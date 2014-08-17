@@ -1,14 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Coursemology2</title>
+  <title>Coursemology</title>
+  <!--[if lt IE 9]>
+  <script async src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="/images/favicon.png">
+
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+
+  <style>
+      body {
+          background-color: white;
+      }
+  </style>
 </head>
 <body>
+<div class="modal_loading"></div>
+<%= render "layouts/header" %>
 
-<%= yield %>
+<div class="container-fluid">
+  <%= yield %>
+</div>
+
+<%= render "layouts/footer" %>
+<%= debug(params) if Rails.env.development? %>
 
 </body>
 </html>
