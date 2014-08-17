@@ -36,4 +36,4 @@ gem 'listen', '~> 1.3.1', group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
+  gem 'sqlite3', group: [:development, :test]
