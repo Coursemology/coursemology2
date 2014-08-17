@@ -1,23 +1,34 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  static_pages:
+    welcome:
+      name: "Name"
+      email: "Email"
+      password: "Password"
+      password_confirmation: "Password Confirmation"
+      sign_up: "Sign Up"
+      engaging: "Engaging"
+      general: "General"
+      simple: "Simple"
+      gamify_edu: "Gamified Online Education Platform:"
+      full_of_fun: "Making your class a world of games in a universe of fun."
+      description1_1: "Coursemology allows educators to add gamification elements, such as experience points, levels, achievements, to their classroom exercises and assignments."
+      description1_2: "The gamification elements of Coursemology motivate students to do assignments and trainings."
+      description2_1: "It's built for all subjects. The gamification system of Coursemology doesn't make assumption on the course's subject."
+      description2_2: "Through Coursemology, any teacher who teaches any subject can turn his course excercies into a online game."
+      description3_1: "It's built for all teachers. You don't need to have any programming knowledge to master the platform."
+      description3_2: "Coursemology is easy and intuitive to use for both teachers and students."
+
+  layouts:
+    header:
+      courses: "Courses"
+      help: "Help"
+      sign_up: "Sign Up"
+      sign_in: "Sign In"
+      language: "Language"
+    footer:
+      copyright: "2013 - 2014 Coursemology.org. All Rights Reserved."
+      term_of_service: "Term of Service"
+      about: "About Us"
+      policy: "Privacy Policy"
+      contact: "Contact Us"
+      source_code: "Source code"
