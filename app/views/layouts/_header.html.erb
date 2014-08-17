@@ -1,21 +1,17 @@
-<header class="navbar navbar-inverse navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container-fluid">
+<header>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-header">
       <%= link_to "/", id: "site-logo" do %>
           <%= image_tag "coursemology_white.png" %>
       <% end %>
-      <a class="btn btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-chevron-down"></span>
-      </a>
-
-      <div class="nav-collapse" style="height: 0px;">
-        <ul class="nav pull-right">
-          <li><%= link_to "Courses", '#' %></li>
-          <li><%= link_to "Help", '#' %></li>
-          <li><%= link_to "Sign up", '#' %></li>
-          <li><%= link_to "Sign in", '#' %></li>
-        </ul>
-      </div>
     </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav pull-right">
+        <li><%= link_to "Courses", '#' %></li>
+        <li><%= link_to "Help", '#' %></li>
+        <li><%= link_to "Sign up", '#' %></li>
+        <li><%= link_to "Sign in", '#' %></li>
+      </ul>
+    </nav>
   </div>
 </header>
