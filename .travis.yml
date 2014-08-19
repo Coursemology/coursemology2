@@ -6,5 +6,6 @@ matrix:
   allow_failures:
     - rvm: ruby-head
 bundler_args: "--without development:production"
+cache: bundler
 script:
   - bundle exec rubocop
