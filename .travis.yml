@@ -1,0 +1,10 @@
+language: ruby
+rvm:
+  - 2.1.2
+  - ruby-head
+matrix:
+  allow_failures:
+    - rvm: ruby-head
+bundler_args: "--without development:production"
+script:
+  - bundle exec rubocop
