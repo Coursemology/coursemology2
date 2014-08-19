@@ -7,7 +7,7 @@ AllCops:
    - 'bin/*'
    - 'db/seeds.rb'
    - 'db/schema.rb'
-   - 'vendor/bundle'
+   - 'vendor/bundle/**/*'
 
 Metrics/LineLength:
   Max: 120
