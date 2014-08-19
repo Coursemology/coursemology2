@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.4'
 # Use SCSS for stylesheets
@@ -39,4 +38,3 @@ gem 'rubocop', group: [:development, :test]
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
