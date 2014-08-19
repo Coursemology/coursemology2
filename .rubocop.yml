@@ -7,8 +7,9 @@ AllCops:
    - 'bin/*'
    - 'db/seeds.rb'
    - 'db/schema.rb'
+   - 'vendor/bundle'
 
-Style/LineLength:
+Metrics/LineLength:
   Max: 120
 
 Style/DotPosition:
