@@ -1,5 +1,5 @@
 # Coursemology, Reloaded [![Build Status](https://travis-ci.org/Coursemology/coursemology2.svg?branch=master)](https://travis-ci.org/Coursemology/coursemology2)
----
+
 This is the Rails 4.1 re-write of Coursemology.
 
 Major changes:
