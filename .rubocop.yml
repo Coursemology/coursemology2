@@ -8,8 +8,14 @@ AllCops:
    - 'db/seeds.rb'
    - 'db/schema.rb'
 
-LineLength:
-  Enabled: false
+Style/LineLength:
+  Max: 120
 
-Documentation:
+Style/DotPosition:
+  EnforcedStyle: trailing
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+
+Style/Documentation:
   Enabled: false
