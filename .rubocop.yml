@@ -7,3 +7,6 @@ AllCops:
    - 'bin/*'
    - 'db/seeds.rb'
    - 'db/schema.rb'
+
+LineLength:
+  Enabled: false
