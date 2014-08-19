@@ -25,6 +25,9 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 gem 'listen', '~> 1.3.1', group: :development
 
+# Use rubocop to analyze ruby code
+gem 'rubocop', group: [:development, :test]
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

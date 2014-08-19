@@ -1,0 +1,8 @@
+AllCops:
+  RunRailsCops: true
+  Include:
+    - 'Gemfile'
+    - 'Rakefile'
+  Exclude:
+   - 'bin/*'
+   - 'db/seeds.rb'
