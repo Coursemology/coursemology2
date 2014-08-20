@@ -7,5 +7,10 @@ matrix:
     - rvm: ruby-head
 bundler_args: "--without development:production --deployment"
 cache: bundler
+
+before_install:
+  - gem install rubocop
+  - gem install coveralls
+
 script:
   - bundle exec rubocop
