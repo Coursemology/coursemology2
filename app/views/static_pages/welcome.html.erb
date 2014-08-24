@@ -1,23 +1,22 @@
 <meta name="viewport" content="width=device-width">
 
-<body id="inner_body" class="inner_body">
-<div class="fb-like" style="float: right;top:900px; position: relative" data-href="https://www.facebook.com/coursemology" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
-<div id="content" class="welcome_content">
+<body id="inner-body" class="inner-body">
+<div id="content" class="welcome-content">
   <% if flash[:notice] %>
-      <div class="alert alert-info" style="position: absolute; z-index: 200">
+      <div class="alert alert-info">
         <%= flash[:notice] %>
       </div>
   <% end %>
 
   <div class="container-fluid">
-    <div id="_slogen" class="_slogen">
-      <p style="text-align: center;">
-        <span style="font-family: arial,helvetica,sans-serif;font-size: 14px;color: #707070;">
+    <div id="slogen" class="slogen">
+      <p>
+        <span>
             <%= t ".gamify_edu" %>
         </span>
       </p>
-      <p style="text-align: center;">
-        <span style="font-family: arial,helvetica,sans-serif;font-size: 14px;color: #707070;">
+      <p>
+        <span>
           <span>
             <%= t ".full_of_fun" %>
           </span>
@@ -25,63 +24,63 @@
       </p>
     </div>
 
-    <div class="_gray_background">
+    <div class="gray-background">
 
     </div>
 
-    <div id="_center_image">
+    <div id="center-image">
         <%= image_tag "teaching-wordle_316.png" %>
     </div>
 
-    <div id="_sign_up">
+    <div id="sign-up">
     </div>
 
-    <div id="_first_divider"></div>
-    <div id="_second_divider"></div>
-    <div id="_engaging_title">
-      <p><span style="color: #333333;font-size: 18px;"><strong><span style="font-family: arial,helvetica,sans-serif;"><%= t '.engaging' %><br></span></strong></span></p>
+    <div id="first-divider"></div>
+    <div id="second-divider"></div>
+    <div id="engaging-title">
+      <p><span><strong><span><%= t '.engaging' %><br></span></strong></span></p>
     </div>
-    <div id="_first_tick">
+    <div id="first-tick">
       <%= image_tag "tick.png", height: 31, width: 31, alt: "" %>
     </div>
-    <div id="_second_tick">
+    <div id="second-tick">
       <%= image_tag "tick.png", height: 31, width: 31, alt:"" %>
     </div>
-    <div id="_second_title">
-      <p><span style="color: #333333;font-size: 18px;"><strong><span style="font-family: arial,helvetica,sans-serif;"><%= t '.general' %><br></span></strong></span></p>
+    <div id="second-title">
+      <p><span><strong><span><%= t '.general' %><br></span></strong></span></p>
     </div>
 
-    <div id="_third_title">
-      <p><span style="color: #333333;font-size: 18px;"><strong><span style="font-family: arial,helvetica,sans-serif;"><%= t '.simple' %></span></strong></span></p>
+    <div id="third-title">
+      <p><span><strong><span><%= t '.simple' %></span></strong></span></p>
     </div>
 
-    <div id="_third_tick">
+    <div id="third-tick">
       <%= image_tag "tick.png", height: 31, width: 31, alt: "" %>
     </div>
 
-    <div id="_bottom_line"></div>
+    <div id="bottom-line"></div>
 
-    <div id="_first_text_box" class="_first_text_box">
-      <p><span style="color: #707070;"><%= t ".description1_1" %></span></p>
-      <p><span style="color: #707070;"> </span></p>
-      <p><span style="color: #707070;"><%= t ".description1_2" %> </span></p>
-      <p><br><span style="font-family: arial,helvetica,sans-serif;color: #707070;font-size: small;"><br></span></p>
+    <div id="first-text-box" class="first-text-box">
+      <p><span class="description-text"><%= t ".description1_1" %></span></p>
+      <p><span> </span></p>
+      <p><span class="description-text"><%= t ".description1_2" %> </span></p>
+      <p><br><span><br></span></p>
     </div>
 
-    <div id="_second_text_box" class="_second_text_box">
-      <p><span style="font-family: arial,helvetica,sans-serif;color: #707070;font-size: small;"><%= t ".description2_1" %></span></p>
+    <div id="second-text-box" class="second-text-box">
+      <p><span class="description-text"><%= t ".description2_1" %></span></p>
       <p> </p>
-      <p><span style="font-family: arial,helvetica,sans-serif;color: #707070;font-size: small;"><%= t ".description2_2" %></span></p>
+      <p><span class="description-text"><%= t ".description2_2" %></span></p>
     </div>
 
-    <div id="_third_text_box" class="_third_text_box">
-      <p><span style="font-family: arial,helvetica,sans-serif;color: #707070;font-size: small;"><%= t ".description3_1" %></span></p>
-      <p><span style="font-family: arial,helvetica,sans-serif;color: #707070;font-size: small;"></span></p>
-      <p><span style="font-family: arial,helvetica,sans-serif;color: #707070;font-size: small;"><%= t ".description3_2" %>/span></p>
-      <p><span style="font-family: arial,helvetica,sans-serif;color: #707070;font-size: small;"> </span></p>
+    <div id="third-text-box" class="third-text-box">
+      <p><span class="description-text" ><%= t ".description3_1" %></span></p>
+      <p><span class="description-text" ></span></p>
+      <p><span class="description-text" ><%= t ".description3_2" %></span></p>
+      <p><span class="description-text" > </span></p>
     </div>
 
-    <div id="_logo">
+    <div id="logo">
       <%= image_tag "coursemology_logo_landscape_100.png" %>
     </div>
   </div>
