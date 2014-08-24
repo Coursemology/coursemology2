@@ -2,9 +2,11 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
-  # You can have the root of your site routed with "root"
-  root 'static_pages#welcome'
+  scope ":locale", locale: /#{I18n.available_locales.join("|")}/ do
+    root "static_pages#welcome"
+  end
 
+  get "/*path", to: redirect("/#{I18n.default_locale}/%{path}"), constraints: {path: /(?!(#{I18n.available_locales.join("|")})\/).*/}, format: false
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
