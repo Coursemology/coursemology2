@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.4'
 # Use SCSS for stylesheets
@@ -25,6 +24,9 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 gem 'listen', '~> 1.3.1', group: :development
 
+# Use rubocop to analyze ruby code
+gem 'rubocop', group: [:development, :test]
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -36,4 +38,3 @@ gem 'listen', '~> 1.3.1', group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-  gem 'sqlite3', group: [:development, :test]

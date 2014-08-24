@@ -1,0 +1,21 @@
+AllCops:
+  RunRailsCops: true
+  Include:
+    - 'Gemfile'
+    - 'Rakefile'
+  Exclude:
+   - 'bin/*'
+   - 'db/seeds.rb'
+   - 'db/schema.rb'
+
+Style/LineLength:
+  Max: 120
+
+Style/DotPosition:
+  EnforcedStyle: trailing
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+
+Style/Documentation:
+  Enabled: false
