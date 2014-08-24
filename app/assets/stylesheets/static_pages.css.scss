@@ -208,22 +208,22 @@
 
 
 #bottom-line {
-  height:1px;
+  position:absolute;
   left:0;
   top:840px;
-  width:1030px;
   z-index:22;
-  position:absolute;
+  height:1px;
+  width:1030px;
   border-width:0;
   background-color:#EDEDED;
 }
 
 @mixin text-box-style{
-  height:144px;
-  top:694px;
-  width:260px;
-  z-index:6;
   position:absolute;
+  top:694px;
+  z-index:6;
+  width:260px;
+  height:144px;
   background-color:transparent;
   border:1px none #000;
   font-size:10pt;
