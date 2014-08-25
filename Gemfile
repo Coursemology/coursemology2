@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-
+gem 'sqlite3'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.4'
 # Use SCSS for stylesheets
@@ -40,3 +40,7 @@ gem 'rubocop', group: [:development, :test]
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+#Slim
+#Once installed,slim will be used as the default template engine for generators
+gem 'slim-rails'
