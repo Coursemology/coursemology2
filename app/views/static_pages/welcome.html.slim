@@ -1,0 +1,69 @@
+meta content="width=device-width" name="viewport"
+  body#inner-body.inner-body
+    #content.welcome-content
+      - if flash[:notice]
+        .alert.alert-info
+          = flash[:notice]
+      .container-fluid
+        #slogen.slogen
+          p
+            span
+              = t ".gamify_edu"
+          p
+            span
+              span
+                = t ".full_of_fun"
+        .gray-background
+        #center-image
+          = image_tag "teaching-wordle_316.png"
+        #sign-up
+        #first-divider
+        #second-divider
+        #engaging-title
+          p
+            span
+              strong
+                span
+                  = t '.engaging'
+                  br
+        #first-tick
+          = image_tag "tick.png", height: 31, width: 31, alt: ""
+        #second-tick
+          = image_tag "tick.png", height: 31, width: 31, alt:""
+        #second-title
+          p
+            span
+              strong
+                span
+                  = t '.general'
+                  br
+        #third-title
+          p
+            span
+              strong
+                span= t '.simple'
+        #third-tick
+          = image_tag "tick.png", height: 31, width: 31, alt: ""
+        #bottom-line
+        #first-text-box.first-text-box
+          p
+            span.description-text= t ".description1_1"
+          p
+            span.description-text= t ".description1_2"
+
+        #second-text-box.second-text-box
+          p
+            span.description-text= t ".description2_1"
+          p
+            span.description-text= t ".description2_2"
+        #third-text-box.third-text-box
+          p
+            span.description-text= t ".description3_1"
+          p
+            span.description-text
+          p
+            span.description-text= t ".description3_2"
+          p
+            span.description-text
+        #logo
+          = image_tag "coursemology_logo_landscape_100.png"

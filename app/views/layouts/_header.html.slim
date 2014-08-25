@@ -1,0 +1,21 @@
+header
+  .navbar.navbar-inverse.navbar-fixed-top
+    .navbar-header
+      = link_to "/", id: "site-logo" do
+        = image_tag "coursemology_white.png"
+
+    nav.collapse.navbar-collapse.bs-navbar-collapse role="navigation"
+      ul.nav.navbar-nav.navbar-right
+        li= link_to t(".courses"), '#'
+        li= link_to t(".help"), '#'
+        li= link_to t(".sign_up"), '#'
+        li= link_to t(".sign_in"), '#'
+        li.dropdown
+          a.dropdown-toggle data-toggle="dropdown" href="#"
+            = t ".language"
+            span.caret
+          ul.dropdown-menu role="menu"
+            li
+              a href="/en"  English
+            li
+              a href="/zh-CN"  简体中文
