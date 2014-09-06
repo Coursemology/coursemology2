@@ -1,14 +1,15 @@
 AllCops:
   RunRailsCops: true
   Include:
-    - 'Gemfile'
-    - 'Rakefile'
+    - '**/Gemfile'
+    - '**/Rakefile'
   Exclude:
    - 'bin/*'
    - 'db/seeds.rb'
    - 'db/schema.rb'
+   - 'vendor/bundle/**/*'
 
-Style/LineLength:
+Metrics/LineLength:
   Max: 120
 
 Style/DotPosition:
