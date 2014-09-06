@@ -11,6 +11,8 @@ cache: bundler
 before_install:
   - gem install rubocop
   - gem install coveralls
+  - gem install scss-lint
 
 script:
   - bundle exec rubocop
+  - bundle exec scss-lint app/assets/stylesheets/
