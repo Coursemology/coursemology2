@@ -16,4 +16,4 @@ before_install:
 script:
   - rubocop
   - scss-lint app/assets/stylesheets/
-  - rake test
+  - bundle exec rake test
