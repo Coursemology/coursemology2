@@ -5,6 +5,15 @@ rvm:
 matrix:
   allow_failures:
     - rvm: ruby-head
-bundler_args: "--without development:production"
+bundler_args: "--without development:production --deployment"
+cache: bundler
+
+before_install:
+  - gem install rubocop
+  - gem install coveralls
+  - gem install scss-lint
+
 script:
-  - bundle exec rubocop
+  - rubocop
+  - scss-lint app/assets/stylesheets/
+  - bundle exec rake test
