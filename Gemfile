@@ -37,6 +37,6 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-#Slim
-#Once installed,slim will be used as the default template engine for generators
+# Slim
+# Once installed,slim will be used as the default template engine for generators
 gem 'slim-rails'
