@@ -9,11 +9,9 @@ bundler_args: "--without development:production --deployment"
 cache: bundler
 
 before_install:
-  - gem install rubocop
   - gem install coveralls
   - gem install scss-lint
 
 script:
-  - rubocop
   - scss-lint app/assets/stylesheets/
   - bundle exec rake test
