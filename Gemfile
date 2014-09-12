@@ -1,11 +1,12 @@
 source 'https://rubygems.org'
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.5'
 # Timezone data, needed for Windows machines.
 gem 'tzinfo-data', platforms: [:x64_mingw, :mingw, :mswin]
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
+# Use bootstrap v3
+gem 'bootstrap-sass', '~> 3.2.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
@@ -35,3 +36,7 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+# Slim
+# Once installed,slim will be used as the default template engine for generators
+gem 'slim-rails'

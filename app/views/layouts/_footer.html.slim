@@ -1,0 +1,15 @@
+footer
+  hr
+  hr
+    .navbar-bottom
+      p.navbar-text
+        | &copy; #{t ".copyright"}
+
+      nav.collapse.navbar-collapse.bs-navbar-collapse
+        ul.nav.navbar-nav.pull-right
+          li= link_to t(".term_of_service"), '#'
+          li= link_to t(".about"), '#'
+          li= link_to t(".policy"), '#'
+          li= link_to t(".contact"), '#'
+          li
+            a href="https://github.com/Coursemology/coursemology.org.git" = t ".source_code"

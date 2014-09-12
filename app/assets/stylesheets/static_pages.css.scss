@@ -1,0 +1,429 @@
+// Place all the styles related to the StaticPages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+/* Welcom page */
+.welcome-content {
+  position:relative;
+  left:0;
+  top:30px;
+  z-index:0;
+  height:800px;
+  width:900px;
+  border-width:0;
+  margin:0 auto;
+  background-color:#FFF;
+}
+
+.slogen {
+  position:absolute;
+  left:0px;
+  top:155px;
+  z-index:5;
+  width:1030px;
+  height:34px;
+  border: 1px none #000;
+  font-size:10px;
+  background-color:transparent;
+
+  * {
+    border-width:0;
+    line-height:1.4;
+  }
+
+  a {
+    text-decoration:none;
+  }
+
+  p{
+    text-align: center;
+  }
+
+  span{
+    font-family: arial,helvetica,sans-serif;
+    font-size: 14px;
+    color: #707070;
+  }
+}
+
+.gray-background {
+  position:absolute;
+  left:0;
+  top:230px;
+  z-index:5;
+  width:1030px;
+  height:378px;
+  background-color:#EBEBEB;
+  border:1px solid #EDEDED;
+}
+
+#center-image {
+  position:absolute;
+  top:250px;
+  left:21px;
+  z-index:6;
+  border:1px none #000;
+}
+
+.button-loading {
+  background:#CCC!important;
+  -webkit-box-shadow:0 1px 1px 0 #FFF!important;
+  -moz-box-shadow:0 1px 1px 0 #FFF!important;
+  box-shadow:0 1px 1px 0 #FFF!important;
+  cursor:default;
+  span{
+    text-shadow:none;
+  }
+}
+
+.button-message {
+  background:transparent!important;
+  box-shadow:none!important;
+  -webkit-box-shadow:none!important;
+  -moz-box-shadow:none!important;
+  cursor:default;
+  span {
+    font-size:12px;
+    color:#798992;
+    text-shadow:none;
+    font-weight:normal;
+  }
+}
+
+
+.select-required-img-container {
+  position:relative;
+  float:right;
+  bottom:29px;
+  background:url("/Content/Images/formRequiredInput_v1.26.png") no-repeat right center;
+  height:29px;
+  margin-bottom:-29px;
+  width:101px;
+  right:10px;
+}
+
+.select-container {
+  margin-top:10px
+}
+
+.select-required-img-container {
+  .valid {
+    background: 0;
+  }
+
+  .error {
+    background: url("/Content/Images/formRequiredInputError_v1.26.png") no-repeat right center;
+  }
+}
+
+//3 titles in welcompage
+
+@mixin divider-style {
+  position:absolute;
+  top:650px;
+  z-index:10;
+  border-width:0;
+  width:1px;
+  height:191px;
+  background-color:#EBEBEB
+}
+
+#first-divider {
+  left:343px;
+  @include divider-style
+}
+
+#second-divider {
+  left:689px;
+  @include divider-style
+}
+
+@mixin tick-style {
+  position:absolute;
+  top:649px;
+  width:31px;
+  height:31px;
+  z-index:13;
+  border:1px none #000;
+}
+
+#first-tick {
+  left:50px;
+  @include tick-style
+}
+
+#second-tick {
+  left:393px;
+  @include tick-style
+}
+
+
+#third-tick {
+  left:740px;
+  @include tick-style
+}
+
+@mixin title-style{
+  position:absolute;
+  top:652px;
+  z-index:6;
+  height:25px;
+  width:200px;
+  border:1px none #000;
+  font-size:10pt;
+  background-color:transparent;
+
+  * {
+    border-width:0;
+    line-height:1.4
+  }
+  a {
+    text-decoration:none
+  }
+
+  p{
+    color: #333333;
+    font-size: 18px;
+    strong {
+      font-family: arial,helvetica,sans-serif;
+    }
+  }
+}
+
+#engaging-title {
+  left:92px;
+  @include title-style
+}
+
+#second-title {
+  left:435px;
+  @include title-style;
+}
+
+
+#third-title {
+  left:782px;
+  @include title-style;
+}
+
+
+#bottom-line {
+  position:absolute;
+  left:0;
+  top:840px;
+  z-index:22;
+  height:1px;
+  width:1030px;
+  border-width:0;
+  background-color:#EDEDED;
+}
+
+@mixin text-box-style{
+  position:absolute;
+  top:694px;
+  z-index:6;
+  width:260px;
+  height:144px;
+  background-color:transparent;
+  border:1px none #000;
+  font-size:10pt;
+
+  * {
+    border-width:0;
+    line-height:1.4;
+  }
+
+  a {
+    text-decoration:none
+  }
+
+  .description-text{
+    font-family: arial,helvetica,sans-serif;
+    color: #707070;
+    font-size: small;
+  }
+}
+
+.first-text-box {
+  left:55px;
+  @include text-box-style
+}
+
+.second-text-box {
+  left:390px;
+  @include text-box-style
+}
+
+.third-text-box {
+  left:740px;
+  @include text-box-style
+}
+
+#logo {
+  position:absolute;
+  top:40px;
+  left:354px;
+  z-index:36;
+  border:1px none #000;
+}
+
+.inner-body {
+  border-width:0;
+  margin:0;
+  padding:0;
+}
+
+.not-started {
+  color: red;
+  font-weight: bold;
+}
+
+.about-quote {
+  background-color: #f2f2f2;
+  margin-bottom: 0;
+
+  h1 {
+    font-size: 49px;
+    font-weight: 300;
+    padding-bottom: 10px;
+  }
+
+  p {
+    font-size: 20px;
+    font-weight: 300;
+  }
+}
+
+
+.about-wrapper {
+  border-radius: 20px;
+}
+
+.about-us {
+  margin:0 auto;
+  float:none;
+  text-align: center;
+
+  h2 {
+    font-size: 30px;
+    font-family: 'lato', 'sans-serif';
+    font-weight: bold;
+    padding-top: 30px;
+    padding-bottom: 5px;
+    margin: 15px 0;
+    text-transform: uppercase;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  p {
+    font-size: 16px;
+    font-family: 'lato', 'sans-serif';
+    letter-spacing: 0.4px;
+    padding: 5px 0;
+    text-align: center;
+    line-height: 1.8;
+  }
+}
+
+.about-signup-button {
+  height: 40px;
+  font-size :120%;
+  padding-top: 5px;
+  vertical-align: middle;
+}
+
+.about-img {
+  box-shadow: 0 0 5px #999999;
+  margin-bottom: 5px;
+}
+
+.features {
+  margin-top: 5px;
+
+  h4 {
+
+    font: {
+      size: 16px;
+      weight: normal;
+      style: oblique;
+    }
+
+    color: #575757;
+    padding-bottom: 5px;
+  }
+}
+
+.about-profile-pic {
+  border-radius: 50px;
+  align: middle;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #777777;
+}
+
+.team-members {
+  margin-bottom: 10px;
+}
+
+.team-popover {
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.icon-github {
+  color: #404040;
+  padding-bottom: 10px;
+}
+
+.popover {
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+}
+
+.popover-title {
+  text-align: center;
+  font-weight: bolder;
+  font-size: large;
+  background-color: #3d3d3d;
+  color: #ffffff;
+  border-radius: 10px 10px 0 0;
+}
+
+.popover-content {
+  border-radius: 10px;
+  text-align: center;
+}
+
+p.about-license {
+  font-size: small;
+}
+
+.about-link {
+  color: initial;
+  text-decoration: underline;
+}
+
+.terms-of-service {
+  font-size: 110%;
+  font-family: 'lato', 'sans-serif';
+
+  strong {
+    text-transform: uppercase;
+  }
+
+  p {
+    padding-top: 1px;
+  }
+
+  h3 {
+    padding-top: 1em;
+  }
+}
+
+.alert.alert-info {
+  position: absolute;
+  z-index: 100;
+}

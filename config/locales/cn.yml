@@ -1,0 +1,33 @@
+zh-CN:
+  static_pages:
+    welcome:
+      name: "用户名"
+      email: "邮箱"
+      password: "密码"
+      password_confirmation: "密码确认"
+      sign_up: "注册"
+      engaging: "上瘾"
+      general: "全面"
+      simple: "简单"
+      gamify_edu: "游戏化的在线教育平台："
+      full_of_fun: "让游戏给你的课堂带来无穷的乐趣"
+      description1_1: "Coursemology 允许老师们在课程或者学生提交的作业中添加游戏化的元素, 例如经验、等级、成就等"
+      description1_2: "这些游戏化的元素使学生们更愿意完成作业和练习"
+      description2_1: "系统面向所有主题，Coursemology的游戏化系统不会限制课程的主题"
+      description2_2: "通过 Coursemology, 任何老师都可以将自己的课程变成一个在线游戏"
+      description3_1: "所有的老师均很容易上手使用，你不需要有编程基础"
+      description3_2: "无论对于老师还是学生们，Coursemology都十分的直观、容易上手"
+  layouts:
+    header:
+      courses: "课程"
+      help: "帮助"
+      sign_up: "注册"
+      sign_in: "登录"
+      language: "语言"
+    footer:
+      copyright: "2013 - 2014 Coursemology.org. 版权所有"
+      term_of_service: "服务条款"
+      about: "关于我们"
+      policy: "隐私政策"
+      contact: "联系我们"
+      source_code: "源代码"

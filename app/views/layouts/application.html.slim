@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    /![if lt IE 9]
+              | <script async src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    title Coursemology
+    meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport"
+      link href="/images/favicon.png" rel=("shortcut icon") type="image/vnd.microsoft.icon"
+        = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+        = javascript_include_tag 'application', 'data-turbolinks-track' => true
+        = csrf_meta_tags
+
+  body
+    = render "layouts/header"
+    .container-fluid
+      = yield
+    = render "layouts/footer"
+    = debug(params) if Rails.env.development?
