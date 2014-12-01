@@ -8,7 +8,6 @@ gem 'rails', '4.1.5'
 
 # Use PostgreSQL for the backend
 gem 'pg'
-
 # Schema Plus for some higher level database abstractions
 gem 'schema_plus'
 
@@ -30,6 +29,9 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'listen', '~> 1.3.1'
+
+  gem 'lol_dba'
+  gem 'bullet'
 end
 
 # Use ActiveModel has_secure_password
