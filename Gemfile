@@ -1,9 +1,14 @@
 source 'https://rubygems.org'
 
+# For Windows devs
+gem 'tzinfo-data', platforms: [:mswin]
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.5'
-# Timezone data, needed for Windows machines.
-gem 'tzinfo-data', platforms: [:x64_mingw, :mingw, :mswin]
+
+# Use PostgreSQL for the backend
+gem 'pg'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets
