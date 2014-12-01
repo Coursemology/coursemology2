@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'tzinfo-data', platforms: [:mswin]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.5'
+gem 'rails', '~> 4.1.8'
 
 # Use PostgreSQL for the backend
 gem 'pg'
@@ -33,6 +33,7 @@ group :development do
   # Gems to make development mode faster and less painful
   gem 'rails-dev-tweaks'
   gem 'rails-dev-boost'
+  gem 'rails-flog', require: 'flog'
   gem 'wdm', '>= 0.0.3', platforms: [:mswin]
 
   # Helps to prevent database slowdowns
