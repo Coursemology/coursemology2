@@ -38,6 +38,9 @@ group :development do
   # Helps to prevent database slowdowns
   gem 'lol_dba'
   gem 'bullet'
+
+  # General cleanliness
+  gem 'traceroute'
 end
 
 # Use ActiveModel has_secure_password
