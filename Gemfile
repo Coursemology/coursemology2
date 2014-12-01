@@ -30,6 +30,12 @@ group :development do
   gem 'spring'
   gem 'listen', '~> 1.3.1'
 
+  # Gems to make development mode faster and less painful
+  gem 'rails-dev-tweaks'
+  gem 'rails-dev-boost'
+  gem 'wdm', '>= 0.0.3', platforms: [:mswin]
+
+  # Helps to prevent database slowdowns
   gem 'lol_dba'
   gem 'bullet'
 end
