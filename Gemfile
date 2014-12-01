@@ -9,6 +9,9 @@ gem 'rails', '4.1.5'
 # Use PostgreSQL for the backend
 gem 'pg'
 
+# Schema Plus for some higher level database abstractions
+gem 'schema_plus'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets

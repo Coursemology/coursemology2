@@ -92,6 +92,9 @@ GEM
       sass (~> 3.2.2)
       sprockets (~> 2.8, < 3.0)
       sprockets-rails (~> 2.0)
+    schema_plus (1.7.0)
+      activerecord (>= 3.2)
+      valuable
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
@@ -120,6 +123,7 @@ GEM
     uglifier (2.5.3)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    valuable (0.9.8)
 
 PLATFORMS
   mswin64
@@ -132,6 +136,7 @@ DEPENDENCIES
   pg
   rails (= 4.1.4)
   sass-rails (~> 4.0.3)
+  schema_plus
   sdoc (~> 0.4.0)
   spring
   turbolinks
