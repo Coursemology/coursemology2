@@ -42,6 +42,7 @@ GEM
       execjs
     coffee-script-source (1.8.0)
     diff-lcs (1.2.5)
+    docile (1.1.5)
     erubis (2.7.0)
     execjs (2.2.2)
     ffi (1.9.6)
@@ -126,6 +127,11 @@ GEM
     schema_plus (1.7.0)
       activerecord (>= 3.2)
       valuable
+    simplecov (0.9.1)
+      docile (~> 1.1.0)
+      multi_json (~> 1.0)
+      simplecov-html (~> 0.8.0)
+    simplecov-html (0.8.0)
     spring (1.2.0)
     sprockets (2.12.3)
       hike (~> 1.2)
@@ -173,6 +179,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 4.0.3)
   schema_plus
+  simplecov
   spring
   traceroute
   turbolinks

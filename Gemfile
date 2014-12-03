@@ -49,6 +49,7 @@ group :development, :test do
 
   # Use RSpec for Behaviour testing
   gem 'rspec-rails'
+  gem 'simplecov'
 end
 
 group :production do
