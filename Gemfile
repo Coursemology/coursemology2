@@ -11,6 +11,10 @@ gem 'pg'
 # Schema Plus for some higher level database abstractions
 gem 'schema_plus'
 gem 'schema_validations'
+# Table and column comments
+gem 'migration_comments'
+# Squeel as an SQL-like DSL
+gem 'squeel'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
