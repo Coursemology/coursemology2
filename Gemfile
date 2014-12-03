@@ -70,6 +70,9 @@ group :production do
   gem 'puma'
 end
 
+# Multitenancy
+gem 'acts_as_tenant'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
