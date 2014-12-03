@@ -42,10 +42,13 @@ group :development do
   gem 'traceroute'
 end
 
-group :test do
+group :development, :test do
   # bundle exec yardoc generates the API under doc/.
   # Use yard stats --list-undoc to find what needs documenting.
   gem 'yard',                  group: :doc
+
+  # Use RSpec for Behaviour testing
+  gem 'rspec-rails'
 end
 
 group :production do
