@@ -9,15 +9,21 @@ module ApplicationMultitenancyConcern
   private
 
   def deduce_and_set_current_tenant
-    tenant_hostname = deduce_tenant_hostname
-    current_tenant = Instance.where {
-      lower(host) == lower(tenant_hostname)
-    }.take
+    current_tenant = deduce_tenant
     if current_tenant then
       set_current_tenant(current_tenant)
     else
       set_current_tenant(Instance.default)
     end
+  end
+
+  def deduce_tenant
+    tenant_hostname = deduce_tenant_hostname
+    current_tenant = Instance.where {
+      lower(host) == lower(tenant_hostname)
+    }.take
+
+    current_tenant
   end
 
   def deduce_tenant_hostname
