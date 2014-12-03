@@ -50,6 +50,9 @@ group :development, :test do
   # Use RSpec for Behaviour testing
   gem 'rspec-rails'
   gem 'simplecov'
+
+  # Factory Girl for factories
+  gem 'factory_girl_rails'
 end
 
 group :production do
