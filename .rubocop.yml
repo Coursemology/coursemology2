@@ -10,7 +10,7 @@ AllCops:
    - 'vendor/bundle/**/*'
 
 Metrics/LineLength:
-  Max: 120
+  Max: 100
 
 Style/DotPosition:
   EnforcedStyle: trailing
@@ -20,3 +20,6 @@ Style/ClassAndModuleChildren:
 
 Style/Documentation:
   Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
