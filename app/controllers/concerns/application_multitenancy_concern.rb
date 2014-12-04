@@ -17,12 +17,16 @@ module ApplicationMultitenancyConcern
     end
   end
 
+  # Deduces the tenant from the host specified in the HTTP Request.
+  # @return [Instance|nil] The current tenant, or nil
   def deduce_tenant
-    tenant_hostname = deduce_tenant_hostname
-    Instance.find_tenant_by_hostname(tenant_hostname)
+    tenant_host = deduce_tenant_host
+    Instance.find_tenant_by_host(tenant_host)
   end
 
-  def deduce_tenant_hostname
+  # Deduces the current host. We strip any leading www from the host.
+  # @return [String] The host, with www removed.
+  def deduce_tenant_host
     subdomain = request.subdomain
     if subdomain == 'www'
       request.domain

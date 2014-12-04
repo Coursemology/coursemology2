@@ -8,14 +8,14 @@ RSpec.describe Instance, type: :model do
     end
   end
 
-  describe '.find_tenant_by_hostname' do
+  describe '.find_tenant_by_host' do
     before do
       @instances = create_list(:instance, 3)
     end
 
-    it 'should find the correct tenant if the hostname is correct' do
+    it 'should find the correct tenant if the host is correct' do
       first_instance = @instances[0]
-      found_instance = Instance.find_tenant_by_hostname(first_instance.host)
+      found_instance = Instance.find_tenant_by_host(first_instance.host)
 
       expect(found_instance).to eq(first_instance)
     end

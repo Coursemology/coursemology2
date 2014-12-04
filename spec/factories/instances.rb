@@ -1,6 +1,6 @@
 FactoryGirl.define do
-  sequence :hostnames, Time.now.to_i, aliases: [:host] do |n|
-    "www.local#{n}.com"
+  sequence :host, Time.now.to_i do |n|
+    "local#{n}.com"
   end
 
   factory :instance do
