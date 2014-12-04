@@ -1,22 +1,7 @@
-AllCops:
-  RunRailsCops: true
-  Include:
-    - '**/Gemfile'
-    - '**/Rakefile'
-  Exclude:
-   - 'bin/*'
-   - 'db/seeds.rb'
-   - 'db/schema.rb'
-   - 'vendor/bundle/**/*'
+ruby:
+  enabled: true
+  config_file: .rubocop.yml
 
-Metrics/LineLength:
-  Max: 120
-
-Style/DotPosition:
-  EnforcedStyle: trailing
-
-Style/ClassAndModuleChildren:
-  EnforcedStyle: compact
-
-Style/Documentation:
-  Enabled: false
+java_script:
+  enabled: true
+  config_file: .jshintrc
