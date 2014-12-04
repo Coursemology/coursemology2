@@ -19,7 +19,7 @@ module ApplicationMultitenancyConcern
 
   def deduce_tenant
     tenant_hostname = deduce_tenant_hostname
-    Instance.find_tenant_by_host(tenant_hostname)
+    Instance.find_tenant_by_hostname(tenant_hostname)
   end
 
   def deduce_tenant_hostname
