@@ -1,6 +1,7 @@
 FactoryGirl.define do
-  sequence :host, Time.now.to_i do |n|
-    "local#{n}.com"
+  base_time = Time.now.to_i
+  sequence :host do |n|
+    "local_#{base_time}_#{n}.com"
   end
 
   factory :instance do
