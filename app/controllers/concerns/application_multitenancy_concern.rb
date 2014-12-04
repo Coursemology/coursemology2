@@ -10,7 +10,7 @@ module ApplicationMultitenancyConcern
 
   def deduce_and_set_current_tenant
     current_tenant = deduce_tenant
-    if current_tenant then
+    if current_tenant
       set_current_tenant(current_tenant)
     else
       set_current_tenant(Instance.default)

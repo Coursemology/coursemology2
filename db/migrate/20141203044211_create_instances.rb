@@ -4,11 +4,11 @@ class CreateInstances < ActiveRecord::Migration
       t.string :host,
                null:    false,
                index:   {
-                   case_sensitive: false,
-                   unique:         true
+                 case_sensitive: false,
+                 unique:         true
                },
-               comment: 'Stores the host name of the instance. The www prefix is automatically handled by the ' +
-                            'application'
+               comment: 'Stores the host name of the instance. The www prefix is automatically ' +
+                        'handled by the application'
     end
   end
 end

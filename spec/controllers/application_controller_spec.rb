@@ -17,9 +17,7 @@ RSpec.describe ApplicationController, type: :controller do
 
     let(:instance) do
       default_instance = Instance.default
-      Instance.where {
-        id << [default_instance]
-      }.take
+      Instance.where { id << [default_instance] }.take
     end
 
     it 'should not be case insensitive' do
