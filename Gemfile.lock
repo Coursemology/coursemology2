@@ -33,6 +33,7 @@ GEM
     anbt-sql-formatter (0.0.2)
     arel (5.0.1.20140414130214)
     awesome_print (1.2.0)
+    bcrypt (3.1.9)
     builder (3.2.2)
     bullet (4.14.0)
       activesupport (>= 3.0.0)
@@ -45,6 +46,13 @@ GEM
       execjs
     coffee-script-source (1.8.0)
     consistency_fail (0.3.2)
+    devise (3.4.1)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 3.2.6, < 5)
+      responders
+      thread_safe (~> 0.1)
+      warden (~> 1.2.3)
     diff-lcs (1.2.5)
     docile (1.1.5)
     erubis (2.7.0)
@@ -80,6 +88,7 @@ GEM
     mime-types (2.4.3)
     minitest (5.4.3)
     multi_json (1.10.1)
+    orm_adapter (0.5.0)
     pg (0.17.1)
     polyamorous (1.1.0)
       activerecord (>= 3.0)
@@ -119,6 +128,8 @@ GEM
     rb-kqueue (0.2.3)
       ffi (>= 0.5.0)
     request_store (1.1.0)
+    responders (1.1.2)
+      railties (>= 3.2, < 4.2)
     rspec-core (3.1.7)
       rspec-support (~> 3.1.0)
     rspec-expectations (3.1.2)
@@ -190,6 +201,8 @@ GEM
       json (>= 1.8.0)
     uniform_notifier (1.6.2)
     valuable (0.9.9)
+    warden (1.2.3)
+      rack (>= 1.0)
     wdm (0.1.0)
     yard (0.8.7.6)
 
@@ -201,6 +214,7 @@ DEPENDENCIES
   acts_as_tenant
   bullet
   consistency_fail
+  devise
   factory_girl_rails
   high_voltage
   jbuilder (~> 2.0)
