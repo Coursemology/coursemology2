@@ -19,11 +19,7 @@ module ApplicationMultitenancyConcern
 
   def deduce_tenant
     tenant_hostname = deduce_tenant_hostname
-    current_tenant = Instance.where {
-      lower(host) == lower(tenant_hostname)
-    }.take
-
-    current_tenant
+    Instance.find_tenant_by_host(tenant_hostname)
   end
 
   def deduce_tenant_hostname
