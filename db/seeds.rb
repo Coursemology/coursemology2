@@ -5,4 +5,6 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-Instance.create(host: '*')
+#
+# Remember to ensure that the commands in this file are idempotent!
+Instance.find_or_create_by(host: '*')
