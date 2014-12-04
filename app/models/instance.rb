@@ -11,9 +11,8 @@ class Instance < ActiveRecord::Base
     # @param host [String] The host to look up. This is case insensitive, however prefixes (such
     #                      as www) are not handled automatically.
     def find_tenant_by_host(host)
-      hostname = host
       where {
-          lower(host) == lower(hostname)
+          lower(self.host) == lower(host)
       }.take
     end
   end
