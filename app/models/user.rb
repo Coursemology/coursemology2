@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable
 
   has_many :emails, class_name: UserEmail.name
+  has_many :instance_users
+  has_many :instances, through: :instance_users
 
   validates_presence_of :email, if: :email_required?
   validates_presence_of  :password, if: :password_required?
