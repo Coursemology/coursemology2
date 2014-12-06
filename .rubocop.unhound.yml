@@ -1,0 +1,239 @@
+AccessorMethodName:
+  Enabled: true
+
+ActionFilter:
+  Enabled: true
+
+Alias:
+  Enabled: true
+
+ArrayJoin:
+  Enabled: true
+
+AsciiComments:
+  Enabled: true
+
+AsciiIdentifiers:
+  Enabled: true
+
+Attr:
+  Enabled: true
+
+BlockNesting:
+  Enabled: true
+
+CaseEquality:
+  Enabled: true
+
+CharacterLiteral:
+  Enabled: true
+
+ClassAndModuleChildren:
+  Enabled: true
+
+ClassLength:
+  Enabled: true
+
+ClassVars:
+  Enabled: true
+
+CollectionMethods:
+  PreferredMethods:
+    detect: 'find'
+
+ColonMethodCall:
+  Enabled: true
+
+CommentAnnotation:
+  Enabled: true
+
+CyclomaticComplexity:
+  Enabled: true
+
+Delegate:
+  Enabled: true
+
+DeprecatedHashMethods:
+  Enabled: true
+
+DoubleNegation:
+  Enabled: true
+
+EachWithObject:
+  Enabled: true
+
+EmptyLiteral:
+  Enabled: true
+
+Encoding:
+  Enabled: true
+
+EvenOdd:
+  Enabled: true
+
+FileName:
+  Enabled: true
+
+FlipFlop:
+  Enabled: true
+
+FormatString:
+  Enabled: true
+
+GlobalVars:
+  Enabled: true
+
+GuardClause:
+  Enabled: true
+
+IfUnlessModifier:
+  Enabled: true
+
+IfWithSemicolon:
+  Enabled: true
+
+InlineComment:
+  Enabled: true
+
+Lambda:
+  Enabled: true
+
+LambdaCall:
+  Enabled: true
+
+LineEndConcatenation:
+  Enabled: true
+
+MethodLength:
+  Enabled: true
+
+ModuleFunction:
+  Enabled: true
+
+NegatedIf:
+  Enabled: true
+
+NegatedWhile:
+  Enabled: true
+
+Next:
+  Enabled: true
+
+NilComparison:
+  Enabled: true
+
+Not:
+  Enabled: true
+
+NumericLiterals:
+  Enabled: true
+
+OneLineConditional:
+  Enabled: true
+
+OpMethod:
+  Enabled: true
+
+ParameterLists:
+  Enabled: true
+
+PercentLiteralDelimiters:
+  Enabled: true
+
+PerlBackrefs:
+  Enabled: true
+
+PredicateName:
+  NamePrefixBlacklist: []
+
+Proc:
+  Enabled: true
+
+RaiseArgs:
+  Enabled: true
+
+RegexpLiteral:
+  Enabled: true
+
+SelfAssignment:
+  Enabled: true
+
+SingleLineBlockParams:
+  Enabled: true
+
+SingleLineMethods:
+  Enabled: true
+
+SignalException:
+  Enabled: true
+
+SpecialGlobalVars:
+  Enabled: true
+
+VariableInterpolation:
+  Enabled: true
+
+TrailingComma:
+  Enabled: true
+
+TrivialAccessors:
+  Enabled: true
+
+VariableInterpolation:
+  Enabled: true
+
+WhenThen:
+  Enabled: true
+
+WhileUntilModifier:
+  Enabled: true
+
+WordArray:
+  Enabled: true
+
+# Lint
+
+AmbiguousOperator:
+  Enabled: true
+
+AmbiguousRegexpLiteral:
+  Enabled: true
+
+AssignmentInCondition:
+  Enabled: true
+
+ConditionPosition:
+  Enabled: true
+
+DeprecatedClassMethods:
+  Enabled: true
+
+ElseLayout:
+  Enabled: true
+
+HandleExceptions:
+  Enabled: true
+
+InvalidCharacterLiteral:
+  Enabled: true
+
+LiteralInCondition:
+  Enabled: true
+
+LiteralInInterpolation:
+  Enabled: true
+
+Loop:
+  Enabled: true
+
+ParenthesesAsGroupedExpression:
+  Enabled: true
+
+RequireParentheses:
+  Enabled: true
+
+UnderscorePrefixedVariableName:
+  Enabled: true
+
+Void:
+  Enabled: true

@@ -1,3 +1,6 @@
+inherit_from:
+  - .rubocop.unhound.yml
+
 AllCops:
   RunRailsCops: true
   Include:
