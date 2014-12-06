@@ -135,6 +135,8 @@ GEM
     schema_plus (1.7.0)
       activerecord (>= 3.2)
       valuable
+    schema_validations (1.0.0)
+      schema_plus
     simplecov (0.9.1)
       docile (~> 1.1.0)
       multi_json (~> 1.0)
@@ -199,6 +201,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 4.0.3)
   schema_plus
+  schema_validations
   simplecov
   slim-rails
   spring

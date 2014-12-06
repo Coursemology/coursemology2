@@ -10,6 +10,7 @@ gem 'rails', '~> 4.1.8'
 gem 'pg'
 # Schema Plus for some higher level database abstractions
 gem 'schema_plus'
+gem 'schema_validations'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
