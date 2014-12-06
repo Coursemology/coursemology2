@@ -7,6 +7,10 @@
 # Ignore bundler config.
 /.bundle
 
+# Ignore user-specific Intellij project files
+/.idea/dictionaries/*
+/.idea/workspace.xml
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
