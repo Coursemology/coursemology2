@@ -25,6 +25,9 @@ gem 'uglifier', '>= 1.3.0'
 # Use jQuery as the JavaScript library
 gem 'jquery-cdn'
 gem 'rails-assets-jquery-ujs'
+# Our Coursemology will be themed using Bootstrap
+gem 'bootstrap-sass'
+gem 'autoprefixer-rails'
 # Turbolinks makes following links in your web application faster.
 # Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
