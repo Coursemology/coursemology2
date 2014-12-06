@@ -1,18 +1,44 @@
 doctype html
 html
   head
-    title Coursemology2
+    title
+      - if content_for?(:page_title)
+        = "#{content_for(:page_title)} - "
+      - else
+        |
+      | Coursemology2
+    meta http-equiv="X-UA-Compatible" content="IE=edge"
+    meta name="viewport" content="width=device-width, initial-scale=1"
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
     = include_jquery
     = javascript_include_tag 'application', defer: true, 'data-turbolinks-track' => true
     = csrf_meta_tags
 
   body
-    ul
-      - if user_signed_in?
-        li
-          = link_to('Logout', destroy_user_session_path, method: :delete)
-      - else
-        li
-          = link_to('Login', new_user_session_path)
-    = yield
+    nav.site-navigation role="navigation"
+      div
+        div.header
+          button.collapsed type="button" data-toggle="collapse" data-target="#site-navigation-navbar" aria-expanded="false" aria-controls="navbar"
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.brand href="#" Coursemology
+        div.collapse.navbar-collapse#site-navigation-navbar
+          ul
+            li.active
+              a href="#" Courses
+            li
+              a href="#about" Help
+            li
+              a href="#contact" Sign Up
+            - if user_signed_in?
+              li
+                = link_to('Logout', destroy_user_session_path, method: :delete)
+            - else
+              li
+                = link_to('Login', new_user_session_path)
+
+    div.page
+      div
+        = yield
