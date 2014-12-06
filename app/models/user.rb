@@ -2,7 +2,7 @@
 class User < ActiveRecord::Base
   include UserAuthenticationConcern
 
-  has_many :emails, class_name: UserEmail.name
+  has_many :emails, class_name: UserEmail.name, inverse_of: :user, dependent: :destroy
   has_many :instance_users
   has_many :instances, through: :instance_users
 
