@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+source 'https://rails-assets.org'
 
 # For Windows devs
 gem 'tzinfo-data', platforms: [:mswin]
@@ -21,8 +22,9 @@ gem 'sass-rails', '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
+# Use jQuery as the JavaScript library
+gem 'jquery-cdn'
+gem 'rails-assets-jquery-ujs'
 # Turbolinks makes following links in your web application faster.
 # Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
