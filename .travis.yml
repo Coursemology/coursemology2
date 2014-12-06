@@ -5,12 +5,17 @@ rvm:
 matrix:
   allow_failures:
     - rvm: ruby-head
+addons:
+  postgresql: "9.3"
 bundler_args: "--without development:production --deployment"
 cache: bundler
 
 before_install:
   - gem install coveralls
   - gem install scss-lint
+
+before_script:
+  - psql -c 'create database coursemology_test;' -U postgres
 
 script:
   - scss-lint app/assets/stylesheets/
