@@ -4,8 +4,6 @@ html
     title
       - if content_for?(:page_title)
         = "#{content_for(:page_title)} - "
-      - else
-        |
       | Coursemology2
     meta http-equiv="X-UA-Compatible" content="IE=edge"
     meta name="viewport" content="width=device-width, initial-scale=1"
@@ -40,5 +38,6 @@ html
                 = link_to('Login', new_user_session_path)
 
     div.page
-      div
+      = flash_messages
+      div class=page_class
         = yield
