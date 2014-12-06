@@ -41,6 +41,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.8.0)
+    consistency_fail (0.3.2)
     diff-lcs (1.2.5)
     docile (1.1.5)
     erubis (2.7.0)
@@ -104,7 +105,7 @@ GEM
       activesupport (= 4.1.8)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (10.4.0)
+    rake (10.4.2)
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
@@ -176,7 +177,7 @@ GEM
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     uniform_notifier (1.6.2)
-    valuable (0.9.8)
+    valuable (0.9.9)
     wdm (0.1.0)
     yard (0.8.7.6)
 
@@ -186,6 +187,7 @@ PLATFORMS
 
 DEPENDENCIES
   bullet
+  consistency_fail
   factory_girl_rails
   high_voltage
   jbuilder (~> 2.0)

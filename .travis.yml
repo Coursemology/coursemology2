@@ -14,4 +14,5 @@ before_install:
 
 script:
   - scss-lint app/assets/stylesheets/
+  - bundle exec consistency_fail
   - bundle exec rake test

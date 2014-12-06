@@ -60,6 +60,9 @@ group :development, :test do
 
   # Factory Girl for factories
   gem 'factory_girl_rails'
+
+  # Helps to prevent database consistency mistakes
+  gem 'consistency_fail'
 end
 
 group :production do
