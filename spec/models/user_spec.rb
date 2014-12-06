@@ -2,9 +2,29 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   describe '#email' do
-    let(:user) { User.new }
-    it 'should not have a default email' do
-      expect(user.email).to eq(nil)
+    context 'when the user has no email addresses' do
+      let(:user) { User.new }
+      it 'should not have a default email' do
+        expect(user.email).to eq(nil)
+      end
+    end
+
+    context 'when the user has multiple email address' do
+      context 'no email address is primary' do
+        let(:user) do
+          user = build(:user, emails_count: 4)
+          user.emails.each { |email_record| email_record.primary = false }
+          user.emails.each.take(2).each { |email_record| email_record.mark_for_destruction }
+          user
+        end
+
+        it 'should pick the first non-deleted email as the primary email' do
+          not_marked_for_destruction = user.emails.each.select do |email_record|
+            !email_record.marked_for_destruction?
+          end
+          expect(user.email).to eq(not_marked_for_destruction.first.email)
+        end
+      end
     end
   end
 
@@ -43,6 +63,13 @@ RSpec.describe User, type: :model do
         end
       end
     end
+  end
 
+  describe '#emails' do
+    let(:user) { create(:user, emails_count: 5) }
+    it 'should only allow one primary email' do
+      user.emails.each.each { |email_record| email_record.primary = true }
+      expect{user.save!}.to raise_error(ActiveRecord::RecordInvalid)
+    end
   end
 end

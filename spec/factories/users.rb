@@ -7,7 +7,9 @@ FactoryGirl.define do
     password 'lolololol'
 
     after(:build) do |user, evaluator|
-      user.emails.concat(build_list(:user_email, evaluator.emails_count, user: user))
+      emails = build_list(:user_email, evaluator.emails_count, primary: false, user: user)
+      emails.take(1).each { |user_email| user_email.primary = true }
+      user.emails.concat(emails)
     end
   end
 end

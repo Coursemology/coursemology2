@@ -9,7 +9,7 @@ FactoryGirl.define do
     email
 
     after(:build) do |user_email|
-      user_email.user = build(:user, emails: [user_email], emails_count: 0)
+      user_email.user ||= build(:user, emails: [user_email], emails_count: 0)
     end
   end
 
