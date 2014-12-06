@@ -8,7 +8,7 @@ module UserAuthenticationConcern
            :recoverable, :rememberable, :trackable
 
     validates_presence_of :email, if: :email_required?
-    validates_presence_of  :password, if: :password_required?
+    validates_presence_of :password, if: :password_required?
     validates_confirmation_of :password, if: :password_required?
     validates_length_of :password, within: Devise::password_length, allow_blank: true
 
@@ -38,7 +38,7 @@ module UserAuthenticationConcern
       if email && email.is_a?(String)
         conditions = devise_parameter_filter.filter(tainted_conditions).merge(opts)
         conditions[:emails] = {
-            email: email
+          email: email
         }
 
         joins(:emails).where(conditions).first

@@ -69,7 +69,7 @@ RSpec.describe User, type: :model do
     let(:user) { create(:user, emails_count: 5) }
     it 'should only allow one primary email' do
       user.emails.each.each { |email_record| email_record.primary = true }
-      expect{user.save!}.to raise_error(ActiveRecord::RecordInvalid)
+      expect { user.save! } .to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 end
