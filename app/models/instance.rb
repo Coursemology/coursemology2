@@ -14,4 +14,7 @@ class Instance < ActiveRecord::Base
       where { lower(self.host) == lower(host) }.take
     end
   end
+
+  has_many :instance_users
+  has_many :users, through: :instance_users
 end
