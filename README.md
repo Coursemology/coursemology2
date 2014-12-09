@@ -8,5 +8,9 @@ Major changes:
  2. PostgreSQL as default DBMS (from MySQL)
  3. Bootstrap 3.2 (from Bootstrap 2)
 
-## Installation requirements
+## Installation
+### System requirements
  - [nodejs](http://nodejs.org) (as a JavaScript runtime for [execjs](https://github.com/sstephenson/execjs))
+
+### Procedure
+ 1. `bundle install` (you can add `--without development,test` for production installs)

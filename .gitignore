@@ -18,3 +18,11 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# Ignore generated documentation
+/.yardoc/*
+/doc/*
+
+# Ignore generated code coverage information
+/spec/coverage/*
+/coverage/*
