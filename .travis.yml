@@ -22,4 +22,4 @@ before_script:
 script:
   - scss-lint app/assets/stylesheets/
   - bundle exec consistency_fail
-  - bundle exec rake test
+  - bundle exec rake spec
