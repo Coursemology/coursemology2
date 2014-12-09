@@ -6,7 +6,9 @@ def load_provider(name, &initialiser)
   require name
   initialiser.call
 rescue LoadError => e
-  if e.path != name
+  if e.path == name
+    puts 'Cannot find \'%s\', ignoring' % [name] if ENV['CI']
+  else
     raise e
   end
 end
