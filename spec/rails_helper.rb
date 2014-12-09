@@ -47,4 +47,10 @@ RSpec.configure do |config|
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
+
+  # Ensure that all database seeds are in the database.
+  config.before(:suite) do
+    Application.load_tasks
+    Rake::Task['db:seed'].invoke
+  end
 end

@@ -3,6 +3,9 @@ RSpec.configure do |config|
 
   # Check that the factories are all valid.
   config.before(:suite) do
-    FactoryGirl.lint
+    # In case any factory involves Acts as Tenant
+    ActsAsTenant.with_tenant(Instance.default) do
+      FactoryGirl.lint
+    end
   end
 end

@@ -11,6 +11,10 @@ gem 'pg'
 # Schema Plus for some higher level database abstractions
 gem 'schema_plus'
 gem 'schema_validations'
+# Table and column comments
+gem 'migration_comments'
+# Squeel as an SQL-like DSL
+gem 'squeel'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
@@ -69,6 +73,9 @@ group :production do
   # Puma will be our app server.
   gem 'puma'
 end
+
+# Multitenancy
+gem 'acts_as_tenant'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

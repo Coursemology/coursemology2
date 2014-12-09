@@ -14,3 +14,6 @@ Major changes:
 
 ### Procedure
  1. `bundle install` (you can add `--without development,test` for production installs)
+ 2. `rake db:load`. Run `RAILS_ENV=test rake db:load` if you are intending to run the test suite.
+
+## Development
