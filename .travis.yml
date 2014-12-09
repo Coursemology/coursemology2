@@ -11,8 +11,6 @@ bundler_args: "--without development:production --deployment"
 cache: bundler
 
 before_install:
-  - gem install coveralls
-  - gem install codeclimate-test-reporter
   - gem install scss-lint
 
 before_script:
