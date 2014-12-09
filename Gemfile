@@ -69,6 +69,12 @@ group :development, :test do
   gem 'consistency_fail'
 end
 
+group :ci do
+  # Code Coverage reporters
+  gem 'coveralls'
+  gem 'codeclimate-test-reporter'
+end
+
 group :production do
   # Puma will be our app server.
   gem 'puma'

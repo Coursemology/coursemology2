@@ -13,7 +13,11 @@ Major changes:
  - [nodejs](http://nodejs.org) (as a JavaScript runtime for [execjs](https://github.com/sstephenson/execjs))
 
 ### Procedure
- 1. `bundle install` (you can add `--without development,test` for production installs)
- 2. `rake db:load`. Run `RAILS_ENV=test rake db:load` if you are intending to run the test suite.
+ 1. Install dependencies using `bundle install`
+   a. `bundle install --without development:test` might be preferable for production installs.
+   b. `bundle install --without ci:production` might be preferable if you're only intending to
+      implement features.
+ 2. `rake db:load`. Run `RAILS_ENV=test rake db:load` too if you are intending to run the test
+    suite.
 
 ## Development

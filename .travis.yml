@@ -11,7 +11,6 @@ bundler_args: "--without development:production --deployment"
 cache: bundler
 
 before_install:
-  - gem install coveralls
   - gem install scss-lint
 
 before_script:
@@ -21,4 +20,4 @@ before_script:
 script:
   - scss-lint app/assets/stylesheets/
   - bundle exec consistency_fail
-  - bundle exec rake test
+  - bundle exec rake spec
