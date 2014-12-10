@@ -14,10 +14,18 @@ Major changes:
 
 ### Procedure
  1. Install dependencies using `bundle install`
-   a. `bundle install --without development:test` might be preferable for production installs.
-   b. `bundle install --without ci:production` might be preferable if you're only intending to
-      implement features.
+    1. `bundle install --without development:test` might be preferable for production installs.
+    2. `bundle install --without ci:production` might be preferable if you're only intending to
+       implement features.
  2. `rake db:load`. Run `RAILS_ENV=test rake db:load` too if you are intending to run the test
     suite.
+ 3. `bin/rails server` to start the development app server. Production installs should configure
+    [Puma](http://puma.io) and be reverse-proxied.
 
 ## Development
+Code styles are predefined in the RubyMine/IntelliJ project files. Also, the
+[Rails Community Style Guide](https://github.com/bbatsov/ruby-style-guide) covers majority of the
+styles that we use.
+
+Run tests using `rake spec`.
+
