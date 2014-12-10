@@ -4,7 +4,7 @@ RSpec.describe User, type: :model do
   describe '#email' do
     context 'when the user has no email addresses' do
       let(:user) { User.new }
-      it 'should not have a default email' do
+      it 'does not have a default email' do
         expect(user.email).to eq(nil)
       end
     end
@@ -18,7 +18,7 @@ RSpec.describe User, type: :model do
           user
         end
 
-        it 'should pick the first non-deleted email as the primary email' do
+        it 'picks the first non-deleted email as the primary email' do
           not_marked_for_destruction = user.emails.each.select do |email_record|
             !email_record.marked_for_destruction?
           end
@@ -35,15 +35,15 @@ RSpec.describe User, type: :model do
         result.email = generate(:email)
         result
       end
-      it 'should create a new UserEmail' do
+      it 'creates a new UserEmail' do
         expect(user.emails.length).to_not eq(0)
       end
 
-      it 'should create a new primary UserEmail' do
+      it 'creates a new primary UserEmail' do
         expect(user.emails[0].primary?).to eq(true)
       end
 
-      it 'should delete the only email address when assigning nil' do
+      it 'deletes the only email address when assigning nil' do
         user.email = nil
         expect(user.email).to eq(nil)
 
@@ -55,7 +55,7 @@ RSpec.describe User, type: :model do
     context 'when the user has multiple email addresses' do
       let(:user) { build(:user, emails_count: 2) }
       context 'when there is no primary email set' do
-        it 'should set the first email as primary' do
+        it 'sets the first email as primary' do
           user.email = 'test1a@email'
           email_record = user.send(:default_email_record)
           expect(email_record.primary?).to eq(true)
@@ -67,9 +67,16 @@ RSpec.describe User, type: :model do
 
   describe '#emails' do
     let(:user) { create(:user, emails_count: 5) }
-    it 'should only allow one primary email' do
+    it 'only allows one primary email' do
       user.emails.each.each { |email_record| email_record.primary = true }
-      expect { user.save! } .to raise_error(ActiveRecord::RecordInvalid)
+      expect { user.save! } .to raise_error(ActiveRecord::RecordNotUnique)
+    end
+  end
+
+  describe '#role' do
+    let(:user) { User.new }
+    it 'expects to be normal by default' do
+      expect(user.normal?).to eq(true)
     end
   end
 end
