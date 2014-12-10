@@ -21,3 +21,11 @@ Major changes:
     suite.
  3. `bin/rails server` to start the development app server. Production installs should configure
     [Puma](http://puma.io) and be reverse-proxied.
+
+## Found Boogs?
+
+Create an issue on the Github [issue tracker](https://github.com/Coursemology/coursemology2/issues).
+
+## License
+
+Copyright (c) 2014 Coursemology.org. This software is licensed under the MIT License.
