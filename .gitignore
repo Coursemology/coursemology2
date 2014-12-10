@@ -9,6 +9,8 @@
 
 # Ignore user-specific Intellij project files
 /.idea/dictionaries/*
+/.idea/.rakeTasks
+/.idea/.generators
 /.idea/workspace.xml
 
 # Ignore the default SQLite database.
