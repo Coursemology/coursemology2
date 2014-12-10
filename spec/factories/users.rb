@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :user do
+  factory :user, aliases: [:creator]  do
     transient do
       emails_count 1
     end
