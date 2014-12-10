@@ -20,7 +20,6 @@ RSpec.describe InstanceUser, type: :model do
     end
 
     it 'expects to be normal role by default' do
-      pending 'waiting for the fix of enum validation'
       expect(instance_user.normal?).to eq(true)
     end
 

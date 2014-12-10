@@ -10,7 +10,7 @@ gem 'rails', '~> 4.1.8'
 gem 'pg'
 # Schema Plus for some higher level database abstractions
 gem 'schema_plus'
-gem 'schema_validations'
+gem 'schema_validations', :github => 'lowjoel/schema_validations'
 # Table and column comments
 gem 'migration_comments'
 # Squeel as an SQL-like DSL

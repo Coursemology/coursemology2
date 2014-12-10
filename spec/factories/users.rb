@@ -4,8 +4,7 @@ FactoryGirl.define do
       emails_count 1
     end
 
-    #TODO set to role :normal
-    role 1
+    role :normal
     password 'lolololol'
 
     after(:build) do |user, evaluator|

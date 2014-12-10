@@ -2,8 +2,7 @@
 class User < ActiveRecord::Base
   include UserAuthenticationConcern
 
-  #TODO schema_validation gem has some issues when working with enum
-  #enum role: { super_admin: 0, normal: 1 }
+  enum role: { normal: 0, super_admin: 1 }
   has_many :emails, class_name: UserEmail.name, inverse_of: :user, dependent: :destroy
   has_many :instance_users
   has_many :instances, through: :instance_users

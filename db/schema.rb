@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20141210054627) do
     t.inet     "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "role",                   default: 1,  null: false
+    t.integer  "role",                   default: 0,  null: false
     t.index ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
   end
 
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 20141210054627) do
     t.integer  "user_id",                 null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "role",        default: 3, null: false
+    t.integer  "role",        default: 0, null: false
     t.index ["instance_id", "user_id"], :name => "index_instance_users_on_instance_id_and_user_id", :unique => true
     t.index ["instance_id"], :name => "fk__instance_users_instance_id"
     t.index ["role"], :name => "index_instance_users_on_role"

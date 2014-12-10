@@ -76,7 +76,6 @@ RSpec.describe User, type: :model do
   describe 'role' do
     let(:user) { User.new }
     it 'expects to be normal role by default' do
-      pending 'waiting for the fix of enum validation'
       expect(user.normal?).to eq(true)
     end
   end
