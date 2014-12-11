@@ -1,10 +1,3 @@
-GIT
-  remote: git://github.com/lowjoel/schema_validations.git
-  revision: 5df652e1c27d2147e97595649735ce7761c9ed97
-  specs:
-    schema_validations (1.0.0)
-      schema_plus
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -171,9 +164,11 @@ GEM
       sass (~> 3.2.2)
       sprockets (~> 2.8, < 3.0)
       sprockets-rails (~> 2.0)
-    schema_plus (1.7.0)
+    schema_plus (1.7.1)
       activerecord (>= 3.2)
       valuable
+    schema_validations (1.0.1)
+      schema_plus
     simplecov (0.9.1)
       docile (~> 1.1.0)
       multi_json (~> 1.0)
@@ -253,7 +248,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 4.0.3)
   schema_plus
-  schema_validations!
+  schema_validations
   simplecov
   slim-rails
   spring
