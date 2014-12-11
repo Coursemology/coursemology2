@@ -73,7 +73,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'role' do
+  describe '#role' do
     let(:user) { User.new }
     it 'expects to be normal role by default' do
       expect(user.normal?).to eq(true)
