@@ -2,7 +2,7 @@
 class User < ActiveRecord::Base
   include UserAuthenticationConcern
 
-  enum role: { normal: 0, super_admin: 1 }
+  enum role: { normal: 0, administartor: 1 }
   has_many :emails, class_name: UserEmail.name, inverse_of: :user, dependent: :destroy
   has_many :instance_users
   has_many :instances, through: :instance_users
