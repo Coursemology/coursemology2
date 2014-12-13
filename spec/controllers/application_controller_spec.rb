@@ -15,10 +15,7 @@ RSpec.describe ApplicationController, type: :controller do
       expect(ActsAsTenant.current_tenant).to eq(Instance.default)
     end
 
-    let(:instance) do
-      default_instance = Instance.default
-      Instance.where { id << [default_instance] }.take
-    end
+    let(:instance) { create(:instance) }
 
     it 'should not be case insensitive' do
       @request.headers['host'] = instance.host.upcase

@@ -67,6 +67,9 @@ group :development, :test do
 
   # Helps to prevent database consistency mistakes
   gem 'consistency_fail'
+
+  # Ensure a clean state of database for testing.
+  gem 'database_cleaner'
 end
 
 group :ci do
