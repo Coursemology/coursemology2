@@ -209,8 +209,6 @@ GEM
       coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    tzinfo-data (1.2014.10)
-      tzinfo (>= 1.0.0)
     uglifier (2.5.3)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -218,11 +216,9 @@ GEM
     valuable (0.9.9)
     warden (1.2.3)
       rack (>= 1.0)
-    wdm (0.1.0)
     yard (0.8.7.6)
 
 PLATFORMS
-  mswin64
   ruby
 
 DEPENDENCIES
