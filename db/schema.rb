@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141205065248) do
+ActiveRecord::Schema.define(version: 20141210054627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20141205065248) do
   end
 
   create_table "users", force: true do |t|
+    t.integer  "role",                   default: 0,  null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -37,8 +38,9 @@ ActiveRecord::Schema.define(version: 20141205065248) do
   end
 
   create_table "instance_users", force: true do |t|
-    t.integer  "instance_id", null: false
-    t.integer  "user_id",     null: false
+    t.integer  "instance_id",             null: false
+    t.integer  "user_id",                 null: false
+    t.integer  "role",        default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["instance_id", "user_id"], :name => "index_instance_users_on_instance_id_and_user_id", :unique => true

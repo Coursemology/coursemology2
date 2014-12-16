@@ -164,10 +164,10 @@ GEM
       sass (~> 3.2.2)
       sprockets (~> 2.8, < 3.0)
       sprockets-rails (~> 2.0)
-    schema_plus (1.7.0)
+    schema_plus (1.7.1)
       activerecord (>= 3.2)
       valuable
-    schema_validations (1.0.0)
+    schema_validations (1.0.1)
       schema_plus
     simplecov (0.9.1)
       docile (~> 1.1.0)
