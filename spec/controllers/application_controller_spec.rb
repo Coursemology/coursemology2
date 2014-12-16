@@ -8,7 +8,7 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   describe 'multitenancy' do
-    it 'should check the host for multitenancy' do
+    it 'checks the host for multitenancy' do
       @request.headers['host'] = 'coursemology.org'
       get :index
 
@@ -20,21 +20,21 @@ RSpec.describe ApplicationController, type: :controller do
       Instance.where { id << [default_instance] }.take
     end
 
-    it 'should not be case insensitive' do
+    it 'checks hosts in a case insensitive manner' do
       @request.headers['host'] = instance.host.upcase
       get :index
 
       expect(ActsAsTenant.current_tenant).to eq(instance)
     end
 
-    it 'should accept www as a default subdomain' do
+    it 'accepts www as a default subdomain' do
       @request.headers['host'] = 'www.' + instance.host.capitalize
       get :index
 
       expect(ActsAsTenant.current_tenant).to eq(instance)
     end
 
-    it 'should not recognise any subdomain other than www' do
+    it 'does not recognise any subdomain other than www' do
       @request.headers['host'] = 'random.' + instance.host.capitalize
       get :index
 

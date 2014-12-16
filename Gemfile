@@ -60,6 +60,7 @@ group :development, :test do
 
   # Use RSpec for Behaviour testing
   gem 'rspec-rails'
+  gem 'should_not'
   gem 'simplecov'
 
   # Factory Girl for factories
