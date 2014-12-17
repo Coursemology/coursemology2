@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141210105742) do
+ActiveRecord::Schema.define(version: 20141210133147) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,22 @@ ActiveRecord::Schema.define(version: 20141210105742) do
     t.index ["instance_id"], :name => "fk__courses_instance_id"
     t.foreign_key ["creator_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_courses_creator_id"
     t.foreign_key ["instance_id"], "instances", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_courses_instance_id"
+  end
+
+  create_table "course_users", force: true do |t|
+    t.integer  "course_id",                        null: false
+    t.integer  "user_id",                          null: false
+    t.integer  "role",             default: 0,     null: false
+    t.string   "name",                             null: false
+    t.boolean  "phantom",          default: false, null: false
+    t.datetime "last_active_time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["course_id", "user_id"], :name => "index_course_users_on_course_id_and_user_id", :unique => true
+    t.index ["course_id"], :name => "fk__course_users_course_id"
+    t.index ["user_id"], :name => "fk__course_users_user_id"
+    t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_users_course_id"
+    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_users_user_id"
   end
 
   create_table "instance_users", force: true do |t|

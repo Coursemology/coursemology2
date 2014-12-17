@@ -2,8 +2,8 @@ FactoryGirl.define do
   factory :course_user do
     user
     course
-    name 'student'
     role :student
+    name 'student'
     phantom false
   end
 end
