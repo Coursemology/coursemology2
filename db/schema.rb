@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141210054627) do
+ActiveRecord::Schema.define(version: 20141210105742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,22 @@ ActiveRecord::Schema.define(version: 20141210054627) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+  end
+
+  create_table "courses", force: true do |t|
+    t.integer  "instance_id",             null: false
+    t.string   "title",                   null: false
+    t.text     "description"
+    t.integer  "status",      default: 0, null: false
+    t.datetime "start_at",                null: false
+    t.datetime "end_at",                  null: false
+    t.integer  "creator_id",              null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["creator_id"], :name => "fk__courses_creator_id"
+    t.index ["instance_id"], :name => "fk__courses_instance_id"
+    t.foreign_key ["creator_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_courses_creator_id"
+    t.foreign_key ["instance_id"], "instances", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_courses_instance_id"
   end
 
   create_table "instance_users", force: true do |t|
