@@ -90,5 +90,8 @@ gem 'devise'
 # Use cancancan for authorization
 gem 'cancancan', '~> 1.9'
 
+# Forms made easy for Rails
+gem 'simple_form'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
