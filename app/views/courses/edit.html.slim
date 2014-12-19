@@ -1,0 +1,14 @@
+= simple_form_for @course do |f|
+  = f.input :title, label:'Give it an awesome name',
+      placeholder: 'eg: Maths Universe, Geovengers'
+
+  = f.input :description, label:'Give it an awesome backstory',
+      placeholder: 'eg: Darth Vader is taking over the universe. We need you to save the day!'
+
+  = f.select :status, collection: Course.statuses.keys
+
+  = f.input :start_at, as: :datetime
+
+  = f.input :end_at, as: :datetime
+
+  = f.button :submit

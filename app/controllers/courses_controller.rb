@@ -20,6 +20,11 @@ class CoursesController < ApplicationController
   end
 
   def update
+    if @course.update_attributes(course_params)
+      redirect_to course_path(@course), notice: 'Course updated'
+    else
+      render 'edit'
+    end
   end
 
   def destroy
