@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/lowjoel/themes_on_rails.git
+  revision: 2c6446f8658b55dedc95afa9f66d16d1a68b9136
+  specs:
+    themes_on_rails (0.3.0)
+      rails (>= 3.2)
+
 GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
@@ -276,6 +283,7 @@ DEPENDENCIES
   slim-rails
   spring
   squeel
+  themes_on_rails!
   traceroute
   turbolinks
   tzinfo-data

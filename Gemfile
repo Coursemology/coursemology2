@@ -98,8 +98,11 @@ gem 'devise'
 # Use cancancan for authorization
 gem 'cancancan', '~> 1.9'
 
-# Some helpers for structuring CSS/JavaScript.
+# Some helpers for structuring CSS/JavaScript
 gem 'rails_utils'
+
+# Themes for instances
+gem 'themes_on_rails', github: 'lowjoel/themes_on_rails'
 
 # Forms made easy for Rails
 gem 'simple_form'

@@ -6,5 +6,6 @@ class ApplicationController < ActionController::Base
 
   include ApplicationMultitenancyConcern
   include ApplicationInternationalizationConcern
+  include ApplicationThemingConcern
   include ApplicationUserConcern
 end
