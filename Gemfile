@@ -87,5 +87,8 @@ gem 'acts_as_tenant'
 # User authentication
 gem 'devise'
 
+# Use cancancan for authorization
+gem 'cancancan', '~> 1.9'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

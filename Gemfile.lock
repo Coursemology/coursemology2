@@ -38,6 +38,7 @@ GEM
     bullet (4.14.0)
       activesupport (>= 3.0.0)
       uniform_notifier (>= 1.6.0)
+    cancancan (1.9.2)
     codeclimate-test-reporter (0.4.3)
       simplecov (>= 0.7.1, < 1.0.0)
     coffee-rails (4.1.0)
@@ -229,6 +230,7 @@ PLATFORMS
 DEPENDENCIES
   acts_as_tenant
   bullet
+  cancancan (~> 1.9)
   codeclimate-test-reporter
   consistency_fail
   coveralls
