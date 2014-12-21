@@ -13,17 +13,17 @@ html
     = csrf_meta_tags
 
   body
-    nav.site-navigation role="navigation"
-      div
-        div.header
-          button.collapsed type="button" data-toggle="collapse" data-target="#site-navigation-navbar" aria-expanded="false" aria-controls="navbar"
+    nav.navbar.navbar-inverse.navbar-fixed-top role="navigation"
+      div.container
+        div.navbar-header
+          button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#site-navigation-navbar" aria-expanded="false" aria-controls="navbar"
             span.sr-only Toggle navigation
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.brand href="#" Coursemology
+          a.navbar-brand href="#" Coursemology
         div.collapse.navbar-collapse#site-navigation-navbar
-          ul
+          ul.nav.navbar-nav.pull-right
             li.active
               a href="#" Courses
             li
@@ -37,7 +37,7 @@ html
               li
                 = link_to('Login', new_user_session_path)
 
-    div.page
+    div.container-fluid
       = flash_messages
       div class=page_class
         = yield
