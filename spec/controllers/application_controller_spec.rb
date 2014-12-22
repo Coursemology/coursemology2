@@ -7,7 +7,7 @@ RSpec.describe ApplicationController, type: :controller do
     end
   end
 
-  describe 'multitenancy' do
+  describe ApplicationMultitenancyConcern do
     it 'checks the host for multitenancy' do
       @request.headers['host'] = 'coursemology.org'
       get :index
@@ -88,6 +88,21 @@ RSpec.describe ApplicationController, type: :controller do
       it 'sets the nearest available locale' do
         get :index
         expect(I18n.locale).to eq(:'zh-CN')
+      end
+    end
+  end
+
+  describe ApplicationThemingConcern do
+    context 'when the instance has a theme' do
+      it 'uses the theme' do
+        pending 'an instance with a theme'
+        fail
+      end
+    end
+
+    context 'when the instance does not have a theme' do
+      it 'uses the default theme' do
+        expect(controller.send(:deduce_theme)).to eq('default')
       end
     end
   end
