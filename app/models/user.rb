@@ -1,6 +1,7 @@
 # Represents a user in the application. Users are shared across all instances.
 class User < ActiveRecord::Base
   include UserAuthenticationConcern
+  model_stamper
 
   enum role: { normal: 0, administrator: 1 }
   has_many :emails, class_name: UserEmail.name, inverse_of: :user, dependent: :destroy
