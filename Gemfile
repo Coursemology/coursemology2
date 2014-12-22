@@ -10,7 +10,7 @@ gem 'rails', '~> 4.1.8'
 # Use PostgreSQL for the backend
 gem 'pg'
 # Schema Plus for some higher level database abstractions
-gem 'schema_plus'
+gem 'schema_plus', github: 'lowjoel/schema_plus', branch: '1.x'
 gem 'schema_validations'
 # Table and column comments
 gem 'migration_comments'
