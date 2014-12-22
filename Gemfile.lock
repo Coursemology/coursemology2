@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/lowjoel/schema_plus.git
+  revision: 4e21989cdd6521067c5bd8073453cb44e1f801ec
+  specs:
+    schema_plus (1.7.1)
+      activerecord (>= 3.2)
+      valuable
+
+GIT
   remote: git://github.com/lowjoel/userstamp.git
   revision: 4cb83294ff0c143e1eddde9384ddfe463b708a41
   specs:
@@ -172,9 +180,6 @@ GEM
       sass (~> 3.2.2)
       sprockets (~> 2.8, < 3.0)
       sprockets-rails (~> 2.0)
-    schema_plus (1.7.1)
-      activerecord (>= 3.2)
-      valuable
     schema_validations (1.0.1)
       schema_plus
     should_not (1.1.0)
@@ -262,7 +267,7 @@ DEPENDENCIES
   rails-flog
   rspec-rails
   sass-rails (~> 4.0.3)
-  schema_plus
+  schema_plus!
   schema_validations
   should_not
   simple_form
