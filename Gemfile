@@ -98,3 +98,7 @@ gem 'simple_form'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+
+# Add created_by and updated_by attributes to models
+gem 'magiclabs-userstamp', github: 'lowjoel/userstamp'
+
