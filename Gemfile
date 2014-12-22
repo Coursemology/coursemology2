@@ -14,6 +14,8 @@ gem 'schema_plus'
 gem 'schema_validations'
 # Table and column comments
 gem 'migration_comments'
+# Add creator_id and updater_id attributes to models
+gem 'magiclabs-userstamp', github: 'lowjoel/userstamp'
 # Squeel as an SQL-like DSL
 gem 'squeel'
 
