@@ -46,6 +46,8 @@ GEM
     bcrypt (3.1.9)
     bootstrap-sass (3.3.1.0)
       sass (~> 3.2)
+    bootstrap-sass-extras (0.0.6)
+      rails (>= 3.1.0)
     builder (3.2.2)
     bullet (4.14.0)
       activesupport (>= 3.0.0)
@@ -251,6 +253,7 @@ DEPENDENCIES
   acts_as_tenant
   autoprefixer-rails
   bootstrap-sass
+  bootstrap-sass-extras
   bullet
   cancancan (~> 1.9)
   codeclimate-test-reporter

@@ -27,6 +27,7 @@ gem 'jquery-cdn'
 gem 'rails-assets-jquery-ujs'
 # Our Coursemology will be themed using Bootstrap
 gem 'bootstrap-sass'
+gem 'bootstrap-sass-extras'
 gem 'autoprefixer-rails'
 # Turbolinks makes following links in your web application faster.
 # Read more: https://github.com/rails/turbolinks

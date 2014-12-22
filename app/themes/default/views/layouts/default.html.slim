@@ -6,7 +6,7 @@ html
         = "#{content_for(:page_title)} - "
       | Coursemology2
     meta http-equiv="X-UA-Compatible" content="IE=edge"
-    meta name="viewport" content="width=device-width, initial-scale=1"
+    = viewport_meta_tag
     = application_resources
     = stylesheet_link_tag 'default/all', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'default/all', defer: true, 'data-turbolinks-track' => true
