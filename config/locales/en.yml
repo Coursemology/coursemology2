@@ -20,4 +20,8 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  courses:
+    create:
+      notice: "Course %{title} was created."
+    update:
+      notice: "Course %{title} was updated."
