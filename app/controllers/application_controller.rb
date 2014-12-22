@@ -7,4 +7,5 @@ class ApplicationController < ActionController::Base
   include ApplicationMultitenancyConcern
   include ApplicationInternationalizationConcern
   include ApplicationUserConcern
+  include Userstamp
 end
