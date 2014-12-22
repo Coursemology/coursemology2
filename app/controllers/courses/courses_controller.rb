@@ -11,7 +11,7 @@ class Courses::CoursesController < Courses::Controllers
     @course.course_users.build(user: current_user, name: 'name', role: :owner)
 
     if @course.save
-      redirect_to edit_course_path(@course)
+      redirect_to edit_course_path(@course), notice: t('.notice', title: @course.title)
     else
       render 'new'
     end
@@ -22,7 +22,7 @@ class Courses::CoursesController < Courses::Controllers
 
   def update #:nodoc:
     if @course.update_attributes(course_params)
-      redirect_to course_path(@course), notice: 'Course updated'
+      redirect_to course_path(@course), notice: t('.notice', title: @course.title)
     else
       render 'edit'
     end

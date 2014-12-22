@@ -1,10 +1,10 @@
-h2= 'New Course'
+h2= t('.header')
 
 = simple_form_for @course do |f|
-  = f.input :title, label:'Give it an awesome name',
-            placeholder: 'eg: Maths Universe, Geovengers'
+  = f.input :title, label: t('courses.courses.form.title_label'),
+            placeholder: t('courses.courses.form.title_placeholder')
 
-  = f.input :description, label:'Give it an awesome backstory',
-            placeholder: 'eg: Darth Vader is taking over the universe. We need you to save the day!'
+  = f.input :description, label: t('courses.courses.form.description_label'),
+            placeholder: t('courses.courses.form.description_placeholder')
 
   = f.button :submit, class: 'btn-primary'
