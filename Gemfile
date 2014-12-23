@@ -84,6 +84,9 @@ end
 # Multitenancy
 gem 'acts_as_tenant'
 
+# Internationalization
+gem 'http_accept_language'
+
 # User authentication
 gem 'devise'
 
