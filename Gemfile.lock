@@ -74,6 +74,7 @@ GEM
     ffi (1.9.6)
     high_voltage (2.2.1)
     hike (1.2.3)
+    http_accept_language (2.0.2)
     i18n (0.6.11)
     jbuilder (2.2.5)
       activesupport (>= 3.0.0, < 5)
@@ -237,6 +238,7 @@ DEPENDENCIES
   devise
   factory_girl_rails
   high_voltage
+  http_accept_language
   jbuilder (~> 2.0)
   jquery-rails
   listen (~> 1.3.1)
