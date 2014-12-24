@@ -172,6 +172,9 @@ GEM
     schema_validations (1.0.1)
       schema_plus
     should_not (1.1.0)
+    simple_form (3.1.0)
+      actionpack (~> 4.0)
+      activemodel (~> 4.0)
     simplecov (0.9.1)
       docile (~> 1.1.0)
       multi_json (~> 1.0)
@@ -255,6 +258,7 @@ DEPENDENCIES
   schema_plus
   schema_validations
   should_not
+  simple_form
   simplecov
   slim-rails
   spring
