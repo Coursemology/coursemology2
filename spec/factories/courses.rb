@@ -5,5 +5,6 @@ FactoryGirl.define do
     start_at Time.now
     end_at 7.days.from_now
     creator
+    updater
   end
 end

@@ -9,7 +9,7 @@ gem 'rails', '~> 4.1.8'
 # Use PostgreSQL for the backend
 gem 'pg'
 # Schema Plus for some higher level database abstractions
-gem 'schema_plus'
+gem 'schema_plus', github: 'lowjoel/schema_plus'
 gem 'schema_validations'
 # Table and column comments
 gem 'migration_comments'
@@ -63,6 +63,9 @@ group :development, :test do
   gem 'should_not'
   gem 'simplecov'
 
+  # Capybara for feature testing
+  gem 'capybara'
+
   # Factory Girl for factories
   gem 'factory_girl_rails'
 
@@ -98,3 +101,7 @@ gem 'simple_form'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+
+# Add created_by and updated_by attributes to models
+gem 'magiclabs-userstamp', github: 'lowjoel/userstamp'
+
