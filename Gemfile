@@ -66,6 +66,7 @@ group :development, :test do
 
   # Use RSpec for Behaviour testing
   gem 'rspec-rails'
+  gem 'rspec-html-matchers'
   gem 'should_not'
   gem 'simplecov'
 
