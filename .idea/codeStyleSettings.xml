@@ -43,6 +43,7 @@
           </indentOptions>
         </codeStyleSettings>
         <codeStyleSettings language="ruby">
+          <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
           <option name="SPACE_WITHIN_BRACES" value="true" />
           <indentOptions>
             <option name="CONTINUATION_INDENT_SIZE" value="2" />
