@@ -34,4 +34,14 @@ module ApplicationMultitenancyConcern
       request.host
     end
   end
+
+  module ClassMethods
+    # :nodoc:
+    def set_current_tenant_through_filter
+      super
+      class_eval do
+        private :set_current_tenant
+      end
+    end
+  end
 end
