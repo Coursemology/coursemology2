@@ -39,6 +39,7 @@ ClassVars:
 
 CollectionMethods:
   PreferredMethods:
+    find: 'find'
     detect: 'find'
 
 ColonMethodCall:
