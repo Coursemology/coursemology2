@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+source 'https://rails-assets.org'
 
 # For Windows devs
 gem 'tzinfo-data', platforms: [:mswin]
@@ -21,8 +22,13 @@ gem 'sass-rails', '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
+# Use jQuery as the JavaScript library
+gem 'jquery-cdn'
+gem 'rails-assets-jquery-ujs'
+# Our Coursemology will be themed using Bootstrap
+gem 'bootstrap-sass'
+gem 'bootstrap-sass-extras'
+gem 'autoprefixer-rails'
 # Turbolinks makes following links in your web application faster.
 # Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
@@ -60,6 +66,7 @@ group :development, :test do
 
   # Use RSpec for Behaviour testing
   gem 'rspec-rails'
+  gem 'rspec-html-matchers'
   gem 'should_not'
   gem 'simplecov'
 
@@ -92,6 +99,12 @@ gem 'devise'
 
 # Use cancancan for authorization
 gem 'cancancan', '~> 1.9'
+
+# Some helpers for structuring CSS/JavaScript
+gem 'rails_utils'
+
+# Themes for instances
+gem 'themes_on_rails', github: 'lowjoel/themes_on_rails'
 
 # Forms made easy for Rails
 gem 'simple_form'
