@@ -28,4 +28,7 @@
 
 	// Project options: Default on
 	"boss": false
+
+	// Other Project options:
+	"maxlen": 100
 }

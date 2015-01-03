@@ -5,8 +5,19 @@ Code styles are predefined in the RubyMine/IntelliJ project files. Also, the
 [Rails Community Style Guide](https://github.com/bbatsov/ruby-style-guide) covers majority of the
 styles that we use.
 
+### Documentation
+Write Yardoc when implementing classes. Yardoc is preferred because RubyMine is able to infer
+parameter and return types when annotated using it.
+
+Run `yard stats --list-undoc` to find which methods need documenting.
+
 ## Tests
 Run tests using `rake spec`.
+
+## Developer Tools
+The project's Gemfile contains a few developer tools to help keep the project tidy:
+
+ - _Traceroute_ checks that the routes are properly defined and reachable.
 
 ## Themes
 Themes are provided by [themes_on_rails](https://github.com/yoolk/themes_on_rails). Coursemology
