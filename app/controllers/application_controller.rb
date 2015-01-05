@@ -8,4 +8,5 @@ class ApplicationController < ActionController::Base
   include ApplicationInternationalizationConcern
   include ApplicationThemingConcern
   include ApplicationUserConcern
+  include Userstamp
 end
