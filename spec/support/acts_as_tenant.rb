@@ -9,6 +9,7 @@ module ActsAsTenant::TestGroupHelpers
     context "with tenant #{tenant.inspect}" do |*params|
       before(:each) do
         ActsAsTenant.current_tenant = send(tenant)
+        Capybara.app_host = 'http://' + send(tenant).host
       end
       after(:each) do
         ActsAsTenant.current_tenant = nil
@@ -20,4 +21,5 @@ end
 
 RSpec.configure do |config|
   config.extend ActsAsTenant::TestGroupHelpers, type: :model
+  config.extend ActsAsTenant::TestGroupHelpers, type: :feature
 end

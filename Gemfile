@@ -72,6 +72,9 @@ group :development, :test do
   gem 'should_not'
   gem 'simplecov'
 
+  # Capybara for feature testing
+  gem 'capybara'
+
   # Factory Girl for factories
   gem 'factory_girl_rails'
 
