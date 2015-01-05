@@ -3,6 +3,9 @@
 #
 # Modules in this file refer to the concept, not the Ruby Module.
 #
+# In Development mode, classes are not eager loaded. Module hosts then do not know which modules
+# have been implemented.
+#
 # @example Declare that a class can host other modules.
 #   class Course
 #     include Modular
@@ -24,6 +27,7 @@ module Modular
   #
   # @param host [Class] The host to convert into a host.
   def self.become_module_host(host)
+    return if host.include?(ModuleHost)
     host.const_set(:Module, base_module_for_host(host))
 
     host.class_eval do
