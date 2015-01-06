@@ -20,4 +20,19 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  courses:
+    courses:
+      create:
+        notice: "Course %{title} was created."
+      update:
+        notice: "Course %{title} was updated."
+      new:
+        header: 'New Course'
+      edit:
+        header: 'Edit Course'
+      form:
+        title_label: 'Give it an awesome name'
+        title_placeholder: 'e.g. Maths Universe, Geovengers'
+        description_label: 'Give it an awesome backstory'
+        description_placeholder: 'e.g. Darth Vader is taking over the universe. We need you to save
+                                  the day!'
