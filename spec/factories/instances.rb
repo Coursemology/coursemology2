@@ -5,6 +5,7 @@ FactoryGirl.define do
   end
 
   factory :instance do
+    sequence(:name) { |n| "Instance#{n}" }
     host
   end
 end
