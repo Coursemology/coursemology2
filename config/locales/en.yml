@@ -74,6 +74,16 @@ en:
         notice: "System Announcement %{title} was updated."
       destroy:
         notice: "System Announcement %{title} was deleted."
+    instances:
+      new:
+        header: 'New Instance'
+      create:
+        notice: 'Instance has been successfully created'
+      edit:
+        header: 'Edit Instance'
+      update:
+        notice: 'Instance has been successfully updated'
+
   course:
     courses:
       create:
