@@ -7,7 +7,9 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 #
 # Remember to ensure that the commands in this file are idempotent!
-Instance.find_or_create_by(name: 'Default', host: '*')
+
+# Default hostname without validation and cannot be changed in UI
+Instance.find_or_initialize_by(name: 'Default', host: '*').save!(validate: false)
 
 # Create the default user account.
 user = UserEmail.find_by_email('test@example.org')
