@@ -1,2 +1,14 @@
-h1 Instances#index
-p Find me in app/views/instances/index.html.slim
+h1 = t('.header')
+
+= link_to t('.new_instance'), new_admin_instance_path, class: 'btn btn-primary'
+
+table.table.table-middle-align
+  thead
+  tr
+    th= t('.name')
+    th= t('.host_name')
+    th= t('.users')
+    th= t('.courses')
+
+  tbody.table-hover
+    = render @instances

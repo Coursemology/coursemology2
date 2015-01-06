@@ -1,0 +1,10 @@
+tr
+  td
+    a
+      = link_to instance.name, admin_instance_path(instance)
+
+  td = instance.host
+
+  td = InstanceUser.unscoped.where(instance_id: instance.id).count
+
+  td = Course.unscoped.where(instance_id: instance.id).count

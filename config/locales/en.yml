@@ -75,6 +75,13 @@ en:
       destroy:
         notice: "System Announcement %{title} was deleted."
     instances:
+      index:
+        header: 'Instance Management'
+        new_instance: 'New'
+        name: 'Name'
+        host_name: 'Host Name'
+        users: 'Total Users'
+        courses: 'Total Courses'
       new:
         header: 'New Instance'
       create:
