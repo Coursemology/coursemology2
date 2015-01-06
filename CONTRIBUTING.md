@@ -51,3 +51,17 @@ A sample theme (for [coursemology.org](http://coursemology.org)) can be found in
 ## Libraries
 The `lib` directory is not autoloaded, as described in this [blog post](http://hakunin.com/rails3-load-paths#if-you-add-code-in-your-lib-directory). However, the `lib/autoload`
 directory is. Place libraries which will be autoloaded in that directory instead.
+
+## Nested layouts
+Following a paradigm similar to that described by [André Arko](http://andre.arko.net/2013/02/02/nested-layouts-on-rails--31/),
+layouts can be nested. This is most visible when defining a global layout, and then a sub-layout
+for course modules (with the sidebar). Our implementation is similar, but instead of an
+application helper, we extend ActionView directly, so templates look like:
+
+ ```ruby
+ render within: 'parent_template' do
+   | Extra pre-adornments
+   = yield
+   | Extra post-adornments
+ end
+ ```
