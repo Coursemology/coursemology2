@@ -56,7 +56,7 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  scope module: 'courses' do
+  scope module: 'course' do
     resources :courses
   end
 end
