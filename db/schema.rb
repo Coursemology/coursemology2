@@ -11,12 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141222074908) do
+ActiveRecord::Schema.define(version: 20150106073750) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "instances", force: true do |t|
+    t.string "name", null: false
     t.string "host", null: false, comment: "Stores the host name of the instance. The www prefix is automatically handled by the application"
     t.index ["host"], :name => "index_instances_on_host", :unique => true, :case_sensitive => false
   end
