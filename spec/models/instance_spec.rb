@@ -1,6 +1,38 @@
 require 'rails_helper'
 
 RSpec.describe Instance, type: :model do
+  describe 'hostname validation' do
+    context 'when hostname format is invalid' do
+      hosts = ['example,com', 'www_.example.org', 'example_.org', 'example.org_',
+               'example .org', 'example. org', 'example.org..']
+
+      hosts.each do |invalid_host|
+        context invalid_host do
+          subject { build(:instance, host: invalid_host) }
+
+          it { is_expected.not_to be_valid }
+        end
+      end
+    end
+
+    context 'when hostname format is valid' do
+      hosts = ['example.ORG', 'www.example.org', 'ex-ample.org', 'example.org.sg']
+      hosts.each do |valid_host|
+        context valid_host do
+          subject { build(:instance, host: valid_host) }
+
+          it { is_expected.to be_valid }
+        end
+      end
+    end
+
+    context 'when hostname is too long' do
+      subject { build(:instance, host: 'a' * 255 + '.com') }
+
+      it { is_expected.not_to be_valid }
+    end
+  end
+
   describe '.default' do
     it 'returns the default instance' do
       default_instance = Instance.default
