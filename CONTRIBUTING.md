@@ -19,6 +19,18 @@ The project's Gemfile contains a few developer tools to help keep the project ti
 
  - _Traceroute_ checks that the routes are properly defined and reachable.
 
+## Models
+Declare model attributes in the following order:
+
+ 1. includes (e.g. `include UserPasswordConcern`)
+ 2. callbacks
+ 3. attribute overrides (e.g. `enum`s)
+ 4. validations
+ 5. relations
+
+This allows models to be inherited. See the section on _Inherited Callback Queues_ from
+[`ActiveRecord::Callbacks`](http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html#module-ActiveRecord::Callbacks-label-Inheritable+callback+queues).
+
 ## Themes
 Themes are provided by [themes_on_rails](https://github.com/yoolk/themes_on_rails). Coursemology
 uses standard Bootstrap 3 styles, so it is possible to theme Coursemology using any Bootstrap 3
