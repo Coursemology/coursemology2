@@ -15,6 +15,8 @@ class Instance < ActiveRecord::Base
     end
   end
 
+  validates :host, hostname: true
+
   has_many :instance_users
   has_many :users, through: :instance_users
 end
