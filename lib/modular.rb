@@ -33,10 +33,6 @@ module Modular
 
     host.class_eval do
       include ModuleHost
-
-      class_attribute :modules
-      self.modules = []
-      private :modules=
     end
   end
 
@@ -64,6 +60,14 @@ module Modular
   # Templates for each instantiation of Modular
   module ModuleHost
     extend ActiveSupport::Concern
+
+    included do
+      class_attribute :module_names
+      self.module_names = []
+      private :module_names=
+
+      class_attribute :module_file_path
+    end
 
     module ClassMethods
       def add_module(module_)
