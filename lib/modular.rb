@@ -16,9 +16,10 @@
 #     include Course::Module
 #   end
 module Modular
-  # :nodoc:
-  def self.included(host)
-    become_module_host(host)
+  extend ActiveSupport::Concern
+
+  included do
+    Modular.become_module_host(self)
   end
 
   private
@@ -32,7 +33,6 @@ module Modular
 
     host.class_eval do
       include ModuleHost
-      extend ModuleHost::ClassMethods
 
       class_attribute :modules
       self.modules = []
@@ -49,11 +49,11 @@ module Modular
   def self.base_module_for_host(host)
     result = ::Module.new do
       include Module
-      extend Module::ClassMethods
+      extend ActiveSupport::Concern
 
-      def self.included(module_)
+      included do
         host = class_variable_get(:@@host)
-        host.add_module(module_)
+        host.add_module(self)
       end
     end
 
@@ -63,6 +63,8 @@ module Modular
 
   # Templates for each instantiation of Modular
   module ModuleHost
+    extend ActiveSupport::Concern
+
     module ClassMethods
       def add_module(module_)
         modules << module_
@@ -71,6 +73,6 @@ module Modular
   end
 
   module Module
-    module ClassMethods; end
+    extend ActiveSupport::Concern
   end
 end
