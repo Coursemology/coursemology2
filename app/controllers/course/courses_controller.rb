@@ -1,5 +1,5 @@
 class Course::CoursesController < Course::Controller
-  include Modular
+  include Course::CoursesModulesConcern
 
   def show #:nodoc:
   end
