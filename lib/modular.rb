@@ -71,10 +71,10 @@ module Modular
 
     module ClassMethods
       def add_module(module_)
-        modules << module_
+        module_names << module_.name unless module_names.include?(module_.name)
+      end
       end
     end
-  end
 
   module Module
     extend ActiveSupport::Concern

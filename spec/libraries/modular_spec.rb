@@ -23,6 +23,15 @@ RSpec.describe Modular do
     it 'can have modules associated' do
       expect(Modular1.modules).to include(Module1)
     end
+
+    it 'is only included once' do
+      Object.send(:remove_const, :Module1)
+      class Module1
+        include Modular1::Module
+      end
+
+      expect(Modular1.modules).to eq(Modular1.modules.uniq)
+    end
   end
 
   context 'When there are multiple hosts' do
