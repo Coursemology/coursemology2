@@ -21,6 +21,11 @@ Major changes:
     suite.
  3. `bin/rails server` to start the development app server. Production installs should configure
     [Puma](http://puma.io) and be reverse-proxied.
+ 4. You can log in with the default username and password:
+
+    > Email: `test@example.org`
+    >
+    > Password: `Coursemology!`
 
 ## Found Boogs?
 

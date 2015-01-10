@@ -8,3 +8,9 @@
 #
 # Remember to ensure that the commands in this file are idempotent!
 Instance.find_or_create_by(name: 'Default', host: '*')
+
+# Create the default user account.
+user = UserEmail.find_by_email('test@example.org')
+unless user
+  User.create!(email: 'test@example.org', password: 'Coursemology!', role: :administrator)
+end
