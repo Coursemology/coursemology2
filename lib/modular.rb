@@ -70,11 +70,36 @@ module Modular
     end
 
     module ClassMethods
+      # Eager loads all modules in the provided path. Modules have the suffix `Module` in their
+      # class names.
+      #
+      # @param in_path [Dir] The directory to eager load all modules from. The naming of the files
+      #                      must follow Rails conventions.
+      def eager_load_modules(in_path)
+        base_path = Pathname.new(in_path.path).realpath
+
+        Dir.glob("#{base_path}/**/*_module.rb").each do |file|
+          relative_path = Pathname.new(file).relative_path_from(base_path)
+          module_path = "#{relative_path.dirname}/#{relative_path.basename('.rb')}".camelize
+          module_path.constantize
+        end
+      end
+
+      # Associates the given module with the current host.
+      #
+      # @param module_ [Module] The module which included the host.
       def add_module(module_)
         module_names << module_.name unless module_names.include?(module_.name)
       end
+
+      # Gets all the modules associated with this host.
+      #
+      # @return [Array] The modules associated with this host.
+      def modules
+        module_names.map { |module_| module_.constantize }
       end
     end
+  end
 
   module Module
     extend ActiveSupport::Concern
