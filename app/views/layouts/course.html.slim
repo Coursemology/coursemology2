@@ -6,7 +6,7 @@
           ul.nav.nav-pills.nav-stacked
             - controller.sidebar.each do |item|
               li
-                a href="#" item
+                a href="#" = "#{item[:title]} (#{item[:unread]})"
             end
 
     div.col-lg-10.col-md-9.col-sm-8
