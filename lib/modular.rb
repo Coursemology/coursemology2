@@ -79,9 +79,7 @@ module Modular
         base_path = Pathname.new(in_path.path).realpath
 
         Dir.glob("#{base_path}/**/*_module.rb").each do |file|
-          relative_path = Pathname.new(file).relative_path_from(base_path)
-          module_path = "#{relative_path.dirname}/#{relative_path.basename('.rb')}".camelize
-          module_path.constantize
+          load_module(file, base_path)
         end
       end
 
@@ -97,6 +95,36 @@ module Modular
       # @return [Array] The modules associated with this host.
       def modules
         module_names.map { |module_| module_.constantize }
+      end
+
+      private
+
+      # Loads the given module at the specified path.
+      #
+      # @param path [String] The absolute path to the file.
+      # @param base_path [Pathname] The root directory where modules are found. This is to deduce
+      #                             the name of the class defined in the given file.
+      def load_module(path, base_path)
+        relative_path = Pathname.new(path).relative_path_from(base_path)
+
+        require_dependency(path)
+        class_in_path(relative_path).constantize
+      end
+
+      # Deduce the name of the class that is defined in the given path. This follows Rails naming
+      # conventions.
+      #
+      # @example class_in_path(Pathname.new('test.rb')) => 'Test'
+      # @example class_in_path(Pathname.new('Test/test.rb')) => 'Test::Test'
+      #
+      # @param relative_path [Pathname] The relative path to the file.
+      # @return [String] The name of the class defined in the path.
+      def class_in_path(relative_path)
+        module_path = "#{relative_path.dirname}/#{relative_path.basename('.rb')}".camelize
+
+        name_components = module_path.split('::')
+        name_components.shift if name_components.length > 1 && name_components[0] == '.'
+        name_components.join('::')
       end
     end
   end
