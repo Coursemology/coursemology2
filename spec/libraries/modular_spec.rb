@@ -32,6 +32,11 @@ RSpec.describe Modular do
 
       expect(Modular1.modules).to eq(Modular1.modules.uniq)
     end
+
+    it 'eager loads all modules in a directory' do
+      Modular1.eager_load_modules(Dir.new("#{__dir__}/../fixtures/libraries/modular"))
+      expect(Modular1.modules).to include(TestModule)
+    end
   end
 
   context 'When there are multiple hosts' do
