@@ -113,6 +113,9 @@ gem 'themes_on_rails', github: 'lowjoel/themes_on_rails'
 
 # Forms made easy for Rails
 gem 'simple_form'
+gem 'simple_form-bootstrap'
+gem 'momentjs-rails', '>= 2.8.1'
+gem 'bootstrap3-datetimepicker-rails'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
