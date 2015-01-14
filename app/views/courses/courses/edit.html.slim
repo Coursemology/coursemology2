@@ -9,8 +9,8 @@ h2= t('.header')
 
   = f.input :status, as: :radio_buttons, collection: Course.statuses.keys
 
-  = f.input :start_at, as: :datetime
+  = f.input :start_at
 
-  = f.input :end_at, as: :datetime
+  = f.input :end_at
 
   = f.button :submit

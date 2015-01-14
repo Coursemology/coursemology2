@@ -1,5 +1,7 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "bootstrap-datetimepicker";
+@import "bootstrap-select";
 
 body {
   padding-top: $navbar-height + $navbar-margin-bottom;
