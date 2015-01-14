@@ -10,6 +10,8 @@ class Course < ActiveRecord::Base
   has_many :course_users, inverse_of: :course, dependent: :destroy
   has_many :users, through: :course_users
 
+  has_many :announcements, inverse_of: :course, dependent: :destroy
+
   private
 
   # Set default values
