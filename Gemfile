@@ -31,6 +31,8 @@ gem 'rails-assets-jquery-ujs'
 gem 'bootstrap-sass'
 gem 'bootstrap-sass-extras'
 gem 'autoprefixer-rails'
+# Use font-awesome for icons
+gem 'font-awesome-rails'
 # Turbolinks makes following links in your web application faster.
 # Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
