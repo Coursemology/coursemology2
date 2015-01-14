@@ -56,6 +56,10 @@ Rails.application.routes.draw do
 
   devise_for :users
 
+  namespace :admin do
+    get '/' => 'admin#index'
+  end
+
   scope module: 'course' do
     resources :courses
   end
