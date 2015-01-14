@@ -4,9 +4,13 @@ rvm:
   - 2.1.5
   - 2.2.0
   - ruby-head
+gemfile:
+  - Gemfile
+  - gemfiles/rails42.gemfile
 matrix:
   allow_failures:
     - rvm: ruby-head
+    - gemfile: gemfiles/rails42.gemfile
 addons:
   postgresql: "9.3"
 bundler_args: "--without development:production --deployment"
