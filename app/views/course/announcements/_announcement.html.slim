@@ -1,0 +1,12 @@
+hr
+div class=("announcement #{'future' if announcement.valid_in_future? }")
+  h2
+    = announcement.title
+
+div.timestamp
+  = format_datetime(announcement.valid_from)
+  |  by 
+  = link_to_user(announcement.creator)
+
+div.content
+  = announcement.content

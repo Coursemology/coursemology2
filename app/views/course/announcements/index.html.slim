@@ -1,2 +1,7 @@
-h1 Course::Announcements#index
-p Find me in app/views/course/announcements/index.html.slim
+h1 = t('.header')
+
+- if can?(:create, Course::Announcement)
+  = link_to t('.new'), new_course_announcement_path(@course), class: 'btn btn-primary'
+
+= render @announcements
+
