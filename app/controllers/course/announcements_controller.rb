@@ -21,4 +21,10 @@ class Course::AnnouncementsController < Course::ModuleController
 
   def destroy #:nodoc:
   end
+
+  private
+
+  def announcement_params #:nodoc:
+    params.require(:course_announcement).permit(:title, :content, :valid_from, :valid_to)
+  end
 end

@@ -48,3 +48,7 @@ en:
                                   the day!'
     announcements:
       sidebar_title: 'Announcements'
+      new:
+        header: 'New Announcement'
+      edit:
+        header: 'Edit Announcement'
