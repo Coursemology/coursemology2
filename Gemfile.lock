@@ -101,6 +101,8 @@ GEM
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
     ffi (1.9.6)
+    font-awesome-rails (4.2.0.0)
+      railties (>= 3.2, < 5.0)
     high_voltage (2.2.1)
     hike (1.2.3)
     http_accept_language (2.0.2)
@@ -301,6 +303,7 @@ DEPENDENCIES
   coveralls
   devise
   factory_girl_rails
+  font-awesome-rails
   high_voltage
   http_accept_language
   jbuilder (~> 2.0)
