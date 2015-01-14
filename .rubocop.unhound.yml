@@ -39,8 +39,10 @@ ClassVars:
 
 CollectionMethods:
   PreferredMethods:
-    find: 'find'
+    find:   'find'
     detect: 'find'
+    reduce: 'reduce'
+    inject: 'reduce'
 
 ColonMethodCall:
   Enabled: true
