@@ -92,7 +92,7 @@ module Modular
 
       # Gets all the modules associated with this host.
       #
-      # @return [Array] The modules associated with this host.
+      # @return [Array<Module>] The modules associated with this host.
       def modules
         module_names.map { |module_| module_.constantize }
       end
