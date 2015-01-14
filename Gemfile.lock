@@ -1,13 +1,4 @@
 GIT
-  remote: git://github.com/lowjoel/schema_plus.git
-  revision: 4cc3203f3bf594391cdd020617ec16d01d11249a
-  branch: 1.x
-  specs:
-    schema_plus (1.8.2)
-      activerecord (>= 3.2, < 4.3)
-      valuable
-
-GIT
   remote: git://github.com/lowjoel/themes_on_rails.git
   revision: 2c6446f8658b55dedc95afa9f66d16d1a68b9136
   specs:
@@ -220,6 +211,9 @@ GEM
       sass (~> 3.2.2)
       sprockets (~> 2.8, < 3.0)
       sprockets-rails (~> 2.0)
+    schema_plus (1.8.3)
+      activerecord (>= 3.2, < 4.3)
+      valuable
     schema_validations (1.0.1)
       schema_plus
     should_not (1.1.0)
@@ -289,6 +283,7 @@ GEM
     yard (0.8.7.6)
 
 PLATFORMS
+  mswin64
   ruby
 
 DEPENDENCIES
@@ -326,7 +321,7 @@ DEPENDENCIES
   rspec-html-matchers
   rspec-rails
   sass-rails (~> 4.0.3)
-  schema_plus!
+  schema_plus (~> 1)
   schema_validations
   should_not
   simple_form
