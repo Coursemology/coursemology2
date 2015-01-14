@@ -3,5 +3,6 @@
     <option name="myName" value="Project Default" />
     <option name="myLocal" value="false" />
     <inspection_tool class="RubyConvertAllHashesInFileInspections" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="RubyLiteralArrayInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
   </profile>
 </component>
