@@ -8,9 +8,8 @@ module ApplicationThemingConcern
   private
 
   def deduce_theme
-    priorities = [
-      current_tenant.host
-    ]
+    priorities = []
+    priorities << current_tenant.host if current_tenant
     priorities.find(&method(:theme_exists?)) || 'default'
   end
 
