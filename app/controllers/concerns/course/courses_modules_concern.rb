@@ -15,7 +15,7 @@ module Course::CoursesModulesConcern
     end
 
     # Eager load all the modules declared.
-    eager_load_modules(Dir.open(File.join(__dir__, '../../modules')))
+    eager_load_modules(File.join(__dir__, '../../modules'))
   end
 
   module Sidebar
