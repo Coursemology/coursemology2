@@ -14,9 +14,21 @@ class Course::AnnouncementsController < Course::ModuleController
   end
 
   def create #:nodoc:
+    if @announcement.save
+      redirect_to(course_announcements_path(@course),
+                  notice: t('.notice', title: @announcement.title))
+    else
+      render 'new'
+    end
   end
 
   def update #:nodoc:
+    if @announcement.update_attributes(announcement_params)
+      redirect_to(course_announcements_path(@course),
+                  notice: t('.notice', title: @announcement.title))
+    else
+      render 'edit'
+    end
   end
 
   def destroy #:nodoc:

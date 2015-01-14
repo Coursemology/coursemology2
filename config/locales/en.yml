@@ -52,3 +52,7 @@ en:
         header: 'New Announcement'
       edit:
         header: 'Edit Announcement'
+      create:
+        notice: "Announcement %{title} was created."
+      update:
+        notice: "Announcement %{title} was updated."
