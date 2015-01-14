@@ -41,6 +41,8 @@ CollectionMethods:
   PreferredMethods:
     find: 'find'
     detect: 'find'
+    reduce: 'reduce'
+    inject: 'reduce'
 
 ColonMethodCall:
   Enabled: true
