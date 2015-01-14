@@ -96,6 +96,9 @@ end
 # Multitenancy
 gem 'acts_as_tenant'
 
+# Extension for validating hostnames and domain names
+gem 'validates_hostname'
+
 # Internationalization
 gem 'http_accept_language'
 
