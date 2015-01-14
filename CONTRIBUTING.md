@@ -47,3 +47,7 @@ override them in the theme directory.
 A sample theme (for [coursemology.org](http://coursemology.org)) can be found in the
 [coursemology2-coursemology.org project]
 (http://github.com/coursemology/coursemology2-coursemology.org-theme)
+
+## Libraries
+The `lib` directory is not autoloaded, as described in this [blog post](http://hakunin.com/rails3-load-paths#if-you-add-code-in-your-lib-directory). However, the `lib/autoload`
+directory is. Place libraries which will be autoloaded in that directory instead.
