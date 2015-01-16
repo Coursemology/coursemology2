@@ -1,4 +1,5 @@
 class Admin::Controller < ApplicationController
+  layout 'admin'
   before_filter :authorize_admin
 
   private
@@ -6,4 +7,6 @@ class Admin::Controller < ApplicationController
   def authorize_admin
     authorize!(:manage, current_tenant)
   end
+
+  add_breadcrumb :index, :admin_path
 end
