@@ -1,4 +1,4 @@
-h2 Sign up
+h2= t('.sign_up')
 
 = simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
   = f.error_notification
@@ -6,10 +6,11 @@ h2 Sign up
   .form-inputs
     = f.input :name, required: true, autofocus: true
     = f.input :email, required: true
-    = f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @validatable)
+    = f.input :password, required: true,
+              hint: (t('.password_hint', length: @minimum_password_length) if @validatable)
     = f.input :password_confirmation, required: true
 
   .form-actions
-    = f.button :submit, 'Sign up'
+    = f.button :submit, t('.sign_up')
 
 = render 'devise/shared/links'
