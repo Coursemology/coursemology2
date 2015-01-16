@@ -4,6 +4,7 @@ FactoryGirl.define do
       emails_count 1
     end
 
+    name 'user'
     role :normal
     password 'lolololol'
 
