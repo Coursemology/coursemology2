@@ -4,7 +4,7 @@ RSpec.describe Devise::SessionsController, type: :controller do
   controller do
   end
 
-  before { @request.env['devise.mapping'] = Devise.mappings[:user] }
+  requires_login
 
   context 'Users with multiple email addresses' do
     describe 'Log in' do
