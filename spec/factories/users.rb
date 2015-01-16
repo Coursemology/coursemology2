@@ -12,5 +12,9 @@ FactoryGirl.define do
       emails.take(1).each { |user_email| user_email.primary = true }
       user.emails.concat(emails)
     end
+
+    factory :administrator, parent: :user do
+      role :administrator
+    end
   end
 end
