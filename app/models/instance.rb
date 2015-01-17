@@ -19,4 +19,6 @@ class Instance < ActiveRecord::Base
 
   has_many :instance_users
   has_many :users, through: :instance_users
+
+  has_many :announcements, class_name: Announcement.name
 end
