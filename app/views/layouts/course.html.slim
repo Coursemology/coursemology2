@@ -1,0 +1,14 @@
+= render within_layout: controller.parent_layout do
+  div.row
+    div.col-lg-2.col-md-3.col-sm-4
+      nav role="navigation"
+        div.collapse.navbar-collapse#course-navigation-navbar
+          ul.nav.nav-pills.nav-stacked
+            - controller.sidebar.each do |item|
+              li
+                a href="#" = "#{item[:title]} (#{item[:unread]})"
+            end
+
+    div.col-lg-10.col-md-9.col-sm-8
+      = yield
+end

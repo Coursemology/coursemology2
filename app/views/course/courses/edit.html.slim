@@ -1,0 +1,16 @@
+h2= t('.header')
+
+= simple_form_for @course do |f|
+  = f.input :title, label: t('course.courses.form.title_label'),
+      placeholder: t('course.courses.form.title_placeholder')
+
+  = f.input :description, label: t('course.courses.form.description_label'),
+      placeholder: t('course.courses.form.description_placeholder')
+
+  = f.input :status, as: :radio_buttons, collection: Course.statuses.keys
+
+  = f.input :start_at
+
+  = f.input :end_at
+
+  = f.button :submit

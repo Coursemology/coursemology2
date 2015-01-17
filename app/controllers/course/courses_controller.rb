@@ -1,5 +1,5 @@
-class Courses::CoursesController < Courses::Controllers
-  load_and_authorize_resource
+class Course::CoursesController < Course::Controller
+  include Course::CoursesModulesConcern
 
   def show #:nodoc:
   end

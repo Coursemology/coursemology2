@@ -73,9 +73,14 @@ module Modular
       # Eager loads all modules in the provided path. Modules have the suffix `Module` in their
       # class names.
       #
-      # @param in_path [Dir] The directory to eager load all modules from. The naming of the files
-      #                      must follow Rails conventions.
+      # @param in_path [Dir|String] The directory to eager load all modules from. The naming of the
+      #                             files must follow Rails conventions.
       def eager_load_modules(in_path)
+        if in_path.is_a?(String)
+          return unless Dir.exists?(in_path)
+          in_path = Dir.open(in_path)
+        end
+
         base_path = Pathname.new(in_path.path).realpath
 
         Dir.glob("#{base_path}/**/*_module.rb").each do |file|
