@@ -16,6 +16,13 @@ html
     nav.navbar.navbar-inverse.navbar-fixed-top role="navigation"
       div.container-fluid
         div.navbar-header
+          - if has_sidebar?
+            button.navbar-toggle type="button" data-toggle="sidebar" data-target=".sidebar" aria-expanded="false" aria-controls="navbar"
+              span.sr-only
+                = t('layout.navbar.toggle_sidebar')
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
           button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#site-navigation-navbar" aria-expanded="false" aria-controls="navbar"
             span.sr-only
               = t('layout.navbar.toggle_navigation')
