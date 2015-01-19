@@ -18,6 +18,6 @@ class Course::Controller < ApplicationController
       module_.get_sidebar_items(self)
     end
 
-    array_of_module_arrays.flatten!
+    array_of_module_arrays.tap { |arr| arr.flatten! }
   end
 end
