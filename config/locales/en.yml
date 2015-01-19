@@ -30,6 +30,13 @@ en:
       sign_up: Sign Up
       sign_in: Sign In
       sign_out: Sign Out
+  admin:
+    navbar:
+      announcements: Announcements
+    admin:
+      home:
+        message: "Pages"
+    announcements:
   course:
     courses:
       create:
