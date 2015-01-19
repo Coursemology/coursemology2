@@ -37,6 +37,8 @@ en:
       home:
         message: "Pages"
     announcements:
+      index:
+        new: "New Announcement"
   course:
     courses:
       create:
