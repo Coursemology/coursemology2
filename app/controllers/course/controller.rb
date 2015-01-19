@@ -20,4 +20,23 @@ class Course::Controller < ApplicationController
 
     array_of_module_arrays.tap(&:flatten!)
   end
+
+  # Gets the settings items.
+  #
+  # Settings elements have the given format:
+  #
+  # ```
+  # {
+  #    title: 'Settings Item Title'
+  #    controller: controller name, String or Symbol
+  #    action: action name, String or Symbol
+  # }
+  # ```
+  def settings
+    array_of_module_arrays = Course::CoursesController.modules.map do |module_|
+      module_.get_settings_items(self)
+    end
+
+    array_of_module_arrays.tap(&:flatten!)
+  end
 end
