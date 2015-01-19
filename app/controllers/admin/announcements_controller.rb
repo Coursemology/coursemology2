@@ -5,4 +5,22 @@ class Admin::AnnouncementsController < Admin::Controller
 
   def index
   end
+
+  def new
+  end
+
+  def create
+    if @announcement.save
+      redirect_to admin_announcements_path,
+                  notice: t('.notice', title: @announcement.title)
+    else
+      render 'new'
+    end
+  end
+
+  private
+
+  def announcement_params
+    params.require(:instance_announcement).permit(:title, :content, :valid_from, :valid_to)
+  end
 end

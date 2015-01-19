@@ -38,7 +38,10 @@ en:
         message: "Pages"
     announcements:
       index:
+        header: "Announcements"
         new: "New Announcement"
+      create:
+        notice: "Announcement %{title} was created."
   course:
     courses:
       create:
