@@ -3,7 +3,7 @@ div.page-header
     | Instance Announcements
     - if can?(:manage, Instance::Announcement)
       div.pull-right
-        = link_to(t('admin.announcements.index.new'),
+        = link_to(t('.new'),
           new_admin_announcement_path,
           class: ['btn', 'btn-primary'])
 = render partial: 'announcement', collection: @announcements

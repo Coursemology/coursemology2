@@ -40,8 +40,16 @@ en:
       index:
         header: "Announcements"
         new: "New Announcement"
+      new:
+        header: "Create Announcement"
       create:
         notice: "Announcement %{title} was created."
+      edit:
+        header: "Edit Announcement"
+      update:
+        notice: "Announcement %{title} was updated."
+      destroy:
+        notice: "Announcement %{title} was deleted."
   course:
     courses:
       create:

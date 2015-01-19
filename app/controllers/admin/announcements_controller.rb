@@ -4,6 +4,7 @@ class Admin::AnnouncementsController < Admin::Controller
   add_breadcrumb :index, :admin_announcements_path
 
   def index
+    @announcements = @announcements.includes(:creator)
   end
 
   def new
@@ -16,6 +17,23 @@ class Admin::AnnouncementsController < Admin::Controller
     else
       render 'new'
     end
+  end
+
+  def edit
+  end
+
+  def update
+    if @announcement.update_attributes(announcement_params)
+      redirect_to admin_announcements_path,
+                  notice: t('.notice', title: @announcement.title)
+    else
+      render 'edit'
+    end
+  end
+
+  def destroy
+    redirect_to admin_announcements_path,
+                notice: t('.notice', title: @announcement.title) if @announcement.destroy
   end
 
   private
