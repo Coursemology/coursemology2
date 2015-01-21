@@ -9,8 +9,18 @@ describe 'form_for resource', type: :view do
       end.to raise_error(ArgumentError)
     end
 
+    it 'requires :resource to be a symbol' do
+      expect do
+        form_for(build(:course), resource: 'course') {}
+      end.to raise_error(ArgumentError)
+    end
+
+    it 'automatically adds the `path` suffix for route helpers' do
+      expect(form_for(build(:course), resource: :course) {}).to have_form(courses_path, :post)
+    end
+
     context 'when the resource is new' do
-      subject { form_for(build(:course), resource: :course) {} }
+      subject { form_for(build(:course), resource: :course_path) {} }
       it 'generates the plural route' do
         expect(subject).to have_form(courses_path, :post)
       end
@@ -18,7 +28,7 @@ describe 'form_for resource', type: :view do
 
     context 'when the resource is persisted' do
       let(:course) { create(:course) }
-      subject { form_for(course, resource: :course) {} }
+      subject { form_for(course, resource: :course_path) {} }
       it 'generates the singular route' do
         expect(subject).to have_form(course_path(course), :post)
       end
