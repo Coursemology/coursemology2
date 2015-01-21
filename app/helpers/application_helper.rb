@@ -1,6 +1,7 @@
 # :nodoc:
 module ApplicationHelper
   include ApplicationThemingHelper
+  include ApplicationAnnouncementsHelper
 
   # Checks if the current page has a sidebar.
   #

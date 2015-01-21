@@ -9,5 +9,6 @@ class ApplicationController < ActionController::Base
   include ApplicationThemingConcern
   include ApplicationDeviseConcern
   include ApplicationUserConcern
+  include ApplicationAnnouncementsConcern
   include Userstamp
 end
