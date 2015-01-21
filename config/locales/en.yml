@@ -30,6 +30,10 @@ en:
       sign_up: Sign Up
       sign_in: Sign In
       sign_out: Sign Out
+  layouts:
+    global_announcements:
+      close: Close
+      more_announcements: More Announcements...
   admin:
     navbar:
       announcements: Announcements
