@@ -4,7 +4,7 @@ html
     title
       - if content_for?(:page_title)
         = "#{content_for(:page_title)} - "
-      = t('layout.coursemology')
+      = t('.coursemology')
     meta http-equiv="X-UA-Compatible" content="IE=edge"
     = viewport_meta_tag
     = application_resources
@@ -19,32 +19,32 @@ html
           - if has_sidebar?
             button.navbar-toggle type="button" data-toggle="sidebar" data-target=".sidebar" aria-expanded="false" aria-controls="navbar"
               span.sr-only
-                = t('layout.navbar.toggle_sidebar')
+                = t('.navbar.toggle_sidebar')
               span.icon-bar
               span.icon-bar
               span.icon-bar
           button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#site-navigation-navbar" aria-expanded="false" aria-controls="navbar"
             span.sr-only
-              = t('layout.navbar.toggle_navigation')
+              = t('.navbar.toggle_navigation')
             span.icon-bar
             span.icon-bar
             span.icon-bar
           a.navbar-brand href=root_path
-            = t('layout.coursemology')
+            = t('.coursemology')
         div.collapse.navbar-collapse#site-navigation-navbar
           ul.nav.navbar-nav.pull-right
             li.active
-              = link_to(t('layout.navbar.courses'), courses_path)
+              = link_to(t('.navbar.courses'), courses_path)
             li
-              = link_to(t('layout.navbar.help'), '#')
+              = link_to(t('.navbar.help'), '#')
             - if user_signed_in?
               li
-                = link_to(t('layout.navbar.sign_out'), destroy_user_session_path, method: :delete)
+                = link_to(t('.navbar.sign_out'), destroy_user_session_path, method: :delete)
             - else
               li
-                = link_to(t('layout.navbar.register'), new_user_registration_path)
+                = link_to(t('.navbar.register'), new_user_registration_path)
               li
-                = link_to(t('layout.navbar.sign_in'), new_user_session_path)
+                = link_to(t('.navbar.sign_in'), new_user_session_path)
 
     div.container-fluid
       = flash_messages

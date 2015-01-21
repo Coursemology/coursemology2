@@ -20,16 +20,17 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  layout:
-    coursemology: Coursemology
-    navbar:
-      toggle_sidebar: Toggle Sidebar
-      toggle_navigation: Toggle Navigation
-      courses: Courses
-      help: Help
-      sign_up: Sign Up
-      sign_in: Sign In
-      sign_out: Sign Out
+  layouts:
+    default:
+      coursemology: Coursemology
+      navbar:
+        toggle_sidebar: Toggle Sidebar
+        toggle_navigation: Toggle Navigation
+        courses: Courses
+        help: Help
+        sign_up: Sign Up
+        sign_in: Sign In
+        sign_out: Sign Out
   course:
     courses:
       create:
