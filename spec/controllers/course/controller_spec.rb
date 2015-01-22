@@ -7,4 +7,11 @@ RSpec.describe Course::Controller, type: :controller do
       expect(controller.sidebar).to eq([])
     end
   end
+
+  describe '#settings' do
+    it 'returns an empty array when no modules included' do
+      allow(Course::CoursesController).to receive(:modules).and_return([])
+      expect(controller.settings).to eq([])
+    end
+  end
 end
