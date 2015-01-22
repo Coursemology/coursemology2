@@ -56,3 +56,6 @@ en:
         notice: "Announcement %{title} was created."
       update:
         notice: "Announcement %{title} was updated."
+      destroy:
+        notice: "Announcement %{title} was deleted."
+

@@ -32,6 +32,10 @@ class Course::AnnouncementsController < Course::ModuleController
   end
 
   def destroy #:nodoc:
+    if @announcement.destroy
+      redirect_to(course_announcements_path(@course),
+                  notice: t('.notice', title: @announcement.title))
+    end
   end
 
   private
