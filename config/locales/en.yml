@@ -60,8 +60,6 @@ en:
     courses:
       create:
         notice: "Course %{title} was created."
-      update:
-        notice: "Course %{title} was updated."
       new:
         header: 'New Course'
       edit:
@@ -98,3 +96,6 @@ en:
         published: 'Published'
         yes: 'Yes'
         no: 'No'
+    course_settings:
+      update:
+        notice: "Course %{title} was updated."
