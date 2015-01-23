@@ -30,44 +30,4 @@ RSpec.describe 'Course management', type: :feature do
       end
     end
   end
-
-  describe 'course editing' do
-    let(:instance) { create(:instance) }
-
-    with_tenant(:instance) do
-      let!(:course) { create(:course) }
-      before { visit edit_course_path(course) }
-
-      context 'with valid information' do
-        let(:new_title) { 'New Title' }
-        let(:new_description) { 'New Description' }
-
-        before do
-          fill_in 'course_title',          with: new_title
-          fill_in 'course_description',    with: new_description
-          click_button 'Update'
-        end
-
-        it 'changes the attributes' do
-          expect(course.reload.title).to eq(new_title)
-          expect(course.reload.description).to eq(new_description)
-        end
-      end
-
-      context 'with empty title' do
-        before do
-          fill_in 'course_title', with: ''
-          click_button 'Update'
-        end
-
-        it 'does not change title' do
-          expect(course.reload.title).not_to eq('')
-        end
-
-        it 'shows the error' do
-          expect(page).to have_css('div.has-error')
-        end
-      end
-    end
-  end
 end
