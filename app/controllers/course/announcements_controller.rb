@@ -40,6 +40,6 @@ class Course::AnnouncementsController < Course::ModuleController
   private
 
   def announcement_params #:nodoc:
-    params.require(:course_announcement).permit(:title, :content, :valid_from, :valid_to)
+    params.require(:course_announcement).permit(:title, :content, :sticky, :valid_from, :valid_to)
   end
 end
