@@ -21,5 +21,6 @@ end
 
 RSpec.configure do |config|
   config.extend ActsAsTenant::TestGroupHelpers, type: :model
+  config.extend ActsAsTenant::TestGroupHelpers, type: :view
   config.extend ActsAsTenant::TestGroupHelpers, type: :feature
 end
