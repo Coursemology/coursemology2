@@ -1,3 +1,20 @@
 // Place all the styles related to the course/announcements controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "variables";
+
+.course-announcements {
+  &.index {
+    .announcement {
+      padding-left: 8px;
+
+      .timestamp {
+        color: $gray-light;
+      }
+
+      .content {
+        margin-top: 10px;
+      }
+    }
+  }
+}
