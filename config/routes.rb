@@ -61,6 +61,8 @@ Rails.application.routes.draw do
   end
 
   scope module: 'course' do
-    resources :courses
+    resources :courses do
+      resources :announcements
+    end
   end
 end

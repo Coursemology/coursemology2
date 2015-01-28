@@ -57,4 +57,12 @@ module ApplicationHelper
       end
     end
   end
+
+  # Format the given datetime
+  #
+  # @param date [DateTime] The datetime to be formatted
+  # @return [String] the formatted datetime string
+  def format_datetime(date, format = :long)
+    date.to_formatted_s(format)
+  end
 end

@@ -1,0 +1,21 @@
+hr
+div class=("announcement #{'future' if announcement.valid_in_future? }")
+  h2
+    = announcement.title
+
+  - if can?(:manage, Course::Announcement)
+    div.pull-right
+      = link_to edit_course_announcement_path(@course, announcement), class: 'btn btn-default' do
+        = fa_icon 'edit'
+
+      = link_to course_announcement_path(@course, announcement),
+                  class: 'btn btn-danger', method: :delete do
+        = fa_icon 'trash'
+
+  div.timestamp
+    = format_datetime(announcement.valid_from)
+    |  by 
+    = link_to_user(announcement.creator)
+
+  div.content
+    = announcement.content
