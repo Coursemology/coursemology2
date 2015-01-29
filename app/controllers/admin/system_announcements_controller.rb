@@ -17,6 +17,24 @@ class Admin::SystemAnnouncementsController < Admin::Controller
     end
   end
 
+  def edit
+  end
+
+  def update
+    if @system_announcement.update_attributes(system_announcement_params)
+      redirect_to admin_system_announcements_path,
+                  notice: t('.notice', title: @system_announcement.title)
+    else
+      render 'edit'
+    end
+  end
+
+  def destroy
+    redirect_to admin_system_announcements_path,
+                notice: t('.notice',
+                          title: @system_announcement.title) if @system_announcement.destroy
+  end
+
   private
 
   def system_announcement_params

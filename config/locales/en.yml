@@ -64,6 +64,12 @@ en:
         header: 'New System Announcement'
       create:
         notice: "System Announcement %{title} was created."
+      edit:
+        header: 'Edit System Announcement'
+      update:
+        notice: "System Announcement %{title} was updated."
+      destroy:
+        notice: "System Announcement %{title} was deleted."
   course:
     courses:
       create:
