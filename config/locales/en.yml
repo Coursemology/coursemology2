@@ -60,6 +60,10 @@ en:
       index:
         header: 'System Announcements'
         new: 'New System Announcement'
+      new:
+        header: 'New System Announcement'
+      create:
+        notice: "System Announcement %{title} was created."
   course:
     courses:
       create:
