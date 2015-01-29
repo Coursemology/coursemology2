@@ -12,14 +12,10 @@ addons:
 bundler_args: "--without development:production --deployment"
 cache: bundler
 
-before_install:
-  - gem install scss-lint
-
 before_script:
   - psql -c 'create database coursemology_test;' -U postgres
   - bundle exec rake db:setup
 
 script:
-  - scss-lint app/assets/stylesheets/
   - bundle exec consistency_fail
   - bundle exec rake spec
