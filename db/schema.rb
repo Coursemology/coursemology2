@@ -141,6 +141,21 @@ ActiveRecord::Schema.define(version: 20150204075501) do
     t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_instance_users_user_id"
   end
 
+  create_table "system_announcements", force: true do |t|
+    t.string   "title",      null: false
+    t.text     "content"
+    t.datetime "valid_from", null: false
+    t.datetime "valid_to",   null: false
+    t.integer  "creator_id", null: false
+    t.integer  "updater_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], :name => "fk__system_announcements_creator_id"
+    t.index ["updater_id"], :name => "fk__system_announcements_updater_id"
+    t.foreign_key ["creator_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_system_announcements_creator_id"
+    t.foreign_key ["updater_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_system_announcements_updater_id"
+  end
+
   create_table "user_emails", force: true do |t|
     t.boolean  "primary",              default: false, null: false
     t.integer  "user_id",                              null: false
