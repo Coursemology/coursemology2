@@ -1,0 +1,4 @@
+scss_files: 'app/assets/stylesheets/**/*.scss'
+
+NestingDepth:
+  max_depth: 5
