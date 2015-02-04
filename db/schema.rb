@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150116102204) do
+ActiveRecord::Schema.define(version: 20150204075501) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,24 @@ ActiveRecord::Schema.define(version: 20150116102204) do
     t.foreign_key ["creator_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_courses_creator_id"
     t.foreign_key ["instance_id"], "instances", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_courses_instance_id"
     t.foreign_key ["updater_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_courses_updater_id"
+  end
+
+  create_table "course_achievements", force: true do |t|
+    t.integer  "course_id",   null: false
+    t.string   "title",       null: false
+    t.text     "description"
+    t.integer  "weight",      null: false
+    t.boolean  "published",   null: false
+    t.integer  "creator_id",  null: false
+    t.integer  "updater_id",  null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["course_id"], :name => "fk__course_achievements_course_id"
+    t.index ["creator_id"], :name => "fk__course_achievements_creator_id"
+    t.index ["updater_id"], :name => "fk__course_achievements_updater_id"
+    t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_achievements_course_id"
+    t.foreign_key ["creator_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_achievements_creator_id"
+    t.foreign_key ["updater_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_achievements_updater_id"
   end
 
   create_table "course_announcements", force: true do |t|
