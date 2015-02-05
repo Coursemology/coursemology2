@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   has_many :instance_users
   has_many :instances, through: :instance_users
   has_many :course_users, inverse_of: :user, dependent: :destroy
-  has_many :courses, through: :enrollments
+  has_many :courses, through: :course_users
 
   accepts_nested_attributes_for :emails
 
