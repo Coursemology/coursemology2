@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Course::Announcement, type: :model do
-	it { should belong_to(:creator).class_name(User.name) }
-	it { should belong_to(:course).inverse_of(:announcements) }
+  it { should belong_to(:creator).class_name(User.name) }
+  it { should belong_to(:course).inverse_of(:announcements) }
 
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
