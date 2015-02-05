@@ -64,3 +64,11 @@ en:
 
     achievements:
       sidebar_title: 'Achievements'
+      index:
+        header: 'Achievements'
+        new: 'New'
+        description: 'Description'
+        requirements: 'Requirements'
+        published: 'Published'
+        yes: 'Yes'
+        no: 'No'
