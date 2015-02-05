@@ -1,2 +1,2 @@
-class Course::AchievementsController < ApplicationController
+class Course::AchievementsController < Course::ModuleController
 end

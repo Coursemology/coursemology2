@@ -62,3 +62,5 @@ en:
       destroy:
         notice: "Announcement %{title} was deleted."
 
+    achievements:
+      sidebar_title: 'Achievements'
