@@ -84,6 +84,10 @@ group :development, :test do
 
   # Helps to prevent database consistency mistakes
   gem 'consistency_fail'
+
+  # For a better console and an easier debugging experience
+  gem 'pry-rails'
+  gem 'pry-byebug'
 end
 
 group :ci do
