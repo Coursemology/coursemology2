@@ -4,10 +4,10 @@ RSpec.describe Course, type: :model do
 
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
-    it { should belong_to(:creator) }
-    it { should have_many(:course_users).inverse_of(:course).dependent(:destroy) }
-    it { should have_many(:users).through(:course_users) }
-    it { should have_many(:announcements).inverse_of(:course).dependent(:destroy) }
+    it { is_expected.to belong_to(:creator) }
+    it { is_expected.to have_many(:course_users).inverse_of(:course).dependent(:destroy) }
+    it { is_expected.to have_many(:users).through(:course_users) }
+    it { is_expected.to have_many(:announcements).inverse_of(:course).dependent(:destroy) }
 
     context 'when title is not present' do
       subject { build(:course, title: '') }

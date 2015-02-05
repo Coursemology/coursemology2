@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Instance, type: :model do
-  it { should have_many(:instance_users) }
-  it { should have_many(:users).through(:instance_users) }
-  it { should have_many(:announcements).class_name(Instance::Announcement.name) }
+  it { is_expected.to have_many(:instance_users) }
+  it { is_expected.to have_many(:users).through(:instance_users) }
+  it { is_expected.to have_many(:announcements).class_name(Instance::Announcement.name) }
 
   describe 'hostname validation' do
     context 'when hostname format is invalid' do

@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  it { should have_many(:emails).class_name(UserEmail.name).inverse_of(:user).dependent(:destroy) }
-  it { should have_many(:instance_users) }
-  it { should have_many(:instances).through(:instance_users) }
-  it { should have_many(:course_users).inverse_of(:user).dependent(:destroy) }
-  it { should have_many(:courses).through(:course_users) }
+  it { is_expected.to have_many(:emails).class_name(UserEmail.name).inverse_of(:user).dependent(:destroy) }
+  it { is_expected.to have_many(:instance_users) }
+  it { is_expected.to have_many(:instances).through(:instance_users) }
+  it { is_expected.to have_many(:course_users).inverse_of(:user).dependent(:destroy) }
+  it { is_expected.to have_many(:courses).through(:course_users) }
 
   describe '#email' do
     context 'when the user has no email addresses' do
