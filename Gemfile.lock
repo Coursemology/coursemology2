@@ -227,6 +227,8 @@ GEM
     schema_validations (1.0.1)
       schema_plus
     should_not (1.1.0)
+    shoulda-matchers (2.7.0)
+      activesupport (>= 3.0.0)
     simple_form (3.1.0)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
@@ -335,6 +337,7 @@ DEPENDENCIES
   schema_plus (~> 1)
   schema_validations
   should_not
+  shoulda-matchers
   simple_form
   simple_form-bootstrap
   simplecov

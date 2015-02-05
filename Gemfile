@@ -75,6 +75,7 @@ group :development, :test do
   gem 'rspec-html-matchers'
   gem 'should_not'
   gem 'simplecov'
+  gem 'shoulda-matchers'
 
   # Capybara for feature testing
   gem 'capybara'
