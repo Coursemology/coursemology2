@@ -53,7 +53,7 @@ group :development do
 
   # Gems to make development mode faster and less painful
   gem 'rails-dev-tweaks'
-  gem 'rails-dev-boost'
+  gem 'rails-dev-boost', github: 'thedarkone/rails-dev-boost'
   gem 'rails-flog', require: 'flog'
   gem 'wdm', '>= 0.0.3', platforms: [:mswin]
 
