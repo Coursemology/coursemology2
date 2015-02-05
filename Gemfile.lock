@@ -11,6 +11,13 @@ GIT
   specs:
     magiclabs-userstamp (2.1.0)
 
+GIT
+  remote: git://github.com/winston/rails_utils.git
+  revision: 483941d39d5bc999f4ea84ec46b80bc85d0865dd
+  specs:
+    rails_utils (3.3.1)
+      rails (>= 3.2)
+
 GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
@@ -168,8 +175,6 @@ GEM
       anbt-sql-formatter
       awesome_print
       rails (>= 3.2.0)
-    rails_utils (3.3.1)
-      rails (>= 3.2)
     railties (4.1.8)
       actionpack (= 4.1.8)
       activesupport (= 4.1.8)
@@ -323,7 +328,7 @@ DEPENDENCIES
   rails-dev-boost
   rails-dev-tweaks
   rails-flog
-  rails_utils
+  rails_utils!
   rspec-html-matchers
   rspec-rails
   sass-rails (~> 4.0.3)
