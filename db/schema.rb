@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150204075501) do
+ActiveRecord::Schema.define(version: 20150206061807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,15 +59,19 @@ ActiveRecord::Schema.define(version: 20150204075501) do
   end
 
   create_table "course_achievements", force: true do |t|
-    t.integer  "course_id",   null: false
-    t.string   "title",       null: false
+    t.integer  "course_id",         null: false
+    t.string   "title",             null: false
     t.text     "description"
-    t.integer  "weight",      null: false
-    t.boolean  "published",   null: false
-    t.integer  "creator_id",  null: false
-    t.integer  "updater_id",  null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.string   "icon_file_name"
+    t.string   "icon_content_type"
+    t.integer  "icon_file_size"
+    t.datetime "icon_updated_at"
+    t.integer  "weight",            null: false
+    t.boolean  "published",         null: false
+    t.integer  "creator_id",        null: false
+    t.integer  "updater_id",        null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.index ["course_id"], :name => "fk__course_achievements_course_id"
     t.index ["creator_id"], :name => "fk__course_achievements_creator_id"
     t.index ["updater_id"], :name => "fk__course_achievements_updater_id"
