@@ -111,3 +111,8 @@ en:
     course_settings:
       update:
         notice: "Course %{title} was updated."
+      new:
+        header: 'New Achievement'
+      create:
+        notice: "Achievement %{title} was created."
+

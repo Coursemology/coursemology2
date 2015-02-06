@@ -33,7 +33,7 @@ RSpec.describe 'Achievement management' do
 
         before do
           fill_in 'course_achievement_title',    with: achievement.title
-          fill_in 'course_achievement_content',  with: achievement.content
+          fill_in 'course_achievement_description',  with: achievement.description
         end
 
         it 'creates an achievement' do
