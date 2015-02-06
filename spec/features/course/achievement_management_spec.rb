@@ -63,14 +63,11 @@ RSpec.describe 'Achievement management' do
 
       context 'page rendering' do
         it { is_expected.to have_field('course_achievement_title', with: achievement.title) }
-        it { is_expected.to have_field('course_achievement_content', with: achievement.content) }
-        it do
-          is_expected.to have_field('course_achievement[valid_from]',
-                                    with: achievement.valid_from)
+        it 'shows achievement description' do
+          expect(page).to have_field('course_achievement_description',
+                                     with: achievement.description)
         end
-        it do
-          is_expected.to have_field('course_achievement[valid_to]', with: achievement.valid_to)
-        end
+        it { is_expected.to have_checked_field('course_achievement_published') }
       end
 
       context 'with invalid information' do
@@ -90,11 +87,11 @@ RSpec.describe 'Achievement management' do
 
       context 'with valid information' do
         let(:new_title)  { 'New Title' }
-        let(:new_content) { 'New content' }
+        let(:new_description) { 'New description' }
 
         before do
           fill_in 'course_achievement_title',        with: new_title
-          fill_in 'course_achievement_content',      with: new_content
+          fill_in 'course_achievement_description',      with: new_description
           click_button 'Update'
         end
 
@@ -110,7 +107,7 @@ RSpec.describe 'Achievement management' do
 
         it 'changes the attributes' do
           expect(achievement.reload.title).to eq(new_title)
-          expect(achievement.reload.content).to eq(new_content)
+          expect(achievement.reload.description).to eq(new_description)
         end
       end
     end

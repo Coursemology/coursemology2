@@ -113,6 +113,10 @@ en:
         notice: "Course %{title} was updated."
       new:
         header: 'New Achievement'
+      edit:
+        header: 'Edit Achievement'
       create:
         notice: "Achievement %{title} was created."
+      update:
+        notice: "Achievement %{title} was updated."
 

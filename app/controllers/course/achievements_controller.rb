@@ -7,12 +7,24 @@ class Course::AchievementsController < Course::ModuleController
   def new #:nodoc:
   end
 
+  def edit #:nodoc:
+  end
+
   def create #:nodoc:
     if @achievement.save
       redirect_to(course_achievements_path(@course),
                   notice: t('.notice', title: @achievement.title))
     else
       render 'new'
+    end
+  end
+
+  def update #:nodoc:
+    if @achievement.update_attributes(achievement_params)
+      redirect_to(course_achievements_path(@course),
+                  notice: t('.notice', title: @achievement.title))
+    else
+      render 'edit'
     end
   end
 
