@@ -28,6 +28,12 @@ class Course::AchievementsController < Course::ModuleController
     end
   end
 
+  def destroy #:nodoc:
+    @achievement.destroy
+    redirect_to(course_achievements_path(@course),
+                notice: t('.notice', title: @achievement.title))
+  end
+
   private
 
   def achievement_params #:nodic:
