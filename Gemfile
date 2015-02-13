@@ -44,6 +44,8 @@ gem 'slim-rails'
 gem 'high_voltage'
 # Paginator for Rails
 gem 'kaminari'
+# For MTI
+gem 'active_record-acts_as'
 
 group :development do
   # Spring speeds up development by keeping your application running in the background.

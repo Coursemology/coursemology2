@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150204075501) do
+ActiveRecord::Schema.define(version: 20150206062133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,6 +92,24 @@ ActiveRecord::Schema.define(version: 20150204075501) do
     t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_announcements_course_id"
     t.foreign_key ["creator_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_announcements_creator_id"
     t.foreign_key ["updater_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_announcements_updater_id"
+  end
+
+  create_table "course_requirement_achievements", force: true do |t|
+    t.integer  "course_achievement_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["course_achievement_id"], :name => "index_course_requirement_achievements_on_course_achievement_id"
+    t.foreign_key ["course_achievement_id"], "course_achievements", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_requirement_achievements_course_achievement_id"
+  end
+
+  create_table "course_requirements", force: true do |t|
+    t.integer  "actable_id"
+    t.string   "actable_type"
+    t.integer  "has_requirement_id"
+    t.string   "has_requirement_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["has_requirement_id"], :name => "index_course_requirements_on_has_requirement_id"
   end
 
   create_table "course_users", force: true do |t|
