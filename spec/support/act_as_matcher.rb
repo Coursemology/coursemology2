@@ -3,6 +3,7 @@ require 'rspec/expectations'
 RSpec::Matchers.define :act_as do |actable|
   match do |subject|
     @class = subject.class
+    @actable = actable
     @actable_association = actable_association
     @actable_class = actable_association.klass
 
@@ -17,7 +18,7 @@ RSpec::Matchers.define :act_as do |actable|
       if @actable_class_name
         lambda { |r| r.class_name == @actable_class_name }
       else
-        lambda { |r| r.name == actable }
+        lambda { |r| r.name == @actable }
       end
     @class.reflect_on_all_associations.detect(&is_actable_association)
   end
