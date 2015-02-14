@@ -4,7 +4,7 @@ RSpec::Matchers.define :be_actable do
   match do |subject|
     @class = subject.class
     @actable_association = actable_association
-    association_exists? &&
+    actable_association_exists? &&
       actable_association_belongs_to? &&
       actable_association_polymorphic? &&
       @class.actable?
