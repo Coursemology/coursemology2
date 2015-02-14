@@ -11,7 +11,7 @@ RSpec::Matchers.define :be_actable do
   end
 
   def actable_association
-    @class.reflect_on_all_associations.find { |r| r.name == :actable }
+    @class.reflect_on_all_associations.detect { |r| r.name == :actable }
   end
 
   def actable_association_exists?

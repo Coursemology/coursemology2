@@ -19,7 +19,7 @@ RSpec::Matchers.define :act_as do |actable|
       else
         lambda { |r| r.name == actable }
       end
-    @class.reflect_on_all_associations.find(&is_actable_association)
+    @class.reflect_on_all_associations.detect(&is_actable_association)
   end
 
   def actable_association_exists?
