@@ -1,0 +1,23 @@
+tr.achievement
+  td
+    img.achievement-icon
+  td
+    h4 = link_to achievement.title, course_achievement_path(@course, achievement)
+
+  td
+    div.description
+      = achievement.description
+
+  - if can?(:manage, Course::Achievement)
+  td
+    - if achievement.published?
+      = t('.yes')
+    - else
+      = t('.no')
+  td
+    = link_to edit_course_achievement_path(@course, achievement), class: 'btn btn-default' do
+      = fa_icon 'edit'
+
+    = link_to course_achievement_path(@course, achievement),
+        class: 'btn btn-danger', method: :delete do
+      = fa_icon 'trash'
