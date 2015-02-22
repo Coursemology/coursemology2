@@ -9,11 +9,7 @@ RSpec.describe Course, type: :model do
     it { is_expected.to have_many(:users).through(:course_users) }
     it { is_expected.to have_many(:announcements).inverse_of(:course).dependent(:destroy) }
 
-    context 'when title is not present' do
-      subject { build(:course, title: '') }
-
-      it { is_expected.not_to be_valid }
-    end
+    it { is_expected.to validate_presence_of(:title) }
 
     context 'when course is created' do
       subject { Course.new }
