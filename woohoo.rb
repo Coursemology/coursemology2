@@ -1,0 +1,2 @@
+puts "LOL"
+puts 'LOL'
