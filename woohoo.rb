@@ -2,3 +2,4 @@
 [:a, :b].detect { |_| true }
 
 puts "SUP!"
+puts 'SUP!'
