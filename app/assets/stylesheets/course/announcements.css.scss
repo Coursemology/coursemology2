@@ -2,6 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 @import "variables";
+@import "mixins/future";
 
 .course-announcements {
   &.index {
@@ -14,6 +15,10 @@
 
       .content {
         margin-top: 10px;
+      }
+
+      &.future {
+        @include future($gray-lighter);
       }
     }
   }
