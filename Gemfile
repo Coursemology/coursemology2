@@ -129,5 +129,8 @@ gem 'momentjs-rails', '>= 2.8.1'
 gem 'bootstrap3-datetimepicker-rails'
 gem 'bootstrap-select-rails'
 
+# Using carrierwave for file uploads
+gem 'carrierwave', github: 'carrierwaveuploader/carrierwave'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
