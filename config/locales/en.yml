@@ -46,3 +46,29 @@ en:
         description_label: 'Give it an awesome backstory'
         description_placeholder: 'e.g. Darth Vader is taking over the universe. We need you to save
                                   the day!'
+    announcements:
+      sidebar_title: 'Announcements'
+      index:
+        header: 'Announcements'
+        new: 'New'
+      new:
+        header: 'New Announcement'
+      edit:
+        header: 'Edit Announcement'
+      create:
+        notice: "Announcement %{title} was created."
+      update:
+        notice: "Announcement %{title} was updated."
+      destroy:
+        notice: "Announcement %{title} was deleted."
+
+    achievements:
+      sidebar_title: 'Achievements'
+      index:
+        header: 'Achievements'
+        new: 'New'
+        description: 'Description'
+        requirements: 'Requirements'
+        published: 'Published'
+        yes: 'Yes'
+        no: 'No'

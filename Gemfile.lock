@@ -11,6 +11,20 @@ GIT
   specs:
     magiclabs-userstamp (2.1.0)
 
+GIT
+  remote: git://github.com/thedarkone/rails-dev-boost.git
+  revision: 15ebc37b3f1b424ce7f5a160d2a8f890023208e6
+  specs:
+    rails-dev-boost (0.3.0)
+      railties (>= 3.0)
+
+GIT
+  remote: git://github.com/winston/rails_utils.git
+  revision: 483941d39d5bc999f4ea84ec46b80bc85d0865dd
+  specs:
+    rails_utils (3.3.1)
+      rails (>= 3.2)
+
 GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
@@ -159,8 +173,6 @@ GEM
     rails-assets-jquery (2.1.1)
     rails-assets-jquery-ujs (1.0.2)
       rails-assets-jquery (> 1.8)
-    rails-dev-boost (0.3.0)
-      railties (>= 3.0)
     rails-dev-tweaks (1.2.0)
       actionpack (>= 3.1)
       railties (>= 3.1)
@@ -168,8 +180,6 @@ GEM
       anbt-sql-formatter
       awesome_print
       rails (>= 3.2.0)
-    rails_utils (3.3.1)
-      rails (>= 3.2)
     railties (4.1.8)
       actionpack (= 4.1.8)
       activesupport (= 4.1.8)
@@ -222,6 +232,8 @@ GEM
     schema_validations (1.0.1)
       schema_plus
     should_not (1.1.0)
+    shoulda-matchers (2.7.0)
+      activesupport (>= 3.0.0)
     simple_form (3.1.0)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
@@ -320,16 +332,17 @@ DEPENDENCIES
   puma
   rails (~> 4.1.8)
   rails-assets-jquery-ujs
-  rails-dev-boost
+  rails-dev-boost!
   rails-dev-tweaks
   rails-flog
-  rails_utils
+  rails_utils!
   rspec-html-matchers
   rspec-rails
   sass-rails (~> 4.0.3)
   schema_plus (~> 1)
   schema_validations
   should_not
+  shoulda-matchers
   simple_form
   simple_form-bootstrap
   simplecov

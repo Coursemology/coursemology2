@@ -53,7 +53,7 @@ group :development do
 
   # Gems to make development mode faster and less painful
   gem 'rails-dev-tweaks'
-  gem 'rails-dev-boost'
+  gem 'rails-dev-boost', github: 'thedarkone/rails-dev-boost'
   gem 'rails-flog', require: 'flog'
   gem 'wdm', '>= 0.0.3', platforms: [:mswin]
 
@@ -75,6 +75,7 @@ group :development, :test do
   gem 'rspec-html-matchers'
   gem 'should_not'
   gem 'simplecov'
+  gem 'shoulda-matchers'
 
   # Capybara for feature testing
   gem 'capybara'
@@ -113,7 +114,7 @@ gem 'devise'
 gem 'cancancan', '~> 1.9'
 
 # Some helpers for structuring CSS/JavaScript
-gem 'rails_utils'
+gem 'rails_utils', github: 'winston/rails_utils'
 
 # Themes for instances
 gem 'themes_on_rails', github: 'lowjoel/themes_on_rails'

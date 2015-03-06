@@ -84,10 +84,10 @@
     <orderEntry type="library" scope="PROVIDED" name="rails (v4.1.8, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rails-assets-jquery (v2.1.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rails-assets-jquery-ujs (v1.0.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rails-dev-boost (v0.3.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rails-dev-boost (v0.3.0@15ebc3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rails-dev-tweaks (v1.2.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rails-flog (v1.3.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rails_utils (v3.3.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rails_utils (v3.3.1@483941, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="railties (v4.1.8, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rake (v10.4.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rb-fsevent (v0.9.4, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
@@ -108,6 +108,7 @@
     <orderEntry type="library" scope="PROVIDED" name="schema_plus (v1.8.3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="schema_validations (v1.0.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="should_not (v1.1.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="shoulda-matchers (v2.7.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="simple_form (v3.1.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="simple_form-bootstrap (v1.0.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="simplecov (v0.9.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />

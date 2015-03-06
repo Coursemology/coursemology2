@@ -1,0 +1,8 @@
+scss_files: 'app/assets/stylesheets/**/*.scss'
+
+linters:
+  NestingDepth:
+    max_depth: 5
+
+  SelectorDepth:
+    max_depth: 5

@@ -3,6 +3,9 @@ require 'rails_helper'
 RSpec.describe InstanceUser, type: :model do
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
+    it { is_expected.to belong_to(:instance) }
+    it { is_expected.to belong_to(:user) }
+
     let!(:user) { create(:user) }
     let!(:instance_user) do
       result = InstanceUser.create(instance: instance, user: user)
