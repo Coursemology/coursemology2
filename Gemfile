@@ -113,6 +113,9 @@ gem 'devise'
 # Use cancancan for authorization
 gem 'cancancan', '~> 1.9'
 
+# Manage read/unread status
+gem 'unread'
+
 # Some helpers for structuring CSS/JavaScript
 gem 'rails_utils', '~> 3.3', '>= 3.3.2'
 
