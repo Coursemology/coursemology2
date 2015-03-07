@@ -4,6 +4,8 @@ class Course::AnnouncementsController < Course::ModuleController
   def index #:nodoc:
     @announcements = @announcements.includes(:creator).sorted_by_sticky.sorted_by_date
     @announcements = @announcements.page(params[:page])
+    unread = @announcements.unread_by(current_user)
+    Course::Announcement.mark_array_as_read(unread, current_user)
   end
 
   def show #:nodoc:

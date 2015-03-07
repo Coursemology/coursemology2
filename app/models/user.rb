@@ -2,6 +2,7 @@
 class User < ActiveRecord::Base
   include UserAuthenticationConcern
   model_stamper
+  acts_as_reader
 
   enum role: { normal: 0, administrator: 1 }
   has_many :emails, class_name: UserEmail.name, inverse_of: :user, dependent: :destroy
