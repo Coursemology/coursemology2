@@ -44,6 +44,8 @@ gem 'slim-rails'
 gem 'high_voltage'
 # Paginator for Rails
 gem 'kaminari'
+#Soft deletion, rails3&4 rewrite of acts_as_paranoid
+gem "paranoia", :github => "radar/paranoia", :branch => "rails4"
 
 group :development do
   # Spring speeds up development by keeping your application running in the background.

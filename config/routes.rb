@@ -64,6 +64,7 @@ Rails.application.routes.draw do
     resources :courses do
       resources :announcements
       resources :achievements
+      resources :enrol_requests
     end
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150204075501) do
+ActiveRecord::Schema.define(version: 20150308081645) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,16 +40,17 @@ ActiveRecord::Schema.define(version: 20150204075501) do
   end
 
   create_table "courses", force: true do |t|
-    t.integer  "instance_id",             null: false
-    t.string   "title",                   null: false
+    t.integer  "instance_id",                null: false
+    t.string   "title",                      null: false
     t.text     "description"
-    t.integer  "status",      default: 0, null: false
-    t.datetime "start_at",                null: false
-    t.datetime "end_at",                  null: false
-    t.integer  "creator_id",              null: false
-    t.integer  "updater_id",              null: false
+    t.integer  "status",      default: 0,    null: false
+    t.datetime "start_at",                   null: false
+    t.datetime "end_at",                     null: false
+    t.integer  "creator_id",                 null: false
+    t.integer  "updater_id",                 null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "is_open",     default: true
     t.index ["creator_id"], :name => "fk__courses_creator_id"
     t.index ["instance_id"], :name => "fk__courses_instance_id"
     t.index ["updater_id"], :name => "fk__courses_updater_id"
@@ -92,6 +93,26 @@ ActiveRecord::Schema.define(version: 20150204075501) do
     t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_announcements_course_id"
     t.foreign_key ["creator_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_announcements_creator_id"
     t.foreign_key ["updater_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_announcements_updater_id"
+  end
+
+  create_table "course_enrol_requests", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "course_id"
+    t.integer  "role"
+    t.datetime "deleted_at"
+    t.integer  "creator_id", null: false
+    t.integer  "updater_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["course_id"], :name => "fk__course_enrol_requests_course_id"
+    t.index ["creator_id"], :name => "fk__course_enrol_requests_creator_id"
+    t.index ["deleted_at"], :name => "index_course_enrol_requests_on_deleted_at"
+    t.index ["updater_id"], :name => "fk__course_enrol_requests_updater_id"
+    t.index ["user_id"], :name => "fk__course_enrol_requests_user_id"
+    t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_enrol_requests_course_id"
+    t.foreign_key ["creator_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_enrol_requests_creator_id"
+    t.foreign_key ["updater_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_enrol_requests_updater_id"
+    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_enrol_requests_user_id"
   end
 
   create_table "course_users", force: true do |t|

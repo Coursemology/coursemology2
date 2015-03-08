@@ -20,4 +20,14 @@ class Course::Controller < ApplicationController
 
     array_of_module_arrays.tap { |arr| arr.flatten! }
   end
+
+  def current_course_user
+    if current_user and @course
+      @current_course_user ||= CourseUser.find_by_user_id_and_course_id(
+        current_user.id,
+        @course.id
+      )
+    end
+    @current_course_user
+  end
 end
