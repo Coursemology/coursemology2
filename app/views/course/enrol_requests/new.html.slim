@@ -1,0 +1,5 @@
+- if current_course_user
+  p = t('.already_registered_format') % current_course_user.role
+- else
+  p = t('.request_format') % current_course_user.role
+  p = t('.come_back_later')

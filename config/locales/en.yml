@@ -72,3 +72,9 @@ en:
         published: 'Published'
         yes: 'Yes'
         no: 'No'
+
+    enrol_requests:
+      new:
+        already_registered_format: 'You have already registed to this class as a %{role}'
+        request_format: 'You have already registed to this class as a %{role}'
+        come_back_later: Your request has been received. Please come back later to check for the result!
