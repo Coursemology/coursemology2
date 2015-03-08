@@ -87,6 +87,9 @@ group :development, :test do
 
   # Helps to prevent database consistency mistakes
   gem 'consistency_fail'
+
+  # File system monitoring for running changed tests automatically.
+  gem 'guard-rspec', require: false
 end
 
 group :ci do
