@@ -1,0 +1,14 @@
+- if form_builder.object.attachments.count > 0
+  strong = t('.uploaded')
+
+= form_builder.fields_for :attachments do |sub_builder|
+  div
+    - if sub_builder.object.persisted?
+      = link_to sub_builder.object.name, attachment_path(sub_builder.object)
+
+      = sub_builder.check_box :_destroy
+      = sub_builder.label :_destroy, t('.remove')
+    - else
+      = sub_builder.label t('.new_file')
+      = sub_builder.file_field :file_upload
+      = sub_builder.hidden_field :file_upload_cache
