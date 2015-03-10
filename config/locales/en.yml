@@ -74,6 +74,29 @@ en:
         no: 'No'
 
     enrol_requests:
+      approve_message_format: 'Approved %{count} enrollment requests.'
+      delete_message_format: 'Deleted %{count} enrollment requests.'
+      error_message_format: 'Failed to process the request. %{reason}'
+      index:
+        enrol_requests: Enrol Requests
+        staff_requests: Staff Requests
+        student_requests: Student Requets
+      enrol_tab:
+        enrol_requests: Enrol Requests
+        mass_enrolment: Mass Enrolment
+      list:
+        no_staff_requests: No outstanding staff request
+        no_student_requests: No outstanding student request
+        loading: Loading...
+        name: Name
+        email: Email
+        requested_at: Requested At
+        role: Role
+        action: Action
+        approve_selected: Approve Selcted
+        delete_selected: Delete Selected
+        approve_all: Approve All
+        delete_all: Delete All
       new:
         already_registered_format: 'You have already registed to this class as a %{role}'
         request_format: 'You have already registed to this class as a %{role}'

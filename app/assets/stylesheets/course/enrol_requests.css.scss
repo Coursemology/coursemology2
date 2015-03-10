@@ -1,3 +1,68 @@
-// Place all the styles related to the course/enrol_requests controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+#course_purchase_info {
+  span {
+    padding: 5px 10px 5px 0px;
+  }
+}
+
+.bold-text {
+  font-weight: bold;
+}
+
+#loading {
+  text-align: center;
+  margin: 20px 0px 20px 0px;
+
+  span {
+    font-size: 17px;
+    font-weight: bold;
+  }
+
+  img {
+    height: 24px;
+    width: 24px;
+  }
+}
+
+#enroll_request_alert {
+  height: 18px;
+  margin: -18px 0px -14px 0px;
+  -webkit-transition: all linear 0.5s;
+  -moz-transition: all linear 0.5s;
+  -ms-transition: all linear 0.5s;
+  -o-transition: all linear 0.5s;
+  transition: all linear 0.5s;
+}
+
+#batch_controls {
+  a {
+    cursor: pointer;
+  }
+}
+
+.transparent-enroll-request-alert {
+  opacity: 0;
+}
+
+.enroll-request-animate-repeat.ng-move,
+.enroll-request-animate-repeat.ng-enter,
+.enroll-request-animate-repeat.ng-leave {
+  -webkit-transition: all linear 0.5s;
+  -moz-transition: all linear 0.5s;
+  -ms-transition: all linear 0.5s;
+  -o-transition: all linear 0.5s;
+  transition: all linear 0.5s;
+}
+
+.enroll-request-animate-repeat.ng-leave.ng-leave-active,
+.enroll-request-animate-repeat.ng-move,
+.enroll-request-animate-repeat.ng-enter {
+  opacity:0;
+  max-height:0;
+}
+
+.enroll-request-animate-repeat.ng-leave,
+.enroll-request-animate-repeat.ng-move.ng-move-active,
+.enroll-request-animate-repeat.ng-enter.ng-enter-active {
+  opacity:1;
+  max-height:40px;
+}

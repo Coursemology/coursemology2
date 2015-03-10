@@ -1,0 +1,70 @@
+- if type == 'staff'
+  - container = 'staffRequests'
+  - no_request_message = t('.no_staff_requests')
+- else
+  - container = 'studentRequests'
+  - no_request_message = t('.no_student_requests')
+
+div id="loading" ng-show="loading"
+  image src="/images/ajax_loader.gif" alt="Spinner"
+  span = t('.loading')
+
+div ng-show="!loading && <%= container %>.length == 0"
+  span no_request_message
+
+div ng-show="!loading && <%= container %>.length > 0"
+  table class="table enrol-requests"
+    thead
+    tr
+      - if can? :approve, Course::EnrolRequest
+        | <td>
+            <input type="checkbox" class="check-all" ng-model="#{container}CheckAll"
+            ng-change="checkAll(#{container}CheckAll, #{container})"></input>
+          </td>
+
+      td = t('.name')
+      td = t('.email')
+      td = t('.requested_at')
+      td = t('.role')
+      - if can? :approve, Course::EnrolRequest
+        | <td>#{t('.action')}</td>
+
+    tbody
+    tr ng-repeat="request in #{container}" class="enrol-request-animate-repeat"
+      - if can? :approve, Course::EnrolRequest
+        | <td>
+            <input type="checkbox" ng-model="request.checked" ng-value="request.id"
+            class="checkbox-#{type}"></input>
+          </td>
+
+      | <td><label class="user-name">{{ request.user.name }}</label></td>
+      td {{ request.user.email }}
+      td {{ request.created_at | date: 'd MMM y h:mm a' }}
+      td {{ request.role.title }}
+      - if can? :approve, Course::EnrolRequest
+        | <td>
+            <button ng-click="deleteButtonClicked(request, #{container}, true)"
+              class="btn btn-primary request-approve">
+              <i class="icon-ok"></i>
+            </button>
+            <button ng-click="deleteButtonClicked(request, #{container}, false)"
+              class="btn btn-danger request-del">
+              <i class="icon-remove"></i>
+            </button>
+          </td>
+
+  div id="batch_controls"
+    - if can? :approve, Course::EnrolRequest
+      a [class="update-selected"
+        ng-click="deleteSelected('#{course_approve_selected_enrol_requests_path(@course,
+        'json')}', #{container}, true)"] = t('.approve_selected')
+      = '|'
+      a [class="update-selected"
+        ng-click="deleteSelected('#{course_delete_selected_enrol_requests_path(@course,
+        'json')}', #{container}, false)"] = t('.delete_selected')
+      = '|'
+      a [ng-click="deleteAll('#{course_approve_selected_enrol_requests_path(@course,
+      'json')}',#{container}, true)"] = t('.approve_all')
+      = '|'
+      a [ng-click="deleteAll('#{course_delete_selected_enrol_requests_path(@course,
+      'json')}',#{container}, false)"] = t('.delete_all')
