@@ -9,10 +9,10 @@ div id="loading" ng-show="loading"
   image src="/images/ajax_loader.gif" alt="Spinner"
   span = t('.loading')
 
-div ng-show="!loading && <%= container %>.length == 0"
-  span no_request_message
+div ng-show="!loading && #{container}.length == 0"
+  span = no_request_message
 
-div ng-show="!loading && <%= container %>.length > 0"
+div ng-show="!loading && #{container}.length > 0"
   table class="table enrol-requests"
     thead
     tr
@@ -43,11 +43,11 @@ div ng-show="!loading && <%= container %>.length > 0"
       td {{ request.role.title }}
       - if can? :approve, Course::EnrolRequest
         | <td>
-            <button ng-click="deleteButtonClicked(request, #{container}, true)"
+            <button ng-click="approveButtonClicked(request.id, #{container})"
               class="btn btn-primary request-approve">
               <i class="icon-ok"></i>
             </button>
-            <button ng-click="deleteButtonClicked(request, #{container}, false)"
+            <button ng-click="deleteButtonClicked(request.id, #{container})"
               class="btn btn-danger request-del">
               <i class="icon-remove"></i>
             </button>
@@ -55,16 +55,10 @@ div ng-show="!loading && <%= container %>.length > 0"
 
   div id="batch_controls"
     - if can? :approve, Course::EnrolRequest
-      a [class="update-selected"
-        ng-click="deleteSelected('#{course_approve_selected_enrol_requests_path(@course,
-        'json')}', #{container}, true)"] = t('.approve_selected')
+      a ng-click="approveSelectedButtonClicked(#{container})" = t('.approve_selected')
       = '|'
-      a [class="update-selected"
-        ng-click="deleteSelected('#{course_delete_selected_enrol_requests_path(@course,
-        'json')}', #{container}, false)"] = t('.delete_selected')
+      a ng-click="deleteSelectedButtonClicked(#{container})" = t('.delete_selected')
       = '|'
-      a [ng-click="deleteAll('#{course_approve_selected_enrol_requests_path(@course,
-      'json')}',#{container}, true)"] = t('.approve_all')
+      a ng-click="approveAllButtonClicked(#{container})" = t('.approve_all')
       = '|'
-      a [ng-click="deleteAll('#{course_delete_selected_enrol_requests_path(@course,
-      'json')}',#{container}, false)"] = t('.delete_all')
+      a ng-click="deleteAllButtonClicked(#{container})" = t('.delete_all')

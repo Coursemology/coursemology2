@@ -65,9 +65,9 @@ Rails.application.routes.draw do
       resources :announcements
       resources :achievements
 
-      get 'enrol_requests/delete_selected' => 'enrol_requests#delete_selected',
+      post 'enrol_requests/delete_selected' => 'enrol_requests#delete_selected',
           as: :delete_selected_enrol_requests
-      get 'enrol_requests/approve_selected' => 'enrol_requests#approve_selected',
+      post 'enrol_requests/approve_selected' => 'enrol_requests#approve_selected',
           as: :approve_selected_enrol_requests
       resources :enrol_requests do
         member do

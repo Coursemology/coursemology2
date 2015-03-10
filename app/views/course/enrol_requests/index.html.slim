@@ -1,5 +1,7 @@
 script type="application/javascript"
-  | var enrol_requests_path = "#{course_enrol_requests_path(@course, 'json')}";
+  | var enrolRequestsPath = "#{course_enrol_requests_path(@course, 'json')}";
+    var deleteEnrolRequestsPath = "#{course_delete_selected_enrol_requests_path(@course, 'json')}";
+    var approveEnrolRequestsPath = "#{course_approve_selected_enrol_requests_path(@course,'json')}";
 
 div class="page-header"
   h1 = t('.enrol_requests')
