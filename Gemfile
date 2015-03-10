@@ -89,7 +89,7 @@ group :development, :test do
   gem 'consistency_fail'
 
   # File system monitoring for running changed tests automatically.
-  gem 'guard-rspec', require: false
+  # gem 'guard-rspec', require: false
 end
 
 group :ci do
