@@ -84,6 +84,10 @@ en:
       enrol_tab:
         enrol_requests: Enrol Requests
         mass_enrolment: Mass Enrolment
+      enrol_form:
+        enrol_as_student: Enrol As Student
+        enrol_as_teaching_assistant: Enrol As Teaching Assistant
+        enrol_as_manager: Enrol As Manager
       list:
         no_staff_requests: No outstanding staff request
         no_student_requests: No outstanding student request
@@ -98,6 +102,7 @@ en:
         approve_all: Approve All
         delete_all: Delete All
       new:
+        new_enrol_request: New Enrol Request
         already_registered_format: 'You have already registed to this class as a %{role}'
         request_format: 'You have already registed to this class as a %{role}'
         come_back_later: Your request has been received. Please come back later to check for the result!

@@ -11,6 +11,7 @@ class Ability
     can :read, Course do |course|
       course.published? or course.opened?
     end
+    can :manage, Course, creator_id: user.id
     if user.administrator?
       can :manage, :all
     end

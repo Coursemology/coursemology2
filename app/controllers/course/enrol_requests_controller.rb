@@ -9,13 +9,7 @@ class Course::EnrolRequestsController < Course::ModuleController
       format.html
       format.json do
         def get_request_hash(requests)
-          result = []
-          requests.each do |request|
-            request_hash = request.as_json(include: {user: {only: [:name, :email]}})
-            request_hash[:path] = course_enroll_request_path(@course, request.id, 'json')
-            result << request_hash
-          end
-          result
+          requests.map { |request| request.as_json(include: {user: {only: [:name, :email]}})}
         end
 
         staff_request_hashes = get_request_hash(@staff_requests)
@@ -53,16 +47,8 @@ class Course::EnrolRequestsController < Course::ModuleController
     end
   end
 
-  def approve #:nodoc:
-    process_enrol_requests([@enrol_request.id], true)
-  end
-
   def approve_selected #:nodoc:
     process_enrol_requests(params[:enrol_request_ids], true)
-  end
-
-  def delete #:nodoc:
-    process_enrol_requests([@enrol_request.id])
   end
 
   def delete_selected #:nodoc:
@@ -94,16 +80,17 @@ class Course::EnrolRequestsController < Course::ModuleController
         response_hash[:processed_ids] << @current_id
       end
 
-      count = response_has[:processed_ids].count
+      count = response_hash[:processed_ids].count
       if approve
-        response_hash[:message] = t('course.enrol_requests.approve_message_format') % count
+        response_hash[:message] = t('course.enrol_requests.approve_message_format') % {count: count}
       else
-        response_hash[:message] = t('course.enrol_requests.delete_message_format') % count
+        response_hash[:message] = t('course.enrol_requests.delete_message_format') % {count: count}
       end
     rescue
       response_hash[:status] = :error
       response_hash[:error_id] = @current_id
-      response_hash[:message] = t('course.enrol_requests.error_message_format') % $!.message
+      response_hash[:message] = t('course.enrol_requests.error_message_format') %
+        {reason: $!.message}
     end
 
     respond_to do |format|
@@ -128,13 +115,14 @@ class Course::EnrolRequestsController < Course::ModuleController
 
   # Approve the given enrol_request.
   def approve_request!(enrol_request)
-    authorize! :approve, EnrollRequest
+    authorize! :approve, Course::EnrolRequest
 
-    if CourseUser.where(course_id: @course, user_id: enrol_request.user_id)
+    if !CourseUser.where(course_id: @course, user_id: enrol_request.user_id).empty?
       return
     end
-
-    @course.course_users.create!(user_id: enrol_request.user_id, role: enrol_request.role)
+    @course.course_users.create!(user_id: enrol_request.user_id, role: enrol_request.role,
+                                 name: enrol_request.user.name)
+    puts CourseUser.where(user_id: enrol_request.user_id).inspect#fd
   end
 
 end

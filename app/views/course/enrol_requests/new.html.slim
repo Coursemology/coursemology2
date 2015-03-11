@@ -1,5 +1,6 @@
+h1.page-header = t('.new_enrol_request')
 - if current_course_user
-  p = t('.already_registered_format') % current_course_user.role
+  p = t('.already_registered_format') % {role: current_course_user.role}
 - else
-  p = t('.request_format') % current_course_user.role
+  p = t('.request_format') % {role: current_course_user.role}
   p = t('.come_back_later')

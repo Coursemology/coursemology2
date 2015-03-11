@@ -5,20 +5,38 @@ RSpec.describe Course::EnrolRequestsController, :type => :controller do
     ActsAsTenant.current_tenant = Instance.default
   end
 
+  let!(:user) { create(:user) }
   let!(:course) { create(:course, status: :opened) }
+  let!(:student_request) {create(:course_enrol_request, course: course, user: create(:user),
+                                 role: :student)}
+  let!(:staff_request) {create(:course_enrol_request, course: course, user: create(:user),
+                               role: :teaching_assistant)}
 
   describe '#index' do
-    subject { get :index, course_id: course }
-
     context 'user can manage the course' do
-      it 'should render index template' do
-        subject
-        expect(response).to render_template(:index)
+      before do
+        student_request
+        staff_request
+        sign_in(create(:administrator))
       end
-    end
 
-    context 'user cannot manage the course' do
-      # TODO
+      context 'request html' do
+        subject { get :index, course_id: course.id }
+        it 'renders index template' do
+          subject
+          expect(response).to render_template(:index)
+          expect(assigns(:student_requests)).to contain_exactly(student_request)
+          expect(assigns(:staff_requests)).to contain_exactly(staff_request)
+        end
+      end
+
+      context 'request json' do
+        subject { get :index, format: 'json', course_id: course.id }
+        it 'renders index json' do
+          subject
+          expect(response).to have_http_status(:ok)
+        end
+      end
     end
   end
 
@@ -54,6 +72,36 @@ RSpec.describe Course::EnrolRequestsController, :type => :controller do
         subject
         expect(response).to redirect_to(new_user_session_path)
       end
+    end
+  end
+
+  describe '#approve_seleced' do
+    subject { get :approve_selected, format: 'json', course_id: course.id,
+                  enrol_request_ids: [student_request.id] }
+
+    before do
+      sign_in(create(:administrator))
+    end
+
+    it 'creates a course_user and destroy the enrol_request' do
+      expect{ subject }.to change(CourseUser, :count).by(1).and change(Course::EnrolRequest,
+                                                                       :count).by(-1)
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe '#delete_selected' do
+    subject { get :delete_selected, format: 'json', course_id: course.id,
+                  enrol_request_ids: [student_request.id] }
+
+    before do
+      sign_in(create(:administrator))
+    end
+
+    it 'destroys the enrol_request' do
+      expect{ subject }.to change(CourseUser, :count).by(0).and change(Course::EnrolRequest,
+                                                                       :count).by(-1)
+      expect(response).to have_http_status(:ok)
     end
   end
 end

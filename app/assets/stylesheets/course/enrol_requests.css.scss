@@ -1,6 +1,9 @@
-#course_purchase_info {
-  span {
-    padding: 5px 10px 5px 0px;
+#enrol_request_form {
+  min-width: 190px;
+  width: 190px;
+  a {
+    width: 100%;
+    margin: 5px 0px 5px 0px;
   }
 }
 
@@ -23,7 +26,7 @@
   }
 }
 
-#enroll_request_alert {
+#enrol_request_alert {
   height: 18px;
   margin: -18px 0px -14px 0px;
   -webkit-transition: all linear 0.5s;
@@ -39,13 +42,13 @@
   }
 }
 
-.transparent-enroll-request-alert {
+.transparent-enrol-request-alert {
   opacity: 0;
 }
 
-.enroll-request-animate-repeat.ng-move,
-.enroll-request-animate-repeat.ng-enter,
-.enroll-request-animate-repeat.ng-leave {
+.enrol-request-animate-repeat.ng-move,
+.enrol-request-animate-repeat.ng-enter,
+.enrol-request-animate-repeat.ng-leave {
   -webkit-transition: all linear 0.5s;
   -moz-transition: all linear 0.5s;
   -ms-transition: all linear 0.5s;
@@ -53,16 +56,16 @@
   transition: all linear 0.5s;
 }
 
-.enroll-request-animate-repeat.ng-leave.ng-leave-active,
-.enroll-request-animate-repeat.ng-move,
-.enroll-request-animate-repeat.ng-enter {
+.enrol-request-animate-repeat.ng-leave.ng-leave-active,
+.enrol-request-animate-repeat.ng-move,
+.enrol-request-animate-repeat.ng-enter {
   opacity:0;
   max-height:0;
 }
 
-.enroll-request-animate-repeat.ng-leave,
-.enroll-request-animate-repeat.ng-move.ng-move-active,
-.enroll-request-animate-repeat.ng-enter.ng-enter-active {
+.enrol-request-animate-repeat.ng-leave,
+.enrol-request-animate-repeat.ng-move.ng-move-active,
+.enrol-request-animate-repeat.ng-enter.ng-enter-active {
   opacity:1;
   max-height:40px;
 }
