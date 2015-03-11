@@ -30,9 +30,17 @@ class Course::EnrolRequestsController < Course::ModuleController
       return
     end
 
-    existing = Course::EnrolRequest.find_by_user_id_and_course_id(current_user.id,
-                                                                         @course.id)
-    if !current_course_user && !existing
+    existing = Course::EnrolRequest.with_deleted.find_by_user_id_and_course_id(current_user.id,
+                                                                               @course.id)
+    if existing
+      if existing.deleted?
+        Course::EnrolRequest.restore(existing)
+      end
+
+      @enrol_request = existing
+    end
+
+    if !current_course_user
       if CourseUser.roles.include?(params[:role])
         @enrol_request.role = params[:role]
       else
@@ -41,7 +49,6 @@ class Course::EnrolRequestsController < Course::ModuleController
 
       @enrol_request.course = @course
       @enrol_request.user = current_user
-      @enrol_request.role = @role
       @enrol_request.save!
       # TODO notify lecturer
     end
@@ -122,7 +129,6 @@ class Course::EnrolRequestsController < Course::ModuleController
     end
     @course.course_users.create!(user_id: enrol_request.user_id, role: enrol_request.role,
                                  name: enrol_request.user.name)
-    puts CourseUser.where(user_id: enrol_request.user_id).inspect#fd
   end
 
 end
