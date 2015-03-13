@@ -114,7 +114,7 @@ gem 'devise'
 gem 'cancancan', '~> 1.9'
 
 # Some helpers for structuring CSS/JavaScript
-gem 'rails_utils', github: 'winston/rails_utils'
+gem 'rails_utils', '~> 3.3', '>= 3.3.2'
 
 # Themes for instances
 gem 'themes_on_rails', github: 'lowjoel/themes_on_rails'
