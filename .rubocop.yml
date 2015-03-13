@@ -24,5 +24,11 @@ Style/ClassAndModuleChildren:
 Style/Documentation:
   Enabled: false
 
+Style/IndentHash:
+  EnforcedStyle: consistent
+
 Style/StringLiterals:
   EnforcedStyle: single_quotes
+
+Style/WordArray:
+  Enabled: false
