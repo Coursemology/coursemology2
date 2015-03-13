@@ -1,5 +1,6 @@
 class Course::EnrolRequestsController < Course::ModuleController
   load_and_authorize_resource through: :course
+  skip_before_filter :verify_authenticity_token, only: [:approve_selected, :delete_selected]
 
   def index #:nodoc:
     @staff_requests = @enrol_requests.staff
@@ -8,14 +9,7 @@ class Course::EnrolRequestsController < Course::ModuleController
     respond_to do |format|
       format.html
       format.json do
-        def get_request_hash(requests)
-          requests.map { |request| request.as_json(include: {user: {only: [:name, :email]}})}
-        end
-
-        staff_request_hashes = get_request_hash(@staff_requests)
-        student_request_hashes = get_request_hash(@student_requests)
-        response_hash = {staff_requests: staff_request_hashes, student_requests: student_request_hashes}
-        render json: response_hash
+        render json: {staff_requests: @staff_requests, student_requests: @student_requests}
       end
     end
   end
@@ -73,6 +67,8 @@ class Course::EnrolRequestsController < Course::ModuleController
   #         error_id: The ID of the enrol_request where the error occurred. This key is present
   #                   only when the status is "error"
   def process_enrol_requests(enrol_request_ids, approve = false)
+    authorize! :approve, Course::EnrolRequest
+
     enrol_request_ids ||= []
     enrol_requests = get_enrol_requests(enrol_request_ids)
     response_hash = {status: :ok, processed_ids: []}
@@ -80,7 +76,7 @@ class Course::EnrolRequestsController < Course::ModuleController
       enrol_requests.each do |enrol_request|
         @current_id = enrol_request.id
         if approve
-          approve_request!(enrol_request)
+          enrol_request.approve!
         end
 
         enrol_request.destroy!
@@ -105,7 +101,7 @@ class Course::EnrolRequestsController < Course::ModuleController
         if response_hash[:status] == :ok
           status = :ok
         else
-          status = :internal_server_error
+          status = :bad_request
         end
         render json: response_hash, status: status
       end
@@ -116,19 +112,7 @@ class Course::EnrolRequestsController < Course::ModuleController
   # it will not be included in the returned list.
   def get_enrol_requests(enrol_request_ids)
     enrol_request_ids.map { |enrol_request_id|
-      Course::EnrolRequest.find(enrol_request_id)
+      Course::EnrolRequest.find_by_id(enrol_request_id)
     }.select { |enrol_request| !!enrol_request }
   end
-
-  # Approve the given enrol_request.
-  def approve_request!(enrol_request)
-    authorize! :approve, Course::EnrolRequest
-
-    if !CourseUser.where(course_id: @course, user_id: enrol_request.user_id).empty?
-      return
-    end
-    @course.course_users.create!(user_id: enrol_request.user_id, role: enrol_request.role,
-                                 name: enrol_request.user.name)
-  end
-
 end

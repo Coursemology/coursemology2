@@ -12,5 +12,19 @@ class Course::EnrolRequest < ActiveRecord::Base
   belongs_to :course
   belongs_to :user
 
-  # TODO notify lecturer method
+  def approve!
+    if !CourseUser.where(course_id: @course, user_id: self.user_id).empty?
+      return
+    end
+
+    self.course.course_users.create!(user_id: self.user_id,
+                                     role: self.role,
+                                     name: self.user.name)
+  end
+
+  def as_json(options = {})
+    super(options.reverse_merge(include: {user: {only: :name, methods: :email}}))
+  end
+
+  # TODO add notify lecturer method
 end

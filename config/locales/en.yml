@@ -103,6 +103,6 @@ en:
         delete_all: Delete All
       new:
         new_enrol_request: New Enrol Request
-        already_registered_format: 'You have already registed to this class as a %{role}'
-        request_format: 'You have already registed to this class as a %{role}'
+        already_registered_format: 'You have already registered to this class as a %{role}'
+        request_format: 'You have requested to enrol to this class as a %{role}'
         come_back_later: Your request has been received. Please come back later to check for the result!

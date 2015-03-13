@@ -86,14 +86,14 @@ coursemologyApp.controller('enrolRequestListController', function($scope, $http,
   $scope.processEnrolRequests = function(path, requestIds, fromList) {
     var makeResponseHandler = function(success) {
       return function(data) {
-        $scope.updateCourseInfo(data);
-        $scope.alertMessage(data.message, success);
+        console.log(data);//fd
+        $scope.showAlert(data.message, success);
         $scope.deleteRequestsWithIds(fromList, data.processed_ids);
       };
     };
 
-    if (requests && requests.constructor === Array && requests.length > 0) {
-      $http.post(path, {enrol_requestIds: requestIds})
+    if (requestIds && requestIds.constructor === Array && requestIds.length > 0) {
+      $http.post(path, {enrol_request_ids: requestIds})
         .success(makeResponseHandler(true))
         .error(makeResponseHandler(false))
     }

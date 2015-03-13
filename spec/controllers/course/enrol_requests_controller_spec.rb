@@ -76,17 +76,30 @@ RSpec.describe Course::EnrolRequestsController, :type => :controller do
   end
 
   describe '#approve_seleced' do
-    subject { get :approve_selected, format: 'json', course_id: course.id,
-                  enrol_request_ids: [student_request.id] }
-
     before do
       sign_in(create(:administrator))
     end
 
-    it 'creates a course_user and destroy the enrol_request' do
-      expect{ subject }.to change(CourseUser, :count).by(1).and change(Course::EnrolRequest,
-                                                                       :count).by(-1)
-      expect(response).to have_http_status(:ok)
+    context 'existing enrol request' do
+      subject { get :approve_selected, format: 'json', course_id: course.id,
+                    enrol_request_ids: [student_request.id] }
+
+      it 'creates a course_user and destroy the enrol request' do
+        expect{ subject }.to change(CourseUser, :count).by(1).and change(Course::EnrolRequest,
+                                                                         :count).by(-1)
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'non-existing enrol request' do
+      subject { get :approve_selected, format: 'json', course_id: course.id,
+                    enrol_request_ids: [student_request.id * 10]}
+
+      it 'responds with bad request status' do
+        expect{ subject }.to change(CourseUser, :count).by(0).and change(Course::EnrolRequest,
+                                                                         :count).by(0)
+        expect(response).to have_http_status(:ok)
+      end
     end
   end
 
@@ -98,7 +111,7 @@ RSpec.describe Course::EnrolRequestsController, :type => :controller do
       sign_in(create(:administrator))
     end
 
-    it 'destroys the enrol_request' do
+    it 'destroys the enrol request' do
       expect{ subject }.to change(CourseUser, :count).by(0).and change(Course::EnrolRequest,
                                                                        :count).by(-1)
       expect(response).to have_http_status(:ok)

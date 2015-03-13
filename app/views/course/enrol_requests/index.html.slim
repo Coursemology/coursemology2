@@ -6,15 +6,13 @@ script type="application/javascript"
 div class="page-header"
   h1 = t('.enrol_requests')
 
-/! TODO add the partial view
 = render partial: 'course/enrol_requests/enrol_tab', locals: {mass_requests: false}
 
 div id="request_list" ng-controller="enrolRequestListController"
-  div [id="enroll_request_alert" class="alert transparent-enroll-request-alert"
-  ng-class="{'alert-success': alertSuccess, 'alert-error': !alertSuccess,'transparent-enroll-request-alert': alertMessage == null}"]
+  div [id="enrol_request_alert" class="alert transparent-enrol-request-alert"
+  ng-class="{'alert-success': alertSuccess, 'alert-error': !alertSuccess,'transparent-enrol-request-alert': alertMessage == null}"]
     | {{ alertMessage }}
 
-  /! TODO add the list partial view
   h3 = t('.staff_requests')
   = render partial: 'course/enrol_requests/list', locals: { requests: @staff_requests, type: 'staff' }
 
