@@ -7,10 +7,10 @@ module UserAuthenticationConcern
     devise :database_authenticatable, :registerable,
            :recoverable, :rememberable, :trackable
 
-    validates_presence_of :email, if: :email_required?
-    validates_presence_of :password, if: :password_required?
-    validates_confirmation_of :password, if: :password_required?
-    validates_length_of :password, within: Devise::password_length, allow_blank: true
+    validates :email, presence: true, if: :email_required?
+    validates :password, presence: true, if: :password_required?
+    validates :password, confirmation: true, if: :password_required?
+    validates :password, length: { within: Devise.password_length, allow_blank: true }
 
     extend ReplacementClassMethods
   end

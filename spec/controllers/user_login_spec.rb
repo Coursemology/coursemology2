@@ -23,12 +23,11 @@ RSpec.describe Devise::SessionsController, type: :controller do
       it 'allows users to log in with their secondary email address' do
         post :create,
              user: {
-               email: user.emails.reject { |email_record| email_record.primary }.first.email,
+               email: user.emails.reject(&:primary).first.email,
                password: user.password
              }
         expect(flash[:notice]).to include('success')
       end
     end
   end
-
 end

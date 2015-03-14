@@ -1,7 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  it { is_expected.to have_many(:emails).class_name(UserEmail.name).inverse_of(:user).dependent(:destroy) }
+  it do
+    is_expected.to have_many(:emails).
+      class_name(UserEmail.name).
+      inverse_of(:user).
+      dependent(:destroy)
+  end
   it { is_expected.to have_many(:instance_users) }
   it { is_expected.to have_many(:instances).through(:instance_users) }
   it { is_expected.to have_many(:course_users).inverse_of(:user).dependent(:destroy) }
@@ -20,7 +25,7 @@ RSpec.describe User, type: :model do
         let(:user) do
           user = build(:user, emails_count: 4)
           user.emails.each { |email_record| email_record.primary = false }
-          user.emails.each.take(2).each { |email_record| email_record.mark_for_destruction }
+          user.emails.each.take(2).each(&:mark_for_destruction)
           user
         end
 
@@ -53,7 +58,7 @@ RSpec.describe User, type: :model do
         user.email = nil
         expect(user.email).to eq(nil)
 
-        remaining_emails = user.emails.reject { |user_email| user_email.marked_for_destruction? }
+        remaining_emails = user.emails.reject(&:marked_for_destruction?)
         expect(remaining_emails.length).to eq(0)
       end
     end

@@ -8,5 +8,4 @@ FactoryGirl.define do
     valid_from Time.now
     valid_to 3.days.from_now
   end
-
 end

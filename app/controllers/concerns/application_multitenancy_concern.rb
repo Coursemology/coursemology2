@@ -3,7 +3,7 @@ module ApplicationMultitenancyConcern
 
   included do
     set_current_tenant_through_filter
-    before_filter :deduce_and_set_current_tenant
+    before_action :deduce_and_set_current_tenant
   end
 
   private
