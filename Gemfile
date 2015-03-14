@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 source 'https://rails-assets.org'
 
 # For Windows devs
-gem 'tzinfo-data', platforms: [:mswin]
+gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.1.8'
@@ -55,7 +55,7 @@ group :development do
   gem 'rails-dev-tweaks'
   gem 'rails-dev-boost', github: 'thedarkone/rails-dev-boost'
   gem 'rails-flog', require: 'flog'
-  gem 'wdm', '>= 0.0.3', platforms: [:mswin]
+  gem 'wdm', '>= 0.0.3', platforms: [:mswin, :mswin64]
 
   # Helps to prevent database slowdowns
   gem 'lol_dba'

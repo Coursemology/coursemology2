@@ -295,6 +295,7 @@ GEM
     yard (0.8.7.6)
 
 PLATFORMS
+  mswin64
   ruby
 
 DEPENDENCIES
