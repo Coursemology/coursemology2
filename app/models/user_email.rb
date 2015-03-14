@@ -2,6 +2,6 @@
 class UserEmail < ActiveRecord::Base
   belongs_to :user, inverse_of: :emails
 
-  validates_uniqueness_of :email, case_sensitive: false
-  validates_format_of :email, with: Devise::email_regexp
+  validates :email, uniqueness: { case_sensitive: false }
+  validates :email, format: Devise.email_regexp
 end

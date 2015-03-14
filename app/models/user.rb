@@ -17,11 +17,7 @@ class User < ActiveRecord::Base
   # @return [String, nil] The email address of the user.
   def email
     result_record = default_email_record
-    if result_record
-      default_email_record.email
-    else
-      nil
-    end
+    default_email_record.email if result_record
   end
 
   # Sets the default email address of the user.
@@ -45,7 +41,7 @@ class User < ActiveRecord::Base
   # @return [UserEmail] The user's primary email address record.
   def default_email_record
     valid_emails = emails.each.select { |email_record| !email_record.marked_for_destruction? }
-    result = valid_emails.find { |email_record| email_record.primary? }
+    result = valid_emails.find(&:primary?)
     result ||= valid_emails.first
     result ||= emails.order('primary=1 ASC').first
     result

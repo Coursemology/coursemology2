@@ -6,9 +6,9 @@ RSpec.describe ApplicationHelper, type: :helper do
       expect(helper.has_sidebar?).to eq(false)
     end
 
-    describe '#has_sidebar' do
+    describe '#sidebar!' do
       it 'sets #has_sidebar?' do
-        helper.has_sidebar
+        helper.sidebar!
         expect(helper.has_sidebar?).to eq(true)
       end
     end
@@ -18,6 +18,7 @@ RSpec.describe ApplicationHelper, type: :helper do
         helper.sidebar do
           ''
         end
+        expect(helper.has_sidebar?).to eq(true)
       end
 
       it 'accepts a block as the sidebar contents' do

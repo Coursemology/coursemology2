@@ -4,5 +4,4 @@ FactoryGirl.define do
     user
     role :normal
   end
-
 end

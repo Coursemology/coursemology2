@@ -14,7 +14,7 @@ RSpec.describe 'render within_layout', type: :view do
     render template: 'content', layout: 'inner_layout'
     expect(rendered).to have_tag('div.outer') do
       with_tag('div.inner') do
-        with_text /test!/
+        with_text(/test!/)
       end
     end
   end

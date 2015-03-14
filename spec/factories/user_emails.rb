@@ -12,5 +12,4 @@ FactoryGirl.define do
       user_email.user ||= build(:user, emails: [user_email], emails_count: 0)
     end
   end
-
 end

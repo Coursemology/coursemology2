@@ -25,17 +25,17 @@ module Extensions::ActionController::Base
   def layout_hierarchy
     @layout_hierarchy ||=
       Extensions::ActionController::Base.class_hierarchy(self.class).
-        select { |klass| klass < ActionController::Base }.
-        map { |klass| Extensions::ActionController::Base.class_layout(klass, self) }.
-        select { |layout| !layout.nil? }.
-        reduce([]) do |memo, layout|
-          if memo.empty? || memo.last != layout
-            memo << layout
-          else
-            memo
-          end
-        end.
-        reverse!
+      select { |klass| klass < ActionController::Base }.
+      map { |klass| Extensions::ActionController::Base.class_layout(klass, self) }.
+      select { |layout| !layout.nil? }.
+      reduce([]) do |memo, layout|
+        if memo.empty? || memo.last != layout
+          memo << layout
+        else
+          memo
+        end
+      end.
+      reverse!
   end
 
   # Gets the superclass hierarchy for the given class. Object is not part of the returned result.
@@ -60,7 +60,7 @@ module Extensions::ActionController::Base
   # @return [String] The layout to use for instances of `klass`.
   def self.class_layout(klass, self_)
     layout_method = klass.instance_method(:_layout)
-    _layout = layout_method.bind(self_)
-    _layout.call
+    layout = layout_method.bind(self_)
+    layout.call
   end
 end

@@ -1,7 +1,8 @@
 require 'simplecov'
 
 module CoverageHelper
-  # Helper to include Coveralls/Code Climate coverage, but not require developers to install the gem.
+  # Helper to include Coveralls/Code Climate coverage, but not require developers to install the
+  # gem.
   #
   # @param name [String] The name of the module to require.
   # @param initialiser [Proc] The block to execute when the module is required successfully.
@@ -16,7 +17,7 @@ module CoverageHelper
     end
   rescue LoadError => e
     if e.path == name
-      puts 'Cannot find \'%s\', ignoring' % [name] if ENV['CI']
+      puts format('Cannot find \'%s\', ignoring', name) if ENV['CI']
     else
       raise e
     end

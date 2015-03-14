@@ -2,7 +2,7 @@ class Instance < ActiveRecord::Base
   class << self
     def default
       result = first
-      raise 'Unknown instance. Did you run rake db:seed?' unless result
+      fail 'Unknown instance. Did you run rake db:seed?' unless result
       result
     end
 
