@@ -12,6 +12,7 @@ Major changes:
 ## Installation
 ### System requirements
  - [nodejs](http://nodejs.org) (as a JavaScript runtime for [execjs](https://github.com/sstephenson/execjs))
+ - [bundler](http://bundler.io) 1.8.0 or later
 
 ### Procedure
  1. Install dependencies using `bundle install`
