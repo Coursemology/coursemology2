@@ -77,7 +77,7 @@ module Modular
       #                             files must follow Rails conventions.
       def eager_load_modules(in_path)
         if in_path.is_a?(String)
-          return unless Dir.exists?(in_path)
+          return unless Dir.exist?(in_path)
           in_path = Dir.open(in_path)
         end
 
@@ -99,7 +99,7 @@ module Modular
       #
       # @return [Array<Module>] The modules associated with this host.
       def modules
-        module_names.map { |module_| module_.constantize }
+        module_names.map(&:constantize)
       end
 
       private

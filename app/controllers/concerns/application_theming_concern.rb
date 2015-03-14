@@ -18,7 +18,7 @@ module ApplicationThemingConcern
   # @param theme_name [String] The name of the theme to check.
   # @return [Boolean] True if the theme exists.
   def theme_exists?(theme_name)
-    File.exists?("#{themes_path}/#{theme_name}")
+    File.exist?("#{themes_path}/#{theme_name}")
   end
 
   # Gets the path to the themes directory.

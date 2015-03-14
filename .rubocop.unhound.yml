@@ -69,7 +69,7 @@ EmptyLiteral:
   Enabled: true
 
 Encoding:
-  Enabled: true
+  Enabled: false
 
 EvenOdd:
   Enabled: true
@@ -96,7 +96,7 @@ IfWithSemicolon:
   Enabled: true
 
 InlineComment:
-  Enabled: true
+  Enabled: false
 
 Lambda:
   Enabled: true

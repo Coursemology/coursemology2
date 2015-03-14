@@ -18,7 +18,7 @@ class Course::Controller < ApplicationController
       module_.get_sidebar_items(self)
     end
 
-    array_of_module_arrays.tap { |arr| arr.flatten! }
+    array_of_module_arrays.tap(&:flatten!)
   end
 
   def current_course_user

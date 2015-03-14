@@ -12,8 +12,6 @@ class Ability
       course.published? or course.opened?
     end
     can :manage, Course, creator_id: user.id
-    if user.administrator?
-      can :manage, :all
-    end
+    can :manage, :all if user.administrator?
   end
 end

@@ -12,6 +12,9 @@ addons:
 bundler_args: "--without development:production --deployment"
 cache: bundler
 
+before_install:
+  - gem update bundler
+
 before_script:
   - psql -c 'create database coursemology_test;' -U postgres
   - bundle exec rake db:setup

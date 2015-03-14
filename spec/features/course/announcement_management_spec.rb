@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Announcement management' do
+RSpec.describe 'Announcement management' do
   subject { page }
 
   let!(:instance) { create(:instance) }

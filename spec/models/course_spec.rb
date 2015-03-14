@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Course, type: :model do
-
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
     it { is_expected.to belong_to(:creator) }

@@ -1,0 +1,8 @@
+inherit_from:
+  - ../../.rubocop.yml
+
+Metrics/MethodLength:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false

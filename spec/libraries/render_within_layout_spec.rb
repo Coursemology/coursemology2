@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'render within_layout', type: :view do
+RSpec.describe 'render within_layout', type: :view do
   let(:views_directory) do
     path = Pathname.new("#{__dir__}/../fixtures/libraries/render_within_layout")
     path.realpath
@@ -14,7 +14,7 @@ describe 'render within_layout', type: :view do
     render template: 'content', layout: 'inner_layout'
     expect(rendered).to have_tag('div.outer') do
       with_tag('div.inner') do
-        with_text /test!/
+        with_text(/test!/)
       end
     end
   end
