@@ -1,6 +1,6 @@
 class Course::EnrolRequest < ActiveRecord::Base
   stampable
-  acts_as_paranoid
+  has_paper_trail on: [:destroy]
   validates_uniqueness_of :course_id, scope: :user_id
 
   scope :student, -> { where(role: CourseUser.roles[:student]) }

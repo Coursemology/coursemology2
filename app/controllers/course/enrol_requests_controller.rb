@@ -21,13 +21,8 @@ class Course::EnrolRequestsController < Course::ModuleController
       return
     end
 
-    existing = Course::EnrolRequest.with_deleted.find_by_user_id_and_course_id(current_user.id,
-                                                                               @course.id)
+    existing = Course::EnrolRequest.find_by_user_id_and_course_id(current_user.id, @course.id)
     if existing
-      if existing.deleted?
-        Course::EnrolRequest.restore(existing)
-      end
-
       @enrol_request = existing
     end
 

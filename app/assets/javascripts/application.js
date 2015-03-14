@@ -17,7 +17,4 @@
 //= require bootstrap-datetimepicker
 //= require bootstrap-select
 //= require simple_form-bootstrap
-//= require angular
-//= require angular-resource
-//= require angular-animate
 //= require_tree .
