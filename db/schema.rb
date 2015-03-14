@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20150316080645) do
     t.integer  "instance_id",             null: false
     t.string   "title",                   null: false
     t.text     "description"
+    t.text     "logo"
     t.integer  "status",      default: 0, null: false
     t.datetime "start_at",                null: false
     t.datetime "end_at",                  null: false
