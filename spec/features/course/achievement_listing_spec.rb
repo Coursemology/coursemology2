@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Achievement listing' do
+RSpec.describe 'Achievement listing' do
   subject { page }
 
   let!(:instance) { create(:instance) }

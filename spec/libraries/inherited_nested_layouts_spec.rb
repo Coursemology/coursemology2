@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Inherited Nested Layouts', type: :controller do
+RSpec.describe 'Inherited Nested Layouts', type: :controller do
   class ControllerA < ApplicationController
     layout 'testA'
   end
