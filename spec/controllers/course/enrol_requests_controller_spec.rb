@@ -9,14 +9,16 @@ RSpec.describe Course::EnrolRequestsController, :type => :controller do
   let!(:course) { create(:course, status: :opened) }
   let!(:student_request) {create(:course_enrol_request, course: course, user: create(:user),
                                  role: :student)}
+  let!(:student_request2) {create(:course_enrol_request, course: course, user: create(:user),
+                                  role: :student)}
   let!(:staff_request) {create(:course_enrol_request, course: course, user: create(:user),
                                role: :teaching_assistant)}
+  let!(:staff_request2) {create(:course_enrol_request, course: course, user: create(:user),
+                                role: :manager)}
 
   describe '#index' do
     context 'user can manage the course' do
       before do
-        student_request
-        staff_request
         sign_in(create(:administrator))
       end
 
@@ -25,16 +27,8 @@ RSpec.describe Course::EnrolRequestsController, :type => :controller do
         it 'renders index template' do
           subject
           expect(response).to render_template(:index)
-          expect(assigns(:student_requests)).to contain_exactly(student_request)
-          expect(assigns(:staff_requests)).to contain_exactly(staff_request)
-        end
-      end
-
-      context 'request json' do
-        subject { get :index, format: 'json', course_id: course.id }
-        it 'renders index json' do
-          subject
-          expect(response).to have_http_status(:ok)
+          expect(assigns(:student_requests)).to contain_exactly(student_request, student_request2)
+          expect(assigns(:staff_requests)).to contain_exactly(staff_request, staff_request2)
         end
       end
     end
@@ -75,46 +69,60 @@ RSpec.describe Course::EnrolRequestsController, :type => :controller do
     end
   end
 
-  describe '#approve_seleced' do
+  describe '#process_multiple' do
     before do
       sign_in(create(:administrator))
     end
 
-    context 'existing enrol request' do
-      subject { get :approve_selected, format: 'json', course_id: course.id,
-                    enrol_request_ids: [student_request.id] }
+    context 'approve selected student' do
+      subject { post :process_multiple, course_id: course.id, approve_selected_student: '',
+                     enrol_request_ids: [student_request.id] }
 
-      it 'creates a course_user and destroy the enrol request' do
+      it 'creates a course user and destroy the enrol request' do
         expect{ subject }.to change(CourseUser, :count).by(1).and change(Course::EnrolRequest,
                                                                          :count).by(-1)
-        expect(response).to have_http_status(:ok)
+        expect(response).to redirect_to(course_enrol_requests_path(course))
+        expect(flash[:notice]).to match(I18n.t('course.enrol_requests.approve_message_format') %
+                                          {count: 1})
       end
     end
 
-    context 'non-existing enrol request' do
-      subject { get :approve_selected, format: 'json', course_id: course.id,
-                    enrol_request_ids: [student_request.id * 10]}
+    context 'delete selected student' do
+      subject { get :process_multiple, course_id: course.id, delete_selected_studenet: '',
+                    enrol_request_ids: [student_request.id] }
 
-      it 'responds with bad request status' do
+      it 'destroys the enrol request' do
         expect{ subject }.to change(CourseUser, :count).by(0).and change(Course::EnrolRequest,
-                                                                         :count).by(0)
-        expect(response).to have_http_status(:ok)
+                                                                         :count).by(-1)
+        expect(response).to redirect_to(course_enrol_requests_path(course))
+        expect(flash[:notice]).to match(I18n.t('course.enrol_requests.delete_message_format') %
+                                          {count: 1})
+      end
+    end
+
+    context 'approve all student' do
+      subject { post :process_multiple, course_id: course.id, approve_all_student: '' }
+
+      it 'create course users for all student enrol requests and destroy the requests' do
+        expect{ subject }.to change(CourseUser, :count).by(2).and change(Course::EnrolRequest,
+                                                                         :count).by(-2)
+        expect(response).to redirect_to(course_enrol_requests_path(course))
+        expect(flash[:notice]).to match(I18n.t('course.enrol_requests.approve_message_format') %
+                                          {count: 2})
+      end
+    end
+
+    context 'approve all staff' do
+      subject { post :process_multiple, course_id: course.id, approve_all_staff: '' }
+
+      it 'create course users for all staff enrol requests and destroy the requests' do
+        expect{ subject }.to change(CourseUser, :count).by(2).and change(Course::EnrolRequest,
+                                                                         :count).by(-2)
+        expect(response).to redirect_to(course_enrol_requests_path(course))
+        expect(flash[:notice]).to match(I18n.t('course.enrol_requests.approve_message_format') %
+                                          {count: 2})
       end
     end
   end
 
-  describe '#delete_selected' do
-    subject { get :delete_selected, format: 'json', course_id: course.id,
-                  enrol_request_ids: [student_request.id] }
-
-    before do
-      sign_in(create(:administrator))
-    end
-
-    it 'destroys the enrol request' do
-      expect{ subject }.to change(CourseUser, :count).by(0).and change(Course::EnrolRequest,
-                                                                       :count).by(-1)
-      expect(response).to have_http_status(:ok)
-    end
-  end
 end

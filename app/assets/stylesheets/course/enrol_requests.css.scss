@@ -11,61 +11,33 @@
   font-weight: bold;
 }
 
-#loading {
-  text-align: center;
-  margin: 20px 0px 20px 0px;
-
-  span {
-    font-size: 17px;
-    font-weight: bold;
+.enrol-request-row {
+  td {
+    vertical-align: middle !important;
   }
-
-  img {
-    height: 24px;
-    width: 24px;
+  .request-approve {
+    margin-right: 5px;
+  }
+  .request-approve, .request-delete {
+    padding-top: 2px;
+    padding-bottom: 2px;
   }
 }
 
-#enrol_request_alert {
-  height: 18px;
-  margin: -18px 0px -14px 0px;
-  -webkit-transition: all linear 0.5s;
-  -moz-transition: all linear 0.5s;
-  -ms-transition: all linear 0.5s;
-  -o-transition: all linear 0.5s;
-  transition: all linear 0.5s;
-}
-
-#batch_controls {
-  a {
+.batch-controls {
+  input[type="submit"] {
+    /* Remove all decorations to look like normal text */
+    background: none;
+    border: none;
+    display: inline;
+    font: inherit;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    outline-offset: 0;
+    /* Additional styles to look like a link */
+    color: blue;
     cursor: pointer;
   }
 }
 
-.transparent-enrol-request-alert {
-  opacity: 0;
-}
-
-.enrol-request-animate-repeat.ng-move,
-.enrol-request-animate-repeat.ng-enter,
-.enrol-request-animate-repeat.ng-leave {
-  -webkit-transition: all linear 0.5s;
-  -moz-transition: all linear 0.5s;
-  -ms-transition: all linear 0.5s;
-  -o-transition: all linear 0.5s;
-  transition: all linear 0.5s;
-}
-
-.enrol-request-animate-repeat.ng-leave.ng-leave-active,
-.enrol-request-animate-repeat.ng-move,
-.enrol-request-animate-repeat.ng-enter {
-  opacity:0;
-  max-height:0;
-}
-
-.enrol-request-animate-repeat.ng-leave,
-.enrol-request-animate-repeat.ng-move.ng-move-active,
-.enrol-request-animate-repeat.ng-enter.ng-enter-active {
-  opacity:1;
-  max-height:40px;
-}

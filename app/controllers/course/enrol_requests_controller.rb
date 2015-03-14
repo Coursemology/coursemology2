@@ -8,9 +8,6 @@ class Course::EnrolRequestsController < Course::ModuleController
 
     respond_to do |format|
       format.html
-      format.json do
-        render json: {staff_requests: @staff_requests, student_requests: @student_requests}
-      end
     end
   end
 
@@ -48,12 +45,38 @@ class Course::EnrolRequestsController < Course::ModuleController
     end
   end
 
-  def approve_selected #:nodoc:
-    process_enrol_requests(params[:enrol_request_ids], true)
+  def approve #:nodoc:
+    process_enrol_requests([@enrol_request.id], true)
   end
 
-  def delete_selected #:nodoc:
-    process_enrol_requests(params[:enrol_request_ids])
+  def delete #:nodoc:
+    process_enrol_requests([@enrol_request.id])
+  end
+
+  def should_process_all_requests? #:nodoc:
+    params[:approve_all_staff] or params[:delete_all_staff] or
+      params[:approve_all_student] or params[:delete_all_student]
+  end
+
+  def should_approve? #:nodoc:
+    params[:approve_all_student] or params[:approve_selected_student] or
+      params[:approve_all_staff] or params[:approve_selected_staff]
+  end
+
+  def get_all_enrol_requests #:nodoc:
+    if params[:approve_all_student]
+      return @enrol_requests.student
+    else
+      return @enrol_requests.staff
+    end
+  end
+
+  def process_multiple #:nodoc:
+    if should_process_all_requests?
+      process_enrol_requests(get_all_enrol_requests, should_approve?)
+    else
+      process_enrol_requests(params[:enrol_request_ids], should_approve?)
+    end
   end
 
   # Process the given list of enrol_requests and respond to the http request
@@ -71,7 +94,8 @@ class Course::EnrolRequestsController < Course::ModuleController
 
     enrol_request_ids ||= []
     enrol_requests = get_enrol_requests(enrol_request_ids)
-    response_hash = {status: :ok, processed_ids: []}
+    count = 0
+    flash = {}
     begin
       enrol_requests.each do |enrol_request|
         @current_id = enrol_request.id
@@ -80,30 +104,21 @@ class Course::EnrolRequestsController < Course::ModuleController
         end
 
         enrol_request.destroy!
-        response_hash[:processed_ids] << @current_id
+        count += 1
       end
 
-      count = response_hash[:processed_ids].count
       if approve
-        response_hash[:message] = t('course.enrol_requests.approve_message_format') % {count: count}
+        flash[:notice] = t('course.enrol_requests.approve_message_format') % {count: count}
       else
-        response_hash[:message] = t('course.enrol_requests.delete_message_format') % {count: count}
+        flash[:notice] = t('course.enrol_requests.delete_message_format') % {count: count}
       end
     rescue
-      response_hash[:status] = :error
-      response_hash[:error_id] = @current_id
-      response_hash[:message] = t('course.enrol_requests.error_message_format') %
-        {reason: $!.message}
+      flash[:error] = t('course.enrol_requests.error_message_format') % {reason: $!.message}
     end
 
     respond_to do |format|
-      format.json do
-        if response_hash[:status] == :ok
-          status = :ok
-        else
-          status = :bad_request
-        end
-        render json: response_hash, status: status
+      format.html do
+        redirect_to course_enrol_requests_path(@course), flash: flash
       end
     end
   end

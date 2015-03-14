@@ -65,11 +65,14 @@ Rails.application.routes.draw do
       resources :announcements
       resources :achievements
 
-      post 'enrol_requests/delete_selected' => 'enrol_requests#delete_selected',
-          as: :delete_selected_enrol_requests
-      post 'enrol_requests/approve_selected' => 'enrol_requests#approve_selected',
-          as: :approve_selected_enrol_requests
-      resources :enrol_requests, only: [:new, :index]
+      post 'enrol_requests/process_multiple' => 'enrol_requests#process_multiple',
+          as: :process_multiple_enrol_requests
+      resources :enrol_requests, only: [:new, :index] do
+        member do
+          get 'delete'
+          get 'approve'
+        end
+      end
     end
   end
 end

@@ -1,64 +1,49 @@
-- if type == 'staff'
-  - container = 'staffRequests'
-  - no_request_message = t('.no_staff_requests')
-- else
-  - container = 'studentRequests'
-  - no_request_message = t('.no_student_requests')
+- no_request_message = (type == 'staff') ? t('.no_staff_requests') : t('.no_student_requests')
 
-div id="loading" ng-show="loading"
-  image src="/images/ajax_loader.gif" alt="Spinner"
-  span = t('.loading')
+div
+  -if enrol_requests.count == 0
+    = no_request_message
+  -else
+    form action=course_process_multiple_enrol_requests_path(@course)
+      table class="table enrol-requests"
+        thead
+        tr
+          - if can? :approve, Course::EnrolRequest
+            td
 
-div ng-show="!loading && #{container}.length == 0"
-  span = no_request_message
+          td = t('.name')
+          td = t('.email')
+          td = t('.requested_at')
+          td = t('.role')
+          - if can? :approve, Course::EnrolRequest
+            td = t('.action')
 
-div ng-show="!loading && #{container}.length > 0"
-  table class="table enrol-requests"
-    thead
-    tr
-      - if can? :approve, Course::EnrolRequest
-        | <td>
-            <input type="checkbox" class="check-all" ng-model="#{container}CheckAll"
-            ng-change="checkAll(#{container}CheckAll, #{container})"></input>
-          </td>
+        tbody
+          - for enrol_request in enrol_requests do
+            tr.enrol-request-row
+              - if can? :approve, Course::EnrolRequest
+                td
+                  input [type="checkbox" value=enrol_request.id name="enrol_request_ids[]"]
 
-      td = t('.name')
-      td = t('.email')
-      td = t('.requested_at')
-      td = t('.role')
-      - if can? :approve, Course::EnrolRequest
-        | <td>#{t('.action')}</td>
+              td.user-name = enrol_request.user.name
+              td  = enrol_request.user.email
+              td  = enrol_request.created_at.strftime('%d %b %Y %H:%M %a')
+              td  = enrol_request.role
+              - if can? :approve, Course::EnrolRequest
+                td
+                  a [class="btn btn-primary request-approve"
+                  href=approve_course_enrol_request_path(@course, enrol_request)]
+                    | <i class="glyphicon glyphicon-ok"></i>
+                  a [class="btn btn-danger request-delete"
+                  href=delete_course_enrol_request_path(@course, enrol_request)]
+                    | <i class="glyphicon glyphicon-remove"></i>
 
-    tbody
-    tr ng-repeat="request in #{container}" class="enrol-request-animate-repeat"
-      - if can? :approve, Course::EnrolRequest
-        | <td>
-            <input type="checkbox" ng-model="request.checked" ng-value="request.id"
-            class="checkbox-#{type}"></input>
-          </td>
-
-      | <td><label class="user-name">{{ request.user.name }}</label></td>
-      td {{ request.user.email }}
-      td {{ request.created_at | date: 'd MMM y h:mm a' }}
-      td {{ request.role.title }}
-      - if can? :approve, Course::EnrolRequest
-        | <td>
-            <button ng-click="approveButtonClicked(request.id, #{container})"
-              class="btn btn-primary request-approve">
-              <i class="icon-ok"></i>
-            </button>
-            <button ng-click="deleteButtonClicked(request.id, #{container})"
-              class="btn btn-danger request-del">
-              <i class="icon-remove"></i>
-            </button>
-          </td>
-
-  div id="batch_controls"
-    - if can? :approve, Course::EnrolRequest
-      a ng-click="approveSelectedButtonClicked(#{container})" = t('.approve_selected')
-      = '|'
-      a ng-click="deleteSelectedButtonClicked(#{container})" = t('.delete_selected')
-      = '|'
-      a ng-click="approveAllButtonClicked(#{container})" = t('.approve_all')
-      = '|'
-      a ng-click="deleteAllButtonClicked(#{container})" = t('.delete_all')
+      div class="batch-controls"
+        - if can? :approve, Course::EnrolRequest
+          input [type="submit" name="approve_selected_#{type}" value="#{t('.approve_selected')}"]
+          = '|'
+          input [type="submit" name="delete_selected_#{type}" value="#{t('.delete_selected')}"]
+          = '|'
+          input [type="submit" name="approve_all_#{type}" value="#{t('.approve_all')}"]
+          = '|'
+          input [type="submit" name="delete_all_#{type}" value="#{t('.delete_all')}"]
