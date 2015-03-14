@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="RUBY_MODULE" version="4">
-  <component name="CompassSettings">
-    <option name="compassSupportEnabled" value="true" />
-  </component>
   <component name="FacetManager">
     <facet type="RailsFacetType" name="Ruby on Rails">
       <configuration>
@@ -17,125 +14,10 @@
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
     </content>
-    <orderEntry type="jdk" jdkName="RVM: ruby-2.0.0-p598 [rails_4]" jdkType="RUBY_SDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="actionmailer (v4.1.8, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="actionpack (v4.1.8, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="actionview (v4.1.8, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="activemodel (v4.1.8, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="activerecord (v4.1.8, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="activesupport (v4.1.8, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="acts_as_tenant (v0.3.7, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="anbt-sql-formatter (v0.0.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="arel (v5.0.1.20140414130214, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="autoprefixer-rails (v4.0.1.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="awesome_print (v1.2.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="bcrypt (v3.1.9, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="bootstrap-sass (v3.3.1.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="bootstrap-sass-extras (v0.0.6, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="bootstrap-select-rails (v1.6.3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="bootstrap3-datetimepicker-rails (v3.1.3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="builder (v3.2.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="bullet (v4.14.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.8.4, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="cancancan (v1.9.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="capybara (v2.4.4, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="codeclimate-test-reporter (v0.4.3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="coffee-rails (v4.1.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="coffee-script (v2.3.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="coffee-script-source (v1.8.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="consistency_fail (v0.3.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="coveralls (v0.7.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="devise (v3.4.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="diff-lcs (v1.2.5, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="docile (v1.1.5, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="erubis (v2.7.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="execjs (v2.2.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="factory_girl (v4.5.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="factory_girl_rails (v4.5.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="ffi (v1.9.6, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="font-awesome-rails (v4.2.0.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="high_voltage (v2.2.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="hike (v1.2.3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="http_accept_language (v2.0.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="i18n (v0.6.11, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="jbuilder (v2.2.5, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="jquery-cdn (v2.1.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="json (v1.8.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="kaminari (v0.16.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="listen (v1.3.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="lol_dba (v1.6.4, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="magiclabs-userstamp (v2.1.0@4cb832, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="mail (v2.6.3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="migration_comments (v0.3.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="mime-types (v2.4.3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="mini_portile (v0.6.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="minitest (v5.4.3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="momentjs-rails (v2.8.3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="multi_json (v1.10.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="netrc (v0.10.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="nokogiri (v1.6.5, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="orm_adapter (v0.5.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="pg (v0.17.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="polyamorous (v1.1.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="puma (v2.10.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rack (v1.5.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rack-test (v0.6.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rails (v4.1.8, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rails-assets-jquery (v2.1.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rails-assets-jquery-ujs (v1.0.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rails-dev-boost (v0.3.0@15ebc3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rails-dev-tweaks (v1.2.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rails-flog (v1.3.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rails_utils (v3.3.1@483941, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="railties (v4.1.8, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rake (v10.4.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rb-fsevent (v0.9.4, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rb-inotify (v0.9.5, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rb-kqueue (v0.2.3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="request_store (v1.1.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="responders (v1.1.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rest-client (v1.7.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rspec (v3.1.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rspec-core (v3.1.7, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rspec-expectations (v3.1.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rspec-html-matchers (v0.6.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rspec-mocks (v3.1.3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rspec-rails (v3.1.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rspec-support (v3.1.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="sass (v3.2.19, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="sass-rails (v4.0.5, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="schema_plus (v1.8.3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="schema_validations (v1.0.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="should_not (v1.1.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="shoulda-matchers (v2.7.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="simple_form (v3.1.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="simple_form-bootstrap (v1.0.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="simplecov (v0.9.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="simplecov-html (v0.8.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="slim (v2.1.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="slim-rails (v2.1.5, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="spring (v1.2.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="sprockets (v2.12.3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="sprockets-rails (v2.2.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="squeel (v1.2.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="temple (v0.6.10, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="term-ansicolor (v1.3.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="themes_on_rails (v0.3.0@2c6446, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="thor (v0.19.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="thread_safe (v0.3.4, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="tilt (v1.4.1, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="tins (v1.3.3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="traceroute (v0.4.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="turbolinks (v2.5.3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="tzinfo (v1.2.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="uglifier (v2.6.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="uniform_notifier (v1.6.2, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="validates_hostname (v1.0.5, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="valuable (v0.9.9, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="warden (v1.2.3, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="xpath (v2.0.0, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="yard (v0.8.7.6, RVM: ruby-2.0.0-p598 [rails_4]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.7.6, ruby-2.1.5-p274) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="json (v1.8.1, ruby-2.1.5-p274) [gem]" level="application" />
   </component>
   <component name="RModuleSettingsStorage">
     <LOAD_PATH number="0" />
