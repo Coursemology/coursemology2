@@ -1,2 +1,0 @@
-module Course::EnrolRequestsHelper
-end
