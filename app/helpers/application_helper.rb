@@ -71,7 +71,7 @@ module ApplicationHelper
   # @return [CourseUser] the course_user instance of the signed in user if a
   #         course instance variable is defined.
   def current_course_user
-    if current_user and @course
+    if current_user && @course
       @current_course_user ||= CourseUser.find_by_user_id_and_course_id(
         current_user.id,
         @course.id

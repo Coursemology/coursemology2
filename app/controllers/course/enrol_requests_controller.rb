@@ -1,6 +1,5 @@
 class Course::EnrolRequestsController < Course::ModuleController
   load_and_authorize_resource through: :course
-  skip_before_filter :verify_authenticity_token, only: [:approve_selected, :delete_selected]
 
   def index #:nodoc:
     @staff_requests = @enrol_requests.staff
@@ -114,7 +113,7 @@ class Course::EnrolRequestsController < Course::ModuleController
         flash[:notice] = t('course.enrol_requests.delete_message_format') % { count: count }
       end
     rescue
-      flash[:error] = t('course.enrol_requests.error_message_format') % { reason: $!.message }
+      flash[:error] = t('course.enrol_requests.error_message_format') % { reason: $ERROR_INFO }
     end
 
     respond_to do |format|
