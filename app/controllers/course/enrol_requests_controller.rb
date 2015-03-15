@@ -36,7 +36,7 @@ class Course::EnrolRequestsController < Course::ModuleController
       @enrol_request.course = @course
       @enrol_request.user = current_user
       @enrol_request.save!
-      # TODO notify lecturer
+      # TODO: Notify lecturer
     end
   end
 
@@ -49,13 +49,13 @@ class Course::EnrolRequestsController < Course::ModuleController
   end
 
   def should_process_all_requests? #:nodoc:
-    params[:approve_all_staff] or params[:delete_all_staff] or
-      params[:approve_all_student] or params[:delete_all_student]
+    params[:approve_all_staff] || params[:delete_all_staff] ||
+      params[:approve_all_student] || params[:delete_all_student]
   end
 
   def should_approve? #:nodoc:
-    params[:approve_all_student] or params[:approve_selected_student] or
-      params[:approve_all_staff] or params[:approve_selected_staff]
+    params[:approve_all_student] || params[:approve_selected_student] ||
+      params[:approve_all_staff] || params[:approve_selected_staff]
   end
 
   def all_enrol_requests #:nodoc:
@@ -121,8 +121,7 @@ class Course::EnrolRequestsController < Course::ModuleController
   # Get a list of enrol_requests of the given IDs. If the record of an ID is not found,
   # it will not be included in the returned list.
   def get_enrol_requests(enrol_request_ids)
-    enrol_request_ids.map { |enrol_request_id|
-      Course::EnrolRequest.find_by_id(enrol_request_id)
-    }.select { |enrol_request| !!enrol_request }
+    enrol_request_ids.map { |enrol_request_id| Course::EnrolRequest.find_by_id(enrol_request_id) }
+    .select { |enrol_request| !!enrol_request }
   end
 end

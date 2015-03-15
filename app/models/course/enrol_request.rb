@@ -23,5 +23,5 @@ class Course::EnrolRequest < ActiveRecord::Base
                                      name: self.user.name)
   end
 
-  # TODO add notify lecturer method
+  # TODO: Add notify lecturer method
 end
