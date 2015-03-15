@@ -16,8 +16,16 @@ class Course::EnrolRequestsController < Course::ModuleController
       redirect_to new_user_session_path
       return
     end
+
     unless @course.opened?
-      redirect_to course_path(@course), flash: {error: t('.course_not_open')}
+      redirect_to course_path(@course), flash: { error: t('.course_not_open') }
+      return
+    end
+
+    if current_course_user
+      redirect_to course_path(@course),
+                  flash: { error: t('.already_registered_format') %
+                    { role: current_course_user.role } }
       return
     end
 
@@ -26,18 +34,16 @@ class Course::EnrolRequestsController < Course::ModuleController
       @enrol_request = existing
     end
 
-    if !current_course_user
-      if CourseUser.roles.include?(params[:role])
-        @enrol_request.role = params[:role]
-      else
-        @enrol_request.role = :student
-      end
-
-      @enrol_request.course = @course
-      @enrol_request.user = current_user
-      @enrol_request.save!
-      # TODO: Notify lecturer
+    if CourseUser.roles.include?(params[:role])
+      @enrol_request.role = params[:role]
+    else
+      @enrol_request.role = :student
     end
+
+    @enrol_request.course = @course
+    @enrol_request.user = current_user
+    @enrol_request.save!
+    # TODO: Notify lecturer
   end
 
   def approve #:nodoc:
@@ -103,12 +109,12 @@ class Course::EnrolRequestsController < Course::ModuleController
       end
 
       if approve
-        flash[:notice] = t('course.enrol_requests.approve_message_format') % {count: count}
+        flash[:notice] = t('course.enrol_requests.approve_message_format') % { count: count }
       else
-        flash[:notice] = t('course.enrol_requests.delete_message_format') % {count: count}
+        flash[:notice] = t('course.enrol_requests.delete_message_format') % { count: count }
       end
     rescue
-      flash[:error] = t('course.enrol_requests.error_message_format') % {reason: $!.message}
+      flash[:error] = t('course.enrol_requests.error_message_format') % { reason: $!.message }
     end
 
     respond_to do |format|
@@ -121,7 +127,7 @@ class Course::EnrolRequestsController < Course::ModuleController
   # Get a list of enrol_requests of the given IDs. If the record of an ID is not found,
   # it will not be included in the returned list.
   def get_enrol_requests(enrol_request_ids)
-    enrol_request_ids.map { |enrol_request_id| Course::EnrolRequest.find_by_id(enrol_request_id) }
-    .select { |enrol_request| !!enrol_request }
+    enrol_request_ids.map { |enrol_request_id| Course::EnrolRequest.find_by_id(enrol_request_id) }.
+      select { |enrol_request| enrol_request }
   end
 end

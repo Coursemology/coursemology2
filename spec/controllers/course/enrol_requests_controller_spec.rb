@@ -7,14 +7,14 @@ RSpec.describe Course::EnrolRequestsController, :type => :controller do
 
   let!(:user) { create(:user) }
   let!(:course) { create(:course, status: :opened) }
-  let!(:student_request) {create(:course_enrol_request, course: course, user: create(:user),
-                                 role: :student)}
-  let!(:student_request2) {create(:course_enrol_request, course: course, user: create(:user),
-                                  role: :student)}
-  let!(:staff_request) {create(:course_enrol_request, course: course, user: create(:user),
-                               role: :teaching_assistant)}
-  let!(:staff_request2) {create(:course_enrol_request, course: course, user: create(:user),
-                                role: :manager)}
+  let!(:student_request) { create(:course_enrol_request, course: course, user: create(:user),
+                                  role: :student) }
+  let!(:student_request2) { create(:course_enrol_request, course: course, user: create(:user),
+                                  role: :student) }
+  let!(:staff_request) { create(:course_enrol_request, course: course, user: create(:user),
+                                role: :teaching_assistant) }
+  let!(:staff_request2) { create(:course_enrol_request, course: course, user: create(:user),
+                                 role: :manager) }
 
   describe '#index' do
     context 'user can manage the course' do
@@ -39,7 +39,7 @@ RSpec.describe Course::EnrolRequestsController, :type => :controller do
 
     context 'user is signed in' do
       before do
-        sign_in(create(:user))
+        sign_in(user)
       end
 
       context 'course is open' do
@@ -58,6 +58,21 @@ RSpec.describe Course::EnrolRequestsController, :type => :controller do
           subject
           expect(response).to redirect_to(course_path(course))
           expect(flash[:error]).to match(I18n.t('course.enrol_requests.new.course_not_open'))
+        end
+      end
+
+      context 'already registered' do
+        before do
+          create(:course_student, course: course, user: user)
+        end
+
+        it 'redirects to course page' do
+          subject
+          expect(response).to redirect_to(course_path(course))
+          expect(flash[:error]).to(
+            match(I18n.t('course.enrol_requests.new.already_registered_format') %
+                    { role: :student }))
+
         end
       end
     end
@@ -84,7 +99,7 @@ RSpec.describe Course::EnrolRequestsController, :type => :controller do
                                                                          :count).by(-1)
         expect(response).to redirect_to(course_enrol_requests_path(course))
         expect(flash[:notice]).to match(I18n.t('course.enrol_requests.approve_message_format') %
-                                          {count: 1})
+                                          { count: 1 })
       end
     end
 
@@ -97,7 +112,7 @@ RSpec.describe Course::EnrolRequestsController, :type => :controller do
                                                                          :count).by(-1)
         expect(response).to redirect_to(course_enrol_requests_path(course))
         expect(flash[:notice]).to match(I18n.t('course.enrol_requests.delete_message_format') %
-                                          {count: 1})
+                                          { count: 1 })
       end
     end
 
@@ -109,7 +124,7 @@ RSpec.describe Course::EnrolRequestsController, :type => :controller do
                                                                          :count).by(-2)
         expect(response).to redirect_to(course_enrol_requests_path(course))
         expect(flash[:notice]).to match(I18n.t('course.enrol_requests.approve_message_format') %
-                                          {count: 2})
+                                          { count: 2 })
       end
     end
 
@@ -121,7 +136,7 @@ RSpec.describe Course::EnrolRequestsController, :type => :controller do
                                                                          :count).by(-2)
         expect(response).to redirect_to(course_enrol_requests_path(course))
         expect(flash[:notice]).to match(I18n.t('course.enrol_requests.approve_message_format') %
-                                          {count: 2})
+                                          { count: 2 })
       end
     end
   end
