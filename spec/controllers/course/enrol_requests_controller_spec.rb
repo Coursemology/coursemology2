@@ -57,6 +57,7 @@ RSpec.describe Course::EnrolRequestsController, :type => :controller do
         it 'redirects to course page' do
           subject
           expect(response).to redirect_to(course_path(course))
+          expect(flash[:error]).to match(I18n.t('course.enrol_requests.new.course_not_open'))
         end
       end
     end

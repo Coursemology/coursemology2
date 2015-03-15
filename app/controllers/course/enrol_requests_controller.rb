@@ -17,7 +17,7 @@ class Course::EnrolRequestsController < Course::ModuleController
       return
     end
     unless @course.opened?
-      redirect_to course_path(@course)
+      redirect_to course_path(@course), flash: {error: t('.course_not_open')}
       return
     end
 
