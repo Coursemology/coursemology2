@@ -60,9 +60,9 @@ class Course::EnrolRequestsController < Course::ModuleController
 
   def get_all_enrol_requests #:nodoc:
     if params[:approve_all_student]
-      return @enrol_requests.student
+      @enrol_requests.student
     else
-      return @enrol_requests.staff
+      @enrol_requests.staff
     end
   end
 
