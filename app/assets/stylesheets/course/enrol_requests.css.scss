@@ -1,9 +1,10 @@
 #enrol_request_form {
   min-width: 190px;
   width: 190px;
+
   a {
-    width: 100%;
     margin: 5px 0px 5px 0px;
+    width: 100%;
   }
 }
 
@@ -12,21 +13,22 @@
 }
 
 .enrol-request-row {
-  td {
-    vertical-align: middle !important;
-  }
+
   .request-approve {
     margin-right: 5px;
   }
+
   .request-approve, .request-delete {
-    padding-top: 2px;
     padding-bottom: 2px;
+    padding-top: 2px;
   }
+
 }
 
 .batch-controls {
-  input[type="submit"] {
-    /* Remove all decorations to look like normal text */
+
+  input[type=submit] {
+    // Remove all decorations to look like normal text
     background: none;
     border: none;
     display: inline;
@@ -35,9 +37,10 @@
     padding: 0;
     outline: none;
     outline-offset: 0;
-    /* Additional styles to look like a link */
-    color: blue;
+    // Additional styles to look like a link
+    color: #0000ff;
     cursor: pointer;
   }
+
 }
 
