@@ -1,9 +1,11 @@
+$link-color: #0000ff;
+
 #enrol-request-form {
   min-width: 190px;
   width: 190px;
 
   a {
-    margin: 5px 0px 5px 0px;
+    margin: 5px 0;
     width: 100%;
   }
 }
@@ -18,29 +20,25 @@
     margin-right: 5px;
   }
 
-  .request-approve, .request-delete {
+  .request-approve,
+  .request-delete {
     padding-bottom: 2px;
     padding-top: 2px;
   }
 
 }
 
-.batch-controls {
-
-  input[type=submit] {
-    // Remove all decorations to look like normal text
-    background: none;
-    border: none;
-    display: inline;
-    font: inherit;
-    margin: 0;
-    padding: 0;
-    outline: none;
-    outline-offset: 0;
-    // Additional styles to look like a link
-    color: #0000ff;
-    cursor: pointer;
-  }
-
+.link-style {
+  // Remove all decorations to look like link
+  background: none;
+  border: none;
+  color: $link-color;
+  cursor: pointer;
+  display: inline;
+  font: inherit;
+  margin: 0;
+  outline: none;
+  outline-offset: 0;
+  padding: 0;
 }
 

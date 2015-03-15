@@ -22,7 +22,7 @@ class Course::Controller < ApplicationController
   end
 
   def current_course_user
-    if current_user and @course
+    if current_user && @course
       @current_course_user ||= CourseUser.find_by_user_id_and_course_id(
         current_user.id,
         @course.id

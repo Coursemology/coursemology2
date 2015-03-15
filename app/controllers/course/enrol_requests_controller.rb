@@ -58,7 +58,7 @@ class Course::EnrolRequestsController < Course::ModuleController
       params[:approve_all_staff] or params[:approve_selected_staff]
   end
 
-  def get_all_enrol_requests #:nodoc:
+  def all_enrol_requests #:nodoc:
     if params[:approve_all_student]
       @enrol_requests.student
     else
@@ -68,7 +68,7 @@ class Course::EnrolRequestsController < Course::ModuleController
 
   def process_multiple #:nodoc:
     if should_process_all_requests?
-      process_enrol_requests(get_all_enrol_requests, should_approve?)
+      process_enrol_requests(all_enrol_requests, should_approve?)
     else
       process_enrol_requests(params[:enrol_request_ids], should_approve?)
     end

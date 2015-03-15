@@ -40,10 +40,12 @@ div
 
       div class="batch-controls"
         - if can? :approve, Course::EnrolRequest
-          input [type="submit" name="approve_selected_#{type}" value="#{t('.approve_selected')}"]
+          input.link-style [type="submit" name="approve_selected_#{type}"
+          value="#{t('.approve_selected')}"]
           = '|'
-          input [type="submit" name="delete_selected_#{type}" value="#{t('.delete_selected')}"]
+          input.link-style [type="submit" name="delete_selected_#{type}"
+          value="#{t('.delete_selected')}"]
           = '|'
-          input [type="submit" name="approve_all_#{type}" value="#{t('.approve_all')}"]
+          input.link-style [type="submit" name="approve_all_#{type}" value="#{t('.approve_all')}"]
           = '|'
-          input [type="submit" name="delete_all_#{type}" value="#{t('.delete_all')}"]
+          input.link-style [type="submit" name="delete_all_#{type}" value="#{t('.delete_all')}"]
