@@ -14,6 +14,8 @@ class Course < ActiveRecord::Base
   has_many :achievements, inverse_of: :course, dependent: :destroy
   has_many :levels, inverse_of: :course, dependent: :destroy
 
+  delegate :staff, to: :course_users
+
   private
 
   # Set default values

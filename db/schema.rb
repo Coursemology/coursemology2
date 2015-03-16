@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150512014731) do
+ActiveRecord::Schema.define(version: 20150512015621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,6 +120,8 @@ ActiveRecord::Schema.define(version: 20150512014731) do
     t.datetime "last_active_time"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.integer  "creator_id",       null: false, index: {name: "fk__course_users_creator_id"}, foreign_key: {references: "users", name: "fk_course_users_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id",       null: false, index: {name: "fk__course_users_updater_id"}, foreign_key: {references: "users", name: "fk_course_users_updater_id", on_update: :no_action, on_delete: :no_action}
   end
   add_index "course_users", ["course_id", "user_id"], name: "index_course_users_on_course_id_and_user_id", unique: true
 
