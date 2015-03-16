@@ -2,8 +2,8 @@ class Course::AnnouncementsController < Course::ModuleController
   load_and_authorize_resource :announcement, through: :course, class: Course::Announcement.name
 
   def index #:nodoc:
-    @announcements = @announcements.includes(:creator).
-      sorted_by_sticky.sorted_by_date.page params[:page]
+    @announcements = @announcements.includes(:creator).sorted_by_sticky.sorted_by_date
+    @announcements = @announcements.page(params[:page])
   end
 
   def show #:nodoc:

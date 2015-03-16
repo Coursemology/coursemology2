@@ -1,35 +1,44 @@
 require 'simplecov'
 
 module CoverageHelper
-  # Helper to include Coveralls/Code Climate coverage, but not require developers to install the
-  # gem.
-  #
-  # @param name [String] The name of the module to require.
-  # @param initialiser [Proc] The block to execute when the module is required successfully.
-  def self.load(name, &initialiser)
-    old_simplecov_formatter = SimpleCov.formatter
-    require name
-    initialiser.call
+  class << self
+    # Helper to include Coveralls/Code Climate coverage, but not require developers to install the
+    # gem.
+    #
+    # @param name [String] The name of the module to require.
+    # @param initializer [Proc] The block to execute when the module is required successfully.
+    def load(name, &initializer)
+      old_formatter = SimpleCov.formatter
+      require name
+      initializer.call
 
-    if old_simplecov_formatter != SimpleCov.formatter
+      merge_formatters(old_formatter, SimpleCov.formatter)
+    rescue LoadError => e
+      if e.path == name
+        puts format('Cannot find \'%s\', ignoring', name) if ENV['CI']
+      else
+        raise e
+      end
+    end
+
+    private
+
+    # Merge two SimpleCov formatters into a single MultiFormatter.
+    #
+    # This method is idempotent if the old and new formatters are the same.
+    def merge_formatters(old_formatter, new_formatter)
+      return unless old_formatter == new_formatter
+
       formatters.unshift(SimpleCov.formatter)
       SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[*formatters]
     end
-  rescue LoadError => e
-    if e.path == name
-      puts format('Cannot find \'%s\', ignoring', name) if ENV['CI']
-    else
-      raise e
+
+    # Tracks the formatters which need to be enabled
+    #
+    # @return [Array] The formatters which have been currently defined.
+    def formatters
+      @formatters ||= []
     end
-  end
-
-  private
-
-  # Tracks the formatters which need to be enabled
-  #
-  # @return [Array] The formatters which have been currently defined.
-  def self.formatters
-    @formatters ||= []
   end
 end
 
