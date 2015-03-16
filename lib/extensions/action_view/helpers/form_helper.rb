@@ -42,20 +42,25 @@ module Extensions::ActionView::Helpers::FormHelper
   # @return [String] The stem, in the given plurality.
   def self.inflect_path(stem, plural)
     components = stem.to_s.underscore.split('_')
-    suffix =
-      if ['path', 'url'].include?(components.last)
-        components.pop
-      else
-        'path'
-      end
+    components, suffix = parse_path_components(components)
+
     name = components.pop
-    name =
-      if plural
-        name.pluralize
-      else
-        name.singularize
-      end
+    name = plural ? name.pluralize : name.singularize
+
     components.push(name, suffix)
     components.join('_').to_sym
+  end
+
+  # Splits the path helper into the suffix (_path, or _url), and the resource involved.
+  #
+  # @param [String] The components of the path helper.
+  # @return Array<[String], String)> The list of components, with the suffix removed, followed by
+  #                                  the suffix.
+  def self.parse_path_components(components)
+    if ['path', 'url'].include?(components.last)
+      [components, components.pop]
+    else
+      [components, 'path']
+    end
   end
 end
