@@ -4,6 +4,7 @@ class CreateCourseEnrolRequests < ActiveRecord::Migration
       t.belongs_to :user
       t.belongs_to :course
       t.integer :role
+      t.index [:user_id, :course_id], unique: true
 
       t.datetime :deleted_at
       t.index :deleted_at

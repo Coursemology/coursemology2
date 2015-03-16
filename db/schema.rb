@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(version: 20150314205546) do
     t.index ["creator_id"], :name => "fk__course_enrol_requests_creator_id"
     t.index ["deleted_at"], :name => "index_course_enrol_requests_on_deleted_at"
     t.index ["updater_id"], :name => "fk__course_enrol_requests_updater_id"
+    t.index ["user_id", "course_id"], :name => "index_course_enrol_requests_on_user_id_and_course_id", :unique => true
     t.index ["user_id"], :name => "fk__course_enrol_requests_user_id"
     t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_enrol_requests_course_id"
     t.foreign_key ["creator_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_enrol_requests_creator_id"
