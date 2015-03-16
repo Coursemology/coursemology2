@@ -4,18 +4,22 @@ module Extensions::ActionView::Helpers::FormHelper
   end
 
   def form_for_with_resource(record, options, &proc)
+    Extensions::ActionView::Helpers::FormHelper.form_for_with_resource_option(self, record, options)
+
+    form_for_without_resource(record, options, &proc)
+  end
+
+  # Handles the :resource option in form_for.
+  def self.form_for_with_resource_option(form_helper, record, options)
     case options[:resource]
     when Symbol
       fail ArgumentError, ':resource and :url cannot be specified simultaneously' if options[:url]
-      helper_module = Extensions::ActionView::Helpers::FormHelper
-      helper = helper_module.url_helper_for_resource(record, options.delete(:resource))
-      options[:url] = send(helper, *record)
+      helper = url_helper_for_resource(record, options.delete(:resource))
+      options[:url] = form_helper.send(helper, *record)
     when nil
     else
       fail ArgumentError, 'Resource must be a symbol with the stem of route helper'
     end
-
-    form_for_without_resource(record, options, &proc)
   end
 
   # Gets the URL for the record. This follows the pluralisation rules for Rails routes, where the
