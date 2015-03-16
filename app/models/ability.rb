@@ -7,6 +7,11 @@ class Ability
   def initialize(user)
     return unless user
 
+    can :new, Course::EnrolRequest
+    can :read, Course do |course|
+      course.published? || course.opened?
+    end
+    can :manage, Course, creator_id: user.id
     can :manage, :all if user.administrator?
   end
 end

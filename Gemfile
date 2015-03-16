@@ -44,6 +44,8 @@ gem 'slim-rails'
 gem 'high_voltage'
 # Paginator for Rails
 gem 'kaminari'
+# Soft deletion
+gem 'paper_trail', '~> 4.0.0.beta'
 
 group :development do
   # Spring speeds up development by keeping your application running in the background.
@@ -85,6 +87,9 @@ group :development, :test do
 
   # Helps to prevent database consistency mistakes
   gem 'consistency_fail'
+
+  # File system monitoring for running changed tests automatically.
+  # gem 'guard-rspec', require: false
 end
 
 group :ci do

@@ -9,6 +9,7 @@ class Course < ActiveRecord::Base
   belongs_to :creator, class_name: User.name
   has_many :course_users, inverse_of: :course, dependent: :destroy
   has_many :users, through: :course_users
+  has_many :enrol_requests
 
   has_many :announcements, inverse_of: :course, dependent: :destroy
   has_many :achievements, inverse_of: :course, dependent: :destroy

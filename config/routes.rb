@@ -66,6 +66,16 @@ Rails.application.routes.draw do
     resources :courses do
       resources :announcements
       resources :achievements
+
+      post 'enrol_requests/process_multiple' => 'enrol_requests#process_multiple',
+           as: :process_multiple_enrol_requests
+      resources :enrol_requests, only: [:new, :index] do
+        member do
+          get 'delete'
+          get 'approve'
+        end
+      end
+
       get 'settings' => 'course_settings#index', as: :settings
     end
   end

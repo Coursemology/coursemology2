@@ -1,0 +1,7 @@
+div#enrol-request-form
+  a.btn.btn-primary href="#{new_course_enrol_request_path(course, role: :student)}"
+    | #{t('.enrol_as_student')}
+  a.btn.btn-primary href="#{new_course_enrol_request_path(course, role: :teaching_assistant)}"
+    | #{t('.enrol_as_teaching_assistant')}
+  a.btn.btn-primary href="#{new_course_enrol_request_path(course, role: :manager)}"
+    | #{t('.enrol_as_manager')}
