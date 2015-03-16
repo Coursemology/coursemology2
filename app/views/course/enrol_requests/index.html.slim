@@ -1,0 +1,15 @@
+div class="page-header"
+  h1 = t('.enrol_requests')
+
+= render partial: 'course/enrol_requests/enrol_tab', locals: {mass_requests: false}
+
+div id="request_list"
+  h3 = t('.staff_requests')
+  = render partial: 'course/enrol_requests/list', locals: { enrol_requests: @staff_requests,
+  type: 'staff' }
+
+  br
+
+  h3 = t('.student_requests')
+  = render partial: 'course/enrol_requests/list', locals: { enrol_requests: @student_requests,
+  type: 'student' }

@@ -1,0 +1,15 @@
+ul class="nav nav-tabs"
+  - if mass_requests
+    li
+  - else
+    li class="active"
+
+  a href="#{course_enrol_requests_path(@course)}" #{t('.enrol_requests')}
+
+  - if !mass_requests
+    li
+  - else
+    li class="active"
+
+  /! TODO uncomment after mass enrolment is added
+  /a href="#{course_mass_enrolment_emails_path(@course)}" #{t('.mass_enrolment')}
