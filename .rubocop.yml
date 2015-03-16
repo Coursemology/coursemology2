@@ -18,9 +18,6 @@ Metrics/LineLength:
 Style/DotPosition:
   EnforcedStyle: trailing
 
-Style/ClassAndModuleChildren:
-  EnforcedStyle: compact
-
 Style/Documentation:
   Enabled: false
 

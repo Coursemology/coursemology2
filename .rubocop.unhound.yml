@@ -30,6 +30,7 @@ CharacterLiteral:
 
 ClassAndModuleChildren:
   Enabled: true
+  EnforcedStyle: compact
 
 ClassLength:
   Enabled: true
@@ -38,11 +39,12 @@ ClassVars:
   Enabled: true
 
 CollectionMethods:
+  Enabled: true
   PreferredMethods:
-    find: 'find'
-    detect: 'find'
+    reduce:
     inject: 'reduce'
-    reduce: 'reduce'
+    find:
+    detect: 'find'
 
 ColonMethodCall:
   Enabled: true
