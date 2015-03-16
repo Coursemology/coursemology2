@@ -23,6 +23,7 @@ en:
   common:
     'yes': 'Yes'
     'no': 'No'
+    delete: 'Delete'
   layout:
     coursemology: 'Coursemology'
     navbar:
