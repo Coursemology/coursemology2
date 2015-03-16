@@ -6,9 +6,9 @@ RSpec.describe 'Inherited Nested Layouts', type: :controller do
   end
 
   class ControllerB < ControllerA
-    layout :get_layout
+    layout :controller_b_layout
 
-    def get_layout
+    def controller_b_layout
       'testB'
     end
   end
