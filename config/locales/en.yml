@@ -56,6 +56,20 @@ en:
         notice: "Announcement %{title} was updated."
       destroy:
         notice: "Announcement %{title} was deleted."
+    system_announcements:
+      index:
+        header: 'System Announcements'
+        new: 'New System Announcement'
+      new:
+        header: 'New System Announcement'
+      create:
+        notice: "System Announcement %{title} was created."
+      edit:
+        header: 'Edit System Announcement'
+      update:
+        notice: "System Announcement %{title} was updated."
+      destroy:
+        notice: "System Announcement %{title} was deleted."
   course:
     courses:
       create:

@@ -8,6 +8,7 @@ RSpec.describe 'Global announcements', type: :feature do
     describe 'no global announcements' do
       before do
         instance.announcements.clear
+        SystemAnnouncement.destroy_all
         visit root_path
       end
 

@@ -58,6 +58,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     get '/' => 'admin#index'
+    resources :system_announcements
     resources :announcements
   end
 
