@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150204075501) do
+ActiveRecord::Schema.define(version: 20150316080645) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,6 +140,16 @@ ActiveRecord::Schema.define(version: 20150204075501) do
     t.index ["user_id"], :name => "index_instance_users_on_user_id", :unique => true
     t.foreign_key ["instance_id"], "instances", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_instance_users_instance_id"
     t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_instance_users_user_id"
+  end
+
+  create_table "read_marks", force: true do |t|
+    t.integer  "readable_id"
+    t.string   "readable_type", null: false
+    t.integer  "user_id",       null: false
+    t.datetime "timestamp"
+    t.index ["user_id", "readable_type", "readable_id"], :name => "index_read_marks_on_user_id_and_readable_type_and_readable_id"
+    t.index ["user_id"], :name => "fk__read_marks_user_id"
+    t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_read_marks_user_id"
   end
 
   create_table "system_announcements", force: true do |t|
