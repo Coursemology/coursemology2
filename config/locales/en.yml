@@ -30,6 +30,30 @@ en:
       sign_up: Sign Up
       sign_in: Sign In
       sign_out: Sign Out
+  layouts:
+    global_announcements:
+      close: Close
+      more_announcements: More Announcements...
+  admin:
+    navbar:
+      announcements: Announcements
+    admin:
+      home:
+        message: "Pages"
+    announcements:
+      index:
+        header: "Announcements"
+        new: "New Announcement"
+      new:
+        header: "Create Announcement"
+      create:
+        notice: "Announcement %{title} was created."
+      edit:
+        header: "Edit Announcement"
+      update:
+        notice: "Announcement %{title} was updated."
+      destroy:
+        notice: "Announcement %{title} was deleted."
   course:
     courses:
       create:

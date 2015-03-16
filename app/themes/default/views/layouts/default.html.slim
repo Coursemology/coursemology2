@@ -47,6 +47,7 @@ html
                 = link_to(t('layout.navbar.sign_in'), new_user_session_path)
 
     div.container-fluid
+      = global_announcements
       = flash_messages
       div class=page_class
         = yield

@@ -1,0 +1,17 @@
+- unless controller.global_announcements.empty?
+  - announcement = controller.global_announcements.first
+  div.panel.panel-primary.global-announcement
+    div.panel-heading
+      div.pull-right
+        button.close type="button" data-dismiss="alert" data-target=".global-announcement" aria-label=t('.close')
+          span aria-hidden="true"
+            | &times;
+      = announcement.title
+    div.panel-body
+      = announcement.content
+    - if controller.global_announcements.size > 1
+      div.panel-footer
+        div.pull-right
+          = link_to(t('.more_announcements'), '/announcements')
+        br.clearfix
+

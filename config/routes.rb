@@ -58,6 +58,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     get '/' => 'admin#index'
+    resources :announcements
   end
 
   scope module: 'course' do

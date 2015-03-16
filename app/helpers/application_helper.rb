@@ -1,6 +1,7 @@
 # :nodoc:
 module ApplicationHelper
   include ApplicationThemingHelper
+  include ApplicationAnnouncementsHelper
 
   # Checks if the current page has a sidebar.
   #
@@ -42,14 +43,15 @@ module ApplicationHelper
   # Links to the given User.
   #
   # @param user [User] The User to display.
+  # @param options [Hash] The options to pass to `link_to`
   # @yield The user will be yielded to the provided block, and the block can override the display
   #        of the User.
   # @yieldparam user [User] The user to display.
   # @return [String] The user-visible string, including embedded HTML which will display the
   #                  string within a link to bring to the User page.
-  def link_to_user(user)
+  def link_to_user(user, options = {})
     link_path = '' # TODO: Link to the user page.
-    link_to(link_path) do
+    link_to(link_path, options) do
       if block_given?
         yield(user)
       else

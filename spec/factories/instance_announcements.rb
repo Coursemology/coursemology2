@@ -1,6 +1,8 @@
 FactoryGirl.define do
   factory :instance_announcement, class: Instance::Announcement.name do
-    instance
+    transient do
+      instance
+    end
     creator
     updater
 
