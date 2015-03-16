@@ -1,5 +1,5 @@
 ruby:
-  config_file: .rubocop.yml
+  config_file: config/.rubocop.yml
 
 java_script:
   config_file: .jshintrc
