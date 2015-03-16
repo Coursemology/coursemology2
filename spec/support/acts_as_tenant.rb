@@ -1,6 +1,6 @@
 # Test group helpers for setting the tenant for tests.
-module ActsAsTenant
-  module TestGroupHelpers
+module ActsAsTenant::TestGroupHelpers
+  module ModelHelpers
     # Sets the current tenant when running this group of tests.
     #
     # @param tenant [Symbol] The symbol containing the tenant to use for this group of
@@ -19,8 +19,8 @@ module ActsAsTenant
     end
   end
 
-  module RequestTestHelpers
-    include TestGroupHelpers
+  module FeatureHelpers
+    include ModelHelpers
     # Sets the current tenant and host when running this group of tests.
     #
     # @param tenant [Symbol] The symbol containing the tenant to use for this group of
@@ -43,7 +43,7 @@ module ActsAsTenant
 end
 
 RSpec.configure do |config|
-  config.extend ActsAsTenant::TestGroupHelpers, type: :model
-  config.extend ActsAsTenant::TestGroupHelpers, type: :view
-  config.extend ActsAsTenant::RequestTestHelpers, type: :feature
+  config.extend ActsAsTenant::TestGroupHelpers::ModelHelpers, type: :model
+  config.extend ActsAsTenant::TestGroupHelpers::ModelHelpers, type: :view
+  config.extend ActsAsTenant::TestGroupHelpers::FeatureHelpers, type: :feature
 end
