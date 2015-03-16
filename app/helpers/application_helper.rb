@@ -67,4 +67,18 @@ module ApplicationHelper
   def format_datetime(date, format = :long)
     date.to_formatted_s(format)
   end
+
+  # Get the course user of the signed in user.
+  #
+  # @return [CourseUser] the course_user instance of the signed in user if a
+  #         course instance variable is defined.
+  def current_course_user
+    if current_user && @course
+      @current_course_user ||= CourseUser.find_by_user_id_and_course_id(
+        current_user.id,
+        @course.id
+      )
+    end
+    @current_course_user
+  end
 end
