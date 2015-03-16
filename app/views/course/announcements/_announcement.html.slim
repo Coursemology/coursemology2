@@ -1,5 +1,8 @@
 hr
 div class=("announcement #{'future' if announcement.valid_in_future? }")
+  - if announcement.sticky?
+    = fa_icon 'thumb-tack'
+
   h2
     = announcement.title
 

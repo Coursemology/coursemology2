@@ -11,6 +11,7 @@ module Course::CoursesModulesConcern
       # Inject our sidebar definition methods into ClassMethods.
       class_methods_module.module_eval do
         include Sidebar
+        include Settings
       end
     end
 
@@ -43,5 +44,32 @@ module Course::CoursesModulesConcern
     private
 
     attr_accessor :sidebar_proc
+  end
+
+  module Settings
+    # Class method to declare the proc handling the course settings items.
+    #
+    # @param proc [Proc] The proc handling the settings for the given module. The proc will be
+    #                    `instance_eval`ed in the context of the controller handling the current
+    #                    request. This proc must return an array of hashes, each describing one
+    #                    module settings page.
+    def settings(&proc)
+      self.settings_proc = proc
+    end
+
+    # Class method to get the settings items from this module, in the context of the given
+    # controller instance.
+    #
+    # @param controller [Course::Controller] The controller handling the current request.
+    # @return [Array] An array of hashes containing the settings items exposed by this module.
+    def get_settings_items(controller)
+      return [] unless settings_proc
+
+      controller.instance_exec(&settings_proc)
+    end
+
+    private
+
+    attr_accessor :settings_proc
   end
 end

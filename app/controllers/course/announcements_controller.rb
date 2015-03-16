@@ -2,7 +2,8 @@ class Course::AnnouncementsController < Course::ModuleController
   load_and_authorize_resource :announcement, through: :course, class: Course::Announcement.name
 
   def index #:nodoc:
-    @announcements = @announcements.includes(:creator).sorted_by_date
+    @announcements = @announcements.includes(:creator).
+      sorted_by_sticky.sorted_by_date.page params[:page]
   end
 
   def show #:nodoc:
@@ -40,6 +41,6 @@ class Course::AnnouncementsController < Course::ModuleController
   private
 
   def announcement_params #:nodoc:
-    params.require(:course_announcement).permit(:title, :content, :valid_from, :valid_to)
+    params.require(:course_announcement).permit(:title, :content, :sticky, :valid_from, :valid_to)
   end
 end

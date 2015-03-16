@@ -1,0 +1,20 @@
+div.announcement class=(announcement.currently_valid? ? '' : 'future')
+  h2
+    - if announcement.unread?
+      input.new_announcement type="hidden"
+      = fa_icon 'envelope'
+    = announcement.title
+  - if can? :manage, announcement.class
+    div.pull-right
+      = link_to edit_admin_announcement_path(announcement), class: 'btn btn-default' do
+        = fa_icon 'edit'
+      = link_to admin_announcement_path(announcement), class: ['btn', 'btn-danger'],
+                method: :delete do
+        = fa_icon 'trash'
+  h3.timestamp
+    => format_datetime(announcement.valid_from)
+    ' by
+    = link_to_user(announcement.creator)
+  div.content
+    = announcement.content
+hr

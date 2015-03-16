@@ -19,7 +19,7 @@ RSpec.describe 'User signup', type: :feature do
       fill_in 'user_password_confirmation', with: valid_user.password
     end
 
-    it 'creates a course' do
+    it 'creates a user' do
       expect { click_button 'Sign up' }.to change(User, :count).by(1)
     end
   end

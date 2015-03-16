@@ -58,6 +58,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     get '/' => 'admin#index'
+    resources :announcements
   end
 
   scope module: 'course' do
@@ -66,13 +67,15 @@ Rails.application.routes.draw do
       resources :achievements
 
       post 'enrol_requests/process_multiple' => 'enrol_requests#process_multiple',
-          as: :process_multiple_enrol_requests
+           as: :process_multiple_enrol_requests
       resources :enrol_requests, only: [:new, :index] do
         member do
           get 'delete'
           get 'approve'
         end
       end
+
+      get 'settings' => 'course_settings#index', as: :settings
     end
   end
 end

@@ -77,15 +77,16 @@ ActiveRecord::Schema.define(version: 20150314205546) do
   end
 
   create_table "course_announcements", force: true do |t|
-    t.integer  "course_id",  null: false
-    t.string   "title",      null: false
+    t.integer  "course_id",                  null: false
+    t.string   "title",                      null: false
     t.text     "content"
-    t.datetime "valid_from", null: false
-    t.datetime "valid_to",   null: false
-    t.integer  "creator_id", null: false
-    t.integer  "updater_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.boolean  "sticky",     default: false, null: false
+    t.datetime "valid_from",                 null: false
+    t.datetime "valid_to",                   null: false
+    t.integer  "creator_id",                 null: false
+    t.integer  "updater_id",                 null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.index ["course_id"], :name => "fk__course_announcements_course_id"
     t.index ["creator_id"], :name => "fk__course_announcements_creator_id"
     t.index ["updater_id"], :name => "fk__course_announcements_updater_id"

@@ -7,6 +7,7 @@ class Course::Announcement < ActiveRecord::Base
   belongs_to :course, inverse_of: :announcements
 
   scope :sorted_by_date, -> { order(valid_from: :desc) }
+  scope :sorted_by_sticky, -> { order(sticky: :desc) }
 
   # Set default values
   def set_defaults

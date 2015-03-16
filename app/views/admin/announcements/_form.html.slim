@@ -1,12 +1,6 @@
-= simple_form_for [@course, @announcement], resource: :course_announcement do |f|
+= simple_form_for @announcement, resource: :admin_announcement do |f|
   = f.input :title
-
   = f.input :content
-
-  = f.input :sticky
-
   = f.input :valid_from
-
   = f.input :valid_to
-
   = f.button :submit, class: 'btn-primary'
