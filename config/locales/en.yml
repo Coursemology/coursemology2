@@ -21,37 +21,37 @@
 
 en:
   layout:
-    coursemology: Coursemology
+    coursemology: 'Coursemology'
     navbar:
-      toggle_sidebar: Toggle Sidebar
-      toggle_navigation: Toggle Navigation
-      courses: Courses
-      help: Help
-      sign_up: Sign Up
-      sign_in: Sign In
-      sign_out: Sign Out
+      toggle_sidebar: 'Toggle Sidebar'
+      toggle_navigation: 'Toggle Navigation'
+      courses: 'Courses'
+      help: 'Help'
+      sign_up: 'Sign Up'
+      sign_in: 'Sign In'
+      sign_out: 'Sign Out'
   layouts:
     global_announcements:
-      close: Close
-      more_announcements: More Announcements...
+      close: 'Close'
+      more_announcements: 'More Announcements...'
     course_settings:
       title: 'Settings'
   admin:
     navbar:
-      announcements: Announcements
+      announcements: 'Announcements'
     admin:
       home:
-        message: "Pages"
+        message: 'Pages'
     announcements:
       index:
-        header: "Announcements"
-        new: "New Announcement"
+        header: 'Announcements'
+        new: 'New Announcement'
       new:
-        header: "Create Announcement"
+        header: 'Create Announcement'
       create:
         notice: "Announcement %{title} was created."
       edit:
-        header: "Edit Announcement"
+        header: 'Edit Announcement'
       update:
         notice: "Announcement %{title} was updated."
       destroy:
