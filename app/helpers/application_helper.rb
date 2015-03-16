@@ -67,4 +67,14 @@ module ApplicationHelper
   def format_datetime(date, format = :long)
     date.to_formatted_s(format)
   end
+
+  # A helper for generating css class, return the time bounded status of the item
+  #
+  # @param item [ActiveRecord::Base] The ActiveRecord objects who has the time_bounded fields
+  # @return [String] the string which indicates its current status
+  def time_period_class(item)
+    return 'not-yet-valid' if item.not_yet_valid?
+    return 'currently-valid' if item.currently_valid?
+    return 'expired' if item.expired?
+  end
 end
