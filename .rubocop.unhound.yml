@@ -76,6 +76,9 @@ Encoding:
 EvenOdd:
   Enabled: true
 
+ExtraSpacing:
+  Enabled: false
+
 FileName:
   Enabled: true
 
