@@ -39,7 +39,6 @@ ClassVars:
 
 CollectionMethods:
   PreferredMethods:
-    find: 'find'
     detect: 'find'
     inject: 'reduce'
     reduce: 'reduce'
