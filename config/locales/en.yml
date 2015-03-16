@@ -34,6 +34,8 @@ en:
     global_announcements:
       close: Close
       more_announcements: More Announcements...
+    course_settings:
+      title: 'Settings'
   admin:
     navbar:
       announcements: Announcements

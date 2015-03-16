@@ -65,6 +65,7 @@ Rails.application.routes.draw do
     resources :courses do
       resources :announcements
       resources :achievements
+      get 'settings' => 'course_settings#index', as: :settings
     end
   end
 end
