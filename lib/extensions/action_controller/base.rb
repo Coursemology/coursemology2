@@ -28,13 +28,7 @@ module Extensions::ActionController::Base
       select { |klass| klass < ActionController::Base }.
       map { |klass| Extensions::ActionController::Base.class_layout(klass, self) }.
       select { |layout| !layout.nil? }.
-      reduce([]) do |memo, layout|
-        if memo.empty? || memo.last != layout
-          memo << layout
-        else
-          memo
-        end
-      end.
+      uniq.
       reverse!
   end
 
