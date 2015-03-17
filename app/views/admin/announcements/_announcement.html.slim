@@ -1,4 +1,4 @@
-div.announcement class=(announcement.currently_valid? ? '' : 'future')
+div.announcement class=time_period_class(announcement)
   h2
     - if announcement.unread?
       input.new_announcement type="hidden"
