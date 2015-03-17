@@ -2,7 +2,7 @@ class Admin::SystemAnnouncementsController < Admin::Controller
   load_and_authorize_resource :system_announcement, class: SystemAnnouncement.name
 
   def index
-    @system_announcements = @system_announcements.includes(:creator)
+    @system_announcements = @system_announcements.includes(:creator).page(params[:page])
   end
 
   def new

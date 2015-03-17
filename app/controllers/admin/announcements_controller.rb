@@ -4,7 +4,7 @@ class Admin::AnnouncementsController < Admin::Controller
   add_breadcrumb :index, :admin_announcements_path
 
   def index
-    @announcements = @announcements.includes(:creator)
+    @announcements = @announcements.includes(:creator).page(params[:page])
   end
 
   def new

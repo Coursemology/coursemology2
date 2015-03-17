@@ -7,3 +7,5 @@ div.page-header
           new_admin_announcement_path,
           class: ['btn', 'btn-primary'])
 = render partial: 'announcement', collection: @announcements
+
+= paginate @announcements

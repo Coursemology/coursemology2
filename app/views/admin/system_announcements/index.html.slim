@@ -4,3 +4,5 @@ h1 = t('.header')
   = link_to t('.new'), new_admin_system_announcement_path, class: 'btn btn-primary'
 
 = render @system_announcements
+
+= paginate @system_announcements
