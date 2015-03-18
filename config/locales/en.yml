@@ -112,3 +112,37 @@ en:
         published: 'Published'
         yes: 'Yes'
         no: 'No'
+
+    registrations:
+      approve_message_format: 'Approved %{count} enrollment requests.'
+      delete_message_format: 'Deleted %{count} enrollment requests.'
+      error_message_format: 'Failed to process the request. %{reason}'
+      index:
+        registrations: Registrations
+        staff_requests: Staff Registrations
+        student_requests: Student Registrations
+      registration_tab:
+        enrol_requests: Registrations
+      registration_form:
+        enrol_as_student: Register As Student
+        enrol_as_teaching_assistant: Register As Teaching Assistant
+        enrol_as_manager: Register As Manager
+      list:
+        no_staff_requests: No outstanding staff request
+        no_student_requests: No outstanding student request
+        loading: Loading...
+        name: Name
+        email: Email
+        requested_at: Registered At
+        role: Role
+        action: Action
+        approve_selected: Approve Selcted
+        delete_selected: Delete Selected
+        approve_all: Approve All
+        delete_all: Delete All
+      new:
+        new_registration: New Registration
+        already_registered_format: 'You have already registered to this class as a %{role}'
+        request_format: 'You have requested to enrol to this class as a %{role}'
+        come_back_later: Your request has been received. Please come back later to check for the result!
+        course_not_open: The course is not open for registration.
