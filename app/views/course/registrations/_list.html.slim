@@ -5,47 +5,49 @@ div
     = no_request_message
   -else
     form action=update_multiple_course_registrations_path(@course)
-      table class="table enrol-requests"
+      table class="table"
         thead
         tr
-          - if can? :approve, Course::EnrolRequest
+          - if can? :approve, Course::Registration
             td
 
           td = t('.name')
           td = t('.email')
           td = t('.requested_at')
           td = t('.role')
-          - if can? :approve, Course::EnrolRequest
+          - if can? :approve, Course::Registration
             td = t('.action')
 
         tbody
-          - for enrol_request in enrol_requests do
-            tr.enrol-request-row
-              - if can? :approve, Course::EnrolRequest
+          - for registration in registrations do
+            tr.registration-row
+              - if can? :approve, Course::Registration
                 td
-                  input [type="checkbox" value=enrol_request.id name="enrol_request_ids[]"]
+                  input [type="checkbox" value=registration.id name="registration_ids[]"]
 
-              td.user-name = enrol_request.user.name
-              td  = enrol_request.user.email
-              td  = enrol_request.created_at.strftime('%d %b %Y %H:%M %a')
-              td  = enrol_request.role
-              - if can? :approve, Course::EnrolRequest
+              td.user-name = registration.user.name
+              td  = registration.user.email
+              td  = registration.created_at.strftime(t('.date_format'))
+              td  = registration.role
+              - if can? :approve, Course::Registration
                 td
-                  a [class="btn btn-primary request-approve"
-                  href=update_course_enrol_request_path(@course, enrol_request)]
+                  button [class="btn btn-primary request-approve" type="submit"
+                  name="approve_single" value=registration.id]
                     | <i class="glyphicon glyphicon-ok"></i>
-                  a [class="btn btn-danger request-delete"
-                  href=delete_course_enrol_request_path(@course, enrol_request)]
+                  a [class="btn btn-danger request-delete" name="delete_single"
+                  value=registration.id]
                     | <i class="glyphicon glyphicon-remove"></i>
 
       div class="batch-controls"
-        - if can? :approve, Course::EnrolRequest
-          input.link-style [type="submit" name="approve_selected_#{type}"
-          value="#{t('.approve_selected')}"]
+        - if can? :approve, Course::Registration
+          button.link-style [type="submit" name="approve_selected" value="#{type}"]
+            = t('.approve_selected')
           = '|'
-          input.link-style [type="submit" name="delete_selected_#{type}"
-          value="#{t('.delete_selected')}"]
+          button.link-style [type="submit" name="delete_selected" value="#{type}"]
+            = t('.delete_selected')
           = '|'
-          input.link-style [type="submit" name="approve_all_#{type}" value="#{t('.approve_all')}"]
+          button.link-style [type="submit" name="approve_all" value="#{type}"]
+            = t('.approve_all')
           = '|'
-          input.link-style [type="submit" name="delete_all_#{type}" value="#{t('.delete_all')}"]
+          button.link-style [type="submit" name="delete_all" value="#{type}"]
+            = t('.delete_all')
