@@ -18,5 +18,57 @@ RSpec.describe Course::Announcement, type: :model do
 
       it { is_expected.not_to be_valid }
     end
+
+    context 'unread status' do
+      let!(:first_user) { create(:user, role: :administrator) }
+      let!(:second_user) { create(:user, role: :administrator) }
+      let!(:course) { create(:course) }
+
+      describe 'announcement creation' do
+        let!(:another_course) { create(:course) }
+
+        let!(:first_user_unread) do
+          create_list(:course_announcement, 5, course: course, creator: second_user)
+        end
+        let!(:second_user_unread) do
+          create_list(:course_announcement, 5, course: course, creator: first_user)
+        end
+        let!(:another_ann) do
+          create_list(:course_announcement, 5, course: another_course, creator: first_user)
+        end
+        let!(:create_ann) { create(:course_announcement, course: course, creator: first_user) }
+
+        it 'does not change unread announcement number of creator' do
+          expect(course.announcements.unread_by(first_user).count).to eq(5)
+        end
+
+        it 'increases unread number by 1 for other users' do
+          expect(course.announcements.unread_by(second_user).count).to eq(6)
+        end
+
+        it 'does not change unread announcement number of another course' do
+          expect(another_course.announcements.unread_by(second_user).count).to eq(5)
+        end
+      end
+
+      describe 'announcement editing' do
+        let!(:first_announcement) do
+          create(:course_announcement, course: course, creator: first_user)
+        end
+        let!(:second_announcement) do
+          create(:course_announcement, course: course, creator: second_user)
+        end
+
+        it 'does not change unread announcement number of updater' do
+          first_announcement.update(content: 'edited', updater: first_user)
+          expect(course.announcements.unread_by(first_user).count).to eq(1)
+        end
+
+        it 'marks announcement which has been read by others as unread' do
+          second_announcement.update(content: 'edited', updater: first_user)
+          expect(course.announcements.unread_by(second_user).count).to eq(2)
+        end
+      end
+    end
   end
 end
