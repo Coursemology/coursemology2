@@ -1,4 +1,4 @@
-div#enrol-request-form
+div.registration-form
   - Course::Registration.roles.except(:owner).each do |role, value|
     = form_for [course, Course::Registration.new(role: role)], resource: :course_registration do |f|
       = f.hidden_field :role

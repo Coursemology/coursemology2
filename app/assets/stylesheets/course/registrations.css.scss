@@ -1,44 +1,37 @@
 $link-color: #0000ff;
 
-#registration-form {
-  min-width: 190px;
-  width: 190px;
+.course-registrations {
+  &.index {
+    .bold-text {
+      font-weight: bold;
+    }
 
-  a {
-    margin: 5px 0;
-    width: 100%;
+    .registration-row {
+
+      .request-approve {
+        margin-right: 5px;
+      }
+
+      .request-approve,
+      .request-delete {
+        padding-bottom: 2px;
+        padding-top: 2px;
+      }
+
+    }
+
+    .link-style {
+      // Remove all decorations to look like link
+      background: none;
+      border: none;
+      color: $link-color;
+      cursor: pointer;
+      display: inline;
+      font: inherit;
+      margin: 0;
+      outline: none;
+      outline-offset: 0;
+      padding: 0;
+    }
   }
 }
-
-.bold-text {
-  font-weight: bold;
-}
-
-.registration-row {
-
-  .request-approve {
-    margin-right: 5px;
-  }
-
-  .request-approve,
-  .request-delete {
-    padding-bottom: 2px;
-    padding-top: 2px;
-  }
-
-}
-
-.link-style {
-  // Remove all decorations to look like link
-  background: none;
-  border: none;
-  color: $link-color;
-  cursor: pointer;
-  display: inline;
-  font: inherit;
-  margin: 0;
-  outline: none;
-  outline-offset: 0;
-  padding: 0;
-}
-
