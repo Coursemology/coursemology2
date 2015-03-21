@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150316080645) do
+ActiveRecord::Schema.define(version: 20150321145059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,6 +140,40 @@ ActiveRecord::Schema.define(version: 20150316080645) do
     t.index ["user_id"], :name => "index_instance_users_on_user_id", :unique => true
     t.foreign_key ["instance_id"], "instances", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_instance_users_instance_id"
     t.foreign_key ["user_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_instance_users_user_id"
+  end
+
+  create_table "mail_sign_offs", force: true do |t|
+    t.string   "content"
+    t.integer  "course_id"
+    t.integer  "creator_id", null: false
+    t.integer  "updater_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["course_id"], :name => "fk__mail_sign_offs_course_id"
+    t.index ["creator_id"], :name => "fk__mail_sign_offs_creator_id"
+    t.index ["updater_id"], :name => "fk__mail_sign_offs_updater_id"
+    t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_mail_sign_offs_course_id"
+    t.foreign_key ["creator_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_mail_sign_offs_creator_id"
+    t.foreign_key ["updater_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_mail_sign_offs_updater_id"
+  end
+
+  create_table "mail_templates", force: true do |t|
+    t.string   "subject"
+    t.string   "pre_message"
+    t.string   "post_message"
+    t.integer  "course_id"
+    t.string   "action"
+    t.integer  "creator_id",   null: false
+    t.integer  "updater_id",   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["course_id", "action"], :name => "index_mail_templates_on_course_id_and_action", :unique => true
+    t.index ["course_id"], :name => "fk__mail_templates_course_id"
+    t.index ["creator_id"], :name => "fk__mail_templates_creator_id"
+    t.index ["updater_id"], :name => "fk__mail_templates_updater_id"
+    t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_mail_templates_course_id"
+    t.foreign_key ["creator_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_mail_templates_creator_id"
+    t.foreign_key ["updater_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_mail_templates_updater_id"
   end
 
   create_table "read_marks", force: true do |t|
