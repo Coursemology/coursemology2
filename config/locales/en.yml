@@ -126,9 +126,9 @@ en:
       registration_tab:
         enrol_requests: Registrations
       registration_form:
-        enrol_as_student: Register As Student
-        enrol_as_teaching_assistant: Register As Teaching Assistant
-        enrol_as_manager: Register As Manager
+        register_as_student: Register As Student
+        register_as_teaching_assistant: Register As Teaching Assistant
+        register_as_manager: Register As Manager
       list:
         no_staff_requests: No outstanding staff request
         no_student_requests: No outstanding student request

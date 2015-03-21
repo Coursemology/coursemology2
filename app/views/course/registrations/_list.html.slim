@@ -1,53 +1,52 @@
 - no_request_message = (type == 'staff') ? t('.no_staff_requests') : t('.no_student_requests')
 
-div
-  -if registrations.count == 0
-    = no_request_message
-  -else
-    form action=update_multiple_course_registrations_path(@course)
-      table class="table"
-        thead
-        tr
-          - if can? :approve, Course::Registration
-            td
+  div
+    -if registrations.count == 0
+      = no_request_message
+    -else
+      = form_tag update_multiple_course_registrations_path(@course), method: :post
+        table.table
+          tr
+            - if can? :approve, Course::Registration
+              td
 
-          td = t('.name')
-          td = t('.email')
-          td = t('.requested_at')
-          td = t('.role')
-          - if can? :approve, Course::Registration
-            td = t('.action')
+            td = t('.name')
+            td = t('.email')
+            td = t('.requested_at')
+            td = t('.role')
+            - if can? :approve, Course::Registration
+              td = t('.action')
 
-        tbody
-          - for registration in registrations do
-            tr.registration-row
-              - if can? :approve, Course::Registration
-                td
-                  input [type="checkbox" value=registration.id name="registration_ids[]"]
+          tbody
+            - for registration in registrations do
+              tr.registration-row
+                - if can? :approve, Course::Registration
+                  td
+                    input [type="checkbox" value=registration.id name="registration_ids[]"]
 
-              td.user-name = registration.user.name
-              td  = registration.user.email
-              td  = registration.created_at.strftime(t('.date_format'))
-              td  = registration.role
-              - if can? :approve, Course::Registration
-                td
-                  button [class="btn btn-primary request-approve" type="submit"
-                  name="approve_single" value=registration.id]
-                    | <i class="glyphicon glyphicon-ok"></i>
-                  a [class="btn btn-danger request-delete" name="delete_single"
-                  value=registration.id]
-                    | <i class="glyphicon glyphicon-remove"></i>
+                td.user-name = registration.user.name
+                td = registration.user.email
+                td = registration.created_at.strftime(t('.date_format'))
+                td = t("course.registrations.role.#{registration.role}")
+                - if can? :approve, Course::Registration
+                  td
+                    button.btn.btn-primary.request-approve [type="submit" name="approve_single"
+                    value=registration.id]
+                      | <i class="glyphicon glyphicon-ok"></i>
+                    button.btn.btn-danger.request-delete [type="submit" name="delete_single"
+                    value=registration.id]
+                      | <i class="glyphicon glyphicon-remove"></i>
 
-      div class="batch-controls"
         - if can? :approve, Course::Registration
-          button.link-style [type="submit" name="approve_selected" value="#{type}"]
-            = t('.approve_selected')
-          = '|'
-          button.link-style [type="submit" name="delete_selected" value="#{type}"]
-            = t('.delete_selected')
-          = '|'
-          button.link-style [type="submit" name="approve_all" value="#{type}"]
-            = t('.approve_all')
-          = '|'
-          button.link-style [type="submit" name="delete_all" value="#{type}"]
-            = t('.delete_all')
+          div
+            button.link-style [type="submit" name="approve_selected" value="#{type}"]
+              = t('.approve_selected')
+            = '|'
+            button.link-style [type="submit" name="delete_selected" value="#{type}"]
+              = t('.delete_selected')
+            = '|'
+            button.link-style [type="submit" name="approve_all" value="#{type}"]
+              = t('.approve_all')
+            = '|'
+            button.link-style [type="submit" name="delete_all" value="#{type}"]
+              = t('.delete_all')

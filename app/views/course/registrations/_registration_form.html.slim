@@ -1,7 +1,5 @@
 div#enrol-request-form
-  a.btn.btn-primary href="#{new_course_enrol_request_path(course, role: :student)}"
-    | #{t('.enrol_as_student')}
-  a.btn.btn-primary href="#{new_course_enrol_request_path(course, role: :teaching_assistant)}"
-    | #{t('.enrol_as_teaching_assistant')}
-  a.btn.btn-primary href="#{new_course_enrol_request_path(course, role: :manager)}"
-    | #{t('.enrol_as_manager')}
+  - Course::Registration.roles.except(:owner).each do |role, value|
+    = form_for [course, Course::Registration.new(role: role)], resource: :course_registration do |f|
+      = f.hidden_field :role
+      = f.submit t(".register_as_#{role}")
