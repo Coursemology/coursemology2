@@ -111,13 +111,13 @@ ActiveRecord::Schema.define(version: 20150321145059) do
   end
 
   create_table "course_mail_templates", force: true do |t|
-    t.string   "subject"
-    t.string   "pre_message"
-    t.string   "post_message"
-    t.integer  "course_id"
-    t.string   "action"
-    t.integer  "creator_id",   null: false
-    t.integer  "updater_id",   null: false
+    t.string   "subject",      default: ""
+    t.string   "pre_message",  default: ""
+    t.string   "post_message", default: ""
+    t.integer  "course_id",                 null: false
+    t.integer  "action",       default: 0,  null: false
+    t.integer  "creator_id",                null: false
+    t.integer  "updater_id",                null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["course_id", "action"], :name => "index_course_mail_templates_on_course_id_and_action", :unique => true

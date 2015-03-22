@@ -11,5 +11,10 @@ FactoryGirl.define do
       action 'invitation'
       subject 'Please register this course'
     end
+
+    factory :announcement, parent: :course_mail_template do
+      action 'announcement'
+      subject 'New announcement'
+    end
   end
 end

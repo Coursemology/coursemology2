@@ -2,6 +2,8 @@ class Course::MailTemplate < ActiveRecord::Base
   stampable
   belongs_to :course
   has_one :mail_sign_off, through: :course
+  # This is a list of mailer actions that allows customization.
+  enum action: { invitation: 0, announcement: 1 }
 
   # Returns the content of customized sign off if it exists
   def sign_off
