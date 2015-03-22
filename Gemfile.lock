@@ -1,4 +1,14 @@
 GIT
+  remote: git://github.com/carrierwaveuploader/carrierwave.git
+  revision: fe64bf7a014cc578a516fa9c9109fbe370d10d82
+  specs:
+    carrierwave (0.10.0)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      json (>= 1.7)
+      mime-types (>= 1.16)
+
+GIT
   remote: git://github.com/lowjoel/themes_on_rails.git
   revision: 2c6446f8658b55dedc95afa9f66d16d1a68b9136
   specs:
@@ -310,6 +320,7 @@ DEPENDENCIES
   bullet
   cancancan (~> 1.9)
   capybara
+  carrierwave!
   codeclimate-test-reporter
   consistency_fail
   coveralls
