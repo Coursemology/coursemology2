@@ -1,6 +1,6 @@
-class CreateMailTemplates < ActiveRecord::Migration
+class CreateCourseMailTemplates < ActiveRecord::Migration
   def change
-    create_table :mail_templates do |t|
+    create_table :course_mail_templates do |t|
       t.string :subject
       t.string :pre_message
       t.string :post_message

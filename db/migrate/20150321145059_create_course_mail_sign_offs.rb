@@ -1,6 +1,6 @@
-class CreateMailSignOffs < ActiveRecord::Migration
+class CreateCourseMailSignOffs < ActiveRecord::Migration
   def change
-    create_table :mail_sign_offs do |t|
+    create_table :course_mail_sign_offs do |t|
       t.string :content
       t.belongs_to :course
 

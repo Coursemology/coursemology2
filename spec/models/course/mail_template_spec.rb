@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe MailTemplate, :type => :model do
+RSpec.describe Course::MailTemplate, :type => :model do
   it { is_expected.to belong_to(:course) }
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
     let!(:invitation) { create(:invitation) }
 
     describe '.template_content' do
-      subject { MailTemplate.template_content(@course, @action, @part) }
+      subject { Course::MailTemplate.template_content(@course, @action, @part) }
 
       before do
         @course = invitation.course

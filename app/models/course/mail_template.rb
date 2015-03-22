@@ -1,4 +1,4 @@
-class MailTemplate < ActiveRecord::Base
+class Course::MailTemplate < ActiveRecord::Base
   stampable
   belongs_to :course
   has_one :mail_sign_off, through: :course
@@ -18,7 +18,7 @@ class MailTemplate < ActiveRecord::Base
   # 'post_message' or 'sign_off'.
   # @returns [string] The content of the requested template part if exist or nil otherwise.
   def self.template_content(course, action, part)
-    if template = MailTemplate.find_by_course_id_and_action(course.id, action.to_s)
+    if template = Course::MailTemplate.find_by_course_id_and_action(course.id, action.to_s)
       template.send(part) if template.respond_to?(part)
     end
   end
