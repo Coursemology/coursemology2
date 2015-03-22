@@ -5,7 +5,7 @@ source 'https://rails-assets.org'
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.1.8'
+gem 'rails', '~> 4.2.1'
 
 # Use PostgreSQL for the backend
 gem 'pg'
