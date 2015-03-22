@@ -3,4 +3,19 @@ class Course::CourseSettingsController < Course::ModuleController
 
   def index
   end
+
+  def update #:nodoc:
+    if @course.update_attributes(course_setting_params)
+      redirect_to course_settings_path(@course), notice: t('.notice', title: @course.title)
+    else
+      render 'index'
+    end
+  end
+
+  private
+
+  def course_setting_params #:nodoc:
+    params.require(:course).
+      permit(:title, :description, :status, :start_at, :end_at)
+  end
 end
