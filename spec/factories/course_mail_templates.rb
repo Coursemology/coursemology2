@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :course_mail_template, class: Course::MailTemplate.name do
     course
+    action 'invitation'
     subject nil
     pre_message nil
     post_message nil

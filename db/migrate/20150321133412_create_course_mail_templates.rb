@@ -6,7 +6,7 @@ class CreateCourseMailTemplates < ActiveRecord::Migration
       t.string :post_message, default: ''
 
       t.belongs_to :course, null: false
-      t.integer :action, null: false, default: 0
+      t.integer :action, null: false
       t.index [:course_id, :action], unique: true
 
       t.userstamps null: false, foreign_key: { references: :users }

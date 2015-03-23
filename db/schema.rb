@@ -115,7 +115,7 @@ ActiveRecord::Schema.define(version: 20150321145059) do
     t.string   "pre_message",  default: ""
     t.string   "post_message", default: ""
     t.integer  "course_id",                 null: false
-    t.integer  "action",       default: 0,  null: false
+    t.integer  "action",                    null: false
     t.integer  "creator_id",                null: false
     t.integer  "updater_id",                null: false
     t.datetime "created_at"
