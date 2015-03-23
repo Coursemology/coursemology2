@@ -53,6 +53,9 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
 
+  # Old school have_tag, with_tag(and more) matchers for rspec 3
+  config.include RSpecHtmlMatchers
+
   # Delete all the uploaded files after testing
   config.after(:suite) do
     FileUtils.rm_rf(Dir["#{Rails.root}/spec/support/uploads"])
