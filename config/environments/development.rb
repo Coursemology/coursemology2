@@ -48,4 +48,4 @@ Rails.application.configure do
 end
 
 # Pretty-print our HTML in development mode.
-Slim::Engine.default_options[:pretty] = true
+Slim::Engine.options[:pretty] = true
