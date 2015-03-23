@@ -8,11 +8,10 @@ RSpec.describe 'Global announcements', type: :feature do
     describe 'no global announcements' do
       before do
         instance.announcements.clear
-        SystemAnnouncement.destroy_all
         visit root_path
       end
 
-      it { is_expected.not_to have_tag('div.global-announcement') }
+      it { is_expected.not_to have_selector('div.global-announcement') }
     end
 
     describe 'one valid global announcement' do
@@ -25,8 +24,8 @@ RSpec.describe 'Global announcements', type: :feature do
 
       it 'shows the announcement' do
         expect(page).to have_tag('div.global-announcement') do
-          have_tag('div.panel-heading', with_text: announcement.title)
-          have_tag('div.panel-body', with_text: announcement.content)
+          with_tag('div.panel-heading', text: format('×%s', announcement.title))
+          with_tag('div.panel-body', text: announcement.content)
         end
       end
     end
@@ -42,15 +41,15 @@ RSpec.describe 'Global announcements', type: :feature do
       it 'shows the latest announcement' do
         announcement = announcements.last
         expect(page).to have_tag('div.global-announcement') do
-          have_tag('div.panel-heading', with_text: announcement.title)
-          have_tag('div.panel-body', with_text: announcement.content)
+          with_tag('div.panel-heading', text: format('×%s', announcement.title))
+          with_tag('div.panel-body', text: announcement.content)
         end
       end
 
       it 'shows the more announcements link' do
         expect(page).to have_tag('div.global-announcement') do
-          have_tag('div.panel-footer',
-                   with_text: I18n.t('layouts.global_announcements.more_announcements'))
+          with_tag('div.panel-footer',
+                   text: I18n.t('layouts.global_announcements.more_announcements'))
         end
       end
     end
