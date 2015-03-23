@@ -36,9 +36,10 @@ RSpec.describe Course::MailTemplatesController, :type => :controller do
     it 'creates a new mail template and redirects to the edit page' do
       expect { post :create, course_id: course.id, course_mail_template: new_template }.
         to change(Course::MailTemplate, :count).by(1)
-      expect_correct_response(edit_course_mail_template_path(course, Course::MailTemplate.all.last),
-                              'create',
-                              { mail_action: 'announcement' })
+      created = Course::MailTemplate.all.last
+      expect_correct_response(course_mail_templates_path(course, mail_action: created.action),
+        'create',
+        { mail_action: 'announcement' })
     end
   end
 
@@ -64,9 +65,9 @@ RSpec.describe Course::MailTemplatesController, :type => :controller do
           subject
           existing.reload
         end.to change(existing, :subject).to(@updated.subject)
-        expect_correct_response(edit_course_mail_template_path(course, existing),
-                                'update',
-                                { mail_action: 'invitation' })
+        expect_correct_response(course_mail_templates_path(course, mail_action: existing.action),
+          'update',
+          { mail_action: 'invitation' })
       end
     end
 
