@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Course::MailTemplatesController, :type => :controller do
+RSpec.describe Course::MailTemplatesController, type: :controller do
   before do
     ActsAsTenant.current_tenant = Instance.default
     sign_in(create(:administrator))
@@ -10,17 +10,18 @@ RSpec.describe Course::MailTemplatesController, :type => :controller do
   let(:new_template) { build(:announcement, course: course).as_json }
   let(:anonymous_controller) { controller(Course::MailTemplatesController) }
 
-  def expect_correct_response(redirect_path, controller_action, options = {})
+  def expect_notice_response(redirect_path, controller_action, mail_action)
     expect(response).to redirect_to(redirect_path)
-    if options[:mail_action]
-      expect(flash[:notice]).
-        to match(I18n.t("course.mail_templates.#{controller_action}.notice_format") %
-                   { action: I18n.t("course.mail_templates.action.#{options[:mail_action]}") })
-    elsif options[:error]
-      expect(flash[:error]).
-        to match(I18n.t("course.mail_templates.#{controller_action}.error_format") %
-                   { reason: options[:error] })
-    end
+    expect(flash[:notice]).
+      to match(I18n.t("course.mail_templates.#{controller_action}.notice_format") %
+                 { action: I18n.t("course.mail_templates.action.#{mail_action}") })
+  end
+
+  def expect_error_response(redirect_path, controller_action, reason)
+    expect(response).to redirect_to(redirect_path)
+    expect(flash[:error]).
+      to match(I18n.t("course.mail_templates.#{controller_action}.error_format") %
+                 { reason: reason })
   end
 
   describe '#index' do
@@ -38,9 +39,9 @@ RSpec.describe Course::MailTemplatesController, :type => :controller do
       expect { post :create, course_id: course.id, course_mail_template: new_template }.
         to change(Course::MailTemplate, :count).by(1)
       created = Course::MailTemplate.all.last
-      expect_correct_response(course_mail_templates_path(course, mail_action: created.action),
-        'create',
-        { mail_action: 'announcement' })
+      expect_notice_response(course_mail_templates_path(course, mail_action: created.action),
+                             'create',
+                             'announcement')
     end
   end
 
@@ -53,8 +54,8 @@ RSpec.describe Course::MailTemplatesController, :type => :controller do
     subject do
       put :update,
           course_id: course.id,
-        id: existing.id,
-        course_mail_template: @updated.as_json
+          id: existing.id,
+          course_mail_template: @updated.as_json
     end
     context 'new value is valid' do
       before do
@@ -66,9 +67,9 @@ RSpec.describe Course::MailTemplatesController, :type => :controller do
           subject
           existing.reload
         end.to change(existing, :subject).to(@updated.subject)
-        expect_correct_response(course_mail_templates_path(course, mail_action: existing.action),
-          'update',
-          { mail_action: 'invitation' })
+        expect_notice_response(course_mail_templates_path(course, mail_action: existing.action),
+                               'update',
+                               'invitation')
       end
     end
 
@@ -84,9 +85,9 @@ RSpec.describe Course::MailTemplatesController, :type => :controller do
           subject
           existing.reload
         end.not_to change(existing, :action)
-        expect_correct_response(edit_course_mail_template_path(course, existing),
-                                'update',
-                                { error: 'Validation failed: Action has already been taken' })
+        expect_error_response(edit_course_mail_template_path(course, existing),
+                              'update',
+                              'Validation failed: Action has already been taken')
       end
     end
   end
@@ -95,9 +96,7 @@ RSpec.describe Course::MailTemplatesController, :type => :controller do
     subject { delete :destroy, course_id: course.id, id: existing.id }
     it 'destroys an existing record' do
       expect { subject }.to change(Course::MailTemplate, :count).by(-1)
-      expect_correct_response(course_mail_templates_path(course),
-                              'destroy',
-                              { mail_action: 'invitation' })
+      expect_notice_response(course_mail_templates_path(course), 'destroy', 'invitation')
     end
   end
 
