@@ -8,6 +8,7 @@ RSpec.describe Course::MailTemplatesController, :type => :controller do
   let!(:course) { create(:course) }
   let!(:existing) { create(:invitation, course: course) }
   let(:new_template) { build(:announcement, course: course).as_json }
+  let(:anonymous_controller) { controller(Course::MailTemplatesController) }
 
   def expect_correct_response(redirect_path, controller_action, options = {})
     expect(response).to redirect_to(redirect_path)
@@ -97,6 +98,41 @@ RSpec.describe Course::MailTemplatesController, :type => :controller do
       expect_correct_response(course_mail_templates_path(course),
                               'destroy',
                               { mail_action: 'invitation' })
+    end
+  end
+
+  def expect_action_options(options, method_sym, *args)
+    expect(@controller.send(method_sym, *args)).to contain_exactly(*options)
+  end
+
+  describe '#mail_action_options' do
+    it 'returns all mail actions as select options' do
+      expect_action_options(
+        Course::MailTemplate.actions.keys.map do |action|
+          [I18n.t("course.mail_templates.action.#{action}"), action]
+        end,
+        :mail_action_options
+      )
+    end
+  end
+
+  describe '#customized_mail_actions' do
+    it 'returns mail actions that has mail templates' do
+      expect_action_options(
+        [[I18n.t('course.mail_templates.action.invitation'), 'invitation']],
+        :customized_mail_actions,
+        course
+      )
+    end
+  end
+
+  describe '#noncustomized_mail_actions' do
+    it 'returns mail actions that does not have mail templates' do
+      expect_action_options(
+        [[I18n.t('course.mail_templates.action.announcement'), 'announcement']],
+        :noncustomized_mail_actions,
+        course
+      )
     end
   end
 end
