@@ -1,5 +1,5 @@
 hr
-div class=("announcement #{'future' if announcement.valid_in_future? }")
+div.announcement class=time_period_class(announcement)
   - if announcement.sticky?
     = fa_icon 'thumb-tack'
 

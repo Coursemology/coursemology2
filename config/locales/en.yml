@@ -74,12 +74,8 @@ en:
     courses:
       create:
         notice: "Course %{title} was created."
-      update:
-        notice: "Course %{title} was updated."
       new:
         header: 'New Course'
-      edit:
-        header: 'Edit Course'
       form:
         title_label: 'Give it an awesome name'
         title_placeholder: 'e.g. Maths Universe, Geovengers'
@@ -112,7 +108,9 @@ en:
         published: 'Published'
         yes: 'Yes'
         no: 'No'
-
+    course_settings:
+      update:
+        notice: "Course %{title} was updated."
     registrations:
       role:
         student: student

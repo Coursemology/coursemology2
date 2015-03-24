@@ -1,5 +1,5 @@
 hr
-div.announcement class=(system_announcement.valid_in_future? ? '' : 'future')
+div.announcement class=time_period_class(system_announcement)
   h2
     - if system_announcement.unread?
       input.new_announcement type="hidden"
