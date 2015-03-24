@@ -5,5 +5,4 @@ FactoryGirl.define do
     creator
     updater
   end
-
 end
