@@ -121,12 +121,20 @@ en:
         registrations: Registrations
         staff_requests: Staff Registrations
         student_requests: Student Registrations
-      registration_tab:
-        enrol_requests: Registrations
-      registration_form:
-        register_as_student: Register As Student
-        register_as_teaching_assistant: Register As Teaching Assistant
-        register_as_manager: Register As Manager
+      create:
+        notice_format: 'You have submitted registration to the course as a %{role}.'
+        error_format: Unable to register.
+        course_not_open: The course is not open for registration.
+        already_registered_format: 'You are already registered as a %{role}.'
+      destroy:
+        notice_format: 'Deleted %{role} registration from %{email}.'
+        error: 'Unable to approve %{role} registration from %{email}.'
+        approve_format: 'Approved %{role} registration from %{email}.'
+      update:
+        notice_format: 'Registration updated. You are now registered as %{role}.'
+      destroy_multiple:
+        approve_notice_format: 'Approved %{count} registrations.'
+        destroy_notice_format: 'Deleted %{count} registrations.'
       list:
         no_staff_requests: No outstanding staff request
         no_student_requests: No outstanding student request
@@ -141,17 +149,7 @@ en:
         approve_all: Approve All
         delete_all: Delete All
         date_format: '%d %b %Y %H:%M %a'
-      create:
-        request_format: 'You have submitted registration to the course as a %{role}.'
-        course_not_open: The course is not open for registration.
-        already_registered_format: 'You are already registered as a %{role}.'
-      update:
-        update_notice_format: 'Registration updated. You are now registered as %{role}'
-        approve_notice_format: 'Approved the %{role} registration from %{user}'
-        error_format: 'Failed to process the request. %{reason}'
-      update_multiple:
-        approve_notice_format: 'Approved %{count} registrations'
-        delete_notice_format: 'Deleted %{count} registrations'
-        error_format: 'Failed to process the request. %{reason}'
-      delete:
-        notice_format: 'Deleted the %{role} registration from %{user}.'
+      registration_form:
+        register_as_student: Register As Student
+        register_as_teaching_assistant: Register As Teaching Assistant
+        register_as_manager: Register As Manager

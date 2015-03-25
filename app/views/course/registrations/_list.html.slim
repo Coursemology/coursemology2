@@ -4,7 +4,7 @@ div
   -if registrations.count == 0
     = no_request_message
   -else
-    = form_tag update_multiple_course_registrations_path(@course), method: :post
+    = form_tag destroy_multiple_course_registrations_path(@course), method: :post
       table.table
         tr
           - if can? :approve, Course::Registration
@@ -30,23 +30,29 @@ div
               td = t("course.registrations.role.#{registration.role}")
               - if can? :approve, Course::Registration
                 td
-                  button.btn.btn-primary.request-approve [type="submit" name="approve_single"
-                  value=registration.id]
+                  = link_to course_registration_path(@course, registration, approve: true),
+                            class: 'btn btn-primary request-approve',
+                            method: :delete
                     | <i class="glyphicon glyphicon-ok"></i>
-                  button.btn.btn-danger.request-delete [type="submit" name="delete_single"
-                  value=registration.id]
+                  = link_to course_registration_path(@course, registration),
+                            class: 'btn btn-danger request-delete',
+                            method: :delete
                     | <i class="glyphicon glyphicon-remove"></i>
 
       - if can? :approve, Course::Registration
         div
-          button.link-style [type="submit" name="approve_selected" value="#{type}"]
+          button.link-style [type="submit" name="operation"
+          value='{"action": "approve", "scope": "selected", "role": "#{type}"}']
             = t('.approve_selected')
           = '|'
-          button.link-style [type="submit" name="delete_selected" value="#{type}"]
+          button.link-style [type="submit" name="operation"
+          value='{"action": "destroy", "scope": "selected", "role": "#{type}"}']
             = t('.delete_selected')
           = '|'
-          button.link-style [type="submit" name="approve_all" value="#{type}"]
+          button.link-style [type="submit" name="operation"
+          value='{"action": "approve", "scope": "all", "role": "#{type}"}']
             = t('.approve_all')
           = '|'
-          button.link-style [type="submit" name="delete_all" value="#{type}"]
+          button.link-style [type="submit" name="operation"
+          value='{"action": "destroy", "scope": "all", "role": "#{type}"}']
             = t('.delete_all')
