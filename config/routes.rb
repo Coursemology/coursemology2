@@ -66,6 +66,7 @@ Rails.application.routes.draw do
     resources :courses do
       resources :announcements
       resources :achievements
+      resources :mail_templates, except: :show
       get 'settings' => 'course_settings#index', as: :settings
       patch 'settings' => 'course_settings#update', as: :update_settings
     end
