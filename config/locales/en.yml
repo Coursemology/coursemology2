@@ -135,6 +135,7 @@ en:
       destroy_multiple:
         approve_notice_format: 'Approved %{count} registrations.'
         destroy_notice_format: 'Deleted %{count} registrations.'
+        error_format: 'Unable to approve registration from %{email}. %{reason}'
       list:
         no_staff_requests: No outstanding staff request
         no_student_requests: No outstanding student request
