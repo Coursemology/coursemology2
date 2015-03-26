@@ -12,6 +12,8 @@ class Course < ActiveRecord::Base
 
   has_many :announcements, inverse_of: :course, dependent: :destroy
   has_many :achievements, inverse_of: :course, dependent: :destroy
+  has_many :mail_templates
+  has_one :mail_sign_off, inverse_of: :course
 
   private
 

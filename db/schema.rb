@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150316080645) do
+ActiveRecord::Schema.define(version: 20150321145059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,6 +93,40 @@ ActiveRecord::Schema.define(version: 20150316080645) do
     t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_announcements_course_id"
     t.foreign_key ["creator_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_announcements_creator_id"
     t.foreign_key ["updater_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_announcements_updater_id"
+  end
+
+  create_table "course_mail_sign_offs", force: true do |t|
+    t.string   "content"
+    t.integer  "course_id"
+    t.integer  "creator_id", null: false
+    t.integer  "updater_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["course_id"], :name => "fk__course_mail_sign_offs_course_id"
+    t.index ["creator_id"], :name => "fk__course_mail_sign_offs_creator_id"
+    t.index ["updater_id"], :name => "fk__course_mail_sign_offs_updater_id"
+    t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_mail_sign_offs_course_id"
+    t.foreign_key ["creator_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_mail_sign_offs_creator_id"
+    t.foreign_key ["updater_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_mail_sign_offs_updater_id"
+  end
+
+  create_table "course_mail_templates", force: true do |t|
+    t.string   "subject",      default: ""
+    t.string   "pre_message",  default: ""
+    t.string   "post_message", default: ""
+    t.integer  "course_id",                 null: false
+    t.integer  "action",                    null: false
+    t.integer  "creator_id",                null: false
+    t.integer  "updater_id",                null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["course_id", "action"], :name => "index_course_mail_templates_on_course_id_and_action", :unique => true
+    t.index ["course_id"], :name => "fk__course_mail_templates_course_id"
+    t.index ["creator_id"], :name => "fk__course_mail_templates_creator_id"
+    t.index ["updater_id"], :name => "fk__course_mail_templates_updater_id"
+    t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_mail_templates_course_id"
+    t.foreign_key ["creator_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_mail_templates_creator_id"
+    t.foreign_key ["updater_id"], "users", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_mail_templates_updater_id"
   end
 
   create_table "course_users", force: true do |t|
