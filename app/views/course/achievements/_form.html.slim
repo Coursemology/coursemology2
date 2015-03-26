@@ -1,0 +1,8 @@
+= simple_form_for [@course, @achievement], resource: :course_achievement do |f|
+  = f.input :title
+
+  = f.input :description
+
+  = f.input :published
+
+  = f.button :submit, class: 'btn-primary'
