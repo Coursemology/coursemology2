@@ -1,4 +1,4 @@
-Rails.application.config.after_initialize do
+Rails.application.config.before_initialize do
   extensions_path = "#{Rails.root}/lib/extensions"
 
   # Load the base Extensions module
