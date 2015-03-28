@@ -8,6 +8,7 @@ RSpec.describe 'Global announcements', type: :feature do
     describe 'no global announcements' do
       before do
         instance.announcements.clear
+        SystemAnnouncement.destroy_all
         visit root_path
       end
 
@@ -18,6 +19,7 @@ RSpec.describe 'Global announcements', type: :feature do
       let(:announcement) { build(:instance_announcement, instance: instance) }
       before do
         instance.announcements.clear
+        SystemAnnouncement.destroy_all
         announcement.save!
         visit root_path
       end
@@ -34,6 +36,7 @@ RSpec.describe 'Global announcements', type: :feature do
       let(:announcements) { build_list(:instance_announcement, 2, instance: instance) }
       before do
         instance.announcements.clear
+        SystemAnnouncement.destroy_all
         announcements.each(&:save!)
         visit root_path
       end
