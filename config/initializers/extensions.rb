@@ -1,4 +1,4 @@
-Rails.application.config.after_initialize do
+Rails.application.config.before_initialize do
   extensions_path = "#{Rails.root}/lib/extensions"
 
   # Load the base Extensions module
@@ -26,12 +26,12 @@ Rails.application.config.after_initialize do
     class_to_extend = relative_filename.camelize
     module_to_include_name = "Extensions::#{class_to_extend}"
     module_to_include = module_to_include_name.constantize
-    module_to_extend_name = "#{module_to_include}::ClassMethods"
 
     class_to_extend.constantize.class_eval do
       include module_to_include
-      if module_to_include.const_defined?(module_to_extend_name, false)
-        extend module_to_extend.constantize
+      if module_to_include.const_defined?(:ClassMethods, false)
+        module_to_extend_name = "#{module_to_include}::ClassMethods"
+        extend module_to_extend_name.constantize
       end
     end
   end
