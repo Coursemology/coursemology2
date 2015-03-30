@@ -109,7 +109,7 @@ ActiveRecord::Schema.define(version: 20150316080645) do
   add_index "instance_users", ["instance_id", "user_id"], name: "index_instance_users_on_instance_id_and_user_id", unique: true
 
   create_table "read_marks", force: :cascade do |t|
-    t.integer  "readable_id"
+    t.integer  "readable_id",   foreign_key: false
     t.string   "readable_type", limit: 255, null: false
     t.integer  "user_id",       null: false, index: {name: "fk__read_marks_user_id"}, foreign_key: {references: "users", name: "fk_read_marks_user_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "timestamp"
