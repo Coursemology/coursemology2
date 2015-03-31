@@ -136,5 +136,19 @@ module Modular
 
   module Module
     extend ActiveSupport::Concern
+
+    module ClassMethods
+      # @return [Boolean] the default enabled status of the module
+      def enabled_by_default?
+        true
+      end
+
+      # Unique key of the module, to serve as the key in module_preference_objects and translations
+      #
+      # @return [Symbol] the key
+      def key
+        name.underscore.sub('/', '_').to_sym
+      end
+    end
   end
 end
