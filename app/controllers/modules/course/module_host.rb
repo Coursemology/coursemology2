@@ -55,6 +55,20 @@ class Course::ModuleHost
     attr_accessor :settings_proc
   end
 
+  module Enableable
+    # @return [Boolean] the default enabled status of the module
+    def enabled_by_default?
+      true
+    end
+
+    # Unique key of the module, to serve as the key in module_preference_objects and translations
+    #
+    # @return [Symbol] the key
+    def key
+      name.underscore.sub('/', '_').to_sym
+    end
+  end
+
   # Open the Modular Base Module.
   const_get(:Module).module_eval do
     const_set(:ClassMethods, ::Module.new) unless const_defined?(:ClassMethods)
@@ -64,6 +78,7 @@ class Course::ModuleHost
     class_methods_module.module_eval do
       include Sidebar
       include Settings
+      include Enableable
     end
   end
 
