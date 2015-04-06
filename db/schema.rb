@@ -120,6 +120,19 @@ ActiveRecord::Schema.define(version: 20150425030128) do
   end
   add_index "instance_users", ["instance_id", "user_id"], name: "index_instance_users_on_instance_id_and_user_id", unique: true
 
+  create_table "notifications", force: :cascade do |t|
+    t.integer  "user_id",    null: false, index: {name: "fk__notifications_on_user_id"}, foreign_key: {references: "users", name: "fk_notifications_user_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "course_id",  null: false, index: {name: "fk__notifications_on_course_id"}, foreign_key: {references: "courses", name: "fk_notifications_course_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "type"
+    t.string   "title"
+    t.text     "content"
+    t.string   "image"
+    t.string   "link"
+    t.boolean  "share"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "read_marks", force: :cascade do |t|
     t.integer  "readable_id"
     t.string   "readable_type", limit: 255, null: false
