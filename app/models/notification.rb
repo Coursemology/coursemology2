@@ -17,6 +17,8 @@ class Notification < ActiveRecord::Base
       CenterPopup.create_notification(user, course, options)
     when 'right_side_popup'
       RightSidePopup.create_notification(user, course, options)
+    when 'email'
+      EmailNotification.create_notification(user, course, options)
     else
       return
     end
