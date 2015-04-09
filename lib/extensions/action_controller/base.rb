@@ -1,4 +1,13 @@
 module Extensions::ActionController::Base
+  module ClassMethods
+    # Method from ActsAsAttachable framework.
+    # Declared this function in controller to let it accepts attachments.
+    # Should be declared after load_and_authorize_resources.
+    def accepts_attachments
+      before_action :build_attachments, only: [:new, :edit]
+    end
+  end
+
   # Gets the current layout used by this controller.
   #
   # @return [String] The layout used by the current controller.
@@ -32,6 +41,13 @@ module Extensions::ActionController::Base
       reverse!
   end
 
+  # Method from ActsAsAttachable framework.
+  # Permit attachments params in strong parameters.
+  # @return [Hash] The params required by the framework.
+  def attachments_params
+    { attachments_attributes: [:id, :attachment, :attachment_cache, :_destroy] }
+  end
+
   # Gets the superclass hierarchy for the given class. Object is not part of the returned result.
   #
   # @param klass [Class] The class to obtain the hierarchy of.
@@ -56,5 +72,16 @@ module Extensions::ActionController::Base
     layout_method = klass.instance_method(:_layout)
     layout = layout_method.bind(self_)
     layout.call
+  end
+
+  private
+
+  def build_attachments
+    @attachable = instance_variable_get('@' + attachable_item_name)
+    @attachable.attachments.build if @attachable
+  end
+
+  def attachable_item_name
+    params[:controller].split('/').last.singularize
   end
 end

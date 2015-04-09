@@ -16,11 +16,6 @@ ActiveRecord::Schema.define(version: 20150316080645) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "instances", force: :cascade do |t|
-    t.string "name", limit: 255, null: false
-    t.string "host", limit: 255, null: false, comment: "Stores the host name of the instance. The www prefix is automatically handled by the application", index: {name: "index_instances_on_host", unique: true, case_sensitive: false}
-  end
-
   create_table "users", force: :cascade do |t|
     t.string   "name",                   limit: 255,              null: false
     t.integer  "role",                   default: 0,  null: false
@@ -35,6 +30,22 @@ ActiveRecord::Schema.define(version: 20150316080645) do
     t.inet     "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "attachments", force: :cascade do |t|
+    t.string   "name",            null: false
+    t.integer  "attachable_id"
+    t.string   "attachable_type", index: {name: "index_attachments_on_attachable_type_and_attachable_id", with: ["attachable_id"]}
+    t.text     "file_upload",     null: false
+    t.integer  "creator_id",      null: false, index: {name: "fk__attachments_creator_id"}
+    t.integer  "updater_id",      null: false, index: {name: "fk__attachments_updater_id"}, foreign_key: {references: "users", name: "fk_attachments_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  create_table "instances", force: :cascade do |t|
+    t.string "name", limit: 255, null: false
+    t.string "host", limit: 255, null: false, comment: "Stores the host name of the instance. The www prefix is automatically handled by the application", index: {name: "index_instances_on_host", unique: true, case_sensitive: false}
   end
 
   create_table "courses", force: :cascade do |t|
