@@ -15,6 +15,7 @@ class Course < ActiveRecord::Base
   has_many :announcements, inverse_of: :course, dependent: :destroy
   has_many :achievements, inverse_of: :course, dependent: :destroy
   has_many :levels, inverse_of: :course, dependent: :destroy
+  has_many :groups, inverse_of: :course, dependent: :destroy, class_name: Course::Group.name
 
   delegate :staff, to: :course_users
 

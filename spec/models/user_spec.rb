@@ -11,6 +11,9 @@ RSpec.describe User, type: :model do
   it { is_expected.to have_many(:instances).through(:instance_users) }
   it { is_expected.to have_many(:course_users).inverse_of(:user).dependent(:destroy) }
   it { is_expected.to have_many(:courses).through(:course_users) }
+  it { is_expected.to have_many(:course_group_users).inverse_of(:user).dependent(:destroy) }
+  it { is_expected.to have_many(:course_groups).through(:course_group_users) }
+
 
   describe '#email' do
     context 'when the user has no email addresses' do
