@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 20150316080645) do
     t.integer  "instance_id", null: false, index: {name: "fk__courses_instance_id"}, foreign_key: {references: "instances", name: "fk_courses_instance_id", on_update: :no_action, on_delete: :no_action}
     t.string   "title",       limit: 255,             null: false
     t.text     "description"
+    t.text     "logo"
     t.integer  "status",      default: 0, null: false
     t.datetime "start_at",    null: false
     t.datetime "end_at",      null: false

@@ -131,6 +131,8 @@ gem 'bootstrap-select-rails'
 
 # Using carrierwave for file uploads
 gem 'carrierwave', github: 'carrierwaveuploader/carrierwave'
+# Required by carrierwave, for image resizing
+gem 'mini_magick'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
