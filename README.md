@@ -19,9 +19,8 @@ Major changes:
     1. `bundle install --without development:test` might be preferable for production installs.
     2. `bundle install --without ci:production` might be preferable if you're only intending to
        implement features.
- 2. `rake db:schema:load`. Run `RAILS_ENV=test rake db:schema:load` too if you are intending to run the test
+ 2. `rake db:setup`. Run `RAILS_ENV=test rake db:setup` too if you are intending to run the test
     suite.
- 3. `rake db:seed` to create the initial instance and test user.
  3. `bin/rails server` to start the development app server. Production installs should configure
     [Puma](http://puma.io) and be reverse-proxied.
  4. You can log in with the default username and password:
