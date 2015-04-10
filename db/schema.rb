@@ -87,6 +87,15 @@ ActiveRecord::Schema.define(version: 20150316080645) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "course_levels", force: true do |t|
+    t.integer  "course_id"
+    t.integer  "exp_threshold"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["course_id"], :name => "fk__course_levels_course_id"
+    t.foreign_key ["course_id"], "courses", ["id"], :on_update => :no_action, :on_delete => :no_action, :name => "fk_course_levels_course_id"
+  end
+
   create_table "course_users", force: :cascade do |t|
     t.integer  "course_id",        null: false, index: {name: "fk__course_users_course_id"}, foreign_key: {references: "courses", name: "fk_course_users_course_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "user_id",          null: false, index: {name: "fk__course_users_user_id"}, foreign_key: {references: "users", name: "fk_course_users_user_id", on_update: :no_action, on_delete: :no_action}
