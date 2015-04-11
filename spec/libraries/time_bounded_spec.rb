@@ -74,6 +74,7 @@ RSpec.describe 'time_bounded', type: :model do
                               valid_to: DateTime.now - 1.day)
         end
 
+        it { is_expected.to be_expired }
         it { is_expected.not_to be_currently_valid }
       end
 
@@ -83,6 +84,7 @@ RSpec.describe 'time_bounded', type: :model do
                               valid_to: DateTime.now + 1.week)
         end
 
+        it { is_expected.to be_not_yet_valid }
         it { is_expected.not_to be_currently_valid }
       end
 
