@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150316080645) do
+ActiveRecord::Schema.define(version: 20150411065243) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,6 +85,21 @@ ActiveRecord::Schema.define(version: 20150316080645) do
     t.integer  "updater_id", null: false, index: {name: "fk__course_announcements_updater_id"}, foreign_key: {references: "users", name: "fk_course_announcements_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "course_lesson_plan_items", force: :cascade do |t|
+    t.integer  "base_exp",          null: false
+    t.integer  "time_bonus_exp",    null: false
+    t.integer  "extra_bonus_exp",   null: false
+    t.datetime "start_time"
+    t.datetime "bonus_cutoff_time"
+    t.datetime "end_time"
+    t.integer  "creator_id",        null: false, index: {name: "fk__course_lesson_plan_items_creator_id"}
+    t.integer  "updater_id",        null: false, index: {name: "fk__course_lesson_plan_items_updater_id"}, foreign_key: {references: "users", name: "fk_course_lesson_plan_items_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "actable_id"
+    t.string   "actable_type"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   create_table "course_users", force: :cascade do |t|
