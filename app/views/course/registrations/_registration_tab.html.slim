@@ -1,5 +1,5 @@
 ul.nav.nav-tabs
-  li class=(controller.is_a?(Course::RegistrationsController) ? "active" : nil)
-    a href="#{course_registrations_path(@course)}" #{t('.enrol_requests')}
+  li class=active_tab?('registrations')
+    a href="#{course_registrations_path(@course)}" = t('.registrations')
 
     /! TODO: Add mass email and secret code tabs

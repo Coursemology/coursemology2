@@ -135,6 +135,7 @@ en:
         registrations: Registrations
         staff_requests: Staff Registrations
         student_requests: Student Registrations
+        not_authorized: You are not authorized to approve course registrations.
       create:
         notice_format: 'You have submitted registration to the course as a %{role}.'
         error_format: Unable to register.
@@ -144,12 +145,14 @@ en:
         notice_format: 'Deleted %{role} registration from %{email}.'
         error: 'Unable to approve %{role} registration from %{email}.'
         approve_format: 'Approved %{role} registration from %{email}.'
+        not_authorized: You are not authorized to approve course registrations.
       update:
         notice_format: 'Registration updated. You are now registered as %{role}.'
       destroy_multiple:
         approve_notice_format: 'Approved %{count} registrations.'
         destroy_notice_format: 'Deleted %{count} registrations.'
         error_format: 'Unable to approve registration from %{email}. %{reason}'
+        not_authorized: You are not authorized to approve course registrations.
       list:
         no_staff_requests: No outstanding staff request
         no_student_requests: No outstanding student request
