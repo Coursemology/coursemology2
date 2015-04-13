@@ -1,4 +1,6 @@
 class Course < ActiveRecord::Base
+  has_settings_on :settings
+
   acts_as_tenant(:instance)
   stampable
 

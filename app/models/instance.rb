@@ -1,4 +1,6 @@
 class Instance < ActiveRecord::Base
+  has_settings_on :settings
+
   class << self
     def default
       result = first
