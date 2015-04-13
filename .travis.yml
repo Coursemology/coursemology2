@@ -2,14 +2,14 @@ sudo: false
 language: ruby
 rvm:
   - 2.1.5
-  - 2.2.0
+  - 2.2.1
   - ruby-head
 matrix:
   allow_failures:
     - rvm: ruby-head
 addons:
   postgresql: "9.3"
-bundler_args: "--without development:production --deployment"
+bundler_args: "--jobs=3 --retry=3 --without development:production --deployment"
 cache: bundler
 
 before_install:
@@ -22,3 +22,7 @@ before_script:
 script:
   - bundle exec consistency_fail
   - bundle exec rake spec
+
+notifications:
+  slack:
+    secure: h++bTbn+z5gm8QAF+Fk9ExyCX+Oe++O++1jN/CrakTL7p19w0Cd8Xbt8VsNevaWWeu/CAd3mjTlkF4iE+VQCax0WO1Z1qJTCcj4fiVwJSF9ojRZoNTaQeZCaDsmce3XA1gUITvN+n/iu0aNQYi7XKsXBFwmkC/BkoA4e/euzft4=

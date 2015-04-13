@@ -1,12 +1,20 @@
 module Extensions::ActiveRecord::Base
-  def self.included(class_)
-    class_.class_eval do
-      def self.currently_valid
-        where do
-          (valid_from.nil? || valid_from <= DateTime.now) &&
-            (valid_to.nil? || valid_to >= DateTime.now)
-        end
+  module ClassMethods
+    def currently_valid
+      where do
+        (valid_from.nil? || valid_from <= DateTime.now) &&
+          (valid_to.nil? || valid_to >= DateTime.now)
       end
+    end
+
+    # Functions from ActsAsAttachable framework.
+    # This function should be declared in model, to it have attachments.
+    def acts_as_attachable
+      has_many :attachments, as: :attachable
+
+      accepts_nested_attributes_for :attachments,
+                                    allow_destroy: true,
+                                    reject_if: -> (params) { params[:attachment].blank? }
     end
   end
 

@@ -1,7 +1,7 @@
 # Coursemology, Reloaded [![Build Status](https://travis-ci.org/Coursemology/coursemology2.svg?branch=master)](https://travis-ci.org/Coursemology/coursemology2)
 [![Code Climate](https://codeclimate.com/github/Coursemology/coursemology2/badges/gpa.svg)](https://codeclimate.com/github/Coursemology/coursemology2) [![Coverage Status](https://img.shields.io/coveralls/Coursemology/coursemology2.svg)](https://coveralls.io/r/Coursemology/coursemology2) [![Inline docs](http://inch-ci.org/github/Coursemology/coursemology2.svg?branch=master&style=flat-square)](http://inch-ci.org/github/Coursemology/coursemology2)
 
-This is the Rails 4.1 re-write of Coursemology.
+This is the Rails 4+ re-write of Coursemology.
 
 Major changes:
 
@@ -19,9 +19,8 @@ Major changes:
     1. `bundle install --without development:test` might be preferable for production installs.
     2. `bundle install --without ci:production` might be preferable if you're only intending to
        implement features.
- 2. `rake db:schema:load`. Run `RAILS_ENV=test rake db:schema:load` too if you are intending to run the test
+ 2. `rake db:setup`. Run `RAILS_ENV=test rake db:setup` too if you are intending to run the test
     suite.
- 3. `rake db:seed` to create the initial instance and test user.
  3. `bin/rails server` to start the development app server. Production installs should configure
     [Puma](http://puma.io) and be reverse-proxied.
  4. You can log in with the default username and password:

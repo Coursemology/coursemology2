@@ -36,6 +36,10 @@ en:
       more_announcements: 'More Announcements...'
     course_settings:
       title: 'Settings'
+    attachment_uploader:
+      uploaded: 'Uploaded Files:'
+      new_file: 'Upload New File'
+      remove: 'Remove'
   admin:
     navbar:
       announcements: 'Announcements'
