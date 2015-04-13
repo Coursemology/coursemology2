@@ -1,4 +1,6 @@
 class Instance < ActiveRecord::Base
+  include ModuleHostSettingsConcern
+
   class << self
     def default
       result = first
@@ -28,4 +30,9 @@ class Instance < ActiveRecord::Base
   has_many :users, through: :instance_users
 
   has_many :announcements, class_name: Instance::Announcement.name
+
+  # @return [Array] array of all available modules
+  def modules
+    Course::ModuleHost.modules
+  end
 end

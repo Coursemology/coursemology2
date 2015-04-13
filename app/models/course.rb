@@ -1,4 +1,6 @@
 class Course < ActiveRecord::Base
+  include ModuleHostSettingsConcern
+
   acts_as_tenant(:instance)
   stampable
 
@@ -12,6 +14,11 @@ class Course < ActiveRecord::Base
 
   has_many :announcements, inverse_of: :course, dependent: :destroy
   has_many :achievements, inverse_of: :course, dependent: :destroy
+
+  # @return [Array] array of all available modules
+  def modules
+    Instance.current.enabled_modules
+  end
 
   private
 
