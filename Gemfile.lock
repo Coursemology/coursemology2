@@ -414,7 +414,7 @@ DEPENDENCIES
   pg
   puma
   rails (~> 4.2.1)
-  rails-assets-jquery-ujs
+  rails-assets-jquery-ujs (~> 1.0.3)!
   rails-dev-boost!
   rails-dev-tweaks
   rails-flog
