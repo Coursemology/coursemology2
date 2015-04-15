@@ -3,7 +3,7 @@ FactoryGirl.define do
     creator
     updater
     course_user
-    exp_awarded 100
+    exp_awarded { rand(1..20) * 100 }
     reason 'EXP for some event'
   end
 end
