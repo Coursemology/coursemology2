@@ -115,6 +115,18 @@ ActiveRecord::Schema.define(version: 20150426062133) do
   end
   add_index "course_users", ["course_id", "user_id"], name: "index_course_users_on_course_id_and_user_id", unique: true
 
+  create_table "course_experience_points_records", force: :cascade do |t|
+    t.integer  "actable_id"
+    t.string   "actable_type",   index: {name: "index_course_experience_points_records_on_actable", with: ["actable_id"], unique: true}
+    t.integer  "points_awarded", null: false
+    t.integer  "course_user_id", null: false, index: {name: "fk__course_experience_points_records_course_user_id"}, foreign_key: {references: "course_users", name: "fk_course_experience_points_records_course_user_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "reason"
+    t.integer  "creator_id",     null: false, index: {name: "fk__course_experience_points_records_creator_id"}, foreign_key: {references: "users", name: "fk_course_experience_points_records_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id",     null: false, index: {name: "fk__course_experience_points_records_updater_id"}, foreign_key: {references: "users", name: "fk_course_experience_points_records_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
   create_table "course_lesson_plan_items", force: :cascade do |t|
     t.integer  "actable_id"
     t.string   "actable_type",    index: {name: "index_course_lesson_plan_items_on_actable_type_and_actable_id", with: ["actable_id"], unique: true}
