@@ -12,6 +12,7 @@ class Course < ActiveRecord::Base
 
   has_many :announcements, inverse_of: :course, dependent: :destroy
   has_many :achievements, inverse_of: :course, dependent: :destroy
+  has_many :levels, inverse_of: :course, dependent: :destroy
 
   private
 
