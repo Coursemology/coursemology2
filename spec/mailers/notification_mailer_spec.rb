@@ -5,17 +5,17 @@ RSpec.describe NotificationMailer, type: :mailer do
     TEST_CONTENT = '<h3> This is a test</h3>'
     TEST_URL = '../../spec/fixtures/notification_mailer/test_email.html.slim'
 
-    let(:user) { User.create(name: 'tester', email: 'to@example.org') }
+    let(:user) { create(:user, name: 'tester') }
     let(:mail) do
-      NotificationMailer.notification(user, title: 'test mailer',
-                                            content: TEST_CONTENT,
-                                            html_link: TEST_URL,
-                                            user_defined_option: 'option')
+      NotificationMailer.notification_email(user, title: 'test mailer',
+                                                  content: TEST_CONTENT,
+                                                  html_link: TEST_URL,
+                                                  user_defined_option: 'option')
     end
 
     it 'renders the headers' do
       expect(mail.subject).to eq('test mailer')
-      expect(mail.to).to eq(['to@example.org'])
+      expect(mail.to).to eq([user.email])
       expect(mail.from).to eq(['noreply@coursemology.com'])
     end
 

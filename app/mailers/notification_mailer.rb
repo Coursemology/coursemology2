@@ -6,7 +6,7 @@ class NotificationMailer < ApplicationMailer
   #
   layout :false
 
-  def notification(user, options = {})
+  def notification_email(user, options = {})
     @user = user
     @options = options
     mail(to: user.email, subject: "#{options[:title]}")

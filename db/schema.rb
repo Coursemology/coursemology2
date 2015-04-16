@@ -126,9 +126,10 @@ ActiveRecord::Schema.define(version: 20150425030128) do
     t.string   "type"
     t.string   "title"
     t.text     "content"
-    t.string   "image"
+    t.string   "button_text"
+    t.string   "image_url"
     t.string   "link"
-    t.boolean  "share"
+    t.boolean  "sharable"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

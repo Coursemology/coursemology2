@@ -5,8 +5,9 @@ FactoryGirl.define do
     type ''
     title 'example'
     content 'example'
-    image 'example.png'
+    button_text 'Yay!'
+    image_url 'example.png'
     link 'examples/example'
-    share false
+    sharable false
   end
 end

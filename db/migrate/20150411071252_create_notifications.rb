@@ -6,9 +6,10 @@ class CreateNotifications < ActiveRecord::Migration
       t.string :type
       t.string :title
       t.text :content
-      t.string :image
+      t.string :button_text
+      t.string :image_url
       t.string :link
-      t.boolean :share
+      t.boolean :sharable
 
       t.timestamps null: false
     end

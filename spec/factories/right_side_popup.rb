@@ -1,11 +1,11 @@
 FactoryGirl.define do
-  factory :right_side_popup do
+  factory :right_side_popup, class: Notification::RightSidePopup.name do
     user
     course
     title 'example'
     content 'example'
-    image 'example.png'
+    image_url 'example.png'
     link 'examples/example'
-    share false
+    sharable false
   end
 end

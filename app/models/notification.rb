@@ -3,22 +3,18 @@ class Notification < ActiveRecord::Base
   belongs_to :user
   belongs_to :course
 
-  scope :center_popup, -> { where(type: 'CenterPopup') }
-  scope :right_side_popup, -> { where(type: 'RightSidePopup') }
-  scope :email, -> { where(type: 'EmailNotification') }
+  scope :center_popup, -> { where(type: 'Notification::CenterPopup') }
+  scope :right_side_popup, -> { where(type: 'Notification::RightSidePopup') }
+  scope :email, -> { where(type: 'Notification::EmailNotification') }
 
-  def self.types
-    %w(CenterPopup RightSidePopup EmailNotification)
-  end
-
-  def self.create(user, course, options = {})
-    case options['type']
-    when 'center_popup'
-      CenterPopup.create_notification(user, course, options)
-    when 'right_side_popup'
-      RightSidePopup.create_notification(user, course, options)
-    when 'email'
-      EmailNotification.create_notification(user, course, options)
+  def self.send_notification(user, course, options = {})
+    case options[:type]
+    when :center_popup
+      Notification::CenterPopup.notify(user, course, options)
+    when :right_side_popup
+      Notification::RightSidePopup.notify(user, course, options)
+    when :email
+      Notification::EmailNotification.notify(user, course, options)
     else
       return
     end
@@ -27,8 +23,9 @@ class Notification < ActiveRecord::Base
   def self.set_options(notification, options = {})
     notification.title = options[:title]
     notification.content = options[:content]
-    notification.image = options[:image]
+    notification.button_text = options[:button_text]
+    notification.image_url = options[:image_url]
     notification.link = options[:link]
-    notification.share = options[:share]
+    notification.sharable = options[:sharable]
   end
 end
