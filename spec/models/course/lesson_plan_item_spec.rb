@@ -16,5 +16,10 @@ RSpec.describe Course::LessonPlanItem, type: :model do
         expect(lesson_plan_item.total_exp).to eq sum
       end
     end
+
+    describe '#set_default_values' do
+      subject { Course::LessonPlanItem.new.total_exp }
+      it { is_expected.to eq 0 }
+    end
   end
 end
