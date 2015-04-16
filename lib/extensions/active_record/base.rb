@@ -16,6 +16,12 @@ module Extensions::ActiveRecord::Base
                                     allow_destroy: true,
                                     reject_if: -> (params) { params[:attachment].blank? }
     end
+
+    # Decorator for abstractions with concreate occurrences which have
+    # the potential to award course_users EXP Points
+    def acts_as_lesson_plan_item
+      acts_as :lesson_plan_item, class_name: Course::LessonPlanItem.name
+    end
   end
 
   # @return [Bool] True if valid_from is a future time
