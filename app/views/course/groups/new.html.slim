@@ -1,0 +1,11 @@
+div.page-header
+  h1 = t('.create_new_group')
+= form_for [@course, @group], resource: :course_group do |f|
+  div.control-group
+    label.control-label for='name' = t('.group_name')
+    div.controls
+      = f.text_field :name
+      = f.submit t('.create'), class: 'btn btn-primary'
+  table.table
+    = render partial: 'course/groups/group_user_list',
+             locals: { operation: 'add', course_user_list: @course.course_users }

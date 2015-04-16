@@ -1,0 +1,8 @@
+.course-groups {
+  &.new, &.edit{
+    .table-section-title {
+      border-top: none;
+      text-align: center;
+    }
+  }
+}
