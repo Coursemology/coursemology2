@@ -1,10 +1,13 @@
-h4 Hello, #{@user.name}
+h4
+  = I18n.t('notification_mailer.notification.greeting') + ', ' +  @user.name
 
 = sanitize(@options[:content])
 
 - if @options[:html_link]
   = render partial: @options[:html_link]
 
-h4 Best Regards,
+h4
+  = I18n.t('notification_mailer.notification.leave_taking') + ','
 
-h4 The Coursemology Team
+h4
+  = I18n.t('notification_mailer.notification.signature')

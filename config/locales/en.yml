@@ -142,4 +142,8 @@ en:
         notice: "Achievement %{title} was updated."
       destroy:
         notice: "Achievement %{title} was deleted."
-
+  notification_mailer:
+    notification:
+      greeting: "Hello"
+      leave_taking: "Best Regards"
+      signature: "The Coursemology Team"

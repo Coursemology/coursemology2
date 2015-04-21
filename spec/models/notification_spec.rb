@@ -37,8 +37,8 @@ RSpec.describe Notification, type: :model do
       let!(:course) { create(:course) }
 
       it 'create a correct type of notification' do
-        Notification.send_notification(user, course, type: :center_popup)
-        Notification.send_notification(user, course, type: :right_side_popup)
+        Notification.notify(user, course, type: :center_popup)
+        Notification.notify(user, course, type: :right_side_popup)
         expect(user.center_popup.count).to eq(1)
         expect(user.right_side_popup.count).to eq(1)
       end

@@ -7,7 +7,7 @@ class Notification < ActiveRecord::Base
   scope :right_side_popup, -> { where(type: 'Notification::RightSidePopup') }
   scope :email, -> { where(type: 'Notification::EmailNotification') }
 
-  def self.send_notification(user, course, options = {})
+  def self.notify(user, course, options = {})
     case options[:type]
     when :center_popup
       Notification::CenterPopup.notify(user, course, options)

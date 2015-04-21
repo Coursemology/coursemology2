@@ -30,5 +30,11 @@ RSpec.describe NotificationMailer, type: :mailer do
     it 'uses user-input options in user-input html link' do
       expect(mail.body.encoded).to match('option')
     end
+
+    it 'shows template content' do
+      expect(mail.body.encoded).to match('Hello, tester')
+      expect(mail.body.encoded).to match('Best Regards,')
+      expect(mail.body.encoded).to match('The Coursemology Team')
+    end
   end
 end
