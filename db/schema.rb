@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150316080645) do
+ActiveRecord::Schema.define(version: 20150415033008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,6 +98,18 @@ ActiveRecord::Schema.define(version: 20150316080645) do
     t.datetime "updated_at"
   end
   add_index "course_users", ["course_id", "user_id"], name: "index_course_users_on_course_id_and_user_id", unique: true
+
+  create_table "course_exp_records", force: :cascade do |t|
+    t.integer  "exp_awarded",    null: false
+    t.integer  "course_user_id", null: false, index: {name: "fk__course_exp_records_course_user_id"}, foreign_key: {references: "course_users", name: "fk_course_exp_records_course_user_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "reason"
+    t.integer  "actable_id"
+    t.string   "actable_type"
+    t.integer  "creator_id",     null: false, index: {name: "fk__course_exp_records_creator_id"}
+    t.integer  "updater_id",     null: false, index: {name: "fk__course_exp_records_updater_id"}, foreign_key: {references: "users", name: "fk_course_exp_records_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
 
   create_table "instance_announcements", force: :cascade do |t|
     t.integer  "instance_id", null: false, index: {name: "fk__instance_announcements_instance_id"}, foreign_key: {references: "instances", name: "fk_instance_announcements_instance_id", on_update: :no_action, on_delete: :no_action}

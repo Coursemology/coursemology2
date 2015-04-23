@@ -16,6 +16,11 @@ module Extensions::ActiveRecord::Base
                                     allow_destroy: true,
                                     reject_if: -> (params) { params[:attachment].blank? }
     end
+
+    # Decorator for items that give course_users EXP Points
+    def acts_as_exp_record
+      acts_as :exp_record, class_name: 'Course::ExpRecord'
+    end
   end
 
   # @return [Bool] True if valid_from is a future time
