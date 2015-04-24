@@ -1,0 +1,37 @@
+class Admin::InstancesController < Admin::Controller
+  load_and_authorize_resource
+
+  def index #:nodoc:
+  end
+
+  def new #:nodoc:
+  end
+
+  def create #:nodoc:
+    if @instance.save
+      redirect_to admin_instances_path, notice: t('.notice')
+    else
+      render 'new'
+    end
+  end
+
+  def edit #:nodoc:
+  end
+
+  def update #:nodoc:
+    if @instance.update_attributes(instance_params)
+      redirect_to admin_instances_path, notice: t('.notice')
+    else
+      render 'edit'
+    end
+  end
+
+  def destroy #:nodoc:
+  end
+
+  private
+
+  def instance_params #:nodoc:
+    params.require(:instance).permit(:name, :host)
+  end
+end

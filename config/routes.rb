@@ -60,6 +60,7 @@ Rails.application.routes.draw do
     get '/' => 'admin#index'
     resources :system_announcements
     resources :announcements
+    resources :instances
   end
 
   scope module: 'course' do
