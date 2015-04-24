@@ -11,7 +11,7 @@ RSpec.describe ImageUploader, type: :model do
       ImageUploader.enable_processing = true
       @uploader = ImageUploader.new(course, :logo)
 
-      File.open(File.join(Rails.root, '/spec/fixtures/files/picture.jpg')) do |f|
+      File.open(File.join(Rails.root, '/spec/fixtures/files/picture.jpg'), 'rb') do |f|
         @uploader.store!(f)
       end
     end
