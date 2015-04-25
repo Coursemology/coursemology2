@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20150316080645) do
     t.integer  "attachable_id"
     t.string   "attachable_type", index: {name: "index_attachments_on_attachable_type_and_attachable_id", with: ["attachable_id"]}
     t.text     "file_upload",     null: false
-    t.integer  "creator_id",      null: false, index: {name: "fk__attachments_creator_id"}
+    t.integer  "creator_id",      null: false, index: {name: "fk__attachments_creator_id"}, foreign_key: {references: "users", name: "fk_attachments_creator_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "updater_id",      null: false, index: {name: "fk__attachments_updater_id"}, foreign_key: {references: "users", name: "fk_attachments_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
@@ -121,7 +121,7 @@ ActiveRecord::Schema.define(version: 20150316080645) do
   add_index "instance_users", ["instance_id", "user_id"], name: "index_instance_users_on_instance_id_and_user_id", unique: true
 
   create_table "read_marks", force: :cascade do |t|
-    t.integer  "readable_id",   foreign_key: false
+    t.integer  "readable_id"
     t.string   "readable_type", limit: 255, null: false
     t.integer  "user_id",       null: false, index: {name: "fk__read_marks_user_id"}, foreign_key: {references: "users", name: "fk_read_marks_user_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "timestamp"
