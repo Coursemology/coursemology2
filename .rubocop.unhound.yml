@@ -196,9 +196,6 @@ WhenThen:
 WhileUntilModifier:
   Enabled: true
 
-WordArray:
-  Enabled: true
-
 # Lint
 
 AmbiguousOperator:
