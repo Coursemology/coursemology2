@@ -9,14 +9,12 @@ RSpec.describe Course::Achievement, type: :model do
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
     describe '.default_scope' do
-      before { Course::Achievement.delete_all }
-
-      let!(:achievement_1st) { create(:course_achievement, weight: 1) }
-      let!(:achievement_2nd) { create(:course_achievement, weight: 5) }
-      let!(:achievement_3rd) { create(:course_achievement, weight: 3) }
-
       it 'orders by ascending weight' do
-        expect(Course::Achievement.all).to eq [achievement_1st, achievement_3rd, achievement_2nd]
+        weights = Course::Achievement.all.map(&:weight)
+        prev_weights = [0] + weights[0..-2]
+        zipped_weights = prev_weights.zip(weights)
+        greater_than_previous = zipped_weights.map { |(a, b)| a <= b }
+        expect(greater_than_previous.all?).to be_truthy
       end
     end
   end
