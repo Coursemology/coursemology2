@@ -274,7 +274,7 @@ GEM
       activerecord (~> 4.2)
       its-it
       modware (~> 0.1)
-    schema_plus (2.0.0.pre14)
+    schema_plus (2.0.0.pre15)
       activerecord (~> 4.2)
       schema_monkey (~> 2.1)
       schema_plus_columns (~> 0.1)
@@ -434,7 +434,7 @@ DEPENDENCIES
   rspec-html-matchers
   rspec-rails
   sass-rails (~> 4.0.3)
-  schema_plus (~> 2.0.beta)
+  schema_plus (~> 2.0.beta, > 2.0.0.pre14)
   schema_validations
   should_not
   shoulda-matchers
