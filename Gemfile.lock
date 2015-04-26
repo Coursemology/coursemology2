@@ -290,7 +290,7 @@ GEM
     schema_plus_columns (0.1.0)
       activerecord (~> 4.2)
       schema_plus_indexes (~> 0.1)
-    schema_plus_core (0.3.0)
+    schema_plus_core (0.3.1)
       activerecord (~> 4.2)
       schema_monkey (~> 2.1)
     schema_plus_db_default (0.1.0)
