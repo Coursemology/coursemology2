@@ -21,6 +21,8 @@ gem 'migration_comments'
 gem 'magiclabs-userstamp', github: 'lowjoel/userstamp'
 # Squeel as an SQL-like DSL
 gem 'squeel'
+# For multiple table inheritance
+gem 'active_record-acts_as'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
@@ -138,6 +140,3 @@ gem 'mini_magick'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-
-# For multiple table inheritance
-gem 'active_record-acts_as'

@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :course_achievement, class: Course::Achievement.name do
+  factory :course_achievement, class: Course::Achievement.name, aliases: [:achievement] do
     course
     creator
     updater

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150425030128) do
+ActiveRecord::Schema.define(version: 20150426062133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,6 +85,22 @@ ActiveRecord::Schema.define(version: 20150425030128) do
     t.integer  "updater_id", null: false, index: {name: "fk__course_announcements_updater_id"}, foreign_key: {references: "users", name: "fk_course_announcements_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "course_condition_achievements", force: :cascade do |t|
+    t.integer "achievement_id", index: {name: "fk__course_condition_achievements_achievement_id"}, foreign_key: {references: "course_achievements", name: "fk_course_condition_achievements_achievement_id", on_update: :no_action, on_delete: :no_action}
+  end
+
+  create_table "course_conditions", force: :cascade do |t|
+    t.integer  "actable_id"
+    t.string   "actable_type",     index: {name: "index_course_conditions_on_actable_type_and_actable_id", with: ["actable_id"], unique: true}
+    t.integer  "course_id",        index: {name: "fk__course_conditions_course_id"}, foreign_key: {references: "courses", name: "fk_course_conditions_course_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "conditional_id"
+    t.string   "conditional_type", index: {name: "index_course_conditions_on_conditional_type_and_conditional_id", with: ["conditional_id"]}
+    t.integer  "creator_id",       null: false, index: {name: "fk__course_conditions_creator_id"}, foreign_key: {references: "users", name: "fk_course_conditions_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id",       null: false, index: {name: "fk__course_conditions_updater_id"}, foreign_key: {references: "users", name: "fk_course_conditions_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   create_table "course_users", force: :cascade do |t|

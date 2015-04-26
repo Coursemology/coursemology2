@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Course::Achievement, type: :model do
+  it { is_expected.to have_many :conditions }
+
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
     context 'when title is not present' do
