@@ -44,6 +44,14 @@ RSpec.describe Instance, type: :model do
     end
   end
 
+  describe '.current' do
+    let(:current_instance) { ActsAsTenant.current_tenant }
+
+    it 'returns the current instance' do
+      expect(Instance.current).to eq(current_instance)
+    end
+  end
+
   describe '.find_tenant_by_host' do
     before do
       @instances = create_list(:instance, 3)

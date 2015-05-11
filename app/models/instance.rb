@@ -6,6 +6,13 @@ class Instance < ActiveRecord::Base
       result
     end
 
+    # Returns the current instance from ActsAsTenant
+    #
+    # @return [Instance] current instance
+    def current
+      ActsAsTenant.current_tenant
+    end
+
     # Finds the given tenant by host.
     #
     # @param host [String] The host to look up. This is case insensitive, however prefixes (such
