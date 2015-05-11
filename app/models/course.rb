@@ -12,6 +12,9 @@ class Course < ActiveRecord::Base
 
   has_many :announcements, inverse_of: :course, dependent: :destroy
   has_many :achievements, inverse_of: :course, dependent: :destroy
+  has_many :notifications, dependent: :destroy
+
+  delegate :center_popup, :right_side_popup, :email, to: :notifications
 
   private
 

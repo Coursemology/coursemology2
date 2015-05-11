@@ -10,6 +10,9 @@ class User < ActiveRecord::Base
   has_many :instances, through: :instance_users
   has_many :course_users, inverse_of: :user, dependent: :destroy
   has_many :courses, through: :course_users
+  has_many :notifications, dependent: :destroy
+
+  delegate :center_popup, :right_side_popup, :email, to: :notifications
 
   accepts_nested_attributes_for :emails
 
