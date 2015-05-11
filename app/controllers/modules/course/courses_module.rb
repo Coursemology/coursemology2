@@ -1,5 +1,5 @@
 class Course::CoursesModule
-  include Course::CoursesController::Module
+  include Course::ModuleHost::Module
 
   settings do
     [

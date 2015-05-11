@@ -16,7 +16,7 @@ RSpec.describe 'Course Modules', type: :controller do
   end
 
   class DummyCourseModule
-    include Course::CoursesController::Module
+    include Course::ModuleHost::Module
 
     sidebar do
       [EXPECTED_SIDEBAR_ITEM]

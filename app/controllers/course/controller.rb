@@ -14,7 +14,7 @@ class Course::Controller < ApplicationController
   #
   # The elements are rendered on all Course controller subclasses as part of a nested template.
   def sidebar
-    array_of_module_arrays = Course::CoursesController.modules.map do |module_|
+    array_of_module_arrays = Course::ModuleHost.modules.map do |module_|
       module_.get_sidebar_items(self)
     end
 
@@ -33,7 +33,7 @@ class Course::Controller < ApplicationController
   # }
   # ```
   def settings
-    array_of_module_arrays = Course::CoursesController.modules.map do |module_|
+    array_of_module_arrays = Course::ModuleHost.modules.map do |module_|
       module_.get_settings_items(self)
     end
 
