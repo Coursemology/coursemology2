@@ -1,23 +1,5 @@
-module Course::CoursesModulesConcern
-  extend ActiveSupport::Concern
-  included do
-    include Modular
-
-    # Open the Modular Base Module.
-    const_get(:Module).module_eval do
-      const_set(:ClassMethods, Module.new) unless const_defined?(:ClassMethods)
-      class_methods_module = const_get(:ClassMethods)
-
-      # Inject our sidebar definition methods into ClassMethods.
-      class_methods_module.module_eval do
-        include Sidebar
-        include Settings
-      end
-    end
-
-    # Eager load all the modules declared.
-    eager_load_modules(File.join(__dir__, '../../modules'))
-  end
+class Course::ModuleHost
+  include Modular
 
   module Sidebar
     # Class method to declare the proc handling the sidebar menu items.
@@ -72,4 +54,19 @@ module Course::CoursesModulesConcern
 
     attr_accessor :settings_proc
   end
+
+  # Open the Modular Base Module.
+  const_get(:Module).module_eval do
+    const_set(:ClassMethods, ::Module.new) unless const_defined?(:ClassMethods)
+    class_methods_module = const_get(:ClassMethods)
+
+    # Inject our sidebar definition methods into ClassMethods.
+    class_methods_module.module_eval do
+      include Sidebar
+      include Settings
+    end
+  end
+
+  # Eager load all the modules declared.
+  eager_load_modules(File.join(__dir__, '../'))
 end

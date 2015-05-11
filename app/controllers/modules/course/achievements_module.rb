@@ -1,5 +1,5 @@
 class Course::AchievementsModule
-  include Course::CoursesController::Module
+  include Course::ModuleHost::Module
 
   sidebar do
     [
