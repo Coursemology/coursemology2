@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150426062133) do
+ActiveRecord::Schema.define(version: 20150512014731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(version: 20150426062133) do
   create_table "course_users", force: :cascade do |t|
     t.integer  "course_id",        null: false, index: {name: "fk__course_users_course_id"}, foreign_key: {references: "courses", name: "fk_course_users_course_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "user_id",          null: false, index: {name: "fk__course_users_user_id"}, foreign_key: {references: "users", name: "fk_course_users_user_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "workflow_state",   null: false
     t.integer  "role",             default: 0,     null: false
     t.string   "name",             limit: 255,                 null: false
     t.boolean  "phantom",          default: false, null: false
