@@ -115,6 +115,21 @@ ActiveRecord::Schema.define(version: 20150426062133) do
   end
   add_index "course_users", ["course_id", "user_id"], name: "index_course_users_on_course_id_and_user_id", unique: true
 
+  create_table "course_lesson_plan_items", force: :cascade do |t|
+    t.integer  "actable_id"
+    t.string   "actable_type",    index: {name: "index_course_lesson_plan_items_on_actable_type_and_actable_id", with: ["actable_id"], unique: true}
+    t.integer  "base_exp",        null: false
+    t.integer  "time_bonus_exp",  null: false
+    t.integer  "extra_bonus_exp", null: false
+    t.datetime "start_time"
+    t.datetime "bonus_end_time"
+    t.datetime "end_time"
+    t.integer  "creator_id",      null: false, index: {name: "fk__course_lesson_plan_items_creator_id"}, foreign_key: {references: "users", name: "fk_course_lesson_plan_items_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id",      null: false, index: {name: "fk__course_lesson_plan_items_updater_id"}, foreign_key: {references: "users", name: "fk_course_lesson_plan_items_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
   create_table "instance_announcements", force: :cascade do |t|
     t.integer  "instance_id", null: false, index: {name: "fk__instance_announcements_instance_id"}, foreign_key: {references: "instances", name: "fk_instance_announcements_instance_id", on_update: :no_action, on_delete: :no_action}
     t.string   "title",       limit: 255, null: false
