@@ -37,4 +37,8 @@ class CourseUser < ActiveRecord::Base
   def staff?
     STAFF_ROLES.include?(role.to_sym)
   end
+
+  def on_rejected_entry(*)
+    destroy
+  end
 end

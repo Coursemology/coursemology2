@@ -92,7 +92,14 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
-    describe '#exp_points' do
+    describe '#reject!' do
+      subject { student.tap(&:reject!) }
+      it 'destroys the record' do
+        expect(subject.destroyed?).to be_truthy
+      end
+    end
+
+    describe '#experience_points' do
       let!(:exp_record_1) { create(:course_experience_points_record) }
       let!(:exp_record_2) do
         create(:course_experience_points_record, course_user: exp_record_1.course_user)
