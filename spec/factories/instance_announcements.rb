@@ -9,7 +9,7 @@ FactoryGirl.define do
     sequence(:title) { |n| "Announcement #{n}" }
     sequence(:content) { |n| "Content #{n}" }
 
-    valid_from Time.now
-    valid_to 3.days.from_now
+    sequence(:valid_from) { |n| Time.now + n.seconds }
+    sequence(:valid_to) { |n| 3.days.from_now + n.seconds }
   end
 end

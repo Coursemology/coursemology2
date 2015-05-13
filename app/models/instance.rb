@@ -20,5 +20,5 @@ class Instance < ActiveRecord::Base
   has_many :instance_users
   has_many :users, through: :instance_users
 
-  has_many :announcements, class_name: Instance::Announcement.name
+  has_many :announcements, -> { order(:valid_from) }, class_name: Instance::Announcement.name
 end
