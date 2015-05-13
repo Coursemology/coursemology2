@@ -6,7 +6,8 @@ class Course::CoursesController < Course::Controller
   end
 
   def create #:nodoc:
-    @course.course_users.build(user: current_user, name: 'name', role: :owner)
+    @course.course_users.build(user: current_user, name: 'name', role: :owner,
+                               workflow_state: :approved)
 
     if @course.save
       redirect_to course_settings_path(@course), notice: t('.notice', title: @course.title)

@@ -17,6 +17,8 @@ gem 'schema_plus', '~> 2.0.beta', '> 2.0.0.pre14'
 gem 'schema_validations'
 # Table and column comments
 gem 'migration_comments'
+# A Ruby state machine library
+gem 'workflow'
 # Add creator_id and updater_id attributes to models
 gem 'magiclabs-userstamp', github: 'lowjoel/userstamp'
 # Squeel as an SQL-like DSL
