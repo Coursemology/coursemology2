@@ -14,10 +14,9 @@ class CourseUser < ActiveRecord::Base
   enum role: { student: 0, teaching_assistant: 1, manager: 2, owner: 3 }
 
   # A set of roles which comprise the staff of a course.
-  #
-  # The values are duplicated as strings and symbols so either can be used when querying.
   STAFF_ROLES = Set[:teaching_assistant, :manager, :owner].freeze
   # Gets the staff associated with the course.
+  # TODO: Remove the map when Rails 5 is released.
   scope :staff, -> { where(role: STAFF_ROLES.map { |x| roles[x] }) }
 
   workflow do
