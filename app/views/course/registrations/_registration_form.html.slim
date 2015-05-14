@@ -1,0 +1,8 @@
+div.registration-form
+  - registration = CourseUser.find_by_course_id_and_user_id(course.id, current_user.id)
+  - registration ||= CourseUser.new
+  - CourseUser.roles.except(:owner).each do |role, value|
+    = form_for [course, registration], resource: :course_registrations do |f|
+      = f.hidden_field :name, value: current_user.name
+      = f.hidden_field :role, value: role
+      = f.submit t(".register_as_#{role}")

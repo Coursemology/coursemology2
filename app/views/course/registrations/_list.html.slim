@@ -1,0 +1,58 @@
+- no_request_message = (type == 'staff') ? t('.no_staff_requests') : t('.no_student_requests')
+
+div
+  -if registrations.count == 0
+    = no_request_message
+  -else
+    = form_tag destroy_multiple_course_registrations_path(@course), method: :post
+      table.table
+        tr
+          - if can? :approve, CourseUser
+            td
+
+          td = t('.name')
+          td = t('.email')
+          td = t('.requested_at')
+          td = t('.role')
+          - if can? :approve, CourseUser
+            td = t('.action')
+
+        tbody
+          - for registration in registrations do
+            tr.registration-row
+              - if can? :approve, CourseUser
+                td
+                  input [type="checkbox" value=registration.id name="registration_ids[]"]
+
+              td.user-name = registration.user.name
+              td = registration.user.email
+              td = registration.created_at.strftime(t('.date_format'))
+              td = t("course.registrations.role.#{registration.role}")
+              - if can? :approve, CourseUser
+                td
+                  = link_to course_registration_path(@course, registration, approve: true),
+                            class: 'btn btn-primary request-approve',
+                            method: :delete
+                    | <i class="glyphicon glyphicon-ok"></i>
+                  = link_to course_registration_path(@course, registration),
+                            class: 'btn btn-danger request-delete',
+                            method: :delete
+                    | <i class="glyphicon glyphicon-remove"></i>
+
+      - if can? :approve, CourseUser
+        div
+          button.link-style [type="submit" name="operation"
+          value='{"action": "approve", "scope": "selected", "role": "#{type}"}']
+            = t('.approve_selected')
+          = '|'
+          button.link-style [type="submit" name="operation"
+          value='{"action": "destroy", "scope": "selected", "role": "#{type}"}']
+            = t('.delete_selected')
+          = '|'
+          button.link-style [type="submit" name="operation"
+          value='{"action": "approve", "scope": "all", "role": "#{type}"}']
+            = t('.approve_all')
+          = '|'
+          button.link-style [type="submit" name="operation"
+          value='{"action": "destroy", "scope": "all", "role": "#{type}"}']
+            = t('.delete_all')
