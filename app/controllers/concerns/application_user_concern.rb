@@ -2,12 +2,12 @@ module ApplicationUserConcern
   extend ActiveSupport::Concern
 
   included do
-    before_action :authenticate_user!, unless: :high_voltage_controller?
+    before_action :authenticate_user!, unless: :publicly_accessible?
   end
 
   private
 
-  def high_voltage_controller?
+  def publicly_accessible?
     is_a?(HighVoltage::PagesController)
   end
 end
