@@ -19,6 +19,17 @@ module ActsAsTenant::TestGroupHelpers
     end
   end
 
+  module ControllerHelpers
+    def with_tenant(tenant, &proc)
+      context "with tenant #{tenant.inspect}" do |*params|
+        before(:each) do
+          @request.headers['host'] = send(tenant).host
+        end
+        instance_exec(*params, &proc)
+      end
+    end
+  end
+
   module FeatureHelpers
     include ModelHelpers
     # Sets the current tenant and host when running this group of tests.
@@ -45,5 +56,6 @@ end
 RSpec.configure do |config|
   config.extend ActsAsTenant::TestGroupHelpers::ModelHelpers, type: :model
   config.extend ActsAsTenant::TestGroupHelpers::ModelHelpers, type: :view
+  config.extend ActsAsTenant::TestGroupHelpers::ControllerHelpers, type: :controller
   config.extend ActsAsTenant::TestGroupHelpers::FeatureHelpers, type: :feature
 end
