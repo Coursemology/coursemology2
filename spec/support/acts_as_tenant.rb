@@ -20,8 +20,14 @@ module ActsAsTenant::TestGroupHelpers
   end
 
   module ControllerHelpers
+    include ModelHelpers
+    # Sets the current tenant and host when running this group of tests.
+    #
+    # @param tenant [Symbol] The symbol containing the tenant to use for this group of
+    #                        tests. The tenant must have been set using a let construct.
+    # @param proc [Proc] The block containing the test definitions.
     def with_tenant(tenant, &proc)
-      context "with tenant #{tenant.inspect}" do |*params|
+      super(tenant) do |*params|
         before(:each) do
           @request.headers['host'] = send(tenant).host
         end
@@ -38,7 +44,7 @@ module ActsAsTenant::TestGroupHelpers
     #                        tests. The tenant must have been set using a let construct.
     # @param proc [Proc] The block containing the test definitions.
     def with_tenant(tenant, &proc)
-      super(tenant) do
+      super(tenant) do |*params|
         before(:each) do
           @saved_host = Capybara.app_host
           # Capybara's app_host is for remote testing, it's not recommend to change it for
@@ -47,7 +53,7 @@ module ActsAsTenant::TestGroupHelpers
         end
         after(:each) { Capybara.app_host = @saved_host }
 
-        instance_exec(&proc)
+        instance_exec(*params, &proc)
       end
     end
   end
