@@ -1,6 +1,6 @@
 div.page-header
   h1
-    | Instance Announcements
+    = t('.header')
     - if can?(:manage, Instance::Announcement)
       div.pull-right
         = link_to(t('.new'),

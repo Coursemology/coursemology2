@@ -11,9 +11,9 @@ tr.achievement
   - if can?(:manage, Course::Achievement)
   td
     - if achievement.published?
-      = t('.yes')
+      = t('common.yes')
     - else
-      = t('.no')
+      = t('common.no')
   td
     = link_to edit_course_achievement_path(@course, achievement), class: 'btn btn-default' do
       = fa_icon 'edit'

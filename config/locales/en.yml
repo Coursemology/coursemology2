@@ -20,6 +20,9 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  common:
+    'yes': 'Yes'
+    'no': 'No'
   layout:
     coursemology: 'Coursemology'
     navbar:
@@ -27,7 +30,7 @@ en:
       toggle_navigation: 'Toggle Navigation'
       courses: 'Courses'
       help: 'Help'
-      sign_up: 'Sign Up'
+      register: 'Register'
       sign_in: 'Sign In'
       sign_out: 'Sign Out'
   layouts:
@@ -44,7 +47,7 @@ en:
     navbar:
       announcements: 'Announcements'
     admin:
-      home:
+      index:
         message: 'Pages'
     announcements:
       index:
@@ -127,19 +130,16 @@ en:
         description: 'Description'
         requirements: 'Requirements'
         published: 'Published'
-        yes: 'Yes'
-        no: 'No'
+      new:
+        header: 'New Achievement'
+      create:
+        success: "Achievement %{title} was created."
+      edit:
+        header: 'Edit Achievement'
+      update:
+        success: "Achievement %{title} was updated."
+      destroy:
+        success: "Achievement %{title} was deleted."
     course_settings:
       update:
         notice: "Course %{title} was updated."
-      new:
-        header: 'New Achievement'
-      edit:
-        header: 'Edit Achievement'
-      create:
-        notice: "Achievement %{title} was created."
-      update:
-        notice: "Achievement %{title} was updated."
-      destroy:
-        notice: "Achievement %{title} was deleted."
-
