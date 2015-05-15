@@ -1,6 +1,6 @@
 require 'rspec/expectations'
 
-RSpec::Matchers.define :act_as do |actable|
+RSpec::Matchers.define :acts_as do |actable|
   match do |subject|
     @class = subject.class
     @actable = actable
