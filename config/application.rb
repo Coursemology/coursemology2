@@ -22,6 +22,10 @@ class Application < Rails::Application
   # Do not swallow errors in after_commit/after_rollback callbacks.
   config.active_record.raise_in_transactional_callbacks = true
 
+  # Action Mailer default settings
+  config.action_mailer.default_options = { from: 'noreply@coursemology.org',
+                                           'Content-Transfer-Encoding' => '7bit' }
+
   config.eager_load_paths << "#{Rails.root}/lib/autoload"
   config.eager_load_paths << "#{Rails.root}/app/models/components"
   config.eager_load_paths << "#{Rails.root}/app/controllers/components"
