@@ -17,10 +17,10 @@ RSpec.describe 'Announcement management', type: :feature do
       before { visit new_course_announcement_path(course) }
 
       context 'with invalid information' do
-        before { click_button 'Create' }
+        before { click_button I18n.t('helpers.submit.course_announcement.create') }
 
         it 'stays on the same page' do
-          expect(page).to have_button('Create')
+          expect(page).to have_button(I18n.t('helpers.submit.course_announcement.create'))
         end
 
         it 'shows errors' do
@@ -30,6 +30,7 @@ RSpec.describe 'Announcement management', type: :feature do
 
       context 'with valid information' do
         let(:announcement) { build(:course_announcement, course: course) }
+        subject { click_button I18n.t('helpers.submit.course_announcement.create') }
 
         before do
           fill_in 'course_announcement_title',    with: announcement.title
@@ -37,16 +38,15 @@ RSpec.describe 'Announcement management', type: :feature do
         end
 
         it 'creates an announcement' do
-          expect { click_button 'Create' }.to change(Course::Announcement, :count).by(1)
+          expect { subject }.to change(Course::Announcement, :count).by(1)
         end
 
         context 'after creation' do
-          before { click_button 'Create' }
+          before { subject }
 
           it 'shows the success message' do
             expect(page).to have_selector('div',
-                                          text: I18n.translate('course.announcements.create.notice',
-                                                               title: announcement.title))
+                                          text: I18n.t('course.announcements.create.success'))
           end
 
           it 'redirects the user to the index page' do
@@ -70,17 +70,18 @@ RSpec.describe 'Announcement management', type: :feature do
         end
         it do
           is_expected.to have_field('course_announcement[valid_to]', with: announcement.valid_to)
+          click_button I18n.t('helpers.submit.course_announcement.update')
         end
       end
 
       context 'with invalid information' do
         before do
           fill_in 'course_announcement_title', with: ''
-          click_button 'Update'
+          click_button I18n.t('helpers.submit.course_announcement.update')
         end
 
         it 'stays on the same page' do
-          expect(page).to have_button('Update')
+          expect(page).to have_button('helpers.submit.course_announcement.update')
         end
 
         it 'shows errors' do
@@ -95,7 +96,7 @@ RSpec.describe 'Announcement management', type: :feature do
         before do
           fill_in 'course_announcement_title',        with: new_title
           fill_in 'course_announcement_content',      with: new_content
-          click_button 'Update'
+          click_button I18n.t('helpers.submit.course_announcement.update')
         end
 
         it 'redirects the user to index page' do
@@ -104,8 +105,7 @@ RSpec.describe 'Announcement management', type: :feature do
 
         it 'shows the success message' do
           expect(page).to have_selector('div',
-                                        text: I18n.translate('course.announcements.update.notice',
-                                                             title: new_title))
+                                        text: I18n.t('course.announcements.update.success'))
         end
 
         it 'changes the attributes' do
@@ -123,7 +123,7 @@ RSpec.describe 'Announcement management', type: :feature do
       end
 
       context 'management buttons' do
-        it { is_expected.to have_link('New') }
+        it { is_expected.to have_link(I18n.t('course.announcements.index.new')) }
       end
 
       it 'shows all announcements' do
@@ -156,10 +156,9 @@ RSpec.describe 'Announcement management', type: :feature do
       context 'after announcement deleted' do
         before { find_link(nil, href: announcement_path).click }
 
-        it 'shows the notice message' do
+        it 'shows the success message' do
           expect(page).to have_selector('div',
-                                        text: I18n.translate('course.announcements.destroy.notice',
-                                                             title: announcement.title))
+                                        text: I18n.t('course.announcements.destroy.success'))
         end
       end
     end

@@ -1,13 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe 'Instance management', type: :feature do
-  subject { page }
-
   let!(:user) { create(:user, role: :administrator) }
   before { login_as(user, scope: :user) }
 
   describe 'new page' do
     before { visit new_admin_instance_path }
+    subject { page }
 
     it { is_expected.to have_field('instance_name') }
     it { is_expected.to have_field('instance_host') }
@@ -15,10 +14,11 @@ RSpec.describe 'Instance management', type: :feature do
 
   describe 'instance creation' do
     before { visit new_admin_instance_path }
+    subject { click_button I18n.t('helpers.submit.instance.create') }
 
     context 'with invalid information' do
       it 'does not create a instance' do
-        expect { click_button 'Create' }.not_to change(Instance, :count)
+        expect { subject }.not_to change(Instance, :count)
       end
     end
 
@@ -29,7 +29,7 @@ RSpec.describe 'Instance management', type: :feature do
       end
 
       it 'creates a instance' do
-        expect { click_button 'Create' }.to change(Instance, :count).by(1)
+        expect { subject }.to change(Instance, :count).by(1)
       end
     end
   end
@@ -38,6 +38,7 @@ RSpec.describe 'Instance management', type: :feature do
     let(:instance) { create(:instance) }
 
     before { visit edit_admin_instance_path(instance) }
+    subject { click_button I18n.t('helpers.submit.instance.update') }
 
     context 'with valid information' do
       let(:new_name) { 'New Name' }
@@ -46,7 +47,7 @@ RSpec.describe 'Instance management', type: :feature do
       before do
         fill_in 'instance_name', with: new_name
         fill_in 'instance_host',  with: new_host
-        click_button 'Update'
+        subject
       end
 
       it 'changes the attributes' do
@@ -58,7 +59,7 @@ RSpec.describe 'Instance management', type: :feature do
     context 'with empty name' do
       before do
         fill_in 'instance_name', with: ''
-        click_button 'Update'
+        subject
       end
 
       it 'does not change name' do

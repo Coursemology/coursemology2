@@ -68,7 +68,10 @@ RSpec.describe 'ActsAsAttachable' do
       before { I18n.locale = I18n.default_locale }
       subject { form_builder.attachments }
 
-      it { is_expected.to have_tag('div', text: 'Upload new file') }
+      it do
+        is_expected.to have_tag('div', text: I18n.t('sample.attachments.layouts.'\
+                                                      'attachment_uploader.new_file'))
+      end
     end
   end
 end

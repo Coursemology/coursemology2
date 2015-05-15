@@ -89,6 +89,9 @@ group :development, :test do
   # Factory Girl for factories
   gem 'factory_girl_rails'
 
+  # Checks that all translations are used and defined.
+  gem 'i18n-tasks'
+
   # Helps to prevent database consistency mistakes
   gem 'consistency_fail'
 end

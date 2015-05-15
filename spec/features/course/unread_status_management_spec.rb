@@ -48,7 +48,8 @@ RSpec.describe 'Announcements read/unread status management', type: :feature do
 
       it 'shows the correct number of unread items' do
         expect(course.announcements.unread_by(first_user).count).to eq(1)
-        expect(page).to have_link('Announcements (1)')
+        expect(page).to have_link(format('%s (%d)', I18n.t('course.announcements.sidebar_title'),
+                                         1))
       end
     end
   end

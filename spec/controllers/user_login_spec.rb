@@ -17,7 +17,7 @@ RSpec.describe Devise::SessionsController, type: :controller do
                email: user.email,
                password: user.password
              }
-        expect(flash[:notice]).to include('success')
+        expect(flash[:notice]).to include(I18n.t('user.signed_in'))
       end
 
       it 'allows users to log in with their secondary email address' do
@@ -26,7 +26,7 @@ RSpec.describe Devise::SessionsController, type: :controller do
                email: user.emails.reject(&:primary).first.email,
                password: user.password
              }
-        expect(flash[:notice]).to include('success')
+        expect(flash[:notice]).to include(I18n.t('user.signed_in'))
       end
     end
   end

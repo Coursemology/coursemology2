@@ -13,7 +13,7 @@ class Admin::AnnouncementsController < Admin::Controller
   def create
     if @announcement.save
       redirect_to admin_announcements_path,
-                  notice: t('.notice', title: @announcement.title)
+                  success: t('.success', title: @announcement.title)
     else
       render 'new'
     end
@@ -25,7 +25,7 @@ class Admin::AnnouncementsController < Admin::Controller
   def update
     if @announcement.update_attributes(announcement_params)
       redirect_to admin_announcements_path,
-                  notice: t('.notice', title: @announcement.title)
+                  success: t('.success', title: @announcement.title)
     else
       render 'edit'
     end
@@ -33,7 +33,7 @@ class Admin::AnnouncementsController < Admin::Controller
 
   def destroy
     redirect_to admin_announcements_path,
-                notice: t('.notice', title: @announcement.title) if @announcement.destroy
+                success: t('.success', title: @announcement.title) if @announcement.destroy
   end
 
   private

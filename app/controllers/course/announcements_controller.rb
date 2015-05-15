@@ -20,7 +20,7 @@ class Course::AnnouncementsController < Course::ModuleController
   def create #:nodoc:
     if @announcement.save
       redirect_to(course_announcements_path(@course),
-                  notice: t('.notice', title: @announcement.title))
+                  success: t('.success', title: @announcement.title))
     else
       render 'new'
     end
@@ -29,7 +29,7 @@ class Course::AnnouncementsController < Course::ModuleController
   def update #:nodoc:
     if @announcement.update_attributes(announcement_params)
       redirect_to(course_announcements_path(@course),
-                  notice: t('.notice', title: @announcement.title))
+                  success: t('.success', title: @announcement.title))
     else
       render 'edit'
     end
@@ -37,7 +37,7 @@ class Course::AnnouncementsController < Course::ModuleController
 
   def destroy #:nodoc:
     redirect_to(course_announcements_path(@course),
-                notice: t('.notice', title: @announcement.title)) if @announcement.destroy
+                success: t('.success', title: @announcement.title)) if @announcement.destroy
   end
 
   private

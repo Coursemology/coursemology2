@@ -15,12 +15,13 @@ RSpec.describe 'Achievement management' do
 
     describe 'achievement creation' do
       before { visit new_course_achievement_path(course) }
+      subject { click_button I18n.t('helpers.submit.course_achievement.create') }
 
       context 'with invalid information' do
-        before { click_button 'Create' }
+        before { subject }
 
         it 'stays on the same page' do
-          expect(page).to have_button('Create')
+          expect(page).to have_button('helpers.submit.course_achievement.create')
         end
 
         it 'shows errors' do
@@ -37,16 +38,14 @@ RSpec.describe 'Achievement management' do
         end
 
         it 'creates an achievement' do
-          expect { click_button 'Create' }.to change(Course::Achievement, :count).by(1)
+          expect { subject }.to change(Course::Achievement, :count).by(1)
         end
 
         context 'after creation' do
-          before { click_button 'Create' }
+          before { subject }
 
           it 'shows the success message' do
-            expect(page).to have_selector('div',
-                                          text: I18n.translate('course.achievements.create.notice',
-                                                               title: achievement.title))
+            expect(page).to have_selector('div', text: I18n.t('course.achievements.create.success'))
           end
 
           it 'redirects the user to the index page' do
@@ -73,11 +72,12 @@ RSpec.describe 'Achievement management' do
       context 'with invalid information' do
         before do
           fill_in 'course_achievement_title', with: ''
-          click_button 'Update'
+          subject
         end
+        subject { click_button I18n.t('helpers.submit.course_achievement.update') }
 
         it 'stays on the same page' do
-          expect(page).to have_button('Update')
+          expect(page).to have_button('helpers.submit.course_achievement.update')
         end
 
         it 'shows errors' do
@@ -92,7 +92,7 @@ RSpec.describe 'Achievement management' do
         before do
           fill_in 'course_achievement_title',        with: new_title
           fill_in 'course_achievement_description',      with: new_description
-          click_button 'Update'
+          click_button I18n.t('helpers.submit.course_achievement.update')
         end
 
         it 'redirects the user to index page' do
@@ -100,9 +100,7 @@ RSpec.describe 'Achievement management' do
         end
 
         it 'shows the success message' do
-          expect(page).to have_selector('div',
-                                        text: I18n.translate('course.achievements.update.notice',
-                                                             title: new_title))
+          expect(page).to have_selector('div', 'course.achievements.update.success')
         end
 
         it 'changes the attributes' do
@@ -129,10 +127,9 @@ RSpec.describe 'Achievement management' do
       context 'after achievement deleted' do
         before { find_link(nil, href: achievement_path, between: 2..2).click }
 
-        it 'shows the notice message' do
+        it 'shows the success message' do
           expect(page).to have_selector('div',
-                                        text: I18n.translate('course.achievements.destroy.notice',
-                                                             title: achievement.title))
+                                        text: I18n.t('course.achievements.destroy.success'))
         end
       end
     end

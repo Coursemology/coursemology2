@@ -4,13 +4,15 @@ RSpec.describe 'User signup', type: :feature do
   before { visit new_user_registration_path }
 
   context 'with invalid information' do
+    subject { click_button I18n.t('devise.registrations.new.sign_up') }
     it 'does not create a user' do
-      expect { click_button 'Sign up' }.not_to change(User, :count)
+      expect { subject }.not_to change(User, :count)
     end
   end
 
   context 'with valid information' do
     let(:valid_user) { build(:user) }
+    subject { click_button I18n.t('devise.registrations.new.sign_up') }
 
     before do
       fill_in 'user_name', with: valid_user.name
@@ -20,7 +22,7 @@ RSpec.describe 'User signup', type: :feature do
     end
 
     it 'creates a user' do
-      expect { click_button 'Sign up' }.to change(User, :count).by(1)
+      expect { subject }.to change(User, :count).by(1)
     end
   end
 end
