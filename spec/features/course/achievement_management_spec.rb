@@ -122,12 +122,12 @@ RSpec.describe 'Achievement management' do
         expect do
           # Show and delete have the same URL, difference is in the request method
           # find the 2nd link that matches the path [2], this is the delete button
-          find(:xpath, "(//a[@href=\"#{ achievement_path }\"])[2]").click
+          find_link(nil, href: achievement_path, between: 2..2).click
         end.to change(Course::Achievement, :count).by(-1)
       end
 
       context 'after achievement deleted' do
-        before { find(:xpath, "(//a[@href=\"#{ achievement_path }\"])[2]").click }
+        before { find_link(nil, href: achievement_path, between: 2..2).click }
 
         it 'shows the notice message' do
           expect(page).to have_selector('div',

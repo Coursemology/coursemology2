@@ -135,8 +135,8 @@ RSpec.describe 'Announcement management', type: :feature do
 
       it 'shows all management buttons' do
         announcements.each do |announcement|
-          expect(page).to have_link('', href: edit_course_announcement_path(course, announcement))
-          expect(page).to have_link('', href: course_announcement_path(course, announcement))
+          expect(page).to have_link(nil, href: edit_course_announcement_path(course, announcement))
+          expect(page).to have_link(nil, href: course_announcement_path(course, announcement))
         end
       end
     end
@@ -149,12 +149,12 @@ RSpec.describe 'Announcement management', type: :feature do
 
       it 'deletes the announcement' do
         expect do
-          find(:xpath, "//a[@href=\"#{ announcement_path }\"]").click
+          find_link(nil, href: announcement_path).click
         end.to change(Course::Announcement, :count).by(-1)
       end
 
       context 'after announcement deleted' do
-        before { find(:xpath, "//a[@href=\"#{ announcement_path }\"]").click }
+        before { find_link(nil, href: announcement_path).click }
 
         it 'shows the notice message' do
           expect(page).to have_selector('div',
