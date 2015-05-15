@@ -20,7 +20,7 @@ RSpec.describe 'Course settings', type: :feature do
         before do
           fill_in 'course_title',          with: new_title
           fill_in 'course_description',    with: new_description
-          click_button 'Update'
+          click_button I18n.t('helpers.submit.course.update')
         end
 
         it 'changes the attributes' do
@@ -32,7 +32,7 @@ RSpec.describe 'Course settings', type: :feature do
       context 'with empty title' do
         before do
           fill_in 'course_title', with: ''
-          click_button 'Update'
+          click_button I18n.t('helpers.submit.course.update')
         end
 
         it 'does not change title' do

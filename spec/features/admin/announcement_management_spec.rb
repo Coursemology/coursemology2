@@ -16,10 +16,10 @@ RSpec.describe 'Administration announcement management' do
       before { visit new_admin_announcement_path }
 
       context 'with invalid information' do
-        before { click_button 'Create' }
+        before { click_button I18n.t('helpers.submit.instance_announcement.create') }
 
         it 'stays on the same page' do
-          expect(page).to have_button('Create')
+          expect(page).to have_button(I18n.t('helpers.submit.instance_announcement.create'))
         end
 
         it 'shows errors' do
@@ -38,16 +38,16 @@ RSpec.describe 'Administration announcement management' do
         end
 
         it 'creates an announcement' do
-          expect { click_button 'Create' }.to change(Instance::Announcement, :count).by(1)
+          expect { click_button I18n.t('helpers.submit.instance_announcement.create') }.to change(
+            Instance::Announcement, :count).by(1)
         end
 
         context 'after creation' do
-          before { click_button 'Create' }
+          before { click_button I18n.t('helpers.submit.instance_announcement.create') }
 
           it 'shows the success message' do
             expect(page).to have_selector('div',
-                                          text: I18n.t('admin.announcements.create.notice',
-                                                       title: announcement.title))
+                                          text: I18n.t('admin.announcements.create.success'))
           end
 
           it 'redirects the user to the index page' do
@@ -82,11 +82,11 @@ RSpec.describe 'Administration announcement management' do
       context 'with invalid information' do
         before do
           fill_in 'instance_announcement[title]', with: ''
-          click_button 'Update'
+          click_button I18n.t('helpers.submit.instance_announcement.update')
         end
 
         it 'stays on the same page' do
-          expect(page).to have_button('Update')
+          expect(page).to have_button(I18n.t('helpers.submit.instance_announcement.update'))
         end
 
         it 'shows errors' do
@@ -101,7 +101,7 @@ RSpec.describe 'Administration announcement management' do
         before do
           fill_in 'instance_announcement[title]',        with: new_title
           fill_in 'instance_announcement[content]',      with: new_content
-          click_button 'Update'
+          click_button I18n.t('helpers.submit.instance_announcement.update')
         end
 
         it 'redirects the user to index page' do
@@ -110,8 +110,7 @@ RSpec.describe 'Administration announcement management' do
 
         it 'shows the success message' do
           expect(page).to have_selector('div',
-                                        text: I18n.translate('admin.announcements.update.notice',
-                                                             title: new_title))
+                                        text: I18n.t('admin.announcements.update.success'))
         end
 
         it 'changes the attributes' do
@@ -129,7 +128,7 @@ RSpec.describe 'Administration announcement management' do
       end
 
       context 'management buttons' do
-        it { is_expected.to have_link('New Announcement') }
+        it { is_expected.to have_link(I18n.t('admin.announcements.index.new')) }
       end
 
       it 'shows all announcements' do

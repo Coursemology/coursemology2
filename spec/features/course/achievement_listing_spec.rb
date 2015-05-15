@@ -19,7 +19,7 @@ RSpec.describe 'Achievement listing', type: :feature do
     end
 
     context 'management buttons' do
-      it { is_expected.to have_link('New') }
+      it { is_expected.to have_link(I18n.t('course.achievements.index.new')) }
     end
 
     it 'shows all achievements' do

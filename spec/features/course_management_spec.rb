@@ -15,10 +15,11 @@ RSpec.describe 'Course management', type: :feature do
 
   describe 'course creation' do
     before { visit new_course_path }
+    subject { click_button I18n.t('helpers.submit.course.create') }
 
     context 'with invalid information' do
       it 'does not create a course' do
-        expect { click_button 'Create' }.not_to change(Course.unscoped, :count)
+        expect { subject }.not_to change(Course.unscoped, :count)
       end
     end
 
@@ -26,7 +27,7 @@ RSpec.describe 'Course management', type: :feature do
       before { fill_in 'course_title', with: 'Lorem ipsum' }
 
       it 'creates a course' do
-        expect { click_button 'Create' }.to change(Course.unscoped, :count).by(1)
+        expect { subject }.to change(Course.unscoped, :count).by(1)
       end
     end
   end
