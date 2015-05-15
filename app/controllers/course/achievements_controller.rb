@@ -22,7 +22,7 @@ class Course::AchievementsController < Course::ModuleController
   def update #:nodoc:
     if @achievement.update_attributes(achievement_params)
       redirect_to(course_achievements_path(@course),
-                  notice: t('.success', title: @achievement.title))
+                  success: t('.success', title: @achievement.title))
     else
       render 'edit'
     end
@@ -31,7 +31,7 @@ class Course::AchievementsController < Course::ModuleController
   def destroy #:nodoc:
     @achievement.destroy
     redirect_to(course_achievements_path(@course),
-                notice: t('.success', title: @achievement.title))
+                success: t('.success', title: @achievement.title))
   end
 
   private

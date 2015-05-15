@@ -9,7 +9,7 @@ class Admin::InstancesController < Admin::Controller
 
   def create #:nodoc:
     if @instance.save
-      redirect_to admin_instances_path, notice: t('.notice')
+      redirect_to admin_instances_path, success: t('.success')
     else
       render 'new'
     end
@@ -20,7 +20,7 @@ class Admin::InstancesController < Admin::Controller
 
   def update #:nodoc:
     if @instance.update_attributes(instance_params)
-      redirect_to admin_instances_path, notice: t('.notice')
+      redirect_to admin_instances_path, success: t('.success')
     else
       render 'edit'
     end

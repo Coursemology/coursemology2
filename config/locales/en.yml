@@ -56,13 +56,13 @@ en:
       new:
         header: 'Create Announcement'
       create:
-        notice: "Announcement %{title} was created."
+        success: "Announcement %{title} was created."
       edit:
         header: 'Edit Announcement'
       update:
-        notice: "Announcement %{title} was updated."
+        success: "Announcement %{title} was updated."
       destroy:
-        notice: "Announcement %{title} was deleted."
+        success: "Announcement %{title} was deleted."
     system_announcements:
       index:
         header: 'System Announcements'
@@ -70,13 +70,13 @@ en:
       new:
         header: 'New System Announcement'
       create:
-        notice: "System Announcement %{title} was created."
+        success: "System Announcement %{title} was created."
       edit:
         header: 'Edit System Announcement'
       update:
-        notice: "System Announcement %{title} was updated."
+        success: "System Announcement %{title} was updated."
       destroy:
-        notice: "System Announcement %{title} was deleted."
+        success: "System Announcement %{title} was deleted."
     instances:
       index:
         header: 'Instance Management'
@@ -88,16 +88,16 @@ en:
       new:
         header: 'New Instance'
       create:
-        notice: 'Instance has been successfully created'
+        success: 'Instance has been successfully created'
       edit:
         header: 'Edit Instance'
       update:
-        notice: 'Instance has been successfully updated'
+        success: 'Instance has been successfully updated'
 
   course:
     courses:
       create:
-        notice: "Course %{title} was created."
+        success: "Course %{title} was created."
       new:
         header: 'New Course'
       form:
@@ -116,11 +116,11 @@ en:
       edit:
         header: 'Edit Announcement'
       create:
-        notice: "Announcement %{title} was created."
+        success: "Announcement %{title} was created."
       update:
-        notice: "Announcement %{title} was updated."
+        success: "Announcement %{title} was updated."
       destroy:
-        notice: "Announcement %{title} was deleted."
+        success: "Announcement %{title} was deleted."
 
     achievements:
       sidebar_title: 'Achievements'
@@ -142,4 +142,4 @@ en:
         success: "Achievement %{title} was deleted."
     course_settings:
       update:
-        notice: "Course %{title} was updated."
+        success: "Course %{title} was updated."

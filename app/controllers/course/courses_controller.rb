@@ -10,7 +10,7 @@ class Course::CoursesController < Course::Controller
                                workflow_state: :approved)
 
     if @course.save
-      redirect_to course_settings_path(@course), notice: t('.notice', title: @course.title)
+      redirect_to course_settings_path(@course), success: t('.success', title: @course.title)
     else
       render 'new'
     end
