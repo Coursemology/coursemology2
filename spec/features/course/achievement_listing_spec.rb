@@ -31,8 +31,8 @@ RSpec.describe 'Achievement listing', type: :feature do
 
     it 'shows all management buttons' do
       achievements.each do |achievement|
-        expect(page).to have_link('', href: edit_course_achievement_path(course, achievement))
-        expect(page).to have_link('', href: course_achievement_path(course, achievement))
+        expect(page).to have_link(nil, href: edit_course_achievement_path(course, achievement))
+        expect(page).to have_link(nil, href: course_achievement_path(course, achievement))
       end
     end
   end

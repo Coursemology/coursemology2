@@ -141,8 +141,8 @@ RSpec.describe 'Administration announcement management' do
 
       it 'shows all management buttons' do
         announcements.each do |announcement|
-          expect(page).to have_link('', href: edit_admin_announcement_path(announcement))
-          expect(page).to have_link('', href: admin_announcement_path(announcement))
+          expect(page).to have_link(nil, href: edit_admin_announcement_path(announcement))
+          expect(page).to have_link(nil, href: admin_announcement_path(announcement))
         end
       end
     end
@@ -154,7 +154,7 @@ RSpec.describe 'Administration announcement management' do
 
       it 'deletes the announcement' do
         expect do
-          find(:xpath, "//a[@href=\"#{announcement_path}\"]").click
+          find_link(nil, href: announcement_path).click
         end.to change(Instance::Announcement, :count).by(-1)
       end
     end

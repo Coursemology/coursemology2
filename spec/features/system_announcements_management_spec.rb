@@ -121,21 +121,19 @@ RSpec.describe 'System announcement management', type: :feature do
 
     it 'shows all management buttons' do
       announcements.each do |announcement|
-        expect(page).to have_link('', href: edit_admin_system_announcement_path(announcement))
-        expect(page).to have_link('', href: admin_system_announcement_path(announcement))
+        expect(subject).to have_link(nil, href: edit_admin_system_announcement_path(announcement))
+        expect(subject).to have_link(nil, href: admin_system_announcement_path(announcement))
       end
     end
   end
 
   describe 'announcement deletion' do
     let!(:announcement) { create(:system_announcement) }
-    let(:announcement_path) { admin_system_announcement_path(announcement) }
     before { visit admin_system_announcements_path }
+    subject { first('div.announcement a.btn-danger').click }
 
     it 'deletes the announcement' do
-      expect do
-        find(:xpath, "//a[@href=\"#{announcement_path}\"]").click
-      end.to change(SystemAnnouncement, :count).by(-1)
+      expect { subject }.to change(SystemAnnouncement, :count).by(-1)
     end
   end
 end
