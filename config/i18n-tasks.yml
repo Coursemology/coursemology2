@@ -3,7 +3,7 @@
 # The "main" locale.
 base_locale: en
 ## All available locales are inferred from the data by default. Alternatively, specify them explicitly:
-# locales: [es, fr]
+locales: [en]
 ## Reporting locale, default: en. Available: en, ru.
 # internal_locale: en
 
@@ -21,6 +21,9 @@ data:
     # - config/locales/**/*.%{locale}.yml
     ## Another gem:
     # - "<%= %x[bundle show vagrant].chomp %>/templates/locales/%{locale}.yml"
+    - config/locales/%{locale}.yml
+    - config/locales/devise.%{locale}.yml
+    - config/locales/simple_form.%{locale}.yml
 
   # Locale files to write new keys to, based on a list of key pattern => file rules. Matched from top to bottom:
   # `i18n-tasks normalize -p` will force move the keys according to these rules
@@ -83,12 +86,13 @@ search:
 # - '{devise,simple_form}.*'
 
 ## Consider these keys used:
-# ignore_unused:
-# - 'activerecord.attributes.*'
-# - '{devise,kaminari,will_paginate}.*'
-# - 'simple_form.{yes,no}'
-# - 'simple_form.{placeholders,hints,labels}.*'
-# - 'simple_form.{error_notification,required}.:'
+ignore_unused:
+- 'activerecord.attributes.*'
+- 'errors.messages.*'
+- '{devise,kaminari,will_paginate}.*'
+- 'simple_form.{yes,no}'
+- 'simple_form.{placeholders,hints,labels}.*'
+- 'simple_form.{error_notification,required}.:'
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:
