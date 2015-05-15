@@ -142,4 +142,54 @@ en:
         notice: "Achievement %{title} was updated."
       destroy:
         notice: "Achievement %{title} was deleted."
+    groups:
+      roles:
+        normal: Student
+        manager: Manager
+      group_user_list:
+        remove_students: Students in this group - uncheck to remove
+        no_students_to_remove: This group does not have any student.
+        add_students: Students not in this group - check to add
+        no_students_to_add: No more students can be added to this group.
+      index:
+        groups: Groups
+        no_group: There is no group for this course.
+        new_group: New Group
+        group_name: Group Name
+        group_managers: Group Managers
+        member_count: Member Count
+        edit: Edit
+        delete: Delete
+      new:
+        create_new_group: Create A New Group
+        group_name: Group Name
+        name: Name
+        email: Email
+        role: Role
+        current_group: Current Group
+        manager: Group Manager
+        not_assigned: 'Not assigned'
+        create: Create
+      edit:
+        edit_group: Edit Group
+        group_name: Group Name
+        name: Name
+        email: Email
+        tutor: Tutor
+        current_group: Current Group
+        not_assigned: 'Not assigned'
+        update: Update
+        delete: Delete Group
+      create:
+        notice: Group created.
+        error_format: Unable to create group. %{reason}
+        user_not_found_format: with email %{email} can't be found.
+        user_not_enrolled_format: with email %{email} is not enrolled to this course.
+      update:
+        notice: Group updated.
+        error_format: Unable to update group. %{reason}
+        user_not_found_format: with email %{email} can't be found.
+        user_not_enrolled_format: with email %{email} is not enrolled to this course.
+      destroy:
+        notice: Group delete.
 

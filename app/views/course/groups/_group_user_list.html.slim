@@ -1,0 +1,28 @@
+tr
+  th.table-section-title colspan=6 = t(".#{operation}_students")
+- if course_user_list.empty?
+  tr
+    td colspan=6 = t(".no_students_to_#{operation}")
+- else
+  tr
+    th
+    th = t('.name')
+    th = t('.email')
+    th = t('.role')
+    th = t('.current_group')
+    th = t('.manager')
+  - for course_student in course_user_list
+    - student = course_student.user
+    - group = student.groups.for_course(@course).first
+    tr
+      td
+        - if group == @group
+          input [type='checkbox' name='user_ids[]' value="#{student.id}" checked=""]
+        - else
+          input [type='checkbox' name='user_ids[]' value="#{student.id}"]
+        input [type='hidden' name="user_emails[#{student.id}]" value="#{student.email}"]
+      td = student.name
+      td = student.email
+      td = group ? localized_role(group.role_for_user(student)) : t('.not_assigned')
+      td = group ? group.name : t('.not_assigned')
+      td = group_manager_names(group)

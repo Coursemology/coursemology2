@@ -1,0 +1,18 @@
+div.page-header
+  h1 = t('.edit_group')
+= form_for [@course, @group], resource: :course_group do |f|
+  div.control-group
+    label.control-label for='name' = t('.group_name')
+    div.controls
+      = f.text_field :name
+      = f.submit t('.update'), class: 'btn btn-primary'
+      = link_to t('.delete'),
+                course_group_path(@course, @group),
+                class: 'btn btn-danger',
+                method: :delete
+  h3 = t('.add_students')
+  table.table
+    = render partial: 'course/groups/group_user_list',
+             locals: { operation: 'remove', course_user_list: @in_group }
+    = render partial: 'course/groups/group_user_list',
+             locals: { operation: 'add', course_user_list: @not_in_group }

@@ -1,0 +1,28 @@
+div
+  h1 = t('.groups')
+
+div
+  = link_to t('.new_group'), new_course_group_path(@course), class: 'btn btn-primary'
+
+- if @groups.empty?
+  div
+    = t('.no_group')
+- else
+  div
+    table.table
+      tr
+        th = t('.group_name')
+        th = t('.group_managers')
+        th = t('.member_count')
+        th
+        th
+      - @groups.each do |group|
+        tr
+          td = group.name
+          td = group_manager_names(group)
+          td = group.group_users.count
+          td = link_to t('.edit'), edit_course_group_path(@course, group), class: 'btn btn-primary'
+          td = link_to t('.delete'),
+                       course_group_path(@course, group),
+                       method: :delete,
+                       class: 'btn btn-danger'
