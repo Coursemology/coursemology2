@@ -1,11 +1,12 @@
 class Course::LessonPlanItem < ActiveRecord::Base
   actable
   stampable
+
+  after_initialize :set_default_values, if: :new_record?
+
   validates :base_exp, numericality: { only_integer: true }
   validates :time_bonus_exp, numericality: { only_integer: true }
   validates :extra_bonus_exp, numericality: { only_integer: true }
-
-  after_initialize :set_default_values, if: :new_record?
 
   # Gives the maximum number of EXP Points that an EXP-awarding item
   # is allocated to give, which is the sum of base and bonus EXPs.
