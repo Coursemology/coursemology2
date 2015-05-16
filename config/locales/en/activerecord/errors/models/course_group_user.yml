@@ -1,0 +1,6 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course_group_user:
+          not_enrolled: 'user must be enrolled in same course as group'
