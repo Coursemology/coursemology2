@@ -4,6 +4,7 @@ RSpec.describe Instance, type: :model do
   it { is_expected.to have_many(:instance_users) }
   it { is_expected.to have_many(:users).through(:instance_users) }
   it { is_expected.to have_many(:announcements).class_name(Instance::Announcement.name) }
+  it { is_expected.to have_many(:courses) }
 
   describe 'hostname validation' do
     context 'when hostname format is invalid' do

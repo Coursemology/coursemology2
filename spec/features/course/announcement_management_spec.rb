@@ -38,7 +38,7 @@ RSpec.describe 'Announcement management', type: :feature do
         end
 
         it 'creates an announcement' do
-          expect { subject }.to change(Course::Announcement, :count).by(1)
+          expect { subject }.to change(course.announcements, :count).by(1)
         end
 
         context 'after creation' do
@@ -150,7 +150,7 @@ RSpec.describe 'Announcement management', type: :feature do
       it 'deletes the announcement' do
         expect do
           find_link(nil, href: announcement_path).click
-        end.to change(Course::Announcement, :count).by(-1)
+        end.to change(course.announcements, :count).by(-1)
       end
 
       context 'after announcement deleted' do
