@@ -44,8 +44,9 @@ ActiveRecord::Schema.define(version: 20150512015621) do
   end
 
   create_table "instances", force: :cascade do |t|
-    t.string "name", limit: 255, null: false
-    t.string "host", limit: 255, null: false, comment: "Stores the host name of the instance. The www prefix is automatically handled by the application", index: {name: "index_instances_on_host", unique: true, case_sensitive: false}
+    t.string "name",     limit: 255, null: false
+    t.string "host",     limit: 255, null: false, comment: "Stores the host name of the instance. The www prefix is automatically handled by the application", index: {name: "index_instances_on_host", unique: true, case_sensitive: false}
+    t.text   "settings"
   end
 
   create_table "courses", force: :cascade do |t|
@@ -54,6 +55,7 @@ ActiveRecord::Schema.define(version: 20150512015621) do
     t.text     "description"
     t.text     "logo"
     t.integer  "status",      default: 0, null: false
+    t.text     "settings"
     t.datetime "start_at",    null: false
     t.datetime "end_at",      null: false
     t.integer  "creator_id",  null: false, index: {name: "fk__courses_creator_id"}, foreign_key: {references: "users", name: "fk_courses_creator_id", on_update: :no_action, on_delete: :no_action}

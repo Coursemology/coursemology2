@@ -329,6 +329,8 @@ GEM
       schema_plus_core (~> 0.1)
     schema_validations (1.1.0)
       schema_plus
+    settings_on_rails (0.2.2)
+      activerecord (>= 3.1)
     should_not (1.1.0)
     shoulda-matchers (2.8.0)
       activesupport (>= 3.0.0)
@@ -453,6 +455,7 @@ DEPENDENCIES
   sass-rails (~> 4.0.3)
   schema_plus (~> 2.0.beta, > 2.0.0.pre14)
   schema_validations
+  settings_on_rails
   should_not
   shoulda-matchers
   simple_form

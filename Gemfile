@@ -143,5 +143,8 @@ gem 'carrierwave', github: 'carrierwaveuploader/carrierwave'
 # Required by carrierwave, for image resizing
 gem 'mini_magick'
 
+# Instance/Course settings
+gem 'settings_on_rails'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
