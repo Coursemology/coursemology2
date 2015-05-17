@@ -1,6 +1,8 @@
 class CourseUser < ActiveRecord::Base
   include Workflow
 
+  after_initialize :set_defaults, if: :new_record?
+
   stampable
   belongs_to :user, inverse_of: :course_users
   belongs_to :course, inverse_of: :course_users
@@ -37,7 +39,14 @@ class CourseUser < ActiveRecord::Base
     STAFF_ROLES.include?(role.to_sym)
   end
 
+  # Callback handler for workflow state change to the rejected state.
   def on_rejected_entry(*)
     destroy
+  end
+
+  private
+
+  def set_defaults # :nodoc:
+    self.name ||= user.name if user
   end
 end

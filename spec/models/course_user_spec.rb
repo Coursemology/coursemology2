@@ -15,6 +15,14 @@ RSpec.describe CourseUser, type: :model do
 
     it { is_expected.to be_student }
     it { is_expected.not_to be_phantom }
+
+    context 'when a user is provided' do
+      let(:user) { create(:user) }
+      subject { CourseUser.new(user: user) }
+      it 'has the same name as the user' do
+        expect(subject.name).to eq(subject.user.name)
+      end
+    end
   end
 
   let!(:instance) { create :instance }
