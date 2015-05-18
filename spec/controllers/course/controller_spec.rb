@@ -64,5 +64,12 @@ RSpec.describe Course::Controller, type: :controller do
         end
       end
     end
+
+    describe '#current_component_host' do
+      it 'returns the component host of current course' do
+        allow(controller).to receive(:current_course).and_return(course)
+        expect(controller.current_component_host).to be_a Course::ComponentHost
+      end
+    end
   end
 end

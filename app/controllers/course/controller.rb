@@ -54,4 +54,13 @@ class Course::Controller < ApplicationController
     @current_course_user ||= @course.course_users.find_by(user: current_user)
   end
   helper_method :current_course_user
+
+  # Gets the component host for current instance and course
+  #
+  # @return [Course::ComponentHost] The instance of component host using settings from instance and
+  #                                 course
+  def current_component_host
+    @current_component_host ||= Course::ComponentHost.new(current_tenant.settings,
+                                                          current_course.settings)
+  end
 end
