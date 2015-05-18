@@ -10,21 +10,6 @@ RSpec.describe CourseUser, type: :model do
       dependent(:destroy)
   end
 
-  context 'when course_user is created' do
-    subject { CourseUser.new }
-
-    it { is_expected.to be_student }
-    it { is_expected.not_to be_phantom }
-
-    context 'when a user is provided' do
-      let(:user) { create(:user) }
-      subject { CourseUser.new(user: user) }
-      it 'has the same name as the user' do
-        expect(subject.name).to eq(subject.user.name)
-      end
-    end
-  end
-
   let!(:instance) { create :instance }
   with_tenant(:instance) do
     let(:course) { create(:course) }
@@ -32,6 +17,32 @@ RSpec.describe CourseUser, type: :model do
     let(:teaching_assistant) { create(:course_teaching_assistant, course: course) }
     let(:manager) { create(:course_manager, course: course) }
     let(:owner) { create(:course_owner, course: course) }
+
+    describe '#initialize' do
+      subject { CourseUser.new(course: course, creator: owner.user, updater: owner.user) }
+
+      it { is_expected.to be_student }
+      it { is_expected.not_to be_phantom }
+
+      context 'when a user is provided' do
+        let(:user) { create(:user) }
+        subject { CourseUser.new(user: user) }
+        it 'has the same name as the user' do
+          expect(subject.name).to eq(subject.user.name)
+        end
+      end
+
+      context 'when a user is provided after creation' do
+        let(:user) { create(:user) }
+        before do
+          subject.user = user
+          subject.save!
+        end
+        it 'has the same name as the user' do
+          expect(subject.name).to eq(subject.user.name)
+        end
+      end
+    end
 
     describe '.staff' do
       it 'returns teaching assistant, manager and owner' do
