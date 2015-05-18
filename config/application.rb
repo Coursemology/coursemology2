@@ -23,6 +23,6 @@ class Application < Rails::Application
   config.active_record.raise_in_transactional_callbacks = true
 
   config.eager_load_paths << "#{Rails.root}/lib/autoload"
-  config.eager_load_paths << "#{Rails.root}/app/models/modules"
-  config.eager_load_paths << "#{Rails.root}/app/controllers/modules"
+  config.eager_load_paths << "#{Rails.root}/app/models/components"
+  config.eager_load_paths << "#{Rails.root}/app/controllers/components"
 end

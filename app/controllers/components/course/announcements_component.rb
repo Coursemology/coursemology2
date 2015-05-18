@@ -1,11 +1,11 @@
-class Course::AnnouncementsModule
-  include Course::ModuleHost::Module
+class Course::AnnouncementsComponent
+  include Course::ComponentHost::Component
 
   sidebar do
     [
       {
         title: I18n.t('course.announcements.sidebar_title'),
-        unread: Course::AnnouncementsModule.unread_count(@course, current_user)
+        unread: Course::AnnouncementsComponent.unread_count(@course, current_user)
 
       }
     ]
