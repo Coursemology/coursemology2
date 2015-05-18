@@ -2,6 +2,7 @@ class CourseUser < ActiveRecord::Base
   include Workflow
 
   after_initialize :set_defaults, if: :new_record?
+  before_validation :set_defaults, if: :new_record?
 
   stampable
   belongs_to :user, inverse_of: :course_users
