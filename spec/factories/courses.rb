@@ -6,5 +6,9 @@ FactoryGirl.define do
     end_at 7.days.from_now
     creator
     updater
+
+    factory :open_course do
+      status :opened
+    end
   end
 end

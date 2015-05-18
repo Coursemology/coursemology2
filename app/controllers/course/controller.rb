@@ -39,4 +39,19 @@ class Course::Controller < ApplicationController
 
     array_of_component_arrays.tap(&:flatten!)
   end
+
+  # Gets the current course.
+  # @return [Course] The current course that the user is browsing.
+  def current_course
+    @course
+  end
+  helper_method :current_course
+
+  # Gets the current course user.
+  # @return [CourseUser|nil] The course user that belongs to the signed in user and the loaded
+  #                          course. nil if there is no user session, or no course is loaded.
+  def current_course_user
+    @current_course_user ||= @course.course_users.find_by(user: current_user)
+  end
+  helper_method :current_course_user
 end
