@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150515041839) do
+ActiveRecord::Schema.define(version: 20150519061618) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -187,6 +187,13 @@ ActiveRecord::Schema.define(version: 20150515041839) do
     t.datetime "updated_at",  null: false
   end
   add_index "instance_users", ["instance_id", "user_id"], name: "index_instance_users_on_instance_id_and_user_id", unique: true
+
+  create_table "notification_styles", force: :cascade do |t|
+    t.integer  "activity_id",       index: {name: "index_notifications_on_activity_id"}, foreign_key: {references: "activities", name: "fk_notifications_activity_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "notification_type"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
 
   create_table "read_marks", force: :cascade do |t|
     t.integer  "readable_id"
