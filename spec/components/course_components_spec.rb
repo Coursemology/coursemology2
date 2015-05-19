@@ -27,11 +27,17 @@ RSpec.describe 'Course Modules', type: :controller do
     end
   end
 
-  it 'gathers all modules\' sidebar callbacks' do
-    expect(controller.sidebar).to include(EXPECTED_SIDEBAR_ITEM)
-  end
+  let(:instance) { create(:instance) }
+  with_tenant(:instance) do
+    let(:course) { create(:course) }
+    before { allow(controller).to receive(:current_course).and_return(course) }
 
-  it 'gathers all modules\' settings callback' do
-    expect(controller.settings).to include(EXPECTED_SETTINGS_ITEM)
+    it 'gathers all modules\' sidebar callbacks' do
+      expect(controller.sidebar).to include(EXPECTED_SIDEBAR_ITEM)
+    end
+
+    it 'gathers all modules\' settings callback' do
+      expect(controller.settings).to include(EXPECTED_SETTINGS_ITEM)
+    end
   end
 end
