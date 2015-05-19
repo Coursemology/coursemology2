@@ -14,6 +14,9 @@ Run `yard stats --list-undoc` to find which methods need documenting.
 ## Tests
 Run tests using `rake spec`.
 
+Try to group tests according to their purpose. Feature tests should be namespaced using colons 
+for tidiness (e.g. `Courses: Users`)
+
 Write your tests to be as compartmentalised from other tests as possible. Compartmentalised tests
 are those that do not depend on any external state to run. This would allow tests to be run in 
 parallel. 
@@ -22,6 +25,7 @@ parallel.
 The project's Gemfile contains a few developer tools to help keep the project tidy:
 
  - _Traceroute_ checks that the routes are properly defined and reachable.
+ - _i18n-tasks_ checks that the localisations are all defined and used. 
 
 ## Models
 Declare model attributes in the following order:
