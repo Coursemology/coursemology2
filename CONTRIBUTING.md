@@ -14,6 +14,10 @@ Run `yard stats --list-undoc` to find which methods need documenting.
 ## Tests
 Run tests using `rake spec`.
 
+Write your tests to be as compartmentalised from other tests as possible. Compartmentalised tests
+are those that do not depend on any external state to run. This would allow tests to be run in 
+parallel. 
+
 ## Developer Tools
 The project's Gemfile contains a few developer tools to help keep the project tidy:
 

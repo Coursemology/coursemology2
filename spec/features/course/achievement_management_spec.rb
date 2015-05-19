@@ -38,7 +38,7 @@ RSpec.describe 'Achievement management' do
         end
 
         it 'creates an achievement' do
-          expect { subject }.to change(Course::Achievement, :count).by(1)
+          expect { subject }.to change(course.achievements, :count).by(1)
         end
 
         context 'after creation' do
@@ -121,7 +121,7 @@ RSpec.describe 'Achievement management' do
           # Show and delete have the same URL, difference is in the request method
           # find the 2nd link that matches the path [2], this is the delete button
           find_link(nil, href: achievement_path, between: 2..2).click
-        end.to change(Course::Achievement, :count).by(-1)
+        end.to change(course.achievements, :count).by(-1)
       end
 
       context 'after achievement deleted' do
