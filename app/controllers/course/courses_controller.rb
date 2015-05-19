@@ -1,5 +1,8 @@
 class Course::CoursesController < Course::Controller
+  include ActivitiesConcern
+
   def show #:nodoc:
+    @activities = recent_activities(current_course, number: 20)
   end
 
   def new #:nodoc:
