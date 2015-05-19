@@ -1,7 +1,6 @@
 class Course < ActiveRecord::Base
-  has_settings_on :settings
-
   acts_as_tenant(:instance)
+  has_settings_on :settings
   stampable
 
   after_initialize :set_defaults, if: :new_record?

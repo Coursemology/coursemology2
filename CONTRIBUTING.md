@@ -14,6 +14,9 @@ Run `yard stats --list-undoc` to find which methods need documenting.
 ## Tests
 Run tests using `rake spec`.
 
+Try to group tests according to their purpose. Feature tests should be namespaced using colons 
+for tidiness (e.g. `Courses: Users`)
+
 Write your tests to be as compartmentalised from other tests as possible. Compartmentalised tests
 are those that do not depend on any external state to run. This would allow tests to be run in 
 parallel. 
@@ -22,15 +25,18 @@ parallel.
 The project's Gemfile contains a few developer tools to help keep the project tidy:
 
  - _Traceroute_ checks that the routes are properly defined and reachable.
+ - _i18n-tasks_ checks that the localisations are all defined and used. 
 
 ## Models
 Declare model attributes in the following order:
 
  1. includes (e.g. `include UserPasswordConcern`)
- 2. callbacks
- 3. attribute overrides (e.g. `enum`s)
- 4. validations
- 5. relations
+ 2. declarations (e.g. `acts_as :superclass`, `stampable`)
+ 3. callbacks
+ 4. attribute overrides (e.g. `enum`s, workflows)
+ 5. validations
+ 6. associations
+ 7. scopes
 
 This allows models to be inherited. See the section on _Inherited Callback Queues_ from
 [`ActiveRecord::Callbacks`](http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html#module-ActiveRecord::Callbacks-label-Inheritable+callback+queues).
