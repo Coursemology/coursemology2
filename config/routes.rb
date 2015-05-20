@@ -69,6 +69,8 @@ Rails.application.routes.draw do
       resources :achievements
       get 'settings' => 'course_settings#index', as: :settings
       patch 'settings' => 'course_settings#update', as: :update_settings
+
+      resources :users, except: [:new, :edit]
     end
   end
 end
