@@ -27,17 +27,19 @@ module CoverageHelper
     #
     # This method is idempotent if the old and new formatters are the same.
     def merge_formatters(old_formatter, new_formatter)
-      return unless old_formatter == new_formatter
+      return if old_formatter == new_formatter
 
-      formatters.unshift(SimpleCov.formatter)
+      old_formatter = [*expand_formatter(old_formatter)]
+      new_formatter = [*expand_formatter(new_formatter)]
+      formatters = old_formatter + new_formatter
+
       SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[*formatters]
     end
 
-    # Tracks the formatters which need to be enabled
-    #
-    # @return [Array] The formatters which have been currently defined.
-    def formatters
-      @formatters ||= []
+    # Extracts the formatters from a MultiFormatter so we do not nest them.
+    def expand_formatter(formatter)
+      return formatter unless formatter.is_a?(SimpleCov::Formatter::MultiFormatter)
+      formatter.formatters
     end
   end
 end
