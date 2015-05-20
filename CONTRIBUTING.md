@@ -41,6 +41,16 @@ Declare model attributes in the following order:
 This allows models to be inherited. See the section on _Inherited Callback Queues_ from
 [`ActiveRecord::Callbacks`](http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html#module-ActiveRecord::Callbacks-label-Inheritable+callback+queues).
 
+## Views
+Remember to give useful page titles (using the `page_title` content helper). The current resource 
+should always be clearly present at the start of the title (for users to quickly switch to the tab
+when many tabs are open). Reverse breadcrumbs should be given, so that on browsers which allow
+searching for a URL by page title, users can jump to a page by the location in the module. The 
+Coursemology branding is automatically appended to all page titles.
+
+Place all toolbar items dealing with a resource at the same baseline as the page header. On smaller
+screens, the toolbar should wrap below the title.
+
 ## Themes
 Themes are provided by [themes_on_rails](https://github.com/yoolk/themes_on_rails). Coursemology
 uses standard Bootstrap 3 styles, so it is possible to theme Coursemology using any Bootstrap 3
