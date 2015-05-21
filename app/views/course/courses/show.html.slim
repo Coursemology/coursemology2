@@ -1,2 +1,11 @@
 h1
-  = @course.title
+  = current_course.title
+= current_course.description
+- if !current_course.has_user?(current_user) && can?(:register, current_course)
+  - if current_course.course_users.exists?(user: current_user)
+    - disable_message = t('.already_registered')
+    - disabled = 'disabled'
+  div data-toggle='tooltip' title=disable_message
+    = button_to course_register_path(current_course), class: ['register'],
+                                                      disabled: disabled do
+      = t('.register')

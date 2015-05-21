@@ -43,7 +43,7 @@ RSpec.describe Course::UsersController, type: :controller do
           context "when the course user is the students' own" do
             it 'creates a new request' do
               expect { subject }.
-                to change { course.course_users.with_pending_state.reload.count }.by(1)
+                to change { course.course_users.with_requested_state.reload.count }.by(1)
             end
             it { is_expected.to redirect_to(course_path(course)) }
             it 'sets the proper flash message' do

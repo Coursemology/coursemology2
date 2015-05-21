@@ -16,6 +16,8 @@ en:
         success: "Registration updated. You are now registered as %{role}."
       destroy:
         success: "Deleted %{role} registration from %{email}."
+      register:
+        failure: "Could not register for the course: %{error}."
       list:
         name: 'Name'
         email: 'Email'

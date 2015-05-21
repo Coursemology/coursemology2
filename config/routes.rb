@@ -77,6 +77,7 @@ Rails.application.routes.draw do
       patch 'settings' => 'settings#update', as: :update_settings
 
       resources :users, except: [:new, :edit]
+      post 'register' => 'users#register'
     end
   end
 end

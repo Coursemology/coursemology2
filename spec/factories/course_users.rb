@@ -26,5 +26,15 @@ FactoryGirl.define do
       role :owner
       sequence(:name) { |n| "owner #{n}" }
     end
+
+    trait :approved do
+      workflow_state :approved
+    end
+    trait :invited do
+      workflow_state :invited
+    end
+    trait :phantom do
+      phantom true
+    end
   end
 end

@@ -3,3 +3,6 @@ en:
     'yes': 'Yes'
     'no': 'No'
     delete: 'Delete'
+    name: 'Name'
+    email: 'Email'
+    role: 'Role'

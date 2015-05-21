@@ -6,12 +6,12 @@ class Ability
   # @param user [User] The current user.
   def initialize(user)
     # TODO: Replace with just the symbols when Rails 5 is released.
-    can :read, Course, status: [Course.statuses[:published], Course.statuses[:opened],
-                                'published', 'opened']
+    can [:read, :register], Course, status: [Course.statuses[:published], Course.statuses[:opened],
+                                             'published', 'opened']
 
     return unless user
 
-    can :create, CourseUser, user_id: user.id, workflow_state: 'pending'
+    can [:create, :register], CourseUser, user_id: user.id, workflow_state: 'pending'
     can :manage, CourseUser, course: { creator_id: user.id }
     can :manage, CourseUser, course: { course_users: { user_id: user.id,
                                                        role: [CourseUser.roles[:manager],

@@ -11,7 +11,7 @@ class CourseUser < ActiveRecord::Base
   STAFF_ROLES = Set[:teaching_assistant, :manager, :owner].freeze
 
   workflow do
-    state :pending do
+    state :requested do
       event :approve, transitions_to: :approved
       event :reject, transitions_to: :rejected
     end

@@ -1,19 +1,23 @@
 class Course::UsersController < Course::ComponentController
-  load_and_authorize_resource :course_user, through: :course, parent: false
+  load_and_authorize_resource :course_user, through: :course, parent: false, new: [:register]
+  before_action :set_course_user_user, only: [:register]
   before_action :authorize_show!, only: [:index]
-  before_action :authorize_edit!, except: [:index, :create]
-  before_action :ensure_unregistered_user, only: :create
+  before_action :authorize_edit!, except: [:index, :create, :register]
+  before_action :ensure_unregistered_user, only: [:create, :register]
 
   def index # :nodoc:
+    @course_users = @course_users.with_approved_state
   end
 
   def create # :nodoc:
-    @course_user.workflow_state = :approved if current_course_user && current_course_user.staff?
+    @course_user.workflow_state = :approved if can?(:manage_users, current_course)
+    authorize_edit! if @course_user.user != current_user
     if @course_user.save
       success = t('.success', role: t("course.users.role.#{@course_user.role}"))
-      redirect_to course_path(current_course), success: success
+      redirect_to appropriate_redirect_path, success: success
     else
-      redirect_to course_users_path(current_course), danger: @course_user.errors
+      danger = t('.failure', error: @course_user.errors.full_messages.to_sentence)
+      redirect_to appropriate_redirect_path, danger: danger
     end
   end
 
@@ -23,7 +27,7 @@ class Course::UsersController < Course::ComponentController
       success = t('.success', role: t("course.users.role.#{@course_user.role}"))
       redirect_to course_users_path(current_course), success: success
     else
-      redirect_to course_users_path(current_course), danger: @course_user.errors
+      redirect_to course_users_path(current_course), danger: @course_user.errors.full_messages.to_sentence
     end
   end
 
@@ -32,14 +36,22 @@ class Course::UsersController < Course::ComponentController
       success = t('.success', role: @course_user.role, email: @course_user.user.email)
       redirect_to course_users_path(current_course), success: success
     else
-      redirect_to course_users_path(current_course), danger: @course_user.errors
+      redirect_to course_users_path(current_course), danger: @course_user.errors.full_messages.to_sentence
     end
+  end
+
+  def register # :nodoc:
+    create
   end
 
   private
 
   def course_user_params # :nodoc:
     params.require(:course_user).permit(:user_id, :role, :name)
+  end
+
+  def set_course_user_user
+    @course_user.user = current_user
   end
 
   # Prevents access to this set of pages unless the user is a staff of the course.
