@@ -34,6 +34,14 @@ class CourseUser < ActiveRecord::Base
 
   delegate :experience_points, to: :experience_points_records
 
+  # Test whether the current scope includes the current user.
+  #
+  # @param user [User] The user to check
+  # @return [Boolean] True if the user exists in the current context
+  def self.has_user?(user)
+    with_approved_state.exists?(user: user)
+  end
+
   # Test whether this course_user is a staff (i.e. teaching_assistant, manager or owner)
   #
   # @return [Boolean] True if course_user is a staff
