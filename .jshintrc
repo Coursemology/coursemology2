@@ -23,11 +23,11 @@
 	// Project options: Default off
 	"camelcase": true,
 	"forin": true,
-	"quotmark": 'single',
+	"quotmark": "single",
 	"strict": true,
 
 	// Project options: Default on
-	"boss": false
+	"boss": false,
 
 	// Other Project options:
 	"maxlen": 100
