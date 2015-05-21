@@ -1,0 +1,33 @@
+require 'rails_helper'
+
+RSpec.feature 'Courses: Registration' do
+  let!(:instance) { create(:instance) }
+
+  with_tenant(:instance) do
+    let(:course) { create(:open_course) }
+    let(:user) { create(:user) }
+    before { login_as(user, scope: :user) }
+
+    scenario 'Users can register for the course' do
+      visit course_path(course)
+
+      expect(page).to have_text(course.description)
+      expect(page).to have_button('.register')
+
+      click_button('.register')
+      expect(current_path).to eq(course_path(course))
+
+      expect(page).not_to have_button('.register')
+    end
+
+    context 'when the user is registered in the course' do
+      let!(:course_student) { create(:course_student, :approved, course: course, user: user) }
+      scenario 'Users cannot re-register for a course' do
+        visit course_path(course)
+
+        expect(page).to have_text(course.description)
+        expect(page).not_to have_button('.register')
+      end
+    end
+  end
+end
