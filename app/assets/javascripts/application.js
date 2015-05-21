@@ -17,4 +17,5 @@
 //= require bootstrap-datetimepicker
 //= require bootstrap-select
 //= require simple_form-bootstrap
+//= require layout
 //= require_tree .
