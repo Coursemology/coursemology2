@@ -76,8 +76,9 @@ Rails.application.routes.draw do
       get 'settings' => 'settings#index', as: :settings
       patch 'settings' => 'settings#update', as: :update_settings
 
-      resources :users, except: [:new, :edit]
+      resources :users, except: [:index, :new, :edit]
       post 'register' => 'users#register'
+      get 'students' => 'users#students', as: :users_students
     end
   end
 end

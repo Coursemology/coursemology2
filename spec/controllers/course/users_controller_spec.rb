@@ -12,14 +12,14 @@ RSpec.describe Course::UsersController, type: :controller do
       stub
     end
 
-    describe '#index' do
+    describe '#students' do
       before { sign_in(user) }
-      subject { get :index, course_id: course }
+      subject { get :students, course_id: course }
 
       context 'when a course manager visits the page' do
         let!(:course_lecturer) { create(:course_manager, course: course, user: user) }
 
-        it { is_expected.to render_template(:index) }
+        it { is_expected.to render_template(:students) }
       end
 
       context 'when a student visits the page' do
@@ -86,7 +86,7 @@ RSpec.describe Course::UsersController, type: :controller do
           let(:user_params) { { user_id: user.id } }
 
           it { expect { subject }.not_to change { course.course_users.reload.count } }
-          it { is_expected.to redirect_to(course_users_path(course)) }
+          it { is_expected.to redirect_to(course_users_students_path(course)) }
           it 'sets the proper flash message' do
             subject
             expect(flash[:info]).to eq(I18n.t('course.users.new.already_registered'))
@@ -109,7 +109,7 @@ RSpec.describe Course::UsersController, type: :controller do
                 subject
               end
 
-              it { is_expected.to redirect_to(course_users_path(course)) }
+              it { is_expected.to redirect_to(course_users_students_path(course)) }
             end
           end
         end
@@ -140,7 +140,7 @@ RSpec.describe Course::UsersController, type: :controller do
             subject
           end
 
-          it { is_expected.to redirect_to(course_users_path(course)) }
+          it { is_expected.to redirect_to(course_users_students_path(course)) }
         end
       end
 
@@ -168,7 +168,7 @@ RSpec.describe Course::UsersController, type: :controller do
         it 'destroys the registration record' do
           expect { subject }.to change { course.course_users.reload.count }.by(-1)
         end
-        it { is_expected.to redirect_to(course_users_path(course)) }
+        it { is_expected.to redirect_to(course_users_students_path(course)) }
         it 'sets the proper flash message' do
           subject
           expect(flash[:success]).to eq(I18n.t('course.users.destroy.success'))
@@ -180,7 +180,7 @@ RSpec.describe Course::UsersController, type: :controller do
             subject
           end
 
-          it { is_expected.to redirect_to(course_users_path(course)) }
+          it { is_expected.to redirect_to(course_users_students_path(course)) }
         end
       end
 
