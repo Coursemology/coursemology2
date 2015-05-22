@@ -1,12 +1,19 @@
 GIT
   remote: git://github.com/carrierwaveuploader/carrierwave.git
-  revision: 1257b19eb79450ef732d244c99dafe31c90a3bc6
+  revision: d7b18dd002cc11ef2da76508e0b700c300e3023d
   specs:
     carrierwave (0.10.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
       json (>= 1.7)
       mime-types (>= 1.16)
+
+GIT
+  remote: git://github.com/doabit/bootstrap-sass-extras.git
+  revision: ccc8bd97902b2560136e5ae65153689a0b823a2b
+  specs:
+    bootstrap-sass-extras (0.0.6)
+      rails (>= 3.1.0)
 
 GIT
   remote: git://github.com/lowjoel/themes_on_rails.git
@@ -83,8 +90,6 @@ GEM
     bootstrap-sass (3.3.4.1)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
-    bootstrap-sass-extras (0.0.6)
-      rails (>= 3.1.0)
     bootstrap-select-rails (1.6.3)
     bootstrap3-datetimepicker-rails (4.7.14)
       momentjs-rails (>= 2.8.1)
@@ -241,7 +246,7 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
-    rb-fsevent (0.9.4)
+    rb-fsevent (0.9.5)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
     rb-kqueue (0.2.4)
@@ -425,7 +430,7 @@ DEPENDENCIES
   acts_as_tenant
   autoprefixer-rails
   bootstrap-sass
-  bootstrap-sass-extras
+  bootstrap-sass-extras!
   bootstrap-select-rails
   bootstrap3-datetimepicker-rails
   bullet

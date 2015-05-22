@@ -15,8 +15,14 @@ gem 'pg', '~> 0.17.0' # TODO: Until VC compatibility is fixed, use 0.18.2
 # Schema Plus for some higher level database abstractions
 gem 'schema_plus', '~> 2.0.beta', '> 2.0.0.pre14'
 gem 'schema_validations'
+# Instance/Course settings
+gem 'settings_on_rails'
 # Table and column comments
 gem 'migration_comments'
+# Manage read/unread status
+gem 'unread'
+# Extension for validating hostnames and domain names
+gem 'validates_hostname'
 # A Ruby state machine library
 gem 'workflow'
 # Add creator_id and updater_id attributes to models
@@ -35,7 +41,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jquery-cdn'
 # Our Coursemology will be themed using Bootstrap
 gem 'bootstrap-sass'
-gem 'bootstrap-sass-extras'
+gem 'bootstrap-sass-extras', github: 'doabit/bootstrap-sass-extras'
 gem 'autoprefixer-rails'
 # Use font-awesome for icons
 gem 'font-awesome-rails'
@@ -110,9 +116,6 @@ end
 # Multitenancy
 gem 'acts_as_tenant'
 
-# Extension for validating hostnames and domain names
-gem 'validates_hostname'
-
 # Internationalization
 gem 'http_accept_language'
 
@@ -121,9 +124,6 @@ gem 'devise'
 
 # Use cancancan for authorization
 gem 'cancancan', '~> 1.9'
-
-# Manage read/unread status
-gem 'unread'
 
 # Some helpers for structuring CSS/JavaScript
 gem 'rails_utils', '~> 3.3', '>= 3.3.2'
@@ -138,13 +138,10 @@ gem 'momentjs-rails', '>= 2.8.1'
 gem 'bootstrap3-datetimepicker-rails'
 gem 'bootstrap-select-rails'
 
-# Using carrierwave for file uploads
+# Using CarrierWave for file uploads
 gem 'carrierwave', github: 'carrierwaveuploader/carrierwave'
-# Required by carrierwave, for image resizing
+# Required by CarrierWave, for image resizing
 gem 'mini_magick'
-
-# Instance/Course settings
-gem 'settings_on_rails'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
