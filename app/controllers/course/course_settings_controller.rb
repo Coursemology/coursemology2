@@ -6,7 +6,8 @@ class Course::CourseSettingsController < Course::ModuleController
 
   def update #:nodoc:
     if @course.update_attributes(course_setting_params)
-      redirect_to course_settings_path(@course), success: t('.success', title: @course.title)
+      redirect_to course_settings_path(current_course),
+                  success: t('.success', title: current_course.title)
     else
       render 'index'
     end

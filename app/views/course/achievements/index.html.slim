@@ -1,7 +1,7 @@
 h1 = t('.header')
 
 - if can?(:create, Course::Achievement)
-  = link_to t('.new'), new_course_achievement_path(@course), class: 'btn btn-primary'
+  = link_to t('.new'), new_course_achievement_path(current_course), class: 'btn btn-primary'
 
 table.table.achievement-list
   thead

@@ -1,4 +1,4 @@
-= simple_form_for [@course, @achievement], resource: :course_achievement do |f|
+= simple_form_for [current_course, @achievement], resource: :course_achievement do |f|
   = f.input :title
 
   = f.input :description

@@ -11,9 +11,9 @@ class Course::UsersController < Course::ModuleController
     @course_user.workflow_state = :approved if current_course_user && current_course_user.staff?
     if @course_user.save
       success = t('.success', role: t("course.users.role.#{@course_user.role}"))
-      redirect_to course_path(@course), success: success
+      redirect_to course_path(current_course), success: success
     else
-      redirect_to course_users_path(@course), danger: @course_user.errors
+      redirect_to course_users_path(current_course), danger: @course_user.errors
     end
   end
 
@@ -21,18 +21,18 @@ class Course::UsersController < Course::ModuleController
     @course_user.update(course_user_params)
     if @course_user.save
       success = t('.success', role: t("course.users.role.#{@course_user.role}"))
-      redirect_to course_users_path(@course), success: success
+      redirect_to course_users_path(current_course), success: success
     else
-      redirect_to course_users_path(@course), danger: @course_user.errors
+      redirect_to course_users_path(current_course), danger: @course_user.errors
     end
   end
 
   def destroy # :nodoc:
     if @course_user.destroy
       success = t('.success', role: @course_user.role, email: @course_user.user.email)
-      redirect_to course_users_path(@course), success: success
+      redirect_to course_users_path(current_course), success: success
     else
-      redirect_to course_users_path(@course), danger: @course_user.errors
+      redirect_to course_users_path(current_course), danger: @course_user.errors
     end
   end
 
