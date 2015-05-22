@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'System announcement pagination', type: :feature do
+RSpec.describe 'Administration: System announcements', type: :feature do
   subject { page }
 
   let!(:user) { create(:user, role: :administrator) }

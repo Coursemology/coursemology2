@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Instance announcement pagination', type: :feature do
+RSpec.describe 'Administration: Announcements', type: :feature do
   subject { page }
 
   let!(:instance) { create(:instance) }

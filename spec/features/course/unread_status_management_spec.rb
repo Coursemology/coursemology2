@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Announcements read/unread status management', type: :feature do
+RSpec.describe 'Course: Announcements', type: :feature do
   subject { page }
 
   let!(:instance) { create(:instance) }

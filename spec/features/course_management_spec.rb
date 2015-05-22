@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Course management', type: :feature do
+RSpec.describe 'Courses', type: :feature do
   subject { page }
   let(:instance) { create(:instance) }
 

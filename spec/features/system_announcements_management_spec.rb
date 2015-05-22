@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'System announcement management', type: :feature do
+RSpec.describe 'System announcements', type: :feature do
   let!(:user) { create(:user, role: :administrator) }
 
   before do

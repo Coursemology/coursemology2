@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Course settings', type: :feature do
+RSpec.describe 'Course: Settings', type: :feature do
   subject { page }
 
   let!(:user) { create(:user, role: :administrator) }

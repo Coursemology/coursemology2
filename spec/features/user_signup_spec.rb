@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'User signup', type: :feature do
+RSpec.describe 'Users', type: :feature do
   before { visit new_user_registration_path }
 
   context 'with invalid information' do
