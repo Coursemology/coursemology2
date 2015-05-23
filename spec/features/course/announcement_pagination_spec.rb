@@ -8,7 +8,9 @@ RSpec.describe 'Announcement pagination', type: :feature do
   with_tenant(:instance) do
     let!(:user) { create(:user, role: :administrator) }
     let!(:course) { create(:course) }
-    let!(:announcements) { create_list(:course_announcement, 50, course: course) }
+    let!(:announcements) do
+      create_list(:course_announcement, 50, course: course, creator: user, updater: user)
+    end
 
     before do
       login_as(user, scope: :user)

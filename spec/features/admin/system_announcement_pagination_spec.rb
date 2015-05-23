@@ -7,7 +7,7 @@ RSpec.describe 'System announcement pagination', type: :feature do
 
   before do
     SystemAnnouncement.delete_all
-    create_list(:system_announcement, 50)
+    create_list(:system_announcement, 50, creator: user, updater: user)
 
     login_as(user, scope: :user)
     visit admin_system_announcements_path

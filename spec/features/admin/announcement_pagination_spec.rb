@@ -9,7 +9,7 @@ RSpec.describe 'Instance announcement pagination', type: :feature do
     let!(:user) { create(:user, role: :administrator) }
 
     before do
-      create_list(:instance_announcement, 50, instance: instance)
+      create_list(:instance_announcement, 50, instance: instance, creator: user, updater: user)
 
       login_as(user, scope: :user)
       visit admin_announcements_path
