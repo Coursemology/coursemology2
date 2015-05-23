@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Instance management', type: :feature do
+RSpec.describe 'Administration: Instances', type: :feature do
   let!(:user) { create(:user, role: :administrator) }
   before { login_as(user, scope: :user) }
 
