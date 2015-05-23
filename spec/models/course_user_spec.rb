@@ -12,14 +12,15 @@ RSpec.describe CourseUser, type: :model do
 
   let!(:instance) { create :instance }
   with_tenant(:instance) do
-    let(:course) { create(:course) }
+    let(:owner) { create(:user) }
+    let(:course) { create(:course, creator: owner, updater: owner) }
     let!(:student) { create(:course_student, course: course) }
     let(:teaching_assistant) { create(:course_teaching_assistant, course: course) }
     let(:manager) { create(:course_manager, course: course) }
-    let(:owner) { create(:course_owner, course: course) }
+    let(:course_owner) { course.course_users.find_by!(user: owner) }
 
     describe '#initialize' do
-      subject { CourseUser.new(course: course, creator: owner.user, updater: owner.user) }
+      subject { CourseUser.new(course: course, creator: owner, updater: owner) }
 
       it { is_expected.to be_student }
       it { is_expected.not_to be_phantom }
@@ -46,7 +47,8 @@ RSpec.describe CourseUser, type: :model do
 
     describe '.staff' do
       it 'returns teaching assistant, manager and owner' do
-        expect(course.course_users.staff).to contain_exactly(teaching_assistant, manager, owner)
+        expect(course.course_users.staff).to contain_exactly(teaching_assistant, manager,
+                                                             course_owner)
       end
     end
 
@@ -70,7 +72,7 @@ RSpec.describe CourseUser, type: :model do
 
     describe '.owner' do
       it 'returns only owner' do
-        expect(course.course_users.owner).to contain_exactly(owner)
+        expect(course.course_users.owner).to contain_exactly(course_owner)
       end
     end
 
@@ -82,13 +84,12 @@ RSpec.describe CourseUser, type: :model do
 
       it 'returns all approved course users' do
         expect(course.course_users.with_approved_state).to contain_exactly(student,
-                                                                           teaching_assistant)
+                                                                           teaching_assistant,
+                                                                           course_owner)
       end
     end
 
     describe '.pending' do
-      before { owner.approve! }
-
       it 'returns all pending course users' do
         expect(course.course_users.with_pending_state).
           to contain_exactly(student, teaching_assistant, manager)
@@ -100,7 +101,7 @@ RSpec.describe CourseUser, type: :model do
         expect(student.staff?).to be_falsey
         expect(teaching_assistant.staff?).to be_truthy
         expect(manager.staff?).to be_truthy
-        expect(owner.staff?).to be_truthy
+        expect(course_owner.staff?).to be_truthy
       end
     end
 
