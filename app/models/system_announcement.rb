@@ -5,6 +5,8 @@ class SystemAnnouncement < ActiveRecord::Base
 
   belongs_to :creator, class_name: User.name
 
+  default_scope { order(valid_from: :desc) }
+
   def unread?
     # TODO: Implement
     false

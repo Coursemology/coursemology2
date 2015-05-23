@@ -3,7 +3,10 @@ require 'rails_helper'
 RSpec.describe Instance, type: :model do
   it { is_expected.to have_many(:instance_users) }
   it { is_expected.to have_many(:users).through(:instance_users) }
-  it { is_expected.to have_many(:announcements).class_name(Instance::Announcement.name) }
+  it do
+    is_expected.to have_many(:announcements).class_name(Instance::Announcement.name).
+      order(valid_from: :desc)
+  end
   it { is_expected.to have_many(:courses) }
 
   describe 'hostname validation' do
