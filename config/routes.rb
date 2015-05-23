@@ -53,19 +53,22 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+  concern :paginatable do
+    get '(page/:page)', action: :index, on: :collection, as: ''
+  end
 
   devise_for :users
 
   namespace :admin do
     get '/' => 'admin#index'
-    resources :system_announcements
-    resources :announcements
+    resources :system_announcements, concerns: :paginatable
+    resources :announcements, concerns: :paginatable
     resources :instances
   end
 
   scope module: 'course' do
     resources :courses do
-      resources :announcements
+      resources :announcements, concerns: :paginatable
       resources :achievements
       get 'settings' => 'course_settings#index', as: :settings
       patch 'settings' => 'course_settings#update', as: :update_settings
