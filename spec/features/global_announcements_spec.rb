@@ -5,6 +5,8 @@ RSpec.describe 'Global announcements', type: :feature do
   let(:instance) { create(:instance) }
 
   with_tenant(:instance) do
+    let(:user) { create(:user) }
+
     describe 'no global announcements' do
       before do
         instance.announcements.clear
@@ -16,7 +18,10 @@ RSpec.describe 'Global announcements', type: :feature do
     end
 
     describe 'one valid global announcement' do
-      let(:announcement) { build(:instance_announcement, instance: instance) }
+      let(:announcement) do
+        build(:instance_announcement, instance: instance, creator: user, updater: user)
+      end
+
       before do
         instance.announcements.clear
         SystemAnnouncement.destroy_all
@@ -33,7 +38,10 @@ RSpec.describe 'Global announcements', type: :feature do
     end
 
     describe 'many valid global announcements' do
-      let(:announcements) { build_list(:instance_announcement, 2, instance: instance) }
+      let(:announcements) do
+        build_list(:instance_announcement, 2, instance: instance, creator: user, updater: user)
+      end
+
       before do
         instance.announcements.clear
         SystemAnnouncement.destroy_all

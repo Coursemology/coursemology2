@@ -15,7 +15,8 @@ RSpec.describe 'Announcements read/unread status management', type: :feature do
         TEST_NUMBER = 66
 
         let!(:announcements) do
-          create_list(:course_announcement, TEST_NUMBER, course: course, creator: second_user)
+          create_list(:course_announcement, TEST_NUMBER, course: course, creator: second_user,
+                                                         updater: second_user)
         end
 
         context 'before visiting' do
@@ -39,7 +40,9 @@ RSpec.describe 'Announcements read/unread status management', type: :feature do
     end
 
     describe 'sidebar' do
-      let!(:announcement) { create(:course_announcement, course: course, creator: second_user) }
+      let!(:announcement) do
+        create(:course_announcement, course: course, creator: second_user, updater: first_user)
+      end
 
       before do
         login_as(first_user)
