@@ -2,7 +2,7 @@ tr.achievement
   td
     img.achievement-icon
   td
-    h4 = link_to achievement.title, course_achievement_path(@course, achievement)
+    h4 = link_to achievement.title, course_achievement_path(current_course, achievement)
 
   td
     div.description
@@ -15,9 +15,9 @@ tr.achievement
     - else
       = t('common.no')
   td
-    = link_to edit_course_achievement_path(@course, achievement), class: 'btn btn-default' do
+    = link_to edit_course_achievement_path(current_course, achievement), class: 'btn btn-default' do
       = fa_icon 'edit'
 
-    = link_to course_achievement_path(@course, achievement),
+    = link_to course_achievement_path(current_course, achievement),
         class: 'btn btn-danger', method: :delete do
       = fa_icon 'trash'
