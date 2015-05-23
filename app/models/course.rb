@@ -4,6 +4,7 @@ class Course < ActiveRecord::Base
   stampable
 
   after_initialize :set_defaults, if: :new_record?
+  before_validation :set_defaults, if: :new_record?
 
   enum status: { closed: 0, published: 1, opened: 2 }
 
@@ -23,5 +24,8 @@ class Course < ActiveRecord::Base
   def set_defaults
     self.start_at ||= Time.now
     self.end_at ||= 1.month.from_now
+
+    course_users.build(user: creator, role: :owner, workflow_state: :approved, creator: creator,
+                       updater: updater) if creator && course_users.empty?
   end
 end
