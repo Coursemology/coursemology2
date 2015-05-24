@@ -6,19 +6,23 @@ en:
         teaching_assistant: 'Teaching Assistant'
         manager: 'Manager'
         owner: 'Owner'
-      index:
-        header: 'Users'
+        phantom: 'Phantom'
+      tabs:
+        students: 'Students'
+        staff: 'Staff'
+        requests: 'Requests'
       new:
         already_registered: "You are already registered as a %{role}."
       create:
         success: "You have submitted registration to the course as a %{role}."
+        failure: "Could not register for the course: %{error}"
       update:
         success: "Registration updated. You are now registered as %{role}."
       destroy:
         success: "Deleted %{role} registration from %{email}."
-      register:
-        failure: "Could not register for the course: %{error}."
-      list:
-        name: 'Name'
-        email: 'Email'
-        phantom: 'Phantom'
+      students:
+        header: 'Students'
+      requests:
+        header: 'User Requests'
+        approve: 'Approve'
+        reject: 'Reject'

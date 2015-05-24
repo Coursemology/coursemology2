@@ -1,14 +1,16 @@
 div.page-header
   h1 = t('.header')
 
+= render partial: 'tabs'
+
 div.users
   div.table-fluid
     table.table.table-striped
       thead
         tr
-          th = t('.name')
-          th = t('.email')
-          th = t('.phantom')
+          th = t('common.name')
+          th = t('common.email')
+          th = t('course.users.role.phantom')
           th
 
       tbody

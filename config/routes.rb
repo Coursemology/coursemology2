@@ -79,6 +79,8 @@ Rails.application.routes.draw do
       resources :users, except: [:index, :new, :edit]
       post 'register' => 'users#register'
       get 'students' => 'users#students', as: :users_students
+      get 'staff' => 'users#staff', as: :users_staff
+      get 'requests' => 'users#requests', as: :users_requests
     end
   end
 end
