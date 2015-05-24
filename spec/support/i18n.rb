@@ -7,8 +7,13 @@ RSpec.configure do |config|
       protected
 
       def lookup(_, key, _, _)
-        super
-        key.to_s
+        key = key.to_s
+        result = super
+        if key.start_with?('activerecord', 'attributes', 'errors', 'support')
+          result
+        else
+          key
+        end
       end
     end
     I18n.backend = StubbedI18nBackend.new
