@@ -64,6 +64,9 @@ Rails.application.routes.draw do
     resources :system_announcements, concerns: :paginatable
     resources :announcements, concerns: :paginatable
     resources :instances
+
+    get 'components' => 'admin#components'
+    patch 'components' => 'admin#update_components'
   end
 
   scope module: 'course' do
