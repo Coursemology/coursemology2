@@ -17,7 +17,7 @@ class Instance < ActiveRecord::Base
     end
   end
 
-  validates :host, hostname: true
+  validates :host, hostname: true, if: :should_validate_host?
 
   has_many :instance_users
   has_many :users, through: :instance_users
@@ -25,4 +25,10 @@ class Instance < ActiveRecord::Base
   has_many :announcements, -> { order(valid_from: :desc) },
            class_name: Instance::Announcement.name
   has_many :courses
+
+  private
+
+  def should_validate_host? #:nodoc:
+    new_record? || changed_attributes.keys.include?('host'.freeze)
+  end
 end

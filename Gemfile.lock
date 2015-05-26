@@ -341,7 +341,7 @@ GEM
       activerecord (~> 4.2, >= 4.2.1)
       schema_plus_columns
       valuable
-    settings_on_rails (0.2.2)
+    settings_on_rails (0.3.0)
       activerecord (>= 3.1)
     should_not (1.1.0)
     shoulda-matchers (2.8.0)
