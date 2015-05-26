@@ -1,9 +1,9 @@
 class Course::Achievement < ActiveRecord::Base
+  acts_as_conditional
   stampable
 
   after_initialize :set_defaults, if: :new_record?
 
-  has_many :conditions, as: :conditional
   belongs_to :creator, class_name: User.name
   belongs_to :course, inverse_of: :achievements
 

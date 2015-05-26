@@ -57,6 +57,13 @@ Rails.application.routes.draw do
     get '(page/:page)', action: :index, on: :collection, as: ''
   end
 
+  concern :conditional do
+    namespace :condition do
+      resources :achievements, except: [:index]
+      resources :levels, except: [:index]
+    end
+  end
+
   devise_for :users
 
   namespace :admin do
