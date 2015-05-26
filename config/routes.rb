@@ -73,8 +73,8 @@ Rails.application.routes.draw do
     resources :courses do
       resources :announcements, concerns: :paginatable
       resources :achievements
-      get 'settings' => 'course_settings#index', as: :settings
-      patch 'settings' => 'course_settings#update', as: :update_settings
+      get 'settings' => 'settings#index', as: :settings
+      patch 'settings' => 'settings#update', as: :update_settings
 
       resources :users, except: [:new, :edit]
     end

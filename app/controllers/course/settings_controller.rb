@@ -1,4 +1,4 @@
-class Course::CourseSettingsController < Course::ModuleController
+class Course::SettingsController < Course::ModuleController
   layout 'course_settings'
 
   def index

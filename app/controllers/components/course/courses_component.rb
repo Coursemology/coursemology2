@@ -5,7 +5,7 @@ class Course::CoursesComponent
     [
       {
         title: t('layouts.course_settings.title'),
-        controller: 'course/course_settings',
+        controller: 'course/settings',
         action: 'index'
       }
     ]

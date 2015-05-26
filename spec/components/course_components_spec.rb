@@ -8,7 +8,7 @@ RSpec.describe 'Course Modules', type: :controller do
 
   EXPECTED_SETTINGS_ITEM = {
     title: 'DummyCourseModule',
-    controller: :course_settings,
+    controller: :'course/settings',
     action: :index
   }
 
