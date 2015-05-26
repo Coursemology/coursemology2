@@ -1,4 +1,3 @@
-# Provides an adapter for configuration settings as a resource for use with controllers and views.
 class Course::Settings
   include SettingsConcern
 

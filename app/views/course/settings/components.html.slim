@@ -1,0 +1,15 @@
+h2 = t('.header')
+= simple_form_for @settings, url: course_components_path do |f|
+  table.table
+    thead
+      th = t('.name')
+      th = t('.enabled')
+    tbody
+      - instance_components = controller.current_component_host.instance_components
+      - collection = instance_components.map { |c| [c.name, c.key.to_s] }
+      = f.collection_check_boxes :enabled_component_ids, collection, :last, :first do |f|
+        tr
+          th = f.label
+          td = f.check_box
+
+  = f.button :submit
