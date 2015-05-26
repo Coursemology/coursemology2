@@ -12,7 +12,7 @@ RSpec.describe 'Course Modules', type: :controller do
     action: :index
   }
 
-  controller(Course::ModuleController) do
+  controller(Course::ComponentController) do
   end
 
   class DummyCourseModule

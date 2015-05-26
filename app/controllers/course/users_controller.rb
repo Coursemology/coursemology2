@@ -1,4 +1,4 @@
-class Course::UsersController < Course::ModuleController
+class Course::UsersController < Course::ComponentController
   load_and_authorize_resource :course_user, through: :course, parent: false
   before_action :authorize_show!, only: [:index]
   before_action :authorize_edit!, except: [:index, :create]

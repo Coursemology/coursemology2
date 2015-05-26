@@ -1,4 +1,4 @@
-class Course::AnnouncementsController < Course::ModuleController
+class Course::AnnouncementsController < Course::ComponentController
   load_and_authorize_resource :announcement, through: :course, class: Course::Announcement.name
 
   def index #:nodoc:
