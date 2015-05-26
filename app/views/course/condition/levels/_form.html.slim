@@ -1,0 +1,5 @@
+= simple_form_for [@course, @conditional, @level_condition],
+                  resource: :course_achievement_condition_level do |f|
+  = f.input :minimum_level, as: :integer, input_html: { min: '1', step: 'any' }
+
+  = f.submit

@@ -93,6 +93,10 @@ ActiveRecord::Schema.define(version: 20150513111716) do
     t.integer "achievement_id", index: {name: "fk__course_condition_achievements_achievement_id"}, foreign_key: {references: "course_achievements", name: "fk_course_condition_achievements_achievement_id", on_update: :no_action, on_delete: :no_action}
   end
 
+  create_table "course_condition_levels", force: :cascade do |t|
+    t.integer "minimum_level", null: false
+  end
+
   create_table "course_conditions", force: :cascade do |t|
     t.integer  "actable_id"
     t.string   "actable_type",     index: {name: "index_course_conditions_on_actable_type_and_actable_id", with: ["actable_id"], unique: true}
