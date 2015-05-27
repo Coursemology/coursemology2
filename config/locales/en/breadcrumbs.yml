@@ -1,0 +1,9 @@
+en:
+  breadcrumbs:
+    admin:
+      controller:
+        index: 'Administration'
+      admin:
+        components: 'Components'
+      announcements:
+        index: 'Announcements'
