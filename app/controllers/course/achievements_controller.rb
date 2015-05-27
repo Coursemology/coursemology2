@@ -7,9 +7,6 @@ class Course::AchievementsController < Course::ComponentController
   def new #:nodoc:
   end
 
-  def edit #:nodoc:
-  end
-
   def create #:nodoc:
     if @achievement.save
       redirect_to(course_achievements_path(current_course),
@@ -17,6 +14,9 @@ class Course::AchievementsController < Course::ComponentController
     else
       render 'new'
     end
+  end
+
+  def edit #:nodoc:
   end
 
   def update #:nodoc:
