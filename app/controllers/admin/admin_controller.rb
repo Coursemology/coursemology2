@@ -22,7 +22,7 @@ class Admin::AdminController < Admin::Controller
 
   # Load our settings adapter to handle component settings
   def load_settings
-    @settings = Instance::Settings.new(current_tenant)
+    @settings = Instance::Settings.new(current_tenant, Course::ComponentHost.components)
   end
 
   # Checks if the current request is the components page.
