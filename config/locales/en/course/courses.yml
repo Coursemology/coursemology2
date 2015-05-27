@@ -1,0 +1,13 @@
+en:
+  course:
+    courses:
+      create:
+        success: "Course %{title} was created."
+      new:
+        header: 'New Course'
+      form:
+        title_label: 'Give it an awesome name'
+        title_placeholder: 'e.g. Maths Universe, Geovengers'
+        description_label: 'Give it an awesome backstory'
+        description_placeholder: 'e.g. Darth Vader is taking over the universe. We need you to save
+                                  the day!'

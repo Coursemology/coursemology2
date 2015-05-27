@@ -1,0 +1,17 @@
+en:
+  course:
+    announcements:
+      sidebar_title: 'Announcements'
+      index:
+        header: 'Announcements'
+        new: 'New'
+      new:
+        header: 'New Announcement'
+      edit:
+        header: 'Edit Announcement'
+      create:
+        success: "Announcement %{title} was created."
+      update:
+        success: "Announcement %{title} was updated."
+      destroy:
+        success: "Announcement %{title} was deleted."

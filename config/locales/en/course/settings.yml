@@ -1,0 +1,5 @@
+en:
+  course:
+    settings:
+      update:
+        success: "Course %{title} was updated."

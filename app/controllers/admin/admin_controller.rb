@@ -1,5 +1,6 @@
 class Admin::AdminController < Admin::Controller
   before_action :load_settings, only: [:components, :update_components]
+  add_breadcrumb :components, :admin_components_path, if: :is_components_page?
 
   def index
   end
@@ -22,5 +23,10 @@ class Admin::AdminController < Admin::Controller
   # Load our settings adapter to handle component settings
   def load_settings
     @settings = Instance::Settings.new(current_tenant)
+  end
+
+  # Checks if the current request is the components page.
+  def is_components_page?
+    Set['components', 'update_components'].freeze.include?(params[:action])
   end
 end

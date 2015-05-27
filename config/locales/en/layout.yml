@@ -1,0 +1,21 @@
+en:
+  layout:
+    coursemology: 'Coursemology'
+    navbar:
+      toggle_sidebar: 'Toggle Sidebar'
+      toggle_navigation: 'Toggle Navigation'
+      courses: 'Courses'
+      help: 'Help'
+      register: 'Register'
+      sign_in: 'Sign In'
+      sign_out: 'Sign Out'
+  layouts:
+    global_announcements:
+      close: 'Close'
+      more_announcements: 'More Announcements...'
+    course_settings:
+      title: 'Settings'
+    attachment_uploader:
+      uploaded: 'Uploaded Files:'
+      new_file: 'Upload New File'
+      remove: 'Remove'
