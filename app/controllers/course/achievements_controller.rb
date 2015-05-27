@@ -1,4 +1,4 @@
-class Course::AchievementsController < Course::ModuleController
+class Course::AchievementsController < Course::ComponentController
   load_and_authorize_resource :achievement, through: :course, class: Course::Achievement.name
 
   def index #:nodoc:

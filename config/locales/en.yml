@@ -148,7 +148,8 @@ en:
         success: "Achievement %{title} was updated."
       destroy:
         success: "Achievement %{title} was deleted."
-    course_settings:
+
+    settings:
       update:
         success: "Course %{title} was updated."
 
