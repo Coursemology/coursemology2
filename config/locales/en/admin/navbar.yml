@@ -1,0 +1,5 @@
+en:
+  admin:
+    navbar:
+      announcements: 'Announcements'
+      components: 'Components'
