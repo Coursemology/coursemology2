@@ -87,6 +87,7 @@ search:
 ## Consider these keys used:
 ignore_unused:
 - 'activerecord.attributes.*'
+- 'breadcrumbs.*'
 - 'errors.messages.*'
 - '{devise,kaminari,will_paginate}.*'
 - 'simple_form.{yes,no}'
