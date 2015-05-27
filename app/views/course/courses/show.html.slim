@@ -1,2 +1,7 @@
 h1
   = @course.title
+
+- @activities.each do |activity|
+  div.activity
+    = link_to_user(activity.recipient)
+    = render_activity(activity, display: activity.key_to_path, root: '/')

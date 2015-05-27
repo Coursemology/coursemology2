@@ -32,6 +32,12 @@ module Extensions::ActiveRecord::Base
     def acts_as_lesson_plan_item
       acts_as :lesson_plan_item, class_name: Course::LessonPlanItem.name
     end
+
+    # Functions from notification framework.
+    # This function should be declared in model, to send out notifications.
+    def acts_as_notifiable
+      include NotifyConcern
+    end
   end
 
   # @return [Bool] True if valid_from is a future time
