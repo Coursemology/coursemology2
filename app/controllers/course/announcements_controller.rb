@@ -14,9 +14,6 @@ class Course::AnnouncementsController < Course::ComponentController
   def new #:nodoc:
   end
 
-  def edit #:nodoc:
-  end
-
   def create #:nodoc:
     if @announcement.save
       redirect_to(course_announcements_path(current_course),
@@ -24,6 +21,9 @@ class Course::AnnouncementsController < Course::ComponentController
     else
       render 'new'
     end
+  end
+
+  def edit #:nodoc:
   end
 
   def update #:nodoc:
