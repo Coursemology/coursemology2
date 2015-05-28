@@ -60,6 +60,8 @@ Rails.application.routes.draw do
   devise_for :users
   get 'users/emails' => 'users#emails', as: :user_emails
   patch 'users/emails' => 'users#update_emails', as: :update_user_emails
+  get '/emails/:id/set_primary' => 'user/emails#set_primary', as: :set_primary_email
+  delete '/emails/:id' => 'user/emails#destroy', as: :email
 
   namespace :admin do
     get '/' => 'admin#index'
