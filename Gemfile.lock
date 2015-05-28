@@ -204,6 +204,11 @@ GEM
     pg (0.17.1)
     polyamorous (1.1.0)
       activerecord (>= 3.0)
+    public_activity (1.4.2)
+      actionpack (>= 3.0.0)
+      activerecord (>= 3.0)
+      i18n (>= 0.5.0)
+      railties (>= 3.0.0)
     puma (2.11.3)
       rack (>= 1.1, < 2.0)
     rack (1.6.1)
@@ -456,6 +461,7 @@ DEPENDENCIES
   mini_magick
   momentjs-rails (>= 2.8.1)
   pg (~> 0.17.0)
+  public_activity
   puma
   rails (~> 4.2.1)
   rails-assets-jquery-ujs (~> 1.0.3)!
