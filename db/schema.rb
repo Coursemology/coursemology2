@@ -11,10 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150513111716) do
+ActiveRecord::Schema.define(version: 20150528092025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "notifications", force: :cascade do |t|
+    t.boolean  "activity_feed"
+    t.boolean  "email"
+    t.boolean  "popup"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "activities", force: :cascade do |t|
+    t.integer  "trackable_id",    index: {name: "index_activities_on_trackable_id_and_trackable_type", with: ["trackable_type"]}
+    t.string   "trackable_type",  index: {name: "fk__activities_trackable_id", with: ["trackable_id"]}
+    t.integer  "owner_id",        index: {name: "index_activities_on_owner_id_and_owner_type", with: ["owner_type"]}
+    t.string   "owner_type",      index: {name: "fk__activities_owner_id", with: ["owner_id"]}
+    t.string   "key"
+    t.text     "parameters"
+    t.integer  "recipient_id",    index: {name: "index_activities_on_recipient_id_and_recipient_type", with: ["recipient_type"]}
+    t.string   "recipient_type",  index: {name: "fk__activities_recipient_id", with: ["recipient_id"]}
+    t.integer  "notification_id", index: {name: "fk__activities_notification_id"}, foreign_key: {references: "notifications", name: "fk_activities_notification_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+  add_index "activities", ["notification_id"], name: "index_activities_on_notification_id", unique: true
 
   create_table "users", force: :cascade do |t|
     t.string   "name",                   limit: 255,              null: false
@@ -199,14 +222,6 @@ ActiveRecord::Schema.define(version: 20150513111716) do
     t.datetime "updated_at",  null: false
   end
   add_index "instance_users", ["instance_id", "user_id"], name: "index_instance_users_on_instance_id_and_user_id", unique: true
-
-  create_table "notifications", force: :cascade do |t|
-    t.boolean  "activity_feed"
-    t.boolean  "email"
-    t.boolean  "popup"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
 
   create_table "read_marks", force: :cascade do |t|
     t.integer  "readable_id"
