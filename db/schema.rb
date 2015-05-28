@@ -200,6 +200,14 @@ ActiveRecord::Schema.define(version: 20150513111716) do
   end
   add_index "instance_users", ["instance_id", "user_id"], name: "index_instance_users_on_instance_id_and_user_id", unique: true
 
+  create_table "notifications", force: :cascade do |t|
+    t.boolean  "activity_feed"
+    t.boolean  "email"
+    t.boolean  "popup"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
   create_table "read_marks", force: :cascade do |t|
     t.integer  "readable_id"
     t.string   "readable_type", limit: 255, null: false
