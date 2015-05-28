@@ -1,0 +1,8 @@
+= simple_form_for @user, url: update_user_emails_path do |f|
+  = f.fields_for :emails do |email_form|
+    div
+      - if email_form.object.persisted?
+        = email_form.input :email, readonly: true, required: false
+      - else
+        = email_form.input :email, required: false
+        = email_form.button :submit, 'Add Email'
