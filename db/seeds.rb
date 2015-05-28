@@ -12,7 +12,7 @@
 Instance.find_or_initialize_by(name: 'Default', host: '*').save!(validate: false)
 
 # Create the default user account.
-user = UserEmail.find_by_email('test@example.org')
+user = User::Email.find_by_email('test@example.org')
 unless user
   User.create!(name: 'Administrator', email: 'test@example.org',
                password: 'Coursemology!', role: :administrator)

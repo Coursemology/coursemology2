@@ -4,7 +4,7 @@ FactoryGirl.define do
     "user_#{n}@domain_#{base_time}_name.com"
   end
 
-  factory :user_email do
+  factory :user_email, class: User::Email.name do
     primary true
     email
 

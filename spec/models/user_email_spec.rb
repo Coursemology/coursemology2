@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe UserEmail, type: :model do
+RSpec.describe User::Email, type: :model do
   it { is_expected.to belong_to(:user).inverse_of(:emails) }
 
   let(:email) { build(:user_email) }
