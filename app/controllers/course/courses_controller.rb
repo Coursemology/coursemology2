@@ -1,4 +1,6 @@
 class Course::CoursesController < Course::Controller
+  include ActivitiesConcern
+
   def show # :nodoc:
     render layout: 'course'
   end
