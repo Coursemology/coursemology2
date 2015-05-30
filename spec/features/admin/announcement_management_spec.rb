@@ -121,7 +121,9 @@ RSpec.describe 'Administration: Announcements', type: :feature do
     end
 
     describe 'index' do
-      let!(:announcements) { create_list(:instance_announcement, 10, instance: instance) }
+      let!(:announcements) do
+        create_list(:instance_announcement, 10, instance: instance, creator: user, updater: user)
+      end
 
       before do
         visit admin_announcements_path

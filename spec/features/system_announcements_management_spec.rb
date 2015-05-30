@@ -99,7 +99,7 @@ RSpec.describe 'System announcements', type: :feature do
   end
 
   describe 'index' do
-    let!(:announcements) { create_list(:system_announcement, 10) }
+    let!(:announcements) { create_list(:system_announcement, 10, creator: user, updater: user) }
 
     before { visit admin_system_announcements_path }
     subject { page }
