@@ -116,7 +116,9 @@ RSpec.describe 'Course: Announcements', type: :feature do
     end
 
     describe 'index' do
-      let!(:announcements) { create_list(:course_announcement, 10, course: course) }
+      let!(:announcements) do
+        create_list(:course_announcement, 10, course: course, creator: user, updater: user)
+      end
 
       before do
         visit course_announcements_path(course)
