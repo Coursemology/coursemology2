@@ -8,7 +8,8 @@ RSpec.describe 'Administration: System announcements', type: :feature do
 
     before do
       SystemAnnouncement.delete_all
-      create_list(:system_announcement, 50, creator: user, updater: user)
+      allow(SystemAnnouncement).to receive(:default_per_page).and_return(5)
+      create_list(:system_announcement, 10, creator: user, updater: user)
 
       login_as(user, scope: :user)
       visit admin_system_announcements_path

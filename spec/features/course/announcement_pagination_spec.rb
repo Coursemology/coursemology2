@@ -4,13 +4,14 @@ RSpec.describe 'Course: Announcements', type: :feature do
   describe 'Pagination' do
     subject { page }
 
+    before { allow(Course::Announcement).to receive(:default_per_page).and_return(5) }
     let!(:instance) { create(:instance) }
 
     with_tenant(:instance) do
       let!(:user) { create(:user, role: :administrator) }
       let!(:course) { create(:course) }
       let!(:announcements) do
-        create_list(:course_announcement, 50, course: course, creator: user, updater: user)
+        create_list(:course_announcement, 10, course: course, creator: user, updater: user)
       end
 
       before do
