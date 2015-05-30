@@ -17,6 +17,7 @@ class Course < ActiveRecord::Base
   has_many :levels, inverse_of: :course, dependent: :destroy
 
   delegate :staff, to: :course_users
+  delegate :has_user?, to: :course_users
 
   private
 

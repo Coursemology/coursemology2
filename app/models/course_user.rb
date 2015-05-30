@@ -11,7 +11,7 @@ class CourseUser < ActiveRecord::Base
   STAFF_ROLES = Set[:teaching_assistant, :manager, :owner].freeze
 
   workflow do
-    state :pending do
+    state :requested do
       event :approve, transitions_to: :approved
       event :reject, transitions_to: :rejected
     end
@@ -31,8 +31,17 @@ class CourseUser < ActiveRecord::Base
   # Gets the staff associated with the course.
   # TODO: Remove the map when Rails 5 is released.
   scope :staff, -> { where(role: STAFF_ROLES.map { |x| roles[x] }) }
+  scope :students, -> { where(role: roles[:student]) }
 
   delegate :experience_points, to: :experience_points_records
+
+  # Test whether the current scope includes the current user.
+  #
+  # @param user [User] The user to check
+  # @return [Boolean] True if the user exists in the current context
+  def self.has_user?(user)
+    with_approved_state.exists?(user: user)
+  end
 
   # Test whether this course_user is a staff (i.e. teaching_assistant, manager or owner)
   #

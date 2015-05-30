@@ -91,7 +91,7 @@ RSpec.describe CourseUser, type: :model do
 
     describe '.pending' do
       it 'returns all pending course users' do
-        expect(course.course_users.with_pending_state).
+        expect(course.course_users.with_requested_state).
           to contain_exactly(student, teaching_assistant, manager)
       end
     end

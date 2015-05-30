@@ -1,11 +1,12 @@
 class Course::CoursesController < Course::Controller
-  def show #:nodoc:
+  def show # :nodoc:
+    render layout: 'course'
   end
 
-  def new #:nodoc:
+  def new # :nodoc:
   end
 
-  def create #:nodoc:
+  def create # :nodoc:
     if @course.save
       redirect_to course_settings_path(@course), success: t('.success', title: @course.title)
     else
@@ -13,12 +14,12 @@ class Course::CoursesController < Course::Controller
     end
   end
 
-  def destroy #:nodoc:
+  def destroy # :nodoc:
   end
 
   private
 
-  def course_params #:nodoc:
+  def course_params # :nodoc:
     params.require(:course).
       permit(:title, :description, :status, :start_at, :end_at)
   end
