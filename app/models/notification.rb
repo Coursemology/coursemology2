@@ -17,7 +17,7 @@ class Notification < ActiveRecord::Base
                                     email: types.include?(:email), popup: types.include?(:popup))
     notification.build_activity(recipient: recipient, owner: sender, trackable: object,
                                 key: key, notification: notification)
-    email_notify(recipient, sender, activity) if notification.email
+    email_notify(recipient, sender, notification.activity) if notification.email
     notification.save
   end
 
@@ -30,7 +30,7 @@ class Notification < ActiveRecord::Base
     # @param [Object] sender who sends this notification
     # @param [Activity] activity the activity which belongs to this notification
     def email_notify(recipient, sender, activity)
-      template = email_template(activity.key)
+      template = activity.template_path(:email)
       NotificationMailer.notify(recipient, sender, activity.trackable, template).deliver_now
     end
 
@@ -43,16 +43,6 @@ class Notification < ActiveRecord::Base
     # @return [String]
     def customize_key(object, activity)
       "#{object.class.name.underscore.pluralize}.notifications.#{activity}"
-    end
-
-    # Get email notification's template path from the key of activity which this notification is
-    #   based on
-    #
-    # @param [Symbol] activity The type of activity
-    # @return [String]
-    def email_template(key)
-      path = key.split('.')
-      format('/%s/email', path.join('/'))
     end
   end
 end
