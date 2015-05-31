@@ -11,6 +11,9 @@ class User < ActiveRecord::Base
   has_many :instances, through: :instance_users
   has_many :course_users, inverse_of: :user, dependent: :destroy
   has_many :courses, through: :course_users
+  has_many :course_group_users, inverse_of: :user, dependent: :destroy,
+                                class_name: Course::GroupUser.name
+  has_many :course_groups, through: :course_group_users, class_name: Course::Group.name
 
   accepts_nested_attributes_for :emails
 
