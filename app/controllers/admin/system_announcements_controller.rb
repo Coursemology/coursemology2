@@ -32,7 +32,7 @@ class Admin::SystemAnnouncementsController < Admin::Controller
   def destroy
     redirect_to admin_system_announcements_path,
                 success: t('.success',
-                          title: @system_announcement.title) if @system_announcement.destroy
+                           title: @system_announcement.title) if @system_announcement.destroy
   end
 
   private

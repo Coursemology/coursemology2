@@ -55,7 +55,7 @@ class Course::UsersController < Course::ComponentController
 
   def course_user_params # :nodoc:
     @course_user_params ||= params.require(:course_user).
-      permit(:user_id, :name, :workflow_state, :role, :phantom)
+                            permit(:user_id, :name, :workflow_state, :role, :phantom)
   end
 
   def set_course_user_user
