@@ -160,7 +160,7 @@ RSpec.describe Course::UsersController, type: :controller do
             subject
           end
 
-          it { is_expected.to redirect_to(course_users_students_path(course)) }
+          it { is_expected.to redirect_to(course_users_staff_path(course)) }
         end
       end
 

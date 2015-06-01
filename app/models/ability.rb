@@ -18,6 +18,8 @@ class Ability
                                                               CourseUser.roles[:owner],
                                                               'manager', 'owner'] } }
 
+    can [:read], Course, course_users: { user_id: user.id, workflow_state: ['approved'] }
+
     can :manage, Course, course_users: { user_id: user.id,
                                          role: [CourseUser.roles[:manager],
                                                 CourseUser.roles[:owner],

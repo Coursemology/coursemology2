@@ -22,6 +22,8 @@ en:
         success: "Deleted %{role} registration from %{email}."
       students:
         header: 'Students'
+      staff:
+        header: 'Staff'
       requests:
         header: 'User Requests'
         approve: 'Approve'
