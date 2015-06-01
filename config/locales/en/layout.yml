@@ -15,6 +15,8 @@ en:
       more_announcements: 'More Announcements...'
     course_settings:
       title: 'Settings'
+    course_users:
+      title: 'Manage Users'
     attachment_uploader:
       uploaded: 'Uploaded Files:'
       new_file: 'Upload New File'

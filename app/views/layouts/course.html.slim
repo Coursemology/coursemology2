@@ -7,7 +7,10 @@
           ul.nav.nav-pills.nav-stacked
             - controller.sidebar.each do |item|
               li
-                a href="#" = "#{item[:title]} (#{item[:unread]})"
+                = link_to(item[:path]) do
+                  = item[:title]
+                  span.unread
+                    = badge(item[:unread]) if item[:unread]
 
     div.col-lg-10.col-md-9.col-sm-8
       = yield
