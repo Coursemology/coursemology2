@@ -41,7 +41,7 @@ module UserAuthenticationConcern
           email: email
         }
 
-        joins(:emails).where(conditions).first
+        joins(:emails).find_by(conditions)
       else
         super(tainted_conditions, opts)
       end
