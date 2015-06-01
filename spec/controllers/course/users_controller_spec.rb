@@ -32,6 +32,26 @@ RSpec.describe Course::UsersController, type: :controller do
       end
     end
 
+    describe '#staff' do
+      before { sign_in(user) }
+      subject { get :staff, course_id: course }
+
+      context 'when a course manager visits the page' do
+        let!(:course_lecturer) { create(:course_manager, course: course, user: user) }
+
+        it { is_expected.to render_template(:staff) }
+      end
+
+      context 'when a student visits the page' do
+        let!(:course_student) { create(:course_student, course: course, user: user) }
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when a user is not registered in the course' do
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+    end
+
     describe '#create' do
       before { sign_in(user) }
       subject { post :create, course_id: course, course_user: user_params }
