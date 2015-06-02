@@ -17,10 +17,12 @@ RSpec.describe Admin::AdminController, type: :controller do
         all_component_ids.sample(1 + rand(all_component_ids.count))
       end
       let(:components_params) { { enabled_component_ids: ids_to_enable } }
-      subject { post :update_components, instance_settings: components_params }
+      subject { post :update_components, instance_settings_effective: components_params }
 
       context 'enable/disable components' do
-        let(:settings) { Instance::Settings.new(instance.reload) }
+        let(:settings) do
+          Instance::Settings::Effective.new(instance.reload, Course::ComponentHost)
+        end
 
         it 'enables the component to enabled and disables all other components' do
           subject
