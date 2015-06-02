@@ -10,7 +10,7 @@ class Course::UsersController < Course::ComponentController
   end
 
   def staff # :nodoc:
-    @course_users = @course_users.staff
+    @course_users = @course_users.staff.with_approved_state
   end
 
   def requests # :nodoc:
@@ -87,6 +87,8 @@ class Course::UsersController < Course::ComponentController
   def update_redirect_path
     if course_user_params.key?(:workflow_state)
       course_users_requests_path(current_course)
+    elsif course_user_params.key?(:role)
+      course_users_staff_path(current_course)
     else
       course_users_students_path(current_course)
     end
