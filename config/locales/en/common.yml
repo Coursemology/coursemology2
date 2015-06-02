@@ -4,6 +4,7 @@ en:
     'no': 'No'
     edit: 'Edit'
     delete: 'Delete'
+    delete_confirm: 'Are you sure?'
     back: 'Back'
     name: 'Name'
     email: 'Email'
