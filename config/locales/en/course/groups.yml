@@ -1,0 +1,8 @@
+en:
+  course:
+    groups:
+      index:
+        header: 'Groups'
+        new: 'New'
+        name: 'Name'
+        members: 'Members'

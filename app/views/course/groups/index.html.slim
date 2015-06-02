@@ -1,0 +1,12 @@
+h1 = t('.header')
+
+= link_to t('.new'), new_course_group_path(current_course), class: 'btn btn-primary'
+
+table.table
+  thead
+    th = t('.name')
+    th = t('.members')
+    th
+
+  tbody
+    = render @groups
