@@ -51,6 +51,9 @@ Coursemology branding is automatically appended to all page titles.
 Place all toolbar items dealing with a resource at the same baseline as the page header. On smaller
 screens, the toolbar should wrap below the title.
 
+Use `content_tag_for` or `div_for` helper whenever you want to present an active_record object 
+(such as in lists/tables). This makes your code more readable and enforces the consistency in views.
+
 ## Themes
 Themes are provided by [themes_on_rails](https://github.com/yoolk/themes_on_rails). Coursemology
 uses standard Bootstrap 3 styles, so it is possible to theme Coursemology using any Bootstrap 3
