@@ -9,13 +9,9 @@ div.announcement class=time_period_class(system_announcement)
 
   - if can? :manage, system_announcement.class
     div.pull-right
-      = link_to edit_admin_system_announcement_path(system_announcement),
-                class: 'btn btn-default' do
-        = fa_icon 'edit'
+      = edit_button(edit_admin_system_announcement_path(system_announcement))
 
-      = link_to admin_system_announcement_path(system_announcement), class: 'btn btn-danger',
-      method: :delete do
-        = fa_icon 'trash'
+      = delete_button(admin_system_announcement_path(system_announcement))
 
   div.timestamp
     = format_datetime(system_announcement.valid_from)

@@ -11,6 +11,5 @@ en:
         update:
           success: 'Achievement condition was updated.'
         destroy:
-          confirmation: 'Are you sure to delete the Achievement condition?'
           success: 'Achievement condition was deleted.'
           error: 'Failed to delete achievement condition.'

@@ -6,11 +6,9 @@ div.announcement class=time_period_class(announcement)
     = announcement.title
   - if can? :manage, announcement.class
     div.pull-right
-      = link_to edit_admin_announcement_path(announcement), class: 'btn btn-default' do
-        = fa_icon 'edit'
-      = link_to admin_announcement_path(announcement), class: ['btn', 'btn-danger'],
-                method: :delete do
-        = fa_icon 'trash'
+      = edit_button(edit_admin_announcement_path(announcement))
+      = delete_button(admin_announcement_path(announcement))
+
   h3.timestamp
     => format_datetime(announcement.valid_from)
     ' by

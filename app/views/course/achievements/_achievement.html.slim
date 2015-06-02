@@ -15,9 +15,6 @@ tr.achievement
     - else
       = t('common.no')
   td
-    = link_to edit_course_achievement_path(current_course, achievement), class: 'btn btn-default' do
-      = fa_icon 'edit'
+    = edit_button(edit_course_achievement_path(current_course, achievement))
 
-    = link_to course_achievement_path(current_course, achievement),
-        class: 'btn btn-danger', method: :delete do
-      = fa_icon 'trash'
+    = delete_button(course_achievement_path(current_course, achievement))
