@@ -5,30 +5,12 @@ RSpec.describe Instance::Settings, type: :model do
   ENABLED_COMPONENTS = [:A, :C, :E]
 
   let(:settings) do
-    class MockSettings
-      def stub_method(name, &block)
-        (class << self; self; end).class_eval do
-          define_method(name, &block)
-        end
-      end
+    components = {}
+    ALL_COMPONENTS.each do |component|
+      components[component] ||= { enabled: ENABLED_COMPONENTS.include?(component) }
     end
-
-    component_settings = Struct.new(:enabled)
-    components_settings = MockSettings.new
-    component_settings_store = {}
-    components_settings.stub_method(:settings) do |symbol|
-      enabled = ENABLED_COMPONENTS.include?(symbol)
-      component_settings_store[symbol] ||= component_settings.new(enabled)
-    end
-    components_settings.stub_method(:map) do |&block|
-      ALL_COMPONENTS.map { |symbol| [symbol, settings(symbol)] }.map(&block)
-    end
-    instance_settings = MockSettings.new
-    instance_settings.stub_method(:settings) do |_|
-      components_settings
-    end
-
-    instance_settings
+    hash = { components: components }
+    mock_settings(hash)
   end
 
   subject { Instance::Settings.new(settings) }
