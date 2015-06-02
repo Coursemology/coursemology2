@@ -1,5 +1,5 @@
 hr
-div.announcement class=time_period_class(system_announcement)
+= div_for(system_announcement, class: time_period_class(system_announcement))
   h2
     - if system_announcement.unread?
       input.new_announcement type="hidden"
