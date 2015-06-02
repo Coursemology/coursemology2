@@ -11,10 +11,12 @@ RSpec.configure do |config|
         storage :file
 
         def cache_dir
+          super # Just to run the superclass method, but we ignore the return value.
           "#{Rails.root}/spec/support/uploads/tmp"
         end
 
         def store_dir
+          super # Just to run the superclass method, but we ignore the return value.
           "#{Rails.root}/spec/support/uploads/#{model.class.to_s.underscore}/#{model.id}"
         end
       end

@@ -13,7 +13,8 @@ class Course::Group < ActiveRecord::Base
 
   # Set default values
   def set_defaults
-    return unless creator && creator.courses.include?(course) && group_users.empty?
+    return if !course || !creator
+    return if !course.course_users.exists?(user: creator) || group_users.exists?(user: creator)
     group_users.build(user: creator, role: :manager, creator: creator, updater: updater)
   end
 end
