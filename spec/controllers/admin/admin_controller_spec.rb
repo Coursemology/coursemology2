@@ -20,11 +20,11 @@ RSpec.describe Admin::AdminController, type: :controller do
       subject { post :update_components, instance_settings: components_params }
 
       context 'enable/disable components' do
-        let(:settings) { Instance::Settings.new(instance.reload) }
+        let(:settings) { Instance::Settings.new(instance.reload, Course::ComponentHost.components) }
 
         it 'enables the component to enabled and disables all other components' do
           subject
-          expect(settings.enabled_component_ids).to eq(ids_to_enable)
+          expect(settings.enabled_component_ids).to contain_exactly(*ids_to_enable)
         end
       end
 

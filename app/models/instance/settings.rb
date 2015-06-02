@@ -8,8 +8,9 @@ class Instance::Settings
   # Initialises the settings adapter
   #
   # @param settings [#settings] The settings object provided by the settings_on_rails gem.
-  def initialize(settings)
+  def initialize(settings, components = [])
     @settings = settings
+    @components = components
   end
 
   # Update settings with the hash attributes
@@ -63,9 +64,10 @@ class Instance::Settings
   # @return [Array<Instance::Settings::BooleanValue>]
   def components_enabled_statuses
     component_settings = settings(:components)
-    component_settings.map do |k, v|
-      enabled = v[:enabled].nil? ? false : v[:enabled]
-      Instance::Settings::BooleanValue.new(id: k, value: enabled)
+    @components.each.map do |component|
+      key = component.key.to_s
+      enabled = component_settings.settings(key).enabled
+      Instance::Settings::BooleanValue.new(id: key, value: enabled.nil? ? false : enabled)
     end || []
   end
 
