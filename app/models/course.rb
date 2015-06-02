@@ -1,4 +1,5 @@
 class Course < ActiveRecord::Base
+  include Course::LevelsConcern
   acts_as_tenant(:instance)
   has_settings_on :settings
   stampable
