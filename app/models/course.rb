@@ -24,7 +24,7 @@ class Course < ActiveRecord::Base
 
   # Set default values
   def set_defaults
-    self.start_at ||= Time.now
+    self.start_at ||= Time.zone.now
     self.end_at ||= 1.month.from_now
 
     course_users.build(user: creator, role: :owner, workflow_state: :approved, creator: creator,

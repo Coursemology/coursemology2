@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  base_time = Time.now.to_i
+  base_time = Time.zone.now.to_i
   sequence :host do |n|
     "local-#{base_time}-#{n}.com"
   end
