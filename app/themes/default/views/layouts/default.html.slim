@@ -38,6 +38,13 @@ html
             li
               = link_to(t('layout.navbar.help'), '#')
             - if user_signed_in?
+              - if can?(:manage, current_tenant)
+                li
+                  a.dropdown-toggle data-toggle="dropdown" = current_user.name
+                    b.caret
+                  ul.dropdown-menu
+                    li
+                      = link_to(t('layout.navbar.admin_panel'), admin_path)
               li
                 = link_to(t('layout.navbar.sign_out'), destroy_user_session_path, method: :delete)
             - else

@@ -9,6 +9,7 @@ en:
       register: 'Register'
       sign_in: 'Sign In'
       sign_out: 'Sign Out'
+      admin_panel: 'Administration Panel'
   layouts:
     global_announcements:
       close: 'Close'
