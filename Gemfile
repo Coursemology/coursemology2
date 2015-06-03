@@ -71,7 +71,6 @@ group :development do
 
   # Helps to prevent database slowdowns
   gem 'lol_dba'
-  gem 'bullet'
 
   # General cleanliness
   gem 'traceroute'
@@ -95,11 +94,14 @@ group :development, :test do
   # Factory Girl for factories
   gem 'factory_girl_rails'
 
-  # Checks that all translations are used and defined.
+  # Checks that all translations are used and defined
   gem 'i18n-tasks'
 
   # Helps to prevent database consistency mistakes
   gem 'consistency_fail'
+
+  # Prevent N+1 queries.
+  gem 'bullet'
 end
 
 group :ci do
@@ -109,7 +111,7 @@ group :ci do
 end
 
 group :production do
-  # Puma will be our app server.
+  # Puma will be our app server
   gem 'puma'
 end
 
