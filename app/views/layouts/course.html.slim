@@ -10,7 +10,7 @@
                 = link_to(item[:path]) do
                   = item[:title]
                   span.unread
-                    = badge(item[:unread]) if item[:unread]
+                    = badge(item[:unread]) if item[:unread] && item[:unread] > 0
 
     div.col-lg-10.col-md-9.col-sm-8
       = yield
