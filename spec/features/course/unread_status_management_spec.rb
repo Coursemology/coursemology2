@@ -47,7 +47,7 @@ RSpec.describe 'Course: Announcements', type: :feature do
 
         before do
           login_as(first_user)
-          visit course_achievements_path(course)
+          visit course_path(course)
         end
 
         it 'shows the correct number of unread items' do
