@@ -21,3 +21,7 @@ en:
       uploaded: 'Uploaded Files:'
       new_file: 'Upload New File'
       remove: 'Remove'
+    email:
+      greeting: "Hello, %{user}:"
+      complimentary_close: 'Best Regards,'
+      sign_off: 'The Coursemology Team'
