@@ -1,0 +1,10 @@
+h4
+  = t('.greeting', user: @recipient.name)
+
+= yield
+
+h4
+  = t('.complimentary_close')
+
+h4
+  = t('.sign_off')
