@@ -6,15 +6,15 @@ class Course::UsersController < Course::ComponentController
   before_action :ensure_unregistered_user, only: [:create, :register]
 
   def students # :nodoc:
-    @course_users = @course_users.students.with_approved_state
+    @course_users = @course_users.students.with_approved_state.includes(user: :emails)
   end
 
   def staff # :nodoc:
-    @course_users = @course_users.staff.with_approved_state
+    @course_users = @course_users.staff.with_approved_state.includes(user: :emails)
   end
 
   def requests # :nodoc:
-    @course_users = @course_users.with_requested_state
+    @course_users = @course_users.with_requested_state.includes(user: :emails)
   end
 
   def create # :nodoc:
