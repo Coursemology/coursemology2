@@ -1,0 +1,6 @@
+en:
+  notification_mailer:
+    notification:
+      greeting: "Hello, %{user}:"
+      complimentary_close: 'Best Regards,'
+      sign_off: 'The Coursemology Team'
