@@ -57,6 +57,13 @@ Rails.application.routes.draw do
     get '(page/:page)', action: :index, on: :collection, as: ''
   end
 
+  concern :conditional do
+    namespace :condition do
+      resources :achievements, except: [:index]
+      resources :levels, except: [:index]
+    end
+  end
+
   devise_for :users
 
   namespace :admin do
@@ -72,7 +79,12 @@ Rails.application.routes.draw do
   scope module: 'course' do
     resources :courses do
       resources :announcements, concerns: :paginatable
-      resources :achievements
+      resources :achievements do
+        scope module: :achievement do
+          concerns :conditional
+        end
+      end
+
       get 'settings' => 'settings#index', as: :settings
       patch 'settings' => 'settings#update', as: :update_settings
 

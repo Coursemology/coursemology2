@@ -2,7 +2,9 @@ en:
   common:
     'yes': 'Yes'
     'no': 'No'
+    edit: 'Edit'
     delete: 'Delete'
+    back: 'Back'
     name: 'Name'
     email: 'Email'
     role: 'Role'

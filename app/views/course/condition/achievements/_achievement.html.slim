@@ -1,0 +1,10 @@
+div
+  label Achievement
+  '
+  = achievement.achievement.title
+
+  = link_to t('common.edit'), [:edit, course, conditional, :condition, achievement]
+  '
+  = link_to t('common.delete'), [course, conditional, :condition, achievement],
+            method: :delete,
+            data: { confirm: t('course.condition.achievements.destroy.confirmation') }

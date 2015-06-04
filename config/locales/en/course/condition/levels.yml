@@ -1,0 +1,16 @@
+en:
+  course:
+    condition:
+      levels:
+        new:
+          header: 'New Level Condition'
+        create:
+          success: 'Level condition was created.'
+        edit:
+          header: 'Edit Level Condition'
+        update:
+          success: 'Level condition was updated.'
+        destroy:
+          confirmation: 'Are you sure to delete the Level condition?'
+          success: 'Level condition was deleted.'
+          error: 'Failed to delete level condition.'

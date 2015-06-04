@@ -1,0 +1,10 @@
+div
+  label Level
+  '
+  = level.minimum_level
+
+  = link_to t('common.edit'), [:edit, course, conditional, :condition, level]
+  '
+  = link_to t('common.delete'), [course, conditional, :condition, level],
+            method: :delete,
+            data: { confirm: t('course.condition.levels.destroy.confirmation') }

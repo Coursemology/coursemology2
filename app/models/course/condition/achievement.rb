@@ -1,4 +1,6 @@
 class Course::Condition::Achievement < ActiveRecord::Base
-  acts_as :condition, class_name: Course::Condition.name
+  acts_as_condition
   belongs_to :achievement, class_name: Course::Achievement.name
+
+  default_scope { includes(:achievement) }
 end
