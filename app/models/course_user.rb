@@ -43,6 +43,14 @@ class CourseUser < ActiveRecord::Base
     with_approved_state.exists?(user: user)
   end
 
+  # Computes the level number of the CourseUser with respect to
+  # a course's Course::Levels.
+  #
+  # @return [Fixnum] CourseUser level number
+  def level_number
+    course.compute_level_number(experience_points)
+  end
+
   # Test whether this course_user is a staff (i.e. teaching_assistant, manager or owner)
   #
   # @return [Boolean] True if course_user is a staff
