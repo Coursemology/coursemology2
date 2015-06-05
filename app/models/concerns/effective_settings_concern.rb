@@ -5,7 +5,7 @@ module EffectiveSettingsConcern
 
   # This overrides #components_enabled_statuses to merge in defaults from the component host.
   #
-  # @return [Array<Settings::BooleanValue>] The enabled status for every component, and
+  # @return [Array<Pseudo::BooleanValue>] The enabled status for every component, and
   #   only every components which exist.
   def components_enabled_statuses
     existing_components = Set[*@component_host.components.map { |c| c.key.to_s }]
@@ -17,9 +17,9 @@ module EffectiveSettingsConcern
   # Augments the current array of enabled statuses with defaults for components which do not have
   # a configuration.
   #
-  # @param [Array<GlobalSettings::BooleanValue>] enabled_statuses The array of enable statuses
+  # @param [Array<Pseudo::BooleanValue>] enabled_statuses The array of enable statuses
   #   currently stored in the settings.
-  # @return [Array<Settings::BooleanValue] The array of enable statuses with the defaults
+  # @return [Array<Pseudo::BooleanValue] The array of enable statuses with the defaults
   #   augmented for undefined components.
   def augment_enabled_statuses_defaults(enabled_statuses)
     enabled_statuses = enabled_statuses.dup
@@ -29,7 +29,7 @@ module EffectiveSettingsConcern
       next if configured_components.include?(component.key.to_s)
       id = component.key.to_s
       value = component.enabled_by_default?
-      enabled_statuses << Instance::Settings::BooleanValue.new(id: id, value: value)
+      enabled_statuses << Pseudo::BooleanValue.new(id: id, value: value)
     end
 
     enabled_statuses

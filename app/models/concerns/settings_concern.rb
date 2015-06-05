@@ -43,12 +43,12 @@ module SettingsConcern
 
   # Gets the enabled status for every component which has a settings key.
   #
-  # @return [Array<Settings::BooleanValue>]
+  # @return [Array<Pseudo::BooleanValue>]
   def components_enabled_statuses
     component_settings = settings(:components)
     component_settings.map do |k, v|
       enabled = v[:enabled].nil? ? false : v[:enabled]
-      Instance::Settings::BooleanValue.new(id: k, value: enabled)
+      Pseudo::BooleanValue.new(id: k, value: enabled)
     end || []
   end
 
