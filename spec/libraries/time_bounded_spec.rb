@@ -16,8 +16,8 @@ RSpec.describe 'time_bounded', type: :model do
         [-1.day, 1.day]
       ].each do |pair|
         options = {}
-        options[:valid_from] = DateTime.now + pair[0] unless pair[0].nil?
-        options[:valid_to] = DateTime.now + pair[1] unless pair[1].nil?
+        options[:valid_from] = Time.zone.now + pair[0] unless pair[0].nil?
+        options[:valid_to] = Time.zone.now + pair[1] unless pair[1].nil?
         TimeBoundedTest.create!(options)
       end
     end
@@ -28,8 +28,8 @@ RSpec.describe 'time_bounded', type: :model do
 
       matching_entries.each do |record|
         expect(record).to be_currently_valid
-        expect(record.valid_from).to satisfy { |v| v.nil? || v <= DateTime.now }
-        expect(record.valid_to).to satisfy { |v| v.nil? || v >= DateTime.now }
+        expect(record.valid_from).to satisfy { |v| v.nil? || v <= Time.zone.now }
+        expect(record.valid_to).to satisfy { |v| v.nil? || v >= Time.zone.now }
       end
     end
 
@@ -41,13 +41,13 @@ RSpec.describe 'time_bounded', type: :model do
 
     context 'when the records do not have valid_from' do
       context 'when the records expire after today' do
-        subject { TimeBoundedTest.new(valid_to: DateTime.now + 1.day) }
+        subject { TimeBoundedTest.new(valid_to: Time.zone.now + 1.day) }
 
         it { is_expected.to be_currently_valid }
       end
 
       context 'when the records expire before today' do
-        subject { TimeBoundedTest.new(valid_to: DateTime.now - 1.day) }
+        subject { TimeBoundedTest.new(valid_to: Time.zone.now - 1.day) }
 
         it { is_expected.to_not be_currently_valid }
       end
@@ -55,13 +55,13 @@ RSpec.describe 'time_bounded', type: :model do
 
     context 'when the records do not have valid_to' do
       context 'when the records become valid after today' do
-        subject { TimeBoundedTest.new(valid_from: DateTime.now + 1.day) }
+        subject { TimeBoundedTest.new(valid_from: Time.zone.now + 1.day) }
 
         it { is_expected.not_to be_currently_valid }
       end
 
       context 'when the records become valid before today' do
-        subject { TimeBoundedTest.new(valid_from: DateTime.now - 1.day) }
+        subject { TimeBoundedTest.new(valid_from: Time.zone.now - 1.day) }
 
         it { is_expected.to be_currently_valid }
       end
@@ -70,8 +70,8 @@ RSpec.describe 'time_bounded', type: :model do
     context 'when the records have both valid_from and valid_to' do
       context 'when the records have expired' do
         subject do
-          TimeBoundedTest.new(valid_from: DateTime.now - 1.week,
-                              valid_to: DateTime.now - 1.day)
+          TimeBoundedTest.new(valid_from: Time.zone.now - 1.week,
+                              valid_to: Time.zone.now - 1.day)
         end
 
         it { is_expected.to be_expired }
@@ -80,8 +80,8 @@ RSpec.describe 'time_bounded', type: :model do
 
       context 'when the records have not become valid' do
         subject do
-          TimeBoundedTest.new(valid_from: DateTime.now + 1.day,
-                              valid_to: DateTime.now + 1.week)
+          TimeBoundedTest.new(valid_from: Time.zone.now + 1.day,
+                              valid_to: Time.zone.now + 1.week)
         end
 
         it { is_expected.to be_not_yet_valid }
@@ -90,8 +90,8 @@ RSpec.describe 'time_bounded', type: :model do
 
       context 'when the records are become valid' do
         subject do
-          TimeBoundedTest.new(valid_from: DateTime.now - 1.week,
-                              valid_to: DateTime.now + 1.week)
+          TimeBoundedTest.new(valid_from: Time.zone.now - 1.week,
+                              valid_to: Time.zone.now + 1.week)
         end
 
         it { is_expected.to be_currently_valid }

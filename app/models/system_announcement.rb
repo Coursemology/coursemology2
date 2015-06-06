@@ -16,7 +16,7 @@ class SystemAnnouncement < ActiveRecord::Base
 
   # Set default values
   def set_defaults
-    self.valid_from ||= Time.now
+    self.valid_from ||= Time.zone.now
     self.valid_to ||= 7.days.from_now
   end
 end

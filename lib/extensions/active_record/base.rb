@@ -2,8 +2,8 @@ module Extensions::ActiveRecord::Base
   module ClassMethods
     def currently_valid
       where do
-        (valid_from.nil? || valid_from <= DateTime.now) &&
-          (valid_to.nil? || valid_to >= DateTime.now)
+        (valid_from.nil? || valid_from <= Time.zone.now) &&
+          (valid_to.nil? || valid_to >= Time.zone.now)
       end
     end
 
@@ -50,18 +50,18 @@ module Extensions::ActiveRecord::Base
 
   # @return [Bool] True if valid_from is a future time
   def not_yet_valid?
-    !valid_from.nil? && valid_from > DateTime.now
+    !valid_from.nil? && valid_from > Time.zone.now
   end
 
   # @return [Bool] True if current time is between valid_from and valid_to
   def currently_valid?
-    (valid_from.nil? || valid_from <= DateTime.now) &&
-      (valid_to.nil? || valid_to >= DateTime.now)
+    (valid_from.nil? || valid_from <= Time.zone.now) &&
+      (valid_to.nil? || valid_to >= Time.zone.now)
   end
 
   # @return [Bool] True if valid_to is a past time
   def expired?
-    !valid_to.nil? && DateTime.now > valid_to
+    !valid_to.nil? && Time.zone.now > valid_to
   end
 
   module ConditionalInstanceMethods

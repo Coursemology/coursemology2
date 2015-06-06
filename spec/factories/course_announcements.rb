@@ -5,7 +5,7 @@ FactoryGirl.define do
     updater
     sequence(:title)  { |n| "Announcement #{n}" }
     sequence(:content) { |n| "Content #{n}" }
-    valid_from Time.now
+    valid_from Time.zone.now
     valid_to 3.days.from_now
   end
 end

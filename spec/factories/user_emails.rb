@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  base_time = Time.now.to_i
+  base_time = Time.zone.now.to_i
   sequence :email do |n|
     "user_#{n}@domain_#{base_time}_name.com"
   end
