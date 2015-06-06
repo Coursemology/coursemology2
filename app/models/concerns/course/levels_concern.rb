@@ -22,7 +22,7 @@ module Course::LevelsConcern
   # nil is returned if experience_points is insufficient to
   # attain to any level, i.e. nil represents the zeroth level.
   #
-  # @param [Integer] experience_points Number of Experience Points
+  # @param [Fixnum] experience_points Number of Experience Points
   # @return [Course::Level, nil] A Course::Level instance, or nil.
   def compute_level(experience_points)
     i = numbered_levels.rindex do |l|
@@ -35,8 +35,8 @@ module Course::LevelsConcern
   # have attained if s/he had experience_points number of
   # experience points.
   #
-  # @param [Integer] experience_points Number of experience points
-  # @return [Integer] The level number for the given number of experience points
+  # @param [Fixnum] experience_points Number of experience points
+  # @return [Fixnum] The level number for the given number of experience points
   def compute_level_number(experience_points)
     level = compute_level(experience_points)
     level ? level.level_number : 0
