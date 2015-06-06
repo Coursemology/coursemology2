@@ -126,7 +126,7 @@ RSpec.describe 'System announcements', type: :feature do
   describe 'announcement deletion' do
     let!(:announcement) { create(:system_announcement) }
     before { visit admin_system_announcements_path }
-    subject { first('div.announcement a.btn-danger').click }
+    subject { first('div.system_announcement a.btn-danger').click }
 
     it 'deletes the announcement' do
       expect { subject }.to change(SystemAnnouncement, :count).by(-1)
