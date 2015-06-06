@@ -1,5 +1,5 @@
 # Represents an email address belonging to a user.
-class UserEmail < ActiveRecord::Base
+class User::Email < ActiveRecord::Base
   validates :email, uniqueness: { case_sensitive: false }
   validates :email, format: Devise.email_regexp
 

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   it do
     is_expected.to have_many(:emails).
-      class_name(UserEmail.name).
+      class_name(User::Email.name).
       inverse_of(:user).
       dependent(:destroy)
   end
