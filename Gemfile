@@ -11,7 +11,7 @@ gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 gem 'rails', '~> 4.2.1'
 
 # Use PostgreSQL for the backend
-gem 'pg', '~> 0.18.0', '>= 0.18.2'
+gem 'pg', '>= 0.18.2'
 # Schema Plus for some higher level database abstractions
 gem 'schema_plus', '~> 2.0.beta', '> 2.0.0.pre14'
 gem 'schema_plus_association_inverses', '> 0.0.1'
@@ -34,7 +34,7 @@ gem 'squeel'
 gem 'active_record-acts_as'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.3'
+gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
