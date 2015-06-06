@@ -9,7 +9,7 @@ class Admin::AdminController < Admin::Controller
   end
 
   def update_components #:nodoc:
-    @settings.update(params.require(:instance_settings))
+    @settings.update(params.require(:instance_settings_effective))
     if current_tenant.save
       redirect_to admin_components_path, success: t('.success')
     else
@@ -22,7 +22,7 @@ class Admin::AdminController < Admin::Controller
 
   # Load our settings adapter to handle component settings
   def load_settings
-    @settings = Instance::Settings.new(current_tenant)
+    @settings = Instance::Settings::Effective.new(current_tenant, Course::ComponentHost)
   end
 
   # Checks if the current request is the components page.

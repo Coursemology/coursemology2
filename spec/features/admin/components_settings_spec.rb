@@ -6,18 +6,22 @@ RSpec.feature 'Administration: Components', type: :feature do
   with_tenant(:instance) do
     let(:admin) { create(:administrator) }
     let(:components)  { Course::ComponentHost.components }
-    let(:sample_component_id) { "instance_settings_enabled_component_ids_#{components.sample.key}" }
+    let(:sample_component_id) do
+      "instance_settings_effective_enabled_component_ids_#{components.sample.key}"
+    end
 
     before { login_as(admin, scope: :user) }
 
     scenario 'Admin visits the page' do
       visit admin_components_path
 
+      settings = Instance::Settings::Effective.new(instance.reload.settings, Course::ComponentHost)
+      enabled_components = settings.enabled_component_ids
       components.each do |component|
         expect(page).to have_selector('th', text: component.name)
-        enabled = instance.reload.settings(:components, component.key).enabled
-        checkbox = find("#instance_settings_enabled_component_ids_#{component.key}")
-        if enabled
+
+        checkbox = find("#instance_settings_effective_enabled_component_ids_#{component.key}")
+        if enabled_components.include?(component.key.to_s)
           expect(checkbox).to be_checked
         else
           expect(checkbox).not_to be_checked
