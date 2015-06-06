@@ -11,9 +11,10 @@ gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 gem 'rails', '~> 4.2.1'
 
 # Use PostgreSQL for the backend
-gem 'pg', '~> 0.17.0' # TODO: Until VC compatibility is fixed, use 0.18.2
+gem 'pg', '~> 0.18.0', '>= 0.18.2'
 # Schema Plus for some higher level database abstractions
 gem 'schema_plus', '~> 2.0.beta', '> 2.0.0.pre14'
+gem 'schema_plus_association_inverses', '> 0.0.1'
 gem 'schema_validations'
 # Instance/Course settings
 gem 'settings_on_rails'
