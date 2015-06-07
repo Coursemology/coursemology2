@@ -1,4 +1,8 @@
 class Course::CoursesController < Course::Controller
+  def index # :nodoc:
+    @courses = @courses.page(params[:page])
+  end
+
   def show # :nodoc:
     render layout: 'course'
   end

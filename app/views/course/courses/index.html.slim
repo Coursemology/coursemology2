@@ -1,0 +1,12 @@
+div.page-header
+  h1
+    = t('.header')
+    - if can?(:create, Course)
+      div.pull-right
+        = link_to(t('.new'),
+                  new_course_path,
+                  class: ['btn', 'btn-primary'])
+
+= render @courses
+
+= paginate @courses
