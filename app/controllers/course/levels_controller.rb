@@ -1,8 +1,14 @@
 class Course::LevelsController < Course::ComponentController
   before_action :number_levels, only: [:index]
-  load_and_authorize_resource
+  load_and_authorize_resource :level, through: :course, class: Course::Level.name
 
   def index #:nodoc:
+  end
+
+  def new #:nodoc:
+  end
+
+  def create #:nodoc:
   end
 
   private
