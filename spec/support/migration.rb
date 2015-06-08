@@ -3,9 +3,9 @@ module ActiveRecord::Migration::TestGroupHelpers
   # Defines a temporary table that is instantiated when needed, within a `with_temporary_table`
   # block.
   #
-  # @param table_name Symbol The name of the table to define.
-  # @param proc Proc The table definition, same as that of a block given to
-  #                  `ActiveRecord::Migration::create_table`
+  # @param [Symbol] table_name The name of the table to define.
+  # @param [Proc] proc The table definition, same as that of a block given to
+  #   +ActiveRecord::Migration::create_table+
   def temporary_table(table_name, &proc)
     define_method(table_name) do
       proc
@@ -14,8 +14,8 @@ module ActiveRecord::Migration::TestGroupHelpers
 
   # Using the temporary table defined previously, run the examples in this group.
   #
-  # @param table_name Symbol The name of the table to use.
-  # @param proc Proc The examples requiring the use of the temporary table.
+  # @param [Symbol] table_name The name of the table to use.
+  # @param [Proc] proc The examples requiring the use of the temporary table.
   def with_temporary_table(table_name, &proc)
     context "with temporary table #{table_name}" do |*params|
       before(:context) do

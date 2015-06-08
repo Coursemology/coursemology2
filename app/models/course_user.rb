@@ -37,7 +37,7 @@ class CourseUser < ActiveRecord::Base
 
   # Test whether the current scope includes the current user.
   #
-  # @param user [User] The user to check
+  # @param [User] user The user to check
   # @return [Boolean] True if the user exists in the current context
   def self.has_user?(user)
     with_approved_state.exists?(user: user)

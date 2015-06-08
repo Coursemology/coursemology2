@@ -25,8 +25,8 @@ module Extensions::ActionView::Helpers::FormHelper
   # Gets the URL for the record. This follows the pluralisation rules for Rails routes, where the
   # CREATE action is plural, and the PUT action is singular.
   #
-  # @param record [Array<ActiveRecord::Base>|ActionRecord::Base] The record to build the route from.
-  # @param helper [Symbol] The symbol with the stem of the URL helper.
+  # @param [Array<ActiveRecord::Base>|ActionRecord::Base] record The record to build the route from.
+  # @param [Symbol] helper The symbol with the stem of the URL helper.
   # @return [Symbol] The appropriate URL helper to call.
   def self.url_helper_for_resource(record, helper)
     resource = record
@@ -37,8 +37,8 @@ module Extensions::ActionView::Helpers::FormHelper
 
   # Inflects the path according to the plurality specified.
   #
-  # @param stem [Symbol] The path to inflect.
-  # @param plural [Boolean] Whether to make the path plural.
+  # @param [Symbol] stem The path to inflect.
+  # @param [Boolean] plural Whether to make the path plural.
   # @return [String] The stem, in the given plurality.
   def self.inflect_path(stem, plural)
     components = stem.to_s.underscore.split('_')
@@ -53,9 +53,9 @@ module Extensions::ActionView::Helpers::FormHelper
 
   # Splits the path helper into the suffix (_path, or _url), and the resource involved.
   #
-  # @param [String] The components of the path helper.
-  # @return Array<[String], String)> The list of components, with the suffix removed, followed by
-  #                                  the suffix.
+  # @param [String] components The components of the path helper.
+  # @return [Array<[String], String>] The list of components, with the suffix removed, followed by
+  #   the suffix.
   def self.parse_path_components(components)
     if ['path', 'url'].include?(components.last)
       [components, components.pop]

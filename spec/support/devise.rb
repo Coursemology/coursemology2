@@ -1,8 +1,8 @@
 module DeviseControllerMacros
   # Specifies that the controller requires a user to be logged in.
   #
-  # @param as [nil] if there should not be a user to be logged in.
-  # @param as [Symbol] if there is a user that should be created by the factory with this name.
+  # @param [nil] as if there should not be a user to be logged in.
+  # @param [Symbol] as if there is a user that should be created by the factory with this name.
   def requires_login(as: nil)
     before do
       @request.env['devise.mapping'] = Devise.mappings[:user]

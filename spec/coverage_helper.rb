@@ -5,8 +5,8 @@ module CoverageHelper
     # Helper to include Coveralls/Code Climate coverage, but not require developers to install the
     # gem.
     #
-    # @param name [String] The name of the module to require.
-    # @param initializer [Proc] The block to execute when the module is required successfully.
+    # @param [String] name The name of the module to require.
+    # @param [Proc] initializer The block to execute when the module is required successfully.
     def load(name, &initializer)
       old_formatter = SimpleCov.formatter
       require name

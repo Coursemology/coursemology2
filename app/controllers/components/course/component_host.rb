@@ -4,10 +4,10 @@ class Course::ComponentHost
   module Sidebar
     # Class method to declare the proc handling the sidebar menu items.
     #
-    # @param proc [Proc] The proc handling the sidebar for the given component. The proc will be
-    #                    `instance_eval`ed in the context of the controller handling the current
-    #                    request. This proc must return an array of hashes, each describing one
-    #                    menu item.
+    # @param [Proc] proc The proc handling the sidebar for the given component. The proc will be
+    #   +instance_eval+ed in the context of the controller handling the current
+    #   request. This proc must return an array of hashes, each describing one
+    #   menu item.
     def sidebar(&proc)
       self.sidebar_proc = proc
     end
@@ -15,7 +15,7 @@ class Course::ComponentHost
     # Class method to get the sidebar items from this component, in the context of the given
     # controller instance.
     #
-    # @param controller [Course::Controller] The controller handling the current request.
+    # @param [Course::Controller] controller The controller handling the current request.
     # @return [Array] An array of hashes containing the sidebar items exposed by this component.
     def get_sidebar_items(controller)
       return [] unless sidebar_proc
@@ -31,10 +31,10 @@ class Course::ComponentHost
   module Settings
     # Class method to declare the proc handling the course settings items.
     #
-    # @param proc [Proc] The proc handling the settings for the given component. The proc will be
-    #                    `instance_eval`ed in the context of the controller handling the current
-    #                    request. This proc must return an array of hashes, each describing one
-    #                    component settings page.
+    # @param [Proc] proc The proc handling the settings for the given component. The proc will be
+    #   +instance_eval+ed in the context of the controller handling the current
+    #   request. This proc must return an array of hashes, each describing one
+    #   component settings page.
     def settings(&proc)
       self.settings_proc = proc
     end
@@ -42,7 +42,7 @@ class Course::ComponentHost
     # Class method to get the settings items from this component, in the context of the given
     # controller instance.
     #
-    # @param controller [Course::Controller] The controller handling the current request.
+    # @param [Course::Controller] controller The controller handling the current request.
     # @return [Array] An array of hashes containing the settings items exposed by this component.
     def get_settings_items(controller)
       return [] unless settings_proc
@@ -87,8 +87,8 @@ class Course::ComponentHost
 
   # Initialize the component host instance
   #
-  # @param [#settings] instance settings object
-  # @param [#settings] course settings object
+  # @param [#settings] instance_settings instance settings object
+  # @param [#settings] course_settings course settings object
   def initialize(instance_settings, course_settings)
     @instance_settings = instance_settings
     @course_settings = course_settings
