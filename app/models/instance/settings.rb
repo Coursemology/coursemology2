@@ -7,14 +7,14 @@ class Instance::Settings
 
   # Initialises the settings adapter
   #
-  # @param settings [#settings] The settings object provided by the settings_on_rails gem.
+  # @param [#settings] settings The settings object provided by the settings_on_rails gem.
   def initialize(settings)
     @settings = settings
   end
 
   # Update settings with the hash attributes
   #
-  # @param attributes [Hash] The hash who stores the new settings
+  # @param [Hash] attributes The hash who stores the new settings
   def update(attributes)
     attributes.each { |k, v| send("#{k}=", v) }
     true
@@ -53,7 +53,7 @@ class Instance::Settings
 
   # Queries the underlying settings object for the key's subtree.
   #
-  # @param symbol [Symbol] The symbol to query for.
+  # @param [Symbol] symbol The symbol to query for.
   def settings(symbol)
     @settings.settings(symbol)
   end
@@ -71,9 +71,9 @@ class Instance::Settings
 
   # Deduces the components to disable/enable from the set of IDs which are enabled.
   #
-  # @param ids [Array<String>] The set of component IDs to enable.
+  # @param [Array<String>] ids The set of component IDs to enable.
   # @return [Set<String>, Set<String>] The components which are to be disabled and the set of
-  #                                    components which are to be enabled respectively.
+  #   components which are to be enabled respectively.
   def deduce_component_ids(ids)
     components_to_disable = Set[*components_enabled_statuses.map(&:id)]
     components_to_enable = Set.new

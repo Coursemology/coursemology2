@@ -3,7 +3,7 @@ class Ability
 
   # Initialize the ability of user.
   #
-  # @param user [User] The current user.
+  # @param [User] user The current user.
   def initialize(user)
     # TODO: Replace with just the symbols when Rails 5 is released.
     can [:read, :register], Course, status: [Course.statuses[:published], Course.statuses[:opened],

@@ -21,8 +21,8 @@ module ApplicationHelper
 
   # Defines the sidebar for the current page.
   #
-  # @param classes [Array<String>] An array of classes to apply to the sidebar container.
-  # @return String The buffer containing the markup for the sidebar.
+  # @param [Array<String>] classes An array of classes to apply to the sidebar container.
+  # @return [String] The buffer containing the markup for the sidebar.
   def sidebar(classes: ['col-xs-7', 'col-sm-3', 'col-md-2'])
     sidebar!
 
@@ -33,22 +33,22 @@ module ApplicationHelper
 
   # Formats the given User as a user-visible string.
   #
-  # @param user [User] The User to display.
+  # @param [User] user The User to display.
   # @return [String] The user-visible string to represent the User, suitable for rendering as
-  #                  output.
+  #   output.
   def display_user(user)
     user.name
   end
 
   # Links to the given User.
   #
-  # @param user [User] The User to display.
-  # @param options [Hash] The options to pass to `link_to`
+  # @param [User] user The User to display.
+  # @param [Hash] options The options to pass to `link_to`
   # @yield The user will be yielded to the provided block, and the block can override the display
-  #        of the User.
-  # @yieldparam user [User] The user to display.
+  #   of the User.
+  # @yieldparam [User] user The user to display.
   # @return [String] The user-visible string, including embedded HTML which will display the
-  #                  string within a link to bring to the User page.
+  #   string within a link to bring to the User page.
   def link_to_user(user, options = {})
     link_path = '' # TODO: Link to the user page.
     link_to(link_path, options) do
@@ -62,7 +62,7 @@ module ApplicationHelper
 
   # Format the given datetime
   #
-  # @param date [DateTime] The datetime to be formatted
+  # @param [DateTime] date The datetime to be formatted
   # @return [String] the formatted datetime string
   def format_datetime(date, format = :long)
     date.to_formatted_s(format)
@@ -70,7 +70,7 @@ module ApplicationHelper
 
   # A helper for generating css class, return the time bounded status of the item
   #
-  # @param item [ActiveRecord::Base] The ActiveRecord objects who has the time_bounded fields
+  # @param [ActiveRecord::Base] item The ActiveRecord objects who has the time_bounded fields
   # @return [String] the string which indicates its current status
   def time_period_class(item)
     return 'not-yet-valid' if item.not_yet_valid?

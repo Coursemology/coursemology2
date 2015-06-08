@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
 
   # Sets the default email address of the user.
   #
-  # @param email [String, nil] The email address of the user to set. Nil unsets the record.
+  # @param [String, nil] email The email address of the user to set. Nil unsets the record.
   def email=(email)
     record = default_email_record
     if email

@@ -3,7 +3,7 @@ module Capybara::TestGroupHelpers
   module FeatureHelpers
     # Finds the given form with the given selector and target.
     #
-    # @param selector [String|nil] The selector to find the form with.
+    # @param [String|nil] selector The selector to find the form with.
     def find_form(selector, action: nil)
       attribute_selector =
         if action

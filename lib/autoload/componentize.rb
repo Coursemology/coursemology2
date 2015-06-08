@@ -27,7 +27,7 @@ module Componentize
 
   # Extends the given host with methods needed to host other classes.
   #
-  # @param host [Class] The host to convert into a host.
+  # @param [Class] host The host to convert into a host.
   def self.become_component_host(host)
     return if host.include?(ComponentHost)
     host.const_set(:Component, base_component_for_host(host))
@@ -41,7 +41,7 @@ module Componentize
   #
   # The base component is included by other components to associate them with the host.
   #
-  # @param host [Class] The class to make the base component for.
+  # @param [Class] host The class to make the base component for.
   # @return [Component] A new base component for the given host.
   def self.base_component_for_host(host)
     result = ::Module.new do
@@ -74,7 +74,7 @@ module Componentize
       # Eager loads all components in the provided path. Components have the suffix `Component` in
       # their class names.
       #
-      # @param in_path [Dir|String] The directory to eager load all components from. The naming of
+      # @param [Dir|String] in_path The directory to eager load all components from. The naming of
       # the files must follow Rails conventions.
       def eager_load_components(in_path)
         if in_path.is_a?(String)
@@ -91,7 +91,7 @@ module Componentize
 
       # Associates the given component with the current host.
       #
-      # @param component [Component] The component which included the host.
+      # @param [Component] component The component which included the host.
       def add_component(component)
         component_names << component.name unless component_names.include?(component.name)
       end
@@ -107,9 +107,9 @@ module Componentize
 
       # Loads the given component at the specified path.
       #
-      # @param path [String] The absolute path to the file.
-      # @param base_path [Pathname] The root directory where components are found. This is to deduce
-      #                             the name of the class defined in the given file.
+      # @param [String] path The absolute path to the file.
+      # @param [Pathname] base_path The root directory where components are found. This is to deduce
+      #   the name of the class defined in the given file.
       def load_component(path, base_path)
         relative_path = Pathname.new(path).relative_path_from(base_path)
 
@@ -123,7 +123,7 @@ module Componentize
       # @example class_in_path(Pathname.new('test.rb')) => 'Test'
       # @example class_in_path(Pathname.new('Test/test.rb')) => 'Test::Test'
       #
-      # @param relative_path [Pathname] The relative path to the file.
+      # @param [Pathname] relative_path The relative path to the file.
       # @return [String] The name of the class defined in the path.
       def class_in_path(relative_path)
         component_path = "#{relative_path.dirname}/#{relative_path.basename('.rb')}".camelize

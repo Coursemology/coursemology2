@@ -45,7 +45,7 @@ class Course::Controller < ApplicationController
 
   # Gets the current course user.
   # @return [CourseUser|nil] The course user that belongs to the signed in user and the loaded
-  #                          course. nil if there is no user session, or no course is loaded.
+  #   course. nil if there is no user session, or no course is loaded.
   def current_course_user
     @current_course_user ||= @course.course_users.find_by(user: current_user)
   end
@@ -54,7 +54,7 @@ class Course::Controller < ApplicationController
   # Gets the component host for current instance and course
   #
   # @return [Course::ComponentHost] The instance of component host using settings from instance and
-  #                                 course
+  #   course
   def current_component_host
     @current_component_host ||= Course::ComponentHost.new(current_tenant.settings(:components),
                                                           current_course.settings(:components))

@@ -3,9 +3,9 @@ module ActsAsTenant::TestGroupHelpers
   module ModelHelpers
     # Sets the current tenant when running this group of tests.
     #
-    # @param tenant [Symbol] The symbol containing the tenant to use for this group of
-    #                        tests. The tenant must have been set using a let construct.
-    # @param proc [Proc] The block containing the test definitions.
+    # @param [Symbol] tenant The symbol containing the tenant to use for this group of
+    #   tests. The tenant must have been set using a let construct.
+    # @param [Proc] proc The block containing the test definitions.
     def with_tenant(tenant, &proc)
       context "with tenant #{tenant.inspect}" do |*params|
         before(:each) do
@@ -23,9 +23,9 @@ module ActsAsTenant::TestGroupHelpers
     include ModelHelpers
     # Sets the current tenant and host when running this group of tests.
     #
-    # @param tenant [Symbol] The symbol containing the tenant to use for this group of
-    #                        tests. The tenant must have been set using a let construct.
-    # @param proc [Proc] The block containing the test definitions.
+    # @param [Symbol] tenant The symbol containing the tenant to use for this group of
+    #   tests. The tenant must have been set using a let construct.
+    # @param [Proc] proc The block containing the test definitions.
     def with_tenant(tenant, &proc)
       super(tenant) do |*params|
         before(:each) do
@@ -40,9 +40,9 @@ module ActsAsTenant::TestGroupHelpers
     include ModelHelpers
     # Sets the current tenant and host when running this group of tests.
     #
-    # @param tenant [Symbol] The symbol containing the tenant to use for this group of
-    #                        tests. The tenant must have been set using a let construct.
-    # @param proc [Proc] The block containing the test definitions.
+    # @param [Symbol] tenant The symbol containing the tenant to use for this group of
+    #   tests. The tenant must have been set using a let construct.
+    # @param [Proc] proc The block containing the test definitions.
     def with_tenant(tenant, &proc)
       super(tenant) do |*params|
         before(:each) do

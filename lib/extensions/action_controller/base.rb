@@ -17,8 +17,8 @@ module Extensions::ActionController::Base
 
   # Gets the parent layout of the given layout, as specified in the layout hierarchy.
   #
-  # @param of_layout [String] The layout to obtain the parent of. If this is nil, obtains the
-  #                           current controller's parent layout.
+  # @param [String] of_layout The layout to obtain the parent of. If this is nil, obtains the
+  #   current controller's parent layout.
   # @return [String] The parent layout of the given layout.
   def parent_layout(of_layout: nil)
     layout = of_layout || current_layout
@@ -50,7 +50,7 @@ module Extensions::ActionController::Base
 
   # Gets the superclass hierarchy for the given class. Object is not part of the returned result.
   #
-  # @param klass [Class] The class to obtain the hierarchy of.
+  # @param [Class] klass The class to obtain the hierarchy of.
   # @return [Array<String>] The superclass hierarchy for the given class.
   def self.class_hierarchy(klass)
     result = []
@@ -64,9 +64,9 @@ module Extensions::ActionController::Base
 
   # Gets the layout for objects of the given class.
   #
-  # @param klass [Class] The class to obtain the layout of. This must be a subclass of
-  #                      ActionController::Base
-  # @param self_ [ActionController::Base] The instance to query against the class hierarchy.
+  # @param [Class] klass The class to obtain the layout of. This must be a subclass of
+  #   ActionController::Base
+  # @param [ActionController::Base] self_ The instance to query against the class hierarchy.
   # @return [String] The layout to use for instances of `klass`.
   def self.class_layout(klass, self_)
     layout_method = klass.instance_method(:_layout)
