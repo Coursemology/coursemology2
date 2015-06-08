@@ -1,4 +1,8 @@
 h1 = t('.header')
+
+- if can?(:create, Course::Level)
+  = new_button([current_course, :level]) { t('.create') }
+
 table.table.levels-list
   thead
     tr
