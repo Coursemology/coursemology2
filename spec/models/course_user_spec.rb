@@ -119,6 +119,25 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
+    describe '#level_number' do
+      subject { student.level_number }
+      before do
+        create :course_level, course: course, experience_points_threshold: 100
+        create :course_level, course: course, experience_points_threshold: 200
+      end
+
+      context 'when student has no experience points' do
+        it { is_expected.to eq(0) }
+      end
+
+      context 'after enough experience points have been awarded' do
+        before do
+          create :course_experience_points_record, points_awarded: 150, course_user: student
+        end
+        it { is_expected.to eq(1) }
+      end
+    end
+
     describe '#experience_points' do
       let!(:exp_record_1) { create(:course_experience_points_record) }
       let!(:exp_record_2) do
