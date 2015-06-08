@@ -4,7 +4,7 @@ RSpec.describe 'Administration: System announcements', type: :feature do
   describe 'Pagination' do
     subject { page }
 
-    let!(:user) { create(:user, role: :administrator) }
+    let!(:user) { create(:administrator) }
 
     before do
       SystemAnnouncement.delete_all

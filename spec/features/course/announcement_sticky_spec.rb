@@ -7,7 +7,7 @@ RSpec.describe 'Course: Announcements', type: :feature do
     let!(:instance) { create(:instance) }
 
     with_tenant(:instance) do
-      let!(:user) { create(:user, role: :administrator) }
+      let!(:user) { create(:administrator) }
       let!(:course) { create(:course) }
 
       before do

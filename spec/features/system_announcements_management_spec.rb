@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'System announcements', type: :feature do
-  let!(:user) { create(:user, role: :administrator) }
+  let!(:user) { create(:administrator) }
 
   before do
     login_as(user, scope: :user)
