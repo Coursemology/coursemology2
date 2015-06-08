@@ -1,0 +1,7 @@
+en:
+  course:
+    levels:
+      index:
+        header: 'Levels'
+        level: 'Level'
+        threshold: 'Threshold'
