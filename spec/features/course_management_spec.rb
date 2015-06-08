@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Courses', type: :feature do
+RSpec.feature 'Courses' do
   subject { page }
   let(:instance) { create(:instance) }
 
@@ -8,30 +8,28 @@ RSpec.describe 'Courses', type: :feature do
     let!(:user) { create(:administrator) }
     before { login_as(user, scope: :user) }
 
-    describe 'course new page' do
-      before { visit new_course_path }
+    scenario 'Users can see a list of courses' do
+      create(:course, creator: user, updater: user)
 
-      it { is_expected.to have_field('course_title') }
-      it { is_expected.to have_field('course_description') }
+      visit courses_path
+      expect(all('.course').count).to eq(1)
+      expect(subject).to have_link(I18n.t('course.courses.index.new'), href: new_course_path)
     end
 
-    describe 'course creation' do
-      before { visit new_course_path }
-      subject { click_button I18n.t('helpers.submit.course.create') }
+    scenario 'Users can create a new course' do
+      visit new_course_path
 
-      context 'with invalid information' do
-        it 'does not create a course' do
-          expect { subject }.not_to change(instance.courses, :count)
-        end
-      end
+      expect(subject).to have_field('course_title')
+      expect(subject).to have_field('course_description')
 
-      context 'with valid information' do
-        before { fill_in 'course_title', with: 'Lorem ipsum' }
+      expect do
+        click_button I18n.t('helpers.submit.course.create')
+      end.not_to change(instance.courses, :count)
 
-        it 'creates a course' do
-          expect { subject }.to change(instance.courses, :count).by(1)
-        end
-      end
+      expect do
+        fill_in 'course_title', with: 'Lorem ipsum'
+        click_button I18n.t('helpers.submit.course.create')
+      end.to change(instance.courses, :count).by(1)
     end
   end
 end
