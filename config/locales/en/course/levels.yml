@@ -1,6 +1,7 @@
 en:
   course:
     levels:
+      sidebar_title: 'Levels'
       index:
         header: 'Levels'
         level: 'Level'
