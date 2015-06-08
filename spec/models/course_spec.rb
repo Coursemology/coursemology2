@@ -90,6 +90,13 @@ RSpec.describe Course, type: :model do
           end
         end
       end
+
+      describe '#numbered_levels' do
+        it 'numbers levels' do
+          numbering = course.numbered_levels.map(&:level_number)
+          expect(numbering).to eq((1..(levels.size)).to_a)
+        end
+      end
     end
 
     describe '#staff' do
