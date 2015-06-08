@@ -5,7 +5,7 @@ class Course::ComponentHost
     # Class method to declare the proc handling the sidebar menu items.
     #
     # @param [Proc] proc The proc handling the sidebar for the given component. The proc will be
-    #   `instance_eval`ed in the context of the controller handling the current
+    #   +instance_eval+ed in the context of the controller handling the current
     #   request. This proc must return an array of hashes, each describing one
     #   menu item.
     def sidebar(&proc)
@@ -32,7 +32,7 @@ class Course::ComponentHost
     # Class method to declare the proc handling the course settings items.
     #
     # @param [Proc] proc The proc handling the settings for the given component. The proc will be
-    #   `instance_eval`ed in the context of the controller handling the current
+    #   +instance_eval+ed in the context of the controller handling the current
     #   request. This proc must return an array of hashes, each describing one
     #   component settings page.
     def settings(&proc)

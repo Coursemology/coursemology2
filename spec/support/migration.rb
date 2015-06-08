@@ -5,7 +5,7 @@ module ActiveRecord::Migration::TestGroupHelpers
   #
   # @param [Symbol] table_name The name of the table to define.
   # @param [Proc] proc The table definition, same as that of a block given to
-  #   `ActiveRecord::Migration::create_table`
+  #   +ActiveRecord::Migration::create_table+
   def temporary_table(table_name, &proc)
     define_method(table_name) do
       proc

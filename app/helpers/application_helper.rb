@@ -43,7 +43,7 @@ module ApplicationHelper
   # Links to the given User.
   #
   # @param [User] user The User to display.
-  # @param [Hash] options The options to pass to `link_to`
+  # @param [Hash] options The options to pass to +link_to+
   # @yield The user will be yielded to the provided block, and the block can override the display
   #   of the User.
   # @yieldparam [User] user The user to display.

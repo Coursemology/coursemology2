@@ -67,7 +67,7 @@ module Extensions::ActionController::Base
   # @param [Class] klass The class to obtain the layout of. This must be a subclass of
   #   ActionController::Base
   # @param [ActionController::Base] self_ The instance to query against the class hierarchy.
-  # @return [String] The layout to use for instances of `klass`.
+  # @return [String] The layout to use for instances of +klass+.
   def self.class_layout(klass, self_)
     layout_method = klass.instance_method(:_layout)
     layout = layout_method.bind(self_)
