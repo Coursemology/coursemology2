@@ -7,7 +7,7 @@ RSpec.describe 'Administration: Announcements', type: :feature do
     let!(:instance) { create(:instance) }
 
     with_tenant(:instance) do
-      let!(:user) { create(:user, role: :administrator) }
+      let!(:user) { create(:administrator) }
 
       before do
         create_list(:instance_announcement, 50, instance: instance, creator: user, updater: user)

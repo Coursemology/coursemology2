@@ -20,8 +20,8 @@ RSpec.describe Course::Announcement, type: :model do
     end
 
     context 'unread status' do
-      let!(:first_user) { create(:user, role: :administrator) }
-      let!(:second_user) { create(:user, role: :administrator) }
+      let!(:first_user) { create(:administrator) }
+      let!(:second_user) { create(:administrator) }
       let!(:course) { create(:course) }
 
       describe 'announcement creation' do

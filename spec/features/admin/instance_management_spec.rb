@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Administration: Instances', type: :feature do
-  let!(:user) { create(:user, role: :administrator) }
+  let!(:user) { create(:administrator) }
   before { login_as(user, scope: :user) }
 
   describe 'new page' do

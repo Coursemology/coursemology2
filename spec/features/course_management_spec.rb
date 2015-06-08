@@ -5,7 +5,7 @@ RSpec.describe 'Courses', type: :feature do
   let(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let!(:user) { create(:user, role: :administrator) }
+    let!(:user) { create(:administrator) }
     before { login_as(user, scope: :user) }
 
     describe 'course new page' do

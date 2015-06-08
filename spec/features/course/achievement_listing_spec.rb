@@ -6,7 +6,7 @@ RSpec.describe 'Course: Achievements', type: :feature do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let!(:user) { create(:user, role: :administrator) }
+    let!(:user) { create(:administrator) }
     let!(:course) { create(:course) }
     let!(:achievements) do
       create_list(:course_achievement, 10, course: course, creator: user, updater: user)

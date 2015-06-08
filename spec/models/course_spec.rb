@@ -38,7 +38,7 @@ RSpec.describe Course, type: :model do
     end
 
     describe 'levels' do
-      let!(:user) { create(:user, role: :administrator) }
+      let!(:user) { create(:administrator) }
       let!(:course) { create(:course) }
       let!(:levels) do
         create_list(:course_level, 5, course: course).map(&:experience_points_threshold)
