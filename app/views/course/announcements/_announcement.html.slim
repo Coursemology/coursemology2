@@ -8,13 +8,9 @@ hr
 
   - if can?(:manage, Course::Announcement)
     div.pull-right
-      = link_to edit_course_announcement_path(current_course, announcement),
-                class: 'btn btn-default' do
-        = fa_icon 'edit'
+      = edit_button(edit_course_announcement_path(current_course, announcement))
 
-      = link_to course_announcement_path(current_course, announcement),
-                  class: 'btn btn-danger', method: :delete do
-        = fa_icon 'trash'
+      = delete_button(course_announcement_path(current_course, announcement))
 
   div.timestamp
     = format_datetime(announcement.valid_from)

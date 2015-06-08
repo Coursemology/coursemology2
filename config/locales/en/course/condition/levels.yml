@@ -11,6 +11,5 @@ en:
         update:
           success: 'Level condition was updated.'
         destroy:
-          confirmation: 'Are you sure to delete the Level condition?'
           success: 'Level condition was deleted.'
           error: 'Failed to delete level condition.'
