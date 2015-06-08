@@ -5,12 +5,10 @@ class Course::Controller < ApplicationController
   #
   # Sidebar elements have the given format:
   #
-  # ```
-  # {
-  #    title: 'Sidebar Item Title'
-  #    unread: 0 # or nil
-  # }
-  # ```
+  #   {
+  #      title: 'Sidebar Item Title'
+  #      unread: 0 # or nil
+  #   }
   #
   # The elements are rendered on all Course controller subclasses as part of a nested template.
   def sidebar
@@ -25,13 +23,11 @@ class Course::Controller < ApplicationController
   #
   # Settings elements have the given format:
   #
-  # ```
-  # {
-  #    title: 'Settings Item Title'
-  #    controller: controller name, String or Symbol
-  #    action: action name, String or Symbol
-  # }
-  # ```
+  #   {
+  #      title: 'Settings Item Title'
+  #      controller: controller name, String or Symbol
+  #      action: action name, String or Symbol
+  #   }
   def settings
     array_of_component_arrays = current_component_host.components.map do |component|
       component.get_settings_items(self)

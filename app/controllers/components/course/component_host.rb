@@ -87,8 +87,8 @@ class Course::ComponentHost
 
   # Initialize the component host instance
   #
-  # @param [#settings] instance settings object
-  # @param [#settings] course settings object
+  # @param [#settings] instance_settings instance settings object
+  # @param [#settings] course_settings course settings object
   def initialize(instance_settings, course_settings)
     @instance_settings = instance_settings
     @course_settings = course_settings

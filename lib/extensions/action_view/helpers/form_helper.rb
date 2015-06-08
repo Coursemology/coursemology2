@@ -53,9 +53,9 @@ module Extensions::ActionView::Helpers::FormHelper
 
   # Splits the path helper into the suffix (_path, or _url), and the resource involved.
   #
-  # @param [String] The components of the path helper.
-  # @return Array<[String], String)> The list of components, with the suffix removed, followed by
-  #                                  the suffix.
+  # @param [String] components the components of the path helper.
+  # @return [Array<[String], String>] The list of components, with the suffix removed, followed by
+  #                                   the suffix.
   def self.parse_path_components(components)
     if ['path', 'url'].include?(components.last)
       [components, components.pop]

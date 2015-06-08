@@ -40,7 +40,7 @@ class Instance::Settings
 
   # Disable/Enable components
   #
-  # @params [Array<String>] the ids of all the enabled components
+  # @param [Array<String>] ids the ids of all the enabled components
   def enabled_component_ids=(ids)
     components_to_disable, components_to_enable = deduce_component_ids(ids)
 
