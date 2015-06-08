@@ -1,0 +1,14 @@
+en:
+  user:
+    registrations:
+      new:
+        sign_up: 'Sign up'
+        password_hint: "#{length} characters minimum"
+      edit:
+        edit: "Edit #{resource}"
+        pending_confirmation: 'Currently waiting confirmation for #{email}'
+        new_password_hint: "Leave blank if you don't want to change it"
+        current_password_required_hint: 'We need your current password to confirm your changes'
+        cancel_account: 'Cancel my account'
+        confirm_deletion: 'Are you sure?'
+        unhappy: 'Unhappy?'

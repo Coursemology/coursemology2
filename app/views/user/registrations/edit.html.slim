@@ -1,0 +1,28 @@
+h2
+  = t('.edit', resource: resource_name.to_s.humanize)
+
+= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
+  = f.error_notification
+
+  div.form-inputs
+    = f.input :email, required: true, autofocus: true
+
+    - if devise_mapping.confirmable? && resource.pending_reconfirmation?
+      p = t('.pending_confirmation', email: resource.unconfirmed_email)
+
+    = f.input :password, autocomplete: 'off', hint: t('.new_password_hint'), required: false
+    = f.input :password_confirmation, required: false
+    = f.input :current_password, hint: t('.current_password_required_hint'), required: true
+
+  div.form-actions
+    = f.button :submit
+
+h3
+  = t('.cancel_account')
+
+p
+  = t('.unhappy')
+  = link_to t('.cancel_account'), registration_path(resource_name),\
+      data: { confirm: t('.confirm_deletion') }, method: :delete
+
+= link_to t('common.back'), :back

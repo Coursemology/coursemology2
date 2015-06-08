@@ -6,7 +6,8 @@ class User < ActiveRecord::Base
 
   enum role: { normal: 0, administrator: 1 }
 
-  has_many :emails, class_name: UserEmail.name, inverse_of: :user, dependent: :destroy
+  has_many :emails, -> { order('primary' => :desc) }, class_name: UserEmail.name,
+                                                      inverse_of: :user, dependent: :destroy
   has_many :instance_users
   has_many :instances, through: :instance_users
   has_many :course_users, inverse_of: :user, dependent: :destroy
@@ -39,6 +40,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def email_changed?
+    !persisted? || (emails.loaded? && emails.each.any?(&:changed))
+  end
+
   private
 
   # Gets the default email address record.
@@ -48,7 +53,6 @@ class User < ActiveRecord::Base
     valid_emails = emails.each.select { |email_record| !email_record.marked_for_destruction? }
     result = valid_emails.find(&:primary?)
     result ||= valid_emails.first
-    result ||= emails.order('primary=1 ASC').first
     result
   end
 end
