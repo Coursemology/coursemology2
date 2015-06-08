@@ -1,4 +1,4 @@
-class Instance::Settings::BooleanValue
+class Pseudo::BooleanValue
   include ActiveModel::Model
   include ActiveModel::Conversion
 

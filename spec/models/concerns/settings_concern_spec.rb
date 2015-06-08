@@ -1,9 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe Instance::Settings, type: :model do
+RSpec.describe SettingsConcern, type: :model do
   let(:all_components) { [:A, :B, :C, :D, :E, :F].freeze }
   let(:enabled_components) { [:A, :C, :E].freeze }
-
   let(:settings) do
     components = {}
     all_components.each do |component|
@@ -13,7 +12,17 @@ RSpec.describe Instance::Settings, type: :model do
     mock_settings(hash)
   end
 
-  subject { Instance::Settings.new(settings) }
+  let(:test_class) do
+    Class.new do
+      include SettingsConcern
+
+      def initialize(settings)
+        @settings = settings
+      end
+    end
+  end
+
+  subject { test_class.new(settings) }
 
   describe '#enabled_components' do
     it 'retrieves only enabled components' do
