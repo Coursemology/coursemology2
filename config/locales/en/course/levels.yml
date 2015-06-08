@@ -6,3 +6,10 @@ en:
         header: 'Levels'
         level: 'Level'
         threshold: 'Threshold'
+        create: 'Create Level'
+      new:
+        header: 'New Level'
+        experience_points_threshold: 'Experience Points Threshold'
+        description: "A student will achieve this level when the student's experience points equals or exceeds this value."
+      create:
+        success: "Level created with threshold at %{threshold} experience points."
