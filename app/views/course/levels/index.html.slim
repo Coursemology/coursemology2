@@ -8,5 +8,7 @@ table.table.levels-list
     tr
       th = t('.level')
       th = t('.threshold')
+      - if can?(:manage, Course::Level)
+        th
   tbody
     = render @levels
