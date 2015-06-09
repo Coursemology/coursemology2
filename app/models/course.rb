@@ -21,6 +21,10 @@ class Course < ActiveRecord::Base
   delegate :staff, to: :course_users
   delegate :has_user?, to: :course_users
 
+  def self.use_relative_model_naming?
+    true
+  end
+
   private
 
   # Set default values

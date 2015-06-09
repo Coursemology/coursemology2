@@ -32,8 +32,5 @@ module RouteOverridesHelper
     end
   end
 
-  map_route :course_course_achievement_condition_course_condition_achievement,
-            to: :course_achievement_condition_achievement
-  map_route :course_course_achievement_condition_course_condition_level,
-            to: :course_achievement_condition_level
+  map_route :course_course_user, to: :course_user
 end

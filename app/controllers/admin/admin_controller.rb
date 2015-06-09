@@ -9,7 +9,7 @@ class Admin::AdminController < Admin::Controller
   end
 
   def update_components #:nodoc:
-    @settings.update(params.require(:instance_settings_effective))
+    @settings.update(params.require(:settings_effective))
     if current_tenant.save
       redirect_to admin_components_path, success: t('.success')
     else
