@@ -1,4 +1,8 @@
 h1 = t('.header')
+
+- if can?(:create, Course::Level)
+  = link_to t('.create'), new_course_level_path(current_course), class: 'btn btn-primary'
+
 table.table.levels-list
   thead
     tr
