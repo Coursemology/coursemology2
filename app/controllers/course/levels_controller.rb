@@ -17,6 +17,16 @@ class Course::LevelsController < Course::ComponentController
     end
   end
 
+  def destroy #:nodoc:
+    if @level.destroy
+      redirect_to(course_levels_path(current_course),
+                  success: t('.success',
+                             threshold: @level.experience_points_threshold))
+    else
+      redirect_to(course_levels_path(current_course), failure: t('.failure'))
+    end
+  end
+
   private
 
   # This methods ensures that the Course::Levels are numbered
@@ -26,6 +36,6 @@ class Course::LevelsController < Course::ComponentController
   end
 
   def level_params #:nodoc:
-    params.require(:course_level).permit(:experience_points_threshold)
+    params.require(:level).permit(:experience_points_threshold)
   end
 end

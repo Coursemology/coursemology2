@@ -1,12 +1,14 @@
 h1 = t('.header')
 
 - if can?(:create, Course::Level)
-  = new_button([current_course, :level]) { t('.create') }
+  = new_button([current_course, :level])
 
 table.table.levels-list
   thead
     tr
       th = t('.level')
       th = t('.threshold')
+      - if can?(:destroy, Course::Level)
+        th
   tbody
     = render @levels
