@@ -2,10 +2,13 @@ en:
   common:
     'yes': 'Yes'
     'no': 'No'
-    edit: 'Edit'
-    delete: 'Delete'
-    delete_confirm: 'Are you sure?'
     back: 'Back'
     name: 'Name'
     email: 'Email'
     role: 'Role'
+  helpers:
+    buttons:
+      new: 'New %{model}'
+      edit: "Edit %{model}"
+      delete: "Delete %{model}"
+      delete_confirm_message: 'Are you sure?'

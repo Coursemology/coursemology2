@@ -89,6 +89,7 @@ ignore_unused:
 - 'activerecord.attributes.*'
 - 'breadcrumbs.*'
 - 'errors.messages.*'
+- 'helpers.buttons.*'
 - '{devise,kaminari,will_paginate}.*'
 - 'simple_form.{yes,no}'
 - 'simple_form.{placeholders,hints,labels}.*'
