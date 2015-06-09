@@ -1,0 +1,2 @@
+module Course::GroupsHelper
+end

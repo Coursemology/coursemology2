@@ -96,6 +96,8 @@ Rails.application.routes.draw do
       get 'students' => 'users#students', as: :users_students
       get 'staff' => 'users#staff', as: :users_staff
       get 'requests' => 'users#requests', as: :users_requests
+
+      resources :groups
     end
   end
 end
