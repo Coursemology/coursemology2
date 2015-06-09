@@ -14,32 +14,35 @@ RSpec.feature 'Course: Levels' do
       end
     end
 
-    context 'As a Course Administrator,' do
+    context 'As a Course Administrator' do
       before do
         login_as(user, scope: :user)
-        visit course_levels_path(course)
       end
 
       scenario 'I can view course levels' do
+        visit course_levels_path(course)
+
         (1..3).each do |i|
           expect(page.find('tr', text: i * 100)).to have_selector('td', text: i)
         end
       end
 
-      scenario 'I can create a course level with valid input' do
+      scenario 'I can create a course level' do
+        visit course_levels_path(course)
         find_link(nil, href: new_course_level_path(course)).click
-        fill_in 'course_level_experience_points_threshold', with: 100
+        fill_in 'level_experience_points_threshold', with: 100
 
         expect do
-          click_button I18n.t('helpers.submit.course_level.create')
+          click_button I18n.t('helpers.submit.level.create')
         end.to change(course.levels, :count).by(1)
       end
 
-      scenario 'I cannot create a course level with invalid input' do
-        visit new_course_level_path(course)
-        click_button I18n.t('helpers.submit.course_level.create')
+      scenario 'I can delete a course level' do
+        visit course_levels_path(course)
 
-        expect(page).to have_button('helpers.submit.course_level.create')
+        expect do
+          find_link(nil, href: course_level_path(course, levels[0])).click
+        end.to change(course.levels, :count).by(-1)
       end
     end
   end
