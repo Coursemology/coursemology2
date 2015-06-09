@@ -86,7 +86,7 @@ Rails.application.routes.draw do
           concerns :conditional
         end
       end
-      resources :levels, except: [:show]
+      resources :levels, except: [:show, :edit, :update]
 
       get 'settings' => 'settings#index', as: :settings
       patch 'settings' => 'settings#update', as: :update_settings
