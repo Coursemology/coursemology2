@@ -111,9 +111,10 @@ class Course::ComponentHost
     instance_components - components
   end
 
-  private
-
-  def instance_components #:nodoc:
+  # Returns the enabled components in instance.
+  #
+  # @return [Array] array of enabled components in instance
+  def instance_components
     all_components = Course::ComponentHost.components
     all_components.select do |m|
       enabled = @instance_settings.settings(m.key).enabled
