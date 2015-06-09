@@ -16,6 +16,22 @@ ActiveRecord::Schema.define(version: 20150614024340) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "activities", force: :cascade do |t|
+    t.integer  "trackable_id",   index: {name: "index_activities_on_trackable_id_and_trackable_type", with: ["trackable_type"]}
+    t.string   "trackable_type"
+    t.integer  "owner_id",       index: {name: "index_activities_on_owner_id_and_owner_type", with: ["owner_type"]}
+    t.string   "owner_type"
+    t.string   "key"
+    t.text     "parameters"
+    t.integer  "recipient_id",   index: {name: "index_activities_on_recipient_id_and_recipient_type", with: ["recipient_type"]}
+    t.string   "recipient_type"
+    t.boolean  "feed",           default: false, null: false
+    t.boolean  "email",          default: false, null: false
+    t.boolean  "popup",          default: false, null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "name",                   limit: 255,              null: false
     t.integer  "role",                   default: 0,  null: false
