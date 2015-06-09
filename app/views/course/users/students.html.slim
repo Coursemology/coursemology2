@@ -21,5 +21,6 @@ div.users
               td = f.object.user.email
               td = f.input :phantom
               td
-                = f.button :submit
+                = f.button :submit do
+                  = fa_icon :save
                 = delete_button([current_course, f.object])
