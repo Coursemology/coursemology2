@@ -22,4 +22,4 @@ div.users
               td = f.input :phantom
               td
                 = f.button :submit
-                = delete_button course_user_path(current_course, f.object)
+                = delete_button([current_course, f.object])

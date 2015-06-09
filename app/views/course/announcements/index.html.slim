@@ -1,7 +1,7 @@
 h1 = t('.header')
 
 - if can?(:create, Course::Announcement)
-  = link_to t('.new'), new_course_announcement_path(current_course), class: 'btn btn-primary'
+  = new_button([current_course, :announcement])
 
 = render @announcements
 

@@ -3,7 +3,6 @@ en:
     system_announcements:
       index:
         header: 'System Announcements'
-        new: 'New System Announcement'
       new:
         header: 'New System Announcement'
       create:

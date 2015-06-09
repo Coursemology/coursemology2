@@ -3,7 +3,6 @@ en:
     courses:
       index:
         header: 'Courses'
-        new: 'New Course'
       show:
         register: 'Register'
         already_registered: 'You have already registered for the course.'

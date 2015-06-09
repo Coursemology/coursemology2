@@ -1,7 +1,7 @@
 h1 = t('.header')
 
 - if can?(:create, SystemAnnouncement)
-  = link_to t('.new'), new_admin_system_announcement_path, class: 'btn btn-primary'
+  = new_button([:admin, :system_announcement])
 
 = render @system_announcements
 
