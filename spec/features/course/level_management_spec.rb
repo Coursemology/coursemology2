@@ -26,18 +26,20 @@ RSpec.feature 'Course: Levels' do
         end
       end
 
-      scenario 'I can view the "Create Level" button on the index page' do
-        expect(page).to have_link(I18n.t('course.levels.index.create'),
-                                  href: new_course_level_path(course))
-      end
-
       scenario 'I can create a course level' do
-        visit new_course_level_path(course)
+        visit course_levels_path(course)
+        find_link(nil, href: new_course_level_path(course)).click
         fill_in 'course_level_experience_points_threshold', with: 100
 
         expect do
           click_button I18n.t('helpers.submit.course_level.create')
         end.to change(course.levels, :count).by(1)
+      end
+
+      scenario 'I can delete a course level' do
+        expect do
+          find_link(nil, href: course_level_path(course, levels[0])).click
+        end.to change(course.levels, :count).by(-1)
       end
     end
   end
