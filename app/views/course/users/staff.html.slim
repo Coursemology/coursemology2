@@ -24,6 +24,4 @@ div.users
               td = f.input :phantom
               td
                 = f.button :submit
-                = link_to course_user_path(current_course, f.object), data: { method: :delete },
-                          class: ['btn', 'btn-danger'], title: t('common.delete') do
-                  = fa_icon :trash
+                = delete_button course_user_path(current_course, f.object)
