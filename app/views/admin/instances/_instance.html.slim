@@ -5,6 +5,6 @@ tr
 
   td = instance.host
 
-  td = InstanceUser.unscoped.where(instance_id: instance.id).count
+  td = instance.user_count
 
-  td = Course.unscoped.where(instance_id: instance.id).count
+  td = instance.course_count

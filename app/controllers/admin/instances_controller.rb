@@ -2,6 +2,7 @@ class Admin::InstancesController < Admin::Controller
   load_and_authorize_resource
 
   def index #:nodoc:
+    @instances = @instances.with_course_count.with_user_count
   end
 
   def new #:nodoc:
