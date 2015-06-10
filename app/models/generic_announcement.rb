@@ -4,9 +4,10 @@ class GenericAnnouncement
 
   # @return [Array<SystemAnnouncement|Instance::Announcement>]
   def self.currently_valid
-    in_time_range = ['valid_from <= :now AND :now <= valid_to', {now: Time.zone.now}]
-    system = SystemAnnouncement.includes(:creator).where(in_time_range).order(valid_from: :desc)
-    instance = Instance::Announcement.includes(:creator).where(in_time_range).order(valid_from: :desc)
+    now = Time.zone.now
+    in_time_range = proc { (valid_from <= now) & (valid_to >= now) }
+    system = SystemAnnouncement.includes(:creator).where(&in_time_range).order(valid_from: :desc)
+    instance = Instance::Announcement.includes(:creator).where(&in_time_range).order(valid_from: :desc)
     system + instance
   end
 end
