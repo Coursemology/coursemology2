@@ -1,7 +1,9 @@
-h1 = t('.header')
-
-- if can?(:create, Course::Achievement)
-  = new_button([current_course, :achievement])
+div.page-header
+  h1
+    = t('.header')
+    - if can?(:create, Course::Achievement)
+      div.pull-right
+        = new_button([current_course, :achievement])
 
 table.table.achievement-list
   thead

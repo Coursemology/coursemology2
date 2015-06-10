@@ -1,8 +1,9 @@
-h1 = t('.header')
-
-- if can?(:create, SystemAnnouncement)
-  = new_button([:admin, :system_announcement])
+div.page-header
+  h1
+    = t('.header')
+    - if can?(:create, SystemAnnouncement)
+      div.pull-right
+        = new_button([:admin, :system_announcement])
 
 = render @system_announcements
-
 = paginate @system_announcements

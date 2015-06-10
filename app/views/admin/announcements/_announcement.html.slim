@@ -9,7 +9,7 @@
       = edit_button([:admin, announcement])
       = delete_button([:admin, announcement])
 
-  h3.timestamp
+  div.timestamp
     => format_datetime(announcement.valid_from)
     ' by
     = link_to_user(announcement.creator)
