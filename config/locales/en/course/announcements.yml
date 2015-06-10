@@ -4,7 +4,6 @@ en:
       sidebar_title: 'Announcements'
       index:
         header: 'Announcements'
-        new: 'New'
       new:
         header: 'New Announcement'
       edit:

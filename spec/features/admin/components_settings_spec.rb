@@ -7,7 +7,7 @@ RSpec.feature 'Administration: Components', type: :feature do
     let(:admin) { create(:administrator) }
     let(:components)  { Course::ComponentHost.components }
     let(:sample_component_id) do
-      "instance_settings_effective_enabled_component_ids_#{components.sample.key}"
+      "settings_effective_enabled_component_ids_#{components.sample.key}"
     end
 
     before { login_as(admin, scope: :user) }
@@ -20,7 +20,7 @@ RSpec.feature 'Administration: Components', type: :feature do
       components.each do |component|
         expect(page).to have_selector('th', text: component.name)
 
-        checkbox = find("#instance_settings_effective_enabled_component_ids_#{component.key}")
+        checkbox = find("#settings_effective_enabled_component_ids_#{component.key}")
         if enabled_components.include?(component.key.to_s)
           expect(checkbox).to be_checked
         else
@@ -32,7 +32,7 @@ RSpec.feature 'Administration: Components', type: :feature do
     scenario 'Enable a component' do
       visit admin_components_path
 
-      page.check(sample_component_id)
+      check(sample_component_id)
       click_button('submit')
       expect(page).to have_checked_field(sample_component_id)
     end
@@ -40,7 +40,7 @@ RSpec.feature 'Administration: Components', type: :feature do
     scenario 'Disable a component' do
       visit admin_components_path
 
-      page.uncheck(sample_component_id)
+      uncheck(sample_component_id)
       click_button('submit')
       expect(page).to have_unchecked_field(sample_component_id)
     end

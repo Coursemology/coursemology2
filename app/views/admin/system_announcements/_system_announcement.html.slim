@@ -9,9 +9,9 @@ hr
 
   - if can? :manage, system_announcement.class
     div.pull-right
-      = edit_button(edit_admin_system_announcement_path(system_announcement))
+      = edit_button([:admin, system_announcement])
 
-      = delete_button(admin_system_announcement_path(system_announcement))
+      = delete_button([:admin, system_announcement])
 
   div.timestamp
     = format_datetime(system_announcement.valid_from)

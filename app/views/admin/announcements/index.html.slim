@@ -3,9 +3,7 @@ div.page-header
     = t('.header')
     - if can?(:manage, Instance::Announcement)
       div.pull-right
-        = link_to(t('.new'),
-          new_admin_announcement_path,
-          class: ['btn', 'btn-primary'])
+        = new_button([:admin, :announcement])
 = render partial: 'announcement', collection: @announcements
 
 = paginate @announcements

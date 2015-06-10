@@ -105,7 +105,7 @@ RSpec.describe 'System announcements', type: :feature do
     subject { page }
 
     context 'management buttons' do
-      it { is_expected.to have_link(I18n.t('admin.system_announcements.index.new')) }
+      it { is_expected.to have_link(nil, href: new_admin_system_announcement_path) }
     end
 
     it 'shows all announcements' do

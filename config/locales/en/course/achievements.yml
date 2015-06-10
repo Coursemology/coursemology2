@@ -4,7 +4,6 @@ en:
       sidebar_title: 'Achievements'
       index:
         header: 'Achievements'
-        new: 'New'
         description: 'Description'
         requirements: 'Requirements'
         published: 'Published'

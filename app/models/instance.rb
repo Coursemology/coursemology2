@@ -26,6 +26,10 @@ class Instance < ActiveRecord::Base
            class_name: Instance::Announcement.name
   has_many :courses
 
+  def self.use_relative_model_naming?
+    true
+  end
+
   private
 
   def should_validate_host? #:nodoc:

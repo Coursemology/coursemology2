@@ -17,10 +17,10 @@ RSpec.describe 'Course: Announcements', type: :feature do
       before { visit new_course_announcement_path(course) }
 
       context 'with invalid information' do
-        before { click_button I18n.t('helpers.submit.course_announcement.create') }
+        before { click_button I18n.t('helpers.submit.announcement.create') }
 
         it 'stays on the same page' do
-          expect(page).to have_button(I18n.t('helpers.submit.course_announcement.create'))
+          expect(page).to have_button(I18n.t('helpers.submit.announcement.create'))
         end
 
         it 'shows errors' do
@@ -30,11 +30,11 @@ RSpec.describe 'Course: Announcements', type: :feature do
 
       context 'with valid information' do
         let(:announcement) { build(:course_announcement, course: course) }
-        subject { click_button I18n.t('helpers.submit.course_announcement.create') }
+        subject { click_button I18n.t('helpers.submit.announcement.create') }
 
         before do
-          fill_in 'course_announcement_title',    with: announcement.title
-          fill_in 'course_announcement_content',  with: announcement.content
+          fill_in 'announcement_title',    with: announcement.title
+          fill_in 'announcement_content',  with: announcement.content
         end
 
         it 'creates an announcement' do
@@ -62,26 +62,26 @@ RSpec.describe 'Course: Announcements', type: :feature do
       before { visit edit_course_announcement_path(course, announcement) }
 
       context 'page rendering' do
-        it { is_expected.to have_field('course_announcement_title', with: announcement.title) }
-        it { is_expected.to have_field('course_announcement_content', with: announcement.content) }
+        it { is_expected.to have_field('announcement_title', with: announcement.title) }
+        it { is_expected.to have_field('announcement_content', with: announcement.content) }
         it do
-          is_expected.to have_field('course_announcement[valid_from]',
+          is_expected.to have_field('announcement[valid_from]',
                                     with: announcement.valid_from)
         end
         it do
-          is_expected.to have_field('course_announcement[valid_to]', with: announcement.valid_to)
-          click_button I18n.t('helpers.submit.course_announcement.update')
+          is_expected.to have_field('announcement[valid_to]', with: announcement.valid_to)
+          click_button I18n.t('helpers.submit.announcement.update')
         end
       end
 
       context 'with invalid information' do
         before do
-          fill_in 'course_announcement_title', with: ''
-          click_button I18n.t('helpers.submit.course_announcement.update')
+          fill_in 'announcement_title', with: ''
+          click_button I18n.t('helpers.submit.announcement.update')
         end
 
         it 'stays on the same page' do
-          expect(page).to have_button('helpers.submit.course_announcement.update')
+          expect(page).to have_button('helpers.submit.announcement.update')
         end
 
         it 'shows errors' do
@@ -94,9 +94,9 @@ RSpec.describe 'Course: Announcements', type: :feature do
         let(:new_content) { 'New content' }
 
         before do
-          fill_in 'course_announcement_title',        with: new_title
-          fill_in 'course_announcement_content',      with: new_content
-          click_button I18n.t('helpers.submit.course_announcement.update')
+          fill_in 'announcement_title',        with: new_title
+          fill_in 'announcement_content',      with: new_content
+          click_button I18n.t('helpers.submit.announcement.update')
         end
 
         it 'redirects the user to index page' do
@@ -125,7 +125,7 @@ RSpec.describe 'Course: Announcements', type: :feature do
       end
 
       context 'management buttons' do
-        it { is_expected.to have_link(I18n.t('course.announcements.index.new')) }
+        it { is_expected.to have_link(nil, href: new_course_announcement_path(course)) }
       end
 
       it 'shows all announcements' do

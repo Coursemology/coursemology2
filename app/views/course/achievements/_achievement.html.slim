@@ -15,6 +15,6 @@
     - else
       = t('common.no')
   td
-    = edit_button(edit_course_achievement_path(current_course, achievement))
+    = edit_button([current_course, achievement])
 
-    = delete_button(course_achievement_path(current_course, achievement))
+    = delete_button([current_course, achievement])

@@ -3,7 +3,6 @@ en:
     announcements:
       index:
         header: 'Announcements'
-        new: 'New Announcement'
       new:
         header: 'Create Announcement'
       create:

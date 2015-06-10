@@ -21,7 +21,7 @@ RSpec.describe 'Course: Achievements', type: :feature do
     end
 
     context 'management buttons' do
-      it { is_expected.to have_link(I18n.t('course.achievements.index.new')) }
+      it { is_expected.to have_link(nil, href: new_course_achievement_path(course)) }
     end
 
     it 'shows all achievements' do

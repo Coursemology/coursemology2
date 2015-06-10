@@ -39,6 +39,6 @@ class Admin::AnnouncementsController < Admin::Controller
   private
 
   def announcement_params
-    params.require(:instance_announcement).permit(:title, :content, :valid_from, :valid_to)
+    params.require(:announcement).permit(:title, :content, :valid_from, :valid_to)
   end
 end

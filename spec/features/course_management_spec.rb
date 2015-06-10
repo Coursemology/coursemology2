@@ -13,7 +13,7 @@ RSpec.feature 'Courses' do
 
       visit courses_path
       expect(all('.course').count).to eq(1)
-      expect(subject).to have_link(I18n.t('course.courses.index.new'), href: new_course_path)
+      expect(subject).to have_link(nil, href: new_course_path)
     end
 
     scenario 'Users can create a new course' do

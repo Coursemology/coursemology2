@@ -15,13 +15,13 @@ RSpec.describe 'Course: Achievements' do
 
     describe 'achievement creation' do
       before { visit new_course_achievement_path(course) }
-      subject { click_button I18n.t('helpers.submit.course_achievement.create') }
+      subject { click_button I18n.t('helpers.submit.achievement.create') }
 
       context 'with invalid information' do
         before { subject }
 
         it 'stays on the same page' do
-          expect(page).to have_button('helpers.submit.course_achievement.create')
+          expect(page).to have_button('helpers.submit.achievement.create')
         end
 
         it 'shows errors' do
@@ -33,8 +33,8 @@ RSpec.describe 'Course: Achievements' do
         let(:achievement) { build(:course_achievement, course: course) }
 
         before do
-          fill_in 'course_achievement_title',    with: achievement.title
-          fill_in 'course_achievement_description',  with: achievement.description
+          fill_in 'achievement_title',    with: achievement.title
+          fill_in 'achievement_description',  with: achievement.description
         end
 
         it 'creates an achievement' do
@@ -61,23 +61,23 @@ RSpec.describe 'Course: Achievements' do
       before { visit edit_course_achievement_path(course, achievement) }
 
       context 'page rendering' do
-        it { is_expected.to have_field('course_achievement_title', with: achievement.title) }
+        it { is_expected.to have_field('achievement_title', with: achievement.title) }
         it 'shows achievement description' do
-          expect(page).to have_field('course_achievement_description',
+          expect(page).to have_field('achievement_description',
                                      with: achievement.description)
         end
-        it { is_expected.to have_checked_field('course_achievement_published') }
+        it { is_expected.to have_checked_field('achievement_published') }
       end
 
       context 'with invalid information' do
         before do
-          fill_in 'course_achievement_title', with: ''
+          fill_in 'achievement_title', with: ''
           subject
         end
-        subject { click_button I18n.t('helpers.submit.course_achievement.update') }
+        subject { click_button I18n.t('helpers.submit.achievement.update') }
 
         it 'stays on the same page' do
-          expect(page).to have_button('helpers.submit.course_achievement.update')
+          expect(page).to have_button('helpers.submit.achievement.update')
         end
 
         it 'shows errors' do
@@ -90,9 +90,9 @@ RSpec.describe 'Course: Achievements' do
         let(:new_description) { 'New description' }
 
         before do
-          fill_in 'course_achievement_title',        with: new_title
-          fill_in 'course_achievement_description',      with: new_description
-          click_button I18n.t('helpers.submit.course_achievement.update')
+          fill_in 'achievement_title',        with: new_title
+          fill_in 'achievement_description',      with: new_description
+          click_button I18n.t('helpers.submit.achievement.update')
         end
 
         it 'redirects the user to index page' do

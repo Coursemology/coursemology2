@@ -28,7 +28,7 @@ RSpec.describe 'Course: Announcements', type: :feature do
         end
 
         before { visit course_announcements_path(course) }
-        subject { first('div.course_announcement') }
+        subject { first('div.announcement') }
 
         it 'shows sticky announcement on top' do
           expect(subject).to have_selector('h2', text: sticky_announcement.title)

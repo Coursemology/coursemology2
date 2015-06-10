@@ -6,8 +6,8 @@
     = announcement.title
   - if can? :manage, announcement.class
     div.pull-right
-      = edit_button(edit_admin_announcement_path(announcement))
-      = delete_button(admin_announcement_path(announcement))
+      = edit_button([:admin, announcement])
+      = delete_button([:admin, announcement])
 
   h3.timestamp
     => format_datetime(announcement.valid_from)

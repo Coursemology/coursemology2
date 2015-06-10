@@ -16,10 +16,12 @@ RSpec.describe 'Administration: Announcements', type: :feature do
       before { visit new_admin_announcement_path }
 
       context 'with invalid information' do
-        before { click_button I18n.t('helpers.submit.instance_announcement.create') }
+        before do
+          click_button I18n.t('helpers.submit.announcement.create')
+        end
 
         it 'stays on the same page' do
-          expect(page).to have_button(I18n.t('helpers.submit.instance_announcement.create'))
+          expect(page).to have_button(I18n.t('helpers.submit.announcement.create'))
         end
 
         it 'shows errors' do
@@ -31,19 +33,19 @@ RSpec.describe 'Administration: Announcements', type: :feature do
         let(:announcement) { build(:instance_announcement, instance: instance) }
 
         before do
-          fill_in 'instance_announcement[title]',      with: announcement.title
-          fill_in 'instance_announcement[content]',    with: announcement.content
-          fill_in 'instance_announcement[valid_from]', with: announcement.valid_from
-          fill_in 'instance_announcement[valid_to]',   with: announcement.valid_to
+          fill_in 'announcement[title]',      with: announcement.title
+          fill_in 'announcement[content]',    with: announcement.content
+          fill_in 'announcement[valid_from]', with: announcement.valid_from
+          fill_in 'announcement[valid_to]',   with: announcement.valid_to
         end
 
         it 'creates an announcement' do
-          expect { click_button I18n.t('helpers.submit.instance_announcement.create') }.to change(
+          expect { click_button I18n.t('helpers.submit.announcement.create') }.to change(
             Instance::Announcement, :count).by(1)
         end
 
         context 'after creation' do
-          before { click_button I18n.t('helpers.submit.instance_announcement.create') }
+          before { click_button I18n.t('helpers.submit.announcement.create') }
 
           it 'shows the success message' do
             expect(page).to have_selector('div',
@@ -63,30 +65,30 @@ RSpec.describe 'Administration: Announcements', type: :feature do
       before { visit edit_admin_announcement_path(announcement) }
 
       context 'page rendering' do
-        it { is_expected.to have_field('instance_announcement[title]', with: announcement.title) }
+        it { is_expected.to have_field('announcement[title]', with: announcement.title) }
 
         it do
-          is_expected.to have_field('instance_announcement[content]', with: announcement.content)
+          is_expected.to have_field('announcement[content]', with: announcement.content)
         end
 
         it do
-          is_expected.to have_field('instance_announcement[valid_from]',
+          is_expected.to have_field('announcement[valid_from]',
                                     with: announcement.valid_from)
         end
 
         it do
-          is_expected.to have_field('instance_announcement[valid_to]', with: announcement.valid_to)
+          is_expected.to have_field('announcement[valid_to]', with: announcement.valid_to)
         end
       end
 
       context 'with invalid information' do
         before do
-          fill_in 'instance_announcement[title]', with: ''
-          click_button I18n.t('helpers.submit.instance_announcement.update')
+          fill_in 'announcement[title]', with: ''
+          click_button I18n.t('helpers.submit.announcement.update')
         end
 
         it 'stays on the same page' do
-          expect(page).to have_button(I18n.t('helpers.submit.instance_announcement.update'))
+          expect(page).to have_button(I18n.t('helpers.submit.announcement.update'))
         end
 
         it 'shows errors' do
@@ -99,9 +101,9 @@ RSpec.describe 'Administration: Announcements', type: :feature do
         let(:new_content) { 'New content' }
 
         before do
-          fill_in 'instance_announcement[title]',        with: new_title
-          fill_in 'instance_announcement[content]',      with: new_content
-          click_button I18n.t('helpers.submit.instance_announcement.update')
+          fill_in 'announcement[title]',        with: new_title
+          fill_in 'announcement[content]',      with: new_content
+          click_button I18n.t('helpers.submit.announcement.update')
         end
 
         it 'redirects the user to index page' do
@@ -130,7 +132,7 @@ RSpec.describe 'Administration: Announcements', type: :feature do
       end
 
       context 'management buttons' do
-        it { is_expected.to have_link(I18n.t('admin.announcements.index.new')) }
+        it { is_expected.to have_link(nil, href: new_admin_announcement_path) }
       end
 
       it 'shows all announcements' do
