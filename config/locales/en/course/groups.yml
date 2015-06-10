@@ -3,6 +3,13 @@ en:
     groups:
       index:
         header: 'Groups'
-        new: 'New'
         name: 'Name'
         members: 'Members'
+      new:
+        header: 'New Group'
+      create:
+        success: 'Group %{name} was created.'
+      edit:
+        header: 'Edit Group'
+      update:
+        success: 'Group %{name} was updated.'

@@ -1,6 +1,6 @@
 h1 = t('.header')
 
-= link_to t('.new'), new_course_group_path(current_course), class: 'btn btn-primary'
+= new_button([current_course, :group])
 
 table.table
   thead
