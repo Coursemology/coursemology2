@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'ActsAsAttachable' do
+RSpec.describe 'Extension: Acts as Attachable' do
   class SampleModel < ActiveRecord::Base
     def self.columns
       []

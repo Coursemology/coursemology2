@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'time_bounded', type: :model do
+RSpec.describe 'Extension: Time Bounded Record', type: :model do
   class TimeBoundedTest < ActiveRecord::Base
   end
 
