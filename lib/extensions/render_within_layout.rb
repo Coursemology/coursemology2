@@ -1,2 +1,1 @@
-module Extensions::RenderWithinLayout
-  ; end
+module Extensions::RenderWithinLayout; end
