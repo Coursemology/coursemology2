@@ -9,7 +9,7 @@ gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Lock down Bundle version as new versions will cause noisy
 # changes in the Gemfile.lock file
-gem 'bundler', '1.10.3'
+gem 'bundler', '>= 1.10.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.1'
