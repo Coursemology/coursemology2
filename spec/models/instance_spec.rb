@@ -39,6 +39,12 @@ RSpec.describe Instance, type: :model do
 
       it { is_expected.not_to be_valid }
     end
+
+    context 'when saving instance without modifying host' do
+      it 'does not validate the host' do
+        expect(Instance.default.save).to be_truthy
+      end
+    end
   end
 
   describe '.default' do
@@ -58,6 +64,25 @@ RSpec.describe Instance, type: :model do
       found_instance = Instance.find_tenant_by_host(first_instance.host)
 
       expect(found_instance).to eq(first_instance)
+    end
+  end
+
+  let(:instance) { create(:instance) }
+  with_tenant(:instance) do
+    describe '.with_course_count' do
+      let!(:courses) { create_list(:course, 2, instance: instance) }
+
+      it 'shows the correct count' do
+        expect(Instance.with_course_count.find(instance).course_count).to eq(courses.size)
+      end
+    end
+
+    describe '.with_user_count' do
+      let!(:users) { create_list(:instance_user, 3, instance: instance) }
+
+      it 'shows the correct count' do
+        expect(Instance.with_user_count.find(instance).user_count).to eq(users.size)
+      end
     end
   end
 end
