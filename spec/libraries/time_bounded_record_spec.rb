@@ -8,23 +8,23 @@ RSpec.describe 'Extension: Time Bounded Record', type: :model do
     t.time_bounded
   end
   with_temporary_table(:time_bounded_tests) do
-    before(:context) do
+    let!(:valid_records) do
       [
         [nil, nil],
         [nil, 1.day],
         [-1.day, nil],
         [-1.day, 1.day]
-      ].each do |pair|
+      ].map do |pair|
         options = {}
         options[:valid_from] = Time.zone.now + pair[0] unless pair[0].nil?
         options[:valid_to] = Time.zone.now + pair[1] unless pair[1].nil?
         TimeBoundedTest.create!(options)
-      end
+      end.select(&:currently_valid?)
     end
 
     it 'gets records which are still valid' do
       matching_entries = TimeBoundedTest.currently_valid
-      expect(matching_entries).to_not be_empty
+      expect(matching_entries.size).to eq(valid_records.length)
 
       matching_entries.each do |record|
         expect(record).to be_currently_valid
