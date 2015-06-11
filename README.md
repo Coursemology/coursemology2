@@ -12,7 +12,7 @@ Major changes:
 ## Installation
 ### System requirements
  - [nodejs](http://nodejs.org) (as a JavaScript runtime for [execjs](https://github.com/sstephenson/execjs))
- - [bundler](http://bundler.io) 1.8.0 or later
+ - [bundler](http://bundler.io) 1.10.3 - Install with the command `gem install bundler -v1.10.3`
 
 ### Procedure
  1. Install dependencies using `bundle install`
