@@ -1,4 +1,7 @@
 = tabs do
   = nav_to(t('.students'), course_users_students_path(current_course))
   = nav_to(t('.staff'), course_users_staff_path(current_course))
-  = nav_to(t('.requests'), course_users_requests_path(current_course))
+  = nav_to(course_users_requests_path(current_course)) do
+    = t('.requests')
+    - requests_count = current_course.course_users.with_requested_state.count
+    =< badge(requests_count) if requests_count > 0
