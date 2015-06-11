@@ -83,15 +83,18 @@ module Extensions
 
     # Extends the given +class_+ with the given +module_+.
     #
+    # Two special submodules are recognised:
+    # - ClassMethods would inject the module into the class.
+    # - PrependMethods would be prepended instead of included into the class.
+    #
     # @param [Class] class_ The class to extend.
     # @param [Module] module_ The module to extend the class with.
     # @return [void]
     def extend_class(class_, module_)
       class_.class_eval do
         include module_
-        if module_.const_defined?(:ClassMethods, false)
-          extend module_.const_get(:ClassMethods)
-        end
+        extend module_.const_get(:ClassMethods) if module_.const_defined?(:ClassMethods, false)
+        prepend module_.const_get(:PrependMethods) if module_.const_defined?(:PrependMethods, false)
       end
     end
   end
