@@ -1,12 +1,5 @@
 module Extensions::Legacy::ActiveRecord::Base
   module ClassMethods
-    def currently_valid
-      where do
-        (valid_from.nil? || valid_from <= Time.zone.now) &&
-          (valid_to.nil? || valid_to >= Time.zone.now)
-      end
-    end
-
     # Decorator for items that give course_users EXP Points
     def acts_as_experience_points_record
       acts_as :experience_points_record, class_name: Course::ExperiencePointsRecord.name
@@ -36,22 +29,6 @@ module Extensions::Legacy::ActiveRecord::Base
     def acts_as_condition
       acts_as :condition, class_name: Course::Condition.name
     end
-  end
-
-  # @return [Bool] True if valid_from is a future time
-  def not_yet_valid?
-    !valid_from.nil? && valid_from > Time.zone.now
-  end
-
-  # @return [Bool] True if current time is between valid_from and valid_to
-  def currently_valid?
-    (valid_from.nil? || valid_from <= Time.zone.now) &&
-      (valid_to.nil? || valid_to >= Time.zone.now)
-  end
-
-  # @return [Bool] True if valid_to is a past time
-  def expired?
-    !valid_to.nil? && Time.zone.now > valid_to
   end
 
   module ConditionalInstanceMethods
