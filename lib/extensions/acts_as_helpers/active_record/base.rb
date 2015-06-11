@@ -1,4 +1,4 @@
-module Extensions::Legacy::ActiveRecord::Base
+module Extensions::ActsAsHelpers::ActiveRecord::Base
   module ClassMethods
     # Decorator for items that give course_users EXP Points
     def acts_as_experience_points_record
