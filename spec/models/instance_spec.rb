@@ -60,4 +60,23 @@ RSpec.describe Instance, type: :model do
       expect(found_instance).to eq(first_instance)
     end
   end
+
+  let(:instance) { create(:instance) }
+  with_tenant(:instance) do
+    describe '.with_course_count' do
+      let!(:courses) { create_list(:course, 2, instance: instance) }
+
+      it 'shows the correct count' do
+        expect(Instance.with_course_count.find(instance).course_count).to eq(courses.size)
+      end
+    end
+
+    describe '.with_user_count' do
+      let!(:users) { create_list(:instance_user, 3, instance: instance) }
+
+      it 'shows the correct count' do
+        expect(Instance.with_user_count.find(instance).user_count).to eq(users.size)
+      end
+    end
+  end
 end
