@@ -73,7 +73,7 @@ RSpec.describe Instance, type: :model do
       let!(:courses) { create_list(:course, 2, instance: instance) }
 
       it 'shows the correct count' do
-        expect(Instance.with_course_count.find(instance).course_count).to eq(courses.size)
+        expect(Instance.with_course_count.find(instance.id).course_count).to eq(courses.size)
       end
     end
 
@@ -81,7 +81,7 @@ RSpec.describe Instance, type: :model do
       let!(:users) { create_list(:instance_user, 3, instance: instance) }
 
       it 'shows the correct count' do
-        expect(Instance.with_user_count.find(instance).user_count).to eq(users.size)
+        expect(Instance.with_user_count.find(instance.id).user_count).to eq(users.size)
       end
     end
   end
