@@ -428,6 +428,7 @@ DEPENDENCIES
   bootstrap-select-rails
   bootstrap3-datetimepicker-rails
   bullet
+  bundler (= 1.10.3)
   cancancan (~> 1.9)
   capybara
   carrierwave!
@@ -482,3 +483,6 @@ DEPENDENCIES
   wdm (>= 0.0.3)
   workflow
   yard
+
+BUNDLED WITH
+   1.10.3
