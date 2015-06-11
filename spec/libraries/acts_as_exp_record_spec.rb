@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'acts_as_experience_points_record' do
+RSpec.describe 'Extension: Acts as Experience Points Record' do
   class ActsAsExperiencePointsRecordDummyClass < ActiveRecord::Base
     def self.columns
       []

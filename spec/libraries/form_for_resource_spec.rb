@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'form_for resource', type: :view do
+RSpec.describe 'Extension: form_for with resource', type: :view do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     it 'does not allow :url to be used with :resource' do

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'acts_as_conditional', type: :model do
+RSpec.describe 'Extension: Acts as Conditional', type: :model do
   let(:instance) { create(:instance) }
 
   with_tenant(:instance) do

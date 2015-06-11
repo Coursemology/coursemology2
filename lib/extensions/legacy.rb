@@ -1,0 +1,2 @@
+module Extensions::Legacy
+end

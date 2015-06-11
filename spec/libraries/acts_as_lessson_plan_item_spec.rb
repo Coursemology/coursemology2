@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'acts_as_lesson_plan_item' do
+RSpec.describe 'Extension: Acts as Lesson Plan Item' do
   class DummyClass < ActiveRecord::Base
     def self.columns
       []
