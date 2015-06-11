@@ -1,4 +1,4 @@
-module Extensions::Legacy::ActionController::Base
+module Extensions::RenderWithinLayout::ActionController::Base
   # Gets the current layout used by this controller.
   #
   # @return [String] The layout used by the current controller.
@@ -23,10 +23,11 @@ module Extensions::Legacy::ActionController::Base
   #
   # @return [Array<String>] The layout hierarchy for this controller.
   def layout_hierarchy
+    extension_module = Extensions::RenderWithinLayout::ActionController::Base
     @layout_hierarchy ||=
-      Extensions::Legacy::ActionController::Base.class_hierarchy(self.class).
+      extension_module.class_hierarchy(self.class).
       select { |klass| klass < ActionController::Base }.
-      map { |klass| Extensions::Legacy::ActionController::Base.class_layout(klass, self) }.
+      map { |klass| extension_module.class_layout(klass, self) }.
       select { |layout| !layout.nil? }.
       uniq.
       reverse!
