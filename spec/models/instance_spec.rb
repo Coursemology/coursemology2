@@ -39,6 +39,12 @@ RSpec.describe Instance, type: :model do
 
       it { is_expected.not_to be_valid }
     end
+
+    context 'when saving instance without modifying host' do
+      it 'does not validate the host' do
+        expect(Instance.default.save).to be_truthy
+      end
+    end
   end
 
   describe '.default' do
