@@ -1,3 +1,5 @@
+# Simultaneous code coverage reporting to Coveralls and Code Climate.
+# Latest version can be found at https://gist.github.com/lowjoel/6c2f2d3a08bb3786994f
 require 'simplecov'
 
 module CoverageHelper
@@ -44,18 +46,21 @@ module CoverageHelper
   end
 end
 
-# Coveralls
-CoverageHelper.load('coveralls') do
-  Coveralls.wear!('rails')
-end
+if ENV['CI']
+  # Coveralls
+  CoverageHelper.load('coveralls') do
+    Coveralls.wear!('rails')
+  end
 
-# Code Climate
-CoverageHelper.load('codeclimate-test-reporter') do
-  CodeClimate::TestReporter.start
-end
+  # Code Climate
+  CoverageHelper.load('codeclimate-test-reporter') do
+    CodeClimate::TestReporter.start
+  end
 
-# Code coverage exclusions
-SimpleCov.start do
-  # Helpers for schema migrations. We don't test schema migrations, so these would never run.
-  add_filter '/lib/extensions/legacy/active_record/connection_adapters/table_definition.rb'
+  # Code coverage exclusions
+  SimpleCov.start do
+    # SimpleCov configuration
+    # Helpers for schema migrations. We don't test schema migrations, so these would never run.
+    add_filter '/lib/extensions/legacy/active_record/connection_adapters/table_definition.rb'
+  end
 end
