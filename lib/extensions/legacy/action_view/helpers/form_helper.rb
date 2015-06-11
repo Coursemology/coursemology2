@@ -1,10 +1,12 @@
-module Extensions::ActionView::Helpers::FormHelper
+module Extensions::Legacy::ActionView::Helpers::FormHelper
   def self.included(module_)
     module_.alias_method_chain :form_for, :resource
   end
 
   def form_for_with_resource(record, options, &proc)
-    Extensions::ActionView::Helpers::FormHelper.form_for_with_resource_option(self, record, options)
+    Extensions::Legacy::ActionView::Helpers::FormHelper.form_for_with_resource_option(self,
+                                                                                      record,
+                                                                                      options)
 
     form_for_without_resource(record, options, &proc)
   end

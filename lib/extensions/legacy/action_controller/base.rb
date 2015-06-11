@@ -1,4 +1,4 @@
-module Extensions::ActionController::Base
+module Extensions::Legacy::ActionController::Base
   module ClassMethods
     # Method from ActsAsAttachable framework.
     # Declared this function in controller to let it accepts attachments.
@@ -33,9 +33,9 @@ module Extensions::ActionController::Base
   # @return [Array<String>] The layout hierarchy for this controller.
   def layout_hierarchy
     @layout_hierarchy ||=
-      Extensions::ActionController::Base.class_hierarchy(self.class).
+      Extensions::Legacy::ActionController::Base.class_hierarchy(self.class).
       select { |klass| klass < ActionController::Base }.
-      map { |klass| Extensions::ActionController::Base.class_layout(klass, self) }.
+      map { |klass| Extensions::Legacy::ActionController::Base.class_layout(klass, self) }.
       select { |layout| !layout.nil? }.
       uniq.
       reverse!

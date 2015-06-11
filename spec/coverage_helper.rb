@@ -57,5 +57,5 @@ end
 # Code coverage exclusions
 SimpleCov.start do
   # Helpers for schema migrations. We don't test schema migrations, so these would never run.
-  add_filter '/lib/extensions/active_record/connection_adapters/table_definition.rb'
+  add_filter '/lib/extensions/legacy/active_record/connection_adapters/table_definition.rb'
 end

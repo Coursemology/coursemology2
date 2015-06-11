@@ -1,4 +1,4 @@
-module Extensions::ActionView::Helpers::RenderingHelper
+module Extensions::Legacy::ActionView::Helpers::RenderingHelper
   def self.included(module_)
     module_.alias_method_chain :render, :within_layout
   end

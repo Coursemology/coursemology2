@@ -1,1 +1,0 @@
-module Extensions::ActionController; end

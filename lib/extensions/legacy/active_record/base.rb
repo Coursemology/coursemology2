@@ -1,4 +1,4 @@
-module Extensions::ActiveRecord::Base
+module Extensions::Legacy::ActiveRecord::Base
   module ClassMethods
     def currently_valid
       where do

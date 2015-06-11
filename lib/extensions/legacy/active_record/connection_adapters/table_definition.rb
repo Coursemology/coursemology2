@@ -1,4 +1,4 @@
-module Extensions::ActiveRecord::ConnectionAdapters::TableDefinition
+module Extensions::Legacy::ActiveRecord::ConnectionAdapters::TableDefinition
   def self.included(module_)
     module_.alias_method_chain :userstamps, :compatibility
     module_.alias_method_chain :actable, :schema_plus
