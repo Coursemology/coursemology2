@@ -7,16 +7,6 @@ module Extensions::Legacy::ActiveRecord::Base
       end
     end
 
-    # Functions from ActsAsAttachable framework.
-    # This function should be declared in model, to it have attachments.
-    def acts_as_attachable
-      has_many :attachments, as: :attachable
-
-      accepts_nested_attributes_for :attachments,
-                                    allow_destroy: true,
-                                    reject_if: -> (params) { params[:attachment].blank? }
-    end
-
     # Decorator for items that give course_users EXP Points
     def acts_as_experience_points_record
       acts_as :experience_points_record, class_name: Course::ExperiencePointsRecord.name

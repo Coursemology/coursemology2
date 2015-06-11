@@ -1,4 +1,4 @@
-module Extensions::Legacy::ActionView::Helpers::FormBuilder
+module Extensions::Attachable::ActionView::Helpers::FormBuilder
   # Method from ActsAsAttachable framework.
   # Hepler to support f.attachments in form
   def attachments
