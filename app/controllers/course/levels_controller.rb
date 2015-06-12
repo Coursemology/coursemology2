@@ -1,5 +1,5 @@
 class Course::LevelsController < Course::ComponentController
-  before_action :number_levels, only: [:index]
+  before_action :load_levels, only: [:index]
   load_and_authorize_resource :level, through: :course, class: Course::Level.name
 
   def index #:nodoc:
@@ -31,7 +31,7 @@ class Course::LevelsController < Course::ComponentController
 
   # This methods ensures that the Course::Levels are numbered
   # for use by the controller.
-  def number_levels
+  def load_levels
     @levels = @course.numbered_levels
   end
 
