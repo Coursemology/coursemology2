@@ -1,5 +1,6 @@
 class Admin::SystemAnnouncementsController < Admin::Controller
   load_and_authorize_resource :system_announcement, class: SystemAnnouncement.name
+  add_breadcrumb :index, :admin_system_announcements_path
 
   def index
     @system_announcements = @system_announcements.includes(:creator).page(params[:page])

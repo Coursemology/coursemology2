@@ -7,3 +7,7 @@ en:
         components: 'Components'
       announcements:
         index: 'Announcements'
+      instances:
+        index: 'Instances'
+      system_announcements:
+        index: 'System Announcements'

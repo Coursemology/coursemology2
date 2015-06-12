@@ -4,13 +4,13 @@ div.page-header
     div.pull-right
       = new_button([:admin, :instance])
 
-  table.table.table-middle-align
-    thead
-    tr
-      th= t('.name')
-      th= t('.host_name')
-      th= t('.users')
-      th= t('.courses')
+table.table.table-middle-align
+  thead
+  tr
+    th= t('.name')
+    th= t('.host_name')
+    th= t('.users')
+    th= t('.courses')
 
-    tbody.table-hover
-      = render @instances
+  tbody.table-hover
+    = render @instances
