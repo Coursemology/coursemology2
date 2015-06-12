@@ -1,4 +1,3 @@
-hr
 = div_for(announcement, class: time_period_class(announcement))
   - if announcement.sticky?
     = fa_icon 'thumb-tack'
@@ -9,13 +8,13 @@ hr
   - if can?(:manage, Course::Announcement)
     div.pull-right
       = edit_button([current_course, announcement])
-
       = delete_button([current_course, announcement])
 
-  div.timestamp
-    = format_datetime(announcement.valid_from)
-    |  by 
+  h3.timestamp
+    => format_datetime(announcement.valid_from)
+    ' by
     = link_to_user(announcement.creator)
 
   div.content
     = announcement.content
+hr

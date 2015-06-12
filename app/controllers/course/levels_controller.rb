@@ -1,6 +1,7 @@
 class Course::LevelsController < Course::ComponentController
   before_action :load_levels, only: [:index]
   load_and_authorize_resource :level, through: :course, class: Course::Level.name
+  add_breadcrumb :index, :course_levels_path
 
   def index #:nodoc:
   end

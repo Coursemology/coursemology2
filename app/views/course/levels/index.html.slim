@@ -1,9 +1,6 @@
-h1 = t('.header')
-
-- if can?(:create, Course::Level)
-  = new_button([current_course, :level])
-
-table.table.levels-list
+= page_header do
+  = new_button([current_course, :level]) if can?(:create, Course::Level)
+table.table.levels-list.table-hover
   thead
     tr
       th = t('.level')

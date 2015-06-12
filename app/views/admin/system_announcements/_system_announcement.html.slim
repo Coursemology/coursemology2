@@ -12,7 +12,7 @@
 
       = delete_button([:admin, system_announcement])
 
-  div.timestamp
+  h3.timestamp
     => format_datetime(system_announcement.valid_from)
     ' by
     = link_to_user(system_announcement.creator)

@@ -1,6 +1,8 @@
 class Course::Controller < ApplicationController
   load_and_authorize_resource :course
 
+  before_action :add_course_breadcrumb
+
   # Gets the sidebar elements.
   #
   # Sidebar elements have the given format:
@@ -58,5 +60,12 @@ class Course::Controller < ApplicationController
   def current_component_host
     @current_component_host ||= Course::ComponentHost.new(current_tenant.settings(:components),
                                                           current_course.settings(:components))
+  end
+
+  private
+
+  def add_course_breadcrumb
+    add_breadcrumb(current_course.title, course_path(current_course)) if
+      current_course.present? && current_course.id.present?
   end
 end

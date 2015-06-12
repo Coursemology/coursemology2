@@ -2,4 +2,5 @@
   td = level.level_number
   td = level.experience_points_threshold
   - if can?(:destroy, level)
-    td = delete_button([current_course, level])
+    td
+      = delete_button([current_course, level])

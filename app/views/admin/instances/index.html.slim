@@ -1,16 +1,12 @@
-div.page-header
-  h1
-    = t('.header')
-    div.pull-right
-      = new_button([:admin, :instance])
-
-table.table.table-middle-align
+= page_header do
+  = new_button([:admin, :instance]) if can?(:create, Instance)
+table.table.table-middle-align.table-hover
   thead
-  tr
-    th= t('.name')
-    th= t('.host_name')
-    th= t('.users')
-    th= t('.courses')
+    tr
+      th= t('.name')
+      th= t('.host_name')
+      th= t('.users')
+      th= t('.courses')
 
-  tbody.table-hover
+  tbody
     = render @instances

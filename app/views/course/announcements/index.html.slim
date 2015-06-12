@@ -1,9 +1,5 @@
-h1 = t('.header')
-
-- if can?(:create, Course::Announcement)
-  = new_button([current_course, :announcement])
-
+= page_header do
+  = new_button([current_course, :announcement]) if can?(:create, Course::Announcement)
 = render @announcements
-
 = paginate @announcements
 
