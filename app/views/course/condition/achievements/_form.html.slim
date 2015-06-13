@@ -1,4 +1,4 @@
-= simple_form_for [@course, @conditional, @achievement_condition],
+= simple_form_for [current_course, @conditional, @achievement_condition],
                   resource: :course_achievement_condition_achievement do |f|
   = f.input :achievement_id, collection: Course::Achievement.all
 

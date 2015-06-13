@@ -6,7 +6,7 @@ class Course::Condition::LevelsController < Course::ConditionsController
 
   def create
     @level_condition.conditional = @conditional
-    @level_condition.course = @course
+    @level_condition.course = current_course
 
     if @level_condition.save
       redirect_to return_to_path, success: t('course.condition.levels.create.success')

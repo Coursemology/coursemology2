@@ -7,7 +7,7 @@ class Course::Condition::AchievementsController < Course::ConditionsController
 
   def create
     @achievement_condition.conditional = @conditional
-    @achievement_condition.course = @course
+    @achievement_condition.course = current_course
 
     if @achievement_condition.save
       redirect_to return_to_path, success: t('course.condition.achievements.create.success')
