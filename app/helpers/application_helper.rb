@@ -6,7 +6,7 @@ module ApplicationHelper
 
   # Checks if the current page has a sidebar.
   #
-  # @return [Bool] True if there is a sidebar for the current page.
+  # @return [boolean] True if there is a sidebar for the current page.
   def has_sidebar?
     content_for?(:layout_sidebar)
   end
