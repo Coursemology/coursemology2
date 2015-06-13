@@ -1,6 +1,6 @@
 module Course::AchievementConditionalConcern
   def return_to_path
-    course_achievements_path(@course)
+    course_achievements_path(current_course)
   end
 
   def set_conditional

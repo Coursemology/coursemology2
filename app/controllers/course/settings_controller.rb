@@ -6,7 +6,7 @@ class Course::SettingsController < Course::ComponentController
   end
 
   def update #:nodoc:
-    if @course.update_attributes(course_setting_params)
+    if current_course.update_attributes(course_setting_params)
       redirect_to course_settings_path(current_course),
                   success: t('.success', title: current_course.title)
     else

@@ -1,4 +1,4 @@
-= simple_form_for @course, url: course_update_settings_path(@course) do |f|
+= simple_form_for current_course, url: course_update_settings_path(current_course) do |f|
   = f.input :title, label: t('course.courses.form.title_label'),
       placeholder: t('course.courses.form.title_placeholder')
 

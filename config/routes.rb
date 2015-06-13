@@ -79,7 +79,7 @@ Rails.application.routes.draw do
   end
 
   scope module: 'course' do
-    resources :courses do
+    resources :courses, except: [:edit] do
       resources :announcements, concerns: :paginatable
       resources :achievements do
         scope module: :achievement do
