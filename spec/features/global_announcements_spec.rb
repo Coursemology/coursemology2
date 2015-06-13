@@ -39,7 +39,12 @@ RSpec.describe 'Global announcements', type: :feature do
 
     describe 'many valid global announcements' do
       let(:announcements) do
-        build_list(:instance_announcement, 2, instance: instance, creator: user, updater: user)
+        [
+          build(:instance_announcement, valid_from: Time.zone.now - 1.second, instance: instance,
+                                        creator: user, updater: user),
+          build(:instance_announcement, valid_from: Time.zone.now, instance: instance,
+                                        creator: user, updater: user)
+        ]
       end
 
       before do
