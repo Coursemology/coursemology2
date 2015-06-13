@@ -68,6 +68,8 @@ Rails.application.routes.draw do
     registrations: 'user/registrations'
   }
 
+  resources :announcements, only: [:index]
+
   namespace :admin do
     get '/' => 'admin#index'
     resources :system_announcements, concerns: :paginatable
