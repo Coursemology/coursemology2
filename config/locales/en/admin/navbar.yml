@@ -2,4 +2,5 @@ en:
   admin:
     navbar:
       announcements: 'Announcements'
+      system_announcements: 'System Announcements'
       components: 'Components'

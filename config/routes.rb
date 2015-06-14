@@ -72,16 +72,16 @@ Rails.application.routes.draw do
 
   namespace :admin do
     get '/' => 'admin#index'
-    resources :system_announcements, concerns: :paginatable
-    resources :announcements, concerns: :paginatable
-    resources :instances
+    resources :system_announcements, except: [:show], concerns: :paginatable
+    resources :announcements, except: [:show], concerns: :paginatable
+    resources :instances, except: [:show]
 
     get 'components' => 'admin#components'
     patch 'components' => 'admin#update_components'
   end
 
   scope module: 'course' do
-    resources :courses, except: [:edit] do
+    resources :courses, except: [:edit, :update] do
       resources :announcements, concerns: :paginatable
       resources :achievements do
         scope module: :achievement do
@@ -95,7 +95,7 @@ Rails.application.routes.draw do
       get 'components' => 'settings#components'
       patch 'components' => 'settings#update_components'
 
-      resources :users, except: [:index, :new, :edit]
+      resources :users, except: [:index, :show, :new, :edit]
       post 'register' => 'users#register'
       get 'students' => 'users#students', as: :users_students
       get 'staff' => 'users#staff', as: :users_staff
