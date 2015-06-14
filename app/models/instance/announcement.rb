@@ -1,11 +1,5 @@
-class Instance::Announcement < ActiveRecord::Base
-  stampable
+class Instance::Announcement < GenericAnnouncement
+  acts_as_tenant :instance
 
-  belongs_to :creator, class_name: User.name
-  belongs_to :instance, inverse_of: :announcements
-
-  def unread?
-    # TODO: Implement
-    false
-  end
+  validates :instance, presence: true
 end

@@ -1,12 +1,4 @@
 FactoryGirl.define do
-  factory :system_announcement do
-    creator
-    updater
-
-    sequence(:title) { |n| "Announcement #{n}" }
-    sequence(:content) { |n| "Content #{n}" }
-
-    valid_from Time.zone.now
-    valid_to 3.days.from_now
+  factory :system_announcement, class: SystemAnnouncement.name, parent: :generic_announcement do
   end
 end

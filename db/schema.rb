@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150513111716) do
+ActiveRecord::Schema.define(version: 20150614024340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -179,14 +179,15 @@ ActiveRecord::Schema.define(version: 20150513111716) do
     t.datetime "updated_at",                  null: false
   end
 
-  create_table "instance_announcements", force: :cascade do |t|
-    t.integer  "instance_id", null: false, index: {name: "fk__instance_announcements_instance_id"}, foreign_key: {references: "instances", name: "fk_instance_announcements_instance_id", on_update: :no_action, on_delete: :no_action}
-    t.string   "title",       limit: 255, null: false
+  create_table "generic_announcements", force: :cascade do |t|
+    t.string   "type",        null: false
+    t.integer  "instance_id", comment: "The instance this announcement is associated with. This only applies to instance announcements.", index: {name: "fk__generic_announcements_instance_id"}, foreign_key: {references: "instances", name: "fk_generic_announcements_instance_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "title",       null: false
     t.text     "content"
     t.datetime "valid_from",  null: false
     t.datetime "valid_to",    null: false
-    t.integer  "creator_id",  null: false, index: {name: "fk__instance_announcements_creator_id"}, foreign_key: {references: "users", name: "fk_instance_announcements_creator_id", on_update: :no_action, on_delete: :no_action}
-    t.integer  "updater_id",  null: false, index: {name: "fk__instance_announcements_updater_id"}, foreign_key: {references: "users", name: "fk_instance_announcements_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "creator_id",  null: false, index: {name: "fk__generic_announcements_creator_id"}, foreign_key: {references: "users", name: "fk_generic_announcements_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id",  null: false, index: {name: "fk__generic_announcements_updater_id"}, foreign_key: {references: "users", name: "fk_generic_announcements_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
@@ -207,17 +208,6 @@ ActiveRecord::Schema.define(version: 20150513111716) do
     t.datetime "timestamp"
   end
   add_index "read_marks", ["user_id", "readable_type", "readable_id"], name: "index_read_marks_on_user_id_and_readable_type_and_readable_id"
-
-  create_table "system_announcements", force: :cascade do |t|
-    t.string   "title",      limit: 255, null: false
-    t.text     "content"
-    t.datetime "valid_from", null: false
-    t.datetime "valid_to",   null: false
-    t.integer  "creator_id", null: false, index: {name: "fk__system_announcements_creator_id"}, foreign_key: {references: "users", name: "fk_system_announcements_creator_id", on_update: :no_action, on_delete: :no_action}
-    t.integer  "updater_id", null: false, index: {name: "fk__system_announcements_updater_id"}, foreign_key: {references: "users", name: "fk_system_announcements_updater_id", on_update: :no_action, on_delete: :no_action}
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "user_emails", force: :cascade do |t|
     t.boolean  "primary",              default: false, null: false
