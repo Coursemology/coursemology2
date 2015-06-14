@@ -1,71 +1,77 @@
+# encoding: UTF-8
 require 'rails_helper'
 
-RSpec.describe 'Global announcements', type: :feature do
+RSpec.feature 'Global announcements' do
   subject { page }
   let(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let(:user) { create(:user) }
+    let!(:user) { create(:user) }
+    before { login_as(user, scope: :user) }
 
-    describe 'no global announcements' do
-      before do
+    context 'As a User' do
+      before(:each) do
         instance.announcements.clear
         SystemAnnouncement.destroy_all
-        visit root_path
       end
 
-      it { is_expected.not_to have_selector('div.global-announcement') }
-    end
-
-    describe 'one valid global announcement' do
-      let(:announcement) do
-        build(:instance_announcement, instance: instance, creator: user, updater: user)
+      scenario 'I should not see any announcements if there are none' do
+        visit announcements_path
+        it { is_expected.not_to have_selector('div.global-announcement') }
+        it { is_expected.not_to have_selector('div.instance-announcement') }
+        it { is_expected.not_to have_selector('div.system-announcement') }
       end
 
-      before do
-        instance.announcements.clear
-        SystemAnnouncement.destroy_all
-        announcement.save!
-        visit root_path
-      end
+      scenario 'I should see instance announcements' do
+        announcement = create(:instance_announcement, instance: instance, creator: user,
+                                                      updater: user)
+        visit announcements_path
 
-      it 'shows the announcement' do
         expect(page).to have_tag('div.global-announcement') do
           with_tag('div.panel-heading', text: format('×%s', announcement.title))
           with_tag('div.panel-body', text: announcement.content)
         end
-      end
-    end
-
-    describe 'many valid global announcements' do
-      let(:announcements) do
-        [
-          build(:instance_announcement, valid_from: Time.zone.now - 1.second, instance: instance,
-                                        creator: user, updater: user),
-          build(:instance_announcement, valid_from: Time.zone.now, instance: instance,
-                                        creator: user, updater: user)
-        ]
+        it { is_expected.to have_selector('div.instance-announcement') }
       end
 
-      before do
-        instance.announcements.clear
-        SystemAnnouncement.destroy_all
-        announcements.each(&:save!)
-        visit root_path
-      end
+      scenario 'I should see system announcements' do
+        announcement = create(:system_announcement, creator: user, updater: user)
+        visit announcements_path
 
-      it 'shows the latest announcement' do
-        announcement = announcements.last
         expect(page).to have_tag('div.global-announcement') do
           with_tag('div.panel-heading', text: format('×%s', announcement.title))
           with_tag('div.panel-body', text: announcement.content)
         end
+        it { is_expected.to have_selector('div.system-announcement') }
       end
 
-      it 'shows the more announcements link' do
+      scenario 'I should see both types of announcements' do
+        announcements = (-3..0).map do |i|
+          now = Time.zone.now
+          [
+            create(:instance_announcement, valid_from: now - i.seconds,
+                                           instance: instance, creator: user, updater: user),
+            create(:system_announcement, valid_from: now - i.seconds,
+                                         creator: user, updater: user)
+          ]
+        end
+        announcements.flatten!
+
+        visit announcements_path
+
+        expect(page).to have_tag('div.global-announcement') do
+          with_tag('div.panel-heading', text: format('×%s', announcements.last.title))
+          with_tag('div.panel-body', text: announcements.last.content)
+        end
+
         expect(page).to have_tag('div.global-announcement') do
           with_tag('div.panel-footer',
                    text: I18n.t('layouts.global_announcements.more_announcements'))
+        end
+
+        announcements.each do |s|
+          type_selector = s.is_a?(SystemAnnouncement) ? 'system' : 'instance'
+          it { is_expected.to have_selector("div##{type_selector}_announcement_#{s.id}") }
         end
       end
     end
