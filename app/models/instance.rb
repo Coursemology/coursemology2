@@ -25,18 +25,17 @@ class Instance < ActiveRecord::Base
 
   # @!attribute [r] instance_users
   #   @note You are scoped by the current tenant, you might not see all.
-  has_many :instance_users
+  has_many :instance_users, dependent: :destroy
   # @!attribute [r] users
   #   @note You are scoped by the current tenant, you might not see all.
   has_many :users, through: :instance_users
 
   # @!attribute [r] announcements
   #   @note You are scoped by the current tenant, you might not see all.
-  has_many :announcements, -> { order(valid_from: :desc) },
-           class_name: Instance::Announcement.name
+  has_many :announcements, class_name: Instance::Announcement.name, dependent: :destroy
   # @!attribute [r] courses
   #   @note You are scoped by the current tenant, you might not see all.
-  has_many :courses
+  has_many :courses, dependent: :destroy
 
   # @!method self.with_course_count
   #   Augments all returned records with the number of courses in that instance.

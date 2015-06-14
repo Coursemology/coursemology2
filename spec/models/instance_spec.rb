@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Instance, type: :model do
-  it { is_expected.to have_many(:instance_users) }
+  it { is_expected.to have_many(:instance_users).dependent(:destroy) }
   it { is_expected.to have_many(:users).through(:instance_users) }
   it do
     is_expected.to have_many(:announcements).class_name(Instance::Announcement.name).
-      order(valid_from: :desc)
+      dependent(:destroy)
   end
-  it { is_expected.to have_many(:courses) }
+  it { is_expected.to have_many(:courses).dependent(:destroy) }
 
   describe 'hostname validation' do
     context 'when hostname format is invalid' do
