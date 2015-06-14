@@ -1,4 +1,6 @@
 class Instance < ActiveRecord::Base
+  DEFAULT_HOST_NAME = '*'
+
   has_settings_on :settings
 
   class << self
@@ -6,9 +8,9 @@ class Instance < ActiveRecord::Base
     #
     # @return [Instance]
     def default
-      result = first
-      fail 'Unknown instance. Did you run rake db:seed?' unless result
-      result
+      @default ||= find_by(host: Instance::DEFAULT_HOST_NAME)
+      fail 'Unknown instance. Did you run rake db:seed?' unless @default
+      @default
     end
 
     # Finds the given tenant by host.
@@ -18,6 +20,19 @@ class Instance < ActiveRecord::Base
     # @return [Instance]
     def find_tenant_by_host(host)
       where { lower(self.host) == lower(host) }.take
+    end
+
+    # Finds the given tenant by host, falling back to the default is none is found.
+    #
+    # @param [String] host The host to look up. This is case insensitive, however prefixes (such
+    #   as www) are not handled automatically.
+    # @return [Instance]
+    def find_tenant_by_host_or_default(host)
+      tenants = where do
+        (lower(self.host) == lower(host)) | (self.host == Instance::DEFAULT_HOST_NAME)
+      end.to_a
+
+      tenants.find { |tenant| !tenant.default? } || tenants.first
     end
   end
 
@@ -57,6 +72,13 @@ class Instance < ActiveRecord::Base
 
   def self.use_relative_model_naming?
     true
+  end
+
+  # Checks if the current instance is the default instance.
+  #
+  # @return [bool]
+  def default?
+    host == Instance::DEFAULT_HOST_NAME
   end
 
   private
