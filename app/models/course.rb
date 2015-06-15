@@ -17,6 +17,7 @@ class Course < ActiveRecord::Base
   has_many :achievements, inverse_of: :course, dependent: :destroy
   has_many :levels, inverse_of: :course, dependent: :destroy
   has_many :groups, inverse_of: :course, dependent: :destroy, class_name: Course::Group.name
+  has_many :lesson_plan_items, inverse_of: :course, dependent: :destroy
 
   delegate :staff, to: :course_users
   delegate :has_user?, to: :course_users
