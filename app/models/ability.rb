@@ -29,6 +29,11 @@ class Ability
                                                     CourseUser.roles[:owner],
                                                     CourseUser.roles[:teaching_assistant],
                                                     'manager', 'owner', 'teaching_assistant'] }
+    can :manage_users, Course, course_users: { user_id: user.id,
+                                               role: [CourseUser.roles[:manager],
+                                                      CourseUser.roles[:owner],
+                                                      CourseUser.roles[:teaching_assistant],
+                                                      'manager', 'owner', 'teaching_assistant'] }
     can :manage, :all if user.administrator?
   end
 end

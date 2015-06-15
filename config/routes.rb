@@ -95,11 +95,15 @@ Rails.application.routes.draw do
       get 'components' => 'settings#components'
       patch 'components' => 'settings#update_components'
 
-      resources :users, except: [:index, :show, :new, :edit]
+      resources :users, except: [:index, :show, :new, :edit] do
+        get 'invite' => 'user_invitations#new', on: :collection
+        post 'invite' => 'user_invitations#create', on: :collection
+      end
       post 'register' => 'users#register'
       get 'students' => 'users#students', as: :users_students
       get 'staff' => 'users#staff', as: :users_staff
       get 'requests' => 'users#requests', as: :users_requests
+      get 'invitations' => 'users#invitations', as: :users_invitations
 
       resources :groups
     end

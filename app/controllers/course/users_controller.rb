@@ -1,8 +1,9 @@
 class Course::UsersController < Course::ComponentController
   load_and_authorize_resource :course_user, through: :course, parent: false, new: [:register]
   before_action :set_course_user_user, only: [:register]
-  before_action :authorize_show!, only: [:students, :staff, :requests]
-  before_action :authorize_edit!, except: [:students, :staff, :requests, :create, :register]
+  before_action :authorize_show!, only: [:students, :staff, :requests, :invitations]
+  before_action :authorize_edit!, except: [:students, :staff, :requests, :invitations,
+                                           :create, :register]
   before_action :ensure_unregistered_user, only: [:create, :register]
   add_breadcrumb :index, :course_users_path
 
@@ -16,6 +17,10 @@ class Course::UsersController < Course::ComponentController
 
   def requests # :nodoc:
     @course_users = @course_users.with_requested_state.includes(user: :emails)
+  end
+
+  def invitations # :nodoc:
+    @course_users = @course_users.joins { invitation }.includes(invitation: :user_email)
   end
 
   def create # :nodoc:

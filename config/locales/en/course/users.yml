@@ -11,6 +11,8 @@ en:
         students: 'Students'
         staff: 'Staff'
         requests: 'Requests'
+        invite: 'Invite Users'
+        invitations: 'Pending Invitations'
       new:
         already_registered: "You are already registered as a %{role}."
       create:
