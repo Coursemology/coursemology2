@@ -156,9 +156,8 @@ RSpec.describe 'Administration: Announcements', type: :feature do
       before { visit admin_announcements_path }
 
       it 'deletes the announcement' do
-        expect do
-          find_link(nil, href: announcement_path).click
-        end.to change(Instance::Announcement, :count).by(-1)
+        find_link(nil, href: announcement_path).click
+        it { is_expected.not_to have_link(nil, href: announcement_path) }
       end
     end
   end

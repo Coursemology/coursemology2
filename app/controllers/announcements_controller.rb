@@ -2,6 +2,6 @@ class AnnouncementsController < ApplicationController
   add_breadcrumb :index, :announcements_path
 
   def index
-    @announcements = GenericAnnouncement.currently_valid
+    @announcements = global_announcements.includes(:creator)
   end
 end

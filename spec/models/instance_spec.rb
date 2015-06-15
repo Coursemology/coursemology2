@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Instance, type: :model do
-  it { is_expected.to have_many(:instance_users) }
+  it { is_expected.to have_many(:instance_users).dependent(:destroy) }
   it { is_expected.to have_many(:users).through(:instance_users) }
   it do
     is_expected.to have_many(:announcements).class_name(Instance::Announcement.name).
-      order(valid_from: :desc)
+      dependent(:destroy)
   end
-  it { is_expected.to have_many(:courses) }
+  it { is_expected.to have_many(:courses).dependent(:destroy) }
 
   describe 'hostname validation' do
     context 'when hostname format is invalid' do
@@ -51,19 +51,30 @@ RSpec.describe Instance, type: :model do
     it 'returns the default instance' do
       default_instance = Instance.default
       expect(default_instance.host).to eq('*')
+      expect(default_instance.default?).to be_truthy
     end
   end
 
   describe '.find_tenant_by_host' do
-    before do
-      @instances = create_list(:instance, 3)
-    end
+    let(:instances) { create_list(:instance, 3) }
 
     it 'finds the correct tenant if the host is correct' do
-      first_instance = @instances[0]
-      found_instance = Instance.find_tenant_by_host(first_instance.host)
+      found_instance = Instance.find_tenant_by_host(instances.first.host)
+      expect(found_instance).to eq(instances.first)
+    end
+  end
 
-      expect(found_instance).to eq(first_instance)
+  describe '.find_tenant_by_host_or_default' do
+    let(:instances) { create_list(:instance, 3) }
+
+    it 'finds the correct tenant if the host is correct' do
+      found_instance = Instance.find_tenant_by_host_or_default(instances.first.host)
+      expect(found_instance).to eq(instances.first)
+    end
+
+    it 'defaults to the default host if the host is not found' do
+      found_instance = Instance.find_tenant_by_host_or_default('some-website.com')
+      expect(found_instance).to eq(Instance.default)
     end
   end
 

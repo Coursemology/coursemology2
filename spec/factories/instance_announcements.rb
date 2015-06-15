@@ -1,15 +1,8 @@
 FactoryGirl.define do
-  factory :instance_announcement, class: Instance::Announcement.name do
+  factory :instance_announcement, class: Instance::Announcement.name,
+                                  parent: :generic_announcement do
     transient do
       instance
     end
-    creator
-    updater
-
-    sequence(:title) { |n| "Announcement #{n}" }
-    sequence(:content) { |n| "Content #{n}" }
-
-    valid_from Time.zone.now
-    valid_to 3.days.from_now
   end
 end

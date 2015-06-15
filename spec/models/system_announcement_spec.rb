@@ -1,19 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe SystemAnnouncement, type: :model do
-  context 'when title is not present' do
-    subject { build(:system_announcement, title: '') }
-
-    it { is_expected.not_to be_valid }
-  end
+  it { is_expected.to belong_to(:creator).class_name(User.name) }
+  it { is_expected.to belong_to(:instance).inverse_of(:announcements) }
+  it { is_expected.to validate_presence_of(:title) }
 
   describe '.default_scope' do
     before { create_list(:system_announcement, 3) }
 
     it 'orders by descending valid_from' do
       dates = SystemAnnouncement.all.map(&:valid_from)
-      sorted_dates = dates.sort { |a, b| b <=> a }
-      expect(dates).to eq(sorted_dates)
+      expect(dates.each_cons(2).all? { |x, y| x >= y }).to be_truthy
     end
   end
 end
