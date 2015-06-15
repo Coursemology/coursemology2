@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(version: 20150617021911) do
 
   create_table "course_users", force: :cascade do |t|
     t.integer  "course_id",        null: false, index: {name: "fk__course_users_course_id"}, foreign_key: {references: "courses", name: "fk_course_users_course_id", on_update: :no_action, on_delete: :no_action}
-    t.integer  "user_id",          null: false, index: {name: "fk__course_users_user_id"}, foreign_key: {references: "users", name: "fk_course_users_user_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "user_id",          index: {name: "fk__course_users_user_id"}, foreign_key: {references: "users", name: "fk_course_users_user_id", on_update: :no_action, on_delete: :no_action}
     t.string   "workflow_state",   null: false
     t.integer  "role",             default: 0,     null: false
     t.string   "name",             limit: 255,                 null: false
@@ -199,6 +199,26 @@ ActiveRecord::Schema.define(version: 20150617021911) do
     t.datetime "updated_at",                  null: false
   end
 
+  create_table "user_emails", force: :cascade do |t|
+    t.boolean  "primary",              default: false, null: false
+    t.integer  "user_id",              index: {name: "index_user_emails_on_user_id_and_primary", with: ["primary"], unique: true, where: "(\"primary\" <> false)"}, foreign_key: {references: "users", name: "fk_user_emails_user_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "email",                limit: 255,                 null: false, index: {name: "index_user_emails_on_email", unique: true, case_sensitive: false}
+    t.string   "confirmation_token",   limit: 255, index: {name: "index_user_emails_on_confirmation_token", unique: true}
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "unconfirmed_email",    limit: 255
+  end
+
+  create_table "course_user_invitations", force: :cascade do |t|
+    t.integer  "course_user_id", null: false, index: {name: "index_course_user_invitations_on_course_user_id", unique: true}, foreign_key: {references: "course_users", name: "fk_course_user_invitations_course_user_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "user_email_id",  null: false, index: {name: "fk__course_user_invitations_user_email_id"}, foreign_key: {references: "user_emails", name: "fk_course_user_invitations_user_email_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "invitation_key", limit: 16, null: false, index: {name: "index_course_user_invitations_on_invitation_key", unique: true}
+    t.integer  "creator_id",     null: false, index: {name: "fk__course_user_invitations_creator_id"}, foreign_key: {references: "users", name: "fk_course_user_invitations_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id",     null: false, index: {name: "fk__course_user_invitations_updater_id"}, foreign_key: {references: "users", name: "fk_course_user_invitations_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
   create_table "generic_announcements", force: :cascade do |t|
     t.string   "type",        null: false
     t.integer  "instance_id", comment: "The instance this announcement is associated with. This only applies to instance announcements.", index: {name: "fk__generic_announcements_instance_id"}, foreign_key: {references: "instances", name: "fk_generic_announcements_instance_id", on_update: :no_action, on_delete: :no_action}
@@ -228,15 +248,5 @@ ActiveRecord::Schema.define(version: 20150617021911) do
     t.datetime "timestamp"
   end
   add_index "read_marks", ["user_id", "readable_type", "readable_id"], name: "index_read_marks_on_user_id_and_readable_type_and_readable_id"
-
-  create_table "user_emails", force: :cascade do |t|
-    t.boolean  "primary",              default: false, null: false
-    t.integer  "user_id",              null: false, index: {name: "index_user_emails_on_user_id_and_primary", with: ["primary"], unique: true, where: "(\"primary\" <> false)"}, foreign_key: {references: "users", name: "fk_user_emails_user_id", on_update: :no_action, on_delete: :no_action}
-    t.string   "email",                limit: 255,                 null: false, index: {name: "index_user_emails_on_email", unique: true, case_sensitive: false}
-    t.string   "confirmation_token",   limit: 255, index: {name: "index_user_emails_on_confirmation_token", unique: true}
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email",    limit: 255
-  end
 
 end

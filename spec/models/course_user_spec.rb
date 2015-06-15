@@ -9,6 +9,7 @@ RSpec.describe CourseUser, type: :model do
       inverse_of(:course_user).
       dependent(:destroy)
   end
+  it { is_expected.to have_one(:invitation) }
 
   let!(:instance) { create :instance }
   with_tenant(:instance) do
