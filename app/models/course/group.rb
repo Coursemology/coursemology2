@@ -9,6 +9,9 @@ class Course::Group < ActiveRecord::Base
                          class_name: Course::GroupUser.name, foreign_key: :course_group_id
   has_many :users, through: :group_users
 
+  accepts_nested_attributes_for :group_users, allow_destroy: true,
+                                              reject_if: -> (params) { params[:user_id].blank? }
+
   private
 
   # Set default values

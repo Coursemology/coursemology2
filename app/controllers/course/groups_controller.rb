@@ -21,7 +21,7 @@ class Course::GroupsController < Course::ComponentController
 
   def update #:nodoc:
     if @group.update_attributes(group_params)
-      redirect_to(course_groups_path(current_course), success: t('.success', title: @group.name))
+      redirect_to(course_groups_path(current_course), success: t('.success', name: @group.name))
     else
       render 'edit'
     end
@@ -30,6 +30,7 @@ class Course::GroupsController < Course::ComponentController
   private
 
   def group_params #:nodoc:
-    params.require(:group).permit(:name, user_ids: [])
+    params.require(:group).permit(:name, user_ids: [],
+                                         group_users_attributes: [:id, :user_id, :role, :_destroy])
   end
 end
