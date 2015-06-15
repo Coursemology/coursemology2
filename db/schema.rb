@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150615073135) do
+ActiveRecord::Schema.define(version: 20150615075515) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -107,6 +107,11 @@ ActiveRecord::Schema.define(version: 20150615073135) do
     t.integer  "updater_id",       null: false, index: {name: "fk__course_conditions_updater_id"}, foreign_key: {references: "users", name: "fk_course_conditions_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+  end
+
+  create_table "course_events", force: :cascade do |t|
+    t.string   "location"
+    t.integer  "event_type", default: 0
   end
 
   create_table "course_users", force: :cascade do |t|
