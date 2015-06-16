@@ -32,8 +32,12 @@ class Admin::AnnouncementsController < Admin::Controller
   end
 
   def destroy
-    redirect_to admin_announcements_path,
-                success: t('.success', title: @announcement.title) if @announcement.destroy
+    if @announcement.destroy
+      redirect_to admin_announcements_path,
+                  success: t('.success', title: @announcement.title)
+    else
+      redirect_to admin_announcements_path, danger: t('.failure')
+    end
   end
 
   private

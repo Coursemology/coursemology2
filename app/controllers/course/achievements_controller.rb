@@ -29,9 +29,12 @@ class Course::AchievementsController < Course::ComponentController
   end
 
   def destroy #:nodoc:
-    @achievement.destroy
-    redirect_to(course_achievements_path(current_course),
-                success: t('.success', title: @achievement.title))
+    if @achievement.destroy
+      redirect_to(course_achievements_path(current_course),
+                  success: t('.success', title: @achievement.title))
+    else
+      redirect_to course_achievements_path, danger: t('.failure')
+    end
   end
 
   private
