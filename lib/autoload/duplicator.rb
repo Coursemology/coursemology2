@@ -1,3 +1,5 @@
+require 'set'
+
 class Duplicator
   attr_reader :duplicated_objects
 
@@ -16,7 +18,7 @@ class Duplicator
   def duplicate_object(source_object)
     if @duplicated_objects.has_key?(source_object)
       return @duplicated_objects[source_object]
-    elsif @to_dup_objects.has_key?(source_object)
+    elsif @to_dup_objects.include?(source_object)
       @duplicated_objects[source_object] = source_object.duplicate(self)
     else
       @duplicated_objects[source_object] = nil
