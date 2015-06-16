@@ -28,4 +28,5 @@ class Application < Rails::Application
   config.eager_load_paths << "#{Rails.root}/lib/autoload"
   config.eager_load_paths << "#{Rails.root}/app/models/components"
   config.eager_load_paths << "#{Rails.root}/app/controllers/components"
+  config.eager_load_paths << "#{Rails.root}/app/services"
 end
