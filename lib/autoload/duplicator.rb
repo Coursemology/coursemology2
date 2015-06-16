@@ -1,7 +1,10 @@
 class Duplicator
+  attr_reader :duplicated_objects
 
-  @duplicated_objects = {}  # hash to check what has been duplicated
-  @to_dup_objects = {}      # hash to check what should be duplicated
+  def initialize
+    @duplicated_objects = {}  # hash to check what has been duplicated
+    @to_dup_objects = {}      # hash to check what should be duplicated
+  end
 
   # Check the duplicated_objects hash to see if source_object has already been duplicated.
   # If it has, return it.
