@@ -33,12 +33,13 @@ ActiveRecord::Schema.define(version: 20150702122955) do
   end
 
   create_table "activities", force: :cascade do |t|
-    t.integer  "actor_id",    null: false, index: {name: "fk__activities_actor_id"}, foreign_key: {references: "users", name: "fk_activities_actor_id", on_update: :no_action, on_delete: :no_action}
-    t.integer  "object_id",   null: false
-    t.string   "object_type", null: false
-    t.string   "event",       null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "actor_id",      null: false, index: {name: "fk__activities_actor_id"}, foreign_key: {references: "users", name: "fk_activities_actor_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "object_id",     null: false
+    t.string   "object_type",   null: false
+    t.string   "event",         null: false
+    t.string   "notifier_type", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "attachments", force: :cascade do |t|
@@ -229,6 +230,14 @@ ActiveRecord::Schema.define(version: 20150702122955) do
     t.datetime "updated_at",     null: false
   end
 
+  create_table "course_notifications", force: :cascade do |t|
+    t.integer  "activity_id",       null: false, index: {name: "index_course_notifications_on_activity_id"}, foreign_key: {references: "activities", name: "fk_course_notifications_activity_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "course_id",         null: false, index: {name: "index_course_notifications_on_course_id"}, foreign_key: {references: "courses", name: "fk_course_notifications_course_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "notification_type", default: 0, null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
   create_table "generic_announcements", force: :cascade do |t|
     t.string   "type",        limit: 255, null: false
     t.integer  "instance_id", comment: "The instance this announcement is associated with. This only applies to instance announcements.", index: {name: "fk__generic_announcements_instance_id"}, foreign_key: {references: "instances", name: "fk_generic_announcements_instance_id", on_update: :no_action, on_delete: :no_action}
@@ -259,4 +268,11 @@ ActiveRecord::Schema.define(version: 20150702122955) do
   end
   add_index "read_marks", ["user_id", "readable_type", "readable_id"], name: "index_read_marks_on_user_id_and_readable_type_and_readable_id"
 
+  create_table "user_notifications", force: :cascade do |t|
+    t.integer  "activity_id",       null: false, index: {name: "index_user_notifications_on_activity_id"}, foreign_key: {references: "activities", name: "fk_user_notifications_activity_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "user_id",           null: false, index: {name: "index_user_notifications_on_user_id"}, foreign_key: {references: "users", name: "fk_user_notifications_user_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "notification_type", default: 0, null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
 end

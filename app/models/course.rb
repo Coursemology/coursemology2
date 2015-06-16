@@ -15,6 +15,7 @@ class Course < ActiveRecord::Base
   has_many :course_users, inverse_of: :course, dependent: :destroy
   has_many :users, through: :course_users
   has_many :invitations, through: :course_users
+  has_many :notifications, dependent: :destroy
 
   has_many :announcements, inverse_of: :course, dependent: :destroy
   has_many :achievements, inverse_of: :course, dependent: :destroy
