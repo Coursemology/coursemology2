@@ -26,7 +26,7 @@ module ActiveRecord::Migration::TestGroupHelpers
         ActiveRecord::Migration::TestGroupHelpers.after_context(table_name)
       end
 
-      instance_exec(*params, &proc)
+      module_exec(*params, &proc)
     end
   end
 

@@ -14,7 +14,7 @@ module ActsAsTenant::TestGroupHelpers
         after(:each) do
           ActsAsTenant.current_tenant = nil
         end
-        instance_exec(*params, &proc)
+        module_exec(*params, &proc)
       end
     end
   end
@@ -31,7 +31,7 @@ module ActsAsTenant::TestGroupHelpers
         before(:each) do
           @request.headers['host'] = send(tenant).host
         end
-        instance_exec(*params, &proc)
+        module_exec(*params, &proc)
       end
     end
   end
@@ -53,7 +53,7 @@ module ActsAsTenant::TestGroupHelpers
         end
         after(:each) { Capybara.app_host = @saved_host }
 
-        instance_exec(*params, &proc)
+        module_exec(*params, &proc)
       end
     end
   end
@@ -74,9 +74,7 @@ module ActsAsTenant::TestExampleHelpers
 end
 
 RSpec.configure do |config|
-  config.extend ActsAsTenant::TestGroupHelpers::ModelHelpers, type: :model
-  config.extend ActsAsTenant::TestGroupHelpers::ModelHelpers, type: :helper
-  config.extend ActsAsTenant::TestGroupHelpers::ModelHelpers, type: :view
+  config.extend ActsAsTenant::TestGroupHelpers::ModelHelpers
   config.extend ActsAsTenant::TestGroupHelpers::ControllerHelpers, type: :controller
   config.extend ActsAsTenant::TestGroupHelpers::FeatureHelpers, type: :feature
   config.include ActsAsTenant::TestExampleHelpers::FeatureHelpers, type: :feature
