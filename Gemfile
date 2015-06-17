@@ -26,6 +26,8 @@ gem 'settings_on_rails'
 gem 'migration_comments'
 # Manage read/unread status
 gem 'unread'
+# Manage activities and notifications
+gem 'public_activity'
 # Extension for validating hostnames and domain names
 gem 'validates_hostname'
 # A Ruby state machine library
