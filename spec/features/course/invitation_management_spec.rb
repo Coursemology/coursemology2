@@ -8,6 +8,7 @@ RSpec.feature 'Courses: Invitations' do
 
     context 'As a Course manager' do
       let(:user) { create(:administrator) }
+
       scenario 'I can invite users by individually entering their addresses' do
         pending
         course = create(:course)
@@ -26,45 +27,52 @@ RSpec.feature 'Courses: Invitations' do
       end
 
       scenario 'I can invite users by uploading a file' do
-        pending
         course = create(:course)
         invitation_file = File.join(__dir__, '../../fixtures/course/invitation.csv')
-        invitations = CSV.read(invitation_file)
+        invitations = CSV.read(invitation_file, headers: true)
 
         visit invite_course_users_path(course)
         attach_file 'course_users_file', invitation_file
         click_button 'submit'
 
-        expect(page).to have_selsector('div.progress', text: '0%')
+        expect(page).to have_selector('div.progress')
         invitations.each do |invitation|
-          expect(page).to have_selector('.course_user_invitation th', text: invitation[0])
-          expect(page).to have_selector('.course_user_invitation td', text: invitation[1])
+          expect(page).to have_selector('tr.course_user th', text: invitation[0])
+          expect(page).to have_selector('tr.course_user td', text: invitation[1])
+          expect(page).to have_selector('tr.course_user td',
+                                        text: I18n.t('course.users.status.invited'))
         end
       end
 
       scenario 'I can track the status of invites' do
-        pending
         course = create(:course)
-        invitations = create_list(:course_user_invitation, 3, course: course)
-        invitations.first.course_user.approve!
         visit course_users_invitations_path(course)
 
-        expect(page).to have_selector('div.progress', text: '33%')
-        approved_text = I18n.t('course.users.statuses.approved')
-        invited_text = I18n.t('course.users.statuses.invited')
-        invitations.each do |invitation|
-          expect(page).to have_selector('.course_user_invitation th', text: invitation[0])
-          expect(page).to have_selector('.course_user_invitation td', text: invitation[1])
+        invitations = create_list(:course_user_invitation, 3, course: course)
+        invitations.first.course_user.accept!(create(:instance_user).user)
+        visit course_users_invitations_path(course)
 
-          status_text = invitation.course_user.approved? ? approved_text : invited_text
-          expect(page).to have_selector('.course_user_invitation td', text: status_text)
+        expect(page).to have_selector('div.progress')
+        invitations.each do |invitation|
+          within page.find(".course_user#course_user_#{invitation.course_user.id}") do
+            expect(page).to have_selector('th')
+            expect(page).to have_selector('td')
+
+            if invitation.course_user.approved?
+              expect(page).to have_selector('td', text: I18n.t('course.users.status.accepted'))
+            else
+              expect(page).to have_selector('td', text: I18n.t('course.users.status.invited'))
+            end
+          end
         end
       end
     end
 
     context 'As a User' do
-      let(:course) { create(:course) }
-      let(:course_user) { create(:course_user, course: course) }
+      let(:course) { create(:open_course) }
+      let(:instance_user) { create(:instance_user) }
+      let(:user) { instance_user.user }
+      let(:course_user) { create(:course_user, course: course, user: user) }
       let(:invitation) { create(:course_user_invitation, course_user: course_user) }
       scenario 'I can accept invitations' do
         pending
