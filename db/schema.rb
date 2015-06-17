@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150615075515) do
+ActiveRecord::Schema.define(version: 20150617021911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -179,6 +179,17 @@ ActiveRecord::Schema.define(version: 20150615075515) do
     t.integer  "updater_id",      null: false, index: {name: "fk__course_lesson_plan_items_updater_id"}, foreign_key: {references: "users", name: "fk_course_lesson_plan_items_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+  end
+
+  create_table "course_lesson_plan_milestones", force: :cascade do |t|
+    t.integer  "course_id",   index: {name: "fk__course_lesson_plan_milestones_course_id"}, foreign_key: {references: "courses", name: "fk_course_lesson_plan_milestones_course_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "title",       null: false
+    t.text     "description"
+    t.datetime "start_time",  null: false
+    t.integer  "creator_id",  null: false, index: {name: "fk__course_lesson_plan_milestones_creator_id"}, foreign_key: {references: "users", name: "fk_course_lesson_plan_milestones_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id",  null: false, index: {name: "fk__course_lesson_plan_milestones_updater_id"}, foreign_key: {references: "users", name: "fk_course_lesson_plan_milestones_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "course_levels", force: :cascade do |t|
