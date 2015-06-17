@@ -8,6 +8,8 @@ class Course::LessonPlanItem < ActiveRecord::Base
   validates :time_bonus_exp, numericality: { only_integer: true }
   validates :extra_bonus_exp, numericality: { only_integer: true }
 
+  belongs_to :course, inverse_of: :lesson_plan_items
+
   # Gives the maximum number of EXP Points that an EXP-awarding item
   # is allocated to give, which is the sum of base and bonus EXPs.
   #
