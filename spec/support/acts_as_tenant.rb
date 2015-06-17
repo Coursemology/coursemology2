@@ -14,7 +14,7 @@ module ActsAsTenant::TestGroupHelpers
         after(:each) do
           ActsAsTenant.current_tenant = nil
         end
-        instance_exec(*params, &proc)
+        module_exec(*params, &proc)
       end
     end
   end
@@ -31,7 +31,7 @@ module ActsAsTenant::TestGroupHelpers
         before(:each) do
           @request.headers['host'] = send(tenant).host
         end
-        instance_exec(*params, &proc)
+        module_exec(*params, &proc)
       end
     end
   end
@@ -53,7 +53,7 @@ module ActsAsTenant::TestGroupHelpers
         end
         after(:each) { Capybara.app_host = @saved_host }
 
-        instance_exec(*params, &proc)
+        module_exec(*params, &proc)
       end
     end
   end
