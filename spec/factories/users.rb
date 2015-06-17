@@ -1,10 +1,14 @@
 FactoryGirl.define do
+  sequence :name do |n|
+    "user #{n}"
+  end
+
   factory :user, aliases: [:creator, :updater]  do
     transient do
       emails_count 1
     end
 
-    name 'user'
+    name
     role :normal
     password 'lolololol'
 
