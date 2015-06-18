@@ -14,4 +14,4 @@ en:
         success: "Announcement %{title} was updated."
       destroy:
         success: "Announcement %{title} was deleted."
-        failure: 'An error occurred. Please try again.'
+        failure: 'Failed to delete announcement: %{error}'

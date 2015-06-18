@@ -24,7 +24,10 @@ RSpec.describe Course::LevelsController, type: :controller do
           subject
         end
 
-        it { is_expected.to redirect_to(course_levels_path(course)) }
+        it 'redirects with a flash message' do
+          it { is_expected.to redirect_to(course_levels_path(course)) }
+          expect(flash[:danger]).to eq(I18n.t('course.levels.destroy.failure', error: ''))
+        end
       end
     end
 

@@ -36,7 +36,8 @@ class Admin::AnnouncementsController < Admin::Controller
       redirect_to admin_announcements_path,
                   success: t('.success', title: @announcement.title)
     else
-      redirect_to admin_announcements_path, danger: t('.failure')
+      redirect_to admin_announcements_path,
+                  danger: t('.failure', error: @announcement.errors.full_messages.to_sentence)
     end
   end
 
