@@ -12,7 +12,7 @@ RSpec.describe Course::GroupsController, type: :controller do
       context 'when the user is present' do
         let(:user_to_add) { create(:user) }
         let(:group_attributes) do
-          id_not_taken = Course::GroupUser.maximum(:id).next.to_s
+          id_not_taken = generate(:nested_attribute_new_id)
           group_users_attributes = { id_not_taken => attributes_for(:course_group_user,
                                                                     user_id: user_to_add) }
           attributes_for(:course_group, group_users_attributes: group_users_attributes)
@@ -43,7 +43,7 @@ RSpec.describe Course::GroupsController, type: :controller do
 
       context 'when the user is blank' do
         let(:group_attributes) do
-          id_not_taken = Course::GroupUser.maximum(:id).next.to_s
+          id_not_taken = generate(:nested_attribute_new_id)
           group_users_attributes = { id_not_taken => attributes_for(:course_group_user) }
           attributes_for(:course_group, group_users_attributes: group_users_attributes)
         end
