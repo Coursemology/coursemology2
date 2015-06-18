@@ -36,4 +36,11 @@ en:
       invitations:
         header: 'Invitations'
         progress: "%{accepted} accepted / %{total} invited"
+        manual_acceptance: >
+          The following table lists all invitations which have been sent out to date.
+
+
+          Users can key in their associated invitation code into the course registration page to
+          register into this course.
+        invitation_code: 'Invitation Code'
         status: 'Status'
