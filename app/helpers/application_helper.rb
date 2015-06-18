@@ -3,6 +3,7 @@ module ApplicationHelper
   include ApplicationThemingHelper
   include ApplicationAnnouncementsHelper
   include ApplicationWidgetsHelper
+  include ApplicationCocoonHelper
 
   # Checks if the current page has a sidebar.
   #
