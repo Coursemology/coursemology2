@@ -12,6 +12,7 @@ RSpec.describe Course, type: :model do
     it { is_expected.to have_many(:levels).inverse_of(:course).dependent(:destroy) }
     it { is_expected.to have_many(:groups).inverse_of(:course).dependent(:destroy) }
     it { is_expected.to have_many(:lesson_plan_items).inverse_of(:course).dependent(:destroy) }
+    it { is_expected.to have_many(:lesson_plan_milestones).inverse_of(:course).dependent(:destroy) }
 
     it { is_expected.to validate_presence_of(:title) }
 
