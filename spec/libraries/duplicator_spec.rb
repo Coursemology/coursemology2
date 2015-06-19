@@ -2,15 +2,22 @@ require 'rails_helper'
 
 RSpec.describe 'Test Duplicator Core Class' do
   class SimpleObject
-    attr_reader :id
-
     def initialize(id)
       @id = id
     end
 
-    # duplicate itself
     def duplicate(duplicator)
       self.clone
+    end
+
+    def ==(other)
+      self.class == other.class && self.state == other.state
+    end
+
+    protected
+
+    def state
+      [@id]
     end
   end
 
@@ -20,8 +27,8 @@ RSpec.describe 'Test Duplicator Core Class' do
       @obj_b = @obj_a.duplicate(Duplicator.new)
     end
 
-    it 'tests duplicated objects have the same attribute value' do
-      expect(@obj_a.id).to eq(@obj_b.id)
+    it 'tests duplicated objects have the same contents' do
+      expect(@obj_a).to eq(@obj_b)
     end
 
     it 'tests duplicated objects are not the same object' do
@@ -40,12 +47,22 @@ RSpec.describe 'Test Duplicator Core Class' do
       expect(duplicated_object).to be_nil
     end
 
-    it 'tests object in list is duplicated' do
+    it 'tests that objects in list are duplicated' do
       @duplicator.duplicate([@obj_a])
-      expect(@duplicator.duplicated_objects[@obj_a]).to_not be_nil
-      expect(@duplicator.duplicated_objects[@obj_a]).to_not be(@obj_a)
-      expect(@duplicator.duplicated_objects[@obj_a].id).to eq(2)
+      duplicate_of_a = @duplicator.duplicate_of(@obj_a)
+
+      expect(duplicate_of_a).to_not be_nil
+      expect(duplicate_of_a).to_not be(@obj_a)
+      expect(duplicate_of_a).to eq(@obj_a)
     end
 
+    it 'ensures objects are only duplicated once' do
+      @duplicator.duplicate([@obj_a])
+      duplicate_of_a = @duplicator.duplicate_of(@obj_a)
+      duplicate = @duplicator.duplicate_object(@obj_a)
+
+      expect(duplicate).to_not be_nil
+      expect(duplicate).to be(duplicate_of_a)
+    end
   end
 end

@@ -1,11 +1,9 @@
 require 'set'
 
 class Duplicator
-  attr_reader :duplicated_objects
-
   def initialize
     @duplicated_objects = {}  # hash to check what has been duplicated
-    @to_dup_objects = {}      # hash to check what should be duplicated
+    @to_dup_objects = Set.new # hash to check what should be duplicated
   end
 
   # Check the duplicated_objects hash to see if source_object has already been duplicated.
@@ -17,7 +15,7 @@ class Duplicator
   # @return duplicated_object A reference to the duplicated object.
   def duplicate_object(source_object)
     if @duplicated_objects.has_key?(source_object)
-      return @duplicated_objects[source_object]
+      @duplicated_objects[source_object]
     elsif @to_dup_objects.include?(source_object)
       @duplicated_objects[source_object] = source_object.duplicate(self)
     else
@@ -31,12 +29,17 @@ class Duplicator
   # @param to_duplicate_list [Array] The list of objects selected for duplication.
   # @return [void]
   def duplicate(to_duplicate_list)
-    # convert list to a Set so the duplicate_object function can check faster
-    @to_dup_objects = to_duplicate_list.to_set()
-
-    # duplicate each item in the list
+    @to_dup_objects = to_duplicate_list.to_set
     to_duplicate_list.each do |item|
       duplicate_object(item)
     end
+  end
+
+  # Returns the duplicate of an object if it exists, nil otherwise.
+  #
+  # @param [Object] object
+  # @return [Object, nil]
+  def duplicate_of(object)
+    @duplicated_objects[object]
   end
 end
