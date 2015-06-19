@@ -17,6 +17,8 @@ div.users
       tbody
         - @course_users.each do |user|
           = simple_form_for [current_course, user], resource: :course_user do |f|
+            = f.error_notification
+            = f.error :course_user
             tr
               th = f.input :name
               td = f.object.user.email

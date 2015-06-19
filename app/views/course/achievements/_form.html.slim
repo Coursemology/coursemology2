@@ -1,4 +1,6 @@
 = simple_form_for [current_course, @achievement], resource: :course_achievement do |f|
+  = f.error_notification
+  = f.error :course_achievement
   = f.input :title
 
   = f.input :description

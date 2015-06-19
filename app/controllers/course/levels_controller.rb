@@ -23,7 +23,8 @@ class Course::LevelsController < Course::ComponentController
                   success: t('.success',
                              threshold: @level.experience_points_threshold))
     else
-      redirect_to(course_levels_path(current_course), failure: t('.failure'))
+      redirect_to(course_levels_path(current_course),
+                  danger: t('.failure', @level.errors.full_messages.to_sentence))
     end
   end
 

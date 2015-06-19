@@ -1,4 +1,6 @@
 = simple_form_for @system_announcement, resource: :admin_system_announcement do |f|
+  = f.error_notification
+  = f.error :admin_system_announcement
   = f.input :title
 
   = f.input :content

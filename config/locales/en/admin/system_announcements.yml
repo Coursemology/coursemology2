@@ -13,3 +13,4 @@ en:
         success: "System Announcement %{title} was updated."
       destroy:
         success: "System Announcement %{title} was deleted."
+        failure: 'Failed to delete announcement: %{error}'

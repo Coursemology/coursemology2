@@ -1,4 +1,6 @@
 = simple_form_for @instance, resource: :admin_instance do |f|
+  = f.error_notification
+  = f.error :admin_instance
   = f.input :name
 
   = f.input :host

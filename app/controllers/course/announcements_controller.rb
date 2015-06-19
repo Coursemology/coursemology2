@@ -36,8 +36,13 @@ class Course::AnnouncementsController < Course::ComponentController
   end
 
   def destroy #:nodoc:
-    redirect_to(course_announcements_path(current_course),
-                success: t('.success', title: @announcement.title)) if @announcement.destroy
+    if @announcement.destroy
+      redirect_to(course_announcements_path(current_course),
+                  success: t('.success', title: @announcement.title))
+    else
+      redirect_to(course_announcements_path(current_course),
+                  danger: t('.failure', @announcement.errors.full_messages.to_sentence))
+    end
   end
 
   private
