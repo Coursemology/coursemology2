@@ -1,9 +1,5 @@
-div.page-header
-  h1
-    = t('.header')
-    - if can?(:create, Course)
-      div.pull-right
-        = new_button(:course)
+= page_header do
+  = new_button([:course]) if can?(:create, Course)
 
 = render @courses
 

@@ -1,9 +1,5 @@
-div.page-header
-  h1
-    = t('.header')
-    - if can?(:manage, Instance::Announcement)
-      div.pull-right
-        = new_button([:admin, :announcement])
-= render partial: 'announcement', collection: @announcements
+= page_header do
+  = new_button([:admin, :announcement]) if can?(:create, Instance::Announcement)
 
+= render partial: 'announcement', collection: @announcements
 = paginate @announcements

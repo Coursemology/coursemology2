@@ -1,5 +1,6 @@
 class Course::AnnouncementsController < Course::ComponentController
   load_and_authorize_resource :announcement, through: :course, class: Course::Announcement.name
+  add_breadcrumb :index, :course_announcements_path
 
   def index #:nodoc:
     @announcements = @announcements.includes(:creator).sorted_by_sticky.sorted_by_date

@@ -1,6 +1,7 @@
 en:
   admin:
     navbar:
-      announcements: 'Announcements'
       system_announcements: 'System Announcements'
+      announcements: 'Announcements'
+      instances: 'Instances'
       components: 'Components'

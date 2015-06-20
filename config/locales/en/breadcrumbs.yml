@@ -1,5 +1,16 @@
 en:
   breadcrumbs:
+    course:
+      levels:
+        index: 'Levels'
+      settings:
+        index: 'Settings'
+      users:
+        index: 'Users'
+      announcements:
+        index: 'Announcements'
+      achievements:
+        index: 'Achievements'
     admin:
       controller:
         index: 'Administration'
@@ -7,3 +18,7 @@ en:
         components: 'Components'
       announcements:
         index: 'Announcements'
+      instances:
+        index: 'Instances'
+      system_announcements:
+        index: 'System Announcements'

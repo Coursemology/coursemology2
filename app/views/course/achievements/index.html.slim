@@ -1,9 +1,6 @@
-h1 = t('.header')
-
-- if can?(:create, Course::Achievement)
-  = new_button([current_course, :achievement])
-
-table.table.achievement-list
+= page_header do
+  = new_button([current_course, :achievement]) if can?(:create, Course::Achievement)
+table.table.achievement-list.table-hover
   thead
     tr
       th
@@ -12,5 +9,5 @@ table.table.achievement-list
       - if can?(:manage, Course::Achievement)
       th = t('.published')
       th
-
+  tbody
     = render @achievements

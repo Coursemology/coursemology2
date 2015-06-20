@@ -1,6 +1,7 @@
 class Course::SettingsController < Course::ComponentController
   layout 'course_settings'
   before_action :load_settings, only: [:components, :update_components]
+  add_breadcrumb :index, :course_settings_path
 
   def index
   end

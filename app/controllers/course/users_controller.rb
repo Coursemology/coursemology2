@@ -4,6 +4,7 @@ class Course::UsersController < Course::ComponentController
   before_action :authorize_show!, only: [:students, :staff, :requests]
   before_action :authorize_edit!, except: [:students, :staff, :requests, :create, :register]
   before_action :ensure_unregistered_user, only: [:create, :register]
+  add_breadcrumb :index, :course_users_path
 
   def students # :nodoc:
     @course_users = @course_users.students.with_approved_state.includes(user: :emails)

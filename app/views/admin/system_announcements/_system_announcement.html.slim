@@ -1,4 +1,3 @@
-hr
 = div_for(system_announcement, class: time_period_class(system_announcement))
   h2
     - if system_announcement.unread?
@@ -13,10 +12,11 @@ hr
 
       = delete_button([:admin, system_announcement])
 
-  div.timestamp
-    = format_datetime(system_announcement.valid_from)
-    | by 
+  h3.timestamp
+    => format_datetime(system_announcement.valid_from)
+    ' by
     = link_to_user(system_announcement.creator)
 
   div.content
     = system_announcement.content
+hr

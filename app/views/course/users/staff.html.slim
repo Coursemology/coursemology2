@@ -1,11 +1,10 @@
-div.page-header
-  h1 = t('.header')
+= page_header
 
 = render partial: 'tabs'
 
 div.users
   div.table-fluid
-    table.table.table-striped
+    table.table.table-striped.table-hover
       thead
         tr
           th = t('common.name')

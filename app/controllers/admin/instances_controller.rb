@@ -1,5 +1,6 @@
 class Admin::InstancesController < Admin::Controller
   load_and_authorize_resource
+  add_breadcrumb :index, :admin_instances_path
 
   def index #:nodoc:
     @instances = @instances.with_course_count.with_user_count

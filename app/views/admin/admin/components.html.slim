@@ -1,6 +1,6 @@
-h2 = t('.header')
+= page_header
 = simple_form_for @settings, url: admin_components_path, method: :patch do |f|
-  table.table
+  table.table.table-hover
     thead
       th = t('.name')
       th = t('.enabled')
