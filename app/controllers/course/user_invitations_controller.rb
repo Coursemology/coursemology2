@@ -1,5 +1,6 @@
 class Course::UserInvitationsController < Course::ComponentController
   before_action :authorize_invitation!
+  add_breadcrumb :index, :course_users_path
 
   def new # :nodoc:
   end

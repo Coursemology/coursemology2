@@ -7,6 +7,8 @@ en:
         index: 'Settings'
       users:
         index: 'Users'
+      user_invitations:
+        index: :'breadcrumbs.course.users.index'
       announcements:
         index: 'Announcements'
       achievements:
