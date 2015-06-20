@@ -101,6 +101,55 @@ RSpec.describe Course, type: :model do
       end
     end
 
+    describe '#grouped_lesson_plan_items_with_milestones' do
+      let(:course) { create(:course) }
+      let!(:milestones) do
+        [3.days.ago, 2.days.ago, 2.days.from_now].map do |start_time|
+          create(:course_lesson_plan_milestone, course: course, start_time: start_time)
+        end
+      end
+      let!(:lesson_plan_items) do
+        [3.days.ago, 2.days.ago, 1.days.from_now, 3.days.from_now].map do |start_time|
+          create(:course_lesson_plan_item, course: course, start_time: start_time)
+        end
+      end
+      subject { course.grouped_lesson_plan_items_with_milestones }
+
+      context 'when no milestones exist' do
+        let!(:milestones) { [] }
+        it 'groups all items under the nil milestone' do
+          expect(subject.length).to eq(1)
+          expect(subject.keys).to eq([nil])
+          expect(subject[nil].each_cons(2).all? { |(a, b)| a.start_time <= b.start_time }).to \
+            be_truthy
+        end
+      end
+
+      context 'when the first milestone comes after the first event' do
+        before do
+          milestone_to_delete = milestones.shift
+          milestone_to_delete.destroy
+        end
+
+        it 'groups all items before the first milestone under the nil milestone' do
+          expect(subject).to have_key(nil)
+          expect(subject[nil]).to contain_exactly(lesson_plan_items.first)
+        end
+      end
+
+      context 'when the first milestone and the first event starts at the same time' do
+        it 'groups the first event under the first milestone' do
+          expect(subject[milestones.first]).to include(lesson_plan_items.first)
+        end
+      end
+
+      context 'when no items exist' do
+        it 'creates the keys for all milestones' do
+          expect(subject.length).to eq(milestones.length)
+        end
+      end
+    end
+
     describe '#staff' do
       let(:course) { create(:course, creator: owner, updater: owner) }
       let(:course_owner) { course.course_users.find_by!(user: owner) }
