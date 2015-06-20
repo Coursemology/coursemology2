@@ -20,7 +20,7 @@ class Course::UserInvitationService
       if users.is_a?(File) || users.is_a?(Tempfile)
         invite_from_file(users)
       else
-        invite_users(users.deep_dup)
+        invite_from_form(users)
       end
 
       @current_course.save
@@ -55,6 +55,18 @@ class Course::UserInvitationService
     invites
   rescue StandardError => error
     raise CSV::MalformedCSVError.new(error), error.message
+  end
+
+  # Invites the users from the form submission, which reflects the actual model associations.
+  #
+  # We do not use this format in the service object because it is very clumsy.
+  #
+  # @param [Hash] users The attributes from the client.
+  # @return [void]
+  def invite_from_form(users)
+    invite_users(users.map do |(_, value)|
+      { name: value[:course_user][:name], email: value[:user_email][:email] }
+    end)
   end
 
   # Invites the given users into the course.

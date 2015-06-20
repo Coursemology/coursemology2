@@ -12,6 +12,7 @@ class Course < ActiveRecord::Base
   belongs_to :creator, class_name: User.name
   has_many :course_users, inverse_of: :course, dependent: :destroy
   has_many :users, through: :course_users
+  has_many :invitations, through: :course_users
 
   has_many :announcements, inverse_of: :course, dependent: :destroy
   has_many :achievements, inverse_of: :course, dependent: :destroy
@@ -19,6 +20,8 @@ class Course < ActiveRecord::Base
   has_many :groups, inverse_of: :course, dependent: :destroy, class_name: Course::Group.name
   has_many :lesson_plan_items, inverse_of: :course, dependent: :destroy
   has_many :lesson_plan_milestones, inverse_of: :course, dependent: :destroy
+
+  accepts_nested_attributes_for :invitations
 
   delegate :staff, to: :course_users
   delegate :has_user?, to: :course_users

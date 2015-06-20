@@ -16,6 +16,13 @@ RSpec.describe Course::UserInvitationService do
     end
 
     let(:course) { build(:course) }
+    let(:stubbed_user_invitation_service) do
+      Course::UserInvitationService.new(course).tap do |result|
+        result.define_singleton_method(:invite_users) do |users|
+          users
+        end
+      end
+    end
     subject { Course::UserInvitationService.new(course) }
 
     let(:existing_users) do
@@ -40,6 +47,14 @@ RSpec.describe Course::UserInvitationService do
     end
     let(:users) { existing_users + new_users }
     let(:user_attributes) { existing_user_attributes + new_user_attributes }
+    let(:user_form_attributes) do
+      user_attributes.map do |hash|
+        [generate(:nested_attribute_new_id), {
+          course_user: { name: hash[:name] },
+          user_email: { email: hash[:email] }
+        }]
+      end.to_h
+    end
 
     describe '#invite' do
       def verify_new_user(user)
@@ -65,8 +80,8 @@ RSpec.describe Course::UserInvitationService do
         existing_users.each(&method(:verify_existing_user))
       end
 
-      it 'accepts a list of invitation attributes' do
-        subject.invite(user_attributes)
+      it 'accepts a list of invitation form attributes' do
+        subject.invite(user_form_attributes)
       end
 
       it 'accepts a CSV file with a header' do
@@ -79,13 +94,7 @@ RSpec.describe Course::UserInvitationService do
     end
 
     describe '#invite_from_file' do
-      subject do
-        Course::UserInvitationService.new(course).tap do |result|
-          result.define_singleton_method(:invite_users) do |users|
-            users
-          end
-        end
-      end
+      subject { stubbed_user_invitation_service }
       let(:temp_csv) { temp_csv_from_attributes(users) }
       after { temp_csv.close! }
 
@@ -107,6 +116,20 @@ RSpec.describe Course::UserInvitationService do
                                              '../../fixtures/course/invalid_invitation.csv')))
           end.to raise_exception(CSV::MalformedCSVError)
         end
+      end
+    end
+
+    describe '#invite_from_form' do
+      subject { stubbed_user_invitation_service }
+
+      it 'accepts a list of invitation form attributes' do
+        result = subject.send(:invite_from_form, user_form_attributes)
+        expect(result.length).to eq(user_attributes.length)
+      end
+
+      it 'calls #invite_users with appropriate user attributes' do
+        result = subject.send(:invite_from_form, user_form_attributes)
+        expect(result).to eq(user_attributes)
       end
     end
 
