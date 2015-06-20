@@ -26,5 +26,25 @@ RSpec.describe 'Users', type: :feature do
         expect { subject }.to change(User, :count).by(1)
       end
     end
+
+    context 'As a user' do
+      let(:instance) { create(:instance) }
+      with_tenant(:instance) do
+        scenario 'I can sign up after I have been invited to a course' do
+          pending
+          valid_user = build(:user)
+          user_email = create(:user_email, user: nil)
+
+          fill_in 'user_name', with: valid_user.name
+          fill_in 'user_email', with: user_email.email
+          fill_in 'user_password', with: valid_user.password
+          fill_in 'user_password_confirmation', with: valid_user.password
+
+          expect do
+            click_button I18n.t('user.registrations.new.sign_up')
+          end.to change(User, :count).by(1)
+        end
+      end
+    end
   end
 end

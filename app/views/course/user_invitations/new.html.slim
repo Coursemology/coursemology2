@@ -1,0 +1,29 @@
+= page_header
+
+= render partial: 'course/users/tabs'
+
+div role='tabpanel'
+  ul class='nav nav-pills' role='tablist'
+    li.active role='presentation'
+      a href='#file' aria-controls='file' role='tab' data-toggle='tab'
+        = t('.tabs.file')
+    li role='presentation'
+      a href='#individual' aria-controls='individual' role='tab' data-toggle='tab'
+        = t('.tabs.individual')
+
+  div.tab-content
+    div.tab-pane.active#file role='tabpanel'
+      div.panel.panel-primary
+        div.panel-body
+          = t('.file.format')
+          pre
+            code
+              = "#{t('common.name')},#{t('common.email')}\n"
+              = "#{t('common.name')},test@example.org"
+
+      = simple_form_for(current_course, url: invite_course_users_path, method: :post) do |f|
+        = f.error_notification
+        = f.input :users_file, as: :file
+        = f.button :submit
+
+    div.tab-pane#individual role='tabpanel'

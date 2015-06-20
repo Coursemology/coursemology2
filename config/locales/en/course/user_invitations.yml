@@ -1,0 +1,12 @@
+en:
+  course:
+    user_invitations:
+      new:
+        header: 'Invite Users'
+        tabs:
+          file: 'Upload file'
+          individual: 'Individually add users'
+        file:
+          format: 'Files uploaded must be in the following format:'
+      create:
+        success: 'Successfully invited users from the uploaded file.'

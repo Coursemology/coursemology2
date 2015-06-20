@@ -1,0 +1,26 @@
+= page_header
+
+= render partial: 'tabs'
+
+br
+
+- accepted_course_users = @course_users.each.select { |user| !user.invited? }.size
+- progress = accepted_course_users * 100 / [@course_users.length, 1].max
+div.progress
+  div.progress-bar role='progressbar' aria-valuenow=progress aria-valuemin='0' aria-valuemax='100' style="width: #{progress}%"
+    span
+      = t('.progress', accepted: accepted_course_users, total: @course_users.size)
+
+table.table.table-striped
+  thead
+    th = t('common.name')
+    th = t('common.email')
+    th = t('.status')
+    th
+  tbody
+    - @course_users.each do |course_user|
+      = content_tag_for(:tr, course_user)
+        th = course_user.name
+        td = course_user.invitation.user_email.email
+        td = course_user.invited? ? t('course.users.status.invited') : t('course.users.status.accepted')
+        td

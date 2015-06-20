@@ -7,10 +7,15 @@ en:
         manager: 'Manager'
         owner: 'Owner'
         phantom: 'Phantom'
+      status:
+        accepted: 'Accepted'
+        invited: 'Invited'
       tabs:
         students: 'Students'
         staff: 'Staff'
         requests: 'Requests'
+        invite: 'Invite Users'
+        invitations: 'Invitations'
       new:
         already_registered: "You are already registered as a %{role}."
       create:
@@ -28,3 +33,7 @@ en:
         header: 'User Requests'
         approve: 'Approve'
         reject: 'Reject'
+      invitations:
+        header: 'Invitations'
+        progress: "%{accepted} accepted / %{total} invited"
+        status: 'Status'

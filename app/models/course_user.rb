@@ -15,9 +15,14 @@ class CourseUser < ActiveRecord::Base
       event :approve, transitions_to: :approved
       event :reject, transitions_to: :rejected
     end
+    state :invited do
+      event :accept, transitions_to: :approved
+    end
     state :approved
     state :rejected
   end
+
+  validates :user, presence: true, unless: :invited?
 
   belongs_to :user, inverse_of: :course_users
   belongs_to :course, inverse_of: :course_users
@@ -27,6 +32,7 @@ class CourseUser < ActiveRecord::Base
       sum(:points_awarded)
     end
   end
+  has_one :invitation, class_name: Course::UserInvitation.name, dependent: :destroy
 
   # Gets the staff associated with the course.
   # TODO: Remove the map when Rails 5 is released.
@@ -56,6 +62,14 @@ class CourseUser < ActiveRecord::Base
   # @return [Boolean] True if course_user is a staff
   def staff?
     STAFF_ROLES.include?(role.to_sym)
+  end
+
+  # Transitions the user from the invited to the accepted state.
+  #
+  # @param [User] user The user which is accepting this invitation.
+  # @return [void]
+  def accept(user)
+    self.user = user
   end
 
   # Callback handler for workflow state change to the rejected state.
