@@ -18,4 +18,5 @@
 //= require bootstrap-select
 //= require simple_form-bootstrap
 //= require layout
+//= require cocoon
 //= require_tree .

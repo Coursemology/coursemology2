@@ -104,6 +104,7 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    cocoon (1.2.6)
     codeclimate-test-reporter (0.4.7)
       simplecov (>= 0.7.1, < 1.0.0)
     coffee-rails (4.1.0)
@@ -432,6 +433,7 @@ DEPENDENCIES
   cancancan (~> 1.9)
   capybara
   carrierwave!
+  cocoon
   codeclimate-test-reporter
   consistency_fail
   coveralls
