@@ -1,5 +1,5 @@
 class System::Admin::Controller < ApplicationController
-  layout 'admin'
+  layout 'system_admin'
   before_action :authorize_admin
 
   private
