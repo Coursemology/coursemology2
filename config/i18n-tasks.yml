@@ -93,8 +93,8 @@ ignore_unused:
 - 'simple_form.{yes,no}'
 - 'simple_form.{placeholders,hints,labels}.*'
 - 'simple_form.{error_notification,required}.:'
-- 'admin.*.*.header'
-- 'admin.admin.components.header'
+- 'system.admin.*.*.header'
+- 'system.admin.admin.components.header'
 - 'course.*.*.header'
 - 'course.users.*.header'
 
