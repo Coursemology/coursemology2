@@ -1,4 +1,4 @@
-class Admin::InstancesController < Admin::Controller
+class System::Admin::InstancesController < System::Admin::Controller
   load_and_authorize_resource
   add_breadcrumb :index, :admin_instances_path
 

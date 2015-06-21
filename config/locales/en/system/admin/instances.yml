@@ -1,17 +1,18 @@
 en:
-  admin:
-    instances:
-      index:
-        header: 'Instance Management'
-        name: 'Name'
-        host_name: 'Host Name'
-        users: 'Total Users'
-        courses: 'Total Courses'
-      new:
-        header: 'New Instance'
-      create:
-        success: 'Instance has been successfully created'
-      edit:
-        header: 'Edit Instance'
-      update:
-        success: 'Instance has been successfully updated'
+  system:
+    admin:
+      instances:
+        index:
+          header: 'Instance Management'
+          name: 'Name'
+          host_name: 'Host Name'
+          users: 'Total Users'
+          courses: 'Total Courses'
+        new:
+          header: 'New Instance'
+        create:
+          success: 'Instance has been successfully created'
+        edit:
+          header: 'Edit Instance'
+        update:
+          success: 'Instance has been successfully updated'

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Administration: Components', type: :feature do
+RSpec.feature 'System: Administration: Components', type: :feature do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
