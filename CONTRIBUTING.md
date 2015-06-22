@@ -55,6 +55,11 @@ wrap below the title.
 Use `content_tag_for` or `div_for` helper whenever you want to present an active_record object (such
 as in lists/tables). This makes your code more readable and enforces the consistency in views.
 
+When displaying translations for long stretches of text (e.g. a paragraph), use Rails'
+`simple_format` view helper to present the text. This automatically paragraphs the translations.
+
+When using simple_form remember to declare f.error_notification.
+
 ## Themes
 Themes are provided by [themes_on_rails](https://github.com/yoolk/themes_on_rails). Coursemology
 uses standard Bootstrap 3 styles, so it is possible to theme Coursemology using any Bootstrap 3
