@@ -1,6 +1,5 @@
-h1 = t('.header')
-
-= new_button([current_course, :group])
+= page_header do
+  = new_button([current_course, :group]) if can?(:create, Course::Group)
 
 table.table.table-hover
   thead
