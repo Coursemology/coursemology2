@@ -7,7 +7,7 @@ RSpec.describe 'System: Administration: System announcements', type: :feature do
     let!(:user) { create(:administrator) }
 
     before do
-      SystemAnnouncement.delete_all
+      System::Announcement.delete_all
       create_list(:system_announcement, 50, creator: user, updater: user)
 
       login_as(user, scope: :user)
@@ -17,7 +17,7 @@ RSpec.describe 'System: Administration: System announcements', type: :feature do
     it { is_expected.to have_selector('nav.pagination') }
 
     it 'lists each announcement' do
-      SystemAnnouncement.page(1).each do |announcement|
+      System::Announcement.page(1).each do |announcement|
         expect(page).to have_selector('div', text: announcement.title)
         expect(page).to have_selector('div', text: announcement.content)
       end
@@ -27,7 +27,7 @@ RSpec.describe 'System: Administration: System announcements', type: :feature do
       before { visit admin_system_announcements_path(page: '2') }
 
       it 'lists each announcement' do
-        SystemAnnouncement.page(2).each do |announcement|
+        System::Announcement.page(2).each do |announcement|
           expect(page).to have_selector('div', text: announcement.title)
           expect(page).to have_selector('div', text: announcement.content)
         end

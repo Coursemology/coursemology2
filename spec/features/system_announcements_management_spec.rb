@@ -34,7 +34,7 @@ RSpec.describe 'System announcements', type: :feature do
       end
 
       it 'creates an announcement' do
-        expect { subject }.to change(SystemAnnouncement, :count).by(1)
+        expect { subject }.to change(System::Announcement, :count).by(1)
       end
 
       context 'after creation' do
@@ -130,7 +130,7 @@ RSpec.describe 'System announcements', type: :feature do
     subject { first('div.system_announcement a.btn-danger').click }
 
     it 'deletes the announcement' do
-      expect { subject }.to change(SystemAnnouncement, :count).by(-1)
+      expect { subject }.to change(System::Announcement, :count).by(-1)
     end
   end
 end

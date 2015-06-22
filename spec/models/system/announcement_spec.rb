@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SystemAnnouncement, type: :model do
+RSpec.describe System::Announcement, type: :model do
   it { is_expected.to belong_to(:creator).class_name(User.name) }
   it { is_expected.to belong_to(:instance).inverse_of(:announcements) }
   it { is_expected.to validate_presence_of(:title) }
@@ -9,7 +9,7 @@ RSpec.describe SystemAnnouncement, type: :model do
     before { create_list(:system_announcement, 3) }
 
     it 'orders by descending valid_from' do
-      dates = SystemAnnouncement.all.map(&:valid_from)
+      dates = System::Announcement.all.map(&:valid_from)
       expect(dates.each_cons(2).all? { |x, y| x >= y }).to be_truthy
     end
   end

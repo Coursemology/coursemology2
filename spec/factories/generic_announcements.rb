@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :generic_announcement, class: SystemAnnouncement.name do
+  factory :generic_announcement, class: System::Announcement.name do
     creator
     updater
 
