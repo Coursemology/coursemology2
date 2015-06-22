@@ -70,14 +70,16 @@ Rails.application.routes.draw do
 
   resources :announcements, only: [:index]
 
-  namespace :admin do
-    get '/' => 'admin#index'
-    resources :system_announcements, except: [:show], concerns: :paginatable
-    resources :announcements, except: [:show], concerns: :paginatable
-    resources :instances, except: [:show]
+  scope module: 'system' do
+    namespace :admin do
+      get '/' => 'admin#index'
+      resources :system_announcements, except: [:show], concerns: :paginatable
+      resources :announcements, except: [:show], concerns: :paginatable
+      resources :instances, except: [:show]
 
-    get 'components' => 'admin#components'
-    patch 'components' => 'admin#update_components'
+      get 'components' => 'admin#components'
+      patch 'components' => 'admin#update_components'
+    end
   end
 
   scope module: 'course' do

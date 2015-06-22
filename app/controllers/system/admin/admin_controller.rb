@@ -1,4 +1,4 @@
-class Admin::AdminController < Admin::Controller
+class System::Admin::AdminController < System::Admin::Controller
   before_action :load_settings, only: [:components, :update_components]
   add_breadcrumb :components, :admin_components_path, if: :is_components_page?
 

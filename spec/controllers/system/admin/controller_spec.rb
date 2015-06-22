@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Admin::Controller, type: :controller do
+RSpec.describe System::Admin::Controller, type: :controller do
   controller do
     def index
       render text: 'Success'

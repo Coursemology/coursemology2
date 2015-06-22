@@ -1,0 +1,13 @@
+en:
+  system:
+    admin:
+      admin:
+        index:
+          message: 'Pages'
+          header: 'Administration'
+        components:
+          header: 'Enable/Disable Components'
+          name: 'Name'
+          enabled: 'Enabled?'
+        update_components:
+          success: 'Settings was updated successfully'

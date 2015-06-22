@@ -41,8 +41,9 @@ RSpec.describe 'System announcements', type: :feature do
         before { subject }
 
         it 'shows the success message' do
-          expect(page).to have_selector('div',
-                                        text: I18n.t('admin.system_announcements.create.success'))
+          expect(page).
+            to have_selector('div',
+                             text: I18n.t('system.admin.system_announcements.create.success'))
         end
 
         it 'redirects the user to the index page' do
@@ -88,7 +89,7 @@ RSpec.describe 'System announcements', type: :feature do
       end
 
       it 'shows the success message' do
-        expect(page).to have_selector('div', 'admin.system_announcements.update.success')
+        expect(page).to have_selector('div', 'system.admin.system_announcements.update.success')
       end
 
       it 'changes the attributes' do

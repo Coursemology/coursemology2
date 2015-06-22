@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Administration: Announcements', type: :feature do
+RSpec.describe 'System: Administration: Announcements', type: :feature do
   subject { page }
 
   let!(:instance) { create(:instance) }
@@ -49,7 +49,7 @@ RSpec.describe 'Administration: Announcements', type: :feature do
 
           it 'shows the success message' do
             expect(page).to have_selector('div',
-                                          text: I18n.t('admin.announcements.create.success'))
+                                          text: I18n.t('system.admin.announcements.create.success'))
           end
 
           it 'redirects the user to the index page' do
@@ -112,7 +112,7 @@ RSpec.describe 'Administration: Announcements', type: :feature do
 
         it 'shows the success message' do
           expect(page).to have_selector('div',
-                                        text: I18n.t('admin.announcements.update.success'))
+                                        text: I18n.t('system.admin.announcements.update.success'))
         end
 
         it 'changes the attributes' do

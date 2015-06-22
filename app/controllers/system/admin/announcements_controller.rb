@@ -1,4 +1,4 @@
-class Admin::AnnouncementsController < Admin::Controller
+class System::Admin::AnnouncementsController < System::Admin::Controller
   load_and_authorize_resource :announcement, through: :current_tenant, class:
       Instance::Announcement.name
   add_breadcrumb :index, :admin_announcements_path
