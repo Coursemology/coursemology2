@@ -1,6 +1,7 @@
 class Course::Registration
   include ActiveModel::Model
   extend ActiveModel::Naming
+  extend ActiveModel::Translation
   include ActiveModel::Conversion
 
   # @!attribute [rw] course
@@ -22,6 +23,16 @@ class Course::Registration
   #   The course user created from the registration object.
   #   @return [nil|CourseUser]
   attr_accessor :course_user
+
+  # @!attribute [r] errors
+  #   The errors associated with this model.
+  #   @return [Hash]
+  attr_reader :errors
+
+  def initialize(params = {})
+    @errors = ActiveModel::Errors.new(self)
+    update(params)
+  end
 
   def update(params)
     params.each do |key, value|

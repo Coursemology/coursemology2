@@ -2,15 +2,24 @@ FactoryGirl.define do
   factory :course_user_invitation, class: Course::UserInvitation do
     transient do
       course nil
-      user nil
+      user do
+        build(:user)
+      end
     end
 
     course_user do
       options = { workflow_state: :invited }
+      options[:user] = user
       options[:course] = course if course
       build(:course_user, options)
     end
-    user_email { build(:user_email, user: user) }
+    user_email do
+      if user.present?
+        user.emails.take
+      else
+        build(:user_email, user: user, primary: false)
+      end
+    end
     creator
     updater
 

@@ -2,8 +2,10 @@ en:
   course:
     user_registrations:
       registration:
+        registration_code: 'Registration code'
         register: 'Register'
         already_registered: 'You have already registered for the course.'
       create:
+        invalid_code: 'You have entered an invalid registration code.'
         requested: "You have submitted registration to the course as a %{role}."
         registered: "You have been registered as a %{role}."

@@ -3,5 +3,8 @@
     - disable_message = t('.already_registered')
     - disabled = 'disabled'
   div data-toggle='tooltip' title=disable_message
-    input type='hidden' name='registration[code]'
-    = f.button :submit, value: t('.register'), class: 'register', disabled: disabled
+    div.input-group
+      = f.input :code, label: false, wrapper: false, placeholder: t('.registration_code'),
+                disabled: disabled
+      span.input-group-btn
+        = f.button :submit, value: t('.register'), class: 'register', disabled: disabled

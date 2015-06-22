@@ -56,6 +56,56 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
           end
         end
       end
+
+      context 'when a registration code is specified' do
+        let(:registration_params) { { code: registration_code } }
+
+        context 'when a user registration code is specified' do
+          let(:registration_code) { create(:course_user_invitation, course: course).invitation_key }
+
+          context 'when the user is not in the course' do
+            context 'when the course is open' do
+              it 'registers the user' do
+                expect { subject }.
+                  to change { course.course_users.with_approved_state.reload.count }.by(1)
+              end
+              it { is_expected.to redirect_to(course_path(course)) }
+              it 'sets the proper flash message' do
+                subject
+                expect(flash[:success]).to eq(I18n.t('course.user_registrations.create.registered'))
+              end
+            end
+
+            context 'when the course is closed' do
+              before { course.update_attributes!(status: :closed) }
+              it 'rejects the request' do
+                expect { subject }.to raise_exception(CanCan::AccessDenied)
+              end
+            end
+          end
+
+          context 'when the user is already registered' do
+            let(:invitation) { Course::UserInvitation.find_by(invitation_key: registration_code) }
+            before { invitation.course_user.accept!(user) }
+
+            it { expect { subject }.not_to change { course.course_users.reload.count } }
+            it 'shows the proper error message' do
+              subject
+              errors = controller.instance_variable_get(:@registration).errors
+              expect(errors).to have_key(:code)
+              expect(errors[:code].to_sentence).to eq(
+                I18n.t('course.user_registrations.create.invalid_code'))
+            end
+          end
+        end
+
+        context 'when a course registration code is specified' do
+          it 'registers the user' do
+            pending 'Not implemented'
+            fail
+          end
+        end
+      end
     end
   end
 end

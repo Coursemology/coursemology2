@@ -80,9 +80,8 @@ RSpec.feature 'Courses: Invitations' do
       let(:course_user) { create(:course_user, course: course, user: user) }
       let(:invitation) { create(:course_user_invitation, course_user: course_user) }
       scenario 'I can accept invitations' do
-        pending
         visit course_path(course)
-        fill_in 'key', with: invitation.invitation_key
+        fill_in 'registration_code', with: invitation.invitation_key
         click_button 'register'
 
         expect(page).not_to have_selector('div.register')
