@@ -3,7 +3,7 @@ h2= t('.header')
 = simple_form_for [current_course, @group] do |f|
   = f.input :name
 
-  table.table
+  table.table.group-user-list.table-hover
     thead
       tr
         th = t('.name')
