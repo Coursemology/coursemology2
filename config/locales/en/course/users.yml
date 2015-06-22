@@ -18,9 +18,6 @@ en:
         invitations: 'Invitations'
       new:
         already_registered: "You are already registered as a %{role}."
-      create:
-        success: "You have submitted registration to the course as a %{role}."
-        failure: "Could not register for the course: %{error}"
       update:
         success: "Registration updated. You are now registered as %{role}."
       destroy:

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Course::UserInvitationService do
+RSpec.describe Course::UserInvitationService, type: :service do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     def temp_csv_from_attributes(records)

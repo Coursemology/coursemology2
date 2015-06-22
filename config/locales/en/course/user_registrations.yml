@@ -1,0 +1,9 @@
+en:
+  course:
+    user_registrations:
+      registration:
+        register: 'Register'
+        already_registered: 'You have already registered for the course.'
+      create:
+        requested: "You have submitted registration to the course as a %{role}."
+        registered: "You have been registered as a %{role}."

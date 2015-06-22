@@ -4,6 +4,7 @@ class Course::CoursesController < Course::Controller
   end
 
   def show # :nodoc:
+    @registration = Course::Registration.new
     render layout: 'course'
   end
 
