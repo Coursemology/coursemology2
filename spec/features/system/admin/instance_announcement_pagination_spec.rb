@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'System: Administration: Announcements', type: :feature do
+RSpec.describe 'System: Administration: InstanceAnnouncements', type: :feature do
   describe 'Pagination' do
     subject { page }
 
@@ -13,7 +13,7 @@ RSpec.describe 'System: Administration: Announcements', type: :feature do
         create_list(:instance_announcement, 50, instance: instance, creator: user, updater: user)
 
         login_as(user, scope: :user)
-        visit admin_announcements_path
+        visit admin_instance_announcements_path
       end
 
       it { is_expected.to have_selector('nav.pagination') }
@@ -26,7 +26,7 @@ RSpec.describe 'System: Administration: Announcements', type: :feature do
       end
 
       context 'after clicked second page' do
-        before { visit admin_announcements_path(page: '2') }
+        before { visit admin_instance_announcements_path(page: '2') }
 
         it 'lists each announcement' do
           instance.announcements.page(2).each do |announcement|

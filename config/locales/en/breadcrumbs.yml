@@ -18,7 +18,7 @@ en:
         index: 'Administration'
       admin:
         components: 'Components'
-      announcements:
+      instance_announcements:
         index: 'Announcements'
       instances:
         index: 'Instances'

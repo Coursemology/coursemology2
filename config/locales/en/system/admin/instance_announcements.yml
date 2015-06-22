@@ -1,7 +1,7 @@
 en:
   system:
     admin:
-      announcements:
+      instance_announcements:
         index:
           header: 'Announcements'
         new:

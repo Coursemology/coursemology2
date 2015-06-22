@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'System: Administration: Announcements', type: :feature do
+RSpec.describe 'System: Administration: InstanceAnnouncements', type: :feature do
   subject { page }
 
   let!(:instance) { create(:instance) }
@@ -13,7 +13,7 @@ RSpec.describe 'System: Administration: Announcements', type: :feature do
     end
 
     describe 'announcement creation' do
-      before { visit new_admin_announcement_path }
+      before { visit new_admin_instance_announcement_path }
 
       context 'with invalid information' do
         before do
@@ -48,12 +48,13 @@ RSpec.describe 'System: Administration: Announcements', type: :feature do
           before { click_button I18n.t('helpers.submit.announcement.create') }
 
           it 'shows the success message' do
-            expect(page).to have_selector('div',
-                                          text: I18n.t('system.admin.announcements.create.success'))
+            expect(page).
+              to have_selector('div',
+                               text: I18n.t('system.admin.instance_announcements.create.success'))
           end
 
           it 'redirects the user to the index page' do
-            expect(current_path).to eq(admin_announcements_path)
+            expect(current_path).to eq(admin_instance_announcements_path)
           end
         end
       end
@@ -62,7 +63,7 @@ RSpec.describe 'System: Administration: Announcements', type: :feature do
     describe 'announcement editing' do
       let!(:announcement) { create(:instance_announcement, instance: instance) }
 
-      before { visit edit_admin_announcement_path(announcement) }
+      before { visit edit_admin_instance_announcement_path(announcement) }
 
       context 'page rendering' do
         it { is_expected.to have_field('announcement[title]', with: announcement.title) }
@@ -107,12 +108,13 @@ RSpec.describe 'System: Administration: Announcements', type: :feature do
         end
 
         it 'redirects the user to index page' do
-          expect(current_path).to eq admin_announcements_path
+          expect(current_path).to eq admin_instance_announcements_path
         end
 
         it 'shows the success message' do
-          expect(page).to have_selector('div',
-                                        text: I18n.t('system.admin.announcements.update.success'))
+          expect(page).
+            to have_selector('div',
+                             text: I18n.t('system.admin.instance_announcements.update.success'))
         end
 
         it 'changes the attributes' do
@@ -128,11 +130,11 @@ RSpec.describe 'System: Administration: Announcements', type: :feature do
       end
 
       before do
-        visit admin_announcements_path
+        visit admin_instance_announcements_path
       end
 
       context 'management buttons' do
-        it { is_expected.to have_link(nil, href: new_admin_announcement_path) }
+        it { is_expected.to have_link(nil, href: new_admin_instance_announcement_path) }
       end
 
       it 'shows all announcements' do
@@ -144,16 +146,16 @@ RSpec.describe 'System: Administration: Announcements', type: :feature do
 
       it 'shows all management buttons' do
         announcements.each do |announcement|
-          expect(page).to have_link(nil, href: edit_admin_announcement_path(announcement))
-          expect(page).to have_link(nil, href: admin_announcement_path(announcement))
+          expect(page).to have_link(nil, href: edit_admin_instance_announcement_path(announcement))
+          expect(page).to have_link(nil, href: admin_instance_announcement_path(announcement))
         end
       end
     end
 
     describe 'announcement deletion' do
       let!(:announcement) { create(:instance_announcement, instance: instance) }
-      let(:announcement_path) { admin_announcement_path(announcement) }
-      before { visit admin_announcements_path }
+      let(:announcement_path) { admin_instance_announcement_path(announcement) }
+      before { visit admin_instance_announcements_path }
 
       it 'deletes the announcement' do
         find_link(nil, href: announcement_path).click

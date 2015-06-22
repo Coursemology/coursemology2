@@ -1,7 +1,7 @@
-class System::Admin::AnnouncementsController < System::Admin::Controller
-  load_and_authorize_resource :announcement, through: :current_tenant, class:
-      Instance::Announcement.name
-  add_breadcrumb :index, :admin_announcements_path
+class System::Admin::InstanceAnnouncementsController < System::Admin::Controller
+  load_and_authorize_resource :announcement, through: :current_tenant, parent: false,
+                                             class: Instance::Announcement.name
+  add_breadcrumb :index, :admin_instance_announcements_path
 
   def index
     @announcements = @announcements.includes(:creator).page(params[:page])
@@ -12,7 +12,7 @@ class System::Admin::AnnouncementsController < System::Admin::Controller
 
   def create
     if @announcement.save
-      redirect_to admin_announcements_path,
+      redirect_to admin_instance_announcements_path,
                   success: t('.success', title: @announcement.title)
     else
       render 'new'
@@ -24,7 +24,7 @@ class System::Admin::AnnouncementsController < System::Admin::Controller
 
   def update
     if @announcement.update_attributes(announcement_params)
-      redirect_to admin_announcements_path,
+      redirect_to admin_instance_announcements_path,
                   success: t('.success', title: @announcement.title)
     else
       render 'edit'
@@ -33,10 +33,10 @@ class System::Admin::AnnouncementsController < System::Admin::Controller
 
   def destroy
     if @announcement.destroy
-      redirect_to admin_announcements_path,
+      redirect_to admin_instance_announcements_path,
                   success: t('.success', title: @announcement.title)
     else
-      redirect_to admin_announcements_path,
+      redirect_to admin_instance_announcements_path,
                   danger: t('.failure', error: @announcement.errors.full_messages.to_sentence)
     end
   end
