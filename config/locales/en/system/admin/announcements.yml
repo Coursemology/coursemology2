@@ -1,7 +1,7 @@
 en:
   system:
     admin:
-      system_announcements:
+      announcements:
         index:
           header: 'System Announcements'
         new:

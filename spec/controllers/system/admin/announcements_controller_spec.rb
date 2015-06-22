@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe System::Admin::SystemAnnouncementsController, type: :controller do
+RSpec.describe System::Admin::AnnouncementsController, type: :controller do
   let(:instance) { create(:instance) }
 
   with_tenant(:instance) do
@@ -18,13 +18,13 @@ RSpec.describe System::Admin::SystemAnnouncementsController, type: :controller d
 
       context 'upon destroy failure' do
         before do
-          controller.instance_variable_set(:@system_announcement, system_announcement_stub)
+          controller.instance_variable_set(:@announcement, system_announcement_stub)
           subject
         end
 
         it 'redirects with a flash message' do
-          it { is_expected.to redirect_to(admin_system_announcements_path) }
-          expect(flash[:danger]).to(eq(I18n.t('system.admin.system_announcements.destroy.failure',
+          it { is_expected.to redirect_to(admin_announcements_path) }
+          expect(flash[:danger]).to(eq(I18n.t('system.admin.announcements.destroy.failure',
                                               error: '')))
         end
       end

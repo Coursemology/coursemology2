@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'System announcements', type: :feature do
+RSpec.describe 'System: Administration: Announcements', type: :feature do
   let!(:user) { create(:administrator) }
 
   before do
@@ -8,7 +8,7 @@ RSpec.describe 'System announcements', type: :feature do
   end
 
   describe 'announcement creation' do
-    before { visit new_admin_system_announcement_path }
+    before { visit new_admin_announcement_path }
     subject { click_button I18n.t('helpers.submit.system_announcement.create') }
 
     context 'with invalid information' do
@@ -43,11 +43,11 @@ RSpec.describe 'System announcements', type: :feature do
         it 'shows the success message' do
           expect(page).
             to have_selector('div',
-                             text: I18n.t('system.admin.system_announcements.create.success'))
+                             text: I18n.t('system.admin.announcements.create.success'))
         end
 
         it 'redirects the user to the index page' do
-          expect(current_path).to eq(admin_system_announcements_path)
+          expect(current_path).to eq(admin_announcements_path)
         end
       end
     end
@@ -56,7 +56,7 @@ RSpec.describe 'System announcements', type: :feature do
   describe 'announcement editing' do
     let!(:announcement) { create(:system_announcement) }
 
-    before { visit edit_admin_system_announcement_path(announcement) }
+    before { visit edit_admin_announcement_path(announcement) }
     subject { click_button I18n.t('helpers.submit.system_announcement.update') }
 
     context 'with invalid information' do
@@ -85,11 +85,11 @@ RSpec.describe 'System announcements', type: :feature do
       end
 
       it 'redirects the user to index page' do
-        expect(current_path).to eq admin_system_announcements_path
+        expect(current_path).to eq admin_announcements_path
       end
 
       it 'shows the success message' do
-        expect(page).to have_selector('div', 'system.admin.system_announcements.update.success')
+        expect(page).to have_selector('div', 'system.admin.announcements.update.success')
       end
 
       it 'changes the attributes' do
@@ -102,11 +102,11 @@ RSpec.describe 'System announcements', type: :feature do
   describe 'index' do
     let!(:announcements) { create_list(:system_announcement, 10, creator: user, updater: user) }
 
-    before { visit admin_system_announcements_path }
+    before { visit admin_announcements_path }
     subject { page }
 
     context 'management buttons' do
-      it { is_expected.to have_link(nil, href: new_admin_system_announcement_path) }
+      it { is_expected.to have_link(nil, href: new_admin_announcement_path) }
     end
 
     it 'shows all announcements' do
@@ -118,15 +118,15 @@ RSpec.describe 'System announcements', type: :feature do
 
     it 'shows all management buttons' do
       announcements.each do |announcement|
-        expect(subject).to have_link(nil, href: edit_admin_system_announcement_path(announcement))
-        expect(subject).to have_link(nil, href: admin_system_announcement_path(announcement))
+        expect(subject).to have_link(nil, href: edit_admin_announcement_path(announcement))
+        expect(subject).to have_link(nil, href: admin_announcement_path(announcement))
       end
     end
   end
 
   describe 'announcement deletion' do
     let!(:announcement) { create(:system_announcement) }
-    before { visit admin_system_announcements_path }
+    before { visit admin_announcements_path }
     subject { first('div.system_announcement a.btn-danger').click }
 
     it 'deletes the announcement' do

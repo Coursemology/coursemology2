@@ -1,4 +1,0 @@
-= page_header do
-  = new_button([:admin, :system_announcement]) if can?(:create, System::Announcement)
-= render @system_announcements
-= paginate @system_announcements
