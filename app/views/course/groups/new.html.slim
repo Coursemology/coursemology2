@@ -2,6 +2,6 @@
 = simple_form_for [current_course, @group] do |f|
   = f.input :name
 
-  = f.association :users, collection: current_course.users
+  = f.association :users, collection: current_course.users - [current_user]
 
   = f.button :submit

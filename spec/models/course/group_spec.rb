@@ -35,17 +35,17 @@ RSpec.describe Course::Group, type: :model do
         end
       end
 
-      context 'when multiple group_users reference a same user', focus: true do
+      context 'when multiple group_users reference a same user' do
         let(:group) { create(:course_group, course: course) }
         let(:user) { create(:user) }
         before do
           create(:course_user, course: course, user: user)
-          2.times { group.group_users.build(user: user, creator: owner, updater: owner ) }
+          2.times { group.group_users.build(user: user, creator: owner, updater: owner) }
         end
         subject { group.save }
 
         it 'does not raise any errors' do
-          expect{ subject }.not_to raise_error
+          expect { subject }.not_to raise_error
         end
 
         it 'adds the user to the group' do
