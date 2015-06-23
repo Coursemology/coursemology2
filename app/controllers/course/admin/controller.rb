@@ -1,3 +1,3 @@
 class Course::Admin::Controller < Course::ComponentController
-  layout 'course_settings'
+  layout 'course_admin'
 end

@@ -4,7 +4,7 @@ class Course::CoursesComponent
   sidebar do
     [
       {
-        title: t('layouts.course_settings.title'),
+        title: t('layouts.course_admin.title'),
         path: course_admin_path(current_course),
         action: 'index'
       }
@@ -14,7 +14,7 @@ class Course::CoursesComponent
   settings do
     [
       {
-        title: t('layouts.course_settings.title'),
+        title: t('layouts.course_admin.title'),
         controller: 'course/admin/admin',
         action: 'index'
       }
