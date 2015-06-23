@@ -37,7 +37,7 @@ RSpec.describe GenericAnnouncement, type: :model do
       it 'orders by descending valid_from within type' do
         all = GenericAnnouncement.with_instance([nil, instance])
         system_announcements, instance_announcements = all.partition do |a|
-          a.is_a?(SystemAnnouncement)
+          a.is_a?(System::Announcement)
         end
 
         comparator = proc { |x, y| x >= y }
@@ -50,7 +50,7 @@ RSpec.describe GenericAnnouncement, type: :model do
 
       it 'orders system announcements before instance announcements' do
         announcements = GenericAnnouncement.with_instance([nil, instance])
-        instance_announcements = announcements.drop_while { |a| a.is_a?(SystemAnnouncement) }
+        instance_announcements = announcements.drop_while { |a| a.is_a?(System::Announcement) }
         all_instance = instance_announcements.all? { |a| a.is_a?(Instance::Announcement) }
         expect(all_instance).to be_truthy
       end

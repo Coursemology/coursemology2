@@ -2,21 +2,17 @@
   h2
     - if announcement.unread?
       input.new_announcement type="hidden"
-        = fa_icon 'envelope'
-
+      = fa_icon 'envelope'
     = announcement.title
-
   - if can? :manage, announcement.class
     div.pull-right
-      = edit_button(edit_admin_announcement_path(announcement))
-
-      = delete_button(admin_announcement_path(announcement))
+      = edit_button([:admin, :instance, announcement])
+      = delete_button([:admin, :instance, announcement])
 
   h3.timestamp
     => format_datetime(announcement.valid_from)
     ' by
     = link_to_user(announcement.creator)
-
   div.content
     = announcement.content
 hr

@@ -1,6 +1,5 @@
 class System::Admin::AnnouncementsController < System::Admin::Controller
-  load_and_authorize_resource :announcement, through: :current_tenant, class:
-      Instance::Announcement.name
+  load_and_authorize_resource :announcement, class: System::Announcement.name
   add_breadcrumb :index, :admin_announcements_path
 
   def index
@@ -34,16 +33,17 @@ class System::Admin::AnnouncementsController < System::Admin::Controller
   def destroy
     if @announcement.destroy
       redirect_to admin_announcements_path,
-                  success: t('.success', title: @announcement.title)
+                  success: t('.success',
+                             title: @announcement.title)
     else
       redirect_to admin_announcements_path,
-                  danger: t('.failure', error: @announcement.errors.full_messages.to_sentence)
+                  danger: t('.failure', @announcement.errors.full_messages.to_sentence)
     end
   end
 
   private
 
   def announcement_params
-    params.require(:announcement).permit(:title, :content, :valid_from, :valid_to)
+    params.require(:system_announcement).permit(:title, :content, :valid_from, :valid_to)
   end
 end

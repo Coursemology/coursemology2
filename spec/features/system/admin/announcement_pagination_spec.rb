@@ -4,35 +4,32 @@ RSpec.describe 'System: Administration: Announcements', type: :feature do
   describe 'Pagination' do
     subject { page }
 
-    let!(:instance) { create(:instance) }
+    let!(:user) { create(:administrator) }
 
-    with_tenant(:instance) do
-      let!(:user) { create(:administrator) }
+    before do
+      System::Announcement.delete_all
+      create_list(:system_announcement, 50, creator: user, updater: user)
 
-      before do
-        create_list(:instance_announcement, 50, instance: instance, creator: user, updater: user)
+      login_as(user, scope: :user)
+      visit admin_announcements_path
+    end
 
-        login_as(user, scope: :user)
-        visit admin_announcements_path
+    it { is_expected.to have_selector('nav.pagination') }
+
+    it 'lists each announcement' do
+      System::Announcement.page(1).each do |announcement|
+        expect(page).to have_selector('div', text: announcement.title)
+        expect(page).to have_selector('div', text: announcement.content)
       end
+    end
 
-      it { is_expected.to have_selector('nav.pagination') }
+    context 'after clicked second page' do
+      before { visit admin_announcements_path(page: '2') }
 
       it 'lists each announcement' do
-        instance.announcements.page(1).each do |announcement|
+        System::Announcement.page(2).each do |announcement|
           expect(page).to have_selector('div', text: announcement.title)
           expect(page).to have_selector('div', text: announcement.content)
-        end
-      end
-
-      context 'after clicked second page' do
-        before { visit admin_announcements_path(page: '2') }
-
-        it 'lists each announcement' do
-          instance.announcements.page(2).each do |announcement|
-            expect(page).to have_selector('div', text: announcement.title)
-            expect(page).to have_selector('div', text: announcement.content)
-          end
         end
       end
     end

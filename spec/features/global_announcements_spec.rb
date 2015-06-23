@@ -12,7 +12,7 @@ RSpec.feature 'Global announcements' do
     context 'As a User' do
       before(:each) do
         instance.announcements.clear
-        SystemAnnouncement.destroy_all
+        System::Announcement.destroy_all
       end
 
       scenario 'I should not see any announcements if there are none' do
@@ -70,7 +70,7 @@ RSpec.feature 'Global announcements' do
         end
 
         announcements.each do |s|
-          type_selector = s.is_a?(SystemAnnouncement) ? 'system' : 'instance'
+          type_selector = s.is_a?(System::Announcement) ? 'system' : 'instance'
           it { is_expected.to have_selector("div##{type_selector}_announcement_#{s.id}") }
         end
       end

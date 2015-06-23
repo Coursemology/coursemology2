@@ -73,8 +73,8 @@ Rails.application.routes.draw do
   scope module: 'system' do
     namespace :admin do
       get '/' => 'admin#index'
-      resources :system_announcements, except: [:show], concerns: :paginatable
       resources :announcements, except: [:show], concerns: :paginatable
+      resources :instance_announcements, except: [:show], concerns: :paginatable
       resources :instances, except: [:show]
 
       get 'components' => 'admin#components'
