@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Course: Components' do
+RSpec.feature 'Course: Administration: Components' do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
@@ -15,7 +15,7 @@ RSpec.feature 'Course: Components' do
       before { login_as(user, scope: :user) }
 
       scenario 'I can view the list of enabled/disabled components' do
-        visit course_components_path(course)
+        visit course_admin_components_path(course)
 
         components.each do |component|
           expect(page).to have_selector('th', text: component.name)
@@ -31,7 +31,7 @@ RSpec.feature 'Course: Components' do
       end
 
       scenario 'I can enable a component' do
-        visit course_components_path(course)
+        visit course_admin_components_path(course)
 
         check(sample_component_id)
         click_button('submit')
@@ -39,7 +39,7 @@ RSpec.feature 'Course: Components' do
       end
 
       scenario 'I can disable a component' do
-        visit course_components_path(course)
+        visit course_admin_components_path(course)
 
         uncheck(sample_component_id)
         click_button('submit')

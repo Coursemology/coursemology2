@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Course: Settings', type: :feature do
+RSpec.describe 'Course: Administration: Administration', type: :feature do
   subject { page }
 
   let!(:user) { create(:administrator) }
@@ -11,7 +11,7 @@ RSpec.describe 'Course: Settings', type: :feature do
 
     with_tenant(:instance) do
       let!(:course) { create(:course) }
-      before { visit course_settings_path(course) }
+      before { visit course_admin_path(course) }
 
       context 'with valid information' do
         let(:new_title) { 'New Title' }

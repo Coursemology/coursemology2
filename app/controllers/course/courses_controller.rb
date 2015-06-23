@@ -13,7 +13,7 @@ class Course::CoursesController < Course::Controller
 
   def create # :nodoc:
     if @course.save
-      redirect_to course_settings_path(@course), success: t('.success', title: @course.title)
+      redirect_to course_admin_path(@course), success: t('.success', title: @course.title)
     else
       render 'new'
     end

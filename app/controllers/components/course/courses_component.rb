@@ -5,7 +5,7 @@ class Course::CoursesComponent
     [
       {
         title: t('layouts.course_settings.title'),
-        path: course_settings_path(current_course),
+        path: course_admin_path(current_course),
         action: 'index'
       }
     ]
@@ -15,7 +15,7 @@ class Course::CoursesComponent
     [
       {
         title: t('layouts.course_settings.title'),
-        controller: 'course/settings',
+        controller: 'course/admin/admin',
         action: 'index'
       }
     ]
