@@ -84,6 +84,14 @@ Rails.application.routes.draw do
 
   scope module: 'course' do
     resources :courses, except: [:edit, :update] do
+      namespace :admin do
+        get '/' => 'admin#index'
+        patch '/' => 'admin#update'
+
+        get 'components' => 'admin#components'
+        patch 'components' => 'admin#update_components'
+      end
+
       resources :announcements, concerns: :paginatable
       resources :achievements do
         scope module: :achievement do
@@ -91,11 +99,6 @@ Rails.application.routes.draw do
         end
       end
       resources :levels, except: [:show, :edit, :update]
-
-      get 'settings' => 'settings#index', as: :settings
-      patch 'settings' => 'settings#update', as: :update_settings
-      get 'components' => 'settings#components'
-      patch 'components' => 'settings#update_components'
 
       resources :users, only: [:update, :destroy] do
         get 'invite' => 'user_invitations#new', on: :collection

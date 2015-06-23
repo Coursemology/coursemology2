@@ -1,5 +1,5 @@
 = page_header
-= simple_form_for @settings, url: course_components_path do |f|
+= simple_form_for @settings, url: course_admin_components_path(current_course) do |f|
   table.table.table-hover
     thead
       th = t('.name')

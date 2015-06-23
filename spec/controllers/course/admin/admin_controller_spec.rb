@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Course::SettingsController, type: :controller do
+RSpec.describe Course::Admin::AdminController, type: :controller do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:user) { create(:user) }

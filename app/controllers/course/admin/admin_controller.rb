@@ -1,14 +1,13 @@
-class Course::SettingsController < Course::ComponentController
-  layout 'course_settings'
+class Course::Admin::AdminController < Course::Admin::Controller
   before_action :load_settings, only: [:components, :update_components]
-  add_breadcrumb :index, :course_settings_path
+  add_breadcrumb :index, :course_admin_path
 
   def index
   end
 
   def update #:nodoc:
     if current_course.update_attributes(course_setting_params)
-      redirect_to course_settings_path(current_course),
+      redirect_to course_admin_path(current_course),
                   success: t('.success', title: current_course.title)
     else
       render 'index'
@@ -21,7 +20,7 @@ class Course::SettingsController < Course::ComponentController
   def update_components #:nodoc:
     @settings.update(settings_effective_params)
     if current_course.save
-      redirect_to course_components_path(current_course), success: t('.success')
+      redirect_to course_admin_components_path(current_course), success: t('.success')
     else
       @settings.errors = current_course.errors
       render 'components'
