@@ -13,14 +13,15 @@ en:
         index: 'Announcements'
       achievements:
         index: 'Achievements'
-    admin:
-      controller:
-        index: 'Administration'
+    system:
       admin:
-        components: 'Components'
-      instance_announcements:
-        index: 'Announcements'
-      instances:
-        index: 'Instances'
-      system_announcements:
-        index: 'System Announcements'
+        controller:
+          index: 'Administration'
+        admin:
+          components: 'Components'
+        instance_announcements:
+          index: 'Announcements'
+        instances:
+          index: 'Instances'
+        announcements:
+          index: 'System Announcements'
