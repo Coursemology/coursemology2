@@ -33,9 +33,9 @@ ActiveRecord::Schema.define(version: 20150617021911) do
   end
 
   create_table "attachments", force: :cascade do |t|
-    t.string   "name",            null: false
+    t.string   "name",            limit: 255, null: false
     t.integer  "attachable_id"
-    t.string   "attachable_type", index: {name: "index_attachments_on_attachable_type_and_attachable_id", with: ["attachable_id"]}
+    t.string   "attachable_type", limit: 255, index: {name: "index_attachments_on_attachable_type_and_attachable_id", with: ["attachable_id"]}
     t.text     "file_upload",     null: false
     t.integer  "creator_id",      null: false, index: {name: "fk__attachments_creator_id"}, foreign_key: {references: "users", name: "fk_attachments_creator_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "updater_id",      null: false, index: {name: "fk__attachments_updater_id"}, foreign_key: {references: "users", name: "fk_attachments_updater_id", on_update: :no_action, on_delete: :no_action}
@@ -99,10 +99,10 @@ ActiveRecord::Schema.define(version: 20150617021911) do
 
   create_table "course_conditions", force: :cascade do |t|
     t.integer  "actable_id"
-    t.string   "actable_type",     index: {name: "index_course_conditions_on_actable_type_and_actable_id", with: ["actable_id"], unique: true}
+    t.string   "actable_type",     limit: 255, index: {name: "index_course_conditions_on_actable_type_and_actable_id", with: ["actable_id"], unique: true}
     t.integer  "course_id",        index: {name: "fk__course_conditions_course_id"}, foreign_key: {references: "courses", name: "fk_course_conditions_course_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "conditional_id"
-    t.string   "conditional_type", index: {name: "index_course_conditions_on_conditional_type_and_conditional_id", with: ["conditional_id"]}
+    t.string   "conditional_type", limit: 255, index: {name: "index_course_conditions_on_conditional_type_and_conditional_id", with: ["conditional_id"]}
     t.integer  "creator_id",       null: false, index: {name: "fk__course_conditions_creator_id"}, foreign_key: {references: "users", name: "fk_course_conditions_creator_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "updater_id",       null: false, index: {name: "fk__course_conditions_updater_id"}, foreign_key: {references: "users", name: "fk_course_conditions_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at",       null: false
@@ -110,14 +110,14 @@ ActiveRecord::Schema.define(version: 20150617021911) do
   end
 
   create_table "course_events", force: :cascade do |t|
-    t.string   "location"
-    t.integer  "event_type", default: 0
+    t.string  "location",   limit: 255
+    t.integer "event_type", default: 0
   end
 
   create_table "course_users", force: :cascade do |t|
     t.integer  "course_id",        null: false, index: {name: "fk__course_users_course_id"}, foreign_key: {references: "courses", name: "fk_course_users_course_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "user_id",          index: {name: "fk__course_users_user_id"}, foreign_key: {references: "users", name: "fk_course_users_user_id", on_update: :no_action, on_delete: :no_action}
-    t.string   "workflow_state",   null: false
+    t.string   "workflow_state",   limit: 255,                 null: false
     t.integer  "role",             default: 0,     null: false
     t.string   "name",             limit: 255,                 null: false
     t.boolean  "phantom",          default: false, null: false
@@ -131,10 +131,10 @@ ActiveRecord::Schema.define(version: 20150617021911) do
 
   create_table "course_experience_points_records", force: :cascade do |t|
     t.integer  "actable_id"
-    t.string   "actable_type",   index: {name: "index_course_experience_points_records_on_actable", with: ["actable_id"], unique: true}
+    t.string   "actable_type",   limit: 255, index: {name: "index_course_experience_points_records_on_actable", with: ["actable_id"], unique: true}
     t.integer  "points_awarded", null: false
     t.integer  "course_user_id", null: false, index: {name: "fk__course_experience_points_records_course_user_id"}, foreign_key: {references: "course_users", name: "fk_course_experience_points_records_course_user_id", on_update: :no_action, on_delete: :no_action}
-    t.string   "reason"
+    t.string   "reason",         limit: 255
     t.integer  "creator_id",     null: false, index: {name: "fk__course_experience_points_records_creator_id"}, foreign_key: {references: "users", name: "fk_course_experience_points_records_creator_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "updater_id",     null: false, index: {name: "fk__course_experience_points_records_updater_id"}, foreign_key: {references: "users", name: "fk_course_experience_points_records_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at",     null: false
@@ -143,7 +143,7 @@ ActiveRecord::Schema.define(version: 20150617021911) do
 
   create_table "course_groups", force: :cascade do |t|
     t.integer  "course_id",  null: false, index: {name: "fk__course_groups_course_id"}, foreign_key: {references: "courses", name: "fk_course_groups_course_id", on_update: :no_action, on_delete: :no_action}
-    t.string   "name",       default: "", null: false
+    t.string   "name",       limit: 255, default: "", null: false
     t.integer  "creator_id", null: false, index: {name: "fk__course_groups_creator_id"}, foreign_key: {references: "users", name: "fk_course_groups_creator_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "updater_id", null: false, index: {name: "fk__course_groups_updater_id"}, foreign_key: {references: "users", name: "fk_course_groups_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at", null: false
@@ -164,9 +164,9 @@ ActiveRecord::Schema.define(version: 20150617021911) do
 
   create_table "course_lesson_plan_items", force: :cascade do |t|
     t.integer  "actable_id"
-    t.string   "actable_type",    index: {name: "index_course_lesson_plan_items_on_actable_type_and_actable_id", with: ["actable_id"], unique: true}
+    t.string   "actable_type",    limit: 255, index: {name: "index_course_lesson_plan_items_on_actable_type_and_actable_id", with: ["actable_id"], unique: true}
     t.integer  "course_id",       null: false, index: {name: "fk__course_lesson_plan_items_course_id"}, foreign_key: {references: "courses", name: "fk_course_lesson_plan_items_course_id", on_update: :no_action, on_delete: :no_action}
-    t.string   "title",           null: false
+    t.string   "title",           limit: 255,                 null: false
     t.text     "description"
     t.boolean  "published",       default: false, null: false
     t.integer  "base_exp",        null: false
@@ -183,7 +183,7 @@ ActiveRecord::Schema.define(version: 20150617021911) do
 
   create_table "course_lesson_plan_milestones", force: :cascade do |t|
     t.integer  "course_id",   index: {name: "fk__course_lesson_plan_milestones_course_id"}, foreign_key: {references: "courses", name: "fk_course_lesson_plan_milestones_course_id", on_update: :no_action, on_delete: :no_action}
-    t.string   "title",       null: false
+    t.string   "title",       limit: 255, null: false
     t.text     "description"
     t.datetime "start_time",  null: false
     t.integer  "creator_id",  null: false, index: {name: "fk__course_lesson_plan_milestones_creator_id"}, foreign_key: {references: "users", name: "fk_course_lesson_plan_milestones_creator_id", on_update: :no_action, on_delete: :no_action}
@@ -220,9 +220,9 @@ ActiveRecord::Schema.define(version: 20150617021911) do
   end
 
   create_table "generic_announcements", force: :cascade do |t|
-    t.string   "type",        null: false
+    t.string   "type",        limit: 255, null: false
     t.integer  "instance_id", comment: "The instance this announcement is associated with. This only applies to instance announcements.", index: {name: "fk__generic_announcements_instance_id"}, foreign_key: {references: "instances", name: "fk_generic_announcements_instance_id", on_update: :no_action, on_delete: :no_action}
-    t.string   "title",       null: false
+    t.string   "title",       limit: 255, null: false
     t.text     "content"
     t.datetime "valid_from",  null: false
     t.datetime "valid_to",    null: false
