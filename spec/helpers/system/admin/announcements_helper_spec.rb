@@ -10,5 +10,5 @@ require 'rails_helper'
 #     end
 #   end
 # end
-RSpec.describe Admin::AnnouncementsHelper, type: :helper do
+RSpec.describe System::Admin::AnnouncementsHelper, type: :helper do
 end
