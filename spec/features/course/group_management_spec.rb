@@ -16,7 +16,7 @@ RSpec.feature 'Courses: Groups' do
         expect(page).to have_link(nil, href: new_course_group_path(course))
 
         groups.each do |group|
-          expect(page).to have_selector('td', text: group.name)
+          expect(page).to have_selector('th', text: group.name)
           expect(page).to have_link(nil, href: edit_course_group_path(course, group))
           expect(page).to have_link(nil, href: course_group_path(course, group))
         end
