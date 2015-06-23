@@ -1,0 +1,10 @@
+= simple_form_for(@registration, url: course_register_path(current_course)) do |f|
+  - if current_course.course_users.exists?(user: current_user)
+    - disable_message = t('.already_registered')
+    - disabled = 'disabled'
+  div data-toggle='tooltip' title=disable_message
+    div.input-group
+      = f.input :code, label: false, wrapper: false, placeholder: t('.registration_code'),
+                disabled: disabled
+      span.input-group-btn
+        = f.button :submit, value: t('.register'), class: 'register', disabled: disabled

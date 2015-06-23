@@ -3,9 +3,6 @@ en:
     courses:
       index:
         header: 'Courses'
-      show:
-        register: 'Register'
-        already_registered: 'You have already registered for the course.'
       create:
         success: "Course %{title} was created."
       new:

@@ -23,7 +23,21 @@ div role='tabpanel'
 
       = simple_form_for(current_course, url: invite_course_users_path, method: :post) do |f|
         = f.error_notification
-        = f.input :users_file, as: :file
+        = f.input :invitations_file, as: :file
         = f.button :submit
 
     div.tab-pane#individual role='tabpanel'
+      = simple_form_for(current_course, url: invite_course_users_path, method: :post) do |f|
+        = f.error_notification
+        table.table.table-hover
+          thead
+            tr
+              th = t('common.name')
+              th = t('common.email')
+              th
+                div.pull-right
+                  = link_to_add_association(t('.individual.add_user'), f, :invitations,
+                                            find_selector: :tbody, insert_using: :append)
+          tbody
+
+        = f.button :submit

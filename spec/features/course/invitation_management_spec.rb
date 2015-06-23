@@ -10,10 +10,14 @@ RSpec.feature 'Courses: Invitations' do
       let(:user) { create(:administrator) }
 
       scenario 'I can invite users by individually entering their addresses' do
-        pending
         course = create(:course)
+        invitation = create(:course_user_invitation, course: course)
         visit invite_course_users_path(course)
 
+        # Make sure existing invitations don't show up.
+        expect(page).not_to have_selector(".user_invitation#user_invitation_#{invitation.id}")
+
+        pending 'JavaScript support'
         name = 'My name'
         email = 'email_test@example.org'
         fill_in 'course_user_name', with: name
@@ -23,7 +27,6 @@ RSpec.feature 'Courses: Invitations' do
         expect(page).to have_selector('div.progress', text: '0%')
         expect(page).to have_selector('.course_user_invitation th', text: name)
         expect(page).to have_selector('.course_user_invitation td', text: name)
-        pending
       end
 
       scenario 'I can invite users by uploading a file' do
@@ -32,8 +35,10 @@ RSpec.feature 'Courses: Invitations' do
         invitations = CSV.read(invitation_file, headers: true)
 
         visit invite_course_users_path(course)
-        attach_file 'course_users_file', invitation_file
-        click_button 'submit'
+        within find('#course_invitations_file').find(:xpath, '../..') do
+          attach_file 'course_invitations_file', invitation_file
+          click_button 'submit'
+        end
 
         expect(page).to have_selector('div.progress')
         invitations.each do |invitation|
@@ -75,9 +80,8 @@ RSpec.feature 'Courses: Invitations' do
       let(:course_user) { create(:course_user, course: course, user: user) }
       let(:invitation) { create(:course_user_invitation, course_user: course_user) }
       scenario 'I can accept invitations' do
-        pending
         visit course_path(course)
-        fill_in 'key', with: invitation.invitation_key
+        fill_in 'registration_code', with: invitation.invitation_key
         click_button 'register'
 
         expect(page).not_to have_selector('div.register')

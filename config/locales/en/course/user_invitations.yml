@@ -8,5 +8,9 @@ en:
           individual: 'Individually add users'
         file:
           format: 'Files uploaded must be in the following format:'
+        individual:
+          add_user: 'Add User'
+      invitation_fields:
+        remove: 'Remove'
       create:
         success: 'Successfully invited users from the uploaded file.'

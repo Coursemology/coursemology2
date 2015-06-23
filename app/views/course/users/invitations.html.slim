@@ -11,10 +11,13 @@ div.progress
     span
       = t('.progress', accepted: accepted_course_users, total: @course_users.size)
 
+= simple_format t('.manual_acceptance')
+
 table.table.table-striped
   thead
     th = t('common.name')
     th = t('common.email')
+    th = t('.invitation_code')
     th = t('.status')
     th
   tbody
@@ -22,5 +25,6 @@ table.table.table-striped
       = content_tag_for(:tr, course_user)
         th = course_user.name
         td = course_user.invitation.user_email.email
+        td = course_user.invitation.invitation_key
         td = course_user.invited? ? t('course.users.status.invited') : t('course.users.status.accepted')
         td

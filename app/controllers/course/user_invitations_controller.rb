@@ -1,6 +1,6 @@
 class Course::UserInvitationsController < Course::ComponentController
   before_action :authorize_invitation!
-  add_breadcrumb :index, :course_users_path
+  add_breadcrumb :index, :course_users_students_path
 
   def new # :nodoc:
   end
@@ -21,15 +21,24 @@ class Course::UserInvitationsController < Course::ComponentController
   end
 
   def course_user_invitation_params # :nodoc:
-    @invite_params ||= params.require(:course).permit(:users_file, users: [:name, :email])
+    invitations_attributes = { course_user: [:name], user_email: [:email] }
+    @invite_params ||= params.require(:course).
+                       permit(:invitations_file, invitations_attributes: invitations_attributes)
+  end
+
+  # Determines the parameters to be passed to the invitation service object.
+  #
+  # @return [Hash]
+  def invitation_params
+    course_user_invitation_params[:invitations_file].try(:tempfile) ||
+      course_user_invitation_params[:invitations_attributes]
   end
 
   # Invites the users via the service object.
   #
   # @return [bool] True if the invitation was successful.
   def invite
-    invitation_service.invite(course_user_invitation_params[:users_file].try(:tempfile) ||
-                                course_user_invitation_params[:users])
+    invitation_service.invite(invitation_params)
   rescue CSV::MalformedCSVError => e
     current_course.errors[:users_file] = e.message
     return false

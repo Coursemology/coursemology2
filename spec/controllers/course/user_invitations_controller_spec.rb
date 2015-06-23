@@ -8,7 +8,14 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
 
     describe '#create_invite' do
       before { sign_in(user) }
-      let(:invite_params) { { users: {} } }
+      let(:invite_params) do
+        invitation = {
+          course_user: { name: generate(:name) },
+          user_email: { email: generate(:email) }
+        }
+        invitations = { generate(:nested_attribute_new_id) => invitation }
+        { invitations_attributes: invitations }
+      end
 
       subject { post :create, course_id: course, course: invite_params }
 
@@ -32,7 +39,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
 
         context 'when an invalid CSV is uploaded' do
           let(:invite_params) do
-            { users_file: fixture_file_upload('course/invalid_invitation.csv') }
+            { invitations_file: fixture_file_upload('course/invalid_invitation.csv') }
           end
           it { is_expected.to render_template(:new) }
         end
