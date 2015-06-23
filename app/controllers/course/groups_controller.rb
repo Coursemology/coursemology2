@@ -27,6 +27,15 @@ class Course::GroupsController < Course::ComponentController
     end
   end
 
+  def destroy #:nodoc
+    if @group.destroy
+      redirect_to(course_groups_path(current_course),
+                  success: t('.success', name: @group.name))
+    else
+      redirect_to course_groups_path, danger: @group.errors.full_messages.to_sentence
+    end
+  end
+
   private
 
   def group_params #:nodoc:

@@ -56,5 +56,23 @@ RSpec.describe Course::GroupsController, type: :controller do
         it { is_expected.to redirect_to(course_groups_path(course)) }
       end
     end
+
+    describe '#destroy' do
+      let!(:group_stub) do
+        stub = create(:course_group, course: course)
+        allow(stub).to receive(:destroy).and_return(false)
+        stub
+      end
+      subject { delete :destroy, course_id: course, id: group_stub }
+
+      context 'when the group cannot be destroyed' do
+        before do
+          controller.instance_variable_set(:@group, group_stub)
+          subject
+        end
+
+        it { is_expected.to redirect_to(course_groups_path(course)) }
+      end
+    end
   end
 end
