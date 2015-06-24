@@ -11,6 +11,16 @@ class Course::AnnouncementsComponent
     ]
   end
 
+  settings do
+    [
+      {
+        title: t('layouts.course_admin.announcement_settings.title'),
+        controller: 'course/admin/announcement_settings',
+        action: 'edit'
+      }
+    ]
+  end
+
   def self.unread_count(course, user)
     return 0 if course.nil? || user.nil?
     course.announcements.unread_by(user).count
