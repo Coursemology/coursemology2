@@ -6,10 +6,10 @@ en:
         header: 'Announcements'
       new:
         header: 'New Announcement'
-      edit:
-        header: 'Edit Announcement'
       create:
         success: "Announcement %{title} was created."
+      edit:
+        header: 'Edit Announcement'
       update:
         success: "Announcement %{title} was updated."
       destroy:

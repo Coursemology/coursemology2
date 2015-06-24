@@ -11,11 +11,11 @@ en:
         accepted: 'Accepted'
         invited: 'Invited'
       tabs:
-        students: 'Students'
-        staff: 'Staff'
-        requests: 'Requests'
-        invite: 'Invite Users'
-        invitations: 'Invitations'
+        students: :'course.users.students.header'
+        staff: :'course.users.staff.header'
+        requests: :'course.users.requests.header'
+        invite: :'course.user_invitations.new.header'
+        invitations: :'course.users.invitations.header'
       new:
         already_registered: "You are already registered as a %{role}."
       update:
