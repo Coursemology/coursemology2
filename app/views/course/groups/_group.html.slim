@@ -1,5 +1,5 @@
 = content_tag_for(:tr, group) do
-  td = group.name
+  th = group.name
   td = group.users.normal.count
   td
     = edit_button(edit_course_group_path(current_course, group))

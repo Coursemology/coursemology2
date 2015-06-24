@@ -94,4 +94,27 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
     end
   end
+
+  describe 'page title helper' do
+    subject { helper.page_title }
+
+    context 'when the page title is not set' do
+      it { is_expected.to eq(t('layout.coursemology')) }
+    end
+
+    context 'when the page title is explicitly set' do
+      let(:test_title) { 'this is a test' }
+      before { helper.content_for(:page_title, test_title) }
+      it { is_expected.to eq("#{test_title} - #{t('layout.coursemology')}") }
+    end
+
+    context 'when there are breadcrumbs present' do
+      let!(:breadcrumbs) { ['a', 'b', 'c'] }
+      before do
+        bc = breadcrumbs
+        helper.define_singleton_method(:breadcrumb_names) { bc }
+      end
+      it { is_expected.to eq("#{breadcrumbs.reverse.join(' - ')} - #{t('layout.coursemology')}") }
+    end
+  end
 end

@@ -1,5 +1,6 @@
 class Course::GroupsController < Course::ComponentController
   load_and_authorize_resource :group, through: :course, class: Course::Group.name
+  add_breadcrumb :index, :course_groups_path
 
   def index #:nodoc:
   end
