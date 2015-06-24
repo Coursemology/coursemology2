@@ -6,6 +6,7 @@ en:
     name: 'Name'
     email: 'Email'
     role: 'Role'
+    time_range: "%{from} to %{to}"
   helpers:
     buttons:
       new: 'New %{model}'

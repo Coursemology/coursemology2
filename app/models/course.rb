@@ -1,5 +1,7 @@
 class Course < ActiveRecord::Base
   include Course::LevelsConcern
+  include Course::LessonPlanConcern
+
   acts_as_tenant(:instance)
   has_settings_on :settings
   stampable
@@ -20,6 +22,7 @@ class Course < ActiveRecord::Base
   has_many :groups, inverse_of: :course, dependent: :destroy, class_name: Course::Group.name
   has_many :lesson_plan_items, inverse_of: :course, dependent: :destroy
   has_many :lesson_plan_milestones, inverse_of: :course, dependent: :destroy
+  has_many :events, through: :lesson_plan_items, source: :actable, source_type: Course::Event.name
 
   accepts_nested_attributes_for :invitations
 

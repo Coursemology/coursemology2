@@ -1,0 +1,38 @@
+- if can?(:read, event)
+  = div_for(event) do
+    a role='button' data-toggle='collapse' href="##{item_body_id(event)}"
+      li.list-group-item
+
+        .pull-right
+          - if event.end_time.present?
+            = t('common.time_range', from: format_datetime(event.start_time),
+                                     to: format_datetime(event.end_time))
+          - else
+            = format_datetime(event.start_time)
+
+        span.label.label-default
+          = event.event_type
+
+        - if !event.published
+          span data-toggle='tooltip' data-placement='top' title=t('.unpublished')
+            => fa_icon 'ban'
+
+        = event.title
+
+    .lesson-plan-item-body.panel-collapse.collapse.in id=item_body_id(event)
+      li.list-group-item
+
+        .pull-right
+          = edit_button([current_course, event]) if can?(:update, event)
+          = delete_button([current_course, event]) if can?(:destroy, event)
+
+        - if event.description.blank?
+          p
+            i = t('.no_description')
+        - else
+          p
+            = sanitize(event.description)
+
+        - if !event.location.blank?
+          p
+            string = t('.location', location: event.location)

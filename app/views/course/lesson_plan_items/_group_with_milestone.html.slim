@@ -1,0 +1,22 @@
+= div_for(milestone, class: 'panel panel-default')
+  .panel-heading
+    a role='button' data-toggle='collapse' href="##{milestone_body_id(milestone)}"
+      h3.panel-title
+        = milestone.title
+        .pull-right
+          = format_datetime(milestone.start_time)
+
+  .milestone-body.panel-collapse.collapse.in id=milestone_body_id(milestone) class=item_period_class(milestone)
+    .panel-body
+
+      .pull-right
+        = edit_button([current_course, milestone]) if can?(:update, milestone)
+        = delete_button([current_course, milestone]) if can?(:destroy, milestone)
+
+      - if milestone.description.blank?
+        i = t('.no_description')
+      - else
+        p = milestone.description
+
+    ul.list-group
+      = render items.map(&:specific)
