@@ -1,7 +1,7 @@
 = div_for(announcement, class: time_period_class(announcement))
   h2
     - if announcement.unread?
-      input.new_announcement type="hidden"
+      input.new_announcement type='hidden'
         = fa_icon 'envelope'
 
     = announcement.title
