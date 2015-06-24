@@ -18,7 +18,7 @@ RSpec.describe Course::LevelsController, type: :controller do
     describe '#destroy' do
       subject { delete :destroy, course_id: course, id: level_stub }
 
-      context 'upon destroy failure' do
+      context 'when destroy fails' do
         before do
           controller.instance_variable_set(:@level, level_stub)
           subject
@@ -34,7 +34,7 @@ RSpec.describe Course::LevelsController, type: :controller do
     describe '#save' do
       subject { post :create, course_id: course, level: level_stub }
 
-      context 'upon save failure' do
+      context 'when saving fails' do
         before do
           controller.instance_variable_set(:@level, level_stub)
           subject
