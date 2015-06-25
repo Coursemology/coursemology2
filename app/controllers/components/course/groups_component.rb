@@ -5,6 +5,7 @@ class Course::GroupsComponent
     [
       {
         title: I18n.t('course.groups.sidebar_title'),
+        type: :admin,
         path: course_groups_path(current_course)
       }
     ]
