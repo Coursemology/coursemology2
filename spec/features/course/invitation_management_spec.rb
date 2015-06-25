@@ -49,6 +49,30 @@ RSpec.feature 'Courses: Invitations' do
         end
       end
 
+      scenario 'I can enable and disable registration-code registrations' do
+        course = create(:course)
+        expect(course.registration_key).to be_nil
+        visit invite_course_users_path(course)
+
+        # Enable registration codes
+        within find('#course_registration_key').find(:xpath, '..') do
+          click_button I18n.t('course.user_invitations.new.registration_code.enable')
+        end
+        expect(current_path).to eq(invite_course_users_path(course))
+        course.reload
+        expect(course.registration_key).not_to be_nil
+        expect(page).to have_selector('pre', text: course.registration_key)
+
+        # Disable registration codes
+        within find('#course_registration_key').find(:xpath, '..') do
+          click_button I18n.t('course.user_invitations.new.registration_code.disable')
+        end
+        expect(current_path).to eq(invite_course_users_path(course))
+        expect(page).not_to have_selector('pre', text: course.registration_key)
+        course.reload
+        expect(course.registration_key).to be_nil
+      end
+
       scenario 'I can track the status of invites' do
         course = create(:course)
         visit course_users_invitations_path(course)

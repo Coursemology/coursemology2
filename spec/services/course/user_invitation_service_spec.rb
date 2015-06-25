@@ -261,5 +261,21 @@ RSpec.describe Course::UserInvitationService, type: :service do
         end
       end
     end
+
+    describe '#enable_registration_code' do
+      context 'when true is given' do
+        it 'generates a registration code for the course' do
+          subject.enable_registration_code(true)
+          expect(course.registration_key).not_to be_nil
+        end
+      end
+
+      context 'when false is given' do
+        it 'unsets the registration code for the course' do
+          subject.enable_registration_code(false)
+          expect(course.registration_key).to be_nil
+        end
+      end
+    end
   end
 end
