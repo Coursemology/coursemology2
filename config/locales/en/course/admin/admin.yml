@@ -6,9 +6,3 @@ en:
           header: 'Settings'
         update:
           success: "Course %{title} was updated."
-        components:
-          header: 'Enable/Disable Components'
-          name: 'Name'
-          enabled: 'Enabled?'
-        update_components:
-          success: 'Settings was updated successfully'

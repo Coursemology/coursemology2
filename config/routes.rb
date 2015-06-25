@@ -88,8 +88,8 @@ Rails.application.routes.draw do
         get '/' => 'admin#index'
         patch '/' => 'admin#update'
 
-        get 'components' => 'admin#components'
-        patch 'components' => 'admin#update_components'
+        get 'components' => 'component_settings#edit'
+        patch 'components' => 'component_settings#update'
       end
 
       resources :announcements, concerns: :paginatable
