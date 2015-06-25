@@ -79,6 +79,7 @@ RSpec.feature 'Courses: Invitations' do
 
         invitations = create_list(:course_user_invitation, 3, course: course)
         invitations.first.course_user.accept!(create(:instance_user).user)
+        invitations.first.course_user.save!
         visit course_users_invitations_path(course)
 
         expect(page).to have_selector('div.progress')

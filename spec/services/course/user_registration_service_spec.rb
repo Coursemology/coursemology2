@@ -9,7 +9,7 @@ RSpec.describe Course::UserRegistrationService, type: :service do
     subject { Course::UserRegistrationService.new }
 
     def self.registration_with_invitation_code
-      let!(:invitation) { create(:course_user_invitation, course: course, user: nil) }
+      let!(:invitation) { create(:course_user_invitation, course: course) }
       let(:registration) do
         Course::Registration.new(course: course, user: user, code: invitation.invitation_key.dup)
       end

@@ -88,6 +88,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
             let(:invitation) { Course::UserInvitation.find_by(invitation_key: registration_code) }
             before do
               invitation.course_user.accept!(user)
+              invitation.course_user.save!
             end
 
             it { expect { subject }.not_to change { course.course_users.reload.count } }

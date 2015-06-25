@@ -23,6 +23,7 @@ class CourseUser < ActiveRecord::Base
   end
 
   validates :user, presence: true, unless: :invited?
+  validates :user, absence: true, if: :invited?
 
   belongs_to :user, inverse_of: :course_users
   belongs_to :course, inverse_of: :course_users
@@ -70,7 +71,6 @@ class CourseUser < ActiveRecord::Base
   # @return [void]
   def accept(user)
     self.user = user
-    save!
   end
 
   # Callback handler for workflow state change to the rejected state.

@@ -2,9 +2,7 @@ FactoryGirl.define do
   factory :course_user_invitation, class: Course::UserInvitation do
     transient do
       course nil
-      user do
-        build(:user)
-      end
+      user nil
     end
 
     course_user do
