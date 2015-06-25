@@ -101,14 +101,32 @@ RSpec.feature 'Courses: Invitations' do
       let(:course) { create(:open_course) }
       let(:instance_user) { create(:instance_user) }
       let(:user) { instance_user.user }
-      let(:course_user) { create(:course_user, course: course, user: user) }
-      let(:invitation) { create(:course_user_invitation, course_user: course_user) }
-      scenario 'I can accept invitations' do
-        visit course_path(course)
-        fill_in 'registration_code', with: invitation.invitation_key
-        click_button 'register'
 
-        expect(page).not_to have_selector('div.register')
+      context 'when I have an invitation code' do
+        let(:invitation) { create(:course_user_invitation, course: course) }
+
+        scenario 'I can accept invitations' do
+          visit course_path(course)
+          fill_in 'registration_code', with: invitation.invitation_key
+          click_button 'register'
+
+          expect(page).not_to have_selector('div.register')
+        end
+      end
+
+      context 'when I have a course registration code' do
+        before do
+          course.generate_registration_key
+          course.save!
+        end
+
+        scenario 'I can register for courses using the course registration code' do
+          visit course_path(course)
+          fill_in 'registration_code', with: course.registration_key
+          click_button 'register'
+
+          expect(page).not_to have_selector('div.register')
+        end
       end
     end
   end

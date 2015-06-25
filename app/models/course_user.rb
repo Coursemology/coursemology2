@@ -70,6 +70,7 @@ class CourseUser < ActiveRecord::Base
   # @return [void]
   def accept(user)
     self.user = user
+    save!
   end
 
   # Callback handler for workflow state change to the rejected state.
