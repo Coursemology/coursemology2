@@ -15,32 +15,104 @@ class Course::UserRegistrationService
 
   private
 
-  # Registers the given +user+ for a +course+. This sets the course user to the +requested+ state.
+  # Registers the given +user+ for a +course+. This sets the course user to the +requested+
+  # state, unless an explicit +workflow_state+ is passed in the +options+.
+  #
+  # This also sets the given +user+'s state as specified in the +options+ if the user already
+  # exists in the database.
   #
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
+  # @param [Hash] options Additional options for creating the course user.
   # @return [bool] True if the creation succeeded.
-  def register_course_user(registration)
-    course_user = CourseUser.new(course: registration.course, user: registration.user,
-                                 creator: registration.user, updater: registration.user)
-    registration.course_user = course_user
-    course_user.save
+  def register_course_user(registration, options = {}.freeze)
+    options = options.dup.reverse_merge(course: registration.course, user: registration.user,
+                                        updater: registration.user)
+    course_user = CourseUser.find_by(course: registration.course, user: registration.user)
+    if course_user
+      update_course_user(registration, course_user, options)
+    else
+      create_course_user(registration, options)
+    end
   end
 
-  # Claims a given user's registration code. This sets the course user to the +approved+ state.
+  # Updates the given +course_user+ with the options specified.
+  #
+  # @param [Course::Registration] registration The registration model containing the course user
+  #   parameters.
+  # @param [Hash] options Additional operations for updating the course user.
+  # @return [bool] True if the course user was updated.
+  def update_course_user(registration, course_user, options)
+    registration.course_user = course_user
+    course_user.update(options)
+  end
+
+  # Creates a +course_user+ with the options specified.
+  #
+  # @param [Course::Registration] registration The registration model containing the course user
+  #   parameters.
+  # @param [Hash] options Additional operations for updating the course user.
+  # @return [bool] True if the course user was created.
+  def create_course_user(registration, options)
+    registration.course_user = CourseUser.new(options.reverse_merge!(creator: registration.user))
+    registration.course_user.save
+  end
+
+  # Claims a given registration code. This sets the course user to the +approved+ state. The
+  # correct type of code is deduced from the code itself and used to claim the correct code.
   #
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
   # @return [bool] True if the creation succeeded.
   def claim_registration_code(registration)
+    code = registration.code
+    if code.length < 1
+      false
+    elsif code[0] == 'C'
+      claim_course_registration_code(registration)
+    elsif code[0] == 'I'
+      claim_course_invitation_code(registration)
+    else
+      false
+    end
+  end
+
+  # Claims a given course registration code. This sets the course user to the +approved+ state.
+  #
+  # @param [Course::Registration] registration The registration model containing the course user
+  #   parameters.
+  # @return [bool] True if the creation succeeded.
+  def claim_course_registration_code(registration)
+    if registration.course.registration_key == registration.code
+      register_course_user(registration, workflow_state: :approved)
+    else
+      invalid_code(registration)
+    end
+  end
+
+  # Claims a given user's invitation code. This sets the course user to the +approved+ state.
+  #
+  # @param [Course::Registration] registration The registration model containing the course user
+  #   parameters.
+  # @return [bool] True if the creation succeeded.
+  def claim_course_invitation_code(registration)
     invitations = load_active_invitations(registration.course)
     invitation = invitations.find_by(invitation_key: registration.code)
     if invitation.nil?
-      registration.errors.add(:code, I18n.t('course.user_registrations.create.invalid_code'))
-      false
+      invalid_code(registration)
     else
       accept_invitation(registration, invitation)
     end
+  end
+
+  # Given a registration model, sets the invalid code error on the model and returns false.
+  #
+  # @param [Course::Registration] registration The registration model containing the course user
+  #   parameters.
+  # @return [bool]
+  def invalid_code(registration)
+    registration.errors.add(:code, I18n.t('course.user_registrations.create.invalid_code'))
+    false
   end
 
   # Loads active invitations given a course.
