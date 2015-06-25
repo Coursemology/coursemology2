@@ -3,7 +3,7 @@
 
 = render partial: 'course/users/tabs'
 
-div role='tabpanel'
+div.methods role='tabpanel'
   ul class='nav nav-pills' role='tablist'
     li.active role='presentation'
       a href='#file' aria-controls='file' role='tab' data-toggle='tab'
@@ -11,6 +11,9 @@ div role='tabpanel'
     li role='presentation'
       a href='#individual' aria-controls='individual' role='tab' data-toggle='tab'
         = t('.tabs.individual')
+    li role='presentation'
+      a href='#registration-code' aria-controls='individual' role='tab' data-toggle='tab'
+        = t('.tabs.registration_code')
 
   div.tab-content
     div.tab-pane.active#file role='tabpanel'
@@ -22,13 +25,13 @@ div role='tabpanel'
               = "#{t('common.name')},#{t('common.email')}\n"
               = "#{t('common.name')},test@example.org"
 
-      = simple_form_for(current_course, url: invite_course_users_path, method: :post) do |f|
+      = simple_form_for current_course, url: invite_course_users_path, method: :post do |f|
         = f.error_notification
         = f.input :invitations_file, as: :file
         = f.button :submit
 
     div.tab-pane#individual role='tabpanel'
-      = simple_form_for(current_course, url: invite_course_users_path, method: :post) do |f|
+      = simple_form_for current_course, url: invite_course_users_path, method: :post do |f|
         = f.error_notification
         table.table.table-hover
           thead
@@ -42,3 +45,22 @@ div role='tabpanel'
           tbody
 
         = f.button :submit
+
+    div.tab-pane#registration-code role='tabpanel'
+      = simple_format(t('.registration_code.explanation'))
+      div.alert.alert-warning
+        = simple_format(t('.registration_code.explanation_warning'))
+      = simple_form_for current_course, url: invite_course_users_path, method: :post do |f|
+        - if current_course.registration_key.present?
+          div.registration-code
+            pre
+              code
+                = current_course.registration_key
+          = f.hidden_field :registration_key, as: :hidden, value: ''
+          = f.button :submit, class: ['btn-info'], value: t('.registration_code.disable')
+
+        - else
+          = t('.registration_code.disabled')
+          = f.hidden_field :registration_key, as: :hidden, value: 'checked'
+          br
+          =< f.button :submit, class: ['btn-info'], value: t('.registration_code.enable')

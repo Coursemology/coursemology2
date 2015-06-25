@@ -1,0 +1,17 @@
+.course-user-invitations {
+  &.new {
+    .methods {
+      .nav {
+        margin-bottom: 1em;
+      }
+
+      .tab-pane#registration-code .registration-code {
+        text-align: center;
+
+        pre {
+          font-size: 500%;
+        }
+      }
+    }
+  }
+}
