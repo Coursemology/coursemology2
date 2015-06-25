@@ -114,7 +114,7 @@ Rails.application.routes.draw do
       get 'requests' => 'users#requests', as: :users_requests
       get 'invitations' => 'users#invitations', as: :users_invitations
 
-      resources :groups
+      resources :groups, except: [:show]
     end
   end
 end
