@@ -10,9 +10,23 @@ class ActivityMailer < ApplicationMailer
   def email(recipient, object, view_path)
     @recipient = recipient
     @object = object
-    mail(to: recipient.email) do |format|
-      format.html { render view_path }
-      format.text { render view_path }
+    mail(to: recipient.email, template: view_path)
+  end
+
+  protected
+
+  # Adds support for the +template+ option, which specifies an absolute path.
+  #
+  # @option options [String] :template (nil) The absolute template path to render.
+  # @see #{ActionMailer::Base#mail}
+  def mail(options)
+    template = options.delete(:template)
+    if template
+      prepend_view_path(File.dirname(template))
+      options[:template_path] = ''
+      options[:template_name] = File.basename(template)
     end
+
+    super
   end
 end
