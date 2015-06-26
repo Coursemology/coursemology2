@@ -1,18 +1,18 @@
 require 'rails_helper'
 
-RSpec.describe Course::Admin::AdminController, type: :controller do
+RSpec.describe Course::Admin::ComponentSettingsController, type: :controller do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:user) { create(:user) }
     let(:course) { create(:course, creator: user) }
     before { sign_in(user) }
 
-    describe '#components' do
-      subject { get :components, course_id: course }
-      it { is_expected.to render_template(:components) }
+    describe '#edit' do
+      subject { get :edit, course_id: course }
+      it { is_expected.to render_template(:edit) }
     end
 
-    describe '#update_components' do
+    describe '#update' do
       let(:ids_to_enable) do
         allow(controller).to receive(:current_course).and_return(course)
         all_components = controller.current_component_host.instance_components
@@ -23,7 +23,7 @@ RSpec.describe Course::Admin::AdminController, type: :controller do
       let(:settings) { Course::Settings.new(course.reload) }
 
       subject do
-        post :update_components, settings_effective: components_params, course_id: course
+        patch :update, settings_effective: components_params, course_id: course
       end
 
       it 'enables the specified component and disables all other components' do
@@ -38,7 +38,7 @@ RSpec.describe Course::Admin::AdminController, type: :controller do
           subject
         end
 
-        it { is_expected.to render_template(:components) }
+        it { is_expected.to render_template(:edit) }
       end
     end
   end

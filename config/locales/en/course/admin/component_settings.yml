@@ -1,0 +1,10 @@
+en:
+  course:
+    admin:
+      component_settings:
+        edit:
+          header: 'Enable/Disable Components'
+          name: 'Name'
+          enabled: 'Enabled?'
+        update:
+          success: 'Settings was updated successfully'
