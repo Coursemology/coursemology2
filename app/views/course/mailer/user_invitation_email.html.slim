@@ -1,0 +1,7 @@
+= simple_format(t('.message', course: link_to(@course.title, course_url(@course)),
+                              coursemology: link_to(t('layout.coursemology'), root_url),
+                              sign_up: link_to(t('layout.navbar.register'), new_user_registration_url)))
+
+pre
+  code
+    = @invitation.invitation_key

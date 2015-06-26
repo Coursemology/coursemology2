@@ -6,6 +6,7 @@ en:
     name: 'Name'
     email: 'Email'
     role: 'Role'
+    plain_text_link: '%{text} (%{url})'
     time_range: "%{from} to %{to}"
   helpers:
     buttons:
