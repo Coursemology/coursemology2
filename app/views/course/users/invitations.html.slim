@@ -3,8 +3,6 @@
 
 = render partial: 'tabs'
 
-br
-
 - accepted_course_users = @course_users.each.select { |user| !user.invited? }.size
 - progress = accepted_course_users * 100 / [@course_users.length, 1].max
 div.progress

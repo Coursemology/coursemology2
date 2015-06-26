@@ -27,6 +27,20 @@ class Course::UserInvitationService
     end
   end
 
+  # Enables or disables registration codes in the given course.
+  #
+  # @param [bool] enable True if registration codes should be enabled.
+  # @return [bool]
+  def enable_registration_code(enable)
+    if enable
+      return true if @current_course.registration_key
+      generate_registration_key
+    else
+      @current_course.registration_key = nil
+    end
+    @current_course.save
+  end
+
   private
 
   # Loads the given file, then invites the users.
@@ -138,5 +152,12 @@ class Course::UserInvitationService
   def user_email_map(users)
     UserEmail.where { email.in(users) }.
       map { |user_email| [user_email.email, user_email] }.to_h
+  end
+
+  # Generates a registration key for the course.
+  #
+  # @return [void]
+  def generate_registration_key
+    @current_course.generate_registration_key
   end
 end

@@ -6,10 +6,21 @@ en:
         tabs:
           file: 'Upload file'
           individual: 'Individually add users'
+          registration_code: 'Registration code'
         file:
           format: 'Files uploaded must be in the following format:'
         individual:
           add_user: 'Add User'
+        registration_code:
+          explanation: >
+            If users are having difficulty registering for a course by following the email
+            invitation, they can be registered by using a generic course registration code.
+          explanation_warning: >
+            Users who have been invited and use this invitation code to register for the
+            course would not have the proper status reflected in the Invitations page.
+          disable: 'Disable'
+          disabled: 'Registration via registration codes are currently disabled.'
+          enable: 'Enable'
       invitation_fields:
         remove: 'Remove'
       create:

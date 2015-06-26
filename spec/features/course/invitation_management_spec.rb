@@ -49,12 +49,37 @@ RSpec.feature 'Courses: Invitations' do
         end
       end
 
+      scenario 'I can enable and disable registration-code registrations' do
+        course = create(:course)
+        expect(course.registration_key).to be_nil
+        visit invite_course_users_path(course)
+
+        # Enable registration codes
+        within find('#course_registration_key').find(:xpath, '..') do
+          click_button I18n.t('course.user_invitations.new.registration_code.enable')
+        end
+        expect(current_path).to eq(invite_course_users_path(course))
+        course.reload
+        expect(course.registration_key).not_to be_nil
+        expect(page).to have_selector('pre', text: course.registration_key)
+
+        # Disable registration codes
+        within find('#course_registration_key').find(:xpath, '..') do
+          click_button I18n.t('course.user_invitations.new.registration_code.disable')
+        end
+        expect(current_path).to eq(invite_course_users_path(course))
+        expect(page).not_to have_selector('pre', text: course.registration_key)
+        course.reload
+        expect(course.registration_key).to be_nil
+      end
+
       scenario 'I can track the status of invites' do
         course = create(:course)
         visit course_users_invitations_path(course)
 
         invitations = create_list(:course_user_invitation, 3, course: course)
         invitations.first.course_user.accept!(create(:instance_user).user)
+        invitations.first.course_user.save!
         visit course_users_invitations_path(course)
 
         expect(page).to have_selector('div.progress')
@@ -77,14 +102,32 @@ RSpec.feature 'Courses: Invitations' do
       let(:course) { create(:open_course) }
       let(:instance_user) { create(:instance_user) }
       let(:user) { instance_user.user }
-      let(:course_user) { create(:course_user, course: course, user: user) }
-      let(:invitation) { create(:course_user_invitation, course_user: course_user) }
-      scenario 'I can accept invitations' do
-        visit course_path(course)
-        fill_in 'registration_code', with: invitation.invitation_key
-        click_button 'register'
 
-        expect(page).not_to have_selector('div.register')
+      context 'when I have an invitation code' do
+        let(:invitation) { create(:course_user_invitation, course: course) }
+
+        scenario 'I can accept invitations' do
+          visit course_path(course)
+          fill_in 'registration_code', with: invitation.invitation_key
+          click_button 'register'
+
+          expect(page).not_to have_selector('div.register')
+        end
+      end
+
+      context 'when I have a course registration code' do
+        before do
+          course.generate_registration_key
+          course.save!
+        end
+
+        scenario 'I can register for courses using the course registration code' do
+          visit course_path(course)
+          fill_in 'registration_code', with: course.registration_key
+          click_button 'register'
+
+          expect(page).not_to have_selector('div.register')
+        end
       end
     end
   end

@@ -160,5 +160,12 @@ RSpec.describe Course, type: :model do
         expect(course.staff).to contain_exactly(teaching_assistant, manager, course_owner)
       end
     end
+
+    describe '#generate_registration_key' do
+      it 'starts with "C"' do
+        subject.generate_registration_key
+        expect(subject.registration_key).to start_with('C')
+      end
+    end
   end
 end

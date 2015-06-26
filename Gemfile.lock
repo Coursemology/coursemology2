@@ -16,6 +16,16 @@ GIT
       rails (>= 3.1.0)
 
 GIT
+  remote: git://github.com/lowjoel/schema_validations.git
+  revision: 0878b0f7b4e0593c23682c45604abac0503b90c4
+  branch: allow_nil_for_uniqueness
+  specs:
+    schema_validations (1.2.0)
+      activerecord (~> 4.2, >= 4.2.1)
+      schema_plus_columns
+      valuable
+
+GIT
   remote: git://github.com/lowjoel/themes_on_rails.git
   revision: 2c6446f8658b55dedc95afa9f66d16d1a68b9136
   specs:
@@ -335,10 +345,6 @@ GEM
     schema_plus_views (0.2.0)
       activerecord (~> 4.2)
       schema_plus_core (~> 0.1)
-    schema_validations (1.2.0)
-      activerecord (~> 4.2, >= 4.2.1)
-      schema_plus_columns
-      valuable
     settings_on_rails (0.3.0)
       activerecord (>= 3.1)
     should_not (1.1.0)
@@ -465,7 +471,7 @@ DEPENDENCIES
   sass-rails
   schema_plus (~> 2.0.beta, > 2.0.0.pre14)
   schema_plus_association_inverses (> 0.0.1)
-  schema_validations
+  schema_validations!
   settings_on_rails
   should_not
   shoulda-matchers

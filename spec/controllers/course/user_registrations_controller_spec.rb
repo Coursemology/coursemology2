@@ -86,23 +86,68 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
 
           context 'when the user is already registered' do
             let(:invitation) { Course::UserInvitation.find_by(invitation_key: registration_code) }
-            before { invitation.course_user.accept!(user) }
+            before do
+              invitation.course_user.accept!(user)
+              invitation.course_user.save!
+            end
 
             it { expect { subject }.not_to change { course.course_users.reload.count } }
-            it 'shows the proper error message' do
+            it { is_expected.to redirect_to(course_path(course)) }
+            it 'sets the proper flash message' do
               subject
-              errors = controller.instance_variable_get(:@registration).errors
-              expect(errors).to have_key(:code)
-              expect(errors[:code].to_sentence).to eq(
-                I18n.t('course.user_registrations.create.invalid_code'))
+              expect(flash[:info]).to eq(I18n.t('course.users.new.already_registered'))
             end
           end
         end
 
         context 'when a course registration code is specified' do
-          it 'registers the user' do
-            pending 'Not implemented'
-            fail
+          let(:registration_code) do
+            course.generate_registration_key
+            course.save!
+            course.registration_key
+          end
+
+          context 'when the user is not in the course' do
+            context 'when the course is open' do
+              it 'registers the user' do
+                expect { subject }.
+                  to change { course.course_users.with_approved_state.reload.count }.by(1)
+              end
+              it { is_expected.to redirect_to(course_path(course)) }
+              it 'sets the proper flash message' do
+                subject
+                expect(flash[:success]).to eq(I18n.t('course.user_registrations.create.registered'))
+              end
+            end
+
+            context 'when the course is closed' do
+              before { course.update_attributes!(status: :closed) }
+              it 'rejects the request' do
+                expect { subject }.to raise_exception(CanCan::AccessDenied)
+              end
+            end
+          end
+
+          context 'when the user is already registered' do
+            before do
+              course.course_users.build(user: user, workflow_state: :approved, creator: user,
+                                        updater: user)
+              course.save!
+            end
+
+            it { expect { subject }.not_to change { course.course_users.reload.count } }
+            it { is_expected.to redirect_to(course_path(course)) }
+            it 'sets the proper flash message' do
+              subject
+              expect(flash[:info]).to eq(I18n.t('course.users.new.already_registered'))
+            end
+          end
+        end
+
+        context 'when an invalid registration code is specified' do
+          let(:registration_code) { '*' }
+          it 'rejects the request' do
+            expect(subject).to render_template('course/courses/show')
           end
         end
       end

@@ -33,6 +33,11 @@ class Course < ActiveRecord::Base
     true
   end
 
+  # Generates a registration key for use with the course.
+  def generate_registration_key
+    self.registration_key = 'C'.freeze + SecureRandom.base64(8)
+  end
+
   private
 
   # Set default values

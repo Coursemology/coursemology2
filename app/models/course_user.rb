@@ -23,6 +23,7 @@ class CourseUser < ActiveRecord::Base
   end
 
   validates :user, presence: true, unless: :invited?
+  validates :user, absence: true, if: :invited?
 
   belongs_to :user, inverse_of: :course_users
   belongs_to :course, inverse_of: :course_users
