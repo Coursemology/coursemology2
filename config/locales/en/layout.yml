@@ -16,6 +16,8 @@ en:
       more_announcements: 'More Announcements...'
     course_admin:
       title: 'Settings'
+      announcement_settings:
+        title: 'Announcements'
     course_users:
       title: 'Manage Users'
     attachment_uploader:

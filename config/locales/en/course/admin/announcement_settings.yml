@@ -1,0 +1,6 @@
+en:
+  course:
+    admin:
+      announcement_settings:
+        update:
+          success: "Announcement settings was updated."

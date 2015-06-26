@@ -1,0 +1,4 @@
+= simple_form_for @settings, url: course_admin_announcements_path(current_course) do |f|
+  = f.error_notification
+  = f.input :pagination, as: :integer
+  = f.button :submit
