@@ -21,7 +21,7 @@ class Course::UsersController < Course::ComponentController
   end
 
   def update # :nodoc:
-    if @course_user.update(course_user_params)
+    if update_course_user(course_user_params)
       success = t('.success', role: t("course.users.role.#{@course_user.role}"))
       redirect_to update_redirect_path, success: success
     else
@@ -53,6 +53,21 @@ class Course::UsersController < Course::ComponentController
   # Prevents access to this set of pages unless the user is a staff of the course.
   def authorize_edit!
     authorize!(:manage_users, current_course)
+  end
+
+  # Updates the course user. This will dispatch an email to the user if he transitions to the
+  # +approved+ state.
+  #
+  # @param [Hash] course_user_params The parameters to set on the given Course User.
+  # @return [bool] True if the course user was updated successfully.
+  def update_course_user(course_user_params)
+    course_user_requested = @course_user.requested?
+    result = @course_user.update(course_user_params)
+    if course_user_requested && @course_user.approved?
+      Course::Mailer.user_added_email(current_course, @course_user).deliver_later
+    end
+
+    result
   end
 
   # Selects an appropriate redirect path depending on the contents of the post data.
