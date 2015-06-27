@@ -39,5 +39,18 @@ RSpec.describe Course::Mailer, type: :mailer do
         expect(subject.subject).to eq(I18n.t('course.mailer.user_added_email.subject'))
       end
     end
+
+    describe '#user_registered_email' do
+      let(:course_user) { create(:course_user, course: course) }
+      let(:mail) { Course::Mailer.user_registered_email(course, course_user) }
+
+      it 'sends to the course staff' do
+        expect(subject.to).to contain_exactly(*course.staff.map(&:user).map(&:email))
+      end
+
+      it 'sets the correct subject' do
+        expect(subject.subject).to eq(I18n.t('course.mailer.user_registered_email.subject'))
+      end
+    end
   end
 end
