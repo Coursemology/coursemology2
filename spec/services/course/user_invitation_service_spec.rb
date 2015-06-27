@@ -81,16 +81,35 @@ RSpec.describe Course::UserInvitationService, type: :service do
         existing_users.each(&method(:verify_existing_user))
       end
 
-      it 'accepts a list of invitation form attributes' do
-        subject.invite(user_form_attributes)
+      context 'when a list of invitation form attributes are provided' do
+        it 'registers everyone' do
+          expect(subject.invite(user_form_attributes)).to be_truthy
+          verify_users
+        end
+
+        it 'sends an email to everyone' do
+          expect do
+            subject.invite(user_form_attributes)
+          end.to change { ActionMailer::Base.deliveries.count }.by(user_form_attributes.length)
+        end
       end
 
-      it 'accepts a CSV file with a header' do
-        subject.invite(temp_csv_from_attributes(user_attributes.map do |attributes|
-          OpenStruct.new(attributes)
-        end))
+      context 'when a CSV file with a header is uploaded' do
+        it 'accepts a CSV file with a header' do
+          expect(subject.invite(temp_csv_from_attributes(user_attributes.map do |attributes|
+            OpenStruct.new(attributes)
+          end))).to be_truthy
 
-        verify_users
+          verify_users
+        end
+
+        it 'sends an email to everyone' do
+          expect do
+            subject.invite(temp_csv_from_attributes(user_attributes.map do |attributes|
+              OpenStruct.new(attributes)
+            end))
+          end.to change { ActionMailer::Base.deliveries.count }.by(user_attributes.length)
+        end
       end
     end
 
