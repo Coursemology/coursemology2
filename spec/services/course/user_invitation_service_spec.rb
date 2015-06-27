@@ -16,14 +16,15 @@ RSpec.describe Course::UserInvitationService, type: :service do
     end
 
     let(:course) { build(:course) }
+    let(:user) { build(:user) }
     let(:stubbed_user_invitation_service) do
-      Course::UserInvitationService.new(course).tap do |result|
+      Course::UserInvitationService.new(user, course).tap do |result|
         result.define_singleton_method(:invite_users) do |users|
           users
         end
       end
     end
-    subject { Course::UserInvitationService.new(course) }
+    subject { Course::UserInvitationService.new(user, course) }
 
     let(:existing_users) do
       (1..2).map do

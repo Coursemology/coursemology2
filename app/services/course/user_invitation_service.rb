@@ -4,8 +4,10 @@ require 'csv'
 class Course::UserInvitationService
   # Constructor for the user invitation service object.
   #
+  # @param [User] current_user The user performing this action.
   # @param [Course] current_course The course to invite users to.
-  def initialize(current_course)
+  def initialize(current_user, current_course)
+    @current_user = current_user
     @current_course = current_course
     @current_instance = @current_course.instance
   end
@@ -17,13 +19,10 @@ class Course::UserInvitationService
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite(users)
     Course.transaction do
-      if users.is_a?(File) || users.is_a?(Tempfile)
-        invite_from_file(users)
-      else
-        invite_from_form(users)
-      end
+      registered_users, invited_users = invite_from_source(users)
 
-      @current_course.save
+      break false unless @current_course.save
+      send_invitation_emails(registered_users, invited_users)
     end
   end
 
@@ -43,10 +42,25 @@ class Course::UserInvitationService
 
   private
 
+  # Invites users to the given course.
+  #
+  # @param [Array<Hash>|File|TempFile] users Invites the given users.
+  # @return [Array<(Array<CourseUser>, Array<Course::UserInvitation>)>] A tuple containing the
+  #   list of users who were immediately registered, and the users who were invited.
+  # @raise [CSV::MalformedCSVError] When the file provided is invalid.
+  def invite_from_source(users)
+    if users.is_a?(File) || users.is_a?(Tempfile)
+      invite_from_file(users)
+    else
+      invite_from_form(users)
+    end
+  end
+
   # Loads the given file, then invites the users.
   #
   # @param [File] file Reads the given file, in CSV format, for the name and email.
-  # @return [void]
+  # @return [Array<(Array<CourseUser>, Array<Course::UserInvitation>)>] A tuple containing the
+  #   list of users who were immediately registered, and the users who were invited.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite_from_file(file)
     invites = load_from_file(file)
@@ -87,13 +101,13 @@ class Course::UserInvitationService
   #
   # @param [Array<Hash{Symbol=>String}>] users A mutable array of users to add. Each hash must have
   #   two attributes: the +:name+ and the +:email+ of the user to add.
-  # @return [void]
+  # @return [Array<(Array<CourseUser>, Array<Course::UserInvitation>)>] A tuple containing the
+  #   list of users who were immediately registered, and the users who were invited.
   def invite_users(users)
     augment_user_objects(users)
     existing_users, new_users = users.partition { |user| user[:user].present? }
 
-    add_existing_users(existing_users)
-    invite_new_users(new_users)
+    [add_existing_users(existing_users), invite_new_users(new_users)]
   end
 
   # Given an array of hashes containing the email address and name of a user to invite, finds the
@@ -123,25 +137,30 @@ class Course::UserInvitationService
   # Adds existing users to the course.
   #
   # @param [Array<Hash>] users The user descriptions to add to the course.
-  # @return [void]
+  # @return [Array<CourseUser>] An array containing a list of users who were immediately registered.
   def add_existing_users(users)
-    users.each do |user|
+    users.map do |user|
       @current_course.course_users.build(user: user[:user], name: user[:name],
-                                         workflow_state: :approved)
+                                         workflow_state: :approved, creator: @current_user,
+                                         updater: @current_user)
     end
   end
 
   # Generates invitations for users to the course.
   #
   # @param [Array<Hash>] users The user descriptions to invite.
-  # @return [void]
+  # @return [Array<Course::UserInvitation>)>] An array containing the list of users who were
+  #   invited.
   def invite_new_users(users)
     user_email_map = user_email_map(users.map { |user| user[:email] })
 
-    users.each do |user|
-      course_user = @current_course.course_users.build(name: user[:name], workflow_state: :invited)
+    users.map do |user|
+      course_user = @current_course.course_users.build(name: user[:name], workflow_state: :invited,
+                                                       creator: @current_user,
+                                                       updater: @current_user)
       user_email = user_email_map[user[:email]] || UserEmail.new(email: user[:email])
-      course_user.invitation = Course::UserInvitation.new(user_email: user_email)
+      course_user.build_invitation(user_email: user_email, creator: @current_user,
+                                   updater: @current_user)
     end
   end
 
@@ -152,6 +171,21 @@ class Course::UserInvitationService
   def user_email_map(users)
     UserEmail.where { email.in(users) }.
       map { |user_email| [user_email.email, user_email] }.to_h
+  end
+
+  # Sends invitation emails to the users invited.
+  #
+  # @param [Array<CourseUser>] registered_users An array of users who were registered.
+  # @param [Array<Course::UserInvitation>] invited_users An array of invitations sent out to users.
+  # @return [bool] True if the emails were dispatched.
+  def send_invitation_emails(registered_users, invited_users)
+    registered_users.each do |user|
+      Course::Mailer.user_added_email(@current_course, user).deliver_later
+    end
+    invited_users.each do |user|
+      Course::Mailer.user_invitation_email(@current_course, user).deliver_later
+    end
+    true
   end
 
   # Generates a registration key for the course.

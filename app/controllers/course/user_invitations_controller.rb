@@ -75,7 +75,7 @@ class Course::UserInvitationsController < Course::ComponentController
   #
   # @return [Course::UserInvitationService]
   def invitation_service
-    @invitation_service ||= Course::UserInvitationService.new(current_course)
+    @invitation_service ||= Course::UserInvitationService.new(current_user, current_course)
   end
 
   # The path to redirect to after the {#create} action.
