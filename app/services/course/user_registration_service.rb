@@ -5,15 +5,29 @@ class Course::UserRegistrationService
   # @return [bool] True if the registration succeeded. False if the registration failed.
   def register(registration)
     CourseUser.transaction do
-      if registration.code.empty?
-        register_course_user(registration)
+      course_user = create_or_update_registration(registration)
+      succeeded = course_user && !course_user.changed?
+      if succeeded && course_user.requested?
+        notify_course_staff(registration.course, course_user)
       else
-        claim_registration_code(registration)
+        succeeded
       end
     end
   end
 
   private
+
+  # Creates the effect of performing the given registration.
+  #
+  # @param [Course::Registration] registration The registration object to be processed.
+  # @return [CourseUser] The Course User which was created or updated from the registration.
+  def create_or_update_registration(registration)
+    if registration.code.empty?
+      register_course_user(registration)
+    else
+      claim_registration_code(registration)
+    end
+  end
 
   # Registers the given +user+ for a +course+. This sets the course user to the +requested+
   # state, unless an explicit +workflow_state+ is passed in the +options+.
@@ -24,13 +38,14 @@ class Course::UserRegistrationService
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
   # @param [Hash] options Additional options for creating the course user.
-  # @return [bool] True if the creation succeeded.
+  # @return [CourseUser] The Course User object which was created or updated.
   def register_course_user(registration, options = {}.freeze)
     options = options.dup.reverse_merge(course: registration.course, user: registration.user,
                                         updater: registration.user)
     course_user = CourseUser.find_by(course: registration.course, user: registration.user)
     if course_user
       update_course_user(registration, course_user, options)
+      course_user
     else
       create_course_user(registration, options)
     end
@@ -52,10 +67,11 @@ class Course::UserRegistrationService
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
   # @param [Hash] options Additional operations for updating the course user.
-  # @return [bool] True if the course user was created.
+  # @return [CourseUser] The Course User which was built from the registration.
   def create_course_user(registration, options)
-    registration.course_user = CourseUser.new(options.reverse_merge!(creator: registration.user))
-    registration.course_user.save
+    course_user = CourseUser.new(options.reverse_merge!(creator: registration.user))
+    course_user.save
+    registration.course_user = course_user
   end
 
   # Claims a given registration code. This sets the course user to the +approved+ state. The
@@ -63,17 +79,18 @@ class Course::UserRegistrationService
   #
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
-  # @return [bool] True if the creation succeeded.
+  # @return [CourseUser|nil] The Course User object for the given registration, if the code is
+  #   valid.
   def claim_registration_code(registration)
     code = registration.code
     if code.length < 1
-      false
+      nil
     elsif code[0] == 'C'
       claim_course_registration_code(registration)
     elsif code[0] == 'I'
       claim_course_invitation_code(registration)
     else
-      false
+      nil
     end
   end
 
@@ -81,7 +98,8 @@ class Course::UserRegistrationService
   #
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
-  # @return [bool] True if the creation succeeded.
+  # @return [CourseUser|nil] The Course User object for the given registration, if the code is
+  #   valid.
   def claim_course_registration_code(registration)
     if registration.course.registration_key == registration.code
       register_course_user(registration, workflow_state: :approved)
@@ -94,7 +112,8 @@ class Course::UserRegistrationService
   #
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
-  # @return [bool] True if the creation succeeded.
+  # @return [CourseUser|nil] The Course User object for the given registration, if the code is
+  #   valid.
   def claim_course_invitation_code(registration)
     invitations = load_active_invitations(registration.course)
     invitation = invitations.find_by(invitation_key: registration.code)
@@ -109,10 +128,10 @@ class Course::UserRegistrationService
   #
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
-  # @return [bool]
+  # @return [nil]
   def invalid_code(registration)
     registration.errors.add(:code, I18n.t('course.user_registrations.create.invalid_code'))
-    false
+    nil
   end
 
   # Loads active invitations given a course.
@@ -131,10 +150,22 @@ class Course::UserRegistrationService
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
   # @param [Course::Invitation] invitation The invitation which is to be accepted.
-  # @return [bool]
+  # @return [CourseUser|nil] The Course User object for the given registration, if the code is
+  #    valid.
   def accept_invitation(registration, invitation)
     registration.course_user = invitation.course_user
     invitation.course_user.accept!(registration.user)
     invitation.course_user.save
+    invitation.course_user
+  end
+
+  # Sends an email to the course staff to approve the given course registration request.
+  #
+  # @param [Course] course The course that the user is registering into.
+  # @param [CourseUser] course_user The Course User object who registered.
+  # @return [bool] True if the staff were successfully notified.
+  def notify_course_staff(course, course_user)
+    Course::Mailer.user_registered_email(course, course_user).deliver_later
+    true
   end
 end
