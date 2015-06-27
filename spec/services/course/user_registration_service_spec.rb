@@ -51,6 +51,12 @@ RSpec.describe Course::UserRegistrationService, type: :service do
             expect(subject.register(registration)).to be_truthy
           end.to change { course.course_users.with_requested_state.reload.count }.by(1)
         end
+
+        it 'emails the course staff' do
+          expect do
+            expect(subject.register(registration)).to be_truthy
+          end.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end
       end
     end
 
