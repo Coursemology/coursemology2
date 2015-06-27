@@ -20,6 +20,12 @@ Rails.application.configure do
   # NGINX, varnish or squid.
   # config.action_dispatch.rack_cache = true
 
+  # Default from address for email
+  config.action_mailer.default_options = { from: ENV['RAILS_MAILER_DEFAULT_FROM_ADDRESS'] }
+
+  # We will configure the host from the environment.
+  config.action_mailer.default_url_options = { host: ENV['RAILS_HOSTNAME'] }
+
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
   config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
