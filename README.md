@@ -1,39 +1,52 @@
-# Coursemology, Reloaded [![Build Status](https://travis-ci.org/Coursemology/coursemology2.svg?branch=master)](https://travis-ci.org/Coursemology/coursemology2)
+# Coursemology [![Build Status](https://travis-ci.org/Coursemology/coursemology2.svg?branch=master)](https://travis-ci.org/Coursemology/coursemology2)
 [![Code Climate](https://codeclimate.com/github/Coursemology/coursemology2/badges/gpa.svg)](https://codeclimate.com/github/Coursemology/coursemology2) [![Coverage Status](https://img.shields.io/coveralls/Coursemology/coursemology2.svg)](https://coveralls.io/r/Coursemology/coursemology2) [![Inline docs](http://inch-ci.org/github/Coursemology/coursemology2.svg?branch=master&style=flat-square)](http://inch-ci.org/github/Coursemology/coursemology2)
+[![Slack](http://coursemology-slack.herokuapp.com/badge.svg)](http://coursemology-slack.herokuapp.com)
 
-This is the Rails 4+ re-write of Coursemology.
+<a href="http://coursemology.org"><img src="https://raw.githubusercontent.com/Coursemology/coursemology.org/development/public/images/coursemology_logo_landscape_100.png"
+ alt="Coursemology logo" title="Coursemology" align="right" /></a>
 
-Major changes:
+Coursemology is an open source gamified learning platform that enables
+educators to increase student engagement and make learning fun.
 
- 1. Rails 4 (from Rails 3.2)
- 2. PostgreSQL as default DBMS (from MySQL)
- 3. Bootstrap 3.2 (from Bootstrap 2)
+## Setting up Coursemology
 
-## Installation
-### System requirements
- - [nodejs](http://nodejs.org) (as a JavaScript runtime for [execjs](https://github.com/sstephenson/execjs))
- - [bundler](http://bundler.io) 1.10.3 - Install with the command `gem install bundler -v1.10.3`
+### System Requirements
 
-### Procedure
- 1. Install dependencies using `bundle install`
-    1. `bundle install --without ci:development:test` might be preferable for production installs.
-    2. `bundle install --without ci:production` might be preferable if you're only intending to
-       implement features.
- 2. `rake db:setup`. Run `RAILS_ENV=test rake db:setup` too if you are intending to run the test
-    suite. Run `RAILS_ENV=production rake db:setup` for a production server.
- 3. `RAILS_ENV=production rake assets:precompile` for production servers, or all the assets won't load.
- 4. `bin/rails server` to start the development app server. Production installs should configure
-    [Puma](http://puma.io) and be reverse-proxied.
- 5. You can log in with the default username and password:
+1. Ruby (>= 2.1.0)
+2. Ruby on Rails
+3. PostgreSQL
+
+Coursemology uses [Ruby on Rails](http://rubyonrails.org/). This
+[guide](https://gorails.com/setup/) written by the awesome people at
+GoRails should help you to get everything started.
+
+### Getting Started
+
+ 1. Download bundler to install dependencies
+
+    $ gem install bundler
+
+ 2. Install dependencies
+
+    $ bundle install --without ci:production
+
+ 3. Create and seed the database
+
+    $ bundle exec rake db:setup
+
+ 4. Start the development app server
+
+    $ bundle exec rails server
+
+ 5. You're all set! Simply login with the default username and password:
 
     > Email: `test@example.org`
-    >
     > Password: `Coursemology!`
 
 ## Found Boogs?
 
-Create an issue on the Github [issue tracker](https://github.com/Coursemology/coursemology2/issues).
+Create an issue on the Github [issue tracker](https://github.com/Coursemology/coursemology2/issues) or come talk to us over at our [Slack channels](https://coursemology-slack.herokuapp.com/).
 
 ## License
 
-Copyright (c) 2014 Coursemology.org. This software is licensed under the MIT License.
+Copyright (c) 2015 Coursemology.org. This software is licensed under the MIT License.
