@@ -61,13 +61,17 @@ RSpec.describe Course::UsersController, type: :controller do
       context 'when the user is a manager' do
         let!(:course_user) { create(:course_manager, course: course, user: user) }
 
-        it 'only updates the role' do
+        it 'updates the Course User' do
           expect { subject }.to change { course_user.reload.role }.to('teaching_assistant')
         end
 
         it 'sets the proper flash message' do
           subject
           expect(flash[:success]).to eq(I18n.t('course.users.update.success'))
+        end
+
+        it 'does not send a notification email to the user' do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
 
         context 'when the user cannot be saved' do
@@ -77,6 +81,13 @@ RSpec.describe Course::UsersController, type: :controller do
           end
 
           it { is_expected.to redirect_to(course_users_staff_path(course)) }
+        end
+
+        context 'when the user transitions from the requested state to the approved state' do
+          let(:updated_course_user) { { workflow_state: :approved } }
+          it 'sends a notification email to the user' do
+            expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+          end
         end
       end
 
