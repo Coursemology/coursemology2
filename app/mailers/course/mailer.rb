@@ -22,4 +22,15 @@ class Course::Mailer < ApplicationMailer
 
     mail(to: @recipient.email, subject: t('.subject', course: @course.title))
   end
+
+  # Sends a notification email to the course staff to approve a given Course Registration Request.
+  #
+  # @param [Course] course The course which the user registered in.
+  def user_registered_email(course, course_user)
+    @course = course
+    @course_user = course_user
+    @recipient = Struct.new(:name).new(name: t('course.mailer.user_registered_email.recipients'))
+
+    mail(to: @course.staff.map(&:user).map(&:email), subject: t('.subject', course: @course.title))
+  end
 end
