@@ -6,11 +6,11 @@ RSpec.describe Duplicator do
       @id = id
     end
 
-    def duplicate(duplicator)
+    def duplicate(_duplicator)
     end
 
     def ==(other)
-      self.class == other.class && self.state == other.state
+      self.class == other.class && state == other.state
     end
 
     protected
@@ -30,7 +30,7 @@ RSpec.describe Duplicator do
     end
 
     def duplicate(duplicator)
-      new_children = Array.new
+      new_children = []
 
       @children.each do |child|
         new_child = duplicator.duplicate_object(child)
@@ -43,7 +43,7 @@ RSpec.describe Duplicator do
     end
 
     def ==(other)
-      self.class == other.class && self.state == other.state
+      self.class == other.class && state == other.state
     end
 
     protected
@@ -99,7 +99,7 @@ RSpec.describe Duplicator do
     end
 
     it 'is duplicated by default' do
-      @duplicator= Duplicator.new
+      @duplicator = Duplicator.new
       duplicate_of_a = @duplicator.duplicate_object(@obj_a)
 
       expect(duplicate_of_a).to_not be_nil
@@ -108,7 +108,7 @@ RSpec.describe Duplicator do
     end
 
     it 'is duplicated once' do
-      @duplicator= Duplicator.new
+      @duplicator = Duplicator.new
       duplicate_of_a = @duplicator.duplicate_object(@obj_a)
       duplicate_of_a_2 = @duplicator.duplicate_object(@obj_a)
 
@@ -205,6 +205,28 @@ RSpec.describe Duplicator do
 
       expect(dup_c1).to eq(c1)
       expect(dup_c1).to_not be(c1)
+      expect(duplicator.instance_variable_get(:@duplicated_objects).length).to be(2)
+      expect(dup_c1.children[0].children[0]).to be(dup_c1)
+    end
+
+    it 'duplicates graph with 2 object cycle' do
+      # a -> b -> c -> d
+      #      ^----|
+      c4 = ComplexObject.new(14, [])
+      c3 = ComplexObject.new(13, [])  # still incomplete
+      c2 = ComplexObject.new(12, [c3])
+      c1 = ComplexObject.new(11, [c2])
+      c3.instance_variable_set(:@children, [c2, c4])
+      duplicator = Duplicator.new
+      dup_c1 = duplicator.duplicate_object(c1)
+
+      dup_c2 = dup_c1.children[0]
+      dup_c3 = dup_c2.children[0]
+
+      expect(duplicator.instance_variable_get(:@duplicated_objects).length).to be(4)
+      expect(dup_c1).to eq(c1)
+      expect(dup_c1).to_not be(c1)
+      expect(dup_c3.children[0]).to be(dup_c2)
     end
 
     it 'duplicates cyclic graph' do
