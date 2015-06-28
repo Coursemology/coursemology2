@@ -24,24 +24,33 @@ GoRails should help you to get everything started.
 
  1. Download bundler to install dependencies
 
+    ~~~ sh
     $ gem install bundler
+    ~~~
 
  2. Install dependencies
 
+    ~~~ sh
     $ bundle install --without ci:production
+    ~~~
 
  3. Create and seed the database
 
+    ~~~ sh
     $ bundle exec rake db:setup
+    ~~~
 
  4. Start the development app server
 
+    ~~~ sh
     $ bundle exec rails server
+    ~~~
 
  5. You're all set! Simply login with the default username and password:
 
-    > Email: `test@example.org`
-    > Password: `Coursemology!`
+> Email: `test@example.org`
+>
+> Password: `Coursemology!`
 
 ## Found Boogs?
 
