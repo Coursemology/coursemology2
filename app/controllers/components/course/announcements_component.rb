@@ -5,6 +5,7 @@ class Course::AnnouncementsComponent
     [
       {
         title: I18n.t('course.announcements.sidebar_title'),
+        weight: 1,
         path: course_announcements_path(current_course),
         unread: Course::AnnouncementsComponent.unread_count(current_course, current_user)
       }
