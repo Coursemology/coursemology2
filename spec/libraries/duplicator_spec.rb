@@ -6,7 +6,7 @@ RSpec.describe Duplicator do
       @id = id
     end
 
-    def duplicate(_duplicator)
+    def initialize_duplicate(_duplicator)
     end
 
     def ==(other)
@@ -29,7 +29,7 @@ RSpec.describe Duplicator do
       @children = children
     end
 
-    def duplicate(duplicator)
+    def initialize_duplicate(duplicator)
       new_children = []
 
       @children.each do |child|
