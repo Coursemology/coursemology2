@@ -9,16 +9,25 @@ class Course::Controller < ApplicationController
   #
   #   {
   #      title: 'Sidebar Item Title'
+  #      type: :admin # Will be considered as `:normal` if not set
+  #      path: path_to_the_component
   #      unread: 0 # or nil
   #   }
   #
   # The elements are rendered on all Course controller subclasses as part of a nested template.
-  def sidebar
-    array_of_component_arrays = current_component_host.components.map do |component|
-      component.get_sidebar_items(self)
+  # @param [Symbol] type The type of sidebar item, all sidebar items will be returned if the type
+  # is not specified
+  # @return [Array] The array of sidebar items of the given type
+  def sidebar(type = nil)
+    @sidebar ||= begin
+      array_of_component_arrays = current_component_host.components.map do |component|
+        component.get_sidebar_items(self)
+      end
+
+      array_of_component_arrays.tap(&:flatten!)
     end
 
-    array_of_component_arrays.tap(&:flatten!)
+    type ? @sidebar.select { |item| (item[:type] || :normal) ==  type } : @sidebar
   end
 
   # Gets the settings items.

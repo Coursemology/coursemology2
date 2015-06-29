@@ -1,8 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe 'Course Modules', type: :controller do
-  EXPECTED_SIDEBAR_ITEM = {
+  NORMAL_SIDEBAR_ITEM = {
     title: 'DummyCourseModule',
+    type: :normal,
+    unread: -1
+  }
+
+  ADMIN_SIDEBAR_ITEM = {
+    title: 'DummyCourseModule',
+    type: :admin,
     unread: -1
   }
 
@@ -19,7 +26,7 @@ RSpec.describe 'Course Modules', type: :controller do
     include Course::ComponentHost::Component
 
     sidebar do
-      [EXPECTED_SIDEBAR_ITEM]
+      [NORMAL_SIDEBAR_ITEM, ADMIN_SIDEBAR_ITEM]
     end
 
     settings do
@@ -33,7 +40,10 @@ RSpec.describe 'Course Modules', type: :controller do
     before { allow(controller).to receive(:current_course).and_return(course) }
 
     it 'gathers all modules\' sidebar callbacks' do
-      expect(controller.sidebar).to include(EXPECTED_SIDEBAR_ITEM)
+      expect(controller.sidebar(:normal)).to include(NORMAL_SIDEBAR_ITEM)
+      expect(controller.sidebar(:normal)).not_to include(ADMIN_SIDEBAR_ITEM)
+      expect(controller.sidebar(:admin)).to include(ADMIN_SIDEBAR_ITEM)
+      expect(controller.sidebar(:admin)).not_to include(NORMAL_SIDEBAR_ITEM)
     end
 
     it 'gathers all modules\' settings callback' do

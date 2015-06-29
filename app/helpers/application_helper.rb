@@ -33,6 +33,33 @@ module ApplicationHelper
     end
   end
 
+  # Display the given sidebar items.
+  #
+  # @param [Array] items An array of sidebar items to be displayed.
+  # @param [Array<String>] classes An array of classes to apply to the sidebar items container.
+  # @return [String] The HTML string which will display the sidebar items.
+  def sidebar_items(items, classes: ['nav', 'nav-pills', 'nav-stacked'])
+    links = items.map { |item| link_to_sidebar_item(item) }
+    content_tag(:ul, class: classes) do
+      links.map { |link| concat(content_tag(:li, link)) }
+    end
+  end
+
+  # Generates the link to the given sidebar item.
+  #
+  # @param item The sidebar item.
+  # @return [String] The HTML string which will display the link.
+  def link_to_sidebar_item(item)
+    link_to(item[:path]) do
+      concat(item[:title])
+      concat(
+        content_tag(:span, class: ['unread']) do
+          badge(item[:unread]) if item[:unread] && item[:unread] > 0
+        end
+      )
+    end
+  end
+
   # Formats the given User as a user-visible string.
   #
   # @param [User] user The User to display.

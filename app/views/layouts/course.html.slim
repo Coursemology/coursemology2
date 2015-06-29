@@ -5,13 +5,9 @@
     div.col-lg-2.col-md-3.col-sm-4
       nav role='navigation'
         div.collapse.navbar-collapse#course-navigation-navbar
-          ul.nav.nav-pills.nav-stacked
-            - controller.sidebar.each do |item|
-              li
-                = link_to(item[:path]) do
-                  = item[:title]
-                  span.unread
-                    = badge(item[:unread]) if item[:unread] && item[:unread] > 0
+          = sidebar_items(controller.sidebar(:normal))
+          h5 = t('.administration')
+          = sidebar_items(controller.sidebar(:admin))
 
     div.col-lg-10.col-md-9.col-sm-8
       = yield

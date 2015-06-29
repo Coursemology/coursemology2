@@ -14,6 +14,8 @@ en:
     global_announcements:
       close: 'Close'
       more_announcements: 'More Announcements...'
+    course:
+      administration: 'Administration'
     course_admin:
       title: 'Settings'
       announcement_settings:

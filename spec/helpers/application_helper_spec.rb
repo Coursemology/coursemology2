@@ -30,6 +30,56 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
   end
 
+  describe 'sidebar items' do
+    let(:sidebar_items) do
+      [
+        {
+          title: 'Announcements',
+          path: 'courses/1/announcements',
+          unread: 1
+        },
+        {
+          title: 'Levels',
+          path: 'courses/1/levels'
+        }
+      ]
+    end
+
+    describe '#link_to_sidebar_item' do
+      let(:sidebar_item) { sidebar_items.sample }
+      subject { helper.link_to_sidebar_item(sidebar_item) }
+
+      it 'generates a link with title' do
+        expect(subject).to have_tag('a', text: /^#{sidebar_item[:title]}/)
+        expect(subject).to have_tag('a', with: { href: sidebar_item[:path] })
+      end
+
+      it 'shows the unread badge' do
+        if sidebar_item[:unread]
+          expect(subject).to have_tag('span.unread') do
+            with_tag 'span.badge', text: sidebar_item[:unread]
+          end
+        else
+          expect(subject).to have_tag('span.unread')
+        end
+      end
+    end
+
+    describe '#sidebar_items' do
+      subject { helper.sidebar_items(sidebar_items) }
+
+      it 'displays all the sidebar items' do
+        expect(subject).to have_tag('ul.nav.nav-pills.nav-stacked')
+        sidebar_items.each do |item|
+          expect(subject).to have_tag('li') do
+            with_tag('a', text: /^#{item[:title]}/)
+            with_tag('a', with: { href: item[:path] })
+          end
+        end
+      end
+    end
+  end
+
   describe 'user display helper' do
     describe '#display_user' do
       let(:user) { build(:user) }
