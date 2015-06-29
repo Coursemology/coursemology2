@@ -16,6 +16,12 @@ Rails.application.configure do
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
+  # Default from address for email
+  config.action_mailer.default_options = { from: 'coursemology@example.org' }
+
+  # We will assume that we are running on localhost
+  config.action_mailer.default_url_options = { host: 'localhost:3000' }
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 

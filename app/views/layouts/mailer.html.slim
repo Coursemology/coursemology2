@@ -1,10 +1,17 @@
-h4
-  = t('.greeting', user: @recipient.name)
+doctype html
+html
+  head
+    title
+      = message.subject
+    meta http-equiv="X-UA-Compatible" content="IE=edge"
 
-= yield
+body
+  p
+    = t('.greeting', user: @recipient.name)
 
-h4
-  = t('.complimentary_close')
+  = yield
 
-h4
-  = t('.sign_off')
+  p
+    = t('.complimentary_close')
+    br
+    = t('.sign_off')

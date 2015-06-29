@@ -1,0 +1,11 @@
+en:
+  course:
+    mailer:
+      user_invitation_email:
+        subject: "Invitation to Register for %{course}"
+        message: >
+          You are invited to register for %{course} on %{coursemology}.
+
+
+          You do not seem to have an account registered at this email address; please %{sign_up}
+          for an account, and register for %{course} using the following registration code:

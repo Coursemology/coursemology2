@@ -1,0 +1,4 @@
+<% course_requests_page = plain_link_to(t('course.users.requests.header'), course_users_requests_url(@course)) %>
+<%= t('.message', user: plain_link_to(@course_user.name, @course_user.user.email),
+                  course: plain_link_to(@course.title, course_url(@course)),
+                  course_requests_page: course_requests_page) %>
