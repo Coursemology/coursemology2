@@ -92,4 +92,14 @@ RSpec.describe User, type: :model do
       expect(user.normal?).to eq(true)
     end
   end
+
+  context 'when the user has an invalid email address' do
+    subject { build(:user, email: 'xyz@sdf') }
+
+    it 'propagates the error to the error attribute' do
+      expect(subject).not_to be_valid
+      expect(subject.errors[:email].length).to eq(1)
+      expect(subject.errors[:email].first).to match(/invalid/)
+    end
+  end
 end

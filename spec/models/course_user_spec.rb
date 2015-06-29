@@ -151,7 +151,7 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
-    context 'registering the same user to the same course twice' do
+    context 'when the same user is registered into the same course twice' do
       subject do
         create(:course_student, course: student.course, user: student.user, role: :student)
       end
