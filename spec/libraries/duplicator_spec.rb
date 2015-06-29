@@ -33,13 +33,13 @@ RSpec.describe Duplicator do
       new_children = []
 
       @children.each do |child|
-        new_child = duplicator.duplicate_object(child)
+        new_child = duplicator.duplicate(child)
         new_children << new_child unless new_child.nil?
       end
 
       # example if object has no accessor for the children
       # self is already duplicated by Duplicator. Find the duplicated version
-      duplicator.duplicate_object(self).instance_variable_set(:@children, new_children)
+      duplicator.duplicate(self).instance_variable_set(:@children, new_children)
     end
 
     def ==(other)
@@ -93,14 +93,14 @@ RSpec.describe Duplicator do
 
     it 'is not duplicated if excluded' do
       @duplicator = Duplicator.new([@obj_a])
-      duplicated_object = @duplicator.duplicate_object(@obj_a)
+      duplicated_object = @duplicator.duplicate(@obj_a)
 
       expect(duplicated_object).to be_nil
     end
 
     it 'is duplicated by default' do
       @duplicator = Duplicator.new
-      duplicate_of_a = @duplicator.duplicate_object(@obj_a)
+      duplicate_of_a = @duplicator.duplicate(@obj_a)
 
       expect(duplicate_of_a).to_not be_nil
       expect(duplicate_of_a).to_not be(@obj_a)
@@ -109,8 +109,8 @@ RSpec.describe Duplicator do
 
     it 'is duplicated once' do
       @duplicator = Duplicator.new
-      duplicate_of_a = @duplicator.duplicate_object(@obj_a)
-      duplicate_of_a_2 = @duplicator.duplicate_object(@obj_a)
+      duplicate_of_a = @duplicator.duplicate(@obj_a)
+      duplicate_of_a_2 = @duplicator.duplicate(@obj_a)
 
       expect(duplicate_of_a).to_not be_nil
       expect(duplicate_of_a).to be(duplicate_of_a_2)
@@ -124,7 +124,7 @@ RSpec.describe Duplicator do
     end
 
     it 'duplicates object' do
-      dup_c1 = @duplicator.duplicate_object(@c1)
+      dup_c1 = @duplicator.duplicate(@c1)
 
       orig_children = @c1.children
       dup_children = dup_c1.children
@@ -141,8 +141,8 @@ RSpec.describe Duplicator do
     end
 
     it 'duplicates objects referenced in 2 places once' do
-      dup_c1 = @duplicator.duplicate_object(@c1)
-      dup_c2 = @duplicator.duplicate_object(@c2)
+      dup_c1 = @duplicator.duplicate(@c1)
+      dup_c2 = @duplicator.duplicate(@c2)
 
       # dup_s1 should be the same object
       expect(dup_c1.children[0]).to be(dup_c2.children[0])
@@ -155,7 +155,7 @@ RSpec.describe Duplicator do
     end
 
     it 'duplicates objects with ComplexObject children' do
-      dup_c3 = @duplicator.duplicate_object(@c3)
+      dup_c3 = @duplicator.duplicate(@c3)
 
       expect(dup_c3.children.length).to be(3)
       expect(dup_c3.children[0]).to eq(@c1)
@@ -172,7 +172,7 @@ RSpec.describe Duplicator do
 
     it 'duplicates ComplexObject but not excluded children' do
       duplicator = Duplicator.new([@s1, @s2])
-      dup_c1 = duplicator.duplicate_object(@c1)
+      dup_c1 = duplicator.duplicate(@c1)
 
       expect(dup_c1.children).to be_empty
       expect(dup_c1).to_not be(@c1)
@@ -180,7 +180,7 @@ RSpec.describe Duplicator do
 
     it 'partially duplicates objects when some children are excluded' do
       duplicator = Duplicator.new([@s2, @c2])
-      dup_c3 = duplicator.duplicate_object(@c3)
+      dup_c3 = duplicator.duplicate(@c3)
 
       dup_c1_children = dup_c3.children[0].children
 
@@ -201,7 +201,7 @@ RSpec.describe Duplicator do
       c2 = ComplexObject.new(12, [c1])
       c1.instance_variable_set(:@children, [c2])
       duplicator = Duplicator.new
-      dup_c1 = duplicator.duplicate_object(c1)
+      dup_c1 = duplicator.duplicate(c1)
 
       expect(dup_c1).to eq(c1)
       expect(dup_c1).to_not be(c1)
@@ -218,7 +218,7 @@ RSpec.describe Duplicator do
       c1 = ComplexObject.new(11, [c2])
       c3.instance_variable_set(:@children, [c2, c4])
       duplicator = Duplicator.new
-      dup_c1 = duplicator.duplicate_object(c1)
+      dup_c1 = duplicator.duplicate(c1)
 
       dup_c2 = dup_c1.children[0]
       dup_c3 = dup_c2.children[0]
@@ -231,7 +231,7 @@ RSpec.describe Duplicator do
 
     it 'duplicates cyclic graph' do
       duplicator = Duplicator.new
-      dup_c1 = duplicator.duplicate_object(@c1)
+      dup_c1 = duplicator.duplicate(@c1)
 
       expect(dup_c1).to eq(@c1)
       expect(dup_c1).to_not be(@c1)
@@ -239,7 +239,7 @@ RSpec.describe Duplicator do
 
     it 'duplicates cyclic graph without excluded tail' do
       duplicator = Duplicator.new([@s1])
-      dup_c1 = duplicator.duplicate_object(@c1)
+      dup_c1 = duplicator.duplicate(@c1)
 
       # get original and duplicated node c4
       c4 = @c1.children[0].children[1]
@@ -251,7 +251,7 @@ RSpec.describe Duplicator do
 
     it 'duplicates cyclic graph without c5' do
       duplicator = Duplicator.new([@c5])
-      dup_c1 = duplicator.duplicate_object(@c1)
+      dup_c1 = duplicator.duplicate(@c1)
 
       dup_c3 = dup_c1.children[0].children[0]
 
@@ -261,7 +261,7 @@ RSpec.describe Duplicator do
 
     it 'duplicates cyclic graph without c4' do
       duplicator = Duplicator.new([@c4])
-      dup_c1 = duplicator.duplicate_object(@c1)
+      dup_c1 = duplicator.duplicate(@c1)
 
       # should be left with c1 -> c2 -> c3 -> c5
       dup_c2 = dup_c1.children[0]
@@ -276,7 +276,7 @@ RSpec.describe Duplicator do
 
     it 'duplicates sub-graph from c3' do
       duplicator = Duplicator.new
-      dup_c3 = duplicator.duplicate_object(@c3)
+      dup_c3 = duplicator.duplicate(@c3)
 
       dup_c4 = dup_c3.children[0].children[0]
 
