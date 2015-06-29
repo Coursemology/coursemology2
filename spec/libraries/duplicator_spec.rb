@@ -86,6 +86,21 @@ RSpec.describe Duplicator do
     @c4.instance_variable_set(:@children, [@s1, @c3])   # create cycle
   end
 
+  def create_second_cyclic_graph
+    #
+    #      ----> c22 <--
+    #      |      |    |
+    # c21 --      |    |
+    #      |      |--> |
+    #      ----------> c23
+    #
+    @c22 = ComplexObject.new(22, [])  # assign children later
+    @c23 = ComplexObject.new(23, [@c22])
+    @c21 = ComplexObject.new(21, [@c22, @c23])
+
+    @c22.instance_variable_set(:@children, [@c23])
+  end
+
   context 'when SimpleObject is duplicated' do
     before :each do
       @obj_a = SimpleObject.new(2)
@@ -284,6 +299,89 @@ RSpec.describe Duplicator do
       expect(dup_c4.children[0]).to eq(@s1)
       # check cycle
       expect(dup_c4.children[1]).to be(dup_c3)
+    end
+  end
+
+  context 'when an array of objects is duplicated' do
+    before :each do
+      create_cyclic_graph
+      create_second_cyclic_graph
+    end
+
+    it 'duplicates objects mentioned twice without creating extras' do
+      duplicator = Duplicator.new
+      duplicated_stuff = duplicator.duplicate([@c1, @c3])
+
+      dup_c3 = duplicated_stuff[0].children[0].children[0]
+
+      expect(duplicated_stuff.length).to be(2)
+      expect(duplicated_stuff[0]).to eq(@c1)
+      expect(duplicated_stuff[0]).to_not be(@c1)
+      expect(duplicated_stuff[1]).to eq(@c3)
+      expect(duplicated_stuff[1]).to_not be(@c3)
+      expect(duplicated_stuff[1]).to be(dup_c3)
+    end
+
+    it 'duplicates disjoint graphs' do
+      duplicator = Duplicator.new
+      duplicated_stuff = duplicator.duplicate([@c1, @c21])
+
+      expect(duplicated_stuff.length).to be(2)
+      expect(duplicated_stuff[0]).to eq(@c1)
+      expect(duplicated_stuff[0]).to_not be(@c1)
+      expect(duplicated_stuff[1]).to eq(@c21)
+      expect(duplicated_stuff[1]).to_not be(@c21)
+    end
+
+    it 'duplicates disjoint graphs and excludes objects' do
+      duplicator = Duplicator.new([@c4, @c23])
+      duplicator.duplicate([@c1, @c21])
+
+      duplicated_objects = duplicator.instance_variable_get(:@duplicated_objects)
+
+      # @s1 is not reached, @c4 and @c23 are reached by not duplicated
+      expect(duplicated_objects.length).to be(8)
+      expect(duplicated_objects[@c4]).to be_nil
+      expect(duplicated_objects[@c23]).to be_nil
+    end
+  end
+
+  context 'when joined graphs are duplicated' do
+    before :each do
+      create_cyclic_graph
+      create_second_cyclic_graph
+      # join graphs
+      c1_children = @c1.children
+      c1_children << @c21
+      @c1.instance_variable_set(:@children, c1_children)
+    end
+
+    it 'duplicates all objects' do
+      duplicator = Duplicator.new
+      duplicator.duplicate(@c1)
+
+      duplicated_objects = duplicator.instance_variable_get(:@duplicated_objects)
+      expect(duplicated_objects.length).to be(9)
+    end
+
+    it 'duplicates cyclically joined graphs' do
+      duplicator = Duplicator.new
+      # join from c21 to c1
+      c21_children = @c21.children
+      c21_children << @c1
+      @c21.instance_variable_set(:@children, c21_children)
+      duplicator.duplicate(@c21)
+
+      duplicated_objects = duplicator.instance_variable_get(:@duplicated_objects)
+      expect(duplicated_objects.length).to be(9)
+    end
+
+    it 'excludes excluded objects' do
+      duplicator = Duplicator.new([@s1])
+      duplicator.duplicate(@c1)
+
+      duplicated_objects = duplicator.instance_variable_get(:@duplicated_objects)
+      expect(duplicated_objects[@s1]).to be_nil
     end
   end
 end

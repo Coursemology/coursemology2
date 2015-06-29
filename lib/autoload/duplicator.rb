@@ -23,7 +23,6 @@ class Duplicator
     duplicated_stuff.length == 1 ? duplicated_stuff[0] : duplicated_stuff
   end
 
-
   private
 
   # Deep copy +source_object+ and its children. +source_object+ must provide a duplicate
