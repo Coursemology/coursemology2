@@ -15,10 +15,7 @@ RSpec.describe ApplicationController, type: :controller do
       expect(ActsAsTenant.current_tenant).to eq(Instance.default)
     end
 
-    let(:instance) do
-      default_instance = Instance.default
-      Instance.where { id << [default_instance] }.take
-    end
+    let(:instance) { create(:instance) }
 
     it 'checks hosts in a case insensitive manner' do
       @request.headers['host'] = instance.host.upcase
@@ -44,6 +41,9 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   describe 'internationalization' do
+    before { @old_i18n_locale = I18n.locale }
+    after { I18n.locale = @old_i18n_locale }
+
     context 'when http accept language is present' do
       before { @request.env['HTTP_ACCEPT_LANGUAGE'] = 'zh-cn' }
 
