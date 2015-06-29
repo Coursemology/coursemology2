@@ -11,10 +11,8 @@ RSpec.describe Course::Achievement, type: :model do
     describe '.default_scope' do
       it 'orders by ascending weight' do
         weights = Course::Achievement.all.map(&:weight)
-        prev_weights = [0] + weights[0..-2]
-        zipped_weights = prev_weights.zip(weights)
-        greater_than_previous = zipped_weights.map { |(a, b)| a <= b }
-        expect(greater_than_previous.all?).to be_truthy
+        expect(weights.length).not_to eq(0)
+        expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
       end
     end
   end
