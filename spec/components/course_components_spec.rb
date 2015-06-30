@@ -4,12 +4,14 @@ RSpec.describe 'Course Modules', type: :controller do
   NORMAL_SIDEBAR_ITEM = {
     title: 'DummyCourseModule',
     type: :normal,
+    weight: 1,
     unread: -1
   }
 
   ADMIN_SIDEBAR_ITEM = {
     title: 'DummyCourseModule',
     type: :admin,
+    weight: 10,
     unread: -1
   }
 
