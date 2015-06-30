@@ -65,7 +65,8 @@ Rails.application.routes.draw do
   end
 
   devise_for :users, controllers: {
-    registrations: 'user/registrations'
+    registrations: 'user/registrations',
+    sessions: 'user/sessions'
   }
 
   resources :announcements, only: [:index]
