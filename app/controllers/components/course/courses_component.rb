@@ -26,6 +26,12 @@ class Course::CoursesComponent
         controller: 'course/admin/component_settings',
         action: 'edit',
         weight: 2
+      },
+      {
+        title: t('layouts.course_admin.sidebar_settings.title'),
+        controller: 'course/admin/sidebar_settings',
+        action: 'edit',
+        weight: 3
       }
     ]
   end

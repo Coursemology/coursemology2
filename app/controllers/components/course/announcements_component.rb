@@ -19,7 +19,7 @@ class Course::AnnouncementsComponent
         title: t('layouts.course_admin.announcement_settings.title'),
         controller: 'course/admin/announcement_settings',
         action: 'edit',
-        weight: 3
+        weight: 4
       }
     ]
   end

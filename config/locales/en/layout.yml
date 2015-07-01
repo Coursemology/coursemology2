@@ -22,6 +22,8 @@ en:
         title: 'Announcements'
       component_settings:
         title: 'Components'
+      sidebar_settings:
+        title: 'Sidebar'
     course_users:
       title: 'Manage Users'
     attachment_uploader:

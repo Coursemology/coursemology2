@@ -90,6 +90,8 @@ Rails.application.routes.draw do
 
         get 'components' => 'component_settings#edit'
         patch 'components' => 'component_settings#update'
+        get 'sidebar' => 'sidebar_settings#edit'
+        patch 'sidebar' => 'sidebar_settings#update'
         get 'announcements' => 'announcement_settings#edit'
         patch 'announcements' => 'announcement_settings#update'
       end

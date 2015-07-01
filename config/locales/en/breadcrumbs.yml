@@ -11,6 +11,8 @@ en:
           edit: 'Announcements'
         component_settings:
           edit: 'Components'
+        sidebar_settings:
+          index: 'Sidebar'
       users:
         index: 'Users'
         students: :'course.users.students.header'
