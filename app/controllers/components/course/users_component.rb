@@ -4,6 +4,7 @@ class Course::UsersComponent
   sidebar do
     [
       {
+        key: :users,
         title: t('layouts.course_users.title'),
         type: :admin,
         weight: 1,

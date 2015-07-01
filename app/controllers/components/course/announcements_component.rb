@@ -4,6 +4,7 @@ class Course::AnnouncementsComponent
   sidebar do
     [
       {
+        key: :announcements,
         title: I18n.t('course.announcements.sidebar_title'),
         weight: 1,
         path: course_announcements_path(current_course),
