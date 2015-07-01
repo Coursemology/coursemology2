@@ -10,6 +10,7 @@ class Course::Controller < ApplicationController
   #   {
   #      title: 'Sidebar Item Title'
   #      type: :admin # Will be considered as `:normal` if not set
+  #      weight: 100
   #      path: path_to_the_component
   #      unread: 0 # or nil
   #   }
@@ -24,7 +25,7 @@ class Course::Controller < ApplicationController
         component.get_sidebar_items(self)
       end
 
-      array_of_component_arrays.tap(&:flatten!)
+      array_of_component_arrays.tap(&:flatten!).sort_by { |item| item[:weight] }
     end
 
     type ? @sidebar.select { |item| (item[:type] || :normal) ==  type } : @sidebar

@@ -6,8 +6,8 @@ class Course::CoursesComponent
       {
         title: t('layouts.course_admin.title'),
         type: :admin,
-        path: course_admin_path(current_course),
-        action: 'index'
+        weight: 4,
+        path: course_admin_path(current_course)
       }
     ]
   end
