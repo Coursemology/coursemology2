@@ -9,9 +9,11 @@ RSpec.describe Course::Achievement, type: :model do
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
     describe '.default_scope' do
+      let(:course) { create(:course) }
+      let!(:achievements) { create_list(:course_achievement, 2, course: course) }
       it 'orders by ascending weight' do
-        weights = Course::Achievement.all.map(&:weight)
-        expect(weights.length).not_to eq(0)
+        weights = course.achievements.map(&:weight)
+        expect(weights.length).to be > 1
         expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
       end
     end
