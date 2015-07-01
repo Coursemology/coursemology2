@@ -17,12 +17,14 @@ class Course::CoursesComponent
       {
         title: t('layouts.course_admin.title'),
         controller: 'course/admin/admin',
-        action: 'index'
+        action: 'index',
+        weight: 1
       },
       {
         title: t('layouts.course_admin.component_settings.title'),
         controller: 'course/admin/component_settings',
-        action: 'edit'
+        action: 'edit',
+        weight: 2
       }
     ]
   end
