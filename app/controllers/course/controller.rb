@@ -39,13 +39,14 @@ class Course::Controller < ApplicationController
   #      title: 'Settings Item Title'
   #      controller: controller name, String or Symbol
   #      action: action name, String or Symbol
+  #      weight: 1 # The weight which determines the order of the item
   #   }
   def settings
     array_of_component_arrays = current_component_host.components.map do |component|
       component.get_settings_items(self)
     end
 
-    array_of_component_arrays.tap(&:flatten!)
+    array_of_component_arrays.tap(&:flatten!).sort_by { |item| item[:weight] }
   end
 
   # Gets the current course.
