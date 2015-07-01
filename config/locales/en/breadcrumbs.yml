@@ -7,6 +7,10 @@ en:
       admin:
         controller:
           admin: 'Administration'
+        announcement_settings:
+          edit: 'Announcements'
+        component_settings:
+          edit: 'Components'
       users:
         index: 'Users'
         students: :'course.users.students.header'

@@ -1,6 +1,6 @@
 class Course::Admin::ComponentSettingsController < Course::Admin::Controller
   before_action :load_settings
-  add_breadcrumb :index, :course_admin_components_path
+  add_breadcrumb :edit, :course_admin_components_path
 
   def edit #:nodoc:
   end
