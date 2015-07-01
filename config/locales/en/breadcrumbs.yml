@@ -4,8 +4,13 @@ en:
       levels:
         index: :'course.levels.index.header'
         new: :'course.levels.new.header'
-      settings:
-        index: 'Settings'
+      admin:
+        controller:
+          admin: 'Administration'
+        announcement_settings:
+          edit: 'Announcements'
+        component_settings:
+          edit: 'Components'
       users:
         index: 'Users'
         students: :'course.users.students.header'
