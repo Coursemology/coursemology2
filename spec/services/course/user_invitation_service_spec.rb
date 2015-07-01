@@ -38,7 +38,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
     end
     let(:new_users) do
       (1..2).map do
-        create(:user)
+        build(:user)
       end
     end
     let(:new_user_attributes) do
@@ -81,16 +81,19 @@ RSpec.describe Course::UserInvitationService, type: :service do
         existing_users.each(&method(:verify_existing_user))
       end
 
+      def invite
+        subject.invite(user_form_attributes)
+      end
+
       context 'when a list of invitation form attributes are provided' do
         it 'registers everyone' do
-          expect(subject.invite(user_form_attributes)).to be_truthy
+          expect(invite).to be_truthy
           verify_users
         end
 
         it 'sends an email to everyone' do
-          expect do
-            subject.invite(user_form_attributes)
-          end.to change { ActionMailer::Base.deliveries.count }.by(user_form_attributes.length)
+          expect { invite }.to change { ActionMailer::Base.deliveries.count }.
+            by(user_form_attributes.length)
         end
       end
 
@@ -109,6 +112,76 @@ RSpec.describe Course::UserInvitationService, type: :service do
               OpenStruct.new(attributes)
             end))
           end.to change { ActionMailer::Base.deliveries.count }.by(user_attributes.length)
+        end
+      end
+
+      context 'when an invited user is already in the course' do
+        let!(:existing_course_user) do
+          course.course_users.build(user: existing_users.first,
+                                    creator: user, updater: user).tap(&:save!)
+        end
+
+        it 'fails' do
+          expect(invite).to be_falsey
+        end
+
+        it 'does not send any notifications' do
+          expect { invite }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+
+        it 'sets the proper errors' do
+          invite
+          errors = course.course_users.map(&:errors).
+                   tap(&:compact!).reject(&:empty?)
+          expect(errors.length).to eq(1)
+          expect(errors.first[:user_id].first).to match(/been taken/)
+          expect(errors.first[:course_id].first).to match(/been taken/)
+        end
+      end
+
+      context 'when duplicate users are specified' do
+        before do
+          new_users.push(new_users.last)
+        end
+
+        it 'fails' do
+          expect(invite).to be_falsey
+        end
+
+        it 'does not send any notifications' do
+          expect { invite }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+
+        it 'sets the proper errors' do
+          invite
+          errors = course.course_users.map(&:invitation).
+                   map { |invitation| invitation.try(:user_email).try(:errors) }.
+                   tap(&:compact!).reject(&:empty?)
+          expect(errors.length).to eq(1)
+          expect(errors.first[:email].all? { |error| error =~ /been taken/ }).to be_truthy
+        end
+      end
+
+      context 'when an invalid email is specified' do
+        before do
+          new_users.first.email = 'xxnot an email'
+        end
+
+        it 'fails' do
+          expect(invite).to be_falsey
+        end
+
+        it 'does not send any notifications' do
+          expect { invite }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+
+        it 'sets the proper errors' do
+          invite
+          errors = course.course_users.map(&:invitation).
+                   map { |invitation| invitation.try(:user_email).try(:errors) }.
+                   tap(&:compact!).reject(&:empty?)
+          expect(errors.length).to eq(1)
+          expect(errors.first[:email].first).to match(/invalid/)
         end
       end
     end

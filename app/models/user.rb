@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
 
   enum role: { normal: 0, administrator: 1 }
 
+  after_validation :propagate_user_email_errors
+
   has_many :emails, -> { order('primary' => :desc) }, class_name: UserEmail.name,
                                                       inverse_of: :user, dependent: :destroy
   has_many :instance_users
@@ -45,6 +47,17 @@ class User < ActiveRecord::Base
   end
 
   private
+
+  # Propagates the error from the +user_emails+ association to the main object
+  #
+  # @return [void]
+  def propagate_user_email_errors
+    return if errors[:'emails.email'].nil?
+
+    errors[:'emails.email'].each do |error|
+      errors.add(:email, error)
+    end
+  end
 
   # Gets the default email address record.
   #

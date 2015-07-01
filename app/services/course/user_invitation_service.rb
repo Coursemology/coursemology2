@@ -15,13 +15,14 @@ class Course::UserInvitationService
   # Invites users to the given course.
   #
   # @param [Array<Hash>|File|TempFile] users Invites the given users.
-  # @return [bool]
+  # @return [bool] True if the invitations were successfully created and sent out. The errors
+  #   that this method would add to the provided course is in the +course_users+ association.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite(users)
     Course.transaction do
       registered_users, invited_users = invite_from_source(users)
 
-      break false unless @current_course.save
+      break false if !@current_course.save || !@current_course.valid?
       send_invitation_emails(registered_users, invited_users)
     end
   end

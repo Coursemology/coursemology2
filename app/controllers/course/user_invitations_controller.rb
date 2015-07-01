@@ -9,6 +9,7 @@ class Course::UserInvitationsController < Course::ComponentController
     if invite
       redirect_to create_redirect_path, success: t('.success')
     else
+      propagate_errors
       render 'new'
     end
   end
@@ -29,11 +30,11 @@ class Course::UserInvitationsController < Course::ComponentController
 
   # Determines the parameters to be passed to the invitation service object.
   #
-  # @return [Tempfile|Hash|String|nil]
+  # @return [Tempfile|Hash|bool]
   def invitation_params
     @invitation_params ||= course_user_invitation_params[:invitations_file].try(:tempfile) ||
                            course_user_invitation_params[:invitations_attributes] ||
-                           course_user_invitation_params[:registration_key]
+                           course_user_invitation_params[:registration_key] == 'checked'.freeze
   end
 
   # Determines if the user uploaded a file.
@@ -54,7 +55,7 @@ class Course::UserInvitationsController < Course::ComponentController
   #
   # @return [bool]
   def invite_by_registration_code?
-    invitation_params.nil? || invitation_params.is_a?(String)
+    invitation_params.is_a?(TrueClass) || invitation_params.is_a?(FalseClass)
   end
 
   # Invites the users via the service object.
@@ -64,10 +65,10 @@ class Course::UserInvitationsController < Course::ComponentController
     if invite_by_file? || invite_by_entry?
       invitation_service.invite(invitation_params)
     elsif invite_by_registration_code?
-      invitation_service.enable_registration_code(invitation_params == 'checked'.freeze)
+      invitation_service.enable_registration_code(invitation_params)
     end
   rescue CSV::MalformedCSVError => e
-    current_course.errors[:users_file] = e.message
+    current_course.errors.add(:invitations_file, e.message)
     return false
   end
 
@@ -76,6 +77,65 @@ class Course::UserInvitationsController < Course::ComponentController
   # @return [Course::UserInvitationService]
   def invitation_service
     @invitation_service ||= Course::UserInvitationService.new(current_user, current_course)
+  end
+
+  # Propagate errors from the parameters depending on the type of the parameters.
+  #
+  # @return [void]
+  def propagate_errors
+    propagate_errors_to_file if invite_by_file?
+  end
+
+  # Propagates errors from the generated records to the file.
+  #
+  # @return [void]
+  def propagate_errors_to_file
+    errors = aggregate_errors
+    current_course.errors.add(:invitations_file, errors.to_sentence) unless errors.empty?
+  end
+
+  # Aggregates errors from all the known sources of failure.
+  #
+  # @return [Array<String>] An array of failure messages;
+  def aggregate_errors
+    invalid_course_user_errors + invalid_user_email_errors
+  end
+
+  # Aggregates Course User objects which have errors.
+  #
+  # @return [Array<String>]
+  def invalid_course_user_errors
+    invalid_course_users.map do |course_user|
+      user = self.class.helpers.display_user(course_user.user || course_user)
+      t('course.user_invitations.errors.duplicate_user', user: user)
+    end
+  end
+
+  # Finds all the invalid Course User objects in the current course.
+  #
+  # @return [Array<CourseUser>]
+  def invalid_course_users
+    current_course.course_users.
+      reject { |course_user| course_user.errors.empty? }
+  end
+
+  # Aggregates errors caused by a user who already exists.
+  #
+  # @return [Array<String>]
+  def invalid_user_email_errors
+    invalid_user_emails.map do |user_email|
+      message = user_email.errors.full_messages.to_sentence
+      t('course.user_invitations.errors.invalid_email', email: user_email.email, message: message)
+    end
+  end
+
+  # Finds all the invalid email objects in the current course.
+  #
+  # @return [Array<UserEmail>]
+  def invalid_user_emails
+    current_course.course_users.
+      map { |course_user| course_user.invitation.try(:user_email) }.
+      reject { |user_email| user_email.nil? || user_email.errors.empty? }
   end
 
   # The path to redirect to after the {#create} action.

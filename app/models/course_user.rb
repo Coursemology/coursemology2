@@ -33,7 +33,7 @@ class CourseUser < ActiveRecord::Base
       sum(:points_awarded)
     end
   end
-  has_one :invitation, class_name: Course::UserInvitation.name, dependent: :destroy
+  has_one :invitation, class_name: Course::UserInvitation.name, dependent: :destroy, validate: true
 
   # Gets the staff associated with the course.
   # TODO: Remove the map when Rails 5 is released.
