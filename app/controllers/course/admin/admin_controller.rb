@@ -1,6 +1,4 @@
 class Course::Admin::AdminController < Course::Admin::Controller
-  add_breadcrumb :index, :course_admin_path
-
   def index
   end
 
