@@ -18,6 +18,11 @@ class Course::CoursesComponent
         title: t('layouts.course_admin.title'),
         controller: 'course/admin/admin',
         action: 'index'
+      },
+      {
+        title: t('layouts.course_admin.component_settings.title'),
+        controller: 'course/admin/component_settings',
+        action: 'edit'
       }
     ]
   end

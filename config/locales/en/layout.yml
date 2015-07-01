@@ -20,6 +20,8 @@ en:
       title: 'Settings'
       announcement_settings:
         title: 'Announcements'
+      component_settings:
+        title: 'Components'
     course_users:
       title: 'Manage Users'
     attachment_uploader:
