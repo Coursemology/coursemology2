@@ -1,6 +1,9 @@
 en:
   course:
     user_invitations:
+      errors:
+        duplicate_user: "%{user} appears more than once in the submission."
+        invalid_email: "%{email} is an invalid email address."
       new:
         header: 'Invite Users'
         tabs:
