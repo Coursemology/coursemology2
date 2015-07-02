@@ -2,8 +2,11 @@ en:
   user:
     registrations:
       new:
-        sign_up: 'Sign up'
+        header: :'layout.navbar.register'
+        already_registered: >
+          Already registered? If you have an existing Coursemology account, you can %{sign_in}.
         password_hint: "#{length} characters minimum"
+        sign_up: :'user.registrations.new.header'
       edit:
         edit: "Edit #{resource}"
         pending_confirmation: 'Currently waiting confirmation for #{email}'
@@ -12,3 +15,7 @@ en:
         cancel_account: 'Cancel my account'
         confirm_deletion: 'Are you sure?'
         unhappy: 'Unhappy?'
+    sessions:
+      new:
+        header: :'layout.navbar.sign_in'
+        sign_in: :'user.sessions.new.header'
