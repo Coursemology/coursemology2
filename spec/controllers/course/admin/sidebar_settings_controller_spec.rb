@@ -14,7 +14,7 @@ RSpec.describe Course::Admin::SidebarSettingsController, type: :controller do
 
     describe '#update' do
       before { allow(controller).to receive(:current_course).and_return(course) }
-      let(:sample_item) { controller.sidebar(:normal).sample }
+      let(:sample_item) { controller.all_sidebar_items(type: :normal).sample }
       let(:weight) { 10 }
       let(:sidebar_item_attributes) do
         id = generate(:nested_attribute_new_id)
