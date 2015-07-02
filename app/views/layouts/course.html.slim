@@ -5,9 +5,9 @@
     div.col-lg-2.col-md-3.col-sm-4
       nav role='navigation'
         div.collapse.navbar-collapse#course-navigation-navbar
-          = sidebar_items(controller.sidebar(:normal))
+          = sidebar_items(controller.all_sidebar_items(type: :normal))
           h5 = t('.administration')
-          = sidebar_items(controller.sidebar(:admin))
+          = sidebar_items(controller.all_sidebar_items(type: :admin))
 
     div.col-lg-10.col-md-9.col-sm-8
       = yield

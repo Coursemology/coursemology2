@@ -20,7 +20,7 @@ class Course::Controller < ApplicationController
   # @param [Symbol] type The type of sidebar item, all sidebar items will be returned if the type
   # is not specified
   # @return [Array] The array of sidebar items of the given type
-  def sidebar(type = nil)
+  def all_sidebar_items(type: nil)
     @sidebar ||= begin
       array_of_component_arrays = current_component_host.components.map do |component|
         component.get_sidebar_items(self)
