@@ -101,6 +101,62 @@ RSpec.describe Duplicator, type: :model do
     @c22.instance_variable_set(:@children, [@c23])
   end
 
+  class SimpleActiveRecord < ActiveRecord::Base
+    def initialize_duplicate(_duplicator)
+    end
+
+    def ==(other)
+      self.class == other.class && state == other.state
+    end
+
+    protected
+
+    def state
+      [@data]
+    end
+  end
+
+  temporary_table(:simple_active_records) do |t|
+    t.integer :data
+  end
+
+  class ComplexActiveRecord < ActiveRecord::Base
+    has_and_belongs_to_many :children, class_name: 'ComplexActiveRecord',
+                            foreign_key: 'parent_id', join_table: :children_parents,
+                            association_foreign_key: 'children_id'
+    has_and_belongs_to_many :parents, class_name: 'ComplexActiveRecord',
+                            foreign_key: 'children_id', join_table: :children_parents,
+                            association_foreign_key: 'parent_id'
+
+    def initialize_duplicate(duplicator)
+      new_children = []
+
+      self.children.each do |child|
+        new_child = duplicator.duplicate(child)
+        new_children << new_child unless new_child.nil?
+      end
+
+      duplicator.duplicate(self).children = new_children
+    end
+
+    def ==(other)
+      self.class == other.class && state == other.state
+    end
+
+    def state
+      [@data, self.children]
+    end
+  end
+
+  temporary_table(:complex_active_records) do |t|
+    t.integer :data
+  end
+
+  temporary_table(:children_parents) do |t|
+    t.integer :children_id, foreign_key: { references: :complex_active_records, primary_key: :id }
+    t.integer :parent_id, foreign_key: { references: :complex_active_records, primary_key: :id }
+  end
+
   context 'when SimpleObject is duplicated' do
     before :each do
       @obj_a = SimpleObject.new(2)
@@ -386,27 +442,8 @@ RSpec.describe Duplicator, type: :model do
   end
 
   context 'when SimpleActiveRecord objects are duplicated' do
-    class SimpleActiveRecord < ActiveRecord::Base
-      def initialize_duplicate(_duplicator)
-      end
-
-      def ==(other)
-        self.class == other.class && state == other.state
-      end
-
-      protected
-
-      def state
-        [@data]
-      end
-    end
-
-    temporary_table(:simple_active_records) do |t|
-      t.integer :data
-    end
-
     before :each do
-      @sar_1 = SimpleActiveRecord.new(data: 100)
+      @sar_1 = SimpleActiveRecord.new(data: 1)
       @sar_1.save
     end
 
@@ -436,6 +473,88 @@ RSpec.describe Duplicator, type: :model do
         duplicator.duplicate(@sar_1).save
 
         expect(SimpleActiveRecord.count).to be(2)
+      end
+    end
+  end
+
+  # ComplexActiveRecord objects have associations to themselves
+  context 'when ComplexActiveRecord objects are duplicated' do
+    #self.use_transactional_fixtures = false
+    with_temporary_table(:complex_active_records) do
+      with_temporary_table(:children_parents) do
+        it 'duplicates a ComplexActiveRecord object' do
+          # create object and some children
+          c1 = ComplexActiveRecord.new(data: 11)
+          c1.save
+          c1.children.create({data: 12})
+          c1.children.create({data: 13})
+
+          # duplicate object
+          duplicator = Duplicator.new
+          dup_c1 = duplicator.duplicate(c1)
+          dup_c1.save
+
+          # tests
+          expect(ComplexActiveRecord.count).to be(6)
+          expect(c1).to eq(dup_c1)
+          expect(c1).to_not be(dup_c1)
+          # both children should be duplicated, same values, different objects
+          (0..1).each do |i|
+            expect(c1.children[i]).to eq(dup_c1.children[i])
+            expect(c1.children[i]).to_not be(dup_c1.children[i])
+          end
+        end
+
+        it 'duplicates object referenced in 2 places once' do
+          #
+          # c1--|
+          #     |---> c5
+          # c2--|
+          #
+          c1 = ComplexActiveRecord.new(data: 11)
+          c2 = ComplexActiveRecord.new(data: 12)
+          c1.save
+          c2.save
+          c1.children.create({data: 15})
+          c2.children = c1.children
+
+          duplicator = Duplicator.new
+          dup_c1 = duplicator.duplicate(c1)
+          dup_c1.save
+          dup_c2 = duplicator.duplicate(c2)
+          dup_c2.save
+
+          expect(ComplexActiveRecord.count).to be(6)
+          expect(dup_c1.children[0]).to be(dup_c2.children[0])
+          expect(dup_c1.children[0].data).to be(15)
+        end
+
+        # stuck here because c3 never gets duplicated
+        it 'duplicates multi-layer graphs' do
+          #
+          #  c1 ---> c2 ---- > c3
+          #     ----> c4 ----> c5
+          #     ----> c6
+          #
+          c1 = ComplexActiveRecord.new(data: 11)
+          c1.save
+          c2 = c1.children.create({data: 12})
+          c3 = c2.children.create({data: 13})
+          c4 = c1.children.create({data: 14})
+          c5 = c4.children.create({data: 15})
+          c6 = c1.children.create({data: 16})
+#          c6.children = c4.children
+
+          duplicator = Duplicator.new
+          dup_c1 = duplicator.duplicate(c1)
+          dup_c1.save
+          p dup_c1.children[0].children[0]
+
+#          byebug
+          expect(ComplexActiveRecord.count).to be(12)
+        end
+
+
       end
     end
   end
