@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Duplicator do
+RSpec.describe Duplicator, type: :model do
   class SimpleObject
     def initialize(id)
       @id = id
@@ -382,6 +382,61 @@ RSpec.describe Duplicator do
 
       duplicated_objects = duplicator.instance_variable_get(:@duplicated_objects)
       expect(duplicated_objects[@s1]).to be_nil
+    end
+  end
+
+  context 'when SimpleActiveRecord objects are duplicated' do
+    class SimpleActiveRecord < ActiveRecord::Base
+      def initialize_duplicate(_duplicator)
+      end
+
+      def ==(other)
+        self.class == other.class && state == other.state
+      end
+
+      protected
+
+      def state
+        [@data]
+      end
+    end
+
+    temporary_table(:simple_active_records) do |t|
+      t.integer :data
+    end
+
+    before :each do
+      @sar_1 = SimpleActiveRecord.new(data: 100)
+      @sar_1.save
+    end
+
+    with_temporary_table(:simple_active_records) do
+      it 'duplicates a record' do
+        duplicator = Duplicator.new
+        duplicator.duplicate(@sar_1).save
+
+        all_records = SimpleActiveRecord.all
+
+        expect(SimpleActiveRecord.count).to be(2)
+        expect(all_records[0]).to eq(all_records[1])
+        expect(all_records[0].id).to_not eq(all_records[1].id)
+      end
+
+      it 'is not duplicated if excluded' do
+        duplicator = Duplicator.new([@sar_1])
+        dup_sar_1 = duplicator.duplicate(@sar_1)
+
+        expect(dup_sar_1).to be_nil
+        expect(SimpleActiveRecord.count).to be(1)
+      end
+
+      it 'is duplicated once' do
+        duplicator = Duplicator.new
+        duplicator.duplicate(@sar_1).save
+        duplicator.duplicate(@sar_1).save
+
+        expect(SimpleActiveRecord.count).to be(2)
+      end
     end
   end
 end
