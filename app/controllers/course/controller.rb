@@ -32,6 +32,19 @@ class Course::Controller < ApplicationController
     type ? @sidebar.select { |item| (item[:type] || :normal) ==  type } : @sidebar
   end
 
+  # Gets the ordered sidebar items. The sidebar items are ordered by the settings of current course.
+  #
+  # @param [Symbol] type The type of sidebar item, all sidebar items will be returned if the type
+  # is not specified.
+  # @return [Array] The array of ordered sidebar items of the given type.
+  def ordered_sidebar_items(type: nil)
+    sidebar_items = all_sidebar_items(type: type)
+    sidebar_settings = Course::Settings::Sidebar.new(current_course.settings(:sidebar),
+                                                     sidebar_items)
+    weights_hash = sidebar_settings.sidebar_items.map { |item| [item.id, item.weight] }.to_h
+    sidebar_items.sort_by { |item| weights_hash[item[:key]] }
+  end
+
   # Gets the settings items.
   #
   # Settings elements have the given format:
