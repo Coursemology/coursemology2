@@ -39,8 +39,7 @@ class Course::Controller < ApplicationController
   # @return [Array] The array of ordered sidebar items of the given type.
   def ordered_sidebar_items(type: nil)
     sidebar_items = all_sidebar_items(type: type)
-    sidebar_settings = Course::Settings::Sidebar.new(current_course.settings(:sidebar),
-                                                     sidebar_items)
+    sidebar_settings = Course::Settings::Sidebar.new(current_course.settings, sidebar_items)
     weights_hash = sidebar_settings.sidebar_items.map { |item| [item.id, item.weight] }.to_h
     sidebar_items.sort_by { |item| weights_hash[item[:key]] }
   end

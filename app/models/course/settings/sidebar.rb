@@ -4,13 +4,13 @@ class Course::Settings::Sidebar
 
   attr_reader :sidebar_items
 
-  # @param [#settings] settings The settings object provided by the settings_on_rails gem.
+  # @param [#settings] course_settings The settings object provided by the settings_on_rails gem.
   # @param [Array<Hash>] sidebar_items The sidebar items.
-  def initialize(settings, sidebar_items)
-    @settings = settings
+  def initialize(course_settings, sidebar_items)
+    @settings = course_settings.settings(:sidebar)
     @sidebar_items = begin
       sidebar_items = sidebar_items.map do |item|
-        Course::Settings::SidebarItem.new(settings, item)
+        Course::Settings::SidebarItem.new(@settings, item)
       end
       sidebar_items.sort_by(&:weight)
     end
