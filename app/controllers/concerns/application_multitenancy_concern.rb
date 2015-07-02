@@ -4,6 +4,8 @@ module ApplicationMultitenancyConcern
   included do
     set_current_tenant_through_filter
     before_action :deduce_and_set_current_tenant
+
+    helper_method :current_tenant
   end
 
   private

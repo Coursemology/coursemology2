@@ -50,5 +50,6 @@ Rails.application.configure do
   config.after_initialize do
     Bullet.enable = true
     Bullet.raise = true
+    Bullet.counter_cache_enable = false
   end
 end
