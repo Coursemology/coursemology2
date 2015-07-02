@@ -78,4 +78,6 @@ RSpec.configure do |config|
   config.extend ActsAsTenant::TestGroupHelpers::ControllerHelpers, type: :controller
   config.extend ActsAsTenant::TestGroupHelpers::FeatureHelpers, type: :feature
   config.include ActsAsTenant::TestExampleHelpers::FeatureHelpers, type: :feature
+
+  config.backtrace_exclusion_patterns << %r{/spec/support/acts_as_tenant\.rb}
 end
