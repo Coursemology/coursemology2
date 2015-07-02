@@ -26,7 +26,7 @@ class Course::Controller < ApplicationController
         component.get_sidebar_items(self)
       end
 
-      array_of_component_arrays.tap(&:flatten!).sort_by { |item| item[:weight] }
+      array_of_component_arrays.tap(&:flatten!)
     end
 
     type ? @sidebar.select { |item| (item[:type] || :normal) ==  type } : @sidebar
