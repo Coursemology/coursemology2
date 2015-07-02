@@ -94,10 +94,7 @@ ignore_unused:
 - 'simple_form.{placeholders,hints,labels}.*'
 - 'simple_form.{error_notification,required}.:'
 # Keys used dynamically by the page_header helper
-- 'admin.*.*.header'
-- 'course.*.*.header'
-- 'announcements.index.header'
-- 'system.admin.*.*.header'
+- '*.*.header'
 
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
