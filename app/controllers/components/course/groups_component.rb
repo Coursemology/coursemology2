@@ -4,6 +4,7 @@ class Course::GroupsComponent
   sidebar do
     [
       {
+        key: :groups,
         title: I18n.t('course.groups.sidebar_title'),
         type: :admin,
         weight: 3,

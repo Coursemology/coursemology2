@@ -1,0 +1,10 @@
+en:
+  course:
+    admin:
+      sidebar_settings:
+        edit:
+          header: 'Sidebar Settings'
+          name: 'Name'
+          weight: 'Weight'
+        update:
+          success: 'Settings was updated successfully'

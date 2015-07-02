@@ -4,6 +4,7 @@ class Course::CoursesComponent
   sidebar do
     [
       {
+        key: :settings,
         title: t('layouts.course_admin.title'),
         type: :admin,
         weight: 4,
@@ -25,6 +26,12 @@ class Course::CoursesComponent
         controller: 'course/admin/component_settings',
         action: 'edit',
         weight: 2
+      },
+      {
+        title: t('layouts.course_admin.sidebar_settings.title'),
+        controller: 'course/admin/sidebar_settings',
+        action: 'edit',
+        weight: 3
       }
     ]
   end

@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Course Modules', type: :controller do
   NORMAL_SIDEBAR_ITEM = {
+    key: :normal_item,
     title: 'DummyCourseModule',
     type: :normal,
     weight: 1,
@@ -9,6 +10,7 @@ RSpec.describe 'Course Modules', type: :controller do
   }
 
   ADMIN_SIDEBAR_ITEM = {
+    key: :admin_item,
     title: 'DummyCourseModule',
     type: :admin,
     weight: 10,

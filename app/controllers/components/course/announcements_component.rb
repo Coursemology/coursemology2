@@ -4,6 +4,7 @@ class Course::AnnouncementsComponent
   sidebar do
     [
       {
+        key: :announcements,
         title: I18n.t('course.announcements.sidebar_title'),
         weight: 1,
         path: course_announcements_path(current_course),
@@ -18,7 +19,7 @@ class Course::AnnouncementsComponent
         title: t('layouts.course_admin.announcement_settings.title'),
         controller: 'course/admin/announcement_settings',
         action: 'edit',
-        weight: 3
+        weight: 4
       }
     ]
   end

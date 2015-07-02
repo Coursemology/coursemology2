@@ -8,6 +8,7 @@ class Course::Controller < ApplicationController
   # Sidebar elements have the given format:
   #
   #   {
+  #      key: :sidebar_item_key # The unique key of the item, which will be used in sidebar settings
   #      title: 'Sidebar Item Title'
   #      type: :admin # Will be considered as `:normal` if not set
   #      weight: 100
