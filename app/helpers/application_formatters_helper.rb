@@ -1,5 +1,15 @@
 # Helpers for formatting objects/values on the application.
 module ApplicationFormattersHelper
+  # Sanitises and formats the given user-input string. The string is assumed to contain HTML markup.
+  #
+  # TODO: not implemented
+  #
+  # @param [String] text The text to display
+  # @return [String]
+  def format_text(text)
+    text
+  end
+
   # Formats the given User as a user-visible string.
   #
   # @param [User] user The User to display.

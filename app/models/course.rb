@@ -27,6 +27,7 @@ class Course < ActiveRecord::Base
   accepts_nested_attributes_for :invitations
 
   delegate :staff, to: :course_users
+  delegate :instructors, to: :course_users
   delegate :has_user?, to: :course_users
 
   def self.use_relative_model_naming?

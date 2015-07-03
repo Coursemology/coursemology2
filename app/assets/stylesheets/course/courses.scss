@@ -1,0 +1,11 @@
+.course-courses {
+  &.show {
+    .course > h1 > .register {
+      @extend .pull-right;
+      @extend .col-lg-offset-9;
+      @extend .col-lg-3;
+      @extend .col-md-offset-8;
+      @extend .col-md-4;
+    }
+  }
+}

@@ -38,6 +38,7 @@ class CourseUser < ActiveRecord::Base
   # Gets the staff associated with the course.
   # TODO: Remove the map when Rails 5 is released.
   scope :staff, -> { where(role: STAFF_ROLES.map { |x| roles[x] }) }
+  scope :instructors, -> { staff }
   scope :students, -> { where(role: roles[:student]) }
 
   delegate :experience_points, to: :experience_points_records

@@ -1,5 +1,12 @@
 = div_for(current_course) do
-  h1 = current_course.title
-  = current_course.description
-  - if !current_course.has_user?(current_user) && can?(:register, current_course)
-    = render partial: 'course/user_registrations/registration'
+  h1
+    = current_course.title
+    - if !current_course.has_user?(current_user) && can?(:register, current_course)
+      div.register
+        = render partial: 'course/user_registrations/registration'
+  h2 = t('.description')
+  = format_text(current_course.description)
+
+  h2 = t('.instructors')
+  div
+    = render partial: 'layouts/user', collection: current_course.instructors.map(&:user)
