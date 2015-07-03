@@ -19,6 +19,9 @@ class Application < Rails::Application
   config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.yml').to_s]
   # config.i18n.default_locale = :de
 
+  # Action Controller default settings
+  config.action_controller.include_all_helpers = false
+
   # Action Mailer default settings
   config.action_mailer.default_options = { from: ENV['EMAIL_FROM_ADDRESS'] }
 
