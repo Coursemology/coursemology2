@@ -1,9 +1,12 @@
 # :nodoc:
 module ApplicationHelper
+  include FontAwesome::Rails::IconHelper
+
   include ApplicationThemingHelper
   include ApplicationAnnouncementsHelper
   include ApplicationWidgetsHelper
   include ApplicationCocoonHelper
+  include RouteOverridesHelper
 
   # Checks if the current page has a sidebar.
   #
