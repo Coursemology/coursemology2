@@ -1,15 +1,13 @@
 # Allows associating classes with other classes. This can form a nesting hierarchy. This is also
 # used in Coursemology to associate components that a course can have enabled.
 #
-# Components in this file refer to the concept.
-#
 # In Development mode, classes are not eager loaded. Component hosts then do not know which
-# components
-# have been implemented.
+# components have been implemented. Call #{Componentize.eager_load_components} to load all
+# components within a given path.
 #
 # @example Declare that a class can host other components.
 #   class Course
-#     include Modular
+#     include Componentize
 #   end
 #
 # @example Declare that the Announcements class is a component belonging to a Course.
