@@ -3,7 +3,7 @@ en:
     admin:
       instance_announcements:
         index:
-          header: 'Announcements'
+          header: :'course.announcements.index.header'
         new:
           header: 'Create Announcement'
         create:

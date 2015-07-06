@@ -15,13 +15,13 @@ en:
       close: 'Close'
       more_announcements: 'More Announcements...'
     course:
-      administration: 'Administration'
+      administration: :'system.admin.admin.index.header'
     course_admin:
       title: 'Settings'
       announcement_settings:
-        title: 'Announcements'
+        title: :'course.announcements.index.header'
       component_settings:
-        title: 'Components'
+        title: :'course.admin.component_settings.index.header'
       sidebar_settings:
         title: 'Sidebar'
     course_users:

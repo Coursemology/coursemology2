@@ -1,7 +1,7 @@
 en:
   course:
     groups:
-      sidebar_title: 'Groups'
+      sidebar_title: :'course.groups.index.header'
       index:
         header: 'Groups'
         name: 'Name'

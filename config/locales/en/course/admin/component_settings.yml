@@ -2,6 +2,8 @@ en:
   course:
     admin:
       component_settings:
+        index:
+          header: 'Components'
         edit:
           header: 'Enable/Disable Components'
           name: 'Name'

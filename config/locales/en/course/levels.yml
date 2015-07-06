@@ -1,7 +1,7 @@
 en:
   course:
     levels:
-      sidebar_title: 'Levels'
+      sidebar_title: :'course.levels.index.header'
       index:
         header: 'Levels'
         level: 'Level'
