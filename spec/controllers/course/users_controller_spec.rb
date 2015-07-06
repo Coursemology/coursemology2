@@ -81,6 +81,9 @@ RSpec.describe Course::UsersController, type: :controller do
           end
 
           it { is_expected.to redirect_to(course_users_staff_path(course)) }
+          it 'sets an error flash message' do
+            expect(flash[:danger]).to eq('')
+          end
         end
 
         context 'when the user transitions from the requested state to the approved state' do
@@ -128,6 +131,9 @@ RSpec.describe Course::UsersController, type: :controller do
           end
 
           it { is_expected.to redirect_to(course_users_students_path(course)) }
+          it 'sets an error flash message' do
+            expect(flash[:danger]).to eq('')
+          end
         end
       end
 

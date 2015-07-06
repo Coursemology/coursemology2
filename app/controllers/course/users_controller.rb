@@ -1,5 +1,6 @@
 class Course::UsersController < Course::ComponentController
-  load_and_authorize_resource :course_user, through: :course, parent: false
+  before_action :load_resource
+  authorize_resource :course_user, through: :course, parent: false
   before_action :authorize_show!, only: [:students, :staff, :requests, :invitations]
   before_action :authorize_edit!, except: [:students, :staff, :requests, :invitations]
   add_breadcrumb :index, :course_users_students_path
@@ -43,6 +44,18 @@ class Course::UsersController < Course::ComponentController
   def course_user_params # :nodoc:
     @course_user_params ||= params.require(:course_user).
                             permit(:user_id, :name, :workflow_state, :role, :phantom)
+  end
+
+  def load_resource
+    course_users = current_course.course_users
+    case params[:action]
+    when 'invitations'
+      @course_users ||= course_users
+    when 'students', 'staff', 'requests'
+      @course_users ||= course_users.includes(:user)
+    else
+      @course_user ||= course_users.includes(:user).find(params[:id])
+    end
   end
 
   # Prevents access to this set of pages unless the user is a staff of the course.
