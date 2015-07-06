@@ -62,6 +62,10 @@ wrap below the title.
 Use `content_tag_for` or `div_for` helper whenever you want to present an active_record object (such
 as in lists/tables). This makes your code more readable and enforces the consistency in views.
 
+When specifying the class list of tags in templates or helpers, specify them as an array over a
+space-delimited list. This allows other parts of the view rendering pipeline to modify the set of
+classes which should be applied to an element. Use the Slim shorthand for classes, where possible.
+
 When displaying translations for long stretches of text (e.g. a paragraph), use Rails'
 `simple_format` view helper to present the text. This automatically paragraphs the translations.
 
