@@ -1,0 +1,6 @@
+// Dimming style mixin. Indicates the item is currently disabled.
+@mixin dim($bg-color) {
+  background-color: $bg-color;
+  opacity: 0.9;
+  padding: 0.8em;
+}
