@@ -1,0 +1,9 @@
+.course-admin-sidebar-settings {
+  &.edit {
+    .sidebar-items {
+      .reorder {
+        display: none;
+      }
+    }
+  }
+}
