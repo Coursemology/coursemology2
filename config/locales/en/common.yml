@@ -7,10 +7,10 @@ en:
     email: 'Email'
     role: 'Role'
     plain_text_link: '%{text} (%{url})'
-    time_range: "%{from} to %{to}"
+    time_range: '%{from} to %{to}'
   helpers:
     buttons:
       new: 'New %{model}'
-      edit: "Edit %{model}"
-      delete: "Delete %{model}"
+      edit: 'Edit %{model}'
+      delete: 'Delete %{model}'
       delete_confirm_message: 'Are you sure?'

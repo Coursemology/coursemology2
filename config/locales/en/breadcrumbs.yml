@@ -6,13 +6,13 @@ en:
         new: :'course.levels.new.header'
       admin:
         controller:
-          admin: 'Administration'
+          admin: :'layouts.course.administration'
         announcement_settings:
-          edit: 'Announcements'
+          edit: :'course.announcements.index.header'
         component_settings:
-          edit: 'Components'
+          edit: :'course.admin.component_settings.index.header'
         sidebar_settings:
-          index: 'Sidebar'
+          index: :'layouts.course_admin.sidebar_settings.title'
       users:
         index: 'Users'
         students: :'course.users.students.header'
@@ -41,9 +41,9 @@ en:
     system:
       admin:
         controller:
-          index: 'Administration'
+          index: :'layouts.course.administration'
         admin:
-          components: 'Components'
+          components: :'course.admin.component_settings.index.header'
         instance_announcements:
           index: :'system.admin.instance_announcements.index.header'
           new: :'system.admin.instance_announcements.new.header'

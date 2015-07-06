@@ -4,15 +4,15 @@ en:
       new:
         header: 'New Event'
       create:
-        success: "New event '%{title}' created."
+        success: 'New event %{title} created.'
       edit:
         header: 'Edit Event'
       update:
-        success: "Event '%{title}' updated."
+        success: 'Event %{title} updated.'
       destroy:
-        success: "New event '%{title}' removed."
+        success: 'New event %{title} removed.'
         failure: 'Failed to remove event.'
       event:
-        location: "Location: %{location}"
+        location: 'Location: %{location}'
         no_description: '(No Description)'
         unpublished: 'Unpublished'

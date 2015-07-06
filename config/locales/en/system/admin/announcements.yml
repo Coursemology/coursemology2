@@ -7,11 +7,11 @@ en:
         new:
           header: 'New System Announcement'
         create:
-          success: "System Announcement %{title} was created."
+          success: 'System Announcement %{title} was created.'
         edit:
           header: 'Edit System Announcement'
         update:
-          success: "System Announcement %{title} was updated."
+          success: 'System Announcement %{title} was updated.'
         destroy:
-          success: "System Announcement %{title} was deleted."
+          success: 'System Announcement %{title} was deleted.'
           failure: 'Failed to delete announcement: %{error}'

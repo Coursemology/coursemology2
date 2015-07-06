@@ -3,4 +3,4 @@ en:
     admin:
       announcement_settings:
         update:
-          success: "Announcement settings was updated."
+          success: 'Announcement settings updated.'

@@ -1,7 +1,7 @@
 en:
   course:
     achievements:
-      sidebar_title: 'Achievements'
+      sidebar_title: :'course.achievements.index.header'
       index:
         header: 'Achievements'
         description: 'Description'
@@ -10,11 +10,11 @@ en:
       new:
         header: 'New Achievement'
       create:
-        success: "Achievement %{title} was created."
+        success: 'Achievement %{title} was created.'
       edit:
         header: 'Edit Achievement'
       update:
-        success: "Achievement %{title} was updated."
+        success: 'Achievement %{title} was updated.'
       destroy:
-        success: "Achievement %{title} was deleted."
+        success: 'Achievement %{title} was deleted.'
         failure: 'Failed to delete achievement: %{error}'

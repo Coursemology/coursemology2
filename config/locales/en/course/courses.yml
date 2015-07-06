@@ -4,7 +4,7 @@ en:
       index:
         header: 'Courses'
       create:
-        success: "Course %{title} was created."
+        success: 'Course %{title} was created.'
       new:
         header: 'New Course'
       form:

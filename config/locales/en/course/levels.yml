@@ -1,7 +1,7 @@
 en:
   course:
     levels:
-      sidebar_title: 'Levels'
+      sidebar_title: :'course.levels.index.header'
       index:
         header: 'Levels'
         level: 'Level'
@@ -9,9 +9,9 @@ en:
       new:
         header: 'New Level'
       create:
-        success: "Level created with threshold at %{threshold} experience points."
+        success: 'Level created with threshold at %{threshold} experience points.'
       destroy:
-        success: "Level with threshold at %{threshold} experience points removed."
+        success: 'Level with threshold at %{threshold} experience points removed.'
         failure: 'Failed to remove level: %{error}'
       form:
         description: "A student will achieve this level when the student's experience points equals or exceeds this value."
