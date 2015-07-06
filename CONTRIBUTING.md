@@ -79,9 +79,11 @@ the resource, e.g. showing its title or name.
 ## Themes
 Themes are provided by [themes_on_rails](https://github.com/yoolk/themes_on_rails). Coursemology
 uses standard Bootstrap 3 styles, so it is possible to theme Coursemology using any Bootstrap 3
-template. As a result, `assets/styles/application.css` is empty. This is to allow you to specify
-your own styles in `themes/your-theme/styles/your-theme/all.css` by redefining Bootstrap-sass
-variables and then including Bootstrap.
+template.
+
+Bootstrap is included in `assets/styles/application.scss`. Coursemology's markup is semantically 
+written, modulo extras that Bootstrap requires to work. Themes should therefore `@import
+'application';` in their theme stylesheets, and override the base styles there.
 
 It also follows that because the application stylesheet has been deferred to themes, the base
 Coursemology application _cannot_ define an application template. Coursemology instead implements a

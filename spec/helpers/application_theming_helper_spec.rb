@@ -6,12 +6,6 @@ RSpec.describe ApplicationThemingHelper, type: :helper do
 
     it { should be_html_safe }
 
-    it 'has application.css' do
-      expect(subject).to have_tag('link', with: {
-        href: '/assets/application.css'
-      })
-    end
-
     it 'has application.js' do
       expect(subject).to have_tag('script', with: {
         src: '/assets/application.js'
