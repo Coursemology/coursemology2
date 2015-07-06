@@ -12,6 +12,7 @@
 //
 //= require bootstrap-sprockets
 //= require jquery-ujs
+//= require jquery-ui/sortable
 //= require turbolinks
 //= require nprogress
 //= require nprogress-ajax

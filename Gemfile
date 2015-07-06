@@ -44,6 +44,7 @@ gem 'uglifier', '>= 1.3.0'
 
 # Use jQuery as the JavaScript library
 gem 'jquery-cdn'
+gem 'jquery-ui-rails'
 # Our Coursemology will be themed using Bootstrap
 gem 'bootstrap-sass'
 gem 'bootstrap-sass-extras', github: 'doabit/bootstrap-sass-extras'
