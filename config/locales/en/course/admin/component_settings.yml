@@ -7,4 +7,4 @@ en:
           name: 'Name'
           enabled: 'Enabled?'
         update:
-          success: 'Settings was updated successfully'
+          success: 'Settings updated successfully.'
