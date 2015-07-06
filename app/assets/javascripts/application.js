@@ -13,6 +13,9 @@
 //= require bootstrap-sprockets
 //= require jquery-ujs
 //= require turbolinks
+//= require nprogress
+//= require nprogress-ajax
+//= require nprogress-turbolinks
 //= require moment
 //= require bootstrap-datetimepicker
 //= require bootstrap-select
