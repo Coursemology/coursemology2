@@ -10,10 +10,6 @@
       .content {
         margin-top: 10px;
       }
-
-      &.future {
-        @include future($gray-lighter);
-      }
     }
   }
 }

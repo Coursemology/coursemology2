@@ -6,6 +6,8 @@ en:
     name: 'Name'
     email: 'Email'
     role: 'Role'
+    not_yet_valid: 'Not yet valid'
+    expired: 'Expired'
     plain_text_link: '%{text} (%{url})'
     time_range: "%{from} to %{to}"
   helpers:
