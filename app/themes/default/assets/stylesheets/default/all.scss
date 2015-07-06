@@ -3,5 +3,5 @@
 // they'll appear at the top of the compiled file, but it's generally better to create a new file
 // per style scope.
 //
-//= require 'default/layout'
-//= require_tree .
+@import "default/layout";
+@import "**/*";
