@@ -1,39 +1,28 @@
 class Ability
   include CanCan::Ability
+  attr_reader :user
+
+  # Load all components which declare abilities.
+  AbilityHost.components.each { |component| prepend(component) }
 
   # Initialize the ability of user.
   #
-  # @param [User] user The current user.
+  # @param [User|nil] user The current user. This can be nil if the no user is logged in.
   def initialize(user)
-    # TODO: Replace with just the symbols when Rails 5 is released.
-    can [:read, :register], Course, status: [Course.statuses[:published], Course.statuses[:opened],
-                                             'published', 'opened']
+    @user = user
+    can :manage, :all if user && user.administrator?
 
-    return unless user
+    define_permissions
+  end
 
-    can [:create, :register], CourseUser, user_id: user.id, workflow_state: 'pending'
-    can :manage, CourseUser, course: { creator_id: user.id }
-    can :manage, CourseUser, course: { course_users: { user_id: user.id,
-                                                       role: [CourseUser.roles[:manager],
-                                                              CourseUser.roles[:owner],
-                                                              'manager', 'owner'] } }
-
-    can [:read], Course, course_users: { user_id: user.id, workflow_state: ['approved'] }
-
-    can :manage, Course, course_users: { user_id: user.id,
-                                         role: [CourseUser.roles[:manager],
-                                                CourseUser.roles[:owner],
-                                                'manager', 'owner'] }
-    can :show_users, Course, course_users: { user_id: user.id,
-                                             role: [CourseUser.roles[:manager],
-                                                    CourseUser.roles[:owner],
-                                                    CourseUser.roles[:teaching_assistant],
-                                                    'manager', 'owner', 'teaching_assistant'] }
-    can :manage_users, Course, course_users: { user_id: user.id,
-                                               role: [CourseUser.roles[:manager],
-                                                      CourseUser.roles[:owner],
-                                                      CourseUser.roles[:teaching_assistant],
-                                                      'manager', 'owner', 'teaching_assistant'] }
-    can :manage, :all if user.administrator?
+  # Defines abilities for the given user.
+  #
+  # This is the method to implement when defining permissions for a component. Always call
+  # +super+ when implementing this method.
+  #
+  # Global administrators already have full access.
+  #
+  # @return [void]
+  def define_permissions
   end
 end
