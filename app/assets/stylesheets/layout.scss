@@ -1,9 +1,18 @@
+$nprogress-color: #26b0ff !default;
+$nprogress-spinner-icon-width: 18px !default;
+
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "bootstrap-datetimepicker";
 @import "bootstrap-select";
+@import "nprogress";
+@import "nprogress-bootstrap";
 @import "font-awesome";
 
 body {
   padding-top: $navbar-height + $navbar-margin-bottom;
+
+  > nav #site-navigation-navbar {
+    margin-right: $nprogress-spinner-icon-width;
+  }
 }
