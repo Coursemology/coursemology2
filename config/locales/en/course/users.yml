@@ -17,11 +17,11 @@ en:
         invite: :'course.user_invitations.new.header'
         invitations: :'course.users.invitations.header'
       new:
-        already_registered: "You are already registered as a %{role}."
+        already_registered: 'You are already registered as a %{role}.'
       update:
-        success: "Registration updated. You are now registered as %{role}."
+        success: 'Registration updated. You are now registered as %{role}.'
       destroy:
-        success: "Deleted %{role} registration from %{email}."
+        success: 'Deleted %{role} registration from %{email}.'
       students:
         header: 'Students'
       staff:
@@ -32,7 +32,7 @@ en:
         reject: 'Reject'
       invitations:
         header: 'Invitations'
-        progress: "%{accepted} accepted / %{total} invited"
+        progress: '%{accepted} accepted / %{total} invited'
         manual_acceptance: >
           The following table lists all invitations which have been sent out to date.
 

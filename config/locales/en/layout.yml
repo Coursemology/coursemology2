@@ -31,6 +31,6 @@ en:
       new_file: 'Upload New File'
       remove: 'Remove'
     mailer:
-      greeting: "Hello, %{user}:"
+      greeting: 'Hello, %{user}:'
       complimentary_close: 'Best Regards,'
       sign_off: 'The Coursemology Team'
