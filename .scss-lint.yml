@@ -1,7 +1,18 @@
 scss_files: 'app/**/*.scss'
 
 linters:
+  # Unhounding.
+  StringQuotes:
+    style: single_quotes
+
+  # Project-specific options
   IdSelector:
+    enabled: false
+
+  LeadingZero:
+    style: include_zero
+
+  PlaceholderInExtend:
     enabled: false
 
   NestingDepth:
