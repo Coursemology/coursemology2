@@ -1,8 +1,0 @@
-//future style
-//indicates the item will be available in future
-
-@mixin future($bg-color) {
-  background-color: $bg-color;
-  opacity: 0.9;
-  padding: 10px;
-}

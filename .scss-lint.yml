@@ -1,6 +1,20 @@
-scss_files: 'app/assets/stylesheets/**/*.scss'
+scss_files: 'app/**/*.scss'
 
 linters:
+  # Unhounding.
+  StringQuotes:
+    style: single_quotes
+
+  # Project-specific options
+  IdSelector:
+    enabled: false
+
+  LeadingZero:
+    style: include_zero
+
+  PlaceholderInExtend:
+    enabled: false
+
   NestingDepth:
     max_depth: 5
 
