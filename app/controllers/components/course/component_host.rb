@@ -4,70 +4,24 @@ class Course::ComponentHost
   module Sidebar
     extend ActiveSupport::Concern
 
-    def get_sidebar_items
-      self.class.get_sidebar_items(self)
-    end
-
-    module ClassMethods
-      # Class method to declare the proc handling the sidebar menu items.
-      #
-      # @param [Proc] proc The proc handling the sidebar for the given component. The proc will be
-      #   +instance_eval+ed in the context of the controller handling the current
-      #   request. This proc must return an array of hashes, each describing one
-      #   menu item.
-      def sidebar(&proc)
-        self.sidebar_proc = proc
-      end
-
-      # Class method to get the sidebar items from this component, in the context of the given
-      # controller instance.
-      #
-      # @param [Course::Controller] controller The controller handling the current request.
-      # @return [Array] An array of hashes containing the sidebar items exposed by this component.
-      def get_sidebar_items(controller)
-        return [] unless sidebar_proc
-
-        controller.instance_exec(&sidebar_proc)
-      end
-
-      private
-
-      attr_accessor :sidebar_proc
+    # Get the sidebar items from this component.
+    #
+    # @return [Array] An array of hashes containing the sidebar items exposed by this component.
+    #   See #{Course::ComponentHost#sidebar} for the format.
+    def sidebar_items
+      []
     end
   end
 
   module Settings
     extend ActiveSupport::Concern
 
-    def get_settings_items
-      self.class.get_settings_items(self)
-    end
-
-    module ClassMethods
-      # Class method to declare the proc handling the course settings items.
-      #
-      # @param [Proc] proc The proc handling the settings for the given component. The proc will be
-      #   +instance_eval+ed in the context of the controller handling the current
-      #   request. This proc must return an array of hashes, each describing one
-      #   component settings page.
-      def settings(&proc)
-        self.settings_proc = proc
-      end
-
-      # Class method to get the settings items from this component, in the context of the given
-      # controller instance.
-      #
-      # @param [Course::Controller] controller The controller handling the current request.
-      # @return [Array] An array of hashes containing the settings items exposed by this component.
-      def get_settings_items(controller)
-        return [] unless settings_proc
-
-        controller.instance_exec(&settings_proc)
-      end
-
-      private
-
-      attr_accessor :settings_proc
+    # Gets the settings items from this component.
+    #
+    # @return [Array] An array of hashes containing the settings items exposed by this component.
+    #   See #{Course::ComponentHost#settings} for the format.
+    def settings_items
+      []
     end
   end
 
@@ -104,10 +58,10 @@ class Course::ComponentHost
   # Eager load all the components declared.
   eager_load_components(File.join(__dir__, '../'))
 
-  # Initialize the component host instance
+  # Initializes the component host instance.
   #
-  # @param [#settings] instance_settings Instance settings object
-  # @param [#settings] course_settings Course settings object
+  # @param [#settings] instance_settings Instance settings object.
+  # @param [#settings] course_settings Course settings object.
   # @param context The context to execute all component instance methods on.
   def initialize(instance_settings, course_settings, context)
     @instance_settings = instance_settings
@@ -165,7 +119,7 @@ class Course::ComponentHost
   #
   # The elements are rendered on all Course controller subclasses as part of a nested template.
   def sidebar_items
-    @sidebar_items ||= components.map(&:get_sidebar_items).tap(&:flatten!)
+    @sidebar_items ||= components.map(&:sidebar_items).tap(&:flatten!)
   end
 
   # Gets the settings items.
@@ -179,6 +133,6 @@ class Course::ComponentHost
   #      weight: 1 # The weight which determines the order of the item
   #   }
   def settings
-    @settings ||= components.map(&:get_settings_items).tap(&:flatten!)
+    @settings ||= components.map(&:settings_items).tap(&:flatten!)
   end
 end

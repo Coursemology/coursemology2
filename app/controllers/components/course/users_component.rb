@@ -1,7 +1,7 @@
 class Course::UsersComponent < SimpleDelegator
   include Course::ComponentHost::Component
 
-  sidebar do
+  def sidebar_items
     [
       {
         key: :users,

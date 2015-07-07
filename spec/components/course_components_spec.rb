@@ -33,11 +33,11 @@ RSpec.describe 'Course Modules', type: :controller do
     def initialize(*)
     end
 
-    sidebar do
+    def sidebar_items
       [NORMAL_SIDEBAR_ITEM, ADMIN_SIDEBAR_ITEM]
     end
 
-    settings do
+    def settings_items
       [EXPECTED_SETTINGS_ITEM]
     end
   end

@@ -1,7 +1,7 @@
 class Course::CoursesComponent < SimpleDelegator
   include Course::ComponentHost::Component
 
-  sidebar do
+  def sidebar_items
     [
       {
         key: :settings,
@@ -13,7 +13,7 @@ class Course::CoursesComponent < SimpleDelegator
     ]
   end
 
-  settings do
+  def settings_items
     [
       {
         title: t('layouts.course_admin.title'),
