@@ -178,6 +178,8 @@ GEM
       multi_json (~> 1.2)
     jquery-cdn (2.1.4)
       sprockets (>= 2)
+    jquery-ui-rails (5.0.5)
+      railties (>= 3.2.16)
     json (1.8.3)
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
@@ -246,7 +248,7 @@ GEM
       rails (>= 3.2.0)
     rails-html-sanitizer (1.0.2)
       loofah (~> 2.0)
-    rails_utils (3.3.2)
+    rails_utils (3.3.3)
       rails (>= 3.2)
     railties (4.2.1)
       actionpack (= 4.2.1)
@@ -449,6 +451,7 @@ DEPENDENCIES
   i18n-tasks
   jbuilder (~> 2.0)
   jquery-cdn
+  jquery-ui-rails
   kaminari
   listen (~> 1.3.1)
   lol_dba
@@ -463,7 +466,7 @@ DEPENDENCIES
   rails-assets-jquery-ujs (~> 1.0.3)!
   rails-dev-boost!
   rails-flog
-  rails_utils (~> 3.3, >= 3.3.2)
+  rails_utils (~> 3.3, >= 3.3.3)
   rspec-html-matchers
   rspec-rails
   sass-rails
