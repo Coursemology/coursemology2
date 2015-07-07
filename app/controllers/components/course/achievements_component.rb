@@ -1,4 +1,4 @@
-class Course::AchievementsComponent
+class Course::AchievementsComponent < SimpleDelegator
   include Course::ComponentHost::Component
 
   sidebar do

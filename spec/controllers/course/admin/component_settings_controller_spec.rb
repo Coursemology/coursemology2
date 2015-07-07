@@ -15,7 +15,7 @@ RSpec.describe Course::Admin::ComponentSettingsController, type: :controller do
     describe '#update' do
       let(:ids_to_enable) do
         allow(controller).to receive(:current_course).and_return(course)
-        all_components = controller.current_component_host.instance_components
+        all_components = controller.current_component_host.instance_enabled_components
         all_component_ids = all_components.map { |c| c.key.to_s }
         all_component_ids.sample(1 + rand(all_component_ids.count))
       end

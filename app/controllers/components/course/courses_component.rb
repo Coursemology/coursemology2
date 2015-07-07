@@ -1,4 +1,4 @@
-class Course::CoursesComponent
+class Course::CoursesComponent < SimpleDelegator
   include Course::ComponentHost::Component
 
   sidebar do

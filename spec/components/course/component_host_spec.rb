@@ -18,6 +18,14 @@ RSpec.describe Course::ComponentHost, type: :controller do
       describe '#components' do
         subject { component_host.components }
 
+        it 'includes instances of every enabled component' do
+          expect(subject.map(&:class)).to contain_exactly(*component_host.enabled_components)
+        end
+      end
+
+      describe '#enabled_components' do
+        subject { component_host.enabled_components }
+
         context 'without preferences' do
           it 'returns the default enabled components' do
             expect(subject.count).to eq(default_enabled_components.count)

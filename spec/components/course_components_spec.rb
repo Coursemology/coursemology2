@@ -30,6 +30,9 @@ RSpec.describe 'Course Modules', type: :controller do
   class DummyCourseModule
     include Course::ComponentHost::Component
 
+    def initialize(*)
+    end
+
     sidebar do
       [NORMAL_SIDEBAR_ITEM, ADMIN_SIDEBAR_ITEM]
     end
