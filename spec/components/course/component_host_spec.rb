@@ -1,11 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe Course::ComponentHost, type: :controller do
+  controller do
+  end
+
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
     describe 'component preferences' do
       let(:course) { create(:course, instance: instance) }
-      let(:component_host) { Course::ComponentHost.new(instance.settings, course.settings) }
+      let(:component_host) do
+        Course::ComponentHost.new(instance.settings, course.settings, controller)
+      end
       let(:default_enabled_components) do
         Course::ComponentHost.components.select(&:enabled_by_default?)
       end
@@ -76,6 +81,20 @@ RSpec.describe Course::ComponentHost, type: :controller do
               expect(subject.include?(sample_component)).to be_falsey
             end
           end
+        end
+      end
+
+      describe '#sidebar_items' do
+        it 'returns an empty array when no components included' do
+          allow(component_host).to receive(:components).and_return([])
+          expect(component_host.sidebar_items).to eq([])
+        end
+      end
+
+      describe '#settings' do
+        it 'returns an empty array when no components included' do
+          allow(controller).to receive(:settings).and_return([])
+          expect(controller.settings).to eq([])
         end
       end
     end

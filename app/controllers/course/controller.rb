@@ -3,63 +3,22 @@ class Course::Controller < ApplicationController
 
   before_action :add_course_breadcrumb
 
-  # Gets the sidebar elements.
-  #
-  # Sidebar elements have the given format:
-  #
-  #   {
-  #      key: :sidebar_item_key # The unique key of the item, which will be used in sidebar settings
-  #      title: 'Sidebar Item Title'
-  #      type: :admin # Will be considered as `:normal` if not set
-  #      weight: 100
-  #      path: path_to_the_component
-  #      unread: 0 # or nil
-  #   }
-  #
-  # The elements are rendered on all Course controller subclasses as part of a nested template.
-  # @param [Symbol] type The type of sidebar item, all sidebar items will be returned if the type
-  # is not specified
-  # @return [Array] The array of sidebar items of the given type
-  def all_sidebar_items(type: nil)
-    @sidebar ||= begin
-      array_of_component_arrays = current_component_host.components.map do |component|
-        component.get_sidebar_items(self)
-      end
-
-      array_of_component_arrays.tap(&:flatten!)
-    end
-
-    type ? @sidebar.select { |item| (item[:type] || :normal) == type } : @sidebar
-  end
-
-  # Gets the ordered sidebar items. The sidebar items are ordered by the settings of current course.
+  # Gets the sidebar items. The sidebar items are ordered by the settings of current course.
   #
   # @param [Symbol] type The type of sidebar item, all sidebar items will be returned if the type
   # is not specified.
   # @return [Array] The array of ordered sidebar items of the given type.
-  def ordered_sidebar_items(type: nil)
-    sidebar_items = all_sidebar_items(type: type)
+  def sidebar_items(type: nil)
+    sidebar_items = current_component_host.sidebar_items
+    sidebar_items = sidebar_items.select { |item| item.fetch(:type, :normal) == type } if type
     sidebar_settings = Course::Settings::Sidebar.new(current_course.settings, sidebar_items)
     weights_hash = sidebar_settings.sidebar_items.map { |item| [item.id, item.weight] }.to_h
     sidebar_items.sort_by { |item| weights_hash[item[:key]] }
   end
 
-  # Gets the settings items.
-  #
-  # Settings elements have the given format:
-  #
-  #   {
-  #      title: 'Settings Item Title'
-  #      controller: controller name, String or Symbol
-  #      action: action name, String or Symbol
-  #      weight: 1 # The weight which determines the order of the item
-  #   }
   def settings
-    array_of_component_arrays = current_component_host.components.map do |component|
-      component.get_settings_items(self)
-    end
-
-    array_of_component_arrays.tap(&:flatten!).sort_by { |item| item[:weight] }
+    @current_component_host_settings ||=
+      current_component_host.settings.sort_by { |item| item[:weight] }
   end
 
   # Gets the current course.
@@ -83,7 +42,8 @@ class Course::Controller < ApplicationController
   #   course
   def current_component_host
     @current_component_host ||= Course::ComponentHost.new(current_tenant.settings(:components),
-                                                          current_course.settings(:components))
+                                                          current_course.settings(:components),
+                                                          self)
   end
 
   private

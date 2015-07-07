@@ -14,7 +14,7 @@ RSpec.describe Course::Admin::SidebarSettingsController, type: :controller do
 
     describe '#update' do
       before { allow(controller).to receive(:current_course).and_return(course) }
-      let(:sample_item) { controller.all_sidebar_items(type: :normal).sample }
+      let(:sample_item) { controller.sidebar_items(type: :normal).sample }
       let(:weight) { 10 }
       let(:sidebar_item_attributes) do
         id = generate(:nested_attribute_new_id)
@@ -43,14 +43,13 @@ RSpec.describe Course::Admin::SidebarSettingsController, type: :controller do
 
       context 'when the weight is the heaviest' do
         let(:weight) do
-          heaviest_item = controller.all_sidebar_items(type: :normal).
-                          max_by { |item| item[:weight] }
+          heaviest_item = controller.sidebar_items(type: :normal).max_by { |item| item[:weight] }
           heaviest_item[:weight] + 1
         end
 
         it 'reorders the item to the bottom' do
           subject
-          last_item = controller.ordered_sidebar_items(type: :normal).last
+          last_item = controller.sidebar_items(type: :normal).last
           expect(last_item[:key]).to eq(sample_item[:key])
         end
       end

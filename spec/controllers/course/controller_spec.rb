@@ -58,36 +58,22 @@ RSpec.describe Course::Controller, type: :controller do
       end
     end
 
-    describe '#all_sidebar_items' do
-      it 'returns an empty array when no components included' do
-        allow(controller).to receive_message_chain('current_component_host.components').
-          and_return([])
-        expect(controller.all_sidebar_items).to eq([])
-      end
-    end
-
-    describe '#ordered_sidebar_items' do
+    describe '#sidebar_items' do
       it 'orders the sidebar items by ascending weight' do
         allow(controller).to receive(:current_course).and_return(course)
-        weights = controller.ordered_sidebar_items.map { |item| item[:weight] }
+        weights = controller.sidebar_items.map { |item| item[:weight] }
         expect(weights.length).not_to eq(0)
         expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
       end
     end
 
     describe '#settings' do
-      it 'returns an empty array when no components included' do
-        allow(controller).to receive_message_chain('current_component_host.components').
-          and_return([])
-        expect(controller.settings).to eq([])
+      it 'orders the settings items by ascending weight' do
+        allow(controller).to receive(:current_course).and_return(course)
+        weights = controller.settings.map { |item| item[:weight] }
+        expect(weights.length).not_to eq(0)
+        expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
       end
-    end
-
-    it 'orders the settings items by ascending weight' do
-      allow(controller).to receive(:current_course).and_return(course)
-      weights = controller.settings.map { |item| item[:weight] }
-      expect(weights.length).not_to eq(0)
-      expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
     end
   end
 end

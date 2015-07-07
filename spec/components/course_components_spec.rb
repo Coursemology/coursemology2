@@ -45,10 +45,10 @@ RSpec.describe 'Course Modules', type: :controller do
     before { allow(controller).to receive(:current_course).and_return(course) }
 
     it 'gathers all modules\' sidebar callbacks' do
-      expect(controller.all_sidebar_items(type: :normal)).to include(NORMAL_SIDEBAR_ITEM)
-      expect(controller.all_sidebar_items(type: :normal)).not_to include(ADMIN_SIDEBAR_ITEM)
-      expect(controller.all_sidebar_items(type: :admin)).to include(ADMIN_SIDEBAR_ITEM)
-      expect(controller.all_sidebar_items(type: :admin)).not_to include(NORMAL_SIDEBAR_ITEM)
+      expect(controller.sidebar_items(type: :normal)).to include(NORMAL_SIDEBAR_ITEM)
+      expect(controller.sidebar_items(type: :normal)).not_to include(ADMIN_SIDEBAR_ITEM)
+      expect(controller.sidebar_items(type: :admin)).to include(ADMIN_SIDEBAR_ITEM)
+      expect(controller.sidebar_items(type: :admin)).not_to include(NORMAL_SIDEBAR_ITEM)
     end
 
     it 'gathers all modules\' settings callback' do

@@ -87,11 +87,13 @@ class Course::ComponentHost
 
   # Initialize the component host instance
   #
-  # @param [#settings] instance_settings instance settings object
-  # @param [#settings] course_settings course settings object
-  def initialize(instance_settings, course_settings)
+  # @param [#settings] instance_settings Instance settings object
+  # @param [#settings] course_settings Course settings object
+  # @param context The context to execute all component instance methods on.
+  def initialize(instance_settings, course_settings, context)
     @instance_settings = instance_settings
     @course_settings = course_settings
+    @context = context
   end
 
   # Apply preferences to all the components, returns the enabled components.
@@ -119,6 +121,50 @@ class Course::ComponentHost
     all_components.select do |m|
       enabled = @instance_settings.settings(m.key).enabled
       enabled.nil? ? m.enabled_by_default? : enabled
+    end
+  end
+
+  # Gets the sidebar elements.
+  #
+  # Sidebar elements have the given format:
+  #
+  #   {
+  #      key: :sidebar_item_key # The unique key of the item, which will be used in sidebar settings
+  #      title: 'Sidebar Item Title'
+  #      type: :admin # Will be considered as `:normal` if not set
+  #      weight: 100
+  #      path: path_to_the_component
+  #      unread: 0 # or nil
+  #   }
+  #
+  # The elements are rendered on all Course controller subclasses as part of a nested template.
+  def sidebar_items
+    @sidebar_items ||= begin
+      array_of_component_arrays = components.map do |component|
+        component.get_sidebar_items(@context)
+      end
+
+      array_of_component_arrays.tap(&:flatten!)
+    end
+  end
+
+  # Gets the settings items.
+  #
+  # Settings elements have the given format:
+  #
+  #   {
+  #      title: 'Settings Item Title'
+  #      controller: controller name, String or Symbol
+  #      action: action name, String or Symbol
+  #      weight: 1 # The weight which determines the order of the item
+  #   }
+  def settings
+    @settings ||= begin
+      array_of_component_arrays = components.map do |component|
+        component.get_settings_items(@context)
+      end
+
+      array_of_component_arrays.tap(&:flatten!)
     end
   end
 end

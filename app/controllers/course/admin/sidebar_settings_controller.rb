@@ -17,8 +17,7 @@ class Course::Admin::SidebarSettingsController < Course::Admin::Controller
 
   # Load our settings adapter to handle component settings
   def load_settings
-    @settings = Course::Settings::Sidebar.new(current_course.settings,
-                                              all_sidebar_items(type: :normal))
+    @settings = Course::Settings::Sidebar.new(current_course.settings, sidebar_items(type: :normal))
   end
 
   def settings_sidebar_params #:nodoc:
