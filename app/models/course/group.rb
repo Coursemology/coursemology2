@@ -3,7 +3,8 @@ class Course::Group < ActiveRecord::Base
 
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
-  before_save :remove_duplicate_users
+
+  validate :users_are_unique
 
   belongs_to :course, inverse_of: :groups
   has_many :group_users, inverse_of: :course_group, dependent: :destroy,
@@ -31,12 +32,10 @@ class Course::Group < ActiveRecord::Base
       !group_users.exists?(user: creator)
   end
 
-  def remove_duplicate_users
+  def users_are_unique
     new_group_users = group_users.select(&:new_record?)
-    users_to_remove = new_group_users - new_group_users.uniq(&:user)
+    return if new_group_users.count == new_group_users.uniq(&:user).count
 
-    users_to_remove.each do |group_user|
-      group_users.delete(group_user)
-    end
+    errors.add(:'group_users.user_id',  I18n.t('errors.messages.taken'))
   end
 end
