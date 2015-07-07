@@ -89,8 +89,6 @@ class Course::UserRegistrationService
       claim_course_registration_code(registration)
     elsif code[0] == 'I'
       claim_course_invitation_code(registration)
-    else
-      nil
     end
   end
 

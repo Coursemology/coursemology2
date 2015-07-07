@@ -1,6 +1,6 @@
 module Course::LessonPlanItemsHelper
   def item_period_class(item)
-    'past' if item.start_time < Time.now
+    'past' if item.start_time < Time.zone.now
   end
 
   def milestone_body_id(milestone)

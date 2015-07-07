@@ -1,10 +1,17 @@
 module Extensions::TimeBoundedRecord::ActiveRecord::Base
   module ClassMethods
     def currently_valid
-      where do
-        ((valid_from == nil) | (valid_from <= Time.zone.now)) &
-          ((valid_to == nil) | (valid_to >= Time.zone.now))
-      end
+      now_valid.merge(not_yet_expired)
+    end
+
+    private
+
+    def now_valid
+      where { (valid_from == nil) | (valid_from <= Time.zone.now) }
+    end
+
+    def not_yet_expired
+      where { (valid_to == nil) | (valid_to >= Time.zone.now) }
     end
   end
 

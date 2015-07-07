@@ -17,9 +17,18 @@ class Course::Group < ActiveRecord::Base
 
   # Set default values
   def set_defaults
-    return if !course || !creator
-    return if !course.course_users.exists?(user: creator) || group_users.exists?(user: creator)
-    group_users.build(user: creator, role: :manager, creator: creator, updater: updater)
+    group_users.build(user: creator, role: :manager,
+                      creator: creator, updater: updater) if should_create_manager?
+  end
+
+  # Checks if the current group has sufficient information to have a manager, but does not
+  # currently exist.
+  #
+  # @return [bool]
+  def should_create_manager?
+    course && creator &&
+      course.course_users.exists?(user: creator) &&
+      !group_users.exists?(user: creator)
   end
 
   def remove_duplicate_users

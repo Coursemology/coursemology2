@@ -29,7 +29,7 @@ class Course::Controller < ApplicationController
       array_of_component_arrays.tap(&:flatten!)
     end
 
-    type ? @sidebar.select { |item| (item[:type] || :normal) ==  type } : @sidebar
+    type ? @sidebar.select { |item| (item[:type] || :normal) == type } : @sidebar
   end
 
   # Gets the ordered sidebar items. The sidebar items are ordered by the settings of current course.
