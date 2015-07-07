@@ -48,9 +48,9 @@ RSpec.describe Course::Group, type: :model do
           expect { subject }.not_to raise_error
         end
 
-        it 'adds the user to the group' do
+        it 'is not valid' do
           subject
-          expect(group.users).to include(user)
+          expect(group).not_to be_valid
         end
       end
     end
