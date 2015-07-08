@@ -2,7 +2,7 @@ class Course::AnnouncementsController < Course::ComponentController
   load_and_authorize_resource :announcement, through: :course, class: Course::Announcement.name
   before_action :check_component
   before_action :load_settings
-  add_breadcrumb :index, :course_announcements_path
+  before_action :add_announcement_breadcrumb
 
   def index #:nodoc:
     @announcements = @announcements.includes(:creator).sorted_by_sticky.sorted_by_date
@@ -69,5 +69,9 @@ class Course::AnnouncementsController < Course::ComponentController
   # Load current component's settings
   def load_settings
     @announcement_settings = component.settings
+  end
+
+  def add_announcement_breadcrumb
+    add_breadcrumb @announcement_settings.title || :index, :course_announcements_path
   end
 end
