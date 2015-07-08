@@ -23,6 +23,7 @@ class Course::Settings::SidebarItem
 
   # @return [Fixnum] The weight of the item.
   def weight
-    @settings.settings(id).weight || @sidebar_item[:weight]
+    result = @settings.settings(id).weight if id
+    result || @sidebar_item[:weight]
   end
 end

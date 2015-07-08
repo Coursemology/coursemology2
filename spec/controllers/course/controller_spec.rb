@@ -66,14 +66,5 @@ RSpec.describe Course::Controller, type: :controller do
         expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
       end
     end
-
-    describe '#settings' do
-      it 'orders the settings items by ascending weight' do
-        allow(controller).to receive(:current_course).and_return(course)
-        weights = controller.settings.map { |item| item[:weight] }
-        expect(weights.length).not_to eq(0)
-        expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
-      end
-    end
   end
 end

@@ -98,13 +98,6 @@ RSpec.describe Course::ComponentHost, type: :controller do
           expect(component_host.sidebar_items).to eq([])
         end
       end
-
-      describe '#settings' do
-        it 'returns an empty array when no components included' do
-          allow(controller).to receive(:settings).and_return([])
-          expect(controller.settings).to eq([])
-        end
-      end
     end
   end
 end

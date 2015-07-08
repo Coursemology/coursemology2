@@ -17,8 +17,9 @@ RSpec.describe 'Course Modules', type: :controller do
     unread: -1
   }
 
-  EXPECTED_SETTINGS_ITEM = {
+  SETTINGS_SIDEBAR_ITEM = {
     title: 'DummyCourseModule',
+    type: :settings,
     controller: :'course/admin/admin',
     action: :index,
     weight: 1
@@ -34,11 +35,7 @@ RSpec.describe 'Course Modules', type: :controller do
     end
 
     def sidebar_items
-      [NORMAL_SIDEBAR_ITEM, ADMIN_SIDEBAR_ITEM]
-    end
-
-    def settings_items
-      [EXPECTED_SETTINGS_ITEM]
+      [NORMAL_SIDEBAR_ITEM, ADMIN_SIDEBAR_ITEM, SETTINGS_SIDEBAR_ITEM]
     end
   end
 
@@ -50,12 +47,13 @@ RSpec.describe 'Course Modules', type: :controller do
     it 'gathers all modules\' sidebar callbacks' do
       expect(controller.sidebar_items(type: :normal)).to include(NORMAL_SIDEBAR_ITEM)
       expect(controller.sidebar_items(type: :normal)).not_to include(ADMIN_SIDEBAR_ITEM)
+      expect(controller.sidebar_items(type: :normal)).not_to include(SETTINGS_SIDEBAR_ITEM)
       expect(controller.sidebar_items(type: :admin)).to include(ADMIN_SIDEBAR_ITEM)
       expect(controller.sidebar_items(type: :admin)).not_to include(NORMAL_SIDEBAR_ITEM)
-    end
-
-    it 'gathers all modules\' settings callback' do
-      expect(controller.settings).to include(EXPECTED_SETTINGS_ITEM)
+      expect(controller.sidebar_items(type: :admin)).not_to include(SETTINGS_SIDEBAR_ITEM)
+      expect(controller.sidebar_items(type: :settings)).to include(SETTINGS_SIDEBAR_ITEM)
+      expect(controller.sidebar_items(type: :settings)).not_to include(ADMIN_SIDEBAR_ITEM)
+      expect(controller.sidebar_items(type: :settings)).not_to include(NORMAL_SIDEBAR_ITEM)
     end
   end
 end

@@ -13,18 +13,6 @@ class Course::ComponentHost
     end
   end
 
-  module Settings
-    extend ActiveSupport::Concern
-
-    # Gets the settings items from this component.
-    #
-    # @return [Array] An array of hashes containing the settings items exposed by this component.
-    #   See #{Course::ComponentHost#settings} for the format.
-    def settings_items
-      []
-    end
-  end
-
   module Enableable
     extend ActiveSupport::Concern
 
@@ -51,7 +39,6 @@ class Course::ComponentHost
     const_set(:ClassMethods, ::Module.new) unless const_defined?(:ClassMethods)
 
     include Sidebar
-    include Settings
     include Enableable
   end
 
@@ -109,30 +96,27 @@ class Course::ComponentHost
   # Sidebar elements have the given format:
   #
   #   {
-  #      key: :sidebar_item_key # The unique key of the item, which will be used in sidebar settings
-  #      title: 'Sidebar Item Title'
-  #      type: :admin # Will be considered as `:normal` if not set
-  #      weight: 100
-  #      path: path_to_the_component
+  #      key: :sidebar_item_key, # The unique key of the item to identify it among others.
+  #      title: 'Sidebar Item Title',
+  #      type: :admin, # Will be considered as `:normal` if not set
+  #      weight: 100,
+  #      path: path_to_the_component,
   #      unread: 0 # or nil
   #   }
-  #
-  # The elements are rendered on all Course controller subclasses as part of a nested template.
-  def sidebar_items
-    @sidebar_items ||= components.map(&:sidebar_items).tap(&:flatten!)
-  end
-
   # Gets the settings items.
   #
   # Settings elements have the given format:
   #
   #   {
-  #      title: 'Settings Item Title'
-  #      controller: controller name, String or Symbol
-  #      action: action name, String or Symbol
+  #      title: 'Settings Item Title',
+  #      type: :settings,
+  #      controller: controller name, String or Symbol,
+  #      action: action name, String or Symbol,
   #      weight: 1 # The weight which determines the order of the item
   #   }
-  def settings
-    @settings ||= components.map(&:settings_items).tap(&:flatten!)
+  #
+  # The elements are rendered on all Course controller subclasses as part of a nested template.
+  def sidebar_items
+    @sidebar_items ||= components.map(&:sidebar_items).tap(&:flatten!)
   end
 end

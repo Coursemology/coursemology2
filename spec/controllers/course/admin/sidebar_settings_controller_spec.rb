@@ -43,7 +43,8 @@ RSpec.describe Course::Admin::SidebarSettingsController, type: :controller do
 
       context 'when the weight is the heaviest' do
         let(:weight) do
-          heaviest_item = controller.sidebar_items(type: :normal).max_by { |item| item[:weight] }
+          heaviest_item = controller.current_component_host.sidebar_items.
+                          max_by { |item| item[:weight] }
           heaviest_item[:weight] + 1
         end
 

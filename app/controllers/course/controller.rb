@@ -9,16 +9,8 @@ class Course::Controller < ApplicationController
   # is not specified.
   # @return [Array] The array of ordered sidebar items of the given type.
   def sidebar_items(type: nil)
-    sidebar_items = current_component_host.sidebar_items
-    sidebar_items = sidebar_items.select { |item| item.fetch(:type, :normal) == type } if type
-    sidebar_settings = Course::Settings::Sidebar.new(current_course.settings, sidebar_items)
-    weights_hash = sidebar_settings.sidebar_items.map { |item| [item.id, item.weight] }.to_h
-    sidebar_items.sort_by { |item| weights_hash[item[:key]] }
-  end
-
-  def settings
-    @current_component_host_settings ||=
-      current_component_host.settings.sort_by { |item| item[:weight] }
+    weights_hash = sidebar_items_weights
+    sidebar_items_of_type(type).sort_by { |item| weights_hash[item[:key]] || item[:weight] }
   end
 
   # Gets the current course.
@@ -47,6 +39,26 @@ class Course::Controller < ApplicationController
   end
 
   private
+
+  # Selects sidebar items of the given type.
+  #
+  # @param [nil|Symbol] type The type of sidebar items to return. This can be nil to retrieve all
+  #   items.
+  # @return [Array<Hash>]
+  def sidebar_items_of_type(type)
+    sidebar_items = current_component_host.sidebar_items
+    type ? sidebar_items.select { |item| item.fetch(:type, :normal) == type } : sidebar_items
+  end
+
+  # Computes a hash containing the key of each sidebar item, and its defined weight as the value.
+  #
+  # @return [Hash{Symbol=>Fixnum}]
+  def sidebar_items_weights
+    sidebar_settings = Course::Settings::Sidebar.new(current_course.settings,
+                                                     current_component_host.sidebar_items)
+    defined_sidebar_settings = sidebar_settings.sidebar_items.select { |item| item.id.present? }
+    defined_sidebar_settings.map { |item| [item.id, item.weight] }.to_h
+  end
 
   def add_course_breadcrumb
     add_breadcrumb(current_course.title, course_path(current_course)) if

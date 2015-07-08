@@ -2,6 +2,12 @@ class Course::AnnouncementsComponent < SimpleDelegator
   include Course::ComponentHost::Component
 
   def sidebar_items
+    main_sidebar_items + settings_sidebar_items
+  end
+
+  private
+
+  def main_sidebar_items
     [
       {
         key: :announcements,
@@ -13,18 +19,17 @@ class Course::AnnouncementsComponent < SimpleDelegator
     ]
   end
 
-  def settings_items
+  def settings_sidebar_items
     [
       {
         title: t('layouts.course_admin.announcement_settings.title'),
+        type: :settings,
         controller: 'course/admin/announcement_settings',
         action: 'edit',
         weight: 4
       }
     ]
   end
-
-  private
 
   def unread_count
     return 0 if current_course.nil? || current_user.nil?
