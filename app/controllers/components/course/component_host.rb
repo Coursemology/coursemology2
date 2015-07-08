@@ -29,7 +29,7 @@ class Course::ComponentHost
       #
       # @return [Symbol] the key
       def key
-        name.underscore.sub('/', '_').to_sym
+        name.underscore.gsub('/', '_').to_sym
       end
     end
   end
