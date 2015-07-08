@@ -21,6 +21,6 @@ class Course::Admin::AnnouncementSettingsController < Course::Admin::Controller
   end
 
   def announcement_settings_params #:nodoc:
-    params.require(:announcement_settings).permit(:pagination)
+    params.require(:announcement_settings).permit(:title, :pagination)
   end
 end

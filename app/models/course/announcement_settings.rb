@@ -12,6 +12,21 @@ class Course::AnnouncementSettings
     @settings = settings
   end
 
+  # Returns the title of announcements component
+  #
+  # @return [String] The custom or default title of announcements component
+  def title
+    @settings.title
+  end
+
+  # Sets the title of announcements component
+  #
+  # @param [String] title The new title
+  def title=(title)
+    title = nil unless title.present?
+    @settings.title = title
+  end
+
   # Returns the announcement pagination count
   #
   # @return [Integer] The pagination count of announcement
