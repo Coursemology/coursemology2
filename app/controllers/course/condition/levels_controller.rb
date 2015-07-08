@@ -9,7 +9,8 @@ class Course::Condition::LevelsController < Course::ConditionsController
     @level_condition.course = current_course
 
     if @level_condition.save
-      redirect_to return_to_path, success: t('course.condition.levels.create.success')
+      redirect_to edit_course_achievement_path(current_course, @conditional),
+                  success: t('course.condition.levels.create.success')
     else
       render :new
     end
@@ -20,7 +21,8 @@ class Course::Condition::LevelsController < Course::ConditionsController
 
   def update
     if @level_condition.update(level_condition_params)
-      redirect_to return_to_path, success: t('course.condition.levels.update.success')
+      redirect_to edit_course_achievement_path(current_course, @conditional),
+                  success: t('course.condition.levels.update.success')
     else
       render :edit
     end
@@ -28,7 +30,8 @@ class Course::Condition::LevelsController < Course::ConditionsController
 
   def destroy
     if @level_condition.destroy
-      redirect_to return_to_path, success: t('course.condition.levels.destroy.success')
+      redirect_to edit_course_achievement_path(current_course, @conditional),
+                  success: t('course.condition.levels.destroy.success')
     else
       redirect_to return_to_path, alert: t('course.condition.levels.destroy.error')
     end
