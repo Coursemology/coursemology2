@@ -17,7 +17,7 @@ RSpec.describe Course::UsersController, type: :controller do
       subject { get :students, course_id: course }
 
       context 'when a course manager visits the page' do
-        let!(:course_lecturer) { create(:course_manager, course: course, user: user) }
+        let!(:course_lecturer) { create(:course_manager, :approved, course: course, user: user) }
 
         it { is_expected.to render_template(:students) }
       end
@@ -37,7 +37,7 @@ RSpec.describe Course::UsersController, type: :controller do
       subject { get :staff, course_id: course }
 
       context 'when a course manager visits the page' do
-        let!(:course_lecturer) { create(:course_manager, course: course, user: user) }
+        let!(:course_lecturer) { create(:course_manager, :approved, course: course, user: user) }
 
         it { is_expected.to render_template(:staff) }
       end
@@ -59,7 +59,10 @@ RSpec.describe Course::UsersController, type: :controller do
       let(:updated_course_user) { { role: :teaching_assistant } }
 
       context 'when the user is a manager' do
-        let!(:course_user) { create(:course_manager, course: course, user: user) }
+        let!(:logged_in_course_user) do
+          create(:course_manager, :approved, course: course, user: user)
+        end
+        let(:course_user) { create(:course_manager, course: course) }
 
         it 'updates the Course User' do
           expect { subject }.to change { course_user.reload.role }.to('teaching_assistant')
@@ -113,7 +116,7 @@ RSpec.describe Course::UsersController, type: :controller do
       let!(:course_user_to_delete) { create(:course_user, course: course, user: create(:user)) }
 
       context 'when the user is a manager' do
-        let!(:course_user) { create(:course_manager, course: course, user: user) }
+        let!(:course_user) { create(:course_manager, :approved, course: course, user: user) }
 
         it 'destroys the registration record' do
           expect { subject }.to change { course.course_users.reload.count }.by(-1)

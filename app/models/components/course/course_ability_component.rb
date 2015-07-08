@@ -29,11 +29,13 @@ module Course::CourseAbilityComponent
 
   def allow_owners_managing_course
     can :manage, Course, course_users: { user_id: user.id,
+                                         workflow_state: 'approved',
                                          role: [CourseUser.roles[:manager],
                                                 CourseUser.roles[:owner],
                                                 'manager', 'owner'] }
 
     can :manage, CourseUser, course: { course_users: { user_id: user.id,
+                                                       workflow_state: 'approved',
                                                        role: [CourseUser.roles[:manager],
                                                               CourseUser.roles[:owner],
                                                               'manager', 'owner'] } }
@@ -41,9 +43,10 @@ module Course::CourseAbilityComponent
 
   def allow_staff_manage_users
     can [:show_users, :manage_users], Course,
-        course_users: { user_id: user.id, role: [CourseUser.roles[:manager],
-                                                 CourseUser.roles[:owner],
-                                                 CourseUser.roles[:teaching_assistant],
-                                                 'manager', 'owner', 'teaching_assistant'] }
+        course_users: { user_id: user.id, workflow_state: 'approved',
+                        role: [CourseUser.roles[:manager],
+                               CourseUser.roles[:owner],
+                               CourseUser.roles[:teaching_assistant],
+                               'manager', 'owner', 'teaching_assistant'] }
   end
 end

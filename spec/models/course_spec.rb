@@ -154,7 +154,7 @@ RSpec.describe Course, type: :model do
       let(:course) { create(:course, creator: owner, updater: owner) }
       let(:course_owner) { course.course_users.find_by!(user: owner) }
       let(:teaching_assistant) { create(:course_teaching_assistant, course: course) }
-      let(:manager) { create(:course_manager, course: course) }
+      let(:manager) { create(:course_manager, :approved, course: course) }
 
       it 'returns all the staff in course' do
         expect(course.staff).to contain_exactly(teaching_assistant, manager, course_owner)

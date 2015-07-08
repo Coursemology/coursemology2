@@ -45,7 +45,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
           end
 
           context 'when the user is a manager of the course' do
-            let!(:course_manager) { create(:course_manager, course: course, user: user) }
+            let!(:course_manager) { create(:course_manager, :approved, course: course, user: user) }
 
             it { expect { subject }.not_to change { course.course_users.reload.count } }
             it { is_expected.to redirect_to(course_path(course)) }
