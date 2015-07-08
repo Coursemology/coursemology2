@@ -1,7 +1,7 @@
-class Course::GroupsComponent
+class Course::GroupsComponent < SimpleDelegator
   include Course::ComponentHost::Component
 
-  sidebar do
+  def sidebar_items
     [
       {
         key: :groups,

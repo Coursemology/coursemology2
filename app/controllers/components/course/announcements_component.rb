@@ -1,31 +1,37 @@
-class Course::AnnouncementsComponent
+class Course::AnnouncementsComponent < SimpleDelegator
   include Course::ComponentHost::Component
 
-  sidebar do
+  def sidebar_items
+    main_sidebar_items + settings_sidebar_items
+  end
+
+  private
+
+  def main_sidebar_items
     [
       {
         key: :announcements,
         title: I18n.t('course.announcements.sidebar_title'),
         weight: 1,
         path: course_announcements_path(current_course),
-        unread: Course::AnnouncementsComponent.unread_count(current_course, current_user)
+        unread: unread_count
       }
     ]
   end
 
-  settings do
+  def settings_sidebar_items
     [
       {
         title: t('layouts.course_admin.announcement_settings.title'),
-        controller: 'course/admin/announcement_settings',
-        action: 'edit',
-        weight: 4
+        type: :settings,
+        weight: 4,
+        path: course_admin_announcements_path(current_course)
       }
     ]
   end
 
-  def self.unread_count(course, user)
-    return 0 if course.nil? || user.nil?
-    course.announcements.unread_by(user).count
+  def unread_count
+    return 0 if current_course.nil? || current_user.nil?
+    current_course.announcements.unread_by(current_user).count
   end
 end

@@ -1,9 +1,5 @@
 = render within_layout: controller.parent_layout(of_layout: 'course_admin') do
-  ul.nav.nav-tabs role='tablist'
-    - controller.settings.each do |item|
-      - if item[:controller].to_s == params[:controller]
-        = content_tag(:li, link_to(t(item[:title]), '#'), class: 'active')
-      - else
-        = content_tag(:li, link_to(t(item[:title]), controller: item[:controller],
-                      action: item[:action]))
+  = tabs do
+    - controller.sidebar_items(type: :settings).each do |item|
+      = nav_to(item[:title], item[:path])
   = yield

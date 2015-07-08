@@ -3,63 +3,14 @@ class Course::Controller < ApplicationController
 
   before_action :add_course_breadcrumb
 
-  # Gets the sidebar elements.
-  #
-  # Sidebar elements have the given format:
-  #
-  #   {
-  #      key: :sidebar_item_key # The unique key of the item, which will be used in sidebar settings
-  #      title: 'Sidebar Item Title'
-  #      type: :admin # Will be considered as `:normal` if not set
-  #      weight: 100
-  #      path: path_to_the_component
-  #      unread: 0 # or nil
-  #   }
-  #
-  # The elements are rendered on all Course controller subclasses as part of a nested template.
-  # @param [Symbol] type The type of sidebar item, all sidebar items will be returned if the type
-  # is not specified
-  # @return [Array] The array of sidebar items of the given type
-  def all_sidebar_items(type: nil)
-    @sidebar ||= begin
-      array_of_component_arrays = current_component_host.components.map do |component|
-        component.get_sidebar_items(self)
-      end
-
-      array_of_component_arrays.tap(&:flatten!)
-    end
-
-    type ? @sidebar.select { |item| (item[:type] || :normal) == type } : @sidebar
-  end
-
-  # Gets the ordered sidebar items. The sidebar items are ordered by the settings of current course.
+  # Gets the sidebar items. The sidebar items are ordered by the settings of current course.
   #
   # @param [Symbol] type The type of sidebar item, all sidebar items will be returned if the type
   # is not specified.
   # @return [Array] The array of ordered sidebar items of the given type.
-  def ordered_sidebar_items(type: nil)
-    sidebar_items = all_sidebar_items(type: type)
-    sidebar_settings = Course::Settings::Sidebar.new(current_course.settings, sidebar_items)
-    weights_hash = sidebar_settings.sidebar_items.map { |item| [item.id, item.weight] }.to_h
-    sidebar_items.sort_by { |item| weights_hash[item[:key]] }
-  end
-
-  # Gets the settings items.
-  #
-  # Settings elements have the given format:
-  #
-  #   {
-  #      title: 'Settings Item Title'
-  #      controller: controller name, String or Symbol
-  #      action: action name, String or Symbol
-  #      weight: 1 # The weight which determines the order of the item
-  #   }
-  def settings
-    array_of_component_arrays = current_component_host.components.map do |component|
-      component.get_settings_items(self)
-    end
-
-    array_of_component_arrays.tap(&:flatten!).sort_by { |item| item[:weight] }
+  def sidebar_items(type: nil)
+    weights_hash = sidebar_items_weights
+    sidebar_items_of_type(type).sort_by { |item| weights_hash[item[:key]] || item[:weight] }
   end
 
   # Gets the current course.
@@ -83,10 +34,31 @@ class Course::Controller < ApplicationController
   #   course
   def current_component_host
     @current_component_host ||= Course::ComponentHost.new(current_tenant.settings(:components),
-                                                          current_course.settings(:components))
+                                                          current_course.settings(:components),
+                                                          self)
   end
 
   private
+
+  # Selects sidebar items of the given type.
+  #
+  # @param [nil|Symbol] type The type of sidebar items to return. This can be nil to retrieve all
+  #   items.
+  # @return [Array<Hash>]
+  def sidebar_items_of_type(type)
+    sidebar_items = current_component_host.sidebar_items
+    type ? sidebar_items.select { |item| item.fetch(:type, :normal) == type } : sidebar_items
+  end
+
+  # Computes a hash containing the key of each sidebar item, and its defined weight as the value.
+  #
+  # @return [Hash{Symbol=>Fixnum}]
+  def sidebar_items_weights
+    sidebar_settings = Course::Settings::Sidebar.new(current_course.settings,
+                                                     current_component_host.sidebar_items)
+    defined_sidebar_settings = sidebar_settings.sidebar_items.select { |item| item.id.present? }
+    defined_sidebar_settings.map { |item| [item.id, item.weight] }.to_h
+  end
 
   def add_course_breadcrumb
     add_breadcrumb(current_course.title, course_path(current_course)) if

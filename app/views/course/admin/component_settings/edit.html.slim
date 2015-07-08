@@ -5,7 +5,7 @@
       th = t('.name')
       th = t('.enabled')
     tbody
-      - instance_components = controller.current_component_host.instance_components
+      - instance_components = controller.current_component_host.instance_enabled_components
       - collection = instance_components.map { |c| [c.name, c.key.to_s] }
       = f.collection_check_boxes :enabled_component_ids, collection, :last, :first do |f|
         tr

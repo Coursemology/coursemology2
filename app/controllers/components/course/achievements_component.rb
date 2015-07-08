@@ -1,7 +1,7 @@
-class Course::AchievementsComponent
+class Course::AchievementsComponent < SimpleDelegator
   include Course::ComponentHost::Component
 
-  sidebar do
+  def sidebar_items
     [
       {
         key: :achievements,
