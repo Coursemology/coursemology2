@@ -5,13 +5,17 @@ class Course::AnnouncementsComponent < SimpleDelegator
     main_sidebar_items + settings_sidebar_items
   end
 
+  def settings
+    @settings ||= Course::AnnouncementSettings.new(current_course.settings(:announcement))
+  end
+
   private
 
   def main_sidebar_items
     [
       {
         key: :announcements,
-        title: I18n.t('course.announcements.sidebar_title'),
+        title: settings.title || t('course.announcements.sidebar_title'),
         weight: 1,
         path: course_announcements_path(current_course),
         unread: unread_count
@@ -22,7 +26,7 @@ class Course::AnnouncementsComponent < SimpleDelegator
   def settings_sidebar_items
     [
       {
-        title: t('layouts.course_admin.announcement_settings.title'),
+        title: settings.title || t('layouts.course_admin.announcement_settings.title'),
         type: :settings,
         weight: 4,
         path: course_admin_announcements_path(current_course)
