@@ -167,4 +167,15 @@ RSpec.describe ApplicationHelper, type: :helper do
       it { is_expected.to eq("#{breadcrumbs.reverse.join(' - ')} - #{t('layout.coursemology')}") }
     end
   end
+
+  describe '#page_header' do
+    context 'when custom header text is provided' do
+      let(:header) { 'Custom header' }
+      subject { helper.page_header(header) }
+
+      it 'shows the custom header text' do
+        expect(subject).to have_tag('div h1 span', text: header)
+      end
+    end
+  end
 end
