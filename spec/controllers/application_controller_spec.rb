@@ -5,6 +5,14 @@ RSpec.describe ApplicationController, type: :controller do
     def index
       redirect_to '/'
     end
+
+    def create
+      fail CanCan::AccessDenied
+    end
+
+    def publicly_accessible?
+      true
+    end
   end
 
   describe ApplicationMultitenancyConcern do
@@ -40,7 +48,7 @@ RSpec.describe ApplicationController, type: :controller do
     end
   end
 
-  describe 'internationalization' do
+  describe ApplicationInternationalizationConcern do
     before { @old_i18n_locale = I18n.locale }
     after { I18n.locale = @old_i18n_locale }
 
@@ -103,6 +111,20 @@ RSpec.describe ApplicationController, type: :controller do
     context 'when the instance does not have a theme' do
       it 'uses the default theme' do
         expect(controller.send(:deduce_theme)).to eq('default')
+      end
+    end
+  end
+
+  describe ApplicationUserConcern do
+    context 'when the action raises a CanCan::AccessDenied' do
+      it 'renders the access denied page to /pages/403' do
+        post :create
+        expect(response).to render_template('pages/403')
+      end
+
+      it 'returns HTTP status 403' do
+        post :create
+        expect(response.status).to eq(403)
       end
     end
   end
