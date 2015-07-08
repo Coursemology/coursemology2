@@ -36,10 +36,10 @@ RSpec.feature 'Courses: Students' do
 
       visit course_users_students_path(course)
       within find_field('course_user_name', with: user_to_change.name).find(:xpath, '../../..') do
-        check 'phantom'
+        check 'course_user_phantom'
         click_button 'submit'
 
-        expect(page).to have_checked_field('phantom')
+        expect(page).to have_checked_field('course_user_phantom')
       end
     end
 

@@ -19,9 +19,9 @@ div.users
             = f.error_notification
             = f.error :course_user
             tr
-              th = f.input :name
+              th = f.input :name, label: false
               td = f.object.user.email
-              td = f.input :phantom
+              td = f.input :phantom, label: false
               td
                 = f.button :submit do
                   = fa_icon :save
