@@ -21,6 +21,10 @@ Write your tests to be as compartmentalised from other tests as possible. Compar
 are those that do not depend on any external state to run. This would allow tests to be run in
 parallel.
 
+In Rails, controller specs will always execute the `rescue_from` handlers. In our specs, we 
+disable that by default; to execute controllers with the handlers enabled, declare `run_rescue` 
+within the example group.
+
 ## Developer Tools
 The project's Gemfile contains a few developer tools to help keep the project tidy:
 
