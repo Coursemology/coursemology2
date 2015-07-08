@@ -24,9 +24,8 @@ class Course::AnnouncementsComponent < SimpleDelegator
       {
         title: t('layouts.course_admin.announcement_settings.title'),
         type: :settings,
-        controller: 'course/admin/announcement_settings',
-        action: 'edit',
-        weight: 4
+        weight: 4,
+        path: course_admin_announcements_path(current_course)
       }
     ]
   end

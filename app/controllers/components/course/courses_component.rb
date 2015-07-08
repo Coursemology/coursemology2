@@ -10,7 +10,6 @@ class Course::CoursesComponent < SimpleDelegator
   def admin_sidebar_items
     [
       {
-        key: :settings,
         title: t('layouts.course_admin.title'),
         type: :admin,
         weight: 4,
@@ -31,9 +30,8 @@ class Course::CoursesComponent < SimpleDelegator
     {
       title: t('layouts.course_admin.title'),
       type: :settings,
-      controller: 'course/admin/admin',
-      action: 'index',
-      weight: 1
+      weight: 1,
+      path: course_admin_path(current_course)
     }
   end
 
@@ -41,9 +39,8 @@ class Course::CoursesComponent < SimpleDelegator
     {
       title: t('layouts.course_admin.component_settings.title'),
       type: :settings,
-      controller: 'course/admin/component_settings',
-      action: 'edit',
-      weight: 2
+      weight: 2,
+      path: course_admin_components_path(current_course)
     }
   end
 
@@ -51,9 +48,8 @@ class Course::CoursesComponent < SimpleDelegator
     {
       title: t('layouts.course_admin.sidebar_settings.title'),
       type: :settings,
-      controller: 'course/admin/sidebar_settings',
-      action: 'edit',
-      weight: 3
+      weight: 3,
+      path: course_admin_sidebar_path(current_course)
     }
   end
 end

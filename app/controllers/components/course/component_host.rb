@@ -104,23 +104,14 @@ class Course::ComponentHost
   # Sidebar elements have the given format:
   #
   #   {
-  #      key: :sidebar_item_key, # The unique key of the item to identify it among others.
+  #      key: :item_key, # The unique key of the item to identify it among others. Can be nil if
+  #                      # there is no need to distinguish between items.
   #      title: 'Sidebar Item Title',
-  #      type: :admin, # Will be considered as `:normal` if not set
-  #      weight: 100,
+  #      type: :admin, # Will be considered as +:normal+ if not set. Currently +:normal+, +:admin+,
+  #                    # and +:settings+ are used.
+  #      weight: 100, # The default weight of the item. Larger weights (heavier items) sink.
   #      path: path_to_the_component,
-  #      unread: 0 # or nil
-  #   }
-  # Gets the settings items.
-  #
-  # Settings elements have the given format:
-  #
-  #   {
-  #      title: 'Settings Item Title',
-  #      type: :settings,
-  #      controller: controller name, String or Symbol,
-  #      action: action name, String or Symbol,
-  #      weight: 1 # The weight which determines the order of the item
+  #      unread: 0 # Number of unread items. Can be +nil+, if not needed.
   #   }
   #
   # The elements are rendered on all Course controller subclasses as part of a nested template.
