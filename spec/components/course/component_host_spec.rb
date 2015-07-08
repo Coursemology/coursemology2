@@ -23,6 +23,29 @@ RSpec.describe Course::ComponentHost, type: :controller do
         end
       end
 
+      describe '#[]' do
+        subject { component_host }
+
+        context 'when the key specified does not exist' do
+          it 'returns nil' do
+            expect(subject['i_do_not_exist']).to be_nil
+          end
+        end
+
+        context 'when the key provided is a string' do
+          it 'returns the correct component' do
+            expect(subject['dummy_course_module']).to be_a(DummyCourseModule)
+          end
+        end
+
+        context 'when the key provided is a symbol' do
+          it 'returns the correct component' do
+            expect(subject[:dummy_course_module]).to be_a(DummyCourseModule)
+          end
+        end
+        it ''
+      end
+
       describe '#enabled_components' do
         subject { component_host.enabled_components }
 

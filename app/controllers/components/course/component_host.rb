@@ -63,6 +63,14 @@ class Course::ComponentHost
     enabled_components.map { |component| component.new(@context) }
   end
 
+  # Gets the component instance with the given key.
+  #
+  # @param [String|Symbol] component_key The key of the component to find.
+  # @return [nil|Object] The component with the given key, or nil if it is not enabled.
+  def [](component_key)
+    components.find { |component| component.key.to_s == component_key.to_s }
+  end
+
   # Apply preferences to all the components, returns the enabled components.
   #
   # @return [Array<Class>] array of enabled components
