@@ -37,6 +37,6 @@ class Course::Condition::LevelsController < Course::ConditionsController
   private
 
   def level_condition_params
-    params.require(:course_condition_level).permit(:minimum_level)
+    params.require(:condition_level).permit(:minimum_level)
   end
 end

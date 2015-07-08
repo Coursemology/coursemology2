@@ -38,6 +38,6 @@ class Course::Condition::AchievementsController < Course::ConditionsController
   private
 
   def achievement_condition_params
-    params.require(:course_condition_achievement).permit(:achievement_id)
+    params.require(:condition_achievement).permit(:achievement_id)
   end
 end
