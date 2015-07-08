@@ -167,5 +167,17 @@ RSpec.describe Course, type: :model do
         expect(subject.registration_key).to start_with('C')
       end
     end
+
+    describe '#users' do
+      let(:course) { create(:course, creator: owner, updater: owner) }
+      describe '#with_approved_state' do
+        let(:unapproved_user) { create(:course_user, course: course).user }
+        let(:approved_user) { create(:course_user, :approved, course: course).user }
+        subject { course.users.with_approved_state }
+
+        it { is_expected.to include(approved_user) }
+        it { is_expected.not_to include(unapproved_user) }
+      end
+    end
   end
 end
