@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe 'Extension: Inherited Nested Layouts', type: :controller do
-  class ControllerA < ApplicationController
+  class self::ControllerA < ApplicationController
     layout 'testA'
   end
 
-  class ControllerB < ControllerA
+  class self::ControllerB < self::ControllerA
     layout :controller_b_layout
 
     def controller_b_layout
@@ -13,11 +13,11 @@ RSpec.describe 'Extension: Inherited Nested Layouts', type: :controller do
     end
   end
 
-  class ControllerC < ControllerB
+  class self::ControllerC < self::ControllerB
     layout 'testC'
   end
 
-  controller(ControllerC) do
+  controller(self::ControllerC) do
   end
 
   it 'gets the correct current layout' do
