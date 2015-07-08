@@ -1,19 +1,47 @@
 require 'rails_helper'
 
 RSpec.describe Course::ComponentHost, type: :controller do
-  controller do
+  controller(Course::Controller) do
   end
 
   class self::DummyCourseModule
     include Course::ComponentHost::Component
 
+    NORMAL_SIDEBAR_ITEM = {
+      key: :normal_item,
+      title: 'DummyCourseModule',
+      type: :normal,
+      weight: 1,
+      unread: -1
+    }
+
+    ADMIN_SIDEBAR_ITEM = {
+      key: :admin_item,
+      title: 'DummyCourseModule',
+      type: :admin,
+      weight: 10,
+      unread: -1
+    }
+
+    SETTINGS_SIDEBAR_ITEM = {
+      title: 'DummyCourseModule',
+      type: :settings,
+      weight: 1
+    }
+
     def initialize(*)
+    end
+
+    def sidebar_items
+      [NORMAL_SIDEBAR_ITEM, ADMIN_SIDEBAR_ITEM, SETTINGS_SIDEBAR_ITEM]
     end
   end
 
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:course) { create(:course, instance: instance) }
+    before { allow(controller).to receive(:current_course).and_return(course) }
+
     let(:component_host) do
       Course::ComponentHost.new(instance.settings, course.settings, controller)
     end
@@ -21,7 +49,7 @@ RSpec.describe Course::ComponentHost, type: :controller do
       Course::ComponentHost.components.select(&:enabled_by_default?)
     end
 
-    describe 'DummyCourseModule' do
+    describe 'Components' do
       subject do
         component_host.components.find do |component|
           component.class == self.class::DummyCourseModule
@@ -135,9 +163,18 @@ RSpec.describe Course::ComponentHost, type: :controller do
     end
 
     describe '#sidebar_items' do
-      it 'returns an empty array when no components included' do
-        allow(component_host).to receive(:components).and_return([])
-        expect(component_host.sidebar_items).to eq([])
+      subject { component_host.sidebar_items }
+      context 'when there are no components included' do
+        it 'returns an empty array' do
+          allow(component_host).to receive(:components).and_return([])
+          expect(subject).to eq([])
+        end
+      end
+
+      it "gathers all modules' sidebar items" do
+        expect(subject).to include(self.class::DummyCourseModule::NORMAL_SIDEBAR_ITEM)
+        expect(subject).to include(self.class::DummyCourseModule::ADMIN_SIDEBAR_ITEM)
+        expect(subject).to include(self.class::DummyCourseModule::SETTINGS_SIDEBAR_ITEM)
       end
     end
   end

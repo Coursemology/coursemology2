@@ -59,11 +59,26 @@ RSpec.describe Course::Controller, type: :controller do
     end
 
     describe '#sidebar_items' do
+      before { allow(controller).to receive(:current_course).and_return(course) }
+
       it 'orders the sidebar items by ascending weight' do
-        allow(controller).to receive(:current_course).and_return(course)
         weights = controller.sidebar_items.map { |item| item[:weight] }
         expect(weights.length).not_to eq(0)
         expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
+      end
+
+      context 'when no type is specified' do
+        it 'returns all sidebar items' do
+          expect(controller.sidebar_items).to \
+            contain_exactly(*controller.current_component_host.sidebar_items)
+        end
+      end
+
+      context 'when a type is specified' do
+        it 'returns only that type' do
+          expect(controller.sidebar_items(type: :admin).all? { |item| item[:type] == :admin }).to \
+            be_truthy
+        end
       end
     end
   end
