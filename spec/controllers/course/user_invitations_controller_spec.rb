@@ -39,7 +39,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
       subject { post :create, course_id: course, course: invite_params }
 
       context 'when a course manager visits the page' do
-        let!(:course_lecturer) { create(:course_manager, course: course, user: user) }
+        let!(:course_lecturer) { create(:course_manager, :approved, course: course, user: user) }
 
         it { is_expected.to redirect_to(course_users_invitations_path(course)) }
 
