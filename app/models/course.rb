@@ -13,7 +13,12 @@ class Course < ActiveRecord::Base
 
   belongs_to :creator, class_name: User.name
   has_many :course_users, inverse_of: :course, dependent: :destroy
-  has_many :users, through: :course_users
+  # @!attribute [r] users
+  # Returns all the users related to the course regardless of course_user state.
+  # Note that if you only want approved users you should call +users.with_approved_state+ instead.
+  has_many :users, through: :course_users do
+    include CourseUser::UsersConcern
+  end
   has_many :invitations, through: :course_users
   has_many :notifications, dependent: :destroy
 
