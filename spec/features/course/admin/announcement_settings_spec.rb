@@ -26,6 +26,26 @@ RSpec.feature 'Course: Administration: Announcement' do
           to have_selector('div', text: I18n.t('course.admin.announcement_settings.update.success'))
         expect(page).to have_field('announcement_settings_pagination', with: valid_pagination_count)
       end
+
+      scenario 'I can change the announcements title' do
+        visit course_admin_announcements_path(course)
+
+        new_title = 'New Title'
+        empty_title = ''
+
+        fill_in 'announcement_settings_title', with: new_title
+        click_button 'update'
+        expect(page).
+          to have_selector('div', text: I18n.t('course.admin.announcement_settings.update.success'))
+        expect(page).to have_field('announcement_settings_title', with: new_title)
+        expect(page).to have_selector('li a', text: new_title)
+
+        fill_in 'announcement_settings_title', with: empty_title
+        click_button 'update'
+        expect(page).
+          to have_selector('div', text: I18n.t('course.admin.announcement_settings.update.success'))
+        expect(page).to have_selector('li a', text: I18n.t('course.announcements.sidebar_title'))
+      end
     end
   end
 end
