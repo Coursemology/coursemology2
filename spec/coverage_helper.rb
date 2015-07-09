@@ -62,5 +62,9 @@ if ENV['CI']
     # SimpleCov configuration
     # Helpers for schema migrations. We don't test schema migrations, so these would never run.
     add_filter '/lib/extensions/legacy/active_record/connection_adapters/table_definition.rb'
+
+    # Extra statistics to be placed in `rake stats`. We don't run that on CI, so coverage is not
+    # important.
+    add_filter '/lib/tasks/coursemology/stats_setup.rake'
   end
 end
