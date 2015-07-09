@@ -130,4 +130,26 @@ RSpec.describe ApplicationController, type: :controller do
       end
     end
   end
+
+  describe ApplicationComponentsConcern do
+    context 'when the action raises a Coursemology::ComponentNotFoundError' do
+      run_rescue
+
+      before do
+        def controller.index
+          fail ComponentNotFoundError
+        end
+      end
+
+      it 'renders the component not found page to /public/404' do
+        get :index
+        expect(response).to render_template(file: "#{Rails.root}/public/404.html")
+      end
+
+      it 'returns HTTP status 404' do
+        get :index
+        expect(response.status).to eq(404)
+      end
+    end
+  end
 end
