@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   helper_method :add_breadcrumb
 
   include ApplicationMultitenancyConcern
+  include ApplicationComponentsConcern
   include ApplicationInternationalizationConcern
   include ApplicationThemingConcern
   include ApplicationUserConcern
