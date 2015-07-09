@@ -18,7 +18,8 @@ RSpec.feature 'Courses: Staff Management' do
       end
 
       scenario 'Teaching assistants cannot access the staff list' do
-        expect { visit course_users_staff_path(course) }.to raise_error(CanCan::AccessDenied)
+        visit course_users_staff_path(course)
+        expect(page.status_code).to eq(403)
       end
     end
 

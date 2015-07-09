@@ -3,11 +3,17 @@ module ApplicationUserConcern
 
   included do
     before_action :authenticate_user!, unless: :publicly_accessible?
+    rescue_from CanCan::AccessDenied, with: :handle_access_denied
   end
 
-  private
+  protected
 
   def publicly_accessible?
     is_a?(HighVoltage::PagesController)
+  end
+
+  def handle_access_denied(exception)
+    @exception = exception
+    render 'pages/403', status: 403
   end
 end
