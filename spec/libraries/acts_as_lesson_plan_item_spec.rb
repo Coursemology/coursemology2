@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Extension: Acts as Lesson Plan Item' do
-  class DummyClass < ActiveRecord::Base
+  class self::DummyClass < ActiveRecord::Base
     def self.columns
       []
     end
@@ -9,7 +9,7 @@ RSpec.describe 'Extension: Acts as Lesson Plan Item' do
     acts_as_lesson_plan_item
   end
 
-  subject(:dummy) { DummyClass.new }
+  subject(:dummy) { self.class::DummyClass.new }
   it { is_expected.to respond_to(:base_exp) }
   it { is_expected.to respond_to(:time_bonus_exp) }
   it { is_expected.to respond_to(:extra_bonus_exp) }

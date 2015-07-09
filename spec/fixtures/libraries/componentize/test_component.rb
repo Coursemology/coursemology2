@@ -1,3 +1,3 @@
 class TestComponent
-  include Componentize1::Component
+  include RSpec::ExampleGroups::Componentize::WhenIncludedInAClass::ComponentHost::Component
 end

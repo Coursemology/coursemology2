@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Extension: Acts as Attachable' do
-  class SampleModel < ActiveRecord::Base
+  class self::SampleModel < ActiveRecord::Base
     def self.columns
       []
     end
@@ -9,21 +9,21 @@ RSpec.describe 'Extension: Acts as Attachable' do
     acts_as_attachable
   end
 
-  describe SampleModel do
+  describe self::SampleModel do
     it { is_expected.to have_many(:attachments) }
   end
 
   describe 'controller' do
-    class SampleController < ActionController::Base; end
+    class self::SampleController < ActionController::Base; end
 
     context 'class methods' do
-      subject { SampleController }
+      subject { self.class::SampleController }
 
       it { is_expected.to respond_to(:accepts_attachments) }
     end
 
     context 'instance methods' do
-      let(:controller) { SampleController.new }
+      let(:controller) { self.class::SampleController.new }
       subject { controller }
       it { is_expected.to respond_to(:attachments_params) }
 
@@ -36,30 +36,31 @@ RSpec.describe 'Extension: Acts as Attachable' do
       describe '#build_attachments' do
         before do
           allow(controller).to receive(:params).and_return(controller: 'sample_model')
+          example_group_class = self.class
           controller.instance_eval do
-            @sample_model = SampleModel.new
+            @sample_model = example_group_class::SampleModel.new
             build_attachments
           end
         end
 
         it 'builds the attachments' do
-          expect(controller.instance_variable_get('@sample_model').attachments).not_to be_empty
+          expect(controller.instance_variable_get(:@sample_model).attachments).not_to be_empty
         end
       end
     end
   end
 
   describe 'form_builder helper' do
-    class SampleView < ActionView::Base; end
-    class SampleFormBuilder < ActionView::Helpers::FormBuilder; end
+    class self::SampleView < ActionView::Base; end
+    class self::SampleFormBuilder < ActionView::Helpers::FormBuilder; end
 
-    let(:template) { SampleView.new(Rails.root.join('app', 'views')) }
+    let(:template) { self.class::SampleView.new(Rails.root.join('app', 'views')) }
     let(:resource) do
-      model = SampleModel.new
+      model = self.class::SampleModel.new
       model.attachments << build(:attachment)
       model
     end
-    let(:form_builder) { SampleFormBuilder.new(:sample, resource, template, {}) }
+    let(:form_builder) { self.class::SampleFormBuilder.new(:sample, resource, template, {}) }
     subject { form_builder }
 
     it { is_expected.to respond_to(:attachments) }

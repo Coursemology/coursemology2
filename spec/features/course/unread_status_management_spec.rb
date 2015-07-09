@@ -13,16 +13,17 @@ RSpec.describe 'Course: Announcements', type: :feature do
 
       describe 'visit announcement' do
         describe 'index page' do
-          TEST_NUMBER = 66
+          self::TEST_NUMBER = 66
 
           let!(:announcements) do
-            create_list(:course_announcement, TEST_NUMBER, course: course, creator: second_user,
-                                                           updater: second_user)
+            create_list(:course_announcement, self.class::TEST_NUMBER,
+                        course: course, creator: second_user, updater: second_user)
           end
 
           context 'before visiting' do
             it 'remains unread number as TEST_NUMBER' do
-              expect(course.announcements.unread_by(first_user).count).to eq(TEST_NUMBER)
+              expect(course.announcements.unread_by(first_user).count).to \
+                eq(self.class::TEST_NUMBER)
             end
           end
 
@@ -33,7 +34,7 @@ RSpec.describe 'Course: Announcements', type: :feature do
             end
 
             it 'marks announcements in page 2 as read' do
-              expect_number = TEST_NUMBER - course.announcements.page(2).count
+              expect_number = self.class::TEST_NUMBER - course.announcements.page(2).count
               expect(course.announcements.unread_by(first_user).count).to eq(expect_number)
             end
           end

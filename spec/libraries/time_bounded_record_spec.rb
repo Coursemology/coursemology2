@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Extension: Time Bounded Record', type: :model do
-  class TimeBoundedTest < ActiveRecord::Base
+  class self::TimeBoundedTest < ActiveRecord::Base
+    self.table_name = 'time_bounded_tests'
   end
 
   temporary_table(:time_bounded_tests) do |t|
@@ -18,12 +19,12 @@ RSpec.describe 'Extension: Time Bounded Record', type: :model do
         options = {}
         options[:valid_from] = Time.zone.now + pair[0] unless pair[0].nil?
         options[:valid_to] = Time.zone.now + pair[1] unless pair[1].nil?
-        TimeBoundedTest.create!(options)
+        self.class::TimeBoundedTest.create!(options)
       end.select(&:currently_valid?)
     end
 
     it 'gets records which are still valid' do
-      matching_entries = TimeBoundedTest.currently_valid
+      matching_entries = self.class::TimeBoundedTest.currently_valid
       expect(matching_entries.size).to eq(valid_records.length)
 
       matching_entries.each do |record|
@@ -34,20 +35,20 @@ RSpec.describe 'Extension: Time Bounded Record', type: :model do
     end
 
     context 'when the records have neither valid_from nor valid_to' do
-      subject { TimeBoundedTest.new }
+      subject { self.class::TimeBoundedTest.new }
 
       it { is_expected.to be_currently_valid }
     end
 
     context 'when the records do not have valid_from' do
       context 'when the records expire after today' do
-        subject { TimeBoundedTest.new(valid_to: Time.zone.now + 1.day) }
+        subject { self.class::TimeBoundedTest.new(valid_to: Time.zone.now + 1.day) }
 
         it { is_expected.to be_currently_valid }
       end
 
       context 'when the records expire before today' do
-        subject { TimeBoundedTest.new(valid_to: Time.zone.now - 1.day) }
+        subject { self.class::TimeBoundedTest.new(valid_to: Time.zone.now - 1.day) }
 
         it { is_expected.to_not be_currently_valid }
       end
@@ -55,13 +56,13 @@ RSpec.describe 'Extension: Time Bounded Record', type: :model do
 
     context 'when the records do not have valid_to' do
       context 'when the records become valid after today' do
-        subject { TimeBoundedTest.new(valid_from: Time.zone.now + 1.day) }
+        subject { self.class::TimeBoundedTest.new(valid_from: Time.zone.now + 1.day) }
 
         it { is_expected.not_to be_currently_valid }
       end
 
       context 'when the records become valid before today' do
-        subject { TimeBoundedTest.new(valid_from: Time.zone.now - 1.day) }
+        subject { self.class::TimeBoundedTest.new(valid_from: Time.zone.now - 1.day) }
 
         it { is_expected.to be_currently_valid }
       end
@@ -70,8 +71,8 @@ RSpec.describe 'Extension: Time Bounded Record', type: :model do
     context 'when the records have both valid_from and valid_to' do
       context 'when the records have expired' do
         subject do
-          TimeBoundedTest.new(valid_from: Time.zone.now - 1.week,
-                              valid_to: Time.zone.now - 1.day)
+          self.class::TimeBoundedTest.new(valid_from: Time.zone.now - 1.week,
+                                          valid_to: Time.zone.now - 1.day)
         end
 
         it { is_expected.to be_expired }
@@ -80,8 +81,8 @@ RSpec.describe 'Extension: Time Bounded Record', type: :model do
 
       context 'when the records have not become valid' do
         subject do
-          TimeBoundedTest.new(valid_from: Time.zone.now + 1.day,
-                              valid_to: Time.zone.now + 1.week)
+          self.class::TimeBoundedTest.new(valid_from: Time.zone.now + 1.day,
+                                          valid_to: Time.zone.now + 1.week)
         end
 
         it { is_expected.to be_not_yet_valid }
@@ -90,8 +91,8 @@ RSpec.describe 'Extension: Time Bounded Record', type: :model do
 
       context 'when the records are become valid' do
         subject do
-          TimeBoundedTest.new(valid_from: Time.zone.now - 1.week,
-                              valid_to: Time.zone.now + 1.week)
+          self.class::TimeBoundedTest.new(valid_from: Time.zone.now - 1.week,
+                                          valid_to: Time.zone.now + 1.week)
         end
 
         it { is_expected.to be_currently_valid }

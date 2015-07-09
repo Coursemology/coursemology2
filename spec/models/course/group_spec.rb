@@ -13,7 +13,7 @@ RSpec.describe Course::Group, type: :model do
       subject { Course::Group.new(course: course, name: 'group') }
 
       # TODO: Remove when using Rails 5.0
-      MANAGER_ROLE = Course::GroupUser.roles[:manager]
+      self::MANAGER_ROLE = Course::GroupUser.roles[:manager]
 
       context 'when a user is provided' do
         subject { Course::Group.new(course: course, creator: owner, updater: owner) }
@@ -31,7 +31,8 @@ RSpec.describe Course::Group, type: :model do
           subject.save!
         end
         it 'sets the user as the owner of the group' do
-          expect(subject.group_users.exists?(user: owner, role: MANAGER_ROLE)).to be_truthy
+          expect(subject.group_users.exists?(user: owner, role: self.class::MANAGER_ROLE)).to \
+            be_truthy
         end
       end
 

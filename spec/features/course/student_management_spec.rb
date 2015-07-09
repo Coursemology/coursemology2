@@ -20,15 +20,15 @@ RSpec.feature 'Courses: Students' do
     end
 
     scenario "Course staff can change students' names" do
-      NEW_NAME = 'NewNamePerson'.freeze
+      new_name = 'NewNamePerson'.freeze
 
       visit course_users_students_path(course)
       within('form.edit_course_user:first') do
-        fill_in 'course_user_name', with: NEW_NAME
+        fill_in 'course_user_name', with: new_name
         click_button 'submit'
 
-        expect(page).to have_field('course_user_name', with: NEW_NAME)
       end
+      expect(page).to have_field('course_user_name', with: new_name)
     end
 
     scenario "Course staff can change students' phantom status" do
