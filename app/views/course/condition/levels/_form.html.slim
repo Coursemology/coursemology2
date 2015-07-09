@@ -1,7 +1,11 @@
+- if @conditional.is_a?(Course::Achievement)
+  - add_breadcrumb :index, :course_achievements_path
+  - add_breadcrumb @conditional.title, edit_course_achievement_path(current_course, @conditional)
+
 = simple_form_for [current_course, @conditional, @level_condition],
                   resource: :course_achievement_condition_level do |f|
   = f.error_notification
   = f.error :course_achievement_condition_level
   = f.input :minimum_level, as: :integer, input_html: { min: '1', step: 'any' }
 
-  = f.submit
+  = f.button :submit

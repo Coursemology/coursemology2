@@ -9,6 +9,13 @@ en:
     plain_text_link: '%{text} (%{url})'
     time_range: "%{from} to %{to}"
   helpers:
+    submit:
+      condition_level:
+        create: 'Create Level Condition'
+        update: 'Update Level Condition'
+      condition_achievement:
+        create: 'Create Achievement Condition'
+        update: 'Update Achievement Condition'
     buttons:
       new: 'New %{model}'
       edit: "Edit %{model}"
