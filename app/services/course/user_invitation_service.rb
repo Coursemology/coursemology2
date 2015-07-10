@@ -159,7 +159,7 @@ class Course::UserInvitationService
       course_user = @current_course.course_users.build(name: user[:name], workflow_state: :invited,
                                                        creator: @current_user,
                                                        updater: @current_user)
-      user_email = user_email_map[user[:email]] || UserEmail.new(email: user[:email])
+      user_email = user_email_map[user[:email]] || User::Email.new(email: user[:email])
       course_user.build_invitation(user_email: user_email, creator: @current_user,
                                    updater: @current_user)
     end
@@ -168,9 +168,9 @@ class Course::UserInvitationService
   # Creates an email-to-user mapping, given a list of email addresses.
   #
   # @param [Array<String>] users An array of email addresses to query.
-  # @return [Hash{String=>UserEmail}] The mapping from an email address to a +UserEmail+.
+  # @return [Hash{String=>User::Email}] The mapping from an email address to a +User::Email+.
   def user_email_map(users)
-    UserEmail.where { email.in(users) }.
+    User::Email.where { email.in(users) }.
       map { |user_email| [user_email.email, user_email] }.to_h
   end
 

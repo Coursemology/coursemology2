@@ -337,7 +337,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
       context "when the user's email exists" do
         let!(:email) { create(:user_email, user: nil) }
-        it 'associates the email address with a UserEmail object' do
+        it 'associates the email address with a User::Email object' do
           result = subject.send(:user_email_map, [email.email])
           expect(result).to have_key(email.email)
           expect(result[email.email]).to eq(email)

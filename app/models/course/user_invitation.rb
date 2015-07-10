@@ -2,7 +2,7 @@ class Course::UserInvitation < ActiveRecord::Base
   after_initialize :generate_invitation_key, if: :new_record?
 
   belongs_to :course_user, dependent: :destroy
-  belongs_to :user_email, validate: true
+  belongs_to :user_email, validate: true, class_name: User::Email.name
 
   private
 

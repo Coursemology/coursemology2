@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   it do
     is_expected.to have_many(:emails).
-      class_name(UserEmail.name).
+      class_name(User::Email.name).
       inverse_of(:user).
       dependent(:destroy)
   end
@@ -48,11 +48,11 @@ RSpec.describe User, type: :model do
         result.email = generate(:email)
         result
       end
-      it 'creates a new UserEmail' do
+      it 'creates a new User::Email' do
         expect(user.emails.length).to_not eq(0)
       end
 
-      it 'creates a new primary UserEmail' do
+      it 'creates a new primary User::Email' do
         expect(user.emails[0].primary?).to eq(true)
       end
 

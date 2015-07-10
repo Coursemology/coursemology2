@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
 
   after_validation :propagate_user_email_errors
 
-  has_many :emails, -> { order('primary' => :desc) }, class_name: UserEmail.name,
+  has_many :emails, -> { order('primary' => :desc) }, class_name: User::Email.name,
                                                       inverse_of: :user, dependent: :destroy
   has_many :instance_users
   has_many :instances, through: :instance_users
@@ -63,7 +63,7 @@ class User < ActiveRecord::Base
 
   # Gets the default email address record.
   #
-  # @return [UserEmail] The user's primary email address record.
+  # @return [User::Email] The user's primary email address record.
   def default_email_record
     valid_emails = emails.each.select { |email_record| !email_record.marked_for_destruction? }
     result = valid_emails.find(&:primary?)
