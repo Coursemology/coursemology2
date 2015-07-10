@@ -7,7 +7,7 @@
 
   = f.input :published
 
-  - if @achievement && !@achievement.new_record?
+  - if @achievement.try(:persisted?)
     h2
       span = t('course.condition.header')
       div.dropdown.pull-right
@@ -33,4 +33,3 @@
                    locals: { course: current_course }
 
   = f.button :submit
-
