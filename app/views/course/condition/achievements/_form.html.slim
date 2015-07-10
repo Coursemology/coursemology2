@@ -1,7 +1,11 @@
+- if @conditional.is_a?(Course::Achievement)
+  - add_breadcrumb :index, :course_achievements_path
+  - add_breadcrumb @conditional.title, edit_course_achievement_path(current_course, @conditional)
+
 = simple_form_for [current_course, @conditional, @achievement_condition],
                   resource: :course_achievement_condition_achievement do |f|
   = f.error_notification
   = f.error :course_achievement_condition_achievement
   = f.input :achievement_id, collection: Course::Achievement.all
 
-  = f.submit
+  = f.button :submit

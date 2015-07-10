@@ -108,6 +108,168 @@ RSpec.describe 'Course: Achievements' do
           expect(achievement.reload.description).to eq(new_description)
         end
       end
+
+      context 'achievement achievement conditions' do
+        let(:achievement) { create(:course_achievement, course: course) }
+        it do
+          is_expected.to have_selector(:link_or_button,
+                                       'course.condition.achievements.new.header')
+        end
+        context 'creating an achievement condition' do
+          before do
+            click_link 'course.condition.achievements.new.header'
+            expect(current_path).to eq(new_course_achievement_condition_achievement_path(course, achievement))
+            find('#condition_achievement_achievement_id').
+              find(:css, "option[value='#{achievement.id}']").
+              select_option
+            click_button 'helpers.submit.condition_achievement.create'
+          end
+          it 'creates an achievement condition correctly' do
+            expect(current_path).to eq edit_course_achievement_path(course, achievement)
+            expect(page).to have_selector('tr.condition > td:nth-child(2)', text: achievement.title)
+          end
+        end
+        context 'editing and deleting' do
+          let!(:achievement_which_is_condition) { create(:course_achievement, course: course) }
+          let(:achievement_condition) do
+            create(:course_condition_achievement,
+                   course: course, achievement: achievement_which_is_condition)
+          end
+          let!(:some_other_achievement) { create(:course_achievement, course: course) }
+          let!(:achievement) do
+            create(:course_achievement, course: course, conditions: [achievement_condition])
+          end
+
+          it 'editing an achievement condition' do
+            expect(current_path).to eq edit_course_achievement_path(course, achievement)
+            expect(page).to have_selector('tr.condition > td:nth-child(2)',
+                                          text: achievement_which_is_condition.title)
+            condition_edit_path =
+              edit_course_achievement_condition_achievement_path(course,
+                                                                 achievement,
+                                                                 achievement_condition)
+            find_link(nil, href: condition_edit_path).click
+
+            find('#condition_achievement_achievement_id').
+              find(:css, "option[value='#{some_other_achievement.id}']").
+              select_option
+            click_button 'helpers.submit.condition_achievement.update'
+            expect(current_path).to eq edit_course_achievement_path(course, achievement)
+            expect(page).to have_selector('tr.condition > td:nth-child(2)',
+                                          text: some_other_achievement.title)
+          end
+
+          it 'deleting an achievement condition' do
+            condition_delete_path =
+              course_achievement_condition_achievement_path(course, achievement,
+                                                            achievement_condition)
+            expect do
+              find_link(nil, href: condition_delete_path).click
+            end.to change { achievement.conditions.count }.by(-1)
+            expect(page).not_to have_selector('tr.condition > td:nth-child(2)',
+                                              text: achievement_which_is_condition.title)
+          end
+        end
+      end
+
+      context 'achievement level conditions' do
+        it do
+          is_expected.to have_selector(:link_or_button,
+                                       'course.condition.levels.new.header')
+        end
+        context 'creating a level condition' do
+          before do
+            click_link I18n.t('course.condition.levels.new.header')
+            expect(current_path).to eq(new_course_achievement_condition_level_path(course,
+                                                                                   achievement))
+            fill_in 'minimum_level', with: '10'
+            click_button 'helpers.submit.condition_level.create'
+          end
+          it 'creates a level condition correctly' do
+            expect(current_path).to eq edit_course_achievement_path(course, achievement)
+            expect(page).to have_selector('tr.condition > td:nth-child(2)', text: '10')
+          end
+        end
+
+        context 'editing and deleting' do
+          let(:level_condition) { create(:course_condition_level, course: course) }
+          let!(:achievement) do
+            create(:course_achievement, course: course, conditions: [level_condition])
+          end
+
+          it 'editing a level condition' do
+            expect(current_path).to eq edit_course_achievement_path(course, achievement)
+            expect(page).to have_selector('tr.condition > td:nth-child(2)', text: '1')
+            condition_edit_path = edit_course_achievement_condition_level_path(course,
+                                                                               achievement,
+                                                                               level_condition)
+            find_link(nil, href: condition_edit_path).click
+            fill_in 'minimum_level', with: '13'
+            click_button 'helpers.submit.condition_level.update'
+            expect(current_path).to eq edit_course_achievement_path(course, achievement)
+            expect(page).to have_selector('tr.condition > td:nth-child(2)', text: '13')
+          end
+
+          it 'deleting a level condition' do
+            condition_delete_path = course_achievement_condition_level_path(course,
+                                                                            achievement,
+                                                                            level_condition)
+            expect do
+              find_link(nil, href: condition_delete_path).click
+            end.to change { achievement.conditions.count }.by(-1)
+            expect(page).not_to have_selector('tr.condition > td:nth-child(2)', text: '1')
+          end
+        end
+      end
+
+      context 'achievement level conditions' do
+        it do
+          is_expected.to have_selector(:link_or_button, 'course.condition.levels.new.header')
+        end
+        context 'creating a level condition' do
+          before do
+            click_link I18n.t('course.condition.levels.new.header')
+            expect(current_path).to eq(new_course_achievement_condition_level_path(course,
+                                                                                   achievement))
+            fill_in 'minimum_level', with: '10'
+            click_button 'helpers.submit.condition_level.create'
+          end
+          it 'creates a level condition correctly' do
+            expect(current_path).to eq edit_course_achievement_path(course, achievement)
+            expect(page).to have_selector('tr.condition > td:nth-child(2)', text: '10')
+          end
+        end
+
+        context 'editing and deleting' do
+          let(:level_condition) { create(:course_condition_level, course: course) }
+          let!(:achievement) do
+            create(:course_achievement, course: course, conditions: [level_condition])
+          end
+
+          it 'editing a level condition' do
+            expect(current_path).to eq edit_course_achievement_path(course, achievement)
+            expect(page).to have_selector('tr.condition > td:nth-child(2)', text: '1')
+            condition_edit_path = edit_course_achievement_condition_level_path(course,
+                                                                               achievement,
+                                                                               level_condition)
+            find_link(nil, href: condition_edit_path).click
+            fill_in 'minimum_level', with: '13'
+            click_button 'helpers.submit.condition_level.update'
+            expect(current_path).to eq edit_course_achievement_path(course, achievement)
+            expect(page).to have_selector('tr.condition > td:nth-child(2)', text: '13')
+          end
+
+          it 'deleting a level condition' do
+            condition_delete_path = course_achievement_condition_level_path(course,
+                                                                            achievement,
+                                                                            level_condition)
+            expect do
+              find_link(nil, href: condition_delete_path).click
+            end.to change { achievement.conditions.count }.by(-1)
+            expect(page).not_to have_selector('tr.condition > td:nth-child(2)', text: '1')
+          end
+        end
+      end
     end
 
     describe 'achievement destruction' do

@@ -1,0 +1,7 @@
+= content_tag_for(:tr, achievement)
+  td Achievement
+  td = achievement.specific.achievement.title
+
+  td
+    = edit_button([course, achievement.conditional, achievement.specific])
+    = delete_button([course, achievement.conditional, achievement.specific])

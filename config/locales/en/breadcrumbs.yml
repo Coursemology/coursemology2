@@ -25,6 +25,12 @@ en:
       announcements:
         index: :'course.announcements.index.header'
         new: :'course.announcements.new.header'
+      achievement:
+        condition:
+          levels:
+            index: :'course.achievements.index.header'
+          achievements:
+            index: :'course.achievements.index.header'
       achievements:
         index: :'course.achievements.index.header'
         new: :'course.achievements.new.header'
