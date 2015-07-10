@@ -5,11 +5,12 @@ class ActivityMailer < ApplicationMailer
   # Emails a recipient, informing him of an activity.
   #
   # @param [User] recipient The recipient of the email.
-  # @param object The object to be made available to the view, accessible using +@object+.
+  # @param [Course::Notification|UserNotification] notification The notification to be made
+  #   available to the view, accessible using +@notification+.
   # @param [String] view_path The path to the view which should be rendered.
-  def email(recipient, object, view_path)
+  def email(recipient, notification, view_path)
     @recipient = recipient
-    @object = object
+    @object = notification.activity.object
     mail(to: recipient.email, template: view_path)
   end
 
@@ -22,8 +23,7 @@ class ActivityMailer < ApplicationMailer
   def mail(options)
     template = options.delete(:template)
     if template
-      prepend_view_path(File.dirname(template))
-      options[:template_path] = ''
+      options[:template_path] = File.dirname(template)
       options[:template_name] = File.basename(template)
     end
 
