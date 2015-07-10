@@ -1,0 +1,10 @@
+en:
+  course:
+    condition:
+      header: 'Conditions'
+      new:
+        header: 'New...'
+      type:
+        header: 'Type'
+      description:
+        header: 'Description'

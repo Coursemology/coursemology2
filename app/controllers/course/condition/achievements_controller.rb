@@ -31,7 +31,7 @@ class Course::Condition::AchievementsController < Course::ConditionsController
     if @achievement_condition.destroy
       redirect_to return_to_path, success: t('course.condition.achievements.destroy.success')
     else
-      redirect_to return_to_path, alert: t('course.condition.achievements.destroy.error')
+      redirect_to return_to_path, danger: t('course.condition.achievements.destroy.error')
     end
   end
 
