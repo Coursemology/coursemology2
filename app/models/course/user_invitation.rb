@@ -1,6 +1,4 @@
 class Course::UserInvitation < ActiveRecord::Base
-  stampable
-
   after_initialize :generate_invitation_key, if: :new_record?
 
   belongs_to :course_user, dependent: :destroy

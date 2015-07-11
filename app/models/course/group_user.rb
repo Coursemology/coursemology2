@@ -1,6 +1,4 @@
 class Course::GroupUser < ActiveRecord::Base
-  stampable
-
   after_initialize :set_defaults, if: :new_record?
 
   enum role: { normal: 0, manager: 1 }

@@ -31,7 +31,7 @@ gem 'validates_hostname'
 # A Ruby state machine library
 gem 'workflow'
 # Add creator_id and updater_id attributes to models
-gem 'magiclabs-userstamp', github: 'lowjoel/userstamp'
+gem 'activerecord-userstamp', '>= 3.0.2'
 # Squeel as an SQL-like DSL
 gem 'squeel'
 # For multiple table inheritance
