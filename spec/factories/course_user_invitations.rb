@@ -18,8 +18,6 @@ FactoryGirl.define do
         build(:user_email, user: user, primary: false)
       end
     end
-    creator
-    updater
 
     after(:create) do |invitation|
       invitation.course_user.save!

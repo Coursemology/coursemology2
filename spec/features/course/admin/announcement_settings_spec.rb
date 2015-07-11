@@ -4,7 +4,7 @@ RSpec.feature 'Course: Administration: Announcement' do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let(:user) { create(:administrator) }
+    let(:user) { create(:user) }
     let(:course) { create(:course, creator: user) }
 
     context 'As a Course Administrator' do

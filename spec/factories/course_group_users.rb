@@ -3,8 +3,6 @@ FactoryGirl.define do
     course_group
     user
     role :normal
-    creator
-    updater
 
     after(:build) do |group_user|
       course = group_user.course_group.course

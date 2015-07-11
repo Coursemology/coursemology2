@@ -23,8 +23,7 @@ RSpec.feature 'Global announcements' do
       end
 
       scenario 'I should see instance announcements' do
-        announcement = create(:instance_announcement, instance: instance, creator: user,
-                                                      updater: user)
+        announcement = create(:instance_announcement, instance: instance)
         visit announcements_path
 
         expect(page).to have_tag('div.global-announcement') do
@@ -35,7 +34,7 @@ RSpec.feature 'Global announcements' do
       end
 
       scenario 'I should see system announcements' do
-        announcement = create(:system_announcement, creator: user, updater: user)
+        announcement = create(:system_announcement)
         visit announcements_path
 
         expect(page).to have_tag('div.global-announcement') do
@@ -49,10 +48,8 @@ RSpec.feature 'Global announcements' do
         announcements = (-3..0).map do |i|
           now = Time.zone.now
           [
-            create(:instance_announcement, valid_from: now - i.seconds,
-                                           instance: instance, creator: user, updater: user),
-            create(:system_announcement, valid_from: now - i.seconds,
-                                         creator: user, updater: user)
+            create(:instance_announcement, valid_from: now - i.seconds, instance: instance),
+            create(:system_announcement, valid_from: now - i.seconds)
           ]
         end
         announcements.flatten!

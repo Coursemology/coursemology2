@@ -7,10 +7,10 @@ RSpec.describe 'System: Administration: InstanceAnnouncements', type: :feature d
     let!(:instance) { create(:instance) }
 
     with_tenant(:instance) do
-      let!(:user) { create(:administrator) }
+      let(:user) { create(:administrator) }
 
       before do
-        create_list(:instance_announcement, 50, instance: instance, creator: user, updater: user)
+        create_list(:instance_announcement, 50, instance: instance)
 
         login_as(user, scope: :user)
         visit admin_instance_announcements_path

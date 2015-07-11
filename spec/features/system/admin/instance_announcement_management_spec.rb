@@ -6,7 +6,7 @@ RSpec.describe 'System: Administration: InstanceAnnouncements', type: :feature d
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let!(:user) { create(:administrator) }
+    let(:user) { create(:administrator) }
 
     before do
       login_as(user, scope: :user)
@@ -126,7 +126,7 @@ RSpec.describe 'System: Administration: InstanceAnnouncements', type: :feature d
 
     describe 'index' do
       let!(:announcements) do
-        create_list(:instance_announcement, 10, instance: instance, creator: user, updater: user)
+        create_list(:instance_announcement, 10, instance: instance)
       end
 
       before do

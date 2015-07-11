@@ -16,8 +16,7 @@ RSpec.describe 'Course: Announcements', type: :feature do
           self::TEST_NUMBER = 66
 
           let!(:announcements) do
-            create_list(:course_announcement, self.class::TEST_NUMBER,
-                        course: course, creator: second_user, updater: second_user)
+            create_list(:course_announcement, self.class::TEST_NUMBER, course: course)
           end
 
           context 'before visiting' do

@@ -1,8 +1,4 @@
-RSpec.configure do |config|
-  config.before(:example) do
-    User.stamper = build(:user)
-  end
-  config.after(:example) do
-    User.reset_stamper
-  end
+ActsAsTenant.with_tenant(Instance.default) do
+  # Create a global stamper for this spec run
+  User.stamper = User.first
 end

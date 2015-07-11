@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'System: Administration: Announcements', type: :feature do
-  let!(:user) { create(:administrator) }
+  let(:user) { create(:administrator) }
 
   before do
     login_as(user, scope: :user)
@@ -100,7 +100,7 @@ RSpec.describe 'System: Administration: Announcements', type: :feature do
   end
 
   describe 'index' do
-    let!(:announcements) { create_list(:system_announcement, 10, creator: user, updater: user) }
+    let!(:announcements) { create_list(:system_announcement, 10) }
 
     before { visit admin_announcements_path }
     subject { page }

@@ -8,11 +8,10 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
     let(:erroneous_course) do
       create(:open_course).tap do |course|
         user = create(:user)
-        course.course_users.build(user: user, creator: user, updater: user).save
-        course.course_users.build(user: user, creator: user, updater: user)
+        course.course_users.build(user: user).save
+        course.course_users.build(user: user)
 
-        course.course_users.build(workflow_state: :invited, name: generate(:name),
-                                  creator: user, updater: user).
+        course.course_users.build(workflow_state: :invited, name: generate(:name)).
           build_invitation.build_user_email(email: 'fdgsdf@no')
         course.save
       end

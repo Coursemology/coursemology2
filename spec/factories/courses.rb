@@ -4,8 +4,6 @@ FactoryGirl.define do
     description 'example course'
     start_at Time.zone.now
     end_at 7.days.from_now
-    creator
-    updater
 
     factory :open_course do
       status :opened

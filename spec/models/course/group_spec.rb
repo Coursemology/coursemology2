@@ -9,14 +9,14 @@ RSpec.describe Course::Group, type: :model do
   with_tenant(:instance) do
     describe '#initialize' do
       let(:owner) { create(:user) }
-      let(:course) { create(:course, creator: owner, updater: owner) }
+      let(:course) { create(:course, creator: owner) }
       subject { Course::Group.new(course: course, name: 'group') }
 
       # TODO: Remove when using Rails 5.0
       self::MANAGER_ROLE = Course::GroupUser.roles[:manager]
 
       context 'when a user is provided' do
-        subject { Course::Group.new(course: course, creator: owner, updater: owner) }
+        subject { Course::Group.new(course: course, creator: owner) }
         it 'sets the user as the owner of the group' do
           expect(subject.group_users.length).to eq(1)
           owner_group_user = subject.group_users.first
@@ -41,7 +41,7 @@ RSpec.describe Course::Group, type: :model do
         let(:user) { create(:user) }
         before do
           create(:course_user, course: course, user: user)
-          2.times { group.group_users.build(user: user, creator: owner, updater: owner) }
+          2.times { group.group_users.build(user: user) }
         end
         subject { group.save }
 

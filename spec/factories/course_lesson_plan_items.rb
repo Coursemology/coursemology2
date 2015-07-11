@@ -1,7 +1,5 @@
 FactoryGirl.define do
   factory :course_lesson_plan_item, class: 'Course::LessonPlanItem' do
-    creator
-    updater
     course
     base_exp          { rand(1..10) * 100 }
     time_bonus_exp    { rand(1..10) * 100 }
