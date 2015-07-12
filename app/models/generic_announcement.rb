@@ -2,12 +2,9 @@
 #
 # This is the abstract single-table inheritance table used for both announcement types.
 class GenericAnnouncement < ActiveRecord::Base
-  stampable
-
   after_initialize :set_defaults, if: :new_record?
 
   belongs_to :instance, inverse_of: :announcements
-  belongs_to :creator, class_name: User.name
 
   # @!method self.system_announcements_first
   #   Orders the results such that system announcements appear earlier in the result set.

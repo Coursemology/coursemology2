@@ -130,8 +130,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
 
           context 'when the user is already registered' do
             before do
-              course.course_users.build(user: user, workflow_state: :approved, creator: user,
-                                        updater: user)
+              course.course_users.build(user: user, workflow_state: :approved)
               course.save!
             end
 

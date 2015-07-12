@@ -9,7 +9,7 @@ RSpec.describe 'Course: Achievements', type: :feature do
     let!(:user) { create(:administrator) }
     let!(:course) { create(:course) }
     let!(:achievements) do
-      create_list(:course_achievement, 10, course: course, creator: user, updater: user)
+      create_list(:course_achievement, 10, course: course)
     end
 
     before do

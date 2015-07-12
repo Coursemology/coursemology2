@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Course::Announcement, type: :model do
-  it { is_expected.to belong_to(:creator).class_name(User.name) }
   it { is_expected.to belong_to(:course).inverse_of(:announcements) }
   it { is_expected.to validate_presence_of(:title) }
 
@@ -60,13 +59,17 @@ RSpec.describe Course::Announcement, type: :model do
         end
 
         it 'does not change unread announcement number of updater' do
-          first_announcement.update(content: 'edited', updater: first_user)
-          expect(course.announcements.unread_by(first_user).count).to eq(1)
+          expect do
+            User.with_stamper(first_user) do
+              first_announcement.update(content: 'edited')
+            end
+          end.not_to change { course.announcements.unread_by(first_user).count }
         end
 
         it 'marks announcement which has been read by others as unread' do
-          second_announcement.update(content: 'edited', updater: first_user)
-          expect(course.announcements.unread_by(second_user).count).to eq(2)
+          expect do
+            second_announcement.update(content: 'edited', updater: first_user)
+          end.to change { course.announcements.unread_by(second_user).count }.by(1)
         end
       end
     end

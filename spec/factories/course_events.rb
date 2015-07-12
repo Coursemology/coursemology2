@@ -1,8 +1,6 @@
 FactoryGirl.define do
   factory :course_event, class: 'Course::Event' do
     course
-    creator
-    updater
     start_time 1.days.from_now
     sequence(:title) { |n| "Example Course Event #{n}" }
     description 'Funky description'

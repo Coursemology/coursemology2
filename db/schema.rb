@@ -35,9 +35,9 @@ ActiveRecord::Schema.define(version: 20150702122955) do
   create_table "activities", force: :cascade do |t|
     t.integer  "actor_id",      null: false, index: {name: "fk__activities_actor_id"}, foreign_key: {references: "users", name: "fk_activities_actor_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "object_id",     null: false
-    t.string   "object_type",   null: false
-    t.string   "event",         null: false
-    t.string   "notifier_type", null: false
+    t.string   "object_type",   limit: 255, null: false
+    t.string   "event",         limit: 255, null: false
+    t.string   "notifier_type", limit: 255, null: false
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end

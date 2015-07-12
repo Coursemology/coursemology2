@@ -4,11 +4,11 @@ RSpec.describe 'System: Administration: Announcements', type: :feature do
   describe 'Pagination' do
     subject { page }
 
-    let!(:user) { create(:administrator) }
+    let(:user) { create(:administrator) }
 
     before do
       System::Announcement.delete_all
-      create_list(:system_announcement, 50, creator: user, updater: user)
+      create_list(:system_announcement, 50)
 
       login_as(user, scope: :user)
       visit admin_announcements_path

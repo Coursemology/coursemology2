@@ -117,7 +117,7 @@ RSpec.describe 'Course: Announcements', type: :feature do
 
     describe 'index' do
       let!(:announcements) do
-        create_list(:course_announcement, 10, course: course, creator: user, updater: user)
+        create_list(:course_announcement, 10, course: course)
       end
 
       before do

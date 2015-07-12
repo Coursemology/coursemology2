@@ -10,7 +10,7 @@ RSpec.describe 'Course: Announcements', type: :feature do
       let!(:user) { create(:administrator) }
       let!(:course) { create(:course) }
       let!(:announcements) do
-        create_list(:course_announcement, 50, course: course, creator: user, updater: user)
+        create_list(:course_announcement, 50, course: course)
       end
 
       before do

@@ -3,8 +3,6 @@ class CourseUser < ActiveRecord::Base
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
 
-  stampable
-
   enum role: { student: 0, teaching_assistant: 1, manager: 2, owner: 3 }
 
   # A set of roles which comprise the staff of a course.

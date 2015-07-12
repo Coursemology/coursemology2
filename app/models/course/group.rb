@@ -1,6 +1,4 @@
 class Course::Group < ActiveRecord::Base
-  stampable
-
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
 

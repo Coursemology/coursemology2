@@ -1,8 +1,6 @@
 FactoryGirl.define do
   factory :course_user do
     user
-    creator
-    updater
     course
     phantom false
     role :student

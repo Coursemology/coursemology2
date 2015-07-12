@@ -2,16 +2,14 @@ class Course < ActiveRecord::Base
   include Course::LevelsConcern
   include Course::LessonPlanConcern
 
-  acts_as_tenant(:instance)
+  acts_as_tenant :instance
   has_settings_on :settings
-  stampable
 
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
 
   enum status: { closed: 0, published: 1, opened: 2 }
 
-  belongs_to :creator, class_name: User.name
   has_many :course_users, inverse_of: :course, dependent: :destroy
   # @!attribute [r] users
   # Returns all the users related to the course regardless of course_user state.

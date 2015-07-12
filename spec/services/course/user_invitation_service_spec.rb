@@ -117,8 +117,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
       context 'when an invited user is already in the course' do
         let!(:existing_course_user) do
-          course.course_users.build(user: existing_users.first,
-                                    creator: user, updater: user).tap(&:save!)
+          course.course_users.build(user: existing_users.first).tap(&:save!)
         end
 
         it 'fails' do

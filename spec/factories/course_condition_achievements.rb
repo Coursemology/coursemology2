@@ -3,7 +3,5 @@ FactoryGirl.define do
           class: Course::Condition::Achievement.name, aliases: [:achievement_condition] do
     course
     achievement
-    creator
-    updater
   end
 end

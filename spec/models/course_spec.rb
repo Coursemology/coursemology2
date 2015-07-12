@@ -5,7 +5,6 @@ RSpec.describe Course, type: :model do
   with_tenant(:instance) do
     let(:owner) { create(:user) }
 
-    it { is_expected.to belong_to(:creator) }
     it { is_expected.to have_many(:course_users).inverse_of(:course).dependent(:destroy) }
     it { is_expected.to have_many(:users).through(:course_users) }
     it { is_expected.to have_many(:announcements).inverse_of(:course).dependent(:destroy) }

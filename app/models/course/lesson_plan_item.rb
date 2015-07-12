@@ -1,6 +1,5 @@
 class Course::LessonPlanItem < ActiveRecord::Base
   actable
-  stampable
 
   after_initialize :set_default_values, if: :new_record?
 
