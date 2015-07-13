@@ -8,8 +8,7 @@
     div.description
       = achievement.description
 
-  td
-    span requirement text
+  td = achievement.specific_conditions.map(&:title).to_sentence
 
   - if can?(:manage, Course::Achievement)
     td
