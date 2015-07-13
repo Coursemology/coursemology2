@@ -18,14 +18,14 @@ gem 'rails', '~> 4.2.1'
 gem 'pg', '>= 0.18.2'
 # Schema Plus for some higher level database abstractions
 gem 'schema_plus', '~> 2.0.beta', '> 2.0.0.pre14'
-gem 'schema_plus_association_inverses', '0.0.2'
+gem 'schema_plus_association_inverses', '>= 0.0.3'
 gem 'schema_validations'
 # Instance/Course settings
 gem 'settings_on_rails'
 # Table and column comments
 gem 'migration_comments'
 # Manage read/unread status
-gem 'unread'
+gem 'unread', github: 'ledermann/unread'
 # Extension for validating hostnames and domain names
 gem 'validates_hostname'
 # A Ruby state machine library
@@ -123,7 +123,7 @@ group :production do
 end
 
 # Multitenancy
-gem 'acts_as_tenant'
+gem 'acts_as_tenant', github: 'lowjoel/acts_as_tenant', branch: 'allow-inverse-of'
 
 # Internationalization
 gem 'http_accept_language'

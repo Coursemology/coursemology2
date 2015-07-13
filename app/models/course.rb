@@ -2,7 +2,7 @@ class Course < ActiveRecord::Base
   include Course::LevelsConcern
   include Course::LessonPlanConcern
 
-  acts_as_tenant :instance
+  acts_as_tenant :instance, inverse_of: :courses
   has_settings_on :settings
 
   after_initialize :set_defaults, if: :new_record?
@@ -20,15 +20,15 @@ class Course < ActiveRecord::Base
   has_many :invitations, through: :course_users
   has_many :notifications, dependent: :destroy
 
-  has_many :announcements, inverse_of: :course, dependent: :destroy
-  has_many :achievements, inverse_of: :course, dependent: :destroy
+  has_many :announcements, dependent: :destroy
+  has_many :achievements, dependent: :destroy
   has_many :assessment_categories, class_name: Course::Assessment::Category.name,
-                                   inverse_of: :course, dependent: :destroy
+                                   dependent: :destroy
   has_many :assessments, through: :assessment_categories
-  has_many :levels, inverse_of: :course, dependent: :destroy
-  has_many :groups, inverse_of: :course, dependent: :destroy, class_name: Course::Group.name
-  has_many :lesson_plan_items, inverse_of: :course, dependent: :destroy
-  has_many :lesson_plan_milestones, inverse_of: :course, dependent: :destroy
+  has_many :levels, dependent: :destroy
+  has_many :groups, dependent: :destroy, class_name: Course::Group.name
+  has_many :lesson_plan_items, dependent: :destroy
+  has_many :lesson_plan_milestones, dependent: :destroy
   has_many :events, through: :lesson_plan_items, source: :actable, source_type: Course::Event.name
 
   accepts_nested_attributes_for :invitations
