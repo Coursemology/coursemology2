@@ -1,0 +1,11 @@
+table.table.table-hover
+  thead
+    tr
+      th = t('.email')
+      th
+  tbody
+    = render @emails
+
+= simple_form_for @new_email, url: user_emails_path do |f|
+  = f.input :email, required: false, label: t('.add_email')
+  = f.button :submit, t('.add')

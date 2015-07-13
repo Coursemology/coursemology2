@@ -1,0 +1,11 @@
+en:
+  user:
+    emails:
+      index:
+        add: 'Add'
+        email: 'Email'
+        add_email: 'Add email address'
+      create:
+        success: 'Email was added successfully'
+      email:
+        set_primary: 'Set Primary'
