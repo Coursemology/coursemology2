@@ -4,7 +4,7 @@
 
   td
     - unless email.primary?
-      = link_to t('.set_primary'), '#', class: ['btn', 'btn-default']
+      = link_to t('.set_primary'), set_primary_user_email_path(email) ,
+                method: :post, class: ['btn', 'btn-default']
 
-    = link_to '#', method: :delete, class: 'btn btn-danger' do
-      = fa_icon 'trash'
+    = delete_button(email) if @emails.count > 1

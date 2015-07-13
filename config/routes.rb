@@ -71,7 +71,9 @@ Rails.application.routes.draw do
 
   resources :announcements, only: [:index]
   namespace :user do
-    resources :emails, only: [:index, :create, :destroy]
+    resources :emails, only: [:index, :create, :destroy] do
+      post 'set_primary', on: :member
+    end
   end
 
   scope module: 'system' do

@@ -7,5 +7,9 @@ en:
         add_email: 'Add email address'
       create:
         success: 'Email was added successfully'
+      destroy:
+        success: 'Email was deleted successfully'
+      set_primary:
+        success: 'Primary email was updated successfully'
       email:
         set_primary: 'Set Primary'

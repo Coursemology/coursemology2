@@ -13,6 +13,23 @@ class User::EmailsController < ApplicationController
     end
   end
 
+  def destroy #:nodoc
+    if @email.destroy
+      redirect_to user_emails_path, success: t('.success')
+    else
+      redirect_to user_emails_path, error: @email.errors.full_messages.to_sentence
+    end
+  end
+
+  # Set an email as the primary email
+  def set_primary
+    if @email.primary!
+      redirect_to user_emails_path, success: t('.success')
+    else
+      redirect_to user_emails_path, error: @email.errors.full_messages.to_sentence
+    end
+  end
+
   private
 
   def email_params
