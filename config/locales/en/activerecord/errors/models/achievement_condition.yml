@@ -1,0 +1,9 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/condition/achievement:
+          attributes:
+            achievement:
+              unique_dependency: 'cannot have duplicate conditions'
+              references_self: 'cannot have itself as a condition'

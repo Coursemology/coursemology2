@@ -97,6 +97,8 @@ ignore_unused:
 - 'simple_form.{error_notification,required}.:'
 - 'helpers.submit.*.create'
 - 'helpers.submit.*.update'
+# Dynamically resolved using symbol overload of #t
+- 'activerecord.errors.*'
 # Used dynamically by the page_header helper
 - '*.*.header'
 
