@@ -8,12 +8,15 @@
     div.description
       = achievement.description
 
-  - if can?(:manage, Course::Achievement)
   td
-    - if achievement.draft?
-      = t('common.no')
-    - else
-      = t('common.yes')
+    span requirement text
+
+  - if can?(:manage, Course::Achievement)
+    td
+      - if achievement.draft?
+        = t('common.yes')
+      - else
+        = t('common.no')
   td
     = edit_button([current_course, achievement])
     = delete_button([current_course, achievement])
