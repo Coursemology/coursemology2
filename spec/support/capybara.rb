@@ -20,4 +20,7 @@ end
 
 RSpec.configure do |config|
   config.include Capybara::TestGroupHelpers::FeatureHelpers, type: :feature
+  config.define_derived_metadata do |meta|
+    meta[:aggregate_failures] = true if !meta.key?(:aggregate_failures) && meta[:type] == :feature
+  end
 end
