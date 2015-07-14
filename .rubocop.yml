@@ -15,6 +15,9 @@ AllCops:
 Metrics/LineLength:
   Max: 100
 
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
 Style/DotPosition:
   EnforcedStyle: trailing
 
