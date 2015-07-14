@@ -18,8 +18,8 @@ gem 'rails', '~> 4.2.1'
 gem 'pg', '>= 0.18.2'
 # Schema Plus for some higher level database abstractions
 gem 'schema_plus', '~> 2.0.beta', '> 2.0.0.pre14'
-gem 'schema_plus_association_inverses', '> 0.0.1'
-gem 'schema_validations', github: 'lowjoel/schema_validations', branch: 'allow_nil_for_uniqueness'
+gem 'schema_plus_association_inverses', '0.0.2'
+gem 'schema_validations', github: 'schemaplus/schema_validations'
 # Instance/Course settings
 gem 'settings_on_rails'
 # Table and column comments
