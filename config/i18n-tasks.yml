@@ -95,6 +95,8 @@ ignore_unused:
 - 'simple_form.{yes,no}'
 - 'simple_form.{placeholders,hints,labels}.*'
 - 'simple_form.{error_notification,required}.:'
+- 'helpers.submit.*.create'
+- 'helpers.submit.*.update'
 # Keys used dynamically by the page_header helper
 - '*.*.header'
 

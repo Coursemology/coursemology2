@@ -1,6 +1,7 @@
 en:
   course:
     condition:
+      level: 'Level'
       levels:
         new:
           header: 'New Level Condition'

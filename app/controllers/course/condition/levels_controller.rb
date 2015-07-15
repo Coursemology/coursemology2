@@ -30,13 +30,13 @@ class Course::Condition::LevelsController < Course::ConditionsController
     if @level_condition.destroy
       redirect_to return_to_path, success: t('course.condition.levels.destroy.success')
     else
-      redirect_to return_to_path, alert: t('course.condition.levels.destroy.error')
+      redirect_to return_to_path, danger: t('course.condition.levels.destroy.error')
     end
   end
 
   private
 
   def level_condition_params
-    params.require(:course_condition_level).permit(:minimum_level)
+    params.require(:condition_level).permit(:minimum_level)
   end
 end

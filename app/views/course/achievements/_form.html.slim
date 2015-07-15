@@ -7,4 +7,29 @@
 
   = f.input :published
 
+  - if @achievement.try(:persisted?)
+    h2
+      span = t('course.condition.header')
+      div.dropdown.pull-right
+        button.btn.btn-primary.dropdown-toggle#new-condition-dropdown-btn [data-toggle="dropdown"
+                                                                           aria-haspopup="true"]
+          span = t('course.condition.new.header')
+        ul.dropdown-menu.dropdown-menu-right aria-labelledby="new-condition-dropdown-btn"
+          li = link_to t('course.condition.achievements.new.header'),
+                       new_course_achievement_condition_achievement_path(current_course,
+                                                                         @achievement)
+          li = link_to t('course.condition.levels.new.header'),
+                       new_course_achievement_condition_level_path(current_course,
+                                                                   @achievement)
+    table.table.table-hover
+      thead
+        tr
+          th = t('course.condition.type.header')
+          th = t('course.condition.description.header')
+      tbody
+        - @achievement.conditions.includes(:conditional).each do |condition|
+          = render object: condition,
+                   partial: condition.specific.class.name.underscore,
+                   locals: { course: current_course }
+
   = f.button :submit
