@@ -15,7 +15,3 @@ en:
         cancel_account: 'Cancel my account'
         confirm_deletion: 'Are you sure?'
         unhappy: 'Unhappy?'
-    sessions:
-      new:
-        header: :'layout.navbar.sign_in'
-        sign_in: :'user.sessions.new.header'
