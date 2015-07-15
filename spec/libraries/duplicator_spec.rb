@@ -1,4 +1,3 @@
-# encoding: UTF-8
 require 'rails_helper'
 
 RSpec.describe Duplicator, type: :model do
@@ -56,6 +55,15 @@ RSpec.describe Duplicator, type: :model do
     end
 
     def create_complex_objects
+      #
+      #       ---> c1 ---> s2
+      #       |     |
+      #       |     -----> s1
+      #       |     |
+      #  c3 -----> c2
+      #       |
+      #       ---> s3
+      #
       @s1 = SimpleObject.new(1)
       @s2 = SimpleObject.new(2)
       @s3 = SimpleObject.new(3)
@@ -70,13 +78,13 @@ RSpec.describe Duplicator, type: :model do
 
     def create_cyclic_graph
       #
-      #       ------→ c3 ------
-      #       |       ↑       ↓
-      # c1 → c2       |      c5
+      #       ------> c3 ------
+      #       |       ^       v
+      # c1-> c2       |      c5
       #       |       |       |
-      #       ------→ c4 ← ----
+      #       ------> c4 <-----
       #               |
-      #               ----→ s1
+      #               ----> s1
       #
       @s1 = SimpleObject.new(1)
       @c4 = ComplexObject.new(14, [])      # assign children later
@@ -135,9 +143,12 @@ RSpec.describe Duplicator, type: :model do
     end
 
     context 'when ComplexObject is duplicated' do
+      before :each do
+        create_complex_objects
+      end
+
       context 'without exclusions' do
         before :each do
-          create_complex_objects
           @duplicator = Duplicator.new
         end
 
@@ -151,7 +162,7 @@ RSpec.describe Duplicator, type: :model do
           expect(dup_c1).to_not be(@c1)
 
           # both children should be duplicated, same values, different objects
-          expect(dup_children.length).to be(2)
+          expect(dup_children.length).to eq(2)
           (0..1).each do |i|
             expect(orig_children[i]).to eq(dup_children[i])
             expect(orig_children[i]).to_not be(dup_children[i])
@@ -175,7 +186,7 @@ RSpec.describe Duplicator, type: :model do
         it 'duplicates objects with ComplexObject children' do
           dup_c3 = @duplicator.duplicate(@c3)
 
-          expect(dup_c3.children.length).to be(3)
+          expect(dup_c3.children.length).to eq(3)
           expect(dup_c3.children[0]).to eq(@c1)
           expect(dup_c3.children[1]).to eq(@c2)
           expect(dup_c3.children[0]).to_not be(@c1)
@@ -184,10 +195,6 @@ RSpec.describe Duplicator, type: :model do
       end
 
       context 'with exclusions' do
-        before :each do
-          create_complex_objects
-        end
-
         it 'duplicates ComplexObject but not excluded children' do
           duplicator = Duplicator.new([@s1, @s2])
           dup_c1 = duplicator.duplicate(@c1)
@@ -202,8 +209,8 @@ RSpec.describe Duplicator, type: :model do
 
           dup_c1_children = dup_c3.children[0].children
 
-          expect(dup_c3.children.length).to be(2)
-          expect(dup_c1_children.length).to be(1)
+          expect(dup_c3.children.length).to eq(2)
+          expect(dup_c1_children.length).to eq(1)
           expect(dup_c1_children[0]).to eq(@s1)
           expect(dup_c1_children[0]).to_not be(@s1)
         end
@@ -225,7 +232,7 @@ RSpec.describe Duplicator, type: :model do
 
           expect(dup_c1).to eq(c1)
           expect(dup_c1).to_not be(c1)
-          expect(duplicator.instance_variable_get(:@duplicated_objects).length).to be(2)
+          expect(duplicator.instance_variable_get(:@duplicated_objects).length).to eq(2)
           expect(dup_c1.children[0].children[0]).to be(dup_c1)
         end
 
@@ -237,7 +244,7 @@ RSpec.describe Duplicator, type: :model do
           expect(dup_c1).to_not be(@c1)
         end
 
-        it 'duplicates cyclic graph without excluded tail' do
+        it 'duplicates cyclic graph without excluded tail c6' do
           duplicator = Duplicator.new([@s1])
           dup_c1 = duplicator.duplicate(@c1)
 
@@ -268,10 +275,10 @@ RSpec.describe Duplicator, type: :model do
           dup_c3 = dup_c2.children[0]
           dup_c5 = dup_c3.children[0]
 
-          expect(dup_c1.children.length).to be(1)
-          expect(dup_c2.children.length).to be(1)
-          expect(dup_c3.children.length).to be(1)
-          expect(dup_c5.children.length).to be(0)
+          expect(dup_c1.children.length).to eq(1)
+          expect(dup_c2.children.length).to eq(1)
+          expect(dup_c3.children.length).to eq(1)
+          expect(dup_c5.children.length).to eq(0)
         end
 
         it 'duplicates sub-graph from c3' do
@@ -291,15 +298,15 @@ RSpec.describe Duplicator, type: :model do
         before :each do
           create_cyclic_graph
           create_second_cyclic_graph
+          @duplicator = Duplicator.new
         end
 
         it 'duplicates objects mentioned twice without creating extras' do
-          duplicator = Duplicator.new
-          duplicated_stuff = duplicator.duplicate([@c1, @c3])
+          duplicated_stuff = @duplicator.duplicate([@c1, @c3])
 
           dup_c3 = duplicated_stuff[0].children[0].children[0]
 
-          expect(duplicated_stuff.length).to be(2)
+          expect(duplicated_stuff.length).to eq(2)
           expect(duplicated_stuff[0]).to eq(@c1)
           expect(duplicated_stuff[0]).to_not be(@c1)
           expect(duplicated_stuff[1]).to eq(@c3)
@@ -308,10 +315,9 @@ RSpec.describe Duplicator, type: :model do
         end
 
         it 'duplicates disjoint graphs' do
-          duplicator = Duplicator.new
-          duplicated_stuff = duplicator.duplicate([@c1, @c21])
+          duplicated_stuff = @duplicator.duplicate([@c1, @c21])
 
-          expect(duplicated_stuff.length).to be(2)
+          expect(duplicated_stuff.length).to eq(2)
           expect(duplicated_stuff[0]).to eq(@c1)
           expect(duplicated_stuff[0]).to_not be(@c1)
           expect(duplicated_stuff[1]).to eq(@c21)
@@ -327,26 +333,27 @@ RSpec.describe Duplicator, type: :model do
           c1_children = @c1.children
           c1_children << @c21
           @c1.instance_variable_set(:@children, c1_children)
+
+          @duplicator = Duplicator.new
         end
 
         it 'duplicates all objects' do
-          duplicator = Duplicator.new
-          duplicator.duplicate(@c1)
+          @duplicator.duplicate(@c1)
 
-          duplicated_objects = duplicator.instance_variable_get(:@duplicated_objects)
-          expect(duplicated_objects.length).to be(9)
+          duplicated_objects = @duplicator.instance_variable_get(:@duplicated_objects)
+          expect(duplicated_objects.length).to eq(9)
         end
 
         it 'duplicates cyclically joined graphs' do
-          duplicator = Duplicator.new
           # join from c21 to c1
           c21_children = @c21.children
           c21_children << @c1
           @c21.instance_variable_set(:@children, c21_children)
-          duplicator.duplicate(@c21)
 
-          duplicated_objects = duplicator.instance_variable_get(:@duplicated_objects)
-          expect(duplicated_objects.length).to be(9)
+          @duplicator.duplicate(@c21)
+
+          duplicated_objects = @duplicator.instance_variable_get(:@duplicated_objects)
+          expect(duplicated_objects.length).to eq(9)
         end
       end
     end
@@ -395,16 +402,15 @@ RSpec.describe Duplicator, type: :model do
 
     def create_ar_cyclic_graph
       #
-      #       ------→ c3 ------
-      #       |       ↑       ↓
-      # c1 → c2       |      c5
+      #       ------> c3 ------
+      #       |       ^       v
+      # c1-> c2       |      c5
       #       |       |       |
-      #       ------→ c4 ← ----
+      #       ------> c4 <-----
       #               |
-      #               ----→ c6
+      #               ----> c6
       #
-      @car1 = ComplexActiveRecord.new(data: 11)
-      @car1.save
+      @car1 = ComplexActiveRecord.create(data: 11)
       @car2 = @car1.children.create(data: 12)
       @car3 = @car2.children.create(data: 13)
       @car4 = @car2.children.create(data: 14)
@@ -414,20 +420,36 @@ RSpec.describe Duplicator, type: :model do
       @car5.children << @car4
     end
 
-    context 'when SimpleActiveRecord objects are duplicated' do
-      before :each do
-        @sar_1 = SimpleActiveRecord.new(data: 1)
-        @sar_1.save
-      end
+    def create_ar_graph
+      #
+      #    --> c22 ---> c23
+      #    |
+      # c21 --> c24 ---> c25
+      #    |              ^
+      #    --> c26 -------|
+      #
+      @car21 = ComplexActiveRecord.create(data: 21)
+      @car22 = @car21.children.create(data: 22)
+      @car23 = @car22.children.create(data: 23)
+      @car24 = @car21.children.create(data: 24)
+      @car25 = @car24.children.create(data: 25)
+      @car26 = @car21.children.create(data: 26)
+      @car26.children = @car24.children
+    end
 
-      with_temporary_table(:simple_active_records) do
+    with_temporary_table(:simple_active_records) do
+      context 'when SimpleActiveRecord objects are duplicated' do
+        before :each do
+          @sar_1 = SimpleActiveRecord.create(data: 1)
+        end
+
         it 'is duplicated by default' do
           duplicator = Duplicator.new
           duplicator.duplicate(@sar_1).save
 
           all_records = SimpleActiveRecord.all
 
-          expect(SimpleActiveRecord.count).to be(2)
+          expect(SimpleActiveRecord.count).to eq(2)
           expect(all_records[0].data).to eq(all_records[1].data)
           expect(all_records[0].id).to_not eq(all_records[1].id)
         end
@@ -437,212 +459,299 @@ RSpec.describe Duplicator, type: :model do
           dup_sar_1 = duplicator.duplicate(@sar_1)
 
           expect(dup_sar_1).to be_nil
-          expect(SimpleActiveRecord.count).to be(1)
         end
 
         it 'is duplicated once' do
           duplicator = Duplicator.new
-          duplicator.duplicate(@sar_1).save
-          duplicator.duplicate(@sar_1).save
+          dup1 = duplicator.duplicate(@sar_1).save
+          dup2 = duplicator.duplicate(@sar_1).save
 
-          expect(SimpleActiveRecord.count).to be(2)
+          expect(dup1).to be(dup2)
         end
       end
     end
 
-    # ComplexActiveRecord objects have associations to themselves
-    context 'when ComplexActiveRecord objects are duplicated' do
-      with_temporary_table(:complex_active_records) do
-        with_temporary_table(:children_parents) do
-          it 'duplicates a ComplexActiveRecord object' do
-            # create object and some children
-            c1 = ComplexActiveRecord.new(data: 11)
-            c1.save
-            c1.children.create(data: 12)
-            c1.children.create(data: 13)
+    with_temporary_table(:complex_active_records) do
+      with_temporary_table(:children_parents) do
+        # ComplexActiveRecord objects have associations to themselves
+        context 'when ComplexActiveRecord objects are duplicated' do
+          before :each do
+            create_ar_graph
+          end
 
-            # duplicate object
-            duplicator = Duplicator.new
-            dup_c1 = duplicator.duplicate(c1)
-            dup_c1.save
+          context 'without exclusions' do
+            before :each do
+              @duplicator = Duplicator.new
+            end
 
-            # tests
-            expect(ComplexActiveRecord.count).to be(6)
-            expect(c1.data).to eq(dup_c1.data)
-            expect(c1).to_not be(dup_c1)
-            # both children should be duplicated, same values, different objects
-            (0..1).each do |i|
-              expect(c1.children[i].data).to eq(dup_c1.children[i].data)
-              expect(c1.children[i]).to_not be(dup_c1.children[i])
+            it 'duplicates a ComplexActiveRecord object' do
+              dup_c22 = @duplicator.duplicate(@car22)
+              dup_c22.save
+
+              expect(dup_c22.data).to eq(@car22.data)
+              expect(dup_c22.children.size).to eq(1)
+              expect(dup_c22.children[0].data).to eq(@car23.data)
+              expect(dup_c22.children[0]).to_not be(@car23)
+            end
+
+            it 'duplicates object referenced in 2 places once' do
+              dup_c24 = @duplicator.duplicate(@car24)
+              dup_c24.save
+              dup_c26 = @duplicator.duplicate(@car26)
+              dup_c26.save
+
+              expect(dup_c24.children[0]).to be(dup_c26.children[0])
+              expect(dup_c24.children[0].data).to eq(@car25.data)
+            end
+
+            it 'duplicates ComplexActiveRecord object with children' do
+              dup_c21 = @duplicator.duplicate(@car21)
+              dup_c21.save
+
+              dup_c22 = dup_c21.children[0]
+              dup_c23 = dup_c22.children[0]
+              dup_c24 = dup_c21.children[1]
+              dup_c25 = dup_c24.children[0]
+              dup_c26 = dup_c21.children[2]
+
+              # Check that data is duplicated correctly, duplicates not the same object
+              expect(dup_c21.data).to eq(@car21.data)
+              expect(dup_c22.data).to eq(@car22.data)
+              expect(dup_c23.data).to eq(@car23.data)
+              expect(dup_c24.data).to eq(@car24.data)
+              expect(dup_c25.data).to eq(@car25.data)
+              expect(dup_c26.data).to eq(@car26.data)
+              expect(dup_c21).to_not be(@car21)
+              expect(dup_c22).to_not be(@car22)
+              expect(dup_c23).to_not be(@car23)
+              expect(dup_c24).to_not be(@car24)
+              expect(dup_c25).to_not be(@car25)
+              expect(dup_c26).to_not be(@car26)
+
+              # Check associations
+              # dup_c21's children
+              expect(dup_c21.children.size).to eq(3)
+              expect(dup_c21.children).to include(dup_c22)
+              expect(dup_c21.children).to include(dup_c24)
+              expect(dup_c21.children).to include(dup_c26)
+              # dup_c22's children
+              expect(dup_c22.children.size).to eq(1)
+              expect(dup_c22.children).to include(dup_c23)
+              # dup_c23's children
+              expect(dup_c23.children.size).to eq(0)
+              # dup_c24's children
+              expect(dup_c24.children.size).to eq(1)
+              expect(dup_c24.children).to include(dup_c25)
+              # dup_c25's children
+              expect(dup_c25.children.size).to eq(0)
+              # dup_c26's children
+              expect(dup_c26.children.size).to eq(1)
+              expect(dup_c26.children).to include(dup_c25)
             end
           end
 
-          it 'duplicates object referenced in 2 places once' do
-            #
-            # c1--|
-            #     |---> c5
-            # c2--|
-            #
-            c1 = ComplexActiveRecord.new(data: 11)
-            c2 = ComplexActiveRecord.new(data: 12)
-            c1.save
-            c2.save
-            c1.children.create(data: 15)
-            c2.children = c1.children
+          context 'with exclusions' do
+            it 'duplicates ComplexActiveRecord object but not excluded children' do
+              duplicator = Duplicator.new([@car24, @car26])
+              dup_c21 = duplicator.duplicate(@car21)
 
-            duplicator = Duplicator.new
-            dup_c1 = duplicator.duplicate(c1)
-            dup_c1.save
-            dup_c2 = duplicator.duplicate(c2)
-            dup_c2.save
+              dup_c22 = dup_c21.children[0]
+              dup_c23 = dup_c22.children[0]
 
-            expect(ComplexActiveRecord.count).to be(6)
-            expect(dup_c1.children[0]).to be(dup_c2.children[0])
-            expect(dup_c1.children[0].data).to be(15)
-          end
+              expect(dup_c21.data).to eq(21)
+              expect(dup_c22.data).to eq(22)
+              expect(dup_c23.data).to eq(23)
+              expect(dup_c21).to_not be(@car21)
+              expect(dup_c22).to_not be(@car22)
+              expect(dup_c23).to_not be(@car23)
+              expect(dup_c21.children.size).to eq(1)
+              expect(dup_c22.children.size).to eq(1)
+            end
 
-          it 'duplicates multi-layer graphs' do
-            #
-            #    --> c2 ---> c3
-            #    |
-            # c1 --> c4 ---> c5
-            #    |           ↑
-            #    --> c6 ------
-            #
-            c1 = ComplexActiveRecord.new(data: 11)
-            c1.save
-            c2 = c1.children.create(data: 12)
-            c3 = c2.children.create(data: 13)
-            c4 = c1.children.create(data: 14)
-            c5 = c4.children.create(data: 15)
-            c6 = c1.children.create(data: 16)
-            c6.children = c4.children
+            it 'partially duplicates objects when some children are excluded' do
+              duplicator = Duplicator.new([@car22, @car25])
+              dup_c21 = duplicator.duplicate(@car21)
 
-            duplicator = Duplicator.new
-            dup_c1 = duplicator.duplicate(c1)
-            dup_c1.save
+              dup_c24 = dup_c21.children[0]
+              dup_c26 = dup_c21.children[1]
 
-            dup_c2 = dup_c1.children[0]
-            dup_c3 = dup_c2.children[0]
-            dup_c4 = dup_c1.children[1]
-            dup_c5 = dup_c4.children[0]
-            dup_c6 = dup_c1.children[2]
-
-            # Check that data is duplicated correctly, duplicates not the same object
-            expect(ComplexActiveRecord.count).to be(12)
-            expect(dup_c1.data).to eq(c1.data)
-            expect(dup_c2.data).to eq(c2.data)
-            expect(dup_c3.data).to eq(c3.data)
-            expect(dup_c4.data).to eq(c4.data)
-            expect(dup_c5.data).to eq(c5.data)
-            expect(dup_c6.data).to eq(c6.data)
-            expect(dup_c1).to_not eq(c1)
-            expect(dup_c2).to_not eq(c2)
-            expect(dup_c3).to_not eq(c3)
-            expect(dup_c4).to_not eq(c4)
-            expect(dup_c5).to_not eq(c5)
-            expect(dup_c6).to_not eq(c6)
-
-            # Check associations
-            # dup_c1's children
-            expect(dup_c1.children.size).to be(3)
-            expect(dup_c1.children).to include(dup_c2)
-            expect(dup_c1.children).to include(dup_c4)
-            expect(dup_c1.children).to include(dup_c6)
-            # dup_c2's children
-            expect(dup_c2.children.size).to be(1)
-            expect(dup_c2.children).to include(dup_c3)
-            # dup_c3's children
-            expect(dup_c3.children.size).to be(0)
-            # dup_c4's children
-            expect(dup_c4.children.size).to be(1)
-            expect(dup_c4.children).to include(dup_c5)
-            # dup_c5's children
-            expect(dup_c5.children.size).to be(0)
-            # dup_c6's children
-            expect(dup_c6.children.size).to be(1)
-            expect(dup_c6.children).to include(dup_c5)
+              expect(dup_c21.data).to eq(21)
+              expect(dup_c24.data).to eq(24)
+              expect(dup_c26.data).to eq(26)
+              expect(dup_c21).to_not be(@car21)
+              expect(dup_c24).to_not be(@car24)
+              expect(dup_c26).to_not be(@car26)
+              expect(dup_c21.children.size).to eq(2)
+              expect(dup_c24.children.size).to eq(0)
+              expect(dup_c26.children.size).to eq(0)
+            end
           end
         end
-      end
-    end
 
-    context 'when ComplexActiveRecord object graphs are duplicated' do
-      with_temporary_table(:complex_active_records) do
-        with_temporary_table(:children_parents) do
+        context 'when ComplexActiveRecord object graphs are duplicated' do
           before :each do
             create_ar_cyclic_graph
           end
 
-          it 'duplicates cyclic two object graph' do
-            c1 = ComplexActiveRecord.new(data: 51)
-            c1.save
-            c2 = c1.children.create(data: 52)
-            c2.children << c1
+          context 'with cycles' do
+            it 'duplicates cyclic two object graph' do
+              c1 = ComplexActiveRecord.create(data: 51)
+              c2 = c1.children.create(data: 52)
+              c2.children << c1
 
-            duplicator = Duplicator.new
-            dup_c1 = duplicator.duplicate(c1)
-            dup_c2 = dup_c1.children[0]
-            
-            # check that objects are duplicated
-            expect(dup_c1.data).to eq(c1.data)
-            expect(dup_c1).to_not be(c1)
-            expect(dup_c2.data).to eq(c2.data)
-            expect(dup_c2).to_not be(c2)
-            # check associations
-            expect(dup_c1.children).to include(dup_c2)
-            expect(dup_c2.children).to include(dup_c1)
-            expect(dup_c1.children).to_not include(c2)
-            expect(dup_c2.children).to_not include(c1)
+              duplicator = Duplicator.new
+              dup_c1 = duplicator.duplicate(c1)
+              dup_c2 = dup_c1.children[0]
+
+              # check that objects are duplicated
+              expect(dup_c1.data).to eq(c1.data)
+              expect(dup_c1).to_not be(c1)
+              expect(dup_c2.data).to eq(c2.data)
+              expect(dup_c2).to_not be(c2)
+              # check associations
+              expect(dup_c1.children).to include(dup_c2)
+              expect(dup_c2.children).to include(dup_c1)
+              expect(dup_c1.children).to_not include(c2)
+              expect(dup_c2.children).to_not include(c1)
+            end
+
+            it 'duplicates cyclic graph' do
+              duplicator = Duplicator.new
+              dup_c1 = duplicator.duplicate(@car1)
+              dup_c1.save
+
+              dup_c3 = dup_c1.children[0].children[0]
+              dup_c5 = dup_c3.children[0]
+              dup_c4 = dup_c1.children[0].children[1]
+
+              expect(ComplexActiveRecord.count).to eq(12)
+
+              # check cycle data
+              expect(dup_c3.data).to eq(13)
+              expect(dup_c4.data).to eq(14)
+              expect(dup_c5.data).to eq(15)
+              # check cycle associations
+              expect(dup_c5.children[0]).to be(dup_c4)
+              expect(dup_c4.children.size).to eq(2)
+              expect(dup_c4.children).to include(dup_c3)
+              expect(dup_c3.children).to include(dup_c5)
+              expect(dup_c3.children.size).to eq(1)
+            end
+
+            it 'duplicates cyclic graph without c4' do
+              duplicator = Duplicator.new([@car4])
+              dup_c1 = duplicator.duplicate(@car1)
+              dup_c1.save
+
+              # should be left with c1 -> c2 -> c3 -> c5
+              dup_c2 = dup_c1.children[0]
+              dup_c3 = dup_c2.children[0]
+              dup_c5 = dup_c3.children[0]
+
+              # check nodes duplicated
+              expect(dup_c1.data).to eq(@car1.data)
+              expect(dup_c2.data).to eq(@car2.data)
+              expect(dup_c3.data).to eq(@car3.data)
+              expect(dup_c5.data).to eq(@car5.data)
+              # check 1 child each
+              expect(dup_c1.children.size).to eq(1)
+              expect(dup_c2.children.size).to eq(1)
+              expect(dup_c3.children.size).to eq(1)
+              expect(dup_c5.children.size).to eq(0)
+              # check the children
+              expect(dup_c1.children).to include(dup_c2)
+              expect(dup_c2.children).to include(dup_c3)
+              expect(dup_c3.children).to include(dup_c5)
+            end
+
+            it 'duplicates sub-graph from c3' do
+              duplicator = Duplicator.new
+              dup_c3 = duplicator.duplicate(@car3)
+              dup_c3.save
+
+              # check cycle
+              expect(dup_c3.children[0].children[0].children).to include(dup_c3)
+            end
+
+            it 'duplicates cyclic graph without c5' do
+              duplicator = Duplicator.new([@car5])
+
+              dup_c2 = duplicator.duplicate(@car2)
+              dup_c3 = dup_c2.children[0]
+
+              # check that @car3 has no children (because @car5 was excluded)
+              expect(dup_c3.children).to be_empty
+              expect(dup_c2.children[1].children).to include(dup_c3)
+            end
+
+            it 'duplicates cyclic graph without excluded tail c6' do
+              duplicator = Duplicator.new([@car6])
+
+              dup_c2 = duplicator.duplicate(@car2)
+              dup_c4 = dup_c2.children[1]
+
+              expect(dup_c4.data).to eq(@car4.data)
+              expect(dup_c4.children.size).to eq(1)
+            end
           end
 
-          it 'duplicates cyclic graph' do
-            duplicator = Duplicator.new
-            dup_c1 = duplicator.duplicate(@car1)
-            dup_c1.save
+          context 'when an array of objects are duplicated' do
+            before :each do
+              create_ar_graph
+              @duplicator = Duplicator.new
+            end
 
-            dup_c3 = dup_c1.children[0].children[0]
-            dup_c5 = dup_c3.children[0]
-            dup_c4 = dup_c1.children[0].children[1]
+            it 'duplicates disjoint graphs' do
+              duplicated_stuff = @duplicator.duplicate([@car1, @car21])
 
-            expect(ComplexActiveRecord.count).to be(12)
+              expect(duplicated_stuff.length).to eq(2)
+              expect(duplicated_stuff[0].data).to eq(@car1.data)
+              expect(duplicated_stuff[0]).to_not be(@car1)
+              expect(duplicated_stuff[1].data).to be(@car21.data)
+              expect(duplicated_stuff[1]).to_not be(@car21)
+            end
 
-            # check cycle data
-            expect(dup_c3.data).to be(13)
-            expect(dup_c4.data).to be(14)
-            expect(dup_c5.data).to be(15)
-            # check cycle associations
-            expect(dup_c5.children[0]).to be(dup_c4)
-            expect(dup_c4.children.count).to be(2)
-            expect(dup_c4.children).to include(dup_c3)
-            expect(dup_c3.children).to include(dup_c5)
-            expect(dup_c3.children.count).to be(1)
+            it 'duplicates objects mentioned twice without creating extras' do
+              duplicated_stuff = @duplicator.duplicate([@car2, @car3])
+
+              dup_c3 = duplicated_stuff[0].children[0]
+
+              expect(duplicated_stuff.length).to eq(2)
+              expect(duplicated_stuff[0].data).to eq(@car2.data)
+              expect(duplicated_stuff[0]).to_not be(@car2)
+              expect(duplicated_stuff[1].data).to be(@car3.data)
+              expect(duplicated_stuff[1]).to_not be(@car3)
+              expect(duplicated_stuff[1]).to be(dup_c3)
+            end
           end
 
-          it 'duplicates cyclic graph without c4' do
-            duplicator = Duplicator.new([@car4])
-            dup_c1 = duplicator.duplicate(@car1)
-            dup_c1.save
+          context 'when joined graphs are duplicated' do
+            before :each do
+              create_ar_graph
+              # join graphs
+              @car1.children << @car21
 
-            # should be left with c1 -> c2 -> c3 -> c5
-            dup_c2 = dup_c1.children[0]
-            dup_c3 = dup_c2.children[0]
-            dup_c5 = dup_c3.children[0]
+              @duplicator = Duplicator.new
+            end
 
-            # check nodes duplicated
-            expect(dup_c1.data).to be(11)
-            expect(dup_c2.data).to be(12)
-            expect(dup_c3.data).to be(13)
-            expect(dup_c5.data).to be(15)
-            # check 1 child each
-            expect(dup_c1.children.length).to be(1)
-            expect(dup_c2.children.length).to be(1)
-            expect(dup_c3.children.length).to be(1)
-            expect(dup_c5.children.length).to be(0)
-            # check the children
-            expect(dup_c1.children).to include(dup_c2)
-            expect(dup_c2.children).to include(dup_c3)
-            expect(dup_c3.children).to include(dup_c5)
+            it 'duplicates all objects' do
+              dup_c1 = @duplicator.duplicate(@car1)
+              dup_c1.save
+
+              duplicated_objects = @duplicator.instance_variable_get(:@duplicated_objects)
+              expect(duplicated_objects.length).to eq(12)
+            end
+
+            it 'duplicates cyclically joined graphs' do
+              # join in the other direction
+              @car21.children << @car1
+
+              dup_c21 = @duplicator.duplicate(@car21)
+              dup_c21.save
+
+              duplicated_objects = @duplicator.instance_variable_get(:@duplicated_objects)
+              expect(duplicated_objects.length).to eq(12)
+            end
           end
         end
       end
