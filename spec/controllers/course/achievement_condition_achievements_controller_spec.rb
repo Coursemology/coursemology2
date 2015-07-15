@@ -4,8 +4,8 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let!(:user) { create(:administrator) }
-    let!(:course) { create(:course) }
+    let(:user) { create(:administrator) }
+    let(:course) { create(:course) }
 
     before { sign_in(user) }
 
@@ -15,7 +15,7 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
           allow(stub).to receive(:destroy).and_return(false)
         end
       end
-      let!(:achievement) do
+      let(:achievement) do
         create(:course_achievement,
                course: course,
                conditions: [achievement_condition])
@@ -28,7 +28,7 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
                id: achievement_condition
       end
 
-      context 'upon destroy failure' do
+      context 'when destroy fails' do
         before do
           controller.instance_variable_set(:@achievement_condition, achievement_condition)
           controller.instance_variable_set(:@conditional, achievement)
@@ -48,7 +48,7 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
           allow(stub).to receive(:save).and_return(false)
         end
       end
-      let!(:achievement) do
+      let(:achievement) do
         create(:course_achievement,
                course: course,
                conditions: [achievement_condition])
@@ -60,7 +60,7 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
              achievement_id: achievement
       end
 
-      context 'upon create failure' do
+      context 'when create fails' do
         before do
           controller.instance_variable_set(:@achievement_condition, achievement_condition)
           controller.instance_variable_set(:@conditional, achievement)
@@ -80,7 +80,7 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
           allow(stub).to receive(:update).and_return(false)
         end
       end
-      let!(:achievement) do
+      let(:achievement) do
         create(:course_achievement,
                course: course,
                conditions: [achievement_condition])
@@ -94,7 +94,7 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
               condition_achievement: { achievement_id: achievement.id }
       end
 
-      context 'upon update failure' do
+      context 'when update fails' do
         before do
           controller.instance_variable_set(:@achievement_condition, achievement_condition)
           controller.instance_variable_set(:@conditional, achievement)

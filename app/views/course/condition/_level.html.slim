@@ -1,6 +1,6 @@
 = content_tag_for(:tr, level)
   td = t('course.condition.level')
-  td = level.specific.minimum_level
+  td.level-condition-content = level.specific.minimum_level
 
   td
     = edit_button([course, level.conditional, level.specific])

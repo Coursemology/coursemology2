@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Course::Achievement::Condition::LevelsController, type: :controller do
-  let!(:instance) { create(:instance) }
+  let(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let!(:user) { create(:administrator) }
-    let!(:course) { create(:course) }
+    let(:user) { create(:administrator) }
+    let(:course) { create(:course) }
 
     before { sign_in(user) }
 
@@ -15,7 +15,7 @@ RSpec.describe Course::Achievement::Condition::LevelsController, type: :controll
           allow(stub).to receive(:destroy).and_return(false)
         end
       end
-      let!(:achievement) do
+      let(:achievement) do
         create(:course_achievement,
                course: course,
                conditions: [level_condition])
@@ -28,7 +28,7 @@ RSpec.describe Course::Achievement::Condition::LevelsController, type: :controll
                id: level_condition
       end
 
-      context 'upon destroy failure' do
+      context 'when destroy fails' do
         before do
           controller.instance_variable_set(:@level_condition, level_condition)
           controller.instance_variable_set(:@conditional, achievement)
@@ -60,7 +60,7 @@ RSpec.describe Course::Achievement::Condition::LevelsController, type: :controll
              achievement_id: achievement
       end
 
-      context 'upon create failure' do
+      context 'when create fails' do
         before do
           controller.instance_variable_set(:@level_condition, level_condition)
           controller.instance_variable_set(:@conditional, achievement)
@@ -73,6 +73,7 @@ RSpec.describe Course::Achievement::Condition::LevelsController, type: :controll
         end
       end
     end
+
     describe '#update' do
       let(:min_level) { 7 }
       let(:level_condition) do
@@ -94,7 +95,7 @@ RSpec.describe Course::Achievement::Condition::LevelsController, type: :controll
               condition_level: { minimum_level: min_level }
       end
 
-      context 'upon update failure' do
+      context 'when update fails' do
         before do
           controller.instance_variable_set(:@level_condition, level_condition)
           controller.instance_variable_set(:@conditional, achievement)
