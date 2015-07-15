@@ -14,6 +14,19 @@ RSpec.describe Course::AnnouncementsController, type: :controller do
 
     before { sign_in(user) }
 
+    describe '#index' do
+      context 'when announcements component is disabled' do
+        before do
+          allow(controller).
+            to receive_message_chain('current_component_host.[]').and_return(nil)
+        end
+        subject { get :index, course_id: course }
+        it 'raises an component not found error' do
+          expect { subject }.to raise_error(ComponentNotFoundError)
+        end
+      end
+    end
+
     describe '#destroy' do
       subject { delete :destroy, course_id: course, id: announcement_stub }
 

@@ -1,6 +1,8 @@
 class Course::AnnouncementsController < Course::ComponentController
   load_and_authorize_resource :announcement, through: :course, class: Course::Announcement.name
-  add_breadcrumb :index, :course_announcements_path
+  before_action :check_component
+  before_action :load_settings
+  before_action :add_announcement_breadcrumb
 
   def index #:nodoc:
     @announcements = @announcements.includes(:creator).sorted_by_sticky.sorted_by_date
@@ -50,5 +52,26 @@ class Course::AnnouncementsController < Course::ComponentController
 
   def announcement_params #:nodoc:
     params.require(:announcement).permit(:title, :content, :sticky, :valid_from, :valid_to)
+  end
+
+  # @return [Course::AnnouncementsComponent | nil] The announcement component or nil if disabled.
+  def component
+    current_component_host[:course_announcements_component]
+  end
+
+  # Ensure that the component is enabled.
+  #
+  # @raise [Coursemology::ComponentNotFoundError] When the component is disabled.
+  def check_component
+    fail ComponentNotFoundError unless component
+  end
+
+  # Load current component's settings
+  def load_settings
+    @announcement_settings = component.settings
+  end
+
+  def add_announcement_breadcrumb
+    add_breadcrumb @announcement_settings.title || :index, :course_announcements_path
   end
 end
