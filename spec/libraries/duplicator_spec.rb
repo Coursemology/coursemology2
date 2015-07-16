@@ -7,7 +7,7 @@ RSpec.describe Duplicator, type: :model do
         @id = id
       end
 
-      def initialize_duplicate(_duplicator)
+      def initialize_duplicate(_duplicator, _other)
       end
 
       def ==(other)
@@ -30,17 +30,10 @@ RSpec.describe Duplicator, type: :model do
         @children = children
       end
 
-      def initialize_duplicate(duplicator)
-        new_children = []
-
-        @children.each do |child|
-          new_child = duplicator.duplicate(child)
-          new_children << new_child unless new_child.nil?
-        end
-
-        # example if object has no accessor for the children
-        # self is already duplicated by Duplicator. Find the duplicated version
-        duplicator.duplicate(self).instance_variable_set(:@children, new_children)
+      def initialize_duplicate(duplicator, other)
+        @children = other.children.map do |child|
+          duplicator.duplicate(child)
+        end.tap(&:compact!)
       end
 
       def ==(other)
@@ -112,7 +105,7 @@ RSpec.describe Duplicator, type: :model do
     end
 
     context 'when SimpleObject is duplicated' do
-      before :each do
+      before(:each) do
         @obj_a = SimpleObject.new(2)
       end
 
@@ -143,12 +136,12 @@ RSpec.describe Duplicator, type: :model do
     end
 
     context 'when ComplexObject is duplicated' do
-      before :each do
+      before(:each) do
         create_complex_objects
       end
 
       context 'without exclusions' do
-        before :each do
+        before(:each) do
           @duplicator = Duplicator.new
         end
 
@@ -219,7 +212,7 @@ RSpec.describe Duplicator, type: :model do
 
     context 'when Plain Old Ruby Object graphs are duplicated' do
       context 'with cycles' do
-        before :each do
+        before(:each) do
           create_cyclic_graph
         end
 
@@ -295,7 +288,7 @@ RSpec.describe Duplicator, type: :model do
       end
 
       context 'when an array of objects is duplicated' do
-        before :each do
+        before(:each) do
           create_cyclic_graph
           create_second_cyclic_graph
           @duplicator = Duplicator.new
@@ -326,7 +319,7 @@ RSpec.describe Duplicator, type: :model do
       end
 
       context 'when joined graphs are duplicated' do
-        before :each do
+        before(:each) do
           create_cyclic_graph
           create_second_cyclic_graph
           # join graphs
@@ -361,7 +354,7 @@ RSpec.describe Duplicator, type: :model do
 
   context 'when ActiveRecord objects' do
     class SimpleActiveRecord < ActiveRecord::Base
-      def initialize_duplicate(_duplicator)
+      def initialize_duplicate(_duplicator, _other)
       end
     end
 
@@ -379,15 +372,10 @@ RSpec.describe Duplicator, type: :model do
                                         join_table: :children_parents,
                                         association_foreign_key: 'parent_id'
 
-      def initialize_duplicate(duplicator)
-        new_children = []
-
-        children.each do |child|
-          new_child = duplicator.duplicate(child)
-          new_children << new_child unless new_child.nil?
-        end
-
-        duplicator.duplicate(self).children = new_children
+      def initialize_duplicate(duplicator, other)
+        self.children = other.children.map do |child|
+          duplicator.duplicate(child)
+        end.tap(&:compact!)
       end
     end
 
@@ -439,7 +427,7 @@ RSpec.describe Duplicator, type: :model do
 
     with_temporary_table(:simple_active_records) do
       context 'when SimpleActiveRecord objects are duplicated' do
-        before :each do
+        before(:each) do
           @sar_1 = SimpleActiveRecord.create(data: 1)
         end
 
@@ -475,12 +463,12 @@ RSpec.describe Duplicator, type: :model do
       with_temporary_table(:children_parents) do
         # ComplexActiveRecord objects have associations to themselves
         context 'when ComplexActiveRecord objects are duplicated' do
-          before :each do
+          before(:each) do
             create_ar_graph
           end
 
           context 'without exclusions' do
-            before :each do
+            before(:each) do
               @duplicator = Duplicator.new
             end
 
@@ -589,7 +577,7 @@ RSpec.describe Duplicator, type: :model do
         end
 
         context 'when ComplexActiveRecord object graphs are duplicated' do
-          before :each do
+          before(:each) do
             create_ar_cyclic_graph
           end
 
@@ -696,7 +684,7 @@ RSpec.describe Duplicator, type: :model do
           end
 
           context 'when an array of objects are duplicated' do
-            before :each do
+            before(:each) do
               create_ar_graph
               @duplicator = Duplicator.new
             end
@@ -726,7 +714,7 @@ RSpec.describe Duplicator, type: :model do
           end
 
           context 'when joined graphs are duplicated' do
-            before :each do
+            before(:each) do
               create_ar_graph
               # join graphs
               @car1.children << @car21
