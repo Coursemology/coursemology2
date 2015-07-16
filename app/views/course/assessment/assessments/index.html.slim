@@ -1,0 +1,13 @@
+= page_header do
+  = new_button([current_course, :assessment]) if can?(:create, Course::Assessment.new(tab: @tab))
+
+table.table.assessments-list.table-hover
+  thead
+    tr
+      th = t('.title')
+      th = t('.maximum_experience_points')
+      th = t('.start_time')
+      th = t('.end_time')
+      th
+  tbody
+    = render partial: 'assessment_row', collection: @assessments

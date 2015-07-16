@@ -1,0 +1,26 @@
+en:
+  course:
+    assessment:
+      assessments:
+        sidebar_title: :'course.assessment.assessments.index.header'
+        index:
+          header: 'Assessments'
+          title: 'Title'
+          start_time: 'Start Time'
+          end_time: 'End Time'
+          maximum_experience_points: 'Maximum Experience Points'
+        show:
+          description: 'Description'
+          start_time: :'course.assessment.assessments.index.start_time'
+          end_time: :'course.assessment.assessments.index.end_time'
+          maximum_experience_points: \
+            :'course.assessment.assessments.index.maximum_experience_points'
+          finish_to_unlock: 'Finish to Unlock'
+          files: 'Files'
+        create:
+          success: 'Assessment %{title} was created.'
+        update:
+          success: 'Assessment %{title} was updated.'
+        destroy:
+          success: 'Assessment %{assessment} was deleted.'
+          failure: 'Could not delete assessment: %{error}'
