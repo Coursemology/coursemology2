@@ -191,8 +191,8 @@ ActiveRecord::Schema.define(version: 20150728022835) do
     t.integer  "actable_id"
     t.string   "actable_type",     limit: 255, index: {name: "index_course_conditions_on_actable_type_and_actable_id", with: ["actable_id"], unique: true}
     t.integer  "course_id",        null: false, index: {name: "fk__course_conditions_course_id"}, foreign_key: {references: "courses", name: "fk_course_conditions_course_id", on_update: :no_action, on_delete: :no_action}
-    t.integer  "conditional_id"
-    t.string   "conditional_type", limit: 255, index: {name: "index_course_conditions_on_conditional_type_and_conditional_id", with: ["conditional_id"]}
+    t.integer  "conditional_id",   null: false
+    t.string   "conditional_type", limit: 255, null: false, index: {name: "index_course_conditions_on_conditional_type_and_conditional_id", with: ["conditional_id"]}
     t.integer  "creator_id",       null: false, index: {name: "fk__course_conditions_creator_id"}, foreign_key: {references: "users", name: "fk_course_conditions_creator_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "updater_id",       null: false, index: {name: "fk__course_conditions_updater_id"}, foreign_key: {references: "users", name: "fk_course_conditions_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at",       null: false
