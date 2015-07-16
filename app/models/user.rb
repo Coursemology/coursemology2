@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
 
   after_validation :propagate_user_email_errors
 
-  has_many :emails, -> { order('primary' => :desc) }, class_name: UserEmail.name,
+  has_many :emails, -> { order('primary' => :desc) }, class_name: User::Email.name,
                                                       inverse_of: :user, dependent: :destroy
   has_many :instance_users
   has_many :instances, through: :instance_users
@@ -48,6 +48,27 @@ class User < ActiveRecord::Base
     !persisted? || (emails.loaded? && emails.each.any?(&:changed))
   end
 
+  # Unset current primary email. This method would immediately set the attributes in the database.
+  #
+  # @return [Boolean] True if current primary emails was set as non primary or there is no
+  #   primary email, false if failed.
+  def unset_primary_email
+    return true unless default_email_record
+
+    default_email_record.update_attributes(primary: false)
+  end
+
+  # Pick the default email and set it as primary email. This method would immediately set the
+  # attributes in the database.
+  #
+  # @return [Boolean] True if the new email was set as primary, false if failed or next email
+  #   cannot be found.
+  def set_next_email_as_primary
+    return false unless default_email_record
+
+    default_email_record.update_attributes(primary: true)
+  end
+
   private
 
   # Propagates the error from the +user_emails+ association to the main object
@@ -63,7 +84,7 @@ class User < ActiveRecord::Base
 
   # Gets the default email address record.
   #
-  # @return [UserEmail] The user's primary email address record.
+  # @return [User::Email] The user's primary email address record.
   def default_email_record
     valid_emails = emails.each.select { |email_record| !email_record.marked_for_destruction? }
     result = valid_emails.find(&:primary?)

@@ -131,7 +131,7 @@ class Course::UserInvitationsController < Course::ComponentController
 
   # Finds all the invalid email objects in the current course.
   #
-  # @return [Array<UserEmail>]
+  # @return [Array<User::Email>]
   def invalid_user_emails
     current_course.course_users.
       map { |course_user| course_user.invitation.try(:user_email) }.

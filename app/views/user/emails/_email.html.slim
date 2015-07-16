@@ -1,0 +1,10 @@
+= content_tag_for(:tr, email) do
+  td
+    = email.email
+
+  td
+    - unless email.primary?
+      = link_to t('.set_primary'), set_primary_user_email_path(email) ,
+                method: :post, class: ['btn', 'btn-default']
+
+    = delete_button(email) if @emails.count > 1
