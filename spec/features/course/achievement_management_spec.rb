@@ -12,7 +12,6 @@ RSpec.feature 'Course: Achievements' do
     end
 
     context 'As a Course Manager' do
-
       scenario 'I can create an achievement' do
         # Fields not yet filled
         visit new_course_achievement_path(course)
