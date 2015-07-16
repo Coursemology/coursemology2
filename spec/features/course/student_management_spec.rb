@@ -26,7 +26,6 @@ RSpec.feature 'Courses: Students' do
       within('form.edit_course_user:first') do
         fill_in 'course_user_name', with: new_name
         click_button 'submit'
-
       end
       expect(page).to have_field('course_user_name', with: new_name)
     end
