@@ -108,6 +108,9 @@ Rails.application.routes.draw do
           concerns :conditional
         end
       end
+      scope module: :assessment do
+        resources :assessments
+      end
       resources :levels, except: [:show, :edit, :update]
 
       get 'lesson_plan' => 'lesson_plan_items#index'

@@ -1,0 +1,29 @@
+= page_header(@assessment.title) do
+  = edit_button([current_course, @assessment])
+  = delete_button([current_course, @assessment])
+
+h2 = t('.description')
+= sanitize(@assessment.description)
+
+table.table.table-bordered.details-table
+  tbody
+    tr.maximum_experience_points
+      th = t('.maximum_experience_points')
+      td = @assessment.base_exp + @assessment.time_bonus_exp + @assessment.extra_bonus_exp
+    /tr.maximum_grade
+      th = ('.maximum_grade')
+      td = @assessment.maximum_grade
+    tr.start_time
+      th = t('.start_time')
+      td = @assessment.start_time
+    tr.end_time
+      th = t('.end_time')
+      td = @assessment.end_time
+
+h2 = t('.finish_to_unlock')
+/ TODO: dependencies
+
+h2 = t('.files')
+/ TODO: files
+
+hr

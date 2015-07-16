@@ -34,6 +34,9 @@ en:
       achievements:
         index: :'course.achievements.index.header'
         new: :'course.achievements.new.header'
+      assessment:
+        assessments:
+          index: :'course.assessment.assessments.index.header'
       groups:
         index: :'course.groups.index.header'
         new: :'course.groups.new.header'

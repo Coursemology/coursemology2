@@ -1,0 +1,8 @@
+- assessment = assessment_row
+= content_tag_for(:tr, assessment)
+  th
+    = link_to(assessment.title, course_assessment_path(current_course, assessment))
+  td
+  td = assessment.start_time
+  td = assessment.end_time
+  td

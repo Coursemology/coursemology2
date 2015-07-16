@@ -8,4 +8,8 @@ class Course::Assessment < ActiveRecord::Base
 
   has_many :questions
   has_many :submissions
+
+  def to_partial_path
+    'course/assessment/assessments/assessment'.freeze
+  end
 end

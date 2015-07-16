@@ -22,6 +22,9 @@ class Course < ActiveRecord::Base
 
   has_many :announcements, inverse_of: :course, dependent: :destroy
   has_many :achievements, inverse_of: :course, dependent: :destroy
+  has_many :assessment_categories, class_name: Course::Assessment::Category.name,
+                                   inverse_of: :course, dependent: :destroy
+  has_many :assessments, through: :assessment_categories
   has_many :levels, inverse_of: :course, dependent: :destroy
   has_many :groups, inverse_of: :course, dependent: :destroy, class_name: Course::Group.name
   has_many :lesson_plan_items, inverse_of: :course, dependent: :destroy

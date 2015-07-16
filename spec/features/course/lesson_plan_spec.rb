@@ -31,6 +31,10 @@ RSpec.feature 'Course: Lesson Plan' do
       end
     end
 
+    let!(:assessments) do
+      create_list(:course_assessment_assessment, 1, course: course)
+    end
+
     context 'As a Course Administrator' do
       before do
         login_as(user, scope: :user)
