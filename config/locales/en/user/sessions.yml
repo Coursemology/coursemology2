@@ -1,0 +1,6 @@
+en:
+  user:
+    sessions:
+      new:
+        header: :'layout.navbar.sign_in'
+        sign_in: :'user.sessions.new.header'

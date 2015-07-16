@@ -36,11 +36,13 @@ html
             li
               = link_to(t('layout.navbar.help'), '#')
             - if user_signed_in?
-              - if can?(:manage, current_tenant)
-                li
-                  a.dropdown-toggle data-toggle="dropdown" = current_user.name
-                    b.caret
-                  ul.dropdown-menu
+              li
+                a.dropdown-toggle data-toggle="dropdown" = current_user.name
+                  b.caret
+                ul.dropdown-menu
+                  li
+                    = link_to(t('user.admin.navbar.account_settings'), edit_user_registration_path)
+                  - if can?(:manage, current_tenant)
                     li
                       = link_to(t('layout.navbar.admin_panel'), admin_path)
               li

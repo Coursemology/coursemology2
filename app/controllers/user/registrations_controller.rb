@@ -1,5 +1,6 @@
 class User::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
+  layout 'user_admin', only: :edit
 
   # GET /resource/sign_up
   # def new

@@ -1,0 +1,5 @@
+en:
+  user:
+    admin:
+      navbar:
+        account_settings: 'Account Settings'
