@@ -11,10 +11,11 @@ RSpec.describe Course::GroupsController, type: :controller do
     describe '#update' do
       context 'when the user is present' do
         let(:user_to_add) { create(:user) }
-        let(:group_attributes) do
+        let(:group_users_attributes) do
           id_not_taken = generate(:nested_attribute_new_id)
-          group_users_attributes = { id_not_taken => attributes_for(:course_group_user,
-                                                                    user_id: user_to_add) }
+          { id_not_taken => attributes_for(:course_group_user, user_id: user_to_add) }
+        end
+        let(:group_attributes) do
           attributes_for(:course_group, group_users_attributes: group_users_attributes)
         end
         subject { patch :update, course_id: course, id: group, group: group_attributes }
@@ -38,6 +39,32 @@ RSpec.describe Course::GroupsController, type: :controller do
           end
 
           it { is_expected.to render_template(:edit) }
+        end
+
+        context 'when duplicate users are added' do
+          let!(:course_user) { create(:course_user, course: course, user: user_to_add) }
+          let(:group_users_attributes) do
+            first_id = generate(:nested_attribute_new_id)
+            second_id = generate(:nested_attribute_new_id)
+            {
+              first_id => attributes_for(:course_group_user, user_id: user_to_add),
+              second_id => attributes_for(:course_group_user, user_id: user_to_add)
+            }
+          end
+
+          it 'adds neither of them to the group' do
+            expect { subject }.to change { group.users.count }.by(0)
+          end
+
+          it 'adds errors to group users' do
+            subject
+            user_with_errors = controller.instance_variable_get(:@group).group_users.
+                                          select { |user| user.errors.any? }
+            expect(user_with_errors).not_to be_empty
+            user_with_errors.each do |user|
+              expect(user.errors.messages[:user]).to include(I18n.t('errors.messages.taken'))
+            end
+          end
         end
       end
 
