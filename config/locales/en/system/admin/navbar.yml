@@ -2,6 +2,7 @@ en:
   system:
     admin:
       navbar:
+        users: :'system.admin.users.index.header'
         system_announcements: :'system.admin.announcements.index.header'
         announcements: :'course.announcements.index.header'
         instances: :'system.admin.instances.index.header'

@@ -1,0 +1,12 @@
+= content_tag_for(:tr, user)
+  th = user.name
+  td = user.email
+  / TODO: implement after rails #13775 was closed.
+  td
+
+  = simple_form_for user, url: admin_user_path(user) do |f|
+    td = f.input :role, as: :select, collection: User.roles.keys, label: false
+    td
+      = f.button :submit do
+        = fa_icon 'ok'
+  td = delete_button([:admin, user])

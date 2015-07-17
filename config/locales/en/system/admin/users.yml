@@ -1,0 +1,7 @@
+en:
+  system:
+    admin:
+      users:
+        index:
+          header: 'Users'
+          related_instances: 'Related Instances'
