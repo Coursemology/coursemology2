@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe ActivityMailer, type: :mailer do
-  let(:template_path) { '../../spec/fixtures/activity_mailer/test_email' }
+  let(:template) { 'activity_mailer/test_email' }
   let(:user) { create(:user, name: 'tester') }
   let(:activity) { create(:activity, object: user) }
   let(:notification) { create(:user_notification, activity: activity) }
-  let(:mail) { ActivityMailer.email(user, notification, template_path) }
+  let(:mail) { ActivityMailer.email(user, notification, template) }
   let(:text) { mail.body.parts.find { |part| part.content_type.start_with?('text/plain') }.to_s }
   let(:html) { mail.body.parts.find { |part| part.content_type.start_with?('text/html') }.to_s }
 

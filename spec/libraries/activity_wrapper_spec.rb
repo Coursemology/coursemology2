@@ -13,6 +13,7 @@ RSpec.describe Notifier::Base::ActivityWrapper, type: :notifier do
           new(notifier, Activity.new(actor: user, object: user, event: :created,
                                      notifier_type: notifier.class.name))
       end
+      let(:template) { 'activity_mailer/test_email' }
 
       context 'when recipient is User' do
         context 'when type is popup' do
@@ -26,8 +27,7 @@ RSpec.describe Notifier::Base::ActivityWrapper, type: :notifier do
 
         context 'when type is email' do
           before do
-            allow(notifier).to receive(:notification_view_path).
-              and_return('../../spec/fixtures/activity_mailer/test_email')
+            allow(notifier).to receive(:notification_view_path).and_return(template)
           end
 
           subject { activity.notify(user, :email).save }
@@ -58,8 +58,7 @@ RSpec.describe Notifier::Base::ActivityWrapper, type: :notifier do
 
         context 'when type is email' do
           before do
-            allow(notifier).to receive(:notification_view_path).
-              and_return('../../spec/fixtures/activity_mailer/test_email')
+            allow(notifier).to receive(:notification_view_path).and_return(template)
           end
 
           subject { activity.notify(course, :email).save }

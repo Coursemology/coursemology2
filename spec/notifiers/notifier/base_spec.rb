@@ -25,11 +25,11 @@ RSpec.describe Notifier::Base, type: :notifier do
         let(:course) { create(:course) }
         let!(:course_users) { create(:course_user, course: course) }
         let(:notifier) { self.class::DummyNotifier.new }
+        let(:template) { 'activity_mailer/test_email' }
 
         context 'when notify a user' do
           before do
-            allow(notifier).to receive(:notification_view_path).
-              and_return('../../spec/fixtures/activity_mailer/test_email')
+            allow(notifier).to receive(:notification_view_path).and_return(template)
           end
 
           subject { notifier.dummy_created(user, user, user) }
@@ -55,8 +55,7 @@ RSpec.describe Notifier::Base, type: :notifier do
 
         context 'when notify a course' do
           before do
-            allow(notifier).to receive(:notification_view_path).
-              and_return('../../spec/fixtures/activity_mailer/test_email')
+            allow(notifier).to receive(:notification_view_path).and_return(template)
           end
 
           subject { notifier.dummy_updated(user, user, course) }
