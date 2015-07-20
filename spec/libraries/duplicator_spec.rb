@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe Duplicator, type: :model do
   context 'when Plain Old Ruby Objects' do
     class SimpleObject
+      attr_reader :id
+
       def initialize(id)
         @id = id
       end
@@ -23,6 +25,7 @@ RSpec.describe Duplicator, type: :model do
 
     # ComplexObject has children
     class ComplexObject
+      attr_reader :id
       attr_reader :children
 
       def initialize(id, children)
@@ -40,10 +43,15 @@ RSpec.describe Duplicator, type: :model do
         self.class == other.class && state == other.state
       end
 
+      def inspect
+        children = @children.map(&:id).join(', ')
+        "<#{self.class}: 0x#{object_id} @id=#{@id} @children=[#{children}]>"
+      end
+
       protected
 
       def state
-        [@id, @children]
+        [@id, @children.map(&:id)]
       end
     end
 
@@ -245,7 +253,6 @@ RSpec.describe Duplicator, type: :model do
           c4 = @c1.children[0].children[1]
           dup_c4 = dup_c1.children[0].children[1]
 
-          expect(dup_c1).to_not eq(@c1)
           expect(dup_c4.children.length).to_not eq(c4.children.length)
         end
 
