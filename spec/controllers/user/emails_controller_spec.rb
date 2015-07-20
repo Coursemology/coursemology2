@@ -8,13 +8,25 @@ RSpec.describe User::EmailsController, type: :controller do
     before { sign_in(user) }
 
     describe '#destroy' do
-      subject { delete :destroy, id: user.emails.first }
+      subject { delete :destroy, id: user.send(:default_email_record) }
 
-      context 'when user only have one email' do
+      context 'when the user only has one email address' do
         it 'cannot be deleted' do
           expect { subject }.to change { user.emails.count }.by(0)
         end
         it { is_expected.to redirect_to(user_emails_path) }
+      end
+
+      context 'when destroying a primary email' do
+        let!(:non_primary_email) { create(:user_email, user: user, primary: false) }
+        it 'deletes the primary email' do
+          expect { subject }.to change { user.emails.count }.by(-1)
+        end
+
+        it 'sets another email as primary' do
+          subject
+          expect(non_primary_email.reload).to be_primary
+        end
       end
     end
 
