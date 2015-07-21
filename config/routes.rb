@@ -109,7 +109,9 @@ Rails.application.routes.draw do
         end
       end
       scope module: :assessment do
-        resources :assessments
+        resources :assessments do
+          resources :submissions, only: [:create, :edit, :update]
+        end
       end
       resources :levels, except: [:show, :edit, :update]
 

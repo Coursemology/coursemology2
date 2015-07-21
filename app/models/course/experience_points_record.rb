@@ -7,10 +7,6 @@ class Course::ExperiencePointsRecord < ActiveRecord::Base
 
   scope :active, -> { where { points_awarded != nil } }
 
-  def manual_exp?
-    true
-  end
-
   # Checks if the current record is active, i.e. it has been granted by a course staff.
   #
   # This is necessary for records to be created but not graded, such as that of assessments.
@@ -18,5 +14,14 @@ class Course::ExperiencePointsRecord < ActiveRecord::Base
   # @return [bool]
   def active?
     points_awarded.present?
+  end
+
+  protected
+
+  # Checks if the given record is a manually-awarded experience points record.
+  #
+  # @return [bool]
+  def manual_exp?
+    actable_type.nil? && actable.nil?
   end
 end

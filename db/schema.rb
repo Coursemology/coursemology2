@@ -156,7 +156,7 @@ ActiveRecord::Schema.define(version: 20150721070705) do
 
   create_table "course_assessment_submissions", force: :cascade do |t|
     t.integer  "assessment_id",  null: false, index: {name: "fk__course_assessment_submissions_assessment_id"}, foreign_key: {references: "course_assessments", name: "fk_course_assessment_submissions_assessment_id", on_update: :no_action, on_delete: :no_action}
-    t.integer  "course_user_id", null: false, index: {name: "fk__course_assessment_submissions_course_user_id"}, foreign_key: {references: "course_users", name: "fk_course_assessment_submissions_course_user_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "workflow_state", limit: 255, null: false
     t.integer  "creator_id",     null: false, index: {name: "fk__course_assessment_submissions_creator_id"}, foreign_key: {references: "users", name: "fk_course_assessment_submissions_creator_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "updater_id",     null: false, index: {name: "fk__course_assessment_submissions_updater_id"}, foreign_key: {references: "users", name: "fk_course_assessment_submissions_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at",     null: false

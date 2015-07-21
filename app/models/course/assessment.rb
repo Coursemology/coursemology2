@@ -9,6 +9,10 @@ class Course::Assessment < ActiveRecord::Base
   has_many :questions
   has_many :submissions
 
+  def self.use_relative_model_naming?
+    true
+  end
+
   def to_partial_path
     'course/assessment/assessments/assessment'.freeze
   end
