@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150713125423) do
+ActiveRecord::Schema.define(version: 20150721055754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -222,7 +222,7 @@ ActiveRecord::Schema.define(version: 20150713125423) do
   create_table "course_experience_points_records", force: :cascade do |t|
     t.integer  "actable_id"
     t.string   "actable_type",   limit: 255, index: {name: "index_course_experience_points_records_on_actable", with: ["actable_id"], unique: true}
-    t.integer  "points_awarded", null: false
+    t.integer  "points_awarded"
     t.integer  "course_user_id", null: false, index: {name: "fk__course_experience_points_records_course_user_id"}, foreign_key: {references: "course_users", name: "fk_course_experience_points_records_course_user_id", on_update: :no_action, on_delete: :no_action}
     t.string   "reason",         limit: 255
     t.integer  "creator_id",     null: false, index: {name: "fk__course_experience_points_records_creator_id"}, foreign_key: {references: "users", name: "fk_course_experience_points_records_creator_id", on_update: :no_action, on_delete: :no_action}
