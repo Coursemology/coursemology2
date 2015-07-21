@@ -1,0 +1,22 @@
+= page_header do
+  = new_button([current_course, :category]) if can?(:create, Course::Assessment::Category)
+
+= simple_form_for(current_course, url: course_admin_categories_path(current_course)) do |f|
+  table.table.table-hover.category-items
+    thead
+      th.reorder
+      th = t('.title')
+      th.weight = t('.weight')
+      th
+    tbody
+      = f.simple_fields_for :assessment_categories,
+                            current_course.assessment_categories.order(:weight) do |item_form|
+        tr
+          th.reorder
+            span = fa_icon 'reorder'
+          td = item_form.input :title, label: false
+          td.weight = item_form.input :weight, as: :integer, label: false
+          td
+            = edit_button(edit_course_category_path(current_course, item_form.object))
+            = delete_button(course_category_path(current_course, item_form.object))
+  = f.button :submit, t('.submit')

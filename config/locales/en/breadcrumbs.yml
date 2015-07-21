@@ -7,6 +7,8 @@ en:
       admin:
         controller:
           admin: :'layouts.course.administration'
+        categories:
+          index: :'course.assessment.categories.index.header'
         announcement_settings:
           edit: :'course.announcements.index.header'
         component_settings:
@@ -35,6 +37,10 @@ en:
         index: :'course.achievements.index.header'
         new: :'course.achievements.new.header'
       assessment:
+        categories:
+          index: :'course.assessment.categories.index.header'
+          new: :'course.assessment.categories.new.header'
+          admin: :'system.admin.admin.index.header'
         controller:
           index: :'course.assessment.assessments.index.header'
         assessments:
