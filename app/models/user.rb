@@ -87,7 +87,9 @@ class User < ActiveRecord::Base
   #
   # @return [User::Email] The user's primary email address record.
   def default_email_record
-    valid_emails = emails.each.select { |email_record| !email_record.marked_for_destruction? }
+    valid_emails = emails.each.select do |email_record|
+      !email_record.destroyed? && !email_record.marked_for_destruction?
+    end
     result = valid_emails.find(&:primary?)
     result ||= valid_emails.first
     result
