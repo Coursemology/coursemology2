@@ -130,6 +130,8 @@ gem 'http_accept_language'
 
 # User authentication
 gem 'devise'
+gem 'omniauth'
+gem 'omniauth-facebook'
 
 # Use cancancan for authorization
 gem 'cancancan', '~> 1.9'
