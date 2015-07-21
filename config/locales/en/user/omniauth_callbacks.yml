@@ -1,0 +1,5 @@
+en:
+  user:
+    omniauth_callbacks:
+      facebook:
+        kind: 'Facebook'
