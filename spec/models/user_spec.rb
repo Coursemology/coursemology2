@@ -9,6 +9,7 @@ RSpec.describe User, type: :model do
   end
   it { is_expected.to have_many(:instance_users) }
   it { is_expected.to have_many(:instances).through(:instance_users) }
+  it { is_expected.to have_many(:identities).inverse_of(:user).dependent(:destroy) }
   it { is_expected.to have_many(:course_users).inverse_of(:user).dependent(:destroy) }
   it { is_expected.to have_many(:courses).through(:course_users) }
   it { is_expected.to have_many(:course_group_users).inverse_of(:user).dependent(:destroy) }

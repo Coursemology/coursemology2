@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150721055754) do
+ActiveRecord::Schema.define(version: 20150721070705) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -346,6 +346,14 @@ ActiveRecord::Schema.define(version: 20150721055754) do
     t.datetime "timestamp"
   end
   add_index "read_marks", ["user_id", "readable_type", "readable_id"], name: "index_read_marks_on_user_id_and_readable_type_and_readable_id"
+
+  create_table "user_identities", force: :cascade do |t|
+    t.integer  "user_id",    null: false, index: {name: "fk__user_identities_user_id"}, foreign_key: {references: "users", name: "fk_user_identities_user_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "provider",   limit: 255, null: false, index: {name: "index_user_identities_on_provider_and_uid", with: ["uid"], unique: true}
+    t.string   "uid",        limit: 255, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "user_notifications", force: :cascade do |t|
     t.integer  "activity_id",       null: false, index: {name: "index_user_notifications_on_activity_id"}, foreign_key: {references: "activities", name: "fk_user_notifications_activity_id", on_update: :no_action, on_delete: :no_action}

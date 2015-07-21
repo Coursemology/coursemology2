@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
                                                       inverse_of: :user, dependent: :destroy
   has_many :instance_users
   has_many :instances, through: :instance_users
+  has_many :identities, inverse_of: :user, dependent: :destroy, class_name: User::Identity.name
   has_many :activities, inverse_of: :actor, dependent: :destroy, foreign_key: 'actor_id'.freeze
   has_many :notifications, dependent: :destroy, class_name: UserNotification.name
   has_many :course_users, inverse_of: :user, dependent: :destroy
