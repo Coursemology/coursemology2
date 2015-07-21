@@ -1,0 +1,12 @@
+en:
+  course:
+    admin:
+      categories:
+        update:
+          success: 'Categories successfully updated.'
+          failure: 'Could not update categories. Please try again.'
+        index:
+          header: :'course.assessment.categories.index.header'
+          submit: 'Update Categories'
+          title: 'Title'
+          weight: 'Weight'

@@ -34,7 +34,7 @@ class Course < ActiveRecord::Base
   has_many :lesson_plan_events, through: :lesson_plan_items,
                                 source: :actable, source_type: Course::LessonPlan::Event.name
 
-  accepts_nested_attributes_for :invitations
+  accepts_nested_attributes_for :invitations, :assessment_categories
 
   scope :ordered_by_title, -> { order(:title) }
 
