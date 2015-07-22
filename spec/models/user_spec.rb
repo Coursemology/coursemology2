@@ -103,11 +103,4 @@ RSpec.describe User, type: :model do
       expect(subject.errors[:email].first).to match(/invalid/)
     end
   end
-
-  describe '#destroy' do
-    let(:user) { create(:user) }
-    subject { user.destroy }
-
-    it { is_expected.to be_destroyed }
-  end
 end
