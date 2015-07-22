@@ -7,6 +7,8 @@ module ApplicationHelper
   include ApplicationWidgetsHelper
   include ApplicationCocoonHelper
 
+  include ApplicationNotificationsConcern
+
   include ApplicationFormattersHelper
   include ApplicationSidebarHelper
   include RouteOverridesHelper
