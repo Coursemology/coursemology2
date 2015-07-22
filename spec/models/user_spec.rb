@@ -5,7 +5,7 @@ RSpec.describe User, type: :model do
     is_expected.to have_many(:emails).
       class_name(User::Email.name).
       inverse_of(:user).
-      dependent(:delete_all)
+      dependent(:destroy)
   end
   it { is_expected.to have_many(:instance_users) }
   it { is_expected.to have_many(:instances).through(:instance_users) }
@@ -102,12 +102,5 @@ RSpec.describe User, type: :model do
       expect(subject.errors[:email].length).to eq(1)
       expect(subject.errors[:email].first).to match(/invalid/)
     end
-  end
-
-  describe '#destroy' do
-    let(:user) { create(:user) }
-    subject { user.destroy }
-
-    it { is_expected.to be_destroyed }
   end
 end
