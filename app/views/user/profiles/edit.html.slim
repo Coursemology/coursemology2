@@ -1,0 +1,6 @@
+= page_header
+
+= simple_form_for current_user, url: user_profile_path do |f|
+  = f.error_notification
+  = f.input :name, required: true
+  = f.button :submit, t('.submit')

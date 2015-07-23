@@ -1,0 +1,8 @@
+en:
+  user:
+    profiles:
+      edit:
+        header: 'Profile'
+        submit: 'Update Profile'
+      update:
+        success: 'Your profile was updated successfully'

@@ -3,6 +3,8 @@
   div.container-fluid
     = sidebar do
       li
+        = link_to(t('user.admin.navbar.profile'), edit_user_profile_path)
+      li
         = link_to(t('user.admin.navbar.emails'), user_emails_path)
       li
         = link_to(t('user.admin.navbar.account_settings'), edit_user_registration_path)
