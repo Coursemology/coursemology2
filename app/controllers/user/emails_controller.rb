@@ -1,5 +1,6 @@
 class User::EmailsController < ApplicationController
   load_and_authorize_resource :email, through: :current_user, class: User::Email.name
+  layout 'user_admin'
 
   def index #:nodoc:
     @new_email = current_user.emails.build
