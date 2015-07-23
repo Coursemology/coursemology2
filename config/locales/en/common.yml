@@ -2,7 +2,6 @@ en:
   common:
     'yes': 'Yes'
     'no': 'No'
-    back: 'Back'
     name: 'Name'
     email: 'Email'
     role: 'Role'
