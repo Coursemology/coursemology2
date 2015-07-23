@@ -23,7 +23,7 @@ class Application < Rails::Application
   config.action_controller.include_all_helpers = false
 
   # Action Mailer default settings
-  config.action_mailer.default_options = { from: ENV['EMAIL_FROM_ADDRESS'] }
+  config.action_mailer.default_options = { from: ENV['RAILS_MAILER_DEFAULT_FROM_ADDRESS'] }
 
   # Do not swallow errors in after_commit/after_rollback callbacks.
   config.active_record.raise_in_transactional_callbacks = true
