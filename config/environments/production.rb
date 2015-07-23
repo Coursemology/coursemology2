@@ -20,9 +20,6 @@ Rails.application.configure do
   # NGINX, varnish or squid.
   # config.action_dispatch.rack_cache = true
 
-  # Default from address for email
-  config.action_mailer.default_options = { from: ENV['RAILS_MAILER_DEFAULT_FROM_ADDRESS'] }
-
   # We will configure the host from the environment.
   config.action_mailer.default_url_options = { host: ENV['RAILS_HOSTNAME'] }
 
