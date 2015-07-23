@@ -3,4 +3,4 @@ en:
     admin:
       navbar:
         emails: :'user.emails.index.header'
-        account_settings: 'Account Settings'
+        account_settings: :'user.registrations.edit.header'

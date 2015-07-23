@@ -8,7 +8,7 @@ en:
         password_hint: "#{length} characters minimum"
         sign_up: :'user.registrations.new.header'
       edit:
-        edit: "Edit #{resource}"
+        header: 'Account Settings'
         pending_confirmation: 'Currently waiting confirmation for #{email}'
         new_password_hint: "Leave blank if you don't want to change it"
         current_password_required_hint: 'We need your current password to confirm your changes'
