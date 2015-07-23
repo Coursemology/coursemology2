@@ -1,5 +1,6 @@
 class Course::Level < ActiveRecord::Base
-  validates :experience_points_threshold, numericality: { greater_than: 0 }
+  validates :experience_points_threshold,
+            numericality: { greater_than: 0, less_than: 2_147_483_647 }
   belongs_to :course, inverse_of: :levels
   default_scope { order(:experience_points_threshold) }
   attr_writer :level_number
