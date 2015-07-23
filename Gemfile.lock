@@ -23,15 +23,6 @@ GIT
       rails (>= 3.2)
 
 GIT
-  remote: git://github.com/schemaplus/schema_validations.git
-  revision: 31c9e5c1f6b0b696fa0e2d0fc216537e541cd47f
-  specs:
-    schema_validations (1.2.0)
-      activerecord (~> 4.2, >= 4.2.1)
-      schema_plus_columns
-      valuable
-
-GIT
   remote: git://github.com/thedarkone/rails-dev-boost.git
   revision: a709a10b06b7d9fc4a9846bc613c60c86af9dd7c
   specs:
@@ -360,6 +351,10 @@ GEM
     schema_plus_views (0.2.3)
       activerecord (~> 4.2)
       schema_plus_core (~> 0.1)
+    schema_validations (1.3.0)
+      activerecord (~> 4.2, >= 4.2.1)
+      schema_plus_columns
+      valuable
     settings_on_rails (0.3.0)
       activerecord (>= 3.1)
     should_not (1.1.0)
@@ -489,7 +484,7 @@ DEPENDENCIES
   sass-rails
   schema_plus (~> 2.0.beta, > 2.0.0.pre14)
   schema_plus_association_inverses (= 0.0.2)
-  schema_validations!
+  schema_validations
   settings_on_rails
   should_not
   shoulda-matchers
