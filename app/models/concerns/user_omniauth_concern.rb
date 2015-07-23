@@ -32,8 +32,25 @@ module UserOmniauthConcern
       User.create do |user|
         user.assign_attributes(name: auth.info.name, email: auth.info.email,
                                password: Devise.friendly_token[0, 20])
-        user.identities.build(provider: auth.provider, uid: auth.uid)
+        user.link_with_omniauth(auth)
       end
     end
+  end
+
+  # Link user with an omniauth provider.
+  #
+  # @param [OmniAuth::AuthHash|Hash] auth The data with omniauth info.
+  def link_with_omniauth(auth)
+    identities.find_or_initialize_by(provider: auth[:provider], uid: auth[:uid])
+  end
+
+  # Link user with an omniauth provider. This method would immediately set the attributes in the
+  # database.
+  #
+  # @param [OmniAuth::AuthHash|Hash] auth The data with omniauth info.
+  # @return [Bool] True if success, otherwise false.
+  def link_with_omniauth!(auth)
+    link_with_omniauth(auth)
+    save
   end
 end

@@ -10,7 +10,7 @@ module UserOmniauthFacebookConcern
         if facebook_data && (info = facebook_data[:info])
           user.name ||= info[:name] if info[:name]
           user.email ||= info[:email] if info[:email]
-          user.identities.build(facebook_data.slice(:provider, :uid))
+          user.link_with_omniauth(facebook_data)
         end
       end
     end

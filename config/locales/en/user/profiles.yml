@@ -4,5 +4,6 @@ en:
       edit:
         header: 'Profile'
         submit: 'Update Profile'
+        link_to_facebook: 'Link to Facebook'
       update:
         success: 'Your profile was updated successfully'
