@@ -16,8 +16,8 @@ en:
           description: 'Description'
           start_time: :'course.assessment.assessments.index.start_time'
           end_time: :'course.assessment.assessments.index.end_time'
-          maximum_experience_points: \
-            :'course.assessment.assessments.index.maximum_experience_points'
+          maximum_experience_points: :'course.assessment.assessments.index.
+            maximum_experience_points'
           finish_to_unlock: 'Finish to Unlock'
           files: 'Files'
         create:
