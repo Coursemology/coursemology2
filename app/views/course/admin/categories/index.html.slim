@@ -4,19 +4,38 @@
 = simple_form_for(current_course, url: course_admin_categories_path(current_course)) do |f|
   table.table.table-hover.category-items
     thead
-      th.reorder
+      th
+      th
       th = t('.title')
-      th.weight = t('.weight')
+      th = t('.weight')
+      th
       th
     tbody
-      = f.simple_fields_for :assessment_categories,
-                            current_course.assessment_categories.order(:weight) do |item_form|
+      - categories = current_course.assessment_categories.order(:weight)
+      = f.simple_fields_for(:assessment_categories, categories) do |category_form|
+        - category = category_form.object
         tr
-          th.reorder
-            span = fa_icon 'reorder'
-          td = item_form.input :title, label: false
-          td.weight = item_form.input :weight, as: :integer, label: false
           td
-            = edit_button(edit_course_category_path(current_course, item_form.object))
-            = delete_button(course_category_path(current_course, item_form.object))
+            span = fa_icon 'reorder'
+          td
+          td = category_form.input :title, label: false
+          td = category_form.input :weight, as: :integer, label: false
+          td
+          td
+            /= edit_button(edit_course_category_path(current_course, category))
+            = delete_button(course_category_path(current_course, category))
+
+        - tabs = category.tabs.order(:weight)
+        = category_form.simple_fields_for :tabs, tabs do |tab_form|
+          - tab = tab_form.object
+          tr
+            th
+            th
+              span = fa_icon 'reorder'
+            td = tab_form.input :title, label: false
+            td = tab_form.input :weight, as: :integer, label: false
+            td = tab_form.association :category, label: false
+            td
+              /= delete_button(course_category_path(current_course, tab))
+
   = f.button :submit, t('.submit')
