@@ -2,6 +2,7 @@ en:
   user:
     emails:
       index:
+        header: 'Emails'
         add: 'Add'
         email: 'Email'
         add_email: 'Add email address'
