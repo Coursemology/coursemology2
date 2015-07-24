@@ -27,7 +27,7 @@
           th = t('course.condition.type.header')
           th = t('course.condition.description.header')
       tbody
-        - @achievement.conditions.includes(:conditional).each do |condition|
+        - @achievement.conditions.each do |condition|
           = render object: condition,
                    partial: condition.specific.class.name.underscore,
                    locals: { course: current_course }
