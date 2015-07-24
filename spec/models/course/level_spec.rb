@@ -6,7 +6,7 @@ RSpec.describe Course::Level, type: :model do
 
   context 'before level_number is set' do
     it 'raises' do
-      expect { Course::Level.new.level_number }.to raise_error
+      expect { Course::Level.new.level_number }.to raise_error(IllegalStateError)
     end
   end
 end
