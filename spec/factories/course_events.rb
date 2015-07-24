@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :course_event, class: 'Course::Event' do
+  factory :course_event, class: Course::Event.name do
     course
     start_time 1.days.from_now
     sequence(:title) { |n| "Example Course Event #{n}" }
