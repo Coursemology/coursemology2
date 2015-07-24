@@ -18,6 +18,8 @@ class Course::Admin::CategoriesController < Course::Admin::Controller
   private
 
   def category_params
-    params.require(:course).permit(assessment_categories_attributes: [:id, :title, :weight])
+    params.require(:course).permit(assessment_categories_attributes:
+                                     [:id,:title, :weight,
+                                      { tabs_attributes: [:id, :title, :weight, :category_id] }])
   end
 end

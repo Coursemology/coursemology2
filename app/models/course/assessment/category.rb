@@ -4,4 +4,6 @@ class Course::Assessment::Category < ActiveRecord::Base
   has_many :tabs, class_name: Course::Assessment::Tab.name, inverse_of: :category,
            dependent: :destroy
   has_many :assessments, through: :tabs
+
+  accepts_nested_attributes_for :tabs
 end

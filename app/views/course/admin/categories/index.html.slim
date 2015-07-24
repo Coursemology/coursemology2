@@ -4,19 +4,38 @@
 = simple_form_for(current_course, url: course_admin_categories_path(current_course)) do |f|
   table.table.table-hover.category-items
     thead
-      th.reorder
+      th.reorder-categories
+      th.reorder-tabs
       th = t('.title')
       th.weight = t('.weight')
+      th.tab-parent
       th
     tbody
-      = f.simple_fields_for :assessment_categories,
-                            current_course.assessment_categories.order(:weight) do |item_form|
-        tr
-          th.reorder
+      - categories = current_course.assessment_categories.order(:weight)
+      = f.simple_fields_for(:assessment_categories, categories) do |category_form|
+        - category = category_form.object
+        tr.category-row[category-id=category.id]
+          td.reorder-categories
             span = fa_icon 'reorder'
-          td = item_form.input :title, label: false
-          td.weight = item_form.input :weight, as: :integer, label: false
           td
-            = edit_button(edit_course_category_path(current_course, item_form.object))
-            = delete_button(course_category_path(current_course, item_form.object))
+          td = category_form.input :title, label: false
+          td.weight = category_form.input :weight, as: :integer, label: false
+          td.tab-parent
+          td
+            /= edit_button(edit_course_category_path(current_course, category))
+            = delete_button(course_category_path(current_course, category))
+
+        - tabs = category.tabs.order(:weight)
+        = category_form.simple_fields_for :tabs, tabs do |tab_form|
+          - tab = tab_form.object
+          tr[tab-id=tab.id]
+            th
+            th.reorder-tabs
+              span = fa_icon 'reorder'
+            td = tab_form.input :title, label: false
+            td.weight = tab_form.input :weight, as: :integer, label: false
+            td.tab-parent = tab_form.association :category, label: false
+            td button
+            /= delete_button(course_category_path(current_course, tab))
+
   = f.button :submit, t('.submit')
