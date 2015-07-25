@@ -20,6 +20,8 @@ en:
             maximum_experience_points'
           finish_to_unlock: 'Finish to Unlock'
           files: 'Files'
+        new:
+          header: 'New Assessment'
         create:
           success: 'Assessment %{title} was created.'
         update:
