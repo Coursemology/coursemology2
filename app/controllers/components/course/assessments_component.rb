@@ -24,6 +24,13 @@ class Course::AssessmentsComponent < SimpleDelegator
   end
 
   def admin_settings_items
-    []
+    [
+      {
+        title: t('course.assessment.assessments.sidebar_title'),
+        type: :settings,
+        weight: 6,
+        path: course_admin_assessments_path(current_course)
+      }
+    ]
   end
 end

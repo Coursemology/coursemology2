@@ -103,8 +103,14 @@ Rails.application.routes.draw do
         patch 'sidebar' => 'sidebar_settings#update'
         get 'announcements' => 'announcement_settings#edit'
         patch 'announcements' => 'announcement_settings#update'
-        get 'categories' => 'categories#index'
-        patch 'categories' => 'categories#update'
+
+        get 'assessments' => 'assessment_settings#edit'
+        patch 'assessments' => 'assessment_settings#update'
+        namespace 'assessments' do
+          resources :categories, only: [:new, :create, :destroy] do
+            resources :tabs, only: [:new, :create, :destroy]
+          end
+        end
       end
 
       resources :announcements, concerns: :paginatable
@@ -120,7 +126,6 @@ Rails.application.routes.draw do
           end
           resources :submissions, only: [:create, :edit, :update]
         end
-        resources :categories, except: [:index]
       end
       resources :levels, except: [:show, :edit, :update]
 

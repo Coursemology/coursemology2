@@ -1,0 +1,53 @@
+= page_header
+
+h2
+  span = t('.categories_and_tabs')
+  div.pull-right
+    - if can?(:create, Course::Assessment::Category)
+      = new_button([current_course, :admin, :assessments, :category])
+
+= simple_form_for(current_course, url: course_admin_assessments_path(current_course)) do |f|
+  table.table.table-hover.category-items
+    thead
+      th
+      th
+      th = t('.title')
+      th = t('.weight')
+      th = t('.parent_category')
+      th
+    tbody
+      = f.simple_fields_for(:assessment_categories, @categories) do |category_form|
+        - category = category_form.object
+        = content_tag_for(:tr, category) do
+          td
+            span = fa_icon :reorder
+          td
+          td = category_form.input :title, label: false, input_html: { class: 'category_title' }
+          td = category_form.input :weight, as: :integer, label: false,
+                                   input_html: { class: 'category_weight' }
+          td
+          td
+            div.btn-group
+              - if can?(:create, Course::Assessment::Tab)
+                = new_button(new_course_admin_assessments_category_tab_path(current_course,
+                                                                            category))
+              - if can?(:destroy, Course::Assessment::Category)
+                = delete_button(course_admin_assessments_category_path(current_course, category))
+
+        - tabs = category.tabs
+        = category_form.simple_fields_for :tabs do |tab_form|
+          - tab = tab_form.object
+          = content_tag_for(:tr, tab) do
+            td
+            td
+              span = fa_icon :reorder
+            td = tab_form.input :title, label: false, input_html: { class: 'tab_title' }
+            td = tab_form.input :weight, as: :integer, label: false,
+                                input_html: { class: 'tab_weight' }
+            td = tab_form.association :category, label: false
+            td
+              - if can?(:destroy, Course::Assessment::Tab)
+                = delete_button(course_admin_assessments_category_tab_path(current_course,
+                                                                           category, tab))
+
+  = f.button :submit, t('.submit')
