@@ -1,12 +1,14 @@
 en:
   course:
     admin:
-      categories:
-        update:
-          success: 'Categories successfully updated.'
-          failure: 'Could not update categories. Please try again.'
-        index:
-          header: :'course.assessment.categories.index.header'
-          submit: 'Update Categories'
-          title: 'Title'
-          weight: 'Weight'
+      assessments:
+        categories:
+          index:
+            header: 'Categories'
+          create:
+            success: 'Category %{title} was created.'
+          destroy:
+            success: 'Category %{title} was deleted.'
+            failure: 'Could not delete category: %{error}'
+          new:
+            header: 'New Category'

@@ -1,0 +1,13 @@
+en:
+  course:
+    admin:
+      assessment_settings:
+        update:
+          success: 'Assessment settings successfully updated.'
+        edit:
+          header: 'Assessment Settings'
+          categories_and_tabs: 'Categories and Tabs'
+          submit: 'Update Assessment Settings'
+          title: 'Title'
+          weight: 'Weight'
+          parent_category: 'Category'
