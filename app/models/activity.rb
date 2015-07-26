@@ -33,7 +33,8 @@ class Activity < ActiveRecord::Base
   def notify_course(course, type)
     fail ArgumentError, 'Invalid course notification type' unless COURSE_NOTIFICATION_TYPES.
                                                                   include?(type)
-    course_notifications.build(course: course, notification_type: type)
+    self.course = course
+    course_notifications.build(notification_type: type)
   end
 
   def notify_user(user, type)

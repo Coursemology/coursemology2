@@ -53,7 +53,7 @@ class Notifier::Base
   #
   # @param [Course::Notification] notification The notification which is used to generate emails
   def email_course(notification)
-    notification.course.users.each do |user|
+    notification.activity.course.users.each do |user|
       @pending_emails << ActivityMailer.email(user, notification,
                                               notification_view_path(notification))
     end
