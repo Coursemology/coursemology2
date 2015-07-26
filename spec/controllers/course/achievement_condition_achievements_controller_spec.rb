@@ -10,15 +10,15 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
     before { sign_in(user) }
 
     describe '#destroy' do
+      let(:other_achievement) { create(:course_achievement, course: course) }
       let(:achievement_condition) do
-        create(:course_condition_achievement, course: course).tap do |stub|
+        create(:course_condition_achievement,
+               achievement: other_achievement, course: course).tap do  |stub|
           allow(stub).to receive(:destroy).and_return(false)
         end
       end
       let(:achievement) do
-        create(:course_achievement,
-               course: course,
-               conditions: [achievement_condition])
+        create(:course_achievement, course: course, conditions: [achievement_condition])
       end
 
       subject do
@@ -43,15 +43,16 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
     end
 
     describe '#create' do
+      let(:other_achievement) { create(:course_achievement, course: course) }
       let(:achievement_condition) do
-        create(:course_condition_achievement, course: course).tap do |stub|
+        create(:course_condition_achievement,
+               achievement: other_achievement,
+               course: course).tap do |stub|
           allow(stub).to receive(:save).and_return(false)
         end
       end
       let(:achievement) do
-        create(:course_achievement,
-               course: course,
-               conditions: [achievement_condition])
+        create(:course_achievement, course: course, conditions: [achievement_condition])
       end
 
       subject do
@@ -75,15 +76,16 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
       end
     end
     describe '#update' do
+      let(:other_achievement) { create(:course_achievement, course: course) }
       let(:achievement_condition) do
-        create(:course_condition_achievement, course: course).tap do |stub|
+        create(:course_condition_achievement,
+               achievement: other_achievement,
+               course: course).tap do |stub|
           allow(stub).to receive(:update).and_return(false)
         end
       end
       let(:achievement) do
-        create(:course_achievement,
-               course: course,
-               conditions: [achievement_condition])
+        create(:course_achievement, course: course, conditions: [achievement_condition])
       end
 
       subject do

@@ -6,6 +6,18 @@ RSpec.feature 'Course: Achievements' do
   with_tenant(:instance) do
     let(:user) { create(:administrator) }
     let(:course) { create(:course) }
+    let(:other_achievement) { create(:course_achievement, course: course) }
+    let(:achievement_condition) do
+      create(:course_condition_achievement,
+             course: course,
+             achievement: other_achievement)
+    end
+    let(:level_condition) { create(:course_condition_level, course: course) }
+    let(:achievement) do
+      create(:course_achievement,
+             course: course,
+             conditions: [level_condition, achievement_condition])
+    end
 
     before do
       login_as(user, scope: :user)
@@ -68,27 +80,31 @@ RSpec.feature 'Course: Achievements' do
       end
 
       scenario 'I can create an achievement condition' do
-        achievement = create(:course_achievement, course: course)
+        valid_achievement_as_condition = create(:course_achievement, course: course)
+
         visit edit_course_achievement_path(course, achievement)
-        condition_achievement = create(:course_achievement, course: course)
-        expect(page).to have_selector(:link_or_button,
-                                      I18n.t('course.condition.achievements.new.header'))
         click_link I18n.t('course.condition.achievements.new.header')
+        expect(page).to have_selector('#condition_achievement_achievement_id >' \
+          "option[value='#{valid_achievement_as_condition.id}']")
+
+        # Selecting nothing won't work
+        click_button I18n.t('helpers.submit.condition_achievement.create')
         expect(current_path).
-          to eq(new_course_achievement_condition_achievement_path(course, achievement))
+          to eq(course_achievement_condition_achievements_path(course, achievement))
+        expect(page).to have_text(I18n.t('errors.messages.blank'))
+
+        # Select the right option
         find('#condition_achievement_achievement_id').
-          find(:css, "option[value='#{condition_achievement.id}']").
+          find(:css, "option[value='#{valid_achievement_as_condition.id}']").
           select_option
         click_button I18n.t('helpers.submit.condition_achievement.create')
         expect(current_path).to eq edit_course_achievement_path(course, achievement)
         expect(page).to have_selector('tr.condition > td.achievement-condition-content',
-                                      text: condition_achievement.title)
+                                      text: valid_achievement_as_condition.title)
       end
 
       scenario 'I can edit an achievement condition' do
         achievement_to_change_to = create(:course_achievement, course: course)
-        achievement_condition, achievement, other_achievement =
-          create_achievement_condition
         visit edit_course_achievement_path(course, achievement)
         expect(current_path).to eq edit_course_achievement_path(course, achievement)
         expect(page).to have_selector('tr.condition > td.achievement-condition-content',
@@ -109,8 +125,6 @@ RSpec.feature 'Course: Achievements' do
       end
 
       scenario 'I can delete an achievement condition' do
-        achievement_condition, achievement, other_achievement =
-          create_achievement_condition
         visit edit_course_achievement_path(course, achievement)
         condition_delete_path =
           course_achievement_condition_achievement_path(course, achievement,
@@ -125,11 +139,8 @@ RSpec.feature 'Course: Achievements' do
       scenario 'I can create a level condition' do
         achievement = create(:course_achievement, course: course)
         visit edit_course_achievement_path(course, achievement)
-        expect(page).to have_selector(:link_or_button,
-                                      I18n.t('course.condition.levels.new.header'))
         click_link I18n.t('course.condition.levels.new.header')
-        expect(current_path).to eq(new_course_achievement_condition_level_path(course,
-                                                                               achievement))
+        expect(current_path).to eq(new_course_achievement_condition_level_path(course, achievement))
         fill_in 'minimum_level', with: '10'
         click_button I18n.t('helpers.submit.condition_level.create')
         expect(current_path).to eq edit_course_achievement_path(course, achievement)
@@ -137,7 +148,6 @@ RSpec.feature 'Course: Achievements' do
       end
 
       scenario 'I can edit a level condition' do
-        level_condition, achievement = create_level_condition
         visit edit_course_achievement_path(course, achievement)
         expect(current_path).to eq edit_course_achievement_path(course, achievement)
         expect(page).to have_selector('tr.condition > td.level-condition-content', text: '1')
@@ -152,7 +162,6 @@ RSpec.feature 'Course: Achievements' do
       end
 
       scenario 'I can delete a level condition' do
-        level_condition, achievement = create_level_condition
         visit edit_course_achievement_path(course, achievement)
         condition_delete_path = course_achievement_condition_level_path(course,
                                                                         achievement,
@@ -161,25 +170,6 @@ RSpec.feature 'Course: Achievements' do
           find_link(nil, href: condition_delete_path).click
         end.to change { achievement.conditions.count }.by(-1)
         expect(page).not_to have_selector('tr.condition > td.level-condition-content', text: '1')
-      end
-
-      def create_achievement_condition
-        other_achievement = create(:course_achievement, course: course)
-        achievement_condition =
-          create(:course_condition_achievement,
-                 course: course, achievement: other_achievement)
-        achievement = create(:course_achievement,
-                             course: course,
-                             conditions: [achievement_condition])
-        [achievement_condition, achievement, other_achievement]
-      end
-
-      def create_level_condition
-        level_condition = create(:course_condition_level, course: course)
-        achievement = create(:course_achievement,
-                             course: course,
-                             conditions: [level_condition])
-        [level_condition, achievement]
       end
     end
   end
