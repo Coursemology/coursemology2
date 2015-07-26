@@ -3,7 +3,6 @@
 # @api notifications
 class Course::Notification < ActiveRecord::Base
   belongs_to :activity, inverse_of: :course_notifications
-  belongs_to :course, inverse_of: :notifications
 
   enum notification_type: { feed: 0, email: 1 }
 end

@@ -4,6 +4,7 @@ class CreateActivitiesAndNotifications < ActiveRecord::Migration
       t.references :actor, null: false, foreign_key: { references: :users }
       t.belongs_to :object, null: false, polymorphic: true
       t.string :event, null: false
+      t.references :course, null: false, index: true, foreign_key: true
       t.string :notifier_type, null: false
 
       t.timestamps null: false
@@ -19,7 +20,6 @@ class CreateActivitiesAndNotifications < ActiveRecord::Migration
 
     create_table :course_notifications do |t|
       t.references :activity, null: false, index: true, foreign_key: true
-      t.references :course, null: false, index: true, foreign_key: true
       t.integer :notification_type, null: false, default: 0
 
       t.timestamps null: false

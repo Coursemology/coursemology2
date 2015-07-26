@@ -1,7 +1,6 @@
 FactoryGirl.define do
   factory :course_notification, class: Course::Notification.name do
     activity
-    course
 
     trait :feed do
       notification_type :feed

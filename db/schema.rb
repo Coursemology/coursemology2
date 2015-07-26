@@ -32,16 +32,6 @@ ActiveRecord::Schema.define(version: 20150721070705) do
     t.datetime "updated_at",             null: false
   end
 
-  create_table "activities", force: :cascade do |t|
-    t.integer  "actor_id",      null: false, index: {name: "fk__activities_actor_id"}, foreign_key: {references: "users", name: "fk_activities_actor_id", on_update: :no_action, on_delete: :no_action}
-    t.integer  "object_id",     null: false
-    t.string   "object_type",   limit: 255, null: false
-    t.string   "event",         limit: 255, null: false
-    t.string   "notifier_type", limit: 255, null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
-
   create_table "attachments", force: :cascade do |t|
     t.string   "name",            limit: 255, null: false
     t.integer  "attachable_id"
@@ -73,6 +63,17 @@ ActiveRecord::Schema.define(version: 20150721070705) do
     t.integer  "updater_id",       null: false, index: {name: "fk__courses_updater_id"}, foreign_key: {references: "users", name: "fk_courses_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+  end
+
+  create_table "activities", force: :cascade do |t|
+    t.integer  "actor_id",      null: false, index: {name: "fk__activities_actor_id"}, foreign_key: {references: "users", name: "fk_activities_actor_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "object_id",     null: false
+    t.string   "object_type",   limit: 255, null: false
+    t.string   "event",         limit: 255, null: false
+    t.integer  "course_id",     null: false, index: {name: "index_activities_on_course_id"}, foreign_key: {references: "courses", name: "fk_activities_course_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "notifier_type", limit: 255, null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "course_achievements", force: :cascade do |t|
@@ -291,7 +292,6 @@ ActiveRecord::Schema.define(version: 20150721070705) do
 
   create_table "course_notifications", force: :cascade do |t|
     t.integer  "activity_id",       null: false, index: {name: "index_course_notifications_on_activity_id"}, foreign_key: {references: "activities", name: "fk_course_notifications_activity_id", on_update: :no_action, on_delete: :no_action}
-    t.integer  "course_id",         null: false, index: {name: "index_course_notifications_on_course_id"}, foreign_key: {references: "courses", name: "fk_course_notifications_course_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "notification_type", default: 0, null: false
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false

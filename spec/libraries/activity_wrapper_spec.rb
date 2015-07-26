@@ -10,7 +10,7 @@ RSpec.describe Notifier::Base::ActivityWrapper, type: :notifier do
       let!(:course_users) { create(:course_user, course: course) }
       let(:activity) do
         Notifier::Base::ActivityWrapper.
-          new(notifier, Activity.new(actor: user, object: user, event: :created,
+          new(notifier, Activity.new(actor: user, object: user, event: :created, course: course,
                                      notifier_type: notifier.class.name))
       end
       let(:template) { 'activity_mailer/test_email' }

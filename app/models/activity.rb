@@ -5,6 +5,7 @@
 class Activity < ActiveRecord::Base
   belongs_to :object, polymorphic: true
   belongs_to :actor, inverse_of: :activities, class_name: User.name
+  belongs_to :course, inverse_of: :activities
   has_many :course_notifications, inverse_of: :activity, dependent: :destroy,
                                   class_name: Course::Notification.name
   has_many :user_notifications, inverse_of: :activity, dependent: :destroy
@@ -32,7 +33,8 @@ class Activity < ActiveRecord::Base
   def notify_course(course, type)
     fail ArgumentError, 'Invalid course notification type' unless COURSE_NOTIFICATION_TYPES.
                                                                   include?(type)
-    course_notifications.build(course: course, notification_type: type)
+    self.course = course
+    course_notifications.build(notification_type: type)
   end
 
   def notify_user(user, type)
