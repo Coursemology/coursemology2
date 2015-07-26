@@ -4,14 +4,14 @@ RSpec.describe Notifier::Base, type: :notifier do
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
     class self::DummyNotifier < Notifier::Base
-      def dummy_created(actor, object, user)
-        create_activity(actor: actor, object: object, event: :created).notify(user, :popup).
-          notify(user, :email).save
+      def dummy_created(actor, object, user, course)
+        create_activity(actor: actor, object: object, event: :created, course: course).
+          notify(user, :popup).notify(user, :email).save
       end
 
       def dummy_updated(actor, object, course)
-        create_activity(actor: actor, object: object, event: :created).notify(course, :feed).
-          notify(course, :email).save
+        create_activity(actor: actor, object: object, event: :created, course: course).
+          notify(course, :feed).notify(course, :email).save
       end
 
       def method_missing_tester
@@ -31,7 +31,7 @@ RSpec.describe Notifier::Base, type: :notifier do
           allow(notifier).to receive(:notification_view_path).and_return(template)
         end
 
-        subject { notifier.dummy_created(user, user, user) }
+        subject { notifier.dummy_created(user, user, user, course) }
 
         it 'creates an activity' do
           expect { subject }.to change { user.activities.count }.by(1)
