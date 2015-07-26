@@ -100,6 +100,25 @@ ActiveRecord::Schema.define(version: 20150728022835) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "course_assessment_answer_multiple_responses", force: :cascade do |t|
+  end
+
+  create_table "course_assessment_question_multiple_responses", force: :cascade do |t|
+    t.integer "question_type", default: 0, null: false
+  end
+
+  create_table "course_assessment_question_multiple_response_options", force: :cascade do |t|
+    t.integer "question_id", null: false, index: {name: "fk__course_assessment_multiple_response_option_question"}, foreign_key: {references: "course_assessment_question_multiple_responses", name: "fk_course_assessment_question_multiple_response_options_questio", on_update: :no_action, on_delete: :no_action}
+    t.boolean "correct",     null: false
+    t.string  "option",      limit: 255, null: false
+    t.string  "explanation", limit: 255, null: false
+  end
+
+  create_table "course_assessment_answer_multiple_response_options", force: :cascade do |t|
+    t.integer "answer_id", null: false, index: {name: "fk__course_assessment_multiple_response_option_answer"}, foreign_key: {references: "course_assessment_answer_multiple_responses", name: "fk_course_assessment_answer_multiple_response_options_answer_id", on_update: :no_action, on_delete: :no_action}
+    t.integer "option_id", null: false, index: {name: "fk__course_assessment_multiple_response_option_question_option"}, foreign_key: {references: "course_assessment_question_multiple_response_options", name: "fk_course_assessment_answer_multiple_response_options_option_id", on_update: :no_action, on_delete: :no_action}
+  end
+
   create_table "course_assessment_categories", force: :cascade do |t|
     t.integer  "course_id",  null: false, index: {name: "fk__course_assessment_categories_course_id"}, foreign_key: {references: "courses", name: "fk_course_assessment_categories_course_id", on_update: :no_action, on_delete: :no_action}
     t.string   "title",      limit: 255, null: false
@@ -132,7 +151,9 @@ ActiveRecord::Schema.define(version: 20150728022835) do
     t.integer  "actable_id"
     t.string   "actable_type",  limit: 255, index: {name: "index_course_assessment_questions_actable", with: ["actable_id"], unique: true}
     t.integer  "assessment_id", null: false, index: {name: "fk__course_assessment_questions_assessment_id"}, foreign_key: {references: "course_assessments", name: "fk_course_assessment_questions_assessment_id", on_update: :no_action, on_delete: :no_action}
-    t.text     "description",   null: false
+    t.string   "title",         limit: 255, null: false
+    t.text     "description"
+    t.integer  "maximum_grade", null: false
     t.integer  "creator_id",    null: false, index: {name: "fk__course_assessment_questions_creator_id"}, foreign_key: {references: "users", name: "fk_course_assessment_questions_creator_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "updater_id",    null: false, index: {name: "fk__course_assessment_questions_updater_id"}, foreign_key: {references: "users", name: "fk_course_assessment_questions_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at",    null: false

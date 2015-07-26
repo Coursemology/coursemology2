@@ -39,6 +39,9 @@ en:
           index: :'course.assessment.assessments.index.header'
         assessments:
           new: :'course.assessment.assessments.new.header'
+        question:
+          multiple_responses:
+            new: :'course.assessment.question.multiple_responses.new.header'
       groups:
         index: :'course.groups.index.header'
         new: :'course.groups.new.header'

@@ -22,5 +22,7 @@ module Course::Assessment::AssessmentAbility
 
   def allow_staff_manage_assessments
     can :manage, Course::Assessment, tab: { category: course_staff_hash }
+    can :manage, Course::Assessment::Question::MultipleResponse,
+        question: { assessment: { tab: { category: course_staff_hash } } }
   end
 end

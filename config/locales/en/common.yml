@@ -4,6 +4,7 @@ en:
     'no': 'No'
     name: 'Name'
     email: 'Email'
+    new: 'New'
     role: 'Role'
     not_yet_valid: 'Not yet valid'
     expired: 'Expired'

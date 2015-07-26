@@ -113,6 +113,9 @@ Rails.application.routes.draw do
       end
       scope module: :assessment do
         resources :assessments do
+          namespace :question do
+            resources :multiple_responses, only: [:new, :create, :edit, :update, :destroy]
+          end
           resources :submissions, only: [:create, :edit, :update]
         end
       end

@@ -22,6 +22,9 @@ en:
             maximum_experience_points'
           finish_to_unlock: 'Finish to Unlock'
           files: 'Files'
+          questions: 'Questions'
+          new_question:
+            multiple_response: 'Multiple Response'
         new:
           header: 'New Assessment'
         create:
