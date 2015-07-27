@@ -1,0 +1,8 @@
+en:
+  course:
+    assessment:
+      submissions:
+        create:
+          failure: 'Could not create submission: %{error}'
+        update:
+          success: 'Submission was updated.'

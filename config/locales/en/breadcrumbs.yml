@@ -35,8 +35,10 @@ en:
         index: :'course.achievements.index.header'
         new: :'course.achievements.new.header'
       assessment:
-        assessments:
+        controller:
           index: :'course.assessment.assessments.index.header'
+        assessments:
+          new: :'course.assessment.assessments.new.header'
       groups:
         index: :'course.groups.index.header'
         new: :'course.groups.new.header'

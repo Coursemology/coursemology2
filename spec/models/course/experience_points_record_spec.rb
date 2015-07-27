@@ -32,7 +32,9 @@ RSpec.describe Course::ExperiencePointsRecord, type: :model do
       subject { build(:course_experience_points_record) }
 
       it { is_expected.to be_valid }
-      it { is_expected.to be_manual_exp }
+      it 'is a manual experience points record' do
+        expect(subject.send(:manual_exp?)).to be_truthy
+      end
 
       context 'when the record does not have a reason' do
         before { subject.reason = nil }

@@ -1,5 +1,4 @@
 class Course::Assessment::AssessmentsController < Course::Assessment::Controller
-  add_breadcrumb :index, :course_assessments_path
   before_action :load_assessment, only: [:index, :new, :create]
   load_resource :assessment, class: Course::Assessment.name, through: :course,
                              except: [:index, :new, :create]

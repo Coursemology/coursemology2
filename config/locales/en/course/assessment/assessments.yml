@@ -12,14 +12,18 @@ en:
           start_time: 'Start Time'
           end_time: 'End Time'
           maximum_experience_points: 'Maximum Experience Points'
+        assessment_row:
+          attempt: 'Attempt'
         show:
           description: 'Description'
           start_time: :'course.assessment.assessments.index.start_time'
           end_time: :'course.assessment.assessments.index.end_time'
-          maximum_experience_points: \
-            :'course.assessment.assessments.index.maximum_experience_points'
+          maximum_experience_points: :'course.assessment.assessments.index.
+            maximum_experience_points'
           finish_to_unlock: 'Finish to Unlock'
           files: 'Files'
+        new:
+          header: 'New Assessment'
         create:
           success: 'Assessment %{title} was created.'
         update:
