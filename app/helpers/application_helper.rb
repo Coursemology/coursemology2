@@ -6,8 +6,7 @@ module ApplicationHelper
   include ApplicationAnnouncementsHelper
   include ApplicationWidgetsHelper
   include ApplicationCocoonHelper
-
-  include ApplicationNotificationsConcern
+  include ApplicationNotificationsHelper
 
   include ApplicationFormattersHelper
   include ApplicationSidebarHelper
