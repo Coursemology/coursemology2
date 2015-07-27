@@ -1,0 +1,13 @@
+= page_header
+
+table.table.table-middle-align.table-hover
+  thead
+    tr
+      th= t('common.name')
+      th= t('common.email')
+      th= t('.related_instances')
+      th= t('common.role')
+
+  tbody
+    = render @users
+= paginate @users

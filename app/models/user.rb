@@ -23,6 +23,8 @@ class User < ActiveRecord::Base
 
   accepts_nested_attributes_for :emails
 
+  scope :ordered_by_name, -> { order(:name) }
+
   # Gets the email address of the user.
   #
   # @return [String, nil] The email address of the user.

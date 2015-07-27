@@ -1,0 +1,11 @@
+en:
+  system:
+    admin:
+      users:
+        index:
+          header: 'Users'
+          related_instances: 'Related Instances'
+        update:
+          success: '%{user} was updated.'
+        destroy:
+          success: '%{user} was destroyed.'

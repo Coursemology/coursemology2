@@ -64,3 +64,5 @@ en:
         announcements:
           index: :'system.admin.announcements.index.header'
           new: :'system.admin.announcements.new.header'
+        users:
+          index: :'system.admin.users.index.header'
