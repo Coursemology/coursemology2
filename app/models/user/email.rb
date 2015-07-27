@@ -24,6 +24,7 @@ class User::Email < ActiveRecord::Base
   private
 
   def set_new_user_primary_email
+    return if user.destroying?
     fail ActiveRecord::Rollback unless user.set_next_email_as_primary
   end
 end
