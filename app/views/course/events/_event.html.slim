@@ -12,9 +12,9 @@
       span.label.label-default
         = event.event_type
 
-      - if !event.published
-        span data-toggle='tooltip' data-placement='top' title=t('.unpublished')
-          => fa_icon 'ban'
+        - if event.draft
+          span data-toggle='tooltip' data-placement='top' title=t('.draft')
+            => fa_icon 'ban'
 
       = event.title
 

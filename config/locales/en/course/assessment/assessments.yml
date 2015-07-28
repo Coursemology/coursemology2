@@ -5,7 +5,7 @@ en:
         sidebar_title: :'course.assessment.assessments.index.header'
         assessment:
           no_description: '(No Description)'
-          unpublished: 'Unpublished'
+          draft: 'draft'
         index:
           header: 'Assessments'
           title: 'Title'

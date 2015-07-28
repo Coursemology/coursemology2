@@ -40,6 +40,6 @@ class Course::EventsController < Course::ComponentController
 
   def event_params #:nodoc:
     params.require(:event).
-      permit(:event_type, :title, :description, :location, :start_time, :end_time, :published)
+      permit(:event_type, :title, :description, :location, :start_time, :end_time, :draft)
   end
 end

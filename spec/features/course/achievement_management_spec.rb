@@ -48,7 +48,7 @@ RSpec.feature 'Course: Achievements' do
         visit edit_course_achievement_path(course, achievement)
         expect(page).to have_field('achievement_title', with: achievement.title)
         expect(page).to have_field('achievement_description', with: achievement.description)
-        expect(page).to have_checked_field('achievement_published')
+        expect(page).to have_unchecked_field('achievement_draft')
 
         # Invalid fields
         fill_in 'achievement_title', with: ''

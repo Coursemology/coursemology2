@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150728020832) do
+ActiveRecord::Schema.define(version: 20150728022835) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,7 +80,7 @@ ActiveRecord::Schema.define(version: 20150728020832) do
     t.string   "title",       limit: 255, null: false
     t.text     "description"
     t.integer  "weight",      null: false
-    t.boolean  "published",   null: false
+    t.boolean  "draft",       null: false
     t.integer  "creator_id",  null: false, index: {name: "fk__course_achievements_creator_id"}, foreign_key: {references: "users", name: "fk_course_achievements_creator_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "updater_id",  null: false, index: {name: "fk__course_achievements_updater_id"}, foreign_key: {references: "users", name: "fk_course_achievements_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at",  null: false
@@ -258,7 +258,7 @@ ActiveRecord::Schema.define(version: 20150728020832) do
     t.integer  "course_id",       null: false, index: {name: "fk__course_lesson_plan_items_course_id"}, foreign_key: {references: "courses", name: "fk_course_lesson_plan_items_course_id", on_update: :no_action, on_delete: :no_action}
     t.string   "title",           limit: 255,                 null: false
     t.text     "description"
-    t.boolean  "published",       default: false, null: false
+    t.boolean  "draft",           default: false, null: false
     t.integer  "base_exp",        null: false
     t.integer  "time_bonus_exp",  null: false
     t.integer  "extra_bonus_exp", null: false
