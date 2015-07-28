@@ -20,4 +20,4 @@
         = sanitize(milestone.description)
 
     ul.list-group
-      = render items.map(&:specific)
+      = render partial: items.map(&:specific), prefix: 'lesson_plan'

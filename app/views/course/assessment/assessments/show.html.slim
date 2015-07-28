@@ -17,10 +17,10 @@ table.table.table-bordered.details-table
       td = @assessment.maximum_grade
     tr.start_time
       th = t('.start_time')
-      td = @assessment.start_time
+      td = format_datetime(@assessment.start_time)
     tr.end_time
       th = t('.end_time')
-      td = @assessment.end_time
+      td = format_datetime(@assessment.end_time)
 
 h2 = t('.finish_to_unlock')
 / TODO: dependencies
