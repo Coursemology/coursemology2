@@ -15,4 +15,4 @@ en:
       event:
         location: 'Location: %{location}'
         no_description: '(No Description)'
-        unpublished: 'Unpublished'
+        draft: 'draft'

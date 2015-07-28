@@ -55,7 +55,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   def assessment_params
     params.require(:assessment).permit(:title, :description, :base_exp, :time_bonus_exp,
                                        :extra_bonus_exp, :start_time, :end_time, :bonus_end_time,
-                                       :published)
+                                       :draft)
   end
 
   def load_assessment

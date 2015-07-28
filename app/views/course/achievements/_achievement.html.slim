@@ -10,10 +10,10 @@
 
   - if can?(:manage, Course::Achievement)
   td
-    - if achievement.published?
-      = t('common.yes')
-    - else
+    - if achievement.draft?
       = t('common.no')
+    - else
+      = t('common.yes')
   td
     = edit_button([current_course, achievement])
     = delete_button([current_course, achievement])

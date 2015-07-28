@@ -12,8 +12,8 @@
       span.label.label-default
         = assessment.tab.category.title
 
-      - if !assessment.published
-        span data-toggle='tooltip' data-placement='top' title=t('.unpublished')
+      - if assessment.draft
+        span data-toggle='tooltip' data-placement='top' title=t('.draft')
           => fa_icon 'ban'
 
       = assessment.title
