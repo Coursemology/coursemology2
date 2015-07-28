@@ -10,6 +10,7 @@ class Course < ActiveRecord::Base
 
   enum status: { closed: 0, published: 1, opened: 2 }
 
+  belongs_to :instance, inverse_of: :courses
   has_many :course_users, inverse_of: :course, dependent: :destroy
   # @!attribute [r] users
   # Returns all the users related to the course regardless of course_user state.
