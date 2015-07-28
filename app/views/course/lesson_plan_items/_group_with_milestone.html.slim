@@ -10,13 +10,14 @@
     .panel-body
 
       .pull-right
-        = edit_button([current_course, milestone]) if can?(:update, milestone)
-        = delete_button([current_course, milestone]) if can?(:destroy, milestone)
+        div.btn-group
+          = edit_button([current_course, milestone]) if can?(:update, milestone)
+          = delete_button([current_course, milestone]) if can?(:destroy, milestone)
 
       - if milestone.description.blank?
-        i = t('.no_description')
+        em = t('.no_description')
       - else
-        p = milestone.description
+        = sanitize(milestone.description)
 
     ul.list-group
       = render items.map(&:specific)

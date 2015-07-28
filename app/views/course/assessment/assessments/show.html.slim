@@ -1,7 +1,8 @@
 - add_breadcrumb @assessment.title
 = page_header(@assessment.title) do
-  = edit_button([current_course, @assessment])
-  = delete_button([current_course, @assessment])
+  div.btn-group
+    = edit_button([current_course, @assessment])
+    = delete_button([current_course, @assessment])
 
 h2 = t('.description')
 = sanitize(@assessment.description)
