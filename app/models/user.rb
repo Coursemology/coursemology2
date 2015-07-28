@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
 
   has_many :emails, -> { order('primary' => :desc) }, class_name: User::Email.name,
                                                       inverse_of: :user, dependent: :destroy
-  has_many :instance_users
+  has_many :instance_users, dependent: :destroy
   has_many :instances, through: :instance_users
   has_many :identities, dependent: :destroy, class_name: User::Identity.name
   has_many :activities, inverse_of: :actor, dependent: :destroy, foreign_key: 'actor_id'.freeze
