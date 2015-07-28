@@ -1,0 +1,14 @@
+en:
+  system:
+    admin:
+      courses:
+        index:
+          header: 'Courses'
+          title: 'Title'
+          status: 'Status'
+          created_at: 'Created At'
+          instance: 'Instance'
+          owners: 'Owners'
+        destroy:
+          success: '%{course} was destroyed'
+          failure: 'Failed to delete course: %{error}'

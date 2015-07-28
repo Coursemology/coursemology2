@@ -61,6 +61,8 @@ en:
         instances:
           index: :'system.admin.instances.index.header'
           new: :'system.admin.instances.new.header'
+        courses:
+          index: :'system.admin.courses.index.header'
         announcements:
           index: :'system.admin.announcements.index.header'
           new: :'system.admin.announcements.new.header'

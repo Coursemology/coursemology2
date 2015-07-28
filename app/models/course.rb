@@ -34,6 +34,8 @@ class Course < ActiveRecord::Base
 
   accepts_nested_attributes_for :invitations
 
+  scope :ordered_by_title, -> { order(:title) }
+
   delegate :staff, to: :course_users
   delegate :instructors, to: :course_users
   delegate :has_user?, to: :course_users
