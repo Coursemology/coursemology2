@@ -8,10 +8,10 @@
         => fa_icon(:ban)
     = announcement.title
 
-  - if can?(:manage, announcement.class)
-    div.pull-right
-      = edit_button([:admin, :instance, announcement])
-      = delete_button([:admin, :instance, announcement])
+    - if can?(:manage, announcement.class)
+      div.pull-right
+        = edit_button([:admin, :instance, announcement])
+        = delete_button([:admin, :instance, announcement])
 
   h3.timestamp
     => format_datetime(announcement.valid_from)

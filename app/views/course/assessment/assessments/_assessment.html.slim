@@ -22,8 +22,9 @@
     li.list-group-item
 
       .pull-right
-        = edit_button([current_course, assessment]) if can?(:update, assessment)
-        = delete_button([current_course, assessment]) if can?(:destroy, assessment)
+        div.btn-group
+          = edit_button([current_course, assessment]) if can?(:update, assessment)
+          = delete_button([current_course, assessment]) if can?(:destroy, assessment)
 
       - if assessment.description.blank?
         p

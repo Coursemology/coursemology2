@@ -23,8 +23,9 @@
       li.list-group-item
 
         .pull-right
-          = edit_button([current_course, event]) if can?(:update, event)
-          = delete_button([current_course, event]) if can?(:destroy, event)
+          div.btn-group
+            = edit_button([current_course, event]) if can?(:update, event)
+            = delete_button([current_course, event]) if can?(:destroy, event)
 
         - if event.description.blank?
           p
