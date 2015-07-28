@@ -13,6 +13,6 @@ class Course::Assessment::Submission < ActiveRecord::Base
     state :graded
   end
 
-  belongs_to :assessment
+  belongs_to :assessment, inverse_of: :submissions
   has_many :answers
 end

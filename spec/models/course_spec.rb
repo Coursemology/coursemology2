@@ -7,11 +7,11 @@ RSpec.describe Course, type: :model do
 
     it { is_expected.to have_many(:course_users).inverse_of(:course).dependent(:destroy) }
     it { is_expected.to have_many(:users).through(:course_users) }
-    it { is_expected.to have_many(:announcements).inverse_of(:course).dependent(:destroy) }
-    it { is_expected.to have_many(:levels).inverse_of(:course).dependent(:destroy) }
-    it { is_expected.to have_many(:groups).inverse_of(:course).dependent(:destroy) }
-    it { is_expected.to have_many(:lesson_plan_items).inverse_of(:course).dependent(:destroy) }
-    it { is_expected.to have_many(:lesson_plan_milestones).inverse_of(:course).dependent(:destroy) }
+    it { is_expected.to have_many(:announcements).dependent(:destroy) }
+    it { is_expected.to have_many(:levels).dependent(:destroy) }
+    it { is_expected.to have_many(:groups).dependent(:destroy) }
+    it { is_expected.to have_many(:lesson_plan_items).dependent(:destroy) }
+    it { is_expected.to have_many(:lesson_plan_milestones).dependent(:destroy) }
 
     it { is_expected.to validate_presence_of(:title) }
 

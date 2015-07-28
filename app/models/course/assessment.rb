@@ -4,7 +4,7 @@
 class Course::Assessment < ActiveRecord::Base
   acts_as_lesson_plan_item
 
-  belongs_to :tab
+  belongs_to :tab, inverse_of: :assessments
 
   has_many :questions
   has_many :submissions
