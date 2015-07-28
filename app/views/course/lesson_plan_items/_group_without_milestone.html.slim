@@ -9,4 +9,4 @@
       i = t('.ungrouped_items_description')
 
     ul.list-group
-      = render items.map(&:specific)
+      = render partial: items.map(&:specific), prefix: 'lesson_plan'

@@ -1,3 +1,4 @@
+- event = lesson_plan_event
 = div_for(event) do
   a role='button' data-toggle='collapse' href="##{item_body_id(event)}"
     li.list-group-item
@@ -14,7 +15,7 @@
 
         - if event.draft
           span data-toggle='tooltip' data-placement='top' title=t('.draft')
-            => fa_icon 'ban'
+          => fa_icon 'ban'
 
       = event.title
 

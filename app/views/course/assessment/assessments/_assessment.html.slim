@@ -1,34 +1,9 @@
-= div_for(assessment) do
-  a role='button' data-toggle='collapse' href="##{item_body_id(assessment)}"
-    li.list-group-item
-
-      .pull-right
-        - if assessment.end_time.present?
-          = t('common.time_range', from: format_datetime(assessment.start_time),
-              to: format_datetime(assessment.end_time))
-        - else
-          = format_datetime(assessment.start_time)
-
-      span.label.label-default
-        = assessment.tab.category.title
-
-      - if assessment.draft
-        span data-toggle='tooltip' data-placement='top' title=t('.draft')
-          => fa_icon 'ban'
-
-      = assessment.title
-
-  .lesson-plan-item-body.panel-collapse.collapse.in id=item_body_id(assessment)
-    li.list-group-item
-
-      .pull-right
-        div.btn-group
-          = edit_button([current_course, assessment]) if can?(:update, assessment)
-          = delete_button([current_course, assessment]) if can?(:destroy, assessment)
-
-      - if assessment.description.blank?
-        p
-          i = t('.no_description')
-      - else
-        p
-          = sanitize(assessment.description)
+= content_tag_for(:tr, assessment)
+  th
+    = link_to(assessment.title, course_assessment_path(current_course, assessment))
+  td
+  td = assessment.start_time
+  td = assessment.end_time
+  td
+    = button_to(t('.attempt'), course_assessment_submissions_path(current_course, assessment),
+                class: ['btn-info'])

@@ -3,7 +3,7 @@ en:
     assessment:
       assessments:
         sidebar_title: :'course.assessment.assessments.index.header'
-        assessment:
+        lesson_plan_assessment:
           no_description: '(No Description)'
           draft: 'draft'
         index:
@@ -12,7 +12,7 @@ en:
           start_time: 'Start Time'
           end_time: 'End Time'
           maximum_experience_points: 'Maximum Experience Points'
-        assessment_row:
+        assessment:
           attempt: 'Attempt'
         show:
           description: 'Description'

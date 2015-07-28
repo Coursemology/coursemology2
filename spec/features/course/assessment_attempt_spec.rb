@@ -17,7 +17,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
         link = find_link(assessment.title, href: course_assessment_path(course, assessment))
         within link.find(:xpath, './../..') do
-          find_button(I18n.t('course.assessment.assessments.assessment_row.attempt')).click
+          find_button(I18n.t('course.assessment.assessments.assessment.attempt')).click
         end
 
         created_submission = assessment.submissions.last
