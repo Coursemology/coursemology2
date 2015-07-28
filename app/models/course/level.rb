@@ -14,7 +14,7 @@ class Course::Level < ActiveRecord::Base
     if @level_number
       @level_number
     else
-      fail "Attempted to access a Course::Level's number before computing it."
+      fail IllegalStateError, "Attempted to access a Course::Level's number before computing it."
     end
   end
 end
