@@ -13,6 +13,8 @@ module Course::CourseAbilityComponent
     super
   end
 
+  private
+
   def allow_showing_open_courses
     # TODO: Replace with just the symbols when Rails 5 is released.
     can [:read, :register], Course, status: [Course.statuses[:published], Course.statuses[:opened],
@@ -24,29 +26,15 @@ module Course::CourseAbilityComponent
   end
 
   def allow_registered_users_showing_course
-    can [:read], Course, course_users: { user_id: user.id, workflow_state: ['approved'] }
+    can [:read], Course, course_user_hash
   end
 
   def allow_owners_managing_course
-    can :manage, Course, course_users: { user_id: user.id,
-                                         workflow_state: 'approved',
-                                         role: [CourseUser.roles[:manager],
-                                                CourseUser.roles[:owner],
-                                                'manager', 'owner'] }
-
-    can :manage, CourseUser, course: { course_users: { user_id: user.id,
-                                                       workflow_state: 'approved',
-                                                       role: [CourseUser.roles[:manager],
-                                                              CourseUser.roles[:owner],
-                                                              'manager', 'owner'] } }
+    can :manage, Course, course_user_hash(*CourseUser::MANAGER_ROLES.to_a)
+    can :manage, CourseUser, course_managers_hash
   end
 
   def allow_staff_manage_users
-    can [:show_users, :manage_users], Course,
-        course_users: { user_id: user.id, workflow_state: 'approved',
-                        role: [CourseUser.roles[:manager],
-                               CourseUser.roles[:owner],
-                               CourseUser.roles[:teaching_assistant],
-                               'manager', 'owner', 'teaching_assistant'] }
+    can [:show_users, :manage_users], Course, course_user_hash(*CourseUser::STAFF_ROLES.to_a)
   end
 end
