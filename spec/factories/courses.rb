@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :course do
-    title 'example'
+    sequence(:title) { |n| "Example course #{n}" }
     description 'example course'
     start_at Time.zone.now
     end_at 7.days.from_now
