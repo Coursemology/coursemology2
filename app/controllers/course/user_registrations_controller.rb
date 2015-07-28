@@ -47,9 +47,9 @@ class Course::UserRegistrationsController < Course::ComponentController
     role = t("course.users.role.#{@registration.course_user.role}")
     success =
       if @registration.course_user.approved?
-        t('course.user_registrations.create.registered', role)
+        t('course.user_registrations.create.registered', role: role)
       else
-        t('course.user_registrations.create.requested', role)
+        t('course.user_registrations.create.requested', role: role)
       end
 
     redirect_to course_path(current_course), success: success

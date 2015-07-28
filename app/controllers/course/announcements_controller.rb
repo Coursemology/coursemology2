@@ -44,7 +44,7 @@ class Course::AnnouncementsController < Course::ComponentController
                   success: t('.success', title: @announcement.title))
     else
       redirect_to(course_announcements_path(current_course),
-                  danger: t('.failure', @announcement.errors.full_messages.to_sentence))
+                  danger: t('.failure', error: @announcement.errors.full_messages.to_sentence))
     end
   end
 

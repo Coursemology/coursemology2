@@ -37,7 +37,7 @@ class System::Admin::AnnouncementsController < System::Admin::Controller
                              title: @announcement.title)
     else
       redirect_to admin_announcements_path,
-                  danger: t('.failure', @announcement.errors.full_messages.to_sentence)
+                  danger: t('.failure', error: @announcement.errors.full_messages.to_sentence)
     end
   end
 

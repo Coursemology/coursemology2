@@ -35,7 +35,7 @@ class Course::AchievementsController < Course::ComponentController
                   success: t('.success', title: @achievement.title))
     else
       redirect_to course_achievements_path,
-                  danger: t('.failure', @achievement.errors.full_messages.to_sentence)
+                  danger: t('.failure', error: @achievement.errors.full_messages.to_sentence)
     end
   end
 
