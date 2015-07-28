@@ -8,6 +8,9 @@ class CourseUser < ActiveRecord::Base
   # A set of roles which comprise the staff of a course.
   STAFF_ROLES = Set[:teaching_assistant, :manager, :owner].freeze
 
+  # A set of roles which comprise the managers of a course.
+  MANAGER_ROLES = Set[:manager, :owner].freeze
+
   workflow do
     state :requested do
       event :approve, transitions_to: :approved
