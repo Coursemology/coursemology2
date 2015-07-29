@@ -3,6 +3,7 @@ en:
     achievements:
       sidebar_title: :'course.achievements.index.header'
       index:
+        title: 'Title'
         header: 'Achievements'
         description: 'Description'
         requirements: 'Requirements'

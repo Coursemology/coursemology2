@@ -3,6 +3,7 @@ class Course::AchievementsController < Course::ComponentController
   add_breadcrumb :index, :course_achievements_path
 
   def index #:nodoc:
+    @achievements = @achievements.includes(:conditions)
   end
 
   def new #:nodoc:

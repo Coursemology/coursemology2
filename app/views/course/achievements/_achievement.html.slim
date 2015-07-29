@@ -8,12 +8,14 @@
     div.description
       = achievement.description
 
+  td = achievement.specific_conditions.map(&:title).to_sentence
+
   - if can?(:manage, Course::Achievement)
-  td
-    - if achievement.draft?
-      = t('common.no')
-    - else
-      = t('common.yes')
+    td
+      - if achievement.draft?
+        = t('common.yes')
+      - else
+        = t('common.no')
   td
     = edit_button([current_course, achievement])
     = delete_button([current_course, achievement])

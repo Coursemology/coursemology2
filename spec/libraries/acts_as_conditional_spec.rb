@@ -6,10 +6,8 @@ RSpec.describe 'Extension: Acts as Conditional', type: :model do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:achievement) do
-      achievement = build(:achievement)
-      cond = build(:achievement_condition)
-      cond.conditional = achievement
-      cond.save
+      achievement = build(:achievement, course: course)
+      create(:achievement_condition, achievement: achievement)
       achievement
     end
 
