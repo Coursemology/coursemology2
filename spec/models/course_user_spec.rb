@@ -158,7 +158,8 @@ RSpec.describe CourseUser, type: :model do
       end
 
       it 'fails' do
-        expect { subject }.to change(CourseUser, :count).by(0).and raise_error
+        expect { subject }.to change(CourseUser, :count).by(0).
+          and raise_error(ActiveRecord::RecordInvalid)
       end
     end
   end
