@@ -105,9 +105,12 @@ RSpec.describe User, type: :model do
   end
 
   describe '#destroy' do
-    let(:user) { create(:user) }
-    subject { user.destroy }
+    let(:instance) { create(:instance) }
+    with_tenant(:instance) do
+      let(:user) { create(:user) }
+      subject { user.destroy }
 
-    it { is_expected.to be_destroyed }
+      it { is_expected.to be_destroyed }
+    end
   end
 end
