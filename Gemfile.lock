@@ -16,6 +16,14 @@ GIT
       rails (>= 3.1.0)
 
 GIT
+  remote: git://github.com/flyerhzm/bullet.git
+  revision: 63c305ea07cb7193c854b22606104d3c6d25419c
+  specs:
+    bullet (4.14.8)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.9.0)
+
+GIT
   remote: git://github.com/ledermann/unread.git
   revision: 0bfcb4f31c31599a601b02ba9ab606dd0bd32d29
   specs:
@@ -104,9 +112,6 @@ GEM
     bootstrap3-datetimepicker-rails (4.14.30)
       momentjs-rails (>= 2.8.1)
     builder (3.2.2)
-    bullet (4.14.7)
-      activesupport (>= 3.0.0)
-      uniform_notifier (~> 1.9.0)
     cancancan (1.12.0)
     capybara (2.4.4)
       mime-types (>= 1.16)
@@ -456,7 +461,7 @@ DEPENDENCIES
   bootstrap-sass-extras!
   bootstrap-select-rails
   bootstrap3-datetimepicker-rails
-  bullet
+  bullet!
   bundler (>= 1.10.3)
   cancancan (~> 1.9)
   capybara

@@ -57,8 +57,4 @@ class User::RegistrationsController < Devise::RegistrationsController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
-
-  def sign_in(resource_or_scope, user)
-    super(resource_or_scope, User.includes(:emails).find(user.id))
-  end
 end
