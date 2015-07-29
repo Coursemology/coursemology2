@@ -124,9 +124,8 @@ Rails.application.routes.draw do
       namespace :lesson_plan do
         get '/' => 'items#index'
         resources :milestones, except: [:index, :show]
+        resources :events, except: [:index, :show]
       end
-
-      resources :events, except: [:index, :show]
 
       resources :users, only: [:update, :destroy] do
         get 'invite' => 'user_invitations#new', on: :collection

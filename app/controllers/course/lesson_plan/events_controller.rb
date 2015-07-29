@@ -1,5 +1,6 @@
-class Course::EventsController < Course::ComponentController
-  load_and_authorize_resource :event, through: :course, class: Course::Event.name
+class Course::LessonPlan::EventsController < Course::ComponentController
+  load_and_authorize_resource :event, class: Course::LessonPlan::Event.name, through: :course,
+                                      through_association: :lesson_plan_events
   add_breadcrumb :index, :course_lesson_plan_path
 
   def new #:nodoc:
@@ -39,7 +40,7 @@ class Course::EventsController < Course::ComponentController
   private
 
   def event_params #:nodoc:
-    params.require(:event).
+    params.require(:lesson_plan_event).
       permit(:event_type, :title, :description, :location, :start_time, :end_time, :draft)
   end
 end

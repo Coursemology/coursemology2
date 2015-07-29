@@ -2,6 +2,7 @@
   div.btn-group
     - if can?(:create, Course::LessonPlan::Milestone)
       = new_button([current_course, :lesson_plan_milestone])
-    = new_button([current_course, :event]) if can?(:create, Course::Event)
+    - if can?(:create, Course::LessonPlan::Event)
+      = new_button([current_course, :lesson_plan_event])
 
 = render partial: 'lesson_plan_group', collection: @lesson_plan_items.to_a, as: :group

@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe Course::EventsController, type: :controller do
+RSpec.describe Course::LessonPlan::EventsController, type: :controller do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
     let!(:user) { create(:administrator) }
     let!(:course) { create(:course) }
     let!(:event_immutable_stub) do
-      stub = create(:course_event, course: course)
+      stub = create(:course_lesson_plan_event, course: course)
       allow(stub).to receive(:save).and_return(false)
       allow(stub).to receive(:update).and_return(false)
       allow(stub).to receive(:destroy).and_return(false)
@@ -32,7 +32,7 @@ RSpec.describe Course::EventsController, type: :controller do
       subject do
         patch :update, course_id: course,
                        id: event_immutable_stub,
-                       event: { id: event_immutable_stub.id }
+                       lesson_plan_event: { id: event_immutable_stub.id }
       end
 
       context 'when update fails' do
