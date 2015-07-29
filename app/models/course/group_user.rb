@@ -19,6 +19,6 @@ class Course::GroupUser < ActiveRecord::Base
 
   def user_and_group_in_same_course #:nodoc:
     return if user.courses.include?(group.course)
-    errors.add(:user, I18n.t('activerecord.errors.models.course_group_user.not_enrolled'))
+    errors.add(:user, :not_enrolled)
   end
 end

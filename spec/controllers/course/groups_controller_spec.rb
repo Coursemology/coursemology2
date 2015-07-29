@@ -55,16 +55,6 @@ RSpec.describe Course::GroupsController, type: :controller do
           it 'adds neither of them to the group' do
             expect { subject }.to change { group.users.count }.by(0)
           end
-
-          it 'adds errors to group users' do
-            subject
-            user_with_errors = controller.instance_variable_get(:@group).group_users.
-                               select { |user| user.errors.any? }
-            expect(user_with_errors).not_to be_empty
-            user_with_errors.each do |user|
-              expect(user.errors.messages[:user]).to include(I18n.t('errors.messages.taken'))
-            end
-          end
         end
       end
 

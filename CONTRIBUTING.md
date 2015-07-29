@@ -42,7 +42,9 @@ Declare model attributes in the following order:
  2. declarations (e.g. `acts_as :superclass`, `stampable`)
  3. callbacks
  4. attribute overrides (e.g. `enum`s, workflows)
- 5. validations
+ 5. validations. **Exception**: when the validation is over a collection association, this 
+    validation needs to be placed _after_ the association so that the validation is not 
+    overwritten by the association model's validations.
  6. associations
  7. scopes
 
