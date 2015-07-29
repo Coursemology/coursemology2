@@ -1,4 +1,4 @@
-module Course::LessonPlanItemsHelper
+module Course::LessonPlan::ItemsHelper
   def item_period_class(item)
     'past' if item.start_time < Time.zone.now
   end

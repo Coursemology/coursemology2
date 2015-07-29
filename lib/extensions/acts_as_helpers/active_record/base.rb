@@ -10,7 +10,7 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
     # Decorator for abstractions with concrete occurrences which have
     # the potential to award course_users EXP Points
     def acts_as_lesson_plan_item
-      acts_as :lesson_plan_item, class_name: Course::LessonPlanItem.name, inverse_of: :actable
+      acts_as :lesson_plan_item, class_name: Course::LessonPlan::Item.name, inverse_of: :actable
     end
   end
 

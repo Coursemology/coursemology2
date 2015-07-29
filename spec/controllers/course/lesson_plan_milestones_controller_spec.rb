@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Course::LessonPlanMilestonesController, type: :controller do
+RSpec.describe Course::LessonPlan::MilestonesController, type: :controller do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
@@ -21,7 +21,7 @@ RSpec.describe Course::LessonPlanMilestonesController, type: :controller do
 
       context 'when saving fails' do
         before do
-          controller.instance_variable_set(:@lesson_plan_milestone, milestone_immutable_stub)
+          controller.instance_variable_set(:@milestone, milestone_immutable_stub)
           subject
         end
 
@@ -38,7 +38,7 @@ RSpec.describe Course::LessonPlanMilestonesController, type: :controller do
 
       context 'when update fails' do
         before do
-          controller.instance_variable_set(:@lesson_plan_milestone, milestone_immutable_stub)
+          controller.instance_variable_set(:@milestone, milestone_immutable_stub)
           subject
         end
 
@@ -51,7 +51,7 @@ RSpec.describe Course::LessonPlanMilestonesController, type: :controller do
 
       context 'when destroy fails' do
         before do
-          controller.instance_variable_set(:@lesson_plan_milestone, milestone_immutable_stub)
+          controller.instance_variable_set(:@milestone, milestone_immutable_stub)
           subject
         end
 

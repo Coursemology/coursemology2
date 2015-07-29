@@ -5,7 +5,7 @@ class Course::LessonPlanComponent < SimpleDelegator
     [
       {
         key: :lesson_plan,
-        title: I18n.t('course.lesson_plan_items.sidebar_title'),
+        title: I18n.t('course.lesson_plan.items.sidebar_title'),
         weight: 3,
         path: course_lesson_plan_path(current_course)
       }
