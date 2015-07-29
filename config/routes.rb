@@ -84,6 +84,7 @@ Rails.application.routes.draw do
       resources :instance_announcements, except: [:show], concerns: :paginatable
       resources :instances, except: [:show]
       resources :users, only: [:index, :update, :destroy], concerns: :paginatable
+      resources :courses, only: [:index, :destroy], concerns: :paginatable
 
       get 'components' => 'admin#components'
       patch 'components' => 'admin#update_components'
