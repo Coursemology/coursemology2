@@ -1,0 +1,5 @@
+en:
+  activerecord:
+    attributes:
+      course/condition/level/title:
+          title: 'Level %{value}'

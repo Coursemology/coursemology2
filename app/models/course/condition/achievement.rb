@@ -3,4 +3,6 @@ class Course::Condition::Achievement < ActiveRecord::Base
   belongs_to :achievement, class_name: Course::Achievement.name, inverse_of: false
 
   default_scope { includes(:achievement) }
+
+  delegate :title, to: :achievement
 end
