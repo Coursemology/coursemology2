@@ -13,6 +13,7 @@ module UserAuthenticationConcern
     validates :password, length: { within: Devise.password_length, allow_blank: true }
 
     extend ReplacementClassMethods
+    include UserOmniauthConcern
   end
 
   private

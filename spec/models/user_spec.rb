@@ -113,4 +113,17 @@ RSpec.describe User, type: :model do
       it { is_expected.to be_destroyed }
     end
   end
+
+  describe '.new_with_session' do
+    context 'when facebook data is provided' do
+      let(:facebook_data) { OmniAuth.config.mock_auth[:facebook] }
+      let(:session) { { 'devise.facebook_data' => facebook_data } }
+      subject { User.new_with_session({}, session) }
+
+      it 'builds the user with information from facebook' do
+        expect(subject.name).to eq(facebook_data.info.name)
+        expect(subject.email).to eq(facebook_data.info.email)
+      end
+    end
+  end
 end
