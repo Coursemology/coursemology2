@@ -1,0 +1,14 @@
+en:
+  course:
+    assessment:
+      question:
+        multiple_responses:
+          new:
+            header: 'New Multiple Response Question'
+          create:
+            success: 'The multiple response question was created.'
+          update:
+            success: 'The multiple response question was updated.'
+          destroy:
+            success: 'The multiple response question was deleted.'
+            failure: 'Could not delete multiple response question: %{error}'

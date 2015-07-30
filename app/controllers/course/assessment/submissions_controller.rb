@@ -1,6 +1,5 @@
 class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   before_action :authorize_assessment, only: :create
-  before_action :add_assessment_breadcrumb
   load_and_authorize_resource :submission, class: Course::Assessment::Submission.name,
                                            through: :assessment
 
@@ -37,9 +36,5 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
 
   def authorize_assessment
     authorize!(:attempt, @assessment)
-  end
-
-  def add_assessment_breadcrumb
-    add_breadcrumb @assessment.title, course_assessment_path(current_course, @assessment)
   end
 end

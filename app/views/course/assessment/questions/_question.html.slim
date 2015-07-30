@@ -1,0 +1,7 @@
+= div_for(question) do
+  div.pull-right
+    div.btn-group
+      = edit_button(edit_path)
+      = delete_button(delete_path)
+  h3 = question.title
+  = sanitize(question.description)

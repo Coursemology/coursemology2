@@ -1,0 +1,8 @@
+= simple_form_for [current_course, @assessment, @multiple_response_question] do |f|
+  = f.error_notification
+  = render partial: 'course/assessment/questions/form', locals: { f: f }
+  = f.input :question_type,
+            as: :select,
+            collection: Course::Assessment::Question::MultipleResponse.question_types.keys
+
+  = f.button :submit
