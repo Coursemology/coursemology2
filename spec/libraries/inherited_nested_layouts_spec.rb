@@ -2,7 +2,14 @@ require 'rails_helper'
 
 RSpec.describe 'Extension: Inherited Nested Layouts', type: :controller do
   class self::ControllerA < ApplicationController
+    prepend_view_path File.join(__dir__, '../fixtures/libraries/inherited_nested_layouts')
     layout 'testA'
+
+    protected
+
+    def publicly_accessible?
+      true
+    end
   end
 
   class self::ControllerB < self::ControllerA
@@ -18,6 +25,9 @@ RSpec.describe 'Extension: Inherited Nested Layouts', type: :controller do
   end
 
   controller(self::ControllerC) do
+    def index
+      render template: 'content', layout: 'test_layout'
+    end
   end
 
   it 'gets the correct current layout' do
@@ -39,5 +49,20 @@ RSpec.describe 'Extension: Inherited Nested Layouts', type: :controller do
       'testB',
       'testC'
     ])
+  end
+
+  describe '#render' do
+    context 'when rendering with an explicit :layout' do
+      it 'gets the correct layout hierarchy' do
+        get :index
+        expect(controller.layout_hierarchy).to eq([
+          'default',
+          'testA',
+          'testB',
+          'testC',
+          'test_layout'
+        ])
+      end
+    end
   end
 end

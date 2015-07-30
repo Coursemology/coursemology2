@@ -58,4 +58,13 @@ module Extensions::InheritedNestedLayouts::ActionController::Base
     layout = layout_method.bind(self_)
     layout.call
   end
+
+  # Overrides {ActionController::Rendering#render} to keep track of the :layout rendering option.
+  def render(*args)
+    options = args.extract_options!
+    layout_hierarchy << options[:layout] if options.try(:key?, :layout)
+
+    args << options
+    super
+  end
 end
