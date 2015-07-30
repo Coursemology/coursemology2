@@ -108,7 +108,7 @@ group :development, :test do
   gem 'consistency_fail'
 
   # Prevent N+1 queries.
-  gem 'bullet', github: 'flyerhzm/bullet'
+  gem 'bullet', github: 'lowjoel/bullet', branch: 'allow-disable-bullet'
 end
 
 group :ci do

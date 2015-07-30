@@ -16,14 +16,6 @@ GIT
       rails (>= 3.1.0)
 
 GIT
-  remote: git://github.com/flyerhzm/bullet.git
-  revision: 63c305ea07cb7193c854b22606104d3c6d25419c
-  specs:
-    bullet (4.14.8)
-      activesupport (>= 3.0.0)
-      uniform_notifier (~> 1.9.0)
-
-GIT
   remote: git://github.com/ledermann/unread.git
   revision: 0bfcb4f31c31599a601b02ba9ab606dd0bd32d29
   specs:
@@ -38,6 +30,15 @@ GIT
     acts_as_tenant (0.3.9)
       rails (>= 3.1)
       request_store (>= 1.0.5)
+
+GIT
+  remote: git://github.com/lowjoel/bullet.git
+  revision: 0eae7c15e95a7fe8869d3f8677e8a2020174167b
+  branch: allow-disable-bullet
+  specs:
+    bullet (4.14.8)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.9.0)
 
 GIT
   remote: git://github.com/lowjoel/themes_on_rails.git

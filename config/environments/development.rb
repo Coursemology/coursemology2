@@ -47,10 +47,7 @@ Rails.application.configure do
 
   # Enable Bullet to monitor our queries
   config.after_initialize do
-    Bullet.enable = true
-    Bullet.rails_logger = true
     Bullet.add_footer = true
-    Bullet.counter_cache_enable = false
   end
 end
 
