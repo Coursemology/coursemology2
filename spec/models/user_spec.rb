@@ -140,5 +140,13 @@ RSpec.describe User, type: :model do
         end
       end
     end
+
+    context 'after user was created' do
+      subject { create(:user) }
+
+      it 'creates an instance_user' do
+        expect { subject }.to change(instance.instance_users, :count).by(1)
+      end
+    end
   end
 end
