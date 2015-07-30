@@ -1,9 +1,23 @@
 require 'rspec/expectations'
 require 'action_view/record_identifier'
 
-RSpec::Matchers.define :have_content_tag_for do |resource|
+module ContentTag; end
+module ContentTag::TestExampleHelpers; end
+
+module ContentTag::TestExampleHelpers::FeatureHelpers
   include ActionView::RecordIdentifier
-  match do |page|
-    expect(page).to have_selector(".#{dom_class(resource)}\##{dom_id(resource)}")
+  def content_tag_selector(resource)
+    ".#{dom_class(resource)}\##{dom_id(resource)}"
   end
+end
+
+RSpec::Matchers.define :have_content_tag_for do |resource|
+  include ContentTag::TestExampleHelpers::FeatureHelpers
+  match do |page|
+    expect(page).to have_selector(content_tag_selector(resource))
+  end
+end
+
+RSpec.configure do |config|
+  config.include ContentTag::TestExampleHelpers::FeatureHelpers, type: :feature
 end
