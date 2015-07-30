@@ -31,22 +31,23 @@ html
             = t('layout.coursemology')
         div.collapse.navbar-collapse#site-navigation-navbar
           ul.nav.navbar-nav.pull-right
-            li.active
+            li
               = link_to(t('layout.navbar.courses'), courses_path)
             li
               = link_to(t('layout.navbar.help'), '#')
             - if user_signed_in?
               li
-                a.dropdown-toggle data-toggle="dropdown" = current_user.name
-                  b.caret
+                a.dropdown-toggle data-toggle="dropdown"
+                  => current_user.name
+                  span.caret
                 ul.dropdown-menu
                   li
                     = link_to(t('user.admin.navbar.account_settings'), edit_user_registration_path)
                   - if can?(:manage, current_tenant)
                     li
                       = link_to(t('layout.navbar.admin_panel'), admin_path)
-              li
-                = link_to(t('layout.navbar.sign_out'), destroy_user_session_path, method: :delete)
+                  li
+                    = link_to(t('layout.navbar.sign_out'), destroy_user_session_path, method: :delete)
             - else
               li
                 = link_to(t('layout.navbar.register'), new_user_registration_path)
