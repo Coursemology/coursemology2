@@ -1,5 +1,6 @@
 module UserAuthenticationConcern
   extend ActiveSupport::Concern
+  include Devise::SignInCallbacks
 
   included do
     # Include default devise modules. Others available are:
