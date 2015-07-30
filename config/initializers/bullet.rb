@@ -5,5 +5,11 @@ Rails.application.configure do
       Bullet.rails_logger = true
       Bullet.counter_cache_enable = false
     end
+  else
+    ApplicationController.class_eval do
+      def without_bullet
+        yield
+      end
+    end
   end
 end

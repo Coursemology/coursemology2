@@ -152,4 +152,12 @@ RSpec.describe ApplicationController, type: :controller do
       end
     end
   end
+
+  describe '#without_bullet' do
+    it 'disables bullet within the block' do
+      controller.send(:without_bullet) do
+        expect(Bullet.enable?).to be(false)
+      end
+    end
+  end
 end
