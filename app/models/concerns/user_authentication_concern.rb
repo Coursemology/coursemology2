@@ -7,7 +7,7 @@ module UserAuthenticationConcern
     # :validatable, :confirmable, :lockable, :timeoutable and :omniauthable
     devise :database_authenticatable, :registerable,
            :recoverable, :rememberable, :trackable
-    
+
     before_sign_in :create_instance_users
 
     validates :email, presence: true, if: :email_required?
