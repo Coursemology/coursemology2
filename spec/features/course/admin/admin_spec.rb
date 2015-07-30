@@ -3,13 +3,13 @@ require 'rails_helper'
 RSpec.describe 'Course: Administration: Administration', type: :feature do
   subject { page }
 
-  let!(:user) { create(:administrator) }
-  before { login_as(user, scope: :user) }
+  let(:instance) { create(:instance) }
 
-  describe 'index' do
-    let(:instance) { create(:instance) }
+  with_tenant(:instance) do
+    let!(:user) { create(:administrator) }
+    before { login_as(user, scope: :user) }
 
-    with_tenant(:instance) do
+    describe 'index' do
       let!(:course) { create(:course) }
       before { visit course_admin_path(course) }
 

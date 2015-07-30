@@ -6,9 +6,9 @@ RSpec.feature 'Users: Sign In' do
     scenario 'I can sign in if I am a user in another instance' do
       other_instance = create(:instance)
       password = 'abcdefghi'
-      user = create(:user, password: password)
+      user = nil
       ActsAsTenant.with_tenant(other_instance) do
-        other_instance.instance_users.create(user: user)
+        user = create(:user, password: password)
       end
 
       visit new_user_session_path
