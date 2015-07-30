@@ -45,10 +45,10 @@ en:
       groups:
         index: :'course.groups.index.header'
         new: :'course.groups.new.header'
-      lesson_plan_items:
-        index: :'course.lesson_plan_items.index.header'
-      lesson_plan_milestones:
-        index: :'breadcrumbs.course.lesson_plan_items'
+      lesson_plan:
+        items:
+          index: :'course.lesson_plan.items.index.header'
+        milestones: :'breadcrumbs.course.lesson_plan.items'
       events:
         index: :'breadcrumbs.course.lesson_plan_items'
 

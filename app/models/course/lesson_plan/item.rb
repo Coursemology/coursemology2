@@ -1,4 +1,4 @@
-class Course::LessonPlanItem < ActiveRecord::Base
+class Course::LessonPlan::Item < ActiveRecord::Base
   actable
 
   after_initialize :set_default_values, if: :new_record?

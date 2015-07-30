@@ -121,9 +121,11 @@ Rails.application.routes.draw do
       end
       resources :levels, except: [:show, :edit, :update]
 
-      get 'lesson_plan' => 'lesson_plan_items#index'
-      resources :lesson_plan_milestones, except: [:index, :show]
-      resources :events, except: [:index, :show]
+      namespace :lesson_plan do
+        get '/' => 'items#index'
+        resources :milestones, except: [:index, :show]
+        resources :events, except: [:index, :show]
+      end
 
       resources :users, only: [:update, :destroy] do
         get 'invite' => 'user_invitations#new', on: :collection

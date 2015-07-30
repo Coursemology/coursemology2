@@ -28,9 +28,11 @@ class Course < ActiveRecord::Base
   has_many :assessments, through: :assessment_categories
   has_many :levels, dependent: :destroy
   has_many :groups, dependent: :destroy, class_name: Course::Group.name
-  has_many :lesson_plan_items, dependent: :destroy
-  has_many :lesson_plan_milestones, dependent: :destroy
-  has_many :events, through: :lesson_plan_items, source: :actable, source_type: Course::Event.name
+  has_many :lesson_plan_items, class_name: Course::LessonPlan::Item.name, dependent: :destroy
+  has_many :lesson_plan_milestones, class_name: Course::LessonPlan::Milestone.name,
+                                    dependent: :destroy
+  has_many :lesson_plan_events, through: :lesson_plan_items,
+                                source: :actable, source_type: Course::LessonPlan::Event.name
 
   accepts_nested_attributes_for :invitations
 

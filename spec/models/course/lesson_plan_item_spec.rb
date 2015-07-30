@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Course::LessonPlanItem, type: :model do
+RSpec.describe Course::LessonPlan::Item, type: :model do
   it { is_expected.to validate_numericality_of(:base_exp).only_integer }
   it { is_expected.to validate_numericality_of(:time_bonus_exp).only_integer }
   it { is_expected.to validate_numericality_of(:extra_bonus_exp).only_integer }
@@ -19,7 +19,7 @@ RSpec.describe Course::LessonPlanItem, type: :model do
     end
 
     describe '#set_default_values' do
-      subject { Course::LessonPlanItem.new.total_exp }
+      subject { Course::LessonPlan::Item.new.total_exp }
       it { is_expected.to eq 0 }
     end
   end

@@ -1,11 +1,16 @@
-class Course::LessonPlanItemsController < Course::ComponentController
+class Course::LessonPlan::ItemsController < Course::ComponentController
   before_action :load_lesson_plan_items, only: [:index]
+  # This can only be done with Bullet once Rails supports polymorphic +inverse_of+.
+  prepend_around_action :without_bullet, only: [:index]
   load_and_authorize_resource :lesson_plan_item,
                               through: :course,
-                              class: Course::LessonPlanItem.name
+                              class: Course::LessonPlan::Item.name
   add_breadcrumb :index, :course_lesson_plan_path
 
   def index #:nodoc:
+    @lesson_plan_items.each_value do |items|
+      items.reject! { |x| cannot?(:show, x.specific) }
+    end
   end
 
   private

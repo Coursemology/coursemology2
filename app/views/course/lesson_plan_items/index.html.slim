@@ -1,6 +1,0 @@
-= page_header do
-  div.btn-group
-    = new_button([current_course, :lesson_plan_milestone]) if can?(:create, Course::LessonPlanMilestone)
-    = new_button([current_course, :event]) if can?(:create, Course::Event)
-
-= render partial: 'lesson_plan_group', collection: @lesson_plan_items.to_a, as: :group

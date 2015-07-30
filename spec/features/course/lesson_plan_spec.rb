@@ -24,7 +24,7 @@ RSpec.feature 'Course: Lesson Plan' do
       future_dates = (0..3).map { |i| i.days.from_now }
 
       (past_dates + future_dates).map do |start_time|
-        create(:course_event,
+        create(:course_lesson_plan_event,
                course: course,
                start_time: start_time,
                title: event_title_prefix + start_time.to_s)
