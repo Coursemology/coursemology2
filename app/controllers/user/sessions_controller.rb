@@ -22,11 +22,4 @@ class User::SessionsController < Devise::SessionsController
   # def configure_sign_in_params
   #   devise_parameter_sanitizer.for(:sign_in) << :attribute
   # end
-
-  private
-
-  def sign_in(*)
-    super
-    current_tenant.instance_users.find_or_create_by(user: resource)
-  end
 end

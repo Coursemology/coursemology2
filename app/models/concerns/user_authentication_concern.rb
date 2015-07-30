@@ -7,6 +7,8 @@ module UserAuthenticationConcern
     # :validatable, :confirmable, :lockable, :timeoutable and :omniauthable
     devise :database_authenticatable, :registerable,
            :recoverable, :rememberable, :trackable
+    
+    before_sign_in :create_instance_users
 
     validates :email, presence: true, if: :email_required?
     validates :password, presence: true, if: :password_required?
@@ -28,6 +30,10 @@ module UserAuthenticationConcern
 
   def email_required?
     true
+  end
+
+  def create_instance_users
+    instance_users.create if persisted? && instance_users.empty?
   end
 
   module ReplacementClassMethods
