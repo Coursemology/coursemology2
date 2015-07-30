@@ -11,11 +11,11 @@ RSpec.feature 'Course: Lesson Plan' do
     let(:event_title_prefix) { 'Spec event ' }
 
     let!(:milestones) do
-      [2.days.ago, 2.days.from_now].map do |start_time|
+      [2.days.ago, 2.days.from_now].map do |start_at|
         create(:course_lesson_plan_milestone,
                course: course,
-               start_time: start_time,
-               title: milestone_title_prefix + start_time.to_s)
+               start_at: start_at,
+               title: milestone_title_prefix + start_at.to_s)
       end
     end
 
@@ -23,11 +23,11 @@ RSpec.feature 'Course: Lesson Plan' do
       past_dates = (1..3).map { |i| i.days.ago }
       future_dates = (0..3).map { |i| i.days.from_now }
 
-      (past_dates + future_dates).map do |start_time|
+      (past_dates + future_dates).map do |start_at|
         create(:course_lesson_plan_event,
                course: course,
-               start_time: start_time,
-               title: event_title_prefix + start_time.to_s)
+               start_at: start_at,
+               title: event_title_prefix + start_at.to_s)
       end
     end
 

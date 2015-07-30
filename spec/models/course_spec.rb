@@ -104,13 +104,13 @@ RSpec.describe Course, type: :model do
     describe '#grouped_lesson_plan_items_with_milestones' do
       let(:course) { create(:course) }
       let!(:milestones) do
-        [3.days.ago, 2.days.ago, 2.days.from_now].map do |start_time|
-          create(:course_lesson_plan_milestone, course: course, start_time: start_time)
+        [3.days.ago, 2.days.ago, 2.days.from_now].map do |start_at|
+          create(:course_lesson_plan_milestone, course: course, start_at: start_at)
         end
       end
       let!(:lesson_plan_items) do
-        [3.days.ago, 2.days.ago, 1.days.from_now, 3.days.from_now].map do |start_time|
-          create(:course_lesson_plan_item, course: course, start_time: start_time)
+        [3.days.ago, 2.days.ago, 1.days.from_now, 3.days.from_now].map do |start_at|
+          create(:course_lesson_plan_item, course: course, start_at: start_at)
         end
       end
       subject { course.grouped_lesson_plan_items_with_milestones }
@@ -120,7 +120,7 @@ RSpec.describe Course, type: :model do
         it 'groups all items under the nil milestone' do
           expect(subject.length).to eq(1)
           expect(subject.keys).to eq([nil])
-          expect(subject[nil].each_cons(2).all? { |(a, b)| a.start_time <= b.start_time }).to \
+          expect(subject[nil].each_cons(2).all? { |(a, b)| a.start_at <= b.start_at }).to \
             be_truthy
         end
       end

@@ -4,11 +4,11 @@
     li.list-group-item
 
       .pull-right
-        - if assessment.end_time.present?
-          = t('common.time_range', from: format_datetime(assessment.start_time),
-              to: format_datetime(assessment.end_time))
+        - if assessment.end_at.present?
+          = t('common.time_range', from: format_datetime(assessment.start_at),
+              to: format_datetime(assessment.end_at))
         - else
-          = format_datetime(assessment.start_time)
+          = format_datetime(assessment.start_at)
 
       span.label.label-default
         = assessment.tab.category.title

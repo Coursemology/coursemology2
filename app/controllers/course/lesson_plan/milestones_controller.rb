@@ -41,6 +41,6 @@ class Course::LessonPlan::MilestonesController < Course::ComponentController
 
   def milestone_params #:nodoc:
     params.require(:lesson_plan_milestone).
-      permit(:title, :description, :start_time)
+      permit(:title, :description, :start_at)
   end
 end

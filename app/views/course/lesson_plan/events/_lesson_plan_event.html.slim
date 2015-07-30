@@ -4,11 +4,11 @@
     li.list-group-item
 
       .pull-right
-        - if event.end_time.present?
-          = t('common.time_range', from: format_datetime(event.start_time),
-                                   to: format_datetime(event.end_time))
+        - if event.end_at.present?
+          = t('common.time_range', from: format_datetime(event.start_at),
+                                   to: format_datetime(event.end_at))
         - else
-          = format_datetime(event.start_time)
+          = format_datetime(event.start_at)
 
       span.label.label-default
         = event.event_type

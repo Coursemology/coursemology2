@@ -2,8 +2,8 @@
   th
     = link_to(assessment.title, course_assessment_path(current_course, assessment))
   td
-  td = format_datetime(assessment.start_time)
-  td = format_datetime(assessment.end_time)
+  td = format_datetime(assessment.start_at)
+  td = format_datetime(assessment.end_at)
   td
     = button_to(t('.attempt'), course_assessment_submissions_path(current_course, assessment),
                 class: ['btn-info'])
