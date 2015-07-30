@@ -1,6 +1,7 @@
 - add_breadcrumb @group.name
 = page_header
 = simple_form_for [current_course, @group] do |f|
+  = f.error_notification
   = f.input :name
 
   table.table.group-user-list.table-hover

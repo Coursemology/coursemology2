@@ -24,7 +24,6 @@ class Course::GroupsController < Course::ComponentController
     if @group.update_attributes(group_params)
       redirect_to(course_groups_path(current_course), success: t('.success', name: @group.name))
     else
-      propagate_errors
       render 'edit'
     end
   end
@@ -43,15 +42,5 @@ class Course::GroupsController < Course::ComponentController
   def group_params #:nodoc:
     params.require(:group).permit(:name, user_ids: [],
                                          group_users_attributes: [:id, :user_id, :role, :_destroy])
-  end
-
-  # Propagate errors to group users
-  def propagate_errors
-    new_group_users = @group.group_users.select(&:new_record?)
-    non_unique_group_users = new_group_users - new_group_users.uniq(&:user)
-
-    non_unique_group_users.each do |group_user|
-      group_user.errors.add(:user, t('errors.messages.taken'))
-    end
   end
 end

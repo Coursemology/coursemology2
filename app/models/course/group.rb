@@ -2,8 +2,6 @@ class Course::Group < ActiveRecord::Base
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
 
-  validate :users_are_unique
-
   belongs_to :course, inverse_of: :groups
   has_many :group_users, inverse_of: :course_group, dependent: :destroy,
                          class_name: Course::GroupUser.name, foreign_key: :course_group_id
@@ -11,6 +9,8 @@ class Course::Group < ActiveRecord::Base
 
   accepts_nested_attributes_for :group_users, allow_destroy: true,
                                               reject_if: -> (params) { params[:user_id].blank? }
+
+  validate :validate_new_users_are_unique
 
   private
 
@@ -30,10 +30,18 @@ class Course::Group < ActiveRecord::Base
       !group_users.exists?(user: creator)
   end
 
-  def users_are_unique
+  # Validate that the new users are unique.
+  #
+  # Validating that the users in general are unique is already handled by the uniqueness
+  # constraint in the {GroupUser} model. However, the uniqueness constraint does not work with
+  # new records and will raise a {RecordNotUnique} error in that circumstance.
+  def validate_new_users_are_unique
     new_group_users = group_users.select(&:new_record?)
     return if new_group_users.count == new_group_users.uniq(&:user).count
 
-    errors.add(:'group_users.user_id',  I18n.t('errors.messages.taken'))
+    errors.add(:group_users, :invalid)
+    (new_group_users - new_group_users.uniq(&:user)).each do |group_user|
+      group_user.errors.add(:user, :taken)
+    end
   end
 end

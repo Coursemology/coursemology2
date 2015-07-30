@@ -37,21 +37,25 @@ RSpec.describe Course::Group, type: :model do
       end
 
       context 'when multiple group_users reference a same user' do
-        let(:group) { create(:course_group, course: course) }
+        subject { create(:course_group, course: course) }
         let(:user) { create(:user) }
-        before do
-          create(:course_user, course: course, user: user)
-          2.times { group.group_users.build(user: user) }
-        end
-        subject { group.save }
-
-        it 'does not raise any errors' do
-          expect { subject }.not_to raise_error
+        let!(:group_users) do
+          create(:course_user, :approved, course: course, user: user)
+          2.times.map { subject.group_users.build(user: user) }
         end
 
-        it 'is not valid' do
-          subject
-          expect(group).not_to be_valid
+        it 'is an invalid group' do
+          expect(subject.save).to be(false)
+          expect(subject).not_to be_valid
+        end
+
+        it 'adds errors to group users' do
+          subject.valid?
+          user_with_errors = subject.group_users.select { |user| user.errors.any? }
+          expect(user_with_errors).not_to be_empty
+          user_with_errors.each do |user|
+            expect(user.errors.messages[:user]).to include(I18n.t('errors.messages.taken'))
+          end
         end
       end
     end
