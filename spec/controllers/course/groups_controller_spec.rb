@@ -21,7 +21,7 @@ RSpec.describe Course::GroupsController, type: :controller do
         subject { patch :update, course_id: course, id: group, group: group_attributes }
 
         context 'when the user and the group are in the same course' do
-          let!(:course_user) { create(:course_user, course: course, user: user_to_add) }
+          let!(:course_user) { create(:course_user, :approved, course: course, user: user_to_add) }
 
           it 'adds the user to the group' do
             expect { subject }.to change { group.users.count }.by(1)

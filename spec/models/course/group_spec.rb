@@ -40,7 +40,7 @@ RSpec.describe Course::Group, type: :model do
         subject { create(:course_group, course: course) }
         let(:user) { create(:user) }
         let!(:group_users) do
-          create(:course_user, course: course, user: user)
+          create(:course_user, :approved, course: course, user: user)
           2.times.map { subject.group_users.build(user: user) }
         end
 
