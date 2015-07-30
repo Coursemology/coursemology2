@@ -16,4 +16,3 @@ en:
         lesson_plan_event:
           location: 'Location: %{location}'
           no_description: '(No Description)'
-          draft: 'draft'

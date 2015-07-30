@@ -2,16 +2,15 @@
   h2
     - if announcement.unread?
       small => fa_icon(:envelope)
-    - unless announcement.currently_valid?
-      - title = announcement.expired? ? t('common.expired') : t('common.not_yet_valid')
-      small data-toggle='tooltip' title=title
-        => fa_icon(:ban)
     = announcement.title
+    - unless announcement.currently_valid?
+      small data-toggle='tooltip' title=time_period_message(announcement)
+        =< fa_icon(:calendar)
 
-    - if can?(:manage, announcement.class)
-      div.pull-right
-        = edit_button(edit_admin_announcement_path(announcement))
-        = delete_button(admin_announcement_path(announcement))
+    div.pull-right
+      div.btn-group
+        = edit_button(edit_admin_announcement_path(announcement)) if can?(:edit, announcement)
+        = delete_button(admin_announcement_path(announcement)) if can?(:destroy, announcement)
 
   h3.timestamp
     => format_datetime(announcement.start_at)

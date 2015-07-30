@@ -58,13 +58,53 @@ module ApplicationFormattersHelper
     date.to_formatted_s(format)
   end
 
-  # A helper for generating css class, return the time bounded status of the item
+  # A helper for generating CSS classes, based on the time-bounded status of the item.
   #
-  # @param [ActiveRecord::Base] item The ActiveRecord objects who has the time_bounded fields
-  # @return [String] the string which indicates its current status
+  # @param [ActiveRecord::Base] item An ActiveRecord object which has time-bounded fields.
+  # @return [Array<String>] An array of CSS classes applicable for the provided item.
   def time_period_class(item)
-    return 'not-yet-valid' if item.not_yet_valid?
-    return 'currently-valid' if item.currently_valid?
-    'expired' if item.expired?
+    if item.not_yet_valid?
+      ['not-yet-valid']
+    elsif item.currently_valid?
+      ['currently-valid']
+    elsif item.expired?
+      ['expired']
+    else
+      []
+    end
+  end
+
+  # A helper for retrieving the title for a time-bounded item's status.
+  #
+  # @param [ActiveRecord::Base] item An ActiveRecord object which has time-bounded fields.
+  # @return [String|nil] A translated string representing the status of the item, or nil if the
+  #   item is valid.
+  def time_period_message(item)
+    if item.not_yet_valid?
+      t('common.not_yet_valid')
+    elsif item.expired?
+      t('common.expired')
+    end
+  end
+
+  # A helper for generating CSS classes, based on the draft status of the item.
+  #
+  # @param [ActiveRecord::Base] item An ActiveRecord object which has a draft field.
+  # @return [Array<String>] An array of CSS classes applicable for the provided item.
+  def draft_class(item)
+    if item.draft?
+      ['draft']
+    else
+      []
+    end
+  end
+
+  # A helper for retrieving the title of a draft item's status.
+  #
+  # @param [ActiveRecord::Base] item An ActiveRecord object which has a draft field.
+  # @return [String|nil] A translated string representing the status of the item, or nil if the
+  #   item is not a draft.
+  def draft_message(item)
+    t('common.draft') if item.draft?
   end
 end

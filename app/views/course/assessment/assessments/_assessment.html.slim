@@ -1,6 +1,13 @@
-= content_tag_for(:tr, assessment)
+= content_tag_for(:tr, assessment, class: time_period_class(assessment) + draft_class(assessment))
   th
     = link_to(assessment.title, course_assessment_path(current_course, assessment))
+    - unless assessment.currently_valid?
+      small data-toggle='tooltip' title=time_period_message(assessment)
+        =< fa_icon(:calendar)
+    - if assessment.draft?
+      small data-toggle='tooltip' title=draft_message(assessment)
+        =< fa_icon(:'eye-slash')
+
   td
   td = format_datetime(assessment.start_at)
   td = format_datetime(assessment.end_at)
