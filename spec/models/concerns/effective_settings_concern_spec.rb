@@ -7,7 +7,7 @@ RSpec.describe EffectiveSettingsConcern, type: :model do
     })
   end
 
-  let(:component_host) { Course::ComponentHost }
+  let(:component_host) { Course::ControllerComponentHost }
   let(:default_enabled_components) do
     component_host.components.select(&:enabled_by_default?)
   end

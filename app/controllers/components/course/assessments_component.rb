@@ -1,5 +1,5 @@
 class Course::AssessmentsComponent < SimpleDelegator
-  include Course::ComponentHost::Component
+  include Course::ControllerComponentHost::Component
 
   def sidebar_items
     main_sidebar_items + admin_sidebar_items + admin_settings_items

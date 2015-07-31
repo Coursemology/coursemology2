@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe Course::ComponentHost::Component do
+RSpec.describe Course::ControllerComponentHost::Component do
   class self::DummyComponent
-    include Course::ComponentHost::Component
+    include Course::ControllerComponentHost::Component
 
     def initialize(*)
     end

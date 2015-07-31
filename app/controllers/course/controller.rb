@@ -30,12 +30,12 @@ class Course::Controller < ApplicationController
 
   # Gets the component host for current instance and course
   #
-  # @return [Course::ComponentHost] The instance of component host using settings from instance and
-  #   course
+  # @return [Course::ControllerComponentHost] The instance of component host using settings from
+  #   instance and course
   def current_component_host
-    @current_component_host ||= Course::ComponentHost.new(current_tenant.settings(:components),
-                                                          current_course.settings(:components),
-                                                          self)
+    @current_component_host ||=
+      Course::ControllerComponentHost.new(current_tenant.settings(:components),
+                                          current_course.settings(:components), self)
   end
 
   private

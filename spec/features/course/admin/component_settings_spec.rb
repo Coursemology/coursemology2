@@ -6,7 +6,7 @@ RSpec.feature 'Course: Administration: Components' do
   with_tenant(:instance) do
     let(:user) { create(:user) }
     let(:course) { create(:course, creator: user) }
-    let(:components)  { Course::ComponentHost.components }
+    let(:components)  { Course::ControllerComponentHost.components }
     let(:sample_component_id) do
       "settings_effective_enabled_component_ids_#{components.sample.key}"
     end
