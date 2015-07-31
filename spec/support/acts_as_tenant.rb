@@ -61,7 +61,7 @@ end
 
 module ActsAsTenant::TestExampleHelpers
   module FeatureHelpers
-    [:visit, :click_button].each do |method|
+    [:visit, :click_button, :click_link].each do |method|
       define_method(method) do |*args|
         # Unset the active tenant, let the request flow through the Rack stack and allow our own
         # code to deduce the tenant from the host name.
