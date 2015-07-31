@@ -27,10 +27,10 @@ RSpec.describe 'System: Administration: Announcements', type: :feature do
       let(:announcement) { build(:system_announcement) }
 
       before do
-        fill_in 'system_announcement[title]',      with: announcement.title
-        fill_in 'system_announcement[content]',    with: announcement.content
-        fill_in 'system_announcement[valid_from]', with: announcement.valid_from
-        fill_in 'system_announcement[valid_to]',   with: announcement.valid_to
+        fill_in 'system_announcement[title]',    with: announcement.title
+        fill_in 'system_announcement[content]',  with: announcement.content
+        fill_in 'system_announcement[start_at]', with: announcement.start_at
+        fill_in 'system_announcement[end_at]',   with: announcement.end_at
       end
 
       it 'creates an announcement' do

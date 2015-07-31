@@ -7,27 +7,27 @@ module Extensions::TimeBoundedRecord::ActiveRecord::Base
     private
 
     def now_valid
-      where { (valid_from == nil) | (valid_from <= Time.zone.now) }
+      where { (start_at == nil) | (start_at <= Time.zone.now) }
     end
 
     def not_yet_expired
-      where { (valid_to == nil) | (valid_to >= Time.zone.now) }
+      where { (end_at == nil) | (end_at >= Time.zone.now) }
     end
   end
 
-  # @return [boolean] True if valid_from is a future time
+  # @return [boolean] True if start_at is a future time
   def not_yet_valid?
-    !valid_from.nil? && valid_from > Time.zone.now
+    start_at.present? && start_at > Time.zone.now
   end
 
-  # @return [boolean] True if current time is between valid_from and valid_to
+  # @return [boolean] True if current time is between start_at and end_at
   def currently_valid?
-    (valid_from.nil? || valid_from <= Time.zone.now) &&
-      (valid_to.nil? || valid_to >= Time.zone.now)
+    (start_at.nil? || start_at <= Time.zone.now) &&
+      (end_at.nil? || end_at >= Time.zone.now)
   end
 
-  # @return [boolean] True if valid_to is a past time
+  # @return [boolean] True if end_at is a past time
   def expired?
-    !valid_to.nil? && Time.zone.now > valid_to
+    end_at.present? && Time.zone.now > end_at
   end
 end

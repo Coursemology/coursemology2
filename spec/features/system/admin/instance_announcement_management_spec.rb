@@ -33,10 +33,10 @@ RSpec.describe 'System: Administration: InstanceAnnouncements', type: :feature d
         let(:announcement) { build(:instance_announcement, instance: instance) }
 
         before do
-          fill_in 'announcement[title]',      with: announcement.title
-          fill_in 'announcement[content]',    with: announcement.content
-          fill_in 'announcement[valid_from]', with: announcement.valid_from
-          fill_in 'announcement[valid_to]',   with: announcement.valid_to
+          fill_in 'announcement[title]',    with: announcement.title
+          fill_in 'announcement[content]',  with: announcement.content
+          fill_in 'announcement[start_at]', with: announcement.start_at
+          fill_in 'announcement[end_at]',   with: announcement.end_at
         end
 
         it 'creates an announcement' do
@@ -73,12 +73,12 @@ RSpec.describe 'System: Administration: InstanceAnnouncements', type: :feature d
         end
 
         it do
-          is_expected.to have_field('announcement[valid_from]',
-                                    with: announcement.valid_from)
+          is_expected.to have_field('announcement[start_at]',
+                                    with: announcement.start_at)
         end
 
         it do
-          is_expected.to have_field('announcement[valid_to]', with: announcement.valid_to)
+          is_expected.to have_field('announcement[end_at]', with: announcement.end_at)
         end
       end
 

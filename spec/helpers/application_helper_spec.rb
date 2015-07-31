@@ -114,32 +114,32 @@ RSpec.describe ApplicationHelper, type: :helper do
     describe '#time_period_class' do
       let(:stub) do
         result = Object.new
-        valid_from = self.valid_from
-        valid_to = self.valid_to
-        result.define_singleton_method(:not_yet_valid?) { Time.zone.now < valid_from }
+        start_at = self.start_at
+        end_at = self.end_at
+        result.define_singleton_method(:not_yet_valid?) { Time.zone.now < start_at }
         result.define_singleton_method(:currently_valid?) do
-          Time.zone.now >= valid_from && Time.zone.now <= valid_to
+          Time.zone.now >= start_at && Time.zone.now <= end_at
         end
-        result.define_singleton_method(:expired?) { Time.zone.now > valid_to }
+        result.define_singleton_method(:expired?) { Time.zone.now > end_at }
         result
       end
       subject { helper.time_period_class(stub) }
 
       context 'when the object is not yet valid' do
-        let(:valid_from) { Time.zone.now + 1.day }
-        let(:valid_to) { Time.zone.now + 2.days }
+        let(:start_at) { Time.zone.now + 1.day }
+        let(:end_at) { Time.zone.now + 2.days }
         it { is_expected.to eq('not-yet-valid') }
       end
 
       context 'when the object is currently valid' do
-        let(:valid_from) { Time.zone.now - 1.day }
-        let(:valid_to) { Time.zone.now + 1.day }
+        let(:start_at) { Time.zone.now - 1.day }
+        let(:end_at) { Time.zone.now + 1.day }
         it { is_expected.to eq('currently-valid') }
       end
 
       context 'when the object is expired' do
-        let(:valid_from) { Time.zone.now - 1.week }
-        let(:valid_to) { Time.zone.now - 1.day }
+        let(:start_at) { Time.zone.now - 1.week }
+        let(:end_at) { Time.zone.now - 1.day }
         it { is_expected.to eq('expired') }
       end
     end

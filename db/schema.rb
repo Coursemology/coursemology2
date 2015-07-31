@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150730074301) do
+ActiveRecord::Schema.define(version: 20150731010032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,8 +92,8 @@ ActiveRecord::Schema.define(version: 20150730074301) do
     t.string   "title",      limit: 255,                 null: false
     t.text     "content"
     t.boolean  "sticky",     default: false, null: false
-    t.datetime "valid_from", null: false
-    t.datetime "valid_to",   null: false
+    t.datetime "start_at",   null: false
+    t.datetime "end_at",     null: false
     t.integer  "creator_id", null: false, index: {name: "fk__course_announcements_creator_id"}, foreign_key: {references: "users", name: "fk_course_announcements_creator_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "updater_id", null: false, index: {name: "fk__course_announcements_updater_id"}, foreign_key: {references: "users", name: "fk_course_announcements_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at", null: false
@@ -343,8 +343,8 @@ ActiveRecord::Schema.define(version: 20150730074301) do
     t.integer  "instance_id", comment: "The instance this announcement is associated with. This only applies to instance announcements.", index: {name: "fk__generic_announcements_instance_id"}, foreign_key: {references: "instances", name: "fk_generic_announcements_instance_id", on_update: :no_action, on_delete: :no_action}
     t.string   "title",       limit: 255, null: false
     t.text     "content"
-    t.datetime "valid_from",  null: false
-    t.datetime "valid_to",    null: false
+    t.datetime "start_at",    null: false
+    t.datetime "end_at",      null: false
     t.integer  "creator_id",  null: false, index: {name: "fk__generic_announcements_creator_id"}, foreign_key: {references: "users", name: "fk_generic_announcements_creator_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "updater_id",  null: false, index: {name: "fk__generic_announcements_updater_id"}, foreign_key: {references: "users", name: "fk_generic_announcements_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at",  null: false

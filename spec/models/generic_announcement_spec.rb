@@ -13,10 +13,10 @@ RSpec.describe GenericAnnouncement, type: :model do
       let!(:now) { Time.zone.now }
       let!(:invalid_announcements) do
         [
-          create_list(:system_announcement, 3, valid_from: now + 1.days, valid_to: now + 2.days),
-          create_list(:system_announcement, 3, valid_from: now - 2.days, valid_to: now - 1.days),
-          create_list(:instance_announcement, 3, valid_from: now + 1.days, valid_to: now + 2.days),
-          create_list(:instance_announcement, 3, valid_from: now - 2.days, valid_to: now - 1.days)
+          create_list(:system_announcement, 3, start_at: now + 1.days, end_at: now + 2.days),
+          create_list(:system_announcement, 3, start_at: now - 2.days, end_at: now - 1.days),
+          create_list(:instance_announcement, 3, start_at: now + 1.days, end_at: now + 2.days),
+          create_list(:instance_announcement, 3, start_at: now - 2.days, end_at: now - 1.days)
         ].flatten
       end
 
@@ -33,15 +33,15 @@ RSpec.describe GenericAnnouncement, type: :model do
     end
 
     describe '.default_scope' do
-      it 'orders by descending valid_from within type' do
+      it 'orders by descending start_at within type' do
         all = GenericAnnouncement.with_instance([nil, instance])
         system_announcements, instance_announcements = all.partition do |a|
           a.is_a?(System::Announcement)
         end
 
         comparator = proc { |x, y| x >= y }
-        system_sorted = system_announcements.map(&:valid_from).each_cons(2).all?(&comparator)
-        instance_sorted = instance_announcements.map(&:valid_from).each_cons(2).all?(&comparator)
+        system_sorted = system_announcements.map(&:start_at).each_cons(2).all?(&comparator)
+        instance_sorted = instance_announcements.map(&:start_at).each_cons(2).all?(&comparator)
 
         expect(system_sorted).to be_truthy
         expect(instance_sorted).to be_truthy

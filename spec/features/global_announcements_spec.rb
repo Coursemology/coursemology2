@@ -48,8 +48,8 @@ RSpec.feature 'Global announcements' do
         announcements = (-3..0).map do |i|
           now = Time.zone.now
           [
-            create(:instance_announcement, valid_from: now - i.seconds, instance: instance),
-            create(:system_announcement, valid_from: now - i.seconds)
+            create(:instance_announcement, end_at: now - i.seconds, instance: instance),
+            create(:system_announcement, start_at: now - i.seconds)
           ]
         end
         announcements.flatten!

@@ -1,0 +1,8 @@
+class RenameValidFromToStartEndAt < ActiveRecord::Migration
+  def change
+    rename_column :course_announcements, :valid_from, :start_at
+    rename_column :course_announcements, :valid_to, :end_at
+    rename_column :generic_announcements, :valid_from, :start_at
+    rename_column :generic_announcements, :valid_to, :end_at
+  end
+end

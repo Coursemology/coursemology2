@@ -7,8 +7,9 @@ RSpec.describe System::Announcement, type: :model do
   describe '.default_scope' do
     before { create_list(:system_announcement, 3) }
 
-    it 'orders by descending valid_from' do
-      dates = System::Announcement.all.map(&:valid_from)
+    it 'orders by descending start_at' do
+      dates = System::Announcement.pluck(:start_at)
+      expect(dates.length).to be > 1
       expect(dates.each_cons(2).all? { |x, y| x >= y }).to be_truthy
     end
   end

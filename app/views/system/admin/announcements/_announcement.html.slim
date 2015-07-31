@@ -14,7 +14,7 @@
         = delete_button(admin_announcement_path(announcement))
 
   h3.timestamp
-    => format_datetime(announcement.valid_from)
+    => format_datetime(announcement.start_at)
     ' by
     = link_to_user(announcement.creator)
 
