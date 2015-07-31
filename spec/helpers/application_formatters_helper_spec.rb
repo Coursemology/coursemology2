@@ -36,57 +36,57 @@ RSpec.describe ApplicationFormattersHelper do
   describe 'time-bounded helper' do
     let(:stub) do
       Object.new.tap do |result|
-        valid_from = self.valid_from
-        valid_to = self.valid_to
-        result.define_singleton_method(:not_yet_valid?) { Time.zone.now < valid_from }
-        result.define_singleton_method(:currently_valid?) do
-          Time.zone.now >= valid_from && Time.zone.now <= valid_to
+        start_at = self.start_at
+        end_at = self.end_at
+        result.define_singleton_method(:started?) { Time.zone.now >= start_at }
+        result.define_singleton_method(:currently_active?) do
+          Time.zone.now >= start_at && Time.zone.now <= end_at
         end
-        result.define_singleton_method(:expired?) { Time.zone.now > valid_to }
+        result.define_singleton_method(:ended?) { Time.zone.now > end_at }
       end
     end
 
     describe '#time_period_class' do
       subject { helper.time_period_class(stub) }
 
-      context 'when the object is not yet valid' do
-        let(:valid_from) { Time.zone.now + 1.day }
-        let(:valid_to) { Time.zone.now + 2.days }
-        it { is_expected.to eq(['not-yet-valid']) }
+      context 'when the object is not started' do
+        let(:start_at) { Time.zone.now + 1.day }
+        let(:end_at) { Time.zone.now + 2.days }
+        it { is_expected.to eq(['not-started']) }
       end
 
-      context 'when the object is currently valid' do
-        let(:valid_from) { Time.zone.now - 1.day }
-        let(:valid_to) { Time.zone.now + 1.day }
-        it { is_expected.to eq(['currently-valid']) }
+      context 'when the object is currently active' do
+        let(:start_at) { Time.zone.now - 1.day }
+        let(:end_at) { Time.zone.now + 1.day }
+        it { is_expected.to eq(['currently-active']) }
       end
 
-      context 'when the object is expired' do
-        let(:valid_from) { Time.zone.now - 1.week }
-        let(:valid_to) { Time.zone.now - 1.day }
-        it { is_expected.to eq(['expired']) }
+      context 'when the object is ended' do
+        let(:start_at) { Time.zone.now - 1.week }
+        let(:end_at) { Time.zone.now - 1.day }
+        it { is_expected.to eq(['ended']) }
       end
     end
 
     describe '#time_period_message' do
       subject { helper.time_period_message(stub) }
 
-      context 'when the object is yet valid' do
-        let(:valid_from) { Time.zone.now + 1.day }
-        let(:valid_to) { Time.zone.now + 2.days }
-        it { is_expected.to eq(I18n.t('common.not_yet_valid')) }
+      context 'when the object is not started' do
+        let(:start_at) { Time.zone.now + 1.day }
+        let(:end_at) { Time.zone.now + 2.days }
+        it { is_expected.to eq(I18n.t('common.not_started')) }
       end
 
-      context 'when the object is currently valid' do
-        let(:valid_from) { Time.zone.now - 1.day }
-        let(:valid_to) { Time.zone.now + 1.day }
+      context 'when the object is currently active' do
+        let(:start_at) { Time.zone.now - 1.day }
+        let(:end_at) { Time.zone.now + 1.day }
         it { is_expected.to be_nil }
       end
 
-      context 'when the object is expired' do
-        let(:valid_from) { Time.zone.now - 1.week }
-        let(:valid_to) { Time.zone.now - 1.day }
-        it { is_expected.to eq(I18n.t('common.expired')) }
+      context 'when the object is ended' do
+        let(:start_at) { Time.zone.now - 1.week }
+        let(:end_at) { Time.zone.now - 1.day }
+        it { is_expected.to eq(I18n.t('common.ended')) }
       end
     end
   end

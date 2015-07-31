@@ -6,12 +6,12 @@ RSpec.describe GenericAnnouncement, type: :model do
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
-    let!(:valid_system_announcements) { create_list(:system_announcement, 1) }
-    let!(:valid_instance_announcements) { create_list(:instance_announcement, 1) }
+    let!(:active_system_announcements) { create_list(:system_announcement, 1) }
+    let!(:active_instance_announcements) { create_list(:instance_announcement, 1) }
 
-    describe '.currently_valid' do
+    describe '.currently_active' do
       let!(:now) { Time.zone.now }
-      let!(:invalid_announcements) do
+      let!(:inactive_announcements) do
         [
           create_list(:system_announcement, 3, start_at: now + 1.days, end_at: now + 2.days),
           create_list(:system_announcement, 3, start_at: now - 2.days, end_at: now - 1.days),
@@ -20,15 +20,15 @@ RSpec.describe GenericAnnouncement, type: :model do
         ].flatten
       end
 
-      it 'shows currently valid announcements' do
-        all = GenericAnnouncement.currently_valid
-        expect(all).to include(*valid_system_announcements)
-        expect(all).to include(*valid_instance_announcements)
+      it 'shows currently active announcements' do
+        all = GenericAnnouncement.currently_active
+        expect(all).to include(*active_system_announcements)
+        expect(all).to include(*active_instance_announcements)
       end
 
-      it 'does not show invalid announcements' do
-        all = GenericAnnouncement.currently_valid
-        expect(all).to_not include(*invalid_announcements)
+      it 'does not show inactive announcements' do
+        all = GenericAnnouncement.currently_active
+        expect(all).to_not include(*inactive_announcements)
       end
     end
 
@@ -58,8 +58,8 @@ RSpec.describe GenericAnnouncement, type: :model do
     describe '.for_instance' do
       it 'retrieves both instance announcements and global announcements' do
         announcements = GenericAnnouncement.for_instance(instance)
-        expect(announcements).to include(*valid_system_announcements)
-        expect(announcements).to include(*valid_instance_announcements)
+        expect(announcements).to include(*active_system_announcements)
+        expect(announcements).to include(*active_instance_announcements)
       end
     end
   end

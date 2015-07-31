@@ -1,5 +1,5 @@
 module Course::LessonPlan::ItemsHelper
-  def item_period_class(item)
+  def milestone_period_class(item)
     'past' if item.start_at < Time.zone.now
   end
 

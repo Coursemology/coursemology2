@@ -63,12 +63,12 @@ module ApplicationFormattersHelper
   # @param [ActiveRecord::Base] item An ActiveRecord object which has time-bounded fields.
   # @return [Array<String>] An array of CSS classes applicable for the provided item.
   def time_period_class(item)
-    if item.not_yet_valid?
-      ['not-yet-valid']
-    elsif item.currently_valid?
-      ['currently-valid']
-    elsif item.expired?
-      ['expired']
+    if !item.started?
+      ['not-started']
+    elsif item.currently_active?
+      ['currently-active']
+    elsif item.ended?
+      ['ended']
     else
       []
     end
@@ -80,10 +80,10 @@ module ApplicationFormattersHelper
   # @return [String|nil] A translated string representing the status of the item, or nil if the
   #   item is valid.
   def time_period_message(item)
-    if item.not_yet_valid?
-      t('common.not_yet_valid')
-    elsif item.expired?
-      t('common.expired')
+    if !item.started?
+      t('common.not_started')
+    elsif item.ended?
+      t('common.ended')
     end
   end
 

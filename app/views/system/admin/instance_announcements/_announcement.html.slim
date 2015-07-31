@@ -3,7 +3,7 @@
     - if announcement.unread?
       small => fa_icon(:envelope)
     = announcement.title
-    - unless announcement.currently_valid?
+    - unless announcement.currently_active?
       small data-toggle='tooltip' title=time_period_message(announcement)
         =< fa_icon(:calendar)
 
