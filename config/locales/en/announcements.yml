@@ -2,4 +2,6 @@ en:
   announcements:
     index:
       header: 'All Announcements'
-
+    global_announcements:
+      close: 'Close'
+      more_announcements: 'More Announcements...'

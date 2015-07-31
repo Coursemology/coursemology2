@@ -63,7 +63,7 @@ RSpec.feature 'Global announcements' do
 
         expect(page).to have_tag('div.global-announcement') do
           with_tag('div.panel-footer',
-                   text: I18n.t('layouts.global_announcements.more_announcements'))
+                   text: I18n.t('announcements.global_announcements.more_announcements'))
         end
 
         announcements.each do |s|
