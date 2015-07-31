@@ -1,22 +1,5 @@
-= div_for(announcement, class: time_period_class(announcement))
-  h2
-    - if announcement.unread?
-      small => fa_icon(:envelope)
-    = announcement.title
-    - unless announcement.currently_active?
-      small data-toggle='tooltip' title=time_period_message(announcement)
-        =< fa_icon(:calendar)
-
-    div.pull-right
-      div.btn-group
-        = edit_button([:admin, :instance, announcement]) if can?(:edit, announcement)
-        = delete_button([:admin, :instance, announcement]) if can?(:destroy, announcement)
-
-  h3.timestamp
-    => format_datetime(announcement.start_at)
-    ' by
-    = link_to_user(announcement.creator)
-
-  div.content
-    = announcement.content
-hr
+- edit_button_path = [:admin, :instance, announcement]
+- delete_button_path = [:admin, :instance, announcement]
+= render partial: 'announcements/announcement', object: announcement,
+                                                locals: { edit_button_path: edit_button_path,
+                                                          delete_button_path: delete_button_path }

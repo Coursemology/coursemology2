@@ -1,0 +1,26 @@
+= div_for(announcement, class: time_period_class(announcement))
+  h2
+    - if announcement.unread?(current_user)
+      small => fa_icon(:envelope)
+
+    = announcement.title
+
+    - if announcement.sticky?
+      small =< fa_icon(:'thumb-tack')
+    - unless announcement.currently_active?
+      small data-toggle='tooltip' title=time_period_message(announcement)
+        =< fa_icon(:calendar)
+
+    div.pull-right
+      div.btn-group
+        = edit_button(edit_button_path) if can?(:edit, announcement)
+        = delete_button(delete_button_path) if can?(:destroy, announcement)
+
+  h3.timestamp
+    => format_datetime(announcement.start_at)
+    ' by
+    = link_to_user(announcement.creator)
+
+  div.content
+    = sanitize(announcement.content)
+hr

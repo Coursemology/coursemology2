@@ -23,8 +23,12 @@ class GenericAnnouncement < ActiveRecord::Base
 
   default_scope { system_announcements_first.order(start_at: :desc) }
 
-  def unread?
+  def unread?(_)
     # TODO: Implement
+    false
+  end
+
+  def sticky?
     false
   end
 
