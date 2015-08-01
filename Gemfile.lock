@@ -16,6 +16,14 @@ GIT
       rails (>= 3.1.0)
 
 GIT
+  remote: git://github.com/flyerhzm/bullet.git
+  revision: 5143b9f4dc4619903abb68827d0a8e0ce03dfa0c
+  specs:
+    bullet (4.14.8)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.9.0)
+
+GIT
   remote: git://github.com/ledermann/unread.git
   revision: 0bfcb4f31c31599a601b02ba9ab606dd0bd32d29
   specs:
@@ -30,15 +38,6 @@ GIT
     acts_as_tenant (0.3.9)
       rails (>= 3.1)
       request_store (>= 1.0.5)
-
-GIT
-  remote: git://github.com/lowjoel/bullet.git
-  revision: 0eae7c15e95a7fe8869d3f8677e8a2020174167b
-  branch: allow-disable-bullet
-  specs:
-    bullet (4.14.8)
-      activesupport (>= 3.0.0)
-      uniform_notifier (~> 1.9.0)
 
 GIT
   remote: git://github.com/lowjoel/themes_on_rails.git
@@ -110,7 +109,7 @@ GEM
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.3.0)
     bootstrap-select-rails (1.6.3)
-    bootstrap3-datetimepicker-rails (4.14.30)
+    bootstrap3-datetimepicker-rails (4.15.35)
       momentjs-rails (>= 2.8.1)
     builder (3.2.2)
     cancancan (1.12.0)
@@ -162,7 +161,7 @@ GEM
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.10)
-    font-awesome-rails (4.3.0.0)
+    font-awesome-rails (4.4.0.0)
       railties (>= 3.2, < 5.0)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
@@ -324,29 +323,33 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
-    schema_monkey (2.1.0)
+    schema_auto_foreign_keys (0.1.0)
+      schema_plus_foreign_keys (~> 0.1)
+      schema_plus_indexes (~> 0.2)
+    schema_monkey (2.1.1)
       activerecord (~> 4.2)
       its-it
       modware (~> 0.1)
-    schema_plus (2.0.0.pre15)
+    schema_plus (2.0.0)
       activerecord (~> 4.2)
+      schema_auto_foreign_keys (~> 0.1)
       schema_monkey (~> 2.1)
       schema_plus_columns (~> 0.1)
-      schema_plus_core (~> 0.2)
+      schema_plus_core (~> 0.4)
       schema_plus_db_default (~> 0.1)
       schema_plus_default_expr (~> 0.1)
       schema_plus_enums (~> 0.1)
+      schema_plus_foreign_keys (~> 0.1)
       schema_plus_indexes (~> 0.1, >= 0.1.3)
       schema_plus_pg_indexes (~> 0.1, >= 0.1.3)
       schema_plus_tables (~> 0.1)
       schema_plus_views (~> 0.1)
-      valuable
-    schema_plus_association_inverses (0.0.4)
-      schema_plus_core (~> 0.3.0)
+    schema_plus_association_inverses (0.0.5)
+      schema_plus_core (~> 0.3, >= 0.3.1)
     schema_plus_columns (0.1.0)
       activerecord (~> 4.2)
       schema_plus_indexes (~> 0.1)
-    schema_plus_core (0.3.1)
+    schema_plus_core (0.5.0)
       activerecord (~> 4.2)
       schema_monkey (~> 2.1)
     schema_plus_db_default (0.1.0)
@@ -358,6 +361,10 @@ GEM
     schema_plus_enums (0.1.0)
       activerecord (~> 4.2)
       schema_plus_core (~> 0.2, >= 0.2.1)
+    schema_plus_foreign_keys (0.1.2)
+      activerecord (~> 4.2)
+      schema_plus_core (~> 0.5)
+      valuable
     schema_plus_indexes (0.2.0)
       activerecord (~> 4.2)
       schema_plus_core (~> 0.1)
@@ -464,7 +471,7 @@ DEPENDENCIES
   bootstrap3-datetimepicker-rails
   bullet!
   bundler (>= 1.10.3)
-  cancancan (~> 1.9)
+  cancancan
   capybara
   carrierwave!
   cocoon
@@ -477,7 +484,7 @@ DEPENDENCIES
   high_voltage
   http_accept_language
   i18n-tasks
-  jbuilder (~> 2.0)
+  jbuilder
   jquery-cdn
   jquery-ui-rails
   kaminari
@@ -492,14 +499,14 @@ DEPENDENCIES
   pg (>= 0.18.2)
   puma
   rails (~> 4.2.1)
-  rails-assets-jquery-ujs (~> 1.0.3)!
+  rails-assets-jquery-ujs!
   rails-dev-boost!
   rails-flog
-  rails_utils (~> 3.3, >= 3.3.3)
+  rails_utils (>= 3.3.3)
   rspec-html-matchers
   rspec-rails
   sass-rails
-  schema_plus (~> 2.0.beta, > 2.0.0.pre14)
+  schema_plus
   schema_plus_association_inverses (>= 0.0.3)
   schema_validations
   settings_on_rails

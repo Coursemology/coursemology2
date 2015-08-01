@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 source 'https://rails-assets.org' do
-  gem 'rails-assets-jquery-ujs', '~> 1.0.3'
+  gem 'rails-assets-jquery-ujs'
 end
 
 # For Windows devs
@@ -17,7 +17,7 @@ gem 'rails', '~> 4.2.1'
 # Use PostgreSQL for the backend
 gem 'pg', '>= 0.18.2'
 # Schema Plus for some higher level database abstractions
-gem 'schema_plus', '~> 2.0.beta', '> 2.0.0.pre14'
+gem 'schema_plus'
 gem 'schema_plus_association_inverses', '>= 0.0.3'
 gem 'schema_validations'
 # Instance/Course settings
@@ -57,7 +57,7 @@ gem 'turbolinks'
 # Progress bars for Turbolinks
 gem 'nprogress-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0'
+gem 'jbuilder'
 # Slim as the templating language
 gem 'slim-rails'
 # High Voltage for static pages
@@ -68,7 +68,7 @@ gem 'kaminari'
 group :development do
   # Spring speeds up development by keeping your application running in the background.
   # Read more: https://github.com/rails/spring
-  gem 'spring'
+  gem 'spring', platforms: [:ruby]
   gem 'listen', '~> 1.3.1'
 
   # Gems to make development mode faster and less painful
@@ -108,7 +108,7 @@ group :development, :test do
   gem 'consistency_fail'
 
   # Prevent N+1 queries.
-  gem 'bullet', github: 'lowjoel/bullet', branch: 'allow-disable-bullet'
+  gem 'bullet', github: 'flyerhzm/bullet'
 end
 
 group :ci do
@@ -134,10 +134,10 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 
 # Use cancancan for authorization
-gem 'cancancan', '~> 1.9'
+gem 'cancancan'
 
 # Some helpers for structuring CSS/JavaScript
-gem 'rails_utils', '~> 3.3', '>= 3.3.3'
+gem 'rails_utils', '>= 3.3.3'
 
 # Themes for instances
 gem 'themes_on_rails', github: 'lowjoel/themes_on_rails'
