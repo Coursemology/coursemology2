@@ -2,10 +2,10 @@
   th
     = link_to(assessment.title, course_assessment_path(current_course, assessment))
     - unless assessment.currently_active?
-      small data-toggle='tooltip' title=time_period_message(assessment)
+      small title=time_period_message(assessment)
         =< fa_icon(:calendar)
     - if assessment.draft?
-      small data-toggle='tooltip' title=draft_message(assessment)
+      small title=draft_message(assessment)
         =< fa_icon(:'eye-slash')
 
   td

@@ -2,7 +2,7 @@
   'use strict';
   function initializeComponents(element) {
     $('[data-toggle="popover"]', element).popover();
-    $('[data-toggle="tooltip"]', element).tooltip();
+    $('[title]', element).tooltip();
   }
 
   initializeComponents(document);

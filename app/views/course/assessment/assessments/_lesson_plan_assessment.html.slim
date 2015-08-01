@@ -11,12 +11,12 @@
           = format_datetime(assessment.start_at)
 
       span.label.label-default
-        = assessment.tab.category.title
+        = assessment.tab.category.title.singularize
 
       =< assessment.title
 
       - if assessment.draft?
-        span data-toggle='tooltip' data-placement='top' title=draft_message(assessment)
+        span data-placement='top' title=draft_message(assessment)
           =< fa_icon(:'eye-slash')
 
   .lesson-plan-item-body.panel-collapse.collapse.in id=item_body_id(assessment)
