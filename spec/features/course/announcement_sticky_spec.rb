@@ -16,7 +16,7 @@ RSpec.describe 'Course: Announcements', type: :feature do
 
       describe 'orders' do
         let!(:published_announcement) do
-          create(:course_announcement, course: course, valid_from: 1.day.ago)
+          create(:course_announcement, course: course, start_at: 1.day.ago)
         end
 
         let!(:sticky_announcement) do
@@ -24,7 +24,7 @@ RSpec.describe 'Course: Announcements', type: :feature do
         end
 
         let!(:future_announcement) do
-          create(:course_announcement, course: course, valid_from: 3.days.from_now)
+          create(:course_announcement, course: course, start_at: 3.days.from_now)
         end
 
         before { visit course_announcements_path(course) }

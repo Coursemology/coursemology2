@@ -1,4 +1,5 @@
 = page_header do
   = new_button([:admin, :announcement]) if can?(:create, System::Announcement)
-= render partial: 'announcement', collection: @announcements
+
+= render partial: @announcements, spacer_template: 'announcements/announcement_spacer'
 = paginate @announcements

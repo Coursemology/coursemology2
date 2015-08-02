@@ -7,8 +7,6 @@ table.table.achievement-list.table-hover
       th = t('.title')
       th = t('.description')
       th = t('.requirements')
-      - if can?(:manage, Course::Achievement)
-        th = t('.draft')
       th
   tbody
     = render @achievements

@@ -65,11 +65,11 @@ RSpec.describe 'Course: Announcements', type: :feature do
         it { is_expected.to have_field('announcement_title', with: announcement.title) }
         it { is_expected.to have_field('announcement_content', with: announcement.content) }
         it do
-          is_expected.to have_field('announcement[valid_from]',
-                                    with: announcement.valid_from)
+          is_expected.to have_field('announcement[start_at]',
+                                    with: announcement.start_at)
         end
         it do
-          is_expected.to have_field('announcement[valid_to]', with: announcement.valid_to)
+          is_expected.to have_field('announcement[end_at]', with: announcement.end_at)
           click_button I18n.t('helpers.submit.announcement.update')
         end
       end

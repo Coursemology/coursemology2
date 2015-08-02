@@ -4,41 +4,42 @@
     = edit_button([current_course, @assessment])
     = delete_button([current_course, @assessment])
 
-h2 = t('.description')
-= sanitize(@assessment.description)
+= div_for(@assessment) do
+  h2 = t('.description')
+  = sanitize(@assessment.description)
 
-table.table.table-bordered.details-table
-  tbody
-    tr.maximum_experience_points
-      th = t('.maximum_experience_points')
-      td = @assessment.base_exp + @assessment.time_bonus_exp + @assessment.extra_bonus_exp
-    /tr.maximum_grade
-      th = ('.maximum_grade')
-      td = @assessment.maximum_grade
-    tr.start_time
-      th = t('.start_time')
-      td = format_datetime(@assessment.start_time)
-    tr.end_time
-      th = t('.end_time')
-      td = format_datetime(@assessment.end_time)
+  table.table.table-bordered.details-table
+    tbody
+      tr.maximum_experience_points
+        th = t('.maximum_experience_points')
+        td = @assessment.base_exp + @assessment.time_bonus_exp + @assessment.extra_bonus_exp
+      /tr.maximum_grade
+        th = ('.maximum_grade')
+        td = @assessment.maximum_grade
+      tr.start_at
+        th = t('.start_at')
+        td = format_datetime(@assessment.start_at)
+      tr.end_at
+        th = t('.end_at')
+        td = format_datetime(@assessment.end_at)
 
-h2 = t('.finish_to_unlock')
-/ TODO: dependencies
+  h2 = t('.finish_to_unlock')
+  / TODO: dependencies
 
-h2 = t('.files')
-/ TODO: files
+  h2 = t('.files')
+  / TODO: files
 
-div.pull-right
-  div.dropdown
-    button.btn.btn-info.dropdown-toggle#new-question [type='button' data-toggle='dropdown'
-                                                      aria-expanded='true']
-      => t('common.new')
-      span.caret
-    ul.dropdown-menu.dropdown-menu-right role='menu' aria-labelledby='new-question'
-      li role='presentation'
-        = link_to(t('.new_question.multiple_response'),
-                  new_course_assessment_question_multiple_response_path(current_course, @assessment),
-                  role: 'menuitem')
-h2 = t('.questions')
+  div.pull-right
+    div.dropdown
+      button.btn.btn-info.dropdown-toggle#new-question [type='button' data-toggle='dropdown'
+                                                        aria-expanded='true']
+        => t('common.new')
+        span.caret
+      ul.dropdown-menu.dropdown-menu-right role='menu' aria-labelledby='new-question'
+        li role='presentation'
+          = link_to(t('.new_question.multiple_response'),
+                    new_course_assessment_question_multiple_response_path(current_course, @assessment),
+                    role: 'menuitem')
+  h2 = t('.questions')
 
-= render @assessment.questions.map(&:specific)
+  = render @assessment.questions.map(&:specific)

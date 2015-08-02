@@ -22,9 +22,9 @@ RSpec.feature 'Course: Assessments: Management' do
         fill_in 'assessment_base_exp', with: assessment.base_exp
         fill_in 'assessment_time_bonus_exp', with: assessment.time_bonus_exp
         fill_in 'assessment_extra_bonus_exp', with: assessment.extra_bonus_exp
-        fill_in 'assessment_start_time', with: assessment.start_time
-        fill_in 'assessment_end_time', with: assessment.end_time
-        fill_in 'assessment_bonus_end_time', with: assessment.bonus_end_time
+        fill_in 'assessment_start_at', with: assessment.start_at
+        fill_in 'assessment_end_at', with: assessment.end_at
+        fill_in 'assessment_bonus_end_at', with: assessment.bonus_end_at
 
         click_button 'submit'
 
@@ -35,10 +35,7 @@ RSpec.feature 'Course: Assessments: Management' do
         fill_in 'assessment_title', with: assessment.title
         click_button 'submit'
 
-        expect(page).to have_selector('h1', text: assessment.title)
-        assessment_exp = assessment.base_exp + assessment.time_bonus_exp +
-                         assessment.extra_bonus_exp
-        expect(page).to have_selector('tr.maximum_experience_points td', text: assessment_exp)
+        expect(page).to have_content_tag_for(course.assessments.last)
       end
 
       scenario 'I can edit an assessment' do

@@ -13,9 +13,9 @@ RSpec.describe 'Extension: Acts as Lesson Plan Item' do
   it { is_expected.to respond_to(:base_exp) }
   it { is_expected.to respond_to(:time_bonus_exp) }
   it { is_expected.to respond_to(:extra_bonus_exp) }
-  it { is_expected.to respond_to(:start_time) }
-  it { is_expected.to respond_to(:end_time) }
-  it { is_expected.to respond_to(:bonus_end_time) }
+  it { is_expected.to respond_to(:start_at) }
+  it { is_expected.to respond_to(:end_at) }
+  it { is_expected.to respond_to(:bonus_end_at) }
   it { is_expected.to respond_to(:total_exp) }
   it { is_expected.to respond_to(:acting_as) }
   it { expect(dummy.acting_as).to respond_to(:specific) }

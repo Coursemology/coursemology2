@@ -21,10 +21,14 @@ class GenericAnnouncement < ActiveRecord::Base
   #   @param [Instance] instance The instance to retrieve announcements for.
   scope :for_instance, ->(instance) { with_instance([nil, instance]) }
 
-  default_scope { system_announcements_first.order(valid_from: :desc) }
+  default_scope { system_announcements_first.order(start_at: :desc) }
 
-  def unread?
+  def unread?(_)
     # TODO: Implement
+    false
+  end
+
+  def sticky?
     false
   end
 
@@ -32,7 +36,7 @@ class GenericAnnouncement < ActiveRecord::Base
 
   # Set default values
   def set_defaults
-    self.valid_from ||= Time.zone.now
-    self.valid_to ||= 7.days.from_now
+    self.start_at ||= Time.zone.now
+    self.end_at ||= 7.days.from_now
   end
 end

@@ -6,42 +6,42 @@ RSpec.describe GenericAnnouncement, type: :model do
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
-    let!(:valid_system_announcements) { create_list(:system_announcement, 1) }
-    let!(:valid_instance_announcements) { create_list(:instance_announcement, 1) }
+    let!(:active_system_announcements) { create_list(:system_announcement, 1) }
+    let!(:active_instance_announcements) { create_list(:instance_announcement, 1) }
 
-    describe '.currently_valid' do
+    describe '.currently_active' do
       let!(:now) { Time.zone.now }
-      let!(:invalid_announcements) do
+      let!(:inactive_announcements) do
         [
-          create_list(:system_announcement, 3, valid_from: now + 1.days, valid_to: now + 2.days),
-          create_list(:system_announcement, 3, valid_from: now - 2.days, valid_to: now - 1.days),
-          create_list(:instance_announcement, 3, valid_from: now + 1.days, valid_to: now + 2.days),
-          create_list(:instance_announcement, 3, valid_from: now - 2.days, valid_to: now - 1.days)
+          create_list(:system_announcement, 3, start_at: now + 1.days, end_at: now + 2.days),
+          create_list(:system_announcement, 3, start_at: now - 2.days, end_at: now - 1.days),
+          create_list(:instance_announcement, 3, start_at: now + 1.days, end_at: now + 2.days),
+          create_list(:instance_announcement, 3, start_at: now - 2.days, end_at: now - 1.days)
         ].flatten
       end
 
-      it 'shows currently valid announcements' do
-        all = GenericAnnouncement.currently_valid
-        expect(all).to include(*valid_system_announcements)
-        expect(all).to include(*valid_instance_announcements)
+      it 'shows currently active announcements' do
+        all = GenericAnnouncement.currently_active
+        expect(all).to include(*active_system_announcements)
+        expect(all).to include(*active_instance_announcements)
       end
 
-      it 'does not show invalid announcements' do
-        all = GenericAnnouncement.currently_valid
-        expect(all).to_not include(*invalid_announcements)
+      it 'does not show inactive announcements' do
+        all = GenericAnnouncement.currently_active
+        expect(all).to_not include(*inactive_announcements)
       end
     end
 
     describe '.default_scope' do
-      it 'orders by descending valid_from within type' do
+      it 'orders by descending start_at within type' do
         all = GenericAnnouncement.with_instance([nil, instance])
         system_announcements, instance_announcements = all.partition do |a|
           a.is_a?(System::Announcement)
         end
 
         comparator = proc { |x, y| x >= y }
-        system_sorted = system_announcements.map(&:valid_from).each_cons(2).all?(&comparator)
-        instance_sorted = instance_announcements.map(&:valid_from).each_cons(2).all?(&comparator)
+        system_sorted = system_announcements.map(&:start_at).each_cons(2).all?(&comparator)
+        instance_sorted = instance_announcements.map(&:start_at).each_cons(2).all?(&comparator)
 
         expect(system_sorted).to be_truthy
         expect(instance_sorted).to be_truthy
@@ -58,8 +58,8 @@ RSpec.describe GenericAnnouncement, type: :model do
     describe '.for_instance' do
       it 'retrieves both instance announcements and global announcements' do
         announcements = GenericAnnouncement.for_instance(instance)
-        expect(announcements).to include(*valid_system_announcements)
-        expect(announcements).to include(*valid_instance_announcements)
+        expect(announcements).to include(*active_system_announcements)
+        expect(announcements).to include(*active_instance_announcements)
       end
     end
   end

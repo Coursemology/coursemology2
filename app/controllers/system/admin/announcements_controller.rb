@@ -44,6 +44,6 @@ class System::Admin::AnnouncementsController < System::Admin::Controller
   private
 
   def announcement_params
-    params.require(:system_announcement).permit(:title, :content, :valid_from, :valid_to)
+    params.require(:system_announcement).permit(:title, :content, :start_at, :end_at)
   end
 end

@@ -11,9 +11,6 @@ en:
       sign_out: 'Sign Out'
       admin_panel: 'Administration Panel'
   layouts:
-    global_announcements:
-      close: 'Close'
-      more_announcements: 'More Announcements...'
     course:
       administration: :'system.admin.admin.index.header'
     course_admin:

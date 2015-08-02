@@ -7,7 +7,6 @@ en:
         header: 'Achievements'
         description: 'Description'
         requirements: 'Requirements'
-        draft: 'Draft'
       new:
         header: 'New Achievement'
       create:

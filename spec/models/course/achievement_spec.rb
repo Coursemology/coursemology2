@@ -11,7 +11,7 @@ RSpec.describe Course::Achievement, type: :model do
       let(:course) { create(:course) }
       let!(:achievements) { create_list(:course_achievement, 2, course: course) }
       it 'orders by ascending weight' do
-        weights = course.achievements.map(&:weight)
+        weights = course.achievements.pluck(:weight)
         expect(weights.length).to be > 1
         expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
       end

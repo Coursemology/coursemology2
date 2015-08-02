@@ -1,8 +1,11 @@
-= content_tag_for(:tr, achievement) do
+= content_tag_for(:tr, achievement, class: draft_class(achievement)) do
   td
     img.achievement-icon
   th
     = link_to achievement.title, course_achievement_path(current_course, achievement)
+    - if achievement.draft?
+      small title=achievement
+        =< fa_icon(:'eye-slash')
 
   td
     div.description
@@ -10,12 +13,7 @@
 
   td = achievement.specific_conditions.map(&:title).to_sentence
 
-  - if can?(:manage, Course::Achievement)
-    td
-      - if achievement.draft?
-        = t('common.yes')
-      - else
-        = t('common.no')
   td
-    = edit_button([current_course, achievement])
-    = delete_button([current_course, achievement])
+    div.btn-group
+      = edit_button([current_course, achievement]) if can?(:edit, achievement)
+      = delete_button([current_course, achievement]) if can?(:delete, achievement)

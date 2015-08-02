@@ -3,7 +3,7 @@ FactoryGirl.define do
     course
     sequence(:title)  { |n| "Announcement #{n}" }
     sequence(:content) { |n| "Content #{n}" }
-    valid_from Time.zone.now
-    valid_to 3.days.from_now
+    start_at Time.zone.now
+    end_at 3.days.from_now
   end
 end
