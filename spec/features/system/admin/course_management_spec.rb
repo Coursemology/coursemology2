@@ -4,11 +4,12 @@ RSpec.feature 'System: Administration: Courses' do
   let(:instance) { create(:instance) }
 
   with_tenant(:instance) do
+    let(:last_page) { Course.unscoped.page.total_pages }
     let!(:courses) do
       courses = create_list(:course, 2)
       other_instance = create(:instance)
       courses.last.update_column(:instance_id, other_instance)
-      Course.unscoped.ordered_by_title.page(1)
+      Course.unscoped.ordered_by_title.page(last_page)
     end
 
     context 'As a System Administrator' do
@@ -16,7 +17,7 @@ RSpec.feature 'System: Administration: Courses' do
       before { login_as(admin, scope: :user) }
 
       scenario 'I can view all courses in the system' do
-        visit admin_courses_path
+        visit admin_courses_path(page: last_page)
 
         courses.each do |course|
           expect(page).to have_selector('tr.course th', text: course.title)
@@ -25,7 +26,9 @@ RSpec.feature 'System: Administration: Courses' do
         end
       end
 
-      let!(:course_to_delete) { create(:course, title: courses.first.title) }
+      let!(:course_to_delete) do
+        create(:course, title: Course.unscoped.ordered_by_title.first.title)
+      end
       scenario 'I can delete a course' do
         visit admin_courses_path
 
