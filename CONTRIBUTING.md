@@ -21,12 +21,12 @@ Write your tests to be as compartmentalised from other tests as possible. Compar
 are those that do not depend on any external state to run. This would allow tests to be run in
 parallel.
 
-When defining constants, by default all constants would go to the global namespace and 
+When defining constants, by default all constants would go to the global namespace and
 potentially cause your specs to intefere with each other. To overcome this,
 [prefix all constants with `self::`](http://stackoverflow.com/a/6025300).
 
-In Rails, controller specs will always execute the `rescue_from` handlers. In our specs, we 
-disable that by default; to execute controllers with the handlers enabled, declare `run_rescue` 
+In Rails, controller specs will always execute the `rescue_from` handlers. In our specs, we
+disable that by default; to execute controllers with the handlers enabled, declare `run_rescue`
 within the example group.
 
 ## Developer Tools
@@ -42,8 +42,8 @@ Declare model attributes in the following order:
  2. declarations (e.g. `acts_as :superclass`, `stampable`)
  3. callbacks
  4. attribute overrides (e.g. `enum`s, workflows)
- 5. validations. **Exception**: when the validation is over a collection association, this 
-    validation needs to be placed _after_ the association so that the validation is not 
+ 5. validations. **Exception**: when the validation is over a collection association, this
+    validation needs to be placed _after_ the association so that the validation is not
     overwritten by the association model's validations.
  6. associations
  7. scopes
@@ -81,6 +81,13 @@ When displaying translations for long stretches of text (e.g. a paragraph), use 
 
 When using Simple Form remember to declare `f.error_notification`.
 
+`simple_form_for`, `simple_fields_for`, and associated methods (`f.input`, etc.) should be called
+without parentheses.
+
+## Controllers
+
+Controller actions (`render`, `redirect_to`) should be called without parentheses.
+
 ## Breadcrumbs
 Remember to specify page breadcrumbs in **controllers** with the `add_breadcrumb` helper.
 
@@ -95,7 +102,7 @@ Themes are provided by [themes_on_rails](https://github.com/yoolk/themes_on_rail
 uses standard Bootstrap 3 styles, so it is possible to theme Coursemology using any Bootstrap 3
 template.
 
-Bootstrap is included in `assets/styles/application.scss`. Coursemology's markup is semantically 
+Bootstrap is included in `assets/styles/application.scss`. Coursemology's markup is semantically
 written, modulo extras that Bootstrap requires to work. Themes should therefore `@import
 'application';` in their theme stylesheets, and override the base styles there.
 
