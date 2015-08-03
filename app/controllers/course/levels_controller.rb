@@ -11,8 +11,8 @@ class Course::LevelsController < Course::ComponentController
 
   def create #:nodoc:
     if @level.save
-      redirect_to(course_levels_path(current_course),
-                  success: t('.success', threshold: @level.experience_points_threshold))
+      redirect_to course_levels_path(current_course),
+                  success: t('.success', threshold: @level.experience_points_threshold)
     else
       render 'new'
     end
@@ -20,12 +20,12 @@ class Course::LevelsController < Course::ComponentController
 
   def destroy #:nodoc:
     if @level.destroy
-      redirect_to(course_levels_path(current_course),
+      redirect_to course_levels_path(current_course),
                   success: t('.success',
-                             threshold: @level.experience_points_threshold))
+                             threshold: @level.experience_points_threshold)
     else
-      redirect_to(course_levels_path(current_course),
-                  danger: t('.failure', error: @level.errors.full_messages.to_sentence))
+      redirect_to course_levels_path(current_course),
+                  danger: t('.failure', error: @level.errors.full_messages.to_sentence)
     end
   end
 

@@ -11,8 +11,8 @@ class Course::AchievementsController < Course::ComponentController
 
   def create #:nodoc:
     if @achievement.save
-      redirect_to(course_achievements_path(current_course),
-                  success: t('.success', title: @achievement.title))
+      redirect_to course_achievements_path(current_course),
+                  success: t('.success', title: @achievement.title)
     else
       render 'new'
     end
@@ -23,8 +23,8 @@ class Course::AchievementsController < Course::ComponentController
 
   def update #:nodoc:
     if @achievement.update_attributes(achievement_params)
-      redirect_to(course_achievements_path(current_course),
-                  success: t('.success', title: @achievement.title))
+      redirect_to course_achievements_path(current_course),
+                  success: t('.success', title: @achievement.title)
     else
       render 'edit'
     end
@@ -32,8 +32,8 @@ class Course::AchievementsController < Course::ComponentController
 
   def destroy #:nodoc:
     if @achievement.destroy
-      redirect_to(course_achievements_path(current_course),
-                  success: t('.success', title: @achievement.title))
+      redirect_to course_achievements_path(current_course),
+                  success: t('.success', title: @achievement.title)
     else
       redirect_to course_achievements_path,
                   danger: t('.failure', error: @achievement.errors.full_messages.to_sentence)

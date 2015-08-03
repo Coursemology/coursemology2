@@ -8,8 +8,8 @@ class Course::LessonPlan::EventsController < Course::ComponentController
 
   def create #:nodoc:
     if @event.save
-      redirect_to(course_lesson_plan_path(current_course),
-                  success: t('.success', title: @event.title))
+      redirect_to course_lesson_plan_path(current_course),
+                  success: t('.success', title: @event.title)
     else
       render 'new'
     end
@@ -20,8 +20,8 @@ class Course::LessonPlan::EventsController < Course::ComponentController
 
   def update #:nodoc:
     if @event.update_attributes(event_params)
-      redirect_to(course_lesson_plan_path(current_course),
-                  success: t('.success', title: @event.title))
+      redirect_to course_lesson_plan_path(current_course),
+                  success: t('.success', title: @event.title)
     else
       render 'edit'
     end
@@ -29,11 +29,11 @@ class Course::LessonPlan::EventsController < Course::ComponentController
 
   def destroy #:nodoc:
     if @event.destroy
-      redirect_to(course_lesson_plan_path(current_course),
-                  success: t('.success', title: @event.title))
+      redirect_to course_lesson_plan_path(current_course),
+                  success: t('.success', title: @event.title)
     else
-      redirect_to(course_lesson_plan_path(current_course),
-                  failure: t('.failure'))
+      redirect_to course_lesson_plan_path(current_course),
+                  failure: t('.failure')
     end
   end
 

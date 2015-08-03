@@ -9,8 +9,8 @@ class Course::LessonPlan::MilestonesController < Course::ComponentController
 
   def create #:nodoc:
     if @milestone.save
-      redirect_to(course_lesson_plan_path(current_course),
-                  success: t('.success', title: @milestone.title))
+      redirect_to course_lesson_plan_path(current_course),
+                  success: t('.success', title: @milestone.title)
     else
       render 'new'
     end
@@ -21,8 +21,8 @@ class Course::LessonPlan::MilestonesController < Course::ComponentController
 
   def update #:nodoc:
     if @milestone.update_attributes(milestone_params)
-      redirect_to(course_lesson_plan_path(current_course),
-                  success: t('.success', title: @milestone.title))
+      redirect_to course_lesson_plan_path(current_course),
+                  success: t('.success', title: @milestone.title)
     else
       render 'edit'
     end
@@ -30,10 +30,10 @@ class Course::LessonPlan::MilestonesController < Course::ComponentController
 
   def destroy #:nodoc:
     if @milestone.destroy
-      redirect_to(course_lesson_plan_path(current_course),
-                  success: t('.success', title: @milestone.title))
+      redirect_to course_lesson_plan_path(current_course),
+                  success: t('.success', title: @milestone.title)
     else
-      redirect_to(course_lesson_plan_path(current_course), failure: t('.failure'))
+      redirect_to course_lesson_plan_path(current_course), failure: t('.failure')
     end
   end
 
