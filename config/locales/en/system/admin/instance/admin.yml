@@ -1,0 +1,7 @@
+en:
+  system:
+    admin:
+      instance:
+        admin:
+          index:
+            header: 'Instance Administration'
