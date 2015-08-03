@@ -17,6 +17,7 @@ class Course::Assessment::Tab < ActiveRecord::Base
   private
 
   def validate_before_destroy
+    return true if category.destroying?
     safe = other_tabs_remaining?
     errors.add(:base, :deletion) unless safe
     safe

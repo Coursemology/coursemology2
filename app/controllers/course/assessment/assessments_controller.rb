@@ -77,14 +77,6 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def load_category
-    @category ||= current_course.assessment_categories.first ||
-                  current_course.assessment_categories.new.tap do |c|
-                    c.assign_attributes(title: t('course.assessment.assessments.index.header'),
-                                        weight: 0)
-                    c.tabs.build(title: t('course.assessment.assessments.index.header'),
-                                 weight: 0,
-                                 category: c)
-                    c.save!
-                  end
+    @category ||= current_course.assessment_categories.first
   end
 end

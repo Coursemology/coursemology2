@@ -1,6 +1,10 @@
 en:
   activerecord:
+    attributes:
+      course/assessment/category/title:
+        default: :'course.assessment.assessments.index.header'
     errors:
       models:
         course/assessment/category:
-          deletion: 'The last category cannot be deleted'
+          deletion: 'the last category cannot be deleted'
+

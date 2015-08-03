@@ -65,7 +65,8 @@ RSpec.feature 'Course: Assessments: Management' do
     context 'As a Course Student' do
       let(:user) { create(:course_user, :approved, course: course).user }
       scenario 'I can see assessments' do
-        assessment = create(:assessment, course: course)
+        category = course.assessment_categories.first
+        assessment = create(:assessment, course: course, tab: category.tabs.first)
         visit course_assessments_path(course)
 
         find_link(assessment.title, href: course_assessment_path(course, assessment)).click
