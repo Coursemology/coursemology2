@@ -7,12 +7,23 @@ en:
       admin:
         controller:
           admin: :'layouts.course.administration'
+        assessment_settings:
+          index: :'course.assessment.assessments.index.header'
         announcement_settings:
           edit: :'course.announcements.index.header'
         component_settings:
           edit: :'course.admin.component_settings.index.header'
         sidebar_settings:
           index: :'layouts.course_admin.sidebar_settings.title'
+        assessments:
+          tabs:
+            index: :'course.assessment.assessments.index.header'
+            new: :'course.admin.assessments.tabs.new.header'
+            admin: :'system.admin.admin.index.header'
+          categories:
+            index: :'course.assessment.assessments.index.header'
+            new: :'course.admin.assessments.categories.new.header'
+            admin: :'system.admin.admin.index.header'
       users:
         index: 'Users'
         students: :'course.users.students.header'

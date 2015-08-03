@@ -1,0 +1,8 @@
+- add_breadcrumb :new
+= page_header
+= simple_form_for [current_course, @category, @tab],
+                  url: course_admin_assessments_category_tabs_path(current_course, @category) do |f|
+  = f.error_notification
+  = f.input :title
+  = f.input :weight
+  = f.button :submit

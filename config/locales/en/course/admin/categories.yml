@@ -1,0 +1,14 @@
+en:
+  course:
+    admin:
+      assessments:
+        categories:
+          index:
+            header: 'Categories'
+          create:
+            success: 'Category %{title} was created.'
+          destroy:
+            success: 'Category %{title} was deleted.'
+            failure: 'Could not delete category: %{error}'
+          new:
+            header: 'New Category'

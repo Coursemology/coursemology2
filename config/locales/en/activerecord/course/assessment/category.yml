@@ -1,0 +1,6 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/assessment/category:
+          deletion: 'The last category cannot be deleted'
