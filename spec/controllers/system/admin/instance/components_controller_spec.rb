@@ -1,23 +1,23 @@
 require 'rails_helper'
 
-RSpec.describe System::Admin::AdminController, type: :controller do
+RSpec.describe System::Admin::Instance::ComponentsController, type: :controller do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:admin) { create(:administrator) }
     before { sign_in(admin) }
 
-    describe '#components' do
-      subject { get :components }
-      it { is_expected.to render_template(:components) }
+    describe '#edit' do
+      subject { get :edit }
+      it { is_expected.to render_template(:edit) }
     end
 
-    describe '#update_components' do
+    describe '#update' do
       let(:ids_to_enable) do
         all_component_ids = Course::ComponentHost.components.map { |c| c.key.to_s }
         all_component_ids.sample(1 + rand(all_component_ids.count))
       end
       let(:components_params) { { enabled_component_ids: ids_to_enable } }
-      subject { post :update_components, settings_effective: components_params }
+      subject { patch :update, settings_effective: components_params }
 
       context 'enable/disable components' do
         let(:settings) do
@@ -37,7 +37,7 @@ RSpec.describe System::Admin::AdminController, type: :controller do
           subject
         end
 
-        it { is_expected.to render_template(:components) }
+        it { is_expected.to render_template(:edit) }
       end
     end
   end

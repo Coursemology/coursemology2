@@ -67,8 +67,6 @@ en:
       admin:
         controller:
           index: :'layouts.course.administration'
-        admin:
-          components: :'course.admin.component_settings.index.header'
         instances:
           index: :'system.admin.instances.index.header'
           new: :'system.admin.instances.new.header'
@@ -85,3 +83,5 @@ en:
           announcements:
             index: :'system.admin.instance.announcements.index.header'
             new: :'system.admin.instance.announcements.new.header'
+          components:
+            edit: :'system.admin.instance.components.edit.header'

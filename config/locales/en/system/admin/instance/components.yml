@@ -1,0 +1,12 @@
+en:
+  system:
+    admin:
+      instance:
+        components:
+          edit:
+            header: 'Components'
+            name: 'Name'
+            enabled: 'Enabled?'
+            submit: 'Update Settings'
+          update:
+            success: 'Settings was updated successfully'
