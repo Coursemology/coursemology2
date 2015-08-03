@@ -274,7 +274,6 @@ RSpec.describe Course::UserInvitationService, type: :service do
       context 'when the user already exists' do
         let(:user) { create(:user, emails_count: 2) }
         let(:user_non_primary_email) { user.emails.find { |email| email.email != user.email } }
-        let!(:instance_user) { create(:instance_user, user: user) }
 
         it "associates a user's email address" do
           result = subject.send(:find_existing_users, [user_non_primary_email.email])
@@ -284,7 +283,12 @@ RSpec.describe Course::UserInvitationService, type: :service do
       end
 
       context 'when the user does not exist' do
-        let!(:user) { create(:user, emails_count: 2) }
+        let!(:user) do
+          other_instance = create(:instance)
+          ActsAsTenant.with_tenant(other_instance) do
+            create(:user, emails_count: 2)
+          end
+        end
         it 'does not define the key' do
           result = subject.send(:find_existing_users, [user.email])
           expect(result).not_to have_key(user.email)

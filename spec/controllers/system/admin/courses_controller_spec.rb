@@ -5,16 +5,8 @@ RSpec.describe System::Admin::CoursesController, type: :controller do
 
   with_tenant(:instance) do
     let(:admin) { create(:administrator) }
-    let(:instance_admin) do
-      user = create(:user)
-      create(:instance_user, instance: instance, user: user, role: :administrator)
-      user
-    end
-    let(:normal_user) do
-      user = create(:user)
-      create(:instance_user, instance: instance, user: user, role: :normal)
-      user
-    end
+    let(:instance_admin) { create(:instance_user, role: :administrator).user }
+    let(:normal_user) { create(:user) }
 
     describe '#index' do
       subject { get :index }

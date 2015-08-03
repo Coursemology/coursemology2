@@ -9,14 +9,18 @@ RSpec.describe System::Admin::Controller, type: :controller do
 
   requires_login
 
-  it 'allows instance administrators to access the page' do
-    sign_in(create(:administrator))
-    get :index
-    expect(response.status).to eq(200)
-  end
+  let(:instance) { create(:instance) }
 
-  it 'does not allow users to access the page' do
-    sign_in(create(:user))
-    expect { get :index }.to raise_exception(CanCan::AccessDenied)
+  with_tenant(:instance) do
+    it 'allows instance administrators to access the page' do
+      sign_in(create(:administrator))
+      get :index
+      expect(response.status).to eq(200)
+    end
+
+    it 'does not allow users to access the page' do
+      sign_in(create(:user))
+      expect { get :index }.to raise_exception(CanCan::AccessDenied)
+    end
   end
 end

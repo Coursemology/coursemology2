@@ -24,7 +24,8 @@ RSpec.feature 'Users: Sign Up' do
       end
 
       it 'creates a user' do
-        expect { subject }.to change(User, :count).by(1)
+        it { is_expected.to change(User, :count).by(1) }
+        it { is_expected.to change(instance.instance_users, :count).by(1) }
       end
     end
   end
