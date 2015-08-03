@@ -1,4 +1,4 @@
-= simple_form_for(@registration, url: course_register_path(current_course)) do |f|
+= simple_form_for @registration, url: course_register_path(current_course) do |f|
   - if current_course.course_users.exists?(user: current_user)
     - disable_message = t('.already_registered')
     - disabled = 'disabled'
