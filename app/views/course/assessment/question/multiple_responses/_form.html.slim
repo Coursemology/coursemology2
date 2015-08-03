@@ -5,4 +5,18 @@
             as: :select,
             collection: Course::Assessment::Question::MultipleResponse.question_types.keys
 
+  table.table.table-striped.table-hover
+    thead
+      tr
+        th = t('.correct')
+        th = t('.option')
+        th = t('.explanation')
+        th
+          div.pull-right
+            = link_to_add_association t('.add_option'), f, :options,
+                                      find_selector: 'tbody', insert_using: 'append'
+    tbody
+      = f.simple_fields_for :options do |options_form|
+        = render 'option_fields', f: options_form
+
   = f.button :submit
