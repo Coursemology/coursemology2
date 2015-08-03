@@ -13,6 +13,14 @@ class Course::Assessment::Answer < ActiveRecord::Base
     state :graded
   end
 
+  validate :validate_consistent_assessment
+
   belongs_to :submission, inverse_of: :answers
   belongs_to :question, inverse_of: nil
+
+  private
+
+  def validate_consistent_assessment
+    errors.add(:question, :consistent_assessment) if question.assessment != submission.assessment
+  end
 end
