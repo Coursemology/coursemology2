@@ -20,4 +20,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
   #   this is because every answer is saved over time. Use the {.latest} scope of the answers if
   #   only the latest answer for each question is desired.
   has_many :answers, inverse_of: :submission
+  has_many :multiple_response_answers,
+           through: :answers, source: :actable,
+           source_type: Course::Assessment::Answer::MultipleResponse.name
 end
