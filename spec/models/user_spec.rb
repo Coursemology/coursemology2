@@ -116,13 +116,28 @@ RSpec.describe User, type: :model do
 
   describe '.new_with_session' do
     context 'when facebook data is provided' do
+      let(:params) { {} }
       let(:facebook_data) { OmniAuth.config.mock_auth[:facebook] }
       let(:session) { { 'devise.facebook_data' => facebook_data } }
-      subject { User.new_with_session({}, session) }
+      subject { User.new_with_session(params, session) }
 
       it 'builds the user with information from facebook' do
         expect(subject.name).to eq(facebook_data.info.name)
         expect(subject.email).to eq(facebook_data.info.email)
+      end
+
+      context 'when the user did not authorize access to his email address' do
+        let(:facebook_data) do
+          OmniAuth.config.mock_auth[:facebook].tap do |facebook|
+            facebook[:info].except(:email)
+          end
+        end
+        let(:email) { generate(:email) }
+        let(:params) { { email: email } }
+
+        it 'does not override the value provided in the params' do
+          expect(subject.email).to eq(email)
+        end
       end
     end
   end
