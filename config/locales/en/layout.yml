@@ -10,6 +10,7 @@ en:
       sign_in: 'Sign In'
       sign_out: 'Sign Out'
       admin_panel: 'Administration Panel'
+      instance_admin_panel: 'Instance Administration Panel'
   layouts:
     course:
       administration: :'system.admin.admin.index.header'
