@@ -6,9 +6,11 @@ Rails.application.configure do
       Bullet.counter_cache_enable = false
     end
   else
-    ApplicationController.class_eval do
-      def without_bullet
-        yield
+    config.after_initialize do
+      ApplicationController.class_eval do
+        def without_bullet
+          yield
+        end
       end
     end
   end
