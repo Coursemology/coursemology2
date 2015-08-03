@@ -1,0 +1,6 @@
+en:
+  system:
+    admin:
+      instance:
+        navbar:
+          announcements: :'system.admin.instance.announcements.index.header'

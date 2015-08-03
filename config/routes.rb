@@ -81,7 +81,6 @@ Rails.application.routes.draw do
     namespace :admin do
       get '/' => 'admin#index'
       resources :announcements, except: [:show], concerns: :paginatable
-      resources :instance_announcements, except: [:show], concerns: :paginatable
       resources :instances, except: [:show]
       resources :users, only: [:index, :update, :destroy], concerns: :paginatable
       resources :courses, only: [:index, :destroy], concerns: :paginatable
@@ -91,6 +90,7 @@ Rails.application.routes.draw do
 
       namespace :instance do
         get '/' => 'admin#index', as: :admin
+        resources :announcements, except: [:show], concerns: :paginatable
       end
     end
   end
