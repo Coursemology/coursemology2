@@ -1,0 +1,6 @@
+
+= content_tag_for(:tr, f.object) do
+  td = f.input :correct, label: false
+  td = f.input :option, label: false
+  td = f.input :explanation, label: false, placeholder: t('.explanation_hint')
+  td = link_to_remove_association t('.remove'), f

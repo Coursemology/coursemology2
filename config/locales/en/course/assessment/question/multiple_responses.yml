@@ -12,3 +12,11 @@ en:
           destroy:
             success: 'The multiple response question was deleted.'
             failure: 'Could not delete multiple response question: %{error}'
+          form:
+            correct: 'Correct'
+            option: 'Option'
+            explanation: 'Explanation'
+            add_option: 'Add Option'
+          option_fields:
+            explanation_hint: 'The explanation to show after the student submits his answer.'
+            remove: 'Remove'

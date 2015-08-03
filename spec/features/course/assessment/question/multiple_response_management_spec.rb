@@ -40,6 +40,9 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(mrq.reload.maximum_grade).to eq(maximum_grade)
+
+        pending 'JavaScript support'
+        fail 'Add multiple options'
       end
 
       scenario 'I can delete a question' do
