@@ -88,6 +88,10 @@ Rails.application.routes.draw do
 
       get 'components' => 'admin#components'
       patch 'components' => 'admin#update_components'
+
+      namespace :instance do
+        get '/' => 'admin#index', as: :admin
+      end
     end
   end
 
