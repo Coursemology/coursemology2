@@ -39,6 +39,11 @@ RSpec.describe User::OmniauthCallbacksController, type: :controller do
         end
 
         it { is_expected.to redirect_to(new_user_registration_path) }
+
+        it 'shows an error message' do
+          subject
+          expect(flash[:danger]).to eq(I18n.t('user.omniauth_callbacks.facebook.sign_in_failure'))
+        end
       end
     end
   end

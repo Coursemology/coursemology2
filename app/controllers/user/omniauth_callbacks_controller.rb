@@ -27,7 +27,9 @@ class User::OmniauthCallbacksController < Devise::OmniauthCallbacksController
                         kind: t('user.omniauth_callbacks.facebook.kind')) if is_navigational_format?
     else
       session['devise.facebook_data'] = auth
-      redirect_to new_user_registration_path
+      redirect_to new_user_registration_path,
+                  danger: t('user.omniauth_callbacks.facebook.sign_in_failure',
+                            error: @user.errors.full_messages.to_sentence)
     end
   end
 end
