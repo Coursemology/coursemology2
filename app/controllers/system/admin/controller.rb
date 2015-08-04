@@ -5,7 +5,7 @@ class System::Admin::Controller < ApplicationController
   private
 
   def authorize_admin
-    authorize!(:manage, current_tenant)
+    authorize!(:manage, :all)
   end
 
   add_breadcrumb :index, :admin_path

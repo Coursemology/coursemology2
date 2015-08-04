@@ -1,5 +1,5 @@
 class System::Admin::InstancesController < System::Admin::Controller
-  load_and_authorize_resource
+  load_and_authorize_resource :instance, class_name: ::Instance.name
   add_breadcrumb :index, :admin_instances_path
 
   def index #:nodoc:

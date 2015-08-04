@@ -43,9 +43,12 @@ html
                 ul.dropdown-menu
                   li
                     = link_to(t('user.admin.navbar.account_settings'), edit_user_registration_path)
-                  - if can?(:manage, current_tenant)
+                  - if can?(:manage, :all)
                     li
                       = link_to(t('layout.navbar.admin_panel'), admin_path)
+                  - if can?(:manage, current_tenant)
+                    li
+                      = link_to(t('layout.navbar.instance_admin_panel'), admin_instance_admin_path)
                   li
                     = link_to(t('layout.navbar.sign_out'), destroy_user_session_path, method: :delete)
             - else
