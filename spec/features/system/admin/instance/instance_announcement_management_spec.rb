@@ -50,7 +50,7 @@ RSpec.describe 'System: Administration: InstanceAnnouncements', type: :feature d
           it 'shows the success message' do
             expect(page).
               to have_selector('div',
-                               text: I18n.t('system.admin.instance_announcements.create.success'))
+                               text: I18n.t('system.admin.instance.announcements.create.success'))
           end
 
           it 'redirects the user to the index page' do
@@ -114,7 +114,7 @@ RSpec.describe 'System: Administration: InstanceAnnouncements', type: :feature d
         it 'shows the success message' do
           expect(page).
             to have_selector('div',
-                             text: I18n.t('system.admin.instance_announcements.update.success'))
+                             text: I18n.t('system.admin.instance.announcements.update.success'))
         end
 
         it 'changes the attributes' do

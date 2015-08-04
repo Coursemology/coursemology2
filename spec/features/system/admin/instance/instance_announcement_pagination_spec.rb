@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'System: Administration: InstanceAnnouncements', type: :feature do
+RSpec.describe 'System: Administration: Instance: Announcements', type: :feature do
   describe 'Pagination' do
     subject { page }
 

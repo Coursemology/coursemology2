@@ -1,6 +1,6 @@
-class System::Admin::InstanceAnnouncementsController < System::Admin::Controller
+class System::Admin::Instance::AnnouncementsController < System::Admin::Instance::Controller
   load_and_authorize_resource :announcement, through: :current_tenant, parent: false,
-                                             class: Instance::Announcement.name
+                                             class: ::Instance::Announcement.name
   add_breadcrumb :index, :admin_instance_announcements_path
 
   def index

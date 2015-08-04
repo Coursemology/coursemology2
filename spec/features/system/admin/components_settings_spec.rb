@@ -13,7 +13,7 @@ RSpec.feature 'System: Administration: Components', type: :feature do
     before { login_as(admin, scope: :user) }
 
     scenario 'Admin visits the page' do
-      visit admin_components_path
+      visit admin_instance_components_path
 
       settings = Instance::Settings::Effective.new(instance.reload.settings, Course::ComponentHost)
       enabled_components = settings.enabled_component_ids
@@ -30,7 +30,7 @@ RSpec.feature 'System: Administration: Components', type: :feature do
     end
 
     scenario 'Enable a component' do
-      visit admin_components_path
+      visit admin_instance_components_path
 
       check(sample_component_id)
       click_button('submit')
@@ -38,7 +38,7 @@ RSpec.feature 'System: Administration: Components', type: :feature do
     end
 
     scenario 'Disable a component' do
-      visit admin_components_path
+      visit admin_instance_components_path
 
       uncheck(sample_component_id)
       click_button('submit')
