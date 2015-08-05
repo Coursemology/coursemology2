@@ -1,3 +1,9 @@
+= page_header
+
 = simple_form_for [current_course, @assessment, @submission] do |f|
-  = f.hidden_field :updated_at
+  - @answers.each do |answer|
+    = f.simple_fields_for :answers, answer do |base_answer_form|
+      = base_answer_form.simple_fields_for :actable do |specific_answer_form|
+        = render partial: answer.specific, locals: { f: specific_answer_form }
+  = f.input :updated_at, type: :hidden
   = f.button :submit

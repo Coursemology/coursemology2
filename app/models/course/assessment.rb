@@ -6,7 +6,9 @@ class Course::Assessment < ActiveRecord::Base
 
   belongs_to :tab, inverse_of: :assessments
 
-  has_many :questions, dependent: :destroy
+  has_many :questions, inverse_of: :assessment, dependent: :destroy do
+    include Course::Assessment::QuestionsConcern
+  end
   has_many :multiple_response_questions,
            through: :questions, source: :actable,
            source_type: Course::Assessment::Question::MultipleResponse.name
