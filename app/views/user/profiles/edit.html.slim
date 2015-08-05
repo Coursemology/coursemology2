@@ -1,0 +1,13 @@
+= page_header
+
+= simple_form_for current_user, url: user_profile_path do |f|
+  = f.error_notification
+  = f.input :name, required: true
+
+  span
+    - unless current_user.identities.facebook.any?
+      div.facebook
+        = link_to user_omniauth_authorize_path(:facebook) do
+          = fa_icon :'facebook-square', text: t('.link_to_facebook'), class: ['fa-2x']
+
+  = f.button :submit, t('.submit')

@@ -2,5 +2,6 @@ en:
   user:
     admin:
       navbar:
+        profile: :'user.profiles.edit.header'
         emails: :'user.emails.index.header'
         account_settings: :'user.registrations.edit.header'

@@ -75,6 +75,7 @@ Rails.application.routes.draw do
     resources :emails, only: [:index, :create, :destroy] do
       post 'set_primary', on: :member
     end
+    resource :profile, only: [:edit, :update]
   end
 
   scope module: 'system' do
