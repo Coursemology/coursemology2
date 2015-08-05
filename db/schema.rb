@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150803065430) do
+ActiveRecord::Schema.define(version: 20150803065716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -308,6 +308,30 @@ ActiveRecord::Schema.define(version: 20150803065430) do
     t.integer  "experience_points_threshold", null: false
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
+  end
+
+  create_table "course_material_folders", force: :cascade do |t|
+    t.integer  "parent_folder_id", index: {name: "fk__course_material_folders_parent_folder_id"}, foreign_key: {references: "course_material_folders", name: "fk_course_material_folders_parent_folder_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "owner_id"
+    t.string   "owner_type",       limit: 255, index: {name: "fk__course_material_folders_owner_id", with: ["owner_id"]}
+    t.string   "name",             limit: 255, null: false
+    t.text     "description"
+    t.datetime "start_at",         null: false
+    t.datetime "end_at"
+    t.integer  "creator_id",       null: false, index: {name: "fk__course_material_folders_creator_id"}, foreign_key: {references: "users", name: "fk_course_material_folders_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id",       null: false, index: {name: "fk__course_material_folders_updater_id"}, foreign_key: {references: "users", name: "fk_course_material_folders_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  create_table "course_materials", force: :cascade do |t|
+    t.integer  "folder_id",   null: false, index: {name: "fk__course_materials_folder_id"}, foreign_key: {references: "course_material_folders", name: "fk_course_materials_folder_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "name",        limit: 255, null: false
+    t.text     "description"
+    t.integer  "creator_id",  null: false, index: {name: "fk__course_materials_creator_id"}, foreign_key: {references: "users", name: "fk_course_materials_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id",  null: false, index: {name: "fk__course_materials_updater_id"}, foreign_key: {references: "users", name: "fk_course_materials_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "course_notifications", force: :cascade do |t|
