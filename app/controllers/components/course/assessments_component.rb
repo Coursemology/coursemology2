@@ -8,15 +8,15 @@ class Course::AssessmentsComponent < SimpleDelegator
   private
 
   def main_sidebar_items
-    [
+    current_course.assessment_categories.map do |category|
       {
         key: :assessments,
-        title: I18n.t('course.assessment.assessments.sidebar_title'),
+        title: category.title,
         weight: 3,
-        path: course_assessments_path(current_course),
+        path: course_assessments_path(current_course, category: category, tab: category.tabs.first),
         unread: 0
       }
-    ]
+    end
   end
 
   def admin_sidebar_items

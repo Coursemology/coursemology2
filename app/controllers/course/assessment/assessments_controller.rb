@@ -59,24 +59,30 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def load_assessment
-    load_tab
-
     case params[:action]
     when 'index'
-      @assessments ||= @tab.assessments
+      @assessments ||= tab.assessments
     when 'new', 'create'
-      @assessment ||= @tab.assessments.build(course: current_course)
+      @assessment ||= tab.assessments.build(course: current_course)
       @assessment.assign_attributes(assessment_params) if params[:assessment]
     end
   end
 
-  def load_tab
-    # TODO: Implement tabs. This would be necessary so that we can list our assessments
-    load_category
-    @tab ||= @category.tabs.first
+  def tab
+    @tab ||=
+      if params[:tab]
+        category.tabs.find(params[:tab])
+      else
+        category.tabs.first!
+      end
   end
 
-  def load_category
-    @category ||= current_course.assessment_categories.first
+  def category
+    @category ||=
+      if params[:category]
+        current_course.assessment_categories.find(params[:category])
+      else
+        current_course.assessment_categories.first!
+      end
   end
 end
