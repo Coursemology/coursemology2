@@ -1,0 +1,7 @@
+span.btn-group
+  - if can?(:create, Course::Material::Folder)
+    = new_button(new_subfolder_course_material_folder_path(current_course, @folder), title: t('.new')) do
+        = fa_icon :folder
+span.pull-right.btn-group
+  - if can?(:edit, @folder)
+    = edit_button([current_course, @folder])

@@ -1,0 +1,18 @@
+= page_header(@folder.name)
+
+= render 'folder_controls'
+
+table.table.table-hover
+  thead
+    tr
+      th = t('.name')
+      th = t('.modified')
+      th
+  tbody
+    - if @folder.parent
+      tr
+        td colspan="100%"
+          = link_to '...', course_material_folder_path(current_course, @folder.parent)
+
+    = render @folder.children
+    / TODO: show files
