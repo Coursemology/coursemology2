@@ -36,6 +36,8 @@ gem 'activerecord-userstamp', '>= 3.0.2'
 gem 'squeel'
 # For multiple table inheritance
 gem 'active_record-acts_as'
+# Organise ActiveRecord model into a tree structure
+gem 'edge'
 
 # Use SCSS for stylesheets
 gem 'sass-rails'
