@@ -150,6 +150,12 @@ Rails.application.routes.draw do
       get 'invitations' => 'users#invitations', as: :users_invitations
 
       resources :groups, except: [:show]
+
+      namespace :material, path: 'materials' do
+        resources :folders, except: [:new, :index] do
+          get 'new_subfolder', on: :member
+        end
+      end
     end
   end
 end
