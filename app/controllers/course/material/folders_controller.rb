@@ -9,9 +9,24 @@ class Course::Material::FoldersController < Course::ComponentController
   end
 
   def update
+    if @folder.update_attributes(folder_params)
+      redirect_folder = @folder.parent ? @folder.parent : @folder
+      redirect_to course_material_folder_path(current_course, redirect_folder),
+                  success: t('.success', name: @folder.name)
+    else
+      render 'edit'
+    end
   end
 
   def destroy
+    parent_folder = @folder.parent
+    if @folder.destroy
+      redirect_to course_material_folder_path(current_course, parent_folder),
+                  success: t('.success', name: @folder.name)
+    else
+      redirect_to course_material_folder_path(current_course, parent_folder),
+                  danger: t('.failure', error: @folder.errors.full_messages.to_sentence)
+    end
   end
 
   def new_subfolder

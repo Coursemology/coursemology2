@@ -152,8 +152,9 @@ Rails.application.routes.draw do
       resources :groups, except: [:show]
 
       namespace :material, path: 'materials' do
-        resources :folders, except: [:new, :index] do
-          get 'new_subfolder', on: :member
+        resources :folders, except: [:new, :create, :index] do
+          get 'new_subfolder', on: :member, path: 'new/subfolder'
+          post 'create_subfolder', on: :member, path: 'create/subfolder'
         end
       end
     end

@@ -1,0 +1,20 @@
+en:
+  course:
+    material:
+      folders:
+        show:
+          modified: 'Last Modified'
+          name: 'Name'
+        new_subfolder:
+          header: 'New Subfolder'
+        create_subfolder:
+          success: 'Folder %{name} was created.'
+        edit:
+          header: 'Edit Folder'
+        update:
+          success: 'Folder %{name} was updated.'
+        destroy:
+          success: 'Folder %{name} was deleted.'
+          failure: 'Failed to delete folder: %{error}'
+        folder_controls:
+          new: 'New Subfolder'
