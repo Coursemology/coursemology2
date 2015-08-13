@@ -3,5 +3,6 @@ en:
     admin:
       instance:
         navbar:
+          users: :'system.admin.instance.users.index.header'
           announcements: :'system.admin.instance.announcements.index.header'
           components: :'system.admin.instance.components.edit.header'
