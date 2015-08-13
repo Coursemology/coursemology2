@@ -44,8 +44,37 @@ class AbilityHost
     end
   end
 
+  module InstanceHelpers
+    protected
+
+    # Creates a hash which allows referencing a set of instance users.
+    #
+    # @param [Array<Symbol>] roles The roles {InstanceUser::Roles} which should be referenced by
+    #   this rule.
+    # @return [Hash] This hash is relative to a Instance.
+    def instance_user_hash(*roles)
+      instance_users = { user_id: user.id }
+      unless roles.empty?
+        instance_users[:role] = roles.map do |role|
+          [InstanceUser.roles[role], role.to_s]
+        end.flatten!
+      end
+
+      { instance_users: instance_users }
+    end
+
+    # @return [Hash] The hash is relative to a component which has a +belongs_to+ association with
+    #   an Instance.
+    def instance_instance_user_hash(*roles)
+      { instance: instance_user_hash(*roles) }
+    end
+
+    alias_method :instance_all_instance_users_hash, :instance_instance_user_hash
+  end
+
   # Open the Componentize Base Component.
   const_get(:Component).module_eval do
+    include InstanceHelpers
     include CourseHelpers
   end
 
