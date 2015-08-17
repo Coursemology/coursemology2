@@ -15,4 +15,4 @@ table.table.table-hover
           = link_to '...', course_material_folder_path(current_course, @folder.parent)
 
     = render @folder.children
-    / TODO: show files
+    = render partial: 'material', collection: @folder.materials

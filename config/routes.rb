@@ -156,6 +156,7 @@ Rails.application.routes.draw do
         resources :folders, except: [:new, :create, :index] do
           get 'new_subfolder', on: :member, path: 'new/subfolder'
           post 'create_subfolder', on: :member, path: 'create/subfolder'
+          resources :materials, path: 'files'
         end
       end
     end
