@@ -44,8 +44,32 @@ class Course::Material::FoldersController < Course::ComponentController
     end
   end
 
+  def new_materials
+  end
+
+  def upload_materials
+    if @folder.update_attributes(files_params)
+      redirect_to course_material_folder_path(current_course, @folder),
+                  success: t('.success', name: @folder.name)
+    else
+      upload_materials_failure
+    end
+  end
+
+  private
+
   def folder_params
     params.require(:material_folder).permit(:parent_id, :name, :description, :can_student_upload,
                                             :start_at, :end_at)
+  end
+
+  def files_params
+    params.require(:material_folder).permit(files_attributes: [])
+  end
+
+  def upload_materials_failure
+    flash.now[:danger] = t('course.material.folders.upload_materials.failure',
+                           error: @folder.errors.full_messages.to_sentence)
+    render 'new_materials'
   end
 end

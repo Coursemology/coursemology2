@@ -10,6 +10,12 @@ class Course::Material::Folder < ActiveRecord::Base
   # TODO: Remove this after schema_validations #21 was closed
   validates :name, uniqueness: { case_sensitive: false, scope: :parent_id }, if: :parent
 
+  def files_attributes=(files)
+    files.each do |file|
+      materials.build(name: file.original_filename, file: file)
+    end
+  end
+
   private
 
   def set_defaults

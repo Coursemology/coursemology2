@@ -18,3 +18,9 @@ en:
           failure: 'Failed to delete folder: %{error}'
         folder_controls:
           new: 'New Subfolder'
+          upload: 'Upload'
+        new_materials:
+          header: 'Upload Files'
+        upload_materials:
+          success: 'Files were uploaded.'
+          failure: 'Failed to upload files: %{error}'
