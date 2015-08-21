@@ -77,9 +77,9 @@ class User < ActiveRecord::Base
   #
   # @return [void]
   def propagate_user_email_errors
-    return if errors[:'emails.email'].nil?
+    return if (email_errors = errors.delete(:'emails.email')).nil?
 
-    errors[:'emails.email'].each do |error|
+    email_errors.each do |error|
       errors.add(:email, error)
     end
   end
