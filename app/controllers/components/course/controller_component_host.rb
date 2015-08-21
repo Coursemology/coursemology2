@@ -1,4 +1,4 @@
-class Course::ComponentHost
+class Course::ControllerComponentHost
   include Componentize
 
   module Sidebar
@@ -7,7 +7,7 @@ class Course::ComponentHost
     # Get the sidebar items from this component.
     #
     # @return [Array] An array of hashes containing the sidebar items exposed by this component.
-    #   See #{Course::ComponentHost#sidebar} for the format.
+    #   See #{Course::ControllerComponentHost#sidebar} for the format.
     def sidebar_items
       []
     end
@@ -92,7 +92,7 @@ class Course::ComponentHost
   #
   # @return [Array<Class>] array of enabled components in instance
   def instance_enabled_components
-    all_components = Course::ComponentHost.components
+    all_components = Course::ControllerComponentHost.components
     all_components.select do |m|
       enabled = @instance_settings.settings(m.key).enabled
       enabled.nil? ? m.enabled_by_default? : enabled

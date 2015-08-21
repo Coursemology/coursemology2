@@ -5,7 +5,7 @@ RSpec.feature 'System: Administration: Components', type: :feature do
 
   with_tenant(:instance) do
     let(:admin) { create(:administrator) }
-    let(:components)  { Course::ComponentHost.components }
+    let(:components)  { Course::ControllerComponentHost.components }
     let(:sample_component_id) do
       "settings_effective_enabled_component_ids_#{components.sample.key}"
     end
@@ -15,7 +15,8 @@ RSpec.feature 'System: Administration: Components', type: :feature do
     scenario 'Admin visits the page' do
       visit admin_instance_components_path
 
-      settings = Instance::Settings::Effective.new(instance.reload.settings, Course::ComponentHost)
+      settings = Instance::Settings::Effective.new(instance.reload.settings,
+                                                   Course::ControllerComponentHost)
       enabled_components = settings.enabled_component_ids
       components.each do |component|
         expect(page).to have_selector('th', text: component.name)

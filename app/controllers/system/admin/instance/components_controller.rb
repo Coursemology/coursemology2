@@ -19,6 +19,6 @@ class System::Admin::Instance::ComponentsController < System::Admin::Instance::C
 
   # Load our settings adapter to handle component settings
   def load_settings
-    @settings = Instance::Settings::Effective.new(current_tenant, Course::ComponentHost)
+    @settings = Instance::Settings::Effective.new(current_tenant, Course::ControllerComponentHost)
   end
 end

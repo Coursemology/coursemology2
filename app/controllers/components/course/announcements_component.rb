@@ -1,5 +1,5 @@
 class Course::AnnouncementsComponent < SimpleDelegator
-  include Course::ComponentHost::Component
+  include Course::ControllerComponentHost::Component
 
   def sidebar_items
     main_sidebar_items + settings_sidebar_items

@@ -1,5 +1,5 @@
 class Course::AchievementsComponent < SimpleDelegator
-  include Course::ComponentHost::Component
+  include Course::ControllerComponentHost::Component
 
   def sidebar_items
     [

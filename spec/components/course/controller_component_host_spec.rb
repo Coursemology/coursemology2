@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe Course::ComponentHost, type: :controller do
+RSpec.describe Course::ControllerComponentHost, type: :controller do
   controller(Course::Controller) do
   end
 
   class self::DummyCourseModule
-    include Course::ComponentHost::Component
+    include Course::ControllerComponentHost::Component
 
     NORMAL_SIDEBAR_ITEM = {
       key: :normal_item,
@@ -43,10 +43,10 @@ RSpec.describe Course::ComponentHost, type: :controller do
     before { allow(controller).to receive(:current_course).and_return(course) }
 
     let(:component_host) do
-      Course::ComponentHost.new(instance.settings, course.settings, controller)
+      Course::ControllerComponentHost.new(instance.settings, course.settings, controller)
     end
     let(:default_enabled_components) do
-      Course::ComponentHost.components.select(&:enabled_by_default?)
+      Course::ControllerComponentHost.components.select(&:enabled_by_default?)
     end
 
     describe 'Components' do
