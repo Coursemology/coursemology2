@@ -221,6 +221,28 @@ ActiveRecord::Schema.define(version: 20151011151130) do
     t.datetime "updated_at",       null: false
   end
 
+  create_table "course_discussion_topics", force: :cascade do |t|
+    t.integer "actable_id"
+    t.string  "actable_type", limit: 255, index: {name: "index_course_discussion_topics_on_actable_type_and_actable_id", with: ["actable_id"], unique: true}
+  end
+
+  create_table "course_discussion_posts", force: :cascade do |t|
+    t.integer  "parent_id",  index: {name: "fk__course_discussion_posts_parent_id"}, foreign_key: {references: "course_discussion_posts", name: "fk_course_discussion_posts_parent_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "topic_id",   null: false, index: {name: "fk__course_discussion_posts_topic_id"}, foreign_key: {references: "course_discussion_topics", name: "fk_course_discussion_posts_topic_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "title",      limit: 255, null: false
+    t.text     "text"
+    t.integer  "creator_id", null: false, index: {name: "fk__course_discussion_posts_creator_id"}, foreign_key: {references: "users", name: "fk_course_discussion_posts_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id", null: false, index: {name: "fk__course_discussion_posts_updater_id"}, foreign_key: {references: "users", name: "fk_course_discussion_posts_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "course_discussion_topic_subscriptions", force: :cascade do |t|
+    t.integer "topic_id", null: false, index: {name: "fk__course_discussion_topic_subscriptions_topic_id"}, foreign_key: {references: "course_discussion_topics", name: "fk_course_discussion_topic_subscriptions_topic_id", on_update: :no_action, on_delete: :no_action}
+    t.integer "user_id",  null: false, index: {name: "fk__course_discussion_topic_subscriptions_user_id"}, foreign_key: {references: "users", name: "fk_course_discussion_topic_subscriptions_user_id", on_update: :no_action, on_delete: :no_action}
+  end
+  add_index "course_discussion_topic_subscriptions", ["topic_id", "user_id"], name: "index_topic_subscriptions_on_topic_id_and_user_id", unique: true
+
   create_table "course_users", force: :cascade do |t|
     t.integer  "course_id",      null: false, index: {name: "fk__course_users_course_id"}, foreign_key: {references: "courses", name: "fk_course_users_course_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "user_id",        index: {name: "fk__course_users_user_id"}, foreign_key: {references: "users", name: "fk_course_users_user_id", on_update: :no_action, on_delete: :no_action}
