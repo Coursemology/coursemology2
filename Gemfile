@@ -38,6 +38,8 @@ gem 'squeel'
 gem 'active_record-acts_as'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
+# Create pretty URLs and work with human-friendly strings
+gem 'friendly_id', '~> 5.0.0'
 
 # Use SCSS for stylesheets
 gem 'sass-rails'
