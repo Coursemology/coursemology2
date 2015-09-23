@@ -2,9 +2,7 @@ module Course::LessonPlanAbilityComponent
   include AbilityHost::Component
 
   def define_permissions
-    if user
-      allow_registered_users_showing_milestones_items
-    end
+    allow_registered_users_showing_milestones_items if user
 
     super
   end
