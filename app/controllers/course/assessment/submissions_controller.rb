@@ -31,7 +31,7 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   end
 
   def update_params
-    @update_params ||= params.require(:submission).permit()
+    @update_params ||= params.require(:submission).permit
   end
 
   def authorize_assessment
