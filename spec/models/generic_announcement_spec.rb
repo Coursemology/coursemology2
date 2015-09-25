@@ -62,5 +62,22 @@ RSpec.describe GenericAnnouncement, type: :model do
         expect(announcements).to include(*active_instance_announcements)
       end
     end
+
+    describe 'unread state' do
+      let(:creator) { create(:creator) }
+      let!(:user) { create(:user) }
+      let!(:system_announcement) { create(:system_announcement, creator: creator) }
+      let!(:instance_announcement) { create(:instance_announcement, creator: creator) }
+
+      it 'has been read by the creator' do
+        expect(creator.have_read?(instance_announcement)).to eq(true)
+        expect(creator.have_read?(system_announcement)).to eq(true)
+      end
+
+      it 'is unread by other users' do
+        expect(user.have_read?(instance_announcement)).to eq(false)
+        expect(user.have_read?(system_announcement)).to eq(false)
+      end
+    end
   end
 end
