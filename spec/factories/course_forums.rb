@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :forum, class: Course::Forum.name do
     course
-    name 'test forum'
+    sequence(:name) { |n| "forum #{n}" }
     description 'This is the test forum'
   end
 end

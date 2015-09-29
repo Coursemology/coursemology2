@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :forum_topic, class: Course::Forum::Topic.name do
     forum
-    title 'test'
+    sequence(:title) { |n| "forum topic #{n}" }
     creator
     updater
     locked false

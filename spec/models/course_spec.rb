@@ -13,6 +13,7 @@ RSpec.describe Course, type: :model do
     it { is_expected.to have_many(:groups).dependent(:destroy) }
     it { is_expected.to have_many(:lesson_plan_items).dependent(:destroy) }
     it { is_expected.to have_many(:lesson_plan_milestones).dependent(:destroy) }
+    it { is_expected.to have_many(:forums).dependent(:destroy) }
 
     it { is_expected.to validate_presence_of(:title) }
 
