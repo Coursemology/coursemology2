@@ -3,8 +3,8 @@ FactoryGirl.define do
     creator
     updater
     parent nil
-    topic
-    title 'test'
+    topic { Course::Discussion::Topic.create }
+    sequence(:title) { |n| "post #{n}" }
     text 'This is a test post'
   end
 end
