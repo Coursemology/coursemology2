@@ -9,17 +9,18 @@ RSpec.feature 'Course: Assessments: Management' do
 
     context 'As a Course Manager' do
       let(:user) { course.creator }
-      let!(:category) { create(:course_assessment_category, course: course) }
+      let(:category) { course.assessment_categories.first }
+      let(:tab) { category.tabs.first }
 
       scenario 'I can create a new tab' do
-        tab = attributes_for(:course_assessment_tab)
+        new_tab = attributes_for(:course_assessment_tab)
 
         visit course_admin_assessments_path(course)
         find_link(nil, href: new_course_admin_assessments_category_tab_path(course, category)).click
 
         expect(current_path).to eq(new_course_admin_assessments_category_tab_path(course, category))
-        fill_in 'title', with: tab[:title]
-        fill_in 'weight', with: tab[:weight]
+        fill_in 'title', with: new_tab[:title]
+        fill_in 'weight', with: new_tab[:weight]
         click_button 'submit'
 
         expect(current_path).to eq(course_admin_assessments_path(course))
@@ -27,7 +28,6 @@ RSpec.feature 'Course: Assessments: Management' do
       end
 
       scenario 'I can edit tab fields' do
-        tab = create(:course_assessment_tab, course: course, category: category)
         tab_edited = attributes_for(:course_assessment_tab)
 
         visit course_admin_assessments_path(course)
@@ -50,24 +50,20 @@ RSpec.feature 'Course: Assessments: Management' do
       end
 
       scenario 'I can delete a tab' do
-        tab1 = create(:course_assessment_tab, course: course, category: category)
         tab2 = create(:course_assessment_tab, course: course, category: category)
 
         visit course_admin_assessments_path(course)
-        find_link(nil, href: course_admin_assessments_category_tab_path(course, category,
-                                                                        category.tabs.first)).click
+        find_link(nil,
+                  href: course_admin_assessments_category_tab_path(course, category, tab)).click
         expect(page).to have_selector('div.alert.alert-success')
-        expect(page).not_to have_content_tag_for(tab1)
+        expect(page).not_to have_content_tag_for(tab)
         expect(page).to have_content_tag_for(tab2)
       end
 
       scenario 'I cannot delete the last tab of the last category' do
-        category = course.assessment_categories.first
-        tab = create(:course_assessment_tab, course: course, category: category)
-
         visit course_admin_assessments_path(course)
-        find_link(nil, href: course_admin_assessments_category_tab_path(course,
-                                                                        category, tab)).click
+        find_link(nil,
+                  href: course_admin_assessments_category_tab_path(course, category, tab)).click
         expect(page).to have_selector('div.alert.alert-danger')
         expect(page).to have_content_tag_for(tab)
       end

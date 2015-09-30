@@ -11,7 +11,7 @@ RSpec.describe Course::Assessment::Tab do
       let(:category) { create(:course_assessment_category, course: course) }
       let!(:tabs) { create_list(:course_assessment_tab, 2, course: course, category: category) }
       it 'orders by ascending weight' do
-        weights = course.assessment_categories.first.tabs.map(&:weight)
+        weights = category.tabs.map(&:weight)
         expect(weights.length).to be > 1
         expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
       end

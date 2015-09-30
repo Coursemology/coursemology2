@@ -23,7 +23,7 @@ class Course::Admin::Assessments::CategoriesController < Course::Admin::Controll
                   success: t('.success', title: @category.title)
     else
       redirect_to course_admin_assessments_path(current_course),
-                  danger: t('.failure', title: @category.errors.full_messages.to_sentence)
+                  danger: t('.failure', error: @category.errors.full_messages.to_sentence)
     end
   end
 

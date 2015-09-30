@@ -1,6 +1,9 @@
 en:
   activerecord:
+    attributes:
+      course/assessment/tab/title:
+        default: 'Default'
     errors:
       models:
         course/assessment/tab:
-          deletion: 'The last tab cannot be deleted'
+          deletion: 'the last tab cannot be deleted'

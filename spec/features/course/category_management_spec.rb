@@ -25,7 +25,7 @@ RSpec.feature 'Course: Category: Management' do
       end
 
       scenario 'I can edit category fields' do
-        category = create(:course_assessment_category, course: course)
+        category = course.assessment_categories.first
         category_edited = attributes_for(:course_assessment_category)
 
         visit course_admin_assessments_path(course)
@@ -49,33 +49,21 @@ RSpec.feature 'Course: Category: Management' do
 
       scenario 'I can delete a category' do
         category = create(:course_assessment_category, course: course)
-        other_category = create(:course_assessment_category, course: course)
-        create(:course_assessment_tab, course: course, category: other_category)
-
         visit course_admin_assessments_path(course)
-
         deletion_path = course_admin_assessments_category_path(course, category)
         find_link(nil, href: deletion_path).click
         expect(page).to have_selector('div.alert.alert-success')
       end
 
       scenario 'I cannot delete the last category' do
-        category = build(:course_assessment_category, course: course)
-
         visit course_admin_assessments_path(course)
-        find_link(nil, href: new_course_admin_assessments_category_path(course)).click
-
-        fill_in 'title', with: category.title
-        fill_in 'weight', with: category.weight
-        click_button 'submit'
-
-        course.reload
+        category = course.assessment_categories.first
         deletion_path =
-          course_admin_assessments_category_path(course, course.assessment_categories.first)
+          course_admin_assessments_category_path(course, category)
         find_link(nil, href: deletion_path).click
         expect(page).not_to have_selector('div.alert.alert-success')
         expect(page).to have_selector('div.alert.alert-danger')
-        expect(page).not_to have_content_tag_for(category)
+        expect(page).to have_content_tag_for(category)
       end
     end
   end
