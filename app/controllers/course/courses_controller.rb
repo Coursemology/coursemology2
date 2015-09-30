@@ -1,10 +1,13 @@
 class Course::CoursesController < Course::Controller
+  include Course::ActivityFeedsConcern
+
   def index # :nodoc:
     @courses = @courses.page(params[:page])
   end
 
   def show # :nodoc:
     @registration = Course::Registration.new
+    @activity_feeds = recent_activity_feeds.limit(20).includes(:activity)
     render layout: 'course'
   end
 

@@ -2,7 +2,7 @@
 #
 # @api notifications
 class Notifier::Base
-  include ApplicationNotificationsConcern
+  include ApplicationNotificationsHelper
 
   class << self
     # This is to allow client code to create notifications without explicitly instantiating

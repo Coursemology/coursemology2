@@ -1,9 +1,7 @@
-module ApplicationNotificationsConcern
-  extend ActiveSupport::Concern
-
+module ApplicationNotificationsHelper
   # Returns the view path of the notification
   #
-  # @param [Course::Notification|UserNotification] notification The target notification
+  # @param [#notification_view_path] notification The target notification
   # @return [String] The view path of the notification
   def notification_view_path(notification)
     activity = notification.activity
