@@ -102,6 +102,7 @@ group :development, :test do
 
   # Capybara for feature testing
   gem 'capybara'
+  gem 'poltergeist'
 
   # Factory Girl for factories
   gem 'factory_girl_rails'

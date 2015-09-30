@@ -1,7 +1,7 @@
 FactoryGirl.define do
   base_time = Time.zone.now.to_i
   sequence :host do |n|
-    "local-#{base_time}-#{n}.com"
+    "local-#{base_time}-#{n}.lvh.me"
   end
 
   factory :instance do
