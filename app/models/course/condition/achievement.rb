@@ -8,6 +8,16 @@ class Course::Condition::Achievement < ActiveRecord::Base
 
   delegate :title, to: :achievement
 
+  # Checks if the user has the required achievement.
+  #
+  # @param [CourseUser] course_user The user that the achievement condition is being checked on. The
+  #   user must respond to `achievements` and returns an ActiveRecord::Association that
+  #   contains all achievements the subject has obtained.
+  # @return [Boolean] true if the user has the required achievement and false otherwise.
+  def satisfied_by?(course_user)
+    course_user.achievements.exists?(achievement)
+  end
+
   private
 
   # Given an achievement, returns all its achievement conditions.

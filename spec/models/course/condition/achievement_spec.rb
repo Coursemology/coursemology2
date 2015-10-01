@@ -34,5 +34,32 @@ RSpec.describe Course::Condition::Achievement, type: :model do
         expect(subject.title).to eq(subject.achievement.title)
       end
     end
+
+    describe '#satisfied_by?' do
+      let(:achievement1) { create(:achievement) }
+      let(:achievement2) { create(:achievement) }
+      let(:course_user) do
+        achievements = instance_double(ActiveRecord::Associations::CollectionProxy)
+        allow(achievements).to receive(:exists?).with(achievement1).and_return(true)
+        allow(achievements).to receive(:exists?).with(achievement2).and_return(false)
+        course_user = instance_double(CourseUser)
+        allow(course_user).to receive(:achievements).and_return(achievements)
+        course_user
+      end
+
+      context 'when the user has the achievement' do
+        it 'returns true' do
+          subject.achievement = achievement1
+          expect(subject.satisfied_by?(course_user)).to be_truthy
+        end
+      end
+
+      context 'when the user does not have the achievement' do
+        it 'returns false' do
+          subject.achievement = achievement2
+          expect(subject.satisfied_by?(course_user)).to be_falsey
+        end
+      end
+    end
   end
 end
