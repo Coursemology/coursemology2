@@ -33,6 +33,8 @@ class Course < ActiveRecord::Base
                                     dependent: :destroy
   has_many :lesson_plan_events, through: :lesson_plan_items,
                                 source: :actable, source_type: Course::LessonPlan::Event.name
+  has_many :material_folders, class_name: Course::Material::Folder.name, inverse_of: :course,
+                              dependent: :destroy
 
   accepts_nested_attributes_for :invitations, :assessment_categories
 
