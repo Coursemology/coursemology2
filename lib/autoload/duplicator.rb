@@ -28,8 +28,8 @@ class Duplicator
 
   private
 
-  # Deep copy +source_object+ and its children. +source_object+ must provide a +duplicate+
-  # method which duplicates its children.
+  # Deep copy +source_object+ and its children. +source_object+ must provide a
+  # +initialize_duplicate+ method which duplicates its children.
   #
   # @param [#initialize_duplicate] source_object The object to be duplicated.
   # @return duplicated_object A reference to the duplicated object.
