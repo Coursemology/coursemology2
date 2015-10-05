@@ -6,70 +6,60 @@ RSpec.describe Course::Announcement, type: :model do
 
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
-    context 'when announcement is created' do
-      subject { Course::Announcement.new }
+    let!(:user) { create(:user) }
+    let(:course) { create(:course) }
 
-      it { is_expected.not_to be_sticky }
-    end
+    describe 'create an announcement' do
+      context 'when announcement is created' do
+        subject { Course::Announcement.new }
 
-    context 'when title is not present' do
-      subject { build(:course_announcement, title: '') }
+        it { is_expected.not_to be_sticky }
+      end
 
-      it { is_expected.not_to be_valid }
-    end
+      context 'when title is not present' do
+        subject { build(:course_announcement, title: '') }
 
-    context 'unread status' do
-      let!(:first_user) { create(:administrator) }
-      let!(:second_user) { create(:administrator) }
-      let!(:course) { create(:course) }
+        it { is_expected.not_to be_valid }
+      end
 
-      describe 'announcement creation' do
-        let!(:another_course) { create(:course) }
-
-        let!(:first_user_unread) do
-          create_list(:course_announcement, 5, course: course, creator: second_user)
-        end
-        let!(:second_user_unread) do
-          create_list(:course_announcement, 5, course: course, creator: first_user)
-        end
-        let!(:another_ann) do
-          create_list(:course_announcement, 5, course: another_course, creator: first_user)
-        end
-        let!(:create_ann) { create(:course_announcement, course: course, creator: first_user) }
-
-        it 'does not change unread announcement number of creator' do
-          expect(course.announcements.unread_by(first_user).count).to eq(5)
+      describe 'unread status' do
+        let!(:creator) { create(:user) }
+        let(:another_course) { create(:course) }
+        let!(:new_announcement) do
+          create(:course_announcement, course: course, creator: creator)
         end
 
-        it 'increases unread number by 1 for other users' do
-          expect(course.announcements.unread_by(second_user).count).to eq(6)
+        it 'has been read by the creator' do
+          expect(creator.have_read?(new_announcement)).to eq(true)
+        end
+
+        it 'is unread by other users' do
+          expect(user.have_read?(new_announcement)).to eq(false)
         end
 
         it 'does not change unread announcement number of another course' do
-          expect(another_course.announcements.unread_by(second_user).count).to eq(5)
+          expect(another_course.announcements.unread_by(user).count).to eq(0)
         end
       end
+    end
 
-      describe 'announcement editing' do
-        let!(:first_announcement) do
-          create(:course_announcement, course: course, creator: first_user)
-        end
-        let!(:second_announcement) do
-          create(:course_announcement, course: course, creator: second_user)
-        end
+    describe 'edit an announcement' do
+      describe 'unread status' do
+        let!(:updater) { create(:user) }
+        let!(:announcement) { create(:course_announcement, course: course) }
 
-        it 'does not change unread announcement number of updater' do
-          expect do
-            User.with_stamper(first_user) do
-              first_announcement.update(content: 'edited')
-            end
-          end.not_to change { course.announcements.unread_by(first_user).count }
+        it 'has been read by the updater' do
+          User.with_stamper(updater) { announcement.update(content: 'edited') }
+          expect(updater.have_read?(announcement)).to eq(true)
         end
 
         it 'marks announcement which has been read by others as unread' do
-          expect do
-            second_announcement.update(content: 'edited', updater: first_user)
-          end.to change { course.announcements.unread_by(second_user).count }.by(1)
+          subject do
+            announcement.mark_as_read for: user
+            announcement.update(content: 'edited', updater: updator)
+          end
+
+          expect(user.have_read?(announcement)).to eq(false)
         end
       end
     end
