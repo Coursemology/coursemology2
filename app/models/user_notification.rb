@@ -4,8 +4,8 @@
 class UserNotification < ActiveRecord::Base
   acts_as_readable on: :created_at
 
+  enum notification_type: { popup: 0, email: 1 }
+
   belongs_to :activity, inverse_of: :user_notifications
   belongs_to :user, inverse_of: :notifications
-
-  enum notification_type: { popup: 0, email: 1 }
 end
