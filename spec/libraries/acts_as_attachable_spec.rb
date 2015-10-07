@@ -1,26 +1,50 @@
 require 'rails_helper'
 
 RSpec.describe 'Extension: Acts as Attachable' do
-  class self::SampleModel < ActiveRecord::Base
+  class self::SampleModelMultiple < ActiveRecord::Base
     def self.columns
       []
     end
 
-    acts_as_attachable
+    has_many_attachments
   end
 
-  describe self::SampleModel do
+  class self::SampleModelSingular < ActiveRecord::Base
+    def self.columns
+      []
+    end
+
+    has_one_attachment
+  end
+
+  describe self::SampleModelMultiple do
     it { is_expected.to have_many(:attachments) }
+
+    let(:files) { [File.open(File.join(Rails.root, '/spec/fixtures/files/text.txt'))] }
+    let(:attachable) { self.class::SampleModelMultiple.new }
+    describe 'files=' do
+      it 'creates attachments from files' do
+        attachable.files = files
+        expect(attachable.attachments).to be_present
+      end
+    end
+  end
+
+  describe self::SampleModelSingular do
+    it { is_expected.to respond_to(:attachment) }
+
+    let(:file) { File.open(File.join(Rails.root, '/spec/fixtures/files/text.txt')) }
+    let(:attachable) { self.class::SampleModelSingular.new }
+    describe 'file=' do
+      it 'creates an attachment from file' do
+        attachable.file = file
+        expect(attachable.attachment).to be_present
+      end
+    end
   end
 
   describe 'controller' do
     class self::SampleController < ActionController::Base; end
-
-    context 'class methods' do
-      subject { self.class::SampleController }
-
-      it { is_expected.to respond_to(:accepts_attachments) }
-    end
 
     context 'instance methods' do
       let(:controller) { self.class::SampleController.new }
@@ -29,22 +53,7 @@ RSpec.describe 'Extension: Acts as Attachable' do
 
       describe '#attachments_params' do
         it 'returns the permitted params' do
-          expect(subject.attachments_params[:attachments_attributes]).not_to be_nil
-        end
-      end
-
-      describe '#build_attachments' do
-        before do
-          allow(controller).to receive(:params).and_return(controller: 'sample_model')
-          example_group_class = self.class
-          controller.instance_eval do
-            @sample_model = example_group_class::SampleModel.new
-            build_attachments
-          end
-        end
-
-        it 'builds the attachments' do
-          expect(controller.instance_variable_get(:@sample_model).attachments).not_to be_empty
+          expect(subject.attachments_params).to include(:file)
         end
       end
     end
@@ -56,7 +65,7 @@ RSpec.describe 'Extension: Acts as Attachable' do
 
     let(:template) { self.class::SampleView.new(Rails.root.join('app', 'views')) }
     let(:resource) do
-      model = self.class::SampleModel.new
+      model = self.class::SampleModelMultiple.new
       model.attachments << build(:attachment)
       model
     end
@@ -69,9 +78,23 @@ RSpec.describe 'Extension: Acts as Attachable' do
       before { I18n.locale = I18n.default_locale }
       subject { form_builder.attachments }
 
-      it do
-        is_expected.to have_tag('div', text: I18n.t('sample.attachments.layouts.'\
-                                                      'attachment_uploader.new_file'))
+      context 'when has many attachments' do
+        it do
+          is_expected.
+            to have_tag('strong', text: I18n.t('layouts.attachment_uploader.uploaded_files'))
+        end
+      end
+
+      context 'when has one attachment' do
+        let(:resource) do
+          model = self.class::SampleModelSingular.new
+          model.attachment = build(:attachment)
+          model
+        end
+        it do
+          is_expected.
+            to have_tag('strong', text: I18n.t('layouts.attachment_uploader.uploaded_file'))
+        end
       end
     end
   end

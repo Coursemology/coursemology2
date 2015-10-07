@@ -25,9 +25,9 @@ en:
     course_users:
       title: 'Manage Users'
     attachment_uploader:
-      uploaded: 'Uploaded Files:'
-      new_file: 'Upload New File'
-      remove: 'Remove'
+      uploaded_files: 'Uploaded Files:'
+      uploaded_file: 'Uploaded File:'
+      new_files: 'Upload New Files'
     mailer:
       greeting: 'Hello, %{user}:'
       complimentary_close: 'Best Regards,'
