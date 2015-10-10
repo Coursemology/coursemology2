@@ -33,8 +33,11 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
 
   def update_params
     @update_params ||= begin
-      params.require(:submission).permit(:updated_at,
-        answers_attributes: [:id, actable_attributes: []]
+      params.require(:submission).permit(
+        answers_attributes: [
+          :id,
+          actable_attributes: [:id, option_ids: []]
+        ]
       )
     end
   end
