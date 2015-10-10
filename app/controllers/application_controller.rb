@@ -17,6 +17,8 @@ class ApplicationController < ActionController::Base
   include ApplicationUserConcern
   include ApplicationAnnouncementsConcern
 
+  rescue_from IllegalStateError, with: :handle_illegal_state_error
+
   protected
 
   # Runs the provided block with Bullet disabled.
@@ -30,5 +32,13 @@ class ApplicationController < ActionController::Base
     yield
   ensure
     Bullet.enable = old_bullet_enable
+  end
+
+  private
+
+  # Handles +IllegalStateError+s with a HTTP 422.
+  def handle_illegal_state_error(exception)
+    @exception = exception
+    render file: 'public/422', layout: false, status: 422
   end
 end
