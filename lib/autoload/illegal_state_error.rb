@@ -1,5 +1,5 @@
 class IllegalStateError < StandardError
-  def initialize(message)
+  def initialize(message = self.class.name)
     super
   end
 end

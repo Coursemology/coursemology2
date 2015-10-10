@@ -160,4 +160,24 @@ RSpec.describe ApplicationController, type: :controller do
       end
     end
   end
+
+  context 'when the action raises an IllegalStateError' do
+    run_rescue
+
+    before do
+      def controller.index
+        fail IllegalStateError
+      end
+    end
+
+    it 'renders the request rejected page /public/422' do
+      get :index
+      expect(response).to render_template(file: "#{Rails.root}/public/422.html")
+    end
+
+    it 'returns HTTP status 422' do
+      get :index
+      expect(response.status).to eq(422)
+    end
+  end
 end
