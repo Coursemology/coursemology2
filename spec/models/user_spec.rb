@@ -152,5 +152,14 @@ RSpec.describe User, type: :model do
         expect { subject }.to change(instance.instance_users, :count).by(1)
       end
     end
+
+    describe '.unread' do
+      let!(:user) { create(:user) }
+      let!(:unread_notification) { create(:user_notification, user: user) }
+
+      it 'returns unread notifications of the user' do
+        expect(user.notifications.unread).to include(unread_notification)
+      end
+    end
   end
 end
