@@ -25,7 +25,7 @@ gem 'settings_on_rails'
 # Table and column comments
 gem 'migration_comments'
 # Manage read/unread status
-gem 'unread', github: 'ledermann/unread'
+gem 'unread'
 # Extension for validating hostnames and domain names
 gem 'validates_hostname'
 # A Ruby state machine library
