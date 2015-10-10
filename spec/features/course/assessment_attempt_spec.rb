@@ -5,8 +5,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:category) { course.assessment_categories.first }
-    let(:assessment) { create(:assessment, course: course, tab: category.tabs.first) }
+    let(:assessment) { create(:assessment, :with_all_question_types, course: course) }
     before { login_as(user, scope: :user) }
 
     context 'As a Course Student' do
