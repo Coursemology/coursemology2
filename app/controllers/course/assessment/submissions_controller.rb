@@ -5,6 +5,7 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   before_action :load_or_create_answers, only: [:edit, :update]
 
   def create
+    fail IllegalStateError if @assessment.questions.empty?
     if @submission.save
       redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission)
     else

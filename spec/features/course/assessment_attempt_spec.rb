@@ -5,13 +5,28 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
+    let(:empty_assessment) { create(:assessment, course: course) }
     let(:assessment) { create(:assessment, :with_all_question_types, course: course) }
     before { login_as(user, scope: :user) }
 
     context 'As a Course Student' do
       let(:user) { create(:course_user, :approved, course: course).user }
       let(:submission) { create(:course_assessment_submission, assessment: assessment, user: user) }
-      scenario 'I can attempt assessments' do
+
+      scenario 'I cannot attempt empty assessments' do
+        empty_assessment
+        visit course_assessments_path(course)
+
+        link = find_link(empty_assessment.title,
+                         href: course_assessment_path(course, empty_assessment))
+        within link.find(:xpath, './../..') do
+          find_button(I18n.t('course.assessment.assessments.assessment.attempt')).click
+        end
+
+        expect(page.status_code).to eq(422)
+      end
+
+      scenario 'I can attempt non-empty assessments' do
         assessment
         visit course_assessments_path(course)
 
