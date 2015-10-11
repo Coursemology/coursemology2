@@ -7,4 +7,8 @@ class Course::Assessment::Question::MultipleResponse < ActiveRecord::Base
                      dependent: :destroy, foreign_key: :question_id, inverse_of: :question
 
   accepts_nested_attributes_for :options
+
+  def attempt(submission)
+    submission.multiple_response_answers.build(submission: submission, question: question).answer
+  end
 end

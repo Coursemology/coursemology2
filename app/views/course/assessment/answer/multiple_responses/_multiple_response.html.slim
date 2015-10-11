@@ -1,0 +1,5 @@
+- question = multiple_response.question.specific
+h3 = question.title
+= sanitize(question.description)
+= f.association :options, as: :check_boxes, collection: question.options,
+                          label_method: :option, label: false

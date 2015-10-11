@@ -171,9 +171,10 @@ ActiveRecord::Schema.define(version: 20150812024950) do
 
   create_table "course_assessment_answers", force: :cascade do |t|
     t.integer "actable_id"
-    t.string  "actable_type",  limit: 255, index: {name: "index_course_assessment_answers_actable", with: ["actable_id"], unique: true}
-    t.integer "submission_id", null: false, index: {name: "fk__course_assessment_answers_submission_id"}, foreign_key: {references: "course_assessment_submissions", name: "fk_course_assessment_answers_submission_id", on_update: :no_action, on_delete: :no_action}
-    t.integer "question_id",   null: false, index: {name: "fk__course_assessment_answers_question_id"}, foreign_key: {references: "course_assessment_questions", name: "fk_course_assessment_answers_question_id", on_update: :no_action, on_delete: :no_action}
+    t.string  "actable_type",   limit: 255, index: {name: "index_course_assessment_answers_actable", with: ["actable_id"], unique: true}
+    t.integer "submission_id",  null: false, index: {name: "fk__course_assessment_answers_submission_id"}, foreign_key: {references: "course_assessment_submissions", name: "fk_course_assessment_answers_submission_id", on_update: :no_action, on_delete: :no_action}
+    t.integer "question_id",    null: false, index: {name: "fk__course_assessment_answers_question_id"}, foreign_key: {references: "course_assessment_questions", name: "fk_course_assessment_answers_question_id", on_update: :no_action, on_delete: :no_action}
+    t.string  "workflow_state", limit: 255, null: false
   end
 
   create_table "course_assessment_tag_groups", force: :cascade do |t|

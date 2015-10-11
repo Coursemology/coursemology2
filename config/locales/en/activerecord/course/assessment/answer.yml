@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/assessment/answer:
+          attributes:
+            question:
+              consistent_assessment: 'must belong to the same assessment'
