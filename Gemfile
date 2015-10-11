@@ -98,7 +98,7 @@ group :development, :test do
   gem 'rspec-html-matchers'
   gem 'should_not'
   gem 'simplecov'
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '~> 2.0' # Wait for 3.0.1, see thoughtbot/shoulda-matchers#801
 
   # Capybara for feature testing
   gem 'capybara'

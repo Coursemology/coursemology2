@@ -376,8 +376,8 @@ GEM
     settings_on_rails (0.3.0)
       activerecord (>= 3.1)
     should_not (1.1.0)
-    shoulda-matchers (3.0.0)
-      activesupport (>= 4.0.0)
+    shoulda-matchers (2.8.0)
+      activesupport (>= 3.0.0)
     simple_form (3.2.0)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
@@ -508,7 +508,7 @@ DEPENDENCIES
   schema_validations
   settings_on_rails
   should_not
-  shoulda-matchers
+  shoulda-matchers (~> 2.0)
   simple_form
   simple_form-bootstrap
   simplecov
