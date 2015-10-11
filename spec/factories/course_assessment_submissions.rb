@@ -3,6 +3,6 @@ FactoryGirl.define do
                                          parent: :course_experience_points_record,
                                          aliases: [:submission] do
     assessment { build(:assessment, course: course) }
-    workflow_state 'created'
+    # workflow_state 'created'
   end
 end
