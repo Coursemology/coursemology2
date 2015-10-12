@@ -9,6 +9,7 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
     let(:folder_stub) do
       stub = create(:folder, course: course, parent: create(:folder, course: course))
       allow(stub).to receive(:destroy).and_return(false)
+      allow(stub).to receive(:update_attributes).and_return(false)
       stub
     end
 
@@ -27,6 +28,24 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
 
         it 'shows a flash message' do
           expect(flash[:danger]).to eq(I18n.t('course.material.folders.destroy.failure'))
+        end
+      end
+    end
+
+    describe '#upload_materials' do
+      subject do
+        patch :upload_materials, course_id: course, id: folder_stub,
+                                 material_folder: { files_attributes: [] }
+      end
+
+      context 'when files cannot be uploaded' do
+        before do
+          controller.instance_variable_set(:@folder, folder_stub)
+          subject
+        end
+
+        it 'shows a flash message' do
+          expect(flash[:danger]).to eq(I18n.t('course.material.folders.upload_materials.failure'))
         end
       end
     end
