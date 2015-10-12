@@ -1,0 +1,11 @@
+en:
+  course:
+    material:
+      materials:
+        edit:
+          header: 'Edit Material'
+        update:
+          success: 'Material %{name} was updated.'
+        destroy:
+          success: 'Material %{name} was deleted.'
+          failure: 'Failed to delete material: %{error}'
