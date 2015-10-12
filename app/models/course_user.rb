@@ -34,6 +34,9 @@ class CourseUser < ActiveRecord::Base
       sum(:points_awarded)
     end
   end
+  has_many :course_user_achievements, class_name: Course::UserAchievement.name,
+                                      inverse_of: :course_user, dependent: :destroy
+  has_many :achievements, through: :user_achievements, class_name: Course::Achievement.name
   has_one :invitation, class_name: Course::UserInvitation.name, dependent: :destroy, validate: true
 
   # Gets the staff associated with the course.
