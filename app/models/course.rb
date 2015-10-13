@@ -54,6 +54,12 @@ class Course < ActiveRecord::Base
     self.registration_key = 'C'.freeze + SecureRandom.base64(8)
   end
 
+  # Returns the root folder of the course.
+  # @return [Course::Material::Folder] The root folder.
+  def root_folder
+    material_folders.find_by!(parent: nil)
+  end
+
   private
 
   # Set default values

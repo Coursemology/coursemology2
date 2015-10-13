@@ -1,5 +1,6 @@
 class Course::Material::Folder < ActiveRecord::Base
-  acts_as_forest order: 'name'
+  acts_as_forest order: :name
+  include Course::ModelComponentHost::Component
 
   after_initialize :set_defaults, if: :new_record?
 
@@ -14,6 +15,10 @@ class Course::Material::Folder < ActiveRecord::Base
     files.each do |file|
       materials.build(name: file.original_filename, file: file)
     end
+  end
+
+  def self.after_course_create(course)
+    course.material_folders.create(name: 'Root')
   end
 
   private
