@@ -24,6 +24,8 @@ en:
             index: :'course.assessment.assessments.index.header'
             new: :'course.admin.assessments.categories.new.header'
             admin: :'system.admin.admin.index.header'
+        material_settings:
+          edit: :'course.material.sidebar_title'
       users:
         index: 'Users'
         students: :'course.users.students.header'
