@@ -3,6 +3,7 @@ class Course::Material::Folder < ActiveRecord::Base
   include Course::ModelComponentHost::Component
 
   after_initialize :set_defaults, if: :new_record?
+  before_destroy :destroy_children
 
   has_many :materials, inverse_of: :folder, dependent: :destroy, foreign_key: :folder_id,
                        class_name: Course::Material.name
@@ -25,5 +26,9 @@ class Course::Material::Folder < ActiveRecord::Base
 
   def set_defaults
     self.start_at ||= Time.zone.now
+  end
+
+  def destroy_children
+    children.destroy_all
   end
 end
