@@ -9,3 +9,4 @@ en:
         destroy:
           success: 'Material %{name} was deleted.'
           failure: 'Failed to delete material: %{error}'
+      sidebar_title: 'Materials'
