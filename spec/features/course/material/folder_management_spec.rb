@@ -68,6 +68,16 @@ RSpec.feature 'Course: Material: Folders: Management' do
         end.to change { parent_folder.children.count }.by(-1)
         expect(current_path).to eq(course_material_folder_path(course, parent_folder))
       end
+
+      scenario 'I can upload a file to the folder' do
+        visit course_material_folder_path(course, parent_folder)
+        find_link(nil, href: new_materials_course_material_folder_path(course, parent_folder)).click
+        attach_file(:material_folder_files_attributes,
+                    File.join(Rails.root, '/spec/fixtures/files/text.txt'))
+        expect do
+          click_button 'submit'
+        end.to change { parent_folder.materials.count }.by(1)
+      end
     end
   end
 end
