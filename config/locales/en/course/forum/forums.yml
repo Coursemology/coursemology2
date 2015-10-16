@@ -2,11 +2,12 @@ en:
   course:
     forum:
       forums:
-        sidebar_title: :'course.forums.index.header'
         index:
-          Name: 'Name'
           header: 'Forums'
-          description: 'Description'
+          forum: 'Forum'
+          topics: 'Topics'
+          posts: 'Posts'
+          views: 'Views'
         new:
           header: 'New Forum'
         create:
@@ -19,6 +20,10 @@ en:
           success: 'Forum %{name} was deleted.'
           failure: 'Failed to delete forum: %{error}'
         subscribe:
+          tag: 'Subscribe'
           success: 'You have subscribed to Forum %{name}.'
+          failure: 'Fail to subscribe to Forum: %{error}'
         unsubscribe:
+          tag: 'Unsubscribe'
           success: 'You have been unsubscribed from the Forum %{name}.'
+          failure: 'Fail to unsubscribe from Forum: %{error}'
