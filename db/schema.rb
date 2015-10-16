@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150812024950) do
+ActiveRecord::Schema.define(version: 20151011151130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -345,6 +345,15 @@ ActiveRecord::Schema.define(version: 20150812024950) do
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
   end
+
+  create_table "course_user_achievements", force: :cascade do |t|
+    t.integer  "course_user_id", index: {name: "fk__course_user_achievements_course_user_id"}, foreign_key: {references: "course_users", name: "fk_course_user_achievements_course_user_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "achievement_id", index: {name: "fk__course_user_achievements_achievement_id"}, foreign_key: {references: "course_achievements", name: "fk_course_user_achievements_achievement_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "obtained_at",    null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+  add_index "course_user_achievements", ["course_user_id", "achievement_id"], name: "index_user_achievements_on_course_user_id_and_achievement_id", unique: true
 
   create_table "user_emails", force: :cascade do |t|
     t.boolean  "primary",              default: false, null: false
