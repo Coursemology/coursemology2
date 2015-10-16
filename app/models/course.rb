@@ -35,6 +35,7 @@ class Course < ActiveRecord::Base
                                 source: :actable, source_type: Course::LessonPlan::Event.name
   has_many :material_folders, class_name: Course::Material::Folder.name, inverse_of: :course,
                               dependent: :destroy
+  has_many :forums, dependent: :destroy
 
   accepts_nested_attributes_for :invitations, :assessment_categories
 
