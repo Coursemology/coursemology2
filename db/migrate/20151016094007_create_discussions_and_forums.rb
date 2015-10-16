@@ -5,7 +5,7 @@ class CreateDiscussionsAndForums < ActiveRecord::Migration
     end
 
     create_table :course_discussion_posts do |t|
-      t.references :parent_id
+      t.references :parent
       t.belongs_to :topic, null: false, foreign_key: { references: :course_discussion_topics }
       t.string :title, null: false
       t.text :text
