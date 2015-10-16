@@ -1,0 +1,24 @@
+en:
+  course:
+    forum:
+      forums:
+        sidebar_title: :'course.forums.index.header'
+        index:
+          Name: 'Name'
+          header: 'Forums'
+          description: 'Description'
+        new:
+          header: 'New Forum'
+        create:
+          success: 'Forum %{name} was created.'
+        edit:
+          header: 'Edit Forum'
+        update:
+          success: 'Forum %{name} was updated.'
+        destroy:
+          success: 'Forum %{name} was deleted.'
+          failure: 'Failed to delete forum: %{error}'
+        subscribe:
+          success: 'You have subscribed to Forum %{name}.'
+        unsubscribe:
+          success: 'You have been unsubscribed from the Forum %{name}.'

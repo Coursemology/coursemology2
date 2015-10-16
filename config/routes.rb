@@ -143,6 +143,13 @@ Rails.application.routes.draw do
         resources :events, except: [:index, :show]
       end
 
+      scope module: :forum do
+        resources :forums do
+          post 'subscribe', on: :member
+          delete 'unsubscribe', on: :member
+        end
+      end
+
       resources :users, only: [:update, :destroy] do
         get 'invite' => 'user_invitations#new', on: :collection
         post 'invite' => 'user_invitations#create', on: :collection
