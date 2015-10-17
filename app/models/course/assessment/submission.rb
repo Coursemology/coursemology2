@@ -27,4 +27,17 @@ class Course::Assessment::Submission < ActiveRecord::Base
            source_type: Course::Assessment::Answer::MultipleResponse.name
 
   accepts_nested_attributes_for :answers
+
+  # @!method self.by_user(user)
+  #   Finds all the submissions by the given user.
+  #   @param [User] user The user to filter submissions by
+  scope :by_user, (lambda do |user|
+    joins { experience_points_record.course_user }.
+      where { experience_points_record.course_user.user == user }
+  end)
+
+  # @!method self.ordered_by_date
+  #   Orders the submissions by date of creation. This defaults to reverse chronological order
+  #   (newest submission first).
+  scope :ordered_by_date, ->(direction = :desc) { order(created_at: direction) }
 end
