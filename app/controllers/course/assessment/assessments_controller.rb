@@ -5,6 +5,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   authorize_resource :assessment, class: Course::Assessment.name
 
   def index
+    @assessments = @assessments.with_submissions_by(current_user)
   end
 
   def show

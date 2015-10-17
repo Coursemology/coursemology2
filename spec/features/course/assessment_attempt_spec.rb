@@ -48,6 +48,15 @@ RSpec.describe 'Course: Assessments: Attempt' do
         expect(current_path).to eq(\
           edit_course_assessment_submission_path(course, assessment, submission))
       end
+
+      scenario 'I can continue my attempt' do
+        submission
+        visit course_assessments_path(course)
+
+        submission_path = edit_course_assessment_submission_path(course, assessment, submission)
+        expect(page).to have_link(I18n.t('course.assessment.assessments.assessment.attempt'),
+                                  href: submission_path)
+      end
     end
   end
 end
