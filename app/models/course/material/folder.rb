@@ -1,7 +1,9 @@
 class Course::Material::Folder < ActiveRecord::Base
-  acts_as_forest order: 'name'
+  acts_as_forest order: :name
+  include Course::ModelComponentHost::Component
 
   after_initialize :set_defaults, if: :new_record?
+  before_destroy :destroy_children
 
   has_many :materials, inverse_of: :folder, dependent: :destroy, foreign_key: :folder_id,
                        class_name: Course::Material.name
@@ -16,9 +18,17 @@ class Course::Material::Folder < ActiveRecord::Base
     end
   end
 
+  def self.after_course_create(course)
+    course.material_folders.create(name: 'Root')
+  end
+
   private
 
   def set_defaults
     self.start_at ||= Time.zone.now
+  end
+
+  def destroy_children
+    children.destroy_all
   end
 end
