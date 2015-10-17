@@ -25,7 +25,7 @@ RSpec.feature 'Courses: Students' do
       visit course_users_students_path(course)
       within('form.edit_course_user:first') do
         fill_in 'course_user_name', with: new_name
-        click_button 'submit'
+        click_button 'update'
       end
       expect(page).to have_field('course_user_name', with: new_name)
     end
@@ -36,7 +36,7 @@ RSpec.feature 'Courses: Students' do
       visit course_users_students_path(course)
       within find_field('course_user_name', with: user_to_change.name).find(:xpath, '../../..') do
         check 'course_user_phantom'
-        click_button 'submit'
+        click_button 'update'
 
         expect(page).to have_checked_field('course_user_phantom')
       end

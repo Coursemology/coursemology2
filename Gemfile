@@ -20,6 +20,7 @@ gem 'pg', '>= 0.18.2'
 gem 'schema_plus'
 gem 'schema_plus_association_inverses', '>= 0.0.3'
 gem 'schema_validations'
+gem 'schema_monkey', '<= 2.1.1' # another fix from pinnymz/migration_comments#9
 # Instance/Course settings
 gem 'settings_on_rails'
 # Table and column comments
@@ -97,7 +98,7 @@ group :development, :test do
   gem 'rspec-html-matchers'
   gem 'should_not'
   gem 'simplecov'
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '~> 2.0' # Wait for 3.0.1, see thoughtbot/shoulda-matchers#801
 
   # Capybara for feature testing
   gem 'capybara'
@@ -112,7 +113,7 @@ group :development, :test do
   gem 'consistency_fail'
 
   # Prevent N+1 queries.
-  gem 'bullet', github: 'flyerhzm/bullet'
+  gem 'bullet', '>= 4.14.9'
 end
 
 group :ci do

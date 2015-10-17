@@ -15,7 +15,7 @@ RSpec.feature 'Course: Requests' do
 
       within find_form(nil, action: course_user_path(course, unregistered_user)) do
         choose('course_user_workflow_state_approved')
-        find_button('submit').click
+        find_button('update').click
       end
 
       expect(current_path).to eq(course_users_requests_path(course))
@@ -31,7 +31,7 @@ RSpec.feature 'Course: Requests' do
 
       within find_form(nil, action: course_user_path(course, unregistered_user)) do
         choose('course_user_workflow_state_rejected')
-        find_button('submit').click
+        find_button('update').click
       end
 
       expect(current_path).to eq(course_users_requests_path(course))
