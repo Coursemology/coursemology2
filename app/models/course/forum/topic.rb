@@ -7,6 +7,7 @@ class Course::Forum::Topic < ActiveRecord::Base
   enum topic_type: { normal: 0, question: 1, sticky: 2, announcement: 3 }
 
   has_many :views, dependent: :destroy, inverse_of: :topic
+  has_many :posts, class_name: Course::Discussion::Post.name, through: :topic
   belongs_to :forum, inverse_of: :topics
 
   private
