@@ -1,8 +1,8 @@
 sudo: false
 language: ruby
 rvm:
-  - 2.1.6
-  - 2.2.2
+  - 2.1.7
+  - 2.2.3
   - ruby-head
 matrix:
   allow_failures:
@@ -21,6 +21,7 @@ before_script:
 
 script:
   - bundle exec consistency_fail
+  - bundle exec i18n-tasks health
   - bundle exec rake spec
 
 notifications:
