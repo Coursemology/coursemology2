@@ -14,11 +14,19 @@ class Course::Assessment::Answer < ActiveRecord::Base
   end
 
   validate :validate_consistent_assessment
+  validates :grade, presence: true, unless: :attempting?
+  validates :grade, absence: true, if: :attempting?
 
   belongs_to :submission, inverse_of: :answers
   belongs_to :question, class_name: Course::Assessment::Question.name, inverse_of: nil
 
   accepts_nested_attributes_for :actable
+
+  protected
+
+  def submit
+    update_attribute(:grade, 0)
+  end
 
   private
 
