@@ -58,5 +58,40 @@ RSpec.describe Course::Assessment do
         end
       end
     end
+
+    describe '.with_submissions_by' do
+      let(:course) { create(:course) }
+      let(:assessment) { create(:assessment, course: course) }
+      let(:user1) { create(:user) }
+      let(:submission1) { create(:submission, assessment: assessment, user: user1) }
+      let(:user2) { create(:user) }
+      let(:submission2) { create(:submission, assessment: assessment, user: user2) }
+      let(:submission3) { create(:submission, assessment: assessment, user: user2) }
+
+      it 'returns all assessments' do
+        assessment
+        expect(course.assessments.with_submissions_by(user1)).to contain_exactly(assessment)
+      end
+
+      it "preloads the specified user's submissions" do
+        submission1
+        submission2
+
+        assessments = course.assessments.with_submissions_by(user1)
+        expect(assessments.all? { |assessment| assessment.submissions.loaded? }).to be(true)
+        submissions = assessments.flat_map { |assessment| assessment.submissions }
+        expect(submissions.all? { |submission| submission.course_user.user == user1 }).to be(true)
+      end
+
+      it 'returns submissions in reverse chronological order' do
+        submission2
+        submission3
+
+        assessment = course.assessments.with_submissions_by(user2).first
+        submissions = assessment.submissions
+        expect(submissions).to contain_exactly(submission2, submission3)
+        expect(submissions.each_cons(2).all? { |a, b| a.created_at >= b.created_at }).to be(true)
+      end
+    end
   end
 end
