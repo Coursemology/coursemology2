@@ -6,8 +6,9 @@ class Course::Material::Folder < ActiveRecord::Base
   before_destroy :destroy_children
 
   has_many :materials, inverse_of: :folder, dependent: :destroy, foreign_key: :folder_id,
-                       class_name: Course::Material.name
+                       class_name: Course::Material.name, autosave: true
   belongs_to :course, inverse_of: :material_folders
+  belongs_to :owner, polymorphic: true, inverse_of: :folder
 
   # TODO: Remove this after schema_validations #21 was closed
   validates :name, uniqueness: { case_sensitive: false, scope: :parent_id }, if: :parent

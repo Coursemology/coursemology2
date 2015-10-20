@@ -28,6 +28,9 @@ en:
       uploaded_files: 'Uploaded Files:'
       uploaded_file: 'Uploaded File:'
       new_files: 'Upload New Files'
+    materials_uploader:
+      uploaded_materials: 'Uploaded Materials:'
+      new_materials: 'Upload New Materials'
     mailer:
       greeting: 'Hello, %{user}:'
       complimentary_close: 'Best Regards,'
