@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Material::Folder, type: :model do
-  it { is_expected.to have_many(:materials) }
+  it { is_expected.to have_many(:materials).autosave(true) }
 
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
