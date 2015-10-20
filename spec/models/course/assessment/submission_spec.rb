@@ -8,12 +8,39 @@ RSpec.describe Course::Assessment::Submission do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:assessment) { create(:assessment, course: course) }
+    let(:assessment) { create(:assessment, *assessment_traits, course: course) }
+    let(:assessment_traits) { [] }
 
     let(:user1) { create(:user) }
     let(:submission1) { create(:submission, assessment: assessment, user: user1) }
     let(:user2) { create(:user) }
     let(:submission2) { create(:submission, assessment: assessment, user: user2) }
+
+    describe '.with_grade' do
+      let(:assessment_traits) { [:with_all_question_types] }
+      let(:submission) { submission1 }
+
+      before do
+        submission.assessment.questions.attempt(submission).each(&:save!)
+        submission.reload
+      end
+
+      it 'includes the grade of the answers' do
+        grades = []
+        self.submission.answers.each do |answer|
+          answer.submit!
+          grade = Random::DEFAULT.rand(answer.question.maximum_grade)
+          grades << grade
+          answer.grade!
+          answer.grade = grade
+          answer.save
+        end
+
+        submission_grade = grades.reduce(0, :+)
+        submission = Course::Assessment::Submission.with_grade.find(self.submission.id)
+        expect(submission.grade).to eq(submission_grade)
+      end
+    end
 
     describe '.with_creator' do
       before do

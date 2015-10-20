@@ -28,6 +28,15 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   accepts_nested_attributes_for :answers
 
+  # @!method self.with_grade
+  #   Includes the grade of the submission. This is the sum of the grades of all associated answers.
+  scope :with_grade, (lambda do
+    joins { answers.outer }.
+      select { 'course_assessment_submissions.*' }.
+      select { sum(answers.grade).as(grade) }.
+      group { course_assessment_submissions.id }
+  end)
+
   # @!method self.by_user(user)
   #   Finds all the submissions by the given user.
   #   @param [User] user The user to filter submissions by

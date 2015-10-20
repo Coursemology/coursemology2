@@ -16,6 +16,14 @@ GIT
       rails (>= 3.1.0)
 
 GIT
+  remote: git://github.com/hzamani/active_record-acts_as.git
+  revision: ae98f721426d39547c2b90e6343893630dd98074
+  specs:
+    active_record-acts_as (1.0.7)
+      activerecord (~> 4, >= 4.1.2)
+      activesupport (~> 4)
+
+GIT
   remote: git://github.com/lowjoel/acts_as_tenant.git
   revision: 9d4d29ca64225953000de30ca99154b7d42d4a13
   branch: allow-inverse-of
@@ -61,9 +69,6 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    active_record-acts_as (1.0.7)
-      activerecord (~> 4, >= 4.1.2)
-      activesupport (~> 4)
     activejob (4.2.4)
       activesupport (= 4.2.4)
       globalid (>= 0.3.0)
@@ -455,7 +460,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_record-acts_as
+  active_record-acts_as!
   activerecord-userstamp (>= 3.0.2)
   acts_as_tenant!
   autoprefixer-rails
