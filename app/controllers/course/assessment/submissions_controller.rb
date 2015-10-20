@@ -35,11 +35,25 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   def update_params
     @update_params ||= begin
       params.require(:submission).permit(
-        answers_attributes: [
-          :id,
-          actable_attributes: [:id, option_ids: []]
-        ]
+        answers_attributes: [:id, update_answers_params]
       )
+    end
+  end
+
+  # The permitted parameters for answers and their specific answer types.
+  #
+  # This varies depending on the permissions of the user.
+  def update_answers_params
+    actable_attributes = [:id]
+    actable_attributes.push(update_answer_type_params) if can?(:update, @submission)
+
+    { actable_attributes: actable_attributes }
+  end
+
+  # The permitted parameters for each kind of answer.
+  def update_answer_type_params
+    {}.tap do |result|
+      result[:option_ids] = [] # MRQ answers
     end
   end
 
