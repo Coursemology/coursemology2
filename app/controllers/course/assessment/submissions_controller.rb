@@ -3,6 +3,7 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   load_and_authorize_resource :submission, class: Course::Assessment::Submission.name,
                                            through: :assessment
   before_action :load_or_create_answers, only: [:edit, :update]
+  before_action :add_assessment_breadcrumb
 
   def create
     fail IllegalStateError if @assessment.questions.empty?
@@ -24,6 +25,12 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
     else
       render 'edit'
     end
+  end
+
+  protected
+
+  def add_assessment_breadcrumb
+    add_breadcrumb(@assessment.title, course_assessment_path(current_course, @assessment));
   end
 
   private

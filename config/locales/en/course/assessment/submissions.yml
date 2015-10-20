@@ -4,5 +4,7 @@ en:
       submissions:
         create:
           failure: 'Could not create submission: %{error}'
+        edit:
+          attempt: :'course.assessment.assessments.assessment.attempt'
         update:
           success: 'Submission was updated.'

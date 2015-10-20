@@ -1,4 +1,5 @@
-= page_header
+- add_breadcrumb(t('.attempt'))
+= page_header(@assessment.title)
 
 = simple_form_for [current_course, @assessment, @submission] do |f|
   = f.error_notification
