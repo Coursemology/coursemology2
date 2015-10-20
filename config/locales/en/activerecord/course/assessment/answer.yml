@@ -6,3 +6,5 @@ en:
           attributes:
             question:
               consistent_assessment: 'must belong to the same assessment'
+            submission:
+              attemptable_state: 'must be in the attempting state'

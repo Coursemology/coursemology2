@@ -23,6 +23,17 @@ RSpec.describe Course::Assessment::Answer do
         end
       end
 
+      describe '#submission' do
+        context 'when the answer is being attempted' do
+          it 'validates that the submission is being attempted' do
+            subject.submission = build_stubbed(:course_assessment_submission,
+                                               workflow_state: 'submitted')
+            expect(subject.valid?).to be(false)
+            expect(subject.errors[:submission]).not_to be_empty
+          end
+        end
+      end
+
       describe '#grade' do
         context 'when the answer is being attempted' do
           it 'cannot have a grade' do

@@ -14,6 +14,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
   end
 
   validate :validate_consistent_assessment
+  validate :validate_assessment_state, if: :attempting?
   validates :grade, presence: true, unless: :attempting?
   validates :grade, absence: true, if: :attempting?
 
@@ -32,5 +33,9 @@ class Course::Assessment::Answer < ActiveRecord::Base
 
   def validate_consistent_assessment
     errors.add(:question, :consistent_assessment) if question.assessment != submission.assessment
+  end
+
+  def validate_assessment_state
+    errors.add(:submission, :attemptable_state) unless submission.attempting?
   end
 end
