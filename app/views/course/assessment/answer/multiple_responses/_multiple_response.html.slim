@@ -3,3 +3,5 @@ h3 = question.title
 = sanitize(question.description)
 = f.association :options, as: :check_boxes, collection: question.options,
                           label_method: :option, label: false
+- if !multiple_response.attempting? && can?(:grade, @submission)
+  = f.input :grade

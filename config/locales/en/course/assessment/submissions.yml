@@ -7,5 +7,6 @@ en:
         edit:
           attempt: :'course.assessment.assessments.assessment.attempt'
           finalise: 'Finalise Submission'
+          publish: 'Publish Grade'
         update:
           success: 'Submission was updated.'

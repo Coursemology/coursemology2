@@ -31,8 +31,8 @@ RSpec.describe Course::Assessment::Submission do
           answer.finalise!
           grade = Random::DEFAULT.rand(answer.question.maximum_grade)
           grades << grade
-          answer.grade!
           answer.grade = grade
+          answer.publish!
           answer.save
         end
 
@@ -80,6 +80,27 @@ RSpec.describe Course::Assessment::Submission do
         expect(submission.answers.all?(&:attempting?)).to be(true)
         submission.finalise!
         expect(submission.answers.all?(&:submitted?)).to be(true)
+      end
+    end
+
+    describe '#publish!' do
+      let(:assessment_traits) { [:with_all_question_types] }
+      let(:submission) { submission1 }
+
+      before do
+        submission.assessment.questions.attempt(submission).each do |answer|
+          answer.workflow_state = 'submitted'
+          answer.grade = 0
+          answer.save!
+        end
+        submission.workflow_state = 'submitted'
+        submission.save!
+      end
+
+      it 'propagates the graded state to its answers' do
+        expect(submission.answers.all?(&:submitted?)).to be(true)
+        submission.publish!
+        expect(submission.answers.all?(&:graded?)).to be(true)
       end
     end
   end

@@ -1,7 +1,8 @@
 class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   before_action :authorize_assessment, only: :create
-  load_and_authorize_resource :submission, class: Course::Assessment::Submission.name,
-                                           through: :assessment
+  load_resource :submission, class: Course::Assessment::Submission.name, through: :assessment
+  authorize_resource :submission, except: [:edit, :update]
+  before_action :authorize_submission!, only: [:edit, :update]
   before_action :load_or_create_answers, only: [:edit, :update]
   before_action :add_assessment_breadcrumb
 
@@ -35,6 +36,14 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
 
   private
 
+  def authorize_submission!
+    if @submission.attempting?
+      authorize!(:update, @submission)
+    else
+      authorize!(:read, @submission)
+    end
+  end
+
   def create_params
     { course_user: current_course_user }
   end
@@ -62,6 +71,7 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   def update_answers_params
     actable_attributes = [:id]
     actable_attributes.push(update_answer_type_params) if can?(:update, @submission)
+    actable_attributes.push(:grade) if can?(:grade, @submission)
 
     { actable_attributes: actable_attributes }
   end

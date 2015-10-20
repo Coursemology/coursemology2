@@ -8,7 +8,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
     end
     state :submitted do
       event :unsubmit, transitions_to: :attempting
-      event :grade, transitions_to: :graded
+      event :publish, transitions_to: :graded
     end
     state :graded
   end

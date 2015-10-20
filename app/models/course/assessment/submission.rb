@@ -8,7 +8,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
     end
     state :submitted do
       event :unsubmit, transitions_to: :attempting
-      event :grade, transitions_to: :graded
+      event :publish, transitions_to: :graded
     end
     state :graded
   end
@@ -51,6 +51,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
   scope :ordered_by_date, ->(direction = :desc) { order(created_at: direction) }
 
   alias_method :finalise=, :finalise!
+  alias_method :publish=, :publish!
 
   protected
 
@@ -59,5 +60,12 @@ class Course::Assessment::Submission < ActiveRecord::Base
   # This finalises all the answers as well.
   def finalise(_ = nil)
     answers.each(&:finalise!)
+  end
+
+  # Handles the grading of a submission.
+  #
+  # This grades all the answers as well.
+  def publish(_ = nil)
+    answers.each(&:publish!)
   end
 end
