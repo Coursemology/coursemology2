@@ -4,7 +4,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
 
   workflow do
     state :attempting do
-      event :submit, transitions_to: :submitted
+      event :finalise, transitions_to: :submitted
     end
     state :submitted do
       event :unsubmit, transitions_to: :attempting
@@ -25,7 +25,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
 
   protected
 
-  def submit
+  def finalise
     update_attribute(:grade, 0)
   end
 

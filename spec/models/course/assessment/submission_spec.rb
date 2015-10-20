@@ -28,7 +28,7 @@ RSpec.describe Course::Assessment::Submission do
       it 'includes the grade of the answers' do
         grades = []
         self.submission.answers.each do |answer|
-          answer.submit!
+          answer.finalise!
           grade = Random::DEFAULT.rand(answer.question.maximum_grade)
           grades << grade
           answer.grade!
@@ -65,6 +65,21 @@ RSpec.describe Course::Assessment::Submission do
         expect(assessment.submissions.ordered_by_date.length).to be >= 2
         expect(assessment.submissions.ordered_by_date.each_cons(2).
           all? { |a, b| a.created_at >= b.created_at }).to be(true)
+      end
+    end
+
+    describe '#finalise!' do
+      let(:assessment_traits) { [:with_all_question_types] }
+      let(:submission) { submission1 }
+
+      before do
+        submission.assessment.questions.attempt(submission).each(&:save!)
+      end
+
+      it 'propagates the finalise state to its answers' do
+        expect(submission.answers.all?(&:attempting?)).to be(true)
+        submission.finalise!
+        expect(submission.answers.all?(&:submitted?)).to be(true)
       end
     end
   end

@@ -6,4 +6,6 @@
   = f.simple_fields_for :answers do |base_answer_form|
     = base_answer_form.simple_fields_for :actable do |specific_answer_form|
       = render partial: specific_answer_form.object.specific, locals: { f: specific_answer_form }
-  = f.button :submit
+  = f.button :submit, t('common.save')
+  - if @submission.attempting? && can?(:update, @submission)
+    = f.button :submit, t('.finalise'), name: 'submission[finalise]', class: ['btn-danger']

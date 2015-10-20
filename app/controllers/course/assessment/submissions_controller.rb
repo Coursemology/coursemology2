@@ -42,9 +42,18 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   def update_params
     @update_params ||= begin
       params.require(:submission).permit(
+        *workflow_state_params,
         answers_attributes: [:id, update_answers_params]
       )
     end
+  end
+
+  # The permitted state changes that will be provided to the model.
+  def workflow_state_params
+    result = []
+    result << :finalise if can?(:update, @submission)
+    result.push(:publish, :unsubmit) if can?(:grade, @submission)
+    result
   end
 
   # The permitted parameters for answers and their specific answer types.
@@ -69,6 +78,8 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   end
 
   def load_or_create_answers
+    return unless @submission.attempting?
+
     new_answers = questions_to_attempt.attempt(@submission).
                   map { |answer| answer.save! if answer.new_record? }.
                   reduce(false) { |left, right| left || right }

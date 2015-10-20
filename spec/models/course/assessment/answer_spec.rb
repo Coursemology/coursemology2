@@ -46,7 +46,7 @@ RSpec.describe Course::Assessment::Answer do
         context 'when the answer is finalised' do
           subject { create(:course_assessment_answer) }
           it 'has a grade of 0' do
-            subject.submit!
+            subject.finalise!
             expect(subject).to be_valid
             expect(subject.grade).to eq(0)
           end

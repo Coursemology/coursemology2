@@ -6,5 +6,6 @@ en:
           failure: 'Could not create submission: %{error}'
         edit:
           attempt: :'course.assessment.assessments.assessment.attempt'
+          finalise: 'Finalise Submission'
         update:
           success: 'Submission was updated.'

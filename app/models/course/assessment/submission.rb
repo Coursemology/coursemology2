@@ -4,7 +4,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   workflow do
     state :attempting do
-      event :finalize, transitions_to: :submitted
+      event :finalise, transitions_to: :submitted
     end
     state :submitted do
       event :unsubmit, transitions_to: :attempting
@@ -49,4 +49,15 @@ class Course::Assessment::Submission < ActiveRecord::Base
   #   Orders the submissions by date of creation. This defaults to reverse chronological order
   #   (newest submission first).
   scope :ordered_by_date, ->(direction = :desc) { order(created_at: direction) }
+
+  alias_method :finalise=, :finalise!
+
+  protected
+
+  # Handles the finalisation of a submission.
+  #
+  # This finalises all the answers as well.
+  def finalise(_ = nil)
+    answers.each(&:finalise!)
+  end
 end

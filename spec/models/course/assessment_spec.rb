@@ -52,7 +52,7 @@ RSpec.describe Course::Assessment do
           before do
             assessment.questions.limit(1).attempt(submission).tap do |answers|
               answers.each(&:save!)
-              answers.each(&:submit!)
+              answers.each(&:finalise!)
             end
           end
 

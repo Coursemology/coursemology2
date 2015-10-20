@@ -44,7 +44,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         submission
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        click_button 'submit'
+        click_button I18n.t('common.save')
         expect(current_path).to eq(\
           edit_course_assessment_submission_path(course, assessment, submission))
       end
@@ -56,6 +56,16 @@ RSpec.describe 'Course: Assessments: Attempt' do
         submission_path = edit_course_assessment_submission_path(course, assessment, submission)
         expect(page).to have_link(I18n.t('course.assessment.assessments.assessment.attempt'),
                                   href: submission_path)
+      end
+
+      scenario 'I can finalise my attempt' do
+        submission
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        click_button I18n.t('course.assessment.submissions.edit.finalise')
+        expect(current_path).to eq(\
+          edit_course_assessment_submission_path(course, assessment, submission))
+        expect(submission.reload.submitted?).to be(true)
       end
     end
   end
