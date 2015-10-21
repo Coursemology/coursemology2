@@ -42,6 +42,11 @@ class Course::Forum::Topic < ActiveRecord::Base
     end
   end)
 
+  # @!method self.with_topic_statistics
+  #   Augments all returned records with the number of posts and views in that topic.
+  scope :with_topic_statistics,
+        -> { all.calculated(:post_count, :view_count) }
+
   private
 
   # Try building a slug based on the following fields in

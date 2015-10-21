@@ -90,5 +90,16 @@ RSpec.describe Course::Forum::Topic, type: :model do
         expect(forum.topics.with_latest_post.first.posts.first).to eq(second_topic_post)
       end
     end
+
+    describe '.with_topic_statistics' do
+      let(:topic) { create(:forum_topic, forum: forum) }
+      let!(:topic_posts) { create_list(:post, 2, topic: topic.acting_as) }
+      let!(:topic_views) { create_list(:forum_topic_view, 2, topic: topic) }
+
+      it 'preloads the correct post and view count' do
+        expect(forum.topics.with_topic_statistics.first.post_count).to eq(topic_posts.size + 1)
+        expect(forum.topics.with_topic_statistics.first.view_count).to eq(topic_views.size)
+      end
+    end
   end
 end

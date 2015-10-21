@@ -149,6 +149,8 @@ Rails.application.routes.draw do
 
       scope module: :forum do
         resources :forums do
+          resources :topics
+
           post 'subscribe', on: :member
           delete 'unsubscribe', on: :member
         end
