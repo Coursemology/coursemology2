@@ -1,8 +1,8 @@
 = content_tag_for(:tr, f.object, class: 'nested-fields') do
   td
     = f.simple_fields_for :course_user do |f|
-      = f.input :name, label: false
+      = f.input :name, label: false, input_html: { class: 'course_user_name' }
   td
     = f.simple_fields_for :user_email do |f|
-      = f.input :email, label: false
+      = f.input :email, label: false, input_html: { class: 'course_user_email' }
   td = link_to_remove_association  t('.remove'), f

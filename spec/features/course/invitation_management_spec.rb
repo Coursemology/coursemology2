@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'csv'
 
-RSpec.feature 'Courses: Invitations' do
+RSpec.feature 'Courses: Invitations', js: true do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     before { login_as(user, scope: :user) }
@@ -17,16 +17,19 @@ RSpec.feature 'Courses: Invitations' do
         # Make sure existing invitations don't show up.
         expect(page).not_to have_selector(".user_invitation#user_invitation_#{invitation.id}")
 
-        pending 'JavaScript support'
+        click_link I18n.t('course.user_invitations.new.tabs.individual')
+        click_link I18n.t('course.user_invitations.new.individual.add_user')
         name = 'My name'
         email = 'email_test@example.org'
-        fill_in 'course_user_name', with: name
-        fill_in 'course_user_email', with: email
-        click_button 'submit'
+        within find('div#individual form') do
+          fill_in find(:css, 'input.course_user_name')[:name], with: name
+          fill_in find(:css, 'input.course_user_email')[:name], with: email
+          click_button 'submit'
+        end
 
-        expect(page).to have_selector('div.progress', text: '0%')
-        expect(page).to have_selector('.course_user_invitation th', text: name)
-        expect(page).to have_selector('.course_user_invitation td', text: name)
+        expect(page).to have_selector('div.progress > div[aria-valuenow="0"]')
+        expect(page).to have_selector('tr.course_user th', text: name)
+        expect(page).to have_selector('tr.course_user td', text: email)
       end
 
       scenario 'I can invite users by uploading a file' do
@@ -55,19 +58,22 @@ RSpec.feature 'Courses: Invitations' do
         visit invite_course_users_path(course)
 
         # Enable registration codes
-        within find('#course_registration_key').find(:xpath, '..') do
+        click_link I18n.t('course.user_invitations.new.tabs.registration_code')
+        within find('#registration-code') do
           click_button I18n.t('course.user_invitations.new.registration_code.enable')
         end
         expect(current_path).to eq(invite_course_users_path(course))
+        click_link I18n.t('course.user_invitations.new.tabs.registration_code')
         course.reload
         expect(course.registration_key).not_to be_nil
         expect(page).to have_selector('pre', text: course.registration_key)
 
         # Disable registration codes
-        within find('#course_registration_key').find(:xpath, '..') do
+        within find('#registration-code').find(:xpath, '..') do
           click_button I18n.t('course.user_invitations.new.registration_code.disable')
         end
         expect(current_path).to eq(invite_course_users_path(course))
+        click_link I18n.t('course.user_invitations.new.tabs.registration_code')
         expect(page).not_to have_selector('pre', text: course.registration_key)
         course.reload
         expect(course.registration_key).to be_nil
