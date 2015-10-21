@@ -47,6 +47,10 @@ class Course::Forum::Topic < ActiveRecord::Base
   scope :with_topic_statistics,
         -> { all.calculated(:post_count, :view_count) }
 
+  def votes_count
+    0 # :TODO
+  end
+
   private
 
   # Try building a slug based on the following fields in
