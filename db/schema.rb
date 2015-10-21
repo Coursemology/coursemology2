@@ -119,6 +119,10 @@ ActiveRecord::Schema.define(version: 20151022105653) do
     t.integer "option_id", null: false, index: {name: "fk__course_assessment_multiple_response_option_question_option"}, foreign_key: {references: "course_assessment_question_multiple_response_options", name: "fk_course_assessment_answer_multiple_response_options_option_id", on_update: :no_action, on_delete: :no_action}
   end
 
+  create_table "course_assessment_answer_text_responses", force: :cascade do |t|
+    t.text "answer_text"
+  end
+
   create_table "course_assessment_categories", force: :cascade do |t|
     t.integer  "course_id",  null: false, index: {name: "fk__course_assessment_categories_course_id"}, foreign_key: {references: "courses", name: "fk_course_assessment_categories_course_id", on_update: :no_action, on_delete: :no_action}
     t.string   "title",      limit: 255, null: false
@@ -176,6 +180,17 @@ ActiveRecord::Schema.define(version: 20151022105653) do
     t.integer "question_id",    null: false, index: {name: "fk__course_assessment_answers_question_id"}, foreign_key: {references: "course_assessment_questions", name: "fk_course_assessment_answers_question_id", on_update: :no_action, on_delete: :no_action}
     t.string  "workflow_state", limit: 255, null: false
     t.integer "grade"
+  end
+
+  create_table "course_assessment_question_text_responses", force: :cascade do |t|
+  end
+
+  create_table "course_assessment_question_text_response_solutions", force: :cascade do |t|
+    t.integer "question_id",   null: false, index: {name: "fk__course_assessment_text_response_solution_question"}, foreign_key: {references: "course_assessment_question_text_responses", name: "fk_course_assessment_questi_2fbeabfad04f21c2d05c8b2d9100d1c4", on_update: :no_action, on_delete: :no_action}
+    t.integer "solution_type", default: 0, null: false
+    t.text    "solution",      null: false
+    t.integer "grade",         default: 0, null: false
+    t.text    "explanation"
   end
 
   create_table "course_assessment_tag_groups", force: :cascade do |t|

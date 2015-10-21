@@ -26,6 +26,10 @@ class Course::Assessment::Submission < ActiveRecord::Base
            through: :answers, source: :actable,
            source_type: Course::Assessment::Answer::MultipleResponse.name
 
+  has_many :text_response_answers,
+           through: :answers, source: :actable,
+           source_type: Course::Assessment::Answer::TextResponse.name
+
   accepts_nested_attributes_for :answers
 
   # @!method self.with_grade

@@ -14,6 +14,10 @@ class Course::Assessment < ActiveRecord::Base
   has_many :multiple_response_questions,
            through: :questions, source: :actable,
            source_type: Course::Assessment::Question::MultipleResponse.name
+  has_many :text_response_questions,
+           through: :questions, source: :actable,
+            source_type: Course::Assessment::Question::TextResponse.name
+
   has_many :submissions, inverse_of: :assessment, dependent: :destroy
 
   # @!method with_maximum_grade
