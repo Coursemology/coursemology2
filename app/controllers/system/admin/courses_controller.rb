@@ -3,8 +3,7 @@ class System::Admin::CoursesController < System::Admin::Controller
   add_breadcrumb :index, :admin_courses_path
 
   def index
-    @courses = Course.ordered_by_title.page(params[:page]).merge(CourseUser.owner).
-               eager_load(:instance, course_users: :user)
+    @courses = Course.ordered_by_title.page(params[:page]).includes(:instance).with_owners
   end
 
   def destroy
