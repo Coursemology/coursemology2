@@ -36,7 +36,7 @@ gem 'activerecord-userstamp', '>= 3.0.2'
 # Squeel as an SQL-like DSL
 gem 'squeel'
 # For multiple table inheritance
-gem 'active_record-acts_as'
+gem 'active_record-acts_as', github: 'hzamani/active_record-acts_as'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Create pretty URLs and work with human-friendly strings

@@ -14,6 +14,16 @@ class Course::Assessment < ActiveRecord::Base
            source_type: Course::Assessment::Question::MultipleResponse.name
   has_many :submissions, inverse_of: :assessment, dependent: :destroy
 
+  # @!method with_maximum_grade
+  #   Includes the maximum grade allowed by this assessment. This is the sum of all questions'
+  #   maximum grade.
+  scope :with_maximum_grade, (lambda do
+    joins { questions }.
+      select { 'course_assessments.*' }.
+      select { sum(questions.maximum_grade).as(maximum_grade) }.
+      group { course_assessments.id }
+  end)
+
   # @!method with_submissions_by(creator)
   #   Includes the submissions by the provided user.
   #   @param [User] user The user to preload submissions for.

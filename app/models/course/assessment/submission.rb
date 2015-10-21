@@ -4,11 +4,11 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   workflow do
     state :attempting do
-      event :finalize, transitions_to: :submitted
+      event :finalise, transitions_to: :submitted
     end
     state :submitted do
       event :unsubmit, transitions_to: :attempting
-      event :grade, transitions_to: :graded
+      event :publish, transitions_to: :graded
     end
     state :graded
   end
@@ -28,6 +28,15 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   accepts_nested_attributes_for :answers
 
+  # @!method self.with_grade
+  #   Includes the grade of the submission. This is the sum of the grades of all associated answers.
+  scope :with_grade, (lambda do
+    joins { answers.outer }.
+      select { 'course_assessment_submissions.*' }.
+      select { sum(answers.grade).as(grade) }.
+      group { course_assessment_submissions.id }
+  end)
+
   # @!method self.by_user(user)
   #   Finds all the submissions by the given user.
   #   @param [User] user The user to filter submissions by
@@ -40,4 +49,23 @@ class Course::Assessment::Submission < ActiveRecord::Base
   #   Orders the submissions by date of creation. This defaults to reverse chronological order
   #   (newest submission first).
   scope :ordered_by_date, ->(direction = :desc) { order(created_at: direction) }
+
+  alias_method :finalise=, :finalise!
+  alias_method :publish=, :publish!
+
+  protected
+
+  # Handles the finalisation of a submission.
+  #
+  # This finalises all the answers as well.
+  def finalise(_ = nil)
+    answers.each(&:finalise!)
+  end
+
+  # Handles the grading of a submission.
+  #
+  # This grades all the answers as well.
+  def publish(_ = nil)
+    answers.each(&:publish!)
+  end
 end

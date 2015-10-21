@@ -9,6 +9,10 @@ RSpec.describe Course::Assessment do
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
+    let(:course) { create(:course) }
+    let(:assessment) { create(:assessment, *assessment_traits, course: course) }
+    let(:assessment_traits) { [] }
+
     describe '.questions' do
       describe '#attempt' do
         let(:assessment) do
@@ -48,7 +52,7 @@ RSpec.describe Course::Assessment do
           before do
             assessment.questions.limit(1).attempt(submission).tap do |answers|
               answers.each(&:save!)
-              answers.each(&:submit!)
+              answers.each(&:finalise!)
             end
           end
 
@@ -59,9 +63,18 @@ RSpec.describe Course::Assessment do
       end
     end
 
+    describe '.with_maximum_grade' do
+      let(:assessment_traits) { [:with_all_question_types] }
+
+      it 'includes the maximum grade' do
+        maximum_grade = self.assessment.questions.map(&:maximum_grade).reduce(0, :+)
+
+        assessment = Course::Assessment.with_maximum_grade.find(self.assessment.id)
+        expect(assessment.maximum_grade).to eq(maximum_grade)
+      end
+    end
+
     describe '.with_submissions_by' do
-      let(:course) { create(:course) }
-      let(:assessment) { create(:assessment, course: course) }
       let(:user1) { create(:user) }
       let(:submission1) { create(:submission, assessment: assessment, user: user1) }
       let(:user2) { create(:user) }

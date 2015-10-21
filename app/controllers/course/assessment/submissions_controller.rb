@@ -1,8 +1,10 @@
 class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   before_action :authorize_assessment, only: :create
-  load_and_authorize_resource :submission, class: Course::Assessment::Submission.name,
-                                           through: :assessment
+  load_resource :submission, class: Course::Assessment::Submission.name, through: :assessment
+  authorize_resource :submission, except: [:edit, :update]
+  before_action :authorize_submission!, only: [:edit, :update]
   before_action :load_or_create_answers, only: [:edit, :update]
+  before_action :add_assessment_breadcrumb
 
   def create
     fail IllegalStateError if @assessment.questions.empty?
@@ -26,7 +28,21 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
     end
   end
 
+  protected
+
+  def add_assessment_breadcrumb
+    add_breadcrumb(@assessment.title, course_assessment_path(current_course, @assessment));
+  end
+
   private
+
+  def authorize_submission!
+    if @submission.attempting?
+      authorize!(:update, @submission)
+    else
+      authorize!(:read, @submission)
+    end
+  end
 
   def create_params
     { course_user: current_course_user }
@@ -35,11 +51,35 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   def update_params
     @update_params ||= begin
       params.require(:submission).permit(
-        answers_attributes: [
-          :id,
-          actable_attributes: [:id, option_ids: []]
-        ]
+        *workflow_state_params,
+        answers_attributes: [:id, update_answers_params]
       )
+    end
+  end
+
+  # The permitted state changes that will be provided to the model.
+  def workflow_state_params
+    result = []
+    result << :finalise if can?(:update, @submission)
+    result.push(:publish, :unsubmit) if can?(:grade, @submission)
+    result
+  end
+
+  # The permitted parameters for answers and their specific answer types.
+  #
+  # This varies depending on the permissions of the user.
+  def update_answers_params
+    actable_attributes = [:id]
+    actable_attributes.push(update_answer_type_params) if can?(:update, @submission)
+    actable_attributes.push(:grade) if can?(:grade, @submission)
+
+    { actable_attributes: actable_attributes }
+  end
+
+  # The permitted parameters for each kind of answer.
+  def update_answer_type_params
+    {}.tap do |result|
+      result[:option_ids] = [] # MRQ answers
     end
   end
 
@@ -48,9 +88,12 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   end
 
   def load_or_create_answers
-    @answers = questions_to_attempt.attempt(@submission).tap do |answers|
-      answers.each { |answer| answer.save! if answer.new_record? }
-    end
+    return unless @submission.attempting?
+
+    new_answers = questions_to_attempt.attempt(@submission).
+                  map { |answer| answer.save! if answer.new_record? }.
+                  reduce(false) { |left, right| left || right }
+    @submission.answers.reload if new_answers && @submission.answers.loaded
   end
 
   def questions_to_attempt
