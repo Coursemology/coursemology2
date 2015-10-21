@@ -8,6 +8,13 @@ en:
           topics: 'Topics'
           posts: 'Posts'
           views: 'Views'
+        show:
+          topics: 'Topics'
+          votes: 'Votes'
+          posts: 'Posts'
+          views: 'Views'
+          latest_post: 'Latest Post'
+          no_topic: 'No Topic'
         new:
           header: 'New Forum'
         create:

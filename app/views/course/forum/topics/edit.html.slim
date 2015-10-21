@@ -1,12 +1,8 @@
-= simple_form_for @topic, url: url do |f|
+= page_header
+
+= simple_form_for @topic, url: course_forum_topic_path(current_course, @forum, @topic) do |f|
   = f.error_notification
-  = f.error :course_forum_topic
   = f.input :title
-
-  - if initial_post
-    = f.fields_for @post do |post|
-      = post.input :text, required: false
-
   = f.input :topic_type, as: :select, collection: Course::Forum::Topic.topic_types.keys,
             required: true
 
