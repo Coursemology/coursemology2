@@ -440,13 +440,14 @@ RSpec.describe Duplicator, type: :model do
 
         it 'is duplicated by default' do
           duplicator = Duplicator.new
-          duplicator.duplicate(@sar_1).save
 
-          all_records = SimpleActiveRecord.all
+          expect do
+            @dup_sar_1 = duplicator.duplicate(@sar_1)
+            @dup_sar_1.save
+          end.to change { SimpleActiveRecord.count }.by(1)
 
-          expect(SimpleActiveRecord.count).to eq(2)
-          expect(all_records[0].data).to eq(all_records[1].data)
-          expect(all_records[0].id).to_not eq(all_records[1].id)
+          expect(@sar_1.data).to eq(@dup_sar_1.data)
+          expect(@sar_1.id).to_not eq(@dup_sar_1.id)
         end
 
         it 'is not duplicated if excluded' do
@@ -612,14 +613,17 @@ RSpec.describe Duplicator, type: :model do
 
             it 'duplicates cyclic graph' do
               duplicator = Duplicator.new
-              dup_c1 = duplicator.duplicate(@car1)
-              dup_c1.save
 
-              dup_c3 = dup_c1.children[0].children[0]
+              # Check that number of objects increased
+              expect do
+                @dup_c1 = duplicator.duplicate(@car1)
+                @dup_c1.save
+              end.to change { ComplexActiveRecord.count }.by(6)
+
+              # init some variables for easier checking
+              dup_c3 = @dup_c1.children[0].children[0]
               dup_c5 = dup_c3.children[0]
-              dup_c4 = dup_c1.children[0].children[1]
-
-              expect(ComplexActiveRecord.count).to eq(12)
+              dup_c4 = @dup_c1.children[0].children[1]
 
               # check cycle data
               expect(dup_c3.data).to eq(13)
