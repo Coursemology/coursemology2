@@ -4,6 +4,8 @@
 class Course::Assessment < ActiveRecord::Base
   acts_as_lesson_plan_item
 
+  before_validation :propagate_course
+
   belongs_to :tab, inverse_of: :assessments
 
   has_many :questions, inverse_of: :assessment, dependent: :destroy do
@@ -43,5 +45,12 @@ class Course::Assessment < ActiveRecord::Base
 
   def to_partial_path
     'course/assessment/assessments/assessment'.freeze
+  end
+
+  private
+
+  # Sets the course of the lesson plan item to be the same as the one for the assessment.
+  def propagate_course
+    lesson_plan_item.course = tab.category.course
   end
 end

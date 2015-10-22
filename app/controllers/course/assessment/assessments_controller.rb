@@ -64,7 +64,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     when 'index'
       @assessments ||= tab.assessments
     when 'new', 'create'
-      @assessment ||= tab.assessments.build(course: current_course)
+      @assessment ||= tab.assessments.build
       @assessment.assign_attributes(assessment_params) if params[:assessment]
     end
   end
