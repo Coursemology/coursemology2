@@ -24,9 +24,8 @@ module ApplicationMultitenancyConcern
   # Deduces the current host. We strip any leading www from the host.
   # @return [String] The host, with www removed.
   def deduce_tenant_host
-    subdomain = request.subdomain
-    if subdomain == 'www'
-      request.domain
+    if request.host.downcase.start_with?('www.')
+      request.host[4..-1]
     else
       request.host
     end
