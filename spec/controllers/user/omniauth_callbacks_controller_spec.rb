@@ -9,11 +9,7 @@ RSpec.describe User::OmniauthCallbacksController, type: :controller do
 
     describe '#facebook' do
       let(:uid) { SecureRandom.random_number(2**48) }
-      let(:facebook_data) do
-        data = generate(:omniauth_facebook)
-        data.uid = uid
-        data
-      end
+      let(:facebook_data) { build(:omniauth_facebook, uid: uid) }
       before { controller.request.env['omniauth.auth'] = facebook_data }
       subject { get :facebook }
 
