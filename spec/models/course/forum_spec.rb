@@ -9,7 +9,7 @@ RSpec.describe Course::Forum, type: :model do
   with_tenant(:instance) do
     describe '#slug_candidates' do
       let(:course) { create(:course) }
-      let!(:first_forum) { create(:forum, name: 'slug') }
+      let!(:first_forum) { create(:forum, name: 'slug', course: course) }
       let!(:second_forum) { create(:forum, name: 'slug', course: course) }
 
       context 'when name is unique' do
