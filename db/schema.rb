@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151018122902) do
+ActiveRecord::Schema.define(version: 20151022105653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -274,13 +274,14 @@ ActiveRecord::Schema.define(version: 20151018122902) do
   create_table "course_forums", force: :cascade do |t|
     t.integer  "course_id",   null: false, index: {name: "fk__course_forums_course_id"}, foreign_key: {references: "courses", name: "fk_course_forums_course_id", on_update: :no_action, on_delete: :no_action}
     t.string   "name",        limit: 255, null: false
-    t.string   "slug",        limit: 255, index: {name: "index_course_forums_on_slug", unique: true}
+    t.string   "slug",        limit: 255
     t.text     "description"
     t.integer  "creator_id",  null: false, index: {name: "fk__course_forums_creator_id"}, foreign_key: {references: "users", name: "fk_course_forums_creator_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "updater_id",  null: false, index: {name: "fk__course_forums_updater_id"}, foreign_key: {references: "users", name: "fk_course_forums_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+  add_index "course_forums", ["course_id", "slug"], name: "index_course_forums_on_course_id_and_slug", unique: true
 
   create_table "course_forum_subscriptions", force: :cascade do |t|
     t.integer "forum_id", null: false, index: {name: "fk__course_forum_subscriptions_forum_id"}, foreign_key: {references: "course_forums", name: "fk_course_forum_subscriptions_forum_id", on_update: :no_action, on_delete: :no_action}
@@ -291,7 +292,7 @@ ActiveRecord::Schema.define(version: 20151018122902) do
   create_table "course_forum_topics", force: :cascade do |t|
     t.integer  "forum_id",   null: false, index: {name: "fk__course_forum_topics_forum_id"}, foreign_key: {references: "course_forums", name: "fk_course_forum_topics_forum_id", on_update: :no_action, on_delete: :no_action}
     t.string   "title",      limit: 255,                 null: false
-    t.string   "slug",       limit: 255, index: {name: "index_course_forum_topics_on_slug", unique: true}
+    t.string   "slug",       limit: 255
     t.boolean  "locked",     default: false
     t.boolean  "hidden",     default: false
     t.integer  "topic_type", default: 0
@@ -300,6 +301,7 @@ ActiveRecord::Schema.define(version: 20151018122902) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+  add_index "course_forum_topics", ["forum_id", "slug"], name: "index_course_forum_topics_on_forum_id_and_slug", unique: true
 
   create_table "course_forum_topic_views", force: :cascade do |t|
     t.integer  "topic_id",   null: false, index: {name: "fk__course_forum_topic_views_topic_id"}, foreign_key: {references: "course_forum_topics", name: "fk_course_forum_topic_views_topic_id", on_update: :no_action, on_delete: :no_action}
