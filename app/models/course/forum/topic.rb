@@ -1,6 +1,6 @@
 class Course::Forum::Topic < ActiveRecord::Base
   extend FriendlyId
-  friendly_id :slug_candidates, use: :slugged
+  friendly_id :slug_candidates, use: :scoped, scope: :forum
 
   acts_as :topic, class_name: Course::Discussion::Topic.name, inverse_of: :actable
 
