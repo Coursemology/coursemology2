@@ -5,16 +5,13 @@ RSpec.describe User::OmniauthCallbacksController, type: :controller do
 
   with_tenant(:instance) do
     before { controller.request.env['devise.mapping'] = Devise.mappings[:user] }
-    self::UID = SecureRandom.random_number(2**48)
 
     describe '#facebook' do
-      let(:uid) { SecureRandom.random_number(2**48) }
-      let(:facebook_data) { build(:omniauth_facebook, uid: uid) }
+      let(:facebook_data) { build(:omniauth_facebook) }
       before { controller.request.env['omniauth.auth'] = facebook_data }
       subject { get :facebook }
 
       context 'when required data is provided' do
-        let(:uid) { self.class::UID }
         it 'creates a user identity' do
           subject
           identity = User::Identity.find_by(provider: facebook_data.provider,
