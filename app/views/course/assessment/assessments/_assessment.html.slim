@@ -10,7 +10,7 @@
 
   td
   td = format_datetime(assessment.start_at)
-  td = format_datetime(assessment.end_at)
+  td = format_datetime(assessment.end_at) if assessment.end_at.present?
   td
     - attempting_submission = assessment.submissions.find(&:attempting?)
     - if attempting_submission
