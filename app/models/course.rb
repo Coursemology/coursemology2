@@ -41,6 +41,17 @@ class Course < ActiveRecord::Base
 
   scope :ordered_by_title, -> { order(:title) }
 
+  # @!method with_owners
+  #   Includes all course_users with the role of owner.
+  scope :with_owners, (lambda do
+    course_users = CourseUser.owner.where(course: pluck(:id))
+
+    all.tap do |result|
+      preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
+      preloader.preload(result, :course_users, course_users)
+    end
+  end)
+
   delegate :staff, to: :course_users
   delegate :instructors, to: :course_users
   delegate :has_user?, to: :course_users

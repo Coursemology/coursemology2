@@ -5,24 +5,30 @@ RSpec.describe User::OmniauthCallbacksController, type: :controller do
 
   with_tenant(:instance) do
     before { controller.request.env['devise.mapping'] = Devise.mappings[:user] }
+    self::UID = SecureRandom.random_number(2**48)
 
     describe '#facebook' do
-      let(:facebook_data) { OmniAuth.config.mock_auth[:facebook].dup }
+      let(:uid) { SecureRandom.random_number(2**48) }
+      let(:facebook_data) { build(:omniauth_facebook, uid: uid) }
       before { controller.request.env['omniauth.auth'] = facebook_data }
       subject { get :facebook }
 
-      it 'creates a user identity' do
-        subject
-        identity = User::Identity.find_by(provider: facebook_data.provider, uid: facebook_data.uid)
-        expect(identity).to be_present
-      end
+      context 'when required data is provided' do
+        let(:uid) { self.class::UID }
+        it 'creates a user identity' do
+          subject
+          identity = User::Identity.find_by(provider: facebook_data.provider,
+                                            uid: facebook_data.uid)
+          expect(identity).to be_present
+        end
 
-      it 'creates a user with the information from facebook' do
-        subject
-        user = controller.instance_variable_get(:@user)
-        expect(user.name).to eq(facebook_data.info.name)
-        expect(user.email).to eq(facebook_data.info.email)
-        expect(user).to be_persisted
+        it 'creates a user with the information from facebook' do
+          subject
+          user = controller.instance_variable_get(:@user)
+          expect(user.name).to eq(facebook_data.info.name)
+          expect(user.email).to eq(facebook_data.info.email)
+          expect(user).to be_persisted
+        end
       end
 
       context 'when the data provided is incomplete' do
