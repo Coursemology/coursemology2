@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151027050627) do
+ActiveRecord::Schema.define(version: 20151028151258) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -417,6 +417,7 @@ ActiveRecord::Schema.define(version: 20151027050627) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+  add_index "course_materials", ["folder_id", "name"], name: "index_course_materials_on_folder_id_and_name", unique: true, case_sensitive: false
 
   create_table "course_notifications", force: :cascade do |t|
     t.integer  "activity_id",       null: false, index: {name: "index_course_notifications_on_activity_id"}, foreign_key: {references: "activities", name: "fk_course_notifications_activity_id", on_update: :no_action, on_delete: :no_action}
