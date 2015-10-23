@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :omniauth_provider, class: OmniAuth::AuthHash.name do
     provider 'default'
-    uid SecureRandom.random_number(2**48)
+    sequence(:uid) { |n| SecureRandom.random_number(2**48) + n }
     info do
       {
         name: generate(:name),
