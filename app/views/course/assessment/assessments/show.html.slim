@@ -21,7 +21,7 @@
         td = format_datetime(@assessment.start_at)
       tr.end_at
         th = t('.end_at')
-        td = format_datetime(@assessment.end_at)
+        td = format_datetime(@assessment.end_at) if @assessment.end_at.present?
 
   h2 = t('.finish_to_unlock')
   / TODO: dependencies
