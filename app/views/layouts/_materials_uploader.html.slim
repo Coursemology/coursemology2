@@ -1,0 +1,8 @@
+- if f.object.materials.any?
+  div
+    strong = t('.uploaded_materials')
+  - f.object.materials.each do |material|
+    div = link_to material.name, '#'
+div
+  strong = t('.new_materials')
+  = f.file_field :files_attributes, multiple: true
