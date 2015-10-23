@@ -13,6 +13,11 @@ RSpec.describe Course::Assessment do
     let(:assessment) { create(:assessment, *assessment_traits, course: course) }
     let(:assessment_traits) { [] }
 
+    it 'sets the course of the lesson plan item' do
+      assessment = create(:assessment, course: course)
+      expect(assessment.course).to eq(assessment.tab.category.course)
+    end
+
     describe '.questions' do
       describe '#attempt' do
         let(:assessment) do
