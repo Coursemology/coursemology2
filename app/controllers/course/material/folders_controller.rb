@@ -1,7 +1,4 @@
-class Course::Material::FoldersController < Course::ComponentController
-  load_and_authorize_resource :folder, through: :course, through_association: :material_folders,
-                                       parent: false, class: Course::Material::Folder.name
-
+class Course::Material::FoldersController < Course::Material::Controller
   def show
   end
 
