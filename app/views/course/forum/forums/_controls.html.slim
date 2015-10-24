@@ -1,0 +1,14 @@
+span.btn-group
+  - if @forum.subscribed_by?(current_user)
+    = link_to unsubscribe_course_forum_path(current_course, @forum),
+              title: t('course.forum.forums.unsubscribe.tag'), class: ['btn', 'btn-danger'],
+              method: :delete do
+      = fa_icon 'eye-slash'.freeze
+  - else
+    = link_to subscribe_course_forum_path(current_course, @forum),
+              title: t('course.forum.forums.subscribe.tag'), class: ['btn', 'btn-success'], method: :post do
+      = fa_icon 'eye'.freeze
+
+span.pull-right.btn-group
+  = edit_button([current_course, @forum]) if can?(:edit, @forum)
+  = delete_button([current_course, @forum]) if can?(:delete, @forum)

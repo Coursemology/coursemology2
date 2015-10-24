@@ -1,0 +1,13 @@
+= page_header do
+  = new_button([current_course, :forum]) if can?(:create, Course::Forum)
+table.table.forum-list.table-hover
+  thead
+    tr
+      th
+      th = t('.forum')
+      th = t('.topics')
+      th = t('.posts')
+      th = t('.views')
+      th
+  tbody
+    = render @forums

@@ -1,0 +1,8 @@
+= simple_form_for [current_course, @forum] do |f|
+  = f.error_notification
+  = f.error :course_forum
+  = f.input :name
+
+  = f.input :description
+
+  = f.button :submit
