@@ -1,84 +1,58 @@
 require 'rails_helper'
 
-RSpec.describe 'System: Administration: Instances', type: :feature do
+RSpec.feature 'System: Administration: Instances' do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
-    let!(:user) { create(:administrator) }
-    before { login_as(user, scope: :user) }
+    context 'As a system administrator' do
+      let!(:user) { create(:administrator) }
+      before { login_as(user, scope: :user) }
 
-    describe 'new page' do
-      before { visit new_admin_instance_path }
-      subject { page }
+      scenario 'I can create new instances' do
+        visit new_admin_instance_path
 
-      it { is_expected.to have_field('instance_name') }
-      it { is_expected.to have_field('instance_host') }
-    end
+        expect(page).to have_field('instance_name')
+        expect(page).to have_field('instance_host')
 
-    describe 'instance creation' do
-      before { visit new_admin_instance_path }
-      subject { click_button I18n.t('helpers.submit.instance.create') }
+        expect do
+          click_button I18n.t('helpers.submit.instance.create')
+        end.not_to change { Instance.count }
 
-      context 'with invalid information' do
-        it 'does not create a instance' do
-          expect { subject }.not_to change(Instance, :count)
-        end
+        fill_in 'instance_name', with: 'Lorem ipsum'
+        fill_in 'instance_host', with: generate(:host)
+        expect do
+          click_button I18n.t('helpers.submit.instance.create')
+        end.to change { Instance.count }.by(1)
+
+        expect(current_path).to eq(admin_instances_path)
+        expect(page).to have_selector('div.alert.alert-success')
       end
 
-      context 'with valid information' do
-        before do
-          fill_in 'instance_name', with: 'Lorem ipsum'
-          fill_in 'instance_host', with: generate(:host)
-        end
+      scenario 'I can edit instances' do
+        visit edit_admin_instance_path(instance)
 
-        it 'creates a instance' do
-          expect { subject }.to change(Instance, :count).by(1)
-        end
-      end
-    end
+        fill_in 'instance_name', with: ''
+        click_button I18n.t('helpers.submit.instance.update')
+        expect(instance.reload.name).not_to eq('')
+        expect(page).to have_css('div.has-error')
 
-    describe 'instance editing' do
-      before { visit edit_admin_instance_path(instance) }
-      subject { click_button I18n.t('helpers.submit.instance.update') }
+        new_name = 'New Name'
+        new_host = generate(:host)
+        fill_in 'instance_name', with: new_name
+        fill_in 'instance_host',  with: new_host
+        click_button I18n.t('helpers.submit.instance.update')
 
-      context 'with valid information' do
-        let(:new_name) { 'New Name' }
-        let(:new_host) { generate(:host) }
-
-        before do
-          fill_in 'instance_name', with: new_name
-          fill_in 'instance_host',  with: new_host
-          subject
-        end
-
-        it 'changes the attributes' do
-          expect(instance.reload.name).to eq(new_name)
-          expect(instance.reload.host).to eq(new_host)
-        end
+        expect(instance.reload.name).to eq(new_name)
+        expect(instance.reload.host).to eq(new_host)
+        expect(current_path).to eq(admin_instances_path)
+        expect(page).to have_selector('div.alert.alert-success')
       end
 
-      context 'with empty name' do
-        before do
-          fill_in 'instance_name', with: ''
-          subject
-        end
+      scenario 'I can see all instances' do
+        instances = create_list(:instance, 2)
+        visit admin_instances_path(page: Instance.page.total_pages)
 
-        it 'does not change name' do
-          expect(instance.reload.name).not_to eq('')
-        end
-
-        it 'shows the error' do
-          expect(page).to have_css('div.has-error')
-        end
-      end
-    end
-
-    describe 'index page' do
-      let!(:instances) { create_list(:instance, 10) }
-      before { visit admin_instances_path }
-
-      it 'shows all instances' do
         instances.each do |instance|
-          expect(page).to have_selector('div', text: instance.name)
+          expect(page).to have_content_tag_for(instance)
         end
       end
     end
