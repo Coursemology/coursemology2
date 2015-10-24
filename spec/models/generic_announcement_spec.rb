@@ -21,14 +21,14 @@ RSpec.describe GenericAnnouncement, type: :model do
       end
 
       it 'shows currently active announcements' do
-        all = GenericAnnouncement.currently_active
-        expect(all).to include(*active_system_announcements)
-        expect(all).to include(*active_instance_announcements)
+        active_announcements = active_system_announcements + active_instance_announcements
+        all = GenericAnnouncement.currently_active.where(id: active_announcements.map(&:id))
+        expect(all).to contain_exactly(*active_announcements)
       end
 
       it 'does not show inactive announcements' do
-        all = GenericAnnouncement.currently_active
-        expect(all).to_not include(*inactive_announcements)
+        active = GenericAnnouncement.currently_active.where(id: inactive_announcements.map(&:id))
+        expect(active).to be_empty
       end
     end
 
