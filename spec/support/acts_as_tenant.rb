@@ -68,25 +68,23 @@ module ActsAsTenant::TestGroupHelpers
   end
 end
 
-module ActsAsTenant::TestExampleHelpers
-  module FeatureHelpers
-    [:visit, :click_button, :click_link].each do |method|
-      define_method(method) do |*args|
-        # Unset the active tenant, let the request flow through the Rack stack and allow our own
-        # code to deduce the tenant from the host name.
-        ActsAsTenant.with_tenant(nil) do
-          super(*args)
-        end
+module ActsAsTenant::CapybaraHelpers
+  module BrowserHelpers
+    # Unset the active tenant, let the request flow through the Rack stack and allow our own
+    # code to deduce the tenant from the host name.
+    def process(*)
+      ActsAsTenant.with_tenant(nil) do
+        super
       end
     end
   end
 end
+Capybara::RackTest::Browser.prepend(ActsAsTenant::CapybaraHelpers::BrowserHelpers)
 
 RSpec.configure do |config|
   config.extend ActsAsTenant::TestGroupHelpers::ModelHelpers
   config.extend ActsAsTenant::TestGroupHelpers::ControllerHelpers, type: :controller
   config.extend ActsAsTenant::TestGroupHelpers::FeatureHelpers, type: :feature
-  config.include ActsAsTenant::TestExampleHelpers::FeatureHelpers, type: :feature
 
   config.backtrace_exclusion_patterns << %r{/spec/support/acts_as_tenant\.rb}
 end
