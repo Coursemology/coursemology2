@@ -1,5 +1,14 @@
 # Test group helpers for setting the tenant for tests.
 module ActsAsTenant::TestGroupHelpers
+  def self.build_host(instance)
+    port = Capybara.current_session.try(:server).try(:port)
+    if port
+      "http://#{instance.host}:#{port}"
+    else
+      "http://#{instance.host}"
+    end
+  end
+
   module ModelHelpers
     # Sets the current tenant when running this group of tests.
     #
@@ -49,7 +58,7 @@ module ActsAsTenant::TestGroupHelpers
           @saved_host = Capybara.app_host
           # Capybara's app_host is for remote testing, it's not recommend to change it for
           # multiple times. However, currently we cannot find a better way to do this
-          Capybara.app_host = 'http://' + send(tenant).host
+          Capybara.app_host = ActsAsTenant::TestGroupHelpers.build_host(send(tenant))
         end
         after(:each) { Capybara.app_host = @saved_host }
 

@@ -27,7 +27,7 @@ RSpec.describe 'System: Administration: Instances', type: :feature do
       context 'with valid information' do
         before do
           fill_in 'instance_name', with: 'Lorem ipsum'
-          fill_in 'instance_host', with: 'example.org'
+          fill_in 'instance_host', with: generate(:host)
         end
 
         it 'creates a instance' do
@@ -37,14 +37,12 @@ RSpec.describe 'System: Administration: Instances', type: :feature do
     end
 
     describe 'instance editing' do
-      let(:instance) { create(:instance) }
-
       before { visit edit_admin_instance_path(instance) }
       subject { click_button I18n.t('helpers.submit.instance.update') }
 
       context 'with valid information' do
         let(:new_name) { 'New Name' }
-        let(:new_host) { 'coursemology.org' }
+        let(:new_host) { generate(:host) }
 
         before do
           fill_in 'instance_name', with: new_name

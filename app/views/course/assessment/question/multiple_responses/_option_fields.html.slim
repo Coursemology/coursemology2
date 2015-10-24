@@ -1,5 +1,6 @@
 = content_tag_for(:tr, f.object, class: 'nested-fields') do
   td = f.input :correct, label: false
-  td = f.input :option, label: false
-  td = f.input :explanation, label: false, placeholder: t('.explanation_hint')
+  td = f.input :option, label: false, input_html: { class: ['multiple-response-option'] }
+  td = f.input :explanation, label: false, placeholder: t('.explanation_hint'),
+    input_html: { class: ['multiple-response-explanation'] }
   td = link_to_remove_association t('.remove'), f

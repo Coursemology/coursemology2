@@ -16,35 +16,51 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   describe ApplicationMultitenancyConcern do
-    it 'checks the host for multitenancy' do
-      @request.headers['host'] = 'coursemology.org'
-      get :index
+    # These variables override the hostname in the selected tenant object before with_tenant gets
+    # to execute. This effectively changes the host requested in the mock request.
+    let(:instance_host) { instance.host }
+    prepend_before { instance.host = instance_host }
 
-      expect(ActsAsTenant.current_tenant).to eq(Instance.default)
-    end
+    with_tenant(:instance) do
+      context 'when a nonexistent instance is specified' do
+        let(:instance) { build_stubbed(:instance) }
+        it 'falls back to the default instance' do
+          get :index
 
-    let(:instance) { create(:instance) }
+          expect(ActsAsTenant.current_tenant).to eq(Instance.default)
+        end
+      end
 
-    it 'checks hosts in a case insensitive manner' do
-      @request.headers['host'] = instance.host.upcase
-      get :index
+      context 'when a host is specified' do
+        let(:instance) { create(:instance) }
+        context 'when the host is specified in the wrong case' do
+          let(:instance_host) { instance.host.upcase! }
+          it 'finds the host with case-insensitivity' do
+            get :index
 
-      expect(ActsAsTenant.current_tenant).to eq(instance)
-    end
+            expect(ActsAsTenant.current_tenant).to eq(instance)
+          end
+        end
 
-    it 'accepts www as a default subdomain' do
-      @request.headers['host'] = 'www.' + instance.host.capitalize
-      get :index
+        context 'when the host has a www subdomain' do
+          let(:instance_host) { 'www.' + instance.host.upcase }
+          it 'finds the host without the www subdomain' do
+            get :index
 
-      expect(ActsAsTenant.current_tenant).to eq(instance)
-    end
+            expect(ActsAsTenant.current_tenant).to eq(instance)
+          end
+        end
 
-    it 'does not recognise any subdomain other than www' do
-      @request.headers['host'] = 'random.' + instance.host.capitalize
-      get :index
+        context 'when the host has a subdomain other than www' do
+          let(:instance_host) { 'random.' + instance.host.upcase }
+          it 'finds the actual host' do
+            get :index
 
-      expect(ActsAsTenant.current_tenant).not_to eq(instance)
-      expect(ActsAsTenant.current_tenant).to eq(Instance.default)
+            expect(ActsAsTenant.current_tenant).not_to eq(instance)
+            expect(ActsAsTenant.current_tenant).to eq(Instance.default)
+          end
+        end
+      end
     end
   end
 

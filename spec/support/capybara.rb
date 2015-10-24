@@ -1,3 +1,5 @@
+require 'capybara/poltergeist'
+
 # Adds extra matchers for Capybara
 module Capybara::TestGroupHelpers
   module FeatureHelpers
@@ -24,3 +26,5 @@ RSpec.configure do |config|
     meta[:aggregate_failures] = true if !meta.key?(:aggregate_failures) && meta[:type] == :feature
   end
 end
+
+Capybara.javascript_driver = :poltergeist

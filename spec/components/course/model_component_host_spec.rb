@@ -8,13 +8,11 @@ RSpec.describe Course::ModelComponentHost do
     class self::DummyComponent
       include Course::ModelComponentHost::Component
 
-      class << self
-        attr_accessor :called
-        @called = false
-      end
+      class_attribute :called
+      self.called = 0
 
       def self.after_course_create(_)
-        @called = true
+        self.called += 1
       end
     end
 
@@ -22,7 +20,9 @@ RSpec.describe Course::ModelComponentHost do
       subject { course }
 
       it 'invokes ::after_course_create on child components' do
-        expect(self.class::DummyComponent.called).to be_truthy
+        expect do
+          course
+        end.to change { self.class::DummyComponent.called }.by(1)
       end
     end
   end

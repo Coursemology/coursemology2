@@ -12,7 +12,8 @@ parameter and return types when annotated using it.
 Run `yard stats --list-undoc` to find which methods need documenting.
 
 ## Tests
-Run tests using `rake spec`.
+Run tests using `rake spec`. You need [PhantomJS](http://phantomjs.org/) to run the tests. We use
+lvh.me to simulate tenants, thanks [levicook](http://github.com/levicook)!
 
 Try to group tests according to their purpose. Feature tests should be namespaced using colons
 for tidiness (e.g. `Courses: Users`)
@@ -22,7 +23,7 @@ are those that do not depend on any external state to run. This would allow test
 parallel.
 
 When defining constants, by default all constants would go to the global namespace and
-potentially cause your specs to intefere with each other. To overcome this,
+potentially cause your specs to interfere with each other. To overcome this,
 [prefix all constants with `self::`](http://stackoverflow.com/a/6025300).
 
 In Rails, controller specs will always execute the `rescue_from` handlers. In our specs, we
