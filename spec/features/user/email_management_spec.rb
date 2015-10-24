@@ -14,7 +14,6 @@ RSpec.feature 'User: Emails' do
     scenario 'I can view all my emails' do
       user.emails.each do |email|
         expect(page).to have_selector('tr td', text: email.email)
-        it { is_expected.to have_selector('tr td', text: email.email) }
       end
     end
 
@@ -23,11 +22,11 @@ RSpec.feature 'User: Emails' do
       valid_email = build(:user_email).email
       fill_in 'user_email_email', with: invalid_email
       click_button 'add'
-      it { is_expected.to have_selector('div.alert-danger') }
+      expect(page).to have_selector('div.alert-danger')
 
       fill_in 'user_email_email', with: valid_email
       click_button 'add'
-      it { is_expected.to have_selector('tr td', text: valid_email) }
+      expect(page).to have_selector('tr td', text: valid_email)
     end
 
     scenario 'I can delete a email' do
@@ -36,7 +35,7 @@ RSpec.feature 'User: Emails' do
         find_link(nil, href: user_email_path(email_to_delete)).click
       end.to change { user.emails.count }.by(-1)
 
-      it { is_expected.to have_selector('div.success') }
+      expect(page).to have_selector('div.alert.alert-success')
     end
 
     scenario 'I can set an email as primary' do

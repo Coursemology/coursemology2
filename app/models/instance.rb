@@ -52,6 +52,10 @@ class Instance < ActiveRecord::Base
   #   @note You are scoped by the current tenant, you might not see all.
   has_many :courses, dependent: :destroy
 
+  # @!method self.order_by_id(direction = :asc)
+  #   Orders the instances by ID.
+  scope :order_by_id, ->(direction = :asc) { order(id: direction) }
+
   # @!method self.with_course_count
   #   Augments all returned records with the number of courses in that instance.
   scope :with_course_count, (lambda do
