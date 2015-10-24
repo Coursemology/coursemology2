@@ -120,7 +120,7 @@ RSpec.describe User, type: :model do
     describe '.new_with_session' do
       context 'when facebook data is provided' do
         let(:params) { {} }
-        let(:facebook_data) { OmniAuth.config.mock_auth[:facebook] }
+        let(:facebook_data) { build(:omniauth_facebook) }
         let(:session) { { 'devise.facebook_data' => facebook_data } }
         subject { User.new_with_session(params, session) }
 
@@ -130,11 +130,7 @@ RSpec.describe User, type: :model do
         end
 
         context 'when the user did not authorize access to his email address' do
-          let(:facebook_data) do
-            OmniAuth.config.mock_auth[:facebook].tap do |facebook|
-              facebook[:info].except(:email)
-            end
-          end
+          let(:facebook_data) { build(:omniauth_facebook, :without_email) }
           let(:email) { generate(:email) }
           let(:params) { { email: email } }
 
