@@ -46,6 +46,10 @@ class Course::Forum < ActiveRecord::Base
       select('*')
   end)
 
+  def self.use_relative_model_naming?
+    true
+  end
+
   # Return if a user has subscribed to this forum
   #
   # @param [User] user The user to check
