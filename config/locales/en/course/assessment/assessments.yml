@@ -13,6 +13,7 @@ en:
           maximum_experience_points: 'Maximum Experience Points'
         assessment:
           attempt: 'Attempt'
+          view: 'View'
         show:
           description: 'Description'
           start_at: :'course.assessment.assessments.index.start_at'
