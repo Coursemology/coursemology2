@@ -52,7 +52,7 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
     @update_params ||= begin
       params.require(:submission).permit(
         *workflow_state_params,
-        answers_attributes: [:id, update_answers_params]
+        answers_attributes: [:id] + update_answers_params
       )
     end
   end
@@ -69,11 +69,13 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   #
   # This varies depending on the permissions of the user.
   def update_answers_params
-    actable_attributes = [:id]
-    actable_attributes.push(update_answer_type_params) if can?(:update, @submission)
-    actable_attributes.push(:grade) if can?(:grade, @submission)
+    [].tap do |result|
+      actable_attributes = [:id]
+      actable_attributes.push(update_answer_type_params) if can?(:update, @submission)
 
-    { actable_attributes: actable_attributes }
+      result.push(:grade) if can?(:grade, @submission)
+      result.push(actable_attributes: actable_attributes)
+    end
   end
 
   # The permitted parameters for each kind of answer.
