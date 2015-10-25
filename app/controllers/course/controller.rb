@@ -1,5 +1,6 @@
 class Course::Controller < ApplicationController
   load_and_authorize_resource :course
+  helper name
 
   before_action :add_course_breadcrumb
 
