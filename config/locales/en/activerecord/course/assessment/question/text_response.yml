@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/assessment/question/text_response:
+          attributes:
+            maximum_grade:
+              invalid_grade: 'must be no less than the grade of any solution'

@@ -25,5 +25,18 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
         expect(submission.text_response_answers).to include(answer.actable)
       end
     end
+
+    describe 'validations' do
+      subject { build_stubbed(:course_assessment_question_text_response, maximum_grade: 10) }
+
+      it 'validates that solution grade does not exceed maximum grade ' do
+        subject.solutions.first.grade = 20
+
+        expect(subject.valid?).to be(false)
+        expect(subject.errors[:maximum_grade]).to include(
+          I18n.t('activerecord.errors.models.course/assessment/question/text_response.attributes'\
+            '.maximum_grade.invalid_grade'))
+      end
+    end
   end
 end
