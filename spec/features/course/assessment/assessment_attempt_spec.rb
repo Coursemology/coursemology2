@@ -94,7 +94,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         submission_maximum_grade = 0
         submission.answers.each do |answer|
           within find(content_tag_selector(answer)) do
-            fill_in 'grade', with: answer.question.maximum_grade
+            fill_in find('input.form-control')[:name], with: answer.question.maximum_grade
             submission_maximum_grade += answer.question.maximum_grade
           end
         end

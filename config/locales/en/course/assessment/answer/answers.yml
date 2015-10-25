@@ -1,0 +1,8 @@
+en:
+  course:
+    assessment:
+      answer:
+        answer:
+          comments: 'Comments'
+          grading: 'Grading'
+          maximum_grade: '/ %{maximum_grade}'
