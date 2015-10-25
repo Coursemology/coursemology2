@@ -62,7 +62,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   def load_assessment
     case params[:action]
     when 'index'
-      @assessments ||= tab.assessments
+      @assessments ||= tab.assessments.accessible_by(current_ability)
     when 'new', 'create'
       @assessment ||= tab.assessments.build
       @assessment.assign_attributes(assessment_params) if params[:assessment]
