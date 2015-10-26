@@ -4,7 +4,6 @@ class Course::Forum < ActiveRecord::Base
 
   belongs_to :course, inverse_of: :forums
   has_many :topics, dependent: :destroy, inverse_of: :forum
-  has_many :posts, class_name: Course::Discussion::Post.name, through: :topics
   has_many :subscriptions, dependent: :destroy, inverse_of: :forum
 
   # @!method self.with_topic_count
@@ -19,9 +18,9 @@ class Course::Forum < ActiveRecord::Base
   # @!method self.with_topic_post_count
   #   Augments all returned records with the number of topic posts in that forum.
   scope :with_topic_post_count, (lambda do
-    joins { posts.outer }.
+    joins { topics.outer.topic.outer.posts.outer }.
       select { 'course_forums.*' }.
-      select { count(posts.id).as(topic_post_count) }.
+      select { count(topics.topic.posts.id).as(topic_post_count) }.
       group { course_forums.id }
   end)
 
