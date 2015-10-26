@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
-  get 'duplication/index'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -196,6 +195,7 @@ Rails.application.routes.draw do
         end
       end
       resources :levels, except: [:show, :edit, :update]
+      resource :duplication, except: [:index, :edit, :update, :destroy]
 
       namespace :lesson_plan do
         get '/' => 'items#index'
