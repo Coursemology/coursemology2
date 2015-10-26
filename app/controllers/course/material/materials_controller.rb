@@ -1,7 +1,4 @@
-class Course::Material::MaterialsController < Course::ComponentController
-  load_and_authorize_resource :folder, through: :course, id_param: :folder_id,
-                                       through_association: :material_folders,
-                                       class: Course::Material::Folder.name
+class Course::Material::MaterialsController < Course::Material::Controller
   load_and_authorize_resource :material, through: :folder, class: Course::Material.name
 
   def show

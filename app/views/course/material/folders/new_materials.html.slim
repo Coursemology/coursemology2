@@ -1,7 +1,8 @@
+- add_breadcrumb :new_materials
 = page_header
 
 = simple_form_for @folder, url: upload_materials_course_material_folder_path(current_course, @folder),
                            method: :put do |f|
   = f.file_field :files_attributes, multiple: true
 
-  = f.button :submit
+  = f.button :submit, t('.submit')

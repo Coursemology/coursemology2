@@ -21,6 +21,7 @@ en:
           upload: 'Upload'
         new_materials:
           header: 'Upload Files'
+          submit: 'Upload'
         upload_materials:
           success: 'Files were uploaded.'
           failure: 'Failed to upload files: %{error}'

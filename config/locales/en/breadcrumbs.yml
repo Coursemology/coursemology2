@@ -64,6 +64,10 @@ en:
         milestones: :'breadcrumbs.course.lesson_plan.items'
       events:
         index: :'breadcrumbs.course.lesson_plan_items'
+      material:
+        folders:
+          new_subfolder: :'course.material.folders.new_subfolder.header'
+          new_materials: :'course.material.folders.new_materials.header'
 
     system:
       admin:
