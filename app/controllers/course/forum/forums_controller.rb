@@ -68,7 +68,7 @@ class Course::Forum::ForumsController < Course::ComponentController
   private
 
   def load_forum
-    @forum ||= Course::Forum.friendly.find(params[:id] || params[:forum_id])
+    @forum ||= current_course.forums.friendly.find(params[:id] || params[:forum_id])
   end
 
   def forum_params
