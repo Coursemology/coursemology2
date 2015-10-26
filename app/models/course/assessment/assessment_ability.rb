@@ -36,6 +36,8 @@ module Course::Assessment::AssessmentAbility
     can :manage, Course::Assessment, assessment_course_staff_hash
     can :manage, Course::Assessment::Question::MultipleResponse,
         question: { assessment: assessment_course_staff_hash }
+    can :manage, Course::Assessment::Question::TextResponse,
+        question: { assessment: assessment_course_staff_hash }
   end
 
   def allow_staff_grade_submissions
