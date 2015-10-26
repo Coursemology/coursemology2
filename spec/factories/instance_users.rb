@@ -7,4 +7,8 @@ FactoryGirl.define do
       instance_user.user ||= build(:user, instance_users: [instance_user])
     end
   end
+
+  factory :instance_administrator, parent: :instance_user do
+    role :administrator
+  end
 end
