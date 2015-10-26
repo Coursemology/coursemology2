@@ -7,8 +7,9 @@ RSpec.describe Course::Forum, type: :model do
 
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
+    let(:course) { create(:course) }
+
     describe '#slug_candidates' do
-      let(:course) { create(:course) }
       let!(:first_forum) { create(:forum, name: 'slug', course: course) }
       let!(:second_forum) { create(:forum, name: 'slug', course: course) }
 
@@ -25,44 +26,43 @@ RSpec.describe Course::Forum, type: :model do
       end
     end
 
-    describe '.with_topic_count' do
-      let(:forum) { create(:forum) }
+    describe '.topic_count' do
+      let(:forum) { create(:forum, course: course) }
       let!(:forum_topics) { create_list(:forum_topic, 2, forum: forum) }
 
       it 'shows the correct count' do
-        expect(Course::Forum.with_topic_count.find(forum.id).topic_count).
-          to eq(forum_topics.size)
+        expect(course.forums.calculated(:topic_count).first.topic_count).to eq(forum_topics.size)
       end
     end
 
-    describe '.with_topic_post_count' do
-      let(:forum) { create(:forum) }
+    describe '.topic_post_count' do
+      let(:forum) { create(:forum, course: course) }
       let(:first_topic) { create(:forum_topic, forum: forum) }
       let(:second_topic) { create(:forum_topic, forum: forum) }
       let!(:first_topic_posts) { create_list(:post, 2, topic: first_topic.acting_as) }
       let!(:second_topic_posts) { create_list(:post, 1, topic: second_topic.acting_as) }
 
       it 'shows the correct count' do
-        expect(Course::Forum.with_topic_post_count.find(forum.id).topic_post_count).
-          to eq(first_topic_posts.size + second_topic_posts.size)
+        expect(course.forums.calculated(:topic_post_count).first.topic_post_count).
+          to eq(first_topic_posts.size + second_topic_posts.size + 2)
       end
     end
 
-    describe '.with_topic_view_count' do
-      let(:forum) { create(:forum) }
+    describe '.topic_view_count' do
+      let(:forum) { create(:forum, course: course) }
       let(:first_topic) { create(:forum_topic, forum: forum) }
       let(:second_topic) { create(:forum_topic, forum: forum) }
       let!(:first_topic_views) { create_list(:forum_topic_view, 2, topic: first_topic) }
       let!(:second_topic_views) { create_list(:forum_topic_view, 1, topic: second_topic) }
 
       it 'shows the correct count' do
-        expect(Course::Forum.with_topic_view_count.find(forum.id).topic_view_count).
+        expect(course.forums.calculated(:topic_view_count).first.topic_view_count).
           to eq(first_topic_views.size + second_topic_views.size)
       end
     end
 
     describe '.with_forum_statistics' do
-      let(:forum) { create(:forum) }
+      let(:forum) { create(:forum, course: course) }
       let(:first_topic) { create(:forum_topic, forum: forum) }
       let(:second_topic) { create(:forum_topic, forum: forum) }
       let!(:first_topic_posts) { create_list(:post, 1, topic: first_topic.acting_as) }
@@ -71,11 +71,10 @@ RSpec.describe Course::Forum, type: :model do
       let!(:second_topic_views) { create_list(:forum_topic_view, 1, topic: second_topic) }
 
       it 'shows the correct count' do
-        expect(Course::Forum.with_forum_statistics.find(forum.id).topic_count).
-          to eq(2)
-        expect(Course::Forum.with_forum_statistics.find(forum.id).topic_post_count).
-          to eq(first_topic_posts.size + second_topic_posts.size)
-        expect(Course::Forum.with_forum_statistics.find(forum.id).topic_view_count).
+        expect(course.forums.with_forum_statistics.first.topic_count).to eq(2)
+        expect(course.forums.with_forum_statistics.first.topic_post_count).
+          to eq(first_topic_posts.size + second_topic_posts.size + 2)
+        expect(course.forums.with_forum_statistics.first.topic_view_count).
           to eq(first_topic_views.size + second_topic_views.size)
       end
     end
