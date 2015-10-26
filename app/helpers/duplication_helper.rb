@@ -1,0 +1,2 @@
+module DuplicationHelper
+end
