@@ -90,6 +90,7 @@ Rails.application.routes.draw do
         get '/' => 'admin#index', as: :admin
         resources :announcements, except: [:show], concerns: :paginatable
         resources :users, only: [:index, :update, :destroy], concerns: :paginatable
+        resources :courses, only: [:index, :destroy], concerns: :paginatable
         get 'components' => 'components#edit'
         patch 'components' => 'components#update'
       end

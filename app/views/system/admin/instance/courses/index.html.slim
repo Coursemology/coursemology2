@@ -1,0 +1,13 @@
+= page_header
+
+table.table.table-middle-align.table-hover
+  thead
+    tr
+      th = t('.title')
+      th = t('.status')
+      th = t('.created_at')
+      th = t('.owners')
+      th
+  tbody
+    = render @courses
+= paginate @courses

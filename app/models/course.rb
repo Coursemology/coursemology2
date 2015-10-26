@@ -44,7 +44,7 @@ class Course < ActiveRecord::Base
   # @!method with_owners
   #   Includes all course_users with the role of owner.
   scope :with_owners, (lambda do
-    course_users = CourseUser.owner.where(course: pluck(:id))
+    course_users = CourseUser.owner.with_approved_state.where(course: pluck(:id)).includes(:user)
 
     all.tap do |result|
       preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new

@@ -88,6 +88,8 @@ en:
             index: :'system.admin.instance.admin.index.header'
           users:
             index: :'system.admin.instance.users.index.header'
+          courses:
+            index: :'system.admin.instance.courses.index.header'
           announcements:
             index: :'system.admin.instance.announcements.index.header'
             new: :'system.admin.instance.announcements.new.header'

@@ -4,5 +4,6 @@ en:
       instance:
         navbar:
           users: :'system.admin.instance.users.index.header'
+          courses: :'system.admin.instance.courses.index.header'
           announcements: :'system.admin.instance.announcements.index.header'
           components: :'system.admin.instance.components.edit.header'
