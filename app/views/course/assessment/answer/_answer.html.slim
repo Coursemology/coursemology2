@@ -13,3 +13,9 @@ div.comments
           = base_answer_form.input_field :grade, class: ['form-control']
         div.col-lg-3.col-md-6.col-sm-6.col-xs-6
           = t('.maximum_grade', maximum_grade: answer.question.maximum_grade)
+- elsif answer.graded?
+    div.panel.panel-default
+      div.panel-heading = t('.grading')
+      div.panel-body
+        div.form-group.submission_answers_grade
+          = t('.grade', grade: answer.grade, maximum_grade: answer.question.maximum_grade)
