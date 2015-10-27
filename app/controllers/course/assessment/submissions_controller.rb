@@ -17,6 +17,10 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   end
 
   def edit
+    return if @submission.attempting?
+
+    calculated_fields = [:submitted_at, :grade, :graded_at]
+    @submission = @submission.calculated(*calculated_fields)
   end
 
   def update
@@ -31,7 +35,7 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   protected
 
   def add_assessment_breadcrumb
-    add_breadcrumb(@assessment.title, course_assessment_path(current_course, @assessment));
+    add_breadcrumb(@assessment.title, course_assessment_path(current_course, @assessment))
   end
 
   private

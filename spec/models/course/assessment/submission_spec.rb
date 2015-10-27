@@ -48,6 +48,27 @@ RSpec.describe Course::Assessment::Submission do
       end
     end
 
+    describe '#grade' do
+      let(:assessment_traits) { [:with_all_question_types] }
+      let(:submission1_traits) { :submitted }
+      let(:submission) { submission1 }
+
+      it 'sums the grade of all answers' do
+        expect(submission.grade).to eq(submission.answers.map(&:grade).reduce(0, :+))
+      end
+    end
+
+    describe '#graded_at' do
+      let(:assessment_traits) { [:with_all_question_types] }
+      let(:submission1_traits) { :graded }
+      let(:submission) { submission1 }
+
+      it 'takes the maximum graded_at' do
+        expect(submission.graded_at).to be_within(0.1).
+          of(submission.answers.max_by(&:graded_at).graded_at)
+      end
+    end
+
     describe '#finalise!' do
       let(:assessment_traits) { [:with_all_question_types] }
       let(:submission) { submission1 }

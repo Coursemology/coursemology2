@@ -47,7 +47,8 @@ Declare model attributes in the following order:
     validation needs to be placed _after_ the association so that the validation is not
     overwritten by the association model's validations.
  6. associations
- 7. scopes
+ 7. calculated fields
+ 8. scopes
 
 This allows models to be inherited. See the section on _Inherited Callback Queues_ from
 [`ActiveRecord::Callbacks`](http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html#module-ActiveRecord::Callbacks-label-Inheritable+callback+queues).

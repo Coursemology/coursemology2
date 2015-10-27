@@ -103,8 +103,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         expect(current_path).to eq(\
           edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.graded?).to be(true)
-        expect(Course::Assessment::Submission.with_grade.find(submission.id).grade).to eq(\
-          submission_maximum_grade)
+        expect(submission.grade).to eq(submission_maximum_grade)
       end
     end
   end

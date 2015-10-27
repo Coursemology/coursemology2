@@ -30,15 +30,37 @@ class Course::Assessment::Submission < ActiveRecord::Base
            through: :answers, source: :actable,
            source_type: Course::Assessment::Answer::TextResponse.name
 
+  # @!attribute [r] graders
+  #   The graders associated with this submission.
+  has_many :graders, through: :answers, class_name: User.name
+
   accepts_nested_attributes_for :answers
 
-  # @!method self.with_grade
-  #   Includes the grade of the submission. This is the sum of the grades of all associated answers.
-  scope :with_grade, (lambda do
-    joins { answers.outer }.
-      select { 'course_assessment_submissions.*' }.
-      select { sum(answers.grade).as(grade) }.
-      group { course_assessment_submissions.id }
+  # @!attribute [r] submitted_at
+  #   Gets the time the submission was submitted.
+  #   @return [Time]
+  calculated :submitted_at, (lambda do
+    Course::Assessment::Answer.where do
+      course_assessment_answers.submission_id == course_assessment_submissions.id
+    end.select { max(course_assessment_answers.submitted_at) }.to_sql
+  end)
+
+  # @!attribute [r] grade
+  #   Gets the grade of the current submission.
+  #   @return [Fixnum]
+  calculated :grade, (lambda do
+    Course::Assessment::Answer.where do
+      course_assessment_answers.submission_id == course_assessment_submissions.id
+    end.select { sum(course_assessment_answers.grade) }.to_sql
+  end)
+
+  # @!attribute [r] graded_at
+  #   Gets the time the submission was graded.
+  #   @return [Time]
+  calculated :graded_at, (lambda do
+    Course::Assessment::Answer.where do
+      course_assessment_answers.submission_id == course_assessment_submissions.id
+    end.select { max(course_assessment_answers.graded_at) }.to_sql
   end)
 
   # @!method self.by_user(user)

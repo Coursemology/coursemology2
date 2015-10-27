@@ -6,6 +6,12 @@ en:
           failure: 'Could not create submission: %{error}'
         edit:
           attempt: :'course.assessment.assessments.assessment.attempt'
+          student: :'course.users.role.student'
+          status: 'Status'
+          due_at: 'Due At'
+          statistics: 'Statistics'
+          question: 'Question'
+          grade_summary: 'Grade Summary'
           finalise: 'Finalise Submission'
           publish: 'Publish Grade'
         update:
