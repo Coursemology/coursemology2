@@ -49,7 +49,11 @@ RSpec.feature 'System: Administration: Instances' do
 
       scenario 'I can see all instances' do
         instances = create_list(:instance, 2)
-        visit admin_instances_path(page: Instance.page.total_pages)
+        last_page = Instance.page.total_pages
+        instances &= Instance.order_by_id.page(last_page)
+        expect(instances).not_to be_empty
+
+        visit admin_instances_path(page: last_page)
 
         instances.each do |instance|
           expect(page).to have_content_tag_for(instance)
