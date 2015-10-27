@@ -15,11 +15,12 @@ class Course::Assessment::Answer < ActiveRecord::Base
 
   validate :validate_consistent_assessment
   validate :validate_assessment_state, if: :attempting?
-  validates :grade, presence: true, unless: :attempting?
-  validates :grade, absence: true, if: :attempting?
+  validates :submitted_at, :grade, :grader, :graded_at, presence: true, unless: :attempting?
+  validates :submitted_at, :grade, :grader, :graded_at, absence: true, if: :attempting?
 
   belongs_to :submission, inverse_of: :answers
   belongs_to :question, class_name: Course::Assessment::Question.name, inverse_of: nil
+  belongs_to :grader, class_name: User.name, inverse_of: nil
 
   accepts_nested_attributes_for :actable
 
@@ -27,6 +28,12 @@ class Course::Assessment::Answer < ActiveRecord::Base
 
   def finalise
     update_attribute(:grade, 0)
+    touch(:submitted_at)
+  end
+
+  def publish
+    update_attribute(:grader_id, User.stamper.id)
+    touch(:graded_at)
   end
 
   private

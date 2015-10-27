@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151022105653) do
+ActiveRecord::Schema.define(version: 20151027050627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -174,12 +174,15 @@ ActiveRecord::Schema.define(version: 20151022105653) do
   end
 
   create_table "course_assessment_answers", force: :cascade do |t|
-    t.integer "actable_id"
-    t.string  "actable_type",   limit: 255, index: {name: "index_course_assessment_answers_actable", with: ["actable_id"], unique: true}
-    t.integer "submission_id",  null: false, index: {name: "fk__course_assessment_answers_submission_id"}, foreign_key: {references: "course_assessment_submissions", name: "fk_course_assessment_answers_submission_id", on_update: :no_action, on_delete: :no_action}
-    t.integer "question_id",    null: false, index: {name: "fk__course_assessment_answers_question_id"}, foreign_key: {references: "course_assessment_questions", name: "fk_course_assessment_answers_question_id", on_update: :no_action, on_delete: :no_action}
-    t.string  "workflow_state", limit: 255, null: false
-    t.integer "grade"
+    t.integer  "actable_id"
+    t.string   "actable_type",   limit: 255, index: {name: "index_course_assessment_answers_actable", with: ["actable_id"], unique: true}
+    t.integer  "submission_id",  null: false, index: {name: "fk__course_assessment_answers_submission_id"}, foreign_key: {references: "course_assessment_submissions", name: "fk_course_assessment_answers_submission_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "question_id",    null: false, index: {name: "fk__course_assessment_answers_question_id"}, foreign_key: {references: "course_assessment_questions", name: "fk_course_assessment_answers_question_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "workflow_state", limit: 255, null: false
+    t.datetime "submitted_at"
+    t.integer  "grade"
+    t.integer  "grader_id",      index: {name: "fk__course_assessment_answers_grader_id"}, foreign_key: {references: "users", name: "fk_course_assessment_answers_grader_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "graded_at"
   end
 
   create_table "course_assessment_question_text_responses", force: :cascade do |t|

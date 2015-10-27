@@ -8,6 +8,8 @@ RSpec.describe Course::Assessment::Answer do
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
+    subject { create(:course_assessment_answer) }
+
     describe 'validations' do
       subject { build_stubbed(:course_assessment_answer, workflow_state: workflow_state) }
       let(:workflow_state) { 'attempting' }
@@ -34,21 +36,31 @@ RSpec.describe Course::Assessment::Answer do
         end
       end
 
+      describe '#submitted_at' do
+        context 'when the answer is being attempted' do
+          it 'is blank' do
+            expect(subject.submitted_at).to be_nil
+            subject.submitted_at = Time.zone.now
+            subject.valid?
+            expect(subject.errors[:submitted_at]).not_to be_empty
+          end
+        end
+
+        context 'when the answer has been submitted' do
+          let(:workflow_state) { 'submitted' }
+          it 'is not blank' do
+            subject.valid?
+            expect(subject.errors[:submitted_at]).not_to be_empty
+          end
+        end
+      end
+
       describe '#grade' do
         context 'when the answer is being attempted' do
           it 'cannot have a grade' do
             subject.grade = 0
             expect(subject).not_to be_valid
             expect(subject.errors[:grade]).not_to be_empty
-          end
-        end
-
-        context 'when the answer is finalised' do
-          subject { create(:course_assessment_answer) }
-          it 'has a grade of 0' do
-            subject.finalise!
-            expect(subject).to be_valid
-            expect(subject.grade).to eq(0)
           end
         end
 
@@ -69,6 +81,58 @@ RSpec.describe Course::Assessment::Answer do
             expect(subject.errors[:grade]).not_to be_empty
           end
         end
+      end
+
+      describe '#grader' do
+        context 'when the answer is being attempted' do
+          it 'cannot have a grade' do
+            subject.grader = build(:user)
+            expect(subject).not_to be_valid
+            expect(subject.errors[:grader]).not_to be_empty
+          end
+        end
+
+        context 'when the answer is submitted' do
+          let(:workflow_state) { 'submitted' }
+
+          it 'must have a grade' do
+            expect(subject).not_to be_valid
+            expect(subject.errors[:grader]).not_to be_empty
+          end
+        end
+
+        context 'when the answer is graded' do
+          let(:workflow_state) { 'graded' }
+
+          it 'must have a grade' do
+            expect(subject).not_to be_valid
+            expect(subject.errors[:grader]).not_to be_empty
+          end
+        end
+      end
+    end
+
+    describe '#finalise!' do
+      it 'sets the grade to 0' do
+        subject.finalise!
+        expect(subject.grade).to eq(0)
+      end
+
+      it 'sets submitted_at to the current time' do
+        time = Time.zone.now
+        subject.finalise!
+        expect(subject.submitted_at).to be >= time
+        expect(subject.submitted_at).to be <= Time.zone.now
+      end
+    end
+
+    describe '#publish!' do
+      before { subject.finalise! }
+      it 'sets graded_at to the current time' do
+        time = Time.zone.now
+        subject.publish!
+        expect(subject.graded_at).to be >= time
+        expect(subject.graded_at).to be <= Time.zone.now
       end
     end
   end

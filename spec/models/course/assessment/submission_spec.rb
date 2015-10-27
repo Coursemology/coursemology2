@@ -12,35 +12,15 @@ RSpec.describe Course::Assessment::Submission do
     let(:assessment_traits) { [] }
 
     let(:user1) { create(:user) }
-    let(:submission1) { create(:submission, assessment: assessment, user: user1) }
-    let(:user2) { create(:user) }
-    let(:submission2) { create(:submission, assessment: assessment, user: user2) }
-
-    describe '.with_grade' do
-      let(:assessment_traits) { [:with_all_question_types] }
-      let(:submission) { submission1 }
-
-      before do
-        submission.assessment.questions.attempt(submission).each(&:save!)
-        submission.reload
-      end
-
-      it 'includes the grade of the answers' do
-        grades = []
-        self.submission.answers.each do |answer|
-          answer.finalise!
-          grade = Random::DEFAULT.rand(answer.question.maximum_grade)
-          grades << grade
-          answer.grade = grade
-          answer.publish!
-          answer.save
-        end
-
-        submission_grade = grades.reduce(0, :+)
-        submission = Course::Assessment::Submission.with_grade.find(self.submission.id)
-        expect(submission.grade).to eq(submission_grade)
-      end
+    let(:submission1) do
+      create(:submission, *submission1_traits, assessment: assessment, user: user1)
     end
+    let(:submission1_traits) { [] }
+    let(:user2) { create(:user) }
+    let(:submission2) do
+      create(:submission, *submission2_traits, assessment: assessment, user: user2)
+    end
+    let(:submission2_traits) { [] }
 
     describe '.with_creator' do
       before do
@@ -86,16 +66,7 @@ RSpec.describe Course::Assessment::Submission do
     describe '#publish!' do
       let(:assessment_traits) { [:with_all_question_types] }
       let(:submission) { submission1 }
-
-      before do
-        submission.assessment.questions.attempt(submission).each do |answer|
-          answer.workflow_state = 'submitted'
-          answer.grade = 0
-          answer.save!
-        end
-        submission.workflow_state = 'submitted'
-        submission.save!
-      end
+      let(:submission1_traits) { :submitted }
 
       it 'propagates the graded state to its answers' do
         expect(submission.answers.all?(&:submitted?)).to be(true)
