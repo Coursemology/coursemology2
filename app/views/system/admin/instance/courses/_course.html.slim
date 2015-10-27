@@ -1,0 +1,10 @@
+= content_tag_for(:tr, course)
+  th
+    = link_to course.title, course_path(course)
+  td = course.status
+  td = format_datetime(course.created_at)
+  td
+    ul.list-unstyled
+      - course.course_users.each do |course_owner|
+        li = link_to_user(course_owner.user)
+  td = delete_button([:admin, :instance, course])
