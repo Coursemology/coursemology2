@@ -17,6 +17,19 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
 
     before { sign_in(user) }
 
+    describe '#show' do
+      let(:forum) { create(:forum, course: course) }
+      let!(:topic) { create(:forum_topic, forum: forum) }
+      let!(:first_topic_post) { create(:post, topic: topic.acting_as) }
+      let!(:second_topic_post) { create(:post, topic: topic.acting_as) }
+
+      it 'preloads the latest post for each topics of the forum' do
+        get :show, course_id: course, id: forum
+        expect(controller.instance_variable_get(:@topics).first.posts.first).
+          to eq(second_topic_post)
+      end
+    end
+
     describe '#create' do
       subject do
         post :create,
@@ -68,7 +81,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
     describe '#subscribe' do
       subject { post :subscribe, course_id: course, id: forum_stub }
 
-      context 'when destroy fails' do
+      context 'when subscribe fails' do
         before do
           controller.instance_variable_set(:@forum, forum_stub)
           subject
@@ -81,7 +94,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
     describe '#unsubscribe' do
       subject { delete :unsubscribe, course_id: course, id: forum_stub }
 
-      context 'when destroy fails' do
+      context 'when unsubscribe fails' do
         before do
           controller.instance_variable_set(:@forum, forum_stub)
           subject
