@@ -3,7 +3,10 @@
 # An assessment is a collection of questions that can be asked.
 class Course::Assessment < ActiveRecord::Base
   acts_as_lesson_plan_item
+  has_one_folder
 
+  after_initialize :build_initial_folder, if: :new_record?
+  before_validation :assign_folder_attributes
   before_validation :propagate_course
 
   belongs_to :tab, inverse_of: :assessments
@@ -56,5 +59,14 @@ class Course::Assessment < ActiveRecord::Base
   # Sets the course of the lesson plan item to be the same as the one for the assessment.
   def propagate_course
     lesson_plan_item.course = tab.category.course
+  end
+
+  def build_initial_folder
+    build_folder unless folder
+  end
+
+  def assign_folder_attributes
+    folder.assign_attributes(name: title, course: course, parent: tab.category.folder,
+                             start_at: start_at)
   end
 end
