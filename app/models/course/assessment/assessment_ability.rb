@@ -25,7 +25,11 @@ module Course::Assessment::AssessmentAbility
   end
 
   def allow_students_attempt_assessment
-    can :attempt, Course::Assessment, assessment_all_course_users_hash
+    valid_lesson_plan_items.each do |properties|
+      can :attempt, Course::Assessment, assessment_all_course_users_hash.reverse_merge(
+        lesson_plan_item: properties
+      )
+    end
     can :create, Course::Assessment::Submission, course_user: { user_id: user.id }
     can :update, Course::Assessment::Submission, course_user: { user_id: user.id },
                                                  workflow_state: 'attempting'
@@ -44,5 +48,18 @@ module Course::Assessment::AssessmentAbility
     can :read, Course::Assessment::Submission, assessment: assessment_course_staff_hash
     can :grade, Course::Assessment::Submission, assessment: assessment_course_staff_hash,
         workflow_state: ['submitted', 'graded']
+  end
+
+  def valid_lesson_plan_items
+    [
+      {
+        start_at: (Time.min..Time.zone.now),
+        end_at: nil
+      },
+      {
+        start_at: (Time.min..Time.zone.now),
+        end_at: (Time.zone.now..Time.max)
+      }
+    ]
   end
 end

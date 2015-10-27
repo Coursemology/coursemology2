@@ -9,6 +9,10 @@ FactoryGirl.define do
     title { generate(:course_assessment_assessment_name) }
     base_exp 1000
 
+    trait :unopened do
+      start_at { 1.day.from_now }
+    end
+
     trait :with_mcq_question do
       after(:build) do |assessment|
         assessment.questions += [

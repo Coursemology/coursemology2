@@ -6,6 +6,9 @@ RSpec.describe 'Course: Assessments: Attempt' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:empty_assessment) { create(:assessment, course: course) }
+    let(:unopened_assessment) do
+      create(:assessment, :with_all_question_types, :unopened, course: course)
+    end
     let(:assessment) { create(:assessment, :with_all_question_types, course: course) }
     before { login_as(user, scope: :user) }
 
@@ -21,9 +24,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         empty_assessment
         visit course_assessments_path(course)
 
-        link = find_link(empty_assessment.title,
-                         href: course_assessment_path(course, empty_assessment))
-        within link.find(:xpath, './../..') do
+        within find(content_tag_selector(empty_assessment)) do
           find_button(I18n.t('course.assessment.assessments.assessment.attempt')).click
         end
 
@@ -34,14 +35,23 @@ RSpec.describe 'Course: Assessments: Attempt' do
         assessment
         visit course_assessments_path(course)
 
-        link = find_link(assessment.title, href: course_assessment_path(course, assessment))
-        within link.find(:xpath, './../..') do
+        within find(content_tag_selector(assessment)) do
           find_button(I18n.t('course.assessment.assessments.assessment.attempt')).click
         end
 
         created_submission = assessment.submissions.last
         expect(current_path).to eq(edit_course_assessment_submission_path(
                                      course, assessment, created_submission))
+      end
+
+      scenario 'I cannot attempt unopened assessments' do
+        unopened_assessment
+        visit course_assessments_path(course)
+
+        within find(content_tag_selector(unopened_assessment)) do
+          expect(page).not_to have_button(
+            I18n.t('course.assessment.assessments.assessment.attempt'))
+        end
       end
 
       scenario 'I can save submissions' do
@@ -84,7 +94,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         submission_maximum_grade = 0
         submission.answers.each do |answer|
           within find(content_tag_selector(answer)) do
-            fill_in 'grade', with: answer.question.maximum_grade
+            fill_in find('input.form-control')[:name], with: answer.question.maximum_grade
             submission_maximum_grade += answer.question.maximum_grade
           end
         end
