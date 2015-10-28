@@ -19,6 +19,19 @@ RSpec.describe Course::Material::Folder, type: :model do
       end
     end
 
+    context 'when folder and material have the same name' do
+      let(:parent_folder) { create(:folder) }
+      let(:material) { create(:material, folder: parent_folder, name: 'Mixed Case') }
+      subject { build(:folder, parent: parent_folder, name: material.name) }
+
+      it 'is not valid' do
+        expect(subject).to be_invalid
+
+        subject.name.upcase!
+        expect(subject).to be_invalid
+      end
+    end
+
     context 'after course was created' do
       let(:course) { build(:course) }
 
