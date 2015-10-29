@@ -1,0 +1,6 @@
+- if folder.materials.any?
+  - folder.materials.includes(:attachments).each do |material|
+    div
+      = link_to material.attachment.file_upload.url do
+          => fa_icon 'file-o'.freeze
+          = material.name
