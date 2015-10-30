@@ -1,0 +1,8 @@
+en:
+  course:
+    admin:
+      forum_settings:
+        edit:
+          title_placeholder: 'Leave blank to use default title'
+        update:
+          success: 'Forums settings updated.'
