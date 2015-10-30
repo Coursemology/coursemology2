@@ -3,10 +3,6 @@ class Course::LessonPlan::Item < ActiveRecord::Base
 
   after_initialize :set_default_values, if: :new_record?
 
-  validates :base_exp, numericality: { only_integer: true }
-  validates :time_bonus_exp, numericality: { only_integer: true }
-  validates :extra_bonus_exp, numericality: { only_integer: true }
-
   belongs_to :course, inverse_of: :lesson_plan_items
 
   # Gives the maximum number of EXP Points that an EXP-awarding item
