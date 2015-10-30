@@ -40,7 +40,7 @@ gem 'active_record-acts_as', github: 'hzamani/active_record-acts_as'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Create pretty URLs and work with human-friendly strings
-gem 'friendly_id', '~> 5.0.0'
+gem 'friendly_id'
 
 # Use SCSS for stylesheets
 gem 'sass-rails'
@@ -98,7 +98,7 @@ group :development, :test do
   gem 'rspec-html-matchers'
   gem 'should_not'
   gem 'simplecov'
-  gem 'shoulda-matchers', '~> 2.0' # Wait for 3.0.1, see thoughtbot/shoulda-matchers#801
+  gem 'shoulda-matchers'
 
   # Capybara for feature testing
   gem 'capybara'
@@ -129,7 +129,7 @@ group :production do
 end
 
 # Multitenancy
-gem 'acts_as_tenant', github: 'lowjoel/acts_as_tenant', branch: 'allow-inverse-of'
+gem 'acts_as_tenant', github: 'ErwinM/acts_as_tenant'
 
 # Internationalization
 gem 'http_accept_language'
