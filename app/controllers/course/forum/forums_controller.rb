@@ -1,6 +1,7 @@
 class Course::Forum::ForumsController < Course::Forum::Controller
   before_action :load_forum, except: [:index, :new, :create]
   load_resource :forum, class: Course::Forum.name, through: :course, only: [:index, :new, :create]
+  before_action :add_forum_item_breadcrumb
 
   def index
     @forums = @forums.with_forum_statistics
@@ -71,5 +72,9 @@ class Course::Forum::ForumsController < Course::Forum::Controller
 
   def forum_params
     params.require(:forum).permit(:name, :description, :course_id)
+  end
+
+  def add_forum_item_breadcrumb
+    add_breadcrumb @forum.name, course_forum_path(current_course, @forum) if @forum.try(:persisted?)
   end
 end
