@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe Course::ExperiencePointsRecord do
   it { is_expected.to belong_to(:course_user).inverse_of(:experience_points_records) }
   it { is_expected.to validate_presence_of(:course_user) }
-  it { is_expected.to validate_numericality_of(:points_awarded).only_integer }
 
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do

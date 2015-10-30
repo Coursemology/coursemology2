@@ -3,4 +3,11 @@
 
 require File.expand_path('../config/application', __FILE__)
 
+# Development dependencies, may fail. See Gemfile.
+begin
+  require 'lol_dba'
+  require 'traceroute'
+rescue LoadError
+end
+
 Rails.application.load_tasks

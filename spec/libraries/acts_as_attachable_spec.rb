@@ -17,7 +17,7 @@ RSpec.describe 'Extension: Acts as Attachable' do
     has_one_attachment
   end
 
-  describe self::SampleModelMultiple do
+  describe self::SampleModelMultiple, type: :model do
     it { is_expected.to have_many(:attachments) }
 
     let(:files) { [File.open(File.join(Rails.root, '/spec/fixtures/files/text.txt'))] }

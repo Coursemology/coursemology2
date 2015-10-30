@@ -40,7 +40,7 @@ gem 'active_record-acts_as', github: 'hzamani/active_record-acts_as'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Create pretty URLs and work with human-friendly strings
-gem 'friendly_id', '~> 5.0.0'
+gem 'friendly_id'
 
 # Use SCSS for stylesheets
 gem 'sass-rails'
@@ -82,10 +82,10 @@ group :development do
   gem 'wdm', '>= 0.0.3', platforms: [:mswin, :mswin64]
 
   # Helps to prevent database slowdowns
-  gem 'lol_dba'
+  gem 'lol_dba', require: false
 
   # General cleanliness
-  gem 'traceroute'
+  gem 'traceroute', require: false
 end
 
 group :development, :test do
@@ -98,7 +98,7 @@ group :development, :test do
   gem 'rspec-html-matchers'
   gem 'should_not'
   gem 'simplecov'
-  gem 'shoulda-matchers', '~> 2.0' # Wait for 3.0.1, see thoughtbot/shoulda-matchers#801
+  gem 'shoulda-matchers'
 
   # Capybara for feature testing
   gem 'capybara'
@@ -108,10 +108,10 @@ group :development, :test do
   gem 'factory_girl_rails'
 
   # Checks that all translations are used and defined
-  gem 'i18n-tasks'
+  gem 'i18n-tasks', require: false
 
   # Helps to prevent database consistency mistakes
-  gem 'consistency_fail'
+  gem 'consistency_fail', require: false
 
   # Prevent N+1 queries.
   gem 'bullet', '>= 4.14.9'
@@ -129,7 +129,7 @@ group :production do
 end
 
 # Multitenancy
-gem 'acts_as_tenant', github: 'lowjoel/acts_as_tenant', branch: 'allow-inverse-of'
+gem 'acts_as_tenant', github: 'ErwinM/acts_as_tenant'
 
 # Internationalization
 gem 'http_accept_language'

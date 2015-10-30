@@ -81,7 +81,7 @@ search:
 
 ## Do not consider these keys missing:
 ignore_missing:
-  - 'application_helper.header'
+  - 'application_helper.page_header.header'
   - 'errors.messages.*'
   - 'activerecord.errors.messages.*'
 
