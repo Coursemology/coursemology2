@@ -82,10 +82,10 @@ group :development do
   gem 'wdm', '>= 0.0.3', platforms: [:mswin, :mswin64]
 
   # Helps to prevent database slowdowns
-  gem 'lol_dba'
+  gem 'lol_dba', require: false
 
   # General cleanliness
-  gem 'traceroute'
+  gem 'traceroute', require: false
 end
 
 group :development, :test do
@@ -108,10 +108,10 @@ group :development, :test do
   gem 'factory_girl_rails'
 
   # Checks that all translations are used and defined
-  gem 'i18n-tasks'
+  gem 'i18n-tasks', require: false
 
   # Helps to prevent database consistency mistakes
-  gem 'consistency_fail'
+  gem 'consistency_fail', require: false
 
   # Prevent N+1 queries.
   gem 'bullet', '>= 4.14.9'
