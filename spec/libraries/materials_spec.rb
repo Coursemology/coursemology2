@@ -9,7 +9,7 @@ RSpec.describe 'Extension: Materials' do
     has_one_folder
   end
 
-  describe self::Assessment do
+  describe self::Assessment, type: :model do
     it { is_expected.to have_one(:folder).autosave(true) }
     it { is_expected.to have_many(:materials) }
 
