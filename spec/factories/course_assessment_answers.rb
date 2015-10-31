@@ -5,7 +5,7 @@ FactoryGirl.define do
       assessment { build(:assessment, course: course) }
     end
 
-    submission { build(:course_assessment_submission, assessment: assessment) }
+    submission { build(:course_assessment_submission, assessment: question.assessment) }
     question { build(:course_assessment_question, assessment: assessment) }
   end
 end

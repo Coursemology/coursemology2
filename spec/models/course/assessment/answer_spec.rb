@@ -132,5 +132,19 @@ RSpec.describe Course::Assessment::Answer do
         expect(subject.graded_at).to be <= Time.zone.now
       end
     end
+
+    describe '#auto_grade!' do
+      let(:question) { build(:course_assessment_question_multiple_response) }
+      subject { build(:course_assessment_answer, question: question) }
+
+      it 'creates a new auto_grading' do
+        subject.auto_grade!
+        expect(subject.auto_grading).to be_persisted
+      end
+
+      it 'returns an ActiveJob' do
+        expect(subject.auto_grade!).to be_a(ActiveJob::Base)
+      end
+    end
   end
 end

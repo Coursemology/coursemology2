@@ -28,6 +28,18 @@ class Course::Assessment::Answer < ActiveRecord::Base
 
   accepts_nested_attributes_for :actable
 
+  # Creates an Auto Grading job for this answer. This saves the answer if there are pending changes.
+  #
+  # @return [Course::Assessment::Answer::AutoGradingJob] The job instance.
+  # @raise [ArgumentError] When the question cannot be auto graded.
+  def auto_grade!
+    fail ArgumentError unless question.auto_gradable?
+
+    save!
+    create_auto_grading!
+    Course::Assessment::Answer::AutoGradingJob.new(auto_grading)
+  end
+
   protected
 
   def finalise
