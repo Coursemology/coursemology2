@@ -32,6 +32,14 @@ GIT
       activesupport (~> 4)
 
 GIT
+  remote: git://github.com/lowjoel/calculated_attributes.git
+  revision: 9d0834095c599df4705f27ee9508d719ffdbbe5e
+  branch: issue-4
+  specs:
+    calculated_attributes (0.1.1)
+      activerecord (>= 3.2.20)
+
+GIT
   remote: git://github.com/lowjoel/themes_on_rails.git
   revision: 2c6446f8658b55dedc95afa9f66d16d1a68b9136
   specs:
@@ -483,6 +491,7 @@ DEPENDENCIES
   bootstrap3-datetimepicker-rails
   bullet (>= 4.14.9)
   bundler (>= 1.10.3)
+  calculated_attributes!
   cancancan
   capybara
   carrierwave!

@@ -81,6 +81,20 @@ RSpec.describe 'Course: Assessments: Attempt' do
           edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.submitted?).to be(true)
       end
+
+      scenario 'I can view my submission grade' do
+        submission.assessment.questions.attempt(submission).each(&:save!)
+        submission.finalise!
+        submission.publish!
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        submission.answers.each do |answer|
+          expect(page).to have_content_tag_for(answer)
+          within find(content_tag_selector(answer)) do
+            expect(page).to have_selector('.submission_answers_grade')
+          end
+        end
+      end
     end
 
     context 'As a Course Staff' do
@@ -103,8 +117,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         expect(current_path).to eq(\
           edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.graded?).to be(true)
-        expect(Course::Assessment::Submission.with_grade.find(submission.id).grade).to eq(\
-          submission_maximum_grade)
+        expect(submission.grade).to eq(submission_maximum_grade)
       end
     end
   end

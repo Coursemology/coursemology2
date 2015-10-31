@@ -1,0 +1,13 @@
+en:
+  activerecord:
+    attributes:
+      course/assessment/submission:
+        grade: 'Total Grade'
+        submitted_at: :'activerecord.attributes.course/assessment/answer/submitted_at'
+        grader: :'activerecord.attributes.course/assessment/answer/grader'
+        graded_at: :'activerecord.attributes.course/assessment/answer/graded_at'
+    errors:
+      models:
+        course/assessment/category:
+          deletion: 'the last category cannot be deleted'
+

@@ -1,5 +1,11 @@
 en:
   activerecord:
+    attributes:
+      course/assessment/answer:
+        submitted_at: 'Submitted At'
+        grade: 'Grade'
+        grader: 'Grader'
+        graded_at: 'Graded At'
     errors:
       models:
         course/assessment/answer:

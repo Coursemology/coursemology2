@@ -33,6 +33,8 @@ gem 'validates_hostname'
 gem 'workflow'
 # Add creator_id and updater_id attributes to models
 gem 'activerecord-userstamp', '>= 3.0.2'
+# Allow declaring the calculated attributes of a record
+gem 'calculated_attributes', github: 'lowjoel/calculated_attributes', branch: 'issue-4'
 # Squeel as an SQL-like DSL
 gem 'squeel'
 # For multiple table inheritance
