@@ -17,6 +17,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
   validate :validate_assessment_state, if: :attempting?
   validates :submitted_at, :grade, :grader, :graded_at, presence: true, unless: :attempting?
   validates :submitted_at, :grade, :grader, :graded_at, absence: true, if: :attempting?
+  validate :validate_consistent_grade, unless: :attempting?
 
   belongs_to :submission, inverse_of: :answers
   belongs_to :question, class_name: Course::Assessment::Question.name, inverse_of: nil
@@ -44,5 +45,9 @@ class Course::Assessment::Answer < ActiveRecord::Base
 
   def validate_assessment_state
     errors.add(:submission, :attemptable_state) unless submission.attempting?
+  end
+
+  def validate_consistent_grade
+    errors.add(:grade, :consistent_grade) if grade.present? && grade > question.maximum_grade
   end
 end
