@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151028151258) do
+ActiveRecord::Schema.define(version: 20151031044810) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,29 +100,6 @@ ActiveRecord::Schema.define(version: 20151028151258) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "course_assessment_answer_multiple_responses", force: :cascade do |t|
-  end
-
-  create_table "course_assessment_question_multiple_responses", force: :cascade do |t|
-    t.integer "question_type", default: 0, null: false
-  end
-
-  create_table "course_assessment_question_multiple_response_options", force: :cascade do |t|
-    t.integer "question_id", null: false, index: {name: "fk__course_assessment_multiple_response_option_question"}, foreign_key: {references: "course_assessment_question_multiple_responses", name: "fk_course_assessment_question_multiple_response_options_questio", on_update: :no_action, on_delete: :no_action}
-    t.boolean "correct",     null: false
-    t.text    "option",      null: false
-    t.text    "explanation"
-  end
-
-  create_table "course_assessment_answer_multiple_response_options", force: :cascade do |t|
-    t.integer "answer_id", null: false, index: {name: "fk__course_assessment_multiple_response_option_answer"}, foreign_key: {references: "course_assessment_answer_multiple_responses", name: "fk_course_assessment_answer_multiple_response_options_answer_id", on_update: :no_action, on_delete: :no_action}
-    t.integer "option_id", null: false, index: {name: "fk__course_assessment_multiple_response_option_question_option"}, foreign_key: {references: "course_assessment_question_multiple_response_options", name: "fk_course_assessment_answer_multiple_response_options_option_id", on_update: :no_action, on_delete: :no_action}
-  end
-
-  create_table "course_assessment_answer_text_responses", force: :cascade do |t|
-    t.text "answer_text"
-  end
-
   create_table "course_assessment_categories", force: :cascade do |t|
     t.integer  "course_id",  null: false, index: {name: "fk__course_assessment_categories_course_id"}, foreign_key: {references: "courses", name: "fk_course_assessment_categories_course_id", on_update: :no_action, on_delete: :no_action}
     t.string   "title",      limit: 255, null: false
@@ -183,6 +160,37 @@ ActiveRecord::Schema.define(version: 20151028151258) do
     t.integer  "grade"
     t.integer  "grader_id",      index: {name: "fk__course_assessment_answers_grader_id"}, foreign_key: {references: "users", name: "fk_course_assessment_answers_grader_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "graded_at"
+  end
+
+  create_table "course_assessment_answer_auto_gradings", force: :cascade do |t|
+    t.integer  "answer_id",  null: false, index: {name: "index_course_assessment_answer_auto_gradings_on_answer_id", unique: true}, foreign_key: {references: "course_assessment_answers", name: "fk_course_assessment_answer_auto_gradings_answer_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "status",     default: 0, null: false
+    t.json     "result"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "course_assessment_answer_multiple_responses", force: :cascade do |t|
+  end
+
+  create_table "course_assessment_question_multiple_responses", force: :cascade do |t|
+    t.integer "question_type", default: 0, null: false
+  end
+
+  create_table "course_assessment_question_multiple_response_options", force: :cascade do |t|
+    t.integer "question_id", null: false, index: {name: "fk__course_assessment_multiple_response_option_question"}, foreign_key: {references: "course_assessment_question_multiple_responses", name: "fk_course_assessment_question_multiple_response_options_questio", on_update: :no_action, on_delete: :no_action}
+    t.boolean "correct",     null: false
+    t.text    "option",      null: false
+    t.text    "explanation"
+  end
+
+  create_table "course_assessment_answer_multiple_response_options", force: :cascade do |t|
+    t.integer "answer_id", null: false, index: {name: "fk__course_assessment_multiple_response_option_answer"}, foreign_key: {references: "course_assessment_answer_multiple_responses", name: "fk_course_assessment_answer_multiple_response_options_answer_id", on_update: :no_action, on_delete: :no_action}
+    t.integer "option_id", null: false, index: {name: "fk__course_assessment_multiple_response_option_question_option"}, foreign_key: {references: "course_assessment_question_multiple_response_options", name: "fk_course_assessment_answer_multiple_response_options_option_id", on_update: :no_action, on_delete: :no_action}
+  end
+
+  create_table "course_assessment_answer_text_responses", force: :cascade do |t|
+    t.text "answer_text"
   end
 
   create_table "course_assessment_question_text_responses", force: :cascade do |t|
