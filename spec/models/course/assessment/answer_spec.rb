@@ -90,6 +90,12 @@ RSpec.describe Course::Assessment::Answer do
             expect(subject).not_to be_valid
             expect(subject.errors[:grader]).not_to be_empty
           end
+
+          it 'must be less than or equal to the question maximum grade' do
+            subject.grade = subject.question.maximum_grade + 1
+            expect(subject).not_to be_valid
+            expect(subject.errors[:grade]).not_to be_empty
+          end
         end
 
         context 'when the answer is submitted' do
