@@ -25,6 +25,7 @@ en:
           questions: 'Questions'
           new_question:
             multiple_response: 'Multiple Response'
+            text_response: 'Text Response'
         new:
           header: 'New Assessment'
         create:

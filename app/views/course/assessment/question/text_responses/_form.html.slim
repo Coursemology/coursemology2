@@ -1,0 +1,20 @@
+= simple_form_for [current_course, @assessment, @text_response_question] do |f|
+  = f.error_notification
+  = render partial: 'course/assessment/questions/form', locals: { f: f }
+
+  table.table.table-striped.table-hover
+    thead
+      tr
+        th = t('.solution_type')
+        th = t('.solution')
+        th = t('.grade')
+        th = t('.explanation')
+        th
+          div.pull-right
+            = link_to_add_association t('.add_solution'), f, :solutions,
+                                      find_selector: 'tbody', insert_using: 'append'
+    tbody
+      = f.simple_fields_for :solutions do |solutions_form|
+        = render 'solution_fields', f: solutions_form
+
+  = f.button :submit
