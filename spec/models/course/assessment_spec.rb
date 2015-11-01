@@ -24,6 +24,7 @@ RSpec.describe Course::Assessment do
         let(:assessment) do
           assessment = build(:assessment)
           create_list(:course_assessment_question_multiple_response, 3, assessment: assessment)
+          create_list(:course_assessment_question_text_response, 3, assessment: assessment)
           assessment
         end
         let(:submission) { create(:course_assessment_submission, assessment: assessment) }
