@@ -402,7 +402,7 @@ ActiveRecord::Schema.define(version: 20151031044810) do
   create_table "course_material_folders", force: :cascade do |t|
     t.integer  "parent_id",          index: {name: "fk__course_material_folders_parent_id"}, foreign_key: {references: "course_material_folders", name: "fk_course_material_folders_parent_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "course_id",          null: false, index: {name: "fk__course_material_folders_course_id"}, foreign_key: {references: "courses", name: "fk_course_material_folders_course_id", on_update: :no_action, on_delete: :no_action}
-    t.integer  "owner_id"
+    t.integer  "owner_id",           index: {name: "index_course_material_folders_on_owner_id_and_owner_type", with: ["owner_type"], unique: true}
     t.string   "owner_type",         limit: 255, index: {name: "fk__course_material_folders_owner_id", with: ["owner_id"]}
     t.string   "name",               limit: 255,                 null: false
     t.text     "description"

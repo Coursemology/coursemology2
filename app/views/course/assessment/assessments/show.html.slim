@@ -27,7 +27,7 @@
   / TODO: dependencies
 
   h2 = t('.files')
-  / TODO: files
+  = render partial: 'layouts/materials', locals: { folder: @assessment.folder }
 
   div.pull-right
     div.dropdown

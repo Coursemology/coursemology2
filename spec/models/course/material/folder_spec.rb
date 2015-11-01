@@ -36,8 +36,8 @@ RSpec.describe Course::Material::Folder, type: :model do
       let(:course) { build(:course) }
 
       it 'creates a root folder' do
-        expect { course.save }.to change(course.material_folders, :count).by(1)
-        expect(course.root_folder).to be_present
+        course.save
+        expect(course.root_folder).to be_persisted
       end
     end
   end

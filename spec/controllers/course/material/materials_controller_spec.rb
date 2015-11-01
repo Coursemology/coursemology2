@@ -15,6 +15,13 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
 
     before { sign_in(user) }
 
+    describe '#show' do
+      let(:material) { create(:material, folder: folder) }
+      subject { get :show, course_id: course, folder_id: folder, id: material }
+
+      it { is_expected.to redirect_to(material.attachment.file_upload.url) }
+    end
+
     describe '#update' do
       let(:file) { fixture_file_upload('files/picture.jpg', 'image/jpeg') }
       let(:attributes) { attributes_for(:material, file: file) }

@@ -112,5 +112,35 @@ RSpec.describe Course::Assessment do
         expect(submissions.each_cons(2).all? { |a, b| a.created_at >= b.created_at }).to be(true)
       end
     end
+
+    context 'after assessment was initialized' do
+      subject { build(:assessment) }
+
+      it 'builds a folder' do
+        expect(subject.folder).to be_present
+
+        expect(subject).to be_valid
+        expect(subject.folder.name).to eq(subject.title)
+        expect(subject.folder.parent).to eq(subject.tab.category.folder)
+        expect(subject.folder.course).to eq(subject.course)
+        expect(subject.folder.start_at).to eq(subject.start_at)
+      end
+    end
+
+    describe 'after assessment was changed' do
+      subject { create(:assessment) }
+
+      it 'updates the folder' do
+        new_title = 'Whole new assessment'
+        new_start_at = 1.day.ago
+
+        subject.title = new_title
+        subject.start_at = new_start_at
+        subject.save
+
+        expect(subject.folder.name).to eq(new_title)
+        expect(subject.folder.start_at).to eq(new_start_at)
+      end
+    end
   end
 end

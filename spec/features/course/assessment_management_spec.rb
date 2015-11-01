@@ -11,6 +11,7 @@ RSpec.feature 'Course: Assessments: Management' do
       let(:user) { course.creator }
       scenario 'I can create a new assessment' do
         assessment = build_stubbed(:assessment)
+        file = File.join(Rails.root, '/spec/fixtures/files/text.txt')
 
         visit course_assessments_path(course)
         find_link(nil, href: new_course_assessment_path(course)).click
@@ -33,9 +34,12 @@ RSpec.feature 'Course: Assessments: Management' do
         expect(page).to have_field('assessment_base_exp', with: assessment.base_exp)
 
         fill_in 'assessment_title', with: assessment.title
+        attach_file :assessment_files_attributes, file
         click_button 'submit'
 
-        expect(page).to have_content_tag_for(course.assessments.last)
+        assessment_created = course.assessments.last
+        expect(page).to have_content_tag_for(assessment_created)
+        expect(assessment_created.folder.materials).to be_present
       end
 
       scenario 'I can edit an assessment' do

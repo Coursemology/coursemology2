@@ -16,5 +16,32 @@ RSpec.describe Course::Assessment::Category do
         expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
       end
     end
+
+    context 'after category was created' do
+      subject { build(:course_assessment_category) }
+
+      it 'creates a folder' do
+        expect(subject.folder).to be_nil
+
+        subject.save
+        expect(subject.folder).to be_persisted
+        expect(subject.folder.name).to eq(subject.title)
+        expect(subject.folder.course).to eq(subject.course)
+        expect(subject.folder.parent).to eq(subject.course.root_folder)
+      end
+    end
+
+    describe 'after category title was changed' do
+      subject { create(:course_assessment_category) }
+
+      it 'updates the folder title' do
+        new_title = 'Mission'
+
+        subject.title = new_title
+        subject.save
+
+        expect(subject.folder.name).to eq(new_title)
+      end
+    end
   end
 end
