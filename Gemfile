@@ -161,6 +161,8 @@ gem 'bootstrap-select-rails'
 
 # Using CarrierWave for file uploads
 gem 'carrierwave', github: 'carrierwaveuploader/carrierwave'
+# Generate sequential filenames
+gem 'filename'
 # Required by CarrierWave, for image resizing
 gem 'mini_magick'
 
