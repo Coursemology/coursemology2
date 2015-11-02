@@ -143,5 +143,30 @@ RSpec.describe Course::Assessment do
         expect(subject.folder.start_at).to eq(new_start_at)
       end
     end
+
+    context 'when there is a name conflict with other assessment in the same category' do
+      let(:common_title) { 'Mission Impossible' }
+      let!(:tab) { create(:assessment, title: common_title).tab }
+
+      context 'after assessment was saved' do
+        subject { build(:assessment, title: common_title, tab: tab) }
+        it 'create a folder with proper name' do
+          subject.save
+
+          expect(subject.folder.name).to eq(common_title + ' (0)')
+        end
+      end
+
+      context 'after assessment was changed' do
+        subject { create(:assessment, title: common_title, tab: tab) }
+
+        it 'updates the folder with proper name' do
+          subject.title = common_title
+          subject.save
+
+          expect(subject.folder.name).to eq(common_title + ' (0)')
+        end
+      end
+    end
   end
 end
