@@ -1,0 +1,23 @@
+en:
+  course:
+    assessment:
+      question:
+        text_responses:
+          new:
+            header: 'New Text Response Question'
+          create:
+            success: 'The text response question was created.'
+          update:
+            success: 'The text response question was updated.'
+          destroy:
+            success: 'The text response question was deleted.'
+            failure: 'Could not delete text response question: %{error}'
+          form:
+            solution_type: 'Type'
+            solution: 'Solution'
+            grade: 'Grade'
+            explanation: 'Explanation'
+            add_solution: 'Add Solution'
+          solution_fields:
+            explanation_hint: 'The explanation to show after the student submits his answer.'
+            remove: 'Remove'

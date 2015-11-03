@@ -132,6 +132,7 @@ Rails.application.routes.draw do
         resources :assessments do
           namespace :question do
             resources :multiple_responses, only: [:new, :create, :edit, :update, :destroy]
+            resources :text_responses, only: [:new, :create, :edit, :update, :destroy]
           end
           resources :submissions, only: [:create, :edit, :update]
         end

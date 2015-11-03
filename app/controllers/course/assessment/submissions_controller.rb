@@ -84,9 +84,14 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
 
   # The permitted parameters for each kind of answer.
   def update_answer_type_params
-    {}.tap do |result|
-      result[:option_ids] = [] # MRQ answers
+    scalar_params = [].tap do |result|
+      result.push(:answer_text) # Text response answer
     end
+    # Parameters that must be an array of permitted values
+    array_params = {}.tap do |result|
+      result[:option_ids] = [] # MRQ answer
+    end
+    scalar_params.push(array_params)
   end
 
   def authorize_assessment
