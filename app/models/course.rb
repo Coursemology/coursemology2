@@ -1,6 +1,7 @@
 class Course < ActiveRecord::Base
   include Course::LevelsConcern
   include Course::LessonPlanConcern
+  include Course::SearchConcern
 
   acts_as_tenant :instance, inverse_of: :courses
   has_settings_on :settings
