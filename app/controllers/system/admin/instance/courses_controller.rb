@@ -4,7 +4,8 @@ class System::Admin::Instance::CoursesController < System::Admin::Instance::Cont
   add_breadcrumb :index, :admin_instance_courses_path
 
   def index
-    @courses = @instance.courses.ordered_by_title.page(params[:page]).with_owners
+    @courses = @instance.courses.ordered_by_title.page(params[:page]).
+               search(params[:search]).with_owners
   end
 
   def destroy

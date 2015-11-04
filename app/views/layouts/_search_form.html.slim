@@ -1,0 +1,6 @@
+= form_tag url, method: :get, class: ['form-horizontal'] do
+  div.form-group
+    div.col-lg-8.col-md-8.col-sm-8.col-xs-8
+      = text_field_tag :search, params[:search], placeholder: placeholder, class: ['form-control']
+    div.col-lg-1.col-md-1.col-sm-1.col-xs-1
+      = submit_tag t('.search_button'), name: nil, class: ['btn', 'btn-primary']
