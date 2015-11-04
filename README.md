@@ -15,6 +15,8 @@ educators to increase student engagement and make learning fun.
 1. Ruby (>= 2.1.0)
 2. Ruby on Rails
 3. PostgreSQL
+4. ImageMagick or GraphicsMagick (For [MiniMagick](https://github.com/minimagick/minimagick))
+work)
 
 Coursemology uses [Ruby on Rails](http://rubyonrails.org/). This
 [guide](https://gorails.com/setup/) written by the awesome people at
