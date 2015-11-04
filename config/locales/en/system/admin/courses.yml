@@ -9,6 +9,7 @@ en:
           created_at: 'Created At'
           instance: 'Instance'
           owners: 'Owners'
+          search_placeholder: 'Search course title, description or related users'
         destroy:
           success: '%{course} was destroyed'
           failure: 'Failed to delete course: %{error}'
