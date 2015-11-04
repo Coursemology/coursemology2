@@ -42,7 +42,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
   calculated :submitted_at, (lambda do
     Course::Assessment::Answer.where do
       course_assessment_answers.submission_id == course_assessment_submissions.id
-    end.select { max(course_assessment_answers.submitted_at) }.to_sql
+    end.select { max(course_assessment_answers.submitted_at) }
   end)
 
   # @!attribute [r] grade
@@ -51,7 +51,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
   calculated :grade, (lambda do
     Course::Assessment::Answer.where do
       course_assessment_answers.submission_id == course_assessment_submissions.id
-    end.select { sum(course_assessment_answers.grade) }.to_sql
+    end.select { sum(course_assessment_answers.grade) }
   end)
 
   # @!attribute [r] graded_at
@@ -60,7 +60,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
   calculated :graded_at, (lambda do
     Course::Assessment::Answer.where do
       course_assessment_answers.submission_id == course_assessment_submissions.id
-    end.select { max(course_assessment_answers.graded_at) }.to_sql
+    end.select { max(course_assessment_answers.graded_at) }
   end)
 
   # @!method self.by_user(user)
