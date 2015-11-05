@@ -69,7 +69,11 @@ class Course < ActiveRecord::Base
   # Returns the root folder of the course.
   # @return [Course::Material::Folder] The root folder.
   def root_folder
-    material_folders.find_by!(parent: nil)
+    if new_record?
+      material_folders.find(&:root?) || (fail ActiveRecord::RecordNotFound)
+    else
+      material_folders.find_by!(parent: nil)
+    end
   end
 
   private
