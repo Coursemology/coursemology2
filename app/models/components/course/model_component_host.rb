@@ -1,9 +1,20 @@
 class Course::ModelComponentHost
   include Componentize
 
+  Course.after_initialize do
+    Course::ModelComponentHost.send(:after_course_initialize, self)
+  end
+
   Course.after_create do
     Course::ModelComponentHost.send(:after_course_create, self)
   end
+
+  def self.after_course_initialize(course)
+    components.each do |component|
+      component.after_course_initialize(course)
+    end
+  end
+  private_class_method :after_course_initialize
 
   def self.after_course_create(course)
     components.each do |component|
@@ -12,12 +23,18 @@ class Course::ModelComponentHost
   end
   private_class_method :after_course_create
 
-  # Provides ::after_course_create to course components
+  # Hook AR callbacks into course components
 
   module CourseComponentMethods
     extend ActiveSupport::Concern
 
     module ClassMethods
+      # @!method after_course_initialize(course)
+      #   A class method that course components may implement to hook into course initialisation.
+      #   @param [Course] course The course under which the initialisation occurs.
+      def after_course_initialize(_course)
+      end
+
       # @!method after_course_create(course)
       #   A class method that course components may implement to hook into course initialisation.
       #   @param [Course] course The course under which the initialisation occurs.
