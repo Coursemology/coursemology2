@@ -15,8 +15,9 @@ class Course::Assessment::Answer < ActiveRecord::Base
 
   validate :validate_consistent_assessment
   validate :validate_assessment_state, if: :attempting?
-  validates :submitted_at, :grade, :grader, :graded_at, presence: true, unless: :attempting?
+  validates :submitted_at, :grade, presence: true, unless: :attempting?
   validates :submitted_at, :grade, :grader, :graded_at, absence: true, if: :attempting?
+  validates :grader, :graded_at, presence: true, if: :graded?
   validate :validate_consistent_grade, unless: :attempting?
 
   belongs_to :submission, inverse_of: :answers

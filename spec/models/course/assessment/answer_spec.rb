@@ -80,16 +80,6 @@ RSpec.describe Course::Assessment::Answer do
             expect(subject).not_to be_valid
             expect(subject.errors[:grade]).not_to be_empty
           end
-        end
-      end
-
-      describe '#grader' do
-        context 'when the answer is being attempted' do
-          it 'cannot have a grade' do
-            subject.grader = build(:user)
-            expect(subject).not_to be_valid
-            expect(subject.errors[:grader]).not_to be_empty
-          end
 
           it 'must be less than or equal to the question maximum grade' do
             subject.grade = subject.question.maximum_grade + 1
@@ -97,11 +87,12 @@ RSpec.describe Course::Assessment::Answer do
             expect(subject.errors[:grade]).not_to be_empty
           end
         end
+      end
 
-        context 'when the answer is submitted' do
-          let(:workflow_state) { 'submitted' }
-
-          it 'must have a grade' do
+      describe '#grader' do
+        context 'when the answer is being attempted' do
+          it 'cannot have a grader' do
+            subject.grader = build(:user)
             expect(subject).not_to be_valid
             expect(subject.errors[:grader]).not_to be_empty
           end
@@ -110,7 +101,7 @@ RSpec.describe Course::Assessment::Answer do
         context 'when the answer is graded' do
           let(:workflow_state) { 'graded' }
 
-          it 'must have a grade' do
+          it 'must have a grader' do
             expect(subject).not_to be_valid
             expect(subject.errors[:grader]).not_to be_empty
           end
