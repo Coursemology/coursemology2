@@ -5,7 +5,7 @@ RSpec.feature 'Course: Material: Folders: Management' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:parent_folder) { create(:folder, course: course) }
+    let(:parent_folder) { create(:folder, course: course, parent: course.root_folder) }
     let!(:subfolders) { create_list(:folder, 2, parent: parent_folder, course: course) }
 
     before { login_as(user, scope: :user) }
@@ -39,7 +39,7 @@ RSpec.feature 'Course: Material: Folders: Management' do
         fill_in 'material_folder_name', with: new_folder.name
         click_button 'submit'
 
-        expect(page).to have_content_tag_for(course.material_folders.last)
+        expect(page).to have_content_tag_for(parent_folder.children.last)
       end
 
       scenario 'I can edit a subfolder' do

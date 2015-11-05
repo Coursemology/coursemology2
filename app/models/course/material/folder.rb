@@ -17,8 +17,10 @@ class Course::Material::Folder < ActiveRecord::Base
     end
   end
 
-  def self.after_course_create(course)
-    course.material_folders.create(name: 'Root')
+  def self.after_course_initialize(course)
+    return if course.persisted?
+
+    course.material_folders.build(name: 'Root')
   end
 
   private
