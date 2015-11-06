@@ -145,14 +145,20 @@ RSpec.describe CourseUser, type: :model do
     end
 
     describe '#experience_points' do
-      let!(:exp_record_1) { create(:course_experience_points_record) }
-      let!(:exp_record_2) do
-        create(:course_experience_points_record, course_user: exp_record_1.course_user)
+      context 'when course user does not have any experience points record' do
+        subject { student.experience_points }
+        it { is_expected.to eq(0) }
       end
-      subject { exp_record_1.course_user }
-      it 'sums all associated experience points records' do
-        points_awarded = exp_record_1.points_awarded + exp_record_2.points_awarded
-        expect(subject.experience_points).to eq(points_awarded)
+
+      context 'when course user has experience points records' do
+        let!(:exp_record_1) { create(:course_experience_points_record, course_user: student) }
+        let!(:exp_record_2) { create(:course_experience_points_record, course_user: student) }
+        subject { student.experience_points }
+
+        it 'sums all associated experience points records' do
+          points_awarded = exp_record_1.points_awarded + exp_record_2.points_awarded
+          expect(subject).to eq(points_awarded)
+        end
       end
     end
 
@@ -164,6 +170,21 @@ RSpec.describe CourseUser, type: :model do
       it 'fails' do
         expect { subject }.to change(CourseUser, :count).by(0).
           and raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    describe '#achievement_count' do
+      context 'with no achievements' do
+        it 'returns the accurate count' do
+          expect(student.achievement_count).to eq(0)
+        end
+      end
+
+      context 'with 1 achievement' do
+        before { create(:course_user_achievement, course_user: student) }
+        it 'returns the accurate count' do
+          expect(student.achievement_count).to eq(1)
+        end
       end
     end
   end
