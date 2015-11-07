@@ -5,7 +5,7 @@ RSpec.describe Course::Assessment::Answer::AutoGradingJob do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     subject { Course::Assessment::Answer::AutoGradingJob }
-    let(:answer) { create(:course_assessment_answer_multiple_response).answer }
+    let(:answer) { create(:course_assessment_answer_multiple_response, :submitted).answer }
     let(:auto_grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
 
     it 'grades answers' do
