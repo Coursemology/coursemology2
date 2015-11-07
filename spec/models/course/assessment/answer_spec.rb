@@ -134,7 +134,7 @@ RSpec.describe Course::Assessment::Answer do
     end
 
     describe '#auto_grade!' do
-      let(:question) { build(:course_assessment_question_multiple_response) }
+      let(:question) { build(:course_assessment_question_multiple_response).question }
       subject { build(:course_assessment_answer, question: question) }
 
       it 'creates a new auto_grading' do
