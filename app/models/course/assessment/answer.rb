@@ -31,13 +31,13 @@ class Course::Assessment::Answer < ActiveRecord::Base
   protected
 
   def finalise
-    update_attribute(:grade, 0)
-    touch(:submitted_at)
+    self.grade = 0
+    self.submitted_at = Time.zone.now
   end
 
   def publish
-    update_attribute(:grader_id, User.stamper.id)
-    touch(:graded_at)
+    self.grader = User.stamper
+    self.graded_at = Time.zone.now
   end
 
   private

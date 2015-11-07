@@ -53,6 +53,9 @@ Declare model attributes in the following order:
 This allows models to be inherited. See the section on _Inherited Callback Queues_ from
 [`ActiveRecord::Callbacks`](http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html#module-ActiveRecord::Callbacks-label-Inheritable+callback+queues).
 
+Take note that workflows do *not* persist their state, `save` needs to be called on the record.
+See `lib/extensions/deferred_workflow_state_persistence`.
+
 ## Views
 The same code style for Ruby code applies to all views (e.g. single quotes unless interpolations
 are used.) There is no linting for views at this point, but that might change in future.

@@ -83,7 +83,9 @@ RSpec.describe CourseUser, type: :model do
     describe '.approved' do
       before do
         student.approve!
+        student.save!
         teaching_assistant.approve!
+        teaching_assistant.save!
       end
 
       it 'returns all approved course users' do
@@ -110,7 +112,7 @@ RSpec.describe CourseUser, type: :model do
     end
 
     describe '#approve!' do
-      subject { student.tap(&:approve!) }
+      subject { student.tap(&:approve!).tap(&:save!) }
       it 'increases approved course users\' count' do
         expect { subject }.to change(CourseUser.with_approved_state, :count).by(1)
       end

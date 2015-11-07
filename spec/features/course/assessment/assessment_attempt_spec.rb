@@ -86,6 +86,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         submission.assessment.questions.attempt(submission).each(&:save!)
         submission.finalise!
         submission.publish!
+        submission.save!
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         submission.answers.each do |answer|
@@ -103,6 +104,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
       scenario "I can grade the student's work" do
         assessment.questions.attempt(submission).each(&:save!)
         submission.finalise!
+        submission.save!
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
         submission_maximum_grade = 0
