@@ -32,6 +32,7 @@ class Course::Assessment::Answer::AutoGradingService
   # @return [Boolean] True if the grading could be saved.
   def grade(auto_grading)
     auto_grading.status = :graded if auto_grading.submitted?
+    auto_grading.answer.publish!
     auto_grading.save
   end
 end
