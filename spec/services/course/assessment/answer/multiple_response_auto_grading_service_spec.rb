@@ -44,11 +44,23 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
 
       context 'when a question is requires any correct option' do
         context 'when the correct answer is given' do
-          it 'marks the answer correct'
+          let(:answer_traits) { :correct }
+
+          it 'marks the answer correct' do
+            subject.grade(grading)
+            expect(answer.grade).to eq(question.maximum_grade)
+            expect(grading.result).to eq('messages' => question.options.correct.first.explanation)
+          end
         end
 
         context 'when the wrong answer is given' do
-          it 'marks the answer wrong'
+          let(:answer_traits) { :wrong }
+
+          it 'marks the answer wrong' do
+            subject.grade(grading)
+            expect(answer.grade).to eq(0)
+            expect(grading.result).to eq('messages' => question.options.correct.first.explanation)
+          end
         end
       end
     end

@@ -14,21 +14,34 @@ class Course::Assessment::Answer::MultipleResponseAutoGradingService < \
   #   student.
   # @return [Array<(Fixnum, Object)>] The grade and the messages to be assigned to the grading.
   def grade_answer(answer)
-    if answer.question.actable.any_correct?
-      grade_any_correct(answer)
+    question = answer.question.actable
+
+    if question.any_correct?
+      grade_any_correct(question, answer)
     else
-      grade_all_correct(answer)
+      grade_all_correct(question, answer)
     end
   end
 
-  def grade_any_correct(answer)
-    fail NotImplementedError
+  # Grades an any_correct question.
+  #
+  # @param [Course::Assessment::Question::MultipleResponse] question The question being attempted.
+  # @param [Course::Assessment::Answer::MultipleResponse] answer The answer from the user.
+  def grade_any_correct(question, answer)
+    correct_selection = question.options.correct & answer.options
+    correct = correct_selection.length > 0
+
+    grade_for(question, correct)
   end
 
-  def grade_all_correct(answer)
-    question = answer.question.actable
-    correct_options = question.options.correct
-    correct = (correct_options & answer.options).length == correct_options.length
+  # Grades an all_correct question.
+  #
+  # @param [Course::Assessment::Question::MultipleResponse] question The question being attempted.
+  # @param [Course::Assessment::Answer::MultipleResponse] answer The answer from the user.
+  def grade_all_correct(question, answer)
+    correct_answers = question.options.correct
+    correct_selection = correct_answers & answer.options
+    correct = correct_selection.length == correct_answers.length
 
     grade_for(question, correct)
   end

@@ -15,6 +15,7 @@ FactoryGirl.define do
     trait :correct do
       after(:build) do |answer|
         answer.options = answer.question.options.correct
+        answer.options = answer.options.sample(1) if answer.question.actable.any_correct?
       end
     end
   end
