@@ -5,5 +5,17 @@ FactoryGirl.define do
     question do
       build(:course_assessment_question_multiple_response, assessment: assessment).question
     end
+
+    trait :wrong do
+      after(:build) do |answer|
+        answer.options = answer.question.options - answer.question.options.correct
+      end
+    end
+
+    trait :correct do
+      after(:build) do |answer|
+        answer.options = answer.question.options.correct
+      end
+    end
   end
 end
