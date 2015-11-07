@@ -31,7 +31,7 @@ class Course::Assessment::Answer::MultipleResponseAutoGradingService < \
     correct_selection = question.options.correct & answer.options
     correct = correct_selection.length > 0
 
-    grade_for(question, correct)
+    [grade_for(question, correct), explanations_for(answer.options)]
   end
 
   # Grades an all_correct question.
@@ -43,7 +43,7 @@ class Course::Assessment::Answer::MultipleResponseAutoGradingService < \
     correct_selection = correct_answers & answer.options
     correct = correct_selection.length == correct_answers.length
 
-    grade_for(question, correct)
+    [grade_for(question, correct), explanations_for(answer.options)]
   end
 
   # Returns the grade for the given correctness.
@@ -53,5 +53,14 @@ class Course::Assessment::Answer::MultipleResponseAutoGradingService < \
   # @param [Boolean] correct True if the answer is correct.
   def grade_for(question, correct)
     correct ? question.maximum_grade : 0
+  end
+
+  # Returns the explanations for the given options.
+  #
+  # @param [Course::Assessment::Question::MultipleResponseOption] options The options to obtain
+  #   the explanations for.
+  # @return [Array<String>] The explanations for the given answers.
+  def explanations_for(answers)
+    answers.map(&:explanation).tap(&:compact!)
   end
 end

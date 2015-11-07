@@ -5,9 +5,9 @@ FactoryGirl.define do
     options do
       [
         build(:course_assessment_question_multiple_response_option,
-              question: nil, correct: true, option: 'true'),
+              question: nil, correct: true, option: 'true', explanation: 'correct'),
         build(:course_assessment_question_multiple_response_option,
-              question: nil, option: 'false')
+              question: nil, option: 'false', explanation: 'wrong')
       ]
     end
   end

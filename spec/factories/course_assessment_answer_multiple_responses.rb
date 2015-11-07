@@ -8,14 +8,16 @@ FactoryGirl.define do
 
     trait :wrong do
       after(:build) do |answer|
-        answer.options = answer.question.options - answer.question.options.correct
+        question = answer.question.actable
+        answer.options = question.options - question.options.select(&:correct)
       end
     end
 
     trait :correct do
       after(:build) do |answer|
-        answer.options = answer.question.options.correct
-        answer.options = answer.options.sample(1) if answer.question.actable.any_correct?
+        question = answer.question.actable
+        answer.options = question.options.select(&:correct)
+        answer.options = answer.options.sample(1) if question.any_correct?
       end
     end
   end
