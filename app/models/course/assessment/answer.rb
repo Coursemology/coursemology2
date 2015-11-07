@@ -15,8 +15,9 @@ class Course::Assessment::Answer < ActiveRecord::Base
 
   validate :validate_consistent_assessment
   validate :validate_assessment_state, if: :attempting?
-  validates :submitted_at, :grade, :grader, :graded_at, presence: true, unless: :attempting?
+  validates :submitted_at, :grade, presence: true, unless: :attempting?
   validates :submitted_at, :grade, :grader, :graded_at, absence: true, if: :attempting?
+  validates :grader, :graded_at, presence: true, if: :graded?
   validate :validate_consistent_grade, unless: :attempting?
 
   belongs_to :submission, inverse_of: :answers
@@ -30,13 +31,13 @@ class Course::Assessment::Answer < ActiveRecord::Base
   protected
 
   def finalise
-    update_attribute(:grade, 0)
-    touch(:submitted_at)
+    self.grade = 0
+    self.submitted_at = Time.zone.now
   end
 
   def publish
-    update_attribute(:grader_id, User.stamper.id)
-    touch(:graded_at)
+    self.grader = User.stamper
+    self.graded_at = Time.zone.now
   end
 
   private

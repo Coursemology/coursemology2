@@ -58,8 +58,8 @@ RSpec.describe Course::Assessment do
         context 'when some questions have been submitted' do
           before do
             assessment.questions.limit(1).attempt(submission).tap do |answers|
-              answers.each(&:save!)
               answers.each(&:finalise!)
+              answers.each(&:save!)
             end
           end
 
