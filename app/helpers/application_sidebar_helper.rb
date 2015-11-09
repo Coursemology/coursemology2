@@ -20,7 +20,7 @@ module ApplicationSidebarHelper
   #
   # @param [Array<String>] classes An array of classes to apply to the sidebar container.
   # @return [String] The buffer containing the markup for the sidebar.
-  def sidebar(classes: ['col-xs-7', 'col-sm-3', 'col-md-2'])
+  def sidebar(classes: ['col-lg-2', 'col-md-3', 'col-sm-4'])
     sidebar!
 
     render layout: 'layouts/sidebar', locals: { sidebar_classes: classes } do
