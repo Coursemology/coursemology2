@@ -32,3 +32,6 @@ Style/StringLiterals:
 
 Style/WordArray:
   Enabled: false
+
+Style/RegexpLiteral:
+  AllowInnerSlashes: true
