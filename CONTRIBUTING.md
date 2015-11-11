@@ -118,8 +118,7 @@ Application components still implement their views in `app/views`, with themes g
 override them in the theme directory.
 
 A sample theme (for [coursemology.org](http://coursemology.org)) can be found in the
-[coursemology2-coursemology.org project]
-(http://github.com/coursemology/coursemology2-coursemology.org-theme)
+[coursemology-theme project](https://github.com/Coursemology/coursemology-theme).
 
 ## Libraries
 The `lib` directory is not autoloaded, as described in this [blog post](http://hakunin.com/rails3-load-paths#if-you-add-code-in-your-lib-directory). However, the `lib/autoload`

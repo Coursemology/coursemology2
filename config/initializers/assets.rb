@@ -9,3 +9,17 @@ Rails.application.config.assets.version = '1.0'
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
+
+# For themes. See https://github.com/yoolk/themes_on_rails
+Rails.application.configure do
+  themes_path = "#{Rails.root}/app/themes/"
+  assets_paths = [
+    proc do |path, filename|
+      filename =~ /app\/themes/ && !['.js', '.css'].include?(File.extname(path))
+    end
+  ]
+
+  assets_paths += Dir["#{themes_path}*"].map { |path| "#{path.split('/').last}/all.js" }
+  assets_paths += Dir["#{themes_path}*"].map { |path| "#{path.split('/').last}/all.css" }
+  config.assets.precompile += assets_paths
+end
