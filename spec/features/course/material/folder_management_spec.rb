@@ -5,7 +5,7 @@ RSpec.feature 'Course: Material: Folders: Management' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:parent_folder) { create(:folder, course: course) }
+    let(:parent_folder) { course.root_folder }
     let!(:subfolders) do
       folders = []
       folders << create(:folder, parent: parent_folder, course: course)
@@ -18,7 +18,7 @@ RSpec.feature 'Course: Material: Folders: Management' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
-      let(:user) { create(:administrator) }
+      let(:user) { create(:course_manager, :approved, course: course).user }
       scenario 'I can view all the subfolders' do
         visit course_material_folder_path(course, parent_folder)
         subfolders.each do |subfolder|
@@ -91,6 +91,19 @@ RSpec.feature 'Course: Material: Folders: Management' do
         find_link(nil, href: download_course_material_folder_path(course, parent_folder)).click
 
         expect(page.response_headers['Content-Type']).to eq('application/zip')
+      end
+
+      scenario 'I cannot edit the folder with a owner' do
+        folder_with_owner = create(:course_assessment_category, course: course).folder
+
+        visit course_material_folder_path(course, folder_with_owner)
+
+        upload_link = new_materials_course_material_folder_path(course, folder_with_owner)
+        edit_link = edit_course_material_folder_path(course, folder_with_owner)
+        new_subfolder_link = new_subfolder_course_material_folder_path(course, folder_with_owner)
+        expect(page).not_to have_link(nil, href: edit_link)
+        expect(page).not_to have_link(nil, href: new_subfolder_link)
+        expect(page).not_to have_link(nil, href: upload_link)
       end
     end
 
