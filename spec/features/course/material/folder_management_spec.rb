@@ -5,8 +5,15 @@ RSpec.feature 'Course: Material: Folders: Management' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:parent_folder) { create(:folder, course: course, parent: course.root_folder) }
-    let!(:subfolders) { create_list(:folder, 2, parent: parent_folder, course: course) }
+    let(:parent_folder) { create(:folder, course: course) }
+    let!(:subfolders) do
+      folders = []
+      folders << create(:folder, parent: parent_folder, course: course)
+      folders << create(:folder, parent: parent_folder, course: course,
+                                 start_at: 1.day.from_now, end_at: nil)
+      folders << create(:folder, parent: parent_folder, course: course,
+                                 start_at: 2.days.ago,  end_at: 1.day.ago)
+    end
 
     before { login_as(user, scope: :user) }
 
@@ -84,6 +91,29 @@ RSpec.feature 'Course: Material: Folders: Management' do
         find_link(nil, href: download_course_material_folder_path(course, parent_folder)).click
 
         expect(page.response_headers['Content-Type']).to eq('application/zip')
+      end
+    end
+
+    context 'As a Course Student' do
+      let(:user) { create(:course_student, :approved, course: course).user }
+
+      scenario 'I can view valid subfolders' do
+        valid_folders = subfolders.select do |f|
+          f.start_at < Time.zone.now && (f.end_at.nil? || f.end_at > Time.zone.now)
+        end
+        invalid_folders = subfolders - valid_folders
+        visit course_material_folder_path(course, parent_folder)
+
+        expect(page).not_to have_selector('a.btn-danger.delete')
+        valid_folders.each do |subfolder|
+          expect(page).to have_content_tag_for(subfolder)
+          expect(page).
+            not_to have_link(nil, href: edit_course_material_folder_path(course, subfolder))
+        end
+
+        invalid_folders.each do |subfolder|
+          expect(page).not_to have_content_tag_for(subfolder)
+        end
       end
     end
   end

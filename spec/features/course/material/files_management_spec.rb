@@ -53,5 +53,20 @@ RSpec.feature 'Course: Material: Files: Management' do
         expect(current_path).to eq(course_material_folder_path(course, folder))
       end
     end
+
+    context 'As a Course Student' do
+      let(:user) { create(:course_student, :approved, course: course).user }
+
+      scenario 'I can view all the materials' do
+        visit course_material_folder_path(course, folder)
+
+        expect(page).not_to have_selector('a.btn-danger.delete')
+        materials.each do |material|
+          expect(page).to have_content_tag_for(material)
+          edit_link = edit_course_material_folder_material_path(course, folder, material)
+          expect(page).not_to have_link(nil, href: edit_link)
+        end
+      end
+    end
   end
 end
