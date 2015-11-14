@@ -4,9 +4,11 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:answer) do
-      create(:course_assessment_answer_multiple_response, :submitted, *answer_traits).answer
+      create(:course_assessment_answer_multiple_response, :submitted, *answer_traits,
+             question_traits: question_traits).answer
     end
     let(:question) { answer.question.actable }
+    let(:question_traits) { nil }
     let(:answer_traits) { nil }
     let(:grading) do
       create(:course_assessment_answer_auto_grading, answer: answer)
@@ -44,6 +46,8 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
       end
 
       context 'when a question is requires any correct option' do
+        let(:question_traits) { :any_correct }
+
         context 'when the correct answer is given' do
           let(:answer_traits) { :correct }
 
@@ -62,7 +66,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
             subject.grade(grading)
             expect(answer.grade).to eq(0)
             expect(grading.result['messages']).to \
-              contain_exactly(answer.specific.options.first.explanation)
+              contain_exactly(*answer.specific.options.reject(&:correct).map(&:explanation))
           end
         end
       end
