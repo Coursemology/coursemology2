@@ -23,6 +23,9 @@ class Course < ActiveRecord::Base
 
   has_many :announcements, dependent: :destroy
   has_many :achievements, dependent: :destroy
+  # The order needs to be preserved, this makes sure that the root_folder will be saved first
+  has_many :material_folders, class_name: Course::Material::Folder.name, inverse_of: :course,
+                              dependent: :destroy
   has_many :assessment_categories, class_name: Course::Assessment::Category.name,
                                    dependent: :destroy, inverse_of: :course
   has_many :assessments, through: :assessment_categories
@@ -33,8 +36,6 @@ class Course < ActiveRecord::Base
                                     dependent: :destroy
   has_many :lesson_plan_events, through: :lesson_plan_items,
                                 source: :actable, source_type: Course::LessonPlan::Event.name
-  has_many :material_folders, class_name: Course::Material::Folder.name, inverse_of: :course,
-                              dependent: :destroy
   has_many :forums, dependent: :destroy
 
   accepts_nested_attributes_for :invitations, :assessment_categories
@@ -68,7 +69,11 @@ class Course < ActiveRecord::Base
   # Returns the root folder of the course.
   # @return [Course::Material::Folder] The root folder.
   def root_folder
-    material_folders.find_by!(parent: nil)
+    if new_record?
+      material_folders.find(&:root?) || (fail ActiveRecord::RecordNotFound)
+    else
+      material_folders.find_by!(parent: nil)
+    end
   end
 
   private

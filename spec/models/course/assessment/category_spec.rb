@@ -17,11 +17,11 @@ RSpec.describe Course::Assessment::Category do
       end
     end
 
-    context 'after category was created' do
+    context 'after category was initialized' do
       subject { build(:course_assessment_category) }
 
       it 'creates a folder' do
-        expect(subject.folder).to be_nil
+        expect(subject.folder).to be_present
 
         subject.save
         expect(subject.folder).to be_persisted

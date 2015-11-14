@@ -11,16 +11,18 @@ class Course::Assessment::Category < ActiveRecord::Base
 
   accepts_nested_attributes_for :tabs
 
-  before_validation :assign_folder_attributes, if: :persisted?
-  before_create :build_initial_tab
-  before_create :build_initial_folder
+  after_initialize :build_initial_tab, if: :new_record?
+  after_initialize :build_initial_folder, if: :new_record?
+  before_validation :assign_folder_attributes
   before_destroy :validate_before_destroy
 
   default_scope { order(:weight) }
 
-  def self.after_course_create(course)
+  def self.after_course_initialize(course)
+    return if course.persisted?
+
     course.assessment_categories.
-      create(title: human_attribute_name('title.default'), weight: 0)
+      build(title: human_attribute_name('title.default'), weight: 0)
   end
 
   # Returns a boolean value indicating if there are other categories
@@ -39,8 +41,7 @@ class Course::Assessment::Category < ActiveRecord::Base
   end
 
   def build_initial_folder
-    build_folder(name: title, course: course, parent: course.root_folder,
-                 start_at: Time.zone.now)
+    build_folder(start_at: Time.zone.now)
   end
 
   def assign_folder_attributes
