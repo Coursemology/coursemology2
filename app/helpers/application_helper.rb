@@ -12,6 +12,15 @@ module ApplicationHelper
   include ApplicationSidebarHelper
   include RouteOverridesHelper
 
+  # Accesses the header tags specified for the current page
+  def header_tags(*args, &proc)
+    content_for(:header_tags, *args, &proc)
+  end
+
+  # @!method within_head_tag(&proc)
+  #   Adds the given block to the header tags which will be added to the rendered page.
+  alias_method :within_head_tag, :header_tags
+
   # Generates a page header. The title shown will be the +.header+ key in the page
   # that calls this helper.
   #
