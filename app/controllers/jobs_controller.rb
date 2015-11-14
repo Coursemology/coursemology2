@@ -30,9 +30,12 @@ class JobsController < ApplicationController
   def show_errored_job
     if @job.redirect_to.present?
       redirect_to @job.redirect_to
+    else
+      response.status = :internal_server_error
     end
   end
 
   def show_submitted_job
+    response.status = :accepted
   end
 end

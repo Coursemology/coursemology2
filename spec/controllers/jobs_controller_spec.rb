@@ -9,23 +9,35 @@ RSpec.describe JobsController do
 
   describe '#show' do
     def self.expect_to_redirect_to_job_redirect_to
-      before { job.redirect_to = '/' }
-      it { is_expected.to redirect_to(job.redirect_to) }
+      let(:redirect_path) { '/' }
+      let(:job_traits) do
+        super_traits = *super()
+        super_traits + [{ redirect_to: redirect_path }]
+      end
+      it { is_expected.to redirect_to(redirect_path) }
     end
 
-    subject { get 'show', id: job.id }
+    before { get 'show', id: job.id }
+
+    context 'when the job is in progress' do
+      it { is_expected.to respond_with(:accepted) }
+    end
 
     context 'when the job has been completed' do
+      let(:job_traits) { :completed }
       context 'when the job has a redirect_to path' do
-        let(:job_traits) { :completed }
         expect_to_redirect_to_job_redirect_to
       end
     end
 
     context 'when the job has errored' do
+      let(:job_traits) { :errored }
       context 'when the job has a redirect_to path' do
-        let(:job_traits) { :errored }
         expect_to_redirect_to_job_redirect_to
+      end
+
+      context 'when the job does not have a redirec_to path' do
+        it { is_expected.to respond_with(:internal_server_error) }
       end
     end
   end
