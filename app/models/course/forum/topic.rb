@@ -59,7 +59,7 @@ class Course::Forum::Topic < ActiveRecord::Base
   end
 
   def generate_initial_post
-    posts.build
+    posts.build if posts.empty?
   end
 
   def set_initial_post_title
