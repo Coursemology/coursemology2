@@ -4,48 +4,36 @@ class Course::Forum < ActiveRecord::Base
 
   belongs_to :course, inverse_of: :forums
   has_many :topics, dependent: :destroy, inverse_of: :forum
-  has_many :posts, class_name: Course::Discussion::Post.name, through: :topics
   has_many :subscriptions, dependent: :destroy, inverse_of: :forum
 
-  # @!method self.with_topic_count
-  #   Augments all returned records with the number of topics in that forum.
-  scope :with_topic_count, (lambda do
-    joins { topics.outer }.
-      select { 'course_forums.*' }.
-      select { count(topics.id).as(topic_count) }.
-      group { course_forums.id }
+  # @!attribute [r] topic_count
+  #   The number of topics in this forum.
+  calculated :topic_count, (lambda do
+    Course::Forum::Topic.where { course_forum_topics.forum_id == course_forums.id }.
+      select { count('*') }
   end)
 
-  # @!method self.with_topic_post_count
-  #   Augments all returned records with the number of topic posts in that forum.
-  scope :with_topic_post_count, (lambda do
-    joins { posts.outer }.
-      select { 'course_forums.*' }.
-      select { count(posts.id).as(topic_post_count) }.
-      group { course_forums.id }
+  # @!attribute [r] topic_post_count
+  #   The number of posts in this forum.
+  calculated :topic_post_count, (lambda do
+    Course::Forum::Topic.joins { topic.outer.posts.outer }.
+      where { course_forum_topics.forum_id == course_forums.id }.
+      select { count('*') }
   end)
 
-  # @!method self.with_topic_view_count
-  #   Augments all returned records with the number of topic views in that forum.
-  scope :with_topic_view_count, (lambda do
-    joins { topics.outer.views.outer }.
-      select { 'course_forums.*' }.
-      select { count(course_forum_topic_views.id).as(topic_view_count) }.
-      group { course_forums.id }
+  # @!attribute [r] topic_view_count
+  #   The number of views in this forum.
+  calculated :topic_view_count, (lambda do
+    Course::Forum::Topic.joins { views.outer }.
+      where { course_forum_topics.forum_id == course_forums.id }.
+      select { count('*')  }
   end)
 
   # @!method self.with_forum_statistics
   #   Augments all returned records with the number of topics, topic posts and topic views
   #   in that forum.
-  scope :with_forum_statistics, (lambda do
-    joins("INNER JOIN (#{with_topic_count.to_sql}) topic ON
-            course_forums.id = topic.id").
-      joins("INNER JOIN (#{with_topic_post_count.to_sql}) post ON
-            course_forums.id = post.id").
-      joins("INNER JOIN (#{with_topic_view_count.to_sql}) view ON
-            course_forums.id = view.id").
-      select('*')
-  end)
+  scope :with_forum_statistics,
+        -> { all.calculated(:topic_count, :topic_view_count, :topic_post_count) }
 
   # Return if a user has subscribed to this forum
   #
