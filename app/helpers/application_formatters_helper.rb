@@ -65,12 +65,10 @@ module ApplicationFormattersHelper
   def time_period_class(item)
     if !item.started?
       ['not-started']
-    elsif item.currently_active?
-      ['currently-active']
     elsif item.ended?
       ['ended']
-    else
-      []
+    else # Not started, not ended.
+      ['currently-active']
     end
   end
 
