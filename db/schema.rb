@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151101050627) do
+ActiveRecord::Schema.define(version: 20151114043545) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "users", force: :cascade do |t|
     t.string   "name",                   limit: 255,              null: false
@@ -485,6 +486,12 @@ ActiveRecord::Schema.define(version: 20151101050627) do
     t.datetime "updated_at",  null: false
   end
   add_index "instance_users", ["instance_id", "user_id"], name: "index_instance_users_on_instance_id_and_user_id", unique: true
+
+  create_table "jobs", id: :uuid, default: nil, force: :cascade do |t|
+    t.integer "status",      default: 0, null: false
+    t.string  "redirect_to", limit: 255
+    t.json    "error"
+  end
 
   create_table "read_marks", force: :cascade do |t|
     t.integer  "readable_id"

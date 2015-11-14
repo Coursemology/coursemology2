@@ -14,6 +14,6 @@ module ApplicationUserConcern
 
   def handle_access_denied(exception)
     @exception = exception
-    render 'pages/403', status: 403
+    render 'pages/403', status: :forbidden
   end
 end
