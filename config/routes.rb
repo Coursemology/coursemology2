@@ -71,6 +71,8 @@ Rails.application.routes.draw do
   }
 
   resources :announcements, only: [:index]
+  resources :jobs, only: [:show]
+
   namespace :user do
     resources :emails, only: [:index, :create, :destroy] do
       post 'set_primary', on: :member
