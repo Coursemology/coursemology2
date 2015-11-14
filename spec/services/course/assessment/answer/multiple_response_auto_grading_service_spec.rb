@@ -17,7 +17,6 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
     describe '#grade' do
       it 'sets the grading as graded' do
         expect(subject.grade(grading)).to eq(true)
-        expect(grading.graded?).to eq(true)
         expect(answer.graded?).to eq(true)
       end
 
