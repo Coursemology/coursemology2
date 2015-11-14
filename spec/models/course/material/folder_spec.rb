@@ -43,5 +43,28 @@ RSpec.describe Course::Material::Folder, type: :model do
         expect(course.root_folder).to be_persisted
       end
     end
+
+    describe '#next_valid_name' do
+      let(:common_name) { 'This Is A Folder' }
+      let(:parent_folder) { create(:folder) }
+      let(:folder) { build(:folder, parent: parent_folder, name: common_name) }
+
+      let(:other_child_folder) { build(:folder, parent: parent_folder, name: common_name.downcase) }
+      let(:material) { build(:material, folder: parent_folder, name: common_name + ' (0)') }
+
+      subject { folder.next_valid_name }
+      it 'finds the proper name' do
+        # When there is no name conflicts
+        expect(folder.send(:next_valid_name)).to eq(common_name)
+
+        # When is is a name conflict
+        other_child_folder.save
+        expect(folder.send(:next_valid_name)).to eq(common_name + ' (0)')
+
+        # When there is another name conflict with lower case
+        material.save
+        expect(folder.send(:next_valid_name)).to eq(common_name + ' (1)')
+      end
+    end
   end
 end

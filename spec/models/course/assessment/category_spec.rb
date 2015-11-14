@@ -43,5 +43,32 @@ RSpec.describe Course::Assessment::Category do
         expect(subject.folder.name).to eq(new_title)
       end
     end
+
+    context 'when there is another category with the same title' do
+      let(:course) { create(:course) }
+      let(:common_title) { 'Assessments' }
+      let!(:category) { create(:course_assessment_category, course: course, title: common_title) }
+
+      context 'after category was created' do
+        subject { build(:course_assessment_category, title: common_title, course: course) }
+
+        it 'creates a folder with the proper name' do
+          subject.save
+
+          expect(subject.folder.name).to eq(subject.title + ' (0)')
+        end
+      end
+
+      context 'after category was changed' do
+        subject { create(:course_assessment_category, title: common_title, course: course) }
+
+        it 'updates the folder with proper name' do
+          subject.title = common_title
+          subject.save
+
+          expect(subject.folder.name).to eq(common_title + ' (0)')
+        end
+      end
+    end
   end
 end
