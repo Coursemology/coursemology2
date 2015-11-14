@@ -1,0 +1,43 @@
+en:
+  course:
+    forum:
+      topics:
+        topic:
+          started_by: 'Started by '
+          last_post: 'Last Post: '
+          creator: 'Creator: '
+        new:
+          header: 'New Topic'
+        create:
+          success: 'Topic %{title} was created.'
+        edit:
+          header: 'Edit Topic'
+        update:
+          success: 'Topic %{title} was updated.'
+        destroy:
+          success: 'Topic %{title} was deleted.'
+          failure: 'Failed to delete topic: %{error}'
+        subscribe:
+          tag: 'Subscribe'
+          success: 'You have subscribed to Topic %{title}.'
+          failure: 'Fail to subscribe to Topic: %{error}'
+        unsubscribe:
+          tag: 'Unsubscribe'
+          success: 'You have been unsubscribed from the Topic %{title}.'
+          failure: 'Fail to unsubscribe from Topic: %{error}'
+        locked:
+          tag: 'Lock'
+          state: 'locked'
+          success: "The topic was successfully %{state}."
+          failure: "The topic could not be %{state}."
+        unlocked:
+          tag: 'Unlock'
+          state: 'unlocked'
+        hidden:
+          tag: 'Hide'
+          state: 'hidden'
+          success: "The topic was successfully %{state}."
+          failure: "The topic could not be %{state}."
+        shown:
+          tag: 'Show'
+          state: 'shown'

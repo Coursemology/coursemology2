@@ -1,8 +1,6 @@
-class Course::Forum::ForumsController < Course::ComponentController
+class Course::Forum::ForumsController < Course::Forum::Controller
   before_action :load_forum, except: [:index, :new, :create]
-  load_resource :forum, class: Course::Forum.name, through: :course,
-                        only: [:index, :new, :create]
-  authorize_resource :forum, class: Course::Forum.name, through: :course
+  load_resource :forum, class: Course::Forum.name, through: :course, only: [:index, :new, :create]
 
   def index
     @forums = @forums.with_forum_statistics
@@ -10,7 +8,8 @@ class Course::Forum::ForumsController < Course::ComponentController
 
   def show
     @topics = @forum.topics.accessible_by(current_ability).order(created_at: :desc).
-              page(params[:page])
+              calculated(:post_count, :view_count).includes(:creator).page(params[:page]).
+              with_latest_post
   end
 
   def new
@@ -68,7 +67,7 @@ class Course::Forum::ForumsController < Course::ComponentController
   private
 
   def load_forum
-    @forum ||= current_course.forums.friendly.find(params[:id] || params[:forum_id])
+    @forum ||= current_course.forums.friendly.find(params[:id])
   end
 
   def forum_params
