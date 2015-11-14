@@ -8,6 +8,14 @@ class Course::Assessment::Question::MultipleResponse < ActiveRecord::Base
 
   accepts_nested_attributes_for :options
 
+  def auto_gradable?
+    true
+  end
+
+  def auto_grader
+    Course::Assessment::Answer::MultipleResponseAutoGradingService.new
+  end
+
   def attempt(submission)
     submission.multiple_response_answers.build(submission: submission, question: question).answer
   end

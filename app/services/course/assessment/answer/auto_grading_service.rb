@@ -16,8 +16,8 @@ class Course::Assessment::Answer::AutoGradingService
     # @param [Course::Assessment::Question] question The question that the needs to be graded.
     # @return [Course::Assessment::Answer::AnswerAutoGraderService] The service object that can
     #   grade this question.
-    def pick_grader(_question)
-      fail
+    def pick_grader(question)
+      question.auto_grader
     end
   end
 
@@ -32,6 +32,7 @@ class Course::Assessment::Answer::AutoGradingService
   # @return [Boolean] True if the grading could be saved.
   def grade(auto_grading)
     auto_grading.status = :graded if auto_grading.submitted?
+    auto_grading.answer.publish!
     auto_grading.save
   end
 end

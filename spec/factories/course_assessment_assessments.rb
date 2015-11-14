@@ -16,7 +16,7 @@ FactoryGirl.define do
     trait :with_mcq_question do
       after(:build) do |assessment|
         assessment.questions += [
-          build(:course_assessment_question_multiple_response, assessment: assessment)
+          build(:course_assessment_question_multiple_response, assessment: assessment).question
         ]
       end
     end

@@ -15,7 +15,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
         assessment.questions.attempt(submission)
         submission
       end
-      let(:correct_option) { assessment.questions.first.options.find(&:correct?).option }
+      let(:correct_option) { assessment.questions.first.specific.options.find(&:correct?).option }
 
       scenario 'I can save my submission' do
         submission
