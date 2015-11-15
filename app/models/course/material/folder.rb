@@ -19,7 +19,7 @@ class Course::Material::Folder < ActiveRecord::Base
   end
 
   def self.after_course_initialize(course)
-    return if course.persisted? || course.root_folder
+    return if course.persisted? || course.has_root_folder?
 
     course.material_folders.build(name: 'Root')
   end
