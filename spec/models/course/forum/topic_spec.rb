@@ -37,6 +37,18 @@ RSpec.describe Course::Forum::Topic, type: :model do
         end
       end
 
+      context 'when reinitializing a topic' do
+        subject do
+          test_topic = Course::Forum::Topic.new(posts_attributes: [title: nil])
+          test_topic.save
+          test_topic
+        end
+
+        it 'does not create another post' do
+          expect(subject.posts.size).to eq(1)
+        end
+      end
+
       context 'when updating a topic' do
         before do
           topic.update_attribute(:title, 'new title')
