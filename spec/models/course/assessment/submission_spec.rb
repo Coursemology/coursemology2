@@ -82,6 +82,14 @@ RSpec.describe Course::Assessment::Submission do
         submission.finalise!
         expect(submission.answers.all?(&:submitted?)).to be(true)
       end
+
+      with_active_job_queue_adapter(:test) do
+        it 'creates a new auto grading job' do
+          submission.finalise!
+          expect { submission.save }.to \
+            change { ActiveJob::Base.queue_adapter.enqueued_jobs.count }.by(1)
+        end
+      end
     end
 
     describe '#publish!' do

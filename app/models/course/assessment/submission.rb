@@ -2,6 +2,8 @@ class Course::Assessment::Submission < ActiveRecord::Base
   include Workflow
   acts_as_experience_points_record
 
+  after_save :auto_grade_submission, if: :submitted?
+
   workflow do
     state :attempting do
       event :finalise, transitions_to: :submitted
@@ -95,5 +97,14 @@ class Course::Assessment::Submission < ActiveRecord::Base
     answers.each do |answer|
       answer.publish! if answer.submitted?
     end
+  end
+
+  private
+
+  # Queues the submission for auto grading, after the submission has changed to the submitted state.
+  def auto_grade_submission
+    return unless workflow_state_changed?
+
+    AutoGradingJob.perform_later(self)
   end
 end

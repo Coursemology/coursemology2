@@ -6,7 +6,7 @@ RSpec.describe Course::Assessment::Submission::AutoGradingJob do
   with_tenant(:instance) do
     subject { Course::Assessment::Submission::AutoGradingJob }
     let(:answer) { create(:course_assessment_answer_multiple_response, :submitted).answer }
-    let(:submission) { answer.submission.tap { |submission| submission.answers.reload } }
+    let!(:submission) { answer.submission.tap { |submission| submission.answers.reload } }
     let(:question) { answer.question.specific }
 
     it 'can be queued' do
