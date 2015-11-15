@@ -3,7 +3,7 @@ class System::Admin::CoursesController < System::Admin::Controller
   add_breadcrumb :index, :admin_courses_path
 
   def index
-    @courses = Course.ordered_by_title.page(params[:page]).includes(:instance).
+    @courses = Course.ordered_by_title.page(page_param).includes(:instance).
                search(params[:search]).with_owners
   end
 

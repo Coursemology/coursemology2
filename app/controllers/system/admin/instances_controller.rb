@@ -3,7 +3,7 @@ class System::Admin::InstancesController < System::Admin::Controller
   add_breadcrumb :index, :admin_instances_path
 
   def index #:nodoc:
-    @instances = @instances.with_course_count.with_user_count.order_by_id.page(params[:page])
+    @instances = @instances.with_course_count.with_user_count.order_by_id.page(page_param)
   end
 
   def new #:nodoc:

@@ -4,7 +4,7 @@ class System::Admin::Instance::AnnouncementsController < System::Admin::Instance
   add_breadcrumb :index, :admin_instance_announcements_path
 
   def index
-    @announcements = @announcements.includes(:creator).page(params[:page])
+    @announcements = @announcements.includes(:creator).page(page_param)
   end
 
   def new

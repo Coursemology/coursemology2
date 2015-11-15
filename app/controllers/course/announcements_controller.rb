@@ -6,7 +6,7 @@ class Course::AnnouncementsController < Course::ComponentController
 
   def index #:nodoc:
     @announcements = @announcements.includes(:creator).sorted_by_sticky.sorted_by_date
-    @announcements = @announcements.page(params[:page])
+    @announcements = @announcements.page(page_param)
     unread = @announcements.unread_by(current_user)
     Course::Announcement.mark_array_as_read(unread, current_user)
   end

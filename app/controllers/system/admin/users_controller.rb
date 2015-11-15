@@ -3,7 +3,7 @@ class System::Admin::UsersController < System::Admin::Controller
   add_breadcrumb :index, :admin_users_path
 
   def index
-    @users = @users.ordered_by_name.includes(:emails).page(params[:page])
+    @users = @users.ordered_by_name.includes(:emails).page(page_param)
   end
 
   def update
