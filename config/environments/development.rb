@@ -22,6 +22,9 @@ Rails.application.configure do
   # We will assume that we are running on localhost
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
 
+  # Use the threaded background job adapter for some asynchrony
+  config.active_job.queue_adapter = :background_thread
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 

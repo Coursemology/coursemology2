@@ -9,12 +9,23 @@ RSpec.describe Course::Assessment::Submission::AutoGradingJob do
     let(:submission) { answer.submission.tap { |submission| submission.answers.reload } }
     let(:question) { answer.question.specific }
 
-    it 'grades submissions' do
+    it 'can be queued' do
       expect { subject.perform_later(submission) }.to \
         change { ActiveJob::Base.queue_adapter.enqueued_jobs.count }.by(1)
+    end
 
-      subject.perform_now(submission)
-      expect(submission).to be_graded
+    context 'when using an asynchronous adapter' do
+      around(:each) do |proc|
+        old_adapter = ActiveJob::Base.queue_adapter
+        ActiveJob::Base.queue_adapter = :background_thread
+        proc.call
+        ActiveJob::Base.queue_adapter = old_adapter
+      end
+
+      it 'grades submissions' do
+        subject.perform_now(submission)
+        expect(submission).to be_graded
+      end
     end
   end
 end
