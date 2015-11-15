@@ -4,8 +4,8 @@ class System::Admin::Instance::CoursesController < System::Admin::Instance::Cont
   add_breadcrumb :index, :admin_instance_courses_path
 
   def index
-    @courses = @instance.courses.ordered_by_title.page(params[:page]).
-               search(params[:search]).with_owners
+    @courses = @instance.courses.ordered_by_title.page(page_param).
+               search(search_param).with_owners
   end
 
   def destroy
@@ -15,5 +15,11 @@ class System::Admin::Instance::CoursesController < System::Admin::Instance::Cont
       redirect_to admin_instance_courses_path,
                   danger: t('.failure', error: @course.errors.full_messages.to_sentence)
     end
+  end
+
+  private
+
+  def search_param
+    params.permit(:search)[:search]
   end
 end

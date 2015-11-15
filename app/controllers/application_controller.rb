@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
   include ApplicationThemingConcern
   include ApplicationUserConcern
   include ApplicationAnnouncementsConcern
+  include ApplicationPaginationConcern
 
   rescue_from IllegalStateError, with: :handle_illegal_state_error
 

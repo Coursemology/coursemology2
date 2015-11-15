@@ -5,7 +5,7 @@ class System::Admin::Instance::UsersController < System::Admin::Instance::Contro
 
   def index
     @instance_users = @instance.instance_users.includes(user: [:emails, :courses]).
-                      ordered_by_username.page(params[:page])
+                      ordered_by_username.page(page_param)
   end
 
   def update
