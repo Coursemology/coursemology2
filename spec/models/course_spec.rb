@@ -210,5 +210,30 @@ RSpec.describe Course, type: :model do
         expect(subject.count(course_with_keyword_in_user_name)).to eq(1)
       end
     end
+
+    describe '#has_root_folder?' do
+      let(:course) { build(:course) }
+      subject { course.has_root_folder? }
+
+      context 'when course is a new record' do
+        it { is_expected.to be_truthy }
+
+        context 'when there is no root folder' do
+          before { course.material_folders.clear }
+          it { is_expected.to be_falsey }
+        end
+      end
+
+      context 'when course is persisted' do
+        before { course.save }
+        it { is_expected.to be_truthy }
+
+        context 'when there is no root folder' do
+          before { course.root_folder.destroy }
+
+          it { is_expected.to be_falsey }
+        end
+      end
+    end
   end
 end

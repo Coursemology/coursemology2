@@ -17,6 +17,29 @@ RSpec.describe Course::Assessment::Category do
       end
     end
 
+    describe '.after_course_initialize' do
+      let(:course) { build(:course) }
+
+      it 'builds only one category' do
+        expect(course.assessment_categories.length).to eq(1)
+
+        # Call the callback one more time
+        Course::Assessment::Category.after_course_initialize(course)
+        expect(course.assessment_categories.length).to eq(1)
+      end
+    end
+
+    describe '#build_initial_tab' do
+      subject { build(:course_assessment_category) }
+
+      it 'only builds one tab' do
+        expect(subject.tabs.length).to eq(1)
+
+        subject.send(:build_initial_tab)
+        expect(subject.tabs.length).to eq(1)
+      end
+    end
+
     context 'after category was initialized' do
       subject { build(:course_assessment_category) }
 

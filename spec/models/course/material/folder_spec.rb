@@ -32,12 +32,15 @@ RSpec.describe Course::Material::Folder, type: :model do
       end
     end
 
-    context 'after course was initialized' do
+    describe '.after_course_initialize' do
       let(:course) { build(:course) }
 
-      it 'builds a root folder' do
+      it 'builds only one root folder' do
         expect(course.material_folders.length).to eq(1)
-        expect(course.root_folder).to be_new_record
+
+        # Call the callback one more time
+        Course::Material::Folder.after_course_initialize(course)
+        expect(course.material_folders.length).to eq(1)
 
         course.save
         expect(course.root_folder).to be_persisted

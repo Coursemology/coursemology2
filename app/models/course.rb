@@ -77,6 +77,16 @@ class Course < ActiveRecord::Base
     end
   end
 
+  # Test if the course has a root folder.
+  # @return [Boolean] True if there is a root folder, otherwise false.
+  def has_root_folder?
+    if new_record?
+      material_folders.find(&:root?).present?
+    else
+      material_folders.find_by(parent: nil).present?
+    end
+  end
+
   private
 
   # Set default values
