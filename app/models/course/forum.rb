@@ -35,6 +35,10 @@ class Course::Forum < ActiveRecord::Base
   scope :with_forum_statistics,
         -> { all.calculated(:topic_count, :topic_view_count, :topic_post_count) }
 
+  def self.use_relative_model_naming?
+    true
+  end
+
   # Return if a user has subscribed to this forum
   #
   # @param [User] user The user to check

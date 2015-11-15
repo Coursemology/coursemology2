@@ -1,0 +1,3 @@
+span.pull-right.btn-group
+  = edit_button(edit_course_forum_topic_path(current_course, @forum, @topic)) if can?(:edit, @topic)
+  = delete_button(course_forum_topic_path(current_course, @forum, @topic)) if can?(:delete, @topic)

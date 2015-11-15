@@ -1,3 +1,20 @@
 = page_header(@forum.name) do
 
 = render 'controls'
+
+table.table.forum-list.table-hover
+  thead
+    tr
+      th
+      th = t('.topics')
+      th = t('.votes')
+      th = t('.posts')
+      th = t('.views')
+      th = t('.latest_post')
+  tbody
+    - if @topics.empty?
+      tr
+        td colspan="6" align="center"
+         h3 = t('.no_topic')
+    - else
+      = render @topics
