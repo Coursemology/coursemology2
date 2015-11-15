@@ -4,7 +4,7 @@ class System::Admin::CoursesController < System::Admin::Controller
 
   def index
     @courses = Course.ordered_by_title.page(page_param).includes(:instance).
-               search(params[:search]).with_owners
+               search(search_param).with_owners
   end
 
   def destroy
@@ -24,5 +24,9 @@ class System::Admin::CoursesController < System::Admin::Controller
     Course.unscoped do
       yield
     end
+  end
+
+  def search_param
+    params.permit(:search)[:search]
   end
 end
