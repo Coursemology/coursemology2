@@ -9,17 +9,16 @@ RSpec.describe Course::Assessment::Answer::AutoGradingService do
     describe '.grade' do
       subject { Course::Assessment::Answer::AutoGradingService.grade(auto_grading) }
 
-      it 'grades the grading' do
+      it 'grades the answer' do
         subject
 
-        expect(auto_grading).to be_graded
+        expect(auto_grading.answer).to be_graded
       end
     end
 
     describe '#grade' do
-      it 'sets the status to graded' do
+      it "sets the answer's status to graded" do
         expect(subject.grade(auto_grading)).to eq(true)
-        expect(auto_grading).to be_graded
         expect(auto_grading.answer).to be_graded
       end
     end

@@ -14,7 +14,7 @@ RSpec.describe Course::Assessment::Answer::AutoGradingJob do
         change { ActiveJob::Base.queue_adapter.enqueued_jobs.count }.by(1)
 
       subject.perform_now(auto_grading)
-      expect(auto_grading).to be_graded
+      expect(auto_grading.answer).to be_graded
     end
   end
 end

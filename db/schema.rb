@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151114043545) do
+ActiveRecord::Schema.define(version: 20151114093538) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -163,9 +163,15 @@ ActiveRecord::Schema.define(version: 20151114043545) do
     t.datetime "graded_at"
   end
 
+  create_table "jobs", id: :uuid, default: nil, force: :cascade do |t|
+    t.integer "status",      default: 0, null: false
+    t.string  "redirect_to", limit: 255
+    t.json    "error"
+  end
+
   create_table "course_assessment_answer_auto_gradings", force: :cascade do |t|
     t.integer  "answer_id",  null: false, index: {name: "index_course_assessment_answer_auto_gradings_on_answer_id", unique: true}, foreign_key: {references: "course_assessment_answers", name: "fk_course_assessment_answer_auto_gradings_answer_id", on_update: :no_action, on_delete: :no_action}
-    t.integer  "status",     default: 0, null: false
+    t.uuid     "job_id",     index: {name: "index_course_assessment_answer_auto_gradings_on_job_id", unique: true}, foreign_key: {references: "jobs", name: "fk_course_assessment_answer_auto_gradings_job_id", on_update: :no_action, on_delete: :nullify}
     t.json     "result"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -486,12 +492,6 @@ ActiveRecord::Schema.define(version: 20151114043545) do
     t.datetime "updated_at",  null: false
   end
   add_index "instance_users", ["instance_id", "user_id"], name: "index_instance_users_on_instance_id_and_user_id", unique: true
-
-  create_table "jobs", id: :uuid, default: nil, force: :cascade do |t|
-    t.integer "status",      default: 0, null: false
-    t.string  "redirect_to", limit: 255
-    t.json    "error"
-  end
 
   create_table "read_marks", force: :cascade do |t|
     t.integer  "readable_id"
