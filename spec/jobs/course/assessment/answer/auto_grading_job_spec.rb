@@ -8,11 +8,12 @@ RSpec.describe Course::Assessment::Answer::AutoGradingJob do
     let(:answer) { create(:course_assessment_answer_multiple_response, :submitted).answer }
     let(:auto_grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
 
-    it 'grades answers' do
-      auto_grading.save!
+    it 'can be queued' do
       expect { subject.perform_later(auto_grading) }.to \
         change { ActiveJob::Base.queue_adapter.enqueued_jobs.count }.by(1)
+    end
 
+    it 'grades answers' do
       subject.perform_now(auto_grading)
       expect(auto_grading.answer).to be_graded
     end
