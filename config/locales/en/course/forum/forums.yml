@@ -2,6 +2,11 @@ en:
   course:
     forum:
       forums:
+        sidebar_title: :'course.forum.forums.index.header'
+        new_forum:
+          header: 'New Forum'
+        edit_forum:
+          header: 'Edit Forum'
         index:
           header: 'Forums'
           forum: 'Forum'

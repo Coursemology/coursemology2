@@ -117,6 +117,9 @@ Rails.application.routes.draw do
 
         get 'materials' => 'material_settings#edit'
         patch 'materials' => 'material_settings#update'
+
+        get 'forums' => 'forum_settings#edit'
+        patch 'forums' => 'forum_settings#update'
         namespace 'assessments' do
           resources :categories, only: [:new, :create, :destroy] do
             resources :tabs, only: [:new, :create, :destroy]

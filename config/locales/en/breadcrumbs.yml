@@ -26,6 +26,8 @@ en:
             admin: :'system.admin.admin.index.header'
         material_settings:
           edit: :'course.material.sidebar_title'
+        forum_settings:
+          edit: :'course.forum.forums.sidebar_title'
       users:
         index: 'Users'
         students: :'course.users.students.header'
@@ -70,6 +72,11 @@ en:
         folders:
           new_subfolder: :'course.material.folders.new_subfolder.header'
           new_materials: :'course.material.folders.new_materials.header'
+      forum:
+        forums:
+          index: :'course.forum.forums.index.header'
+          new_forum: :'course.forum.forums.new_forum.header'
+          edit_forum: :'course.forum.forums.edit_forum.header'
 
     system:
       admin:
