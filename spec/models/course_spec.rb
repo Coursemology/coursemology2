@@ -180,5 +180,35 @@ RSpec.describe Course, type: :model do
         it { is_expected.not_to include(unapproved_user) }
       end
     end
+
+    describe '.search' do
+      let(:keyword) { 'KeyWord' }
+      let!(:course_with_keyword_in_title) do
+        course = create(:course, title: 'Course' + keyword)
+        # We should be able to find the course even it doesn't have any course_users
+        course.course_users.destroy_all
+        course
+      end
+      let!(:course_with_keyword_in_description) do
+        course = create(:course, description: "Awesome#{keyword.downcase}Math!")
+        # We should not return multiple instances of same course if it has multiple course_users
+        create_list(:course_user, 2, course: course)
+        course
+      end
+      let!(:course_with_keyword_in_user_name) do
+        user = create(:user, name: "I am #{keyword}")
+        course_user = create(:course_user, user: user)
+        course_user.course
+      end
+
+      subject { Course.search(keyword).to_a }
+      it 'finds the course' do
+        subject
+
+        expect(subject.count(course_with_keyword_in_title)).to eq(1)
+        expect(subject.count(course_with_keyword_in_description)).to eq(1)
+        expect(subject.count(course_with_keyword_in_user_name)).to eq(1)
+      end
+    end
   end
 end

@@ -97,6 +97,8 @@ ignore_unused:
 - 'simple_form.{error_notification,required}.:'
 - 'helpers.submit.*.create'
 - 'helpers.submit.*.update'
+# TODO: Remove this when https://github.com/glebm/i18n-tasks/issues/150 is closed.
+- 'common.search'
 # Dynamically resolved using symbol overload of #t
 - 'activerecord.errors.*'
 # Used dynamically by the page_header helper

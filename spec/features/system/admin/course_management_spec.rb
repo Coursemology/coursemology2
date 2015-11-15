@@ -35,6 +35,17 @@ RSpec.feature 'System: Administration: Courses' do
         find_link(nil, href: admin_course_path(course_to_delete)).click
         expect(page).to have_selector('div', text: I18n.t('system.admin.courses.destroy.success'))
       end
+
+      let!(:course_to_search) { create(:course) }
+      scenario 'I can search courses' do
+        visit admin_courses_path
+
+        fill_in 'search', with: course_to_search.title
+        click_button 'layouts.search_form.search_button'
+
+        expect(page).to have_content_tag_for(course_to_search)
+        expect(all('.course').count).to eq(1)
+      end
     end
   end
 end
