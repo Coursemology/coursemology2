@@ -1,4 +1,8 @@
 class Course::Forum::TopicsController < Course::Forum::Controller
+  include Course::Forum::TopicControllerHidingConcern
+  include Course::Forum::TopicControllerLockingConcern
+  include Course::Forum::TopicControllerSubscriptionConcern
+
   before_action :load_topic, except: [:new, :create]
   load_resource :topic, class: Course::Forum::Topic.name, through: :forum, only: [:new, :create]
   authorize_resource :topic, class: Course::Forum::Topic.name

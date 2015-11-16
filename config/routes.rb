@@ -155,7 +155,12 @@ Rails.application.routes.draw do
 
       scope module: :forum do
         resources :forums do
-          resources :topics
+          resources :topics do
+            post 'subscribe', on: :member
+            delete 'subscribe', on: :member
+            put 'locked' => 'topics#set_locked', on: :member
+            put 'hidden' => 'topics#set_hidden', on: :member
+          end
 
           post 'subscribe', on: :member
           delete 'unsubscribe', on: :member
