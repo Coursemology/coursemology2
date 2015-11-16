@@ -55,12 +55,4 @@ RSpec.configure do |config|
 
   # Old school have_tag, with_tag(and more) matchers for rspec 3
   config.include RSpecHtmlMatchers
-
-  # TODO: Remove when upgrading to RSpec >= 3.4
-  config.around(:each, type: :job) do |example|
-    old_adapter = ActiveJob::Base.queue_adapter
-    ActiveJob::Base.queue_adapter = :test
-    example.call
-    ActiveJob::Base.queue_adapter = old_adapter
-  end
 end

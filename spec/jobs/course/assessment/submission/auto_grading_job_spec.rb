@@ -14,14 +14,7 @@ RSpec.describe Course::Assessment::Submission::AutoGradingJob do
         change { ActiveJob::Base.queue_adapter.enqueued_jobs.count }.by(1)
     end
 
-    context 'when using an asynchronous adapter' do
-      around(:each) do |proc|
-        old_adapter = ActiveJob::Base.queue_adapter
-        ActiveJob::Base.queue_adapter = :background_thread
-        proc.call
-        ActiveJob::Base.queue_adapter = old_adapter
-      end
-
+    with_active_job_queue_adapter(:background_thread) do
       it 'grades submissions' do
         subject.perform_now(submission)
         expect(submission).to be_graded
