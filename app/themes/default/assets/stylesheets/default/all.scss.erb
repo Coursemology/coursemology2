@@ -1,0 +1,29 @@
+// This is a manifest file that'll automatically include all the stylesheets available in this
+// directory and any sub-directories. You're free to add application-wide styles to this file and
+// they'll appear at the top of the compiled file, but it's generally better to create a new file
+// per style scope.
+//
+@import 'default/layout';
+<%
+# Import the rest of the files; @import '**/*' will include application.scss multiple times.
+# This is not perfect because every time a new file is added all assets need to be cleaned for the
+# new set of assets to be generated.
+# This is taken from app/assets/stylesheets/application.css.erb
+#
+# TODO: Use compass-import-once after Compass/compass#1951 is fixed
+# TODO: Revert to @import '**/*' after sass/sass#139 is fixed in sass-4.0.
+exclude_imports =  ['layout', 'all.scss']
+imports = Dir["#{__dir__}/*"]
+imports.reject! do |path|
+  basename = File.basename(path, '.*')
+  basename.start_with?('_') || exclude_imports.include?(basename)
+end
+imports.map! do |path|
+  file_path = File.file?(path)
+  path = path[(__dir__.length + 1)..-1]
+  file_path ? path : "#{path}/**/*"
+end
+
+imports.each do |file| %>
+@import '<%= file %>';
+<% end %>
