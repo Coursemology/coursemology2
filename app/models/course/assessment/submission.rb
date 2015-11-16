@@ -92,6 +92,8 @@ class Course::Assessment::Submission < ActiveRecord::Base
   #
   # This grades all the answers as well.
   def publish(_ = nil)
-    answers.each(&:publish!)
+    answers.each do |answer|
+      answer.publish! if answer.submitted?
+    end
   end
 end

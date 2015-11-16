@@ -94,6 +94,22 @@ RSpec.describe Course::Assessment::Submission do
         submission.publish!
         expect(submission.answers.all?(&:graded?)).to be(true)
       end
+
+      context 'when some of the answers are already graded' do
+        before do
+          submission.answers.sample.tap do |answer|
+            answer.publish!
+            answer.save!
+          end
+
+          expect(submission.answers.any?(&:graded?)).to be(true)
+        end
+
+        it 'propagates the graded state to its answers' do
+          submission.publish!
+          expect(submission.answers.all?(&:graded?)).to be(true)
+        end
+      end
     end
   end
 end
