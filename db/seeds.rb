@@ -12,6 +12,12 @@
 Instance.find_or_initialize_by(name: 'Default', host: '*').save!(validate: false)
 
 ActsAsTenant.with_tenant(Instance.default) do
+  # Create the Coursemology system account.
+  user = User.exists?(User::SYSTEM_USER_ID)
+  unless user
+    User.new(id: User::SYSTEM_USER_ID, name: 'System').save!(validate: false)
+  end
+
   # Create the default user account.
   user = User::Email.find_by_email('test@example.org')
   unless user

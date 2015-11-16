@@ -1,10 +1,26 @@
 # Represents a user in the application. Users are shared across all instances.
 class User < ActiveRecord::Base
+  SYSTEM_USER_ID = 0
+
   include UserAuthenticationConcern
   model_stamper
   acts_as_reader
 
   enum role: { normal: 0, administrator: 1 }
+
+  class << self
+    # Finds the System user.
+    #
+    # This account cannot be logged into (because it has no email and a null password), and the
+    # User Authentication Concern explcitly rejects any user with the system user ID.
+    #
+    # @return [User]
+    def system
+      @system ||= find(User::SYSTEM_USER_ID)
+      fail 'No system user. Did you run rake db:seed?' unless @system
+      @system
+    end
+  end
 
   after_validation :propagate_user_email_errors
 
@@ -26,6 +42,13 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :emails
 
   scope :ordered_by_name, -> { order(:name) }
+
+  # Gets whether the current user is the system user.
+  #
+  # @return [Boolean]
+  def system?
+    id == User::SYSTEM_USER_ID
+  end
 
   # Gets the email address of the user.
   #

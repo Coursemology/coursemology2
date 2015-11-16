@@ -45,12 +45,10 @@ module UserAuthenticationConcern
     def find_first_by_auth_conditions(tainted_conditions, opts = {})
       email = tainted_conditions.delete(:email)
       if email && email.is_a?(String)
-        conditions = devise_parameter_filter.filter(tainted_conditions).merge(opts)
-        conditions[:emails] = {
-          email: email
-        }
+        conditions = devise_parameter_filter.filter(tainted_conditions).merge(opts).
+                     reverse_merge(emails: { email: email })
 
-        joins(:emails).find_by(conditions)
+        joins(:emails).where { users.id != User::SYSTEM_USER_ID }.find_by(conditions)
       else
         super(tainted_conditions, opts)
       end
