@@ -5,11 +5,7 @@
       = link_to(topic.title, course_forum_topic_path(@course, @forum, topic))
     div.started-by
       = t('.started_by')
-      - topic_creator = current_course.course_users.where(user: topic.creator)
-      - if topic_creator
-        = link_to_user(topic_creator)
-      - else
-        = link_to_user(topic.creator)
+      = link_to_user(topic.creator)
   td = topic.votes_count
   td = topic.post_count
   td = topic.view_count
@@ -20,8 +16,4 @@
       = link_to last_post.title, course_forum_topic_path(current_course, @forum, topic)
       br
       = t('.creator')
-      - last_post_creator = current_course.course_users.where(user: last_post.creator)
-      - if last_post_creator
-        = link_to_user(last_post_creator)
-      - else
-        = link_to_user(last_post.creator)
+      = link_to_user(last_post.creator)
