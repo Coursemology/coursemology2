@@ -15,5 +15,23 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
         expect(gradable_answers.map(&:reload).all?(&:graded?)).to be(true)
       end
     end
+
+    context 'when a sub job fails' do
+      before do
+        def subject.aggregate_failures(jobs)
+          jobs.each_with_index do |job, i|
+            job.status = :errored
+            job.error = { 'message' => i }
+          end
+
+          super
+        end
+      end
+
+      it 'fails with a SubJobError' do
+        expect { subject.grade(submission) }.to \
+          raise_error(Course::Assessment::Submission::AutoGradingService::SubJobError)
+      end
+    end
   end
 end
