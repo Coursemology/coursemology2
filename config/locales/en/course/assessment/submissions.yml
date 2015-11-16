@@ -14,5 +14,6 @@ en:
           grade_summary: 'Grade Summary'
           finalise: 'Finalise Submission'
           publish: 'Publish Grade'
+          auto_grade: 'Auto Grade Submission'
         update:
           success: 'Submission was updated.'

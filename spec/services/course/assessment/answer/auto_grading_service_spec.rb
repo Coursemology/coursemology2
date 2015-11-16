@@ -21,6 +21,11 @@ RSpec.describe Course::Assessment::Answer::AutoGradingService do
         expect(subject.grade(auto_grading)).to eq(true)
         expect(auto_grading.answer).to be_graded
       end
+
+      it "sets the answer's grader to the system account" do
+        expect(subject.grade(auto_grading)).to eq(true)
+        expect(auto_grading.answer.grader).to eq(User.system)
+      end
     end
   end
 end

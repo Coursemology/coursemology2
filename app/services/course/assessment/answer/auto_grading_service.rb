@@ -32,6 +32,7 @@ class Course::Assessment::Answer::AutoGradingService
   # @return [Boolean] True if the grading could be saved.
   def grade(auto_grading)
     auto_grading.answer.publish!
+    auto_grading.answer.grader = User.system
     auto_grading.save
   end
 end

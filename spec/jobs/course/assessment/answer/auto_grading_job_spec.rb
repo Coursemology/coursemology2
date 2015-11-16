@@ -6,7 +6,7 @@ RSpec.describe Course::Assessment::Answer::AutoGradingJob do
   with_tenant(:instance) do
     subject { Course::Assessment::Answer::AutoGradingJob }
     let(:answer) { create(:course_assessment_answer_multiple_response, :submitted).answer }
-    let(:auto_grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
+    let!(:auto_grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
 
     it 'can be queued' do
       expect { subject.perform_later(auto_grading) }.to \

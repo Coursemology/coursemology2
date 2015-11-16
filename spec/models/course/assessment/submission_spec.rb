@@ -82,6 +82,14 @@ RSpec.describe Course::Assessment::Submission do
         submission.finalise!
         expect(submission.answers.all?(&:submitted?)).to be(true)
       end
+
+      with_active_job_queue_adapter(:test) do
+        it 'creates a new auto grading job' do
+          submission.finalise!
+          expect { submission.save }.to \
+            change { ActiveJob::Base.queue_adapter.enqueued_jobs.count }.by(1)
+        end
+      end
     end
 
     describe '#publish!' do
@@ -93,6 +101,40 @@ RSpec.describe Course::Assessment::Submission do
         expect(submission.answers.all?(&:submitted?)).to be(true)
         submission.publish!
         expect(submission.answers.all?(&:graded?)).to be(true)
+      end
+
+      context 'when some of the answers are already graded' do
+        before do
+          submission.answers.sample.tap do |answer|
+            answer.publish!
+            answer.save!
+          end
+
+          expect(submission.answers.any?(&:graded?)).to be(true)
+        end
+
+        it 'propagates the graded state to its answers' do
+          submission.publish!
+          expect(submission.answers.all?(&:graded?)).to be(true)
+        end
+      end
+    end
+
+    describe '#auto_grade!' do
+      let(:assessment_traits) { [:with_all_question_types] }
+      let(:submission1_traits) { :submitted }
+      let(:submission) { submission1 }
+
+      it 'returns an ActiveJob' do
+        expect(submission.auto_grade!).to be_a(ActiveJob::Base)
+      end
+
+      with_active_job_queue_adapter(:test) do
+        it 'queues the job' do
+          submission
+          expect { submission.auto_grade! }.to \
+            change { ActiveJob::Base.queue_adapter.enqueued_jobs.count }.by(1)
+        end
       end
     end
   end

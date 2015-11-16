@@ -2,6 +2,8 @@ class Course::Assessment::Submission < ActiveRecord::Base
   include Workflow
   acts_as_experience_points_record
 
+  after_save :auto_grade_submission, if: :submitted?
+
   workflow do
     state :attempting do
       event :finalise, transitions_to: :submitted
@@ -79,6 +81,14 @@ class Course::Assessment::Submission < ActiveRecord::Base
   alias_method :finalise=, :finalise!
   alias_method :publish=, :publish!
 
+  # Creates an Auto Grading job for this submission. This saves the submission if there are pending
+  # changes.
+  #
+  # @return [Course::Assessment::Submission::AutoGradingJob] The job instance.
+  def auto_grade!
+    AutoGradingJob.perform_later(self)
+  end
+
   protected
 
   # Handles the finalisation of a submission.
@@ -92,6 +102,17 @@ class Course::Assessment::Submission < ActiveRecord::Base
   #
   # This grades all the answers as well.
   def publish(_ = nil)
-    answers.each(&:publish!)
+    answers.each do |answer|
+      answer.publish! if answer.submitted?
+    end
+  end
+
+  private
+
+  # Queues the submission for auto grading, after the submission has changed to the submitted state.
+  def auto_grade_submission
+    return unless workflow_state_changed?
+
+    auto_grade!
   end
 end
