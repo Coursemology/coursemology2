@@ -8,13 +8,11 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
     let(:question) { answer.question.specific }
 
     describe '#grade' do
-      it "sets the submissions's status to graded" do
+      it 'grades all answers' do
         expect(subject.grade(submission)).to eq(true)
 
         gradable_answers = submission.answers.select { |answer| answer.question.auto_gradable? }
-        expect(gradable_answers.all?(&:graded?)).to be(true)
-
-        expect(submission).to be_graded
+        expect(gradable_answers.map(&:reload).all?(&:graded?)).to be(true)
       end
     end
   end

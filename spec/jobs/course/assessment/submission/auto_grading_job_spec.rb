@@ -17,7 +17,7 @@ RSpec.describe Course::Assessment::Submission::AutoGradingJob do
     with_active_job_queue_adapter(:background_thread) do
       it 'grades submissions' do
         subject.perform_now(submission)
-        expect(submission).to be_graded
+        expect(submission.answers.map(&:reload).all?(&:graded?)).to be(true)
       end
     end
   end
