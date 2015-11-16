@@ -145,6 +145,13 @@ RSpec.describe Course::Assessment::Answer do
       it 'returns an ActiveJob' do
         expect(subject.auto_grade!).to be_a(ActiveJob::Base)
       end
+
+      with_active_job_queue_adapter(:test) do
+        it 'queues the job' do
+          expect { subject.auto_grade! }.to \
+            change { ActiveJob::Base.queue_adapter.enqueued_jobs.count }.by(1)
+        end
+      end
     end
   end
 end

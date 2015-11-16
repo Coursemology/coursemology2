@@ -38,7 +38,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
     self.class.transaction do
       save!
       create_auto_grading!
-      Course::Assessment::Answer::AutoGradingJob.new(auto_grading).tap do |job|
+      Course::Assessment::Answer::AutoGradingJob.perform_later(auto_grading).tap do |job|
         auto_grading.update_attributes!(job_id: job.job_id)
       end
     end

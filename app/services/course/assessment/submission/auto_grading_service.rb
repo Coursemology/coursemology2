@@ -38,7 +38,8 @@ class Course::Assessment::Submission::AutoGradingService
   # @param [Course::Assessment::Answer] answer The answer to grade.
   # @return [Course::Assessment::Answer::AutoGradingJob] The job created to grade.
   def grade_answer(answer)
-    Course::Assessment::Answer::AutoGradingJob.perform_later(answer)
+    fail ArgumentError if answer.changed?
+    answer.auto_grade!
   end
 
   # Waits for the given list of +TrackableJob::Job+s to enter the finished state.
