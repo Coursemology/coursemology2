@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe User, type: :model do
+RSpec.describe User do
   it do
     is_expected.to have_many(:emails).
       class_name(User::Email.name).
@@ -18,6 +18,23 @@ RSpec.describe User, type: :model do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
+    describe '.system' do
+      it 'returns the system user' do
+        default_user = User.system
+        expect(default_user.password).to be_nil
+        expect(default_user.email).to be_nil
+        expect(default_user.system?).to be_truthy
+      end
+    end
+
+    describe '#system?' do
+      context 'when the user is a normal user' do
+        it 'returns false' do
+          expect(build_stubbed(:user).system?).to be_falsey
+        end
+      end
+    end
+
     describe '#email' do
       context 'when the user has no email addresses' do
         let(:user) { User.new }
