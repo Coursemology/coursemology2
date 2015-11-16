@@ -57,9 +57,10 @@ module TrackableJob
   private
 
   def deserialize_arguments(serialized_arguments)
-    super
+    result = super
 
     @job = Job.find(job_id)
+    result
   end
 
   # Specifies that the job should redirect to the given path.

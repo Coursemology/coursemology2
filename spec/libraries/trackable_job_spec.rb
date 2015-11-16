@@ -94,6 +94,12 @@ RSpec.describe TrackableJob do
       subject.send(:deserialize_arguments, [])
       expect(subject.job.id).to eq(subject.job_id)
     end
+
+    it 'returns the arguments' do
+      arguments = subject.arguments
+      serialized_arguments = subject.serialize['arguments']
+      expect(subject.send(:deserialize_arguments, serialized_arguments)).to eq(arguments)
+    end
   end
 
   describe '#redirect_to' do
