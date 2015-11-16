@@ -107,6 +107,11 @@ RSpec.describe 'Course: Assessments: Attempt' do
         submission.save!
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        # Auto grade where possible. There's one MRQ so it should be gradable.
+        click_link I18n.t('course.assessment.submissions.edit.auto_grade')
+        expect(submission.answers.map(&:reload).any?(&:graded?)).to be(true)
+
         submission_maximum_grade = 0
         submission.answers.each do |answer|
           within find(content_tag_selector(answer)) do

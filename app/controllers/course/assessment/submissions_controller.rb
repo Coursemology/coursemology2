@@ -1,7 +1,7 @@
 class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   before_action :authorize_assessment, only: :create
   load_resource :submission, class: Course::Assessment::Submission.name, through: :assessment
-  authorize_resource :submission, except: [:edit, :update]
+  authorize_resource :submission, except: [:edit, :update, :auto_grade]
   before_action :authorize_submission!, only: [:edit, :update]
   before_action :load_or_create_answers, only: [:edit, :update]
   before_action :add_assessment_breadcrumb
@@ -30,6 +30,12 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
     else
       render 'edit'
     end
+  end
+
+  def auto_grade
+    authorize!(:grade, @submission)
+    job = @submission.auto_grade!
+    redirect_to(job_path(job.job))
   end
 
   protected

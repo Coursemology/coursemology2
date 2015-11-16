@@ -139,7 +139,9 @@ Rails.application.routes.draw do
             resources :multiple_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :text_responses, only: [:new, :create, :edit, :update, :destroy]
           end
-          resources :submissions, only: [:create, :edit, :update]
+          resources :submissions, only: [:create, :edit, :update] do
+            post :auto_grade, on: :member
+          end
         end
       end
       resources :levels, except: [:show, :edit, :update]

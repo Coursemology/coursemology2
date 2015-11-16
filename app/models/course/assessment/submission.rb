@@ -81,6 +81,14 @@ class Course::Assessment::Submission < ActiveRecord::Base
   alias_method :finalise=, :finalise!
   alias_method :publish=, :publish!
 
+  # Creates an Auto Grading job for this submission. This saves the submission if there are pending
+  # changes.
+  #
+  # @return [Course::Assessment::Submission::AutoGradingJob] The job instance.
+  def auto_grade!
+    AutoGradingJob.perform_later(self)
+  end
+
   protected
 
   # Handles the finalisation of a submission.
@@ -105,6 +113,6 @@ class Course::Assessment::Submission < ActiveRecord::Base
   def auto_grade_submission
     return unless workflow_state_changed?
 
-    AutoGradingJob.perform_later(self)
+    auto_grade!
   end
 end
