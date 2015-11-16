@@ -13,9 +13,9 @@ class Course::Assessment::Submission::AutoGradingJob < ApplicationJob
 
   # Performs the auto grading.
   #
-  # @param [Course::Assessment::Answer::AutoGrading] auto_grading The object to store the grading
+  # @param [Course::Assessment::Submission] submission The object to store the grading
   #   results into.
-  def perform_tracked(auto_grading)
-    Course::Assessment::Submission::AutoGradingService.grade(auto_grading)
+  def perform_tracked(submission)
+    Course::Assessment::Submission::AutoGradingService.grade(submission)
   end
 end
