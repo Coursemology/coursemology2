@@ -3,17 +3,14 @@
   th
     = link_to(format_inline_text(topic.title), course_forum_topic_path(@course, @forum, topic))
     div.started-by
-      = t('.started_by')
-      = link_to_user(topic.creator)
+      = t('.started_by_html', user: link_to_user(topic.creator))
   td = topic.votes_count
   td = topic.post_count
   td = topic.view_count
   td.latest-post
     - last_post = topic.posts.first
     - if last_post
-      = t('.last_post')
-      = link_to format_inline_text(last_post.title),
-                course_forum_topic_path(current_course, @forum, topic)
+      = t('.last_post_html', post: link_to(format_inline_text(last_post.title),
+                                           course_forum_topic_path(current_course, @forum, topic)))
       br
-      = t('.creator')
-      = link_to_user(last_post.creator)
+      = t('.creator_html', creator: link_to_user(last_post.creator))
