@@ -87,7 +87,7 @@ RSpec.describe Course::Assessment::Submission do
         it 'creates a new auto grading job' do
           submission.finalise!
           expect { submission.save }.to \
-            change { ActiveJob::Base.queue_adapter.enqueued_jobs.count }.by(1)
+            have_enqueued_job(Course::Assessment::Submission::AutoGradingJob).exactly(:once)
         end
       end
     end
@@ -133,7 +133,7 @@ RSpec.describe Course::Assessment::Submission do
         it 'queues the job' do
           submission
           expect { submission.auto_grade! }.to \
-            change { ActiveJob::Base.queue_adapter.enqueued_jobs.count }.by(1)
+            have_enqueued_job(Course::Assessment::Submission::AutoGradingJob).exactly(:once)
         end
       end
     end

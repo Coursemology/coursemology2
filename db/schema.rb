@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151114093538) do
+ActiveRecord::Schema.define(version: 20151117141053) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -171,7 +171,7 @@ ActiveRecord::Schema.define(version: 20151114093538) do
 
   create_table "course_assessment_answer_auto_gradings", force: :cascade do |t|
     t.integer  "answer_id",  null: false, index: {name: "index_course_assessment_answer_auto_gradings_on_answer_id", unique: true}, foreign_key: {references: "course_assessment_answers", name: "fk_course_assessment_answer_auto_gradings_answer_id", on_update: :no_action, on_delete: :no_action}
-    t.uuid     "job_id",     index: {name: "index_course_assessment_answer_auto_gradings_on_job_id", unique: true}, foreign_key: {references: "jobs", name: "fk_course_assessment_answer_auto_gradings_job_id", on_update: :no_action, on_delete: :nullify}
+    t.uuid     "job_id",     index: {name: "fk__course_assessment_answer_auto_gradings_job_id"}, foreign_key: {references: "jobs", name: "fk_course_assessment_answer_auto_gradings_job_id", on_update: :no_action, on_delete: :nullify}
     t.json     "result"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -496,10 +496,11 @@ ActiveRecord::Schema.define(version: 20151114093538) do
   create_table "read_marks", force: :cascade do |t|
     t.integer  "readable_id"
     t.string   "readable_type", limit: 255, null: false
-    t.integer  "user_id",       null: false, index: {name: "fk__read_marks_user_id"}, foreign_key: {references: "users", name: "fk_read_marks_user_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "reader_id",     null: false, index: {name: "fk__read_marks_user_id"}, foreign_key: {references: "users", name: "fk_read_marks_user_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "reader_type",   limit: 255
     t.datetime "timestamp"
   end
-  add_index "read_marks", ["user_id", "readable_type", "readable_id"], name: "index_read_marks_on_user_id_and_readable_type_and_readable_id"
+  add_index "read_marks", ["reader_id", "reader_type", "readable_type", "readable_id"], name: "read_marks_reader_readable_index"
 
   create_table "user_identities", force: :cascade do |t|
     t.integer  "user_id",    null: false, index: {name: "fk__user_identities_user_id"}, foreign_key: {references: "users", name: "fk_user_identities_user_id", on_update: :no_action, on_delete: :no_action}
