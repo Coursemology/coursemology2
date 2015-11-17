@@ -120,6 +120,14 @@ override them in the theme directory.
 A sample theme (for [coursemology.org](http://coursemology.org)) can be found in the
 [coursemology-theme project](https://github.com/Coursemology/coursemology-theme).
 
+## Sprockets Pipeline
+Because we use Sass' `@import` directive, which does not ensure a file is included exactly once 
+(see sass/sass#139), we have a custom workaround by using an ERB template. This will properly 
+pick up changes made to scss files, but adding new files would require clearing the asset cache.
+
+Run `rake assets:clobber` (in production) and `rm -rf tmp/cache` (in development) to clear the 
+cache.
+
 ## Libraries
 The `lib` directory is not autoloaded, as described in this [blog post](http://hakunin.com/rails3-load-paths#if-you-add-code-in-your-lib-directory). However, the `lib/autoload`
 directory is. Place libraries which will be autoloaded in that directory instead.
