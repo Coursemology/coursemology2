@@ -22,8 +22,6 @@ end
 
 RSpec.configure do |config|
   config.extend ActiveJob::TestGroupHelpers
-
-  # TODO: Remove when upgrading to RSpec >= 3.4
   config.around(:each, type: :job,
                 &ActiveJob::TestGroupHelpers.with_active_job_queue_adapter_method)
 

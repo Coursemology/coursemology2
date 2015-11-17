@@ -1,6 +1,5 @@
 require 'rails_helper'
 
-# TODO: Rewrite using new RSpec matchers when upgrading to RSpec >= 3.4
 RSpec.describe Course::Assessment::Answer::AutoGradingJob do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
@@ -10,7 +9,7 @@ RSpec.describe Course::Assessment::Answer::AutoGradingJob do
 
     it 'can be queued' do
       expect { subject.perform_later(auto_grading) }.to \
-        change { ActiveJob::Base.queue_adapter.enqueued_jobs.count }.by(1)
+        have_enqueued_job(subject).exactly(:once)
     end
 
     it 'grades answers' do

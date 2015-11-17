@@ -154,7 +154,7 @@ RSpec.describe Course::Assessment::Answer do
         it 'queues the job' do
           subject
           expect { subject.auto_grade! }.to \
-            change { ActiveJob::Base.queue_adapter.enqueued_jobs.count }.by(1)
+            have_enqueued_job(Course::Assessment::Answer::AutoGradingJob).exactly(:once)
         end
       end
 
