@@ -32,8 +32,10 @@ class Course::Assessment::Answer < ActiveRecord::Base
   #
   # @return [Course::Assessment::Answer::AutoGradingJob] The job instance.
   # @raise [ArgumentError] When the question cannot be auto graded.
+  # @raise [IllegalStateError] When the answer has not been submitted.
   def auto_grade!
     fail ArgumentError unless question.auto_gradable?
+    fail IllegalStateError if attempting?
 
     self.class.transaction do
       save!
