@@ -10,7 +10,9 @@ class Course::Assessment::Answer < ActiveRecord::Base
       event :unsubmit, transitions_to: :attempting
       event :publish, transitions_to: :graded
     end
-    state :graded
+    state :graded do
+      event :publish, transitions_to: :graded # To re-grade an answer.
+    end
   end
 
   validate :validate_consistent_assessment
@@ -32,14 +34,18 @@ class Course::Assessment::Answer < ActiveRecord::Base
   #
   # @return [Course::Assessment::Answer::AutoGradingJob] The job instance.
   # @raise [ArgumentError] When the question cannot be auto graded.
+  # @raise [IllegalStateError] When the answer has not been submitted.
   def auto_grade!
     fail ArgumentError unless question.auto_gradable?
+    fail IllegalStateError if attempting?
 
     self.class.transaction do
-      save!
-      create_auto_grading!
-      Course::Assessment::Answer::AutoGradingJob.perform_later(auto_grading).tap do |job|
-        auto_grading.update_attributes!(job_id: job.job_id)
+      create_auto_grading! unless auto_grading
+      Course::Assessment::Answer::AutoGradingJob.new(auto_grading).tap do |job|
+        auto_grading.assign_attributes(job_id: job.job_id)
+
+        save!
+        job.enqueue
       end
     end
   end

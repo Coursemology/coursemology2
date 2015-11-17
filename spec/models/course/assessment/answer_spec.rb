@@ -135,7 +135,11 @@ RSpec.describe Course::Assessment::Answer do
 
     describe '#auto_grade!' do
       let(:question) { build(:course_assessment_question_multiple_response).question }
-      subject { build(:course_assessment_answer, question: question) }
+      let(:answer_traits) { :submitted }
+      subject do
+        create(:course_assessment_answer_multiple_response, *answer_traits, question: question).
+          answer
+      end
 
       it 'creates a new auto_grading' do
         subject.auto_grade!
@@ -148,8 +152,27 @@ RSpec.describe Course::Assessment::Answer do
 
       with_active_job_queue_adapter(:test) do
         it 'queues the job' do
+          subject
           expect { subject.auto_grade! }.to \
             change { ActiveJob::Base.queue_adapter.enqueued_jobs.count }.by(1)
+        end
+      end
+
+      context 'when the answer has been graded before' do
+        let(:answer_traits) { :graded }
+        it 'allows re-grading' do
+          new_grade = subject.grade = 1
+          subject.auto_grade!
+          subject.reload
+
+          expect(subject.grade).not_to eq(new_grade)
+        end
+      end
+
+      context 'when the answer has not been finalised' do
+        let(:answer_traits) { nil }
+        it 'fails with an IllegalStateError' do
+          expect { subject.auto_grade! }.to raise_error(IllegalStateError)
         end
       end
     end
