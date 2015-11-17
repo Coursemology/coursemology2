@@ -136,7 +136,10 @@ RSpec.describe Course::Assessment::Answer do
     describe '#auto_grade!' do
       let(:question) { build(:course_assessment_question_multiple_response).question }
       let(:answer_traits) { :submitted }
-      subject { create(:course_assessment_answer, *answer_traits, question: question) }
+      subject do
+        create(:course_assessment_answer_multiple_response, *answer_traits, question: question).
+          answer
+      end
 
       it 'creates a new auto_grading' do
         subject.auto_grade!
@@ -152,6 +155,17 @@ RSpec.describe Course::Assessment::Answer do
           subject
           expect { subject.auto_grade! }.to \
             change { ActiveJob::Base.queue_adapter.enqueued_jobs.count }.by(1)
+        end
+      end
+
+      context 'when the answer has been graded before' do
+        let(:answer_traits) { :graded }
+        it 'allows re-grading' do
+          new_grade = subject.grade = 1
+          subject.auto_grade!
+          subject.reload
+
+          expect(subject.grade).not_to eq(new_grade)
         end
       end
 
