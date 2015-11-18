@@ -169,6 +169,8 @@ gem 'carrierwave', github: 'carrierwaveuploader/carrierwave'
 gem 'filename'
 # Required by CarrierWave, for image resizing
 gem 'mini_magick'
+# Library for reading and writing zip files
+gem 'rubyzip', require: 'zip'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
