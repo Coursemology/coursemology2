@@ -1,13 +1,24 @@
 # Helpers for formatting objects/values on the application.
 module ApplicationFormattersHelper
-  # Sanitises and formats the given user-input string. The string is assumed to contain HTML markup.
+  include ApplicationHTMLFormattersHelper
+
+  # Formats the given user-input string. The string is assumed not to contain HTML markup, and
+  # will be processed for simple formatting like newlines using the Rails +simple_format+ helper.
   #
-  # TODO: not implemented
+  # This will treat the given text as a block element.
   #
-  # @param [String] text The text to display
+  # @param [String] text The text to display.
   # @return [String]
-  def format_text(text)
-    text
+  def format_block_text(text)
+    format_html(simple_format(text, {}, sanitize: false))
+  end
+
+  # Formats the given user-input string. The string is assumed not to contain HTML markup.
+  #
+  # @param [String] text The text to display.
+  # @return [String]
+  def format_inline_text(text)
+    format_html(html_escape(text))
   end
 
   # Formats the given User as a user-visible string.

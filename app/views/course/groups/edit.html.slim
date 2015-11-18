@@ -1,4 +1,4 @@
-- add_breadcrumb @group.name
+- add_breadcrumb format_inline_text(@group.name)
 = page_header
 = simple_form_for [current_course, @group] do |f|
   = f.error_notification

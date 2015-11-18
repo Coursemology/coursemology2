@@ -3,5 +3,5 @@
     div.btn-group
       = edit_button(edit_path)
       = delete_button(delete_path)
-  h3 = question.title
-  = sanitize(question.description)
+  h3 = format_inline_text(question.title)
+  = format_html(question.description)

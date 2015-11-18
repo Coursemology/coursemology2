@@ -7,9 +7,9 @@
         button.close type='button' data-dismiss='alert' data-target='.global-announcement' aria-label=t('.close')
           span aria-hidden='true'
             | &times;
-      = announcement.title
+      = format_inline_text(announcement.title)
     div.panel-body
-      = announcement.content
+      = format_html(announcement.content)
     - if announcements.size > 1
       div.panel-footer
         div.pull-right

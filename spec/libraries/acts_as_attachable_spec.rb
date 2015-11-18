@@ -60,7 +60,9 @@ RSpec.describe 'Extension: Acts as Attachable' do
   end
 
   describe 'form_builder helper' do
-    class self::SampleView < ActionView::Base; end
+    class self::SampleView < ActionView::Base
+      include ApplicationFormattersHelper
+    end
     class self::SampleFormBuilder < ActionView::Helpers::FormBuilder; end
 
     let(:template) { self.class::SampleView.new(Rails.root.join('app', 'views')) }

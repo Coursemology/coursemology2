@@ -2,14 +2,15 @@
   td
     img.achievement-icon
   th
-    = link_to achievement.title, course_achievement_path(current_course, achievement)
+    = link_to format_inline_text(achievement.title),
+              course_achievement_path(current_course, achievement)
     - if achievement.draft?
       small title=achievement
         =< fa_icon(:'eye-slash')
 
   td
     div.description
-      = achievement.description
+      = format_html(achievement.description)
 
   td = achievement.specific_conditions.map(&:title).to_sentence
 

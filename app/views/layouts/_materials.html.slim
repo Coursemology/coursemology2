@@ -3,4 +3,4 @@
     div
       = link_to material.attachment.file_upload.url do
           => fa_icon 'file-o'.freeze
-          = material.name
+          = format_inline_text(material.name)

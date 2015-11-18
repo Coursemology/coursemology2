@@ -1,6 +1,6 @@
 = content_tag_for(:tr, course)
   th
-    = link_to course.title, course_path(course)
+    = link_to format_inline_text(course.title), course_path(course)
   td = course.status
   td = format_datetime(course.created_at)
   td

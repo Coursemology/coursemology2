@@ -2,7 +2,7 @@
   td
   td
     h4
-      = link_to(topic.title, course_forum_topic_path(@course, @forum, topic))
+      = link_to(format_inline_text(topic.title), course_forum_topic_path(@course, @forum, topic))
     div.started-by
       = t('.started_by')
       = link_to_user(topic.creator)
@@ -13,7 +13,8 @@
     - last_post = topic.posts.first
     - if last_post
       = t('.last_post')
-      = link_to last_post.title, course_forum_topic_path(current_course, @forum, topic)
+      = link_to format_inline_text(last_post.title),
+                course_forum_topic_path(current_course, @forum, topic)
       br
       = t('.creator')
       = link_to_user(last_post.creator)
