@@ -2,7 +2,7 @@
   th
     = link_to course_material_folder_path(current_course, folder) do
       = fa_icon 'folder-open'
-      => folder.name
+      => format_inline_text(folder.name)
 
   td = format_datetime(folder.updated_at)
   td

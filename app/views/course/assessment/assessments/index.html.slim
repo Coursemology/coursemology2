@@ -1,9 +1,10 @@
-= page_header @category.title do
+= page_header format_inline_text(@category.title) do
   = new_button([current_course, :assessment]) if can?(:create, Course::Assessment.new(tab: @tab))
 
 = tabs do
   - @category.tabs.each do |item|
-    = nav_to(item.title, course_assessments_path(current_course, category: @category, tab: item))
+    = nav_to(format_inline_text(item.title),
+             course_assessments_path(current_course, category: @category, tab: item))
 
 table.table.assessments-list.table-hover
   thead

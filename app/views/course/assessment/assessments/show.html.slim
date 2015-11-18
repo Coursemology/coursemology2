@@ -1,12 +1,12 @@
-- add_breadcrumb @assessment.title
-= page_header(@assessment.title) do
+- add_breadcrumb format_inline_text(@assessment.title)
+= page_header format_inline_text(@assessment.title) do
   div.btn-group
     = edit_button([current_course, @assessment])
     = delete_button([current_course, @assessment])
 
 = div_for(@assessment) do
   h2 = t('.description')
-  = sanitize(@assessment.description)
+  = format_html(@assessment.description)
 
   table.table.table-bordered.details-table
     tbody

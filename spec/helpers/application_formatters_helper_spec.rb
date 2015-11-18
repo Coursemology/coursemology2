@@ -1,6 +1,48 @@
 require 'rails_helper'
 
 RSpec.describe ApplicationFormattersHelper do
+  describe 'text helpers' do
+    before do
+      subject.include(ERB::Util)
+    end
+
+    describe '#format_block_text' do
+      it 'processes newlines' do
+        expect(helper.format_block_text("hello\n\nthere")).to have_tag('p', text: 'there')
+      end
+    end
+
+    describe '#format_inline_text' do
+      it 'does not add a block element' do
+        expect(helper.format_inline_text('')).to eq('')
+      end
+    end
+
+    describe '#format_html' do
+      it 'removes script tags' do
+        expect(helper.sanitize('<script/>')).to eq('')
+      end
+
+      it 'produces html_safe output' do
+        expect(helper.sanitize('')).to be_html_safe
+      end
+    end
+
+    describe '#sanitize' do
+      it 'removes script tags' do
+        expect(helper.sanitize('<script/>')).to eq('')
+      end
+    end
+
+    describe '#simple_format' do
+      it 'escapes HTML' do
+        expect(helper.simple_format('<')).to have_tag('p') do
+          with_text('<')
+        end
+      end
+    end
+  end
+
   describe 'user display helper' do
     describe '#display_user' do
       let(:user) { build(:user) }

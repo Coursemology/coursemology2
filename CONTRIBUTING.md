@@ -84,6 +84,10 @@ classes which should be applied to an element. Use the Slim shorthand for classe
 When displaying translations for long stretches of text (e.g. a paragraph), use Rails'
 `simple_format` view helper to present the text. This automatically paragraphs the translations.
 
+When displaying user input, use the formatting helpers in 
+`app/helpers/application_formatters_helper.rb`. This would apply HTML sanitisation, automatic 
+linking to URL-like strings, etc. 
+
 When using Simple Form remember to declare `f.error_notification`.
 
 `simple_form_for`, `simple_fields_for`, and associated methods (`f.input`, etc.) should be called

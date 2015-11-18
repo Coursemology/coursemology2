@@ -3,7 +3,7 @@
     - if announcement.unread?(current_user)
       small => fa_icon(:envelope)
 
-    = announcement.title
+    = format_inline_text(announcement.title)
 
     - if announcement.sticky?
       small title=t('.sticky')
@@ -23,4 +23,4 @@
     = link_to_user(announcement.creator)
 
   div.content
-    = sanitize(announcement.content)
+    = format_html(announcement.content)

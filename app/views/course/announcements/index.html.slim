@@ -1,4 +1,4 @@
-= page_header(@announcement_settings.title) do
+= page_header format_inline_text(@announcement_settings.title) do
   = new_button([current_course, :announcement]) if can?(:create, Course::Announcement)
 
 = render partial: @announcements, spacer_template: 'announcements/announcement_spacer'

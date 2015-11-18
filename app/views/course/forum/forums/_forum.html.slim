@@ -3,9 +3,9 @@
   td
     div.forum
       .h4
-        = link_to(forum.name, course_forum_path(current_course, forum))
+        = link_to(format_inline_text(forum.name), course_forum_path(current_course, forum))
       .h5
-        = forum.description
+        = format_html(forum.description)
 
   td = forum.topic_count
   td = forum.topic_post_count

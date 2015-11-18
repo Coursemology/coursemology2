@@ -2,5 +2,5 @@
   = link_to course_path(course) do
     div.thumbnail
       div.caption
-        h2 = course.title
-        = sanitize course.description
+        h2 = format_inline_text(course.title)
+        = format_html(course.description)

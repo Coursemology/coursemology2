@@ -11,9 +11,9 @@
           = format_datetime(assessment.start_at)
 
       span.label.label-default
-        = assessment.tab.category.title.singularize
+        = format_inline_text(assessment.tab.category.title.singularize)
 
-      =< assessment.title
+      =< format_inline_text(assessment.title)
 
       - if assessment.draft?
         span data-placement='top' title=draft_message(assessment)
@@ -32,4 +32,4 @@
           i = t('.no_description')
       - else
         p
-          = sanitize(assessment.description)
+          = format_html(assessment.description)

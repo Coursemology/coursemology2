@@ -13,7 +13,7 @@
             span = fa_icon 'reorder'
           th
             = item_form.hidden_field :id
-            = item_form.label item_form.object.title
+            = item_form.label format_inline_text(item_form.object.title)
           td.weight = item_form.input :weight, as: :integer, label: false
 
   = f.button :submit

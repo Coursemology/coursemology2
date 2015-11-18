@@ -2,13 +2,13 @@
   - if f.object.attachments.any?
     strong = t('.uploaded_files')
     - f.object.attachments.each do |attachment|
-      = link_to attachment.name, '#'
+      = link_to format_inline_text(attachment.name), '#'
   div
     strong = t('.new_files')
     = f.file_field :files, multiple: true
 - else
   - if f.object.attachment.present?
     strong => t('.uploaded_file')
-    = link_to f.object.attachment.name, '#'
+    = link_to format_inline_text(f.object.attachment.name), '#'
   div
     = f.file_field :file

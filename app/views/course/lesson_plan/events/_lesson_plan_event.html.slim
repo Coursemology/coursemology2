@@ -13,7 +13,7 @@
       span.label.label-default
         = event.event_type
 
-      =< event.title
+      =< format_inline_text(event.title)
 
       - if event.draft?
         span data-placement='top' title=draft_message(event)
@@ -32,8 +32,8 @@
           i = t('.no_description')
       - else
         p
-          = sanitize(event.description)
+          = format_html(event.description)
 
       - if !event.location.blank?
         p
-          string = t('.location', location: event.location)
+          string = t('.location', location: format_inline_text(event.location))
