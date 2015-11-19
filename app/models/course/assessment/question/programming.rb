@@ -3,6 +3,7 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
   self.table_name = table_name.singularize
 
   acts_as :question, class_name: Course::Assessment::Question.name, inverse_of: :actable
+  schema_validations except: :language
 
   validates :memory_limit, :time_limit, numericality: { greater_then: 0 }
   validate :validate_language
