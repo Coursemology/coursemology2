@@ -1,4 +1,6 @@
 class Course::Assessment::Answer::AutoGrading < ActiveRecord::Base
+  actable
+
   belongs_to :answer, class_name: Course::Assessment::Answer.name, touch: true, autosave: true,
                       inverse_of: :auto_grading
   # @!attribute [r] job
