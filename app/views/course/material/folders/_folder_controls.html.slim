@@ -1,11 +1,11 @@
-span.btn-group
+span.pull-right.btn-group
   - if can?(:create, Course::Material::Folder)
     = new_button(new_subfolder_course_material_folder_path(current_course, @folder), title: t('.new')) do
-        = fa_icon :folder
+      = fa_icon :folder
   - if can?(:upload, @material_folder)
     = link_to new_materials_course_material_folder_path(current_course, @folder),
               title: t('.upload'), class: ['btn', 'btn-primary'] do
       = fa_icon :upload
-span.pull-right.btn-group
+
   - if can?(:edit, @folder)
     = edit_button([current_course, @folder])
