@@ -1,11 +1,11 @@
 module Extensions::DateTimeHelpers
   module TimeClassMethods
     def min
-      at(-Float::MAX)
+      utc(0)
     end
 
     def max
-      at(Float::MAX)
+      utc(5000)
     end
   end
 end
