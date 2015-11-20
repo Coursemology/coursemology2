@@ -59,6 +59,8 @@ en:
             new: :'course.assessment.question.multiple_responses.new.header'
           text_responses:
             new: :'course.assessment.question.text_responses.new.header'
+          programming:
+            new: :'course.assessment.question.programming.new.header'
       groups:
         index: :'course.groups.index.header'
         new: :'course.groups.new.header'

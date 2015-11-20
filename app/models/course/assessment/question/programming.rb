@@ -20,6 +20,10 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
     answer.answer
   end
 
+  def to_partial_path
+    'course/assessment/question/programming/programming'.freeze
+  end
+
   private
 
   def validate_language

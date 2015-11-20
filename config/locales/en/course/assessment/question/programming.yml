@@ -1,0 +1,22 @@
+en:
+  course:
+    assessment:
+      question:
+        programming:
+          new:
+            header: 'New Programming Question'
+          create:
+            success: 'The programming question was created.'
+          update:
+            success: 'The programming question was updated.'
+          destroy:
+            success: 'The programming question was deleted.'
+            failure: 'Could not delete programming question: %{error}'
+          form:
+            template: 'Template'
+            test_cases:
+              test_cases: 'Test Cases'
+              public: 'Public Test Cases'
+              private: 'Private Test Cases'
+              description: 'Description'
+              hint: 'Hint'
