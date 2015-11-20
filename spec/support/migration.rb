@@ -16,29 +16,34 @@ module ActiveRecord::Migration::TestGroupHelpers
   #
   # @param [Symbol] table_name The name of the table to use.
   # @param [Proc] proc The examples requiring the use of the temporary table.
-  def with_temporary_table(table_name, &proc)
-    context "with temporary table #{table_name}" do |*params|
+  def with_temporary_table(*table_names, &proc)
+    context "with temporary table #{table_names}" do |*params|
       before(:context) do
-        ActiveRecord::Migration::TestGroupHelpers.before_context(table_name, send(table_name))
+        definitions = table_names.map { |name| [name, send(name)] }
+        ActiveRecord::Migration::TestGroupHelpers.before_context(definitions)
       end
 
       after(:context) do
-        ActiveRecord::Migration::TestGroupHelpers.after_context(table_name)
+        ActiveRecord::Migration::TestGroupHelpers.after_context(table_names)
       end
 
       module_exec(*params, &proc)
     end
   end
 
-  def self.before_context(table_name, table_definition)
+  def self.before_context(table_definitions)
     ActiveRecord::Migration.suppress_messages do
-      ActiveRecord::Migration.create_table(table_name, &table_definition)
+      table_definitions.each do |(table_name, table_definition)|
+        ActiveRecord::Migration.create_table(table_name, &table_definition)
+      end
     end
   end
 
-  def self.after_context(table_name)
+  def self.after_context(table_names)
     ActiveRecord::Migration.suppress_messages do
-      ActiveRecord::Migration.drop_table(table_name)
+      table_names.reverse_each do |table_name|
+        ActiveRecord::Migration.drop_table(table_name)
+      end
     end
   end
 end
