@@ -15,11 +15,14 @@ class Course::Assessment < ActiveRecord::Base
     include Course::Assessment::QuestionsConcern
   end
   has_many :multiple_response_questions,
-           through: :questions, source: :actable,
+           through: :questions, inverse_through: :question, source: :actable,
            source_type: Course::Assessment::Question::MultipleResponse.name
   has_many :text_response_questions,
-           through: :questions, source: :actable,
+           through: :questions, inverse_through: :question, source: :actable,
            source_type: Course::Assessment::Question::TextResponse.name
+  has_many :programming_questions,
+           through: :questions, inverse_through: :question, source: :actable,
+           source_type: Course::Assessment::Question::Programming.name
 
   has_many :submissions, inverse_of: :assessment, dependent: :destroy
 
