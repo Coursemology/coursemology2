@@ -7,6 +7,13 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
     let(:user) { create(:user) }
     let(:course) { create(:course, creator: user) }
     let(:assessment) { create(:assessment, course: course) }
+    let(:question_programming_attributes) do
+      attributes_for(:course_assessment_question_programming).
+        slice(:title, :description, :maximum_grade, :language, :memory_limit,
+              :time_limit).tap do |result|
+        result[:language_id] = result.delete(:language).id
+      end
+    end
     let(:immutable_programming_question) do
       create(:course_assessment_question_programming, assessment: assessment).tap do |question|
         allow(question).to receive(:save).and_return(false)
@@ -22,9 +29,6 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
 
     describe '#create' do
       subject do
-        question_programming_attributes = attributes_for(:course_assessment_question_programming).
-                                          slice(:title, :description, :maximum_grade, :language,
-                                                :memory_limit, :time_limit)
         post :create, course_id: course, assessment_id: assessment,
                       question_programming: question_programming_attributes
       end
@@ -38,9 +42,6 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
     describe '#update' do
       let(:programming_question) { immutable_programming_question }
       subject do
-        question_programming_attributes = attributes_for(:course_assessment_question_programming).
-                                          slice(:title, :description, :maximum_grade, :language,
-                                                :memory_limit, :time_limit)
         patch :update, course_id: course, assessment_id: assessment, id: programming_question,
                        question_programming: question_programming_attributes
       end

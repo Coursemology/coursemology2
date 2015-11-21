@@ -21,7 +21,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         fill_in 'title', with: question_attributes[:title]
         fill_in 'description', with: question_attributes[:description]
         fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
-        fill_in 'language', with: question_attributes[:language]
+        select question_attributes[:language].name, from: 'language'
         fill_in 'memory_limit', with: question_attributes[:memory_limit]
         fill_in 'time_limit', with: question_attributes[:time_limit]
         click_button 'submit'
