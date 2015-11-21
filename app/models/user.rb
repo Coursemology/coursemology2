@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   SYSTEM_USER_ID = 0
 
   include UserAuthenticationConcern
+  include UserSearchConcern
   model_stamper
   acts_as_reader
 

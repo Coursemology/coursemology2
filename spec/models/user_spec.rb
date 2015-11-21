@@ -158,6 +158,27 @@ RSpec.describe User do
       end
     end
 
+    describe '.search' do
+      let(:keyword) { 'KeyWord' }
+      let!(:user_with_keyword_in_name) do
+        user = create(:user, name: 'Awesome' + keyword + 'User')
+        # We should not return multiple instances of same user if it has multiple emails
+        create(:user_email, user: user, primary: false)
+        user
+      end
+      let!(:user_with_keyword_in_emails) do
+        user = create(:user)
+        create(:user_email, user: user, email: keyword + generate(:email), primary: false)
+        user
+      end
+
+      subject { User.search(keyword.downcase).to_a }
+      it 'finds the user' do
+        expect(subject.count(user_with_keyword_in_name)).to eq(1)
+        expect(subject.count(user_with_keyword_in_emails)).to eq(1)
+      end
+    end
+
     context 'after user was created' do
       subject { create(:user) }
 

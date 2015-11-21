@@ -35,5 +35,21 @@ RSpec.describe InstanceUser, type: :model do
       expect(instance.users.count).to eq(1)
       expect(instance.users.first).to eq(user)
     end
+
+    describe '.search' do
+      let(:keyword) { 'KeyWord' }
+      let!(:instance_user_with_keyword_in_username) do
+        create(:user, emails_count: 2, name: 'Awesome' + keyword + 'User').instance_users.last
+      end
+      let!(:instance_user_with_keyword_in_emails) do
+        create(:user_email, email: keyword + generate(:email)).user.instance_users.last
+      end
+
+      subject { InstanceUser.search(keyword.downcase).to_a }
+      it 'finds the instance_user' do
+        expect(subject.count(instance_user_with_keyword_in_username)).to eq(1)
+        expect(subject.count(instance_user_with_keyword_in_emails)).to eq(1)
+      end
+    end
   end
 end
