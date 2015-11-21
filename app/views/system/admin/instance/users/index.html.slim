@@ -1,5 +1,7 @@
 = page_header
 
+= render partial: 'layouts/search_form', locals: { url: admin_instance_users_path, placeholder: t('.search_placeholder') }
+
 table.table.table-middle-align.table-hover
   thead
     tr

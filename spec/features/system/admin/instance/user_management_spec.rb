@@ -50,6 +50,28 @@ RSpec.feature 'System: Administration: Instance: Users' do
         expect(page).to have_selector('div',
                                       text: I18n.t('system.admin.instance.users.destroy.success'))
       end
+
+      scenario 'I can search users' do
+        user_name = 'lool'
+        instance_users_to_search = create_list(:user, 2, name: user_name).
+                                   map { |u| u.instance_users.first }
+        visit admin_instance_users_path
+
+        # Search by username
+        fill_in 'search', with: user_name
+        click_button 'layouts.search_form.search_button'
+
+        instance_users_to_search.each { |user| expect(page).to have_content_tag_for(user) }
+        expect(all('.instance_user').count).to eq(2)
+
+        # Search by email
+        random_instance_user = InstanceUser.order('RANDOM()').first
+        fill_in 'search', with: random_instance_user.user.email
+        click_button 'layouts.search_form.search_button'
+
+        expect(page).to have_content_tag_for(random_instance_user)
+        expect(all('.instance_user').count).to eq(1)
+      end
     end
   end
 end

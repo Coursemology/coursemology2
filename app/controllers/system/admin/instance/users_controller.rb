@@ -5,7 +5,7 @@ class System::Admin::Instance::UsersController < System::Admin::Instance::Contro
 
   def index
     @instance_users = @instance.instance_users.includes(user: [:emails, :courses]).
-                      ordered_by_username.page(page_param)
+                      page(page_param).search_and_ordered_by_username(search_param)
   end
 
   def update
@@ -28,5 +28,9 @@ class System::Admin::Instance::UsersController < System::Admin::Instance::Contro
 
   def instance_user_params
     params.require(:instance_user).permit(:role)
+  end
+
+  def search_param
+    params.permit(:search)[:search]
   end
 end

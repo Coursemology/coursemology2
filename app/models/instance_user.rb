@@ -6,4 +6,8 @@ class InstanceUser < ActiveRecord::Base
   belongs_to :user, inverse_of: :instance_users
 
   scope :ordered_by_username, -> { joins(:user).merge(User.order(name: :asc)) }
+
+  def self.search_and_ordered_by_username(keyword)
+    keyword.blank? ? ordered_by_username : search(keyword).group { user.name }.ordered_by_username
+  end
 end
