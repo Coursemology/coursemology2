@@ -1,5 +1,5 @@
 - question = multiple_response.question.specific
-h3 = format_inline_text(question.title)
+h2 = format_inline_text(question.title)
 = format_html(question.description)
 = f.association :options, as: :check_boxes, collection: question.options,
                           label_method: :option, label: false

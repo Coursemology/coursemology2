@@ -1,7 +1,7 @@
 = base_answer_form.simple_fields_for :actable do |specific_answer_form|
   = render partial: specific_answer_form.object.specific, locals: { f: specific_answer_form }
 
-h4 = t('.comments')
+h3 = t('.comments')
 div.comments
 
 - if !answer.attempting? && can?(:grade, @submission)
