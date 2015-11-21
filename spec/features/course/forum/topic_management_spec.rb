@@ -97,6 +97,83 @@ RSpec.feature 'Course: Forum: Topic: Management' do
 
         expect(page).not_to have_selector("#topic_#{topic.id}")
       end
+
+      scenario 'I can subscribe to a topic' do
+        topic = create(:forum_topic, forum: forum)
+        visit course_forum_topic_path(course, forum, topic)
+        find_link(I18n.t('course.forum.topics.subscribe.tag'),
+                  href: subscribe_course_forum_topic_path(course, forum, topic,
+                                                          subscribe: true)).click
+
+        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
+        expect(page).to have_link(I18n.t('course.forum.topics.unsubscribe.tag'),
+                                  subscribe_course_forum_topic_path(course, forum, topic,
+                                                                    subscribe: false))
+        expect(topic.subscriptions.where(user: user).count).to eq(1)
+      end
+
+      scenario 'I can unsubscribe from a topic' do
+        topic = create(:forum_topic, forum: forum)
+        topic.subscriptions.create(user: user)
+        visit course_forum_topic_path(course, forum, topic)
+        find_link(I18n.t('course.forum.topics.unsubscribe.tag'),
+                  href: subscribe_course_forum_topic_path(course, forum, topic,
+                                                          subscribe: false)).click
+
+        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
+        expect(page).to have_link(I18n.t('course.forum.topics.subscribe.tag'),
+                                  subscribe_course_forum_topic_path(course, forum, topic,
+                                                                    subscribe: true))
+        expect(topic.subscriptions.where(user: user).empty?).to eq(true)
+      end
+
+      scenario 'I can set lock state of a topic' do
+        topic = create(:forum_topic, forum: forum, locked: false)
+
+        # Set locked
+        visit course_forum_topic_path(course, forum, topic)
+        find_link(I18n.t('course.forum.topics.locked.tag'),
+                  href: locked_course_forum_topic_path(course, forum, topic, locked: true)).click
+
+        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
+        expect(page).to have_link(I18n.t('course.forum.topics.unlocked.tag'),
+                                  locked_course_forum_topic_path(course, forum, topic,
+                                                                 locked: false))
+        expect(topic.reload.locked).to eq(true)
+
+        # Set unlocked
+        find_link(I18n.t('course.forum.topics.unlocked.tag'),
+                  href: locked_course_forum_topic_path(course, forum, topic, locked: false)).click
+        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
+        expect(page).to have_link(I18n.t('course.forum.topics.locked.tag'),
+                                  locked_course_forum_topic_path(course, forum, topic,
+                                                                 locked: true))
+        expect(topic.reload.locked).to eq(false)
+      end
+
+      scenario 'I can set hide state of a topic' do
+        topic = create(:forum_topic, forum: forum, hidden: false)
+
+        # Set hidden
+        visit course_forum_topic_path(course, forum, topic)
+        find_link(I18n.t('course.forum.topics.hidden.tag'),
+                  href: hidden_course_forum_topic_path(course, forum, topic, hidden: true)).click
+
+        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
+        expect(page).to have_link(I18n.t('course.forum.topics.shown.tag'),
+                                  hidden_course_forum_topic_path(course, forum, topic,
+                                                                 hidden: false))
+        expect(topic.reload.hidden).to eq(true)
+
+        # Set shown
+        find_link(I18n.t('course.forum.topics.shown.tag'),
+                  href: hidden_course_forum_topic_path(course, forum, topic, hidden: false)).click
+        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
+        expect(page).to have_link(I18n.t('course.forum.topics.hidden.tag'),
+                                  hidden_course_forum_topic_path(course, forum, topic,
+                                                                 hidden: true))
+        expect(topic.reload.hidden).to eq(false)
+      end
     end
   end
 end
