@@ -40,8 +40,8 @@ div.methods role='tabpanel'
               th = t('common.email')
               th
                 div.pull-right
-                  = link_to_add_association(t('.individual.add_user'), f, :invitations,
-                                            find_selector: :tbody, insert_using: :append)
+                  = link_to_add_association t('.individual.add_user'), f, :invitations,
+                                            find_selector: 'tbody', insert_using: 'append'
           tbody
 
         = f.button :submit
