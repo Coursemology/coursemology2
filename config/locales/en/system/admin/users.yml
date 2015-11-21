@@ -5,6 +5,7 @@ en:
         index:
           header: 'Users'
           related_instances: 'Related Instances'
+          search_placeholder: 'Search user name or emails'
         update:
           success: '%{user} was updated.'
         destroy:
