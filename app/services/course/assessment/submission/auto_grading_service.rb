@@ -21,11 +21,12 @@ class Course::Assessment::Submission::AutoGradingService
 
   private
 
-  # Grades the answers in the provided submission which has not yet been graded.
+  # Grades the answers in the provided submission which has not yet been graded and auto gradable.
   def grade_answers(submission)
-    jobs = ungraded_answers(submission).map do |answer|
-      grade_answer(answer).job
+    auto_gradable_answers = ungraded_answers(submission).select do |answer|
+      answer.question.auto_gradable?
     end
+    jobs = auto_gradable_answers.map { |answer| grade_answer(answer).job }
 
     wait_for_jobs(jobs)
     aggregate_failures(jobs)

@@ -6,4 +6,10 @@ class Course::Assessment::Answer::Programming < ActiveRecord::Base
 
   has_many :files, class_name: Course::Assessment::Answer::ProgrammingFile.name,
                    foreign_key: :answer_id, inverse_of: :answer
+
+  accepts_nested_attributes_for :files, allow_destroy: true
+
+  def to_partial_path
+    'course/assessment/answer/programming/programming'.freeze
+  end
 end

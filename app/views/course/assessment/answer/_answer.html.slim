@@ -1,7 +1,7 @@
 = base_answer_form.simple_fields_for :actable do |specific_answer_form|
   = render partial: specific_answer_form.object.specific, locals: { f: specific_answer_form }
 
-h4 = t('.comments')
+h3 = t('.comments')
 div.comments
 
 - if !answer.attempting? && can?(:grade, @submission)
@@ -10,7 +10,7 @@ div.comments
     div.panel-body
       div.form-group.submission_answers_grade.row
         div.col-lg-3.col-md-6.col-sm-6.col-xs-6
-          = base_answer_form.input_field :grade, class: ['form-control']
+          = base_answer_form.input_field :grade, class: ['form-control', 'grade']
         div.col-lg-3.col-md-6.col-sm-6.col-xs-6
           = t('.maximum_grade', maximum_grade: answer.question.maximum_grade)
 - elsif answer.graded?
