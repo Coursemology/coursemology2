@@ -115,13 +115,13 @@ RSpec.describe 'Course: Assessments: Attempt' do
         submission_maximum_grade = 0
         submission.answers.each do |answer|
           within find(content_tag_selector(answer)) do
-            fill_in find('input.form-control')[:name], with: answer.question.maximum_grade
+            fill_in find('input.form-control.grade')[:name], with: answer.question.maximum_grade
             submission_maximum_grade += answer.question.maximum_grade
           end
         end
 
         click_button I18n.t('course.assessment.submissions.edit.publish')
-        expect(current_path).to eq(\
+        expect(current_path).to eq(
           edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.graded?).to be(true)
         expect(submission.grade).to eq(submission_maximum_grade)
