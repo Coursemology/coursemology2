@@ -26,6 +26,7 @@ en:
           new_question:
             multiple_response: 'Multiple Response'
             text_response: 'Text Response'
+            programming: 'Programming'
         new:
           header: 'New Assessment'
         create:

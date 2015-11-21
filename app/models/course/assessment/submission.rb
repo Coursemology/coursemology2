@@ -25,12 +25,14 @@ class Course::Assessment::Submission < ActiveRecord::Base
     include Course::Assessment::Submission::AnswersConcern
   end
   has_many :multiple_response_answers,
-           through: :answers, source: :actable,
+           through: :answers, inverse_through: :answer, source: :actable,
            source_type: Course::Assessment::Answer::MultipleResponse.name
-
   has_many :text_response_answers,
-           through: :answers, source: :actable,
+           through: :answers, inverse_through: :answer, source: :actable,
            source_type: Course::Assessment::Answer::TextResponse.name
+  has_many :programming_answers,
+           through: :answers, inverse_through: :answer, source: :actable,
+           source_type: Course::Assessment::Answer::Programming.name
 
   # @!attribute [r] graders
   #   The graders associated with this submission.

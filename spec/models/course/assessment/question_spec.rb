@@ -57,12 +57,21 @@ RSpec.describe Course::Assessment::Question do
       end
 
       context 'when the question is polymorphic' do
-        let(:question) { self.class::TestPolymorphicQuestion.new }
+        let(:question) do
+          # Force the creation of the superclass object, see hzamani/active_record-acts_as#55
+          self.class::TestPolymorphicQuestion.new.tap(&:actable)
+        end
         subject { question.question }
 
         it "calls the polymorphic object's methods" do
           expect(question).to receive(:attempt).and_return([])
           subject.attempt(nil)
+        end
+
+        context 'when the question does not implement #attempt' do
+          it 'fails' do
+            expect { subject.attempt(nil) }.to raise_error(NotImplementedError)
+          end
         end
       end
     end

@@ -35,7 +35,7 @@ class Course::Assessment::Question < ActiveRecord::Base
   #   that the {Course::Assessment::Answer#question} property be the same as +self+. The result
   #   should not be persisted.
   def attempt(submission)
-    return actable.attempt(submission) if actable
+    return actable.attempt(submission) if actable && actable.self_respond_to?(:attempt)
     fail NotImplementedError, 'Questions must implement the #attempt method for submissions.'
   end
 end
