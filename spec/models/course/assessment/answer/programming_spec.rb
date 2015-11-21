@@ -6,4 +6,5 @@ RSpec.describe Course::Assessment::Answer::Programming do
     expect(subject).to have_many(:files).
       class_name(Course::Assessment::Answer::ProgrammingFile.name)
   end
+  it { is_expected.to accept_nested_attributes_for(:files).allow_destroy(true) }
 end

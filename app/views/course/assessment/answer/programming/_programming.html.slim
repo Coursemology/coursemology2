@@ -1,0 +1,10 @@
+- question = programming.question.specific
+- file_fields_path = 'course/assessment/answer/programming/file_fields'.freeze
+h2 = format_inline_text(question.title)
+= format_html(question.description)
+
+div.files
+  = link_to_add_association t('.add_file'), f, :files, partial: file_fields_path,
+                            insert_using: 'after'
+  = f.simple_fields_for :files do |files_form|
+    = render file_fields_path, f: files_form
