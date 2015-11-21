@@ -96,6 +96,7 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
     # Parameters that must be an array of permitted values
     array_params = {}.tap do |result|
       result[:option_ids] = [] # MRQ answer
+      result[:files_attributes] = [:id, :_destroy, :filename, :content] # Programming answer
     end
     scalar_params.push(array_params)
   end
