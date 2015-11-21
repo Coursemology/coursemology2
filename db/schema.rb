@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151119020459) do
+ActiveRecord::Schema.define(version: 20151121070719) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -534,6 +534,12 @@ ActiveRecord::Schema.define(version: 20151119020459) do
     t.datetime "updated_at",  null: false
   end
   add_index "instance_users", ["instance_id", "user_id"], name: "index_instance_users_on_instance_id_and_user_id", unique: true
+
+  create_table "polyglot_languages", force: :cascade do |t|
+    t.string  "type",      limit: 255, null: false, comment: "The class of language, as perceived by the application."
+    t.string  "name",      limit: 255, null: false, index: {name: "index_polyglot_languages_on_name", unique: true, case_sensitive: false}
+    t.integer "parent_id", index: {name: "fk__polyglot_languages_parent_id"}, foreign_key: {references: "polyglot_languages", name: "fk_polyglot_languages_parent_id", on_update: :no_action, on_delete: :no_action}
+  end
 
   create_table "read_marks", force: :cascade do |t|
     t.integer  "readable_id"
