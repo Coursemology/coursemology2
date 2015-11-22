@@ -19,6 +19,21 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationsController do
 
     before { sign_in(user) }
 
+    describe '#allocate' do
+      let(:request) do
+        post :allocate, course_id: course
+      end
+
+      context 'when saving fails' do
+        before do
+          controller.instance_variable_set(:@programming_evaluation, immutable_evaluation)
+          request
+        end
+
+        it { is_expected.to respond_with(400) }
+      end
+    end
+
     describe '#update_result' do
       let(:request) do
         put :update_result, course_id: course, programming_evaluation_id: evaluation,

@@ -9,12 +9,20 @@
 class Course::Assessment::ProgrammingEvaluationsController < ApplicationController
   around_action :unscope_course
   before_action :load_programming_evaluation, only: [:update_result]
+  around_action :load_and_authorize_pending_programming_evaluation, only: [:allocate]
   before_action :set_request_format
   load_and_authorize_resource :programming_evaluations,
-                              class: Course::Assessment::ProgrammingEvaluation.name
+                              class: Course::Assessment::ProgrammingEvaluation.name,
+                              except: [:allocate]
 
   def index
     @programming_evaluations = @programming_evaluations.with_language(language_param)
+  end
+
+  def allocate
+    fail ActiveRecord::RecordNotFound unless @programming_evaluation
+    @programming_evaluation.assign!(current_user)
+    response.status = :bad_request unless @programming_evaluation.save
   end
 
   def update_result
@@ -36,6 +44,17 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
 
   def load_programming_evaluation
     @programming_evaluation = Course::Assessment::ProgrammingEvaluation.find(id_param)
+  end
+
+  def load_and_authorize_pending_programming_evaluation
+    Course::Assessment::ProgrammingEvaluation.transaction do
+      @programming_evaluation ||= Course::Assessment::ProgrammingEvaluation.
+                                  accessible_by(current_ability, :show).
+                                  with_language(language_param).
+                                  pending.limit(1).first
+      authorize! :show, @programming_evaluation if @programming_evaluation
+      yield
+    end
   end
 
   def set_request_format

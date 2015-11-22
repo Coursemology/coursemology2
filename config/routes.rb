@@ -136,6 +136,7 @@ Rails.application.routes.draw do
       scope module: :assessment do
         collection do
           resources :programming_evaluations, only: [:index] do
+            post 'allocate' => 'programming_evaluations#allocate', on: :collection
             put 'result' => 'programming_evaluations#update_result'
           end
         end
