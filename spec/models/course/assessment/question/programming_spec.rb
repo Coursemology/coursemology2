@@ -20,12 +20,6 @@ RSpec.describe Course::Assessment::Question::Programming do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     describe 'validations' do
-      describe '#language' do
-        it 'is a valid language' do
-          pending 'Polyglot framework'
-          fail NotImplementedError
-        end
-      end
     end
 
     describe '#attempt' do

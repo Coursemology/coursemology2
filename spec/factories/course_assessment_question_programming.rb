@@ -8,7 +8,7 @@ FactoryGirl.define do
 
     memory_limit 32
     time_limit 10
-    language '' # TODO: Implement the Polyglot component
+    language { Polyglot::Language::Python::Python2Point7.instance }
     template_files do
       template_file_count.downto(0).map do
         build(:course_assessment_question_programming_template_file, question: nil)

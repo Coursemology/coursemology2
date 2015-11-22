@@ -2,7 +2,7 @@
   = f.error_notification
   = render partial: 'course/assessment/questions/form', locals: { f: f }
 
-  = f.input :language
+  = f.association :language
   = f.input :memory_limit
   = f.input :time_limit
 

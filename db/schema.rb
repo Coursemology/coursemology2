@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151119020459) do
+ActiveRecord::Schema.define(version: 20151121082432) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -204,8 +204,14 @@ ActiveRecord::Schema.define(version: 20151119020459) do
   create_table "course_assessment_answer_programming_auto_gradings", force: :cascade do |t|
   end
 
+  create_table "polyglot_languages", force: :cascade do |t|
+    t.string  "type",      limit: 255, null: false, comment: "The class of language, as perceived by the application."
+    t.string  "name",      limit: 255, null: false, index: {name: "index_polyglot_languages_on_name", unique: true, case_sensitive: false}
+    t.integer "parent_id", index: {name: "fk__polyglot_languages_parent_id"}, foreign_key: {references: "polyglot_languages", name: "fk_polyglot_languages_parent_id", on_update: :no_action, on_delete: :no_action}
+  end
+
   create_table "course_assessment_question_programming", force: :cascade do |t|
-    t.string  "language",      limit: 255, null: false
+    t.integer "language_id",   null: false, index: {name: "fk__course_assessment_question_programming_language_id"}, foreign_key: {references: "polyglot_languages", name: "fk_course_assessment_question_programming_language_id", on_update: :no_action, on_delete: :no_action}
     t.integer "memory_limit",  comment: "Memory limit, in MiB"
     t.integer "time_limit",    comment: "Time limit, in seconds"
     t.uuid    "import_job_id", comment: "The ID of the importing job", index: {name: "index_course_assessment_question_programming_on_import_job_id", unique: true}, foreign_key: {references: "jobs", name: "fk_course_assessment_question_programming_import_job_id", on_update: :no_action, on_delete: :nullify}
