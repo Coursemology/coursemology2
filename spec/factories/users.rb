@@ -21,5 +21,9 @@ FactoryGirl.define do
     factory :administrator, parent: :user do
       role :administrator
     end
+
+    trait :auto_grader do
+      role :auto_grader
+    end
   end
 end

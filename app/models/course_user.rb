@@ -3,13 +3,16 @@ class CourseUser < ActiveRecord::Base
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
 
-  enum role: { student: 0, teaching_assistant: 1, manager: 2, owner: 3 }
+  enum role: { student: 0, teaching_assistant: 1, manager: 2, owner: 3, auto_grader: 4 }
 
   # A set of roles which comprise the staff of a course.
   STAFF_ROLES = Set[:teaching_assistant, :manager, :owner].freeze
 
   # A set of roles which comprise the managers of a course.
   MANAGER_ROLES = Set[:manager, :owner].freeze
+
+  # A set of roles which comprise the auto graders of a course.
+  AUTO_GRADER_ROLES = Set[:auto_grader].freeze
 
   workflow do
     state :requested do
