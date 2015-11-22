@@ -27,6 +27,14 @@ class Polyglot::Language < ActiveRecord::Base
 
   validate :unique_root_language, unless: :parent
 
+  # @!method self.with_language(languages)
+  #   Gets all languages in the given set.
+  #
+  #   @param [Array<String>] languages
+  scope :with_language, (lambda do |languages|
+    where { name.in(languages) }
+  end)
+
   # @!method self.instance
   #   Gets an instance of the language object. Any class which implements this method can be
   #   instantiated and is expected to no longer be abstract.

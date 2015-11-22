@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151121082432) do
+ActiveRecord::Schema.define(version: 20151122011709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -240,6 +240,21 @@ ActiveRecord::Schema.define(version: 20151121082432) do
 
   create_table "course_assessment_answer_text_responses", force: :cascade do |t|
     t.text "answer_text"
+  end
+
+  create_table "course_assessment_programming_evaluations", force: :cascade do |t|
+    t.integer  "course_id",    null: false, index: {name: "fk__course_assessment_programming_evaluations_course_id"}, foreign_key: {references: "courses", name: "fk_course_assessment_programming_evaluations_course_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "language_id",  null: false, index: {name: "fk__course_assessment_programming_evaluations_language_id"}, foreign_key: {references: "polyglot_languages", name: "fk_course_assessment_programming_evaluations_language_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "memory_limit", comment: "Memory limit, in MiB"
+    t.integer  "time_limit",   comment: "Time limit, in seconds"
+    t.string   "status",       limit: 255, null: false
+    t.integer  "evaluator_id", index: {name: "fk__course_assessment_programming_evaluations_evaluator_id"}, foreign_key: {references: "users", name: "fk_course_assessment_programming_evaluations_evaluator_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "assigned_at"
+    t.text     "stdout"
+    t.text     "stderr"
+    t.text     "test_report"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "course_assessment_question_programming_template_files", force: :cascade do |t|
