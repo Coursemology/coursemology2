@@ -32,7 +32,11 @@ class Polyglot::Language < ActiveRecord::Base
   #
   #   @param [Array<String>] languages
   scope :with_language, (lambda do |languages|
-    where { name.in(languages) }
+    if !languages || languages.empty?
+      all
+    else
+      where { name.in(languages) }
+    end
   end)
 
   # @!method self.instance
