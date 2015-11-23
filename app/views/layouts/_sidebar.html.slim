@@ -1,3 +1,4 @@
-div.sidebar.sidebar-left.sidebar-animate#site-navigation-sidebar class=sidebar_classes
-  ul.nav.navbar-stacked
-    = yield
+div class=sidebar_classes
+  nav.navbar-default.sidebar role='navigation'
+    div.collapse.navbar-collapse#site-navigation-sidebar
+      = yield

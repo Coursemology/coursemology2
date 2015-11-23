@@ -1,12 +1,14 @@
 = render within_layout: controller.parent_layout(of_layout: 'user_admin') do
-  = render_breadcrumbs
   div.container-fluid
-    = sidebar do
-      li
-        = link_to(t('user.admin.navbar.profile'), edit_user_profile_path)
-      li
-        = link_to(t('user.admin.navbar.emails'), user_emails_path)
-      li
-        = link_to(t('user.admin.navbar.account_settings'), edit_user_registration_path)
-    div.col-xs-5.col-sm-9.col-md-10
-      = yield
+    = render_breadcrumbs
+    div.row
+      = sidebar do
+        ul.nav.nav-pills.nav-stacked
+          li
+            = link_to(t('user.admin.navbar.profile'), edit_user_profile_path)
+          li
+            = link_to(t('user.admin.navbar.emails'), user_emails_path)
+          li
+            = link_to(t('user.admin.navbar.account_settings'), edit_user_registration_path)
+      div.col-lg-10.col.md-9.col-sm-8
+        = yield

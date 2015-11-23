@@ -1,11 +1,16 @@
 = render within_layout: controller.parent_layout(of_layout: 'system_admin') do
-  = render_breadcrumbs
   div.container-fluid
-    = sidebar do
-      li
-        = link_to(t('system.admin.navbar.users'), admin_users_path)
-        = link_to(t('system.admin.navbar.system_announcements'), admin_announcements_path)
-        = link_to(t('system.admin.navbar.instances'), admin_instances_path)
-        = link_to(t('system.admin.navbar.courses'), admin_courses_path)
-    div.col-xs-5.col-sm-9.col-md-10
-      = yield
+    = render_breadcrumbs
+    div.row
+      = sidebar do
+        ul.nav.nav-pills.nav-stacked
+          li
+            = link_to(t('system.admin.navbar.users'), admin_users_path)
+          li
+            = link_to(t('system.admin.navbar.system_announcements'), admin_announcements_path)
+          li
+            = link_to(t('system.admin.navbar.instances'), admin_instances_path)
+          li
+            = link_to(t('system.admin.navbar.courses'), admin_courses_path)
+      div.col-lg-10.col.md-9.col-sm-8
+        = yield

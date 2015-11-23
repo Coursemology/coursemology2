@@ -3,8 +3,8 @@
   = render_breadcrumbs
   div.row
     div.col-lg-2.col-md-3.col-sm-4
-      nav role='navigation'
-        div.collapse.navbar-collapse#course-navigation-navbar
+      nav.navbar-default.sidebar role='navigation'
+        div.collapse.navbar-collapse#course-navigation-sidebar
           = sidebar_items(controller.sidebar_items(type: :normal))
           h5 = t('.administration')
           = sidebar_items(controller.sidebar_items(type: :admin))
