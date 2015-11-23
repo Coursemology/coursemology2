@@ -36,6 +36,14 @@ RSpec.describe Polyglot do
       end
     end
 
+    describe '.with_language' do
+      subject { self.class::WorkingLanguage }
+      it 'only shows the languages specified' do
+        expect(Polyglot::Language.with_language([subject.instance.name])).to \
+          contain_exactly(subject.instance)
+      end
+    end
+
     describe '.display_name' do
       it 'fails with NotImplementedError' do
         expect { subject.display_name }.to raise_error(NotImplementedError)
