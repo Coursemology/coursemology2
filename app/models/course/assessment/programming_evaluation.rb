@@ -59,4 +59,14 @@ class Course::Assessment::ProgrammingEvaluation < ActiveRecord::Base
   def finished?
     completed? || errored?
   end
+
+  protected
+
+  # Handles the assign event.
+  #
+  # @param [User] assigned_evaluator The user  assigned to evaluate this evaluation.
+  def assign(assigned_evaluator)
+    self.evaluator = assigned_evaluator
+    self.assigned_at = Time.zone.now
+  end
 end
