@@ -51,14 +51,6 @@ class Course::Forum::Topic < ActiveRecord::Base
     0 # :TODO
   end
 
-  # Return if a user has subscribed to this topic
-  #
-  # @param [User] user The user to check
-  # @return [Boolean] True if the user has subscribed this topic
-  def subscribed_by?(user)
-    subscriptions.where(user: user).any?
-  end
-
   private
 
   # Try building a slug based on the following fields in
