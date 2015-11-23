@@ -66,16 +66,23 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
 
     describe '#sidebar_items' do
-      subject { helper.sidebar_items(sidebar_items) }
+      context 'when function is called' do
+        subject { helper.sidebar_items(sidebar_items) }
 
-      it 'displays all the sidebar items' do
-        expect(subject).to have_tag('ul.nav.nav-pills.nav-stacked')
-        sidebar_items.each do |item|
-          expect(subject).to have_tag('li') do
-            with_tag('a', text: /^#{item[:title]}/)
-            with_tag('a', with: { href: item[:path] })
+        it 'displays all the sidebar items' do
+          expect(subject).to have_tag('ul.nav.nav-pills.nav-stacked')
+          sidebar_items.each do |item|
+            expect(subject).to have_tag('li') do
+              with_tag('a', text: /^#{item[:title]}/)
+              with_tag('a', with: { href: item[:path] })
+            end
           end
         end
+      end
+
+      it 'sets #has_sidebar?' do
+        helper.sidebar_items(sidebar_items)
+        expect(helper.has_sidebar?).to eq(true)
       end
     end
   end

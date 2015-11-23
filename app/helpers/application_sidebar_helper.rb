@@ -34,6 +34,8 @@ module ApplicationSidebarHelper
   # @param [Array<String>] classes An array of classes to apply to the sidebar items container.
   # @return [String] The HTML string which will display the sidebar items.
   def sidebar_items(items, classes: ['nav', 'nav-pills', 'nav-stacked'])
+    sidebar!
+
     links = items.map { |item| link_to_sidebar_item(item) }
     content_tag(:ul, class: classes) do
       links.map { |link| concat(content_tag(:li, link)) }
