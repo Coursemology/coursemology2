@@ -6,6 +6,10 @@ en:
           started_by_html: 'Started by %{user}'
           last_post_html: 'Last Post: %{post}'
           creator_html: 'Creator: %{creator}'
+        new_topic:
+          header: 'New Topic'
+        edit_topic:
+          header: 'Edit Topic'
         new:
           header: 'New Topic'
         create:

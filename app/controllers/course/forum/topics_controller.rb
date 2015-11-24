@@ -1,4 +1,4 @@
-class Course::Forum::TopicsController < Course::Forum::Controller
+class Course::Forum::TopicsController < Course::Forum::ComponentController
   include Course::Forum::TopicControllerHidingConcern
   include Course::Forum::TopicControllerLockingConcern
   include Course::Forum::TopicControllerSubscriptionConcern
@@ -6,6 +6,7 @@ class Course::Forum::TopicsController < Course::Forum::Controller
   before_action :load_topic, except: [:new, :create]
   load_resource :topic, class: Course::Forum::Topic.name, through: :forum, only: [:new, :create]
   authorize_resource :topic, class: Course::Forum::Topic.name
+  before_action :add_topic_breadcrumb
 
   def show
     @posts = @topic.posts
@@ -72,5 +73,10 @@ class Course::Forum::TopicsController < Course::Forum::Controller
 
   def load_topic
     @topic ||= @forum.topics.friendly.find(params[:id])
+  end
+
+  def add_topic_breadcrumb
+    add_breadcrumb @topic.title, course_forum_topic_path(current_course, @forum,
+                                                         @topic) if @topic.try(:persisted?)
   end
 end
