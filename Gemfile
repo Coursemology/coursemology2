@@ -146,7 +146,7 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 
 # Use cancancan for authorization
-gem 'cancancan'
+gem 'cancancan', github: 'CanCanCommunity/cancancan', branch: 'develop'
 
 # Some helpers for structuring CSS/JavaScript
 gem 'rails_utils', '>= 3.3.3'
