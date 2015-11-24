@@ -28,7 +28,7 @@
               td = @submission.points_awarded
             tr
               th = t('.due_at')
-              td = format_datetime(@assessment.end_at)
+              td = format_datetime(@assessment.end_at) if @assessment.end_at
             tr
               th = @submission.class.human_attribute_name(:submitted_at)
               td = format_datetime(@submission.submitted_at)
