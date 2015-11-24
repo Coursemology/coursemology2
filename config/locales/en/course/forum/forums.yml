@@ -13,6 +13,7 @@ en:
           topics: 'Topics'
           posts: 'Posts'
           views: 'Views'
+          no_forum: 'No Forum'
         show:
           topics: 'Topics'
           votes: 'Votes'
