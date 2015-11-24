@@ -4,6 +4,7 @@ module Course::MaterialsAbilityComponent
   def define_permissions
     if user
       allow_students_show_materials
+      allow_students_upload_materials
       allow_staff_manage_materials
     end
 
@@ -28,6 +29,13 @@ module Course::MaterialsAbilityComponent
     currently_valid_hashes.each do |properties|
       can :read, Course::Material::Folder, course_all_course_users_hash.reverse_merge(properties)
     end
+  end
+
+  def allow_students_upload_materials
+    alias_action :new_materials, :upload_materials, to: :upload
+    can :upload, Course::Material::Folder, course_all_course_users_hash.
+      reverse_merge(can_student_upload: true)
+    can :manage, Course::Material, creator: user
   end
 
   def allow_staff_manage_materials

@@ -67,6 +67,18 @@ RSpec.feature 'Course: Material: Files: Management' do
           expect(page).not_to have_link(nil, href: edit_link)
         end
       end
+
+      scenario 'I can edit the material created by me' do
+        material = create(:material, folder: folder, creator: user)
+        visit edit_course_material_folder_material_path(course, folder, material)
+
+        new_name = 'new name'
+        fill_in 'material_name', with: new_name
+        click_button 'submit'
+
+        expect(current_path).to eq(course_material_folder_path(course, folder))
+        expect(material.reload.name).to eq(new_name)
+      end
     end
   end
 end

@@ -128,6 +128,21 @@ RSpec.feature 'Course: Material: Folders: Management' do
           expect(page).not_to have_content_tag_for(subfolder)
         end
       end
+
+      scenario 'I can upload a file to the folder' do
+        folder = create(:folder, parent: parent_folder, course: course, can_student_upload: true)
+        visit course_material_folder_path(course, folder)
+        find_link(nil, href: new_materials_course_material_folder_path(course, folder)).click
+        attach_file(:material_folder_files_attributes,
+                    File.join(Rails.root, '/spec/fixtures/files/text.txt'))
+        expect do
+          click_button 'submit'
+        end.to change { folder.materials.count }.by(1)
+
+        edit_link = edit_course_material_folder_material_path(course, folder, folder.materials.last)
+        expect(page).to have_link(nil, href: edit_link)
+        expect(page).to have_selector('a.btn-danger.delete')
+      end
     end
   end
 end
