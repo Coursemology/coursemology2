@@ -94,6 +94,66 @@ RSpec.describe Course, type: :model do
         end
       end
 
+      describe '#current_level_threshold' do
+        subject do
+          -> (course, experience_points) { course.current_level_threshold experience_points }
+        end
+
+        context 'when there are no levels created in the course' do
+          let!(:course_without_levels) { create(:course) }
+          it 'returns the correct threshold value' do
+            expect(subject[course_without_levels, 0]).to eq 0
+            expect(subject[course_without_levels, 1]).to eq 0
+          end
+        end
+
+        context 'with levels created in the course' do
+          context 'with experience points less than the threshold of the lowest level' do
+            it 'returns the correct threshold value' do
+              expect(subject[course, levels.first - 1]).to eq 0
+            end
+          end
+
+          context 'with experience points greater than threshold of the lowest level' do
+            it 'returns the correct threshold value' do
+              levels.each do |threshold|
+                expect(subject[course, threshold]).to eq threshold
+              end
+            end
+          end
+        end
+      end
+
+      describe '#next_level_threshold' do
+        subject do
+          -> (course, experience_points) { course.next_level_threshold experience_points }
+        end
+
+        context 'when there are no levels created in the course' do
+          let!(:course_without_levels) { create(:course) }
+          it 'returns the correct threshold value' do
+            expect(subject[course_without_levels, 0]).to eq 0
+            expect(subject[course_without_levels, 1]).to eq 0
+          end
+        end
+
+        context 'with levels created in the course' do
+          context 'with experience points less than threshold of the highest level' do
+            it 'returns the correct threshold value' do
+              levels.each do |threshold|
+                expect(subject[course, threshold - 1]).to eq threshold
+              end
+            end
+          end
+
+          context 'with experience points greater than the threshold of the highest level' do
+            it 'returns the correct threshold value' do
+              expect(subject[course, levels.last + 1]).to eq levels.last
+            end
+          end
+        end
+      end
+
       describe '#numbered_levels' do
         it 'numbers levels' do
           numbering = course.numbered_levels.map(&:level_number)
