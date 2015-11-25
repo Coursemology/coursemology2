@@ -1,5 +1,7 @@
 = simple_form_for @settings, url: course_admin_forums_path(current_course) do |f|
   = f.error_notification
   = f.input :title, as: :string, placeholder: t('.title_placeholder')
-  = f.input :pagination, as: :integer
+  = f.input :forum_pagination, as: :integer
+  = f.input :topic_title, as: :string, placeholder: t('.title_placeholder')
+  = f.input :topic_pagination, as: :integer
   = f.button :submit
