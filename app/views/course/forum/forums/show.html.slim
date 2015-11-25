@@ -5,7 +5,7 @@ table.table.forum-list.table-hover
   thead
     tr
       th
-      th = t('.topics')
+      th = @forum_settings.topic_title.present? ? @forum_settings.topic_title : t('.topics')
       th = t('.votes')
       th = t('.posts')
       th = t('.views')

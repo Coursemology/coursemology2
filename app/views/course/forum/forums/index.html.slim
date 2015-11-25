@@ -1,11 +1,11 @@
-= page_header do
+= page_header format_inline_text(@forum_settings.title) do
   = new_button([current_course, :forum]) if can?(:create, Course::Forum)
 table.table.forum-list.table-hover
   thead
     tr
       th
-      th = t('.forum')
-      th = t('.topics')
+      th = @forum_settings.title.present? ? @forum_settings.title : t('.forums')
+      th = @forum_settings.topic_title.present? ? @forum_settings.topic_title : t('.topics')
       th = t('.posts')
       th = t('.views')
   tbody
