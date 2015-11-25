@@ -80,19 +80,39 @@ RSpec.describe Instance do
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
-    describe '.with_course_count' do
+    describe '.course_count' do
       let!(:courses) { create_list(:course, 2, instance: instance) }
+      subject { Instance.where(id: instance.id).calculated(:course_count).first }
 
       it 'shows the correct count' do
-        expect(Instance.with_course_count.find(instance.id).course_count).to eq(courses.size)
+        expect(subject.course_count).to eq(courses.size)
+      end
+
+      context 'when viewing from another instance' do
+        let(:new_instance) { create(:instance) }
+        it 'shows the correct count' do
+          ActsAsTenant.with_tenant(new_instance) do
+            expect(subject.course_count).to eq(courses.size)
+          end
+        end
       end
     end
 
-    describe '.with_user_count' do
+    describe '.user_count' do
       let!(:users) { create_list(:instance_user, 3, instance: instance) }
+      subject { Instance.where(id: instance.id).calculated(:user_count).first }
 
       it 'shows the correct count' do
-        expect(Instance.with_user_count.find(instance.id).user_count).to eq(users.size)
+        expect(subject.user_count).to eq(users.size)
+      end
+
+      context 'when viewing from another instance' do
+        let(:new_instance) { create(:instance) }
+        it 'shows the correct count' do
+          ActsAsTenant.with_tenant(new_instance) do
+            expect(subject.user_count).to eq(users.size)
+          end
+        end
       end
     end
   end

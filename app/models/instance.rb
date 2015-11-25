@@ -56,22 +56,18 @@ class Instance < ActiveRecord::Base
   #   Orders the instances by ID.
   scope :order_by_id, ->(direction = :asc) { order(id: direction) }
 
-  # @!method self.with_course_count
-  #   Augments all returned records with the number of courses in that instance.
-  scope :with_course_count, (lambda do
-    joins { courses.outer }.
-      select { 'instances.*' }.
-      select { count(courses.id).as(course_count) }.
-      group { instances.id }
+  # @!attribute [r] course_count
+  #   The number of courses in the instance.
+  calculated :course_count, (lambda do
+    Course.unscoped.where { courses.instance_id == instances.id }.
+      select { count('*') }
   end)
 
-  # @!method self.with_user_count
-  #   Augments all returned records with the number of users in that instance.
-  scope :with_user_count, (lambda do
-    joins { instance_users.outer }.
-      select { 'instances.*' }.
-      select { count(instance_users.id).as(user_count) }.
-      group { instances.id }
+  # @!attribute [r] user_count
+  #   The number of users in the instance.
+  calculated :user_count, (lambda do
+    InstanceUser.unscoped.where { instance_users.instance_id == instances.id }.
+      select { count('*') }
   end)
 
   def self.use_relative_model_naming?
