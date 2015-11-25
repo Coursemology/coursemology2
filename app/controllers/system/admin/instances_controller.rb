@@ -29,6 +29,12 @@ class System::Admin::InstancesController < System::Admin::Controller
   end
 
   def destroy #:nodoc:
+    if @instance.destroy
+      redirect_to admin_instances_path, success: t('.success', instance: @instance.name)
+    else
+      redirect_to admin_instances_path,
+                  danger: t('.failure', error: @instance.errors.full_messages.to_sentence)
+    end
   end
 
   private

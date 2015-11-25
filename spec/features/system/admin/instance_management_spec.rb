@@ -59,6 +59,15 @@ RSpec.feature 'System: Administration: Instances' do
           expect(page).to have_content_tag_for(instance)
         end
       end
+
+      scenario 'I can destroy an instance' do
+        instance = create(:instance)
+        last_page = Instance.page.total_pages
+        visit admin_instances_path(page: last_page)
+
+        find_link(nil, href: admin_instance_path(instance)).click
+        expect(Instance.find_by(id: instance.id)).to be_nil
+      end
     end
   end
 end

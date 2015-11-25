@@ -8,3 +8,7 @@
   td = instance.user_count
 
   td = instance.course_count
+
+  td
+    = edit_button([:admin, instance]) if can?(:edit, instance)
+    = delete_button([:admin, instance]) if can?(:delete, instance)

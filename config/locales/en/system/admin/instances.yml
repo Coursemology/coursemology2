@@ -11,8 +11,11 @@ en:
         new:
           header: 'New Instance'
         create:
-          success: 'Instance has been successfully created'
+          success: 'Instance has been successfully created.'
         edit:
           header: 'Edit Instance'
         update:
-          success: 'Instance has been successfully updated'
+          success: 'Instance has been successfully updated.'
+        destroy:
+          success: '%{instance} was destroyed.'
+          failure: 'Failed to delete instance: %{error}'
