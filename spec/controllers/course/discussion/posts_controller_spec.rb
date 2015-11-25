@@ -7,7 +7,7 @@ RSpec.describe Course::Discussion::PostsController, type: :controller do
     let(:user) { create(:administrator) }
     let(:forum_topic)  { create(:forum_topic).topic }
     let!(:post_stub) do
-      stub = create(:post)
+      stub = build_stubbed(:post)
       allow(stub).to receive(:save).and_return(false)
       allow(stub).to receive(:destroy).and_return(false)
       stub
