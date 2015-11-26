@@ -9,8 +9,10 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
   before_action :add_topic_breadcrumb
 
   def show
-    @posts = @topic.posts
-    @topic.views.create(user: current_user)
+    @posts = @topic.posts.ordered_by_created_at
+    @topic.viewed_by(current_user)
+    @reply_post = @topic.posts.build(title: t('course.discussion.posts.reply_title',
+                                              title: @topic.title))
   end
 
   def new

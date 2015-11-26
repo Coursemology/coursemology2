@@ -1,0 +1,7 @@
+= page_header
+
+= render partial: 'post', locals: { post: @post }
+hr
+
+h3 = t('.reply')
+= render partial: 'reply_form'
