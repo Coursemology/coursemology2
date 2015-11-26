@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/discussion/post:
+          attributes:
+            post:
+              topic_inconsistent: 'The topic is inconsistent with its parent post'
