@@ -167,6 +167,10 @@ Rails.application.routes.draw do
       scope module: :forum do
         resources :forums do
           resources :topics do
+            resources :posts, only: [:create, :edit, :update, :destroy] do
+              get 'reply', on: :member
+            end
+
             post 'subscribe', on: :member
             delete 'subscribe', on: :member
             put 'locked' => 'topics#set_locked', on: :member
