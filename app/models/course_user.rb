@@ -32,7 +32,7 @@ class CourseUser < ActiveRecord::Base
                                        inverse_of: :course_user, dependent: :destroy
   has_many :course_user_achievements, class_name: Course::UserAchievement.name,
                                       inverse_of: :course_user, dependent: :destroy
-  has_many :achievements, through: :user_achievements, class_name: Course::Achievement.name
+  has_many :achievements, through: :course_user_achievements, class_name: Course::Achievement.name
   has_one :invitation, class_name: Course::UserInvitation.name, dependent: :destroy, validate: true
 
   # @!attribute [r] experience_points
