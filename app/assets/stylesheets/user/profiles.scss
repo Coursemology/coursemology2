@@ -1,0 +1,12 @@
+.user-profiles {
+  &.edit {
+    .image > img {
+      height: 200px;
+      width: 200px;
+    }
+
+    .upload-btn {
+      margin-bottom: 1em;
+    }
+  }
+}

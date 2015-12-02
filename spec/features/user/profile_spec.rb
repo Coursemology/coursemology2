@@ -11,7 +11,7 @@ RSpec.feature 'User: Profile' do
     end
 
     context 'As a registered user' do
-      scenario 'I can change my name' do
+      scenario 'I can change my profile' do
         new_name = 'New Name'
         empty_name = ''
 
@@ -20,9 +20,12 @@ RSpec.feature 'User: Profile' do
         expect(page).to have_selector('div.alert-danger')
 
         fill_in :user_name, with: new_name
+        attach_file :user_profile_photo, File.join(Rails.root, '/spec/fixtures/files/picture.jpg')
         click_button 'submit'
+
         expect(page).to have_selector('div', text: I18n.t('user.profiles.update.success'))
         expect(page).to have_field('user_name', with: new_name)
+        expect(user.reload.profile_photo.url).to be_present
       end
 
       scenario 'I can link my account to facebook' do
