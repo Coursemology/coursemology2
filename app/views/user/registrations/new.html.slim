@@ -1,6 +1,6 @@
 = page_header
 
-= simple_format(t('.already_registered',
+= simple_format(t('.already_registered_html',
                   sign_in: link_to(t('layout.navbar.sign_in'), new_user_session_path)))
 
 = simple_form_for resource, as: resource_name, url: registration_path(resource_name) do |f|
