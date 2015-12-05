@@ -13,12 +13,7 @@ class AbilityHost
     def course_user_hash(*roles)
       course_users = { user_id: user.id,
                        workflow_state: 'approved' }
-      unless roles.empty?
-        # Remove the map when Rails 5 is released.
-        course_users[:role] = roles.map do |role|
-          [CourseUser.roles[role], role.to_s]
-        end.flatten!
-      end
+      course_users[:role] = roles.map { |role| CourseUser.roles[role] } if roles.any?
 
       { course_users: course_users }
     end
@@ -54,11 +49,7 @@ class AbilityHost
     # @return [Hash] This hash is relative to a Instance.
     def instance_user_hash(*roles)
       instance_users = { user_id: user.id }
-      unless roles.empty?
-        instance_users[:role] = roles.map do |role|
-          [InstanceUser.roles[role], role.to_s]
-        end.flatten!
-      end
+      instance_users[:role] = roles.map { |role| InstanceUser.roles[role] } if roles.any?
 
       { instance_users: instance_users }
     end

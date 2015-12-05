@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/CanCanCommunity/cancancan.git
+  revision: 3e3c3666f74cf91201a9142578f09a53b6287726
+  branch: develop
+  specs:
+    cancancan (1.13.1)
+
+GIT
   remote: git://github.com/ErwinM/acts_as_tenant.git
   revision: 005ce894384a82544bc321aae78764c288940c19
   specs:
@@ -107,7 +114,6 @@ GEM
       uniform_notifier (~> 1.9.0)
     calculated_attributes (0.1.3)
       activerecord (>= 3.2.20)
-    cancancan (1.13.1)
     capybara (2.5.0)
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
@@ -499,7 +505,7 @@ DEPENDENCIES
   bullet (>= 4.14.9)
   bundler (>= 1.10.3)
   calculated_attributes (>= 0.1.3)
-  cancancan
+  cancancan!
   capybara
   carrierwave!
   cocoon
