@@ -185,6 +185,7 @@ Rails.application.routes.draw do
           post 'create_subfolder', on: :member, path: 'create/subfolder'
           get 'new_materials', on: :member, path: 'new/files'
           put 'upload_materials', on: :member
+          get 'download', on: :member
           resources :materials, path: 'files'
         end
       end

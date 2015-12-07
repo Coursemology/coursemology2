@@ -29,6 +29,6 @@ class Course::Material::ZipDownloadJob < ApplicationJob
     public_file = File.join(public_dir, name)
     FileUtils.cp(file, public_file)
 
-    File.join(downloads_dir, job.id, File.basename(public_file))
+    URI.encode(File.join('/', downloads_dir, job.id, File.basename(public_file)))
   end
 end

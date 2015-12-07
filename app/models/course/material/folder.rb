@@ -24,6 +24,16 @@ class Course::Material::Folder < ActiveRecord::Base
     course.material_folders.build(name: 'Root')
   end
 
+  # Returns the path of the folder, note that '/' will be returned for root_folder
+  #
+  # @return [Pathname] The path of the folder
+  def path
+    folders = ancestors.reverse + [self]
+    folders.shift # Remove the root folder
+    path = File.join('/', folders.map(&:name))
+    Pathname.new(path)
+  end
+
   private
 
   def set_defaults

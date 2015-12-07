@@ -4,6 +4,13 @@ class Course::Material < ActiveRecord::Base
 
   validate :validate_name_is_unique_among_folders
 
+  # Returns the path of the material
+  #
+  # @return [Pathname] The path of the material
+  def path
+    folder.path + name
+  end
+
   private
 
   # TODO: Not threadsafe, consider making all folders as materials

@@ -53,6 +53,13 @@ class Course::Material::FoldersController < Course::Material::Controller
     end
   end
 
+  def download
+    materials = @folder.descendants.map { |f| f.materials.accessible_by(current_ability) }.flatten
+    zip_filename = @folder.root? ? root_folder_name : @folder.name
+    job = Course::Material::ZipDownloadJob.perform_later(@folder, materials, zip_filename).job
+    redirect_to job_path(job)
+  end
+
   private
 
   def folder_params

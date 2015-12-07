@@ -6,6 +6,9 @@ span.pull-right.btn-group
     = link_to new_materials_course_material_folder_path(current_course, @folder),
               title: t('.upload'), class: ['btn', 'btn-primary'] do
       = fa_icon :upload
+  = link_to download_course_material_folder_path(current_course, @folder),
+            title: t('.download'), class: ['btn', 'btn-primary'] do
+    = fa_icon :download
 
   - if can?(:edit, @folder)
     = edit_button([current_course, @folder])

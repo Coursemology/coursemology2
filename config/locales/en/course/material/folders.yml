@@ -19,6 +19,7 @@ en:
         folder_controls:
           new: 'New Subfolder'
           upload: 'Upload'
+          download: 'Download Entire Folder'
         new_materials:
           header: 'Upload Files'
           submit: 'Upload'

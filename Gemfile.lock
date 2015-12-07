@@ -341,6 +341,7 @@ GEM
       rspec-mocks (~> 3.4.0)
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
+    rubyzip (1.1.7)
     sanitize (4.0.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
@@ -547,6 +548,7 @@ DEPENDENCIES
   rinku
   rspec-html-matchers
   rspec-rails
+  rubyzip
   sanitize
   sass-rails
   schema_monkey (<= 2.1.1)
