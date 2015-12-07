@@ -9,7 +9,7 @@ en:
           header: 'Edit Forum'
         index:
           header: 'Forums'
-          forum: 'Forum'
+          forums: 'Forums'
           topics: 'Topics'
           posts: 'Posts'
           views: 'Views'
