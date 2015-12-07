@@ -195,5 +195,13 @@ RSpec.describe User do
         expect(user.notifications.unread).to include(unread_notification)
       end
     end
+
+    describe '.human_users' do
+      subject { User.human_users }
+
+      it 'does not include the system user' do
+        expect(subject.find_by(id: User::SYSTEM_USER_ID)).to be_nil
+      end
+    end
   end
 end

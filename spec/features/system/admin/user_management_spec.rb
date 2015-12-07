@@ -10,7 +10,7 @@ RSpec.feature 'System: Administration: Users' do
 
       let!(:users) do
         create_list(:user, 2)
-        User.ordered_by_name.page(1)
+        User.human_users.ordered_by_name.page(1)
       end
       scenario 'I can view all users in the system' do
         visit admin_users_path
