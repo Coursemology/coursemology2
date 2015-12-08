@@ -42,6 +42,13 @@ RSpec.describe Polyglot do
         expect(Polyglot::Language.with_language([subject.instance.name])).to \
           contain_exactly(subject.instance)
       end
+
+      context 'when an empty array is specified' do
+        it 'returns all languages' do
+          expect(Polyglot::Language.with_language([])).to \
+            contain_exactly(*Polyglot::Language.all.to_a)
+        end
+      end
     end
 
     describe '.display_name' do

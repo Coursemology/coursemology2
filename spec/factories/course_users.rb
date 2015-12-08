@@ -34,5 +34,9 @@ FactoryGirl.define do
     trait :phantom do
       phantom true
     end
+
+    trait :auto_grader do
+      role :auto_grader
+    end
   end
 end

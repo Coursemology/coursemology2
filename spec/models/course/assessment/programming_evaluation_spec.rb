@@ -129,17 +129,32 @@ RSpec.describe Course::Assessment::ProgrammingEvaluation do
 
     describe '#finished?' do
       context 'when the job errored' do
-        subject { build_stubbed(:course_assessment_programming_evaluation, :errored) }
+        let(:evaluation_traits) { :errored }
         it 'returns true' do
           expect(subject).to be_finished
         end
       end
 
       context 'when the job completed' do
-        subject { build_stubbed(:course_assessment_programming_evaluation, :completed) }
+        let(:evaluation_traits) { :completed }
         it 'returns true' do
           expect(subject).to be_finished
         end
+      end
+    end
+
+    describe '#assign!' do
+      subject { super().tap { |subject| subject.assign!(user) } }
+      let(:user) { build_stubbed(:user) }
+
+      it 'sets the evaluator to the specified user' do
+        expect(subject).to be_assigned
+        expect(subject.evaluator).to eq(user)
+      end
+
+      it 'sets the evaluator to the specified user' do
+        time = Time.zone.now
+        expect(subject.assigned_at).to be > time
       end
     end
   end

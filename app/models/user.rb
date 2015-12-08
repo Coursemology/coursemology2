@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   model_stamper
   acts_as_reader
 
-  enum role: { normal: 0, administrator: 1 }
+  enum role: { normal: 0, administrator: 1, auto_grader: 2 }
 
   class << self
     # Finds the System user.

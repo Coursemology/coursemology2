@@ -5,6 +5,7 @@ module Course::Assessment::AssessmentAbility
       allow_students_attempt_assessment
       allow_staff_manage_assessments
       allow_staff_grade_submissions
+      allow_auto_grader_programming_evaluations
     end
 
     super
@@ -50,6 +51,37 @@ module Course::Assessment::AssessmentAbility
     can :read, Course::Assessment::Submission, assessment: assessment_course_staff_hash
     can :grade, Course::Assessment::Submission, assessment: assessment_course_staff_hash,
         workflow_state: ['submitted', 'graded']
+  end
+
+  def allow_auto_grader_programming_evaluations
+    if user.auto_grader?
+      allow_system_auto_grader_programming_evaluations
+    else
+      allow_instance_auto_grader_programming_evaluations
+      allow_course_auto_grader_programming_evaluations
+    end
+  end
+
+  def allow_system_auto_grader_programming_evaluations
+    can :read, Course::Assessment::ProgrammingEvaluation
+    can :update_result, Course::Assessment::ProgrammingEvaluation
+  end
+
+  def allow_instance_auto_grader_programming_evaluations
+    instance_auto_grader_hash = {
+      instance: {
+        instance_users: { user_id: user.id, role: InstanceUser.roles[:auto_grader] }
+      }
+    }
+    can :read, Course::Assessment::ProgrammingEvaluation, course: instance_auto_grader_hash
+    can :update_result, Course::Assessment::ProgrammingEvaluation, course: instance_auto_grader_hash
+  end
+
+  def allow_course_auto_grader_programming_evaluations
+    can :read, Course::Assessment::ProgrammingEvaluation,
+        course_course_user_hash(*CourseUser::AUTO_GRADER_ROLES.to_a)
+    can :update_result, Course::Assessment::ProgrammingEvaluation,
+        course_course_user_hash(*CourseUser::AUTO_GRADER_ROLES.to_a)
   end
 
   def valid_lesson_plan_items
