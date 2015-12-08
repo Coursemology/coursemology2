@@ -28,7 +28,7 @@
               td = @submission.points_awarded
             tr
               th = t('.due_at')
-              td = format_datetime(@assessment.end_at) if @assessment.end_at
+              td = format_datetime(@assessment.end_at) if @assessment.end_at.present?
             tr
               th = @submission.class.human_attribute_name(:submitted_at)
               td = format_datetime(@submission.submitted_at)
@@ -37,7 +37,7 @@
               td = @submission.graders.uniq
             tr
               th = @submission.class.human_attribute_name(:graded_at)
-              td = format_datetime(@submission.graded_at) if @submission.graded_at
+              td = format_datetime(@submission.graded_at) if @submission.graded_at.present?
 
         - if @submission.answers.length > 1
           h4 = t('.grade_summary')
