@@ -8,6 +8,14 @@ class Course::Assessment::Question::TextResponse < ActiveRecord::Base
 
   accepts_nested_attributes_for :solutions
 
+  def auto_gradable?
+    true
+  end
+
+  def auto_grader
+    Course::Assessment::Answer::TextResponseAutoGradingService.new
+  end
+
   def attempt(submission)
     submission.text_response_answers.build(submission: submission, question: question).answer
   end
