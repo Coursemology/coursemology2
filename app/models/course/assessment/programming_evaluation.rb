@@ -6,8 +6,13 @@
 #  b) has the programming language runtime to evaluate this submission
 #
 # Like trackable jobs, elements in this table are ephemeral.
+#
+# @see Course::Assessment::ProgrammingEvaluationService
 class Course::Assessment::ProgrammingEvaluation < ActiveRecord::Base
   include Workflow
+
+  # The time to elapse before an allocated job is deemed as dead and can be allocated to another
+  # evaluator.
   TIMEOUT = 5.minutes
 
   workflow_column :status

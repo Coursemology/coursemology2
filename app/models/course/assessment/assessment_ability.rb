@@ -64,7 +64,7 @@ module Course::Assessment::AssessmentAbility
 
   def allow_system_auto_grader_programming_evaluations
     can :read, Course::Assessment::ProgrammingEvaluation
-    can :update_result, Course::Assessment::ProgrammingEvaluation
+    can :update_result, Course::Assessment::ProgrammingEvaluation, evaluator_id: user.id
   end
 
   def allow_instance_auto_grader_programming_evaluations
@@ -74,14 +74,13 @@ module Course::Assessment::AssessmentAbility
       }
     }
     can :read, Course::Assessment::ProgrammingEvaluation, course: instance_auto_grader_hash
-    can :update_result, Course::Assessment::ProgrammingEvaluation, course: instance_auto_grader_hash
+    can :update_result, Course::Assessment::ProgrammingEvaluation, evaluator_id: user.id
   end
 
   def allow_course_auto_grader_programming_evaluations
     can :read, Course::Assessment::ProgrammingEvaluation,
         course_course_user_hash(*CourseUser::AUTO_GRADER_ROLES.to_a)
-    can :update_result, Course::Assessment::ProgrammingEvaluation,
-        course_course_user_hash(*CourseUser::AUTO_GRADER_ROLES.to_a)
+    can :update_result, Course::Assessment::ProgrammingEvaluation, evaluator_id: user.id
   end
 
   def valid_lesson_plan_items
