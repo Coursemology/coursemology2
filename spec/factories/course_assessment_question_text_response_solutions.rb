@@ -9,10 +9,13 @@ FactoryGirl.define do
     trait :keyword do
       solution_type :keyword
       solution 'Keyword'
+      grade 1
     end
+
     trait :exact_match do
       solution_type :exact_match
       solution 'Exact Match'
+      grade 2
     end
   end
 end
