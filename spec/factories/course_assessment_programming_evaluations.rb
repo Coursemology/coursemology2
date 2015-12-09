@@ -22,7 +22,8 @@ FactoryGirl.define do
       status :completed
       stdout ''
       stderr ''
-      test_report ''
+      test_report File.read(File.join(Rails.root,
+                                      'spec/fixtures/course/programming_test_case_report.xml'))
     end
 
     trait :errored do
