@@ -171,6 +171,8 @@ gem 'filename'
 gem 'mini_magick'
 # Library for reading and writing zip files
 gem 'rubyzip', require: 'zip'
+# Manipulating XML files, needed for programming evaluation test report parsing.
+gem 'nokogiri'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

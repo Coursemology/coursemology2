@@ -534,6 +534,7 @@ DEPENDENCIES
   migration_comments
   mini_magick
   momentjs-rails (>= 2.8.1)
+  nokogiri
   nprogress-rails
   omniauth
   omniauth-facebook
