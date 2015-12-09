@@ -27,9 +27,17 @@ FactoryGirl.define do
       end
     end
 
+    trait :with_text_response_question do
+      after(:build) do |assessment|
+        question = build(:course_assessment_question_text_response, assessment: assessment)
+        assessment.text_response_questions << question
+      end
+    end
+
     trait :with_all_question_types do
       with_mcq_question
       with_programming_question
+      with_text_response_question
     end
   end
 end

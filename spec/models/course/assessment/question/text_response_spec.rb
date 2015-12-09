@@ -11,6 +11,13 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
+    describe '#auto_gradable?' do
+      subject { build_stubbed(:course_assessment_question_text_response) }
+      it 'returns true' do
+        expect(subject.auto_gradable?).to be(true)
+      end
+    end
+
     describe '#attempt' do
       subject { build_stubbed(:course_assessment_question_text_response) }
       let(:assessment) { subject.assessment }
