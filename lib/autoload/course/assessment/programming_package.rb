@@ -34,14 +34,14 @@ class Course::Assessment::ProgrammingPackage
   #
   # @param [String|Pathname] path The path to the package on disk.
   def initialize(path)
-    @file = Zip::File.open(path.to_s)
+    @path = path
   end
 
   # Gets the file path to the provided package.
   #
   # @return [String]
   def path
-    @file.name
+    @file ? @file.name : @path
   end
 
   # Closes the package.
@@ -56,6 +56,7 @@ class Course::Assessment::ProgrammingPackage
   # @return [Hash<Pathname, String>] A hash mapping the file path to the file contents of each
   #   file.
   def submission_files
+    ensure_file_open!
     @file.glob("#{SUBMISSION_PATH}/**/*").map do |entry|
       entry_file_name = Pathname.new(entry.name)
       submission_file_name = entry_file_name.relative_path_from(SUBMISSION_PATH)
@@ -68,6 +69,7 @@ class Course::Assessment::ProgrammingPackage
   # @param [Hash<Pathname|String, String>] files A hash mapping the file path to the file
   #   contents of each file.
   def submission_files=(files)
+    ensure_file_open!
     remove_submission_files
 
     files.each do |path, file|
@@ -86,7 +88,8 @@ class Course::Assessment::ProgrammingPackage
   #
   # @raise [IllegalStateError] when the zip file is not open and it cannot be opened.
   def ensure_file_open!
-    fail IllegalStateError unless @file
+    return if @file
+    @file = Zip::File.open(@path.to_s)
   end
 
   # Removes all submission files from the archive.

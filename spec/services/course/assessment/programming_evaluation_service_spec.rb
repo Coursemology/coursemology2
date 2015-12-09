@@ -1,36 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::ProgrammingEvaluationService do
-  class self::StubbedEvaluationService < Course::Assessment::ProgrammingEvaluationService
-    private
-
-    def wait_for_evaluation(evaluation)
-      tenant = ActsAsTenant.current_tenant
-      Thread.new do
-        ActsAsTenant.with_tenant(tenant) do
-          populate_mock_result(evaluation)
-        end
-      end
-
-      super
-    end
-
-    # Populates the evaluation with fake results.
-    #
-    # @param [Course::Assessment::ProgrammingEvaluation] evaluation The evaluation to populate
-    #   mock results for.
-    def populate_mock_result(evaluation)
-      evaluation = Course::Assessment::ProgrammingEvaluation.find(evaluation.id)
-      attributes = FactoryGirl.
-                   attributes_for(:course_assessment_programming_evaluation, :completed).
-                   slice(:stdout, :stderr, :test_report)
-      evaluation.assign!(User.system)
-      evaluation.assign_attributes(attributes)
-      evaluation.complete!
-      evaluation.save!
-    end
-  end
-  subject { self.class::StubbedEvaluationService }
+  subject { Course::Assessment::ProgrammingEvaluationService }
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
