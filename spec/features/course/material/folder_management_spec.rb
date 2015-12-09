@@ -9,10 +9,8 @@ RSpec.feature 'Course: Material: Folders: Management' do
     let!(:subfolders) do
       folders = []
       folders << create(:folder, parent: parent_folder, course: course)
-      folders << create(:folder, parent: parent_folder, course: course,
-                                 start_at: 1.day.from_now, end_at: nil)
-      folders << create(:folder, parent: parent_folder, course: course,
-                                 start_at: 2.days.ago,  end_at: 1.day.ago)
+      folders << create(:folder, :not_started, parent: parent_folder, course: course)
+      folders << create(:folder, :ended, parent: parent_folder, course: course)
     end
 
     before { login_as(user, scope: :user) }
