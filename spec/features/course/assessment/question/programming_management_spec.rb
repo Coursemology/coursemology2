@@ -56,6 +56,41 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(page).not_to have_content_tag_for(question)
       end
+
+      scenario 'I can create a new question and upload the template package' do
+        visit new_course_assessment_question_programming_path(course, assessment)
+        question_attributes = attributes_for(:course_assessment_question_programming)
+        fill_in 'title', with: question_attributes[:title]
+        fill_in 'description', with: question_attributes[:description]
+        fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
+        select question_attributes[:language].name, from: 'language'
+        fill_in 'memory_limit', with: question_attributes[:memory_limit]
+        fill_in 'time_limit', with: question_attributes[:time_limit]
+        attach_file 'question_programming[file]',
+                    File.join(ActionController::TestCase.fixture_path,
+                              'course/programming_question_template.zip')
+
+        click_button 'submit'
+        wait_for_job
+
+        expect(current_path).to \
+          start_with(course_assessment_path(course, assessment))
+      end
+
+      scenario 'I can upload a question package' do
+        question = create(:course_assessment_question_programming, assessment: assessment)
+        visit edit_course_assessment_question_programming_path(course, assessment, question)
+
+        attach_file 'question_programming[file]',
+                    File.join(ActionController::TestCase.fixture_path,
+                              'course/programming_question_template.zip')
+
+        click_button 'submit'
+        wait_for_job
+
+        expect(current_path).to \
+          start_with(course_assessment_path(course, assessment))
+      end
     end
 
     context 'As a Student' do
