@@ -130,6 +130,7 @@ RSpec.describe CourseUser, type: :model do
       before do
         create :course_level, course: course, experience_points_threshold: 100
         create :course_level, course: course, experience_points_threshold: 200
+        course.reload
       end
 
       context 'when student has no experience points' do

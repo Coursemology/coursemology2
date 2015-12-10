@@ -49,9 +49,8 @@ RSpec.describe Course, type: :model do
     describe 'levels' do
       let!(:user) { create(:administrator) }
       let!(:course) { create(:course) }
-      let!(:levels) do
-        create_list(:course_level, 5, course: course).map(&:experience_points_threshold)
-      end
+      let!(:levels) { create_list(:course_level, 5, course: course) }
+      before { course.reload }
 
       describe '.levels' do
         it 'returns levels is ascending order' do
@@ -59,6 +58,15 @@ RSpec.describe Course, type: :model do
           expect(level_thresholds).to eq(level_thresholds.sort)
         end
       end
+
+      describe '#level_for' do
+        context 'when experience_points is 0 or negative' do
+          it 'returns the first level' do
+            [0, -1].each do |experience_points|
+              expect(course.level_for(experience_points)).to be_default_level
+            end
+          end
+        end
 
         context 'when experience_points is a positive number' do
           it 'returns the correct level number' do
@@ -74,7 +82,7 @@ RSpec.describe Course, type: :model do
       describe '#numbered_levels' do
         it 'numbers levels' do
           numbering = course.numbered_levels.map(&:level_number)
-          expect(numbering).to eq((1..(levels.size)).to_a)
+          expect(numbering).to eq((0..(course.levels.count - 1)).to_a)
         end
       end
     end
@@ -210,6 +218,20 @@ RSpec.describe Course, type: :model do
 
           it { is_expected.to be_falsey }
         end
+      end
+    end
+
+    describe '#has_default_level?' do
+      let(:course) { build(:course) }
+      subject { course.has_default_level? }
+
+      context 'when course is a new record' do
+        it { is_expected.to be_truthy }
+      end
+
+      context 'when course is persisted' do
+        before { course.save }
+        it { is_expected.to be_truthy }
       end
     end
   end

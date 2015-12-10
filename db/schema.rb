@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151214080700) do
+ActiveRecord::Schema.define(version: 20151214081508) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -477,6 +477,7 @@ ActiveRecord::Schema.define(version: 20151214080700) do
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
   end
+  add_index "course_levels", ["course_id", "experience_points_threshold"], name: "index_experience_points_threshold_on_course_id", unique: true
 
   create_table "course_material_folders", force: :cascade do |t|
     t.integer  "parent_id",          index: {name: "fk__course_material_folders_parent_id"}, foreign_key: {references: "course_material_folders", name: "fk_course_material_folders_parent_id", on_update: :no_action, on_delete: :no_action}
