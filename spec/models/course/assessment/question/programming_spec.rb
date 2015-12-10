@@ -19,6 +19,24 @@ RSpec.describe Course::Assessment::Question::Programming do
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
+    describe 'callbacks' do
+      subject { build(:course_assessment_question_programming) }
+
+      describe 'after_save' do
+        context 'when a new package is uploaded' do
+          with_active_job_queue_adapter(:test) do
+            it 'queues a new import job' do
+              expect(subject.import_job).to be_nil
+              subject.file = File.new(File.join(Rails.root, 'spec/fixtures/course/'\
+                                                            'programming_question_template.zip'))
+              expect { subject.save }.to \
+                have_enqueued_job(Course::Assessment::Question::ProgrammingImportJob).exactly(:once)
+            end
+          end
+        end
+      end
+    end
+
     describe 'validations' do
     end
 
