@@ -5,4 +5,6 @@ class Course::Condition < ActiveRecord::Base
   belongs_to :conditional, polymorphic: true
 
   delegate :satisfied_by?, to: :actable
+
+  NAMES = ['achievement', 'level']
 end

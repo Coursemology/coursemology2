@@ -138,20 +138,25 @@ RSpec.feature 'Course: Achievements' do
       end
 
       scenario 'I can create a level condition' do
-        achievement = create(:course_achievement, course: course)
         visit edit_course_achievement_path(course, achievement)
         click_link I18n.t('course.condition.levels.new.header')
         expect(current_path).to eq(new_course_achievement_condition_level_path(course, achievement))
         fill_in 'minimum_level', with: '10'
         click_button I18n.t('helpers.submit.condition_level.create')
         expect(current_path).to eq edit_course_achievement_path(course, achievement)
-        expect(page).to have_selector('tr.condition > td.level-condition-content', text: '10')
+        level_title = I18n.t('activerecord.attributes.course/condition/level/title.title',
+                             value: 10)
+        expect(page).to have_selector('tr.condition > td.level-condition-content',
+                                      text: level_title)
       end
 
       scenario 'I can edit a level condition' do
         visit edit_course_achievement_path(course, achievement)
         expect(current_path).to eq edit_course_achievement_path(course, achievement)
-        expect(page).to have_selector('tr.condition > td.level-condition-content', text: '1')
+        level_title = I18n.t('activerecord.attributes.course/condition/level/title.title',
+                             value: 1)
+        expect(page).to have_selector('tr.condition > td.level-condition-content',
+                                      text: level_title)
         condition_edit_path = edit_course_achievement_condition_level_path(course,
                                                                            achievement,
                                                                            level_condition)
@@ -159,7 +164,10 @@ RSpec.feature 'Course: Achievements' do
         fill_in 'minimum_level', with: '13'
         click_button I18n.t('helpers.submit.condition_level.update')
         expect(current_path).to eq edit_course_achievement_path(course, achievement)
-        expect(page).to have_selector('tr.condition > td.level-condition-content', text: '13')
+        level_title = I18n.t('activerecord.attributes.course/condition/level/title.title',
+                             value: 13)
+        expect(page).to have_selector('tr.condition > td.level-condition-content',
+                                      text: level_title)
       end
 
       scenario 'I can delete a level condition' do
@@ -170,7 +178,10 @@ RSpec.feature 'Course: Achievements' do
         expect do
           find_link(nil, href: condition_delete_path).click
         end.to change { achievement.conditions.count }.by(-1)
-        expect(page).not_to have_selector('tr.condition > td.level-condition-content', text: '1')
+        level_title = I18n.t('activerecord.attributes.course/condition/level/title.title',
+                             value: 1)
+        expect(page).not_to have_selector('tr.condition > td.level-condition-content',
+                                          text: level_title)
       end
     end
   end
