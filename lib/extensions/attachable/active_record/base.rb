@@ -44,9 +44,14 @@ module Extensions::Attachable::ActiveRecord::Base
     end
 
     def file=(file)
-      build_attachment if !attachment || attachment.new_record?
-      attachment.file_upload = file
-      attribute_will_change!('attachment'.freeze) if attachment.changed?
+      if file
+        build_attachment if !attachment || attachment.new_record?
+        attachment.file_upload = file
+        attribute_will_change!('attachment'.freeze) if attachment.changed?
+      else
+        attribute_will_change!('attachment'.freeze) if attachment
+        attachments.clear
+      end
     end
   end
 end

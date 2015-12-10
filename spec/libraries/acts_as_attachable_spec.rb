@@ -46,13 +46,43 @@ RSpec.describe 'Extension: Acts as Attachable' do
     end
 
     describe '#file=' do
-      before { attachable.file = file }
-      it 'creates an attachment from file' do
-        expect(attachable.attachment).to be_present
+      context 'when a file is specified' do
+        before { attachable.file = file }
+        it 'creates an attachment from file' do
+          expect(attachable.attachment).to be_present
+        end
+
+        it 'marks attachment as modified' do
+          expect(attachable.attachment_changed?).to be(true)
+        end
       end
 
-      it 'marks attachment as modified' do
-        expect(attachable.attachment_changed?).to be(true)
+      context 'when nil is specified' do
+        context 'when a file existed' do
+          before do
+            attachable.file = file
+            attachable.file = nil
+          end
+
+          it 'removes the attachment' do
+            expect(attachable.attachment).to be_nil
+          end
+
+          it 'marks attachment as modified' do
+            expect(attachable.attachment_changed?).to be(true)
+          end
+        end
+
+        context 'when a file was never specified' do
+          before { attachable.file = nil }
+          it 'does not have an attachment' do
+            expect(attachable.attachment).to be_nil
+          end
+
+          it 'does not change the attachment' do
+            expect(attachable.attachment_changed?).to be(false)
+          end
+        end
       end
     end
   end
