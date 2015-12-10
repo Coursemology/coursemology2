@@ -43,6 +43,7 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :emails
 
   scope :ordered_by_name, -> { order(:name) }
+  scope :human_users, -> { where { id != User::SYSTEM_USER_ID } }
 
   # Gets whether the current user is the system user.
   #
