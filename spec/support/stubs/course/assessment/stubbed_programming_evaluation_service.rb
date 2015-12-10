@@ -4,8 +4,10 @@ module Course::Assessment::StubbedProgrammingEvaluationService
   def wait_for_evaluation(evaluation)
     tenant = ActsAsTenant.current_tenant
     Thread.new do
-      ActsAsTenant.with_tenant(tenant) do
-        populate_mock_result(evaluation)
+      ActiveRecord::Base.connection_pool.with_connection do
+        ActsAsTenant.with_tenant(tenant) do
+          populate_mock_result(evaluation)
+        end
       end
     end
 
