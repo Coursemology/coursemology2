@@ -3,6 +3,7 @@
 # An assessment is a collection of questions that can be asked.
 class Course::Assessment < ActiveRecord::Base
   acts_as_lesson_plan_item
+  acts_as_conditional
   has_one_folder
 
   after_initialize :build_initial_folder, if: :new_record?

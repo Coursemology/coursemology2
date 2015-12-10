@@ -156,6 +156,7 @@ Rails.application.routes.draw do
           resources :submissions, only: [:create, :edit, :update] do
             post :auto_grade, on: :member
           end
+          concerns :conditional
         end
       end
       resources :levels, except: [:show, :edit, :update]

@@ -12,4 +12,7 @@
   = f.input :display_mode, as: :select, collection: Course::Assessment.display_modes.keys
   = f.folder
 
+  - if @assessment.persisted?
+    = render partial: 'course/condition/conditions', locals: { conditional: @assessment }
+
   = f.button :submit
