@@ -30,16 +30,28 @@ module Extensions::Attachable::ActiveRecord::Base
     def attachment=(attachment)
       attachments.clear
       attachments << attachment
+      attribute_will_change!('attachment'.freeze)
     end
 
     def build_attachment(attributes = {})
       attachments.clear
       attachments.build(attributes)
+      attribute_will_change!('attachment'.freeze)
+    end
+
+    def attachment_changed?
+      changed.include?('attachment'.freeze)
     end
 
     def file=(file)
-      build_attachment if !attachment || attachment.new_record?
-      attachment.file_upload = file
+      if file
+        build_attachment if !attachment || attachment.new_record?
+        attachment.file_upload = file
+        attribute_will_change!('attachment'.freeze) if attachment.changed?
+      else
+        attribute_will_change!('attachment'.freeze) if attachment
+        attachments.clear
+      end
     end
   end
 end
