@@ -20,6 +20,19 @@ module ActiveJob::TestGroupHelpers
   end
 end
 
+# Since message deliveries use the test delivery engine, all deferred deliver calls must be
+# converted to +deliver_now+ to prevent a dependency on the ActiveJob queue adapter.
+module ActionMailer::MessageDelivery::TestDeliveryHelpers
+  def deliver_later(_ = {})
+    deliver_now
+  end
+
+  def deliver_later!(_ = {})
+    deliver_now!
+  end
+end
+ActionMailer::MessageDelivery.prepend(ActionMailer::MessageDelivery::TestDeliveryHelpers)
+
 RSpec.configure do |config|
   config.extend ActiveJob::TestGroupHelpers
   config.around(:each, type: :job,
