@@ -13,5 +13,5 @@ table.table.table-hover
         td colspan="100%"
           = link_to '...', course_material_folder_path(current_course, @folder.parent)
 
-    = render @folder.children
+    = render @folder.children.accessible_by(current_ability).preload(:owner)
     = render partial: 'material', collection: @folder.materials

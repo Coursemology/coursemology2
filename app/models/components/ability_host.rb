@@ -63,10 +63,33 @@ class AbilityHost
     alias_method :instance_all_instance_users_hash, :instance_instance_user_hash
   end
 
+  module TimeBoundedHelpers
+    protected
+
+    # Returns an array of conditions which will return currently valid rows when ORed together in a
+    # database query. Reverse-merge each of these hashes with your conditions to obtain the set of
+    # currently valid rows in the table.
+    #
+    # @return [Array<Hash>] An array of hash conditions indicating the currently valid rows.
+    def currently_valid_hashes
+      [
+        {
+          start_at: (Time.min..Time.zone.now),
+          end_at: nil
+        },
+        {
+          start_at: (Time.min..Time.zone.now),
+          end_at: (Time.zone.now..Time.max)
+        }
+      ]
+    end
+  end
+
   # Open the Componentize Base Component.
   const_get(:Component).module_eval do
     include InstanceHelpers
     include CourseHelpers
+    include TimeBoundedHelpers
   end
 
   # Eager load all the components declared.

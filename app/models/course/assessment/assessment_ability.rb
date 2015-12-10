@@ -26,7 +26,7 @@ module Course::Assessment::AssessmentAbility
   end
 
   def allow_students_attempt_assessment
-    valid_lesson_plan_items.each do |properties|
+    currently_valid_hashes.each do |properties|
       can :attempt, Course::Assessment, assessment_all_course_users_hash.reverse_merge(
         lesson_plan_item: properties
       )
@@ -81,18 +81,5 @@ module Course::Assessment::AssessmentAbility
     can :read, Course::Assessment::ProgrammingEvaluation,
         course_course_user_hash(*CourseUser::AUTO_GRADER_ROLES.to_a)
     can :update_result, Course::Assessment::ProgrammingEvaluation, evaluator_id: user.id
-  end
-
-  def valid_lesson_plan_items
-    [
-      {
-        start_at: (Time.min..Time.zone.now),
-        end_at: nil
-      },
-      {
-        start_at: (Time.min..Time.zone.now),
-        end_at: (Time.zone.now..Time.max)
-      }
-    ]
   end
 end
