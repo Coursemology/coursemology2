@@ -22,7 +22,8 @@ RSpec.describe 'Extension: Acts as Attachable' do
 
     let(:files) { [File.open(File.join(Rails.root, '/spec/fixtures/files/text.txt'))] }
     let(:attachable) { self.class::SampleModelMultiple.new }
-    describe 'files=' do
+
+    describe '#files=' do
       it 'creates attachments from files' do
         attachable.files = files
         expect(attachable.attachments).to be_present
@@ -35,10 +36,23 @@ RSpec.describe 'Extension: Acts as Attachable' do
 
     let(:file) { File.open(File.join(Rails.root, '/spec/fixtures/files/text.txt')) }
     let(:attachable) { self.class::SampleModelSingular.new }
-    describe 'file=' do
+
+    describe '#attachment_changed?' do
+      context 'when the record is clean' do
+        it 'returns false' do
+          expect(attachable.attachment_changed?).to be(false)
+        end
+      end
+    end
+
+    describe '#file=' do
+      before { attachable.file = file }
       it 'creates an attachment from file' do
-        attachable.file = file
         expect(attachable.attachment).to be_present
+      end
+
+      it 'marks attachment as modified' do
+        expect(attachable.attachment_changed?).to be(true)
       end
     end
   end
