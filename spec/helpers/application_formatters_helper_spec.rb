@@ -53,6 +53,26 @@ RSpec.describe ApplicationFormattersHelper do
       end
     end
 
+    describe '#display_user_image' do
+      let(:user) { build_stubbed(:user) }
+      subject { helper.display_user_image(user) }
+
+      context 'when the user has a profile photo' do
+        it { is_expected.to include('user_silhouette.svg') }
+      end
+
+      context "when the user doesn't have a profile photo" do
+        let(:image) { File.join(Rails.root, '/spec/fixtures/files/picture.jpg') }
+        before do
+          file = File.open(image, 'rb')
+          user.profile_photo = file
+          file.close
+        end
+
+        it { is_expected.to include(user.profile_photo.medium.url) }
+      end
+    end
+
     describe '#link_to_user' do
       let(:user) { build(:user) }
       subject { helper.link_to_user(user) }

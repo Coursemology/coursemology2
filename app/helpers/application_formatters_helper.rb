@@ -35,9 +35,8 @@ module ApplicationFormattersHelper
   # @param [User] user The user to display
   # @return [String] A HTML fragment containing the image to display for the user.
   def display_user_image(user)
-    user.name # TODO: Implement displaying the actual user avatar.
     content_tag(:span, class: ['image']) do
-      image_tag('user_silhouette.svg')
+      image_tag(user.profile_photo.medium.url || 'user_silhouette.svg')
     end
   end
 

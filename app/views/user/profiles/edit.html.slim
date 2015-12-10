@@ -3,11 +3,15 @@
 = simple_form_for current_user, url: user_profile_path do |f|
   = f.error_notification
   = f.input :name, required: true
+  = f.label t('.profile_photo')
+  div = display_user_image(current_user)
+  = f.file_field :profile_photo, class: 'upload-btn'
 
+  = f.button :submit, t('.submit')
+
+  hr
   span
     - unless current_user.identities.facebook.any?
       div.facebook
         = link_to user_omniauth_authorize_path(:facebook) do
           = fa_icon :'facebook-square', text: t('.link_to_facebook'), class: ['fa-2x']
-
-  = f.button :submit, t('.submit')

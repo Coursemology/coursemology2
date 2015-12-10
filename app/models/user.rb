@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   include UserSearchConcern
   model_stamper
   acts_as_reader
+  mount_uploader :profile_photo, ImageUploader
 
   enum role: { normal: 0, administrator: 1, auto_grader: 2 }
 
