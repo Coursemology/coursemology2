@@ -33,10 +33,21 @@ module ActionMailer::MessageDelivery::TestDeliveryHelpers
 end
 ActionMailer::MessageDelivery.prepend(ActionMailer::MessageDelivery::TestDeliveryHelpers)
 
+module TrackableJob::TestExampleHelpers
+  def wait_for_job
+    return unless current_path.start_with?(job_path(''))
+    job_guid = current_path[(current_path.rindex('/') + 1)..-1]
+    job = TrackableJob::Job.find(job_guid)
+    job.wait(while_callback: -> { job.reload.submitted? })
+    visit current_path
+  end
+end
+
 RSpec.configure do |config|
   config.extend ActiveJob::TestGroupHelpers
   config.around(:each, type: :job,
                 &ActiveJob::TestGroupHelpers.with_active_job_queue_adapter_method)
+  config.include TrackableJob::TestExampleHelpers, type: :feature
 
   config.backtrace_exclusion_patterns << /\/spec\/support\/active_job\.rb/
 end
