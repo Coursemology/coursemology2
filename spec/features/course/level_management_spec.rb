@@ -6,7 +6,6 @@ RSpec.feature 'Course: Levels' do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let!(:user) { create(:administrator) }
     let!(:course) { create(:course) }
     let!(:levels) do
       (1..3).map do |i|
@@ -14,10 +13,12 @@ RSpec.feature 'Course: Levels' do
       end
     end
 
+    before do
+      login_as(user, scope: :user)
+    end
+
     context 'As a Course Administrator' do
-      before do
-        login_as(user, scope: :user)
-      end
+      let(:user) { create(:course_manager, :approved, course: course).user }
 
       scenario 'I can view course levels' do
         visit course_levels_path(course)
