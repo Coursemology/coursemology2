@@ -76,20 +76,12 @@ class Course::Assessment::ProgrammingEvaluationService
 
   # Waits for the given evaluation to enter the finished state.
   #
-  # TODO: This uses polling, find a way to make this more efficient.
-  #
   # @param [Course::Assessment::ProgrammingEvaluation] evaluation The evaluation to wait for.
   # @raise [Timeout::Error] When the evaluation timeout has elapsed.
   def wait_for_evaluation(evaluation)
-    terminate_at = Time.zone.now + @timeout
-    loop do
-      if evaluation.tap(&:reload).finished?
-        break
-      elsif Time.zone.now >= terminate_at
-        fail Timeout::Error
-      else
-        sleep 0.1
-      end
-    end
+    wait_result = evaluation.wait(timeout: @timeout,
+                                  while_callback: -> { !evaluation.tap(&:reload).finished? })
+
+    fail Timeout::Error if wait_result.nil?
   end
 end

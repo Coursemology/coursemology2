@@ -26,10 +26,10 @@ class Course::Assessment::Submission::AutoGradingService
     auto_gradable_answers = ungraded_answers(submission).select do |answer|
       answer.question.auto_gradable?
     end
-    jobs = auto_gradable_answers.map { |answer| grade_answer(answer).job }
+    jobs = auto_gradable_answers.map { |answer| grade_answer(answer) }
 
     wait_for_jobs(jobs)
-    aggregate_failures(jobs)
+    aggregate_failures(jobs.map { |job| job.job.reload })
   end
 
   # Gets the ungraded answers for the given submission
@@ -48,18 +48,9 @@ class Course::Assessment::Submission::AutoGradingService
 
   # Waits for the given list of +TrackableJob::Job+s to enter the finished state.
   #
-  # TODO: This uses polling, find a way to make this more efficient.
-  #
-  # @param [Array<TrackableJob::Job>] jobs The jobs to wait.
+  # @param [Array<Course::Assessment::Answer::AutoGradingJob>] jobs The jobs to wait.
   def wait_for_jobs(jobs)
-    loop do
-      jobs.each(&:reload)
-      if jobs.any?(&:submitted?)
-        sleep 0.1
-      else
-        break
-      end
-    end
+    jobs.each(&:wait)
   end
 
   # Aggregates the failures in the given jobs and fails this job if there were any failures.

@@ -127,6 +127,28 @@ RSpec.describe Course::Assessment::ProgrammingEvaluation do
       end
     end
 
+    describe '#save' do
+      subject { create(:course_assessment_programming_evaluation, *evaluation_traits) }
+
+      context 'when the evaluation is finished' do
+        let(:evaluation_traits) { :assigned }
+        it 'notifies listeners' do
+          subject.status = :completed
+          Thread.new do
+            ActiveRecord::Base.connection_pool.with_connection do
+              attributes = attributes_for(:course_assessment_programming_evaluation, :completed).
+                           slice(:stderr, :stdout, :test_report)
+              subject.update_attributes(attributes)
+            end
+          end
+
+          subject.wait
+
+          # This should not deadlock because saving the record should signal.
+        end
+      end
+    end
+
     describe '#finished?' do
       context 'when the job errored' do
         let(:evaluation_traits) { :errored }

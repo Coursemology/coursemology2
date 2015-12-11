@@ -40,7 +40,7 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
 
       it 'fails with a SubJobError' do
         expect { subject.grade(submission) }.to \
-          raise_error(Course::Assessment::Submission::AutoGradingService::SubJobError)
+          raise_error(Course::Assessment::Submission::AutoGradingService::SubJobError, '0')
       end
     end
   end
