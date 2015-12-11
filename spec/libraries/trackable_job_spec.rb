@@ -42,6 +42,20 @@ RSpec.describe TrackableJob do
         expect(subject.valid?).to be(true)
       end
     end
+
+    describe '#save' do
+      context 'when the job is finished' do
+        it 'notifies listeners' do
+          subject.id = SecureRandom.uuid
+          subject.save!
+          subject.status = :completed
+          Thread.new { ActiveRecord::Base.connection_pool.with_connection { subject.save } }
+          subject.wait
+
+          # This should not deadlock because saving the record should signal.
+        end
+      end
+    end
   end
 
   subject { self.class::ExampleJob.perform_later }
@@ -81,6 +95,28 @@ RSpec.describe TrackableJob do
     end
   end
 
+  describe '#wait' do
+    it 'waits for the job to finish' do
+      expect(subject.job).to be_submitted
+      subject.wait
+
+      subject.job.reload
+      expect(subject.job).to be_completed
+    end
+
+    context 'when waiting for a completed job' do
+      it 'does not block' do
+        job_id = subject.job_id
+        subject.wait
+
+        subject.job.reload
+        expect(subject.job_id).to eq(job_id)
+        expect(subject.job).to be_completed
+        subject.wait
+      end
+    end
+  end
+
   describe '#perform_tracked' do
     subject { self.class::NoOpJob.perform_later }
 
@@ -89,16 +125,9 @@ RSpec.describe TrackableJob do
     end
   end
 
-  describe '#deserialize_arguments' do
+  describe '#job_id=' do
     it 'fetches the job' do
-      subject.send(:deserialize_arguments, [])
-      expect(subject.job.id).to eq(subject.job_id)
-    end
-
-    it 'returns the arguments' do
-      arguments = subject.arguments
-      serialized_arguments = subject.serialize['arguments']
-      expect(subject.send(:deserialize_arguments, serialized_arguments)).to eq(arguments)
+      expect(ActiveJob::Base.deserialize(subject.serialize).job).to eq(subject.job)
     end
   end
 

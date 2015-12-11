@@ -30,6 +30,8 @@ class Course::Assessment::ProgrammingEvaluation < ActiveRecord::Base
   end
   has_one_attachment
 
+  after_commit :signal, if: :finished?
+
   validates :evaluator, :assigned_at, presence: true, unless: :submitted?
   validates :stdout, :stderr, :test_report, exclusion: [nil], if: :finished?
 
