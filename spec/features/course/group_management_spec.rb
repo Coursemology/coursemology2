@@ -5,11 +5,12 @@ RSpec.feature 'Courses: Groups' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:user) { create(:administrator) }
     let!(:groups) { create_list(:course_group, 3, course: course) }
     before { login_as(user, scope: :user) }
 
     context 'As a Course manager' do
+      let(:user) { create(:course_manager, :approved, course: course).user }
+
       scenario 'I can view all the groups in course' do
         visit course_groups_path(course)
 
