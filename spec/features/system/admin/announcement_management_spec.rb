@@ -52,10 +52,12 @@ RSpec.feature 'System: Administration: Announcements' do
       end
 
       scenario 'I can see all announcements' do
-        announcements = create_list(:system_announcement, 2)
+        create_list(:system_announcement, 2)
+        announcements = System::Announcement.ordered_by_date.first(2)
         visit admin_announcements_path
 
         expect(page).to have_link(nil, href: new_admin_announcement_path)
+
         announcements.each do |announcement|
           expect(page).to have_content_tag_for(announcement)
           expect(page).to have_link(nil, href: edit_admin_announcement_path(announcement))
@@ -64,7 +66,8 @@ RSpec.feature 'System: Administration: Announcements' do
       end
 
       scenario 'I can delete announcements' do
-        announcement = create(:system_announcement)
+        create(:system_announcement)
+        announcement = System::Announcement.ordered_by_date.first
         visit admin_announcements_path
 
         expect do
