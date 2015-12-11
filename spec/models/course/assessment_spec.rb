@@ -39,8 +39,8 @@ RSpec.describe Course::Assessment do
           end
 
           it 'instantiates new answers' do
-            expect(answers.first.persisted?).to be(true)
-            expect(answers.drop(1).any?(&:persisted?)).to be(false)
+            expect(answers.count(&:persisted?)).to eq(1)
+            expect(answers.count(&:new_record?)).to eq(assessment.questions.length - 1)
           end
         end
 
