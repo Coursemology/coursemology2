@@ -110,6 +110,8 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
         # Auto grade where possible. There's one MRQ so it should be gradable.
         click_link I18n.t('course.assessment.submissions.edit.auto_grade')
+        wait_for_job
+
         expect(submission.answers.map(&:reload).any?(&:graded?)).to be(true)
 
         submission_maximum_grade = 0

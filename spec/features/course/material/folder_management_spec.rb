@@ -88,6 +88,8 @@ RSpec.feature 'Course: Material: Folders: Management' do
         visit course_material_folder_path(course, parent_folder)
         find_link(nil, href: download_course_material_folder_path(course, parent_folder)).click
 
+        wait_for_job
+
         expect(page.response_headers['Content-Type']).to eq('application/zip')
       end
 

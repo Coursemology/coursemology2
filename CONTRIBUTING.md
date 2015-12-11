@@ -30,6 +30,22 @@ In Rails, controller specs will always execute the `rescue_from` handlers. In ou
 disable that by default; to execute controllers with the handlers enabled, declare `run_rescue`
 within the example group.
 
+In development mode and when running specs, ActiveJob jobs are run with the `:background_thread`
+queue adapter (see `lib/autoload/active_job/queue_adapters`). This is to ensure consistency with
+production (where we will be using a separate jobs server): running jobs inline might cause
+database conenctions within the job to remain within a transaction.
+
+Therefore, specs have a group helper `with_active_job_queue_adapter`, which takes the queue
+adapter to use for that group of examples. The only adapters which should be used is:
+
+ - `:test` when counting the number of enqueued jobs.
+ - `:background_thread` when running job specs. `spec/support/active_job.rb` automatically sets
+   the default queue adapter to be `:test` when running job specs.
+
+There is no longer a need to explicitly set the `:inline` adapter for delayed delivery of mail.
+When running specs, all deferred mail deliveries are converted to immediate deliveries to keep
+track of the number of pending mail deliveries.
+
 Trackable Jobs can be waited -- use the `TrackableJob#wait` method.
 
 ## Developer Tools
