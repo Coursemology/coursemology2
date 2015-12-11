@@ -4,6 +4,10 @@
 = simple_form_for @topic, url: course_forum_topic_path(current_course, @forum, @topic) do |f|
   = f.error_notification
   = f.input :title
-  = f.input :topic_type, as: :select, collection: Course::Forum::Topic.topic_types.keys
+
+  - keys = Course::Forum::Topic.topic_types.keys
+  - keys -= ['announcement'] unless can?(:set_announcement, @topic)
+  - keys -= ['sticky'] unless can?(:set_sticky, @topic)
+  = f.input :topic_type, as: :select, collection: keys
 
   = f.button :submit

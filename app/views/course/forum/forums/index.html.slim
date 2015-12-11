@@ -1,5 +1,5 @@
 = page_header do
-  = new_button([current_course, :forum]) if can?(:create, Course::Forum)
+  = new_button([current_course, :forum]) if can?(:create, Course::Forum.new(course: current_course))
 table.table.forum-list.table-hover
   thead
     tr

@@ -8,6 +8,9 @@
   = f.fields_for :posts do |post|
     = post.input :text
 
-  = f.input :topic_type, as: :select, collection: Course::Forum::Topic.topic_types.keys
+  - keys = Course::Forum::Topic.topic_types.keys
+  - keys -= ['announcement'] unless can?(:set_announcement, @topic)
+  - keys -= ['sticky']  unless can?(:set_sticky, @topic)
+  = f.input :topic_type, as: :select, collection: keys
 
   = f.button :submit

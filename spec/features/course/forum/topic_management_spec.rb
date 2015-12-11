@@ -9,7 +9,7 @@ RSpec.feature 'Course: Forum: Topic: Management' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
-      let(:user) { course.creator }
+      let(:user) { create(:course_manager, :approved, course: course).user }
       scenario 'I can see topics' do
         topics = create_list(:forum_topic, 2, forum: forum)
         visit course_forum_path(course, forum)
@@ -173,6 +173,125 @@ RSpec.feature 'Course: Forum: Topic: Management' do
                                   hidden_course_forum_topic_path(course, forum, topic,
                                                                  hidden: true))
         expect(topic.reload.hidden).to eq(false)
+      end
+    end
+
+    context 'As a Course Student' do
+      let(:user) { create(:course_student, :approved, course: course).user }
+      scenario 'I can see shown topics' do
+        topic = create(:forum_topic, forum: forum)
+        hidden_topic = create(:forum_topic, forum: forum, hidden: true)
+
+        visit course_forum_path(course, forum)
+        expect(page).to have_link(topic.title,
+                                  href: course_forum_topic_path(course, forum, topic))
+        expect(page).to have_content_tag_for(topic)
+        expect(page).not_to have_link(hidden_topic.title,
+                                      href: course_forum_topic_path(course, forum, hidden_topic))
+        expect(page).not_to have_content_tag_for(hidden_topic)
+      end
+
+      scenario 'I can create a new topic with normal and question types' do
+        topic = build_stubbed(:forum_topic, forum: forum)
+
+        visit course_forum_path(course, forum)
+        find_link(nil, href: new_course_forum_topic_path(course, forum)).click
+
+        expect(current_path).to eq(new_course_forum_topic_path(course, forum))
+
+        # Create a topic with a missing title.
+        click_button 'submit'
+
+        expect(current_path).to eq(course_forum_topics_path(course, forum))
+        expect(page).to have_selector('div.alert.alert-danger')
+
+        # Create an announcement topic with a title.
+        fill_in 'title', with: topic.title
+        fill_in 'text', with: 'test'
+
+        within '#topic_topic_type' do
+          find("option[value='normal']").select_option
+        end
+        click_button 'submit'
+
+        expect(current_path).to eq(course_forum_topic_path(course, forum, forum.topics.last))
+        expect(forum.topics.last.topic_type).to eq('normal')
+        expect(forum.topics.last.posts.first.title).to eq(topic.title)
+        expect(forum.topics.last.posts.first.text).to eq('test')
+
+        # Create a sticky topic with a title.
+        visit course_forum_path(course, forum)
+        find_link(nil, href: new_course_forum_topic_path(course, forum)).click
+
+        fill_in 'title', with: topic.title
+
+        within '#topic_topic_type' do
+          find("option[value='question']").select_option
+        end
+        click_button 'submit'
+
+        expect(current_path).to eq(course_forum_topic_path(course, forum, forum.topics.last))
+        expect(forum.topics.last.topic_type).to eq('question')
+      end
+
+      scenario 'I can edit my topic' do
+        topic = create(:forum_topic, forum: forum, creator: user)
+        other_topic = create(:forum_topic, forum: forum)
+
+        # Edit with valid information.
+        visit course_forum_topic_path(course, forum, topic)
+        find_link(nil, href: edit_course_forum_topic_path(course, forum, topic)).click
+
+        new_title = 'new title'
+        fill_in 'title', with: new_title
+        click_button 'submit'
+
+        expect(current_path).to eq(course_forum_topic_path(course, forum, topic.reload))
+        expect(page).to have_selector('h1', text: new_title)
+
+        # Edit with invalid information.
+        visit course_forum_topic_path(course, forum, topic)
+        find_link(nil, href: edit_course_forum_topic_path(course, forum, topic)).click
+
+        fill_in 'title', with: ''
+        click_button 'submit'
+
+        expect(current_path).to eq(course_forum_topic_path(course, forum, topic.reload))
+        expect(page).to have_selector('div.alert.alert-danger')
+
+        # Can not edit others' topic
+        visit course_forum_topic_path(course, forum, other_topic)
+        expect(page).not_to have_link(nil, href: edit_course_forum_topic_path(course, forum,
+                                                                              other_topic))
+      end
+
+      scenario 'I can subscribe to a topic' do
+        topic = create(:forum_topic, forum: forum)
+        visit course_forum_topic_path(course, forum, topic)
+        find_link(I18n.t('course.forum.topics.subscribe.tag'),
+                  href: subscribe_course_forum_topic_path(course, forum, topic,
+                                                          subscribe: true)).click
+
+        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
+        expect(page).to have_link(I18n.t('course.forum.topics.unsubscribe.tag'),
+                                  subscribe_course_forum_topic_path(course, forum, topic,
+                                                                    subscribe: false))
+        expect(topic.subscriptions.where(user: user).count).to eq(1)
+      end
+
+      scenario 'I can unsubscribe from a topic' do
+        topic = create(:forum_topic, forum: forum)
+        topic.subscriptions.create(user: user)
+        visit course_forum_topic_path(course, forum, topic)
+        find_link(I18n.t('course.forum.topics.unsubscribe.tag'),
+                  href: subscribe_course_forum_topic_path(course, forum, topic,
+                                                          subscribe: false)).click
+
+        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
+        expect(page).to have_link(I18n.t('course.forum.topics.subscribe.tag'),
+                                  subscribe_course_forum_topic_path(course, forum, topic,
+                                                                    subscribe: true))
+        expect(topic.subscriptions.where(user: user).empty?).to eq(true)
       end
     end
   end
