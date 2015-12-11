@@ -4,14 +4,18 @@ RSpec.feature 'Course: Announcements' do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let!(:user) { create(:administrator) }
-    let!(:course) { create(:course) }
+    let(:course) { create(:course) }
+    let!(:not_started_announcement) { create(:course_announcement, :not_started, course: course) }
+    let!(:valid_announcement) { create(:course_announcement, course: course) }
+    let!(:ended_announcement) { create(:course_announcement, :ended, course: course) }
 
     before do
       login_as(user, scope: :user)
     end
 
-    context 'As an administrator' do
+    context 'As an Course Manager' do
+      let(:user) { create(:course_manager, :approved, course: course).user }
+
       scenario 'I can create new announcements' do
         visit new_course_announcement_path(course)
         click_button I18n.t('helpers.submit.announcement.create')
@@ -30,7 +34,7 @@ RSpec.feature 'Course: Announcements' do
         expect(current_path).to eq(course_announcements_path(course))
       end
 
-      scenario 'I can edit announcments' do
+      scenario 'I can edit announcements' do
         announcement = create(:course_announcement, course: course)
         visit edit_course_announcement_path(course, announcement)
 
@@ -58,11 +62,10 @@ RSpec.feature 'Course: Announcements' do
       end
 
       scenario 'I can see all existing announcements' do
-        announcements = create_list(:course_announcement, 10, course: course)
         visit course_announcements_path(course)
         expect(page).to have_link(nil, href: new_course_announcement_path(course))
 
-        announcements.each do |announcement|
+        [not_started_announcement, valid_announcement, ended_announcement].each do |announcement|
           expect(page).to have_content_tag_for(announcement)
           expect(page).to have_link(nil, href: edit_course_announcement_path(course, announcement))
           expect(page).to have_link(nil, href: course_announcement_path(course, announcement))
@@ -79,6 +82,24 @@ RSpec.feature 'Course: Announcements' do
         expect(current_path).to eq(course_announcements_path(course))
         expect(page).to have_selector('div.alert.alert-success',
                                       text: I18n.t('course.announcements.destroy.success'))
+      end
+    end
+
+    context 'As an Course Student' do
+      let(:user) { create(:course_student, :approved, course: course).user }
+
+      scenario 'I can see the started announcements' do
+        visit course_announcements_path(course)
+        expect(page).not_to have_link(nil, href: new_course_announcement_path(course))
+
+        [valid_announcement, ended_announcement].each do |announcement|
+          expect(page).to have_content_tag_for(announcement)
+          expect(page).
+            not_to have_link(nil, href: edit_course_announcement_path(course, announcement))
+          expect(page).not_to have_link(nil, href: course_announcement_path(course, announcement))
+        end
+
+        expect(page).not_to have_content_tag_for(not_started_announcement)
       end
     end
   end

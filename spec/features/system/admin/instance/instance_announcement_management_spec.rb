@@ -6,13 +6,13 @@ RSpec.feature 'System: Administration: Instance Announcements' do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let(:user) { create(:administrator) }
-
     before do
       login_as(user, scope: :user)
     end
 
-    context 'As a system administrator' do
+    context 'As an Instance Administrator' do
+      let(:user) { create(:instance_administrator).user }
+
       scenario 'I can create instance announcements' do
         visit new_admin_instance_announcement_path
 

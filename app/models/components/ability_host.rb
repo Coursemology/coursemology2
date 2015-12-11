@@ -83,6 +83,17 @@ class AbilityHost
         }
       ]
     end
+
+    # Returns a condition which will return started rows(start_at before current time) when
+    # ORed together in a database query. Reverse-merge this with your conditions to obtain the
+    # set of already started rows in the table.
+    #
+    # @return [Hash] The hash condition.
+    def already_started_hash
+      {
+        start_at: (Time.min..Time.zone.now)
+      }
+    end
   end
 
   # Open the Componentize Base Component.
