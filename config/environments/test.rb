@@ -37,6 +37,9 @@ Rails.application.configure do
   # We will assume that we are running on localhost
   config.action_mailer.default_url_options = { host: 'localhost' }
 
+  # Use the threaded background job adapter for replicating the production environment.
+  config.active_job.queue_adapter = :background_thread
+
   # Randomize the order test cases are executed.
   config.active_support.test_order = :random
 

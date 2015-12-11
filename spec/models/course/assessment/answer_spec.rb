@@ -162,7 +162,7 @@ RSpec.describe Course::Assessment::Answer do
         let(:answer_traits) { :graded }
         it 'allows re-grading' do
           new_grade = subject.grade = 1
-          subject.auto_grade!
+          subject.auto_grade!.wait
           subject.reload
 
           expect(subject.grade).not_to eq(new_grade)

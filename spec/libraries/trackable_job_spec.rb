@@ -121,7 +121,7 @@ RSpec.describe TrackableJob do
     subject { self.class::NoOpJob.perform_later }
 
     it 'fails with NotImplementedError' do
-      expect { subject.perform_tracked }.to raise_error(NotImplementedError)
+      expect { subject.send(:perform_tracked) }.to raise_error(NotImplementedError)
     end
   end
 
