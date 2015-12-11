@@ -30,6 +30,8 @@ In Rails, controller specs will always execute the `rescue_from` handlers. In ou
 disable that by default; to execute controllers with the handlers enabled, declare `run_rescue`
 within the example group.
 
+Trackable Jobs can be waited -- use the `TrackableJob#wait` method.
+
 ## Developer Tools
 The project's Gemfile contains a few developer tools to help keep the project tidy:
 

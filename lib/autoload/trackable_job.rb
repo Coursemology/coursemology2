@@ -15,6 +15,8 @@ module TrackableJob
   class Job < ActiveRecord::Base
     enum status: [:submitted, :completed, :errored]
 
+    after_commit :signal, unless: :submitted?
+
     validates :redirect_to, absence: true, if: :submitted?
     validates :error, absence: true, unless: :errored?
   end
@@ -28,6 +30,16 @@ module TrackableJob
   # @!attribute [r] job
   #   The Job object which tracks the status of this job.
   attr_reader :job
+
+  # Waits for the asynchronous job to finish.
+  #
+  # @param [Fixnum] timeout The amount of time to wait.
+  # @raise [Timeout::Error] If the timeout was elapsed without the condition being met.
+  def wait(timeout = nil)
+    wait_result = job.wait(timeout: timeout, while_callback: -> { job.tap(&:reload).submitted? })
+
+    fail Timeout::Error if wait_result.nil?
+  end
 
   # Implements +initialize+, creating the job in the database.
   def initialize(*args)
