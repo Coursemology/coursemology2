@@ -1,13 +1,17 @@
 class Course::Condition::AchievementsController < Course::ConditionsController
-  load_and_authorize_resource :achievement_condition,
-                              class: Course::Condition::Achievement.name, parent: false
+  load_resource :achievement_condition, class: Course::Condition::Achievement.name, parent: false
+  before_action :set_course, only: [:new, :create]
+  authorize_resource :achievement_condition, class: Course::Condition::Achievement.name
 
   def new
+    @achievement_condition.course = current_course
+    authorize!(:new, @achievement_condition)
   end
 
   def create
     @achievement_condition.conditional = @conditional
     @achievement_condition.course = current_course
+    authorize!(:create, @achievement_condition)
 
     if @achievement_condition.save
       redirect_to return_to_path, success: t('course.condition.achievements.create.success')
@@ -39,5 +43,9 @@ class Course::Condition::AchievementsController < Course::ConditionsController
 
   def achievement_condition_params
     params.require(:condition_achievement).permit(:achievement_id)
+  end
+
+  def set_course
+    @achievement_condition.course = current_course
   end
 end
