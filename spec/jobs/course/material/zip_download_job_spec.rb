@@ -17,18 +17,5 @@ RSpec.describe Course::Material::ZipDownloadJob do
       expect(download_job.job).to be_completed
       expect(download_job.job.redirect_to).to be_present
     end
-
-    describe '#publish_file' do
-      let(:file) do
-        file = Tempfile.new('test_file')
-        file.close
-        file.path
-      end
-      let(:filename) { 'Name with whitespaces' }
-      let(:download_job) { Course::Material::ZipDownloadJob.perform_later(folder, []) }
-      subject { download_job.send(:publish_file, file, filename) }
-
-      it { is_expected.to eq(URI.encode("/downloads/#{download_job.job.id}/#{filename}")) }
-    end
   end
 end
