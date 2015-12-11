@@ -42,6 +42,12 @@ module TrackableJob
     @job.save!
   end
 
+  def job_id=(job_id)
+    super
+    @job.destroy
+    @job = Job.find(job_id)
+  end
+
   protected
 
   def perform_tracked(*)
@@ -55,13 +61,6 @@ module TrackableJob
   end
 
   private
-
-  def deserialize_arguments(serialized_arguments)
-    result = super
-
-    @job = Job.find(job_id)
-    result
-  end
 
   # Specifies that the job should redirect to the given path.
   def redirect_to(path)
