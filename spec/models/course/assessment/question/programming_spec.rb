@@ -28,7 +28,8 @@ RSpec.describe Course::Assessment::Question::Programming do
             it 'queues a new import job' do
               expect(subject.import_job).to be_nil
               subject.file = File.new(File.join(Rails.root, 'spec/fixtures/course/'\
-                                                            'programming_question_template.zip'))
+                                                            'programming_question_template.zip'),
+                                      'rb')
               expect { subject.save }.to \
                 have_enqueued_job(Course::Assessment::Question::ProgrammingImportJob).exactly(:once)
             end

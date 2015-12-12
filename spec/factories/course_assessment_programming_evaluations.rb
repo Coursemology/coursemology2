@@ -6,7 +6,8 @@ FactoryGirl.define do
     status :submitted
     attachment do
       build(:attachment,
-            file: File.join(Rails.root, '/spec/fixtures/course/programming_question_template.zip'))
+            file: File.join(Rails.root, '/spec/fixtures/course/programming_question_template.zip'),
+            binary: true)
     end
 
     trait :assigned do

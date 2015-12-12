@@ -17,7 +17,7 @@ FactoryGirl.define do
     end
     file do
       File.new(File.join(Rails.root, 'spec/fixtures/course/'\
-                         'programming_question_template.zip')) if template_package
+                         'programming_question_template.zip'), 'rb') if template_package
     end
   end
 end

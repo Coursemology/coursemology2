@@ -67,7 +67,7 @@ class Course::Assessment::ProgrammingEvaluationService
   #
   # @return [Course::Assessment::ProgrammingEvaluation]
   def create_evaluation
-    File.open(@package) do
+    File.open(@package, 'rb') do
       Course::Assessment::ProgrammingEvaluation.create(
         course: @course, language: @language, memory_limit: @memory_limit,
         time_limit: @time_limit.to_i)
