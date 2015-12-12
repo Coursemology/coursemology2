@@ -9,7 +9,8 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportJob do
     end
     let(:attachment) do
       create(:attachment,
-             file: File.join(Rails.root, 'spec/fixtures/course/programming_question_template.zip'))
+             file: File.join(Rails.root, 'spec/fixtures/course/programming_question_template.zip'),
+             binary: true)
     end
 
     it 'can be queued' do
