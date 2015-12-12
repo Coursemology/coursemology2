@@ -19,17 +19,24 @@ class User::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def sign_in_with_facebook
-    auth = request.env['omniauth.auth']
-    @user = User.find_or_create_by_omniauth(auth)
+    @user = User.find_or_create_by_omniauth(request.env['omniauth.auth'])
     if @user.persisted?
-      sign_in_and_redirect(@user, event: :authentication)
-      set_flash_message(:notice, :success,
-                        kind: t('user.omniauth_callbacks.facebook.kind')) if is_navigational_format?
+      facebook_sign_in_success_redirect(@user)
     else
-      session['devise.facebook_data'] = auth
-      redirect_to new_user_registration_path,
-                  danger: t('user.omniauth_callbacks.facebook.sign_in_failure',
-                            error: @user.errors.full_messages.to_sentence)
+      facebook_sign_in_fail_redirect(@user)
     end
+  end
+
+  def facebook_sign_in_success_redirect(user)
+    sign_in_and_redirect(user, event: :authentication)
+    set_flash_message(:notice, :success,
+                      kind: t('user.omniauth_callbacks.facebook.kind')) if is_navigational_format?
+  end
+
+  def facebook_sign_in_fail_redirect(user)
+    session['devise.facebook_data'] = request.env['omniauth.auth']
+    redirect_to new_user_registration_path,
+                danger: t('user.omniauth_callbacks.facebook.sign_in_failure',
+                          error: user.errors.full_messages.to_sentence)
   end
 end

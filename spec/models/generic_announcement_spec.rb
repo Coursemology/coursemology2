@@ -13,10 +13,10 @@ RSpec.describe GenericAnnouncement, type: :model do
       let!(:now) { Time.zone.now }
       let!(:inactive_announcements) do
         [
-          create_list(:system_announcement, 3, start_at: now + 1.days, end_at: now + 2.days),
-          create_list(:system_announcement, 3, start_at: now - 2.days, end_at: now - 1.days),
-          create_list(:instance_announcement, 3, start_at: now + 1.days, end_at: now + 2.days),
-          create_list(:instance_announcement, 3, start_at: now - 2.days, end_at: now - 1.days)
+          create_list(:system_announcement, 3, start_at: now + 1.day, end_at: now + 2.days),
+          create_list(:system_announcement, 3, start_at: now - 2.days, end_at: now - 1.day),
+          create_list(:instance_announcement, 3, start_at: now + 1.day, end_at: now + 2.days),
+          create_list(:instance_announcement, 3, start_at: now - 2.days, end_at: now - 1.day)
         ].flatten
       end
 

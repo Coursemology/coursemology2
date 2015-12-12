@@ -42,7 +42,6 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
   # Queues the new question package for processing.
   def process_new_package
     self.import_job_id =
-      Course::Assessment::Question::ProgrammingImportJob.
-      perform_later(self, attachment).job_id
+      Course::Assessment::Question::ProgrammingImportJob.perform_later(self, attachment).job_id
   end
 end

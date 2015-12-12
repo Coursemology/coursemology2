@@ -19,7 +19,7 @@ RSpec.feature 'Course: Lesson Plan Milestones' do
         find_link(nil, href: new_course_lesson_plan_milestone_path(course)).click
 
         fill_in 'title', with: 'Title'
-        fill_in 'lesson_plan_milestone[start_at]', with: 1.days.from_now
+        fill_in 'lesson_plan_milestone[start_at]', with: 1.day.from_now
 
         expect do
           click_button I18n.t('helpers.submit.lesson_plan_milestone.create')

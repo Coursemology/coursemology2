@@ -6,7 +6,7 @@ module Course::SearchConcern
     # @param [String] keywords The keywords for filtering courses.
     # @return [Array<Course>] The courses which match the keyword. All courses will be returned if
     #   keyword is blank.
-    def search(keyword)
+    def search(keyword) # rubocop:disable Metrics/AbcSize
       return all if keyword.blank?
 
       condition = "%#{keyword}%"
