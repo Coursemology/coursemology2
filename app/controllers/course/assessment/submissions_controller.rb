@@ -110,7 +110,7 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
 
     new_answers = questions_to_attempt.attempt(@submission).
                   map { |answer| answer.save! if answer.new_record? }.
-                  reduce(false) { |left, right| left || right }
+                  reduce(false) { |a, e| a || e }
     @submission.answers.reload if new_answers && @submission.answers.loaded
   end
 

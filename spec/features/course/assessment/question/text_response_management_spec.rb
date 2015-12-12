@@ -29,7 +29,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
 
       scenario 'I can edit a question', js: true do
         question = create(:course_assessment_question_text_response, assessment: assessment,
-                          solutions: [])
+                                                                     solutions: [])
         solutions = [
           attributes_for(:course_assessment_question_text_response_solution, :keyword),
           attributes_for(:course_assessment_question_text_response_solution, :exact_match)

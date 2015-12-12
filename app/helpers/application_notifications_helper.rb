@@ -6,7 +6,7 @@ module ApplicationNotificationsHelper
   def notification_view_path(notification)
     activity = notification.activity
     root_path = "notifiers/#{activity.notifier_type}/#{activity.event}"
-    notification_class_name = notification.class.name.underscore.gsub('/', '_').pluralize
+    notification_class_name = notification.class.name.underscore.tr('/', '_').pluralize
     "/#{root_path}/#{notification_class_name}/#{notification.notification_type}"
   end
 end

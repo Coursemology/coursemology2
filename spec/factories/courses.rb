@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :course do
     sequence(:title) do |n|
       timestamp = Time.zone.now.to_i.to_s
-      "Course #{ timestamp + n.to_s }"
+      "Course #{timestamp + n.to_s}"
     end
     description 'example course'
     start_at Time.zone.now
