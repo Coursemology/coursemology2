@@ -1,5 +1,5 @@
 = page_header do
-  = new_button([current_course, :achievement]) if can?(:create, Course::Achievement)
+  = new_button([current_course, :achievement]) if can?(:create, Course::Achievement.new(course: current_course))
 table.table.achievement-list.table-hover
   thead
     tr

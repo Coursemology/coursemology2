@@ -4,7 +4,6 @@ RSpec.feature 'Course: Achievements' do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let(:user) { create(:administrator) }
     let(:course) { create(:course) }
     let(:other_achievement) { create(:course_achievement, course: course) }
     let(:achievement_condition) do
@@ -24,6 +23,8 @@ RSpec.feature 'Course: Achievements' do
     end
 
     context 'As a Course Manager' do
+      let(:user) { create(:course_manager, :approved, course: course).user }
+
       scenario 'I can create an achievement' do
         # Fields not yet filled
         visit new_course_achievement_path(course)

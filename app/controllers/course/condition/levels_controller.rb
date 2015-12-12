@@ -1,12 +1,13 @@
 class Course::Condition::LevelsController < Course::ConditionsController
-  load_and_authorize_resource :level_condition, class: Course::Condition::Level.name, parent: false
+  load_resource :level_condition, class: Course::Condition::Level.name, parent: false
+  before_action :set_course, only: [:new, :create]
+  authorize_resource :level_condition, class: Course::Condition::Level.name
 
   def new
   end
 
   def create
     @level_condition.conditional = @conditional
-    @level_condition.course = current_course
 
     if @level_condition.save
       redirect_to return_to_path, success: t('course.condition.levels.create.success')
@@ -38,5 +39,9 @@ class Course::Condition::LevelsController < Course::ConditionsController
 
   def level_condition_params
     params.require(:condition_level).permit(:minimum_level)
+  end
+
+  def set_course
+    @level_condition.course = current_course
   end
 end
