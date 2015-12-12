@@ -28,8 +28,7 @@ class CreateCourseAssessmentProgrammingQuestions < ActiveRecord::Migration
       t.text :hint
     end
 
-    create_table :course_assessment_answer_programming do |t|
-    end
+    create_table :course_assessment_answer_programming
 
     create_table :course_assessment_answer_programming_files do |t|
       t.references :answer, foreign_key: { references: :course_assessment_answer_programming },
@@ -47,8 +46,7 @@ class CreateCourseAssessmentProgrammingQuestions < ActiveRecord::Migration
     add_index :course_assessment_answer_auto_gradings, [:actable_id, :actable_type],
               name: :index_course_assessment_answer_auto_gradings_on_actable, unique: true
 
-    create_table :course_assessment_answer_programming_auto_gradings do |t|
-    end
+    create_table :course_assessment_answer_programming_auto_gradings
 
     create_table :course_assessment_answer_programming_auto_grading_test_results do |t|
       t.references :auto_grading,
