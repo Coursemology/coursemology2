@@ -2,7 +2,7 @@ class Course::Forum::Topic < ActiveRecord::Base
   extend FriendlyId
   friendly_id :slug_candidates, use: :scoped, scope: :forum
 
-  acts_as :topic, class_name: Course::Discussion::Topic.name, inverse_of: :actable
+  acts_as :topic, class_name: Course::Discussion::Topic.name
 
   after_initialize :generate_initial_post, unless: :persisted?
   before_validation :set_initial_post_title, unless: :persisted?
