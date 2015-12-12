@@ -40,7 +40,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
     fail IllegalStateError if attempting?
 
     self.class.transaction do
-      create_auto_grading! unless auto_grading
+      ensure_auto_grading!
       create_and_queue_auto_grading
     end
   end
@@ -69,6 +69,19 @@ class Course::Assessment::Answer < ActiveRecord::Base
 
   def validate_consistent_grade
     errors.add(:grade, :consistent_grade) if grade.present? && grade > question.maximum_grade
+  end
+
+  # Ensures that an auto grading record exists for this answer.
+  #
+  # Use this to guarantee that an auto grading record exists, and retrieves it. This is because
+  # there can be a concurrent creation of such a record across two processes, and this can only
+  # be detected at the database level.
+  #
+  # @return [Course::Assessment::Answer::AutoGrading]
+  def ensure_auto_grading!
+    create_auto_grading! unless auto_grading
+  rescue ActiveRecord::RecordNotUnique
+    auto_grading
   end
 
   # Creates a new auto grading record, and enqueues the job.
