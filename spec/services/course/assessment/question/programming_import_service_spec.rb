@@ -18,6 +18,12 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportService do
           and_call_original
         subject.import(question, package_path)
       end
+
+      it 'accepts package file streams' do
+        File.open(package_path) do |file|
+          subject.import(question, file)
+        end
+      end
     end
 
     describe '#import' do
