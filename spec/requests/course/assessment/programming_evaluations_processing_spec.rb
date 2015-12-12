@@ -19,7 +19,7 @@ RSpec.describe 'Course: Assessments: Programming Evaluations Processing', type: 
       context 'when there are available jobs' do
         it 'allows an evaluator to request for a job' do
           evaluation = create(:course_assessment_programming_evaluation, course: course)
-          post allocate_programming_evaluations_path
+          post allocate_assessment_programming_evaluations_path
 
           response_object = JSON.parse(response.body)['job']
           expect(response_object['id']).not_to be_nil
@@ -30,7 +30,7 @@ RSpec.describe 'Course: Assessments: Programming Evaluations Processing', type: 
       it 'allows the evaluation result to be updated' do
         evaluation = create(:course_assessment_programming_evaluation, :assigned, course: course)
         attributes = attributes_for(:course_assessment_programming_evaluation, :completed)
-        put programming_evaluation_result_path(evaluation),
+        put assessment_programming_evaluation_result_path(evaluation),
             programming_evaluation: attributes.slice(:stdout, :stderr, :test_report)
 
         expect(response.status).to eq(200)
@@ -45,7 +45,7 @@ RSpec.describe 'Course: Assessments: Programming Evaluations Processing', type: 
         it 'fails with HTTP 422' do
           evaluation = create(:course_assessment_programming_evaluation, course: course)
           attributes = attributes_for(:course_assessment_programming_evaluation, :completed)
-          put programming_evaluation_result_path(evaluation),
+          put assessment_programming_evaluation_result_path(evaluation),
               programming_evaluation: attributes.slice(:stdout, :stderr, :test_report)
 
           expect(response.status).to eq(422)
@@ -67,7 +67,7 @@ RSpec.describe 'Course: Assessments: Programming Evaluations Processing', type: 
         expect(evaluation).to be_assigned
         expect(evaluation.evaluator).to eq(user)
 
-        put programming_evaluation_result_path(evaluation),
+        put assessment_programming_evaluation_result_path(evaluation),
             programming_evaluation: { stdout: '', stderr: '', test_report: '' }
       end
     end
