@@ -3,14 +3,13 @@ require 'rails_helper'
 RSpec.describe Course::Assessment::ProgrammingPackage do
   self::PACKAGE_PATH = File.join(Rails.root,
                                  'spec/fixtures/course/programming_question_template.zip')
-  self::TEMP_PACKAGE_PATH = File.join(Rails.root, 'tmp/spec')
 
   def temp_package_path
     temp_package_stream.tap(&:close).path
   end
 
   def temp_package_stream
-    package_path = self.class::TEMP_PACKAGE_PATH
+    package_path = Rails.application.config.x.temp_folder.join('spec/packages')
     Dir.mkdir(package_path) unless Dir.exist?(package_path)
     Tempfile.create('programming_package', package_path)
   end
