@@ -39,6 +39,16 @@ GIT
       activesupport (~> 4)
 
 GIT
+  remote: git://github.com/lowjoel/simple_token_authentication.git
+  revision: 75cca3c0327e8ae9c8e2554e3d51b6f1b5db18a1
+  branch: optional-params-headers
+  specs:
+    simple_token_authentication (1.11.0)
+      actionmailer (>= 3.2.6, < 5)
+      actionpack (>= 3.2.6, < 5)
+      devise (~> 3.2)
+
+GIT
   remote: git://github.com/thedarkone/rails-dev-boost.git
   revision: a709a10b06b7d9fc4a9846bc613c60c86af9dd7c
   specs:
@@ -138,7 +148,7 @@ GEM
       thor (~> 0.19.1)
       tins (~> 1.6.0)
     crass (1.0.2)
-    devise (3.5.4)
+    devise (3.5.5)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 3.2.6, < 5)
@@ -568,6 +578,7 @@ DEPENDENCIES
   shoulda-matchers
   simple_form
   simple_form-bootstrap
+  simple_token_authentication!
   simplecov
   slim-rails
   spring

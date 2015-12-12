@@ -14,6 +14,16 @@ module UserAuthenticationConcern
     include UserOmniauthConcern
   end
 
+  # Enables token authentication for this user.
+  def enable_token_authentication
+    ensure_authentication_token
+  end
+
+  # Disables token authentication for this user.
+  def disable_token_authentication
+    self.authentication_token = nil
+  end
+
   private
 
   def create_instance_user
