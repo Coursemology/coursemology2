@@ -10,16 +10,16 @@ module CarrierWave::TestGroupHelpers
       class_.storage :file
     end
 
-    UPLOADS_DIR = "#{Rails.root}/spec/support/uploads"
+    UPLOADS_DIR = Rails.application.config.x.temp_folder.join('spec/uploads')
 
     def cache_dir
       super # Just to run the superclass method, but we ignore the return value.
-      "#{UPLOADS_DIR}/tmp"
+      UPLOADS_DIR.join('cache')
     end
 
     def store_dir
       super # Just to run the superclass method, but we ignore the return value.
-      "#{UPLOADS_DIR}/#{model.class.to_s.underscore}/#{model.id}"
+      UPLOADS_DIR.join(model.class.to_s.underscore, model.id.to_s)
     end
   end
 end
@@ -41,7 +41,11 @@ RSpec.configure do |config|
   end
 
   # Delete all the uploaded files after testing
+  config.before(:suite) do
+    next if Dir.exist?(CarrierWave::TestGroupHelpers::DirectoryOverrides::UPLOADS_DIR)
+    FileUtils.mkdir_p(CarrierWave::TestGroupHelpers::DirectoryOverrides::UPLOADS_DIR)
+  end
   config.after(:suite) do
-    FileUtils.rm_rf(Dir["#{Rails.root}/spec/support/uploads"])
+    FileUtils.rm_rf(CarrierWave::TestGroupHelpers::DirectoryOverrides::UPLOADS_DIR)
   end
 end
