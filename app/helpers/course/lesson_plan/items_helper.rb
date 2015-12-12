@@ -8,6 +8,6 @@ module Course::LessonPlan::ItemsHelper
   end
 
   def item_body_id(item)
-    "item-#{item.class.name.underscore.dasherize.gsub('/', '_')}-#{item.id}-body"
+    "item-#{item.class.name.underscore.dasherize.tr('/', '_')}-#{item.id}-body"
   end
 end

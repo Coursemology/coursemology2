@@ -41,12 +41,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
 
     self.class.transaction do
       create_auto_grading! unless auto_grading
-      Course::Assessment::Answer::AutoGradingJob.new(auto_grading).tap do |job|
-        auto_grading.assign_attributes(job_id: job.job_id)
-
-        save!
-        job.enqueue
-      end
+      create_and_queue_auto_grading
     end
   end
 
@@ -74,5 +69,17 @@ class Course::Assessment::Answer < ActiveRecord::Base
 
   def validate_consistent_grade
     errors.add(:grade, :consistent_grade) if grade.present? && grade > question.maximum_grade
+  end
+
+  # Creates a new auto grading record, and enqueues the job.
+  #
+  # @return [Course::Assessment::Answer::AutoGradingJob] The job instance.
+  def create_and_queue_auto_grading
+    Course::Assessment::Answer::AutoGradingJob.new(auto_grading).tap do |job|
+      auto_grading.assign_attributes(job_id: job.job_id)
+
+      save!
+      job.enqueue
+    end
   end
 end

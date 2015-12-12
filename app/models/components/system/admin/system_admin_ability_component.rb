@@ -2,9 +2,7 @@ module System::Admin::SystemAdminAbilityComponent
   include AbilityHost::Component
 
   def define_permissions
-    if user
-      do_not_allow_system_admin_manage_default_instance
-    end
+    do_not_allow_system_admin_manage_default_instance
 
     super
   end

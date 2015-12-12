@@ -50,7 +50,7 @@ module Course::Assessment::AssessmentAbility
   def allow_staff_grade_submissions
     can :read, Course::Assessment::Submission, assessment: assessment_course_staff_hash
     can :grade, Course::Assessment::Submission, assessment: assessment_course_staff_hash,
-        workflow_state: ['submitted', 'graded']
+                                                workflow_state: ['submitted', 'graded']
   end
 
   def allow_auto_grader_programming_evaluations

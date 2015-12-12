@@ -29,7 +29,7 @@ class Course::ControllerComponentHost
       #
       # @return [Symbol] the key
       def key
-        name.underscore.gsub('/', '_').to_sym
+        name.underscore.tr('/', '_').to_sym
       end
     end
   end

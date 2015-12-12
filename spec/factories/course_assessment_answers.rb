@@ -13,7 +13,7 @@ FactoryGirl.define do
 
     trait :submitted do
       submission_traits :submitted
-      after(:build) do |answer|
+      after(:build) do |answer| # rubocop:disable Style/SymbolProc
         answer.finalise!
       end
     end
@@ -21,7 +21,7 @@ FactoryGirl.define do
     trait :graded do
       submitted
       submission_traits :graded
-      after(:build) do |answer|
+      after(:build) do |answer| # rubocop:disable Style/SymbolProc
         answer.publish!
       end
     end

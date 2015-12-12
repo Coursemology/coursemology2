@@ -7,7 +7,7 @@ require File.expand_path('../config/application', __FILE__)
 begin
   require 'lol_dba'
   require 'traceroute'
-rescue LoadError
+rescue LoadError # rubocop:disable Lint/HandleExceptions
 end
 
 Rails.application.load_tasks

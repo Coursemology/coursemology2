@@ -15,7 +15,7 @@ FactoryGirl.define do
 
     trait :submitted do
       attempting
-      after(:build) do |submission|
+      after(:build) do |submission| # rubocop:disable Style/SymbolProc
         submission.finalise!
       end
     end

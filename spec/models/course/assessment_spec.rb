@@ -100,7 +100,7 @@ RSpec.describe Course::Assessment do
 
         assessments = course.assessments.with_submissions_by(user1)
         expect(assessments.all? { |assessment| assessment.submissions.loaded? }).to be(true)
-        submissions = assessments.flat_map { |assessment| assessment.submissions }
+        submissions = assessments.flat_map(&:submissions)
         expect(submissions.all? { |submission| submission.course_user.user == user1 }).to be(true)
       end
 
