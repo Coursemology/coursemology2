@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151202030421) do
+ActiveRecord::Schema.define(version: 20151212091754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -235,9 +235,10 @@ ActiveRecord::Schema.define(version: 20151202030421) do
 
   create_table "course_assessment_answer_programming_files", force: :cascade do |t|
     t.integer "answer_id", null: false, index: {name: "fk__course_assessment_answer_programming_files_answer_id"}, foreign_key: {references: "course_assessment_answer_programming", name: "fk_course_assessment_answer_programming_files_answer_id", on_update: :no_action, on_delete: :no_action}
-    t.string  "filename",  limit: 255,              null: false, index: {name: "index_course_assessment_answer_programming_files_filename", with: ["answer_id"], unique: true}
+    t.string  "filename",  limit: 255,              null: false
     t.text    "content",   default: "", null: false
   end
+  add_index "course_assessment_answer_programming_files", ["answer_id", "filename"], name: "index_course_assessment_answer_programming_files_filename", unique: true, case_sensitive: false
 
   create_table "course_assessment_answer_text_responses", force: :cascade do |t|
     t.text "answer_text"
@@ -263,6 +264,7 @@ ActiveRecord::Schema.define(version: 20151202030421) do
     t.string  "filename",    limit: 255, null: false
     t.text    "content",     null: false
   end
+  add_index "course_assessment_question_programming_template_files", ["question_id", "filename"], name: "index_course_assessment_question_programming_template_filenames", unique: true, case_sensitive: false
 
   create_table "course_assessment_question_text_responses", force: :cascade do |t|
   end
