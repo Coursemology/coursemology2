@@ -51,6 +51,12 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
     let(:test_cases) { parsed_report.test_suites.second.test_cases }
     subject { test_cases.first }
 
+    describe '#class_name' do
+      it 'returns the classname attribute' do
+        expect(subject.class_name).to eq('JUnitXmlReporter.constructor')
+      end
+    end
+
     describe '#name' do
       it 'returns the name attribute' do
         expect(subject.name).to eq('should default path to an empty string')
