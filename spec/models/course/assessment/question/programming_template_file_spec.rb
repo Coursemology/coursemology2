@@ -8,8 +8,19 @@ RSpec.describe Course::Assessment::Question::ProgrammingTemplateFile do
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
+    subject { build_stubbed(:course_assessment_question_programming_template_file) }
+
+    describe 'validations' do
+      describe '#filename' do
+        it 'normalises the filename' do
+          subject.filename = 'test\\b.txt'
+          expect(subject.valid?).to be(true)
+          expect(subject.filename).to eq('test/b.txt')
+        end
+      end
+    end
+
     describe '#copy_template_to' do
-      subject { build_stubbed(:course_assessment_question_programming_template_file) }
       let(:answer) do
         build_stubbed(:course_assessment_answer_programming, question: subject.question)
       end
