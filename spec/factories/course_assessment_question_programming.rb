@@ -3,7 +3,8 @@ FactoryGirl.define do
           class: Course::Assessment::Question::Programming,
           parent: :course_assessment_question do
     transient do
-      template_file_count 1
+      template_file_count 0
+      template_package false
     end
 
     memory_limit 32
@@ -13,6 +14,10 @@ FactoryGirl.define do
       template_file_count.downto(0).map do
         build(:course_assessment_question_programming_template_file, question: nil)
       end
+    end
+    file do
+      File.new(File.join(Rails.root, 'spec/fixtures/course/'\
+                         'programming_question_template.zip')) if template_package
     end
   end
 end

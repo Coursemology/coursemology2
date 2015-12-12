@@ -32,16 +32,32 @@ class Course::Assessment::ProgrammingPackage
 
   # Creates a new programming package instance.
   #
-  # @param [String|Pathname] path The path to the package on disk.
-  def initialize(path)
-    @path = path
+  # @overload initialize(path)
+  #   @param [String|Pathname] path The path to the package on disk.
+  # @overload initialize(stream)
+  #   @param [IO] stream The stream to the file.
+  def initialize(path_or_stream)
+    case path_or_stream
+    when String, Pathname
+      @path = path_or_stream
+    when IO
+      @stream = path_or_stream
+    else
+      fail ArgumentError, 'Invalid path or stream object'
+    end
   end
 
   # Gets the file path to the provided package.
   #
-  # @return [String]
+  # @return [String|nil] The path to the file, or +nil+ if the package is associated with a stream.
   def path
-    @file ? @file.name : @path
+    if @file
+      @file.name
+    elsif @path
+      @path.to_s
+    elsif @stream.is_a?(File)
+      @stream.path
+    end
   end
 
   # Closes the package.
@@ -89,7 +105,13 @@ class Course::Assessment::ProgrammingPackage
   # @raise [IllegalStateError] when the zip file is not open and it cannot be opened.
   def ensure_file_open!
     return if @file
-    @file = Zip::File.open(@path.to_s)
+    if @path
+      @file = Zip::File.open(@path.to_s)
+    elsif @stream
+      @file = Zip::File.new(@stream, true, true)
+      @file.read_from_stream(@stream)
+    end
+    fail IllegalStateError unless @file
   end
 
   # Removes all submission files from the archive.

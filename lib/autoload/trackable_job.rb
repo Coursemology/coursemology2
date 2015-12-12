@@ -68,7 +68,11 @@ module TrackableJob
 
   def rescue_tracked(exception)
     @job.status = :errored
-    @job.error = { message: exception.to_s }
+    @job.error = {
+      class: exception.class.name,
+      message: exception.to_s,
+      backtrace: exception.backtrace
+    }
     @job.save!
   end
 

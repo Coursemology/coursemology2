@@ -5,15 +5,22 @@ class Course::Assessment::Question::ProgrammingImportService
   class << self
     # Imports the programming package into the question.
     #
-    # @param [Course::Assessment::Question::Programming] question The programming question for
-    #   import.
-    # @param [Course::Assessment::ProgrammingPackage] package The package containing the
-    #   tests and template files.
-    #
     # @overload import(question, package)
     #   @param [Course::Assessment::Question::Programming] question The programming question for
     #     import.
-    #   @param [String] package The path to the package containing the tests and template files.
+    #   @param [Course::Assessment::ProgrammingPackage] package The package containing the
+    #     tests and template files.
+    #
+    # @overload import(question, package_path)
+    #   @param [Course::Assessment::Question::Programming] question The programming question for
+    #     import.
+    #   @param [String] package_path The path to the package containing the tests and template
+    # files.
+    #
+    # @overload import(question, package_stream)
+    #   @param [Course::Assessment::Question::Programming] question The programming question for
+    #     import.
+    #   @param [IO] package_stream An I/O object containing the package.
     def import(question, package)
       package = Course::Assessment::ProgrammingPackage.new(package) unless \
         package.is_a?(Course::Assessment::ProgrammingPackage)
@@ -35,12 +42,11 @@ class Course::Assessment::Question::ProgrammingImportService
 
   # Imports the templates and tests found in the package.
   def import
-    template_files = nil
-    template_import_thread = Thread.new { template_files = import_template_files }
+    template_import_thread = Thread.new { import_template_files }
     evaluation_result = evaluate_package
     template_import_thread.join
 
-    save(template_files, evaluation_result)
+    save(template_import_thread.value, evaluation_result)
   end
 
   # Extracts the templates from the package.

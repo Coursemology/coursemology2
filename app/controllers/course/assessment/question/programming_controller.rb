@@ -9,8 +9,12 @@ class Course::Assessment::Question::ProgrammingController < \
 
   def create
     if @programming_question.save
-      redirect_to course_assessment_path(current_course, @assessment),
-                  success: t('.success')
+      if @programming_question.import_job
+        redirect_to job_path(@programming_question.import_job)
+      else
+        redirect_to course_assessment_path(current_course, @assessment),
+                    success: t('.success')
+      end
     else
       render 'new'
     end
@@ -21,8 +25,12 @@ class Course::Assessment::Question::ProgrammingController < \
 
   def update
     if @programming_question.update_attributes(programming_question_params)
-      redirect_to course_assessment_path(current_course, @assessment),
-                  success: t('.success')
+      if @programming_question.import_job
+        redirect_to job_path(@programming_question.import_job)
+      else
+        redirect_to course_assessment_path(current_course, @assessment),
+                    success: t('.success')
+      end
     else
       render 'edit'
     end
@@ -43,6 +51,7 @@ class Course::Assessment::Question::ProgrammingController < \
 
   def programming_question_params
     params.require(:question_programming).permit(
-      :title, :description, :maximum_grade, :language_id, :memory_limit, :time_limit)
+      :title, :description, :maximum_grade, :language_id, :memory_limit, :time_limit,
+      *attachment_params)
   end
 end

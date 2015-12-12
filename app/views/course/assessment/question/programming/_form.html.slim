@@ -5,8 +5,13 @@
   = f.association :language
   = f.input :memory_limit
   = f.input :time_limit
+  = f.label :template_package
+  = f.attachment
 
   h2 = t('.template')
+  ul
+    - f.object.template_files.each do |template|
+      li = template.filename
 
   h2 = t('.test_cases.test_cases')
   table.table.table-striped.table-hover
