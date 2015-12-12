@@ -3,6 +3,6 @@ FactoryGirl.define do
     course
     sequence(:title) { |n| "Example Milestone #{n}" }
     description 'Coolest description.'
-    start_at 1.days.from_now
+    start_at 1.day.from_now
   end
 end

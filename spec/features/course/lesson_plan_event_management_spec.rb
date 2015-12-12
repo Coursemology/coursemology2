@@ -19,7 +19,7 @@ RSpec.feature 'Course: Events' do
         find_link(nil, href: new_course_lesson_plan_event_path(course)).click
 
         fill_in 'title', with: 'Title'
-        fill_in 'start_at', with: 1.days.from_now
+        fill_in 'start_at', with: 1.day.from_now
 
         expect do
           click_button I18n.t('helpers.submit.lesson_plan_event.create')
