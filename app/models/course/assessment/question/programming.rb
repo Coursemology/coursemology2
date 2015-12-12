@@ -2,7 +2,7 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
   # The table name for this model is singular.
   self.table_name = table_name.singularize
 
-  acts_as :question, class_name: Course::Assessment::Question.name, inverse_of: :actable
+  acts_as :question, class_name: Course::Assessment::Question.name
 
   after_save :process_new_package, if: :attachment_changed?
   after_commit :save, if: :import_job_id_changed?

@@ -12,7 +12,7 @@ module Extensions::Conditional::ActiveRecord::Base
 
     # Declare this function in the condition model
     def acts_as_condition
-      acts_as :condition, class_name: Course::Condition.name, inverse_of: :actable
+      acts_as :condition, class_name: Course::Condition.name
 
       include ConditionInstanceMethods
     end

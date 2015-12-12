@@ -1,5 +1,5 @@
 class Course::Assessment::Question::MultipleResponse < ActiveRecord::Base
-  acts_as :question, class_name: Course::Assessment::Question.name, inverse_of: :actable
+  acts_as :question, class_name: Course::Assessment::Question.name
 
   enum question_type: [:all_correct, :any_correct]
 
