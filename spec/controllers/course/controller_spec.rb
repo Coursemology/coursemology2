@@ -13,7 +13,7 @@ RSpec.describe Course::Controller, type: :controller do
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
-    let(:course) { create(:open_course) }
+    let(:course) { create(:course, :opened) }
     describe '#current_course' do
       it 'returns the current course' do
         get(:show, id: course.id)
