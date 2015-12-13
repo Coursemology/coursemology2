@@ -4,11 +4,11 @@ RSpec.feature 'Course: Administration: Materials' do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let(:user) { create(:user) }
-    let(:course) { create(:course, creator: user) }
+    let(:course) { create(:course) }
+    before { login_as(user, scope: :user) }
 
-    context 'As a Course Administrator' do
-      before { login_as(user, scope: :user) }
+    context 'As a Course Manager' do
+      let(:user) { create(:course_manager, :approved, course: course).user }
 
       scenario 'I can change the materials title' do
         visit course_admin_materials_path(course)

@@ -17,8 +17,7 @@ module Course::CourseAbilityComponent
 
   def allow_showing_open_courses
     # TODO: Replace with just the symbols when Rails 5 is released.
-    can [:read, :register], Course, status: [Course.statuses[:published], Course.statuses[:opened],
-                                             'published', 'opened']
+    can [:read, :register], Course, status: [Course.statuses[:published], Course.statuses[:opened]]
   end
 
   def allow_unregistered_users_registering_open_courses
