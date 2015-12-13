@@ -4,7 +4,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:user) { create(:user) }
-    let(:course) { create(:open_course) }
+    let(:course) { create(:course, :opened) }
     describe '#create' do
       before { sign_in(user) }
       subject { post :create, course_id: course, registration: registration_params }

@@ -4,7 +4,7 @@ RSpec.feature 'Courses: Registration' do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let(:course) { create(:open_course) }
+    let(:course) { create(:course, :opened) }
     let(:user) { create(:user) }
     before { login_as(user, scope: :user) }
 

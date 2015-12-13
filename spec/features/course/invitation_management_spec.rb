@@ -105,7 +105,7 @@ RSpec.feature 'Courses: Invitations', js: true do
     end
 
     context 'As a User' do
-      let(:course) { create(:open_course) }
+      let(:course) { create(:course, :opened) }
       let(:instance_user) { create(:instance_user) }
       let(:user) { instance_user.user }
 
