@@ -26,14 +26,13 @@ class Course::Assessment < ActiveRecord::Base
 
   has_many :submissions, inverse_of: :assessment, dependent: :destroy
 
-  # @!method with_maximum_grade
-  #   Includes the maximum grade allowed by this assessment. This is the sum of all questions'
+  # @!attribute [r] maximum_grade
+  #   Gets the maximum grade allowed by this assessment. This is the sum of all questions'
   #   maximum grade.
-  scope :with_maximum_grade, (lambda do
-    joins { questions }.
-      select { 'course_assessments.*' }.
-      select { sum(questions.maximum_grade).as(maximum_grade) }.
-      group { course_assessments.id }
+  #   @return [Fixnum]
+  calculated :maximum_grade, (lambda do
+    Course::Assessment::Question.select { sum(course_assessment_questions.maximum_grade) }.
+      where { course_assessment_questions.assessment_id == course_assessments.id }
   end)
 
   # @!method with_submissions_by(creator)
