@@ -71,13 +71,12 @@ RSpec.describe Course::Assessment do
       end
     end
 
-    describe '.with_maximum_grade' do
+    describe '#maximum_grade' do
       let(:assessment_traits) { [:with_all_question_types] }
 
-      it 'includes the maximum grade' do
+      it 'returns the maximum grade' do
         maximum_grade = self.assessment.questions.map(&:maximum_grade).reduce(0, :+)
 
-        assessment = Course::Assessment.with_maximum_grade.find(self.assessment.id)
         expect(assessment.maximum_grade).to eq(maximum_grade)
       end
     end
