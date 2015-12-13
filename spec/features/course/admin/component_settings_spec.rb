@@ -4,15 +4,15 @@ RSpec.feature 'Course: Administration: Components' do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let(:user) { create(:user) }
-    let(:course) { create(:course, creator: user) }
+    let(:course) { create(:course) }
     let(:components)  { Course::ControllerComponentHost.components }
     let(:sample_component_id) do
       "settings_effective_enabled_component_ids_#{components.sample.key}"
     end
+    before { login_as(user, scope: :user) }
 
-    context 'As Course Owner' do
-      before { login_as(user, scope: :user) }
+    context 'As a Course Manager' do
+      let(:user) { create(:course_manager, :approved, course: course).user }
 
       scenario 'I can view the list of enabled/disabled components' do
         visit course_admin_components_path(course)

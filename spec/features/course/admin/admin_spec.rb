@@ -6,11 +6,12 @@ RSpec.feature 'Course: Administration: Administration' do
   let(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let!(:user) { create(:administrator) }
+    let(:course) { create(:course) }
     before { login_as(user, scope: :user) }
 
-    context 'As an administrator' do
-      let(:course) { create(:course) }
+    context 'As an Course Manager' do
+      let(:user) { create(:course_manager, :approved, course: course).user }
+
       scenario 'I can change the course attributes' do
         visit course_admin_path(course)
 
