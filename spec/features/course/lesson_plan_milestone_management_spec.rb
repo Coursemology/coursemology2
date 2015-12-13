@@ -4,15 +4,16 @@ RSpec.feature 'Course: Lesson Plan Milestones' do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let!(:user) { create(:administrator) }
     let!(:course) { create(:course) }
     let(:milestone) { create(:course_lesson_plan_milestone, course: course) }
     let(:new_milestone_title) { 'Modified milestone title' }
 
-    context 'As a Course Administrator' do
-      before do
-        login_as(user, scope: :user)
-      end
+    before do
+      login_as(user, scope: :user)
+    end
+
+    context 'As a Course Manager' do
+      let(:user) { create(:course_manager, :approved, course: course).user }
 
       scenario 'I can create a milestone' do
         visit course_lesson_plan_path(course)
