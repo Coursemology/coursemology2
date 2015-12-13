@@ -18,5 +18,17 @@ RSpec.describe Course::LessonPlan::Milestone do
           to contain_exactly(lesson_plan_milestone)
       end
     end
+
+    context 'when the user is a Course Student' do
+      let(:user) { create(:course_student, :approved, course: course).user }
+
+      it { is_expected.to be_able_to(:show, lesson_plan_milestone) }
+      it { is_expected.not_to be_able_to(:manage, lesson_plan_milestone) }
+
+      it 'sees all lesson plan milestones' do
+        expect(course.lesson_plan_milestones.accessible_by(subject)).
+          to contain_exactly(lesson_plan_milestone)
+      end
+    end
   end
 end

@@ -13,7 +13,19 @@ RSpec.describe Course::LessonPlan::Item do
 
       it { is_expected.to be_able_to(:manage, lesson_plan_item) }
 
-      it 'sees all lesson plan items' do
+      it 'allows him to see all lesson plan items' do
+        expect(course.lesson_plan_items.accessible_by(subject)).
+          to contain_exactly(lesson_plan_item)
+      end
+    end
+
+    context 'when the user is a Course Student' do
+      let(:user) { create(:course_student, :approved, course: course).user }
+
+      it { is_expected.to be_able_to(:show, lesson_plan_item) }
+      it { is_expected.not_to be_able_to(:manage, lesson_plan_item) }
+
+      it 'allows him to see all lesson plan items' do
         expect(course.lesson_plan_items.accessible_by(subject)).
           to contain_exactly(lesson_plan_item)
       end

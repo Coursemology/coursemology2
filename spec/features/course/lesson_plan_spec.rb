@@ -52,5 +52,23 @@ RSpec.feature 'Course: Lesson Plan' do
         end
       end
     end
+
+    context 'As a Course Student' do
+      let(:user) { create(:course_student, :approved, course: course).user }
+
+      scenario 'I can view all lesson plan items grouped by milestone' do
+        visit course_lesson_plan_path(course)
+        expect(page).not_to have_link(nil, href: new_course_lesson_plan_event_path(course))
+        expect(page).not_to have_link(nil, href: new_course_lesson_plan_milestone_path(course))
+
+        milestones.each do |m|
+          expect(subject).to have_text(m.title)
+        end
+
+        events.each do |item|
+          expect(subject).to have_text(item.title)
+        end
+      end
+    end
   end
 end
