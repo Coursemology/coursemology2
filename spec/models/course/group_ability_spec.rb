@@ -17,5 +17,15 @@ RSpec.describe Course::Group do
         expect(course.groups.accessible_by(subject)).to contain_exactly(group)
       end
     end
+
+    context 'when the user is a Group Manager' do
+      let(:user) { create(:course_group_manager, course: course, course_group: group).user }
+
+      it { is_expected.to be_able_to(:manage, group.reload) }
+
+      it 'sees all groups' do
+        expect(course.groups.accessible_by(subject)).to contain_exactly(group)
+      end
+    end
   end
 end

@@ -2,7 +2,10 @@ module Course::GroupsAbilityComponent
   include AbilityHost::Component
 
   def define_permissions
-    allow_staff_manage_groups if user
+    if user
+      allow_staff_manage_groups
+      allow_group_manager_manage_group
+    end
 
     super
   end
@@ -11,5 +14,13 @@ module Course::GroupsAbilityComponent
 
   def allow_staff_manage_groups
     can :manage, Course::Group, course_staff_hash
+  end
+
+  def allow_group_manager_manage_group
+    can :manage, Course::Group, course_group_manager_hash
+  end
+
+  def course_group_manager_hash
+    { group_users: { user_id: user.id, role: Course::GroupUser.roles[:manager] } }
   end
 end
