@@ -52,6 +52,14 @@ RSpec.describe Course::Assessment::Category do
         expect(subject.folder.course).to eq(subject.course)
         expect(subject.folder.parent).to eq(subject.course.root_folder)
       end
+
+      context 'when category title is not a valid filename' do
+        subject { create(:course_assessment_category, title: 'lol\lol') }
+
+        it 'creates a folder with the valid name' do
+          expect(subject.folder.name).to eq('lol lol')
+        end
+      end
     end
 
     describe 'after category title was changed' do
