@@ -11,6 +11,7 @@ class Course::Material::Folder < ActiveRecord::Base
   belongs_to :owner, polymorphic: true, inverse_of: :folder
 
   validate :validate_name_is_unique_among_materials
+  validates_with FilenameValidator
 
   def files_attributes=(files)
     files.each do |file|
