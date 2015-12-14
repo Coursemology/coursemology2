@@ -63,15 +63,12 @@ class Course::Assessment::ProgrammingEvaluationService
   # Creates a new evaluation, attaching the provided package and specifying all its input
   # parameters.
   #
-  # TODO: Publish the file
-  #
   # @return [Course::Assessment::ProgrammingEvaluation]
   def create_evaluation
-    File.open(@package, 'rb') do
-      Course::Assessment::ProgrammingEvaluation.create(
-        course: @course, language: @language, memory_limit: @memory_limit,
-        time_limit: @time_limit.to_i)
-    end
+    package_path = SendFile.send_file(@package)
+    Course::Assessment::ProgrammingEvaluation.create(
+      course: @course, language: @language, package_path: package_path, memory_limit: @memory_limit,
+      time_limit: @time_limit.to_i)
   end
 
   # Waits for the given evaluation to enter the finished state.

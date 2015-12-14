@@ -28,7 +28,6 @@ class Course::Assessment::ProgrammingEvaluation < ActiveRecord::Base
     state :completed
     state :errored
   end
-  has_one_attachment
 
   after_commit :signal, if: :finished?
 

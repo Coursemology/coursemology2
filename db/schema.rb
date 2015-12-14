@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151212091754) do
+ActiveRecord::Schema.define(version: 20151214080700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -247,6 +247,7 @@ ActiveRecord::Schema.define(version: 20151212091754) do
   create_table "course_assessment_programming_evaluations", force: :cascade do |t|
     t.integer  "course_id",    null: false, index: {name: "fk__course_assessment_programming_evaluations_course_id"}, foreign_key: {references: "courses", name: "fk_course_assessment_programming_evaluations_course_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "language_id",  null: false, index: {name: "fk__course_assessment_programming_evaluations_language_id"}, foreign_key: {references: "polyglot_languages", name: "fk_course_assessment_programming_evaluations_language_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "package_path", limit: 255, null: false
     t.integer  "memory_limit", comment: "Memory limit, in MiB"
     t.integer  "time_limit",   comment: "Time limit, in seconds"
     t.string   "status",       limit: 255, null: false
