@@ -136,7 +136,7 @@ Rails.application.routes.draw do
 
       collection do
         namespace :assessment do
-          resources :programming_evaluations, only: [:index] do
+          resources :programming_evaluations, only: [:index], defaults: { format: 'json' } do
             post 'allocate' => 'programming_evaluations#allocate', on: :collection
             put 'result' => 'programming_evaluations#update_result'
           end

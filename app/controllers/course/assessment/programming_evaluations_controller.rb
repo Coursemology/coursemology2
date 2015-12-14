@@ -10,7 +10,6 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
   around_action :unscope_course
   before_action :load_programming_evaluation, only: [:update_result]
   around_action :load_and_authorize_pending_programming_evaluation, only: [:allocate]
-  before_action :set_request_format
   load_and_authorize_resource :programming_evaluations,
                               class: Course::Assessment::ProgrammingEvaluation.name,
                               except: [:allocate]
@@ -55,10 +54,6 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
       authorize! :show, @programming_evaluation if @programming_evaluation
       yield
     end
-  end
-
-  def set_request_format
-    request.format = :json unless params.key?(:format)
   end
 
   def language_param

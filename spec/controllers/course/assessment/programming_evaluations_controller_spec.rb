@@ -21,7 +21,7 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationsController do
 
     describe '#allocate' do
       let(:request) do
-        post :allocate, course_id: course
+        post :allocate, format: :json, course_id: course
       end
 
       context 'when saving fails' do
@@ -36,7 +36,7 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationsController do
 
     describe '#update_result' do
       let(:request) do
-        put :update_result, course_id: course, programming_evaluation_id: evaluation,
+        put :update_result, format: :json, course_id: course, programming_evaluation_id: evaluation,
                             programming_evaluation: evaluation.attributes.slice('stdout', 'stderr',
                                                                                 'test_report')
       end
