@@ -8,11 +8,11 @@
 # of them.
 class Course::Assessment::ProgrammingEvaluationsController < ApplicationController
   around_action :unscope_course
-  before_action :load_programming_evaluation, only: [:update_result]
   around_action :load_and_authorize_pending_programming_evaluation, only: [:allocate]
-  load_and_authorize_resource :programming_evaluation,
-                              class: Course::Assessment::ProgrammingEvaluation.name,
-                              except: [:allocate]
+  load_resource :programming_evaluation, class: Course::Assessment::ProgrammingEvaluation.name
+  before_action :load_programming_evaluation, only: [:package, :update_result]
+  authorize_resource :programming_evaluation, class: Course::Assessment::ProgrammingEvaluation.name,
+                                              except: [:allocate, :package]
 
   def index
     @programming_evaluations = @programming_evaluations.with_language(language_param)
@@ -23,6 +23,14 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
                    each { |evaluation| evaluation.assign!(current_user) }.
                    map(&:save)
     response.status = :bad_request unless save_success.all?
+  end
+
+  def show
+  end
+
+  def package
+    authorize! :show, @programming_evaluation
+    redirect_to @programming_evaluation.package_path
   end
 
   def update_result
@@ -43,7 +51,7 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
   end
 
   def load_programming_evaluation
-    @programming_evaluation = Course::Assessment::ProgrammingEvaluation.find(id_param)
+    @programming_evaluation ||= Course::Assessment::ProgrammingEvaluation.find(id_param)
   end
 
   def load_and_authorize_pending_programming_evaluation

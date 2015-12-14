@@ -27,6 +27,25 @@ RSpec.describe 'Course: Assessments: Programming Evaluations Processing' do
         end
       end
 
+      it 'allows the evaluation to be queried' do
+        evaluation = create(:course_assessment_programming_evaluation,
+                            course: course, memory_limit: 3, time_limit: 5)
+        get assessment_programming_evaluation_path(evaluation)
+
+        response_object = JSON.parse(response.body)
+        expect(response_object['id']).to eq(evaluation.id)
+        expect(response_object['memory_limit']).to eq(evaluation.memory_limit)
+        expect(response_object['time_limit']).to eq(evaluation.time_limit)
+      end
+
+      it 'allows the evaluation package to be downloaded' do
+        evaluation = create(:course_assessment_programming_evaluation,
+                            course: course, memory_limit: 3, time_limit: 5)
+        get assessment_programming_evaluation_package_path(evaluation)
+
+        expect(URI.parse(response.location).path).to eq(evaluation.package_path)
+      end
+
       it 'allows the evaluation result to be updated' do
         evaluation = create(:course_assessment_programming_evaluation, :assigned, course: course)
         attributes = attributes_for(:course_assessment_programming_evaluation, :completed)

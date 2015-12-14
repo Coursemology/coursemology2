@@ -43,6 +43,7 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationsController do
 
       context 'when saving fails' do
         before do
+          immutable_evaluation.assign!(User.system)
           controller.instance_variable_set(:@programming_evaluation, immutable_evaluation)
           request
         end
