@@ -10,7 +10,7 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
   around_action :unscope_course
   before_action :load_programming_evaluation, only: [:update_result]
   around_action :load_and_authorize_pending_programming_evaluation, only: [:allocate]
-  load_and_authorize_resource :programming_evaluations,
+  load_and_authorize_resource :programming_evaluation,
                               class: Course::Assessment::ProgrammingEvaluation.name,
                               except: [:allocate]
 
