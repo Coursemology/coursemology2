@@ -1,0 +1,5 @@
+en:
+  activerecord:
+    attributes:
+      course/condition/assessment/title:
+        title: '%{assessment_title} (at least %{minimum_grade_percentage})'

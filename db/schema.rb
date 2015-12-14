@@ -305,6 +305,11 @@ ActiveRecord::Schema.define(version: 20151212091754) do
     t.integer "achievement_id", null: false, index: {name: "fk__course_condition_achievements_achievement_id"}, foreign_key: {references: "course_achievements", name: "fk_course_condition_achievements_achievement_id", on_update: :no_action, on_delete: :no_action}
   end
 
+  create_table "course_condition_assessments", force: :cascade do |t|
+    t.integer "assessment_id",            null: false, index: {name: "fk__course_condition_assessments_assessment_id"}
+    t.float   "minimum_grade_percentage"
+  end
+
   create_table "course_condition_levels", force: :cascade do |t|
     t.integer "minimum_level", null: false
   end
