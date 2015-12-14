@@ -11,6 +11,12 @@ RSpec.feature 'Courses: Groups' do
     context 'As a Course manager' do
       let(:user) { create(:course_manager, :approved, course: course).user }
 
+      scenario 'I can view the Group Sidebar item' do
+        visit course_path(course)
+
+        expect(page).to have_selector('li', text: 'course.groups.sidebar_title')
+      end
+
       scenario 'I can view all the groups in course' do
         visit course_groups_path(course)
 
@@ -69,6 +75,12 @@ RSpec.feature 'Courses: Groups' do
       let(:group) { create(:course_group, course: course) }
       let(:user) { create(:course_group_manager, course: course, course_group: group).user }
 
+      scenario 'I can view the Group Sidebar item' do
+        visit course_path(course)
+
+        expect(page).to have_selector('li', text: 'course.groups.sidebar_title')
+      end
+
       scenario 'I can edit my group' do
         visit edit_course_group_path(course, group)
         new_name = 'New Group'
@@ -93,6 +105,16 @@ RSpec.feature 'Courses: Groups' do
         end.to change { course.groups.count }.by(-1)
 
         expect(page).to have_selector('div', text: I18n.t('course.groups.destroy.success'))
+      end
+    end
+
+    context 'As a Course Student' do
+      let(:user) { create(:course_student, :approved, course: course).user }
+
+      scenario 'I cannot view the Group Sidebar item' do
+        visit course_path(course)
+
+        expect(page).not_to have_selector('li', text: 'course.groups.sidebar_title')
       end
     end
   end

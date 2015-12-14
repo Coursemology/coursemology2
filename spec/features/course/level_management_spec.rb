@@ -20,6 +20,12 @@ RSpec.feature 'Course: Levels' do
     context 'As a Course Administrator' do
       let(:user) { create(:course_manager, :approved, course: course).user }
 
+      scenario 'I can view the Level Sidebar item' do
+        visit course_path(course)
+
+        expect(page).to have_selector('li', text: 'course.levels.sidebar_title')
+      end
+
       scenario 'I can view course levels' do
         visit course_levels_path(course)
 
@@ -44,6 +50,16 @@ RSpec.feature 'Course: Levels' do
         expect do
           find_link(nil, href: course_level_path(course, levels[0])).click
         end.to change(course.levels, :count).by(-1)
+      end
+    end
+
+    context 'As a Course Student' do
+      let(:user) { create(:course_student, :approved, course: course).user }
+
+      scenario 'I cannot view the Level Sidebar item' do
+        visit course_path(course)
+
+        expect(page).not_to have_selector('li', text: 'course.levels.sidebar_title')
       end
     end
   end

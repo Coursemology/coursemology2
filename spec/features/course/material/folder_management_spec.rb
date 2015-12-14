@@ -110,6 +110,12 @@ RSpec.feature 'Course: Material: Folders: Management' do
     context 'As a Course Student' do
       let(:user) { create(:course_student, :approved, course: course).user }
 
+      scenario 'I can view the Material Sidebar item' do
+        visit course_path(course)
+
+        expect(page).to have_selector('li', text: 'course.material.sidebar_title')
+      end
+
       scenario 'I can view valid subfolders' do
         valid_folders = subfolders.select do |f|
           f.start_at < Time.zone.now && (f.end_at.nil? || f.end_at > Time.zone.now)

@@ -56,6 +56,12 @@ RSpec.feature 'Course: Lesson Plan' do
     context 'As a Course Student' do
       let(:user) { create(:course_student, :approved, course: course).user }
 
+      scenario 'I can view the LessonPlan Sidebar item' do
+        visit course_path(course)
+
+        expect(page).to have_selector('li', text: 'course.lesson_plan.items.sidebar_title')
+      end
+
       scenario 'I can view all lesson plan items grouped by milestone' do
         visit course_lesson_plan_path(course)
         expect(page).not_to have_link(nil, href: new_course_lesson_plan_event_path(course))

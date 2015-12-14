@@ -68,6 +68,14 @@ RSpec.feature 'Course: Assessments: Management' do
 
     context 'As a Course Student' do
       let(:user) { create(:course_user, :approved, course: course).user }
+
+      scenario 'I can view the Assessment Sidebar item' do
+        visit course_path(course)
+
+        assessment_sidebar = 'activerecord.attributes.course/assessment/category/title.default'
+        expect(page).to have_selector('li', text: assessment_sidebar)
+      end
+
       scenario 'I can see assessments' do
         category = course.assessment_categories.first
         assessment = create(:assessment, course: course, tab: category.tabs.first)

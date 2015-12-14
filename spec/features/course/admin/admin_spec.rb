@@ -12,6 +12,12 @@ RSpec.feature 'Course: Administration: Administration' do
     context 'As an Course Manager' do
       let(:user) { create(:course_manager, :approved, course: course).user }
 
+      scenario 'I can view the Course Admin Sidebar item' do
+        visit course_path(course)
+
+        expect(page).to have_selector('li', text: 'layouts.course_admin.title')
+      end
+
       scenario 'I can change the course attributes' do
         visit course_admin_path(course)
 
@@ -29,6 +35,26 @@ RSpec.feature 'Course: Administration: Administration' do
         expect(page).to have_selector('div.alert.alert-success')
         expect(course.reload.title).to eq(new_title)
         expect(course.reload.description).to eq(new_description)
+      end
+    end
+
+    context 'As a Course Teaching Assistant' do
+      let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
+
+      scenario 'I cannot view the Course Admin Sidebar item' do
+        visit course_path(course)
+
+        expect(page).not_to have_selector('li', text: 'layouts.course_admin.title')
+      end
+    end
+
+    context 'As a Course Student' do
+      let(:user) { create(:course_student, :approved, course: course).user }
+
+      scenario 'I cannot view the Course Admin Sidebar item' do
+        visit course_path(course)
+
+        expect(page).not_to have_selector('li', text: 'layouts.course_admin.title')
       end
     end
   end

@@ -178,6 +178,13 @@ RSpec.feature 'Course: Forum: Topic: Management' do
 
     context 'As a Course Student' do
       let(:user) { create(:course_student, :approved, course: course).user }
+
+      scenario 'I can view the Forum Sidebar item' do
+        visit course_path(course)
+
+        expect(page).to have_selector('li', text: 'course.forum.forums.sidebar_title')
+      end
+
       scenario 'I can see shown topics' do
         topic = create(:forum_topic, forum: forum)
         hidden_topic = create(:forum_topic, forum: forum, hidden: true)
