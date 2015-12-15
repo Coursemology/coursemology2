@@ -140,7 +140,9 @@ RSpec.describe CourseUser, type: :model do
         before do
           create :course_experience_points_record, points_awarded: 150, course_user: student
         end
-        it { is_expected.to eq(1) }
+        it 'returns the correct level number' do
+          expect(subject).to eq(1)
+        end
       end
     end
 

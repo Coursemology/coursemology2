@@ -17,28 +17,13 @@ module Course::LevelsConcern
   # the level that a course participant would have attained if
   # s/he had experience_points number of experience points.
   #
-  # The motivation for this method is to accommodate named levels.
-  #
-  # nil is returned if experience_points is insufficient to
-  # attain to any level, i.e. nil represents the zeroth level.
   #
   # @param [Fixnum] experience_points Number of Experience Points
-  # @return [Course::Level, nil] A Course::Level instance, or nil.
-  def compute_level(experience_points)
+  # @return [Course::Level] A Course::Level instance.
+  def level_for(experience_points)
     i = numbered_levels.rindex do |l|
       l.experience_points_threshold <= experience_points
     end
-    i ? numbered_levels[i] : nil
-  end
-
-  # Returns the level number that a course participant would
-  # have attained if s/he had experience_points number of
-  # experience points.
-  #
-  # @param [Fixnum] experience_points Number of experience points
-  # @return [Fixnum] The level number for the given number of experience points
-  def compute_level_number(experience_points)
-    level = compute_level(experience_points)
-    level ? level.level_number : 0
+    i ? numbered_levels[i] : numbered_levels.first
   end
 end

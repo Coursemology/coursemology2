@@ -55,47 +55,18 @@ RSpec.describe Course, type: :model do
 
       describe '.levels' do
         it 'returns levels is ascending order' do
-          course_level_numbers = course.levels.map(&:experience_points_threshold)
-          expect(course_level_numbers).to eq levels
+          level_thresholds = course.levels.map(&:experience_points_threshold)
+          expect(level_thresholds).to eq(level_thresholds.sort)
         end
       end
 
-      describe '#compute_level' do
-        it 'returns nil when experience_points is 0' do
-          level = course.compute_level(0)
-          expect(level).to be_nil
-        end
-      end
-
-      describe '#compute_level_number' do
-        context 'when experience_points is 0' do
-          it 'returns 0' do
-            level = course.compute_level_number(0)
-            expect(level).to eq 0
-          end
-        end
-
-        context 'when experience_points is between threshold' do
+        context 'when experience_points is a positive number' do
           it 'returns the correct level number' do
-            experience_points = levels.max - 1
-            level = course.compute_level_number(experience_points)
-            expect(level).to eq levels.size - 1
-          end
-        end
-
-        context 'when experience_points coincides with a level threshold' do
-          it 'returns the correct level number' do
-            experience_points = levels[1]
-            level = course.compute_level_number(experience_points)
-            expect(level).to eq 2
-          end
-        end
-
-        context 'when experience_points exceeds all level thresholds' do
-          it 'returns the correct level number' do
-            experience_points = levels.max + 1
-            level = course.compute_level_number(experience_points)
-            expect(level).to eq levels.size
+            course.numbered_levels.each do |level|
+              experience_points = level.experience_points_threshold
+              expect(course.level_for(experience_points)).to eq(level)
+              expect(course.level_for(experience_points + 1)).to eq(level)
+            end
           end
         end
       end
