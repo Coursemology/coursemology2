@@ -31,19 +31,16 @@ RSpec.feature 'Course: Levels' do
       scenario 'I can create a course level' do
         visit course_levels_path(course)
         find_link(nil, href: new_course_level_path(course)).click
-        fill_in 'level_experience_points_threshold', with: 100
+        fill_in 'level_experience_points_threshold', with: 400
 
-        expect do
-          click_button I18n.t('helpers.submit.level.create')
-        end.to change(course.levels, :count).by(1)
+        expect { click_button I18n.t('helpers.submit.level.create') }.
+          to change(course.levels, :count).by(1)
       end
 
       scenario 'I can delete a course level' do
         visit course_levels_path(course)
-
-        expect do
-          find_link(nil, href: course_level_path(course, levels[0])).click
-        end.to change(course.levels, :count).by(-1)
+        expect { find_link(nil, href: course_level_path(course, levels[0])).click }.
+          to change(course.levels, :count).by(-1)
       end
     end
   end

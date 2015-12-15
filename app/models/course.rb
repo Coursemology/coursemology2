@@ -33,7 +33,7 @@ class Course < ActiveRecord::Base
   has_many :assessment_programming_evaluations,
            class_name: Course::Assessment::ProgrammingEvaluation.name, dependent: :destroy,
            inverse_of: :course
-  has_many :levels, dependent: :destroy
+  has_many :levels, dependent: :destroy, inverse_of: :course
   has_many :groups, dependent: :destroy, class_name: Course::Group.name
   has_many :lesson_plan_items, class_name: Course::LessonPlan::Item.name, dependent: :destroy
   has_many :lesson_plan_milestones, class_name: Course::LessonPlan::Milestone.name,

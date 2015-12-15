@@ -63,7 +63,7 @@ class CourseUser < ActiveRecord::Base
   #
   # @return [Fixnum] CourseUser level number
   def level_number
-    course.compute_level_number(experience_points)
+    course.level_for(experience_points).level_number
   end
 
   # Test whether this course_user is a staff (i.e. teaching_assistant, manager or owner)

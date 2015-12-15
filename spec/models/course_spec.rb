@@ -49,53 +49,32 @@ RSpec.describe Course, type: :model do
     describe 'levels' do
       let!(:user) { create(:administrator) }
       let!(:course) { create(:course) }
-      let!(:levels) do
-        create_list(:course_level, 5, course: course).map(&:experience_points_threshold)
-      end
+      let!(:levels) { create_list(:course_level, 5, course: course) }
+      before { course.reload }
 
       describe '.levels' do
         it 'returns levels is ascending order' do
-          course_level_numbers = course.levels.map(&:experience_points_threshold)
-          expect(course_level_numbers).to eq levels
+          level_thresholds = course.levels.map(&:experience_points_threshold)
+          expect(level_thresholds).to eq(level_thresholds.sort)
         end
       end
 
-      describe '#compute_level' do
-        it 'returns nil when experience_points is 0' do
-          level = course.compute_level(0)
-          expect(level).to be_nil
-        end
-      end
-
-      describe '#compute_level_number' do
-        context 'when experience_points is 0' do
-          it 'returns 0' do
-            level = course.compute_level_number(0)
-            expect(level).to eq 0
+      describe '#level_for' do
+        context 'when experience_points is 0 or negative' do
+          it 'returns the first level' do
+            [0, -1].each do |experience_points|
+              expect(course.level_for(experience_points)).to be_default_level
+            end
           end
         end
 
-        context 'when experience_points is between threshold' do
+        context 'when experience_points is a positive number' do
           it 'returns the correct level number' do
-            experience_points = levels.max - 1
-            level = course.compute_level_number(experience_points)
-            expect(level).to eq levels.size - 1
-          end
-        end
-
-        context 'when experience_points coincides with a level threshold' do
-          it 'returns the correct level number' do
-            experience_points = levels[1]
-            level = course.compute_level_number(experience_points)
-            expect(level).to eq 2
-          end
-        end
-
-        context 'when experience_points exceeds all level thresholds' do
-          it 'returns the correct level number' do
-            experience_points = levels.max + 1
-            level = course.compute_level_number(experience_points)
-            expect(level).to eq levels.size
+            course.numbered_levels.each do |level|
+              experience_points = level.experience_points_threshold
+              expect(course.level_for(experience_points)).to eq(level)
+              expect(course.level_for(experience_points + 1)).to eq(level)
+            end
           end
         end
       end
@@ -103,7 +82,7 @@ RSpec.describe Course, type: :model do
       describe '#numbered_levels' do
         it 'numbers levels' do
           numbering = course.numbered_levels.map(&:level_number)
-          expect(numbering).to eq((1..(levels.size)).to_a)
+          expect(numbering).to eq((0..(course.levels.count - 1)).to_a)
         end
       end
     end
@@ -239,6 +218,20 @@ RSpec.describe Course, type: :model do
 
           it { is_expected.to be_falsey }
         end
+      end
+    end
+
+    describe '#has_default_level?' do
+      let(:course) { build(:course) }
+      subject { course.has_default_level? }
+
+      context 'when course is a new record' do
+        it { is_expected.to be_truthy }
+      end
+
+      context 'when course is persisted' do
+        before { course.save }
+        it { is_expected.to be_truthy }
       end
     end
   end
