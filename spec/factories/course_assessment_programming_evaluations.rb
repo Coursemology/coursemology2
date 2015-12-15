@@ -4,10 +4,9 @@ FactoryGirl.define do
     course
     language { Polyglot::Language::Python::Python2Point7.instance }
     status :submitted
-    attachment do
-      build(:attachment,
-            file: File.join(Rails.root, '/spec/fixtures/course/programming_question_template.zip'),
-            binary: true)
+    package_path do
+      SendFile.send_file(File.join(Rails.root,
+                                   '/spec/fixtures/course/programming_question_template.zip'))
     end
 
     trait :assigned do

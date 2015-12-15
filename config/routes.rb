@@ -133,14 +133,18 @@ Rails.application.routes.draw do
           concerns :conditional
         end
       end
-      scope module: :assessment do
-        collection do
-          resources :programming_evaluations, only: [:index] do
+
+      collection do
+        namespace :assessment do
+          resources :programming_evaluations, only: [:index, :show], defaults: { format: 'json' } do
             post 'allocate' => 'programming_evaluations#allocate', on: :collection
+            get 'package' => 'programming_evaluations#package'
             put 'result' => 'programming_evaluations#update_result'
           end
         end
+      end
 
+      scope module: :assessment do
         resources :assessments do
           namespace :question do
             resources :multiple_responses, only: [:new, :create, :edit, :update, :destroy]
