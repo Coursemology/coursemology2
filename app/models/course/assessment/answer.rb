@@ -79,8 +79,10 @@ class Course::Assessment::Answer < ActiveRecord::Base
   #
   # @return [Course::Assessment::Answer::AutoGrading]
   def ensure_auto_grading!
-    create_auto_grading! unless auto_grading
-  rescue ActiveRecord::RecordNotUnique
+    auto_grading || create_auto_grading!
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
+    raise e if e.is_a?(ActiveRecord::RecordInvalid) && e.record.errors[:answer_id].empty?
+    association(:auto_grading).reload
     auto_grading
   end
 

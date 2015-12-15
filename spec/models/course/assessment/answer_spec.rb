@@ -176,5 +176,28 @@ RSpec.describe Course::Assessment::Answer do
         end
       end
     end
+
+    describe '#ensure_auto_grading!' do
+      context 'when an existing auto grading already exists' do
+        let(:existing_record) do
+          # Duplicate the subject so the subject does not know about the grading.
+          create(:course_assessment_answer_auto_grading, answer: subject.class.find(subject.id))
+        end
+
+        it 'returns the existing grading' do
+          # Simulate a concurrent creation of an existing record.
+          expect(subject.auto_grading).to be_nil
+          existing_record
+
+          expect(subject.send(:ensure_auto_grading!)).to eq(existing_record)
+        end
+      end
+
+      context 'when no existing auto grading exists' do
+        it 'creates a new grading' do
+          expect(subject.send(:ensure_auto_grading!)).to be_persisted
+        end
+      end
+    end
   end
 end
