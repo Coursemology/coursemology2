@@ -38,6 +38,12 @@ RSpec.feature 'Course: Achievements' do
         expect(page).not_to have_link(nil, href: edit_course_achievement_path(course, achievement))
         expect(page).not_to have_content_tag_for(draft_achievement)
       end
+
+      scenario 'I can view the Achievement Sidebar item' do
+        visit course_path(course)
+
+        expect(page).to have_selector('li', text: 'course.achievements.sidebar_title')
+      end
     end
   end
 end

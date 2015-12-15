@@ -2,6 +2,8 @@ class Course::LevelsComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
   def sidebar_items
+    return [] unless can?(:manage, Course::Level.new(course: current_course))
+
     [
       {
         key: :levels,

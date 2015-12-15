@@ -8,6 +8,8 @@ class Course::CoursesComponent < SimpleDelegator
   private
 
   def admin_sidebar_items
+    return [] unless can?(:manage, current_course)
+
     [
       {
         title: t('layouts.course_admin.title'),
