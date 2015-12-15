@@ -142,6 +142,7 @@ gem 'http_accept_language'
 
 # User authentication
 gem 'devise'
+gem 'devise_masquerade'
 gem 'omniauth'
 gem 'omniauth-facebook'
 
