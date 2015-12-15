@@ -148,14 +148,39 @@ RSpec.describe CourseUser, type: :model do
     end
 
     describe '#experience_points' do
-      let!(:exp_record_1) { create(:course_experience_points_record) }
-      let!(:exp_record_2) do
-        create(:course_experience_points_record, course_user: exp_record_1.course_user)
+      context 'when there are no experience points record' do
+        it 'returns zero' do
+          expect(student.experience_points).to eq(0)
+        end
       end
-      subject { exp_record_1.course_user }
-      it 'sums all associated experience points records' do
-        points_awarded = exp_record_1.points_awarded + exp_record_2.points_awarded
-        expect(subject.experience_points).to eq(points_awarded)
+
+      context 'when there are one or more experience points records' do
+        let!(:exp_record_1) { create(:course_experience_points_record) }
+        let!(:exp_record_2) do
+          create(:course_experience_points_record, course_user: exp_record_1.course_user)
+        end
+        subject { exp_record_1.course_user }
+
+        it 'sums all associated experience points records' do
+          points_awarded = exp_record_1.points_awarded + exp_record_2.points_awarded
+          expect(subject.experience_points).to eq(points_awarded)
+        end
+      end
+    end
+
+    describe '#achievement_count' do
+      subject { student.achievement_count }
+      context 'when the user has no achievement' do
+        it 'returns 0' do
+          expect(subject).to eq(0)
+        end
+      end
+
+      context 'when the user has one achievement' do
+        before { create(:course_user_achievement, course_user: student) }
+        it 'returns the accurate count' do
+          expect(subject).to eq(1)
+        end
       end
     end
 
