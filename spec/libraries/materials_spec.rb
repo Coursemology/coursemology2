@@ -24,6 +24,15 @@ RSpec.describe 'Extension: Materials' do
         assessment.files_attributes = files
         expect(assessment.folder.materials).to be_present
       end
+
+      context 'when filename is not valid' do
+        let(:files) { [OpenStruct.new(original_filename: 'lol\lol.txt')] }
+
+        it 'normalizes the name' do
+          assessment.files_attributes = files
+          expect(assessment.folder.materials.first.name).to eq('lol lol.txt')
+        end
+      end
     end
   end
 

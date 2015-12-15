@@ -3,6 +3,7 @@ class Course::Material < ActiveRecord::Base
   belongs_to :folder, inverse_of: :materials, class_name: Course::Material::Folder.name
 
   validate :validate_name_is_unique_among_folders
+  validates_with FilenameValidator
 
   # Returns the path of the material
   #

@@ -3,6 +3,7 @@ class Course::Material::Folder < ActiveRecord::Base
   include Course::ModelComponentHost::Component
 
   after_initialize :set_defaults, if: :new_record?
+  before_validation :normalize_filename, if: :owner
   before_validation :assign_valid_name
 
   has_many :materials, inverse_of: :folder, dependent: :destroy, foreign_key: :folder_id,
@@ -11,10 +12,11 @@ class Course::Material::Folder < ActiveRecord::Base
   belongs_to :owner, polymorphic: true, inverse_of: :folder
 
   validate :validate_name_is_unique_among_materials
+  validates_with FilenameValidator
 
   def files_attributes=(files)
     files.each do |file|
-      materials.build(name: file.original_filename, file: file)
+      materials.build(name: Pathname.normalize_filename(file.original_filename), file: file)
     end
   end
 
@@ -75,5 +77,10 @@ class Course::Material::Folder < ActiveRecord::Base
     return unless name_changed? && owner
 
     self.name = next_valid_name
+  end
+
+  # Normalize the folder name
+  def normalize_filename
+    self.name = Pathname.normalize_filename(name)
   end
 end
