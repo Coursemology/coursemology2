@@ -1,3 +1,2 @@
-json.job do
-  json.id @programming_evaluation.id
-end
+json.partial! 'programming_evaluation', collection: @programming_evaluations,
+                                        as: :programming_evaluation

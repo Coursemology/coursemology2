@@ -19,9 +19,10 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
   end
 
   def allocate
-    fail ActiveRecord::RecordNotFound unless @programming_evaluation
-    @programming_evaluation.assign!(current_user)
-    response.status = :bad_request unless @programming_evaluation.save
+    save_success = @programming_evaluations.
+                   each { |evaluation| evaluation.assign!(current_user) }.
+                   map(&:save)
+    response.status = :bad_request unless save_success.all?
   end
 
   def update_result
@@ -47,13 +48,27 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
 
   def load_and_authorize_pending_programming_evaluation
     Course::Assessment::ProgrammingEvaluation.transaction do
-      @programming_evaluation ||= Course::Assessment::ProgrammingEvaluation.
-                                  accessible_by(current_ability, :show).
-                                  with_language(language_param).
-                                  pending.limit(1).first
-      authorize! :show, @programming_evaluation if @programming_evaluation
+      @programming_evaluations ||= [].tap do |evaluations|
+        programming_evaluation = find_pending_programming_evaluation
+        next unless programming_evaluation
+
+        authorize! :show, programming_evaluation
+        evaluations << programming_evaluation
+      end
+
       yield
     end
+  end
+
+  # Obtains a programming evaluation task accessible by and suitable for the current user.
+  #
+  # @return [Course::Assessment::ProgrammingEvaluation|nil] The evaluation, or nil if none are
+  #   found.
+  def find_pending_programming_evaluation
+    Course::Assessment::ProgrammingEvaluation.
+      accessible_by(current_ability, :show).
+      with_language(language_param).
+      pending.limit(1).first
   end
 
   def language_param
