@@ -52,6 +52,8 @@ html
                       = link_to(t('layout.navbar.instance_admin_panel'), admin_instance_admin_path)
                   li
                     = link_to(t('layout.navbar.sign_out'), destroy_user_session_path, method: :delete)
+              - if user_masquerade?
+                li = link_to t('layout.navbar.stop_masquerading'), back_masquerade_path(current_user)
             - else
               li
                 = link_to(t('layout.navbar.register'), new_user_registration_path)

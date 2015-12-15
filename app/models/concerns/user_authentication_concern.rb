@@ -6,7 +6,7 @@ module UserAuthenticationConcern
     # Include default devise modules. Others available are:
     # :validatable, :confirmable, :lockable, :timeoutable and :omniauthable
     devise :database_authenticatable, :registerable,
-           :recoverable, :rememberable, :trackable
+           :recoverable, :rememberable, :trackable, :masqueradable
 
     before_sign_in :create_instance_user
     after_create :create_instance_user

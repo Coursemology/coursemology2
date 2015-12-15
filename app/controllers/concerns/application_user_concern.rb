@@ -1,5 +1,6 @@
 module ApplicationUserConcern
   extend ActiveSupport::Concern
+  include ApplicationUserMasqueradeConcern
 
   included do
     before_action :authenticate_user!, unless: :publicly_accessible?

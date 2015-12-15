@@ -11,6 +11,7 @@ en:
       sign_out: 'Sign Out'
       admin_panel: 'Administration Panel'
       instance_admin_panel: 'Instance Administration Panel'
+      stop_masquerading: '(Stop Masquerading)'
   layouts:
     course:
       administration: :'system.admin.admin.index.header'

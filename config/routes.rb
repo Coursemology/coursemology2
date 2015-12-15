@@ -67,7 +67,8 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     registrations: 'user/registrations',
     sessions: 'user/sessions',
-    omniauth_callbacks: 'user/omniauth_callbacks'
+    omniauth_callbacks: 'user/omniauth_callbacks',
+    masquerades: 'user/masquerades'
   }
 
   resources :announcements, only: [:index]
