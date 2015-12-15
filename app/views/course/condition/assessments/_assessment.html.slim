@@ -1,0 +1,8 @@
+- assessment_condition = assessment
+= content_tag_for(:tr, assessment_condition, class: 'condition')
+  td = t('course.condition.assessment.title')
+  td.assessment-condition-content = format_inline_text(assessment_condition.title)
+
+  td
+    = edit_button([course, conditional, assessment_condition])
+    = delete_button([course, conditional, assessment_condition])

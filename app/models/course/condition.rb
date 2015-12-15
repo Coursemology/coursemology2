@@ -6,5 +6,8 @@ class Course::Condition < ActiveRecord::Base
 
   delegate :satisfied_by?, to: :actable
 
-  NAMES = ['achievement', 'level']
+  ALL_CONDITIONS = [
+    Course::Condition::Achievement.name,
+    Course::Condition::Assessment.name,
+    Course::Condition::Level.name]
 end

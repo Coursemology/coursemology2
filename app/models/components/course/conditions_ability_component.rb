@@ -12,6 +12,7 @@ module Course::ConditionsAbilityComponent
   def allow_staff_manage_conditions
     can :manage, Course::Condition, course_staff_hash
     can :manage, Course::Condition::Achievement, condition: course_staff_hash
+    can :manage, Course::Condition::Assessment, condition: course_staff_hash
     can :manage, Course::Condition::Level, condition: course_staff_hash
   end
 end

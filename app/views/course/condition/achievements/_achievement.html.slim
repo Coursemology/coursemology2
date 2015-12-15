@@ -1,5 +1,5 @@
-- achievement_condition = condition.specific
-= content_tag_for(:tr, achievement_condition, class: :condition)
+- achievement_condition = achievement
+= content_tag_for(:tr, achievement_condition, class: 'condition')
   td = t('course.condition.achievement.title')
   td.achievement-condition-content = format_inline_text(achievement_condition.title)
 

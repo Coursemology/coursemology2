@@ -46,6 +46,8 @@ en:
             index: :'course.achievements.index.header'
           achievements:
             index: :'course.achievements.index.header'
+          assessments:
+            index: :'course.achievements.index.header'
       achievements:
         index: :'course.achievements.index.header'
         new: :'course.achievements.new.header'

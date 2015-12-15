@@ -61,6 +61,7 @@ Rails.application.routes.draw do
     namespace :condition do
       resources :achievements, except: [:index]
       resources :levels, except: [:index]
+      resources :assessments, except: [:index]
     end
   end
 

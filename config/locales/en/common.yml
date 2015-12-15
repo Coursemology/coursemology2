@@ -19,6 +19,9 @@ en:
       condition_achievement:
         create: 'Create Achievement Condition'
         update: 'Update Achievement Condition'
+      condition_assessment:
+        create: 'Create Assessment Condition'
+        update: 'Update Assessment Condition'
     buttons:
       new: 'New %{model}'
       edit: 'Edit %{model}'

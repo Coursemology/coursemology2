@@ -6,9 +6,11 @@ div.dropdown.pull-right
     aria-haspopup="true"]
     span = t('course.condition.new.header')
   ul.dropdown-menu.dropdown-menu-right aria-labelledby="new-condition-dropdown-btn"
-    - Course::Condition::ALL_CONDITIONS.each do |condition_name|
+    - Course::Condition::ALL_CONDITIONS.map do |condition_name| \
+        condition_name.demodulize.downcase\
+      end.each do |condition_name|
       li = link_to t("course.condition.#{condition_name.pluralize}.new.header"),
-                   [:new, current_course, conditional, :condition, condition_name]
+                   [:new, current_course, conditional, :condition, condition_name.downcase]
 
 table.table.table-hover
   thead
@@ -17,6 +19,4 @@ table.table.table-hover
       th = t('course.condition.description.header')
       th
   tbody
-    - conditional.conditions.each do |condition|
-      = render partial: condition.specific.class.name.underscore,
-               locals: { course: current_course, conditional: conditional, condition: condition }
+    = render conditional.specific_conditions, course: current_course, conditional: conditional
