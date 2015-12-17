@@ -7,6 +7,50 @@ RSpec.describe Course::Condition::Assessment, type: :model do
   with_tenant(:instance) do
     let(:course) { create(:course) }
 
+    describe 'validations' do
+      context 'when an assessment is its own condition' do
+        subject do
+          assessment = create(:assessment, course: course)
+          build_stubbed(:assessment_condition,
+                        course: course, assessment: assessment, conditional: assessment).
+            tap do |assessment_condition|
+            allow(assessment_condition).to receive(:assessment_id_changed?).and_return(true)
+          end
+        end
+        it { is_expected.to_not be_valid }
+      end
+
+      context "when an assessment is already included in its conditional's conditions" do
+        subject do
+          existing_assessment_condition = create(:assessment_condition, course: course)
+          build(:assessment_condition,
+                course: course, conditional: existing_assessment_condition.conditional,
+                assessment: existing_assessment_condition.assessment)
+        end
+
+        it 'is not valid' do
+          expect(subject).to_not be_valid
+          expect(subject.errors[:assessment]).to_not be_blank
+        end
+      end
+
+      # TODO: remove this test when Course::Condition::Assessment#required_assessments_for uses
+      # squeel.
+      context 'when an assessment is required by another conditional with the same id' do
+        subject do
+          id = Time.now.to_i
+          assessment = create(:assessment, course: course, id: id)
+          achievement = create(:achievement, course: course, id: id)
+          required_assessment = create(:assessment, course: course)
+          create(:assessment_condition,
+                 course: course, assessment: required_assessment, conditional: achievement)
+          build_stubbed(:assessment_condition,
+                        course: course, assessment: required_assessment, conditional: assessment)
+        end
+        it { is_expected.to be_valid }
+      end
+    end
+
     describe '#title' do
       let(:assessment) { create(:course_assessment_assessment, title: 'Dummy', course: course) }
       subject { create(:course_condition_assessment, assessment: assessment) }
