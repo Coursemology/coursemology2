@@ -20,11 +20,12 @@ class Course::Condition::Achievement < ActiveRecord::Base
 
   private
 
-  # Given an achievement, returns all its achievement conditions.
+  # Given a conditional object, returns all achievements that it requires.
   #
-  # @param [Course::Achievement] achievement The achievement to return achievement conditions for.
+  # @param [Object] conditional The object that is declared as acts_as_conditional and for which
+  #   returned achievements are required.
   # @return [Array<Course::Achievement>]
-  def achievement_conditions(achievement)
+  def required_achievements_for(conditional)
     # Course::Condition::Achievement.
     #   joins { condition.conditional(Course::Achievement) }.
     #   where { condition.conditional.id == achievement.id }.
@@ -37,7 +38,7 @@ class Course::Condition::Achievement < ActiveRecord::Base
         (SELECT cca.achievement_id
           FROM course_condition_achievements cca INNER JOIN course_conditions cc
             ON cc.actable_type = 'Course::Condition::Achievement' AND cc.actable_id = cca.id
-            WHERE cc.conditional_id = #{achievement.id}) ids
+            WHERE cc.conditional_id = #{conditional.id}) ids
     ON ids.achievement_id = course_achievements.id")
   end
 
@@ -52,7 +53,7 @@ class Course::Condition::Achievement < ActiveRecord::Base
   end
 
   def validate_unique_dependency
-    return unless achievement_conditions(conditional).include?(achievement)
+    return unless required_achievements_for(conditional).include?(achievement)
     errors.add(:achievement, :unique_dependency)
   end
 end
