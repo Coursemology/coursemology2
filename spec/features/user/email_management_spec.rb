@@ -4,7 +4,7 @@ RSpec.feature 'User: Emails' do
   let(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let(:user) { create(:administrator) }
+    let(:user) { create(:user) }
     let!(:user_emails) { create_list(:user_email, 2, user: user, primary: false) }
     before do
       login_as(user, scope: :user)
