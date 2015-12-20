@@ -10,3 +10,5 @@ en:
           success: '%{user} was updated.'
         destroy:
           success: '%{user} was destroyed.'
+        user:
+          masquerade: 'Masquerade'
