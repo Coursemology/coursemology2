@@ -1,0 +1,8 @@
+= simple_form_for @reply_post, url: course_forum_topic_posts_path(current_course, @forum, @topic) do |f|
+  = f.error_notification
+  = f.input :title
+  = f.input :text
+
+  = f.hidden_field :parent_id, value: @post.id
+
+  = f.button :submit

@@ -1,0 +1,13 @@
+en:
+  course:
+    discussion:
+      posts:
+        reply_title: 'Re: %{title}'
+        create:
+          success: 'Post was created'
+          failure: 'Fail to create post: %{error}'
+        update:
+          success: 'Post was updated'
+        destroy:
+          success: 'Post was deleted'
+          failure: 'Fail to delete post: %{error}'

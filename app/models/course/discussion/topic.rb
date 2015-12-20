@@ -13,4 +13,16 @@ class Course::Discussion::Topic < ActiveRecord::Base
   def subscribed_by?(user)
     subscriptions.where(user: user).any?
   end
+
+  # Create subscription for a user
+  #
+  # @param [User] user The user who needs to subscribe to this topic
+  def ensure_subscribed_by(user)
+    return true if self.subscribed_by?(user)
+    subscriptions.build(user: user).save!
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
+    return true if e.is_a?(ActiveRecord::RecordInvalid) &&
+                   e.record.errors[:topic_id].any? && e.record.errors[:user_id].any?
+    raise e
+  end
 end

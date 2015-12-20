@@ -10,6 +10,8 @@ en:
           header: 'New Topic'
         edit_topic:
           header: 'Edit Topic'
+        show:
+          post_reply: 'Post a reply'
         new:
           header: 'New Topic'
         create:

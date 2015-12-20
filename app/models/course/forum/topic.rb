@@ -51,6 +51,13 @@ class Course::Forum::Topic < ActiveRecord::Base
     0 # :TODO
   end
 
+  # Create view record for a user
+  #
+  # @param [User] user The user who views a topic
+  def viewed_by(user)
+    views.create(user: user)
+  end
+
   private
 
   # Try building a slug based on the following fields in

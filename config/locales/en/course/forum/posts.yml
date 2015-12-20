@@ -1,0 +1,11 @@
+en:
+  course:
+    forum:
+      posts:
+        edit:
+          header: 'Edit Post'
+        reply:
+          header: 'Reply'
+          reply: 'Reply'
+        post:
+          reply: 'Reply'
