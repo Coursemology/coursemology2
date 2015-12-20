@@ -13,6 +13,7 @@ gem 'bundler', '>= 1.10.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.1'
+gem 'sprockets-rails', '~> 2.0' # Until ai/jquery-cdn#2 is fixed.
 
 # Use PostgreSQL for the backend
 gem 'pg', '>= 0.18.2'
@@ -152,7 +153,7 @@ gem 'cancancan', github: 'CanCanCommunity/cancancan', branch: 'develop'
 gem 'rails_utils', '>= 3.3.3'
 
 # Themes for instances
-gem 'themes_on_rails', github: 'lowjoel/themes_on_rails'
+gem 'themes_on_rails', github: 'yoolk/themes_on_rails'
 
 # Forms made easy for Rails
 gem 'simple_form'
