@@ -18,6 +18,7 @@ module UserAuthenticationConcern
 
     extend ReplacementClassMethods
     include UserOmniauthConcern
+    include UserConfirmableConcern
   end
 
   private

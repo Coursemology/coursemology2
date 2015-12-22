@@ -1,0 +1,5 @@
+p = t('.welcome', email: @email)
+
+p = t('.instruction')
+
+p = link_to t('.link_title'), confirmation_url(@resource.user, confirmation_token: @token)

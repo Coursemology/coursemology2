@@ -19,6 +19,9 @@ en:
     mailer:
       confirmation_instructions:
         subject: 'Confirmation instructions'
+        welcome: 'Welcome %{email} !'
+        instruction: 'You can confirm your email through the link below:'
+        link_title: 'Confirm my email'
       reset_password_instructions:
         subject: 'Reset password instructions'
       unlock_instructions:

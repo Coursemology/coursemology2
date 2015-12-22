@@ -160,6 +160,7 @@ class Course::UserInvitationService
                                                        creator: @current_user,
                                                        updater: @current_user)
       user_email = user_email_map[user[:email]] || User::Email.new(email: user[:email])
+      user_email.confirmed_at = Time.zone.now
       course_user.build_invitation(user_email: user_email, creator: @current_user,
                                    updater: @current_user)
     end
