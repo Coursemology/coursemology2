@@ -7,6 +7,16 @@ RSpec.describe User::Email, type: :model do
 
   with_tenant(:instance) do
     let(:email) { build(:user_email) }
+
+    describe 'send_confirmation_instructions' do
+      it 'sends the confirmation instructions' do
+        email = create(:user_email)
+
+        expect { email.send_confirmation_instructions }.
+          to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+    end
+
     it 'rejects invalid email addresses' do
       email.email = 'wrong'
       expect(email.valid?).to eq(false)
