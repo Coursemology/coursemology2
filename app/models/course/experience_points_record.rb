@@ -1,7 +1,7 @@
 class Course::ExperiencePointsRecord < ActiveRecord::Base
   actable
 
-  validates :reason, presence: true, if: :manual_exp?
+  validates :reason, presence: true, if: :manually_awarded?
 
   belongs_to :course_user, inverse_of: :experience_points_records
 
@@ -21,7 +21,7 @@ class Course::ExperiencePointsRecord < ActiveRecord::Base
   # Checks if the given record is a manually-awarded experience points record.
   #
   # @return [bool]
-  def manual_exp?
+  def manually_awarded?
     actable_type.nil? && actable.nil?
   end
 end
