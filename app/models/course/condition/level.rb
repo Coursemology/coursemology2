@@ -14,4 +14,9 @@ class Course::Condition::Level < ActiveRecord::Base
   def satisfied_by?(course_user)
     course_user.level_number >= minimum_level
   end
+
+  # Array of classes that the condition depends on.
+  def self.dependent_classes
+    []
+  end
 end

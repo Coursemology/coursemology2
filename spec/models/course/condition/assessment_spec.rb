@@ -165,5 +165,11 @@ RSpec.describe Course::Condition::Assessment, type: :model do
         end
       end
     end
+
+    describe '.dependent_classes' do
+      it 'returns [Course::Assessment]' do
+        expect(Course::Condition::Assessment.dependent_classes).to eq([Course::Assessment.name])
+      end
+    end
   end
 end

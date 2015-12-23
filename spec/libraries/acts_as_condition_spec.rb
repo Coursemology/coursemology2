@@ -21,4 +21,20 @@ RSpec.describe 'Extension: Acts as Condition', type: :model do
       expect { subject.satisfied_by?(double) }.to raise_error(NotImplementedError)
     end
   end
+
+  describe 'classes which implement acts_as_condition' do
+    subject do
+      Class.new(ActiveRecord::Base) do
+        def self.columns
+          []
+        end
+        acts_as_condition
+      end
+    end
+
+    it 'implements .dependent_classes' do
+      expect(subject).to respond_to(:dependent_classes)
+      expect { subject.dependent_classes }.to raise_error(NotImplementedError)
+    end
+  end
 end

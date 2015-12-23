@@ -32,6 +32,11 @@ class Course::Condition::Assessment < ActiveRecord::Base
     end
   end
 
+  # Array of classes that the condition depends on.
+  def self.dependent_classes
+    [Course::Assessment.name]
+  end
+
   private
 
   def graded_submissions_by_user(user)

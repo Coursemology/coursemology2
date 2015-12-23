@@ -15,6 +15,7 @@ module Extensions::Conditional::ActiveRecord::Base
       acts_as :condition, class_name: Course::Condition.name
 
       include ConditionInstanceMethods
+      extend ConditionClassMethods
     end
   end
 
@@ -44,6 +45,13 @@ module Extensions::Conditional::ActiveRecord::Base
     # @param [CourseUser] _user The user that the condition is being checked on
     # @return [Boolean] true if the condition is met and false otherwise
     def satisfied_by?(_user)
+      fail NotImplementedError
+    end
+  end
+
+  module ConditionClassMethods
+    # Array of classes that the condition depends on.
+    def dependent_classes
       fail NotImplementedError
     end
   end
