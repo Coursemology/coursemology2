@@ -14,7 +14,7 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
   end
 
   module ExperiencePointsInstanceMethods
-    def manual_exp?
+    def manually_awarded?
       false
     end
   end

@@ -32,7 +32,7 @@ RSpec.describe Course::ExperiencePointsRecord do
 
       it { is_expected.to be_valid }
       it 'is a manual experience points record' do
-        expect(subject.send(:manual_exp?)).to be_truthy
+        expect(subject.send(:manually_awarded?)).to be_truthy
       end
 
       context 'when the record does not have a reason' do
