@@ -9,6 +9,7 @@
   = f.input :end_at
   = f.input :bonus_end_at
   = f.input :draft
+  = f.input :display_mode, as: :select, collection: Course::Assessment.display_modes.keys
   = f.folder
 
   = f.button :submit

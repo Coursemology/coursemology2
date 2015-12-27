@@ -9,6 +9,8 @@ class Course::Assessment < ActiveRecord::Base
   before_validation :assign_folder_attributes
   before_validation :propagate_course
 
+  enum display_mode: { worksheet: 0, guided: 1 }
+
   belongs_to :tab, inverse_of: :assessments
 
   has_many :questions, inverse_of: :assessment, dependent: :destroy do

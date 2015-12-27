@@ -26,6 +26,9 @@ RSpec.feature 'Course: Assessments: Management' do
         fill_in 'assessment_start_at', with: assessment.start_at
         fill_in 'assessment_end_at', with: assessment.end_at
         fill_in 'assessment_bonus_end_at', with: assessment.bonus_end_at
+        within '#assessment_display_mode' do
+          find("option[value='guided']").select_option
+        end
 
         click_button 'submit'
 
@@ -40,6 +43,7 @@ RSpec.feature 'Course: Assessments: Management' do
         assessment_created = course.assessments.last
         expect(page).to have_content_tag_for(assessment_created)
         expect(assessment_created.folder.materials).to be_present
+        expect(assessment_created).to be_guided
       end
 
       scenario 'I can edit an assessment' do
