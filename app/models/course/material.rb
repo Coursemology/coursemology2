@@ -19,7 +19,7 @@ class Course::Material < ActiveRecord::Base
   def validate_name_is_unique_among_folders
     return if folder.nil?
 
-    conflicts = folder.children.where('lower(name) = ?', name.downcase)
+    conflicts = folder.children.where { name =~ my { name } }
     errors.add(:name, :taken) if conflicts.any?
   end
 end

@@ -47,7 +47,7 @@ class Course::Material::Folder < ActiveRecord::Base
   def validate_name_is_unique_among_materials
     return if parent.nil?
 
-    conflicts = parent.materials.where('lower(name) = ?', name.downcase)
+    conflicts = parent.materials.where { name =~ my { name } }
     errors.add(:name, :taken) if conflicts.any?
   end
 
