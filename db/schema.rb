@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151224034135) do
+ActiveRecord::Schema.define(version: 20151228030006) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,9 +135,10 @@ ActiveRecord::Schema.define(version: 20151224034135) do
     t.integer  "actable_id"
     t.string   "actable_type",  limit: 255, index: {name: "index_course_assessment_questions_actable", with: ["actable_id"], unique: true}
     t.integer  "assessment_id", null: false, index: {name: "fk__course_assessment_questions_assessment_id"}, foreign_key: {references: "course_assessments", name: "fk_course_assessment_questions_assessment_id", on_update: :no_action, on_delete: :no_action}
-    t.string   "title",         limit: 255, null: false
+    t.string   "title",         limit: 255,             null: false
     t.text     "description"
     t.integer  "maximum_grade", null: false
+    t.integer  "weight",        default: 0, null: false
     t.integer  "creator_id",    null: false, index: {name: "fk__course_assessment_questions_creator_id"}, foreign_key: {references: "users", name: "fk_course_assessment_questions_creator_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "updater_id",    null: false, index: {name: "fk__course_assessment_questions_updater_id"}, foreign_key: {references: "users", name: "fk_course_assessment_questions_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at",    null: false

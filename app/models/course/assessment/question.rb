@@ -4,6 +4,8 @@ class Course::Assessment::Question < ActiveRecord::Base
   belongs_to :assessment, inverse_of: :questions
   has_and_belongs_to_many :tags
 
+  default_scope { order(weight: :asc) }
+
   delegate :to_partial_path, to: :actable
 
   # Checks if the given question is auto gradable. This defaults to false if the specific
