@@ -76,7 +76,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         submission
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        click_button I18n.t('course.assessment.submissions.edit.finalise')
+        click_button I18n.t('course.assessment.submissions.worksheet.finalise')
         expect(current_path).to eq(\
           edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.submitted?).to be(true)
@@ -109,7 +109,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         # Auto grade where possible. There's one MRQ so it should be gradable.
-        click_link I18n.t('course.assessment.submissions.edit.auto_grade')
+        click_link I18n.t('course.assessment.submissions.worksheet.auto_grade')
         wait_for_job
 
         expect(submission.answers.map(&:reload).any?(&:graded?)).to be(true)
@@ -122,7 +122,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
           end
         end
 
-        click_button I18n.t('course.assessment.submissions.edit.publish')
+        click_button I18n.t('course.assessment.submissions.worksheet.publish')
         expect(current_path).to eq(
           edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.graded?).to be(true)
