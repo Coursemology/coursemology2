@@ -21,7 +21,9 @@ ActsAsTenant.with_tenant(Instance.default) do
   # Create the default user account.
   user = User::Email.find_by_email('test@example.org')
   unless user
-    User.create!(name: 'Administrator', email: 'test@example.org',
-                 password: 'Coursemology!', role: :administrator)
+    user = User.new(name: 'Administrator', email: 'test@example.org',
+                    password: 'Coursemology!', role: :administrator)
+    user.skip_confirmation!
+    user.save!
   end
 end
