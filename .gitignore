@@ -32,3 +32,6 @@
 
 # Ignore additional themes
 /app/themes/*
+
+# Ignore public download folder
+/public/downloads/*
