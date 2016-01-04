@@ -20,6 +20,14 @@ class Course::Level < ActiveRecord::Base
     experience_points_threshold == 0
   end
 
+  # Returns the next higher level in the course
+  # nil is returned if current level is the highest level
+  #
+  # @return [Course::Level, nil]
+  def next
+    course.numbered_levels[level_number + 1]
+  end
+
   # Retrieves the level number of the current level,
   # relative to the other levels in the same course.
   # This number is set by Course::LevelsConcern#number_levels.

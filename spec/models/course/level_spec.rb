@@ -65,5 +65,22 @@ RSpec.describe Course::Level, type: :model do
         end
       end
     end
+
+    describe '.next' do
+      before { create_list(:course_level, 5, course: course) }
+      context 'when current level is not the highest' do
+        it 'returns the next level' do
+          course.reload.numbered_levels.each_cons(2) do |current_level, next_level|
+            expect(current_level.next).to eq(next_level)
+          end
+        end
+      end
+
+      context 'when current level is the highest' do
+        it 'returns nil' do
+          expect(course.numbered_levels.last.next).to be_nil
+        end
+      end
+    end
   end
 end
