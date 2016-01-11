@@ -4,5 +4,6 @@ FactoryGirl.define do
     title 'This awesome question'
     description 'Look at this awesome question'
     maximum_grade 2
+    sequence(:weight)
   end
 end

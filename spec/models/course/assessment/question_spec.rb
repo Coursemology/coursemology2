@@ -75,5 +75,15 @@ RSpec.describe Course::Assessment::Question do
         end
       end
     end
+
+    describe '.default_scope' do
+      let(:assessment) { create(:course_assessment_assessment) }
+      let!(:questions) { create_list(:course_assessment_question, 2, assessment: assessment) }
+      it 'orders by ascending weight' do
+        weights = assessment.questions.pluck(:weight)
+        expect(weights.length).to be > 1
+        expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
+      end
+    end
   end
 end
