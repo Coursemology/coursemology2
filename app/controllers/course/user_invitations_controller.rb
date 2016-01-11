@@ -30,7 +30,9 @@ class Course::UserInvitationsController < Course::ComponentController
 
   # Determines the parameters to be passed to the invitation service object.
   #
-  # @return [Tempfile|Hash|bool]
+  # @return [Tempfile]
+  # @return [Hash]
+  # @return [Boolean]
   def invitation_params
     @invitation_params ||= course_user_invitation_params[:invitations_file].try(:tempfile) ||
                            course_user_invitation_params[:invitations_attributes] ||
@@ -39,28 +41,28 @@ class Course::UserInvitationsController < Course::ComponentController
 
   # Determines if the user uploaded a file.
   #
-  # @return [bool]
+  # @return [Boolean]
   def invite_by_file?
     invitation_params.is_a?(Tempfile)
   end
 
   # Determines if the user keyed in entries manually.
   #
-  # @return [bool]
+  # @return [Boolean]
   def invite_by_entry?
     invitation_params.is_a?(Hash)
   end
 
   # Determines if the user is changing the registration code enabled state.
   #
-  # @return [bool]
+  # @return [Boolean]
   def invite_by_registration_code?
     invitation_params.is_a?(TrueClass) || invitation_params.is_a?(FalseClass)
   end
 
   # Invites the users via the service object.
   #
-  # @return [bool] True if the invitation was successful.
+  # @return [Boolean] True if the invitation was successful.
   def invite
     if invite_by_file? || invite_by_entry?
       invitation_service.invite(invitation_params)

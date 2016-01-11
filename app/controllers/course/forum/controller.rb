@@ -10,7 +10,8 @@ class Course::Forum::Controller < Course::ComponentController
     @forum ||= current_course.forums.friendly.find(params[:forum_id])
   end
 
-  # @return [Course::ForumsComponent|nil] The forum component or nil if disabled.
+  # @return [Course::ForumsComponent] The forum component.
+  # @return [nil] If component is disabled.
   def component
     current_component_host[:course_forums_component]
   end

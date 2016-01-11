@@ -2,7 +2,7 @@ class Course::UserRegistrationService
   # Registers the specified registration.
   #
   # @param [Course::Registration] registration The registration object to be processed.
-  # @return [bool] True if the registration succeeded. False if the registration failed.
+  # @return [Boolean] True if the registration succeeded. False if the registration failed.
   def register(registration)
     CourseUser.transaction do
       course_user = create_or_update_registration(registration)
@@ -56,7 +56,7 @@ class Course::UserRegistrationService
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
   # @param [Hash] options Additional operations for updating the course user.
-  # @return [bool] True if the course user was updated.
+  # @return [Boolean] True if the course user was updated.
   def update_course_user(registration, course_user, options)
     registration.course_user = course_user
     course_user.update(options)
@@ -79,8 +79,9 @@ class Course::UserRegistrationService
   #
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
-  # @return [CourseUser|nil] The Course User object for the given registration, if the code is
+  # @return [CourseUser] The Course User object for the given registration, if the code is
   #   valid.
+  # @return [nil] If the code is invalid.
   def claim_registration_code(registration)
     code = registration.code
     if code.length < 1
@@ -96,8 +97,9 @@ class Course::UserRegistrationService
   #
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
-  # @return [CourseUser|nil] The Course User object for the given registration, if the code is
+  # @return [CourseUser] The Course User object for the given registration, if the code is
   #   valid.
+  # @return [nil] If the code is invalid.
   def claim_course_registration_code(registration)
     if registration.course.registration_key == registration.code
       register_course_user(registration, workflow_state: :approved)
@@ -110,8 +112,9 @@ class Course::UserRegistrationService
   #
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
-  # @return [CourseUser|nil] The Course User object for the given registration, if the code is
+  # @return [CourseUser] The Course User object for the given registration, if the code is
   #   valid.
+  # @return [nil] If the code is invalid.
   def claim_course_invitation_code(registration)
     invitations = load_active_invitations(registration.course)
     invitation = invitations.find_by(invitation_key: registration.code)
@@ -148,8 +151,9 @@ class Course::UserRegistrationService
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
   # @param [Course::Invitation] invitation The invitation which is to be accepted.
-  # @return [CourseUser|nil] The Course User object for the given registration, if the code is
+  # @return [CourseUser] The Course User object for the given registration, if the code is
   #    valid.
+  # @return [nil] If the code is invalid.
   def accept_invitation(registration, invitation)
     registration.course_user = invitation.course_user
     invitation.course_user.accept!(registration.user)
@@ -161,7 +165,7 @@ class Course::UserRegistrationService
   #
   # @param [Course] course The course that the user is registering into.
   # @param [CourseUser] course_user The Course User object who registered.
-  # @return [bool] True if the staff were successfully notified.
+  # @return [Boolean] True if the staff were successfully notified.
   def notify_course_staff(course, course_user)
     Course::Mailer.user_registered_email(course, course_user).deliver_later
     true

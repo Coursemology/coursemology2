@@ -85,8 +85,8 @@ module ApplicationFormattersHelper
   # A helper for retrieving the title for a time-bounded item's status.
   #
   # @param [ActiveRecord::Base] item An ActiveRecord object which has time-bounded fields.
-  # @return [String|nil] A translated string representing the status of the item, or nil if the
-  #   item is valid.
+  # @return [String] A translated string representing the status of the item.
+  # @return [nil] If the item is valid.
   def time_period_message(item)
     if !item.started?
       t('common.not_started')
@@ -110,8 +110,8 @@ module ApplicationFormattersHelper
   # A helper for retrieving the title of a draft item's status.
   #
   # @param [ActiveRecord::Base] item An ActiveRecord object which has a draft field.
-  # @return [String|nil] A translated string representing the status of the item, or nil if the
-  #   item is not a draft.
+  # @return [String] A translated string representing the status of the item.
+  # @return [nil] If the item is not a draft.
   def draft_message(item)
     t('common.draft') if item.draft?
   end

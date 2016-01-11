@@ -23,7 +23,7 @@ class Course::Group < ActiveRecord::Base
   # Checks if the current group has sufficient information to have a manager, but does not
   # currently exist.
   #
-  # @return [bool]
+  # @return [Boolean]
   def should_create_manager?
     course && creator &&
       course.course_users.exists?(user: creator) &&

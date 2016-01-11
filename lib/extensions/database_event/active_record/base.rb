@@ -11,9 +11,10 @@ module Extensions::DatabaseEvent::ActiveRecord::Base
     #   notification. If this returns +false+, the named of the last received notification is
     #   returned. If no notification was received yet (i.e. before the first wait), this returns
     #   +false+.
-    # @return [String|Boolean|nil] If a +while+ callback was specified and it returned
-    #   false before the first wait, this returns false. Otherwise, this returns the notification
-    #   received, or +nil+.
+    # @return [Boolean] If a +while+ callback was specified and it returned
+    #   false before the first wait, this returns false.
+    # @return [String] Otherwise, this returns the notification received.
+    # @return [nil] If the notification received is +nil+.
     def wait(identifier, timeout: nil, while_callback: nil, &block)
       deadline = timeout ? Time.zone.now + timeout : nil
       connection.execute("LISTEN #{identifier};")
@@ -35,8 +36,8 @@ module Extensions::DatabaseEvent::ActiveRecord::Base
     #
     # @param [Time|nil] deadline The deadline to wait until.
     # @param [Proc|nil] while_callback The loop will keep waiting until this returns a truthy value.
-    # @return [String|nil] +nil+ if the deadline elapsed. Otherwise, this returns the notified
-    #   event.
+    # @return [String] Returns the notified event if the deadline has not elasped.
+    # @return [nil] If the deadline elasped.
     def wait_until(deadline, while_callback, &block)
       while deadline.nil? || Time.zone.now < deadline
         wait_timeout = deadline ? deadline - Time.zone.now : nil
@@ -57,9 +58,10 @@ module Extensions::DatabaseEvent::ActiveRecord::Base
   #   sent, and is used to check to see if the library should continue waiting for a notification
   #   event. If this returns +false+, the named of the last received notification is returned. If no
   #   notification was received yet (i.e. before the first wait), this returns false.
-  # @return [String|Boolean|nil] If a +while+ callback was specified and it returned
-  #   false before the first wait, this returns false. Otherwise, this returns the notification
-  #   received, or +nil+.
+  # @return [Boolean] If a +while+ callback was specified and it returned
+  #   false before the first wait, this returns false.
+  # @return [String] Otherwise, this returns the notification received.
+  # @return [nil] If the notification received is +nil+.
   def wait(timeout: nil, while_callback: nil, &block)
     self.class.wait(notify_identifier, timeout: timeout, while_callback: while_callback, &block)
   end

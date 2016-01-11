@@ -14,7 +14,7 @@ module Extensions::DestroyCallbacks::ActiveRecord::Base
     around_destroy :update_status
   end
 
-  # @return [boolean] True if the record is being destroyed.
+  # @return [Boolean] True if the record is being destroyed.
   def destroying?
     @destroying
   end

@@ -15,7 +15,8 @@ module ApplicationMultitenancyConcern
   end
 
   # Deduces the tenant from the host specified in the HTTP Request.
-  # @return [Instance|nil] The current tenant, or nil
+  # @return [Instance] The current tenant.
+  # @return [nil] If there is no current tenant.
   def deduce_tenant
     tenant_host = deduce_tenant_host
     Instance.find_tenant_by_host_or_default(tenant_host)

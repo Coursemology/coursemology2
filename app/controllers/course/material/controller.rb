@@ -7,7 +7,8 @@ class Course::Material::Controller < Course::ComponentController
 
   private
 
-  # @return [Course::MaterialsComponent|nil] The materials component or nil if disabled.
+  # @return [Course::MaterialsComponent] The materials component.
+  # @return [nil] If component is disabled.
   def component
     current_component_host[:course_materials_component]
   end

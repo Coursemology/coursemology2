@@ -49,7 +49,8 @@ class Course::Assessment::ProgrammingPackage
 
   # Gets the file path to the provided package.
   #
-  # @return [String|nil] The path to the file, or +nil+ if the package is associated with a stream.
+  # @return [String] The path to the file.
+  # @return [nil] If the package is associated with a stream.
   def path
     if @file
       @file.name

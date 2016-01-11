@@ -39,7 +39,7 @@ module Course::Discussion::PostsConcern
 
   # Create topic subscriptions for related users
   #
-  # @return [Bool] True if all subscriptions are created successfully.
+  # @return [Boolean] True if all subscriptions are created successfully.
   def create_topic_subscription
     fail NotImplementedError, 'To be implemented by the concrete topic posts controller.'
   end

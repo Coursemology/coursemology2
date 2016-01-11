@@ -15,7 +15,7 @@ class Course::UserInvitationService
   # Invites users to the given course.
   #
   # @param [Array<Hash>|File|TempFile] users Invites the given users.
-  # @return [bool] True if the invitations were successfully created and sent out. The errors
+  # @return [Boolean] True if the invitations were successfully created and sent out. The errors
   #   that this method would add to the provided course is in the +course_users+ association.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite(users)
@@ -29,8 +29,8 @@ class Course::UserInvitationService
 
   # Enables or disables registration codes in the given course.
   #
-  # @param [bool] enable True if registration codes should be enabled.
-  # @return [bool]
+  # @param [Boolean] enable True if registration codes should be enabled.
+  # @return [Boolean]
   def enable_registration_code(enable)
     if enable
       return true if @current_course.registration_key
@@ -178,7 +178,7 @@ class Course::UserInvitationService
   #
   # @param [Array<CourseUser>] registered_users An array of users who were registered.
   # @param [Array<Course::UserInvitation>] invited_users An array of invitations sent out to users.
-  # @return [bool] True if the emails were dispatched.
+  # @return [Boolean] True if the emails were dispatched.
   def send_invitation_emails(registered_users, invited_users)
     registered_users.each do |user|
       Course::Mailer.user_added_email(@current_course, user).deliver_later

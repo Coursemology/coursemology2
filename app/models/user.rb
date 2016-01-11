@@ -55,7 +55,8 @@ class User < ActiveRecord::Base
 
   # Gets the email address of the user.
   #
-  # @return [String, nil] The email address of the user.
+  # @return [String] The email address of the user.
+  # @return [nil] If there is no email address associated with the user.
   def email
     result_record = default_email_record
     default_email_record.email if result_record
