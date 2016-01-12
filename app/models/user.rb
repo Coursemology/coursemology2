@@ -23,8 +23,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  after_validation :propagate_user_email_errors
-
   has_many :emails, -> { order('primary' => :desc) }, class_name: User::Email.name,
                                                       inverse_of: :user, dependent: :destroy
   # This order need to be preserved, so that :emails association can be detected by
@@ -78,17 +76,6 @@ class User < ActiveRecord::Base
   end
 
   private
-
-  # Propagates the error from the +user_emails+ association to the main object
-  #
-  # @return [void]
-  def propagate_user_email_errors
-    return if (email_errors = errors.delete(:'emails.email')).nil?
-
-    email_errors.each do |error|
-      errors.add(:email, error)
-    end
-  end
 
   # Gets the default email address record.
   #
