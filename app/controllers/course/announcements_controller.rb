@@ -54,7 +54,8 @@ class Course::AnnouncementsController < Course::ComponentController
     params.require(:announcement).permit(:title, :content, :sticky, :start_at, :end_at)
   end
 
-  # @return [Course::AnnouncementsComponent | nil] The announcement component or nil if disabled.
+  # @return [Course::AnnouncementsComponent] The announcement component.
+  # @return [nil] If announcement component is disabled.
   def component
     current_component_host[:course_announcements_component]
   end

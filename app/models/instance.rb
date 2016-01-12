@@ -76,7 +76,7 @@ class Instance < ActiveRecord::Base
 
   # Checks if the current instance is the default instance.
   #
-  # @return [bool]
+  # @return [Boolean]
   def default?
     host == Instance::DEFAULT_HOST_NAME
   end

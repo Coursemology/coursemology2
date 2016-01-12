@@ -2,8 +2,9 @@ class Course::ConditionsController < Course::ComponentController
   before_action :load_and_authorize_conditional
   helper_method :return_to_path
 
-  # @return [String|Symbol] The path to return to when successfully executing or failing an action,
+  # @return [String] The path to return to when successfully executing or failing an action,
   #         or when the user clicks on the `Back` button.
+  # @return [Symbol] Similar to above.
   def return_to_path
     fail NotImplementedError, 'To be implemented by the condition controllers of a specific'\
       'conditional.'

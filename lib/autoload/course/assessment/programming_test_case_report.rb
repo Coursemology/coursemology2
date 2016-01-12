@@ -28,7 +28,8 @@ class Course::Assessment::ProgrammingTestCaseReport
 
     # The duration for running the test suite.
     #
-    # @return [Float|nil] The duration for the test suite, or nil if it was not recorded.
+    # @return [Float] The duration for the test suite.
+    # @return [nil] If the duration was not recorded.
     def duration
       @duration ||= begin
         duration = @suite['time']
@@ -75,7 +76,8 @@ class Course::Assessment::ProgrammingTestCaseReport
 
     # The duration for running the test case.
     #
-    # @return [Float|nil] The duration for the test case, or nil if it was not recorded.
+    # @return [Float] The duration for the test case.
+    # @return [nil] If the duration was not recorded.
     def duration
       @duration ||= begin
         duration = @test_case['time']

@@ -70,8 +70,8 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
 
   # Obtains a programming evaluation task accessible by and suitable for the current user.
   #
-  # @return [Course::Assessment::ProgrammingEvaluation|nil] The evaluation, or nil if none are
-  #   found.
+  # @return [Course::Assessment::ProgrammingEvaluation|nil] The programming evaluation.
+  # @return [nil] If no evaluations are found.
   def find_pending_programming_evaluation
     Course::Assessment::ProgrammingEvaluation.
       accessible_by(current_ability, :show).

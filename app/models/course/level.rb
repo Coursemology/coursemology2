@@ -23,7 +23,8 @@ class Course::Level < ActiveRecord::Base
   # Returns the next higher level in the course
   # nil is returned if current level is the highest level
   #
-  # @return [Course::Level, nil]
+  # @return [Course::Level] For levels with next level in the course.
+  # @return [nil] If current level is the highest in the course.
   def next
     course.numbered_levels[level_number + 1]
   end
@@ -32,7 +33,7 @@ class Course::Level < ActiveRecord::Base
   # relative to the other levels in the same course.
   # This number is set by Course::LevelsConcern#number_levels.
   #
-  # @return [Integer] Level Number
+  # @return [Integer] Level Number.
   # @raise [RuntimeError] Raises if level_number is not set.
   def level_number
     if @level_number

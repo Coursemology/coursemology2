@@ -41,7 +41,8 @@ module UserAuthenticationConcern
     # Overrides Devise::Models::Authenticatable::ClassMethods#find_first_by_auth_conditions
     # This will check the user's various emails instead of just one email per user.
     #
-    # @return [User|nil] The user matching the given conditions.
+    # @return [User] The user matching the given conditions.
+    # @return [nil] If none is found.
     def find_first_by_auth_conditions(tainted_conditions, opts = {})
       email = tainted_conditions.delete(:email)
       if email && email.is_a?(String)

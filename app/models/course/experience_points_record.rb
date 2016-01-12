@@ -11,7 +11,7 @@ class Course::ExperiencePointsRecord < ActiveRecord::Base
   #
   # This is necessary for records to be created but not graded, such as that of assessments.
   #
-  # @return [bool]
+  # @return [Boolean]
   def active?
     points_awarded.present?
   end
@@ -20,7 +20,7 @@ class Course::ExperiencePointsRecord < ActiveRecord::Base
 
   # Checks if the given record is a manually-awarded experience points record.
   #
-  # @return [bool]
+  # @return [Boolean]
   def manually_awarded?
     actable_type.nil? && actable.nil?
   end

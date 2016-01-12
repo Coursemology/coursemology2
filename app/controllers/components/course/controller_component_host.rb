@@ -66,7 +66,8 @@ class Course::ControllerComponentHost
   # Gets the component instance with the given key.
   #
   # @param [String|Symbol] component_key The key of the component to find.
-  # @return [nil|Object] The component with the given key, or nil if it is not enabled.
+  # @return [Object] The component with the given key.
+  # @return [nil] If component is not enabled.
   def [](component_key)
     components.find { |component| component.key.to_s == component_key.to_s }
   end
