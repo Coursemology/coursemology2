@@ -35,70 +35,6 @@ RSpec.describe User do
       end
     end
 
-    describe '#email' do
-      context 'when the user has no email addresses' do
-        let(:user) { User.new }
-        it 'does not have a default email' do
-          expect(user.email).to eq(nil)
-        end
-      end
-
-      context 'when the user has multiple email address' do
-        context 'no email address is primary' do
-          let(:user) do
-            user = build(:user, emails_count: 4)
-            user.emails.each { |email_record| email_record.primary = false }
-            user.emails.each.take(2).each(&:mark_for_destruction)
-            user
-          end
-
-          it 'picks the first non-deleted email as the primary email' do
-            not_marked_for_destruction = user.emails.each.select do |email_record|
-              !email_record.marked_for_destruction?
-            end
-            expect(user.email).to eq(not_marked_for_destruction.first.email)
-          end
-        end
-      end
-    end
-
-    describe '#email=' do
-      context 'when the user has no email addresses' do
-        let(:user) do
-          result = build(:user, emails_count: 0)
-          result.email = generate(:email)
-          result
-        end
-        it 'creates a new User::Email' do
-          expect(user.emails.length).to_not eq(0)
-        end
-
-        it 'creates a new primary User::Email' do
-          expect(user.emails[0].primary?).to eq(true)
-        end
-
-        it 'deletes the only email address when assigning nil' do
-          user.email = nil
-          expect(user.email).to eq(nil)
-
-          remaining_emails = user.emails.reject(&:marked_for_destruction?)
-          expect(remaining_emails.length).to eq(0)
-        end
-      end
-
-      context 'when the user has multiple email addresses' do
-        let(:user) { build(:user, emails_count: 2) }
-        context 'when there is no primary email set' do
-          it 'sets the first email as primary' do
-            user.email = 'test1a@email'
-            email_record = user.send(:default_email_record)
-            expect(email_record.primary?).to eq(true)
-            expect(email_record.email).to eq('test1a@email')
-          end
-        end
-      end
-    end
-
     describe '#emails' do
       let(:user) { create(:user, emails_count: 5) }
       it 'only allows one primary email' do
@@ -111,16 +47,6 @@ RSpec.describe User do
       let(:user) { User.new }
       it 'expects to be normal role by default' do
         expect(user.normal?).to eq(true)
-      end
-    end
-
-    context 'when the user has an invalid email address' do
-      subject { build(:user, email: 'xyz@sdf') }
-
-      it 'propagates the error to the error attribute' do
-        expect(subject).not_to be_valid
-        expect(subject.errors[:email].length).to eq(1)
-        expect(subject.errors[:email].first).to match(/invalid/)
       end
     end
 
