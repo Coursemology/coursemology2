@@ -5,7 +5,7 @@ module UserAuthenticationConcern
   included do
     # Include default devise modules. Others available are:
     # :validatable, :confirmable, :lockable, :timeoutable and :omniauthable
-    devise :database_authenticatable, :registerable,
+    devise :multi_email_authenticatable, :registerable,
            :recoverable, :rememberable, :trackable, :masqueradable
 
     before_sign_in :create_instance_user
@@ -16,7 +16,6 @@ module UserAuthenticationConcern
     validates :password, confirmation: true, if: :password_required?
     validates :password, length: { within: Devise.password_length, allow_blank: true }
 
-    extend ReplacementClassMethods
     include UserOmniauthConcern
   end
 
@@ -35,24 +34,5 @@ module UserAuthenticationConcern
 
   def create_instance_user
     instance_users.create if persisted? && instance_users.empty?
-  end
-
-  module ReplacementClassMethods
-    # Overrides Devise::Models::Authenticatable::ClassMethods#find_first_by_auth_conditions
-    # This will check the user's various emails instead of just one email per user.
-    #
-    # @return [User] The user matching the given conditions.
-    # @return [nil] If none is found.
-    def find_first_by_auth_conditions(tainted_conditions, opts = {})
-      email = tainted_conditions.delete(:email)
-      if email && email.is_a?(String)
-        conditions = devise_parameter_filter.filter(tainted_conditions).merge(opts).
-                     reverse_merge(emails: { email: email })
-
-        joins(:emails).where { users.id != User::SYSTEM_USER_ID }.find_by(conditions)
-      else
-        super(tainted_conditions, opts)
-      end
-    end
   end
 end
