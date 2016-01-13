@@ -48,6 +48,18 @@ RSpec.describe User::OmniauthCallbacksController, type: :controller do
           expect(flash[:danger]).to eq(I18n.t('user.omniauth_callbacks.facebook.sign_in_failure'))
         end
       end
+
+      context 'when the user is signed in' do
+        let(:user) { create(:user) }
+        before { sign_in(user) }
+
+        it 'shows an error message when omniauth data is incomplete' do
+          facebook_data.uid = nil
+
+          subject
+          expect(flash[:danger]).to eq(I18n.t('user.omniauth_callbacks.facebook.failed'))
+        end
+      end
     end
   end
 end
