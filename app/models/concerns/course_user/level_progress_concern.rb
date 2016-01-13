@@ -2,7 +2,7 @@
 module CourseUser::LevelProgressConcern
   extend ActiveSupport::Concern
 
-  delegate :level_number, to: :current_level
+  delegate :level_number, :next_level_threshold, to: :current_level
 
   # Returns the level object of the CourseUser with respect to a course's Course::Levels.
   #

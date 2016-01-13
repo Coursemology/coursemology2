@@ -1,0 +1,22 @@
+#course-user-badge {
+  #course-user-progress {
+    .progress {
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+  }
+
+  #course-user-achievements {
+    h5,
+    p {
+      text-align: center;
+    }
+  }
+
+  #course-user-level {
+    h5,
+    p {
+      text-align: right;
+    }
+  }
+}
