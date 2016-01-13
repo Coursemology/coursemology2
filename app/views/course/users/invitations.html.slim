@@ -5,10 +5,8 @@
 
 - accepted_course_users = @course_users.each.select { |user| !user.invited? }.size
 - progress = accepted_course_users * 100 / [@course_users.length, 1].max
-div.progress
-  div.progress-bar role='progressbar' aria-valuenow=progress aria-valuemin='0' aria-valuemax='100' style="width: #{progress}%"
-    span
-      = t('.progress', accepted: accepted_course_users, total: @course_users.size)
+= display_progress_bar progress, [] do
+  = t('.progress', accepted: accepted_course_users, total: @course_users.size)
 
 = simple_format t('.manual_acceptance')
 
