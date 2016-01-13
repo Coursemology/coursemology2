@@ -14,10 +14,6 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
   authorize_resource :programming_evaluation, class: Course::Assessment::ProgrammingEvaluation.name,
                                               except: [:allocate, :package]
 
-  def index
-    @programming_evaluations = @programming_evaluations.with_language(language_param)
-  end
-
   def allocate
     save_success = @programming_evaluations.
                    each { |evaluation| evaluation.assign!(current_user) }.
