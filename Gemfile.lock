@@ -148,6 +148,8 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    devise-multi_email (1.0.2)
+      devise
     devise_masquerade (0.1.7)
       devise (>= 2.1.0)
       railties (>= 3.0)
@@ -519,6 +521,7 @@ DEPENDENCIES
   consistency_fail
   coveralls
   devise
+  devise-multi_email
   devise_masquerade
   edge
   factory_girl_rails

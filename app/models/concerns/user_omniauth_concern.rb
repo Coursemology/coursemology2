@@ -33,6 +33,7 @@ module UserOmniauthConcern
       User.create do |user|
         user.assign_attributes(name: auth.info.name, email: auth.info.email,
                                password: Devise.friendly_token[0, 20])
+        user.skip_confirmation! if user.email
         user.link_with_omniauth(auth)
       end
     end

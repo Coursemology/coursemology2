@@ -2,7 +2,6 @@
 class User < ActiveRecord::Base
   SYSTEM_USER_ID = 0
 
-  include UserAuthenticationConcern
   include UserSearchConcern
   model_stamper
   acts_as_reader
@@ -24,10 +23,12 @@ class User < ActiveRecord::Base
     end
   end
 
-  after_validation :propagate_user_email_errors
-
   has_many :emails, -> { order('primary' => :desc) }, class_name: User::Email.name,
                                                       inverse_of: :user, dependent: :destroy
+  # This order need to be preserved, so that :emails association can be detected by
+  # devise-multi_email correctly.
+  include UserAuthenticationConcern
+
   has_many :instance_users, dependent: :destroy
   has_many :instances, through: :instance_users
   has_many :identities, dependent: :destroy, class_name: User::Identity.name
@@ -53,33 +54,6 @@ class User < ActiveRecord::Base
     id == User::SYSTEM_USER_ID
   end
 
-  # Gets the email address of the user.
-  #
-  # @return [String] The email address of the user.
-  # @return [nil] If there is no email address associated with the user.
-  def email
-    result_record = default_email_record
-    default_email_record.email if result_record
-  end
-
-  # Sets the default email address of the user.
-  #
-  # @param [String, nil] email The email address of the user to set. Nil unsets the record.
-  def email=(email)
-    record = default_email_record
-    if email
-      record ||= emails.build
-      record.email = email
-      record.primary = true
-    elsif email.nil? && record
-      record.mark_for_destruction
-    end
-  end
-
-  def email_changed?
-    !persisted? || (emails.loaded? && emails.each.any?(&:changed))
-  end
-
   # Unset current primary email. This method would immediately set the attributes in the database.
   #
   # @return [Boolean] True if current primary emails was set as non primary or there is no
@@ -102,17 +76,6 @@ class User < ActiveRecord::Base
   end
 
   private
-
-  # Propagates the error from the +user_emails+ association to the main object
-  #
-  # @return [void]
-  def propagate_user_email_errors
-    return if (email_errors = errors.delete(:'emails.email')).nil?
-
-    email_errors.each do |error|
-      errors.add(:email, error)
-    end
-  end
 
   # Gets the default email address record.
   #

@@ -5,8 +5,6 @@ class User::Email < ActiveRecord::Base
   schema_validations except: :primary
   validates :primary, inclusion: [true, false]
   validates :primary, uniqueness: { scope: [:user_id], conditions: -> { where(primary: true) } }
-  validates :email, uniqueness: { case_sensitive: false }
-  validates :email, format: Devise.email_regexp
 
   belongs_to :user, inverse_of: :emails
 
