@@ -64,16 +64,16 @@ RSpec.describe Course::Assessment::ProgrammingEvaluation do
         Course::Assessment::ProgrammingEvaluation.with_language([language]).
           where(course: course)
       end
-      let(:language) { Polyglot::Language::Python::Python2Point7.instance.name }
+      let(:language) { Coursemology::Polyglot::Language::Python::Python2Point7.instance.name }
       let!(:expected) do
         create(:course_assessment_programming_evaluation,
                course: course,
-               language: Polyglot::Language::Python::Python2Point7.instance)
+               language: Coursemology::Polyglot::Language::Python::Python2Point7.instance)
       end
       let!(:other) do
         create(:course_assessment_programming_evaluation,
                course: course,
-               language: Polyglot::Language::Python::Python3Point4.instance)
+               language: Coursemology::Polyglot::Language::Python::Python3Point4.instance)
       end
 
       it 'returns only those with the specified language' do

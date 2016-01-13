@@ -1,0 +1,1 @@
+module Extensions::PolyglotWithDatabase; end

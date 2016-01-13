@@ -1,6 +1,6 @@
 Rails.application.configure do
   config.after_initialize do
-    Polyglot::Language.load_languages if Polyglot::Language.connected? &&
-                                         Polyglot::Language.table_exists?
+    language_base = Coursemology::Polyglot::Language
+    language_base.load_languages if language_base.connected? && language_base.table_exists?
   end
 end

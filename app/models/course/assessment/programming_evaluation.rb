@@ -35,13 +35,13 @@ class Course::Assessment::ProgrammingEvaluation < ActiveRecord::Base
   validates :stdout, :stderr, :test_report, exclusion: [nil], if: :finished?
 
   belongs_to :course, inverse_of: :assessment_programming_evaluations
-  belongs_to :language, class_name: Polyglot::Language.name, inverse_of: nil
+  belongs_to :language, class_name: Coursemology::Polyglot::Language.name, inverse_of: nil
   belongs_to :evaluator, class_name: User.name, inverse_of: nil
 
   # @!method self.with_language(languages)
   #   Gets the programming evaluation jobs with any of the given languages.
   scope :with_language, (lambda do |languages|
-    joins(:language).merge(Polyglot::Language.with_language(languages))
+    joins(:language).merge(Coursemology::Polyglot::Language.with_language(languages))
   end)
 
   # @!method self.pending

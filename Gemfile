@@ -177,5 +177,8 @@ gem 'rubyzip', require: 'zip'
 # Manipulating XML files, needed for programming evaluation test report parsing.
 gem 'nokogiri'
 
+# Polyglot support
+gem 'coursemology-polyglot', '>= 0.0.2'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

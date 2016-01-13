@@ -19,7 +19,8 @@ class Course::Assessment::ProgrammingEvaluationService
     #
     # @param [Course] course The course which this evaluation belongs to. This is necessary to
     #   determine which workers get access to execute the package.
-    # @param [Polyglot::Language] language The language runtime to use to run this package.
+    # @param [Coursemology::Polyglot::Language] language The language runtime to use to run this
+    #   package.
     # @param [Fixnum] memory_limit The memory limit for the evaluation, in MiB.
     # @param [Fixnum|ActiveSupport::Duration] time_limit The time limit for the evaluation, in
     #   seconds.
