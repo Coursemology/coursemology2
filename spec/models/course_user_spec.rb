@@ -161,6 +161,36 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
+    describe '#level_progress_percentage' do
+      subject { student.level_progress_percentage }
+      before do
+        create(:course_level, course: course, experience_points_threshold: 100)
+        course.reload
+      end
+
+      it { is_expected.to be_a(Fixnum) }
+      it { is_expected.to be_between(0, 100) }
+
+      context 'when the course user has 0% of progress within the level' do
+        it { is_expected.to eq(0) }
+      end
+
+      context 'when the course user has 99% of progress within the level' do
+        before do
+          create(:course_experience_points_record, points_awarded: 99, course_user: student)
+        end
+
+        it { is_expected.to eq(99) }
+      end
+
+      context 'when course user is at the maximum level' do
+        before do
+          create(:course_experience_points_record, points_awarded: 150, course_user: student)
+        end
+        it { is_expected.to eq(100) }
+      end
+    end
+
     describe '#experience_points' do
       context 'when there are no experience points record' do
         it 'returns zero' do
