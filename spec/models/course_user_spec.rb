@@ -125,11 +125,25 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
+    describe '#current_level' do
+      context 'when student has enough EXP to be level 1' do
+        let!(:level_1) { create(:course_level, course: course, experience_points_threshold: 100) }
+        before do
+          create(:course_experience_points_record, points_awarded: 150, course_user: student)
+          course.reload
+        end
+
+        it 'returns the level 1 object' do
+          expect(student.current_level).to eq(level_1)
+        end
+      end
+    end
+
     describe '#level_number' do
       subject { student.level_number }
       before do
-        create :course_level, course: course, experience_points_threshold: 100
-        create :course_level, course: course, experience_points_threshold: 200
+        create(:course_level, course: course, experience_points_threshold: 100)
+        create(:course_level, course: course, experience_points_threshold: 200)
         course.reload
       end
 
@@ -139,7 +153,7 @@ RSpec.describe CourseUser, type: :model do
 
       context 'after enough experience points have been awarded' do
         before do
-          create :course_experience_points_record, points_awarded: 150, course_user: student
+          create(:course_experience_points_record, points_awarded: 150, course_user: student)
         end
         it 'returns the correct level number' do
           expect(subject).to eq(1)

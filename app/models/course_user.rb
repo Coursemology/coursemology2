@@ -60,20 +60,14 @@ class CourseUser < ActiveRecord::Base
   scope :instructors, -> { staff }
   scope :students, -> { where(role: roles[:student]) }
 
+  include CourseUser::LevelProgressConcern
+
   # Test whether the current scope includes the current user.
   #
   # @param [User] user The user to check
   # @return [Boolean] True if the user exists in the current context
   def self.has_user?(user)
     with_approved_state.exists?(user: user)
-  end
-
-  # Computes the level number of the CourseUser with respect to
-  # a course's Course::Levels.
-  #
-  # @return [Fixnum] CourseUser level number
-  def level_number
-    course.level_for(experience_points).level_number
   end
 
   # Test whether this course_user is a staff (i.e. teaching_assistant, manager or owner)
