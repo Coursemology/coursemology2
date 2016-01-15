@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :course_assessment_programming_evaluation,
           class: Course::Assessment::ProgrammingEvaluation do
     course
-    language { Polyglot::Language::Python::Python2Point7.instance }
+    language { Coursemology::Polyglot::Language::Python::Python2Point7.instance }
     status :submitted
     package_path do
       SendFile.send_file(File.join(Rails.root,

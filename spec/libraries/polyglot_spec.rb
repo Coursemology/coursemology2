@@ -1,25 +1,19 @@
 require 'rails_helper'
 
-RSpec.describe Polyglot do
-  describe Polyglot::Language, type: :model do
-    class self::DummyLanguage < Polyglot::Language
+RSpec.describe 'Extension: Coursemology::Polyglot' do
+  describe Coursemology::Polyglot::Language, type: :model do
+    class self::DummyLanguage < Coursemology::Polyglot::Language
     end
 
     class self::WorkingLanguage < self::DummyLanguage
-      def self.instance
-        root
-      end
-
-      def self.display_name
-        'Working Language'
-      end
+      concrete_language 'Working Language'
     end
 
     after(:each) do
       # Clean up, because these dummy classes might influence the other specs e.g. when listing
       # the languages for a programming question.
       self.class::WorkingLanguage.instance.delete
-      self.class::WorkingLanguage.remove_instance_variable(:@root)
+      self.class::WorkingLanguage.remove_instance_variable(:@root_instance)
     end
 
     subject { self.class::DummyLanguage }
@@ -39,41 +33,23 @@ RSpec.describe Polyglot do
     describe '.with_language' do
       subject { self.class::WorkingLanguage }
       it 'only shows the languages specified' do
-        expect(Polyglot::Language.with_language([subject.instance.name])).to \
+        expect(Coursemology::Polyglot::Language.with_language([subject.instance.name])).to \
           contain_exactly(subject.instance)
       end
 
       context 'when an empty array is specified' do
         it 'returns all languages' do
-          expect(Polyglot::Language.with_language([])).to \
-            contain_exactly(*Polyglot::Language.all.to_a)
+          expect(Coursemology::Polyglot::Language.with_language([])).to \
+            contain_exactly(*Coursemology::Polyglot::Language.all.to_a)
         end
       end
     end
 
-    describe '.display_name' do
-      it 'fails with NotImplementedError' do
-        expect { subject.display_name }.to raise_error(NotImplementedError)
-      end
-    end
-
-    describe '.stylesheets' do
-      it 'fails with NotImplementedError' do
-        expect { subject.stylesheets }.to raise_error(NotImplementedError)
-      end
-    end
-
-    describe '.javascript' do
-      it 'fails with NotImplementedError' do
-        expect { subject.javascript }.to raise_error(NotImplementedError)
-      end
-    end
-
-    describe '.root' do
+    describe '.root_instance' do
       subject { self.class::WorkingLanguage }
 
       it 'returns the object without any parent' do
-        expect(subject.send(:root).parent).to be_nil
+        expect(subject.send(:root_instance).parent).to be_nil
       end
 
       it 'creates the language in the database' do
