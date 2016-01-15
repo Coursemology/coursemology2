@@ -108,10 +108,10 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   def load_or_create_answers
     return unless @submission.attempting?
 
-    new_answers = questions_to_attempt.attempt(@submission).
+    new_answers = questions_to_attempt.not_correctly_answered(@submission).attempt(@submission).
                   map { |answer| answer.save! if answer.new_record? }.
                   reduce(false) { |a, e| a || e }
-    @submission.answers.reload if new_answers && @submission.answers.loaded
+    @submission.answers.reload if new_answers && @submission.answers.loaded?
   end
 
   def questions_to_attempt

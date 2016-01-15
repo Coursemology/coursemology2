@@ -76,6 +76,34 @@ RSpec.describe Course::Assessment::Question do
       end
     end
 
+    describe '#not_correctly_answered' do
+      let(:assessment) do
+        assessment = build(:assessment)
+        create_list(:course_assessment_question_multiple_response, 3, assessment: assessment)
+        assessment
+      end
+      let(:submission) { create(:course_assessment_submission, assessment: assessment) }
+
+      context 'when there is no answer' do
+        it 'returns not correctly answered questions' do
+          expect(assessment.questions.not_correctly_answered(submission)).
+            to contain_exactly(*assessment.questions)
+        end
+      end
+
+      context 'when some of the questions are answered correctly' do
+        it 'returns not correctly answered questions' do
+          question = assessment.questions.first
+          answer = question.attempt(submission)
+          answer.correct = true
+          answer.save
+
+          expect(assessment.questions.not_correctly_answered(submission)).
+            to contain_exactly(*(assessment.questions - [question]))
+        end
+      end
+    end
+
     describe '.default_scope' do
       let(:assessment) { create(:course_assessment_assessment) }
       let!(:questions) { create_list(:course_assessment_question, 2, assessment: assessment) }
