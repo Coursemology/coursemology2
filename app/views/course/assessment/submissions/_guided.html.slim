@@ -3,3 +3,13 @@ nav
     - (1..@assessment.questions.length).each do |i|
       li class="#{nav_class(i)}"
         = link_to i, [:edit, current_course, @assessment, @submission, step: i], class: ['btn', 'btn-default']
+
+= simple_form_for [current_course, @assessment, @submission] do |f|
+  = f.error_notification
+  = f.simple_fields_for :answers, @submission.answers.where(question: @questions_to_attempt).last do |base_answer_form|
+    = content_tag_for(:div, base_answer_form.object) do
+      = render partial: 'course/assessment/answer/answer', object: base_answer_form.object,
+               locals: { base_answer_form: base_answer_form }
+
+      - if base_answer_form.object.attempting?
+        = f.button :submit, t('common.save')
