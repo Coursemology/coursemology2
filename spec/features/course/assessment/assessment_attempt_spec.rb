@@ -109,6 +109,18 @@ RSpec.describe 'Course: Assessments: Attempt' do
           expect(page).to have_link(step, href: path)
         end
       end
+
+      scenario 'I can submit the answer in the guided assessment' do
+        assessment = create(:assessment, :with_mcq_question, :guided, course: course)
+        submission = create(:course_assessment_submission, assessment: assessment, user: student)
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+        check 'true'
+        click_button 'submit'
+        wait_for_job
+
+        expect(page).to have_selector('div', text: 'course.assessment.answer.answer.grading')
+        expect(page).to have_selector('div', text: 'course.assessment.answer.answer.grade')
+      end
     end
 
     context 'As a Course Staff' do

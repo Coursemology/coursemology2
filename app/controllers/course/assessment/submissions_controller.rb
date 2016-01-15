@@ -24,9 +24,28 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   end
 
   def update
+    if params[:submit_answer]
+      submit_answer
+    else
+      update_submission
+    end
+  end
+
+  def update_submission
     if @submission.update_attributes(update_params)
       redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission),
-                  success: t('.success')
+                  success: t('course.assessment.submissions.update.success')
+    else
+      render 'edit'
+    end
+  end
+
+  def submit_answer
+    if @submission.update_attributes(update_params)
+      answer_to_grade = @submission.answers.find(answer_id_param)
+      answer_to_grade.finalise!
+      job = answer_to_grade.auto_grade!
+      redirect_to job_path(job.job)
     else
       render 'edit'
     end
@@ -103,6 +122,10 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
 
   def step_param
     params.permit(:step)[:step]
+  end
+
+  def answer_id_param
+    params.require(:submission).permit(:answer_id)[:answer_id]
   end
 
   def authorize_assessment

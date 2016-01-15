@@ -10,6 +10,8 @@ en:
           finalise: 'Finalise Submission'
           publish: 'Publish Grade'
           auto_grade: 'Auto Grade Submission'
+        guided:
+          submit: 'Submit'
         statistics:
           student: :'course.users.role.student'
           status: 'Status'
