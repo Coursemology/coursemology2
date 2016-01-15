@@ -155,7 +155,7 @@ gem 'cancancan', github: 'CanCanCommunity/cancancan', branch: 'develop'
 gem 'rails_utils', '>= 3.3.3'
 
 # Themes for instances
-gem 'themes_on_rails', github: 'yoolk/themes_on_rails'
+gem 'themes_on_rails', '>= 0.3.1'
 
 # Forms made easy for Rails
 gem 'simple_form'
