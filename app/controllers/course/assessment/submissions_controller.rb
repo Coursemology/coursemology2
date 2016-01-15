@@ -101,6 +101,10 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
     scalar_params.push(array_params)
   end
 
+  def step_param
+    params.permit(:step)[:step]
+  end
+
   def authorize_assessment
     authorize!(:attempt, @assessment)
   end
@@ -115,6 +119,12 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   end
 
   def questions_to_attempt
-    @questions_to_attempt ||= @submission.assessment.questions
+    @questions_to_attempt ||= begin
+      if @submission.assessment.guided?
+        @submission.assessment.questions.step(@submission, step_param)
+      else
+        @submission.assessment.questions
+      end
+    end
   end
 end
