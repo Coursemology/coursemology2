@@ -88,6 +88,7 @@ ignore_missing:
 ## Consider these keys used:
 ignore_unused:
 - 'activerecord.attributes.*'
+- 'activerecord.models.*'
 - 'breadcrumbs.*'
 - 'errors.messages.*'
 - 'helpers.buttons.*'
