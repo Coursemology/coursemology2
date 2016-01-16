@@ -20,11 +20,12 @@ class Course::Condition::Achievement < ActiveRecord::Base
 
   private
 
-  # Given an achievement, returns all its achievement conditions.
+  # Given a conditional object, returns all achievements that it requires.
   #
-  # @param [Course::Achievement] achievement The achievement to return achievement conditions for.
+  # @param [#conditions] conditional The object that is declared as acts_as_conditional and for
+  #   which returned achievements are required.
   # @return [Array<Course::Achievement>]
-  def achievement_conditions(achievement)
+  def required_achievements_for(conditional)
     # Course::Condition::Achievement.
     #   joins { condition.conditional(Course::Achievement) }.
     #   where { condition.conditional.id == achievement.id }.
@@ -32,13 +33,17 @@ class Course::Condition::Achievement < ActiveRecord::Base
 
     # Workaround, pending the squeel bugfix (activerecord-hackery/squeel#390) that will allow
     # allow the above query to work without #reload
-    Course::Achievement.joins(
-      "INNER JOIN
+    # TODO: use squeel
+    Course::Achievement.joins(<<-SQL)
+      INNER JOIN
         (SELECT cca.achievement_id
           FROM course_condition_achievements cca INNER JOIN course_conditions cc
             ON cc.actable_type = 'Course::Condition::Achievement' AND cc.actable_id = cca.id
-            WHERE cc.conditional_id = #{achievement.id}) ids
-    ON ids.achievement_id = course_achievements.id")
+            WHERE cc.conditional_id = #{conditional.id}
+              AND cc.conditional_type = #{ActiveRecord::Base.sanitize(conditional.class.name)}
+        ) ids
+      ON ids.achievement_id = course_achievements.id
+    SQL
   end
 
   def validate_achievement_condition
@@ -52,7 +57,7 @@ class Course::Condition::Achievement < ActiveRecord::Base
   end
 
   def validate_unique_dependency
-    return unless achievement_conditions(conditional).include?(achievement)
+    return unless required_achievements_for(conditional).include?(achievement)
     errors.add(:achievement, :unique_dependency)
   end
 end

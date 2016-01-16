@@ -10,9 +10,11 @@ RSpec.describe Course::Condition::Achievement, type: :model do
     describe 'validations' do
       context 'when an achievement is its own condition' do
         subject do
-          build_stubbed(:course_condition_achievement, :self_referential,
-                        course: course).tap do |cca|
-            allow(cca).to receive(:achievement_id_changed?).and_return(true)
+          achievement = create(:achievement, course: course)
+          build_stubbed(:achievement_condition,
+                        course: course, achievement: achievement, conditional: achievement).
+            tap do |achievement_condition|
+            allow(achievement_condition).to receive(:achievement_id_changed?).and_return(true)
           end
         end
         it { is_expected.to_not be_valid }
@@ -20,11 +22,32 @@ RSpec.describe Course::Condition::Achievement, type: :model do
 
       context "when an achievement is already included in its conditional's conditions" do
         subject do
-          create(:course_condition_achievement, :duplicate_child, course: course).tap do |cca|
-            allow(cca).to receive(:achievement_id_changed?).and_return(true)
-          end
+          existing_achievement_condition = create(:achievement_condition, course: course)
+          build(:achievement_condition,
+                course: course, conditional: existing_achievement_condition.conditional,
+                achievement: existing_achievement_condition.achievement)
         end
-        it { is_expected.to_not be_valid }
+
+        it 'is not valid' do
+          expect(subject).to_not be_valid
+          expect(subject.errors[:achievement]).to_not be_blank
+        end
+      end
+
+      # TODO: remove this test when Course::Condition::Achievement#required_achievements_for uses
+      # squeel.
+      context 'when an achievement is required by another conditional with the same id' do
+        subject do
+          id = Time.now.to_i
+          assessment = create(:assessment, course: course, id: id)
+          achievement = create(:achievement, course: course, id: id)
+          required_achievement = create(:achievement, course: course)
+          create(:achievement_condition,
+                 course: course, achievement: required_achievement, conditional: assessment)
+          build_stubbed(:achievement_condition,
+                        course: course, achievement: required_achievement, conditional: achievement)
+        end
+        it { is_expected.to be_valid }
       end
     end
 
