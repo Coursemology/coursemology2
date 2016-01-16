@@ -6,6 +6,8 @@ class Course::Condition::Assessment < ActiveRecord::Base
 
   default_scope { includes(:assessment) }
 
+  validate :validate_assessment_condition, if: :assessment_id_changed?
+
   def title
     if minimum_grade_percentage
       minimum_grade_percentage_display = number_to_percentage(minimum_grade_percentage,
@@ -40,5 +42,41 @@ class Course::Condition::Assessment < ActiveRecord::Base
     graded_submissions_by_user(user).joins { answers }.
       group { course_assessment_submissions.id }.
       having { sum(answers.grade) >= minimum_grade }
+  end
+
+  def validate_assessment_condition
+    validate_references_self
+    validate_unique_dependency
+  end
+
+  def validate_references_self
+    return unless assessment == conditional
+    errors.add(:assessment, :references_self)
+  end
+
+  def validate_unique_dependency
+    return unless required_assessments_for(conditional).include?(assessment)
+    errors.add(:assessment, :unique_dependency)
+  end
+
+  # Given a conditional object, returns all assessments that it requires.
+  #
+  # @param [Object] conditional The object that is declared as acts_as_conditional and for which
+  #   returned assessments are required.
+  # @return [Array<Course::Assessment]
+  def required_assessments_for(conditional)
+    # Workaround, pending the squeel bugfix (activerecord-hackery/squeel#390), similar issue as in
+    # Course::Condition::Achievement.
+    # TODO: use squeel.
+    Course::Assessment.joins(<<-SQL)
+      INNER JOIN
+        (SELECT cca.assessment_id
+          FROM course_condition_assessments cca INNER JOIN course_conditions cc
+          ON cc.actable_type = 'Course::Condition::Assessment' AND cc.actable_id = cca.id
+          WHERE cc.conditional_id = #{conditional.id}
+            AND cc.conditional_type = #{ActiveRecord::Base.sanitize(conditional.class.name)}
+        ) ids
+      ON ids.assessment_id = course_assessments.id
+    SQL
   end
 end

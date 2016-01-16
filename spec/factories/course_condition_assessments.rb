@@ -3,7 +3,14 @@ FactoryGirl.define do
           class: Course::Condition::Assessment.name, aliases: [:assessment_condition] do
     course
     assessment
-    association :conditional, factory: :course_achievement
+    association :conditional, factory: :assessment
     minimum_grade_percentage nil
+
+    trait :achievement_conditional do
+      association :conditional, factory: :achievement
+    end
+
+    trait :assessment_conditional do
+    end
   end
 end

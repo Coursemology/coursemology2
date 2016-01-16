@@ -5,3 +5,10 @@ en:
     attributes:
       course/condition/assessment/title:
         title: '%{assessment_title} (at least %{minimum_grade_percentage})'
+    errors:
+      models:
+        course/condition/assessment:
+          attributes:
+            assessment:
+              unique_dependency: 'cannot have duplicate conditions'
+              references_self: 'cannot have itself as condition'
