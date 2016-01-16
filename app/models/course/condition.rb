@@ -9,5 +9,6 @@ class Course::Condition < ActiveRecord::Base
   ALL_CONDITIONS = [
     Course::Condition::Achievement.name,
     Course::Condition::Assessment.name,
-    Course::Condition::Level.name]
+    Course::Condition::Level.name
+  ]
 end

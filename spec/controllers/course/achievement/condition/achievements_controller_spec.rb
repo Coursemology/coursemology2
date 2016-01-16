@@ -36,7 +36,7 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
         end
 
         it 'redirects with a flash message' do
-          it { is_expected.to redirect_to(edit_course_achievement_path(course, achievement)) }
+          expect(subject).to redirect_to(edit_course_achievement_path(course, achievement))
           expect(flash[:danger]).to eq(I18n.t('course.condition.achievements.destroy.error'))
         end
       end
@@ -68,10 +68,10 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
           subject
         end
 
-        it 'redirects' do
+        it 'shows the form' do
           path = new_course_achievement_condition_achievement_path(course, achievement,
                                                                    achievement_condition)
-          it { is_expected.to redirect_to(path) }
+          expect(subject).to render_template('new')
         end
       end
     end
@@ -103,10 +103,10 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
           subject
         end
 
-        it 'redirects' do
+        it 'shows the form' do
           path = edit_course_achievement_condition_achievement_path(course, achievement,
                                                                     achievement_condition)
-          it { is_expected.to redirect_to(path) }
+          expect(subject).to render_template('edit')
         end
       end
     end

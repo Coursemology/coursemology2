@@ -33,7 +33,7 @@ RSpec.feature 'Course: Achievements' do
         valid_achievement_as_condition = create(:course_achievement, course: course)
 
         visit edit_course_achievement_path(course, achievement)
-        click_link I18n.t('course.condition.achievements.new.header')
+        click_link Course::Condition::Achievement.model_name.human
         expect(page).to have_selector('#condition_achievement_achievement_id >' \
         "option[value='#{valid_achievement_as_condition.id}']")
 
@@ -92,7 +92,7 @@ RSpec.feature 'Course: Achievements' do
         valid_assessment_as_condition = create(:assessment, course: course)
 
         visit edit_course_achievement_path(course, achievement)
-        click_link I18n.t('course.condition.assessments.new.header')
+        click_link Course::Condition::Assessment.model_name.human
         expect(current_path).
           to eq(new_course_achievement_condition_assessment_path(course, achievement))
 
@@ -147,7 +147,7 @@ RSpec.feature 'Course: Achievements' do
 
       scenario 'I can create a level condition' do
         visit edit_course_achievement_path(course, achievement)
-        click_link I18n.t('course.condition.levels.new.header')
+        click_link Course::Condition::Level.model_name.human
         expect(current_path).to eq(new_course_achievement_condition_level_path(course,
                                                                                achievement))
         fill_in 'minimum_level', with: '10'
