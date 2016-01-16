@@ -1,8 +1,9 @@
 module Extensions::DatabaseEvent::ActiveRecord::Base
   module ClassMethods
-    # Waits for the given +NOTIFY+ signal, optionally until a give time, or until a specific
+    # Waits for the given +NOTIFY+ signal, optionally until a given time, or until a specific
     # condition is met.
     #
+    # @param [String] identifier The +NOTIFY+ signal to wait for.
     # @param [Fixnum|nil] timeout The timeout to wait for a message. A +nil+ or zero timeout will
     #   wait indefinitely. The timeout applies to the total time waiting for a notification, even
     #   if the function waits multiple times.
@@ -13,16 +14,15 @@ module Extensions::DatabaseEvent::ActiveRecord::Base
     #   +false+.
     # @return [Boolean] If a +while+ callback was specified and it returned
     #   false before the first wait, this returns false.
-    # @return [String] Otherwise, this returns the notification received.
-    # @return [nil] If the notification received is +nil+.
+    # @return [String] If a notification was received.
+    # @return [nil] If the timeout elapsed.
     def wait(identifier, timeout: nil, while_callback: nil, &block)
       deadline = timeout ? Time.zone.now + timeout : nil
       connection.execute("LISTEN #{identifier};")
 
-      return false if while_callback && while_callback.call == false
-      wait_until(deadline, while_callback, &block)
+      wait_for_identifier(identifier, deadline, while_callback, &block)
     ensure
-      connection.execute('UNLISTEN *;')
+      connection.execute("UNLISTEN #{identifier};")
     end
 
     # Signals to possible waiting consumers on this record.
@@ -32,12 +32,28 @@ module Extensions::DatabaseEvent::ActiveRecord::Base
 
     private
 
+    # Waits for the given identifier to be signalled.
+    #
+    # @param [String] identifier The identifier to wait for.
+    # @param [Time|nil] deadline The deadline to wait until.
+    # @param [Proc|nil] while_callback The loop will keep waiting until this returns a truthy value.
+    # @return [String] Returns the notified event if the deadline has not elapsed.
+    # @return [nil] If the deadline elapsed.
+    def wait_for_identifier(identifier, deadline, while_callback, &block)
+      return false if while_callback && while_callback.call == false
+
+      last_notification = false
+      last_notification = wait_until(deadline, while_callback, &block) until
+        last_notification.nil? || last_notification == identifier
+      last_notification
+    end
+
     # Waits until the deadline, or while_callback returns false.
     #
     # @param [Time|nil] deadline The deadline to wait until.
     # @param [Proc|nil] while_callback The loop will keep waiting until this returns a truthy value.
-    # @return [String] Returns the notified event if the deadline has not elasped.
-    # @return [nil] If the deadline elasped.
+    # @return [String] Returns the notified event if the deadline has not elapsed.
+    # @return [nil] If the deadline elapsed.
     def wait_until(deadline, while_callback, &block)
       while deadline.nil? || Time.zone.now < deadline
         wait_timeout = deadline ? deadline - Time.zone.now : nil
