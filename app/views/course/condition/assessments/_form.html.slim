@@ -1,0 +1,5 @@
+= simple_form_for [current_course, @conditional, @assessment_condition] do |f|
+  = f.error_notification
+  = f.association :assessment, collection: current_course.assessments
+  = f.input :minimum_grade_percentage
+  = f.button :submit

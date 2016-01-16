@@ -1,5 +1,4 @@
-= simple_form_for [current_course, @conditional, @level_condition],
-                  resource: :course_achievement_condition_level do |f|
+= simple_form_for [current_course, @conditional, @level_condition] do |f|
   = f.error_notification
   = f.error :course_achievement_condition_level
   = f.input :minimum_level, as: :integer, input_html: { min: '1', step: 'any' }

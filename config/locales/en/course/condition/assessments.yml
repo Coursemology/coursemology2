@@ -1,0 +1,17 @@
+en:
+  course:
+    condition:
+      assessment:
+        title: 'Assessment'
+      assessments:
+        new:
+          header: 'New Assessment Condition'
+        create:
+          success: 'Assessment condition was created.'
+        edit:
+          header: 'Edit Assessment Condition'
+        update:
+          success: 'Assessment condition was updated.'
+        destroy:
+          success: 'Assessment condition was deleted.'
+          error: 'Failed to delete assessment condition.'

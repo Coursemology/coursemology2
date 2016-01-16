@@ -1,7 +1,8 @@
 en:
   course:
     condition:
-      achievement: 'Achievement'
+      achievement:
+        title: 'Achievement'
       achievements:
         new:
           header: 'New Achievement Condition'

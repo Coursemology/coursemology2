@@ -1,0 +1,8 @@
+- level_condition = level
+= content_tag_for(:tr, level_condition, class: 'condition')
+  td = t('course.condition.level.title')
+  td.level-condition-content = level_condition.title
+
+  td
+    = edit_button([course, conditional, level_condition])
+    = delete_button([course, conditional, level_condition])

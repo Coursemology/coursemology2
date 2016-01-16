@@ -1,0 +1,22 @@
+h2
+  span = t('course.condition.header')
+
+div.dropdown.pull-right
+  button.btn.btn-primary.dropdown-toggle#new-condition-dropdown-btn [data-toggle="dropdown"
+    aria-haspopup="true"]
+    span = t('course.condition.new.header')
+  ul.dropdown-menu.dropdown-menu-right aria-labelledby="new-condition-dropdown-btn"
+    - Course::Condition::ALL_CONDITIONS.map do |condition_name| \
+        condition_name.demodulize.downcase\
+      end.each do |condition_name|
+      li = link_to t("course.condition.#{condition_name.pluralize}.new.header"),
+                   [:new, current_course, conditional, :condition, condition_name.downcase]
+
+table.table.table-hover
+  thead
+    tr
+      th = t('course.condition.type.header')
+      th = t('course.condition.description.header')
+      th
+  tbody
+    = render conditional.specific_conditions, course: current_course, conditional: conditional

@@ -1,8 +1,0 @@
-= content_tag_for(:tr, achievement)
-  td = t('course.condition.achievement')
-  td.achievement-condition-content = format_inline_text(achievement.specific.achievement.title)
-
-  td
-    = edit_button([course, achievement.conditional, achievement.specific])
-    = delete_button([course, achievement.conditional, achievement.specific])
-
