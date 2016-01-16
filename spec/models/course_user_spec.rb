@@ -125,11 +125,25 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
+    describe '#current_level' do
+      context 'when student has enough EXP to be level 1' do
+        let!(:level_1) { create(:course_level, course: course, experience_points_threshold: 100) }
+        before do
+          create(:course_experience_points_record, points_awarded: 150, course_user: student)
+          course.reload
+        end
+
+        it 'returns the level 1 object' do
+          expect(student.current_level).to eq(level_1)
+        end
+      end
+    end
+
     describe '#level_number' do
       subject { student.level_number }
       before do
-        create :course_level, course: course, experience_points_threshold: 100
-        create :course_level, course: course, experience_points_threshold: 200
+        create(:course_level, course: course, experience_points_threshold: 100)
+        create(:course_level, course: course, experience_points_threshold: 200)
         course.reload
       end
 
@@ -139,11 +153,41 @@ RSpec.describe CourseUser, type: :model do
 
       context 'after enough experience points have been awarded' do
         before do
-          create :course_experience_points_record, points_awarded: 150, course_user: student
+          create(:course_experience_points_record, points_awarded: 150, course_user: student)
         end
         it 'returns the correct level number' do
           expect(subject).to eq(1)
         end
+      end
+    end
+
+    describe '#level_progress_percentage' do
+      subject { student.level_progress_percentage }
+      before do
+        create(:course_level, course: course, experience_points_threshold: 100)
+        course.reload
+      end
+
+      it { is_expected.to be_a(Fixnum) }
+      it { is_expected.to be_between(0, 100) }
+
+      context 'when the course user has 0% of progress within the level' do
+        it { is_expected.to eq(0) }
+      end
+
+      context 'when the course user has 99% of progress within the level' do
+        before do
+          create(:course_experience_points_record, points_awarded: 99, course_user: student)
+        end
+
+        it { is_expected.to eq(99) }
+      end
+
+      context 'when course user is at the maximum level' do
+        before do
+          create(:course_experience_points_record, points_awarded: 150, course_user: student)
+        end
+        it { is_expected.to eq(100) }
       end
     end
 
