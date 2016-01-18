@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 class Course::LevelsController < Course::ComponentController
-  before_action :load_levels, only: [:index]
   load_and_authorize_resource :level, through: :course, class: Course::Level.name
   add_breadcrumb :index, :course_levels_path
 
   def index #:nodoc:
+    @levels = @course.levels
   end
 
   def new #:nodoc:
@@ -31,12 +31,6 @@ class Course::LevelsController < Course::ComponentController
   end
 
   private
-
-  # This methods ensures that the Course::Levels are numbered
-  # for use by the controller.
-  def load_levels
-    @levels = @course.numbered_levels
-  end
 
   def level_params #:nodoc:
     params.require(:level).permit(:experience_points_threshold)
