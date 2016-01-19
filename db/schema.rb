@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151228030006) do
+ActiveRecord::Schema.define(version: 20160119055307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -162,6 +162,7 @@ ActiveRecord::Schema.define(version: 20151228030006) do
     t.string   "workflow_state", limit: 255, null: false
     t.datetime "submitted_at"
     t.integer  "grade"
+    t.boolean  "correct",        comment: "Correctness is independent of the grade (depends on the grading schema)"
     t.integer  "grader_id",      index: {name: "fk__course_assessment_answers_grader_id"}, foreign_key: {references: "users", name: "fk_course_assessment_answers_grader_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "graded_at"
   end
