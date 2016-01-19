@@ -6,10 +6,6 @@ module CarrierWave::TestGroupHelpers
   end
 
   module DirectoryOverrides
-    def self.prepended(class_)
-      class_.storage :file
-    end
-
     UPLOADS_DIR = Rails.application.config.x.temp_folder.join('spec/uploads')
 
     def cache_dir
