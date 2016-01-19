@@ -20,4 +20,12 @@ module Course::Assessment::QuestionsConcern
       attempting_answers.fetch(question) { question.attempt(submission) }
     end
   end
+
+  # Returns the questions which do not have a answer or correct answer.
+  #
+  # @param [Course::Assessment::Submission] submission The submission which contains the answers.
+  # @return [Array<Course::Assessment::Question>]
+  def not_correctly_answered(submission)
+    where.not(id: submission.answers.where(correct: true).select(:question_id))
+  end
 end

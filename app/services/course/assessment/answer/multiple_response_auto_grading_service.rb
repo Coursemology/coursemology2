@@ -1,7 +1,8 @@
 class Course::Assessment::Answer::MultipleResponseAutoGradingService < \
   Course::Assessment::Answer::AutoGradingService
   def grade(auto_grading)
-    auto_grading.answer.grade, messages = grade_answer(auto_grading.answer.actable)
+    auto_grading.answer.correct, auto_grading.answer.grade, messages =
+      grade_answer(auto_grading.answer.actable)
     auto_grading.result = { messages: messages }
     super(auto_grading)
   end
@@ -12,7 +13,8 @@ class Course::Assessment::Answer::MultipleResponseAutoGradingService < \
   #
   # @param [Course::Assessment::Answer::MultipleResponse] answer The answer specified by the
   #   student.
-  # @return [Array<(Fixnum, Object)>] The grade and the messages to be assigned to the grading.
+  # @return [Array<(Boolean, Fixnum, Object)>] The correct status, grade and the messages to be
+  #   assigned to the grading.
   def grade_answer(answer)
     question = answer.question.actable
 
@@ -31,7 +33,7 @@ class Course::Assessment::Answer::MultipleResponseAutoGradingService < \
     correct_selection = question.options.correct & answer.options
     correct = correct_selection.length > 0
 
-    [grade_for(question, correct), explanations_for(answer.options)]
+    [correct, grade_for(question, correct), explanations_for(answer.options)]
   end
 
   # Grades an all_correct question.
@@ -43,7 +45,7 @@ class Course::Assessment::Answer::MultipleResponseAutoGradingService < \
     correct_selection = correct_answers & answer.options
     correct = correct_selection.length == correct_answers.length
 
-    [grade_for(question, correct), explanations_for(answer.options)]
+    [correct, grade_for(question, correct), explanations_for(answer.options)]
   end
 
   # Returns the grade for the given correctness.

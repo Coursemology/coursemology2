@@ -1,7 +1,8 @@
 class Course::Assessment::Answer::TextResponseAutoGradingService < \
   Course::Assessment::Answer::AutoGradingService
   def grade(auto_grading)
-    auto_grading.answer.grade, messages = grade_answer(auto_grading.answer.actable)
+    auto_grading.answer.correct, auto_grading.answer.grade, messages =
+      grade_answer(auto_grading.answer.actable)
     auto_grading.result = { messages: messages }
     super(auto_grading)
   end
@@ -12,7 +13,8 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   #
   # @param [Course::Assessment::Answer::TextResponse] answer The answer specified by the
   #   student.
-  # @return [Array<(Fixnum, Object)>] The grade and the messages to be assigned to the grading.
+  # @return [Array<(Boolean, Fixnum, Object)>] The correct status, grade and the messages to be
+  #   assigned to the grading.
   def grade_answer(answer)
     question = answer.question.actable
     answer_text = answer.answer_text
@@ -21,13 +23,13 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
     solutions = find_exact_match(answer_text, exact_matches)
     # If there is no exact match, we fall back to keyword matches.
     # Solutions are always kept in an array for easier use of #grade_for and #explanations_for
-    if !solutions.nil?
-      solutions = [solutions]
-    else
-      solutions = find_keywords(answer_text, keywords)
-    end
+    solutions = solutions.present? ? [solutions] : find_keywords(answer_text, keywords)
 
-    [grade_for(question, solutions), explanations_for(solutions)]
+    [
+      correctness_for(question, solutions),
+      grade_for(question, solutions),
+      explanations_for(solutions)
+    ]
   end
 
   # Returns one solution that exactly matches the answer.
@@ -73,5 +75,15 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   # @return [Array<String>] The explanations for the given solutions.
   def explanations_for(solutions)
     solutions.map(&:explanation).tap(&:compact!)
+  end
+
+  # Mark the correctness of the answer based on solutions
+  #
+  # @param [Course::Assessment::Question::TextResponse] question The question answered by the
+  #   student.
+  # @param [Array<Course::Assessment::Question::TextResponseSolution>] solutions The solutions that
+  #   matches the student's answer.
+  def correctness_for(question, solutions)
+    solutions.map(&:grade).sum >= question.maximum_grade
   end
 end

@@ -27,6 +27,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           it 'marks the answer correct' do
             subject.grade(grading)
             expect(answer.grade).to eq(question.maximum_grade)
+            expect(answer).to be_correct
             expect(grading.result['messages']).to \
               contain_exactly(question.options.correct.first.explanation)
           end
@@ -37,6 +38,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
 
           it 'marks the answer wrong' do
             subject.grade(grading)
+            expect(answer).not_to be_correct
             expect(answer.grade).to eq(0)
             expect(grading.result['messages']).to \
               contain_exactly(answer.specific.options.first.explanation)
@@ -52,6 +54,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
 
           it 'marks the answer correct' do
             subject.grade(grading)
+            expect(answer).to be_correct
             expect(answer.grade).to eq(question.maximum_grade)
             expect(grading.result['messages']).to \
               contain_exactly(question.options.correct.first.explanation)
@@ -63,6 +66,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
 
           it 'marks the answer wrong' do
             subject.grade(grading)
+            expect(answer).not_to be_correct
             expect(answer.grade).to eq(0)
             expect(grading.result['messages']).to \
               contain_exactly(*answer.specific.options.reject(&:correct).map(&:explanation))
