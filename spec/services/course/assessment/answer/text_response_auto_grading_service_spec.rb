@@ -25,6 +25,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
 
         it 'matches the entire answer' do
           subject.grade(grading)
+          expect(answer).to be_correct
           expect(answer.grade).to eq(question.solutions.exact_match.first.grade)
           expect(grading.result['messages']).to \
             contain_exactly(question.solutions.exact_match.first.explanation)
@@ -36,6 +37,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
 
         it 'matches the keyword' do
           subject.grade(grading)
+          expect(answer).not_to be_correct
           expect(answer.grade).to eq(question.solutions.keyword.first.grade)
           expect(grading.result['messages']).to \
             contain_exactly(question.solutions.keyword.first.explanation)
@@ -51,6 +53,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
                             question.maximum_grade].min
 
           subject.grade(grading)
+          expect(answer).to be_correct
           expect(answer.grade).to eq(expected_grade)
           expect(grading.result['messages']).to \
             match_array(question.solutions.keyword.map(&:explanation))
