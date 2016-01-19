@@ -95,5 +95,25 @@ RSpec.describe Course::Level, type: :model do
         end
       end
     end
+
+    describe '#next_level_threshold' do
+      before { course.levels.concat(create_list(:course_level, 5, course: course)) }
+
+      context 'when current level is not the highest' do
+        it "returns the next level's threshold" do
+          course.levels.each_cons(2) do |current_level, next_level|
+            expect(current_level.next_level_threshold).
+              to eq(next_level.experience_points_threshold)
+          end
+        end
+      end
+
+      context 'when current level is the highest' do
+        it "returns the current level's threshold" do
+          expect(course.levels.last.next_level_threshold).
+            to eq(course.levels.last.experience_points_threshold)
+        end
+      end
+    end
   end
 end
