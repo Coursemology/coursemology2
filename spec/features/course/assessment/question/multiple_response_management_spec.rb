@@ -21,10 +21,12 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         fill_in 'title', with: question_attributes[:title]
         fill_in 'description', with: question_attributes[:description]
         fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
+        fill_in 'weight', with: question_attributes[:weight]
         click_button 'submit'
 
-        expect(current_path).to eq(course_assessment_path(course, assessment))
-        expect(page).to have_content_tag_for(assessment.questions.first.specific)
+        question_created = assessment.questions.first.specific
+        expect(page).to have_content_tag_for(question_created)
+        expect(question_created.weight).to eq(question_attributes[:weight])
       end
 
       scenario 'I can edit a question', js: true do
