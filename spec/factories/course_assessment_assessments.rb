@@ -39,5 +39,13 @@ FactoryGirl.define do
       with_programming_question
       with_text_response_question
     end
+
+    trait :worksheet do
+      display_mode :worksheet
+    end
+
+    trait :guided do
+      display_mode :guided
+    end
   end
 end

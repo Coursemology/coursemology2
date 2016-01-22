@@ -28,4 +28,22 @@ module Course::Assessment::QuestionsConcern
   def not_correctly_answered(submission)
     where.not(id: submission.answers.where(correct: true).select(:question_id))
   end
+
+  # Return the question at the given step.
+  #
+  # @param [Course::Assessment::Submission] submission The submission which contains the answers.
+  # @return [Array<Course::Assessment::Question>] The question at the given the step. The latest
+  #   unfinished question will be returned if the question at the step is not accessible.
+  def step(submission, current_step)
+    # Make sure index is between [0, length - 1]
+    index = [length - 1, [0, current_step.to_i - 1].max].min
+
+    correctly_answered_questions =
+      where(id: submission.answers.where(correct: true).select(:question_id))
+
+    index -= 1 while index > 0 && !correctly_answered_questions.include?(fetch(index - 1))
+
+    # Let return type be `ActiveRecord_AssociationRelation`, so that they can be attempted.
+    where(id: fetch(index))
+  end
 end

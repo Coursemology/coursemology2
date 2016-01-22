@@ -96,6 +96,19 @@ RSpec.describe 'Course: Assessments: Attempt' do
           end
         end
       end
+
+      scenario 'I can attempt a guided assessment' do
+        assessment = create(:assessment, :with_all_question_types, :guided, course: course)
+        submission = create(:course_assessment_submission, assessment: assessment, user: student)
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        expect(page).to have_selector('h1', text: assessment.title)
+        1..assessment.questions.length do |step|
+          path = edit_course_assessment_submission_path(course, assessment, submission,
+                                                        step: step)
+          expect(page).to have_link(step, href: path)
+        end
+      end
     end
 
     context 'As a Course Staff' do

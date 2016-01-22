@@ -70,6 +70,31 @@ RSpec.describe Course::Assessment do
           end
         end
       end
+
+      describe '#step' do
+        let(:assessment_traits) { [:with_all_question_types] }
+        let(:submission) { create(:course_assessment_submission, assessment: assessment) }
+
+        context 'when no question is answered' do
+          it 'returns the first question' do
+            expect(assessment.questions.step(submission, 2)).
+              to contain_exactly(assessment.questions.first)
+          end
+        end
+
+        context 'when the first question is answered' do
+          before do
+            answer = assessment.questions.first.attempt(submission)
+            answer.correct = true
+            answer.save
+          end
+
+          it 'returns the first unanswered question' do
+            expect(assessment.questions.step(submission, 2)).
+              to contain_exactly(assessment.questions.second)
+          end
+        end
+      end
     end
 
     describe '#maximum_grade' do
