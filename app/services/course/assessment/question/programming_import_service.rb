@@ -5,6 +5,8 @@ class Course::Assessment::Question::ProgrammingImportService
   class << self
     # Imports the programming package into the question.
     #
+    # @raise [InvalidDataError] When the package is not a valid package.
+    #
     # @overload import(question, package)
     #   @param [Course::Assessment::Question::Programming] question The programming question for
     #     import.
@@ -42,6 +44,8 @@ class Course::Assessment::Question::ProgrammingImportService
 
   # Imports the templates and tests found in the package.
   def import
+    fail InvalidDataError unless @package.valid?
+
     template_import_thread = Thread.new { import_template_files }
     evaluation_result = evaluate_package
     template_import_thread.join
