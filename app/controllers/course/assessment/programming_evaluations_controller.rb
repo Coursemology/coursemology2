@@ -34,7 +34,7 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
     @programming_evaluation.assign_attributes(update_result_params)
     @programming_evaluation.complete!
     if @programming_evaluation.save
-      render nothing: true, status: :ok
+      render json: {}, status: :ok
     else
       response.status = :bad_request
     end

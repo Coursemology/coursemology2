@@ -11,11 +11,6 @@ RSpec.describe 'Course: Assessments: Programming Evaluations Processing' do
     context 'when an auto grader is logged in' do
       let(:user_traits) { :auto_grader }
 
-      it 'lists all outstanding evaluations' do
-        pending 'Do we need this?'
-        fail
-      end
-
       context 'when there are available jobs' do
         it 'allows an evaluator to request for a job' do
           evaluation = create(:course_assessment_programming_evaluation, course: course)
@@ -53,6 +48,7 @@ RSpec.describe 'Course: Assessments: Programming Evaluations Processing' do
             programming_evaluation: attributes.slice(:stdout, :stderr, :test_report)
 
         expect(response.status).to eq(200)
+        expect(JSON.parse(response.body)).to eq({})
         evaluation.reload
         expect(evaluation.stdout).to eq(attributes[:stdout])
         expect(evaluation.stderr).to eq(attributes[:stderr])
