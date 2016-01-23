@@ -32,7 +32,7 @@ class Course::Assessment::ProgrammingEvaluation < ActiveRecord::Base
   after_commit :signal, if: :finished?
 
   validates :evaluator, :assigned_at, presence: true, unless: :submitted?
-  validates :stdout, :stderr, :test_report, exclusion: [nil], if: :finished?
+  validates :stdout, :stderr, exclusion: [nil], if: :finished?
 
   belongs_to :course, inverse_of: :assessment_programming_evaluations
   belongs_to :language, class_name: Coursemology::Polyglot::Language.name, inverse_of: nil

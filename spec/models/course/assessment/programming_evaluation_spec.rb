@@ -48,14 +48,6 @@ RSpec.describe Course::Assessment::ProgrammingEvaluation do
             expect(subject.errors[:stderr]).not_to be_nil
           end
         end
-
-        describe '#test_report' do
-          it 'requires the presence of test_report' do
-            subject.test_report = nil
-            expect(subject).not_to be_valid
-            expect(subject.errors[:test_report]).not_to be_nil
-          end
-        end
       end
     end
 
