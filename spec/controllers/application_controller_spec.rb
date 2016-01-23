@@ -159,7 +159,7 @@ RSpec.describe ApplicationController, type: :controller do
 
       it 'renders the component not found page to /public/404' do
         get :index
-        expect(response).to render_template(file: Rails.public_path.join('404.html').to_s)
+        expect(response).to render_template(file: '404.html')
       end
 
       it 'returns HTTP status 404' do
@@ -188,7 +188,7 @@ RSpec.describe ApplicationController, type: :controller do
 
     it 'renders the request rejected page /public/422' do
       get :index
-      expect(response).to render_template(file: Rails.public_path.join('422.html').to_s)
+      expect(response).to render_template(file: '422.html')
     end
 
     it 'returns HTTP status 422' do
