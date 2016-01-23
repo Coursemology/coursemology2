@@ -24,7 +24,8 @@ class Course::Assessment::ProgrammingEvaluationService
     # @param [Fixnum] memory_limit The memory limit for the evaluation, in MiB.
     # @param [Fixnum|ActiveSupport::Duration] time_limit The time limit for the evaluation, in
     #   seconds.
-    # @param [String] package The path to the package.
+    # @param [String] package The path to the package. The package is assumed to be a valid package;
+    #   no parsing is done on the package.
     # @param [nil|Fixnum] timeout The duration to elapse before timing out. When the operation
     #   times out, a +Timeout::TimeoutError+ is raised. This is different from the time limit in
     #   that the time limit affects only the run time of the evaluation. The timeout includes
@@ -66,9 +67,8 @@ class Course::Assessment::ProgrammingEvaluationService
   #
   # @return [Course::Assessment::ProgrammingEvaluation]
   def create_evaluation
-    package_path = SendFile.send_file(@package)
     Course::Assessment::ProgrammingEvaluation.create(
-      course: @course, language: @language, package_path: package_path, memory_limit: @memory_limit,
+      course: @course, language: @language, package_path: @package, memory_limit: @memory_limit,
       time_limit: @time_limit.to_i)
   end
 

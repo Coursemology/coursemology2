@@ -52,7 +52,7 @@ class Course::Assessment::ProgrammingPackage
   # @return [String] The path to the file.
   # @return [nil] If the package is associated with a stream.
   def path
-    if @file
+    if @file && @file.name.is_a?(String)
       @file.name
     elsif @path
       @path.to_s
@@ -66,6 +66,15 @@ class Course::Assessment::ProgrammingPackage
     ensure_file_open!
     @file.close
     @file = nil
+  end
+
+  # Checks if the given programming package is valid.
+  #
+  # @return [Boolean]
+  def valid?
+    ensure_file_open!
+
+    ['Makefile', 'submission/', 'tests/'].all? { |entry| @file.find_entry(entry).present? }
   end
 
   # Gets the contents of all submission files.

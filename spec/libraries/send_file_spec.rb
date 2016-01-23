@@ -1,16 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe SendFile do
-  describe '#publish_file' do
-    let(:file) do
-      file = Tempfile.new('test file')
-      file << 'lol'
-      file.close
-      file.path
-    end
+  let(:file) do
+    file = Tempfile.new('test file')
+    file << 'lol'
+    file.close
+    file.path
+  end
+
+  describe '.publish_file' do
     subject { SendFile.send_file(file) }
 
-    it 'preserves the orignal file name' do
+    it 'preserves the original file name' do
       expect(File.basename(URI.decode(subject))).to eq(File.basename(file))
     end
 
@@ -26,6 +27,14 @@ RSpec.describe SendFile do
       it 'uses the custom name' do
         expect(File.basename(URI.decode(subject))).to eq(file_name)
       end
+    end
+  end
+
+  describe '.local_path' do
+    let(:public_path) { SendFile.send_file(file) }
+
+    it 'obtains the local path of the publicly accessible file' do
+      expect(FileUtils.identical?(SendFile.local_path(public_path), file)).to be(true)
     end
   end
 end

@@ -24,6 +24,16 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportService do
           subject.import(question, file)
         end
       end
+
+      context 'when an invalid package is provided' do
+        let(:package_path) do
+          File.join(Rails.root, 'spec/fixtures/course/empty_programming_question_template.zip')
+        end
+
+        it 'raises an InvalidDataError' do
+          expect { subject.import(question, package_path) }.to raise_error(InvalidDataError)
+        end
+      end
     end
 
     describe '#import' do

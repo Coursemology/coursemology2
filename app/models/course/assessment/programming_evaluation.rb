@@ -15,6 +15,9 @@ class Course::Assessment::ProgrammingEvaluation < ActiveRecord::Base
   # evaluator.
   TIMEOUT = 5.minutes
 
+  before_save :copy_package, if: :package_path_changed?
+  after_destroy :delete_package, if: :package_path
+
   workflow_column :status
   workflow do
     state :submitted do
@@ -32,7 +35,7 @@ class Course::Assessment::ProgrammingEvaluation < ActiveRecord::Base
   after_commit :signal, if: :finished?
 
   validates :evaluator, :assigned_at, presence: true, unless: :submitted?
-  validates :stdout, :stderr, :test_report, exclusion: [nil], if: :finished?
+  validates :stdout, :stderr, exclusion: [nil], if: :finished?
 
   belongs_to :course, inverse_of: :assessment_programming_evaluations
   belongs_to :language, class_name: Coursemology::Polyglot::Language.name, inverse_of: nil
@@ -70,9 +73,24 @@ class Course::Assessment::ProgrammingEvaluation < ActiveRecord::Base
 
   # Handles the assign event.
   #
-  # @param [User] assigned_evaluator The user  assigned to evaluate this evaluation.
+  # @param [User] assigned_evaluator The user assigned to evaluate this evaluation.
   def assign(assigned_evaluator)
     self.evaluator = assigned_evaluator
     self.assigned_at = Time.zone.now
+  end
+
+  private
+
+  # Copies the package to a publicly accessible path.
+  def copy_package
+    old_package_path = changed_attributes[:package_path]
+    File.delete(SendFile.local_path(old_package_path)) if old_package_path
+
+    self.package_path = SendFile.send_file(package_path)
+  end
+
+  # Deletes the package.
+  def delete_package
+    File.delete(SendFile.local_path(package_path))
   end
 end
