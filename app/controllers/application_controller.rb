@@ -1,8 +1,7 @@
 # :nodoc:
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
+  # Prevent CSRF attacks by providing a null session when the token is missing from the request.
+  protect_from_forgery
 
   # Custom flash types. We follow Bootstrap's convention.
   add_flash_types :success, :info, :warning, :danger

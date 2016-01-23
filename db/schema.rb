@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20160119055307) do
     t.integer  "role",                   default: 0,  null: false
     t.text     "profile_photo"
     t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "authentication_token",   limit: 255, index: {name: "index_users_on_authentication_token", unique: true}
     t.string   "reset_password_token",   limit: 255, index: {name: "index_users_on_reset_password_token", unique: true}
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
