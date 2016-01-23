@@ -3,6 +3,9 @@ require 'rails_helper'
 RSpec.describe Course::Assessment::ProgrammingPackage do
   self::PACKAGE_PATH = File.join(Rails.root,
                                  'spec/fixtures/course/programming_question_template.zip')
+  self::EMPTY_PACKAGE_PATH = File.join(Rails.root,
+                                       'spec/fixtures/course/'\
+                                       'empty_programming_question_template.zip')
 
   def temp_package_path
     temp_package_stream.tap(&:close).path
@@ -53,6 +56,14 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
     it 'returns the path to the package' do
       expect(subject.path).to eq(self.class::PACKAGE_PATH)
     end
+
+    context 'when a File is given' do
+      let(:package_path) { File.new(self.class::PACKAGE_PATH, 'rb') }
+      it 'returns the path to the File' do
+        subject.valid?
+        expect(subject.path).to eq(self.class::PACKAGE_PATH)
+      end
+    end
   end
 
   describe '#close' do
@@ -65,6 +76,27 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
       subject.submission_files = {}
       subject.close
       expect(open_package(package_path).submission_files).to be_empty
+    end
+  end
+
+  describe '#valid?' do
+    let(:package_path) { temp_package_path }
+    let(:package_to_copy) { self.class::PACKAGE_PATH }
+    before do
+      FileUtils.copy(package_to_copy, package_path)
+    end
+
+    context 'when given a valid package' do
+      it 'returns true' do
+        expect(subject).to be_valid
+      end
+    end
+
+    context 'when given an empty package' do
+      let(:package_to_copy) { self.class::EMPTY_PACKAGE_PATH }
+      it 'returns false' do
+        expect(subject).not_to be_valid
+      end
     end
   end
 
