@@ -24,10 +24,14 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         select question_attributes[:language].name, from: 'language'
         fill_in 'memory_limit', with: question_attributes[:memory_limit]
         fill_in 'time_limit', with: question_attributes[:time_limit]
+        fill_in 'weight', with: question_attributes[:weight]
         click_button 'submit'
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
-        expect(page).to have_content_tag_for(assessment.questions.first.specific)
+
+        question_created = assessment.questions.first.specific
+        expect(page).to have_content_tag_for(question_created)
+        expect(question_created.weight).to eq(question_attributes[:weight])
       end
 
       scenario 'I can edit a question' do
