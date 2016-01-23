@@ -32,4 +32,10 @@ RSpec.describe Course::Condition::Level, type: :model do
       end
     end
   end
+
+  describe '.dependent_classes' do
+    it 'returns no class' do
+      expect(Course::Condition::Level.dependent_classes).to be_empty
+    end
+  end
 end
