@@ -5,8 +5,7 @@ FactoryGirl.define do
     language { Coursemology::Polyglot::Language::Python::Python2Point7.instance }
     status :submitted
     package_path do
-      SendFile.send_file(File.join(Rails.root,
-                                   '/spec/fixtures/course/programming_question_template.zip'))
+      File.join(Rails.root, '/spec/fixtures/course/programming_question_template.zip')
     end
 
     trait :assigned do

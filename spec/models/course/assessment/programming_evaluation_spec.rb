@@ -51,6 +51,45 @@ RSpec.describe Course::Assessment::ProgrammingEvaluation do
       end
     end
 
+    describe 'callbacks' do
+      subject { build(:course_assessment_programming_evaluation, *evaluation_traits) }
+      describe '#copy_package' do
+        it 'publishes the file' do
+          original_package_path = subject.package_path
+          subject.save
+
+          identical = FileUtils.identical?(original_package_path,
+                                           SendFile.local_path(subject.package_path))
+          expect(identical).to be(true)
+        end
+
+        context 'when the package is changed' do
+          it 'deletes the old package' do
+            original_package_path = subject.package_path
+            subject.save
+
+            old_path = SendFile.local_path(subject.package_path)
+            expect(File.exist?(old_path)).to be(true)
+
+            subject.package_path = original_package_path
+            subject.save
+
+            expect(File.exist?(old_path)).to be(false)
+            expect(File.exist?(original_package_path)).to be(true)
+          end
+        end
+      end
+
+      describe '#delete_package' do
+        it 'deletes the package' do
+          subject.save
+
+          subject.destroy!
+          expect(File.exist?(SendFile.local_path(subject.package_path))).to be(false)
+        end
+      end
+    end
+
     describe '.with_language' do
       subject do
         Course::Assessment::ProgrammingEvaluation.with_language([language]).

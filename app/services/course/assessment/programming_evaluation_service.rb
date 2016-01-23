@@ -67,9 +67,8 @@ class Course::Assessment::ProgrammingEvaluationService
   #
   # @return [Course::Assessment::ProgrammingEvaluation]
   def create_evaluation
-    package_path = SendFile.send_file(@package)
     Course::Assessment::ProgrammingEvaluation.create(
-      course: @course, language: @language, package_path: package_path, memory_limit: @memory_limit,
+      course: @course, language: @language, package_path: @package, memory_limit: @memory_limit,
       time_limit: @time_limit.to_i)
   end
 
