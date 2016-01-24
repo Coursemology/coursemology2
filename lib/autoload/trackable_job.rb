@@ -72,11 +72,9 @@ module TrackableJob
 
   def rescue_tracked(exception)
     @job.status = :errored
-    @job.error = {
-      class: exception.class.name,
-      message: exception.to_s,
-      backtrace: exception.backtrace
-    }
+    @job.error = exception.as_json.reverse_merge(class: exception.class.name,
+                                                 message: exception.to_s,
+                                                 backtrace: exception.backtrace)
     @job.save!
   end
 
