@@ -16,10 +16,18 @@ module TrackableJob
   class Job < ActiveRecord::Base
     enum status: [:submitted, :completed, :errored]
 
-    after_commit :signal, unless: :submitted?
+    after_save :signal_finished, unless: :submitted?
 
     validates :redirect_to, absence: true, if: :submitted?
     validates :error, absence: true, unless: :errored?
+
+    private
+
+    def signal_finished
+      return unless status_changed?
+
+      execute_after_commit { signal }
+    end
   end
 
   included do

@@ -56,6 +56,15 @@ RSpec.describe TrackableJob do
           # This should not deadlock because saving the record should signal.
         end
       end
+
+      context 'when the job was already completed' do
+        it 'does not notify listeners' do
+          subject.update_attributes(id: SecureRandom.uuid, status: :completed)
+
+          expect(subject).not_to receive(:signal)
+          subject.update_attributes(redirect_to: '')
+        end
+      end
     end
   end
 

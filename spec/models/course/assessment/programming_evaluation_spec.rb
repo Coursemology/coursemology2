@@ -170,7 +170,7 @@ RSpec.describe Course::Assessment::ProgrammingEvaluation do
     describe '#save' do
       subject { create(:course_assessment_programming_evaluation, *evaluation_traits) }
 
-      context 'when the evaluation is finished' do
+      context 'when the evaluation is completed' do
         let(:evaluation_traits) { :assigned }
         it 'notifies listeners' do
           subject.status = :completed
@@ -185,6 +185,14 @@ RSpec.describe Course::Assessment::ProgrammingEvaluation do
           subject.wait
 
           # This should not deadlock because saving the record should signal.
+        end
+
+        context 'when the evaluation was already completed' do
+          let(:evaluation_traits) { :completed }
+          it 'does not notify listeners' do
+            expect(subject).not_to receive(:signal)
+            subject.update_attributes(exit_code: 128)
+          end
         end
       end
     end
