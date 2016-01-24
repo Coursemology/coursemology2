@@ -7,6 +7,8 @@ class Course::Assessment::Question::ProgrammingImportService
     # Imports the programming package into the question.
     #
     # @raise [InvalidDataError] When the package is not a valid package.
+    # @raise [Course::Assessment::ProgrammingEvaluationService::Error] When there was an error
+    #   evaluating the package.
     #
     # @overload import(question, package)
     #   @param [Course::Assessment::Question::Programming] question The programming question for
@@ -51,6 +53,7 @@ class Course::Assessment::Question::ProgrammingImportService
     evaluation_result = evaluate_package
     template_import_thread.join
 
+    fail evaluation_result if evaluation_result.error?
     save(template_import_thread.value, evaluation_result)
   end
 

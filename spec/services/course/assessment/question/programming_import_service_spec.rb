@@ -48,6 +48,16 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportService do
         expect(question.template_files).not_to be_empty
         expect(question.template_files.map(&:filename)).to contain_exactly('__init__.py')
       end
+
+      context 'when the evaluation fails' do
+        it 'raises an Course::Assessment::ProgrammingEvaluationService::Error' do
+          mock_result = Course::Assessment::ProgrammingEvaluationService::Result.new('', '', nil, 1)
+          expect(subject).to receive(:evaluate_package).and_return(mock_result)
+
+          expect { subject.send(:import) }.to \
+            raise_error(Course::Assessment::ProgrammingEvaluationService::Error)
+        end
+      end
     end
   end
 end
