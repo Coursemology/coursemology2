@@ -68,6 +68,10 @@ RSpec.describe TrackableJob do
     it 'is persisted to the database' do
       expect(TrackableJob::Job.find(subject.job_id)).to eq(subject.job)
     end
+
+    it 'only creates one job' do
+      expect { subject }.to change { TrackableJob::Job.count }.by(1)
+    end
   end
 
   context 'when the job is completed' do

@@ -22,6 +22,7 @@ module TrackableJob
   end
 
   included do
+    before_enqueue :save_job
     rescue_from(StandardError) do |exception|
       rescue_tracked(exception)
     end
@@ -41,11 +42,11 @@ module TrackableJob
     fail Timeout::Error if wait_result.nil?
   end
 
-  # Implements +initialize+, creating the job in the database.
+  # Implements +initialize+, creating or loading the job from the database.
   def initialize(*args)
     super
 
-    @job = Job.create!(id: job_id)
+    @job = Job.find_or_initialize_by(id: job_id)
   end
 
   def perform(*args)
@@ -55,9 +56,11 @@ module TrackableJob
   end
 
   def job_id=(job_id)
-    super
-    @job.destroy
-    @job = Job.find(job_id)
+    super.tap do
+      next unless @job
+      @job.destroy
+      @job = Job.find(job_id)
+    end
   end
 
   protected
@@ -77,6 +80,13 @@ module TrackableJob
   end
 
   private
+
+  # Saves the job to the database.
+  #
+  # The job is not saved until queueing because the job ID might not be decided.
+  def save_job
+    @job.save!
+  end
 
   # Specifies that the job should redirect to the given path.
   def redirect_to(path)
