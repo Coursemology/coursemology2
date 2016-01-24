@@ -13,6 +13,13 @@ en:
             success: 'The programming question was deleted.'
             failure: 'Could not delete programming question: %{error}'
           form:
+            import_result:
+              success: 'The package was successfully imported.'
+              error: 'The package could not be imported: %{error}'
+              errors:
+                invalid_package: 'the package uploaded does not have a valid structure.'
+                time_limit_exceeded: 'the package did not finish executing within the time limit.'
+                evaluation_error: 'an error occurred during evaluation, see logs.'
             template: 'Template'
             test_cases:
               test_cases: 'Test Cases'
@@ -20,3 +27,7 @@ en:
               private: 'Private Test Cases'
               description: 'Description'
               hint: 'Hint'
+          build_log:
+            title: 'Build Log'
+            stdout: 'Standard Output'
+            stderr: 'Standard Error'

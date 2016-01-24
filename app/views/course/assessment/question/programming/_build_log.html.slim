@@ -1,0 +1,11 @@
+h2 = t('.title')
+div.build_log
+  h3 = t('.stdout')
+  div.stdout
+    pre
+      = log['stdout']
+
+  h3 = t('.stderr')
+  div.stderr
+    pre
+      = log['stderr']
