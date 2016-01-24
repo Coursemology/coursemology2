@@ -49,6 +49,14 @@ RSpec.describe Course::Assessment::ProgrammingEvaluation do
             expect(subject.errors[:stderr]).not_to be_nil
           end
         end
+
+        describe '#exit_code' do
+          it 'requires the presence of exit_code' do
+            subject.exit_code = nil
+            expect(subject).not_to be_valid
+            expect(subject.errors[:exit_code]).not_to be_nil
+          end
+        end
       end
     end
 
@@ -169,7 +177,7 @@ RSpec.describe Course::Assessment::ProgrammingEvaluation do
           Thread.new do
             ActiveRecord::Base.connection_pool.with_connection do
               attributes = attributes_for(:course_assessment_programming_evaluation, :completed).
-                           slice(:stderr, :stdout, :test_report)
+                           slice(:stderr, :stdout, :test_report, :exit_code)
               subject.update_attributes(attributes)
             end
           end

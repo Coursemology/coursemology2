@@ -23,7 +23,7 @@ module Course::Assessment::StubbedProgrammingEvaluationService
     evaluation = Course::Assessment::ProgrammingEvaluation.find(evaluation.id)
     attributes = FactoryGirl.
                  attributes_for(:course_assessment_programming_evaluation, :completed).
-                 slice(:stdout, :stderr, :test_report)
+                 slice(:stdout, :stderr, :test_report, :exit_code)
     evaluation.assign!(User.system)
     evaluation.assign_attributes(attributes)
     evaluation.complete!
