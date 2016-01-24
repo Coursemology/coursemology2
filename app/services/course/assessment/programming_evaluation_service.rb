@@ -5,14 +5,51 @@ class Course::Assessment::ProgrammingEvaluationService
   DEFAULT_TIMEOUT = Course::Assessment::ProgrammingEvaluation::TIMEOUT
 
   # Represents a result of evaluating a package.
-  class Result
-    attr_reader :stdout, :stderr, :test_report
+  Result = Struct.new(:stdout, :stderr, :test_report, :exit_code) do
+    # Checks if the evaluation errored.
+    #
+    # This does not count failing test cases as an error, although the exit code is nonzero.
+    #
+    # @return [Boolean]
+    def error?
+      test_report.nil? && exit_code != 0
+    end
 
-    def initialize(stdout, stderr, test_report)
+    # Checks if the evaluation exceeded its time limit.
+    #
+    # This uses a Bash behaviour where the exit code of a process is 128 + signal number, if the
+    # process was terminated because of the signal.
+    #
+    # The time limit is enforced using SIGKILL.
+    #
+    # @return [Boolean]
+    def time_limit_exceeded?
+      exit_code == 128 + Signal.list['KILL']
+    end
+
+    # Obtains the exception suitable for this result.
+    def exception
+      return nil unless error?
+
+      exception_class = time_limit_exceeded? ? TimeLimitExceededError : Error
+      exception_class.new(exception_class.name, stdout, stderr)
+    end
+  end
+
+  # Represents an error while evaluating the package.
+  class Error < StandardError
+    attr_reader :stdout
+    attr_reader :stderr
+
+    def initialize(message = self.class.name, stdout = nil, stderr = nil)
+      super(message)
       @stdout = stdout
       @stderr = stderr
-      @test_report = test_report
     end
+  end
+
+  # Represents a Time Limit Exceeded error while evaluating the package.
+  class TimeLimitExceededError < Error
   end
 
   class << self
@@ -58,7 +95,7 @@ class Course::Assessment::ProgrammingEvaluationService
   def execute
     evaluation = create_evaluation
     wait_for_evaluation(evaluation)
-    Result.new(evaluation.stdout, evaluation.stderr, evaluation.test_report)
+    Result.new(evaluation.stdout, evaluation.stderr, evaluation.test_report, evaluation.exit_code)
   ensure
     evaluation.destroy! if evaluation
   end
