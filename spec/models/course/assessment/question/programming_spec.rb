@@ -3,6 +3,9 @@ require 'rails_helper'
 
 RSpec.describe Course::Assessment::Question::Programming do
   it { is_expected.to act_as(Course::Assessment::Question) }
+  it { is_expected.to validate_numericality_of(:time_limit).allow_nil }
+  it { is_expected.to validate_numericality_of(:memory_limit).allow_nil }
+
   it 'belongs to an import job' do
     expect(subject).to belong_to(:import_job).
       class_name(TrackableJob::Job.name)
