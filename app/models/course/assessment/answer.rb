@@ -77,9 +77,14 @@ class Course::Assessment::Answer < ActiveRecord::Base
   # there can be a concurrent creation of such a record across two processes, and this can only
   # be detected at the database level.
   #
+  # The additional transaction is in place because a RecordNotUnique will cause the active
+  # transaction to be considered as errored, and needing a rollback.
+  #
   # @return [Course::Assessment::Answer::AutoGrading]
   def ensure_auto_grading!
-    auto_grading || create_auto_grading!
+    ActiveRecord::Base.transaction do
+      auto_grading || create_auto_grading!
+    end
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
     raise e if e.is_a?(ActiveRecord::RecordInvalid) && e.record.errors[:answer_id].empty?
     association(:auto_grading).reload
