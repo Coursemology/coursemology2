@@ -98,6 +98,9 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.4.0)
+    after_commit_action (1.0.1)
+      activerecord (>= 3.0.0)
+      activesupport (>= 3.0.0)
     anbt-sql-formatter (0.0.3)
     arel (6.0.3)
     ast (2.2.0)
@@ -514,6 +517,7 @@ DEPENDENCIES
   active_record-acts_as!
   activerecord-userstamp (>= 3.0.2)
   acts_as_tenant!
+  after_commit_action
   autoprefixer-rails
   bootstrap-sass
   bootstrap-sass-extras!

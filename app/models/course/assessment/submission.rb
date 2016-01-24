@@ -115,6 +115,8 @@ class Course::Assessment::Submission < ActiveRecord::Base
   def auto_grade_submission
     return unless workflow_state_changed?
 
-    auto_grade!
+    execute_after_commit do
+      auto_grade!
+    end
   end
 end
