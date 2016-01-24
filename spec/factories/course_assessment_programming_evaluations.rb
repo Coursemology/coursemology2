@@ -24,7 +24,8 @@ FactoryGirl.define do
       stderr ''
       exit_code 0
       test_report File.read(File.join(Rails.root,
-                                      'spec/fixtures/course/programming_test_case_report.xml'))
+                                      'spec/fixtures/course/programming_multiple_test_suite_report'\
+                                      '.xml'))
     end
 
     trait :errored do
