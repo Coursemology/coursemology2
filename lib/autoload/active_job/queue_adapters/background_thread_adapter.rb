@@ -10,11 +10,13 @@
 class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapters::InlineAdapter
   class << self
     def enqueue(job) #:nodoc:
-      Thread.new do
+      thread = Thread.new do
         ActiveRecord::Base.connection_pool.with_connection do
           ActiveJob::Base.execute(job.serialize)
         end
       end
+
+      thread.abort_on_exception = true
     end
   end
 end

@@ -68,6 +68,10 @@ RSpec.describe TrackableJob do
     it 'is persisted to the database' do
       expect(TrackableJob::Job.find(subject.job_id)).to eq(subject.job)
     end
+
+    it 'only creates one job' do
+      expect { subject }.to change { TrackableJob::Job.count }.by(1)
+    end
   end
 
   context 'when the job is completed' do
@@ -118,10 +122,12 @@ RSpec.describe TrackableJob do
   end
 
   describe '#perform_tracked' do
-    subject { self.class::NoOpJob.perform_later }
+    with_active_job_queue_adapter(:inline) do
+      subject { self.class::NoOpJob.perform_later }
 
-    it 'fails with NotImplementedError' do
-      expect { subject.send(:perform_tracked) }.to raise_error(NotImplementedError)
+      it 'fails with NotImplementedError' do
+        expect { subject.send(:perform_tracked) }.to raise_error(NotImplementedError)
+      end
     end
   end
 

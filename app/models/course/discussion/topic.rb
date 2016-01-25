@@ -16,10 +16,15 @@ class Course::Discussion::Topic < ActiveRecord::Base
 
   # Create subscription for a user
   #
+  # The additional transaction is in place because a RecordNotUnique will cause the active
+  # transaction to be considered as errored, and needing a rollback.
+  #
   # @param [User] user The user who needs to subscribe to this topic
   def ensure_subscribed_by(user)
     return true if self.subscribed_by?(user)
-    subscriptions.build(user: user).save!
+    ActiveRecord::Base.transaction do
+      subscriptions.build(user: user).save!
+    end
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
     return true if e.is_a?(ActiveRecord::RecordInvalid) &&
                    e.record.errors[:topic_id].any? && e.record.errors[:user_id].any?

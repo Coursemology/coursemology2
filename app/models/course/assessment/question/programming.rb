@@ -5,7 +5,6 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
   acts_as :question, class_name: Course::Assessment::Question.name
 
   after_save :process_new_package, if: :attachment_changed?
-  after_commit :save, if: :import_job_id_changed?
 
   validates :memory_limit, :time_limit, numericality: { greater_then: 0 }
 
@@ -41,7 +40,10 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
 
   # Queues the new question package for processing.
   def process_new_package
-    self.import_job_id =
-      Course::Assessment::Question::ProgrammingImportJob.perform_later(self, attachment).job_id
+    execute_after_commit do
+      import_job =
+        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, attachment)
+      update(import_job_id: import_job.job_id)
+    end
   end
 end
