@@ -2,4 +2,4 @@
 h2 = format_inline_text(question.title)
 = format_html(question.description)
 = f.association :options, as: :check_boxes, collection: question.options,
-                          label_method: :option, label: false
+                          label_method: :option, label: false, disabled: !f.object.attempting?

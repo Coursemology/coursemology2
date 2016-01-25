@@ -2,3 +2,14 @@ nav
   ul.pagination
     - (1..@assessment.questions.length).each do |i|
       li = link_to i, [:edit, current_course, @assessment, @submission, step: i], class: ['btn', 'btn-default']
+
+= simple_form_for [current_course, @assessment, @submission] do |f|
+  = f.error_notification
+  = f.simple_fields_for :answers, @submission.answers.where(question: @questions_to_attempt).last do |base_answer_form|
+    = content_tag_for(:div, base_answer_form.object) do
+      = render partial: 'course/assessment/answer/answer', object: base_answer_form.object,
+               locals: { base_answer_form: base_answer_form }
+      - if base_answer_form.object.attempting?
+        = f.hidden_field :answer_id, value: base_answer_form.object.id
+        = f.button :submit, t('common.save')
+        = f.button :submit, t('.submit'), name: 'submit_answer', class: ['btn-danger']
