@@ -586,7 +586,6 @@ DEPENDENCIES
   simplecov
   slim-rails
   spring
-  sprockets-rails (~> 2.0)
   squeel
   themes_on_rails (>= 0.3.1)
   traceroute

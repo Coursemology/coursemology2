@@ -57,10 +57,7 @@ RSpec.describe Course::Assessment::Question do
       end
 
       context 'when the question is polymorphic' do
-        let(:question) do
-          # Force the creation of the superclass object, see hzamani/active_record-acts_as#55
-          self.class::TestPolymorphicQuestion.new.tap(&:actable)
-        end
+        let(:question) { self.class::TestPolymorphicQuestion.new }
         subject { question.question }
 
         it "calls the polymorphic object's methods" do
