@@ -39,9 +39,10 @@ class Course::Assessment::Answer < ActiveRecord::Base
     fail ArgumentError unless question.auto_gradable?
     fail IllegalStateError if attempting?
 
-    self.class.transaction do
-      ensure_auto_grading!
-      create_and_queue_auto_grading
+    ensure_auto_grading!
+    Course::Assessment::Answer::AutoGradingJob.perform_later(auto_grading).tap do |job|
+      auto_grading.job_id = job.job_id
+      save!
     end
   end
 
@@ -89,17 +90,5 @@ class Course::Assessment::Answer < ActiveRecord::Base
     raise e if e.is_a?(ActiveRecord::RecordInvalid) && e.record.errors[:answer_id].empty?
     association(:auto_grading).reload
     auto_grading
-  end
-
-  # Creates a new auto grading record, and enqueues the job.
-  #
-  # @return [Course::Assessment::Answer::AutoGradingJob] The job instance.
-  def create_and_queue_auto_grading
-    Course::Assessment::Answer::AutoGradingJob.new(auto_grading).tap do |job|
-      auto_grading.assign_attributes(job_id: job.job_id)
-
-      save!
-      job.enqueue
-    end
   end
 end
