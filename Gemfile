@@ -12,7 +12,7 @@ gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 gem 'bundler', '>= 1.10.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.1'
+gem 'rails', '~> 4.2.5.1'
 gem 'sprockets-rails', '~> 2.0' # Until ai/jquery-cdn#2 is fixed.
 
 # Use PostgreSQL for the backend
@@ -185,3 +185,5 @@ gem 'coursemology-polyglot', '>= 0.0.2'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+
+gem 'rails-html-sanitizer', '~> 1.0.3'
