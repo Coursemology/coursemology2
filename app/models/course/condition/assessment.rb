@@ -24,7 +24,7 @@ class Course::Condition::Assessment < ActiveRecord::Base
   def satisfied_by?(course_user)
     user = course_user.user
 
-    if minimum_grade_percentage
+    if minimum_grade_percentage && assessment.maximum_grade
       minimum_grade = assessment.maximum_grade * minimum_grade_percentage / 100.0
       graded_submissions_with_minimum_grade(user, minimum_grade).exists?
     else
