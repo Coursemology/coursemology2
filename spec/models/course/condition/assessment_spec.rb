@@ -111,57 +111,74 @@ RSpec.describe Course::Condition::Assessment, type: :model do
       end
 
       context 'when there is minimum grade percentage' do
-        subject do
-          condition = create(:course_condition_assessment, minimum_grade_percentage: 60)
-          condition.assessment = assessment
-          condition
-        end
-        # This submission is graded but its grade is below the minimum grade percentage to satisfy
-        # the condition.
-        let(:below_minimum_grade_submission) do
-          submission = create(:submission, workflow_state: :graded, assessment: assessment,
-                                           user: course_user.user)
-          answers = assessment.questions.attempt(submission)
-          answers.each do |answer|
-            answer.finalise!
-            answer.grade = 0
-            answer.save!
-          end
-          submission
-        end
-        let(:submission) do
-          create(:submission, workflow_state: :graded, assessment: assessment,
-                              user: course_user.user)
+        let(:condition) do
+          create(:course_condition_assessment, minimum_grade_percentage: 60)
         end
 
-        before do
-          submission
-          below_minimum_grade_submission
-        end
-
-        context 'when all graded submissions are below the minimum grade percentage' do
-          it 'returns false' do
-            answers = assessment.questions.attempt(submission)
-            answers.each do |answer|
-              answer.finalise!
-              answer.grade = 5
-              answer.save!
+        context 'when there is no maximum grade for the assessment' do
+          context 'when the submission is not graded' do
+            it 'returns false' do
+              new_assessment = create(:assessment)
+              condition.assessment = new_assessment
+              create(:submission, workflow_state: :attempting, assessment: new_assessment,
+                                  user: course_user.user)
+              expect(condition.satisfied_by?(course_user)).to be_falsey
             end
-
-            expect(subject.satisfied_by?(course_user)).to be_falsey
           end
         end
 
-        context 'when at least one submission is at least the minimum grade percentage' do
-          it 'returns true' do
+        context 'when there is maximum grade for the assessment' do
+          subject do
+            condition.assessment = assessment
+            condition
+          end
+          # This submission is graded but its grade is below the minimum grade percentage to satisfy
+          # the condition.
+          let(:below_minimum_grade_submission) do
+            submission = create(:submission, workflow_state: :graded, assessment: assessment,
+                                             user: course_user.user)
             answers = assessment.questions.attempt(submission)
             answers.each do |answer|
               answer.finalise!
-              answer.grade = 6
+              answer.grade = 0
               answer.save!
             end
+            submission
+          end
+          let(:submission) do
+            create(:submission, workflow_state: :graded, assessment: assessment,
+                                user: course_user.user)
+          end
 
-            expect(subject.satisfied_by?(course_user)).to be_truthy
+          before do
+            submission
+            below_minimum_grade_submission
+          end
+
+          context 'when all graded submissions are below the minimum grade percentage' do
+            it 'returns false' do
+              answers = assessment.questions.attempt(submission)
+              answers.each do |answer|
+                answer.finalise!
+                answer.grade = 5
+                answer.save!
+              end
+
+              expect(subject.satisfied_by?(course_user)).to be_falsey
+            end
+          end
+
+          context 'when at least one submission is at least the minimum grade percentage' do
+            it 'returns true' do
+              answers = assessment.questions.attempt(submission)
+              answers.each do |answer|
+                answer.finalise!
+                answer.grade = 6
+                answer.save!
+              end
+
+              expect(subject.satisfied_by?(course_user)).to be_truthy
+            end
           end
         end
       end
