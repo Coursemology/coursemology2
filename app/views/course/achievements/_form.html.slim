@@ -5,6 +5,10 @@
 
   = f.input :description
 
+  = f.label t('.badge')
+  div = display_achievement_badge(@achievement, size: :small)
+  = f.file_field :badge, class: 'upload-btn'
+
   = f.input :draft
 
   - if @achievement.persisted?
