@@ -1,5 +1,6 @@
 class Course::Achievement < ActiveRecord::Base
   acts_as_conditional
+  mount_uploader :badge, AchievementBadgeUploader
 
   after_initialize :set_defaults, if: :new_record?
 
