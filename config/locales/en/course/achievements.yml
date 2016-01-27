@@ -7,6 +7,7 @@ en:
         header: 'Achievements'
         description: 'Description'
         requirements: 'Requirements'
+        badge: 'Badge'
       new:
         header: 'New Achievement'
       create:
@@ -18,3 +19,5 @@ en:
       destroy:
         success: 'Achievement %{title} was deleted.'
         failure: 'Failed to delete achievement: %{error}'
+      form:
+        badge: :'course.achievements.index.badge'

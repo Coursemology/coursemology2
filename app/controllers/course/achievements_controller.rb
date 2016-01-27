@@ -43,6 +43,6 @@ class Course::AchievementsController < Course::ComponentController
   private
 
   def achievement_params #:nodoc:
-    params.require(:achievement).permit(:title, :description, :weight, :draft)
+    params.require(:achievement).permit(:title, :description, :weight, :draft, :badge)
   end
 end
