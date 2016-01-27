@@ -52,6 +52,11 @@ class Course::Assessment < ActiveRecord::Base
     end
   end)
 
+  def satisfy_conditions
+    # Satisfying an assessment conditional does not satisfy any new conditions
+    nil
+  end
+
   def self.use_relative_model_naming?
     true
   end

@@ -31,12 +31,23 @@ module Extensions::Conditional::ActiveRecord::Base
     def conditions_satisfied_by?(course_user)
       conditions.all? { |condition| condition.satisfied_by?(course_user) }
     end
+
+    # @return [Array<Condition] Conditions that are satisfied when this conditional is resolved
+    def satisfy_conditions
+      fail NotImplementedError
+    end
   end
 
   module ConditionInstanceMethods
     # A human-readable name for each condition; usually just wraps a title
     # or name field. Meant to be used in a polymorphic manner for views.
     def title
+      fail NotImplementedError
+    end
+
+    # @return [Array<Object] Conditional objects that the condition depends on to check
+    #   if it is satisfiable
+    def dependent_objects
       fail NotImplementedError
     end
 

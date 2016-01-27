@@ -8,6 +8,10 @@ class Course::Condition::Achievement < ActiveRecord::Base
 
   delegate :title, to: :achievement
 
+  def dependent_objects
+    [achievement]
+  end
+
   # Checks if the user has the required achievement.
   #
   # @param [CourseUser] course_user The user that the achievement condition is being checked on. The
