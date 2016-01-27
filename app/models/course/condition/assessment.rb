@@ -9,6 +9,8 @@ class Course::Condition::Assessment < ActiveRecord::Base
 
   validate :validate_assessment_condition, if: :assessment_id_changed?
 
+  alias_method :dependent_object, :assessment
+
   def title
     if minimum_grade_percentage
       minimum_grade_percentage_display = number_to_percentage(minimum_grade_percentage,
@@ -25,7 +27,7 @@ class Course::Condition::Assessment < ActiveRecord::Base
   def satisfied_by?(course_user)
     user = course_user.user
 
-    if minimum_grade_percentage && assessment.maximum_grade
+    if minimum_grade_percentage
       minimum_grade = assessment.maximum_grade * minimum_grade_percentage / 100.0
       graded_submissions_with_minimum_grade(user, minimum_grade).exists?
     else

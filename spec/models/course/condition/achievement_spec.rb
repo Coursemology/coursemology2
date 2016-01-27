@@ -86,6 +86,12 @@ RSpec.describe Course::Condition::Achievement, type: :model do
       end
     end
 
+    describe '#dependent_object' do
+      it 'returns the correct dependent achievement object' do
+        expect(subject.dependent_object).to eq(subject.achievement)
+      end
+    end
+
     describe '.dependent_class' do
       it 'returns Course::Achievement' do
         expect(Course::Condition::Achievement.dependent_class).to eq(Course::Achievement.name)

@@ -41,6 +41,12 @@ module Extensions::Conditional::ActiveRecord::Base
       fail NotImplementedError
     end
 
+    # @return [Object] Conditional object that the condition depends on to check if it is
+    #   satisfiable
+    def dependent_object
+      fail NotImplementedError
+    end
+
     # Checks if the condition is satisfied by the user.
     #
     # @param [CourseUser] _user The user that the condition is being checked on
