@@ -58,7 +58,11 @@ RSpec.describe ApplicationFormattersHelper do
       subject { helper.display_user_image(user) }
 
       context 'when the user has a profile photo' do
-        it { is_expected.to include('user_silhouette.svg') }
+        it 'has an image tag' do
+          expect(subject).to have_tag('img', with: {
+            :'src^' => '/assets/user_silhouette-'
+          })
+        end
       end
 
       context "when the user doesn't have a profile photo" do

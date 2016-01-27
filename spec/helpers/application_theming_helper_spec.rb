@@ -4,17 +4,17 @@ RSpec.describe ApplicationThemingHelper, type: :helper do
   describe '#application_resources' do
     subject { helper.application_resources }
 
-    it { should be_html_safe }
+    it { is_expected.to be_html_safe }
 
     it 'has application.js' do
       expect(subject).to have_tag('script', with: {
-        src: '/assets/application.js'
+        :'src^' => '/assets/application-'
       })
     end
 
     it 'has jquery' do
       expect(subject).to have_tag('script', with: {
-        src: '/assets/jquery.js'
+        :'src^' => '/assets/jquery-'
       })
     end
   end
