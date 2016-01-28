@@ -1,9 +1,5 @@
 source 'https://rubygems.org'
 
-source 'https://rails-assets.org' do
-  gem 'rails-assets-jquery-ujs'
-end
-
 # For Windows devs
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
@@ -53,6 +49,7 @@ gem 'uglifier', '>= 1.3.0'
 
 # Use jQuery as the JavaScript library
 gem 'jquery-cdn'
+gem 'jquery-rails'
 gem 'jquery-ui-rails'
 # Our Coursemology will be themed using Bootstrap
 gem 'bootstrap-sass'
