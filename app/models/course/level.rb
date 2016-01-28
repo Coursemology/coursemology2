@@ -50,4 +50,13 @@ class Course::Level < ActiveRecord::Base
     @next if defined? @next
     @next = course.levels.find_nth(level_number + 1, 0)
   end
+
+  # Returns the experience_points_threshold of the next level. If current level is highest
+  # the current experience_points_threshold will be returned.
+  #
+  # @return [Fixnum] The experience_points_threshold of the next level, or threshold of current
+  # level if current level is the highest.
+  def next_level_threshold
+    self.next ? self.next.experience_points_threshold : experience_points_threshold
+  end
 end
