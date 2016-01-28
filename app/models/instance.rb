@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Instance < ActiveRecord::Base
   DEFAULT_HOST_NAME = '*'
 

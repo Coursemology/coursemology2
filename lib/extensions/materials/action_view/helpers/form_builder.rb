@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::Materials::ActionView::Helpers::FormBuilder
   # Hepler to support f.folder in form
   def folder

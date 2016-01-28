@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Notifier::Base::ActivityWrapper < SimpleDelegator
   # Send notifications according to input type and recipient
   #

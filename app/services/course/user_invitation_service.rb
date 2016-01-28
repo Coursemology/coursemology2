@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'csv'
 
 # Provides a service object for inviting users into a course.

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Question::MultipleResponse < ActiveRecord::Base
   acts_as :question, class_name: Course::Assessment::Question.name
 

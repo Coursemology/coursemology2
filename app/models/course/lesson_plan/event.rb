@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::LessonPlan::Event < ActiveRecord::Base
   acts_as_lesson_plan_item
 

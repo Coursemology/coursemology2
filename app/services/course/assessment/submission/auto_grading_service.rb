@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Submission::AutoGradingService
   class << self
     # Grades into the given submission.

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module UserAuthenticationConcern
   extend ActiveSupport::Concern
   include Devise::SignInCallbacks

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # This is a mix-in that allows jobs to be trackable. Trackable jobs can be queried at /jobs/<id>.
 # A client requesting HTML would see a progress bar; a client requesting JSON will get a status
 # message. When the job is complete, the trackable job can specify a path to redirect the user to.

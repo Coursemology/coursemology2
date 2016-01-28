@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class FilenameValidator < ActiveModel::Validator
   def validate(record)
     errors = record.errors[:name]

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class System::Admin::Instance::Controller < ApplicationController
   layout 'system_admin_instance'
   before_action :load_instance

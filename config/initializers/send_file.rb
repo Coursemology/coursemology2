@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 public_download_dir = File.join(Rails.public_path, Application.config.x.public_download_folder)
 
 if Rails.env.development? || Rails.env.test?

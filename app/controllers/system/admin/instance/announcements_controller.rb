@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class System::Admin::Instance::AnnouncementsController < System::Admin::Instance::Controller
   load_and_authorize_resource :announcement, through: :current_tenant, parent: false,
                                              class: ::Instance::Announcement.name

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateFolderForCategoriesAndAssessments < ActiveRecord::Migration
   def up
     # Create folders for categories

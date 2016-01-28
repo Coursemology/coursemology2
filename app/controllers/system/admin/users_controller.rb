@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class System::Admin::UsersController < System::Admin::Controller
   load_and_authorize_resource :user, class: User.name
   add_breadcrumb :index, :admin_users_path

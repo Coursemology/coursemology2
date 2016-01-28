@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateCourseLessonPlanMilestones < ActiveRecord::Migration
   def change
     create_table :course_lesson_plan_milestones do |t|

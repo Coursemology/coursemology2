@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Answer::AutoGradingService
   class << self
     # Picks the grader for the given grading, then grades into the given

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :course_experience_points_record, class: Course::ExperiencePointsRecord.name do
     transient do

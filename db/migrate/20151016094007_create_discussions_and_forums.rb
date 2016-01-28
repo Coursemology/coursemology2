@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateDiscussionsAndForums < ActiveRecord::Migration
   def change
     create_table :course_discussion_topics do |t|

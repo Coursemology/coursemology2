@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::UserRegistrationsController < Course::ComponentController
   before_action :ensure_unregistered_user, only: [:create]
   before_action :authorize_register!

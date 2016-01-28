@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.configure do |config|
   config.before(:suite) do
     OmniAuth.configure do |omniauth_config|

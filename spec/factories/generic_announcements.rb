@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :generic_announcement, class: System::Announcement.name do
     sequence(:title) { |n| "Announcement #{n}" }

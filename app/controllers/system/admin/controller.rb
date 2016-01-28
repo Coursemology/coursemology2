@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class System::Admin::Controller < ApplicationController
   layout 'system_admin'
   before_action :authorize_admin

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::RenderWithinLayout::ActionView::Helpers::RenderingHelper
   def self.included(module_)
     module_.alias_method_chain :render, :within_layout

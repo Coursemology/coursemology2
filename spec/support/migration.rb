@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Test group helpers for creating tables.
 module ActiveRecord::Migration::TestGroupHelpers
   # Defines a temporary table that is instantiated when needed, within a `with_temporary_table`

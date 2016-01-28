@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Helpers for formatting objects/values on the application.
 module ApplicationFormattersHelper
   include ApplicationHTMLFormattersHelper

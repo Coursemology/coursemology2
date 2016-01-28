@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Group < ActiveRecord::Base
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?

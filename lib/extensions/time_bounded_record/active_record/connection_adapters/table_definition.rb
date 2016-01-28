@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::TimeBoundedRecord::ActiveRecord::ConnectionAdapters::TableDefinition
   # Enforces a date range for the given table.
   #

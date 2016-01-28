@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class User::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
   layout :select_layout

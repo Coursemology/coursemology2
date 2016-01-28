@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Forum::TopicsController < Course::Forum::ComponentController
   include Course::Forum::TopicControllerHidingConcern
   include Course::Forum::TopicControllerLockingConcern

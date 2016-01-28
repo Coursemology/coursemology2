@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :course_assessment_answer, class: Course::Assessment::Answer do
     transient do

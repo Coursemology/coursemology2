@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :omniauth_provider, class: OmniAuth::AuthHash.name do
     transient do

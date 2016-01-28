@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Course::LessonPlan::ItemsHelper
   def milestone_period_class(item)
     'past' if item.start_at < Time.zone.now

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddFieldsToCourseLessonPlanItem < ActiveRecord::Migration
   def change
     add_column :course_lesson_plan_items,

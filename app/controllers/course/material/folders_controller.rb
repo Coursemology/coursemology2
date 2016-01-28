@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Material::FoldersController < Course::Material::Controller
   def show
   end

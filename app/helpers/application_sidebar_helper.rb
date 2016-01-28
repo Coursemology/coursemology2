@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Helpers for displaying sidebars in pages.
 module ApplicationSidebarHelper
   # Checks if the current page has a sidebar.

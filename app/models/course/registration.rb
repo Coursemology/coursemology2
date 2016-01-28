@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Registration
   include ActiveModel::Model
   extend ActiveModel::Naming

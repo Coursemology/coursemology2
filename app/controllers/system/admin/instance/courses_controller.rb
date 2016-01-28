@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class System::Admin::Instance::CoursesController < System::Admin::Instance::Controller
   load_and_authorize_resource :course, through: :instance
 

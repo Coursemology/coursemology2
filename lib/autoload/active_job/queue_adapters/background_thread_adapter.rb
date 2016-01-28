@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # == Active Job Background Thread adapter
 #
 # When enqueueing jobs with the Background Thread adapter the job will be executed in a

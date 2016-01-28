@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Announcement < ActiveRecord::Base
   acts_as_readable on: :updated_at
 

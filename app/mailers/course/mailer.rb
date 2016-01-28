@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # The mailer for course emails.
 class Course::Mailer < ApplicationMailer
   # Sends an invitation email for the given invitation.

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 task :stats => 'coursemology:stats_setup'
 
 namespace :coursemology do

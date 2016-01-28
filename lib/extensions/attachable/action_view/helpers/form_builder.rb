@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::Attachable::ActionView::Helpers::FormBuilder
   # Method from ActsAsAttachable framework.
   # Hepler to support f.attachments in form

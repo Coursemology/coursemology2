@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RenameValidFromToStartEndAt < ActiveRecord::Migration
   def change
     rename_column :course_announcements, :valid_from, :start_at

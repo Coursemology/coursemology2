@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddCourseAssessmentLogic < ActiveRecord::Migration
   def change
     add_column :course_assessment_submissions, :workflow_state, :string, null: false

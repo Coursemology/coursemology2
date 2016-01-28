@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::AssociationInverseSuppression::ActiveRecord::Base
   module ClassMethods
     def add_userstamp_associations(options)

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::Conditional::ActiveRecord::Base
   module ClassMethods
     # Functions from conditional-and-condition framework.

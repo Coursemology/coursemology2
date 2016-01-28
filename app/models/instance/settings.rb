@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Provides an adapter for configuration settings as a resource for use with controllers and views.
 class Instance::Settings
   include SettingsConcern

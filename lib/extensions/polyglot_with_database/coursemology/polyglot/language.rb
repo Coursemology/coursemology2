@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # This extends +Coursemology::Polyglot::Language+ to support integration into a database.
 #
 # Each concrete language has a unique +Polyglot::Language.instance+ which is internally called the

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class System::Admin::CoursesController < System::Admin::Controller
   around_action :unscope_resources
   add_breadcrumb :index, :admin_courses_path

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddSubmissionGradingStatistics < ActiveRecord::Migration
   def up
     change_table :course_assessment_answers do |t|

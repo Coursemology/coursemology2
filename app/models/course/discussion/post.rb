@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Discussion::Post < ActiveRecord::Base
   acts_as_forest order: :created_at
 

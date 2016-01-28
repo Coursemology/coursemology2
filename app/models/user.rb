@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Represents a user in the application. Users are shared across all instances.
 class User < ActiveRecord::Base
   SYSTEM_USER_ID = 0

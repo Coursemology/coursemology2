@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::LevelsController < Course::ComponentController
   before_action :load_levels, only: [:index]
   load_and_authorize_resource :level, through: :course, class: Course::Level.name

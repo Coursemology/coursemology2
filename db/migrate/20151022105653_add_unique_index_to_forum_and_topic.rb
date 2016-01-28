@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddUniqueIndexToForumAndTopic < ActiveRecord::Migration
   def change
     remove_index :course_forums, column: :slug

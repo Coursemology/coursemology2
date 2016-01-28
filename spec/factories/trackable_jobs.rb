@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :trackable_job, class: TrackableJob::Job do
     id { SecureRandom.uuid }

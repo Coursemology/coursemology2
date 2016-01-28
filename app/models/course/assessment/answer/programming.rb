@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Answer::Programming < ActiveRecord::Base
   # The table name for this model is singular.
   self.table_name = table_name.singularize

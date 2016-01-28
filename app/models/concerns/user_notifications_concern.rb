@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module UserNotificationsConcern
   # Get user's unread notifications
   def unread

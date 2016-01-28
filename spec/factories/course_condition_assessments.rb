@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :course_condition_assessment,
           class: Course::Condition::Assessment.name, aliases: [:assessment_condition] do

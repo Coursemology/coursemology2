@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class LinkCourseAssessmentAnswerAutoGradingToJobs < ActiveRecord::Migration
   def change
     remove_column :course_assessment_answer_auto_gradings, :status, :integer,

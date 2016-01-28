@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Represents a programming package, containing the tests and submitted code for a given question.
 #
 # A package has these files at the very minimum:

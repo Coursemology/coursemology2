@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ApplicationHTMLFormattersHelper
   # The default pipeline, used by both text and HTML pipelines.
   DefaultPipeline = HTML::Pipeline.new([

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class User::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def facebook
     if user_signed_in?
