@@ -22,7 +22,7 @@ class Course::Discussion::Topic < ActiveRecord::Base
   # @param [User] user The user who needs to subscribe to this topic
   def ensure_subscribed_by(user)
     return true if self.subscribed_by?(user)
-    ActiveRecord::Base.transaction do
+    ActiveRecord::Base.transaction(requires_new: true) do
       subscriptions.build(user: user).save!
     end
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e

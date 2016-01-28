@@ -22,7 +22,7 @@ before_script:
 script:
   - bundle exec consistency_fail
   - bundle exec i18n-tasks health
-  - bundle exec rspec spec --format documentation
+  - bundle exec rake spec
 
 notifications:
   slack:
