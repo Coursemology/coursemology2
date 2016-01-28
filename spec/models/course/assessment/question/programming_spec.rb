@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Question::Programming do
-  it { is_expected.to act_as(:question) }
+  it { is_expected.to act_as(Course::Assessment::Question) }
   it 'belongs to an import job' do
     expect(subject).to belong_to(:import_job).
       class_name(TrackableJob::Job.name)
