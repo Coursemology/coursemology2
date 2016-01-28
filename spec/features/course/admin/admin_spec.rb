@@ -19,6 +19,12 @@ RSpec.feature 'Course: Administration: Administration' do
         expect(page).to have_selector('li', text: 'layouts.course_admin.title')
       end
 
+      scenario 'I can view the course settings page' do
+        visit course_admin_path(course)
+
+        expect(page).to have_selector('h1', text: 'layouts.course_admin.title')
+      end
+
       scenario 'I can change the course attributes' do
         visit course_admin_path(course)
 
