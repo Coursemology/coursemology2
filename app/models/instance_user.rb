@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class InstanceUser < ActiveRecord::Base
   include InstanceUserSearchConcern
   acts_as_tenant :instance, inverse_of: :instance_users

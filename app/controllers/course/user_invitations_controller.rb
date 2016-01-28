@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::UserInvitationsController < Course::ComponentController
   before_action :authorize_invitation!
   add_breadcrumb :index, :course_users_students_path

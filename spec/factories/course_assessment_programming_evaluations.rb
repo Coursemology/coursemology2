@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :course_assessment_programming_evaluation,
           class: Course::Assessment::ProgrammingEvaluation do

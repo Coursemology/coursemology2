@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ApplicationNotificationsHelper
   # Returns the view path of the notification
   #

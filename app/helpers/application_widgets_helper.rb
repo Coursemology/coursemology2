@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ApplicationWidgetsHelper
   # Create a +new+ button.
   #

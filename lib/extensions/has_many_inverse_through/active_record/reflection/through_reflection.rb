@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::HasManyInverseThrough::ActiveRecord::Reflection::ThroughReflection
   module PrependMethods
     def self.prepended(module_)

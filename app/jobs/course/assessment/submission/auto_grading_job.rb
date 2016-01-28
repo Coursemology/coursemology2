@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Submission::AutoGradingJob < ApplicationJob
   include TrackableJob
   include Rails.application.routes.url_helpers

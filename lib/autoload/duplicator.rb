@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Duplicator
   # Create an instance of Duplicator to track duplicated objects.
   #

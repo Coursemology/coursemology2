@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Imports the provided programming package into the question. This evaluates the package to
 # obtain the set of tests, as well as extracts the templates from the package to be stored
 # together with the question.

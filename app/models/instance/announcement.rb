@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Instance::Announcement < GenericAnnouncement
   acts_as_tenant :instance, inverse_of: :announcements
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Sets up a programming evaluation, queues it for execution by evaluators, then returns the results.
 class Course::Assessment::ProgrammingEvaluationService
   # The default timeout for the job to finish.

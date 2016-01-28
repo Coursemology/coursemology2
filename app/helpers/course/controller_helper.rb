@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Course::ControllerHelper
   # Formats the given +CourseUser+ as a user-visible string.
   #

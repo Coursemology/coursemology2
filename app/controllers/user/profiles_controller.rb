@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class User::ProfilesController < ApplicationController
   layout 'user_admin'
 

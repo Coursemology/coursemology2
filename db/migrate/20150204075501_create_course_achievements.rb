@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateCourseAchievements < ActiveRecord::Migration
   def change
     create_table :course_achievements do |t|

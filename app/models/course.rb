@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course < ActiveRecord::Base
   include Course::LevelsConcern
   include Course::LessonPlanConcern

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::FormForWithResource::ActionView::Helpers::FormHelper
   class << self
     def included(module_)

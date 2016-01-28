@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Answer < ActiveRecord::Base
   include Workflow
   actable

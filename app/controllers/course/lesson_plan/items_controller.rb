@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::LessonPlan::ItemsController < Course::ComponentController
   before_action :load_lesson_plan_items, only: [:index]
   # This can only be done with Bullet once Rails supports polymorphic +inverse_of+.

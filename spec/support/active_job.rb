@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ActiveJob::TestGroupHelpers
   def self.with_active_job_queue_adapter_method(adapter = :test)
     proc { |example| ActiveJob::TestGroupHelpers.with_active_job_queue_adapter(example, adapter) }

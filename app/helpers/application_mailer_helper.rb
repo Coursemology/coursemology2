@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Helpers for use in mailers.
 module ApplicationMailerHelper
   # Creates a plain text link.

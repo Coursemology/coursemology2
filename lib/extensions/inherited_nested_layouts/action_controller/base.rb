@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::InheritedNestedLayouts::ActionController::Base
   # Gets the current layout used by this controller.
   #

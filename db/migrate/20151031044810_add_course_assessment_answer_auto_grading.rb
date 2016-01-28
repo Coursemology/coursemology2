@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddCourseAssessmentAnswerAutoGrading < ActiveRecord::Migration
   def change
     create_table :course_assessment_answer_auto_gradings do |t|

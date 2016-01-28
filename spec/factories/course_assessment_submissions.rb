@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :course_assessment_submission, class: Course::Assessment::Submission,
                                          parent: :course_experience_points_record,

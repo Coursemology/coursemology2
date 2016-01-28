@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module CarrierWave::TestGroupHelpers
   module BaseClassMethods
     def inherited(class_)

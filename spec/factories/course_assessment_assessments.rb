@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   sequence(:course_assessment_assessment_name) { |n| "Assessment #{n}" }
   factory :course_assessment_assessment, class: Course::Assessment, aliases: [:assessment],

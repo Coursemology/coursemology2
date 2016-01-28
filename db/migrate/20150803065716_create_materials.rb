@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateMaterials < ActiveRecord::Migration
   def change
     create_table :course_material_folders do |t|

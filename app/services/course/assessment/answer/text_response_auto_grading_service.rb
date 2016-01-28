@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Answer::TextResponseAutoGradingService < \
   Course::Assessment::Answer::AutoGradingService
   def grade(auto_grading)

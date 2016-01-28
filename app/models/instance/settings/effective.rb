@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Instance::Settings::Effective < Instance::Settings
   include EffectiveSettingsConcern
 

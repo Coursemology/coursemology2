@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreatePolyglotLanguages < ActiveRecord::Migration
   def change
     create_table :polyglot_languages do |t|

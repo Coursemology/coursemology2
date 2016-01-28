@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Achievement < ActiveRecord::Base
   acts_as_conditional
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module SendFile
   # Makes the given file publicly accessible.
   #

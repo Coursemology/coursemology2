@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Test helpers for ApplicationMailer
 module ApplicationMailer::TestGroupHelpers
   # prepend template path '../fixtures/' in ApplicationMailer

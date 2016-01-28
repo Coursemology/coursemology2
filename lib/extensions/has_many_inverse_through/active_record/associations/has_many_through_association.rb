@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::HasManyInverseThrough::ActiveRecord::Associations::HasManyThroughAssociation
   module PrependMethods
     def build_through_record(record)

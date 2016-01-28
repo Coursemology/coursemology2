@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # The course level notification. This is meant to be called by the Notifications Framework
 #
 # @api notifications

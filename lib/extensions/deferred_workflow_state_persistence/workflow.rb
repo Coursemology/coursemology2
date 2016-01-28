@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::DeferredWorkflowStatePersistence::Workflow; end
 module Extensions::DeferredWorkflowStatePersistence::Workflow::Adapter; end
 module Extensions::DeferredWorkflowStatePersistence::Workflow::Adapter::DeferredActiveRecord

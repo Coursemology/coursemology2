@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'capybara/poltergeist'
 
 # Adds extra matchers for Capybara

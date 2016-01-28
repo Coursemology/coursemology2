@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Allows associating classes with other classes. This can form a nesting hierarchy. This is also
 # used in Coursemology to associate components that a course can have enabled.
 #

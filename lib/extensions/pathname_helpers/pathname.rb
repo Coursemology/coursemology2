@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::PathnameHelpers::Pathname
   module ClassMethods
     # Normalizes the filename.

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :course_lesson_plan_item, class: Course::LessonPlan::Item.name do
     course

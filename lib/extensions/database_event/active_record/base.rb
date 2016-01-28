@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::DatabaseEvent::ActiveRecord::Base
   module ClassMethods
     # Waits for the given +NOTIFY+ signal, optionally until a given time, or until a specific

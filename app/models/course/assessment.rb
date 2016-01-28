@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Represents an assessment in Coursemology, as well as the enclosing module for associated models.
 #
 # An assessment is a collection of questions that can be asked.

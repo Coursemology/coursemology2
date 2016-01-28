@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CourseUser < ActiveRecord::Base
   include Workflow
   after_initialize :set_defaults, if: :new_record?

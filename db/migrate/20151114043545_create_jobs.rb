@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateJobs < ActiveRecord::Migration
   def change
     enable_extension 'uuid-ossp'

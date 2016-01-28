@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class System::Admin::AnnouncementsController < System::Admin::Controller
   load_and_authorize_resource :announcement, class: System::Announcement.name
   add_breadcrumb :index, :admin_announcements_path

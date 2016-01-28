@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::UserInvitation < ActiveRecord::Base
   after_initialize :generate_invitation_key, if: :new_record?
 

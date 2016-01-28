@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Forum::PostsController < Course::Forum::Controller
   before_action :load_topic
   authorize_resource :topic

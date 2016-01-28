@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Test group helpers for killing N+1 queries.
 module Bullet::TestGroupHelpers
   def self.extended(group)

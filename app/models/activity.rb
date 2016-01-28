@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # The object which represents the user's activity. This is meant to be called by the Notifications
 # Framework
 #

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Material::MaterialsController < Course::Material::Controller
   load_and_authorize_resource :material, through: :folder, class: Course::Material.name
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Material::ZipDownloadService
   class << self
     # Downloads the materials and zip them.
