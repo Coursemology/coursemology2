@@ -47,4 +47,13 @@ module Course::ControllerHelper
       super(user, options, &block)
     end
   end
+
+  # Display the course_user_badge given the course_user
+  #
+  # @param [CourseUser] course_user The CourseUser for which the badge is to be displayed
+  # @return [String] HTML string to render the course_user_badge
+  def display_course_user_badge(course_user)
+    render partial: 'layouts/course_user_badge',
+           locals: { course_user: course_user }
+  end
 end
