@@ -63,7 +63,7 @@ RSpec.describe Course::Assessment::Question::Programming do
         subject.template_files.each do |template_file|
           matching_answer_file = answer.files.find do |answer_file|
             answer_file.filename == template_file.filename &&
-            answer_file.content == template_file.content
+              answer_file.content == template_file.content
           end
           expect(matching_answer_file).not_to be_nil
         end

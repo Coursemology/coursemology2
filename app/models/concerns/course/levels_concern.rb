@@ -32,7 +32,7 @@ module Course::LevelsConcern
 
   # Test if the course has a default level.
   # @return [Boolean] True if there is a default level, otherwise false.
-  def has_default_level?
+  def default_level?
     levels.any?(&:default_level?)
   end
 end

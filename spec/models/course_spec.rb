@@ -197,9 +197,9 @@ RSpec.describe Course, type: :model do
       end
     end
 
-    describe '#has_root_folder?' do
+    describe '#root_folder?' do
       let(:course) { build(:course) }
-      subject { course.has_root_folder? }
+      subject { course.root_folder? }
 
       context 'when course is a new record' do
         it { is_expected.to be_truthy }
@@ -222,9 +222,9 @@ RSpec.describe Course, type: :model do
       end
     end
 
-    describe '#has_default_level?' do
+    describe '#default_level?' do
       let(:course) { build(:course) }
-      subject { course.has_default_level? }
+      subject { course.default_level? }
 
       context 'when course is a new record' do
         it { is_expected.to be_truthy }

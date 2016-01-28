@@ -12,7 +12,7 @@ RSpec.describe Course::ExperiencePointsRecord do
 
     describe '.active' do
       it 'only returns active records' do
-        active = create_list(:course_experience_points_record, 2,  course_user: course_user)
+        active = create_list(:course_experience_points_record, 2, course_user: course_user)
         create_list(:course_experience_points_record, 2, :inactive, course_user: course_user)
         expect(course_user.experience_points_records.active).to contain_exactly(*active)
       end

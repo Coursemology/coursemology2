@@ -22,8 +22,6 @@ module Componentize
     Componentize.become_component_host(self)
   end
 
-  private
-
   # Extends the given host with methods needed to host other classes.
   #
   # @param [Class] host The host to convert into a host.
@@ -52,6 +50,7 @@ module Componentize
         host.add_component(self)
       end
     end
+    private_class_method :base_component_for_host
 
     result.class_variable_set(:@@host, host)
     result

@@ -96,7 +96,7 @@ end
 group :development, :test do
   # bundle exec yardoc generates the API under doc/.
   # Use yard stats --list-undoc to find what needs documenting.
-  gem 'yard',                  group: :doc
+  gem 'yard', group: :doc
 
   # Use RSpec for Behaviour testing
   gem 'rspec-rails'

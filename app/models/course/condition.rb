@@ -11,7 +11,7 @@ class Course::Condition < ActiveRecord::Base
     Course::Condition::Achievement.name,
     Course::Condition::Assessment.name,
     Course::Condition::Level.name
-  ]
+  ].freeze
 
   class << self
     # Finds all conditionals that depend on the given object.

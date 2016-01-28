@@ -42,7 +42,7 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   #   the answer.
   def find_exact_match(answer_text, solutions)
     # comparison is case insensitive
-    solutions.find { |s| s.solution.downcase == answer_text.downcase }
+    solutions.find { |s| s.solution.casecmp(answer_text) == 0 }
   end
 
   # Returns the keywords found in the given answer text.
