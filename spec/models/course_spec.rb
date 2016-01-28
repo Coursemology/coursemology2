@@ -71,19 +71,12 @@ RSpec.describe Course, type: :model do
 
         context 'when experience_points is a positive number' do
           it 'returns the correct level number' do
-            course.numbered_levels.each do |level|
+            course.levels.each do |level|
               experience_points = level.experience_points_threshold
               expect(course.level_for(experience_points)).to eq(level)
               expect(course.level_for(experience_points + 1)).to eq(level)
             end
           end
-        end
-      end
-
-      describe '#numbered_levels' do
-        it 'numbers levels' do
-          numbering = course.numbered_levels.map(&:level_number)
-          expect(numbering).to eq((0..(course.levels.count - 1)).to_a)
         end
       end
     end
