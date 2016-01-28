@@ -279,7 +279,7 @@ GEM
       websocket-driver (>= 0.2.0)
     polyamorous (1.1.0)
       activerecord (>= 3.0)
-    puma (2.15.3)
+    puma (2.16.0)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -478,8 +478,6 @@ GEM
       coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    tzinfo-data (1.2015.7)
-      tzinfo (>= 1.0.0)
     uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -495,7 +493,6 @@ GEM
     valuable (0.9.10)
     warden (1.2.4)
       rack (>= 1.0)
-    wdm (0.1.1)
     websocket-driver (0.6.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
@@ -505,7 +502,6 @@ GEM
     yard (0.8.7.6)
 
 PLATFORMS
-  mswin64
   ruby
 
 DEPENDENCIES
