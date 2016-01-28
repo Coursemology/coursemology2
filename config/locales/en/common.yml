@@ -11,6 +11,7 @@ en:
     draft: 'Draft'
     save: 'Save'
     search: 'Search'
+    submit: 'Submit'
   helpers:
     submit:
       condition_level:
