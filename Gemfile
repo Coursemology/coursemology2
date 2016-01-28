@@ -1,9 +1,5 @@
 source 'https://rubygems.org'
 
-source 'https://rails-assets.org' do
-  gem 'rails-assets-jquery-ujs'
-end
-
 # For Windows devs
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
@@ -40,7 +36,7 @@ gem 'calculated_attributes', '>= 0.1.3'
 # Squeel as an SQL-like DSL
 gem 'squeel'
 # For multiple table inheritance
-gem 'active_record-acts_as', github: 'hzamani/active_record-acts_as'
+gem 'active_record-acts_as', '>= 1.0.8'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Create pretty URLs and work with human-friendly strings
@@ -53,6 +49,7 @@ gem 'uglifier', '>= 1.3.0'
 
 # Use jQuery as the JavaScript library
 gem 'jquery-cdn'
+gem 'jquery-rails'
 gem 'jquery-ui-rails'
 # Our Coursemology will be themed using Bootstrap
 gem 'bootstrap-sass'
