@@ -15,7 +15,7 @@ GIT
 
 GIT
   remote: git://github.com/carrierwaveuploader/carrierwave.git
-  revision: cc2ab785a9d475a777f67f5fb12751c8c6171e03
+  revision: be638dc263f2e6ac22351b7dd7d9e71979a06696
   specs:
     carrierwave (0.10.0)
       activemodel (>= 4.0.0)
@@ -29,14 +29,6 @@ GIT
   specs:
     bootstrap-sass-extras (0.0.6)
       rails (>= 3.1.0)
-
-GIT
-  remote: git://github.com/hzamani/active_record-acts_as.git
-  revision: 5826af8a21966ccd042d1534810ad9fa51775b1f
-  specs:
-    active_record-acts_as (1.0.7)
-      activerecord (~> 4, >= 4.1.2)
-      activesupport (~> 4)
 
 GIT
   remote: git://github.com/lowjoel/simple_token_authentication.git
@@ -77,6 +69,9 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
+    active_record-acts_as (1.0.8)
+      activerecord (~> 4, >= 4.1.2)
+      activesupport (~> 4)
     activejob (4.2.5.1)
       activesupport (= 4.2.5.1)
       globalid (>= 0.3.0)
@@ -514,7 +509,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_record-acts_as!
+  active_record-acts_as (>= 1.0.8)
   activerecord-userstamp (>= 3.0.2)
   acts_as_tenant!
   after_commit_action

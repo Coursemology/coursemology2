@@ -36,7 +36,7 @@ gem 'calculated_attributes', '>= 0.1.3'
 # Squeel as an SQL-like DSL
 gem 'squeel'
 # For multiple table inheritance
-gem 'active_record-acts_as', github: 'hzamani/active_record-acts_as'
+gem 'active_record-acts_as', '>= 1.0.8'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Create pretty URLs and work with human-friendly strings
