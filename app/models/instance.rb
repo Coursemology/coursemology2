@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Instance < ActiveRecord::Base
-  DEFAULT_HOST_NAME = '*'
+  DEFAULT_HOST_NAME = '*'.freeze
 
   has_settings_on :settings
 

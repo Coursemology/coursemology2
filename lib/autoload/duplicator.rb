@@ -4,8 +4,8 @@ class Duplicator
   #
   # @param [Enumerable] excluded_objects An Enumerable of objects to be excluded from duplication
   def initialize(excluded_objects = [])
-    @duplicated_objects = {}  # hash to check what has been duplicated
-    @exclusion_set = excluded_objects.to_set  # set to check what should be excluded
+    @duplicated_objects = {} # hash to check what has been duplicated
+    @exclusion_set = excluded_objects.to_set # set to check what should be excluded
   end
 
   # Deep copy the arguments to this function. Objects must provide an +initialize_duplicate+

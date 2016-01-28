@@ -10,11 +10,8 @@ module Course::Discussion::PostsConcern
 
   def create
     Course::Discussion::Post.transaction do
-      if @post.save && create_topic_subscription
-        true
-      else
-        fail ActiveRecord::Rollback
-      end
+      return true if @post.save && create_topic_subscription
+      fail ActiveRecord::Rollback
     end
   end
 

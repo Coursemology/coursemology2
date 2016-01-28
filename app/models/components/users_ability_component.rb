@@ -11,6 +11,6 @@ module UsersAbilityComponent
   private
 
   def allow_registered_user_manage_emails
-    can :manage, User::Email,  user_id: user.id
+    can :manage, User::Email, user_id: user.id
   end
 end

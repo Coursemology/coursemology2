@@ -39,7 +39,7 @@ RSpec.feature 'System: Administration: Instances' do
         new_name = 'New Name'
         new_host = generate(:host)
         fill_in 'instance_name', with: new_name
-        fill_in 'instance_host',  with: new_host
+        fill_in 'instance_host', with: new_host
         click_button I18n.t('helpers.submit.instance.update')
 
         expect(instance.reload.name).to eq(new_name)

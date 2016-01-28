@@ -2,6 +2,6 @@
 FactoryGirl.define do
   factory :course_group, class: Course::Group.name do
     course
-    sequence(:name)  { |n| "Group #{n}" }
+    sequence(:name) { |n| "Group #{n}" }
   end
 end

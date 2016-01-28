@@ -60,7 +60,7 @@ class Course < ActiveRecord::Base
 
   delegate :staff, to: :course_users
   delegate :instructors, to: :course_users
-  delegate :has_user?, to: :course_users
+  delegate :user?, to: :course_users
 
   def self.use_relative_model_naming?
     true
@@ -83,7 +83,7 @@ class Course < ActiveRecord::Base
 
   # Test if the course has a root folder.
   # @return [Boolean] True if there is a root folder, otherwise false.
-  def has_root_folder?
+  def root_folder?
     if new_record?
       material_folders.find(&:root?).present?
     else

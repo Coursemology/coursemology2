@@ -69,7 +69,6 @@ RSpec.describe Course::Achievement::Condition::LevelsController, type: :controll
         end
 
         it 'shows the form' do
-          path = new_course_achievement_condition_level_path(course, achievement, level_condition)
           expect(subject).to render_template('new')
         end
       end
@@ -104,7 +103,6 @@ RSpec.describe Course::Achievement::Condition::LevelsController, type: :controll
         end
 
         it 'shows the form' do
-          path = edit_course_achievement_condition_level_path(course, achievement, level_condition)
           expect(subject).to render_template('edit')
         end
       end

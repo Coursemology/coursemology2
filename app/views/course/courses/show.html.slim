@@ -1,7 +1,7 @@
 = div_for(current_course) do
   h1
     = format_inline_text(current_course.title)
-    - if !current_course.has_user?(current_user) && can?(:register, current_course)
+    - if !current_course.user?(current_user) && can?(:register, current_course)
       div.register
         = render partial: 'course/user_registrations/registration'
   h2 = t('.description')

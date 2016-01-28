@@ -89,13 +89,13 @@ RSpec.describe Duplicator, type: :model do
       #               ----> s1
       #
       @s1 = SimpleObject.new(1)
-      @c4 = ComplexObject.new(14, [])      # assign children later
+      @c4 = ComplexObject.new(14, []) # assign children later
       @c5 = ComplexObject.new(15, [@c4])
       @c3 = ComplexObject.new(13, [@c5])
       @c2 = ComplexObject.new(12, [@c3, @c4])
       @c1 = ComplexObject.new(11, [@c2])
 
-      @c4.instance_variable_set(:@children, [@s1, @c3])   # create cycle
+      @c4.instance_variable_set(:@children, [@s1, @c3]) # create cycle
     end
 
     def create_second_cyclic_graph
@@ -106,7 +106,7 @@ RSpec.describe Duplicator, type: :model do
       #      |      |--> |
       #      ----------> c23
       #
-      @c22 = ComplexObject.new(22, [])  # assign children later
+      @c22 = ComplexObject.new(22, []) # assign children later
       @c23 = ComplexObject.new(23, [@c22])
       @c21 = ComplexObject.new(21, [@c22, @c23])
 

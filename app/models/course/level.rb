@@ -8,7 +8,7 @@ class Course::Level < ActiveRecord::Base
   attr_writer :level_number
 
   def self.after_course_initialize(course)
-    return if course.persisted? || course.has_default_level?
+    return if course.persisted? || course.default_level?
 
     course.levels.build(experience_points_threshold: 0)
   end

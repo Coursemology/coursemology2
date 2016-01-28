@@ -14,7 +14,7 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
       let(:other_achievement) { create(:course_achievement, course: course) }
       let(:achievement_condition) do
         create(:course_condition_achievement,
-               achievement: other_achievement, course: course).tap do  |stub|
+               achievement: other_achievement, course: course).tap do |stub|
           allow(stub).to receive(:destroy).and_return(false)
         end
       end
@@ -70,8 +70,6 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
         end
 
         it 'shows the form' do
-          path = new_course_achievement_condition_achievement_path(course, achievement,
-                                                                   achievement_condition)
           expect(subject).to render_template('new')
         end
       end
@@ -105,8 +103,6 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
         end
 
         it 'shows the form' do
-          path = edit_course_achievement_condition_achievement_path(course, achievement,
-                                                                    achievement_condition)
           expect(subject).to render_template('edit')
         end
       end

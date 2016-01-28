@@ -27,7 +27,7 @@ class Course::Forum < ActiveRecord::Base
   calculated :topic_view_count, (lambda do
     Course::Forum::Topic.joins { views.outer }.
       where { course_forum_topics.forum_id == course_forums.id }.
-      select { count('*')  }
+      select { count('*') }
   end)
 
   # @!method self.with_forum_statistics

@@ -14,7 +14,7 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
       type: :normal,
       weight: 1,
       unread: -1
-    }
+    }.freeze
 
     ADMIN_SIDEBAR_ITEM = {
       key: :admin_item,
@@ -22,13 +22,13 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
       type: :admin,
       weight: 10,
       unread: -1
-    }
+    }.freeze
 
     SETTINGS_SIDEBAR_ITEM = {
       title: 'DummyCourseModule',
       type: :settings,
       weight: 1
-    }
+    }.freeze
 
     def initialize(*)
     end
