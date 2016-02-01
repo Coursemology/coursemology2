@@ -10,4 +10,14 @@
       width: $course-achievement-badge-small;
     }
   }
+
+  .achievement-list {
+    .granted {
+      background-color: $course-achievement-granted-bg;
+    }
+
+    .locked {
+      background-color: $course-achievement-locked-bg;
+    }
+  }
 }
