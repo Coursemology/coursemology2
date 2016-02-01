@@ -27,5 +27,12 @@ RSpec.describe Course::AchievementsHelper do
         end
       end
     end
+
+    describe '#display_locked_achievement_badge' do
+      it 'displays the locked achievement badge' do
+        expect(helper.display_locked_achievement_badge).
+          to have_tag('img', with: { :'src^' => '/assets/achievement_locked-' })
+      end
+    end
   end
 end

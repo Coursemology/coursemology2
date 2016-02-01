@@ -10,4 +10,13 @@ module Course::AchievementsHelper
       image_tag(achievement.badge.medium.url || 'achievement_blank.png')
     end
   end
+
+  # Returns the HTML code to display a locked achievement.
+  #
+  # @return [String] A HTML fragment containing the image to display the locked achievement.
+  def display_locked_achievement_badge
+    content_tag(:span, class: ['image']) do
+      image_tag('achievement_locked.svg')
+    end
+  end
 end
