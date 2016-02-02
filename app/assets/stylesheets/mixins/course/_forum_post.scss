@@ -1,0 +1,31 @@
+@mixin course-forum-post {
+  .user {
+    float: left;
+    margin-right: 1em;
+    text-align: right;
+    width: 7em;
+  }
+
+  .contents {
+    border: 1px solid $post-border-color;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px $post-shadow-color;
+    line-height: 1;
+
+    // Block formatting context
+    overflow: hidden;
+
+    padding: 20px;
+
+    // Post title
+    .title {
+      font-size: 90%;
+      margin: -0.4em 0 0.75em;
+    }
+
+    // The post info, like post time etc
+    .info {
+      margin-top: 1em;
+    }
+  }
+}

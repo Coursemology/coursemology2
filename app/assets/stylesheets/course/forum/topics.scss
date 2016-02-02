@@ -1,0 +1,13 @@
+.course-forum-topics {
+  &.show {
+    .post {
+      @include course-forum-post;
+
+      // In case the previous post was too short.
+      clear: both;
+
+      // Spacing between posts.
+      margin-bottom: 1em;
+    }
+  }
+}
