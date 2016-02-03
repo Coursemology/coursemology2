@@ -9,6 +9,9 @@
 #
 #   Rails.application.config.active_job.queue_adapter = :background_thread
 class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapters::InlineAdapter
+  # The ActiveSupport::Notification instrumentation event when a new job is enqueued.
+  ENQUEUE_EVENT = 'enqueue.background_thread_adapter.active_job'.freeze
+
   # The ActiveSupport::Notification instrumentation event when the pool grows.
   GROW_EVENT = 'grow.background_thread_adapter.active_job'.freeze
 
@@ -20,12 +23,17 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
 
   @pending_jobs = []
   @running_jobs = 0
+  @finish_jobs_condition = ConditionVariable.new
   @thread_pool = []
   @thread_pool_mutex = Mutex.new
 
   def self.enqueue(job) #:nodoc:
-    with_thread_pool { @pending_jobs << job }
-    ensure_threads
+    ActiveSupport::Notifications.instrument(ENQUEUE_EVENT, job: job, caller: caller) do |payload|
+      with_thread_pool { @pending_jobs << job }
+      ensure_threads
+
+      payload.reverse_merge!(notification_statistics)
+    end
   end
 
   class << self
@@ -143,17 +151,21 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
   end
 
   class LogSubscriber < ActiveSupport::LogSubscriber
+    def enqueue(event)
+      message = "[Background Thread] Enqueued job: #{event.payload[:job]}, "\
+                "call stack:\n#{event.payload[:caller][20..-1].join("\n")}"
+      debug(message)
+    end
+
     def grow(event)
-      message = "[Background Thread] New thread: #{event.payload[:thread].object_id}, "\
-                "pool size: #{event.payload[:pool_size]}, running jobs: "\
-                "#{event.payload[:running_jobs]} pending jobs: #{event.payload[:pending_jobs]}"
+      message = "[Background Thread] New thread: #{event.payload[:thread].object_id}, " +
+                pool_statistics(event)
       info(message)
     end
 
     def shrink(event)
-      message = "[Background Thread] Stopping thread: #{event.payload[:thread].object_id}, "\
-                "pool size: #{event.payload[:pool_size]}, running jobs: "\
-                "#{event.payload[:running_jobs]} pending jobs: #{event.payload[:pending_jobs]}"
+      message = "[Background Thread] Stopping thread: #{event.payload[:thread].object_id}, " +
+                pool_statistics(event)
       info(message)
     end
 
@@ -161,6 +173,12 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
 
     def logger
       ActiveJob::Base.logger
+    end
+
+    def pool_statistics(event)
+      "pool size: #{event.payload[:pool_size]}, "\
+      "running jobs: #{event.payload[:running_jobs]}, "\
+      "pending jobs: #{event.payload[:pending_jobs]}"
     end
   end
 
