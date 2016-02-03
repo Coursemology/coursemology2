@@ -126,7 +126,7 @@ class Course::Assessment::ProgrammingTestCaseReport
   #
   # @return [Enumerable<Course::Assessment::ProgrammingTestCaseReport::TestSuite>]
   def test_suites
-    @report.search('./testsuites/testsuite').map do |suite|
+    @report.search('./testsuites/testsuite|./testsuite').map do |suite|
       TestSuite.new(suite)
     end
   end

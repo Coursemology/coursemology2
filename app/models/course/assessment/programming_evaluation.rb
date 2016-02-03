@@ -33,10 +33,10 @@ class Course::Assessment::ProgrammingEvaluation < ActiveRecord::Base
     state :errored
   end
 
-  after_commit :signal, if: :finished?
+  after_save :signal_evaluated, if: :finished?
 
   validates :evaluator, :assigned_at, presence: true, unless: :submitted?
-  validates :stdout, :stderr, exclusion: [nil], if: :finished?
+  validates :stdout, :stderr, :exit_code, exclusion: [nil], if: :finished?
 
   belongs_to :course, inverse_of: :assessment_programming_evaluations
   belongs_to :language, class_name: Coursemology::Polyglot::Language.name, inverse_of: nil
@@ -93,5 +93,11 @@ class Course::Assessment::ProgrammingEvaluation < ActiveRecord::Base
   # Deletes the package.
   def delete_package
     File.delete(SendFile.local_path(package_path))
+  end
+
+  def signal_evaluated
+    return unless status_changed?
+
+    execute_after_commit { signal }
   end
 end

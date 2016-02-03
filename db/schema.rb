@@ -262,6 +262,7 @@ ActiveRecord::Schema.define(version: 20160126094510) do
     t.text     "stdout"
     t.text     "stderr"
     t.text     "test_report"
+    t.integer  "exit_code"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end

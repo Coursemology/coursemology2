@@ -49,6 +49,14 @@ RSpec.describe Course::Assessment::ProgrammingEvaluation do
             expect(subject.errors[:stderr]).not_to be_nil
           end
         end
+
+        describe '#exit_code' do
+          it 'requires the presence of exit_code' do
+            subject.exit_code = nil
+            expect(subject).not_to be_valid
+            expect(subject.errors[:exit_code]).not_to be_nil
+          end
+        end
       end
     end
 
@@ -162,14 +170,14 @@ RSpec.describe Course::Assessment::ProgrammingEvaluation do
     describe '#save' do
       subject { create(:course_assessment_programming_evaluation, *evaluation_traits) }
 
-      context 'when the evaluation is finished' do
+      context 'when the evaluation is completed' do
         let(:evaluation_traits) { :assigned }
         it 'notifies listeners' do
           subject.status = :completed
           Thread.new do
             ActiveRecord::Base.connection_pool.with_connection do
               attributes = attributes_for(:course_assessment_programming_evaluation, :completed).
-                           slice(:stderr, :stdout, :test_report)
+                           slice(:stderr, :stdout, :test_report, :exit_code)
               subject.update_attributes(attributes)
             end
           end
@@ -177,6 +185,14 @@ RSpec.describe Course::Assessment::ProgrammingEvaluation do
           subject.wait
 
           # This should not deadlock because saving the record should signal.
+        end
+
+        context 'when the evaluation was already completed' do
+          let(:evaluation_traits) { :completed }
+          it 'does not notify listeners' do
+            expect(subject).not_to receive(:signal)
+            subject.update_attributes(exit_code: 128)
+          end
         end
       end
     end

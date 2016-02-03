@@ -56,6 +56,15 @@ RSpec.describe TrackableJob do
           # This should not deadlock because saving the record should signal.
         end
       end
+
+      context 'when the job was already completed' do
+        it 'does not notify listeners' do
+          subject.update_attributes(id: SecureRandom.uuid, status: :completed)
+
+          expect(subject).not_to receive(:signal)
+          subject.update_attributes(redirect_to: '')
+        end
+      end
     end
   end
 
@@ -83,9 +92,11 @@ RSpec.describe TrackableJob do
   end
 
   context 'when the job has an error' do
+    let(:error_to_throw) { StandardError }
     before do
-      def subject.perform_tracked
-        fail
+      error_to_throw = self.error_to_throw
+      subject.define_singleton_method(:perform_tracked) do
+        fail error_to_throw
       end
 
       subject.perform_now
@@ -97,6 +108,19 @@ RSpec.describe TrackableJob do
 
     it 'has the error' do
       expect(subject.job.error).to be_present
+    end
+
+    context 'when the error defines #as_json' do
+      let(:error_to_throw) { self.class::MyError }
+      class self::MyError < StandardError
+        def as_json
+          super.reverse_merge(test: nil)
+        end
+      end
+
+      it 'includes the json properties' do
+        expect(subject.job.error).to have_key('test')
+      end
     end
   end
 
