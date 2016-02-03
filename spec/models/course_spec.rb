@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe Course, type: :model do
@@ -70,19 +71,12 @@ RSpec.describe Course, type: :model do
 
         context 'when experience_points is a positive number' do
           it 'returns the correct level number' do
-            course.numbered_levels.each do |level|
+            course.levels.each do |level|
               experience_points = level.experience_points_threshold
               expect(course.level_for(experience_points)).to eq(level)
               expect(course.level_for(experience_points + 1)).to eq(level)
             end
           end
-        end
-      end
-
-      describe '#numbered_levels' do
-        it 'numbers levels' do
-          numbering = course.numbered_levels.map(&:level_number)
-          expect(numbering).to eq((0..(course.levels.count - 1)).to_a)
         end
       end
     end
@@ -196,9 +190,9 @@ RSpec.describe Course, type: :model do
       end
     end
 
-    describe '#has_root_folder?' do
+    describe '#root_folder?' do
       let(:course) { build(:course) }
-      subject { course.has_root_folder? }
+      subject { course.root_folder? }
 
       context 'when course is a new record' do
         it { is_expected.to be_truthy }
@@ -221,9 +215,9 @@ RSpec.describe Course, type: :model do
       end
     end
 
-    describe '#has_default_level?' do
+    describe '#default_level?' do
       let(:course) { build(:course) }
-      subject { course.has_default_level? }
+      subject { course.default_level? }
 
       context 'when course is a new record' do
         it { is_expected.to be_truthy }

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::ActsAsHelpers::ActiveRecord::Base
   module ClassMethods
     # Decorator for items that give course_users EXP Points

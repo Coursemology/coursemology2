@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddSchemaNullity < ActiveRecord::Migration
   def change
     change_column_null :course_assessment_questions_tags, :question_id, false

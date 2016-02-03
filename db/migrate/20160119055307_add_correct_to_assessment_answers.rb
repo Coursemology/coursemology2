@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddCorrectToAssessmentAnswers < ActiveRecord::Migration
   def change
     add_column :course_assessment_answers, :correct, :boolean,

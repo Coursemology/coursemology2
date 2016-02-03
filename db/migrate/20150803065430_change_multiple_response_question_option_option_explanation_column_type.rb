@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ChangeMultipleResponseQuestionOptionOptionExplanationColumnType < ActiveRecord::Migration
   def up
     change_column :course_assessment_question_multiple_response_options, :option, :text

@@ -1,9 +1,10 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   sequence :name do |n|
     "user #{n}"
   end
 
-  factory :user, aliases: [:creator, :updater, :actor]  do
+  factory :user, aliases: [:creator, :updater, :actor] do
     transient do
       emails_count 1
     end

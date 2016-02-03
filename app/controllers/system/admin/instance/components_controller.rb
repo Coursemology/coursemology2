@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class System::Admin::Instance::ComponentsController < System::Admin::Instance::Controller
   before_action :load_settings
   add_breadcrumb :edit, :admin_instance_components_path

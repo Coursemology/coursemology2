@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Represents one pending programming question evaluation.
 #
 # This is different from a job in that jobs are assigned to an arbitrary worker. These

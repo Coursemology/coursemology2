@@ -2,7 +2,6 @@ inherit_from:
   - .rubocop.unhound.yml
 
 AllCops:
-  RunRailsCops: true
   Include:
     - '**/Gemfile'
     - '**/Rakefile'
@@ -11,12 +10,19 @@ AllCops:
    - 'db/seeds.rb'
    - 'db/schema.rb'
    - 'vendor/bundle/**/*'
+  TargetRubyVersion: 2.1
 
 Metrics/LineLength:
   Max: 100
 
+Rails:
+  Enabled: true
+
 Rails/HasAndBelongsToMany:
   Enabled: false
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
 
 Style/DotPosition:
   EnforcedStyle: trailing
@@ -27,8 +33,17 @@ Style/Documentation:
 Style/IndentHash:
   EnforcedStyle: consistent
 
+Style/IfUnlessModifier:
+  MaxLineLength: 100
+
+Style/ParallelAssignment:
+  Enabled: false
+
 Style/StringLiterals:
   EnforcedStyle: single_quotes
+
+Style/WhileUntilModifier:
+  MaxLineLength: 100
 
 Style/WordArray:
   Enabled: false

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.configure do |config|
   config.before(:suite) do
     # The Stubbed I18n backend will allow certain translation keys to be returned directly, ignoring

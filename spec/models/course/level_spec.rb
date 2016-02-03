@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe Course::Level, type: :model do
@@ -25,12 +26,6 @@ RSpec.describe Course::Level, type: :model do
       end
     end
 
-    context 'before level_number is set' do
-      it 'raises an IllegalStateError' do
-        expect { Course::Level.new.level_number }.to raise_error(IllegalStateError)
-      end
-    end
-
     describe '.after_course_initialize' do
       it 'builds one default level' do
         expect(course.levels.size).to eq(1)
@@ -46,6 +41,23 @@ RSpec.describe Course::Level, type: :model do
 
           course.save
           expect(level).to be_persisted
+        end
+      end
+    end
+
+    describe '.default_scope' do
+      before { course.levels.concat(create_list(:course_level, 5, course: course)) }
+
+      it 'orders by ascending experience_points_threshold' do
+        course.levels.each_cons(2) do |current_level, next_level|
+          expect(current_level.experience_points_threshold).
+            to be < next_level.experience_points_threshold
+        end
+      end
+
+      it 'adds level_number to each level record' do
+        course.levels.each_with_index do |level, index|
+          expect(level.level_number).to eq(index)
         end
       end
     end
@@ -67,10 +79,11 @@ RSpec.describe Course::Level, type: :model do
     end
 
     describe '.next' do
-      before { create_list(:course_level, 5, course: course) }
+      before { course.levels.concat(create_list(:course_level, 5, course: course)) }
+
       context 'when current level is not the highest' do
         it 'returns the next level' do
-          course.reload.numbered_levels.each_cons(2) do |current_level, next_level|
+          course.levels.each_cons(2) do |current_level, next_level|
             expect(current_level.next).to eq(next_level)
           end
         end
@@ -78,7 +91,27 @@ RSpec.describe Course::Level, type: :model do
 
       context 'when current level is the highest' do
         it 'returns nil' do
-          expect(course.numbered_levels.last.next).to be_nil
+          expect(course.levels.last.next).to be_nil
+        end
+      end
+    end
+
+    describe '#next_level_threshold' do
+      before { course.levels.concat(create_list(:course_level, 5, course: course)) }
+
+      context 'when current level is not the highest' do
+        it "returns the next level's threshold" do
+          course.levels.each_cons(2) do |current_level, next_level|
+            expect(current_level.next_level_threshold).
+              to eq(next_level.experience_points_threshold)
+          end
+        end
+      end
+
+      context 'when current level is the highest' do
+        it "returns the current level's threshold" do
+          expect(course.levels.last.next_level_threshold).
+            to eq(course.levels.last.experience_points_threshold)
         end
       end
     end

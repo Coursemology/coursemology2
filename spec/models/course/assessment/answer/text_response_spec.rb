@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Answer::TextResponse, type: :model do
-  it { is_expected.to act_as(:answer) }
+  it { is_expected.to act_as(Course::Assessment::Answer) }
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do

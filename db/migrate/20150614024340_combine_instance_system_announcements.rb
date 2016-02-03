@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CombineInstanceSystemAnnouncements < ActiveRecord::Migration
   def change
     drop_table :system_announcements

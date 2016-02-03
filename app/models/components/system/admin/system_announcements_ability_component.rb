@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module System::Admin::SystemAnnouncementsAbilityComponent
   include AbilityHost::Component
 

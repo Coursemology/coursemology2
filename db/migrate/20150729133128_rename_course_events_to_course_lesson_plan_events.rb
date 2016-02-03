@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RenameCourseEventsToCourseLessonPlanEvents < ActiveRecord::Migration
   def change
     rename_table :course_events, :course_lesson_plan_events

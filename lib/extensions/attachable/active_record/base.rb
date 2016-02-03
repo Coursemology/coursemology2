@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::Attachable::ActiveRecord::Base
   module ClassMethods
     # This function should be declared in model, to it have attachments.

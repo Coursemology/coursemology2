@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RenameStartEndTimeToStartEndAt < ActiveRecord::Migration
   def change
     rename_column :course_users, :last_active_time, :last_active_at

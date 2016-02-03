@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # The base class of notifiers. This is meant to be called by the Notifications Framework
 #
 # @api notifications

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Allows associating classes with other classes. This can form a nesting hierarchy. This is also
 # used in Coursemology to associate components that a course can have enabled.
 #
@@ -20,8 +21,6 @@ module Componentize
   included do
     Componentize.become_component_host(self)
   end
-
-  private
 
   # Extends the given host with methods needed to host other classes.
   #
@@ -51,6 +50,7 @@ module Componentize
         host.add_component(self)
       end
     end
+    private_class_method :base_component_for_host
 
     result.class_variable_set(:@@host, host)
     result

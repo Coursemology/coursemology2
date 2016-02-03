@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CourseUser < ActiveRecord::Base
   include Workflow
   after_initialize :set_defaults, if: :new_record?
@@ -66,7 +67,7 @@ class CourseUser < ActiveRecord::Base
   #
   # @param [User] user The user to check
   # @return [Boolean] True if the user exists in the current context
-  def self.has_user?(user)
+  def self.user?(user)
     with_approved_state.exists?(user: user)
   end
 

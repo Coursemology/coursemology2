@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateCourseConditionLevels < ActiveRecord::Migration
   def change
     create_table :course_condition_levels do |t|

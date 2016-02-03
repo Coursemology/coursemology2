@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Question::TextResponseSolution < ActiveRecord::Base
   enum solution_type: [:exact_match, :keyword]
 

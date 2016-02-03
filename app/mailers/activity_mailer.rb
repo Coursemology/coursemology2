@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # The mailer for activities. This is meant to be called by the activities framework alone.
 #
 # @api private

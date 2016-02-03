@@ -1,9 +1,10 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe 'Extensions: Database Event' do
   subject { Instance.default }
 
-  self::NOTIFICATION = 'database_event_test'
+  self::NOTIFICATION = 'database_event_test'.freeze
 
   def signal
     Thread.new do

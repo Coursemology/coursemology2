@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Answer::ProgrammingAutoGrading < ActiveRecord::Base
   acts_as :auto_grading, class_name: Course::Assessment::Answer::AutoGrading.name,
                          inverse_of: :actable

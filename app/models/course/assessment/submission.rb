@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Submission < ActiveRecord::Base
   include Workflow
   acts_as_experience_points_record

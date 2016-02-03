@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::TimeBoundedRecord::ActiveRecord::Base
   module ClassMethods
     def currently_active

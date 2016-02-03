@@ -1,24 +1,25 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe ApplicationHelper, type: :helper do
   describe 'sidebar navigation' do
     it 'defaults to not having a sidebar' do
-      expect(helper.has_sidebar?).to eq(false)
+      expect(helper.sidebar?).to eq(false)
     end
 
     describe '#sidebar!' do
-      it 'sets #has_sidebar?' do
+      it 'sets #sidebar?' do
         helper.sidebar!
-        expect(helper.has_sidebar?).to eq(true)
+        expect(helper.sidebar?).to eq(true)
       end
     end
 
     describe '#sidebar' do
-      it 'sets #has_sidebar?' do
+      it 'sets #sidebar?' do
         helper.sidebar do
           ''
         end
-        expect(helper.has_sidebar?).to eq(true)
+        expect(helper.sidebar?).to eq(true)
       end
 
       it 'accepts a block as the sidebar contents' do
@@ -80,9 +81,9 @@ RSpec.describe ApplicationHelper, type: :helper do
         end
       end
 
-      it 'sets #has_sidebar?' do
+      it 'sets #sidebar?' do
         helper.sidebar_items(sidebar_items)
-        expect(helper.has_sidebar?).to eq(true)
+        expect(helper.sidebar?).to eq(true)
       end
     end
   end

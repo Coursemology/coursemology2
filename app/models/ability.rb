@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Ability
   include CanCan::Ability
   attr_reader :user

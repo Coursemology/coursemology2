@@ -1,8 +1,9 @@
+# frozen_string_literal: true
 module ApplicationHTMLFormattersHelper
   # The default pipeline, used by both text and HTML pipelines.
   DefaultPipeline = HTML::Pipeline.new([
-    HTML::Pipeline::AutolinkFilter
-  ])
+                                         HTML::Pipeline::AutolinkFilter
+                                       ])
 
   # The HTML sanitizer options to use.
   HTMLSanitizerOptions = {

@@ -1,9 +1,10 @@
+# frozen_string_literal: true
 # Helpers for displaying sidebars in pages.
 module ApplicationSidebarHelper
   # Checks if the current page has a sidebar.
   #
   # @return [Boolean] True if there is a sidebar for the current page.
-  def has_sidebar?
+  def sidebar?
     content_for?(:layout_sidebar)
   end
 

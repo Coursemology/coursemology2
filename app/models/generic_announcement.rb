@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Represents a generic announcement, which may be either a system-level or instance-level one.
 #
 # This is the abstract single-table inheritance table used for both announcement types.

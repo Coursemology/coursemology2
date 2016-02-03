@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
-  it { is_expected.to act_as(:question) }
+  it { is_expected.to act_as(Course::Assessment::Question) }
   it 'has many solutions' do
     expect(subject).to have_many(:solutions).
       class_name(Course::Assessment::Question::TextResponseSolution.name).

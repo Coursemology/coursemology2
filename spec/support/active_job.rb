@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ActiveJob::TestGroupHelpers
   def self.with_active_job_queue_adapter_method(adapter = :test)
     proc { |example| ActiveJob::TestGroupHelpers.with_active_job_queue_adapter(example, adapter) }
@@ -8,7 +9,20 @@ module ActiveJob::TestGroupHelpers
     ActiveJob::Base.queue_adapter = adapter
     example.call
   ensure
+    wait_for_jobs if adapter == :background_thread ||
+                     adapter == ActiveJob::QueueAdapters::BackgroundThreadAdapter
     ActiveJob::Base.queue_adapter = old_adapter
+  end
+
+  def self.ensure_jobs_completion(example)
+    example.call
+  ensure
+    wait_for_jobs if ActiveJob::Base.queue_adapter ==
+                     ActiveJob::QueueAdapters::BackgroundThreadAdapter
+  end
+
+  def self.wait_for_jobs
+    ActiveJob::QueueAdapters::BackgroundThreadAdapter.wait_for_jobs
   end
 
   def with_active_job_queue_adapter(adapter, &proc)
@@ -47,6 +61,8 @@ RSpec.configure do |config|
   config.extend ActiveJob::TestGroupHelpers
   config.around(:each, type: :job,
                 &ActiveJob::TestGroupHelpers.with_active_job_queue_adapter_method)
+  config.around(:each,
+                &ActiveJob::TestGroupHelpers.method(:ensure_jobs_completion))
   config.include TrackableJob::TestExampleHelpers, type: :feature
 
   config.backtrace_exclusion_patterns << /\/spec\/support\/active_job\.rb/

@@ -1,44 +1,4 @@
-AccessorMethodName:
-  Enabled: true
-
-ActionFilter:
-  Enabled: true
-
-Alias:
-  Enabled: true
-
-ArrayJoin:
-  Enabled: true
-
-AsciiComments:
-  Enabled: true
-
-AsciiIdentifiers:
-  Enabled: true
-
-Attr:
-  Enabled: true
-
-BlockNesting:
-  Enabled: true
-
-CaseEquality:
-  Enabled: true
-
-CharacterLiteral:
-  Enabled: true
-
-ClassAndModuleChildren:
-  Enabled: true
-  EnforcedStyle: compact
-
-ClassLength:
-  Enabled: true
-
-ClassVars:
-  Enabled: true
-
-CollectionMethods:
+Style/CollectionMethods:
   Enabled: true
   PreferredMethods:
     reduce:
@@ -46,199 +6,104 @@ CollectionMethods:
     find:
     detect: 'find'
 
-ColonMethodCall:
+Style/FileName:
   Enabled: true
 
-CommentAnnotation:
+Style/GuardClause:
   Enabled: true
 
-CyclomaticComplexity:
+Style/IfUnlessModifier:
   Enabled: true
 
-Delegate:
+Style/PercentLiteralDelimiters:
   Enabled: true
 
-DeprecatedHashMethods:
+Style/SignalException:
   Enabled: true
 
-DoubleNegation:
+Style/SingleLineBlockParams:
   Enabled: true
 
-EachWithObject:
+Style/SingleLineMethods:
   Enabled: true
 
-EmptyLiteral:
+Style/TrailingCommaInArguments:
   Enabled: true
 
-Encoding:
-  Enabled: false
-
-EvenOdd:
+Style/TrailingCommaInLiteral:
   Enabled: true
 
-ExtraSpacing:
-  Enabled: false
-
-FileName:
+Metrics/AbcSize:
   Enabled: true
 
-FlipFlop:
+Metrics/ClassLength:
   Enabled: true
 
-FormatString:
+Metrics/ModuleLength:
   Enabled: true
 
-GlobalVars:
+Metrics/CyclomaticComplexity:
   Enabled: true
 
-GuardClause:
+Metrics/MethodLength:
   Enabled: true
 
-IfUnlessModifier:
+Metrics/ParameterLists:
   Enabled: true
 
-IfWithSemicolon:
+Metrics/PerceivedComplexity:
   Enabled: true
 
-InlineComment:
-  Enabled: false
-
-Lambda:
+Lint/AssignmentInCondition:
   Enabled: true
 
-LambdaCall:
+Style/AccessorMethodName:
   Enabled: true
 
-LineEndConcatenation:
+Style/Alias:
+  Enabled: true
+  EnforcedStyle: prefer_alias_method
+
+Style/Documentation:
   Enabled: true
 
-MethodLength:
+Style/DoubleNegation:
   Enabled: true
 
-ModuleFunction:
+Style/EachWithObject:
   Enabled: true
 
-NegatedIf:
+Style/EmptyLiteral:
   Enabled: true
 
-NegatedWhile:
+Style/ModuleFunction:
   Enabled: true
 
-Next:
+Style/OneLineConditional:
   Enabled: true
 
-NilComparison:
+Style/PerlBackrefs:
   Enabled: true
 
-Not:
+Style/SpecialGlobalVars:
   Enabled: true
 
-NumericLiterals:
+Style/VariableInterpolation:
   Enabled: true
 
-OneLineConditional:
+Style/WhenThen:
   Enabled: true
 
-OpMethod:
+Lint/EachWithObjectArgument:
   Enabled: true
 
-ParameterLists:
+Lint/HandleExceptions:
   Enabled: true
 
-PercentLiteralDelimiters:
+Lint/LiteralInCondition:
+  Description: Checks of literals used in conditions.
   Enabled: true
 
-PerlBackrefs:
-  Enabled: true
-
-PredicateName:
-  NamePrefixBlacklist: []
-
-Proc:
-  Enabled: true
-
-RaiseArgs:
-  Enabled: true
-
-RegexpLiteral:
-  Enabled: true
-
-SelfAssignment:
-  Enabled: true
-
-SingleLineBlockParams:
-  Enabled: true
-
-SingleLineMethods:
-  Enabled: true
-
-SignalException:
-  Enabled: true
-
-SpecialGlobalVars:
-  Enabled: true
-
-VariableInterpolation:
-  Enabled: true
-
-TrailingComma:
-  Enabled: true
-
-TrivialAccessors:
-  Enabled: true
-
-VariableInterpolation:
-  Enabled: true
-
-WhenThen:
-  Enabled: true
-
-WhileUntilModifier:
-  Enabled: true
-
-# Lint
-
-AmbiguousOperator:
-  Enabled: true
-
-AmbiguousRegexpLiteral:
-  Enabled: true
-
-AssignmentInCondition:
-  Enabled: true
-
-ConditionPosition:
-  Enabled: true
-
-DeprecatedClassMethods:
-  Enabled: true
-
-ElseLayout:
-  Enabled: true
-
-HandleExceptions:
-  Enabled: true
-
-InvalidCharacterLiteral:
-  Enabled: true
-
-LiteralInCondition:
-  Enabled: true
-
-LiteralInInterpolation:
-  Enabled: true
-
-Loop:
-  Enabled: true
-
-ParenthesesAsGroupedExpression:
-  Enabled: true
-
-RequireParentheses:
-  Enabled: true
-
-UnderscorePrefixedVariableName:
-  Enabled: true
-
-Void:
+Lint/LiteralInInterpolation:
+  Description: Checks for literals used in interpolation.
   Enabled: true

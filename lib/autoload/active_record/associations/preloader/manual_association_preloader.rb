@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ActiveRecord::Associations::Preloader::ManualAssociationPreloader
   def initialize(klass, owners, reflection, records)
     super(klass, owners, reflection, nil)

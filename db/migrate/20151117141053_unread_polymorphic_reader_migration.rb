@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class UnreadPolymorphicReaderMigration < ActiveRecord::Migration
   def self.up
     remove_index :read_marks, [:user_id, :readable_type, :readable_id]

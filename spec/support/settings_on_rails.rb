@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module SettingsOnRails::TestHelpers
   # Creates a mock Settings object from the given hash.
   #

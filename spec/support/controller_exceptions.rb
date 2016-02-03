@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ControllerExceptions; end
 
 # Test group helpers for allowing exceptions from controller tests to be caught by specs.

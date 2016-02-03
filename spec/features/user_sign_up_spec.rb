@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.feature 'Users: Sign Up' do
@@ -21,7 +22,7 @@ RSpec.feature 'Users: Sign Up' do
         expect do
           click_button I18n.t('user.registrations.new.sign_up')
         end.to change(User, :count).by(1)
-        user = User::Email.find_by!(email: valid_user[:email]).user
+        user = User::Email.find_by!(email: valid_user[:email]).user_id
         expect(instance.users.exists?(user)).to be_truthy
       end
     end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Represents a Programming Question test report.
 #
 # We adopt the JUnit XML format (documented at

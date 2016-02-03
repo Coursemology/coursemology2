@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe 'Extension: Inherited Nested Layouts', type: :controller do
@@ -44,11 +45,11 @@ RSpec.describe 'Extension: Inherited Nested Layouts', type: :controller do
 
   it 'gets the correct layout hierarchy' do
     expect(controller.layout_hierarchy).to eq([
-      'default',
-      'testA',
-      'testB',
-      'testC'
-    ])
+                                                'default',
+                                                'testA',
+                                                'testB',
+                                                'testC'
+                                              ])
   end
 
   describe '#render' do
@@ -56,12 +57,12 @@ RSpec.describe 'Extension: Inherited Nested Layouts', type: :controller do
       it 'gets the correct layout hierarchy' do
         get :index
         expect(controller.layout_hierarchy).to eq([
-          'default',
-          'testA',
-          'testB',
-          'testC',
-          'test_layout'
-        ])
+                                                    'default',
+                                                    'testA',
+                                                    'testB',
+                                                    'testC',
+                                                    'test_layout'
+                                                  ])
       end
     end
   end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateCourseAssessmentQuestionMultipleResponse < ActiveRecord::Migration
   def change
     add_column :course_assessment_questions, :title, :string, null: false, default: ''

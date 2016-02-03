@@ -1,5 +1,7 @@
+# frozen_string_literal: true
 class Course::Achievement < ActiveRecord::Base
   acts_as_conditional
+  mount_uploader :badge, ImageUploader
 
   after_initialize :set_defaults, if: :new_record?
 

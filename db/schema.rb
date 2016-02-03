@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
@@ -11,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160119055307) do
+ActiveRecord::Schema.define(version: 20160126094510) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +83,7 @@ ActiveRecord::Schema.define(version: 20160119055307) do
     t.integer  "course_id",   null: false, index: {name: "fk__course_achievements_course_id"}, foreign_key: {references: "courses", name: "fk_course_achievements_course_id", on_update: :no_action, on_delete: :no_action}
     t.string   "title",       limit: 255, null: false
     t.text     "description"
+    t.text     "badge"
     t.integer  "weight",      null: false
     t.boolean  "draft",       null: false
     t.integer  "creator_id",  null: false, index: {name: "fk__course_achievements_creator_id"}, foreign_key: {references: "users", name: "fk_course_achievements_creator_id", on_update: :no_action, on_delete: :no_action}

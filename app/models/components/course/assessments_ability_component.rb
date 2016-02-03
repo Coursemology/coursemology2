@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Course::AssessmentsAbilityComponent
   include AbilityHost::Component
   extend ActiveSupport::Concern

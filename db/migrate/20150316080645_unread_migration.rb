@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class UnreadMigration < ActiveRecord::Migration
   def self.up
     create_table :read_marks, force: true do |t|

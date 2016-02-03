@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Answer::MultipleResponseOption < ActiveRecord::Base
   belongs_to :answer, class_name: Course::Assessment::Answer::MultipleResponse.name,
                       inverse_of: :options

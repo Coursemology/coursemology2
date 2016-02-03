@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Answer < ActiveRecord::Base
   include Workflow
   actable
@@ -83,7 +84,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
   #
   # @return [Course::Assessment::Answer::AutoGrading]
   def ensure_auto_grading!
-    ActiveRecord::Base.transaction do
+    ActiveRecord::Base.transaction(requires_new: true) do
       auto_grading || create_auto_grading!
     end
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e

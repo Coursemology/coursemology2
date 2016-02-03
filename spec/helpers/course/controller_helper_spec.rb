@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe Course::ControllerHelper do
@@ -61,6 +62,77 @@ RSpec.describe Course::ControllerHelper do
           let!(:course_user) { create(:course_user, course: course, user: user) }
 
           it { is_expected.to eq(helper.link_to_course_user(course_user)) }
+        end
+      end
+    end
+
+    describe '#display_course_user_badge' do
+      let(:user) { create(:course_user) }
+      subject { helper.display_course_user_badge(user) }
+
+      context 'when the levels component is enabled in the course' do
+        before do
+          helper.controller.define_singleton_method(:current_component_host) do
+            { course_achievements_component: nil,
+              course_levels_component: 'foo' }
+          end
+        end
+
+        context 'when course user has experience points' do
+          before do
+            create(:course_level, course: user.course, experience_points_threshold: 100)
+            create(:course_level, course: user.course, experience_points_threshold: 200)
+            create(:course_experience_points_record, points_awarded: 140, course_user: user)
+          end
+
+          it "shows the course user's experience points" do
+            expect(subject).to include(user.experience_points.to_s)
+          end
+
+          it "shows the course user's level number" do
+            expect(subject).to include(user.level_number.to_s)
+          end
+
+          it 'displays the progress bar with current level progress' do
+            expect(helper).to receive(:display_progress_bar).
+              with(user.level_progress_percentage, ['progress-bar-info', 'progress-bar-striped'])
+            subject
+          end
+        end
+      end
+
+      context 'when the achievements component is enabled in the course' do
+        before do
+          helper.controller.define_singleton_method(:current_component_host) do
+            { course_achievements_component: 'bar',
+              course_levels_component: nil }
+          end
+        end
+
+        context 'when course user has a number of achievements' do
+          before { create_list(:course_user_achievement, 3, course_user: user) }
+
+          it "displays the achievement tab with the course user's achievement count" do
+            expect(subject).to include(I18n.t('layouts.course_user_badge.achievements'))
+            expect(subject).to include(user.achievement_count.to_s)
+          end
+        end
+      end
+
+      context 'when levels and achievement components are disabled' do
+        before do
+          helper.controller.define_singleton_method(:current_component_host) do
+            { course_achievements_component: nil,
+              course_levels_component: nil }
+          end
+        end
+
+        it 'does not display the level of the course user' do
+          expect(subject).not_to include(I18n.t('layouts.course_user_badge.levels'))
+        end
+
+        it 'does not display the achievement tab' do
+          expect(subject).not_to include(I18n.t('layouts.course_user_badge.achievements'))
         end
       end
     end

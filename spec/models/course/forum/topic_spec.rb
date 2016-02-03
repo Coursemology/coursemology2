@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe Course::Forum::Topic, type: :model do
-  it { is_expected.to act_as(:topic).class_name(Course::Discussion::Topic.name) }
+  it { is_expected.to act_as(Course::Discussion::Topic) }
   it { is_expected.to have_many(:views).inverse_of(:topic).dependent(:destroy) }
   it { is_expected.to belong_to(:forum).inverse_of(:topics) }
   it { is_expected.to belong_to(:creator) }

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.feature 'Course: Achievements' do
@@ -113,7 +114,7 @@ RSpec.feature 'Course: Achievements' do
       end
 
       scenario 'I can edit a assessment condition' do
-        assessment_to_change_to  = create(:assessment, course: course)
+        assessment_to_change_to = create(:assessment, course: course)
 
         visit edit_course_achievement_path(course, achievement)
         expect(current_path).to eq edit_course_achievement_path(course, achievement)

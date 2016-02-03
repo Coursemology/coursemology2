@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Material::Folder < ActiveRecord::Base
   acts_as_forest order: :name, dependent: :destroy
   include Course::ModelComponentHost::Component
@@ -21,7 +22,7 @@ class Course::Material::Folder < ActiveRecord::Base
   end
 
   def self.after_course_initialize(course)
-    return if course.persisted? || course.has_root_folder?
+    return if course.persisted? || course.root_folder?
 
     course.material_folders.build(name: 'Root')
   end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Question::ProgrammingTestCase < ActiveRecord::Base
   schema_validations except: :description
 

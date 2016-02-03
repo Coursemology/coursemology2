@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SetTimestampsNullity < ActiveRecord::Migration
   def change
     change_column_null :users, :created_at, false

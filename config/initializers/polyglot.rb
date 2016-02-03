@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Rails.application.configure do
   Coursemology::Polyglot.eager_load!
   config.after_initialize do

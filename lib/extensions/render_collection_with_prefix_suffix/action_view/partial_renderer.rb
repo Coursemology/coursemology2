@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::RenderCollectionWithPrefixSuffix::ActionView::PartialRenderer
   module PrependMethods
     # Adds support for the +prefix+ and +suffix+ options to {render partial:}.

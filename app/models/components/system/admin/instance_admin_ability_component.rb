@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module System::Admin::InstanceAdminAbilityComponent
   include AbilityHost::Component
 

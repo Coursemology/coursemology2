@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module DeviseControllerMacros
   # Specifies that the controller requires a user to be logged in.
   #

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ActiveRecord::Associations::Preloader
   # A manual preloader, inspired by
   # https://mrbrdo.wordpress.com/2013/09/25/manually-preloading-associations-in-rails

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Extensions::Materials::ActiveRecord::Base
   module ClassMethods
     # Declare this to allow models to support materials uploads.

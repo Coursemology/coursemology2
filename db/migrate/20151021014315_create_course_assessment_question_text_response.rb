@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateCourseAssessmentQuestionTextResponse < ActiveRecord::Migration
   def change
     create_table :course_assessment_question_text_responses do

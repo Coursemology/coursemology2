@@ -15,7 +15,7 @@ GIT
 
 GIT
   remote: git://github.com/carrierwaveuploader/carrierwave.git
-  revision: cc2ab785a9d475a777f67f5fb12751c8c6171e03
+  revision: b742d7fc1d095e7a2541e27bf281fd48fc142715
   specs:
     carrierwave (0.10.0)
       activemodel (>= 4.0.0)
@@ -29,14 +29,6 @@ GIT
   specs:
     bootstrap-sass-extras (0.0.6)
       rails (>= 3.1.0)
-
-GIT
-  remote: git://github.com/hzamani/active_record-acts_as.git
-  revision: 5826af8a21966ccd042d1534810ad9fa51775b1f
-  specs:
-    active_record-acts_as (1.0.7)
-      activerecord (~> 4, >= 4.1.2)
-      activesupport (~> 4)
 
 GIT
   remote: git://github.com/lowjoel/simple_token_authentication.git
@@ -57,7 +49,6 @@ GIT
 
 GEM
   remote: https://rubygems.org/
-  remote: https://rails-assets.org/
   specs:
     actionmailer (4.2.5.1)
       actionpack (= 4.2.5.1)
@@ -78,6 +69,9 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
+    active_record-acts_as (1.0.8)
+      activerecord (~> 4, >= 4.1.2)
+      activesupport (~> 4)
     activejob (4.2.5.1)
       activesupport (= 4.2.5.1)
       globalid (>= 0.3.0)
@@ -121,7 +115,7 @@ GEM
       uniform_notifier (~> 1.9.0)
     calculated_attributes (0.1.3)
       activerecord (>= 3.2.20)
-    capybara (2.6.0)
+    capybara (2.6.2)
       addressable
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
@@ -129,7 +123,7 @@ GEM
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
     cliver (0.3.2)
-    cocoon (1.2.6)
+    cocoon (1.2.7)
     codeclimate-test-reporter (0.4.8)
       simplecov (>= 0.7.1, < 1.0.0)
     coffee-rails (4.1.1)
@@ -140,7 +134,7 @@ GEM
       execjs
     coffee-script-source (1.10.0)
     concurrent-ruby (1.0.0)
-    consistency_fail (0.3.3)
+    consistency_fail (0.3.4)
     coursemology-polyglot (0.0.3)
       activesupport (~> 4.2.0, >= 4.2.2)
     coveralls (0.8.10)
@@ -151,7 +145,7 @@ GEM
       thor (~> 0.19.1)
       tins (~> 1.6.0)
     crass (1.0.2)
-    devise (3.5.5)
+    devise (3.5.6)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 3.2.6, < 5)
@@ -165,19 +159,19 @@ GEM
       railties (>= 3.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
-    domain_name (0.5.25)
+    domain_name (0.5.20160128)
       unf (>= 0.0.5, < 1.0.0)
     easy_translate (0.5.0)
       json
       thread
       thread_safe
-    edge (0.4.3)
+    edge (0.4.4)
       activerecord (>= 4.0.0)
     erubis (2.7.0)
     execjs (2.6.0)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.5.0)
+    factory_girl_rails (4.6.0)
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
     faraday (0.9.2)
@@ -216,10 +210,14 @@ GEM
       multi_json (~> 1.2)
     jquery-cdn (2.2.0)
       sprockets (>= 2)
+    jquery-rails (4.1.0)
+      rails-dom-testing (~> 1.0)
+      railties (>= 4.2.0)
+      thor (>= 0.14, < 2.0)
     jquery-ui-rails (5.0.5)
       railties (>= 3.2.16)
     json (1.8.3)
-    jwt (1.5.2)
+    jwt (1.5.1)
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -256,12 +254,12 @@ GEM
     nokogumbo (1.4.7)
       nokogiri
     nprogress-rails (0.1.6.7)
-    oauth2 (1.0.0)
+    oauth2 (1.1.0)
       faraday (>= 0.8, < 0.10)
-      jwt (~> 1.0)
+      jwt (~> 1.0, < 1.5.2)
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
-      rack (~> 1.2)
+      rack (>= 1.2, < 3)
     omniauth (1.3.1)
       hashie (>= 1.2, < 4)
       rack (>= 1.0, < 3)
@@ -274,14 +272,14 @@ GEM
     parser (2.3.0.2)
       ast (~> 2.2)
     pg (0.18.4)
-    poltergeist (1.8.1)
+    poltergeist (1.9.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
       multi_json (~> 1.0)
       websocket-driver (>= 0.2.0)
     polyamorous (1.1.0)
       activerecord (>= 3.0)
-    puma (2.15.3)
+    puma (2.16.0)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -296,9 +294,6 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 4.2.5.1)
       sprockets-rails
-    rails-assets-jquery (2.2.0)
-    rails-assets-jquery-ujs (1.2.0)
-      rails-assets-jquery (> 1.8)
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
     rails-dom-testing (1.0.7)
@@ -347,7 +342,7 @@ GEM
     rspec-mocks (3.4.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.4.0)
-    rspec-rails (3.4.1)
+    rspec-rails (3.4.2)
       actionpack (>= 3.0, < 4.3)
       activesupport (>= 3.0, < 4.3)
       railties (>= 3.0, < 4.3)
@@ -429,7 +424,7 @@ GEM
     settings_on_rails (0.3.0)
       activerecord (>= 3.1)
     should_not (1.1.0)
-    shoulda-matchers (3.1.0)
+    shoulda-matchers (3.1.1)
       activesupport (>= 4.0.0)
     simple_form (3.2.1)
       actionpack (> 4, < 5.1)
@@ -458,7 +453,7 @@ GEM
     sprockets (3.5.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
-    sprockets-rails (3.0.0)
+    sprockets-rails (3.0.1)
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
@@ -483,8 +478,6 @@ GEM
       coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    tzinfo-data (1.2015.7)
-      tzinfo (>= 1.0.0)
     uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -498,9 +491,8 @@ GEM
       activerecord (>= 3.0)
       activesupport (>= 3.0)
     valuable (0.9.10)
-    warden (1.2.4)
+    warden (1.2.6)
       rack (>= 1.0)
-    wdm (0.1.1)
     websocket-driver (0.6.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
@@ -510,11 +502,10 @@ GEM
     yard (0.8.7.6)
 
 PLATFORMS
-  mswin64
   ruby
 
 DEPENDENCIES
-  active_record-acts_as!
+  active_record-acts_as (>= 1.0.8)
   activerecord-userstamp (>= 3.0.2)
   acts_as_tenant!
   after_commit_action
@@ -548,6 +539,7 @@ DEPENDENCIES
   i18n-tasks
   jbuilder
   jquery-cdn
+  jquery-rails
   jquery-ui-rails
   kaminari
   listen (~> 1.3.1)
@@ -563,7 +555,6 @@ DEPENDENCIES
   poltergeist
   puma
   rails (~> 4.2.1)
-  rails-assets-jquery-ujs!
   rails-dev-boost!
   rails-flog
   rails_utils (>= 3.3.3)
@@ -599,4 +590,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

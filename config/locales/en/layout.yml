@@ -38,3 +38,6 @@ en:
       sign_off: 'The Coursemology Team'
     search_form:
       search_button: :'common.search'
+    course_user_badge:
+      achievements: :'course.achievements.index.header'
+      levels: :'course.levels.index.level'

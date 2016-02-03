@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateAssessments < ActiveRecord::Migration
   def change
     create_table :course_assessment_categories do |t|

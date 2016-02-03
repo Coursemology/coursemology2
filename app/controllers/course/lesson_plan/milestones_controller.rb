@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::LessonPlan::MilestonesController < Course::ComponentController
   load_and_authorize_resource :milestone,
                               through: :course, through_association: :lesson_plan_milestones,

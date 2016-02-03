@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Course::Material::FoldersHelper
   # Find the proper display name for the folder, if folder is root we will display the name of
   # material component.

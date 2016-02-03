@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::ProgrammingPackage do
@@ -109,7 +110,7 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
   describe '#submission_files=' do
     it 'replaces all existing submission files' do
       replacement = { Pathname.new('test.py') => 'test!' }
-      expect(subject.submission_files = replacement).to eq(replacement)
+      expect((subject.submission_files = replacement)).to eq(replacement)
       expect(subject.submission_files).to eq(replacement)
     end
   end

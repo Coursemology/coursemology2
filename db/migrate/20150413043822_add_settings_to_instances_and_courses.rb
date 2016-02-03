@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddSettingsToInstancesAndCourses < ActiveRecord::Migration
   def change
     add_column :instances, :settings, :text

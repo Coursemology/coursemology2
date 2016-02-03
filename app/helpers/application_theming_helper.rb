@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ApplicationThemingHelper
   def application_resources
     jquery = include_jquery

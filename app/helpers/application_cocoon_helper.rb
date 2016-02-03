@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ApplicationCocoonHelper
   # Shows a link that will allow to dynamically add a new associated object. This is a wrapper of
   # #link_to_add_association

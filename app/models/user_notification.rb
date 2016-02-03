@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # The user level notification. This is meant to be called by the Notifications Framework
 #
 # @api notifications

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class IntegrateAssessmentsWithPolyglotFramework < ActiveRecord::Migration
   def up
     change_table :course_assessment_question_programming do |t|

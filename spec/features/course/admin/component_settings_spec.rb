@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.feature 'Course: Administration: Components' do
@@ -5,7 +6,7 @@ RSpec.feature 'Course: Administration: Components' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:components)  { Course::ControllerComponentHost.components }
+    let(:components) { Course::ControllerComponentHost.components }
     let(:sample_component_id) do
       "settings_effective_enabled_component_ids_#{components.sample.key}"
     end

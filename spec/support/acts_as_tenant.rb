@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Test group helpers for setting the tenant for tests.
 module ActsAsTenant::TestGroupHelpers
   def self.build_host(instance)
