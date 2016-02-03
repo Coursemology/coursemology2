@@ -21,11 +21,30 @@ RSpec.describe ApplicationFormattersHelper do
 
     describe '#format_html' do
       it 'removes script tags' do
-        expect(helper.sanitize('<script/>')).to eq('')
+        expect(helper.format_html('<script/>')).to eq('')
       end
 
       it 'produces html_safe output' do
-        expect(helper.sanitize('')).to be_html_safe
+        expect(helper.format_html('')).to be_html_safe
+      end
+    end
+
+    describe '#format_code_block' do
+      let(:language) { Coursemology::Polyglot::Language::Python::Python2Point7 }
+      let(:snippet) do
+        <<-PYTHON
+          def hello:
+            pass
+        PYTHON
+      end
+      let(:formatted_block) { helper.format_code_block(snippet, language) }
+
+      it 'produces a pre element' do
+        expect(formatted_block).to have_tag('pre')
+      end
+
+      it 'highlights the keywords' do
+        expect(formatted_block).to have_tag('span.k', text: 'def')
       end
     end
 

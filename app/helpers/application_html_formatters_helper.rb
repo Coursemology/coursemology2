@@ -2,7 +2,8 @@
 module ApplicationHTMLFormattersHelper
   # The default pipeline, used by both text and HTML pipelines.
   DefaultPipeline = HTML::Pipeline.new([
-                                         HTML::Pipeline::AutolinkFilter
+                                         HTML::Pipeline::AutolinkFilter,
+                                         HTML::Pipeline::RougeFilter
                                        ])
 
   # The HTML sanitizer options to use.
@@ -38,6 +39,22 @@ module ApplicationHTMLFormattersHelper
   # @return [String]
   def format_html(text)
     format_with_pipeline(DefaultHTMLPipeline, text)
+  end
+
+  # Syntax highlights the given code fragment.
+  #
+  # @param [String] code The code to syntax highlight.
+  # @param [Coursemology::Polyglot::Language] language The language to highlight the code block
+  #   with.
+  def format_code_block(code, language = nil)
+    code = html_escape(code) unless code.html_safe?
+    code = content_tag(:pre, lang: language ? language.rouge_lexer : nil) do
+      content_tag(:code) do
+        code
+      end
+    end
+
+    format_with_pipeline(DefaultPipeline, code)
   end
 
   private
