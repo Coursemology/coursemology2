@@ -36,6 +36,14 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
     end
   end
 
+  # Waits for all queued jobs to finish executing.
+  def self.wait_for_jobs
+    with_thread_pool do
+      return if @pending_jobs.empty? && @running_jobs == 0
+      @finish_jobs_condition.wait(@thread_pool_mutex)
+    end
+  end
+
   class << self
     private
 
@@ -146,7 +154,17 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
         ActiveJob::Base.execute(job.serialize)
       end
     ensure
-      with_thread_pool { @running_jobs -= 1 }
+      thread_finish_job(job)
+    end
+
+    # Cleans up after a job is finished.
+    #
+    # This also signals whoever needs to know that the job queue is now empty.
+    def thread_finish_job(_)
+      with_thread_pool do
+        @running_jobs -= 1
+        @finish_jobs_condition.broadcast if @running_jobs == 0 && @pending_jobs.empty?
+      end
     end
   end
 
