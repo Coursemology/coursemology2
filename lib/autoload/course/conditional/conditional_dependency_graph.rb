@@ -24,7 +24,7 @@ class Course::Conditional::ConditionalDependencyGraph
         resolved_conditionals.add(conditional)
 
         # Add newly resolved conditions to cascade the effect of the resolved conditional
-        resolved_conditions.union(@edges[conditional].select { |c| c.satisfied_by?(course_user) })
+        resolved_conditions.merge(@edges[conditional].select { |c| c.satisfied_by?(course_user) })
       end
     end
 
