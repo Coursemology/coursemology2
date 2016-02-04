@@ -22,8 +22,8 @@ class Course::Condition::Assessment < ActiveRecord::Base
     end
   end
 
-  def dependent_objects
-    [assessment]
+  def dependent_object
+    assessment
   end
 
   def satisfied_by?(course_user)

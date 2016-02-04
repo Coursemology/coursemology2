@@ -7,8 +7,8 @@ class Course::Condition::Level < ActiveRecord::Base
     self.class.human_attribute_name('title.title', value: minimum_level)
   end
 
-  def dependent_objects
-    []
+  def dependent_object
+    nil
   end
 
   # Checks if the user satisfies the minimum level condition.

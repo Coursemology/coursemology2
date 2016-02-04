@@ -16,8 +16,4 @@ class Course::Achievement < ActiveRecord::Base
   def set_defaults
     self.weight ||= 10
   end
-
-  def satisfy_conditions
-    Course::Condition::Achievement.where(achievement: self)
-  end
 end

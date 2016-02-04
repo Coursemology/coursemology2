@@ -9,8 +9,8 @@ class Course::Condition::Achievement < ActiveRecord::Base
 
   delegate :title, to: :achievement
 
-  def dependent_objects
-    [achievement]
+  def dependent_object
+    achievement
   end
 
   # Checks if the user has the required achievement.

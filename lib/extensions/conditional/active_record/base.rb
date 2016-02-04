@@ -32,11 +32,6 @@ module Extensions::Conditional::ActiveRecord::Base
     def conditions_satisfied_by?(course_user)
       conditions.all? { |condition| condition.satisfied_by?(course_user) }
     end
-
-    # @return [Array<Condition] Conditions that are satisfied when this conditional is resolved
-    def satisfy_conditions
-      fail NotImplementedError
-    end
   end
 
   module ConditionInstanceMethods
@@ -46,9 +41,9 @@ module Extensions::Conditional::ActiveRecord::Base
       fail NotImplementedError
     end
 
-    # @return [Array<Object] Conditional objects that the condition depends on to check
-    #   if it is satisfiable
-    def dependent_objects
+    # @return [Object] Conditional object that the condition depends on to check if it is
+    #   satisfiable
+    def dependent_object
       fail NotImplementedError
     end
 
@@ -63,6 +58,7 @@ module Extensions::Conditional::ActiveRecord::Base
 
   module ConditionClassMethods
     # Array of classes that the condition depends on.
+    #TODO(Xuanyi): change to dependent_class
     def dependent_classes
       fail NotImplementedError
     end
