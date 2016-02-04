@@ -107,6 +107,7 @@ Rails.application.routes.draw do
       namespace :admin do
         get '/' => 'admin#index'
         patch '/' => 'admin#update'
+        delete '/' => 'admin#destroy'
 
         get 'components' => 'component_settings#edit'
         patch 'components' => 'component_settings#update'
