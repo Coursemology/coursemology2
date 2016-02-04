@@ -84,6 +84,6 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
   end
 
   def update_result_params
-    params.require(:programming_evaluation).permit(:stdout, :stderr, :test_report)
+    params.require(:programming_evaluation).permit(:stdout, :stderr, :test_report, :exit_code)
   end
 end

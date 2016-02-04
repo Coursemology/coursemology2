@@ -16,10 +16,18 @@ module TrackableJob
   class Job < ActiveRecord::Base
     enum status: [:submitted, :completed, :errored]
 
-    after_commit :signal, unless: :submitted?
+    after_save :signal_finished, unless: :submitted?
 
     validates :redirect_to, absence: true, if: :submitted?
     validates :error, absence: true, unless: :errored?
+
+    private
+
+    def signal_finished
+      return unless status_changed?
+
+      execute_after_commit { signal }
+    end
   end
 
   included do
@@ -72,11 +80,9 @@ module TrackableJob
 
   def rescue_tracked(exception)
     @job.status = :errored
-    @job.error = {
-      class: exception.class.name,
-      message: exception.to_s,
-      backtrace: exception.backtrace
-    }
+    @job.error = exception.as_json.reverse_merge(class: exception.class.name,
+                                                 message: exception.to_s,
+                                                 backtrace: exception.backtrace)
     @job.save!
   end
 

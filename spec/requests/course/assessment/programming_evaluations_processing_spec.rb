@@ -46,7 +46,7 @@ RSpec.describe 'Course: Assessments: Programming Evaluations Processing' do
         evaluation = create(:course_assessment_programming_evaluation, :assigned, course: course)
         attributes = attributes_for(:course_assessment_programming_evaluation, :completed)
         put assessment_programming_evaluation_result_path(evaluation),
-            programming_evaluation: attributes.slice(:stdout, :stderr, :test_report)
+            programming_evaluation: attributes.slice(:stdout, :stderr, :test_report, :exit_code)
 
         expect(response.status).to eq(200)
         expect(JSON.parse(response.body)).to eq({})

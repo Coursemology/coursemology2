@@ -35,6 +35,26 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(question_created.weight).to eq(question_attributes[:weight])
       end
 
+      scenario 'I can upload a template package' do
+        question = create(:course_assessment_question_programming, assessment: assessment)
+        visit edit_course_assessment_question_programming_path(course, assessment, question)
+
+        attach_file 'question_programming[file]',
+                    File.join(ActionController::TestCase.fixture_path,
+                              'course/empty_programming_question_template.zip')
+        click_button 'submit'
+        wait_for_job
+        expect(page).to have_selector('div.alert.alert-danger')
+
+        attach_file 'question_programming[file]',
+                    File.join(ActionController::TestCase.fixture_path,
+                              'course/programming_question_template.zip')
+        click_button 'submit'
+        wait_for_job
+
+        expect(page).to have_selector('div.alert.alert-success')
+      end
+
       scenario 'I can edit a question' do
         question = create(:course_assessment_question_programming, assessment: assessment)
         visit course_assessment_path(course, assessment)

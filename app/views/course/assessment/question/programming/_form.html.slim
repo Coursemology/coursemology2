@@ -1,3 +1,5 @@
+= import_result_alert
+
 = simple_form_for [current_course, @assessment, @programming_question] do |f|
   = f.error_notification
   = render partial: 'course/assessment/questions/form', locals: { f: f }
@@ -7,6 +9,10 @@
   = f.input :time_limit
   = f.label :template_package
   = f.attachment
+
+  - if display_build_log?
+    = render partial: 'build_log',
+             locals: { log: @programming_question.import_job.error.slice('stdout', 'stderr') }
 
   h2 = t('.template')
   ul
