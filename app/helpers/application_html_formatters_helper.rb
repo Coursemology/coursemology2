@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 module ApplicationHTMLFormattersHelper
+  DefaultPipelineOptions = {
+    css_class: 'codehilite'
+  }.freeze
+
   # The default pipeline, used by both text and HTML pipelines.
   DefaultPipeline = HTML::Pipeline.new([
                                          HTML::Pipeline::AutolinkFilter,
                                          HTML::Pipeline::RougeFilter
-                                       ])
+                                       ], DefaultPipelineOptions)
 
   # The HTML sanitizer options to use.
   HTMLSanitizerOptions = {
@@ -14,10 +18,13 @@ module ApplicationHTMLFormattersHelper
   HTMLSanitizerPipeline = HTML::Pipeline.new([HTML::Pipeline::SanitizationFilter],
                                              HTMLSanitizerOptions)
 
+  # The default HTML pipeline options.
+  DefaultHTMLPipelineOptions = DefaultPipelineOptions.merge(HTMLSanitizerOptions).freeze
+
   # The default HTML pipeline.
   DefaultHTMLPipeline = HTML::Pipeline.new(HTMLSanitizerPipeline.filters +
                                            DefaultPipeline.filters,
-                                           HTMLSanitizerOptions)
+                                           DefaultHTMLPipelineOptions)
 
   # Replaces the Rails sanitizer with the one configured with HTML Pipeline.
   def sanitize(text)

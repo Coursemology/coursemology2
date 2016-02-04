@@ -24,6 +24,16 @@ RSpec.describe ApplicationFormattersHelper do
         expect(helper.format_html('<script/>')).to eq('')
       end
 
+      it 'formats code' do
+        html = <<-HTML
+          <pre lang="python"><code>
+          def hello:
+            pass
+          </code></pre>
+        HTML
+        expect(helper.format_html(html)).to have_tag('pre.codehilite')
+      end
+
       it 'produces html_safe output' do
         expect(helper.format_html('')).to be_html_safe
       end
@@ -39,8 +49,8 @@ RSpec.describe ApplicationFormattersHelper do
       end
       let(:formatted_block) { helper.format_code_block(snippet, language) }
 
-      it 'produces a pre element' do
-        expect(formatted_block).to have_tag('pre')
+      it 'produces a pre element with the codehilite class' do
+        expect(formatted_block).to have_tag('pre.codehilite')
       end
 
       it 'highlights the keywords' do

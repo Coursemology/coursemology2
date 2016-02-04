@@ -8,6 +8,7 @@ $nprogress-spinner-icon-width: 18px !default;
 @import 'nprogress';
 @import 'nprogress-bootstrap';
 @import 'font-awesome';
+@import 'pygments-css/github';
 
 body {
   padding-top: $navbar-height + $navbar-margin-bottom;
