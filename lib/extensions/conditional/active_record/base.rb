@@ -58,7 +58,7 @@ module Extensions::Conditional::ActiveRecord::Base
 
   module ConditionClassMethods
     # Array of classes that the condition depends on.
-    #TODO(Xuanyi): change to dependent_class
+    # TODO(Xuanyi): change to dependent_class
     def dependent_classes
       fail NotImplementedError
     end
