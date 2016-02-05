@@ -177,7 +177,7 @@ gem 'rubyzip', require: 'zip'
 gem 'nokogiri'
 
 # Polyglot support
-gem 'coursemology-polyglot', '>= 0.0.2'
+gem 'coursemology-polyglot', '>= 0.1.0'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
