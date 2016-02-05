@@ -18,8 +18,8 @@ en:
           description: 'Description'
           start_at: :'course.assessment.assessments.index.start_at'
           end_at: :'course.assessment.assessments.index.end_at'
-          maximum_experience_points: :'course.assessment.assessments.index.
-            maximum_experience_points'
+          maximum_experience_points:
+            :'course.assessment.assessments.index.maximum_experience_points'
           finish_to_unlock: 'Finish to Unlock'
           files: 'Files'
           questions: 'Questions'
