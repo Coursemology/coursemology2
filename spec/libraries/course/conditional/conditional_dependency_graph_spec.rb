@@ -41,13 +41,13 @@ RSpec.describe Course::Conditional::ConditionalDependencyGraph do
     #        ->E<-
     # B -------^
     #
-    @A = DummyConditionalCondition.build([], 'A')
-    @B = DummyConditionalCondition.build([], 'B')
-    @C = DummyConditionalCondition.build([@A], 'C')
-    @D = DummyConditionalCondition.build([@A, @C], 'D')
-    @E = DummyConditionalCondition.build([@A, @B, @D], 'E')
+    @a = DummyConditionalCondition.build([], 'A')
+    @b = DummyConditionalCondition.build([], 'B')
+    @c = DummyConditionalCondition.build([@a], 'C')
+    @d = DummyConditionalCondition.build([@a, @c], 'D')
+    @e = DummyConditionalCondition.build([@a, @b, @d], 'E')
 
-    [@C, @A, @B, @E, @D]
+    [@c, @a, @b, @e, @d]
   end
 
   def create_cyclic_graph
@@ -57,12 +57,12 @@ RSpec.describe Course::Conditional::ConditionalDependencyGraph do
     # |               |
     #  ----------------
     #
-    @A = DummyConditionalCondition.build([], 'A')
-    @B = DummyConditionalCondition.build([@A], 'B')
-    @C = DummyConditionalCondition.build([@B], 'C')
-    @A.conditions.append(@C)
+    @a = DummyConditionalCondition.build([], 'A')
+    @b = DummyConditionalCondition.build([@a], 'B')
+    @c = DummyConditionalCondition.build([@b], 'C')
+    @a.conditions.append(@c)
 
-    [@B, @A, @C]
+    [@b, @a, @c]
   end
 
   def create_disconnected_graph
@@ -73,19 +73,19 @@ RSpec.describe Course::Conditional::ConditionalDependencyGraph do
     #
     # G ----> H ----> I
     #
-    @A = DummyConditionalCondition.build([], 'A')
-    @B = DummyConditionalCondition.build([@A], 'B')
-    @C = DummyConditionalCondition.build([@B], 'C')
+    @a = DummyConditionalCondition.build([], 'A')
+    @b = DummyConditionalCondition.build([@a], 'B')
+    @c = DummyConditionalCondition.build([@b], 'C')
 
-    @D = DummyConditionalCondition.build([], 'D')
-    @E = DummyConditionalCondition.build([@D], 'E')
-    @F = DummyConditionalCondition.build([@E], 'F')
+    @d = DummyConditionalCondition.build([], 'D')
+    @e = DummyConditionalCondition.build([@d], 'E')
+    @f = DummyConditionalCondition.build([@e], 'F')
 
-    @G = DummyConditionalCondition.build([], 'G')
-    @H = DummyConditionalCondition.build([@G], 'H')
-    @I = DummyConditionalCondition.build([@H], 'I')
+    @g = DummyConditionalCondition.build([], 'G')
+    @h = DummyConditionalCondition.build([@g], 'H')
+    @i = DummyConditionalCondition.build([@h], 'I')
 
-    [@B, @D, @E, @H, @G, @A, @I, @C, @F]
+    [@b, @d, @e, @h, @g, @a, @i, @c, @f]
   end
 
   describe '.build' do
@@ -126,13 +126,13 @@ RSpec.describe Course::Conditional::ConditionalDependencyGraph do
       context 'when resolved conditions do not resolve other conditions' do
         context 'when no conditions are satisfied initially' do
           it 'returns only conditionals with no condition' do
-            expect(subject.resolve([], double)).to contain_exactly(@A, @B)
+            expect(subject.resolve([], double)).to contain_exactly(@a, @b)
           end
         end
 
         context 'when condition A & B are satisfied initially' do
           it 'returns only conditionals that have been resolved' do
-            expect(subject.resolve([@A, @B], double)).to contain_exactly(@A, @B, @C)
+            expect(subject.resolve([@a, @b], double)).to contain_exactly(@a, @b, @c)
           end
         end
 
@@ -148,9 +148,9 @@ RSpec.describe Course::Conditional::ConditionalDependencyGraph do
         context 'when no conditions are satisfied initially' do
           context 'when conditions for A & B are satisfied by the user' do
             it 'returns conditionals up to C' do
-              allow(@A).to receive(:satisfied_by?).and_return(true)
-              allow(@B).to receive(:satisfied_by?).and_return(true)
-              expect(subject.resolve([], double)).to contain_exactly(@A, @B, @C)
+              allow(@a).to receive(:satisfied_by?).and_return(true)
+              allow(@b).to receive(:satisfied_by?).and_return(true)
+              expect(subject.resolve([], double)).to contain_exactly(@a, @b, @c)
             end
           end
 
@@ -171,9 +171,9 @@ RSpec.describe Course::Conditional::ConditionalDependencyGraph do
       context 'when condition D is satisfied initially' do
         context 'when conditions for A & B are satisfied by the user' do
           it 'returns all conditionals except for D' do
-            allow(@A).to receive(:satisfied_by?).and_return(true)
-            allow(@B).to receive(:satisfied_by?).and_return(true)
-            expect(subject.resolve([@D], double)).to contain_exactly(@A, @B, @C, @E)
+            allow(@a).to receive(:satisfied_by?).and_return(true)
+            allow(@b).to receive(:satisfied_by?).and_return(true)
+            expect(subject.resolve([@d], double)).to contain_exactly(@a, @b, @c, @e)
           end
         end
       end
@@ -191,13 +191,13 @@ RSpec.describe Course::Conditional::ConditionalDependencyGraph do
       context 'when resolved conditions do not resolve other conditions' do
         context 'when no conditions are satisfied initially' do
           it 'returns only conditionals with no condition' do
-            expect(subject.resolve([], double)).to contain_exactly(@A, @D, @G)
+            expect(subject.resolve([], double)).to contain_exactly(@a, @d, @g)
           end
         end
 
         context 'when condition A & D are satisfied initially' do
           it 'returns only conditionals that have been resolved' do
-            expect(subject.resolve([@A, @D], double)).to contain_exactly(@A, @B, @D, @E, @G)
+            expect(subject.resolve([@a, @d], double)).to contain_exactly(@a, @b, @d, @e, @g)
           end
         end
       end
@@ -207,20 +207,20 @@ RSpec.describe Course::Conditional::ConditionalDependencyGraph do
         context 'when no conditions are satisfied initially' do
           context 'when conditions for A, D & H are satisfied by the user' do
             it 'returns each disconnected components up to level 2' do
-              allow(@A).to receive(:satisfied_by?).and_return(true)
-              allow(@D).to receive(:satisfied_by?).and_return(true)
-              allow(@G).to receive(:satisfied_by?).and_return(true)
-              expect(subject.resolve([], double)).to contain_exactly(@A, @B, @D, @E, @G, @H)
+              allow(@a).to receive(:satisfied_by?).and_return(true)
+              allow(@d).to receive(:satisfied_by?).and_return(true)
+              allow(@g).to receive(:satisfied_by?).and_return(true)
+              expect(subject.resolve([], double)).to contain_exactly(@a, @b, @d, @e, @g, @h)
             end
           end
 
           context 'when all cascading conditions are satisfied by user in component A & D'
           it 'returns all conditional in component A & D and conditional H' do
-            allow(@A).to receive(:satisfied_by?).and_return(true)
-            allow(@B).to receive(:satisfied_by?).and_return(true)
-            allow(@D).to receive(:satisfied_by?).and_return(true)
-            allow(@E).to receive(:satisfied_by?).and_return(true)
-            expect(subject.resolve([], double)).to contain_exactly(@A, @B, @C, @D, @E, @F, @G)
+            allow(@a).to receive(:satisfied_by?).and_return(true)
+            allow(@b).to receive(:satisfied_by?).and_return(true)
+            allow(@d).to receive(:satisfied_by?).and_return(true)
+            allow(@e).to receive(:satisfied_by?).and_return(true)
+            expect(subject.resolve([], double)).to contain_exactly(@a, @b, @c, @d, @e, @f, @g)
           end
         end
       end
