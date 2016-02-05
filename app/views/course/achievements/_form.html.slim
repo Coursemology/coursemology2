@@ -5,6 +5,10 @@
 
   = f.input :description
 
+  = f.label t('.badge')
+  div.achievement-form = display_achievement_badge(@achievement)
+  = f.file_field :badge
+
   = f.input :draft
 
   - if @achievement.persisted?
