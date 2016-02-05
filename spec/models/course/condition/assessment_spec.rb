@@ -167,6 +167,13 @@ RSpec.describe Course::Condition::Assessment, type: :model do
       end
     end
 
+    describe '#dependent_object' do
+      it 'returns the correct dependent assessment object' do
+        subject.assessment = create(:assessment, course: course)
+        expect(subject.dependent_object).to eq(subject.assessment)
+      end
+    end
+
     describe '.dependent_classes' do
       it 'returns [Course::Assessment]' do
         expect(Course::Condition::Assessment.dependent_classes).to eq([Course::Assessment.name])
