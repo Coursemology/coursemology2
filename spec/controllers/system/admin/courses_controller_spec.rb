@@ -34,7 +34,7 @@ RSpec.describe System::Admin::CoursesController, type: :controller do
     describe '#destroy' do
       let!(:course_to_delete) { create(:course) }
       let!(:course_stub) do
-        stub = create(:user)
+        stub = create(:course)
         allow(stub).to receive(:destroy).and_return(false)
         stub
       end
