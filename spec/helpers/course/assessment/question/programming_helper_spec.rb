@@ -64,6 +64,15 @@ RSpec.describe Course::Assessment::Question::ProgrammingHelper do
         end
       end
 
+      context 'when a Timeout::Error is raised' do
+        let(:error_class) { Timeout::Error }
+
+        it 'returns timeout error' do
+          expect(subject).to eq(I18n.t('course.assessment.question.programming.form.import_result.'\
+                                       'errors.evaluation_timeout'))
+        end
+      end
+
       context 'when a generic Evaluation error is raised' do
         let(:error_class) { Course::Assessment::ProgrammingEvaluationService::Error }
         it 'returns the generic error message' do
