@@ -11,13 +11,11 @@
   = f.attachment
 
   - if display_build_log?
-    = render partial: 'build_log',
+    = render partial: 'form_build_log',
              locals: { log: @programming_question.import_job.error.slice('stdout', 'stderr') }
 
-  h2 = t('.template')
-  ul
-    - f.object.template_files.each do |template|
-      li = template.filename
+  = render partial: 'form_templates',
+           locals: { programming_question: @programming_question }
 
   h2 = t('.test_cases.test_cases')
   table.table.table-striped.table-hover
