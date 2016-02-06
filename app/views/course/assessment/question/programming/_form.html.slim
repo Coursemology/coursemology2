@@ -17,28 +17,7 @@
   = render partial: 'form_templates',
            locals: { programming_question: @programming_question }
 
-  h2 = t('.test_cases.test_cases')
-  table.table.table-striped.table-hover
-    thead
-      tr
-        th colspan=2
-          h3 = t('.test_cases.public')
-      tr
-        th = t('.test_cases.description')
-        th = t('.test_cases.hint')
-    tbody
-    thead
-      tr
-        th colspan=2
-          h3 = t('.test_cases.private')
-      tr
-        th colspan=2 = t('.test_cases.description')
-    tbody
-
-
-  table.table.table-striped.table-hover
-    thead
-
-    tbody
+  = render partial: 'form_test_cases',
+           locals: { test_cases: @programming_question.test_cases }
 
   = f.button :submit

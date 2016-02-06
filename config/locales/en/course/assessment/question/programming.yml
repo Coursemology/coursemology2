@@ -20,15 +20,16 @@ en:
                 invalid_package: 'the package uploaded does not have a valid structure.'
                 time_limit_exceeded: 'the package did not finish executing within the time limit.'
                 evaluation_error: 'an error occurred during evaluation, see logs.'
-            test_cases:
-              test_cases: 'Test Cases'
-              public: 'Public Test Cases'
-              private: 'Private Test Cases'
-              description: 'Description'
-              hint: 'Hint'
           form_build_log:
             title: 'Build Log'
             stdout: 'Standard Output'
             stderr: 'Standard Error'
           form_templates:
             templates: 'Template'
+          form_test_cases:
+            test_cases: 'Test Cases'
+            public: 'Public Test Cases'
+            private: 'Private Test Cases'
+            identifier: 'Identifier'
+            description: 'Description'
+            hint: 'Hint'

@@ -63,6 +63,9 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
                                         text: template.content)
         end
 
+        question.test_cases.each do |test_case|
+          expect(page).to have_content_tag_for(test_case)
+        end
       end
 
       scenario 'I can edit a question' do
