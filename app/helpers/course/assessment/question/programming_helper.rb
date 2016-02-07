@@ -53,6 +53,8 @@ module Course::Assessment::Question::ProgrammingHelper
     case error['class']
     when InvalidDataError.name
       t('course.assessment.question.programming.form.import_result.errors.invalid_package')
+    when Timeout::Error.name
+      t('course.assessment.question.programming.form.import_result.errors.evaluation_timeout')
     when Course::Assessment::ProgrammingEvaluationService::TimeLimitExceededError.name
       t('course.assessment.question.programming.form.import_result.errors.time_limit_exceeded')
     when Course::Assessment::ProgrammingEvaluationService::Error.name
