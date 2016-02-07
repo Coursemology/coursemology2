@@ -1,0 +1,27 @@
+- public_test_cases, private_test_cases = test_cases.partition(&:public?)
+h2 = t('.test_cases')
+
+table.table.table-striped.table-hover
+  thead
+    tr
+      th = t('.identifier')
+      th = t('.description')
+      th = t('.hint')
+  tbody
+    tr
+      th colspan=3
+        = t('.public')
+    - public_test_cases.each do |test_case|
+      = content_tag_for(:tr, test_case) do
+        th = test_case.identifier
+        td = test_case.description
+        td = test_case.hint
+  tbody
+    tr
+      th colspan=3
+        = t('.private')
+    - private_test_cases.each do |test_case|
+      = content_tag_for(:tr, test_case) do
+        th = test_case.identifier
+        td = test_case.description
+        td

@@ -36,7 +36,8 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
       end
 
       scenario 'I can upload a template package' do
-        question = create(:course_assessment_question_programming, assessment: assessment)
+        question = create(:course_assessment_question_programming,
+                          assessment: assessment, template_file_count: 0)
         visit edit_course_assessment_question_programming_path(course, assessment, question)
 
         attach_file 'question_programming[file]',
@@ -52,7 +53,19 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         click_button 'submit'
         wait_for_job
 
+        expect(current_path).to \
+          start_with(course_assessment_path(course, assessment))
+
         expect(page).to have_selector('div.alert.alert-success')
+        question.template_files.reload.each do |template|
+          expect(page).to have_selector('ul.nav a', text: template.filename)
+          expect(page).to have_selector('div.question_programming_template_file pre code',
+                                        text: template.content)
+        end
+
+        question.test_cases.each do |test_case|
+          expect(page).to have_content_tag_for(test_case)
+        end
       end
 
       scenario 'I can edit a question' do
@@ -91,21 +104,6 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         select question_attributes[:language].name, from: 'language'
         fill_in 'memory_limit', with: question_attributes[:memory_limit]
         fill_in 'time_limit', with: question_attributes[:time_limit]
-        attach_file 'question_programming[file]',
-                    File.join(ActionController::TestCase.fixture_path,
-                              'course/programming_question_template.zip')
-
-        click_button 'submit'
-        wait_for_job
-
-        expect(current_path).to \
-          start_with(course_assessment_path(course, assessment))
-      end
-
-      scenario 'I can upload a question package' do
-        question = create(:course_assessment_question_programming, assessment: assessment)
-        visit edit_course_assessment_question_programming_path(course, assessment, question)
-
         attach_file 'question_programming[file]',
                     File.join(ActionController::TestCase.fixture_path,
                               'course/programming_question_template.zip')

@@ -1,0 +1,11 @@
+h2 = t('.templates')
+div.templates role='tabpanel'
+  ul class='nav nav-tabs' role='tablist'
+    - programming_question.template_files.each_with_index do |template, index|
+      li role='presentation' class=(index == 0 ? 'active' : nil)
+        = link_to(template.filename, "##{dom_id(template)}")
+
+  div.tab-content
+    - programming_question.template_files.each_with_index do |template, index|
+      = div_for(template, role: 'tabpanel', class: ['tab-pane', index == 0 ? 'active' : nil]) do
+        = format_code_block(template.content, programming_question.language)

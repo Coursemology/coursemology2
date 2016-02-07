@@ -61,6 +61,7 @@ gem 'font-awesome-rails'
 gem 'html-pipeline'
 gem 'sanitize'
 gem 'rinku'
+gem 'html-pipeline-rouge_filter'
 # Turbolinks makes following links in your web application faster.
 # Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
