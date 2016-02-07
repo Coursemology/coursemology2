@@ -21,6 +21,11 @@ RSpec.describe 'Extension: Acts as Condition', type: :model do
       expect(subject).to respond_to(:satisfied_by?)
       expect { subject.satisfied_by?(double) }.to raise_error(NotImplementedError)
     end
+
+    it 'implements #dependent_object' do
+      expect(subject).to respond_to(:dependent_object)
+      expect { subject.dependent_object }.to raise_error(NotImplementedError)
+    end
   end
 
   describe 'classes which implement acts_as_condition' do
