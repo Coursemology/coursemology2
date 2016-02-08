@@ -35,7 +35,7 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
         it 'changes the file' do
           old_file_url = material_stub.attachment.file_upload.url
           subject
-          expect(material_stub.attachment.reload.file_upload.url).not_to eq(old_file_url)
+          expect(material_stub.reload.attachment.file_upload.url).not_to eq(old_file_url)
         end
       end
     end

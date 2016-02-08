@@ -24,20 +24,23 @@ module Extensions::Attachable::ActiveRecord::Base
   end
 
   module SingularInstanceMethods
+    ATTACHMENT_ATTRIBUTE = 'attachment'.freeze
+
     def attachment
-      attachments[0]
+      attachments.take
     end
 
     def attachment=(attachment)
+      return self.attachment if self.attachment == attachment
+      attribute_will_change!(ATTACHMENT_ATTRIBUTE)
       attachments.clear
-      attachments << attachment
-      attribute_will_change!('attachment'.freeze)
+      attachments << attachment if attachment
     end
 
     def build_attachment(attributes = {})
+      attribute_will_change!(ATTACHMENT_ATTRIBUTE)
       attachments.clear
       attachments.build(attributes)
-      attribute_will_change!('attachment'.freeze)
     end
 
     def attachment_changed?
@@ -46,11 +49,10 @@ module Extensions::Attachable::ActiveRecord::Base
 
     def file=(file)
       if file
-        build_attachment unless attachment
-        attachment.file_upload = file
-        attribute_will_change!('attachment'.freeze) if attachment.changed?
+        build_attachment(file_upload: file)
       else
-        attribute_will_change!('attachment'.freeze) if attachment
+        return nil if attachment.nil?
+        attribute_will_change!(ATTACHMENT_ATTRIBUTE)
         attachments.clear
       end
     end

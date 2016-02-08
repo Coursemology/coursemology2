@@ -16,6 +16,11 @@ RSpec.describe 'Extension: Acts as Attachable' do
     end
 
     has_one_attachment
+
+    def clear_attribute_changes(attributes = changed_attributes.keys)
+      super
+    end
+    public :clear_attribute_changes
   end
 
   describe self::SampleModelMultiple, type: :model do
@@ -38,6 +43,34 @@ RSpec.describe 'Extension: Acts as Attachable' do
     let(:file) { File.open(File.join(Rails.root, '/spec/fixtures/files/text.txt')) }
     let(:attachable) { self.class::SampleModelSingular.new }
 
+    describe '#attachment=' do
+      context 'when the same attachment is specified' do
+        before { attachable.attachment = attachable.attachment }
+
+        it 'does not change the attachment' do
+          expect(attachable.attachment_changed?).to be(false)
+        end
+      end
+
+      context 'when a new attachment is specified' do
+        let(:attachment) { build(:attachment, file: file) }
+        before { attachable.attachment = attachment }
+
+        it 'stores the old attribute' do
+          expect(attachable.changes[:attachment].first).to be_nil
+        end
+      end
+    end
+
+    describe '#build_attachment' do
+      let(:attachment_attributes) { {} }
+      before { attachable.build_attachment(attachment_attributes) }
+
+      it 'builds a new attachment' do
+        expect(attachable.attachment_changed?).to be(true)
+      end
+    end
+
     describe '#attachment_changed?' do
       context 'when the record is clean' do
         it 'returns false' do
@@ -56,12 +89,17 @@ RSpec.describe 'Extension: Acts as Attachable' do
         it 'marks attachment as modified' do
           expect(attachable.attachment_changed?).to be(true)
         end
+
+        it 'stores the old attribute' do
+          expect(attachable.changes[:attachment].first).to be_nil
+        end
       end
 
       context 'when nil is specified' do
         context 'when a file existed' do
           before do
             attachable.file = file
+            attachable.clear_attribute_changes
             attachable.file = nil
           end
 
@@ -71,6 +109,10 @@ RSpec.describe 'Extension: Acts as Attachable' do
 
           it 'marks attachment as modified' do
             expect(attachable.attachment_changed?).to be(true)
+          end
+
+          it 'stores the old attribute' do
+            expect(attachable.changes[:attachment].first).to be_a(Attachment)
           end
         end
 
