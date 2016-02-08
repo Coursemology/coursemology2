@@ -28,12 +28,7 @@ class Course::Assessment::Question::ProgrammingImportJob < ApplicationJob
   #   import the package to.
   # @param [Attachment] attachment The attachment containing the package.
   def perform_import(question, attachment)
-    Tempfile.create('programming-import', binmode: true) do |temporary_file|
-      temporary_file.write(attachment.file_upload.read)
-      temporary_file.seek(0)
-      Course::Assessment::Question::ProgrammingImportService.import(question, temporary_file)
-    end
-
+    Course::Assessment::Question::ProgrammingImportService.import(question, attachment)
   ensure
     redirect_to edit_course_assessment_question_programming_path(question.assessment.course,
                                                                  question.assessment, question)

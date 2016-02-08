@@ -5,7 +5,7 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
 
   acts_as :question, class_name: Course::Assessment::Question.name
 
-  after_save :process_new_package, if: :attachment_changed?
+  before_save :process_new_package, if: :attachment_changed?
 
   validates :memory_limit, :time_limit, numericality: { greater_then: 0 }, allow_nil: true
 
@@ -40,11 +40,27 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
   end
 
   # Queues the new question package for processing.
+  #
+  # We restore the original package, but capture the new package into a local for processing by
+  # the import job.
   def process_new_package
+    return remove_old_package if attachment.nil?
+
+    new_attachment = attachment
+    restore_attribute!(:attachment)
+
     execute_after_commit do
+      new_attachment.save!
       import_job =
-        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, attachment)
+        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, new_attachment)
       update(import_job_id: import_job.job_id)
     end
+  end
+
+  # Removes the template files and test cases from the old package.
+  def remove_old_package
+    template_files.clear
+    test_cases.clear
+    self.import_job = nil
   end
 end

@@ -24,18 +24,61 @@ RSpec.describe Course::Assessment::Question::Programming do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     describe 'callbacks' do
-      subject { build(:course_assessment_question_programming) }
+      let(:question_attributes) { [] }
+      subject { build(:course_assessment_question_programming, *question_attributes) }
 
-      describe 'after_save' do
-        context 'when a new package is uploaded' do
-          with_active_job_queue_adapter(:test) do
+      describe 'before_save' do
+        with_active_job_queue_adapter(:test) do
+          before { subject.send(:clear_attribute_changes, :attachment) }
+
+          context 'when a package is removed' do
+            let(:question_attributes) do
+              [{
+                template_file_count: 1,
+                template_package: true,
+                import_job_id: SecureRandom.uuid
+              }]
+            end
+            before { subject.attachment = nil }
+
+            it 'does not queue any import jobs' do
+              expect { subject.save }.not_to \
+                have_enqueued_job(Course::Assessment::Question::ProgrammingImportJob)
+              expect(subject.import_job).to be_nil
+            end
+
+            it 'removes existing template files' do
+              subject.save!
+              expect(subject.template_files).to be_empty
+            end
+
+            it 'removes existing test cases' do
+              subject.save!
+              expect(subject.test_cases).to be_empty
+            end
+
+            it 'removes the old import job' do
+              subject.save!
+              expect(subject.import_job).to be_nil
+            end
+          end
+
+          context 'when a new package is uploaded' do
+            before do
+              file = File.new(File.join(Rails.root, 'spec/fixtures/course/'\
+                                                    'programming_question_template.zip'))
+              subject.attachment = build(:attachment, file: file)
+            end
+
             it 'queues a new import job' do
               expect(subject.import_job).to be_nil
-              subject.file = File.new(File.join(Rails.root, 'spec/fixtures/course/'\
-                                                            'programming_question_template.zip'),
-                                      'rb')
               expect { subject.save }.to \
                 have_enqueued_job(Course::Assessment::Question::ProgrammingImportJob).exactly(:once)
+              expect(subject.import_job).not_to be_nil
+            end
+
+            it 'reverts the change to the attachment' do
+              expect { subject.save }.to change { subject.attachment }.to(nil)
             end
           end
         end
