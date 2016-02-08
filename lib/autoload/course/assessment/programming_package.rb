@@ -53,7 +53,7 @@ class Course::Assessment::ProgrammingPackage
   # @return [String] The path to the file.
   # @return [nil] If the package is associated with a stream.
   def path
-    if @file && @file.name.is_a?(String)
+    if @file
       @file.name
     elsif @path
       @path.to_s
@@ -87,7 +87,7 @@ class Course::Assessment::ProgrammingPackage
     @file.glob("#{SUBMISSION_PATH}/**/*").map do |entry|
       entry_file_name = Pathname.new(entry.name)
       submission_file_name = entry_file_name.relative_path_from(SUBMISSION_PATH)
-      [submission_file_name, entry.get_input_stream.read]
+      [submission_file_name, entry.get_input_stream(&:read)]
     end.to_h
   end
 
@@ -104,7 +104,6 @@ class Course::Assessment::ProgrammingPackage
       fail ArgumentError, 'Paths must be relative' unless path.relative?
       @file.get_output_stream(SUBMISSION_PATH.join(path)) do |stream|
         stream.write(file)
-        stream.close
       end
     end
   end
@@ -113,14 +112,18 @@ class Course::Assessment::ProgrammingPackage
 
   # Ensures that the zip file is open.
   #
+  # When a stream is open, some atypical code is required because Rubyzip doesn't support streams
+  # in its API too well -- the entries in memory and loaded from stream are different.
+  #
   # @raise [IllegalStateError] when the zip file is not open and it cannot be opened.
   def ensure_file_open!
     return if @file
     if @path
       @file = Zip::File.open(@path.to_s)
     elsif @stream
-      @file = Zip::File.new(@stream, true, true)
+      @file = Zip::File.new(@stream.try(:path), true, true)
       @file.read_from_stream(@stream)
+      @file.instance_variable_set(:@stored_entries, @file.instance_variable_get(:@entry_set).dup)
     end
     fail IllegalStateError unless @file
   end
