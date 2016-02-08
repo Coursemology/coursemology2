@@ -6,30 +6,11 @@ class Course::Assessment::Question::ProgrammingImportService
   class << self
     # Imports the programming package into the question.
     #
-    # @raise [InvalidDataError] When the package is not a valid package.
-    # @raise [Course::Assessment::ProgrammingEvaluationService::Error] When there was an error
-    #   evaluating the package.
-    #
-    # @overload import(question, package)
-    #   @param [Course::Assessment::Question::Programming] question The programming question for
-    #     import.
-    #   @param [Course::Assessment::ProgrammingPackage] package The package containing the
-    #     tests and template files.
-    #
-    # @overload import(question, package_path)
-    #   @param [Course::Assessment::Question::Programming] question The programming question for
-    #     import.
-    #   @param [String] package_path The path to the package containing the tests and template
-    # files.
-    #
-    # @overload import(question, package_stream)
-    #   @param [Course::Assessment::Question::Programming] question The programming question for
-    #     import.
-    #   @param [IO] package_stream An I/O object containing the package.
-    def import(question, package)
-      package = Course::Assessment::ProgrammingPackage.new(package) unless \
-        package.is_a?(Course::Assessment::ProgrammingPackage)
-      new(question, package).send(:import)
+    # @param [Course::Assessment::Question::Programming] question The programming question for
+    #   import.
+    # @param [Attachment] attachment The attachment containing the package to import.
+    def import(question, attachment)
+      new(question, attachment).send(:import)
     end
   end
 
@@ -38,19 +19,47 @@ class Course::Assessment::Question::ProgrammingImportService
   # Creates a new service import object.
   #
   # @param [Course::Assessment::Question::Programming] question The programming question for import.
-  # @param [Course::Assessment::ProgrammingPackage] package The package containing the tests and
-  #   template files.
-  def initialize(question, package)
+  # @param [Attachment] attachment The attachment containing the tests and files.
+  def initialize(question, attachment)
     @question = question
-    @package = package
+    @attachment = attachment
   end
 
   # Imports the templates and tests found in the package.
   def import
-    fail InvalidDataError unless @package.valid?
+    with_attachment(@attachment) do |temporary_file|
+      begin
+        package = Course::Assessment::ProgrammingPackage.new(temporary_file)
+        import_from_package(package)
+      ensure
+        next unless package
+        temporary_file.close
+        package.close
+      end
+    end
+  end
 
-    template_import_thread = Thread.new { import_template_files }
-    evaluation_result = evaluate_package
+  # Copies the attachment to disk, yielding a File stream to a block.
+  #
+  # @param [Attachment] attachment The attachment to copy its contents from.
+  # @yield [file] The file with the contents of the attachment.
+  def with_attachment(attachment)
+    Tempfile.create('programming-import', binmode: true) do |temporary_file|
+      temporary_file.write(attachment.file_upload.read)
+      temporary_file.seek(0)
+
+      yield temporary_file
+    end
+  end
+
+  # Imports the templates and tests from the given package.
+  #
+  # @param [Course::Assessment::ProgrammingPackage] package The package to import.
+  def import_from_package(package)
+    fail InvalidDataError unless package.valid?
+
+    template_import_thread = Thread.new { import_template_files(package) }
+    evaluation_result = evaluate_package(package)
     template_import_thread.join
 
     fail evaluation_result if evaluation_result.error?
@@ -59,18 +68,20 @@ class Course::Assessment::Question::ProgrammingImportService
 
   # Extracts the templates from the package.
   #
+  # @param [Course::Assessment::ProgrammingPackage] package The package to import.
   # @return [Hash<Pathname, String>] The templates found in the package.
-  def import_template_files
-    @package.submission_files
+  def import_template_files(package)
+    package.submission_files
   end
 
   # Evaluates the package to obtain the set of tests.
   #
+  # @param [Course::Assessment::ProgrammingPackage] package The package to import.
   # @return [Course::Assessment::ProgrammingEvaluationService::Result]
-  def evaluate_package
+  def evaluate_package(package)
     Course::Assessment::ProgrammingEvaluationService.
       execute(@question.assessment.course, @question.language, @question.memory_limit,
-              @question.time_limit, @package.path)
+              @question.time_limit, package.path)
   end
 
   # Saves the templates and tests to the question.
@@ -79,6 +90,7 @@ class Course::Assessment::Question::ProgrammingImportService
   # @param [Course::Assessment::ProgrammingEvaluationService::Result] evaluation_result The
   #   result of evaluating the package.
   def save(template_files, evaluation_result)
+    @question.attachment = @attachment
     @question.template_files = build_template_file_records(template_files)
     @question.test_cases = build_test_case_records(evaluation_result.test_report)
 
