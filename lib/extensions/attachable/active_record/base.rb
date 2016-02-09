@@ -3,8 +3,8 @@ module Extensions::Attachable::ActiveRecord::Base
   module ClassMethods
     # This function should be declared in model, to it have attachments.
     def has_many_attachments # rubocop:disable Style/PredicateName
-      has_many :attachments, as: :attachable, inverse_of: :attachable,
-                             dependent: :destroy, autosave: true
+      has_many :attachments, as: :attachable, class_name: "::#{Attachment.name}",
+                             inverse_of: :attachable, dependent: :destroy, autosave: true
 
       define_method(:files=) do |files|
         files.each do |file|
@@ -18,8 +18,8 @@ module Extensions::Attachable::ActiveRecord::Base
 
       validates :attachments, length: { maximum: 1 }
 
-      has_many :attachments, as: :attachable, inverse_of: :attachable,
-                             dependent: :destroy, autosave: true
+      has_many :attachments, as: :attachable, class_name: "::#{Attachment.name}",
+                             inverse_of: :attachable, dependent: :destroy, autosave: true
     end
   end
 
