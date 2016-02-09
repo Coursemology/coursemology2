@@ -8,7 +8,12 @@
     $('textarea.code', element).ace();
   }
 
-  initializeComponents(document);
+  // Queue component initialisation until the script has completely loaded.
+  //
+  // This prevents missing definitions for things like Ace themes, which are loaded after the
+  // application script.
+  setTimeout(function() { initializeComponents(document); }, 0);
+
   $(document).on('DOMNodeInserted', function(e) {
     initializeComponents(e.target);
   });
