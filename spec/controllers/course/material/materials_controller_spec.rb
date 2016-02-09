@@ -20,7 +20,7 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
       let(:material) { create(:material, folder: folder) }
       subject { get :show, course_id: course, folder_id: folder, id: material }
 
-      it { is_expected.to redirect_to(material.attachment.file_upload.url) }
+      it { is_expected.to redirect_to(material.attachment.url) }
     end
 
     describe '#update' do
@@ -33,9 +33,9 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
 
       context 'when a different file is given' do
         it 'changes the file' do
-          old_file_url = material_stub.attachment.file_upload.url
+          old_file_url = material_stub.attachment.url
           subject
-          expect(material_stub.reload.attachment.file_upload.url).not_to eq(old_file_url)
+          expect(material_stub.reload.attachment.url).not_to eq(old_file_url)
         end
       end
     end

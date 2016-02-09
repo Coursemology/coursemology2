@@ -39,21 +39,21 @@ RSpec.describe Course::Material::ZipDownloadService do
           expect(
             FileUtils.compare_file(
               material_a_path,
-              material_a.attachment.file_upload.path
+              material_a.attachment.path
             )
           ).to be_truthy
 
           expect(
             FileUtils.compare_file(
               material_b_path,
-              material_b.attachment.file_upload.path
+              material_b.attachment.path
             )
           ).to be_truthy
 
           expect(
             FileUtils.compare_file(
               material_d_path,
-              material_d.attachment.file_upload.path
+              material_d.attachment.path
             )
           ).to be_truthy
         end

@@ -6,6 +6,13 @@ class Attachment < ActiveRecord::Base
 
   belongs_to :attachable, polymorphic: true
 
+  # @!attribute [r] url
+  #   The URL to the attachment contents.
+  #
+  # @!attribute [r] path
+  #   The path to the attachment contents.
+  delegate :url, :path, to: :file_upload
+
   # Opens the attachment for reading as a stream. The options are the same as those taken by
   # +IO.new+
   #
