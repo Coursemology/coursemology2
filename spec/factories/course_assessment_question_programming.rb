@@ -4,21 +4,38 @@ FactoryGirl.define do
           class: Course::Assessment::Question::Programming,
           parent: :course_assessment_question do
     transient do
-      template_file_count 0
       template_package false
+      template_package_deferred true # Set false to immediately assign the package to the question.
+      template_file_count 1
+      test_case_count 0
     end
 
     memory_limit 32
     time_limit 10
     language { Coursemology::Polyglot::Language::Python::Python2Point7.instance }
     template_files do
-      template_file_count.downto(0).map do
+      template_file_count.downto(1).map do
         build(:course_assessment_question_programming_template_file, question: nil)
       end
     end
     file do
       File.new(File.join(Rails.root, 'spec/fixtures/course/'\
                          'programming_question_template.zip'), 'rb') if template_package
+    end
+    test_cases do
+      test_case_count.downto(1).map do
+        build(:course_assessment_question_programming_test_case, question: nil)
+      end
+    end
+
+    after(:build) do |question, evaluator|
+      # Suppress the deferred assignment of the attachment.
+      question.send(:clear_attribute_changes, :attachment) unless \
+        evaluator.template_package_deferred
+    end
+
+    trait :auto_gradable do
+      test_case_count 1
     end
   end
 end

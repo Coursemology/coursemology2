@@ -88,8 +88,28 @@ RSpec.describe Course::Assessment::Question::Programming do
     describe 'validations' do
     end
 
+    describe '#auto_gradable?' do
+      subject do
+        build_stubbed(:course_assessment_question_programming, test_case_count: test_case_count)
+      end
+
+      context 'when the question has test cases' do
+        let(:test_case_count) { 1 }
+        it 'returns true' do
+          expect(subject).to be_auto_gradable
+        end
+      end
+
+      context 'when the question has no test cases' do
+        let(:test_case_count) { 0 }
+        it 'returns false' do
+          expect(subject).not_to be_auto_gradable
+        end
+      end
+    end
+
     describe '#attempt' do
-      subject { build_stubbed(:course_assessment_question_programming) }
+      subject { build_stubbed(:course_assessment_question_programming, template_file_count: 1) }
       let(:assessment) { subject.assessment }
       let(:submission) { build_stubbed(:course_assessment_submission, assessment: assessment) }
 

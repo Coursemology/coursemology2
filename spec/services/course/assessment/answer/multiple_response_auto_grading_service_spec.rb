@@ -16,11 +16,6 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
     end
 
     describe '#grade' do
-      it 'sets the grading as graded' do
-        expect(subject.grade(grading)).to eq(true)
-        expect(answer.graded?).to eq(true)
-      end
-
       context 'when the question is requires all correct options' do
         context 'when the correct answer is given' do
           let(:answer_traits) { :correct }
