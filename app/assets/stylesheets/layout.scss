@@ -17,3 +17,7 @@ body {
     margin-right: $nprogress-spinner-icon-width;
   }
 }
+
+textarea.code {
+  font-family: monospace;
+}

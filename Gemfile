@@ -165,6 +165,7 @@ gem 'cocoon'
 gem 'momentjs-rails', '>= 2.8.1'
 gem 'bootstrap3-datetimepicker-rails'
 gem 'bootstrap-select-rails'
+gem 'ace-rails-ap'
 
 # Using CarrierWave for file uploads
 gem 'carrierwave', github: 'carrierwaveuploader/carrierwave'
