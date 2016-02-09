@@ -50,6 +50,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    ace-rails-ap (4.0.1)
     actionmailer (4.2.5.1)
       actionpack (= 4.2.5.1)
       actionview (= 4.2.5.1)
@@ -510,6 +511,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ace-rails-ap
   active_record-acts_as (>= 1.0.8)
   activerecord-userstamp (>= 3.0.2)
   acts_as_tenant!
