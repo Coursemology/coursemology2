@@ -2,10 +2,16 @@ scss_files: 'app/**/*.scss'
 
 linters:
   # Unhounding.
+  HexLength:
+    enabled: true
+
   StringQuotes:
     style: single_quotes
 
   # Project-specific options
+  HexLength:
+    style: long
+
   IdSelector:
     enabled: false
 
@@ -14,6 +20,9 @@ linters:
 
   PlaceholderInExtend:
     enabled: false
+
+  QualifyingElement:
+    allow_element_with_class: true
 
   NestingDepth:
     max_depth: 5
