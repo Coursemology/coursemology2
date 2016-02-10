@@ -34,7 +34,7 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
       end
 
       describe '#identifier' do
-        it 'generates an identifer for the test suite' do
+        it 'generates an identifier for the test suite' do
           expect(subject.identifier).to eq(subject.name)
         end
       end
@@ -69,9 +69,21 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
       end
 
       describe '#identifier' do
-        it 'generates an identifer for the test suite' do
+        it 'generates an identifier for the test suite' do
           expect(subject.identifier).to include(subject.test_suite.name)
           expect(subject.identifier).to include(subject.name)
+        end
+
+        context 'when the test case as a class name' do
+          it 'uses the class name as part of the identifier' do
+            expect(subject.identifier).to include(subject.class_name)
+          end
+        end
+
+        context 'when the test case does not have a class name' do
+          it 'still generates an identifier' do
+            expect(subject.identifier).not_to be_nil
+          end
         end
       end
 
