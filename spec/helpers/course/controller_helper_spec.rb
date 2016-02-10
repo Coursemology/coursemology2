@@ -86,7 +86,7 @@ RSpec.describe Course::ControllerHelper do
           end
 
           it "shows the course user's experience points" do
-            expect(subject).to include(user.experience_points.to_s)
+            expect(subject).to include(I18n.t('layouts.course_user_badge.progress'))
           end
 
           it "shows the course user's level number" do
@@ -95,7 +95,9 @@ RSpec.describe Course::ControllerHelper do
 
           it 'displays the progress bar with current level progress' do
             expect(helper).to receive(:display_progress_bar).
-              with(user.level_progress_percentage, ['progress-bar-info', 'progress-bar-striped'])
+              with(user.level_progress_percentage,
+                   ['progress-bar-info', 'progress-bar-striped',
+                    'course-user-experience-points'])
             subject
           end
         end
