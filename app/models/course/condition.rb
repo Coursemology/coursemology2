@@ -47,15 +47,14 @@ class Course::Condition < ActiveRecord::Base
     #   'Course::Assessment' => ['Course::Condition::Assessment']
     # }
     def dependent_class_to_condition_class_mapping
-      mappings = Course::Condition::ALL_CONDITIONS.map do |condition_name|
-        condition_name.constantize.dependent_classes.map do |dependent_name|
-          { dependent_name => [condition_name] }
-        end
-      end.flatten
+      mappings = Hash.new { |h, k| h[k] = [] }
 
-      mappings.reduce({}) do |mapping1, mapping2|
-        mapping1.merge(mapping2) { |_, conditions1, conditions2| conditions1 + conditions2 }
+      Course::Condition::ALL_CONDITIONS.map do |condition_name|
+        dependent_class = condition_name.constantize.dependent_class
+        mappings[dependent_class] << condition_name unless dependent_class.nil?
       end
+
+      mappings
     end
   end
 end

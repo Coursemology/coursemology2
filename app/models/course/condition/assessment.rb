@@ -33,9 +33,9 @@ class Course::Condition::Assessment < ActiveRecord::Base
     end
   end
 
-  # Array of classes that the condition depends on.
-  def self.dependent_classes
-    [Course::Assessment.name]
+  # Class that the condition depends on.
+  def self.dependent_class
+    Course::Assessment.name
   end
 
   private

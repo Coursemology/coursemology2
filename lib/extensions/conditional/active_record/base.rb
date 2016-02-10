@@ -51,8 +51,8 @@ module Extensions::Conditional::ActiveRecord::Base
   end
 
   module ConditionClassMethods
-    # Array of classes that the condition depends on.
-    def dependent_classes
+    # Class that the condition depends on.
+    def dependent_class
       fail NotImplementedError
     end
   end
