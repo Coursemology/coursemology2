@@ -29,6 +29,6 @@ class Course::CoursesController < Course::Controller
 
   def course_params # :nodoc:
     params.require(:course).
-      permit(:title, :description, :status, :start_at, :end_at)
+      permit(:title, :description, :status, :start_at, :end_at, :logo)
   end
 end
