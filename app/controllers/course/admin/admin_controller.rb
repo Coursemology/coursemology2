@@ -23,7 +23,7 @@ class Course::Admin::AdminController < Course::Admin::Controller
 
   def course_setting_params #:nodoc:
     params.require(:course).
-      permit(:title, :description, :status, :start_at, :end_at)
+      permit(:title, :description, :status, :start_at, :end_at, :logo)
   end
 
   def destroy_success #:nodoc:

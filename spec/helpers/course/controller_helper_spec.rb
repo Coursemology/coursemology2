@@ -136,5 +136,29 @@ RSpec.describe Course::ControllerHelper do
         end
       end
     end
+
+    describe '#display_course_logo' do
+      let(:course) { create(:course) }
+      subject { helper.display_course_logo(course) }
+
+      context 'when no course logo is uploaded' do
+        it 'displays the default course logo' do
+          expect(subject).to have_tag('img', with: { :'src^' => '/assets/course_default_logo-' })
+        end
+      end
+
+      context 'when a course logo is uploaded' do
+        let(:logo) { File.join(Rails.root, '/spec/fixtures/files/picture.jpg') }
+        before do
+          file = File.open(logo, 'rb')
+          course.logo = file
+          file.close
+        end
+
+        it 'displays the course logo' do
+          expect(subject).to include(course.logo.medium.url)
+        end
+      end
+    end
   end
 end
