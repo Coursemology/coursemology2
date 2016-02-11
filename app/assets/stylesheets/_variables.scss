@@ -13,6 +13,10 @@ $gray:                   lighten($gray-base, 33.5%) !default; // #555
 $gray-light:             lighten($gray-base, 46.7%) !default; // #777
 $gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
 
+//## Variables for colors used in Coursemology.
+$course-achievement-granted-bg: $state-success-bg !default;
+$course-achievement-locked-bg: $gray-lighter !default;
+
 //== Fonts
 //
 //## Code editor typography.
@@ -25,13 +29,12 @@ $code-font-size: $font-size-base !default;
 $nprogress-color: #26b0ff !default;
 $nprogress-spinner-icon-width: 18px !default;
 
-//
 //## Common sizes to be used across Coursemology.
-
 $picture-thumb: 25px !default;
 $picture-small: 75px !default;
 $picture-medium: 100px !default;
 
+//## Variables for icons or logos used in Coursemology.
 $course-achievement-badge-thumb:   $picture-thumb !default;
 $course-achievement-badge-small:   $picture-small !default;
 $course-achievement-badge-medium:  $picture-medium !default;
