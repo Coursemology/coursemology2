@@ -17,12 +17,12 @@ class Course::Admin::ComponentSettingsController < Course::Admin::Controller
 
   private
 
+  def settings_effective_params #:nodoc:
+    params.require(:settings_effective)
+  end
+
   # Load our settings adapter to handle component settings
   def load_settings
     @settings = Course::Settings::Effective.new(current_course, current_component_host)
-  end
-
-  def settings_effective_params #:nodoc:
-    params.require(:settings_effective)
   end
 end

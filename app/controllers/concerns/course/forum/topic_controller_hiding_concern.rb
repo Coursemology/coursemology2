@@ -13,6 +13,10 @@ module Course::Forum::TopicControllerHidingConcern
 
   private
 
+  def hidden_params
+    params.permit(:hidden)
+  end
+
   def hidden_state_text(successful)
     case [@topic.hidden, successful]
     when [true, true]
@@ -24,9 +28,5 @@ module Course::Forum::TopicControllerHidingConcern
     when [false, false]
       t('course.forum.topics.shown.failure')
     end
-  end
-
-  def hidden_params
-    params.permit(:hidden)
   end
 end

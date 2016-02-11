@@ -15,12 +15,12 @@ class Course::Admin::ForumSettingsController < Course::Admin::Controller
 
   private
 
+  def forum_settings_params #:nodoc:
+    params.require(:forum_settings).permit(:title, :pagination)
+  end
+
   # Load our settings adapter to handle forum settings
   def load_settings
     @settings ||= Course::ForumSettings.new(current_course.settings(:forum))
-  end
-
-  def forum_settings_params #:nodoc:
-    params.require(:forum_settings).permit(:title, :pagination)
   end
 end

@@ -51,11 +51,11 @@ module Course::Discussion::PostsConcern
 
   private
 
-  def set_topic
-    @discussion_topic ||= discussion_topic
-  end
-
   def post_params
     params.require(:discussion_post).permit(:title, :text, :parent_id)
+  end
+
+  def set_topic
+    @discussion_topic ||= discussion_topic
   end
 end

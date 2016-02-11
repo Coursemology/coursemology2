@@ -13,6 +13,10 @@ module Course::Forum::TopicControllerLockingConcern
 
   private
 
+  def locked_params
+    params.permit(:locked)
+  end
+
   def locked_state_text(successful)
     case [@topic.locked, successful]
     when [true, true]
@@ -24,9 +28,5 @@ module Course::Forum::TopicControllerLockingConcern
     when [false, false]
       t('course.forum.topics.unlocked.failure')
     end
-  end
-
-  def locked_params
-    params.permit(:locked)
   end
 end

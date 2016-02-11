@@ -21,13 +21,13 @@ class System::Admin::CoursesController < System::Admin::Controller
 
   private
 
+  def search_param
+    params.permit(:search)[:search]
+  end
+
   def unscope_resources
     Course.unscoped do
       yield
     end
-  end
-
-  def search_param
-    params.permit(:search)[:search]
   end
 end

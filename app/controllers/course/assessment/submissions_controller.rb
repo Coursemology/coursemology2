@@ -49,14 +49,6 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
 
   private
 
-  def authorize_submission!
-    if @submission.attempting?
-      authorize!(:update, @submission)
-    else
-      authorize!(:read, @submission)
-    end
-  end
-
   def create_params
     { course_user: current_course_user }
   end
@@ -106,6 +98,14 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
 
   def authorize_assessment
     authorize!(:attempt, @assessment)
+  end
+
+  def authorize_submission!
+    if @submission.attempting?
+      authorize!(:update, @submission)
+    else
+      authorize!(:read, @submission)
+    end
   end
 
   def load_or_create_answers

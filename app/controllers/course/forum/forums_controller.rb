@@ -67,12 +67,12 @@ class Course::Forum::ForumsController < Course::Forum::Controller
 
   private
 
-  def load_forum
-    @forum ||= current_course.forums.friendly.find(params[:id])
-  end
-
   def forum_params
     params.require(:forum).permit(:name, :description, :course_id)
+  end
+
+  def load_forum
+    @forum ||= current_course.forums.friendly.find(params[:id])
   end
 
   def add_forum_item_breadcrumb
