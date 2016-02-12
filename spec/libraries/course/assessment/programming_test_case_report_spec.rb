@@ -96,11 +96,13 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
       context 'when the test case failed' do
         subject { test_cases.first }
         it { is_expected.to be_failed }
+        it { is_expected.not_to be_passed }
       end
 
       context 'when the test case was skipped' do
         subject { test_cases.second }
         it { is_expected.to be_skipped }
+        it { is_expected.not_to be_passed }
       end
 
       context 'when the test case passed' do
@@ -129,6 +131,16 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
     describe '#test_cases' do
       it 'returns all the test cases in the report' do
         expect(subject.test_cases.length).to eq(3)
+      end
+    end
+
+    describe Course::Assessment::ProgrammingTestCaseReport::TestCase do
+      let(:test_cases) { parsed_report.test_suites.first.test_cases }
+
+      context 'when the test case errored' do
+        subject { test_cases.first }
+        it { is_expected.to be_errored }
+        it { is_expected.not_to be_passed }
       end
     end
   end
