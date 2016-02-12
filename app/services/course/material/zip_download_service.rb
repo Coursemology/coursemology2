@@ -45,10 +45,12 @@ class Course::Material::ZipDownloadService
   # Downloads the material and store it in the given directory.
   def download_material(material, folder, dir)
     file_path = Pathname.new(dir) + material.path.relative_path_from(folder.path)
-
     file_path.dirname.mkpath
-    file = File.open(file_path, 'wb')
-    file << material.attachment.file_upload.read
-    file.close
+
+    File.open(file_path, 'wb') do |file|
+      material.attachment.open(binmode: true) do |attachment_stream|
+        FileUtils.copy_stream(attachment_stream, file)
+      end
+    end
   end
 end

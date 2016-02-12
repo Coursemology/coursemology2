@@ -3,7 +3,7 @@ class Course::Material::MaterialsController < Course::Material::Controller
   load_and_authorize_resource :material, through: :folder, class: Course::Material.name
 
   def show
-    redirect_to @material.attachment.file_upload.url
+    redirect_to @material.attachment.url
   end
 
   def edit

@@ -27,7 +27,7 @@ class Course::Assessment::Question::ProgrammingImportService
 
   # Imports the templates and tests found in the package.
   def import
-    with_attachment(@attachment) do |temporary_file|
+    @attachment.open(binmode: true) do |temporary_file|
       begin
         package = Course::Assessment::ProgrammingPackage.new(temporary_file)
         import_from_package(package)
@@ -36,19 +36,6 @@ class Course::Assessment::Question::ProgrammingImportService
         temporary_file.close
         package.close
       end
-    end
-  end
-
-  # Copies the attachment to disk, yielding a File stream to a block.
-  #
-  # @param [Attachment] attachment The attachment to copy its contents from.
-  # @yield [file] The file with the contents of the attachment.
-  def with_attachment(attachment)
-    Tempfile.create('programming-import', binmode: true) do |temporary_file|
-      temporary_file.write(attachment.file_upload.read)
-      temporary_file.seek(0)
-
-      yield temporary_file
     end
   end
 
