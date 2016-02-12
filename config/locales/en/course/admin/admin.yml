@@ -4,5 +4,13 @@ en:
       admin:
         index:
           header: 'Settings'
+          delete:
+            header: 'Delete Course'
+            button: 'Delete My Course'
+            description_placeholder: >
+              Once you delete this course, you will not be able to access it any more.
         update:
           success: 'Course %{title} was updated.'
+        destroy:
+          success: 'Course %{title} was deleted.'
+          failure: 'Failed to delete course: %{error}.'

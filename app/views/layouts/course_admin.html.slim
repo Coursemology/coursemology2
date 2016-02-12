@@ -1,4 +1,5 @@
 = render within_layout: controller.parent_layout(of_layout: 'course_admin') do
+  = page_header t('.title')
   = tabs do
     - controller.sidebar_items(type: :settings).each do |item|
       = nav_to(item[:title], item[:path])

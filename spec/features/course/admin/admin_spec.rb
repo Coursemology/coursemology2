@@ -19,6 +19,12 @@ RSpec.feature 'Course: Administration: Administration' do
         expect(page).to have_selector('li', text: 'layouts.course_admin.title')
       end
 
+      scenario 'I can view the course settings page' do
+        visit course_admin_path(course)
+
+        expect(page).to have_selector('h1', text: 'layouts.course_admin.title')
+      end
+
       scenario 'I can change the course attributes' do
         visit course_admin_path(course)
 
@@ -36,6 +42,14 @@ RSpec.feature 'Course: Administration: Administration' do
         expect(page).to have_selector('div.alert.alert-success')
         expect(course.reload.title).to eq(new_title)
         expect(course.reload.description).to eq(new_description)
+      end
+
+      scenario 'I can delete the course' do
+        visit course_admin_path(course)
+
+        expect { click_link(I18n.t('course.admin.admin.index.delete.button')) }.
+          to change(instance.courses, :count).by(-1)
+        expect(page).to have_selector('div', text: I18n.t('course.admin.admin.destroy.success'))
       end
     end
 
