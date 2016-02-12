@@ -33,9 +33,9 @@ RSpec.describe 'Extension: Acts as Condition', type: :model do
       end
     end
 
-    it 'implements .dependent_classes' do
-      expect(subject).to respond_to(:dependent_classes)
-      expect { subject.dependent_classes }.to raise_error(NotImplementedError)
+    it 'implements .dependent_class' do
+      expect(subject).to respond_to(:dependent_class)
+      expect { subject.dependent_class }.to raise_error(NotImplementedError)
     end
   end
 end

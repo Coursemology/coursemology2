@@ -16,8 +16,8 @@ class Course::Condition::Level < ActiveRecord::Base
     course_user.level_number >= minimum_level
   end
 
-  # Array of classes that the condition depends on.
-  def self.dependent_classes
-    []
+  # Class that the condition depends on.
+  def self.dependent_class
+    nil
   end
 end

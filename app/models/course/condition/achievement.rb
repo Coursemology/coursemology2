@@ -19,9 +19,9 @@ class Course::Condition::Achievement < ActiveRecord::Base
     course_user.achievements.exists?(achievement)
   end
 
-  # Array of classes that the condition depends on.
-  def self.dependent_classes
-    [Course::Achievement.name]
+  # Class that the condition depends on.
+  def self.dependent_class
+    Course::Achievement.name
   end
 
   private
