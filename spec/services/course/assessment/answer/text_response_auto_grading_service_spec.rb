@@ -16,11 +16,6 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
     end
 
     describe '#grade' do
-      it 'sets the grading as graded' do
-        expect(subject.grade(grading)).to eq(true)
-        expect(answer.graded?).to eq(true)
-      end
-
       context 'when an exact match is present' do
         let(:answer_traits) { :exact_match }
 

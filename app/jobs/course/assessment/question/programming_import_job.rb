@@ -11,10 +11,7 @@ class Course::Assessment::Question::ProgrammingImportJob < ApplicationJob
   #   import the package to.
   # @param [Attachment] attachment The attachment containing the package.
   def perform_tracked(question, attachment)
-    instance = nil
-    Course.unscoped do
-      instance = question.assessment.course.instance
-    end
+    instance = Course.unscoped { question.assessment.course.instance }
     ActsAsTenant.with_tenant(instance) do
       perform_import(question, attachment)
     end

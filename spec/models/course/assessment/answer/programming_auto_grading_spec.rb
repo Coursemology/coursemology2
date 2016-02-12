@@ -10,6 +10,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGrading do
   end
   it 'has many test results' do
     expect(subject).to have_many(:test_results).
-      class_name(Course::Assessment::Answer::ProgrammingAutoGradingTestResult.name)
+      class_name(Course::Assessment::Answer::ProgrammingAutoGradingTestResult.name).
+      with_foreign_key(:auto_grading_id)
   end
 end

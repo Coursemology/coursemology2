@@ -126,7 +126,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         click_link I18n.t('course.assessment.submissions.worksheet.auto_grade')
         wait_for_job
 
-        expect(submission.answers.map(&:reload).any?(&:graded?)).to be(true)
+        expect(submission.answers.map(&:reload).all?(&:graded?)).to be(true)
 
         submission_maximum_grade = 0
         submission.answers.each do |answer|

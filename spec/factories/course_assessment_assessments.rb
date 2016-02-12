@@ -23,7 +23,9 @@ FactoryGirl.define do
 
     trait :with_programming_question do
       after(:build) do |assessment|
-        question = build(:course_assessment_question_programming, assessment: assessment)
+        question = build(:course_assessment_question_programming, :auto_gradable,
+                         template_package: true, template_package_deferred: false,
+                         assessment: assessment)
         assessment.programming_questions << question
       end
     end

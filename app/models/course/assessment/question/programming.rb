@@ -17,6 +17,14 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
   has_many :test_cases, class_name: Course::Assessment::Question::ProgrammingTestCase.name,
                         dependent: :destroy, foreign_key: :question_id, inverse_of: :question
 
+  def auto_gradable?
+    !test_cases.empty?
+  end
+
+  def auto_grader
+    Course::Assessment::Answer::ProgrammingAutoGradingService.new
+  end
+
   def attempt(submission)
     answer = submission.programming_answers.build(submission: submission, question: question)
     copy_template_files_to(answer)
