@@ -9,6 +9,8 @@ class Course::Condition::Assessment < ActiveRecord::Base
 
   validate :validate_assessment_condition, if: :assessment_id_changed?
 
+  alias_method :dependent_object, :assessment
+
   def title
     if minimum_grade_percentage
       minimum_grade_percentage_display = number_to_percentage(minimum_grade_percentage,

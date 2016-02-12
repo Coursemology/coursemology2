@@ -8,6 +8,7 @@ class Course::Condition::Achievement < ActiveRecord::Base
   validate :validate_achievement_condition, if: :achievement_id_changed?
 
   delegate :title, to: :achievement
+  alias_method :dependent_object, :achievement
 
   # Checks if the user has the required achievement.
   #
