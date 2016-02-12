@@ -90,7 +90,15 @@ class Course::Assessment::ProgrammingTestCaseReport
     #
     # @return [String]
     def identifier
-      "#{@test_suite.identifier}/#{name.underscore}"
+      class_name = self.class_name ? self.class_name + '/' : ''
+      "#{@test_suite.identifier}/#{class_name}#{name.underscore}"
+    end
+
+    # Checks if the test case encountered an error.
+    #
+    # @return [Boolean]
+    def errored?
+      !@test_case.search('./error').empty?
     end
 
     # Checks if the test case was skipped.
@@ -111,7 +119,7 @@ class Course::Assessment::ProgrammingTestCaseReport
     #
     # @return [Boolean]
     def passed?
-      !failed? && !skipped?
+      !failed? && !skipped? && !errored?
     end
   end
 
