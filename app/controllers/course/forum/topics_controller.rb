@@ -57,15 +57,6 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
 
   private
 
-  def authorize_topic_type!(type)
-    case type
-    when 'sticky'.freeze
-      authorize!(:set_sticky, @topic)
-    when 'announcement'.freeze
-      authorize!(:set_announcement, @topic)
-    end
-  end
-
   def update_topic_params
     params.require(:topic).permit(:title, :topic_type)
   end
@@ -81,5 +72,14 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
   def add_topic_breadcrumb
     add_breadcrumb @topic.title, course_forum_topic_path(current_course, @forum,
                                                          @topic) if @topic.try(:persisted?)
+  end
+
+  def authorize_topic_type!(type)
+    case type
+    when 'sticky'.freeze
+      authorize!(:set_sticky, @topic)
+    when 'announcement'.freeze
+      authorize!(:set_announcement, @topic)
+    end
   end
 end

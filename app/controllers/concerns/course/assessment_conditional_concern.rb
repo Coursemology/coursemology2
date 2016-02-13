@@ -15,12 +15,12 @@ module Course::AssessmentConditionalConcern
 
   private
 
+  def conditional_params
+    params.permit(:assessment_id)
+  end
+
   def add_conditional_breadcrumbs
     add_breadcrumb :index, :course_assessments_path
     add_breadcrumb @conditional.title, edit_course_assessment_path(current_course, @conditional)
-  end
-
-  def conditional_params
-    params.permit(:assessment_id)
   end
 end

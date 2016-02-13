@@ -34,11 +34,11 @@ class Course::Admin::Assessments::TabsController < Course::Admin::Controller
 
   private
 
-  def add_category_breadcrumb
-    add_breadcrumb @category.title, course_admin_assessments_path(current_course)
-  end
-
   def tab_params
     params.require(:tab).permit(:title, :weight)
+  end
+
+  def add_category_breadcrumb
+    add_breadcrumb @category.title, course_admin_assessments_path(current_course)
   end
 end

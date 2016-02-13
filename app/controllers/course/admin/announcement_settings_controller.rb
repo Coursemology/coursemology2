@@ -15,12 +15,12 @@ class Course::Admin::AnnouncementSettingsController < Course::Admin::Controller
 
   private
 
+  def announcement_settings_params #:nodoc:
+    params.require(:announcement_settings).permit(:title, :pagination)
+  end
+
   # Load our settings adapter to handle announcement settings
   def load_settings
     @settings ||= Course::AnnouncementSettings.new(current_course.settings(:announcement))
-  end
-
-  def announcement_settings_params #:nodoc:
-    params.require(:announcement_settings).permit(:title, :pagination)
   end
 end

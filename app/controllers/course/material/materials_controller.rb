@@ -28,6 +28,8 @@ class Course::Material::MaterialsController < Course::Material::Controller
     end
   end
 
+  private
+
   def material_params
     params.require(:material).permit(:name, :description, attachments_params)
   end

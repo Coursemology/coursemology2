@@ -48,11 +48,11 @@ class Course::Forum::PostsController < Course::Forum::Controller
 
   private
 
-  def load_topic
-    @topic ||= @forum.topics.friendly.find(topic_id_param)
-  end
-
   def topic_id_param
     params.permit(:topic_id)[:topic_id]
+  end
+
+  def load_topic
+    @topic ||= @forum.topics.friendly.find(topic_id_param)
   end
 end

@@ -22,10 +22,6 @@ class Course::Material::Controller < Course::ComponentController
     fail ComponentNotFoundError unless component
   end
 
-  def root_folder_name
-    component.settings.title || t('course.material.sidebar_title')
-  end
-
   def add_folder_breadcrumb
     folders_chain = @folder.ancestors.reverse << @folder
     root_folder = folders_chain.shift
@@ -34,5 +30,9 @@ class Course::Material::Controller < Course::ComponentController
     folders_chain.each do |folder|
       add_breadcrumb folder.name, course_material_folder_path(current_course, folder)
     end
+  end
+
+  def root_folder_name
+    component.settings.title || t('course.material.sidebar_title')
   end
 end
