@@ -41,3 +41,4 @@ en:
     course_user_badge:
       achievements: :'course.achievements.index.header'
       levels: :'course.levels.index.level'
+      progress: '%{current} / %{next} EXP'
