@@ -3,4 +3,5 @@
   = tabs do
     - controller.sidebar_items(type: :settings).each do |item|
       = nav_to(item[:title], item[:path])
-  = yield
+  div class=page_class
+    = yield
