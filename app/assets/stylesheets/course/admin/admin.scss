@@ -1,0 +1,10 @@
+.course-admin-admin {
+  .edit-course {
+    .course-logo {
+      .image > img {
+        height: $course-admin-form-logo;
+        width: $course-admin-form-logo;
+      }
+    }
+  }
+}

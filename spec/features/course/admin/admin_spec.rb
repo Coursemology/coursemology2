@@ -37,9 +37,11 @@ RSpec.feature 'Course: Administration: Administration' do
         new_description = 'New Description'
         fill_in 'course_title',          with: new_title
         fill_in 'course_description',    with: new_description
+        attach_file :course_logo, File.join(Rails.root, '/spec/fixtures/files/picture.jpg')
         click_button I18n.t('helpers.submit.course.update')
 
         expect(page).to have_selector('div.alert.alert-success')
+        expect(page).to have_content(course.logo.medium.url)
         expect(course.reload.title).to eq(new_title)
         expect(course.reload.description).to eq(new_description)
       end

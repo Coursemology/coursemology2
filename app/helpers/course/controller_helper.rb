@@ -56,4 +56,15 @@ module Course::ControllerHelper
     render partial: 'layouts/course_user_badge',
            locals: { course_user: course_user }
   end
+
+  # Helper method to display the course logo. If logo is present, returns the medium version
+  # of the logo (see ImageUploader for more versions). Otherwise, returns the default course
+  # logo.
+  #
+  # @return [String] HTML string to render the course logo
+  def display_course_logo(course)
+    content_tag(:span, class: ['image']) do
+      image_tag(course.logo.medium.url || 'course_default_logo.png')
+    end
+  end
 end
