@@ -3,8 +3,8 @@ div#course-user-badge
     - progress_bar_classes = ['progress-bar-info', 'progress-bar-striped',
                               'course-user-experience-points']
     = display_progress_bar(course_user.level_progress_percentage, progress_bar_classes) do
-      = t('layouts.course_user_badge.progress', current: course_user.experience_points,
-                                                next: course_user.next_level_threshold)
+      = t('.progress', current: course_user.experience_points,
+                       next: course_user.next_level_threshold)
   div.col-xs-6#course-user-achievements
     - unless controller.current_component_host[:course_achievements_component].nil?
       = link_to course_achievements_path(course_user.course) do
