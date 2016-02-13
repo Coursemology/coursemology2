@@ -1,11 +1,4 @@
 GIT
-  remote: git://github.com/CanCanCommunity/cancancan.git
-  revision: 3e3c3666f74cf91201a9142578f09a53b6287726
-  branch: develop
-  specs:
-    cancancan (1.13.1)
-
-GIT
   remote: git://github.com/ErwinM/acts_as_tenant.git
   revision: 005ce894384a82544bc321aae78764c288940c19
   specs:
@@ -29,6 +22,13 @@ GIT
   specs:
     bootstrap-sass-extras (0.0.6)
       rails (>= 3.1.0)
+
+GIT
+  remote: git://github.com/lowjoel/cancancan.git
+  revision: 6cdb4aded3c16d30cc466d32c6d1358760da9d43
+  branch: issue-284
+  specs:
+    cancancan (1.13.1)
 
 GIT
   remote: git://github.com/lowjoel/simple_token_authentication.git
