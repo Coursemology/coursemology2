@@ -90,15 +90,18 @@ module ApplicationWidgetsHelper
   # Display a progress_bar with the given percentage and styling. The percentage is assumed to
   # be a number ranging from 0-100. In addition, a block can be passed to add custom text.
   #
+  # ActionView::Helpers::CaptureHelper#capture is used to ensure the block is rendered in the
+  # original view_context, rather than within the view_context of the progress bar layout.
+  #
   # @param [Fixnum] percentage The percentage to be displayed on the progress bar.
   # @param [Array<String>] classes An array of classes to apply to the progress bar.
   # @yield The HTML text which will be passed to the partial as text to be shown in the bar.
   # @return [String] HTML string to render the progress bar.
-  def display_progress_bar(percentage, classes = ['progress-bar-info'])
-    render layout: 'layouts/progress_bar', locals: { percentage: percentage,
-                                                     progress_bar_classes: classes } do
-      yield if block_given?
-    end
+  def display_progress_bar(percentage, classes = ['progress-bar-info'], &block)
+    text_in_block = capture(&block) if block_given?
+    render partial: 'layouts/progress_bar', locals: { percentage: percentage,
+                                                      progress_bar_classes: classes,
+                                                      progress_bar_text: text_in_block }
   end
 
   private

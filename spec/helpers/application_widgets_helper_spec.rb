@@ -208,6 +208,12 @@ RSpec.describe ApplicationWidgetsHelper, type: :helper do
         it 'appends the text within the progress bar' do
           expect(helper.send(:display_progress_bar, 50) { '30%' }).to include('30%')
         end
+
+        it 'renders the block in the context of the helper' do
+          message = 'foo'
+          helper.define_singleton_method(:some_method) { message }
+          expect(helper.send(:display_progress_bar, 50) { helper.some_method }).to include(message)
+        end
       end
     end
   end
