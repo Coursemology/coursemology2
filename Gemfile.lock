@@ -274,7 +274,7 @@ GEM
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     orm_adapter (0.5.0)
-    parser (2.3.0.5)
+    parser (2.3.0.6)
       ast (~> 2.2)
     pg (0.18.4)
     poltergeist (1.9.0)
