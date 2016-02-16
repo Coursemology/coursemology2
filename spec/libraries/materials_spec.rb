@@ -14,20 +14,34 @@ RSpec.describe 'Extension: Materials' do
     it { is_expected.to have_one(:folder).autosave(true) }
     it { is_expected.to have_many(:materials) }
 
-    let(:files) { [OpenStruct.new(original_filename: 'file.txt')] }
-    let(:assessment) { self.class::Assessment.new }
-    describe '#files_attributes=' do
-      before do
-        assessment.build_folder(name: 'folder')
-      end
+    let(:file) { 'file.txt' }
+    let(:files) { [OpenStruct.new(original_filename: file)] }
+    let(:assessment) { self.class::Assessment.new(assessment_attributes) }
+    let(:assessment_attributes) { nil }
 
+    describe 'callbacks' do
+      describe 'after the assessment is initialized' do
+        it 'has a folder' do
+          expect(assessment.folder).to be_present
+        end
+      end
+    end
+
+    describe '#initialize' do
+      let(:assessment_attributes) { { files_attributes: files } }
+      it 'allows direct assignment to files' do
+        expect(assessment.materials.all? { |file| file.original_filename == file }).to be(true)
+      end
+    end
+
+    describe '#files_attributes=' do
       it 'creates materials from files' do
         assessment.files_attributes = files
         expect(assessment.folder.materials).to be_present
       end
 
       context 'when filename is not valid' do
-        let(:files) { [OpenStruct.new(original_filename: 'lol\lol.txt')] }
+        let(:file) { 'lol\lol.txt' }
 
         it 'normalizes the name' do
           assessment.files_attributes = files
