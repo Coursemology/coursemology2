@@ -3,7 +3,7 @@
 class User::Email < ActiveRecord::Base
   after_destroy :set_new_user_primary_email, if: :primary?
 
-  schema_validations except: :primary
+  schema_validations except: [:primary, :email]
   validates :primary, inclusion: [true, false]
   validates :primary, uniqueness: { scope: [:user_id], conditions: -> { where(primary: true) } }
 
