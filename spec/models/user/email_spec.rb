@@ -32,5 +32,15 @@ RSpec.describe User::Email, type: :model do
         it { is_expected.not_to be_valid }
       end
     end
+
+    context 'when email has already been taken' do
+      let(:existing_email) { create(:user_email).email }
+      subject { build(:user_email, email: existing_email) }
+
+      it 'is not valid' do
+        expect(subject).not_to be_valid
+        expect(subject.errors[:email].count).to eq(1)
+      end
+    end
   end
 end
