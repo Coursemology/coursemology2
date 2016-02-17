@@ -2,6 +2,10 @@
   td
     = email.email
 
+    - if !email.confirmed?
+      div.label.label-default
+        = t('.unconfirmed')
+
   td
     - unless email.primary?
       = link_to t('.set_primary'), set_primary_user_email_path(email) ,

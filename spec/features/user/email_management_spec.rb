@@ -6,7 +6,9 @@ RSpec.feature 'User: Emails' do
 
   with_tenant(:instance) do
     let(:user) { create(:user) }
-    let!(:user_emails) { create_list(:user_email, 2, user: user, primary: false) }
+    let!(:confirmed_emails) { create_list(:user_email, 2, user: user, primary: false) }
+    let!(:unconfirmed_email) { create(:user_email, :unconfirmed, user: user, primary: false) }
+
     before do
       login_as(user, scope: :user)
       visit user_emails_path
@@ -15,6 +17,11 @@ RSpec.feature 'User: Emails' do
     scenario 'I can view all my emails' do
       user.emails.each do |email|
         expect(page).to have_selector('tr td', text: email.email)
+
+        unless email.confirmed?
+          expect(page).to have_selector("tr#user_email_#{unconfirmed_email.id} td",
+                                        text: I18n.t('user.emails.email.unconfirmed'))
+        end
       end
     end
 
@@ -40,7 +47,7 @@ RSpec.feature 'User: Emails' do
     end
 
     scenario 'I can set an email as primary' do
-      email_to_be_set_as_primary = user.reload.emails.select { |e| !e.primary? }.sample
+      email_to_be_set_as_primary = confirmed_emails.sample
       find_link(nil, href: set_primary_user_email_path(email_to_be_set_as_primary)).click
       expect(email_to_be_set_as_primary.reload).to be_primary
     end
