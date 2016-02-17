@@ -79,6 +79,7 @@ Rails.application.routes.draw do
   namespace :user do
     resources :emails, only: [:index, :create, :destroy] do
       post 'set_primary', on: :member
+      post 'send_confirmation', on: :member
     end
     resource :profile, only: [:edit, :update]
   end
