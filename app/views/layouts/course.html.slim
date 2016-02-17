@@ -4,6 +4,9 @@
   div.row.course-layout
     div.col-lg-2.col-md-3.col-sm-4
       div.row
+        div.hidden-xs.text-center#course-sidebar-logo
+          = link_to course_path(current_course) do
+            = display_course_logo(current_course)
         div.col-xs-12.user
           = display_user_image(current_user)
           = link_to_user(current_course_user || current_user)
