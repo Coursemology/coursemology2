@@ -1,5 +1,5 @@
 = page_header do
-  = new_button([:admin, :instance]) if can?(:create, Instance)
+  = new_button([:admin, :instance]) if can?(:create, Instance.new)
 table.table.table-middle-align.table-hover
   thead
     tr

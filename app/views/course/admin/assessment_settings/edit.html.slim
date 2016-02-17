@@ -3,7 +3,7 @@
 h2
   span = t('.categories_and_tabs')
   div.pull-right
-    - if can?(:create, Course::Assessment::Category)
+    - if can?(:create, Course::Assessment::Category.new(course: current_course))
       = new_button([current_course, :admin, :assessments, :category])
 
 = simple_form_for(current_course, url: course_admin_assessments_path(current_course)) do |f|
@@ -28,10 +28,10 @@ h2
           td
           td
             div.btn-group
-              - if can?(:create, Course::Assessment::Tab)
+              - if can?(:create, Course::Assessment::Tab.new(category: category))
                 = new_button(new_course_admin_assessments_category_tab_path(current_course,
                                                                             category))
-              - if can?(:destroy, Course::Assessment::Category)
+              - if can?(:destroy, category)
                 = delete_button(course_admin_assessments_category_path(current_course, category))
 
         - tabs = category.tabs
@@ -46,7 +46,7 @@ h2
                                 input_html: { class: 'tab_weight' }
             td = tab_form.association :category, label: false
             td
-              - if can?(:destroy, Course::Assessment::Tab)
+              - if can?(:destroy, tab)
                 = delete_button(course_admin_assessments_category_tab_path(current_course,
                                                                            category, tab))
 
