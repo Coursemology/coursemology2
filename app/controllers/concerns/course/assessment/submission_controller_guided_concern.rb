@@ -8,6 +8,6 @@ module Course::Assessment::SubmissionControllerGuidedConcern
   end
 
   def question_to_attempt_guided
-    @submission.assessment.questions.step(@submission, step_param)
+    @submission.assessment.questions.step(@submission, step_param.to_i)
   end
 end
