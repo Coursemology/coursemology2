@@ -4,7 +4,6 @@ class Course::LevelsController < Course::ComponentController
   add_breadcrumb :index, :course_levels_path
 
   def index #:nodoc:
-    @levels = @course.levels
   end
 
   def new #:nodoc:
