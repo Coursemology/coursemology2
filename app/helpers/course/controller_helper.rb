@@ -64,7 +64,7 @@ module Course::ControllerHelper
   # @return [String] HTML string to render the course logo
   def display_course_logo(course)
     content_tag(:span, class: ['image']) do
-      image_tag(course.logo.medium.url || 'course_default_logo.png')
+      image_tag(course.logo.medium.url || 'course_default_logo.svg')
     end
   end
 end
