@@ -144,7 +144,8 @@ gem 'http_accept_language'
 gem 'devise'
 gem 'devise_masquerade'
 gem 'devise-multi_email'
-gem 'simple_token_authentication', github: 'lowjoel/simple_token_authentication', branch: 'optional-params-headers'
+gem 'simple_token_authentication', github: 'lowjoel/simple_token_authentication',
+                                   branch: 'optional-params-headers'
 gem 'omniauth'
 gem 'omniauth-facebook'
 
