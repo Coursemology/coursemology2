@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Condition::LevelsController < Course::ConditionsController
   load_resource :level_condition, class: Course::Condition::Level.name, parent: false
   before_action :set_course, only: [:new, :create]

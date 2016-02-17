@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::AnnouncementsComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 

@@ -1,4 +1,4 @@
-- if folder.materials.any?
+- unless folder.materials.empty?
   - folder.materials.includes(:attachments).each do |material|
     div
       = link_to material.attachment.url do

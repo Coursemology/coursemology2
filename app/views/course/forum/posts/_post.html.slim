@@ -17,7 +17,7 @@
         div.info
           div.pull-right
             - if can? :reply_topic, @topic
-              = link_to reply_course_forum_topic_post_path(@course, @forum, @topic, post),
+              = link_to reply_course_forum_topic_post_path(current_course, @forum, @topic, post),
                         title: t('.reply'), class: ['btn', 'btn-primary'] do
                 = fa_icon 'mail-reply'.freeze
             - if can? :edit, post

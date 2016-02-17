@@ -32,7 +32,7 @@ class Course::Assessment::Answer::MultipleResponseAutoGradingService < \
   # @param [Course::Assessment::Answer::MultipleResponse] answer The answer from the user.
   def grade_any_correct(question, answer)
     correct_selection = question.options.correct & answer.options
-    correct = correct_selection.length > 0
+    correct = !correct_selection.empty?
 
     [correct, grade_for(question, correct), explanations_for(answer.options)]
   end

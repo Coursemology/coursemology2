@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::AnnouncementsController < Course::ComponentController
   load_and_authorize_resource :announcement, through: :course, class: Course::Announcement.name
   before_action :check_component
@@ -58,7 +59,7 @@ class Course::AnnouncementsController < Course::ComponentController
   #
   # @raise [Coursemology::ComponentNotFoundError] When the component is disabled.
   def check_component
-    fail ComponentNotFoundError unless component
+    raise ComponentNotFoundError unless component
   end
 
   # Load current component's settings

@@ -1,12 +1,13 @@
+# frozen_string_literal: true
 module Course::Forum::TopicControllerLockingConcern
   extend ActiveSupport::Concern
 
   def set_locked
     if @topic.update_attributes(locked_params)
-      redirect_to course_forum_topic_path(@course, @forum, @topic),
+      redirect_to course_forum_topic_path(current_course, @forum, @topic),
                   success: locked_state_text(true)
     else
-      redirect_to course_forum_topic_path(@course, @forum, @topic),
+      redirect_to course_forum_topic_path(current_course, @forum, @topic),
                   danger: locked_state_text(false)
     end
   end

@@ -44,7 +44,7 @@ class Course::Assessment::ProgrammingPackage
     when IO
       @stream = path_or_stream
     else
-      fail ArgumentError, 'Invalid path or stream object'
+      raise ArgumentError, 'Invalid path or stream object'
     end
   end
 
@@ -101,7 +101,7 @@ class Course::Assessment::ProgrammingPackage
 
     files.each do |path, file|
       path = Pathname.new(path) unless path.is_a?(Pathname)
-      fail ArgumentError, 'Paths must be relative' unless path.relative?
+      raise ArgumentError, 'Paths must be relative' unless path.relative?
       @file.get_output_stream(SUBMISSION_PATH.join(path)) do |stream|
         stream.write(file)
       end
@@ -125,7 +125,7 @@ class Course::Assessment::ProgrammingPackage
       @file.read_from_stream(@stream)
       @file.instance_variable_set(:@stored_entries, @file.instance_variable_get(:@entry_set).dup)
     end
-    fail IllegalStateError unless @file
+    raise IllegalStateError unless @file
   end
 
   # Removes all submission files from the archive.

@@ -20,7 +20,7 @@ class Course::Assessment::Category < ActiveRecord::Base
   default_scope { order(:weight) }
 
   def self.after_course_initialize(course)
-    return if course.persisted? || course.assessment_categories.any?
+    return if course.persisted? || !course.assessment_categories.empty?
 
     course.assessment_categories.
       build(title: human_attribute_name('title.default'), weight: 0)

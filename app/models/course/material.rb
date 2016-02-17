@@ -21,6 +21,6 @@ class Course::Material < ActiveRecord::Base
     return if folder.nil?
 
     conflicts = folder.children.where { name =~ my { name } }
-    errors.add(:name, :taken) if conflicts.any?
+    errors.add(:name, :taken) unless conflicts.empty?
   end
 end

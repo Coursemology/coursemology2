@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Admin::AssessmentSettingsController < Course::Admin::Controller
   add_breadcrumb :index, :course_admin_assessments_path
 

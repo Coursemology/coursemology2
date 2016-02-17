@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Admin::AnnouncementSettingsController < Course::Admin::Controller
   add_breadcrumb :edit, :course_admin_announcements_path
   before_action :load_settings

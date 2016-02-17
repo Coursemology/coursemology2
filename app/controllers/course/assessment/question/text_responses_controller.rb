@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Question::TextResponsesController < \
   Course::Assessment::QuestionsController
   load_and_authorize_resource :text_response_question,

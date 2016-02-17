@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe Attachment do
@@ -48,7 +49,7 @@ RSpec.describe Attachment do
       expect(Tempfile).to receive(:new).and_wrap_original do |method, *args|
         tempfile = method.call(*args)
         tempfile.define_singleton_method(:seek) do |*|
-          fail IOError
+          raise IOError
         end
         tempfile
       end.at_least(:once)

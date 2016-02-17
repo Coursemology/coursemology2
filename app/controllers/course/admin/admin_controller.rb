@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Admin::AdminController < Course::Admin::Controller
   def index
   end
@@ -33,7 +34,7 @@ class Course::Admin::AdminController < Course::Admin::Controller
   end
 
   def destroy_failure #:nodoc:
-    redirect_to course_admin_path(@course),
+    redirect_to course_admin_path(current_course),
                 danger: t('course.admin.admin.destroy.failure',
                           error: current_course.errors.full_messages.to_sentence)
   end

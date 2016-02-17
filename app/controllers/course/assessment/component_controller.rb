@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::ComponentController < Course::Assessment::Controller
   before_action :add_assessment_breadcrumb
 

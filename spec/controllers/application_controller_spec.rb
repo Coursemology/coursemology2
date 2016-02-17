@@ -8,7 +8,7 @@ RSpec.describe ApplicationController, type: :controller do
     end
 
     def create
-      fail CanCan::AccessDenied
+      raise CanCan::AccessDenied
     end
 
     def publicly_accessible?
@@ -121,7 +121,7 @@ RSpec.describe ApplicationController, type: :controller do
     context 'when the instance has a theme' do
       it 'uses the theme' do
         pending 'an instance with a theme'
-        fail
+        raise
       end
     end
 
@@ -154,7 +154,7 @@ RSpec.describe ApplicationController, type: :controller do
 
       before do
         def controller.index
-          fail ComponentNotFoundError
+          raise ComponentNotFoundError
         end
       end
 
@@ -183,7 +183,7 @@ RSpec.describe ApplicationController, type: :controller do
 
     before do
       def controller.index
-        fail IllegalStateError
+        raise IllegalStateError
       end
     end
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Course::AchievementsHelper
   # Returns the HTML code to display the achievement badge. If badge is present, return
   # medium version of the badge (see ImageUploader for more versions). Otherwise, return

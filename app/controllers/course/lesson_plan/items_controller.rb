@@ -21,6 +21,6 @@ class Course::LessonPlan::ItemsController < Course::ComponentController
   # except the first, is an array that has a milestone as its first item.
   # This method assigns the list of groups to @lesson_plan_items.
   def load_lesson_plan_items
-    @lesson_plan_items = @course.grouped_lesson_plan_items_with_milestones
+    @lesson_plan_items = current_course.grouped_lesson_plan_items_with_milestones
   end
 end

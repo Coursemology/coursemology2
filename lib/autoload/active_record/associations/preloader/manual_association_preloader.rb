@@ -12,7 +12,7 @@ module ActiveRecord::Associations::Preloader::ManualAssociationPreloader
   end
 
   def scope
-    fail NotImplementedError
+    raise NotImplementedError
   end
 
   def records_for(ids)

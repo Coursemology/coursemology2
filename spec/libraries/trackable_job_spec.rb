@@ -96,7 +96,7 @@ RSpec.describe TrackableJob do
     before do
       error_to_throw = self.error_to_throw
       subject.define_singleton_method(:perform_tracked) do
-        fail error_to_throw
+        raise error_to_throw
       end
 
       subject.perform_now

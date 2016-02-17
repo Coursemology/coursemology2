@@ -46,7 +46,7 @@ class Notifier::Base
     when User
       email_user(notification)
     else
-      fail ArgumentError, 'Invalid recipient type'
+      raise ArgumentError, 'Invalid recipient type'
     end
   end
 

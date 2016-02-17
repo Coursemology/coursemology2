@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Condition::AssessmentsController < Course::ConditionsController
   load_resource :assessment_condition, class: Course::Condition::Assessment.name, parent: false
   before_action :set_course_and_conditional, only: [:new, :create]

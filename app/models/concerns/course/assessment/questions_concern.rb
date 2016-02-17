@@ -33,18 +33,28 @@ module Course::Assessment::QuestionsConcern
   # Return the question at the given step.
   #
   # @param [Course::Assessment::Submission] submission The submission which contains the answers.
+  # @param [Fixnum] current_step The question at the current step.
   # @return [Array<Course::Assessment::Question>] The question at the given the step. The latest
   #   unfinished question will be returned if the question at the step is not accessible.
   def step(submission, current_step)
-    # Make sure index is between [0, length - 1]
-    index = [length - 1, [0, current_step.to_i - 1].max].min
+    correctly_answered_question_ids = correctly_answered_questions(submission).pluck(:id)
+    question_ids = pluck(:id)
 
-    correctly_answered_questions =
-      where(id: submission.answers.where(correct: true).select(:question_id))
+    question_index = question_ids.zip(0..question_ids.length).find_index do |(question, index)|
+      index == current_step || !correctly_answered_question_ids.include?(question)
+    end
 
-    index -= 1 while index > 0 && !correctly_answered_questions.include?(fetch(index - 1))
+    # Return a +ActiveRecord::AssociationRelation+, so that the scope can be attempted.
+    where(id: question_ids.fetch(question_index))
+  end
 
-    # Let return type be `ActiveRecord_AssociationRelation`, so that they can be attempted.
-    where(id: fetch(index))
+  private
+
+  # Retrieves the correctly answered questions from the given submission.
+  #
+  # @param [Course::Assessment::Submission] submission The submission which contains the answers.
+  # @return [Array<Course::Assessment::Question>] The questions which were correctly answered.
+  def correctly_answered_questions(submission)
+    where(id: submission.answers.where(correct: true).select(:question_id))
   end
 end

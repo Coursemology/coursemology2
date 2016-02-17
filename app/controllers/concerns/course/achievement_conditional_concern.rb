@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Course::AchievementConditionalConcern
   extend ActiveSupport::Concern
 
