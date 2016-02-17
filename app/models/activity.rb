@@ -23,21 +23,21 @@ class Activity < ActiveRecord::Base
     when User
       notify_user(recipient, type)
     else
-      fail ArgumentError, 'Invalid recipient type'
+      raise ArgumentError, 'Invalid recipient type'
     end
   end
 
   private
 
   def notify_course(course, type)
-    fail ArgumentError, 'Invalid course notification type' unless COURSE_NOTIFICATION_TYPES.
-                                                                  include?(type)
+    raise ArgumentError, 'Invalid course notification type' unless COURSE_NOTIFICATION_TYPES.
+                                                                   include?(type)
     course_notifications.build(course: course, notification_type: type)
   end
 
   def notify_user(user, type)
-    fail ArgumentError, 'Invalid user notification type' unless USER_NOTIFICATION_TYPES.
-                                                                include?(type)
+    raise ArgumentError, 'Invalid user notification type' unless USER_NOTIFICATION_TYPES.
+                                                                 include?(type)
     user_notifications.build(user: user, notification_type: type)
   end
 end

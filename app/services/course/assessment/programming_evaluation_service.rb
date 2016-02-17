@@ -118,6 +118,6 @@ class Course::Assessment::ProgrammingEvaluationService
     wait_result = evaluation.wait(timeout: @timeout,
                                   while_callback: -> { !evaluation.tap(&:reload).finished? })
 
-    fail Timeout::Error if wait_result.nil?
+    raise Timeout::Error if wait_result.nil?
   end
 end

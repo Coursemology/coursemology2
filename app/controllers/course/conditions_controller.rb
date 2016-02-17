@@ -6,7 +6,7 @@ class Course::ConditionsController < Course::ComponentController
   #         or when the user clicks on the `Back` button.
   # @return [Symbol] Similar to above.
   def return_to_path
-    fail NotImplementedError, 'To be implemented by the condition controllers of a specific'\
+    raise NotImplementedError, 'To be implemented by the condition controllers of a specific'\
       'conditional.'
   end
 
@@ -18,7 +18,7 @@ class Course::ConditionsController < Course::ComponentController
   # To retrieve and set the conditional,
   #     @conditional = Course::Achievement.find(params[:achievement_id])
   def set_conditional
-    fail NotImplementedError, 'To be implemented by the condition controllers of a specific'\
+    raise NotImplementedError, 'To be implemented by the condition controllers of a specific'\
       'conditional.'
   end
 

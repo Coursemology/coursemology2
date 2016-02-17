@@ -11,7 +11,7 @@ module Course::Discussion::PostsConcern
   def create
     Course::Discussion::Post.transaction do
       return true if @post.save && create_topic_subscription
-      fail ActiveRecord::Rollback
+      raise ActiveRecord::Rollback
     end
   end
 
@@ -38,7 +38,7 @@ module Course::Discussion::PostsConcern
   #
   # @return [Boolean] True if all subscriptions are created successfully.
   def create_topic_subscription
-    fail NotImplementedError, 'To be implemented by the concrete topic posts controller.'
+    raise NotImplementedError, 'To be implemented by the concrete topic posts controller.'
   end
 
   # The discussion topic record that posts belong to.
@@ -46,7 +46,7 @@ module Course::Discussion::PostsConcern
   #
   # @return [Course::Discussion::Topic] The discussion topic record.
   def discussion_topic
-    fail NotImplementedError, 'To be implemented by the concrete topic posts controller.'
+    raise NotImplementedError, 'To be implemented by the concrete topic posts controller.'
   end
 
   private

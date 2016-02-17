@@ -16,7 +16,7 @@ class ActiveRecord::Associations::Preloader
       when NullPreloader.name, AlreadyLoaded.name
         preloader_class
       else
-        fail NotImplementedError
+        raise NotImplementedError
       end
     end
   end

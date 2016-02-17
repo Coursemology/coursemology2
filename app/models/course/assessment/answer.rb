@@ -37,8 +37,8 @@ class Course::Assessment::Answer < ActiveRecord::Base
   # @raise [ArgumentError] When the question cannot be auto graded.
   # @raise [IllegalStateError] When the answer has not been submitted.
   def auto_grade!
-    fail ArgumentError unless question.auto_gradable?
-    fail IllegalStateError if attempting?
+    raise ArgumentError unless question.auto_gradable?
+    raise IllegalStateError if attempting?
 
     ensure_auto_grading!
     Course::Assessment::Answer::AutoGradingJob.perform_later(auto_grading).tap do |job|

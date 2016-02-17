@@ -30,7 +30,7 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
   end
 
   def update_result
-    fail IllegalStateError unless @programming_evaluation.assigned?
+    raise IllegalStateError unless @programming_evaluation.assigned?
     @programming_evaluation.assign_attributes(update_result_params)
     @programming_evaluation.complete!
     if @programming_evaluation.save

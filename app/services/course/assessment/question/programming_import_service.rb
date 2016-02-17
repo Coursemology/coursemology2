@@ -43,13 +43,13 @@ class Course::Assessment::Question::ProgrammingImportService
   #
   # @param [Course::Assessment::ProgrammingPackage] package The package to import.
   def import_from_package(package)
-    fail InvalidDataError unless package.valid?
+    raise InvalidDataError unless package.valid?
 
     template_import_thread = Thread.new { import_template_files(package) }
     evaluation_result = evaluate_package(package)
     template_import_thread.join
 
-    fail evaluation_result if evaluation_result.error?
+    raise evaluation_result if evaluation_result.error?
     save(template_import_thread.value, evaluation_result)
   end
 

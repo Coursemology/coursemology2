@@ -58,7 +58,7 @@ class Course::AnnouncementsController < Course::ComponentController
   #
   # @raise [Coursemology::ComponentNotFoundError] When the component is disabled.
   def check_component
-    fail ComponentNotFoundError unless component
+    raise ComponentNotFoundError unless component
   end
 
   # Load current component's settings

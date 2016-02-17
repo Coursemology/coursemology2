@@ -138,7 +138,7 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
           @running_jobs += 1
         else
           remove_thread_from_pool(Thread.current)
-          fail StopIteration
+          raise StopIteration
         end
       end
 

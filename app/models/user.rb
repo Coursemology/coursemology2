@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
     # @return [User]
     def system
       @system ||= find(User::SYSTEM_USER_ID)
-      fail 'No system user. Did you run rake db:seed?' unless @system
+      raise 'No system user. Did you run rake db:seed?' unless @system
       @system
     end
   end
