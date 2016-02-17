@@ -49,7 +49,7 @@ class Course::Material::Folder < ActiveRecord::Base
     return if parent.nil?
 
     conflicts = parent.materials.where { name =~ my { name } }
-    errors.add(:name, :taken) if conflicts.any?
+    errors.add(:name, :taken) unless conflicts.empty?
   end
 
   def sibling_names

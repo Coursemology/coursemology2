@@ -1,4 +1,4 @@
-- if f.object.materials.any?
+- unless f.object.materials.empty?
   div
     strong = t('.uploaded_materials')
   - f.object.materials.each do |material|

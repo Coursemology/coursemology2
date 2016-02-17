@@ -19,7 +19,7 @@ class Course::GroupsComponent < SimpleDelegator
   private
 
   def can_manage_group?
-    can?(:manage, Course::Group.new(course: current_course)) || manageable_groups.any?
+    can?(:manage, Course::Group.new(course: current_course)) || !manageable_groups.empty?
   end
 
   def manageable_groups

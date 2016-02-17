@@ -26,8 +26,9 @@ class Course::Discussion::Topic < ActiveRecord::Base
       subscribed_by?(user) || subscriptions.create!(user: user)
     end
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
+    errors = e.record.errors
     return true if e.is_a?(ActiveRecord::RecordInvalid) &&
-                   e.record.errors[:topic_id].any? && e.record.errors[:user_id].any?
+                   !errors[:topic_id].empty? && !errors[:user_id].empty?
     raise e
   end
 end

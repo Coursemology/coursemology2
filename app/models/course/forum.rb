@@ -45,7 +45,7 @@ class Course::Forum < ActiveRecord::Base
   # @param [User] user The user to check
   # @return [Boolean] True if the user has subscribed this forum
   def subscribed_by?(user)
-    subscriptions.where(user: user).any?
+    !subscriptions.where(user: user).empty?
   end
 
   # Rewrite partial path which is used to find a suitable partial to represent the object.
