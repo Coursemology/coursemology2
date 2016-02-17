@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+class Course::UserInvitationService; end
 module Course::UserInvitationService::RegistrationCodeConcern
   extend ActiveSupport::Autoload
 
