@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Admin::MaterialSettingsController < Course::Admin::Controller
   add_breadcrumb :edit, :course_admin_materials_path
   before_action :load_settings

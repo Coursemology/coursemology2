@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # :nodoc:
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by providing a null session when the token is missing from the request.

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Condition::AchievementsController < Course::ConditionsController
   load_resource :achievement_condition, class: Course::Condition::Achievement.name, parent: false
   before_action :set_course, only: [:new, :create]

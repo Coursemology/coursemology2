@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Controller < Course::ComponentController
   before_action :load_and_authorize_assessment
   before_action :add_assessment_breadcrumbs

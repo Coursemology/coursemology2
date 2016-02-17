@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Course::Assessment::Question::ProgrammingHelper
   # Displays the result alert for an import job.
   #

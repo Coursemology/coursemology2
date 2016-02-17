@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::AnnouncementsController < Course::ComponentController
   load_and_authorize_resource :announcement, through: :course, class: Course::Announcement.name
   before_action :check_component

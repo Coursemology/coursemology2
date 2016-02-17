@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # The programming question evaluations controller.
 #
 # This does *NOT* inherit from the course/assessment controllers because this needs to query across

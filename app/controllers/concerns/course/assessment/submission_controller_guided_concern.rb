@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Course::Assessment::SubmissionControllerGuidedConcern
   extend ActiveSupport::Concern
 

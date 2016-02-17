@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Admin::SidebarSettingsController < Course::Admin::Controller
   before_action :load_settings
   add_breadcrumb :index, :course_admin_sidebar_path

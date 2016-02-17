@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Admin::ForumSettingsController < Course::Admin::Controller
   add_breadcrumb :edit, :course_admin_forums_path
   before_action :load_settings

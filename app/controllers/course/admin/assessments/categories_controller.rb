@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Admin::Assessments::CategoriesController < Course::Admin::Controller
   load_and_authorize_resource :category,
                               through: :course,

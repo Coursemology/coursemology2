@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Course::Forum::TopicControllerHidingConcern
   extend ActiveSupport::Concern
 

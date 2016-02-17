@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   include Course::Assessment::SubmissionControllerWorksheetConcern
   include Course::Assessment::SubmissionControllerGuidedConcern

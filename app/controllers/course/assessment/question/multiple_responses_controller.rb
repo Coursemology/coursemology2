@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::Question::MultipleResponsesController < \
   Course::Assessment::QuestionsController
   load_and_authorize_resource :multiple_response_question,

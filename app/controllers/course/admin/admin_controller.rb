@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Admin::AdminController < Course::Admin::Controller
   def index
   end

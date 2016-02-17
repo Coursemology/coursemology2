@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Course::Assessment::AssessmentsHelper
   def display_assessment_tabs
     return nil if @category.tabs.count == 1

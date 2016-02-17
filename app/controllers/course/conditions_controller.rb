@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::ConditionsController < Course::ComponentController
   before_action :load_and_authorize_conditional
   helper_method :return_to_path
