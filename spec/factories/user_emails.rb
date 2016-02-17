@@ -8,10 +8,18 @@ FactoryGirl.define do
   factory :user_email, class: User::Email.name do
     primary true
     email
-    confirmed_at { Time.zone.now }
+    confirmed
 
     after(:build) do |user_email|
       user_email.user ||= build(:user, emails: [user_email], emails_count: 0)
+    end
+
+    trait :confirmed do
+      confirmed_at { Time.zone.now }
+    end
+
+    trait :unconfirmed do
+      confirmed_at nil
     end
   end
 end
