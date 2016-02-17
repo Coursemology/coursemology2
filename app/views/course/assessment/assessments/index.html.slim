@@ -1,5 +1,6 @@
 = page_header format_inline_text(@category.title) do
-  = new_button([current_course, :assessment]) if can?(:create, Course::Assessment.new(tab: @tab))
+  - if can?(:create, Course::Assessment.new(tab: @tab))
+    = new_button([current_course, :assessment, category: @category.id, tab: @tab.id])
 
 = display_assessment_tabs
 

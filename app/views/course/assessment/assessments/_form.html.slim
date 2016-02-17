@@ -11,6 +11,8 @@
   = f.input :draft
   = f.input :display_mode, as: :select, collection: Course::Assessment.display_modes.keys
   = f.folder
+  = f.hidden_field :tab, value: @tab.id
+  = f.hidden_field :category, value: @tab.category_id
 
   - if @assessment.persisted?
     = render partial: 'course/condition/conditions', locals: { conditional: @assessment }

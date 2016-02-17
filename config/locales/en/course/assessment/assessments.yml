@@ -1,4 +1,8 @@
 en:
+  helpers:
+    buttons:
+      assessment:
+        new: 'New Assessment'
   course:
     assessment:
       assessments:
