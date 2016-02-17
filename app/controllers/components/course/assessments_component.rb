@@ -8,7 +8,7 @@ class Course::AssessmentsComponent < SimpleDelegator
   private
 
   def main_sidebar_items
-    current_course.assessment_categories.map do |category|
+    current_course.assessment_categories.select(&:persisted?).map do |category|
       {
         key: :assessments,
         title: category.title,
