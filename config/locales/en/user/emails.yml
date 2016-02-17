@@ -15,3 +15,4 @@ en:
       email:
         set_primary: 'Set Primary'
         unconfirmed: 'Unconfirmed'
+        primary: 'Primary'

@@ -15,12 +15,17 @@ RSpec.feature 'User: Emails' do
     end
 
     scenario 'I can view all my emails' do
-      user.emails.each do |email|
+      user.reload.emails.each do |email|
         expect(page).to have_selector('tr td', text: email.email)
 
         unless email.confirmed?
-          expect(page).to have_selector("tr#user_email_#{unconfirmed_email.id} td",
+          expect(page).to have_selector("tr#user_email_#{email.id} td",
                                         text: I18n.t('user.emails.email.unconfirmed'))
+        end
+
+        if email.primary?
+          expect(page).to have_selector("tr#user_email_#{email.id} td",
+                                        text: I18n.t('user.emails.email.primary'))
         end
       end
     end
