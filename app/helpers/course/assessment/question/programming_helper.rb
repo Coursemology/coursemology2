@@ -49,7 +49,7 @@ module Course::Assessment::Question::ProgrammingHelper
   #
   # @param [Hash] error The error object in the +TrackableJobs+ table.
   # @return [String]
-  def import_error_message(error)
+  def import_error_message(error) # rubocop:disable Metrics/MethodLength
     case error['class']
     when InvalidDataError.name
       t('course.assessment.question.programming.form.import_result.errors.invalid_package')
