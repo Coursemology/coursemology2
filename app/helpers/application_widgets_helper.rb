@@ -159,7 +159,7 @@ module ApplicationWidgetsHelper
   # @param [Symbol] button_type The type of the button to generate a title for.
   # @param [Symbol|Array|ActiveRecord::Base] resource The resource to deduce the title for.
   def deduce_resource_button_title(button_type, resource)
-    resource = resource.last if resource.is_a?(Array)
+    resource = deduce_resource_button_resource(resource)
     object_name = deduce_resource_object_name(resource)
     resource_name = resource.try(:model_name).try(:human) || object_name.humanize
 
@@ -168,6 +168,19 @@ module ApplicationWidgetsHelper
     keys << :"helpers.buttons.#{button_type}"
     keys << "#{button_type.to_s.humanize} #{resource_name}" if resource_name
     t(keys.shift, model: resource_name, default: keys)
+  end
+
+  # Given a parameter set for +url_for+, deduce the resource that the parameter references.
+  #
+  # @param [Array|String] resource The resource to deduce. This handles arrays, which are
+  #   interpreted as +url_for+ parameters. This also supports hash options to be provided to
+  #   +url_for+.
+  # @return [Symbol] When an array is given.
+  # @return [String] When a string is given.
+  def deduce_resource_button_resource(resource)
+    return resource unless resource.is_a?(Array)
+    return resource[-2] if resource.last.is_a?(Hash)
+    resource.last
   end
 
   # Deduces the object name of the resource. This is the name used to construct the translation

@@ -159,6 +159,16 @@ RSpec.describe ApplicationWidgetsHelper, type: :helper do
             :'helpers.buttons.edit',
             'Edit Announcement')
         end
+
+        context 'when given an array with an options hash' do
+          let(:url_options) { [announcement, test: 'something'] }
+          it 'picks the last resource' do
+            expect(subject).to contain_exactly(
+              :'helpers.buttons.announcement.edit',
+              :'helpers.buttons.edit',
+              'Edit Announcement')
+          end
+        end
       end
 
       context 'when given a single resource' do
