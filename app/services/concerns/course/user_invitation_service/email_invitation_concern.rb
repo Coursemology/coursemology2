@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'csv'
 
+class Course::UserInvitationService; end
 module Course::UserInvitationService::EmailInvitationConcern
   extend ActiveSupport::Autoload
 
