@@ -5,7 +5,8 @@ class Course::Assessment::Submission::UpdateGuidedAssessmentService <
   private
 
   def questions_to_attempt
-    @questions_to_attempt ||= @submission.assessment.questions.step(@submission, step_param)
+    @questions_to_attempt ||= @submission.assessment.questions.
+                              step(@submission, step_param.to_i - 1)
   end
 
   def step_param

@@ -33,15 +33,17 @@ module Course::Assessment::QuestionsConcern
   # Return the question at the given step.
   #
   # @param [Course::Assessment::Submission] submission The submission which contains the answers.
-  # @param [Fixnum] current_step The question at the current step.
+  # @param [Fixnum] current_index The index of the question, it's zero based.
   # @return [Array<Course::Assessment::Question>] The question at the given the step. The latest
   #   unfinished question will be returned if the question at the step is not accessible.
-  def step(submission, current_step)
+  def step(submission, current_index)
+    current_index = 0 if current_index < 0
+
     correctly_answered_question_ids = correctly_answered_questions(submission).pluck(:id)
     question_ids = pluck(:id)
 
     question_index = question_ids.zip(0..question_ids.length).find_index do |(question, index)|
-      index == current_step || !correctly_answered_question_ids.include?(question)
+      index == current_index || !correctly_answered_question_ids.include?(question)
     end
 
     # Return a +ActiveRecord::AssociationRelation+, so that the scope can be attempted.
