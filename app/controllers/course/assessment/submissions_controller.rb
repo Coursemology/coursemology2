@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 class Course::Assessment::SubmissionsController < Course::Assessment::Controller
-  include Course::Assessment::SubmissionControllerWorksheetConcern
-  include Course::Assessment::SubmissionControllerGuidedConcern
-
   before_action :authorize_assessment, only: :create
   load_resource :submission, class: Course::Assessment::Submission.name, through: :assessment
   authorize_resource :submission, except: [:edit, :update, :auto_grade]
@@ -97,6 +94,10 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
     scalar_params.push(array_params)
   end
 
+  def step_param
+    params.permit(:step)[:step]
+  end
+
   def authorize_assessment
     authorize!(:attempt, @assessment)
   end
@@ -119,7 +120,12 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
   end
 
   def questions_to_attempt
-    @questions_to_attempt ||=
-      @submission.assessment.guided? ? question_to_attempt_guided : question_to_attempt_worksheet
+    @questions_to_attempt ||= begin
+      if @submission.assessment.guided?
+        @submission.assessment.questions.step(@submission, step_param)
+      else
+        @submission.assessment.questions
+      end
+    end
   end
 end
