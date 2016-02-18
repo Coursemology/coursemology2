@@ -153,7 +153,7 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
-    devise-multi_email (1.0.2)
+    devise-multi_email (1.0.3)
       devise
     devise_masquerade (0.1.7)
       devise (>= 2.1.0)
@@ -342,9 +342,9 @@ GEM
     rspec-expectations (3.4.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.4.0)
-    rspec-html-matchers (0.7.0)
+    rspec-html-matchers (0.7.1)
       nokogiri (~> 1)
-      rspec (~> 3)
+      rspec (>= 3.0.0.a, < 4)
     rspec-mocks (3.4.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.4.0)
