@@ -50,11 +50,11 @@ module Componentize
         host.add_component(self)
       end
     end
-    private_class_method :base_component_for_host
 
     result.class_variable_set(:@@host, host)
     result
   end
+  private_class_method :base_component_for_host
 
   # Templates for each instantiation of Modular
   module ComponentHost

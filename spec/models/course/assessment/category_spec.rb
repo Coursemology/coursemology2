@@ -8,6 +8,48 @@ RSpec.describe Course::Assessment::Category do
 
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
+    describe 'callbacks' do
+      describe 'after category was initialized' do
+        subject { build(:course_assessment_category) }
+
+        it 'sets the folder to be open with immediate effect' do
+          expect(subject.folder.start_at).to be <= Time.zone.now
+        end
+      end
+
+      describe 'after the category is saved' do
+        let(:category_attributes) { nil }
+        subject { create(:course_assessment_category, category_attributes) }
+
+        it 'sets the folder to have the same attributes as the category' do
+          expect(subject.folder.name).to eq(subject.title)
+          expect(subject.folder.course).to eq(subject.course)
+          expect(subject.folder.parent).to eq(subject.course.root_folder)
+        end
+
+        context 'when category title is not a valid filename' do
+          let(:category_attributes) { { title: 'lol\lol' } }
+
+          it 'creates a folder with the valid name' do
+            expect(subject.folder.name).to eq('lol lol')
+          end
+        end
+      end
+
+      describe 'after category title was changed' do
+        subject { create(:course_assessment_category) }
+
+        it 'updates the folder title' do
+          new_title = 'Mission'
+
+          subject.title = new_title
+          subject.save
+
+          expect(subject.folder.name).to eq(new_title)
+        end
+      end
+    end
+
     describe '.default_scope' do
       let(:course) { create(:course) }
       let!(:categories) { create_list(:course_assessment_category, 2, course: course) }
@@ -38,41 +80,6 @@ RSpec.describe Course::Assessment::Category do
 
         subject.send(:build_initial_tab)
         expect(subject.tabs.length).to eq(1)
-      end
-    end
-
-    context 'after category was initialized' do
-      subject { build(:course_assessment_category) }
-
-      it 'creates a folder' do
-        expect(subject.folder).to be_present
-
-        subject.save
-        expect(subject.folder).to be_persisted
-        expect(subject.folder.name).to eq(subject.title)
-        expect(subject.folder.course).to eq(subject.course)
-        expect(subject.folder.parent).to eq(subject.course.root_folder)
-      end
-
-      context 'when category title is not a valid filename' do
-        subject { create(:course_assessment_category, title: 'lol\lol') }
-
-        it 'creates a folder with the valid name' do
-          expect(subject.folder.name).to eq('lol lol')
-        end
-      end
-    end
-
-    describe 'after category title was changed' do
-      subject { create(:course_assessment_category) }
-
-      it 'updates the folder title' do
-        new_title = 'Mission'
-
-        subject.title = new_title
-        subject.save
-
-        expect(subject.folder.name).to eq(new_title)
       end
     end
 

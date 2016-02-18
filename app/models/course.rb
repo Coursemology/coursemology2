@@ -6,6 +6,7 @@ class Course < ActiveRecord::Base
 
   acts_as_tenant :instance, inverse_of: :courses
   has_settings_on :settings
+  mount_uploader :logo, ImageUploader
 
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
@@ -75,7 +76,7 @@ class Course < ActiveRecord::Base
   # @return [Course::Material::Folder] The root folder.
   def root_folder
     if new_record?
-      material_folders.find(&:root?) || (fail ActiveRecord::RecordNotFound)
+      material_folders.find(&:root?) || (raise ActiveRecord::RecordNotFound)
     else
       material_folders.find_by!(parent: nil)
     end

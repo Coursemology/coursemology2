@@ -1,6 +1,12 @@
-= content_tag_for(:tr, achievement, class: draft_class(achievement)) do
+= content_tag_for(:tr, achievement,
+                  class: draft_class(achievement) + \
+                         achievement_status_class(achievement, current_course_user)) do
+
   td
-    = display_achievement_badge(achievement)
+    - if can?(:display_badge, achievement)
+      = display_achievement_badge(achievement)
+    - else
+      = display_locked_achievement_badge
 
   th
     = link_to format_inline_text(achievement.title),

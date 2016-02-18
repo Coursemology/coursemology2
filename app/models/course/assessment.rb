@@ -7,7 +7,6 @@ class Course::Assessment < ActiveRecord::Base
   acts_as_conditional
   has_one_folder
 
-  after_initialize :build_initial_folder, if: :new_record?
   before_validation :assign_folder_attributes
   before_validation :propagate_course
 
@@ -66,10 +65,6 @@ class Course::Assessment < ActiveRecord::Base
   # Sets the course of the lesson plan item to be the same as the one for the assessment.
   def propagate_course
     lesson_plan_item.course = tab.category.course
-  end
-
-  def build_initial_folder
-    build_folder unless folder
   end
 
   def assign_folder_attributes

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::CoursesController < Course::Controller
   include Course::ActivityFeedsConcern
 
@@ -29,6 +30,6 @@ class Course::CoursesController < Course::Controller
 
   def course_params # :nodoc:
     params.require(:course).
-      permit(:title, :description, :status, :start_at, :end_at)
+      permit(:title, :description, :status, :start_at, :end_at, :logo)
   end
 end

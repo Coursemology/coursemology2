@@ -7,6 +7,10 @@ class Course::Condition::Level < ActiveRecord::Base
     self.class.human_attribute_name('title.title', value: minimum_level)
   end
 
+  def dependent_object
+    nil
+  end
+
   # Checks if the user satisfies the minimum level condition.
   #
   # @param [CourseUser] course_user The user that the level condition is being checked on. The user
@@ -16,8 +20,8 @@ class Course::Condition::Level < ActiveRecord::Base
     course_user.level_number >= minimum_level
   end
 
-  # Array of classes that the condition depends on.
-  def self.dependent_classes
-    []
+  # Class that the condition depends on.
+  def self.dependent_class
+    nil
   end
 end

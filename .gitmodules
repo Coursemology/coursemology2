@@ -1,0 +1,3 @@
+[submodule "vendor/assets/stylesheets/pygments-css"]
+	path = vendor/assets/stylesheets/pygments-css
+	url = https://github.com/richleland/pygments-css.git

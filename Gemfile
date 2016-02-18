@@ -61,6 +61,7 @@ gem 'font-awesome-rails'
 gem 'html-pipeline'
 gem 'sanitize'
 gem 'rinku'
+gem 'html-pipeline-rouge_filter'
 # Turbolinks makes following links in your web application faster.
 # Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
@@ -143,12 +144,13 @@ gem 'http_accept_language'
 gem 'devise'
 gem 'devise_masquerade'
 gem 'devise-multi_email'
-gem 'simple_token_authentication', github: 'lowjoel/simple_token_authentication', branch: 'optional-params-headers'
+gem 'simple_token_authentication', github: 'lowjoel/simple_token_authentication',
+                                   branch: 'optional-params-headers'
 gem 'omniauth'
 gem 'omniauth-facebook'
 
 # Use cancancan for authorization
-gem 'cancancan', github: 'CanCanCommunity/cancancan', branch: 'develop'
+gem 'cancancan', github: 'lowjoel/cancancan', branch: 'issue-284'
 
 # Some helpers for structuring CSS/JavaScript
 gem 'rails_utils', '>= 3.3.3'
@@ -164,6 +166,7 @@ gem 'cocoon'
 gem 'momentjs-rails', '>= 2.8.1'
 gem 'bootstrap3-datetimepicker-rails'
 gem 'bootstrap-select-rails'
+gem 'ace-rails-ap'
 
 # Using CarrierWave for file uploads
 gem 'carrierwave', github: 'carrierwaveuploader/carrierwave'

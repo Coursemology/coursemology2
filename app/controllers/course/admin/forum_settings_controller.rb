@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Admin::ForumSettingsController < Course::Admin::Controller
   add_breadcrumb :edit, :course_admin_forums_path
   before_action :load_settings
@@ -15,12 +16,12 @@ class Course::Admin::ForumSettingsController < Course::Admin::Controller
 
   private
 
+  def forum_settings_params #:nodoc:
+    params.require(:forum_settings).permit(:title, :pagination)
+  end
+
   # Load our settings adapter to handle forum settings
   def load_settings
     @settings ||= Course::ForumSettings.new(current_course.settings(:forum))
-  end
-
-  def forum_settings_params #:nodoc:
-    params.require(:forum_settings).permit(:title, :pagination)
   end
 end

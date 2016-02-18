@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Admin::SidebarSettingsController < Course::Admin::Controller
   before_action :load_settings
   add_breadcrumb :index, :course_admin_sidebar_path
@@ -15,12 +16,12 @@ class Course::Admin::SidebarSettingsController < Course::Admin::Controller
 
   private
 
+  def settings_sidebar_params #:nodoc:
+    params.require(:settings_sidebar)
+  end
+
   # Load our settings adapter to handle component settings
   def load_settings
     @settings = Course::Settings::Sidebar.new(current_course.settings, sidebar_items(type: :normal))
-  end
-
-  def settings_sidebar_params #:nodoc:
-    params.require(:settings_sidebar)
   end
 end

@@ -5,6 +5,7 @@ module Course::AchievementsAbilityComponent
   def define_permissions
     if user
       allow_student_show_achievements
+      allow_students_with_achievement_show_badges
       allow_staff_manage_achievements
     end
 
@@ -20,6 +21,10 @@ module Course::AchievementsAbilityComponent
 
   def allow_staff_manage_achievements
     can :manage, Course::Achievement, course_staff_hash
+  end
+
+  def allow_students_with_achievement_show_badges
+    can :display_badge, Course::Achievement, course_users: { user_id: user.id }
   end
 
   def published_achievement_hash

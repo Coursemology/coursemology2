@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Course::Assessment::Question::ProgrammingHelper
   # Displays the result alert for an import job.
   #
@@ -49,10 +50,12 @@ module Course::Assessment::Question::ProgrammingHelper
   #
   # @param [Hash] error The error object in the +TrackableJobs+ table.
   # @return [String]
-  def import_error_message(error)
+  def import_error_message(error) # rubocop:disable Metrics/MethodLength
     case error['class']
     when InvalidDataError.name
       t('course.assessment.question.programming.form.import_result.errors.invalid_package')
+    when Timeout::Error.name
+      t('course.assessment.question.programming.form.import_result.errors.evaluation_timeout')
     when Course::Assessment::ProgrammingEvaluationService::TimeLimitExceededError.name
       t('course.assessment.question.programming.form.import_result.errors.time_limit_exceeded')
     when Course::Assessment::ProgrammingEvaluationService::Error.name

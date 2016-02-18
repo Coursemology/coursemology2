@@ -1,14 +1,26 @@
-= simple_form_for current_course, url: course_admin_path(current_course) do |f|
-  = f.input :title, label: t('course.courses.form.title_label'),
-      placeholder: t('course.courses.form.title_placeholder')
+= div_for(current_course)
+  = simple_form_for current_course, url: course_admin_path(current_course) do |f|
+    = f.input :title, label: t('course.courses.form.title_label'),
+        placeholder: t('course.courses.form.title_placeholder')
 
-  = f.input :description, label: t('course.courses.form.description_label'),
-      placeholder: t('course.courses.form.description_placeholder')
+    = f.input :description, label: t('course.courses.form.description_label'),
+        placeholder: t('course.courses.form.description_placeholder')
 
-  = f.input :status, as: :radio_buttons, collection: Course.statuses.keys
+    = f.label t('course.courses.form.logo')
+    div.course-logo = display_course_logo(current_course)
+    = f.file_field :logo
 
-  = f.input :start_at
+    = f.input :status, as: :radio_buttons, collection: Course.statuses.keys
 
-  = f.input :end_at
+    = f.input :start_at
 
-  = f.button :submit
+    = f.input :end_at
+
+    = f.button :submit
+
+  div.delete-course
+    = page_header t('.delete.header')
+    div.alert.alert-danger
+      = simple_format(t('.delete.description_placeholder'))
+    = delete_button(course_admin_path(current_course)) do
+      = t('.delete.button')

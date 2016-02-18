@@ -1,11 +1,4 @@
 GIT
-  remote: git://github.com/CanCanCommunity/cancancan.git
-  revision: 3e3c3666f74cf91201a9142578f09a53b6287726
-  branch: develop
-  specs:
-    cancancan (1.13.1)
-
-GIT
   remote: git://github.com/ErwinM/acts_as_tenant.git
   revision: 005ce894384a82544bc321aae78764c288940c19
   specs:
@@ -31,6 +24,13 @@ GIT
       rails (>= 3.1.0)
 
 GIT
+  remote: git://github.com/lowjoel/cancancan.git
+  revision: 6cdb4aded3c16d30cc466d32c6d1358760da9d43
+  branch: issue-284
+  specs:
+    cancancan (1.13.1)
+
+GIT
   remote: git://github.com/lowjoel/simple_token_authentication.git
   revision: 75cca3c0327e8ae9c8e2554e3d51b6f1b5db18a1
   branch: optional-params-headers
@@ -50,6 +50,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    ace-rails-ap (4.0.1)
     actionmailer (4.2.5.1)
       actionpack (= 4.2.5.1)
       actionview (= 4.2.5.1)
@@ -98,7 +99,7 @@ GEM
     anbt-sql-formatter (0.0.3)
     arel (6.0.3)
     ast (2.2.0)
-    autoprefixer-rails (6.3.1)
+    autoprefixer-rails (6.3.3)
       execjs
       json
     awesome_print (1.6.1)
@@ -178,8 +179,8 @@ GEM
       multipart-post (>= 1.2, < 3)
     ffi (1.9.10)
     filename (0.1.2)
-    font-awesome-rails (4.5.0.0)
-      railties (>= 3.2, < 5.0)
+    font-awesome-rails (4.5.0.1)
+      railties (>= 3.2, < 5.1)
     friendly_id (5.1.0)
       activerecord (>= 4.0.0)
     globalid (0.3.6)
@@ -190,11 +191,15 @@ GEM
     html-pipeline (2.3.0)
       activesupport (>= 2, < 5)
       nokogiri (>= 1.4)
+    html-pipeline-rouge_filter (1.0.3)
+      activesupport
+      html-pipeline (>= 1.11)
+      rouge (~> 1.8)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     http_accept_language (2.0.5)
     i18n (0.7.0)
-    i18n-tasks (0.9.3)
+    i18n-tasks (0.9.4)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       easy_translate (>= 0.5.0)
@@ -205,7 +210,7 @@ GEM
       term-ansicolor (>= 1.3.2)
       terminal-table (>= 1.5.1)
     its-it (1.2.0)
-    jbuilder (2.4.0)
+    jbuilder (2.4.1)
       activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
     jquery-cdn (2.2.0)
@@ -237,7 +242,7 @@ GEM
     migration_comments (0.3.2)
       activerecord (>= 2.3.2)
     mime-types (2.99)
-    mini_magick (4.3.6)
+    mini_magick (4.4.0)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     modware (0.1.2)
@@ -269,7 +274,7 @@ GEM
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     orm_adapter (0.5.0)
-    parser (2.3.0.2)
+    parser (2.3.0.6)
       ast (~> 2.2)
     pg (0.18.4)
     poltergeist (1.9.0)
@@ -315,7 +320,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.5.0)
     rb-fsevent (0.9.7)
-    rb-inotify (0.9.5)
+    rb-inotify (0.9.7)
       ffi (>= 0.5.0)
     rb-kqueue (0.2.4)
       ffi (>= 0.5.0)
@@ -327,6 +332,7 @@ GEM
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
     rinku (1.7.3)
+    rouge (1.10.1)
     rspec (3.4.0)
       rspec-core (~> 3.4.0)
       rspec-expectations (~> 3.4.0)
@@ -505,6 +511,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ace-rails-ap
   active_record-acts_as (>= 1.0.8)
   activerecord-userstamp (>= 3.0.2)
   acts_as_tenant!
@@ -535,6 +542,7 @@ DEPENDENCIES
   friendly_id
   high_voltage
   html-pipeline
+  html-pipeline-rouge_filter
   http_accept_language
   i18n-tasks
   jbuilder

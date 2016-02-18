@@ -48,7 +48,7 @@ module TrackableJob
   def wait(timeout = nil)
     wait_result = job.wait(timeout: timeout, while_callback: -> { job.tap(&:reload).submitted? })
 
-    fail Timeout::Error if wait_result.nil?
+    raise Timeout::Error if wait_result.nil?
   end
 
   # Implements +initialize+, creating or loading the job from the database.
@@ -75,7 +75,7 @@ module TrackableJob
   protected
 
   def perform_tracked(*)
-    fail NotImplementedError
+    raise NotImplementedError
   end
 
   def rescue_tracked(exception)

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ApplicationAnnouncementsConcern
   extend ActiveSupport::Concern
 

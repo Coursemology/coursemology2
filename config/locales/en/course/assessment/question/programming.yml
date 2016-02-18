@@ -18,16 +18,21 @@ en:
               error: 'The package could not be imported: %{error}'
               errors:
                 invalid_package: 'the package uploaded does not have a valid structure.'
-                time_limit_exceeded: 'the package did not finish executing within the time limit.'
+                time_limit_exceeded: >-
+                  the package exceeded the maximum time allowed by the question.
+                evaluation_timeout: >-
+                  no response was received from an evaluator within the required time.
                 evaluation_error: 'an error occurred during evaluation, see logs.'
-            template: 'Template'
-            test_cases:
-              test_cases: 'Test Cases'
-              public: 'Public Test Cases'
-              private: 'Private Test Cases'
-              description: 'Description'
-              hint: 'Hint'
-          build_log:
+          form_build_log:
             title: 'Build Log'
             stdout: 'Standard Output'
             stderr: 'Standard Error'
+          form_templates:
+            templates: 'Template'
+          form_test_cases:
+            test_cases: 'Test Cases'
+            public: 'Public Test Cases'
+            private: 'Private Test Cases'
+            identifier: 'Identifier'
+            description: 'Description'
+            hint: 'Hint'

@@ -10,7 +10,7 @@ class Instance < ActiveRecord::Base
     # @return [Instance]
     def default
       @default ||= find_by(host: Instance::DEFAULT_HOST_NAME)
-      fail 'Unknown instance. Did you run rake db:seed?' unless @default
+      raise 'Unknown instance. Did you run rake db:seed?' unless @default
       @default
     end
 

@@ -43,7 +43,7 @@ class Course::Assessment::Submission::AutoGradingService
   # @param [Course::Assessment::Answer] answer The answer to grade.
   # @return [Course::Assessment::Answer::AutoGradingJob] The job created to grade.
   def grade_answer(answer)
-    fail ArgumentError if answer.changed?
+    raise ArgumentError if answer.changed?
     answer.auto_grade!
   end
 
@@ -63,6 +63,6 @@ class Course::Assessment::Submission::AutoGradingService
     return if failed_jobs.empty?
 
     error_messages = failed_jobs.map { |job| job.error['message'] }
-    fail SubJobError, error_messages.to_sentence
+    raise SubJobError, error_messages.to_sentence
   end
 end

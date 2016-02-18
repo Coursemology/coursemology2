@@ -52,7 +52,7 @@ RSpec.describe Course::Group, type: :model do
 
         it 'adds errors to group users' do
           subject.valid?
-          user_with_errors = subject.group_users.select { |user| user.errors.any? }
+          user_with_errors = subject.group_users.select { |user| !user.errors.empty? }
           expect(user_with_errors).not_to be_empty
           user_with_errors.each do |user|
             expect(user.errors.messages[:user]).to include(I18n.t('errors.messages.taken'))

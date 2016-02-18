@@ -107,6 +107,7 @@ Rails.application.routes.draw do
       namespace :admin do
         get '/' => 'admin#index'
         patch '/' => 'admin#update'
+        delete '/' => 'admin#destroy'
 
         get 'components' => 'component_settings#edit'
         patch 'components' => 'component_settings#update'
@@ -199,7 +200,7 @@ Rails.application.routes.draw do
       resources :groups, except: [:show]
 
       namespace :material, path: 'materials' do
-        resources :folders, except: [:new, :create, :index] do
+        resources :folders, except: [:index, :new, :create] do
           get 'new_subfolder', on: :member, path: 'new/subfolder'
           post 'create_subfolder', on: :member, path: 'create/subfolder'
           get 'new_materials', on: :member, path: 'new/files'

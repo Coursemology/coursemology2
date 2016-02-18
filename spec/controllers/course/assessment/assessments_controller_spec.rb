@@ -69,5 +69,30 @@ RSpec.describe Course::Assessment::AssessmentsController do
         end
       end
     end
+
+    describe '#add_assessment_breadcrumbs' do
+      let(:breadcrumbs) { controller.send(:breadcrumb_names) }
+      let(:tabs) { 1 }
+      before do
+        create_list(:course_assessment_tab, tabs - 1,
+                    category: course.assessment_categories.first)
+        get :index, course_id: course.id
+      end
+
+      context 'when the category has one tab' do
+        it 'only displays the category' do
+          expect(breadcrumbs).to include(course.assessment_categories.first.title)
+          expect(breadcrumbs).not_to include(course.assessment_categories.first.tabs.first.title)
+        end
+      end
+
+      context 'when the category has more than one tab' do
+        let(:tabs) { 2 }
+        it 'also displays the tab' do
+          expect(breadcrumbs).to include(course.assessment_categories.first.title)
+          expect(breadcrumbs).to include(course.assessment_categories.first.tabs.first.title)
+        end
+      end
+    end
   end
 end

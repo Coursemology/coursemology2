@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Admin::MaterialSettingsController < Course::Admin::Controller
   add_breadcrumb :edit, :course_admin_materials_path
   before_action :load_settings
@@ -15,12 +16,12 @@ class Course::Admin::MaterialSettingsController < Course::Admin::Controller
 
   private
 
+  def material_settings_params #:nodoc:
+    params.require(:material_settings).permit(:title)
+  end
+
   # Load our settings adapter to handle material settings
   def load_settings
     @settings ||= Course::MaterialSettings.new(current_course.settings(:material))
-  end
-
-  def material_settings_params #:nodoc:
-    params.require(:material_settings).permit(:title)
   end
 end

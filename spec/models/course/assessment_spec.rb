@@ -17,9 +17,42 @@ RSpec.describe Course::Assessment do
     let(:assessment) { create(:assessment, *assessment_traits, course: course) }
     let(:assessment_traits) { [] }
 
-    it 'sets the course of the lesson plan item' do
-      assessment = create(:assessment, course: course)
-      expect(assessment.course).to eq(assessment.tab.category.course)
+    describe 'callbacks' do
+      describe 'after assessment was initialized' do
+        subject { build(:assessment) }
+
+        it 'sets the course of the lesson plan item' do
+          assessment = create(:assessment, course: course)
+          expect(assessment.course).to eq(assessment.tab.category.course)
+        end
+      end
+
+      describe 'after assessment was saved' do
+        subject { create(:assessment) }
+
+        it 'sets the folder to have the same attributes as the assessment' do
+          expect(subject.folder.name).to eq(subject.title)
+          expect(subject.folder.parent).to eq(subject.tab.category.folder)
+          expect(subject.folder.course).to eq(subject.course)
+          expect(subject.folder.start_at).to eq(subject.start_at)
+        end
+      end
+
+      describe 'after assessment was changed' do
+        subject { create(:assessment) }
+
+        it 'updates the folder' do
+          new_title = 'Whole new assessment'
+          new_start_at = 1.day.ago
+
+          subject.title = new_title
+          subject.start_at = new_start_at
+          subject.save
+
+          expect(subject.folder.name).to eq(new_title)
+          expect(subject.folder.start_at).to eq(new_start_at)
+        end
+      end
     end
 
     describe '.questions' do
@@ -138,36 +171,6 @@ RSpec.describe Course::Assessment do
         submissions = assessment.submissions
         expect(submissions).to contain_exactly(submission2, submission3)
         expect(submissions.each_cons(2).all? { |a, b| a.created_at >= b.created_at }).to be(true)
-      end
-    end
-
-    context 'after assessment was initialized' do
-      subject { build(:assessment) }
-
-      it 'builds a folder' do
-        expect(subject.folder).to be_present
-
-        expect(subject).to be_valid
-        expect(subject.folder.name).to eq(subject.title)
-        expect(subject.folder.parent).to eq(subject.tab.category.folder)
-        expect(subject.folder.course).to eq(subject.course)
-        expect(subject.folder.start_at).to eq(subject.start_at)
-      end
-    end
-
-    describe 'after assessment was changed' do
-      subject { create(:assessment) }
-
-      it 'updates the folder' do
-        new_title = 'Whole new assessment'
-        new_start_at = 1.day.ago
-
-        subject.title = new_title
-        subject.start_at = new_start_at
-        subject.save
-
-        expect(subject.folder.name).to eq(new_title)
-        expect(subject.folder.start_at).to eq(new_start_at)
       end
     end
 

@@ -3,7 +3,7 @@
 class User::Email < ActiveRecord::Base
   after_destroy :set_new_user_primary_email, if: :primary?
 
-  schema_validations except: :primary
+  schema_validations except: [:primary, :email]
   validates :primary, inclusion: [true, false]
   validates :primary, uniqueness: { scope: [:user_id], conditions: -> { where(primary: true) } }
 
@@ -14,8 +14,8 @@ class User::Email < ActiveRecord::Base
   # @return [Boolean] True if transaction was done successfully, otherwise nil.
   def primary!
     User::Email.transaction do
-      fail ActiveRecord::Rollback unless user.unset_primary_email
-      fail ActiveRecord::Rollback unless update_attributes(primary: true)
+      raise ActiveRecord::Rollback unless user.unset_primary_email
+      raise ActiveRecord::Rollback unless update_attributes(primary: true)
       true
     end
   end
@@ -24,6 +24,6 @@ class User::Email < ActiveRecord::Base
 
   def set_new_user_primary_email
     return if user.destroying?
-    fail ActiveRecord::Rollback unless user.set_next_email_as_primary
+    raise ActiveRecord::Rollback unless user.set_next_email_as_primary
   end
 end

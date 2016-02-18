@@ -17,11 +17,6 @@ class Course::UserInvitationsController < Course::ComponentController
 
   private
 
-  # Prevents access to this set of pages unless the user is a staff of the course.
-  def authorize_invitation!
-    authorize!(:manage_users, current_course)
-  end
-
   def course_user_invitation_params # :nodoc:
     invitations_attributes = { course_user: [:name], user_email: [:email] }
     @invite_params ||= params.require(:course).
@@ -38,6 +33,11 @@ class Course::UserInvitationsController < Course::ComponentController
     @invitation_params ||= course_user_invitation_params[:invitations_file].try(:tempfile) ||
                            course_user_invitation_params[:invitations_attributes] ||
                            course_user_invitation_params[:registration_key] == 'checked'.freeze
+  end
+
+  # Prevents access to this set of pages unless the user is a staff of the course.
+  def authorize_invitation!
+    authorize!(:manage_users, current_course)
   end
 
   # Determines if the user uploaded a file.

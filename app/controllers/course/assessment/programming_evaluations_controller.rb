@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # The programming question evaluations controller.
 #
 # This does *NOT* inherit from the course/assessment controllers because this needs to query across
@@ -30,7 +31,7 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
   end
 
   def update_result
-    fail IllegalStateError unless @programming_evaluation.assigned?
+    raise IllegalStateError unless @programming_evaluation.assigned?
     @programming_evaluation.assign_attributes(update_result_params)
     @programming_evaluation.complete!
     if @programming_evaluation.save
@@ -42,12 +43,20 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
 
   private
 
-  def unscope_course
-    Course.unscoped { yield }
+  def language_param
+    params.permit(language: [])[:language]
   end
 
-  def load_programming_evaluation
-    @programming_evaluation ||= Course::Assessment::ProgrammingEvaluation.find(id_param)
+  def id_param
+    params.permit(:programming_evaluation_id)[:programming_evaluation_id]
+  end
+
+  def update_result_params
+    params.require(:programming_evaluation).permit(:stdout, :stderr, :test_report, :exit_code)
+  end
+
+  def unscope_course
+    Course.unscoped { yield }
   end
 
   def load_and_authorize_pending_programming_evaluation
@@ -64,6 +73,10 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
     end
   end
 
+  def load_programming_evaluation
+    @programming_evaluation ||= Course::Assessment::ProgrammingEvaluation.find(id_param)
+  end
+
   # Obtains a programming evaluation task accessible by and suitable for the current user.
   #
   # @return [Course::Assessment::ProgrammingEvaluation|nil] The programming evaluation.
@@ -73,17 +86,5 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
       accessible_by(current_ability, :show).
       with_language(language_param).
       pending.limit(1).first
-  end
-
-  def language_param
-    params.permit(language: [])[:language]
-  end
-
-  def id_param
-    params.permit(:programming_evaluation_id)[:programming_evaluation_id]
-  end
-
-  def update_result_params
-    params.require(:programming_evaluation).permit(:stdout, :stderr, :test_report, :exit_code)
   end
 end

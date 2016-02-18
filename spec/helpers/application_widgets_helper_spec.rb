@@ -159,6 +159,16 @@ RSpec.describe ApplicationWidgetsHelper, type: :helper do
             :'helpers.buttons.edit',
             'Edit Announcement')
         end
+
+        context 'when given an array with an options hash' do
+          let(:url_options) { [announcement, test: 'something'] }
+          it 'picks the last resource' do
+            expect(subject).to contain_exactly(
+              :'helpers.buttons.announcement.edit',
+              :'helpers.buttons.edit',
+              'Edit Announcement')
+          end
+        end
       end
 
       context 'when given a single resource' do
@@ -207,6 +217,12 @@ RSpec.describe ApplicationWidgetsHelper, type: :helper do
       context 'when a block is given' do
         it 'appends the text within the progress bar' do
           expect(helper.send(:display_progress_bar, 50) { '30%' }).to include('30%')
+        end
+
+        it 'renders the block in the context of the helper' do
+          message = 'foo'
+          helper.define_singleton_method(:some_method) { message }
+          expect(helper.send(:display_progress_bar, 50) { helper.some_method }).to include(message)
         end
       end
     end

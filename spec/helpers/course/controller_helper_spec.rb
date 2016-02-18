@@ -86,7 +86,7 @@ RSpec.describe Course::ControllerHelper do
           end
 
           it "shows the course user's experience points" do
-            expect(subject).to include(user.experience_points.to_s)
+            expect(subject).to include(I18n.t('layouts.course_user_badge.progress'))
           end
 
           it "shows the course user's level number" do
@@ -95,7 +95,9 @@ RSpec.describe Course::ControllerHelper do
 
           it 'displays the progress bar with current level progress' do
             expect(helper).to receive(:display_progress_bar).
-              with(user.level_progress_percentage, ['progress-bar-info', 'progress-bar-striped'])
+              with(user.level_progress_percentage,
+                   ['progress-bar-info', 'progress-bar-striped',
+                    'course-user-experience-points'])
             subject
           end
         end
@@ -133,6 +135,30 @@ RSpec.describe Course::ControllerHelper do
 
         it 'does not display the achievement tab' do
           expect(subject).not_to include(I18n.t('layouts.course_user_badge.achievements'))
+        end
+      end
+    end
+
+    describe '#display_course_logo' do
+      let(:course) { create(:course) }
+      subject { helper.display_course_logo(course) }
+
+      context 'when no course logo is uploaded' do
+        it 'displays the default course logo' do
+          expect(subject).to have_tag('img', with: { :'src^' => '/assets/course_default_logo-' })
+        end
+      end
+
+      context 'when a course logo is uploaded' do
+        let(:logo) { File.join(Rails.root, '/spec/fixtures/files/picture.jpg') }
+        before do
+          file = File.open(logo, 'rb')
+          course.logo = file
+          file.close
+        end
+
+        it 'displays the course logo' do
+          expect(subject).to include(course.logo.medium.url)
         end
       end
     end

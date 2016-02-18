@@ -25,8 +25,8 @@ class Course::Assessment::Question < ActiveRecord::Base
   # @return [Course::Assessment::Answer::AutoGradingService] An auto grading service.
   # @raise [NotImplementedError] The question does not have a suitable auto grader for use.
   def auto_grader
-    fail NotImplementedError unless auto_gradable? && actable.self_respond_to?(:auto_grader)
-    actable.auto_grader || (fail NotImplementedError)
+    raise NotImplementedError unless auto_gradable? && actable.self_respond_to?(:auto_grader)
+    actable.auto_grader || (raise NotImplementedError)
   end
 
   # Attempts the given question in the submission. This builds a new answer for the current
@@ -39,6 +39,6 @@ class Course::Assessment::Question < ActiveRecord::Base
   #   should not be persisted.
   def attempt(submission)
     return actable.attempt(submission) if actable && actable.self_respond_to?(:attempt)
-    fail NotImplementedError, 'Questions must implement the #attempt method for submissions.'
+    raise NotImplementedError, 'Questions must implement the #attempt method for submissions.'
   end
 end

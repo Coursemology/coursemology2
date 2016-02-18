@@ -38,7 +38,13 @@ module Extensions::Conditional::ActiveRecord::Base
     # A human-readable name for each condition; usually just wraps a title
     # or name field. Meant to be used in a polymorphic manner for views.
     def title
-      fail NotImplementedError
+      raise NotImplementedError
+    end
+
+    # @return [Object] Conditional object that the condition depends on to check if it is
+    #   satisfiable
+    def dependent_object
+      raise NotImplementedError
     end
 
     # Checks if the condition is satisfied by the user.
@@ -46,14 +52,14 @@ module Extensions::Conditional::ActiveRecord::Base
     # @param [CourseUser] _user The user that the condition is being checked on
     # @return [Boolean] true if the condition is met and false otherwise
     def satisfied_by?(_user)
-      fail NotImplementedError
+      raise NotImplementedError
     end
   end
 
   module ConditionClassMethods
-    # Array of classes that the condition depends on.
-    def dependent_classes
-      fail NotImplementedError
+    # Class that the condition depends on.
+    def dependent_class
+      raise NotImplementedError
     end
   end
 end

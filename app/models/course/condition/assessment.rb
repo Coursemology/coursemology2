@@ -9,6 +9,8 @@ class Course::Condition::Assessment < ActiveRecord::Base
 
   validate :validate_assessment_condition, if: :assessment_id_changed?
 
+  alias_method :dependent_object, :assessment
+
   def title
     if minimum_grade_percentage
       minimum_grade_percentage_display = number_to_percentage(minimum_grade_percentage,
@@ -33,9 +35,9 @@ class Course::Condition::Assessment < ActiveRecord::Base
     end
   end
 
-  # Array of classes that the condition depends on.
-  def self.dependent_classes
-    [Course::Assessment.name]
+  # Class that the condition depends on.
+  def self.dependent_class
+    Course::Assessment.name
   end
 
   private

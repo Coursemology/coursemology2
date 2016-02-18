@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Assessment::QuestionsController < Course::Assessment::ComponentController
   before_action :authorize_assessment
 

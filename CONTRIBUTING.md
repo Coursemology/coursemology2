@@ -115,6 +115,21 @@ without parentheses.
 
 Controller actions (`render`, `redirect_to`) should be called without parentheses.
 
+Arrange controller methods for Rails' default routes in the following order:
+ 1. `index`
+ 2. `show`
+ 3. `new`
+ 4. `create`
+ 5. `edit`
+ 6. `update`
+ 7. `destroy`
+
+Arrange private controller methods in the following order: 
+ 1. All `params` methods
+ 2. Callbacks - `before_action` and `after_action`  
+ 3. Any other helper methods for the controller
+
+
 ## Breadcrumbs
 Remember to specify page breadcrumbs in **controllers** with the `add_breadcrumb` helper.
 

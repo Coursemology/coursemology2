@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Question::ProgrammingHelper do
@@ -61,6 +62,15 @@ RSpec.describe Course::Assessment::Question::ProgrammingHelper do
         it 'returns time limit exceeded' do
           expect(subject).to eq(I18n.t('course.assessment.question.programming.form.import_result.'\
                                        'errors.time_limit_exceeded'))
+        end
+      end
+
+      context 'when a Timeout::Error is raised' do
+        let(:error_class) { Timeout::Error }
+
+        it 'returns timeout error' do
+          expect(subject).to eq(I18n.t('course.assessment.question.programming.form.import_result.'\
+                                       'errors.evaluation_timeout'))
         end
       end
 

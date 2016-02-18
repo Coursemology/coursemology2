@@ -1,9 +1,5 @@
+# frozen_string_literal: true
 class Course::Assessment::AssessmentsController < Course::Assessment::Controller
-  before_action :load_assessment, only: [:index, :new, :create]
-  load_resource :assessment, class: Course::Assessment.name, through: :course,
-                             except: [:index, :new, :create]
-  authorize_resource :assessment, class: Course::Assessment.name
-
   def index
     @assessments = @assessments.with_submissions_by(current_user)
   end
@@ -47,8 +43,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   protected
 
-  def assessments_controller
-    true
+  def load_assessment_options
+    return super if skip_tab_filter?
+
+    { through: :tab }
   end
 
   private
@@ -59,20 +57,27 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
                                        :draft, :display_mode, folder_params)
   end
 
-  def load_assessment
-    case params[:action]
-    when 'index'
-      @assessments ||= tab.assessments.accessible_by(current_ability)
-    when 'new', 'create'
-      @assessment ||= tab.assessments.build
-      @assessment.assign_attributes(assessment_params) if params[:assessment]
+  # Merges the parameters for category and tab IDs from either the assessment parameter or the
+  # query string.
+  def tab_params
+    params.permit(:category, :tab, assessment: [:category, :tab]).tap do |tab_params|
+      tab_params.merge!(tab_params.delete(:assessment)) if tab_params.key?(:assessment)
     end
+  end
+
+  # Checks to see if the assessment resource requires should be filtered by tab and category.
+  #
+  # Currently only index, new, and create actions require filtering.
+  def skip_tab_filter?
+    !['index', 'new', 'create'].include?(params[:action])
   end
 
   def tab
     @tab ||=
-      if params[:tab]
-        category.tabs.find(params[:tab])
+      if skip_tab_filter?
+        super
+      elsif tab_params[:tab]
+        category.tabs.find(tab_params[:tab])
       else
         category.tabs.first!
       end
@@ -80,8 +85,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def category
     @category ||=
-      if params[:category]
-        current_course.assessment_categories.find(params[:category])
+      if skip_tab_filter?
+        super
+      elsif tab_params[:category]
+        current_course.assessment_categories.find(tab_params[:category])
       else
         current_course.assessment_categories.first!
       end

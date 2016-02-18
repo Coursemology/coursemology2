@@ -2,26 +2,31 @@
 // Variables
 // --------------------------------------------------
 
-
 //== Colors
 //
-//## Gray colors for use across Coursemology.
 
-$gray-base:              #000 !default;
-$gray-darker:            lighten($gray-base, 13.5%) !default; // #222
-$gray-dark:              lighten($gray-base, 20%) !default;   // #333
-$gray:                   lighten($gray-base, 33.5%) !default; // #555
-$gray-light:             lighten($gray-base, 46.7%) !default; // #777
-$gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
+//## Variables for colors used in Coursemology.
+$course-achievement-granted-bg: $state-success-bg !default;
+$course-achievement-locked-bg: $gray-lighter !default;
+
+//== Fonts
+//
+//## Code editor typography.
+$code-font-family: $font-family-monospace !default;
+$code-font-size: $font-size-base !default;
 
 //== Icons and Logos
 //
-//## Common sizes to be used across Coursemology.
+//## Progress bar spinner
+$nprogress-color: #26b0ff !default;
+$nprogress-spinner-icon-width: 18px !default;
 
+//## Common sizes to be used across Coursemology.
 $picture-thumb: 25px !default;
 $picture-small: 75px !default;
 $picture-medium: 100px !default;
 
-$course-achievement-badge-thumb:   $picture-thumb !default;
-$course-achievement-badge-small:   $picture-small !default;
-$course-achievement-badge-medium:  $picture-medium !default;
+//## Variables for icons or logos used in Coursemology.
+$course-achievement-form-badge:   $picture-small !default;
+
+$course-admin-form-logo: $picture-small !default;

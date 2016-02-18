@@ -8,6 +8,7 @@ class Course::Condition::Achievement < ActiveRecord::Base
   validate :validate_achievement_condition, if: :achievement_id_changed?
 
   delegate :title, to: :achievement
+  alias_method :dependent_object, :achievement
 
   # Checks if the user has the required achievement.
   #
@@ -19,9 +20,9 @@ class Course::Condition::Achievement < ActiveRecord::Base
     course_user.achievements.exists?(achievement)
   end
 
-  # Array of classes that the condition depends on.
-  def self.dependent_classes
-    [Course::Achievement.name]
+  # Class that the condition depends on.
+  def self.dependent_class
+    Course::Achievement.name
   end
 
   private

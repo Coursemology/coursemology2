@@ -2,4 +2,4 @@ div.progress
   div.progress-bar [ class=progress_bar_classes role='progressbar' aria-valuenow="#{percentage}"
                      aria-valuemin='0' aria-valuemax='100' style="width: #{percentage}%" ]
     span.sr-only #{percentage}% Complete
-    = yield
+    = progress_bar_text

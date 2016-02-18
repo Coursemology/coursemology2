@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::Controller < ApplicationController
   load_and_authorize_resource :course
   helper name

@@ -5,4 +5,4 @@ if Rails.env.development? || Rails.env.test?
   Dir.mkdir(public_download_dir) unless Dir.exist?(public_download_dir)
 end
 
-fail "#{public_download_dir} does not exist." unless Dir.exist?(public_download_dir)
+raise "#{public_download_dir} does not exist." unless Dir.exist?(public_download_dir)

@@ -9,12 +9,12 @@ module Extensions::FormForWithResource::ActionView::Helpers::FormHelper
     def form_for_with_resource_option(form_helper, record, options)
       case options[:resource]
       when Symbol
-        fail ArgumentError, ':resource and :url cannot be specified simultaneously' if options[:url]
+        raise ArgumentError, ':resource and :url cannot both be specified' if options[:url]
         helper = url_helper_for_resource(record, options.delete(:resource))
         options[:url] = form_helper.send(helper, *record)
       when nil
       else
-        fail ArgumentError, 'Resource must be a symbol with the stem of route helper'
+        raise ArgumentError, 'Resource must be a symbol with the stem of route helper'
       end
     end
 

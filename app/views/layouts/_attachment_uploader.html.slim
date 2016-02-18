@@ -1,5 +1,5 @@
 - if multiple
-  - if f.object.attachments.any?
+  - unless f.object.attachments.empty?
     strong = t('.uploaded_files')
     - f.object.attachments.each do |attachment|
       = link_to format_inline_text(attachment.name), '#'

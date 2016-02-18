@@ -44,9 +44,9 @@ RSpec.describe Course::Condition, type: :model do
       context 'when multiple conditions depend on the same class' do
         it 'returns the mapping with an array of all the conditions' do
           allow(Course::Condition::Achievement).
-            to receive(:dependent_classes).and_return([Course::Achievement.name])
+            to receive(:dependent_class).and_return(Course::Achievement.name)
           allow(Course::Condition::Assessment).
-            to receive(:dependent_classes).and_return([Course::Achievement.name])
+            to receive(:dependent_class).and_return(Course::Achievement.name)
           actual_mapping = Course::Condition.send(:dependent_class_to_condition_class_mapping)
           expected_mapping = { Course::Achievement.name => [Course::Condition::Achievement.name,
                                                             Course::Condition::Assessment.name] }

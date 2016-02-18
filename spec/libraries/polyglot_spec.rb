@@ -7,6 +7,7 @@ RSpec.describe 'Extension: Coursemology::Polyglot' do
     end
 
     class self::WorkingLanguage < self::DummyLanguage
+      syntax_highlighter 'python'
       concrete_language 'Working Language'
     end
 

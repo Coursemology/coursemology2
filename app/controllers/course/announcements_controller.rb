@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Course::AnnouncementsController < Course::ComponentController
   load_and_authorize_resource :announcement, through: :course, class: Course::Announcement.name
   before_action :check_component
@@ -54,17 +55,11 @@ class Course::AnnouncementsController < Course::ComponentController
     params.require(:announcement).permit(:title, :content, :sticky, :start_at, :end_at)
   end
 
-  # @return [Course::AnnouncementsComponent] The announcement component.
-  # @return [nil] If announcement component is disabled.
-  def component
-    current_component_host[:course_announcements_component]
-  end
-
   # Ensure that the component is enabled.
   #
   # @raise [Coursemology::ComponentNotFoundError] When the component is disabled.
   def check_component
-    fail ComponentNotFoundError unless component
+    raise ComponentNotFoundError unless component
   end
 
   # Load current component's settings
@@ -74,5 +69,11 @@ class Course::AnnouncementsController < Course::ComponentController
 
   def add_announcement_breadcrumb
     add_breadcrumb @announcement_settings.title || :index, :course_announcements_path
+  end
+
+  # @return [Course::AnnouncementsComponent] The announcement component.
+  # @return [nil] If announcement component is disabled.
+  def component
+    current_component_host[:course_announcements_component]
   end
 end

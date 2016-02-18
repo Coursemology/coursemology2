@@ -8,22 +8,16 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportService do
     let(:package_path) do
       File.join(Rails.root, 'spec/fixtures/course/programming_question_template.zip')
     end
-    let(:package) { Course::Assessment::ProgrammingPackage.new(package_path) }
-    subject { Course::Assessment::Question::ProgrammingImportService.new(question, package) }
+    let(:attachment) { create(:attachment, binary: true, file: package_path) }
+    subject { Course::Assessment::Question::ProgrammingImportService.new(question, attachment) }
 
     describe '.import' do
       subject { Course::Assessment::Question::ProgrammingImportService }
-      it 'accepts package file paths' do
+      it 'accepts attachments' do
         expect(subject).to receive(:new).
-          with(question, instance_of(Course::Assessment::ProgrammingPackage)).
+          with(question, instance_of(Attachment)).
           and_call_original
-        subject.import(question, package_path)
-      end
-
-      it 'accepts package file streams' do
-        File.open(package_path, 'rb') do |file|
-          subject.import(question, file)
-        end
+        subject.import(question, attachment)
       end
 
       context 'when an invalid package is provided' do
@@ -32,7 +26,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportService do
         end
 
         it 'raises an InvalidDataError' do
-          expect { subject.import(question, package_path) }.to raise_error(InvalidDataError)
+          expect { subject.import(question, attachment) }.to raise_error(InvalidDataError)
         end
       end
     end

@@ -1,7 +1,10 @@
 div#course-user-badge
   div.col-xs-12#course-user-progress
-    = display_progress_bar course_user.level_progress_percentage,
-      ['progress-bar-info', 'progress-bar-striped']
+    - progress_bar_classes = ['progress-bar-info', 'progress-bar-striped',
+                              'course-user-experience-points']
+    = display_progress_bar(course_user.level_progress_percentage, progress_bar_classes) do
+      = t('.progress', current: course_user.experience_points,
+                       next: course_user.next_level_threshold)
   div.col-xs-6#course-user-achievements
     - unless controller.current_component_host[:course_achievements_component].nil?
       = link_to course_achievements_path(course_user.course) do
@@ -9,6 +12,6 @@ div#course-user-badge
         p = course_user.achievement_count
   div.col-xs-6#course-user-level
     - unless controller.current_component_host[:course_levels_component].nil?
-      / TODO: Link to the course_user course summary page
-      h5 = t('.levels') + ' ' + course_user.level_number.to_s
-      p #{course_user.experience_points} / #{course_user.next_level_threshold} EXP
+      = link_to_course_user(course_user) do
+        h5 = t('.levels')
+        p = course_user.level_number

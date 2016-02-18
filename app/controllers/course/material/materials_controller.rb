@@ -3,7 +3,7 @@ class Course::Material::MaterialsController < Course::Material::Controller
   load_and_authorize_resource :material, through: :folder, class: Course::Material.name
 
   def show
-    redirect_to @material.attachment.file_upload.url
+    redirect_to @material.attachment.url
   end
 
   def edit
@@ -27,6 +27,8 @@ class Course::Material::MaterialsController < Course::Material::Controller
                   danger: t('.failure', error: @material.errors.full_messages.to_sentence)
     end
   end
+
+  private
 
   def material_params
     params.require(:material).permit(:name, :description, attachments_params)

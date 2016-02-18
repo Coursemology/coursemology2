@@ -54,13 +54,23 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
   end
 
   describe '#path' do
-    it 'returns the path to the package' do
-      expect(subject.path).to eq(self.class::PACKAGE_PATH)
+    context 'when the package is not loaded' do
+      context 'when a File name is given' do
+        it 'returns the path to the package' do
+          expect(subject.path).to eq(self.class::PACKAGE_PATH)
+        end
+      end
+
+      context 'when a File is given' do
+        let(:package_path) { File.new(self.class::PACKAGE_PATH, 'rb') }
+        it 'returns the path to the File' do
+          expect(subject.path).to eq(self.class::PACKAGE_PATH)
+        end
+      end
     end
 
-    context 'when a File is given' do
-      let(:package_path) { File.new(self.class::PACKAGE_PATH, 'rb') }
-      it 'returns the path to the File' do
+    context 'when the package is loaded' do
+      it 'returns the path to the package' do
         subject.valid?
         expect(subject.path).to eq(self.class::PACKAGE_PATH)
       end

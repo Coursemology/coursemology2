@@ -1,9 +1,14 @@
 # frozen_string_literal: true
 module ApplicationHTMLFormattersHelper
+  DefaultPipelineOptions = {
+    css_class: 'codehilite'
+  }.freeze
+
   # The default pipeline, used by both text and HTML pipelines.
   DefaultPipeline = HTML::Pipeline.new([
-                                         HTML::Pipeline::AutolinkFilter
-                                       ])
+                                         HTML::Pipeline::AutolinkFilter,
+                                         HTML::Pipeline::RougeFilter
+                                       ], DefaultPipelineOptions)
 
   # The HTML sanitizer options to use.
   HTMLSanitizerOptions = {
@@ -13,10 +18,13 @@ module ApplicationHTMLFormattersHelper
   HTMLSanitizerPipeline = HTML::Pipeline.new([HTML::Pipeline::SanitizationFilter],
                                              HTMLSanitizerOptions)
 
+  # The default HTML pipeline options.
+  DefaultHTMLPipelineOptions = DefaultPipelineOptions.merge(HTMLSanitizerOptions).freeze
+
   # The default HTML pipeline.
   DefaultHTMLPipeline = HTML::Pipeline.new(HTMLSanitizerPipeline.filters +
                                            DefaultPipeline.filters,
-                                           HTMLSanitizerOptions)
+                                           DefaultHTMLPipelineOptions)
 
   # Replaces the Rails sanitizer with the one configured with HTML Pipeline.
   def sanitize(text)
@@ -38,6 +46,22 @@ module ApplicationHTMLFormattersHelper
   # @return [String]
   def format_html(text)
     format_with_pipeline(DefaultHTMLPipeline, text)
+  end
+
+  # Syntax highlights the given code fragment.
+  #
+  # @param [String] code The code to syntax highlight.
+  # @param [Coursemology::Polyglot::Language] language The language to highlight the code block
+  #   with.
+  def format_code_block(code, language = nil)
+    code = html_escape(code) unless code.html_safe?
+    code = content_tag(:pre, lang: language ? language.rouge_lexer : nil) do
+      content_tag(:code) do
+        code
+      end
+    end
+
+    format_with_pipeline(DefaultPipeline, code)
   end
 
   private
