@@ -47,7 +47,7 @@ class Course::Level < ActiveRecord::Base
   # @return [Course::Level] For levels with next level in the course.
   # @return [nil] If current level is the highest in the course.
   def next
-    @next if defined? @next
+    return @next if defined? @next
     @next = course.levels.find_nth(level_number + 1, 0)
   end
 
