@@ -4,7 +4,7 @@ module Course::SearchConcern
 
   module ClassMethods
     # Search and filter courses by their titles, descriptions or user names.
-    # @param [String] keywords The keywords for filtering courses.
+    # @param [String] keyword The keywords for filtering courses.
     # @return [Array<Course>] The courses which match the keyword. All courses will be returned if
     #   keyword is blank.
     def search(keyword) # rubocop:disable Metrics/AbcSize

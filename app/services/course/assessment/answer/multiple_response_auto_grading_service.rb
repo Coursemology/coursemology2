@@ -60,7 +60,7 @@ class Course::Assessment::Answer::MultipleResponseAutoGradingService < \
 
   # Returns the explanations for the given options.
   #
-  # @param [Course::Assessment::Question::MultipleResponseOption] options The options to obtain
+  # @param [Course::Assessment::Question::MultipleResponseOption] answers The options to obtain
   #   the explanations for.
   # @return [Array<String>] The explanations for the given answers.
   def explanations_for(answers)

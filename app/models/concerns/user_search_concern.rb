@@ -5,7 +5,7 @@ module UserSearchConcern
   module ClassMethods
     # Search and filter users by their names or emails.
     #
-    # @param [String] keywords The keywords for filtering users.
+    # @param [String] keyword The keywords for filtering users.
     # @return [Array<User>] The users which match the keyword. All users will be returned if
     #   keyword is blank.
     def search(keyword) # rubocop:disable Metrics/AbcSize
