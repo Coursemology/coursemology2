@@ -27,7 +27,8 @@ class Course::Controller < ApplicationController
   #   course.
   # @return [nil] If there is no user session, or no course is loaded.
   def current_course_user
-    @current_course_user ||= @course.course_users.find_by(user: current_user)
+    @current_course_user ||= @course.course_users.with_course_statistics.
+                             find_by(user: current_user)
   end
   helper_method :current_course_user
 
