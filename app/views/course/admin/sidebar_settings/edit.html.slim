@@ -3,9 +3,10 @@
 = simple_form_for @settings, url: course_admin_sidebar_path(current_course) do |f|
   table.table.table-hover.sidebar-items
     thead
-      th.reorder
-      th = t('.name')
-      th.weight = t('.weight')
+      tr
+        th.reorder
+        th = t('.name')
+        th.weight = t('.weight')
     tbody
       = f.simple_fields_for :sidebar_items do |item_form|
         tr
