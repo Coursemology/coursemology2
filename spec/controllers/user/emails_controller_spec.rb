@@ -52,5 +52,34 @@ RSpec.describe User::EmailsController, type: :controller do
         it { is_expected.to redirect_to(user_emails_path) }
       end
     end
+
+    describe '#send_confirmation' do
+      let!(:email) { create(:user_email, email_traits, user: user, primary: false) }
+      subject { post :send_confirmation, id: email }
+
+      context 'when the email is already confirmed' do
+        let(:email_traits) { :confirmed }
+
+        it 'does not send any confirmations' do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+
+        it 'sets an error message' do
+          subject
+
+          expect(flash[:warning]).to eq(I18n.t('user.emails.send_confirmation.already_confirmed'))
+        end
+      end
+
+      context 'when the email is not confirmed' do
+        let(:email_traits) { :unconfirmed }
+
+        it 'sends out a confirmation email' do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end
+
+        it { is_expected.to redirect_to(user_emails_path) }
+      end
+    end
   end
 end

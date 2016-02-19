@@ -12,7 +12,11 @@ en:
         success: 'Email was deleted successfully'
       set_primary:
         success: 'Primary email was updated successfully'
+      send_confirmation:
+        already_confirmed: '%{email} was already confirmed.'
+        success: 'A message with a confirmation link has been sent to %{email}. Please follow the link to confirm the email_address.'
       email:
         set_primary: 'Set Primary'
         unconfirmed: 'Unconfirmed'
         primary: 'Primary'
+        resend_confirmation: 'Resend confirmation email'

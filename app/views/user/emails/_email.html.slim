@@ -11,8 +11,11 @@
         = t('.primary')
 
   td
-    - unless email.primary?
+    - if !email.confirmed?
+      = link_to t('.resend_confirmation'), send_confirmation_user_email_path(email),
+                method: :post, class: ['btn', 'btn-default']
+    - elsif !email.primary?
       = link_to t('.set_primary'), set_primary_user_email_path(email) ,
                 method: :post, class: ['btn', 'btn-default']
 
-    = delete_button(email) if @emails.count > 1
+  td = delete_button(email) if @emails.length > 1
