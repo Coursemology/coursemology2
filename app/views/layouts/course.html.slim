@@ -6,7 +6,7 @@
       div.row
         div.col-xs-12.user
           = display_user_image(current_user)
-          = link_to_user(current_user)
+          = link_to_user(current_course_user || current_user)
         - if current_course_user.present? && !current_course_user.staff?
           = display_course_user_badge(current_course_user)
       nav.navbar-default role='navigation'
