@@ -2,5 +2,5 @@
   - folder.materials.includes(:attachment_references).each do |material|
     div
       = link_to material.attachment.url do
-          => fa_icon 'file-o'.freeze
-          = format_inline_text(material.name)
+        => fa_icon 'file-o'.freeze
+        = format_inline_text(material.name)
