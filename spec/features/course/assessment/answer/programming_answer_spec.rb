@@ -11,16 +11,15 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
     end
     before { login_as(user, scope: :user) }
 
+    let(:submission) do
+      create(:course_assessment_submission, *submission_traits, assessment: assessment, user: user)
+    end
+    let(:submission_traits) { nil }
+
     context 'As a Course Student' do
       let(:user) { create(:course_user, :approved, course: course).user }
-      let(:submission) do
-        submission = create(:course_assessment_submission, assessment: assessment, user: user)
-        assessment.questions.attempt(submission)
-        submission
-      end
 
       scenario 'I can save my submission', js: true do
-        submission
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         # Fill in every single successive item
@@ -66,7 +65,6 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
       end
 
       scenario 'I cannot update my submission after finalising' do
-        submission
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         click_button I18n.t('course.assessment.submissions.worksheet.finalise')
@@ -74,6 +72,21 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
         within find(content_tag_selector(submission.answers.first)) do
           expect(all(:fillable_field)).not_to be_empty
           all(:fillable_field).each { |input| expect(input.native.attr(:readonly)).to be_truthy }
+        end
+      end
+    end
+
+    context 'As Course Staff' do
+      let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
+      let(:submission_traits) { :submitted }
+
+      scenario 'I can view the test cases' do
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        within find(content_tag_selector(submission.answers.first)) do
+          assessment.questions.first.actable.test_cases.each do |solution|
+            expect(page).to have_content_tag_for(solution)
+          end
         end
       end
     end

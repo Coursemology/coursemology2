@@ -1,0 +1,40 @@
+- test_cases = question.test_cases
+- public_test_cases, private_test_cases = test_cases.partition(&:public?)
+- auto_grading = answer.auto_grading ? answer.auto_grading.actable : nil
+- answer_test_results_hash = auto_grading ? \
+    auto_grading.test_results.map { |result| [result.test_case, result] }.to_h : \
+    {}
+
+h3 = t('.test_cases')
+
+table.table.table-striped.table-hover
+  thead
+    tr
+      th = t('.identifier')
+      th = t('.description')
+      th = t('.hint')
+      th = t('.passed')
+  tbody
+    tr
+      th colspan=4
+        = t('.public')
+    - public_test_cases.each do |test_case|
+      = content_tag_for(:tr, test_case) do
+        th = test_case.identifier
+        td = test_case.description
+        td = test_case.hint
+        td
+          - test_case_result = answer_test_results_hash[test_case]
+          = fa_icon('check') if test_case_result && test_case_result.passed?
+  tbody
+    tr
+      th colspan=4
+        = t('.private')
+    - private_test_cases.each do |test_case|
+      = content_tag_for(:tr, test_case) do
+        th = test_case.identifier
+        td = test_case.description
+        td
+        td
+          - test_case_result = answer_test_results_hash[test_case]
+          = fa_icon('check') if test_case_result && test_case_result.passed?
