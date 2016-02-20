@@ -1,4 +1,5 @@
 nav
   ul.pagination
     - (1..@assessment.questions.length).each do |i|
-      li = link_to i, [:edit, current_course, @assessment, @submission, step: i], class: ['btn', 'btn-default']
+      li class="#{nav_class(i)}"
+        = link_to i, [:edit, current_course, @assessment, @submission, step: i], class: ['btn', 'btn-default']

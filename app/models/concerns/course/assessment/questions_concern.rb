@@ -50,6 +50,20 @@ module Course::Assessment::QuestionsConcern
     where(id: question_ids.fetch(question_index))
   end
 
+  # Return the next unanswered question.
+  #
+  # @param [Course::Assessment::Submission] submission The submission which contains the answers.
+  # @return [Course::Assessment::Question|nil] the next unanswered question or nil if all
+  #   questions have been correctly answered.
+  def next_unanswered(submission)
+    correctly_answered_questions = correctly_answered_questions(submission)
+    return first if correctly_answered_questions.empty?
+
+    reduce(nil) do |_, question|
+      break question unless correctly_answered_questions.include?(question)
+    end
+  end
+
   private
 
   # Retrieves the correctly answered questions from the given submission.

@@ -148,6 +148,37 @@ RSpec.describe Course::Assessment do
           end
         end
       end
+
+      describe '#next_unanswered' do
+        let(:assessment_traits) { [:with_all_question_types] }
+        let(:submission) { create(:course_assessment_submission, assessment: assessment) }
+
+        subject { assessment.questions.next_unanswered(submission) }
+        context 'when there is no answers' do
+          it { is_expected.to eq(assessment.questions.first) }
+        end
+
+        context 'when the first question is answered correctly' do
+          before do
+            answer = assessment.questions.first.attempt(submission)
+            answer.correct = true
+            answer.save
+          end
+
+          it { is_expected.to eq(assessment.questions.second) }
+        end
+
+        context 'when all questions have been answered correctly' do
+          before do
+            assessment.questions.attempt(submission).each do |answer|
+              answer.correct = true
+              answer.save
+            end
+          end
+
+          it { is_expected.to be_nil }
+        end
+      end
     end
 
     describe '#maximum_grade' do
