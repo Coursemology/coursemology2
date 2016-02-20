@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
+RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
   let(:instance) { create(:instance) }
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:assessment) { create(:course_assessment_assessment, :with_mcq_question, course: course) }
+    let(:assessment) do
+      create(:course_assessment_assessment, :with_text_response_question, course: course)
+    end
     before { login_as(user, scope: :user) }
 
     context 'As a Course Student' do
@@ -16,20 +18,6 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
         assessment.questions.attempt(submission)
         submission
       end
-      let(:correct_option) { assessment.questions.first.specific.options.find(&:correct?).option }
-
-      scenario 'I can save my submission' do
-        submission
-        visit edit_course_assessment_submission_path(course, assessment, submission)
-
-        check correct_option
-
-        click_button I18n.t('common.save')
-        expect(current_path).to eq(\
-          edit_course_assessment_submission_path(course, assessment, submission))
-
-        expect(page).to have_checked_field(correct_option)
-      end
 
       scenario 'I cannot update my submission after finalising' do
         submission
@@ -38,8 +26,9 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
         click_button I18n.t('course.assessment.submissions.worksheet.finalise')
 
         within find(content_tag_selector(submission.answers.first)) do
-          expect(all(:field, disabled: true)).not_to be_empty
-          all(:field, disabled: true).each { |input| expect(input.disabled?).to be_truthy }
+          # We cannot use :fillable_field because the textarea has no labels.
+          expect(all('textarea')).not_to be_empty
+          all('textarea').each { |input| expect(input.native.attr(:readonly)).to be_truthy }
         end
       end
     end

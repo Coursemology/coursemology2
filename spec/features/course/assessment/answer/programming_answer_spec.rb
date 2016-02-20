@@ -64,6 +64,18 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
 
         expect(page).not_to have_field('filename')
       end
+
+      scenario 'I cannot update my submission after finalising' do
+        submission
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        click_button I18n.t('course.assessment.submissions.worksheet.finalise')
+
+        within find(content_tag_selector(submission.answers.first)) do
+          expect(all(:fillable_field)).not_to be_empty
+          all(:fillable_field).each { |input| expect(input.native.attr(:readonly)).to be_truthy }
+        end
+      end
     end
   end
 end

@@ -1,5 +1,6 @@
 - question = multiple_response.question.specific
 h2 = format_inline_text(question.title)
 = format_html(question.description)
+- readonly = cannot?(:update, multiple_response.answer)
 = f.association :options, as: :check_boxes, collection: question.options,
-                          label_method: :option, label: false
+                          label_method: :option, label: false, disabled: readonly
