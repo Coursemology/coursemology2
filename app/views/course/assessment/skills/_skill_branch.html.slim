@@ -1,10 +1,14 @@
 tbody
   - if skill_branch
     = content_tag_for(:tr, skill_branch) do
-      td = skill_branch.title
+      th = skill_branch.title
       td = skill_branch.description
       td
-        = delete_button([current_course, skill_branch]) if can?(:destroy, skill_branch)
+        div.btn-group
+          - if can?(:update, skill_branch)
+            = edit_button([current_course, :assessments, skill_branch])
+          - if can?(:destroy, skill_branch)
+            = delete_button([current_course, :assessments, skill_branch])
   - else
     tr
       th colspan=3

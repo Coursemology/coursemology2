@@ -162,7 +162,8 @@ Rails.application.routes.draw do
           concerns :conditional
 
           collection do
-            resources :skills, as: :assessments_skills
+            resources :skills, as: :assessments_skills, except: [:show]
+            resources :skill_branches, as: :assessments_skill_branches, except: [:index, :show]
           end
         end
       end
