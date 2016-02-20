@@ -1,0 +1,10 @@
+en:
+  course:
+    assessment:
+      skills:
+        sidebar_title: 'Skills'
+        index:
+          header: 'Skills'
+          failure: 'Could not delete skill: %{error}'
+        skill_branch:
+          uncategorised: 'Uncategorised Skills'
