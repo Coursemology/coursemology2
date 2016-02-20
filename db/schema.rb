@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160220081731) do
+ActiveRecord::Schema.define(version: 20160220092350) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -285,6 +285,7 @@ ActiveRecord::Schema.define(version: 20160220081731) do
   end
 
   create_table "course_assessment_skill_branches", force: :cascade do |t|
+    t.integer  "course_id",   null: false, index: {name: "fk__course_assessment_skill_branches_course_id"}, foreign_key: {references: "courses", name: "fk_course_assessment_skill_branches_course_id", on_update: :no_action, on_delete: :no_action}
     t.string   "title",       limit: 255, null: false
     t.text     "description", null: false
     t.integer  "creator_id",  null: false, index: {name: "fk__course_assessment_skill_branches_creator_id"}, foreign_key: {references: "users", name: "fk_course_assessment_skill_branches_creator_id", on_update: :no_action, on_delete: :no_action}
@@ -294,6 +295,7 @@ ActiveRecord::Schema.define(version: 20160220081731) do
   end
 
   create_table "course_assessment_skills", force: :cascade do |t|
+    t.integer  "course_id",       null: false, index: {name: "fk__course_assessment_skills_course_id"}, foreign_key: {references: "courses", name: "fk_course_assessment_skills_course_id", on_update: :no_action, on_delete: :no_action}
     t.integer  "skill_branch_id", index: {name: "fk__course_assessment_skills_skill_branch_id"}, foreign_key: {references: "course_assessment_skill_branches", name: "fk_course_assessment_skills_skill_branch_id", on_update: :no_action, on_delete: :no_action}
     t.string   "title",           limit: 255, null: false
     t.text     "description",     null: false
