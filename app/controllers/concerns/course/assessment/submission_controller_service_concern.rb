@@ -20,7 +20,7 @@ module Course::Assessment::SubmissionControllerServiceConcern
   #
   # @return [Course::Assessment::Submission::UpdateService] The service instance.
   def service
-    service_class.new(self, assessment: @assessment, submission: @submission)
+    @service ||= service_class.new(self, assessment: @assessment, submission: @submission)
   end
 
   # Extract the defined instance variables from the service, so that views can access them.
