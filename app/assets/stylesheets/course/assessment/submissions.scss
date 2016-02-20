@@ -1,0 +1,14 @@
+.course-assessment-submissions {
+  &.edit {
+    .answer .correct {
+      background-color: $course-assessment-submission-answer-correct-bg;
+
+      border: 1px solid transparent;
+      border-color: $course-assessment-submission-answer-correct-border-color;
+      border-radius: $course-assessment-submission-answer-correct-border-radius;
+
+      color: $course-assessment-submission-answer-correct-border-text;
+      padding: 0 3px;
+    }
+  }
+}

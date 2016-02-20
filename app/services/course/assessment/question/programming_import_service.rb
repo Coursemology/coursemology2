@@ -77,7 +77,7 @@ class Course::Assessment::Question::ProgrammingImportService
   # @param [Course::Assessment::ProgrammingEvaluationService::Result] evaluation_result The
   #   result of evaluating the package.
   def save(template_files, evaluation_result)
-    @question.attachment = @attachment
+    @question.imported_attachment = @attachment
     @question.template_files = build_template_file_records(template_files)
     @question.test_cases = build_test_case_records(evaluation_result.test_report)
 

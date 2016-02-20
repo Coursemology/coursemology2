@@ -135,5 +135,14 @@ RSpec.describe Course::Assessment::Question::Programming do
         end
       end
     end
+
+    describe '#imported_attachment=' do
+      with_active_job_queue_adapter(:test) do
+        it 'does not enqueue another import job' do
+          subject.imported_attachment = build(:attachment)
+          expect { subject.save }.not_to have_enqueued_job
+        end
+      end
+    end
   end
 end
