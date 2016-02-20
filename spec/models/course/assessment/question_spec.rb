@@ -12,7 +12,7 @@ RSpec.describe Course::Assessment::Question do
 
   it { is_expected.to be_actable }
   it { is_expected.to belong_to(:assessment) }
-  it { is_expected.to have_and_belong_to_many(:tags) }
+  it { is_expected.to have_and_belong_to_many(:skills) }
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
