@@ -11,16 +11,15 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
     end
     before { login_as(user, scope: :user) }
 
+    let(:submission) do
+      create(:course_assessment_submission, *submission_traits, assessment: assessment, user: user)
+    end
+    let(:submission_traits) { nil }
+
     context 'As a Course Student' do
       let(:user) { create(:course_user, :approved, course: course).user }
-      let(:submission) do
-        submission = create(:course_assessment_submission, assessment: assessment, user: user)
-        assessment.questions.attempt(submission)
-        submission
-      end
 
       scenario 'I cannot update my submission after finalising' do
-        submission
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         click_button I18n.t('course.assessment.submissions.worksheet.finalise')
@@ -29,6 +28,21 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
           # We cannot use :fillable_field because the textarea has no labels.
           expect(all('textarea')).not_to be_empty
           all('textarea').each { |input| expect(input.native.attr(:readonly)).to be_truthy }
+        end
+      end
+    end
+
+    context 'As Course Staff' do
+      let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
+      let(:submission_traits) { :submitted }
+
+      scenario 'I can view the grading scheme' do
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        within find(content_tag_selector(submission.answers.first)) do
+          assessment.questions.first.actable.solutions.each do |solution|
+            expect(page).to have_content_tag_for(solution)
+          end
         end
       end
     end
