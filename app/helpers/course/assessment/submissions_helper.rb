@@ -2,8 +2,8 @@
 module Course::Assessment::SubmissionsHelper
   # The maximum step that current user can attempt.
   def max_step
-    @max_step ||= @assessment.
-                  questions.index(@assessment.questions.next_unanswered(@submission)) + 1
+    @max_step ||= @assessment.questions.
+                  index(@assessment.questions.next_unanswered(@submission)) + 1
   end
 
   # The step that current user is on.
