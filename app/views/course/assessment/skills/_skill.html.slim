@@ -1,0 +1,7 @@
+= content_tag_for(:tr, skill) do
+  th = skill.title
+  td = skill.description
+  td
+    div.btn-group
+      = edit_button([current_course, :assessments, skill]) if can?(:update, skill)
+      = delete_button([current_course, :assessments, skill]) if can?(:destroy, skill)

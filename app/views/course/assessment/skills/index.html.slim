@@ -1,0 +1,13 @@
+= page_header do
+  div.btn-group
+    - if can?(:create, Course::Assessment::Skill.new(course: current_course))
+      = new_button([current_course, :assessments, :skill])
+
+table.table.skills-list.table-hover
+  thead
+    tr
+      th = Course::Assessment::Skill.human_attribute_name(:title)
+      th = Course::Assessment::Skill.human_attribute_name(:description)
+      th
+  = render partial: 'skill_branch', collection: @skill_branches + [nil],
+           locals: { skills: @skills.group_by(&:skill_branch) }

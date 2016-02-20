@@ -1,0 +1,13 @@
+tbody
+  - if skill_branch
+    = content_tag_for(:tr, skill_branch) do
+      td = skill_branch.title
+      td = skill_branch.description
+      td
+        = delete_button([current_course, skill_branch]) if can?(:destroy, skill_branch)
+  - else
+    tr
+      th colspan=3
+        = t('.uncategorised')
+
+  = render partial: 'skill', collection: skills[skill_branch]

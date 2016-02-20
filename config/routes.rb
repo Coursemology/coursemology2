@@ -160,6 +160,10 @@ Rails.application.routes.draw do
             post :auto_grade, on: :member
           end
           concerns :conditional
+
+          collection do
+            resources :skills, as: :assessments_skills
+          end
         end
       end
       resources :levels, except: [:show, :edit, :update]

@@ -1,0 +1,7 @@
+= simple_form_for([current_course, :assessments, @skill]) do |f|
+  = f.error_notification
+  = f.input :title
+  = f.input :description
+  = f.association :skill_branch, collection: @skill_branches
+
+  = f.button :submit
