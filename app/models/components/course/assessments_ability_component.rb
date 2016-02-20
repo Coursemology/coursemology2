@@ -4,4 +4,5 @@ module Course::AssessmentsAbilityComponent
   extend ActiveSupport::Concern
 
   include Course::Assessment::AssessmentAbility
+  include Course::Assessment::SkillAbility
 end
