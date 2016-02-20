@@ -11,7 +11,7 @@
       = f.simple_fields_for :sidebar_items do |item_form|
         tr
           th.reorder
-            span = fa_icon 'reorder'
+            span = fa_icon 'reorder'.freeze
           th
             = item_form.hidden_field :id
             = item_form.label format_inline_text(item_form.object.title)

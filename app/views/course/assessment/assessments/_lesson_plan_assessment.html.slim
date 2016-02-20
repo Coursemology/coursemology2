@@ -17,7 +17,7 @@
 
       - if assessment.draft?
         span data-placement='top' title=draft_message(assessment)
-          =< fa_icon(:'eye-slash')
+          =< fa_icon 'eye-slash'.freeze
 
   .lesson-plan-item-body.panel-collapse.collapse.in id=item_body_id(assessment)
     li.list-group-item

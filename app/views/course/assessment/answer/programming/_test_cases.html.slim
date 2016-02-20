@@ -25,7 +25,7 @@ table.table.table-striped.table-hover
         td = format_html(test_case.description)
         td = format_html(test_case.hint) if !test_case_result || !test_case_result.passed?
         td
-          = fa_icon('check') if test_case_result && test_case_result.passed?
+          = fa_icon 'check'.freeze if test_case_result && test_case_result.passed?
   - if can?(:grade, answer.answer)
     tbody
       tr
@@ -38,7 +38,7 @@ table.table.table-striped.table-hover
           td
           td
             - test_case_result = answer_test_results_hash[test_case]
-            = fa_icon('check') if test_case_result && test_case_result.passed?
+            = fa_icon 'check'.freeze if test_case_result && test_case_result.passed?
 
 - failed_private_test_cases = private_test_cases. \
     select { |t| !answer_test_results_hash[t] || !answer_test_results_hash[t].passed? }

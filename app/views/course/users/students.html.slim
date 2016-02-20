@@ -24,5 +24,5 @@ div.users
               td = f.input :phantom, label: false
               td
                 = f.button :submit, id: 'update' do
-                  = fa_icon :save
+                  = fa_icon 'save'.freeze
                 = delete_button([current_course, f.object])
