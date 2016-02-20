@@ -1,5 +1,7 @@
 # frozen_string_literal: true
-class Course::Assessment::Submission::WorksheetService < Course::Assessment::SubmissionService
+class Course::Assessment::Submission::UpdateWorksheetAssessmentService <
+  Course::Assessment::Submission::UpdateService
+
   private
 
   def questions_to_attempt

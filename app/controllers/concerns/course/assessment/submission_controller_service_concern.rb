@@ -10,15 +10,15 @@ module Course::Assessment::SubmissionControllerServiceConcern
   def service_class
     case @assessment.display_mode
     when 'guided'
-      Course::Assessment::Submission::GuidedService
+      Course::Assessment::Submission::UpdateGuidedAssessmentService
     when 'worksheet'
-      Course::Assessment::Submission::WorksheetService
+      Course::Assessment::Submission::UpdateWorksheetAssessmentService
     end
   end
 
   # Instantiate a service based on the assessment display mode.
   #
-  # @return [Course::Assessment::SubmissionService] The service instance.
+  # @return [Course::Assessment::Submission::UpdateService] The service instance.
   def service
     service_class.new(self, assessment: @assessment, submission: @submission)
   end
@@ -26,7 +26,7 @@ module Course::Assessment::SubmissionControllerServiceConcern
   # Extract the defined instance variables from the service, so that views can access them.
   # Call this method at the end of the action if there are any instance variables defined in the
   # action.
-  # @param [Course::Assessment::SubmissionService] service the service instance.
+  # @param [Course::Assessment::UpdateService] service the service instance.
   def extract_instance_variables(service)
     service.instance_variables.each do |name|
       value = service.instance_variable_get(name)
