@@ -52,5 +52,17 @@ RSpec.describe Course::Assessment::SubmissionsController do
         it { is_expected.to render_template('edit') }
       end
     end
+
+    describe '#extract_instance_variables' do
+      subject do
+        get :edit, course_id: course, assessment_id: assessment, id: immutable_submission
+      end
+
+      it 'extracts instance variables from services' do
+        subject
+
+        expect(controller.instance_variable_get(:@questions_to_attempt)).to be_present
+      end
+    end
   end
 end

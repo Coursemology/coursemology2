@@ -1,5 +1,7 @@
 # frozen_string_literal: true
-class Course::Assessment::Submission::GuidedService < Course::Assessment::SubmissionService
+class Course::Assessment::Submission::UpdateGuidedAssessmentService <
+  Course::Assessment::Submission::UpdateService
+
   private
 
   def questions_to_attempt
