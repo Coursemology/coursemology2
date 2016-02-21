@@ -2,6 +2,8 @@
   div.btn-group
     - if can?(:create, Course::Assessment::Skill.new(course: current_course))
       = new_button([current_course, :assessments, :skill])
+    - if can?(:create, Course::Assessment::SkillBranch.new(course: current_course))
+      = new_button([current_course, :assessments, :skill_branch])
 
 table.table.skills-list.table-hover
   thead

@@ -12,8 +12,7 @@ en:
         update:
           success: 'Skill %{title} was updated.'
         destroy:
-          success: 'Skill %{assessment} was deleted.'
-          failure: 'Could not delete skill: %{error}'
+          success: 'Skill %{skill} was deleted.'
           failure: 'Could not delete skill: %{error}'
         skill_branch:
           uncategorised: 'Uncategorised Skills'

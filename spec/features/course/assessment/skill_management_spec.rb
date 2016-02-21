@@ -29,6 +29,7 @@ RSpec.describe 'Course: Skills' do
 
       scenario 'I can edit a skill' do
         skill = create(:course_assessment_skill, course: course)
+        skill_branch = create(:course_assessment_skill_branch, course: course)
         visit course_assessments_skills_path(course)
         within find(content_tag_selector(skill)) do
           click_link(nil, href: edit_course_assessments_skill_path(course, skill))
@@ -36,6 +37,7 @@ RSpec.describe 'Course: Skills' do
 
         new_skill_title = skill.title + ' there!'
         fill_in 'title', with: new_skill_title
+        select skill_branch.title
 
         click_button 'submit'
 
@@ -43,6 +45,7 @@ RSpec.describe 'Course: Skills' do
         expect(page).to have_content_tag_for(skill)
 
         expect(skill.reload.title).to eq(new_skill_title)
+        expect(skill.skill_branch).to eq(skill_branch)
       end
 
       scenario 'I can delete a skill' do
