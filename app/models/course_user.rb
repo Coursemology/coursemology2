@@ -61,6 +61,8 @@ class CourseUser < ActiveRecord::Base
   scope :instructors, -> { staff }
   scope :students, -> { where(role: roles[:student]) }
 
+  scope :with_course_statistics, -> { all.calculated(:experience_points, :achievement_count) }
+
   include CourseUser::LevelProgressConcern
 
   # Test whether the current scope includes the current user.

@@ -8,7 +8,7 @@ module CourseUser::LevelProgressConcern
   #
   # @return [Course::Level] Level of CourseUser.
   def current_level
-    course.level_for(experience_points)
+    @current_level ||= course.level_for(experience_points)
   end
 
   # Computes the percentage (a fixnum ranging from 0-100) of the CourseUser's EXP progress
