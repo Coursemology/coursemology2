@@ -12,8 +12,8 @@ module Course::LevelsConcern
   # @param [Fixnum] experience_points Number of Experience Points
   # @return [Course::Level] A Course::Level instance.
   def level_for(experience_points)
-    level = levels.reverse_order.find_by('experience_points_threshold <= ?', experience_points)
-    level ? level : levels.first
+    return levels.first if experience_points < 0
+    levels.reverse_order.find_by('experience_points_threshold <= ?', experience_points)
   end
 
   # Test if the course has a default level.
