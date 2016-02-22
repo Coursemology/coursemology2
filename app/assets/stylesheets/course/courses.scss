@@ -8,4 +8,14 @@
       @extend .col-md-4;
     }
   }
+
+  &.index {
+    .thumbnail {
+      .image > img {
+        height: $course-course-listing-logo;
+        margin-top: 1em;
+        width: $course-course-listing-logo;
+      }
+    }
+  }
 }
