@@ -215,6 +215,10 @@ Rails.application.routes.draw do
           resources :materials, path: 'files'
         end
       end
+
+      resources :course_users, only: [] do
+        resources :experience_points_records, only: [:index]
+      end
     end
   end
 end
