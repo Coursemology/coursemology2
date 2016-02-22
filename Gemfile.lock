@@ -109,6 +109,7 @@ GEM
     bootstrap-select-rails (1.6.3)
     bootstrap3-datetimepicker-rails (4.17.37)
       momentjs-rails (>= 2.8.1)
+    bootstrap_tokenfield_rails (0.12.1)
     builder (3.2.2)
     bullet (5.0.0)
       activesupport (>= 3.0.0)
@@ -424,7 +425,7 @@ GEM
     simple_form (3.2.1)
       actionpack (> 4, < 5.1)
       activemodel (> 4, < 5.1)
-    simple_form-bootstrap (1.2.0)
+    simple_form-bootstrap (1.3.0)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
       bootstrap-sass (~> 3)
@@ -471,6 +472,10 @@ GEM
       rails (>= 3.0.0)
     turbolinks (2.5.3)
       coffee-rails
+    twitter-typeahead-rails (0.11.1)
+      actionpack (>= 3.1)
+      jquery-rails
+      railties (>= 3.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.7.2)
@@ -507,6 +512,7 @@ DEPENDENCIES
   bootstrap-sass-extras!
   bootstrap-select-rails
   bootstrap3-datetimepicker-rails
+  bootstrap_tokenfield_rails
   bullet (>= 4.14.9)
   bundler (>= 1.10.3)
   calculated_attributes (>= 0.1.3)
@@ -566,7 +572,7 @@ DEPENDENCIES
   should_not
   shoulda-matchers
   simple_form
-  simple_form-bootstrap
+  simple_form-bootstrap (>= 1.3.0)
   simple_token_authentication!
   simplecov
   slim-rails
@@ -575,6 +581,7 @@ DEPENDENCIES
   themes_on_rails (>= 0.3.1)
   traceroute
   turbolinks
+  twitter-typeahead-rails
   tzinfo-data
   uglifier (>= 1.3.0)
   unread
