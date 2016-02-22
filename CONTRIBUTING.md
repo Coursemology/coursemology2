@@ -74,6 +74,9 @@ This allows models to be inherited. See the section on _Inherited Callback Queue
 Take note that workflows do *not* persist their state, `save` needs to be called on the record.
 See `lib/extensions/deferred_workflow_state_persistence`.
 
+### Abilities
+When declaring [cancancan](https://github.com/CanCanCommunity/cancancan) abilities, use only hashes. Do not define an ability using a block as cancancan only allows a single `can` statement for a model if a block is used. If we use hashes, we can write multiple `can` statements and cancancan will combine them.
+
 ## Views
 The same code style for Ruby code applies to all views (e.g. single quotes unless interpolations
 are used.) There is no linting for views at this point, but that might change in future.
@@ -102,9 +105,9 @@ classes which should be applied to an element. Use the Slim shorthand for classe
 When displaying translations for long stretches of text (e.g. a paragraph), use Rails'
 `simple_format` view helper to present the text. This automatically paragraphs the translations.
 
-When displaying user input, use the formatting helpers in 
-`app/helpers/application_formatters_helper.rb`. This would apply HTML sanitisation, automatic 
-linking to URL-like strings, etc. 
+When displaying user input, use the formatting helpers in
+`app/helpers/application_formatters_helper.rb`. This would apply HTML sanitisation, automatic
+linking to URL-like strings, etc.
 
 When using Simple Form remember to declare `f.error_notification`.
 
@@ -124,7 +127,7 @@ Arrange controller methods for Rails' default routes in the following order:
  6. `update`
  7. `destroy`
 
-Arrange private controller methods in the following order: 
+Arrange private controller methods in the following order:
  1. All `params` methods
  2. Callbacks - `before_action` and `after_action`  
  3. Any other helper methods for the controller
@@ -158,11 +161,11 @@ A sample theme (for [coursemology.org](http://coursemology.org)) can be found in
 [coursemology-theme project](https://github.com/Coursemology/coursemology-theme).
 
 ## Sprockets Pipeline
-Because we use Sass' `@import` directive, which does not ensure a file is included exactly once 
-(see sass/sass#139), we have a custom workaround by using an ERB template. This will properly 
+Because we use Sass' `@import` directive, which does not ensure a file is included exactly once
+(see sass/sass#139), we have a custom workaround by using an ERB template. This will properly
 pick up changes made to scss files, but adding new files would require clearing the asset cache.
 
-Run `rake assets:clobber` (in production) and `rm -rf tmp/cache` (in development) to clear the 
+Run `rake assets:clobber` (in production) and `rm -rf tmp/cache` (in development) to clear the
 cache.
 
 ## Libraries
