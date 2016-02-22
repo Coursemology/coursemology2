@@ -4,6 +4,9 @@ en:
       answer:
         worksheet:
           comments: 'Comments'
+        guided:
+          continue: 'Continue'
+          reattempt: 'Reattempt'
         grading:
           grading: 'Grading'
           maximum_grade: '/ %{maximum_grade}'

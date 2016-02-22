@@ -9,8 +9,7 @@ module Course::Assessment::Submission::SubmissionsGuidedHelper
   # The step that current user is on.
   def guided_current_step
     @current_step ||= begin
-      current_question = @questions_to_attempt.first
-      @assessment.questions.index(current_question) + 1
+      @assessment.questions.index(guided_current_question) + 1
     end
   end
 
@@ -20,5 +19,10 @@ module Course::Assessment::Submission::SubmissionsGuidedHelper
     return 'disabled' if step > guided_max_step
 
     ''
+  end
+
+  # The question on current step.
+  def guided_current_question
+    @questions_to_attempt.first
   end
 end

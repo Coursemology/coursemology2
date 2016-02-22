@@ -6,8 +6,8 @@ nav
 
 = simple_form_for [current_course, @assessment, @submission] do |f|
   = f.error_notification
-  = hidden_field_tag :step, current_step
-  = f.simple_fields_for :answers, @submission.answers.where(question: @questions_to_attempt).last do |base_answer_form|
+  = hidden_field_tag :step, guided_current_step
+  = f.simple_fields_for :answers, @submission.answers.where(question: guided_current_question).last do |base_answer_form|
     = content_tag_for(:div, base_answer_form.object) do
       = render partial: 'course/assessment/answer/answer', object: base_answer_form.object,
                locals: { base_answer_form: base_answer_form }

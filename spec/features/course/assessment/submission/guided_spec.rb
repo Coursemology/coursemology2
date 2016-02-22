@@ -50,6 +50,23 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         expect(page).to have_selector('div', text: 'course.assessment.answer.grading.grading')
         expect(page).to have_selector('div', text: 'course.assessment.answer.grading.grade')
       end
+
+      scenario 'I can submit an answer for auto grading' do
+        assessment = create(:assessment, :with_mcq_question, :guided, course: course)
+        submission = create(:course_assessment_submission, assessment: assessment, user: student)
+        # Create an incorrect answer
+        create(:course_assessment_answer_multiple_response, :graded,
+               correct: false, question: assessment.questions.first, submission: submission)
+
+        visit edit_course_assessment_submission_path(assessment.course, assessment, submission)
+
+        expect(page).not_to have_button(I18n.t('common.save'))
+        expect(page).not_to have_button(I18n.t('common.submit'))
+
+        click_button I18n.t('course.assessment.answer.guided.reattempt')
+        expect(page).to have_button(I18n.t('common.save'))
+        expect(page).to have_button(I18n.t('common.submit'))
+      end
     end
   end
 end
