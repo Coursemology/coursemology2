@@ -20,6 +20,8 @@
 //= require moment
 //= require bootstrap-datetimepicker
 //= require bootstrap-select
+//= require twitter/typeahead
+//= require bootstrap-tokenfield
 //= require simple_form-bootstrap
 //= require ace-rails-ap
 //= require coursemology/polyglot/ace-modes

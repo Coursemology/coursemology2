@@ -4,6 +4,18 @@
 @import 'variables';
 @import 'bootstrap-datetimepicker';
 @import 'bootstrap-select';
+@import 'tokenfield-typeahead';
+@import 'bootstrap-tokenfield';
+
+// Fixes for compatibility with Typeahead v0.11
+.tt-menu {
+  @extend .tt-dropdown-menu;
+}
+
+.tt-suggestion.tt-selectable:hover {
+  @extend .tt-suggestion.tt-cursor;
+}
+
 @import 'nprogress';
 @import 'nprogress-bootstrap';
 @import 'font-awesome';

@@ -13,6 +13,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
       let(:user) { course.creator }
 
       scenario 'I can create a new question' do
+        skill = create(:course_assessment_skill, course: course)
         visit course_assessment_path(course, assessment)
         click_link I18n.t('course.assessment.assessments.show.new_question.programming')
 
@@ -22,16 +23,20 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         fill_in 'title', with: question_attributes[:title]
         fill_in 'description', with: question_attributes[:description]
         fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
+        fill_in 'weight', with: question_attributes[:weight]
+        within find_field('skills') do
+          select skill.title
+        end
         select question_attributes[:language].name, from: 'language'
         fill_in 'memory_limit', with: question_attributes[:memory_limit]
         fill_in 'time_limit', with: question_attributes[:time_limit]
-        fill_in 'weight', with: question_attributes[:weight]
         click_button 'submit'
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
 
         question_created = assessment.questions.first.specific
         expect(page).to have_content_tag_for(question_created)
+        expect(question_created.skills).to contain_exactly(skill)
         expect(question_created.weight).to eq(question_attributes[:weight])
       end
 
