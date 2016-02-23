@@ -1,0 +1,14 @@
+= page_header do
+  - if can?(:create, Course::ExperiencePointsRecord.new(course_user: @course_user))
+    = new_button([current_course, @course_user, :experience_points_record])
+
+h2 = @course_user.name
+
+table.table.levels-list.table-hover
+  thead
+    tr
+      th = t('.experience_points_awarded')
+      th = t('.description')
+      th = t('.awarded_by')
+  tbody
+    = render @experience_points_records

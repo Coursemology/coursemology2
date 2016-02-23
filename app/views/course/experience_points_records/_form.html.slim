@@ -1,0 +1,7 @@
+= simple_form_for [current_course, @course_user, @experience_points_record],
+                  resource: :course_course_user_experience_points_record do |f|
+  = f.error_notification
+  = f.error :course_course_user_experience_points_record
+  = f.input :reason, required: true
+  = f.input :points_awarded, required: true
+  = f.button :submit
