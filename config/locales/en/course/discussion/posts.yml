@@ -2,7 +2,6 @@ en:
   course:
     discussion:
       posts:
-        reply_title: 'Re: %{title}'
         create:
           success: 'Post was created'
           failure: 'Fail to create post: %{error}'

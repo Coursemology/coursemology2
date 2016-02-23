@@ -12,8 +12,7 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
   def show
     @posts = @topic.posts.ordered_by_created_at
     @topic.viewed_by(current_user)
-    @reply_post = @topic.posts.build(title: t('course.discussion.posts.reply_title',
-                                              title: @topic.title))
+    @reply_post = @posts.last.children.build
   end
 
   def new

@@ -39,8 +39,9 @@ RSpec.feature 'Course: Forum: Post: Management' do
         end
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(topic.reload.posts.last.title).to eq(I18n.t('course.discussion.posts.reply_title',
-                                                           title: topic.title))
+        expect(topic.reload.posts.last.title).to \
+          eq(I18n.t('activerecord.attributes.course/discussion/post.title_reply_template',
+                    title: topic.title))
         expect(topic.reload.posts.last.text).to eq('test')
         expect(topic.reload.subscriptions.where(user: user).count).to eq(1)
       end
@@ -106,8 +107,9 @@ RSpec.feature 'Course: Forum: Post: Management' do
         end
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(topic.reload.posts.last.title).to eq(I18n.t('course.discussion.posts.reply_title',
-                                                           title: post.title))
+        expect(topic.reload.posts.last.title).to \
+          eq(I18n.t('activerecord.attributes.course/discussion/post.title_reply_template',
+                    title: post.title))
         expect(topic.reload.posts.last.text).to eq('test')
         expect(topic.reload.posts.last.parent).to eq(post)
       end

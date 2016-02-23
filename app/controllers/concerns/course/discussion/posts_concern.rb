@@ -29,8 +29,7 @@ module Course::Discussion::PostsConcern
 
   # Render a new post in a separate page
   def reply
-    @reply_post = @discussion_topic.posts.build(title: t('course.discussion.posts.reply_title',
-                                                         title: @post.title))
+    @reply_post = @post.children.build
   end
 
   protected
