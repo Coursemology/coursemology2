@@ -41,7 +41,8 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         check 'true'
         click_button 'save'
         expect(page).to have_selector('div.alert-success',
-                                      text: 'course.assessment.submissions.update.success')
+                                      text: 'course.assessment.submission.submissions.update.'\
+                                            'success')
 
         click_button 'submit'
         wait_for_job

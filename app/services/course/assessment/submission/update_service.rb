@@ -3,7 +3,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update
     if @submission.update_attributes(update_params)
       redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission),
-                  success: t('course.assessment.submissions.update.success')
+                  success: t('course.assessment.submission.submissions.update.success')
     else
       render 'edit'
     end

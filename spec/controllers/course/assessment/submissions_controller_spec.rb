@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Course::Assessment::SubmissionsController do
+RSpec.describe Course::Assessment::Submission::SubmissionsController do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
@@ -31,8 +31,8 @@ RSpec.describe Course::Assessment::SubmissionsController do
 
         it { is_expected.to redirect_to(course_assessments_path(course)) }
         it 'sets the proper flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.assessment.submissions.create.failure',
-                                              error: ''))
+          expect(flash[:danger]).to eq(I18n.t('course.assessment.submission.submissions.create.'\
+                                              'failure', error: ''))
         end
       end
     end
