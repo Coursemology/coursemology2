@@ -64,5 +64,30 @@ RSpec.describe Course::Assessment::SubmissionsController do
         expect(controller.instance_variable_get(:@questions_to_attempt)).to be_present
       end
     end
+
+    context 'when the assessment is guided' do
+      let(:assessment) { create(:assessment, :guided, :with_mcq_question, course: course) }
+      let!(:answer) do
+        answer = assessment.questions.first.attempt(immutable_submission)
+        answer.save
+        answer
+      end
+
+      describe '#submit_answer' do
+        subject do
+          put :update, course_id: course, assessment_id: assessment, id: immutable_submission,
+                       attempting_answer_id: answer.id, submission: { title: '' }
+        end
+
+        context 'when update fails' do
+          before do
+            controller.instance_variable_set(:@submission, immutable_submission)
+            subject
+          end
+
+          it { is_expected.to render_template('edit') }
+        end
+      end
+    end
   end
 end

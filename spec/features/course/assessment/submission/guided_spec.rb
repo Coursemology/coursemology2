@@ -33,6 +33,22 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
         # TODO: Add more asserts once questions are displayed in guided assessment.
       end
+
+      scenario 'I can submit an answer for auto grading' do
+        assessment = create(:assessment, :with_mcq_question, :guided, course: course)
+        submission = create(:course_assessment_submission, assessment: assessment, user: student)
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+        check 'true'
+        click_button 'save'
+        expect(page).to have_selector('div.alert-success',
+                                      text: 'course.assessment.submissions.update.success')
+
+        click_button 'submit'
+        wait_for_job
+
+        expect(page).to have_selector('div', text: 'course.assessment.answer.grading.grading')
+        expect(page).to have_selector('div', text: 'course.assessment.answer.grading.grade')
+      end
     end
   end
 end

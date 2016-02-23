@@ -2,8 +2,9 @@ en:
   course:
     assessment:
       answer:
-        answer:
+        worksheet:
           comments: 'Comments'
+        grading:
           grading: 'Grading'
           maximum_grade: '/ %{maximum_grade}'
           grade: 'Grade: %{grade} / %{maximum_grade}'
