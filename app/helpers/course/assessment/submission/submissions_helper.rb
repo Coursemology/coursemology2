@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-module Course::Assessment::SubmissionsHelper
+module Course::Assessment::Submission::SubmissionsHelper
   # The maximum step that current user can attempt.
   def max_step
     @max_step ||= @assessment.questions.

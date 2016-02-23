@@ -1,13 +1,12 @@
 # frozen_string_literal: true
-class Course::Assessment::SubmissionsController < Course::Assessment::Controller
-  include Course::Assessment::SubmissionControllerServiceConcern
+class Course::Assessment::Submission::SubmissionsController < \
+  Course::Assessment::Submission::Controller
+  include Course::Assessment::Submission::SubmissionsControllerServiceConcern
 
   before_action :authorize_assessment, only: :create
-  load_resource :submission, class: Course::Assessment::Submission.name, through: :assessment
-  authorize_resource :submission, except: [:edit, :update, :auto_grade]
+  skip_authorize_resource :submission, only: [:edit, :update, :auto_grade]
   before_action :authorize_submission!, only: [:edit, :update]
   before_action :load_or_create_answers, only: [:edit, :update]
-  before_action :add_assessment_breadcrumb
 
   delegate_to_service(:update)
   delegate_to_service(:load_or_create_answers)
@@ -33,12 +32,6 @@ class Course::Assessment::SubmissionsController < Course::Assessment::Controller
     authorize!(:grade, @submission)
     job = @submission.auto_grade!
     redirect_to(job_path(job.job))
-  end
-
-  protected
-
-  def add_assessment_breadcrumb
-    add_breadcrumb(@assessment.title, course_assessment_path(current_course, @assessment))
   end
 
   private

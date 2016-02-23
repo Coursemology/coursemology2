@@ -156,8 +156,10 @@ Rails.application.routes.draw do
             resources :text_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :programming, only: [:new, :create, :edit, :update, :destroy]
           end
-          resources :submissions, only: [:create, :edit, :update] do
-            post :auto_grade, on: :member
+          scope module: :submission do
+            resources :submissions, only: [:create, :edit, :update] do
+              post :auto_grade, on: :member
+            end
           end
           concerns :conditional
 

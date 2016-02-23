@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-module Course::Assessment::SubmissionControllerServiceConcern
+module Course::Assessment::Submission::SubmissionsControllerServiceConcern
   extend ActiveSupport::Concern
 
   private

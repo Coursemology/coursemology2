@@ -1,0 +1,22 @@
+en:
+  course:
+    assessment:
+      submission:
+        submissions:
+          create:
+            failure: 'Could not create submission: %{error}'
+          edit:
+            attempt: :'course.assessment.assessments.assessment.attempt'
+          worksheet:
+            finalise: 'Finalise Submission'
+            publish: 'Publish Grade'
+            auto_grade: 'Auto Grade Submission'
+          statistics:
+            student: :'course.users.role.student'
+            status: 'Status'
+            due_at: 'Due At'
+            statistics: 'Statistics'
+            question: 'Question'
+            grade_summary: 'Grade Summary'
+          update:
+            success: 'Submission was updated.'

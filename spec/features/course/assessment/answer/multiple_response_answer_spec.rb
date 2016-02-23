@@ -34,7 +34,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
       scenario 'I cannot update my submission after finalising' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        click_button I18n.t('course.assessment.submissions.worksheet.finalise')
+        click_button I18n.t('course.assessment.submission.submissions.worksheet.finalise')
 
         within find(content_tag_selector(submission.answers.first)) do
           expect(all(:field, disabled: true)).not_to be_empty
