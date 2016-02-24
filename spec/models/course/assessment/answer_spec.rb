@@ -3,6 +3,8 @@ require 'rails_helper'
 
 RSpec.describe Course::Assessment::Answer do
   it { is_expected.to be_actable }
+  it { is_expected.to act_as(Course::Discussion::Topic) }
+  it { is_expected.to accept_nested_attributes_for(:discussion_topic) }
   it { is_expected.to belong_to(:submission) }
   it { is_expected.to belong_to(:question) }
   it { is_expected.to accept_nested_attributes_for(:actable) }

@@ -27,7 +27,9 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
         within find(content_tag_selector(submission.answers.first)) do
           # We cannot use :fillable_field because the textarea has no labels.
           expect(all('textarea')).not_to be_empty
-          all('textarea').each { |input| expect(input.native.attr(:readonly)).to be_truthy }
+          all('textarea:not(.comment)').each do |input|
+            expect(input.native.attr(:readonly)).to be_truthy
+          end
         end
       end
     end
