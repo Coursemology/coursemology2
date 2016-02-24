@@ -52,6 +52,30 @@ RSpec.describe Course::Condition::Achievement, type: :model do
       end
     end
 
+    describe 'callbacks' do
+      describe '#achievement' do
+        let(:user_achievement) { create(:course_user_achievement) }
+
+        context 'when the user achievement has changes' do
+          it 'resolve_conditional_for the affected course_user' do
+            expect(Course::Condition::Achievement).
+              to receive(:resolve_conditional_for).with(user_achievement.course_user)
+            user_achievement.save!
+          end
+        end
+
+        context 'when the user experiences does not has any changes' do
+          it 'does not resolve_conditional_for the affected course_user' do
+            # Remove all the previous changes
+            user_achievement.save!
+            expect(Course::Condition::Achievement).
+              to_not receive(:resolve_conditional_for).with(user_achievement.course_user)
+            user_achievement.save!
+          end
+        end
+      end
+    end
+
     describe '#title' do
       it 'returns the correct achievement title' do
         subject.achievement = create(:course_achievement, course: course)

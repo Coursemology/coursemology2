@@ -3,11 +3,17 @@ class Course::Condition::Assessment < ActiveRecord::Base
   include ActiveSupport::NumberHelper
 
   acts_as_condition
+
+  # Trigger for resolving the conditional for a course user
+  Course::Assessment::Submission.after_save do |submission|
+    Course::Condition::Assessment.on_dependent_status_change(submission)
+  end
+
+  validate :validate_assessment_condition, if: :assessment_id_changed?
+
   belongs_to :assessment, class_name: Course::Assessment.name, inverse_of: false
 
   default_scope { includes(:assessment) }
-
-  validate :validate_assessment_condition, if: :assessment_id_changed?
 
   alias_method :dependent_object, :assessment
 
@@ -38,6 +44,14 @@ class Course::Condition::Assessment < ActiveRecord::Base
   # Class that the condition depends on.
   def self.dependent_class
     Course::Assessment.name
+  end
+
+  def self.on_dependent_status_change(submission)
+    return unless submission.previous_changes.key?(:workflow_state)
+
+    submission.execute_after_commit do
+      resolve_conditional_for(submission.course_user) if submission.current_state >= :submitted
+    end
   end
 
   private

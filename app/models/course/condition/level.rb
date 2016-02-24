@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 class Course::Condition::Level < ActiveRecord::Base
   acts_as_condition
+
+  # Trigger for resolving the conditional for a course user
+  Course::ExperiencePointsRecord.after_save do |record|
+    Course::Condition::Level.on_dependent_status_change(record)
+  end
+
   validates :minimum_level, numericality: { greater_than: 0 }
 
   def title
@@ -23,5 +29,10 @@ class Course::Condition::Level < ActiveRecord::Base
   # Class that the condition depends on.
   def self.dependent_class
     nil
+  end
+
+  def self.on_dependent_status_change(record)
+    return unless record.previous_changes.key?(:points_awarded)
+    record.execute_after_commit { resolve_conditional_for(record.course_user) }
   end
 end
