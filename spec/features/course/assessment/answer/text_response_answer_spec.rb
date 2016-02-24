@@ -40,6 +40,11 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
 
       scenario 'I can view the grading scheme' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
+        click_link I18n.t('course.assessment.submission.submissions.worksheet.auto_grade')
+        wait_for_job
+
+        expect(page).
+          to have_selector('div', text: I18n.t('course.assessment.answer.explanation.wrong'))
 
         within find(content_tag_selector(submission.answers.first)) do
           assessment.questions.first.actable.solutions.each do |solution|
