@@ -66,7 +66,7 @@ RSpec.describe Course::Forum::Topic, type: :model do
 
     describe '.post_count' do
       let(:topic) { create(:forum_topic, forum: forum) }
-      let!(:topic_posts) { create_list(:post, 2, topic: topic.acting_as) }
+      let!(:topic_posts) { create_list(:course_discussion_post, 2, topic: topic.acting_as) }
 
       it 'preloads the correct post count' do
         expect(forum.topics.calculated(:post_count).first.post_count).to eq(topic_posts.size + 1)
@@ -84,8 +84,8 @@ RSpec.describe Course::Forum::Topic, type: :model do
 
     describe '.with_latest_post' do
       let(:topic) { create(:forum_topic, forum: forum) }
-      let!(:first_topic_post) { create(:post, topic: topic.acting_as) }
-      let!(:second_topic_post) { create(:post, topic: topic.acting_as) }
+      let!(:first_topic_post) { create(:course_discussion_post, topic: topic.acting_as) }
+      let!(:second_topic_post) { create(:course_discussion_post, topic: topic.acting_as) }
 
       it 'preloads the latest post' do
         expect(forum.topics.with_latest_post.first.posts.first).to eq(second_topic_post)
@@ -94,7 +94,7 @@ RSpec.describe Course::Forum::Topic, type: :model do
 
     describe '.with_topic_statistics' do
       let(:topic) { create(:forum_topic, forum: forum) }
-      let!(:topic_posts) { create_list(:post, 2, topic: topic.acting_as) }
+      let!(:topic_posts) { create_list(:course_discussion_post, 2, topic: topic.acting_as) }
       let!(:topic_views) { create_list(:forum_topic_view, 2, topic: topic) }
 
       it 'preloads the correct post and view count' do

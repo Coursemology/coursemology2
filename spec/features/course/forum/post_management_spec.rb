@@ -13,7 +13,7 @@ RSpec.feature 'Course: Forum: Post: Management' do
     context 'As a Course Manager' do
       let(:user) { create(:administrator) }
       scenario 'I can see posts' do
-        posts = create_list(:post, 2, topic: topic.acting_as)
+        posts = create_list(:course_discussion_post, 2, topic: topic.acting_as)
         visit course_forum_topic_path(course, forum, topic)
         posts.each do |post|
           expect(page).to have_content_tag_for(post)
@@ -72,7 +72,7 @@ RSpec.feature 'Course: Forum: Post: Management' do
       end
 
       scenario 'I can delete a topic' do
-        post = create(:post, topic: topic.acting_as)
+        post = create(:course_discussion_post, topic: topic.acting_as)
         visit course_forum_topic_path(course, forum, topic)
 
         find_link(nil, href: course_forum_topic_post_path(course, forum, topic, post)).click

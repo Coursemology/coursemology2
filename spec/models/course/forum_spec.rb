@@ -40,8 +40,12 @@ RSpec.describe Course::Forum, type: :model do
       let(:forum) { create(:forum, course: course) }
       let(:first_topic) { create(:forum_topic, forum: forum) }
       let(:second_topic) { create(:forum_topic, forum: forum) }
-      let!(:first_topic_posts) { create_list(:post, 2, topic: first_topic.acting_as) }
-      let!(:second_topic_posts) { create_list(:post, 1, topic: second_topic.acting_as) }
+      let!(:first_topic_posts) do
+        create_list(:course_discussion_post, 2, topic: first_topic.acting_as)
+      end
+      let!(:second_topic_posts) do
+        create_list(:course_discussion_post, 1, topic: second_topic.acting_as)
+      end
 
       it 'shows the correct count' do
         expect(course.forums.calculated(:topic_post_count).first.topic_post_count).
@@ -66,8 +70,12 @@ RSpec.describe Course::Forum, type: :model do
       let(:forum) { create(:forum, course: course) }
       let(:first_topic) { create(:forum_topic, forum: forum) }
       let(:second_topic) { create(:forum_topic, forum: forum) }
-      let!(:first_topic_posts) { create_list(:post, 1, topic: first_topic.acting_as) }
-      let!(:second_topic_posts) { create_list(:post, 2, topic: second_topic.acting_as) }
+      let!(:first_topic_posts) do
+        create_list(:course_discussion_post, 1, topic: first_topic.acting_as)
+      end
+      let!(:second_topic_posts) do
+        create_list(:course_discussion_post, 2, topic: second_topic.acting_as)
+      end
       let!(:first_topic_views) { create_list(:forum_topic_view, 2, topic: first_topic) }
       let!(:second_topic_views) { create_list(:forum_topic_view, 1, topic: second_topic) }
 
