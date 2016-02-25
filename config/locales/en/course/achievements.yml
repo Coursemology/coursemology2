@@ -3,11 +3,7 @@ en:
     achievements:
       sidebar_title: :'course.achievements.index.header'
       index:
-        title: 'Title'
         header: 'Achievements'
-        description: 'Description'
-        requirements: 'Requirements'
-        badge: 'Badge'
       new:
         header: 'New Achievement'
       create:
@@ -20,4 +16,9 @@ en:
         success: 'Achievement %{title} was deleted.'
         failure: 'Failed to delete achievement: %{error}'
       form:
-        badge: :'course.achievements.index.badge'
+        badge: :'course.achievements.achievements.badge'
+      achievements:
+        badge: 'Badge'
+        title: 'Title'
+        description: 'Description'
+        requirements: 'Requirements'
