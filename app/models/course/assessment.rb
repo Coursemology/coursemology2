@@ -7,8 +7,11 @@ class Course::Assessment < ActiveRecord::Base
   acts_as_conditional
   has_one_folder
 
+  after_initialize :set_defaults, if: :new_record?
   before_validation :assign_folder_attributes
   before_validation :propagate_course
+
+  validate :draft_status
 
   enum display_mode: { worksheet: 0, guided: 1 }
 
@@ -70,5 +73,14 @@ class Course::Assessment < ActiveRecord::Base
   def assign_folder_attributes
     folder.assign_attributes(name: title, course: course, parent: tab.category.folder,
                              start_at: start_at)
+  end
+
+  def set_defaults
+    self.draft ||= true
+  end
+
+  def draft_status
+    return if draft
+    errors.add(:draft, :no_questions) unless questions.present?
   end
 end

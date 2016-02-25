@@ -17,6 +17,37 @@ RSpec.describe Course::Assessment do
     let(:assessment) { create(:assessment, *assessment_traits, course: course) }
     let(:assessment_traits) { [] }
 
+    describe 'validations' do
+      context 'when it is not a draft' do
+        context 'when it has no questions' do
+          subject { build(:assessment, draft: false) }
+
+          it 'adds a :no_questions error on :draft' do
+            expect(subject.valid?).to be(false)
+            expect(subject.errors[:draft]).to include(I18n.t('activerecord.errors.models.' \
+            'course/assessment.no_questions'))
+          end
+        end
+
+        context 'when it has questions' do
+          subject { build(:assessment, :with_all_question_types, draft: true) }
+          it { is_expected.to be_valid }
+        end
+      end
+
+      context 'when it is a draft' do
+        context 'when it has no questions' do
+          subject { build(:assessment, draft: true) }
+          it { is_expected.to be_valid }
+        end
+
+        context 'when it has questions' do
+          subject { build(:assessment, :with_all_question_types, draft: true) }
+          it { is_expected.to be_valid }
+        end
+      end
+    end
+
     describe 'callbacks' do
       describe 'after assessment was initialized' do
         subject { build(:assessment) }
