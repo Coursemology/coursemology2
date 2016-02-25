@@ -39,12 +39,12 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         submission = create(:course_assessment_submission, assessment: assessment, user: student)
         visit edit_course_assessment_submission_path(course, assessment, submission)
         check 'true'
-        click_button 'save'
+        click_button I18n.t('common.save')
         expect(page).to have_selector('div.alert-success',
                                       text: 'course.assessment.submission.submissions.update.'\
                                             'success')
 
-        click_button 'submit'
+        click_button I18n.t('common.submit')
         wait_for_job
 
         expect(page).to have_selector('div', text: 'course.assessment.answer.grading.grading')

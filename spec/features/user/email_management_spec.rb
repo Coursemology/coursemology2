@@ -34,11 +34,12 @@ RSpec.feature 'User: Emails' do
       invalid_email = 'test@example'
       valid_email = build(:user_email).email
       fill_in 'user_email_email', with: invalid_email
-      click_button 'add'
+
+      click_button I18n.t('user.emails.index.add')
       expect(page).to have_selector('div.alert-danger')
 
       fill_in 'user_email_email', with: valid_email
-      click_button 'add'
+      click_button I18n.t('user.emails.index.add')
       expect(page).to have_selector('tr td', text: valid_email)
     end
 

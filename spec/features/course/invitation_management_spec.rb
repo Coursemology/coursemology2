@@ -116,7 +116,7 @@ RSpec.feature 'Courses: Invitations', js: true do
         scenario 'I can accept invitations' do
           visit course_path(course)
           fill_in 'registration_code', with: invitation.invitation_key
-          click_button 'register'
+          click_button I18n.t('course.user_registrations.registration.register')
 
           expect(page).not_to have_selector('div.register')
         end
@@ -131,7 +131,7 @@ RSpec.feature 'Courses: Invitations', js: true do
         scenario 'I can register for courses using the course registration code' do
           visit course_path(course)
           fill_in 'registration_code', with: course.registration_key
-          click_button 'register'
+          click_button I18n.t('course.user_registrations.registration.register')
 
           expect(page).not_to have_selector('div.register')
         end
