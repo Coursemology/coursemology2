@@ -4,6 +4,8 @@ en:
       sidebar_title: :'course.achievements.index.header'
       index:
         header: 'Achievements'
+      show:
+        users_with_achievement: 'Students with this Achievement'
       new:
         header: 'New Achievement'
       create:

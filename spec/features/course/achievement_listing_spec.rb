@@ -31,10 +31,12 @@ RSpec.feature 'Course: Achievements' do
     end
 
     context 'As an Course Student' do
-      let!(:course_student) { create(:course_student, :approved, course: course) }
-      let!(:user) { course_student.user }
+      let!(:course_student1) { create(:course_student, :approved, course: course) }
+      let!(:course_student2) { create(:course_student, :approved, course: course) }
+      let!(:user) { course_student1.user }
       before do
-        create(:course_user_achievement, course_user: course_student, achievement: achievement1)
+        create(:course_user_achievement, course_user: course_student1, achievement: achievement1)
+        create(:course_user_achievement, course_user: course_student2, achievement: achievement2)
       end
 
       scenario 'I can view all published achievements and whether I have obtained them' do
@@ -57,6 +59,16 @@ RSpec.feature 'Course: Achievements' do
         visit course_path(course)
 
         expect(page).to have_selector('li', text: 'course.achievements.sidebar_title')
+      end
+
+      scenario 'I can view all users who have obtained an achievement' do
+        visit course_achievement_path(course, achievement1)
+        expect(page).to have_content_tag_for(course_student1)
+        expect(page).not_to have_content_tag_for(course_student2)
+
+        visit course_achievement_path(course, achievement2)
+        expect(page).to have_content_tag_for(course_student2)
+        expect(page).not_to have_content_tag_for(course_student1)
       end
     end
   end

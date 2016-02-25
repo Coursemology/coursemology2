@@ -20,4 +20,10 @@
       background-color: $course-achievement-locked-bg;
     }
   }
+
+  &.show {
+    .course-user-achievement {
+      text-align: center;
+    }
+  }
 }
