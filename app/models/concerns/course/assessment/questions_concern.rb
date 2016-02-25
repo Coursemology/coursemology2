@@ -27,27 +27,22 @@ module Course::Assessment::QuestionsConcern
   # @param [Course::Assessment::Submission] submission The submission which contains the answers.
   # @return [Array<Course::Assessment::Question>]
   def not_correctly_answered(submission)
-    where.not(id: submission.answers.where(correct: true).select(:question_id))
+    where.not(id: correctly_answered_question_ids(submission))
   end
 
-  # Return the question at the given step.
+  # Return the question at the given index. The next unanswered question will be returned if
+  # the question at the index is not accessible.
   #
   # @param [Course::Assessment::Submission] submission The submission which contains the answers.
   # @param [Fixnum] current_index The index of the question, it's zero based.
-  # @return [Array<Course::Assessment::Question>] The question at the given the step. The latest
-  #   unfinished question will be returned if the question at the step is not accessible.
+  # @return [Array<Course::Assessment::Question>] The question at the given index or next
+  #   unanswered question, whichever comes first.
   def step(submission, current_index)
     current_index = 0 if current_index < 0
-
-    correctly_answered_question_ids = correctly_answered_questions(submission).pluck(:id)
-    question_ids = pluck(:id)
-
-    question_index = question_ids.zip(0..question_ids.length).find_index do |(question, index)|
-      index == current_index || !correctly_answered_question_ids.include?(question)
-    end
+    max_index = index(next_unanswered(submission) || last)
 
     # Return a +ActiveRecord::AssociationRelation+, so that the scope can be attempted.
-    where(id: question_ids.fetch(question_index))
+    where(id: fetch([current_index, max_index].min))
   end
 
   # Return the next unanswered question.
@@ -71,6 +66,10 @@ module Course::Assessment::QuestionsConcern
   # @param [Course::Assessment::Submission] submission The submission which contains the answers.
   # @return [Array<Course::Assessment::Question>] The questions which were correctly answered.
   def correctly_answered_questions(submission)
-    where(id: submission.answers.where(correct: true).select(:question_id))
+    where(id: correctly_answered_question_ids(submission))
+  end
+
+  def correctly_answered_question_ids(submission)
+    submission.answers.where(correct: true).select(:question_id)
   end
 end
