@@ -29,6 +29,12 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
 
         comment_post = submission.answers.first.discussion_topic.posts.first
         expect(comment_post.text).to eq(comment_post_text)
+
+        submission.answers.each do |answer|
+          within find(content_tag_selector(answer)) do
+            expect(page).to have_content_tag_for(comment_post)
+          end
+        end
       end
     end
   end

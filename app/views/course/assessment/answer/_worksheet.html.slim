@@ -1,6 +1,7 @@
 h3 = t('.comments')
 div.comments
-  = render partial: 'course/assessment/answer/comments', topic: answer.discussion_topic
+  = render partial: answer.discussion_topic,
+           locals: { post_partial: 'course/assessment/answer/comment' }
 
   = base_answer_form.simple_fields_for :discussion_topic do |discussion_topic_form|
     - new_post = new_comments_post(discussion_topic_form.object)
