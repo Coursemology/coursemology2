@@ -27,7 +27,7 @@ module Course::Assessment::QuestionsConcern
   # @param [Course::Assessment::Submission] submission The submission which contains the answers.
   # @return [Array<Course::Assessment::Question>]
   def not_correctly_answered(submission)
-    where.not(id: submission.answers.where(correct: true).select(:question_id))
+    where.not(id: correctly_answered_question_ids(submission))
   end
 
   # Return the question at the given index. The next unanswered question will be returned if
@@ -66,6 +66,10 @@ module Course::Assessment::QuestionsConcern
   # @param [Course::Assessment::Submission] submission The submission which contains the answers.
   # @return [Array<Course::Assessment::Question>] The questions which were correctly answered.
   def correctly_answered_questions(submission)
-    where(id: submission.answers.where(correct: true).select(:question_id))
+    where(id: correctly_answered_question_ids(submission))
+  end
+
+  def correctly_answered_question_ids(submission)
+    submission.answers.where(correct: true).select(:question_id)
   end
 end
