@@ -182,12 +182,20 @@ RSpec.describe Course::Assessment do
     end
 
     describe '#maximum_grade' do
-      let(:assessment_traits) { [:with_all_question_types] }
+      context 'when it has questions' do
+        let(:assessment_traits) { [:with_all_question_types] }
 
-      it 'returns the maximum grade' do
-        maximum_grade = self.assessment.questions.map(&:maximum_grade).reduce(0, :+)
+        it 'returns the maximum grade' do
+          maximum_grade = self.assessment.questions.map(&:maximum_grade).reduce(0, :+)
 
-        expect(assessment.maximum_grade).to eq(maximum_grade)
+          expect(assessment.maximum_grade).to eq(maximum_grade)
+        end
+      end
+
+      context 'when it does not have any question' do
+        it 'returns 0' do
+          expect(assessment.maximum_grade).to eq(0)
+        end
       end
     end
 

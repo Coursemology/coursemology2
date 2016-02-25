@@ -35,7 +35,7 @@ class Course::Assessment < ActiveRecord::Base
   #   @return [Fixnum]
   calculated :maximum_grade, (lambda do
     Course::Assessment::Question.unscope(:order).
-      select { sum(course_assessment_questions.maximum_grade) }.
+      select { coalesce(sum(course_assessment_questions.maximum_grade), 0) }.
       where { course_assessment_questions.assessment_id == course_assessments.id }
   end)
 
