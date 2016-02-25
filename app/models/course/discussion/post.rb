@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Discussion::Post < ActiveRecord::Base
+  include Course::Discussion::Post::OrderingConcern
+
   acts_as_forest order: :created_at
 
   after_initialize :set_topic, if: :new_record?
