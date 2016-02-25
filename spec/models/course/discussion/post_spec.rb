@@ -4,4 +4,32 @@ require 'rails_helper'
 RSpec.describe Course::Discussion::Post, type: :model do
   it { is_expected.to belong_to(:topic).inverse_of(:posts) }
   it { is_expected.to belong_to(:creator) }
+
+  let(:instance) { create(:instance) }
+  with_tenant(:instance) do
+    describe '.tsort' do
+      let(:topic) { create(:course_discussion_topic) }
+      let(:graph) do
+        # root -> a -> b
+        #      \-> c
+        root = create(:course_discussion_post, topic: topic)
+        a = create(:course_discussion_post, parent: root, topic: topic)
+        b = create(:course_discussion_post, parent: a, topic: topic)
+        c = create(:course_discussion_post, parent: root, topic: topic)
+
+        { root: root, a: a, b: b, c: c } # Already in topographical order.
+      end
+      subject { graph[:root].topic.posts.ordered_topologically }
+
+      it 'sorts the posts topographically' do
+        root_post = subject.to_a.first
+        expect(root_post.first).to eq(graph[:root])
+
+        root_children = root_post.second
+        expect(root_children).to contain_exactly([graph[:a], [
+                                                   [graph[:b], []]]],
+                                                 [graph[:c], []])
+      end
+    end
+  end
 end

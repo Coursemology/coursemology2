@@ -14,7 +14,7 @@ RSpec.describe Course::Discussion::Topic, type: :model do
     describe '#subscribed_by?' do
       let(:another_user) { create(:user) }
       let!(:discussion_topic_subscription) do
-        create(:discussion_topic_subscription, topic: topic.acting_as, user: user)
+        create(:course_discussion_topic_subscription, topic: topic.acting_as, user: user)
       end
 
       context 'when the user has subscribed to a topic' do
@@ -33,7 +33,7 @@ RSpec.describe Course::Discussion::Topic, type: :model do
     describe '#ensure_subscribed_by' do
       context 'when the user has subscribed to a topic' do
         let!(:discussion_topic_subscription) do
-          create(:discussion_topic_subscription, topic: topic.acting_as, user: user)
+          create(:course_discussion_topic_subscription, topic: topic.acting_as, user: user)
         end
 
         it 'returns true' do
@@ -49,7 +49,7 @@ RSpec.describe Course::Discussion::Topic, type: :model do
 
       context 'when record already exists' do
         let!(:discussion_topic_subscription) do
-          create(:discussion_topic_subscription, topic: topic.acting_as, user: user)
+          create(:course_discussion_topic_subscription, topic: topic.acting_as, user: user)
         end
 
         before do

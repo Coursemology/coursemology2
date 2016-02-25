@@ -7,6 +7,10 @@ class Course::Discussion::Topic < ActiveRecord::Base
 
   accepts_nested_attributes_for :posts
 
+  def to_partial_path
+    'course/discussion/topic'.freeze
+  end
+
   # Return if a user has subscribed to this topic
   #
   # @param [User] user The user to check
