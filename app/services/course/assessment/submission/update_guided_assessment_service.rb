@@ -5,6 +5,8 @@ class Course::Assessment::Submission::UpdateGuidedAssessmentService <
   def update
     if params[:attempting_answer_id]
       submit_answer
+    elsif params[:attempting_question_id]
+      reattempt_question
     else
       super
     end
@@ -16,6 +18,10 @@ class Course::Assessment::Submission::UpdateGuidedAssessmentService <
     params.permit(:attempting_answer_id)[:attempting_answer_id]
   end
 
+  def question_id_param
+    params.permit(:attempting_question_id)[:attempting_question_id]
+  end
+
   def step_param
     params.permit(:step)[:step]
   end
@@ -24,9 +30,7 @@ class Course::Assessment::Submission::UpdateGuidedAssessmentService <
     if @submission.update_attributes(update_params)
       answer = @submission.answers.find(answer_id_param)
       answer.finalise!
-      redirect_path = edit_course_assessment_submission_path(current_course, @assessment,
-                                                             @submission, step: step_param)
-      job = answer.auto_grade!(redirect_path)
+      job = answer.auto_grade!(current_step_path)
 
       redirect_to job_path(job.job)
     else
@@ -34,8 +38,25 @@ class Course::Assessment::Submission::UpdateGuidedAssessmentService <
     end
   end
 
+  def reattempt_question
+    question = @assessment.questions.find(question_id_param)
+    question.attempt(@submission)
+    if @submission.save
+      redirect_to current_step_path
+    else
+      redirect_to current_step_path,
+                  danger: t('course.assessment.submission.submissions.update.failure',
+                            error: @submission.errors.full_messages.to_sentence)
+    end
+  end
+
   def questions_to_attempt
     @questions_to_attempt ||= @submission.assessment.questions.
                               step(@submission, step_param.to_i - 1)
+  end
+
+  def current_step_path
+    edit_course_assessment_submission_path(current_course, @assessment,
+                                           @submission, step: step_param)
   end
 end

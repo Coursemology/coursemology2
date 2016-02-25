@@ -41,4 +41,11 @@ class Course::Assessment::Question < ActiveRecord::Base
     return actable.attempt(submission) if actable && actable.self_respond_to?(:attempt)
     raise NotImplementedError, 'Questions must implement the #attempt method for submissions.'
   end
+
+  # Test if the question is the last question of the assessment.
+  #
+  # @return [Boolean] True if the question is the last question, otherwise False.
+  def last_question?
+    assessment.questions.last == self
+  end
 end

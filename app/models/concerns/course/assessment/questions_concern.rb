@@ -22,6 +22,14 @@ module Course::Assessment::QuestionsConcern
     end
   end
 
+  # Returns the questions which do not have a answer.
+  #
+  # @param [Course::Assessment::Submission] submission The submission which contains the answers.
+  # @return [Array<Course::Assessment::Question>]
+  def not_answered(submission)
+    where.not(id: submission.answers.select(:question_id))
+  end
+
   # Returns the questions which do not have a answer or correct answer.
   #
   # @param [Course::Assessment::Submission] submission The submission which contains the answers.

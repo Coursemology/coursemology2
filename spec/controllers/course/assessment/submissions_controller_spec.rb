@@ -88,6 +88,25 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
           it { is_expected.to render_template('edit') }
         end
       end
+
+      describe '#re_attempt_question' do
+        subject do
+          put :update, course_id: course, assessment_id: assessment, id: immutable_submission,
+                       attempting_question_id: answer.question.id, submission: { title: '' }
+        end
+
+        context 'when update fails' do
+          before do
+            controller.instance_variable_set(:@submission, immutable_submission)
+            subject
+          end
+
+          it 'sets a flash with error messages' do
+            expect(flash[:danger]).
+              to eq(I18n.t('course.assessment.submission.submissions.update.failure'))
+          end
+        end
+      end
     end
   end
 end
