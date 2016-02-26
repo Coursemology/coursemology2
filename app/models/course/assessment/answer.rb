@@ -2,6 +2,7 @@
 class Course::Assessment::Answer < ActiveRecord::Base
   include Workflow
   actable
+  acts_as :discussion_topic, class_name: Course::Discussion::Topic.name
 
   workflow do
     state :attempting do
@@ -30,6 +31,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
                          inverse_of: :answer
 
   accepts_nested_attributes_for :actable
+  accepts_nested_attributes_for :discussion_topic
 
   # Creates an Auto Grading job for this answer. This saves the answer if there are pending changes.
   #
