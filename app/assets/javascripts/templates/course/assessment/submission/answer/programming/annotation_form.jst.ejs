@@ -6,11 +6,15 @@
         <input type="hidden" name="discussion_post[id]" />
         <input type="hidden" name="discussion_post[parent_id]" />
         <textarea name="discussion_post[text]"
-                  class="form-control text" placeholder="Leave an annotation" aria-label="Annotation body"></textarea>
+                  class="form-control text"
+                  placeholder="<%= I18n.t('javascript.course.assessment.submission.answer.programming.annotation_form.text.placeholder') %>"
+                  aria-label="<%= I18n.t('javascript.course.assessment.submission.answer.programming.annotation_form.text.label') %>"></textarea>
       </div>
 
-      <input type="reset" class="btn btn-default" value="Cancel" />
-      <input type="submit" class="btn btn-primary" />
+      <input type="reset" class="btn btn-default"
+             value="<%= I18n.t('javascript.course.assessment.submission.answer.programming.annotation_form.reset') %>" />
+      <input type="submit" class="btn btn-primary"
+             value="<%= I18n.t('javascript.course.assessment.submission.answer.programming.annotation_form.submit') %>" />
     </div>
   </td>
 </tr>

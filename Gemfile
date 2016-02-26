@@ -47,6 +47,9 @@ gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
+# Internationalisation for JavaScript.
+gem 'i18n-js', '>= 3.0.0.rc1'
+
 # Use jQuery as the JavaScript library
 gem 'jquery-cdn'
 gem 'jquery-rails'

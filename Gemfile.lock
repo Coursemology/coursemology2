@@ -196,6 +196,8 @@ GEM
       rouge (~> 1.8)
     http_accept_language (2.0.5)
     i18n (0.7.0)
+    i18n-js (3.0.0.rc12)
+      i18n (~> 0.6, >= 0.6.6)
     i18n-tasks (0.9.4)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
@@ -548,6 +550,7 @@ DEPENDENCIES
   html-pipeline
   html-pipeline-rouge_filter
   http_accept_language
+  i18n-js (>= 3.0.0.rc1)
   i18n-tasks
   image_optim
   jbuilder

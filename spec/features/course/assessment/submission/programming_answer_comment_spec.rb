@@ -34,7 +34,8 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
           annotation_button = find('span.add-annotation', match: :first)
           annotation_button.click
 
-          click_button 'Cancel'
+          click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
+                              'annotation_form.reset')
           expect(page).not_to have_selector('.annotation-form')
         end
       end
