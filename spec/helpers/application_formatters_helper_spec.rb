@@ -53,6 +53,10 @@ RSpec.describe ApplicationFormattersHelper do
         expect(formatted_block).to have_tag('pre.codehilite')
       end
 
+      it 'enumerates every line' do
+        expect(formatted_block).to have_tag('td.line-number', count: 3)
+      end
+
       it 'highlights the keywords' do
         expect(formatted_block).to have_tag('span.k', text: 'def')
       end

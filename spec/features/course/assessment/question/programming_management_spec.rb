@@ -64,7 +64,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(page).to have_selector('div.alert.alert-success')
         question.template_files.reload.each do |template|
           expect(page).to have_selector('ul.nav a', text: template.filename)
-          expect(page).to have_selector('div.question_programming_template_file pre code',
+          expect(page).to have_selector('div.question_programming_template_file',
                                         text: template.content)
         end
 
