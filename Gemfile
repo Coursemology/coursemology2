@@ -132,6 +132,9 @@ end
 group :production do
   # Puma will be our app server
   gem 'puma'
+
+  # Compress image assets
+  gem 'image_optim'
 end
 
 # Multitenancy
