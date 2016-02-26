@@ -2,7 +2,10 @@
 - programming_question = programming_answer.question.actable
 div.nested-fields
   = link_to_remove_association t('.delete'), f, class: ['pull-right']
-  - readonly = cannot?(:update, programming_answer.answer)
+  - readonly = !programming_answer.attempting? || cannot?(:update, programming_answer.answer)
   = f.input :filename, readonly: readonly
-  = f.input :content, as: :code, language: programming_question.language.ace_mode,
-                      input_html: { rows: 20 }, readonly: readonly
+  - if readonly
+    = format_code_block(f.object.content, programming_question.language)
+  - else
+    = f.input :content, as: :code, language: programming_question.language.ace_mode,
+                        input_html: { rows: 20 }
