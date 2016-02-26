@@ -71,6 +71,8 @@ gem 'nprogress-rails'
 gem 'jbuilder'
 # Slim as the templating language
 gem 'slim-rails'
+# ejs for client-side templates
+gem 'ejs'
 # High Voltage for static pages
 gem 'high_voltage'
 # Paginator for Rails

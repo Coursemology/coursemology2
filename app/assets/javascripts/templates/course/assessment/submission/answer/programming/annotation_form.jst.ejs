@@ -1,0 +1,16 @@
+<tr>
+  <td colspan="2">
+    <div class="annotation-form" data-action="answers/<%= answerId %>/programming/files/<%= programmingFileId %>/annotations" data-method="post">
+      <input type="hidden" name="annotation[line]" value="<%= lineNumber %>" />
+      <div class="form-group text">
+        <input type="hidden" name="discussion_post[id]" />
+        <input type="hidden" name="discussion_post[parent_id]" />
+        <textarea name="discussion_post[text]"
+                  class="form-control text" placeholder="Leave an annotation" aria-label="Annotation body"></textarea>
+      </div>
+
+      <input type="reset" class="btn btn-default" value="Cancel" />
+      <input type="submit" class="btn btn-primary" />
+    </div>
+  </td>
+</tr>

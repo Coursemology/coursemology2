@@ -164,6 +164,7 @@ GEM
       thread_safe
     edge (0.4.4)
       activerecord (>= 4.0.0)
+    ejs (1.1.1)
     erubis (2.7.0)
     execjs (2.6.0)
     exifr (1.2.4)
@@ -538,6 +539,7 @@ DEPENDENCIES
   devise-multi_email
   devise_masquerade
   edge
+  ejs
   factory_girl_rails
   filename
   font-awesome-rails
