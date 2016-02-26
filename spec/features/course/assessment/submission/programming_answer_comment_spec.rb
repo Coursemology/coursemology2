@@ -27,6 +27,7 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         click_button I18n.t('course.assessment.submission.submissions.worksheet.finalise')
         wait_for_job
 
+        annotation = 'test annotation text'
         within find(content_tag_selector(submission.answers.first)) do
           first_line = find('table.codehilite tr', match: :first)
           first_line.hover
@@ -37,7 +38,19 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
           click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
                               'annotation_form.reset')
           expect(page).not_to have_selector('.annotation-form')
+
+          first_line.hover
+          annotation_button.click
+
+          find_field('discussion_post[text]').set annotation
+          click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
+                              'annotation_form.submit')
+          wait_for_ajax
         end
+
+        answer_file = submission.answers.first.actable.files.first
+        answer_discussion_topic = answer_file.annotations.first.discussion_topic
+        expect(answer_discussion_topic.posts.first.text).to eq(annotation)
       end
     end
   end

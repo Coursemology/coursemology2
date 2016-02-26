@@ -99,10 +99,11 @@
     var action = $form.data('action');
     var method = $form.data('method');
 
-    var data = buildFormData($form);
+    $.ajax({ url: action, method: method, data: buildFormData($form) }).
+      done(function(data) { onAnnotationFormSubmitSuccess(data, $form[0]); }).
+      fail(function(data) { onAnnotationFormSubmitFail(data, $form[0]); });
 
-    console.log(method + ' ' + action);
-    console.log(data);
+    findFormFields($form).prop('disabled', true);
     e.preventDefault();
   }
 
@@ -134,7 +135,9 @@
    */
   function buildFormData($form) {
     var $fields = findFormFields($form, ':not(:disabled)');
-    var data = {};
+    var data = {
+      authenticity_token: $(document).find('meta[name="csrf-token"]').attr('content')
+    };
     $fields.each(function() {
       if (this.name === '') {
         return;
@@ -144,6 +147,25 @@
     });
 
     return data;
+  }
+
+  /**
+   * Handles the successful annotation save event.
+   *
+   * @param {HTMLElement} form The form which was submitted
+   */
+  function onAnnotationFormSubmitSuccess(_, form) {
+    $(form).remove();
+  }
+
+  /**
+   * Handles the errored annotation save event.
+   *
+   * @param {HTMLElement} form The form which was submitted
+   */
+  function onAnnotationFormSubmitFail(_, form) {
+    var $form = $(form);
+    findFormFields($form).prop('disabled', false);
   }
 
   addProgrammingAnnotationLinks(document);
