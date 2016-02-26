@@ -50,7 +50,7 @@ RSpec.feature 'System: Administration: Instance: Courses' do
         visit admin_instance_courses_path
 
         fill_in 'search', with: course_to_search.title
-        click_button 'layouts.search_form.search_button'
+        click_button I18n.t('layouts.search_form.search_button')
 
         expect(page).to have_content_tag_for(course_to_search)
         expect(all('.course').count).to eq(1)

@@ -35,7 +35,7 @@ RSpec.feature 'Course: Administration: Components' do
         visit course_admin_components_path(course)
 
         check(sample_component_id)
-        click_button('submit')
+        click_button 'submit'
         expect(page).to have_checked_field(sample_component_id)
       end
 
@@ -43,7 +43,7 @@ RSpec.feature 'Course: Administration: Components' do
         visit course_admin_components_path(course)
 
         uncheck(sample_component_id)
-        click_button('submit')
+        click_button 'submit'
         expect(page).to have_unchecked_field(sample_component_id)
       end
     end
