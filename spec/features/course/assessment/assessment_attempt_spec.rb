@@ -55,15 +55,6 @@ RSpec.describe 'Course: Assessments: Attempt' do
         end
       end
 
-      scenario 'I can save submissions' do
-        submission
-        visit edit_course_assessment_submission_path(course, assessment, submission)
-
-        click_button I18n.t('common.save')
-        expect(current_path).to eq(\
-          edit_course_assessment_submission_path(course, assessment, submission))
-      end
-
       scenario 'I can continue my attempt' do
         submission
         visit course_assessments_path(course)
@@ -71,16 +62,6 @@ RSpec.describe 'Course: Assessments: Attempt' do
         submission_path = edit_course_assessment_submission_path(course, assessment, submission)
         expect(page).to have_link(I18n.t('course.assessment.assessments.assessment.attempt'),
                                   href: submission_path)
-      end
-
-      scenario 'I can finalise my attempt' do
-        submission
-        visit edit_course_assessment_submission_path(course, assessment, submission)
-
-        click_button I18n.t('course.assessment.submission.submissions.worksheet.finalise')
-        expect(current_path).to eq(\
-          edit_course_assessment_submission_path(course, assessment, submission))
-        expect(submission.reload.submitted?).to be(true)
       end
 
       scenario 'I can view my submission grade' do
@@ -95,19 +76,6 @@ RSpec.describe 'Course: Assessments: Attempt' do
           within find(content_tag_selector(answer)) do
             expect(page).to have_selector('.submission_answers_grade')
           end
-        end
-      end
-
-      scenario 'I can attempt a guided assessment' do
-        assessment = create(:assessment, :with_all_question_types, :guided, course: course)
-        submission = create(:course_assessment_submission, assessment: assessment, user: student)
-        visit edit_course_assessment_submission_path(course, assessment, submission)
-
-        expect(page).to have_selector('h1', text: assessment.title)
-        1..assessment.questions.length do |step|
-          path = edit_course_assessment_submission_path(course, assessment, submission,
-                                                        step: step)
-          expect(page).to have_link(step, href: path)
         end
       end
     end

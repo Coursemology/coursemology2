@@ -6,7 +6,7 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:assessment) { create(:assessment, :with_mcq_question, course: course) }
+    let(:assessment) { create(:assessment, :worksheet, :with_mcq_question, course: course) }
     before { login_as(user, scope: :user) }
 
     let(:student) { create(:course_user, :approved, course: course).user }
@@ -16,6 +16,29 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
 
     context 'As a Course Student' do
       let(:user) { student }
+
+      scenario 'I can save my submission' do
+        submission
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        option = assessment.questions.first.actable.options.first.option
+        check option
+        click_button I18n.t('common.save')
+
+        expect(current_path).to eq(\
+          edit_course_assessment_submission_path(course, assessment, submission))
+        expect(page).to have_checked_field(option)
+      end
+
+      scenario 'I can finalise my submission' do
+        submission
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        click_button I18n.t('course.assessment.submission.submissions.worksheet.finalise')
+        expect(current_path).to eq(\
+          edit_course_assessment_submission_path(course, assessment, submission))
+        expect(submission.reload).to be_submitted
+      end
 
       scenario 'I can comment on answers' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
