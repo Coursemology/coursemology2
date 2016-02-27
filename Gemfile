@@ -129,12 +129,16 @@ group :ci do
   gem 'codeclimate-test-reporter'
 end
 
+# This is used only when producing Production assets. Deals with things like minifying JavaScript
+# source files/image assets.
+group :assets do
+  # Compress image assets
+  gem 'image_optim'
+end
+
 group :production do
   # Puma will be our app server
   gem 'puma'
-
-  # Compress image assets
-  gem 'image_optim'
 end
 
 # Multitenancy
