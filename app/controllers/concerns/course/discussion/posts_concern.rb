@@ -6,7 +6,7 @@ module Course::Discussion::PostsConcern
     before_action :set_topic
     authorize_resource :discussion_topic
     load_and_authorize_resource :post, through: :discussion_topic,
-                                       class: Course::Discussion::Post.name
+                                       class: Course::Discussion::Post.name, parent: false
   end
 
   def create

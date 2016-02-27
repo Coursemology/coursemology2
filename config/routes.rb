@@ -159,6 +159,16 @@ Rails.application.routes.draw do
           scope module: :submission do
             resources :submissions, only: [:create, :edit, :update] do
               post :auto_grade, on: :member
+
+              scope module: :answer do
+                resources :answers, only: [] do
+                  namespace :programming do
+                    resources :files, only: [] do
+                      resources :annotations, only: [:create]
+                    end
+                  end
+                end
+              end
             end
           end
           concerns :conditional

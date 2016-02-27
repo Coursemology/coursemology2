@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160220092350) do
+ActiveRecord::Schema.define(version: 20160226013208) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -244,6 +244,11 @@ ActiveRecord::Schema.define(version: 20160220092350) do
     t.text    "content",   default: "", null: false
   end
   add_index "course_assessment_answer_programming_files", ["answer_id", "filename"], name: "index_course_assessment_answer_programming_files_filename", unique: true, case_sensitive: false
+
+  create_table "course_assessment_answer_programming_file_annotations", force: :cascade do |t|
+    t.integer "file_id", null: false, index: {name: "fk__course_assessment_answe_09c4b638af92d0f8252d7cdef59bd6f3"}, foreign_key: {references: "course_assessment_answer_programming_files", name: "fk_course_assessment_answer_ed21459e7a2a5034dcf43a14812cb17d", on_update: :no_action, on_delete: :no_action}
+    t.integer "line",    null: false
+  end
 
   create_table "course_assessment_answer_text_responses", force: :cascade do |t|
     t.text "answer_text"

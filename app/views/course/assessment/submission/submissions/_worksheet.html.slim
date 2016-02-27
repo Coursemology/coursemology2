@@ -1,7 +1,8 @@
 = simple_form_for [current_course, @assessment, @submission] do |f|
   = f.error_notification
   = f.simple_fields_for :answers do |base_answer_form|
-    = content_tag_for(:div, base_answer_form.object) do
+    = content_tag_for(:div, base_answer_form.object,
+                      'data-answer-id' => base_answer_form.object.id) do
       = render partial: 'course/assessment/answer/answer', object: base_answer_form.object,
                locals: { base_answer_form: base_answer_form }
 

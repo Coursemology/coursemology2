@@ -164,6 +164,7 @@ GEM
       thread_safe
     edge (0.4.4)
       activerecord (>= 4.0.0)
+    ejs (1.1.1)
     erubis (2.7.0)
     execjs (2.6.0)
     exifr (1.2.4)
@@ -195,6 +196,8 @@ GEM
       rouge (~> 1.8)
     http_accept_language (2.0.5)
     i18n (0.7.0)
+    i18n-js (3.0.0.rc12)
+      i18n (~> 0.6, >= 0.6.6)
     i18n-tasks (0.9.4)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
@@ -538,6 +541,7 @@ DEPENDENCIES
   devise-multi_email
   devise_masquerade
   edge
+  ejs
   factory_girl_rails
   filename
   font-awesome-rails
@@ -546,6 +550,7 @@ DEPENDENCIES
   html-pipeline
   html-pipeline-rouge_filter
   http_accept_language
+  i18n-js (>= 3.0.0.rc1)
   i18n-tasks
   image_optim
   jbuilder
