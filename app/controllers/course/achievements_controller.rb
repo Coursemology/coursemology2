@@ -7,6 +7,9 @@ class Course::AchievementsController < Course::ComponentController
     @achievements = @achievements.includes(:conditions)
   end
 
+  def show #:nodoc:
+  end
+
   def new #:nodoc:
   end
 

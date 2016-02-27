@@ -1,0 +1,12 @@
+table.table.achievement-list.table-hover
+  thead
+    tr
+      th = t('.badge')
+      th = t('.title')
+      th = t('.description')
+      th = t('.requirements') if include_requirements
+      th
+  tbody
+    = render partial: 'achievement',
+             collection: achievements,
+             locals: { include_requirements: include_requirements }

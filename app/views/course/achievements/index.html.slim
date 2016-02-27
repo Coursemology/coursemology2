@@ -1,12 +1,5 @@
 = page_header do
   = new_button([current_course, :achievement]) if can?(:create, Course::Achievement.new(course: current_course))
-table.table.achievement-list.table-hover
-  thead
-    tr
-      th = t('.badge')
-      th = t('.title')
-      th = t('.description')
-      th = t('.requirements')
-      th
-  tbody
-    = render @achievements
+
+= render partial: 'achievements',
+         locals: { include_requirements: true, achievements: @achievements }
