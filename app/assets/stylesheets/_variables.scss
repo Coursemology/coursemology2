@@ -32,9 +32,11 @@ $nprogress-spinner-icon-width: 18px !default;
 $picture-thumb: 25px !default;
 $picture-small: 75px !default;
 $picture-medium: 100px !default;
+$picture-large: 140px !default;
 
 //## Variables for icons or logos used in Coursemology.
 $course-achievement-form-badge:   $picture-small !default;
+$course-course-user-profile-picture: $picture-large !default;
 
 $course-admin-form-logo: $picture-small !default;
 $course-layout-sidebar-logo: $picture-medium !default;

@@ -228,7 +228,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :course_users, only: [] do
+      resources :course_users, only: [:show] do
         resources :experience_points_records, only: [:index]
       end
     end
