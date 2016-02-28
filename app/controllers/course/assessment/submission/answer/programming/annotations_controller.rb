@@ -12,6 +12,7 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
                              through: :file
 
   include Course::Discussion::PostsConcern # This needs the annotation loaded.
+  helper Course::Assessment::Answer::ProgrammingHelper.name.sub(/Helper$/, '')
 
   def create
     @annotation.class.transaction do

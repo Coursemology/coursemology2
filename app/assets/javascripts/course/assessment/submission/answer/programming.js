@@ -23,14 +23,86 @@
   }
 
   /**
+   * Finds the annotation cell for the given line within the given code block. This will create
+   * a cell if the cell cannot be found.
+   *
+   * @param {jQuery} $code The table containing the code block.
+   * @param {Number} programmingFileId The programming file which the annotation refers to.
+   * @param {Number} lineNumber The line number for the annotation.
+   * @return {jQuery} The cell which was found or created.
+   */
+  function findOrCreateAnnotationCell($code, programmingFileId, lineNumber) {
+    var $cell = findAnnotationCell($code, programmingFileId, lineNumber);
+    if ($cell.length > 0) {
+      return $cell;
+    }
+
+    var row = createAnnotationRow(programmingFileId, lineNumber);
+    findCodeLine($code, lineNumber).after(row);
+
+    // Traverse again, so we get the inserted row instead of the disconnected row node.
+    return findAnnotationCell($code, programmingFileId, lineNumber);
+  }
+
+  /**
+   * Creates an annotation row for the given line number.
+   *
+   * @param {Number} lineNumber The line number to create an annotation row for.
+   * @param {Number} programmingFileId The programming file which the annotation refers to.
+   * @return {String} The markup for the annotation row.
+   */
+  function createAnnotationRow(programmingFileId, lineNumber) {
+    return render('annotation_row', {
+      annotationCellId: fileLineAnnotationCellId(programmingFileId, lineNumber),
+      lineNumber: lineNumber
+    });
+  }
+
+  /**
+   * Creates the annotation cell ID for the given file and line number.
+   *
+   * This is the JavaScript port of
+   * `Course::Assessment::Answer::ProgrammingHelper#file_line_annotation_cell_id`.
+   *
+   * @param {Number} lineNumber The line number to create an annotation row for.
+   * @param {Number} programmingFileId The programming file which the annotation refers to.
+   * @return {String} The ID for the given annotation cell.
+   */
+  function fileLineAnnotationCellId(programmingFileId, lineNumber) {
+    return 'line_annotation_file_' + programmingFileId + '_line_' + lineNumber + '_annotation';
+  }
+
+  /**
+   * Finds the table row representing the line content at the given line number.
+   *
+   * @param {jQuery} $code The table containing the code to search.
+   * @returns {jQuery} The row containing the line content.
+   */
+  function findCodeLine($code, lineNumber) {
+    return $code.find('td.line-number[data-line-number=' + lineNumber + ']').parent();
+  }
+
+  /**
+   * Finds the annotation cell for the same file, at the given line number.
+   *
+   * @param {jQuery} $code The table containing the code to search.
+   * @param {Number} programmingFileId The programming file which the annotation refers to.
+   * @param {Number} lineNumber The line number.
+   * @return {jQuery} If the cell was found.
+   */
+  function findAnnotationCell($code, programmingFileId, lineNumber) {
+    return $code.find('td#line_annotation_file_' + programmingFileId + '_line_' + lineNumber +
+                      '_annotation');
+  }
+
+  /**
    * Adds the programming annotation links to every line of code.
    *
    * @param {HTMLElement} element The table containing the code, tabulated by lines. This is the
    *   output of the Ruby `format_code_block` helper.
    */
   function addProgrammingAnnotationLinks(element) {
-    var $lineNumbers = $(DOCUMENT_SELECTOR + 'table.codehilite td', element).
-      not('.line-number').
+    var $lineNumbers = $(DOCUMENT_SELECTOR + 'table.codehilite td.line-content', element).
       not(function() {
         return $(this).find('.add-annotation').length > 0;
       });
@@ -53,26 +125,58 @@
     var programmingFileId = $programmingFile.data('programmingFileId');
     var lineNumber = $line.find('.line-number').data('lineNumber');
 
-    createAnnotationBox($line[0], answerId, programmingFileId, lineNumber);
+    var $code = $line.parents('table:first');
+    findOrCreateAnnotationBox($code, answerId, programmingFileId, lineNumber);
   }
 
   /**
    * Creates a annotation box for the user to enter his annotation.
    *
-   * @param {HTMLTableRowElement} line The containing the line number and code. This directs the
-   *   placement of the annotation form.
+   * @param {jQuery} $code The table containing the code to search.
    * @param {Number} answerId The answer ID that the annotation is associated with.
    * @param {Number} programmingFileId The programming answer file ID that the annotation is
    *   associated with.
    * @param {Number} lineNumber The line number that the user is annotating.
+   * @return {jQuery} The annotation box which was found or created.
    */
-  function createAnnotationBox(line, answerId, programmingFileId, lineNumber) {
-    var $line = $(line);
-    $line.after(render('annotation_form', {
+  function findOrCreateAnnotationBox($code, answerId, programmingFileId, lineNumber) {
+    var $annotationCell = findOrCreateAnnotationCell($code, programmingFileId, lineNumber);
+    var $annotationBox = findAnnotationBox($annotationCell);
+    if ($annotationBox.length > 0) {
+      return $annotationBox;
+    }
+
+    return createAnnotationBox($annotationCell, answerId, programmingFileId, lineNumber);
+  }
+
+  /**
+   * Finds the annotation box in the given cell.
+   *
+   * @param {jQuery} $annotationCell The annotation cell to search for the form.
+   * @return {jQuery} The annotation box which was found.
+   */
+  function findAnnotationBox($annotationCell) {
+    return $annotationCell.find('div.annotation-form');
+  }
+
+  /**
+   * Creates a annotation box for the user to enter his annotation.
+   *
+   * @param {jQuery} $annotationCell The annotation cell to search for the form.
+   * @param {Number} answerId The answer ID that the annotation is associated with.
+   * @param {Number} programmingFileId The programming answer file ID that the annotation is
+   *   associated with.
+   * @param {Number} lineNumber The line number that the user is annotating.
+   * @return {jQuery} The annotation box which was created.
+   */
+  function createAnnotationBox($annotationCell, answerId, programmingFileId, lineNumber) {
+    $annotationCell.append(render('annotation_form', {
       answerId: answerId,
       programmingFileId: programmingFileId,
       lineNumber: lineNumber
     }));
+
+    return findAnnotationBox($annotationCell);
   }
 
   /**

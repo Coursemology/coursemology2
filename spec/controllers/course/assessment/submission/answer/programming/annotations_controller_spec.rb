@@ -24,7 +24,7 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
       let(:post_text) { 'test post text' }
       subject do
         controller.instance_variable_set(:@annotation, immutable_annotation)
-        post :create, format: :json, course_id: course, assessment_id: assessment,
+        post :create, format: :js, course_id: course, assessment_id: assessment,
                       submission_id: submission, answer_id: answer, file_id: file,
                       id: immutable_annotation,
                       annotation: {

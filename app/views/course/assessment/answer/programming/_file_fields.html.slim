@@ -5,7 +5,7 @@
   - readonly = !programming_answer.attempting? || cannot?(:update, programming_answer.answer)
   = f.input :filename, readonly: readonly
   - if readonly
-    = format_code_block(f.object.content, programming_question.language)
+    = format_programming_answer_file(f.object, programming_question.language)
   - else
     = f.input :content, as: :code, language: programming_question.language.ace_mode,
                         input_html: { rows: 20 }
