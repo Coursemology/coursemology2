@@ -21,7 +21,7 @@ RSpec.describe Course::Discussion::Post, type: :model do
       end
     end
 
-    describe '.tsort' do
+    describe '.ordered_topologically' do
       let(:topic) { create(:course_discussion_topic) }
       let(:graph) do
         # root -> a -> b
@@ -31,11 +31,11 @@ RSpec.describe Course::Discussion::Post, type: :model do
         b = create(:course_discussion_post, parent: a, topic: topic)
         c = create(:course_discussion_post, parent: root, topic: topic)
 
-        { root: root, a: a, b: b, c: c } # Already in topographical order.
+        { root: root, a: a, b: b, c: c } # Already in topological order.
       end
       subject { graph[:root].topic.posts.ordered_topologically }
 
-      it 'sorts the posts topographically' do
+      it 'sorts the posts topologically' do
         root_post = subject.to_a.first
         expect(root_post.first).to eq(graph[:root])
 

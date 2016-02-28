@@ -1,7 +1,7 @@
 module Course::Discussion::Post::OrderingConcern
   extend ActiveSupport::Concern
 
-  # Sorts all posts in a collection in topographical order.
+  # Sorts all posts in a collection in topological order.
   #
   # By convention, each post is represented by an array. The first element is the post itself,
   # the second is the children of the array.
