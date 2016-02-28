@@ -7,7 +7,21 @@ RSpec.describe Course::Discussion::Post, type: :model do
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
-    describe '.tsort' do
+    describe '.all' do
+      let(:topic) { create(:course_discussion_topic) }
+      let(:posts) do
+        (1..3).map do |i|
+          create(:course_discussion_post, topic: topic, created_at: Time.zone.now + i.seconds)
+        end
+      end
+
+      it 'is sorted by ascending date' do
+        created_times = posts.map(&:created_at)
+        expect(created_times.each_cons(2).all? { |current, following| current <= following })
+      end
+    end
+
+    describe '.ordered_topologically' do
       let(:topic) { create(:course_discussion_topic) }
       let(:graph) do
         # root -> a -> b
@@ -17,11 +31,11 @@ RSpec.describe Course::Discussion::Post, type: :model do
         b = create(:course_discussion_post, parent: a, topic: topic)
         c = create(:course_discussion_post, parent: root, topic: topic)
 
-        { root: root, a: a, b: b, c: c } # Already in topographical order.
+        { root: root, a: a, b: b, c: c } # Already in topological order.
       end
       subject { graph[:root].topic.posts.ordered_topologically }
 
-      it 'sorts the posts topographically' do
+      it 'sorts the posts topologically' do
         root_post = subject.to_a.first
         expect(root_post.first).to eq(graph[:root])
 
@@ -29,6 +43,20 @@ RSpec.describe Course::Discussion::Post, type: :model do
         expect(root_children).to contain_exactly([graph[:a], [
                                                    [graph[:b], []]]],
                                                  [graph[:c], []])
+      end
+
+      describe '#last' do
+        it 'returns the last post topologically' do
+          expect(subject.last).to eq(graph[:c])
+        end
+
+        context 'when there are no posts' do
+          subject { topic.posts.ordered_topologically }
+
+          it 'returns nil' do
+            expect(subject.last).to be_nil
+          end
+        end
       end
     end
   end

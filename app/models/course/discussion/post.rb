@@ -12,7 +12,9 @@ class Course::Discussion::Post < ActiveRecord::Base
 
   belongs_to :topic, inverse_of: :posts
 
-  scope :ordered_by_created_at, -> { order(created_at: :asc).includes(:creator).to_a }
+  default_scope { ordered_by_created_at.with_creator }
+  scope :ordered_by_created_at, -> { order(created_at: :asc) }
+  scope :with_creator, -> { includes(:creator) }
 
   private
 
