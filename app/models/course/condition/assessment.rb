@@ -31,7 +31,7 @@ class Course::Condition::Assessment < ActiveRecord::Base
       minimum_grade = assessment.maximum_grade * minimum_grade_percentage / 100.0
       graded_submissions_with_minimum_grade(user, minimum_grade).exists?
     else
-      graded_submissions_by_user(user).exists?
+      submitted_submissions_by_user(user).exists?
     end
   end
 
@@ -42,12 +42,14 @@ class Course::Condition::Assessment < ActiveRecord::Base
 
   private
 
-  def graded_submissions_by_user(user)
-    assessment.submissions.by_user(user).with_graded_state
+  def submitted_submissions_by_user(user)
+    # TODO: Replace with Rails 5 ActiveRecord::Relation#or with named scope
+    assessment.submissions.by_user(user).where(workflow_state: [:submitted, :graded])
   end
 
   def graded_submissions_with_minimum_grade(user, minimum_grade)
-    graded_submissions_by_user(user).joins { answers }.
+    assessment.submissions.by_user(user).with_graded_state.
+      joins { answers }.
       group { course_assessment_submissions.id }.
       having { coalesce(sum(answers.grade), 0) >= minimum_grade }
   end
