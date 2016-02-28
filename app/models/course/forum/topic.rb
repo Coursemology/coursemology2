@@ -34,7 +34,8 @@ class Course::Forum::Topic < ActiveRecord::Base
   # @!method self.with_latest_post
   #   Augments all returned records with the latest post.
   scope :with_latest_post, (lambda do
-    ids = Course::Discussion::Post.select { max(id) }.group { course_discussion_posts.topic_id }
+    ids = Course::Discussion::Post.unscope(:order).
+          select { max(id) }.group { course_discussion_posts.topic_id }
     last_posts = Course::Discussion::Post.where(id: ids).includes(:creator)
 
     all.tap do |result|

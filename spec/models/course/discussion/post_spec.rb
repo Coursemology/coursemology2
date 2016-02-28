@@ -7,6 +7,20 @@ RSpec.describe Course::Discussion::Post, type: :model do
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
+    describe '.all' do
+      let(:topic) { create(:course_discussion_topic) }
+      let(:posts) do
+        (1..3).map do |i|
+          create(:course_discussion_post, topic: topic, created_at: Time.zone.now + i.seconds)
+        end
+      end
+
+      it 'is sorted by ascending date' do
+        created_times = posts.map(&:created_at)
+        expect(created_times.each_cons(2).all? { |current, following| current <= following })
+      end
+    end
+
     describe '.tsort' do
       let(:topic) { create(:course_discussion_topic) }
       let(:graph) do
