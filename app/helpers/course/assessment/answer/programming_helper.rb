@@ -11,6 +11,19 @@ module Course::Assessment::Answer::ProgrammingHelper
     insert_annotations(code_block, programming_answer_file)
   end
 
+  # Generates the annotation cell ID for the given file and line number.
+  #
+  # This is the Ruby port of +fileLineAnnotationCellId+ in
+  # +app/assets/javascripts/course/assessment/submission/answer/programming.js+.
+  #
+  # @param [Course::Assessment::Answer::ProgrammingFile] file The file which is being annotated.
+  # @param [Fixnum] line_number The line number being annotated.
+  # @return [String] The ID of the cell containing the annotation for the given file and line
+  # number.
+  def file_line_annotation_cell_id(file, line_number)
+    "line_annotation_file_#{file.id}_line_#{line_number}_annotation"
+  end
+
   private
 
   # Inserts annotations into the generated code block.
@@ -51,7 +64,12 @@ module Course::Assessment::Answer::ProgrammingHelper
   # @return [Nokogiri::XML::Node] The node representing the annotation row.
   def build_annotation_row(annotation)
     html = render partial: 'course/assessment/answer/programming/annotation_row',
-                  locals: { file_id: annotation.file_id, line_number: annotation.line }
+                  locals: {
+                    annotation_cell_id: file_line_annotation_cell_id(annotation.file,
+                                                                     annotation.line),
+                    line_number: annotation.line
+                  }
+
     line_discussion_row = Nokogiri::XML::DocumentFragment.parse(html)
     line_discussion_cell = line_discussion_row.at('.//td[@class="line-annotation"]')
 

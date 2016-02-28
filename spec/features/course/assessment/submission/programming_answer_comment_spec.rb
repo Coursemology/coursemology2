@@ -65,6 +65,8 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         answer_file = submission.answers.first.actable.files.first
         answer_discussion_topic = answer_file.annotations.first.discussion_topic
         expect(answer_discussion_topic.posts.first.text).to eq(annotation)
+
+        expect(page).to have_content_tag_for(answer_discussion_topic.posts.first)
       end
     end
   end

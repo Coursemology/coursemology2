@@ -52,7 +52,24 @@
    * @return {String} The markup for the annotation row.
    */
   function createAnnotationRow(programmingFileId, lineNumber) {
-    return render('annotation_row', { fileId: programmingFileId, lineNumber: lineNumber });
+    return render('annotation_row', {
+      annotationCellId: fileLineAnnotationCellId(programmingFileId, lineNumber),
+      lineNumber: lineNumber
+    });
+  }
+
+  /**
+   * Creates the annotation cell ID for the given file and line number.
+   *
+   * This is the JavaScript port of
+   * `Course::Assessment::Answer::ProgrammingHelper#file_line_annotation_cell_id`.
+   *
+   * @param {Number} lineNumber The line number to create an annotation row for.
+   * @param {Number} programmingFileId The programming file which the annotation refers to.
+   * @return {String} The ID for the given annotation cell.
+   */
+  function fileLineAnnotationCellId(programmingFileId, lineNumber) {
+    return 'line_annotation_file_' + programmingFileId + '_line_' + lineNumber + '_annotation';
   }
 
   /**
