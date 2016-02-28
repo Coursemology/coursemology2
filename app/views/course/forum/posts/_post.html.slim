@@ -1,21 +1,20 @@
-= content_tag_for(:post, post) do
-  div.post
-    div.user
-      h5 = link_to_user(post.creator)
+= div_for(post, class: ['post']) do
+  div.user
+    h5 = link_to_user(post.creator)
 
-    div.contents
+  div.contents
+    h4.title
+      a = format_inline_text(post.title)
       div.pull-right
         .timestamp
           => format_datetime(post.created_at)
 
-      h4.title
-        a = format_inline_text(post.title)
+    = format_block_text(post.text)
 
-      = format_block_text(post.text)
-
-      - if defined?(show_buttons)
-        div.info
-          div.pull-right
+    - if defined?(show_buttons)
+      div.info
+        div.pull-right
+          .btn-group
             - if can? :reply_topic, @topic
               = link_to reply_course_forum_topic_post_path(current_course, @forum, @topic, post),
                         title: t('.reply'), class: ['btn', 'btn-primary'] do

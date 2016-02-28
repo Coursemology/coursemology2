@@ -1,0 +1,7 @@
+@import 'discussion_post';
+
+.course-assessment-submission-submissions.edit {
+  .answer .comments {
+    @include course-assessment-submission-discussion;
+  }
+}
