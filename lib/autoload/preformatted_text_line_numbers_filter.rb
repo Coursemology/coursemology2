@@ -75,6 +75,7 @@ class PreformattedTextLineNumbersFilter < HTML::Pipeline::Filter
   # @return [Nokogiri::XML::Element] The tag representing the line.
   def build_line_content_tag(line_content, container_attributes)
     result = Nokogiri::XML::Element.new('td', doc)
+    result['class'] = 'line-content'
 
     line_pre = Nokogiri::XML::Element.new('pre', doc)
     result.add_child(line_pre)

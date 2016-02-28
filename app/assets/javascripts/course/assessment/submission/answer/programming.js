@@ -29,8 +29,7 @@
    *   output of the Ruby `format_code_block` helper.
    */
   function addProgrammingAnnotationLinks(element) {
-    var $lineNumbers = $(DOCUMENT_SELECTOR + 'table.codehilite td', element).
-      not('.line-number').
+    var $lineNumbers = $(DOCUMENT_SELECTOR + 'table.codehilite td.line-content', element).
       not(function() {
         return $(this).find('.add-annotation').length > 0;
       });

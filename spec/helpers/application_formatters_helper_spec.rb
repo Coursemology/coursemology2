@@ -55,6 +55,7 @@ RSpec.describe ApplicationFormattersHelper do
 
       it 'enumerates every line' do
         expect(formatted_block).to have_tag('td.line-number', count: 3)
+        expect(formatted_block).to have_tag('td.line-content', count: 3)
       end
 
       it 'highlights the keywords' do
