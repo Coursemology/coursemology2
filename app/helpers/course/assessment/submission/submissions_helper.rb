@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 module Course::Assessment::Submission::SubmissionsHelper
   include Course::Assessment::Submission::SubmissionsGuidedHelper
+  include Course::Assessment::Answer::ProgrammingHelper
 
   # Finds the comment being created/edited, or constructs a new one in reply to the latest post.
   #
