@@ -35,10 +35,22 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
           annotation_button = find('span.add-annotation', match: :first)
           annotation_button.click
           expect(page).to have_tag('td.line-annotation', count: 1)
+          expect(page).to have_tag('div.annotation-form', count: 1)
 
           # Test that only one annotation row is created for every line.
           annotation_button.click
           expect(page).to have_tag('td.line-annotation', count: 1)
+
+          # Test that only one annotation form is created no matter how many times we click on
+          # the add annotation button.
+          expect(page).to have_tag('div.annotation-form', count: 1)
+
+          # Test that we can annotate another line.
+          another_line = all('table.codehilite tr')[2]
+          another_line.hover
+          another_line_annotation_button = find('span.add-annotation', match: :first)
+          another_line_annotation_button.click
+          expect(page).to have_tag('div.annotation-form', count: 2)
 
           click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
                               'annotation_form.reset'), match: :first
