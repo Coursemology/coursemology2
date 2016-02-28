@@ -122,6 +122,12 @@ RSpec.describe Course::Condition::Assessment, type: :model do
                               user: course_user.user)
         end
 
+        context 'when there is no answer' do
+          it 'return false' do
+            expect(subject.satisfied_by?(course_user)).to be_falsey
+          end
+        end
+
         context 'when all graded submissions are below the minimum grade percentage' do
           it 'returns false' do
             answers = assessment.questions.attempt(submission)
