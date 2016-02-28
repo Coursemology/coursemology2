@@ -1,9 +1,9 @@
-= div_for(post) do
+= div_for(annotation_post) do
   div.user
-    h5 = link_to_user(post.creator)
+    h5 = link_to_user(annotation_post.creator)
 
   div.content
-    = format_html(post.text)
+    = format_html(annotation_post.text)
 
   div.timestamp
-    = format_datetime(post.created_at)
+    = format_datetime(annotation_post.created_at)

@@ -1,9 +1,9 @@
-= div_for(post) do
+= div_for(comment) do
   div.user
-    h5 = link_to_user(post.creator)
+    h5 = link_to_user(comment.creator)
 
   div.content
-    = format_html(post.text)
+    = format_html(comment.text)
 
   div.timestamp
-    = format_datetime(post.created_at)
+    = format_datetime(comment.created_at)
