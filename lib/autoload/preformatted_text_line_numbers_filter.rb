@@ -30,7 +30,9 @@ class PreformattedTextLineNumbersFilter < HTML::Pipeline::Filter
   # @param [Nokogiri::XML::Node] pre The +pre+ tag being processed.
   def build_table_tag(lines, pre)
     table = Nokogiri::XML::Element.new('table', doc)
-    table['class'] = [pre['class'], context[:css_class] || 'highlight'].compact.join(' ')
+    table['class'] = [pre['class'], context[:css_class] || 'highlight', context[:css_table_class]].
+                     compact.join(' ')
+
     lines.each_with_index do |line, i|
       tr = build_line_tag(i + 1, line, pre.attributes)
       table.add_child(tr)

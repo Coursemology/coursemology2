@@ -27,7 +27,7 @@ module ApplicationHTMLFormattersHelper
                                            DefaultHTMLPipelineOptions)
 
   # The Code formatter options to use.
-  DefaultCodePipelineOptions = DefaultPipelineOptions
+  DefaultCodePipelineOptions = DefaultPipelineOptions.merge(css_table_class: 'table').freeze
 
   # The Code formatter pipeline.
   DefaultCodePipeline = HTML::Pipeline.new(DefaultPipeline.filters +
