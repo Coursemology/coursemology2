@@ -1,4 +1,9 @@
 = div_for(post) do
   div.user
     h5 = link_to_user(post.creator)
+
+  div.content
     = format_html(post.text)
+
+  div.timestamp
+    = format_datetime(post.created_at)
