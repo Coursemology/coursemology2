@@ -8,5 +8,5 @@ h2 = format_inline_text(question.title)
                           label_method: :option, label: false, disabled: readonly
 
 - if f.object.auto_grading && f.object.auto_grading.result
-  div
-    = format_html(f.object.auto_grading.result['messages'])
+  = render partial: 'course/assessment/answer/explanation',
+           locals: { answer: f.object }

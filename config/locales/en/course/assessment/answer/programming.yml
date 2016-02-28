@@ -8,10 +8,8 @@ en:
           file_fields:
             delete: 'Delete file'
           test_cases:
-            identifier: :'course.assessment.question.programming.form_test_cases.identifier'
-            description: :'course.assessment.question.programming.form_test_cases.description'
-            hint: :'course.assessment.question.programming.form_test_cases.hint'
             passed: 'Passed'
             private: :'course.assessment.question.programming.form_test_cases.private'
             public: :'course.assessment.question.programming.form_test_cases.public'
             test_cases: :'course.assessment.question.programming.form_test_cases.test_cases'
+            failed_message: 'You have failed to pass one or more private test cases.'

@@ -14,4 +14,11 @@ module Course::Assessment::Submission::SubmissionsHelper
     parent_collection = topic.posts.last ? topic.posts.last.children : topic.posts
     parent_collection.build
   end
+
+  # Return the CSS class of the explanation based on the correctness of the answer.
+  #
+  # @return [String]
+  def explanation_panel_class(answer)
+    answer.correct ? 'panel-success' : 'panel-danger'
+  end
 end

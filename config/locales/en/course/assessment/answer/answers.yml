@@ -11,3 +11,6 @@ en:
           grading: 'Grading'
           maximum_grade: '/ %{maximum_grade}'
           grade: 'Grade: %{grade} / %{maximum_grade}'
+        explanation:
+          correct: 'Correct!'
+          wrong: 'Wrong!'

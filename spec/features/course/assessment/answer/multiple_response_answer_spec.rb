@@ -54,6 +54,15 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
           expect(all('.correct').length).to eq(options.to_a.count(&:correct?))
         end
       end
+
+      scenario 'I can view the auto grading results' do
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+        click_link I18n.t('course.assessment.submission.submissions.worksheet.auto_grade')
+        wait_for_job
+
+        expect(page).
+          to have_selector('div', text: I18n.t('course.assessment.answer.explanation.wrong'))
+      end
     end
   end
 end
