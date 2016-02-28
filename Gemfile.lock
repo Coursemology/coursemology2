@@ -133,7 +133,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.10.0)
-    concurrent-ruby (1.0.0)
+    concurrent-ruby (1.0.1)
     consistency_fail (0.3.4)
     coursemology-polyglot (0.1.0)
       activesupport (~> 4.2.0, >= 4.2.2)
