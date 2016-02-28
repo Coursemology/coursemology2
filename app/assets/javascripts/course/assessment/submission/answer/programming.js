@@ -23,6 +23,58 @@
   }
 
   /**
+   * Finds the annotation cell for the given line within the given code block. This will create
+   * a cell if the cell cannot be found.
+   *
+   * @param {jQuery} $code The table containing the code block.
+   * @param {Number} lineNumber The line number for the annotation.
+   * @return {jQuery} The cell which was found or created.
+   */
+  function findOrCreateAnnotationCell($code, lineNumber) {
+    var $cell = findAnnotationCell($code, lineNumber);
+    if ($cell.length > 0) {
+      return $cell;
+    }
+
+    var row = createAnnotationRow(lineNumber);
+    findCodeLine($code, lineNumber).after(row);
+
+    // Traverse again, so we get the inserted row instead of the disconnected row node.
+    return findAnnotationCell($code, lineNumber);
+  }
+
+  /**
+   * Creates an annotation row for the given line number.
+   *
+   * @param {Number} lineNumber The line number to create an annotation row for.
+   * @return {String} The markup for the annotation row.
+   */
+  function createAnnotationRow(lineNumber) {
+    return render('annotation_row', { lineNumber: lineNumber });
+  }
+
+  /**
+   * Finds the table row representing the line content at the given line number.
+   *
+   * @param {jQuery} $code The table containing the code to search.
+   * @returns {jQuery} The row containing the line content.
+   */
+  function findCodeLine($code, lineNumber) {
+    return $code.find('td.line-number[data-line-number=' + lineNumber + ']').parent();
+  }
+
+  /**
+   * Finds the annotation cell for the same file, at the given line number.
+   *
+   * @param {jQuery} $code The table containing the code to search.
+   * @param {Number} lineNumber The line number.
+   * @return {jQuery} If the cell was found.
+   */
+  function findAnnotationCell($code, lineNumber) {
+    return $code.find('td.line-annotation[data-line-number="' + lineNumber + '"]');
+  }
+
+  /**
    * Adds the programming annotation links to every line of code.
    *
    * @param {HTMLElement} element The table containing the code, tabulated by lines. This is the
@@ -66,8 +118,10 @@
    * @param {Number} lineNumber The line number that the user is annotating.
    */
   function createAnnotationBox(line, answerId, programmingFileId, lineNumber) {
-    var $line = $(line);
-    $line.after(render('annotation_form', {
+    var $code = $(line).parents('table:first');
+    var $annotationCell = findOrCreateAnnotationCell($code, lineNumber);
+
+    $annotationCell.append(render('annotation_form', {
       answerId: answerId,
       programmingFileId: programmingFileId,
       lineNumber: lineNumber

@@ -34,13 +34,15 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
 
           annotation_button = find('span.add-annotation', match: :first)
           annotation_button.click
+          expect(page).to have_tag('td.line-annotation', count: 1)
+
+          # Test that only one annotation row is created for every line.
+          annotation_button.click
+          expect(page).to have_tag('td.line-annotation', count: 1)
 
           click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
-                              'annotation_form.reset')
-          expect(page).not_to have_selector('.annotation-form')
-
-          first_line.hover
-          annotation_button.click
+                              'annotation_form.reset'), match: :first
+          expect(page).to have_tag('.annotation-form', count: 1)
 
           find_field('discussion_post[text]').set annotation
           click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
