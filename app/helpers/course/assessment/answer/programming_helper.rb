@@ -51,7 +51,7 @@ module Course::Assessment::Answer::ProgrammingHelper
   # @return [Nokogiri::XML::Node] The node representing the annotation row.
   def build_annotation_row(annotation)
     html = render partial: 'course/assessment/answer/programming/annotation_row',
-                  locals: { line_number: annotation.line }
+                  locals: { file_id: annotation.file_id, line_number: annotation.line }
     line_discussion_row = Nokogiri::XML::DocumentFragment.parse(html)
     line_discussion_cell = line_discussion_row.at('.//td[@class="line-annotation"]')
 

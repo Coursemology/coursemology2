@@ -27,30 +27,32 @@
    * a cell if the cell cannot be found.
    *
    * @param {jQuery} $code The table containing the code block.
+   * @param {Number} programmingFileId The programming file which the annotation refers to.
    * @param {Number} lineNumber The line number for the annotation.
    * @return {jQuery} The cell which was found or created.
    */
-  function findOrCreateAnnotationCell($code, lineNumber) {
-    var $cell = findAnnotationCell($code, lineNumber);
+  function findOrCreateAnnotationCell($code, programmingFileId, lineNumber) {
+    var $cell = findAnnotationCell($code, programmingFileId, lineNumber);
     if ($cell.length > 0) {
       return $cell;
     }
 
-    var row = createAnnotationRow(lineNumber);
+    var row = createAnnotationRow(programmingFileId, lineNumber);
     findCodeLine($code, lineNumber).after(row);
 
     // Traverse again, so we get the inserted row instead of the disconnected row node.
-    return findAnnotationCell($code, lineNumber);
+    return findAnnotationCell($code, programmingFileId, lineNumber);
   }
 
   /**
    * Creates an annotation row for the given line number.
    *
    * @param {Number} lineNumber The line number to create an annotation row for.
+   * @param {Number} programmingFileId The programming file which the annotation refers to.
    * @return {String} The markup for the annotation row.
    */
-  function createAnnotationRow(lineNumber) {
-    return render('annotation_row', { lineNumber: lineNumber });
+  function createAnnotationRow(programmingFileId, lineNumber) {
+    return render('annotation_row', { fileId: programmingFileId, lineNumber: lineNumber });
   }
 
   /**
@@ -67,11 +69,13 @@
    * Finds the annotation cell for the same file, at the given line number.
    *
    * @param {jQuery} $code The table containing the code to search.
+   * @param {Number} programmingFileId The programming file which the annotation refers to.
    * @param {Number} lineNumber The line number.
    * @return {jQuery} If the cell was found.
    */
-  function findAnnotationCell($code, lineNumber) {
-    return $code.find('td.line-annotation[data-line-number="' + lineNumber + '"]');
+  function findAnnotationCell($code, programmingFileId, lineNumber) {
+    return $code.find('td#line_annotation_file_' + programmingFileId + '_line_' + lineNumber +
+                      '_annotation');
   }
 
   /**
@@ -119,7 +123,7 @@
    * @return {jQuery} The annotation box which was found or created.
    */
   function findOrCreateAnnotationBox($code, answerId, programmingFileId, lineNumber) {
-    var $annotationCell = findOrCreateAnnotationCell($code, lineNumber);
+    var $annotationCell = findOrCreateAnnotationCell($code, programmingFileId, lineNumber);
     var $annotationBox = findAnnotationBox($annotationCell);
     if ($annotationBox.length > 0) {
       return $annotationBox;
