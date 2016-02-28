@@ -34,9 +34,11 @@ class Course::Forum::Topic < ActiveRecord::Base
   # @!method self.with_latest_post
   #   Augments all returned records with the latest post.
   scope :with_latest_post, (lambda do
+    topic_ids = pluck('course_discussion_topics.id')
     ids = Course::Discussion::Post.unscope(:order).
-          select { max(id) }.group { course_discussion_posts.topic_id }
-    last_posts = Course::Discussion::Post.where(id: ids).includes(:creator)
+          select { max(id) }.group { course_discussion_posts.topic_id }.
+          where { topic_id.in(topic_ids) }
+    last_posts = Course::Discussion::Post.with_creator.where(id: ids)
 
     all.tap do |result|
       preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
