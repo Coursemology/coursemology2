@@ -44,6 +44,20 @@ RSpec.describe Course::Discussion::Post, type: :model do
                                                    [graph[:b], []]]],
                                                  [graph[:c], []])
       end
+
+      describe '#last' do
+        it 'returns the last post topologically' do
+          expect(subject.last).to eq(graph[:c])
+        end
+
+        context 'when there are no posts' do
+          subject { topic.posts.ordered_topologically }
+
+          it 'returns nil' do
+            expect(subject.last).to be_nil
+          end
+        end
+      end
     end
   end
 end

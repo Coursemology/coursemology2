@@ -17,6 +17,18 @@ module Course::Discussion::Post::OrderingConcern
       @sorted = sort(nil)
     end
 
+    # Retrieves the last post topologically -- the last post at every branch.
+    #
+    # @return [Course::Discussion::Post] The last post topologically.
+    # @return [nil] When there are no posts.
+    def last
+      current_thread = @sorted.last
+      return nil unless current_thread
+
+      current_thread = current_thread.second.last until current_thread.second.empty?
+      current_thread.first
+    end
+
     private
 
     def sort(post_id)
