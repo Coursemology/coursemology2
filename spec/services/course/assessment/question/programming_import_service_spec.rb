@@ -8,14 +8,14 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportService do
     let(:package_path) do
       File.join(Rails.root, 'spec/fixtures/course/programming_question_template.zip')
     end
-    let(:attachment) { create(:attachment, binary: true, file: package_path) }
+    let(:attachment) { create(:attachment_reference, binary: true, file_path: package_path) }
     subject { Course::Assessment::Question::ProgrammingImportService.new(question, attachment) }
 
     describe '.import' do
       subject { Course::Assessment::Question::ProgrammingImportService }
       it 'accepts attachments' do
         expect(subject).to receive(:new).
-          with(question, instance_of(Attachment)).
+          with(question, instance_of(AttachmentReference)).
           and_call_original
         subject.import(question, attachment)
       end

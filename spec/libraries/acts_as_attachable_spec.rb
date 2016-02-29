@@ -24,7 +24,8 @@ RSpec.describe 'Extension: Acts as Attachable' do
   end
 
   describe self::SampleModelMultiple, type: :model do
-    it { is_expected.to have_many(:attachments) }
+    it { is_expected.to respond_to(:attachment_references) }
+    it { is_expected.to respond_to(:attachments) }
 
     let(:files) { [File.open(File.join(Rails.root, '/spec/fixtures/files/text.txt'))] }
     let(:attachable) { self.class::SampleModelMultiple.new }
@@ -53,7 +54,7 @@ RSpec.describe 'Extension: Acts as Attachable' do
       end
 
       context 'when a new attachment is specified' do
-        let(:attachment) { build(:attachment, file: file) }
+        let(:attachment) { build(:attachment_reference, file: file) }
         before { attachable.attachment = attachment }
 
         it 'stores the old attribute' do
@@ -112,7 +113,7 @@ RSpec.describe 'Extension: Acts as Attachable' do
           end
 
           it 'stores the old attribute' do
-            expect(attachable.changes[:attachment].first).to be_a(Attachment)
+            expect(attachable.changes[:attachment].first).to be_a(AttachmentReference)
           end
         end
 
@@ -152,11 +153,12 @@ RSpec.describe 'Extension: Acts as Attachable' do
     end
     class self::SampleFormBuilder < ActionView::Helpers::FormBuilder; end
 
+    let(:attachment) { build(:attachment_reference) }
     let(:template) { self.class::SampleView.new(Rails.root.join('app', 'views')) }
     let(:resource) do
-      model = self.class::SampleModelMultiple.new
-      model.attachments << build(:attachment)
-      model
+      stub = self.class::SampleModelMultiple.new
+      allow(stub).to receive(:attachments).and_return([attachment])
+      stub
     end
     let(:form_builder) { self.class::SampleFormBuilder.new(:sample, resource, template, {}) }
     subject { form_builder }
@@ -177,7 +179,7 @@ RSpec.describe 'Extension: Acts as Attachable' do
       context 'when has one attachment' do
         let(:resource) do
           model = self.class::SampleModelSingular.new
-          model.attachment = build(:attachment)
+          model.attachment = attachment
           model
         end
         it do

@@ -3,12 +3,15 @@ module Extensions::Attachable::ActiveRecord::Base
   module ClassMethods
     # This function should be declared in model, to it have attachments.
     def has_many_attachments # rubocop:disable Style/PredicateName
-      has_many :attachments, as: :attachable, class_name: "::#{Attachment.name}",
-                             inverse_of: :attachable, dependent: :destroy, autosave: true
+      has_many :attachment_references, as: :attachable, class_name: "::#{AttachmentReference.name}",
+                                       inverse_of: :attachable, dependent: :destroy, autosave: true
+      # Attachment references can substitute attachments, so allow access using the `attachments`
+      # identifier.
+      alias_method :attachments, :attachment_references
 
       define_method(:files=) do |files|
         files.each do |file|
-          attachments.build.file_upload = file
+          attachment_references.build(file: file)
         end
       end
     end
@@ -16,44 +19,51 @@ module Extensions::Attachable::ActiveRecord::Base
     def has_one_attachment # rubocop:disable Style/PredicateName
       include SingularInstanceMethods
 
-      validates :attachments, length: { maximum: 1 }
+      validates :attachment_references, length: { maximum: 1 }
 
-      has_many :attachments, as: :attachable, class_name: "::#{Attachment.name}",
-                             inverse_of: :attachable, dependent: :destroy, autosave: true
+      has_many :attachment_references, as: :attachable, class_name: "::#{AttachmentReference.name}",
+                                       inverse_of: :attachable, dependent: :destroy, autosave: true
     end
   end
 
   module SingularInstanceMethods
     ATTACHMENT_ATTRIBUTE = 'attachment'.freeze
 
-    def attachment
-      attachments.take
+    def attachment_reference
+      attachment_references.take
     end
+    # Attachment references can substitute attachments, so allow access using the `attachment`
+    # identifier.
+    alias_method :attachment, :attachment_reference
 
-    def attachment=(attachment)
-      return self.attachment if self.attachment == attachment
+    def attachment_reference=(attachment_reference)
+      return self.attachment_reference if self.attachment_reference == attachment_reference
+
       attribute_will_change!(ATTACHMENT_ATTRIBUTE)
-      attachments.clear
-      attachments << attachment if attachment
+      attachment_references.clear
+      attachment_references << attachment_reference if attachment_reference
     end
+    alias_method :attachment=, :attachment_reference=
 
-    def build_attachment(attributes = {})
+    def build_attachment_reference(attributes = {})
       attribute_will_change!(ATTACHMENT_ATTRIBUTE)
-      attachments.clear
-      attachments.build(attributes)
+      attachment_references.clear
+      attachment_references.build(attributes)
     end
+    alias_method :build_attachment, :build_attachment_reference
 
-    def attachment_changed?
-      changed.include?('attachment'.freeze)
+    def attachment_reference_changed?
+      changed.include?(ATTACHMENT_ATTRIBUTE)
     end
+    alias_method :attachment_changed?, :attachment_reference_changed?
 
     def file=(file)
       if file
-        build_attachment(file_upload: file)
+        build_attachment_reference(file: file)
       else
-        return nil if attachment.nil?
+        return nil if attachment_reference.nil?
         attribute_will_change!(ATTACHMENT_ATTRIBUTE)
-        attachments.clear
+        attachment_references.clear
       end
     end
   end
