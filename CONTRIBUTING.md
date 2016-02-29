@@ -15,6 +15,10 @@ Run `yard stats --list-undoc` to find which methods need documenting.
 Run tests using `rake spec`. You need [PhantomJS](http://phantomjs.org/) to run the tests. We use
 lvh.me to simulate tenants, thanks [levicook](http://github.com/levicook)!
 
+Tests should always use `I18n.t()` to indicate translatable strings. In test mode, the strings
+are stubbed out so variable interpolations are not used. This is to simplify testing and reducing
+the brittleness of the tests against changing translations and arguments.
+
 Try to group tests according to their purpose. Feature tests should be namespaced using colons
 for tidiness (e.g. `Courses: Users`)
 
