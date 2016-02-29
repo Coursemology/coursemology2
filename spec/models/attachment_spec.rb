@@ -58,4 +58,28 @@ RSpec.describe Attachment do
       expect(tempfile).to be_closed
     end
   end
+
+  let(:file) { Rack::Test::UploadedFile.new(file_path) }
+  describe '.find_or_initialize_by' do
+    subject { Attachment.find_or_initialize_by(file: file) }
+
+    it 'finds or initializes an attachment from file' do
+      expect(subject).to be_present
+      expect(subject.file_upload.file).not_to be_nil
+    end
+
+    context 'when the file hash does not exist' do
+      let(:file) do
+        file = Tempfile.new('')
+        file.write(SecureRandom.hex)
+        file.close
+        file
+      end
+
+      it 'initializes an attachment' do
+        expect(subject).to be_new_record
+        expect(subject.file_upload.file).not_to be_nil
+      end
+    end
+  end
 end

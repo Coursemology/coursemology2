@@ -13,6 +13,35 @@ class Attachment < ActiveRecord::Base
   #   The path to the attachment contents.
   delegate :url, :path, to: :file_upload
 
+  class << self
+    # This is for supporting `find_or_initialize_by(file: file)`. It calculates the SHA256 hash
+    # of the file and returns the attachment which has the same hash. A new attachment will be
+    # built if no record matches the hash.
+    #
+    # @param [Hash] attributes The hash attributes with the file.
+    # @return [Attachment] The attachment which contains the file.
+    def find_or_initialize_by(attributes, &block)
+      file = attributes.delete(:file)
+      return super unless file
+
+      attributes[:name] = file_digest(file)
+      find_by(attributes) || new(attributes.reverse_merge(file_upload: file), &block)
+    end
+    # `find_or_create_by(file: file)` is not implemented.
+    private :find_or_create_by
+
+    private
+
+    # Get the SHA256 hash of the file.
+    #
+    # @param [File|ActionDispatch::Http::UploadedFile] The uploaded file.
+    # @return [String] the hash digest.
+    def file_digest(file)
+      # Get the actual file by #tempfile if the file is an `ActionDispatch::Http::UploadedFile`.
+      Digest::SHA256.file(file.try(:tempfile) || file).hexdigest
+    end
+  end
+
   # Opens the attachment for reading as a stream. The options are the same as those taken by
   # +IO.new+
   #
