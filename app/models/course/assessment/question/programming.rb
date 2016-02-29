@@ -35,6 +35,16 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
     'course/assessment/question/programming/programming'.freeze
   end
 
+  # This specifies the attachment which was imported.
+  #
+  # This is used by the +Course::Assessment::Question::ProgrammingImportService+ to indicate
+  # the actual attachment which was imported. This does not run the evaluator again when the
+  # record is saved.
+  def imported_attachment=(attachment)
+    self.attachment = attachment
+    clear_attribute_changes(:attachment)
+  end
+
   private
 
   # Copies the template files from this question to the specified answer.

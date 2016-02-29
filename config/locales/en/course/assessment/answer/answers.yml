@@ -2,8 +2,15 @@ en:
   course:
     assessment:
       answer:
-        answer:
+        worksheet:
           comments: 'Comments'
+        guided:
+          continue: 'Continue'
+          reattempt: 'Reattempt'
+        grading:
           grading: 'Grading'
           maximum_grade: '/ %{maximum_grade}'
           grade: 'Grade: %{grade} / %{maximum_grade}'
+        explanation:
+          correct: 'Correct!'
+          wrong: 'Wrong!'

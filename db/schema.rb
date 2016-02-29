@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
@@ -12,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160126094510) do
+ActiveRecord::Schema.define(version: 20160226013208) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -246,6 +245,11 @@ ActiveRecord::Schema.define(version: 20160126094510) do
   end
   add_index "course_assessment_answer_programming_files", ["answer_id", "filename"], name: "index_course_assessment_answer_programming_files_filename", unique: true, case_sensitive: false
 
+  create_table "course_assessment_answer_programming_file_annotations", force: :cascade do |t|
+    t.integer "file_id", null: false, index: {name: "fk__course_assessment_answe_09c4b638af92d0f8252d7cdef59bd6f3"}, foreign_key: {references: "course_assessment_answer_programming_files", name: "fk_course_assessment_answer_ed21459e7a2a5034dcf43a14812cb17d", on_update: :no_action, on_delete: :no_action}
+    t.integer "line",    null: false
+  end
+
   create_table "course_assessment_answer_text_responses", force: :cascade do |t|
     t.text "answer_text"
   end
@@ -285,28 +289,30 @@ ActiveRecord::Schema.define(version: 20160126094510) do
     t.text    "explanation"
   end
 
-  create_table "course_assessment_tag_groups", force: :cascade do |t|
+  create_table "course_assessment_skill_branches", force: :cascade do |t|
+    t.integer  "course_id",   null: false, index: {name: "fk__course_assessment_skill_branches_course_id"}, foreign_key: {references: "courses", name: "fk_course_assessment_skill_branches_course_id", on_update: :no_action, on_delete: :no_action}
     t.string   "title",       limit: 255, null: false
     t.text     "description", null: false
-    t.integer  "creator_id",  null: false, index: {name: "fk__course_assessment_tag_groups_creator_id"}, foreign_key: {references: "users", name: "fk_course_assessment_tag_groups_creator_id", on_update: :no_action, on_delete: :no_action}
-    t.integer  "updater_id",  null: false, index: {name: "fk__course_assessment_tag_groups_updater_id"}, foreign_key: {references: "users", name: "fk_course_assessment_tag_groups_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "creator_id",  null: false, index: {name: "fk__course_assessment_skill_branches_creator_id"}, foreign_key: {references: "users", name: "fk_course_assessment_skill_branches_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id",  null: false, index: {name: "fk__course_assessment_skill_branches_updater_id"}, foreign_key: {references: "users", name: "fk_course_assessment_skill_branches_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
 
-  create_table "course_assessment_tags", force: :cascade do |t|
-    t.integer  "tag_group_id", index: {name: "fk__course_assessment_tags_tag_group_id"}, foreign_key: {references: "course_assessment_tag_groups", name: "fk_course_assessment_tags_tag_group_id", on_update: :no_action, on_delete: :no_action}
-    t.string   "title",        limit: 255, null: false
-    t.text     "description",  null: false
-    t.integer  "creator_id",   null: false, index: {name: "fk__course_assessment_tags_creator_id"}, foreign_key: {references: "users", name: "fk_course_assessment_tags_creator_id", on_update: :no_action, on_delete: :no_action}
-    t.integer  "updater_id",   null: false, index: {name: "fk__course_assessment_tags_updater_id"}, foreign_key: {references: "users", name: "fk_course_assessment_tags_updater_id", on_update: :no_action, on_delete: :no_action}
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+  create_table "course_assessment_skills", force: :cascade do |t|
+    t.integer  "course_id",       null: false, index: {name: "fk__course_assessment_skills_course_id"}, foreign_key: {references: "courses", name: "fk_course_assessment_skills_course_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "skill_branch_id", index: {name: "fk__course_assessment_skills_skill_branch_id"}, foreign_key: {references: "course_assessment_skill_branches", name: "fk_course_assessment_skills_skill_branch_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "title",           limit: 255, null: false
+    t.text     "description",     null: false
+    t.integer  "creator_id",      null: false, index: {name: "fk__course_assessment_skills_creator_id"}, foreign_key: {references: "users", name: "fk_course_assessment_skills_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id",      null: false, index: {name: "fk__course_assessment_skills_updater_id"}, foreign_key: {references: "users", name: "fk_course_assessment_skills_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
-  create_table "course_assessment_questions_tags", force: :cascade do |t|
-    t.integer "question_id", null: false, index: {name: "course_assessment_question_tags_question_index"}, foreign_key: {references: "course_assessment_questions", name: "fk_course_assessment_questions_tags_question_id", on_update: :no_action, on_delete: :no_action}
-    t.integer "tag_id",      null: false, index: {name: "course_assessment_question_tags_tag_index"}, foreign_key: {references: "course_assessment_tags", name: "fk_course_assessment_questions_tags_tag_id", on_update: :no_action, on_delete: :no_action}
+  create_table "course_assessment_questions_skills", force: :cascade do |t|
+    t.integer "question_id", null: false, index: {name: "course_assessment_question_skills_question_index"}, foreign_key: {references: "course_assessment_questions", name: "fk_course_assessment_questions_skills_question_id", on_update: :no_action, on_delete: :no_action}
+    t.integer "skill_id",    null: false, index: {name: "course_assessment_question_skills_skill_index"}, foreign_key: {references: "course_assessment_skills", name: "fk_course_assessment_questions_skills_skill_id", on_update: :no_action, on_delete: :no_action}
   end
 
   create_table "course_condition_achievements", force: :cascade do |t|

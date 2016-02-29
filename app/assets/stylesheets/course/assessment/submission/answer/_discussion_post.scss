@@ -1,0 +1,25 @@
+@mixin course-assessment-submission-discussion {
+  .discussion_post { // scss-lint:disable SelectorFormat
+    margin-bottom: 1em;
+
+    .user {
+      float: left;
+      margin: 0 1em 0 0;
+      padding-top: 4px;
+
+      h5 {
+        font-size: $font-size-base;
+        margin: 0;
+      }
+    }
+
+    .timestamp {
+      color: $text-muted;
+      font-size: $font-size-small;
+    }
+  }
+
+  .replies {
+    margin-left: 5em;
+  }
+}

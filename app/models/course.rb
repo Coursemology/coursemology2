@@ -32,6 +32,10 @@ class Course < ActiveRecord::Base
   has_many :assessment_categories, class_name: Course::Assessment::Category.name,
                                    dependent: :destroy, inverse_of: :course
   has_many :assessments, through: :assessment_categories
+  has_many :assessment_skills, class_name: Course::Assessment::Skill.name,
+                               dependent: :destroy
+  has_many :assessment_skill_branches, class_name: Course::Assessment::SkillBranch.name,
+                                       dependent: :destroy
   has_many :assessment_programming_evaluations,
            class_name: Course::Assessment::ProgrammingEvaluation.name, dependent: :destroy,
            inverse_of: :course

@@ -1,0 +1,26 @@
+@import 'discussion_post';
+
+.course-assessment-submission-submissions.edit {
+  table.codehilite {
+    tr {
+      span.add-annotation {
+        display: none;
+        float: left;
+        height: 1em;
+        margin-left: -1em;
+        position: relative;
+        width: 1em;
+      }
+
+      &:hover {
+        span.add-annotation {
+          display: inline;
+        }
+      }
+
+      td.line-annotation {
+        @include course-assessment-submission-discussion;
+      }
+    }
+  }
+}

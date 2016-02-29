@@ -1,8 +1,9 @@
 = page_header format_inline_text(@topic.title) do
   = render 'controls'
 
-- @posts.each do |post|
-  = render partial: 'course/forum/posts/post', locals: { post: post, show_buttons: false }
+= render partial: @topic.topic, locals: { post_partial: 'course/forum/posts/post',
+                                          post_locals: { show_buttons: false } }
+
 hr
 
 h3 = t('.post_reply')

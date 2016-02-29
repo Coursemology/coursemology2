@@ -30,6 +30,8 @@
     editor.setTheme('ace/theme/' + options['theme']);
     editor.getSession().setMode('ace/mode/' + options['lang']);
 
+    editor.setOptions({ readOnly: !!options.readOnly });
+
     return editor;
   }
 
@@ -102,7 +104,8 @@
 
     return this.each(function() {
       var $this = $(this);
-      var elementOptions = $.extend({}, options, { 'lang': $this[0].lang });
+      var elementOptions = $.extend({}, options, { lang: this.lang,
+                                                   readOnly: $this[0].readOnly });
       var $editor = findOrBuildEditorContainer($this, elementOptions);
 
       $this.hide();

@@ -1,0 +1,9 @@
+= div_for(comment) do
+  div.user
+    h5 = link_to_user(comment.creator)
+
+  div.content
+    = format_html(comment.text)
+
+  div.timestamp
+    = format_datetime(comment.created_at)

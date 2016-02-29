@@ -2,6 +2,7 @@
 class Course::Assessment::Answer < ActiveRecord::Base
   include Workflow
   actable
+  acts_as :discussion_topic, class_name: Course::Discussion::Topic.name
 
   workflow do
     state :attempting do
@@ -30,18 +31,22 @@ class Course::Assessment::Answer < ActiveRecord::Base
                          inverse_of: :answer
 
   accepts_nested_attributes_for :actable
+  accepts_nested_attributes_for :discussion_topic
 
   # Creates an Auto Grading job for this answer. This saves the answer if there are pending changes.
   #
+  # @param [String|nil] redirect_to_path The path to be redirected after auto grading job was
+  #   finished.
   # @return [Course::Assessment::Answer::AutoGradingJob] The job instance.
   # @raise [ArgumentError] When the question cannot be auto graded.
   # @raise [IllegalStateError] When the answer has not been submitted.
-  def auto_grade!
+  def auto_grade!(redirect_to_path = nil)
     raise ArgumentError unless question.auto_gradable?
     raise IllegalStateError if attempting?
 
     ensure_auto_grading!
-    Course::Assessment::Answer::AutoGradingJob.perform_later(auto_grading).tap do |job|
+    Course::Assessment::Answer::AutoGradingJob.
+      perform_later(auto_grading, redirect_to_path).tap do |job|
       auto_grading.job_id = job.job_id
       save!
     end

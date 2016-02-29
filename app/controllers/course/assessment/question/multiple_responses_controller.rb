@@ -44,7 +44,8 @@ class Course::Assessment::Question::MultipleResponsesController < \
 
   def multiple_response_question_params
     params.require(:question_multiple_response).permit(
-      :title, :description, :maximum_grade, :question_type, :weight,
+      :title, :description, :maximum_grade, :weight, :question_type,
+      skill_ids: [],
       options_attributes: [:_destroy, :id, :correct, :option, :explanation])
   end
 end

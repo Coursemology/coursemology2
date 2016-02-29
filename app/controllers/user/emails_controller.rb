@@ -32,6 +32,15 @@ class User::EmailsController < ApplicationController
     end
   end
 
+  def send_confirmation
+    if @email.confirmed?
+      redirect_to user_emails_path, warning: t('.already_confirmed', email: @email.email)
+    else
+      @email.send_confirmation_instructions
+      redirect_to user_emails_path, success: t('.success', email: @email.email)
+    end
+  end
+
   private
 
   def email_params

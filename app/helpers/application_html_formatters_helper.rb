@@ -26,6 +26,14 @@ module ApplicationHTMLFormattersHelper
                                            DefaultPipeline.filters,
                                            DefaultHTMLPipelineOptions)
 
+  # The Code formatter options to use.
+  DefaultCodePipelineOptions = DefaultPipelineOptions.merge(css_table_class: 'table').freeze
+
+  # The Code formatter pipeline.
+  DefaultCodePipeline = HTML::Pipeline.new(DefaultPipeline.filters +
+                                           [PreformattedTextLineNumbersFilter],
+                                           DefaultCodePipelineOptions)
+
   # Replaces the Rails sanitizer with the one configured with HTML Pipeline.
   def sanitize(text)
     format_with_pipeline(HTMLSanitizerPipeline, text)
@@ -48,20 +56,24 @@ module ApplicationHTMLFormattersHelper
     format_with_pipeline(DefaultHTMLPipeline, text)
   end
 
-  # Syntax highlights the given code fragment.
+  # Syntax highlights and adds lines numbers to the given code fragment.
+  #
+  # This filter will normalise all line endings to Unix format (\n) for use with the Rouge
+  # highlighter.
   #
   # @param [String] code The code to syntax highlight.
   # @param [Coursemology::Polyglot::Language] language The language to highlight the code block
   #   with.
   def format_code_block(code, language = nil)
     code = html_escape(code) unless code.html_safe?
+    code = code.gsub(/\r\n|\r/, "\n")
     code = content_tag(:pre, lang: language ? language.rouge_lexer : nil) do
       content_tag(:code) do
         code
       end
     end
 
-    format_with_pipeline(DefaultPipeline, code)
+    format_with_pipeline(DefaultCodePipeline, code)
   end
 
   private

@@ -1,0 +1,13 @@
+en:
+  course:
+    assessment:
+      skill_branches:
+        new:
+          header: 'New Skill Branch'
+        create:
+          success: 'Skill Branch %{title} was created.'
+        update:
+          success: 'Skill Branch %{title} was updated.'
+        destroy:
+          success: 'Skill Branch %{skill_branch} was deleted.'
+          failure: 'Could not delete skill branch: %{error}'

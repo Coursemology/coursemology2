@@ -13,9 +13,9 @@ RSpec.feature 'Courses: Registration' do
       visit course_path(course)
 
       expect(page).to have_text(course.description)
-      expect(page).to have_button('.register')
+      expect(page).to have_button(I18n.t('course.user_registrations.registration.register'))
 
-      click_button('.register')
+      click_button I18n.t('course.user_registrations.registration.register')
       expect(current_path).to eq(course_path(course))
 
       expect(page).not_to have_button('.register')
@@ -27,7 +27,7 @@ RSpec.feature 'Courses: Registration' do
         visit course_path(course)
 
         expect(page).to have_text(course.description)
-        expect(page).not_to have_button('.register')
+        expect(page).not_to have_button('course.user_registrations.registration.register')
       end
     end
   end

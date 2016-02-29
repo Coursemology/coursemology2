@@ -79,6 +79,7 @@ Rails.application.routes.draw do
   namespace :user do
     resources :emails, only: [:index, :create, :destroy] do
       post 'set_primary', on: :member
+      post 'send_confirmation', on: :member
     end
     resource :profile, only: [:edit, :update]
   end
@@ -155,10 +156,27 @@ Rails.application.routes.draw do
             resources :text_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :programming, only: [:new, :create, :edit, :update, :destroy]
           end
-          resources :submissions, only: [:create, :edit, :update] do
-            post :auto_grade, on: :member
+          scope module: :submission do
+            resources :submissions, only: [:create, :edit, :update] do
+              post :auto_grade, on: :member
+
+              scope module: :answer do
+                resources :answers, only: [] do
+                  namespace :programming do
+                    resources :files, only: [] do
+                      resources :annotations, only: [:create]
+                    end
+                  end
+                end
+              end
+            end
           end
           concerns :conditional
+
+          collection do
+            resources :skills, as: :assessments_skills, except: [:show]
+            resources :skill_branches, as: :assessments_skill_branches, except: [:index, :show]
+          end
         end
       end
       resources :levels, except: [:show, :edit, :update]
@@ -208,6 +226,10 @@ Rails.application.routes.draw do
           get 'download', on: :member
           resources :materials, path: 'files'
         end
+      end
+
+      resources :course_users, only: [] do
+        resources :experience_points_records, only: [:index]
       end
     end
   end

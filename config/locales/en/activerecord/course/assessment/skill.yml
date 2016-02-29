@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/assessment/skill:
+          attributes:
+            course:
+              consistent_course: 'must belong to the same course'

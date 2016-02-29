@@ -17,6 +17,37 @@ RSpec.describe Course::Assessment do
     let(:assessment) { create(:assessment, *assessment_traits, course: course) }
     let(:assessment_traits) { [] }
 
+    describe 'validations' do
+      context 'when it is not a draft' do
+        context 'when it has no questions' do
+          subject { build(:assessment, draft: false) }
+
+          it 'adds a :no_questions error on :draft' do
+            expect(subject.valid?).to be(false)
+            expect(subject.errors[:draft]).to include(I18n.t('activerecord.errors.models.' \
+            'course/assessment.no_questions'))
+          end
+        end
+
+        context 'when it has questions' do
+          subject { build(:assessment, :with_all_question_types, draft: true) }
+          it { is_expected.to be_valid }
+        end
+      end
+
+      context 'when it is a draft' do
+        context 'when it has no questions' do
+          subject { build(:assessment, draft: true) }
+          it { is_expected.to be_valid }
+        end
+
+        context 'when it has questions' do
+          subject { build(:assessment, :with_all_question_types, draft: true) }
+          it { is_expected.to be_valid }
+        end
+      end
+    end
+
     describe 'callbacks' do
       describe 'after assessment was initialized' do
         subject { build(:assessment) }
@@ -113,6 +144,9 @@ RSpec.describe Course::Assessment do
           it 'returns the first question' do
             expect(assessment.questions.step(submission, 2)).
               to contain_exactly(assessment.questions.first)
+
+            expect(assessment.questions.step(submission, -1)).
+              to contain_exactly(assessment.questions.first)
           end
         end
 
@@ -123,21 +157,76 @@ RSpec.describe Course::Assessment do
             answer.save
           end
 
-          it 'returns the first unanswered question' do
-            expect(assessment.questions.step(submission, 2)).
-              to contain_exactly(assessment.questions.second)
+          context 'when index is inaccessible' do
+            it 'returns the first unanswered question' do
+              expect(assessment.questions.step(submission, 1)).
+                to contain_exactly(assessment.questions.second)
+            end
           end
+
+          context 'when index is less than 0' do
+            it 'returns the first question' do
+              expect(assessment.questions.step(submission, -1)).
+                to contain_exactly(assessment.questions.first)
+            end
+          end
+
+          context 'when index is accessible' do
+            it 'returns the question at given index' do
+              expect(assessment.questions.step(submission, 0)).
+                to contain_exactly(assessment.questions.first)
+            end
+          end
+        end
+      end
+
+      describe '#next_unanswered' do
+        let(:assessment_traits) { [:with_all_question_types] }
+        let(:submission) { create(:course_assessment_submission, assessment: assessment) }
+
+        subject { assessment.questions.next_unanswered(submission) }
+        context 'when there is no answers' do
+          it { is_expected.to eq(assessment.questions.first) }
+        end
+
+        context 'when the first question is answered correctly' do
+          before do
+            answer = assessment.questions.first.attempt(submission)
+            answer.correct = true
+            answer.save
+          end
+
+          it { is_expected.to eq(assessment.questions.second) }
+        end
+
+        context 'when all questions have been answered correctly' do
+          before do
+            assessment.questions.attempt(submission).each do |answer|
+              answer.correct = true
+              answer.save
+            end
+          end
+
+          it { is_expected.to be_nil }
         end
       end
     end
 
     describe '#maximum_grade' do
-      let(:assessment_traits) { [:with_all_question_types] }
+      context 'when it has questions' do
+        let(:assessment_traits) { [:with_all_question_types] }
 
-      it 'returns the maximum grade' do
-        maximum_grade = self.assessment.questions.map(&:maximum_grade).reduce(0, :+)
+        it 'returns the maximum grade' do
+          maximum_grade = self.assessment.questions.map(&:maximum_grade).reduce(0, :+)
 
-        expect(assessment.maximum_grade).to eq(maximum_grade)
+          expect(assessment.maximum_grade).to eq(maximum_grade)
+        end
+      end
+
+      context 'when it does not have any question' do
+        it 'returns 0' do
+          expect(assessment.maximum_grade).to eq(0)
+        end
       end
     end
 

@@ -1,0 +1,4 @@
+- posts_locals = { posts: topic.posts.ordered_topologically }
+- posts_locals[:post_partial] = post_partial if defined?(post_partial)
+- posts_locals[:post_locals] = post_locals if defined?(post_locals)
+= render partial: 'course/discussion/posts', locals: posts_locals

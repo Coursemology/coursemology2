@@ -1,0 +1,10 @@
+en:
+  course:
+    assessment:
+      answer:
+        text_responses:
+          solution:
+            solutions: 'Solutions'
+            solution_type: :'course.assessment.question.text_responses.form.solution_type'
+            solution: :'course.assessment.question.text_responses.form.solution'
+            grade: :'course.assessment.question.text_responses.form.grade'

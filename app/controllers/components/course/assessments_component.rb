@@ -21,7 +21,17 @@ class Course::AssessmentsComponent < SimpleDelegator
   end
 
   def admin_sidebar_items
-    []
+    return [] unless can?(:manage, Course::Assessment::Skill.new(course: current_course))
+
+    [
+      {
+        key: :assessments_skills,
+        title: t('course.assessment.skills.sidebar_title'),
+        type: :admin,
+        weight: 3,
+        path: course_assessments_skills_path(current_course)
+      }
+    ]
   end
 
   def admin_settings_items

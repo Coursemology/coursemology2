@@ -34,11 +34,12 @@ RSpec.feature 'User: Emails' do
       invalid_email = 'test@example'
       valid_email = build(:user_email).email
       fill_in 'user_email_email', with: invalid_email
-      click_button 'add'
+
+      click_button I18n.t('user.emails.index.add')
       expect(page).to have_selector('div.alert-danger')
 
       fill_in 'user_email_email', with: valid_email
-      click_button 'add'
+      click_button I18n.t('user.emails.index.add')
       expect(page).to have_selector('tr td', text: valid_email)
     end
 
@@ -55,6 +56,12 @@ RSpec.feature 'User: Emails' do
       email_to_be_set_as_primary = confirmed_emails.sample
       find_link(nil, href: set_primary_user_email_path(email_to_be_set_as_primary)).click
       expect(email_to_be_set_as_primary.reload).to be_primary
+    end
+
+    scenario 'I can request a new confirmation email' do
+      find_link(nil, href: send_confirmation_user_email_path(unconfirmed_email)).click
+      expect(page).to have_selector('div.alert.alert-success',
+                                    text: I18n.t('user.emails.send_confirmation.success'))
     end
   end
 end

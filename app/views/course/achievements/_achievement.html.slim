@@ -10,7 +10,7 @@
 
   th
     = link_to format_inline_text(achievement.title),
-              course_achievement_path(current_course, achievement)
+      course_achievement_path(current_course, achievement)
     - if achievement.draft?
       small title=achievement
         =< fa_icon(:'eye-slash')
@@ -19,7 +19,8 @@
     div.description
       = format_html(achievement.description)
 
-  td = achievement.specific_conditions.map(&:title).to_sentence
+  - if include_requirements
+    td = achievement.specific_conditions.map(&:title).to_sentence
 
   td
     div.btn-group

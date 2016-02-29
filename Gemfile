@@ -47,6 +47,9 @@ gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
+# Internationalisation for JavaScript.
+gem 'i18n-js', '>= 3.0.0.rc1'
+
 # Use jQuery as the JavaScript library
 gem 'jquery-cdn'
 gem 'jquery-rails'
@@ -71,6 +74,8 @@ gem 'nprogress-rails'
 gem 'jbuilder'
 # Slim as the templating language
 gem 'slim-rails'
+# ejs for client-side templates
+gem 'ejs'
 # High Voltage for static pages
 gem 'high_voltage'
 # Paginator for Rails
@@ -129,6 +134,13 @@ group :ci do
   gem 'codeclimate-test-reporter'
 end
 
+# This is used only when producing Production assets. Deals with things like minifying JavaScript
+# source files/image assets.
+group :assets do
+  # Compress image assets
+  gem 'image_optim'
+end
+
 group :production do
   # Puma will be our app server
   gem 'puma'
@@ -160,12 +172,14 @@ gem 'themes_on_rails', '>= 0.3.1'
 
 # Forms made easy for Rails
 gem 'simple_form'
-gem 'simple_form-bootstrap'
+gem 'simple_form-bootstrap', '>= 1.3.0'
 # Dynamic nested forms
 gem 'cocoon'
 gem 'momentjs-rails', '>= 2.8.1'
 gem 'bootstrap3-datetimepicker-rails'
 gem 'bootstrap-select-rails'
+gem 'bootstrap_tokenfield_rails'
+gem 'twitter-typeahead-rails'
 gem 'ace-rails-ap'
 
 # Using CarrierWave for file uploads

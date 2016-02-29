@@ -1,6 +1,9 @@
 = div_for(course, class: ['col-sm-6', 'col-md-4', 'col-lg-3']) do
   = link_to course_path(course) do
-    div.thumbnail
+    div.thumbnail.text-center
+      div.course-logo
+        = display_course_logo(course)
       div.caption
-        h2 = format_inline_text(course.title)
-        = format_html(course.description)
+        / TODO: Truncate text when text truncator is implemented for HTML pipeline
+        h3 = format_inline_text(course.title)
+        p = format_html(course.description)

@@ -3,7 +3,7 @@ class Course::Assessment::Question < ActiveRecord::Base
   actable
 
   belongs_to :assessment, inverse_of: :questions
-  has_and_belongs_to_many :tags
+  has_and_belongs_to_many :skills
 
   default_scope { order(weight: :asc) }
 
@@ -40,5 +40,12 @@ class Course::Assessment::Question < ActiveRecord::Base
   def attempt(submission)
     return actable.attempt(submission) if actable && actable.self_respond_to?(:attempt)
     raise NotImplementedError, 'Questions must implement the #attempt method for submissions.'
+  end
+
+  # Test if the question is the last question of the assessment.
+  #
+  # @return [Boolean] True if the question is the last question, otherwise False.
+  def last_question?
+    assessment.questions.last == self
   end
 end

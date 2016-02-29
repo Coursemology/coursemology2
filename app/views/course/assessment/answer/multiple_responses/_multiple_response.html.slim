@@ -1,5 +1,12 @@
 - question = multiple_response.question.specific
 h2 = format_inline_text(question.title)
 = format_html(question.description)
-= f.association :options, as: :check_boxes, collection: question.options,
-                          label_method: :option, label: false
+- readonly = cannot?(:update, multiple_response.answer)
+= f.association :options, as: :course_assessment_answer_multiple_response,
+                          collection: question.options,
+                          display_solution: can?(:grade, multiple_response.answer),
+                          label_method: :option, label: false, disabled: readonly
+
+- if f.object.auto_grading && f.object.auto_grading.result
+  = render partial: 'course/assessment/answer/explanation',
+           locals: { answer: f.object }

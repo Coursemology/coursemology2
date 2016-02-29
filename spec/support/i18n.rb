@@ -34,7 +34,7 @@ RSpec.configure do |config|
       # @param [String] key The key to check.
       # @return [Boolean]
       def always_return_actual?(key)
-        key.start_with?('errors.', 'support.', 'number.')
+        key.start_with?('errors.', 'support.', 'number.', 'javascript.')
       end
     end
     I18n.backend = StubbedI18nBackend.new

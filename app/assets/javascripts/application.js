@@ -10,6 +10,7 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require i18n/translations
 //= require bootstrap-sprockets
 //= require jquery_ujs
 //= require jquery-ui/sortable
@@ -20,6 +21,8 @@
 //= require moment
 //= require bootstrap-datetimepicker
 //= require bootstrap-select
+//= require twitter/typeahead
+//= require bootstrap-tokenfield
 //= require simple_form-bootstrap
 //= require ace-rails-ap
 //= require coursemology/polyglot/ace-modes

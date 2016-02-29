@@ -18,6 +18,12 @@ module Capybara::TestGroupHelpers
       result = find('form' + attribute_selector)
       selector ? result.find(selector) : result
     end
+
+    def wait_for_ajax
+      Timeout.timeout(Capybara.default_max_wait_time) do
+        sleep 0.1 until page.evaluate_script('jQuery.active').zero?
+      end
+    end
   end
 end
 

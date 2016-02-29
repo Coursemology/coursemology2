@@ -57,7 +57,7 @@ RSpec.feature 'System: Administration: Users' do
 
         # Search by username
         fill_in 'search', with: user_name
-        click_button 'layouts.search_form.search_button'
+        click_button I18n.t('layouts.search_form.search_button')
 
         users_to_search.each { |user| expect(page).to have_content_tag_for(user) }
         expect(all('.user').count).to eq(2)
@@ -65,7 +65,7 @@ RSpec.feature 'System: Administration: Users' do
         # Search by email
         random_user = User.order('RANDOM()').first
         fill_in 'search', with: random_user.email
-        click_button 'layouts.search_form.search_button'
+        click_button I18n.t('layouts.search_form.search_button')
 
         expect(page).to have_content_tag_for(random_user)
         expect(all('.user').count).to eq(1)

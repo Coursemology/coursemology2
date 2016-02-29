@@ -13,7 +13,7 @@ RSpec.feature 'Course: Forum: Post: Management' do
     context 'As a Course Manager' do
       let(:user) { create(:administrator) }
       scenario 'I can see posts' do
-        posts = create_list(:post, 2, topic: topic.acting_as)
+        posts = create_list(:course_discussion_post, 2, topic: topic.acting_as)
         visit course_forum_topic_path(course, forum, topic)
         posts.each do |post|
           expect(page).to have_content_tag_for(post)
@@ -39,8 +39,9 @@ RSpec.feature 'Course: Forum: Post: Management' do
         end
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(topic.reload.posts.last.title).to eq(I18n.t('course.discussion.posts.reply_title',
-                                                           title: topic.title))
+        expect(topic.reload.posts.last.title).to \
+          eq(I18n.t('activerecord.attributes.course/discussion/post.title_reply_template',
+                    title: topic.title))
         expect(topic.reload.posts.last.text).to eq('test')
         expect(topic.reload.subscriptions.where(user: user).count).to eq(1)
       end
@@ -71,7 +72,7 @@ RSpec.feature 'Course: Forum: Post: Management' do
       end
 
       scenario 'I can delete a topic' do
-        post = create(:post, topic: topic.acting_as)
+        post = create(:course_discussion_post, topic: topic.acting_as)
         visit course_forum_topic_path(course, forum, topic)
 
         find_link(nil, href: course_forum_topic_post_path(course, forum, topic, post)).click
@@ -106,8 +107,9 @@ RSpec.feature 'Course: Forum: Post: Management' do
         end
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(topic.reload.posts.last.title).to eq(I18n.t('course.discussion.posts.reply_title',
-                                                           title: post.title))
+        expect(topic.reload.posts.last.title).to \
+          eq(I18n.t('activerecord.attributes.course/discussion/post.title_reply_template',
+                    title: post.title))
         expect(topic.reload.posts.last.text).to eq('test')
         expect(topic.reload.posts.last.parent).to eq(post)
       end

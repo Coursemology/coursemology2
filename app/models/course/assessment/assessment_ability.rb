@@ -4,6 +4,7 @@ module Course::Assessment::AssessmentAbility
     if user
       allow_students_show_assessments
       allow_students_attempt_assessment
+      allow_students_update_own_submission
       allow_staff_manage_assessments
       allow_staff_grade_submissions
       allow_auto_grader_programming_evaluations
@@ -22,6 +23,16 @@ module Course::Assessment::AssessmentAbility
     { tab: { category: course_staff_hash } }
   end
 
+  def submission_attempting_hash(user)
+    { workflow_state: 'attempting' }.tap do |result|
+      result.reverse_merge(course_user: { user_id: user.id }) if user
+    end
+  end
+
+  def submission_submitted_or_graded_hash
+    { workflow_state: ['submitted', 'graded'] }
+  end
+
   def allow_students_show_assessments
     can :read, Course::Assessment, assessment_all_course_users_hash
   end
@@ -33,9 +44,12 @@ module Course::Assessment::AssessmentAbility
       )
     end
     can :create, Course::Assessment::Submission, course_user: { user_id: user.id }
-    can :update, Course::Assessment::Submission, course_user: { user_id: user.id },
-                                                 workflow_state: 'attempting'
+    can :update, Course::Assessment::Submission, submission_attempting_hash(user)
     can :read, Course::Assessment::Submission, course_user: { user_id: user.id }
+  end
+
+  def allow_students_update_own_submission
+    can :update, Course::Assessment::Answer, submission: submission_attempting_hash(user)
   end
 
   def allow_staff_manage_assessments
@@ -50,8 +64,10 @@ module Course::Assessment::AssessmentAbility
 
   def allow_staff_grade_submissions
     can :read, Course::Assessment::Submission, assessment: assessment_course_staff_hash
-    can :grade, Course::Assessment::Submission, assessment: assessment_course_staff_hash,
-                                                workflow_state: ['submitted', 'graded']
+    can :grade, Course::Assessment::Submission, submission_submitted_or_graded_hash.merge(
+      assessment: assessment_course_staff_hash)
+    can :grade, Course::Assessment::Answer, submission: submission_submitted_or_graded_hash.merge(
+      assessment: assessment_course_staff_hash)
   end
 
   def allow_auto_grader_programming_evaluations

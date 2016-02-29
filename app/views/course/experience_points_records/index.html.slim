@@ -1,0 +1,10 @@
+= page_header t('.header', name: display_course_user(@course_user))
+
+table.table.levels-list.table-hover
+  thead
+    tr
+      th = Course::ExperiencePointsRecord.human_attribute_name(:points_awarded)
+      th = Course::ExperiencePointsRecord.human_attribute_name(:reason)
+      th = Course::ExperiencePointsRecord.human_attribute_name(:awarder)
+  tbody
+    = render @experience_points_records

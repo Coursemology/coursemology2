@@ -70,6 +70,12 @@ en:
             new: :'course.assessment.question.text_responses.new.header'
           programming:
             new: :'course.assessment.question.programming.new.header'
+        skills:
+          new: :'course.assessment.skills.new.header'
+          index: :'course.assessment.skills.index.header'
+        skill_branches:
+          index: :'breadcrumbs.course.assessment.skills.index'
+          new: :'course.assessment.skill_branches.new.header'
       groups:
         index: :'course.groups.index.header'
         new: :'course.groups.new.header'

@@ -1,0 +1,10 @@
+h3 = t('.comments')
+div.comments
+  = render partial: answer.discussion_topic,
+           locals: { post_partial: 'course/assessment/answer/comment' }
+
+  = base_answer_form.simple_fields_for :discussion_topic do |discussion_topic_form|
+    - new_post = new_comments_post(discussion_topic_form.object)
+    = discussion_topic_form.simple_fields_for :posts, new_post do |discussion_post_form|
+      = discussion_post_form.hidden_field :parent_id
+      = discussion_post_form.input :text, label: false, input_html: { class: 'comment' }

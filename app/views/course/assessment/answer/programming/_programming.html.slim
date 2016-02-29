@@ -8,3 +8,6 @@ div.files
                             find_selector: 'this', insert_using: 'after'
   = f.simple_fields_for :files do |files_form|
     = render file_fields_path, f: files_form
+
+= render partial: 'course/assessment/answer/programming/test_cases',
+         locals: { question: question, answer: programming }

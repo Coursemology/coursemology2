@@ -21,8 +21,8 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
     describe '#show' do
       let(:forum) { create(:forum, course: course) }
       let!(:topic) { create(:forum_topic, forum: forum) }
-      let!(:first_topic_post) { create(:post, topic: topic.acting_as) }
-      let!(:second_topic_post) { create(:post, topic: topic.acting_as) }
+      let!(:first_topic_post) { create(:course_discussion_post, topic: topic.acting_as) }
+      let!(:second_topic_post) { create(:course_discussion_post, topic: topic.acting_as) }
 
       it 'preloads the latest post for each topics of the forum' do
         get :show, course_id: course, id: forum

@@ -19,4 +19,15 @@
       }
     }
   }
+
+  #course-sidebar-logo {
+    .image > img {
+      height: $course-layout-sidebar-logo;
+      width: $course-layout-sidebar-logo;
+    }
+  }
+
+  .user {
+    margin: 0.5em 0;
+  }
 }

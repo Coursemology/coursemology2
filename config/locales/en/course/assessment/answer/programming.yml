@@ -7,3 +7,9 @@ en:
             add_file: 'Add file'
           file_fields:
             delete: 'Delete file'
+          test_cases:
+            passed: 'Passed'
+            private: :'course.assessment.question.programming.form_test_cases.private'
+            public: :'course.assessment.question.programming.form_test_cases.public'
+            test_cases: :'course.assessment.question.programming.form_test_cases.test_cases'
+            failed_message: 'You have failed to pass one or more private test cases.'

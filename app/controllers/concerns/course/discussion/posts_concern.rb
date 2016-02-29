@@ -6,7 +6,7 @@ module Course::Discussion::PostsConcern
     before_action :set_topic
     authorize_resource :discussion_topic
     load_and_authorize_resource :post, through: :discussion_topic,
-                                       class: Course::Discussion::Post.name
+                                       class: Course::Discussion::Post.name, parent: false
   end
 
   def create
@@ -29,8 +29,7 @@ module Course::Discussion::PostsConcern
 
   # Render a new post in a separate page
   def reply
-    @reply_post = @discussion_topic.posts.build(title: t('course.discussion.posts.reply_title',
-                                                         title: @post.title))
+    @reply_post = @post.children.build
   end
 
   protected

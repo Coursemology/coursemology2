@@ -8,6 +8,13 @@
 //## Variables for colors used in Coursemology.
 $course-achievement-granted-bg: $state-success-bg !default;
 $course-achievement-locked-bg: $gray-lighter !default;
+$course-assessment-submission-answer-correct-border-color: $state-success-border !default;
+$course-assessment-submission-answer-correct-border-radius: $border-radius-base !default;
+$course-assessment-submission-answer-correct-bg: $state-success-bg !default;
+$course-assessment-submission-answer-correct-border-text: $state-success-text !default;
+$course-discussion-post-border-color: $panel-default-border !default;
+$course-discussion-post-border-radius: $border-radius-base !default;
+$course-discussion-post-shadow-color: $gray-lighter !default;
 
 //== Fonts
 //
@@ -30,3 +37,5 @@ $picture-medium: 100px !default;
 $course-achievement-form-badge:   $picture-small !default;
 
 $course-admin-form-logo: $picture-small !default;
+$course-layout-sidebar-logo: $picture-medium !default;
+$course-course-listing-logo: $picture-medium !default;
