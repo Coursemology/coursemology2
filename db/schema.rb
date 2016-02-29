@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160226013208) do
+ActiveRecord::Schema.define(version: 20160229082515) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,12 +46,20 @@ ActiveRecord::Schema.define(version: 20160226013208) do
   end
 
   create_table "attachments", force: :cascade do |t|
-    t.string   "name",            limit: 255, null: false
+    t.string   "name",        limit: 255, null: false, index: {name: "index_attachments_on_name", unique: true}
+    t.text     "file_upload", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "attachment_references", force: :cascade do |t|
     t.integer  "attachable_id"
-    t.string   "attachable_type", limit: 255, index: {name: "index_attachments_on_attachable_type_and_attachable_id", with: ["attachable_id"]}
-    t.text     "file_upload",     null: false
-    t.integer  "creator_id",      null: false, index: {name: "fk__attachments_creator_id"}, foreign_key: {references: "users", name: "fk_attachments_creator_id", on_update: :no_action, on_delete: :no_action}
-    t.integer  "updater_id",      null: false, index: {name: "fk__attachments_updater_id"}, foreign_key: {references: "users", name: "fk_attachments_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "attachable_type", limit: 255, index: {name: "fk__attachment_references_attachable_id", with: ["attachable_id"]}
+    t.integer  "attachment_id",   null: false, index: {name: "fk__attachment_references_attachment_id"}, foreign_key: {references: "attachments", name: "fk_attachment_references_attachment_id", on_update: :no_action, on_delete: :no_action}
+    t.string   "name",            limit: 255, null: false
+    t.datetime "expires_at"
+    t.integer  "creator_id",      null: false, index: {name: "fk__attachment_references_creator_id"}, foreign_key: {references: "users", name: "fk_attachment_references_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id",      null: false, index: {name: "fk__attachment_references_updater_id"}, foreign_key: {references: "users", name: "fk_attachment_references_updater_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end

@@ -5,7 +5,7 @@ RSpec.describe Attachment do
   let(:file_path) { File.join(Rails.root, '/spec/fixtures/files/text.txt') }
   subject { build(:attachment, file: file_path) }
 
-  it { is_expected.to belong_to(:attachable) }
+  it { is_expected.to have_many(:attachment_references).dependent(:destroy) }
   it { is_expected.to respond_to(:url) }
   it { is_expected.to respond_to(:path) }
 

@@ -4,7 +4,7 @@ class Attachment < ActiveRecord::Base
 
   mount_uploader :file_upload, FileUploader
 
-  belongs_to :attachable, polymorphic: true
+  has_many :attachment_references, inverse_of: :attachment, dependent: :destroy
 
   # @!attribute [r] url
   #   The URL to the attachment contents.
