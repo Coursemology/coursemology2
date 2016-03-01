@@ -1,4 +1,6 @@
-<div class="annotation-form" data-action="answers/<%= answerId %>/programming/files/<%= programmingFileId %>/annotations" data-method="post">
+<% formActionPath = Routes.course_assessment_submission_answer_programming_file_annotations_path(
+    courseId, assessmentId, submissionId, answerId, programmingFileId) %>
+<div class="annotation-form" data-action="<%= formActionPath %>" data-method="post">
   <input type="hidden" name="annotation[line]" value="<%= lineNumber %>" />
   <div class="form-group text">
     <input type="hidden" name="discussion_post[id]" />
