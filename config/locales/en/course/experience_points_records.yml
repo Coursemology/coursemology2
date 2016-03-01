@@ -3,3 +3,5 @@ en:
     experience_points_records:
       index:
         header: 'Experience Points History for %{name}'
+      destroy:
+        success: 'Experience points record "%{reason}" was deleted.'

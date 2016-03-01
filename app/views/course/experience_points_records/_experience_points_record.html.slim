@@ -2,3 +2,5 @@
   td = experience_points_record.points_awarded
   td = format_inline_text(experience_points_record.reason)
   td = link_to_user(experience_points_record.creator)
+  - if experience_points_record.manually_awarded? && can?(:destroy, experience_points_record)
+    td = delete_button([current_course, experience_points_record.course_user, experience_points_record])

@@ -6,5 +6,6 @@ table.table.levels-list.table-hover
       th = Course::ExperiencePointsRecord.human_attribute_name(:points_awarded)
       th = Course::ExperiencePointsRecord.human_attribute_name(:reason)
       th = Course::ExperiencePointsRecord.human_attribute_name(:awarder)
+      th
   tbody
     = render @experience_points_records
