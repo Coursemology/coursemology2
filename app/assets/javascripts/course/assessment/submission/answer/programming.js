@@ -4,7 +4,8 @@
 (function($) {
   /* global JST */
   'use strict';
-  var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ';
+  var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ' +
+    'div.answer_programming_file ';
 
   /**
    * Renders a programming submission template.
