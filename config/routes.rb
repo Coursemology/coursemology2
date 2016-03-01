@@ -165,6 +165,9 @@ Rails.application.routes.draw do
                   namespace :programming do
                     resources :files, only: [] do
                       resources :annotations, only: [:create]
+                      resources :lines, only: [] do
+                        resources :posts, only: [:destroy]
+                      end
                     end
                   end
                 end

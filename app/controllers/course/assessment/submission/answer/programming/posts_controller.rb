@@ -4,6 +4,10 @@ class Course::Assessment::Submission::Answer::Programming::PostsController < \
 
   include Course::Discussion::PostsConcern
 
+  def destroy
+    render status: :bad_request unless super
+  end
+
   private
 
   def line_param

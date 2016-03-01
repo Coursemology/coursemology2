@@ -68,6 +68,29 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
 
         expect(page).to have_content_tag_for(answer_discussion_topic.posts.first)
       end
+
+      scenario 'I can delete my annotations', js: true do
+        answers = assessment.questions.attempt(submission)
+        file = answers.first.actable.files.first
+        file.content = "test\n\n\n\nlines"
+        answers.each(&:save!)
+        submission.finalise!
+        submission.publish!
+        submission.save!
+
+        annotation = file.annotations.build(line: 1)
+        post = create(:course_discussion_post, topic: annotation.discussion_topic, creator: user)
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        expect(page).to have_content_tag_for(post)
+        within find(content_tag_selector(post)) do
+          find('.delete').click
+        end
+
+        wait_for_ajax
+        expect(page).not_to have_content_tag_for(post)
+      end
     end
   end
 end
