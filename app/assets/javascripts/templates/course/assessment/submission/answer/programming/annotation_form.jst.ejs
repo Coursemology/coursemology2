@@ -2,7 +2,7 @@
   <input type="hidden" name="annotation[line]" value="<%= lineNumber %>" />
   <div class="form-group text">
     <input type="hidden" name="discussion_post[id]" />
-    <input type="hidden" name="discussion_post[parent_id]" />
+    <input type="hidden" name="discussion_post[parent_id]" value="<%= parentId %>" />
     <textarea name="discussion_post[text]"
               class="form-control text"
               placeholder="<%= I18n.t('javascript.course.assessment.submission.answer.programming.annotation_form.text.placeholder') %>"
