@@ -82,7 +82,8 @@ RSpec.feature 'Course: Forum: Post: Management' do
       end
 
       scenario 'I can reply to a post' do
-        post = topic.posts.last
+        create_list(:course_discussion_post, 2, topic: topic.topic)
+        post = topic.posts.reload.sample
 
         visit course_forum_topic_path(course, forum, topic)
 
@@ -112,6 +113,22 @@ RSpec.feature 'Course: Forum: Post: Management' do
                     title: post.title))
         expect(topic.reload.posts.last.text).to eq('test')
         expect(topic.reload.posts.last.parent).to eq(post)
+      end
+
+      scenario 'I can reply to a topic' do
+        create_list(:course_discussion_post, 2, topic: topic.topic)
+        parent_post = topic.posts.reload.ordered_topologically.last
+        expect(parent_post).not_to be_nil
+        visit course_forum_topic_path(course, forum, topic)
+
+        post_content = 'test post content'
+        fill_in 'text', with: post_content
+        click_button 'submit'
+
+        new_post = topic.posts.reload.last
+        expect(new_post.text).to eq(post_content)
+        expect(new_post.parent).to eq(parent_post)
+        expect(page).to have_content_tag_for(new_post)
       end
     end
   end

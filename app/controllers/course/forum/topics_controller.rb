@@ -11,7 +11,7 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
 
   def show
     @topic.viewed_by(current_user)
-    @reply_post = @topic.posts.last.children.build
+    @reply_post = @topic.posts.build
   end
 
   def new
