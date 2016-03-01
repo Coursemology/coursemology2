@@ -1,4 +1,5 @@
-= page_header
+- add_breadcrumb(@post.title)
+= page_header(@post.title)
 
 = render partial: 'form',
          locals: { url: course_forum_topic_post_path(current_course, @forum, @topic, @post),
