@@ -1,7 +1,8 @@
 # frozen_string_literal: true
-class Course::Forum::PostsController < Course::Forum::Controller
+class Course::Forum::PostsController < Course::Forum::ComponentController
   before_action :load_topic
   authorize_resource :topic
+  before_action :add_topic_breadcrumb
 
   include Course::Discussion::PostsConcern
 
@@ -54,5 +55,9 @@ class Course::Forum::PostsController < Course::Forum::Controller
 
   def load_topic
     @topic ||= @forum.topics.friendly.find(topic_id_param)
+  end
+
+  def add_topic_breadcrumb
+    add_breadcrumb @topic.title, course_forum_topic_path(current_course, @forum, @topic)
   end
 end

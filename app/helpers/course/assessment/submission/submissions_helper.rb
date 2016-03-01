@@ -11,8 +11,7 @@ module Course::Assessment::Submission::SubmissionsHelper
     new_post = topic.posts.find(&:new_record?)
     return new_post if new_post
 
-    parent_collection = topic.posts.last ? topic.posts.last.children : topic.posts
-    parent_collection.build
+    topic.posts.build
   end
 
   # Return the CSS class of the explanation based on the correctness of the answer.
