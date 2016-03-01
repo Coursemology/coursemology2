@@ -1,3 +1,5 @@
 = page_header
 
-= render 'form', url: course_forum_topic_post_path(current_course, @forum, @topic, @post), post: @post
+= render partial: 'form',
+         locals: { url: course_forum_topic_post_path(current_course, @forum, @topic, @post),
+                   post: @post }

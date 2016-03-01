@@ -8,4 +8,5 @@ hr
 
 h3 = t('.post_reply')
 = render partial: 'course/forum/posts/form',
-         locals: { url: course_forum_topic_posts_path(current_course, @forum, @topic), post: @reply_post }
+         locals: { post: @reply_post,
+                   url: course_forum_topic_posts_path(current_course, @forum, @topic), }
