@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::Answer::Programming::Controller < \
-  Course::Assessment::Submission::Controller
+  Course::Assessment::Submission::Answer::Controller
 
-  load_resource :answer, class: Course::Assessment::Answer.name, through: :submission
-  load_resource :actable, class: Course::Assessment::Answer::Programming.name,
-                          singleton: true, through: :answer
   before_action :set_programming_answer
   load_resource :file, class: Course::Assessment::Answer::ProgrammingFile.name,
                        through: :programming_answer
