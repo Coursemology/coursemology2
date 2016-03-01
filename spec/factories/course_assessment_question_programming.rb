@@ -8,6 +8,7 @@ FactoryGirl.define do
       template_package_deferred true # Set false to immediately assign the package to the question.
       template_file_count 1
       test_case_count 0
+      private_test_case_count 0
     end
 
     memory_limit 32
@@ -23,9 +24,15 @@ FactoryGirl.define do
                          'programming_question_template.zip'), 'rb') if template_package
     end
     test_cases do
-      test_case_count.downto(1).map do
+      public_test_cases = test_case_count.downto(1).map do
         build(:course_assessment_question_programming_test_case, question: nil)
       end
+
+      private_test_cases = private_test_case_count.downto(1).map do
+        build(:course_assessment_question_programming_test_case, :private, question: nil)
+      end
+
+      public_test_cases + private_test_cases
     end
 
     after(:build) do |question, evaluator|
@@ -36,6 +43,7 @@ FactoryGirl.define do
 
     trait :auto_gradable do
       test_case_count 1
+      private_test_case_count 1
     end
   end
 end

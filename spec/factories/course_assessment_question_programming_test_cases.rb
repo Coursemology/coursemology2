@@ -7,5 +7,9 @@ FactoryGirl.define do
     sequence(:identifier) { |n| "test_id_#{base_time}_#{n}" }
     description ''
     public true
+
+    trait :private do
+      public false
+    end
   end
 end
