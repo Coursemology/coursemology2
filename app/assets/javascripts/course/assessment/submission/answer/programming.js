@@ -4,7 +4,8 @@
 (function($) {
   /* global JST */
   'use strict';
-  var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ';
+  var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ' +
+    'div.answer_programming_file ';
 
   /**
    * Renders a programming submission template.
@@ -76,6 +77,7 @@
    * Finds the table row representing the line content at the given line number.
    *
    * @param {jQuery} $code The table containing the code to search.
+   * @param {Number} lineNumber The line number to search for.
    * @returns {jQuery} The row containing the line content.
    */
   function findCodeLine($code, lineNumber) {
@@ -93,6 +95,28 @@
   function findAnnotationCell($code, programmingFileId, lineNumber) {
     return $code.find('td#line_annotation_file_' + programmingFileId + '_line_' + lineNumber +
                       '_annotation');
+  }
+
+  /**
+   * Gets the answer ID for the given row within the code listing table.
+   *
+   * @param {jQuery} $element The element to find the associated answer for.
+   * @return {Number} The ID for the answer the line is associated with.
+   */
+  function answerIdForRow($element) {
+    var $answer = $element.parents('.answer:first');
+    return $answer.data('answerId');
+  }
+
+  /**
+   * Gets the programming file ID for the given row within the code listing table.
+   *
+   * @param {jQuery} $element The element to find the associated answer for.
+   * @return {Number} The ID for the programming file the line is associated with.
+   */
+  function programmingFileIdForRow($element) {
+    var $programmingFile = $element.parents('.answer_programming_file');
+    return $programmingFile.data('programmingFileId');
   }
 
   /**
@@ -117,12 +141,10 @@
    */
   function onAddProgrammingAnnotation(e) {
     var $target = $(e.target);
-    var $answer = $target.parents('.answer:first');
-    var $programmingFile = $target.parents('.answer_programming_file');
     var $line = $target.parents('tr:first');
 
-    var answerId = $answer.data('answerId');
-    var programmingFileId = $programmingFile.data('programmingFileId');
+    var answerId = answerIdForRow($target);
+    var programmingFileId = programmingFileIdForRow($target);
     var lineNumber = $line.find('.line-number').data('lineNumber');
 
     var $code = $line.parents('table:first');
@@ -270,6 +292,44 @@
   function onAnnotationFormSubmitFail(_, form) {
     var $form = $(form);
     findFormFields($form).prop('disabled', false);
+
+    // TODO: Implement error recovery.
+  }
+
+  /**
+   * Handles the annotation delete button click event.
+   *
+   * @param e The event object.
+   */
+  function onAnnotationDelete(e) {
+    var $element = $(e.target);
+
+    var answerId = answerIdForRow($element);
+    var programmingFileId = programmingFileIdForRow($element);
+    var lineNumber = $element.parents('.line-annotation:first').data('lineNumber');
+
+    var $post = $element.parents('.discussion_post:first');
+    var postId = $post.data('postId');
+
+    $.ajax({ url: 'answers/' + answerId + '/programming/files/' + programmingFileId + '/lines/' +
+                  lineNumber + '/posts/' + postId,
+             method: 'delete' }).
+      done(function(data) { onAnnotationDeleteSuccess(data, $element); }).
+      fail(function(data) { onAnnotationDeleteFail(data, $element); });
+    e.preventDefault();
+  }
+
+  /**
+   * Handles the successful annotation delete event.
+   */
+  function onAnnotationDeleteSuccess() {
+  }
+
+  /**
+   * Handles the errored annotation delete event.
+   */
+  function onAnnotationDeleteFail() {
+    // TODO: Implement error recovery.
   }
 
   addProgrammingAnnotationLinks(document);
@@ -282,4 +342,6 @@
     onAnnotationFormResetted);
   $(document).on('click', DOCUMENT_SELECTOR + '.annotation-form input[type="submit"]',
     onAnnotationFormSubmitted);
+  $(document).on('click', DOCUMENT_SELECTOR + '.discussion_post .toolbar .delete',
+    onAnnotationDelete);
 })(jQuery);

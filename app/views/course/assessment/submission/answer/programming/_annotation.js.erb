@@ -1,0 +1,3 @@
+$('#<%= file_line_annotation_cell_id(annotation.file, annotation.line) %>').html(
+  '<%= escape_javascript(render partial: 'course/assessment/answer/programming/annotation_topic',
+                                locals: { annotation_topic: annotation.discussion_topic } ) %>');

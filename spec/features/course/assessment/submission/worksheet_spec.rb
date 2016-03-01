@@ -68,6 +68,22 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
           end
         end
       end
+
+      scenario 'I can delete comments', js: true do
+        assessment.questions.attempt(submission).each(&:save!)
+        comment_answer = submission.answers.first
+        comment_topic = comment_answer.discussion_topic
+        comment_post = create(:course_discussion_post, topic: comment_topic, creator: user)
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        within find(content_tag_selector(comment_post)) do
+          find('.delete').click
+        end
+
+        wait_for_ajax
+        expect(page).not_to have_content_tag_for(comment_post)
+      end
     end
   end
 end

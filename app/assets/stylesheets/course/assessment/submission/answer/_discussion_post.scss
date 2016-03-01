@@ -17,6 +17,11 @@
       color: $text-muted;
       font-size: $font-size-small;
     }
+
+    .toolbar {
+      // Hide the toolbars by default, they need script to function.
+      display: none;
+    }
   }
 
   .replies {
