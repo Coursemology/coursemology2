@@ -148,57 +148,57 @@
     var lineNumber = $line.find('.line-number').data('lineNumber');
 
     var $code = $line.parents('table:first');
-    findOrCreateAnnotationBox($code, answerId, programmingFileId, lineNumber);
+    var $cell = findOrCreateAnnotationCell($code, programmingFileId, lineNumber);
+    findOrCreateAnnotationForm($cell, answerId, programmingFileId, lineNumber);
   }
 
   /**
-   * Creates a annotation box for the user to enter his annotation.
+   * Creates a annotation form for the user to enter his annotation.
    *
-   * @param {jQuery} $code The table containing the code to search.
+   * @param {jQuery} $element The element to search for the form.
    * @param {Number} answerId The answer ID that the annotation is associated with.
    * @param {Number} programmingFileId The programming answer file ID that the annotation is
    *   associated with.
    * @param {Number} lineNumber The line number that the user is annotating.
-   * @return {jQuery} The annotation box which was found or created.
+   * @return {jQuery} The annotation form which was found or created.
    */
-  function findOrCreateAnnotationBox($code, answerId, programmingFileId, lineNumber) {
-    var $annotationCell = findOrCreateAnnotationCell($code, programmingFileId, lineNumber);
-    var $annotationBox = findAnnotationBox($annotationCell);
-    if ($annotationBox.length > 0) {
-      return $annotationBox;
+  function findOrCreateAnnotationForm($element, answerId, programmingFileId, lineNumber) {
+    var $annotationForm = findAnnotationForm($element);
+    if ($annotationForm.length > 0) {
+      return $annotationForm;
     }
 
-    return createAnnotationBox($annotationCell, answerId, programmingFileId, lineNumber);
+    return createAnnotationForm($element, answerId, programmingFileId, lineNumber);
   }
 
   /**
-   * Finds the annotation box in the given cell.
+   * Finds the annotation form in the given cell.
    *
-   * @param {jQuery} $annotationCell The annotation cell to search for the form.
-   * @return {jQuery} The annotation box which was found.
+   * @param {jQuery} $element The annotation cell to search for the form.
+   * @return {jQuery} The annotation form which was found.
    */
-  function findAnnotationBox($annotationCell) {
-    return $annotationCell.find('div.annotation-form');
+  function findAnnotationForm($element) {
+    return $element.find('> div.annotation-form');
   }
 
   /**
-   * Creates a annotation box for the user to enter his annotation.
+   * Creates a annotation form for the user to enter his annotation.
    *
-   * @param {jQuery} $annotationCell The annotation cell to search for the form.
+   * @param {jQuery} $element The element to search for the form.
    * @param {Number} answerId The answer ID that the annotation is associated with.
    * @param {Number} programmingFileId The programming answer file ID that the annotation is
    *   associated with.
    * @param {Number} lineNumber The line number that the user is annotating.
-   * @return {jQuery} The annotation box which was created.
+   * @return {jQuery} The annotation form which was created.
    */
-  function createAnnotationBox($annotationCell, answerId, programmingFileId, lineNumber) {
-    $annotationCell.append(render('annotation_form', {
+  function createAnnotationForm($element, answerId, programmingFileId, lineNumber) {
+    $element.append(render('annotation_form', {
       answerId: answerId,
       programmingFileId: programmingFileId,
       lineNumber: lineNumber
     }));
 
-    return findAnnotationBox($annotationCell);
+    return findAnnotationForm($element);
   }
 
   /**
