@@ -11,6 +11,28 @@ RSpec.describe Course::Discussion::Topic, type: :model do
     let(:user) { create(:user) }
     let(:topic) { create(:forum_topic) }
 
+    describe '#posts' do
+      describe '#reload' do
+        it 'removes its memoised result' do
+          posts = topic.posts.ordered_topologically
+          topic.posts.reload
+          expect(topic.posts.ordered_topologically).not_to be(posts)
+        end
+
+        context 'before the posts are ordered' do
+          it 'can be reloaded' do
+            topic.posts.reload
+          end
+        end
+      end
+
+      describe '#ordered_topologically' do
+        it 'memoises its result' do
+          expect(topic.posts.ordered_topologically).to be(topic.posts.ordered_topologically)
+        end
+      end
+    end
+
     describe '#subscribed_by?' do
       let(:another_user) { create(:user) }
       let!(:discussion_topic_subscription) do

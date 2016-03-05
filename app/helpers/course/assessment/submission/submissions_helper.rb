@@ -3,6 +3,14 @@ module Course::Assessment::Submission::SubmissionsHelper
   include Course::Assessment::Submission::SubmissionsGuidedHelper
   include Course::Assessment::Answer::ProgrammingHelper
 
+  # Gets the ID for the given answer's comments container.
+  #
+  # @param [Course::Assessment::Answer] answer The answer to get the ID for
+  # @return [String] The ID for the given answer's comments.
+  def comments_container_id(answer)
+    "course_assessment_submission_answer_#{answer.id}_comments"
+  end
+
   # Finds the comment being created/edited, or constructs a new one in reply to the latest post.
   #
   # @param [Course::Discussion::Topic] topic The topic being replied to.
@@ -11,8 +19,7 @@ module Course::Assessment::Submission::SubmissionsHelper
     new_post = topic.posts.find(&:new_record?)
     return new_post if new_post
 
-    parent_collection = topic.posts.last ? topic.posts.last.children : topic.posts
-    parent_collection.build
+    topic.posts.build
   end
 
   # Return the CSS class of the explanation based on the correctness of the answer.

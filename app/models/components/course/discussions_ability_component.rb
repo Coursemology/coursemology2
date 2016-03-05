@@ -6,6 +6,7 @@ module Course::DiscussionsAbilityComponent
     if user
       allow_course_users_show_topics
       allow_course_users_create_posts
+      allow_course_users_update_delete_own_post
     end
 
     super
@@ -19,5 +20,9 @@ module Course::DiscussionsAbilityComponent
 
   def allow_course_users_create_posts
     can :create, Course::Discussion::Post
+  end
+
+  def allow_course_users_update_delete_own_post
+    can [:update, :destroy], Course::Discussion::Post, creator_id: user.id
   end
 end

@@ -1,4 +1,9 @@
-= div_for(comment) do
+= div_for(comment, 'data-post-id' => comment.id) do
+  div.toolbar.pull-right
+    - if can?(:destroy, comment)
+      = link_to('#', class: ['delete']) do
+        = fa_icon 'trash'.freeze
+
   div.user
     h5 = link_to_user(comment.creator)
 

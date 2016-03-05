@@ -4,7 +4,8 @@
 (function($) {
   /* global JST */
   'use strict';
-  var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ';
+  var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ' +
+    'div.answer_programming_file ';
 
   /**
    * Renders a programming submission template.
@@ -76,6 +77,7 @@
    * Finds the table row representing the line content at the given line number.
    *
    * @param {jQuery} $code The table containing the code to search.
+   * @param {Number} lineNumber The line number to search for.
    * @returns {jQuery} The row containing the line content.
    */
   function findCodeLine($code, lineNumber) {
@@ -93,6 +95,28 @@
   function findAnnotationCell($code, programmingFileId, lineNumber) {
     return $code.find('td#line_annotation_file_' + programmingFileId + '_line_' + lineNumber +
                       '_annotation');
+  }
+
+  /**
+   * Gets the answer ID for the given row within the code listing table.
+   *
+   * @param {jQuery} $element The element to find the associated answer for.
+   * @return {Number} The ID for the answer the line is associated with.
+   */
+  function answerIdForRow($element) {
+    var $answer = $element.parents('.answer:first');
+    return $answer.data('answerId');
+  }
+
+  /**
+   * Gets the programming file ID for the given row within the code listing table.
+   *
+   * @param {jQuery} $element The element to find the associated answer for.
+   * @return {Number} The ID for the programming file the line is associated with.
+   */
+  function programmingFileIdForRow($element) {
+    var $programmingFile = $element.parents('.answer_programming_file');
+    return $programmingFile.data('programmingFileId');
   }
 
   /**
@@ -117,66 +141,67 @@
    */
   function onAddProgrammingAnnotation(e) {
     var $target = $(e.target);
-    var $answer = $target.parents('.answer:first');
-    var $programmingFile = $target.parents('.answer_programming_file');
     var $line = $target.parents('tr:first');
 
-    var answerId = $answer.data('answerId');
-    var programmingFileId = $programmingFile.data('programmingFileId');
+    var answerId = answerIdForRow($target);
+    var programmingFileId = programmingFileIdForRow($target);
     var lineNumber = $line.find('.line-number').data('lineNumber');
 
     var $code = $line.parents('table:first');
-    findOrCreateAnnotationBox($code, answerId, programmingFileId, lineNumber);
+    var $cell = findOrCreateAnnotationCell($code, programmingFileId, lineNumber);
+    findOrCreateAnnotationForm($cell, answerId, programmingFileId, lineNumber);
   }
 
   /**
-   * Creates a annotation box for the user to enter his annotation.
+   * Creates a annotation form for the user to enter his annotation.
    *
-   * @param {jQuery} $code The table containing the code to search.
+   * @param {jQuery} $element The element to search for the form.
    * @param {Number} answerId The answer ID that the annotation is associated with.
    * @param {Number} programmingFileId The programming answer file ID that the annotation is
    *   associated with.
    * @param {Number} lineNumber The line number that the user is annotating.
-   * @return {jQuery} The annotation box which was found or created.
+   * @param {Number} parentId The parent post ID that the annotation will be associated with.
+   * @return {jQuery} The annotation form which was found or created.
    */
-  function findOrCreateAnnotationBox($code, answerId, programmingFileId, lineNumber) {
-    var $annotationCell = findOrCreateAnnotationCell($code, programmingFileId, lineNumber);
-    var $annotationBox = findAnnotationBox($annotationCell);
-    if ($annotationBox.length > 0) {
-      return $annotationBox;
+  function findOrCreateAnnotationForm($element, answerId, programmingFileId, lineNumber, parentId) {
+    var $annotationForm = findAnnotationForm($element);
+    if ($annotationForm.length > 0) {
+      return $annotationForm;
     }
 
-    return createAnnotationBox($annotationCell, answerId, programmingFileId, lineNumber);
+    return createAnnotationForm($element, answerId, programmingFileId, lineNumber, parentId);
   }
 
   /**
-   * Finds the annotation box in the given cell.
+   * Finds the annotation form in the given cell.
    *
-   * @param {jQuery} $annotationCell The annotation cell to search for the form.
-   * @return {jQuery} The annotation box which was found.
+   * @param {jQuery} $element The annotation cell to search for the form.
+   * @return {jQuery} The annotation form which was found.
    */
-  function findAnnotationBox($annotationCell) {
-    return $annotationCell.find('div.annotation-form');
+  function findAnnotationForm($element) {
+    return $element.find('> div.annotation-form');
   }
 
   /**
-   * Creates a annotation box for the user to enter his annotation.
+   * Creates a annotation form for the user to enter his annotation.
    *
-   * @param {jQuery} $annotationCell The annotation cell to search for the form.
+   * @param {jQuery} $element The element to search for the form.
    * @param {Number} answerId The answer ID that the annotation is associated with.
    * @param {Number} programmingFileId The programming answer file ID that the annotation is
    *   associated with.
    * @param {Number} lineNumber The line number that the user is annotating.
-   * @return {jQuery} The annotation box which was created.
+   * @param {Number} parentId The parent post ID that the annotation will be associated with.
+   * @return {jQuery} The annotation form which was created.
    */
-  function createAnnotationBox($annotationCell, answerId, programmingFileId, lineNumber) {
-    $annotationCell.append(render('annotation_form', {
+  function createAnnotationForm($element, answerId, programmingFileId, lineNumber, parentId) {
+    $element.append(render('annotation_form', {
       answerId: answerId,
       programmingFileId: programmingFileId,
-      lineNumber: lineNumber
+      lineNumber: lineNumber,
+      parentId: parentId
     }));
 
-    return findAnnotationBox($annotationCell);
+    return findAnnotationForm($element);
   }
 
   /**
@@ -270,7 +295,67 @@
   function onAnnotationFormSubmitFail(_, form) {
     var $form = $(form);
     findFormFields($form).prop('disabled', false);
+
+    // TODO: Implement error recovery.
   }
+
+  /**
+   * Handles the annotation delete button click event.
+   *
+   * @param e The event object.
+   */
+  function onAnnotationDelete(e) {
+    var $element = $(e.target);
+
+    var answerId = answerIdForRow($element);
+    var programmingFileId = programmingFileIdForRow($element);
+    var lineNumber = $element.parents('.line-annotation:first').data('lineNumber');
+
+    var $post = $element.parents('.discussion_post:first');
+    var postId = $post.data('postId');
+
+    $.ajax({ url: 'answers/' + answerId + '/programming/files/' + programmingFileId + '/lines/' +
+                  lineNumber + '/posts/' + postId,
+             method: 'delete' }).
+      done(function(data) { onAnnotationDeleteSuccess(data, $element); }).
+      fail(function(data) { onAnnotationDeleteFail(data, $element); });
+    e.preventDefault();
+  }
+
+  /**
+   * Handles the successful annotation delete event.
+   */
+  function onAnnotationDeleteSuccess() {
+  }
+
+  /**
+   * Handles the errored annotation delete event.
+   */
+  function onAnnotationDeleteFail() {
+    // TODO: Implement error recovery.
+  }
+
+  /**
+   * Handles the annotation reply button click event.
+   *
+   * @param e The event object.
+   */
+  function onAnnotationReply(e) {
+    var $element = $(e.target);
+    var $post = $element.parents('.discussion_post:first');
+    var $replies = $post.next('div.replies');
+
+    var answerId = answerIdForRow($element);
+    var programmingFileId = programmingFileIdForRow($element);
+    var lineNumber = $element.parents('.line-annotation:first').data('lineNumber');
+    var postId = $post.data('postId');
+
+    var $form = findOrCreateAnnotationForm($replies, answerId, programmingFileId, lineNumber,
+                                           postId);
+    $form.find('textarea').focus();
+    e.preventDefault();
+  }
+
 
   addProgrammingAnnotationLinks(document);
   $(document).on('DOMNodeInserted', function(e) {
@@ -282,4 +367,8 @@
     onAnnotationFormResetted);
   $(document).on('click', DOCUMENT_SELECTOR + '.annotation-form input[type="submit"]',
     onAnnotationFormSubmitted);
+  $(document).on('click', DOCUMENT_SELECTOR + '.discussion_post .toolbar .delete',
+    onAnnotationDelete);
+  $(document).on('click', DOCUMENT_SELECTOR + '.discussion_post .toolbar .reply',
+    onAnnotationReply);
 })(jQuery);

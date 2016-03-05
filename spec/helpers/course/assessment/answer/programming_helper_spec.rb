@@ -17,7 +17,9 @@ RSpec.describe Course::Assessment::Answer::ProgrammingHelper do
         end
       end
 
+      before { controller.define_singleton_method(:current_user) { nil } }
       subject { helper.format_programming_answer_file(file, language) }
+
       context 'when given a file with no annotations' do
         let(:file) do
           build(:course_assessment_answer_programming_file, answer: nil, content: snippet)

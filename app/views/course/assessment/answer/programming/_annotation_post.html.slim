@@ -1,4 +1,11 @@
-= div_for(annotation_post) do
+= div_for(annotation_post, 'data-post-id' => annotation_post.id) do
+  div.toolbar.pull-right
+    => link_to('#', class: ['reply']) do
+      = fa_icon 'reply'.freeze
+    - if can?(:destroy, annotation_post)
+      = link_to('#', class: ['delete']) do
+        = fa_icon 'trash'.freeze
+
   div.user
     h5 = link_to_user(annotation_post.creator)
 

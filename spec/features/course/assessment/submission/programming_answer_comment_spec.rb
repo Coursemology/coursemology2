@@ -15,6 +15,18 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
 
     context 'As a course student' do
       let(:user) { student }
+      let(:answers) { assessment.questions.attempt(submission) }
+      let(:annotation) do
+        file = answers.first.actable.files.first
+        file.content = "test\n\n\n\nlines"
+        answers.each(&:save!)
+
+        submission.finalise!
+        submission.publish!
+        submission.save!
+
+        file.annotations.build(line: 1)
+      end
 
       scenario 'I can annotate my answer after submitting', js: true do
         visit edit_course_assessment_submission_path(course, assessment, submission)
@@ -67,6 +79,40 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         expect(answer_discussion_topic.posts.first.text).to eq(annotation)
 
         expect(page).to have_content_tag_for(answer_discussion_topic.posts.first)
+      end
+
+      scenario 'I can reply to an existing annotation', js: true do
+        post = create(:course_discussion_post, topic: annotation.discussion_topic, creator: user)
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+        within find(content_tag_selector(post)) do
+          find('.reply').click
+        end
+
+        annotation_text = 'reply annotation'
+        within find_form('.annotation-form') do
+          find_field('discussion_post[text]').set annotation_text
+          click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
+                              'annotation_form.submit')
+        end
+
+        wait_for_ajax
+        new_post = post.children.reload.last
+        expect(new_post.text).to eq(annotation_text)
+      end
+
+      scenario 'I can delete my annotations', js: true do
+        post = create(:course_discussion_post, topic: annotation.discussion_topic, creator: user)
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        expect(page).to have_content_tag_for(post)
+        within find(content_tag_selector(post)) do
+          find('.delete').click
+        end
+
+        wait_for_ajax
+        expect(page).not_to have_content_tag_for(post)
       end
     end
   end

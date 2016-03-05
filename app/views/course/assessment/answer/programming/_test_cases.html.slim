@@ -40,7 +40,8 @@ table.table.table-striped.table-hover
             - test_case_result = answer_test_results_hash[test_case]
             = fa_icon('check') if test_case_result && test_case_result.passed?
 
-- failed_private_test_cases = private_test_cases.select { |t| !test_case_result || !test_case_result.passed? }
+- failed_private_test_cases = private_test_cases. \
+    select { |t| !answer_test_results_hash[t] || !answer_test_results_hash[t].passed? }
 - if !failed_private_test_cases.empty? && answer.submission.attempting?
     div.panel.panel-danger
       div.panel-heading = t('.failed_message')
