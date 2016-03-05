@@ -137,7 +137,7 @@ GEM
     consistency_fail (0.3.4)
     coursemology-polyglot (0.1.0)
       activesupport (~> 4.2.0, >= 4.2.2)
-    coveralls (0.8.12)
+    coveralls (0.8.13)
       json (~> 1.8)
       simplecov (~> 0.11.0)
       term-ansicolor (~> 1.3)
