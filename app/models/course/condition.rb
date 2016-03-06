@@ -14,6 +14,16 @@ class Course::Condition < ActiveRecord::Base
   ].freeze
 
   class << self
+    # Finds all the conditionals for the given course.
+    #
+    # @param [Course] course The course with the conditionals to be retrieved.
+    # @return [Object] acts_as_conditionals objects belonging to the given course
+    def conditionals_for(course)
+      dependent_class_to_condition_class_mapping.keys.map do |conditional_name|
+        conditional_name.constantize.where(course_id: course)
+      end.flatten
+    end
+
     # Finds all conditionals that depend on the given object.
     #
     # @param [Course::Assessment, Course::Achievement] dependent_object An assessment or
