@@ -11,6 +11,10 @@ class Course::Announcement < ActiveRecord::Base
   scope :sorted_by_date, -> { order(start_at: :desc) }
   scope :sorted_by_sticky, -> { order(sticky: :desc) }
 
+  def to_partial_path
+    'course/announcements/announcement'
+  end
+
   private
 
   # Set default values
