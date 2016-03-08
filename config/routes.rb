@@ -125,10 +125,16 @@ Rails.application.routes.draw do
 
         get 'forums' => 'forum_settings#edit'
         patch 'forums' => 'forum_settings#update'
+
         namespace 'assessments' do
           resources :categories, only: [:new, :create, :destroy] do
             resources :tabs, only: [:new, :create, :destroy]
           end
+        end
+
+        namespace 'manual_award' do
+          resources :achievements, controller: '/course/user_achievements',
+                    only: [:index, :edit, :update]
         end
       end
 
