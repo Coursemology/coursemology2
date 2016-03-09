@@ -131,6 +131,8 @@ Arrange controller methods for Rails' default routes in the following order:
  6. `update`
  7. `destroy`
 
+Add all other non REST-ful controller actions after these methods.
+
 Arrange private controller methods in the following order:
  1. All `params` methods
  2. Callbacks - `before_action` and `after_action`  

@@ -3,24 +3,8 @@ class Course::UsersController < Course::ComponentController
   before_action :load_resource
   authorize_resource :course_user, through: :course, parent: false
   before_action :authorize_show!, only: [:students, :staff, :requests, :invitations]
-  before_action :authorize_edit!, except: [:students, :staff, :requests, :invitations]
+  before_action :authorize_edit!, only: [:update, :destroy]
   add_breadcrumb :index, :course_users_students_path
-
-  def students # :nodoc:
-    @course_users = @course_users.students.with_approved_state.includes(user: :emails)
-  end
-
-  def staff # :nodoc:
-    @course_users = @course_users.staff.with_approved_state.includes(user: :emails)
-  end
-
-  def requests # :nodoc:
-    @course_users = @course_users.with_requested_state.includes(user: :emails)
-  end
-
-  def invitations # :nodoc:
-    @course_users = @course_users.joins { invitation }.includes(invitation: :user_email)
-  end
 
   def update # :nodoc:
     if update_course_user(course_user_params)
@@ -38,6 +22,22 @@ class Course::UsersController < Course::ComponentController
     else
       redirect_to delete_redirect_path, danger: @course_user.errors.full_messages.to_sentence
     end
+  end
+
+  def students # :nodoc:
+    @course_users = @course_users.students.with_approved_state.includes(user: :emails)
+  end
+
+  def staff # :nodoc:
+    @course_users = @course_users.staff.with_approved_state.includes(user: :emails)
+  end
+
+  def requests # :nodoc:
+    @course_users = @course_users.with_requested_state.includes(user: :emails)
+  end
+
+  def invitations # :nodoc:
+    @course_users = @course_users.joins { invitation }.includes(invitation: :user_email)
   end
 
   private
