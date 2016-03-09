@@ -19,7 +19,7 @@ RSpec.describe Course::ControllerHelper do
     end
 
     describe '#link_to_course_user' do
-      let(:user) { build(:course_user) }
+      let(:user) { create(:course_user) }
       subject { helper.link_to_course_user(user) }
 
       it { is_expected.to have_tag('a') }
@@ -48,7 +48,7 @@ RSpec.describe Course::ControllerHelper do
       subject { helper.link_to_user(user) }
 
       context 'when a CourseUser is given' do
-        let(:user) { build(:course_user) }
+        let(:user) { create(:course_user) }
 
         it { is_expected.to eq(helper.link_to_course_user(user)) }
       end
