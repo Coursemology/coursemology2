@@ -17,13 +17,13 @@ RSpec.feature 'Courses: CourseUser Profile' do
 
       scenario "I can view a student's profile" do
         achievement
-        visit course_course_user_path(course, course_student)
+        visit course_user_path(course, course_student)
 
         expect(page).to have_text(course_student.name)
-        expect(page).to have_text(I18n.t('course.course_users.show.achievement_count'))
+        expect(page).to have_text(I18n.t('course.users.show.achievement_count'))
         expect(page).to have_link(nil, href: course_achievement_path(course, achievement))
         expect(page).
-          to have_text(I18n.t('course.course_users.show.experience_points_earned_html'))
+          to have_text(I18n.t('course.users.show.experience_points_earned_html'))
       end
     end
 
@@ -32,38 +32,38 @@ RSpec.feature 'Courses: CourseUser Profile' do
 
       scenario "I can view a staff's profile" do
         login_as(student_user, scope: :user)
-        visit course_course_user_path(course, course_teaching_assistant)
+        visit course_user_path(course, course_teaching_assistant)
 
         expect(page).to have_text(course_teaching_assistant.name)
-        expect(page).not_to have_text(I18n.t('course.course_users.show.achievement_count'))
+        expect(page).not_to have_text(I18n.t('course.users.show.achievement_count'))
         expect(page).
           not_to have_selector('h2', text: Course::Achievement.model_name.human.pluralize)
         expect(page).
-          not_to have_text(I18n.t('course.course_users.show.experience_points_earned_html'))
+          not_to have_text(I18n.t('course.users.show.experience_points_earned_html'))
       end
 
       scenario "I can view a coursemate's profile" do
         achievement
         login_as(student_user, scope: :user)
-        visit course_course_user_path(course, course_student)
+        visit course_user_path(course, course_student)
 
         expect(page).to have_text(course_student.name)
-        expect(page).to have_text(I18n.t('course.course_users.show.achievement_count'))
+        expect(page).to have_text(I18n.t('course.users.show.achievement_count'))
         expect(page).to have_link(nil, href: course_achievement_path(course, achievement))
         expect(page).
-          not_to have_text(I18n.t('course.course_users.show.experience_points_earned_html'))
+          not_to have_text(I18n.t('course.users.show.experience_points_earned_html'))
       end
 
       scenario 'I can view my own profile' do
         achievement
         login_as(course_student.user, scope: :user)
-        visit course_course_user_path(course, course_student)
+        visit course_user_path(course, course_student)
 
         expect(page).to have_text(course_student.name)
-        expect(page).to have_text(I18n.t('course.course_users.show.achievement_count'))
+        expect(page).to have_text(I18n.t('course.users.show.achievement_count'))
         expect(page).to have_link(nil, href: course_achievement_path(course, achievement))
         expect(page).
-          to have_text(I18n.t('course.course_users.show.experience_points_earned_html'))
+          to have_text(I18n.t('course.users.show.experience_points_earned_html'))
       end
     end
   end

@@ -41,3 +41,11 @@ en:
           register into this course.
         invitation_code: 'Invitation Code'
         status: 'Status'
+      show:
+        header: 'Profile'
+        role: 'Role: %{role}'
+        experience_points_earned_html: 'Experience points earned: %{points}'
+        achievement_count:
+          zero: 'No achievements'
+          one: 'One achievement'
+          other: '%{count} achievements'

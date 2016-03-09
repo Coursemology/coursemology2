@@ -209,7 +209,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :users, only: [:update, :destroy] do
+      resources :users, only: [:show, :update, :destroy] do
         get 'invite' => 'user_invitations#new', on: :collection
         post 'invite' => 'user_invitations#create', on: :collection
       end
@@ -232,7 +232,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :course_users, only: [:show] do
+      resources :course_users, only: [] do
         resources :experience_points_records, only: [:index]
       end
     end

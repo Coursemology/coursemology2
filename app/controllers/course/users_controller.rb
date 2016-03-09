@@ -5,6 +5,10 @@ class Course::UsersController < Course::ComponentController
   before_action :authorize_show!, only: [:students, :staff, :requests, :invitations]
   before_action :authorize_edit!, only: [:update, :destroy]
   add_breadcrumb :index, :course_users_students_path
+  helper Course::AchievementsHelper.name.sub(/Helper$/, '')
+
+  def show # :nodoc:
+  end
 
   def update # :nodoc:
     if update_course_user(course_user_params)
