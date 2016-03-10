@@ -1,5 +1,6 @@
 = div_for(comment, 'data-post-id' => comment.id) do
-  div.toolbar.pull-right
+  / Hide toolbar; only JavaScript-enabled clients will show this div.
+  div.toolbar.pull-right style='display: none'
     - if can?(:destroy, comment)
       = link_to('#', class: ['delete']) do
         = fa_icon 'trash'.freeze

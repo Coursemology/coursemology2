@@ -1,5 +1,6 @@
 = div_for(annotation_post, 'data-post-id' => annotation_post.id) do
-  div.toolbar.pull-right
+  / Hide toolbar; only JavaScript-enabled clients will show this div.
+  div.toolbar.pull-right style='display: none'
     => link_to('#', class: ['reply']) do
       = fa_icon 'reply'.freeze
     - if can?(:destroy, annotation_post)
