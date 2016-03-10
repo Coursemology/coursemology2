@@ -1,0 +1,6 @@
+en:
+  course:
+    leaderboard:
+      sidebar_title: :'course.leaderboard.index.header'
+      index:
+        header: 'Leaderboard'

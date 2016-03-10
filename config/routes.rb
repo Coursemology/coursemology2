@@ -125,6 +125,10 @@ Rails.application.routes.draw do
 
         get 'forums' => 'forum_settings#edit'
         patch 'forums' => 'forum_settings#update'
+
+        get 'leaderboard' => 'leaderboard_settings#edit'
+        patch 'leaderboard' => 'leaderboard_settings#update'
+
         namespace 'assessments' do
           resources :categories, only: [:new, :create, :destroy] do
             resources :tabs, only: [:new, :create, :destroy]
