@@ -19,7 +19,7 @@ module Course::ControllerHelper
   # @return [String] The user-visible string, including embedded HTML which will display the
   #   string within a link to bring to the User page.
   def link_to_course_user(user, options = {})
-    link_path = '' # TODO: Link to the user page.
+    link_path = course_user_path(user.course, user)
     link_to(link_path, options) do
       if block_given?
         yield(user)

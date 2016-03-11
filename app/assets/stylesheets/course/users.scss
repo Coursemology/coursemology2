@@ -8,4 +8,13 @@
       }
     }
   }
+
+  &.show {
+    .profile-picture {
+      .image > img {
+        height: $course-user-profile-picture;
+        margin-top: 1em;
+      }
+    }
+  }
 }
