@@ -17,4 +17,19 @@
       }
     }
   }
+
+  &.index {
+    .profile-picture {
+      text-align: center;
+
+      .image > img {
+        height: $course-user-listing-picture;
+        margin-top: 1em;
+      }
+    }
+
+    .user-name {
+      padding-top: 2em;
+    }
+  }
 }

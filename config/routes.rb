@@ -214,7 +214,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :users, only: [:show, :update, :destroy] do
+      resources :users, only: [:index, :show, :update, :destroy] do
         get 'invite' => 'user_invitations#new', on: :collection
         post 'invite' => 'user_invitations#create', on: :collection
       end

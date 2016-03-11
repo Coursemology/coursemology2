@@ -4,8 +4,11 @@ class Course::UsersController < Course::ComponentController
   authorize_resource :course_user, through: :course, parent: false
   before_action :authorize_show!, only: [:students, :staff, :requests, :invitations]
   before_action :authorize_edit!, only: [:update, :destroy]
-  add_breadcrumb :index, :course_users_students_path
+  add_breadcrumb :index, :course_users_path
   helper Course::Achievement::ControllerHelper.name.sub(/Helper$/, '')
+
+  def index # :nodoc:
+  end
 
   def show # :nodoc:
   end
@@ -56,6 +59,8 @@ class Course::UsersController < Course::ComponentController
     case params[:action]
     when 'invitations'
       @course_users ||= course_users
+    when 'index'
+      @course_users ||= course_users.students.includes(:user)
     when 'students', 'staff', 'requests'
       @course_users ||= course_users.includes(:user)
     else

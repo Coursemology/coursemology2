@@ -1,6 +1,7 @@
 en:
   course:
     users:
+      sidebar_title: :'course.users.index.header'
       role:
         student: 'Student'
         teaching_assistant: 'Teaching Assistant'
@@ -49,3 +50,5 @@ en:
           zero: 'No achievements'
           one: 'One achievement'
           other: '%{count} achievements'
+      index:
+        header: 'Students'
