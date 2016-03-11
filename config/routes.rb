@@ -240,6 +240,8 @@ Rails.application.routes.draw do
       resources :course_users, only: [] do
         resources :experience_points_records, only: [:index]
       end
+
+      resource :leaderboard, only: [:show]
     end
   end
 end

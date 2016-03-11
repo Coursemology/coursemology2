@@ -100,6 +100,8 @@ en:
         topics:
           new_topic: :'course.forum.topics.new_topic.header'
           edit_topic: :'course.forum.topics.edit_topic.header'
+      leaderboards:
+        index: :'course.leaderboard.title'
 
     system:
       admin:
