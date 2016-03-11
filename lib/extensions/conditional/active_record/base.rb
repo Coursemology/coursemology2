@@ -61,5 +61,8 @@ module Extensions::Conditional::ActiveRecord::Base
     def dependent_class
       raise NotImplementedError
     end
+
+    def resolve_conditional_for(_course_user)
+    end
   end
 end

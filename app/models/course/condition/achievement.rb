@@ -1,11 +1,17 @@
 # frozen_string_literal: true
 class Course::Condition::Achievement < ActiveRecord::Base
   acts_as_condition
+
+  # Trigger for resolving the conditional for a course user
+  Course::UserAchievement.after_save do |submission|
+    Course::Condition::Achievement.on_dependent_status_change(submission)
+  end
+
+  validate :validate_achievement_condition, if: :achievement_id_changed?
+
   belongs_to :achievement, class_name: Course::Achievement.name, inverse_of: false
 
   default_scope { includes(:achievement) }
-
-  validate :validate_achievement_condition, if: :achievement_id_changed?
 
   delegate :title, to: :achievement
   alias_method :dependent_object, :achievement
@@ -23,6 +29,11 @@ class Course::Condition::Achievement < ActiveRecord::Base
   # Class that the condition depends on.
   def self.dependent_class
     Course::Achievement.name
+  end
+
+  def self.on_dependent_status_change(achievement)
+    return if achievement.previous_changes.empty?
+    achievement.execute_after_commit { resolve_conditional_for(achievement.course_user) }
   end
 
   private

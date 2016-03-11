@@ -42,5 +42,9 @@ RSpec.describe 'Extension: Acts as Condition', type: :model do
       expect(subject).to respond_to(:dependent_class)
       expect { subject.dependent_class }.to raise_error(NotImplementedError)
     end
+
+    it 'implements .resolve_conditional_for' do
+      expect(subject).to respond_to(:resolve_conditional_for)
+    end
   end
 end
