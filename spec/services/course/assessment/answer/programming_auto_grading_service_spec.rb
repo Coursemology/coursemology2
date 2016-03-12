@@ -9,9 +9,9 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
         arguments = *answer_traits
         options = arguments.extract_options!
         options[:question_traits] = question_traits
+        options[:submission_traits] = submission_traits
         create(:course_assessment_answer_programming, :submitted, *arguments, options).answer
       end
-      let(:answer_traits) { [{ file_count: 1 }] }
       let(:question) { answer.question.actable }
       let(:question_traits) do
         [{
@@ -31,6 +31,8 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
       let(:question_test_report_path) do
         File.join(Rails.root, 'spec/fixtures/course/programming_single_test_suite_report.xml')
       end
+      let(:submission_traits) { [{ auto_grade: false }] }
+      let(:answer_traits) { [{ file_count: 1 }] }
       let(:grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
 
       before do

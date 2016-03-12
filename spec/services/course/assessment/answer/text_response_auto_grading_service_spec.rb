@@ -5,11 +5,15 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:answer) do
-      create(:course_assessment_answer_text_response, :submitted, *answer_traits,
-             question_traits: question_traits).answer
+      arguments = *answer_traits
+      options = arguments.extract_options!
+      options[:question_traits] = question_traits
+      options[:submission_traits] = submission_traits
+      create(:course_assessment_answer_text_response, :submitted, *arguments, options).answer
     end
     let(:question) { answer.question.actable }
     let(:question_traits) { nil }
+    let(:submission_traits) { [{ auto_grade: false }] }
     let(:answer_traits) { nil }
     let(:grading) do
       create(:course_assessment_answer_auto_grading, answer: answer)
