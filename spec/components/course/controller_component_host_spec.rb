@@ -62,11 +62,22 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
       end
     end
 
+    describe '#initialize' do
+      it 'instantiates all enabled components' do
+        expect(self.class::DummyCourseModule).to receive(:new).and_call_original
+        component_host
+      end
+    end
+
     describe '#components' do
       subject { component_host.components }
 
       it 'includes instances of every enabled component' do
         expect(subject.map(&:class)).to contain_exactly(*component_host.enabled_components)
+      end
+
+      it 'memoises its result' do
+        expect(component_host.components).to be(subject)
       end
     end
 
@@ -96,6 +107,10 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
 
     describe '#enabled_components' do
       subject { component_host.enabled_components }
+
+      it 'memoises its result' do
+        expect(component_host.enabled_components).to be(subject)
+      end
 
       context 'without preferences' do
         it 'returns the default enabled components' do
@@ -136,6 +151,10 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
 
     describe '#disabled_components' do
       subject { component_host.disabled_components }
+
+      it 'memoises its result' do
+        expect(component_host.disabled_components).to be(subject)
+      end
 
       context 'without preferences' do
         it 'returns empty' do
