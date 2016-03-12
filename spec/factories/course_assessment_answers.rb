@@ -8,7 +8,10 @@ FactoryGirl.define do
     end
 
     submission do
-      build(:course_assessment_submission, *submission_traits, assessment: question.assessment)
+      traits = *submission_traits
+      options = traits.extract_options!
+      options[:assessment] = question.assessment
+      build(:course_assessment_submission, *traits, options)
     end
     question { build(:course_assessment_question, assessment: assessment) }
 

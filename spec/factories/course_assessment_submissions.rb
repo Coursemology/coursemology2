@@ -5,6 +5,7 @@ FactoryGirl.define do
                                          aliases: [:submission] do
     transient do
       grader { User.stamper }
+      auto_grade true # Used only with any of the submitted or finalised traits.
     end
     assessment { build(:assessment, course: course) }
 
@@ -16,8 +17,9 @@ FactoryGirl.define do
 
     trait :submitted do
       attempting
-      after(:build) do |submission| # rubocop:disable Style/SymbolProc
+      after(:build) do |submission, evaluator| # rubocop:disable Style/SymbolProc
         submission.finalise!
+        answer.send(:clear_attribute_changes, :workflow_state) unless evaluator.auto_grade
       end
     end
 
