@@ -168,7 +168,8 @@ gem 'cancancan', github: 'lowjoel/cancancan', branch: 'issue-284'
 gem 'rails_utils', '>= 3.3.3'
 
 # Themes for instances
-gem 'themes_on_rails', '>= 0.3.1'
+gem 'themes_on_rails', '>= 0.3.1', github: 'lowjoel/themes_on_rails',
+                                   branch: 'cache-theme-templates'
 
 # Forms made easy for Rails
 gem 'simple_form'
