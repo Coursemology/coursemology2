@@ -41,6 +41,7 @@ class Course::Controller < ApplicationController
       Course::ControllerComponentHost.new(current_tenant.settings(:components),
                                           current_course.settings(:components), self)
   end
+  helper_method :current_component_host
 
   private
 

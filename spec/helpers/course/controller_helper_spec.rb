@@ -4,13 +4,22 @@ require 'rails_helper'
 RSpec.describe Course::ControllerHelper do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
+    let(:course) { create(:course) }
     before(:all) do
       # This is to fix https://github.com/rspec/rspec-rails/issues/1483
       Course::ControllerHelper.include ApplicationHelper
     end
+    before(:each) do
+      # This is to mock a Course::ComponentController
+      test = self
+      controller.define_singleton_method(:current_course) { test.course }
+      helper.singleton_class.class_eval do
+        delegate :current_course, :current_component_host, to: :controller
+      end
+    end
 
     describe '#display_course_user' do
-      let(:user) { build(:course_user) }
+      let(:user) { build(:course_user, course: course) }
       subject { helper.display_course_user(user) }
 
       it "displays the user's course name" do
@@ -19,7 +28,7 @@ RSpec.describe Course::ControllerHelper do
     end
 
     describe '#link_to_course_user' do
-      let(:user) { create(:course_user) }
+      let(:user) { create(:course_user, course: course) }
       subject { helper.link_to_course_user(user) }
 
       it { is_expected.to have_tag('a') }
@@ -40,11 +49,6 @@ RSpec.describe Course::ControllerHelper do
     end
 
     describe '#link_to_user' do
-      let(:course) { create(:course) }
-      before do
-        helper.controller.define_singleton_method(:current_course) {}
-        allow(helper.controller).to receive(:current_course).and_return(course)
-      end
       subject { helper.link_to_user(user) }
 
       context 'when a CourseUser is given' do
@@ -67,12 +71,12 @@ RSpec.describe Course::ControllerHelper do
     end
 
     describe '#display_course_user_badge' do
-      let(:user) { create(:course_user) }
+      let(:user) { create(:course_user, course: course) }
       subject { helper.display_course_user_badge(user) }
 
       context 'when the levels component is enabled in the course' do
         before do
-          helper.controller.define_singleton_method(:current_component_host) do
+          controller.define_singleton_method(:current_component_host) do
             { course_achievements_component: nil,
               course_levels_component: 'foo' }
           end
@@ -80,8 +84,8 @@ RSpec.describe Course::ControllerHelper do
 
         context 'when course user has experience points' do
           before do
-            create(:course_level, course: user.course, experience_points_threshold: 100)
-            create(:course_level, course: user.course, experience_points_threshold: 200)
+            create(:course_level, course: course, experience_points_threshold: 100)
+            create(:course_level, course: course, experience_points_threshold: 200)
             create(:course_experience_points_record, points_awarded: 140, course_user: user)
           end
 
@@ -105,7 +109,7 @@ RSpec.describe Course::ControllerHelper do
 
       context 'when the achievements component is enabled in the course' do
         before do
-          helper.controller.define_singleton_method(:current_component_host) do
+          controller.define_singleton_method(:current_component_host) do
             { course_achievements_component: 'bar',
               course_levels_component: nil }
           end
@@ -123,7 +127,7 @@ RSpec.describe Course::ControllerHelper do
 
       context 'when levels and achievement components are disabled' do
         before do
-          helper.controller.define_singleton_method(:current_component_host) do
+          controller.define_singleton_method(:current_component_host) do
             { course_achievements_component: nil,
               course_levels_component: nil }
           end
@@ -140,7 +144,6 @@ RSpec.describe Course::ControllerHelper do
     end
 
     describe '#display_course_logo' do
-      let(:course) { create(:course) }
       subject { helper.display_course_logo(course) }
 
       context 'when no course logo is uploaded' do
