@@ -48,6 +48,8 @@ class Course::ControllerComponentHost
 
   # Initializes the component host instance.
   #
+  # This loads all components.
+  #
   # @param [#settings] instance_settings Instance settings object.
   # @param [#settings] course_settings Course settings object.
   # @param context The context to execute all component instance methods on.
@@ -55,13 +57,15 @@ class Course::ControllerComponentHost
     @instance_settings = instance_settings
     @course_settings = course_settings
     @context = context
+
+    components
   end
 
   # Instantiates the enabled components.
   #
   # @return [Array] The instantiated enabled components.
   def components
-    enabled_components.map { |component| component.new(@context) }
+    @components ||= enabled_components.map { |component| component.new(@context) }
   end
 
   # Gets the component instance with the given key.
@@ -77,9 +81,11 @@ class Course::ControllerComponentHost
   #
   # @return [Array<Class>] array of enabled components
   def enabled_components
-    instance_enabled_components.select do |m|
-      enabled = @course_settings.settings(m.key).enabled
-      enabled.nil? ? m.enabled_by_default? : enabled
+    @enabled_components ||= begin
+      instance_enabled_components.select do |m|
+        enabled = @course_settings.settings(m.key).enabled
+        enabled.nil? ? m.enabled_by_default? : enabled
+      end
     end
   end
 
@@ -87,17 +93,19 @@ class Course::ControllerComponentHost
   #
   # @return [Array<Class>] array of disabled components
   def disabled_components
-    instance_enabled_components - enabled_components
+    @disabled_components ||= instance_enabled_components - enabled_components
   end
 
   # Returns the enabled components in instance.
   #
   # @return [Array<Class>] array of enabled components in instance
   def instance_enabled_components
-    all_components = Course::ControllerComponentHost.components
-    all_components.select do |m|
-      enabled = @instance_settings.settings(m.key).enabled
-      enabled.nil? ? m.enabled_by_default? : enabled
+    @instance_enabled_components ||= begin
+      all_components = Course::ControllerComponentHost.components
+      all_components.select do |m|
+        enabled = @instance_settings.settings(m.key).enabled
+        enabled.nil? ? m.enabled_by_default? : enabled
+      end
     end
   end
 
