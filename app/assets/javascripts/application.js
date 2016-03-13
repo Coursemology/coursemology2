@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require i18n/translations
+//= require js-routes
 //= require bootstrap-sprockets
 //= require jquery_ujs
 //= require jquery-ui/sortable

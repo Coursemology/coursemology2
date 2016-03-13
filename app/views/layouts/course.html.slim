@@ -1,7 +1,7 @@
 - layout = controller.parent_layout(of_layout: 'course') || controller.current_layout
 = render within_layout: layout do
   = render_breadcrumbs
-  div.row.course-layout
+  div.row.course-layout data-course-id=current_course.id
     div.col-lg-2.col-md-3.col-sm-4
       div.row
         div.hidden-xs.text-center#course-sidebar-logo

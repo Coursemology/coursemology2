@@ -50,6 +50,9 @@ gem 'uglifier', '>= 1.3.0'
 # Internationalisation for JavaScript.
 gem 'i18n-js', '>= 3.0.0.rc1'
 
+# Routes from JavaScript
+gem 'js-routes'
+
 # Use jQuery as the JavaScript library
 gem 'jquery-cdn'
 gem 'jquery-rails'

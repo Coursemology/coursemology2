@@ -1,6 +1,41 @@
 (function($) {
+  /* global Routes */
   'use strict';
   var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ';
+
+
+  /**
+   * Gets the course ID for the given comment.
+   *
+   * @param {jQuery} $comment The comment to find the associated course for.
+   * @return {Number} The ID for the course the element is associated with.
+   */
+  function courseIdForComment($comment) {
+    var $course = $comment.parents('.course-layout:first');
+    return $course.data('courseId');
+  }
+
+  /**
+   * Gets the assessment ID for the given comment.
+   *
+   * @param {jQuery} $comment The comment to find the associated assessment for.
+   * @return {Number} The ID for the assessment the element is associated with.
+   */
+  function assessmentIdForComment($comment) {
+    var $assessment = $comment.parents('.assessment:first');
+    return $assessment.data('assessmentId');
+  }
+
+  /**
+   * Gets the submission ID for the given comment.
+   *
+   * @param {jQuery} $comment The comment to find the associated submission for.
+   * @return {Number} The ID for the submission the element is associated with.
+   */
+  function submissionIdForComment($comment) {
+    var $submission = $comment.parents('.submission:first');
+    return $submission.data('submissionId');
+  }
 
   /**
    * Gets the answer ID for the given comment.
@@ -33,11 +68,15 @@
   function onCommentDelete(e) {
     var $element = $(e.target);
 
+    var courseId = courseIdForComment($element);
+    var assessmentId = assessmentIdForComment($element);
+    var submissionId = submissionIdForComment($element);
     var answerId = answerIdForComment($element);
     var $post = $element.parents('.discussion_post:first');
     var postId = $post.data('postId');
 
-    $.ajax({ url: 'answers/' + answerId + '/comments/' + postId, method: 'delete' }).
+    $.ajax({ url: Routes.course_assessment_submission_answer_comment_path(courseId,
+                    assessmentId, submissionId, answerId, postId), method: 'delete' }).
       done(function(data) { onCommentDeleteSuccess(data, $element); }).
       fail(function(data) { onCommentDeleteFail(data, $element); });
     e.preventDefault();

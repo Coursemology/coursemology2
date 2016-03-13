@@ -1,5 +1,7 @@
 - add_breadcrumb t('.attempt')
 = page_header format_inline_text(@assessment.title)
 
-= render @assessment.display_mode
+= div_for(@assessment, 'data-assessment-id' => @assessment.id) do
+  = div_for(@submission, 'data-submission-id' => @submission.id) do
+    = render @assessment.display_mode
 
