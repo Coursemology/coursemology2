@@ -62,7 +62,11 @@ module Extensions::Conditional::ActiveRecord::Base
       raise NotImplementedError
     end
 
-    def resolve_conditional_for(_course_user)
+    # Resolve the conditionals for the given course user
+    #
+    # @param [CourseUser] course_user The user with conditionals to be resolved
+    def resolve_conditional_for(course_user)
+      Course::Conditional::ConditionalResolvingService.resolve(course_user)
     end
   end
 end
