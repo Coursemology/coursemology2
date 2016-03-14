@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class AttachmentReference < ActiveRecord::Base
+  before_save :update_expires_at
+
   belongs_to :attachable, polymorphic: true, inverse_of: nil
   belongs_to :attachment, inverse_of: :attachment_references
 
@@ -27,5 +29,14 @@ class AttachmentReference < ActiveRecord::Base
              File.basename(file)
            end
     Pathname.normalize_filename(name)
+  end
+
+  # Clears the expires_at if attachable is present, otherwise set the expires_at.
+  def update_expires_at
+    self.expires_at = if attachable
+                        nil
+                      else
+                        1.day.from_now
+                      end
   end
 end

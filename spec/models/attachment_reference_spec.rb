@@ -31,4 +31,33 @@ RSpec.describe AttachmentReference do
       end
     end
   end
+
+  let!(:instance) { create(:instance) }
+  with_tenant(:instance) do
+    let(:attachable) { create(:material) }
+    let(:attachment_reference) { attachable.attachment_reference }
+
+    describe '#update_expires_at' do
+      subject { attachment_reference.expires_at }
+
+      context 'when attachable is present' do
+        it { is_expected.to be_nil }
+      end
+
+      context 'when attachable it not present' do
+        let(:attachment_reference) { create(:attachment_reference) }
+
+        it { is_expected.to be_present }
+      end
+
+      context 'when unset the attachable' do
+        before do
+          attachment_reference.attachable = nil
+          attachment_reference.save!
+        end
+
+        it { is_expected.to be_present }
+      end
+    end
+  end
 end
