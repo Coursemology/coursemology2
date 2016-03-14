@@ -11,7 +11,14 @@ FactoryGirl.define do
         build(:course_user, course: course, user: user)
     end
     points_awarded { rand(1..20) * 100 }
-    reason 'EXP for some event'
+    reason { 'Reason for manually-awarded experience points' if manually_awarded? }
+
+    trait :automatically_awarded do
+      after(:build) do |record|
+        record.actable = record
+        record.reason = nil
+      end
+    end
 
     trait :inactive do
       points_awarded nil

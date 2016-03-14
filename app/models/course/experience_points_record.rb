@@ -17,8 +17,6 @@ class Course::ExperiencePointsRecord < ActiveRecord::Base
     points_awarded.present?
   end
 
-  protected
-
   # Checks if the given record is a manually-awarded experience points record.
   #
   # @return [Boolean]
