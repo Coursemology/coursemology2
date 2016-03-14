@@ -10,3 +10,7 @@
   h2 = t('.instructors')
   div
     = render partial: 'layouts/user', collection: current_course.instructors.map(&:user)
+  - if current_course.user?(current_user)
+    h2 = t('.announcements')
+    div
+      = render current_course.announcements.currently_active
