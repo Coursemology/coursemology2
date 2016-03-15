@@ -7,6 +7,7 @@
     $('[data-toggle="popover"]', element).popover();
     $('[title]', element).tooltip();
     $('input.toggle-all[type="checkbox"]', element).checkboxToggleAll();
+    $('textarea.text', element).summernote();
     $('textarea.code', element).ace();
   }
 

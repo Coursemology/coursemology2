@@ -25,6 +25,7 @@
 //= require twitter/typeahead
 //= require bootstrap-tokenfield
 //= require simple_form-bootstrap
+//= require summernote
 //= require ace-rails-ap
 //= require coursemology/polyglot/ace-modes
 //= require layout

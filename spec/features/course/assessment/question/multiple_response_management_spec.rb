@@ -60,9 +60,8 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
           click_link I18n.t('course.assessment.question.multiple_responses.form.add_option')
           within all('.edit_question_multiple_response '\
             'tr.question_multiple_response_option')[i] do
-            fill_in find('textarea.multiple-response-option')[:name], with: option[:option]
-            fill_in find('textarea.multiple-response-explanation')[:name],
-                    with: option[:explanation]
+            find('textarea.multiple-response-option').set option[:option]
+            find('textarea.multiple-response-explanation').set option[:explanation]
             if option[:correct]
               check find('input[type="checkbox"]')[:name]
             else

@@ -35,3 +35,34 @@ RSpec.configure do |config|
 end
 
 Capybara.javascript_driver = :poltergeist
+
+module Capybara::CustomFinders
+  # Supplements find to try for alternative elements.
+  def find(*args)
+    super
+  rescue Capybara::ElementNotFound
+    result = try_find_textarea(*args)
+    raise unless result
+
+    result
+  end
+
+  private
+
+  # Tries to find a textarea used by Summernote.
+  #
+  # We find the hidden node first, then we find the corresponding editor node.
+  def try_find_textarea(*args)
+    options = args.extract_options!.dup
+    return nil if options[:visible] == false
+
+    options[:visible] = false
+    args.push(options)
+
+    textarea = find(*args)
+    textarea.find(:xpath, 'following-sibling::*').find(:css, '.note-editable')
+  rescue Capybara::ElementNotFound
+    nil
+  end
+end
+Capybara::Node::Base.include(Capybara::CustomFinders)
