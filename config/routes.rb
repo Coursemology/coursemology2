@@ -125,6 +125,10 @@ Rails.application.routes.draw do
 
         get 'forums' => 'forum_settings#edit'
         patch 'forums' => 'forum_settings#update'
+
+        get 'leaderboard' => 'leaderboard_settings#edit'
+        patch 'leaderboard' => 'leaderboard_settings#update'
+
         namespace 'assessments' do
           resources :categories, only: [:new, :create, :destroy] do
             resources :tabs, only: [:new, :create, :destroy]
@@ -236,6 +240,8 @@ Rails.application.routes.draw do
       resources :course_users, only: [] do
         resources :experience_points_records, only: [:index, :destroy]
       end
+
+      resource :leaderboard, only: [:show]
     end
   end
 end

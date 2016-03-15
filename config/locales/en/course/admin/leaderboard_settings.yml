@@ -1,0 +1,8 @@
+en:
+  course:
+    admin:
+      leaderboard_settings:
+        edit:
+          title_placeholder: 'Leave blank to use default title'
+        update:
+          success: 'Leaderboard settings updated.'

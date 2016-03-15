@@ -28,6 +28,8 @@ en:
           edit: :'course.material.sidebar_title'
         forum_settings:
           edit: :'course.forum.forums.sidebar_title'
+        leaderboard_settings:
+          edit: :'course.leaderboard.index.header'
       users:
         index: 'Users'
         students: :'course.users.students.header'
@@ -98,6 +100,8 @@ en:
         topics:
           new_topic: :'course.forum.topics.new_topic.header'
           edit_topic: :'course.forum.topics.edit_topic.header'
+      leaderboards:
+        index: :'course.leaderboard.title'
 
     system:
       admin:
