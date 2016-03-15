@@ -28,7 +28,8 @@ RSpec.feature 'Course: Achievements' do
         expect do
           click_button I18n.t('helpers.submit.achievement.create')
         end.to change(course.achievements, :count).by(1)
-        expect(page).to have_selector('div', text: I18n.t('course.achievements.create.success'))
+        expect(page).to have_selector('div', text: I18n.t('course.achievement.achievements.create.'\
+                                                          'success'))
         expect(current_path).to eq(course_achievements_path(course))
         expect(page).to have_content(achievement.badge.medium.url)
       end
@@ -43,8 +44,8 @@ RSpec.feature 'Course: Achievements' do
           # find the 2nd link that matches the path [2], this is the delete button
           find_link(nil, href: achievement_path, between: 2..2).click
         end.to change(course.achievements, :count).by(-1)
-        expect(page).to have_selector('div',
-                                      text: I18n.t('course.achievements.destroy.success'))
+        expect(page).to have_selector('div', text: I18n.t('course.achievement.achievements.'\
+                                                          'destroy.success'))
       end
 
       scenario 'I can edit an achievement' do
@@ -67,7 +68,8 @@ RSpec.feature 'Course: Achievements' do
         attach_file :achievement_badge, File.join(Rails.root, '/spec/fixtures/files/picture.jpg')
         click_button I18n.t('helpers.submit.achievement.update')
         expect(current_path).to eq course_achievements_path(course)
-        expect(page).to have_selector('div', I18n.t('course.achievements.update.success'))
+        expect(page).to have_selector('div', I18n.t('course.achievement.achievements.update.'\
+                                                    'success'))
         expect(page).to have_content(achievement.badge.medium.url)
         expect(achievement.reload.title).to eq(new_title)
         expect(achievement.reload.description).to eq(new_description)

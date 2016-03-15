@@ -1,0 +1,27 @@
+en:
+  course:
+    achievement:
+      achievements:
+        sidebar_title: :'course.achievement.achievements.index.header'
+        index:
+          header: 'Achievements'
+        show:
+          users_with_achievement: 'Students with this Achievement'
+        new:
+          header: 'New Achievement'
+        create:
+          success: 'Achievement %{title} was created.'
+        edit:
+          header: 'Edit Achievement'
+        update:
+          success: 'Achievement %{title} was updated.'
+        destroy:
+          success: 'Achievement %{title} was deleted.'
+          failure: 'Failed to delete achievement: %{error}'
+        form:
+          badge: :'course.achievement.achievements.achievements.badge'
+        achievements:
+          badge: 'Badge'
+          title: 'Title'
+          description: 'Description'
+          requirements: 'Requirements'

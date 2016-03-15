@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Course::AchievementsHelper do
+RSpec.describe Course::Achievement::ControllerHelper do
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:achievement) { create(:course_achievement) }
