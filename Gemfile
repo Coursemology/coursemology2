@@ -184,6 +184,7 @@ gem 'bootstrap3-datetimepicker-rails'
 gem 'bootstrap-select-rails'
 gem 'bootstrap_tokenfield_rails'
 gem 'twitter-typeahead-rails'
+gem 'summernote-rails'
 gem 'ace-rails-ap'
 
 # Using CarrierWave for file uploads

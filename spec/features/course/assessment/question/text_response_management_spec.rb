@@ -60,9 +60,8 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
           click_link I18n.t('course.assessment.question.text_responses.form.add_solution')
           within all('.edit_question_text_response '\
             'tr.question_text_response_solution')[i] do
-            fill_in find('textarea.text-response-solution')[:name], with: solution[:solution]
-            fill_in find('textarea.text-response-explanation')[:name],
-                    with: solution[:explanation]
+            find('textarea.text-response-solution').set solution[:solution]
+            find('textarea.text-response-explanation').set solution[:explanation]
             solution_type = find('select.text-response-solution-type', visible: :all)
             # Twitter Bootstrap hides <select> element and creates a div.
             # The usual #select method is broken as it does not seem to work with hidden elements.

@@ -68,7 +68,7 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
                               'annotation_form.reset'), match: :first
           expect(page).to have_tag('.annotation-form', count: 1)
 
-          find_field('discussion_post[text]').set annotation
+          fill_in 'discussion_post[text]', with: annotation
           click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
                               'annotation_form.submit')
           wait_for_ajax
@@ -76,7 +76,7 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
 
         answer_file = submission.answers.first.actable.files.first
         answer_discussion_topic = answer_file.annotations.first.discussion_topic
-        expect(answer_discussion_topic.posts.first.text).to eq(annotation)
+        expect(answer_discussion_topic.posts.first.text).to have_tag('*', text: annotation)
 
         expect(page).to have_content_tag_for(answer_discussion_topic.posts.first)
       end
@@ -91,14 +91,14 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
 
         annotation_text = 'reply annotation'
         within find_form('.annotation-form') do
-          find_field('discussion_post[text]').set annotation_text
+          fill_in 'discussion_post[text]', with: annotation_text
           click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
                               'annotation_form.submit')
         end
 
         wait_for_ajax
         new_post = post.children.reload.last
-        expect(new_post.text).to eq(annotation_text)
+        expect(new_post.text).to have_tag('*', text: annotation_text)
       end
 
       scenario 'I can delete my annotations', js: true do
