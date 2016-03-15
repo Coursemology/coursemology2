@@ -1,10 +1,12 @@
 //= require layout_ace_editor
+//= require layout_checkbox_toggle_all
 
 (function($) {
   'use strict';
   function initializeComponents(element) {
     $('[data-toggle="popover"]', element).popover();
     $('[title]', element).tooltip();
+    $('input.toggle-all[type="checkbox"]', element).checkboxToggleAll();
     $('textarea.code', element).ace();
   }
 

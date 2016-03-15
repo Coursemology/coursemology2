@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Course::AchievementsController, type: :controller do
+RSpec.describe Course::Achievement::AchievementsController, type: :controller do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
@@ -26,7 +26,8 @@ RSpec.describe Course::AchievementsController, type: :controller do
 
         it 'redirects with a flash message' do
           it { is_expected.to redirect_to(course_achievements_path(course)) }
-          expect(flash[:danger]).to eq(I18n.t('course.achievements.destroy.failure', error: ''))
+          expect(flash[:danger]).to eq(I18n.t('course.achievement.achievements.destroy.failure',
+                                              error: ''))
         end
       end
     end

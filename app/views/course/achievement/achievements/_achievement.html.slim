@@ -24,5 +24,9 @@
 
   td
     div.btn-group
+      - if can?(:manage, achievement)
+        = link_to(t('.award_button'),
+                  course_achievement_course_users_path(current_course, achievement),
+                  class: ['btn', 'btn-info'])
       = edit_button([current_course, achievement]) if can?(:edit, achievement)
       = delete_button([current_course, achievement]) if can?(:delete, achievement)

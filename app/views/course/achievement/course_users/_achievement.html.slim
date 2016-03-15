@@ -1,0 +1,9 @@
+= div_for(achievement, class: draft_class(achievement) + \
+                         achievement_status_class(achievement, current_course_user)) do
+  div.pull-left
+    = display_achievement_badge(achievement)
+
+  div.description
+    = format_html(achievement.description)
+
+div.clearfix

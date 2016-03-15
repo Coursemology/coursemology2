@@ -133,9 +133,10 @@ Rails.application.routes.draw do
       end
 
       resources :announcements, concerns: :paginatable
-      resources :achievements do
-        scope module: :achievement do
+      scope module: :achievement do
+        resources :achievements do
           concerns :conditional
+          resources :course_users, only: [:index]
         end
       end
 

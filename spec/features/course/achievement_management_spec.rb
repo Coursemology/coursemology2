@@ -28,7 +28,8 @@ RSpec.feature 'Course: Achievements' do
         expect do
           click_button I18n.t('helpers.submit.achievement.create')
         end.to change(course.achievements, :count).by(1)
-        expect(page).to have_selector('div', text: I18n.t('course.achievements.create.success'))
+        expect(page).to have_selector('div', text: I18n.t('course.achievement.achievements.create.'\
+                                                          'success'))
         expect(current_path).to eq(course_achievements_path(course))
         expect(page).to have_content(achievement.badge.medium.url)
       end
@@ -43,8 +44,8 @@ RSpec.feature 'Course: Achievements' do
           # find the 2nd link that matches the path [2], this is the delete button
           find_link(nil, href: achievement_path, between: 2..2).click
         end.to change(course.achievements, :count).by(-1)
-        expect(page).to have_selector('div',
-                                      text: I18n.t('course.achievements.destroy.success'))
+        expect(page).to have_selector('div', text: I18n.t('course.achievement.achievements.'\
+                                                          'destroy.success'))
       end
 
       scenario 'I can edit an achievement' do
@@ -67,10 +68,25 @@ RSpec.feature 'Course: Achievements' do
         attach_file :achievement_badge, File.join(Rails.root, '/spec/fixtures/files/picture.jpg')
         click_button I18n.t('helpers.submit.achievement.update')
         expect(current_path).to eq course_achievements_path(course)
-        expect(page).to have_selector('div', I18n.t('course.achievements.update.success'))
+        expect(page).to have_selector('div', I18n.t('course.achievement.achievements.update.'\
+                                                    'success'))
         expect(page).to have_content(achievement.badge.medium.url)
         expect(achievement.reload.title).to eq(new_title)
         expect(achievement.reload.description).to eq(new_description)
+      end
+
+      scenario 'I can award an achievement to a student' do
+        achievement = create(:course_achievement, course: course)
+        student = create(:course_student, course: course)
+        course_user_id = "achievement_course_user_ids_#{student.id}"
+
+        visit course_achievement_course_users_path(course, achievement)
+        expect(page).to have_unchecked_field(course_user_id)
+        check course_user_id
+
+        expect do
+          click_button I18n.t('course.achievement.course_users.course_users_form.button')
+        end.to change(achievement.course_users, :count).by(1)
       end
     end
   end

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-module Course::AchievementsHelper
+module Course::Achievement::ControllerHelper
   # Returns the HTML code to display the achievement badge. If badge is present, return
   # medium version of the badge (see ImageUploader for more versions). Otherwise, return
   # default achievement badge.
