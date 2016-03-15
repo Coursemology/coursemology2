@@ -35,7 +35,9 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
           def test:
             pass
         PYTHON
-        find('.ace_text-input', visible: false).set(code) # because fill_in does not work with Ace.
+        within find(content_tag_selector(submission.answers.first)) do
+          find('textarea.code').set code
+        end
         click_button I18n.t('course.assessment.submission.submissions.worksheet.finalise')
         wait_for_job
 
