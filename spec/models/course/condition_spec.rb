@@ -54,5 +54,13 @@ RSpec.describe Course::Condition, type: :model do
         end
       end
     end
+
+    describe '.conditionals_for' do
+      let!(:conditional1) { create(:achievement, course: course) }
+      let!(:conditional2) { create(:achievement) }
+      subject { Course::Condition.conditionals_for(course) }
+
+      it { is_expected.to contain_exactly(conditional1) }
+    end
   end
 end

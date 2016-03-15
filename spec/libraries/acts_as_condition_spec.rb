@@ -45,6 +45,10 @@ RSpec.describe 'Extension: Acts as Condition', type: :model do
 
     it 'implements .resolve_conditional_for' do
       expect(subject).to respond_to(:resolve_conditional_for)
+
+      user = double('user')
+      expect(Course::Conditional::ConditionalResolvingService).to receive(:resolve).with(user).once
+      subject.resolve_conditional_for(user)
     end
   end
 end
