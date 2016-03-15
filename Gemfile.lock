@@ -16,13 +16,6 @@ GIT
       mime-types (>= 1.16)
 
 GIT
-  remote: git://github.com/doabit/bootstrap-sass-extras.git
-  revision: 85d6db37f216e1b9d071b915246bb12a3e47d9e4
-  specs:
-    bootstrap-sass-extras (0.0.6)
-      rails (>= 3.1.0)
-
-GIT
   remote: git://github.com/lowjoel/cancancan.git
   revision: 6cdb4aded3c16d30cc466d32c6d1358760da9d43
   branch: issue-284
@@ -113,6 +106,8 @@ GEM
     bootstrap-sass (3.3.6)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
+    bootstrap-sass-extras (0.0.7)
+      rails (>= 3.1.0)
     bootstrap-select-rails (1.6.3)
     bootstrap3-datetimepicker-rails (4.17.37)
       momentjs-rails (>= 2.8.1)
@@ -531,7 +526,7 @@ DEPENDENCIES
   after_commit_action
   autoprefixer-rails
   bootstrap-sass
-  bootstrap-sass-extras!
+  bootstrap-sass-extras (>= 0.0.7)
   bootstrap-select-rails
   bootstrap3-datetimepicker-rails
   bootstrap_tokenfield_rails
