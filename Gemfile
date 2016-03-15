@@ -59,7 +59,7 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 # Our Coursemology will be themed using Bootstrap
 gem 'bootstrap-sass'
-gem 'bootstrap-sass-extras', github: 'doabit/bootstrap-sass-extras'
+gem 'bootstrap-sass-extras', '>= 0.0.7'
 gem 'autoprefixer-rails'
 # Use font-awesome for icons
 gem 'font-awesome-rails'
