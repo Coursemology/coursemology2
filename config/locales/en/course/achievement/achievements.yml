@@ -25,3 +25,5 @@ en:
           title: 'Title'
           description: 'Description'
           requirements: 'Requirements'
+        achievement:
+          award_button: :'course.achievement.course_users.course_users_form.header'

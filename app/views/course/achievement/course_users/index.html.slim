@@ -1,0 +1,6 @@
+- add_breadcrumb format_inline_text(@achievement.title)
+= page_header format_inline_text(@achievement.title)
+
+= render partial: 'achievement', object: @achievement
+
+= render partial: 'course_users_form', locals: { course: @course, achievement: @achievement }

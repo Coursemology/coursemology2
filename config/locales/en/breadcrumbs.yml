@@ -48,8 +48,9 @@ en:
             index: :'course.achievement.achievements.index.header'
           assessments:
             index: :'course.achievement.achievements.index.header'
-        achievements:
+        controller:
           index: :'course.achievement.achievements.index.header'
+        achievements:
           new: :'course.achievement.achievements.new.header'
       assessment:
         condition:

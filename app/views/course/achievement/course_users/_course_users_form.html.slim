@@ -1,0 +1,19 @@
+= simple_form_for [current_course, achievement] do |f|
+  = f.error_notification
+  = f.error :achievement
+
+  div.alert.alert-info
+    = simple_format(t('.notice'))
+
+  table.table.table-hover
+    thead
+      th = t('.name')
+      th = t('.enabled')
+    tbody
+      - collection = course.course_users.students
+      = f.collection_check_boxes :course_user_ids, collection, :id, :name do |f|
+        tr
+          th = link_to_course_user(f.object)
+          td = f.check_box
+
+  = f.button :submit, t('.button')

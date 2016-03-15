@@ -44,6 +44,7 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
   private
 
   def achievement_params #:nodoc:
-    params.require(:achievement).permit(:title, :description, :weight, :draft, :badge)
+    params.require(:achievement).permit(:title, :description, :weight, :draft, :badge,
+                                        course_user_ids: [])
   end
 end

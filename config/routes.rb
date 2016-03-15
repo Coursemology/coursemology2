@@ -136,6 +136,7 @@ Rails.application.routes.draw do
       scope module: :achievement do
         resources :achievements do
           concerns :conditional
+          resources :course_users, only: [:index]
         end
       end
 

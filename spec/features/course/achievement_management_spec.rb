@@ -74,6 +74,20 @@ RSpec.feature 'Course: Achievements' do
         expect(achievement.reload.title).to eq(new_title)
         expect(achievement.reload.description).to eq(new_description)
       end
+
+      scenario 'I can award an achievement to a student' do
+        achievement = create(:course_achievement, course: course)
+        student = create(:course_student, course: course)
+        course_user_id = "achievement_course_user_ids_#{student.id}"
+
+        visit course_achievement_course_users_path(course, achievement)
+        expect(page).to have_unchecked_field(course_user_id)
+        check course_user_id
+
+        expect do
+          click_button I18n.t('course.achievement.course_users.course_users_form.button')
+        end.to change(achievement.course_users, :count).by(1)
+      end
     end
   end
 end

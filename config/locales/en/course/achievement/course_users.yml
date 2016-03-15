@@ -1,0 +1,12 @@
+en:
+  course:
+    achievement:
+      course_users:
+        course_users_form:
+          header: 'Award Achievement'
+          name: 'Student Name'
+          enabled: 'Obtained Achievement'
+          button: 'Update Users'
+          notice: >
+            If an Achievement has conditions associated with it, Coursemology will automatically
+            award achievements when the student meets those conditions.
