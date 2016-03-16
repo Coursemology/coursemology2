@@ -71,6 +71,7 @@ class Course::Condition::Assessment < ActiveRecord::Base
   def validate_assessment_condition
     validate_references_self
     validate_unique_dependency
+    validate_acyclic_dependency
   end
 
   def validate_references_self
@@ -81,6 +82,11 @@ class Course::Condition::Assessment < ActiveRecord::Base
   def validate_unique_dependency
     return unless required_assessments_for(conditional).include?(assessment)
     errors.add(:assessment, :unique_dependency)
+  end
+
+  def validate_acyclic_dependency
+    return unless cyclic?
+    errors.add(:assessment, :cyclic_dependency)
   end
 
   # Given a conditional object, returns all assessments that it requires.

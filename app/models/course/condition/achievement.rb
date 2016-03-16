@@ -67,6 +67,7 @@ class Course::Condition::Achievement < ActiveRecord::Base
   def validate_achievement_condition
     validate_references_self
     validate_unique_dependency
+    validate_acyclic_dependency
   end
 
   def validate_references_self
@@ -77,5 +78,10 @@ class Course::Condition::Achievement < ActiveRecord::Base
   def validate_unique_dependency
     return unless required_achievements_for(conditional).include?(achievement)
     errors.add(:achievement, :unique_dependency)
+  end
+
+  def validate_acyclic_dependency
+    return unless cyclic?
+    errors.add(:achievement, :cyclic_dependency)
   end
 end
