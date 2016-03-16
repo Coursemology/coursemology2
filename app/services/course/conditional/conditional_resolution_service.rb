@@ -1,4 +1,4 @@
-class Course::Conditional::ConditionalResolvingService
+class Course::Conditional::ConditionalResolutionService
   class << self
     # Resolve the conditionals for the given course user
     #
@@ -25,7 +25,7 @@ class Course::Conditional::ConditionalResolvingService
   # Finds all the conditions that are satisfied by the course user
   def satisfied_conditions
     # TODO: Invalidate and replace current cache with the newly satisfied_condition
-    Course::Condition.where(course: @course).
+    Course::Condition.includes(:actable).where(course: @course).
       select { |c| c.satisfied_by?(@course_user) }.
       map(&:specific)
   end

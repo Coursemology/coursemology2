@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Course::Conditional::ConditionalResolvingService do
+RSpec.describe Course::Conditional::ConditionalResolutionService do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:course) { create(:course) }
@@ -12,7 +12,7 @@ RSpec.describe Course::Conditional::ConditionalResolvingService do
       let!(:achievement) do
         create(:course_achievement, course: course, conditions: [level_condition])
       end
-      subject { Course::Conditional::ConditionalResolvingService.resolve(course_user) }
+      subject { Course::Conditional::ConditionalResolutionService.resolve(course_user) }
 
       context 'when course user satisfy the level condition' do
         it 'adds the resolved achievement conditional to the course user' do
