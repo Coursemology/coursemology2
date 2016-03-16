@@ -130,5 +130,23 @@ RSpec.describe User do
         expect(subject.find_by(id: User::SYSTEM_USER_ID)).to be_nil
       end
     end
+
+    describe 'validations' do
+      context 'when a system user is specified' do
+        let(:system_user_stub) do
+          stub = build(:user)
+          stub.email = nil
+          stub.encrypted_password = nil
+          allow(stub).to receive(:system?).and_return(true)
+          stub
+        end
+        subject { system_user_stub }
+
+        it { is_expected.to be_valid }
+        it { is_expected.to validate_absence_of(:email) }
+        it { is_expected.to validate_absence_of(:encrypted_password) }
+        it { is_expected.to validate_absence_of(:authentication_token) }
+      end
+    end
   end
 end

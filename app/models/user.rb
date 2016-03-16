@@ -24,6 +24,9 @@ class User < ActiveRecord::Base
     end
   end
 
+  validates :email, :encrypted_password, :authentication_token, absence: true, if: :system?
+  schema_validations except: [:encrypted_password]
+
   has_many :emails, -> { order('primary' => :desc) }, class_name: User::Email.name,
                                                       inverse_of: :user, dependent: :destroy
   # This order need to be preserved, so that :emails association can be detected by
