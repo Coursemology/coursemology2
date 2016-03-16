@@ -3,6 +3,23 @@ class Course::UsersComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
   def sidebar_items
+    main_sidebar_items + admin_sidebar_items
+  end
+
+  private
+
+  def main_sidebar_items
+    [
+      {
+        title: t('course.users.sidebar_title'),
+        key: :users,
+        weight: 8,
+        path: course_users_path(current_course)
+      }
+    ]
+  end
+
+  def admin_sidebar_items
     return [] unless can?(:manage, CourseUser.new(course: current_course))
 
     [

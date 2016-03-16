@@ -1,0 +1,7 @@
+= content_tag_for(:div, course_user, class: ['col-sm-12', 'col-md-6', 'col-lg-4'])
+  div.row
+    = link_to_course_user(course_user) do
+      div.profile-picture.col-xs-3
+        = display_user_image(course_user.user)
+      div.user-name.col-xs-9
+        h4 = format_inline_text(course_user.name)
