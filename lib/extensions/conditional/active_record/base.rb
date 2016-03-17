@@ -35,6 +35,12 @@ module Extensions::Conditional::ActiveRecord::Base
   end
 
   module ConditionInstanceMethods
+    extend ActiveSupport::Concern
+
+    included do
+      after_save :on_condition_change, if: :changed?
+    end
+
     # A human-readable name for each condition; usually just wraps a title
     # or name field. Meant to be used in a polymorphic manner for views.
     def title
@@ -53,6 +59,19 @@ module Extensions::Conditional::ActiveRecord::Base
     # @return [Boolean] true if the condition is met and false otherwise
     def satisfied_by?(_user)
       raise NotImplementedError
+    end
+
+    private
+
+    def on_condition_change
+      execute_after_commit { rebuild_satisfiability_graph(course) }
+    end
+
+    # Rebuild the satisfiability graph for the given course.
+    #
+    # @param [Course] course The course with the dependency graph to be built.
+    def rebuild_satisfiability_graph(_course)
+      # TODO: Replace with the job for building the satisfiability graph
     end
   end
 
