@@ -28,8 +28,8 @@ RSpec.describe Course::Forum::PostsController, type: :controller do
           subject
         end
 
-        it 'redirects with a flash message' do
-          it { is_expected.to redirect_to(course_forum_topic_path(current_course, forum, topic)) }
+        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic)) }
+        it 'sets an error flash message' do
           expect(flash[:danger]).to eq(I18n.t('course.discussion.posts.destroy.failure',
                                               error: post_stub.errors.full_messages.to_sentence))
         end

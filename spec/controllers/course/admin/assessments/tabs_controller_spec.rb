@@ -34,8 +34,9 @@ RSpec.describe Course::Admin::Assessments::TabsController, type: :controller do
           controller.instance_variable_set(:@tab, tab_stub)
           subject
         end
-        it 'redirects with a flash message' do
-          it { is_expected.to redirect_to(course_admin_assessments_path(current_course)) }
+
+        it { is_expected.to redirect_to(course_admin_assessments_path(course)) }
+        it 'sets an error flash message' do
           expect(flash[:danger]).to(eq(I18n.t('course.admin.assessments.tabs.destroy.failure',
                                               error: '')))
         end
