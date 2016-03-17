@@ -9,7 +9,7 @@ RSpec.describe Course::ExperiencePointsRecordsController, type: :controller do
     let(:course_student) { create(:course_student, :approved, course: course) }
     let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
     let(:experience_points_history_path) do
-      course_course_user_experience_points_records_path(course, course_student)
+      course_user_experience_points_records_path(course, course_student)
     end
     let(:points_record_stub) do
       stub = build_stubbed(:course_experience_points_record, course_user: course_student)
@@ -21,7 +21,7 @@ RSpec.describe Course::ExperiencePointsRecordsController, type: :controller do
 
     describe '#destroy' do
       subject do
-        delete :destroy, course_id: course, course_user_id: course_student, id: points_record_stub
+        delete :destroy, course_id: course, user_id: course_student, id: points_record_stub
       end
 
       context 'when destroy fails' do
