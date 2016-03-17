@@ -24,8 +24,8 @@ RSpec.describe Course::Achievement::AchievementsController, type: :controller do
           subject
         end
 
-        it 'redirects with a flash message' do
-          it { is_expected.to redirect_to(course_achievements_path(course)) }
+        it { is_expected.to redirect_to(course_achievements_path(course)) }
+        it 'sets an error flash message' do
           expect(flash[:danger]).to eq(I18n.t('course.achievement.achievements.destroy.failure',
                                               error: ''))
         end

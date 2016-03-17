@@ -28,8 +28,8 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
           subject
         end
 
-        it 'redirects with a flash message' do
-          it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
+        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
+        it 'sets an error flash message' do
           expect(flash[:danger]).to eq(I18n.t('course.forum.topics.destroy.failure',
                                               error: topic_stub.errors.full_messages.to_sentence))
         end
@@ -47,8 +47,8 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
           post :subscribe, course_id: course, forum_id: forum, id: topic_stub, subscribe: 'true'
         end
 
-        it 'redirects with a flash message' do
-          it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
+        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
+        it 'sets an error flash message' do
           expect(flash[:danger]).to eq(I18n.t('course.forum.topics.subscribe.failure'))
         end
       end
@@ -58,8 +58,8 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
           post :subscribe, course_id: course, forum_id: forum, id: topic_stub, subscribe: 'false'
         end
 
-        it 'redirects with a flash message' do
-          it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
+        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
+        it 'sets an error flash message' do
           expect(flash[:danger]).to eq(I18n.t('course.forum.topics.unsubscribe.failure'))
         end
       end
@@ -76,8 +76,8 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
           put :set_locked, course_id: course, forum_id: forum, id: topic_stub, locked: true
         end
 
-        it 'redirects with a flash message' do
-          it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
+        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
+        it 'sets an error flash message' do
           expect(flash[:danger]).to eq(I18n.t('course.forum.topics.locked.failure'))
         end
       end
@@ -87,8 +87,8 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
           put :set_locked, course_id: course, forum_id: forum, id: topic_stub, locked: false
         end
 
-        it 'redirects with a flash message' do
-          it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
+        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
+        it 'sets an error flash message' do
           expect(flash[:danger]).to eq(I18n.t('course.forum.topics.unlocked.failure'))
         end
       end
@@ -105,8 +105,8 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
           put :set_hidden, course_id: course, forum_id: forum, id: topic_stub, hidden: true
         end
 
-        it 'redirects with a flash message' do
-          it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
+        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
+        it 'sets an error flash message' do
           expect(flash[:danger]).to eq(I18n.t('course.forum.topics.hidden.failure'))
         end
       end
@@ -116,8 +116,8 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
           put :set_hidden, course_id: course, forum_id: forum, id: topic_stub, hidden: false
         end
 
-        it 'redirects with a flash message' do
-          it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
+        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
+        it 'sets an error flash message' do
           expect(flash[:danger]).to eq(I18n.t('course.forum.topics.shown.failure'))
         end
       end

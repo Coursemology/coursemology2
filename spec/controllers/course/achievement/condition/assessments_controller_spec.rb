@@ -36,8 +36,8 @@ RSpec.describe Course::Achievement::Condition::AssessmentsController, type: :con
           subject
         end
 
-        it 'redirects with a flash message' do
-          it { is_expected.to redirect_to(edit_course_achievement_path(course, achievement)) }
+        it { is_expected.to redirect_to(edit_course_achievement_path(course, achievement)) }
+        it 'sets an error flash message' do
           expect(flash[:danger]).to eq(I18n.t('course.condition.assessments.destroy.error'))
         end
       end
@@ -68,11 +68,7 @@ RSpec.describe Course::Achievement::Condition::AssessmentsController, type: :con
           subject
         end
 
-        it 'redirects' do
-          path = new_course_achievement_condition_assessment_path(course, achievement,
-                                                                  assessment_condition)
-          it { is_expected.to redirect_to(path) }
-        end
+        it { is_expected.to render_template(:new) }
       end
     end
 
@@ -105,11 +101,7 @@ RSpec.describe Course::Achievement::Condition::AssessmentsController, type: :con
           subject
         end
 
-        it 'redirects' do
-          path = edit_course_achievement_condition_assessment_path(course, achievement,
-                                                                   assessment_condition)
-          it { is_expected.to redirect_to(path) }
-        end
+        it { is_expected.to render_template(:edit) }
       end
     end
   end
