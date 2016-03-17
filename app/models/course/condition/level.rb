@@ -2,7 +2,7 @@
 class Course::Condition::Level < ActiveRecord::Base
   acts_as_condition
 
-  # Trigger for resolving the conditional for a course user
+  # Trigger for evaluating the satisfiability of conditionals for a course user
   Course::ExperiencePointsRecord.after_save do |record|
     Course::Condition::Level.on_dependent_status_change(record)
   end
@@ -33,6 +33,6 @@ class Course::Condition::Level < ActiveRecord::Base
 
   def self.on_dependent_status_change(record)
     return unless record.previous_changes.key?(:points_awarded)
-    record.execute_after_commit { resolve_conditional_for(record.course_user) }
+    record.execute_after_commit { evaluate_conditional_for(record.course_user) }
   end
 end

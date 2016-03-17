@@ -11,9 +11,9 @@ RSpec.describe Course::Condition::Level, type: :model do
         context 'when points is awarded' do
           let(:exp) { create(:course_experience_points_record, points_awarded: 10) }
 
-          it 'resolve_conditional_for the affected course_user' do
+          it 'evaluate_conditional_for the affected course_user' do
             expect(Course::Condition::Level).
-              to receive(:resolve_conditional_for).with(exp.course_user)
+              to receive(:evaluate_conditional_for).with(exp.course_user)
             exp.save!
           end
         end
@@ -21,9 +21,9 @@ RSpec.describe Course::Condition::Level, type: :model do
         context 'when point is not awarded' do
           let(:exp) { create(:course_experience_points_record, points_awarded: nil) }
 
-          it 'does not resolve_conditional_for the affected course_user' do
+          it 'does not evaluate_conditional_for the affected course_user' do
             expect(Course::Condition::Level).
-              to_not receive(:resolve_conditional_for).with(exp.course_user)
+              to_not receive(:evaluate_conditional_for).with(exp.course_user)
             exp.save!
           end
         end

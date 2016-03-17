@@ -43,19 +43,19 @@ RSpec.describe 'Extension: Acts as Condition', type: :model do
       expect { subject.dependent_class }.to raise_error(NotImplementedError)
     end
 
-    describe '.resolve_conditional_for' do
+    describe '.evaluate_conditional_for' do
       let(:instance) { create(:instance) }
       with_tenant(:instance) do
         let(:course_user) { create(:course_user) }
 
         it 'returns an ActiveJob' do
-          expect(subject.resolve_conditional_for(course_user)).to be_a(ActiveJob::Base)
+          expect(subject.evaluate_conditional_for(course_user)).to be_a(ActiveJob::Base)
         end
 
         with_active_job_queue_adapter(:test) do
           it 'queues the job' do
-            expect { subject.resolve_conditional_for(course_user) }.
-              to have_enqueued_job(Course::Conditional::ConditionalResolutionJob)
+            expect { subject.evaluate_conditional_for(course_user) }.
+              to have_enqueued_job(Course::Conditional::ConditionalSatisfiabilityEvaluationJob)
           end
         end
       end

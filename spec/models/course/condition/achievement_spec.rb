@@ -57,19 +57,19 @@ RSpec.describe Course::Condition::Achievement, type: :model do
         let(:user_achievement) { create(:course_user_achievement) }
 
         context 'when the user achievement has changes' do
-          it 'resolve_conditional_for the affected course_user' do
+          it 'evaluate_conditional_for the affected course_user' do
             expect(Course::Condition::Achievement).
-              to receive(:resolve_conditional_for).with(user_achievement.course_user)
+              to receive(:evaluate_conditional_for).with(user_achievement.course_user)
             user_achievement.save!
           end
         end
 
         context 'when the user experiences does not has any changes' do
-          it 'does not resolve_conditional_for the affected course_user' do
+          it 'does not evaluate_conditional_for the affected course_user' do
             # Remove all the previous changes
             user_achievement.save!
             expect(Course::Condition::Achievement).
-              to_not receive(:resolve_conditional_for).with(user_achievement.course_user)
+              to_not receive(:evaluate_conditional_for).with(user_achievement.course_user)
             user_achievement.save!
           end
         end

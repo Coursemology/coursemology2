@@ -56,18 +56,18 @@ RSpec.describe Course::Condition::Assessment, type: :model do
       describe '#assessment' do
         context 'when the submission is being attempted' do
           let(:submission) { create(:submission, :attempting) }
-          it 'does not resolve_conditional_for the affected course_user' do
+          it 'does not evaluate_conditional_for the affected course_user' do
             expect(Course::Condition::Assessment).
-              to_not receive(:resolve_conditional_for).with(submission.course_user)
+              to_not receive(:evaluate_conditional_for).with(submission.course_user)
             submission.save!
           end
         end
 
         context 'when the submission is being submitted' do
           let(:submission) { create(:submission, :attempting) }
-          it 'resolve_conditional_for the affected course_user' do
+          it 'evaluate_conditional_for the affected course_user' do
             expect(Course::Condition::Assessment).
-              to receive(:resolve_conditional_for).with(submission.course_user)
+              to receive(:evaluate_conditional_for).with(submission.course_user)
             submission.finalise!
             submission.save!
           end
@@ -75,9 +75,9 @@ RSpec.describe Course::Condition::Assessment, type: :model do
 
         context 'when the submission is being graded' do
           let(:submission) { create(:submission, :submitted) }
-          it 'resolve_conditional_for the affected course_user' do
+          it 'evaluate_conditional_for the affected course_user' do
             expect(Course::Condition::Assessment).
-              to receive(:resolve_conditional_for).with(submission.course_user)
+              to receive(:evaluate_conditional_for).with(submission.course_user)
             submission.publish!
             submission.save!
           end
@@ -85,9 +85,9 @@ RSpec.describe Course::Condition::Assessment, type: :model do
 
         context 'when the submission is already graded' do
           let(:submission) { create(:submission, :graded) }
-          it 'does not resolve_conditional_for the affected course_user' do
+          it 'does not evaluate_conditional_for the affected course_user' do
             expect(Course::Condition::Assessment).
-              to_not receive(:resolve_conditional_for).with(submission.course_user)
+              to_not receive(:evaluate_conditional_for).with(submission.course_user)
             submission.save!
           end
         end

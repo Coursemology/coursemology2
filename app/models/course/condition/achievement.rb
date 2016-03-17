@@ -2,7 +2,7 @@
 class Course::Condition::Achievement < ActiveRecord::Base
   acts_as_condition
 
-  # Trigger for resolving the conditional for a course user
+  # Trigger for evaluating the satisfiability of conditionals for a course user
   Course::UserAchievement.after_save do |submission|
     Course::Condition::Achievement.on_dependent_status_change(submission)
   end
@@ -33,7 +33,7 @@ class Course::Condition::Achievement < ActiveRecord::Base
 
   def self.on_dependent_status_change(achievement)
     return if achievement.previous_changes.empty?
-    achievement.execute_after_commit { resolve_conditional_for(achievement.course_user) }
+    achievement.execute_after_commit { evaluate_conditional_for(achievement.course_user) }
   end
 
   private
