@@ -15,10 +15,6 @@ RSpec.describe FileUploader, type: :model do
     end
   end
 
-  after do
-    @uploader.remove!
-  end
-
   it 'uploads the file' do
     expect(File.exist?(@uploader.file.path)).to eq true
   end

@@ -4,6 +4,6 @@ FactoryGirl.define do
     folder
     sequence(:name) { |n| "Material #{n}" }
     sequence(:description) { |n| "Material Description #{n}" }
-    attachment
+    attachment_reference
   end
 end

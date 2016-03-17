@@ -67,7 +67,7 @@ RSpec.describe Course::Assessment::Question::Programming do
             before do
               file = File.new(File.join(Rails.root, 'spec/fixtures/course/'\
                                                     'programming_question_template.zip'))
-              subject.attachment = build(:attachment, file: file)
+              subject.attachment = build(:attachment_reference, file: file)
             end
 
             it 'queues a new import job' do
@@ -139,7 +139,7 @@ RSpec.describe Course::Assessment::Question::Programming do
     describe '#imported_attachment=' do
       with_active_job_queue_adapter(:test) do
         it 'does not enqueue another import job' do
-          subject.imported_attachment = build(:attachment)
+          subject.imported_attachment = build(:attachment_reference)
           expect { subject.save }.not_to have_enqueued_job
         end
       end

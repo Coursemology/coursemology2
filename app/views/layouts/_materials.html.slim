@@ -1,5 +1,5 @@
 - unless folder.materials.empty?
-  - folder.materials.includes(:attachments).each do |material|
+  - folder.materials.includes(:attachment_references).each do |material|
     div
       = link_to material.attachment.url do
           => fa_icon 'file-o'.freeze
