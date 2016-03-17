@@ -13,6 +13,7 @@ module UserAuthenticationConcern
     after_create :create_instance_user
 
     include UserOmniauthConcern
+    include ReplacementMethods
   end
 
   # Enables token authentication for this user.
@@ -29,5 +30,19 @@ module UserAuthenticationConcern
 
   def create_instance_user
     instance_users.create if persisted? && instance_users.empty?
+  end
+
+  module ReplacementMethods
+    # Overrides `Devise::Models::Validatable`
+    # This disables the devise email validation for system user.
+    def email_required?
+      system? ? false : super
+    end
+
+    # Overrides `Devise::Models::Validatable`
+    # This disables the devise password validation for system user.
+    def password_required?
+      system? ? false : super
+    end
   end
 end
