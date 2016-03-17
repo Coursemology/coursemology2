@@ -5,7 +5,6 @@ table.table.levels-list.table-hover
     tr
       th = t('.level')
       th = t('.threshold')
-      - if can?(:destroy, Course::Level.new(course: current_course))
-        th
+      th
   tbody
     = render @levels
