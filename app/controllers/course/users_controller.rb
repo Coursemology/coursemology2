@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 class Course::UsersController < Course::ComponentController
+  include Course::UsersBreadcrumbConcern
   include Course::UsersControllerManagementConcern
 
   before_action :load_resource
   authorize_resource :course_user, through: :course, parent: false
-  add_breadcrumb :index, :course_users_path
   helper Course::Achievement::ControllerHelper.name.sub(/Helper$/, '')
 
   def index # :nodoc:

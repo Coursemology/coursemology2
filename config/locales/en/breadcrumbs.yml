@@ -102,6 +102,8 @@ en:
           edit_topic: :'course.forum.topics.edit_topic.header'
       leaderboards:
         index: :'course.leaderboard.title'
+      experience_points_records:
+        index: 'Experience Points History'
 
     system:
       admin:
