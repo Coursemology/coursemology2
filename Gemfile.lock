@@ -297,7 +297,7 @@ GEM
     polyamorous (1.1.0)
       activerecord (>= 3.0)
     progress (3.1.1)
-    puma (3.1.0)
+    puma (3.1.1)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -432,7 +432,7 @@ GEM
     schema_plus_views (0.3.0)
       activerecord (~> 4.2)
       schema_plus_core (~> 0.1)
-    schema_validations (2.0.1)
+    schema_validations (2.0.2)
       activerecord (~> 4.2, >= 4.2.1)
       schema_plus_columns
       valuable
