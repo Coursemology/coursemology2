@@ -14,3 +14,6 @@ nav
                locals: { base_answer_form: base_answer_form }
       - if base_answer_form.object.attempting?
         = f.button :submit, t('common.save')
+
+  - if @submission.attempting? && guided_next_unanswered_question.nil?
+    = f.button :submit, t('.finalise'), name: 'submission[finalise]', class: ['btn-danger']

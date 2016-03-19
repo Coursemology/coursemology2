@@ -85,6 +85,24 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         expect(page).to have_selector('h2', mcq_questions.first.title)
         expect(page).not_to have_checked_field(wrong_option)
       end
+
+      scenario 'I can finalise my submission' do
+        answers = mcq_questions.map { |q| q.attempt(submission) }
+        answers.each do |answer|
+          answer.finalise!
+          answer.publish!
+          answer.correct = true
+          answer.save!
+        end
+
+        visit edit_course_assessment_submission_path(assessment.course, assessment, submission)
+        click_button I18n.t('course.assessment.submission.submissions.guided.finalise')
+
+        mcq_questions.each do |question|
+          expect(page).to have_selector('h2', question.title)
+          expect(page).to have_selector('div', question.description)
+        end
+      end
     end
   end
 end

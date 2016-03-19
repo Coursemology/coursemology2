@@ -94,6 +94,20 @@ RSpec.describe Course::Assessment::Submission do
             have_enqueued_job(Course::Assessment::Submission::AutoGradingJob).exactly(:once)
         end
       end
+
+      context 'when one of the answers is finalised' do
+        before do
+          answer = submission.answers.sample
+          answer.finalise!
+          answer.save!
+        end
+
+        it 'finalises the rest of the answers' do
+          expect(submission.answers.all?(&:submitted?)).to be(false)
+          submission.finalise!
+          expect(submission.answers.all?(&:submitted?)).to be(true)
+        end
+      end
     end
 
     describe '#publish!' do

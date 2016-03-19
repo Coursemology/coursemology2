@@ -2,13 +2,24 @@
 module Course::Assessment::Submission::SubmissionsGuidedHelper
   # The maximum step that current user can attempt.
   def guided_max_step
-    @max_step ||= @assessment.questions.
-                  index(@assessment.questions.next_unanswered(@submission)) + 1
+    @guided_max_step ||= begin
+      question = guided_next_unanswered_question
+      if question
+        @assessment.questions.index(question) + 1
+      else
+        # All questions have been answered.
+        @assessment.questions.length
+      end
+    end
+  end
+
+  def guided_next_unanswered_question
+    @guided_next_unanswered_question ||= @assessment.questions.next_unanswered(@submission)
   end
 
   # The step that current user is on.
   def guided_current_step
-    @current_step ||= begin
+    @guided_current_step ||= begin
       @assessment.questions.index(guided_current_question) + 1
     end
   end
