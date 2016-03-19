@@ -4,7 +4,7 @@ class Course::Condition::Assessment < ActiveRecord::Base
 
   acts_as_condition
 
-  # Trigger for resolving the conditional for a course user
+  # Trigger for evaluating the satisfiability of conditionals for a course user
   Course::Assessment::Submission.after_save do |submission|
     Course::Condition::Assessment.on_dependent_status_change(submission)
   end
@@ -50,7 +50,7 @@ class Course::Condition::Assessment < ActiveRecord::Base
     return unless submission.previous_changes.key?(:workflow_state)
 
     submission.execute_after_commit do
-      resolve_conditional_for(submission.course_user) if submission.current_state >= :submitted
+      evaluate_conditional_for(submission.course_user) if submission.current_state >= :submitted
     end
   end
 

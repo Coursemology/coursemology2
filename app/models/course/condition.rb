@@ -20,6 +20,9 @@ class Course::Condition < ActiveRecord::Base
     # @return [Object] acts_as_conditionals objects belonging to the given course
     def conditionals_for(course)
       dependent_class_to_condition_class_mapping.keys.map do |conditional_name|
+        next unless conditional_name.constantize.include?(
+          ActiveRecord::Base::ConditionalInstanceMethods)
+
         conditional_name.constantize.where(course_id: course)
       end.flatten
     end
