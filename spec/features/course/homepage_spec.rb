@@ -27,6 +27,17 @@ RSpec.feature 'Course: Homepage' do
         visit course_path(course)
         expect(page).not_to have_content_tag_for(valid_announcement)
       end
+
+      scenario 'I am only able to see approved owner and managers in instructors list' do
+        manager = create(:course_manager, :approved, course: course)
+        teaching_assistant = create(:course_teaching_assistant, :approved, course: course)
+        visit course_path(course)
+        course.course_users.owner.with_approved_state.each do |course_user|
+          expect(page).to have_selector('span.name', text: course_user.user.name)
+        end
+        expect(page).to have_selector('span.name', text: manager.user.name)
+        expect(page).not_to have_selector('span.name', text: teaching_assistant.user.name)
+      end
     end
   end
 end
