@@ -2,15 +2,16 @@
 require 'rails_helper'
 
 RSpec.describe 'Extension: Acts as Condition', type: :model do
-  describe 'objects which act as conditions' do
-    subject do
-      Class.new(ActiveRecord::Base) do
-        def self.columns
-          []
-        end
-        acts_as_condition
-      end.new
+  class self::DummyConditionClass < ActiveRecord::Base
+    def self.columns
+      []
     end
+
+    acts_as_condition
+  end
+
+  describe 'objects which act as conditions' do
+    subject { self.class::DummyConditionClass.new }
 
     it 'implements #title' do
       expect(subject).to respond_to(:title)
@@ -26,17 +27,29 @@ RSpec.describe 'Extension: Acts as Condition', type: :model do
       expect(subject).to respond_to(:dependent_object)
       expect { subject.dependent_object }.to raise_error(NotImplementedError)
     end
+
+    describe 'callbacks' do
+      describe 'after condition is saved' do
+        context 'when there are changes' do
+          it 'rebuild satisfiability graph' do
+            allow(subject).to receive(:changed?).and_return(true)
+            expect(subject).to receive(:rebuild_satisfiability_graph).once
+            subject.run_callbacks(:save)
+          end
+        end
+
+        context 'when there are no changes' do
+          it 'does not rebuild satisfiability graph' do
+            expect(subject).to_not receive(:rebuild_satisfiability_graph)
+            subject.run_callbacks(:save)
+          end
+        end
+      end
+    end
   end
 
   describe 'classes which implement acts_as_condition' do
-    subject do
-      Class.new(ActiveRecord::Base) do
-        def self.columns
-          []
-        end
-        acts_as_condition
-      end
-    end
+    subject { self.class::DummyConditionClass }
 
     it 'implements .dependent_class' do
       expect(subject).to respond_to(:dependent_class)
