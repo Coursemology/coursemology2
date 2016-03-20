@@ -81,6 +81,12 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
+    describe '.managers_and_owners' do
+      it 'returns only owner and manager' do
+        expect(course.course_users.managers_and_owners).to contain_exactly(course_owner, manager)
+      end
+    end
+
     describe '.approved' do
       before do
         student.approve!
