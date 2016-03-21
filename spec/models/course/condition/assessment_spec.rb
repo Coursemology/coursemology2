@@ -12,13 +12,15 @@ RSpec.describe Course::Condition::Assessment, type: :model do
       context 'when an assessment is its own condition' do
         subject do
           assessment = create(:assessment, course: course)
-          build_stubbed(:assessment_condition,
-                        course: course, assessment: assessment, conditional: assessment).
-            tap do |assessment_condition|
-            allow(assessment_condition).to receive(:assessment_id_changed?).and_return(true)
-          end
+          build(:assessment_condition,
+                course: course, assessment: assessment, conditional: assessment)
         end
-        it { is_expected.to_not be_valid }
+
+        it 'is not valid' do
+          expect(subject).to_not be_valid
+          expect(subject.errors[:assessment]).to include(I18n.t('activerecord.errors.models.' \
+            'course/condition/assessment.attributes.assessment.references_self'))
+        end
       end
 
       context "when an assessment is already included in its conditional's conditions" do
@@ -31,7 +33,8 @@ RSpec.describe Course::Condition::Assessment, type: :model do
 
         it 'is not valid' do
           expect(subject).to_not be_valid
-          expect(subject.errors[:assessment]).to_not be_blank
+          expect(subject.errors[:assessment]).to include(I18n.t('activerecord.errors.models.' \
+            'course/condition/assessment.attributes.assessment.unique_dependency'))
         end
       end
 
@@ -49,6 +52,23 @@ RSpec.describe Course::Condition::Assessment, type: :model do
                         course: course, assessment: required_assessment, conditional: assessment)
         end
         it { is_expected.to be_valid }
+      end
+
+      context 'when an achievement has the conditional as its own conditions' do
+        subject do
+          assessment1 = create(:assessment, course: course)
+          assessment2 = create(:assessment, course: course)
+          create(:assessment_condition,
+                 course: course, assessment: assessment1, conditional: assessment2)
+          build(:assessment_condition,
+                course: course, assessment: assessment2, conditional: assessment1)
+        end
+
+        it 'is not valid' do
+          expect(subject).to_not be_valid
+          expect(subject.errors[:assessment]).to include(I18n.t('activerecord.errors.models.' \
+            'course/condition/assessment.attributes.assessment.cyclic_dependency'))
+        end
       end
     end
 

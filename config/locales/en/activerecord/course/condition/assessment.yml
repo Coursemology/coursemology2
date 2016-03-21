@@ -12,3 +12,4 @@ en:
             assessment:
               unique_dependency: 'cannot have duplicate conditions'
               references_self: 'cannot have itself as condition'
+              cyclic_dependency: 'cannot have cyclic dependency'

@@ -12,13 +12,15 @@ RSpec.describe Course::Condition::Achievement, type: :model do
       context 'when an achievement is its own condition' do
         subject do
           achievement = create(:achievement, course: course)
-          build_stubbed(:achievement_condition,
-                        course: course, achievement: achievement, conditional: achievement).
-            tap do |achievement_condition|
-            allow(achievement_condition).to receive(:achievement_id_changed?).and_return(true)
-          end
+          build(:achievement_condition,
+                course: course, achievement: achievement, conditional: achievement)
         end
-        it { is_expected.to_not be_valid }
+
+        it 'is not valid' do
+          expect(subject).to_not be_valid
+          expect(subject.errors[:achievement]).to include(I18n.t('activerecord.errors.models.' \
+            'course/condition/achievement.attributes.achievement.references_self'))
+        end
       end
 
       context "when an achievement is already included in its conditional's conditions" do
@@ -31,7 +33,8 @@ RSpec.describe Course::Condition::Achievement, type: :model do
 
         it 'is not valid' do
           expect(subject).to_not be_valid
-          expect(subject.errors[:achievement]).to_not be_blank
+          expect(subject.errors[:achievement]).to include(I18n.t('activerecord.errors.models.' \
+            'course/condition/achievement.attributes.achievement.unique_dependency'))
         end
       end
 
@@ -49,6 +52,23 @@ RSpec.describe Course::Condition::Achievement, type: :model do
                         course: course, achievement: required_achievement, conditional: achievement)
         end
         it { is_expected.to be_valid }
+      end
+
+      context 'when an achievement has the conditional as its own conditions' do
+        subject do
+          achievement1 = create(:achievement, course: course)
+          achievement2 = create(:achievement, course: course)
+          create(:achievement_condition,
+                 course: course, achievement: achievement1, conditional: achievement2)
+          build(:achievement_condition,
+                course: course, achievement: achievement2, conditional: achievement1)
+        end
+
+        it 'is not valid' do
+          expect(subject).to_not be_valid
+          expect(subject.errors[:achievement]).to include(I18n.t('activerecord.errors.models.' \
+            'course/condition/achievement.attributes.achievement.cyclic_dependency'))
+        end
       end
     end
 

@@ -73,6 +73,14 @@ module Extensions::Conditional::ActiveRecord::Base
     def rebuild_satisfiability_graph(_course)
       # TODO: Replace with the job for building the satisfiability graph
     end
+
+    # @return [Boolean] true if the condition completes a cyclic path in the satifiability graph.
+    def cyclic?
+      # This condition will add an edge connecting the dependent_object to the conditional in the
+      # satisfiability graph. Thus a cyclic dependency will be created if there is an existing
+      # path from the conditional to the dependent_object.
+      Course::Conditional::UserSatisfiabilityGraph.reachable?(conditional, dependent_object)
+    end
   end
 
   module ConditionClassMethods

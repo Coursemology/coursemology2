@@ -20,9 +20,10 @@ class Course::Conditional::UserSatisfiabilityGraph
   # @raise [ArgumentError] When there is a cyclic dependency within the given conditionals
   def initialize(conditionals)
     @edges = EdgeSet.new
+    @nodes = conditionals
 
     begin
-      @graph = TSort.tsort(each_node(conditionals), each_child)
+      @graph = TSort.tsort(each_node, each_child)
     rescue TSort::Cyclic
       raise ArgumentError, 'Cyclic dependency detected in given conditionals'
     end
@@ -50,10 +51,21 @@ class Course::Conditional::UserSatisfiabilityGraph
     satisfied_conditionals
   end
 
+  # Return true if the destination node is reachable from the source node
+  #
+  # @param [Object] source Conditional node as the source
+  # @param [Object] dest Conditional node as the destination
+  # @return [Bool] true if the dest node is reachable from the source node
+  def self.reachable?(source, dest)
+    return true if source == dest
+
+    dest.specific_conditions.index { |c| reachable?(source, c.dependent_object) }.present?
+  end
+
   private
 
-  def each_node(conditionals)
-    conditionals.method(:each)
+  def each_node
+    @nodes.method(:each)
   end
 
   def each_child
