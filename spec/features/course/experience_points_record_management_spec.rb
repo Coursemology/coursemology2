@@ -23,7 +23,7 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
 
       scenario "I can view a course student's active experience points records" do
         records
-        visit course_course_user_experience_points_records_path(course, course_student)
+        visit course_user_experience_points_records_path(course, course_student)
 
         expect(page).to have_content_tag_for(record)
         expect(page).to have_content_tag_for(manual_record)
@@ -32,17 +32,17 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
 
       scenario "I can delete a course student's active manually-awarded points records" do
         records
-        visit course_course_user_experience_points_records_path(course, course_student)
+        visit course_user_experience_points_records_path(course, course_student)
 
         record_path =
-          course_course_user_experience_points_record_path(course, course_student, record)
+          course_user_experience_points_record_path(course, course_student, record)
         manual_record_path =
-          course_course_user_experience_points_record_path(course, course_student, manual_record)
+          course_user_experience_points_record_path(course, course_student, manual_record)
 
         expect(page).not_to have_link(nil, href: record_path)
         find_link(nil, href: manual_record_path).click
         expect(current_path).
-          to eq(course_course_user_experience_points_records_path(course, course_student))
+          to eq(course_user_experience_points_records_path(course, course_student))
         expect(page).not_to have_content_tag_for(manual_record)
       end
     end
@@ -52,7 +52,7 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
 
       scenario 'I can view my active experience points records' do
         records
-        visit course_course_user_experience_points_records_path(course, course_student)
+        visit course_user_experience_points_records_path(course, course_student)
 
         expect(page).to have_content_tag_for(record)
         expect(page).to have_content_tag_for(manual_record)

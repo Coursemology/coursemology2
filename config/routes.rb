@@ -215,6 +215,7 @@ Rails.application.routes.draw do
       end
 
       resources :users, only: [:index, :show, :update, :destroy] do
+        resources :experience_points_records, only: [:index, :destroy]
         get 'invite' => 'user_invitations#new', on: :collection
         post 'invite' => 'user_invitations#create', on: :collection
       end
@@ -235,10 +236,6 @@ Rails.application.routes.draw do
           get 'download', on: :member
           resources :materials, path: 'files'
         end
-      end
-
-      resources :course_users, only: [] do
-        resources :experience_points_records, only: [:index, :destroy]
       end
 
       resource :leaderboard, only: [:show]

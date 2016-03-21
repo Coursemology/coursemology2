@@ -15,7 +15,7 @@ div.row
 
       - if can?(:read, Course::ExperiencePointsRecord.new(course_user: @course_user))
         p = link_to t('.experience_points_earned_html', points: @course_user.experience_points),
-                    course_course_user_experience_points_records_path(current_course, @course_user)
+                    course_user_experience_points_records_path(current_course, @course_user)
 
 - if @course_user.student? && @course_user.achievements.present?
   div.row
