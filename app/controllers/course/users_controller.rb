@@ -19,7 +19,7 @@ class Course::UsersController < Course::ComponentController
     course_users = current_course.course_users
     case params[:action]
     when 'index'
-      @course_users ||= course_users.students.includes(:user)
+      @course_users ||= course_users.with_approved_state.students.includes(:user)
     else
       return if super
       @course_user ||= course_users.includes(:user).find(params[:id])
