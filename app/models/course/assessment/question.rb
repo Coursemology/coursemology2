@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Question < ActiveRecord::Base
   actable
+  has_many_attachments
 
   belongs_to :assessment, inverse_of: :questions
   has_and_belongs_to_many :skills

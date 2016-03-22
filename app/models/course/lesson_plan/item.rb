@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::LessonPlan::Item < ActiveRecord::Base
   actable
+  has_many_attachments
 
   after_initialize :set_default_values, if: :new_record?
 
