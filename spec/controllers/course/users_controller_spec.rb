@@ -150,5 +150,20 @@ RSpec.describe Course::UsersController, type: :controller do
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
     end
+
+    describe '#show' do
+      before do
+        sign_in(user)
+        create(:course_user, :approved, course: course, user: user)
+      end
+      subject { get :show, course_id: course, id: course_user }
+
+      context 'when the user is not registered' do
+        let(:course_user) { create(:course_student, course: course) }
+        it 'raises an error' do
+          expect { subject }.to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
+    end
   end
 end
