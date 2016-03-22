@@ -241,4 +241,6 @@ Rails.application.routes.draw do
       resource :leaderboard, only: [:show]
     end
   end
+
+  resources :attachment_references, path: 'attachments', only: [:show]
 end
