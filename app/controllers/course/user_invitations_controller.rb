@@ -18,10 +18,13 @@ class Course::UserInvitationsController < Course::ComponentController
   private
 
   def course_user_invitation_params # :nodoc:
-    invitations_attributes = { course_user: [:name], user_email: [:email] }
-    @invite_params ||= params.require(:course).
-                       permit(:invitations_file, :registration_key,
-                              invitations_attributes: invitations_attributes)
+    @course_user_invitation_params ||= begin
+      params[:course] = { invitations_attributes: {} } unless params.key?(:course)
+
+      invitations_attributes = { course_user: [:name], user_email: [:email] }
+      params.require(:course).permit(:invitations_file, :registration_key,
+                                     invitations_attributes: invitations_attributes)
+    end
   end
 
   # Determines the parameters to be passed to the invitation service object.
