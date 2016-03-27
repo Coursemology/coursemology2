@@ -11,6 +11,7 @@ class Course::UsersController < Course::ComponentController
   end
 
   def show # :nodoc:
+    raise ActiveRecord::RecordNotFound unless @course_user.approved?
   end
 
   private
