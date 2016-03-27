@@ -23,10 +23,10 @@ RSpec.describe System::Admin::AnnouncementsController, type: :controller do
           subject
         end
 
-        it 'redirects with a flash message' do
-          it { is_expected.to redirect_to(admin_announcements_path) }
-          expect(flash[:danger]).to(eq(I18n.t('system.admin.announcements.destroy.failure',
-                                              error: '')))
+        it { is_expected.to redirect_to(admin_announcements_path) }
+        it 'sets an error flash message' do
+          expect(flash[:danger]).to eq(I18n.t('system.admin.announcements.destroy.failure',
+                                              error: ''))
         end
       end
     end
