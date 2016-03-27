@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.course-achievements {
+.course-achievement-achievements {
   .achievement-list,
   .achievement-form {
     .image > img {
@@ -23,6 +23,11 @@
 
   &.show {
     .course-user-achievement {
+      .image > img {
+        height: $course-achievement-user-profile;
+        width: $course-achievement-user-profile;
+      }
+
       text-align: center;
     }
   }

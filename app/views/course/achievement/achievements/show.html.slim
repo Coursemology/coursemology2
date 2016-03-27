@@ -11,5 +11,5 @@ div.user-achievements
       div.col-xs-4.col-sm-3.col-md-2.col-lg-1
         = div_for(course_user, class: ['course-user-achievement']) do
           = link_to_course_user(course_user) do
-            = display_user_image(course_user.user)
-            = display_course_user(course_user)
+            div = display_user_image(course_user.user)
+            div = display_course_user(course_user)
