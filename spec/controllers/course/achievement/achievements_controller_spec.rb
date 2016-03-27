@@ -15,6 +15,16 @@ RSpec.describe Course::Achievement::AchievementsController, type: :controller do
 
     before { sign_in(user) }
 
+    describe '#index' do
+      before do
+        allow(controller).to receive_message_chain('current_component_host.[]').and_return(nil)
+      end
+      subject { get :index, course_id: course }
+      it 'raises an component not found error' do
+        expect { subject }.to raise_error(ComponentNotFoundError)
+      end
+    end
+
     describe '#destroy' do
       subject { delete :destroy, course_id: course, id: achievement_stub }
 

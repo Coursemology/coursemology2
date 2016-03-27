@@ -85,9 +85,9 @@ en:
       lesson_plan:
         items:
           index: :'course.lesson_plan.items.index.header'
-        milestones: :'breadcrumbs.course.lesson_plan.items'
-      events:
-        index: :'breadcrumbs.course.lesson_plan_items'
+        milestones: :'breadcrumbs.course.lesson_plan.items.index'
+        events:
+          index: :'breadcrumbs.course.lesson_plan.items.index'
       material:
         folders:
           new_subfolder: :'course.material.folders.new_subfolder.header'
