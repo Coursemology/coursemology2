@@ -65,6 +65,7 @@ class Course < ActiveRecord::Base
 
   delegate :staff, to: :course_users
   delegate :instructors, to: :course_users
+  delegate :managers_and_owners, to: :course_users
   delegate :user?, to: :course_users
 
   def self.use_relative_model_naming?

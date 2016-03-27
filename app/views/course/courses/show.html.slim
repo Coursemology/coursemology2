@@ -9,7 +9,7 @@
 
   h2 = t('.instructors')
   div
-    = render partial: 'layouts/user', collection: current_course.instructors.map(&:user)
+    = render partial: 'layouts/user', collection: current_course.managers_and_owners.includes(:user).map(&:user)
   - if current_course.user?(current_user)
     h2 = t('.announcements')
     div
