@@ -75,13 +75,16 @@ RSpec.feature 'Course: Achievements' do
         expect(achievement.reload.description).to eq(new_description)
       end
 
-      scenario 'I can award an achievement to a student' do
+      scenario 'I can award an achievement to a confirmed student' do
         achievement = create(:course_achievement, course: course)
-        student = create(:course_student, course: course)
+        student = create(:course_student, :approved, course: course)
         course_user_id = "achievement_course_user_ids_#{student.id}"
+        unregistered_user = create(:course_user, course: course)
+        unregistered_user_id = "achievement_course_user_ids_#{unregistered_user.id}"
 
         visit course_achievement_course_users_path(course, achievement)
         expect(page).to have_unchecked_field(course_user_id)
+        expect(page).not_to have_field(unregistered_user_id)
         check course_user_id
 
         expect do
