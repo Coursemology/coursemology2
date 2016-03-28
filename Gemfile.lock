@@ -99,7 +99,7 @@ GEM
     anbt-sql-formatter (0.0.3)
     arel (6.0.3)
     ast (2.2.0)
-    autoprefixer-rails (6.3.4)
+    autoprefixer-rails (6.3.5)
       execjs
     awesome_print (1.6.1)
     bcrypt (3.1.11)
@@ -333,7 +333,7 @@ GEM
       activesupport (= 4.2.5.2)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (11.1.1)
+    rake (11.1.2)
     rb-fsevent (0.9.7)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
