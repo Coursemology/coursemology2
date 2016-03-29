@@ -18,8 +18,8 @@ class Course::Forum::Topic < ActiveRecord::Base
   calculated :post_count, (lambda do
     Course::Discussion::Topic.joins { posts.inner }.
       where do
-        (course_discussion_topics.actable_id == course_forum_topics.id) &
-        (course_discussion_topics.actable_type == 'Course::Forum::Topic')
+        (actable_id == course_forum_topics.id) &
+        (actable_type == Course::Forum::Topic.name)
       end.select { count('*') }
   end)
 
@@ -27,14 +27,14 @@ class Course::Forum::Topic < ActiveRecord::Base
   #   The number of views in this topic.
   calculated :view_count, (lambda do
     Course::Forum::Topic::View.where do
-      course_forum_topic_views.topic_id == course_forum_topics.id
+      topic_id == course_forum_topics.id
     end.select { count('*') }
   end)
 
   # @!method self.with_latest_post
   #   Augments all returned records with the latest post.
   scope :with_latest_post, (lambda do
-    topic_ids = pluck('course_discussion_topics.id')
+    topic_ids = distinct(false).pluck('course_discussion_topics.id')
     ids = Course::Discussion::Post.unscope(:order).
           select { max(id) }.group { course_discussion_posts.topic_id }.
           where { topic_id.in(topic_ids) }
