@@ -9,7 +9,7 @@ class FileUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    'uploads/'
+    "uploads/attachments/#{partition_name(model.name)}"
   end
 
   def filename
@@ -48,4 +48,12 @@ class FileUploader < CarrierWave::Uploader::Base
   # def filename
   #   "something.jpg" if original_filename
   # end
+
+  private
+
+  # Returns the name of the model in a split path form.
+  # e.g. returns 'ab/cd/ef' for name 'abcdef'.
+  def partition_name(name)
+    name.scan(/.{2}/).first(3).join('/')
+  end
 end
