@@ -16,13 +16,6 @@ GIT
       mime-types (>= 1.16)
 
 GIT
-  remote: git://github.com/lowjoel/cancancan.git
-  revision: 6cdb4aded3c16d30cc466d32c6d1358760da9d43
-  branch: issue-284
-  specs:
-    cancancan (1.13.1)
-
-GIT
   remote: git://github.com/lowjoel/simple_token_authentication.git
   revision: 75cca3c0327e8ae9c8e2554e3d51b6f1b5db18a1
   branch: optional-params-headers
@@ -118,6 +111,11 @@ GEM
       uniform_notifier (~> 1.9.0)
     calculated_attributes (0.1.3)
       activerecord (>= 3.2.20)
+    cancancan (1.13.1)
+    cancancan-squeel (0.1.0)
+      activerecord (>= 4.1)
+      cancancan (~> 1.10)
+      squeel (~> 1.2)
     capybara (2.6.2)
       addressable
       mime-types (>= 1.16)
@@ -536,7 +534,8 @@ DEPENDENCIES
   bullet (>= 4.14.9)
   bundler (>= 1.10.3)
   calculated_attributes (>= 0.1.3)
-  cancancan!
+  cancancan
+  cancancan-squeel
   capybara
   carrierwave!
   cocoon
