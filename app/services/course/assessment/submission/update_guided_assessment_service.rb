@@ -12,6 +12,12 @@ class Course::Assessment::Submission::UpdateGuidedAssessmentService <
     end
   end
 
+  def load_or_create_answers
+    super if @submission.attempting?
+
+    @answers = @submission.answers.where(question: current_question)
+  end
+
   private
 
   def answer_id_param
@@ -51,8 +57,20 @@ class Course::Assessment::Submission::UpdateGuidedAssessmentService <
   end
 
   def questions_to_attempt
-    @questions_to_attempt ||= @submission.assessment.questions.
-                              step(@submission, step_param.to_i - 1)
+    @assessment.questions.where(id: current_question)
+  end
+
+  def current_question
+    @current_question ||=
+      begin
+        step = step_param.to_i - 1
+        if @submission.attempting?
+          @assessment.questions.step(@submission, step)
+        else
+          step = [[0, step].max, @assessment.questions.length - 1].min
+          @assessment.questions.fetch(step)
+        end
+      end
   end
 
   def current_step_path

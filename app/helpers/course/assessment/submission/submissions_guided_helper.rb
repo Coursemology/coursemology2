@@ -20,7 +20,7 @@ module Course::Assessment::Submission::SubmissionsGuidedHelper
   # The step that current user is on.
   def guided_current_step
     @guided_current_step ||= begin
-      @assessment.questions.index(guided_current_question) + 1
+      @assessment.questions.index(@current_question) + 1
     end
   end
 
@@ -32,8 +32,7 @@ module Course::Assessment::Submission::SubmissionsGuidedHelper
     ''
   end
 
-  # The question on current step.
-  def guided_current_question
-    @questions_to_attempt.first
+  def guided_current_answer
+    @answers.last
   end
 end

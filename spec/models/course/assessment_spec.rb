@@ -143,10 +143,10 @@ RSpec.describe Course::Assessment do
         context 'when no question is answered' do
           it 'returns the first question' do
             expect(assessment.questions.step(submission, 2)).
-              to contain_exactly(assessment.questions.first)
+              to eq(assessment.questions.first)
 
             expect(assessment.questions.step(submission, -1)).
-              to contain_exactly(assessment.questions.first)
+              to eq(assessment.questions.first)
           end
         end
 
@@ -160,21 +160,21 @@ RSpec.describe Course::Assessment do
           context 'when index is inaccessible' do
             it 'returns the first unanswered question' do
               expect(assessment.questions.step(submission, 1)).
-                to contain_exactly(assessment.questions.second)
+                to eq(assessment.questions.second)
             end
           end
 
           context 'when index is less than 0' do
             it 'returns the first question' do
               expect(assessment.questions.step(submission, -1)).
-                to contain_exactly(assessment.questions.first)
+                to eq(assessment.questions.first)
             end
           end
 
           context 'when index is accessible' do
             it 'returns the question at given index' do
               expect(assessment.questions.step(submission, 0)).
-                to contain_exactly(assessment.questions.first)
+                to eq(assessment.questions.first)
             end
           end
         end
