@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160229082515) do
+ActiveRecord::Schema.define(version: 20160330031839) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -363,6 +363,16 @@ ActiveRecord::Schema.define(version: 20160229082515) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "course_discussion_post_votes", force: :cascade do |t|
+    t.integer  "post_id",    null: false, index: {name: "fk__course_discussion_post_votes_post_id"}, foreign_key: {references: "course_discussion_posts", name: "fk_course_discussion_post_votes_post_id", on_update: :no_action, on_delete: :no_action}
+    t.boolean  "vote_flag",  null: false
+    t.integer  "creator_id", null: false, index: {name: "fk__course_discussion_post_votes_creator_id"}, foreign_key: {references: "users", name: "fk_course_discussion_post_votes_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id", null: false, index: {name: "fk__course_discussion_post_votes_updater_id"}, foreign_key: {references: "users", name: "fk_course_discussion_post_votes_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+  add_index "course_discussion_post_votes", ["post_id", "creator_id"], name: "index_course_discussion_post_votes_on_post_id_and_creator_id", unique: true
 
   create_table "course_discussion_topic_subscriptions", force: :cascade do |t|
     t.integer "topic_id", null: false, index: {name: "fk__course_discussion_topic_subscriptions_topic_id"}, foreign_key: {references: "course_discussion_topics", name: "fk_course_discussion_topic_subscriptions_topic_id", on_update: :no_action, on_delete: :no_action}
