@@ -92,15 +92,13 @@ RSpec.describe ApplicationFormattersHelper do
       let(:user) { build_stubbed(:user) }
       subject { helper.display_user_image(user) }
 
-      context 'when the user has a profile photo' do
-        it 'has an image tag' do
-          expect(subject).to have_tag('img', with: {
-            :'src^' => '/assets/user_silhouette-'
-          })
+      context "when the user doesn't have a profile photo" do
+        it 'displays the default image' do
+          expect(subject).to have_tag('img', with: { :'src^' => '/assets/user_silhouette-' })
         end
       end
 
-      context "when the user doesn't have a profile photo" do
+      context 'when the user has a profile photo' do
         let(:image) { File.join(Rails.root, '/spec/fixtures/files/picture.jpg') }
         before do
           file = File.open(image, 'rb')
@@ -109,6 +107,15 @@ RSpec.describe ApplicationFormattersHelper do
         end
 
         it { is_expected.to include(user.profile_photo.medium.url) }
+      end
+
+      context 'when the user is nil' do
+        let(:image) { File.join(Rails.root, '/spec/fixtures/files/picture.jpg') }
+        subject { helper.display_user_image(nil) }
+
+        it 'displays the default image' do
+          expect(subject).to have_tag('img', with: { :'src^' => '/assets/user_silhouette-' })
+        end
       end
     end
 

@@ -37,7 +37,11 @@ module ApplicationFormattersHelper
   # @return [String] A HTML fragment containing the image to display for the user.
   def display_user_image(user)
     content_tag(:span, class: ['image']) do
-      image_tag(user.profile_photo.medium.url || 'user_silhouette.svg')
+      if user.nil? || user.profile_photo.medium.url.nil?
+        image_tag('user_silhouette.svg')
+      else
+        image_tag(user.profile_photo.medium.url)
+      end
     end
   end
 
