@@ -3,6 +3,7 @@ class Course::LeaderboardsController < Course::ComponentController
   before_action :check_component
   before_action :load_settings
   before_action :add_leaderboard_breadcrumb
+  helper Course::Achievement::ControllerHelper.name.sub(/Helper$/, '')
 
   def show #:nodoc:
     load_course_users

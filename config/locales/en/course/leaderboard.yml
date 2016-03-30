@@ -5,3 +5,10 @@ en:
       title: :'course.leaderboard.index.header'
       index:
         header: 'Leaderboard'
+    # TODO: Refactor to singular controller
+    leaderboards:
+      show:
+        header: 'Leaderboard'
+        level_header: 'By Level'
+        level: 'Level %{level_number}'
+        achievement_count_header: 'By Achievement Count'
