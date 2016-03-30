@@ -104,5 +104,25 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         end
       end
     end
+
+    context 'As a Course Staff' do
+      let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
+
+      scenario "I can grade the student's work" do
+        mcq_questions.each { |q| q.attempt(submission).save! }
+        submission.finalise!
+        submission.save!
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        click_link I18n.t('course.assessment.submission.submissions.guided.auto_grade')
+        wait_for_job
+
+        click_button I18n.t('course.assessment.submission.submissions.guided.publish')
+        expect(current_path).
+          to eq(edit_course_assessment_submission_path(course, assessment, submission))
+        expect(submission.reload.graded?).to be(true)
+      end
+    end
   end
 end
