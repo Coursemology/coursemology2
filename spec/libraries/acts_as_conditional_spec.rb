@@ -2,34 +2,39 @@
 require 'rails_helper'
 
 RSpec.describe 'Extension: Acts as Conditional', type: :model do
-  let(:instance) { create(:instance) }
-
-  with_tenant(:instance) do
-    let(:course) { create(:course) }
-    let(:achievement) do
-      achievement = build(:achievement, course: course)
-      create(:achievement_condition, achievement: achievement)
-      achievement
+  class self::DummyConditionalClass < ActiveRecord::Base
+    def self.columns
+      []
     end
 
-    describe '#conditions' do
-      subject { achievement.conditions }
+    acts_as_conditional
+  end
 
-      it 'is of type Condition' do
-        expect(subject).to all be_instance_of(Course::Condition)
-      end
+  class self::DummyConditionClass < ActiveRecord::Base
+    def self.columns
+      []
     end
+
+    acts_as_condition
+  end
+
+  describe 'objects which act as conditional' do
+    subject { self.class::DummyConditionalClass.new }
+
+    it { is_expected.to have_many(:conditions).inverse_of(:conditional) }
 
     describe '#specific_conditions' do
-      subject { achievement.specific_conditions }
-
       it 'is of the specific condition type' do
-        expect(subject).to all be_instance_of(Course::Condition::Achievement)
+        condition = instance_double(Course::Condition)
+        allow(condition).to receive(:actable).
+          and_return(self.class::DummyConditionClass.new)
+        allow(subject).to receive(:conditions).and_return [condition]
+
+        expect(subject.specific_conditions).to all be_instance_of(self.class::DummyConditionClass)
       end
     end
 
     describe '#conditions_satisfied_by?' do
-      subject { achievement }
       let(:satisfied_condition) do
         condition = instance_double(Course::Condition)
         allow(condition).to receive(:satisfied_by?).and_return(true)
