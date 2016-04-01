@@ -32,6 +32,20 @@ module Extensions::Conditional::ActiveRecord::Base
     def conditions_satisfied_by?(course_user)
       conditions.all? { |condition| condition.satisfied_by?(course_user) }
     end
+
+    # Permit the conditional for the given course user.
+    #
+    # @param [CourseUser] _course_user The course user in which the conditional is to unlock for
+    def permitted_for!(_course_user)
+      raise NotImplementedError, 'Subclasses must implement a permitted_for! method.'
+    end
+
+    # Preclude the conditional for the given course user.
+    #
+    # @param [CourseUser] _course_user The course user in which the conditional is to lock for
+    def precluded_for!(_course_user)
+      raise NotImplementedError, 'Subclasses must implement a precluded_for! method.'
+    end
   end
 
   module ConditionInstanceMethods
@@ -44,13 +58,13 @@ module Extensions::Conditional::ActiveRecord::Base
     # A human-readable name for each condition; usually just wraps a title
     # or name field. Meant to be used in a polymorphic manner for views.
     def title
-      raise NotImplementedError
+      raise NotImplementedError, 'Subclasses must implement a title method.'
     end
 
     # @return [Object] Conditional object that the condition depends on to check if it is
     #   satisfiable
     def dependent_object
-      raise NotImplementedError
+      raise NotImplementedError, 'Subclasses must implement a dependent_object method.'
     end
 
     # Checks if the condition is satisfied by the user.
@@ -58,7 +72,7 @@ module Extensions::Conditional::ActiveRecord::Base
     # @param [CourseUser] _user The user that the condition is being checked on
     # @return [Boolean] true if the condition is met and false otherwise
     def satisfied_by?(_user)
-      raise NotImplementedError
+      raise NotImplementedError, 'Subclasses must implement a satisfied_by? method.'
     end
 
     private
@@ -86,7 +100,7 @@ module Extensions::Conditional::ActiveRecord::Base
   module ConditionClassMethods
     # Class that the condition depends on.
     def dependent_class
-      raise NotImplementedError
+      raise NotImplementedError, 'Subclasses must implement a dependent_class method.'
     end
 
     # Evaluate and update the satisfied conditionals for the given course user.

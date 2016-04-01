@@ -16,4 +16,10 @@ class Course::Achievement < ActiveRecord::Base
   def set_defaults
     self.weight ||= 10
   end
+
+  def permitted_for!(_course_user)
+  end
+
+  def precluded_for!(_course_user)
+  end
 end

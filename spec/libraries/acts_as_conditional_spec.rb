@@ -23,6 +23,16 @@ RSpec.describe 'Extension: Acts as Conditional', type: :model do
 
     it { is_expected.to have_many(:conditions).inverse_of(:conditional) }
 
+    it 'implements #permitted_for!' do
+      expect(subject).to respond_to(:permitted_for!)
+      expect { subject.permitted_for!(double) }.to raise_error(NotImplementedError)
+    end
+
+    it 'implements #precluded_for!' do
+      expect(subject).to respond_to(:precluded_for!)
+      expect { subject.precluded_for!(double) }.to raise_error(NotImplementedError)
+    end
+
     describe '#specific_conditions' do
       it 'is of the specific condition type' do
         condition = instance_double(Course::Condition)
