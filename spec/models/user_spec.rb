@@ -21,10 +21,10 @@ RSpec.describe User do
   with_tenant(:instance) do
     describe '.system' do
       it 'returns the system user' do
-        default_user = User.system
-        expect(default_user.password).to be_nil
-        expect(default_user.email).to be_nil
-        expect(default_user.system?).to be_truthy
+        user = User.system
+        expect(user.password).to be_nil
+        expect(user.email).to be_nil
+        expect(user.built_in?).to be_truthy
       end
     end
 
@@ -33,13 +33,14 @@ RSpec.describe User do
         user = User.deleted
         expect(user.password).to be_nil
         expect(user.email).to be_nil
+        expect(user.built_in?).to be_truthy
       end
     end
 
-    describe '#system?' do
+    describe '#built_in?' do
       context 'when the user is a normal user' do
         it 'returns false' do
-          expect(build_stubbed(:user).system?).to be_falsey
+          expect(build_stubbed(:user).built_in?).to be_falsey
         end
       end
     end
@@ -140,15 +141,15 @@ RSpec.describe User do
     end
 
     describe 'validations' do
-      context 'when a system user is specified' do
-        let(:system_user_stub) do
+      context 'when a built in user is specified' do
+        let(:built_in_user_stub) do
           stub = build(:user)
           stub.email = nil
           stub.encrypted_password = nil
-          allow(stub).to receive(:system?).and_return(true)
+          allow(stub).to receive(:built_in?).and_return(true)
           stub
         end
-        subject { system_user_stub }
+        subject { built_in_user_stub }
 
         it { is_expected.to be_valid }
         it { is_expected.to validate_absence_of(:email) }

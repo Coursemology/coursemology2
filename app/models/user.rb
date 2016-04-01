@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  validates :email, :encrypted_password, :authentication_token, absence: true, if: :system?
+  validates :email, :encrypted_password, :authentication_token, absence: true, if: :built_in?
   schema_validations except: [:encrypted_password]
 
   has_many :emails, -> { order('primary' => :desc) }, class_name: User::Email.name,
@@ -63,11 +63,11 @@ class User < ActiveRecord::Base
   scope :ordered_by_name, -> { order(:name) }
   scope :human_users, -> { where.not(id: [User::SYSTEM_USER_ID, User::DELETED_USER_ID]) }
 
-  # Gets whether the current user is the system user.
+  # Gets whether the current user is one of the the built in users.
   #
   # @return [Boolean]
-  def system?
-    id == User::SYSTEM_USER_ID || User::DELETED_USER_ID
+  def built_in?
+    id == User::SYSTEM_USER_ID || id == User::DELETED_USER_ID
   end
 
   # Unset current primary email. This method would immediately set the attributes in the database.
