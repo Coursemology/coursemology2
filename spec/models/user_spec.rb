@@ -28,6 +28,14 @@ RSpec.describe User do
       end
     end
 
+    describe '.deleted' do
+      it 'returns the deleted user' do
+        user = User.deleted
+        expect(user.password).to be_nil
+        expect(user.email).to be_nil
+      end
+    end
+
     describe '#system?' do
       context 'when the user is a normal user' do
         it 'returns false' do

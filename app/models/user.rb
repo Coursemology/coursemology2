@@ -2,6 +2,7 @@
 # Represents a user in the application. Users are shared across all instances.
 class User < ActiveRecord::Base
   SYSTEM_USER_ID = 0
+  DELETED_USER_ID = -1
 
   include UserSearchConcern
   model_stamper
@@ -21,6 +22,17 @@ class User < ActiveRecord::Base
       @system ||= find(User::SYSTEM_USER_ID)
       raise 'No system user. Did you run rake db:seed?' unless @system
       @system
+    end
+
+    # Finds the Deleted user.
+    #
+    # Same as the System user, this account cannot be logged into.
+    #
+    # @return [User]
+    def deleted
+      @deleted ||= find(User::DELETED_USER_ID)
+      raise 'No deleted user. Did you run rake db:seed?' unless @deleted
+      @deleted
     end
   end
 
@@ -49,13 +61,13 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :emails
 
   scope :ordered_by_name, -> { order(:name) }
-  scope :human_users, -> { where { id != User::SYSTEM_USER_ID } }
+  scope :human_users, -> { where.not(id: [User::SYSTEM_USER_ID, User::DELETED_USER_ID]) }
 
   # Gets whether the current user is the system user.
   #
   # @return [Boolean]
   def system?
-    id == User::SYSTEM_USER_ID
+    id == User::SYSTEM_USER_ID || User::DELETED_USER_ID
   end
 
   # Unset current primary email. This method would immediately set the attributes in the database.
