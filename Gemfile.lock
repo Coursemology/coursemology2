@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: git://github.com/carrierwaveuploader/carrierwave.git
-  revision: 0198be600e6a27fead346d2d0e8a382620b772b5
+  revision: f0c06c04de6ceda30f1a1627d21394f70359606b
   specs:
     carrierwave (0.10.0)
       activemodel (>= 4.0.0)
@@ -136,7 +136,7 @@ GEM
     coffee-script-source (1.10.0)
     concurrent-ruby (1.0.1)
     consistency_fail (0.3.4)
-    coursemology-polyglot (0.1.0)
+    coursemology-polyglot (0.2.0)
       activesupport (~> 4.2.0, >= 4.2.2)
     coveralls (0.8.13)
       json (~> 1.8)
