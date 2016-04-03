@@ -5,6 +5,7 @@ RSpec.describe Course::Conditional::UserSatisfiabilityGraph do
     acts_as_conditional
     acts_as_condition
     attr_accessor :conditions
+    attr_accessor :satisfied
     attr_accessor :id
 
     def specific_conditions
@@ -13,6 +14,18 @@ RSpec.describe Course::Conditional::UserSatisfiabilityGraph do
 
     def dependent_object
       self
+    end
+
+    def satisfied_by?(_course_user)
+      @satisfied
+    end
+
+    def permitted_for!(_course_user)
+      @satisfied = true
+    end
+
+    def precluded_for!(_course_user)
+      @satisfied = false
     end
 
     def inspect
@@ -26,6 +39,7 @@ RSpec.describe Course::Conditional::UserSatisfiabilityGraph do
     def self.build(conditions, id)
       dummy = new
       dummy.conditions = conditions
+      dummy.satisfied = false
       dummy.id = id
       dummy
     end
@@ -110,6 +124,10 @@ RSpec.describe Course::Conditional::UserSatisfiabilityGraph do
   end
 
   describe '#evaluate' do
+    def check_evaluated_result(graph, satisfied)
+      graph.values.index { |v| v.satisfied != satisfied.include?(v) }.nil?
+    end
+
     context 'simple graph' do
       let(:graph) do
         graph = create_simple_graph
@@ -119,62 +137,40 @@ RSpec.describe Course::Conditional::UserSatisfiabilityGraph do
 
       subject { Course::Conditional::UserSatisfiabilityGraph.new(graph.values) }
 
-      context 'when satisfied conditions do not satisfy other conditions' do
-        context 'when no conditions are satisfied initially' do
-          it 'returns only conditionals with no condition' do
-            expect(subject.evaluate([], double)).to contain_exactly(graph[:A], graph[:B])
-          end
-        end
-
-        context 'when condition A & B are satisfied initially' do
-          it 'returns only conditionals that have been satsified' do
-            expect(subject.evaluate([graph[:A], graph[:B]], double)).
-              to contain_exactly(graph[:A], graph[:B], graph[:C])
-          end
-        end
-
-        context 'when all conditions are satisfied initially' do
-          it 'returns all conditionals' do
-            expect(subject.evaluate(graph.values, double)).to match_array(graph.values)
-          end
+      context 'when satisfied conditional do not satisfied additional conditions' do
+        it 'permits only conditionals with no condition' do
+          conditions = subject.evaluate(double)
+          expect(check_evaluated_result(graph, [graph[:A], graph[:B]])).to be_truthy
+          expect(conditions).to be_empty
         end
       end
 
-      context 'when satisfied conditionals do satisfy other conditions' do
-        context 'when no conditions are satisfied initially' do
-          context 'when conditions for A & B are satisfied by the user' do
-            it 'returns conditionals up to C' do
-              allow(graph[:A]).to receive(:satisfied_by?).and_return(true)
-              allow(graph[:B]).to receive(:satisfied_by?).and_return(true)
-              expect(subject.evaluate([], double)).
-                to contain_exactly(graph[:A], graph[:B], graph[:C])
-            end
-          end
-
-          context 'when all cascading conditions are satisfied by user' do
-            it 'returns all conditionals' do
-              graph.each { |_, v| allow(v).to receive(:satisfied_by?).and_return(true) }
-              expect(subject.evaluate([], double)).to match_array(graph.values)
-            end
-          end
+      context 'when satisfying A satisfied additional conditions' do
+        it 'permits only conditionals that have been satisfied' do
+          allow(graph[:A]).to receive(:satisfied_by?).and_call_original
+          conditions = subject.evaluate(double)
+          expect(check_evaluated_result(graph, [graph[:A], graph[:B], graph[:C]])).to be_truthy
+          expect(conditions).to contain_exactly(graph[:A])
         end
       end
 
-      # The case where:
-      # 1) A conditional x is manually awarded in the system despite not fulfilling the
-      #    requirements.
-      # 2) Some conditions xc that depends on the conditional x are satisfied
-      # The evaluation will not return the manually awarded conditional x since its conditions are
-      # not satisfied. However, conditionals that depends on the conditions xc will still be
-      # satisfied in the evaluation.
-      context 'when condition D is satisfied initially' do
-        context 'when conditions for A & B are satisfied by the user' do
-          it 'returns all conditionals except for D' do
-            allow(graph[:A]).to receive(:satisfied_by?).and_return(true)
-            allow(graph[:B]).to receive(:satisfied_by?).and_return(true)
-            expect(subject.evaluate([graph[:D]], double)).
-              to contain_exactly(graph[:A], graph[:B], graph[:C], graph[:E])
-          end
+      context 'when satisfied conditional satisfied additional conditions' do
+        it 'permits all conditionals' do
+          graph.each { |_, v| allow(v).to receive(:satisfied_by?).and_call_original }
+          conditions = subject.evaluate(double)
+          expect(check_evaluated_result(graph, graph.values)).to be_truthy
+          expect(conditions).to contain_exactly(graph[:A], graph[:B], graph[:C], graph[:D])
+        end
+      end
+
+      context 'when satisfied conditionals become unsatisfied' do
+        it 'precludes the newly unsatisfied conditionals' do
+          # Set C to be satisfied originally
+          graph[:C].satisfied = true
+          graph[:D].satisfied = true
+          conditions = subject.evaluate(double)
+          expect(check_evaluated_result(graph, [graph[:A], graph[:B]])).to be_truthy
+          expect(conditions).to be_empty
         end
       end
     end
@@ -188,45 +184,47 @@ RSpec.describe Course::Conditional::UserSatisfiabilityGraph do
 
       subject { Course::Conditional::UserSatisfiabilityGraph.new(graph.values) }
 
-      context 'when satisfied conditions do not satisfy other conditions' do
-        context 'when no conditions are satisfied initially' do
-          it 'returns only conditionals with no condition' do
-            expect(subject.evaluate([], double)).
-              to contain_exactly(graph[:A], graph[:D], graph[:G])
-          end
-        end
-
-        context 'when condition A & D are satisfied initially' do
-          it 'returns only conditionals that have been satisfied' do
-            expect(subject.evaluate([graph[:A], graph[:D]], double)).
-              to contain_exactly(graph[:A], graph[:B], graph[:D], graph[:E], graph[:G])
-          end
+      context 'when satisfied conditional do not satisfied additional conditions' do
+        it 'permits only conditionals with no condition' do
+          conditions = subject.evaluate(double)
+          expect(check_evaluated_result(graph, [graph[:A], graph[:D], graph[:G]])).to be_truthy
+          expect(conditions).to be_empty
         end
       end
 
-      context 'when satisfied conditionals do satisfy other conditions' do
-        context 'when no conditions are satisfied initially' do
-          context 'when conditions for A, D & H are satisfied by the user' do
-            it 'returns each disconnected components up to level 2' do
-              allow(graph[:A]).to receive(:satisfied_by?).and_return(true)
-              allow(graph[:D]).to receive(:satisfied_by?).and_return(true)
-              allow(graph[:G]).to receive(:satisfied_by?).and_return(true)
-              expect(subject.evaluate([], double)).
-                to contain_exactly(graph[:A], graph[:B], graph[:D], graph[:E], graph[:G], graph[:H])
-            end
-          end
+      context 'when satisfying A & D satisfied additional conditions' do
+        it 'permits only conditionals that have been satisfied' do
+          allow(graph[:A]).to receive(:satisfied_by?).and_call_original
+          allow(graph[:D]).to receive(:satisfied_by?).and_call_original
+          conditions = subject.evaluate(double)
+          expect(check_evaluated_result(graph, [graph[:A], graph[:B], graph[:D], graph[:E],
+                                                graph[:G]])).to be_truthy
+          expect(conditions).to contain_exactly(graph[:A], graph[:D])
+        end
+      end
 
-          context 'when all cascading conditions are satisfied by user in component A & D' do
-            it 'returns all conditional in component A & D and conditional H' do
-              allow(graph[:A]).to receive(:satisfied_by?).and_return(true)
-              allow(graph[:B]).to receive(:satisfied_by?).and_return(true)
-              allow(graph[:D]).to receive(:satisfied_by?).and_return(true)
-              allow(graph[:E]).to receive(:satisfied_by?).and_return(true)
-              expect(subject.evaluate([], double)).
-                to contain_exactly(graph[:A], graph[:B], graph[:C], graph[:D], graph[:E], graph[:F],
-                                   graph[:G])
-            end
-          end
+      context 'when satisfying A & D & G satisfied additional conditions' do
+        it 'permits each disconnected components up to level 2' do
+          allow(graph[:A]).to receive(:satisfied_by?).and_call_original
+          allow(graph[:D]).to receive(:satisfied_by?).and_call_original
+          allow(graph[:G]).to receive(:satisfied_by?).and_call_original
+          conditions = subject.evaluate(double)
+          expect(check_evaluated_result(graph, [graph[:A], graph[:B], graph[:D], graph[:E],
+                                                graph[:G], graph[:H]])).to be_truthy
+          expect(conditions).to contain_exactly(graph[:A], graph[:D], graph[:G])
+        end
+      end
+
+      context 'when all cascading conditions are satisfied by user in component A & D' do
+        it 'permits all conditional in component A & D and conditional H' do
+          allow(graph[:A]).to receive(:satisfied_by?).and_call_original
+          allow(graph[:B]).to receive(:satisfied_by?).and_call_original
+          allow(graph[:D]).to receive(:satisfied_by?).and_call_original
+          allow(graph[:E]).to receive(:satisfied_by?).and_call_original
+          conditions = subject.evaluate(double)
+          expect(check_evaluated_result(graph, [graph[:A], graph[:B], graph[:C], graph[:D],
+                                                graph[:E], graph[:F], graph[:G]])).to be_truthy
+          expect(conditions).to contain_exactly(graph[:A], graph[:B], graph[:D], graph[:E])
         end
       end
     end
