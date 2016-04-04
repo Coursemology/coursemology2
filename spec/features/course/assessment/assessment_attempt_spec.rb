@@ -17,6 +17,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
     let(:submission) do
       create(:course_assessment_submission, assessment: assessment, user: student)
     end
+    let(:points_awarded) { 22 }
 
     context 'As a Course Student' do
       let(:user) { student }
@@ -103,12 +104,14 @@ RSpec.describe 'Course: Assessments: Attempt' do
             submission_maximum_grade += answer.question.maximum_grade
           end
         end
+        fill_in 'submission_points_awarded', with: points_awarded
 
         click_button I18n.t('course.assessment.submission.submissions.worksheet.publish')
         expect(current_path).to eq(
           edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.graded?).to be(true)
         expect(submission.grade).to eq(submission_maximum_grade)
+        expect(submission.points_awarded).to eq(points_awarded)
       end
     end
   end

@@ -14,7 +14,10 @@ div.panel.panel-default
           td = @submission.grade
         tr
           th = @submission.experience_points_record.class.human_attribute_name(:points_awarded)
-          td = @submission.points_awarded
+          - if can?(:grade, @submission)
+            td = f.input :points_awarded, label: false
+          - else
+            td = @submission.points_awarded
         tr
           th = t('.due_at')
           td = format_datetime(@assessment.end_at) if @assessment.end_at

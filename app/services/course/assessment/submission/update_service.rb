@@ -39,6 +39,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     @update_params ||= begin
       params.require(:submission).permit(
         *workflow_state_params,
+        :points_awarded,
         answers_attributes: [:id] + update_answers_params
       )
     end
