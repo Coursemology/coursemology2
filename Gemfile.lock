@@ -7,15 +7,6 @@ GIT
       request_store (>= 1.0.5)
 
 GIT
-  remote: git://github.com/carrierwaveuploader/carrierwave.git
-  revision: a0203154ced699fd727b80483dec0855a8a75b69
-  specs:
-    carrierwave (0.10.0)
-      activemodel (>= 4.0.0)
-      activesupport (>= 4.0.0)
-      mime-types (>= 1.16)
-
-GIT
   remote: git://github.com/lowjoel/simple_token_authentication.git
   revision: 75cca3c0327e8ae9c8e2554e3d51b6f1b5db18a1
   branch: optional-params-headers
@@ -123,6 +114,11 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    carrierwave (0.11.0)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      json (>= 1.7)
+      mime-types (>= 1.16)
     cliver (0.3.2)
     cocoon (1.2.9)
     codeclimate-test-reporter (0.5.0)
@@ -537,7 +533,7 @@ DEPENDENCIES
   cancancan
   cancancan-squeel
   capybara
-  carrierwave!
+  carrierwave
   cocoon
   codeclimate-test-reporter
   consistency_fail
