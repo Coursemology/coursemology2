@@ -36,13 +36,13 @@ module UserAuthenticationConcern
     # Overrides `Devise::Models::Validatable`
     # This disables the devise email validation for system user.
     def email_required?
-      system? ? false : super
+      built_in? ? false : super
     end
 
     # Overrides `Devise::Models::Validatable`
     # This disables the devise password validation for system user.
     def password_required?
-      system? ? false : super
+      built_in? ? false : super
     end
   end
 end
