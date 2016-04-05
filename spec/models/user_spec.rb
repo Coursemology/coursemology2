@@ -157,5 +157,16 @@ RSpec.describe User do
         it { is_expected.to validate_absence_of(:authentication_token) }
       end
     end
+
+    describe '#send_reset_password_instructions' do
+      subject { create(:user) }
+
+      with_active_job_queue_adapter(:test) do
+        it 'sends email with ActiveJob queue' do
+          expect { subject.send_reset_password_instructions }.to \
+            have_enqueued_job.on_queue('mailers')
+        end
+      end
+    end
   end
 end
