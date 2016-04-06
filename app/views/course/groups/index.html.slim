@@ -3,9 +3,10 @@
 
 table.table.table-hover
   thead
-    th = t('.name')
-    th = t('.members')
-    th
+    tr
+      th = t('.name')
+      th = t('.members')
+      th
 
   tbody
     = render @groups

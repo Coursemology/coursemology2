@@ -2,8 +2,9 @@
 = simple_form_for @settings, url: admin_instance_components_path, method: :patch do |f|
   table.table.table-hover
     thead
-      th = t('.name')
-      th = t('.enabled')
+      tr
+        th = t('.name')
+        th = t('.enabled')
     tbody
       - collection = Course::ControllerComponentHost.components.map { |c| [c.name, c.key.to_s] }
       = f.collection_check_boxes :enabled_component_ids, collection, :last, :first do |f|

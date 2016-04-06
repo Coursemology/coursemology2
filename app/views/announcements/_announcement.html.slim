@@ -1,16 +1,16 @@
 = div_for(announcement, class: time_period_class(announcement))
   h2
     - if announcement.unread?(current_user)
-      small => fa_icon(:envelope)
+      small => fa_icon 'envelope'.freeze
 
     = format_inline_text(announcement.title)
 
     - if announcement.sticky?
       small title=t('.sticky')
-        =< fa_icon(:'thumb-tack')
+        =< fa_icon 'thumb-tack'.freeze
     - unless announcement.currently_active?
       small title=time_period_message(announcement)
-        =< fa_icon(:calendar)
+        =< fa_icon 'calendar'.freeze
 
     div.pull-right
       div.btn-group

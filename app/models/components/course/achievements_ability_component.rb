@@ -24,7 +24,7 @@ module Course::AchievementsAbilityComponent
   end
 
   def allow_students_with_achievement_show_badges
-    can :display_badge, Course::Achievement, course_users: { user_id: user.id }
+    can :display_badge, Course::Achievement, course_user_hash
   end
 
   def published_achievement_hash

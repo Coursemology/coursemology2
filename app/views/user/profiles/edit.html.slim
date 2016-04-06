@@ -14,4 +14,4 @@
     - if current_user.identities.facebook.empty?
       div.facebook
         = link_to user_omniauth_authorize_path(:facebook) do
-          = fa_icon :'facebook-square', text: t('.link_to_facebook'), class: ['fa-2x']
+          = fa_icon 'facebook-square'.freeze, text: t('.link_to_facebook'), class: ['fa-2x'.freeze]

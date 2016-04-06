@@ -12,11 +12,12 @@
 
 table.table.table-striped
   thead
-    th = t('common.name')
-    th = t('common.email')
-    th = t('.invitation_code')
-    th = t('.status')
-    th
+    tr
+      th = t('common.name')
+      th = t('common.email')
+      th = t('.invitation_code')
+      th = t('.status')
+      th
   tbody
     - @course_users.each do |course_user|
       = content_tag_for(:tr, course_user)

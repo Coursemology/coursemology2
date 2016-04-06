@@ -15,7 +15,7 @@ module ActiveRecord::Migration::TestGroupHelpers
 
   # Using the temporary table defined previously, run the examples in this group.
   #
-  # @param [Symbol] table_name The name of the table to use.
+  # @param [Array<Symbol>] table_names The name of the table to use.
   # @param [Proc] proc The examples requiring the use of the temporary table.
   def with_temporary_table(*table_names, &proc)
     context "with temporary table #{table_names}" do |*params|

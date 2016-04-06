@@ -28,14 +28,13 @@ module Course::LessonPlanConcern
   # @return [Hash{Course::LessonPlan::Milestone,nil=>Array<Course::LessonPlanItem>}]
   def group_lesson_plan_items_with_milestones(milestones, items)
     current_milestone = nil
-    milestones_hash = {}
-    milestones.each { |m| milestones_hash[m] = [] }
+    milestones_hash = Hash.new { |h, k| h[k] = [] }
+    milestones.each { |m| milestones_hash[m] }
 
     items.each_with_object(milestones_hash) do |item, result|
       current_milestone = milestones.shift if !milestones.empty? &&
                                               milestones.first.start_at < item.start_at
 
-      result[current_milestone] ||= []
       result[current_milestone] << item
     end
   end

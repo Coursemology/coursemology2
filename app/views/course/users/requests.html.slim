@@ -32,4 +32,4 @@ div.users
               td.course_user_workflow_state
                 = f.radio_button :workflow_state, 'rejected'
               td = f.button :submit, id: 'update' do
-                = fa_icon :save
+                = fa_icon 'save'.freeze

@@ -17,7 +17,7 @@
 
       - if event.draft?
         span data-placement='top' title=draft_message(event)
-        =< fa_icon :eye_slash
+        =< fa_icon 'eye-slash'.freeze
 
   .lesson-plan-item-body.panel-collapse.collapse.in id=item_body_id(event)
     li.list-group-item
@@ -36,4 +36,4 @@
 
       - if !event.location.blank?
         p
-          string = t('.location', location: format_inline_text(event.location))
+          = t('.location', location: format_inline_text(event.location))

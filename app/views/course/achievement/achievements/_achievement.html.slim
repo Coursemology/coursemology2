@@ -10,10 +10,10 @@
 
   th
     = link_to format_inline_text(achievement.title),
-      course_achievement_path(current_course, achievement)
+              course_achievement_path(current_course, achievement)
     - if achievement.draft?
       small title=achievement
-        =< fa_icon(:'eye-slash')
+        =< fa_icon 'eye-slash'.freeze
 
   td
     div.description

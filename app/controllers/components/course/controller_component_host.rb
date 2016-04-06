@@ -116,6 +116,8 @@ class Course::ControllerComponentHost
   #   {
   #      key: :item_key, # The unique key of the item to identify it among others. Can be nil if
   #                      # there is no need to distinguish between items.
+  #                      # +normal+ type elements must have a key because their ordering is a
+  #                      # user setting.
   #      title: 'Sidebar Item Title',
   #      type: :admin, # Will be considered as +:normal+ if not set. Currently +:normal+, +:admin+,
   #                    # and +:settings+ are used.

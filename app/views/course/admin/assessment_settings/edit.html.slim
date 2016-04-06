@@ -20,7 +20,7 @@ h2
         - category = category_form.object
         = content_tag_for(:tr, category) do
           td
-            span = fa_icon :reorder
+            span = fa_icon 'reorder'.freeze
           td
           td = category_form.input :title, label: false, input_html: { class: 'category_title' }
           td = category_form.input :weight, as: :integer, label: false,
@@ -40,7 +40,7 @@ h2
           = content_tag_for(:tr, tab) do
             td
             td
-              span = fa_icon :reorder
+              span = fa_icon 'reorder'.freeze
             td = tab_form.input :title, label: false, input_html: { class: 'tab_title' }
             td = tab_form.input :weight, as: :integer, label: false,
                                 input_html: { class: 'tab_weight' }

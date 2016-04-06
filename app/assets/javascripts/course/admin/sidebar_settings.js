@@ -1,6 +1,4 @@
-// Place all the behaviors and hooks related to the matching controller here.
-// All this logic will automatically be available in application.js.
-(function() {
+(function($) {
   'use strict';
   $(document).on('page:load ready', function() {
     var $edit = $('.course-admin-sidebar-settings.edit');
@@ -15,4 +13,4 @@
       }
     }).disableSelection();
   });
-})();
+})(jQuery);

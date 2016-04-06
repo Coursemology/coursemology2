@@ -1,4 +1,4 @@
-(function() {
+(function($) {
   'use strict';
   $(document).on('page:load ready', function() {
     var $index = $('.course-lesson-plan-items.index');
@@ -10,4 +10,4 @@
     $pastMilestones.collapse('hide');
     $('.lesson-plan-item-body', $index).collapse('hide');
   });
-})();
+})(jQuery);
