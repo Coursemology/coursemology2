@@ -189,7 +189,7 @@ gem 'summernote-rails'
 gem 'ace-rails-ap'
 
 # Using CarrierWave for file uploads
-gem 'carrierwave', github: 'carrierwaveuploader/carrierwave'
+gem 'carrierwave'
 # Generate sequential filenames
 gem 'filename'
 # Required by CarrierWave, for image resizing
