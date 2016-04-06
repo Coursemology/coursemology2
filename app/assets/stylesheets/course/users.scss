@@ -10,6 +10,15 @@
   }
 
   &.show {
+    .achievement {
+      text-align: center;
+
+      .image > img {
+        height: $course-user-achievement-badge;
+        width: $course-user-achievement-badge;
+      }
+    }
+
     .profile-picture {
       .image > img {
         height: $course-user-profile-picture;
