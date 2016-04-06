@@ -9,7 +9,7 @@
         .timestamp
           => format_datetime(post.created_at)
 
-    = format_block_text(post.text)
+    = format_html(post.text)
 
     - if defined?(show_buttons)
       div.info
