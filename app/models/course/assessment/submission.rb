@@ -98,7 +98,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
   #
   # This finalises all the answers as well.
   def finalise(_ = nil)
-    answers.each(&:finalise!)
+    answers.select(&:attempting?).each(&:finalise!)
   end
 
   # Handles the grading of a submission.

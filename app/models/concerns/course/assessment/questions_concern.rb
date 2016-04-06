@@ -43,14 +43,13 @@ module Course::Assessment::QuestionsConcern
   #
   # @param [Course::Assessment::Submission] submission The submission which contains the answers.
   # @param [Fixnum] current_index The index of the question, it's zero based.
-  # @return [Array<Course::Assessment::Question>] The question at the given index or next
-  #   unanswered question, whichever comes first.
+  # @return [Course::Assessment::Question] The question at the given index or next unanswered
+  #   question, whichever comes first.
   def step(submission, current_index)
     current_index = 0 if current_index < 0
     max_index = index(next_unanswered(submission) || last)
 
-    # Return a +ActiveRecord::AssociationRelation+, so that the scope can be attempted.
-    where(id: fetch([current_index, max_index].min))
+    fetch([current_index, max_index].min)
   end
 
   # Return the next unanswered question.

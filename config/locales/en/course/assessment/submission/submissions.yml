@@ -3,14 +3,21 @@ en:
     assessment:
       submission:
         submissions:
+          finalise: 'Finalise Submission'
+          publish: 'Publish Grade'
+          auto_grade: 'Auto Grade Submission'
           create:
             failure: 'Could not create submission: %{error}'
           edit:
             attempt: :'course.assessment.assessments.assessment.attempt'
           worksheet:
-            finalise: 'Finalise Submission'
-            publish: 'Publish Grade'
-            auto_grade: 'Auto Grade Submission'
+            finalise: :'course.assessment.submission.submissions.finalise'
+            publish: :'course.assessment.submission.submissions.publish'
+            auto_grade: :'course.assessment.submission.submissions.auto_grade'
+          guided:
+            finalise: :'course.assessment.submission.submissions.finalise'
+            publish: :'course.assessment.submission.submissions.publish'
+            auto_grade: :'course.assessment.submission.submissions.auto_grade'
           statistics:
             student: :'course.users.role.student'
             status: 'Status'
