@@ -67,6 +67,11 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
             expect(controller.current_course.errors[:invitations_file].length).not_to eq(0)
           end
         end
+
+        context 'when no users are manually specified for invitations' do
+          subject { post :create, course_id: course }
+          it { is_expected.to redirect_to(course_users_invitations_path(course)) }
+        end
       end
 
       context 'when a student visits the page' do
