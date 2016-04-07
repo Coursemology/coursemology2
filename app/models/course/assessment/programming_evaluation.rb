@@ -63,6 +63,13 @@ class Course::Assessment::ProgrammingEvaluation < ActiveRecord::Base
   #   completed or errored.
   scope :finished, -> { where { (status == 'completed') | (status == 'errored') } }
 
+  # Checks if the given task is still pending assignment to an evaluator.
+  #
+  # @return [Boolean]
+  def pending?
+    submitted? || (assigned? && assigned_at < Time.zone.now - TIMEOUT)
+  end
+
   # Checks if the given task is finished
   #
   # @return [Boolean]

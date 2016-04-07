@@ -63,14 +63,13 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
     Course::Assessment::ProgrammingEvaluation.transaction do
       @programming_evaluations ||= [].tap do |evaluations|
         programming_evaluation = find_pending_programming_evaluation
-        next unless programming_evaluation
-
-        authorize! :show, programming_evaluation
-        evaluations << programming_evaluation
+        evaluations << programming_evaluation if programming_evaluation
       end
 
       yield
     end
+  rescue IllegalStateError
+    retry
   end
 
   def load_programming_evaluation
@@ -79,12 +78,24 @@ class Course::Assessment::ProgrammingEvaluationsController < ApplicationControll
 
   # Obtains a programming evaluation task accessible by and suitable for the current user.
   #
-  # @return [Course::Assessment::ProgrammingEvaluation|nil] The programming evaluation.
+  # This uses two database queries -- the first to shortlist, the second to lock. Ideally, this
+  # should be one atomic operation, but Postgres does not support row-level locking when used
+  # with DISTINCT.
+  #
+  # @raise [IllegalStateError] If the retrieved record is already assigned to another evaluator
+  #   when locking. The caller should retry finding another evaluation, in that case.
+  # @return [Course::Assessment::ProgrammingEvaluation] The programming evaluation.
   # @return [nil] If no evaluations are found.
   def find_pending_programming_evaluation
-    Course::Assessment::ProgrammingEvaluation.
-      accessible_by(current_ability, :show).
-      with_language(language_param).
-      pending.limit(1).first
+    evaluation = Course::Assessment::ProgrammingEvaluation.
+                 accessible_by(current_ability, :show).
+                 with_language(language_param).
+                 pending.take
+    return nil unless evaluation
+
+    evaluation = evaluation.lock!
+    raise IllegalStateError unless evaluation.pending?
+
+    evaluation
   end
 end
