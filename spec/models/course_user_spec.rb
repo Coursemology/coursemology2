@@ -109,6 +109,39 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
+    describe '.ordered_by_experience_points' do
+      let!(:student1) { create(:course_student, course: course) }
+      before { create(:course_experience_points_record, course_user: student) }
+
+      it 'returns course_users sorted by experience points' do
+        course.course_users.student.ordered_by_experience_points.each_cons(2) do |user1, user2|
+          expect(user1.experience_points).to be >= user2.experience_points
+        end
+      end
+    end
+
+    describe '.ordered_by_achievement_count' do
+      let!(:student1) { create(:course_student, course: course) }
+      before { create(:course_user_achievement, course_user: student) }
+      subject { course.course_users.student.ordered_by_achievement_count }
+
+      it 'returns course_users sorted by achievement count' do
+        expect(subject).to eq([student, student1])
+      end
+
+      context 'when two course_users have the same achievement count' do
+        before do
+          # student achieves the achievement count of 2 before student 1
+          create(:course_user_achievement, course_user: student)
+          create_list(:course_user_achievement, 2, course_user: student1)
+        end
+
+        it 'returns the course_user who obtained the achievement count first' do
+          expect(subject).to eq([student, student1])
+        end
+      end
+    end
+
     describe '#staff?' do
       it 'returns true if the role is teaching assistant, manager or owner' do
         expect(student.staff?).to be_falsey
@@ -232,6 +265,32 @@ RSpec.describe CourseUser, type: :model do
         it 'returns the accurate count' do
           expect(subject).to eq(1)
         end
+      end
+    end
+
+    describe '#last_obtained_achievement' do
+      subject { student.last_obtained_achievement }
+      let!(:achievement) { create(:course_user_achievement, course_user: student) }
+      before do
+        create(:course_user_achievement, course_user: student,
+                                         obtained_at: achievement.obtained_at - 1.day)
+      end
+
+      it 'returns the last obtained achievement' do
+        expect(subject).to eq(achievement.obtained_at)
+      end
+    end
+
+    describe '#ordered_by_date_obtained' do
+      let(:achievement1) { create(:course_achievement, course: course) }
+      let(:achievement2) { create(:course_achievement, course: course) }
+      before do
+        create(:course_user_achievement, course_user: student, achievement: achievement1)
+        create(:course_user_achievement, course_user: student, achievement: achievement2)
+      end
+
+      it 'returns achievement by date obtained' do
+        expect(student.achievements.ordered_by_date_obtained).to eq([achievement1, achievement2])
       end
     end
 

@@ -36,7 +36,10 @@ class CourseUser < ActiveRecord::Base
                                        inverse_of: :course_user, dependent: :destroy
   has_many :course_user_achievements, class_name: Course::UserAchievement.name,
                                       inverse_of: :course_user, dependent: :destroy
-  has_many :achievements, through: :course_user_achievements, class_name: Course::Achievement.name
+  has_many :achievements, through: :course_user_achievements,
+                          class_name: Course::Achievement.name do
+    include CourseUser::AchievementsConcern
+  end
   has_one :invitation, class_name: Course::UserInvitation.name, dependent: :destroy, validate: true
 
   # @!attribute [r] experience_points
@@ -55,6 +58,13 @@ class CourseUser < ActiveRecord::Base
       where { course_user_achievements.course_user_id == course_users.id }
   end)
 
+  # @!attribute [r] last_obtained_achievement
+  #   Returns the time of the last obtained achievement
+  calculated :last_obtained_achievement, (lambda do
+    Course::UserAchievement.select(:obtained_at).limit(1).order(obtained_at: :desc).
+      where { course_user_achievements.course_user_id == course_users.id }
+  end)
+
   # Gets the staff associated with the course.
   # TODO: Remove the map when Rails 5 is released.
   scope :staff, -> { where(role: STAFF_ROLES.map { |x| roles[x] }) }
@@ -63,6 +73,17 @@ class CourseUser < ActiveRecord::Base
   scope :students, -> { where(role: roles[:student]) }
 
   scope :with_course_statistics, -> { all.calculated(:experience_points, :achievement_count) }
+  scope :ordered_by_experience_points, (lambda do
+    all.calculated(:experience_points).order('experience_points DESC')
+  end)
+
+  # Order course_users by achievement count for use in the course leaderboard.
+  #   In the event of a tie in count, the scope will then sort by course_users who
+  #   obtained the current achievement count first.
+  scope :ordered_by_achievement_count, (lambda do
+    all.calculated(:achievement_count, :last_obtained_achievement).
+      order('achievement_count DESC, last_obtained_achievement ASC')
+  end)
 
   include CourseUser::LevelProgressConcern
 
