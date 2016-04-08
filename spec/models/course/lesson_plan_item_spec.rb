@@ -6,7 +6,21 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
 
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
-    let(:lesson_plan_item) { FactoryGirl.create :course_lesson_plan_item }
+    let(:course) { create(:course) }
+    let(:lesson_plan_item) { create(:course_lesson_plan_item, course: course) }
+
+    describe 'ordered_by_date' do
+      let(:other_lesson_plan_item) { create(:course_lesson_plan_item, course: course) }
+
+      it 'orders the items by date' do
+        lesson_plan_item
+        other_lesson_plan_item
+        consecutive = course.lesson_plan_items.each_cons(2)
+        expect(consecutive.to_a).not_to be_empty
+        expect(consecutive.all? { |first, second| first.start_at <= second.start_at })
+      end
+    end
+
     describe '#total_exp' do
       it 'equals base exp plus bonuses' do
         sum = lesson_plan_item.base_exp +
