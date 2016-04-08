@@ -3,8 +3,10 @@ class Course::LeaderboardsController < Course::ComponentController
   before_action :check_component
   before_action :load_settings
   before_action :add_leaderboard_breadcrumb
+  helper Course::Achievement::ControllerHelper.name.sub(/Helper$/, '')
 
   def show #:nodoc:
+    load_course_users
   end
 
   private
@@ -19,6 +21,11 @@ class Course::LeaderboardsController < Course::ComponentController
   # Load current component's settings
   def load_settings
     @leaderboard_settings = component.settings
+  end
+
+  # Load approved students from current course with course statistics.
+  def load_course_users
+    @course_users = @course.course_users.students.with_approved_state.includes(:user)
   end
 
   def add_leaderboard_breadcrumb

@@ -1,0 +1,43 @@
+.course-leaderboards {
+  &.show {
+    .leaderboard-header {
+      margin-bottom: 1em;
+      text-align: center;
+    }
+
+    .leaderboard-level,
+    .leaderboard-achievement {
+      .user-picture {
+        text-align: center;
+        width: 20%;
+
+        .image > img {
+          height: $course-leaderboard-user-picture;
+          width: $course-leaderboard-user-picture;
+        }
+      }
+
+      .rank {
+        padding-right: 2em;
+        text-align: right;
+        vertical-align: middle;
+        width: 15%;
+      }
+
+      .user-profile {
+        text-align: left;
+        vertical-align: middle;
+        width: 65%;
+      }
+    }
+
+    .leaderboard-achievement {
+      .user-profile {
+        .image > img {
+          height: $course-leaderboard-achievement-badge;
+          width: $course-leaderboard-achievement-badge;
+        }
+      }
+    }
+  }
+}
