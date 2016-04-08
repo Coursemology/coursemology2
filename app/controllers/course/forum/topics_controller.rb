@@ -11,6 +11,7 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
 
   def show
     @topic.viewed_by(current_user)
+    @topic.mark_as_read!(for: current_user)
     @reply_post = @topic.posts.build
   end
 
