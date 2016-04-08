@@ -17,7 +17,7 @@ class Course::ForumsComponent < SimpleDelegator
       {
         key: :forums,
         title: settings.title || t('course.forum.forums.sidebar_title'),
-        weight: 5,
+        weight: 9,
         path: course_forums_path(current_course),
         unread: unread_count
       }

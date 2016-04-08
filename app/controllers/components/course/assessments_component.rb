@@ -13,7 +13,7 @@ class Course::AssessmentsComponent < SimpleDelegator
       {
         key: :assessments,
         title: category.title,
-        weight: 3,
+        weight: 2,
         path: course_assessments_path(current_course, category: category, tab: category.tabs.first),
         unread: 0
       }

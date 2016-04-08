@@ -7,7 +7,7 @@ class Course::AchievementsComponent < SimpleDelegator
       {
         key: :achievements,
         title: I18n.t('course.achievement.achievements.sidebar_title'),
-        weight: 2,
+        weight: 4,
         path: course_achievements_path(current_course),
         unread: 0
       }

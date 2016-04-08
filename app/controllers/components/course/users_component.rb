@@ -13,7 +13,7 @@ class Course::UsersComponent < SimpleDelegator
       {
         title: t('course.users.sidebar_title'),
         key: :users,
-        weight: 8,
+        weight: 6,
         path: course_users_path(current_course)
       }
     ]
