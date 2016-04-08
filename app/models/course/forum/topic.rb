@@ -31,6 +31,13 @@ class Course::Forum::Topic < ActiveRecord::Base
     end.select { count('*') }
   end)
 
+  # @!method self.order_by_date
+  #   Orders the topics by their date. This uses the modification date, so topics with new posts
+  #   will float to the top.
+  scope :order_by_date, (lambda do
+    order(updated_at: :desc)
+  end)
+
   # @!method self.with_latest_post
   #   Augments all returned records with the latest post.
   scope :with_latest_post, (lambda do
