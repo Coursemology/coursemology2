@@ -1,12 +1,10 @@
 en:
   course:
-    leaderboard:
-      sidebar_title: :'course.leaderboard.index.header'
-      title: :'course.leaderboard.index.header'
+    leaderboards:
+      sidebar_title: :'course.leaderboards.index.header'
+      title: :'course.leaderboards.index.header'
       index:
         header: 'Leaderboard'
-    # TODO: Refactor to singular controller
-    leaderboards:
       show:
         header: 'Leaderboard'
         level_header: 'By Level'
