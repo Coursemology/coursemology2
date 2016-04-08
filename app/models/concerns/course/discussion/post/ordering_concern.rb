@@ -8,6 +8,8 @@ module Course::Discussion::Post::OrderingConcern
   class PostSort
     include Enumerable
     delegate :each, to: :@sorted
+    delegate :length, to: :@sorted
+    alias_method :size, :length
 
     # Constructor.
     #
