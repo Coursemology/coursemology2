@@ -11,7 +11,7 @@ class Course::Discussion::Post < ActiveRecord::Base
 
   validate :parent_topic_consistency
 
-  belongs_to :topic, inverse_of: :posts
+  belongs_to :topic, inverse_of: :posts, touch: true
   has_many :votes, inverse_of: :post, dependent: :destroy
 
   default_scope { ordered_by_created_at.with_creator }
