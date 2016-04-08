@@ -72,10 +72,13 @@ RSpec.feature 'Course: Forum: Management' do
         forum = create(:forum, course: course)
         visit course_forum_path(course, forum)
 
-        find_link(nil, href: course_forum_path(course, forum)).click
+        within find(:css, '.page-header') do
+          expect { find(:css, 'a.delete').click }.to \
+            change { course.forums.exists?(forum.id) }.to(false)
+        end
         expect(current_path).to eq(course_forums_path(course))
 
-        expect(page).not_to have_selector("#forum_#{forum.id}")
+        expect(page).not_to have_content_tag_for(forum)
       end
 
       scenario 'I can subscribe to a forum' do

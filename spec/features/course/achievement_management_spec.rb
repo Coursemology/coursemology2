@@ -39,11 +39,10 @@ RSpec.feature 'Course: Achievements' do
         achievement = create(:course_achievement, course: course)
         achievement_path = course_achievement_path(course, achievement)
         visit course_achievements_path(course)
-        expect do
-          # Show and delete have the same URL, difference is in the request method
-          # find the 2nd link that matches the path [2], this is the delete button
-          find_link(nil, href: achievement_path, between: 2..2).click
-        end.to change(course.achievements, :count).by(-1)
+
+        within find(content_tag_selector(achievement)) do
+          expect { find(:css, 'a.delete').click }.to change { course.achievements.count }.by(-1)
+        end
         expect(page).to have_selector('div', text: I18n.t('course.achievement.achievements.'\
                                                           'destroy.success'))
       end

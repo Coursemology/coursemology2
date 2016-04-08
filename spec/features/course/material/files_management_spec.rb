@@ -48,9 +48,9 @@ RSpec.feature 'Course: Material: Files: Management' do
 
         material = materials.sample
 
-        expect do
-          find_link(nil, href: course_material_folder_material_path(course, folder, material)).click
-        end.to change { folder.materials.count }.by(-1)
+        within find(content_tag_selector(material)) do
+          expect { find(:css, 'a.delete').click }.to change { folder.materials.count }.by(-1)
+        end
         expect(current_path).to eq(course_material_folder_path(course, folder))
       end
     end
