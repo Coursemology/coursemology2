@@ -5,6 +5,12 @@ class Course::LessonPlan::Item < ActiveRecord::Base
 
   after_initialize :set_default_values, if: :new_record?
 
+  # @!method self.ordered_by_date
+  #   Orders the lesson plan items by the starting date.
+  scope :ordered_by_date, (lambda do
+    order { start_at }
+  end)
+
   belongs_to :course, inverse_of: :lesson_plan_items
 
   # Gives the maximum number of EXP Points that an EXP-awarding item

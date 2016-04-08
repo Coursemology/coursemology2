@@ -42,12 +42,21 @@ class Course::Assessment < ActiveRecord::Base
       where { course_assessment_questions.assessment_id == course_assessments.id }
   end)
 
+  # @!method self.ordered_by_date
+  #   Orders the assessments by the starting date.
+  scope :ordered_by_date, (lambda do
+    select('course_assessments.*').
+      select { lesson_plan_item.start_at }.
+      joins { lesson_plan_item }.
+      merge(Course::LessonPlan::Item.ordered_by_date)
+  end)
+
   # @!method with_submissions_by(creator)
   #   Includes the submissions by the provided user.
   #   @param [User] user The user to preload submissions for.
   scope :with_submissions_by, (lambda do |user|
     submissions = Course::Assessment::Submission.by_user(user).
-                  where(assessment: pluck(:id)).ordered_by_date
+                  where(assessment: distinct(false).pluck(:id)).ordered_by_date
 
     all.to_a.tap do |result|
       preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new

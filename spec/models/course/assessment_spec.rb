@@ -230,6 +230,18 @@ RSpec.describe Course::Assessment do
       end
     end
 
+    describe '.ordered_by_date' do
+      let(:other_assessment) { create(:assessment, *assessment_traits, course: course) }
+
+      it 'orders the assessments by date' do
+        assessment
+        other_assessment
+        consecutive = course.assessments.each_cons(2)
+        expect(consecutive.to_a).not_to be_empty
+        expect(consecutive.all? { |first, second| first.start_at <= second.start_at })
+      end
+    end
+
     describe '.with_submissions_by' do
       let(:user1) { create(:user) }
       let(:submission1) { create(:submission, assessment: assessment, user: user1) }

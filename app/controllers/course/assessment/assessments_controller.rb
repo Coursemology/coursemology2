@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   def index
-    @assessments = @assessments.with_submissions_by(current_user)
+    @assessments = @assessments.ordered_by_date.with_submissions_by(current_user)
   end
 
   def show
