@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Discussion::Post < ActiveRecord::Base
-  include Course::Discussion::Post::OrderingConcern
+  extend Course::Discussion::Post::OrderingConcern
 
   acts_as_forest order: :created_at
   has_many_attachments

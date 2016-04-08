@@ -41,18 +41,10 @@ module Course::Discussion::Post::OrderingConcern
     end
   end
 
-  module ScopeMethods
-    # Returns a set of recursive arrays indicating the parent-child relationships of posts.
-    #
-    # @return [Enumerable]
-    def ordered_topologically
-      PostSort.new(self)
-    end
-  end
-
-  included do
-    scope :ordered_topologically, (lambda do
-      ScopeMethods.instance_method(:ordered_topologically).bind(current_scope).call
-    end)
+  # Returns a set of recursive arrays indicating the parent-child relationships of posts.
+  #
+  # @return [Enumerable]
+  def ordered_topologically
+    PostSort.new(self)
   end
 end
