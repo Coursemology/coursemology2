@@ -27,6 +27,11 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
         subject
         expect(topic.reload.unread?(user)).to be(false)
       end
+
+      it 'marks the topic posts as read' do
+        subject
+        expect(topic.reload.posts.any? { |post| post.unread?(user) }).to be(false)
+      end
     end
 
     describe '#destroy' do

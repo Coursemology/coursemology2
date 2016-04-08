@@ -8,6 +8,7 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
   load_resource :topic, class: Course::Forum::Topic.name, through: :forum, only: [:new, :create]
   authorize_resource :topic, class: Course::Forum::Topic.name
   before_action :add_topic_breadcrumb
+  after_action :mark_posts_read, only: [:show]
 
   def show
     @topic.viewed_by(current_user)
@@ -71,6 +72,10 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
   def add_topic_breadcrumb
     add_breadcrumb @topic.title, course_forum_topic_path(current_course, @forum,
                                                          @topic) if @topic.try(:persisted?)
+  end
+
+  def mark_posts_read
+    @topic.posts.klass.mark_as_read!(@topic.posts.select(&:persisted?), for: current_user)
   end
 
   def authorize_topic_type!(type)

@@ -1,4 +1,6 @@
-= content_tag_for(:tr, topic) do
+- topic_class = []
+- topic_class.concat(unread_class(topic))
+= content_tag_for(:tr, topic, class: topic_class) do
   td
   th
     = link_to(format_inline_text(topic.title),

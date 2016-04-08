@@ -1,11 +1,16 @@
-= div_for(post, class: ['post']) do
+- post_class = ['post']
+- post_class.concat(unread_class(post))
+= div_for(post, class: post_class) do
   = div_for(post.creator) do
     = display_user_image(post.creator)
     span.name = link_to_user(post.creator)
 
   div.contents
     h4.title
-      a = format_inline_text(post.title)
+      - if post.unread?(current_user)
+        => fa_icon 'envelope'.freeze
+      a
+        = format_inline_text(post.title)
       div.pull-right
         .timestamp
           => format_datetime(post.created_at)

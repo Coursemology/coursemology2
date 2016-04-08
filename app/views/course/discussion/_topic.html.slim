@@ -1,4 +1,5 @@
 - posts = topic.posts
+- posts = posts.with_read_marks_for(current_user) if defined?(read_marks)
 - if defined?(with_votes)
   - posts = posts.calculated(:upvotes, :downvotes).with_user_votes(current_user)
 - posts_locals = { posts: posts.ordered_topologically, max_depth: 3 }

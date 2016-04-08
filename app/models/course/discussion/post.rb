@@ -3,6 +3,7 @@ class Course::Discussion::Post < ActiveRecord::Base
   extend Course::Discussion::Post::OrderingConcern
 
   acts_as_forest order: :created_at
+  acts_as_readable on: :updated_at
   has_many_attachments
 
   after_initialize :set_topic, if: :new_record?
