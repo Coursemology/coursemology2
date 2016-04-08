@@ -1,7 +1,9 @@
 - post_locals ||= {}
 - posts.each do |post|
   = render partial: post_partial, object: post.first, locals: post_locals
-  div.replies
+  - nesting_class = 'replies' if max_depth > 1
+  div class=nesting_class
     = render partial: 'course/discussion/posts', locals: { posts: post.second,
                                                            post_partial: post_partial,
-                                                           post_locals: post_locals }
+                                                           post_locals: post_locals,
+                                                           max_depth: max_depth - 1 }
