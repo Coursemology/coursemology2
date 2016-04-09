@@ -9,3 +9,7 @@ en:
           reply: 'Reply'
         post:
           reply: 'Reply'
+          downvote: 'Downvote'
+          upvote: 'Upvote'
+        vote:
+          success: 'Vote was cast.'

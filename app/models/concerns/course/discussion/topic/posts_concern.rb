@@ -1,4 +1,7 @@
 module Course::Discussion::Topic::PostsConcern
+  extend ActiveSupport::Concern
+  include Course::Discussion::Post::OrderingConcern
+
   # Builds a new post in this topic.
   #
   # This defaults to set the new post to be a child of the latest post, ordered topologically.

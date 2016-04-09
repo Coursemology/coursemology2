@@ -130,6 +130,36 @@ RSpec.feature 'Course: Forum: Post: Management' do
         expect(new_post.parent).to eq(parent_post)
         expect(page).to have_content_tag_for(new_post)
       end
+
+      scenario 'I can vote for a post' do
+        post = topic.posts.first
+        expect(post).not_to be_nil
+        visit course_forum_topic_path(course, forum, topic)
+
+        # Downvote
+        within find(content_tag_selector(post)) do
+          find('a .fa-thumbs-o-down').find(:xpath, '..').click
+        end
+        expect(post.reload.vote_tally).to eq(-1)
+
+        # Un-downvote
+        within find(content_tag_selector(post)) do
+          find('a .fa-thumbs-down').find(:xpath, '..').click
+        end
+        expect(post.reload.vote_tally).to eq(0)
+
+        # Upvote
+        within find(content_tag_selector(post)) do
+          find('a .fa-thumbs-o-up').find(:xpath, '..').click
+        end
+        expect(post.reload.vote_tally).to eq(1)
+
+        # Un-upvote
+        within find(content_tag_selector(post)) do
+          find('a .fa-thumbs-up').find(:xpath, '..').click
+        end
+        expect(post.reload.vote_tally).to eq(0)
+      end
     end
   end
 end

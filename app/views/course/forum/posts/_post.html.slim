@@ -11,8 +11,8 @@
 
     = format_html(post.text)
 
-    - if defined?(show_buttons)
-      div.info
+    div.info
+      - if defined?(show_buttons)
         div.pull-right
           .btn-group
             - if can? :reply_topic, @topic
@@ -23,3 +23,23 @@
               = edit_button(edit_course_forum_topic_post_path(current_course, @forum, @topic, post))
             - if can? :delete, post
               = delete_button(course_forum_topic_post_path(current_course, @forum, @topic, post))
+
+      div.voting
+        - user_vote = post.vote_for(current_user)
+        - if user_vote
+          - path = vote_course_forum_topic_post_path(current_course, @forum, @topic, post, vote: 0)
+          => link_to path, method: :put, title: t('.downvote') do
+            = fa_icon(user_vote.vote_flag? ? 'thumbs-o-down'.freeze : 'thumbs-down'.freeze)
+          strong
+            = post.vote_tally
+          =< link_to path, method: :put, title: t('.upvote') do
+            = fa_icon(user_vote.vote_flag? ? 'thumbs-up'.freeze : 'thumbs-o-up'.freeze)
+        - else
+          - path = vote_course_forum_topic_post_path(current_course, @forum, @topic, post, vote: -1)
+          => link_to path, method: :put, title: t('.downvote') do
+            = fa_icon 'thumbs-o-down'.freeze
+          strong
+            = post.vote_tally
+          - path = vote_course_forum_topic_post_path(current_course, @forum, @topic, post, vote: 1)
+          =< link_to path, method: :put, title: t('.upvote') do
+            = fa_icon 'thumbs-o-up'.freeze
