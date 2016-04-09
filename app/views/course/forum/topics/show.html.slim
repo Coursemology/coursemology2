@@ -2,7 +2,8 @@
   = render 'controls'
 
 = render partial: @topic.topic, locals: { post_partial: 'course/forum/posts/post',
-                                          post_locals: { show_buttons: false } }
+                                          post_locals: { show_buttons: false },
+                                          with_votes: true}
 
 hr
 

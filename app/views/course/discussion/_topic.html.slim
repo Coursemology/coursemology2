@@ -1,4 +1,6 @@
 - posts = topic.posts
+- if defined?(with_votes)
+  - posts = posts.calculated(:upvotes, :downvotes).with_user_votes(current_user)
 - posts_locals = { posts: posts.ordered_topologically, max_depth: 3 }
 - posts_locals[:post_partial] = post_partial if defined?(post_partial)
 - posts_locals[:post_locals] = post_locals if defined?(post_locals)

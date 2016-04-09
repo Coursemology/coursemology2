@@ -201,6 +201,7 @@ Rails.application.routes.draw do
           resources :topics do
             resources :posts, only: [:create, :edit, :update, :destroy] do
               get 'reply', on: :member
+              put 'vote', on: :member
             end
 
             post 'subscribe', on: :member

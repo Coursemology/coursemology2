@@ -26,6 +26,12 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
     end
   end
 
+  def vote
+    @post.cast_vote!(current_user, post_vote_param)
+    redirect_to course_forum_topic_path(current_course, @forum, @topic),
+                success: t('.success')
+  end
+
   def destroy
     if super
       redirect_to course_forum_topic_path(current_course, @forum, @topic),
@@ -59,5 +65,9 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
 
   def add_topic_breadcrumb
     add_breadcrumb @topic.title, course_forum_topic_path(current_course, @forum, @topic)
+  end
+
+  def post_vote_param
+    params.permit(:vote)[:vote].to_i
   end
 end
