@@ -5,7 +5,6 @@ class Course::UsersController < Course::ComponentController
 
   before_action :load_resource
   authorize_resource :course_user, through: :course, parent: false
-  helper Course::Achievement::ControllerHelper.name.sub(/Helper$/, '')
 
   def index # :nodoc:
   end
