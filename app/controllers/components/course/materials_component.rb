@@ -17,7 +17,7 @@ class Course::MaterialsComponent < SimpleDelegator
       {
         key: :materials,
         title: settings.title || t('course.material.sidebar_title'),
-        weight: 4,
+        weight: 8,
         path: course_material_folder_path(current_course, current_course.root_folder),
         unread: 0
       }

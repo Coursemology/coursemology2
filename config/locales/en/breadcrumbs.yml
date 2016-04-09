@@ -29,7 +29,7 @@ en:
         forum_settings:
           edit: :'course.forum.forums.sidebar_title'
         leaderboard_settings:
-          edit: :'course.leaderboard.index.header'
+          edit: :'course.leaderboards.index.header'
       users:
         index: 'Users'
         students: :'course.users.students.header'
@@ -101,7 +101,7 @@ en:
           new_topic: :'course.forum.topics.new_topic.header'
           edit_topic: :'course.forum.topics.edit_topic.header'
       leaderboards:
-        index: :'course.leaderboard.title'
+        index: :'course.leaderboards.title'
       experience_points_records:
         index: 'Experience Points History'
 

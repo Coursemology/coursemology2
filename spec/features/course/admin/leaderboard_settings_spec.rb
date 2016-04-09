@@ -46,7 +46,7 @@ RSpec.feature 'Course: Administration: Leaderboard' do
         click_button 'update'
         expect(page).
           to have_selector('div', text: I18n.t('course.admin.leaderboard_settings.update.success'))
-        expect(page).to have_selector('li a', text: I18n.t('course.leaderboard.sidebar_title'))
+        expect(page).to have_selector('li a', text: I18n.t('course.leaderboards.sidebar_title'))
       end
     end
   end
