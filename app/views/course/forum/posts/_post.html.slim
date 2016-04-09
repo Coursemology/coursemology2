@@ -1,6 +1,7 @@
 = div_for(post, class: ['post']) do
-  div.user
-    h5 = link_to_user(post.creator)
+  = div_for(post.creator) do
+    = display_user_image(post.creator)
+    span.name = link_to_user(post.creator)
 
   div.contents
     h4.title

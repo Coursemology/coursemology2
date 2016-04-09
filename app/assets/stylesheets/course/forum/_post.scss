@@ -4,6 +4,15 @@
     margin-right: 1em;
     text-align: right;
     width: 7em;
+
+    .image {
+      float: right;
+    }
+
+    .name {
+      clear: both;
+      display: block;
+    }
   }
 
   .contents {
