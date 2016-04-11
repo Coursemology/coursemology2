@@ -18,6 +18,16 @@ RSpec.describe Course::Achievement, type: :model do
         expect(weights.length).to be > 1
         expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
       end
+
+      it 'implements #permitted_for!' do
+        expect(subject).to respond_to(:permitted_for!)
+        expect { subject.permitted_for!(double) }.to_not raise_error
+      end
+
+      it 'implements #precluded_for!' do
+        expect(subject).to respond_to(:precluded_for!)
+        expect { subject.precluded_for!(double) }.to_not raise_error
+      end
     end
   end
 end

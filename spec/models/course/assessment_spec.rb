@@ -17,6 +17,16 @@ RSpec.describe Course::Assessment do
     let(:assessment) { create(:assessment, *assessment_traits, course: course) }
     let(:assessment_traits) { [] }
 
+    it 'implements #permitted_for!' do
+      expect(subject).to respond_to(:permitted_for!)
+      expect { subject.permitted_for!(double) }.to_not raise_error
+    end
+
+    it 'implements #precluded_for!' do
+      expect(subject).to respond_to(:precluded_for!)
+      expect { subject.precluded_for!(double) }.to_not raise_error
+    end
+
     describe 'validations' do
       context 'when it is not a draft' do
         context 'when it has no questions' do

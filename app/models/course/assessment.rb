@@ -72,6 +72,12 @@ class Course::Assessment < ActiveRecord::Base
     'course/assessment/assessments/assessment'.freeze
   end
 
+  def permitted_for!(_course_user)
+  end
+
+  def precluded_for!(_course_user)
+  end
+
   private
 
   # Sets the course of the lesson plan item to be the same as the one for the assessment.
