@@ -89,7 +89,7 @@ RSpec.feature 'Course: Forum: Management' do
 
         expect(current_path).to eq(course_forum_path(course, forum))
         expect(page).to have_link(I18n.t('course.forum.forums.unsubscribe.tag'),
-                                  unsubscribe_course_forum_path(course, forum))
+                                  href: unsubscribe_course_forum_path(course, forum))
         expect(Course::Forum::Subscription.where(user: user, forum: forum).count).to eq(1)
       end
 
@@ -102,7 +102,7 @@ RSpec.feature 'Course: Forum: Management' do
 
         expect(current_path).to eq(course_forum_path(course, forum))
         expect(page).to have_link(I18n.t('course.forum.forums.subscribe.tag'),
-                                  subscribe_course_forum_path(course, forum))
+                                  href: subscribe_course_forum_path(course, forum))
         expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
       end
     end
@@ -126,7 +126,7 @@ RSpec.feature 'Course: Forum: Management' do
 
         expect(current_path).to eq(course_forum_path(course, forum))
         expect(page).to have_link(I18n.t('course.forum.forums.unsubscribe.tag'),
-                                  unsubscribe_course_forum_path(course, forum))
+                                  href: unsubscribe_course_forum_path(course, forum))
         expect(Course::Forum::Subscription.where(user: user, forum: forum).count).to eq(1)
       end
 
@@ -139,7 +139,7 @@ RSpec.feature 'Course: Forum: Management' do
 
         expect(current_path).to eq(course_forum_path(course, forum))
         expect(page).to have_link(I18n.t('course.forum.forums.subscribe.tag'),
-                                  subscribe_course_forum_path(course, forum))
+                                  href: subscribe_course_forum_path(course, forum))
         expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
       end
     end

@@ -47,7 +47,8 @@ RSpec.feature 'System: Administration: Announcements' do
         click_button I18n.t('helpers.submit.system_announcement.update')
 
         expect(current_path).to eq(admin_announcements_path)
-        expect(page).to have_selector('div', 'system.admin.announcements.update.success')
+        expect(page).to have_selector('div',
+                                      text: I18n.t('system.admin.announcements.update.success'))
         expect(announcement.reload.title).to eq(edited_announcement[:title])
         expect(announcement.reload.content).to eq(edited_announcement[:content])
       end

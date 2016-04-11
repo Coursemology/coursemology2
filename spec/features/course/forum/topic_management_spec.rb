@@ -111,8 +111,8 @@ RSpec.feature 'Course: Forum: Topic: Management' do
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
         expect(page).to have_link(I18n.t('course.forum.topics.unsubscribe.tag'),
-                                  subscribe_course_forum_topic_path(course, forum, topic,
-                                                                    subscribe: false))
+                                  href: subscribe_course_forum_topic_path(course, forum, topic,
+                                                                          subscribe: false))
         expect(topic.subscriptions.where(user: user).count).to eq(1)
       end
 
@@ -126,8 +126,8 @@ RSpec.feature 'Course: Forum: Topic: Management' do
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
         expect(page).to have_link(I18n.t('course.forum.topics.subscribe.tag'),
-                                  subscribe_course_forum_topic_path(course, forum, topic,
-                                                                    subscribe: true))
+                                  href: subscribe_course_forum_topic_path(course, forum, topic,
+                                                                          subscribe: true))
         expect(topic.subscriptions.where(user: user).empty?).to eq(true)
       end
 
@@ -141,8 +141,8 @@ RSpec.feature 'Course: Forum: Topic: Management' do
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
         expect(page).to have_link(I18n.t('course.forum.topics.unlocked.tag'),
-                                  locked_course_forum_topic_path(course, forum, topic,
-                                                                 locked: false))
+                                  href: locked_course_forum_topic_path(course, forum, topic,
+                                                                       locked: false))
         expect(topic.reload.locked).to eq(true)
 
         # Set unlocked
@@ -150,8 +150,8 @@ RSpec.feature 'Course: Forum: Topic: Management' do
                   href: locked_course_forum_topic_path(course, forum, topic, locked: false)).click
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
         expect(page).to have_link(I18n.t('course.forum.topics.locked.tag'),
-                                  locked_course_forum_topic_path(course, forum, topic,
-                                                                 locked: true))
+                                  href: locked_course_forum_topic_path(course, forum, topic,
+                                                                       locked: true))
         expect(topic.reload.locked).to eq(false)
       end
 
@@ -165,8 +165,8 @@ RSpec.feature 'Course: Forum: Topic: Management' do
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
         expect(page).to have_link(I18n.t('course.forum.topics.shown.tag'),
-                                  hidden_course_forum_topic_path(course, forum, topic,
-                                                                 hidden: false))
+                                  href: hidden_course_forum_topic_path(course, forum, topic,
+                                                                       hidden: false))
         expect(topic.reload.hidden).to eq(true)
 
         # Set shown
@@ -174,8 +174,8 @@ RSpec.feature 'Course: Forum: Topic: Management' do
                   href: hidden_course_forum_topic_path(course, forum, topic, hidden: false)).click
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
         expect(page).to have_link(I18n.t('course.forum.topics.hidden.tag'),
-                                  hidden_course_forum_topic_path(course, forum, topic,
-                                                                 hidden: true))
+                                  href: hidden_course_forum_topic_path(course, forum, topic,
+                                                                       hidden: true))
         expect(topic.reload.hidden).to eq(false)
       end
     end
@@ -285,8 +285,8 @@ RSpec.feature 'Course: Forum: Topic: Management' do
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
         expect(page).to have_link(I18n.t('course.forum.topics.unsubscribe.tag'),
-                                  subscribe_course_forum_topic_path(course, forum, topic,
-                                                                    subscribe: false))
+                                  href: subscribe_course_forum_topic_path(course, forum, topic,
+                                                                          subscribe: false))
         expect(topic.subscriptions.where(user: user).count).to eq(1)
       end
 
@@ -300,8 +300,8 @@ RSpec.feature 'Course: Forum: Topic: Management' do
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
         expect(page).to have_link(I18n.t('course.forum.topics.subscribe.tag'),
-                                  subscribe_course_forum_topic_path(course, forum, topic,
-                                                                    subscribe: true))
+                                  href: subscribe_course_forum_topic_path(course, forum, topic,
+                                                                          subscribe: true))
         expect(topic.subscriptions.where(user: user).empty?).to eq(true)
       end
     end

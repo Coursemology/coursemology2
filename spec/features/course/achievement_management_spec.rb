@@ -67,8 +67,8 @@ RSpec.feature 'Course: Achievements' do
         attach_file :achievement_badge, File.join(Rails.root, '/spec/fixtures/files/picture.jpg')
         click_button I18n.t('helpers.submit.achievement.update')
         expect(current_path).to eq course_achievements_path(course)
-        expect(page).to have_selector('div', I18n.t('course.achievement.achievements.update.'\
-                                                    'success'))
+        expect(page).to have_selector('div', text: I18n.t('course.achievement.achievements.update.'\
+                                                          'success'))
         expect(page).to have_content(achievement.badge.medium.url)
         expect(achievement.reload.title).to eq(new_title)
         expect(achievement.reload.description).to eq(new_description)
