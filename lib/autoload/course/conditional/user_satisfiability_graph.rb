@@ -51,6 +51,7 @@ class Course::Conditional::UserSatisfiabilityGraph
   # @param [Object] dest Conditional node as the destination
   # @return [Bool] true if the dest node is reachable from the source node
   def self.reachable?(source, dest)
+    return false unless dest
     return true if source == dest
 
     dest.specific_conditions.index { |c| reachable?(source, c.dependent_object) }.present?
