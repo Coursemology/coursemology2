@@ -19,7 +19,7 @@ nav
     = f.button :submit, t('.finalise'), name: 'submission[finalise]', class: ['btn-danger']
 
   - unless @submission.attempting?
-    = render 'statistics'
+    = render 'statistics', f: f
 
   - if @submission.submitted? && can?(:grade, @submission)
     = link_to t('.auto_grade'),

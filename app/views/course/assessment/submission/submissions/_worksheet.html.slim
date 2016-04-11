@@ -7,7 +7,7 @@
                locals: { base_answer_form: base_answer_form }
 
   - unless @submission.attempting?
-    = render 'statistics'
+    = render 'statistics', f: f
 
   = f.button :submit, t('common.save')
   - if @submission.attempting? && can?(:update, @submission)
