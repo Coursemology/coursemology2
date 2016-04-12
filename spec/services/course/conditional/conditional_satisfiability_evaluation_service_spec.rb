@@ -13,23 +13,21 @@ RSpec.describe Course::Conditional::ConditionalSatisfiabilityEvaluationService d
         create(:course_achievement, course: course, conditions: [level_condition])
       end
 
-      subject do
-        Course::Conditional::ConditionalSatisfiabilityEvaluationService.evaluate(course_user)
-      end
-
       context 'when course user satisfy the level condition' do
         it 'adds the satisfied achievement conditional to the course user' do
           allow(course_user).to receive(:level_number).and_return(2)
-          # TODO: Check that the achievement was added to the course user once conditional's API
+          # TODO: Check that the achievement was added to the course user once achievement's API
           # are added in
-          expect(subject).to contain_exactly(achievement)
+          subject.evaluate(course_user)
         end
       end
 
       context 'when course user do not satisfy the level condition' do
-        # TODO: Check that course user do not have the achievement once conditional's API are
-        # added in
-        it { is_expected.to be_empty }
+        it 'does not adds the unsatisfied achievement conditional to the course user' do
+          # TODO: Check that course user do not have the achievement once achievement's API are
+          # added in
+          subject.evaluate(course_user)
+        end
       end
     end
   end

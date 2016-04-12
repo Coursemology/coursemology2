@@ -8,10 +8,6 @@ class Course::Conditional::UserSatisfiabilityGraph
     def add(source, edge)
       self[source] << edge
     end
-
-    def satisfied_edges_for(source, course_user)
-      self[source].select { |c| c.satisfied_by?(course_user) }
-    end
   end
 
   # Initialize a topological sorted satisfiability graph.
@@ -31,24 +27,22 @@ class Course::Conditional::UserSatisfiabilityGraph
 
   # Walk through the graph to evaluate the satisfiability of the conditionals for the course user.
   #
-  # @param [Array<Condition>] satisfied_conditions Conditions that have already been satisfied
   # @param [Course::CourseUser] course_user whose conditionals are to be evaluated
-  # @return [Set<Object>] All the satisfied conditionals base on the given conditions
-  def evaluate(satisfied_conditions, course_user)
-    satisfied_conditions = Set.new(satisfied_conditions)
-    satisfied_conditionals = Set.new
+  # @return [Set<Object>] All the satisfied conditions after evaluation
+  def evaluate(course_user)
+    satisfied_conditions = Set.new
 
     # Walk through the graph to find all the satisfied conditionals
     @graph.each do |conditional|
-      # A conditional is satisfied if all its specific conditions are satisfied
-      next unless satisfied_conditions.superset?(Set.new(conditional.specific_conditions))
-      satisfied_conditionals << conditional
+      conditions = conditional.specific_conditions.select { |c| c.satisfied_by?(course_user) }
+      satisfied_conditions.merge(Set.new(conditions))
 
-      # Add newly satisfied conditions to cascade the effect of the satisfied conditional
-      satisfied_conditions.merge(@edges.satisfied_edges_for(conditional, course_user))
+      # A conditional is satisfied if all its specific conditions are satisfied
+      satisfied = conditions.count == conditional.specific_conditions.count
+      satisfied ? conditional.permitted_for!(course_user) : conditional.precluded_for!(course_user)
     end
 
-    satisfied_conditionals
+    satisfied_conditions
   end
 
   # Return true if the destination node is reachable from the source node
