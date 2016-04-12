@@ -69,9 +69,10 @@ RSpec.feature 'Course: Material: Folders: Management' do
         visit course_material_folder_path(course, parent_folder)
         sample_folder = subfolders.sample
 
-        expect do
-          find_link(nil, href: course_material_folder_path(course, sample_folder)).click
-        end.to change { parent_folder.children.count }.by(-1)
+        within find(content_tag_selector(sample_folder)) do
+          expect { find(:css, 'a.delete').click }.to change { parent_folder.children.count }.by(-1)
+        end
+
         expect(current_path).to eq(course_material_folder_path(course, parent_folder))
       end
 

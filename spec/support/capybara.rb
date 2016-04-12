@@ -32,6 +32,8 @@ RSpec.configure do |config|
   config.define_derived_metadata do |meta|
     meta[:aggregate_failures] = true if !meta.key?(:aggregate_failures) && meta[:type] == :feature
   end
+
+  config.backtrace_exclusion_patterns << /\/spec\/support\/capybara\.rb/
 end
 
 Capybara.javascript_driver = :poltergeist

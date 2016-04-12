@@ -49,10 +49,10 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
           path = edit_course_assessment_submission_path(course, assessment, submission, step: step)
           expect(page).to have_link(step, href: path)
         end
-        expect(page).to have_selector('h2', assessment.questions.first.title)
+        expect(page).to have_selector('h2', text: assessment.questions.first.title)
 
         click_link '2'
-        expect(page).to have_selector('h2', assessment.questions.second.title)
+        expect(page).to have_selector('h2', text: assessment.questions.second.title)
       end
 
       scenario 'I can continue to the next question when current answer is correct' do
@@ -68,7 +68,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         expect(page).to have_selector('div', text: 'course.assessment.answer.grading.grade')
 
         click_link I18n.t('course.assessment.answer.guided.continue')
-        expect(page).to have_selector('h2', mcq_questions.second.title)
+        expect(page).to have_selector('h2', text: mcq_questions.second.title)
       end
 
       scenario 'I can reattempt the question when current answer is not correct' do
@@ -82,7 +82,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         wait_for_job
 
         click_button I18n.t('course.assessment.answer.guided.reattempt')
-        expect(page).to have_selector('h2', mcq_questions.first.title)
+        expect(page).to have_selector('h2', text: mcq_questions.first.title)
         expect(page).not_to have_checked_field(wrong_option)
       end
 
@@ -98,10 +98,10 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         visit edit_course_assessment_submission_path(assessment.course, assessment, submission)
         click_button I18n.t('course.assessment.submission.submissions.guided.finalise')
 
-        mcq_questions.each do |question|
-          expect(page).to have_selector('h2', question.title)
-          expect(page).to have_selector('div', question.description)
-        end
+        # It redirects to the first question after finalising.
+        question = mcq_questions.first
+        expect(page).to have_selector('h2', text: question.title)
+        expect(page).to have_selector('div', text: question.description)
       end
     end
 

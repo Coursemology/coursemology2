@@ -66,8 +66,10 @@ RSpec.feature 'System: Administration: Instances' do
         last_page = Instance.page.total_pages
         visit admin_instances_path(page: last_page)
 
-        find_link(nil, href: admin_instance_path(instance)).click
-        expect(Instance.find_by(id: instance.id)).to be_nil
+        within find(content_tag_selector(instance)) do
+          expect { find(:css, 'a.delete').click }.to \
+            change { Instance.find_by(id: instance.id) }.to(nil)
+        end
       end
     end
   end

@@ -72,10 +72,13 @@ RSpec.feature 'Course: Forum: Management' do
         forum = create(:forum, course: course)
         visit course_forum_path(course, forum)
 
-        find_link(nil, href: course_forum_path(course, forum)).click
+        within find(:css, '.page-header') do
+          expect { find(:css, 'a.delete').click }.to \
+            change { course.forums.exists?(forum.id) }.to(false)
+        end
         expect(current_path).to eq(course_forums_path(course))
 
-        expect(page).not_to have_selector("#forum_#{forum.id}")
+        expect(page).not_to have_content_tag_for(forum)
       end
 
       scenario 'I can subscribe to a forum' do
@@ -86,7 +89,7 @@ RSpec.feature 'Course: Forum: Management' do
 
         expect(current_path).to eq(course_forum_path(course, forum))
         expect(page).to have_link(I18n.t('course.forum.forums.unsubscribe.tag'),
-                                  unsubscribe_course_forum_path(course, forum))
+                                  href: unsubscribe_course_forum_path(course, forum))
         expect(Course::Forum::Subscription.where(user: user, forum: forum).count).to eq(1)
       end
 
@@ -99,7 +102,7 @@ RSpec.feature 'Course: Forum: Management' do
 
         expect(current_path).to eq(course_forum_path(course, forum))
         expect(page).to have_link(I18n.t('course.forum.forums.subscribe.tag'),
-                                  subscribe_course_forum_path(course, forum))
+                                  href: subscribe_course_forum_path(course, forum))
         expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
       end
     end
@@ -123,7 +126,7 @@ RSpec.feature 'Course: Forum: Management' do
 
         expect(current_path).to eq(course_forum_path(course, forum))
         expect(page).to have_link(I18n.t('course.forum.forums.unsubscribe.tag'),
-                                  unsubscribe_course_forum_path(course, forum))
+                                  href: unsubscribe_course_forum_path(course, forum))
         expect(Course::Forum::Subscription.where(user: user, forum: forum).count).to eq(1)
       end
 
@@ -136,7 +139,7 @@ RSpec.feature 'Course: Forum: Management' do
 
         expect(current_path).to eq(course_forum_path(course, forum))
         expect(page).to have_link(I18n.t('course.forum.forums.subscribe.tag'),
-                                  subscribe_course_forum_path(course, forum))
+                                  href: subscribe_course_forum_path(course, forum))
         expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
       end
     end
