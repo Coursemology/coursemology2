@@ -30,6 +30,16 @@ class Course::Material::Folder < ActiveRecord::Base
       where { children.parent_id == course_material_folders.id }
   end)
 
+  # Filter out the empty linked folders (i.e. Folder with an owner).
+  def self.without_empty_linked_folder
+    select do |folder|
+      folder.owner.nil? ||
+        folder.owner && folder.material_count != 0 && folder.children_count != 0
+    end
+  end
+
+  scope :with_content_statistics, ->() { all.calculated(:material_count, :children_count) }
+
   def files_attributes=(files)
     files.each do |file|
       materials.build(name: Pathname.normalize_filename(file.original_filename), file: file)

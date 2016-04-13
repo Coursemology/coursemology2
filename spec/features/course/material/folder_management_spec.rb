@@ -25,6 +25,12 @@ RSpec.feature 'Course: Material: Folders: Management' do
           expect(page).to have_link(nil, href: edit_course_material_folder_path(course, subfolder))
           expect(page).to have_link(nil, href: course_material_folder_path(course, subfolder))
         end
+
+        empty_linked_folders = parent_folder.children.
+                               select { |f| f.owner && !f.materials.empty? && !f.children.empty? }
+        empty_linked_folders.each do |subfolder|
+          expect(page).not_to have_content_tag_for(subfolder)
+        end
       end
 
       scenario 'I can create a subfolder' do
@@ -45,7 +51,7 @@ RSpec.feature 'Course: Material: Folders: Management' do
         fill_in 'material_folder_name', with: new_folder.name
         click_button 'submit'
 
-        expect(page).to have_content_tag_for(parent_folder.children.last)
+        expect(page).to have_content_tag_for(parent_folder.children.find_by(name: new_folder.name))
       end
 
       scenario 'I can edit a subfolder' do
