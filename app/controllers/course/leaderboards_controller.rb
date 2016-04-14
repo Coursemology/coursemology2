@@ -5,6 +5,7 @@ class Course::LeaderboardsController < Course::ComponentController
   before_action :add_leaderboard_breadcrumb
 
   def show #:nodoc:
+    preload_course_levels
     load_course_users
   end
 
@@ -20,6 +21,11 @@ class Course::LeaderboardsController < Course::ComponentController
   # Load current component's settings
   def load_settings
     @leaderboard_settings = component.settings
+  end
+
+  # Preload course.levels to reduce SQL calls in leaderboard view. See course#level_for.
+  def preload_course_levels
+    @course.levels.to_a
   end
 
   # Load approved students from current course with course statistics.
