@@ -15,6 +15,31 @@ class Course::Material::Folder < ActiveRecord::Base
   validate :validate_name_is_unique_among_materials
   validates_with FilenameValidator
 
+  # @!attribute [r] material_count
+  #   Returns the number of files in current folder.
+  calculated :material_count, (lambda do
+    Course::Material.select { count('*') }.
+      where { course_materials.folder_id == course_material_folders.id }
+  end)
+
+  # @!attribute [r] children_count
+  #   Returns the number of subfolders in current folder.
+  calculated :children_count, (lambda do
+    select { count('*') }.
+      from('course_material_folders children').
+      where { children.parent_id == course_material_folders.id }
+  end)
+
+  # Filter out the empty linked folders (i.e. Folder with an owner).
+  def self.without_empty_linked_folder
+    select do |folder|
+      folder.owner.nil? ||
+        folder.owner && folder.material_count != 0 && folder.children_count != 0
+    end
+  end
+
+  scope :with_content_statistics, ->() { all.calculated(:material_count, :children_count) }
+
   def files_attributes=(files)
     files.each do |file|
       materials.build(name: Pathname.normalize_filename(file.original_filename), file: file)

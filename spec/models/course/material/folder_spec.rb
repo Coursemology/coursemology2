@@ -70,5 +70,25 @@ RSpec.describe Course::Material::Folder, type: :model do
         expect(folder.send(:next_valid_name)).to eq(common_name + ' (1)')
       end
     end
+
+    describe '#material_count' do
+      let(:folder) { create(:folder) }
+      let(:count) { Random.rand(3) }
+
+      it 'returns the number of materials in the folder' do
+        create_list(:material, count, folder: folder)
+        expect(folder.material_count).to eq(count)
+      end
+    end
+
+    describe '#children_count' do
+      let(:folder) { create(:folder) }
+      let(:count) { Random.rand(3) }
+
+      it 'returns the number of subfolders in the folder' do
+        create_list(:folder, count, parent: folder)
+        expect(folder.children_count).to eq(count)
+      end
+    end
   end
 end
