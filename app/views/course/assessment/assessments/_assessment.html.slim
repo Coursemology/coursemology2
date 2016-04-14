@@ -9,7 +9,7 @@
       small title=draft_message(assessment)
         =< fa_icon 'eye-slash'.freeze
 
-  td
+  td = assessment.total_exp
   td = format_datetime(assessment.start_at)
   td = format_datetime(assessment.end_at) if assessment.end_at.present?
   td
