@@ -142,6 +142,16 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
+    describe '.without_phantom_users' do
+      let!(:phantom_user) { create(:course_user, course: course, phantom: true) }
+      it 'returns only non-phantom course users' do
+        expect(course.course_users.without_phantom_users).not_to include(phantom_user)
+        course.course_users.without_phantom_users.each do |course_user|
+          expect(course_user.phantom?).to be_falsey
+        end
+      end
+    end
+
     describe '#staff?' do
       it 'returns true if the role is teaching assistant, manager or owner' do
         expect(student.staff?).to be_falsey
