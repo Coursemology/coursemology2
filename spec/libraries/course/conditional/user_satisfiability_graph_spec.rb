@@ -123,6 +123,47 @@ RSpec.describe Course::Conditional::UserSatisfiabilityGraph do
     end
   end
 
+  describe '.reachable?' do
+    let(:simple_graph) { create_simple_graph }
+    let(:condition_z)  { DummyConditionalCondition.build([], 'Z') }
+
+    subject { Course::Conditional::UserSatisfiabilityGraph }
+
+    context 'when a path exist between the given conditionals' do
+      context 'when all conditions have dependent object' do
+        it 'returns true' do
+          expect(subject.reachable?(simple_graph[:A], simple_graph[:E])).to be_truthy
+        end
+      end
+
+      context 'when one of the conditions in the path do not have any dependent object' do
+        it 'returns true' do
+          simple_graph[:E].conditions.unshift(condition_z)
+
+          expect(condition_z).to receive(:dependent_object).and_return(nil)
+          expect(subject.reachable?(simple_graph[:A], simple_graph[:E])).to be_truthy
+        end
+      end
+    end
+
+    context 'when no path exist between the given conditionals' do
+      context 'when all conditions have dependent object' do
+        it 'returns false' do
+          expect(subject.reachable?(simple_graph[:E], simple_graph[:A])).to be_falsey
+        end
+      end
+
+      context 'when one of the conditions evaluated do not have any dependent object' do
+        it 'returns false' do
+          simple_graph[:A].conditions.unshift(condition_z)
+
+          expect(condition_z).to receive(:dependent_object).and_return(nil)
+          expect(subject.reachable?(simple_graph[:E], simple_graph[:A])).to be_falsey
+        end
+      end
+    end
+  end
+
   describe '#evaluate' do
     def check_evaluated_result(graph, satisfied)
       graph.values.index { |v| v.satisfied != satisfied.include?(v) }.nil?
