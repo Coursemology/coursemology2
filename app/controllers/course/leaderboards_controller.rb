@@ -30,7 +30,8 @@ class Course::LeaderboardsController < Course::ComponentController
 
   # Load approved students from current course with course statistics.
   def load_course_users
-    @course_users = @course.course_users.students.with_approved_state.includes(:user)
+    @course_users = @course.course_users.students.with_approved_state.without_phantom_users.
+                    includes(:user)
   end
 
   def add_leaderboard_breadcrumb
