@@ -13,13 +13,6 @@ FactoryGirl.define do
     points_awarded { rand(1..20) * 100 }
     reason { 'Reason for manually-awarded experience points' if manually_awarded? }
 
-    trait :automatically_awarded do
-      after(:build) do |record|
-        record.actable = record
-        record.reason = nil
-      end
-    end
-
     trait :inactive do
       points_awarded nil
     end
