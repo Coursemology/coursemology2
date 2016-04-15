@@ -79,7 +79,13 @@ class Instance < ActiveRecord::Base
   #
   # @return [Boolean]
   def default?
-    host == Instance::DEFAULT_HOST_NAME
+    self[:host] == Instance::DEFAULT_HOST_NAME
+  end
+
+  # Replace the hostname of the default instance.
+  def host
+    return Application.config.x.default_host if default?
+    super
   end
 
   private
