@@ -72,6 +72,7 @@ class CourseUser < ActiveRecord::Base
   scope :instructors, -> { staff }
   scope :students, -> { where(role: roles[:student]) }
 
+  scope :without_phantom_users, -> { where(phantom: false) }
   scope :with_course_statistics, -> { all.calculated(:experience_points, :achievement_count) }
   scope :ordered_by_experience_points, (lambda do
     all.calculated(:experience_points).order('experience_points DESC')
