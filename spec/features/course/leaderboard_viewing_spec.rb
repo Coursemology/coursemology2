@@ -10,7 +10,9 @@ RSpec.describe 'Course: Leaderboard: View' do
     end
 
     context 'As a student' do
-      let(:students) { create_list(:course_student, 2, :approved, course: course) }
+      let!(:students) { create_list(:course_student, 2, :approved, course: course) }
+      let!(:unregistered_user) { create(:course_user, course: course) }
+      let!(:phantom_user) { create(:course_user, :approved, course: course, phantom: true) }
       let(:user) { students[0].user }
 
       scenario 'I can view the leaderboard sorted by level' do
@@ -18,7 +20,8 @@ RSpec.describe 'Course: Leaderboard: View' do
         visit course_leaderboard_path(course)
 
         within find('.leaderboard-level') do
-          sorted_course_users = course.course_users.students.ordered_by_experience_points
+          sorted_course_users = course.course_users.students.without_phantom_users.
+                                with_approved_state.ordered_by_experience_points
 
           sorted_course_users.each.with_index(1) do |student, index|
             within find(content_tag_selector(student)) do
@@ -27,6 +30,9 @@ RSpec.describe 'Course: Leaderboard: View' do
             end
           end
         end
+
+        expect(page).not_to have_content_tag_for(phantom_user)
+        expect(page).not_to have_content_tag_for(unregistered_user)
       end
 
       scenario 'I can view the leaderboard sorted by achievement count' do
@@ -34,7 +40,8 @@ RSpec.describe 'Course: Leaderboard: View' do
         visit course_leaderboard_path(course)
 
         within find('.leaderboard-achievement') do
-          sorted_course_users = course.course_users.students.ordered_by_achievement_count
+          sorted_course_users = course.course_users.students.without_phantom_users.
+                                with_approved_state.ordered_by_achievement_count
 
           sorted_course_users.each.with_index(1) do |student, index|
             within find(content_tag_selector(student)) do
@@ -45,6 +52,9 @@ RSpec.describe 'Course: Leaderboard: View' do
             end
           end
         end
+
+        expect(page).not_to have_content_tag_for(phantom_user)
+        expect(page).not_to have_content_tag_for(unregistered_user)
       end
     end
   end

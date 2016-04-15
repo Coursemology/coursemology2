@@ -33,6 +33,8 @@ RSpec.feature 'Course: Achievements' do
     context 'As an Course Student' do
       let!(:course_student1) { create(:course_student, :approved, course: course) }
       let!(:course_student2) { create(:course_student, :approved, course: course) }
+      let!(:unregistered_user) { create(:course_user, course: course) }
+      let!(:phantom_user) { create(:course_user, :approved, course: course, phantom: true) }
       let!(:user) { course_student1.user }
       before do
         create(:course_user_achievement, course_user: course_student1, achievement: achievement1)
@@ -63,13 +65,18 @@ RSpec.feature 'Course: Achievements' do
       end
 
       scenario 'I can view all users who have obtained an achievement' do
-        visit course_achievement_path(course, achievement1)
-        expect(page).to have_content_tag_for(course_student1)
-        expect(page).not_to have_content_tag_for(course_student2)
+        [achievement1, achievement2].each do |achievement|
+          visit course_achievement_path(course, achievement)
 
-        visit course_achievement_path(course, achievement2)
-        expect(page).to have_content_tag_for(course_student2)
-        expect(page).not_to have_content_tag_for(course_student1)
+          obtained = achievement.course_users
+          not_obtained = course.course_users - obtained
+
+          obtained.each { |course_user| expect(page).to have_content_tag_for(course_user) }
+          not_obtained.each { |course_user| expect(page).not_to have_content_tag_for(course_user) }
+
+          expect(page).not_to have_content_tag_for(phantom_user)
+          expect(page).not_to have_content_tag_for(unregistered_user)
+        end
       end
     end
   end
