@@ -233,4 +233,32 @@ RSpec.describe ApplicationFormattersHelper do
       end
     end
   end
+
+  describe 'unread helper' do
+    let(:stub) do
+      double.tap do |result|
+        me = self
+        result.define_singleton_method(:unread?) { |_| !me.read_status }
+      end
+    end
+
+    describe '#unread_class' do
+      subject { helper.unread_class(stub) }
+      before { controller.define_singleton_method(:current_user) { nil } }
+
+      context 'when the user has not read the item' do
+        let(:read_status) { false }
+        it 'returns ["unread"]' do
+          expect(subject).to eq(['unread'])
+        end
+      end
+
+      context 'when the user has read the item' do
+        let(:read_status) { true }
+        it 'returns an empty array' do
+          expect(subject).to eq([])
+        end
+      end
+    end
+  end
 end

@@ -120,4 +120,16 @@ module ApplicationFormattersHelper
   def draft_message(item)
     t('common.draft') if item.draft?
   end
+
+  # A helper for generating CSS classes, based on the unread status of the item.
+  #
+  # @param [ActiveRecord::Base] item An ActiveRecord object which acts as readable.
+  # @return [Array<String>] An array of CSS classes applicable for the provided item.
+  def unread_class(item)
+    if item.unread?(current_user)
+      ['unread']
+    else
+      []
+    end
+  end
 end
