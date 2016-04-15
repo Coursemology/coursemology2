@@ -3,6 +3,7 @@ class Course::Forum::Topic < ActiveRecord::Base
   extend FriendlyId
   friendly_id :slug_candidates, use: :scoped, scope: :forum
 
+  acts_as_readable on: :updated_at
   acts_as :topic, class_name: Course::Discussion::Topic.name
 
   after_initialize :generate_initial_post, unless: :persisted?

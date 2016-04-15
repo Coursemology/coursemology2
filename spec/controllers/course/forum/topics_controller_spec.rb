@@ -8,7 +8,8 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
     let(:user) { create(:administrator) }
     let(:course) { create(:course) }
     let(:forum) { create(:forum, course: course) }
-    let!(:topic_stub) do
+    let(:topic) { create(:forum_topic, forum: forum) }
+    let(:topic_stub) do
       stub = build_stubbed(:forum_topic, forum: forum)
       allow(stub).to receive(:save).and_return(false)
       allow(stub).to receive(:destroy).and_return(false)
@@ -18,6 +19,20 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
     end
 
     before { sign_in(user) }
+
+    describe '#show' do
+      subject { get :show, course_id: course, forum_id: forum, id: topic }
+
+      it 'marks the topic as read' do
+        subject
+        expect(topic.reload.unread?(user)).to be(false)
+      end
+
+      it 'marks the topic posts as read' do
+        subject
+        expect(topic.reload.posts.any? { |post| post.unread?(user) }).to be(false)
+      end
+    end
 
     describe '#destroy' do
       subject { delete :destroy, course_id: course, forum_id: forum, id: topic_stub }

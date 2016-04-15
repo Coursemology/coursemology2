@@ -71,7 +71,7 @@ RSpec.feature 'Course: Forum: Post: Management' do
         expect(topic.reload.posts.last.text).to eq('new_text')
       end
 
-      scenario 'I can delete a topic' do
+      scenario 'I can delete a post' do
         post = create(:course_discussion_post, topic: topic.acting_as)
         visit course_forum_topic_path(course, forum, topic)
 
@@ -159,6 +159,11 @@ RSpec.feature 'Course: Forum: Post: Management' do
           find('a .fa-thumbs-up').find(:xpath, '..').click
         end
         expect(post.reload.vote_tally).to eq(0)
+      end
+
+      scenario 'I can see new posts' do
+        visit course_forum_topic_path(course, forum, topic)
+        expect(page).to have_selector(content_tag_selector(topic.posts.first, class: 'unread'))
       end
     end
   end
