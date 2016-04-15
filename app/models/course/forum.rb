@@ -25,7 +25,7 @@ class Course::Forum < ActiveRecord::Base
   # @!attribute [r] topic_view_count
   #   The number of views in this forum.
   calculated :topic_view_count, (lambda do
-    Course::Forum::Topic.joins { views.outer }.
+    Course::Forum::Topic.joins { views }.
       where { course_forum_topics.forum_id == course_forums.id }.
       select { count('*') }
   end)

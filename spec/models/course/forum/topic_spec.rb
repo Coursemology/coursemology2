@@ -64,6 +64,18 @@ RSpec.describe Course::Forum::Topic, type: :model do
       end
     end
 
+    describe '.vote_count' do
+      let(:topic) { create(:forum_topic, forum: forum) }
+      let!(:votes) do
+        create_list(:course_discussion_post_vote, vote_count, post: topic.topic.posts.first)
+      end
+      let(:vote_count) { 3 }
+
+      it 'sets calculates correct vote_count' do
+        expect(forum.topics.calculated(:vote_count).first.vote_count).to eq(vote_count)
+      end
+    end
+
     describe '.post_count' do
       let(:topic) { create(:forum_topic, forum: forum) }
       let!(:topic_posts) { create_list(:course_discussion_post, 2, topic: topic.acting_as) }
@@ -79,6 +91,17 @@ RSpec.describe Course::Forum::Topic, type: :model do
 
       it 'preloads the correct view count' do
         expect(forum.topics.calculated(:view_count).first.view_count).to eq(topic_views.size)
+      end
+    end
+
+    describe '.order_by_date' do
+      let!(:topics) { create_list(:forum_topic, topic_count, forum: forum) }
+      let(:topic_count) { 3 }
+
+      it 'sorts by updated date' do
+        expect(topics).not_to be_empty
+        consecutive = topics.each_cons(2)
+        expect(consecutive.all? { |first, second| first.updated_at <= second.updated_at })
       end
     end
 

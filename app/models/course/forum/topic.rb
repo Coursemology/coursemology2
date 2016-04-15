@@ -13,6 +13,16 @@ class Course::Forum::Topic < ActiveRecord::Base
   has_many :views, dependent: :destroy, inverse_of: :topic
   belongs_to :forum, inverse_of: :topics
 
+  # @!attribute [r] vote_count
+  #   The number of votes in this topic.
+  calculated :vote_count, (lambda do
+    Course::Discussion::Post::Vote.joins { post.topic }.
+      where do
+        (course_forum_topics.id == course_discussion_topics.actable_id) &
+          (course_discussion_topics.actable_type == Course::Forum::Topic.name)
+      end.select { count('*') }
+  end)
+
   # @!attribute [r] post_count
   #   The number of posts in this topic.
   calculated :post_count, (lambda do
@@ -29,6 +39,13 @@ class Course::Forum::Topic < ActiveRecord::Base
     Course::Forum::Topic::View.where do
       topic_id == course_forum_topics.id
     end.select { count('*') }
+  end)
+
+  # @!method self.order_by_date
+  #   Orders the topics by their date. This uses the modification date, so topics with new posts
+  #   will float to the top.
+  scope :order_by_date, (lambda do
+    order(updated_at: :desc)
   end)
 
   # @!method self.with_latest_post
@@ -50,10 +67,6 @@ class Course::Forum::Topic < ActiveRecord::Base
   #   Augments all returned records with the number of posts and views in that topic.
   scope :with_topic_statistics,
         -> { all.calculated(:post_count, :view_count) }
-
-  def votes_count
-    0 # :TODO
-  end
 
   # Create view record for a user
   #

@@ -57,12 +57,23 @@ RSpec.describe Course::Forum, type: :model do
       let(:forum) { create(:forum, course: course) }
       let(:first_topic) { create(:forum_topic, forum: forum) }
       let(:second_topic) { create(:forum_topic, forum: forum) }
-      let!(:first_topic_views) { create_list(:forum_topic_view, 2, topic: first_topic) }
-      let!(:second_topic_views) { create_list(:forum_topic_view, 1, topic: second_topic) }
 
-      it 'shows the correct count' do
-        expect(course.forums.calculated(:topic_view_count).first.topic_view_count).
-          to eq(first_topic_views.size + second_topic_views.size)
+      context 'when the topic has views' do
+        let!(:first_topic_views) { create_list(:forum_topic_view, 2, topic: first_topic) }
+        let!(:second_topic_views) { create_list(:forum_topic_view, 1, topic: second_topic) }
+
+        it 'shows the sum of all views' do
+          expect(course.forums.calculated(:topic_view_count).first.topic_view_count).
+            to eq(first_topic_views.size + second_topic_views.size)
+        end
+      end
+
+      context 'when the topic has no views' do
+        it 'shows zero views' do
+          first_topic
+          second_topic
+          expect(course.forums.calculated(:topic_view_count).first.topic_view_count).to eq(0)
+        end
       end
     end
 

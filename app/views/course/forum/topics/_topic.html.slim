@@ -5,7 +5,7 @@
               course_forum_topic_path(current_course, @forum, topic))
     div.started-by
       = t('.started_by_html', user: link_to_user(topic.creator))
-  td = topic.votes_count
+  td = topic.vote_count
   td = topic.post_count
   td = topic.view_count
   td.latest-post
