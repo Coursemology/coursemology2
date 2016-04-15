@@ -11,7 +11,7 @@ module System::Admin::SystemAdminAbilityComponent
   private
 
   def do_not_allow_system_admin_manage_default_instance
-    cannot :update, Instance, host: Instance::DEFAULT_HOST_NAME
-    cannot :delete, Instance, host: Instance::DEFAULT_HOST_NAME
+    cannot :update, Instance, id: Instance::DEFAULT_INSTANCE_ID
+    cannot :delete, Instance, id: Instance::DEFAULT_INSTANCE_ID
   end
 end

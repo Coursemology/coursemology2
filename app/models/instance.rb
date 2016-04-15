@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Instance < ActiveRecord::Base
-  DEFAULT_HOST_NAME = '*'.freeze
+  DEFAULT_INSTANCE_ID = 0
 
   has_settings_on :settings
 
@@ -9,7 +9,7 @@ class Instance < ActiveRecord::Base
     #
     # @return [Instance]
     def default
-      @default ||= find_by(host: Instance::DEFAULT_HOST_NAME)
+      @default ||= find_by(id: DEFAULT_INSTANCE_ID)
       raise 'Unknown instance. Did you run rake db:seed?' unless @default
       @default
     end
@@ -30,7 +30,7 @@ class Instance < ActiveRecord::Base
     # @return [Instance]
     def find_tenant_by_host_or_default(host)
       tenants = where do
-        (lower(self.host) == lower(host)) | (self.host == Instance::DEFAULT_HOST_NAME)
+        (lower(self.host) == lower(host)) | (id == DEFAULT_INSTANCE_ID)
       end.to_a
 
       tenants.find { |tenant| !tenant.default? } || tenants.first
@@ -79,7 +79,7 @@ class Instance < ActiveRecord::Base
   #
   # @return [Boolean]
   def default?
-    self[:host] == Instance::DEFAULT_HOST_NAME
+    id == DEFAULT_INSTANCE_ID
   end
 
   # Replace the hostname of the default instance.
