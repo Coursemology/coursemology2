@@ -58,6 +58,14 @@ GoRails should help you to get everything started.
 >
 > Password: `Coursemology!`
 
+### Configuration
+
+  To make sure that multi tenancy works correctly for you, change the default host in
+  `config/application.rb` before deploying:
+  ~~~ ruby
+  config.x.default_host = 'your_domain.com'
+  ~~~
+
 ## Found Boogs?
 
 Create an issue on the Github [issue tracker](https://github.com/Coursemology/coursemology2/issues) or come talk to us over at our [Slack channels](https://coursemology-slack.herokuapp.com/).
