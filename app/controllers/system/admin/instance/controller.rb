@@ -12,7 +12,7 @@ class System::Admin::Instance::Controller < ApplicationController
   end
 
   def authorize_instance_admin
-    authorize!(:manage, @instance)
+    authorize!(:show, @instance)
   end
 
   def add_instance_breadcrumb
