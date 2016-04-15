@@ -58,6 +58,8 @@ RSpec.feature 'System: Administration: Instances' do
 
         instances.each do |instance|
           expect(page).to have_content_tag_for(instance)
+          expect(page).
+            to have_link(nil, href: admin_instance_admin_url(host: instance.host, port: nil))
         end
       end
 
