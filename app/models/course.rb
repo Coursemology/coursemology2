@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class Course < ActiveRecord::Base
-  include Course::LevelsConcern
   include Course::LessonPlanConcern
   include Course::SearchConcern
 
@@ -39,7 +38,9 @@ class Course < ActiveRecord::Base
   has_many :assessment_programming_evaluations,
            class_name: Course::Assessment::ProgrammingEvaluation.name, dependent: :destroy,
            inverse_of: :course
-  has_many :levels, dependent: :destroy, inverse_of: :course
+  has_many :levels, dependent: :destroy, inverse_of: :course do
+    include Course::LevelsConcern
+  end
   has_many :groups, dependent: :destroy, class_name: Course::Group.name
   has_many :lesson_plan_items, class_name: Course::LessonPlan::Item.name, dependent: :destroy
   has_many :lesson_plan_milestones, class_name: Course::LessonPlan::Milestone.name,
@@ -67,6 +68,8 @@ class Course < ActiveRecord::Base
   delegate :instructors, to: :course_users
   delegate :managers, to: :course_users
   delegate :user?, to: :course_users
+  delegate :level_for, to: :levels
+  delegate :default_level?, to: :levels
 
   def self.use_relative_model_naming?
     true
