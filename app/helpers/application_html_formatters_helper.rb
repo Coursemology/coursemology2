@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 module ApplicationHTMLFormattersHelper
   DefaultPipelineOptions = {
-    css_class: 'codehilite'
+    css_class: 'codehilite',
+    replace_br: true
   }.freeze
 
   # The default pipeline, used by both text and HTML pipelines.

@@ -187,7 +187,7 @@ GEM
     html-pipeline (2.4.0)
       activesupport (>= 2, < 5)
       nokogiri (>= 1.4)
-    html-pipeline-rouge_filter (1.0.3)
+    html-pipeline-rouge_filter (1.0.4)
       activesupport
       html-pipeline (>= 1.11)
       rouge (~> 1.8)
