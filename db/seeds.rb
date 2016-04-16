@@ -10,7 +10,8 @@
 # Remember to ensure that the commands in this file are idempotent!
 
 # Default hostname without validation and cannot be changed in UI
-Instance.find_or_initialize_by(name: 'Default', host: '*').save!(validate: false)
+Instance.find_or_initialize_by(id: Instance::DEFAULT_INSTANCE_ID, name: 'Default', host: '*').
+  save!(validate: false)
 
 ActsAsTenant.with_tenant(Instance.default) do
   # Create the Coursemology built in accounts.
