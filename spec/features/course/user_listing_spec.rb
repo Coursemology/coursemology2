@@ -8,6 +8,7 @@ RSpec.feature 'Courses: Course User Listing' do
     let(:course) { create(:course) }
     let!(:course_student_list) { create_list(:course_student, 5, :approved, course: course) }
     let!(:unregistered_user) { create(:course_user, course: course) }
+    let!(:phantom_user) { create(:course_user, :approved, course: course, phantom: true) }
     let!(:course_teaching_assistant) do
       create(:course_teaching_assistant, :approved, course: course)
     end
@@ -24,8 +25,9 @@ RSpec.feature 'Courses: Course User Listing' do
           expect(page).to have_link(nil, href: course_user_path(course, student))
         end
 
-        # Page should not display unconfirmed users and teaching assistants
+        # Page should not display unconfirmed users, phantom users and teaching assistants
         expect(page).not_to have_content_tag_for(unregistered_user)
+        expect(page).not_to have_content_tag_for(phantom_user)
         expect(page).not_to have_content_tag_for(course_teaching_assistant)
       end
     end
