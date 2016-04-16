@@ -92,6 +92,24 @@ RSpec.describe Course::Condition::Achievement, type: :model do
             user_achievement.save!
           end
         end
+
+        context 'when the user achievement is destroyed' do
+          it 'evaluate_conditional_for the affected course_user' do
+            user_achievement = create(:course_user_achievement, course_user: course_user)
+            expect(Course::Condition::Achievement).
+              to receive(:evaluate_conditional_for).with(course_user)
+            user_achievement.destroy!
+          end
+        end
+
+        context 'when the user achievement is destroyed through update attributes' do
+          it 'evaluate_conditional_for the affected course_user' do
+            user_achievement = create(:course_user_achievement, course_user: course_user)
+            expect(Course::Condition::Achievement).
+              to receive(:evaluate_conditional_for).with(course_user)
+            user_achievement.achievement.update_attributes(course_user_ids: [])
+          end
+        end
       end
     end
 
