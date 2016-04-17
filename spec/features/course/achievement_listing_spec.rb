@@ -34,7 +34,7 @@ RSpec.feature 'Course: Achievements' do
       let!(:course_student1) { create(:course_student, :approved, course: course) }
       let!(:course_student2) { create(:course_student, :approved, course: course) }
       let!(:unregistered_user) { create(:course_user, course: course) }
-      let!(:phantom_user) { create(:course_user, :approved, course: course, phantom: true) }
+      let!(:phantom_user) { create(:course_user, :approved, :phantom, course: course) }
       let!(:user) { course_student1.user }
       before do
         create(:course_user_achievement, course_user: course_student1, achievement: achievement1)
