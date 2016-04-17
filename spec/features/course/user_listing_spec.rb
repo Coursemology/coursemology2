@@ -8,7 +8,7 @@ RSpec.feature 'Courses: Course User Listing' do
     let(:course) { create(:course) }
     let!(:course_student_list) { create_list(:course_student, 5, :approved, course: course) }
     let!(:unregistered_user) { create(:course_user, course: course) }
-    let!(:phantom_user) { create(:course_user, :approved, course: course, phantom: true) }
+    let!(:phantom_user) { create(:course_user, :approved, :phantom, course: course) }
     let!(:course_teaching_assistant) do
       create(:course_teaching_assistant, :approved, course: course)
     end

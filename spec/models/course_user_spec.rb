@@ -143,7 +143,7 @@ RSpec.describe CourseUser, type: :model do
     end
 
     describe '.without_phantom_users' do
-      let!(:phantom_user) { create(:course_user, course: course, phantom: true) }
+      let!(:phantom_user) { create(:course_user, :phantom, course: course) }
       it 'returns only non-phantom course users' do
         expect(course.course_users.without_phantom_users).not_to include(phantom_user)
         course.course_users.without_phantom_users.each do |course_user|

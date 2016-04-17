@@ -12,7 +12,7 @@ RSpec.describe 'Course: Leaderboard: View' do
     context 'As a student' do
       let!(:students) { create_list(:course_student, 2, :approved, course: course) }
       let!(:unregistered_user) { create(:course_user, course: course) }
-      let!(:phantom_user) { create(:course_user, :approved, course: course, phantom: true) }
+      let!(:phantom_user) { create(:course_user, :approved, :phantom, course: course) }
       let(:user) { students[0].user }
 
       scenario 'I can view the leaderboard sorted by level' do
