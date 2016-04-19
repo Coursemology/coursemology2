@@ -76,4 +76,4 @@ Copyright (c) 2015-2016 Coursemology.org. This software is licensed under the MI
 
 ## Acknowledgments
 
-The Coursemology.org Project was made possible by a large number of teaching development grants from the National University of Singapore over the years. 
+The Coursemology.org Project was made possible by a number of teaching development grants from the National University of Singapore over the years. 
