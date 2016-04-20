@@ -33,6 +33,13 @@ class Course::Assessment::Answer < ActiveRecord::Base
   accepts_nested_attributes_for :actable
   accepts_nested_attributes_for :discussion_topic
 
+  # Get all discussion topic ids of type `Course::Assessment::Answer` in the given course.
+  scope :from_course, (lambda do |course_id|
+    joins { question.assessment.tab.category }.
+      where { question.assessment.tab.category.course_id == course_id }.
+      joins { discussion_topic }.select { discussion_topic.id }
+  end)
+
   # Creates an Auto Grading job for this answer. This saves the answer if there are pending changes.
   #
   # @param [String|nil] redirect_to_path The path to be redirected after auto grading job was
