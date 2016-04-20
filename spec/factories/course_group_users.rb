@@ -5,8 +5,9 @@ FactoryGirl.define do
       course { build(:course) }
     end
 
-    course_group { build(:course_group, course: course) }
-    user { create(:course_user, :approved, course: course_group.course).user }
+    group { build(:course_group, course: course) }
+    course_user { build(:course_user, :approved, course: course) }
+
     role :normal
 
     factory :course_group_student

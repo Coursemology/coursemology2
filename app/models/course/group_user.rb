@@ -4,12 +4,10 @@ class Course::GroupUser < ActiveRecord::Base
 
   enum role: { normal: 0, manager: 1 }
 
-  validate :user_and_group_in_same_course
+  validate :course_user_and_group_in_same_course
 
-  belongs_to :user, inverse_of: :course_group_users
-  belongs_to :course_group, class_name: Course::Group.name, inverse_of: :group_users
-
-  alias_method :group, :course_group
+  belongs_to :course_user, inverse_of: :group_users
+  belongs_to :group, class_name: Course::Group.name, inverse_of: :group_users
 
   private
 
@@ -18,8 +16,9 @@ class Course::GroupUser < ActiveRecord::Base
     self.role ||= :normal
   end
 
-  def user_and_group_in_same_course #:nodoc:
-    return if group.course.course_users.with_approved_state.exists?(user: user)
-    errors.add(:user, :not_enrolled)
+  # Checks if course_user and course_group belongs to the same course.
+  def course_user_and_group_in_same_course
+    return if group.course == course_user.course
+    errors.add(:course_user, :not_enrolled)
   end
 end

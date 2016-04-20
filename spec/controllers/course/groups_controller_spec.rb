@@ -11,10 +11,10 @@ RSpec.describe Course::GroupsController, type: :controller do
 
     describe '#update' do
       context 'when the user is present' do
-        let(:user_to_add) { create(:user) }
         let(:group_users_attributes) do
           id_not_taken = generate(:nested_attribute_new_id)
-          { id_not_taken => attributes_for(:course_group_user, user_id: user_to_add) }
+          { id_not_taken => attributes_for(:course_group_user,
+                                           course_user_id: course_user_to_add.id) }
         end
         let(:group_attributes) do
           attributes_for(:course_group, group_users_attributes: group_users_attributes)
@@ -22,10 +22,10 @@ RSpec.describe Course::GroupsController, type: :controller do
         subject { patch :update, course_id: course, id: group, group: group_attributes }
 
         context 'when the user and the group are in the same course' do
-          let!(:course_user) { create(:course_user, :approved, course: course, user: user_to_add) }
+          let!(:course_user_to_add) { create(:course_user, course: course) }
 
           it 'adds the user to the group' do
-            expect { subject }.to change { group.users.count }.by(1)
+            expect { subject }.to change { group.course_users.count }.by(1)
           end
 
           it 'sets the proper flash message' do
@@ -35,26 +35,29 @@ RSpec.describe Course::GroupsController, type: :controller do
         end
 
         context 'when the user and the group are in different courses' do
+          let(:other_course) { create(:course) }
+          let!(:course_user_to_add) { create(:course_user, course: other_course) }
+
           it 'does not add the user to group' do
-            expect { subject }.not_to change { group.users.count }
+            expect { subject }.not_to change { group.course_users.count }
           end
 
           it { is_expected.to render_template(:edit) }
         end
 
         context 'when duplicate users are added' do
-          let!(:course_user) { create(:course_user, course: course, user: user_to_add) }
+          let!(:course_user_to_add) { create(:course_user, course: course) }
           let(:group_users_attributes) do
             first_id = generate(:nested_attribute_new_id)
             second_id = generate(:nested_attribute_new_id)
             {
-              first_id => attributes_for(:course_group_user, user_id: user_to_add),
-              second_id => attributes_for(:course_group_user, user_id: user_to_add)
+              first_id => attributes_for(:course_group_user, course_user_id: course_user_to_add),
+              second_id => attributes_for(:course_group_user, course_user_id: course_user_to_add)
             }
           end
 
           it 'adds neither of them to the group' do
-            expect { subject }.to change { group.users.count }.by(0)
+            expect { subject }.to change { group.course_users.count }.by(0)
           end
         end
       end
@@ -68,7 +71,7 @@ RSpec.describe Course::GroupsController, type: :controller do
         subject { patch :update, course_id: course, id: group, group: group_attributes }
 
         it 'does not add the user to the group' do
-          expect { subject }.to change { group.users.count }.by(0)
+          expect { subject }.to change { group.course_users.count }.by(0)
         end
 
         it { is_expected.to redirect_to(course_groups_path(course)) }
