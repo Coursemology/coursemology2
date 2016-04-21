@@ -17,6 +17,15 @@ class Course::Achievement < ActiveRecord::Base
     self.weight ||= 10
   end
 
+  # Returns if achievement is manually or automatically awarded.
+  #
+  # @return [Boolean] Whether the achievement is manually awarded.
+  def manually_awarded?
+    # TODO: Correct call should be conditions.empty?, but that results in an
+    # exception due to polymorphism. To investigate.
+    specific_conditions.empty?
+  end
+
   def permitted_for!(_course_user)
   end
 
