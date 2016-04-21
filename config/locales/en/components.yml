@@ -1,0 +1,20 @@
+en:
+  components:
+    announcements:
+      name: :'course.announcements.index.header'
+    achievements:
+      name: :'course.achievement.achievements.index.header'
+    lesson_plan:
+      name: :'course.lesson_plan.items.index.header'
+    assessments:
+      name: 'Assessments'
+    forums:
+      name: :'course.forum.forums.index.header'
+    groups:
+      name: :'course.groups.index.header'
+    levels:
+      name: :'course.levels.index.header'
+    leaderboard:
+      name: :'course.leaderboards.index.header'
+    materials:
+      name: :'course.material.sidebar_title'

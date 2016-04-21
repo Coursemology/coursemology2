@@ -19,7 +19,7 @@ RSpec.feature 'Course: Administration: Components' do
         visit course_admin_components_path(course)
 
         components.each do |component|
-          expect(page).to have_selector('th', text: component.name)
+          expect(page).to have_selector('th', text: component.display_name)
           enabled = course.reload.settings(:components, component.key).enabled
           enabled = enabled.nil? ? component.enabled_by_default? : enabled
           checkbox = find("#settings_effective_enabled_component_ids_#{component.key}")

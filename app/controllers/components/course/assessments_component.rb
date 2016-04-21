@@ -2,6 +2,10 @@
 class Course::AssessmentsComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
+  def self.display_name
+    I18n.t('components.assessments.name')
+  end
+
   def sidebar_items
     main_sidebar_items + admin_sidebar_items + admin_settings_items
   end

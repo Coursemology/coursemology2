@@ -32,6 +32,14 @@ class Course::ControllerComponentHost
       def key
         name.underscore.tr('/', '_').to_sym
       end
+
+      # Override this to customise the display name of the component.
+      # The module name is the default display name.
+      #
+      # @return [String]
+      def display_name
+        name
+      end
     end
   end
 
