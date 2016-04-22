@@ -125,5 +125,30 @@ RSpec.describe Course::Forum::Topic, type: :model do
         expect(forum.topics.with_topic_statistics.first.view_count).to eq(topic_views.size)
       end
     end
+
+    describe '.from_course' do
+      let(:topic_count) { Random.rand(3) }
+      let!(:topics) { create_list(:forum_topic, topic_count, forum: forum) }
+
+      subject { Course::Forum::Topic.from_course(forum.course) }
+
+      it { is_expected.to contain_exactly(*topics) }
+    end
+
+    describe 'unread' do
+      let(:topic) { create(:forum_topic) }
+      context 'after topic was created' do
+        it 'has been read by the creator' do
+          expect(topic.creator.have_read?(topic)).to be_truthy
+        end
+      end
+
+      context 'after topic was updated' do
+        it 'has been read by the updater' do
+          topic.update_attributes(title: 'New Topic')
+          expect(topic.updater.have_read?(topic)).to be_truthy
+        end
+      end
+    end
   end
 end
