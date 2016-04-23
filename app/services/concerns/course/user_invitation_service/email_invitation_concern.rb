@@ -7,17 +7,23 @@ module Course::UserInvitationService::EmailInvitationConcern
 
   # Invites users to the given course.
   #
+  # The result of the transaction is both saving the course as well as validating validity
+  # because Rails does not handle duplicate nested attribute uniqueness constraints.
+  #
   # @param [Array<Hash>|File|TempFile] users Invites the given users.
   # @return [Boolean] True if the invitations were successfully created and sent out. The errors
   #   that this method would add to the provided course is in the +course_users+ association.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite(users)
-    Course.transaction do
-      registered_users, invited_users = invite_from_source(users)
+    registered_users = nil
+    invited_users = nil
 
-      break false if !@current_course.save || !@current_course.valid?
-      send_invitation_emails(registered_users, invited_users)
+    success = Course.transaction do
+      registered_users, invited_users = invite_from_source(users)
+      @current_course.save && @current_course.valid?
     end
+
+    success && send_invitation_emails(registered_users, invited_users)
   end
 
   private

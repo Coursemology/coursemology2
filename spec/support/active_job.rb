@@ -34,15 +34,18 @@ module ActiveJob::TestGroupHelpers
   end
 end
 
-# Since message deliveries use the test delivery engine, all deferred deliver calls must be
-# converted to +deliver_now+ to prevent a dependency on the ActiveJob queue adapter.
+# Since message deliveries use the test delivery engine, all deferred deliver calls must also call
+# +deliver_now+ so that the +ActionMailer::Base.deliveries.count+ attribute will also be
+# incremented.
 module ActionMailer::MessageDelivery::TestDeliveryHelpers
   def deliver_later(_ = {})
     deliver_now
+    super
   end
 
   def deliver_later!(_ = {})
     deliver_now!
+    super
   end
 end
 ActionMailer::MessageDelivery.prepend(ActionMailer::MessageDelivery::TestDeliveryHelpers)

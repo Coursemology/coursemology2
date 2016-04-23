@@ -16,8 +16,8 @@ RSpec.describe Course::UserInvitationService, type: :service do
       end
     end
 
-    let(:course) { build(:course) }
-    let(:user) { build(:user) }
+    let(:course) { create(:course) }
+    let(:user) { create(:user) }
     let(:stubbed_user_invitation_service) do
       Course::UserInvitationService.new(user, course).tap do |result|
         result.define_singleton_method(:invite_users) do |users|
@@ -92,9 +92,11 @@ RSpec.describe Course::UserInvitationService, type: :service do
           verify_users
         end
 
-        it 'sends an email to everyone' do
-          expect { invite }.to change { ActionMailer::Base.deliveries.count }.
-            by(user_form_attributes.length)
+        with_active_job_queue_adapter(:test) do
+          it 'sends an email to everyone' do
+            expect { invite }.to change { ActionMailer::Base.deliveries.count }.
+              by(user_form_attributes.length)
+          end
         end
       end
 
@@ -107,12 +109,14 @@ RSpec.describe Course::UserInvitationService, type: :service do
           verify_users
         end
 
-        it 'sends an email to everyone' do
-          expect do
-            subject.invite(temp_csv_from_attributes(user_attributes.map do |attributes|
-              OpenStruct.new(attributes)
-            end))
-          end.to change { ActionMailer::Base.deliveries.count }.by(user_attributes.length)
+        with_active_job_queue_adapter(:test) do
+          it 'sends an email to everyone' do
+            expect do
+              subject.invite(temp_csv_from_attributes(user_attributes.map do |attributes|
+                OpenStruct.new(attributes)
+              end))
+            end.to change { ActionMailer::Base.deliveries.count }.by(user_attributes.length)
+          end
         end
       end
 
