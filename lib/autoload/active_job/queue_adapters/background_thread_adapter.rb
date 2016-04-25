@@ -29,7 +29,7 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
 
   def self.enqueue(job) #:nodoc:
     ActiveSupport::Notifications.instrument(ENQUEUE_EVENT, job: job, caller: caller) do |payload|
-      with_thread_pool { @pending_jobs << job }
+      with_thread_pool { @pending_jobs << job.serialize }
       ensure_threads
 
       payload.reverse_merge!(notification_statistics)
@@ -151,7 +151,7 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
     # also maintain the current number of jobs running.
     def thread_run_job(job)
       ActiveRecord::Base.connection_pool.with_connection do
-        ActiveJob::Base.execute(job.serialize)
+        ActiveJob::Base.execute(job)
       end
     ensure
       thread_finish_job(job)
