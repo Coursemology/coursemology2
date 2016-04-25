@@ -40,6 +40,18 @@ RSpec.describe Course::Achievement do
         expect(course.achievements.accessible_by(subject)).
           to contain_exactly(achievement, draft_achievement)
       end
+
+      context 'when the achievement is manually awarded' do
+        before { allow(achievement).to receive(:manually_awarded?).and_return(true) }
+
+        it { is_expected.to be_able_to(:award, achievement) }
+      end
+
+      context 'when the achievement is not manually awarded' do
+        before { allow(achievement).to receive(:manually_awarded?).and_return(false) }
+
+        it { is_expected.not_to be_able_to(:award, achievement) }
+      end
     end
   end
 end
