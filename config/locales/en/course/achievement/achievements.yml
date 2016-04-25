@@ -27,3 +27,5 @@ en:
           requirements: 'Requirements'
         achievement:
           award_button: :'course.achievement.course_users.course_users_form.header'
+          disabled_award_button: >
+            Automatically-awarded achievements cannot be manually awarded to students.
