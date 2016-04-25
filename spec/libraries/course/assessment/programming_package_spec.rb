@@ -90,6 +90,19 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
     end
   end
 
+  describe '#save' do
+    let(:package_path) { temp_package_path }
+    before do
+      FileUtils.copy(self.class::PACKAGE_PATH, package_path)
+    end
+
+    it 'persists changes to the package' do
+      subject.submission_files = {}
+      subject.close
+      expect(open_package(package_path).submission_files).to be_empty
+    end
+  end
+
   describe '#valid?' do
     let(:package_path) { temp_package_path }
     let(:package_to_copy) { self.class::PACKAGE_PATH }

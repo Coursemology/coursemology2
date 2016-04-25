@@ -20,6 +20,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
     question.attachment.open(binmode: true) do |temporary_file|
       package = Course::Assessment::ProgrammingPackage.new(temporary_file)
       package.submission_files = build_submission_files(answer)
+      package.save
 
       evaluation_result = evaluate_package(question, package)
       build_result(question, evaluation_result)
