@@ -74,8 +74,10 @@ RSpec.describe User::EmailsController, type: :controller do
       context 'when the email is not confirmed' do
         let(:email_traits) { :unconfirmed }
 
-        it 'sends out a confirmation email' do
-          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+        with_active_job_queue_adapter(:test) do
+          it 'sends out a confirmation email' do
+            expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+          end
         end
 
         it { is_expected.to redirect_to(user_emails_path) }
