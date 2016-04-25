@@ -64,7 +64,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
     test_count = question.test_cases.count
 
     all_correct = number_correct == test_count
-    grade = question.maximum_grade = number_correct / test_count
+    grade = question.maximum_grade * number_correct / test_count
     [all_correct, grade, auto_grading]
   end
 

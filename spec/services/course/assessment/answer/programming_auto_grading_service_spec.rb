@@ -17,7 +17,8 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
         [{
           template_package: true,
           template_package_deferred: false,
-          test_cases: question_test_cases
+          test_cases: question_test_cases,
+          maximum_grade: 3
         }]
       end
       let(:question_test_cases) do
