@@ -121,23 +121,27 @@ RSpec.describe CourseUser, type: :model do
     end
 
     describe '.ordered_by_achievement_count' do
-      let!(:student1) { create(:course_student, course: course) }
-      before { create(:course_user_achievement, course_user: student) }
-      subject { course.course_users.student.ordered_by_achievement_count }
+      let!(:slower_student) { create(:course_student, course: course) }
+      let!(:course_user_achievement) { create(:course_user_achievement, course_user: student) }
+      subject { course.course_users.students.ordered_by_achievement_count }
 
       it 'returns course_users sorted by achievement count' do
-        expect(subject).to eq([student, student1])
+        expect(subject).to eq([student, slower_student])
       end
 
       context 'when two course_users have the same achievement count' do
-        before do
-          # student achieves the achievement count of 2 before student 1
-          create(:course_user_achievement, course_user: student)
-          create_list(:course_user_achievement, 2, course_user: student1)
+        let(:earliest_time) { course_user_achievement.obtained_at }
+        let!(:student_achievement) do
+          create(:course_user_achievement, course_user: student, obtained_at: earliest_time)
+        end
+        let!(:slower_student_achievement) do
+          create_list(:course_user_achievement, 2, course_user: slower_student,
+                                                   obtained_at: earliest_time + 2.days)
         end
 
         it 'returns the course_user who obtained the achievement count first' do
-          expect(subject).to eq([student, student1])
+          # Student achieves the achievement count of 2 before slower_student
+          expect(subject).to eq([student, slower_student])
         end
       end
     end
