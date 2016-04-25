@@ -104,6 +104,8 @@ en:
         index: :'course.leaderboards.title'
       experience_points_records:
         index: 'Experience Points History'
+      experience_points_disbursement:
+        new: :'course.experience_points_disbursement.new.header'
 
     system:
       admin:
