@@ -16,4 +16,5 @@ RSpec.describe 'Extension: Acts as Experience Points Record' do
   it { is_expected.to respond_to(:course_user) }
   it { is_expected.to respond_to(:acting_as) }
   it { expect(subject.acting_as).to respond_to(:specific) }
+  it { expect { subject.experience_points_display_reason }.to raise_error(NotImplementedError) }
 end

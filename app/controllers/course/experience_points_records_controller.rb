@@ -9,7 +9,7 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
 
   def index # :nodoc:
     @experience_points_records =
-      @experience_points_records.active.includes(creator: :course_users)
+      @experience_points_records.active.includes(:updater)
   end
 
   def destroy # :nodoc:
