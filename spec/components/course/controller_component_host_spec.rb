@@ -40,6 +40,8 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
 
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
+    let(:user) { create(:administrator) }
+    before { sign_in(user) }
     let(:course) { create(:course, instance: instance) }
     before { allow(controller).to receive(:current_course).and_return(course) }
 
