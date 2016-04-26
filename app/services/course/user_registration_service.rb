@@ -5,14 +5,13 @@ class Course::UserRegistrationService
   # @param [Course::Registration] registration The registration object to be processed.
   # @return [Boolean] True if the registration succeeded. False if the registration failed.
   def register(registration)
-    CourseUser.transaction do
-      course_user = create_or_update_registration(registration)
-      succeeded = course_user && !course_user.changed?
-      if succeeded && course_user.requested?
-        notify_course_staff(registration.course, course_user)
-      else
-        succeeded
-      end
+    course_user = CourseUser.transaction { create_or_update_registration(registration) }
+
+    succeeded = course_user && !course_user.changed?
+    if succeeded && course_user.requested?
+      notify_course_staff(registration.course, course_user)
+    else
+      succeeded
     end
   end
 
