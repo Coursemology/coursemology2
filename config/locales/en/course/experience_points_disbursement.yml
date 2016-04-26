@@ -1,0 +1,14 @@
+en:
+  course:
+    experience_points_disbursement:
+      sidebar_title: 'Disburse Points'
+      new:
+        header: 'Disburse Experience Points'
+        awardees: 'Recipients'
+        reason: 'Reason for Disbursement'
+        submit: 'Disburse Points'
+      create:
+        success:
+          zero: 'No experience points were disbursed.'
+          one: 'Experience points disbursed to one recipient.'
+          other: 'Experience points disbursed to %{count} recipients.'

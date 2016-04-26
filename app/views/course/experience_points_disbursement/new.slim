@@ -1,0 +1,26 @@
+- add_breadcrumb :new
+= page_header t('.header')
+
+= simple_form_for @experience_points_disbursement,
+                  url: disburse_experience_points_course_users_path,
+                  method: :post do |f|
+  = f.error_notification
+
+  h3 = t('.reason')
+  = f.input :reason, label: false
+
+  h3 = t('.awardees')
+  table.table.table-hover
+    thead
+      tr
+        th = CourseUser.human_attribute_name(:name)
+        th = Course::ExperiencePointsRecord.human_attribute_name(:points_awarded)
+    tbody
+      = f.simple_fields_for :experience_points_records do |record_fields|
+        = content_tag_for(:tr, record_fields.object.course_user)
+          td = display_course_user(record_fields.object.course_user)
+          td = record_fields.input :points_awarded, label: false,
+                                   input_html: { class: 'points_awarded' }
+          = record_fields.hidden_field :course_user_id
+
+  = f.button :submit, t('.submit')
