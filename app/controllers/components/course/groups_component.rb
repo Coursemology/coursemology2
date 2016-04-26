@@ -2,6 +2,10 @@
 class Course::GroupsComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
+  def self.display_name
+    I18n.t('components.groups.name')
+  end
+
   def sidebar_items
     return [] unless can_manage_group?
 

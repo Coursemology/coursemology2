@@ -2,6 +2,10 @@
 class Course::ForumsComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
+  def self.display_name
+    I18n.t('components.forums.name')
+  end
+
   def sidebar_items
     main_sidebar_items + settings_sidebar_items
   end

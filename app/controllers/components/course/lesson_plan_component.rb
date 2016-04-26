@@ -2,6 +2,10 @@
 class Course::LessonPlanComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
+  def self.display_name
+    I18n.t('components.lesson_plan.name')
+  end
+
   def sidebar_items
     [
       {

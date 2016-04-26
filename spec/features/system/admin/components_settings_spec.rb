@@ -20,7 +20,7 @@ RSpec.feature 'System: Administration: Components', type: :feature do
                                                    Course::ControllerComponentHost)
       enabled_components = settings.enabled_component_ids
       components.each do |component|
-        expect(page).to have_selector('th', text: component.name)
+        expect(page).to have_selector('th', text: component.display_name)
 
         checkbox = find("#settings_effective_enabled_component_ids_#{component.key}")
         if enabled_components.include?(component.key.to_s)
