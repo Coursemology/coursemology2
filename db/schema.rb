@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160420005403) do
+ActiveRecord::Schema.define(version: 20160426093832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -544,6 +544,49 @@ ActiveRecord::Schema.define(version: 20160420005403) do
     t.integer  "notification_type", default: 0, null: false
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
+  end
+
+  create_table "course_surveys", force: :cascade do |t|
+    t.integer  "creator_id", null: false, index: {name: "fk__course_surveys_creator_id"}, foreign_key: {references: "users", name: "fk_course_surveys_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id", null: false, index: {name: "fk__course_surveys_updater_id"}, foreign_key: {references: "users", name: "fk_course_surveys_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "course_survey_questions", force: :cascade do |t|
+    t.integer  "actable_id"
+    t.string   "actable_type", limit: 255, index: {name: "index_course_survey_questions_actable", with: ["actable_id"], unique: true}
+    t.integer  "survey_id",    null: false, index: {name: "fk__course_survey_questions_survey_id"}, foreign_key: {references: "course_surveys", name: "fk_course_survey_questions_survey_id", on_update: :no_action, on_delete: :no_action}
+    t.text     "description",  null: false
+    t.integer  "creator_id",   null: false, index: {name: "fk__course_survey_questions_creator_id"}, foreign_key: {references: "users", name: "fk_course_survey_questions_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id",   null: false, index: {name: "fk__course_survey_questions_updater_id"}, foreign_key: {references: "users", name: "fk_course_survey_questions_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "course_survey_question_text_responses", force: :cascade do |t|
+  end
+
+  create_table "course_survey_responses", force: :cascade do |t|
+    t.integer  "survey_id",  null: false, index: {name: "fk__course_survey_responses_survey_id"}, foreign_key: {references: "course_surveys", name: "fk_course_survey_responses_survey_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "creator_id", null: false, index: {name: "fk__course_survey_responses_creator_id"}, foreign_key: {references: "users", name: "fk_course_survey_responses_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id", null: false, index: {name: "fk__course_survey_responses_updater_id"}, foreign_key: {references: "users", name: "fk_course_survey_responses_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "course_survey_answers", force: :cascade do |t|
+    t.integer  "actable_id"
+    t.string   "actable_type", limit: 255, index: {name: "index_course_survey_answers_actable", with: ["actable_id"], unique: true}
+    t.integer  "question_id",  null: false, index: {name: "fk__course_survey_answers_question_id"}, foreign_key: {references: "course_survey_questions", name: "fk_course_survey_answers_question_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "response_id",  null: false, index: {name: "fk__course_survey_answers_response_id"}, foreign_key: {references: "course_survey_responses", name: "fk_course_survey_answers_response_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "creator_id",   null: false, index: {name: "fk__course_survey_answers_creator_id"}, foreign_key: {references: "users", name: "fk_course_survey_answers_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id",   null: false, index: {name: "fk__course_survey_answers_updater_id"}, foreign_key: {references: "users", name: "fk_course_survey_answers_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "course_survey_answer_text_responses", force: :cascade do |t|
   end
 
   create_table "course_user_achievements", force: :cascade do |t|
