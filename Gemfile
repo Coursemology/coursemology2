@@ -156,7 +156,7 @@ gem 'acts_as_tenant', github: 'ErwinM/acts_as_tenant'
 gem 'http_accept_language'
 
 # User authentication
-gem 'devise'
+gem 'devise', github: 'allenwq/devise', branch: '3-stable'
 gem 'devise_masquerade'
 gem 'devise-multi_email'
 gem 'simple_token_authentication', github: 'lowjoel/simple_token_authentication',

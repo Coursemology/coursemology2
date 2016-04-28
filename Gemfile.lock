@@ -7,6 +7,19 @@ GIT
       request_store (>= 1.0.5)
 
 GIT
+  remote: git://github.com/allenwq/devise.git
+  revision: 38cb8922fa39419b2b1bac82a5dd45f884834e1b
+  branch: 3-stable
+  specs:
+    devise (3.5.8)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 3.2.6, < 5)
+      responders
+      thread_safe (~> 0.1)
+      warden (~> 1.2.3)
+
+GIT
   remote: git://github.com/lowjoel/simple_token_authentication.git
   revision: 75cca3c0327e8ae9c8e2554e3d51b6f1b5db18a1
   branch: optional-params-headers
@@ -141,13 +154,6 @@ GEM
       thor (~> 0.19.1)
       tins (~> 1.6.0)
     crass (1.0.2)
-    devise (3.5.8)
-      bcrypt (~> 3.0)
-      orm_adapter (~> 0.1)
-      railties (>= 3.2.6, < 5)
-      responders
-      thread_safe (~> 0.1)
-      warden (~> 1.2.3)
     devise-multi_email (1.0.3)
       devise
     devise_masquerade (0.1.7)
@@ -539,7 +545,7 @@ DEPENDENCIES
   consistency_fail
   coursemology-polyglot (>= 0.1.0)
   coveralls
-  devise
+  devise!
   devise-multi_email
   devise_masquerade
   edge
