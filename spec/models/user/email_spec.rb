@@ -42,5 +42,15 @@ RSpec.describe User::Email, type: :model do
         expect(subject.errors[:email].count).to eq(1)
       end
     end
+
+    context 'when the email is not confirmed' do
+      subject { create(:user_email, :unconfirmed) }
+
+      with_active_job_queue_adapter(:test) do
+        it 'sends email with ActiveJob queue' do
+          expect { subject }.to have_enqueued_job.on_queue('mailers')
+        end
+      end
+    end
   end
 end
