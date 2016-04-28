@@ -3,30 +3,42 @@ module Extensions::Attachable::ActiveRecord::Base
   module ClassMethods
     # This function should be declared in model, to it have attachments.
     def has_many_attachments # rubocop:disable Style/PredicateName
+      include HasManyAttachments
+    end
+
+    def has_one_attachment # rubocop:disable Style/PredicateName
+      include HasOneAttachment
+    end
+  end
+
+  module HasManyAttachments
+    extend ActiveSupport::Concern
+
+    included do
       has_many :attachment_references, as: :attachable, class_name: "::#{AttachmentReference.name}",
                                        inverse_of: :attachable, dependent: :destroy, autosave: true
       # Attachment references can substitute attachments, so allow access using the `attachments`
       # identifier.
       alias_method :attachments, :attachment_references
-
-      define_method(:files=) do |files|
-        files.each do |file|
-          attachment_references.build(file: file)
-        end
-      end
     end
 
-    def has_one_attachment # rubocop:disable Style/PredicateName
-      include SingularInstanceMethods
+    def files=(files)
+      files.each do |file|
+        attachment_references.build(file: file)
+      end
+    end
+  end
 
+  module HasOneAttachment
+    extend ActiveSupport::Concern
+
+    included do
       validates :attachment_references, length: { maximum: 1 }
 
       has_many :attachment_references, as: :attachable, class_name: "::#{AttachmentReference.name}",
                                        inverse_of: :attachable, dependent: :destroy, autosave: true
     end
-  end
 
-  module SingularInstanceMethods
     ATTACHMENT_ATTRIBUTE = 'attachment'.freeze
 
     def attachment_reference
