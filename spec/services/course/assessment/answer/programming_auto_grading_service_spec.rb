@@ -17,7 +17,8 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
         [{
           template_package: true,
           template_package_deferred: false,
-          test_cases: question_test_cases
+          test_cases: question_test_cases,
+          maximum_grade: 3
         }]
       end
       let(:question_test_cases) do
@@ -45,9 +46,22 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
       end
 
       describe '#grade' do
-        before { subject.grade(grading) }
+        subject { super().grade(grading) }
+        let(:answer_contents) { 'test code ' + SecureRandom.hex }
+        let(:answer_traits) { [{ file_contents: [answer_contents] }] }
+
+        it 'creates a new package with the correct file contents' do
+          expect(Course::Assessment::ProgrammingEvaluationService).to \
+            receive(:execute).and_wrap_original do |method, *args|
+            package = Course::Assessment::ProgrammingPackage.new(args[4])
+            expect(package.submission_files.values).to contain_exactly(answer_contents)
+            method.call(*args)
+          end
+          subject
+        end
 
         it 'creates a Programming Auto Grading record' do
+          subject
           expect(grading.actable).to be_a(Course::Assessment::Answer::ProgrammingAutoGrading)
         end
 
@@ -58,6 +72,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
           end
 
           it 'marks the answer correct' do
+            subject
             expect(answer.grade).to eq(question.maximum_grade)
             expect(answer).to be_correct
           end
@@ -65,10 +80,12 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
 
         context 'when the answer is wrong' do
           it 'marks the answer wrong' do
+            subject
             expect(answer).not_to be_correct
           end
 
           it 'gives a grade proportional to the number of test cases' do
+            subject
             test_case_count = answer.question.actable.test_cases.count
             expect(answer.grade).to eq(answer.question.maximum_grade / test_case_count)
           end

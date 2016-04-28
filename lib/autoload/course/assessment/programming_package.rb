@@ -69,6 +69,15 @@ class Course::Assessment::ProgrammingPackage
     @file = nil
   end
 
+  # Commits the package changes to disk
+  #
+  # @return [Boolean] True if the file was saved.
+  def save
+    ensure_file_open!
+    @file.commit
+    true
+  end
+
   # Checks if the given programming package is valid.
   #
   # @return [Boolean]

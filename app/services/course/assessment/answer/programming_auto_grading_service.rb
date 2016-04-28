@@ -20,6 +20,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
     question.attachment.open(binmode: true) do |temporary_file|
       package = Course::Assessment::ProgrammingPackage.new(temporary_file)
       package.submission_files = build_submission_files(answer)
+      package.save
 
       evaluation_result = evaluate_package(question, package)
       build_result(question, evaluation_result)
@@ -63,7 +64,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
     test_count = question.test_cases.count
 
     all_correct = number_correct == test_count
-    grade = question.maximum_grade = number_correct / test_count
+    grade = question.maximum_grade * number_correct / test_count
     [all_correct, grade, auto_grading]
   end
 
