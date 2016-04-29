@@ -1,9 +1,26 @@
 # frozen_string_literal: true
 module Extensions::Attachable::ActiveRecord::Base
   module ClassMethods
-    # This function should be declared in model, to it have attachments.
-    def has_many_attachments # rubocop:disable Style/PredicateName
+    # This method should be declared in model, to let it have attachments.
+    #
+    # @param [Hash] options
+    # @option options [Symbol|Array<Symbol>] :on The column which is associated with attachments,
+    #   the column type should be string or text.
+    #   This can be a symbol or an array of symbols.
+    #   An attribute named `column_name_attachment_references` will be defined, you can override it
+    #   to customise the way to retrieve the attachment_references for the specific column.
+    # @example Has many attachments on a column
+    #   has_many_attachments on: :description #=> description is associated with the attachments
+    #   of the model, updating description will result in attachments changing.
+    def has_many_attachments(options = {}) # rubocop:disable Style/PredicateName
       include HasManyAttachments
+
+      if options[:on]
+        self.attachable_columns = Array(options[:on])
+        before_save :update_attachment_references
+
+        HasManyAttachments.define_attachment_references_readers(attachable_columns)
+      end
     end
 
     def has_one_attachment # rubocop:disable Style/PredicateName
@@ -15,6 +32,9 @@ module Extensions::Attachable::ActiveRecord::Base
     extend ActiveSupport::Concern
 
     included do
+      class_attribute :attachable_columns
+      self.attachable_columns ||= []
+
       has_many :attachment_references, as: :attachable, class_name: "::#{AttachmentReference.name}",
                                        inverse_of: :attachable, dependent: :destroy, autosave: true
       # Attachment references can substitute attachments, so allow access using the `attachments`
@@ -22,10 +42,76 @@ module Extensions::Attachable::ActiveRecord::Base
       alias_method :attachments, :attachment_references
     end
 
+    ATTACHMENT_ATTRIBUTE_READER_SUFFIX = '_attachment_references'
+
+    def self.define_attachment_references_readers(attachable_columns)
+      attachable_columns.each do |column|
+        method_name = "#{column}#{ATTACHMENT_ATTRIBUTE_READER_SUFFIX}"
+        next if method_defined?(method_name)
+
+        define_method(method_name) do
+          parse_attachment_reference_ids_from_content(send(column))
+        end
+      end
+    end
+
     def files=(files)
       files.each do |file|
         attachment_references.build(file: file)
       end
+    end
+
+    private
+
+    # Delete the attachment references which are not in the content.
+    def update_attachment_references
+      return if attachment_references.empty?
+
+      attachment_reference_ids = active_attachment_reference_ids
+      attachment_references.each do |attachment_reference|
+        unless attachment_reference_ids.include?(attachment_reference.id)
+          attachment_reference.mark_for_destruction
+        end
+      end
+    end
+
+    # Find all attachment_reference ids in the columns specified.
+    #
+    # @return [Array<Integer>]
+    def active_attachment_reference_ids
+      attachment_reference_ids = []
+      self.class.attachable_columns.each do |column|
+        attachment_reference_ids += send("#{column}#{ATTACHMENT_ATTRIBUTE_READER_SUFFIX}")
+      end
+
+      attachment_reference_ids
+    end
+
+    # Parse all attachment_reference ids in the content.
+    #
+    # @param [String] content The content which associated with the attachments.
+    # @return [Array<Integer>] the ids of the attachment references in the content.
+    def parse_attachment_reference_ids_from_content(content)
+      ids = []
+      doc = Nokogiri::HTML(content)
+      doc.css('img').each do |image|
+        id = parse_attachment_reference_id_from_url(image['src'])
+        ids << id if id
+      end
+
+      ids
+    end
+
+    ATTACHMENT_ID_REGEX = /\/attachments\/(\d+)$/
+    # Parse attachment_reference from the given url.
+    #
+    # @param [String] url The url.
+    # @return [Integer|nil] the id of the attachment references in the url, nil will be returned
+    #   if the url is not a valid attachment url.
+    def parse_attachment_reference_id_from_url(url)
+      # TODO: Attachments from a third party domain with the same path should not be returned.
+      result = url.match(ATTACHMENT_ID_REGEX)
+      result ? result[1].to_i : nil
     end
   end
 

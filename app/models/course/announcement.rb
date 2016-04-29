@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Announcement < ActiveRecord::Base
   acts_as_readable on: :updated_at
-  has_many_attachments
+  has_many_attachments on: :content
 
   after_initialize :set_defaults, if: :new_record?
   after_create :mark_as_read_by_creator
