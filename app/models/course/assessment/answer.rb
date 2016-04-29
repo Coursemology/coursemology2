@@ -33,6 +33,9 @@ class Course::Assessment::Answer < ActiveRecord::Base
   accepts_nested_attributes_for :actable
   accepts_nested_attributes_for :discussion_topic
 
+  after_initialize :set_course, if: :new_record?
+  before_validation :set_course, if: :new_record?
+
   # Creates an Auto Grading job for this answer. This saves the answer if there are pending changes.
   #
   # @param [String|nil] redirect_to_path The path to be redirected after auto grading job was
@@ -96,5 +99,10 @@ class Course::Assessment::Answer < ActiveRecord::Base
     raise e if e.is_a?(ActiveRecord::RecordInvalid) && e.record.errors[:answer_id].empty?
     association(:auto_grading).reload
     auto_grading
+  end
+
+  # Set the course as the same course of the assessment.
+  def set_course
+    self.course ||= submission.assessment.course if submission && submission.assessment
   end
 end

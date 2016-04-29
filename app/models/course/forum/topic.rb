@@ -16,6 +16,8 @@ class Course::Forum::Topic < ActiveRecord::Base
   has_many :views, dependent: :destroy, inverse_of: :topic
   belongs_to :forum, inverse_of: :topics
 
+  after_initialize :set_course, if: :new_record?
+
   # @!attribute [r] vote_count
   #   The number of votes in this topic.
   calculated :vote_count, (lambda do
@@ -111,5 +113,10 @@ class Course::Forum::Topic < ActiveRecord::Base
 
   def mark_as_read_for_updater
     mark_as_read! for: updater
+  end
+
+  # Set the course as the same course of the forum.
+  def set_course
+    self.course ||= forum.course if forum
   end
 end
