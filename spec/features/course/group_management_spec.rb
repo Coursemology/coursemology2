@@ -31,7 +31,7 @@ RSpec.feature 'Courses: Groups' do
       end
 
       let!(:course_users) { create_list(:course_user, 3, :approved, course: course) }
-      let(:sample_user) { course_users.sample.user }
+      let(:sample_course_user) { course_users.sample }
       scenario 'I can create a group' do
         visit new_course_group_path(course)
 
@@ -40,12 +40,12 @@ RSpec.feature 'Courses: Groups' do
 
         fill_in 'group_name', with: 'Group name'
 
-        within '#group_user_ids' do
-          find("option[value='#{sample_user.id}']").select_option
+        within '#group_course_user_ids' do
+          find("option[value='#{sample_course_user.id}']").select_option
         end
 
         click_button 'create'
-        expect(sample_user.course_groups.count).to eq(1)
+        expect(sample_course_user.groups.count).to eq(1)
       end
 
       let(:group) { create(:course_group, course: course) }
@@ -74,7 +74,10 @@ RSpec.feature 'Courses: Groups' do
 
     context 'As a Group Manager' do
       let(:group) { create(:course_group, course: course) }
-      let(:user) { create(:course_group_manager, course: course, course_group: group).user }
+      let(:course_group_manager) do
+        create(:course_group_manager, course: course, group: group)
+      end
+      let(:user) { course_group_manager.course_user.user }
 
       scenario 'I can view the Group Sidebar item' do
         visit course_path(course)

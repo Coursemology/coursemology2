@@ -41,7 +41,8 @@ class Course::GroupsController < Course::ComponentController
   private
 
   def group_params #:nodoc:
-    params.require(:group).permit(:name, user_ids: [],
-                                         group_users_attributes: [:id, :user_id, :role, :_destroy])
+    params.require(:group).
+      permit(:name, course_user_ids: [],
+                    group_users_attributes: [:id, :course_user_id, :role, :_destroy])
   end
 end

@@ -55,8 +55,6 @@ class User < ActiveRecord::Base
   end
   has_many :course_users, dependent: :destroy
   has_many :courses, through: :course_users
-  has_many :course_group_users, dependent: :destroy, class_name: Course::GroupUser.name
-  has_many :course_groups, through: :course_group_users, class_name: Course::Group.name
 
   accepts_nested_attributes_for :emails
 

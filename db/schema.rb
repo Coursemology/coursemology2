@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160330031839) do
+ActiveRecord::Schema.define(version: 20160420005403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -457,15 +457,15 @@ ActiveRecord::Schema.define(version: 20160330031839) do
   add_index "course_groups", ["course_id", "name"], name: "index_course_groups_on_course_id_and_name", unique: true
 
   create_table "course_group_users", force: :cascade do |t|
-    t.integer  "course_group_id", null: false, index: {name: "fk__course_group_users_course_group_id"}, foreign_key: {references: "course_groups", name: "fk_course_group_users_course_group_id", on_update: :no_action, on_delete: :no_action}
-    t.integer  "user_id",         null: false, index: {name: "fk__course_group_users_user_id"}, foreign_key: {references: "users", name: "fk_course_group_users_user_id", on_update: :no_action, on_delete: :no_action}
-    t.integer  "role",            null: false
-    t.integer  "creator_id",      null: false, index: {name: "fk__course_group_users_creator_id"}, foreign_key: {references: "users", name: "fk_course_group_users_creator_id", on_update: :no_action, on_delete: :no_action}
-    t.integer  "updater_id",      null: false, index: {name: "fk__course_group_users_updater_id"}, foreign_key: {references: "users", name: "fk_course_group_users_updater_id", on_update: :no_action, on_delete: :no_action}
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.integer  "group_id",       null: false, index: {name: "fk__course_group_users_course_group_id"}, foreign_key: {references: "course_groups", name: "fk_course_group_users_course_group_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "course_user_id", null: false, index: {name: "fk__course_group_users_course_user_id"}, foreign_key: {references: "course_users", name: "fk_course_group_users_course_user_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "role",           null: false
+    t.integer  "creator_id",     null: false, index: {name: "fk__course_group_users_creator_id"}, foreign_key: {references: "users", name: "fk_course_group_users_creator_id", on_update: :no_action, on_delete: :no_action}
+    t.integer  "updater_id",     null: false, index: {name: "fk__course_group_users_updater_id"}, foreign_key: {references: "users", name: "fk_course_group_users_updater_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
-  add_index "course_group_users", ["user_id", "course_group_id"], name: "index_course_group_users_on_user_id_and_course_group_id", unique: true
+  add_index "course_group_users", ["course_user_id", "group_id"], name: "index_course_group_users_on_course_user_id_and_course_group_id", unique: true
 
   create_table "course_lesson_plan_events", force: :cascade do |t|
     t.string  "location",   limit: 255

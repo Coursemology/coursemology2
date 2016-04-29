@@ -7,10 +7,11 @@ RSpec.describe Course::Group do
   with_tenant(:instance) do
     subject { Ability.new(user) }
     let(:course) { create(:course) }
+    let(:user) { create(:user) }
     let!(:group) { create(:course_group, course: course) }
 
     context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let!(:course_manager) { create(:course_manager, :approved, course: course, user: user) }
 
       it { is_expected.to be_able_to(:manage, group) }
 
@@ -20,7 +21,10 @@ RSpec.describe Course::Group do
     end
 
     context 'when the user is a Group Manager' do
-      let(:user) { create(:course_group_manager, course: course, course_group: group).user }
+      let!(:course_user) { create(:course_user, course: course, user: user) }
+      let!(:course_group_manager) do
+        create(:course_group_manager, course_user: course_user, group: group)
+      end
 
       it { is_expected.to be_able_to(:manage, group.reload) }
 

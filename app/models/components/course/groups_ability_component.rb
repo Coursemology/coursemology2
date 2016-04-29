@@ -22,6 +22,6 @@ module Course::GroupsAbilityComponent
   end
 
   def course_group_manager_hash
-    { group_users: { user_id: user.id, role: Course::GroupUser.roles[:manager] } }
+    { group_users: { course_user: { user_id: user.id }, role: Course::GroupUser.roles[:manager] } }
   end
 end

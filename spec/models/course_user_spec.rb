@@ -14,6 +14,8 @@ RSpec.describe CourseUser, type: :model do
   it { is_expected.to have_one(:invitation) }
   it { is_expected.to have_many(:course_user_achievements).inverse_of(:course_user) }
   it { is_expected.to have_many(:achievements).through(:course_user_achievements) }
+  it { is_expected.to have_many(:group_users).dependent(:destroy) }
+  it { is_expected.to have_many(:groups).through(:group_users).source(:group) }
 
   let!(:instance) { create :instance }
   with_tenant(:instance) do

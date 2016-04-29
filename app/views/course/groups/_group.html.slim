@@ -1,6 +1,6 @@
 = content_tag_for(:tr, group) do
   th = format_inline_text(group.name)
-  td = group.users.normal.count
+  td = group.course_users.with_approved_state.count
   td
     = edit_button(edit_course_group_path(current_course, group))
     = delete_button(course_group_path(current_course, group))

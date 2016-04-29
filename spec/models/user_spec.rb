@@ -13,8 +13,6 @@ RSpec.describe User do
   it { is_expected.to have_many(:identities).dependent(:destroy) }
   it { is_expected.to have_many(:course_users).dependent(:destroy) }
   it { is_expected.to have_many(:courses).through(:course_users) }
-  it { is_expected.to have_many(:course_group_users).dependent(:destroy) }
-  it { is_expected.to have_many(:course_groups).through(:course_group_users) }
 
   let!(:instance) { create(:instance) }
 
