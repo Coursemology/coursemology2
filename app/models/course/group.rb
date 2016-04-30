@@ -18,8 +18,8 @@ class Course::Group < ActiveRecord::Base
 
   # Set default values
   def set_defaults
-    group_users.build(course_user: course.course_users.find_by(user_id: creator.id),
-                      role: :manager, creator: creator, updater: updater) if should_create_manager?
+    group_users.build(course_user: default_group_manager, role: :manager,
+                      creator: creator, updater: updater) if should_create_manager?
   end
 
   # Checks if the current group has sufficient information to have a manager, but does not
@@ -27,9 +27,16 @@ class Course::Group < ActiveRecord::Base
   #
   # @return [Boolean]
   def should_create_manager?
-    course && creator &&
-      course.course_users.exists?(user: creator) &&
-      !group_users.any? { |group_user| group_user.course_user.user_id == creator }
+    course && creator && group_users.managers.count == 0
+  end
+
+  # Returns the default course_user to be a group_manager.
+  # This will be the creator of the group is a course_user in the course, otherwise it
+  # the group_manager will be the course_creator.
+  #
+  # @return [CourseUser]
+  def default_group_manager
+    course.course_users.find_by(user: creator) || course.course_users.find_by(user: course.creator)
   end
 
   # Validate that the new users are unique.
