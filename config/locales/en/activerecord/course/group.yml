@@ -1,0 +1,6 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/group:
+          no_manager: 'must have at least one group manager'

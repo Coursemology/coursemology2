@@ -13,6 +13,7 @@ class Course::Group < ActiveRecord::Base
                                 reject_if: -> (params) { params[:course_user_id].blank? }
 
   validate :validate_new_users_are_unique
+  validate :validate_presence_of_group_manager, on: :update
 
   private
 
@@ -52,5 +53,14 @@ class Course::Group < ActiveRecord::Base
     (new_group_users - new_group_users.uniq(&:course_user)).each do |group_user|
       group_user.errors.add(:course_user, :taken)
     end
+  end
+
+  # Validate that each group has at least 1 group manager.
+  #
+  # Validation is only called on update action, as the default group manager is created for new
+  # records.
+  def validate_presence_of_group_manager
+    return if group_users.manager.count > 0
+    errors.add(:base, :no_manager)
   end
 end
