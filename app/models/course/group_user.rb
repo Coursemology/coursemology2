@@ -9,6 +9,8 @@ class Course::GroupUser < ActiveRecord::Base
   belongs_to :course_user, inverse_of: :group_users
   belongs_to :group, class_name: Course::Group.name, inverse_of: :group_users
 
+  scope :managers, -> { where(role: roles[:manager]) }
+
   private
 
   # Set default values

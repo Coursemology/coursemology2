@@ -7,8 +7,13 @@ RSpec.describe Course::GroupUser, type: :model do
 
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
+    let!(:course) { create(:course) }
+    let!(:course_group) { create(:course_group, course: course) }
+    let!(:course_group_users) do
+      create_list(:course_group_user, 2, course: course, group: course_group)
+    end
+
     context 'when user is not enrolled in group\'s course' do
-      let(:course_group) { create(:course_group) }
       let(:other_course_user) do
         other_course = create(:course)
         create(:course_user, course: other_course)
@@ -18,6 +23,15 @@ RSpec.describe Course::GroupUser, type: :model do
       end
 
       it { is_expected.not_to be_valid }
+    end
+
+    describe '.managers' do
+      subject { course_group.group_users.managers }
+
+      it 'returns the managers of the group' do
+        managers = course_group.group_users.select(&:manager?)
+        expect(subject).to eq(managers)
+      end
     end
   end
 end

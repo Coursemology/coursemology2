@@ -17,13 +17,27 @@ RSpec.describe Course::Group, type: :model do
       # TODO: Remove when using Rails 5.0
       self::MANAGER_ROLE = Course::GroupUser.roles[:manager]
 
-      context 'when a user is provided' do
+      context 'when the group creator is a course_user of the course' do
         subject { Course::Group.new(course: course, creator: owner) }
-        it 'sets the user as the owner of the group' do
+
+        it 'sets the group creator as the manager of the group' do
           expect(subject.group_users.length).to eq(1)
-          owner_group_user = subject.group_users.first
-          expect(owner_group_user.course_user).to eq(course_owner)
-          expect(owner_group_user.role).to eq('manager')
+          group_manager = subject.group_users.first
+          expect(group_manager.course_user).to eq(course_owner)
+          expect(group_manager.role).to eq('manager')
+        end
+      end
+
+      context 'when the group creator is not a course_user of the course' do
+        let(:other_course) { create(:course) }
+        let(:other_course_creator) { other_course.course_users.find_by(user: other_course.creator) }
+        subject { Course::Group.new(course: other_course, creator: owner) }
+
+        it 'sets the course owner as the manager of the group' do
+          expect(subject.group_users.length).to eq(1)
+          group_manager = subject.group_users.first
+          expect(group_manager.course_user).to eq(other_course_creator)
+          expect(group_manager.role).to eq('manager')
         end
       end
 
@@ -36,6 +50,25 @@ RSpec.describe Course::Group, type: :model do
           expect(subject.group_users.exists?(course_user: course_owner,
                                              role: self.class::MANAGER_ROLE)).
             to be_truthy
+        end
+      end
+
+      context 'when all group managers are deleted from a group' do
+        let!(:group) { create(:course_group) }
+        subject do
+          group.group_users = []
+          group
+        end
+
+        it 'is an invalid group' do
+          expect(subject.save).to be(false)
+          expect(subject).not_to be_valid
+        end
+
+        it 'adds errors to group object' do
+          subject.valid?
+          expect(subject.errors.messages[:base]).
+            to include(I18n.t('activerecord.errors.models.course/group.no_manager'))
         end
       end
 
