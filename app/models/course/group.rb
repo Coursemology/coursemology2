@@ -15,6 +15,35 @@ class Course::Group < ActiveRecord::Base
   validate :validate_new_users_are_unique
   validate :validate_presence_of_group_manager, on: :update
 
+  # @!attribute [r] average_experience_points
+  #   Returns the average experience points of group users in this group who are students.
+  calculated :average_experience_points, (lambda do
+    Course::GroupUser.where { group_id == course_groups.id }.
+      joins { course_user.experience_points_records.outer }.
+      where { course_user.role == CourseUser.roles[:student] }.
+      # CAST is used to force a float division (integer division by default).
+      # greatest(#, 1) is used to avoid division by 0.
+      select(<<-SQL)
+        CAST(coalesce(sum(course_experience_points_records.points_awarded), 0.0) AS FLOAT) /
+        greatest(count(distinct(course_group_users.course_user_id)), 1.0)
+      SQL
+  end)
+
+  # @!attribute [r] average_achievement_count
+  #   Returns the average number of achievements obtained by group users in this group who are
+  #   students.
+  calculated :average_achievement_count, (lambda do
+    Course::GroupUser.where { group_id == course_groups.id }.
+      joins { course_user.course_user_achievements.outer }.
+      where { course_user.role == CourseUser.roles[:student] }.
+      # CAST is used to force a float division (integer division by default).
+      # greatest(#, 1) is used to avoid division by 0.
+      select(<<-SQL)
+        CAST(count(course_user_achievements.id) AS FLOAT) /
+        greatest(count(distinct(course_group_users.course_user_id)), 1.0)
+      SQL
+  end)
+
   private
 
   # Set default values
