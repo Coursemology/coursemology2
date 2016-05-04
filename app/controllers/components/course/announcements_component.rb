@@ -40,7 +40,6 @@ class Course::AnnouncementsComponent < SimpleDelegator
   end
 
   def unread_count
-    return 0 if current_course.nil? || current_user.nil?
     current_course.announcements.unread_by(current_user).count
   end
 end

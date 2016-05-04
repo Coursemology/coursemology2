@@ -8,6 +8,8 @@ class Course::Forum::Topic < ActiveRecord::Base
 
   after_initialize :generate_initial_post, unless: :persisted?
   before_validation :set_initial_post_title, unless: :persisted?
+  after_create :mark_as_read_for_creator
+  after_update :mark_as_read_for_updater
 
   enum topic_type: { normal: 0, question: 1, sticky: 2, announcement: 3 }
 
@@ -69,6 +71,9 @@ class Course::Forum::Topic < ActiveRecord::Base
   scope :with_topic_statistics,
         -> { all.calculated(:post_count, :view_count) }
 
+  # Get all the topics from specified course.
+  scope :from_course, ->(course) { joins { forum }.where { forum.course_id == course } }
+
   # Create view record for a user
   #
   # @param [User] user The user who views a topic
@@ -98,5 +103,13 @@ class Course::Forum::Topic < ActiveRecord::Base
 
   def set_initial_post_title
     posts.first.title = title
+  end
+
+  def mark_as_read_for_creator
+    mark_as_read! for: creator
+  end
+
+  def mark_as_read_for_updater
+    mark_as_read! for: updater
   end
 end
