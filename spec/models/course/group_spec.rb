@@ -161,5 +161,52 @@ RSpec.describe Course::Group, type: :model do
         end
       end
     end
+
+    describe '.ordered_by_experience_points' do
+      let(:student) { create(:course_student, :approved, course: course) }
+      let!(:group_user) { create(:course_group_user, group: group, course_user: student) }
+      let!(:other_group) { create(:course_group, course: course) }
+      let!(:experience_points_record) do
+        create(:course_experience_points_record, course_user: student)
+      end
+
+      it 'returns groups sorted by average experience points' do
+        course.groups.ordered_by_experience_points.each_cons(2) do |group1, group2|
+          expect(group1.average_experience_points).to be >= group2.average_experience_points
+        end
+      end
+    end
+
+    describe '.ordered_by_achievement_count' do
+      let(:student) { create(:course_student, :approved, course: course) }
+      let!(:group_user) { create(:course_group_user, group: group, course_user: student) }
+      let!(:course_user_achievement) { create(:course_user_achievement, course_user: student) }
+      let!(:later_group) { create(:course_group, course: course) }
+
+      it 'returns groups sorted by average achievement count' do
+        course.groups.ordered_by_average_achievement_count.each_cons(2) do |group1, group2|
+          expect(group1.average_achievement_count).to be >= group2.average_achievement_count
+        end
+      end
+
+      context 'when two groups have the same achievement count' do
+        let(:earlier_time) { course_user_achievement.obtained_at }
+        let!(:later_student) { create(:course_student, :approved, course: course) }
+        let!(:later_group_user) do
+          create(:course_group_user, group: later_group, course_user: later_student)
+        end
+        let!(:later_student_achievement) do
+          create(:course_user_achievement, course_user: later_student,
+                                           obtained_at: earlier_time + 2.days)
+        end
+
+        it 'returns the group who obtained the achievement count first' do
+          expect(group.average_achievement_count).to eq(later_group.average_achievement_count)
+          course.groups.ordered_by_average_achievement_count.each_cons(2) do |group1, group2|
+            expect(group1.last_obtained_achievement).to be <= group2.last_obtained_achievement
+          end
+        end
+      end
+    end
   end
 end

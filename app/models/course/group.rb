@@ -54,6 +54,18 @@ class Course::Group < ActiveRecord::Base
       select { course_user_achievements.obtained_at }.limit(1).order('obtained_at DESC')
   end)
 
+  scope :ordered_by_experience_points, (lambda do
+    all.calculated(:average_experience_points).order('average_experience_points DESC')
+  end)
+
+  # Order course_users by achievement count for use in the group leaderboard.
+  #   In the event of a tie in count, the scope will then sort by the group which
+  #   obtained the current achievement count first.
+  scope :ordered_by_average_achievement_count, (lambda do
+    all.calculated(:average_achievement_count, :last_obtained_achievement).
+      order('average_achievement_count DESC, last_obtained_achievement ASC')
+  end)
+
   private
 
   # Set default values
