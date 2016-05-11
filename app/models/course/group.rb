@@ -44,6 +44,16 @@ class Course::Group < ActiveRecord::Base
       SQL
   end)
 
+  # @!attribute [r] last_obtained_achievement
+  #   Returns the time of the last obtained achievement by group users in this group who are
+  #   students.
+  calculated :last_obtained_achievement, (lambda do
+    Course::GroupUser.where { group_id == course_groups.id }.
+      joins { course_user.course_user_achievements }.
+      where { course_user.role == CourseUser.roles[:student] }.
+      select { course_user_achievements.obtained_at }.limit(1).order('obtained_at DESC')
+  end)
+
   private
 
   # Set default values

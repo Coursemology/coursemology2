@@ -139,5 +139,27 @@ RSpec.describe Course::Group, type: :model do
         end
       end
     end
+
+    describe '#last_obtained_achievement' do
+      subject { group.last_obtained_achievement }
+
+      context 'when the group has no achievement' do
+        it { is_expected.to be_falsey }
+      end
+
+      context 'when the group has 1 or more achievements' do
+        let(:student) { create(:course_student, course: course) }
+        let!(:group_user) { create(:course_group_user, group: group, course_user: student) }
+        let!(:later_achievement) { create(:course_user_achievement, course_user: student) }
+        let!(:earlier_achievement) do
+          create(:course_user_achievement, course_user: student,
+                                           obtained_at: later_achievement.obtained_at - 1.day)
+        end
+
+        it 'returns the last obtained achievement' do
+          expect(subject).to eq(later_achievement.obtained_at)
+        end
+      end
+    end
   end
 end
