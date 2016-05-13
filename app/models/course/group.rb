@@ -15,6 +15,57 @@ class Course::Group < ActiveRecord::Base
   validate :validate_new_users_are_unique
   validate :validate_presence_of_group_manager, on: :update
 
+  # @!attribute [r] average_experience_points
+  #   Returns the average experience points of group users in this group who are students.
+  calculated :average_experience_points, (lambda do
+    Course::GroupUser.where { group_id == course_groups.id }.
+      joins { course_user.experience_points_records.outer }.
+      where { course_user.role == CourseUser.roles[:student] }.
+      # CAST is used to force a float division (integer division by default).
+      # greatest(#, 1) is used to avoid division by 0.
+      select(<<-SQL)
+        CAST(coalesce(sum(course_experience_points_records.points_awarded), 0.0) AS FLOAT) /
+        greatest(count(distinct(course_group_users.course_user_id)), 1.0)
+      SQL
+  end)
+
+  # @!attribute [r] average_achievement_count
+  #   Returns the average number of achievements obtained by group users in this group who are
+  #   students.
+  calculated :average_achievement_count, (lambda do
+    Course::GroupUser.where { group_id == course_groups.id }.
+      joins { course_user.course_user_achievements.outer }.
+      where { course_user.role == CourseUser.roles[:student] }.
+      # CAST is used to force a float division (integer division by default).
+      # greatest(#, 1) is used to avoid division by 0.
+      select(<<-SQL)
+        CAST(count(course_user_achievements.id) AS FLOAT) /
+        greatest(count(distinct(course_group_users.course_user_id)), 1.0)
+      SQL
+  end)
+
+  # @!attribute [r] last_obtained_achievement
+  #   Returns the time of the last obtained achievement by group users in this group who are
+  #   students.
+  calculated :last_obtained_achievement, (lambda do
+    Course::GroupUser.where { group_id == course_groups.id }.
+      joins { course_user.course_user_achievements }.
+      where { course_user.role == CourseUser.roles[:student] }.
+      select { course_user_achievements.obtained_at }.limit(1).order('obtained_at DESC')
+  end)
+
+  scope :ordered_by_experience_points, (lambda do
+    all.calculated(:average_experience_points).order('average_experience_points DESC')
+  end)
+
+  # Order course_users by achievement count for use in the group leaderboard.
+  #   In the event of a tie in count, the scope will then sort by the group which
+  #   obtained the current achievement count first.
+  scope :ordered_by_average_achievement_count, (lambda do
+    all.calculated(:average_achievement_count, :last_obtained_achievement).
+      order('average_achievement_count DESC, last_obtained_achievement ASC')
+  end)
+
   private
 
   # Set default values
