@@ -74,21 +74,32 @@ RSpec.feature 'Course: Achievements' do
         expect(achievement.reload.description).to eq(new_description)
       end
 
-      scenario 'I can award an achievement to a confirmed student' do
-        achievement = create(:course_achievement, course: course)
+      scenario 'I can only award a manually-awarded achievement to a confirmed student' do
+        manual_achievement = create(:course_achievement, course: course)
+        auto_achievement = create(:course_achievement, course: course)
+        create(:course_condition_achievement, course: course, conditional: auto_achievement)
+
         student = create(:course_student, :approved, course: course)
         course_user_id = "achievement_course_user_ids_#{student.id}"
         unregistered_user = create(:course_user, course: course)
         unregistered_user_id = "achievement_course_user_ids_#{unregistered_user.id}"
 
-        visit course_achievement_course_users_path(course, achievement)
+        visit course_achievements_path(course)
+
+        expect(page).to have_content_tag_for(auto_achievement)
+        expect(page).
+          not_to have_link(nil,
+                           href: course_achievement_course_users_path(course, auto_achievement))
+
+        expect(page).to have_content_tag_for(manual_achievement)
+        find_link(nil, href: course_achievement_course_users_path(course, manual_achievement)).click
         expect(page).to have_unchecked_field(course_user_id)
         expect(page).not_to have_field(unregistered_user_id)
         check course_user_id
 
         expect do
           click_button I18n.t('course.achievement.course_users.course_users_form.button')
-        end.to change(achievement.course_users, :count).by(1)
+        end.to change(manual_achievement.course_users, :count).by(1)
       end
     end
   end

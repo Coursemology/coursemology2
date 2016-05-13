@@ -29,5 +29,20 @@ RSpec.describe Course::Achievement, type: :model do
         expect { subject.precluded_for!(double) }.to_not raise_error
       end
     end
+
+    describe '#manually_awarded?' do
+      let(:achievement) { create(:course_achievement) }
+      subject { achievement.manually_awarded? }
+
+      context 'when achievement has no conditions' do
+        it { is_expected.to be_truthy }
+      end
+
+      context 'when achievement has 1 or more conditions' do
+        before { create(:course_condition_achievement, conditional: achievement) }
+
+        it { is_expected.to be_falsey }
+      end
+    end
   end
 end

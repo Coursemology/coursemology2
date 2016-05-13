@@ -7,11 +7,6 @@ RSpec.describe Course::Achievement::AchievementsController, type: :controller do
   with_tenant(:instance) do
     let!(:user) { create(:administrator) }
     let!(:course) { create(:course) }
-    let!(:achievement_stub) do
-      stub = create(:course_achievement, course: course)
-      allow(stub).to receive(:destroy).and_return(false)
-      stub
-    end
 
     before { sign_in(user) }
 
@@ -25,7 +20,35 @@ RSpec.describe Course::Achievement::AchievementsController, type: :controller do
       end
     end
 
+    describe '#update' do
+      subject do
+        patch :update, course_id: course, id: achievement_stub,
+                       achievement: { course_user_ids: [course_user.id] }
+      end
+
+      context 'when the achievement is automatically awarded' do
+        let!(:course_user) { create(:course_user, :approved, course: course) }
+        let!(:achievement_stub) do
+          stub = create(:course_achievement, course: course)
+          allow(stub).to receive(:manually_awarded?).and_return(false)
+          stub
+        end
+        before do
+          controller.instance_variable_set(:@achievement, achievement_stub)
+        end
+
+        it 'raises an error' do
+          expect { subject }.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+    end
+
     describe '#destroy' do
+      let!(:achievement_stub) do
+        stub = create(:course_achievement, course: course)
+        allow(stub).to receive(:destroy).and_return(false)
+        stub
+      end
       subject { delete :destroy, course_id: course, id: achievement_stub }
 
       context 'upon destroy failure' do

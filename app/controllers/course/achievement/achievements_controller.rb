@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Achievement::AchievementsController < Course::Achievement::Controller
+  before_action :authorize_achievement!, only: [:update]
+
   def index #:nodoc:
     @achievements = @achievements.includes(:conditions)
   end
@@ -44,7 +46,13 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
   private
 
   def achievement_params #:nodoc:
-    params.require(:achievement).permit(:title, :description, :weight, :draft, :badge,
-                                        course_user_ids: [])
+    @achievement_params ||= params.require(:achievement).
+                            permit(:title, :description, :weight, :draft, :badge,
+                                   course_user_ids: [])
+  end
+
+  # Only allow awarding of manually awarded achievements.
+  def authorize_achievement!
+    authorize!(:award, @achievement) if achievement_params.include?(:course_user_ids)
   end
 end

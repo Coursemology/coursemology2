@@ -7,6 +7,7 @@ module Course::AchievementsAbilityComponent
       allow_student_show_achievements
       allow_students_with_achievement_show_badges
       allow_staff_manage_achievements
+      do_not_allow_staff_award_automatically_awarded_achievements
     end
 
     super
@@ -21,6 +22,12 @@ module Course::AchievementsAbilityComponent
 
   def allow_staff_manage_achievements
     can :manage, Course::Achievement, course_staff_hash
+  end
+
+  def do_not_allow_staff_award_automatically_awarded_achievements
+    cannot :award, Course::Achievement do |achievement|
+      !achievement.manually_awarded?
+    end
   end
 
   def allow_students_with_achievement_show_badges
