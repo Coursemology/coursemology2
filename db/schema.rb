@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160420005403) do
+ActiveRecord::Schema.define(version: 20160429135101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -349,8 +349,11 @@ ActiveRecord::Schema.define(version: 20160420005403) do
   end
 
   create_table "course_discussion_topics", force: :cascade do |t|
-    t.integer "actable_id"
-    t.string  "actable_type", limit: 255, index: {name: "index_course_discussion_topics_on_actable_type_and_actable_id", with: ["actable_id"], unique: true}
+    t.integer  "actable_id"
+    t.string   "actable_type", limit: 255, index: {name: "index_course_discussion_topics_on_actable_type_and_actable_id", with: ["actable_id"], unique: true}
+    t.integer  "course_id",    null: false, index: {name: "fk__course_discussion_topics_course_id"}, foreign_key: {references: "courses", name: "fk_course_discussion_topics_course_id", on_update: :no_action, on_delete: :no_action}
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "course_discussion_posts", force: :cascade do |t|

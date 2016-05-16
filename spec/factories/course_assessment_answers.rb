@@ -15,6 +15,10 @@ FactoryGirl.define do
     end
     question { build(:course_assessment_question, assessment: assessment) }
 
+    after(:build) do |answer, evaluator| # rubocop:disable Style/SymbolProc
+      answer.course = evaluator.course
+    end
+
     trait :submitted do
       submission_traits :submitted
       after(:build) do |answer| # rubocop:disable Style/SymbolProc

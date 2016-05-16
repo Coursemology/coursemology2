@@ -2,6 +2,7 @@
 class Course::Discussion::Topic < ActiveRecord::Base
   actable
 
+  belongs_to :course, inverse_of: :discussion_topics
   has_many :posts, dependent: :destroy, inverse_of: :topic do
     include Course::Discussion::Topic::PostsConcern
   end
