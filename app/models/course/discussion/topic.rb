@@ -9,6 +9,14 @@ class Course::Discussion::Topic < ActiveRecord::Base
 
   accepts_nested_attributes_for :posts
 
+  # Get all
+  scope :from_course, (lambda do |course_id|
+    joins { posts }.where do
+      id >> Course::Assessment::Answer::ProgrammingFileAnnotation.from_course(course_id) |
+        id >> Course::Assessment::Answer.from_course(course_id)
+    end
+  end)
+
   def to_partial_path
     'course/discussion/topic'.freeze
   end

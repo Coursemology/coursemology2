@@ -83,5 +83,20 @@ RSpec.describe Course::Discussion::Topic, type: :model do
         end
       end
     end
+
+    describe '.with_course' do
+      let!(:topic) do
+        topic = build(:course_assessment_answer).discussion_topic
+        create(:course_discussion_post, topic: topic)
+        topic
+      end
+
+      subject do
+        Course::Discussion::Topic.
+          from_course(topic.actable.question.assessment.tab.category.course_id)
+      end
+
+      it { is_expected.to contain_exactly(topic) }
+    end
   end
 end
