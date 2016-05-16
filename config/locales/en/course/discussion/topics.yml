@@ -1,0 +1,8 @@
+en:
+  course:
+    discussion:
+      topics:
+        tabs:
+          all_comments: 'All Comments'
+        index:
+          header: 'Comments'
