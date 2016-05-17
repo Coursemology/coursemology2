@@ -16,6 +16,14 @@ class Course::Discussion::Topic < ActiveRecord::Base
     global_topic_model_names.map(&:constantize)
   end
 
+  # Topics to be displayed in the comments centre.
+  scope :globally_displayed, (lambda do
+    joins(:posts). # Make sure only topics with posts are returned.
+      where(actable_type: global_topic_models.map(&:name))
+  end)
+
+  scope :ordered_by_updated_at, -> { order(updated_at: :desc) }
+
   def to_partial_path
     'course/discussion/topic'.freeze
   end
