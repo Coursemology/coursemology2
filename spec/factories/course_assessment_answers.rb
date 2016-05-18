@@ -15,7 +15,7 @@ FactoryGirl.define do
     end
     question { build(:course_assessment_question, assessment: assessment) }
 
-    after(:build) do |answer, evaluator| # rubocop:disable Style/SymbolProc
+    after(:build) do |answer, evaluator|
       answer.course = evaluator.course
     end
 
