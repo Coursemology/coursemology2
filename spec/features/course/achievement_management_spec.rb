@@ -37,7 +37,6 @@ RSpec.feature 'Course: Achievements' do
       scenario 'I can delete an achievement' do
         visit new_course_achievement_path(course)
         achievement = create(:course_achievement, course: course)
-        achievement_path = course_achievement_path(course, achievement)
         visit course_achievements_path(course)
 
         within find(content_tag_selector(achievement)) do
