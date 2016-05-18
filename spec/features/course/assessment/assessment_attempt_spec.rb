@@ -42,8 +42,8 @@ RSpec.describe 'Course: Assessments: Attempt' do
         end
 
         created_submission = assessment.submissions.last
-        expect(current_path).to eq(edit_course_assessment_submission_path(
-                                     course, assessment, created_submission))
+        expect(current_path).
+          to eq(edit_course_assessment_submission_path(course, assessment, created_submission))
       end
 
       scenario 'I cannot attempt unopened assessments' do
@@ -52,7 +52,8 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
         within find(content_tag_selector(unopened_assessment)) do
           expect(page).not_to have_button(
-            I18n.t('course.assessment.assessments.assessment.attempt'))
+            I18n.t('course.assessment.assessments.assessment.attempt')
+          )
         end
       end
 
@@ -108,7 +109,8 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
         click_button I18n.t('course.assessment.submission.submissions.worksheet.publish')
         expect(current_path).to eq(
-          edit_course_assessment_submission_path(course, assessment, submission))
+          edit_course_assessment_submission_path(course, assessment, submission)
+        )
         expect(submission.reload.graded?).to be(true)
         expect(submission.grade).to eq(submission_maximum_grade)
         expect(submission.points_awarded).to eq(points_awarded)

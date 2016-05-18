@@ -17,8 +17,9 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         visit course_assessment_path(course, assessment)
         click_link I18n.t('course.assessment.assessments.show.new_question.multiple_response')
 
-        expect(current_path).to eq(\
-          new_course_assessment_question_multiple_response_path(course, assessment))
+        expect(current_path).to eq(
+          new_course_assessment_question_multiple_response_path(course, assessment)
+        )
         question_attributes = attributes_for(:course_assessment_question_multiple_response)
         fill_in 'title', with: question_attributes[:title]
         fill_in 'description', with: question_attributes[:description]

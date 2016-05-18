@@ -25,8 +25,9 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
         check option
         click_button I18n.t('common.save')
 
-        expect(current_path).to eq(\
-          edit_course_assessment_submission_path(course, assessment, submission))
+        expect(current_path).to eq(
+          edit_course_assessment_submission_path(course, assessment, submission)
+        )
         expect(page).to have_checked_field(option)
       end
 
@@ -35,8 +36,9 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         click_button I18n.t('course.assessment.submission.submissions.worksheet.finalise')
-        expect(current_path).to eq(\
-          edit_course_assessment_submission_path(course, assessment, submission))
+        expect(current_path).to eq(
+          edit_course_assessment_submission_path(course, assessment, submission)
+        )
         expect(submission.reload).to be_submitted
       end
 

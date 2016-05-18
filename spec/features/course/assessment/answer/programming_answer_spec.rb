@@ -33,7 +33,8 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
 
         click_button I18n.t('common.save')
         expect(current_path).to eq(
-          edit_course_assessment_submission_path(course, assessment, submission))
+          edit_course_assessment_submission_path(course, assessment, submission)
+        )
 
         submission.answers.first.specific.files.reload.each_with_index do |_, i|
           expect(page).to have_field('filename', with: "test #{i}.py")

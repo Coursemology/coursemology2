@@ -46,7 +46,8 @@ RSpec.describe Course::Assessment::Question do
         it "calls the polymorphic object's methods" do
           expect(question).to receive(:auto_gradable?).and_return(true)
           expect(question).to receive(:auto_grader).and_return(
-            double(Course::Assessment::Answer::AutoGradingService))
+            double(Course::Assessment::Answer::AutoGradingService)
+          )
           subject.auto_grader
         end
       end

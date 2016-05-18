@@ -34,13 +34,15 @@ RSpec.describe Componentize do
 
     it 'eager loads all components in a directory' do
       self.class::ComponentHost.eager_load_components(
-        Dir.new("#{__dir__}/../fixtures/libraries/componentize"))
+        Dir.new("#{__dir__}/../fixtures/libraries/componentize")
+      )
       expect(self.class::ComponentHost.components).to include(TestComponent)
     end
 
     it 'eager loads all components in a directory path' do
       self.class::ComponentHost.eager_load_components(
-        "#{__dir__}/../fixtures/libraries/componentize")
+        "#{__dir__}/../fixtures/libraries/componentize"
+      )
       expect(self.class::ComponentHost.components).to include(TestComponent)
     end
   end
