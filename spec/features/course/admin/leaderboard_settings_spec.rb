@@ -48,6 +48,47 @@ RSpec.feature 'Course: Administration: Leaderboard' do
           to have_selector('div', text: I18n.t('course.admin.leaderboard_settings.update.success'))
         expect(page).to have_selector('li a', text: I18n.t('course.leaderboards.sidebar_title'))
       end
+
+      scenario 'I can enable and disable the group leaderboard' do
+        visit course_admin_leaderboard_path(course)
+
+        expect(page).not_to have_checked_field('leaderboard_settings_enable_group_leaderboard')
+        check('leaderboard_settings_enable_group_leaderboard')
+        click_button 'update'
+
+        pending 'Expect to be able to visit group leaderboard page'
+
+        visit course_admin_leaderboard_path(course)
+        expect(page).to have_checked_field('leaderboard_settings_enable_group_leaderboard')
+        uncheck('leaderboard_settings_enable_group_leaderboard')
+        click_button 'update'
+
+        pending ' Expect not to be able to visit group leaderboard page'
+      end
+
+      scenario 'I can change the title of the group leaderboard' do
+        visit course_admin_leaderboard_path(course)
+
+        new_title = 'New Title'
+        empty_title = ''
+
+        check('leaderboard_settings_enable_group_leaderboard')
+        fill_in 'leaderboard_settings_group_leaderboard_title', with: new_title
+        click_button 'update'
+        expect(page).
+          to have_selector('div', text: I18n.t('course.admin.leaderboard_settings.update.success'))
+        expect(page).to have_field('leaderboard_settings_group_leaderboard_title', with: new_title)
+
+        pending 'Expect group leaderboard tab to have changed name'
+
+        visit course_admin_leaderboard_path(course)
+        fill_in 'leaderboard_settings_group_leaderboard_title', with: empty_title
+        click_button 'update'
+        expect(page).
+          to have_selector('div', text: I18n.t('course.admin.leaderboard_settings.update.success'))
+
+        pending 'Expect group leaderboard tab to default to default nam'
+      end
     end
   end
 end

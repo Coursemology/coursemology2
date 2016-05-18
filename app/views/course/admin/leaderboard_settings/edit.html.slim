@@ -2,4 +2,7 @@
   = f.error_notification
   = f.input :title, as: :string, placeholder: t('.title_placeholder')
   = f.input :display_user_count, as: :integer
+  = f.input :enable_group_leaderboard, as: :boolean, label: t('.enable_group_leaderboard')
+  = f.input :group_leaderboard_title, as: :string,
+                                      placeholder: t('.group_leaderboard_title_placeholder')
   = f.button :submit

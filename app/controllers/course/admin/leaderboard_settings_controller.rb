@@ -17,7 +17,8 @@ class Course::Admin::LeaderboardSettingsController < Course::Admin::Controller
   private
 
   def leaderboard_settings_params #:nodoc:
-    params.require(:leaderboard_settings).permit(:title, :display_user_count)
+    params.require(:leaderboard_settings).
+      permit(:title, :display_user_count, :enable_group_leaderboard, :group_leaderboard_title)
   end
 
   # Load our settings adapter to handle leaderboard settings
