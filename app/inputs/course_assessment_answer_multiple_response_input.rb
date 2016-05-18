@@ -10,7 +10,7 @@ class CourseAssessmentAnswerMultipleResponseInput < SimpleForm::Inputs::Collecti
     true
   end
 
-  def has_required?
+  def has_required? # rubocop:disable Style/PredicateName
     !check_boxes?
   end
 

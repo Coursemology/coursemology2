@@ -6,7 +6,7 @@ class Course::ExperiencePointsRecord < ActiveRecord::Base
 
   belongs_to :course_user, inverse_of: :experience_points_records
 
-  scope :active, -> { where { points_awarded != nil } }
+  scope :active, -> { where { points_awarded != nil } } # rubocop:disable Style/NonNilCheck
 
   # Checks if the current record is active, i.e. it has been granted by a course staff.
   #
