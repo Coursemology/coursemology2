@@ -35,7 +35,6 @@ RSpec.describe Course::Controller, type: :controller do
       end
 
       context 'when the user is logged in' do
-
         context 'when the user is not registered in the course' do
           it 'returns nil' do
             get(:show, id: course.id)
