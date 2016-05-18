@@ -242,7 +242,9 @@ Rails.application.routes.draw do
         end
       end
 
-      resource :leaderboard, only: [:show]
+      resource :leaderboard, only: [:show] do
+        get 'groups', as: :group
+      end
 
       scope module: :discussion do
         resources :topics, path: 'comments', only: [:index]
