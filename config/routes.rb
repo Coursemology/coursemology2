@@ -243,6 +243,10 @@ Rails.application.routes.draw do
       end
 
       resource :leaderboard, only: [:show]
+
+      scope module: :discussion do
+        resources :topics, path: 'comments', only: [:index]
+      end
     end
   end
 

@@ -1,0 +1,4 @@
+- @topics.each do |topic|
+  = render partial: topic.actable_type.demodulize.underscore, locals: { topic: topic }
+
+= paginate @topics
