@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 FactoryGirl.define do
-  factory :course_assessment_answer, class: Course::Assessment::Answer do
+  factory :course_assessment_answer, class: Course::Assessment::Answer,
+                                     parent: :course_discussion_topic do
     transient do
-      course { build(:course) }
       assessment { build(:assessment, course: course) }
       submission_traits []
     end
