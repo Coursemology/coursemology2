@@ -17,8 +17,9 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
         visit course_assessment_path(course, assessment)
         click_link I18n.t('course.assessment.assessments.show.new_question.text_response')
 
-        expect(current_path).to eq(\
-          new_course_assessment_question_text_response_path(course, assessment))
+        expect(current_path).to eq(
+          new_course_assessment_question_text_response_path(course, assessment)
+        )
         question_attributes = attributes_for(:course_assessment_question_text_response)
         fill_in 'title', with: question_attributes[:title]
         fill_in 'description', with: question_attributes[:description]

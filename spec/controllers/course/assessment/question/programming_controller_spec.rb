@@ -53,7 +53,8 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
         it 'redirects to job progress page' do
           subject
           expect(subject).to redirect_to(
-            job_path(controller.instance_variable_get(:@programming_question).import_job))
+            job_path(controller.instance_variable_get(:@programming_question).import_job)
+          )
         end
       end
     end
@@ -87,7 +88,8 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
         it 'redirects to job progress page' do
           subject
           expect(subject).to redirect_to(
-            job_path(controller.instance_variable_get(:@programming_question).import_job))
+            job_path(controller.instance_variable_get(:@programming_question).import_job)
+          )
         end
       end
     end

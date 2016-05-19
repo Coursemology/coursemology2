@@ -107,7 +107,8 @@ class Course::Assessment::ProgrammingEvaluationService
   def create_evaluation
     Course::Assessment::ProgrammingEvaluation.create(
       course: @course, language: @language, package_path: @package, memory_limit: @memory_limit,
-      time_limit: @time_limit.to_i)
+      time_limit: @time_limit.to_i
+    )
   end
 
   # Waits for the given evaluation to enter the finished state.

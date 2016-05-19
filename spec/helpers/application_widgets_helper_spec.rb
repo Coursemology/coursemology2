@@ -157,7 +157,8 @@ RSpec.describe ApplicationWidgetsHelper, type: :helper do
           expect(subject).to contain_exactly(
             :'helpers.buttons.announcement.edit',
             :'helpers.buttons.edit',
-            'Edit Announcement')
+            'Edit Announcement'
+          )
         end
 
         context 'when given an array with an options hash' do
@@ -166,7 +167,8 @@ RSpec.describe ApplicationWidgetsHelper, type: :helper do
             expect(subject).to contain_exactly(
               :'helpers.buttons.announcement.edit',
               :'helpers.buttons.edit',
-              'Edit Announcement')
+              'Edit Announcement'
+            )
           end
         end
       end
@@ -177,7 +179,8 @@ RSpec.describe ApplicationWidgetsHelper, type: :helper do
           expect(subject).to contain_exactly(
             :'helpers.buttons.announcement.edit',
             :'helpers.buttons.edit',
-            'Edit Announcement')
+            'Edit Announcement'
+          )
         end
       end
 
@@ -187,7 +190,8 @@ RSpec.describe ApplicationWidgetsHelper, type: :helper do
           expect(subject).to contain_exactly(
             :'helpers.buttons.announcement.edit',
             :'helpers.buttons.edit',
-            'Edit Announcement')
+            'Edit Announcement'
+          )
         end
       end
     end

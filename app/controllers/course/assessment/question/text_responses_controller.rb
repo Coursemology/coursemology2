@@ -46,6 +46,7 @@ class Course::Assessment::Question::TextResponsesController < \
     params.require(:question_text_response).permit(
       :title, :description, :maximum_grade, :weight,
       skill_ids: [],
-      solutions_attributes: [:_destroy, :id, :solution_type, :solution, :grade, :explanation])
+      solutions_attributes: [:_destroy, :id, :solution_type, :solution, :grade, :explanation]
+    )
   end
 end

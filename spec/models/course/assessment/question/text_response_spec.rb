@@ -43,7 +43,8 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
         expect(subject.valid?).to be(false)
         expect(subject.errors[:maximum_grade]).to include(
           I18n.t('activerecord.errors.models.course/assessment/question/text_response.attributes'\
-            '.maximum_grade.invalid_grade'))
+            '.maximum_grade.invalid_grade')
+        )
       end
     end
   end

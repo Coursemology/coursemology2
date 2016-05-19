@@ -22,7 +22,8 @@ class Course::Conditional::ConditionalSatisfiabilityEvaluationService
   def satisfiability_graph
     # TODO: Retrieve graph from cache
     Course::Conditional::UserSatisfiabilityGraph.new(
-      Course::Condition.conditionals_for(@course))
+      Course::Condition.conditionals_for(@course)
+    )
   end
 
   def update_conditions(_satisfied_conditions)

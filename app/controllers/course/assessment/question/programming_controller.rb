@@ -54,6 +54,7 @@ class Course::Assessment::Question::ProgrammingController < \
     params.require(:question_programming).permit(
       :title, :description, :maximum_grade, :weight, :language_id, :memory_limit, :time_limit,
       *attachment_params,
-      skill_ids: [])
+      skill_ids: []
+    )
   end
 end

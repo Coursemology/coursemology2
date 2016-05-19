@@ -45,7 +45,6 @@ class CourseUser < ActiveRecord::Base
                          inverse_of: :course_user, dependent: :destroy
   has_many :groups, through: :group_users, class_name: Course::Group.name, source: :group
 
-
   # @!attribute [r] experience_points
   #   Sums the total experience points for the course user.
   #   Default value is 0 when CourseUser does not have Course::ExperiencePointsRecord

@@ -84,7 +84,7 @@ class Course::UserRegistrationService
   # @return [nil] If the code is invalid.
   def claim_registration_code(registration)
     code = registration.code
-    if code.length < 1
+    if code.blank?
       nil
     elsif code[0] == 'C'
       claim_course_registration_code(registration)

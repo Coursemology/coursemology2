@@ -65,9 +65,11 @@ module Course::Assessment::AssessmentAbility
   def allow_staff_grade_submissions
     can :read, Course::Assessment::Submission, assessment: assessment_course_staff_hash
     can :grade, Course::Assessment::Submission, submission_submitted_or_graded_hash.merge(
-      assessment: assessment_course_staff_hash)
+      assessment: assessment_course_staff_hash
+    )
     can :grade, Course::Assessment::Answer, submission: submission_submitted_or_graded_hash.merge(
-      assessment: assessment_course_staff_hash)
+      assessment: assessment_course_staff_hash
+    )
   end
 
   def allow_auto_grader_programming_evaluations

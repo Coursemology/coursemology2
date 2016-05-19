@@ -17,7 +17,7 @@ FactoryGirl.define do
 
     trait :submitted do
       attempting
-      after(:build) do |submission, evaluator| # rubocop:disable Style/SymbolProc
+      after(:build) do |submission, evaluator|
         submission.finalise!
         answer.send(:clear_attribute_changes, :workflow_state) unless evaluator.auto_grade
       end

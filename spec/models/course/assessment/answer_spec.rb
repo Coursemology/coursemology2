@@ -24,7 +24,8 @@ RSpec.describe Course::Assessment::Answer do
           expect(subject.valid?).to be(false)
           expect(subject.errors[:question]).to include(
             I18n.t('activerecord.errors.models.course/assessment/answer.attributes.question'\
-              '.consistent_assessment'))
+              '.consistent_assessment')
+          )
         end
       end
 

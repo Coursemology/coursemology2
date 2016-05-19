@@ -41,9 +41,16 @@ RSpec.describe Course::Discussion::Post, type: :model do
         expect(root_post.first).to eq(graph[:root])
 
         root_children = root_post.second
-        expect(root_children).to contain_exactly([graph[:a], [
-                                                   [graph[:b], []]]],
-                                                 [graph[:c], []])
+        root_children_graph =
+          [
+            graph[:a],
+            [
+              [
+                graph[:b], []
+              ]
+            ]
+          ], [graph[:c], []]
+        expect(root_children).to contain_exactly(*root_children_graph)
       end
 
       describe '#last' do
