@@ -4,6 +4,8 @@ FactoryGirl.define do
                                      parent: :course_discussion_topic do
     transient do
       assessment { build(:assessment, course: course) }
+      # The creator in userstamps must be persisted.
+      creator { create(:user) }
       submission_traits []
     end
 
@@ -11,6 +13,7 @@ FactoryGirl.define do
       traits = *submission_traits
       options = traits.extract_options!
       options[:assessment] = question.assessment
+      options[:creator] = creator
       build(:course_assessment_submission, *traits, options)
     end
     question { build(:course_assessment_question, assessment: assessment) }

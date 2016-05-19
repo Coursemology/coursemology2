@@ -7,6 +7,14 @@ class Course::Assessment::Answer::ProgrammingFileAnnotation < ActiveRecord::Base
 
   after_initialize :set_course, if: :new_record?
 
+  # Specific implementation of Course::Discussion::Topic#from_user, this is not supposed to be
+  # called directly.
+  scope :from_user, (lambda do |user_id|
+    joins { file.answer.answer.submission }.
+      where { file.answer.answer.submission.creator_id >> user_id }.
+      joins { discussion_topic }.select { discussion_topic.id }
+  end)
+
   private
 
   # Set the course as the same course of the answer.

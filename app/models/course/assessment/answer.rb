@@ -36,6 +36,14 @@ class Course::Assessment::Answer < ActiveRecord::Base
   after_initialize :set_course, if: :new_record?
   before_validation :set_course, if: :new_record?
 
+  # Specific implementation of Course::Discussion::Topic#from_user, this is not supposed to be
+  # called directly.
+  scope :from_user, (lambda do |user_id|
+    joins { submission }.
+      where { submission.creator_id >> user_id }.
+      joins { discussion_topic }.select { discussion_topic.id }
+  end)
+
   # Creates an Auto Grading job for this answer. This saves the answer if there are pending changes.
   #
   # @param [String|nil] redirect_to_path The path to be redirected after auto grading job was

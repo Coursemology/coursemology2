@@ -22,6 +22,18 @@ class Course::Discussion::Topic < ActiveRecord::Base
       where(actable_type: global_topic_models.map(&:name))
   end)
 
+  # Returns the topics from the user(s) specified.
+  #
+  # @param[Integer|Array<Integer>] user_id, the id(s) of the user(s).
+  # @return[Array<Course::Discussion::Topic>]
+  scope :from_user, (lambda do |user_id|
+    where(
+      global_topic_models.map do |model|
+        "course_discussion_topics.id IN (#{model.from_user(user_id).to_sql})"
+      end.join(' OR ')
+    )
+  end)
+
   scope :ordered_by_updated_at, -> { order(updated_at: :desc) }
 
   def to_partial_path
