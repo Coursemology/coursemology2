@@ -56,6 +56,58 @@ RSpec.describe 'Course: Leaderboard: View' do
         expect(page).not_to have_content_tag_for(phantom_user)
         expect(page).not_to have_content_tag_for(unregistered_user)
       end
+
+      context 'when the group leaderboard is enabled for the course' do
+        let!(:groups) { create_list(:course_group, 2, course: course) }
+        let!(:group_user1) do
+          create(:course_group_user, course: course, course_user: students[0], group: groups[0])
+        end
+        let!(:group_user2) do
+          create(:course_group_user, course: course, course_user: students[1], group: groups[1])
+        end
+
+        before do
+          settings = Course::LeaderboardSettings.new(course.settings(:leaderboard))
+          settings.enable_group_leaderboard = true
+          course.save
+        end
+
+        scenario 'I can view the group leaderboard by experience points' do
+          create(:course_experience_points_record, points_awarded: 200, course_user: students[0])
+
+          visit group_course_leaderboard_path(course)
+          expect(page).to have_text(I18n.t('course.leaderboards.groups.header'))
+
+          within find('.leaderboard-points') do
+            sorted_course_groups = course.groups.ordered_by_experience_points
+
+            sorted_course_groups.each.with_index(1) do |group, index|
+              within find(content_tag_selector(group)) do
+                expect(page).to have_text(index)
+                expect(page).to have_text(group.name)
+              end
+            end
+          end
+        end
+
+        scenario 'I can view the group leaderboard by achievement count' do
+          create(:course_user_achievement, course_user: students[0])
+
+          visit group_course_leaderboard_path(course)
+          expect(page).to have_text(I18n.t('course.leaderboards.groups.header'))
+
+          within find('.leaderboard-achievement') do
+            sorted_course_groups = course.groups.ordered_by_average_achievement_count
+
+            sorted_course_groups.each.with_index(1) do |group, index|
+              within find(content_tag_selector(group)) do
+                expect(page).to have_text(index)
+                expect(page).to have_text(group.name)
+              end
+            end
+          end
+        end
+      end
     end
   end
 end

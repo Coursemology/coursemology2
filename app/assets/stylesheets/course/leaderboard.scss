@@ -1,9 +1,10 @@
 .course-leaderboards {
+  .leaderboard-header {
+    margin-bottom: 1em;
+    text-align: center;
+  }
+
   &.show {
-    .leaderboard-header {
-      margin-bottom: 1em;
-      text-align: center;
-    }
 
     .leaderboard-level,
     .leaderboard-achievement {
@@ -37,6 +38,34 @@
           height: $course-leaderboard-achievement-badge;
           width: $course-leaderboard-achievement-badge;
         }
+      }
+    }
+  }
+
+  &.groups {
+    .leaderboard-points,
+    .leaderboard-achievement {
+      .group-name {
+        text-align: center;
+        vertical-align: middle;
+        width: 20%;
+      }
+
+      .group-profile {
+        vertical-align: middle;
+        width: 60%;
+
+        .image > img {
+          height: $course-leaderboard-groupuser-picture;
+          width: $course-leaderboard-groupuser-picture;
+        }
+      }
+
+      .rank {
+        padding-right: 2em;
+        text-align: right;
+        vertical-align: middle;
+        width: 20%;
       }
     }
   }

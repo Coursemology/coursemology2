@@ -1,0 +1,9 @@
+= content_tag_for(:tr, group, class: ['course-group'])
+  td.rank
+    h3 = group_counter + 1
+  td.group-name
+    h3 = format_inline_text(group.name)
+  td.group-profile
+    - group.course_users.includes(:user, :course).students.take(5).each do |course_user|
+      = link_to_course_user(course_user) do
+        = display_user_image(course_user.user)

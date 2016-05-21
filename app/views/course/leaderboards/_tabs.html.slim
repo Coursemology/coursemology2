@@ -1,0 +1,6 @@
+- if @leaderboard_settings.enable_group_leaderboard
+  = tabs do
+    = nav_to(@leaderboard_settings.title || t('.individual_leaderboard'),
+             course_leaderboard_path(current_course))
+    = nav_to(@leaderboard_settings.group_leaderboard_title || t('.group_leaderboard'),
+             group_course_leaderboard_path(current_course))

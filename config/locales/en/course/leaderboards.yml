@@ -9,4 +9,13 @@ en:
         header: 'Leaderboard'
         level_header: 'By Level'
         level: 'Level %{level_number}'
+        achievement_count_header: :'course.leaderboards.common.achievement_count_header'
+      groups:
+        header: 'Group Leaderboard'
+        experience_points_header: 'By Experience Points'
+        achievement_count_header: :'course.leaderboards.common.achievement_count_header'
+      common:
         achievement_count_header: 'By Achievement Count'
+      tabs:
+        individual_leaderboard: :'course.leaderboards.show.header'
+        group_leaderboard: :'course.leaderboards.groups.header'

@@ -3,10 +3,15 @@ class Course::LeaderboardsController < Course::ComponentController
   before_action :check_component
   before_action :load_settings
   before_action :add_leaderboard_breadcrumb
+  before_action :check_group_leaderboard_settings, only: [:groups]
 
   def show #:nodoc:
     preload_course_levels
     load_course_users
+  end
+
+  def groups #:nodoc:
+    load_course_groups
   end
 
   private
@@ -16,6 +21,11 @@ class Course::LeaderboardsController < Course::ComponentController
   # @raise [Coursemology::ComponentNotFoundError] When the component is disabled.
   def check_component
     raise ComponentNotFoundError unless component
+  end
+
+  # Checks if group leaderboard setting is enabled
+  def check_group_leaderboard_settings
+    raise ComponentNotFoundError unless @leaderboard_settings.enable_group_leaderboard
   end
 
   # Load current component's settings
@@ -32,6 +42,11 @@ class Course::LeaderboardsController < Course::ComponentController
   def load_course_users
     @course_users = @course.course_users.students.with_approved_state.without_phantom_users.
                     includes(:user)
+  end
+
+  # Load approved students from current course with course statistics.
+  def load_course_groups
+    @course_groups = @course.groups
   end
 
   def add_leaderboard_breadcrumb
