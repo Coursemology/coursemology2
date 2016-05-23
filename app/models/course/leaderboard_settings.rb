@@ -49,7 +49,7 @@ class Course::LeaderboardSettings
   #
   # @return [Boolean] Setting on whether group leaderboard is enabled.
   def enable_group_leaderboard
-    @group_leaderboard_settings.settings(:enabled) == true
+    @group_leaderboard_settings.enabled == true
   end
 
   # Enable or disable the option to display group leaderboard
