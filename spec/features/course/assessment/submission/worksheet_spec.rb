@@ -31,7 +31,7 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
         expect(page).to have_checked_field(option)
       end
 
-      scenario 'I can finalise my submission' do
+      scenario 'I can finalise my submission only once' do
         submission
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
@@ -40,6 +40,10 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
           edit_course_assessment_submission_path(course, assessment, submission)
         )
         expect(submission.reload).to be_submitted
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+        expect(page).
+          not_to have_button(I18n.t('course.assessment.submission.submissions.worksheet.finalise'))
       end
 
       scenario 'I can comment on answers' do

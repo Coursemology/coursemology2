@@ -11,8 +11,8 @@
 
   = f.button :submit, t('common.save')
   - if @submission.attempting? && can?(:update, @submission)
-  = f.button :submit, t('.finalise'),
-    name: 'submission[finalise]', class: ['btn-danger']
+    = f.button :submit, t('.finalise'),
+      name: 'submission[finalise]', class: ['btn-danger']
   - if @submission.submitted? && can?(:grade, @submission)
     = link_to t('.auto_grade'),
       auto_grade_course_assessment_submission_path(current_course, @submission.assessment,
