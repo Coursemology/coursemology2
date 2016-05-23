@@ -36,6 +36,8 @@ class Course::Discussion::Topic < ActiveRecord::Base
 
   scope :ordered_by_updated_at, -> { order(updated_at: :desc) }
 
+  scope :pending_staff_reply, -> { where(pending_staff_reply: true) }
+
   def to_partial_path
     'course/discussion/topic'.freeze
   end
