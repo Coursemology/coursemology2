@@ -247,7 +247,11 @@ Rails.application.routes.draw do
       end
 
       scope module: :discussion do
-        resources :topics, path: 'comments', only: [:index]
+        resources :topics, path: 'comments', only: [:index] do
+          get 'pending', on: :collection
+          get 'my_students', on: :collection
+          get 'my_students_pending', on: :collection
+        end
       end
     end
   end
