@@ -103,7 +103,7 @@ RSpec.describe Course::Group, type: :model do
         it { is_expected.to eq(0) }
       end
 
-      context 'when there is 1 or more group users' do
+      context 'when there are one or more group users' do
         let(:student) { create(:course_student, course: course) }
         let!(:group_user) { create(:course_group_user, group: group, course_user: student) }
         let!(:other_group_user) { create(:course_group_user, course: course, group: group) }
@@ -124,7 +124,7 @@ RSpec.describe Course::Group, type: :model do
         it { is_expected.to eq(0) }
       end
 
-      context 'when there is 1 or more group users' do
+      context 'when there are one or more group users' do
         let(:student) { create(:course_student, course: course) }
         let!(:group_user) { create(:course_group_user, group: group, course_user: student) }
         let!(:other_group_user) { create(:course_group_user, course: course, group: group) }
