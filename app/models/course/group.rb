@@ -23,10 +23,10 @@ class Course::Group < ActiveRecord::Base
       where { course_user.role == CourseUser.roles[:student] }.
       # CAST is used to force a float division (integer division by default).
       # greatest(#, 1) is used to avoid division by 0.
-      select(<<-SQL)
-        CAST(coalesce(sum(course_experience_points_records.points_awarded), 0.0) AS FLOAT) /
+      select do
+        cast(coalesce(sum(course_experience_points_records.points_awarded), 0.0).as(float)) /
         greatest(count(distinct(course_group_users.course_user_id)), 1.0)
-      SQL
+      end
   end)
 
   # @!attribute [r] average_achievement_count
@@ -38,10 +38,10 @@ class Course::Group < ActiveRecord::Base
       where { course_user.role == CourseUser.roles[:student] }.
       # CAST is used to force a float division (integer division by default).
       # greatest(#, 1) is used to avoid division by 0.
-      select(<<-SQL)
-        CAST(count(course_user_achievements.id) AS FLOAT) /
+      select do
+        cast(count(course_user_achievements.id).as(float)) /
         greatest(count(distinct(course_group_users.course_user_id)), 1.0)
-      SQL
+      end
   end)
 
   # @!attribute [r] last_obtained_achievement
