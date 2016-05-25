@@ -7,7 +7,7 @@ div.col-sm-12.col-md-6
     h4 = t('.experience_points_header')
   table.table.leaderboard-points
     tbody
-      - groups_points = @course_groups.ordered_by_experience_points.take(display_user_count)
+      - groups_points = @groups.ordered_by_experience_points.take(display_user_count)
       = render partial: 'group', collection: groups_points, as: :group
 
 div.col-sm-12.col-md-6
@@ -15,5 +15,5 @@ div.col-sm-12.col-md-6
     h4 = t('.achievement_count_header')
   table.table.leaderboard-achievement
     tbody
-      - groups_count = @course_groups.ordered_by_average_achievement_count.take(display_user_count)
+      - groups_count = @groups.ordered_by_average_achievement_count.take(display_user_count)
       = render partial: 'group', collection: groups_count, as: :group

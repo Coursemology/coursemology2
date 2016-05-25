@@ -3,15 +3,16 @@ class Course::LeaderboardsController < Course::ComponentController
   before_action :check_component
   before_action :load_settings
   before_action :add_leaderboard_breadcrumb
-  before_action :check_group_leaderboard_settings, only: [:groups]
+  before_action :check_component_settings
+  before_action :preload_course_levels, only: [:show]
 
   def show #:nodoc:
-    preload_course_levels
-    load_course_users
+    @course_users = @course.course_users.students.with_approved_state.without_phantom_users.
+                    includes(:user)
   end
 
   def groups #:nodoc:
-    load_course_groups
+    @groups = @course.groups
   end
 
   private
@@ -24,8 +25,13 @@ class Course::LeaderboardsController < Course::ComponentController
   end
 
   # Checks if group leaderboard setting is enabled
-  def check_group_leaderboard_settings
-    raise ComponentNotFoundError unless @leaderboard_settings.enable_group_leaderboard
+  #
+  # @raise [Coursemology::ComponentNotFoundError] When the group leaderboard is disabled.
+  def check_component_settings
+    case params[:action]
+    when 'groups'
+      raise ComponentNotFoundError unless @leaderboard_settings.enable_group_leaderboard
+    end
   end
 
   # Load current component's settings
@@ -36,17 +42,6 @@ class Course::LeaderboardsController < Course::ComponentController
   # Preload course.levels to reduce SQL calls in leaderboard view. See course#level_for.
   def preload_course_levels
     @course.levels.to_a
-  end
-
-  # Load approved students from current course with course statistics.
-  def load_course_users
-    @course_users = @course.course_users.students.with_approved_state.without_phantom_users.
-                    includes(:user)
-  end
-
-  # Load approved students from current course with course statistics.
-  def load_course_groups
-    @course_groups = @course.groups
   end
 
   def add_leaderboard_breadcrumb
