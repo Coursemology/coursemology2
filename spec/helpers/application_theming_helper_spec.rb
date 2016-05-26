@@ -8,9 +8,7 @@ RSpec.describe ApplicationThemingHelper, type: :helper do
     it { is_expected.to be_html_safe }
 
     it 'has jquery' do
-      expect(subject).to have_tag('script', with: {
-        :'src^' => '/assets/jquery-'
-      })
+      expect(subject).to have_tag('script', with: { 'src^': '/assets/jquery-' })
     end
   end
 

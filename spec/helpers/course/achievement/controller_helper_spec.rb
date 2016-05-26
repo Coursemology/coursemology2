@@ -24,7 +24,7 @@ RSpec.describe Course::Achievement::ControllerHelper do
 
       context 'when an achievement badge is not uploaded' do
         it 'displays the default achievement badge' do
-          expect(subject).to have_tag('img', with: { :'src^' => '/assets/achievement_blank-' })
+          expect(subject).to have_tag('img', with: { 'src^': '/assets/achievement_blank-' })
         end
       end
     end
@@ -32,7 +32,7 @@ RSpec.describe Course::Achievement::ControllerHelper do
     describe '#display_locked_achievement_badge' do
       it 'displays the locked achievement badge' do
         expect(helper.display_locked_achievement_badge).
-          to have_tag('img', with: { :'src^' => '/assets/achievement_locked-' })
+          to have_tag('img', with: { 'src^': '/assets/achievement_locked-' })
       end
     end
 

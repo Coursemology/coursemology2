@@ -158,7 +158,7 @@ RSpec.describe Course::ControllerHelper do
 
       context 'when no course logo is uploaded' do
         it 'displays the default course logo' do
-          expect(subject).to have_tag('img', with: { :'src^' => '/assets/course_default_logo-' })
+          expect(subject).to have_tag('img', with: { 'src^': '/assets/course_default_logo-' })
         end
       end
 
