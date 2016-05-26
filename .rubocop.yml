@@ -10,7 +10,7 @@ AllCops:
    - 'db/seeds.rb'
    - 'db/schema.rb'
    - 'vendor/bundle/**/*'
-  TargetRubyVersion: 2.1
+  TargetRubyVersion: 2.2
 
 Metrics/LineLength:
   Max: 100

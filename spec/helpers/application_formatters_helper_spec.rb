@@ -94,7 +94,7 @@ RSpec.describe ApplicationFormattersHelper do
 
       context "when the user doesn't have a profile photo" do
         it 'displays the default image' do
-          expect(subject).to have_tag('img', with: { :'src^' => '/assets/user_silhouette-' })
+          expect(subject).to have_tag('img', with: { 'src^': '/assets/user_silhouette-' })
         end
       end
 
@@ -114,7 +114,7 @@ RSpec.describe ApplicationFormattersHelper do
         subject { helper.display_user_image(nil) }
 
         it 'displays the default image' do
-          expect(subject).to have_tag('img', with: { :'src^' => '/assets/user_silhouette-' })
+          expect(subject).to have_tag('img', with: { 'src^': '/assets/user_silhouette-' })
         end
       end
     end

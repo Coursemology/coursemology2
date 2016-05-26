@@ -12,7 +12,7 @@ educators to increase student engagement and make learning fun.
 
 ### System Requirements
 
-1. Ruby (>= 2.1.0)
+1. Ruby (>= 2.2.0)
 2. Ruby on Rails
 3. PostgreSQL
 4. ImageMagick or GraphicsMagick (For [MiniMagick](https://github.com/minimagick/minimagick))
