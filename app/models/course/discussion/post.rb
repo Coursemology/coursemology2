@@ -2,7 +2,7 @@
 class Course::Discussion::Post < ActiveRecord::Base
   extend Course::Discussion::Post::OrderingConcern
 
-  acts_as_forest order: :created_at
+  acts_as_forest order: :created_at, dependent: :destroy
   acts_as_readable on: :updated_at
   has_many_attachments
 

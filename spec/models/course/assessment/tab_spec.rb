@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe Course::Assessment::Tab do
   it { is_expected.to belong_to(:category) }
-  it { is_expected.to have_many(:assessments) }
+  it { is_expected.to have_many(:assessments).dependent(:destroy) }
 
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
