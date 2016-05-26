@@ -1,4 +1,3 @@
-- @topics.each do |topic|
-  = render partial: topic.actable_type.demodulize.underscore, locals: { topic: topic }
+= render partial: @topics.map(&:specific), prefix: 'discussion_topic'
 
 = paginate @topics
