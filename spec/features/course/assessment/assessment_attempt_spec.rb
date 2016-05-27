@@ -27,7 +27,8 @@ RSpec.describe 'Course: Assessments: Attempt' do
         visit course_assessments_path(course)
 
         within find(content_tag_selector(empty_assessment)) do
-          find_button(I18n.t('course.assessment.assessments.assessment.attempt')).click
+          find_link(I18n.t('course.assessment.assessments.assessment.attempt'),
+                    href: course_assessment_submissions_path(course, empty_assessment)).click
         end
 
         expect(page.status_code).to eq(422)
@@ -38,7 +39,8 @@ RSpec.describe 'Course: Assessments: Attempt' do
         visit course_assessments_path(course)
 
         within find(content_tag_selector(assessment)) do
-          find_button(I18n.t('course.assessment.assessments.assessment.attempt')).click
+          find_link(I18n.t('course.assessment.assessments.assessment.attempt'),
+                    href: course_assessment_submissions_path(course, assessment)).click
         end
 
         created_submission = assessment.submissions.last
