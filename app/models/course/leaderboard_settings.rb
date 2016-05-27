@@ -6,8 +6,6 @@ class Course::LeaderboardSettings
 
   validates :display_user_count, numericality: { greater_than_or_equal_to: 0 }
 
-  TRUE_VALUES = Set[true, '1', 1].freeze
-
   # Initialises the settings adapter
   #
   # @param [#settings] settings The settings object provided by the settings_on_rails gem.
@@ -58,7 +56,7 @@ class Course::LeaderboardSettings
   #   By default, simple_form provides '0' and '1' for boolean fields.
   #   This method will handle this conversion to Boolean.
   def enable_group_leaderboard=(option)
-    option = TRUE_VALUES.include?(option)
+    option = ActiveRecord::Type::Boolean.new.type_cast_from_user(option)
     @group_leaderboard_settings.enabled = option
   end
 
