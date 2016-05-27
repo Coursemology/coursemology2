@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 class Course::Discussion::Topic < ActiveRecord::Base
   actable
+  class_attribute :global_topic_model_names
+  self.global_topic_model_names = []
 
   belongs_to :course, inverse_of: :discussion_topics
   has_many :posts, dependent: :destroy, inverse_of: :topic do
@@ -9,6 +11,10 @@ class Course::Discussion::Topic < ActiveRecord::Base
   has_many :subscriptions, dependent: :destroy, inverse_of: :topic
 
   accepts_nested_attributes_for :posts
+
+  def self.global_topic_models
+    global_topic_model_names.map(&:constantize)
+  end
 
   def to_partial_path
     'course/discussion/topic'.freeze

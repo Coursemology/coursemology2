@@ -2,7 +2,7 @@
 class Course::Assessment::Answer < ActiveRecord::Base
   include Workflow
   actable
-  acts_as :discussion_topic, class_name: Course::Discussion::Topic.name
+  acts_as_discussion_topic display_globally: true
 
   workflow do
     state :attempting do
