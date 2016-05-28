@@ -17,6 +17,11 @@ class Course::Assessment < ActiveRecord::Base
 
   belongs_to :tab, inverse_of: :assessments
 
+  # `submissions` association must be put before `questions`, so that all answers will be deleted
+  # first when deleting the course. Otherwise due to the foreign key `question_id` in answers table,
+  # questions cannot be deleted.
+  has_many :submissions, inverse_of: :assessment, dependent: :destroy
+
   has_many :questions, inverse_of: :assessment, dependent: :destroy do
     include Course::Assessment::QuestionsConcern
   end
@@ -29,8 +34,6 @@ class Course::Assessment < ActiveRecord::Base
   has_many :programming_questions,
            through: :questions, inverse_through: :question, source: :actable,
            source_type: Course::Assessment::Question::Programming.name
-
-  has_many :submissions, inverse_of: :assessment, dependent: :destroy
 
   # @!attribute [r] maximum_grade
   #   Gets the maximum grade allowed by this assessment. This is the sum of all questions'

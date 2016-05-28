@@ -28,7 +28,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
   belongs_to :question, class_name: Course::Assessment::Question.name, inverse_of: nil
   belongs_to :grader, class_name: User.name, inverse_of: nil
   has_one :auto_grading, class_name: Course::Assessment::Answer::AutoGrading.name,
-                         inverse_of: :answer
+                         dependent: :destroy, inverse_of: :answer
 
   accepts_nested_attributes_for :actable
   accepts_nested_attributes_for :discussion_topic

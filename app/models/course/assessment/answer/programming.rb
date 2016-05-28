@@ -6,7 +6,7 @@ class Course::Assessment::Answer::Programming < ActiveRecord::Base
   acts_as :answer, class_name: Course::Assessment::Answer.name
 
   has_many :files, class_name: Course::Assessment::Answer::ProgrammingFile.name,
-                   foreign_key: :answer_id, inverse_of: :answer
+                   foreign_key: :answer_id, dependent: :destroy, inverse_of: :answer
 
   accepts_nested_attributes_for :files, allow_destroy: true
 
