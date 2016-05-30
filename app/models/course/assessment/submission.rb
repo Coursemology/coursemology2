@@ -85,6 +85,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
   #   Orders the submissions by date of creation. This defaults to reverse chronological order
   #   (newest submission first).
   scope :ordered_by_date, ->(direction = :desc) { order(created_at: direction) }
+  scope :with_submission_statistics, -> { all.calculated(:grade) }
 
   alias_method :finalise=, :finalise!
   alias_method :publish=, :publish!

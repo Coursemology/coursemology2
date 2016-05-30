@@ -11,4 +11,14 @@
       padding: 0 3px;
     }
   }
+
+  &.index {
+    .submissions {
+      .no-submission {
+        strong {
+          color: $course-assessment-submission-not-started;
+        }
+      }
+    }
+  }
 }
