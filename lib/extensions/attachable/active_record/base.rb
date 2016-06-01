@@ -12,6 +12,8 @@ module Extensions::Attachable::ActiveRecord::Base
     # @example Has many attachments on a column
     #   has_many_attachments on: :description #=> description is associated with the attachments
     #   of the model, updating description will result in attachments changing.
+    #   You can further implement `description_attachment_references_removed` reader in this case to
+    #   override the default method. The attachment_references ids returned by it will be removed.
     def has_many_attachments(options = {}) # rubocop:disable Style/PredicateName
       include HasManyAttachments
 
@@ -42,15 +44,22 @@ module Extensions::Attachable::ActiveRecord::Base
       alias_method :attachments, :attachment_references
     end
 
-    ATTACHMENT_ATTRIBUTE_READER_SUFFIX = '_attachment_references'
+    ATTACHMENT_REMOVED_SUFFIX = '_attachment_references_removed'.freeze
 
     def self.define_attachment_references_readers(attachable_columns)
       attachable_columns.each do |column|
-        method_name = "#{column}#{ATTACHMENT_ATTRIBUTE_READER_SUFFIX}"
+        method_name = "#{column}#{ATTACHMENT_REMOVED_SUFFIX}"
         next if method_defined?(method_name)
 
+        # Define a reader `#{column_name}_attachment_references_removed` to allow clients
+        # to implement logic when attachments are removed.
+        # This method returns the attachment_reference_ids of attachments that are removed,
+        # by comparing `column` and `column_was` (from ActiveRecord::Dirty).
         define_method(method_name) do
-          parse_attachment_reference_ids_from_content(send(column))
+          return [] unless send("#{column}_changed?")
+          ids_was = parse_attachment_reference_ids_from_content(send("#{column}_was"))
+          ids = parse_attachment_reference_ids_from_content(send(column))
+          ids_was - ids
         end
       end
     end
@@ -63,25 +72,23 @@ module Extensions::Attachable::ActiveRecord::Base
 
     private
 
-    # Delete the attachment references which are not in the content.
+    # Delete the attachment references which are removed in this update.
     def update_attachment_references
       return if attachment_references.empty?
 
-      attachment_reference_ids = active_attachment_reference_ids
+      ids = attachment_reference_ids_removed
       attachment_references.each do |attachment_reference|
-        unless attachment_reference_ids.include?(attachment_reference.id)
-          attachment_reference.mark_for_destruction
-        end
+        attachment_reference.mark_for_destruction if ids.include?(attachment_reference.id)
       end
     end
 
-    # Find all attachment_reference ids in the columns specified.
+    # Find all attachment_reference ids removed in the columns specified.
     #
     # @return [Array<Integer>]
-    def active_attachment_reference_ids
+    def attachment_reference_ids_removed
       attachment_reference_ids = []
       self.class.attachable_columns.each do |column|
-        attachment_reference_ids += send("#{column}#{ATTACHMENT_ATTRIBUTE_READER_SUFFIX}")
+        attachment_reference_ids += send("#{column}#{ATTACHMENT_REMOVED_SUFFIX}")
       end
 
       attachment_reference_ids
