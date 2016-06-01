@@ -5,7 +5,7 @@ RSpec.describe ApplicationNotificationsHelper, type: :helper do
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
     describe '#notification_view_path' do
-      let(:activity) { create(:activity, event: :tested, notifier_type: :user_notifier) }
+      let(:activity) { create(:activity, event: :tested, notifier_type: 'UserNotifier') }
       let(:stub_notification) do
         notification = OpenStruct.new
         notification.activity = activity
