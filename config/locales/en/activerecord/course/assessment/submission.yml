@@ -8,6 +8,9 @@ en:
         graded_at: :'activerecord.attributes.course/assessment/answer/graded_at'
     errors:
       models:
+        course/assessment/submission:
+          experience_points_record:
+            inconsistent_user: 'the creator of the submission must be the same as the course user'
         course/assessment/category:
           deletion: 'the last category cannot be deleted'
 

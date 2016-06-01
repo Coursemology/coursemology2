@@ -28,6 +28,23 @@ RSpec.describe Course::Assessment::Submission do
     end
     let(:submission2_traits) { [] }
 
+    describe 'validations' do
+      context 'when the course user is different from the submission creator' do
+        let(:course_student) { create(:course_student, :approved, course: course) }
+        subject do
+          build(:submission, assessment: assessment, course_user: course_student, creator: user1)
+        end
+
+        it 'is not valid' do
+          expect(subject).not_to be_valid
+          expect(subject.errors.messages[:experience_points_record]).
+            to include(I18n.
+              t('activerecord.errors.models.course/assessment/submission.'\
+                'attributes.experience_points_record.inconsistent_user'))
+        end
+      end
+    end
+
     describe '.with_creator' do
       before do
         submission1
