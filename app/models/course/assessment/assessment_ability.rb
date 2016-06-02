@@ -25,7 +25,7 @@ module Course::Assessment::AssessmentAbility
 
   def submission_attempting_hash(user)
     { workflow_state: 'attempting' }.tap do |result|
-      result.reverse_merge(course_user: { user_id: user.id }) if user
+      result.reverse_merge(experience_points_record: { course_user: { user_id: user.id } }) if user
     end
   end
 
@@ -43,9 +43,11 @@ module Course::Assessment::AssessmentAbility
         lesson_plan_item: properties
       )
     end
-    can :create, Course::Assessment::Submission, course_user: { user_id: user.id }
+    can :create, Course::Assessment::Submission,
+        experience_points_record: { course_user: { user_id: user.id } }
     can :update, Course::Assessment::Submission, submission_attempting_hash(user)
-    can :read, Course::Assessment::Submission, course_user: { user_id: user.id }
+    can :read, Course::Assessment::Submission,
+        experience_points_record: { course_user: { user_id: user.id } }
   end
 
   def allow_students_update_own_submission
