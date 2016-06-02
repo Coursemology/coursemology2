@@ -1,0 +1,9 @@
+en:
+  notifiers:
+    course:
+      achievement_notifier:
+        gained:
+          course_notifications:
+            feed:
+              gained_achievement_html: '%{user} gained achievement %{achievement}'
+
