@@ -14,7 +14,7 @@ gem 'rails', '~> 4.2.0', '>= 4.2.5.2'
 gem 'pg', '>= 0.18.2'
 # Schema Plus for some higher level database abstractions
 gem 'schema_plus'
-gem 'schema_plus_association_inverses', '>= 0.0.3'
+gem 'schema_plus_association_inverses', '>= 0.1.0'
 gem 'schema_validations'
 gem 'schema_monkey', '<= 2.1.1' # another fix from pinnymz/migration_comments#9
 # Instance/Course settings
