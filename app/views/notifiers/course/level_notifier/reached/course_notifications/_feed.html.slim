@@ -1,0 +1,8 @@
+- activity = notification.activity
+- level = activity.object
+
+= div_for(notification) do
+  // TODO: Display user image here.
+  - user_link = link_to_user(activity.actor)
+  => t('.reached_level_html', user: user_link, level_number: level.level_number)
+  h6 = format_datetime(activity.created_at)
