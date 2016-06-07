@@ -23,5 +23,11 @@ FactoryGirl.define do
       event :reached
       notifier_type Course::LevelNotifier.name
     end
+
+    trait :forum_topic_created do
+      object { create(:forum_topic) }
+      event :created
+      notifier_type Course::Forum::TopicNotifier.name
+    end
   end
 end

@@ -29,6 +29,14 @@ RSpec.feature 'Course: Homepage' do
                               activity: level_activity,
                               course: course)
 
+      # Forum topic created notification
+      forum = create(:forum, course: course)
+      topic = create(:forum_topic, forum: forum)
+      topic_activity = create(:activity, :forum_topic_created, object: topic)
+      notifications << create(:course_notification, :feed,
+                              activity: topic_activity,
+                              course: course)
+
       notifications
     end
 

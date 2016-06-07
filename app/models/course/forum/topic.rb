@@ -9,6 +9,7 @@ class Course::Forum::Topic < ActiveRecord::Base
   after_initialize :generate_initial_post, unless: :persisted?
   before_validation :set_initial_post_title, unless: :persisted?
   after_create :mark_as_read_for_creator
+  after_create :send_notification
   after_update :mark_as_read_for_updater
 
   enum topic_type: { normal: 0, question: 1, sticky: 2, announcement: 3 }
@@ -118,5 +119,9 @@ class Course::Forum::Topic < ActiveRecord::Base
   # Set the course as the same course of the forum.
   def set_course
     self.course ||= forum.course if forum
+  end
+
+  def send_notification
+    Course::Forum::TopicNotifier.topic_created(creator, self)
   end
 end
