@@ -6,6 +6,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
   include Course::Assessment::Submission::ExperiencePointsDisplayConcern
 
   after_save :auto_grade_submission, if: :submitted?
+  after_create :send_notification
 
   workflow do
     state :attempting do
@@ -132,5 +133,9 @@ class Course::Assessment::Submission < ActiveRecord::Base
     unless course_user && course_user.user == creator
       errors.add(:experience_points_record, :inconsistent_user)
     end
+  end
+
+  def send_notification
+    Course::AssessmentNotifier.assessment_attempted(creator, assessment)
   end
 end
