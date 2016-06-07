@@ -28,6 +28,36 @@ RSpec.describe Course::ExperiencePointsRecord do
       end
     end
 
+    describe '#reached_new_level?' do
+      let(:course) do
+        course = create(:course)
+        create_list(:course_level, 3, course: course)
+        course.levels.reload
+        course
+      end
+      let(:record) { create(:course_experience_points_record, course: course, points_awarded: 0) }
+      subject do
+        record.points_awarded += exp_to_award
+        record.send(:reached_new_level?)
+      end
+
+      context 'when no exp is awarded' do
+        let(:exp_to_award) { 0 }
+
+        it { is_expected.to be_falsey }
+      end
+
+      context 'when enough exp is awarded' do
+        let(:exp_to_award) do
+          current_exp = record.course_user.experience_points
+          next_level = course.level_for(current_exp).next
+          next_level.experience_points_threshold - current_exp
+        end
+
+        it { is_expected.to be_truthy }
+      end
+    end
+
     context 'when manually created' do
       subject { build(:course_experience_points_record) }
 
