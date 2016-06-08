@@ -11,10 +11,12 @@ RSpec.describe Course::Assessment do
       create(:course_assessment_assessment, :with_all_question_types, course: course)
     end
     let(:attempting_submission) do
-      create(:submission, :attempting, assessment: assessment, creator: course_user.user)
+      create(:course_assessment_submission, :attempting, assessment: assessment,
+                                                         creator: course_user.user)
     end
     let(:submitted_submission) do
-      create(:submission, :submitted, assessment: assessment, creator: course_user.user)
+      create(:course_assessment_submission, :submitted, assessment: assessment,
+                                                        creator: course_user.user)
     end
 
     context 'when the user is a Course Student' do

@@ -75,7 +75,7 @@ RSpec.describe Course::Condition::Assessment, type: :model do
     describe 'callbacks' do
       describe '#assessment' do
         context 'when the submission is being attempted' do
-          let(:submission) { create(:submission, :attempting) }
+          let(:submission) { create(:course_assessment_submission, :attempting) }
           it 'does not evaluate_conditional_for the affected course_user' do
             expect(Course::Condition::Assessment).
               to_not receive(:evaluate_conditional_for).with(submission.course_user)
@@ -84,7 +84,7 @@ RSpec.describe Course::Condition::Assessment, type: :model do
         end
 
         context 'when the submission is being submitted' do
-          let(:submission) { create(:submission, :attempting) }
+          let(:submission) { create(:course_assessment_submission, :attempting) }
           it 'evaluate_conditional_for the affected course_user' do
             expect(Course::Condition::Assessment).
               to receive(:evaluate_conditional_for).with(submission.course_user)
@@ -94,7 +94,7 @@ RSpec.describe Course::Condition::Assessment, type: :model do
         end
 
         context 'when the submission is being graded' do
-          let(:submission) { create(:submission, :submitted) }
+          let(:submission) { create(:course_assessment_submission, :submitted) }
           it 'evaluate_conditional_for the affected course_user' do
             expect(Course::Condition::Assessment).
               to receive(:evaluate_conditional_for).with(submission.course_user)
@@ -104,7 +104,7 @@ RSpec.describe Course::Condition::Assessment, type: :model do
         end
 
         context 'when the submission is already graded' do
-          let(:submission) { create(:submission, :graded) }
+          let(:submission) { create(:course_assessment_submission, :graded) }
           it 'does not evaluate_conditional_for the affected course_user' do
             expect(Course::Condition::Assessment).
               to_not receive(:evaluate_conditional_for).with(submission.course_user)
@@ -157,24 +157,27 @@ RSpec.describe Course::Condition::Assessment, type: :model do
 
         context 'when the submission is attempted' do
           it 'returns false' do
-            create(:submission, workflow_state: :attempting, assessment: assessment,
-                                creator: course_user.user)
+            create(:course_assessment_submission, workflow_state: :attempting,
+                                                  assessment: assessment,
+                                                  creator: course_user.user)
             expect(subject.satisfied_by?(course_user)).to be_falsey
           end
         end
 
         context 'when the submission is submitted' do
           it 'returns true' do
-            create(:submission, workflow_state: :submitted, assessment: assessment,
-                                creator: course_user.user)
+            create(:course_assessment_submission, workflow_state: :submitted,
+                                                  assessment: assessment,
+                                                  creator: course_user.user)
             expect(subject.satisfied_by?(course_user)).to be_truthy
           end
         end
 
         context 'when the submission is graded' do
           it 'returns true' do
-            create(:submission, workflow_state: :graded, assessment: assessment,
-                                creator: course_user.user)
+            create(:course_assessment_submission, workflow_state: :graded,
+                                                  assessment: assessment,
+                                                  creator: course_user.user)
             expect(subject.satisfied_by?(course_user)).to be_truthy
           end
         end
@@ -189,16 +192,18 @@ RSpec.describe Course::Condition::Assessment, type: :model do
 
         context 'when there are submitted submissions' do
           it 'returns false' do
-            create(:submission, workflow_state: :submitted, assessment: assessment,
-                                creator: course_user.user)
+            create(:course_assessment_submission, workflow_state: :submitted,
+                                                  assessment: assessment,
+                                                  creator: course_user.user)
             expect(subject.satisfied_by?(course_user)).to be_falsey
           end
         end
 
         context 'when there are graded submissions' do
           let(:submission) do
-            create(:submission, workflow_state: :graded, assessment: assessment,
-                                creator: course_user.user)
+            create(:course_assessment_submission, workflow_state: :graded,
+                                                  assessment: assessment,
+                                                  creator: course_user.user)
           end
 
           context 'when there is no answer' do
