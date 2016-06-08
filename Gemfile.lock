@@ -260,7 +260,7 @@ GEM
     mime-types-data (3.2016.0521)
     mimemagic (0.3.1)
     mini_magick (4.5.1)
-    mini_portile2 (2.0.0)
+    mini_portile2 (2.1.0)
     minitest (5.9.0)
     modware (0.1.2)
       its-it
@@ -270,8 +270,9 @@ GEM
     multi_json (1.12.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    nokogiri (1.6.7.2)
-      mini_portile2 (~> 2.0.0.rc2)
+    nokogiri (1.6.8)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
     nokogumbo (1.4.7)
       nokogiri
     nprogress-rails (0.1.6.7)
@@ -293,6 +294,7 @@ GEM
     parser (2.3.1.2)
       ast (~> 2.2)
     pg (0.18.4)
+    pkg-config (1.1.7)
     poltergeist (1.9.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -575,7 +577,7 @@ DEPENDENCIES
   migration_comments
   mini_magick
   momentjs-rails (>= 2.8.1)
-  nokogiri
+  nokogiri (>= 1.6.8)
   nprogress-rails
   omniauth
   omniauth-facebook
