@@ -8,7 +8,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
     let(:course) { create(:course, creator: user) }
     let(:assessment) { create(:assessment, :with_mcq_question, course: course) }
     let(:immutable_submission) do
-      create(:submission, assessment: assessment, user: user).tap do |stub|
+      create(:submission, assessment: assessment, creator: user).tap do |stub|
         assessment.questions.attempt(stub).each(&:save)
         allow(stub).to receive(:save).and_return(false)
       end

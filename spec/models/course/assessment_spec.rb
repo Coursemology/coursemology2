@@ -254,10 +254,10 @@ RSpec.describe Course::Assessment do
 
     describe '.with_submissions_by' do
       let(:user1) { create(:user) }
-      let(:submission1) { create(:submission, assessment: assessment, user: user1) }
+      let(:submission1) { create(:submission, assessment: assessment, creator: user1) }
       let(:user2) { create(:user) }
-      let(:submission2) { create(:submission, assessment: assessment, user: user2) }
-      let(:submission3) { create(:submission, assessment: assessment, user: user2) }
+      let(:submission2) { create(:submission, assessment: assessment, creator: user2) }
+      let(:submission3) { create(:submission, assessment: assessment, creator: user2) }
 
       it 'returns all assessments' do
         assessment

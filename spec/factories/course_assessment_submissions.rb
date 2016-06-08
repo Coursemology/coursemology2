@@ -6,6 +6,7 @@ FactoryGirl.define do
     transient do
       grader { User.stamper }
       auto_grade true # Used only with any of the submitted or finalised traits.
+      creator
     end
     assessment { build(:assessment, course: course) }
 

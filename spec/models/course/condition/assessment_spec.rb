@@ -158,7 +158,7 @@ RSpec.describe Course::Condition::Assessment, type: :model do
         context 'when the submission is attempted' do
           it 'returns false' do
             create(:submission, workflow_state: :attempting, assessment: assessment,
-                                user: course_user.user)
+                                creator: course_user.user)
             expect(subject.satisfied_by?(course_user)).to be_falsey
           end
         end
@@ -166,7 +166,7 @@ RSpec.describe Course::Condition::Assessment, type: :model do
         context 'when the submission is submitted' do
           it 'returns true' do
             create(:submission, workflow_state: :submitted, assessment: assessment,
-                                user: course_user.user)
+                                creator: course_user.user)
             expect(subject.satisfied_by?(course_user)).to be_truthy
           end
         end
@@ -174,7 +174,7 @@ RSpec.describe Course::Condition::Assessment, type: :model do
         context 'when the submission is graded' do
           it 'returns true' do
             create(:submission, workflow_state: :graded, assessment: assessment,
-                                user: course_user.user)
+                                creator: course_user.user)
             expect(subject.satisfied_by?(course_user)).to be_truthy
           end
         end
@@ -190,7 +190,7 @@ RSpec.describe Course::Condition::Assessment, type: :model do
         context 'when there are submitted submissions' do
           it 'returns false' do
             create(:submission, workflow_state: :submitted, assessment: assessment,
-                                user: course_user.user)
+                                creator: course_user.user)
             expect(subject.satisfied_by?(course_user)).to be_falsey
           end
         end
@@ -198,7 +198,7 @@ RSpec.describe Course::Condition::Assessment, type: :model do
         context 'when there are graded submissions' do
           let(:submission) do
             create(:submission, workflow_state: :graded, assessment: assessment,
-                                user: course_user.user)
+                                creator: course_user.user)
           end
 
           context 'when there is no answer' do

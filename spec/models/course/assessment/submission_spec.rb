@@ -17,12 +17,12 @@ RSpec.describe Course::Assessment::Submission do
 
     let(:user1) { create(:user) }
     let(:submission1) do
-      create(:submission, *submission1_traits, assessment: assessment, user: user1)
+      create(:submission, *submission1_traits, assessment: assessment, creator: user1)
     end
     let(:submission1_traits) { [] }
     let(:user2) { create(:user) }
     let(:submission2) do
-      create(:submission, *submission2_traits, assessment: assessment, user: user2)
+      create(:submission, *submission2_traits, assessment: assessment, creator: user2)
     end
     let(:submission2_traits) { [] }
 

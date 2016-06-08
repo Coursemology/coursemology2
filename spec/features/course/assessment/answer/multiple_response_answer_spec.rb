@@ -10,7 +10,8 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
     before { login_as(user, scope: :user) }
 
     let(:submission) do
-      create(:course_assessment_submission, *submission_traits, assessment: assessment, user: user)
+      create(:course_assessment_submission, *submission_traits, assessment: assessment,
+                                                                creator: user)
     end
     let(:submission_traits) { nil }
     let(:options) { assessment.questions.first.specific.options }
