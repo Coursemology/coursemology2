@@ -23,7 +23,6 @@ RSpec.feature 'Course: Topics: Management' do
         code_annotation
         visit course_topics_path(course)
 
-        pending 'Implement displaying of actual comments'
         expect(page).to have_selector('div', text: answer_comment.question.assessment.title)
         expect(page).
           to have_selector('div', text: code_annotation.file.answer.question.assessment.title)

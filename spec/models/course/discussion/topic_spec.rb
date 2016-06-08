@@ -83,5 +83,36 @@ RSpec.describe Course::Discussion::Topic, type: :model do
         end
       end
     end
+
+    describe '.globally_displayed' do
+      let(:course) { create(:course) }
+      let!(:annotation) do
+        create(:course_assessment_answer_programming_file_annotation, :with_post, course: course).
+          acting_as
+      end
+      let!(:comment) do
+        create(:course_assessment_answer, :with_post, course: course).acting_as
+      end
+      let!(:comment_without_post) do
+        create(:course_assessment_answer, course: course).acting_as
+      end
+
+      it 'only returns comments and annotations with posts' do
+        expect(course.discussion_topics.globally_displayed).
+          to contain_exactly(annotation, comment)
+      end
+    end
+
+    describe '.ordered_by_updated_at' do
+      let!(:topics) do
+        create(:course_assessment_answer)
+        create(:course_assessment_answer_programming_file_annotation)
+      end
+
+      it 'orders the topics by descending updated_at' do
+        topics = Course::Discussion::Topic.ordered_by_updated_at.limit(10)
+        expect(topics.each_cons(2).all? { |a, b| a.updated_at >= b.updated_at }).to be_truthy
+      end
+    end
   end
 end

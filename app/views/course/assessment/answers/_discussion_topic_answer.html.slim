@@ -1,1 +1,14 @@
-// TODO: Implement displaying of answer comments
+- answer = discussion_topic_answer
+- question = answer.question
+- submission = answer.submission
+- assessment = question.assessment
+
+h3
+  = link_to assessment.title, edit_course_assessment_submission_path(current_course, assessment, submission)
+h4
+  = t('.by_html', user: link_to_user(submission.creator))
+h4
+  = t('.question', title: question.title)
+
+= render partial: 'course/discussion/topic', object: answer.acting_as,
+         locals: { post_partial: 'course/assessment/answer/comment' }

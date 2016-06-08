@@ -4,6 +4,6 @@ class Course::Discussion::TopicsController < Course::ComponentController
                                                  class: Course::Discussion::Topic.name,
                                                  parent: false
   def index
-    @topics = @topics.page(page_param)
+    @topics = @topics.globally_displayed.ordered_by_updated_at.page(page_param)
   end
 end
