@@ -3,6 +3,8 @@ class PreformattedTextLineNumbersFilter < HTML::Pipeline::Filter
   # The regex for splitting input by newlines.
   NEWLINE_REGEX = /\r\n|\r|\n/.freeze
 
+  # Adds a line number before the code block.
+  # Takes a :line_start option which specifies the start line number, default is 1.
   def call
     doc.search('pre').each do |pre|
       process_pre_tag(pre)
@@ -33,8 +35,9 @@ class PreformattedTextLineNumbersFilter < HTML::Pipeline::Filter
     table['class'] = [pre['class'], context[:css_class] || 'highlight', context[:css_table_class]].
                      compact.join(' ')
 
+    line_start = context[:line_start] || 1
     lines.each_with_index do |line, i|
-      tr = build_line_tag(i + 1, line, pre.attributes)
+      tr = build_line_tag(i + line_start, line, pre.attributes)
       table.add_child(tr)
     end
 
