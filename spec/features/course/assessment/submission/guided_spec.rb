@@ -14,7 +14,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
     let(:student) { create(:course_user, :approved, course: course).user }
     let(:submission) do
-      create(:course_assessment_submission, assessment: assessment, user: student)
+      create(:course_assessment_submission, assessment: assessment, creator: student)
     end
 
     context 'As a Course Student' do

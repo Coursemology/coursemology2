@@ -7,7 +7,9 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:course_student) { create(:course_student, :approved, course: course) }
-    let(:record) { create(:submission, course_user: course_student).acting_as }
+    let(:record) do
+      create(:course_assessment_submission, course: course, creator: course_student.user).acting_as
+    end
     let(:manual_record) { create(:course_experience_points_record, course_user: course_student) }
     let(:inactive_record) do
       create(:course_experience_points_record, :inactive, course_user: course_student)

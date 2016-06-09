@@ -15,7 +15,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
     let(:student) { create(:course_user, :approved, course: course).user }
     let(:submission) do
-      create(:course_assessment_submission, assessment: assessment, user: student)
+      create(:course_assessment_submission, assessment: assessment, creator: student)
     end
     let(:points_awarded) { 22 }
 

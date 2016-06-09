@@ -12,7 +12,8 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
     before { login_as(user, scope: :user) }
 
     let(:submission) do
-      create(:course_assessment_submission, *submission_traits, assessment: assessment, user: user)
+      create(:course_assessment_submission, *submission_traits, assessment: assessment,
+                                                                creator: user)
     end
     let(:submission_traits) { nil }
 
