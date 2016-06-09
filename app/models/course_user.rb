@@ -119,6 +119,17 @@ class CourseUser < ActiveRecord::Base
     destroy
   end
 
+  # Returns my students in the course.
+  # If a course_user is the manager of a group, all other users in the group with the group role of
+  # normal will be considered as the students of the course_user.
+  #
+  # @return[Array<CourseUser>]
+  def my_students
+    my_groups = group_users.manager.select(:group_id)
+    CourseUser.joins { group_users.group }.merge(Course::GroupUser.normal).
+      where { group_users.group.id >> my_groups }
+  end
+
   private
 
   def set_defaults # :nodoc:

@@ -310,6 +310,18 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
+    describe '#my_students' do
+      let(:group_owner) { create(:course_manager, course: course) }
+      before do
+        group = create(:course_group, course: course, creator: group_owner.user)
+        create(:course_group_user, course: course, group: group, course_user: student)
+      end
+
+      it 'returns all the normal users in the group' do
+        expect(group_owner.my_students).to contain_exactly(student)
+      end
+    end
+
     context 'when the same user is registered into the same course twice' do
       subject do
         create(:course_student, course: student.course, user: student.user, role: :student)
