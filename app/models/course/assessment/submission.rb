@@ -18,6 +18,8 @@ class Course::Assessment::Submission < ActiveRecord::Base
     state :graded
   end
 
+  validate :validate_consistent_user
+
   belongs_to :assessment, inverse_of: :submissions
 
   # @!attribute [r] answers
@@ -121,6 +123,14 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
     execute_after_commit do
       auto_grade!
+    end
+  end
+
+  # Validate that the submission creator is the same user as the course_user in the associated
+  # experience_points_record.
+  def validate_consistent_user
+    unless course_user && course_user.user == creator
+      errors.add(:experience_points_record, :inconsistent_user)
     end
   end
 end
