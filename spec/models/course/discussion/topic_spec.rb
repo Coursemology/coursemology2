@@ -114,5 +114,48 @@ RSpec.describe Course::Discussion::Topic, type: :model do
         expect(topics.each_cons(2).all? { |a, b| a.updated_at >= b.updated_at }).to be_truthy
       end
     end
+
+    describe '.from_user' do
+      let(:course) { create(:course) }
+      let(:annotation_creator) { create(:user) }
+      let(:comment_creator) { create(:user) }
+      let!(:annotation) do
+        create(:course_assessment_answer_programming_file_annotation,
+               course: course, creator: annotation_creator).acting_as
+      end
+      let!(:comment) do
+        create(:course_assessment_answer, course: course, creator: comment_creator).acting_as
+      end
+      subject { course.discussion_topics.from_user(user_id) }
+
+      context 'when no user is given' do
+        let(:user_id) { [] }
+
+        it { is_expected.to be_empty }
+      end
+
+      context 'when the creator of annotation is given' do
+        let(:user_id) { annotation_creator.id }
+
+        it { is_expected.to contain_exactly(annotation) }
+      end
+
+      context 'when the creator of comment is given' do
+        let(:user_id) { comment_creator.id }
+
+        it { is_expected.to contain_exactly(comment) }
+      end
+
+      context 'when both creators are given' do
+        let(:user_id) do
+          [
+            annotation_creator.id,
+            comment_creator.id
+          ]
+        end
+
+        it { is_expected.to contain_exactly(annotation, comment) }
+      end
+    end
   end
 end

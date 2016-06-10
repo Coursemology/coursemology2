@@ -1,2 +1,5 @@
 = tabs do
-  = nav_to t('.all_comments'), course_topics_path(current_course)
+  = nav_to t('.my_students_pending'), my_students_pending_course_topics_path(current_course)
+  = nav_to t('.pending'), pending_course_topics_path(current_course)
+  = nav_to t('.my_students'), my_students_course_topics_path(current_course)
+  = nav_to t('.all'), course_topics_path(current_course)

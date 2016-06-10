@@ -3,6 +3,15 @@ en:
     discussion:
       topics:
         tabs:
-          all_comments: 'All Comments'
+          my_students_pending: 'My Students Pending'
+          pending: 'Pending'
+          my_students: 'My Students'
+          all: 'All'
         index:
           header: 'Comments'
+        pending:
+          header: :'course.discussion.topics.index.header'
+        my_students:
+          header: :'course.discussion.topics.index.header'
+        my_students_pending:
+          header: :'course.discussion.topics.index.header'
