@@ -9,9 +9,8 @@ RSpec.describe Course::ExperiencePointsDisbursementController, type: :controller
     let(:course_student) { create(:course_student, :approved, course: course) }
     let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
     let(:disbursement_stub) do
-      stub = Course::ExperiencePointsDisbursement.new
-      stub.instance_variable_set(:@course, course)
-      record_stub = Course::ExperiencePointsRecord.new(course_user: course_student)
+      stub = Course::ExperiencePointsDisbursement.new(course: course)
+      record_stub = Course::ExperiencePointsRecord.new(course_user: course_student, reason: nil)
       stub.instance_variable_set(:@experience_points_records, [record_stub])
       stub
     end

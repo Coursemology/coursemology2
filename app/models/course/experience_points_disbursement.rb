@@ -10,23 +10,23 @@ class Course::ExperiencePointsDisbursement
   attr_accessor :reason
 
   # @!attribute [rw] course
-  #   The course that this disbursement is for.
+  #   The course that this disbursement is for. This attribute is read during authorization.
   #   @return [Course]
   attr_accessor :course
 
-  # @!attribute [r] experience_points_records
-  #   Experience points records that will potentially be created.
-  #   @return [Array<Course::ExperiencePointsRecords>]
-  attr_reader :experience_points_records
+  # @!attribute [rw] group_id
+  #   ID of the group that this disbursement is for. nil is returned if no group is specified.
+  #   @return [Integer|nil]
+  attr_accessor :group_id
 
   validates :reason, presence: true
 
-  # Given a course, builds an empty experience points record for each of its approved students.
+  # Returns experience points records for the disbursement. It creates empty records if no records
+  # are present.
   #
-  # @return [Array<Course::ExperiencePointsRecords>] The newly built experience points records
-  def build(current_course)
-    @course = current_course
-    @experience_points_records = course.course_users.students.with_approved_state.map do |student|
+  # @return [Array<Course::ExperiencePointsRecords>] The points records for this disbursement.
+  def experience_points_records
+    @experience_points_records ||= filtered_students.map do |student|
       student.experience_points_records.build
     end
   end
@@ -43,6 +43,14 @@ class Course::ExperiencePointsDisbursement
       Course::ExperiencePointsRecord.new(hash)
     end
     attributes
+  end
+
+  # Returns the group that this disbursement is for if a valid group is specified, otherwise
+  # return nil.
+  #
+  # @return [Course::Group|nil] The group that this disbursement is for
+  def group
+    @group ||= group_id && course.groups.find_by(id: group_id)
   end
 
   # Saves the newly built experience points records.
@@ -64,5 +72,24 @@ class Course::ExperiencePointsDisbursement
     attibutes[:course_user_id].present? &&
       attibutes[:points_awarded].present? &&
       attibutes[:points_awarded].to_i != 0
+  end
+
+  # Returns a list of students filtered by group if one is specified, otherwise
+  # it returns all the approved students in the course.
+  #
+  # @return [Array<CourseUser>] The list of potential students awardees
+  def filtered_students
+    group_id ? students_from_group(group_id) : course.course_users.student.with_approved_state
+  end
+
+  # Returns all normal course_users from the specified group.
+  #
+  # @param [Integer] group_id The id of the group
+  # @return [Array<CourseUser>] The students in the group
+  def students_from_group(group_id)
+    course.course_users.
+      joins { group_users }.
+      merge(Course::GroupUser.normal).
+      where { group_users.group_id == group_id }
   end
 end
