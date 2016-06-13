@@ -6,4 +6,8 @@ en:
           course_notifications:
             feed:
               gained_achievement_html: '%{user} gained achievement %{achievement}'
-
+      assessment_notifier:
+        attempted:
+          course_notifications:
+            feed:
+              attempted_assessment_html: '%{user} attempted %{assessment}'

@@ -6,10 +6,23 @@ RSpec.feature 'Course: Homepage' do
 
   with_tenant(:instance) do
     let(:course) { create(:course, :opened) }
-    let(:achievement_feed_notification) do
-      achievement = create(:course_achievement)
+    let(:feed_notifications) do
+      notifications = []
+      # Achievement gained notification
+      achievement = create(:course_achievement, course: course)
       achievement_activity = create(:activity, :achievement_gained, object: achievement)
-      create(:course_notification, :feed, activity: achievement_activity, course: course)
+      notifications << create(:course_notification, :feed,
+                              activity: achievement_activity,
+                              course: course)
+
+      # Assessment attempted notification
+      assessment = create(:assessment, course: course)
+      assessment_activity = create(:activity, :assessment_attempted, object: assessment)
+      notifications << create(:course_notification, :feed,
+                              activity: assessment_activity,
+                              course: course)
+
+      notifications
     end
 
     before do
@@ -25,10 +38,12 @@ RSpec.feature 'Course: Homepage' do
       end
 
       scenario 'I am able to see the activity feed in course homepage' do
-        achievement_feed_notification
+        feed_notifications
 
         visit course_path(course)
-        expect(page).to have_content_tag_for(achievement_feed_notification)
+        feed_notifications.each do |notification|
+          expect(page).to have_content_tag_for(notification)
+        end
       end
     end
 
@@ -41,10 +56,12 @@ RSpec.feature 'Course: Homepage' do
       end
 
       scenario 'I am not able to see the activity feed in course homepage' do
-        achievement_feed_notification
+        feed_notifications
 
         visit course_path(course)
-        expect(page).not_to have_content_tag_for(achievement_feed_notification)
+        feed_notifications.each do |notification|
+          expect(page).not_to have_content_tag_for(notification)
+        end
       end
 
       scenario 'I am only able to see approved owner and managers in instructors list' do
