@@ -1,0 +1,14 @@
+table.table.submissions
+  thead
+    tr
+      th = t('.student_name')
+      th = t('.status')
+      th = t('.grade')
+      th = t('.experience_points')
+      th
+  tbody
+    - course_users.each do |course_user|
+      - if submissions[course_user]
+        = render partial: 'submission', object: submissions[course_user]
+      - else
+        = render partial: 'no_submission', locals: { course_user: course_user }

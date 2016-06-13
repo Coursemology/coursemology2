@@ -11,6 +11,12 @@ class Course::Assessment::Submission::SubmissionsController < \
   delegate_to_service(:update)
   delegate_to_service(:load_or_create_answers)
 
+  def index
+    @submissions = @submissions.includes(experience_points_record: :course_user).
+                   with_submission_statistics
+    @course_students = current_course.course_users.students.with_approved_state
+  end
+
   def create
     raise IllegalStateError if @assessment.questions.empty?
     if @submission.save

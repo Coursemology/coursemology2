@@ -1,0 +1,9 @@
+= content_tag_for(:tr, submission) do
+  td
+    = link_to edit_course_assessment_submission_path(current_course, submission.assessment,
+                                                     submission) do
+      = format_inline_text(submission.course_user.name)
+  td = submission.workflow_state.capitalize
+  td = submission.grade.to_i.to_s + ' / ' + submission.assessment.maximum_grade.to_s
+  td = submission.points_awarded.to_i.to_s
+  td

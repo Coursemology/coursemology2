@@ -162,7 +162,7 @@ Rails.application.routes.draw do
             resources :programming, only: [:new, :create, :edit, :update, :destroy]
           end
           scope module: :submission do
-            resources :submissions, only: [:create, :edit, :update] do
+            resources :submissions, only: [:index, :create, :edit, :update] do
               post :auto_grade, on: :member
 
               scope module: :answer do

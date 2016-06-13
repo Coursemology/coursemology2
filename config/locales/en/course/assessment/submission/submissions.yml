@@ -6,6 +6,10 @@ en:
           finalise: 'Finalise Submission'
           publish: 'Publish Grade'
           auto_grade: 'Auto Grade Submission'
+          index:
+            submissions: 'Submissions'
+            student_header: 'Student Submissions'
+            other_header: 'Other Submissions'
           create:
             failure: 'Could not create submission: %{error}'
           edit:
@@ -28,3 +32,10 @@ en:
           update:
             success: 'Submission was updated.'
             failure: 'Failed to update submission: %{error}'
+          submissions:
+            student_name: 'Student Name'
+            status: 'Submission Status'
+            grade: 'Grade'
+            experience_points: 'Experience Points'
+          no_submission:
+            not_started: 'Not Started'
