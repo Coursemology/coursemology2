@@ -109,9 +109,9 @@ RSpec.describe Course::Assessment::Question::Programming do
     end
 
     describe '#attempt' do
-      subject { build_stubbed(:course_assessment_question_programming, template_file_count: 1) }
+      subject { create(:course_assessment_question_programming, template_file_count: 1) }
       let(:assessment) { subject.assessment }
-      let(:submission) { build_stubbed(:course_assessment_submission, assessment: assessment) }
+      let(:submission) { create(:course_assessment_submission, assessment: assessment) }
 
       it 'returns an Answer' do
         expect(subject.attempt(submission)).to be_a(Course::Assessment::Answer)

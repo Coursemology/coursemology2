@@ -13,16 +13,16 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     describe '#auto_gradable?' do
-      subject { build_stubbed(:course_assessment_question_text_response) }
+      subject { create(:course_assessment_question_text_response) }
       it 'returns true' do
         expect(subject.auto_gradable?).to be(true)
       end
     end
 
     describe '#attempt' do
-      subject { build_stubbed(:course_assessment_question_text_response) }
+      subject { create(:course_assessment_question_text_response) }
       let(:assessment) { subject.assessment }
-      let(:submission) { build_stubbed(:course_assessment_submission, assessment: assessment) }
+      let(:submission) { create(:course_assessment_submission, assessment: assessment) }
 
       it 'returns an Answer' do
         expect(subject.attempt(submission)).to be_a(Course::Assessment::Answer)
@@ -35,7 +35,7 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
     end
 
     describe 'validations' do
-      subject { build_stubbed(:course_assessment_question_text_response, maximum_grade: 10) }
+      subject { create(:course_assessment_question_text_response, maximum_grade: 10) }
 
       it 'validates that solution grade does not exceed maximum grade ' do
         subject.solutions.first.grade = 20
