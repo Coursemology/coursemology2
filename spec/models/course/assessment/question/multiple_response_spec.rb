@@ -13,16 +13,16 @@ RSpec.describe Course::Assessment::Question::MultipleResponse do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     describe '#auto_gradable?' do
-      subject { build_stubbed(:course_assessment_question_multiple_response) }
+      subject { create(:course_assessment_question_multiple_response) }
       it 'returns true' do
         expect(subject.auto_gradable?).to be(true)
       end
     end
 
     describe '#attempt' do
-      subject { build_stubbed(:course_assessment_question_multiple_response) }
+      subject { create(:course_assessment_question_multiple_response) }
       let(:assessment) { subject.assessment }
-      let(:submission) { build_stubbed(:course_assessment_submission, assessment: assessment) }
+      let(:submission) { create(:course_assessment_submission, assessment: assessment) }
 
       it 'returns an Answer' do
         expect(subject.attempt(submission)).to be_a(Course::Assessment::Answer)
