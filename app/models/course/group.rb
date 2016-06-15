@@ -79,7 +79,7 @@ class Course::Group < ActiveRecord::Base
   #
   # @return [Boolean]
   def should_create_manager?
-    course && creator && group_users.managers.count == 0
+    course && creator && group_users.manager.count == 0
   end
 
   # Returns the default course_user to be a group_manager.
