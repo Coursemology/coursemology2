@@ -82,10 +82,28 @@ class Course::Assessment::Submission < ActiveRecord::Base
       where { experience_points_record.course_user.user == user }
   end)
 
+  # @!method self.from_category(category)
+  #   Finds all the submissions in the given category.
+  #   @param [Course::Assessment::Category] category The category to filter submissions by
+  scope :from_category, (lambda do |category|
+    where { assessment_id >> category.assessments.select(:id) }
+  end)
+
   # @!method self.ordered_by_date
   #   Orders the submissions by date of creation. This defaults to reverse chronological order
   #   (newest submission first).
   scope :ordered_by_date, ->(direction = :desc) { order(created_at: direction) }
+
+  # @!method self.ordered_by_submitted date
+  #   Orders the submissions by date of submission (newest submission first).
+  scope :ordered_by_submitted_date, (lambda do
+    all.calculated(:submitted_at).order('submitted_at DESC')
+  end)
+
+  # @!method self.confirmed
+  #   Returns submissions which have been submitted (which may or may not be graded).
+  scope :confirmed, -> { where(workflow_state: [:submitted, :graded]) }
+
   scope :with_submission_statistics, -> { all.calculated(:grade) }
 
   alias_method :finalise=, :finalise!
