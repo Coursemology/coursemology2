@@ -61,12 +61,8 @@ RSpec.feature 'Course: Experience Points Disbursement' do
 
         expect(page).not_to have_content_tag_for(unapproved_course_student)
         expect(page).to have_content_tag_for(student_to_leave_blank)
-        within find(content_tag_selector(student_to_award_points)) do
-          find('input.points_awarded').set '100'
-        end
-        within find(content_tag_selector(student_to_set_zero)) do
-          find('input.points_awarded').set '00'
-        end
+        find(content_tag_selector(student_to_award_points)).find('input.points_awarded').set '100'
+        find(content_tag_selector(student_to_set_zero)).find('input.points_awarded').set '00'
 
         # ExperiencePointsRecord is not created when points_awarded is zero
         expect do
