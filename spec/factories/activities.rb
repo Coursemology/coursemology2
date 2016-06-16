@@ -17,5 +17,11 @@ FactoryGirl.define do
       event :attempted
       notifier_type Course::AssessmentNotifier.name
     end
+
+    trait :level_reached do
+      object { create(:course_level) }
+      event :reached
+      notifier_type Course::LevelNotifier.name
+    end
   end
 end

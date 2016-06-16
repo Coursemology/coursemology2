@@ -22,6 +22,13 @@ RSpec.feature 'Course: Homepage' do
                               activity: assessment_activity,
                               course: course)
 
+      # Level reached notification
+      level = create(:course_level, course: course)
+      level_activity = create(:activity, :level_reached, object: level)
+      notifications << create(:course_notification, :feed,
+                              activity: level_activity,
+                              course: course)
+
       notifications
     end
 

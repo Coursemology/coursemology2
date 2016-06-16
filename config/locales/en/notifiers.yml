@@ -11,3 +11,8 @@ en:
           course_notifications:
             feed:
               attempted_assessment_html: '%{user} attempted %{assessment}'
+      level_notifier:
+        reached:
+          course_notifications:
+            feed:
+              reached_level_html: '%{user} reached level %{level_number}'
