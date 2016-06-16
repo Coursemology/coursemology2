@@ -6,13 +6,7 @@ RSpec.feature 'Course: Experience Points Disbursement' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:group) { create(:course_group, course: course) }
-    let(:unapproved_course_student) { create(:course_student, course: course) }
-    let(:ungrouped_course_student) { create(:course_student, :approved, course: course) }
-    let(:grouped_course_students) do
-      create_list(:course_group_user, 2, course: course, group: group).map(&:course_user)
-    end
-    let(:approved_course_students) { grouped_course_students + [ungrouped_course_student] }
+    let(:approved_course_students) { create_list(:course_student, 3, :approved, course: course) }
     let(:course_teaching_assistant) do
       create(:course_teaching_assistant, :approved, course: course)
     end
@@ -23,22 +17,26 @@ RSpec.feature 'Course: Experience Points Disbursement' do
       let(:user) { course_teaching_assistant.user }
 
       scenario 'I can filter students by group' do
-        approved_course_students
+        group_1, group_2 = create_list(:course_group, 2, course: course)
+        group_1_student, group_2_student, ungrouped_student = approved_course_students
+        create(:course_group_user, group: group_1, course_user: group_1_student)
+        create(:course_group_user, group: group_2, course_user: group_2_student)
+
         visit disburse_experience_points_course_users_path(course)
         approved_course_students.each do |student|
           expect(page).to have_content_tag_for(student)
         end
 
-        click_link group.name
-        expect(page).not_to have_content_tag_for(ungrouped_course_student)
-        grouped_course_students.each do |student|
-          expect(page).to have_content_tag_for(student)
-        end
+        click_link group_1.name
+        expect(page).to have_content_tag_for(group_1_student)
+        expect(page).not_to have_content_tag_for(group_2_student)
+        expect(page).not_to have_content_tag_for(ungrouped_student)
       end
 
       scenario 'I can disburse experience points' do
         approved_course_students
-        unapproved_course_student
+        unapproved_course_student = create(:course_student, course: course)
+
         visit disburse_experience_points_course_users_path(course)
 
         fill_in 'experience_points_disbursement_reason', with: 'a reason'
