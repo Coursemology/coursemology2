@@ -10,3 +10,5 @@ en:
         destroy:
           success: 'Post was deleted'
           failure: 'Fail to delete post: %{error}'
+        form:
+          comment: 'Comment'
