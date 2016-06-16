@@ -33,6 +33,21 @@ RSpec.feature 'Course: Experience Points Disbursement' do
         expect(page).not_to have_content_tag_for(ungrouped_student)
       end
 
+      scenario 'I can copy points awarded for first student to all students', js: true do
+        approved_course_students
+        visit disburse_experience_points_course_users_path(course)
+
+        find(content_tag_selector(approved_course_students[0])).
+          find('input.points_awarded').set '100'
+
+        click_button 'experience-points-disbursement-copy-button'
+
+        approved_course_students.each do |student|
+          points_awarded = find(content_tag_selector(student)).find('input.points_awarded').value
+          expect(points_awarded).to eq('100')
+        end
+      end
+
       scenario 'I can disburse experience points' do
         approved_course_students
         unapproved_course_student = create(:course_student, course: course)
