@@ -37,21 +37,25 @@ RSpec.feature 'Course: Experience Points Disbursement' do
       end
 
       scenario 'I can disburse experience points' do
+        approved_course_students
         unapproved_course_student
-        unawarded_student, awarded_student, awarded_zero_student = approved_course_students
         visit disburse_experience_points_course_users_path(course)
 
         fill_in 'experience_points_disbursement_reason', with: 'a reason'
 
+        student_to_award_points, student_to_set_zero, student_to_leave_blank = \
+          approved_course_students
+
         expect(page).not_to have_content_tag_for(unapproved_course_student)
-        expect(page).to have_content_tag_for(unawarded_student)
-        within find(content_tag_selector(awarded_student)) do
+        expect(page).to have_content_tag_for(student_to_leave_blank)
+        within find(content_tag_selector(student_to_award_points)) do
           find('input.points_awarded').set '100'
         end
-        within find(content_tag_selector(awarded_zero_student)) do
+        within find(content_tag_selector(student_to_set_zero)) do
           find('input.points_awarded').set '00'
         end
 
+        # ExperiencePointsRecord is not created when points_awarded is zero
         expect do
           click_button I18n.t('course.experience_points_disbursement.new.submit')
         end.to change(Course::ExperiencePointsRecord, :count).by(1)
