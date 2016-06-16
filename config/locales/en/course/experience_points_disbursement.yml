@@ -7,6 +7,9 @@ en:
         awardees: 'Recipients'
         reason: 'Reason for Disbursement'
         submit: 'Disburse Points'
+        filter_selected: 'Showing students from %{group}'
+        filter_not_selected: 'Filter by group'
+        show_all: 'Show all students'
       create:
         success:
           zero: 'No experience points were disbursed.'

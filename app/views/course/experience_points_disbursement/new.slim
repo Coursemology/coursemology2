@@ -10,6 +10,24 @@
   = f.input :reason, label: false
 
   h3 = t('.awardees')
+
+  - if current_course.groups.size >= 1
+    div.dropdown
+      button.btn.btn-default.dropdown-toggle data-toggle='dropdown'
+        - current_group = @experience_points_disbursement.group
+        - if current_group
+          => t('.filter_selected', group: format_inline_text(current_group.name))
+        - else
+          => t('.filter_not_selected')
+        span.caret
+      ul.dropdown-menu
+        - current_course.groups.each do |group|
+          li = link_to format_inline_text(group.name),
+                       disburse_experience_points_course_users_path(current_course,
+                                                                    group_id: group.id)
+        li.divider role='separator'
+        li = link_to t('.show_all'), disburse_experience_points_course_users_path(current_course)
+
   table.table.table-hover
     thead
       tr

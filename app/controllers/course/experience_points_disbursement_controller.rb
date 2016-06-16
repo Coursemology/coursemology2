@@ -1,16 +1,12 @@
 # frozen_string_literal: true
 class Course::ExperiencePointsDisbursementController < Course::ComponentController
   include Course::UsersBreadcrumbConcern
-  load_resource :experience_points_disbursement, class: Course::ExperiencePointsDisbursement.name
+  before_action :load_and_authorize_experience_points_disbursement
 
   def new # :nodoc:
-    @experience_points_disbursement.build(current_course)
-    authorize_resource
   end
 
   def create # :nodoc:
-    @experience_points_disbursement.course = Course.find(params[:course_id])
-    authorize_resource
     if @experience_points_disbursement.save
       recipient_count = @experience_points_disbursement.experience_points_records.length
       redirect_to disburse_experience_points_course_users_path(current_course),
@@ -22,10 +18,21 @@ class Course::ExperiencePointsDisbursementController < Course::ComponentControll
 
   private
 
-  def experience_points_disbursement_params # :nodoc:
-    params.
-      require(:experience_points_disbursement).
-      permit(:reason, experience_points_records_attributes: [:points_awarded, :course_user_id])
+  def load_and_authorize_experience_points_disbursement # :nodoc:
+    @experience_points_disbursement ||=
+      Course::ExperiencePointsDisbursement.new(disbursement_params)
+    authorize_resource
+  end
+
+  def disbursement_params # :nodoc:
+    case action_name
+    when 'new'
+      params.permit(:group_id)
+    when 'create'
+      params.
+        require(:experience_points_disbursement).
+        permit(:reason, experience_points_records_attributes: [:points_awarded, :course_user_id])
+    end.reverse_merge(course: current_course)
   end
 
   # Authorizes each newly-built experience points record.
