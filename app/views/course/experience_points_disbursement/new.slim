@@ -37,10 +37,11 @@
     tbody
       - number_of_records = @experience_points_disbursement.experience_points_records.length
       = f.simple_fields_for :experience_points_records do |record_fields|
-        = content_tag_for(:tr, record_fields.object.course_user)
-          td = display_course_user(record_fields.object.course_user)
+        - course_user = record_fields.object.course_user
+        = content_tag_for(:tr, course_user)
+          td = link_to_course_user(course_user)
           td = record_fields.input :points_awarded, label: false,
-                                   input_html: { class: 'points_awarded' }
+                                                    input_html: { class: 'points_awarded' }
           td
             - if (record_fields.index == 0) && (number_of_records > 1)
               button.btn.btn-link#experience-points-disbursement-copy-button = t('.copy_value')
