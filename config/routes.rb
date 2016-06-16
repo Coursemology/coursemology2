@@ -252,6 +252,7 @@ Rails.application.routes.draw do
           get 'pending', on: :collection
           get 'my_students', on: :collection
           get 'my_students_pending', on: :collection
+          resources :posts, only: [:create]
         end
       end
     end

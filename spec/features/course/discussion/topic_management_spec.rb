@@ -27,6 +27,26 @@ RSpec.feature 'Course: Topics: Management' do
         expect(page).
           to have_selector('div', text: code_annotation.file.answer.question.assessment.title)
       end
+
+      scenario 'I can reply to a comment topic', js: true do
+        # Randomly create a topic, either code_annotation or answer_comment.
+        topic = [true, false].sample ? code_annotation : answer_comment
+        visit course_topics_path(course)
+
+        comment = 'GOOD WORK!'
+        within find('.post-form') do
+          fill_in 'discussion_post[text]', with: comment
+          click_button 'course.discussion.posts.form.comment'
+        end
+        wait_for_ajax
+
+        post = topic.posts.reload.last
+        expect(post.text).to have_tag('*', text: comment)
+        expect(page).to have_content_tag_for(post)
+        within find(content_tag_selector(topic.acting_as)) do
+          expect(page).to have_tag('.post-form', count: 1)
+        end
+      end
     end
   end
 end

@@ -1,0 +1,5 @@
+$('#<%= "discussion_topic_#{@topic.id}"%>').replaceWith(
+    '<%= escape_javascript(render partial: @topic.actable, prefix: 'discussion_topic') %>'
+);
+
+$('.post-form').show();
