@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::ExperiencePointsDisbursement
+class Course::ExperiencePoints::Disbursement
   include ActiveModel::Model
   include ActiveModel::Validations
 

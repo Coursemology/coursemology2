@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::ExperiencePointsDisbursementController < Course::ComponentController
+class Course::ExperiencePoints::DisbursementController < Course::ComponentController
   include Course::UsersBreadcrumbConcern
   before_action :load_and_authorize_experience_points_disbursement
 
@@ -20,7 +20,7 @@ class Course::ExperiencePointsDisbursementController < Course::ComponentControll
 
   def load_and_authorize_experience_points_disbursement # :nodoc:
     @experience_points_disbursement ||=
-      Course::ExperiencePointsDisbursement.new(disbursement_params)
+      Course::ExperiencePoints::Disbursement.new(disbursement_params)
     authorize_resource
   end
 

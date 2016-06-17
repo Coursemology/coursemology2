@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Course::ExperiencePointsDisbursementController, type: :controller do
+RSpec.describe Course::ExperiencePoints::DisbursementController, type: :controller do
   let(:instance) { create(:instance) }
 
   with_tenant(:instance) do
@@ -9,7 +9,7 @@ RSpec.describe Course::ExperiencePointsDisbursementController, type: :controller
     let(:course_student) { create(:course_student, :approved, course: course) }
     let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
     let(:disbursement_stub) do
-      stub = Course::ExperiencePointsDisbursement.new(course: course)
+      stub = Course::ExperiencePoints::Disbursement.new(course: course)
       record_stub = Course::ExperiencePointsRecord.new(course_user: course_student, reason: nil)
       stub.instance_variable_set(:@experience_points_records, [record_stub])
       stub

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Experience Points Disbursement' do
+RSpec.feature 'Course: Experience Points: Disbursement' do
   let(:instance) { create(:instance) }
 
   with_tenant(:instance) do
@@ -66,7 +66,7 @@ RSpec.feature 'Course: Experience Points Disbursement' do
 
         # ExperiencePointsRecord is not created when points_awarded is zero
         expect do
-          click_button I18n.t('course.experience_points_disbursement.new.submit')
+          click_button I18n.t('course.experience_points.disbursement.new.submit')
         end.to change(Course::ExperiencePointsRecord, :count).by(1)
 
         expect(current_path).to eq(disburse_experience_points_course_users_path(course))
