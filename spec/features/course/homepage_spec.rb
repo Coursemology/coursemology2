@@ -37,6 +37,12 @@ RSpec.feature 'Course: Homepage' do
                               activity: topic_activity,
                               course: course)
 
+      # Forum post replied notification
+      post = create(:course_discussion_post, topic: topic.acting_as)
+      post_replied_activity = create(:activity, :forum_post_replied, object: post)
+      notifications << create(:course_notification, :feed,
+                              activity: post_replied_activity,
+                              course: course)
       notifications
     end
 

@@ -22,3 +22,8 @@ en:
             course_notifications:
               feed:
                 created_topic_html: '%{user} created topic %{topic}'
+        post_notifier:
+          replied:
+            course_notifications:
+              feed:
+                replied_to_topic_html: '%{user} replied to %{topic}'

@@ -1,0 +1,10 @@
+- activity = notification.activity
+- post = activity.object
+- topic = post.topic.actable
+
+= div_for(notification) do
+  // TODO: Display user image here.
+  - user_link = link_to_user(activity.actor)
+  - topic_link = link_to topic.title, course_forum_topic_path(notification.course, topic.forum, topic)
+  => t('.replied_to_topic_html', user: user_link, topic: topic_link)
+  h6 = format_datetime(activity.created_at)
