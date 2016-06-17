@@ -27,6 +27,12 @@ RSpec.describe Course::Assessment::Submission do
                                                                  creator: user2)
     end
     let(:submission2_traits) { [] }
+    let(:user3) { create(:user) }
+    let(:submission3) do
+      create(:course_assessment_submission, *submission3_traits, assessment: assessment,
+                                                                 creator: user3)
+    end
+    let(:submission3_traits) { [] }
 
     describe 'validations' do
       context 'when the course user is different from the submission creator' do
@@ -45,7 +51,7 @@ RSpec.describe Course::Assessment::Submission do
       end
     end
 
-    describe '.with_creator' do
+    describe '.by_user' do
       before do
         submission1
         submission2
@@ -55,6 +61,19 @@ RSpec.describe Course::Assessment::Submission do
         expect(assessment.submissions.by_user(user1).empty?).to be(false)
         expect(assessment.submissions.by_user(user1).
           all? { |submission| submission.course_user.user == user1 }).to be(true)
+      end
+    end
+
+    describe '.from_category' do
+      let(:new_category) { create(:course_assessment_category, course: course) }
+      let(:new_tab) { create(:course_assessment_tab, course: course, category: new_category) }
+      let(:new_assessment) { create(:course_assessment_assessment, course: course, tab: new_tab) }
+      let(:new_submission) { create(:course_assessment_submission, assessment: new_assessment) }
+      let!(:submissions) { [submission1, new_submission] }
+      subject { Course::Assessment::Submission.from_category(new_category) }
+
+      it 'returns submissions from assessments in this category' do
+        expect(subject).to contain_exactly(new_submission)
       end
     end
 
@@ -68,6 +87,34 @@ RSpec.describe Course::Assessment::Submission do
         expect(assessment.submissions.ordered_by_date.length).to be >= 2
         expect(assessment.submissions.ordered_by_date.each_cons(2).
           all? { |a, b| a.created_at >= b.created_at }).to be(true)
+      end
+    end
+
+    describe '.ordered_by_submitted_date' do
+      let(:assessment_traits) { [:with_all_question_types] }
+      let(:submission1_traits) { :submitted }
+      let(:submission2_traits) { :submitted }
+      before do
+        submission1
+        submission2
+      end
+
+      it 'returns the submissions in the descending order' do
+        expect(assessment.submissions.ordered_by_submitted_date.length).to be >= 2
+        expect(assessment.submissions.ordered_by_submitted_date.each_cons(2).
+          all? { |a, b| a.submitted_at >= b.submitted_at }).to be(true)
+      end
+    end
+
+    describe '.confirmed' do
+      let(:submission1_traits) { :attempting }
+      let(:submission2_traits) { :submitted }
+      let(:submission3_traits) { :graded }
+      let!(:submissions) { [submission1, submission2, submission3] }
+
+      it 'returns the submissions with submitted or graded workflow state' do
+        states = assessment.submissions.confirmed.map(&:workflow_state)
+        expect(states).to contain_exactly('graded', 'submitted')
       end
     end
 
