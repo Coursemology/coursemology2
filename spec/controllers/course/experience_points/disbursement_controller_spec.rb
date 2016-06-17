@@ -21,7 +21,7 @@ RSpec.describe Course::ExperiencePoints::DisbursementController, type: :controll
 
       context 'when create fails' do
         before do
-          controller.instance_variable_set(:@experience_points_disbursement, disbursement_stub)
+          controller.instance_variable_set(:@disbursement, disbursement_stub)
           subject
         end
 
