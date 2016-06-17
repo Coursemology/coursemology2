@@ -1,0 +1,12 @@
+table.table.table-middle-align.table-hover
+  thead
+    tr
+      th = CourseUser.human_attribute_name(:name)
+      th = Course::Assessment.human_attribute_name(:title)
+      th = Course::Assessment::Submission.human_attribute_name(:submitted_at)
+      th = Course::Assessment::Submission.human_attribute_name(:status)
+      th = Course::Assessment::Submission.human_attribute_name(:grade)
+      th
+      th
+  tbody
+    = render submissions

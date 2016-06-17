@@ -3,9 +3,10 @@ en:
     attributes:
       course/assessment/submission:
         grade: 'Total Grade'
-        submitted_at: :'activerecord.attributes.course/assessment/answer/submitted_at'
-        grader: :'activerecord.attributes.course/assessment/answer/grader'
-        graded_at: :'activerecord.attributes.course/assessment/answer/graded_at'
+        status: 'Status'
+        submitted_at: :'activerecord.attributes.course/assessment/answer.submitted_at'
+        grader: :'activerecord.attributes.course/assessment/answer.grader'
+        graded_at: :'activerecord.attributes.course/assessment/answer.graded_at'
     errors:
       models:
         course/assessment/submission:

@@ -1,0 +1,9 @@
+en:
+  course:
+    assessment:
+      submissions:
+        index:
+          header: 'Submissions'
+        submission:
+          grade: 'Grade'
+          view: 'View'
