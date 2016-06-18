@@ -8,6 +8,7 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
 
   def create
     if super
+      Course::Forum::PostNotifier.post_replied(@post.creator, @post)
       redirect_to course_forum_topic_path(current_course, @forum, @topic),
                   success: t('course.discussion.posts.create.success')
     else
