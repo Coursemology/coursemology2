@@ -7,3 +7,5 @@
 - posts_locals[:post_locals] = post_locals if defined?(post_locals)
 - posts_locals[:max_depth] = max_depth if defined?(max_depth)
 = render partial: 'course/discussion/posts', locals: posts_locals
+br
+= render partial: footer, locals: { topic: topic } if defined?(footer)
