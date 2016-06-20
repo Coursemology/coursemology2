@@ -1,5 +1,6 @@
 (function($) {
   'use strict';
+  var DOCUMENT_SELECTOR = '.course-experience-points-disbursement.new ';
   var COPY_BUTTON_SELECTOR = '#experience-points-disbursement-copy-button';
 
   function copyExperiencePoints(event) {
@@ -8,5 +9,5 @@
     $('.points_awarded').val(valueToCopy);
   }
 
-  $(document).on('click', COPY_BUTTON_SELECTOR, copyExperiencePoints);
+  $(document).on('click', DOCUMENT_SELECTOR + COPY_BUTTON_SELECTOR, copyExperiencePoints);
 })(jQuery);
