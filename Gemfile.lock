@@ -592,7 +592,7 @@ DEPENDENCIES
   rubyzip
   sanitize
   sass-rails
-  schema_monkey (<= 2.1.1)
+  schema_monkey
   schema_plus
   schema_plus_association_inverses (>= 0.1.0)
   schema_validations
