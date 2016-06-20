@@ -18,7 +18,8 @@ RSpec.describe Course::AssessmentsComponent do
         let!(:new_category) { course.assessment_categories.build(title: new_category_title) }
 
         it 'excludes the category from the list' do
-          expect(subject.send(:main_sidebar_items).map(&:title)).not_to include(new_category_title)
+          expect(subject.send(:assessment_categories).map(&:title)).
+            not_to include(new_category_title)
         end
       end
     end
