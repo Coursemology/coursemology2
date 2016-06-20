@@ -43,7 +43,7 @@
           td = record_fields.input :points_awarded, label: false,
                                                     input_html: { class: 'points_awarded' }
           td
-            - if (record_fields.index == 0) && (number_of_records > 1)
+            - if record_fields.index == 0 && number_of_records > 1
               button.btn.btn-link#experience-points-disbursement-copy-button = t('.copy_value')
           = record_fields.hidden_field :course_user_id
 
