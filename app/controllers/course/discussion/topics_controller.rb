@@ -5,6 +5,10 @@ class Course::Discussion::TopicsController < Course::ComponentController
                                                  parent: false
   def index
     @topics = all_topics
+
+    if current_course_user && current_course_user.student?
+      @topics = @topics.from_user(current_course_user.user_id)
+    end
   end
 
   def pending
