@@ -11,6 +11,6 @@ module Course::ExperiencePointsDisbursementAbilityComponent
   private
 
   def allow_staff_disburse_experience_points
-    can :disburse, Course::ExperiencePointsDisbursement, course_staff_hash
+    can :disburse, Course::ExperiencePoints::Disbursement, course_staff_hash
   end
 end

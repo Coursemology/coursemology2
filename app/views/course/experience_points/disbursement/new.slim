@@ -1,7 +1,7 @@
 - add_breadcrumb :new
 = page_header t('.header')
 
-= simple_form_for @experience_points_disbursement,
+= simple_form_for @disbursement,
                   url: disburse_experience_points_course_users_path,
                   method: :post do |f|
   = f.error_notification
@@ -14,7 +14,7 @@
   - if current_course.groups.size >= 1
     div.dropdown
       button.btn.btn-default.dropdown-toggle data-toggle='dropdown'
-        - current_group = @experience_points_disbursement.group
+        - current_group = @disbursement.group
         - if current_group
           => t('.filter_selected', group: format_inline_text(current_group.name))
         - else
@@ -35,7 +35,7 @@
         th = Course::ExperiencePointsRecord.human_attribute_name(:points_awarded)
         th
     tbody
-      - number_of_records = @experience_points_disbursement.experience_points_records.length
+      - number_of_records = @disbursement.experience_points_records.length
       = f.simple_fields_for :experience_points_records do |record_fields|
         - course_user = record_fields.object.course_user
         = content_tag_for(:tr, course_user)
