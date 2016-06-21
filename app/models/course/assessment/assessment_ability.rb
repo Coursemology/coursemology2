@@ -8,6 +8,10 @@ module Course::Assessment::AssessmentAbility
       allow_staff_manage_assessments
       allow_staff_grade_submissions
       allow_auto_grader_programming_evaluations
+      allow_students_manage_annotations_for_own_submissions
+      allow_staff_manage_annotations
+      allow_students_read_own_answers
+      allow_staff_read_answers
     end
 
     super
@@ -102,5 +106,23 @@ module Course::Assessment::AssessmentAbility
     can :read, Course::Assessment::ProgrammingEvaluation,
         course_course_user_hash(*CourseUser::AUTO_GRADER_ROLES.to_a)
     can :update_result, Course::Assessment::ProgrammingEvaluation, evaluator_id: user.id
+  end
+
+  def allow_students_manage_annotations_for_own_submissions
+    can :manage, Course::Assessment::Answer::ProgrammingFileAnnotation,
+        file: { answer: { submission: { creator_id: user.id } } }
+  end
+
+  def allow_staff_manage_annotations
+    can :manage, Course::Assessment::Answer::ProgrammingFileAnnotation,
+        discussion_topic: course_staff_hash
+  end
+
+  def allow_students_read_own_answers
+    can :read, Course::Assessment::Answer, submission: { creator_id: user.id }
+  end
+
+  def allow_staff_read_answers
+    can :read, Course::Assessment::Answer, discussion_topic: course_staff_hash
   end
 end
