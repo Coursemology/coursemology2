@@ -59,7 +59,7 @@ class Course::AssessmentsComponent < SimpleDelegator
       {
         title: t('course.assessment.assessments.sidebar_title'),
         type: :settings,
-        weight: 6,
+        weight: 3,
         path: course_admin_assessments_path(current_course)
       }
     ]

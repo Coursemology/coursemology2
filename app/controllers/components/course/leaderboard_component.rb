@@ -21,7 +21,7 @@ class Course::LeaderboardComponent < SimpleDelegator
       {
         key: :leaderboard,
         title: settings.title || t('course.leaderboards.sidebar_title'),
-        weight: 5,
+        weight: 6,
         path: course_leaderboard_path(current_course)
       }
     ]
@@ -32,7 +32,7 @@ class Course::LeaderboardComponent < SimpleDelegator
       {
         title: settings.title || t('course.leaderboards.title'),
         type: :settings,
-        weight: 4,
+        weight: 5,
         path: course_admin_leaderboard_path(current_course)
       }
     ]
