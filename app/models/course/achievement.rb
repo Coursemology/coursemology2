@@ -9,6 +9,8 @@ class Course::Achievement < ActiveRecord::Base
   has_many :course_user_achievements, class_name: Course::UserAchievement.name,
                                       inverse_of: :achievement, dependent: :destroy
   has_many :course_users, through: :course_user_achievements, class_name: CourseUser.name
+  has_many :achievement_conditions, class_name: Course::Condition::Achievement.name,
+                                    inverse_of: :achievement, dependent: :destroy
 
   default_scope { order(weight: :asc) }
 

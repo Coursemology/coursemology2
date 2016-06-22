@@ -7,6 +7,7 @@ RSpec.describe Course::Achievement, type: :model do
   it { is_expected.to have_many :conditions }
   it { is_expected.to validate_presence_of :title }
   it { is_expected.to belong_to(:course).inverse_of :achievements }
+  it { is_expected.to have_many(:achievement_conditions).dependent(:destroy) }
 
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do

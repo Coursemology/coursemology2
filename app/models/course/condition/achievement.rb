@@ -9,7 +9,7 @@ class Course::Condition::Achievement < ActiveRecord::Base
 
   validate :validate_achievement_condition, if: :achievement_id_changed?
 
-  belongs_to :achievement, class_name: Course::Achievement.name, inverse_of: false
+  belongs_to :achievement, class_name: Course::Achievement.name, inverse_of: :achievement_conditions
 
   default_scope { includes(:achievement) }
 

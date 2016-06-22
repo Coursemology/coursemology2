@@ -11,7 +11,7 @@ class Course::Condition::Assessment < ActiveRecord::Base
 
   validate :validate_assessment_condition, if: :assessment_id_changed?
 
-  belongs_to :assessment, class_name: Course::Assessment.name, inverse_of: false
+  belongs_to :assessment, class_name: Course::Assessment.name, inverse_of: :assessment_conditions
 
   default_scope { includes(:assessment) }
 
