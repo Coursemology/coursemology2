@@ -1,5 +1,0 @@
-en:
-  activerecord:
-    attributes:
-      course/assessment/assessment:
-        title: 'Title'
