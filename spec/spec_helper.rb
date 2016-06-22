@@ -21,6 +21,8 @@ require 'action_mailer'
 require 'email_spec'
 require 'email_spec/rspec'
 require 'should_not/rspec'
+require 'capybara/rspec'
+require 'capybara-screenshot/rspec'
 
 require 'rspec/retry' if ENV['CI']
 
