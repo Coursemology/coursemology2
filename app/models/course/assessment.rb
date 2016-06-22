@@ -34,6 +34,8 @@ class Course::Assessment < ActiveRecord::Base
   has_many :programming_questions,
            through: :questions, inverse_through: :question, source: :actable,
            source_type: Course::Assessment::Question::Programming.name
+  has_many :assessment_conditions, class_name: Course::Condition::Assessment.name,
+                                   inverse_of: :assessment, dependent: :destroy
 
   # @!attribute [r] maximum_grade
   #   Gets the maximum grade allowed by this assessment. This is the sum of all questions'

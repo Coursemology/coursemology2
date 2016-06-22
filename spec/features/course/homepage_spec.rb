@@ -66,6 +66,17 @@ RSpec.feature 'Course: Homepage' do
           expect(page).to have_content_tag_for(notification)
         end
       end
+
+      scenario 'I am unable to see activities with deleted objects in my course homepage' do
+        feed_notifications.each do |notification|
+          notification.activity.object.delete
+        end
+
+        visit course_path(course)
+        feed_notifications.each do |notification|
+          expect(page).not_to have_content_tag_for(notification)
+        end
+      end
     end
 
     context 'As a user not registered for the course' do
