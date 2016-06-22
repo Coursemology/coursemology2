@@ -18,3 +18,6 @@ en:
       name: :'course.leaderboards.index.header'
     materials:
       name: :'course.material.sidebar_title'
+    discussion:
+      topics:
+        name: 'Comments Center'

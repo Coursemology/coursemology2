@@ -43,7 +43,7 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
     let(:user) { create(:administrator) }
     before { sign_in(user) }
     let(:course) { create(:course, instance: instance) }
-    before { allow(controller).to receive(:current_course).and_return(course) }
+    before { controller.instance_variable_set(:@course, course) }
 
     let(:component_host) do
       Course::ControllerComponentHost.new(instance.settings, course.settings, controller)

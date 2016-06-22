@@ -2,6 +2,7 @@ en:
   course:
     discussion:
       topics:
+        sidebar_title: :'course.discussion.topics.index.header'
         tabs:
           my_students_pending: 'My Students Pending'
           pending: 'Pending'
