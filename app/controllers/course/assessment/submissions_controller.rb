@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::SubmissionsController < Course::ComponentController
   before_action :load_submissions
+  before_action :add_submissions_breadcrumb
 
   def index #:nodoc:
     @submissions = @submissions.with_submission_statistics.page(page_param).
@@ -27,5 +28,9 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
   def load_submissions
     @submissions = Course::Assessment::Submission.from_category(category).confirmed.
                    ordered_by_submitted_date.accessible_by(current_ability)
+  end
+
+  def add_submissions_breadcrumb
+    add_breadcrumb :index, course_submissions_path(current_course, category: category)
   end
 end

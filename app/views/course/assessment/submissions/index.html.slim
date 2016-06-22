@@ -1,1 +1,7 @@
-/To be implemented.
+- add_breadcrumb format_inline_text(@category.title)
+= page_header
+= render partial: 'tabs'
+
+= render partial: 'submissions', locals: { submissions: @submissions }
+
+= paginate @submissions

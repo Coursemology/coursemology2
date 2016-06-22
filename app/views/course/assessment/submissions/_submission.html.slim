@@ -1,0 +1,16 @@
+- assessment = submission.assessment
+= content_tag_for(:tr, submission) do
+  td = link_to_course_user(submission.course_user)
+  td = link_to(format_inline_text(assessment.title),
+               course_assessment_path(current_course, assessment))
+  td = format_datetime(submission.submitted_at) if submission.submitted_at
+  td = submission.workflow_state.capitalize
+  td = submission.grade.to_i.to_s + ' / ' + assessment.maximum_grade.to_s
+  td
+    - button_class = ['btn', 'btn-block']
+    - link_path = edit_course_assessment_submission_path(current_course, assessment, submission)
+    - if current_course_user.staff? && submission.submitted?
+      = link_to(t('.grade'), link_path, class: button_class + ['btn-info'])
+    - else
+      = link_to(t('.view'), link_path, class: button_class + ['btn-primary'])
+  td

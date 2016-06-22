@@ -1,0 +1,4 @@
+= tabs do
+  - current_course.assessment_categories.each do |category|
+    = nav_to format_inline_text(category.title),
+             course_submissions_path(current_course, category: category)

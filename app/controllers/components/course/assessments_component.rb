@@ -13,6 +13,10 @@ class Course::AssessmentsComponent < SimpleDelegator
   private
 
   def main_sidebar_items
+    assessment_categories + assessment_submissions
+  end
+
+  def assessment_categories
     current_course.assessment_categories.select(&:persisted?).map do |category|
       {
         key: :assessments,
@@ -22,6 +26,18 @@ class Course::AssessmentsComponent < SimpleDelegator
         unread: 0
       }
     end
+  end
+
+  def assessment_submissions
+    [
+      {
+        key: :assessments_submissions,
+        title: t('course.assessment.submissions.sidebar_title'),
+        weight: 2,
+        path: course_submissions_path(current_course,
+                                      category: current_course.assessment_categories.first)
+      }
+    ]
   end
 
   def admin_sidebar_items
