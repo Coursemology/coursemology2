@@ -89,6 +89,8 @@ class CourseUser < ActiveRecord::Base
       order('achievement_count DESC, last_obtained_achievement ASC')
   end)
 
+  scope :order_alphabetically, ->(direction = :asc) { order(name: direction) }
+
   include CourseUser::LevelProgressConcern
 
   # Test whether the current scope includes the current user.

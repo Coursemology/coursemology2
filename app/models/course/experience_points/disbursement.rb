@@ -26,7 +26,7 @@ class Course::ExperiencePoints::Disbursement
   #
   # @return [Array<Course::ExperiencePointsRecords>] The points records for this disbursement.
   def experience_points_records
-    @experience_points_records ||= filtered_students.map do |student|
+    @experience_points_records ||= filtered_students.order_alphabetically.map do |student|
       student.experience_points_records.build
     end
   end
