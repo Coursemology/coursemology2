@@ -4,7 +4,7 @@ module Course::Discussion::PostsConcern
 
   included do
     before_action :set_topic
-    authorize_resource :discussion_topic
+    authorize_resource :specific_topic
     load_and_authorize_resource :post, through: :discussion_topic,
                                        class: Course::Discussion::Post.name, parent: false
   end
@@ -57,5 +57,6 @@ module Course::Discussion::PostsConcern
 
   def set_topic
     @discussion_topic ||= discussion_topic
+    @specific_topic = discussion_topic.actable
   end
 end

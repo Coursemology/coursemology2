@@ -5,6 +5,7 @@ module Course::DiscussionsAbilityComponent
   def define_permissions
     if user
       allow_course_users_show_topics
+      allow_staff_manage_discussion_topics
       allow_course_users_create_posts
       allow_course_users_update_delete_own_post
     end
@@ -15,7 +16,11 @@ module Course::DiscussionsAbilityComponent
   private
 
   def allow_course_users_show_topics
-    can :read, Course::Discussion::Topic
+    can :read, Course::Discussion::Topic, course_all_course_users_hash
+  end
+
+  def allow_staff_manage_discussion_topics
+    can :manage, Course::Discussion::Topic, course_staff_hash
   end
 
   def allow_course_users_create_posts
