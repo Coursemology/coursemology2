@@ -53,6 +53,15 @@ class Course < ActiveRecord::Base
   accepts_nested_attributes_for :invitations, :assessment_categories
 
   scope :ordered_by_title, -> { order(:title) }
+  scope :ordered_by_end_at, ->(direction = :desc) { order(end_at: direction) }
+
+  # @!method containing_user
+  #   Selects all the courses with user as one of its approved members
+  scope :containing_user, (lambda do |user|
+    joins { course_users }.
+    merge(CourseUser.with_approved_state).
+    where { course_users.user_id == user.id }
+  end)
 
   # @!method with_owners
   #   Includes all course_users with the role of owner.

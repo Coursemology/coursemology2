@@ -33,7 +33,18 @@ html
         div.collapse.navbar-collapse#site-navigation-navbar
           ul.nav.navbar-nav.pull-right
             li
-              = link_to(t('layout.navbar.courses'), courses_path)
+              - my_courses = user_signed_in? && Course.containing_user(current_user).ordered_by_end_at
+              - if my_courses.present?
+                a.dropdown-toggle data-toggle="dropdown"
+                  => t('layout.navbar.courses')
+                  span.caret
+                ul.dropdown-menu.pull-right
+                  - my_courses.each do |course|
+                    li = link_to(format_inline_text(course.title), course_path(course))
+                  li.divider role='separator'
+                  li = link_to(t('layout.navbar.all_courses'), courses_path)
+              - else
+                = link_to(t('layout.navbar.courses'), courses_path)
             li
               = link_to(t('layout.navbar.help'), '#')
             - if user_signed_in?
