@@ -37,8 +37,7 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
         approved_course_students
         visit disburse_experience_points_course_users_path(course)
 
-        find(content_tag_selector(approved_course_students[0])).
-          find('input.points_awarded').set '100'
+        first('.course_user').find('input.points_awarded').set '100'
 
         click_button 'experience-points-disbursement-copy-button'
 
