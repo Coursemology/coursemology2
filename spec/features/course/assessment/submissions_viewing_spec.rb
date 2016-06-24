@@ -10,22 +10,15 @@ RSpec.describe 'Course: Submissions Viewing' do
 
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, :approved, course: course).user }
-      let(:students) { create_list(:course_student, 3, :approved, course: course) }
-      let(:attempting_submission) do
-        create(:course_assessment_submission, :attempting, assessment: assessment,
-                                                           creator: students[0].user)
-      end
-      let(:submitted_submission) do
-        create(:course_assessment_submission, :submitted, assessment: assessment,
-                                                          creator: students[1].user)
-      end
-      let(:graded_submission) do
-        create(:course_assessment_submission, :graded, assessment: assessment,
-                                                       creator: students[2].user)
-      end
-      let!(:submissions) { [attempting_submission, submitted_submission, graded_submission] }
 
       scenario 'I can view all submitted and graded submissions' do
+        students = create_list(:course_student, 3, :approved, course: course)
+        attempting_submission, submitted_submission, graded_submission =
+          students.zip([:attempting, :submitted, :graded]).map do |student, trait|
+            create(:course_assessment_submission, trait,
+                   assessment: assessment, creator: student.user)
+          end
+
         visit course_submissions_path(course)
 
         expect(page).not_to have_content_tag_for(attempting_submission)
@@ -47,17 +40,13 @@ RSpec.describe 'Course: Submissions Viewing' do
 
     context 'As a Course Student' do
       let(:user) { create(:course_student, :approved, course: course).user }
-      let!(:attempting_submission) do
-        create(:course_assessment_submission, :attempting, assessment: assessment, creator: user)
-      end
-      let!(:submitted_submission) do
-        create(:course_assessment_submission, :submitted, assessment: assessment, creator: user)
-      end
-      let!(:graded_submission) do
-        create(:course_assessment_submission, :graded, assessment: assessment, creator: user)
-      end
 
       scenario 'I can view my submitted and graded submissions' do
+        attempting_submission, submitted_submission, graded_submission =
+          [:attempting, :submitted, :graded].map do |trait|
+            create(:course_assessment_submission, trait, assessment: assessment, creator: user)
+          end
+
         visit course_submissions_path(course)
 
         expect(page).not_to have_content_tag_for(attempting_submission)
