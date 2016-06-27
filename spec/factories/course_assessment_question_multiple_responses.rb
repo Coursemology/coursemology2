@@ -12,9 +12,12 @@ FactoryGirl.define do
                 question: nil, option: 'false', explanation: 'wrong')
         ]
 
-      options << build(:course_assessment_question_multiple_response_option,
-                       question: nil, option: 'false',
-                       explanation: 'wrong alternatve') if question_type.to_s == 'any_correct'
+      if any_correct?
+        options << build(:course_assessment_question_multiple_response_option, :wrong,
+                         question: nil, option: 'false', explanation: 'wrong alternatve')
+        options << build(:course_assessment_question_multiple_response_option, :correct,
+                         question: nil, option: 'also true', explanation: 'correct alternatve')
+      end
 
       options
     end
