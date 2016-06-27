@@ -11,11 +11,20 @@ div.panel.panel-default
           td = @submission.workflow_state
         tr
           th = @submission.class.human_attribute_name(:grade)
-          td = @submission.grade
+          td
+            span#submission-statistics-total-grade>
+              = @submission.grade
+            ' /
+            span#submission-statistics-maximum-grade
+              = @submission.assessment.maximum_grade
         tr
           th = @submission.experience_points_record.class.human_attribute_name(:points_awarded)
           - if can?(:grade, @submission)
-            td = f.input :points_awarded, label: false
+            / TODO: Factor in time-based experience points
+            td
+              = f.input :points_awarded, label: false,
+                        input_html: { class: 'submission-points-awarded',
+                                      'data-base-points' => @submission.assessment.base_exp }
           - else
             td = @submission.points_awarded
         tr
@@ -44,4 +53,9 @@ div.panel.panel-default
           - @submission.answers.each do |answer|
             tr
               th = format_inline_text(answer.question.title)
-              td = answer.grade
+              td
+                span.submission-grades-summary-grade> (
+                    id="submission-grades-summary-answer-#{answer.id}-grade")
+                  = answer.grade
+                ' /
+                = answer.question.maximum_grade
