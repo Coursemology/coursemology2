@@ -165,5 +165,27 @@ RSpec.describe Course::UsersController, type: :controller do
         end
       end
     end
+
+    describe '#upgrade_to_staff' do
+      before { sign_in(user) }
+      subject { put :upgrade_to_staff, course_id: course, course_user: staff_to_be_params }
+      let!(:course_user) { create(:course_manager, :approved, course: course, user: user) }
+      let(:staff_to_be) { create(:course_student, :approved, course: course) }
+      let(:staff_to_be_params) { { id: staff_to_be.id, role: :teaching_assistant } }
+      let(:staff_to_be_stub) do
+        stub = staff_to_be
+        allow(stub).to receive(:save).and_return(false)
+        stub
+      end
+
+      context 'when a course user cannot be added as staff' do
+        before do
+          controller.instance_variable_set(:@course_user, staff_to_be_stub)
+          subject
+        end
+
+        it { is_expected.to redirect_to(course_users_staff_path(course)) }
+      end
+    end
   end
 end

@@ -27,6 +27,9 @@ en:
         header: 'Students'
       staff:
         header: 'Staff'
+        upgrade_to_staff: 'Upgrade to Staff'
+      upgrade_to_staff:
+        success: '%{name} is now a %{role}.'
       requests:
         header: 'User Requests'
         approve: 'Approve'

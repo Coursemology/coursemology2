@@ -227,6 +227,7 @@ Rails.application.routes.draw do
       post 'register' => 'user_registrations#create'
       get 'students' => 'users#students', as: :users_students
       get 'staff' => 'users#staff', as: :users_staff
+      patch 'upgrade_to_staff' => 'users#upgrade_to_staff', as: :users_upgrade_to_staff
       get 'requests' => 'users#requests', as: :users_requests
       get 'invitations' => 'users#invitations', as: :users_invitations
 
