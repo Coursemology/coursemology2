@@ -11,7 +11,7 @@ class Course::Assessment < ActiveRecord::Base
   before_validation :assign_folder_attributes
   before_validation :propagate_course
 
-  validate :draft_status
+  validate :validate_draft_status_if_no_questions
 
   enum display_mode: { worksheet: 0, guided: 1 }
 
@@ -99,7 +99,7 @@ class Course::Assessment < ActiveRecord::Base
     self.draft ||= true
   end
 
-  def draft_status
+  def validate_draft_status_if_no_questions
     return if draft
     errors.add(:draft, :no_questions) unless questions.present?
   end
