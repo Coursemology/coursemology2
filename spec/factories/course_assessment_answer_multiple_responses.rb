@@ -12,18 +12,27 @@ FactoryGirl.define do
             assessment: assessment).question
     end
 
-    trait :wrong do
+    trait :with_all_wrong_options do
       after(:build) do |answer|
         question = answer.question.actable
-        answer.options = question.options - question.options.select(&:correct)
+        wrong_options = question.options - question.options.select(&:correct)
+        wrong_options.each { |option| answer.options << option }
       end
     end
 
-    trait :correct do
+    trait :with_all_correct_options do
       after(:build) do |answer|
         question = answer.question.actable
-        answer.options = question.options.select(&:correct)
-        answer.options = answer.options.sample(1) if question.any_correct?
+        correct_options = question.options.select(&:correct)
+        correct_options.each { |option| answer.options << option }
+      end
+    end
+
+    trait :with_one_correct_option do
+      after(:build) do |answer|
+        question = answer.question.actable
+        correct_options = question.options.select(&:correct)
+        answer.options << correct_options.sample(1)
       end
     end
   end
