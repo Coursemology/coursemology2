@@ -137,6 +137,17 @@ RSpec.describe Course::Assessment::Answer do
       end
     end
 
+    describe '#unsubmit!' do
+      before { subject.finalise! }
+      it 'sets grade, grader, graded_at and submitted_at to nil' do
+        subject.unsubmit!
+        expect(subject.grade).to be_nil
+        expect(subject.grader).to be_nil
+        expect(subject.graded_at).to be_nil
+        expect(subject.submitted_at).to be_nil
+      end
+    end
+
     describe '#auto_grade!' do
       let(:question) { build(:course_assessment_question_multiple_response).question }
       let(:answer_traits) { :submitted }

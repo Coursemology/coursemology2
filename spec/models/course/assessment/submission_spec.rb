@@ -265,5 +265,39 @@ RSpec.describe Course::Assessment::Submission do
         end
       end
     end
+
+    describe '#unsubmit!' do
+      let(:assessment_traits) { [:with_all_question_types] }
+      subject { submission1 }
+      before do
+        subject.unsubmit!
+        subject.save!
+        subject.reload
+      end
+
+      context 'when the submission is submitted' do
+        let(:submission1_traits) { :submitted }
+
+        it 'resets the experience points awarded' do
+          expect(subject.points_awarded).to be_nil
+        end
+
+        it 'sets all latest answers in the submission to attempting' do
+          expect(subject.answers.latest_answers.all?(&:attempting?)).to be(true)
+        end
+      end
+
+      context 'when the submission is graded' do
+        let(:submission1_traits) { :graded }
+
+        it 'resets the experience points awarded' do
+          expect(subject.points_awarded).to be_nil
+        end
+
+        it 'sets all latest answers in the submission to attempting' do
+          expect(subject.answers.latest_answers.all?(&:attempting?)).to be(true)
+        end
+      end
+    end
   end
 end

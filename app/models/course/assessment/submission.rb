@@ -16,7 +16,9 @@ class Course::Assessment::Submission < ActiveRecord::Base
       event :unsubmit, transitions_to: :attempting
       event :publish, transitions_to: :graded
     end
-    state :graded
+    state :graded do
+      event :unsubmit, transitions_to: :attempting
+    end
   end
 
   validate :validate_consistent_user
@@ -116,6 +118,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   alias_method :finalise=, :finalise!
   alias_method :publish=, :publish!
+  alias_method :unsubmit=, :unsubmit!
 
   # Creates an Auto Grading job for this submission. This saves the submission if there are pending
   # changes.
@@ -140,6 +143,30 @@ class Course::Assessment::Submission < ActiveRecord::Base
   def publish(_ = nil)
     answers.each do |answer|
       answer.publish! if answer.submitted?
+    end
+  end
+
+  # Handles the unsubmission of a submitted submission.
+  # A separate callback is also defined for unsubmission, see +on_attempting_entry+.
+  def unsubmit(_ = nil)
+    self.points_awarded = nil
+  end
+
+  # A custom callback for `submission.unsubmit!` to unsubmit the latest_answers of the submission.
+  # This is separate from the unsubmit method defined above for the following reasons:
+  #
+  # 1. `unsubmit` method is run before the submission's workflow state is modified
+  #   (see +workflow+ documentation).
+  # 2. Validations in the answer model (+validate_assessment_state+): answer can only be
+  #   `unsubmit` to an attempting state only if submission's workflow state is `attempting`.
+  # 3. A custom scope +latest_answers+ prevents the associations from being saved together, so
+  #    it is necessary to first update `submission`, then proceed to unsubmit latest_answers.
+  def on_attempting_entry(_new_state, event, *_)
+    if event == :unsubmit
+      answers.latest_answers.each do |answer|
+        answer.unsubmit!
+        answer.save!
+      end
     end
   end
 
