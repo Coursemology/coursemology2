@@ -16,7 +16,7 @@ gem 'pg', '>= 0.18.2'
 gem 'schema_plus'
 gem 'schema_plus_association_inverses', '>= 0.1.0'
 gem 'schema_validations'
-gem 'schema_monkey'
+gem 'schema_monkey', '<= 2.1.1' # Wait for SchemaPlus/schema_monkey#13 to be closed 
 # Instance/Course settings
 gem 'settings_on_rails'
 # Table and column comments

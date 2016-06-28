@@ -387,7 +387,7 @@ GEM
       its-it (~> 1.2)
       schema_plus_foreign_keys (~> 0.1)
       schema_plus_indexes (~> 0.2)
-    schema_monkey (2.1.5)
+    schema_monkey (2.1.1)
       activerecord (>= 4.2)
       modware (~> 0.1)
     schema_plus (2.0.1)
@@ -598,7 +598,7 @@ DEPENDENCIES
   rubyzip
   sanitize
   sass-rails
-  schema_monkey
+  schema_monkey (<= 2.1.1)
   schema_plus
   schema_plus_association_inverses (>= 0.1.0)
   schema_validations
