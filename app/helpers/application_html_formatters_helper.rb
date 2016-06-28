@@ -31,9 +31,14 @@ module ApplicationHTMLFormattersHelper
   DefaultCodePipelineOptions = DefaultPipelineOptions.merge(css_table_class: 'table').freeze
 
   # The Code formatter pipeline.
-  DefaultCodePipeline = HTML::Pipeline.new(DefaultPipeline.filters +
-                                           [PreformattedTextLineNumbersFilter],
-                                           DefaultCodePipelineOptions)
+  #
+  # @param [Integer] starting_line_number The line number of the first line, default is 1.
+  # @return [HTML::Pipeline]
+  def default_code_pipeline(starting_line_number = 1)
+    HTML::Pipeline.new(DefaultPipeline.filters +
+                         [PreformattedTextLineNumbersFilter],
+                       DefaultCodePipelineOptions.merge(line_start: starting_line_number))
+  end
 
   # Replaces the Rails sanitizer with the one configured with HTML Pipeline.
   def sanitize(text)
@@ -65,7 +70,9 @@ module ApplicationHTMLFormattersHelper
   # @param [String] code The code to syntax highlight.
   # @param [Coursemology::Polyglot::Language] language The language to highlight the code block
   #   with.
-  def format_code_block(code, language = nil)
+  # @param [Integer] starting_line_number The line number of the first line, default is 1. This
+  #   should be provided if the code fragment does not start on the first line.
+  def format_code_block(code, language = nil, starting_line_number = 1)
     code = html_escape(code) unless code.html_safe?
     code = code.gsub(/\r\n|\r/, "\n")
     code = content_tag(:pre, lang: language ? language.rouge_lexer : nil) do
@@ -74,7 +81,7 @@ module ApplicationHTMLFormattersHelper
       end
     end
 
-    format_with_pipeline(DefaultCodePipeline, code)
+    format_with_pipeline(default_code_pipeline(starting_line_number), code)
   end
 
   private

@@ -61,6 +61,18 @@ RSpec.describe ApplicationFormattersHelper do
       it 'highlights the keywords' do
         expect(formatted_block).to have_tag('span.k', text: 'def')
       end
+
+      context 'when start line number is specified' do
+        let(:line_start) { 5 }
+        let(:formatted_block) { helper.format_code_block(snippet, language, line_start) }
+
+        it 'highlights the code with the given start line number' do
+          expect(formatted_block).to have_tag('td.line-number', count: 3)
+          expect(formatted_block).to have_tag('td.line-number', with: { 'data-line-number': '5' })
+          expect(formatted_block).to have_tag('td.line-number', with: { 'data-line-number': '6' })
+          expect(formatted_block).to have_tag('td.line-number', with: { 'data-line-number': '7' })
+        end
+      end
     end
 
     describe '#sanitize' do
