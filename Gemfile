@@ -12,15 +12,15 @@ gem 'rails', '~> 4.2.0', '>= 4.2.5.2'
 
 # Use PostgreSQL for the backend
 gem 'pg', '>= 0.18.2'
+# Table and column comments, this need to be put before schame_plus ( there are certain compatibility issues ).
+gem 'migration_comments'
 # Schema Plus for some higher level database abstractions
 gem 'schema_plus'
 gem 'schema_plus_association_inverses', '>= 0.1.0'
 gem 'schema_validations'
-gem 'schema_monkey', '<= 2.1.1' # Wait for SchemaPlus/schema_monkey#13 to be closed 
+gem 'schema_monkey' 
 # Instance/Course settings
 gem 'settings_on_rails'
-# Table and column comments
-gem 'migration_comments'
 # Manage read/unread status
 gem 'unread'
 # Extension for validating hostnames and domain names
