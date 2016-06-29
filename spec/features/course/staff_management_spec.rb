@@ -74,6 +74,20 @@ RSpec.feature 'Courses: Staff Management' do
         expect(page).to have_field('course_user_name', with: staff_to_change.name + '!')
       end
 
+      scenario 'I can add new staff' do
+        visit course_users_staff_path(course)
+
+        staff_to_be = course_approved_students[0]
+        expect(page).not_to have_field('course_user_name', with: staff_to_be.name)
+
+        find('#course_user_id').
+          find(:css, "option[value='#{staff_to_be.id}']").
+          select_option
+        click_button I18n.t('course.users.staff.upgrade_to_staff')
+
+        expect(page).to have_field('course_user_name', with: staff_to_be.name)
+      end
+
       scenario 'I can delete staff' do
         staff_to_delete = course_managers[Random.rand(course_managers.length)]
         visit course_users_staff_path(course)
