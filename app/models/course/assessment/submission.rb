@@ -82,11 +82,19 @@ class Course::Assessment::Submission < ActiveRecord::Base
       where { experience_points_record.course_user.user == user }
   end)
 
+  # @!method self.by_users(user)
+  #   @param [Fixnum|Array<Fixnum>] user_ids The user ids to filter submissions by
+  scope :by_users, ->(user_ids) { where { creator_id >> user_ids } }
+
   # @!method self.from_category(category)
   #   Finds all the submissions in the given category.
   #   @param [Course::Assessment::Category] category The category to filter submissions by
   scope :from_category, (lambda do |category|
     where { assessment_id >> category.assessments.select(:id) }
+  end)
+
+  scope :from_course, (lambda do |course|
+    joins { assessment.tab.category }.where { assessment.tab.category.course == course }
   end)
 
   # @!method self.ordered_by_date

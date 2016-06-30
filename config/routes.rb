@@ -188,7 +188,9 @@ Rails.application.routes.draw do
           collection do
             resources :skills, as: :assessments_skills, except: [:show]
             resources :skill_branches, as: :assessments_skill_branches, except: [:index, :show]
-            resources :submissions, only: [:index], concerns: :paginatable
+            resources :submissions, only: [:index], concerns: :paginatable do
+              get 'pending', on: :collection
+            end
           end
         end
       end
