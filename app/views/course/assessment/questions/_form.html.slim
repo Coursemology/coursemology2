@@ -1,5 +1,6 @@
 = f.input :title
 = f.input :description
+= f.input :staff_only_comments
 = f.input :maximum_grade
 = f.input :weight
 = f.association :skills, as: :token, collection: current_course.assessment_skills, multiple: true

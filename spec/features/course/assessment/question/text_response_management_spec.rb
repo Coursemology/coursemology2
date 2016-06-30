@@ -23,6 +23,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
         question_attributes = attributes_for(:course_assessment_question_text_response)
         fill_in 'title', with: question_attributes[:title]
         fill_in 'description', with: question_attributes[:description]
+        fill_in 'staff_only_comments', with: question_attributes[:staff_only_comments]
         fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
         fill_in 'weight', with: question_attributes[:weight]
         within find_field('skills') do
