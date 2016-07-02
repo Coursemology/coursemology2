@@ -1,5 +1,7 @@
 en:
   breadcrumbs:
+    announcements:
+      index: :'announcements.index.header'
     course:
       levels:
         index: :'course.levels.index.header'
