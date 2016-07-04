@@ -5,6 +5,10 @@ en:
         sidebar_title: :'course.assessment.submissions.index.header'
         index:
           header: 'Submissions'
+        pending:
+          header: 'Pending Submissions'
         submission:
           grade: 'Grade'
           view: 'View'
+        tabs:
+          pending: :'course.assessment.submissions.pending.header'

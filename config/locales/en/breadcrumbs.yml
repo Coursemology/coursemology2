@@ -81,6 +81,7 @@ en:
           new: :'course.assessment.skill_branches.new.header'
         submissions:
           index: :'course.assessment.submissions.index.header'
+          pending: :'course.assessment.submissions.pending.header'
       groups:
         index: :'course.groups.index.header'
         new: :'course.groups.new.header'

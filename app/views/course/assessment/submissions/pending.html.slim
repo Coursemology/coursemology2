@@ -1,0 +1,7 @@
+- add_breadcrumb :pending
+= page_header
+= render partial: 'tabs'
+
+= render partial: 'submissions', locals: { submissions: @submissions }
+
+= paginate @submissions
