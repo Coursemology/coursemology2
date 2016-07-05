@@ -61,7 +61,7 @@ RSpec.describe Course::Controller, type: :controller do
     end
 
     describe '#sidebar_items' do
-      before { allow(controller).to receive(:current_course).and_return(course) }
+      before { controller.instance_variable_set(:@course, course) }
 
       it 'orders the sidebar items by ascending weight' do
         weights = controller.sidebar_items.map { |item| item[:weight] }

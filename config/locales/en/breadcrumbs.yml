@@ -109,7 +109,9 @@ en:
       experience_points:
         disbursement:
           new: :'course.experience_points.disbursement.new.header'
-
+      discussion:
+        topics:
+          index: :'course.discussion.topics.index.header'
     system:
       admin:
         controller:

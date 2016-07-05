@@ -129,6 +129,9 @@ Rails.application.routes.draw do
         get 'leaderboard' => 'leaderboard_settings#edit'
         patch 'leaderboard' => 'leaderboard_settings#update'
 
+        get 'topics' => 'discussion/topic_settings#edit', path: 'comments'
+        patch 'topics' => 'discussion/topic_settings#update', path: 'comments'
+
         namespace 'assessments' do
           resources :categories, only: [:new, :create, :destroy] do
             resources :tabs, only: [:new, :create, :destroy]

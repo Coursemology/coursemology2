@@ -29,6 +29,16 @@ RSpec.describe Course::Discussion::TopicsController do
           subject
           expect(topics).to contain_exactly(topic, pending_topic)
         end
+
+        context 'when the discussion topics component is disabled' do
+          before do
+            allow(controller).to receive_message_chain('current_component_host.[]').and_return(nil)
+          end
+
+          it 'raises an component not found error' do
+            expect { subject }.to raise_error(ComponentNotFoundError)
+          end
+        end
       end
 
       context 'when a course student visits the page' do

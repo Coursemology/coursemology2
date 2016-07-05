@@ -14,7 +14,7 @@ RSpec.describe Course::Admin::SidebarSettingsController, type: :controller do
     end
 
     describe '#update' do
-      before { allow(controller).to receive(:current_course).and_return(course) }
+      before { controller.instance_variable_set(:@course, course) }
       let(:sample_item) { controller.sidebar_items(type: :normal).sample }
       let(:weight) { 10 }
       let(:sidebar_item_attributes) do

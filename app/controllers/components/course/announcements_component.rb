@@ -33,7 +33,7 @@ class Course::AnnouncementsComponent < SimpleDelegator
       {
         title: settings.title || t('layouts.course_admin.announcement_settings.title'),
         type: :settings,
-        weight: 4,
+        weight: 3,
         path: course_admin_announcements_path(current_course)
       }
     ]
