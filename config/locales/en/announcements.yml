@@ -4,6 +4,5 @@ en:
       header: 'All Announcements'
     announcement:
       sticky: 'Sticky'
-    global_announcements:
+    global_announcement:
       close: 'Close'
-      more_announcements: 'More Announcements...'

@@ -1,0 +1,11 @@
+div.panel.panel-primary.global-announcement id="global_announcement_#{global_announcement.id}"
+  div.panel-heading
+    div.pull-right
+      = link_to announcement_mark_as_read_path(global_announcement), remote: true, method: :post do
+        button.close (type='button' data-dismiss='alert' aria-label=t('.close')
+                      data-target='#global_announcement_#{global_announcement.id}')
+          span aria-hidden='true'
+            | &times;
+    = format_inline_text(global_announcement.title)
+  div.panel-body
+    = format_html(global_announcement.content)

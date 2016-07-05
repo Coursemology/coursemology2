@@ -73,7 +73,9 @@ Rails.application.routes.draw do
     masquerades: 'user/masquerades'
   }
 
-  resources :announcements, only: [:index]
+  resources :announcements, only: [:index] do
+    post 'mark_as_read'
+  end
   resources :jobs, only: [:show]
 
   namespace :user do
