@@ -64,6 +64,19 @@ RSpec.describe Course::Assessment::Submission do
       end
     end
 
+    describe '.by_users' do
+      before do
+        submission1
+        submission2
+      end
+
+      it 'only returns the selected submissions by the provided user ids' do
+        expect(assessment.submissions.by_users(user1.id)).to contain_exactly(submission1)
+        expect(assessment.submissions.by_users([user1.id, user2.id])).
+          to contain_exactly(submission1, submission2)
+      end
+    end
+
     describe '.from_category' do
       let(:new_category) { create(:course_assessment_category, course: course) }
       let(:new_tab) { create(:course_assessment_tab, course: course, category: new_category) }
@@ -74,6 +87,19 @@ RSpec.describe Course::Assessment::Submission do
 
       it 'returns submissions from assessments in this category' do
         expect(subject).to contain_exactly(new_submission)
+      end
+    end
+
+    describe '.from_course' do
+      let(:new_course) { create(:course) }
+      let(:new_assessment) { create(:course_assessment_assessment, course: new_course) }
+      let!(:new_submission) { create(:course_assessment_submission, assessment: new_assessment) }
+
+      it 'returns submissions from assessments in the specified course' do
+        submission1
+        expect(Course::Assessment::Submission.from_course(course)).to contain_exactly(submission1)
+        expect(Course::Assessment::Submission.from_course(new_course)).
+          to contain_exactly(new_submission)
       end
     end
 

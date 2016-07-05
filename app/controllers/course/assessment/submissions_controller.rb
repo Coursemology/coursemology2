@@ -4,8 +4,11 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
   before_action :add_submissions_breadcrumb
 
   def index #:nodoc:
-    @submissions = @submissions.with_submission_statistics.page(page_param).
-                   includes(:assessment, experience_points_record: { course_user: :course })
+    @submissions = @submissions.from_category(category).confirmed
+  end
+
+  def pending
+    @submissions = pending_submissions.from_course(current_course).with_submitted_state
   end
 
   private
@@ -26,8 +29,22 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
 
   # Load the submissions based on the current category.
   def load_submissions
-    @submissions = Course::Assessment::Submission.from_category(category).confirmed.
-                   ordered_by_submitted_date.accessible_by(current_ability)
+    @submissions = Course::Assessment::Submission.
+                   ordered_by_submitted_date.accessible_by(current_ability).
+                   with_submission_statistics.page(page_param).
+                   includes(:assessment, experience_points_record: { course_user: :course })
+  end
+
+  # Load pending submissions based on current course role:
+  #  Staff with students - show students in staff's groups with pending submissions
+  #  Staff without students - show all students in course with pending submissions
+  def pending_submissions
+    my_student_ids = current_course_user ? current_course_user.my_students.pluck(:user_id) : []
+    if !my_student_ids.empty?
+      @submissions.by_users(my_student_ids)
+    else
+      @submissions
+    end
   end
 
   def add_submissions_breadcrumb
