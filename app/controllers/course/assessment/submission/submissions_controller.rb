@@ -14,7 +14,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   def index
     @submissions = @submissions.includes(experience_points_record: :course_user).
                    with_submission_statistics
-    @course_students = current_course.course_users.students.with_approved_state
+    @course_students = current_course.course_users.students.with_approved_state.order_alphabetically
   end
 
   def create
