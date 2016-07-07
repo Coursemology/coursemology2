@@ -1,2 +1,3 @@
-= render partial: 'course/discussion/topic', object: annotation_topic,
-         locals: { post_partial: 'course/assessment/answer/programming/annotation_post' }
+- unless annotation_topic.posts.empty?
+  = render partial: 'course/discussion/topic', object: annotation_topic,
+           locals: { post_partial: 'course/assessment/answer/programming/annotation_post' }
