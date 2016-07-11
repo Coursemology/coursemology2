@@ -4,7 +4,8 @@ en:
       course/condition/assessment: Assessment Condition
     attributes:
       course/condition/assessment/title:
-        title: '%{assessment_title} (at least %{minimum_grade_percentage})'
+        minimum_score: 'Score at least %{minimum_grade_percentage} for %{assessment_title}'
+        complete: 'Complete %{assessment_title}'
     errors:
       models:
         course/condition/assessment:
