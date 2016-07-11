@@ -32,6 +32,9 @@ en:
           edit: :'course.forum.forums.sidebar_title'
         leaderboard_settings:
           edit: :'course.leaderboards.index.header'
+        discussion:
+          topic_settings:
+            edit: :'course.discussion.topics.index.header'
       users:
         index: 'Users'
         students: :'course.users.students.header'
