@@ -24,6 +24,25 @@ RSpec.describe 'Course: Assessments: Viewing' do
 
         expect(current_path).to eq(course_assessment_submissions_path(course, assessment))
       end
+
+      scenario 'I can view assessment conditions in the assessment page' do
+        # Assessment Conditional
+        other_assessment = create(:assessment, course: course)
+        condition_with_assessment_conditional =
+          create(:assessment_condition, course: course, assessment: assessment,
+                                        conditional: other_assessment)
+
+        # Achievement Conditional
+        achievement = create(:achievement, course: course)
+        condition_with_achievement_conditional =
+          create(:assessment_condition, course: course, assessment: assessment,
+                                        conditional: achievement)
+
+        visit course_assessment_path(course, assessment)
+
+        expect(page).to have_content_tag_for(condition_with_assessment_conditional)
+        expect(page).to have_content_tag_for(condition_with_achievement_conditional)
+      end
     end
   end
 end

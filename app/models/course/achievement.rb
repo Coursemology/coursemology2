@@ -14,6 +14,10 @@ class Course::Achievement < ActiveRecord::Base
 
   default_scope { order(weight: :asc) }
 
+  def to_partial_path
+    'course/achievement/achievements/achievement'.freeze
+  end
+
   # Set default values
   def set_defaults
     self.weight ||= 10
