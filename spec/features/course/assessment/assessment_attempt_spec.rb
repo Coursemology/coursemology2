@@ -11,12 +11,25 @@ RSpec.describe 'Course: Assessments: Attempt' do
       create(:assessment, :with_all_question_types, :unopened, course: course)
     end
     let(:assessment) { create(:assessment, :with_all_question_types, course: course) }
+    let(:assessment_with_condition) do
+      assessment_with_condition = create(:assessment, :with_all_question_types, course: course)
+      create(:assessment_condition,
+             course: course,
+             assessment: assessment,
+             conditional: assessment_with_condition)
+      assessment_with_condition
+    end
+
     before { login_as(user, scope: :user) }
 
     let(:student) { create(:course_user, :approved, course: course).user }
     let(:submission) do
       create(:course_assessment_submission, assessment: assessment, creator: student)
     end
+    let(:submitted_submission) do
+      create(:course_assessment_submission, :submitted, assessment: assessment, creator: student)
+    end
+    let(:points_awarded) { 22 }
 
     context 'As a Course Student' do
       let(:user) { student }
@@ -31,6 +44,34 @@ RSpec.describe 'Course: Assessments: Attempt' do
         end
 
         expect(page.status_code).to eq(422)
+      end
+
+      scenario 'I cannot attempt unsatisfied assessments' do
+        assessment_with_condition
+        visit course_assessments_path(course)
+
+        within find(content_tag_selector(assessment_with_condition)) do
+          expect(page).not_to have_button(
+            I18n.t('course.assessment.assessments.assessment.attempt')
+          )
+        end
+      end
+
+      scenario 'I can attempt satisfied assessments' do
+        submitted_submission
+        assessment_with_condition
+        visit course_assessments_path(course)
+
+        within find(content_tag_selector(assessment_with_condition)) do
+          find_link(I18n.t('course.assessment.assessments.assessment.attempt'),
+                    href: course_assessment_submissions_path(course, assessment_with_condition)).
+            click
+        end
+
+        created_submission = assessment_with_condition.submissions.last
+        expect(current_path).to eq(edit_course_assessment_submission_path(
+                                     course, assessment_with_condition, created_submission
+        ))
       end
 
       scenario 'I can attempt non-empty assessments' do
@@ -85,6 +126,37 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
     context 'As a Course Staff' do
       let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
+
+      scenario 'I can attempt unsatisfied submission' do
+        assessment_with_condition
+        visit course_assessments_path(course)
+
+        within find(content_tag_selector(assessment_with_condition)) do
+          find_link(I18n.t('course.assessment.assessments.assessment.attempt'),
+                    href: course_assessment_submissions_path(course, assessment_with_condition)).
+            click
+        end
+
+        created_submission = assessment_with_condition.submissions.last
+        expect(current_path).to eq(edit_course_assessment_submission_path(
+                                     course, assessment_with_condition, created_submission
+        ))
+      end
+
+      scenario 'I can attempt unopened assessments' do
+        unopened_assessment
+        visit course_assessments_path(course)
+
+        within find(content_tag_selector(unopened_assessment)) do
+          find_link(I18n.t('course.assessment.assessments.assessment.attempt'),
+                    href: course_assessment_submissions_path(course, unopened_assessment)).click
+        end
+
+        created_submission = unopened_assessment.submissions.last
+        expect(current_path).to eq(
+          edit_course_assessment_submission_path(course, unopened_assessment, created_submission)
+        )
+      end
 
       scenario "I can grade the student's work", js: true do
         assessment.questions.attempt(submission).each(&:save!)

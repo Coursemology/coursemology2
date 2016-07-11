@@ -2,19 +2,32 @@
 module Course::Assessment::AssessmentAbility
   def define_permissions
     if user
-      allow_students_show_assessments
-      allow_students_attempt_assessment
-      allow_students_update_own_submission
-      allow_staff_manage_assessments
-      allow_staff_grade_submissions
-      allow_auto_grader_programming_evaluations
-      allow_students_manage_annotations_for_own_submissions
-      allow_staff_manage_annotations
-      allow_students_read_own_answers
-      allow_staff_read_answers
+      define_student_permissions
+      define_staff_permissions
+      define_auto_grader_permissions
     end
 
     super
+  end
+
+  def define_student_permissions
+    allow_students_show_assessments
+    allow_students_attempt_assessment
+    allow_students_create_submission
+    allow_students_update_own_submission
+    allow_students_manage_annotations_for_own_submissions
+    allow_students_read_own_answers
+  end
+
+  def define_staff_permissions
+    allow_staff_manage_assessments
+    allow_staff_grade_submissions
+    allow_staff_manage_annotations
+    allow_staff_read_answers
+  end
+
+  def define_auto_grader_permissions
+    allow_auto_grader_programming_evaluations
   end
 
   private
@@ -42,11 +55,14 @@ module Course::Assessment::AssessmentAbility
   end
 
   def allow_students_attempt_assessment
-    currently_valid_hashes.each do |properties|
-      can :attempt, Course::Assessment, assessment_all_course_users_hash.reverse_merge(
-        lesson_plan_item: properties
+    can :attempt, Course::Assessment do |assessment|
+      assessment.started? && assessment.conditions_satisfied_by?(
+        user.course_users.find_by(course: assessment.course)
       )
     end
+  end
+
+  def allow_students_create_submission
     can :create, Course::Assessment::Submission,
         experience_points_record: { course_user: { user_id: user.id } }
     can :update, Course::Assessment::Submission, submission_attempting_hash(user)
