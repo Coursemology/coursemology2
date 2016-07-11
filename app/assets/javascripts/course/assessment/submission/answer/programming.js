@@ -391,30 +391,6 @@
   }
 
   /**
-   * Handles the annotation post reply button click event.
-   *
-   * @param e The event object.
-   */
-  function onAnnotationPostReply(e) {
-    var $element = $(e.target);
-    var $post = $element.parents('.discussion_post:first');
-    var $replies = $post.next('div.replies');
-
-    var courseId = courseIdForElement($element);
-    var assessmentId = assessmentIdForElement($element);
-    var submissionId = submissionIdForElement($element);
-    var answerId = answerIdForRow($element);
-    var programmingFileId = programmingFileIdForRow($element);
-    var lineNumber = $element.parents('.line-annotation:first').data('lineNumber');
-    var postId = $post.data('postId');
-
-    var $form = findOrCreateAnnotationForm($replies, courseId, assessmentId, submissionId, answerId,
-                                           programmingFileId, lineNumber, postId);
-    $form.find('textarea').focus();
-    e.preventDefault();
-  }
-
-  /**
    * Handles the annotation topic reply button click event.
    *
    * TODO Trigger replying to last post instead of topic itself once proper behavior for post
@@ -444,8 +420,8 @@
     onAnnotationFormSubmitted);
   $(document).on('click', DOCUMENT_SELECTOR + '.discussion_post .toolbar .delete',
     onAnnotationDelete);
-  $(document).on('click', DOCUMENT_SELECTOR + '.discussion_post .toolbar .reply',
-    onAnnotationPostReply);
   $(document).on('click', DOCUMENT_SELECTOR + '.discussion_topic .reply-annotation',
     onAnnotationTopicReply);
+  // TODO Restore feature to reply to individual annotation posts once proper behavior for post
+  //      deletion has been implemented.
 })(jQuery);
