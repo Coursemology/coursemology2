@@ -1,3 +1,7 @@
 - unless annotation_topic.posts.empty?
-  = render partial: 'course/discussion/topic', object: annotation_topic,
-           locals: { post_partial: 'course/assessment/answer/programming/annotation_post' }
+  = div_for(annotation_topic)
+    = render partial: 'course/discussion/topic', object: annotation_topic,
+             locals: { \
+               post_partial: 'course/assessment/answer/programming/annotation_post', \
+               footer: 'course/assessment/answer/programming/annotation_footer' \
+             }

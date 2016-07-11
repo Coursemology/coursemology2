@@ -61,6 +61,30 @@
   }
 
   /**
+   * Shows reply buttons for annotations.
+   *
+   * `addBack` is required since the AJAX response inserts the reply button footer separately
+   * rather than as part of the main discussion topic. `find` will fail to select the button if
+   * the button is `element` itself.
+   *
+   * @param element
+   */
+  function showReplyButton(element) {
+    var REPLY_COMMENT_SELECTOR = '.reply-annotation';
+    $(element).find(REPLY_COMMENT_SELECTOR).addBack(REPLY_COMMENT_SELECTOR).show();
+  }
+
+  /**
+   * Reveals widgets that enable user to use features with JavaScript functionality.
+   *
+   * @param element
+   */
+  function showScriptedWidgets(element) {
+    showCommentToolbar(element);
+    showReplyButton(element);
+  }
+
+  /**
    * Handles the comment delete button click event.
    *
    * @param e The event object.
@@ -95,9 +119,9 @@
     // TODO: Implement error recovery.
   }
 
-  showCommentToolbar(document);
+  showScriptedWidgets(document);
   $(document).on('DOMNodeInserted', function(e) {
-    showCommentToolbar(e.target);
+    showScriptedWidgets(e.target);
   });
   $(document).on('click', DOCUMENT_SELECTOR + '.comments .discussion_post .toolbar .delete',
     onCommentDelete);

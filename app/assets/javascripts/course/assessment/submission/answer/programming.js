@@ -261,8 +261,10 @@
   function onAnnotationFormResetted(e) {
     var $button = $(e.target);
     var $form = $button.parents('div[data-action]:first');
+    var $replyButton = $form.parents('.line-annotation:first').find('.reply-annotation');
 
     $form.remove();
+    $replyButton.show();
   }
 
   /**
@@ -389,11 +391,11 @@
   }
 
   /**
-   * Handles the annotation reply button click event.
+   * Handles the annotation post reply button click event.
    *
    * @param e The event object.
    */
-  function onAnnotationReply(e) {
+  function onAnnotationPostReply(e) {
     var $element = $(e.target);
     var $post = $element.parents('.discussion_post:first');
     var $replies = $post.next('div.replies');
@@ -412,6 +414,23 @@
     e.preventDefault();
   }
 
+  /**
+   * Handles the annotation topic reply button click event.
+   *
+   * TODO Trigger replying to last post instead of topic itself once proper behavior for post
+   *      deletion has been implemented.
+   *
+   * @param e The event object.
+   */
+  function onAnnotationTopicReply(e) {
+    var $element = $(e.target);
+    var $addAnnotationButton =
+      $element.parents('.line-annotation:first').parents('tr:first').prev('tr').
+               find('.add-annotation');
+    $addAnnotationButton.click();
+    $element.hide();
+    e.preventDefault();
+  }
 
   addProgrammingAnnotationLinks(document);
   $(document).on('DOMNodeInserted', function(e) {
@@ -426,5 +445,7 @@
   $(document).on('click', DOCUMENT_SELECTOR + '.discussion_post .toolbar .delete',
     onAnnotationDelete);
   $(document).on('click', DOCUMENT_SELECTOR + '.discussion_post .toolbar .reply',
-    onAnnotationReply);
+    onAnnotationPostReply);
+  $(document).on('click', DOCUMENT_SELECTOR + '.discussion_topic .reply-annotation',
+    onAnnotationTopicReply);
 })(jQuery);
