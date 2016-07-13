@@ -142,6 +142,7 @@ end
 group :assets do
   # Compress image assets
   gem 'image_optim'
+  gem 'coffee-rails'
 end
 
 group :production do
