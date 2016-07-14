@@ -37,6 +37,12 @@ textarea.code {
   font-size: $code-font-size;
 }
 
+// Add frame to summernote editors in airMode
+.note-editor {
+  @extend .note-editor.note-frame;
+  @extend .panel;
+}
+
 table.codehilite {
   tr {
     td {

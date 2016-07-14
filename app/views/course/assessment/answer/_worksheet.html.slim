@@ -8,4 +8,4 @@ div.comments
     - new_post = new_comments_post(discussion_topic_form.object)
     = discussion_topic_form.simple_fields_for :posts, new_post do |discussion_post_form|
       = discussion_post_form.hidden_field :parent_id
-      = discussion_post_form.input :text, label: false, input_html: { class: 'comment' }
+      = discussion_post_form.input :text, label: false, input_html: { class: ['comment', 'airmode'] }
