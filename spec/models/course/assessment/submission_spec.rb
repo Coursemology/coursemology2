@@ -51,6 +51,24 @@ RSpec.describe Course::Assessment::Submission do
       end
     end
 
+    describe '.answers' do
+      describe '.latest_answers' do
+        context 'when the submission has multiple answers for the same question' do
+          let(:assessment_traits) { [:with_mcq_question] }
+          let(:submission1_traits) { :submitted }
+          subject { submission1.answers.latest_answers }
+
+          it 'only returns the latest answer' do
+            submission1
+            new_answer = create(:course_assessment_answer_multiple_response, :submitted,
+                                assessment: assessment, question: assessment.questions.first,
+                                submission: submission1, creator: user1).acting_as
+            expect(subject).to contain_exactly(new_answer)
+          end
+        end
+      end
+    end
+
     describe '.by_user' do
       before do
         submission1
