@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160628052136) do
+ActiveRecord::Schema.define(version: 20160714053644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,6 +176,8 @@ ActiveRecord::Schema.define(version: 20160628052136) do
     t.boolean  "correct",        comment: "Correctness is independent of the grade (depends on the grading schema)"
     t.integer  "grader_id",      index: {name: "fk__course_assessment_answers_grader_id"}, foreign_key: {references: "users", name: "fk_course_assessment_answers_grader_id", on_update: :no_action, on_delete: :no_action}
     t.datetime "graded_at"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
   create_table "jobs", id: :uuid, default: nil, force: :cascade do |t|
