@@ -24,7 +24,7 @@
         td = format_datetime(@assessment.end_at) if @assessment.end_at.present?
 
   h2 = t('.finish_to_unlock')
-  / TODO: dependencies
+  = render partial: @assessment.assessment_conditions.includes(:conditional), suffix: 'condition'
 
   h2 = t('.files')
   = render partial: 'layouts/materials', locals: { folder: @assessment.folder }

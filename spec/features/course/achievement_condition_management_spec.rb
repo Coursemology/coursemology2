@@ -109,8 +109,10 @@ RSpec.feature 'Course: Achievements' do
           select_option
         click_button I18n.t('helpers.submit.condition_assessment.create')
         expect(current_path).to eq edit_course_achievement_path(course, achievement)
+        title = I18n.t('activerecord.attributes.course/condition/assessment/title.complete',
+                       assessment_title: valid_assessment_as_condition.title)
         expect(page).to have_selector('tr.condition > td.assessment-condition-content',
-                                      text: valid_assessment_as_condition.title)
+                                      text: title)
       end
 
       scenario 'I can edit a assessment condition' do
@@ -118,8 +120,10 @@ RSpec.feature 'Course: Achievements' do
 
         visit edit_course_achievement_path(course, achievement)
         expect(current_path).to eq edit_course_achievement_path(course, achievement)
+        current_title = I18n.t('activerecord.attributes.course/condition/assessment/title.complete',
+                               assessment_title: assessment.title)
         expect(page).to have_selector('tr.condition > td.assessment-condition-content',
-                                      text: assessment.title)
+                                      text: current_title)
         condition_edit_path =
           edit_course_achievement_condition_assessment_path(course, achievement,
                                                             assessment_condition)
@@ -129,8 +133,10 @@ RSpec.feature 'Course: Achievements' do
           select_option
         click_button I18n.t('helpers.submit.condition_assessment.update')
         expect(current_path).to eq edit_course_achievement_path(course, achievement)
+        new_title = I18n.t('activerecord.attributes.course/condition/assessment/title.complete',
+                           assessment_title: assessment_to_change_to.title)
         expect(page).to have_selector('tr.condition > td.assessment-condition-content',
-                                      text: assessment_to_change_to.title)
+                                      text: new_title)
       end
 
       scenario 'I can delete a assessment condition' do
@@ -140,8 +146,10 @@ RSpec.feature 'Course: Achievements' do
         expect do
           find_link(nil, href: condition_delete_path).click
         end.to change { achievement.conditions.count }.by(-1)
+        title = I18n.t('activerecord.attributes.course/condition/assessment/title.complete',
+                       assessment_title: assessment.title)
         expect(page).not_to have_selector('tr.condition > td.assessment-condition-content',
-                                          text: assessment.title)
+                                          text: title)
       end
 
       # Level condition

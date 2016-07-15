@@ -119,8 +119,10 @@ RSpec.describe Course::Condition::Assessment, type: :model do
       subject { create(:course_condition_assessment, assessment: assessment) }
 
       context 'when there is no minimum grade percentage' do
-        it 'returns the assessment title' do
-          expect(subject.title).to eq(assessment.title)
+        it 'returns the statement to complete the assessment with the assessment title' do
+          expect(subject.title).
+            to eq(Course::Condition::Assessment.
+                    human_attribute_name('title.complete', assessment_title: assessment.title))
         end
       end
 
@@ -130,7 +132,7 @@ RSpec.describe Course::Condition::Assessment, type: :model do
 
           expect(subject.title).
             to eq(Course::Condition::Assessment.
-                    human_attribute_name('title.title',
+                    human_attribute_name('title.minimum_score',
                                          assessment_title: assessment.title,
                                          minimum_grade_percentage: '33.33%'))
         end

@@ -22,11 +22,12 @@ class Course::Condition::Assessment < ActiveRecord::Base
       minimum_grade_percentage_display = number_to_percentage(minimum_grade_percentage,
                                                               precision: 2,
                                                               strip_insignificant_zeros: true)
-      self.class.human_attribute_name('title.title',
+      self.class.human_attribute_name('title.minimum_score',
                                       assessment_title: assessment.title,
                                       minimum_grade_percentage: minimum_grade_percentage_display)
     else
-      assessment.title
+      self.class.human_attribute_name('title.complete',
+                                      assessment_title: assessment.title)
     end
   end
 
