@@ -261,8 +261,10 @@
   function onAnnotationFormResetted(e) {
     var $button = $(e.target);
     var $form = $button.parents('div[data-action]:first');
+    var $replyButton = $form.parents('.line-annotation:first').find('.reply-annotation');
 
     $form.remove();
+    $replyButton.show();
   }
 
   /**
@@ -389,29 +391,22 @@
   }
 
   /**
-   * Handles the annotation reply button click event.
+   * Handles the annotation topic reply button click event.
+   *
+   * TODO Trigger replying to last post instead of topic itself once proper behavior for post
+   *      deletion has been implemented.
    *
    * @param e The event object.
    */
-  function onAnnotationReply(e) {
+  function onAnnotationTopicReply(e) {
     var $element = $(e.target);
-    var $post = $element.parents('.discussion_post:first');
-    var $replies = $post.next('div.replies');
-
-    var courseId = courseIdForElement($element);
-    var assessmentId = assessmentIdForElement($element);
-    var submissionId = submissionIdForElement($element);
-    var answerId = answerIdForRow($element);
-    var programmingFileId = programmingFileIdForRow($element);
-    var lineNumber = $element.parents('.line-annotation:first').data('lineNumber');
-    var postId = $post.data('postId');
-
-    var $form = findOrCreateAnnotationForm($replies, courseId, assessmentId, submissionId, answerId,
-                                           programmingFileId, lineNumber, postId);
-    $form.find('textarea').focus();
+    var $addAnnotationButton =
+      $element.parents('.line-annotation:first').parents('tr:first').prev('tr').
+               find('.add-annotation');
+    $addAnnotationButton.click();
+    $element.hide();
     e.preventDefault();
   }
-
 
   addProgrammingAnnotationLinks(document);
   $(document).on('DOMNodeInserted', function(e) {
@@ -425,6 +420,8 @@
     onAnnotationFormSubmitted);
   $(document).on('click', DOCUMENT_SELECTOR + '.discussion_post .toolbar .delete',
     onAnnotationDelete);
-  $(document).on('click', DOCUMENT_SELECTOR + '.discussion_post .toolbar .reply',
-    onAnnotationReply);
+  $(document).on('click', DOCUMENT_SELECTOR + '.discussion_topic .reply-annotation',
+    onAnnotationTopicReply);
+  // TODO Restore feature to reply to individual annotation posts once proper behavior for post
+  //      deletion has been implemented.
 })(jQuery);
