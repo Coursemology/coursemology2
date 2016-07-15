@@ -261,8 +261,10 @@
   function onAnnotationFormResetted(e) {
     var $button = $(e.target);
     var $form = $button.parents('div[data-action]:first');
+    var $replyButton = $form.parents('.line-annotation:first').find('.reply-annotation');
 
     $form.remove();
+    $replyButton.show();
   }
 
   /**
@@ -389,29 +391,53 @@
   }
 
   /**
-   * Handles the annotation reply button click event.
+   * Creates a form to reply to a given annotation post.
+   *
+   * @param {jQuery} $post The annotation post to reply to.
+   */
+  function findOrCreateAnnotationReplyFormForPost($post) {
+    var $replies = $post.next('div.replies');
+    var courseId = courseIdForElement($post);
+    var assessmentId = assessmentIdForElement($post);
+    var submissionId = submissionIdForElement($post);
+    var answerId = answerIdForRow($post);
+    var programmingFileId = programmingFileIdForRow($post);
+    var lineNumber = $post.parents('.line-annotation:first').data('lineNumber');
+    var postId = $post.data('postId');
+
+    return findOrCreateAnnotationForm($replies, courseId, assessmentId, submissionId, answerId,
+                                      programmingFileId, lineNumber, postId);
+  }
+
+  /**
+   * Handles the annotation post reply button click event.
+   *
+   * @param e The event object.
+   */
+  function onAnnotationPostReply(e) {
+    var $element = $(e.target);
+    var $post = $element.parents('.discussion_post:first');
+    var $form = findOrCreateAnnotationReplyFormForPost($post);
+
+    $form.find('textarea').focus();
+    e.preventDefault();
+  }
+
+  /**
+   * Handles the annotation reply button click event. Replying to an annotation is
+   * equivalent to replying to its last post.
    *
    * @param e The event object.
    */
   function onAnnotationReply(e) {
     var $element = $(e.target);
-    var $post = $element.parents('.discussion_post:first');
-    var $replies = $post.next('div.replies');
+    var $post = $element.parents('.line-annotation:first').find('.discussion_post:last');
+    var $form = findOrCreateAnnotationReplyFormForPost($post);
 
-    var courseId = courseIdForElement($element);
-    var assessmentId = assessmentIdForElement($element);
-    var submissionId = submissionIdForElement($element);
-    var answerId = answerIdForRow($element);
-    var programmingFileId = programmingFileIdForRow($element);
-    var lineNumber = $element.parents('.line-annotation:first').data('lineNumber');
-    var postId = $post.data('postId');
-
-    var $form = findOrCreateAnnotationForm($replies, courseId, assessmentId, submissionId, answerId,
-                                           programmingFileId, lineNumber, postId);
+    $element.hide();
     $form.find('textarea').focus();
     e.preventDefault();
   }
-
 
   addProgrammingAnnotationLinks(document);
   $(document).on('DOMNodeInserted', function(e) {
@@ -426,5 +452,7 @@
   $(document).on('click', DOCUMENT_SELECTOR + '.discussion_post .toolbar .delete',
     onAnnotationDelete);
   $(document).on('click', DOCUMENT_SELECTOR + '.discussion_post .toolbar .reply',
+    onAnnotationPostReply);
+  $(document).on('click', DOCUMENT_SELECTOR + '.discussion_topic .reply-annotation',
     onAnnotationReply);
 })(jQuery);
