@@ -4,6 +4,8 @@ en:
       answer:
         worksheet:
           comments: 'Comments'
+        comments_footer:
+          comment: 'Comment'
         guided:
           continue: 'Continue'
           reattempt: 'Reattempt'

@@ -46,7 +46,7 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
           not_to have_button(I18n.t('course.assessment.submission.submissions.worksheet.finalise'))
       end
 
-      scenario 'I can comment on answers' do
+      scenario 'I can comment on answers', js: true do
         assessment.questions.attempt(submission).each(&:save!)
         comment_answer = submission.answers.first
         comment_topic = comment_answer.discussion_topic
@@ -57,13 +57,14 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
 
         comment_post_text = 'test comment'
         within find(content_tag_selector(comment_answer)) do
-          find(:css, 'textarea.comment').set(comment_post_text)
+          fill_in 'discussion_post[text]', with: comment_post_text
+          find('.reply-comment').click
         end
 
-        click_button 'save'
+        wait_for_ajax
 
         comment_post = comment_topic.posts.reload.last
-        expect(comment_post.text).to eq(comment_post_text)
+        expect(comment_post.text).to have_tag('*', text: comment_post_text)
         expect(comment_post.parent).to eq(comment_parent_post)
 
         submission.answers.each do |answer|
