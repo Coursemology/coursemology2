@@ -10,6 +10,7 @@ nav
   = f.simple_fields_for :answers, guided_current_answer do |base_answer_form|
     = content_tag_for(:div, base_answer_form.object,
                       'data-answer-id' => base_answer_form.object.id) do
+      = render partial: base_answer_form.object.question, suffix: 'question'
       = render partial: 'course/assessment/answer/answer', object: base_answer_form.object,
                locals: { base_answer_form: base_answer_form }
       - if base_answer_form.object.attempting?
