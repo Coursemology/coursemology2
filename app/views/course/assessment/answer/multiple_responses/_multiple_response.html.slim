@@ -1,6 +1,4 @@
 - question = multiple_response.question.specific
-h2 = format_inline_text(question.title)
-= format_html(question.description)
 - readonly = cannot?(:update, multiple_response.answer)
 = f.association :options, as: :course_assessment_answer_multiple_response,
                           collection: question.options,

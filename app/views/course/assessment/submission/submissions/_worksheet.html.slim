@@ -1,10 +1,16 @@
 = simple_form_for [current_course, @assessment, @submission] do |f|
   = f.error_notification
-  = f.simple_fields_for :answers do |base_answer_form|
-    = content_tag_for(:div, base_answer_form.object,
-                      'data-answer-id' => base_answer_form.object.id) do
-      = render partial: 'course/assessment/answer/answer', object: base_answer_form.object,
-               locals: { base_answer_form: base_answer_form }
+
+  / TODO: Implement flag to display all answers, or only latest answers.
+  - answers_by_question = f.object.answers.latest_answers.group_by(&:question)
+  - f.object.assessment.questions.each do |question|
+    = render partial: question, suffix: 'question'
+
+    = f.simple_fields_for :answers, answers_by_question[question] do |base_answer_form|
+      = content_tag_for(:div, base_answer_form.object,
+                        'data-answer-id' => base_answer_form.object.id) do
+        = render partial: 'course/assessment/answer/answer', object: base_answer_form.object,
+                 locals: { base_answer_form: base_answer_form }
 
   - unless @submission.attempting?
     = render 'statistics', f: f

@@ -1,6 +1,4 @@
 - question = text_response.question.specific
-h2 = format_inline_text(question.title)
-= format_html(question.description)
 - readonly = cannot?(:update, text_response.answer)
 = f.input :answer_text, label: false, readonly: readonly
 

@@ -50,12 +50,14 @@ div.panel.panel-default
             th = t('.question')
             th = @submission.class.human_attribute_name(:grade)
         tbody
-          - @submission.answers.each do |answer|
+          - answer_by_question = @submission.answers.latest_answers.group_by(&:question)
+          - @submission.assessment.questions.each do |question|
+            - answer = answer_by_question[question].first
             tr
-              th = format_inline_text(answer.question.title)
+              th = format_inline_text(question.title)
               td
                 span.submission-grades-summary-grade> (
                     id="submission-grades-summary-answer-#{answer.id}-grade")
                   = answer.grade
                 ' /
-                = answer.question.maximum_grade
+                = question.maximum_grade
