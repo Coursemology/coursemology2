@@ -70,7 +70,7 @@
    * @param element
    */
   function showReplyButton(element) {
-    var REPLY_COMMENT_SELECTOR = '.reply-annotation';
+    var REPLY_COMMENT_SELECTOR = DOCUMENT_SELECTOR + '.reply-annotation';
     $(element).find(REPLY_COMMENT_SELECTOR).addBack(REPLY_COMMENT_SELECTOR).show();
   }
 
