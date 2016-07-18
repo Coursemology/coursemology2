@@ -1,7 +1,8 @@
+//= require helpers/form_helpers
 //= require templates/course/assessment/submission/answer/programming/add_annotation_button
 //= require templates/course/assessment/submission/answer/programming/annotation_form
 
-(function($) {
+(function($, FORM_HELPERS) {
   /* global JST, Routes */
   'use strict';
   var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ' +
@@ -276,57 +277,9 @@
   function onAnnotationFormSubmitted(e) {
     var $button = $(e.target);
     var $form = $button.parents('div[data-action]:first');
-    var action = $form.data('action');
-    var method = $form.data('method');
-
-    $.ajax({ url: action, method: method, data: buildFormData($form) }).
-      done(function(data) { onAnnotationFormSubmitSuccess(data, $form[0]); }).
-      fail(function(data) { onAnnotationFormSubmitFail(data, $form[0]); });
-
-    findFormFields($form).prop('disabled', true);
+    FORM_HELPERS.submitAndDisableForm($form, onAnnotationFormSubmitSuccess,
+                                             onAnnotationFormSubmitFail);
     e.preventDefault();
-  }
-
-  /**
-   * Finds the form fields in the given form.
-   *
-   * @param {jQuery} $form The form to search.
-   * @param {String|undefined} selector The filter to apply on the returned fields.
-   *
-   * @returns {jQuery} The set of fields matching the filter.
-   */
-  function findFormFields($form, selector) {
-    var $result = $form.find('textarea, input');
-    if (selector) {
-      $result = $result.filter(selector);
-    }
-
-    return $result;
-  }
-
-  /**
-   * Builds the form data from the given form.
-   *
-   * This is a less sophisticated version of $.serialize() in that it only supports inputs and
-   * textareas.
-   *
-   * @param {jQuery} $form The form being submitted.
-   * @returns {Object} The form data to be submitted.
-   */
-  function buildFormData($form) {
-    var $fields = findFormFields($form, ':not(:disabled)');
-    var data = {
-      authenticity_token: $(document).find('meta[name="csrf-token"]').attr('content')
-    };
-    $fields.each(function() {
-      if (this.name === '') {
-        return;
-      }
-
-      data[this.name] = $(this).val();
-    });
-
-    return data;
   }
 
   /**
@@ -345,7 +298,7 @@
    */
   function onAnnotationFormSubmitFail(_, form) {
     var $form = $(form);
-    findFormFields($form).prop('disabled', false);
+    FORM_HELPERS.findFormFields($form).prop('disabled', false);
 
     // TODO: Implement error recovery.
   }
@@ -455,4 +408,4 @@
     onAnnotationPostReply);
   $(document).on('click', DOCUMENT_SELECTOR + '.discussion_topic .reply-annotation',
     onAnnotationReply);
-})(jQuery);
+})(jQuery, FORM_HELPERS);

@@ -7,7 +7,23 @@ class Course::Assessment::Submission::Answer::CommentsController < \
 
   delegate :discussion_topic, to: :@answer
 
+  def create
+    @answer.class.transaction do
+      @post.title = @assessment.title
+      if super && @answer.save
+      else
+        render status: :bad_request
+      end
+    end
+  end
+
   def destroy
     render status: :bad_request unless super
+  end
+
+  private
+
+  def create_topic_subscription
+    @discussion_topic.ensure_subscribed_by(current_user)
   end
 end

@@ -1,4 +1,6 @@
-(function($) {
+//= require helpers/form_helpers
+
+(function($, FORM_HELPERS) {
   /* global Routes */
   'use strict';
   var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ';
@@ -75,6 +77,20 @@
   }
 
   /**
+   * Shows forms for adding comments to answers.
+   *
+   * `addBack` is required since the AJAX response inserts the reply button footer separately
+   * rather than as part of the main discussion topic. `find` will fail to select the button if
+   * the button is `element` itself.
+   *
+   * @param element
+   */
+  function showAnswerCommentForm(element) {
+    var FORM_SELECTOR = DOCUMENT_SELECTOR + '.answer-comment-form';
+    $(element).find(FORM_SELECTOR).addBack(FORM_SELECTOR).show();
+  }
+
+  /**
    * Reveals widgets that enable user to use features with JavaScript functionality.
    *
    * @param element
@@ -82,6 +98,35 @@
   function showScriptedWidgets(element) {
     showCommentToolbar(element);
     showReplyButton(element);
+    showAnswerCommentForm(element);
+  }
+
+  /**
+   * Handles the comment reply button click event.
+   *
+   * @param e The event object.
+   */
+  function onCommentReply(e) {
+    var $button = $(e.target);
+    var $form = $button.parents('div[data-action]:first');
+    FORM_HELPERS.submitAndDisableForm($form, onCommentReplySuccess, onCommentReplyFail);
+    e.preventDefault();
+  }
+
+
+  /**
+   * Handles the successful comment reply event.
+   */
+  function onCommentReplySuccess() {
+  }
+
+  /**
+   * Handles the errored comment reply event.
+   */
+  function onCommentReplyFail(_, form) {
+    // TODO: Implement error recovery.
+    var $form = $(form);
+    FORM_HELPERS.findFormFields($form).prop('disabled', false);
   }
 
   /**
@@ -125,4 +170,5 @@
   });
   $(document).on('click', DOCUMENT_SELECTOR + '.comments .discussion_post .toolbar .delete',
     onCommentDelete);
-})(jQuery);
+  $(document).on('click', DOCUMENT_SELECTOR + '.comments .reply-comment', onCommentReply);
+})(jQuery, FORM_HELPERS);

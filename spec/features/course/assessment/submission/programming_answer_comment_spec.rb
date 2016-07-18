@@ -42,7 +42,7 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         wait_for_job
 
         annotation = 'test annotation text'
-        within find(content_tag_selector(submission.answers.first)) do
+        within find(content_tag_selector(submission.answers.first)).find('div.files') do
           first_line = find('table.codehilite tr', match: :first)
           first_line.hover
 
