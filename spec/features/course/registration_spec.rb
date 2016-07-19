@@ -26,7 +26,6 @@ RSpec.feature 'Courses: Registration' do
       scenario 'Users cannot re-register for a course' do
         visit course_path(course)
 
-        expect(page).to have_text(course.description)
         expect(page).not_to have_button('course.user_registrations.registration.register')
       end
     end

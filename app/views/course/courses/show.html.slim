@@ -4,12 +4,16 @@
     - if !current_course.user?(current_user) && can?(:register, current_course)
       div.register
         = render partial: 'course/user_registrations/registration'
-  h2 = t('.description')
-  = format_html(current_course.description)
 
-  h2 = t('.instructors')
-  div
-    = render partial: 'layouts/user', collection: current_course.managers.includes(:user).map(&:user)
+  - unless current_course.user?(current_user)
+    h2 = t('.description')
+    = format_html(current_course.description)
+
+    h2 = t('.instructors')
+    div
+      = render partial: 'layouts/user',
+                collection: current_course.managers.includes(:user).map(&:user)
+
   - if current_course.user?(current_user) || can?(:manage, current_course)
     h2 = t('.announcements')
     div

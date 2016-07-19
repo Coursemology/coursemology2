@@ -106,6 +106,12 @@ RSpec.feature 'Course: Homepage' do
         expect(page).to have_selector('span.name', text: manager.user.name)
         expect(page).not_to have_selector('span.name', text: teaching_assistant.user.name)
       end
+
+      scenario 'I am able to see the course description' do
+        visit course_path(course)
+        expect(page).to have_selector('h2', text: I18n.t('course.courses.show.description'))
+        expect(page).to have_text(course.description)
+      end
     end
   end
 end
