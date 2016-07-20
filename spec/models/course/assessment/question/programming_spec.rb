@@ -3,8 +3,6 @@ require 'rails_helper'
 
 RSpec.describe Course::Assessment::Question::Programming do
   it { is_expected.to act_as(Course::Assessment::Question) }
-  it { is_expected.to validate_numericality_of(:time_limit).allow_nil }
-  it { is_expected.to validate_numericality_of(:memory_limit).allow_nil }
 
   it 'belongs to an import job' do
     expect(subject).to belong_to(:import_job).
@@ -23,6 +21,13 @@ RSpec.describe Course::Assessment::Question::Programming do
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
+    describe 'validations' do
+      subject { build(:course_assessment_question_programming) }
+
+      it { is_expected.to validate_numericality_of(:time_limit).allow_nil }
+      it { is_expected.to validate_numericality_of(:memory_limit).allow_nil }
+    end
+
     describe 'callbacks' do
       let(:question_attributes) { [] }
       subject { build(:course_assessment_question_programming, *question_attributes) }
@@ -85,9 +90,6 @@ RSpec.describe Course::Assessment::Question::Programming do
       end
     end
 
-    describe 'validations' do
-    end
-
     describe '#auto_gradable?' do
       subject do
         build_stubbed(:course_assessment_question_programming, test_case_count: test_case_count)
@@ -138,6 +140,7 @@ RSpec.describe Course::Assessment::Question::Programming do
 
     describe '#imported_attachment=' do
       with_active_job_queue_adapter(:test) do
+        subject { build(:course_assessment_question_programming) }
         it 'does not enqueue another import job' do
           subject.imported_attachment = build(:attachment_reference)
           expect { subject.save }.not_to have_enqueued_job

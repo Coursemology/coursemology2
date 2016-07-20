@@ -80,5 +80,9 @@ FactoryGirl.define do
       with_all_question_types
       published
     end
+
+    trait :autograded do
+      autograded true
+    end
   end
 end

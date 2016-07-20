@@ -18,6 +18,29 @@ RSpec.describe Course::Assessment::Question do
   with_tenant(:instance) do
     subject { build_stubbed(:course_assessment_question) }
 
+    describe 'validations' do
+      context 'when assessment automatically releases grades' do
+        let(:assessment) { create(:assessment, :autograded) }
+        let!(:question) { build(:course_assessment_question, assessment: assessment) }
+        subject { question }
+
+        context 'when question is autograded' do
+          before { allow(question).to receive(:auto_gradable?).and_return(true) }
+          it { is_expected.to be_valid }
+        end
+
+        context 'when question is not autograded' do
+          before { allow(question).to receive(:auto_gradable?).and_return(false) }
+
+          it 'is not valid' do
+            expect(subject).not_to be_valid
+            expect(subject.errors[:base]).to include(I18n.t('activerecord.errors.models.' \
+            'course/assessment/question.autograded_assessment'))
+          end
+        end
+      end
+    end
+
     describe '#auto_gradable?' do
       it 'defaults to false' do
         expect(subject.auto_gradable?).to eq(false)

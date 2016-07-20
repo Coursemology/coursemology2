@@ -3,6 +3,8 @@ class Course::Assessment::Question < ActiveRecord::Base
   actable
   has_many_attachments
 
+  validate :validate_assessment_is_not_autograded, unless: :auto_gradable?
+
   belongs_to :assessment, inverse_of: :questions
   has_and_belongs_to_many :skills
 
@@ -48,5 +50,12 @@ class Course::Assessment::Question < ActiveRecord::Base
   # @return [Boolean] True if the question is the last question, otherwise False.
   def last_question?
     assessment.questions.last == self
+  end
+
+  private
+
+  def validate_assessment_is_not_autograded
+    return unless assessment.autograded
+    errors.add(:base, :autograded_assessment)
   end
 end
