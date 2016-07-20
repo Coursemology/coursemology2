@@ -57,6 +57,31 @@ RSpec.describe Course::Assessment do
           it { is_expected.to be_valid }
         end
       end
+
+      context 'when the assessment is set to be autograded' do
+        let!(:question) do
+          create(:course_assessment_question_programming, *question_traits, assessment: assessment)
+        end
+        subject do
+          assessment.autograded = true
+          assessment
+        end
+
+        context 'when the assessment has a non-autograded question' do
+          let(:question_traits) { nil }
+
+          it 'is not valid' do
+            expect(subject).not_to be_valid
+            expect(subject.errors['actable.base']).
+              to include(I18n.t('activerecord.errors.models.course/assessment.autograded'))
+          end
+        end
+
+        context 'when the assessment only has autograded questions' do
+          let(:question_traits) { [:auto_gradable] }
+          it { is_expected.to be_valid }
+        end
+      end
     end
 
     describe 'callbacks' do
