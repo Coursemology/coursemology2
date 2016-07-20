@@ -177,7 +177,7 @@ Rails.application.routes.draw do
                     resources :files, only: [] do
                       resources :annotations, only: [:create]
                       resources :lines, only: [] do
-                        resources :posts, only: [:destroy]
+                        resources :posts, only: [:update, :destroy]
                       end
                     end
                   end

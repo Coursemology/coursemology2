@@ -4,11 +4,19 @@ class Course::Assessment::Submission::Answer::Programming::PostsController < \
 
   include Course::Discussion::PostsConcern
 
+  def update
+    render status: :bad_request unless super
+  end
+
   def destroy
     render status: :bad_request unless super
   end
 
   private
+
+  def post_params
+    params.require(:discussion_post).permit(:text)
+  end
 
   def line_param
     params.key?(:line_id) ? params[:line_id].to_i : nil

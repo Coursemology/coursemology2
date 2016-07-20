@@ -121,6 +121,24 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         expect(new_post.text).to have_tag('*', text: annotation_text)
       end
 
+      scenario 'I can edit my annotations', js: true do
+        post = create(:course_discussion_post, topic: annotation.discussion_topic, creator: user)
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+        find(content_tag_selector(post)).find('.edit').click
+
+        annotation_text = 'updated annotation'
+        within find_form('.annotation-post-form') do
+          fill_in 'discussion_post[text]', with: annotation_text
+          click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
+                              'annotation_post_form.submit')
+        end
+
+        wait_for_ajax
+        updated_post = post.reload
+        expect(updated_post.text).to have_tag('*', text: annotation_text)
+      end
+
       scenario 'I can delete my annotations', js: true do
         post = create(:course_discussion_post, topic: annotation.discussion_topic, creator: user)
 
