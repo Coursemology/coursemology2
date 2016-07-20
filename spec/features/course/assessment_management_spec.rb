@@ -85,9 +85,10 @@ RSpec.feature 'Course: Assessments: Management' do
         expect(page).to have_selector('li', text: assessment_sidebar)
       end
 
-      scenario 'I can see assessments' do
+      scenario 'I can see non-draft assessments' do
         category = course.assessment_categories.first
-        assessment = create(:assessment, course: course, tab: category.tabs.first)
+        assessment = create(:assessment, :published_with_mcq_question,
+                            course: course, tab: category.tabs.first)
         visit course_assessments_path(course)
 
         find_link(assessment.title, href: course_assessment_path(course, assessment)).click

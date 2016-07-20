@@ -6,10 +6,10 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:assessment) { create(:assessment, :guided, course: course) }
-    let(:mcq_questions) do
-      create_list(:course_assessment_question_multiple_response, 2, assessment: assessment)
+    let(:assessment) do
+      create(:assessment, :guided, :published_with_mcq_question, :with_mcq_question, course: course)
     end
+    let(:mcq_questions) { assessment.questions.map(&:specific) }
     before { login_as(user, scope: :user) }
 
     let(:student) { create(:course_user, :approved, course: course).user }

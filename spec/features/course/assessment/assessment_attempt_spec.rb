@@ -6,13 +6,14 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:empty_assessment) { create(:assessment, course: course) }
+    let(:empty_assessment) { create(:assessment, course: course, draft: true) }
     let(:unopened_assessment) do
-      create(:assessment, :with_all_question_types, :unopened, course: course)
+      create(:assessment, :published_with_all_question_types, :unopened, course: course)
     end
-    let(:assessment) { create(:assessment, :with_all_question_types, course: course) }
+    let(:assessment) { create(:assessment, :published_with_all_question_types, course: course) }
     let(:assessment_with_condition) do
-      assessment_with_condition = create(:assessment, :with_all_question_types, course: course)
+      assessment_with_condition = create(:assessment, :published_with_all_question_types,
+                                         course: course)
       create(:assessment_condition,
              course: course,
              assessment: assessment,
@@ -34,16 +35,11 @@ RSpec.describe 'Course: Assessments: Attempt' do
     context 'As a Course Student' do
       let(:user) { student }
 
-      scenario 'I cannot attempt empty assessments' do
+      scenario 'I cannot see draft assessments which are empty' do
         empty_assessment
         visit course_assessments_path(course)
 
-        within find(content_tag_selector(empty_assessment)) do
-          find_link(I18n.t('course.assessment.assessments.assessment.attempt'),
-                    href: course_assessment_submissions_path(course, empty_assessment)).click
-        end
-
-        expect(page.status_code).to eq(422)
+        expect(page).not_to have_content_tag_for(empty_assessment)
       end
 
       scenario 'I cannot attempt unsatisfied assessments' do
