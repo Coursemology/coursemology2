@@ -9,6 +9,8 @@ FactoryGirl.define do
     end
     title { generate(:course_assessment_assessment_name) }
     base_exp 1000
+    autograded false
+    draft true
 
     trait :unopened do
       start_at { 1.day.from_now }

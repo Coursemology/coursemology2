@@ -96,7 +96,8 @@ class Course::Assessment < ActiveRecord::Base
   end
 
   def set_defaults
-    self.draft ||= true
+    self.draft = true
+    self.autograded ||= false
   end
 
   def validate_draft_status_if_no_questions
