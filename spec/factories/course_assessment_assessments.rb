@@ -17,7 +17,7 @@ FactoryGirl.define do
     trait :with_mcq_question do
       after(:build) do |assessment|
         question = build(:course_assessment_question_multiple_response, assessment: assessment)
-        assessment.multiple_response_questions << question
+        assessment.questions << question.acting_as
       end
     end
 
@@ -26,14 +26,14 @@ FactoryGirl.define do
         question = build(:course_assessment_question_programming, :auto_gradable,
                          template_package: true, template_package_deferred: false,
                          assessment: assessment)
-        assessment.programming_questions << question
+        assessment.questions << question.acting_as
       end
     end
 
     trait :with_text_response_question do
       after(:build) do |assessment|
         question = build(:course_assessment_question_text_response, assessment: assessment)
-        assessment.text_response_questions << question
+        assessment.questions << question.acting_as
       end
     end
 
@@ -49,6 +49,34 @@ FactoryGirl.define do
 
     trait :guided do
       display_mode :guided
+    end
+
+    # Note: Not to be used alone, as a published assessment requires at
+    #   least 1 other question. Use the other published traits intead.
+    trait :published do
+      after(:build) do |assessment|
+        assessment.draft = false
+      end
+    end
+
+    trait :published_with_mcq_question do
+      with_mcq_question
+      published
+    end
+
+    trait :published_with_text_response_question do
+      with_text_response_question
+      published
+    end
+
+    trait :published_with_programming_question do
+      with_programming_question
+      published
+    end
+
+    trait :published_with_all_question_types do
+      with_all_question_types
+      published
     end
   end
 end
