@@ -24,7 +24,6 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::PostsControl
     describe '#update' do
       let(:post_text) { 'updated post text' }
       subject do
-        controller.instance_variable_set(:@post, immutable_post)
         post :update, format: :js, course_id: course, assessment_id: assessment,
                       submission_id: submission, answer_id: answer, file_id: file,
                       line_id: annotation.line, id: immutable_post,
@@ -32,8 +31,12 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::PostsControl
       end
 
       context 'when updating fails' do
-        it 'returns HTTP 400' do
+        before do
+          controller.instance_variable_set(:@post, immutable_post)
           subject
+        end
+
+        it 'returns HTTP 400' do
           expect(response.status).to eq(400)
         end
       end

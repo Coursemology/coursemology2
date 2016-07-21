@@ -23,7 +23,6 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
     describe '#create' do
       let(:post_text) { 'test post text' }
       subject do
-        controller.instance_variable_set(:@annotation, immutable_annotation)
         post :create, format: :js, course_id: course, assessment_id: assessment,
                       submission_id: submission, answer_id: answer, file_id: file,
                       id: immutable_annotation,
@@ -36,8 +35,12 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
       end
 
       context 'when saving fails' do
-        it 'returns HTTP 400' do
+        before do
+          controller.instance_variable_set(:@annotation, immutable_annotation)
           subject
+        end
+
+        it 'returns HTTP 400' do
           expect(response.status).to eq(400)
         end
       end
