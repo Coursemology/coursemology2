@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsController do
+RSpec.describe Course::Assessment::Submission::Answer::Programming::PostsController do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:user) { create(:user) }
@@ -12,31 +12,27 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
     end
     let(:answer) { submission.answers.first }
     let(:file) { answer.actable.files.first }
-    let(:immutable_annotation) do
-      create(:course_assessment_answer_programming_file_annotation, file: file).tap do |stub|
-        allow(stub).to receive(:save).and_return(false)
+    let(:annotation) { create(:course_assessment_answer_programming_file_annotation, file: file) }
+    let(:immutable_post) do
+      create(:course_discussion_post, topic: annotation, creator: user, updater: user).tap do |stub|
+        allow(stub).to receive(:update_attributes).and_return(false)
       end
     end
 
     before { sign_in(user) }
 
-    describe '#create' do
-      let(:post_text) { 'test post text' }
+    describe '#update' do
+      let(:post_text) { 'updated post text' }
       subject do
-        post :create, format: :js, course_id: course, assessment_id: assessment,
+        post :update, format: :js, course_id: course, assessment_id: assessment,
                       submission_id: submission, answer_id: answer, file_id: file,
-                      id: immutable_annotation,
-                      annotation: {
-                        answer_id: answer.id
-                      },
-                      discussion_post: {
-                        text: post_text
-                      }
+                      line_id: annotation.line, id: immutable_post,
+                      discussion_post: { text: post_text }
       end
 
-      context 'when saving fails' do
+      context 'when updating fails' do
         before do
-          controller.instance_variable_set(:@annotation, immutable_annotation)
+          controller.instance_variable_set(:@post, immutable_post)
           subject
         end
 

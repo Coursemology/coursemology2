@@ -23,7 +23,6 @@ RSpec.describe Course::Assessment::Submission::Answer::CommentsController do
       let(:comment) { 'new answer comment' }
 
       subject do
-        controller.instance_variable_set(:@answer, immutable_answer)
         post :create, format: :js, course_id: course, assessment_id: assessment,
                       submission_id: submission, answer_id: immutable_answer,
                       discussion_post: {
@@ -33,8 +32,12 @@ RSpec.describe Course::Assessment::Submission::Answer::CommentsController do
       end
 
       context 'when comment creation fails' do
-        it 'returns HTTP 400' do
+        before do
+          controller.instance_variable_set(:@answer, immutable_answer)
           subject
+        end
+
+        it 'returns HTTP 400' do
           expect(response.status).to eq(400)
         end
       end

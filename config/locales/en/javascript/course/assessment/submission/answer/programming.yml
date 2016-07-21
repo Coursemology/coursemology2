@@ -13,3 +13,8 @@ en:
                   label: 'Annotation body'
                 reset: 'Cancel' # TODO: Reference :'common.cancel', see fnando/i18n-js#392
                 submit: 'Comment'
+              annotation_post_form:
+                text:
+                  label: 'Annotation post body'
+                reset: 'Cancel' # TODO: Reference :'common.cancel', see fnando/i18n-js#392
+                submit: 'Save'

@@ -26,8 +26,12 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       let(:comments_params) { update_params[:answers_attributes]['0'] }
       let(:post_params) { comments_params[:discussion_topic_attributes][:posts_attributes] }
 
-      subject do
+      before do
         controller.instance_variable_set(:@submission, immutable_submission)
+        subject
+      end
+
+      subject do
         post :update, course_id: course, assessment_id: assessment, id: immutable_submission,
                       submission: {
                         answers_attributes: {
@@ -39,7 +43,6 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       context 'when no comment text is specified' do
         let(:post_attributes) { { text: '' } }
         it 'removes the post' do
-          subject
           expect(post_params.first).to be_nil
         end
       end
@@ -47,8 +50,6 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       context 'when comment text is specified' do
         let(:post_attributes) { { text: 'test' } }
         it 'sets the title of the post to the title of the assessment' do
-          subject
-
           expect(post_params.first.second[:title]).to eq(assessment.title)
         end
       end

@@ -3,6 +3,9 @@
   div.toolbar.pull-right style='display: none'
     => link_to('#', class: ['reply']) do
       = fa_icon 'reply'.freeze
+    - if can?(:update, annotation_post)
+      => link_to('#', class: ['edit']) do
+        = fa_icon 'edit'.freeze
     - if can?(:destroy, annotation_post)
       = link_to('#', class: ['delete']) do
         = fa_icon 'trash'.freeze
