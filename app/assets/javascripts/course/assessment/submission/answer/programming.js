@@ -133,7 +133,7 @@
   }
 
   /**
-   * Creates a annotation form for the user to enter his annotation.
+   * Creates an annotation form for the user to enter his annotation.
    *
    * @param {jQuery} $element The element to search for the form.
    * @param {Number} courseId The course ID that the annotation is associated ith.
@@ -158,7 +158,7 @@
   }
 
   /**
-   * Creates a annotation form for the user to edit his annotation post.
+   * Creates an annotation form for the user to edit his annotation post.
    *
    * @param {jQuery} $element The element to search for the form.
    * @param {Number} courseId The course ID that the annotation is associated ith.
@@ -205,7 +205,7 @@
   }
 
   /**
-   * Creates a annotation form for the user to enter his annotation.
+   * Creates an annotation form for the user to enter his annotation.
    *
    * @param {jQuery} $element The element to search for the form.
    * @param {Number} courseId The course ID that the annotation is associated with.
@@ -234,7 +234,7 @@
   }
 
   /**
-   * Creates a annotation form for the user to edit his annotation psot.
+   * Creates an annotation form for the user to edit his annotation post.
    *
    * @param {jQuery} $element The element to search for the form.
    * @param {Number} courseId The course ID that the annotation is associated with.

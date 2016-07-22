@@ -69,7 +69,6 @@
     e.preventDefault();
   }
 
-
   /**
    * Handles the successful comment reply event.
    */
