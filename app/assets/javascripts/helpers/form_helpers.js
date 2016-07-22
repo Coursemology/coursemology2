@@ -1,6 +1,32 @@
 var FORM_HELPERS = (function (){
   'use strict';
 
+   /**
+    * Returns a method that renders templates from a given default path.
+    *
+    * @param {String} defaultPath The absolute path to where the templates reside.
+    * @return {renderFromPath~inner} The renderer.
+    */
+   function renderFromPath(defaultPath) {
+     /**
+      * Renders a specified template.
+      *
+      * @param {String} template The relative path to the template. Absolute paths or paths
+      *   beginning with a period are not expanded.
+      * @param {Object} locals The local variables to be given to the template.
+      * @return {String} The rendered template.
+      */
+     function render(template, locals) {
+       if (template[0] !== '/' && template[0] !== '.') {
+         template = defaultPath + template;
+       }
+
+       return JST[template](locals);
+     }
+
+     return render;
+   }
+
   /**
    * Finds the form fields in the given form.
    *
@@ -81,8 +107,29 @@ var FORM_HELPERS = (function (){
     findFormFields($form).prop('disabled', true);
   }
 
+  /**
+   * Finds the form which $element is a child of.
+   *
+   * @param {jQuery} $element The form's child element
+   */
+  function parentFormForElement($element) {
+    return $element.parents('div[data-action]:first');
+  }
+
+  /**
+   * Removes the form which $element is a part of.
+   *
+   * @param {jQuery} $element The form's child element
+   */
+  function removeParentForm($element) {
+    parentFormForElement($element).remove();
+  }
+
   return {
+    renderFromPath: renderFromPath,
     findFormFields: findFormFields,
-    submitAndDisableForm: submitAndDisableForm
+    submitAndDisableForm: submitAndDisableForm,
+    parentFormForElement: parentFormForElement,
+    removeParentForm: removeParentForm
   };
 }());

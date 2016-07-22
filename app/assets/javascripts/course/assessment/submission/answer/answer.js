@@ -108,7 +108,7 @@
    */
   function onCommentReply(e) {
     var $button = $(e.target);
-    var $form = $button.parents('div[data-action]:first');
+    var $form = FORM_HELPERS.parentFormForElement($button);
     FORM_HELPERS.submitAndDisableForm($form, onCommentReplySuccess, onCommentReplyFail);
     e.preventDefault();
   }

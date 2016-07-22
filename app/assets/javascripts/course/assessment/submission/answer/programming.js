@@ -7,22 +7,7 @@
   'use strict';
   var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ' +
     'div.answer_programming_file ';
-
-  /**
-   * Renders a programming submission template.
-   *
-   * @param {String} template The relative path to the template. Absolute paths or paths
-   *   beginning with a period are not expanded.
-   * @param {Object} locals The local variables to be given to the template.
-   * @return {String} The rendered template.
-   */
-  function render(template, locals) {
-    if (template[0] !== '/' && template[0] !== '.') {
-      template = 'templates/course/assessment/submission/answer/programming/' + template;
-    }
-
-    return JST[template](locals);
-  }
+  var render = FORM_HELPERS.renderFromPath('templates/course/assessment/submission/answer/programming/');
 
   /**
    * Finds the annotation cell for the given line within the given code block. This will create
@@ -325,16 +310,6 @@
   }
 
   /**
-   * Removes the form which $element is a part of.
-   *
-   * @param {jQuery} $element The form's child element
-   */
-  function removeParentForm($element) {
-    var $form = $element.parents('div[data-action]:first');
-    $form.remove();
-  }
-
-  /**
    * Handles the reset of the annotation form.
    *
    * @param e The event object.
@@ -343,7 +318,7 @@
     var $button = $(e.target);
     var $replyButton = $button.parents('.line-annotation:first').find('.reply-annotation');
 
-    removeParentForm($button);
+    FORM_HELPERS.removeParentForm($button);
     $replyButton.show();
   }
 
@@ -356,7 +331,7 @@
     var $button = $(e.target);
     var $post = $button.parents('.discussion_post:first');
 
-    removeParentForm($button);
+    FORM_HELPERS.removeParentForm($button);
     $post.children().show();
   }
 
@@ -368,7 +343,7 @@
    */
   function onAnnotationFormSubmitted(e) {
     var $button = $(e.target);
-    var $form = $button.parents('div[data-action]:first');
+    var $form = FORM_HELPERS.parentFormForElement($button);
     FORM_HELPERS.submitAndDisableForm($form, onAnnotationFormSubmitSuccess,
                                              onAnnotationFormSubmitFail);
     e.preventDefault();
@@ -381,7 +356,7 @@
    */
   function onAnnotationPostFormSubmitted(e) {
     var $button = $(e.target);
-    var $form = $button.parents('div[data-action]:first');
+    var $form = FORM_HELPERS.parentFormForElement($button);
     FORM_HELPERS.submitAndDisableForm($form, onAnnotationPostFormSubmitSuccess,
                                              onAnnotationPostFormSubmitFail);
     e.preventDefault();
