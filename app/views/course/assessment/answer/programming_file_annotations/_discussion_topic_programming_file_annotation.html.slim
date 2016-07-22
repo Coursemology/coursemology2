@@ -14,9 +14,5 @@
     = t('.question', title: question.title)
 
   = display_code_lines(file_annotation.file, file_annotation.line - 5, file_annotation.line)
-
-  = render partial: 'course/discussion/topic', object: topic,
-           locals: { \
-             post_partial: 'course/assessment/answer/programming/annotation_post', \
-             footer: 'course/discussion/posts/form' \
-           }
+  = display_topic topic, post_partial: 'course/assessment/answer/programming/annotation_post',
+                         footer: 'course/discussion/posts/form'
