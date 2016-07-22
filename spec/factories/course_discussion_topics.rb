@@ -5,7 +5,7 @@ FactoryGirl.define do
     pending_staff_reply false
 
     after(:build) do |topic|
-      topic.actable = build(:forum_topic, topic: topic) unless topic.actable
+      topic.actable = build(:forum_topic, discussion_topic: topic) unless topic.actable
     end
 
     trait :with_post do

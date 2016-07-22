@@ -1,10 +1,10 @@
 = page_header format_inline_text(@topic.title) do
   = render 'controls'
 
-= render partial: @topic.topic, locals: { post_partial: 'course/forum/posts/post',
-                                          post_locals: { show_buttons: false },
-                                          read_marks: true,
-                                          with_votes: true}
+= render partial: @topic.acting_as, locals: { post_partial: 'course/forum/posts/post',
+                                             post_locals: { show_buttons: false },
+                                             read_marks: true,
+                                             with_votes: true}
 
 hr
 
