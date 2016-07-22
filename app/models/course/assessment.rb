@@ -11,7 +11,8 @@ class Course::Assessment < ActiveRecord::Base
   before_validation :assign_folder_attributes
   before_validation :propagate_course
 
-  validate :validate_draft_status_if_no_questions
+  validate :validate_prescence_of_questions, unless: :draft?
+  validate :validate_only_autograded_questions, if: :autograded?
 
   enum display_mode: { worksheet: 0, guided: 1 }
 
@@ -96,11 +97,16 @@ class Course::Assessment < ActiveRecord::Base
   end
 
   def set_defaults
-    self.draft ||= true
+    self.draft = true
+    self.autograded ||= false
   end
 
-  def validate_draft_status_if_no_questions
-    return if draft
+  def validate_prescence_of_questions
     errors.add(:draft, :no_questions) unless questions.present?
+  end
+
+  def validate_only_autograded_questions
+    return if questions.all?(&:auto_gradable?)
+    errors.add(:base, :autograded)
   end
 end
