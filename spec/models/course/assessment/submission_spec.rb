@@ -36,7 +36,7 @@ RSpec.describe Course::Assessment::Submission do
 
     describe 'validations' do
       context 'when the course user is different from the submission creator' do
-        let(:course_student) { create(:course_student, :approved, course: course) }
+        let(:course_student) { create(:course_student, course: course) }
         subject do
           build(:submission, assessment: assessment, course_user: course_student, creator: user1)
         end

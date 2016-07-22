@@ -6,13 +6,13 @@ RSpec.feature 'Courses: Staff Management' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let!(:course_approved_students) { create_list(:course_student, 2, :approved, course: course) }
-    let!(:course_unapproved_students) { create_list(:course_student, 2, course: course) }
-    let!(:course_managers) { create_list(:course_manager, 2, :approved, course: course) }
+    let!(:course_approved_students) { create_list(:course_student, 2, course: course) }
+    let!(:course_unapproved_students) { create_list(:course_user, 2, course: course) }
+    let!(:course_managers) { create_list(:course_manager, 2, course: course) }
     before { login_as(user, scope: :user) }
 
     context 'As a Course Student' do
-      let(:user) { create(:course_student, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       scenario 'I cannot view the Users Management Sidebar item' do
         visit course_path(course)
@@ -23,9 +23,7 @@ RSpec.feature 'Courses: Staff Management' do
 
     context 'As a Course Teaching Assistant' do
       let(:user) { create(:user) }
-      let!(:course_staff) do
-        create(:course_teaching_assistant, :approved, course: course, user: user)
-      end
+      let!(:course_staff) { create(:course_teaching_assistant, course: course, user: user) }
 
       scenario 'I cannot view the Users Management Sidebar item' do
         visit course_path(course)
@@ -40,7 +38,7 @@ RSpec.feature 'Courses: Staff Management' do
     end
 
     context 'As a Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can view the Users Management Sidebar item' do
         visit course_path(course)

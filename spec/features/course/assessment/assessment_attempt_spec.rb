@@ -121,7 +121,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
     end
 
     context 'As a Course Staff' do
-      let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
+      let(:user) { create(:course_teaching_assistant, course: course).user }
 
       scenario 'I can attempt unsatisfied submission' do
         assessment_with_condition

@@ -48,7 +48,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
     end
 
     context 'As Course Staff' do
-      let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
+      let(:user) { create(:course_teaching_assistant, course: course).user }
       let(:submission_traits) { :submitted }
 
       scenario 'I can view the correct answer' do

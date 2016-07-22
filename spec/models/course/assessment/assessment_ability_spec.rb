@@ -6,7 +6,7 @@ RSpec.describe Course::Assessment do
   with_tenant(:instance) do
     subject { Ability.new(user) }
     let(:course) { create(:course) }
-    let(:course_user) { create(:course_student, :approved, course: course) }
+    let(:course_user) { create(:course_student, course: course) }
     let(:draft_assessment) do
       create(:course_assessment_assessment, :with_all_question_types, course: course, draft: true)
     end
@@ -38,7 +38,7 @@ RSpec.describe Course::Assessment do
     end
 
     context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       # Course Assessments
       it { is_expected.to be_able_to(:manage, draft_assessment) }

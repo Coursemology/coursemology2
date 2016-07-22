@@ -6,8 +6,8 @@ RSpec.describe Course::ExperiencePoints::DisbursementController, type: :controll
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:course_student) { create(:course_student, :approved, course: course) }
-    let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
+    let(:course_student) { create(:course_student, course: course) }
+    let(:user) { create(:course_teaching_assistant, course: course).user }
     let(:disbursement_stub) do
       stub = Course::ExperiencePoints::Disbursement.new(course: course)
       record_stub = Course::ExperiencePointsRecord.new(course_user: course_student, reason: nil)

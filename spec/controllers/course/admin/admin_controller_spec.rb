@@ -11,19 +11,19 @@ RSpec.describe Course::Admin::AdminController do
       subject { get :index, course_id: course }
 
       context 'when the user is a Course Manager' do
-        let(:user) { create(:course_manager, :approved, course: course).user }
+        let(:user) { create(:course_manager, course: course).user }
 
         it { is_expected.to render_template(:index) }
       end
 
       context 'when the user is a Teaching Assistant' do
-        let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
+        let(:user) { create(:course_teaching_assistant, course: course).user }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
       context 'when the user is a Course Student' do
-        let(:user) { create(:course_student, :approved, course: course).user }
+        let(:user) { create(:course_student, course: course).user }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
@@ -34,7 +34,7 @@ RSpec.describe Course::Admin::AdminController do
       subject { patch :update, course_id: course, course: { title: title } }
 
       context 'when the user is a Course Manager' do
-        let(:user) { create(:course_manager, :approved, course: course).user }
+        let(:user) { create(:course_manager, course: course).user }
 
         it { is_expected.to redirect_to(course_admin_path(course)) }
 
@@ -46,13 +46,13 @@ RSpec.describe Course::Admin::AdminController do
       end
 
       context 'when the user is a Teaching Assistant' do
-        let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
+        let(:user) { create(:course_teaching_assistant, course: course).user }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
       context 'when the user is a Course Student' do
-        let(:user) { create(:course_student, :approved, course: course).user }
+        let(:user) { create(:course_student, course: course).user }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
@@ -63,7 +63,7 @@ RSpec.describe Course::Admin::AdminController do
       before { controller.instance_variable_set(:@course, course) }
 
       context 'when the user is a Course Manager' do
-        let(:user) { create(:course_manager, :approved, course: course).user }
+        let(:user) { create(:course_manager, course: course).user }
 
         it 'destroys the course' do
           subject
@@ -92,13 +92,13 @@ RSpec.describe Course::Admin::AdminController do
       end
 
       context 'when the user is an Teaching Assistant' do
-        let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
+        let(:user) { create(:course_teaching_assistant, course: course).user }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
       context 'when the user is a Course Student' do
-        let(:user) { create(:course_student, :approved, course: course).user }
+        let(:user) { create(:course_student, course: course).user }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end

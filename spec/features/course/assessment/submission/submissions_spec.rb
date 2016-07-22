@@ -9,8 +9,8 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
     let(:assessment) { create(:assessment, :with_all_question_types, course: course) }
     before { login_as(user, scope: :user) }
 
-    let(:students) { create_list(:course_student, 3, :approved, course: course) }
-    let(:phantom_student) { create(:course_student, :approved, :phantom, course: course) }
+    let(:students) { create_list(:course_student, 3, course: course) }
+    let(:phantom_student) { create(:course_student, :phantom, course: course) }
     let!(:submitted_submission) do
       create(:course_assessment_submission, :submitted, assessment: assessment,
                                                         course: course,
@@ -28,7 +28,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
     end
 
     context 'As a Course Staff' do
-      let(:course_staff) { create(:course_manager, :approved, course: course).user }
+      let(:course_staff) { create(:course_manager, course: course).user }
       let(:user) { course_staff }
 
       scenario 'I can view all submissions of an assessment' do

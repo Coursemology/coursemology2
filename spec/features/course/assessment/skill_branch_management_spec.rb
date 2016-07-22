@@ -9,7 +9,7 @@ RSpec.describe 'Course: Skill Branches' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can create a skill branch' do
         visit course_assessments_skills_path(course)

@@ -16,7 +16,7 @@ RSpec.feature 'Course: Topics: Management' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Teaching Assistant' do
-      let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
+      let(:user) { create(:course_teaching_assistant, course: course).user }
 
       scenario 'I can see all the comments' do
         answer_comment
@@ -51,7 +51,7 @@ RSpec.feature 'Course: Topics: Management' do
     end
 
     context 'As a Course Student' do
-      let(:user) { create(:course_student, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
       let(:student_answer) do
         create(:course_assessment_answer, :with_post, course: course, creator: user)
       end

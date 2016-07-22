@@ -9,7 +9,7 @@ RSpec.describe Course::Condition::Achievement do
     let(:condition) { create(:achievement_condition, course: course) }
 
     context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       it { is_expected.to be_able_to(:manage, condition) }
     end

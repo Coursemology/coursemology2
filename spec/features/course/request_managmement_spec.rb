@@ -7,7 +7,7 @@ RSpec.feature 'Course: Requests' do
   with_tenant(:instance) do
     let(:user) { create(:administrator) }
     let(:course) { create(:course) }
-    let!(:unregistered_user) { create(:course_student, course: course) }
+    let!(:unregistered_user) { create(:course_user, course: course) }
     before { login_as(user, scope: :user) }
 
     scenario 'Course staff can approve request' do

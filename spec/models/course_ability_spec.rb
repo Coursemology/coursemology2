@@ -25,21 +25,21 @@ RSpec.describe Course, type: :model do
     end
 
     context 'when the user is a Course Student' do
-      let(:user) { create(:course_student, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       it { is_expected.to be_able_to(:show, course) }
       it { is_expected.not_to be_able_to(:manage, course) }
     end
 
     context 'when the user is a Course Teaching Assistant' do
-      let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
+      let(:user) { create(:course_teaching_assistant, course: course).user }
 
       it { is_expected.to be_able_to(:show, course) }
       it { is_expected.not_to be_able_to(:manage, course) }
     end
 
     context 'when the user is a Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       it { is_expected.to be_able_to(:show, course) }
       it { is_expected.to be_able_to(:manage, course) }

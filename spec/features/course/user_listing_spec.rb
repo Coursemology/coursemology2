@@ -6,15 +6,13 @@ RSpec.feature 'Courses: Course User Listing' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let!(:course_student_list) { create_list(:course_student, 5, :approved, course: course) }
+    let!(:course_student_list) { create_list(:course_student, 5, course: course) }
     let!(:unregistered_user) { create(:course_user, course: course) }
     let!(:phantom_user) { create(:course_user, :approved, :phantom, course: course) }
-    let!(:course_teaching_assistant) do
-      create(:course_teaching_assistant, :approved, course: course)
-    end
+    let!(:course_teaching_assistant) { create(:course_teaching_assistant, course: course) }
 
     context 'As a Course Student' do
-      let(:student) { create(:course_student, :approved, course: course) }
+      let(:student) { create(:course_student, course: course) }
       before { login_as(student.user, scope: :user) }
 
       scenario 'I can view all confirmed students in my course' do

@@ -10,7 +10,7 @@ RSpec.describe Course::Achievement do
     let!(:draft_achievement) { create(:course_achievement, course: course, draft: true) }
 
     context 'when the user is a Course Student' do
-      let(:course_user) { create(:course_student, :approved, course: course) }
+      let(:course_user) { create(:course_student, course: course) }
       let(:user) { course_user.user }
 
       it { is_expected.to be_able_to(:show, achievement) }
@@ -31,7 +31,7 @@ RSpec.describe Course::Achievement do
     end
 
     context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       it { is_expected.to be_able_to(:manage, achievement) }
       it { is_expected.to be_able_to(:manage, draft_achievement) }

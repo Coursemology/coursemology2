@@ -9,7 +9,7 @@ RSpec.feature 'Course: Assessments' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
       let!(:assessment) { create(:course_assessment_assessment, course: course) }
       let(:other_assessment) { create(:assessment, course: course) }
       let!(:assessment_condition) do

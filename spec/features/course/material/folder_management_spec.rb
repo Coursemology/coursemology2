@@ -17,7 +17,7 @@ RSpec.feature 'Course: Material: Folders: Management' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
       scenario 'I can view all the subfolders' do
         visit course_material_folder_path(course, parent_folder)
         subfolders.each do |subfolder|
@@ -116,7 +116,7 @@ RSpec.feature 'Course: Material: Folders: Management' do
     end
 
     context 'As a Course Student' do
-      let(:user) { create(:course_student, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       scenario 'I can view the Material Sidebar item' do
         visit course_path(course)

@@ -12,7 +12,7 @@ RSpec.feature 'Course: Achievements' do
     end
 
     context 'As a Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can create an achievement' do
         # Fields not yet filled
@@ -78,7 +78,7 @@ RSpec.feature 'Course: Achievements' do
         auto_achievement = create(:course_achievement, course: course)
         create(:course_condition_achievement, course: course, conditional: auto_achievement)
 
-        student = create(:course_student, :approved, course: course)
+        student = create(:course_student, course: course)
         course_user_id = "achievement_course_user_ids_#{student.id}"
         unregistered_user = create(:course_user, course: course)
         unregistered_user_id = "achievement_course_user_ids_#{unregistered_user.id}"

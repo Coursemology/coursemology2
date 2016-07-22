@@ -9,13 +9,13 @@ RSpec.describe Course::Condition::Assessment do
     let(:condition) { create(:assessment_condition, course: course) }
 
     context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       it { is_expected.to be_able_to(:manage, condition) }
     end
 
     context 'when the user is a Course Student' do
-      let(:user) { create(:course_student, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       context 'when the assessment is published but has not started' do
         let(:unopened_assessment) do

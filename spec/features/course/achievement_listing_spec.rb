@@ -17,7 +17,7 @@ RSpec.feature 'Course: Achievements' do
     end
 
     context 'As an Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can view all achievements' do
         expect(page).to have_link(nil, href: new_course_achievement_path(course))
@@ -31,8 +31,8 @@ RSpec.feature 'Course: Achievements' do
     end
 
     context 'As an Course Student' do
-      let!(:course_student1) { create(:course_student, :approved, course: course) }
-      let!(:course_student2) { create(:course_student, :approved, course: course) }
+      let!(:course_student1) { create(:course_student, course: course) }
+      let!(:course_student2) { create(:course_student, course: course) }
       let!(:unregistered_user) { create(:course_user, course: course) }
       let!(:phantom_user) { create(:course_user, :approved, :phantom, course: course) }
       let!(:user) { course_student1.user }

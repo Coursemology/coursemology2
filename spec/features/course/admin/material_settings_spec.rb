@@ -9,7 +9,7 @@ RSpec.feature 'Course: Administration: Materials' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can change the materials title' do
         visit course_admin_materials_path(course)

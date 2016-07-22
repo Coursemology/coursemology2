@@ -6,10 +6,8 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:approved_course_students) { create_list(:course_student, 3, :approved, course: course) }
-    let(:course_teaching_assistant) do
-      create(:course_teaching_assistant, :approved, course: course)
-    end
+    let(:approved_course_students) { create_list(:course_student, 3, course: course) }
+    let(:course_teaching_assistant) { create(:course_teaching_assistant, course: course) }
 
     before { login_as(user, scope: :user) }
 
@@ -49,7 +47,7 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
 
       scenario 'I can disburse experience points' do
         approved_course_students
-        unapproved_course_student = create(:course_student, course: course)
+        unapproved_course_student = create(:course_user, course: course)
 
         visit disburse_experience_points_course_users_path(course)
 

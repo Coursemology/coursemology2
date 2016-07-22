@@ -9,7 +9,7 @@ RSpec.feature 'Course: Forum: Management' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
       scenario 'I can see forums' do
         forums = create_list(:forum, 2, course: course)
         visit course_forums_path(course)
@@ -108,7 +108,7 @@ RSpec.feature 'Course: Forum: Management' do
     end
 
     context 'As a Course Student' do
-      let(:user) { create(:course_student, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
       scenario 'I can see forums' do
         forums = create_list(:forum, 2, course: course)
         visit course_forums_path(course)

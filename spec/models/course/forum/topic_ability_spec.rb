@@ -11,7 +11,7 @@ RSpec.describe Course::Forum::Topic, type: :model do
     let(:hidden_topic) { build_stubbed(:forum_topic, forum: forum, hidden: true) }
 
     context 'when the user is a Course Student' do
-      let(:user) { create(:course_student, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
       let(:my_shown_topic) do
         build_stubbed(:forum_topic, forum: forum, hidden: false, creator: user)
       end
@@ -29,7 +29,7 @@ RSpec.describe Course::Forum::Topic, type: :model do
     end
 
     context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       it { is_expected.to be_able_to(:manage, shown_topic) }
       it { is_expected.to be_able_to(:manage, hidden_topic) }

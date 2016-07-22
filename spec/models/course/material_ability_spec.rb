@@ -30,7 +30,7 @@ RSpec.describe Course::Material do
     end
 
     context 'when the user is a Course Student' do
-      let(:user) { create(:course_student, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       it { is_expected.to be_able_to(:show, valid_material) }
       it { is_expected.not_to be_able_to(:show, not_started_material) }
@@ -40,7 +40,7 @@ RSpec.describe Course::Material do
     end
 
     context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       it { is_expected.to be_able_to(:manage, valid_material) }
       it { is_expected.to be_able_to(:manage, not_started_material) }

@@ -6,7 +6,7 @@ RSpec.describe Course::Discussion::TopicsController do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:staff) { create(:course_teaching_assistant, :approved, course: course).user }
+    let(:staff) { create(:course_teaching_assistant, course: course).user }
     let(:student) { create(:course_user, :approved, course: course).user }
     let!(:topic) do
       create(:course_assessment_answer, :with_post, course: course, creator: student).acting_as

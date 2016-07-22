@@ -18,8 +18,8 @@ RSpec.feature 'Courses' do
     end
 
     scenario 'Users can see a list of their courses' do
-      course_attending = create(:course_student, :approved, user: user).course
-      course_teaching = create(:course_teaching_assistant, :approved, user: user).course
+      course_attending = create(:course_student, user: user).course
+      course_teaching = create(:course_teaching_assistant, user: user).course
       other_course = create(:course)
 
       visit root_path

@@ -11,7 +11,7 @@ RSpec.describe Course::Group do
     let!(:group) { create(:course_group, course: course) }
 
     context 'when the user is a Course Staff' do
-      let!(:course_manager) { create(:course_manager, :approved, course: course, user: user) }
+      let!(:course_manager) { create(:course_manager, course: course, user: user) }
 
       it { is_expected.to be_able_to(:manage, group) }
 

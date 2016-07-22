@@ -9,7 +9,7 @@ RSpec.feature 'Course: Administration: Announcement' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can change the announcement pagination settings' do
         visit course_admin_announcements_path(course)

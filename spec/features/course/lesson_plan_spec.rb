@@ -40,7 +40,7 @@ RSpec.feature 'Course: Lesson Plan' do
     end
 
     context 'As a Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can view all lesson plan items grouped by milestone' do
         visit course_lesson_plan_path(course)
@@ -55,7 +55,7 @@ RSpec.feature 'Course: Lesson Plan' do
     end
 
     context 'As a Course Student' do
-      let(:user) { create(:course_student, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       scenario 'I can view the LessonPlan Sidebar item' do
         visit course_path(course)

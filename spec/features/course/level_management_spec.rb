@@ -19,7 +19,7 @@ RSpec.feature 'Course: Levels' do
     end
 
     context 'As a Course Administrator' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can view the Level Sidebar item' do
         visit course_path(course)
@@ -52,7 +52,7 @@ RSpec.feature 'Course: Levels' do
     end
 
     context 'As a Course Student' do
-      let(:user) { create(:course_student, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       scenario 'I cannot view the Level Sidebar item' do
         visit course_path(course)

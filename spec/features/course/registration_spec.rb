@@ -22,7 +22,7 @@ RSpec.feature 'Courses: Registration' do
     end
 
     context 'when the user is registered in the course' do
-      let!(:course_student) { create(:course_student, :approved, course: course, user: user) }
+      let!(:course_student) { create(:course_student, course: course, user: user) }
       scenario 'Users cannot re-register for a course' do
         visit course_path(course)
 

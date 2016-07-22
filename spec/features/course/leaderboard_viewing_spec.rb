@@ -10,7 +10,7 @@ RSpec.describe 'Course: Leaderboard: View' do
     end
 
     context 'As a student' do
-      let!(:students) { create_list(:course_student, 2, :approved, course: course) }
+      let!(:students) { create_list(:course_student, 2, course: course) }
       let!(:unregistered_user) { create(:course_user, course: course) }
       let!(:phantom_user) { create(:course_user, :approved, :phantom, course: course) }
       let(:user) { students[0].user }

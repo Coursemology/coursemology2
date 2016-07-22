@@ -6,8 +6,8 @@ RSpec.describe Course::ExperiencePointsRecordsController, type: :controller do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:course_student) { create(:course_student, :approved, course: course) }
-    let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
+    let(:course_student) { create(:course_student, course: course) }
+    let(:user) { create(:course_teaching_assistant, course: course).user }
     let(:experience_points_history_path) do
       course_user_experience_points_records_path(course, course_student)
     end
