@@ -15,6 +15,12 @@ RSpec.describe Course::Assessment::Submission::Answer::CommentsController do
         allow(stub).to receive(:save).and_return(false)
       end
     end
+    let(:immutable_comment) do
+      create(:course_discussion_post, topic: submission.answers.first.discussion_topic,
+                                      creator: user, updater: user).tap do |stub|
+        allow(stub).to receive(:save).and_return(false)
+      end
+    end
 
     before { sign_in(user) }
 
@@ -34,6 +40,30 @@ RSpec.describe Course::Assessment::Submission::Answer::CommentsController do
       context 'when comment creation fails' do
         before do
           controller.instance_variable_set(:@answer, immutable_answer)
+          subject
+        end
+
+        it 'returns HTTP 400' do
+          expect(response.status).to eq(400)
+        end
+      end
+    end
+
+    describe '#update' do
+      let(:comment) { 'updated answer comment' }
+
+      subject do
+        post :update, format: :js, course_id: course, assessment_id: assessment,
+                      submission_id: submission, answer_id: immutable_answer,
+                      id: immutable_comment,
+                      discussion_post: {
+                        text: comment
+                      }
+      end
+
+      context 'when comment updating fails' do
+        before do
+          controller.instance_variable_set(:@post, immutable_comment)
           subject
         end
 

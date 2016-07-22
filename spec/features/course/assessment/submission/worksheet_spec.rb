@@ -78,6 +78,28 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
         end
       end
 
+      scenario 'I can edit my existing comment', js: true do
+        assessment.questions.attempt(submission).each(&:save!)
+        comment_answer = submission.answers.first
+        comment_topic = comment_answer.discussion_topic
+        comment_post = create(:course_discussion_post,
+                              topic: comment_topic, creator: user, updater: user)
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        find(content_tag_selector(comment_post)).find('.edit').click
+        updated_post_text = 'updated comment'
+        within find(content_tag_selector(comment_post)).find('.answer-comment-form') do
+          fill_in 'discussion_post[text]', with: updated_post_text
+          click_button I18n.t('javascript.course.assessment.submission.answer.comment.submit')
+        end
+
+        wait_for_ajax
+
+        comment_post = comment_topic.posts.reload.last
+        expect(comment_post.text).to have_tag('*', text: updated_post_text)
+      end
+
       scenario 'I can delete comments', js: true do
         assessment.questions.attempt(submission).each(&:save!)
         comment_answer = submission.answers.first

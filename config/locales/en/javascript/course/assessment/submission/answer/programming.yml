@@ -4,6 +4,11 @@ en:
       assessment:
         submission:
           answer:
+            comment:
+              text:
+                label: 'Answer comment body'
+              reset: 'Cancel' # TODO: Reference :'common.cancel', see fnando/i18n-js#392
+              submit: 'Save'
             programming:
               add_annotation_button:
                 label: 'Add annotation'
