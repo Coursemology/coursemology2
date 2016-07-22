@@ -218,6 +218,16 @@ RSpec.describe Course::Assessment::Submission do
           expect(submission.answers.all?(&:submitted?)).to be(true)
         end
       end
+
+      context 'when the assessment is autograded' do
+        let(:assessment_traits) { [:with_all_question_types, :autograded] }
+
+        it 'changes the submission state to graded and grade all answers' do
+          submission.finalise!
+          expect(submission.graded?).to be(true)
+          expect(submission.answers.all?(&:graded?)).to be(true)
+        end
+      end
     end
 
     describe '#publish!' do

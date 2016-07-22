@@ -10,6 +10,8 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   workflow do
     state :attempting do
+      # Transition to graded if assessment is autograded, else transition to submitted.
+      event :finalise, transitions_to: :graded, if: proc { |s| s.autograded? }
       event :finalise, transitions_to: :submitted
     end
     state :submitted do
@@ -117,6 +119,8 @@ class Course::Assessment::Submission < ActiveRecord::Base
   alias_method :finalise=, :finalise!
   alias_method :publish=, :publish!
 
+  delegate :autograded?, to: :assessment
+
   # Creates an Auto Grading job for this submission. This saves the submission if there are pending
   # changes.
   #
@@ -127,20 +131,18 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   protected
 
-  # Handles the finalisation of a submission.
-  #
-  # This finalises all the answers as well.
+  # Callback for Workflow gem to handle the finalisation of a submission.
+  #   This will finalise all the answers in the submission.
+  #   If the assessment is autograded, it will also publish all submitted answers.
   def finalise(_ = nil)
     answers.select(&:attempting?).each(&:finalise!)
+    publish_submitted_answers if autograded?
   end
 
-  # Handles the grading of a submission.
-  #
-  # This grades all the answers as well.
+  # Callback for Workflow gem to handles the grading of a submission.
+  # This will grade all the answers in the submission.
   def publish(_ = nil)
-    answers.each do |answer|
-      answer.publish! if answer.submitted?
-    end
+    publish_submitted_answers
   end
 
   private
@@ -160,6 +162,10 @@ class Course::Assessment::Submission < ActiveRecord::Base
     unless course_user && course_user.user == creator
       errors.add(:experience_points_record, :inconsistent_user)
     end
+  end
+
+  def publish_submitted_answers
+    answers.select(&:submitted?).each(&:publish!)
   end
 
   def send_notification
