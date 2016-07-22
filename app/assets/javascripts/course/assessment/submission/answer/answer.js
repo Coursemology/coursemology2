@@ -1,54 +1,10 @@
 //= require helpers/form_helpers
+//= require helpers/answer_helpers
 
-(function($, FORM_HELPERS) {
+(function($, FORM_HELPERS, ANSWER_HELPERS) {
   /* global Routes */
   'use strict';
   var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ';
-
-
-  /**
-   * Gets the course ID for the given comment.
-   *
-   * @param {jQuery} $comment The comment to find the associated course for.
-   * @return {Number} The ID for the course the element is associated with.
-   */
-  function courseIdForComment($comment) {
-    var $course = $comment.parents('.course-layout:first');
-    return $course.data('courseId');
-  }
-
-  /**
-   * Gets the assessment ID for the given comment.
-   *
-   * @param {jQuery} $comment The comment to find the associated assessment for.
-   * @return {Number} The ID for the assessment the element is associated with.
-   */
-  function assessmentIdForComment($comment) {
-    var $assessment = $comment.parents('.assessment:first');
-    return $assessment.data('assessmentId');
-  }
-
-  /**
-   * Gets the submission ID for the given comment.
-   *
-   * @param {jQuery} $comment The comment to find the associated submission for.
-   * @return {Number} The ID for the submission the element is associated with.
-   */
-  function submissionIdForComment($comment) {
-    var $submission = $comment.parents('.submission:first');
-    return $submission.data('submissionId');
-  }
-
-  /**
-   * Gets the answer ID for the given comment.
-   *
-   * @param {jQuery} $comment The comment to find the associated answer for.
-   * @return {Number} The ID for the answer the comment is associated with.
-   */
-  function answerIdForComment($comment) {
-    var $answer = $comment.parents('.answer:first');
-    return $answer.data('answerId');
-  }
 
   /**
    * Shows the comments toolbar for submissions.
@@ -137,10 +93,10 @@
   function onCommentDelete(e) {
     var $element = $(e.target);
 
-    var courseId = courseIdForComment($element);
-    var assessmentId = assessmentIdForComment($element);
-    var submissionId = submissionIdForComment($element);
-    var answerId = answerIdForComment($element);
+    var courseId = ANSWER_HELPERS.courseIdForElement($element);
+    var assessmentId = ANSWER_HELPERS.assessmentIdForElement($element);
+    var submissionId = ANSWER_HELPERS.submissionIdForElement($element);
+    var answerId = ANSWER_HELPERS.answerIdForElement($element);
     var $post = $element.parents('.discussion_post:first');
     var postId = $post.data('postId');
 
@@ -171,4 +127,4 @@
   $(document).on('click', DOCUMENT_SELECTOR + '.comments .discussion_post .toolbar .delete',
     onCommentDelete);
   $(document).on('click', DOCUMENT_SELECTOR + '.comments .reply-comment', onCommentReply);
-})(jQuery, FORM_HELPERS);
+})(jQuery, FORM_HELPERS, ANSWER_HELPERS);
