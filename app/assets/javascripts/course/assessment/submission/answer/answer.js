@@ -1,54 +1,12 @@
 //= require helpers/form_helpers
+//= require helpers/answer_helpers
+//= require templates/course/assessment/submission/answer/comment_form
 
-(function($, FORM_HELPERS) {
+(function($, FORM_HELPERS, ANSWER_HELPERS) {
   /* global Routes */
   'use strict';
   var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ';
-
-
-  /**
-   * Gets the course ID for the given comment.
-   *
-   * @param {jQuery} $comment The comment to find the associated course for.
-   * @return {Number} The ID for the course the element is associated with.
-   */
-  function courseIdForComment($comment) {
-    var $course = $comment.parents('.course-layout:first');
-    return $course.data('courseId');
-  }
-
-  /**
-   * Gets the assessment ID for the given comment.
-   *
-   * @param {jQuery} $comment The comment to find the associated assessment for.
-   * @return {Number} The ID for the assessment the element is associated with.
-   */
-  function assessmentIdForComment($comment) {
-    var $assessment = $comment.parents('.assessment:first');
-    return $assessment.data('assessmentId');
-  }
-
-  /**
-   * Gets the submission ID for the given comment.
-   *
-   * @param {jQuery} $comment The comment to find the associated submission for.
-   * @return {Number} The ID for the submission the element is associated with.
-   */
-  function submissionIdForComment($comment) {
-    var $submission = $comment.parents('.submission:first');
-    return $submission.data('submissionId');
-  }
-
-  /**
-   * Gets the answer ID for the given comment.
-   *
-   * @param {jQuery} $comment The comment to find the associated answer for.
-   * @return {Number} The ID for the answer the comment is associated with.
-   */
-  function answerIdForComment($comment) {
-    var $answer = $comment.parents('.answer:first');
-    return $answer.data('answerId');
-  }
+  var render = FORM_HELPERS.renderFromPath('templates/course/assessment/submission/answer/');
 
   /**
    * Shows the comments toolbar for submissions.
@@ -108,11 +66,10 @@
    */
   function onCommentReply(e) {
     var $button = $(e.target);
-    var $form = $button.parents('div[data-action]:first');
+    var $form = FORM_HELPERS.parentFormForElement($button);
     FORM_HELPERS.submitAndDisableForm($form, onCommentReplySuccess, onCommentReplyFail);
     e.preventDefault();
   }
-
 
   /**
    * Handles the successful comment reply event.
@@ -130,6 +87,111 @@
   }
 
   /**
+   * Handles the answer comment edit button click event.
+   *
+   * @param e The event object.
+   */
+  function onCommentEdit(e) {
+    var $element = $(e.target);
+    var $post = $element.parents('.discussion_post:first');
+
+    var courseId = ANSWER_HELPERS.courseIdForElement($element);
+    var assessmentId = ANSWER_HELPERS.assessmentIdForElement($element);
+    var submissionId = ANSWER_HELPERS.submissionIdForElement($element);
+    var answerId = ANSWER_HELPERS.answerIdForElement($element);
+    var postId = $post.data('postId');
+    var postContent = $post.find('.content').text();
+    var postCommenter = $post.find('.user').html();
+
+    $post.children().hide();
+    var $form = createCommentForm($post, courseId, assessmentId, submissionId,
+                                  answerId, postId, postContent, postCommenter);
+    e.preventDefault();
+  }
+
+  /**
+   * Finds the form for a given answer comment.
+   *
+   * @param {jQuery} $element The answer comment to search for the form in.
+   * @return {jQuery} The answer comment form which was found.
+   */
+  function findAnswerCommentForm($element) {
+    return $element.find('> div.answer-comment-form');
+  }
+
+  /**
+   * Creates a form for the user to edit his answer comment.
+   *
+   * @param {jQuery} $element The element to search for the form.
+   * @param {Number} courseId The course ID that the comment is associated with.
+   * @param {Number} assessmentId The assessment ID that the comment is associated with.
+   * @param {Number} submissionId The submission ID that the comment is associated with.
+   * @param {Number} answerId The answer ID that the comment is associated with.
+   * @param {Number} postId The ID of the comment being edited.
+   * @param {String} postContent The existing contents of the comment's text field.
+   * @param {HTMLElement} postCommenter The commenter's name with a link to his profile.
+   * @return {jQuery} The form for the annotation post.
+   */
+  function createCommentForm($element, courseId, assessmentId, submissionId, answerId,
+                             postId, postContent, postCommenter) {
+    $element.append(render('comment_form', {
+      courseId: courseId,
+      assessmentId: assessmentId,
+      submissionId: submissionId,
+      answerId: answerId,
+      postId: postId,
+      postContent: postContent,
+      postCommenter: postCommenter
+    }));
+
+    return findAnswerCommentForm($element);
+  }
+
+  /**
+   * Handles the reset of the answer comment form.
+   *
+   * @param e The event object.
+   */
+  function onCommentFormResetted(e) {
+    var $button = $(e.target);
+    var $post = $button.parents('.discussion_post:first');
+
+    FORM_HELPERS.removeParentForm($button);
+    $post.children().show();
+  }
+
+  /**
+   * Handles the submission of the answer comment form.
+   *
+   * @param e The event object.
+   */
+  function onCommentFormSubmitted(e) {
+    var $button = $(e.target);
+    var $form = FORM_HELPERS.parentFormForElement($button);
+    FORM_HELPERS.submitAndDisableForm($form, onCommentFormSubmitSuccess,
+                                             onCommentFormSubmitFail);
+    e.preventDefault();
+  }
+
+  /**
+   * Handles the successful answer comment save event.
+   */
+  function onCommentFormSubmitSuccess() {
+  }
+
+  /**
+   * Handles the errored answer comment save event.
+   *
+   * @param {HTMLElement} form The form which was submitted
+   */
+  function onCommentFormSubmitFail(_, form) {
+    var $form = $(form);
+    FORM_HELPERS.findFormFields($form).prop('disabled', false);
+
+    // TODO: Implement error recovery.
+  }
+
+  /**
    * Handles the comment delete button click event.
    *
    * @param e The event object.
@@ -137,10 +199,10 @@
   function onCommentDelete(e) {
     var $element = $(e.target);
 
-    var courseId = courseIdForComment($element);
-    var assessmentId = assessmentIdForComment($element);
-    var submissionId = submissionIdForComment($element);
-    var answerId = answerIdForComment($element);
+    var courseId = ANSWER_HELPERS.courseIdForElement($element);
+    var assessmentId = ANSWER_HELPERS.assessmentIdForElement($element);
+    var submissionId = ANSWER_HELPERS.submissionIdForElement($element);
+    var answerId = ANSWER_HELPERS.answerIdForElement($element);
     var $post = $element.parents('.discussion_post:first');
     var postId = $post.data('postId');
 
@@ -168,7 +230,13 @@
   $(document).on('DOMNodeInserted', function(e) {
     showScriptedWidgets(e.target);
   });
+  $(document).on('click', DOCUMENT_SELECTOR + '.answer-comment-form input[type="reset"]',
+    onCommentFormResetted);
+  $(document).on('click', DOCUMENT_SELECTOR + '.answer-comment-form input[type="submit"]',
+    onCommentFormSubmitted);
+  $(document).on('click', DOCUMENT_SELECTOR + '.comments .discussion_post .toolbar .edit',
+    onCommentEdit);
   $(document).on('click', DOCUMENT_SELECTOR + '.comments .discussion_post .toolbar .delete',
     onCommentDelete);
   $(document).on('click', DOCUMENT_SELECTOR + '.comments .reply-comment', onCommentReply);
-})(jQuery, FORM_HELPERS);
+})(jQuery, FORM_HELPERS, ANSWER_HELPERS);

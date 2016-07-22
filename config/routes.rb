@@ -172,7 +172,7 @@ Rails.application.routes.draw do
 
               scope module: :answer do
                 resources :answers, only: [] do
-                  resources :comments, only: [:create, :destroy]
+                  resources :comments, only: [:create, :update, :destroy]
                   namespace :programming do
                     resources :files, only: [] do
                       resources :annotations, only: [:create]

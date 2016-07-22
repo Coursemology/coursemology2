@@ -1,28 +1,14 @@
 //= require helpers/form_helpers
+//= require helpers/answer_helpers
 //= require templates/course/assessment/submission/answer/programming/add_annotation_button
 //= require templates/course/assessment/submission/answer/programming/annotation_form
 
-(function($, FORM_HELPERS) {
+(function($, FORM_HELPERS, ANSWER_HELPERS) {
   /* global JST, Routes */
   'use strict';
   var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ' +
     'div.answer_programming_file ';
-
-  /**
-   * Renders a programming submission template.
-   *
-   * @param {String} template The relative path to the template. Absolute paths or paths
-   *   beginning with a period are not expanded.
-   * @param {Object} locals The local variables to be given to the template.
-   * @return {String} The rendered template.
-   */
-  function render(template, locals) {
-    if (template[0] !== '/' && template[0] !== '.') {
-      template = 'templates/course/assessment/submission/answer/programming/' + template;
-    }
-
-    return JST[template](locals);
-  }
+  var render = FORM_HELPERS.renderFromPath('templates/course/assessment/submission/answer/programming/');
 
   /**
    * Finds the annotation cell for the given line within the given code block. This will create
@@ -99,50 +85,6 @@
   }
 
   /**
-   * Gets the course ID for the given element.
-   *
-   * @param {jQuery} $element The element to find the associated course for.
-   * @return {Number} The ID for the course the element is associated with.
-   */
-  function courseIdForElement($element) {
-    var $course = $element.parents('.course-layout:first');
-    return $course.data('courseId');
-  }
-
-  /**
-   * Gets the assessment ID for the given element.
-   *
-   * @param {jQuery} $element The element to find the associated assessment for.
-   * @return {Number} The ID for the assessment the element is associated with.
-   */
-  function assessmentIdForElement($element) {
-    var $assessment = $element.parents('.assessment:first');
-    return $assessment.data('assessmentId');
-  }
-
-  /**
-   * Gets the submission ID for the given element.
-   *
-   * @param {jQuery} $element The element to find the associated submission for.
-   * @return {Number} The ID for the submission the element is associated with.
-   */
-  function submissionIdForElement($element) {
-    var $submission = $element.parents('.submission:first');
-    return $submission.data('submissionId');
-  }
-
-  /**
-   * Gets the answer ID for the given row within the code listing table.
-   *
-   * @param {jQuery} $element The element to find the associated answer for.
-   * @return {Number} The ID for the answer the line is associated with.
-   */
-  function answerIdForRow($element) {
-    var $answer = $element.parents('.answer:first');
-    return $answer.data('answerId');
-  }
-
-  /**
    * Gets the programming file ID for the given row within the code listing table.
    *
    * @param {jQuery} $element The element to find the associated answer for.
@@ -177,10 +119,10 @@
     var $target = $(e.target);
     var $line = $target.parents('tr:first');
 
-    var courseId = courseIdForElement($target);
-    var assessmentId = assessmentIdForElement($target);
-    var submissionId = submissionIdForElement($target);
-    var answerId = answerIdForRow($target);
+    var courseId = ANSWER_HELPERS.courseIdForElement($target);
+    var assessmentId = ANSWER_HELPERS.assessmentIdForElement($target);
+    var submissionId = ANSWER_HELPERS.submissionIdForElement($target);
+    var answerId = ANSWER_HELPERS.answerIdForElement($target);
     var programmingFileId = programmingFileIdForRow($target);
     var lineNumber = $line.find('.line-number').data('lineNumber');
 
@@ -191,7 +133,7 @@
   }
 
   /**
-   * Creates a annotation form for the user to enter his annotation.
+   * Creates an annotation form for the user to enter his annotation.
    *
    * @param {jQuery} $element The element to search for the form.
    * @param {Number} courseId The course ID that the annotation is associated ith.
@@ -216,7 +158,7 @@
   }
 
   /**
-   * Creates a annotation form for the user to edit his annotation post.
+   * Creates an annotation form for the user to edit his annotation post.
    *
    * @param {jQuery} $element The element to search for the form.
    * @param {Number} courseId The course ID that the annotation is associated ith.
@@ -263,7 +205,7 @@
   }
 
   /**
-   * Creates a annotation form for the user to enter his annotation.
+   * Creates an annotation form for the user to enter his annotation.
    *
    * @param {jQuery} $element The element to search for the form.
    * @param {Number} courseId The course ID that the annotation is associated with.
@@ -292,7 +234,7 @@
   }
 
   /**
-   * Creates a annotation form for the user to edit his annotation psot.
+   * Creates an annotation form for the user to edit his annotation post.
    *
    * @param {jQuery} $element The element to search for the form.
    * @param {Number} courseId The course ID that the annotation is associated with.
@@ -325,16 +267,6 @@
   }
 
   /**
-   * Removes the form which $element is a part of.
-   *
-   * @param {jQuery} $element The form's child element
-   */
-  function removeParentForm($element) {
-    var $form = $element.parents('div[data-action]:first');
-    $form.remove();
-  }
-
-  /**
    * Handles the reset of the annotation form.
    *
    * @param e The event object.
@@ -343,7 +275,7 @@
     var $button = $(e.target);
     var $replyButton = $button.parents('.line-annotation:first').find('.reply-annotation');
 
-    removeParentForm($button);
+    FORM_HELPERS.removeParentForm($button);
     $replyButton.show();
   }
 
@@ -356,7 +288,7 @@
     var $button = $(e.target);
     var $post = $button.parents('.discussion_post:first');
 
-    removeParentForm($button);
+    FORM_HELPERS.removeParentForm($button);
     $post.children().show();
   }
 
@@ -368,7 +300,7 @@
    */
   function onAnnotationFormSubmitted(e) {
     var $button = $(e.target);
-    var $form = $button.parents('div[data-action]:first');
+    var $form = FORM_HELPERS.parentFormForElement($button);
     FORM_HELPERS.submitAndDisableForm($form, onAnnotationFormSubmitSuccess,
                                              onAnnotationFormSubmitFail);
     e.preventDefault();
@@ -381,7 +313,7 @@
    */
   function onAnnotationPostFormSubmitted(e) {
     var $button = $(e.target);
-    var $form = $button.parents('div[data-action]:first');
+    var $form = FORM_HELPERS.parentFormForElement($button);
     FORM_HELPERS.submitAndDisableForm($form, onAnnotationPostFormSubmitSuccess,
                                              onAnnotationPostFormSubmitFail);
     e.preventDefault();
@@ -434,10 +366,10 @@
   function onAnnotationDelete(e) {
     var $element = $(e.target);
 
-    var courseId = courseIdForElement($element);
-    var assessmentId = assessmentIdForElement($element);
-    var submissionId = submissionIdForElement($element);
-    var answerId = answerIdForRow($element);
+    var courseId = ANSWER_HELPERS.courseIdForElement($element);
+    var assessmentId = ANSWER_HELPERS.assessmentIdForElement($element);
+    var submissionId = ANSWER_HELPERS.submissionIdForElement($element);
+    var answerId = ANSWER_HELPERS.answerIdForElement($element);
     var programmingFileId = programmingFileIdForRow($element);
     var lineNumber = $element.parents('.line-annotation:first').data('lineNumber');
 
@@ -473,10 +405,10 @@
    */
   function findOrCreateAnnotationReplyFormForPost($post) {
     var $replies = $post.next('div.replies');
-    var courseId = courseIdForElement($post);
-    var assessmentId = assessmentIdForElement($post);
-    var submissionId = submissionIdForElement($post);
-    var answerId = answerIdForRow($post);
+    var courseId = ANSWER_HELPERS.courseIdForElement($post);
+    var assessmentId = ANSWER_HELPERS.assessmentIdForElement($post);
+    var submissionId = ANSWER_HELPERS.submissionIdForElement($post);
+    var answerId = ANSWER_HELPERS.answerIdForElement($post);
     var programmingFileId = programmingFileIdForRow($post);
     var lineNumber = $post.parents('.line-annotation:first').data('lineNumber');
     var postId = $post.data('postId');
@@ -524,10 +456,10 @@
     var $element = $(e.target);
     var $post = $element.parents('.discussion_post:first');
 
-    var courseId = courseIdForElement($element);
-    var assessmentId = assessmentIdForElement($element);
-    var submissionId = submissionIdForElement($element);
-    var answerId = answerIdForRow($element);
+    var courseId = ANSWER_HELPERS.courseIdForElement($element);
+    var assessmentId = ANSWER_HELPERS.assessmentIdForElement($element);
+    var submissionId = ANSWER_HELPERS.submissionIdForElement($element);
+    var answerId = ANSWER_HELPERS.answerIdForElement($element);
     var programmingFileId = programmingFileIdForRow($element);
     var lineNumber = $element.parents('.line-annotation:first').data('lineNumber');
     var postId = $post.data('postId');
@@ -563,4 +495,4 @@
     onAnnotationPostReply);
   $(document).on('click', DOCUMENT_SELECTOR + '.discussion_topic .reply-annotation',
     onAnnotationReply);
-})(jQuery, FORM_HELPERS);
+})(jQuery, FORM_HELPERS, ANSWER_HELPERS);
