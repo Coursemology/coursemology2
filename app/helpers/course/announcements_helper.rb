@@ -5,6 +5,6 @@ module Course::AnnouncementsHelper
   # @return [String] The formatted title of announcements component.
   # @return [nil] If the title is nil.
   def announcements_title
-    @announcement_settings.title.nil? ? nil : format_inline_text(@announcement_settings.title)
+    @settings.title.nil? ? nil : format_inline_text(@settings.title)
   end
 end

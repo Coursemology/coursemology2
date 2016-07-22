@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 class Course::Discussion::TopicsController < Course::ComponentController
-  before_action :check_component
   load_and_authorize_resource :discussion_topic, through: :course, instance_name: :topic,
                                                  class: Course::Discussion::Topic.name,
                                                  parent: false
-  before_action :load_settings
   before_action :add_topics_breadcrumb
 
   def index
@@ -42,17 +40,6 @@ class Course::Discussion::TopicsController < Course::ComponentController
               from_user(my_student_ids).
               includes(:actable).
               page(page_param)
-  end
-
-  # Ensure that the component is enabled.
-  #
-  # @raise [Coursemology::ComponentNotFoundError] When the component is disabled.
-  def check_component
-    raise ComponentNotFoundError unless component
-  end
-
-  def load_settings
-    @settings = component.settings
   end
 
   def add_topics_breadcrumb

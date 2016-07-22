@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 class Course::AnnouncementsController < Course::ComponentController
   load_and_authorize_resource :announcement, through: :course, class: Course::Announcement.name
-  before_action :check_component
-  before_action :load_settings
   before_action :add_announcement_breadcrumb
 
   def index #:nodoc:
@@ -55,20 +53,8 @@ class Course::AnnouncementsController < Course::ComponentController
     params.require(:announcement).permit(:title, :content, :sticky, :start_at, :end_at)
   end
 
-  # Ensure that the component is enabled.
-  #
-  # @raise [Coursemology::ComponentNotFoundError] When the component is disabled.
-  def check_component
-    raise ComponentNotFoundError unless component
-  end
-
-  # Load current component's settings
-  def load_settings
-    @announcement_settings = component.settings
-  end
-
   def add_announcement_breadcrumb
-    add_breadcrumb @announcement_settings.title || :index, :course_announcements_path
+    add_breadcrumb @settings.title || :index, :course_announcements_path
   end
 
   # @return [Course::AnnouncementsComponent] The announcement component.
