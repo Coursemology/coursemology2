@@ -68,6 +68,9 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
         comment_post = comment_topic.posts.reload.last
         expect(comment_post.text).to have_tag('*', text: comment_post_text)
         expect(comment_post.parent).to eq(comment_parent_post)
+        within find(content_tag_selector(comment_answer)) do
+          have_selector('.answer-comment-form', visible: true)
+        end
 
         submission.answers.each do |answer|
           within find(content_tag_selector(answer)) do

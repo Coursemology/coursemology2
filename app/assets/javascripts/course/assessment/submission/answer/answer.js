@@ -23,29 +23,21 @@
   /**
    * Shows reply buttons for annotations.
    *
-   * `addBack` is required since the AJAX response inserts the reply button footer separately
-   * rather than as part of the main discussion topic. `find` will fail to select the button if
-   * the button is `element` itself.
-   *
    * @param element
    */
   function showReplyButton(element) {
-    var REPLY_COMMENT_SELECTOR = DOCUMENT_SELECTOR + '.reply-annotation';
-    $(element).find(REPLY_COMMENT_SELECTOR).addBack(REPLY_COMMENT_SELECTOR).show();
+    var $button = $('.reply-annotation', element).filter(DOCUMENT_SELECTOR + '*');
+    $button.show();
   }
 
   /**
    * Shows forms for adding comments to answers.
    *
-   * `addBack` is required since the AJAX response inserts the reply button footer separately
-   * rather than as part of the main discussion topic. `find` will fail to select the button if
-   * the button is `element` itself.
-   *
    * @param element
    */
   function showAnswerCommentForm(element) {
-    var FORM_SELECTOR = DOCUMENT_SELECTOR + '.answer-comment-form';
-    $(element).find(FORM_SELECTOR).addBack(FORM_SELECTOR).show();
+    var $form = $('.answer-comment-form', element).filter(DOCUMENT_SELECTOR + '*');
+    $form.show();
   }
 
   /**

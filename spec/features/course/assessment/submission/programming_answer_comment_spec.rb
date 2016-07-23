@@ -119,6 +119,9 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         wait_for_ajax
         new_post = annotation.posts.last
         expect(new_post.text).to have_tag('*', text: annotation_text)
+        within find(content_tag_selector(annotation.discussion_topic)) do
+          expect(page).to have_selector('.reply-annotation', visible: true)
+        end
       end
 
       scenario 'I can edit my annotations', js: true do
