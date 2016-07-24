@@ -15,6 +15,12 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         allow(stub).to receive(:destroy).and_return(false)
       end
     end
+    let(:guided_assessment) do
+      create(:assessment, :guided, :with_all_question_types, course: course)
+    end
+    let!(:guided_submission) do
+      create(:course_assessment_submission, assessment: guided_assessment, creator: user)
+    end
 
     before { sign_in(user) }
 
@@ -50,6 +56,24 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
 
         it { is_expected.to render_template('edit') }
+      end
+    end
+
+    describe '#reload' do
+      context 'when the assessment is guided' do
+        subject do
+          get :reload, course_id: course, assessment_id: guided_assessment, id: guided_submission
+        end
+
+        it { is_expected.to render_template('_reload') }
+      end
+
+      context 'when the assessment is worksheet' do
+        subject do
+          get :reload, course_id: course, assessment_id: assessment, id: immutable_submission
+        end
+
+        it { expect { subject }.to raise_error(NotImplementedError) }
       end
     end
 

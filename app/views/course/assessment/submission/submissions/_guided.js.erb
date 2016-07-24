@@ -1,0 +1,53 @@
+FORM_SELECTOR = '.simple_form.edit_submission ';
+STEP_SELECTOR = '#step';
+
+/**
+ * Disable the form and load spinner.
+ *
+ */
+function disableFormAndLoadSpinner() {
+  $(FORM_SELECTOR).prepend(
+      '<%= escape_javascript(render partial: 'jobs/submitted') %>');
+  $(FORM_SELECTOR + ':input').prop('disabled', true);
+}
+
+function onJobGetSuccess(data) {
+  if (data.status == 'completed') {
+    updateSubmissionResult();
+  } else {
+    // Delay for 5 second before checking for the job's status
+    checkJobStatus(5000);
+  }
+}
+
+function updateSubmissionResult() {
+  var data = { 'step': $(STEP_SELECTOR).val() };
+  $.ajax({url: '<%= reload_course_assessment_submission_path(@course, @assessment, @submission) %>',
+    method: 'GET', dataType: 'html', data: data }).done(function (html) {
+    $(FORM_SELECTOR).html(html);
+  }).fail(function (data) {
+    // TODO: Handle failure
+  })
+}
+
+function onJobGetFail(e) {
+  // TODO: Handle job failure
+}
+
+/**
+ * Check on the status of the job.
+ *
+ * @param interval The interval to wait before polling for the job status.
+ */
+function checkJobStatus(interval) {
+  setTimeout(function() {
+    $.ajax({url: '<%= job_path %>', method: 'GET', dataType: 'json'}).done(function (data) {
+      onJobGetSuccess(data);
+    }).fail(function (data) {
+      onJobGetFail(data);
+    })
+  }, interval);
+}
+
+disableFormAndLoadSpinner();
+checkJobStatus(0);
