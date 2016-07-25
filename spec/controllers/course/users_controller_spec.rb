@@ -18,7 +18,7 @@ RSpec.describe Course::UsersController, type: :controller do
       subject { get :students, course_id: course }
 
       context 'when a course manager visits the page' do
-        let!(:course_lecturer) { create(:course_manager, :approved, course: course, user: user) }
+        let!(:course_lecturer) { create(:course_manager, course: course, user: user) }
 
         it { is_expected.to render_template(:students) }
       end
@@ -38,7 +38,7 @@ RSpec.describe Course::UsersController, type: :controller do
       subject { get :staff, course_id: course }
 
       context 'when a course manager visits the page' do
-        let!(:course_lecturer) { create(:course_manager, :approved, course: course, user: user) }
+        let!(:course_lecturer) { create(:course_manager, course: course, user: user) }
 
         it { is_expected.to render_template(:staff) }
       end
@@ -60,9 +60,7 @@ RSpec.describe Course::UsersController, type: :controller do
       let(:updated_course_user) { { role: :teaching_assistant } }
 
       context 'when the user is a manager' do
-        let!(:logged_in_course_user) do
-          create(:course_manager, :approved, course: course, user: user)
-        end
+        let!(:logged_in_course_user) { create(:course_manager, course: course, user: user) }
         let(:course_user) { create(:course_manager, course: course) }
 
         it 'updates the Course User' do
@@ -91,6 +89,7 @@ RSpec.describe Course::UsersController, type: :controller do
         end
 
         context 'when the user transitions from the requested state to the approved state' do
+          let(:course_user) { create(:course_user, course: course, role: :manager) }
           let(:updated_course_user) { { workflow_state: :approved } }
           it 'sends a notification email to the user' do
             expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
@@ -117,7 +116,7 @@ RSpec.describe Course::UsersController, type: :controller do
       let!(:course_user_to_delete) { create(:course_user, course: course, user: create(:user)) }
 
       context 'when the user is a manager' do
-        let!(:course_user) { create(:course_manager, :approved, course: course, user: user) }
+        let!(:course_user) { create(:course_manager, course: course, user: user) }
 
         it 'destroys the registration record' do
           expect { subject }.to change { course.course_users.reload.count }.by(-1)
@@ -159,7 +158,7 @@ RSpec.describe Course::UsersController, type: :controller do
       subject { get :show, course_id: course, id: course_user }
 
       context 'when the user is not registered' do
-        let(:course_user) { create(:course_student, course: course) }
+        let(:course_user) { create(:course_user, course: course) }
         it 'raises an error' do
           expect { subject }.to raise_exception(ActiveRecord::RecordNotFound)
         end
@@ -169,8 +168,8 @@ RSpec.describe Course::UsersController, type: :controller do
     describe '#upgrade_to_staff' do
       before { sign_in(user) }
       subject { put :upgrade_to_staff, course_id: course, course_user: staff_to_be_params }
-      let!(:course_user) { create(:course_manager, :approved, course: course, user: user) }
-      let(:staff_to_be) { create(:course_student, :approved, course: course) }
+      let!(:course_user) { create(:course_manager, course: course, user: user) }
+      let(:staff_to_be) { create(:course_student, course: course) }
       let(:staff_to_be_params) { { id: staff_to_be.id, role: :teaching_assistant } }
       let(:staff_to_be_stub) do
         stub = staff_to_be

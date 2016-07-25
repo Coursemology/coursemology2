@@ -6,11 +6,9 @@ RSpec.feature 'Courses: CourseUser Profile' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:course_student) { create(:course_student, :approved, course: course) }
+    let(:course_student) { create(:course_student, course: course) }
     let(:achievement) { create(:course_user_achievement, course_user: course_student).achievement }
-    let(:course_teaching_assistant) do
-      create(:course_teaching_assistant, :approved, course: course)
-    end
+    let(:course_teaching_assistant) { create(:course_teaching_assistant, course: course) }
 
     context 'As a Course Teaching Assistant' do
       before { login_as(course_teaching_assistant.user, scope: :user) }
@@ -28,7 +26,7 @@ RSpec.feature 'Courses: CourseUser Profile' do
     end
 
     context 'As a Course Student' do
-      let(:student_user) { create(:course_student, :approved, course: course).user }
+      let(:student_user) { create(:course_student, course: course).user }
 
       scenario "I can view a staff's profile" do
         login_as(student_user, scope: :user)

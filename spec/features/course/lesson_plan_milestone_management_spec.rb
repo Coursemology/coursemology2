@@ -14,7 +14,7 @@ RSpec.feature 'Course: Lesson Plan Milestones' do
     end
 
     context 'As a Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can create a milestone' do
         visit course_lesson_plan_path(course)

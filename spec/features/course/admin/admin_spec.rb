@@ -11,7 +11,7 @@ RSpec.feature 'Course: Administration: Administration' do
     before { login_as(user, scope: :user) }
 
     context 'As an Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can view the Course Admin Sidebar item' do
         visit course_path(course)
@@ -56,7 +56,7 @@ RSpec.feature 'Course: Administration: Administration' do
     end
 
     context 'As a Course Teaching Assistant' do
-      let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
+      let(:user) { create(:course_teaching_assistant, course: course).user }
 
       scenario 'I cannot view the Course Admin Sidebar item' do
         visit course_path(course)
@@ -66,7 +66,7 @@ RSpec.feature 'Course: Administration: Administration' do
     end
 
     context 'As a Course Student' do
-      let(:user) { create(:course_student, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       scenario 'I cannot view the Course Admin Sidebar item' do
         visit course_path(course)

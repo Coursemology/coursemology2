@@ -9,7 +9,7 @@ RSpec.feature 'Course: Administration: Leaderboard' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can change the leaderboard display user count setting' do
         visit course_admin_leaderboard_path(course)

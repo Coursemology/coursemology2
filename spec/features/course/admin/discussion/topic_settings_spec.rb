@@ -9,7 +9,7 @@ RSpec.feature 'Course: Administration: Discussion:: Topics' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can change the discussion topics pagination' do
         visit course_admin_topics_path(course)

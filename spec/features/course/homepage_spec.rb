@@ -51,7 +51,7 @@ RSpec.feature 'Course: Homepage' do
     end
 
     context 'As a user registered for the course' do
-      let(:user) { create(:course_student, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
       scenario 'I am able to see announcements in course homepage' do
         valid_announcement = create(:course_announcement, course: course)
         visit course_path(course)
@@ -97,8 +97,8 @@ RSpec.feature 'Course: Homepage' do
       end
 
       scenario 'I am only able to see approved owner and managers in instructors list' do
-        manager = create(:course_manager, :approved, course: course)
-        teaching_assistant = create(:course_teaching_assistant, :approved, course: course)
+        manager = create(:course_manager, course: course)
+        teaching_assistant = create(:course_teaching_assistant, course: course)
         visit course_path(course)
         course.course_users.owner.with_approved_state.each do |course_user|
           expect(page).to have_selector('span.name', text: course_user.user.name)

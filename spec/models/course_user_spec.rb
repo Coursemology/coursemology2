@@ -21,6 +21,7 @@ RSpec.describe CourseUser, type: :model do
   with_tenant(:instance) do
     let(:owner) { create(:user) }
     let(:course) { create(:course, creator: owner, updater: owner) }
+    let(:requested_course_user) { create(:course_user, course: course) }
     let!(:student) { create(:course_student, course: course) }
     let(:teaching_assistant) { create(:course_teaching_assistant, course: course) }
     let(:manager) { create(:course_manager, course: course) }
@@ -90,13 +91,6 @@ RSpec.describe CourseUser, type: :model do
     end
 
     describe '.approved' do
-      before do
-        student.approve!
-        student.save!
-        teaching_assistant.approve!
-        teaching_assistant.save!
-      end
-
       it 'returns all approved course users' do
         expect(course.course_users.with_approved_state).to contain_exactly(student,
                                                                            teaching_assistant,
@@ -107,7 +101,7 @@ RSpec.describe CourseUser, type: :model do
     describe '.pending' do
       it 'returns all pending course users' do
         expect(course.course_users.with_requested_state).
-          to contain_exactly(student, teaching_assistant, manager)
+          to contain_exactly(requested_course_user)
       end
     end
 
@@ -168,14 +162,14 @@ RSpec.describe CourseUser, type: :model do
     end
 
     describe '#approve!' do
-      subject { student.tap(&:approve!).tap(&:save!) }
+      subject { requested_course_user.tap(&:approve!).tap(&:save!) }
       it 'increases approved course users\' count' do
         expect { subject }.to change(CourseUser.with_approved_state, :count).by(1)
       end
     end
 
     describe '#reject!' do
-      subject { student.tap(&:reject!) }
+      subject { requested_course_user.tap(&:reject!) }
       it 'destroys the record' do
         expect(subject.destroyed?).to be_truthy
       end

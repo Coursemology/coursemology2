@@ -9,13 +9,13 @@ RSpec.describe Course::Forum, type: :model do
     let(:forum) { create(:forum, course: course) }
 
     context 'when the user is a Course Student' do
-      let(:user) { create(:course_student, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       it { is_expected.to be_able_to(:show, forum) }
     end
 
     context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       it { is_expected.to be_able_to(:manage, forum) }
     end

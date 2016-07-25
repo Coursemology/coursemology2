@@ -12,7 +12,7 @@ RSpec.describe 'Course: Assessments: Viewing' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Staff' do
-      let(:user) { create(:course_teaching_assistant, :approved, course: course).user }
+      let(:user) { create(:course_teaching_assistant, course: course).user }
 
       scenario 'I can access all submissions of an assessment' do
         assessment

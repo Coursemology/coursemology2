@@ -8,7 +8,7 @@ RSpec.feature 'System: Administration: Instance: Courses' do
     let(:last_page) { Course.unscoped.page.total_pages }
     let!(:courses) do
       courses = create_list(:course, 2)
-      create(:course_manager, :approved, course: courses.sample)
+      create(:course_manager, course: courses.sample)
       create(:course_student, course: courses.sample)
 
       courses

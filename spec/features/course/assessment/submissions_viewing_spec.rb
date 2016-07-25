@@ -9,11 +9,11 @@ RSpec.describe 'Course: Submissions Viewing' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
-      let(:course_manager) { create(:course_manager, :approved, course: course) }
+      let(:course_manager) { create(:course_manager, course: course) }
       let(:user) { course_manager.user }
 
       scenario 'I can view all submitted and graded submissions' do
-        students = create_list(:course_student, 3, :approved, course: course)
+        students = create_list(:course_student, 3, course: course)
         attempting_submission, submitted_submission, graded_submission =
           students.zip([:attempting, :submitted, :graded]).map do |student, trait|
             create(:course_assessment_submission, trait,
@@ -39,7 +39,7 @@ RSpec.describe 'Course: Submissions Viewing' do
       end
 
       scenario 'I can view pending submissions' do
-        students = create_list(:course_student, 4, :approved, course: course)
+        students = create_list(:course_student, 4, course: course)
         attempting_submission, submitted_submission1, submitted_submission2, graded_submission =
           students.zip([:attempting, :submitted, :submitted, :graded]).map do |student, trait|
             create(:course_assessment_submission, trait,
@@ -70,7 +70,7 @@ RSpec.describe 'Course: Submissions Viewing' do
     end
 
     context 'As a Course Student' do
-      let(:user) { create(:course_student, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       scenario 'I can view my submitted and graded submissions' do
         attempting_submission, submitted_submission, graded_submission =

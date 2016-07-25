@@ -12,7 +12,7 @@ RSpec.feature 'Course: Achievements' do
     end
 
     context 'As a Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
       let(:other_achievement) { create(:course_achievement, course: course) }
       let(:achievement_condition) do
         create(:achievement_condition, course: course, achievement: other_achievement)

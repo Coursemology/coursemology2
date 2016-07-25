@@ -15,7 +15,7 @@ RSpec.feature 'Course: Announcements' do
     end
 
     context 'As an Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can create new announcements' do
         visit new_course_announcement_path(course)
@@ -87,7 +87,7 @@ RSpec.feature 'Course: Announcements' do
     end
 
     context 'As an Course Student' do
-      let(:user) { create(:course_student, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       scenario 'I can view the Announcement Sidebar item' do
         visit course_path(course)

@@ -10,7 +10,7 @@ RSpec.feature 'Courses: Groups' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can view the Group Sidebar item' do
         visit course_path(course)
@@ -113,7 +113,7 @@ RSpec.feature 'Courses: Groups' do
     end
 
     context 'As a Course Student' do
-      let(:user) { create(:course_student, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       scenario 'I cannot view the Group Sidebar item' do
         visit course_path(course)

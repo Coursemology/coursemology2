@@ -13,7 +13,7 @@ RSpec.feature 'Course: Administration: Components' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can view the list of enabled/disabled components' do
         visit course_admin_components_path(course)

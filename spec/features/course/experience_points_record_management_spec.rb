@@ -6,7 +6,7 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:course_student) { create(:course_student, :approved, course: course) }
+    let(:course_student) { create(:course_student, course: course) }
     let(:record) do
       create(:course_assessment_submission, course: course, creator: course_student.user).acting_as
     end
@@ -19,7 +19,7 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course manager' do
-      let(:user) { create(:course_manager, :approved, course: course).user }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario "I can view a course student's active experience points records" do
         records

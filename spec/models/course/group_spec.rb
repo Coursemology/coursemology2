@@ -163,7 +163,7 @@ RSpec.describe Course::Group, type: :model do
     end
 
     describe '.ordered_by_experience_points' do
-      let(:student) { create(:course_student, :approved, course: course) }
+      let(:student) { create(:course_student, course: course) }
       let!(:group_user) { create(:course_group_user, group: group, course_user: student) }
       let!(:other_group) { create(:course_group, course: course) }
       let!(:experience_points_record) do
@@ -178,7 +178,7 @@ RSpec.describe Course::Group, type: :model do
     end
 
     describe '.ordered_by_achievement_count' do
-      let(:student) { create(:course_student, :approved, course: course) }
+      let(:student) { create(:course_student, course: course) }
       let!(:group_user) { create(:course_group_user, group: group, course_user: student) }
       let!(:course_user_achievement) { create(:course_user_achievement, course_user: student) }
       let!(:later_group) { create(:course_group, course: course) }
@@ -191,7 +191,7 @@ RSpec.describe Course::Group, type: :model do
 
       context 'when two groups have the same achievement count' do
         let(:earlier_time) { course_user_achievement.obtained_at }
-        let!(:later_student) { create(:course_student, :approved, course: course) }
+        let!(:later_student) { create(:course_student, course: course) }
         let!(:later_group_user) do
           create(:course_group_user, group: later_group, course_user: later_student)
         end
