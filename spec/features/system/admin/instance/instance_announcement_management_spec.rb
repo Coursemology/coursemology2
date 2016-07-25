@@ -36,12 +36,16 @@ RSpec.feature 'System: Administration: Instance Announcements' do
 
       scenario 'I can edit instance announcements' do
         announcement = create(:instance_announcement, instance: instance)
+        time_zone = user.time_zone || Application.config.x.default_user_time_zone
+
         visit edit_admin_instance_announcement_path(announcement)
 
         expect(page).to have_field('announcement[title]', with: announcement.title)
         expect(page).to have_field('announcement[content]', with: announcement.content)
-        expect(page).to have_field('announcement[start_at]', with: announcement.start_at)
-        expect(page).to have_field('announcement[end_at]', with: announcement.end_at)
+        expect(page).to have_field('announcement[start_at]',
+                                   with: announcement.start_at.in_time_zone(time_zone))
+        expect(page).to have_field('announcement[end_at]',
+                                   with: announcement.end_at.in_time_zone(time_zone))
 
         fill_in 'announcement[title]', with: ''
         click_button I18n.t('helpers.submit.announcement.update')
