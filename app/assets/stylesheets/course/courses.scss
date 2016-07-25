@@ -12,6 +12,8 @@
   &.index {
     .thumbnail {
       .image > img {
+        @include no-stretch;
+
         height: $course-course-listing-logo;
         margin-top: 1em;
         width: $course-course-listing-logo;
