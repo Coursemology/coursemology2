@@ -37,12 +37,15 @@ RSpec.feature 'Course: Announcements' do
 
       scenario 'I can edit announcements' do
         announcement = create(:course_announcement, course: course)
+        time_zone = user.time_zone || Application.config.x.default_user_time_zone
         visit edit_course_announcement_path(course, announcement)
 
         expect(page).to have_field('announcement_title', with: announcement.title)
         expect(page).to have_field('announcement_content', with: announcement.content)
-        expect(page).to have_field('announcement[start_at]', with: announcement.start_at)
-        expect(page).to have_field('announcement[end_at]', with: announcement.end_at)
+        expect(page).to have_field('announcement[start_at]',
+                                   with: announcement.start_at.in_time_zone(time_zone))
+        expect(page).to have_field('announcement[end_at]',
+                                   with: announcement.end_at.in_time_zone(time_zone))
 
         fill_in 'announcement_title', with: ''
         click_button I18n.t('helpers.submit.announcement.update')

@@ -154,6 +154,28 @@ RSpec.describe User do
         it { is_expected.to validate_absence_of(:encrypted_password) }
         it { is_expected.to validate_absence_of(:authentication_token) }
       end
+
+      describe '#time_zone' do
+        subject { build(:user) }
+
+        context 'when time_zone is not set' do
+          before { subject.time_zone = nil }
+
+          it { is_expected.to be_valid }
+        end
+
+        context 'when time_zone is invalid' do
+          before { subject.time_zone = 'LOL' }
+
+          it { is_expected.not_to be_valid }
+        end
+
+        context 'when time_zone is valid' do
+          before { subject.time_zone = 'Tokyo' }
+
+          it { is_expected.to be_valid }
+        end
+      end
     end
 
     describe '#send_reset_password_instructions' do

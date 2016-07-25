@@ -16,6 +16,6 @@ class User::ProfilesController < ApplicationController
   private
 
   def profile_params
-    params.require(:user).permit(:name, :profile_photo)
+    params.require(:user).permit(:name, :time_zone, :profile_photo)
   end
 end

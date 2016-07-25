@@ -3,6 +3,7 @@
 = simple_form_for current_user, url: user_profile_path do |f|
   = f.error_notification
   = f.input :name, required: true
+  = f.input :time_zone
   = f.label t('.profile_photo')
   div = display_user_image(current_user)
   = f.file_field :profile_photo, class: 'upload-btn'

@@ -37,6 +37,7 @@ class Application < Rails::Application
   config.eager_load_paths << "#{Rails.root}/app/notifiers"
 
   config.x.default_host = 'example.org'
+  config.x.default_user_time_zone = 'Singapore'
   config.x.public_download_folder = 'downloads'
   config.x.temp_folder = config.root.join('tmp')
 end
