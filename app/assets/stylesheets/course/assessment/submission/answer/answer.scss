@@ -1,7 +1,7 @@
-@import 'discussion_post';
+@import '../../../discussion/post';
 
 .course-assessment-submission-submissions.edit {
   .answer .comments {
-    @include course-assessment-submission-discussion;
+    @include discussion-post;
   }
 }
