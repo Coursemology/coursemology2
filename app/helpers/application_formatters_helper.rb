@@ -65,6 +65,21 @@ module ApplicationFormattersHelper
     end
   end
 
+  # Renders the given topic.
+  #
+  # @param [Course::Discussion::Topic] topic The topic to display.
+  # @option options [String] :post_partial The path to the post partial
+  # @option options [Hash] :post_locals The locals to be passed to the post partial
+  # @option options [String] :footer The path to the footer partial, this is normally used for add a
+  #   reply form below all the posts.
+  # @option options [Boolean] :read_marks Set to true to eager load read marks for posts.
+  # @option options [Boolean] :with_votes Set to true to display votes.
+  def display_topic(topic, options = {})
+    render partial: 'course/discussion/topic',
+           object: topic,
+           locals: options
+  end
+
   # Format the given datetime
   #
   # @param [DateTime] date The datetime to be formatted

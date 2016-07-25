@@ -4,7 +4,7 @@ class Course::Forum::Topic < ActiveRecord::Base
   friendly_id :slug_candidates, use: :scoped, scope: :forum
 
   acts_as_readable on: :updated_at
-  acts_as :topic, class_name: Course::Discussion::Topic.name
+  acts_as_discussion_topic
 
   after_initialize :generate_initial_post, unless: :persisted?
   before_validation :set_initial_post_title, unless: :persisted?
@@ -65,7 +65,7 @@ class Course::Forum::Topic < ActiveRecord::Base
 
     all.tap do |result|
       preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
-      preloader.preload(result, { topic: :posts }, last_posts)
+      preloader.preload(result, { discussion_topic: :posts }, last_posts)
     end
   end)
 

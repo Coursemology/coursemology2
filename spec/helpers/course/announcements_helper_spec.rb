@@ -12,7 +12,7 @@ RSpec.describe Course::AnnouncementsHelper do
 
     context 'when the title is blank' do
       before do
-        helper.instance_variable_set(:@announcement_settings, settings_with_default_title)
+        helper.instance_variable_set(:@settings, settings_with_default_title)
       end
 
       it 'returns nil' do
@@ -22,7 +22,7 @@ RSpec.describe Course::AnnouncementsHelper do
 
     context 'when the title is set' do
       before do
-        helper.instance_variable_set(:@announcement_settings, settings_with_given_title)
+        helper.instance_variable_set(:@settings, settings_with_given_title)
       end
 
       it 'returns a string' do

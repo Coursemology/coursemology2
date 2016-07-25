@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Discussion::PostsController < Course::ComponentController
   before_action :load_topic
-  authorize_resource :topic
+  authorize_resource :specific_topic
 
   include Course::Discussion::PostsConcern
 
@@ -28,5 +28,6 @@ class Course::Discussion::PostsController < Course::ComponentController
 
   def load_topic
     @topic ||= Course::Discussion::Topic.find(topic_id_param)
+    @specific_topic = @topic.specific
   end
 end

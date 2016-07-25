@@ -67,7 +67,7 @@ RSpec.describe Course::Forum::Topic, type: :model do
     describe '.vote_count' do
       let(:topic) { create(:forum_topic, forum: forum) }
       let!(:votes) do
-        create_list(:course_discussion_post_vote, vote_count, post: topic.topic.posts.first)
+        create_list(:course_discussion_post_vote, vote_count, post: topic.posts.first)
       end
       let(:vote_count) { 3 }
 

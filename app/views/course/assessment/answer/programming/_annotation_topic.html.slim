@@ -1,7 +1,4 @@
 - unless annotation_topic.posts.empty?
   = div_for(annotation_topic)
-    = render partial: 'course/discussion/topic', object: annotation_topic,
-             locals: { \
-               post_partial: 'course/assessment/answer/programming/annotation_post', \
-               footer: 'course/assessment/answer/programming/annotation_footer' \
-             }
+    = display_topic annotation_topic, post_partial: 'course/assessment/answer/programming/annotation_post',
+                                      footer: 'course/assessment/answer/programming/annotation_footer'

@@ -17,7 +17,7 @@ class Course::Forum < ActiveRecord::Base
   # @!attribute [r] topic_post_count
   #   The number of posts in this forum.
   calculated :topic_post_count, (lambda do
-    Course::Forum::Topic.joins { topic.outer.posts.outer }.
+    Course::Forum::Topic.joins { discussion_topic.outer.posts.outer }.
       where { course_forum_topics.forum_id == course_forums.id }.
       select { count('*') }
   end)
