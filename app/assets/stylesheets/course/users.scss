@@ -21,6 +21,7 @@
 
     .profile-picture {
       .image > img {
+        @include no-stretch;
         height: $course-user-profile-picture;
         margin-top: 1em;
       }
@@ -32,6 +33,8 @@
       text-align: center;
 
       .image > img {
+        @include no-stretch;
+
         height: $course-user-listing-picture;
         margin-top: 1em;
       }
