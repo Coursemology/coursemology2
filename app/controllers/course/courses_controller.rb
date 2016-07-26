@@ -3,7 +3,7 @@ class Course::CoursesController < Course::Controller
   include Course::ActivityFeedsConcern
 
   def index # :nodoc:
-    @courses = @courses.page(page_param)
+    @courses = Course.publicly_accessible.page(page_param)
   end
 
   def show # :nodoc:
