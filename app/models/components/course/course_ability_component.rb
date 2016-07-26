@@ -5,6 +5,7 @@ module Course::CourseAbilityComponent
   def define_permissions
     allow_showing_open_courses
     if user
+      allow_instructors_create_courses
       allow_unregistered_users_registering_open_courses
       allow_registered_users_showing_course
       allow_owners_managing_course
@@ -15,6 +16,10 @@ module Course::CourseAbilityComponent
   end
 
   private
+
+  def allow_instructors_create_courses
+    can :create, Course if user.instance_users.instructor.present?
+  end
 
   def allow_showing_open_courses
     # TODO: Replace with just the symbols when Rails 5 is released.

@@ -1,5 +1,5 @@
 = page_header do
-  = new_button([:course]) if can?(:create, Course.new)
+  = new_button([:course]) if can?(:create, Course)
 
 = render @courses
 
