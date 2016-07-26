@@ -418,20 +418,6 @@
   }
 
   /**
-   * Handles the annotation post reply button click event.
-   *
-   * @param e The event object.
-   */
-  function onAnnotationPostReply(e) {
-    var $element = $(e.target);
-    var $post = $element.parents('.discussion_post:first');
-    var $form = findOrCreateAnnotationReplyFormForPost($post);
-
-    $form.find('textarea').focus();
-    e.preventDefault();
-  }
-
-  /**
    * Handles the annotation reply button click event. Replying to an annotation is
    * equivalent to replying to its last post.
    *
@@ -491,8 +477,6 @@
     onAnnotationDelete);
   $(document).on('click', DOCUMENT_SELECTOR + '.discussion_post .toolbar .edit',
     onAnnotationEdit);
-  $(document).on('click', DOCUMENT_SELECTOR + '.discussion_post .toolbar .reply',
-    onAnnotationPostReply);
   $(document).on('click', DOCUMENT_SELECTOR + '.discussion_topic .reply-annotation',
     onAnnotationReply);
 })(jQuery, FORM_HELPERS, ANSWER_HELPERS);

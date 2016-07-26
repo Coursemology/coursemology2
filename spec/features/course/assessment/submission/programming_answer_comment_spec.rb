@@ -83,26 +83,6 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         expect(page).to have_content_tag_for(answer_discussion_topic.posts.first)
       end
 
-      scenario 'I can reply to an existing annotation post', js: true do
-        post = create(:course_discussion_post, topic: annotation.discussion_topic, creator: user)
-
-        visit edit_course_assessment_submission_path(course, assessment, submission)
-        within find(content_tag_selector(post)) do
-          find('.reply').click
-        end
-
-        annotation_text = 'reply annotation'
-        within find_form('.annotation-form') do
-          fill_in 'discussion_post[text]', with: annotation_text
-          click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
-                              'annotation_form.submit')
-        end
-
-        wait_for_ajax
-        new_post = post.children.reload.last
-        expect(new_post.text).to have_tag('*', text: annotation_text)
-      end
-
       scenario 'I can reply to an existing annotation topic', js: true do
         create(:course_discussion_post, topic: annotation.discussion_topic, creator: user)
 

@@ -5,7 +5,7 @@ RSpec.describe Course::Discussion::Post, type: :model do
   it { is_expected.to belong_to(:topic).inverse_of(:posts).touch(true) }
   it { is_expected.to belong_to(:creator) }
   it { is_expected.to have_many(:votes).inverse_of(:post).dependent(:destroy) }
-  it { is_expected.to have_many(:children).dependent(:destroy) }
+  it { is_expected.to have_many(:children) }
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
@@ -155,6 +155,25 @@ RSpec.describe Course::Discussion::Post, type: :model do
             calculated_post = post.topic.posts.calculated(:upvotes, :downvotes).first
             expect(calculated_post.upvotes - calculated_post.downvotes).to eq(0)
           end
+        end
+      end
+    end
+
+    describe '.destroy' do
+      let(:topic) { create(:course_discussion_topic) }
+      let(:parent_post) { create(:course_discussion_post, topic: topic) }
+      let(:post) { create(:course_discussion_post, parent: parent_post, topic: topic) }
+
+      context 'when the post has children' do
+        let!(:children_posts) do
+          create_list(:course_discussion_post, 2, parent: post, topic: topic)
+        end
+
+        it 'makes them children of its parent' do
+          post.destroy
+
+          expect(children_posts.all? { |child| child.reload.parent_id == parent_post.id }).
+            to be_truthy
         end
       end
     end

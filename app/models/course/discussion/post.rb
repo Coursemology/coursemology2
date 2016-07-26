@@ -2,13 +2,14 @@
 class Course::Discussion::Post < ActiveRecord::Base
   extend Course::Discussion::Post::OrderingConcern
 
-  acts_as_forest order: :created_at, dependent: :destroy
+  acts_as_forest order: :created_at
   acts_as_readable on: :updated_at
   has_many_attachments
 
   after_initialize :set_topic, if: :new_record?
   after_initialize :set_title, if: :new_record?
   before_validation :set_title
+  before_destroy :reparent_children
 
   validate :parent_topic_consistency
 
@@ -97,5 +98,9 @@ class Course::Discussion::Post < ActiveRecord::Base
 
   def parent_topic_consistency
     errors.add(:topic_inconsistent) if parent && topic != parent.topic
+  end
+
+  def reparent_children
+    children.update_all(parent_id: parent_id)
   end
 end
