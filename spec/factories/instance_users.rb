@@ -8,6 +8,10 @@ FactoryGirl.define do
       instance_user.user ||= build(:user, instance_users: [instance_user])
     end
 
+    trait :instructor do
+      role :instructor
+    end
+
     trait :auto_grader do
       role :auto_grader
     end

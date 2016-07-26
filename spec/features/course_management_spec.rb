@@ -6,11 +6,12 @@ RSpec.feature 'Courses' do
   let(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let(:user) { create(:administrator) }
+    let(:user) { create(:instance_user, :instructor).user }
     before { login_as(user, scope: :user) }
 
-    scenario 'Users can see a list of all courses' do
+    scenario 'Users can see a list of published courses' do
       create(:course)
+      create(:course, [:published, :opened].sample)
 
       visit courses_path
       expect(all('.course').count).to eq(1)
