@@ -8,16 +8,6 @@
   var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ';
 
   /**
-   * Shows reply buttons for annotations.
-   *
-   * @param element
-   */
-  function showReplyButton(element) {
-    var $button = $('.reply-annotation', element).filter(DOCUMENT_SELECTOR + '*');
-    $button.show();
-  }
-
-  /**
    * Shows forms for adding comments to answers.
    *
    * @param element
@@ -25,16 +15,6 @@
   function showAnswerCommentForm(element) {
     var $form = $('.answer-comment-form', element).filter(DOCUMENT_SELECTOR + '*');
     $form.show();
-  }
-
-  /**
-   * Reveals widgets that enable user to use features with JavaScript functionality.
-   *
-   * @param element
-   */
-  function showScriptedWidgets(element) {
-    showReplyButton(element);
-    showAnswerCommentForm(element);
   }
 
   /**
@@ -64,9 +44,9 @@
     FORM_HELPERS.findFormFields($form).prop('disabled', false);
   }
 
-  showScriptedWidgets(document);
+  showAnswerCommentForm(document);
   $(document).on('DOMNodeInserted', function(e) {
-    showScriptedWidgets(e.target);
+    showAnswerCommentForm(e.target);
   });
   $(document).on('click', DOCUMENT_SELECTOR + '.comments .reply-comment', onCommentReply);
   DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR + '.comments ');

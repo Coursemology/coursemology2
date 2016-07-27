@@ -284,9 +284,21 @@
     e.preventDefault();
   }
 
+  /**
+   * Shows reply buttons for annotations.
+   *
+   * @param element
+   */
+  function showReplyButton(element) {
+    var $button = $('.reply-annotation', element).filter(DOCUMENT_SELECTOR + '*');
+    $button.show();
+  }
+
+  showReplyButton(document);
   addProgrammingAnnotationLinks(document);
   $(document).on('DOMNodeInserted', function(e) {
     addProgrammingAnnotationLinks(e.target);
+    showReplyButton(e.target);
   });
   $(document).on('click', DOCUMENT_SELECTOR + 'table.codehilite .add-annotation',
     onAddProgrammingAnnotation);
