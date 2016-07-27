@@ -1,8 +1,11 @@
 //= require helpers/form_helpers
+//= require helpers/course_helpers
 //= require helpers/answer_helpers
 //= require templates/course/assessment/submission/answer/comment_form
 
-(function($, FORM_HELPERS, ANSWER_HELPERS) {
+(function($, FORM_HELPERS,
+             COURSE_HELPERS,
+             ANSWER_HELPERS) {
   /* global Routes */
   'use strict';
   var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ';
@@ -87,7 +90,7 @@
     var $element = $(e.target);
     var $post = $element.parents('.discussion_post:first');
 
-    var courseId = ANSWER_HELPERS.courseIdForElement($element);
+    var courseId = COURSE_HELPERS.courseIdForElement($element);
     var assessmentId = ANSWER_HELPERS.assessmentIdForElement($element);
     var submissionId = ANSWER_HELPERS.submissionIdForElement($element);
     var answerId = ANSWER_HELPERS.answerIdForElement($element);
@@ -191,7 +194,7 @@
   function onCommentDelete(e) {
     var $element = $(e.target);
 
-    var courseId = ANSWER_HELPERS.courseIdForElement($element);
+    var courseId = COURSE_HELPERS.courseIdForElement($element);
     var assessmentId = ANSWER_HELPERS.assessmentIdForElement($element);
     var submissionId = ANSWER_HELPERS.submissionIdForElement($element);
     var answerId = ANSWER_HELPERS.answerIdForElement($element);
@@ -231,4 +234,6 @@
   $(document).on('click', DOCUMENT_SELECTOR + '.comments .discussion_post .toolbar .delete',
     onCommentDelete);
   $(document).on('click', DOCUMENT_SELECTOR + '.comments .reply-comment', onCommentReply);
-})(jQuery, FORM_HELPERS, ANSWER_HELPERS);
+})(jQuery, FORM_HELPERS,
+           COURSE_HELPERS,
+           ANSWER_HELPERS);

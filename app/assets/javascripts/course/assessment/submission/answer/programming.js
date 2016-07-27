@@ -1,9 +1,12 @@
 //= require helpers/form_helpers
+//= require helpers/course_helpers
 //= require helpers/answer_helpers
 //= require templates/course/assessment/submission/answer/programming/add_annotation_button
 //= require templates/course/assessment/submission/answer/programming/annotation_form
 
-(function($, FORM_HELPERS, ANSWER_HELPERS) {
+(function($, FORM_HELPERS,
+             COURSE_HELPERS,
+             ANSWER_HELPERS) {
   /* global JST, Routes */
   'use strict';
   var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ' +
@@ -119,7 +122,7 @@
     var $target = $(e.target);
     var $line = $target.parents('tr:first');
 
-    var courseId = ANSWER_HELPERS.courseIdForElement($target);
+    var courseId = COURSE_HELPERS.courseIdForElement($target);
     var assessmentId = ANSWER_HELPERS.assessmentIdForElement($target);
     var submissionId = ANSWER_HELPERS.submissionIdForElement($target);
     var answerId = ANSWER_HELPERS.answerIdForElement($target);
@@ -366,7 +369,7 @@
   function onAnnotationDelete(e) {
     var $element = $(e.target);
 
-    var courseId = ANSWER_HELPERS.courseIdForElement($element);
+    var courseId = COURSE_HELPERS.courseIdForElement($element);
     var assessmentId = ANSWER_HELPERS.assessmentIdForElement($element);
     var submissionId = ANSWER_HELPERS.submissionIdForElement($element);
     var answerId = ANSWER_HELPERS.answerIdForElement($element);
@@ -405,7 +408,7 @@
    */
   function findOrCreateAnnotationReplyFormForPost($post) {
     var $replies = $post.next('div.replies');
-    var courseId = ANSWER_HELPERS.courseIdForElement($post);
+    var courseId = COURSE_HELPERS.courseIdForElement($post);
     var assessmentId = ANSWER_HELPERS.assessmentIdForElement($post);
     var submissionId = ANSWER_HELPERS.submissionIdForElement($post);
     var answerId = ANSWER_HELPERS.answerIdForElement($post);
@@ -442,7 +445,7 @@
     var $element = $(e.target);
     var $post = $element.parents('.discussion_post:first');
 
-    var courseId = ANSWER_HELPERS.courseIdForElement($element);
+    var courseId = COURSE_HELPERS.courseIdForElement($element);
     var assessmentId = ANSWER_HELPERS.assessmentIdForElement($element);
     var submissionId = ANSWER_HELPERS.submissionIdForElement($element);
     var answerId = ANSWER_HELPERS.answerIdForElement($element);
@@ -479,4 +482,6 @@
     onAnnotationEdit);
   $(document).on('click', DOCUMENT_SELECTOR + '.discussion_topic .reply-annotation',
     onAnnotationReply);
-})(jQuery, FORM_HELPERS, ANSWER_HELPERS);
+})(jQuery, FORM_HELPERS,
+           COURSE_HELPERS,
+           ANSWER_HELPERS);
