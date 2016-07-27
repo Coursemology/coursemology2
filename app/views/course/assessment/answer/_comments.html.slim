@@ -1,5 +1,3 @@
-= render partial: answer.discussion_topic,
-         locals: { \
-           post_partial: 'course/assessment/answer/comment', \
-           footer: 'course/assessment/answer/comments_footer' \
-         }
+= display_topic answer.discussion_topic,
+                post_partial: 'course/discussion/post',
+                footer: 'course/assessment/answer/comments_footer'
