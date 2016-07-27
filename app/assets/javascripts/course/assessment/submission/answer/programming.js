@@ -1,12 +1,14 @@
 //= require helpers/form_helpers
 //= require helpers/course_helpers
 //= require helpers/answer_helpers
+//= require helpers/discussion/post_helpers
 //= require templates/course/assessment/submission/answer/programming/add_annotation_button
 //= require templates/course/assessment/submission/answer/programming/annotation_form
 
 (function($, FORM_HELPERS,
              COURSE_HELPERS,
-             ANSWER_HELPERS) {
+             ANSWER_HELPERS,
+             DISCUSSION_POST_HELPERS) {
   /* global JST, Routes */
   'use strict';
   var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ' +
@@ -362,46 +364,6 @@
   }
 
   /**
-   * Handles the annotation delete button click event.
-   *
-   * @param e The event object.
-   */
-  function onAnnotationDelete(e) {
-    var $element = $(e.target);
-
-    var courseId = COURSE_HELPERS.courseIdForElement($element);
-    var assessmentId = ANSWER_HELPERS.assessmentIdForElement($element);
-    var submissionId = ANSWER_HELPERS.submissionIdForElement($element);
-    var answerId = ANSWER_HELPERS.answerIdForElement($element);
-    var programmingFileId = programmingFileIdForRow($element);
-    var lineNumber = $element.parents('.line-annotation:first').data('lineNumber');
-
-    var $post = $element.parents('.discussion_post:first');
-    var postId = $post.data('postId');
-
-    $.ajax({ url: Routes.course_assessment_submission_answer_programming_file_line_post_path(
-                    courseId, assessmentId, submissionId, answerId, programmingFileId, lineNumber,
-                    postId),
-             method: 'delete' }).
-      done(function(data) { onAnnotationDeleteSuccess(data, $element); }).
-      fail(function(data) { onAnnotationDeleteFail(data, $element); });
-    e.preventDefault();
-  }
-
-  /**
-   * Handles the successful annotation delete event.
-   */
-  function onAnnotationDeleteSuccess() {
-  }
-
-  /**
-   * Handles the errored annotation delete event.
-   */
-  function onAnnotationDeleteFail() {
-    // TODO: Implement error recovery.
-  }
-
-  /**
    * Creates a form to reply to a given annotation post.
    *
    * @param {jQuery} $post The annotation post to reply to.
@@ -476,12 +438,12 @@
     onAnnotationPostFormResetted);
   $(document).on('click', DOCUMENT_SELECTOR + '.annotation-post-form input[type="submit"]',
     onAnnotationPostFormSubmitted);
-  $(document).on('click', DOCUMENT_SELECTOR + '.discussion_post .toolbar .delete',
-    onAnnotationDelete);
   $(document).on('click', DOCUMENT_SELECTOR + '.discussion_post .toolbar .edit',
     onAnnotationEdit);
   $(document).on('click', DOCUMENT_SELECTOR + '.discussion_topic .reply-annotation',
     onAnnotationReply);
+  DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR + '.line-annotation ');
 })(jQuery, FORM_HELPERS,
            COURSE_HELPERS,
-           ANSWER_HELPERS);
+           ANSWER_HELPERS,
+           DISCUSSION_POST_HELPERS);

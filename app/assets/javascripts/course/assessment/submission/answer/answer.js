@@ -1,27 +1,17 @@
 //= require helpers/form_helpers
 //= require helpers/course_helpers
 //= require helpers/answer_helpers
+//= require helpers/discussion/post_helpers
 //= require templates/course/assessment/submission/answer/comment_form
 
 (function($, FORM_HELPERS,
              COURSE_HELPERS,
-             ANSWER_HELPERS) {
+             ANSWER_HELPERS,
+             DISCUSSION_POST_HELPERS) {
   /* global Routes */
   'use strict';
   var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ';
   var render = FORM_HELPERS.renderFromPath('templates/course/assessment/submission/answer/');
-
-  /**
-   * Shows the comments toolbar for submissions.
-   *
-   * This allows comments to be deleted.
-   *
-   * @param element
-   */
-  function showCommentToolbar(element) {
-    var $comments = $('.discussion_post', element).filter(DOCUMENT_SELECTOR + '*');
-    $comments.find('.toolbar').show();
-  }
 
   /**
    * Shows reply buttons for annotations.
@@ -49,7 +39,6 @@
    * @param element
    */
   function showScriptedWidgets(element) {
-    showCommentToolbar(element);
     showReplyButton(element);
     showAnswerCommentForm(element);
   }
@@ -186,41 +175,6 @@
     // TODO: Implement error recovery.
   }
 
-  /**
-   * Handles the comment delete button click event.
-   *
-   * @param e The event object.
-   */
-  function onCommentDelete(e) {
-    var $element = $(e.target);
-
-    var courseId = COURSE_HELPERS.courseIdForElement($element);
-    var assessmentId = ANSWER_HELPERS.assessmentIdForElement($element);
-    var submissionId = ANSWER_HELPERS.submissionIdForElement($element);
-    var answerId = ANSWER_HELPERS.answerIdForElement($element);
-    var $post = $element.parents('.discussion_post:first');
-    var postId = $post.data('postId');
-
-    $.ajax({ url: Routes.course_assessment_submission_answer_comment_path(courseId,
-                    assessmentId, submissionId, answerId, postId), method: 'delete' }).
-      done(function(data) { onCommentDeleteSuccess(data, $element); }).
-      fail(function(data) { onCommentDeleteFail(data, $element); });
-    e.preventDefault();
-  }
-
-  /**
-   * Handles the successful comment delete event.
-   */
-  function onCommentDeleteSuccess() {
-  }
-
-  /**
-   * Handles the errored comment delete event.
-   */
-  function onCommentDeleteFail() {
-    // TODO: Implement error recovery.
-  }
-
   showScriptedWidgets(document);
   $(document).on('DOMNodeInserted', function(e) {
     showScriptedWidgets(e.target);
@@ -231,9 +185,9 @@
     onCommentFormSubmitted);
   $(document).on('click', DOCUMENT_SELECTOR + '.comments .discussion_post .toolbar .edit',
     onCommentEdit);
-  $(document).on('click', DOCUMENT_SELECTOR + '.comments .discussion_post .toolbar .delete',
-    onCommentDelete);
   $(document).on('click', DOCUMENT_SELECTOR + '.comments .reply-comment', onCommentReply);
+  DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR + '.comments ');
 })(jQuery, FORM_HELPERS,
            COURSE_HELPERS,
-           ANSWER_HELPERS);
+           ANSWER_HELPERS,
+           DISCUSSION_POST_HELPERS);

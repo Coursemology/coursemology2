@@ -1,0 +1,7 @@
+$('#<%= dom_id(@topic) %> .posts').html(
+  '<%= escape_javascript(render partial: 'course/discussion/posts',
+                                locals: {
+                                  posts: @topic.posts.ordered_topologically,
+                                  max_depth: 3,
+                                  post_partial: 'course/discussion/post'
+                                } ) %>');

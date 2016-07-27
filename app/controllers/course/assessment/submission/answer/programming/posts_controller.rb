@@ -8,10 +8,6 @@ class Course::Assessment::Submission::Answer::Programming::PostsController < \
     render status: :bad_request unless super
   end
 
-  def destroy
-    render status: :bad_request unless super
-  end
-
   private
 
   def post_params
