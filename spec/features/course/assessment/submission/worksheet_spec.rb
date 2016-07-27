@@ -92,9 +92,9 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
 
         find(content_tag_selector(comment_post)).find('.edit').click
         updated_post_text = 'updated comment'
-        within find(content_tag_selector(comment_post)).find('.answer-comment-form') do
+        within find(content_tag_selector(comment_post)).find('.edit-discussion-post-form') do
           fill_in 'discussion_post[text]', with: updated_post_text
-          click_button I18n.t('javascript.course.assessment.submission.answer.comment.submit')
+          click_button I18n.t('javascript.course.discussion.post.submit')
         end
 
         wait_for_ajax

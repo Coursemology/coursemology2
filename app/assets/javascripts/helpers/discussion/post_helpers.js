@@ -1,6 +1,8 @@
+//= require helpers/discussion/edit_post
 //= require helpers/discussion/delete_post
 
-var DISCUSSION_POST_HELPERS = (function($, DELETE_DISCUSSION_POST) {
+var DISCUSSION_POST_HELPERS = (function($, EDIT_DISCUSSION_POST,
+                                           DELETE_DISCUSSION_POST) {
   /* global JST, Routes */
   'use strict';
 
@@ -15,7 +17,7 @@ var DISCUSSION_POST_HELPERS = (function($, DELETE_DISCUSSION_POST) {
   }
 
   /**
-   * Initializes the toolbar so that the discussion post can be deleted.
+   * Initializes the toolbar so that the discussion post can be edited and deleted.
    *
    * @param {HTMLElement} element The base element to attach the event to.
    * @param {String} selector The selector for the specific discussion posts.
@@ -26,9 +28,11 @@ var DISCUSSION_POST_HELPERS = (function($, DELETE_DISCUSSION_POST) {
       showCommentToolbar(e.target, selector);
     });
     DELETE_DISCUSSION_POST.initializeToolbarElement(element, selector);
+    EDIT_DISCUSSION_POST.initializeToolbarElement(element, selector);
   }
 
   return {
     initializeToolbar: initializeToolbar
   };
-}(jQuery, DELETE_DISCUSSION_POST));
+}(jQuery, EDIT_DISCUSSION_POST,
+          DELETE_DISCUSSION_POST));

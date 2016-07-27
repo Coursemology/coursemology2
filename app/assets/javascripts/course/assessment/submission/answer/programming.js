@@ -163,33 +163,6 @@
   }
 
   /**
-   * Creates an annotation form for the user to edit his annotation post.
-   *
-   * @param {jQuery} $element The element to search for the form.
-   * @param {Number} courseId The course ID that the annotation is associated ith.
-   * @param {Number} assessmentId The assessment ID that the annotation is associated with.
-   * @param {Number} submissionId The submission ID that the annotation is associated with.
-   * @param {Number} answerId The answer ID that the annotation is associated with.
-   * @param {Number} programmingFileId The programming answer file ID that the annotation is
-   *   associated with.
-   * @param {Number} lineNumber The line number that the user is annotating.
-   * @param {Number} postId The ID of the post being edited.
-   * @param {String} postContent The existing contents of the post's text field.
-   * @param {HTMLElement} postCommenter The commenter's name with a link to his profile.
-   * @return {jQuery} The annotation editing form which was found or created.
-   */
-  function findOrCreateAnnotationPostForm($element, courseId, assessmentId, submissionId, answerId,
-                                          programmingFileId, lineNumber, postId, postContent, postCommenter) {
-    var $annotationPostForm = findAnnotationPostForm($element);
-    if ($annotationPostForm.length > 0) {
-      return $annotationPostForm;
-    }
-
-    return createAnnotationPostForm($element, courseId, assessmentId, submissionId, answerId,
-                                    programmingFileId, lineNumber, postId, postContent, postCommenter);
-  }
-
-  /**
    * Finds the annotation form in the given cell.
    *
    * @param {jQuery} $element The annotation cell to search for the form.
@@ -197,16 +170,6 @@
    */
   function findAnnotationForm($element) {
     return $element.find('> div.annotation-form');
-  }
-
-  /**
-   * Finds the annotation post form in the given cell.
-   *
-   * @param {jQuery} $element The annotation cell to search for the form.
-   * @return {jQuery} The annotation form which was found.
-   */
-  function findAnnotationPostForm($element) {
-    return $element.find('> div.annotation-post-form');
   }
 
   /**
@@ -239,39 +202,6 @@
   }
 
   /**
-   * Creates an annotation form for the user to edit his annotation post.
-   *
-   * @param {jQuery} $element The element to search for the form.
-   * @param {Number} courseId The course ID that the annotation is associated with.
-   * @param {Number} assessmentId The assessment ID that the annotation is associated with.
-   * @param {Number} submissionId The submission ID that the annotation is associated with.
-   * @param {Number} answerId The answer ID that the annotation is associated with.
-   * @param {Number} programmingFileId The programming answer file ID that the annotation is
-   *   associated with.
-   * @param {Number} lineNumber The line number that the user is annotating. associated with.
-   * @param {Number} postId The ID of the post being edited.
-   * @param {String} postContent The existing contents of the post's text field.
-   * @param {HTMLElement} postCommenter The commenter's name with a link to his profile.
-   * @return {jQuery} The form for the annotation post.
-   */
-  function createAnnotationPostForm($element, courseId, assessmentId, submissionId, answerId,
-                                    programmingFileId, lineNumber, postId, postContent, postCommenter) {
-    $element.append(render('annotation_post_form', {
-      courseId: courseId,
-      assessmentId: assessmentId,
-      submissionId: submissionId,
-      answerId: answerId,
-      programmingFileId: programmingFileId,
-      lineNumber: lineNumber,
-      postId: postId,
-      postContent: postContent,
-      postCommenter: postCommenter
-    }));
-
-    return findAnnotationPostForm($element);
-  }
-
-  /**
    * Handles the reset of the annotation form.
    *
    * @param e The event object.
@@ -285,19 +215,6 @@
   }
 
   /**
-   * Handles the reset of the annotation edit form.
-   *
-   * @param e The event object.
-   */
-  function onAnnotationPostFormResetted(e) {
-    var $button = $(e.target);
-    var $post = $button.parents('.discussion_post:first');
-
-    FORM_HELPERS.removeParentForm($button);
-    $post.children().show();
-  }
-
-  /**
    * Blocks the submission of the submission form if we click on a submit button within the
    * annotation form.
    *
@@ -308,19 +225,6 @@
     var $form = FORM_HELPERS.parentFormForElement($button);
     FORM_HELPERS.submitAndDisableForm($form, onAnnotationFormSubmitSuccess,
                                              onAnnotationFormSubmitFail);
-    e.preventDefault();
-  }
-
-  /**
-   * Handles the submission of the annotation edit form.
-   *
-   * @param e The event object.
-   */
-  function onAnnotationPostFormSubmitted(e) {
-    var $button = $(e.target);
-    var $form = FORM_HELPERS.parentFormForElement($button);
-    FORM_HELPERS.submitAndDisableForm($form, onAnnotationPostFormSubmitSuccess,
-                                             onAnnotationPostFormSubmitFail);
     e.preventDefault();
   }
 
@@ -339,24 +243,6 @@
    * @param {HTMLElement} form The form which was submitted
    */
   function onAnnotationFormSubmitFail(_, form) {
-    var $form = $(form);
-    FORM_HELPERS.findFormFields($form).prop('disabled', false);
-
-    // TODO: Implement error recovery.
-  }
-
-  /**
-   * Handles the successful annotation post save event.
-   */
-  function onAnnotationPostFormSubmitSuccess() {
-  }
-
-  /**
-   * Handles the errored annotation post save event.
-   *
-   * @param {HTMLElement} form The form which was submitted
-   */
-  function onAnnotationPostFormSubmitFail(_, form) {
     var $form = $(form);
     FORM_HELPERS.findFormFields($form).prop('disabled', false);
 
@@ -398,32 +284,6 @@
     e.preventDefault();
   }
 
-  /**
-   * Handles the annotation edit button click event.
-   *
-   * @param e The event object.
-   */
-  function onAnnotationEdit(e) {
-    var $element = $(e.target);
-    var $post = $element.parents('.discussion_post:first');
-
-    var courseId = COURSE_HELPERS.courseIdForElement($element);
-    var assessmentId = ANSWER_HELPERS.assessmentIdForElement($element);
-    var submissionId = ANSWER_HELPERS.submissionIdForElement($element);
-    var answerId = ANSWER_HELPERS.answerIdForElement($element);
-    var programmingFileId = programmingFileIdForRow($element);
-    var lineNumber = $element.parents('.line-annotation:first').data('lineNumber');
-    var postId = $post.data('postId');
-    var postContent = $post.find('.content').text();
-    var postCommenter = $post.find('.user').html();
-
-    $post.children().hide();
-    var $form = findOrCreateAnnotationPostForm($post, courseId, assessmentId, submissionId,
-                                               answerId, programmingFileId, lineNumber, postId,
-                                               postContent, postCommenter);
-    e.preventDefault();
-  }
-
   addProgrammingAnnotationLinks(document);
   $(document).on('DOMNodeInserted', function(e) {
     addProgrammingAnnotationLinks(e.target);
@@ -434,12 +294,6 @@
     onAnnotationFormResetted);
   $(document).on('click', DOCUMENT_SELECTOR + '.annotation-form input[type="submit"]',
     onAnnotationFormSubmitted);
-  $(document).on('click', DOCUMENT_SELECTOR + '.annotation-post-form input[type="reset"]',
-    onAnnotationPostFormResetted);
-  $(document).on('click', DOCUMENT_SELECTOR + '.annotation-post-form input[type="submit"]',
-    onAnnotationPostFormSubmitted);
-  $(document).on('click', DOCUMENT_SELECTOR + '.discussion_post .toolbar .edit',
-    onAnnotationEdit);
   $(document).on('click', DOCUMENT_SELECTOR + '.discussion_topic .reply-annotation',
     onAnnotationReply);
   DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR + '.line-annotation ');

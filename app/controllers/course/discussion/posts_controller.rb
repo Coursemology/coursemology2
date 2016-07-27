@@ -9,6 +9,10 @@ class Course::Discussion::PostsController < Course::ComponentController
     render status: :bad_request unless super
   end
 
+  def update
+    render status: :bad_request unless super
+  end
+
   def destroy
     render status: :bad_request unless super
   end

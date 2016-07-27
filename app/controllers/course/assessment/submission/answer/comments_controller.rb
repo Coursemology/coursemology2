@@ -17,10 +17,6 @@ class Course::Assessment::Submission::Answer::CommentsController < \
     end
   end
 
-  def update
-    render status: :bad_request unless super
-  end
-
   private
 
   def create_topic_subscription
