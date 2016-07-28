@@ -5,12 +5,9 @@
   - answers_by_question = f.object.answers.latest_answers.group_by(&:question)
   - f.object.assessment.questions.each do |question|
     = render partial: question, suffix: 'question'
-
-    = f.simple_fields_for :answers, answers_by_question[question] do |base_answer_form|
-      = content_tag_for(:div, base_answer_form.object,
-                        'data-answer-id' => base_answer_form.object.id) do
-        = render partial: 'course/assessment/answer/answer', object: base_answer_form.object,
-                 locals: { base_answer_form: base_answer_form }
+    - answer = answers_by_question[question].last
+    = content_tag_for(:div, answer, 'data-answer-id' => answer.id) do
+      = render partial: 'course/assessment/answer/answer', object: answer
 
   - unless @submission.attempting?
     = render 'statistics', f: f
@@ -24,3 +21,4 @@
       auto_grade_course_assessment_submission_path(current_course, @submission.assessment,
         @submission), method: :post, class: ['btn', 'btn-info']
     = f.button :submit, t('.publish'), name: 'submission[publish]', class: ['btn-danger']
+
