@@ -1,6 +1,8 @@
 //= require helpers/form_helpers
+//= require helpers/discussion/post_helpers
 
-(function($, FORM_HELPERS) {
+(function($, FORM_HELPERS,
+             DISCUSSION_POST_HELPERS) {
   'use strict';
   var DOCUMENT_SELECTOR = '.course-discussion-topics.index ';
 
@@ -29,4 +31,7 @@
 
   $(document).on('page:load ready', showCommentBoxes);
   $(document).on('submit', DOCUMENT_SELECTOR + '.post-form', onPostFormSubmit);
-})(jQuery, FORM_HELPERS);
+
+  DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR);
+})(jQuery, FORM_HELPERS,
+           DISCUSSION_POST_HELPERS);

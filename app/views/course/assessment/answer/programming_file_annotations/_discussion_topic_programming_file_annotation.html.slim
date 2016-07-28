@@ -5,7 +5,7 @@
 - submission = answer.submission
 - assessment = question.assessment
 
-= div_for(topic) do
+= div_for(topic, 'data-topic-id' => topic.id) do
   h3
     = link_to assessment.title, edit_course_assessment_submission_path(current_course, assessment, submission)
   h4
