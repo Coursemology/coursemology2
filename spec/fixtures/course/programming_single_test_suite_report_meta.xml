@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite errors="2" failures="0" name="Mission01" skipped="0" tests="2" time="0.001">
+		<testcase classname="Mission01" name="test_public_mosaic" time="0.001">
+			<meta expected="solution_rune" expression="mosaic(rcross_bb, sail_bb, corner_bb, nova_bb)" hint="Is there a rune?"/>
+			<error message="mosaic() takes 1 positional argument but 4 were given" type="TypeError">
+<![CDATA[Traceback (most recent call last):
+  File "tests/test_autograde_runes.py", line 58, in test_public_mosaic
+    student_rune = student.mosaic(rcross_bb, sail_bb, corner_bb, nova_bb)
+TypeError: mosaic() takes 1 positional argument but 4 were given
+]]>			</error>
+		</testcase>
+		<testcase classname="Mission01" name="test_simple_fractal" time="0.000">
+			<error message="module 'mission01-template' has no attribute 'simple_fractal'" type="AttributeError">
+<![CDATA[Traceback (most recent call last):
+  File "tests/test_autograde_runes.py", line 69, in test_simple_fractal
+    student_rune = student.simple_fractal(heart_bb)
+AttributeError: module 'mission01-template' has no attribute 'simple_fractal'
+]]>			</error>
+		</testcase>
+		<system-out>
+<![CDATA[]]>		</system-out>
+		<system-err>
+<![CDATA[]]>		</system-err>
+	</testsuite>
+</testsuites>

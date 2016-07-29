@@ -144,4 +144,59 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
       end
     end
   end
+
+  context 'when given a report with test case meta information' do
+    self::REPORT_PATH = File.join(Rails.root,
+                                  'spec/fixtures/course/'\
+                                  'programming_single_test_suite_report_meta.xml')
+    self::REPORT_XML = File.read(self::REPORT_PATH)
+
+    let(:parsed_report) do
+      Course::Assessment::ProgrammingTestCaseReport.new(self.class::REPORT_XML)
+    end
+    let(:test_cases) { parsed_report.test_suites.first.test_cases }
+
+    describe Course::Assessment::ProgrammingTestCaseReport::TestCase do
+      subject { test_cases.first }
+
+      describe '#expression' do
+        it 'returns the expression attribute' do
+          expect(subject.expression).to eq('mosaic(rcross_bb, sail_bb, corner_bb, nova_bb)')
+        end
+      end
+
+      describe '#expected' do
+        it 'returns the expected attribute' do
+          expect(subject.expected).to eq('solution_rune')
+        end
+      end
+      describe '#hint' do
+        it 'returns the hint attribute' do
+          expect(subject.hint).to eq('Is there a rune?')
+        end
+      end
+    end
+
+    describe 'when there is no meta information' do
+      subject { test_cases.second }
+
+      describe '#expression' do
+        it 'returns an empty string as the expression attribute' do
+          expect(subject.expression).to eq('')
+        end
+      end
+
+      describe '#expected' do
+        it 'returns an empty string as the expected attribute' do
+          expect(subject.expected).to eq('')
+        end
+      end
+
+      describe '#hint' do
+        it 'returns an empty string as the hint attribute' do
+          expect(subject.hint).to eq('')
+        end
+      end
+    end
+  end
 end

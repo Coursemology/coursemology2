@@ -94,6 +94,36 @@ class Course::Assessment::ProgrammingTestCaseReport
       "#{@test_suite.identifier}/#{class_name}#{name.underscore}"
     end
 
+    # The test expression
+    #
+    # @return [String]
+    def expression
+      @expression ||= begin
+        expression = @test_case.search('meta')
+        expression.present? ? expression[0]['expression'] : ''
+      end
+    end
+
+    # The expected value from running the test expression
+    #
+    # @return [String]
+    def expected
+      @expected ||= begin
+        expected = @test_case.search('meta')
+        expected.present? ? expected[0]['expected'] : ''
+      end
+    end
+
+    # A hint to help the student pass the test case
+    #
+    # @return [String]
+    def hint
+      @hint ||= begin
+        hint = @test_case.search('meta')
+        hint.present? ? hint[0]['hint'] : ''
+      end
+    end
+
     # Checks if the test case encountered an error.
     #
     # @return [Boolean]
