@@ -39,4 +39,15 @@ class Course::Assessment::Submission::UpdateWorksheetAssessmentService <
       result.push(options)
     end
   end
+
+  def question_id_param
+    params.permit(:attempting_question_id)[:attempting_question_id]
+  end
+
+  def reattempt_question
+    question = @assessment.questions.find(question_id_param)
+    question.attempt(@submission)
+
+    redirect_to edit_submission_path if @submission.save
+  end
 end

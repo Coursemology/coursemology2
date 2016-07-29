@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update
-    if @submission.update_attributes(update_params)
-      redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission),
+    if params[:attempting_answer_id]
+      submit_answer
+    elsif params[:attempting_question_id]
+      reattempt_question
+    elsif @submission.update_attributes(update_params)
+      redirect_to edit_submission_path,
                   success: t('course.assessment.submission.submissions.update.success')
     else
       render 'edit'
@@ -79,5 +83,36 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       result[:files_attributes] = [:id, :_destroy, :filename, :content] # Programming answer
     end
     scalar_params.push(array_params)
+  end
+
+  def answer_id_param
+    params.permit(:attempting_answer_id)[:attempting_answer_id]
+  end
+
+  def question_id_param
+    params.permit(:attempting_question_id)[:attempting_question_id]
+  end
+
+  def edit_submission_path
+    edit_course_assessment_submission_path(current_course, @assessment, @submission)
+  end
+
+  def submit_answer
+    if @submission.update_attributes(update_params)
+      job = find_and_grade_answer
+
+      respond_to do |format|
+        format.html { redirect_to job_path(job.job) }
+        format.json { render json: { redirect_url: job_path(job.job) } }
+      end
+    else
+      render 'edit'
+    end
+  end
+
+  def find_and_grade_answer
+    answer = @submission.answers.find(answer_id_param)
+    answer.finalise! if answer.attempting?
+    answer.auto_grade!(edit_submission_path)
   end
 end
