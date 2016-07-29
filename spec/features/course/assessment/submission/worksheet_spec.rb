@@ -15,6 +15,9 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
     let(:submission) do
       create(:course_assessment_submission, assessment: assessment, creator: student)
     end
+    let(:programming_question) do
+      create(:course_assessment_question_programming, assessment: assessment)
+    end
 
     context 'As a Course Student' do
       let(:user) { student }
@@ -31,6 +34,14 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
           edit_course_assessment_submission_path(course, assessment, submission)
         )
         expect(page).to have_checked_field(option)
+      end
+
+      scenario 'I can only submit programming answers' do
+        programming_question
+        submission
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        expect(page).to have_selector('.btn.submit-answer', count: 1)
       end
 
       scenario 'I can finalise my submission only once' do

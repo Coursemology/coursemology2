@@ -1,3 +1,9 @@
+- if answer.submission.attempting? && answer.specific.is_a?(Course::Assessment::Answer::Programming)
+  - if answer.attempting?
+    = base_answer_form.button :button, t('common.submit'), value: answer.id, name: 'attempting_answer_id', class: 'submit-answer'
+  - elsif !answer.correct?
+    = base_answer_form.button :button, t('.reattempt'), value: answer.question.id, name: 'attempting_question_id'
+
 h3 = t('.comments')
 div.comments id=comments_container_id(answer)
   - topic = answer.discussion_topic
