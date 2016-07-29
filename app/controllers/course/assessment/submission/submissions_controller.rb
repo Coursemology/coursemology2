@@ -40,6 +40,12 @@ class Course::Assessment::Submission::SubmissionsController < \
     redirect_to(job_path(job.job))
   end
 
+  def reload_answer
+    @answer = @submission.answers.find_by(id: answer_id_param)
+    @current_question = @answer.question
+    render :bad_request unless @answer
+  end
+
   private
 
   def create_params
@@ -56,5 +62,9 @@ class Course::Assessment::Submission::SubmissionsController < \
     else
       authorize!(:read, @submission)
     end
+  end
+
+  def answer_id_param
+    params.permit(:answer_id)[:answer_id]
   end
 end

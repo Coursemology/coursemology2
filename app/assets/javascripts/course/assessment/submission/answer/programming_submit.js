@@ -1,6 +1,7 @@
 (function($) {
   'use strict';
   var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ';
+  var DELAY = 500; // Delay between each job request in ms.
 
   function onAnswerSubmit(e) {
     e.preventDefault();
@@ -30,6 +31,35 @@
   }
 
   function waitForJob(url, answer_id) {
+    setTimeout(function() {
+      $.ajax({
+        url: url,
+        method: 'GET',
+        dataType: 'json',
+        global: false
+      }).done(function(data) {
+        onGetJobSuccess(data, url, answer_id);
+      })
+    }, DELAY);
+  }
+
+  function onGetJobSuccess(data, url, answer_id) {
+    if (data.status == 'completed') {
+      reloadAnswer(answer_id);
+    } else if (data.status == 'submitted') {
+      waitForJob(url, answer_id);
+    } else {
+      // Show errors.
+    }
+  }
+
+  function reloadAnswer(answer_id) {
+    $.ajax({
+      url: 'reload_answer',
+      method: 'GET',
+      data: { answer_id: answer_id },
+      global: false
+    });
   }
 
   function showSpinner($button) {

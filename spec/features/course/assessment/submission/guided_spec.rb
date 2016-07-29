@@ -55,7 +55,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         expect(page).to have_selector('h2', text: assessment.questions.second.title)
       end
 
-      scenario 'I can continue to the next question when current answer is correct' do
+      scenario 'I can continue to the next question when current answer is correct', js: true do
         mcq_questions
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
@@ -63,7 +63,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         check correct_option
 
         click_button I18n.t('common.submit')
-        wait_for_job
+        wait_for_ajax
         expect(page).to have_selector('div', text: 'course.assessment.answer.grading.grading')
         expect(page).to have_selector('div', text: 'course.assessment.answer.grading.grade')
 
