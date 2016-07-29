@@ -8,5 +8,6 @@ class Course::Assessment::Answer::ProgrammingAutoGrading < ActiveRecord::Base
                                source_type: Course::Assessment::Answer::Programming.name
   has_many :test_results,
            class_name: Course::Assessment::Answer::ProgrammingAutoGradingTestResult.name,
-           foreign_key: :auto_grading_id, inverse_of: :auto_grading
+           foreign_key: :auto_grading_id, inverse_of: :auto_grading,
+           dependent: :destroy
 end
