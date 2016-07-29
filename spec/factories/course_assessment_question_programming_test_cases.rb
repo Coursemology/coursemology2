@@ -5,11 +5,16 @@ FactoryGirl.define do
           class: Course::Assessment::Question::ProgrammingTestCase do
     question { build(:course_assessment_question_programming) }
     sequence(:identifier) { |n| "test_id_#{base_time}_#{n}" }
-    description ''
-    public true
+    expression ''
+    expected ''
+    test_case_type :public_test
 
     trait :private do
-      public false
+      test_case_type :private_test
+    end
+
+    trait :evaluation do
+      test_case_type :evaluation_test
     end
   end
 end
