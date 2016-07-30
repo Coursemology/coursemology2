@@ -109,7 +109,8 @@ module Extensions::Attachable::ActiveRecord::Base
       ids
     end
 
-    ATTACHMENT_ID_REGEX = /\/attachments\/(\d+)$/
+    # Regex for filtering UUIDs.
+    ATTACHMENT_ID_REGEX = /\/attachments\/([0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12})$/
     # Parse attachment_reference from the given url.
     #
     # @param [String] url The url.
@@ -118,7 +119,7 @@ module Extensions::Attachable::ActiveRecord::Base
     def parse_attachment_reference_id_from_url(url)
       # TODO: Attachments from a third party domain with the same path should not be returned.
       result = url.match(ATTACHMENT_ID_REGEX)
-      result ? result[1].to_i : nil
+      result ? result[1] : nil
     end
   end
 

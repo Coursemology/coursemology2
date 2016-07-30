@@ -36,6 +36,43 @@ RSpec.describe 'Extension: Acts as Attachable' do
         expect(attachable.attachments).to be_present
       end
     end
+
+    describe '#parse_attachment_reference_id_from_url' do
+      context 'with valid UUIDs' do
+        let(:uuids) do
+          [
+            'f24cfa8b-b9c7-4b16-9cdf-ec6e0f84511d',
+            '24449936-6bfa-4407-a7f2-8c7a360c3316',
+            '04ecba9a-c53c-487b-9191-22454be2b407'
+          ]
+        end
+
+        it 'returns the uuid' do
+          uuids.each do |uuid|
+            url = "/attachments/#{uuid}"
+            expect(attachable.send(:parse_attachment_reference_id_from_url, url)).to eq(uuid)
+          end
+        end
+      end
+
+      context 'with invalid UUIDs' do
+        let(:uuids) do
+          [
+            'f24cfa8b-b9c7-4b16-9cdf-',
+            'c53c-487b-9191-22454be2b407',
+            '24449936-6bfa-4407-8c7a360c3316',
+            '04ecba9a_c53c_487b_9191_22454be2b407'
+          ]
+        end
+
+        it 'returns nil' do
+          uuids.each do |uuid|
+            url = "/attachments/#{uuid}"
+            expect(attachable.send(:parse_attachment_reference_id_from_url, url)).to be_nil
+          end
+        end
+      end
+    end
   end
 
   describe self::SampleModelSingular do

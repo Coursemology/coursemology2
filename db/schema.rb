@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160729022656) do
+ActiveRecord::Schema.define(version: 20160730044448) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(version: 20160729022656) do
     t.datetime "updated_at",  :null=>false
   end
 
-  create_table "attachment_references", force: :cascade do |t|
+  create_table "attachment_references", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.integer  "attachable_id"
     t.string   "attachable_type", :limit=>255, :index=>{:name=>"fk__attachment_references_attachable_id", :with=>["attachable_id"]}
     t.integer  "attachment_id",   :null=>false, :index=>{:name=>"fk__attachment_references_attachment_id"}, :foreign_key=>{:references=>"attachments", :name=>"fk_attachment_references_attachment_id", :on_update=>:no_action, :on_delete=>:no_action}
