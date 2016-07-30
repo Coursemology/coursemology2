@@ -1,4 +1,4 @@
-@import 'discussion_post';
+@import '../../../discussion/post';
 
 .course-assessment-submission-submissions.edit {
   table.codehilite {
@@ -19,7 +19,7 @@
       }
 
       td.line-annotation {
-        @include course-assessment-submission-discussion;
+        @include discussion-post;
       }
     }
   }

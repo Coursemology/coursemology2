@@ -48,29 +48,5 @@ RSpec.describe Course::Assessment::Submission::Answer::CommentsController do
         end
       end
     end
-
-    describe '#update' do
-      let(:comment) { 'updated answer comment' }
-
-      subject do
-        post :update, format: :js, course_id: course, assessment_id: assessment,
-                      submission_id: submission, answer_id: immutable_answer,
-                      id: immutable_comment,
-                      discussion_post: {
-                        text: comment
-                      }
-      end
-
-      context 'when comment updating fails' do
-        before do
-          controller.instance_variable_set(:@post, immutable_comment)
-          subject
-        end
-
-        it 'returns HTTP 400' do
-          expect(response.status).to eq(400)
-        end
-      end
-    end
   end
 end

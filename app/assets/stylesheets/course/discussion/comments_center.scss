@@ -1,0 +1,7 @@
+@import 'post';
+
+.course-discussion-topics.index {
+  .discussion_topic {
+    @include discussion-post;
+  }
+}

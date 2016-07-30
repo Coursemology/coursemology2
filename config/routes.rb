@@ -172,13 +172,10 @@ Rails.application.routes.draw do
 
               scope module: :answer do
                 resources :answers, only: [] do
-                  resources :comments, only: [:create, :update, :destroy]
+                  resources :comments, only: [:create]
                   namespace :programming do
                     resources :files, only: [] do
                       resources :annotations, only: [:create]
-                      resources :lines, only: [] do
-                        resources :posts, only: [:update, :destroy]
-                      end
                     end
                   end
                 end
@@ -260,7 +257,7 @@ Rails.application.routes.draw do
           get 'pending', on: :collection
           get 'my_students', on: :collection
           get 'my_students_pending', on: :collection
-          resources :posts, only: [:create]
+          resources :posts, only: [:create, :update, :destroy]
         end
       end
     end

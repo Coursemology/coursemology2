@@ -59,6 +59,9 @@ RSpec.feature 'Course: Topics: Management' do
         create(:course_assessment_answer_programming_file_annotation, :with_post,
                course: course, creator: user)
       end
+      let(:student_reply) do
+        create(:course_discussion_post, topic: student_answer.acting_as, creator: user)
+      end
 
       scenario 'I can see all my comments' do
         other_comments = [answer_comment, code_annotation].map(&:acting_as)
@@ -93,6 +96,26 @@ RSpec.feature 'Course: Topics: Management' do
         within find(content_tag_selector(topic.acting_as)) do
           expect(page).to have_tag('.post-form', count: 1)
         end
+      end
+
+      scenario 'I can edit and delete my comment post', js: true do
+        my_comment_post = student_reply
+        visit course_topics_path(course)
+
+        # Test post editing
+        find(content_tag_selector(my_comment_post)).find('.edit').click
+        new_post_text = 'new post text'
+        within find('.edit-discussion-post-form') do
+          fill_in 'discussion_post[text]', with: new_post_text
+          click_button I18n.t('javascript.course.discussion.post.submit')
+        end
+        wait_for_ajax
+        expect(page).to have_text(new_post_text)
+
+        # Test post deletion
+        find(content_tag_selector(my_comment_post)).find('.delete').click
+        wait_for_ajax
+        expect(page).not_to have_content_tag_for(my_comment_post)
       end
     end
   end

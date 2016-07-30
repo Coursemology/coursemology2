@@ -82,7 +82,7 @@ RSpec.feature 'Course: Forum: Post: Management' do
       end
 
       scenario 'I can reply to a post' do
-        create_list(:course_discussion_post, 2, topic: topic.specific)
+        create_list(:course_discussion_post, 2, topic: topic.acting_as)
         post = topic.posts.reload.sample
 
         visit course_forum_topic_path(course, forum, topic)
@@ -116,7 +116,7 @@ RSpec.feature 'Course: Forum: Post: Management' do
       end
 
       scenario 'I can reply to a topic' do
-        create_list(:course_discussion_post, 2, topic: topic.specific)
+        create_list(:course_discussion_post, 2, topic: topic.acting_as)
         parent_post = topic.posts.reload.ordered_topologically.last
         expect(parent_post).not_to be_nil
         visit course_forum_topic_path(course, forum, topic)

@@ -1,18 +1,18 @@
-= div_for(comment, 'data-post-id' => comment.id) do
+= div_for(post, 'data-post-id' => post.id) do
   / Hide toolbar; only JavaScript-enabled clients will show this div.
   div.toolbar.pull-right style='display: none'
-    - if can?(:update, comment)
+    - if can?(:update, post)
       => link_to('#', class: ['edit']) do
         = fa_icon 'edit'.freeze
-    - if can?(:destroy, comment)
+    - if can?(:destroy, post)
       = link_to('#', class: ['delete']) do
         = fa_icon 'trash'.freeze
 
   div.user
-    h5 = link_to_user(comment.creator)
+    h5 = link_to_user(post.creator)
 
   div.content
-    = format_html(comment.text)
+    = format_html(post.text)
 
   div.timestamp
-    = format_datetime(comment.created_at)
+    = format_datetime(post.created_at)

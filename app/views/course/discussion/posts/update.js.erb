@@ -1,0 +1,5 @@
+<% selector = dom_id(@post) %>
+$('#<%= selector %>').replaceWith(
+  '<%= escape_javascript(render partial: 'course/discussion/post',
+                                locals: { post: @post } ) %>');
+$('#<%= selector %> .toolbar').show();

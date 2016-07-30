@@ -111,10 +111,9 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         find(content_tag_selector(post)).find('.edit').click
 
         annotation_text = 'updated annotation'
-        within find_form('.annotation-post-form') do
+        within find_form('.edit-discussion-post-form') do
           fill_in 'discussion_post[text]', with: annotation_text
-          click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
-                              'annotation_post_form.submit')
+          click_button I18n.t('javascript.course.discussion.post.submit')
         end
 
         wait_for_ajax

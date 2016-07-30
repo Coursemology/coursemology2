@@ -38,10 +38,6 @@ class Course::Discussion::Topic < ActiveRecord::Base
 
   scope :pending_staff_reply, -> { where(pending_staff_reply: true) }
 
-  def to_partial_path
-    'course/discussion/topic'.freeze
-  end
-
   # Return if a user has subscribed to this topic
   #
   # @param [User] user The user to check
