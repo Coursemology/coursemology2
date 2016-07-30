@@ -72,5 +72,12 @@ table.table.table-striped.table-hover
     select { |t| answer_test_results_hash[t] && !answer_test_results_hash[t].passed? }
 - if !failed_private_test_cases.empty?
     div.panel.panel-danger
-      div.panel-heading = t('.failed_message')
+      div.panel-heading = t('.failed_private_message')
       div.panel-body = format_html(failed_private_test_cases.map(&:hint).compact.first)
+
+- failed_evaluation_test_cases = evaluation_test_cases. \
+    select { |t| answer_test_results_hash[t] && !answer_test_results_hash[t].passed? }
+- if can?(:grade, answer.answer) && !failed_evaluation_test_cases.empty?
+    div.panel.panel-danger
+      div.panel-heading = t('.failed_evaluation_message')
+      div.panel-body = format_html(failed_evaluation_test_cases.map(&:hint).compact.first)

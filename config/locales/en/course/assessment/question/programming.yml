@@ -36,3 +36,5 @@ en:
             evaluation: 'Evaluation Test Cases'
             identifier: 'Identifier'
             hint: 'Hint'
+            expression: 'Expression'
+            expected: 'Expected'
