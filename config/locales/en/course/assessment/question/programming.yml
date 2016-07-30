@@ -33,5 +33,6 @@ en:
             test_cases: 'Test Cases'
             public: 'Public Test Cases'
             private: 'Private Test Cases'
+            evaluation: 'Evaluation Test Cases'
             identifier: 'Identifier'
             hint: 'Hint'
