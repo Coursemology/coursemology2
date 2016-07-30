@@ -146,13 +146,15 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
   end
 
   context 'when given a report with test case meta information' do
-    self::REPORT_PATH = File.join(Rails.root,
-                                  'spec/fixtures/course/'\
-                                  'programming_single_test_suite_report_meta.xml')
-    self::REPORT_XML = File.read(self::REPORT_PATH)
+    let(:report_path) do
+      File.join(Rails.root, 'spec/fixtures/course/'\
+                'programming_single_test_suite_report_meta.xml')
+    end
+
+    let(:report_xml) { File.read(report_path) }
 
     let(:parsed_report) do
-      Course::Assessment::ProgrammingTestCaseReport.new(self.class::REPORT_XML)
+      Course::Assessment::ProgrammingTestCaseReport.new(report_xml)
     end
     let(:test_cases) { parsed_report.test_suites.first.test_cases }
 

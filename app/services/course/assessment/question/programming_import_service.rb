@@ -103,8 +103,24 @@ class Course::Assessment::Question::ProgrammingImportService
     test_cases = parse_test_report(test_report)
     test_cases.map do |test_case|
       @question.test_cases.build(identifier: test_case.identifier,
-                                 public: !(test_case.name =~ /public/i).nil?,
-                                 description: test_case.name)
+                                 test_case_type: infer_test_case_type(test_case.name),
+                                 expression: test_case.expression,
+                                 expected: test_case.expected,
+                                 hint: test_case.hint)
+    end
+  end
+
+  # Figures out what kind of test case it is from the name
+  #
+  # @param [String] test_case_name The name of the test case.
+  # @return [Symbol]
+  def infer_test_case_type(test_case_name)
+    if test_case_name =~ /public/i
+      :public_test
+    elsif test_case_name =~ /evaluation/i
+      :evaluation_test
+    else
+      :private_test
     end
   end
 

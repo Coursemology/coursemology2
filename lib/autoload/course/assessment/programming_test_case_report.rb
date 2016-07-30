@@ -98,30 +98,21 @@ class Course::Assessment::ProgrammingTestCaseReport
     #
     # @return [String]
     def expression
-      @expression ||= begin
-        expression = @test_case.search('meta')
-        expression.present? ? expression[0]['expression'] : ''
-      end
+      @expression ||= get_meta_attribute('expression')
     end
 
     # The expected value from running the test expression
     #
     # @return [String]
     def expected
-      @expected ||= begin
-        expected = @test_case.search('meta')
-        expected.present? ? expected[0]['expected'] : ''
-      end
+      @expected ||= get_meta_attribute('expected')
     end
 
     # A hint to help the student pass the test case
     #
     # @return [String]
     def hint
-      @hint ||= begin
-        hint = @test_case.search('meta')
-        hint.present? ? hint[0]['hint'] : ''
-      end
+      @hint ||= get_meta_attribute('hint')
     end
 
     # Checks if the test case encountered an error.
@@ -150,6 +141,17 @@ class Course::Assessment::ProgrammingTestCaseReport
     # @return [Boolean]
     def passed?
       !failed? && !skipped? && !errored?
+    end
+
+    private
+
+    # Looks up the attribute value in the meta element in the test case XML.
+    #
+    # @param [String] attribute_name The name of the attribute to retrieve.
+    # @return [String]
+    def get_meta_attribute(attribute_name)
+      meta = @test_case.search('meta')
+      meta.present? ? meta[0][attribute_name] : ''
     end
   end
 
