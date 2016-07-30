@@ -1,5 +1,7 @@
 - test_cases = question.test_cases
-- public_test_cases, private_test_cases = test_cases.partition(&:public?)
+- public_test_cases = test_cases.select(&:public_test?)
+- private_test_cases = test_cases.select(&:private_test?)
+- evaluation_test_cases = test_cases.select(&:evaluation_test?)
 - auto_grading = answer.auto_grading ? answer.auto_grading.actable : nil
 - answer_test_results_hash = auto_grading ? \
     auto_grading.test_results.map { |result| [result.test_case, result] }.to_h : \
@@ -11,7 +13,6 @@ table.table.table-striped.table-hover
   thead
     tr
       th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:identifier)
-      th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:description)
       th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:hint)
       th = t('.passed')
   tbody
@@ -22,7 +23,6 @@ table.table.table-striped.table-hover
       - test_case_result = answer_test_results_hash[test_case]
       = content_tag_for(:tr, test_case) do
         th = format_html(test_case.identifier)
-        td = format_html(test_case.description)
         td = format_html(test_case.hint) if !test_case_result || !test_case_result.passed?
         td
           - if test_case_result && test_case_result.passed?
@@ -37,7 +37,6 @@ table.table.table-striped.table-hover
       - private_test_cases.each do |test_case|
         = content_tag_for(:tr, test_case) do
           th = format_html(test_case.identifier)
-          td = format_html(test_case.description)
           td
           td
             - test_case_result = answer_test_results_hash[test_case]

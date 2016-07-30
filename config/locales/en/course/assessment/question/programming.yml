@@ -34,5 +34,4 @@ en:
             public: 'Public Test Cases'
             private: 'Private Test Cases'
             identifier: 'Identifier'
-            description: 'Description'
             hint: 'Hint'
