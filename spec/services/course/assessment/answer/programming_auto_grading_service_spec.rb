@@ -24,9 +24,8 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
       let(:question_test_cases) do
         report = File.read(question_test_report_path)
         Course::Assessment::ProgrammingTestCaseReport.new(report).test_cases.map do |test_case|
-          Course::Assessment::Question::ProgrammingTestCase.new(description: test_case.name,
-                                                                identifier: test_case.identifier,
-                                                                public: false)
+          Course::Assessment::Question::ProgrammingTestCase.new(identifier: test_case.identifier,
+                                                                test_case_type: :private_test)
         end
       end
       let(:question_test_report_path) do

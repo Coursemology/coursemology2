@@ -61,5 +61,20 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportService do
         subject.send(:save, {}, mock_result)
       end
     end
+
+    describe '#infer_test_case_type' do
+      it 'infers that the test case is public' do
+        expect(subject.send(:infer_test_case_type, 'test_public_fractal')).to eq(:public_test)
+      end
+
+      it 'infers that the test case is private' do
+        expect(subject.send(:infer_test_case_type, 'test_fractal')).to eq(:private_test)
+      end
+
+      it 'infers that the test case is an evaluation test' do
+        expect(subject.send(:infer_test_case_type, 'test_evaluation_fractal')).
+          to eq(:evaluation_test)
+      end
+    end
   end
 end
