@@ -1,0 +1,8 @@
+en:
+  activemodel:
+    errors:
+      models:
+        course/experience_points/forum_disbursement:
+          attributes:
+            end_time:
+              invalid_period: 'End time should not preceed start time.'

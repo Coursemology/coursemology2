@@ -115,6 +115,8 @@ en:
       experience_points:
         disbursement:
           new: :'course.experience_points.disbursement.new.header'
+        forum_disbursement:
+          new: :'course.experience_points.forum_disbursement.new.header'
       discussion:
         topics:
           index: :'course.discussion.topics.index.header'
