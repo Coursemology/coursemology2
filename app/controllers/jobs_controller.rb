@@ -25,7 +25,10 @@ class JobsController < ApplicationController
   end
 
   def show_completed_job
-    redirect_to @job.redirect_to if @job.redirect_to.present?
+    respond_to do |format|
+      format.html { redirect_to @job.redirect_to if @job.redirect_to.present? }
+      format.json {}
+    end
   end
 
   def show_errored_job

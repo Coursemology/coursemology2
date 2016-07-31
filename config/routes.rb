@@ -169,6 +169,7 @@ Rails.application.routes.draw do
           scope module: :submission do
             resources :submissions, only: [:index, :create, :edit, :update] do
               post :auto_grade, on: :member
+              get :reload, on: :member
 
               scope module: :answer do
                 resources :answers, only: [] do

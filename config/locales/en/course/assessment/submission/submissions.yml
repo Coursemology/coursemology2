@@ -18,7 +18,7 @@ en:
             finalise: :'course.assessment.submission.submissions.finalise'
             publish: :'course.assessment.submission.submissions.publish'
             auto_grade: :'course.assessment.submission.submissions.auto_grade'
-          guided:
+          guided_form:
             finalise: :'course.assessment.submission.submissions.finalise'
             publish: :'course.assessment.submission.submissions.publish'
             auto_grade: :'course.assessment.submission.submissions.auto_grade'

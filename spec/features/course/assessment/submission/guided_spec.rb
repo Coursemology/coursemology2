@@ -96,7 +96,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         end
 
         visit edit_course_assessment_submission_path(assessment.course, assessment, submission)
-        click_button I18n.t('course.assessment.submission.submissions.guided.finalise')
+        click_button I18n.t('course.assessment.submission.submissions.guided_form.finalise')
 
         # It redirects to the first question after finalising.
         question = mcq_questions.first
@@ -115,10 +115,10 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        click_link I18n.t('course.assessment.submission.submissions.guided.auto_grade')
+        click_link I18n.t('course.assessment.submission.submissions.guided_form.auto_grade')
         wait_for_job
 
-        click_button I18n.t('course.assessment.submission.submissions.guided.publish')
+        click_button I18n.t('course.assessment.submission.submissions.guided_form.publish')
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.graded?).to be(true)

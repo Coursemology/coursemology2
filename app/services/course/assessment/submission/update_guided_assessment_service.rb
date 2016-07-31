@@ -18,6 +18,10 @@ class Course::Assessment::Submission::UpdateGuidedAssessmentService <
     @answers = @submission.answers.where(question: current_question)
   end
 
+  def reload
+    render partial: 'reload'
+  end
+
   private
 
   def answer_id_param
@@ -38,7 +42,10 @@ class Course::Assessment::Submission::UpdateGuidedAssessmentService <
       answer.finalise!
       job = answer.auto_grade!(current_step_path)
 
-      redirect_to job_path(job.job)
+      respond_to do |format|
+        format.html { redirect_to job_path(job.job) }
+        format.js { render 'edit', locals: { job_path: job_path(job.job) } }
+      end
     else
       render 'edit'
     end

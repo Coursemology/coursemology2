@@ -4,11 +4,12 @@ class Course::Assessment::Submission::SubmissionsController < \
   include Course::Assessment::Submission::SubmissionsControllerServiceConcern
 
   before_action :authorize_assessment, only: :create
-  skip_authorize_resource :submission, only: [:edit, :update, :auto_grade]
+  skip_authorize_resource :submission, only: [:edit, :update, :auto_grade, :reload]
   before_action :authorize_submission!, only: [:edit, :update]
-  before_action :load_or_create_answers, only: [:edit, :update]
+  before_action :load_or_create_answers, only: [:edit, :update, :reload]
 
   delegate_to_service(:update)
+  delegate_to_service(:reload)
   delegate_to_service(:load_or_create_answers)
 
   def index

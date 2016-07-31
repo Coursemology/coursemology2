@@ -18,6 +18,10 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     @submission.answers.reload if new_answers && @submission.answers.loaded?
   end
 
+  def reload
+    raise NotImplementedError, 'To be implemented by the specific update service.'
+  end
+
   protected
 
   # Service for handling the submission management logic, this serves as the super class for the
