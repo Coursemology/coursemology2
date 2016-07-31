@@ -1,5 +1,6 @@
 - add_breadcrumb :new
 = page_header t('.header')
+= render 'tabs'
 
 = simple_form_for @disbursement,
                   url: disburse_experience_points_course_users_path,
