@@ -89,6 +89,20 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
             expect(answer.grade).to eq(answer.question.maximum_grade / test_case_count)
           end
         end
+
+        context 'when there is an error' do
+          let(:question_test_report_path) do
+            File.join(Rails.root,
+                      'spec/fixtures/course/programming_single_test_suite_report.xml')
+          end
+
+          it 'sets the error message' do
+            subject
+            # Exact error is from the fixture
+            expect(answer.auto_grading.actable.test_results[0].message).
+              to eq('TypeError: mosaic() takes 1 positional argument but 4 were given')
+          end
+        end
       end
     end
   end

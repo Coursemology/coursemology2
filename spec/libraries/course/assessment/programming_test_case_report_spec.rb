@@ -201,4 +201,48 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
       end
     end
   end
+
+  context 'when given a report with test cases with errors' do
+    let(:report_path) do
+      File.join(Rails.root, 'spec/fixtures/course/'\
+                'programming_single_test_suite_report.xml')
+    end
+
+    let(:report_xml) { File.read(report_path) }
+
+    let(:parsed_report) do
+      Course::Assessment::ProgrammingTestCaseReport.new(report_xml)
+    end
+    let(:test_cases) { parsed_report.test_suites.first.test_cases }
+
+    describe Course::Assessment::ProgrammingTestCaseReport::TestCase do
+      subject { test_cases.first }
+
+      describe '#error_type' do
+        it 'returns the error type attribute' do
+          expect(subject.error_type).to eq('TypeError')
+        end
+      end
+
+      describe '#error_message' do
+        it 'returns the error type and error message together' do
+          expect(subject.error_message).to eq('TypeError: mosaic() takes 1 positional argument but 4 were given')
+        end
+      end
+    end
+
+    describe 'when the test case has no error' do
+      subject { test_cases.third }
+
+      describe '#error_type' do
+        it 'returns nil for the error type attribute' do
+          expect(subject.error_type).to be_nil
+        end
+
+        it 'returns nil for the error message' do
+          expect(subject.error_message).to be_nil
+        end
+      end
+    end
+  end
 end

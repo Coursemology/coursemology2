@@ -83,7 +83,8 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
     test_results.map do |test_result|
       test_case = find_test_case(test_cases, test_result)
       auto_grading.test_results.build(auto_grading: auto_grading, test_case: test_case,
-                                      passed: test_result.passed?)
+                                      passed: test_result.passed?,
+                                      message: test_result.error_message)
     end
   end
 
