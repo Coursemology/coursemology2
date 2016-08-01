@@ -45,7 +45,7 @@
 
   function onGetJobSuccess(data, url, answer_id) {
     if (data.status == 'completed') {
-      reloadAnswer(answer_id);
+      reattemptQuestion(answer_id);
     } else if (data.status == 'submitted') {
       waitForJob(url, answer_id);
     } else {
@@ -53,10 +53,10 @@
     }
   }
 
-  function reloadAnswer(answer_id) {
+  function reattemptQuestion(answer_id) {
     $.ajax({
-      url: 'reload_answer',
-      method: 'GET',
+      url: 'reattempt_question',
+      method: 'POST',
       data: { answer_id: answer_id },
       global: false
     });

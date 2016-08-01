@@ -1,0 +1,3 @@
+$('<%= "#answer_#{@answer.id}"%>').replaceWith(
+    '<%= escape_javascript(render partial: 'course/assessment/answer/answer', object: @new_answer) %>'
+);

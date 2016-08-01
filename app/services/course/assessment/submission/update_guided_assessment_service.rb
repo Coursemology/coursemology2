@@ -14,18 +14,6 @@ class Course::Assessment::Submission::UpdateGuidedAssessmentService <
     params.permit(:step)[:step]
   end
 
-  def reattempt_question
-    question = @assessment.questions.find(question_id_param)
-    question.attempt(@submission)
-    if @submission.save
-      redirect_to current_step_path
-    else
-      redirect_to current_step_path,
-                  danger: t('course.assessment.submission.submissions.update.failure',
-                            error: @submission.errors.full_messages.to_sentence)
-    end
-  end
-
   def questions_to_attempt
     @assessment.questions.where(id: current_question)
   end
@@ -41,10 +29,5 @@ class Course::Assessment::Submission::UpdateGuidedAssessmentService <
           @assessment.questions.fetch(step)
         end
       end
-  end
-
-  def current_step_path
-    edit_course_assessment_submission_path(current_course, @assessment,
-                                           @submission, step: step_param)
   end
 end

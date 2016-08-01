@@ -31,7 +31,6 @@ en:
             grade_summary: 'Grade Summary'
           update:
             success: 'Submission was updated.'
-            failure: 'Failed to update submission: %{error}'
           submissions:
             student_name: 'Student Name'
             status: 'Submission Status'
