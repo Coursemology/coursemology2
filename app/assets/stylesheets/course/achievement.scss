@@ -22,6 +22,8 @@
   }
 
   &.show {
+    @include automatically-clear;
+
     .course-user-achievement {
       .image > img {
         height: $course-achievement-user-profile;
