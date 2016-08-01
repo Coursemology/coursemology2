@@ -17,8 +17,10 @@ class Course::Assessment::Question::TextResponse < ActiveRecord::Base
     Course::Assessment::Answer::TextResponseAutoGradingService.new
   end
 
-  def attempt(submission)
-    submission.text_response_answers.build(submission: submission, question: question).answer
+  def attempt(submission, last_attempt = nil)
+    answer = submission.text_response_answers.build(submission: submission, question: question)
+    answer.answer_text = last_attempt.answer_text if last_attempt
+    answer.acting_as
   end
 
   private

@@ -32,6 +32,17 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
         answer = subject.attempt(submission)
         expect(submission.text_response_answers).to include(answer.actable)
       end
+
+      context 'when last_attempt is given' do
+        let(:last_attempt) { build(:course_assessment_answer_text_response) }
+
+        it 'builds a new answer with old answer_text' do
+          answer = subject.attempt(submission, last_attempt).actable
+          answer.save!
+
+          expect(last_attempt.answer_text).to eq(answer.answer_text)
+        end
+      end
     end
 
     describe 'validations' do

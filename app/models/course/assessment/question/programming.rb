@@ -25,10 +25,16 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
     Course::Assessment::Answer::ProgrammingAutoGradingService.new
   end
 
-  def attempt(submission)
+  def attempt(submission, last_attempt = nil)
     answer = submission.programming_answers.build(submission: submission, question: question)
-    copy_template_files_to(answer)
-    answer.answer
+    if last_attempt
+      last_attempt.files.each do |file|
+        answer.files.build(filename: file.filename, content: file.content)
+      end
+    else
+      copy_template_files_to(answer)
+    end
+    answer.acting_as
   end
 
   def to_partial_path

@@ -32,6 +32,22 @@ RSpec.describe Course::Assessment::Question::MultipleResponse do
         answer = subject.attempt(submission)
         expect(submission.multiple_response_answers).to include(answer.actable)
       end
+
+      context 'when last_attempt is given' do
+        let(:last_attempt) do
+          create(:course_assessment_answer_multiple_response,
+                 :with_one_correct_option,
+                 question: subject.question, submission: submission)
+        end
+
+        it 'builds a new answer with old options' do
+          answer = subject.attempt(submission, last_attempt).actable
+          answer.save!
+
+          expect(last_attempt.option_ids).
+            to contain_exactly(*answer.answer_options.map(&:option_id))
+        end
+      end
     end
   end
 end
