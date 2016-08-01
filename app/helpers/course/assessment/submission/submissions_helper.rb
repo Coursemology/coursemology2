@@ -28,4 +28,15 @@ module Course::Assessment::Submission::SubmissionsHelper
   def explanation_panel_class(answer)
     answer.correct ? 'panel-success' : 'panel-danger'
   end
+
+  # Return the last attempted answer based on the status of current submission.
+  # previous attempt if submission is in attempting state.
+  # current attempt if submission is in submitted or graded state.
+  #
+  # @return [Course::Assessment::Answer]
+  def last_attempt(answer)
+    submission = answer.submission
+    attempts = submission.answers.order(:created_at).from_question(answer.question_id)
+    submission.attempting? ? attempts[-2] : attempts[-1]
+  end
 end

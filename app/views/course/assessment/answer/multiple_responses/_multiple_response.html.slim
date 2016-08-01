@@ -5,6 +5,6 @@
                           display_solution: can?(:grade, multiple_response.answer),
                           label_method: :option, label: false, disabled: readonly
 
-- if f.object.auto_grading && f.object.auto_grading.result
+- if last_attempt && last_attempt.auto_grading && last_attempt.auto_grading.result
   = render partial: 'course/assessment/answer/explanation',
-           locals: { answer: f.object }
+           locals: { answer: last_attempt }
