@@ -27,7 +27,7 @@ FactoryGirl.define do
     end
 
     trait :any_correct do
-      question_type :any_correct
+      grading_scheme :any_correct
     end
   end
 end
