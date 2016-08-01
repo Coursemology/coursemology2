@@ -6,7 +6,7 @@
 
 div.user-achievements
   h2 = t('.users_with_achievement')
-  div.row
+  div.row.automatically-clear
     - @achievement.course_users.without_phantom_users.students.with_approved_state. \
         includes(:user).each do |course_user|
       div.col-xs-4.col-sm-3.col-md-2.col-lg-1
