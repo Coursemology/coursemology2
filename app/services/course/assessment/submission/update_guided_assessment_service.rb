@@ -2,16 +2,6 @@
 class Course::Assessment::Submission::UpdateGuidedAssessmentService <
   Course::Assessment::Submission::UpdateService
 
-  def update
-    if params[:attempting_answer_id]
-      submit_answer
-    elsif params[:attempting_question_id]
-      reattempt_question
-    else
-      super
-    end
-  end
-
   def load_or_create_answers
     super if @submission.attempting?
 
@@ -20,28 +10,8 @@ class Course::Assessment::Submission::UpdateGuidedAssessmentService <
 
   private
 
-  def answer_id_param
-    params.permit(:attempting_answer_id)[:attempting_answer_id]
-  end
-
-  def question_id_param
-    params.permit(:attempting_question_id)[:attempting_question_id]
-  end
-
   def step_param
     params.permit(:step)[:step]
-  end
-
-  def submit_answer
-    if @submission.update_attributes(update_params)
-      answer = @submission.answers.find(answer_id_param)
-      answer.finalise!
-      job = answer.auto_grade!(current_step_path)
-
-      redirect_to job_path(job.job)
-    else
-      render 'edit'
-    end
   end
 
   def reattempt_question

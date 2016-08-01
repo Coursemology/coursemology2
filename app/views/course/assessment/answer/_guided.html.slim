@@ -1,6 +1,6 @@
 - if answer.submission.attempting?
   - if answer.attempting?
-    = base_answer_form.button :button, t('common.submit'), value: answer.id, name: 'attempting_answer_id'
+    = base_answer_form.button :button, t('common.submit'), value: answer.id, name: 'attempting_answer_id', class: 'submit-answer'
   - elsif !answer.correct?
     = base_answer_form.button :button, t('.reattempt'), value: answer.question.id, name: 'attempting_question_id'
   - elsif !@current_question.last_question?
