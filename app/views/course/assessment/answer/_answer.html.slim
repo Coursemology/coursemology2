@@ -12,5 +12,6 @@
       = render partial: "course/assessment/answer/#{answer.submission.assessment.display_mode}",
                locals: { base_answer_form: f, answer: answer, last_attempt: last_attempt }
 
-      = render partial: 'course/assessment/answer/grading',
-               locals: { base_answer_form: f, answer: answer }
+      - if !submission.attempting?
+        = render partial: 'course/assessment/answer/grading',
+                 locals: { base_answer_form: f, answer: answer }
