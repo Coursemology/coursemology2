@@ -1,0 +1,54 @@
+- add_breadcrumb :new
+= page_header t('.header')
+= render 'tabs'
+br
+
+div.panel.panel-primary.forum-participation-search-panel
+  div.panel-heading
+    h3.panel-title = t('.compute_points')
+  div.panel-body
+    = simple_form_for @disbursement,
+                      url: forum_disbursement_course_users_path,
+                      method: :get,
+                      input_html: { class: ['form-horizontal'] } do |f|
+      = f.error_notification
+      = f.input :start_time, as: :bootstrap_date_time
+      = f.input :end_time, as: :bootstrap_date_time
+      = f.input :weekly_cap, as: :integer,
+                             input_html: { value: f.object.weekly_cap || 100 }
+      = f.button :submit, t('.search')
+
+= simple_form_for @disbursement, url: forum_disbursement_course_users_path, method: :post do |f|
+  = f.error_notification
+  = f.hidden_field :start_time
+  = f.hidden_field :end_time
+  = f.hidden_field :weekly_cap
+
+  h3 = t('.reason')
+  = f.input :reason, label: false,
+                     input_html: { value: f.object.reason || t('.forum_participation_reason') }
+
+  h3 = t('.awardees')
+  table.table.table-hover
+    thead
+      tr
+        th = CourseUser.human_attribute_name(:name)
+        th = t('.level')
+        th = t('.experience_points')
+        th = t('.post_count')
+        th = t('.vote_tally')
+        th = Course::ExperiencePointsRecord.human_attribute_name(:points_awarded)
+    tbody
+      = f.simple_fields_for :experience_points_records do |record_fields|
+        - course_user = record_fields.object.course_user
+        = content_tag_for(:tr, course_user)
+          td = link_to_course_user(course_user)
+          td = course_user.level_number
+          td = course_user.experience_points
+          td = @disbursement.student_participation_statistics[course_user][:posts]
+          td = @disbursement.student_participation_statistics[course_user][:votes]
+          td = record_fields.input :points_awarded, label: false,
+                                                    input_html: { class: 'points_awarded' }
+          = record_fields.hidden_field :course_user_id
+
+  = f.button :submit, t('.submit')

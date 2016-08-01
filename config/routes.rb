@@ -227,6 +227,9 @@ Rails.application.routes.draw do
         get 'disburse_experience_points' => 'experience_points/disbursement#new', on: :collection
         post 'disburse_experience_points' => 'experience_points/disbursement#create',
              on: :collection
+        get 'forum_disbursement' => 'experience_points/forum_disbursement#new', on: :collection
+        post 'forum_disbursement' => 'experience_points/forum_disbursement#create',
+             on: :collection
       end
       post 'register' => 'user_registrations#create'
       get 'students' => 'users#students', as: :users_students

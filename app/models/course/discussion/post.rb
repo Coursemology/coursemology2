@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Discussion::Post < ActiveRecord::Base
   extend Course::Discussion::Post::OrderingConcern
+  include Course::ForumParticipationConcern
 
   acts_as_forest order: :created_at
   acts_as_readable on: :updated_at

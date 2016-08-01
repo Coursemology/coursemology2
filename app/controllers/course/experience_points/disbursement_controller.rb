@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 class Course::ExperiencePoints::DisbursementController < Course::ComponentController
   include Course::UsersBreadcrumbConcern
-  before_action :load_and_authorize_disbursement
+  before_action :load_resource
+  before_action :authorize_resource
 
   def new # :nodoc:
   end
 
   def create # :nodoc:
     if @disbursement.save
-      recipient_count = @disbursement.experience_points_records.length
       redirect_to disburse_experience_points_course_users_path(current_course),
                   success: t('.success', count: recipient_count)
     else
@@ -18,9 +18,8 @@ class Course::ExperiencePoints::DisbursementController < Course::ComponentContro
 
   private
 
-  def load_and_authorize_disbursement # :nodoc:
+  def load_resource # :nodoc:
     @disbursement ||= Course::ExperiencePoints::Disbursement.new(disbursement_params)
-    authorize_resource
   end
 
   def disbursement_params # :nodoc:
@@ -43,5 +42,9 @@ class Course::ExperiencePoints::DisbursementController < Course::ComponentContro
     @disbursement.experience_points_records.each do |record|
       authorize!(:create, record)
     end
+  end
+
+  def recipient_count
+    @disbursement.experience_points_records.length
   end
 end

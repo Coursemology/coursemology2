@@ -3,6 +3,9 @@ en:
     experience_points:
       disbursement:
         sidebar_title: 'Disburse Points'
+        tabs:
+          forum_disbursement: 'Forum Participation'
+          general_disbursement: 'General Disbursement'
         new:
           header: 'Disburse Experience Points'
           awardees: 'Recipients'
