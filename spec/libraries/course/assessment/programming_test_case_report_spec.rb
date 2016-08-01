@@ -226,7 +226,8 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
 
       describe '#error_message' do
         it 'returns the error type and error message together' do
-          expect(subject.error_message).to eq('TypeError: mosaic() takes 1 positional argument but 4 were given')
+          expect(subject.error_message).
+            to eq('TypeError: mosaic() takes 1 positional argument but 4 were given')
         end
       end
     end

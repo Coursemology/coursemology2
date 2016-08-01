@@ -120,11 +120,8 @@ class Course::Assessment::ProgrammingTestCaseReport
     # @return [String] A combined string with the error type and error message
     # @return [nil] If there's no error
     def error_message
-      if errored?
-        "#{error_type}: #{_error_message}"
-      else
-        return nil
-      end
+      return nil unless errored?
+      "#{error_type}: #{_error_message}"
     end
 
     # If there's an error, return the error message attribute.
@@ -133,11 +130,8 @@ class Course::Assessment::ProgrammingTestCaseReport
     # @return [String] The message attribute
     # @return [nil] If there's no error
     def _error_message
-      if errored?
-        @test_case.search('error')[0]['message']
-      else
-        return nil
-      end
+      return nil unless errored?
+      @test_case.search('error')[0]['message']
     end
 
     # If there's an error, return the error type attribute.
@@ -145,11 +139,8 @@ class Course::Assessment::ProgrammingTestCaseReport
     # @return [String] The type attribute
     # @return [nil] If there's no error
     def error_type
-      if errored?
-        @test_case.search('error')[0]['type']
-      else
-        return nil
-      end
+      return nil unless errored?
+      @test_case.search('error')[0]['type']
     end
 
     # Checks if the test case encountered an error.
