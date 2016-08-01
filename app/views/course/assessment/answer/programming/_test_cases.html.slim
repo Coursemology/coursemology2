@@ -68,9 +68,16 @@ table.table.table-striped.table-hover
               - elsif test_case_result
                 = fa_icon 'times'.freeze
 
+- failed_public_test_cases = public_test_cases. \
+    select { |t| answer_test_results_hash[t] && !answer_test_results_hash[t].passed? }
+- if !failed_public_test_cases.empty?
+    div.panel.panel-danger
+      div.panel-heading = t('.failed_public_message')
+      div.panel-body = format_html(answer_test_results_hash[failed_public_test_cases.first].message)
+
 - failed_private_test_cases = private_test_cases. \
     select { |t| answer_test_results_hash[t] && !answer_test_results_hash[t].passed? }
-- if !failed_private_test_cases.empty?
+- if failed_public_test_cases.empty? && !failed_private_test_cases.empty?
     div.panel.panel-danger
       div.panel-heading = t('.failed_private_message')
       div.panel-body = format_html(failed_private_test_cases.map(&:hint).compact.first)
