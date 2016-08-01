@@ -13,19 +13,25 @@ h3 = t('.test_cases')
 table.table.table-striped.table-hover
   thead
     tr
-      th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:identifier)
+      - if can?(:grade, answer.answer)
+        th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:identifier)
       th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:expression)
       th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:expected)
       th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:hint)
       th = t('.passed')
   tbody
     tr
-      th colspan=5
-        = t('.public')
+      - if can?(:grade, answer.answer)
+        th colspan=5
+          = t('.public')
+      - else
+        th colspan = 4
+          = t('.public')
     - public_test_cases.each do |test_case|
       - test_case_result = answer_test_results_hash[test_case]
       = content_tag_for(:tr, test_case) do
-        th = format_html(test_case.identifier)
+        - if can?(:grade, answer.answer)
+          th = format_html(test_case.identifier)
         td = format_html(test_case.expression)
         td = format_html(test_case.expected)
         td = format_html(test_case.hint) if !test_case_result || !test_case_result.passed?
