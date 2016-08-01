@@ -8,20 +8,38 @@ table.table.table-striped.table-hover
   thead
     tr
       th = t('.identifier')
+      th = t('.expression')
+      th = t('.expected')
       th = t('.hint')
   tbody
     tr
-      th colspan=3
+      th colspan=4
         = t('.public')
     - public_test_cases.each do |test_case|
       = content_tag_for(:tr, test_case) do
         th = test_case.identifier
+        td = test_case.expression
+        td = test_case.expected
         td = test_case.hint
   tbody
     tr
-      th colspan=3
+      th colspan=4
         = t('.private')
     - private_test_cases.each do |test_case|
       = content_tag_for(:tr, test_case) do
         th = test_case.identifier
+        td = test_case.expression
+        td = test_case.expected
+        td = test_case.hint
+        td
+  tbody
+    tr
+      th colspan=4
+        = t('.evaluation')
+    - evaluation_test_cases.each do |test_case|
+      = content_tag_for(:tr, test_case) do
+        th = test_case.identifier
+        td = test_case.expression
+        td = test_case.expected
+        td = test_case.hint
         td
