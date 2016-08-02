@@ -13,12 +13,13 @@
         - if current_course_user.present? && !current_course_user.staff?
           = display_course_user_badge(current_course_user)
       nav.navbar-default role='navigation'
-        div.sidebar.collapse.navbar-collapse#course-navigation-sidebar
-          = sidebar_items(controller.sidebar_items(type: :normal))
+        - if can?(:participate, current_course)
+          div.sidebar.collapse.navbar-collapse#course-navigation-sidebar
+            = sidebar_items(controller.sidebar_items(type: :normal))
 
-          - unless (admin_sidebar_items = controller.sidebar_items(type: :admin)).empty?
-            h5 = t('.administration')
-            = sidebar_items(admin_sidebar_items)
+        - unless (admin_sidebar_items = controller.sidebar_items(type: :admin)).empty?
+          h5 = t('.administration')
+          = sidebar_items(admin_sidebar_items)
 
     div.col-lg-10.col-md-9.col-sm-8 class=page_class
       = yield
