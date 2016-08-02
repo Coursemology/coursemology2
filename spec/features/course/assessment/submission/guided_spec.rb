@@ -7,10 +7,10 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) do
-      create(:assessment, :guided, :published_with_mcq_question, course: course)
+      create(:assessment, :guided, :published_with_mrq_question, course: course)
     end
-    let(:mcq_questions) { assessment.reload.questions.map(&:specific) }
-    let(:extra_mcq_question) do
+    let(:mrq_questions) { assessment.reload.questions.map(&:specific) }
+    let(:extra_mrq_question) do
       create(:course_assessment_question_multiple_response, assessment: assessment)
     end
     before { login_as(user, scope: :user) }
@@ -26,7 +26,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
       scenario 'I can save my submission' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        option = mcq_questions.first.options.first.option
+        option = mrq_questions.first.options.first.option
         check option
         click_button I18n.t('common.save')
 
@@ -37,10 +37,10 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
       end
 
       scenario 'I can navigate between questions' do
-        extra_mcq_question
+        extra_mrq_question
 
         # Add a correct answer to the first question
-        answer = mcq_questions.first.attempt(submission)
+        answer = mrq_questions.first.attempt(submission)
         answer.correct = true
         answer.save
 
@@ -50,17 +50,17 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
           path = edit_course_assessment_submission_path(course, assessment, submission, step: step)
           expect(page).to have_link(step, href: path)
         end
-        expect(page).to have_selector('h2', text: mcq_questions.first.title)
+        expect(page).to have_selector('h2', text: mrq_questions.first.title)
 
         click_link '2'
-        expect(page).to have_selector('h2', text: mcq_questions.second.title)
+        expect(page).to have_selector('h2', text: mrq_questions.second.title)
       end
 
       scenario 'I can continue to the next question when current answer is correct', js: true do
-        extra_mcq_question
+        extra_mrq_question
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
-        correct_option = mcq_questions.first.options.correct.first.option
+        correct_option = mrq_questions.first.options.correct.first.option
         check correct_option
 
         click_button I18n.t('common.submit')
@@ -71,14 +71,14 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         expect(page).to have_checked_field(correct_option)
 
         click_link I18n.t('course.assessment.answer.guided.continue')
-        expect(page).to have_selector('h2', text: mcq_questions.second.title)
+        expect(page).to have_selector('h2', text: mrq_questions.second.title)
       end
 
       scenario 'I can resubmit the question when submission is not finalised', js: true do
         visit edit_course_assessment_submission_path(assessment.course, assessment, submission)
 
-        wrong_option = mcq_questions.first.options.where(correct: false).first.option
-        correct_option = mcq_questions.first.options.correct.first.option
+        wrong_option = mrq_questions.first.options.where(correct: false).first.option
+        correct_option = mrq_questions.first.options.correct.first.option
 
         # Submit a wrong solution
         check wrong_option
@@ -87,7 +87,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
         expect(page).
           to have_selector('div.panel', text: 'course.assessment.answer.explanation.wrong')
-        expect(page).to have_selector('h2', text: mcq_questions.first.title)
+        expect(page).to have_selector('h2', text: mrq_questions.first.title)
         # Check that previous attempt is restored.
         expect(page).to have_checked_field(wrong_option)
         expect(page).to have_selector('.btn', text: I18n.t('common.submit'))
@@ -100,7 +100,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
         expect(page).
           to have_selector('div.panel', text: 'course.assessment.answer.explanation.correct')
-        expect(page).to have_selector('h2', text: mcq_questions.first.title)
+        expect(page).to have_selector('h2', text: mrq_questions.first.title)
         expect(page).to have_checked_field(correct_option)
         expect(page).to have_selector('.btn', text: I18n.t('common.submit'))
       end
@@ -123,7 +123,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
       let(:user) { create(:course_teaching_assistant, course: course).user }
 
       scenario "I can grade the student's work" do
-        mcq_questions.each { |q| q.attempt(submission).save! }
+        mrq_questions.each { |q| q.attempt(submission).save! }
         submission.finalise!
         submission.save!
 

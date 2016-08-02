@@ -7,7 +7,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) do
-      create(:course_assessment_assessment, :published_with_mcq_question, course: course)
+      create(:course_assessment_assessment, :published_with_mrq_question, course: course)
     end
     before { login_as(user, scope: :user) }
 

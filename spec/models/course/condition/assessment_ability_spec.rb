@@ -19,15 +19,15 @@ RSpec.describe Course::Condition::Assessment do
 
       context 'when the assessment is published but has not started' do
         let(:unopened_assessment) do
-          create(:assessment, :published_with_mcq_question, :unopened, course: course)
+          create(:assessment, :published_with_mrq_question, :unopened, course: course)
         end
 
         it { is_expected.to_not be_able_to(:attempt, unopened_assessment) }
       end
 
       context 'when the assessment has started' do
-        let(:assessment1) { create(:assessment, :published_with_mcq_question, course: course) }
-        let(:assessment2) { create(:assessment, :published_with_mcq_question, course: course) }
+        let(:assessment1) { create(:assessment, :published_with_mrq_question, course: course) }
+        let(:assessment2) { create(:assessment, :published_with_mrq_question, course: course) }
         let!(:condition) do
           create(:assessment_condition,
                  course: course,

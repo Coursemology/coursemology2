@@ -87,7 +87,7 @@ RSpec.feature 'Course: Assessments: Management' do
 
       scenario 'I can see non-draft assessments' do
         category = course.assessment_categories.first
-        assessment = create(:assessment, :published_with_mcq_question,
+        assessment = create(:assessment, :published_with_mrq_question,
                             course: course, tab: category.tabs.first)
         visit course_assessments_path(course)
 

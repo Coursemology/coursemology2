@@ -54,7 +54,7 @@ RSpec.describe Course::Assessment::Submission do
     describe '.answers' do
       describe '.latest_answers' do
         context 'when the submission has multiple answers for the same question' do
-          let(:assessment_traits) { [:with_mcq_question] }
+          let(:assessment_traits) { [:with_mrq_question] }
           let(:submission1_traits) { :submitted }
           subject { submission1.answers.latest_answers }
 
