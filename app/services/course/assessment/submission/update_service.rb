@@ -4,8 +4,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     if params[:attempting_answer_id]
       submit_answer
     elsif @submission.update_attributes(update_params)
-      redirect_to edit_submission_path,
-                  success: t('course.assessment.submission.submissions.update.success')
+      redirect_to_edit
     else
       render 'edit'
     end
@@ -114,5 +113,15 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def unsubmit?
     params[:submission] && params[:submission][:unsubmit].present?
+  end
+
+  def redirect_to_edit
+    if update_params[:finalise] && @submission.assessment.autograded?
+      redirect_to edit_submission_path,
+                  success: t('course.assessment.submission.submissions.update.finalise')
+    else
+      redirect_to edit_submission_path,
+                  success: t('course.assessment.submission.submissions.update.success')
+    end
   end
 end

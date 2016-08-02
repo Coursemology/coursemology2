@@ -34,6 +34,7 @@ en:
             grade_summary: 'Grade Summary'
           update:
             success: 'Submission was updated.'
+            finalise: 'Your submission is being graded, please visit this page again later.'
           submissions:
             student_name: 'Student Name'
             status: 'Submission Status'
