@@ -9,6 +9,13 @@ class Course::Assessment::Question::MultipleResponse < ActiveRecord::Base
 
   accepts_nested_attributes_for :options
 
+  # A Multiple Response Question is considered to be a Multiple Choice Question (MCQ)
+  # if and only if it has an "any correct" grading scheme. The case where "any correct"
+  # questions are not MCQs (i.e. students select a subset of the correct answer by checking
+  # two or more option) is weak. MCQs can be graded with either scheme, but using
+  # "any correct" allows it to have more than one correct answer.
+  alias_method :multiple_choice?, :any_correct?
+
   def auto_gradable?
     true
   end
