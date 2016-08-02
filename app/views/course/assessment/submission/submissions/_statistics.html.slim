@@ -52,12 +52,14 @@ div.panel.panel-default
         tbody
           - answer_by_question = @submission.answers.latest_answers.group_by(&:question)
           - @submission.assessment.questions.each do |question|
-            - answer = answer_by_question[question].first
+            - answer = answer_by_question[question].try(:first)
             tr
               th = format_inline_text(question.title)
               td
-                span.submission-grades-summary-grade> (
-                    id="submission-grades-summary-answer-#{answer.id}-grade")
-                  = answer.grade
+                - if answer
+                  span.submission-grades-summary-grade> (id="submission-grades-summary-answer-#{answer.id}-grade")
+                    = answer.grade
+                - else
+                  span> 0
                 ' /
                 = question.maximum_grade
