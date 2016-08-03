@@ -17,6 +17,7 @@ RSpec.describe Course, type: :model do
       it { is_expected.to be_able_to(:show, published_course) }
       it { is_expected.to be_able_to(:show, opened_course) }
       it { is_expected.not_to be_able_to(:show, closed_course) }
+      it { is_expected.not_to be_able_to(:participate, closed_course) }
 
       it 'sees the opened courses' do
         expect(Course.accessible_by(subject)).
@@ -28,6 +29,7 @@ RSpec.describe Course, type: :model do
       let(:user) { create(:course_student, course: course).user }
 
       it { is_expected.to be_able_to(:show, course) }
+      it { is_expected.to be_able_to(:participate, course) }
       it { is_expected.not_to be_able_to(:manage, course) }
     end
 

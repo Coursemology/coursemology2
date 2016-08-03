@@ -31,7 +31,7 @@ module Course::CourseAbilityComponent
   end
 
   def allow_registered_users_showing_course
-    can [:read], Course, course_user_hash
+    can [:read, :participate], Course, course_user_hash
   end
 
   def allow_owners_managing_course
