@@ -83,7 +83,9 @@ class Course::Assessment::Answer < ActiveRecord::Base
   end
 
   def validate_assessment_state
-    errors.add(:submission, :attemptable_state) unless submission.attempting?
+    if !submission.attempting? && !submission.unsubmitting?
+      errors.add(:submission, :attemptable_state)
+    end
   end
 
   def validate_consistent_grade

@@ -128,6 +128,10 @@ class Course::Assessment::Submission < ActiveRecord::Base
     AutoGradingJob.perform_later(self)
   end
 
+  def unsubmitting?
+    !!@unsubmitting
+  end
+
   protected
 
   # Handles the finalisation of a submission.
@@ -147,27 +151,12 @@ class Course::Assessment::Submission < ActiveRecord::Base
   end
 
   # Handles the unsubmission of a submitted submission.
-  # A separate callback is also defined for unsubmission, see +on_attempting_entry+.
   def unsubmit(_ = nil)
-    self.points_awarded = nil
-  end
+    # Skip the state validation in answers.
+    @unsubmitting = true
 
-  # A custom callback for `submission.unsubmit!` to unsubmit the latest_answers of the submission.
-  # This is separate from the unsubmit method defined above for the following reasons:
-  #
-  # 1. `unsubmit` method is run before the submission's workflow state is modified
-  #   (see +workflow+ documentation).
-  # 2. Validations in the answer model (+validate_assessment_state+): answer can only be
-  #   `unsubmit` to an attempting state only if submission's workflow state is `attempting`.
-  # 3. A custom scope +latest_answers+ prevents the associations from being saved together, so
-  #    it is necessary to first update `submission`, then proceed to unsubmit latest_answers.
-  def on_attempting_entry(_new_state, event, *_)
-    if event == :unsubmit
-      answers.latest_answers.each do |answer|
-        answer.unsubmit!
-        answer.save!
-      end
-    end
+    unsubmit_latest_answers
+    self.points_awarded = nil
   end
 
   private
@@ -191,5 +180,14 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   def send_notification
     Course::AssessmentNotifier.assessment_attempted(creator, assessment)
+  end
+
+  def unsubmit_latest_answers
+    latest_answer_ids = answers.latest_answers.pluck(:id)
+    # Direct change #answers, so that they can be saved together with submission.
+    answers.each do |answer|
+      next unless latest_answer_ids.include?(answer.id)
+      answer.unsubmit!
+    end
   end
 end
