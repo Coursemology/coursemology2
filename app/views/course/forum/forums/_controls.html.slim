@@ -12,4 +12,4 @@ span.pull-right.btn-group
 
   = new_button([current_course, @forum, :topic]) if can?(:create, Course::Forum::Topic.new(forum: @forum))
   = edit_button([current_course, @forum]) if can?(:edit, @forum)
-  = delete_button([current_course, @forum]) if can?(:delete, @forum)
+  = delete_button([current_course, @forum]) if can?(:destroy, @forum)

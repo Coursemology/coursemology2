@@ -12,7 +12,7 @@ RSpec.describe Instance do
       it { is_expected.to be_able_to(:show, instance) }
       it { is_expected.not_to be_able_to(:edit, instance) }
       it { is_expected.not_to be_able_to(:update, instance) }
-      it { is_expected.not_to be_able_to(:delete, instance) }
+      it { is_expected.not_to be_able_to(:destroy, instance) }
     end
   end
 end
