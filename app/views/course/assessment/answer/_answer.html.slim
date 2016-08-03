@@ -1,12 +1,17 @@
-= simple_fields_for :"submission[answers_attributes][#{answer.id}]", answer do |f|
-  = f.hidden_field :id
+- submission = answer.submission
+- last_attempt = last_attempt(answer)
 
-  = f.simple_fields_for :actable do |specific_answer_form|
-    = specific_answer_form.hidden_field :id, value: answer.actable.id
-    = render partial: specific_answer_form.object, locals: { f: specific_answer_form }
+= content_tag_for(:div, answer, 'data-answer-id' => answer.id) do
+  = simple_fields_for :"submission[answers_attributes][#{answer.id}]", answer do |f|
+    = f.hidden_field :id
 
-    = render partial: "course/assessment/answer/#{answer.submission.assessment.display_mode}",
-             locals: { base_answer_form: f, answer: answer }
+    = f.simple_fields_for :actable do |specific_answer_form|
+      = specific_answer_form.hidden_field :id, value: answer.actable.id
+      = render partial: specific_answer_form.object, locals: { f: specific_answer_form, last_attempt: last_attempt }
 
-    = render partial: 'course/assessment/answer/grading',
-             locals: { base_answer_form: f, answer: answer }
+      = render partial: "course/assessment/answer/#{answer.submission.assessment.display_mode}",
+               locals: { base_answer_form: f, answer: answer, last_attempt: last_attempt }
+
+      - if !submission.attempting?
+        = render partial: 'course/assessment/answer/grading',
+                 locals: { base_answer_form: f, answer: answer }

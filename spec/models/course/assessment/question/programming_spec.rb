@@ -136,6 +136,23 @@ RSpec.describe Course::Assessment::Question::Programming do
           expect(matching_answer_file).not_to be_nil
         end
       end
+
+      context 'when last_attempt is given' do
+        let(:last_attempt) do
+          create(:course_assessment_answer_programming, file_contents: ['python file', 'js file'])
+        end
+
+        it 'builds a new answer with old file contents' do
+          answer = subject.attempt(submission, last_attempt).actable
+          answer.save!
+
+          expect(last_attempt.files.map(&:filename)).
+            to contain_exactly(*answer.files.map(&:filename))
+
+          expect(last_attempt.files.map(&:content)).
+            to contain_exactly(*answer.files.map(&:content))
+        end
+      end
     end
 
     describe '#imported_attachment=' do

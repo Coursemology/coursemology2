@@ -64,14 +64,16 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
         click_button I18n.t('common.submit')
         wait_for_ajax
-        expect(page).to have_selector('div', text: 'course.assessment.answer.grading.grading')
-        expect(page).to have_selector('div', text: 'course.assessment.answer.grading.grade')
+        # Check that previous attempt is restored.
+        expect(page).
+          to have_selector('div.panel', text: 'course.assessment.answer.explanation.correct')
+        expect(page).to have_checked_field(correct_option)
 
         click_link I18n.t('course.assessment.answer.guided.continue')
         expect(page).to have_selector('h2', text: mcq_questions.second.title)
       end
 
-      scenario 'I can reattempt the question when current answer is not correct' do
+      scenario 'I can resubmit the question when current answer is not correct', js: true do
         mcq_questions
 
         visit edit_course_assessment_submission_path(assessment.course, assessment, submission)
@@ -79,11 +81,14 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         wrong_option = mcq_questions.first.options.where(correct: false).first.option
         check wrong_option
         click_button I18n.t('common.submit')
-        wait_for_job
+        wait_for_ajax
 
-        click_button I18n.t('course.assessment.answer.guided.reattempt')
+        expect(page).
+          to have_selector('div.panel', text: 'course.assessment.answer.explanation.wrong')
         expect(page).to have_selector('h2', text: mcq_questions.first.title)
-        expect(page).not_to have_checked_field(wrong_option)
+        # Check that previous attempt is restored.
+        expect(page).to have_checked_field(wrong_option)
+        expect(page).to have_selector('.btn', text: I18n.t('common.submit'))
       end
 
       scenario 'I can finalise my submission' do

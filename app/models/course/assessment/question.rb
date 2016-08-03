@@ -37,11 +37,15 @@ class Course::Assessment::Question < ActiveRecord::Base
   #
   # @param [Course::Assessment::Submission] submission The submission which the answer should
   #   belong to.
+  # @param [Course::Assessment::Answer|nil] last_attempt If last_attempt is given, fields in the
+  #   new answer will be pre-populated with data from it.
   # @return [Course::Assessment::Answer] The answer corresponding to the question. It is required
   #   that the {Course::Assessment::Answer#question} property be the same as +self+. The result
   #   should not be persisted.
-  def attempt(submission)
-    return actable.attempt(submission) if actable && actable.self_respond_to?(:attempt)
+  def attempt(submission, last_attempt = nil)
+    if actable && actable.self_respond_to?(:attempt)
+      return actable.attempt(submission, last_attempt ? last_attempt.actable : nil)
+    end
     raise NotImplementedError, 'Questions must implement the #attempt method for submissions.'
   end
 

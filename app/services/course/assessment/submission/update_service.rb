@@ -3,8 +3,6 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update
     if params[:attempting_answer_id]
       submit_answer
-    elsif params[:attempting_question_id]
-      reattempt_question
     elsif @submission.update_attributes(update_params)
       redirect_to edit_submission_path,
                   success: t('course.assessment.submission.submissions.update.success')
@@ -87,10 +85,6 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def answer_id_param
     params.permit(:attempting_answer_id)[:attempting_answer_id]
-  end
-
-  def question_id_param
-    params.permit(:attempting_question_id)[:attempting_question_id]
   end
 
   def edit_submission_path

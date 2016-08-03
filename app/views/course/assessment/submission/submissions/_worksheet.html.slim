@@ -6,8 +6,7 @@
   - f.object.assessment.questions.each do |question|
     = render partial: question, suffix: 'question'
     - answer = answers_by_question[question].last
-    = content_tag_for(:div, answer, 'data-answer-id' => answer.id) do
-      = render partial: 'course/assessment/answer/answer', object: answer
+    = render partial: 'course/assessment/answer/answer', object: answer
 
   - unless @submission.attempting?
     = render 'statistics', f: f

@@ -1,10 +1,11 @@
 - question = multiple_response.question.specific
 - readonly = cannot?(:update, multiple_response.answer)
-= f.association :options, as: :course_assessment_answer_multiple_response,
-                          collection: question.options,
-                          display_solution: can?(:grade, multiple_response.answer),
-                          label_method: :option, label: false, disabled: readonly
+= f.association :options,
+  as: :course_assessment_answer_multiple_response,
+  collection: question.options,
+  display_solution: can?(:grade, multiple_response.answer) && !multiple_response.submission.attempting?,
+  label_method: :option, label: false, disabled: readonly
 
-- if f.object.auto_grading && f.object.auto_grading.result
+- if last_attempt && last_attempt.auto_grading && last_attempt.auto_grading.result
   = render partial: 'course/assessment/answer/explanation',
-           locals: { answer: f.object }
+           locals: { answer: last_attempt }

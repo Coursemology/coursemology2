@@ -40,10 +40,17 @@ class Course::Assessment::Submission::SubmissionsController < \
     redirect_to(job_path(job.job))
   end
 
-  def reload_answer
+  # Reattempt current question and create a new answer based on previous answer.
+  def reattempt_question
     @answer = @submission.answers.find_by(id: answer_id_param)
-    @current_question = @answer.question
-    render :bad_request unless @answer
+
+    if @answer
+      @current_question = @answer.question
+      @new_answer = @current_question.attempt(@submission, @answer)
+      render status: :bad_request unless @new_answer.save
+    else
+      render status: :bad_request
+    end
   end
 
   private

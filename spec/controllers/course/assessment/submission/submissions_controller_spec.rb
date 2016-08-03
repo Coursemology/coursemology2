@@ -65,6 +65,21 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       end
     end
 
+    describe '#reattempt_question' do
+      let(:submission) do
+        create(:course_assessment_submission, assessment: assessment, creator: user)
+      end
+
+      context 'when answer_id does not exist' do
+        subject do
+          post :reattempt_question, course_id: course, assessment_id: assessment,
+                                    id: submission.id, answer_id: -1, format: :js
+        end
+
+        it { is_expected.to have_http_status(:bad_request) }
+      end
+    end
+
     context 'when the assessment is guided' do
       let(:assessment) { create(:assessment, :guided, :with_mcq_question, course: course) }
       let!(:answer) do
@@ -86,25 +101,6 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
           end
 
           it { is_expected.to render_template('edit') }
-        end
-      end
-
-      describe '#re_attempt_question' do
-        subject do
-          put :update, course_id: course, assessment_id: assessment, id: immutable_submission,
-                       attempting_question_id: answer.question.id, submission: { title: '' }
-        end
-
-        context 'when update fails' do
-          before do
-            controller.instance_variable_set(:@submission, immutable_submission)
-            subject
-          end
-
-          it 'sets a flash with error messages' do
-            expect(flash[:danger]).
-              to eq(I18n.t('course.assessment.submission.submissions.update.failure'))
-          end
         end
       end
     end
