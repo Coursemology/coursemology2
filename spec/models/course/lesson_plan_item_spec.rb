@@ -34,5 +34,18 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
       subject { Course::LessonPlan::Item.new.total_exp }
       it { is_expected.to eq 0 }
     end
+
+    describe '#validations' do
+      context 'when time_bonus_exp is set without bonus_end_at' do
+        let(:lesson_plan_item) do
+          build(:course_lesson_plan_item, time_bonus_exp: 100, bonus_end_at: nil)
+        end
+
+        it 'is not valid' do
+          expect(lesson_plan_item).not_to be_valid
+          expect(lesson_plan_item.errors[:bonus_end_at]).to be_present
+        end
+      end
+    end
   end
 end

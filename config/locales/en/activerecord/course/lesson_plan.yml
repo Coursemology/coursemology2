@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/lesson_plan/item:
+          attributes:
+            bonus_end_at:
+              required: 'cannot be blank if time bonus exp is set'
