@@ -6,6 +6,7 @@ RSpec.describe Course::Material::Folder, type: :model do
   with_tenant(:instance) do
     subject(:ability) { Ability.new(user) }
     let(:course) { create(:course) }
+    let(:root_folder) { course.root_folder }
     let(:valid_folder) { build_stubbed(:folder, course: course) }
     let(:not_started_folder) { build_stubbed(:folder, :not_started, course: course) }
     let(:ended_folder) { build_stubbed(:folder, :ended, course: course) }
@@ -35,6 +36,17 @@ RSpec.describe Course::Material::Folder, type: :model do
       it { is_expected.not_to be_able_to(:manage, started_linked_folder) }
       it { is_expected.to be_able_to(:show, started_linked_folder) }
       it { is_expected.to be_able_to(:show, not_started_linked_folder) }
+    end
+
+    context 'when the user is a System Administrator' do
+      let(:user) { create(:administrator) }
+
+      it { is_expected.not_to be_able_to(:update, started_linked_folder) }
+      it { is_expected.not_to be_able_to(:edit, started_linked_folder) }
+      it { is_expected.not_to be_able_to(:destroy, started_linked_folder) }
+      it { is_expected.not_to be_able_to(:update, root_folder) }
+      it { is_expected.not_to be_able_to(:edit, root_folder) }
+      it { is_expected.not_to be_able_to(:destroy, root_folder) }
     end
   end
 end
