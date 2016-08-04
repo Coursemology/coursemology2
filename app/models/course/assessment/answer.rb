@@ -29,7 +29,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
   belongs_to :question, class_name: Course::Assessment::Question.name, inverse_of: nil
   belongs_to :grader, class_name: User.name, inverse_of: nil
   has_one :auto_grading, class_name: Course::Assessment::Answer::AutoGrading.name,
-                         dependent: :destroy, inverse_of: :answer
+                         dependent: :destroy, inverse_of: :answer, autosave: true
 
   accepts_nested_attributes_for :actable
   accepts_nested_attributes_for :discussion_topic
@@ -122,5 +122,6 @@ class Course::Assessment::Answer < ActiveRecord::Base
     self.grader = nil
     self.graded_at = nil
     self.submitted_at = nil
+    auto_grading.mark_for_destruction if auto_grading
   end
 end

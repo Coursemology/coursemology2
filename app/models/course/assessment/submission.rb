@@ -183,10 +183,10 @@ class Course::Assessment::Submission < ActiveRecord::Base
   end
 
   def unsubmit_latest_answers
-    latest_answer_ids = answers.latest_answers.pluck(:id)
+    latest_answers = answers.latest_answers
     # Direct change #answers, so that they can be saved together with submission.
     answers.each do |answer|
-      next unless latest_answer_ids.include?(answer.id)
+      next unless latest_answers.include?(answer)
       answer.unsubmit!
     end
   end

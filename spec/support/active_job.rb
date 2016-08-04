@@ -50,7 +50,7 @@ module ActionMailer::MessageDelivery::TestDeliveryHelpers
 end
 ActionMailer::MessageDelivery.prepend(ActionMailer::MessageDelivery::TestDeliveryHelpers)
 
-module TrackableJob::TestExampleHelpers
+module TrackableJob::FeatureSpecHelpers
   def wait_for_job
     if current_path.start_with?(job_path(''))
       job_guid = current_path[(current_path.rindex('/') + 1)..-1]
@@ -63,13 +63,22 @@ module TrackableJob::TestExampleHelpers
   end
 end
 
+module TrackableJob::ModelSpecHelpers
+  def wait_for_job
+    if ActiveJob::Base.queue_adapter == ActiveJob::QueueAdapters::BackgroundThreadAdapter
+      ActiveJob::QueueAdapters::BackgroundThreadAdapter.wait_for_jobs
+    end
+  end
+end
+
 RSpec.configure do |config|
   config.extend ActiveJob::TestGroupHelpers
   config.around(:each, type: :job,
                 &ActiveJob::TestGroupHelpers.with_active_job_queue_adapter_method)
   config.around(:each,
                 &ActiveJob::TestGroupHelpers.method(:ensure_jobs_completion))
-  config.include TrackableJob::TestExampleHelpers, type: :feature
+  config.include TrackableJob::FeatureSpecHelpers, type: :feature
+  config.include TrackableJob::ModelSpecHelpers, type: :model
 
   config.backtrace_exclusion_patterns << /\/spec\/support\/active_job\.rb/
 end

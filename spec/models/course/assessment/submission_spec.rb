@@ -268,6 +268,18 @@ RSpec.describe Course::Assessment::Submission do
 
     describe '#unsubmit!' do
       let(:assessment_traits) { [:with_all_question_types] }
+      let!(:earlier_answer) do
+        answer = create(:course_assessment_answer_multiple_response, :graded,
+                        assessment: assessment,
+                        question: assessment.multiple_response_questions.first.acting_as,
+                        submission: submission1, creator: user1).acting_as
+        answer.update_column(:created_at, 1.day.ago)
+        submission1.reload
+        # Unfinished jobs in the callbacks could cause a deadlock, need to wait for them to finish.
+        wait_for_job
+        answer
+      end
+
       subject { submission1 }
       before do
         subject.unsubmit!
@@ -284,6 +296,7 @@ RSpec.describe Course::Assessment::Submission do
 
         it 'sets all latest answers in the submission to attempting' do
           expect(subject.answers.latest_answers.all?(&:attempting?)).to be(true)
+          expect(earlier_answer.reload).to be_graded
         end
       end
 
@@ -296,6 +309,7 @@ RSpec.describe Course::Assessment::Submission do
 
         it 'sets all latest answers in the submission to attempting' do
           expect(subject.answers.latest_answers.all?(&:attempting?)).to be(true)
+          expect(earlier_answer.reload).to be_graded
         end
       end
     end
