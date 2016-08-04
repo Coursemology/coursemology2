@@ -7,4 +7,4 @@
   td = format_datetime(folder.updated_at)
   td
     = edit_button([current_course, folder]) if can?(:edit, folder)
-    = delete_button([current_course, folder]) if can?(:delete, folder)
+    = delete_button([current_course, folder]) if can?(:destroy, folder)

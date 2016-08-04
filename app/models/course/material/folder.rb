@@ -33,8 +33,7 @@ class Course::Material::Folder < ActiveRecord::Base
   # Filter out the empty linked folders (i.e. Folder with an owner).
   def self.without_empty_linked_folder
     select do |folder|
-      folder.owner.nil? ||
-        folder.owner && folder.material_count != 0 && folder.children_count != 0
+      folder.owner.nil? || folder.children_count != 0 || folder.material_count != 0
     end
   end
 

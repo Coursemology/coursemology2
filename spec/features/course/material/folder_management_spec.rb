@@ -27,7 +27,7 @@ RSpec.feature 'Course: Material: Folders: Management' do
         end
 
         empty_linked_folders = parent_folder.children.
-                               select { |f| f.owner && !f.materials.empty? && !f.children.empty? }
+                               select { |f| f.owner && f.materials.empty? && f.children.empty? }
         empty_linked_folders.each do |subfolder|
           expect(page).not_to have_content_tag_for(subfolder)
         end
@@ -126,7 +126,8 @@ RSpec.feature 'Course: Material: Folders: Management' do
 
       scenario 'I can view valid subfolders' do
         valid_folders = subfolders.select do |f|
-          f.start_at < Time.zone.now && (f.end_at.nil? || f.end_at > Time.zone.now)
+          f.start_at < Time.zone.now && (f.end_at.nil? || f.end_at > Time.zone.now) &&
+            (f.owner.nil? || f.materials.count > 0 && f.children.count > 0)
         end
         invalid_folders = subfolders - valid_folders
         visit course_material_folder_path(course, parent_folder)

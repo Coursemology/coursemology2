@@ -6,4 +6,4 @@
   td = format_datetime(material.updated_at)
   td
     = edit_button([current_course, @folder, material]) if can?(:edit, material)
-    = delete_button([current_course, @folder, material]) if can?(:delete, material)
+    = delete_button([current_course, @folder, material]) if can?(:destroy, material)

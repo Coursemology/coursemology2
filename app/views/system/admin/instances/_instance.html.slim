@@ -12,4 +12,4 @@
 
   td
     = edit_button([:admin, instance]) if can?(:edit, instance)
-    = delete_button([:admin, instance]) if can?(:delete, instance)
+    = delete_button([:admin, instance]) if can?(:destroy, instance)
