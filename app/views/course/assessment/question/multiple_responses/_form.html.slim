@@ -1,9 +1,7 @@
 = simple_form_for [current_course, @assessment, @multiple_response_question] do |f|
   = f.error_notification
   = render partial: 'course/assessment/questions/form', locals: { f: f }
-  = f.input :grading_scheme,
-            as: :select,
-            collection: Course::Assessment::Question::MultipleResponse.grading_schemes.keys
+  = f.hidden_field :grading_scheme
 
   table.table.table-striped.table-hover
     thead

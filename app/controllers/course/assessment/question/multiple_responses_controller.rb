@@ -6,6 +6,7 @@ class Course::Assessment::Question::MultipleResponsesController < \
                               through: :assessment, parent: false
 
   def new
+    @multiple_response_question.grading_scheme = :any_correct if params[:multiple_choice] == 'true'
   end
 
   def create

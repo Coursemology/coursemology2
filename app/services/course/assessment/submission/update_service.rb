@@ -75,6 +75,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update_answer_type_params
     scalar_params = [].tap do |result|
       result.push(:answer_text) # Text response answer
+      result.push(:option_ids) # MCQ answer
     end
     # Parameters that must be an array of permitted values
     array_params = {}.tap do |result|

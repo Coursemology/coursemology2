@@ -29,6 +29,7 @@ en:
           files: 'Files'
           questions: 'Questions'
           new_question:
+            multiple_choice: 'Multiple Choice'
             multiple_response: 'Multiple Response'
             text_response: 'Text Response'
             programming: 'Programming'
