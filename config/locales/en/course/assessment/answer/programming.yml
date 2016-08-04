@@ -3,10 +3,10 @@ en:
     assessment:
       answer:
         programming:
-          programming:
-            add_file: 'Add file'
-          file_fields:
-            delete: 'Delete file'
+#          programming:
+#            add_file: 'Add file'
+#          file_fields:
+#            delete: 'Delete file'
           test_cases:
             passed: 'Passed'
             private: :'course.assessment.question.programming.form_test_cases.private'

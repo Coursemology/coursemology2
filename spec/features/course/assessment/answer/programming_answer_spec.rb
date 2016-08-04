@@ -21,6 +21,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
       let(:user) { create(:course_user, :approved, course: course).user }
 
       scenario 'I can save my submission', js: true do
+        pending 'Removed add/delete file links for CS1010S'
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         # Fill in every single successive item
