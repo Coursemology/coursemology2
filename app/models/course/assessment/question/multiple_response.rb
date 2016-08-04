@@ -4,6 +4,8 @@ class Course::Assessment::Question::MultipleResponse < ActiveRecord::Base
 
   enum grading_scheme: [:all_correct, :any_correct]
 
+  validate :validate_multiple_choice_has_solution, if: :multiple_choice?
+
   has_many :options, class_name: Course::Assessment::Question::MultipleResponseOption.name,
                      dependent: :destroy, foreign_key: :question_id, inverse_of: :question
 
@@ -34,5 +36,11 @@ class Course::Assessment::Question::MultipleResponse < ActiveRecord::Base
     end
 
     answer.acting_as
+  end
+
+  private
+
+  def validate_multiple_choice_has_solution
+    errors.add(:options, :no_correct_option) if options.select(&:correct?).empty?
   end
 end

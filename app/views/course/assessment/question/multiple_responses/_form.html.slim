@@ -3,6 +3,10 @@
   = render partial: 'course/assessment/questions/form', locals: { f: f }
   = f.hidden_field :grading_scheme
 
+  / workaround for plataformatec/simple_form#1284
+  div.has-error
+    = f.full_error :options
+
   table.table.table-striped.table-hover
     thead
       tr
