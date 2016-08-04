@@ -32,5 +32,17 @@ RSpec.describe Course::Assessment::Submission::SubmissionsHelper do
         end
       end
     end
+
+    describe '#guided_max_step' do
+      let(:assessment) { build(:assessment, :guided, :published_with_mcq_question) }
+      before { helper.instance_variable_set(:@assessment, assessment) }
+      subject { helper.guided_max_step }
+
+      context 'when all questions have been answered' do
+        before { allow(helper).to receive(:guided_next_unanswered_question).and_return(nil) }
+
+        it { is_expected.to eq(assessment.questions.length) }
+      end
+    end
   end
 end

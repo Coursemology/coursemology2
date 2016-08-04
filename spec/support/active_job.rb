@@ -52,11 +52,14 @@ ActionMailer::MessageDelivery.prepend(ActionMailer::MessageDelivery::TestDeliver
 
 module TrackableJob::TestExampleHelpers
   def wait_for_job
-    return unless current_path.start_with?(job_path(''))
-    job_guid = current_path[(current_path.rindex('/') + 1)..-1]
-    job = TrackableJob::Job.find(job_guid)
-    job.wait(while_callback: -> { job.reload.submitted? })
-    visit current_path
+    if current_path.start_with?(job_path(''))
+      job_guid = current_path[(current_path.rindex('/') + 1)..-1]
+      job = TrackableJob::Job.find(job_guid)
+      job.wait(while_callback: -> { job.reload.submitted? })
+      visit current_path
+    elsif ActiveJob::Base.queue_adapter == ActiveJob::QueueAdapters::BackgroundThreadAdapter
+      ActiveJob::QueueAdapters::BackgroundThreadAdapter.wait_for_jobs
+    end
   end
 end
 
