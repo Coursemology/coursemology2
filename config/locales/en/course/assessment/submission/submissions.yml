@@ -6,6 +6,7 @@ en:
           finalise: 'Finalise Submission'
           publish: 'Publish Grade'
           auto_grade: 'Auto Grade Submission'
+          unsubmit: 'Unsubmit Submission'
           index:
             submissions: 'Submissions'
             student_header: 'Student Submissions'
@@ -18,10 +19,12 @@ en:
             finalise: :'course.assessment.submission.submissions.finalise'
             publish: :'course.assessment.submission.submissions.publish'
             auto_grade: :'course.assessment.submission.submissions.auto_grade'
+            unsubmit: :'course.assessment.submission.submissions.unsubmit'
           guided:
             finalise: :'course.assessment.submission.submissions.finalise'
             publish: :'course.assessment.submission.submissions.publish'
             auto_grade: :'course.assessment.submission.submissions.auto_grade'
+            unsubmit: :'course.assessment.submission.submissions.unsubmit'
           statistics:
             student: :'course.users.role.student'
             status: 'Status'

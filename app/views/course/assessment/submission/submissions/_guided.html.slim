@@ -20,8 +20,14 @@ nav
   - unless @submission.attempting?
     = render 'statistics', f: f
 
-  - if @submission.submitted? && can?(:grade, @submission)
-    = link_to t('.auto_grade'),
-      auto_grade_course_assessment_submission_path(current_course, @submission.assessment,
-        @submission), method: :post, class: ['btn', 'btn-info']
-    = f.button :submit, t('.publish'), name: 'submission[publish]', class: ['btn-danger']
+    - if can?(:grade, @submission)
+      - if @submission.submitted?
+        = link_to t('.auto_grade'),
+                  auto_grade_course_assessment_submission_path(current_course,
+                                                               @submission.assessment,
+                                                               @submission),
+                  method: :post,
+                  class: ['btn', 'btn-info']
+        = f.button :submit, t('.publish'), name: 'submission[publish]', class: ['btn-danger']
+
+      = f.button :submit, t('.unsubmit'), name: 'submission[unsubmit]', class: ['btn-warning']

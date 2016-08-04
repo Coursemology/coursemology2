@@ -187,6 +187,28 @@ RSpec.describe 'Course: Assessments: Attempt' do
         expect(submission.grade).to eq(submission_maximum_grade)
         expect(submission.points_awarded).to eq(submission.assessment.base_exp)
       end
+
+      scenario 'I can unsubmit a submitted or graded submission' do
+        # Submitted submission
+        assessment.questions.attempt(submission).each(&:save!)
+        submission.finalise!
+        submission.save!
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        click_button I18n.t('course.assessment.submission.submissions.worksheet.unsubmit')
+        expect(submission.reload.attempting?).to be_truthy
+
+        # Graded submission
+        submission.finalise!
+        submission.publish!
+        submission.save!
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        click_button I18n.t('course.assessment.submission.submissions.worksheet.unsubmit')
+        expect(submission.reload.attempting?).to be_truthy
+      end
     end
   end
 end

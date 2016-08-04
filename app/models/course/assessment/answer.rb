@@ -13,6 +13,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
       event :publish, transitions_to: :graded
     end
     state :graded do
+      event :unsubmit, transitions_to: :attempting
       event :publish, transitions_to: :graded # To re-grade an answer.
     end
   end
@@ -82,7 +83,9 @@ class Course::Assessment::Answer < ActiveRecord::Base
   end
 
   def validate_assessment_state
-    errors.add(:submission, :attemptable_state) unless submission.attempting?
+    if !submission.attempting? && !submission.unsubmitting?
+      errors.add(:submission, :attemptable_state)
+    end
   end
 
   def validate_consistent_grade
@@ -112,5 +115,12 @@ class Course::Assessment::Answer < ActiveRecord::Base
   # Set the course as the same course of the assessment.
   def set_course
     self.course ||= submission.assessment.course if submission && submission.assessment
+  end
+
+  def unsubmit
+    self.grade = nil
+    self.grader = nil
+    self.graded_at = nil
+    self.submitted_at = nil
   end
 end

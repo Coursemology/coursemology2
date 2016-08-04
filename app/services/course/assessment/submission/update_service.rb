@@ -61,6 +61,8 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   #
   # This varies depending on the permissions of the user.
   def update_answers_params
+    return [] if unsubmit? # Attributes like grades should be not updated.
+
     [].tap do |result|
       actable_attributes = [:id]
       actable_attributes.push(update_answer_type_params) if can?(:update, @submission)
@@ -108,5 +110,9 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     answer = @submission.answers.find(answer_id_param)
     answer.finalise! if answer.attempting?
     answer.auto_grade!(edit_submission_path)
+  end
+
+  def unsubmit?
+    params[:submission] && params[:submission][:unsubmit].present?
   end
 end

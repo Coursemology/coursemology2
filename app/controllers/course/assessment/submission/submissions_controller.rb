@@ -3,7 +3,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   Course::Assessment::Submission::Controller
   include Course::Assessment::Submission::SubmissionsControllerServiceConcern
 
-  before_action :authorize_assessment, only: :create
+  before_action :authorize_assessment!, only: :create
   skip_authorize_resource :submission, only: [:edit, :update, :auto_grade]
   before_action :authorize_submission!, only: [:edit, :update]
   before_action :load_or_create_answers, only: [:edit, :update]
@@ -59,7 +59,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     { course_user: current_course_user }
   end
 
-  def authorize_assessment
+  def authorize_assessment!
     authorize!(:attempt, @assessment)
   end
 

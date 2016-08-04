@@ -16,7 +16,9 @@ class Course::Assessment::Submission < ActiveRecord::Base
       event :unsubmit, transitions_to: :attempting
       event :publish, transitions_to: :graded
     end
-    state :graded
+    state :graded do
+      event :unsubmit, transitions_to: :attempting
+    end
   end
 
   validate :validate_consistent_user
@@ -116,6 +118,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   alias_method :finalise=, :finalise!
   alias_method :publish=, :publish!
+  alias_method :unsubmit=, :unsubmit!
 
   # Creates an Auto Grading job for this submission. This saves the submission if there are pending
   # changes.
@@ -123,6 +126,10 @@ class Course::Assessment::Submission < ActiveRecord::Base
   # @return [Course::Assessment::Submission::AutoGradingJob] The job instance.
   def auto_grade!
     AutoGradingJob.perform_later(self)
+  end
+
+  def unsubmitting?
+    !!@unsubmitting
   end
 
   protected
@@ -141,6 +148,15 @@ class Course::Assessment::Submission < ActiveRecord::Base
     answers.each do |answer|
       answer.publish! if answer.submitted?
     end
+  end
+
+  # Handles the unsubmission of a submitted submission.
+  def unsubmit(_ = nil)
+    # Skip the state validation in answers.
+    @unsubmitting = true
+
+    unsubmit_latest_answers
+    self.points_awarded = nil
   end
 
   private
@@ -164,5 +180,14 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   def send_notification
     Course::AssessmentNotifier.assessment_attempted(creator, assessment)
+  end
+
+  def unsubmit_latest_answers
+    latest_answer_ids = answers.latest_answers.pluck(:id)
+    # Direct change #answers, so that they can be saved together with submission.
+    answers.each do |answer|
+      next unless latest_answer_ids.include?(answer.id)
+      answer.unsubmit!
+    end
   end
 end
