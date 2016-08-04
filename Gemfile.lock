@@ -267,7 +267,6 @@ GEM
       pkg-config (~> 1.1.7)
     nokogumbo (1.4.7)
       nokogiri
-    nprogress-rails (0.1.6.7)
     oauth2 (1.2.0)
       faraday (>= 0.8, < 0.10)
       jwt (~> 1.0)
@@ -492,7 +491,7 @@ GEM
     tins (1.6.0)
     traceroute (0.5.0)
       rails (>= 3.0.0)
-    turbolinks (5.0.0)
+    turbolinks (5.0.1)
       turbolinks-source (~> 5)
     turbolinks-source (5.0.0)
     twitter-typeahead-rails (0.11.1)
@@ -575,7 +574,6 @@ DEPENDENCIES
   mini_magick
   momentjs-rails (>= 2.8.1)
   nokogiri (>= 1.6.8)
-  nprogress-rails
   omniauth
   omniauth-facebook
   pg (>= 0.18.2)

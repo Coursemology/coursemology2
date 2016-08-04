@@ -29,7 +29,7 @@
     // TODO: Display error messages.
   }
 
-  $(document).on('page:load ready', showCommentBoxes);
+  $(document).on('turbolinks:load', showCommentBoxes);
   $(document).on('submit', DOCUMENT_SELECTOR + '.post-form', onPostFormSubmit);
 
   DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR);

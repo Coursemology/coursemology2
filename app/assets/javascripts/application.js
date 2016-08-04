@@ -17,9 +17,6 @@
 //= require jquery_ujs
 //= require jquery-ui/sortable
 //= require turbolinks
-//= require nprogress
-//= require nprogress-ajax
-//= require nprogress-turbolinks
 //= require moment
 //= require bootstrap-datetimepicker
 //= require bootstrap-select

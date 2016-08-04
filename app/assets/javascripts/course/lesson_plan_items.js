@@ -1,6 +1,6 @@
 (function($) {
   'use strict';
-  $(document).on('page:load ready', function() {
+  $(document).on('turbolinks:load', function() {
     var $index = $('.course-lesson-plan-items.index');
     var $pastMilestones = $('.milestone-body-past', $index);
     if ($pastMilestones.length === 0) {
