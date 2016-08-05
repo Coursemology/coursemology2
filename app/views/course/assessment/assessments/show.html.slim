@@ -37,6 +37,11 @@
         span.caret
       ul.dropdown-menu.dropdown-menu-right role='menu' aria-labelledby='new-question'
         li role='presentation'
+          = link_to(t('.new_question.multiple_choice'),
+                    new_course_assessment_question_multiple_response_path(current_course, @assessment,
+                                                                          { multiple_choice: true }),
+                    role: 'menuitem')
+        li role='presentation'
           = link_to(t('.new_question.multiple_response'),
                     new_course_assessment_question_multiple_response_path(current_course, @assessment),
                     role: 'menuitem')

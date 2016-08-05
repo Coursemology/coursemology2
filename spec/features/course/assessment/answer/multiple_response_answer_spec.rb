@@ -7,7 +7,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) do
-      create(:course_assessment_assessment, :published_with_mcq_question, course: course)
+      create(:course_assessment_assessment, :published_with_mrq_question, course: course)
     end
     before { login_as(user, scope: :user) }
 
@@ -22,17 +22,38 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
     context 'As a Course Student' do
       let(:user) { create(:course_user, :approved, course: course).user }
 
-      scenario 'I can save my submission' do
-        visit edit_course_assessment_submission_path(course, assessment, submission)
+      context 'when the question is a multiple choice question' do
+        let(:assessment) do
+          create(:course_assessment_assessment, :published_with_mcq_question, course: course)
+        end
 
-        check correct_option
+        scenario 'I can save my submission' do
+          visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        click_button I18n.t('common.save')
-        expect(current_path).to eq(
-          edit_course_assessment_submission_path(course, assessment, submission)
-        )
+          choose correct_option
 
-        expect(page).to have_checked_field(correct_option)
+          click_button I18n.t('common.save')
+          expect(current_path).to eq(
+            edit_course_assessment_submission_path(course, assessment, submission)
+          )
+
+          expect(page).to have_checked_field(correct_option)
+        end
+      end
+
+      context 'when the question is not a multiple choice question' do
+        scenario 'I can save my submission' do
+          visit edit_course_assessment_submission_path(course, assessment, submission)
+
+          check correct_option
+
+          click_button I18n.t('common.save')
+          expect(current_path).to eq(
+            edit_course_assessment_submission_path(course, assessment, submission)
+          )
+
+          expect(page).to have_checked_field(correct_option)
+        end
       end
 
       scenario 'I cannot update my submission after finalising' do

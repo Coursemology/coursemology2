@@ -1,3 +1,4 @@
-- add_breadcrumb :new
-= page_header
+- header = @multiple_response_question.multiple_choice? ? t('.multiple_choice_header') : t('.multiple_response_header')
+- add_breadcrumb header
+= page_header header
 = render partial: 'form'

@@ -7,7 +7,7 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) do
-      create(:assessment, :worksheet, :published_with_mcq_question, course: course)
+      create(:assessment, :worksheet, :published_with_mrq_question, course: course)
     end
     before { login_as(user, scope: :user) }
 

@@ -4,7 +4,8 @@ en:
       question:
         multiple_responses:
           new:
-            header: 'New Multiple Response Question'
+            multiple_response_header: 'New Multiple Response Question'
+            multiple_choice_header: 'New Multiple Choice Question'
           create:
             success: 'The multiple response question was created.'
           update:

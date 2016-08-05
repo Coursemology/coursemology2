@@ -29,5 +29,9 @@ FactoryGirl.define do
     trait :any_correct do
       grading_scheme :any_correct
     end
+
+    trait :multiple_choice do
+      grading_scheme :any_correct
+    end
   end
 end

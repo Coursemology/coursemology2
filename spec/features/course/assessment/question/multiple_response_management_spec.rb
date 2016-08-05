@@ -12,7 +12,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
     context 'As a Course Manager' do
       let(:user) { course.creator }
 
-      scenario 'I can create a new question' do
+      scenario 'I can create a new multiple response question' do
         skill = create(:course_assessment_skill, course: course)
         visit course_assessment_path(course, assessment)
         click_link I18n.t('course.assessment.assessments.show.new_question.multiple_response')
@@ -20,6 +20,10 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         expect(current_path).to eq(
           new_course_assessment_question_multiple_response_path(course, assessment)
         )
+        expect(page).to have_text(
+          I18n.t('course.assessment.question.multiple_responses.new.multiple_response_header')
+        )
+
         question_attributes = attributes_for(:course_assessment_question_multiple_response)
         fill_in 'title', with: question_attributes[:title]
         fill_in 'description', with: question_attributes[:description]
@@ -33,8 +37,52 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
 
         question_created = assessment.questions.first.specific
         expect(page).to have_content_tag_for(question_created)
+        expect(question_created).not_to be_multiple_choice
         expect(question_created.skills).to contain_exactly(skill)
         expect(question_created.weight).to eq(question_attributes[:weight])
+      end
+
+      scenario 'I can create a new multiple choice question', js: true do
+        visit course_assessment_path(course, assessment)
+        click_on I18n.t('common.new')
+        click_link I18n.t('course.assessment.assessments.show.new_question.multiple_choice')
+
+        expect(current_path).to eq(
+          new_course_assessment_question_multiple_response_path(course, assessment)
+        )
+        expect(page).to have_text(
+          I18n.t('course.assessment.question.multiple_responses.new.multiple_choice_header')
+        )
+        question_attributes = attributes_for(:course_assessment_question_multiple_response)
+        fill_in 'title', with: question_attributes[:title]
+        fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
+        click_button 'submit'
+
+        # Cannot create multiple choice question without a correct option
+        expect(current_path).to eq(
+          course_assessment_question_multiple_responses_path(course, assessment)
+        )
+        expect(page).to have_text(
+          I18n.t('activerecord.errors.models.course/assessment/question/'\
+                 'multiple_response.attributes.options.no_correct_option')
+        )
+
+        # Create a correct option
+        click_link I18n.t('course.assessment.question.multiple_responses.form.add_option')
+        correct_option_attributes =
+          attributes_for(:course_assessment_question_multiple_response_option, :correct)
+        within find('#new_question_multiple_response_option') do
+          find('textarea.multiple-response-option').set correct_option_attributes[:option]
+          find('textarea.multiple-response-explanation').set correct_option_attributes[:explanation]
+          check find('input[type="checkbox"]')[:name]
+        end
+
+        click_button 'submit'
+
+        expect(current_path).to eq(course_assessment_path(course, assessment))
+        question_created = assessment.questions.first.specific
+        expect(page).to have_content_tag_for(question_created)
+        expect(question_created).to be_multiple_choice
       end
 
       scenario 'I can edit a question', js: true do

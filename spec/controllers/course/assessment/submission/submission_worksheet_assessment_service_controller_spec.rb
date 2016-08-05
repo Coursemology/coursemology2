@@ -6,7 +6,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
   with_tenant(:instance) do
     let(:user) { create(:user) }
     let(:course) { create(:course, creator: user) }
-    let(:assessment) { create(:assessment, :with_mcq_question, course: course) }
+    let(:assessment) { create(:assessment, :with_mrq_question, course: course) }
     let(:immutable_submission) do
       create(:course_assessment_submission, assessment: assessment, creator: user).tap do |stub|
         assessment.questions.attempt(stub).each(&:save)

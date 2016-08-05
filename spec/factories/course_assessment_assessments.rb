@@ -18,6 +18,14 @@ FactoryGirl.define do
 
     trait :with_mcq_question do
       after(:build) do |assessment|
+        question = build(:course_assessment_question_multiple_response,
+                         :multiple_choice, assessment: assessment)
+        assessment.questions << question.acting_as
+      end
+    end
+
+    trait :with_mrq_question do
+      after(:build) do |assessment|
         question = build(:course_assessment_question_multiple_response, assessment: assessment)
         assessment.questions << question.acting_as
       end
@@ -41,6 +49,7 @@ FactoryGirl.define do
 
     trait :with_all_question_types do
       with_mcq_question
+      with_mrq_question
       with_programming_question
       with_text_response_question
     end
@@ -63,6 +72,11 @@ FactoryGirl.define do
 
     trait :published_with_mcq_question do
       with_mcq_question
+      published
+    end
+
+    trait :published_with_mrq_question do
+      with_mrq_question
       published
     end
 
