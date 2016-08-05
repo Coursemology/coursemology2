@@ -4,10 +4,10 @@ module Course::Assessment::Submission::SubmissionsGuidedHelper
   def guided_max_step
     @guided_max_step ||= begin
       question = guided_next_unanswered_question
-      if question
+      if question && cannot?(:manage, @assessment)
         @assessment.questions.index(question) + 1
       else
-        # All questions have been answered.
+        # All questions have been answered or user is a staff.
         @assessment.questions.length
       end
     end

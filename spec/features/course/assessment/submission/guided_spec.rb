@@ -39,11 +39,6 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
       scenario 'I can navigate between questions' do
         extra_mrq_question
 
-        # Add a correct answer to the first question
-        answer = mrq_questions.first.attempt(submission)
-        answer.correct = true
-        answer.save
-
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         (1..assessment.questions.length).each do |step|
@@ -51,6 +46,15 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
           expect(page).to have_link(step, href: path)
         end
         expect(page).to have_selector('h2', text: mrq_questions.first.title)
+
+        click_link '2'
+        # Students should not be able to go to Q2 before Q1 is done.
+        expect(page).to have_selector('h2', text: mrq_questions.first.title)
+
+        # Add a correct answer to the first question
+        answer = mrq_questions.first.attempt(submission)
+        answer.correct = true
+        answer.save!
 
         click_link '2'
         expect(page).to have_selector('h2', text: mrq_questions.second.title)
@@ -136,6 +140,16 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.graded?).to be(true)
+      end
+
+      scenario 'I can skip steps' do
+        extra_mrq_question
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+        expect(page).to have_selector('h2', text: mrq_questions.first.title)
+
+        click_link '2'
+        expect(page).to have_selector('h2', text: mrq_questions.second.title)
       end
     end
   end
