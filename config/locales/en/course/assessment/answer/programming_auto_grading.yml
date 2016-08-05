@@ -1,0 +1,7 @@
+en:
+  course:
+    assessment:
+      answer:
+        programming_auto_grading:
+          grade:
+            evaluation_failed: 'Evaluation failed. Syntax error?'

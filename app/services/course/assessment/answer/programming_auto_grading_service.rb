@@ -68,7 +68,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
     [all_correct, grade, auto_grading]
   end
 
-  # Builds the test case records from the test report.
+  # Checks presence of test report and builds the test case records.
   #
   # @param [Course::Assessment::Question::Programming] question The programming question being
   #   graded.
@@ -77,6 +77,22 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   # @param [String] test_report The test case report from evaluating the package.
   # @return [Array<Course::Assessment::Question::ProgrammingTestCase>]
   def build_test_case_records(question, auto_grading, test_report)
+    if test_report.present?
+      build_test_case_records_from_report(question, auto_grading, test_report)
+    else
+      build_failed_test_case_records(question, auto_grading)
+    end
+  end
+
+  # Builds test case records from test report.
+  #
+  # @param [Course::Assessment::Question::Programming] question The programming question being
+  #   graded.
+  # @param [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading The programming auto
+  #   grading result to store the test results in.
+  # @param [String] test_report The test case report from evaluating the package.
+  # @return [Array<Course::Assessment::Question::ProgrammingTestCase>]
+  def build_test_case_records_from_report(question, auto_grading, test_report)
     test_cases = question.test_cases.map { |test_case| [test_case.identifier, test_case] }.to_h
     test_results = parse_test_report(test_report)
 
@@ -85,6 +101,24 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
       auto_grading.test_results.build(auto_grading: auto_grading, test_case: test_case,
                                       passed: test_result.passed?,
                                       message: test_result.error_message)
+    end
+  end
+
+  # Builds test case records when there is no test report.
+  # Treats all test cases as failed.
+  #
+  # @param [Course::Assessment::Question::Programming] question The programming question being
+  #   graded.
+  # @param [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading The programming auto
+  #   grading result to store the test results in.
+  # @return [Array<Course::Assessment::Question::ProgrammingTestCase>]
+  def build_failed_test_case_records(question, auto_grading)
+    question.test_cases.map do |test_case|
+      auto_grading.test_results.build(
+        auto_grading: auto_grading, test_case: test_case,
+        passed: false,
+        message: I18n.t('course.assessment.answer.programming_auto_grading.grade.evaluation_failed')
+      )
     end
   end
 
