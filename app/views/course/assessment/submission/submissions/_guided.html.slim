@@ -14,7 +14,7 @@ nav
     - if base_answer_form.object.attempting?
       = f.button :submit, t('common.save')
 
-  - if @submission.attempting? && guided_next_unanswered_question.nil?
+  - if @submission.attempting? && can?(:update, @submission)
     = f.button :submit, t('.finalise'), name: 'submission[finalise]', class: ['btn-danger']
 
   - unless @submission.attempting?

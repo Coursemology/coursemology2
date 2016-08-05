@@ -5,6 +5,8 @@ class Course::LessonPlan::Item < ActiveRecord::Base
 
   after_initialize :set_default_values, if: :new_record?
 
+  validate :validate_presence_of_bonus_end_at
+
   # @!method self.ordered_by_date
   #   Orders the lesson plan items by the starting date.
   scope :ordered_by_date, (lambda do
@@ -28,5 +30,12 @@ class Course::LessonPlan::Item < ActiveRecord::Base
     self.base_exp ||= 0
     self.time_bonus_exp ||= 0
     self.extra_bonus_exp ||= 0
+  end
+
+  # User must set bonus_end_at if there's bonus exp
+  def validate_presence_of_bonus_end_at
+    if time_bonus_exp && time_bonus_exp > 0 && bonus_end_at.blank?
+      errors.add(:bonus_end_at, :required)
+    end
   end
 end

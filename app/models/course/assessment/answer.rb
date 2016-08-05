@@ -72,7 +72,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
   end
 
   def publish
-    self.grader = User.stamper
+    self.grader = User.stamper || User.system
     self.graded_at = Time.zone.now
   end
 
