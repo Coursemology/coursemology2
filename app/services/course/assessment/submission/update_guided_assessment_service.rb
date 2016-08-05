@@ -22,7 +22,7 @@ class Course::Assessment::Submission::UpdateGuidedAssessmentService <
     @current_question ||=
       begin
         step = step_param.to_i - 1
-        if @submission.attempting?
+        if @submission.attempting? && cannot?(:manage, @assessment)
           @assessment.questions.step(@submission, step)
         else
           step = [[0, step].max, @assessment.questions.length - 1].min
