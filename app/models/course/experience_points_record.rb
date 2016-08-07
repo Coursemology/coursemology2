@@ -36,6 +36,8 @@ class Course::ExperiencePointsRecord < ActiveRecord::Base
   private
 
   def send_notification
+    return unless course_user.real_student?
+
     Course::LevelNotifier.level_reached(course_user.user, level_after_update)
   end
 

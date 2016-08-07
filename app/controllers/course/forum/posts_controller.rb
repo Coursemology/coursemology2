@@ -8,7 +8,7 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
 
   def create
     if super
-      Course::Forum::PostNotifier.post_replied(@post.creator, @post)
+      send_created_notification(@post)
       redirect_to course_forum_topic_path(current_course, @forum, @topic),
                   success: t('course.discussion.posts.create.success')
     else
@@ -70,5 +70,11 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
 
   def post_vote_param
     params.permit(:vote)[:vote].to_i
+  end
+
+  def send_created_notification(post)
+    if current_course_user && !current_course_user.phantom?
+      Course::Forum::PostNotifier.post_replied(current_user, post)
+    end
   end
 end

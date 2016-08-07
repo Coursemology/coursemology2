@@ -23,6 +23,7 @@ RSpec.describe CourseUser, type: :model do
     let(:course) { create(:course, creator: owner, updater: owner) }
     let(:requested_course_user) { create(:course_user, course: course) }
     let!(:student) { create(:course_student, course: course) }
+    let(:phantom_student) { create(:course_student, :phantom, course: course) }
     let(:teaching_assistant) { create(:course_teaching_assistant, course: course) }
     let(:manager) { create(:course_manager, course: course) }
     let(:course_owner) { course.course_users.find_by!(user: owner) }
@@ -158,6 +159,16 @@ RSpec.describe CourseUser, type: :model do
         expect(teaching_assistant.staff?).to be_truthy
         expect(manager.staff?).to be_truthy
         expect(course_owner.staff?).to be_truthy
+      end
+    end
+
+    describe '#real_student?' do
+      it 'returns true if the role is student and not phantom' do
+        expect(student.real_student?).to be_truthy
+        expect(phantom_student.real_student?).to be_falsey
+        expect(teaching_assistant.real_student?).to be_falsey
+        expect(manager.real_student?).to be_falsey
+        expect(course_owner.real_student?).to be_falsey
       end
     end
 
