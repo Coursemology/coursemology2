@@ -31,7 +31,7 @@ class Course::Mailer < ApplicationMailer
   def user_registered_email(course, course_user)
     @course = course
     @course_user = course_user
-    @recipient = Struct.new(:name).new(name: t('course.mailer.user_registered_email.recipients'))
+    @recipient = OpenStruct.new(name: t('course.mailer.user_registered_email.recipients'))
 
     mail(to: @course.managers.map(&:user).map(&:email),
          subject: t('.subject', course: @course.title))
