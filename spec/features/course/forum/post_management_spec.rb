@@ -7,11 +7,11 @@ RSpec.feature 'Course: Forum: Post: Management' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:forum) { create(:forum, course: course) }
-    let(:topic) { create(:forum_topic, forum: forum) }
+    let(:topic) { create(:forum_topic, forum: forum, course: course) }
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
-      let(:user) { create(:administrator) }
+      let(:user) { create(:course_manager, course: course).user }
       scenario 'I can see posts' do
         posts = create_list(:course_discussion_post, 2, topic: topic.acting_as)
         visit course_forum_topic_path(course, forum, topic)
