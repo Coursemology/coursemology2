@@ -64,7 +64,8 @@ class Course::Assessment::Question < ActiveRecord::Base
                              index: assessment.questions.index(self) + 1)
 
     return question_number if title.blank?
-    "#{question_number}: #{title}"
+    I18n.t('activerecord.course/assessment/question.question_with_title',
+           question_number: question_number, title: title)
   end
 
   private

@@ -54,7 +54,7 @@ div.panel.panel-default
           - @submission.assessment.questions.each do |question|
             - answer = answer_by_question[question].try(:first)
             tr
-              th = format_inline_text(question.title)
+              th = format_inline_text(question.display_title)
               td
                 - if answer
                   span.submission-grades-summary-grade> (id="submission-grades-summary-answer-#{answer.id}-grade")
