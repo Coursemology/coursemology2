@@ -15,6 +15,8 @@ class Course::UserAchievement < ActiveRecord::Base
   end
 
   def send_notification
+    return unless course_user.real_student?
+
     Course::AchievementNotifier.achievement_gained(course_user.user, achievement)
   end
 end

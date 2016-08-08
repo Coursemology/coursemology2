@@ -179,6 +179,8 @@ class Course::Assessment::Submission < ActiveRecord::Base
   end
 
   def send_notification
+    return unless course_user.real_student?
+
     Course::AssessmentNotifier.assessment_attempted(creator, assessment)
   end
 

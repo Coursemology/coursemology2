@@ -108,6 +108,13 @@ class CourseUser < ActiveRecord::Base
     STAFF_ROLES.include?(role.to_sym)
   end
 
+  # Test whether this course_user is a real student (i.e. not phantom and not staff)
+  #
+  # @return [Boolean]
+  def real_student?
+    student? && !phantom
+  end
+
   # Transitions the user from the invited to the accepted state.
   #
   # @param [User] user The user which is accepting this invitation.
