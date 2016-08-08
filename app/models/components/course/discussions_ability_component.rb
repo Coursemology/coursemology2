@@ -7,6 +7,8 @@ module Course::DiscussionsAbilityComponent
       allow_course_users_show_topics
       allow_staff_manage_discussion_topics
       allow_course_users_create_posts
+      allow_course_users_reply_and_vote_posts
+      allow_course_staff_manage_posts
       allow_course_users_update_delete_own_post
     end
 
@@ -25,6 +27,14 @@ module Course::DiscussionsAbilityComponent
 
   def allow_course_users_create_posts
     can :create, Course::Discussion::Post
+  end
+
+  def allow_course_users_reply_and_vote_posts
+    can [:reply, :vote], Course::Discussion::Post, topic: course_all_course_users_hash
+  end
+
+  def allow_course_staff_manage_posts
+    can :manage, Course::Discussion::Post, topic: course_staff_hash
   end
 
   def allow_course_users_update_delete_own_post

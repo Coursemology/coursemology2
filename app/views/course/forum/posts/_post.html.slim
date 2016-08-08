@@ -21,10 +21,9 @@
       - if defined?(show_buttons)
         div.pull-right
           .btn-group
-            - if can? :reply_topic, @topic
-              = link_to reply_course_forum_topic_post_path(current_course, @forum, @topic, post),
-                        title: t('.reply'), class: ['btn', 'btn-primary'] do
-                = fa_icon 'mail-reply'.freeze
+            = link_to reply_course_forum_topic_post_path(current_course, @forum, @topic, post),
+                      title: t('.reply'), class: ['btn', 'btn-primary'] do
+              = fa_icon 'mail-reply'.freeze
             - if can? :edit, post
               = edit_button(edit_course_forum_topic_post_path(current_course, @forum, @topic, post))
             - if can? :destroy, post
