@@ -56,6 +56,18 @@ class Course::Assessment::Question < ActiveRecord::Base
     assessment.questions.last == self
   end
 
+  # Prefixes a question number in front of the title
+  #
+  # @return [string]
+  def display_title
+    question_number = I18n.t('activerecord.course/assessment/question.question_number',
+                             index: assessment.questions.index(self) + 1)
+
+    return question_number if title.blank?
+    I18n.t('activerecord.course/assessment/question.question_with_title',
+           question_number: question_number, title: title)
+  end
+
   private
 
   def validate_assessment_is_not_autograded

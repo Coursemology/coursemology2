@@ -5,4 +5,6 @@ en:
         course/assessment/question:
           autograded_assessment: >
             A non-autograded question cannot be added to an autograded assessment.
-
+    course/assessment/question:
+      question_number: "Question %{index}"
+      question_with_title: "%{question_number}: %{title}"
