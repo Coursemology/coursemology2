@@ -10,6 +10,7 @@ module UserAuthenticationConcern
            :registerable, :recoverable, :rememberable, :trackable, :masqueradable
 
     before_sign_in :create_instance_user
+    before_validation :find_and_set_invitation_email, if: :new_record?
     after_create :create_instance_user
 
     include UserOmniauthConcern
@@ -27,6 +28,17 @@ module UserAuthenticationConcern
   end
 
   private
+
+  # Check if current_user's email is in the invitation list, link email to the email in the
+  # invitation list if any.
+  def find_and_set_invitation_email
+    invited_email_ids = Course::UserInvitation.select(:user_email_id)
+    invited_email = User::Email.find_by(id: invited_email_ids, user: nil, email: email)
+
+    return unless invited_email
+    invited_email.primary = true
+    self.emails = [invited_email]
+  end
 
   def create_instance_user
     instance_users.create if persisted? && instance_users.empty?

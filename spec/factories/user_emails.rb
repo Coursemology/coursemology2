@@ -21,5 +21,11 @@ FactoryGirl.define do
     trait :unconfirmed do
       confirmed_at nil
     end
+
+    trait :without_user do
+      after(:build) do |user_email|
+        user_email.user = nil
+      end
+    end
   end
 end

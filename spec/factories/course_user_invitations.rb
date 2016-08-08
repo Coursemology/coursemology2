@@ -16,7 +16,7 @@ FactoryGirl.define do
       if user.present?
         user.emails.take
       else
-        build(:user_email, user: user, primary: false)
+        build(:user_email, :without_user, primary: false)
       end
     end
 
