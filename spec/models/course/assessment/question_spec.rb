@@ -41,6 +41,28 @@ RSpec.describe Course::Assessment::Question do
       end
     end
 
+    describe '#display_title' do
+      context 'when title is nil' do
+        let!(:question) { create(:course_assessment_question, title: nil) }
+        subject { question }
+
+        it 'returns Question N' do
+          expect(subject.display_title).
+            to eq I18n.t('activerecord.course/assessment/question.question_number')
+        end
+      end
+
+      context 'when there is a title' do
+        let!(:question) { create(:course_assessment_question) }
+        subject { question }
+
+        it 'returns question_with_title translation' do
+          expect(subject.display_title).
+            to eq I18n.t('activerecord.course/assessment/question.question_with_title')
+        end
+      end
+    end
+
     describe '#auto_gradable?' do
       it 'defaults to false' do
         expect(subject.auto_gradable?).to eq(false)
