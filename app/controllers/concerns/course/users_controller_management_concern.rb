@@ -51,7 +51,8 @@ module Course::UsersControllerManagementConcern
   end
 
   def invitations # :nodoc:
-    @course_users = @course_users.joins { invitation }.includes(invitation: :user_email)
+    @course_users = @course_users.joins { invitation }.includes(invitation: :user_email).
+                    order(workflow_state: :desc, name: :asc)
   end
 
   private
