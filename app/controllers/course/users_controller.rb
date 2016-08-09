@@ -20,7 +20,7 @@ class Course::UsersController < Course::ComponentController
     case params[:action]
     when 'index'
       @course_users ||= course_users.with_approved_state.without_phantom_users.students.
-                        includes(:user)
+                        includes(:user).order_alphabetically
     else
       return if super
       @course_user ||= course_users.includes(:user).find(params[:id])
