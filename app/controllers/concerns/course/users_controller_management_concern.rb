@@ -27,13 +27,15 @@ module Course::UsersControllerManagementConcern
   end
 
   def students # :nodoc:
-    @course_users = @course_users.students.with_approved_state.includes(user: :emails)
+    @course_users = @course_users.students.with_approved_state.includes(user: :emails).
+                    order_alphabetically
   end
 
   def staff # :nodoc:
     @student_options =
       @course_users.students.with_approved_state.order_alphabetically.pluck(:name, :id)
-    @course_users = @course_users.staff.with_approved_state.includes(user: :emails)
+    @course_users = @course_users.staff.with_approved_state.includes(user: :emails).
+                    order_alphabetically
   end
 
   def upgrade_to_staff # :nodoc:
@@ -49,7 +51,8 @@ module Course::UsersControllerManagementConcern
   end
 
   def invitations # :nodoc:
-    @course_users = @course_users.joins { invitation }.includes(invitation: :user_email)
+    @course_users = @course_users.joins { invitation }.includes(invitation: :user_email).
+                    order(workflow_state: :desc, name: :asc)
   end
 
   private
