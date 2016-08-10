@@ -30,9 +30,9 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
   # Load the submissions based on the current category.
   def load_submissions
     @submissions = Course::Assessment::Submission.
-                   ordered_by_submitted_date.accessible_by(current_ability).
-                   with_submission_statistics.page(page_param).
-                   includes(:assessment, experience_points_record: { course_user: :course })
+                   ordered_by_submitted_date.accessible_by(current_ability).page(page_param).
+                   includes(:assessment, :answers,
+                            experience_points_record: { course_user: :course })
   end
 
   # Load pending submissions based on current course role:

@@ -50,7 +50,7 @@ div.panel.panel-default
             th = t('.question')
             th = @submission.class.human_attribute_name(:grade)
         tbody
-          - answer_by_question = @submission.answers.latest_answers.group_by(&:question)
+          - answer_by_question = @submission.latest_answers.group_by(&:question)
           - @submission.assessment.questions.each do |question|
             - answer = answer_by_question[question].try(:first)
             tr

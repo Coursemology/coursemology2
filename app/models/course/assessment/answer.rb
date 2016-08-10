@@ -37,6 +37,8 @@ class Course::Assessment::Answer < ActiveRecord::Base
   after_initialize :set_course, if: :new_record?
   before_validation :set_course, if: :new_record?
 
+  default_scope { order(:created_at) }
+
   # Specific implementation of Course::Discussion::Topic#from_user, this is not supposed to be
   # called directly.
   scope :from_user, (lambda do |user_id|
