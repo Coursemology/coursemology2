@@ -23,9 +23,25 @@ class Course::UserRegistrationService
   # @return [CourseUser] The Course User which was created or updated from the registration.
   def create_or_update_registration(registration)
     if registration.code.empty?
-      register_course_user(registration)
+      register_without_registration_code(registration)
     else
       claim_registration_code(registration)
+    end
+  end
+
+  # If the user has been invited using one of his registered email addresses, automatically
+  # trigger acceptance of the invitation. Otherwise, proceed to do new course user registration.
+  #
+  # @param [Course::Registration] registration The registration object to be processed.
+  # @return [CourseUser] The Course User which was created or updated from the registration.
+  def register_without_registration_code(registration)
+    user_emails = registration.user.emails
+    invitations = load_active_invitations(registration.course)
+    invitation = invitations.find_by(user_email: user_emails)
+    if invitation.nil?
+      register_course_user(registration)
+    else
+      accept_invitation(registration, invitation)
     end
   end
 
