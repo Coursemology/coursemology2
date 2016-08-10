@@ -4,6 +4,7 @@ en:
       registration:
         registration_code: 'Registration code'
         register: 'Register'
+        enter_course: 'Enter Course'
         already_registered: 'You have already registered for the course.'
       create:
         invalid_code: 'You have entered an invalid registration code.'

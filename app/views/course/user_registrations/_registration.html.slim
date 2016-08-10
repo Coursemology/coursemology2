@@ -2,9 +2,17 @@
   - if current_course.course_users.exists?(user: current_user)
     - disable_message = t('.already_registered')
     - disabled = 'disabled'
-  div title=disable_message
-    div.input-group
-      = f.input :code, label: false, wrapper: false, placeholder: t('.registration_code'),
-                disabled: disabled
-      span.input-group-btn
-        = f.button :submit, value: t('.register'), class: 'register', disabled: disabled
+  - already_invited = Course::UserInvitation.joins { course_user }. \
+      where { course_user.course == my { current_course } }. \
+      where { course_user.workflow_state == 'invited' }. \
+      find_by(user_email: current_user.emails )
+  - if already_invited
+    = f.hidden_field :code
+    = f.button :submit, value: t('.enter_course'), class: 'register'
+  - else
+    div title=disable_message
+      div.input-group
+        = f.input :code, label: false, wrapper: false, placeholder: t('.registration_code'),
+                  disabled: disabled
+        span.input-group-btn
+          = f.button :submit, value: t('.register'), class: 'register', disabled: disabled
