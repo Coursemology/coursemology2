@@ -9,6 +9,10 @@ module Course::Assessment::Submission::AnswersConcern
 
   # Load the answers of specific question.
   def from_question(question_id)
-    order(:created_at).where(question_id: question_id)
+    if loaded?
+      select { |a| a.question_id == question_id }
+    else
+      where(question_id: question_id)
+    end
   end
 end
