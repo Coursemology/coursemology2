@@ -166,9 +166,20 @@ RSpec.describe Course::Assessment::Submission do
       let(:assessment_traits) { [:with_all_question_types] }
       let(:submission1_traits) { :submitted }
       let(:submission) { submission1 }
+      let!(:earlier_answer) do
+        answer = create(:course_assessment_answer_multiple_response, :graded,
+                        assessment: assessment,
+                        question: assessment.multiple_response_questions.first.acting_as,
+                        submission: submission1).acting_as
+        answer.grade = 1
+        answer.created_at = 1.day.ago
+        answer.save!
+        submission1.reload
+        answer
+      end
 
       it 'sums the grade of all answers' do
-        expect(submission.grade).to eq(submission.answers.map(&:grade).reduce(0, :+))
+        expect(submission.grade).to eq(submission.answers.map(&:grade).sum - earlier_answer.grade)
       end
     end
 
@@ -295,7 +306,7 @@ RSpec.describe Course::Assessment::Submission do
         end
 
         it 'sets all latest answers in the submission to attempting' do
-          expect(subject.answers.latest_answers.all?(&:attempting?)).to be(true)
+          expect(subject.latest_answers.all?(&:attempting?)).to be(true)
           expect(earlier_answer.reload).to be_graded
         end
       end
@@ -308,7 +319,7 @@ RSpec.describe Course::Assessment::Submission do
         end
 
         it 'sets all latest answers in the submission to attempting' do
-          expect(subject.answers.latest_answers.all?(&:attempting?)).to be(true)
+          expect(subject.latest_answers.all?(&:attempting?)).to be(true)
           expect(earlier_answer.reload).to be_graded
         end
       end

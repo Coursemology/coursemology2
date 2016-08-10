@@ -36,7 +36,7 @@ module Course::Assessment::Submission::SubmissionsHelper
   # @return [Course::Assessment::Answer]
   def last_attempt(answer)
     submission = answer.submission
-    attempts = submission.answers.order(:created_at).from_question(answer.question_id)
+    attempts = submission.answers.from_question(answer.question_id)
     submission.attempting? ? attempts[-2] : attempts[-1]
   end
 end

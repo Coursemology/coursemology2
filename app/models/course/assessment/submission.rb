@@ -53,25 +53,16 @@ class Course::Assessment::Submission < ActiveRecord::Base
   #   Gets the time the submission was submitted.
   #   @return [Time]
   calculated :submitted_at, (lambda do
-    Course::Assessment::Answer.where do
+    Course::Assessment::Answer.unscope(:order).where do
       course_assessment_answers.submission_id == course_assessment_submissions.id
     end.select { max(course_assessment_answers.submitted_at) }
-  end)
-
-  # @!attribute [r] grade
-  #   Gets the grade of the current submission.
-  #   @return [Fixnum]
-  calculated :grade, (lambda do
-    Course::Assessment::Answer.where do
-      course_assessment_answers.submission_id == course_assessment_submissions.id
-    end.select { sum(course_assessment_answers.grade) }
   end)
 
   # @!attribute [r] graded_at
   #   Gets the time the submission was graded.
   #   @return [Time]
   calculated :graded_at, (lambda do
-    Course::Assessment::Answer.where do
+    Course::Assessment::Answer.unscope(:order).where do
       course_assessment_answers.submission_id == course_assessment_submissions.id
     end.select { max(course_assessment_answers.graded_at) }
   end)
@@ -114,8 +105,6 @@ class Course::Assessment::Submission < ActiveRecord::Base
   #   Returns submissions which have been submitted (which may or may not be graded).
   scope :confirmed, -> { where(workflow_state: [:submitted, :graded]) }
 
-  scope :with_submission_statistics, -> { all.calculated(:grade) }
-
   alias_method :finalise=, :finalise!
   alias_method :publish=, :publish!
   alias_method :unsubmit=, :unsubmit!
@@ -130,6 +119,16 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   def unsubmitting?
     !!@unsubmitting
+  end
+
+  # The total grade of the submission
+  def grade
+    latest_answers.map { |a| a.grade || 0 }.sum
+  end
+
+  # The latest answer is last answer of the question, ordered by created_at.
+  def latest_answers
+    answers.group_by(&:question_id).map { |pair| pair[1].last }
   end
 
   protected
@@ -185,11 +184,8 @@ class Course::Assessment::Submission < ActiveRecord::Base
   end
 
   def unsubmit_latest_answers
-    latest_answers = answers.latest_answers
-    # Direct change #answers, so that they can be saved together with submission.
-    answers.each do |answer|
-      next unless latest_answers.include?(answer)
-      answer.unsubmit!
+    latest_answers.each do |answer|
+      answer.unsubmit! if answer.submitted? || answer.graded?
     end
   end
 end

@@ -12,8 +12,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   delegate_to_service(:load_or_create_answers)
 
   def index
-    @submissions = @submissions.includes(experience_points_record: :course_user).
-                   with_submission_statistics
+    @submissions = @submissions.includes(:answers, experience_points_record: :course_user)
     @course_students = current_course.course_users.students.with_approved_state.order_alphabetically
   end
 
@@ -30,7 +29,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   def edit
     return if @submission.attempting?
 
-    calculated_fields = [:submitted_at, :grade, :graded_at]
+    calculated_fields = [:submitted_at, :graded_at]
     @submission = @submission.calculated(*calculated_fields)
   end
 

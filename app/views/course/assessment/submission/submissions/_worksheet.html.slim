@@ -2,7 +2,7 @@
   = f.error_notification
 
   / TODO: Implement flag to display all answers, or only latest answers.
-  - answers_by_question = f.object.answers.latest_answers.group_by(&:question)
+  - answers_by_question = f.object.latest_answers.group_by(&:question)
   - f.object.assessment.questions.each do |question|
     = render partial: question, suffix: 'question'
     - answer = answers_by_question[question].last
