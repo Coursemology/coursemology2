@@ -5,7 +5,7 @@ class Course::Forum::ForumsController < Course::Forum::Controller
   before_action :add_forum_item_breadcrumb
 
   def index
-    @forums = @forums.with_forum_statistics
+    @forums = @forums.order(:created_at).with_forum_statistics
   end
 
   def show
