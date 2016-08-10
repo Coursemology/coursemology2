@@ -1,8 +1,9 @@
 - add_breadcrumb format_inline_text(@assessment.title)
 = page_header format_inline_text(@assessment.title) do
-  div.btn-group
-    = edit_button([current_course, @assessment])
-    = delete_button([current_course, @assessment])
+  - if can?(:manage, @assessment)
+    div.btn-group
+      = edit_button([current_course, @assessment])
+      = delete_button([current_course, @assessment])
 
 = div_for(@assessment) do
   h2 = t('.description')
@@ -26,33 +27,35 @@
   h2 = t('.finish_to_unlock')
   = render partial: @assessment.assessment_conditions.includes(:conditional), suffix: 'condition'
 
-  h2 = t('.files')
-  = render partial: 'layouts/materials', locals: { folder: @assessment.folder }
+  - if can?(:attempt, @assessment)
+    h2 = t('.files')
+    = render partial: 'layouts/materials', locals: { folder: @assessment.folder }
 
-  div.pull-right
-    div.dropdown
-      button.btn.btn-info.dropdown-toggle#new-question [type='button' data-toggle='dropdown'
-                                                        aria-expanded='true']
-        => t('common.new')
-        span.caret
-      ul.dropdown-menu.dropdown-menu-right role='menu' aria-labelledby='new-question'
-        li role='presentation'
-          = link_to(t('.new_question.multiple_choice'),
-                    new_course_assessment_question_multiple_response_path(current_course, @assessment,
-                                                                          { multiple_choice: true }),
-                    role: 'menuitem')
-        li role='presentation'
-          = link_to(t('.new_question.multiple_response'),
-                    new_course_assessment_question_multiple_response_path(current_course, @assessment),
-                    role: 'menuitem')
-        li role='presentation'
-          = link_to(t('.new_question.text_response'),
-                    new_course_assessment_question_text_response_path(current_course, @assessment),
-                    role: 'menuitem')
-        li role='presentation'
-          = link_to(t('.new_question.programming'),
-                    new_course_assessment_question_programming_path(current_course, @assessment),
-                    role: 'menuitem')
-  h2 = t('.questions')
+  - if can?(:manage, @assessment)
+    div.pull-right
+      div.dropdown
+        button.btn.btn-info.dropdown-toggle#new-question [type='button' data-toggle='dropdown'
+                                                          aria-expanded='true']
+          => t('common.new')
+          span.caret
+        ul.dropdown-menu.dropdown-menu-right role='menu' aria-labelledby='new-question'
+          li role='presentation'
+            = link_to(t('.new_question.multiple_choice'),
+                      new_course_assessment_question_multiple_response_path(current_course, @assessment,
+                                                                            { multiple_choice: true }),
+                      role: 'menuitem')
+          li role='presentation'
+            = link_to(t('.new_question.multiple_response'),
+                      new_course_assessment_question_multiple_response_path(current_course, @assessment),
+                      role: 'menuitem')
+          li role='presentation'
+            = link_to(t('.new_question.text_response'),
+                      new_course_assessment_question_text_response_path(current_course, @assessment),
+                      role: 'menuitem')
+          li role='presentation'
+            = link_to(t('.new_question.programming'),
+                      new_course_assessment_question_programming_path(current_course, @assessment),
+                      role: 'menuitem')
+    h2 = t('.questions')
 
-  = render @assessment.questions.map(&:specific)
+    = render @assessment.questions.map(&:specific)
