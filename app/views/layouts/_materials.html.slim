@@ -1,6 +1,6 @@
 - unless folder.materials.empty?
   - folder.materials.includes(:attachment_references).each do |material|
     div
-      = link_to material.attachment.url do
+      = link_to [current_course, folder, material] do
         => fa_icon 'file-o'.freeze
         = format_inline_text(material.name)

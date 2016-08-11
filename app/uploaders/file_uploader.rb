@@ -16,6 +16,17 @@ class FileUploader < CarrierWave::Uploader::Base
     "#{model.name}.#{file.extension}"
   end
 
+  # Manipulate the 'response-content-disposition' header to support file name.
+  #
+  # @param [String] filename The file name of the downloaded file.
+  # @return [String] The url with options.
+  def url(filename: nil)
+    query_option = { 'response-content-disposition' => 'attachment;' }
+    query_option['response-content-disposition'] += " filename=\"#{filename}\"" if filename
+
+    super(query: query_option)
+  end
+
   # Provide a default URL as a default if there hasn't been a file uploaded:
   # def default_url
   #   # For Rails 3.1+ asset pipeline compatibility:
