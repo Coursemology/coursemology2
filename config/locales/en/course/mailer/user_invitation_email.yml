@@ -7,5 +7,7 @@ en:
           You are invited to register for %{course} on %{coursemology}.
 
 
-          You do not seem to have an account registered at this email address; please %{sign_up}
-          for an account, and register for %{course} using the following registration code:
+          You do not seem to have an account registered at this email address (%{email});
+          please %{sign_up} for an account before visiting %{course} to enrol for the course.
+          If you have an existing Coursemology account registered under a different email,
+          enrol with the following non-transferable registration code:
