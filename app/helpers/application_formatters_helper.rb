@@ -85,6 +85,13 @@ module ApplicationFormattersHelper
   # @param [DateTime] date The datetime to be formatted
   # @return [String] the formatted datetime string
   def format_datetime(date, format = :long)
+    user_zone = (current_user ? current_user.time_zone : nil) ||
+                Application.config.x.default_user_time_zone
+    # TODO: Fix the query. This is a workaround to display the time in the correct zone, there are
+    # places where datetimes are directly fetched from db and skipped AR, which result in incorrect
+    # time zone.
+    date = date.in_time_zone(user_zone) if date.zone != user_zone
+
     date.to_formatted_s(format)
   end
 
