@@ -58,7 +58,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportService do
       it 'does not trigger another attachment import' do
         expect(question).to receive(:imported_attachment=).with(attachment)
         mock_result = Course::Assessment::ProgrammingEvaluationService::Result.new('', '', nil, 1)
-        subject.send(:save, {}, mock_result)
+        subject.send(:save!, {}, mock_result)
       end
     end
 
