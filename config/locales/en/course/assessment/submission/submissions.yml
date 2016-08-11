@@ -7,6 +7,10 @@ en:
           publish: 'Publish Grade'
           auto_grade: 'Auto Grade Submission'
           unsubmit: 'Unsubmit Submission'
+          confirm_finalise: |+
+            THIS ACTION IS IRREVERSIBLE
+            
+            Are you sure you want to submit? You will no longer be able to amend your submission!
           index:
             submissions: 'Submissions'
             student_header: 'Student Submissions'
@@ -20,11 +24,13 @@ en:
             publish: :'course.assessment.submission.submissions.publish'
             auto_grade: :'course.assessment.submission.submissions.auto_grade'
             unsubmit: :'course.assessment.submission.submissions.unsubmit'
+            confirm_finalise: :'course.assessment.submission.submissions.confirm_finalise'
           guided:
             finalise: :'course.assessment.submission.submissions.finalise'
             publish: :'course.assessment.submission.submissions.publish'
             auto_grade: :'course.assessment.submission.submissions.auto_grade'
             unsubmit: :'course.assessment.submission.submissions.unsubmit'
+            confirm_finalise: :'course.assessment.submission.submissions.confirm_finalise'
           statistics:
             student: :'course.users.role.student'
             status: 'Status'
