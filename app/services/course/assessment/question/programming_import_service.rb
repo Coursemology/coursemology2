@@ -50,7 +50,7 @@ class Course::Assessment::Question::ProgrammingImportService
     template_import_thread.join
 
     raise evaluation_result if evaluation_result.error?
-    save(template_import_thread.value, evaluation_result)
+    save!(template_import_thread.value, evaluation_result)
   end
 
   # Extracts the templates from the package.
@@ -76,12 +76,12 @@ class Course::Assessment::Question::ProgrammingImportService
   # @param [Hash<Pathname, String>] template_files The templates found in the package.
   # @param [Course::Assessment::ProgrammingEvaluationService::Result] evaluation_result The
   #   result of evaluating the package.
-  def save(template_files, evaluation_result)
+  def save!(template_files, evaluation_result)
     @question.imported_attachment = @attachment
     @question.template_files = build_template_file_records(template_files)
     @question.test_cases = build_test_case_records(evaluation_result.test_report)
 
-    @question.save
+    @question.save!
   end
 
   # Builds the template file records from the templates loaded from the package.
