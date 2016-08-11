@@ -104,6 +104,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
         expect(page).
           to have_selector('div.panel', text: 'course.assessment.answer.explanation.correct')
+        expect(page).to have_selector('.btn.finalise')
         expect(page).to have_selector('h2', text: mrq_questions.first.display_title)
         expect(page).to have_checked_field(correct_option)
         expect(page).to have_selector('.btn', text: I18n.t('common.submit'))
@@ -113,9 +114,17 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         assessment.autograded = true
         assessment.save!
         visit edit_course_assessment_submission_path(assessment.course, assessment, submission)
+        expect(page).not_to have_selector('.btn.finalise')
+
+        # Answer all the questions correctly.
+        submission.answers.each do |answer|
+          answer.finalise!
+          answer.publish!
+          answer.correct = true
+          answer.save!
+        end
+        visit current_path
         click_button I18n.t('course.assessment.submission.submissions.guided.finalise')
-        expect(page).
-          to have_selector('div', text: 'course.assessment.submission.submissions.update.finalise')
 
         wait_for_job
         visit current_path
