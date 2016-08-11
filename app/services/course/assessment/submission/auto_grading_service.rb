@@ -17,6 +17,7 @@ class Course::Assessment::Submission::AutoGradingService
   # @return [Boolean] True if the grading could be saved.
   def grade(submission)
     grade_answers(submission)
+    submission.reload
     publish_grade(submission) if submission.assessment.autograded?
     submission.save!
   end
