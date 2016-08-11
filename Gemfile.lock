@@ -150,7 +150,7 @@ GEM
     crass (1.0.2)
     devise-multi_email (1.0.3)
       devise
-    devise_masquerade (0.1.7)
+    devise_masquerade (0.1.8)
       devise (>= 2.1.0)
       railties (>= 3.0)
     diff-lcs (1.2.5)
@@ -225,7 +225,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (5.0.5)
       railties (>= 3.2.16)
-    js-routes (1.2.8)
+    js-routes (1.2.9)
       railties (>= 3.2)
       sprockets-rails
     json (1.8.3)
