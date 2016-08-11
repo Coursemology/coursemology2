@@ -42,3 +42,6 @@ en:
         destroy:
           success: 'Assessment %{assessment} was deleted.'
           failure: 'Could not delete assessment: %{error}'
+        form:
+          autograded: 'Automatically assign grade and experience points after finalization'
+          autograded_hint: 'Note that all the questions in the assessment must be auto-gradable'

@@ -10,7 +10,8 @@
   = f.input :bonus_end_at
   - unless @assessment.new_record?
     = f.input :draft
-  = f.input :autograded
+  = f.input :autograded, label: t('.autograded'),
+                         hint: t('.autograded_hint')
   = f.input :display_mode, as: :select, collection: Course::Assessment.display_modes.keys
   = f.folder
   = f.hidden_field :tab, value: @tab.id
