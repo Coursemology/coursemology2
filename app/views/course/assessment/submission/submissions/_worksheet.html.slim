@@ -15,7 +15,8 @@
 
   - if @submission.attempting? && can?(:update, @submission)
     = f.button :submit, t('.finalise'),
-      name: 'submission[finalise]', class: ['btn-danger']
+      name: 'submission[finalise]', class: ['btn-danger'],
+      data: { confirm: t('.confirm_finalise') }
 
   - if @submission.submitted? && can?(:grade, @submission)
     = link_to t('.auto_grade'),

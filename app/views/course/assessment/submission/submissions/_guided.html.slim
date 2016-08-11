@@ -15,7 +15,8 @@ nav
       = f.button :submit, t('common.save')
 
   - if @submission.attempting? && can?(:update, @submission)
-    = f.button :submit, t('.finalise'), name: 'submission[finalise]', class: ['btn-danger']
+    = f.button :submit, t('.finalise'), name: 'submission[finalise]', class: ['btn-danger'],
+               data: { confirm: t('.confirm_finalise') }
 
   - unless @submission.attempting?
     = render 'statistics', f: f
