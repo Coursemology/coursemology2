@@ -134,6 +134,7 @@ RSpec.feature 'Courses: Invitations', js: true do
           click_button I18n.t('course.user_registrations.registration.register')
 
           expect(page).not_to have_selector('div.register')
+          expect(user.reload.emails).to include(invitation.user_email)
         end
       end
 

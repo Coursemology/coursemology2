@@ -161,8 +161,19 @@ class Course::UserRegistrationService
   def accept_invitation(registration, invitation)
     registration.course_user = invitation.course_user
     invitation.course_user.accept!(registration.user)
-    invitation.course_user.save
+    CourseUser.transaction do
+      assign_email_to_user(invitation.user_email, invitation.course_user.user)
+      invitation.course_user.save
+    end
     invitation.course_user
+  end
+
+  # Assigns an unclaimed email address to a given user.
+  #
+  # @param [User::Email] email
+  # @param [User] user
+  def assign_email_to_user(email, user)
+    email.update(user: user) if email.user.nil?
   end
 
   # Sends an email to the course staff to approve the given course registration request.
