@@ -110,7 +110,22 @@ RSpec.feature 'Courses: Invitations', js: true do
       let(:instance_user) { create(:instance_user) }
       let(:user) { instance_user.user }
 
-      context 'when I have an invitation code' do
+      context 'when I have been invited using my current email address' do
+        let(:user_email) { user.emails.first }
+        let!(:invitation) do
+          create(:course_user_invitation, course: course, user_email: user_email)
+        end
+
+        scenario 'I can enter the course' do
+          visit course_path(course)
+          expect(page).not_to have_button('.register')
+
+          click_button I18n.t('course.user_registrations.registration.enter_course')
+          expect(invitation.course_user.reload).to be_approved
+        end
+      end
+
+      context 'when I have an invitation code for another email address' do
         let(:invitation) { create(:course_user_invitation, course: course) }
 
         scenario 'I can accept invitations' do
@@ -119,6 +134,7 @@ RSpec.feature 'Courses: Invitations', js: true do
           click_button I18n.t('course.user_registrations.registration.register')
 
           expect(page).not_to have_selector('div.register')
+          expect(user.reload.emails).to include(invitation.user_email)
         end
       end
 
