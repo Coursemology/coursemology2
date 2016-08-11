@@ -24,7 +24,9 @@ class Course < ActiveRecord::Base
   has_many :users, through: :course_users do
     include CourseUser::UsersConcern
   end
-  has_many :invitations, through: :course_users
+  has_many :invitations, through: :course_users do
+    include Course::UserInvitationConcern
+  end
   has_many :notifications, dependent: :destroy
 
   has_many :announcements, dependent: :destroy
