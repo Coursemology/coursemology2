@@ -31,5 +31,7 @@ div.users
                 = f.radio_button :workflow_state, 'approved', checked: true
               td.course_user_workflow_state
                 = f.radio_button :workflow_state, 'rejected'
-              td = f.button :submit, id: 'update' do
-                = fa_icon 'save'.freeze
+              td
+                = f.button :submit, id: 'update' do
+                  = fa_icon 'save'.freeze
+                = delete_button([current_course, f.object])
