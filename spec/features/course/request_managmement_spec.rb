@@ -41,5 +41,19 @@ RSpec.feature 'Course: Requests' do
       visit course_users_requests_path(course)
       expect(page).not_to have_field('course_user_name', with: unregistered_user.name)
     end
+
+    # Allow user to request to enrol again in case she neglects to enter her
+    # invitation code the first time
+    scenario 'Course staff can delete request' do
+      visit course_users_requests_path(course)
+      expect(page).to have_field('course_user_name', with: unregistered_user.name)
+
+      within find_form(nil, action: course_user_path(course, unregistered_user)) do
+        find_link(nil, href: course_user_path(course, unregistered_user)).click
+      end
+
+      expect(CourseUser.where(course: course, user: unregistered_user.user)).
+        to be_empty
+    end
   end
 end
