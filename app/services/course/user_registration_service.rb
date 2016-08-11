@@ -35,9 +35,7 @@ class Course::UserRegistrationService
   # @param [Course::Registration] registration The registration object to be processed.
   # @return [CourseUser] The Course User which was created or updated from the registration.
   def register_without_registration_code(registration)
-    user_emails = registration.user.emails
-    invitations = load_active_invitations(registration.course)
-    invitation = invitations.find_by(user_email: user_emails)
+    invitation = registration.course.invitations.pending_acceptance.for_user(registration.user)
     if invitation.nil?
       register_course_user(registration)
     else
@@ -132,7 +130,7 @@ class Course::UserRegistrationService
   #   valid.
   # @return [nil] If the code is invalid.
   def claim_course_invitation_code(registration)
-    invitations = load_active_invitations(registration.course)
+    invitations = registration.course.invitations.pending_acceptance
     invitation = invitations.find_by(invitation_key: registration.code)
     if invitation.nil?
       invalid_code(registration)
@@ -149,16 +147,6 @@ class Course::UserRegistrationService
   def invalid_code(registration)
     registration.errors.add(:code, I18n.t('course.user_registrations.create.invalid_code'))
     nil
-  end
-
-  # Loads active invitations given a course.
-  #
-  # @param [Course] course The course to load invitations for.
-  # @return [ActiveRecord::CollectionProxy]
-  def load_active_invitations(course)
-    Course::UserInvitation.joins { course_user }.
-      where { course_user.course == course }.
-      where { course_user.workflow_state == 'invited' }
   end
 
   # Accepts the invitation specified, sets the registration's +course_user+ to be that found in

@@ -29,5 +29,18 @@ RSpec.feature 'Courses: Registration' do
         expect(page).not_to have_button('course.user_registrations.registration.register')
       end
     end
+
+    context 'when the user has been invited for the course' do
+      let(:user_email) { user.emails.first }
+      let!(:invitation) { create(:course_user_invitation, course: course, user_email: user_email) }
+
+      scenario 'user can enter the course' do
+        visit course_path(course)
+        expect(page).not_to have_button('.register')
+
+        click_button I18n.t('course.user_registrations.registration.enter_course')
+        expect(invitation.course_user.reload).to be_approved
+      end
+    end
   end
 end
