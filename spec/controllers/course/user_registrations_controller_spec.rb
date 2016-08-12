@@ -152,5 +152,28 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
         end
       end
     end
+
+    describe '#destroy' do
+      before { sign_in(user) }
+      let(:course_user_immutable_stub) do
+        stub = create(:course_user, course: course, user: user)
+        allow(stub).to receive(:destroy).and_return(false)
+        stub
+      end
+
+      subject { delete :destroy, course_id: course }
+
+      context 'when the user cannot cancel his registration' do
+        before do
+          controller.instance_variable_set(:@course_user, course_user_immutable_stub)
+          subject
+        end
+
+        it { is_expected.to redirect_to(course_path(course)) }
+        it 'sets an error flash message' do
+          expect(flash[:danger]).to eq('')
+        end
+      end
+    end
   end
 end

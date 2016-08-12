@@ -21,12 +21,36 @@ RSpec.feature 'Courses: Registration' do
       expect(page).not_to have_button('.register')
     end
 
-    context 'when the user is registered in the course' do
-      let!(:course_student) { create(:course_student, course: course, user: user) }
-      scenario 'Users cannot re-register for a course' do
-        visit course_path(course)
+    context 'when the user has requested to register for a course' do
+      let!(:requested_student) { create(:course_user, course: course, user: user) }
 
-        expect(page).not_to have_button('course.user_registrations.registration.register')
+      scenario 'user can cancel his registration request' do
+        visit course_path(course)
+        expect(page).not_to have_button(I18n.t('course.user_registrations.registration.register'))
+
+        click_link I18n.t('course.user_registrations.registration.deregister')
+        expect(current_path).to eq(course_path(course))
+        expect(page).to have_button(I18n.t('course.user_registrations.registration.register'))
+      end
+    end
+
+    context 'when the user has been approved' do
+      let!(:approved_student) { create(:course_student, course: course, user: user) }
+
+      scenario 'user cannot de-register or re-register for the course' do
+        visit course_path(course)
+        expect(page).not_to have_button(I18n.t('course.user_registrations.registration.register'))
+        expect(page).not_to have_link(I18n.t('course.user_registrations.registration.deregister'))
+      end
+    end
+
+    context 'when the user has been rejected' do
+      let!(:rejected_student) { create(:course_user, :rejected, course: course, user: user) }
+
+      scenario 'user cannot de-register or re-register for the course' do
+        visit course_path(course)
+        expect(page).not_to have_button(I18n.t('course.user_registrations.registration.register'))
+        expect(page).not_to have_link(I18n.t('course.user_registrations.registration.deregister'))
       end
     end
   end

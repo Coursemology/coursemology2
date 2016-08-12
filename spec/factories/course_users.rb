@@ -13,6 +13,9 @@ FactoryGirl.define do
     trait :invited do
       workflow_state :invited
     end
+    trait :rejected do
+      workflow_state :rejected
+    end
     trait :phantom do
       phantom true
     end

@@ -1,15 +1,14 @@
-= simple_form_for @registration, url: course_register_path(current_course) do |f|
-  - if current_course.course_users.exists?(user: current_user)
-    - disable_message = t('.already_registered')
-    - disabled = 'disabled'
-  - invitation = current_course.invitations.pending_acceptance.for_user(current_user)
-  - if invitation.present?
-    = f.hidden_field :code
-    = f.button :submit, value: t('.enter_course')
-  - else
-    div title=disable_message
+- if current_course_user.nil?
+  = simple_form_for @registration, url: course_register_path(current_course) do |f|
+    - invitation = current_course.invitations.pending_acceptance.for_user(current_user)
+    - if invitation.present?
+      = f.hidden_field :code
+      = f.button :submit, value: t('.enter_course')
+    - else
       div.input-group
-        = f.input :code, label: false, wrapper: false, placeholder: t('.registration_code'),
-                  disabled: disabled
+        = f.input :code, label: false, wrapper: false, placeholder: t('.registration_code')
         span.input-group-btn
-          = f.button :submit, value: t('.register'), class: 'register', disabled: disabled
+          = f.button :submit, value: t('.register'), class: 'register'
+- elsif current_course_user.requested? && can?(:deregister, current_course_user)
+  = delete_button(course_deregister_path(current_course)) do
+    = t('.deregister')
