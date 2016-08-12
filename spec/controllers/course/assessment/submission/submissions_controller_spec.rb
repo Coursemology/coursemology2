@@ -7,7 +7,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
   with_tenant(:instance) do
     let(:user) { create(:user) }
     let!(:course) { create(:course, creator: user) }
-    let(:assessment) { create(:assessment, :with_all_question_types, course: course) }
+    let(:assessment) { create(:assessment, :published, :with_all_question_types, course: course) }
     let!(:immutable_submission) do
       create(:course_assessment_submission, assessment: assessment, creator: user).tap do |stub|
         allow(stub).to receive(:save).and_return(false)
@@ -17,6 +17,19 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
     end
 
     before { sign_in(user) }
+
+    describe '#index' do
+      subject do
+        get :index, course_id: course, assessment_id: assessment
+      end
+
+      context 'when a student visits the page' do
+        let(:course) { create(:course) }
+        let(:user) { create(:course_student, course: course).user }
+
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+    end
 
     describe '#create' do
       subject do

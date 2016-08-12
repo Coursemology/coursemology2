@@ -12,6 +12,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   delegate_to_service(:load_or_create_answers)
 
   def index
+    authorize!(:manage, @assessment)
     @submissions = @submissions.includes(:answers, experience_points_record: :course_user)
     @course_students = current_course.course_users.students.with_approved_state.order_alphabetically
   end

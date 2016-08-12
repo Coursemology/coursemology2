@@ -7,6 +7,7 @@ RSpec.describe Course::Assessment do
     subject { Ability.new(user) }
     let(:course) { create(:course) }
     let(:course_user) { create(:course_student, course: course) }
+    let(:coursemate) { create(:course_student, course: course) }
     let(:draft_assessment) do
       create(:course_assessment_assessment, :with_all_question_types, course: course, draft: true)
     end
@@ -20,6 +21,14 @@ RSpec.describe Course::Assessment do
     let(:submitted_submission) do
       create(:course_assessment_submission, :submitted, assessment: published_assessment,
                                                         creator: course_user.user)
+    end
+    let(:coursemate_attempting_submission) do
+      create(:course_assessment_submission, :attempting, assessment: published_assessment,
+                                                         creator: coursemate.user)
+    end
+    let(:coursemate_submitted_submission) do
+      create(:course_assessment_submission, :submitted, assessment: published_assessment,
+                                                        creator: coursemate.user)
     end
 
     context 'when the user is a Course Student' do
@@ -35,6 +44,8 @@ RSpec.describe Course::Assessment do
       it { is_expected.to be_able_to(:create, attempting_submission) }
       it { is_expected.to be_able_to(:update, attempting_submission) }
       it { is_expected.to be_able_to(:read, submitted_submission) }
+      it { is_expected.not_to be_able_to(:update, coursemate_attempting_submission) }
+      it { is_expected.not_to be_able_to(:read, coursemate_submitted_submission) }
     end
 
     context 'when the user is a Course Staff' do

@@ -46,7 +46,7 @@ module Course::Assessment::AssessmentAbility
 
   def submission_attempting_hash(user)
     { workflow_state: 'attempting' }.tap do |result|
-      result.reverse_merge(experience_points_record: { course_user: { user_id: user.id } }) if user
+      result.reverse_merge!(experience_points_record: { course_user: { user_id: user.id } }) if user
     end
   end
 
@@ -89,7 +89,7 @@ module Course::Assessment::AssessmentAbility
   end
 
   def allow_staff_grade_submissions
-    can [:read, :reattempt_question],
+    can [:read, :update, :reattempt_question],
         Course::Assessment::Submission, assessment: assessment_course_staff_hash
     can :grade, Course::Assessment::Submission, submission_submitted_or_graded_hash.merge(
       assessment: assessment_course_staff_hash
