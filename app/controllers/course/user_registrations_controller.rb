@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::UserRegistrationsController < Course::ComponentController
   before_action :ensure_unregistered_user, only: [:create]
-  before_action :authorize_register!
+  before_action :authorize_register!, only: [:create]
   before_action :load_registration
 
   def create # :nodoc:
@@ -11,6 +11,19 @@ class Course::UserRegistrationsController < Course::ComponentController
       create_success
     else
       render 'course/courses/show'
+    end
+  end
+
+  # Allow users to withdraw their requests to register for a course that are pending
+  # approval/rejection.
+  def destroy
+    @course_user ||= current_course_user
+    authorize!(:deregister, @course_user)
+    if @course_user.destroy
+      redirect_to course_path(current_course), success: t('.success')
+    else
+      redirect_to course_path(current_course),
+                  danger: @course_user.errors.full_messages.to_sentence
     end
   end
 
