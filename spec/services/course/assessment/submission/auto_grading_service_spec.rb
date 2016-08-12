@@ -25,6 +25,35 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
           expect(gradable_answers.map(&:reload).all?(&:graded?)).to be(false)
         end
       end
+
+      context 'when assessment is autograded' do
+        let(:assessment) do
+          create(:course_assessment_assessment, :published_with_mcq_question, :autograded,
+                 question_count: 2)
+        end
+        let(:submission) do
+          create(:course_assessment_submission, assessment: assessment)
+        end
+        before do
+          # Create one correct and one wrong answer.
+          create(:course_assessment_answer_multiple_response, :with_all_correct_options,
+                 question: assessment.questions.first,
+                 submission: submission)
+          create(:course_assessment_answer_multiple_response, :with_all_wrong_options,
+                 question: assessment.questions.last,
+                 submission: submission)
+          submission.finalise!
+          submission.save!
+          subject.grade(submission)
+        end
+
+        it 'gives the correct experience points' do
+          expect(submission).to be_graded
+
+          correct_exp = (assessment.time_bonus_exp + assessment.base_exp).to_f / 2
+          expect(submission.points_awarded).to eq(correct_exp.to_i)
+        end
+      end
     end
 
     context 'when a sub job fails' do

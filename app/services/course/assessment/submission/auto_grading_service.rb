@@ -69,7 +69,6 @@ class Course::Assessment::Submission::AutoGradingService
   end
 
   def publish_grade(submission)
-    submission.answers.select(&:submitted?).each(&:publish!)
     submission.points_awarded = calculate_exp(submission).to_i
     submission.publish!
   end
