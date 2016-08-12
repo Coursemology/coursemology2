@@ -3,6 +3,10 @@ FactoryGirl.define do
   sequence(:course_assessment_assessment_name) { |n| "Assessment #{n}" }
   factory :course_assessment_assessment, class: Course::Assessment, aliases: [:assessment],
                                          parent: :course_lesson_plan_item do
+    transient do
+      question_count 1
+    end
+
     tab do
       category = course.assessment_categories.first
       category.try(:tabs).try(:first) || build(:course_assessment_tab, course: course)
@@ -17,33 +21,41 @@ FactoryGirl.define do
     end
 
     trait :with_mcq_question do
-      after(:build) do |assessment|
-        question = build(:course_assessment_question_multiple_response,
-                         :multiple_choice, assessment: assessment)
-        assessment.questions << question.acting_as
+      after(:build) do |assessment, evalutor|
+        evalutor.question_count.downto(1).each do
+          question = build(:course_assessment_question_multiple_response,
+                           :multiple_choice, assessment: assessment)
+          assessment.questions << question.acting_as
+        end
       end
     end
 
     trait :with_mrq_question do
-      after(:build) do |assessment|
-        question = build(:course_assessment_question_multiple_response, assessment: assessment)
-        assessment.questions << question.acting_as
+      after(:build) do |assessment, evaluator|
+        evaluator.question_count.downto(1).each do
+          question = build(:course_assessment_question_multiple_response, assessment: assessment)
+          assessment.questions << question.acting_as
+        end
       end
     end
 
     trait :with_programming_question do
-      after(:build) do |assessment|
-        question = build(:course_assessment_question_programming, :auto_gradable,
-                         template_package: true, template_package_deferred: false,
-                         assessment: assessment)
-        assessment.questions << question.acting_as
+      after(:build) do |assessment, evaluator|
+        evaluator.question_count.downto(1).each do
+          question = build(:course_assessment_question_programming, :auto_gradable,
+                           template_package: true, template_package_deferred: false,
+                           assessment: assessment)
+          assessment.questions << question.acting_as
+        end
       end
     end
 
     trait :with_text_response_question do
-      after(:build) do |assessment|
-        question = build(:course_assessment_question_text_response, assessment: assessment)
-        assessment.questions << question.acting_as
+      after(:build) do |assessment, evaluator|
+        evaluator.question_count.downto(1).each do
+          question = build(:course_assessment_question_text_response, assessment: assessment)
+          assessment.questions << question.acting_as
+        end
       end
     end
 

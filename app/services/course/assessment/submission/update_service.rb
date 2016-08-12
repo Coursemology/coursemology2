@@ -37,13 +37,16 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   def update_params
-    @update_params ||= begin
-      params.require(:submission).permit(
-        *workflow_state_params,
-        :points_awarded,
-        answers_attributes: [:id] + update_answers_params
-      )
-    end
+    @update_params ||=
+      if unsubmit? # Attributes like grades and exp should be not updated.
+        params.require(:submission).permit(*workflow_state_params)
+      else
+        params.require(:submission).permit(
+          *workflow_state_params,
+          :points_awarded,
+          answers_attributes: [:id] + update_answers_params
+        )
+      end
   end
 
   private
@@ -60,8 +63,6 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   #
   # This varies depending on the permissions of the user.
   def update_answers_params
-    return [] if unsubmit? # Attributes like grades should be not updated.
-
     [].tap do |result|
       actable_attributes = [:id]
       actable_attributes.push(update_answer_type_params) if can?(:update, @submission)
