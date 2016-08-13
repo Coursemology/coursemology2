@@ -110,7 +110,7 @@ GEM
       momentjs-rails (>= 2.8.1)
     bootstrap_tokenfield_rails (0.12.1)
     builder (3.2.2)
-    bullet (5.2.0)
+    bullet (5.2.1)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.10.0)
     calculated_attributes (0.1.4)
@@ -148,7 +148,7 @@ GEM
       thor (~> 0.19.1)
       tins (>= 1.6.0, < 2)
     crass (1.0.2)
-    devise-multi_email (1.0.3)
+    devise-multi_email (1.0.4)
       devise
     devise_masquerade (0.1.8)
       devise (>= 2.1.0)
@@ -617,4 +617,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   1.11.2
+   1.12.5
