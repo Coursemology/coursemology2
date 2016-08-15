@@ -43,6 +43,7 @@ RSpec.describe ApplicationFormattersHelper do
       let(:language) { Coursemology::Polyglot::Language::Python::Python2Point7 }
       let(:snippet) do
         <<-PYTHON
+          # '1' < "2" is True
           def hello:
             pass
         PYTHON
@@ -54,8 +55,8 @@ RSpec.describe ApplicationFormattersHelper do
       end
 
       it 'enumerates every line' do
-        expect(formatted_block).to have_tag('td.line-number', count: 3)
-        expect(formatted_block).to have_tag('td.line-content', count: 3)
+        expect(formatted_block).to have_tag('td.line-number', count: 4)
+        expect(formatted_block).to have_tag('td.line-content', count: 4)
       end
 
       it 'highlights the keywords' do
@@ -67,11 +68,17 @@ RSpec.describe ApplicationFormattersHelper do
         let(:formatted_block) { helper.format_code_block(snippet, language, line_start) }
 
         it 'highlights the code with the given start line number' do
-          expect(formatted_block).to have_tag('td.line-number', count: 3)
+          expect(formatted_block).to have_tag('td.line-number', count: 4)
           expect(formatted_block).to have_tag('td.line-number', with: { 'data-line-number': '5' })
           expect(formatted_block).to have_tag('td.line-number', with: { 'data-line-number': '6' })
           expect(formatted_block).to have_tag('td.line-number', with: { 'data-line-number': '7' })
+          expect(formatted_block).to have_tag('td.line-number', with: { 'data-line-number': '8' })
         end
+      end
+
+      it 'does not escape code' do
+        expect(formatted_block).to have_text('<')
+        expect(formatted_block).to have_text('"')
       end
     end
 
