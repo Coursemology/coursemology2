@@ -7,6 +7,10 @@ class Course::Condition::Achievement < ActiveRecord::Base
     Course::Condition::Achievement.on_dependent_status_change(achievement)
   end
 
+  Course::UserAchievement.after_destroy do |achievement|
+    Course::Condition::Achievement.on_dependent_status_change(achievement)
+  end
+
   validate :validate_achievement_condition, if: :achievement_id_changed?
 
   belongs_to :achievement, class_name: Course::Achievement.name, inverse_of: :achievement_conditions
@@ -32,7 +36,7 @@ class Course::Condition::Achievement < ActiveRecord::Base
   end
 
   def self.on_dependent_status_change(achievement)
-    return if achievement.changes.empty?
+    return unless achievement.changes.any? || achievement.destroyed?
     achievement.execute_after_commit { evaluate_conditional_for(achievement.course_user) }
   end
 
