@@ -31,7 +31,7 @@ class Course::Assessment::Answer::MultipleResponseAutoGradingService < \
   # @param [Course::Assessment::Question::MultipleResponse] question The question being attempted.
   # @param [Course::Assessment::Answer::MultipleResponse] answer The answer from the user.
   def grade_any_correct(question, answer)
-    correct_selection = question.options.correct & answer.options
+    correct_selection = question.options.correct & answer.options.uniq
     correct = !correct_selection.empty? && (correct_selection.length == answer.options.length)
 
     [correct, grade_for(question, correct), explanations_for(answer.options)]
@@ -43,7 +43,7 @@ class Course::Assessment::Answer::MultipleResponseAutoGradingService < \
   # @param [Course::Assessment::Answer::MultipleResponse] answer The answer from the user.
   def grade_all_correct(question, answer)
     correct_answers = question.options.correct
-    correct_selection = correct_answers & answer.options
+    correct_selection = correct_answers & answer.options.uniq
     correct = (correct_selection.length == correct_answers.length) &&
               (correct_selection.length == answer.options.length)
 
