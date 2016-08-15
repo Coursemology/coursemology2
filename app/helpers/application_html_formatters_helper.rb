@@ -74,7 +74,7 @@ module ApplicationHTMLFormattersHelper
   #   should be provided if the code fragment does not start on the first line.
   def format_code_block(code, language = nil, starting_line_number = 1)
     code = html_escape(code) unless code.html_safe?
-    code = code.gsub(/\r\n|\r/, "\n")
+    code = code.gsub(/\r\n|\r/, "\n").html_safe
     code = content_tag(:pre, lang: language ? language.rouge_lexer : nil) do
       content_tag(:code) do
         code
