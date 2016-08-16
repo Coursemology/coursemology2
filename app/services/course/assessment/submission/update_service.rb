@@ -96,7 +96,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def submit_answer
     if @submission.update_attributes(update_params)
-      job = find_and_grade_answer
+      job = grade_and_reattempt_answer(@submission.answers.find(answer_id_param))
 
       respond_to do |format|
         format.html { redirect_to job_path(job.job) }
@@ -107,10 +107,9 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     end
   end
 
-  def find_and_grade_answer
-    answer = @submission.answers.find(answer_id_param)
+  def grade_and_reattempt_answer(answer)
     answer.finalise! if answer.attempting?
-    answer.auto_grade!(edit_submission_path)
+    answer.auto_grade!(edit_submission_path, true)
   end
 
   def unsubmit?

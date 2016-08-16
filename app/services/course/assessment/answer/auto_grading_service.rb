@@ -5,8 +5,10 @@ class Course::Assessment::Answer::AutoGradingService
     # +Course::Assessment::Answer::AutoGrading+ object.
     #
     # @param [Course::Assessment::Answer] answer The answer to be graded.
-    def grade(answer)
-      pick_grader(answer.question).grade(answer)
+    # @param [Boolean] reattempt Whether to reattempt the answer after grading.
+    def grade(answer, reattempt = false)
+      answer = pick_grader(answer.question).grade(answer)
+      save!(answer, reattempt)
     end
 
     private
@@ -19,6 +21,17 @@ class Course::Assessment::Answer::AutoGradingService
     def pick_grader(question)
       question.auto_grader
     end
+
+    # Save the graded answer, a new answer will be created if reattempt is set to true.
+    #
+    # @param [Course::Assessment::Answer] answer The answer to be graded.
+    # @param [Boolean] reattempt Whether to reattempt the answer after grading.
+    def save!(answer, reattempt)
+      Course::Assessment::Answer.transaction do
+        answer.save!
+        answer.question.attempt(answer.submission, answer).save! if reattempt
+      end
+    end
   end
 
   # Grades into the given +Course::Assessment::Answer::AutoGrading+ object. This does not do
@@ -28,10 +41,11 @@ class Course::Assessment::Answer::AutoGradingService
   # database.
   #
   # @param [Course::Assessment::Answer] answer The answer to be graded.
-  # @return [Boolean] True if the grading could be saved.
+  # @return [Course::Assessment::Answer] The graded answer. Note that this answer is not persisted
+  #   yet.
   def grade(answer)
     answer.publish!
     answer.grader = User.system
-    answer.save
+    answer
   end
 end

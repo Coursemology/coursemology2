@@ -76,6 +76,17 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
               expect(answer.grade).to eq(question.maximum_grade)
               expect(answer).to be_correct
             end
+
+            context 'when results are saved' do
+              before { subject.save! }
+
+              it 'saves the specific auto_grading' do
+                auto_grading = answer.reload.auto_grading.actable
+
+                expect(auto_grading).to be_present
+                expect(auto_grading.test_results).to be_present
+              end
+            end
           end
 
           context 'when the answer is wrong' do

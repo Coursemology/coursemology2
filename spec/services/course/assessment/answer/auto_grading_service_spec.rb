@@ -22,13 +22,13 @@ RSpec.describe Course::Assessment::Answer::AutoGradingService do
 
     describe '#grade' do
       it "sets the answer's status to graded" do
-        expect(subject.grade(answer)).to eq(true)
-        expect(answer).to be_graded
+        result = subject.grade(answer)
+        expect(result).to be_graded
       end
 
       it "sets the answer's grader to the system account" do
-        expect(subject.grade(answer)).to eq(true)
-        expect(answer.grader).to eq(User.system)
+        result = subject.grade(answer)
+        expect(result.grader).to eq(User.system)
       end
     end
   end
