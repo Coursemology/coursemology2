@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/ErwinM/acts_as_tenant.git
-  revision: 960d3df55bb1230c9050f97e12a1ea8813f69fc3
+  revision: f87a619d79624e53342ab3c4a361607be1054334
   specs:
-    acts_as_tenant (0.3.9)
+    acts_as_tenant (0.4.0)
       rails (>= 3.1)
       request_store (>= 1.0.5)
 
@@ -96,7 +96,7 @@ GEM
     anbt-sql-formatter (0.0.4)
     arel (6.0.3)
     ast (2.3.0)
-    autoprefixer-rails (6.4.0.1)
+    autoprefixer-rails (6.4.0.2)
       execjs
     awesome_print (1.7.0)
     bcrypt (3.1.11)
@@ -110,7 +110,7 @@ GEM
       momentjs-rails (>= 2.8.1)
     bootstrap_tokenfield_rails (0.12.1)
     builder (3.2.2)
-    bullet (5.2.1)
+    bullet (5.3.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.10.0)
     calculated_attributes (0.1.4)
@@ -205,7 +205,7 @@ GEM
       parser (>= 2.2.3.0)
       term-ansicolor (>= 1.3.2)
       terminal-table (>= 1.5.1)
-    image_optim (0.23.0)
+    image_optim (0.24.0)
       exifr (~> 1.2, >= 1.2.2)
       fspath (~> 3.0)
       image_size (~> 1.3)
@@ -334,7 +334,7 @@ GEM
     rb-kqueue (0.2.4)
       ffi (>= 0.5.0)
     request_store (1.3.1)
-    responders (2.2.0)
+    responders (2.3.0)
       railties (>= 4.2.0, < 5.1)
     rinku (2.0.0)
     rouge (1.11.1)
