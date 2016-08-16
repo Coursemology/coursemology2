@@ -28,7 +28,8 @@ module Course::MaterialsAbilityComponent
     end
 
     currently_valid_hashes.each do |properties|
-      can :read, Course::Material::Folder, course_all_course_users_hash.reverse_merge(properties)
+      can [:read, :download],
+          Course::Material::Folder, course_all_course_users_hash.reverse_merge(properties)
     end
   end
 
