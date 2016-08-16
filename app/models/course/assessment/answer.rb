@@ -60,7 +60,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
 
     ensure_auto_grading!
     Course::Assessment::Answer::AutoGradingJob.
-      perform_later(auto_grading, redirect_to_path).tap do |job|
+      perform_later(self, redirect_to_path).tap do |job|
       auto_grading.job_id = job.job_id
       save!
     end

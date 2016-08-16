@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::AutoGradingService
   class << self
-    # Picks the grader for the given grading, then grades into the given
+    # Picks the grader for the given answer, then grades into the given
     # +Course::Assessment::Answer::AutoGrading+ object.
     #
-    # @param [Course::Assessment::Answer::AutoGrading] auto_grading The object to store grading
-    #   results in.
-    def grade(auto_grading)
-      pick_grader(auto_grading.answer.question).grade(auto_grading)
+    # @param [Course::Assessment::Answer] answer The answer to be graded.
+    def grade(answer)
+      pick_grader(answer.question).grade(answer)
     end
 
     private
@@ -28,12 +27,11 @@ class Course::Assessment::Answer::AutoGradingService
   # Subclasses should call this implementation after they are done to persist the changes to the
   # database.
   #
-  # @param [Course::Assessment::Answer::AutoGrading] auto_grading The object to store grading
-  #   results in.
+  # @param [Course::Assessment::Answer] answer The answer to be graded.
   # @return [Boolean] True if the grading could be saved.
-  def grade(auto_grading)
-    auto_grading.answer.publish!
-    auto_grading.answer.grader = User.system
-    auto_grading.save
+  def grade(answer)
+    answer.publish!
+    answer.grader = User.system
+    answer.save
   end
 end

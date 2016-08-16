@@ -15,7 +15,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
     let(:question_traits) { nil }
     let(:submission_traits) { [{ auto_grade: false }] }
     let(:answer_traits) { nil }
-    let(:grading) do
+    let!(:grading) do
       create(:course_assessment_answer_auto_grading, answer: answer)
     end
 
@@ -24,7 +24,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
         let(:answer_traits) { :exact_match }
 
         it 'matches the entire answer' do
-          subject.grade(grading)
+          subject.grade(answer)
           expect(answer).to be_correct
           expect(answer.grade).to eq(question.solutions.exact_match.first.grade)
           expect(grading.result['messages']).to \
@@ -36,7 +36,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
         let(:answer_traits) { :keyword }
 
         it 'matches the keyword' do
-          subject.grade(grading)
+          subject.grade(answer)
           expect(answer).not_to be_correct
           expect(answer.grade).to eq(question.solutions.keyword.first.grade)
           expect(grading.result['messages']).to \
@@ -52,7 +52,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
           expected_grade = [question.solutions.keyword.map(&:grade).reduce(0, :+),
                             question.maximum_grade].min
 
-          subject.grade(grading)
+          subject.grade(answer)
           expect(answer).to be_correct
           expect(answer.grade).to eq(expected_grade)
           expect(grading.result['messages']).to \
@@ -64,7 +64,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
         let(:answer_traits) { :no_match }
 
         it 'matches nothing' do
-          subject.grade(grading)
+          subject.grade(answer)
           expect(answer.grade).to eq(0)
           expect(grading.result['messages']).to be_empty
         end

@@ -9,13 +9,13 @@ RSpec.describe Course::Assessment::Answer::AutoGradingJob do
     let!(:auto_grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
 
     it 'can be queued' do
-      expect { subject.perform_later(auto_grading) }.to \
+      expect { subject.perform_later(answer) }.to \
         have_enqueued_job(subject).exactly(:once)
     end
 
     it 'grades answers' do
-      subject.perform_now(auto_grading)
-      expect(auto_grading.answer).to be_graded
+      subject.perform_now(answer)
+      expect(answer).to be_graded
     end
   end
 end

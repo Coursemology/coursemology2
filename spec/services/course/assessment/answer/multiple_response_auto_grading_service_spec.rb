@@ -15,7 +15,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
     let(:question_traits) { nil }
     let(:submission_traits) { [{ auto_grade: false }] }
     let(:answer_traits) { nil }
-    let(:grading) do
+    let!(:grading) do
       create(:course_assessment_answer_auto_grading, answer: answer)
     end
 
@@ -25,7 +25,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { :with_all_correct_options }
 
           it 'marks the answer correct' do
-            subject.grade(grading)
+            subject.grade(answer)
             expect(answer.grade).to eq(question.maximum_grade)
             expect(answer).to be_correct
             expect(grading.result['messages']).
@@ -37,7 +37,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { :with_all_wrong_options }
 
           it 'marks the answer wrong' do
-            subject.grade(grading)
+            subject.grade(answer)
             expect(answer).not_to be_correct
             expect(answer.grade).to eq(0)
             expect(grading.result['messages']).
@@ -49,7 +49,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { [:with_all_correct_options, :with_all_wrong_options] }
 
           it 'marks the answer wrong' do
-            subject.grade(grading)
+            subject.grade(answer)
             expect(answer).not_to be_correct
             expect(answer.grade).to eq(0)
             expect(grading.result['messages']).
@@ -65,7 +65,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { :with_all_correct_options }
 
           it 'marks the answer correct' do
-            subject.grade(grading)
+            subject.grade(answer)
             expect(answer).to be_correct
             expect(answer.grade).to eq(question.maximum_grade)
             expect(grading.result['messages']).
@@ -77,7 +77,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { :with_all_wrong_options }
 
           it 'marks the answer wrong' do
-            subject.grade(grading)
+            subject.grade(answer)
             expect(answer).not_to be_correct
             expect(answer.grade).to eq(0)
             expect(grading.result['messages']).
@@ -89,7 +89,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { [:with_all_correct_options, :with_all_wrong_options] }
 
           it 'marks the answer wrong' do
-            subject.grade(grading)
+            subject.grade(answer)
             expect(answer).not_to be_correct
             expect(answer.grade).to eq(0)
             expect(grading.result['messages']).
@@ -101,7 +101,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           let(:answer_traits) { :with_one_correct_option }
 
           it 'marks the answer correct' do
-            subject.grade(grading)
+            subject.grade(answer)
             expect(answer).to be_correct
             expect(answer.grade).to eq(question.maximum_grade)
             expect(grading.result['messages']).

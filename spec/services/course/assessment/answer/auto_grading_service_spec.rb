@@ -8,10 +8,10 @@ RSpec.describe Course::Assessment::Answer::AutoGradingService do
       create(:course_assessment_answer_multiple_response, :submitted,
              submission_traits: [{ auto_grade: false }]).answer
     end
-    let(:auto_grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
+    let!(:auto_grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
 
     describe '.grade' do
-      subject { Course::Assessment::Answer::AutoGradingService.grade(auto_grading) }
+      subject { Course::Assessment::Answer::AutoGradingService.grade(answer) }
 
       it 'grades the answer' do
         subject
@@ -22,13 +22,13 @@ RSpec.describe Course::Assessment::Answer::AutoGradingService do
 
     describe '#grade' do
       it "sets the answer's status to graded" do
-        expect(subject.grade(auto_grading)).to eq(true)
-        expect(auto_grading.answer).to be_graded
+        expect(subject.grade(answer)).to eq(true)
+        expect(answer).to be_graded
       end
 
       it "sets the answer's grader to the system account" do
-        expect(subject.grade(auto_grading)).to eq(true)
-        expect(auto_grading.answer.grader).to eq(User.system)
+        expect(subject.grade(answer)).to eq(true)
+        expect(answer.grader).to eq(User.system)
       end
     end
   end

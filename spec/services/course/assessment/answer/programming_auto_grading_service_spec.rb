@@ -33,7 +33,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
       end
       let(:submission_traits) { [{ auto_grade: false }] }
       let(:answer_traits) { [{ file_count: 1 }] }
-      let(:grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
+      let!(:grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
 
       context 'with a test report' do
         before do
@@ -46,7 +46,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
         end
 
         describe '#grade' do
-          subject { super().grade(grading) }
+          subject { super().grade(answer) }
           let(:answer_contents) { 'test code ' + SecureRandom.hex }
           let(:answer_traits) { [{ file_contents: [answer_contents] }] }
 
@@ -118,7 +118,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
         end
 
         describe '#grade' do
-          subject { super().grade(grading) }
+          subject { super().grade(answer) }
 
           it 'sets grade to 0' do
             subject

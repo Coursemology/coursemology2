@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::TextResponseAutoGradingService < \
   Course::Assessment::Answer::AutoGradingService
-  def grade(auto_grading)
-    auto_grading.answer.correct, auto_grading.answer.grade, messages =
-      grade_answer(auto_grading.answer.actable)
-    auto_grading.result = { messages: messages }
-    super(auto_grading)
+  def grade(answer)
+    answer.correct, answer.grade, messages = grade_answer(answer.actable)
+    answer.auto_grading.result = { messages: messages }
+    super(answer)
   end
 
   private
