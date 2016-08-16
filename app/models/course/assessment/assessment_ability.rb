@@ -70,7 +70,7 @@ module Course::Assessment::AssessmentAbility
     can :create, Course::Assessment::Submission,
         experience_points_record: { course_user: { user_id: user.id } }
     can :update, Course::Assessment::Submission, submission_attempting_hash(user)
-    can [:read, :reattempt_question], Course::Assessment::Submission,
+    can [:read, :reload_answer], Course::Assessment::Submission,
         experience_points_record: { course_user: { user_id: user.id } }
   end
 
@@ -89,7 +89,7 @@ module Course::Assessment::AssessmentAbility
   end
 
   def allow_staff_grade_submissions
-    can [:read, :update, :reattempt_question],
+    can [:read, :update, :reload_answer],
         Course::Assessment::Submission, assessment: assessment_course_staff_hash
     can :grade, Course::Assessment::Submission, submission_submitted_or_graded_hash.merge(
       assessment: assessment_course_staff_hash

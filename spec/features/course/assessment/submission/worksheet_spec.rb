@@ -36,19 +36,11 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
         expect(page).to have_checked_field(option)
       end
 
-      scenario 'I can submit and reattempt programming questions', js: true do
+      scenario 'I can submit programming questions', js: true do
         programming_question
         submission
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
-        expect(page).to have_selector('.btn.submit-answer', count: 1)
-
-        answer = submission.reload.answers.find_by(question_id: programming_question.acting_as.id)
-        answer.finalise! && answer.save!
-
-        visit edit_course_assessment_submission_path(course, assessment, submission)
-        click_link I18n.t('course.assessment.answer.worksheet.reattempt')
-
         expect(page).to have_selector('.btn.submit-answer', count: 1)
       end
 
