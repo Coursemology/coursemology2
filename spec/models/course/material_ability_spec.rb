@@ -37,6 +37,12 @@ RSpec.describe Course::Material do
       it { is_expected.not_to be_able_to(:show, ended_material) }
       it { is_expected.to be_able_to(:show, started_linked_material) }
       it { is_expected.not_to be_able_to(:show, not_started_linked_material) }
+
+      it { is_expected.to be_able_to(:download, valid_material.folder) }
+      it { is_expected.not_to be_able_to(:download, not_started_material.folder) }
+      it { is_expected.not_to be_able_to(:download, ended_material.folder) }
+      it { is_expected.to be_able_to(:download, started_linked_material.folder) }
+      it { is_expected.not_to be_able_to(:download, not_started_linked_material.folder) }
     end
 
     context 'when the user is a Course Staff' do

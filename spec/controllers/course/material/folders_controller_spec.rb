@@ -60,6 +60,15 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
         subject
         expect(controller.instance_variable_get(:@materials)).to contain_exactly(material)
       end
+
+      context 'when the user is a student' do
+        let(:user) { create(:course_student, course: course).user }
+
+        it 'downloads all the files in current folder' do
+          subject
+          expect(controller.instance_variable_get(:@materials)).to contain_exactly(material)
+        end
+      end
     end
   end
 end
