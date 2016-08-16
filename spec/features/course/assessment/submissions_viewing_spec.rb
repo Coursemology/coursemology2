@@ -73,9 +73,12 @@ RSpec.describe 'Course: Submissions Viewing' do
       let(:user) { create(:course_student, course: course).user }
 
       scenario 'I can view my submitted and graded submissions' do
+        # Attach a submission of each trait to a unique assessment
+        assessments = create_list(:course_assessment_assessment, 3, course: course)
         attempting_submission, submitted_submission, graded_submission =
-          [:attempting, :submitted, :graded].map do |trait|
-            create(:course_assessment_submission, trait, assessment: assessment, creator: user)
+          assessments.zip([:attempting, :submitted, :graded]).map do |assessment, trait|
+            create(:course_assessment_submission, trait,
+                   assessment: assessment, creator: user)
           end
 
         visit course_submissions_path(course)
@@ -86,7 +89,8 @@ RSpec.describe 'Course: Submissions Viewing' do
           within find(content_tag_selector(submission)) do
             expect(page).to have_link(
               I18n.t('course.assessment.submissions.submission.view'),
-              href: edit_course_assessment_submission_path(course, assessment, submission)
+              href: edit_course_assessment_submission_path(course, submission.assessment,
+                                                           submission)
             )
           end
         end

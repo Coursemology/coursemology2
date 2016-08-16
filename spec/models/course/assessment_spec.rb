@@ -284,11 +284,12 @@ RSpec.describe Course::Assessment do
         create(:course_assessment_submission, assessment: assessment, creator: user1)
       end
       let(:user2) { create(:user) }
+      let(:assessment2) { create(:assessment, *assessment_traits, course: course) }
       let(:submission2) do
         create(:course_assessment_submission, assessment: assessment, creator: user2)
       end
       let(:submission3) do
-        create(:course_assessment_submission, assessment: assessment, creator: user2)
+        create(:course_assessment_submission, assessment: assessment2, creator: user2)
       end
 
       it 'returns all assessments' do
@@ -310,8 +311,8 @@ RSpec.describe Course::Assessment do
         submission2
         submission3
 
-        assessment = course.assessments.with_submissions_by(user2).first
-        submissions = assessment.submissions
+        assessments = course.assessments.with_submissions_by(user2)
+        submissions = assessments.map(&:submissions).flatten
         expect(submissions).to contain_exactly(submission2, submission3)
         expect(submissions.each_cons(2).all? { |a, b| a.created_at >= b.created_at }).to be(true)
       end
