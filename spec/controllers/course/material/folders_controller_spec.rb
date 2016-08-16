@@ -50,5 +50,16 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
         end
       end
     end
+
+    describe '#download' do
+      let(:folder) { create(:folder, course: course, parent: course.root_folder) }
+      let!(:material) { create(:course_material, folder: folder) }
+      subject { get :download, course_id: course, id: folder }
+
+      it 'downloads all the files in current folder' do
+        subject
+        expect(controller.instance_variable_get(:@materials)).to contain_exactly(material)
+      end
+    end
   end
 end
