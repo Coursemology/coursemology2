@@ -1,3 +1,4 @@
+//= require helpers/event_helpers
 //= require helpers/form_helpers
 //= require helpers/discussion/post_helpers
 
@@ -45,10 +46,10 @@
   }
 
   showAnswerCommentForm(document);
-  $(document).on('DOMNodeInserted', function(e) {
-    showAnswerCommentForm(e.target);
-  });
+  EVENT_HELPERS.onNodesInserted($(DOCUMENT_SELECTOR), showAnswerCommentForm);
+
   $(document).on('click', DOCUMENT_SELECTOR + '.comments .reply-comment', onCommentReply);
   DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR + '.comments ');
 })(jQuery, FORM_HELPERS,
-           DISCUSSION_POST_HELPERS);
+           DISCUSSION_POST_HELPERS,
+           EVENT_HELPERS);
