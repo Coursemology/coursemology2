@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160811064336) do
+ActiveRecord::Schema.define(version: 20160815141617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -166,6 +166,7 @@ ActiveRecord::Schema.define(version: 20160811064336) do
     t.datetime "created_at",     :null=>false
     t.datetime "updated_at",     :null=>false
   end
+  add_index "course_assessment_submissions", ["assessment_id", "creator_id"], :name=>"unique_assessment_id_and_creator_id", :unique=>true
 
   create_table "course_assessment_answers", force: :cascade do |t|
     t.integer  "actable_id"
