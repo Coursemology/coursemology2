@@ -1,9 +1,6 @@
 - if answer.submission.attempting? && answer.specific.is_a?(Course::Assessment::Answer::Programming)
   - if answer.attempting?
     = base_answer_form.button :button, t('common.submit'), value: answer.id, name: 'attempting_answer_id', class: 'submit-answer'
-  - elsif !answer.correct?
-    - path = reattempt_question_course_assessment_submission_path(current_course, @assessment, @submission, answer_id: answer.id)
-    = link_to t('.reattempt'), path, remote: true, method: :post, class: ['btn', 'btn-default']
 
 h3 = t('.comments')
 div.comments id=comments_container_id(answer)

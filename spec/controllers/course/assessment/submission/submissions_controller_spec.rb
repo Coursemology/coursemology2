@@ -78,15 +78,15 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       end
     end
 
-    describe '#reattempt_question' do
+    describe '#reload_answer' do
       let(:submission) do
         create(:course_assessment_submission, assessment: assessment, creator: user)
       end
 
       context 'when answer_id does not exist' do
         subject do
-          post :reattempt_question, course_id: course, assessment_id: assessment,
-                                    id: submission.id, answer_id: -1, format: :js
+          post :reload_answer, course_id: course, assessment_id: assessment,
+                               id: submission.id, answer_id: -1, format: :js
         end
 
         it { is_expected.to have_http_status(:bad_request) }

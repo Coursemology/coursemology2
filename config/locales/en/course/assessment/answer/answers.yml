@@ -2,15 +2,12 @@ en:
   course:
     assessment:
       answer:
-        reattempt: 'Reattempt'
         worksheet:
           comments: 'Comments'
-          reattempt: :'course.assessment.answer.reattempt'
         comments_footer:
           comment: 'Comment'
         guided:
           continue: 'Continue'
-          reattempt: :'course.assessment.answer.reattempt'
         grading:
           grading: 'Grading'
           maximum_grade: '/ %{maximum_grade}'
