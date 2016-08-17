@@ -19,6 +19,12 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
     let(:submission) do
       create(:course_assessment_submission, assessment: assessment, creator: student)
     end
+    let(:programming_assessment) do
+      create(:assessment, :guided, :published_with_programming_question, course: course)
+    end
+    let(:programming_assessment_submission) do
+      create(:course_assessment_submission, assessment: programming_assessment, creator: student)
+    end
 
     context 'As a Course Student' do
       let(:user) { student }
@@ -129,6 +135,16 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         wait_for_job
         visit current_path
         expect(page).to have_selector('td', text: 'graded')
+      end
+
+      # Feature spec does not fully test the logic (but the existence of the button)
+      # This is because the logic of question reset is tested in +worksheet_spec.rb+.
+      scenario 'I can see the button to reset my answer to a programming question', js: true do
+        programming_assessment_submission
+
+        visit edit_course_assessment_submission_path(course, programming_assessment,
+                                                     programming_assessment_submission)
+        expect(page).to have_selector('.btn.reset-answer', count: 1)
       end
     end
 

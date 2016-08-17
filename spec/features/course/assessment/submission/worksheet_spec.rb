@@ -15,8 +15,11 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
     let(:submission) do
       create(:course_assessment_submission, assessment: assessment, creator: student)
     end
-    let(:programming_question) do
-      create(:course_assessment_question_programming, assessment: assessment)
+    let(:programming_assessment) do
+      create(:assessment, :worksheet, :published_with_programming_question, course: course)
+    end
+    let(:programming_assessment_submission) do
+      create(:course_assessment_submission, assessment: programming_assessment, creator: student)
     end
 
     context 'As a Course Student' do
@@ -37,11 +40,38 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
       end
 
       scenario 'I can submit programming questions', js: true do
-        programming_question
-        submission
-
-        visit edit_course_assessment_submission_path(course, assessment, submission)
+        programming_assessment_submission
+        visit edit_course_assessment_submission_path(course, programming_assessment,
+                                                     programming_assessment_submission)
         expect(page).to have_selector('.btn.submit-answer', count: 1)
+      end
+
+      scenario 'I can reset my answer to a programming question', js: true do
+        programming_question = programming_assessment.questions.first
+        programming_answer = create(:course_assessment_answer_programming,
+                                    assessment: programming_assessment,
+                                    question: programming_question,
+                                    creator: student,
+                                    file_count: 1)
+        programming_submission = programming_answer.acting_as.submission
+
+        # Modify programming file content
+        file = programming_answer.files.first
+        file.content = 'foooo'
+        file.save
+
+        # Reset answer
+        visit edit_course_assessment_submission_path(course, programming_assessment,
+                                                     programming_submission)
+        expect(page).to have_selector('.btn.reset-answer', count: 1)
+        page.accept_alert I18n.t('course.assessment.answer.reset_answer.warning') do
+          click_link I18n.t('course.assessment.answer.reset_answer.button')
+        end
+        wait_for_ajax
+
+        # Check that answer has been reset to template files
+        expect(programming_answer.reload.files.first.content).
+          to eq(programming_question.specific.template_files.first.content)
       end
 
       scenario 'I can finalise my submission only once' do
