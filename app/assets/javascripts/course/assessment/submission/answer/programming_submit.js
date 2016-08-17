@@ -14,15 +14,12 @@
     var action = $form.attr('action');
     var method = $form.attr('method');
 
-    var $input = $('<input>').attr('type', 'hidden').
-    attr('name', 'attempting_answer_id').val(answer_id);
-    $form = $form.clone().append($input);
-
-    var data = $form.serialize();
+    var data = $form.serializeArray();
+    data.push({name: "attempting_answer_id", value: answer_id});
     $.ajax({
       url: action,
       method: method,
-      data: data,
+      data: $.param(data),
       dataType: 'json',
       global: false
     }).done(function(data) {
