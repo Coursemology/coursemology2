@@ -67,6 +67,16 @@ class Course::Assessment::Answer < ActiveRecord::Base
     end
   end
 
+  # Resets the answer by modifying the answer to the default.
+  #
+  # @return [Course::Assessment::Answer] The reset answer corresponding to the question. It is
+  #   required that the {Course::Assessment::Answer#question} property be the same as +self+.
+  # @raise [NotImplementedError] answer#reset_answer was not implemented.
+  def reset_answer
+    raise NotImplementedError unless actable.self_respond_to?(:reset_answer)
+    actable.reset_answer
+  end
+
   protected
 
   def finalise

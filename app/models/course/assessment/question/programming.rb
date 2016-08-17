@@ -51,8 +51,6 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
     clear_attribute_changes(:attachment)
   end
 
-  private
-
   # Copies the template files from this question to the specified answer.
   #
   # @param [Course::Assessment::Answer::Programming] answer The answer to copy the template files
@@ -62,6 +60,8 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
       template_file.copy_template_to(answer)
     end
   end
+
+  private
 
   # Queues the new question package for processing.
   #

@@ -13,4 +13,14 @@ class Course::Assessment::Answer::Programming < ActiveRecord::Base
   def to_partial_path
     'course/assessment/answer/programming/programming'.freeze
   end
+
+  # Specific implementation of Course::Assessment::Answer#reset_answer
+  def reset_answer
+    self.class.transaction do
+      files.clear
+      question.specific.copy_template_files_to(self)
+      raise ActiveRecord::Rollback unless save
+    end
+    acting_as
+  end
 end
