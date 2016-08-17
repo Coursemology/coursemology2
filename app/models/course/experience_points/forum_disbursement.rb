@@ -45,9 +45,12 @@ class Course::ExperiencePoints::ForumDisbursement < Course::ExperiencePoints::Di
   # @!attribute [rw] weekly_cap
   # The cap on the number of experience points to give out per week for forum participation.
   # This will be pro-rated based on the number of weeks in the period.
+  # A default of 100 is set. This can be made a setting when the needs arises.
   #
   # @return [Integer]
-  attr_reader :weekly_cap
+  def weekly_cap
+    @weekly_cap ||= 100
+  end
 
   # @param [String] weekly_cap_param
   def weekly_cap=(weekly_cap_param)
