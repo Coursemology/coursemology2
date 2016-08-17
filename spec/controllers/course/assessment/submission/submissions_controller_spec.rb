@@ -85,7 +85,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
       context 'when answer_id does not exist' do
         subject do
-          post :reload_answer, course_id: course, assessment_id: assessment,
+          post :reload_answer, course_id: course, assessment_id: assessment.id,
                                id: submission.id, answer_id: -1, format: :js
         end
 
