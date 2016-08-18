@@ -107,7 +107,7 @@ class Course::ExperiencePoints::ForumDisbursement < Course::ExperiencePoints::Di
   # @return [Integer]
   def actual_cap
     seconds_in_a_week = 604_800
-    @acutal_cap ||= (weekly_cap * (end_time - start_time) / seconds_in_a_week).ceil
+    @actual_cap ||= (weekly_cap * (end_time - start_time) / seconds_in_a_week).ceil
   end
 
   # Returns a hash that maps each student to the computed forum participation points.
