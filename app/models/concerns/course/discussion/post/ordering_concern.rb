@@ -34,7 +34,7 @@ module Course::Discussion::Post::OrderingConcern
     private
 
     def sort(post_id)
-      children_posts = @posts.select { |child_post| child_post.parent_id == post_id }
+      children_posts, @posts = @posts.partition { |child_post| child_post.parent_id == post_id }
       children_posts.map do |child_post|
         [child_post].push(sort(child_post.id))
       end
