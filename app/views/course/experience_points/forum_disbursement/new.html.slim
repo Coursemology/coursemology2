@@ -14,8 +14,7 @@ div.panel.panel-primary.forum-participation-search-panel
       = f.error_notification
       = f.input :start_time, as: :bootstrap_date_time
       = f.input :end_time, as: :bootstrap_date_time
-      = f.input :weekly_cap, as: :integer,
-                             input_html: { value: f.object.weekly_cap || 100 }
+      = f.input :weekly_cap, as: :integer
       = f.button :submit, t('.search')
 
 = simple_form_for @disbursement, url: forum_disbursement_course_users_path, method: :post do |f|
