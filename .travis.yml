@@ -11,10 +11,13 @@ matrix:
   allow_failures:
     - rvm: ruby-head
 env:
-  - testfolders=(spec/components spec/uploaders spec/services spec/requests spec/mailers spec/notifiers spec/libraries)
-  - testfolders=(spec/controllers spec/jobs)
-  - testfolders=(spec/models spec/helpers)
-  - testfolders=(spec/features)
+  global:
+    - CACHE_NAME=common_cache
+  matrix:
+    - testfolders=(spec/components spec/uploaders spec/services spec/requests spec/mailers spec/notifiers spec/libraries)
+    - testfolders=(spec/controllers spec/jobs)
+    - testfolders=(spec/models spec/helpers)
+    - testfolders=(spec/features)
 addons:
   postgresql: "9.4"
 bundler_args: "--jobs=3 --retry=3 --without development:production --deployment"
@@ -43,7 +46,7 @@ before_script:
 script:
   - bundle exec consistency_fail
   - bundle exec i18n-tasks health
-  - bundle exec rake spec ${testfolders[@]}
+  - "bundle exec rake spec ${testfolders[@]}"
 
 notifications:
   slack:
