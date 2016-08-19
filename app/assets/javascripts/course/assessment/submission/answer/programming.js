@@ -306,7 +306,9 @@
     showReplyButton(elements);
   }
 
-  showScriptedWidgets(document);
+  $(document).on('turbolinks:load', function() {
+    showScriptedWidgets(document);
+  });
   EVENT_HELPERS.onNodesInserted($(DOCUMENT_SELECTOR), showScriptedWidgets);
 
   $(document).on('click', DOCUMENT_SELECTOR + 'table.codehilite .add-annotation',

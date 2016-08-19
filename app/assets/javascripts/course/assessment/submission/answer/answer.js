@@ -47,7 +47,9 @@
     FORM_HELPERS.findFormFields($form).prop('disabled', false);
   }
 
-  showAnswerCommentForm(document);
+  $(document).on('turbolinks:load', function(x) {
+    showAnswerCommentForm(document);
+  });
   EVENT_HELPERS.onNodesInserted($(DOCUMENT_SELECTOR), showAnswerCommentForm);
 
   $(document).on('click', DOCUMENT_SELECTOR + '.comments .reply-comment', onCommentReply);
