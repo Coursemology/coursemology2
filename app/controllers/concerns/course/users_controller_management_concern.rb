@@ -9,10 +9,9 @@ module Course::UsersControllerManagementConcern
 
   def update # :nodoc:
     if update_course_user(course_user_params)
-      success = t('course.users.update.success', role: t("course.users.role.#{@course_user.role}"))
-      redirect_to update_redirect_path, success: success
+      flash.now[:success] = update_success_flash
     else
-      redirect_to update_redirect_path, danger: @course_user.errors.full_messages.to_sentence
+      flash.now[:danger] = @course_user.errors.full_messages.to_sentence
     end
   end
 
@@ -103,15 +102,27 @@ module Course::UsersControllerManagementConcern
     result
   end
 
-  # Selects an appropriate redirect path depending on the contents of the post data.
-  def update_redirect_path
-    if course_user_params.key?(:workflow_state)
-      course_users_requests_path(current_course)
-    elsif course_user_params.key?(:role)
-      course_users_staff_path(current_course)
+  # Returns the appropriate success flash message depending on the origin of the request.
+  def update_success_flash
+    if update_request_origin == :requests
+      t('course.users.update.request_success', name: @course_user.name,
+                                               workflow_state: @course_user.workflow_state,
+                                               role: t("course.users.role.#{@course_user.role}"))
     else
-      course_users_students_path(current_course)
+      t('course.users.update.success', name: @course_user.name)
     end
+  end
+
+  # Deduces which page the update request originated from.
+  def update_request_origin
+    @update_request_origin ||=
+      if course_user_params.key?(:workflow_state)
+        :requests
+      elsif course_user_params.key?(:role)
+        :staff
+      else
+        :students
+      end
   end
 
   # Selects an appropriate redirect path depending on the user being deleted.

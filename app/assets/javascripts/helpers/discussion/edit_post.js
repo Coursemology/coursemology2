@@ -121,8 +121,7 @@ var EDIT_DISCUSSION_POST = (function($, FORM_HELPERS,
    * @param {HTMLElement} form The form which was submitted
    */
   function onPostFormSubmitFailure(_, form) {
-    var $form = $(form);
-    FORM_HELPERS.findFormFields($form).prop('disabled', false);
+    FORM_HELPERS.enableForm($(form));
 
     // TODO: Implement error recovery.
   }

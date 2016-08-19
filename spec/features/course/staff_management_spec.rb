@@ -58,18 +58,23 @@ RSpec.feature 'Courses: Staff Management' do
         end
       end
 
-      scenario 'I can change staff role' do
-        staff_to_change = course_managers[Random.rand(course_managers.length)]
+      scenario 'I can change staff roles', js: true do
+        new_name = 'new staff name'
+        staff_to_change = course_managers.sample
         visit course_users_staff_path(course)
 
-        field = find_field('course_user_name', with: staff_to_change.name)
-        within field.find(:xpath, '../../../..') do
-          fill_in 'course_user_name', with: staff_to_change.name + '!'
-          select 'owner', from: 'course_user_role'
-          find_button('update').click
+        within find(content_tag_selector(staff_to_change)) do
+          fill_in 'course_user_name', with: new_name
+          find('.dropdown-toggle').click
+          find('ul.dropdown-menu.inner').find('span', text: 'owner').click
+          click_button 'update'
         end
 
-        expect(page).to have_field('course_user_name', with: staff_to_change.name + '!')
+        wait_for_ajax
+
+        expect(staff_to_change.reload).to be_owner
+        expect(staff_to_change.name).to eq(new_name)
+        expect(page).to have_text('course.users.update.success')
       end
 
       scenario 'I can add new staff' do
@@ -87,12 +92,12 @@ RSpec.feature 'Courses: Staff Management' do
       end
 
       scenario 'I can delete staff' do
-        staff_to_delete = course_managers[Random.rand(course_managers.length)]
+        staff_to_delete = course_managers.sample
         visit course_users_staff_path(course)
 
         expect do
           find_link(nil, href: course_user_path(course, staff_to_delete)).click
-        end.to change { page.all('form.edit_course_user').count }.by(-1)
+        end.to change { page.all('.course_user').count }.by(-1)
         expect(page).not_to have_field('course_user_name', with: staff_to_delete.name)
       end
     end

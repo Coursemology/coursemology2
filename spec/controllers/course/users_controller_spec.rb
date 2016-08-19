@@ -55,7 +55,10 @@ RSpec.describe Course::UsersController, type: :controller do
 
     describe '#update' do
       before { sign_in(user) }
-      subject { put :update, course_id: course, id: course_user, course_user: updated_course_user }
+      subject do
+        put :update, format: :js, course_id: course, id: course_user,
+                     course_user: updated_course_user
+      end
       let!(:course_user_to_update) { create(:course_user) }
       let(:updated_course_user) { { role: :teaching_assistant } }
 
@@ -82,7 +85,7 @@ RSpec.describe Course::UsersController, type: :controller do
             subject
           end
 
-          it { is_expected.to redirect_to(course_users_staff_path(course)) }
+          it { is_expected.to render_template(:update) }
           it 'sets an error flash message' do
             expect(flash[:danger]).to eq('')
           end

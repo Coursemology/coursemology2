@@ -47,25 +47,15 @@ var FORM_HELPERS = (function (){
   /**
    * Builds the form data from the given form.
    *
-   * This is a less sophisticated version of $.serialize() in that it only supports inputs and
-   * textareas.
-   *
    * @param {jQuery} $form The form being submitted.
-   * @returns {Object} The form data to be submitted.
+   * @returns {Array} The form data to be submitted.
    */
   function buildFormData ($form) {
-    var $fields = findFormFields($form, ':not(:disabled)');
-    var data = {
+    var data = $form.find(":input").serializeArray();
+    var token = {
       authenticity_token: $(document).find('meta[name="csrf-token"]').attr('content')
     };
-    $fields.each(function() {
-      if (this.name === '') {
-        return;
-      }
-
-      data[this.name] = $(this).val();
-    });
-
+    data.push(token);
     return data;
   };
 
@@ -108,12 +98,21 @@ var FORM_HELPERS = (function (){
   }
 
   /**
+   * Enables the input fields of a form.
+   *
+   * @param {jQuery} $form The form being enabled
+   */
+  function enableForm($form) {
+    findFormFields($form).prop('disabled', false);
+  }
+
+  /**
    * Finds the form which $element is a child of.
    *
    * @param {jQuery} $element The form's child element
    */
   function parentFormForElement($element) {
-    return $element.parents('div[data-action]:first');
+    return $element.parents('[data-action]:first');
   }
 
   /**
@@ -127,8 +126,8 @@ var FORM_HELPERS = (function (){
 
   return {
     renderFromPath: renderFromPath,
-    findFormFields: findFormFields,
     submitAndDisableForm: submitAndDisableForm,
+    enableForm: enableForm,
     parentFormForElement: parentFormForElement,
     removeParentForm: removeParentForm
   };
