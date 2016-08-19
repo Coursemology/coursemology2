@@ -112,7 +112,7 @@ var FORM_HELPERS = (function (){
    * @param {jQuery} $element The form's child element
    */
   function parentFormForElement($element) {
-    return $element.parents('div[data-action]:first');
+    return $element.parents('[data-action]:first');
   }
 
   /**
