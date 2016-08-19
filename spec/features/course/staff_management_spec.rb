@@ -60,7 +60,7 @@ RSpec.feature 'Courses: Staff Management' do
 
       scenario 'I can change staff roles', js: true do
         new_name = 'new staff name'
-        staff_to_change = course_managers[Random.rand(course_managers.length)]
+        staff_to_change = course_managers.sample
         visit course_users_staff_path(course)
 
         within find(content_tag_selector(staff_to_change)) do
@@ -92,7 +92,7 @@ RSpec.feature 'Courses: Staff Management' do
       end
 
       scenario 'I can delete staff' do
-        staff_to_delete = course_managers[Random.rand(course_managers.length)]
+        staff_to_delete = course_managers.sample
         visit course_users_staff_path(course)
 
         expect do

@@ -21,7 +21,7 @@ RSpec.feature 'Courses: Students' do
     end
 
     scenario "Course staff can update students' records", js: true do
-      student_to_update = course_students[Random.rand(course_students.length)]
+      student_to_update = course_students.sample
       new_name = 'NewNamePerson'.freeze
 
       visit course_users_students_path(course)
