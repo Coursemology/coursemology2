@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Discussion::TopicsComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
+  include Course::Discussion::TopicsHelper
 
   def self.display_name
     I18n.t('components.discussion.topics.name')
@@ -65,15 +66,5 @@ class Course::Discussion::TopicsComponent < SimpleDelegator
 
   def staff?
     current_course_user && current_course_user.staff?
-  end
-
-  def all_unread_count
-    current_course.discussion_topics.globally_displayed.pending_staff_reply.count
-  end
-
-  def my_students_unread_count
-    my_student_ids = current_course_user.my_students.select(:user_id)
-    current_course.discussion_topics.globally_displayed.from_user(my_student_ids).
-      pending_staff_reply.count
   end
 end
