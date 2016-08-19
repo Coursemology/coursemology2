@@ -1,6 +1,7 @@
 //= require helpers/form_helpers
 //= require helpers/course_helpers
 //= require helpers/answer_helpers
+//= require helpers/event_helpers
 //= require helpers/discussion/post_helpers
 //= require templates/course/assessment/submission/answer/programming/add_annotation_button
 //= require templates/course/assessment/submission/answer/programming/annotation_form
@@ -8,6 +9,7 @@
 (function($, FORM_HELPERS,
              COURSE_HELPERS,
              ANSWER_HELPERS,
+             EVENT_HELPERS,
              DISCUSSION_POST_HELPERS) {
   /* global JST, Routes */
   'use strict';
@@ -292,12 +294,21 @@
     $button.show();
   }
 
-  showReplyButton(document);
-  addProgrammingAnnotationLinks(document);
-  $(document).on('DOMNodeInserted', function(e) {
-    addProgrammingAnnotationLinks(e.target);
-    showReplyButton(e.target);
+  /**
+   * Shows widgets with javascript functionality.
+   *
+   * @param element
+   */
+  function showScriptedWidgets(elements) {
+    addProgrammingAnnotationLinks(elements);
+    showReplyButton(elements);
+  }
+
+  $(document).on('turbolinks:load', function() {
+    showScriptedWidgets(document);
   });
+  EVENT_HELPERS.onNodesInserted($(DOCUMENT_SELECTOR), showScriptedWidgets);
+
   $(document).on('click', DOCUMENT_SELECTOR + 'table.codehilite .add-annotation',
     onAddProgrammingAnnotation);
   $(document).on('click', DOCUMENT_SELECTOR + '.annotation-form input[type="reset"]',
@@ -310,4 +321,5 @@
 })(jQuery, FORM_HELPERS,
            COURSE_HELPERS,
            ANSWER_HELPERS,
+           EVENT_HELPERS,
            DISCUSSION_POST_HELPERS);

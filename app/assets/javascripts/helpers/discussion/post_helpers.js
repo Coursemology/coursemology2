@@ -1,7 +1,9 @@
+//= require helpers/event_helpers
 //= require helpers/discussion/edit_post
 //= require helpers/discussion/delete_post
 
-var DISCUSSION_POST_HELPERS = (function($, EDIT_DISCUSSION_POST,
+var DISCUSSION_POST_HELPERS = (function($, EVENT_HELPERS,
+                                           EDIT_DISCUSSION_POST,
                                            DELETE_DISCUSSION_POST) {
   /* global JST, Routes */
   'use strict';
@@ -23,9 +25,11 @@ var DISCUSSION_POST_HELPERS = (function($, EDIT_DISCUSSION_POST,
    * @param {String} selector The selector for the specific discussion posts.
    */
   function initializeToolbar(element, selector) {
-    showCommentToolbar(element, selector);
-    $(document).on('DOMNodeInserted', function(e) {
-      showCommentToolbar(e.target, selector);
+    $(document).on('turbolinks:load', function() {
+      showCommentToolbar(element, selector);
+    });
+    EVENT_HELPERS.onNodesInserted($(element), function(insertedElement) {
+      showCommentToolbar(insertedElement, selector);
     });
     DELETE_DISCUSSION_POST.initializeToolbarElement(element, selector);
     EDIT_DISCUSSION_POST.initializeToolbarElement(element, selector);
@@ -34,5 +38,6 @@ var DISCUSSION_POST_HELPERS = (function($, EDIT_DISCUSSION_POST,
   return {
     initializeToolbar: initializeToolbar
   };
-}(jQuery, EDIT_DISCUSSION_POST,
+}(jQuery, EVENT_HELPERS,
+          EDIT_DISCUSSION_POST,
           DELETE_DISCUSSION_POST));

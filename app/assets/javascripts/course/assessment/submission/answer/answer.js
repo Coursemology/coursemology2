@@ -1,3 +1,4 @@
+//= require helpers/event_helpers
 //= require helpers/form_helpers
 //= require helpers/discussion/post_helpers
 
@@ -13,7 +14,9 @@
    * @param element
    */
   function showAnswerCommentForm(element) {
-    var $form = $('.answer-comment-form', element).filter(DOCUMENT_SELECTOR + '*');
+    var $form = $('.answer-comment-form', element).
+                addBack('.answer-comment-form').
+                filter(DOCUMENT_SELECTOR + '*');
     $form.show();
   }
 
@@ -43,11 +46,13 @@
     FORM_HELPERS.enableForm($(form));
   }
 
-  showAnswerCommentForm(document);
-  $(document).on('DOMNodeInserted', function(e) {
-    showAnswerCommentForm(e.target);
+  $(document).on('turbolinks:load', function(x) {
+    showAnswerCommentForm(document);
   });
+  EVENT_HELPERS.onNodesInserted($(DOCUMENT_SELECTOR), showAnswerCommentForm);
+
   $(document).on('click', DOCUMENT_SELECTOR + '.comments .reply-comment', onCommentReply);
   DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR + '.comments ');
 })(jQuery, FORM_HELPERS,
-           DISCUSSION_POST_HELPERS);
+           DISCUSSION_POST_HELPERS,
+           EVENT_HELPERS);

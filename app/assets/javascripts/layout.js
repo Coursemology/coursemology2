@@ -1,7 +1,8 @@
+//= require helpers/event_helpers
 //= require layout_ace_editor
 //= require layout_checkbox_toggle_all
 
-(function($) {
+(function($, EVENT_HELPERS) {
   'use strict';
 
   function initializeSummernote(element) {
@@ -26,10 +27,8 @@
   // application script.
   setTimeout(function() { initializeComponents(document); }, 0);
 
-  $(document).on('DOMNodeInserted', function(e) {
-    initializeComponents(e.target);
-  });
+  EVENT_HELPERS.onNodesInserted($(document), initializeComponents);
   $(document).on('nested:fieldAdded', function(e) {
     initializeComponents(e.field);
   });
-})(jQuery);
+})(jQuery, EVENT_HELPERS);

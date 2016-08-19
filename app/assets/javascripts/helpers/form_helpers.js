@@ -1,4 +1,4 @@
-var FORM_HELPERS = (function (){
+var FORM_HELPERS = (function ($){
   'use strict';
 
    /**
@@ -131,4 +131,4 @@ var FORM_HELPERS = (function (){
     parentFormForElement: parentFormForElement,
     removeParentForm: removeParentForm
   };
-}());
+}(jQuery));

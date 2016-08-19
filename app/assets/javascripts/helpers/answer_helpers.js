@@ -1,4 +1,4 @@
-var ANSWER_HELPERS = (function (){
+var ANSWER_HELPERS = (function ($){
   'use strict';
 
   /**
@@ -39,4 +39,4 @@ var ANSWER_HELPERS = (function (){
     submissionIdForElement: submissionIdForElement,
     answerIdForElement: answerIdForElement,
   };
-}());
+}(jQuery));
