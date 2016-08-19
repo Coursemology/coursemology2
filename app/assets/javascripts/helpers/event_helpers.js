@@ -1,4 +1,4 @@
-var EVENT_HELPERS = (function (){
+var EVENT_HELPERS = (function ($){
   'use strict';
 
   /*
@@ -23,4 +23,4 @@ var EVENT_HELPERS = (function (){
   return {
     onNodesInserted: onNodesInserted
   };
-}());
+}(jQuery));

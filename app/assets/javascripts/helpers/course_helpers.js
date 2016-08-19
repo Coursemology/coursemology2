@@ -1,4 +1,4 @@
-var COURSE_HELPERS = (function (){
+var COURSE_HELPERS = (function ($){
   'use strict';
 
   /**
@@ -15,4 +15,4 @@ var COURSE_HELPERS = (function (){
   return {
     courseIdForElement: courseIdForElement
   };
-}());
+}(jQuery));
