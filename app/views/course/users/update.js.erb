@@ -1,0 +1,9 @@
+$('.course-layout').parents('.container-fluid:first').prepend('<%= flash_messages %>');
+
+// Show users the flash messages
+window.scrollTo(0, 0);
+
+<% if @update_request_origin == :requests %>
+  $('#<%= dom_id(@course_user) %>').remove();
+  $('.nav-tabs .badge').remove();
+<% end %>
