@@ -34,8 +34,7 @@ class Course::AssessmentsComponent < SimpleDelegator
         key: :assessments_submissions,
         title: t('course.assessment.submissions.sidebar_title'),
         weight: 2,
-        path: course_submissions_path(current_course,
-                                      category: current_course.assessment_categories.first)
+        path: assessment_submissions_url
       }
     ]
   end
@@ -63,5 +62,15 @@ class Course::AssessmentsComponent < SimpleDelegator
         path: course_admin_assessments_path(current_course)
       }
     ]
+  end
+
+  # Path for the submissions tab based on course_user role. Students will see submissions#index,
+  #   while course_staff will see submissions#pending.
+  def assessment_submissions_url
+    if current_course_user && current_course_user.staff?
+      pending_course_submissions_path(current_course)
+    else
+      course_submissions_path(current_course, category: current_course.assessment_categories.first)
+    end
   end
 end
