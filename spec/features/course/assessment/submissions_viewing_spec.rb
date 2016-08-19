@@ -38,7 +38,7 @@ RSpec.describe 'Course: Submissions Viewing' do
         end
       end
 
-      scenario 'I can view pending submissions' do
+      scenario 'I can access pending submissions from the sidebar and view pending submissions' do
         students = create_list(:course_student, 4, course: course)
         attempting_submission, submitted_submission1, submitted_submission2, graded_submission =
           students.zip([:attempting, :submitted, :submitted, :graded]).map do |student, trait|
@@ -49,7 +49,6 @@ RSpec.describe 'Course: Submissions Viewing' do
 
         # Staff without group can view all pending submissions
         visit pending_course_submissions_path(course)
-        save_page
         expect(page).to have_content_tag_for(submitted_submission1)
         expect(page).to have_content_tag_for(submitted_submission2)
         expect(page).not_to have_content_tag_for(attempting_submission)
@@ -66,6 +65,12 @@ RSpec.describe 'Course: Submissions Viewing' do
         expect(page).not_to have_content_tag_for(submitted_submission2)
         expect(page).not_to have_content_tag_for(attempting_submission)
         expect(page).not_to have_content_tag_for(graded_submission)
+
+        # Pending submissions can be assessed from the sidebar
+        within find('.sidebar') do
+          expect(page).to have_link(I18n.t('course.assessment.submissions.sidebar_title'),
+                                    href: pending_course_submissions_path(course))
+        end
       end
     end
 
