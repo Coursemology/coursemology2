@@ -15,6 +15,13 @@ cache:
   bundler: true
   directories:
     - travis-phantomjs
+env:
+  global:
+    - RAILS_ENV=test
+    - COVERALLS_PARALLEL=true
+#  matrix:
+#    - GROUP=1
+#    - GROUP=2
 
 before_install:
   - gem update bundler
@@ -30,14 +37,16 @@ before_install:
   - phantomjs --version
 
 before_script:
-  - psql -c 'create database coursemology_test;' -U postgres
-  - bundle exec rake db:setup
+#  - psql -c 'create database coursemology_test;' -U postgres
+#  - bundle exec rake db:setup
+  - bundle exec rake parallel:setup[2]
 
 script:
   - bundle exec consistency_fail
   - bundle exec i18n-tasks health
-  - bundle exec rake spec
+#  - bundle exec parallel_rspec spec -n 2 --only-group $GROUP
+  - bundle exec rake parallel:spec[2]
 
 notifications:
-  slack:
-    secure: h++bTbn+z5gm8QAF+Fk9ExyCX+Oe++O++1jN/CrakTL7p19w0Cd8Xbt8VsNevaWWeu/CAd3mjTlkF4iE+VQCax0WO1Z1qJTCcj4fiVwJSF9ojRZoNTaQeZCaDsmce3XA1gUITvN+n/iu0aNQYi7XKsXBFwmkC/BkoA4e/euzft4=
+  webhooks:
+    - https://coveralls.io/webhook?repo_token=klIDCAuOFrfbf5Eq6qt7P6lsBwXhc6vpQ
