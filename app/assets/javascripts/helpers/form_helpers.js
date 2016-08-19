@@ -108,6 +108,15 @@ var FORM_HELPERS = (function (){
   }
 
   /**
+   * Enables the input fields of a form.
+   *
+   * @param {jQuery} $form The form being enabled
+   */
+  function enableForm($form) {
+    findFormFields($form).prop('disabled', false);
+  }
+
+  /**
    * Finds the form which $element is a child of.
    *
    * @param {jQuery} $element The form's child element
@@ -127,8 +136,8 @@ var FORM_HELPERS = (function (){
 
   return {
     renderFromPath: renderFromPath,
-    findFormFields: findFormFields,
     submitAndDisableForm: submitAndDisableForm,
+    enableForm: enableForm,
     parentFormForElement: parentFormForElement,
     removeParentForm: removeParentForm
   };

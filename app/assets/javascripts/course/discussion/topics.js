@@ -23,8 +23,7 @@
   }
 
   function onPostFormSubmitFail(_, form) {
-    var $form = $(form);
-    FORM_HELPERS.findFormFields($form).prop('disabled', false);
+    FORM_HELPERS.enableForm($(form));
 
     // TODO: Display error messages.
   }
