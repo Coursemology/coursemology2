@@ -14,10 +14,11 @@ env:
   global:
     - CACHE_NAME=common_cache
   matrix:
-    - testfolders=(spec/features)
-    - testfolders=(spec/components spec/uploaders spec/services spec/requests spec/mailers spec/notifiers spec/libraries)
-    - testfolders=(spec/controllers spec/jobs)
-    - testfolders=(spec/models spec/helpers)
+     - testfolders=spec/components
+   # - testfolders=(spec/features)
+   # - testfolders=(spec/components spec/uploaders spec/services spec/requests spec/mailers spec/notifiers spec/libraries)
+   # - testfolders=(spec/controllers spec/jobs)
+   # - testfolders=(spec/models spec/helpers)
 addons:
   postgresql: "9.4"
 bundler_args: "--jobs=3 --retry=3 --without development:production --deployment"
@@ -51,7 +52,7 @@ script:
   - bundle exec i18n-tasks health
   - "echo ${testfolders[@]}"
   - "echo $testfolders"
-  - "bundle exec rake spec ${testfolders[@]}"
+  - "bundle exec rake spec $testfolders"
 
 notifications:
   slack:
