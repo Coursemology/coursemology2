@@ -21,7 +21,8 @@ class Course::Assessment::Submission < ActiveRecord::Base
     end
   end
 
-  validate :validate_consistent_user
+  schema_validations except: [:creator_id, :assessment_id]
+  validate :validate_consistent_user, :validate_unique_submission, on: :create
 
   belongs_to :assessment, inverse_of: :submissions
 
@@ -174,6 +175,17 @@ class Course::Assessment::Submission < ActiveRecord::Base
   def validate_consistent_user
     unless course_user && course_user.user == creator
       errors.add(:experience_points_record, :inconsistent_user)
+    end
+  end
+
+  # Validate that the submission creator does not have an existing submission for this assessment.
+  def validate_unique_submission
+    existing = Course::Assessment::Submission.find_by(assessment_id: assessment.id,
+                                                      creator_id: creator.id)
+    if existing
+      errors.clear
+      errors[:base] << I18n.t('activerecord.errors.models.course/assessment/'\
+                              'submission.submission_already_exists')
     end
   end
 

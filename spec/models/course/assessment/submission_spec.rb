@@ -49,6 +49,24 @@ RSpec.describe Course::Assessment::Submission do
                 'attributes.experience_points_record.inconsistent_user'))
         end
       end
+
+      context 'when a submission for the user and assessment already exists' do
+        before do
+          submission2
+        end
+
+        subject do
+          build(:course_assessment_submission, assessment: assessment, creator: user2)
+        end
+
+        it 'is not valid' do
+          expect(subject).not_to be_valid
+          expect(subject.errors.messages[:base]).
+            to include(I18n.
+              t('activerecord.errors.models.course/assessment/submission.'\
+                'submission_already_exists'))
+        end
+      end
     end
 
     describe '.answers' do

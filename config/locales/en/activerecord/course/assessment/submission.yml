@@ -12,6 +12,7 @@ en:
         course/assessment/submission:
           experience_points_record:
             inconsistent_user: 'the creator of the submission must be the same as the course user'
+          submission_already_exists: "Looks like you have already created a submission. Try again?"
         course/assessment/category:
           deletion: 'the last category cannot be deleted'
 
