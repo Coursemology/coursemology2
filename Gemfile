@@ -127,6 +127,8 @@ group :development, :test do
 
   # Prevent N+1 queries.
   gem 'bullet', '>= 4.14.9'
+
+  gem 'parallel_tests'
 end
 
 group :ci do
