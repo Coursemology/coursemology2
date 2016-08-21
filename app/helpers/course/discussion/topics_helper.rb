@@ -22,4 +22,16 @@ module Course::Discussion::TopicsHelper
           from_user(my_student_ids).pending_staff_reply.distinct.count
       end
   end
+
+  def link_to_toggle_pending(topic)
+    if topic.pending_staff_reply?
+      link_to t('course.discussion.topics.unmark_as_pending'),
+              toggle_pending_course_topic_path(current_course, topic, pending: false),
+              method: :patch, remote: true
+    else
+      link_to t('course.discussion.topics.mark_as_pending'),
+              toggle_pending_course_topic_path(current_course, topic, pending: true),
+              method: :patch, remote: true
+    end
+  end
 end

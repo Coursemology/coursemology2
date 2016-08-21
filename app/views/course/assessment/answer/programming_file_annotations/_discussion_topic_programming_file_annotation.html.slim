@@ -8,6 +8,9 @@
 = div_for(topic, 'data-topic-id' => topic.id) do
   h3
     = link_to assessment.title, edit_course_assessment_submission_path(current_course, assessment, submission)
+  - if can?(:manage, topic)
+    = link_to_toggle_pending(topic)
+
   h4
     = t('.by_html', user: link_to_user(submission.creator))
   h4

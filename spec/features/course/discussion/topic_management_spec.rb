@@ -48,6 +48,19 @@ RSpec.feature 'Course: Topics: Management' do
           expect(page).to have_tag('.post-form', count: 1)
         end
       end
+
+      scenario 'I can mark a topic as pending', js: true do
+        topic = ([true, false].sample ? code_annotation : answer_comment).acting_as
+        visit course_topics_path(course)
+
+        click_link I18n.t('course.discussion.topics.mark_as_pending')
+        wait_for_ajax
+        expect(topic.reload).to be_pending_staff_reply
+
+        click_link I18n.t('course.discussion.topics.unmark_as_pending')
+        wait_for_ajax
+        expect(topic.reload).not_to be_pending_staff_reply
+      end
     end
 
     context 'As a Course Student' do
@@ -69,6 +82,8 @@ RSpec.feature 'Course: Topics: Management' do
         visit course_topics_path(course)
 
         expect(page).not_to have_selector('.nav.nav-tabs')
+        expect(page).not_to have_link(I18n.t('course.discussion.topics.mark_as_pending'))
+
         other_comments.each do |comment|
           expect(page).not_to have_content_tag_for(comment)
         end

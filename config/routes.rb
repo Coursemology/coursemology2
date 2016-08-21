@@ -261,6 +261,7 @@ Rails.application.routes.draw do
           get 'pending', on: :collection
           get 'my_students', on: :collection
           get 'my_students_pending', on: :collection
+          patch 'toggle_pending', on: :member
           resources :posts, only: [:create, :update, :destroy]
         end
       end
