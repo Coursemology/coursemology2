@@ -10,9 +10,11 @@ class ActivityMailer < ApplicationMailer
   #   available to the view, accessible using +@notification+.
   # @param [String] view_path The path to the view which should be rendered.
   def email(recipient, notification, view_path)
-    @recipient = recipient
-    @object = notification.activity.object
-    mail(to: recipient.email, template: view_path)
+    ActsAsTenant.without_tenant do
+      @recipient = recipient
+      @object = notification.activity.object
+      mail(to: recipient.email, template: view_path)
+    end
   end
 
   protected

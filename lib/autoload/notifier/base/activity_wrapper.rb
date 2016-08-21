@@ -15,7 +15,7 @@ class Notifier::Base::ActivityWrapper < SimpleDelegator
   # Save activity and send out pending emails
   def save(*)
     super.tap do |result|
-      @notifier.send(:send_pending_emails) if result
+      execute_after_commit { @notifier.send(:send_pending_emails) } if result
     end
   end
 
