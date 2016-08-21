@@ -3,6 +3,7 @@ class Course::Discussion::PostsController < Course::ComponentController
   before_action :load_topic
   authorize_resource :specific_topic
 
+  helper Course::Discussion::TopicsHelper.name.sub(/Helper$/, '')
   include Course::Discussion::PostsConcern
 
   def create
