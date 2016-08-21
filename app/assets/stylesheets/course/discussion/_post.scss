@@ -1,21 +1,44 @@
 @mixin discussion-post {
   .discussion_post { // scss-lint:disable SelectorFormat
+    border: $course-discussion-post-border;
+    border-radius: $course-discussion-post-border-radius;
     margin-bottom: 1em;
 
-    .user {
-      float: left;
-      margin: 0 1em 0 0;
-      padding-top: 4px;
+    .header,
+    .content {
+      padding: 0.5em;
+    }
 
-      h5 {
-        font-size: $font-size-base;
-        margin: 0;
+    .header {
+      background-color: $panel-default-heading-bg;
+      border-bottom: $course-discussion-post-border;
+
+      .user,
+      .timestamp {
+        display: inline-block;
+      }
+
+      .user {
+        margin-right: 0.5em;
+
+        h5 {
+          font-size: $font-size-base;
+          margin: 0;
+        }
+      }
+
+      .timestamp {
+        color: $text-muted;
+        font-size: $font-size-small;
+      }
+
+      .toolbar {
+        margin-top: -2px;
       }
     }
 
-    .timestamp {
-      color: $text-muted;
-      font-size: $font-size-small;
+    .edit-discussion-post-form {
+      padding: 0.5em;
     }
   }
 
