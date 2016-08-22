@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 class CourseUser < ActiveRecord::Base
   include Workflow
+  include CourseUser::StaffConcern
+  include CourseUser::LevelProgressConcern
+
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
 
@@ -96,8 +99,6 @@ class CourseUser < ActiveRecord::Base
   end)
 
   scope :order_alphabetically, ->(direction = :asc) { order(name: direction) }
-
-  include CourseUser::LevelProgressConcern
 
   # Test whether the current scope includes the current user.
   #

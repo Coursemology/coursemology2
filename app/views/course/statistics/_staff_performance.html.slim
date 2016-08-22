@@ -1,6 +1,6 @@
 = content_tag_for(:tr, staff) do
   td = staff.name
-  td
-  td
-  td
-  td
+  td = staff.graded_submissions.size
+  td = staff.my_students.count
+  td = seconds_to_str(staff.average_marking_time)
+  td = seconds_to_str(staff.marking_time_stddev)
