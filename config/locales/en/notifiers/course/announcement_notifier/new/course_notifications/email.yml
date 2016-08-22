@@ -1,0 +1,13 @@
+en:
+  notifiers:
+    course:
+      announcement_notifier:
+        new:
+          course_notifications:
+            email:
+              subject: >
+                %{course} New Announcement: %{announcement}
+              message: >
+                New %{announcement} from course: %{course}
+
+                %{content}

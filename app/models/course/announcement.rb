@@ -3,6 +3,8 @@ class Course::Announcement < ActiveRecord::Base
   acts_as_readable on: :updated_at
   has_many_attachments on: :content
 
+  after_create :send_notification
+
   after_initialize :set_defaults, if: :new_record?
   after_create :mark_as_read_by_creator
   after_update :mark_as_read_by_updater
@@ -32,5 +34,9 @@ class Course::Announcement < ActiveRecord::Base
   # Mark announcement as read for the updater
   def mark_as_read_by_updater
     mark_as_read! for: updater
+  end
+
+  def send_notification
+    Course::AnnouncementNotifier.new_announcement(creator, self)
   end
 end
