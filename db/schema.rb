@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160815141617) do
+ActiveRecord::Schema.define(version: 20160822092000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -165,6 +165,8 @@ ActiveRecord::Schema.define(version: 20160815141617) do
     t.integer  "updater_id",     :null=>false, :index=>{:name=>"fk__course_assessment_submissions_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessment_submissions_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at",     :null=>false
     t.datetime "updated_at",     :null=>false
+    t.integer  "publisher_id",   :index=>{:name=>"fk__course_assessment_submissions_publisher_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessment_submissions_publisher_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "published_at"
   end
   add_index "course_assessment_submissions", ["assessment_id", "creator_id"], :name=>"unique_assessment_id_and_creator_id", :unique=>true
 
