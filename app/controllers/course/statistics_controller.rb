@@ -11,6 +11,11 @@ class Course::StatisticsController < Course::ComponentController
     @service = Course::StudentStatisticsService.new(staff)
   end
 
+  def staff
+    @staffs = current_course.course_users.with_approved_state.teaching_assistant_and_manager.
+              without_phantom_users.order_alphabetically
+  end
+
   private
 
   def authorize_read_statistics!

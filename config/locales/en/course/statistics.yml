@@ -8,3 +8,10 @@ en:
         serial_number: 'S/N'
         tutor: 'Tutor'
         experience_points: 'Experience Points'
+      staff:
+        header: 'Staff Statistics'
+        name: 'Staff Name'
+        marked: '#Marked'
+        students: '#Students'
+        average_time: 'Average Time Per Assignment'
+        stddev: 'Standard Deviation'

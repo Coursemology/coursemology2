@@ -267,6 +267,7 @@ Rails.application.routes.draw do
       end
 
       get 'statistics/student'
+      get 'statistics/staff'
     end
   end
 

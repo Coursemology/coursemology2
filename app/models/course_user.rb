@@ -10,6 +10,9 @@ class CourseUser < ActiveRecord::Base
   STAFF_ROLES = Set[:teaching_assistant, :manager, :owner].freeze
 
   # A set of roles which comprise the managers of a course.
+  TA_AND_MANAGER_ROLES = Set[:teaching_assistant, :manager].freeze
+
+  # A set of roles which comprise the teaching assistants and managers of a course.
   MANAGER_ROLES = Set[:manager, :owner].freeze
 
   # A set of roles which comprise the auto graders of a course.
@@ -71,6 +74,9 @@ class CourseUser < ActiveRecord::Base
   # Gets the staff associated with the course.
   # TODO: Remove the map when Rails 5 is released.
   scope :staff, -> { where(role: STAFF_ROLES.map { |x| roles[x] }) }
+  scope :teaching_assistant_and_manager, (lambda do
+    where(role: TA_AND_MANAGER_ROLES.map { |x| roles[x] })
+  end)
   scope :managers, -> { where(role: MANAGER_ROLES.map { |x| roles[x] }) }
   scope :instructors, -> { staff }
   scope :students, -> { where(role: roles[:student]) }
