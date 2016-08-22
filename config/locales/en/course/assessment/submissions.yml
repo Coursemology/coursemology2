@@ -11,4 +11,5 @@ en:
           grade: 'Grade'
           view: 'View'
         tabs:
-          pending: :'course.assessment.submissions.pending.header'
+          my_students_pending: 'My Students'
+          all_pending: 'All Pending Submissions'

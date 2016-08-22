@@ -1,6 +1,9 @@
 = tabs do
   - if current_course_user && current_course_user.staff? || can?(:manage, current_course)
-    = nav_to t('.pending'), pending_course_submissions_path(current_course)
+    = nav_to t('.my_students_pending'),
+             pending_course_submissions_path(current_course, my_students: true)
+    = nav_to t('.all_pending'),
+             pending_course_submissions_path(current_course, my_students: false)
   - current_course.assessment_categories.each do |category|
     = nav_to format_inline_text(category.title),
              course_submissions_path(current_course, category: category)
