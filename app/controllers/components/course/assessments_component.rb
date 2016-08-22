@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::AssessmentsComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
+  include Course::Assessment::SubmissionsHelper
 
   def self.display_name
     I18n.t('components.assessments.name')
@@ -34,7 +35,8 @@ class Course::AssessmentsComponent < SimpleDelegator
         key: :assessments_submissions,
         title: t('course.assessment.submissions.sidebar_title'),
         weight: 2,
-        path: assessment_submissions_url
+        path: assessment_submissions_url,
+        unread: submission_count
       }
     ]
   end
@@ -76,6 +78,20 @@ class Course::AssessmentsComponent < SimpleDelegator
       pending_course_submissions_path(current_course, my_students: true)
     else
       course_submissions_path(current_course, category: current_course.assessment_categories.first)
+    end
+  end
+
+  # Returns the number of pending submissions based on roles:
+  #   course_teacher_assistant: Number of submissions from students in my group
+  #   course_owner & course_manager: Number of pending submissions in the course
+  #   course_student or other users: 0
+  def submission_count
+    if current_course_user && current_course_user.manager_or_owner?
+      pending_submissions_count
+    elsif current_course_user && current_course_user.staff?
+      my_students_pending_submissions_count
+    else
+      0
     end
   end
 end
