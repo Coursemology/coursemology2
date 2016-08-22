@@ -1,0 +1,70 @@
+# frozen_string_literal: true
+require 'rails_helper'
+
+RSpec.feature 'Course: Statistics: Staff' do
+  subject { page }
+
+  let!(:instance) { create(:instance) }
+
+  with_tenant(:instance) do
+    let!(:course) { create(:course) }
+
+    before do
+      login_as(user, scope: :user)
+    end
+
+    context 'As a Course Staff' do
+      let(:tutor1) { create(:course_teaching_assistant, course: course) }
+      let(:tutor2) { create(:course_teaching_assistant, course: course) }
+      let!(:tutor3) { create(:course_teaching_assistant, course: course) }
+      let(:user) { tutor1.user }
+
+      # Create submissions for tutors, with given submitted at and published_at
+      let!(:tutor1_submissions) do
+        submitted_at = 1.day.ago
+        published_at = submitted_at + 1.day + 1.hour + 1.minute + 1.second
+        assessment = create(:course_assessment_assessment, course: course)
+        submission = create(:course_assessment_submission, :graded,
+                            assessment: assessment, course: course, publisher: tutor1.user,
+                            published_at: published_at)
+        create(:course_assessment_answer_multiple_response, :graded,
+               assessment: assessment, submission: submission, submitted_at: submitted_at)
+        [submission]
+      end
+
+      let!(:tutor2_submissions) do
+        submitted_at = 2.days.ago
+        published_at = submitted_at + 2.days
+        assessment = create(:course_assessment_assessment, course: course)
+        submission = create(:course_assessment_submission, :graded,
+                            assessment: assessment, course: course, publisher: tutor2.user,
+                            published_at: published_at)
+        create(:course_assessment_answer_multiple_response, :graded,
+               assessment: assessment, submission: submission, submitted_at: submitted_at)
+        [submission]
+      end
+
+      scenario 'I can view staff summary' do
+        visit course_statistics_staff_path(course)
+
+        within find(content_tag_selector(tutor1)) do
+          expect(page).to have_selector('td', text: tutor1.name)
+          expect(page).to have_selector('td', text: tutor1_submissions.size)
+          expect(page).to have_selector('td', text: "1 #{I18n.t('time.day')} 01:01:01")
+        end
+
+        within find(content_tag_selector(tutor2)) do
+          expect(page).to have_selector('td', text: tutor2.name)
+          expect(page).to have_selector('td', text: tutor2_submissions.size)
+          expect(page).to have_selector('td', text: "2 #{I18n.t('time.day')} 00:00:00")
+        end
+
+        within find(content_tag_selector(tutor3)) do
+          expect(page).to have_selector('td', text: tutor3.name)
+          expect(page).to have_selector('td', text: '0')
+          expect(page).to have_selector('td', text: '--:--:--')
+        end
+      end
+    end
+  end
+end
