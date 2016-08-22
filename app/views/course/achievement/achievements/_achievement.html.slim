@@ -20,7 +20,10 @@
       = format_html(achievement.description)
 
   - if include_requirements
-    td = achievement.specific_conditions.map(&:title).to_sentence
+    td
+      ul
+        - achievement.specific_conditions.each do |condition|
+          li = condition.title
 
   td
     div.btn-group
