@@ -5,12 +5,12 @@ class Course::Forum::ForumsController < Course::Forum::Controller
   before_action :add_forum_item_breadcrumb
 
   def index
-    @forums = @forums.order(:created_at).with_forum_statistics
+    @forums = @forums.order(:created_at).with_forum_statistics(current_user)
   end
 
   def show
-    @topics = @forum.topics.accessible_by(current_ability).order_by_date.
-              with_topic_statistics.includes(:creator).page(page_param).with_latest_post
+    @topics = @forum.topics.accessible_by(current_ability).order_by_date.with_topic_statistics.
+              page(page_param).with_read_marks_for(current_user).includes(:creator).with_latest_post
   end
 
   def new

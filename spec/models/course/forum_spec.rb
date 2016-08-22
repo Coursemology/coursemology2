@@ -81,6 +81,7 @@ RSpec.describe Course::Forum, type: :model do
       let(:forum) { create(:forum, course: course) }
       let(:first_topic) { create(:forum_topic, forum: forum) }
       let(:second_topic) { create(:forum_topic, forum: forum) }
+      let!(:user) { create(:user) }
       let!(:first_topic_posts) do
         create_list(:course_discussion_post, 1, topic: first_topic.acting_as)
       end
@@ -89,13 +90,13 @@ RSpec.describe Course::Forum, type: :model do
       end
       let!(:first_topic_views) { create_list(:forum_topic_view, 2, topic: first_topic) }
       let!(:second_topic_views) { create_list(:forum_topic_view, 1, topic: second_topic) }
+      subject { course.forums.with_forum_statistics(user).first  }
 
       it 'shows the correct count' do
-        expect(course.forums.with_forum_statistics.first.topic_count).to eq(2)
-        expect(course.forums.with_forum_statistics.first.topic_post_count).
-          to eq(first_topic_posts.size + second_topic_posts.size + 2)
-        expect(course.forums.with_forum_statistics.first.topic_view_count).
-          to eq(first_topic_views.size + second_topic_views.size)
+        expect(subject.topic_count).to eq(2)
+        expect(subject.topic_post_count).to eq(first_topic_posts.size + second_topic_posts.size + 2)
+        expect(subject.topic_view_count).to eq(first_topic_views.size + second_topic_views.size)
+        expect(subject.topic_unread_count).to eq(2)
       end
     end
   end

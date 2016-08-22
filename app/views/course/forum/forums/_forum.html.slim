@@ -1,5 +1,5 @@
 = content_tag_for(:tr, forum) do
-  td
+  td = badge(forum.topic_unread_count) if forum.topic_unread_count > 0
   th
     = link_to(format_inline_text(forum.name), course_forum_path(current_course, forum))
     br
