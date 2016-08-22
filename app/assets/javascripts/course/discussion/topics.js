@@ -4,7 +4,7 @@
 (function($, FORM_HELPERS,
              DISCUSSION_POST_HELPERS) {
   'use strict';
-  var DOCUMENT_SELECTOR = '.course-discussion-topics.index ';
+  var DOCUMENT_SELECTOR = '.course-discussion-topics ';
 
   // The comment boxes are hidden by default, show the boxes if the browser supports javascript.
   function showCommentBoxes() {

@@ -54,6 +54,10 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
     @topic.acting_as
   end
 
+  def skip_update_topic_status
+    true
+  end
+
   private
 
   def topic_id_param

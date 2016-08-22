@@ -10,7 +10,7 @@ module Course::Discussion::PostsConcern
 
   def create
     Course::Discussion::Post.transaction do
-      return true if @post.save && create_topic_subscription
+      return true if @post.save && create_topic_subscription && update_topic_pending_status
       raise ActiveRecord::Rollback
     end
   end
@@ -32,6 +32,24 @@ module Course::Discussion::PostsConcern
   end
 
   protected
+
+  # Update pending status of the topic:
+  # If the student replies to the topic, set to true.
+  # If the staff replies the post, set to false.
+  def update_topic_pending_status
+    return true if !current_course_user || skip_update_topic_status
+
+    if current_course_user.staff?
+      @post.topic.unmark_as_pending
+    else
+      @post.topic.mark_as_pending
+    end
+  end
+
+  # Option for controller to skip the topic_status.
+  def skip_update_topic_status
+    false
+  end
 
   # Create topic subscriptions for related users
   #

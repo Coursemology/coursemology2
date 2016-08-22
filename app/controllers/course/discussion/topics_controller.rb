@@ -25,6 +25,16 @@ class Course::Discussion::TopicsController < Course::ComponentController
     @topics = my_students_topics.pending_staff_reply
   end
 
+  def toggle_pending
+    success = if mark_as_pending?
+                @topic.mark_as_pending
+              else
+                @topic.unmark_as_pending
+              end
+
+    render status: :bad_request unless success
+  end
+
   private
 
   def all_topics
@@ -48,5 +58,9 @@ class Course::Discussion::TopicsController < Course::ComponentController
 
   def component
     current_component_host[:course_discussion_topics_component]
+  end
+
+  def mark_as_pending?
+    params[:pending] == 'true'
   end
 end

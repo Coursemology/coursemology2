@@ -16,3 +16,5 @@ en:
           header: :'course.discussion.topics.index.header'
         my_students_pending:
           header: :'course.discussion.topics.index.header'
+        mark_as_pending: 'Mark as pending'
+        unmark_as_pending: 'Unmark as pending'

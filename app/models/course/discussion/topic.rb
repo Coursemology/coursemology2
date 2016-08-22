@@ -62,4 +62,18 @@ class Course::Discussion::Topic < ActiveRecord::Base
                    !errors[:topic_id].empty? && !errors[:user_id].empty?
     raise e
   end
+
+  def mark_as_pending
+    return true if pending_staff_reply
+
+    self.pending_staff_reply = true
+    save
+  end
+
+  def unmark_as_pending
+    return true unless pending_staff_reply
+
+    self.pending_staff_reply = false
+    save
+  end
 end
