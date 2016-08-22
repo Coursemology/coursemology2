@@ -105,6 +105,23 @@ RSpec.describe Course::Forum::Topic, type: :model do
       end
     end
 
+    describe '.topic_unread_count' do
+      let!(:user) { create(:user) }
+      let!(:topics) { create_list(:forum_topic, 3, forum: forum) }
+
+      it 'returns the unread count of the user' do
+        expect(forum.topic_unread_count(user)).to eq(topics.size)
+      end
+
+      context 'when user have read the topic' do
+        before { topics.sample.mark_as_read!(for: user) }
+
+        it 'returns the unread count of the user' do
+          expect(forum.topic_unread_count(user)).to eq(topics.size - 1)
+        end
+      end
+    end
+
     describe '.with_latest_post' do
       let(:topic) { create(:forum_topic, forum: forum) }
       let!(:first_topic_post) { create(:course_discussion_post, topic: topic.acting_as) }

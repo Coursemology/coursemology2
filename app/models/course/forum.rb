@@ -30,11 +30,24 @@ class Course::Forum < ActiveRecord::Base
       select { count('*') }
   end)
 
+  calculated :topic_unread_count, (lambda do |user|
+    Course::Forum::Topic.where { course_forum_topics.forum_id == course_forums.id }.
+      unread_by(user).
+      select { count('*') }
+  end)
+
   # @!method self.with_forum_statistics
   #   Augments all returned records with the number of topics, topic posts and topic views
   #   in that forum.
   scope :with_forum_statistics,
-        -> { all.calculated(:topic_count, :topic_view_count, :topic_post_count) }
+        (lambda do |user|
+          all.calculated(
+            :topic_count,
+            :topic_view_count,
+            :topic_post_count,
+            topic_unread_count: user
+          )
+        end)
 
   def self.use_relative_model_naming?
     true
