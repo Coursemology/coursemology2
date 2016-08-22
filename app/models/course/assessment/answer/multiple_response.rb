@@ -26,4 +26,10 @@ class Course::Assessment::Answer::MultipleResponse < ActiveRecord::Base
       end
     end
   end
+
+  # Specific implementation of Course::Assessment::Answer#reset_answer
+  def reset_answer
+    options.clear
+    acting_as
+  end
 end

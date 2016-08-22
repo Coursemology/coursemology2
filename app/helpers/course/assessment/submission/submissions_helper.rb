@@ -39,4 +39,18 @@ module Course::Assessment::Submission::SubmissionsHelper
     attempts = submission.answers.from_question(answer.question_id)
     submission.attempting? ? attempts[-2] : attempts[-1]
   end
+
+  # Display button to allow the resetting of an answer.
+  #
+  # @return [String]
+  def link_to_reset_answer(answer)
+    submission, assessment = answer.submission, answer.submission.assessment
+    path =
+      reload_answer_course_assessment_submission_path(
+        current_course, assessment, submission, answer_id: answer.id, reset_answer: true
+      )
+    link_to t('course.assessment.answer.reset_answer.button'), path,
+            remote: true, method: :post, class: ['btn', 'btn-warning', 'reset-answer'],
+            data: { confirm: t('course.assessment.answer.reset_answer.warning') }
+  end
 end

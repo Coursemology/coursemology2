@@ -5,6 +5,13 @@ class Course::Assessment::Answer::TextResponse < ActiveRecord::Base
   after_initialize :set_default
   before_validation :strip_whitespace
 
+  # Specific implementation of Course::Assessment::Answer#reset_answer
+  def reset_answer
+    self.answer_text = ''
+    save
+    acting_as
+  end
+
   private
 
   def set_default

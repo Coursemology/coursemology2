@@ -18,5 +18,18 @@ RSpec.describe Course::Assessment::Answer::TextResponse, type: :model do
         end
       end
     end
+
+    describe '#reset_answer' do
+      let(:answer) { create(:course_assessment_answer_text_response) }
+      subject { answer.reset_answer }
+
+      it 'sets the text response answer to a blank' do
+        expect(subject.specific.answer_text).to be_blank
+      end
+
+      it 'returns an Answer' do
+        expect(subject).to be_a(Course::Assessment::Answer)
+      end
+    end
   end
 end

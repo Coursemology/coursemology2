@@ -40,15 +40,16 @@ class Course::Assessment::Submission::SubmissionsController < \
     redirect_to(job_path(job.job))
   end
 
-  # Reload current answer to its latest status.
+  # Reload answer to either its latest status or to a fresh answer, depending on parameters.
   def reload_answer
-    @answer = @submission.answers.find_by(id: answer_id_param)
-
-    if @answer
+    @answer = @submission.answers.find_by(id: reload_answer_params[:answer_id])
+    if @answer.nil?
+      render status: :bad_request
+    elsif reload_answer_params[:reset_answer]
+      @new_answer = @answer.reset_answer
+    else
       @current_question = @answer.question
       @new_answer = @submission.answers.from_question(@current_question.id).last
-    else
-      render status: :bad_request
     end
   end
 
@@ -70,7 +71,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     end
   end
 
-  def answer_id_param
-    params.permit(:answer_id)[:answer_id]
+  def reload_answer_params
+    params.permit(:answer_id, :reset_answer)
   end
 end

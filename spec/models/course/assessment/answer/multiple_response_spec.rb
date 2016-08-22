@@ -12,4 +12,20 @@ RSpec.describe Course::Assessment::Answer::MultipleResponse do
     expect(subject).to have_many(:options).
       class_name(Course::Assessment::Question::MultipleResponseOption.name)
   end
+
+  let(:instance) { create(:instance) }
+  with_tenant(:instance) do
+    describe '#reset_answer' do
+      let(:answer) { create(:course_assessment_answer_multiple_response, :with_one_correct_option) }
+      subject { answer.reset_answer }
+
+      it 'removes all multiple response options' do
+        expect(subject.specific.options.count).to eq(0)
+      end
+
+      it 'returns an Answer' do
+        expect(subject).to be_a(Course::Assessment::Answer)
+      end
+    end
+  end
 end

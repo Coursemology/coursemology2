@@ -99,10 +99,6 @@ RSpec.describe Course::Assessment::Question do
     end
 
     describe '#attempt' do
-      it 'fails' do
-        expect { subject.attempt(nil) }.to raise_error(NotImplementedError)
-      end
-
       context 'when the question is polymorphic' do
         let(:question) { self.class::TestPolymorphicQuestion.new }
         subject { question.question }

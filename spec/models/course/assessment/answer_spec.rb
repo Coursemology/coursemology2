@@ -214,5 +214,22 @@ RSpec.describe Course::Assessment::Answer do
         end
       end
     end
+
+    describe '#reset_answer' do
+      subject { answer.reset_answer }
+
+      it "calls the polymorphic object's methods" do
+        answer = create(:course_assessment_answer_multiple_response).answer
+        expect(answer.specific).to receive(:reset_answer).and_return(nil)
+        answer.reset_answer
+      end
+
+      context 'when the question does not implement #reset_attempt' do
+        let(:answer) { create(:course_assessment_answer) }
+        it 'raises a not implemented error' do
+          expect { subject }.to raise_error(NotImplementedError)
+        end
+      end
+    end
   end
 end

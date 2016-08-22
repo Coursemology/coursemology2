@@ -9,13 +9,13 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
     let(:assessment) do
       create(:course_assessment_assessment, :published_with_programming_question, course: course)
     end
-    before { login_as(user, scope: :user) }
-
     let(:submission) do
       create(:course_assessment_submission, *submission_traits, assessment: assessment,
                                                                 creator: user)
     end
     let(:submission_traits) { nil }
+
+    before { login_as(user, scope: :user) }
 
     context 'As a Course Student' do
       let(:user) { create(:course_user, :approved, course: course).user }
