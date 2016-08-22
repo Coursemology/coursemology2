@@ -162,6 +162,15 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
+    describe '#manager_or_owner?' do
+      it 'returns true if the role is manager or owner' do
+        expect(student.manager_or_owner?).to be_falsey
+        expect(teaching_assistant.manager_or_owner?).to be_falsey
+        expect(manager.manager_or_owner?).to be_truthy
+        expect(course_owner.manager_or_owner?).to be_truthy
+      end
+    end
+
     describe '#real_student?' do
       it 'returns true if the role is student and not phantom' do
         expect(student.real_student?).to be_truthy
