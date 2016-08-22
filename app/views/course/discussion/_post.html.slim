@@ -1,18 +1,21 @@
 = div_for(post, 'data-post-id' => post.id) do
-  / Hide toolbar; only JavaScript-enabled clients will show this div.
-  div.toolbar.pull-right style='display: none'
-    - if can?(:update, post)
-      => link_to('#', class: ['edit']) do
-        = fa_icon 'edit'.freeze
-    - if can?(:destroy, post)
-      = link_to('#', class: ['delete']) do
-        = fa_icon 'trash'.freeze
 
-  div.user
-    h5 = link_to_user(post.creator)
+  div.header
+    div.user
+      h5 = link_to_user(post.creator)
+
+    div.timestamp
+      = format_datetime(post.created_at)
+
+    / Hide toolbar; only JavaScript-enabled clients will show this div.
+    div.toolbar.pull-right style='display: none'
+      div.btn-group
+        - if can?(:update, post)
+          => link_to('#', class: ['edit', 'btn', 'btn-default']) do
+            = fa_icon 'edit'.freeze
+        - if can?(:destroy, post)
+          = link_to('#', class: ['delete', 'btn', 'btn-danger']) do
+            = fa_icon 'trash'.freeze
 
   div.content
     = format_html(post.text)
-
-  div.timestamp
-    = format_datetime(post.created_at)

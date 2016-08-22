@@ -2,12 +2,16 @@
 
 .course-assessment-submission-submissions.edit {
   table.codehilite {
+    border: $course-discussion-post-border;
+    border-collapse: separate;
+    border-radius: $course-discussion-post-border-radius;
+
     tr {
       span.add-annotation {
         display: none;
         float: left;
         height: 1em;
-        margin-left: -1em;
+        margin-left: -1.5em;
         position: relative;
         width: 1em;
       }
@@ -18,8 +22,29 @@
         }
       }
 
+      td.line-number {
+        border-right: $course-discussion-post-border;
+        padding-left: 0.5em;
+        text-align: right;
+      }
+
+      td.line-content {
+        padding-left: 0.5em;
+      }
+
       td.line-annotation {
         @include discussion-post;
+
+        border-bottom: $course-discussion-post-border;
+        border-top: $course-discussion-post-border;
+        padding: 1em;
+
+        // scss-lint:disable SelectorFormat
+        .annotation-form,
+        .discussion_post {
+          // scss-lint:enable SelectorFormat
+          max-width: 960px;
+        }
       }
     }
   }
