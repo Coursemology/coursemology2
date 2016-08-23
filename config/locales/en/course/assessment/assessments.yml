@@ -17,6 +17,7 @@ en:
           maximum_experience_points: 'Maximum Experience Points'
         assessment:
           attempt: 'Attempt'
+          resume: 'Resume'
           view: 'View'
           submissions: 'Submissions'
         show:
