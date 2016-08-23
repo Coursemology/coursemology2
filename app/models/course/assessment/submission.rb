@@ -48,6 +48,8 @@ class Course::Assessment::Submission < ActiveRecord::Base
   #   The graders associated with this submission.
   has_many :graders, through: :answers, class_name: User.name
 
+  belongs_to :publisher, class_name: User.name, inverse_of: nil
+
   accepts_nested_attributes_for :answers
 
   # @!attribute [r] submitted_at
@@ -148,6 +150,8 @@ class Course::Assessment::Submission < ActiveRecord::Base
     answers.each do |answer|
       answer.publish! if answer.submitted?
     end
+    self.publisher = User.stamper || User.system
+    self.published_at = Time.zone.now
   end
 
   # Handles the unsubmission of a submitted submission.
