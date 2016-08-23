@@ -24,8 +24,11 @@ RSpec.describe Course::Assessment::SubmissionsController do
       context 'when a category is specified' do
         let(:category) { categories.first }
         let(:tab) { create(:course_assessment_tab, course: course, category: category) }
+        let(:student) { create(:course_student, course: course).user }
         let(:assessment) { create(:assessment, :with_all_question_types, course: course, tab: tab) }
-        let!(:submission) { create(:course_assessment_submission, :graded, assessment: assessment) }
+        let!(:submission) do
+          create(:course_assessment_submission, :graded, creator: student, assessment: assessment)
+        end
         before { get :index, course_id: course, category: category }
 
         it 'sets the category to be the specified category' do

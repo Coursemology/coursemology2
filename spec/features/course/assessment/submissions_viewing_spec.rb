@@ -19,10 +19,14 @@ RSpec.describe 'Course: Submissions Viewing' do
             create(:course_assessment_submission, trait,
                    assessment: assessment, creator: student.user)
           end
+        staff_submission = create(:course_assessment_submission, :submitted,
+                                  assessment: assessment, creator: course_manager.user)
 
         visit course_submissions_path(course)
 
+        # Submissions page should not have show attempting submissions or staff submissions.
         expect(page).not_to have_content_tag_for(attempting_submission)
+        expect(page).not_to have_content_tag_for(staff_submission)
 
         within find(content_tag_selector(submitted_submission)) do
           expect(page).to have_link(

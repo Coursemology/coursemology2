@@ -31,9 +31,10 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
       end
   end
 
-  # Load the submissions based on the current category.
+  # Load student submissions.
   def load_submissions
-    @submissions = Course::Assessment::Submission.
+    student_ids = @course.course_users.students.pluck(:user_id)
+    @submissions = Course::Assessment::Submission.by_users(student_ids).
                    ordered_by_submitted_date.accessible_by(current_ability).page(page_param).
                    includes(:assessment, :answers,
                             experience_points_record: { course_user: :course })
