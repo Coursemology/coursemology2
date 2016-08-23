@@ -21,3 +21,5 @@ en:
     discussion:
       topics:
         name: 'Comments Center'
+    statistics:
+      name: 'Statistics'
