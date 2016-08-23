@@ -7,8 +7,10 @@
   td = submission.workflow_state.capitalize
   - if submission.graded?
     td = submission.grade.to_i.to_s + ' / ' + assessment.maximum_grade.to_s
+    td = submission.points_awarded
   - else
     td = '-- / ' + assessment.maximum_grade.to_s
+    td
   td
     - button_class = ['btn', 'btn-block']
     - link_path = edit_course_assessment_submission_path(current_course, assessment, submission)
