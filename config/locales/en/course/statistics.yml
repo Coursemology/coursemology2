@@ -1,0 +1,10 @@
+en:
+  course:
+    statistics:
+      student:
+        header: 'Student Statistics'
+        phantom_students: 'Phantom Students'
+      table:
+        serial_number: 'S/N'
+        tutor: 'Tutor'
+        experience_points: 'Experience Points'
