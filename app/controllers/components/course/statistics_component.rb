@@ -12,7 +12,7 @@ class Course::StatisticsComponent < SimpleDelegator
         key: :student_statistics,
         title: t('course.statistics.student.header'),
         type: :admin,
-        weight: 1,
+        weight: 2,
         path: course_statistics_student_path(current_course)
       },
       {

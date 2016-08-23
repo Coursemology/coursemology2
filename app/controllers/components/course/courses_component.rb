@@ -15,7 +15,7 @@ class Course::CoursesComponent < SimpleDelegator
       {
         title: t('layouts.course_admin.title'),
         type: :admin,
-        weight: 4,
+        weight: 10,
         path: course_admin_path(current_course)
       }
     ]
