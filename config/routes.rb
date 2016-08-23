@@ -265,6 +265,8 @@ Rails.application.routes.draw do
           resources :posts, only: [:create, :update, :destroy]
         end
       end
+
+      get 'statistics/student'
     end
   end
 

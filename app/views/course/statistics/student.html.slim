@@ -1,0 +1,6 @@
+= page_header
+= render 'table', students: @students
+
+- if @phantom_students.present?
+  h1 = t('.phantom_students')
+  = render 'table', students: @phantom_students

@@ -1,0 +1,16 @@
+table.table.table-hover
+  tr
+    th = t('.serial_number')
+    th = CourseUser.human_attribute_name(:name)
+    th = t('.tutor')
+    th = Course::Level.model_name.human
+    th = t('.experience_points')
+
+  - students.each_with_index do |student, index|
+   = content_tag_for(:tr, student)
+     td = index + 1
+     td = link_to_user(student)
+     td = @service.tutors_of(student).map(&:name).join(', ')
+     td = student.level_number
+     td = link_to student.experience_points,
+                  course_user_experience_points_records_path(current_course, student)
