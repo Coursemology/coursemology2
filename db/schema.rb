@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160822092000) do
+ActiveRecord::Schema.define(version: 20160823094126) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -219,6 +219,7 @@ ActiveRecord::Schema.define(version: 20160822092000) do
     t.integer "answer_id", :null=>false, :index=>{:name=>"fk__course_assessment_multiple_response_option_answer"}, :foreign_key=>{:references=>"course_assessment_answer_multiple_responses", :name=>"fk_course_assessment_answer_multiple_response_options_answer_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer "option_id", :null=>false, :index=>{:name=>"fk__course_assessment_multiple_response_option_question_option"}, :foreign_key=>{:references=>"course_assessment_question_multiple_response_options", :name=>"fk_course_assessment_answer_multiple_response_options_option_id", :on_update=>:no_action, :on_delete=>:no_action}
   end
+  add_index "course_assessment_answer_multiple_response_options", ["answer_id", "option_id"], :name=>"index_multiple_response_answer_on_answer_id_and_option_id", :unique=>true
 
   create_table "course_assessment_answer_programming", force: :cascade do |t|
   end
