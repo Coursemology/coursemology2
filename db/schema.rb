@@ -618,7 +618,7 @@ ActiveRecord::Schema.define(version: 20160823094126) do
     t.datetime "timestamp"
     t.string   "reader_type",   :limit=>255
   end
-  add_index "read_marks", ["reader_id", "reader_type", "readable_type", "readable_id"], :name=>"read_marks_reader_readable_index"
+  add_index "read_marks", ["reader_id", "reader_type", "readable_type", "readable_id"], :name=>"read_marks_reader_readable_index", :unique=>true
 
   create_table "user_identities", force: :cascade do |t|
     t.integer  "user_id",    :null=>false, :index=>{:name=>"fk__user_identities_user_id"}, :foreign_key=>{:references=>"users", :name=>"fk_user_identities_user_id", :on_update=>:no_action, :on_delete=>:no_action}
