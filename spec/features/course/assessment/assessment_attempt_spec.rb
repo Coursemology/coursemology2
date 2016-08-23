@@ -104,7 +104,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
                                   href: submission_path)
       end
 
-      scenario 'I can view my submission grade' do
+      scenario 'I can view my submission statistics' do
         submission.assessment.questions.attempt(submission).each(&:save!)
         submission.finalise!
         submission.publish!
@@ -117,6 +117,9 @@ RSpec.describe 'Course: Assessments: Attempt' do
             expect(page).to have_selector('.submission_answers_grade')
           end
         end
+
+        # Check that publisher is set
+        expect(page).to have_selector('.statistics', text: submission.publisher.name)
       end
     end
 

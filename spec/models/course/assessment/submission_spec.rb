@@ -260,6 +260,14 @@ RSpec.describe Course::Assessment::Submission do
         expect(submission.answers.all?(&:graded?)).to be(true)
       end
 
+      it 'sets the publisher and published_at time' do
+        expect(submission.publisher).to be_nil
+        expect(submission.published_at).to be_nil
+        submission.publish!
+        expect(submission.publisher).not_to be_nil
+        expect(submission.published_at).not_to be_nil
+      end
+
       context 'when some of the answers are already graded' do
         before do
           submission.answers.sample.tap do |answer|
