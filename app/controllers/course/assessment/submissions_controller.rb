@@ -17,6 +17,10 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
     params.permit(:category)
   end
 
+  def pending_submission_params
+    params.permit(:my_students)
+  end
+
   # Load the current category, used to classify and load assessments.
   def category
     @category ||=
@@ -27,20 +31,19 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
       end
   end
 
-  # Load the submissions based on the current category.
+  # Load student submissions.
   def load_submissions
-    @submissions = Course::Assessment::Submission.
+    student_ids = @course.course_users.students.pluck(:user_id)
+    @submissions = Course::Assessment::Submission.by_users(student_ids).
                    ordered_by_submitted_date.accessible_by(current_ability).page(page_param).
                    includes(:assessment, :answers,
                             experience_points_record: { course_user: :course })
   end
 
-  # Load pending submissions based on current course role:
-  #  Staff with students - show students in staff's groups with pending submissions
-  #  Staff without students - show all students in course with pending submissions
+  # Load pending submissions, either for the entire course, or for my students only.
   def pending_submissions
-    my_student_ids = current_course_user ? current_course_user.my_students.pluck(:user_id) : []
-    if !my_student_ids.empty?
+    if pending_submission_params[:my_students] == 'true'
+      my_student_ids = current_course_user ? current_course_user.my_students.select(:user_id) : []
       @submissions.by_users(my_student_ids)
     else
       @submissions

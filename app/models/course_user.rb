@@ -101,6 +101,13 @@ class CourseUser < ActiveRecord::Base
     with_approved_state.exists?(user: user)
   end
 
+  # Test whether this course_user is a manager (i.e. manager or owner)
+  #
+  # @return [Boolean] True if course_user is a staff
+  def manager_or_owner?
+    MANAGER_ROLES.include?(role.to_sym)
+  end
+
   # Test whether this course_user is a staff (i.e. teaching_assistant, manager or owner)
   #
   # @return [Boolean] True if course_user is a staff

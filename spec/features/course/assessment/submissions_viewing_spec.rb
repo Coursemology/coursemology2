@@ -19,10 +19,14 @@ RSpec.describe 'Course: Submissions Viewing' do
             create(:course_assessment_submission, trait,
                    assessment: assessment, creator: student.user)
           end
+        staff_submission = create(:course_assessment_submission, :submitted,
+                                  assessment: assessment, creator: course_manager.user)
 
         visit course_submissions_path(course)
 
+        # Submissions page should not have show attempting submissions or staff submissions.
         expect(page).not_to have_content_tag_for(attempting_submission)
+        expect(page).not_to have_content_tag_for(staff_submission)
 
         within find(content_tag_selector(submitted_submission)) do
           expect(page).to have_link(
@@ -48,7 +52,7 @@ RSpec.describe 'Course: Submissions Viewing' do
           end
 
         # Staff without group can view all pending submissions
-        visit pending_course_submissions_path(course)
+        visit pending_course_submissions_path(course, my_students: false)
         expect(page).to have_content_tag_for(submitted_submission1)
         expect(page).to have_content_tag_for(submitted_submission2)
         expect(page).not_to have_content_tag_for(attempting_submission)
@@ -59,17 +63,18 @@ RSpec.describe 'Course: Submissions Viewing' do
         create(:course_group_manager, group: group, course: course, course_user: course_manager)
         create(:course_group_user, group: group, course: course,
                                    course_user: submitted_submission1.course_user)
-        visit pending_course_submissions_path(course)
+        visit pending_course_submissions_path(course, my_students: true)
 
         expect(page).to have_content_tag_for(submitted_submission1)
         expect(page).not_to have_content_tag_for(submitted_submission2)
         expect(page).not_to have_content_tag_for(attempting_submission)
         expect(page).not_to have_content_tag_for(graded_submission)
 
-        # Pending submissions can be assessed from the sidebar
+        # All Pending submissions can be assessed from the sidebar
         within find('.sidebar') do
-          expect(page).to have_link(I18n.t('course.assessment.submissions.sidebar_title'),
-                                    href: pending_course_submissions_path(course))
+          expect(page).
+            to have_link(I18n.t('course.assessment.submissions.sidebar_title'),
+                         href: pending_course_submissions_path(course, my_students: false))
         end
       end
     end
