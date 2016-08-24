@@ -187,10 +187,11 @@ RSpec.describe 'Extension: Acts as Attachable' do
   describe 'form_builder helper' do
     class self::SampleView < ActionView::Base
       include ApplicationFormattersHelper
+      include Rails.application.routes.url_helpers
     end
     class self::SampleFormBuilder < ActionView::Helpers::FormBuilder; end
 
-    let(:attachment) { build(:attachment_reference) }
+    let(:attachment) { create(:attachment_reference) }
     let(:template) { self.class::SampleView.new(Rails.root.join('app', 'views')) }
     let(:resource) do
       stub = self.class::SampleModelMultiple.new
