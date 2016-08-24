@@ -21,6 +21,9 @@
       tr.start_at
         th = t('.start_at')
         td = format_datetime(@assessment.start_at)
+      tr.bonus_cut_off
+        th = t('.bonus_cut_off')
+        td = format_datetime(@assessment.bonus_end_at) if @assessment.bonus_end_at.present?
       tr.end_at
         th = t('.end_at')
         td = format_datetime(@assessment.end_at) if @assessment.end_at.present?
