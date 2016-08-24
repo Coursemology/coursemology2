@@ -19,8 +19,22 @@ RSpec.describe Course::Assessment::SubmissionsHelper do
     end
 
     describe '#pending_submissions_count' do
+      let(:student_ids) { students.map(&:user_id) }
       subject { helper.pending_submissions_count }
-      it { is_expected.to eq(assessment.submissions.with_submitted_state.count) }
+      it 'returns the number of pending submisssions' do
+        expect(subject).
+          to eq(assessment.submissions.by_users(student_ids).with_submitted_state.count)
+      end
+
+      context 'when there is a staff submission' do
+        let!(:staff_submission) do
+          create(:submission, :submitted, assessment: assessment, creator: course_owner.user)
+        end
+        it 'does not reflect the staff submission in the count' do
+          expect(subject).
+            to eq(assessment.submissions.by_users(student_ids).with_submitted_state.count)
+        end
+      end
     end
 
     describe '#my_students_pending_submissions_count' do
