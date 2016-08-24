@@ -7,6 +7,8 @@ class Course::StatisticsComponent < SimpleDelegator
   end
 
   def sidebar_items
+    return [] unless can?(:read_statistics, current_course)
+
     [
       {
         key: :student_statistics,
