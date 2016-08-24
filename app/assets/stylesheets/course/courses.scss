@@ -7,6 +7,10 @@
       @extend .col-md-offset-8;
       @extend .col-md-4;
     }
+
+    .announcement {
+      @include announcement;
+    }
   }
 
   &.index {

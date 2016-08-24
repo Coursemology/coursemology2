@@ -16,6 +16,7 @@
 
   - if current_course.user?(current_user) || can?(:manage, current_course)
     h2 = t('.announcements')
+    hr
     div
       = render current_course.announcements.currently_active
 
