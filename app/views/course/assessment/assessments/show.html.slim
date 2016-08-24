@@ -1,5 +1,6 @@
 - add_breadcrumb format_inline_text(@assessment.title)
 = page_header format_inline_text(@assessment.title) do
+  = render 'assessment_management_buttons', assessment: @assessment
   - if can?(:manage, @assessment)
     div.btn-group
       = edit_button([current_course, @assessment])

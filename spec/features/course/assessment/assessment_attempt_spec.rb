@@ -59,7 +59,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         visit course_assessments_path(course)
 
         within find(content_tag_selector(assessment_with_condition)) do
-          find_link(I18n.t('course.assessment.assessments.assessment.attempt'),
+          find_link(I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
                     href: course_assessment_submissions_path(course, assessment_with_condition)).
             click
         end
@@ -75,7 +75,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         visit course_assessments_path(course)
 
         within find(content_tag_selector(assessment)) do
-          find_link(I18n.t('course.assessment.assessments.assessment.attempt'),
+          find_link(I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
                     href: course_assessment_submissions_path(course, assessment)).click
         end
 
@@ -90,7 +90,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
         within find(content_tag_selector(unopened_assessment)) do
           expect(page).not_to have_button(
-            I18n.t('course.assessment.assessments.assessment.attempt')
+            I18n.t('course.assessment.assessments.assessment_management_buttons.attempt')
           )
         end
       end
@@ -100,8 +100,10 @@ RSpec.describe 'Course: Assessments: Attempt' do
         visit course_assessments_path(course)
 
         submission_path = edit_course_assessment_submission_path(course, assessment, submission)
-        expect(page).to have_link(I18n.t('course.assessment.assessments.assessment.resume'),
-                                  href: submission_path)
+        expect(page).to have_link(
+          I18n.t('course.assessment.assessments.assessment_management_buttons.resume'),
+          href: submission_path
+        )
       end
 
       scenario 'I can view my submission statistics' do
@@ -131,7 +133,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         visit course_assessments_path(course)
 
         within find(content_tag_selector(assessment_with_condition)) do
-          find_link(I18n.t('course.assessment.assessments.assessment.attempt'),
+          find_link(I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
                     href: course_assessment_submissions_path(course, assessment_with_condition)).
             click
         end
@@ -147,7 +149,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         visit course_assessments_path(course)
 
         within find(content_tag_selector(unopened_assessment)) do
-          find_link(I18n.t('course.assessment.assessments.assessment.attempt'),
+          find_link(I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
                     href: course_assessment_submissions_path(course, unopened_assessment)).click
         end
 
