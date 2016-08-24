@@ -9,6 +9,7 @@
 - else
   - if f.object.attachment.present?
     strong => t('.uploaded_file')
-    = link_to format_inline_text(f.object.attachment.name), '#'
+    = link_to format_inline_text(f.object.attachment.name),
+              attachment_reference_path(f.object.attachment), target: "_blank"
   div
     = f.file_field :file
