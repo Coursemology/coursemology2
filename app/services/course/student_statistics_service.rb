@@ -2,27 +2,37 @@
 
 # Performs calculations for Student Statistics Pages.
 class Course::StudentStatisticsService
-  # Sets the collection of CourseUsers which `tutors_of` will search from. It is possible for
-  # "tutors" not to be staff. Assumes that GroupUsers and their Groups have been included with
-  # each CourseUser.
+  # Sets the collection of CourseUsers which `group_managers_of` will search from.
+  # Assumes that GroupUsers and their Groups have been loaded for each CourseUser.
   #
-  # @param [Array<CourseUser>] tutors
-  def initialize(tutors)
-    @tutors = tutors
+  # @param [Array<CourseUser>] course_users
+  def initialize(course_users)
+    @course_users = course_users
   end
 
   # Returns all managers of the groups that the given CourseUser are a part of.
-  # Assumes that GroupUsers and their Groups have been included with the given CourseUser.
+  # Assumes that GroupUsers and their Groups have been loaded for the given CourseUser.
   #
   # @param [CourseUser] course_user The given CoruseUser
   # @return [Array<CourseUser>]
-  def tutors_of(course_user)
+  def group_managers_of(course_user)
     course_user.groups.map do |group|
-      @tutors.select do |tutor|
-        tutor.group_users.select do |group_user|
-          group_user.manager? && group_user.group_id == group.id
-        end.present?
-      end
-    end.flatten.uniq
+      group_managers_hash[group.id]
+    end.flatten.map(&:course_user).uniq
+  end
+
+  # @return [Boolean] True if none of the given course users are group managers
+  def no_group_managers?
+    group_managers_hash.empty?
+  end
+
+  private
+
+  # Maps groups to their managers
+  #
+  # @return [Hash{Course::Group => Array<Course::GroupUser>}]
+  def group_managers_hash
+    @group_managers_hash ||=
+      @course_users.map(&:group_users).flatten.select(&:manager?).group_by(&:group_id)
   end
 end
