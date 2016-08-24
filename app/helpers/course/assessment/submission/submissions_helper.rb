@@ -53,4 +53,8 @@ module Course::Assessment::Submission::SubmissionsHelper
             remote: true, method: :post, class: ['btn', 'btn-warning', 'reset-answer'],
             data: { confirm: t('course.assessment.answer.reset_answer.warning') }
   end
+
+  def single_question_flag_class(assessment)
+    assessment.questions.length > 1 ? 'multi-question' : 'single-question'
+  end
 end

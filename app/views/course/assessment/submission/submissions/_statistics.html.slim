@@ -40,7 +40,7 @@ div.panel.panel-default
           th = @submission.class.human_attribute_name(:graded_at)
           td = format_datetime(@submission.published_at) if @submission.published_at
 
-    - if @submission.answers.length > 1
+    - if @assessment.questions.length > 1
       h4 = t('.grade_summary')
       table.table.table-striped
         thead

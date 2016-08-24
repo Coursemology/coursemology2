@@ -1,6 +1,8 @@
 (function($) {
   'use strict';
   var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ';
+  var SINGLE_QUESTION_ASSESSMENT_SELECTOR = DOCUMENT_SELECTOR + '.single-question ';
+  var MULTI_QUESTION_ASSESSMENT_SELECTOR = DOCUMENT_SELECTOR + '.multi-question ';
   var SUMMARY_GRADE_SELECTOR = '.submission-grades-summary-grade';
   var GRADE_INPUT_SELECTOR = 'input.grade';
   var POINTS_AWARDED_SELECTOR = 'input.submission-points-awarded';
@@ -28,6 +30,23 @@
     var newTotalGrade = computeNewTotalGrade();
     updateTotalGrade(newTotalGrade);
     updateExperiencePointsAwarded(newTotalGrade);
+  }
+
+  /**
+   * Updates the total grade and experience points awarded in the submission statistics
+   * when the submission's assessment has only one question. Unlike `updateGradesAndPoints`
+   * this method updates the statistics directly instead of via the Grades Summary.
+   *
+   * @param {Event} event The event object.
+   */
+  function updateGradesAndPointsSingleQuestion(event) {
+    var $changedGradeInput = $(event.target);
+    var newGrade = $changedGradeInput.val();
+
+    if (!$.isNumeric(newGrade)) { return; }
+
+    updateTotalGrade(newGrade);
+    updateExperiencePointsAwarded(newGrade);
   }
 
   /**
@@ -75,5 +94,8 @@
     $pointsAwardedInput.val(newPointsAwarded);
   }
 
-  $(document).on('change', DOCUMENT_SELECTOR + GRADE_INPUT_SELECTOR, updateGradesAndPoints);
+  $(document).on('change', MULTI_QUESTION_ASSESSMENT_SELECTOR + GRADE_INPUT_SELECTOR,
+                           updateGradesAndPoints);
+  $(document).on('change', SINGLE_QUESTION_ASSESSMENT_SELECTOR + GRADE_INPUT_SELECTOR,
+                           updateGradesAndPointsSingleQuestion);
 })(jQuery);
