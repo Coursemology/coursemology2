@@ -17,9 +17,6 @@ en:
           maximum_experience_points: 'Maximum Experience Points'
         assessment:
           attempt: 'Attempt'
-          resume: 'Resume'
-          view: 'View'
-          submissions: 'Submissions'
         show:
           description: 'Description'
           start_at: :'course.assessment.assessments.index.start_at'
@@ -46,3 +43,8 @@ en:
         form:
           autograded: 'Automatically assign grade and experience points after finalization'
           autograded_hint: 'Note that all the questions in the assessment must be auto-gradable'
+        assessment_management_buttons:
+          attempt: 'Attempt'
+          resume: 'Resume'
+          view: 'View'
+          submissions: 'Submissions'

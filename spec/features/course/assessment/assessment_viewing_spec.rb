@@ -19,9 +19,16 @@ RSpec.describe 'Course: Assessments: Viewing' do
         visit course_assessments_path(course)
 
         within find(content_tag_selector(assessment)) do
-          click_link I18n.t('course.assessment.assessments.assessment.submissions')
+          click_link I18n.t('course.assessment.assessments.'\
+                            'assessment_management_buttons.submissions')
         end
 
+        expect(current_path).to eq(course_assessment_submissions_path(course, assessment))
+
+        # Access submissions from the show assessment page
+        visit course_assessment_path(course, assessment)
+        click_link I18n.t('course.assessment.assessments.'\
+                          'assessment_management_buttons.submissions')
         expect(current_path).to eq(course_assessment_submissions_path(course, assessment))
       end
 
@@ -42,6 +49,15 @@ RSpec.describe 'Course: Assessments: Viewing' do
 
         expect(page).to have_content_tag_for(condition_with_assessment_conditional)
         expect(page).to have_content_tag_for(condition_with_achievement_conditional)
+      end
+
+      scenario 'I attempt the assessment from the show assessment page' do
+        visit course_assessment_path(course, assessment)
+
+        expect(page).to have_link(
+          I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
+          href: course_assessment_submissions_path(course, assessment)
+        )
       end
     end
   end
