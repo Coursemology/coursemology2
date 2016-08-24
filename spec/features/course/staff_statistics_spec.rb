@@ -50,18 +50,21 @@ RSpec.feature 'Course: Statistics: Staff' do
         expect(page).to have_selector('li', text: I18n.t('course.statistics.staff.header'))
 
         within find(content_tag_selector(tutor1)) do
+          expect(page).to have_selector('td', text: '1') # S/N
           expect(page).to have_selector('td', text: tutor1.name)
           expect(page).to have_selector('td', text: tutor1_submissions.size)
           expect(page).to have_selector('td', text: "1 #{I18n.t('time.day')} 01:01:01")
         end
 
         within find(content_tag_selector(tutor2)) do
+          expect(page).to have_selector('td', text: '2')
           expect(page).to have_selector('td', text: tutor2.name)
           expect(page).to have_selector('td', text: tutor2_submissions.size)
           expect(page).to have_selector('td', text: "2 #{I18n.t('time.day')} 00:00:00")
         end
 
         within find(content_tag_selector(tutor3)) do
+          expect(page).to have_selector('td', text: '3')
           expect(page).to have_selector('td', text: tutor3.name)
           expect(page).to have_selector('td', text: '0')
           expect(page).to have_selector('td', text: '--:--:--')

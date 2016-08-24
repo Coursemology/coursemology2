@@ -1,6 +1,12 @@
 = content_tag_for(:tr, staff) do
+  td.text-center
+    = index + 1
   td = staff.name
-  td = staff.graded_submissions.size
-  td = staff.my_students.count
-  td = seconds_to_str(staff.average_marking_time)
-  td = seconds_to_str(staff.marking_time_stddev)
+  td.text-center
+    = staff.graded_submissions.size
+  td.text-center
+    = staff.my_students.count
+  td.text-center
+    = seconds_to_str(staff.average_marking_time)
+  td.text-center
+    = seconds_to_str(staff.marking_time_stddev)
