@@ -1,15 +1,17 @@
 en:
   course:
     statistics:
+      serial_number: 'S/N'
       student:
         header: 'Student Statistics'
         phantom_students: 'Phantom Students'
       table:
-        serial_number: 'S/N'
+        serial_number: :'course.statistics.serial_number'
         tutor: 'Tutor'
         experience_points: 'Experience Points'
       staff:
         header: 'Staff Statistics'
+        serial_number: :'course.statistics.serial_number'
         name: 'Staff Name'
         marked: '#Marked'
         students: '#Students'
