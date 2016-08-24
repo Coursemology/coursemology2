@@ -26,6 +26,8 @@ RSpec.feature 'Course: Student Statistics' do
       scenario 'I can view student statistics' do
         visit course_statistics_student_path(course)
 
+        expect(page).to have_selector('li', text: I18n.t('course.statistics.student.header'))
+
         students.each do |student|
           expect(page).to have_content_tag_for(student)
         end
@@ -41,6 +43,16 @@ RSpec.feature 'Course: Student Statistics' do
           expect(page).to have_content_tag_for(student)
         end
         expect(page).to have_text(I18n.t('course.statistics.student.phantom_students'))
+      end
+    end
+
+    context 'As a Course Student' do
+      let(:user) { create(:course_student, course: course).user }
+
+      scenario 'I cannot see the sidebar item' do
+        visit course_path(course)
+
+        expect(page).not_to have_selector('li', text: I18n.t('course.statistics.student.header'))
       end
     end
   end

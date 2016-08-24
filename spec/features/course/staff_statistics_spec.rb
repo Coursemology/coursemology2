@@ -47,6 +47,8 @@ RSpec.feature 'Course: Statistics: Staff' do
       scenario 'I can view staff summary' do
         visit course_statistics_staff_path(course)
 
+        expect(page).to have_selector('li', text: I18n.t('course.statistics.staff.header'))
+
         within find(content_tag_selector(tutor1)) do
           expect(page).to have_selector('td', text: tutor1.name)
           expect(page).to have_selector('td', text: tutor1_submissions.size)
@@ -64,6 +66,16 @@ RSpec.feature 'Course: Statistics: Staff' do
           expect(page).to have_selector('td', text: '0')
           expect(page).to have_selector('td', text: '--:--:--')
         end
+      end
+    end
+
+    context 'As a Course Student' do
+      let(:user) { create(:course_student, course: course).user }
+
+      scenario 'I cannot see the sidebar item' do
+        visit course_path(course)
+
+        expect(page).not_to have_selector('li', text: I18n.t('course.statistics.staff.header'))
       end
     end
   end
