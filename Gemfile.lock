@@ -503,7 +503,7 @@ GEM
     uglifier (3.0.2)
       execjs (>= 0.3.0, < 3)
     uniform_notifier (1.10.0)
-    unread (0.8.1)
+    unread (0.8.2)
       activerecord (>= 3)
     validates_hostname (1.0.5)
       activerecord (>= 3.0)
