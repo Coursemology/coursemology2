@@ -4,10 +4,9 @@ branches:
   except:
     - /^bundle-update-[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{6}+$/
 rvm:
+  - 2.2.5
   - 2.3.1
-matrix:
-  allow_failures:
-    - rvm: ruby-head
+
 addons:
   postgresql: "9.4"
 bundler_args: "--jobs=3 --retry=3 --without development:production --deployment"
@@ -42,9 +41,6 @@ before_script:
   - bundle exec rake parallel:setup[2]
 
 script:
-  - bundle exec consistency_fail
-  - bundle exec i18n-tasks health
-#  - bundle exec parallel_rspec spec -n 2 --only-group $GROUP
   - bundle exec rake parallel:spec[2]
 
 notifications:
