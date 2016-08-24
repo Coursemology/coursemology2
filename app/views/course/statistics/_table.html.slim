@@ -10,7 +10,7 @@ table.table.table-hover
    = content_tag_for(:tr, student)
      td = index + 1
      td = link_to_user(student)
-     td = @service.tutors_of(student).map(&:name).join(', ')
+     td = tutors_of(student, @staff)
      td = student.level_number
      td = link_to student.experience_points,
                   course_user_experience_points_records_path(current_course, student)

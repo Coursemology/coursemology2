@@ -5,10 +5,9 @@ class Course::StatisticsController < Course::ComponentController
   def student
     preload_levels
     course_users = current_course.course_users.with_approved_state.includes(:groups)
-    staff = course_users.staff.without_phantom_users
+    @staff = course_users.staff.without_phantom_users
     all_students = course_users.students.ordered_by_experience_points
     @phantom_students, @students = all_students.partition(&:phantom?)
-    @service = Course::StudentStatisticsService.new(staff)
   end
 
   private
