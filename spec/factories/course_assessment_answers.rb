@@ -24,8 +24,10 @@ FactoryGirl.define do
 
     trait :submitted do
       submission_traits :submitted
-      after(:build) do |answer| # rubocop:disable Style/SymbolProc
+      after(:build) do |answer, evaluator| # rubocop:disable Style/SymbolProc
         answer.finalise!
+        # Revert submitted at if given.
+        answer.submitted_at = evaluator.submitted_at if evaluator.submitted_at
       end
     end
 

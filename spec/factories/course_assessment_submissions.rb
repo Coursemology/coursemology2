@@ -32,7 +32,10 @@ FactoryGirl.define do
           answer.grader = evaluator.grader
         end
 
+        # Revert publisher and published at if given.
         submission.publish!
+        submission.publisher = evaluator.publisher if evaluator.publisher
+        submission.published_at = evaluator.published_at if evaluator.published_at
       end
     end
   end

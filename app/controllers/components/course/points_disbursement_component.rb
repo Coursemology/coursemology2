@@ -9,7 +9,7 @@ class Course::PointsDisbursementComponent < SimpleDelegator
       {
         title: t('course.experience_points.disbursement.sidebar_title'),
         type: :admin,
-        weight: 2,
+        weight: 4,
         path: forum_disbursement_course_users_path(current_course)
       }
     ]

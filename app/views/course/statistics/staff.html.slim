@@ -1,0 +1,12 @@
+= page_header
+table.table.table-middle-align.table-hover
+  thead
+    tr
+      th = t('.name')
+      th = t('.marked')
+      th = t('.students')
+      th = t('.average_time')
+      th = t('.stddev')
+  tbody
+    - @staffs.each do |staff|
+      = render partial: 'staff_performance', locals: { staff: staff }

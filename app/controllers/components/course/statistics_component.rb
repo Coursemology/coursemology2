@@ -12,8 +12,15 @@ class Course::StatisticsComponent < SimpleDelegator
         key: :student_statistics,
         title: t('course.statistics.student.header'),
         type: :admin,
-        weight: 1,
+        weight: 2,
         path: course_statistics_student_path(current_course)
+      },
+      {
+        key: :staff_statistics,
+        title: I18n.t('course.statistics.staff.header'),
+        type: :admin,
+        weight: 3,
+        path: course_statistics_staff_path(current_course)
       }
     ]
   end
