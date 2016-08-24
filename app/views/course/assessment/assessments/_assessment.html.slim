@@ -11,6 +11,7 @@
 
   td = assessment.total_exp
   td = format_datetime(assessment.start_at)
+  td = format_datetime(assessment.bonus_end_at) if assessment.bonus_end_at.present?
   td = format_datetime(assessment.end_at) if assessment.end_at.present?
   td
     = render 'assessment_management_buttons', assessment: assessment

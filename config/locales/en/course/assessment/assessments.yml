@@ -13,6 +13,7 @@ en:
           header: 'Assessments'
           title: 'Title'
           start_at: 'Start At'
+          bonus_cut_off: 'Bonus Cut Off'
           end_at: 'End At'
           maximum_experience_points: 'Maximum Experience Points'
         assessment:
@@ -20,6 +21,7 @@ en:
         show:
           description: 'Description'
           start_at: :'course.assessment.assessments.index.start_at'
+          bonus_cut_off: :'course.assessment.assessments.index.bonus_cut_off'
           end_at: :'course.assessment.assessments.index.end_at'
           maximum_experience_points:
             :'course.assessment.assessments.index.maximum_experience_points'
