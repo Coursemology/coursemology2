@@ -14,5 +14,5 @@ table.table.table-middle-align.table-hover
       th.text-center
         = t('.stddev')
   tbody
-    - @staffs.each_with_index do |staff, index|
+    - @staffs.each.with_index(1) do |staff, index|
       = render partial: 'staff_performance', locals: { staff: staff, index: index }

@@ -12,10 +12,10 @@ table.table.table-hover
     th.text-center
       = t('.experience_points')
 
-  - students.each_with_index do |student, index|
+  - students.each.with_index(1) do |student, index|
    = content_tag_for(:tr, student)
      td.text-center
-       = index + 1
+       = index
      td
        = link_to_user(student)
      - unless @service.no_group_managers?
