@@ -1,15 +1,7 @@
 .course-announcements {
   &.index {
     .announcement {
-      padding-left: 8px;
-
-      .timestamp {
-        color: $gray-light;
-      }
-
-      .content {
-        margin-top: 10px;
-      }
+      @include announcement;
     }
   }
 }

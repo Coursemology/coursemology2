@@ -17,7 +17,7 @@
         = edit_button(edit_button_path) if can?(:edit, announcement)
         = delete_button(delete_button_path) if can?(:destroy, announcement)
 
-  h3.timestamp
+  i.timestamp
     => format_datetime(announcement.start_at)
     ' by
     = link_to_user(announcement.creator)
