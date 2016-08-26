@@ -70,6 +70,13 @@ RSpec.describe 'Course: Submissions Viewing' do
         expect(page).not_to have_content_tag_for(attempting_submission)
         expect(page).not_to have_content_tag_for(graded_submission)
 
+        # Pending submissions tab shows the tutors for the students if it exists.
+        visit pending_course_submissions_path(course, my_students: false)
+        expect(page).to have_content_tag_for(submitted_submission1)
+        within find(content_tag_selector(submitted_submission1)) do
+          expect(page).to have_text(course_manager.name)
+        end
+
         # All Pending submissions can be assessed from the sidebar
         within find('.sidebar') do
           expect(page).
