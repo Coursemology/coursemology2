@@ -157,5 +157,27 @@ RSpec.describe Course::Discussion::Topic, type: :model do
         it { is_expected.to contain_exactly(annotation, comment) }
       end
     end
+
+    describe '.migrate!' do
+      let(:from_topic) { create(:course_assessment_answer, :with_post, :pending).acting_as }
+      let(:to_topic) { create(:course_assessment_answer).acting_as }
+      let(:posts) { from_topic.posts }
+
+      subject { Course::Discussion::Topic.migrate!(from: from_topic, to: to_topic) }
+
+      it 'moves all the posts to the new topic' do
+        subject
+
+        expect(from_topic.posts.count).to be(0)
+        expect(to_topic.posts).to contain_exactly(*posts)
+      end
+
+      it 'sets the pending status of the new topic' do
+        subject
+
+        expect(from_topic.pending_staff_reply).to be_falsey
+        expect(to_topic.pending_staff_reply).to be_truthy
+      end
+    end
   end
 end
