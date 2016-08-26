@@ -4,6 +4,7 @@ class Course::GroupsController < Course::ComponentController
   add_breadcrumb :index, :course_groups_path
 
   def index #:nodoc:
+    @groups = @groups.includes(group_users: { course_user: :course })
   end
 
   def new #:nodoc:

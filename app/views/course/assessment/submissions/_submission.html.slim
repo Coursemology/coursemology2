@@ -7,11 +7,10 @@
   td = submission.workflow_state.capitalize
   - if pending
     td
-      ul
-        - @service.group_managers_of(submission.course_user).each do |manager|
-          li
-            = link_to_course_user(manager) do |course_user|
-              = format_inline_text(course_user.name)
+      - @service.group_managers_of(submission.course_user).each do |manager|
+        div
+          = link_to_course_user(manager) do |course_user|
+            = format_inline_text(course_user.name)
 
   - if submission.graded?
     td = submission.grade.to_i.to_s + ' / ' + assessment.maximum_grade.to_s
