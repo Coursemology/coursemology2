@@ -1,0 +1,37 @@
+= page_header
+
+div.panel.panel-primary.search-panel
+  div.panel-heading
+    h3.panel-title
+      = t('.search_panel_title')
+  div.panel-body
+    = simple_form_for @search,
+                      url: search_course_forums_path,
+                      method: :get,
+                      input_html: { class: ['form-horizontal'] } do |f|
+      = f.error_notification
+      = f.input :course_user_id,
+                collection: current_course.course_users.with_approved_state.order_alphabetically
+      = f.input :start_time, as: :bootstrap_date_time
+      = f.input :end_time, as: :bootstrap_date_time
+      = f.button :submit, t('.search')
+
+- if @search.course_user
+  h2 = t('.posts_by', name: @search.course_user.name)
+  h4 = t('.post_count', count: @search.posts.length)
+  h4 = t('.total_vote_tally', tally: @search.posts.map(&:vote_tally).reduce(&:+) || 0)
+
+  - if @search.posts.length > 0
+    table.table.table-striped
+      tr
+        th = t('.post_content')
+        th = t('.vote_tally')
+        th = t('.date_posted')
+      - @search.posts.each do |post|
+        = content_tag_for(:tr, post)
+          td
+            - topic = post.topic.specific
+            p = link_to format_inline_text(topic.title), [current_course, topic.forum, topic]
+            = format_html(post.text)
+          td = post.vote_tally
+          td = format_datetime(post.created_at)

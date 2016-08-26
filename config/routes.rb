@@ -217,6 +217,8 @@ Rails.application.routes.draw do
 
           post 'subscribe', on: :member
           delete 'unsubscribe', on: :member
+
+          get 'search', on: :collection
         end
       end
 

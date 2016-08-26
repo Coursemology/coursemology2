@@ -44,7 +44,16 @@ div.panel.panel-primary.forum-participation-search-panel
           td = link_to_course_user(course_user)
           td = course_user.level_number
           td = course_user.experience_points
-          td = @disbursement.student_participation_statistics[course_user][:posts]
+          td
+            - search_params = { \
+                search: { \
+                  course_user_id: course_user.id,
+                  start_time: @disbursement.start_time,
+                  end_time: @disbursement.end_time \
+                } \
+              }
+            = link_to @disbursement.student_participation_statistics[course_user][:posts],
+                      search_course_forums_path(search_params)
           td = @disbursement.student_participation_statistics[course_user][:votes]
           td = record_fields.input :points_awarded, label: false,
                                                     input_html: { class: 'points_awarded' }

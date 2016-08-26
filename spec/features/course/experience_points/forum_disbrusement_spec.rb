@@ -53,6 +53,8 @@ RSpec.feature 'Course: Experience Points: Forum Disbursement' do
           expect(find('.points_awarded').value).to eq('200')
         end
 
+        expect(page).to have_link(nil, search_course_forums_path(course))
+
         expect { click_button I18n.t('course.experience_points.forum_disbursement.new.submit') }.
           to change { Course::ExperiencePointsRecord.count }.by(3)
       end
