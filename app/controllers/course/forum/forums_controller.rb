@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Forum::ForumsController < Course::Forum::Controller
-  before_action :load_forum, except: [:index, :new, :create]
+  before_action :load_forum, except: [:index, :new, :create, :search]
   load_resource :forum, class: Course::Forum.name, through: :course, only: [:index, :new, :create]
   before_action :add_forum_item_breadcrumb
 
@@ -65,7 +65,19 @@ class Course::Forum::ForumsController < Course::Forum::Controller
     end
   end
 
+  def search
+    @search = Course::Forum::Search.new(search_params)
+  end
+
   private
+
+  def search_params
+    if params[:search]
+      params.require(:search).permit(:course_user_id, :start_time, :end_time)
+    else
+      {}
+    end.reverse_merge(course: current_course)
+  end
 
   def forum_params
     params.require(:forum).permit(:name, :description, :course_id)

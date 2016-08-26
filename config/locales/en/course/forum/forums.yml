@@ -40,3 +40,13 @@ en:
           tag: 'Unsubscribe'
           success: 'You have been unsubscribed from the Forum %{name}.'
           failure: 'Fail to unsubscribe from Forum: %{error}'
+        search:
+          header: 'Search Forums'
+          search_panel_title: 'Forum Search'
+          search: 'Find Posts'
+          posts_by: 'Posts by %{name}'
+          post_count: 'Post Count: %{count}'
+          total_vote_tally: 'Total Vote Tally: %{tally}'
+          post_content: 'Post Content'
+          vote_tally: 'Vote Tally'
+          date_posted: 'Date Posted'
