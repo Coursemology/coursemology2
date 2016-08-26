@@ -2,6 +2,7 @@
 class Course::Assessment::SubmissionsController < Course::ComponentController
   before_action :load_submissions
   before_action :add_submissions_breadcrumb
+  before_action :load_group_managers, only: [:pending]
 
   def index #:nodoc:
     @submissions = @submissions.from_category(category).confirmed
@@ -37,7 +38,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
     @submissions = Course::Assessment::Submission.by_users(student_ids).
                    ordered_by_submitted_date.accessible_by(current_ability).page(page_param).
                    includes(:assessment, :answers,
-                            experience_points_record: { course_user: :course })
+                            experience_points_record: { course_user: [:course, :groups] })
   end
 
   # Load pending submissions, either for the entire course, or for my students only.
@@ -48,6 +49,13 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
     else
       @submissions
     end
+  end
+
+  # Load group managers
+  def load_group_managers
+    course_staff = current_course.course_users.staff.with_approved_state.without_phantom_users.
+                   includes(:groups)
+    @service = Course::StudentStatisticsService.new(course_staff)
   end
 
   def add_submissions_breadcrumb

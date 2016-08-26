@@ -6,6 +6,7 @@ en:
         header: 'Groups'
         name: 'Name'
         members: 'Members'
+        managers: 'Managers'
       new:
         header: 'New Group'
       create:
