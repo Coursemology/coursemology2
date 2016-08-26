@@ -4,4 +4,6 @@ en:
       answer:
         programming_auto_grading:
           grade:
-            evaluation_failed: 'Evaluation failed. Syntax error?'
+            evaluation_failed: >
+              Your code failed to evaluate. There might be a syntax error in your code or
+              perhaps it does not execute within the time and memory limits.
