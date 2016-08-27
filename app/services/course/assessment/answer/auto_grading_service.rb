@@ -29,7 +29,14 @@ class Course::Assessment::Answer::AutoGradingService
     def save!(answer, reattempt)
       Course::Assessment::Answer.transaction do
         answer.save!
-        answer.question.attempt(answer.submission, answer).save! if reattempt
+        if reattempt
+          new_answer = answer.question.attempt(answer.submission, answer)
+          new_answer.save!
+          # Move posts to the new answer.
+          # TODO: Mount posts under a join table between submission and answer.
+          Course::Discussion::Topic.migrate!(from: answer.discussion_topic,
+                                             to: new_answer.discussion_topic)
+        end
       end
     end
   end
