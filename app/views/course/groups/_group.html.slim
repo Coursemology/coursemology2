@@ -2,11 +2,10 @@
   th = format_inline_text(group.name)
   td = group.course_users.with_approved_state.count
   td
-    ul
-      - group.course_users.managers.each do |manager|
-        li
-          = link_to_course_user(manager) do
-            = format_inline_text(manager.name)
+    - group.group_users.select(&:manager?).map(&:course_user).each do |manager|
+      div
+        = link_to_course_user(manager) do
+          = format_inline_text(manager.name)
   td
     = edit_button(edit_course_group_path(current_course, group))
     = delete_button(course_group_path(current_course, group))
