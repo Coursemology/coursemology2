@@ -62,8 +62,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
     ensure_auto_grading!
     Course::Assessment::Answer::AutoGradingJob.
       perform_later(self, redirect_to_path, reattempt).tap do |job|
-      auto_grading.job_id = job.job_id
-      save!
+      auto_grading.update_column(:job_id, job.job_id)
     end
   end
 
