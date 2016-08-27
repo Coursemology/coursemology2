@@ -1,0 +1,17 @@
+en:
+  notifiers:
+    course:
+      forum:
+        post_notifier:
+          replied:
+            user_notifications:
+              email:
+                subject: '%{course} New reply for forum topic: %{topic}'
+                message: >
+                  You can view the new reply here:
+
+                  %{topic}
+                unsubscribe: >
+                  To unsubscribe from this topic, use the following link:
+
+                  %{unsubscribe_link}
