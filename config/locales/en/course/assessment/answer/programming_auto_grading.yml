@@ -5,5 +5,5 @@ en:
         programming_auto_grading:
           grade:
             evaluation_failed: >
-              Your code failed to evaluate. There might be a syntax error in your code or
-              perhaps it does not execute within the time and memory limits.
+              Your code failed to evaluate correctly. There might be a syntax error, or perhaps
+              execution failed to complete within the allocated time and memory limits.
