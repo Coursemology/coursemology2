@@ -15,6 +15,7 @@
         .image > img {
           height: $course-leaderboard-user-picture;
           width: $course-leaderboard-user-picture;
+          border-radius: 50%;
         }
       }
 
@@ -37,6 +38,7 @@
         .image > img {
           height: $course-leaderboard-achievement-badge;
           width: $course-leaderboard-achievement-badge;
+          display: none;
         }
       }
     }
