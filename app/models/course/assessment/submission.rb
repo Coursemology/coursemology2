@@ -6,7 +6,8 @@ class Course::Assessment::Submission < ActiveRecord::Base
   include Course::Assessment::Submission::ExperiencePointsDisplayConcern
 
   after_save :auto_grade_submission, if: :submitted?
-  after_create :send_notification
+  after_save :send_submit_notification, if: :submitted?
+  after_create :send_attempt_notification
 
   workflow do
     state :attempting do
@@ -193,10 +194,17 @@ class Course::Assessment::Submission < ActiveRecord::Base
     end
   end
 
-  def send_notification
+  def send_attempt_notification
     return unless course_user.real_student?
 
     Course::AssessmentNotifier.assessment_attempted(creator, assessment)
+  end
+
+  def send_submit_notification
+    return unless course_user.real_student? && workflow_state_was == 'attempting'
+    return if assessment.autograded?
+
+    Course::AssessmentNotifier.assessment_submitted(creator, course_user, self)
   end
 
   def unsubmit_latest_answers

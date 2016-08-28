@@ -1,0 +1,12 @@
+en:
+  notifiers:
+    course:
+      assessment_notifier:
+        submitted:
+          user_notifications:
+            email:
+              subject: '%{course} New Submission on : %{assessment}'
+              message: >
+                There is a new submission by %{user}
+
+                Please review and grade the %{submission}.
