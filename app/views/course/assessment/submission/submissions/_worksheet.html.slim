@@ -11,18 +11,19 @@
   - unless @submission.attempting?
     = render 'statistics', f: f
 
-  = f.button :submit, t('common.save')
+  div.submission-buttons
+    = f.button :submit, t('common.save')
 
-  - if @submission.attempting? && can?(:update, @submission)
-    = f.button :submit, t('.finalise'),
-      name: 'submission[finalise]', class: ['btn-danger'],
-      data: { confirm: t('.confirm_finalise') }
+    - if @submission.attempting? && can?(:update, @submission)
+      = f.button :submit, t('.finalise'),
+        name: 'submission[finalise]', class: ['btn-danger', 'pull-right'],
+        data: { confirm: t('.confirm_finalise') }
 
-  - if @submission.submitted? && can?(:grade, @submission)
-    = link_to t('.auto_grade'),
-      auto_grade_course_assessment_submission_path(current_course, @submission.assessment,
-        @submission), method: :post, class: ['btn', 'btn-info']
-    = f.button :submit, t('.publish'), name: 'submission[publish]', class: ['btn-danger']
+    - if @submission.submitted? && can?(:grade, @submission)
+      = link_to t('.auto_grade'),
+        auto_grade_course_assessment_submission_path(current_course, @submission.assessment,
+          @submission), method: :post, class: ['btn', 'btn-info']
+      = f.button :submit, t('.publish'), name: 'submission[publish]', class: ['btn-danger', 'pull-right']
 
-  - if (@submission.submitted? || @submission.graded?) && can?(:grade, @submission)
-    = f.button :submit, t('.unsubmit'), name: 'submission[unsubmit]', class: ['btn-warning']
+    - if (@submission.submitted? || @submission.graded?) && can?(:grade, @submission)
+      = f.button :submit, t('.unsubmit'), name: 'submission[unsubmit]', class: ['btn-warning']
