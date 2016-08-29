@@ -23,6 +23,7 @@
       .image > img {
         @include no-stretch;
         height: $course-user-profile-picture;
+        width: $course-user-profile-picture;
         margin-top: 1em;
         border-radius: 50%;
       }
@@ -36,6 +37,7 @@
       .image > img {
         @include no-stretch;
         height: $course-user-listing-picture;
+        width: $course-user-listing-picture;
         margin-top: 1em;
         border-radius: 50%;
       }
