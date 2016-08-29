@@ -119,7 +119,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
       auto_grading || create_auto_grading!
     end
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
-    raise e if e.is_a?(ActiveRecord::RecordInvalid) && e.record.errors[:answer_id].empty?
+    raise ActiveRecord::Rollback if e.is_a?(ActiveRecord::RecordInvalid) && e.record.errors[:answer_id].empty?
     association(:auto_grading).reload
     auto_grading
   end

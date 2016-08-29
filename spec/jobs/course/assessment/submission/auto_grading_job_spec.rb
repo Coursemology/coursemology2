@@ -25,6 +25,9 @@ RSpec.describe Course::Assessment::Submission::AutoGradingJob do
           singleton_class.class_eval { include Rails.application.routes.url_helpers }
           job = subject.perform_later(submission).tap(&:wait).job.tap(&:reload)
 
+          if job.errored?
+            puts job.error
+          end
           expect(job).to be_completed
           expect(job.redirect_to).to \
             eq(edit_course_assessment_submission_path(submission.assessment.course,

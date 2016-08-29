@@ -282,6 +282,9 @@ GEM
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     orm_adapter (0.5.0)
+    parallel (1.9.0)
+    parallel_tests (2.7.1)
+      parallel
     parser (2.3.1.2)
       ast (~> 2.2)
     pg (0.18.4)
@@ -576,6 +579,7 @@ DEPENDENCIES
   nokogiri (>= 1.6.8)
   omniauth
   omniauth-facebook
+  parallel_tests
   pg (>= 0.18.2)
   poltergeist
   puma
