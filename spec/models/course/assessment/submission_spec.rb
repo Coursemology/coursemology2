@@ -312,7 +312,8 @@ RSpec.describe Course::Assessment::Submission do
                         submission: submission1, creator: user1).acting_as
         answer.update_column(:created_at, 1.day.ago)
         submission1.reload
-        # Unfinished jobs in the callbacks could cause a deadlock, need to wait for them to finish.
+        # Submission creates a grading job which could make answers go to the graded state, need to
+        # wait for them to finish.
         wait_for_job
         answer
       end
