@@ -49,7 +49,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
         edit_path = edit_course_assessment_question_text_response_path(course, assessment, question)
         find_link(nil, href: edit_path).click
 
-        maximum_grade = 9999
+        maximum_grade = 999.9
         fill_in 'maximum_grade', with: maximum_grade
         click_button 'submit'
 
