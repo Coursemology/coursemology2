@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160823094126) do
+ActiveRecord::Schema.define(version: 20160830023835) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -150,7 +150,7 @@ ActiveRecord::Schema.define(version: 20160823094126) do
     t.string   "title",               :limit=>255
     t.text     "description"
     t.text     "staff_only_comments"
-    t.integer  "maximum_grade",       :null=>false
+    t.decimal  "maximum_grade",       :precision=>4, :scale=>1, :null=>false
     t.integer  "weight",              :default=>0, :null=>false
     t.integer  "creator_id",          :null=>false, :index=>{:name=>"fk__course_assessment_questions_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessment_questions_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "updater_id",          :null=>false, :index=>{:name=>"fk__course_assessment_questions_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessment_questions_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
@@ -177,7 +177,7 @@ ActiveRecord::Schema.define(version: 20160823094126) do
     t.integer  "question_id",    :null=>false, :index=>{:name=>"fk__course_assessment_answers_question_id"}, :foreign_key=>{:references=>"course_assessment_questions", :name=>"fk_course_assessment_answers_question_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.string   "workflow_state", :limit=>255, :null=>false
     t.datetime "submitted_at"
-    t.integer  "grade"
+    t.decimal  "grade",          :precision=>4, :scale=>1
     t.boolean  "correct",        :comment=>"Correctness is independent of the grade (depends on the grading schema)"
     t.integer  "grader_id",      :index=>{:name=>"fk__course_assessment_answers_grader_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessment_answers_grader_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "graded_at"
@@ -303,7 +303,7 @@ ActiveRecord::Schema.define(version: 20160823094126) do
     t.integer "question_id",   :null=>false, :index=>{:name=>"fk__course_assessment_text_response_solution_question"}, :foreign_key=>{:references=>"course_assessment_question_text_responses", :name=>"fk_course_assessment_questi_2fbeabfad04f21c2d05c8b2d9100d1c4", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer "solution_type", :default=>0, :null=>false
     t.text    "solution",      :null=>false
-    t.integer "grade",         :default=>0, :null=>false
+    t.decimal "grade",         :precision=>4, :scale=>1, :default=>0.0, :null=>false
     t.text    "explanation"
   end
 
