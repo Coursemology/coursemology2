@@ -2,13 +2,16 @@ en:
   course:
     assessment:
       answer:
+        error: 'An error occurred while evaluating your answer, please try again.'
         worksheet:
           comments: 'Comments'
           run_code: 'Run Code'
+          error: :'course.assessment.answer.error'
         comments_footer:
           comment: 'Comment'
         guided:
           continue: 'Continue'
+          error: :'course.assessment.answer.error'
         grading:
           grading: 'Grading'
           maximum_grade: '/ %{maximum_grade}'

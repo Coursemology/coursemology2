@@ -116,6 +116,28 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         expect(page).to have_selector('.btn', text: I18n.t('common.submit'))
       end
 
+      scenario 'I can resubmit the answer when job is errored', js: true do
+        # Build an answer with a failing job
+        errored_grading =
+          build(:course_assessment_answer_auto_grading, job: create(:trackable_job, :errored))
+        create(:course_assessment_answer_multiple_response,
+               :with_all_correct_options, :submitted,
+               auto_grading: errored_grading, question: assessment.questions.first,
+               submission: submission)
+
+        visit edit_course_assessment_submission_path(assessment.course, assessment, submission)
+
+        expect(page).to have_selector('p', text: 'course.assessment.answer.guided.error')
+
+        click_button I18n.t('common.submit')
+        wait_for_ajax
+
+        expect(page).
+          to have_selector('div.panel', text: 'course.assessment.answer.explanation.correct')
+        expect(page).to have_selector('h2', text: mrq_questions.first.display_title)
+        expect(page).to have_selector('.btn', text: I18n.t('common.submit'))
+      end
+
       scenario 'I can finalise my submission for auto grading' do
         assessment.autograded = true
         assessment.save!

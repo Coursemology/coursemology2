@@ -6,16 +6,29 @@
   function onAnswerSubmit(e) {
     e.preventDefault();
 
+    var answerId = e.target.value;
     showSpinner($(this));
-    submitFormAndWaitForJob($('.edit_submission'), e.target.value);
+    hideErrorMessage(answerId);
+    submitFormAndWaitForJob($('.edit_submission'), answerId);
   }
 
-  function submitFormAndWaitForJob($form, answer_id) {
+  // Find all the spinning jobs in the page and check their statuses.
+  function checkSubmittedJobs() {
+    $('a.btn.submitted').filter(DOCUMENT_SELECTOR + '*').each(function(index) {
+      var answer = $(this).closest('.answer');
+      var jobUrl = $(this).data('job-path');
+      var answerId = answer.data('answer-id');
+      // Use different delays, so that all the requests won't send at once.
+      waitForJob(jobUrl, answerId, (index + 1) * DELAY);
+    });
+  }
+
+  function submitFormAndWaitForJob($form, answerId) {
     var action = $form.attr('action');
     var method = $form.attr('method');
 
     var data = $form.serializeArray();
-    data.push({name: "attempting_answer_id", value: answer_id});
+    data.push({name: 'attempting_answer_id', value: answerId});
     $.ajax({
       url: action,
       method: method,
@@ -23,11 +36,11 @@
       dataType: 'json',
       global: false
     }).done(function(data) {
-      waitForJob(data.redirect_url, answer_id);
+      waitForJob(data.redirect_url, answerId);
     });
   }
 
-  function waitForJob(url, answer_id) {
+  function waitForJob(url, answerId, delay) {
     setTimeout(function() {
       $.ajax({
         url: url,
@@ -35,26 +48,27 @@
         dataType: 'json',
         global: false
       }).done(function(data) {
-        onGetJobSuccess(data, url, answer_id);
+        onGetJobSuccess(data, url, answerId);
+      }).fail(function() {
+        // Error message is rendered by the answer.
+        reloadAnswer(answerId);
       })
-    }, DELAY);
+    }, delay || DELAY);
   }
 
-  function onGetJobSuccess(data, url, answer_id) {
+  function onGetJobSuccess(data, url, answerId) {
     if (data.status == 'completed') {
-      reloadAnswer(answer_id);
+      reloadAnswer(answerId);
     } else if (data.status == 'submitted') {
-      waitForJob(url, answer_id);
-    } else {
-      // Show errors.
+      waitForJob(url, answerId);
     }
   }
 
-  function reloadAnswer(answer_id) {
+  function reloadAnswer(answerId) {
     $.ajax({
       url: 'reload_answer',
       method: 'POST',
-      data: { answer_id: answer_id },
+      data: { answer_id: answerId },
       global: false
     });
   }
@@ -64,5 +78,11 @@
     $button.append('<i class="fa fa-spinner fa-lg fa-spin"></i>');
   }
 
+  function hideErrorMessage(answerId) {
+    $('div#answer_' + answerId).find('p.bg-danger').hide();
+  }
+
   $(document).on('click', DOCUMENT_SELECTOR + '.btn.submit-answer', onAnswerSubmit);
+  $(document).on('turbolinks:load', checkSubmittedJobs);
+
 })(jQuery);

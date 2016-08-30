@@ -8,7 +8,7 @@
 	"expr": true,
 	"immed": true,
 	"indent": 4,
-	"latedef": true,
+	"latedef": "nofunc",
 	"newcap": true,
 	"noarg": true,
 	"sub": true,
