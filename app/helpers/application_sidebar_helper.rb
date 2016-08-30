@@ -52,7 +52,10 @@ module ApplicationSidebarHelper
       concat(item[:title])
       concat(
         content_tag(:span, class: ['unread']) do
-          badge(item[:unread]) if item[:unread] && item[:unread] > 0
+          if item[:unread] && item[:unread] > 0
+            concat(' ')
+            concat(badge(item[:unread]))
+          end
         end
       )
     end
