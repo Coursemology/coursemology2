@@ -33,11 +33,11 @@ en:
           success: 'Forum %{name} was deleted.'
           failure: 'Failed to delete forum: %{error}'
         subscribe:
-          tag: 'Subscribe'
+          tag: 'Subscribe to new topic notifications'
           success: 'You have subscribed to Forum %{name}.'
           failure: 'Fail to subscribe to Forum: %{error}'
         unsubscribe:
-          tag: 'Unsubscribe'
+          tag: 'Unsubscribe from new topic notifications'
           success: 'You have been unsubscribed from the Forum %{name}.'
           failure: 'Fail to unsubscribe from Forum: %{error}'
         search:

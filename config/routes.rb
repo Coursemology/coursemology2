@@ -209,12 +209,14 @@ Rails.application.routes.draw do
               put 'vote', on: :member
             end
 
+            get 'subscribe', on: :member
             post 'subscribe', on: :member
             delete 'subscribe', on: :member
             put 'locked' => 'topics#set_locked', on: :member
             put 'hidden' => 'topics#set_hidden', on: :member
           end
 
+          get 'unsubscribe', on: :member
           post 'subscribe', on: :member
           delete 'unsubscribe', on: :member
 

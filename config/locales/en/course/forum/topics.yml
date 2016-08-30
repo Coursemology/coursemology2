@@ -24,11 +24,11 @@ en:
           success: 'Topic %{title} was deleted.'
           failure: 'Failed to delete topic: %{error}'
         subscribe:
-          tag: 'Subscribe'
+          tag: 'Subscribe to new post notifications'
           success: 'You have subscribed to topic.'
           failure: 'Failed to subscribe to topic.'
         unsubscribe:
-          tag: 'Unsubscribe'
+          tag: 'Unsubscribe from new post notifications'
           success: 'You have unsubscribed from topic.'
           failure: 'Failed to unsubscribe from topic.'
         locked:
