@@ -4,6 +4,10 @@
       - if answer.specific.is_a?(Course::Assessment::Answer::Programming)
         = link_to_reset_answer(answer)
       = base_answer_form.button :button, t('common.submit'), value: answer.id, name: 'attempting_answer_id', class: 'submit-answer'
+  - elsif answer.submitted? && job = answer.try(:auto_grading).try(:job)
+    - if job.errored?
+      p.bg-danger = t('.error')
+      = base_answer_form.button :button, t('common.submit'), value: answer.id, name: 'attempting_answer_id', class: 'submit-answer'
 
   / Display a continue button if last attempt is correct
   - if !@current_question.last_question? && last_attempt && last_attempt.correct?
