@@ -1,11 +1,12 @@
 - post = @object
 - topic = post.topic.actable
 - course = topic.course
-- unsubscribe_link = subscribe_course_forum_topic_url(course, topic.forum, topic, subscribe: false)
+- unsubscribe_url = subscribe_course_forum_topic_url(course,topic.forum, topic, subscribe: false)
 
 - message.subject = t('.subject', course: course.title, topic: topic.title)
 
 = simple_format(t('.message',
                 topic: link_to(topic.title, course_forum_topic_url(course, topic.forum, topic))))
 
-= simple_format(t('.unsubscribe', unsubscribe_link: unsubscribe_link))
+= simple_format(t('.unsubscribe.message',
+                unsubscribe_link: link_to(t('.unsubscribe.tag'), unsubscribe_url)))

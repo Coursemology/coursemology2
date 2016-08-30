@@ -11,7 +11,7 @@ en:
                   A new topic has been created in the forum: %{topic}
 
                   %{post}
-                unsubscribe: >
-                  To unsubscribe from this topic, use the following link:
 
-                  %{unsubscribe_link}
+                unsubscribe:
+                  tag: 'Unsubscribe'
+                  message: '%{unsubscribe_link} from new topic notification in this forum'

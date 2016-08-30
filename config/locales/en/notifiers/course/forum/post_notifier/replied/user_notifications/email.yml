@@ -11,7 +11,7 @@ en:
                   You can view the new reply here:
 
                   %{topic}
-                unsubscribe: >
-                  To unsubscribe from this topic, use the following link:
 
-                  %{unsubscribe_link}
+                unsubscribe:
+                  tag: 'Unsubscribe'
+                  message: '%{unsubscribe_link} from new post notification in this topic'
