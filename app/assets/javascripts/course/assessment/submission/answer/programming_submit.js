@@ -12,6 +12,17 @@
     submitFormAndWaitForJob($('.edit_submission'), answerId);
   }
 
+  // Find all the spinning jobs in the page and check their statuses.
+  function checkSubmittedJobs() {
+    $('a.btn.submitted').filter(DOCUMENT_SELECTOR + '*').each(function(index) {
+      var answer = $(this).closest('.answer');
+      var jobUrl = $(this).data('job-path');
+      var answerId = answer.data('answer-id');
+      // Use different delays, so that all the requests won't send at once.
+      waitForJob(jobUrl, answerId, (index + 1) * DELAY);
+    });
+  }
+
   function submitFormAndWaitForJob($form, answerId) {
     var action = $form.attr('action');
     var method = $form.attr('method');
@@ -29,7 +40,7 @@
     });
   }
 
-  function waitForJob(url, answerId) {
+  function waitForJob(url, answerId, delay) {
     setTimeout(function() {
       $.ajax({
         url: url,
@@ -42,7 +53,7 @@
         // Error message is rendered by the answer.
         reloadAnswer(answerId);
       })
-    }, DELAY);
+    }, delay || DELAY);
   }
 
   function onGetJobSuccess(data, url, answerId) {
@@ -72,4 +83,6 @@
   }
 
   $(document).on('click', DOCUMENT_SELECTOR + '.btn.submit-answer', onAnswerSubmit);
+  $(document).on('turbolinks:load', checkSubmittedJobs);
+
 })(jQuery);

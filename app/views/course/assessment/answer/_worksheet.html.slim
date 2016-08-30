@@ -8,6 +8,10 @@
     - if job.errored?
       p.bg-danger = t('.error')
       = base_answer_form.button :button, t('.run_code'), value: answer.id, name: 'attempting_answer_id', class: ['submit-answer', 'btn-danger']
+    - elsif job.submitted?
+      = link_to '#', class: ['btn', 'btn-danger', 'submitted'], 'data-job-path': job_path(job), disabled: true do
+        => t('.run_code')
+        = fa_icon 'spinner lg spin'
 
 h3 = t('.comments')
 div.comments id=comments_container_id(answer)

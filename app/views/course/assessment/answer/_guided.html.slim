@@ -8,6 +8,10 @@
     - if job.errored?
       p.bg-danger = t('.error')
       = base_answer_form.button :button, t('common.submit'), value: answer.id, name: 'attempting_answer_id', class: 'submit-answer'
+    - elsif job.submitted?
+      = link_to '#', class: ['btn', 'btn-default', 'submitted'], 'data-job-path': job_path(job), disabled: true do
+        => t('common.submit')
+        = fa_icon 'spinner lg spin'
 
   / Display a continue button if last attempt is correct
   - if !@current_question.last_question? && last_attempt && last_attempt.correct?
