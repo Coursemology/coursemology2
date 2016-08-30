@@ -11,25 +11,27 @@ nav
     = render partial: base_answer_form.object.question, suffix: 'question'
     = render partial: 'course/assessment/answer/answer', object: base_answer_form.object,
              locals: { base_answer_form: base_answer_form }
-    - if base_answer_form.object.attempting?
-      = f.button :submit, t('common.save')
 
-  - if @submission.attempting? && can?(:update, @submission)
-    = f.button :submit, t('.finalise'), name: 'submission[finalise]', class: ['btn-danger', 'finalise'],
-                                        data: { confirm: t('.confirm_finalise') },
-                                        style: guided_next_unanswered_question.nil? ? '' : 'display: none'
+    div.submission-buttons
+      - if base_answer_form.object.attempting?
+        = f.button :submit, t('common.save')
 
-  - unless @submission.attempting?
-    = render 'statistics', f: f
+      - if @submission.attempting? && can?(:update, @submission)
+        = f.button :submit, t('.finalise'), name: 'submission[finalise]', class: ['btn-danger', 'finalise', 'pull-right'],
+                                            data: { confirm: t('.confirm_finalise') },
+                                            style: guided_next_unanswered_question.nil? ? '' : 'display: none'
 
-    - if can?(:grade, @submission)
-      - if @submission.submitted?
-        = link_to t('.auto_grade'),
-                  auto_grade_course_assessment_submission_path(current_course,
-                                                               @submission.assessment,
-                                                               @submission),
-                  method: :post,
-                  class: ['btn', 'btn-info']
-        = f.button :submit, t('.publish'), name: 'submission[publish]', class: ['btn-danger']
+      - unless @submission.attempting?
+        = render 'statistics', f: f
 
-      = f.button :submit, t('.unsubmit'), name: 'submission[unsubmit]', class: ['btn-warning']
+        - if can?(:grade, @submission)
+          = f.button :submit, t('.unsubmit'), name: 'submission[unsubmit]', class: ['btn-warning']
+
+          - if @submission.submitted?
+            = link_to t('.auto_grade'),
+                      auto_grade_course_assessment_submission_path(current_course,
+                                                                   @submission.assessment,
+                                                                   @submission),
+                      method: :post,
+                      class: ['btn', 'btn-info']
+            = f.button :submit, t('.publish'), name: 'submission[publish]', class: ['btn-danger', 'pull-right']

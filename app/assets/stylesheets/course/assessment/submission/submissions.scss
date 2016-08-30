@@ -10,6 +10,14 @@
       color: $course-assessment-submission-answer-correct-border-text;
       padding: 0 3px;
     }
+
+    .submission-buttons .btn {
+      margin: 10px 10px 10px 0;
+
+      &[name="submission[publish]"] {
+        margin-right: 0;
+      }
+    }
   }
 
   &.index {

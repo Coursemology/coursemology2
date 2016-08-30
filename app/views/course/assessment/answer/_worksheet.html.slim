@@ -2,7 +2,8 @@
   - if answer.attempting?
     div.btn-group
       = link_to_reset_answer(answer)
-      = base_answer_form.button :button, t('common.submit'), value: answer.id, name: 'attempting_answer_id', class: 'submit-answer'
+      = base_answer_form.button :button, t('.run_code'), value: answer.id,
+        name: 'attempting_answer_id', class: ['submit-answer', 'btn-danger']
 
 h3 = t('.comments')
 div.comments id=comments_container_id(answer)

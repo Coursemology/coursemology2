@@ -4,6 +4,7 @@ en:
       answer:
         worksheet:
           comments: 'Comments'
+          run_code: 'Run Code'
         comments_footer:
           comment: 'Comment'
         guided:
