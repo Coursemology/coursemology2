@@ -137,6 +137,14 @@
     var $cell = findOrCreateAnnotationCell($code, programmingFileId, lineNumber);
     findOrCreateAnnotationForm($cell, courseId, assessmentId, submissionId, answerId,
                                programmingFileId, lineNumber);
+
+    var $lineNumberCell = $line.find('.line-number');
+
+    if ($lineNumberCell.children('.line-annotation-trigger').length === 0) {
+      $lineNumberCell.html(render('annotation_row_trigger'), {});
+    }
+
+    $line.find('.collapse-annotation').click();
   }
 
   /**
@@ -204,16 +212,23 @@
   }
 
   /**
-   * Handles the reset of the annotation form.
+   * Handles the reset of the annotation form. Removes the annotation row if there are no more
+   * discussion within this annotation.
    *
    * @param e The event object.
    */
   function onAnnotationFormResetted(e) {
     var $button = $(e.target);
-    var $replyButton = $button.parents('.line-annotation:first').find('.reply-annotation');
+    var $annotationRow = $button.parents('tr:first');
+    var $replyButton = $annotationRow.find('.reply-annotation');
 
-    FORM_HELPERS.removeParentForm($button);
-    $replyButton.show();
+    if ($annotationRow.find('.discussion_topic').length === 0) {
+      $annotationRow.prev().find('.line-annotation-trigger').remove();
+      $annotationRow.remove();
+    } else {
+      FORM_HELPERS.removeParentForm($button);
+      $replyButton.show();
+    }
   }
 
   /**
@@ -295,6 +310,51 @@
   }
 
   /**
+   * Handles the annotation bubble click event.
+   *
+   * @param e The event object.
+   */
+  function onAnnotationTrigger(e) {
+    var $element = $(e.target);
+    var $bubble = $element.closest('.line-annotation-trigger');
+    var $answer = $element.parents('.answer_programming_file:first');
+    var $checkbox = $answer.find('input.annotation-trigger-toggle-all');
+
+    toggleAnnotation($bubble, $bubble.hasClass('collapse-annotation'));
+    $checkbox.prop('indeterminate', true);
+  }
+
+  /**
+   * Expands or collapses the annotation.
+   *
+   * @param {jQuery} $annotationBubbles The annotation bubbles used to toggle the annotation.
+   * @param show The boolean value for whether to display the annotation.
+   */
+  function toggleAnnotation($annotationBubbles, show) {
+    var $annotationRows = $annotationBubbles.parents('tr').next();
+
+    if (show) {
+      $annotationBubbles.removeClass('collapse-annotation');
+      $annotationRows.show();
+    } else {
+      $annotationBubbles.addClass('collapse-annotation');
+      $annotationRows.hide();
+    }
+  }
+
+  /**
+   * Handles the expand all comments checkbox change event.
+   *
+   * @param e The event object.
+   */
+  function onAnnotationExpandAll(e) {
+    var expandAll = e.target.checked;
+    var $answer = $(e.target).parents('.answer_programming_file:first');
+
+    toggleAnnotation($answer.find('div.line-annotation-trigger'), expandAll);
+  }
+
+  /**
    * Shows widgets with javascript functionality.
    *
    * @param element
@@ -317,6 +377,10 @@
     onAnnotationFormSubmitted);
   $(document).on('click', DOCUMENT_SELECTOR + '.discussion_topic .reply-annotation',
     onAnnotationReply);
+  $(document).on('click', DOCUMENT_SELECTOR + '.table.codehilite .line-annotation-trigger',
+    onAnnotationTrigger);
+  $(document).on('change', DOCUMENT_SELECTOR + '.annotation-trigger-toggle-all',
+    onAnnotationExpandAll);
   DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR + '.line-annotation ');
 })(jQuery, FORM_HELPERS,
            COURSE_HELPERS,

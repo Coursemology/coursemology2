@@ -7,6 +7,8 @@ en:
 #            add_file: 'Add file'
 #          file_fields:
 #            delete: 'Delete file'
+          file_fields:
+            expand_comments: 'Expand all comments'
           test_cases:
             passed: 'Passed'
             private: :'course.assessment.question.programming.form_test_cases.private'

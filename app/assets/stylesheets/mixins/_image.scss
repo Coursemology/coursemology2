@@ -1,5 +1,5 @@
 // Keep the aspect ratio of the image.
 @mixin no-stretch {
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
 }

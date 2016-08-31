@@ -37,6 +37,9 @@ module Course::Assessment::Answer::ProgrammingHelper
     document = Nokogiri::XML.parse(code_block_html)
 
     programming_answer_file.annotations.each do |annotation|
+      if annotation.discussion_topic.posts.empty?
+        next
+      end
       insert_annotation_block(document, annotation)
     end
 
@@ -51,6 +54,10 @@ module Course::Assessment::Answer::ProgrammingHelper
   def insert_annotation_block(document, annotation)
     document.search(".//td[@data-line-number='#{annotation.line}']").each do |line_number|
       line_number_row = line_number.at('..')
+      line_number_cell = line_number_row.at('.//td[@class="line-number"]')
+
+      trigger_html = render partial: 'course/assessment/answer/programming/annotation_row_trigger'
+      line_number_cell.inner_html = Nokogiri::XML::DocumentFragment.parse(trigger_html)
 
       line_discussion_row = build_annotation_row(annotation)
       line_number_row.add_next_sibling(line_discussion_row)

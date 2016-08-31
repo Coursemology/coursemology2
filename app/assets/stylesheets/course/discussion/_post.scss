@@ -13,9 +13,20 @@
       background-color: $panel-default-heading-bg;
       border-bottom: $course-discussion-post-border;
 
+      .profile-picture,
       .user,
       .timestamp {
         display: inline-block;
+      }
+
+      .profile-picture {
+        .image > img {
+          @include no-stretch;
+          border-radius: 50%;
+          height: $picture-thumb;
+          margin-right: 5px;
+          width: $picture-thumb;
+        }
       }
 
       .user {
