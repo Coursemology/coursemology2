@@ -4,6 +4,6 @@
                                                      submission) do
       = format_inline_text(submission.course_user.name)
   td = submission.workflow_state.capitalize
-  td = submission.grade.to_i.to_s + ' / ' + submission.assessment.maximum_grade.to_s
+  td = submission.grade.to_s + ' / ' + submission.assessment.maximum_grade.to_s
   td = submission.points_awarded.to_i.to_s
   td
