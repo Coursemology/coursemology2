@@ -7,7 +7,7 @@
       = delete_button([current_course, @assessment])
 
 = div_for(@assessment) do
-  h2 = t('.description')
+  h3 = t('.description')
   = format_html(@assessment.description)
 
   table.table.table-bordered.details-table
@@ -28,11 +28,20 @@
         th = t('.end_at')
         td = format_datetime(@assessment.end_at) if @assessment.end_at.present?
 
-  h2 = t('.finish_to_unlock')
+  - if cannot?(:attempt, @assessment)
+    h3 = t('.requirements')
+    p.condition-not-satisfied = t('.condition_not_satisfied')
+
+    ul
+    - @assessment.specific_conditions.each do |condition|
+      = content_tag_for(:li, condition) do
+        = condition.title
+
+  h3 = t('.finish_to_unlock')
   = render partial: @assessment.assessment_conditions.includes(:conditional), suffix: 'condition'
 
   - if can?(:attempt, @assessment)
-    h2 = t('.files')
+    h3 = t('.files')
     = render partial: 'layouts/materials', locals: { folder: @assessment.folder }
 
   - if can?(:manage, @assessment)
@@ -60,6 +69,6 @@
             = link_to(t('.new_question.programming'),
                       new_course_assessment_question_programming_path(current_course, @assessment),
                       role: 'menuitem')
-    h2 = t('.questions')
 
+    h3 = t('.questions')
     = render @assessment.questions.map(&:specific)

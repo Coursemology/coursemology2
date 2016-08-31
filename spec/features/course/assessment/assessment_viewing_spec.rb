@@ -7,7 +7,7 @@ RSpec.describe 'Course: Assessments: Viewing' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) do
-      create(:course_assessment_assessment, :with_all_question_types, course: course)
+      create(:course_assessment_assessment, :with_all_question_types, :published, course: course)
     end
     before { login_as(user, scope: :user) }
 
@@ -61,6 +61,29 @@ RSpec.describe 'Course: Assessments: Viewing' do
           I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
           href: course_assessment_submissions_path(course, assessment)
         )
+      end
+    end
+
+    context 'As a Course Student' do
+      let(:user) { create(:course_student, course: course).user }
+
+      scenario 'I can view assessment dependencies in the assessment page' do
+        # Create Assessment Condition
+        other_assessment = create(:assessment, course: course)
+        assessment_condition =
+          create(:assessment_condition, course: course, assessment: other_assessment,
+                                        conditional: assessment)
+
+        # Create Achievement Condition
+        achievement = create(:achievement, course: course)
+        achievement_condition =
+          create(:achievement_condition, course: course, achievement: achievement,
+                                         conditional: assessment)
+
+        visit course_assessment_path(course, assessment)
+
+        expect(page).to have_content_tag_for(assessment_condition)
+        expect(page).to have_content_tag_for(achievement_condition)
       end
     end
   end
