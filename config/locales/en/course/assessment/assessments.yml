@@ -23,8 +23,8 @@ en:
           start_at: :'course.assessment.assessments.index.start_at'
           bonus_cut_off: :'course.assessment.assessments.index.bonus_cut_off'
           end_at: :'course.assessment.assessments.index.end_at'
-          maximum_experience_points:
-            :'course.assessment.assessments.index.maximum_experience_points'
+          base_exp: 'Base Experience Points'
+          bonus_exp: 'Bonus Experience Points'
           finish_to_unlock: 'Finish to Unlock'
           files: 'Files'
           questions: 'Questions'
