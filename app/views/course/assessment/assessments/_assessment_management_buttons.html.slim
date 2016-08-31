@@ -1,8 +1,8 @@
 div.btn-group
   - if current_course_user
-    - attempting_submission = assessment.submissions.find(&:attempting?)
-    - submitted_submission = assessment.submissions.find do |submission|
-      - submission != attempting_submission
+    - submissions = assessment.submissions.select { |s| s.creator == current_user }
+    - attempting_submission = submissions.find(&:attempting?)
+    - submitted_submission = submissions.find { |s| !s.attempting? }
     - if attempting_submission
       = link_to(t('.resume'), edit_course_assessment_submission_path(current_course,
           assessment, attempting_submission), class: ['btn', 'btn-info'])

@@ -52,6 +52,9 @@ RSpec.describe 'Course: Assessments: Viewing' do
       end
 
       scenario 'I attempt the assessment from the show assessment page' do
+        # Create a random submission which does not belong to the user.
+        # The button should still be 'Attempt' with the random submission.
+        create(:course_assessment_submission, assessment: assessment)
         visit course_assessment_path(course, assessment)
 
         expect(page).to have_link(
