@@ -12,12 +12,12 @@
 
   table.table.table-bordered.details-table
     tbody
-      tr.maximum_experience_points
-        th = t('.maximum_experience_points')
-        td = @assessment.base_exp + @assessment.time_bonus_exp + @assessment.extra_bonus_exp
-      /tr.maximum_grade
-        th = ('.maximum_grade')
-        td = @assessment.maximum_grade
+      tr.base_exp
+        th = t('.base_exp')
+        td = @assessment.base_exp
+      tr.bonus_exp
+        th = t('.bonus_exp')
+        td = @assessment.time_bonus_exp + @assessment.extra_bonus_exp
       tr.start_at
         th = t('.start_at')
         td = format_datetime(@assessment.start_at)
