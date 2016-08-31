@@ -21,11 +21,8 @@
 
       .profile-picture {
         .image > img {
-          @include no-stretch;
-          border-radius: 50%;
-          height: $picture-thumb;
+          @include fit-round-img($picture-thumb);
           margin-right: 5px;
-          width: $picture-thumb;
         }
       }
 

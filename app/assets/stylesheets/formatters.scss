@@ -1,10 +1,7 @@
 // Styles for formatting resources.
 .user {
   > .image > img {
-    @include no-stretch;
-
-    height: 50px;
+    @include fit-round-img(50px);
     margin-right: 0.5em;
-    width: 50px;
   }
 }

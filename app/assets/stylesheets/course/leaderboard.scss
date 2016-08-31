@@ -13,9 +13,7 @@
         width: 20%;
 
         .image > img {
-          height: $course-leaderboard-user-picture;
-          width: $course-leaderboard-user-picture;
-          border-radius: 50%;
+          @include fit-round-img($course-leaderboard-user-picture);
         }
       }
 
@@ -57,8 +55,7 @@
         width: 60%;
 
         .image > img {
-          height: $course-leaderboard-groupuser-picture;
-          width: $course-leaderboard-groupuser-picture;
+          @include fit-round-img($course-leaderboard-groupuser-picture);
         }
       }
 
