@@ -9,4 +9,10 @@
       margin-top: 1.5em;
     }
   }
+
+  &.index {
+    .condition-not-satisfied {
+      color: $red;
+    }
+  }
 }
