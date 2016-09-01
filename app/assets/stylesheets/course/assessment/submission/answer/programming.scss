@@ -24,9 +24,10 @@
 
       td.line-number {
         border-right: $course-discussion-post-border;
-        padding-left: 2em;
+        padding-left: 2.5em;
         position: relative;
         text-align: right;
+        user-select: none;
       }
 
       td.line-content {
@@ -48,7 +49,7 @@
         }
       }
 
-      div.line-annotation-trigger {
+      span.line-annotation-trigger {
         background: $course-discussion-post-annotation-trigger-bg-color;
         border: $course-discussion-post-border;
         border-bottom-color: $course-discussion-post-annotation-trigger-bg-color;
@@ -78,7 +79,7 @@
         }
       }
 
-      div.collapse-annotation span.fa-chevron-down {
+      span.collapse-annotation span.fa-chevron-down {
         transform: rotate(-90deg) scale(0.7);
       }
     }
