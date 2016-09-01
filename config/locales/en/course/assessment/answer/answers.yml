@@ -2,7 +2,8 @@ en:
   course:
     assessment:
       answer:
-        error: 'An error occurred while evaluating your answer, please try again.'
+        error: >
+          (T_T) Sorry, the autograder is having mood swings and quit on us. Please try again.
         worksheet:
           comments: 'Comments'
           run_code: 'Run Code'
