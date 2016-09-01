@@ -18,6 +18,15 @@
         margin-right: 0;
       }
     }
+
+    .exp-multiplier,
+    .points-awarded {
+      display: inline-block;
+    }
+
+    .exp-multiplier {
+      margin-left: 1em;
+    }
   }
 
   &.index {
