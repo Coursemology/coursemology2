@@ -1,6 +1,9 @@
 = div_for(post, 'data-post-id' => post.id) do
 
   div.header
+    div.profile-picture
+      = display_user_image(post.creator)
+
     div.user
       h5 = link_to_user(post.creator)
 
