@@ -18,6 +18,7 @@ en:
           maximum_experience_points: 'Maximum Experience Points'
         assessment:
           attempt: 'Attempt'
+          condition_not_satisfied: 'You do not fulfill the requirements of the assessment'
         show:
           description: 'Description'
           start_at: :'course.assessment.assessments.index.start_at'
@@ -25,6 +26,9 @@ en:
           end_at: :'course.assessment.assessments.index.end_at'
           base_exp: 'Base Experience Points'
           bonus_exp: 'Bonus Experience Points'
+          requirements: 'Requirements'
+          condition_not_satisfied: >
+            You must fulfill the following requirements before you can attempt this assessment:
           finish_to_unlock: 'Finish to Unlock'
           files: 'Files'
           questions: 'Questions'

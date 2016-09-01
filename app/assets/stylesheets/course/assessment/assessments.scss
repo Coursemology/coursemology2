@@ -1,7 +1,18 @@
 .course-assessment-assessments {
   &.show {
+    .condition-not-satisfied {
+      color: $red;
+      font-weight: bold;
+    }
+
     .details-table {
       margin-top: 1.5em;
+    }
+  }
+
+  &.index {
+    .condition-not-satisfied {
+      color: $red;
     }
   }
 }

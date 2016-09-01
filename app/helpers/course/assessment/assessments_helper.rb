@@ -9,4 +9,10 @@ module Course::Assessment::AssessmentsHelper
       end
     end
   end
+
+  def condition_not_satisfied(assessment)
+    cannot?(:attempt, assessment) &&
+      assessment.start_at < Time.zone.now &&
+      !assessment.conditions_satisfied_by?(current_course_user)
+  end
 end
