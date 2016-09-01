@@ -138,10 +138,13 @@
     findOrCreateAnnotationForm($cell, courseId, assessmentId, submissionId, answerId,
                                programmingFileId, lineNumber);
 
-    var $lineNumberCell = $line.find('.line-number');
+    var $lineNumberCell = $line.find('.line-number:first');
 
     if ($lineNumberCell.children('.line-annotation-trigger').length === 0) {
-      $lineNumberCell.html(render('annotation_row_trigger'), {});
+      $lineNumberCell.html(render('annotation_row_trigger', {}));
+      // Removes all whitespace between html tags so that in Safari, a whitespace is not added
+      // when trying to copy and paste a selection of code which includes the trigger bubble.
+      $line.html($line.html().replace(/>\s+</g, '><'));
     }
 
     $line.find('.collapse-annotation').click();
@@ -351,7 +354,7 @@
     var expandAll = e.target.checked;
     var $answer = $(e.target).parents('.answer_programming_file:first');
 
-    toggleAnnotation($answer.find('div.line-annotation-trigger'), expandAll);
+    toggleAnnotation($answer.find('.line-annotation-trigger'), expandAll);
   }
 
   /**
