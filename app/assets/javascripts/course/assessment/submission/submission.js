@@ -10,6 +10,20 @@
   var TOTAL_GRADE_SELECTOR = '#submission-statistics-total-grade';
 
   /**
+   * Update the initial EXP points after page load.
+   */
+  function updateInitialPoints() {
+    if ($(DOCUMENT_SELECTOR).length !== 0) {
+      var totalGrade = Number($(TOTAL_GRADE_SELECTOR).text());
+      if (isNaN(totalGrade)) { return; }
+
+      var assignedExp = $(POINTS_AWARDED_SELECTOR).val();
+      if (!assignedExp) {
+        updateExperiencePointsAwarded(totalGrade);
+      }
+    }
+  }
+  /**
    * Handles the event when a submission answer is graded or when the grade
    * is changed. If the new grade is valid, three items are updated:
    * - The grade for the question in the grades summary
@@ -98,4 +112,5 @@
                            updateGradesAndPoints);
   $(document).on('change', SINGLE_QUESTION_ASSESSMENT_SELECTOR + GRADE_INPUT_SELECTOR,
                            updateGradesAndPointsSingleQuestion);
+  $(document).on('turbolinks:load', updateInitialPoints);
 })(jQuery);
