@@ -131,20 +131,16 @@
     var submissionId = ANSWER_HELPERS.submissionIdForElement($target);
     var answerId = ANSWER_HELPERS.answerIdForElement($target);
     var programmingFileId = programmingFileIdForRow($target);
-    var lineNumber = $line.find('.line-number').data('lineNumber');
+    var $lineNumberCell = $line.find('.line-number:first');
+    var lineNumber = $lineNumberCell.data('lineNumber');
 
     var $code = $line.parents('table:first');
     var $cell = findOrCreateAnnotationCell($code, programmingFileId, lineNumber);
     findOrCreateAnnotationForm($cell, courseId, assessmentId, submissionId, answerId,
                                programmingFileId, lineNumber);
 
-    var $lineNumberCell = $line.find('.line-number:first');
-
     if ($lineNumberCell.children('.line-annotation-trigger').length === 0) {
-      $lineNumberCell.html(render('annotation_row_trigger', {}));
-      // Removes all whitespace between html tags so that in Safari, a whitespace is not added
-      // when trying to copy and paste a selection of code which includes the trigger bubble.
-      $line.html($line.html().replace(/>\s+</g, '><'));
+      $lineNumberCell.replaceWith(render('line_number_cell', {lineNumber: lineNumber}));
     }
 
     $line.find('.collapse-annotation').click();
