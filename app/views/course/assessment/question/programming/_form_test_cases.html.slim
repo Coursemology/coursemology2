@@ -19,7 +19,8 @@ table.table.table-striped.table-hover
       = content_tag_for(:tr, test_case) do
         th = test_case.identifier
         td = test_case.expression
-        td = test_case.expected
+        td 
+          div.expected = test_case.expected
         td = test_case.hint
   tbody
     tr
@@ -29,7 +30,8 @@ table.table.table-striped.table-hover
       = content_tag_for(:tr, test_case) do
         th = test_case.identifier
         td = test_case.expression
-        td = test_case.expected
+        td 
+          div.expected = test_case.expected
         td = test_case.hint
         td
   tbody
@@ -40,6 +42,7 @@ table.table.table-striped.table-hover
       = content_tag_for(:tr, test_case) do
         th = test_case.identifier
         td = test_case.expression
-        td = test_case.expected
+        td 
+          div.expected = test_case.expected
         td = test_case.hint
         td
