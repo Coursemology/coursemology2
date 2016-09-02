@@ -36,6 +36,7 @@ en:
             status: 'Status'
             due_at: 'Due At'
             statistics: 'Statistics'
+            multiplier: 'Multiplier'
             question: 'Question'
             grade_summary: 'Grade Summary'
           update:

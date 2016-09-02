@@ -10,6 +10,20 @@
   var TOTAL_GRADE_SELECTOR = '#submission-statistics-total-grade';
 
   /**
+   * Update the initial EXP points after page load.
+   */
+  function updateInitialPoints() {
+    if ($(DOCUMENT_SELECTOR).length !== 0) {
+      var totalGrade = Number($(TOTAL_GRADE_SELECTOR).text());
+      if (isNaN(totalGrade)) { return; }
+
+      var assignedExp = $(POINTS_AWARDED_SELECTOR).val();
+      if (!assignedExp) {
+        updateExperiencePointsAwarded(totalGrade);
+      }
+    }
+  }
+  /**
    * Handles the event when a submission answer is graded or when the grade
    * is changed. If the new grade is valid, three items are updated:
    * - The grade for the question in the grades summary
@@ -86,16 +100,62 @@
    * @param {Number} newTotalGrade The new total grade
    */
   function updateExperiencePointsAwarded(newTotalGrade) {
+    var actualPoints = getActualPoints(newTotalGrade);
+    var newPointsAwarded = Math.floor(actualPoints * getMultiplier());
+    $(POINTS_AWARDED_SELECTOR).val(newPointsAwarded);
+  }
+
+  /**
+   * Get the actual points (points before adpot multiplier) that we should award.
+   *
+   * @param {Number} totalGrade The total grade.
+   * @returns {Number}
+   */
+  function getActualPoints(totalGrade) {
     var $pointsAwardedInput = $(POINTS_AWARDED_SELECTOR);
     var basePoints = $pointsAwardedInput.data('base-points');
     var maximumGrade = $(MAXIMUM_GRADE_SELECTOR).text();
-    var newPointsAwarded =
-      maximumGrade === 0 ? 0 : Math.floor(basePoints * newTotalGrade / maximumGrade);
-    $pointsAwardedInput.val(newPointsAwarded);
+
+    var actualPoints = 0;
+    if (maximumGrade !== 0) {
+      actualPoints = Math.floor(basePoints * totalGrade / maximumGrade);
+    }
+
+    return actualPoints;
+  }
+
+  /**
+   * Handles the event when the value of the multiplier changes.
+   */
+  function onMultiplierChange(e) {
+    var $pointsAwardedInput = $(POINTS_AWARDED_SELECTOR);
+    var multiplier = Number(e.target.value);
+    var totalGrade = Number($(TOTAL_GRADE_SELECTOR).text());
+    if (isNaN(multiplier) || isNaN(totalGrade)) { return; }
+
+    var actualPoints = getActualPoints(totalGrade);
+    var newPoints = Math.floor(actualPoints * multiplier);
+    $pointsAwardedInput.val(newPoints);
+  }
+
+  /**
+   * Get the value of current multiplier.
+   *
+   * @returns {Number}
+   */
+  function getMultiplier() {
+    var multiplier = Number($('.exp-multiplier input').val());
+    if (isNaN(multiplier)) {
+      multiplier = 1;
+    }
+
+    return multiplier;
   }
 
   $(document).on('change', MULTI_QUESTION_ASSESSMENT_SELECTOR + GRADE_INPUT_SELECTOR,
                            updateGradesAndPoints);
   $(document).on('change', SINGLE_QUESTION_ASSESSMENT_SELECTOR + GRADE_INPUT_SELECTOR,
                            updateGradesAndPointsSingleQuestion);
+  $(document).on('change', DOCUMENT_SELECTOR + '.exp-multiplier input', onMultiplierChange);
+  $(document).on('turbolinks:load', updateInitialPoints);
 })(jQuery);
