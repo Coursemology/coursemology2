@@ -14,6 +14,8 @@ matrix:
       env: GROUP="checks"
 addons:
   postgresql: "9.4"
+  hosts:
+    - coursemology.lvh.me
 bundler_args: "--jobs=3 --retry=3 --without development:production --deployment"
 cache:
   bundler: true
