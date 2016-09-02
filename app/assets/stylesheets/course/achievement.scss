@@ -26,8 +26,7 @@
 
     .course-user-achievement {
       .image > img {
-        height: $course-achievement-user-profile;
-        width: $course-achievement-user-profile;
+        @include fit-round-img($course-achievement-user-profile);
       }
 
       text-align: center;

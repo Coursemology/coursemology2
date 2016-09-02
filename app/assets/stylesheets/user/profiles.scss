@@ -1,11 +1,7 @@
 .user-profiles {
   &.edit {
     .image > img {
-      @include no-stretch;
-
-      height: 200px;
-      width: 200px;
-      border-radius: 50%;
+      @include fit-round-img(200px);
     }
 
     .upload-btn {
