@@ -19,6 +19,9 @@ cache:
   bundler: true
   directories:
     - travis-phantomjs
+    - spec-runtime
+before_cache:
+  - mv $TRAVIS_BUILD_DIR/tmp/parallel_runtime_rspec.log $TRAVIS_BUILD_DIR/spec-runtime/parallel_runtime_rspec.log
 env:
   global:
     - RAILS_ENV=test
@@ -45,6 +48,9 @@ before_script:
   - psql -c 'create database coursemology_test2;' -U postgres
 #  - bundle exec rake db:setup
   - bundle exec rake parallel:setup[2]
+  # Copy runtime log if it exists. Create runtime cache directory if absent.
+  - 'if [ -f "$TRAVIS_BUILD_DIR/spec-runtime/parallel_runtime_rspec.log" ]; then cp $TRAVIS_BUILD_DIR/spec-runtime/parallel_runtime_rspec.log $TRAVIS_BUILD_DIR/tmp/parallel_runtime_rspec.log; cat $TRAVIS_BUILD_DIR/tmp/parallel_runtime_rspec.log; fi'
+  - 'if [ ! -d "spec-runtime" ]; then mkdir spec-runtime; fi'
 
 script:
   - 'if [ "$GROUP" = "checks" ]; then bundle exec consistency_fail; fi'
