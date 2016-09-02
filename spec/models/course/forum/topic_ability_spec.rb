@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Forum::Topic, type: :model do
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     subject(:ability) { Ability.new(user) }
     let(:course) { create(:course) }

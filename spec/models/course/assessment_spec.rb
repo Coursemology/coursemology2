@@ -12,7 +12,7 @@ RSpec.describe Course::Assessment do
   it { is_expected.to have_many(:conditions) }
   it { is_expected.to have_many(:assessment_conditions).dependent(:destroy) }
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) { create(:assessment, *assessment_traits, course: course) }

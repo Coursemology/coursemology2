@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe Course::Condition::Level, type: :model do
   it { is_expected.to act_as(Course::Condition) }
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course_user) { create(:course_user) }
     describe 'callbacks' do

@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Forum::TopicNotifier, type: :notifier do
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
     describe '#topic_created' do

@@ -6,7 +6,7 @@ RSpec.describe Course::Assessment::ProgrammingEvaluation do
   it { is_expected.to belong_to(:language) }
   it { is_expected.to belong_to(:evaluator) }
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:evaluation_traits) { nil }
     let(:course) { create(:course) }

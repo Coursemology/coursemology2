@@ -7,7 +7,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingTemplateFile do
       class_name(Course::Assessment::Question::Programming.name)
   end
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     subject { build_stubbed(:course_assessment_question_programming_template_file) }
 

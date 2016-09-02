@@ -10,7 +10,7 @@ RSpec.describe Course::Assessment::Answer do
   it { is_expected.to accept_nested_attributes_for(:actable) }
   it { is_expected.to have_one(:auto_grading).dependent(:destroy) }
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     subject { create(:course_assessment_answer) }
 

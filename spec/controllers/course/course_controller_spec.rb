@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::CoursesController, type: :controller do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     describe '#recent_activity_feeds' do
       let(:course) { create(:course) }

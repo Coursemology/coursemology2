@@ -9,7 +9,7 @@ RSpec.describe Course::Assessment::Submission do
   it { is_expected.to have_many(:programming_answers).through(:answers) }
   it { is_expected.to accept_nested_attributes_for(:answers) }
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) { create(:assessment, *assessment_traits, course: course) }

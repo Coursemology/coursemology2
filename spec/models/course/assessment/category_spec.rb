@@ -6,7 +6,7 @@ RSpec.describe Course::Assessment::Category do
   it { is_expected.to have_many(:tabs) }
   it { is_expected.to have_many(:assessments).through(:tabs) }
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     describe 'callbacks' do
       describe 'after category was initialized' do

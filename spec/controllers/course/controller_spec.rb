@@ -12,7 +12,7 @@ RSpec.describe Course::Controller, type: :controller do
     end
   end
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:user) { create(:administrator) }
     let(:course) { create(:course, :opened) }

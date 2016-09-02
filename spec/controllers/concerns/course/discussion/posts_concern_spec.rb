@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Discussion::PostsConcern do
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     describe 'default behaviours' do
       class self::DummyController < ApplicationController

@@ -7,7 +7,7 @@ RSpec.describe Course::Assessment::Question::TextResponseSolution, type: :model 
       class_name(Course::Assessment::Question::TextResponse.name)
   end
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     describe 'validations' do
       describe '#answer_text' do

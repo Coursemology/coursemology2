@@ -8,7 +8,7 @@ RSpec.describe ApplicationWidgetsHelper, type: :helper do
     end
   end
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     describe '#new_button' do
       let(:announcement) { create(:course_announcement) }

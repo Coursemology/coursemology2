@@ -7,7 +7,7 @@ RSpec.describe Course::Discussion::Post, type: :model do
   it { is_expected.to have_many(:votes).inverse_of(:post).dependent(:destroy) }
   it { is_expected.to have_many(:children) }
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     describe '.all' do
       let(:topic) { create(:course_discussion_topic) }

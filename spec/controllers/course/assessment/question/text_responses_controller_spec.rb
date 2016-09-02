@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Question::TextResponsesController do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:text_response) { nil }
     let(:user) { create(:user) }

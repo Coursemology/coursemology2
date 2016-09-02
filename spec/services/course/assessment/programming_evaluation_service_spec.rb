@@ -77,7 +77,7 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
 
   subject { Course::Assessment::ProgrammingEvaluationService }
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course) { create(:course) }
 

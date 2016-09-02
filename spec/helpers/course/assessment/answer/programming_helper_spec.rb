@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Answer::ProgrammingHelper do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     describe '#format_programming_answer_file' do
       let(:language) { Coursemology::Polyglot::Language::Python::Python2Point7 }

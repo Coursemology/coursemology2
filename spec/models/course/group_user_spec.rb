@@ -5,7 +5,7 @@ RSpec.describe Course::GroupUser, type: :model do
   it { is_expected.to belong_to(:course_user).inverse_of(:group_users) }
   it { is_expected.to belong_to(:group).inverse_of(:group_users) }
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course_group) { create(:course_group) }
     context 'when user is not enrolled in group\'s course' do

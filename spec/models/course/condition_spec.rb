@@ -5,7 +5,7 @@ RSpec.describe Course::Condition, type: :model do
   it { is_expected.to be_actable }
   it { is_expected.to belong_to(:conditional) }
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let(:course) { create(:course) }

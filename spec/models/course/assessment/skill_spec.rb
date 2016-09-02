@@ -6,7 +6,7 @@ RSpec.describe Course::Assessment::Skill do
   it { is_expected.to belong_to(:skill_branch) }
   it { is_expected.to have_and_belong_to_many(:questions) }
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course) { build(:course) }
     let(:skill_branch) { nil }

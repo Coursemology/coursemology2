@@ -13,7 +13,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponse do
       class_name(Course::Assessment::Question::MultipleResponseOption.name)
   end
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     describe '#reset_answer' do
       let(:answer) { create(:course_assessment_answer_multiple_response, :with_one_correct_option) }

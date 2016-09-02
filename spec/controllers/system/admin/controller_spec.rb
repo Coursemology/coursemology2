@@ -10,7 +10,7 @@ RSpec.describe System::Admin::Controller, type: :controller do
 
   requires_login
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     it 'allows instance administrators to access the page' do

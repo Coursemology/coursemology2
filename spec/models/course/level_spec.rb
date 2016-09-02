@@ -9,7 +9,7 @@ RSpec.describe Course::Level, type: :model do
       is_greater_than_or_equal_to(0)
   end
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     let!(:course) { build(:course) }
 

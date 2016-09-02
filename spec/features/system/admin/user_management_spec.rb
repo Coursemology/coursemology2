@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.feature 'System: Administration: Users' do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     context 'As a System Administrator' do

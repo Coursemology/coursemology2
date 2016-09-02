@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Submission::AutoGradingService do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:answer) { create(:course_assessment_answer_multiple_response, :submitted).answer }
     let(:submission) { answer.submission.tap { |submission| submission.answers.reload } }

@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe Course::Assessment::Answer::TextResponse, type: :model do
   it { is_expected.to act_as(Course::Assessment::Answer) }
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     describe 'validations' do
       subject do

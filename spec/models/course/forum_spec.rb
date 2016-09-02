@@ -6,7 +6,7 @@ RSpec.describe Course::Forum, type: :model do
   it { is_expected.to have_many(:subscriptions).inverse_of(:forum).dependent(:destroy) }
   it { is_expected.to belong_to(:course).inverse_of(:forums) }
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course) { create(:course) }
 

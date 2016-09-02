@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.feature 'User: Omniauth' do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     context 'As a unregistered user' do

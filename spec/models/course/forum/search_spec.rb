@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Forum::Search, type: :model do
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     subject { Course::Forum::Search.new(search_hash) }
 

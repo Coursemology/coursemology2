@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Achievement::ControllerHelper do
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:achievement) { create(:course_achievement) }
 

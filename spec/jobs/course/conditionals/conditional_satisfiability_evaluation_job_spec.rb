@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Conditional::ConditionalSatisfiabilityEvaluationJob do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course_user) { create(:course_user) }
     subject { Course::Conditional::ConditionalSatisfiabilityEvaluationJob }

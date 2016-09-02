@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Conditional::SatisfiabilityGraphBuildService do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let!(:achievement) { create(:achievement, course: course) }

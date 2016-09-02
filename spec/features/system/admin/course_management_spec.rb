@@ -2,13 +2,13 @@
 require 'rails_helper'
 
 RSpec.feature 'System: Administration: Courses' do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let(:last_page) { Course.unscoped.page.total_pages }
     let!(:courses) do
       courses = create_list(:course, 2)
-      other_instance = create(:instance)
+      other_instance = Instance.default
       courses.last.update_column(:instance_id, other_instance)
       Course.unscoped.ordered_by_title.page(last_page)
     end

@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::ExperiencePoints::DisbursementController, type: :controller do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let(:course) { create(:course) }

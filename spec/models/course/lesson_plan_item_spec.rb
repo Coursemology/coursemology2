@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe Course::LessonPlan::Item, type: :model do
   it { is_expected.to belong_to(:course).inverse_of(:lesson_plan_items) }
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:lesson_plan_item) { create(:course_lesson_plan_item, course: course) }

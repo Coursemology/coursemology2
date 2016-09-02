@@ -19,7 +19,7 @@ RSpec.describe Course::Assessment::Question::Programming do
       class_name(Course::Assessment::Question::ProgrammingTestCase.name).dependent(:destroy)
   end
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     describe 'validations' do
       subject { build(:course_assessment_question_programming) }
