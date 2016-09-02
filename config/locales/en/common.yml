@@ -12,6 +12,8 @@ en:
     save: 'Save'
     search: 'Search'
     submit: 'Submit'
+    show_more: 'See all'
+    show_less: 'See less'
   helpers:
     submit:
       condition_level:
