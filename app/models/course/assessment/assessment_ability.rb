@@ -20,6 +20,7 @@ module Course::Assessment::AssessmentAbility
   end
 
   def define_staff_permissions
+    allow_managers_manage_tab_and_categories
     allow_staff_manage_assessments
     allow_staff_grade_submissions
     allow_staff_manage_annotations
@@ -86,6 +87,11 @@ module Course::Assessment::AssessmentAbility
         question: { assessment: assessment_course_staff_hash }
     can :manage, Course::Assessment::Question::Programming,
         question: { assessment: assessment_course_staff_hash }
+  end
+
+  def allow_managers_manage_tab_and_categories
+    can :manage, Course::Assessment::Tab, category: course_managers_hash
+    can :manage, Course::Assessment::Category, course_managers_hash
   end
 
   def allow_staff_grade_submissions

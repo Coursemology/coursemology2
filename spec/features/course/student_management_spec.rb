@@ -6,7 +6,7 @@ RSpec.feature 'Courses: Students' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:user) { create(:administrator) }
+    let(:user) { create(:course_manager, course: course).user }
     let!(:course_students) { create_list(:course_student, 3, course: course) }
     let!(:unregistered_user) { create(:course_user, course: course) }
     before { login_as(user, scope: :user) }
