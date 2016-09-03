@@ -68,4 +68,8 @@ class Course::UserRegistrationsController < Course::ComponentController
 
     redirect_to course_path(current_course), success: success
   end
+
+  def skip_participation_check?
+    return true if ['create', 'destroy'].include? action_name
+  end
 end
