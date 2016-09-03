@@ -6,7 +6,7 @@ RSpec.describe Course::Discussion::Topic, type: :model do
   it { is_expected.to have_many(:posts).inverse_of(:topic).dependent(:destroy) }
   it { is_expected.to have_many(:subscriptions).inverse_of(:topic).dependent(:destroy) }
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:user) { create(:user) }
     let(:topic) { create(:forum_topic) }

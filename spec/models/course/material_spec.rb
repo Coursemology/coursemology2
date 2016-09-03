@@ -5,7 +5,7 @@ RSpec.describe Course::Material, type: :model do
   it { is_expected.to belong_to(:folder).inverse_of(:materials).touch(true) }
   it { is_expected.to belong_to(:creator) }
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     context 'when two materials have the same name' do
       let(:folder) { create(:folder) }

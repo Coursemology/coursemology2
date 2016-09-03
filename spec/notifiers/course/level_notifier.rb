@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::LevelNotifier, type: :notifier do
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
     describe '#level_reached' do

@@ -9,7 +9,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingFile do
       dependent(:destroy)
   end
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     subject { build_stubbed(:course_assessment_answer_programming_file) }
 

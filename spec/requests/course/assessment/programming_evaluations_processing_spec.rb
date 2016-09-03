@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Course: Assessments: Programming Evaluations Processing' do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:user) { create(:user, *user_traits) }

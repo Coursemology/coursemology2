@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Course: Requests' do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let(:user) { create(:administrator) }

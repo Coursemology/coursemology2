@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Question::ProgrammingImportService do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:question) { create(:course_assessment_question_programming, template_file_count: 0) }
     let(:package_path) do

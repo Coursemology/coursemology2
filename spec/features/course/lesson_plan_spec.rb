@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.feature 'Course: Lesson Plan' do
   subject { page }
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let!(:course) { create(:course) }

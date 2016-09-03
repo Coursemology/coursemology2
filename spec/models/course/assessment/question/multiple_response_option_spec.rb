@@ -7,7 +7,7 @@ RSpec.describe Course::Assessment::Question::MultipleResponseOption do
       class_name(Course::Assessment::Question::MultipleResponse.name)
   end
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     describe '.correct' do
       let(:question) { create(:course_assessment_question_multiple_response) }

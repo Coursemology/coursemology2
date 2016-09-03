@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Notifier::Base, type: :notifier do
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     class self::DummyNotifier < Notifier::Base
       def dummy_created(actor, object, user)

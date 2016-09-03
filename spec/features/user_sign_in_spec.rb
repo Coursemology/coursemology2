@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Users: Sign In' do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     scenario 'I can sign in if I am a user in another instance' do
       other_instance = create(:instance)

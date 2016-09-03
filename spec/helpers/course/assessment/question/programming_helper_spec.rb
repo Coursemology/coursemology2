@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Question::ProgrammingHelper do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     def build_error(error_class, message = error_class.name)
       { 'class' => error_class.name, 'message' => message }

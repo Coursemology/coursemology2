@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Question::ProgrammingImportJob do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     subject { Course::Assessment::Question::ProgrammingImportJob }
     let(:question) do

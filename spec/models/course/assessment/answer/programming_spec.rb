@@ -10,7 +10,7 @@ RSpec.describe Course::Assessment::Answer::Programming do
   end
   it { is_expected.to accept_nested_attributes_for(:files).allow_destroy(true) }
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     describe '#reset_answer' do
       let(:question) { create(:course_assessment_question_programming, template_file_count: 1) }

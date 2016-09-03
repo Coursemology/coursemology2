@@ -17,7 +17,7 @@ RSpec.describe 'Extension: Devise: sign_in with resource', type: :controller do
     include Devise::Controllers::SignInOut
   end
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:user) { self.class::TestUser.new }
     subject { controller.sign_in(:user, user, bypass: true) }

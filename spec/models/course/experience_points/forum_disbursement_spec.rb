@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::ExperiencePoints::ForumDisbursement, type: :model do
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:forum_disbursement) { Course::ExperiencePoints::ForumDisbursement.new(params) }
 

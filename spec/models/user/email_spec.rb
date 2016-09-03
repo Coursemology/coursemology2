@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe User::Email, type: :model do
   it { is_expected.to belong_to(:user).inverse_of(:emails) }
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let(:email) { build(:user_email) }

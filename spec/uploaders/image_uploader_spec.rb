@@ -4,7 +4,7 @@ require 'carrierwave/test/matchers'
 
 RSpec.describe ImageUploader, type: :model do
   include CarrierWave::Test::Matchers
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let(:course) { create(:course) }

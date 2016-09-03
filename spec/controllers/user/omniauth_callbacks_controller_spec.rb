@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe User::OmniauthCallbacksController, type: :controller do
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
     before { controller.request.env['devise.mapping'] = Devise.mappings[:user] }

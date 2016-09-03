@@ -5,7 +5,7 @@ RSpec.describe Course::ExperiencePointsRecord do
   it { is_expected.to belong_to(:course_user).inverse_of(:experience_points_records) }
   it { is_expected.to validate_presence_of(:course_user) }
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:course_user) { create(:course_user, course: course) }

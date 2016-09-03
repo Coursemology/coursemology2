@@ -57,7 +57,7 @@ RSpec.describe 'Extension: Acts as Condition', type: :model do
     end
 
     describe '.evaluate_conditional_for' do
-      let(:instance) { create(:instance) }
+      let(:instance) { Instance.default }
       with_tenant(:instance) do
         let(:course_user) { create(:course_user) }
 

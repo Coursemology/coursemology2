@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.feature 'System: Administration: Users' do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     context 'As a System Administrator' do
@@ -11,9 +11,9 @@ RSpec.feature 'System: Administration: Users' do
 
       let!(:users) do
         create_list(:user, 2)
-        User.human_users.ordered_by_name.page(1)
+        User.human_users.ordered_by_name.limit(5)
       end
-      scenario 'I can view all users in the system' do
+      scenario 'I can view the users in the system' do
         visit admin_users_path
 
         users.each do |user|

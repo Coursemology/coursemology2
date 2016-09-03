@@ -8,7 +8,7 @@ RSpec.describe Course::AssessmentsComponent do
     Course::AssessmentsComponent.new(controller)
   end
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course) { build(:course, instance: instance) }
 

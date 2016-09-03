@@ -7,7 +7,7 @@ RSpec.describe Course::Forum::Topic, type: :model do
   it { is_expected.to belong_to(:forum).inverse_of(:topics) }
   it { is_expected.to belong_to(:creator) }
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:forum) { create(:forum) }
 

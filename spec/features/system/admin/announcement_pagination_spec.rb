@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe 'System: Administration: Announcements', type: :feature do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     describe 'Pagination' do

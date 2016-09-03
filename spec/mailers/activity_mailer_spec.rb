@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe ActivityMailer, type: :mailer do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let(:template) { 'activity_mailer/test_email' }

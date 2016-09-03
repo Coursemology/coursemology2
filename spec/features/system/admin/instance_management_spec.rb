@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.feature 'System: Administration: Instances' do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     context 'As a system administrator' do
       let!(:user) { create(:administrator) }
@@ -29,6 +29,7 @@ RSpec.feature 'System: Administration: Instances' do
       end
 
       scenario 'I can edit instances' do
+        instance = create(:instance)
         visit edit_admin_instance_path(instance)
 
         fill_in 'instance_name', with: ''

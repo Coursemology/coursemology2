@@ -14,7 +14,7 @@ RSpec.describe Course::Assessment::Question do
   it { is_expected.to belong_to(:assessment) }
   it { is_expected.to have_and_belong_to_many(:skills) }
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     subject { build_stubbed(:course_assessment_question) }
 

@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::AssessmentNotifier, type: :notifier do
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
     describe '#assessment_attempted' do

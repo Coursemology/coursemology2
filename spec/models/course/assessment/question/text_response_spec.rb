@@ -10,7 +10,7 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
   end
   it { is_expected.to accept_nested_attributes_for(:solutions) }
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     describe '#auto_gradable?' do
       subject { create(:course_assessment_question_text_response) }

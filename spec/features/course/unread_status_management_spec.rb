@@ -5,7 +5,7 @@ RSpec.describe 'Course: Announcements', type: :feature do
   describe 'Read/Unread' do
     subject { page }
 
-    let!(:instance) { create(:instance) }
+    let!(:instance) { Instance.default }
 
     with_tenant(:instance) do
       let!(:first_user) { create(:administrator) }

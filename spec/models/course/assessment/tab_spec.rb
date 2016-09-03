@@ -5,7 +5,7 @@ RSpec.describe Course::Assessment::Tab do
   it { is_expected.to belong_to(:category) }
   it { is_expected.to have_many(:assessments).dependent(:destroy) }
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     describe '.default_scope' do
       let(:course) { create(:course) }

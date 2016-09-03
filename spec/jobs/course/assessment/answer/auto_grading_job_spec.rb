@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Answer::AutoGradingJob do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     subject { Course::Assessment::Answer::AutoGradingJob }
     let(:answer) { create(:course_assessment_answer_multiple_response, :submitted).answer }

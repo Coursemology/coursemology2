@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe Course::Discussion::Post::Vote do
   it { is_expected.to belong_to(:post).inverse_of(:votes) }
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:user) { create(:user) }
     let(:post) { create(:course_discussion_post) }

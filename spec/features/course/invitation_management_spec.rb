@@ -3,15 +3,15 @@ require 'rails_helper'
 require 'csv'
 
 RSpec.feature 'Courses: Invitations', js: true do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     before { login_as(user, scope: :user) }
 
     context 'As a Course manager' do
-      let(:user) { create(:administrator) }
+      let(:user) { create(:user) }
+      let(:course) { create(:course, creator: user) }
 
       scenario 'I can invite users by individually entering their addresses' do
-        course = create(:course)
         invitation = create(:course_user_invitation, course: course)
         visit invite_course_users_path(course)
 
@@ -34,27 +34,28 @@ RSpec.feature 'Courses: Invitations', js: true do
       end
 
       scenario 'I can invite users by uploading a file' do
-        course = create(:course)
-        invitation_file = File.join(__dir__, '../../fixtures/course/invitation.csv')
-        invitations = CSV.read(invitation_file, headers: true)
+        # Build a invitation file and invite 2 random users.
+        users = build_list(:user, 2)
+        invitation_file = Tempfile.new('invitation')
+        invitation_file.
+          write("Name,Email\n" + users.map { |u| [u.name, u.email].join(',') }.join("\n"))
+        invitation_file.close
 
         visit invite_course_users_path(course)
         within find('#course_invitations_file').find(:xpath, '../..') do
-          attach_file 'course_invitations_file', invitation_file
+          attach_file 'course_invitations_file', invitation_file.path
           click_button 'submit'
         end
-
         expect(page).to have_selector('div.progress')
-        invitations.each do |invitation|
-          expect(page).to have_selector('tr.course_user th', text: invitation[0])
-          expect(page).to have_selector('tr.course_user td', text: invitation[1])
+        users.each do |user|
+          expect(page).to have_selector('tr.course_user th', text: user.name)
+          expect(page).to have_selector('tr.course_user td', text: user.email)
           expect(page).to have_selector('tr.course_user td',
                                         text: I18n.t('course.users.status.invited'))
         end
       end
 
       scenario 'I can enable and disable registration-code registrations' do
-        course = create(:course)
         expect(course.registration_key).to be_nil
         visit invite_course_users_path(course)
 
@@ -81,7 +82,6 @@ RSpec.feature 'Courses: Invitations', js: true do
       end
 
       scenario 'I can track the status of invites' do
-        course = create(:course)
         visit course_users_invitations_path(course)
 
         invitations = create_list(:course_user_invitation, 3, course: course)

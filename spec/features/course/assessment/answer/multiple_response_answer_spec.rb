@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let(:course) { create(:course) }

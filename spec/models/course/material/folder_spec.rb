@@ -5,7 +5,7 @@ RSpec.describe Course::Material::Folder, type: :model do
   it { is_expected.to have_many(:materials).autosave(true) }
   it { is_expected.to have_many(:children).dependent(:destroy) }
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     context 'when two subfolders have the same name' do
       let(:parent) { create(:course_material_folder) }

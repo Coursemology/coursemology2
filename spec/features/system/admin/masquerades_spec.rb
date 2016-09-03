@@ -3,7 +3,7 @@ require 'rails_helper'
 include DeviseMasquerade::Controllers::UrlHelpers
 
 RSpec.feature 'System: Administration: Masquerade' do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let!(:user_to_masquerade) do

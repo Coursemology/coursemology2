@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     with_active_job_queue_adapter(:test) do
       let(:answer) do

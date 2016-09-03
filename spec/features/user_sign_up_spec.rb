@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Users: Sign Up' do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     context 'As an unregistered user' do
       scenario 'I can register for an account' do

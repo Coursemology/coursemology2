@@ -5,7 +5,7 @@ RSpec.describe Course::Announcement, type: :model do
   it { is_expected.to belong_to(:course).inverse_of(:announcements) }
   it { is_expected.to validate_presence_of(:title) }
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     let!(:user) { create(:user) }
     let(:course) { create(:course) }

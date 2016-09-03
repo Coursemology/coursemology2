@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe System::Admin::Instance::CoursesController, type: :controller do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let(:instance_admin) { create(:instance_administrator).user }

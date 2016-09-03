@@ -32,7 +32,7 @@ RSpec.describe AttachmentReference do
     end
   end
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:attachable) { create(:material) }
     let(:attachment_reference) { attachable.attachment_reference }

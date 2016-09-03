@@ -7,7 +7,7 @@ RSpec.describe Devise::SessionsController, type: :controller do
 
   requires_login
 
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     context 'Users with multiple email addresses' do

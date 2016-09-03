@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Users: Sign In with Token' do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:user) { build(:user) }
     context 'when a user token is specified in the HTTP headers' do
