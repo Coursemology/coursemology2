@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 class Course::Forum::ForumsController < Course::Forum::Controller
   before_action :load_forum, except: [:index, :new, :create, :search]
-  load_resource :forum, class: Course::Forum.name, through: :course, only: [:index, :new, :create]
+  load_and_authorize_resource :forum, class: Course::Forum.name, through: :course,
+                                      only: [:index, :new, :create]
   before_action :add_forum_item_breadcrumb
 
   def index
