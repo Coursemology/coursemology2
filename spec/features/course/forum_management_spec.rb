@@ -143,5 +143,15 @@ RSpec.feature 'Course: Forum: Management' do
         expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
       end
     end
+
+    context 'As a non Course Student' do
+      let(:user) { create(:user) }
+
+      scenario 'I am denied forum access' do
+        visit course_forums_path(course)
+        expect(page.status_code).to eq(403)
+        expect(page).to have_selector('div', text: 'pages.403.header')
+      end
+    end
   end
 end
