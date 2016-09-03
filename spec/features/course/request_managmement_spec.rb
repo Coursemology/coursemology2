@@ -5,8 +5,8 @@ RSpec.feature 'Course: Requests' do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
-    let(:user) { create(:administrator) }
     let(:course) { create(:course) }
+    let(:user) { create(:course_manager, course: course).user }
     let(:registrants) { create_list(:course_user, 2, course: course) }
     before { login_as(user, scope: :user) }
 

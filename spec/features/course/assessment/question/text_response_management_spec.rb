@@ -10,7 +10,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
-      let(:user) { course.creator }
+      let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can create a new question' do
         skill = create(:course_assessment_skill, course: course)

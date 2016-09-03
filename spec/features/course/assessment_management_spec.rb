@@ -9,7 +9,7 @@ RSpec.feature 'Course: Assessments: Management' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
-      let(:user) { course.creator }
+      let(:user) { create(:course_manager, course: course).user }
       scenario 'I can create a new assessment' do
         assessment_tab = create(:course_assessment_tab,
                                 category: course.assessment_categories.first)

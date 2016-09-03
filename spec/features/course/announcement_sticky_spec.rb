@@ -8,8 +8,8 @@ RSpec.describe 'Course: Announcements', type: :feature do
     let!(:instance) { Instance.default }
 
     with_tenant(:instance) do
-      let!(:user) { create(:administrator) }
-      let!(:course) { create(:course) }
+      let(:course) { create(:course) }
+      let(:user) { create(:course_manager, course: course).user }
 
       before do
         login_as(user, scope: :user)
