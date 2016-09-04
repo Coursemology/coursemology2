@@ -12,6 +12,7 @@ class Course::GroupsComponent < SimpleDelegator
     [
       {
         key: :groups,
+        icon: 'share-alt',
         title: I18n.t('course.groups.sidebar_title'),
         type: :admin,
         weight: 6,

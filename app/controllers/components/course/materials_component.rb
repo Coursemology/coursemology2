@@ -20,6 +20,7 @@ class Course::MaterialsComponent < SimpleDelegator
     [
       {
         key: :materials,
+        icon: 'folder-open',
         title: settings.title || t('course.material.sidebar_title'),
         weight: 9,
         path: course_material_folder_path(current_course, current_course.root_folder),

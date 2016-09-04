@@ -21,6 +21,7 @@ class Course::AssessmentsComponent < SimpleDelegator
     current_course.assessment_categories.select(&:persisted?).map do |category|
       {
         key: :assessments,
+        icon: 'plane', # TODO: category.icon in db that user can select and set
         title: category.title,
         weight: 2,
         path: course_assessments_path(current_course, category: category, tab: category.tabs.first),
@@ -33,6 +34,7 @@ class Course::AssessmentsComponent < SimpleDelegator
     [
       {
         key: :assessments_submissions,
+        icon: 'upload',
         title: t('course.assessment.submissions.sidebar_title'),
         weight: 2,
         path: assessment_submissions_url,
@@ -47,6 +49,7 @@ class Course::AssessmentsComponent < SimpleDelegator
     [
       {
         key: :assessments_skills,
+        icon: 'bolt',
         title: t('course.assessment.skills.sidebar_title'),
         type: :admin,
         weight: 7,

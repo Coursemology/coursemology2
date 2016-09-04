@@ -13,6 +13,7 @@ class Course::CoursesComponent < SimpleDelegator
 
     [
       {
+        icon: 'gear',
         title: t('layouts.course_admin.title'),
         type: :admin,
         weight: 10,
