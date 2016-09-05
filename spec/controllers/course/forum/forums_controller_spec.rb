@@ -18,7 +18,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
 
     before { sign_in(user) }
 
-    context 'with a non course user' do
+    context 'when current user is not enrolled in the course' do
       let(:user) { create(:user) }
 
       describe '#index' do
