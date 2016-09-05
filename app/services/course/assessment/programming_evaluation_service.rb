@@ -3,6 +3,7 @@
 class Course::Assessment::ProgrammingEvaluationService
   # The default timeout for the job to finish.
   DEFAULT_TIMEOUT = Course::Assessment::ProgrammingEvaluation::TIMEOUT
+  CPU_TIMEOUT = Course::Assessment::ProgrammingEvaluation::CPU_TIMEOUT
 
   # Represents a result of evaluating a package.
   Result = Struct.new(:stdout, :stderr, :test_report, :exit_code) do
@@ -84,7 +85,7 @@ class Course::Assessment::ProgrammingEvaluationService
     @course = course
     @language = language
     @memory_limit = memory_limit
-    @time_limit = time_limit
+    @time_limit = time_limit || CPU_TIMEOUT
     @package = package
     @timeout = timeout || DEFAULT_TIMEOUT
   end
@@ -107,7 +108,7 @@ class Course::Assessment::ProgrammingEvaluationService
   def create_evaluation
     Course::Assessment::ProgrammingEvaluation.create(
       course: @course, language: @language, package_path: @package, memory_limit: @memory_limit,
-      time_limit: @time_limit.to_i
+      time_limit: @time_limit
     )
   end
 

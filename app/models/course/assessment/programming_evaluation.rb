@@ -16,6 +16,9 @@ class Course::Assessment::ProgrammingEvaluation < ActiveRecord::Base
   # evaluator.
   TIMEOUT = 5.minutes
 
+  # The maximum amount of CPU time a job can take before it gets killed.
+  CPU_TIMEOUT = 10.seconds
+
   before_save :copy_package, if: :package_path_changed?
   after_destroy :delete_package, if: :package_path
 
