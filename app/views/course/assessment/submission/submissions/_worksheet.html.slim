@@ -12,7 +12,8 @@
     = render 'statistics', f: f
 
   div.submission-buttons
-    = f.button :submit, t('common.save')
+    - if @submission.attempting? || can?(:grade, @submission)
+      = f.button :submit, t('common.save')
 
     - if @submission.attempting? && can?(:update, @submission)
       = f.button :submit, t('.finalise'),

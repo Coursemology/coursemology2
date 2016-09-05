@@ -25,6 +25,7 @@ nav
         = render 'statistics', f: f
 
         - if can?(:grade, @submission)
+          = f.button :submit, t('common.save')
           = f.button :submit, t('.unsubmit'), name: 'submission[unsubmit]', class: ['btn-warning']
 
           - if @submission.submitted?

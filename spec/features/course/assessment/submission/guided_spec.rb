@@ -180,6 +180,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
+        expect(page).to have_button(I18n.t('common.save'))
         click_link I18n.t('course.assessment.submission.submissions.guided.auto_grade')
         wait_for_job
 
