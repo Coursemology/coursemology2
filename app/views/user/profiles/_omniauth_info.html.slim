@@ -1,0 +1,5 @@
+span.omniauth-info
+  div.facebook
+    - if facebook = user.identities.facebook.first
+      = link_to "//www.facebook.com/#{facebook.uid}" do
+        = fa_icon 'facebook-square', class: 'fa-2x'
