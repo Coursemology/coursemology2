@@ -14,4 +14,4 @@ en:
 
                 unsubscribe:
                   tag: 'Unsubscribe'
-                  message: '%{unsubscribe_link} from new topic notification in this forum'
+                  message: '%{unsubscribe_link} from email notification for this forum'
