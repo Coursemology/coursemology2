@@ -19,10 +19,14 @@
       }
     }
 
-    .profile-picture {
+    .profile-box {
       .image > img {
         @include fit-round-img($course-user-profile-picture);
         margin-top: 1em;
+      }
+
+      .omniauth-info {
+        margin: 1em;
       }
     }
   }
