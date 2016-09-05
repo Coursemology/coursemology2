@@ -11,6 +11,12 @@ en:
             THIS ACTION IS IRREVERSIBLE
             
             Are you sure you want to submit? You will no longer be able to amend your submission!
+          confirm_unsubmit: |+
+            This will reset the submission time and permit the student to change his submission.
+
+            NOTE THAT YOU CANNOT UNDO THIS!!
+
+            Are you sure you want to proceed?
           index:
             submissions: 'Submissions'
             student_header: 'Student Submissions'
@@ -25,12 +31,14 @@ en:
             auto_grade: :'course.assessment.submission.submissions.auto_grade'
             unsubmit: :'course.assessment.submission.submissions.unsubmit'
             confirm_finalise: :'course.assessment.submission.submissions.confirm_finalise'
+            confirm_unsubmit: :'course.assessment.submission.submissions.confirm_unsubmit'
           guided:
             finalise: :'course.assessment.submission.submissions.finalise'
             publish: :'course.assessment.submission.submissions.publish'
             auto_grade: :'course.assessment.submission.submissions.auto_grade'
             unsubmit: :'course.assessment.submission.submissions.unsubmit'
             confirm_finalise: :'course.assessment.submission.submissions.confirm_finalise'
+            confirm_unsubmit: :'course.assessment.submission.submissions.confirm_unsubmit'
           statistics:
             student: :'course.users.role.student'
             status: 'Status'
