@@ -18,6 +18,16 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
 
     before { sign_in(user) }
 
+    context 'with a non course user' do
+      let(:user) { create(:user) }
+
+      describe '#index' do
+        it 'gets access denied' do
+          expect { get :index, course_id: course }.to raise_error(CanCan::AccessDenied)
+        end
+      end
+    end
+
     describe '#show' do
       let(:forum) { create(:forum, course: course) }
       let!(:topic) { create(:forum_topic, forum: forum) }
