@@ -83,6 +83,7 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
           edit_course_assessment_submission_path(course, assessment, submission)
         )
         expect(submission.reload).to be_submitted
+        expect(page).not_to have_button(I18n.t('common.save'))
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
         expect(page).
