@@ -26,6 +26,10 @@ RSpec.describe Course::Assessment::Question::Programming do
 
       it { is_expected.to validate_numericality_of(:time_limit).allow_nil }
       it { is_expected.to validate_numericality_of(:memory_limit).allow_nil }
+      it 'validates time_limit' do
+        expect(subject).to validate_numericality_of(:time_limit).is_greater_than(0).
+          is_less_than_or_equal_to(10)
+      end
     end
 
     describe 'callbacks' do
