@@ -14,6 +14,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   def index
     authorize!(:manage, @assessment)
     @submissions = @submissions.includes(:answers, experience_points_record: :course_user)
+    @my_students = current_course_user.try(:my_students) || []
     @course_students = current_course.course_users.students.with_approved_state.order_alphabetically
   end
 
