@@ -26,6 +26,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
         fill_in 'staff_only_comments', with: question_attributes[:staff_only_comments]
         fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
         fill_in 'weight', with: question_attributes[:weight]
+        check 'question_text_response_allow_attachment'
         within find_field('skills') do
           select skill.title
         end
@@ -35,6 +36,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
         expect(page).to have_content_tag_for(question_created)
         expect(question_created.skills).to contain_exactly(skill)
         expect(question_created.weight).to eq(question_attributes[:weight])
+        expect(question_created.allow_attachment).to be_truthy
       end
 
       scenario 'I can edit a question', js: true do
