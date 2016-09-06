@@ -10,9 +10,16 @@
       @extend .col-md-4;
     }
 
-    .announcement {
-      @include announcement;
+    .announcement-holder {
+      border: 1px solid $gray-lighter;
+      border-radius: 4px;
+      padding: 10px;
+
+      .announcement {
+        @include announcement;
+      }
     }
+
   }
 
   &.index {
