@@ -12,21 +12,21 @@ nav
     = render partial: 'course/assessment/answer/answer', object: base_answer_form.object,
              locals: { base_answer_form: base_answer_form }
 
+    - unless @submission.attempting?
+      = render 'statistics', f: f
+
     div.submission-buttons
       - if base_answer_form.object.attempting?
         = f.button :submit, t('common.save')
 
       - if @submission.attempting? && can?(:update, @submission)
-        = f.button :submit, t('.finalise'), name: 'submission[finalise]', class: ['btn-danger', 'finalise', 'pull-right'],
+        = f.button :submit, t('.finalise'), name: 'submission[finalise]', class: ['btn-danger', 'finalise'],
                                             data: { confirm: t('.confirm_finalise') },
                                             style: guided_next_unanswered_question.nil? ? '' : 'display: none'
 
       - unless @submission.attempting?
-        = render 'statistics', f: f
-
         - if can?(:grade, @submission)
           = f.button :submit, t('common.save')
-          = f.button :submit, t('.unsubmit'), name: 'submission[unsubmit]', class: ['btn-warning']
 
           - if @submission.submitted?
             = link_to t('.auto_grade'),
@@ -35,4 +35,8 @@ nav
                                                                    @submission),
                       method: :post,
                       class: ['btn', 'btn-info']
-            = f.button :submit, t('.publish'), name: 'submission[publish]', class: ['btn-danger', 'pull-right']
+            = f.button :submit, t('.publish'), name: 'submission[publish]', class: ['btn-warning']
+
+
+          = f.button :submit, t('.unsubmit'), name: 'submission[unsubmit]', class: ['btn-danger'],
+            data: { confirm: t('.confirm_unsubmit') }
