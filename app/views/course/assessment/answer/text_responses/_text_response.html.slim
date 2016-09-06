@@ -1,6 +1,8 @@
 - question = text_response.question.specific
 - readonly = cannot?(:update, text_response.answer)
 = f.input :answer_text, label: false, readonly: readonly
+- if question.allow_attachment?
+  = f.attachment
 
 - if last_attempt && last_attempt.auto_grading && last_attempt.auto_grading.result
   = render partial: 'course/assessment/answer/explanation',

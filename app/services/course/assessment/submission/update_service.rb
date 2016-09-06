@@ -77,6 +77,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     scalar_params = [].tap do |result|
       result.push(:answer_text) # Text response answer
       result.push(:option_ids) # MCQ answer
+      result.push(attachments_params) # User uploaded files
     end
     # Parameters that must be an array of permitted values
     array_params = {}.tap do |result|

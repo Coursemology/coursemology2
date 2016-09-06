@@ -53,7 +53,8 @@ FactoryGirl.define do
     trait :with_text_response_question do
       after(:build) do |assessment, evaluator|
         evaluator.question_count.downto(1).each do
-          question = build(:course_assessment_question_text_response, assessment: assessment)
+          question = build(:course_assessment_question_text_response, :allow_attachment,
+                           assessment: assessment)
           assessment.questions << question.acting_as
         end
       end

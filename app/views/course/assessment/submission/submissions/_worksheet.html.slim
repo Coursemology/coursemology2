@@ -1,4 +1,4 @@
-= simple_form_for [current_course, @assessment, @submission] do |f|
+= simple_form_for [current_course, @assessment, @submission], html: { multipart: true } do |f|
   = f.error_notification
 
   / TODO: Implement flag to display all answers, or only latest answers.

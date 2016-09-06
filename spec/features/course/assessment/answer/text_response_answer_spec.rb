@@ -33,6 +33,18 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
           end
         end
       end
+
+      scenario 'I upload an attachment to the answer' do
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        answer = submission.answers.last
+        attach_file "submission_answers_attributes_#{answer.id}_actable_attributes_file",
+                    File.join(Rails.root, '/spec/fixtures/files/text.txt')
+
+        click_button I18n.t('common.save')
+
+        expect(answer.specific.attachment).to be_present
+      end
     end
 
     context 'As Course Staff' do
