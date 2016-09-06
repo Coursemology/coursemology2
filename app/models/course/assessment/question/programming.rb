@@ -7,7 +7,11 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
 
   before_save :process_new_package, if: :attachment_changed?
 
-  validates :memory_limit, :time_limit, numericality: { greater_then: 0 }, allow_nil: true
+  validates :memory_limit, numericality: { greater_than: 0 }, allow_nil: true
+  validates :time_limit, numericality: { greater_than: 0,
+                                         less_than_or_equal_to:
+                                           Course::Assessment::ProgrammingEvaluation::CPU_TIMEOUT },
+                         allow_nil: true
 
   belongs_to :import_job, class_name: TrackableJob::Job.name, inverse_of: nil
   belongs_to :language, class_name: Coursemology::Polyglot::Language.name, inverse_of: nil
