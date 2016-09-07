@@ -49,13 +49,15 @@ module ApplicationSidebarHelper
   # @return [String] The HTML string which will display the link.
   def link_to_sidebar_item(item)
     link_to(item[:path]) do
+      concat(
+        content_tag(:span, class: ['nav-icons']) do
+          fa_icon item[:icon]
+        end
+      )
       concat(item[:title])
       concat(
         content_tag(:span, class: ['unread']) do
-          if item[:unread] && item[:unread] > 0
-            concat(' ')
-            concat(badge(item[:unread]))
-          end
+          badge(item[:unread]) if item[:unread] && item[:unread] > 0
         end
       )
     end

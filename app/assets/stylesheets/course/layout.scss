@@ -27,11 +27,44 @@
     }
   }
 
+  #course-navigation-sidebar {
+    .nav-icons > .fa {
+      font-size: 1.5em;
+      height: 0;
+      line-height: 0;
+      margin-right: 0.2em;
+      position: relative;
+      text-align: center;
+      top: 0.1em;
+      width: 1.5em;
+    }
+
+    .unread {
+      margin-left: 0.4em;
+    }
+
+    #admin-header-sidebar {
+      font-weight: bold;
+      margin: 30px 15px 10px;
+    }
+  }
+
   .user {
     margin: 0.5em 0;
+
+    #user-sidebar {
+      font-size: 18px;
+    }
+
+    .image,
+    #user-sidebar {
+      display: table-cell;
+      vertical-align: middle;
+    }
   }
 
   .notification > h6 {
     margin-top: 0;
   }
+
 }

@@ -12,6 +12,7 @@ class Course::StatisticsComponent < SimpleDelegator
     [
       {
         key: :student_statistics,
+        icon: 'bar-chart',
         title: t('course.statistics.student.header'),
         type: :admin,
         weight: 2,
@@ -19,6 +20,7 @@ class Course::StatisticsComponent < SimpleDelegator
       },
       {
         key: :staff_statistics,
+        icon: 'bar-chart',
         title: I18n.t('course.statistics.staff.header'),
         type: :admin,
         weight: 3,

@@ -34,4 +34,8 @@
       margin-top: 1em;
     }
   }
+
+  &.unread > .contents {
+    background-color: $forum-unread-highlight;
+  }
 }
