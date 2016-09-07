@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160830023835) do
+ActiveRecord::Schema.define(version: 20160906091735) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -297,6 +297,7 @@ ActiveRecord::Schema.define(version: 20160830023835) do
   add_index "course_assessment_question_programming_template_files", ["question_id", "filename"], :name=>"index_course_assessment_question_programming_template_filenames", :unique=>true, :case_sensitive=>false
 
   create_table "course_assessment_question_text_responses", force: :cascade do |t|
+    t.boolean "allow_attachment", :default=>false
   end
 
   create_table "course_assessment_question_text_response_solutions", force: :cascade do |t|

@@ -13,6 +13,7 @@ en:
             success: 'The text response question was deleted.'
             failure: 'Could not delete text response question: %{error}'
           form:
+            allow_upload_file: 'Allow file upload in the answer'
             solution_type: 'Type'
             solution: 'Solution'
             grade: 'Grade'
