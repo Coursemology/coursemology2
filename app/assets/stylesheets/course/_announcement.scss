@@ -1,11 +1,15 @@
-@mixin announcement {
-  padding-left: 8px;
-
+@mixin timestamp {
   .timestamp {
     color: $gray-light;
     font-size: 13px;
     line-height: 18px;
   }
+}
+
+@mixin announcement {
+  padding-left: 8px;
+
+  @include timestamp;
 
   .content {
     font-size: 13px;

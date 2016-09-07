@@ -6,4 +6,4 @@
   - user_link = link_to_user(activity.actor)
   - achievement_link = link_to achievement.title, course_achievement_path(current_course, achievement)
   => t('.gained_achievement_html', user: user_link, achievement: achievement_link)
-  h6 = format_datetime(activity.created_at)
+  i.clearfix.timestamp = format_datetime(activity.created_at)

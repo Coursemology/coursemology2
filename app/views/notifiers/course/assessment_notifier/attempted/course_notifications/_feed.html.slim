@@ -6,4 +6,4 @@
   - user_link = link_to_user(activity.actor)
   - assessment_link = link_to assessment.title, course_assessment_path(notification.course, assessment)
   => t('.attempted_assessment_html', user: user_link, assessment: assessment_link)
-  h6 = format_datetime(activity.created_at)
+  i.clearfix.timestamp = format_datetime(activity.created_at)

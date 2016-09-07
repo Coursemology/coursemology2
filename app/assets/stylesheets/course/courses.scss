@@ -10,10 +10,11 @@
       @extend .col-md-4;
     }
 
-    .announcement-holder {
+    .message-holder {
       border: 1px solid $gray-lighter;
       border-radius: 4px;
       padding: 10px;
+      margin-bottom: 10px;
 
       .announcement {
         @include announcement;

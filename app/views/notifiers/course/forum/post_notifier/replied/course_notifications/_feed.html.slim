@@ -7,4 +7,4 @@
   - user_link = link_to_user(activity.actor)
   - topic_link = link_to topic.title, course_forum_topic_path(notification.course, topic.forum, topic)
   => t('.replied_to_topic_html', user: user_link, topic: topic_link)
-  h6 = format_datetime(activity.created_at)
+  i.clearfix.timestamp = format_datetime(activity.created_at)

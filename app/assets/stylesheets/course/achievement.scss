@@ -25,11 +25,11 @@
     @include automatically-clear;
 
     .course-user-achievement {
+      text-align: center;
+
       .image > img {
         @include fit-round-img($course-achievement-user-profile);
       }
-
-      text-align: center;
     }
   }
 }

@@ -3,6 +3,7 @@
   object-fit: cover;
   object-position: center;
 }
+
 @mixin fit-round-img($width, $height: $width) {
   @include no-stretch;
   width: $width;
