@@ -1,0 +1,32 @@
+div.submissions-filter
+  h3 = t('.filter')
+
+  = simple_form_for :filter, url: course_submissions_path(current_course, category: category), method: :get do |f|
+    - assessment_id = params[:filter][:assessment_id].to_i if params[:filter]
+    - group_id = params[:filter][:group_id].to_i if params[:filter]
+    - user_id = params[:filter][:user_id].to_i if params[:filter]
+
+    = f.input :assessment_id,
+        as: :select,
+        required: false,
+        label: category.title.singularize,
+        selected: lambda { |assessment| assessment[1] == assessment_id },
+        include_blank: '',
+        collection: @category.assessments.ordered_by_date.published.map { |a| [a.title, a.id] }
+    = f.input :group_id,
+        as: :select,
+        required: false,
+        label: Course::Group.model_name.human,
+        selected: lambda { |group| group[1] == group_id },
+        include_blank: '',
+        collection: current_course.groups.ordered_by_name.map { |g| [g.name, g.id] }
+    = f.input :user_id,
+        as: :select,
+        required: false,
+        label: t('.student'),
+        selected: lambda { |user| user[1] == user_id },
+        include_blank: '',
+        collection: current_course.course_users.order_alphabetically.with_approved_state.student.\
+                      map { |u| [u.name, u.user_id] }
+
+    = f.button :submit, t('common.submit')

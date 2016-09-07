@@ -6,6 +6,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
 
   def index #:nodoc:
     @submissions = @submissions.from_category(category).confirmed
+    @submissions = @submissions.filter(filter_params) if filter_params
   end
 
   def pending
@@ -60,5 +61,9 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
 
   def add_submissions_breadcrumb
     add_breadcrumb :index, course_submissions_path(current_course, category: category)
+  end
+
+  def filter_params
+    params[:filter] ? params[:filter].permit(:assessment_id, :group_id, :user_id) : nil
   end
 end
