@@ -28,20 +28,29 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
     end
 
     context 'As a Course Staff' do
-      let(:course_staff) { create(:course_manager, course: course).user }
-      let(:user) { course_staff }
+      let(:course_staff) { create(:course_manager, course: course) }
+      let(:user) { course_staff.user }
+      let(:group_student) do
+        # Create a group and add staff and student to group
+        group = create(:course_group, course: course)
+        create(:course_group_manager, course: course, group: group, course_user: course_staff)
+        create(:course_group_student, course: course, group: group, course_user: students.sample)
+      end
 
       scenario 'I can view all submissions of an assessment' do
         phantom_student
+        group_student
         visit course_assessment_submissions_path(course, assessment)
 
         expect(page).
           to have_text(I18n.t('course.assessment.submission.submissions.index.student_header'))
         expect(page).
+          to have_text(I18n.t('course.assessment.submission.submissions.index.my_student_header'))
+        expect(page).
           to have_text(I18n.t('course.assessment.submission.submissions.index.other_header'))
 
         [submitted_submission, attempting_submission, graded_submission].each do |submission|
-          within find(content_tag_selector(submission)) do
+          within all(content_tag_selector(submission)).last do
             expect(page).to have_text(submission.workflow_state.capitalize)
             expect(page).to have_text(submission.points_awarded)
           end

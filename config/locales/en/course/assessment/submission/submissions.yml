@@ -19,6 +19,7 @@ en:
             Are you sure you want to proceed?
           index:
             submissions: 'Submissions'
+            my_student_header: 'My Student Submissions'
             student_header: 'Student Submissions'
             other_header: 'Other Submissions'
           create:
