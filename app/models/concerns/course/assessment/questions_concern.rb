@@ -42,7 +42,7 @@ module Course::Assessment::QuestionsConcern
   # the question at the index is not accessible.
   #
   # @param [Course::Assessment::Submission] submission The submission which contains the answers.
-  # @param [Fixnum] current_index The index of the question, it's zero based.
+  # @param [Integer] current_index The index of the question, it's zero based.
   # @return [Course::Assessment::Question] The question at the given index or next unanswered
   #   question, whichever comes first.
   def step(submission, current_index)

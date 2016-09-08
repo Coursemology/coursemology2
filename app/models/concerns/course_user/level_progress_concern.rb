@@ -18,7 +18,7 @@ module CourseUser::LevelProgressConcern
   # eg. Current EXP: 500, Level 1 Threshold: 200, Level 2 Threshold: 600
   # Then CourseUser.level_progress_percentage = 75 # [(500 - 200) / (600 - 200)]
   #
-  # @return [Fixnum] The CourseUser's EXP progress percentage.
+  # @return [Integer] The CourseUser's EXP progress percentage.
   def level_progress_percentage
     if current_level.next
       current_experience_progress = experience_points - current_level.experience_points_threshold

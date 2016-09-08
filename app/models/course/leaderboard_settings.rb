@@ -52,7 +52,7 @@ class Course::LeaderboardSettings
 
   # Enable or disable the option to display group leaderboard
   #
-  # @param [Boolean|Fixnum|String] option Setting on whether group leaderboard is enabled.
+  # @param [Boolean|Integer|String] option Setting on whether group leaderboard is enabled.
   #   By default, simple_form provides '0' and '1' for boolean fields.
   #   This method will handle this conversion to Boolean.
   def enable_group_leaderboard=(option)

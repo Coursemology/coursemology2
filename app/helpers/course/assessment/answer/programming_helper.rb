@@ -17,7 +17,7 @@ module Course::Assessment::Answer::ProgrammingHelper
   # +app/assets/javascripts/course/assessment/submission/answer/programming.js+.
   #
   # @param [Course::Assessment::Answer::ProgrammingFile] file The file which is being annotated.
-  # @param [Fixnum] line_number The line number being annotated.
+  # @param [Integer] line_number The line number being annotated.
   # @return [String] The ID of the cell containing the annotation for the given file and line
   # number.
   def file_line_annotation_cell_id(file, line_number)

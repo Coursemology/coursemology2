@@ -57,7 +57,7 @@ class Course::Controller < ApplicationController
 
   # Computes a hash containing the key of each sidebar item, and its defined weight as the value.
   #
-  # @return [Hash{Symbol=>Fixnum}]
+  # @return [Hash{Symbol=>Integer}]
   def sidebar_items_weights
     sidebar_settings = Course::Settings::Sidebar.new(current_course.settings,
                                                      current_component_host.sidebar_items)

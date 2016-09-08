@@ -2,7 +2,7 @@
 module Course::Assessment::SubmissionsHelper
   # Returns the count of student submissions in a course that are pending grading.
   #
-  # @return [Fixnum] The required count
+  # @return [Integer] The required count
   def pending_submissions_count
     @pending_submissions_count ||= begin
       student_ids = current_course.course_users.students.select(:user_id)
@@ -13,7 +13,7 @@ module Course::Assessment::SubmissionsHelper
 
   # Returns the count of submissions of my students in a course that are pending grading
   #
-  # @return [Fixnum] The required count
+  # @return [Integer] The required count
   def my_students_pending_submissions_count
     @my_student_pending_submissions ||= begin
       my_student_ids = current_course_user ? current_course_user.my_students.select(:user_id) : []

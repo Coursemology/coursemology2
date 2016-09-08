@@ -13,7 +13,7 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   #
   # @param [Course::Assessment::Answer::TextResponse] answer The answer specified by the
   #   student.
-  # @return [Array<(Boolean, Fixnum, Object)>] The correct status, grade and the messages to be
+  # @return [Array<(Boolean, Integer, Object)>] The correct status, grade and the messages to be
   #   assigned to the grading.
   def grade_answer(answer)
     question = answer.question.actable
