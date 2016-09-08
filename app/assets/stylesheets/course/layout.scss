@@ -1,4 +1,6 @@
 .course-layout {
+  @include timestamp;
+
   #course-user-badge {
     #course-user-progress {
       .progress {
@@ -54,6 +56,7 @@
 
     #user-sidebar {
       font-size: 18px;
+      font-weight: bold;
     }
 
     .image,
@@ -63,8 +66,7 @@
     }
   }
 
-  .notification > h6 {
-    margin-top: 0;
+  .notification + .notification {
+    margin-top: 10px;
   }
-
 }

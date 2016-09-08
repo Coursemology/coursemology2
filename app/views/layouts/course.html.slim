@@ -9,9 +9,8 @@
             = display_course_logo(current_course)
         - if current_course_user.present? && can?(:participate, current_course)
           div.col-xs-12.user
-            table
-              = display_user_image(current_user)
-              span#user-sidebar = link_to_user(current_course_user || current_user)
+            = display_user_image(current_user)
+            span#user-sidebar = link_to_user(current_course_user || current_user)
             - if !current_course_user.staff?
               = display_course_user_badge(current_course_user)
       nav.navbar-default role='navigation'
