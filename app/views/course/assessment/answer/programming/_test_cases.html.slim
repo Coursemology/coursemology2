@@ -41,11 +41,14 @@ table.table.table-striped.table-hover
             = fa_icon 'check'.freeze
           - elsif test_case_result
             = fa_icon 'times'.freeze
-  - if can?(:grade, answer.answer) && !submission.attempting?
+  - if can?(:grade, answer.answer)
     tbody
       tr
         th colspan=5
           = t('.private')
+          span.bg-danger.text-danger<
+            =fa_icon 'exclamation-triangle'.freeze
+            =<t('.privacy_warning')
       - private_test_cases.each do |test_case|
         - test_case_result = answer_test_results_hash[test_case]
         = content_tag_for(:tr, test_case) do
