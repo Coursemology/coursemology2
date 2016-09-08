@@ -24,6 +24,8 @@ RSpec.describe 'Course: Submissions Viewing' do
 
         visit course_submissions_path(course)
 
+        expect(page).to have_selector('div.submissions-filter')
+
         # Submissions page should not have show attempting submissions or staff submissions.
         expect(page).not_to have_content_tag_for(attempting_submission)
         expect(page).not_to have_content_tag_for(staff_submission)
@@ -101,6 +103,7 @@ RSpec.describe 'Course: Submissions Viewing' do
         visit course_submissions_path(course)
 
         expect(page).not_to have_content_tag_for(attempting_submission)
+        expect(page).not_to have_selector('div.submissions-filter')
 
         [submitted_submission, graded_submission].each do |submission|
           within find(content_tag_selector(submission)) do
