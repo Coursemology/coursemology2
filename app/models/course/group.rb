@@ -66,6 +66,8 @@ class Course::Group < ActiveRecord::Base
       order('average_achievement_count DESC, last_obtained_achievement ASC')
   end)
 
+  scope :ordered_by_name, -> { order(name: :asc) }
+
   private
 
   # Set default values

@@ -74,10 +74,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
   # @!method self.by_user(user)
   #   Finds all the submissions by the given user.
   #   @param [User] user The user to filter submissions by
-  scope :by_user, (lambda do |user|
-    joins { experience_points_record.course_user }.
-      where { experience_points_record.course_user.user == user }
-  end)
+  scope :by_user, ->(user) { where(creator: user) }
 
   # @!method self.by_users(user)
   #   @param [Fixnum|Array<Fixnum>] user_ids The user ids to filter submissions by
@@ -94,6 +91,11 @@ class Course::Assessment::Submission < ActiveRecord::Base
     joins { assessment.tab.category }.where { assessment.tab.category.course == course }
   end)
 
+  scope :from_group, (lambda do |group_id|
+    joins { experience_points_record.course_user.groups }.
+      where { experience_points_record.course_user.groups.id >> group_id }
+  end)
+
   # @!method self.ordered_by_date
   #   Orders the submissions by date of creation. This defaults to reverse chronological order
   #   (newest submission first).
@@ -108,6 +110,17 @@ class Course::Assessment::Submission < ActiveRecord::Base
   # @!method self.confirmed
   #   Returns submissions which have been submitted (which may or may not be graded).
   scope :confirmed, -> { where(workflow_state: [:submitted, :graded]) }
+
+  # Filter submissions by assessment_id, group_id or user_id (creator)
+  scope :filter, (lambda do |filter_params|
+    result = all
+    if filter_params[:assessment_id].present?
+      result = result.where(assessment_id: filter_params[:assessment_id])
+    end
+    result = result.from_group(filter_params[:group_id]) if filter_params[:group_id].present?
+    result = result.by_user(filter_params[:user_id]) if filter_params[:user_id].present?
+    result
+  end)
 
   alias_method :finalise=, :finalise!
   alias_method :publish=, :publish!
