@@ -54,7 +54,7 @@ class Course::Discussion::Post < ActiveRecord::Base
 
   # Calculates the total number of votes given to this post.
   #
-  # @return [Fixnum]
+  # @return [Integer]
   def vote_tally
     upvotes - downvotes
   end
@@ -71,7 +71,7 @@ class Course::Discussion::Post < ActiveRecord::Base
   # Allows a user to cast a vote for this post.
   #
   # @param [User] user The user casting the vote.
-  # @param [Fixnum] vote {-1, 0, 1} indicating whether this is a downvote, no vote, or upvote.
+  # @param [Integer] vote {-1, 0, 1} indicating whether this is a downvote, no vote, or upvote.
   def cast_vote!(user, vote)
     vote = vote <=> 0
     vote_record = votes.find_by(creator: user)

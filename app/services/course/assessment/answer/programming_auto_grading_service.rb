@@ -12,7 +12,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   # Grades the given answer.
   #
   # @param [Course::Assessment::Answer::Programming] answer The answer specified by the student.
-  # @return [Array<(Boolean, Fixnum, Course::Assessment::Answer::ProgrammingAutoGrading)>] The
+  # @return [Array<(Boolean, Integer, Course::Assessment::Answer::ProgrammingAutoGrading)>] The
   #   correct status, grade and the programming auto grading record.
   def grade_answer(answer)
     question = answer.question.actable
@@ -53,7 +53,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   #   graded.
   # @param [Course::Assessment::ProgrammingEvaluationService::Result] evaluation_result The
   #   result of evaluating the package.
-  # @return [Array<(Boolean, Fixnum, Course::Assessment::Answer::ProgrammingAutoGrading)>] The
+  # @return [Array<(Boolean, Integer, Course::Assessment::Answer::ProgrammingAutoGrading)>] The
   #   correct status, grade and the programming auto grading record.
   def build_result(question, evaluation_result)
     auto_grading = Course::Assessment::Answer::ProgrammingAutoGrading.new(actable: nil)

@@ -9,7 +9,7 @@ module Course::LevelsConcern
   # If experience_points <= 0, the level is assumed to be the default level
   # (the 0th level) with 0 experience_points threshold.
   #
-  # @param [Fixnum] experience_points Number of Experience Points
+  # @param [Integer] experience_points Number of Experience Points
   # @return [Course::Level] A Course::Level instance.
   def level_for(experience_points)
     return first if experience_points < 0

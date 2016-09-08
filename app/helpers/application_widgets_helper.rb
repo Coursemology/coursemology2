@@ -93,7 +93,7 @@ module ApplicationWidgetsHelper
   # ActionView::Helpers::CaptureHelper#capture is used to ensure the block is rendered in the
   # original view_context, rather than within the view_context of the progress bar layout.
   #
-  # @param [Fixnum] percentage The percentage to be displayed on the progress bar.
+  # @param [Integer] percentage The percentage to be displayed on the progress bar.
   # @param [Array<String>] classes An array of classes to apply to the progress bar.
   # @yield The HTML text which will be passed to the partial as text to be shown in the bar.
   # @return [String] HTML string to render the progress bar.
