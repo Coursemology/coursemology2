@@ -15,22 +15,25 @@ RSpec.describe Course::Assessment::Submission do
     let(:assessment) { create(:assessment, *assessment_traits, course: course) }
     let(:assessment_traits) { [] }
 
-    let(:user1) { create(:user) }
+    let(:course_student1) { create(:course_student, course: course) }
+    let(:user1) { course_student1.user }
     let(:submission1) do
-      create(:course_assessment_submission, *submission1_traits, assessment: assessment,
-                                                                 creator: user1)
+      create(:course_assessment_submission, *submission1_traits,
+             assessment: assessment, creator: user1, course_user: course_student1)
     end
     let(:submission1_traits) { [] }
-    let(:user2) { create(:user) }
+    let(:course_student2) { create(:course_student, course: course) }
+    let(:user2) { course_student2.user }
     let(:submission2) do
-      create(:course_assessment_submission, *submission2_traits, assessment: assessment,
-                                                                 creator: user2)
+      create(:course_assessment_submission, *submission2_traits,
+             assessment: assessment, creator: user2, course_user: course_student2)
     end
     let(:submission2_traits) { [] }
-    let(:user3) { create(:user) }
+    let(:course_student3) { create(:course_student, course: course) }
+    let(:user3) { course_student3.user }
     let(:submission3) do
-      create(:course_assessment_submission, *submission3_traits, assessment: assessment,
-                                                                 creator: user3)
+      create(:course_assessment_submission, *submission3_traits,
+             assessment: assessment, creator: user3, course_user: course_student3)
     end
     let(:submission3_traits) { [] }
 
@@ -177,6 +180,48 @@ RSpec.describe Course::Assessment::Submission do
       it 'returns the submissions with submitted or graded workflow state' do
         states = assessment.submissions.confirmed.map(&:workflow_state)
         expect(states).to contain_exactly('graded', 'submitted')
+      end
+    end
+
+    describe '.filter' do
+      let(:group) do
+        group = create(:course_group, course: course)
+        create(:course_group_user, group: group, course: course, course_user: course_student1)
+        group
+      end
+      let(:params) do
+        { filter: { assessment_id: assessment.id, group_id: group.id, user_id: user1.id } }
+      end
+
+      it 'filters submissions' do
+        group
+        expect(assessment.submissions.filter(params)).to contain_exactly(submission1)
+      end
+
+      context 'when group id is given' do
+        let(:params) { { filter: { group_id: group.id } } }
+
+        it 'filters submissions by the group' do
+          group
+          expect(assessment.submissions.filter(params)).to contain_exactly(submission1)
+        end
+      end
+
+      context 'when user id is given' do
+        let(:params) { { filter: { user_id: user2.id } } }
+
+        it 'filters submissions by the user' do
+          expect(assessment.submissions.filter(params)).to contain_exactly(submission2)
+        end
+      end
+
+      context 'when assessment id is given' do
+        let(:params) { { filter: { assessment_id: assessment.id } } }
+
+        it 'filters submissions by assessment' do
+          expect(assessment.submissions.filter(params)).
+            to contain_exactly(submission1, submission2, submission3)
+        end
       end
     end
 
