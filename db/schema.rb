@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160906091735) do
+ActiveRecord::Schema.define(version: 20160908100211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -253,7 +253,7 @@ ActiveRecord::Schema.define(version: 20160906091735) do
     t.integer "auto_grading_id", :null=>false, :index=>{:name=>"fk__course_assessment_answe_57b22f114b54911fd4e1519680ebfd49"}, :foreign_key=>{:references=>"course_assessment_answer_programming_auto_gradings", :name=>"fk_course_assessment_answer_e3d785447112439bb306849be8690102", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer "test_case_id",    :index=>{:name=>"fk__course_assessment_answe_29a2568d5e2fb3a47c0561815786f9ab"}, :foreign_key=>{:references=>"course_assessment_question_programming_test_cases", :name=>"fk_course_assessment_answer_bbb492885b1e3dca4433b8af8cb95906", :on_update=>:no_action, :on_delete=>:no_action}
     t.boolean "passed",          :null=>false
-    t.text    "message"
+    t.jsonb   "messages",        :default=>{}, :null=>false
   end
 
   create_table "course_assessment_answer_programming_files", force: :cascade do |t|
