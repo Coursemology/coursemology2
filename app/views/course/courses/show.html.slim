@@ -15,13 +15,15 @@
                 collection: current_course.managers.includes(:user).map(&:user)
 
   - if current_course.user?(current_user) || can?(:manage, current_course)
-    h2 = t('.announcements')
-    div.message-holder
-      = render partial: current_course.announcements.currently_active, spacer_template: 'announcements/announcement_spacer'
+    - if !@currently_active_announcements.empty?
+      h2 = t('.announcements')
+      div.message-holder
+        = render partial: @currently_active_announcements, spacer_template: 'announcements/announcement_spacer'
 
-    h2 = t('.activities')
-    div.message-holder
-      - @activity_feeds.each do |notification|
-        - if notification.activity.object
-          = render partial: notification_view_path(notification),
-                   locals: { notification: notification }
+    - if !@activity_feeds.empty?
+      h2 = t('.activities')
+      div.message-holder
+        - @activity_feeds.each do |notification|
+          - if notification.activity.object
+            = render partial: notification_view_path(notification),
+                     locals: { notification: notification }

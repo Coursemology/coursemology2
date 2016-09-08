@@ -8,6 +8,7 @@ class Course::CoursesController < Course::Controller
 
   def show # :nodoc:
     @registration = Course::Registration.new
+    @currently_active_announcements = current_course.announcements.currently_active
     @activity_feeds = recent_activity_feeds.limit(20).includes(activity: [:object, :actor])
     render layout: 'course'
   end
