@@ -1,7 +1,9 @@
 - add_breadcrumb format_inline_text(@category.title)
 = page_header
 = render partial: 'tabs'
-= render partial: 'filter', locals: { category: @category }
+
+- if current_course_user && current_course_user.staff? || can?(:manage, current_course)
+  = render partial: 'filter', locals: { category: @category }
 
 = render partial: 'submissions', locals: { submissions: @submissions, pending: false }
 
