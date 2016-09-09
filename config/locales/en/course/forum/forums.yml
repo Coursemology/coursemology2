@@ -14,6 +14,8 @@ en:
           posts: 'Posts'
           views: 'Views'
           no_forum: 'No Forum'
+          mark_all_as_read: 'Mark all as read'
+          mark_all_description: 'Mark all forum topics as read'
         show:
           topics: 'Topics'
           votes: 'Votes'
@@ -54,3 +56,5 @@ en:
           title: 'Next unread'
           description: 'Jump to next unread topic'
           notice: 'Hooray! All topics have been read'
+        mark_all_as_read:
+          success: 'All topics have been marked as read'

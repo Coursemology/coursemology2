@@ -2,6 +2,9 @@
   span.pull-right
     .unread-controls.btn-group
       = link_to_next_unread
+      = link_to t('.mark_all_as_read'), mark_all_as_read_course_forums_path(current_course),
+                                        title: t('.mark_all_description'),
+                                        class: ['btn', 'btn-default'], method: :patch
     = new_button([current_course, :forum]) if can?(:create, Course::Forum.new(course: current_course))
 
 table.table.forum-list.table-hover

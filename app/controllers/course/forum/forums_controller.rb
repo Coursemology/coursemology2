@@ -79,6 +79,13 @@ class Course::Forum::ForumsController < Course::Forum::Controller
     end
   end
 
+  def mark_all_as_read
+    topics = Course::Forum::Topic.from_course(current_course).
+             accessible_by(current_ability).unread_by(current_user).to_a
+    Course::Forum::Topic.mark_as_read!(topics, for: current_user)
+    redirect_to course_forums_path(current_course), success: t('.success')
+  end
+
   private
 
   def search_params
@@ -98,6 +105,6 @@ class Course::Forum::ForumsController < Course::Forum::Controller
   end
 
   def skip_load_forum?
-    [:index, :new, :create, :search, :next_unread].include?(action_name.to_sym)
+    [:index, :new, :create, :search, :next_unread, :mark_all_as_read].include?(action_name.to_sym)
   end
 end
