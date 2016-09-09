@@ -142,6 +142,46 @@ RSpec.feature 'Course: Forum: Management' do
                                   href: subscribe_course_forum_path(course, forum))
         expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
       end
+
+      scenario 'I can mark all forum topics in the course as read' do
+        forum1 = create(:forum, course: course)
+        forum2 = create(:forum, course: course)
+        topics = create_list(:forum_topic, 2, forum: forum1) +
+                 create_list(:forum_topic, 2, forum: forum2)
+
+        expect(topics.all? { |t| t.unread?(user) }).to be_truthy
+
+        visit course_forums_path(course)
+        find_link(I18n.t('course.forum.forums.index.mark_all_as_read'),
+                  href: mark_all_as_read_course_forums_path(course)).click
+
+        expect(current_path).to eq(course_forums_path(course))
+        expect(topics.all? { |t| t.unread?(user) }).to be_falsy
+      end
+
+      scenario 'I can mark topics in the forum as read' do
+        forum = create(:forum, course: course)
+        topics = create_list(:forum_topic, 2, forum: forum)
+        expect(topics.all? { |t| t.unread?(user) }).to be_truthy
+
+        visit course_forum_path(course, forum)
+        find_link(I18n.t('course.forum.forums.controls.mark_as_read'),
+                  href: mark_as_read_course_forum_path(course, forum)).click
+
+        expect(current_path).to eq(course_forum_path(course, forum))
+        expect(topics.all? { |t| t.unread?(user) }).to be_falsy
+      end
+
+      scenario 'I can go to next unread topic' do
+        forum = create(:forum, course: course)
+        topic = create(:forum_topic, forum: forum)
+        visit course_forum_path(course, forum)
+        find_link(I18n.t('course.forum.forums.next_unread.title'),
+                  href: next_unread_course_forums_path(course)).click
+
+        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
+        expect(page).to have_selector('div', text: topic.title)
+      end
     end
   end
 end
