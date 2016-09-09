@@ -58,3 +58,8 @@ en:
           notice: 'Hooray! All topics have been read'
         mark_all_as_read:
           success: 'All topics have been marked as read'
+        mark_as_read:
+          success: 'All topics in the forum have been marked as read'
+        controls:
+          mark_as_read: 'Mark as read'
+          mark_forum_description: 'Mark all topics in current forum as read'

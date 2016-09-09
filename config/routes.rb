@@ -223,6 +223,7 @@ Rails.application.routes.draw do
           get 'search', on: :collection
           get 'next_unread', on: :collection
           patch 'mark_all_as_read', on: :collection
+          patch 'mark_as_read', on: :member
         end
       end
 

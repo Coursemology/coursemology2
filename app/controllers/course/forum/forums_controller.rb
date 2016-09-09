@@ -86,6 +86,13 @@ class Course::Forum::ForumsController < Course::Forum::Controller
     redirect_to course_forums_path(current_course), success: t('.success')
   end
 
+  def mark_as_read
+    topics = @forum.topics.accessible_by(current_ability).to_a
+    Course::Forum::Topic.mark_as_read!(topics, for: current_user)
+
+    redirect_to course_forum_path(current_course, @forum), success: t('.success')
+  end
+
   private
 
   def search_params

@@ -1,6 +1,9 @@
 span.pull-right
   .unread-controls.btn-group
     = link_to_next_unread
+    = link_to t('.mark_as_read'), mark_as_read_course_forum_path(current_course, @forum),
+                                  title: t('.mark_forum_description'),
+                                  class: ['btn', 'btn-default'], method: :patch
   .btn-group
     - if can?(:subscribe, @forum)
       - if @forum.subscribed_by?(current_user)
