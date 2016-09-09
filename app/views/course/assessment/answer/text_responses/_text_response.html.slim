@@ -8,6 +8,6 @@
   = render partial: 'course/assessment/answer/explanation',
            locals: { answer: f.object }
 
-- if can?(:grade, text_response.answer)
+- if question.auto_gradable? && can?(:grade, text_response.answer)
   = render partial: 'course/assessment/answer/text_responses/solution',
     locals: { question: question }
