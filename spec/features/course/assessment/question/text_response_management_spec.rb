@@ -61,7 +61,8 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
         visit edit_path
 
         solutions.each_with_index do |solution, i|
-          click_link I18n.t('course.assessment.question.text_responses.form.add_solution')
+          link = I18n.t('course.assessment.question.text_responses.form.add_solution')
+          find('a.add_fields', text: link).trigger('click')
           within all('.edit_question_text_response '\
             'tr.question_text_response_solution')[i] do
             find('textarea.text-response-solution').set solution[:solution]
