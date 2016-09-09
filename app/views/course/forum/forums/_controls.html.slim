@@ -1,15 +1,18 @@
-span.pull-right.btn-group
-  - if can?(:subscribe, @forum)
-    - if @forum.subscribed_by?(current_user)
-      = link_to unsubscribe_course_forum_path(current_course, @forum),
-                title: t('course.forum.forums.unsubscribe.tag'), class: ['btn', 'btn-danger'],
-                method: :delete do
-        = fa_icon 'heart-o'.freeze
-    - else
-      = link_to subscribe_course_forum_path(current_course, @forum),
-                title: t('course.forum.forums.subscribe.tag'), class: ['btn', 'btn-success'], method: :post do
-        = fa_icon 'heart'.freeze
+span.pull-right
+  .unread-controls.btn-group
+    = link_to_next_unread
+  .btn-group
+    - if can?(:subscribe, @forum)
+      - if @forum.subscribed_by?(current_user)
+        = link_to unsubscribe_course_forum_path(current_course, @forum),
+                  title: t('course.forum.forums.unsubscribe.tag'), class: ['btn', 'btn-danger'],
+                  method: :delete do
+          = fa_icon 'heart-o'.freeze
+      - else
+        = link_to subscribe_course_forum_path(current_course, @forum),
+                  title: t('course.forum.forums.subscribe.tag'), class: ['btn', 'btn-success'], method: :post do
+          = fa_icon 'heart'.freeze
 
-  = new_button([current_course, @forum, :topic]) if can?(:create, Course::Forum::Topic.new(forum: @forum))
-  = edit_button([current_course, @forum]) if can?(:edit, @forum)
-  = delete_button([current_course, @forum]) if can?(:destroy, @forum)
+    = new_button([current_course, @forum, :topic]) if can?(:create, Course::Forum::Topic.new(forum: @forum))
+    = edit_button([current_course, @forum]) if can?(:edit, @forum)
+    = delete_button([current_course, @forum]) if can?(:destroy, @forum)

@@ -221,6 +221,7 @@ Rails.application.routes.draw do
           delete 'unsubscribe', on: :member
 
           get 'search', on: :collection
+          get 'next_unread', on: :collection
         end
       end
 

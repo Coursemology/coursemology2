@@ -50,3 +50,7 @@ en:
           post_content: 'Post Content'
           vote_tally: 'Vote Tally'
           date_posted: 'Date Posted'
+        next_unread:
+          title: 'Next unread'
+          description: 'Jump to next unread topic'
+          notice: 'Hooray! All topics have been read'

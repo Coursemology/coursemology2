@@ -1,5 +1,9 @@
 = page_header do
-  = new_button([current_course, :forum]) if can?(:create, Course::Forum.new(course: current_course))
+  span.pull-right
+    .unread-controls.btn-group
+      = link_to_next_unread
+    = new_button([current_course, :forum]) if can?(:create, Course::Forum.new(course: current_course))
+
 table.table.forum-list.table-hover
   thead
     tr
