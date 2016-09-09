@@ -29,8 +29,7 @@ class Course::Assessment::ProgrammingTestCaseReport
 
     # The duration for running the test suite.
     #
-    # @return [Float] The duration for the test suite.
-    # @return [nil] If the duration was not recorded.
+    # @return [Float|nil] The duration for the test suite, nil if the duration was not recorded.
     def duration
       @duration ||= begin
         duration = @suite['time']
@@ -77,8 +76,7 @@ class Course::Assessment::ProgrammingTestCaseReport
 
     # The duration for running the test case.
     #
-    # @return [Float] The duration for the test case.
-    # @return [nil] If the duration was not recorded.
+    # @return [Float|nil] The duration for the test case, nil if not recorded.
     def duration
       @duration ||= begin
         duration = @test_case['time']
@@ -125,37 +123,25 @@ class Course::Assessment::ProgrammingTestCaseReport
 
     # If there's an error, return the error type and error message.
     #
-    # @return [String] A combined string with the error type and error message
-    # @return [nil] If there's no error
+    # @return [String|nil] A combined string with the error type and error message, nil if no error.
     def error_message
       return nil unless errored?
-      "#{error_type}: #{_error_message}"
+      error_body = @test_case.search('error')[0]['message']
+      "#{error_type}: #{error_body}"
     end
 
     # If there's a error, return the contents of the error tag.
     # This contains the full traceback.
     #
-    # @return [String] Full traceback of error.
-    # @return [nil] If there's no error
+    # @return [String|nil] Full traceback of error, or nil if there's no error.
     def error_contents
       return nil unless errored?
       @test_case.search('error')[0].children.to_s
     end
 
-    # If there's an error, return the error message attribute.
-    # For internal use only
-    #
-    # @return [String] The message attribute
-    # @return [nil] If there's no error
-    def _error_message
-      return nil unless errored?
-      @test_case.search('error')[0]['message']
-    end
-
     # If there's an error, return the error type attribute.
     #
-    # @return [String] The type attribute
-    # @return [nil] If there's no error
+    # @return [String|nil] The type attribute, nil if no error.
     def error_type
       return nil unless errored?
       @test_case.search('error')[0]['type']
@@ -163,37 +149,26 @@ class Course::Assessment::ProgrammingTestCaseReport
 
     # If there's a failure, return the failure type and failure message.
     #
-    # @return [String] A combined string with the failure type and failure message
-    # @return [nil] If there's no failure
+    # @return [String|nil] A combined string with the failure type and failure message,
+    # nil if no failure.
     def failure_message
       return nil unless failed?
-      "#{failure_type}: #{_failure_message}"
+      failure_body = @test_case.search('failure')[0]['message']
+      "#{failure_type}: #{failure_body}"
     end
 
     # If there's a failure, return the contents of the failure tag.
     # This contains the full traceback.
     #
-    # @return [String] Full traceback of failure.
-    # @return [nil] If there's no failure
+    # @return [String|nil] Full traceback of failure, nil if there's no failure.
     def failure_contents
       return nil unless failed?
       @test_case.search('failure')[0].children.to_s
     end
 
-    # If there's a failure, return the failure message attribute.
-    # For internal use only
-    #
-    # @return [String] The message attribute
-    # @return [nil] If there's no failure
-    def _failure_message
-      return nil unless failed?
-      @test_case.search('failure')[0]['message']
-    end
-
     # If there's a failure, return the failure type attribute.
     #
-    # @return [String] The type attribute
-    # @return [nil] If there's no failure
+    # @return [String|nil] The type attribute, nil if there's no failure.
     def failure_type
       return nil unless failed?
       @test_case.search('failure')[0]['type']
@@ -235,7 +210,7 @@ class Course::Assessment::ProgrammingTestCaseReport
       @messages ||= {
         'error': error_message,
         'error_contents': error_contents,
-        'hint': hint,   # support dynamic hints
+        'hint': hint,
         'failure': failure_message,
         'failure_contents': failure_contents,
         'output': output
@@ -250,7 +225,7 @@ class Course::Assessment::ProgrammingTestCaseReport
     # @return [String]
     def get_meta_attribute(attribute_name)
       meta = @test_case.search('meta')
-      (meta.present? and meta[0][attribute_name]) ? meta[0][attribute_name] : ''
+      meta.present? && meta[0][attribute_name] ? meta[0][attribute_name] : ''
     end
   end
 
