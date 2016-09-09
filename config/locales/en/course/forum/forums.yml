@@ -14,6 +14,8 @@ en:
           posts: 'Posts'
           views: 'Views'
           no_forum: 'No Forum'
+          mark_all_as_read: 'Mark all as read'
+          mark_all_description: 'Mark all forum topics as read'
         show:
           topics: 'Topics'
           votes: 'Votes'
@@ -50,3 +52,14 @@ en:
           post_content: 'Post Content'
           vote_tally: 'Vote Tally'
           date_posted: 'Date Posted'
+        next_unread:
+          title: 'Next unread'
+          description: 'Jump to next unread topic'
+          notice: 'Hooray! All topics have been read'
+        mark_all_as_read:
+          success: 'All topics have been marked as read'
+        mark_as_read:
+          success: 'All topics in the forum have been marked as read'
+        controls:
+          mark_as_read: 'Mark as read'
+          mark_forum_description: 'Mark all topics in current forum as read'

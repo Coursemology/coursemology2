@@ -26,8 +26,8 @@ module Course::ForumsAbilityComponent
   end
 
   def allow_students_show_forums
-    can :read, Course::Forum, course_all_course_users_hash
-    can :subscribe, Course::Forum, course_all_course_users_hash
+    can [:read, :mark_as_read], Course::Forum, course_all_course_users_hash
+    can [:subscribe, :unsubscribe], Course::Forum, course_all_course_users_hash
   end
 
   def allow_students_show_topics

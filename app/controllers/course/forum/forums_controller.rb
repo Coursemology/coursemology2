@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class Course::Forum::ForumsController < Course::Forum::Controller
-  before_action :load_forum, except: [:index, :new, :create, :search]
   load_resource :forum, class: Course::Forum.name, through: :course, only: [:index, :new, :create]
   before_action :add_forum_item_breadcrumb
 
@@ -69,6 +68,31 @@ class Course::Forum::ForumsController < Course::Forum::Controller
     @search = Course::Forum::Search.new(search_params)
   end
 
+  def next_unread # rubocop:disable Metrics/AbcSize
+    topic = Course::Forum::Topic.from_course(current_course).
+            accessible_by(current_ability).unread_by(current_user).first
+
+    if topic
+      redirect_to course_forum_topic_path(current_course, topic.forum, topic)
+    else
+      redirect_to course_forums_path(current_course), notice: t('.notice')
+    end
+  end
+
+  def mark_all_as_read
+    topics = Course::Forum::Topic.from_course(current_course).
+             accessible_by(current_ability).unread_by(current_user).to_a
+    Course::Forum::Topic.mark_as_read!(topics, for: current_user)
+    redirect_to course_forums_path(current_course), success: t('.success')
+  end
+
+  def mark_as_read
+    topics = @forum.topics.accessible_by(current_ability).to_a
+    Course::Forum::Topic.mark_as_read!(topics, for: current_user)
+
+    redirect_to course_forum_path(current_course, @forum), success: t('.success')
+  end
+
   private
 
   def search_params
@@ -83,11 +107,11 @@ class Course::Forum::ForumsController < Course::Forum::Controller
     params.require(:forum).permit(:name, :description, :course_id)
   end
 
-  def load_forum
-    @forum ||= current_course.forums.friendly.find(params[:id])
-  end
-
   def add_forum_item_breadcrumb
     add_breadcrumb @forum.name, course_forum_path(current_course, @forum) if @forum.try(:persisted?)
+  end
+
+  def skip_load_forum?
+    [:index, :new, :create, :search, :next_unread, :mark_all_as_read].include?(action_name.to_sym)
   end
 end
