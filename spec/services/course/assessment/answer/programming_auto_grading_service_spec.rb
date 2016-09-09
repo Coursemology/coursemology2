@@ -111,7 +111,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
             it 'sets the error message' do
               subject
               # Exact error is from the fixture
-              expect(answer.auto_grading.actable.test_results[0].message).
+              expect(answer.auto_grading.actable.test_results[0].messages[:error]).
                 to eq('TypeError: mosaic() takes 1 positional argument but 4 were given')
             end
           end
@@ -151,7 +151,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
           it 'sets the message for each test result' do
             subject
             answer.auto_grading.specific.test_results.each do |test_result|
-              expect(test_result.message).
+              expect(test_result.messages[:error]).
                 to eq 'course.assessment.answer.programming_auto_grading.grade.evaluation_failed'
             end
           end
