@@ -10,7 +10,7 @@ class Course::Assessment::Question::TextResponse < ActiveRecord::Base
   accepts_nested_attributes_for :solutions
 
   def auto_gradable?
-    true
+    !solutions.empty?
   end
 
   def auto_grader

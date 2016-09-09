@@ -4,4 +4,10 @@
   .discussion_topic {
     @include discussion-post;
   }
+
+  .post-form {
+    .btn {
+      margin-top: -15px;
+    }
+  }
 }

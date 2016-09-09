@@ -4,4 +4,10 @@
   .answer .comments {
     @include discussion-post;
   }
+
+  .answer-comment-form {
+    .btn.reply-comment {
+      margin-top: -15px;
+    }
+  }
 }
