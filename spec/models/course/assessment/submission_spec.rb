@@ -190,7 +190,13 @@ RSpec.describe Course::Assessment::Submission do
         group
       end
       let(:params) do
-        { filter: { assessment_id: assessment.id, group_id: group.id, user_id: user1.id } }
+        { assessment_id: assessment.id, group_id: group.id, user_id: user1.id }
+      end
+
+      before do
+        submission1
+        submission2
+        submission3
       end
 
       it 'filters submissions' do
@@ -199,7 +205,7 @@ RSpec.describe Course::Assessment::Submission do
       end
 
       context 'when group id is given' do
-        let(:params) { { filter: { group_id: group.id } } }
+        let(:params) { { group_id: group.id } }
 
         it 'filters submissions by the group' do
           group
@@ -208,7 +214,7 @@ RSpec.describe Course::Assessment::Submission do
       end
 
       context 'when user id is given' do
-        let(:params) { { filter: { user_id: user2.id } } }
+        let(:params) { { user_id: user2.id } }
 
         it 'filters submissions by the user' do
           expect(assessment.submissions.filter(params)).to contain_exactly(submission2)
@@ -216,7 +222,7 @@ RSpec.describe Course::Assessment::Submission do
       end
 
       context 'when assessment id is given' do
-        let(:params) { { filter: { assessment_id: assessment.id } } }
+        let(:params) { { assessment_id: assessment.id } }
 
         it 'filters submissions by assessment' do
           expect(assessment.submissions.filter(params)).
