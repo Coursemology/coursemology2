@@ -73,7 +73,8 @@ RSpec.feature 'Course: Topics: Management' do
                course: course, creator: user)
       end
       let(:student_reply) do
-        create(:course_discussion_post, topic: student_answer.acting_as, creator: user)
+        create(:course_discussion_post, topic: student_answer.acting_as, creator: user,
+                                        text: '<p>Content with html tags</p>')
       end
 
       scenario 'I can see all my comments' do
@@ -118,8 +119,17 @@ RSpec.feature 'Course: Topics: Management' do
         visit course_topics_path(course)
 
         # Test post editing
+        old_text = my_comment_post.text
         find(content_tag_selector(my_comment_post)).find('.edit').click
+        within find('.edit-discussion-post-form') do
+          click_button I18n.t('javascript.course.discussion.post.submit')
+        end
+        wait_for_ajax
+        # Edit and save should not change the old content
+        expect(my_comment_post.reload.text).to eq(old_text)
+
         new_post_text = 'new post text'
+        find(content_tag_selector(my_comment_post)).find('.edit').click
         within find('.edit-discussion-post-form') do
           fill_in 'discussion_post[text]', with: new_post_text
           click_button I18n.t('javascript.course.discussion.post.submit')
