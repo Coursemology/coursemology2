@@ -51,11 +51,11 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
           path = edit_course_assessment_submission_path(course, assessment, submission, step: step)
           expect(page).to have_link(step, href: path)
         end
-        expect(page).to have_selector('h2', text: mrq_questions.first.display_title)
+        expect(page).to have_selector('h3', text: mrq_questions.first.display_title)
 
         click_link '2'
         # Students should not be able to go to Q2 before Q1 is done.
-        expect(page).to have_selector('h2', text: mrq_questions.first.display_title)
+        expect(page).to have_selector('h3', text: mrq_questions.first.display_title)
 
         # Add a correct answer to the first question
         answer = mrq_questions.first.attempt(submission)
@@ -63,7 +63,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         answer.save!
 
         click_link '2'
-        expect(page).to have_selector('h2', text: mrq_questions.second.display_title)
+        expect(page).to have_selector('h3', text: mrq_questions.second.display_title)
       end
 
       scenario 'I can continue to the next question when current answer is correct', js: true do
@@ -81,7 +81,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         expect(page).to have_checked_field(correct_option)
 
         click_link I18n.t('course.assessment.answer.guided.continue')
-        expect(page).to have_selector('h2', text: mrq_questions.second.display_title)
+        expect(page).to have_selector('h3', text: mrq_questions.second.display_title)
       end
 
       scenario 'I can resubmit the question when submission is not finalised', js: true do
@@ -97,7 +97,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
         expect(page).
           to have_selector('div.panel', text: 'course.assessment.answer.explanation.wrong')
-        expect(page).to have_selector('h2', text: mrq_questions.first.display_title)
+        expect(page).to have_selector('h3', text: mrq_questions.first.display_title)
         # Check that previous attempt is restored.
         expect(page).to have_checked_field(wrong_option)
         expect(page).to have_selector('.btn', text: I18n.t('common.submit'))
@@ -111,7 +111,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         expect(page).
           to have_selector('div.panel', text: 'course.assessment.answer.explanation.correct')
         expect(page).to have_selector('.btn.finalise')
-        expect(page).to have_selector('h2', text: mrq_questions.first.display_title)
+        expect(page).to have_selector('h3', text: mrq_questions.first.display_title)
         expect(page).to have_checked_field(correct_option)
         expect(page).to have_selector('.btn', text: I18n.t('common.submit'))
       end
@@ -134,7 +134,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
         expect(page).
           to have_selector('div.panel', text: 'course.assessment.answer.explanation.correct')
-        expect(page).to have_selector('h2', text: mrq_questions.first.display_title)
+        expect(page).to have_selector('h3', text: mrq_questions.first.display_title)
         expect(page).to have_selector('.btn', text: I18n.t('common.submit'))
       end
 
@@ -194,10 +194,10 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         extra_mrq_question
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
-        expect(page).to have_selector('h2', text: mrq_questions.first.display_title)
+        expect(page).to have_selector('h3', text: mrq_questions.first.display_title)
 
         click_link '2'
-        expect(page).to have_selector('h2', text: mrq_questions.second.display_title)
+        expect(page).to have_selector('h3', text: mrq_questions.second.display_title)
       end
     end
   end
