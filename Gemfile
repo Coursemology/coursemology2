@@ -176,7 +176,7 @@ gem 'themes_on_rails', '>= 0.3.1', github: 'lowjoel/themes_on_rails',
                                    branch: 'cache-theme-templates'
 
 # Forms made easy for Rails
-gem 'simple_form'
+gem 'simple_form', '~> 3.2.1'
 gem 'simple_form-bootstrap'
 # Dynamic nested forms
 gem 'cocoon'
