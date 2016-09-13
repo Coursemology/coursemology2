@@ -17,3 +17,5 @@ table.table.forum-list.table-hover
         h3 = t('.no_topic')
     - else
       = render @topics
+
+= paginate @topics
