@@ -159,14 +159,27 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         expect(page).to have_selector('td', text: 'graded')
       end
 
-      # Feature spec does not fully test the logic (but the existence of the button)
-      # This is because the logic of question reset is tested in +worksheet_spec.rb+.
-      scenario 'I can see the button to reset my answer to a programming question', js: true do
-        programming_assessment_submission
+      scenario 'I can reset my answer to a programming question', js: true do
+        programming_question = programming_assessment.questions.first
+        programming_answer = create(:course_assessment_answer_programming,
+                                    assessment: programming_assessment,
+                                    question: programming_question,
+                                    creator: student,
+                                    file_count: 1)
+        programming_submission = programming_answer.acting_as.submission
 
+        # Modify programming file content
+        programming_answer.files.first.update_column(:content, 'foooo')
+
+        # Reset answer
         visit edit_course_assessment_submission_path(course, programming_assessment,
-                                                     programming_assessment_submission)
-        expect(page).to have_selector('.btn.reset-answer', count: 1)
+                                                     programming_submission)
+        click_link I18n.t('course.assessment.answer.reset_answer.button')
+        wait_for_ajax
+
+        # Check that answer has been reset to template files
+        expect(programming_answer.reload.files.first.content).
+          to eq(programming_question.specific.template_files.first.content)
       end
     end
 
