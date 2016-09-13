@@ -21,7 +21,8 @@ en:
           correct: 'Correct!'
           wrong: 'Wrong!'
         reset_answer:
-          button: 'Reset Answer'
+          button: 'Reset'
+          tooltip: 'Reset your current answer to the template'
           warning: >
             Are you sure you want to reset your answer? This action is irreversible and you will
             lose all your current work for this question.

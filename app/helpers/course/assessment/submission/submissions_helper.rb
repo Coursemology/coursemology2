@@ -50,7 +50,8 @@ module Course::Assessment::Submission::SubmissionsHelper
         current_course, assessment, submission, answer_id: answer.id, reset_answer: true
       )
     link_to t('course.assessment.answer.reset_answer.button'), path,
-            remote: true, method: :post, class: ['btn', 'btn-warning', 'reset-answer'],
+            remote: true, method: :post, class: ['btn', 'btn-default', 'reset-answer'],
+            title: t('course.assessment.answer.reset_answer.tooltip'),
             data: { confirm: t('course.assessment.answer.reset_answer.warning') }
   end
 
