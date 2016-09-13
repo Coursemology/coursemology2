@@ -11,9 +11,9 @@ class RenameProgrammingAutoGradingTestResultMessages < ActiveRecord::Migration
     Course::Assessment::Answer::ProgrammingAutoGradingTestResult.reset_column_information
     Course::Assessment::Answer::ProgrammingAutoGradingTestResult.where.not(message: nil).
       find_in_batches do |group|
-        group.each do |test_result|
-          test_result.update_column(:messages, 'error': test_result.message)
-        end
+      group.each do |test_result|
+        test_result.update_column(:messages, 'error': test_result.message)
+      end
     end
-  end 
+  end
 end
