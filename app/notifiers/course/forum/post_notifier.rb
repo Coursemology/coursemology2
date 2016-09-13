@@ -3,7 +3,9 @@ class Course::Forum::PostNotifier < Notifier::Base
   def post_replied(user, post)
     activity = create_activity(actor: user, object: post, event: :replied)
     activity.notify(post.topic.actable.forum.course, :feed)
-    post.topic.subscriptions.includes(:user).each { |s| activity.notify(s.user, :email) }
+    post.topic.subscriptions.includes(:user).each do |subscription|
+      activity.notify(subscription.user, :email) unless subscription.user == user
+    end
     activity.save!
   end
 end
