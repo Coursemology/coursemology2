@@ -44,12 +44,13 @@ class Course::Assessment::Submission::SubmissionsController < \
   # Reload answer to either its latest status or to a fresh answer, depending on parameters.
   def reload_answer
     @answer = @submission.answers.find_by(id: reload_answer_params[:answer_id])
+    @current_question = @answer.try(:question)
+
     if @answer.nil?
       render status: :bad_request
     elsif reload_answer_params[:reset_answer]
       @new_answer = @answer.reset_answer
     else
-      @current_question = @answer.question
       @new_answer = @submission.answers.from_question(@current_question.id).last
     end
   end
