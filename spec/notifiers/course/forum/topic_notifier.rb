@@ -9,10 +9,15 @@ RSpec.describe Course::Forum::TopicNotifier, type: :notifier do
       let(:course) { create(:course) }
       let(:forum) { create(:forum, course: course) }
       let!(:topic) { create(:forum_topic, forum: forum) }
-      let(:user) do
+      let!(:user) do
         user = create(:course_user, course: course).user
         forum.subscriptions.create(user: user)
         user
+      end
+      let!(:subscriber) do
+        subscriber = create(:course_user, course: course).user
+        forum.subscriptions.create(user: subscriber)
+        subscriber
       end
 
       subject { Course::Forum::TopicNotifier.topic_created(user, topic) }
