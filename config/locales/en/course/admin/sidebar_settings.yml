@@ -6,5 +6,6 @@ en:
           header: 'Sidebar Settings'
           name: 'Name'
           weight: 'Weight'
+          button: 'Update Sidebar Settings'
         update:
           success: 'Settings updated successfully'
