@@ -33,7 +33,9 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         within find_field('skills') do
           select skill.title
         end
-        click_button 'submit'
+        click_button I18n.t(
+          'course.assessment.question.multiple_responses.form.multiple_response_button'
+        )
 
         question_created = assessment.questions.first.specific
         expect(page).to have_content_tag_for(question_created)
@@ -56,7 +58,9 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         question_attributes = attributes_for(:course_assessment_question_multiple_response)
         fill_in 'title', with: question_attributes[:title]
         fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
-        click_button 'submit'
+        click_button I18n.t(
+          'course.assessment.question.multiple_responses.form.multiple_choice_button'
+        )
 
         # Cannot create multiple choice question without a correct option
         expect(current_path).to eq(
@@ -77,7 +81,9 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
           check find('input[type="checkbox"]')[:name]
         end
 
-        click_button 'submit'
+        click_button I18n.t(
+          'course.assessment.question.multiple_responses.form.multiple_choice_button'
+        )
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
         question_created = assessment.questions.first.specific
@@ -99,7 +105,9 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
 
         maximum_grade = 999.9
         fill_in 'maximum_grade', with: maximum_grade
-        click_button 'submit'
+        click_button I18n.t(
+          'course.assessment.question.multiple_responses.form.multiple_response_button'
+        )
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(mrq.reload.maximum_grade).to eq(maximum_grade)
@@ -119,7 +127,10 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
             end
           end
         end
-        click_button 'submit'
+        click_button I18n.t(
+          'course.assessment.question.multiple_responses.form.multiple_response_button'
+        )
+
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(page).to have_selector('div.alert.alert-success')
       end
