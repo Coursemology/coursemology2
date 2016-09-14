@@ -18,11 +18,11 @@ RSpec.feature 'Course: Administration: Sidebar' do
         visit course_admin_sidebar_path(course)
 
         fill_in first_weight_field, with: invalid_weight
-        click_button 'submit'
+        click_button I18n.t('course.admin.sidebar_settings.edit.button')
         expect(page).to have_selector('div.has-error')
 
         fill_in first_weight_field, with: valid_weight
-        click_button 'submit'
+        click_button I18n.t('course.admin.sidebar_settings.edit.button')
         expect(page).to have_field(first_weight_field, with: valid_weight)
       end
     end
