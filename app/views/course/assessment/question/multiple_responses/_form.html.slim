@@ -21,4 +21,9 @@
       = f.simple_fields_for :options do |options_form|
         = render 'option_fields', f: options_form
 
-  = f.button :submit
+  - if @multiple_response_question.multiple_choice?
+    - button_text = t('.multiple_choice_button')
+  - else
+    - button_text = t('.multiple_response_button')
+  = f.button :submit, button_text
+
