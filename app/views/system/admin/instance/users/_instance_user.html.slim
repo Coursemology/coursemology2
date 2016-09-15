@@ -1,11 +1,12 @@
-= content_tag_for(:tr, instance_user)
+= content_tag_for(:tr, instance_user, 'data-action' => admin_instance_user_path(instance_user),
+                                      'data-method' => 'patch',
+                                      class: 'instance-user')
   - user = instance_user.user
-  th = user.name
-  td = user.email
-  / TODO: Add links after user public profile page was implemented
-  td = link_to user.courses.length, '#'
-
-  = simple_form_for instance_user, url: admin_instance_user_path(instance_user) do |f|
+  = simple_fields_for instance_user do |f|
+    th = user.name
+    td = user.email
+    / TODO: Add links after user public profile page was implemented
+    td = link_to user.courses.length, '#'
     td = f.input :role, as: :select, collection: InstanceUser.roles.keys, label: false
     td
       = f.button :submit, id: 'update' do

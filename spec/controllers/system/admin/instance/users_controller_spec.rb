@@ -27,7 +27,9 @@ RSpec.describe System::Admin::Instance::UsersController, type: :controller do
     describe '#update' do
       let!(:instance_user) { create(:instance_user) }
 
-      subject { patch :update, id: instance_user, instance_user: { role: :administrator } }
+      subject do
+        patch :update, format: :js, id: instance_user, instance_user: { role: :administrator }
+      end
 
       context 'when the user is an instance administrator' do
         before { sign_in(instance_admin) }
