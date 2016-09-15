@@ -35,7 +35,9 @@ table.table.table-striped.table-hover
         td = format_html(test_case.expression)
         td
           div.expected = format_html(test_case.expected)
-        td = format_html(test_case.hint) if !test_case_result || !test_case_result.passed?
+        td
+          - if !test_case_result || !test_case_result.passed?
+            = simple_format(get_hint(test_case, test_case_result))
         td
           - if test_case_result && test_case_result.passed?
             = fa_icon 'check'.freeze
@@ -54,9 +56,11 @@ table.table.table-striped.table-hover
         = content_tag_for(:tr, test_case) do
           th = format_html(test_case.identifier)
           td = format_html(test_case.expression)
-          td 
+          td
             div.expected = format_html(test_case.expected)
-          td = format_html(test_case.hint) if !test_case_result || !test_case_result.passed?
+          td
+            - if !test_case_result || !test_case_result.passed?
+              = simple_format(get_hint(test_case, test_case_result))
           td
             - if test_case_result && test_case_result.passed?
               = fa_icon 'check'.freeze
@@ -71,9 +75,11 @@ table.table.table-striped.table-hover
           = content_tag_for(:tr, test_case) do
             th = format_html(test_case.identifier)
             td = format_html(test_case.expression)
-            td 
+            td
               div.expected = format_html(test_case.expected)
-            td = format_html(test_case.hint) if !test_case_result || !test_case_result.passed?
+            td
+              - if !test_case_result || !test_case_result.passed?
+                = simple_format(get_hint(test_case, test_case_result))
             td
               - if test_case_result && test_case_result.passed?
                 = fa_icon 'check'.freeze
@@ -83,20 +89,26 @@ table.table.table-striped.table-hover
 - failed_public_test_cases = public_test_cases. \
     select { |t| answer_test_results_hash[t] && !answer_test_results_hash[t].passed? }
 - if !failed_public_test_cases.empty?
+    - test_case = failed_public_test_cases.first
+    - test_case_result = answer_test_results_hash[test_case]
     div.panel.panel-danger
       div.panel-heading = t('.failed_public_message')
-      div.panel-body = format_html(answer_test_results_hash[failed_public_test_cases.first].message)
+      div.panel-body = simple_format(get_hint(test_case, test_case_result))
 
 - failed_private_test_cases = private_test_cases. \
     select { |t| answer_test_results_hash[t] && !answer_test_results_hash[t].passed? }
 - if failed_public_test_cases.empty? && !failed_private_test_cases.empty?
+    - test_case = failed_private_test_cases.first
+    - test_case_result = answer_test_results_hash[test_case]
     div.panel.panel-danger
       div.panel-heading = t('.failed_private_message')
-      div.panel-body = format_html(failed_private_test_cases.map(&:hint).compact.first)
+      div.panel-body = simple_format(get_hint(test_case, test_case_result))
 
 - failed_evaluation_test_cases = evaluation_test_cases. \
     select { |t| answer_test_results_hash[t] && !answer_test_results_hash[t].passed? }
 - if can?(:grade, answer.answer) && !failed_evaluation_test_cases.empty?
+    - test_case = failed_evaluation_test_cases.first
+    - test_case_result = answer_test_results_hash[test_case]
     div.panel.panel-danger
       div.panel-heading = t('.failed_evaluation_message')
-      div.panel-body = format_html(failed_evaluation_test_cases.map(&:hint).compact.first)
+      div.panel-body = simple_format(get_hint(test_case, test_case_result))

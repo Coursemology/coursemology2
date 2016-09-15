@@ -202,6 +202,116 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
     end
   end
 
+  # Test dynamic hints, failure and error messages, messages hash,
+  # output meta
+  context 'when given a report with various kinds of output data' do
+    let(:report_path) do
+      File.join(Rails.root, 'spec/fixtures/course/'\
+                'programming_messages_test_report.xml')
+    end
+
+    let(:report_xml) { File.read(report_path) }
+
+    let(:parsed_report) do
+      Course::Assessment::ProgrammingTestCaseReport.new(report_xml)
+    end
+    let(:public_test_cases) { parsed_report.test_suites.first.test_cases }
+    let(:private_test_cases) { parsed_report.test_suites.second.test_cases }
+
+    describe Course::Assessment::ProgrammingTestCaseReport::TestCase do
+      context 'failed test case' do
+        subject { public_test_cases.first } # passed test case with output meta
+
+        describe '#output' do
+          it 'returns the output attribute' do
+            expect(subject.output).to eq('-1')
+          end
+        end
+
+        describe '#messages' do
+          it 'returns the output and failure message in a hash' do
+            expect(subject.messages).to eq('output': '-1',
+                                           'failure': 'AssertionError: -1 != 6188 : Wrong answer',
+                                           'failure_contents': 'Some failure traceback')
+          end
+        end
+      end
+
+      context 'timed out test case' do
+        subject { public_test_cases.second }
+
+        describe '#output' do
+          it 'returns an empty string as the output attribute' do
+            expect(subject.output).to eq('')
+          end
+        end
+
+        describe '#failure_message' do
+          it 'returns the failure message' do
+            expect(subject.failure_message).to eq("TimeoutError: 'Timed Out'")
+          end
+        end
+      end
+
+      context 'failed test case with dynamic hint' do
+        subject { private_test_cases.first }
+
+        describe '#hint' do
+          it 'returns the hint attribute generated when catching the exception' do
+            expect(subject.hint).to eq('Inputs are negative')
+          end
+        end
+
+        describe '#output' do
+          it 'returns the output attribute' do
+            expect(subject.output).to eq('Purposely catch exception')
+          end
+        end
+
+        describe '#failure_contents' do
+          it 'returns the contents of the failure tag' do
+            # simpler test for the failure contents
+            expect(subject.failure_contents).to include('self.fail()')
+          end
+        end
+
+        describe '#messages' do
+          it 'returns a hash with the output, hint, failure and failure_contents' do
+            expect(subject.messages.keys).to include(:output, :hint, :failure, :failure_contents)
+          end
+        end
+      end
+
+      context 'error test case' do
+        subject { private_test_cases.second }
+
+        describe '#output' do
+          it 'returns the output attribute' do
+            expect(subject.output).to eq('Purposely raise exception')
+          end
+        end
+
+        describe '#error_message' do
+          it 'returns the error type and message attributes in a single string' do
+            expect(subject.error_message).to eq('Exception: Negative numbers')
+          end
+        end
+
+        describe '#error_contents' do
+          it 'returns the contents of the error tag' do
+            expect(subject.error_contents).to include('raise Exception("Negative numbers")')
+          end
+        end
+
+        describe '#messages' do
+          it 'returns a hash with the output, error and error_contents' do
+            expect(subject.messages.keys).to contain_exactly(:output, :error, :error_contents)
+          end
+        end
+      end
+    end
+  end
+
   context 'when given a report with test cases with errors' do
     let(:report_path) do
       File.join(Rails.root, 'spec/fixtures/course/'\

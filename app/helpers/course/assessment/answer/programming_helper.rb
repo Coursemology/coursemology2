@@ -96,4 +96,16 @@ module Course::Assessment::Answer::ProgrammingHelper
 
     line_discussion_cell.inner_html = html
   end
+
+  # Get a hint message. Use the one from test_result if available, else fallback to the one from
+  # the test case.
+  #
+  # @param [Course::Assessment::Question::ProgrammingTestCase] The test case
+  # @param [Course::Assessment::Answer::ProgrammingAutoGradingTestResult] The test result
+  # @return [String] The hint, or an empty string if there isn't one
+  def get_hint(test_case, test_case_result)
+    hint = test_case_result.messages['hint'] if test_case_result
+    hint ||= test_case.hint
+    hint || ''
+  end
 end

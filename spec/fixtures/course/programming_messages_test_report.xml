@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite errors="0" failures="2" name="L4Q11_Public" skipped="0" tests="2" time="2.008">
+		<testcase classname="L4Q11_Public" name="test_public_fail_test" time="0.000">
+			<meta expected="6188" expression="num_combination(17, 5)" hint="" output="-1"/>
+			<failure message="-1 != 6188 : Wrong answer" type="AssertionError">Some failure traceback</failure>
+		</testcase>
+		<testcase classname="L4Q11_Public" name="test_public_timeout_error" time="2.008">
+			<meta expected="True" expression="recursion" hint="Is your function written recursively?"/>
+			<failure message="'Timed Out'" type="TimeoutError">Another failure traceback</failure>
+		</testcase>
+		<system-out>
+<![CDATA[]]>		</system-out>
+		<system-err>
+<![CDATA[]]>		</system-err>
+	</testsuite>
+	<testsuite errors="1" failures="1" name="L4Q11_Private" skipped="0" tests="2" time="0.001">
+		<testcase classname="L4Q11_Private" name="test_private_catch_exception" time="0.001">
+			<meta expected="1" expression="num_combination(1, 1)" hint="Inputs are negative" output="Purposely catch exception"/>
+			<failure message="None" type="AssertionError">
+<![CDATA[Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages/timeout_decorator/timeout_decorator.py", line 69, in new_function
+    return function(*args, **kwargs)
+  File "answer.py", line 115, in test_private_catch_exception
+    self.fail()
+AssertionError
+]]>			</failure>
+		</testcase>
+		<testcase classname="L4Q11_Private" name="test_private_error_test" time="0.000">
+			<meta expected="1" expression="num_combination(1, 1)" hint="" output="Purposely raise exception"/>
+			<error message="Negative numbers" type="Exception">
+<![CDATA[Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages/timeout_decorator/timeout_decorator.py", line 69, in new_function
+    return function(*args, **kwargs)
+  File "answer.py", line 123, in test_private_error_test
+    self.assertEqual(num_combination(-1, -1), 1)
+  File "answer.py", line 11, in num_combination
+    raise Exception("Negative numbers")
+Exception: Negative numbers
+]]>			</error>
+		</testcase>
+		<system-out>
+<![CDATA[]]>		</system-out>
+		<system-err>
+<![CDATA[]]>		</system-err>
+	</testsuite>
+</testsuites>
