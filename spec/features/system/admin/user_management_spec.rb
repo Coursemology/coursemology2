@@ -17,29 +17,36 @@ RSpec.feature 'System: Administration: Users' do
         visit admin_users_path
 
         users.each do |user|
-          expect(page).to have_selector('tr.user th', text: user.name)
+          expect(page).to have_selector("tr.user input[value='#{user.name}']")
           expect(page).to have_selector('tr.user td', text: user.email)
         end
       end
 
-      scenario 'I can change a user\'s role' do
-        user_to_change = users.sample
+      scenario "I can change a user's record", js: true do
         visit admin_users_path
 
-        field = find('tr.user td', text: user_to_change.email)
-
-        within field.find(:xpath, '..') do
-          select '', from: 'user_role'
-          find_button('update').click
+        user_to_change = users.sample
+        within find(content_tag_selector(user_to_change)) do
+          find('.dropdown-toggle').click
+          find('ul.dropdown-menu.inner').find('span', text: /^$/).trigger('click')
+          click_button 'update'
         end
+
+        wait_for_ajax
         expect(page).to have_selector('div.alert.alert-danger')
 
-        within field.find(:xpath, '..') do
-          select 'administrator', from: 'user_role'
-          find_button('update').click
+        new_name = 'updated user name'
+        within find(content_tag_selector(user_to_change)) do
+          fill_in 'user_name', with: new_name
+          find('.dropdown-toggle').click
+          find('ul.dropdown-menu.inner').find('span', text: 'administrator').click
+          click_button 'update'
         end
+
+        wait_for_ajax
         expect(page).to have_selector('div', text: I18n.t('system.admin.users.update.success'))
         expect(user_to_change.reload).to be_administrator
+        expect(user_to_change.name).to eq(new_name)
       end
 
       let!(:user_to_delete) { create(:user, name: '!' + users.first.name) }
