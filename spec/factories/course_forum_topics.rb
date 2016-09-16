@@ -15,6 +15,7 @@ FactoryGirl.define do
 
     after(:build) do |forum_topic, evaluator|
       forum_topic.course = evaluator.course
+      forum_topic.posts.each { |p| p.text = 'I am a post' }
     end
   end
 end

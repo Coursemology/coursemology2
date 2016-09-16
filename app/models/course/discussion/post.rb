@@ -11,6 +11,7 @@ class Course::Discussion::Post < ActiveRecord::Base
   before_destroy :reparent_children
 
   validate :parent_topic_consistency
+  validates :text, presence: true
 
   belongs_to :topic, inverse_of: :posts, touch: true
   has_many :votes, inverse_of: :post, dependent: :destroy

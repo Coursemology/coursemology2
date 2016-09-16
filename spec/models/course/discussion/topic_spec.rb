@@ -169,7 +169,7 @@ RSpec.describe Course::Discussion::Topic, type: :model do
         subject
 
         expect(from_topic.posts.count).to be(0)
-        expect(to_topic.posts).to contain_exactly(*posts)
+        expect(to_topic.reload.posts).to contain_exactly(*posts)
       end
 
       it 'sets the pending status of the new topic' do
