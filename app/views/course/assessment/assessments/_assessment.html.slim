@@ -10,6 +10,11 @@
         =< fa_icon 'eye-slash'.freeze
 
   td = assessment.total_exp
+  td.achievement-badge
+    - achievement_conditionals = @conditional_service.achievement_conditional_for(assessment)
+    - achievement_conditionals.each do |achievement|
+      = link_to course_achievement_path(current_course, achievement) do
+        = display_achievement_badge(achievement)
   td
     - if condition_not_satisfied(assessment)
       div.condition-not-satisfied data-toggle='tooltip' title="#{t('.condition_not_satisfied')}"

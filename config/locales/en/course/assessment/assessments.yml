@@ -16,6 +16,7 @@ en:
           bonus_cut_off: 'Bonus Cut Off'
           end_at: 'End At'
           maximum_experience_points: 'Maximum Experience Points'
+          requirement_for: 'Requirement For'
         assessment:
           attempt: 'Attempt'
           condition_not_satisfied: 'You do not fulfill the requirements of the assessment'
