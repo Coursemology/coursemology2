@@ -21,7 +21,7 @@ en:
           votes: 'Votes'
           posts: 'Posts'
           views: 'Views'
-          latest_post: 'Latest Post'
+          latest_post: 'Last Posted By'
           no_topic: 'No Topic'
         new:
           header: 'New Forum'

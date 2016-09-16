@@ -9,8 +9,6 @@
     h4.title
       - if post.unread?(current_user)
         => fa_icon 'envelope'.freeze
-      a
-        = format_inline_text(post.title)
       div.pull-right
         .timestamp
           => format_datetime(post.created_at)

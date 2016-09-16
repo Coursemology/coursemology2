@@ -7,7 +7,6 @@ class Course::Forum::Topic < ActiveRecord::Base
   acts_as_discussion_topic
 
   after_initialize :generate_initial_post, unless: :persisted?
-  before_validation :set_initial_post_title, unless: :persisted?
   after_create :mark_as_read_for_creator
   after_update :mark_as_read_for_updater
 
@@ -101,10 +100,6 @@ class Course::Forum::Topic < ActiveRecord::Base
 
   def generate_initial_post
     posts.build if posts.empty?
-  end
-
-  def set_initial_post_title
-    posts.first.title = title
   end
 
   def mark_as_read_for_creator

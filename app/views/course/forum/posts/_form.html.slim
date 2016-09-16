@@ -1,7 +1,6 @@
 = simple_form_for post, url: url do |f|
   = f.error_notification
-  = f.input :title
-  = f.input :text
+  = f.input :text, label: false
 
   = f.hidden_field :parent_id
 

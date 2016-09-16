@@ -11,9 +11,6 @@
   td = topic.post_count
   td = topic.view_count
   td.latest-post
-    - last_post = topic.posts.first
+    - last_post = topic.posts.last
     - if last_post
-      = t('.last_post_html', post: link_to(format_inline_text(last_post.title),
-                                           course_forum_topic_path(current_course, @forum, topic)))
-      br
-      = t('.creator_html', creator: link_to_user(last_post.creator))
+      = link_to_user(last_post.creator)
