@@ -45,20 +45,14 @@ class Course::Assessment::Question::ProgrammingImportService
   def import_from_package(package)
     raise InvalidDataError unless package.valid?
 
-    template_import_thread = Thread.new { import_template_files(package) }
+    # Must extract template files before replacing them with the solution files.
+    template_files = package.submission_files
+    package.replace_submission_with_solution
+    package.save
     evaluation_result = evaluate_package(package)
-    template_import_thread.join
 
     raise evaluation_result if evaluation_result.error?
-    save!(template_import_thread.value, evaluation_result)
-  end
-
-  # Extracts the templates from the package.
-  #
-  # @param [Course::Assessment::ProgrammingPackage] package The package to import.
-  # @return [Hash<Pathname, String>] The templates found in the package.
-  def import_template_files(package)
-    package.submission_files
+    save!(template_files, evaluation_result)
   end
 
   # Evaluates the package to obtain the set of tests.

@@ -18,6 +18,15 @@
 # - +tests/+: where the tests will be placed. How this set of tests should be run is immaterial,
 #   so long it is run when +make test+ is executed by the evaluator.
 #
+# It can also contain an optional 'solution' folder:
+#
+#   +solution/+: where syntax correct code is placed. When the package is uploaded by the
+#   instructor as part of a question, the contents of this directory will replace the contents of
+#   the 'submission' folder. This allows infinite loops or incorrect syntax to be used as templates
+#   for the students to fix. It also allows solutions to be kept in the same place as the tests.
+#   When this package is generated as part of auto grading, this folder is removed to prevent
+#   student code from accessing it.
+#
 # Call {Course::Assessment::ProgrammingPackage#close} when changes have been made to persist the
 # changes to disk. Duplicate the file before modifying if you do not want to modify the original
 # file -- changes are made in-place.
@@ -27,6 +36,9 @@ class Course::Assessment::ProgrammingPackage
 
   # The path to the submission.
   SUBMISSION_PATH = Pathname.new('submission').freeze
+
+  # The path to the solution.
+  SOLUTION_PATH = Pathname.new('solution').freeze
 
   # The path to the tests.
   TESTS_PATH = Pathname.new('tests').freeze
@@ -92,12 +104,7 @@ class Course::Assessment::ProgrammingPackage
   # @return [Hash<Pathname, String>] A hash mapping the file path to the file contents of each
   #   file.
   def submission_files
-    ensure_file_open!
-    @file.glob("#{SUBMISSION_PATH}/**/*").map do |entry|
-      entry_file_name = Pathname.new(entry.name)
-      submission_file_name = entry_file_name.relative_path_from(SUBMISSION_PATH)
-      [submission_file_name, entry.get_input_stream(&:read)]
-    end.to_h
+    get_folder_files(SUBMISSION_PATH)
   end
 
   # Replaces the contents of all submission files.
@@ -106,7 +113,7 @@ class Course::Assessment::ProgrammingPackage
   #   contents of each file.
   def submission_files=(files)
     ensure_file_open!
-    remove_submission_files
+    remove_folder_files(SUBMISSION_PATH)
 
     files.each do |path, file|
       path = Pathname.new(path) unless path.is_a?(Pathname)
@@ -115,6 +122,31 @@ class Course::Assessment::ProgrammingPackage
         stream.write(file)
       end
     end
+  end
+
+  # Remove the contents of the solution folder so students can't do sneaky things
+  # like generating a report from the solution folder.
+  def remove_solution_files
+    remove_folder_files(SOLUTION_PATH)
+  end
+
+  # Gets the contents of all solution files.
+  #
+  # @return [Hash<Pathname, String>] A hash mapping the file path to the file contents of each
+  #   file.
+  def solution_files
+    get_folder_files(SOLUTION_PATH)
+  end
+
+  # If a solution directory exists, replace the contents of the submission directory
+  # with the contents of the solution directory.
+  # Allows syntax incorrect templates since the import uses other files.
+  def replace_submission_with_solution
+    # Return if there are no files in the solution directory
+    files = solution_files
+    return if files.empty?
+
+    self.submission_files = files
   end
 
   private
@@ -137,10 +169,23 @@ class Course::Assessment::ProgrammingPackage
     raise IllegalStateError unless @file
   end
 
-  # Removes all submission files from the archive.
-  def remove_submission_files
-    @file.glob("#{SUBMISSION_PATH}/**/*").each do |entry|
+  def remove_folder_files(folder_path)
+    @file.glob("#{folder_path}/**/*").each do |entry|
       @file.remove(entry)
     end
+  end
+
+  # Get the contents of all files in the specified folder.
+  #
+  # @param [String] Path to folder.
+  # @return [Hash<Pathname, String>] A hash mapping the file path to the file contents of each
+  #   file.
+  def get_folder_files(folder_path)
+    ensure_file_open!
+    @file.glob("#{folder_path}/**/*").map do |entry|
+      entry_file_name = Pathname.new(entry.name)
+      file_name = entry_file_name.relative_path_from(folder_path)
+      [file_name, entry.get_input_stream(&:read)]
+    end.to_h
   end
 end
