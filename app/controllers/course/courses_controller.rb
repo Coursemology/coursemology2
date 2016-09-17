@@ -27,6 +27,12 @@ class Course::CoursesController < Course::Controller
   def destroy # :nodoc:
   end
 
+  protected
+
+  def publicly_accessible?
+    params[:action] == 'index'
+  end
+
   private
 
   def course_params # :nodoc:
