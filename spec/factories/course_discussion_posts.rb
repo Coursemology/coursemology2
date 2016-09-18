@@ -5,7 +5,6 @@ FactoryGirl.define do
     updater
     parent nil
     association :topic, factory: :course_discussion_topic
-    sequence(:title) { |n| "post #{n}" }
     text 'This is a test post'
   end
 end

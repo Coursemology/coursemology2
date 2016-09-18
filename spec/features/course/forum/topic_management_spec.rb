@@ -46,7 +46,6 @@ RSpec.feature 'Course: Forum: Topic: Management' do
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, forum.topics.last))
         expect(forum.topics.last.topic_type).to eq('announcement')
-        expect(forum.topics.last.posts.first.title).to eq(topic.title)
         expect(forum.topics.last.posts.first.text).to eq('test')
 
         # Create a sticky topic with a title.
@@ -54,6 +53,7 @@ RSpec.feature 'Course: Forum: Topic: Management' do
         find_link(nil, href: new_course_forum_topic_path(course, forum)).click
 
         fill_in 'title', with: topic.title
+        fill_in 'text', with: 'awesome text'
 
         within '#topic_topic_type' do
           find("option[value='sticky']").select_option
@@ -227,7 +227,6 @@ RSpec.feature 'Course: Forum: Topic: Management' do
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, forum.topics.last))
         expect(forum.topics.last.topic_type).to eq('normal')
-        expect(forum.topics.last.posts.first.title).to eq(topic.title)
         expect(forum.topics.last.posts.first.text).to eq('test')
 
         # Create a sticky topic with a title.
@@ -235,6 +234,7 @@ RSpec.feature 'Course: Forum: Topic: Management' do
         find_link(nil, href: new_course_forum_topic_path(course, forum)).click
 
         fill_in 'title', with: topic.title
+        fill_in 'text', with: 'awesome text'
 
         within '#topic_topic_type' do
           find("option[value='question']").select_option

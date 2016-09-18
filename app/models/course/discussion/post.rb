@@ -8,11 +8,10 @@ class Course::Discussion::Post < ActiveRecord::Base
   has_many_attachments
 
   after_initialize :set_topic, if: :new_record?
-  after_initialize :set_title, if: :new_record?
-  before_validation :set_title
   before_destroy :reparent_children
 
   validate :parent_topic_consistency
+  validates :text, presence: true
 
   belongs_to :topic, inverse_of: :posts, touch: true
   has_many :votes, inverse_of: :post, dependent: :destroy
@@ -89,12 +88,6 @@ class Course::Discussion::Post < ActiveRecord::Base
 
   def set_topic
     self.topic ||= parent.topic if parent
-  end
-
-  def set_title
-    return unless parent
-
-    self.title ||= self.class.human_attribute_name('title_reply_template', title: parent.title)
   end
 
   def parent_topic_consistency

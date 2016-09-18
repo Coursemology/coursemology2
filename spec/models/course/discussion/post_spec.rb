@@ -6,6 +6,7 @@ RSpec.describe Course::Discussion::Post, type: :model do
   it { is_expected.to belong_to(:creator) }
   it { is_expected.to have_many(:votes).inverse_of(:post).dependent(:destroy) }
   it { is_expected.to have_many(:children) }
+  it { is_expected.to validate_presence_of(:text) }
 
   let(:instance) { Instance.default }
   with_tenant(:instance) do
@@ -35,7 +36,7 @@ RSpec.describe Course::Discussion::Post, type: :model do
 
         { root: root, a: a, b: b, c: c } # Already in topological order.
       end
-      subject { graph[:root].topic.posts.ordered_topologically }
+      subject { graph[:root].topic.posts.reload.ordered_topologically }
 
       it 'sorts the posts topologically' do
         root_post = subject.to_a.first

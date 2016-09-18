@@ -23,9 +23,9 @@ RSpec.feature 'Course: Forum: Post: Management' do
       scenario 'I can create a post' do
         visit course_forum_topic_path(course, forum, topic)
 
-        # Create a post with a missing title.
+        # Create a post with empty content.
         within '#new_discussion_post' do
-          fill_in 'discussion_post_title', with: nil
+          fill_in 'discussion_post_text', with: nil
           click_button 'submit'
         end
 
@@ -39,9 +39,6 @@ RSpec.feature 'Course: Forum: Post: Management' do
         end
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(topic.reload.posts.last.title).to \
-          eq(I18n.t('activerecord.attributes.course/discussion/post.title_reply_template',
-                    title: topic.title))
         expect(topic.reload.posts.last.text).to eq('test')
         expect(topic.reload.subscriptions.where(user: user).count).to eq(1)
       end
@@ -55,19 +52,17 @@ RSpec.feature 'Course: Forum: Post: Management' do
                                                                      topic.posts.last))
 
         # Edit with invalid information.
-        fill_in 'discussion_post_title', with: nil
+        fill_in 'discussion_post_text', with: nil
         click_button 'submit'
         expect(current_path).to eq(course_forum_topic_post_path(course, forum, topic,
                                                                 topic.posts.last))
         expect(page).to have_selector('div.alert.alert-danger')
 
         # Edit with valid information.
-        fill_in 'discussion_post_title', with: 'new_title'
         fill_in 'discussion_post_text', with: 'new_text'
         click_button 'submit'
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(topic.reload.posts.last.title).to eq('new_title')
         expect(topic.reload.posts.last.text).to eq('new_text')
       end
 
@@ -90,9 +85,9 @@ RSpec.feature 'Course: Forum: Post: Management' do
         find_link(nil, href: reply_course_forum_topic_post_path(course, forum, topic, post)).click
         expect(current_path).to eq(reply_course_forum_topic_post_path(course, forum, topic, post))
 
-        # Reply a post with a missing title.
+        # Reply a post with empty content.
         within '#new_discussion_post' do
-          fill_in 'discussion_post_title', with: nil
+          fill_in 'discussion_post_text', with: nil
           click_button 'submit'
         end
 
@@ -108,9 +103,6 @@ RSpec.feature 'Course: Forum: Post: Management' do
         end
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(topic.reload.posts.last.title).to \
-          eq(I18n.t('activerecord.attributes.course/discussion/post.title_reply_template',
-                    title: post.title))
         expect(topic.reload.posts.last.text).to eq('test')
         expect(topic.reload.posts.last.parent).to eq(post)
       end
@@ -122,7 +114,7 @@ RSpec.feature 'Course: Forum: Post: Management' do
         visit course_forum_topic_path(course, forum, topic)
 
         post_content = 'test post content'
-        fill_in 'text', with: post_content
+        fill_in 'discussion_post_text', with: post_content
         click_button 'submit'
 
         new_post = topic.posts.reload.last
@@ -216,7 +208,7 @@ RSpec.feature 'Course: Forum: Post: Management' do
         visit course_forum_topic_path(course, forum, topic)
 
         post_content = 'test post content'
-        fill_in 'text', with: post_content
+        fill_in 'discussion_post_text', with: post_content
         click_button 'submit'
 
         new_post = topic.posts.reload.last

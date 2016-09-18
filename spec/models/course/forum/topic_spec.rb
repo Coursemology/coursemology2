@@ -34,7 +34,6 @@ RSpec.describe Course::Forum::Topic, type: :model do
       context 'when creating a new topic' do
         it 'generates an initial post with the same title as the topic' do
           expect(topic.posts.count).to eq(1)
-          expect(topic.posts.first.title).to eq('lol')
         end
       end
 
@@ -59,7 +58,6 @@ RSpec.describe Course::Forum::Topic, type: :model do
         it 'does not change the number of posts and the title of the initial post' do
           expect(topic.posts.count).to eq(1)
           expect(topic.title).to eq('new title')
-          expect(topic.posts.first.title).to eq('lol')
         end
       end
     end
