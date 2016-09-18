@@ -19,5 +19,24 @@ RSpec.describe Course::CoursesController, type: :controller do
         is_expected.to eq(2)
       end
     end
+
+    describe '#index' do
+      context 'when there is no user logged in' do
+        it 'allows unauthenticated access' do
+          get :index
+          expect(response).to be_success
+        end
+      end
+
+      context 'when the user is logged in' do
+        let(:user) { create(:administrator) }
+
+        it 'allows access' do
+          sign_in(user)
+          get :index
+          expect(response).to be_success
+        end
+      end
+    end
   end
 end
