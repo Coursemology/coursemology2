@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Performs calculations for Student Statistics Pages.
-class Course::StudentStatisticsService
+# Allows querying of group managers of users in a given collection without generating N+1 queries.
+class Course::GroupManagerPreloadService
   # Sets the collection of CourseUsers which `group_managers_of` will search from.
   # Assumes that GroupUsers and their Groups have been loaded for each CourseUser.
   #
