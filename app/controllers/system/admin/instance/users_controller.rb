@@ -11,9 +11,9 @@ class System::Admin::Instance::UsersController < System::Admin::Instance::Contro
 
   def update
     if @instance_user.update_attributes(instance_user_params)
-      redirect_to admin_instance_users_path, success: t('.success', user: @instance_user.user.name)
+      flash.now[:success] = t('.success', user: @instance_user.user.name)
     else
-      redirect_to admin_instance_users_path, danger: @instance_user.errors.full_messages.to_sentence
+      flash.now[:danger] = @instance_user.errors.full_messages.to_sentence
     end
   end
 

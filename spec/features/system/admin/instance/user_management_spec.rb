@@ -22,22 +22,26 @@ RSpec.feature 'System: Administration: Instance: Users' do
         expect(page.all('tr.instance_user').count).to eq(instance.instance_users.count)
       end
 
-      scenario 'I can change a user\'s role' do
+      scenario "I can change a user's role", js: true do
         visit admin_instance_users_path
 
         user_to_change = instance_users.sample
-        field = find('tr.instance_user td', text: user_to_change.user.email)
-
-        within field.find(:xpath, '..') do
-          select '', from: 'instance_user_role'
-          find_button('update').click
+        within find(content_tag_selector(user_to_change)) do
+          find('.dropdown-toggle').click
+          find('ul.dropdown-menu.inner').find('span', text: /^$/).trigger('click')
+          click_button 'update'
         end
+
+        wait_for_ajax
         expect(page).to have_selector('div.alert.alert-danger')
 
-        within field.find(:xpath, '..') do
-          select 'administrator', from: 'instance_user_role'
-          find_button('update').click
+        within find(content_tag_selector(user_to_change)) do
+          find('.dropdown-toggle').click
+          find('ul.dropdown-menu.inner').find('span', text: 'administrator').click
+          click_button 'update'
         end
+
+        wait_for_ajax
         expect(page).to have_selector('div',
                                       text: I18n.t('system.admin.instance.users.update.success'))
         expect(user_to_change.reload).to be_administrator

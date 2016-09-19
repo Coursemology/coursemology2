@@ -10,9 +10,9 @@ class System::Admin::UsersController < System::Admin::Controller
 
   def update
     if @user.update_attributes(user_params)
-      redirect_to admin_users_path, success: t('.success', user: @user.name)
+      flash.now[:success] = t('.success', user: @user.name)
     else
-      redirect_to admin_users_path, danger: @user.errors.full_messages.to_sentence
+      flash.now[:danger] = @user.errors.full_messages.to_sentence
     end
   end
 
@@ -27,7 +27,7 @@ class System::Admin::UsersController < System::Admin::Controller
   private
 
   def user_params
-    params.require(:user).permit(:role)
+    params.require(:user).permit(:name, :role)
   end
 
   def search_param

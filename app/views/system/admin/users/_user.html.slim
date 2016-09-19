@@ -1,10 +1,10 @@
-= content_tag_for(:tr, user)
-  th = user.name
-  td = user.email
-  / TODO: implement after rails #13775 was closed.
-  td
-
-  = simple_form_for user, url: admin_user_path(user) do |f|
+= content_tag_for(:tr, user, 'data-action' => admin_user_path(user),
+                             'data-method' => 'patch')
+  = simple_fields_for user do |f|
+    td = f.input :name, label: false
+    td = user.email
+    / TODO: implement after rails #13775 was closed.
+    td
     td = f.input :role, as: :select, collection: User.roles.keys, label: false
     td
       = f.button :submit, id: 'update' do

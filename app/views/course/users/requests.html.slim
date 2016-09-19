@@ -19,7 +19,8 @@ div.users
       tbody
         - @course_users.each do |user|
           = content_tag_for(:tr, user, 'data-action' => course_user_path(current_course, user),
-                                       'data-method' => 'patch')
+                                       'data-method' => 'patch',
+                                       class: 'course-user')
             = simple_fields_for user, resource: :course_user, wrapper: :inline_form do |f|
               th = f.input :name
               td = f.object.user.email
@@ -30,6 +31,6 @@ div.users
               td.course_user_workflow_state
                 = f.radio_button :workflow_state, 'rejected'
               td
-                = f.button :submit, id: 'update', style: 'display: none' do
+                = f.button :submit, id: 'update' do
                   = fa_icon 'save'.freeze
                 = delete_button([current_course, f.object])
