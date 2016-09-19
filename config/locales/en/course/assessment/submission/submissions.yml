@@ -44,6 +44,7 @@ en:
             student: :'course.users.role.student'
             status: 'Status'
             due_at: 'Due At'
+            attempted_at: 'Attempted At'
             statistics: 'Statistics'
             multiplier: 'Multiplier'
             question: 'Question'
