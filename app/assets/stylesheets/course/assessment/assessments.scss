@@ -14,5 +14,16 @@
     .condition-not-satisfied {
       color: $red;
     }
+
+    .achievement-badge {
+      a {
+        text-decoration: none;
+      }
+
+      .image > img {
+        height: $course-assessment-achievement-badge;
+        width: $course-assessment-achievement-badge;
+      }
+    }
   }
 }
