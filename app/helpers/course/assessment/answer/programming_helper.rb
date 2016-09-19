@@ -24,6 +24,33 @@ module Course::Assessment::Answer::ProgrammingHelper
     "line_annotation_file_#{file.id}_line_#{line_number}_annotation"
   end
 
+  # Get a hint message. Use the one from test_result if available, else fallback to the one from
+  # the test case.
+  #
+  # @param [Course::Assessment::Question::ProgrammingTestCase] The test case
+  # @param [Course::Assessment::Answer::ProgrammingAutoGradingTestResult] The test result
+  # @return [String] The hint, or an empty string if there isn't one
+  def get_hint(test_case, test_case_result)
+    hint = test_case_result.messages['hint'] if test_case_result
+    hint ||= test_case.hint
+    hint || ''
+  end
+
+  # Get the output message for the tutors to see when grading. Use the output meta attribute if
+  # available, else fallback to the failure message, error message, and finally empty string.
+  #
+  # @param [Course::Assessment::Answer::ProgrammingAutoGradingTestResult] The test result
+  # @return [String] The output, failure message, error message or empty string
+  #   if the previous 3 don't exist.
+  def get_output(test_case_result)
+    if test_case_result
+      output = test_case_result.messages['output']
+      output = test_case_result.messages['failure'] if output.blank?
+      output = test_case_result.messages['error'] if output.blank?
+    end
+    output || ''
+  end
+
   private
 
   # Inserts annotations into the generated code block.
@@ -95,17 +122,5 @@ module Course::Assessment::Answer::ProgrammingHelper
                   object: discussion_topic
 
     line_discussion_cell.inner_html = html
-  end
-
-  # Get a hint message. Use the one from test_result if available, else fallback to the one from
-  # the test case.
-  #
-  # @param [Course::Assessment::Question::ProgrammingTestCase] The test case
-  # @param [Course::Assessment::Answer::ProgrammingAutoGradingTestResult] The test result
-  # @return [String] The hint, or an empty string if there isn't one
-  def get_hint(test_case, test_case_result)
-    hint = test_case_result.messages['hint'] if test_case_result
-    hint ||= test_case.hint
-    hint || ''
   end
 end
