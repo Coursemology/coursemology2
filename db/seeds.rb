@@ -31,3 +31,5 @@ ActsAsTenant.with_tenant(Instance.default) do
     user.save!
   end
 end
+
+load(Rails.root.join( 'db', 'seeds', "#{Rails.env.downcase}.rb"))
