@@ -33,6 +33,15 @@ class Course::ExperiencePointsRecord < ActiveRecord::Base
     manually_awarded? ? super : specific.experience_points_display_reason
   end
 
+  # The parameters which will be resolved to the URL that the displayed reason links to.
+  #
+  # @return [Array|Object] The resource to link to
+  # @return [String] The path to link to
+  # @return [nil] If there is no link
+  def reason_url_params
+    manually_awarded? ? nil : specific.experience_points_reason_url_params
+  end
+
   private
 
   def send_notification

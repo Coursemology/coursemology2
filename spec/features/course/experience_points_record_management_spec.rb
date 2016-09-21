@@ -7,9 +7,10 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:course_student) { create(:course_student, course: course) }
-    let(:record) do
-      create(:course_assessment_submission, course: course, creator: course_student.user).acting_as
+    let(:submission) do
+      create(:course_assessment_submission, course: course, creator: course_student.user)
     end
+    let(:record) { submission.acting_as }
     let(:manual_record) { create(:course_experience_points_record, course_user: course_student) }
     let(:inactive_record) do
       create(:course_experience_points_record, :inactive, course_user: course_student)
@@ -28,6 +29,9 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
         expect(page).to have_content_tag_for(record)
         expect(page).to have_content_tag_for(manual_record)
         expect(page).not_to have_content_tag_for(inactive_record)
+        path = edit_course_assessment_submission_path(course, submission.assessment, submission)
+        expect(page).to have_link(record.reason, path)
+        expect(page).not_to have_link(manual_record.reason)
       end
 
       scenario "I can delete a course student's active manually-awarded points records" do
