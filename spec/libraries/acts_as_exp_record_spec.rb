@@ -16,9 +16,16 @@ RSpec.describe 'Extension: Acts as Experience Points Record' do
   it { is_expected.to respond_to(:course_user) }
   it { is_expected.to respond_to(:acting_as) }
   it { is_expected.to act_as(Course::ExperiencePointsRecord) }
+
   describe '#experience_points_display_reason' do
     it 'defaults to raise NotImplementedError' do
       expect { subject.experience_points_display_reason }.to raise_error(NotImplementedError)
+    end
+  end
+
+  describe '#experience_points_reason_url_params' do
+    it 'defaults to raise NotImplementedError' do
+      expect { subject.experience_points_reason_url_params }.to raise_error(NotImplementedError)
     end
   end
 end

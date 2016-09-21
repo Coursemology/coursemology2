@@ -28,5 +28,18 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
       raise NotImplementedError,
             'Experience points awarding items need to implement a points_display_reason method'
     end
+
+    # The parameters which will be resolved to the URL that the displayed reason links to on
+    # the experience points history page.
+    # This method is meant to be overridden by each class that acts as an experience points record.
+    #
+    # @return [Array|Object] The resource to link to
+    # @return [String] The path to link to
+    # @return [nil] If there is no link
+    def experience_points_reason_url_params
+      raise NotImplementedError,
+            'Experience points awarding items need to implement the method '\
+            'experience_points_reason_url_params'
+    end
   end
 end
