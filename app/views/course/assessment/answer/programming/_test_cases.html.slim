@@ -17,7 +17,10 @@ table.table.table-striped.table-hover
         th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:identifier)
       th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:expression)
       th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:expected)
-      th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:hint)
+      - if can?(:grade, answer.answer)
+        th = t('.output')
+      - if @submission.attempting?
+        th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:hint)
       th = t('.passed')
   tbody
     tr
@@ -35,14 +38,18 @@ table.table.table-striped.table-hover
         td = format_html(test_case.expression)
         td
           div.expected = format_html(test_case.expected)
-        td
-          - if !test_case_result || !test_case_result.passed?
-            = simple_format(get_hint(test_case, test_case_result))
+        - if can?(:grade, answer.answer)
+          td = simple_format(get_output(test_case_result))
+        - if @submission.attempting?
+          td
+            - if !test_case_result || !test_case_result.passed?
+              = simple_format(get_hint(test_case, test_case_result))
         td
           - if test_case_result && test_case_result.passed?
             = fa_icon 'check'.freeze
           - elsif test_case_result
             = fa_icon 'times'.freeze
+
   - if can?(:grade, answer.answer)
     tbody
       tr
@@ -58,9 +65,12 @@ table.table.table-striped.table-hover
           td = format_html(test_case.expression)
           td
             div.expected = format_html(test_case.expected)
-          td
-            - if !test_case_result || !test_case_result.passed?
-              = simple_format(get_hint(test_case, test_case_result))
+          - if can?(:grade, answer.answer)
+            td = simple_format(get_output(test_case_result))
+          - if @submission.attempting?
+            td
+              - if !test_case_result || !test_case_result.passed?
+                = simple_format(get_hint(test_case, test_case_result))
           td
             - if test_case_result && test_case_result.passed?
               = fa_icon 'check'.freeze
@@ -77,9 +87,12 @@ table.table.table-striped.table-hover
             td = format_html(test_case.expression)
             td
               div.expected = format_html(test_case.expected)
-            td
-              - if !test_case_result || !test_case_result.passed?
-                = simple_format(get_hint(test_case, test_case_result))
+            - if can?(:grade, answer.answer)
+              td = simple_format(get_output(test_case_result))
+            - if @submission.attempting?
+              td
+                - if !test_case_result || !test_case_result.passed?
+                  = simple_format(get_hint(test_case, test_case_result))
             td
               - if test_case_result && test_case_result.passed?
                 = fa_icon 'check'.freeze
