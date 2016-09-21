@@ -4,6 +4,7 @@ FactoryGirl.define do
           class: Course::Assessment::Question::TextResponse,
           parent: :course_assessment_question do
     allow_attachment false
+    hide_text false
 
     solutions do
       [
@@ -26,6 +27,11 @@ FactoryGirl.define do
 
     trait :allow_attachment do
       allow_attachment true
+    end
+
+    trait :file_upload_question do
+      allow_attachment true
+      hide_text true
     end
   end
 end

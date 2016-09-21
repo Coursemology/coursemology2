@@ -1,5 +1,10 @@
 en:
   activerecord:
+    attributes:
+      models:
+        course/assessment/question/text_response:
+          text_response: 'text response question'
+          file_upload: 'file upload question'
     errors:
       models:
         course/assessment/question/text_response:

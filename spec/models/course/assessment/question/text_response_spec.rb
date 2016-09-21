@@ -45,6 +45,20 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
       end
     end
 
+    describe '#file_upload_question?' do
+      subject { question.file_upload_question? }
+
+      context 'when hide_text is enabled' do
+        let(:question) { build(:course_assessment_question_text_response, :file_upload_question) }
+        it { is_expected.to eq(true) }
+      end
+
+      context 'when hide_text is disabled' do
+        let(:question) { build(:course_assessment_question_text_response) }
+        it { is_expected.to eq(false) }
+      end
+    end
+
     describe 'validations' do
       subject { create(:course_assessment_question_text_response, maximum_grade: 10) }
 
