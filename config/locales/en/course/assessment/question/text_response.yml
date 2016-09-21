@@ -4,14 +4,15 @@ en:
       question:
         text_responses:
           new:
-            header: 'New Text Response Question'
+            text_response: 'New Text Response Question'
+            file_upload: 'New File Upload Question'
           create:
-            success: 'The text response question was created.'
+            success: 'The %{name} was created.'
           update:
-            success: 'The text response question was updated.'
+            success: 'The %{name} was updated.'
           destroy:
-            success: 'The text response question was deleted.'
-            failure: 'Could not delete text response question: %{error}'
+            success: 'The %{name} was deleted.'
+            failure: 'Could not delete %{name}: %{error}'
           form:
             allow_upload_file: 'Allow file upload in the answer'
             solution_type: 'Type'
