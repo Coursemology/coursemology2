@@ -60,11 +60,22 @@ FactoryGirl.define do
       end
     end
 
+    trait :with_file_upload_question do
+      after(:build) do |assessment, evaluator|
+        evaluator.question_count.downto(1).each do
+          question = build(:course_assessment_question_text_response, :file_upload_question,
+                           assessment: assessment)
+          assessment.questions << question.acting_as
+        end
+      end
+    end
+
     trait :with_all_question_types do
       with_mcq_question
       with_mrq_question
       with_programming_question
       with_text_response_question
+      with_file_upload_question
     end
 
     trait :worksheet do
@@ -100,6 +111,11 @@ FactoryGirl.define do
 
     trait :published_with_programming_question do
       with_programming_question
+      published
+    end
+
+    trait :published_with_file_upload_question do
+      with_file_upload_question
       published
     end
 

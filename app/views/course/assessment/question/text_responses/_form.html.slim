@@ -1,21 +1,30 @@
 = simple_form_for [current_course, @assessment, @text_response_question] do |f|
   = f.error_notification
   = render partial: 'course/assessment/questions/form', locals: { f: f }
-  = f.input :allow_attachment, label: t('.allow_upload_file')
+  = f.hidden_field :hide_text
 
-  table.table.table-striped.table-hover
-    thead
-      tr
-        th = t('.solution_type')
-        th = t('.solution')
-        th = t('.grade')
-        th = t('.explanation')
-        th
-          div.pull-right
-            = link_to_add_association t('.add_solution'), f, :solutions,
-                                      find_selector: 'tbody', insert_using: 'append'
-    tbody
-      = f.simple_fields_for :solutions do |solutions_form|
-        = render 'solution_fields', f: solutions_form
+  - if f.object.file_upload_question?
+    = f.hidden_field :allow_attachment
+  - else
+    = f.input :allow_attachment, label: t('.allow_upload_file')
+    table.table.table-striped.table-hover
+      thead
+        tr
+          th = t('.solution_type')
+          th = t('.solution')
+          th = t('.grade')
+          th = t('.explanation')
+          th
+            div.pull-right
+              = link_to_add_association t('.add_solution'), f, :solutions,
+                                        find_selector: 'tbody', insert_using: 'append'
+      tbody
+        = f.simple_fields_for :solutions do |solutions_form|
+          = render 'solution_fields', f: solutions_form
 
-  = f.button :submit
+  - name = f.object.file_upload_question? ? t('.file_upload') : t('.text_response')
+  - if f.object.persisted?
+    - button_text =  t('helpers.buttons.update', model: name)
+  - else
+    - button_text =  t('helpers.buttons.create', model: name)
+  = f.button :submit, button_text

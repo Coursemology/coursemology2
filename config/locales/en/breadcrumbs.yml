@@ -75,7 +75,8 @@ en:
           multiple_responses:
             new: :'course.assessment.question.multiple_responses.new.header'
           text_responses:
-            new: :'course.assessment.question.text_responses.new.header'
+            new_text_response: :'course.assessment.question.text_responses.new.text_response'
+            new_file_upload: :'course.assessment.question.text_responses.new.file_upload'
           programming:
             new: :'course.assessment.question.programming.new.header'
         skills:

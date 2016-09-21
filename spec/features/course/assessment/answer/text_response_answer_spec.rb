@@ -45,6 +45,18 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
 
         expect(answer.specific.attachment).to be_present
       end
+
+      scenario 'I cannot see the text box for a file upload question' do
+        assessment = create(:assessment, :published_with_file_upload_question, course: course)
+        submission = create(:course_assessment_submission, assessment: assessment, creator: user)
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        file_upload_answer = submission.answers.first
+        within find(content_tag_selector(file_upload_answer)) do
+          expect(page).not_to have_selector('textarea:not(.comment)')
+        end
+      end
     end
 
     context 'As Course Staff' do
