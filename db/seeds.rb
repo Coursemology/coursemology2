@@ -21,13 +21,6 @@ ActsAsTenant.with_tenant(Instance.default) do
   unless User.exists?(User::DELETED_USER_ID)
     User.create!(id: User::DELETED_USER_ID, name: 'Deleted')
   end
-
-  # Create the default user account.
-  user = User::Email.find_by_email('test@example.org')
-  unless user
-    user = User.new(name: 'Administrator', email: 'test@example.org',
-                    password: 'Coursemology!', role: :administrator)
-    user.skip_confirmation!
-    user.save!
-  end
 end
+
+load(Rails.root.join( 'db', 'seeds', "#{Rails.env.downcase}.rb"))
