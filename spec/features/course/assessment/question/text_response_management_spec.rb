@@ -39,6 +39,27 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
         expect(question_created.allow_attachment).to be_truthy
       end
 
+      scenario 'I can create a new file upload question' do
+        visit course_assessment_path(course, assessment)
+        click_link I18n.t('course.assessment.assessments.show.new_question.file_upload')
+
+        file_upload_path = new_course_assessment_question_text_response_path(course, assessment)
+        expect(current_path).to eq(file_upload_path)
+
+        question_attributes = attributes_for(:course_assessment_question_text_response)
+        fill_in 'title', with: question_attributes[:title]
+        fill_in 'description', with: question_attributes[:description]
+        fill_in 'staff_only_comments', with: question_attributes[:staff_only_comments]
+        fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
+        fill_in 'weight', with: question_attributes[:weight]
+        click_button I18n.t('helpers.buttons.create')
+
+        question_created = assessment.questions.first.specific
+        expect(page).to have_content_tag_for(question_created)
+        expect(question_created.hide_text).to be_truthy
+        expect(question_created.allow_attachment).to be_truthy
+      end
+
       scenario 'I can edit a text response question', js: true do
         question = create(:course_assessment_question_text_response, assessment: assessment,
                                                                      solutions: [])
