@@ -56,7 +56,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
   def load_group_managers
     course_staff = current_course.course_users.staff.with_approved_state.without_phantom_users.
                    includes(:groups)
-    @service = Course::StudentStatisticsService.new(course_staff)
+    @service = Course::GroupManagerPreloadService.new(course_staff)
   end
 
   def add_submissions_breadcrumb

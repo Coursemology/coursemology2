@@ -8,7 +8,7 @@ class Course::StatisticsController < Course::ComponentController
     staff = course_users.staff.without_phantom_users
     all_students = course_users.students.ordered_by_experience_points
     @phantom_students, @students = all_students.partition(&:phantom?)
-    @service = Course::StudentStatisticsService.new(staff)
+    @service = Course::GroupManagerPreloadService.new(staff)
   end
 
   def staff
