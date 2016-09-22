@@ -4,10 +4,10 @@
 = render partial: 'tabs'
 
 div
-  table.table
-    = simple_form_for :course_user,
-                      url: course_users_upgrade_to_staff_path(current_course),
-                      method: :patch do |f|
+  = simple_form_for :course_user,
+                    url: course_users_upgrade_to_staff_path(current_course),
+                    method: :patch do |f|
+    table.table
       tr
         td = f.input :id, collection: @student_options,
                           label: false, selected: @student_options.first
