@@ -1,6 +1,10 @@
 = content_tag_for(:tr, experience_points_record)
   td = experience_points_record.points_awarded
-  td = format_inline_text(experience_points_record.reason)
+  td
+    - if experience_points_record.manually_awarded?
+      = format_inline_text(experience_points_record.reason)
+    - else
+      = render partial: experience_points_record.specific, suffix: 'experience_points_reason'
   td = link_to_user(experience_points_record.updater)
   td = experience_points_record.updated_at
   td

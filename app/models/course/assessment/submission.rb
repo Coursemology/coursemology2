@@ -3,7 +3,6 @@ class Course::Assessment::Submission < ActiveRecord::Base
   include Workflow
 
   acts_as_experience_points_record
-  include Course::Assessment::Submission::ExperiencePointsDisplayConcern
 
   after_save :auto_grade_submission, if: :submitted?
   after_save :send_submit_notification, if: :submitted?

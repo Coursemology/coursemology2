@@ -26,13 +26,6 @@ class Course::ExperiencePointsRecord < ActiveRecord::Base
     actable_type.nil? && actable.nil?
   end
 
-  # The string to be displayed under the 'reason' column in the experience points history page.
-  #
-  # @return [String] The formatted reason for the award
-  def reason
-    manually_awarded? ? super : specific.experience_points_display_reason
-  end
-
   private
 
   def send_notification
