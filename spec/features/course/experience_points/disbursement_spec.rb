@@ -6,7 +6,7 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:approved_course_students) { create_list(:course_student, 3, course: course) }
+    let(:approved_course_students) { create_list(:course_student, 4, course: course) }
     let(:course_teaching_assistant) { create(:course_teaching_assistant, course: course) }
 
     before { login_as(user, scope: :user) }
@@ -53,18 +53,19 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
 
         fill_in 'experience_points_disbursement_reason', with: 'a reason'
 
-        student_to_award_points, student_to_set_zero, student_to_leave_blank = \
+        student_to_award_points, student_to_set_zero,
+        student_to_leave_blank, student_to_set_negative = \
           approved_course_students
 
         expect(page).not_to have_content_tag_for(unapproved_course_student)
         expect(page).to have_content_tag_for(student_to_leave_blank)
         find(content_tag_selector(student_to_award_points)).find('input.points_awarded').set '100'
         find(content_tag_selector(student_to_set_zero)).find('input.points_awarded').set '00'
+        find(content_tag_selector(student_to_set_negative)).find('input.points_awarded').set '-1'
 
-        # ExperiencePointsRecord is not created when points_awarded is zero
         expect do
           click_button I18n.t('course.experience_points.disbursement.new.submit')
-        end.to change(Course::ExperiencePointsRecord, :count).by(1)
+        end.to change(Course::ExperiencePointsRecord, :count).by(2)
 
         expect(current_path).to eq(disburse_experience_points_course_users_path(course))
       end
