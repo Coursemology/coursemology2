@@ -6,6 +6,11 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def show
+    submission = Course::Assessment::Submission.new(assessment: @assessment,
+                                                    course_user: current_course_user)
+    suppress(Exception) do
+      submission.save!
+    end
   end
 
   def new
