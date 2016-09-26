@@ -1,2 +1,3 @@
 - submission = submission_experience_points_reason
-= format_inline_text(submission.assessment.title)
+- assessment = submission.assessment
+= link_to(format_inline_text(assessment.title), [:edit, current_course, assessment, submission])
