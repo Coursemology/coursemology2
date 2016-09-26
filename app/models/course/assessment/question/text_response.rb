@@ -13,6 +13,20 @@ class Course::Assessment::Question::TextResponse < ActiveRecord::Base
     !solutions.empty?
   end
 
+  # Method provides readability to identifying whether a question is a file upload question.
+  #  Used with the front-end translations.
+  def file_upload_question?
+    hide_text
+  end
+
+  def question_type
+    if file_upload_question?
+      I18n.t('activerecord.attributes.models.course/assessment/question/text_response.file_upload')
+    else
+      I18n.t('activerecord.attributes.models.course/assessment/question/text_response.text_response')
+    end
+  end
+
   def auto_grader
     Course::Assessment::Answer::TextResponseAutoGradingService.new
   end

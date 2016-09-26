@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160916101014) do
+ActiveRecord::Schema.define(version: 20160920101847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -298,6 +298,7 @@ ActiveRecord::Schema.define(version: 20160916101014) do
 
   create_table "course_assessment_question_text_responses", force: :cascade do |t|
     t.boolean "allow_attachment", :default=>false
+    t.boolean "hide_text",        :default=>false
   end
 
   create_table "course_assessment_question_text_response_solutions", force: :cascade do |t|

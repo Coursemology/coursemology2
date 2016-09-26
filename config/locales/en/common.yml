@@ -27,6 +27,8 @@ en:
         update: 'Update Assessment Condition'
     buttons:
       new: 'New %{model}'
+      create: 'Create %{model}'
       edit: 'Edit %{model}'
+      update: 'Update %{model}'
       delete: 'Delete %{model}'
       delete_confirm_message: 'Are you sure?'

@@ -37,6 +37,7 @@ en:
             multiple_choice: 'Multiple Choice'
             multiple_response: 'Multiple Response'
             text_response: 'Text Response'
+            file_upload: 'File Upload'
             programming: 'Programming'
         new:
           header: 'New Assessment'
