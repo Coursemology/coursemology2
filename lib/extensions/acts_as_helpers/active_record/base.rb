@@ -18,15 +18,5 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
     def manually_awarded?
       false
     end
-
-    # The description to be displayed in the 'reason' column for the experience points record on
-    # the experience points history page.
-    # This method is meant to be overridden by each class that acts as an experience points record.
-    #
-    # @return [String] Reason which will be displayed
-    def experience_points_display_reason
-      raise NotImplementedError,
-            'Experience points awarding items need to implement a points_display_reason method'
-    end
   end
 end

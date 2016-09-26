@@ -8,8 +8,13 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
   before_action :add_breadcrumbs
 
   def index # :nodoc:
+    updater_ids = @experience_points_records.active.pluck(:updater_id)
+    @course_user_preload_service =
+      Course::CourseUserPreloadService.new(updater_ids, current_course)
+
     @experience_points_records =
-      @experience_points_records.active.includes(:updater).order(updated_at: :desc).page(page_param)
+      @experience_points_records.active.includes { actable.assessment }.
+      includes(:updater).order(updated_at: :desc).page(page_param)
   end
 
   def destroy # :nodoc:

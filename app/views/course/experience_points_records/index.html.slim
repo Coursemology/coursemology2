@@ -3,9 +3,9 @@
 table.table.levels-list.table-hover
   thead
     tr
-      th = Course::ExperiencePointsRecord.human_attribute_name(:points_awarded)
-      th = Course::ExperiencePointsRecord.human_attribute_name(:reason)
       th = Course::ExperiencePointsRecord.human_attribute_name(:updater)
+      th = Course::ExperiencePointsRecord.human_attribute_name(:reason)
+      th = Course::ExperiencePointsRecord.human_attribute_name(:points_awarded)
       th = Course::ExperiencePointsRecord.human_attribute_name(:updated_at)
       th
   tbody
