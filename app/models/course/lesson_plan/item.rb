@@ -5,7 +5,9 @@ class Course::LessonPlan::Item < ActiveRecord::Base
 
   after_initialize :set_default_values, if: :new_record?
 
-  validate :validate_presence_of_bonus_end_at
+  validate :validate_presence_of_bonus_end_at,
+           :validate_start_at_cannot_be_after_end_at
+
 
   # @!method self.ordered_by_date
   #   Orders the lesson plan items by the starting date.
@@ -37,5 +39,10 @@ class Course::LessonPlan::Item < ActiveRecord::Base
     if time_bonus_exp && time_bonus_exp > 0 && bonus_end_at.blank?
       errors.add(:bonus_end_at, :required)
     end
+  end
+
+  def validate_start_at_cannot_be_after_end_at
+    return unless end_at && start_at > end_at
+    errors.add(:start_at, :cannot_be_after_end_at)
   end
 end
