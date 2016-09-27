@@ -36,14 +36,38 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
     end
 
     describe '#validations' do
+      subject { lesson_plan_item }
+
       context 'when time_bonus_exp is set without bonus_end_at' do
         let(:lesson_plan_item) do
           build(:course_lesson_plan_item, time_bonus_exp: 100, bonus_end_at: nil)
         end
 
         it 'is not valid' do
-          expect(lesson_plan_item).not_to be_valid
-          expect(lesson_plan_item.errors[:bonus_end_at]).to be_present
+          expect(subject).not_to be_valid
+          expect(subject.errors[:bonus_end_at]).to be_present
+        end
+      end
+
+      context 'when start_at is after end_at' do
+        let(:lesson_plan_item) do
+          build(:course_lesson_plan_item, start_at: 1.day.ago, end_at: 3.days.ago)
+        end
+
+        it 'is not valid' do
+          expect(subject).not_to be_valid
+          expect(subject.errors[:start_at]).to be_present
+        end
+      end
+
+      context 'when start_at is before end_at' do
+        let(:lesson_plan_item) do
+          build(:course_lesson_plan_item, start_at: 3.days.ago, end_at: 1.day.ago)
+        end
+
+        it 'is valid' do
+          expect(subject).to be_valid
+          expect(subject.errors[:start_at]).not_to be_present
         end
       end
     end
