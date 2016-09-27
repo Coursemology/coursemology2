@@ -22,7 +22,50 @@
 
       .image > img {
         height: $course-assessment-achievement-badge;
+        margin-bottom: 3px;
         width: $course-assessment-achievement-badge;
+      }
+    }
+
+    .assessments-list {
+      table-layout: fixed;
+
+      td,
+      th {
+        vertical-align: middle;
+      }
+
+      .btn-group {
+        display: flex;
+      }
+
+      .fa-book {
+        margin-right: 4px;
+      }
+
+      .table-bonus-cut-off,
+      .table-requirement-for {
+        @extend .hidden-xs;
+        @extend .hidden-sm;
+        @extend .hidden-md;
+        @extend .text-center;
+      }
+
+      .table-end-at {
+        @extend .text-center;
+      }
+
+      .table-experience-points {
+        @extend .hidden-xs;
+        @extend .hidden-sm;
+        @extend .text-center;
+        width: 150px;
+      }
+
+
+      .table-start-at {
+        @extend .hidden-xs;
+        @extend .text-center;
       }
     }
   }

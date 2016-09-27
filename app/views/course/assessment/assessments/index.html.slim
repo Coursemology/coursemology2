@@ -8,11 +8,13 @@ table.table.assessments-list.table-hover
   thead
     tr
       th = t('.title')
-      th = t('.maximum_experience_points')
-      th = t('.requirement_for')
-      th = t('.start_at')
-      th = t('.bonus_cut_off')
-      th = t('.end_at')
+      th
+      th.table-experience-points = t('.maximum_experience_points')
+      th.table-requirement-for = t('.requirement_for')
+      th.table-start-at = t('.start_at')
+      th.table-bonus-cut-off = t('.bonus_cut_off')
+      th.table-end-at = t('.end_at')
+      th
       th
   tbody
     = render partial: 'assessment', collection: @assessments
