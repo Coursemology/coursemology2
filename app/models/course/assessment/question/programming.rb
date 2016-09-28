@@ -65,6 +65,14 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
     end
   end
 
+  # Groups test cases by test case type. Each key returns an array of all the test cases
+  # of that type.
+  #
+  # @return [Hash] A hash of the test cases keyed by test case type.
+  def test_cases_by_type
+    test_cases.group_by(&:test_case_type)
+  end
+
   private
 
   # Queues the new question package for processing.

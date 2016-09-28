@@ -1,127 +1,50 @@
-- test_cases = question.test_cases
-- public_test_cases = test_cases.select(&:public_test?)
-- private_test_cases = test_cases.select(&:private_test?)
-- evaluation_test_cases = test_cases.select(&:evaluation_test?)
-- submission = answer.submission
 - auto_grading = answer.auto_grading ? answer.auto_grading.actable : nil
 - answer_test_results_hash = auto_grading ? \
     auto_grading.test_results.map { |result| [result.test_case, result] }.to_h : \
     {}
+- is_grader = can?(:grade, answer.answer)
+- test_cases_by_type = question.test_cases_by_type
 
+/ Test case results table
 h3 = t('.test_cases')
 
-table.table.table-striped.table-hover
-  thead
-    tr
-      - if can?(:grade, answer.answer)
-        th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:identifier)
-      th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:expression)
-      th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:expected)
-      - if can?(:grade, answer.answer)
-        th = t('.output')
-      - if @submission.attempting?
-        th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:hint)
-      th = t('.passed')
-  tbody
-    tr
-      - if can?(:grade, answer.answer)
-        th colspan=5
-          = t('.public')
-      - else
-        th colspan = 4
-          = t('.public')
-    - public_test_cases.each do |test_case|
-      - test_case_result = answer_test_results_hash[test_case]
-      = content_tag_for(:tr, test_case) do
-        - if can?(:grade, answer.answer)
-          th = format_html(test_case.identifier)
-        td = format_html(test_case.expression)
-        td
-          div.expected = format_html(test_case.expected)
-        - if can?(:grade, answer.answer)
-          td = simple_format(get_output(test_case_result))
-        - if @submission.attempting?
-          td
-            - if !test_case_result || !test_case_result.passed?
-              = simple_format(get_hint(test_case, test_case_result))
-        td
-          - if test_case_result && test_case_result.passed?
-            = fa_icon 'check'.freeze
-          - elsif test_case_result
-            = fa_icon 'times'.freeze
+= render partial: 'course/assessment/answer/programming/test_cases_of_type',
+  locals: { test_cases: test_cases_by_type['public_test'], type_heading: t('.public'),
+            answer_test_results_hash: answer_test_results_hash, is_grader: is_grader }
 
-  - if can?(:grade, answer.answer)
-    tbody
-      tr
-        th colspan=5
-          = t('.private')
-          span.bg-danger.text-danger<
-            =fa_icon 'exclamation-triangle'.freeze
-            =<t('.privacy_warning')
-      - private_test_cases.each do |test_case|
-        - test_case_result = answer_test_results_hash[test_case]
-        = content_tag_for(:tr, test_case) do
-          th = format_html(test_case.identifier)
-          td = format_html(test_case.expression)
-          td
-            div.expected = format_html(test_case.expected)
-          - if can?(:grade, answer.answer)
-            td = simple_format(get_output(test_case_result))
-          - if @submission.attempting?
-            td
-              - if !test_case_result || !test_case_result.passed?
-                = simple_format(get_hint(test_case, test_case_result))
-          td
-            - if test_case_result && test_case_result.passed?
-              = fa_icon 'check'.freeze
-            - elsif test_case_result
-              = fa_icon 'times'.freeze
-      tbody
-        tr
-          th colspan=5
-            = t('.evaluation')
-        - evaluation_test_cases.each do |test_case|
-          - test_case_result = answer_test_results_hash[test_case]
-          = content_tag_for(:tr, test_case) do
-            th = format_html(test_case.identifier)
-            td = format_html(test_case.expression)
-            td
-              div.expected = format_html(test_case.expected)
-            - if can?(:grade, answer.answer)
-              td = simple_format(get_output(test_case_result))
-            - if @submission.attempting?
-              td
-                - if !test_case_result || !test_case_result.passed?
-                  = simple_format(get_hint(test_case, test_case_result))
-            td
-              - if test_case_result && test_case_result.passed?
-                = fa_icon 'check'.freeze
-              - elsif test_case_result
-                = fa_icon 'times'.freeze
+- if is_grader
+  - if test_cases_by_type.key?('private_test') || test_cases_by_type.key?('evaluation_test')
+    span.bg-danger.text-danger
+      = fa_icon 'exclamation-triangle'.freeze
+      =<t('.privacy_warning')
 
-- failed_public_test_cases = public_test_cases. \
-    select { |t| answer_test_results_hash[t] && !answer_test_results_hash[t].passed? }
-- if !failed_public_test_cases.empty?
-    - test_case = failed_public_test_cases.first
-    - test_case_result = answer_test_results_hash[test_case]
-    div.panel.panel-danger
-      div.panel-heading = t('.failed_public_message')
-      div.panel-body = simple_format(get_hint(test_case, test_case_result))
+  = render partial: 'course/assessment/answer/programming/test_cases_of_type',
+    locals: { test_cases: test_cases_by_type['private_test'], type_heading: t('.private'),
+              answer_test_results_hash: answer_test_results_hash, is_grader: is_grader }
 
-- failed_private_test_cases = private_test_cases. \
-    select { |t| answer_test_results_hash[t] && !answer_test_results_hash[t].passed? }
-- if failed_public_test_cases.empty? && !failed_private_test_cases.empty?
-    - test_case = failed_private_test_cases.first
-    - test_case_result = answer_test_results_hash[test_case]
-    div.panel.panel-danger
-      div.panel-heading = t('.failed_private_message')
-      div.panel-body = simple_format(get_hint(test_case, test_case_result))
+  = render partial: 'course/assessment/answer/programming/test_cases_of_type',
+    locals: { test_cases: test_cases_by_type['evaluation_test'], type_heading: t('.evaluation'),
+              answer_test_results_hash: answer_test_results_hash, is_grader: is_grader }
 
-- failed_evaluation_test_cases = evaluation_test_cases. \
-    select { |t| answer_test_results_hash[t] && !answer_test_results_hash[t].passed? }
-- if can?(:grade, answer.answer) && !failed_evaluation_test_cases.empty?
-    - test_case = failed_evaluation_test_cases.first
-    - test_case_result = answer_test_results_hash[test_case]
-    div.panel.panel-danger
-      div.panel-heading = t('.failed_evaluation_message')
-      div.panel-body = simple_format(get_hint(test_case, test_case_result))
+/ Test failure warning panel display
+- failed_test_cases_by_type = arrange_failed_test_cases_by_type(test_cases_by_type,
+                                                                answer_test_results_hash)
+- test_case = failed_test_cases_by_type['public_test']
+- if test_case
+  = render partial: 'course/assessment/answer/programming/test_cases_warning_panels',
+    locals: { test_case: test_case,
+              panel_heading: t('.failed_public_message'),
+              test_case_result: answer_test_results_hash[test_case] }
+- else
+  - test_case = failed_test_cases_by_type['private_test']
+  = render partial: 'course/assessment/answer/programming/test_cases_warning_panels',
+    locals: { test_case: test_case,
+              panel_heading: t('.failed_private_message'),
+              test_case_result: answer_test_results_hash[test_case] }
+
+- if is_grader
+  - test_case = failed_test_cases_by_type['evaluation_test']
+  = render partial: 'course/assessment/answer/programming/test_cases_warning_panels',
+    locals: { test_case: test_case,
+              panel_heading: t('.failed_evaluation_message'),
+              test_case_result: answer_test_results_hash[test_case] }
