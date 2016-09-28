@@ -6,18 +6,50 @@
   .achievement-list,
   .achievement-form {
     .image > img {
-      height: $course-achievement-form-badge;
-      width: $course-achievement-form-badge;
+      @include no-stretch;
+      max-height: $course-achievement-form-badge;
+      max-width: $course-achievement-form-badge;
     }
   }
 
   .achievement-list {
+    table-layout: fixed;
+
+    td,
+    th {
+      vertical-align: middle;
+    }
+
+    ul {
+      padding-left: 10%;
+    }
+
+    .btn-group {
+      display: flex;
+    }
+
+    .btn-group-vertical {
+      @extend .pull-right;
+      margin-right: 25%;
+      width: 39px;
+    }
+
     .granted {
       background-color: $course-achievement-granted-bg;
     }
 
     .locked {
       background-color: $course-achievement-locked-bg;
+    }
+
+    .table-badge {
+      @extend .text-center;
+      width: $course-achievement-form-badge * 1.5;
+    }
+
+    .table-description {
+      @extend .hidden-xs;
+      @extend .hidden-sm;
     }
   }
 

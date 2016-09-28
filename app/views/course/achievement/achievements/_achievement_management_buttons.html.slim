@@ -1,0 +1,10 @@
+- if can?(:award, achievement)
+  = link_to course_achievement_course_users_path(current_course, achievement),
+            class: ['btn', 'btn-info'], title: t('.award') do
+    = fa_icon 'trophy'.freeze
+- else
+  = content_tag(:span, class:['btn', 'btn-info'], title: t('.disabled_award'),
+                disabled: true) do
+    = fa_icon 'trophy'.freeze
+= edit_button([current_course, achievement]) if can?(:edit, achievement)
+= delete_button([current_course, achievement]) if can?(:delete, achievement)

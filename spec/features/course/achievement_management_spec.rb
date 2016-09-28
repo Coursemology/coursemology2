@@ -40,7 +40,8 @@ RSpec.feature 'Course: Achievements' do
         visit course_achievements_path(course)
 
         within find(content_tag_selector(achievement)) do
-          expect { find(:css, 'a.delete').click }.to change { course.achievements.count }.by(-1)
+          # first is used because a duplicate set of buttons are used for mobile view.
+          expect { first(:css, 'a.delete').click }.to change { course.achievements.count }.by(-1)
         end
         expect(page).to have_selector('div', text: I18n.t('course.achievement.achievements.'\
                                                           'destroy.success'))
@@ -90,8 +91,11 @@ RSpec.feature 'Course: Achievements' do
           not_to have_link(nil,
                            href: course_achievement_course_users_path(course, auto_achievement))
 
-        expect(page).to have_content_tag_for(manual_achievement)
-        find_link(nil, href: course_achievement_course_users_path(course, manual_achievement)).click
+        within find(content_tag_selector(manual_achievement)) do
+          # first is used because a duplicate set of buttons are used for mobile view.
+          first(:link, href: course_achievement_course_users_path(course, manual_achievement)).click
+        end
+
         expect(page).to have_unchecked_field(course_user_id)
         expect(page).not_to have_field(unregistered_user_id)
         check course_user_id

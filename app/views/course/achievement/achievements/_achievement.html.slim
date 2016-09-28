@@ -2,7 +2,7 @@
                   class: draft_class(achievement) + \
                          achievement_status_class(achievement, current_course_user)) do
 
-  td
+  td.table-badge
     - if can?(:display_badge, achievement)
       = display_achievement_badge(achievement)
     - else
@@ -15,7 +15,7 @@
       small title=achievement
         =< fa_icon 'eye-slash'.freeze
 
-  td
+  td.table-description colspan=2
     div.description
       = format_html(achievement.description)
 
@@ -25,15 +25,9 @@
         - achievement.specific_conditions.each do |condition|
           li = condition.title
 
-  td
-    div.btn-group
-      - if can?(:award, achievement)
-        = link_to course_achievement_course_users_path(current_course, achievement),
-                  class: ['btn', 'btn-info'], title: t('.award_button') do
-          = fa_icon 'trophy'.freeze
-      - else
-        = content_tag(:span, class:['btn', 'btn-info'], title: t('.disabled_award_button'),
-                             disabled: true) do
-          = fa_icon 'trophy'.freeze
-      = edit_button([current_course, achievement]) if can?(:edit, achievement)
-      = delete_button([current_course, achievement]) if can?(:delete, achievement)
+  - if can?(:manage, achievement)
+    td
+      div.btn-group.hidden-xs
+        = render 'achievement_management_buttons', achievement: achievement
+      div.btn-group-vertical.visible-xs-block
+        = render 'achievement_management_buttons', achievement: achievement
