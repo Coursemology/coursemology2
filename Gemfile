@@ -36,7 +36,8 @@ gem 'calculated_attributes', '>= 0.1.3'
 # Squeel as an SQL-like DSL
 gem 'squeel'
 # For multiple table inheritance
-gem 'active_record-acts_as', '>= 1.0.8'
+#   TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
+gem 'active_record-acts_as', '>= 1.0.8', '<2.0.0'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Create pretty URLs and work with human-friendly strings
