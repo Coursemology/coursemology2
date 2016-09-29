@@ -51,6 +51,19 @@ module Course::Assessment::Answer::ProgrammingHelper
     output || ''
   end
 
+  # If the test case type has a failed test case, return the first one.
+  #
+  # @param [Hash] test_cases_by_type The test cases keyed by type
+  # @param [Hash] answer_test_results_hash The test results keyed by test case
+  # @return [Hash] Failed test case, if any.
+  def arrange_failed_test_cases_by_type(test_cases_by_type, answer_test_results_hash)
+    {}.tap do |result|
+      test_cases_by_type.each do |test_case_type, test_cases|
+        result[test_case_type] = get_first_failed_test(test_cases, answer_test_results_hash)
+      end
+    end
+  end
+
   private
 
   # Inserts annotations into the generated code block.
@@ -122,5 +135,18 @@ module Course::Assessment::Answer::ProgrammingHelper
                   object: discussion_topic
 
     line_discussion_cell.inner_html = html
+  end
+
+  # Return the first failing test case
+  #
+  # @param [Array] test_cases An array of test cases
+  # @param [Hash] Hash of test results keyed by test case
+  # @return [Course::Assessment::Question::Programming::TestCase|nil] the failed test case, nil
+  #   if all tests passed
+  def get_first_failed_test(test_cases, answer_test_results_hash)
+    test_cases.each do |t|
+      return t if answer_test_results_hash[t] && !answer_test_results_hash[t].passed?
+    end
+    nil
   end
 end
