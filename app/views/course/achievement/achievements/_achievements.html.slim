@@ -1,11 +1,13 @@
 table.table.achievement-list.table-hover
   thead
     tr
-      th = t('.badge')
+      th.table-badge = t('.badge')
       th = t('.title')
-      th = t('.description')
+      th.table-description = t('.description')
+      th.table-description
       th = t('.requirements') if include_requirements
-      th
+      - if can?(:manage, achievements.first)
+        th
   tbody
     = render partial: 'achievement',
              collection: achievements,
