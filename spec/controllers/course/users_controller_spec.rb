@@ -59,7 +59,6 @@ RSpec.describe Course::UsersController, type: :controller do
         put :update, format: :js, course_id: course, id: course_user,
                      course_user: updated_course_user
       end
-      let!(:course_user_to_update) { create(:course_user) }
       let(:updated_course_user) { { role: :teaching_assistant } }
 
       context 'when the user is a manager' do
