@@ -104,7 +104,7 @@ module ApplicationFormattersHelper
       ['not-started']
     elsif item.ended?
       ['ended']
-    else # Not started, not ended.
+    else # Started, but not yet ended.
       ['currently-active']
     end
   end
