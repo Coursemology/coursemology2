@@ -5,6 +5,7 @@ div.submissions-filter
     - assessment_id = params[:filter][:assessment_id].to_i if params[:filter]
     - group_id = params[:filter][:group_id].to_i if params[:filter]
     - user_id = params[:filter][:user_id].to_i if params[:filter]
+    = f.hidden_field :category_id, value: category.id
 
     = f.input :assessment_id,
         as: :select,
