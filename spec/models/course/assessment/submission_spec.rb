@@ -229,6 +229,19 @@ RSpec.describe Course::Assessment::Submission do
             to contain_exactly(submission1, submission2, submission3)
         end
       end
+
+      context 'when category id is given' do
+        let(:new_category) { create(:course_assessment_category, course: course) }
+        let(:new_tab) { create(:course_assessment_tab, course: course, category: new_category) }
+        let(:new_assessment) { create(:course_assessment_assessment, course: course, tab: new_tab) }
+        let(:new_submission) { create(:course_assessment_submission, assessment: new_assessment) }
+        let(:params) { { category_id: new_category.id } }
+
+        it 'filters submissions by category' do
+          new_submission
+          expect(Course::Assessment::Submission.filter(params)).to contain_exactly(new_submission)
+        end
+      end
     end
 
     describe '#grade' do
