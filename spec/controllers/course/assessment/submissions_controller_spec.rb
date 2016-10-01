@@ -39,6 +39,14 @@ RSpec.describe Course::Assessment::SubmissionsController do
           submissions = controller.instance_variable_get(:@submissions)
           expect(submissions).to contain_exactly(submission)
         end
+
+        context 'when the category is specified in the filter' do
+          before { get :index, course_id: course, filter: { category_id: category.id } }
+
+          it 'sets the category to be the specified category' do
+            expect(controller.instance_variable_get(:@category)).to eq(category)
+          end
+        end
       end
     end
   end

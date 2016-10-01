@@ -110,9 +110,12 @@ class Course::Assessment::Submission < ActiveRecord::Base
   #   Returns submissions which have been submitted (which may or may not be graded).
   scope :confirmed, -> { where(workflow_state: [:submitted, :graded]) }
 
-  # Filter submissions by assessment_id, group_id or user_id (creator)
+  # Filter submissions by category_id, assessment_id, group_id and/or user_id (creator)
   scope :filter, (lambda do |filter_params|
     result = all
+    if filter_params[:category_id].present?
+      result = result.from_category(Course::Assessment::Category.find(filter_params[:category_id]))
+    end
     if filter_params[:assessment_id].present?
       result = result.where(assessment_id: filter_params[:assessment_id])
     end
