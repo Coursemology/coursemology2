@@ -20,13 +20,13 @@
       = format_html(achievement.description)
 
   - if include_requirements
-    td
+    td.table-requirement
       ul
         - achievement.specific_conditions.each do |condition|
           li = condition.title
 
   - if can?(:manage, achievement)
-    td
+    td.table-buttons
       div.btn-group.hidden-xs
         = render 'achievement_management_buttons', achievement: achievement
       div.btn-group-vertical.visible-xs-block

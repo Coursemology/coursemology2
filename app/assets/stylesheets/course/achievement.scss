@@ -20,20 +20,6 @@
       vertical-align: middle;
     }
 
-    ul {
-      padding-left: 10%;
-    }
-
-    .btn-group {
-      display: flex;
-    }
-
-    .btn-group-vertical {
-      @extend .pull-right;
-      margin-right: 25%;
-      width: 39px;
-    }
-
     .granted {
       background-color: $course-achievement-granted-bg;
     }
@@ -44,12 +30,51 @@
 
     .table-badge {
       @extend .text-center;
-      width: $course-achievement-form-badge * 1.5;
+
+      @media (min-width: $screen-xs-max){
+        width: $course-achievement-form-badge * 1.5;
+      }
+
+      @media (max-width: $screen-sm-max){
+        width: 20%;
+
+        .image > img {
+          width: 100%;
+        }
+      }
     }
 
     .table-description {
       @extend .hidden-xs;
       @extend .hidden-sm;
+    }
+
+    .table-buttons {
+      @media (max-width: $screen-xs-max) {
+        width: 15%;
+      }
+
+      .btn-group {
+        display: flex;
+      }
+
+      .btn-group-vertical {
+        @extend .pull-right;
+      }
+    }
+
+    .table-requirement {
+      @media (max-width: $screen-sm-max){
+        ul {
+          padding-left: 10%;
+        }
+      }
+    }
+
+    .table-title {
+      @media (max-width: $screen-xs-max) {
+        width: 30%;
+      }
     }
   }
 
