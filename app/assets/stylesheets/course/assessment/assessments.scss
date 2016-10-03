@@ -30,6 +30,10 @@
     .assessments-list {
       table-layout: fixed;
 
+      tr.not-started {
+        background-color: $course-assessment-not-started-bg;
+      }
+
       td,
       th {
         vertical-align: middle;
