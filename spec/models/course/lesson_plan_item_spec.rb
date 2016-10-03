@@ -3,6 +3,7 @@ require 'rails_helper'
 
 RSpec.describe Course::LessonPlan::Item, type: :model do
   it { is_expected.to belong_to(:course).inverse_of(:lesson_plan_items) }
+  it { is_expected.to have_many(:todos).inverse_of(:item).dependent(:destroy) }
 
   let!(:instance) { Instance.default }
   with_tenant(:instance) do

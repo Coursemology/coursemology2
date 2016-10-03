@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160920101847) do
+ActiveRecord::Schema.define(version: 20161003094742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -517,6 +517,18 @@ ActiveRecord::Schema.define(version: 20160920101847) do
     t.datetime "created_at",  :null=>false
     t.datetime "updated_at",  :null=>false
   end
+
+  create_table "course_lesson_plan_todos", force: :cascade do |t|
+    t.integer  "item_id",        :null=>false, :index=>{:name=>"fk__course_lesson_plan_todos_item_id"}, :foreign_key=>{:references=>"course_lesson_plan_items", :name=>"fk_course_lesson_plan_todos_item_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "user_id",        :null=>false, :index=>{:name=>"fk__course_lesson_plan_todos_user_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_lesson_plan_todos_user_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.string   "workflow_state", :limit=>255, :null=>false
+    t.boolean  "ignore",         :default=>false, :null=>false
+    t.integer  "creator_id",     :null=>false, :index=>{:name=>"fk__course_lesson_plan_todos_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_lesson_plan_todos_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "updater_id",     :null=>false, :index=>{:name=>"fk__course_lesson_plan_todos_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_lesson_plan_todos_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+  add_index "course_lesson_plan_todos", ["item_id", "user_id"], :name=>"index_course_lesson_plan_todos_on_item_id_and_user_id", :unique=>true
 
   create_table "course_levels", force: :cascade do |t|
     t.integer  "course_id",                   :null=>false, :index=>{:name=>"fk__course_levels_course_id"}, :foreign_key=>{:references=>"courses", :name=>"fk_course_levels_course_id", :on_update=>:no_action, :on_delete=>:no_action}

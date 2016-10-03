@@ -9,6 +9,7 @@ RSpec.describe User do
       dependent(:destroy)
   end
   it { is_expected.to have_many(:instance_users) }
+  it { is_expected.to have_many(:todos).inverse_of(:user).dependent(:destroy) }
   it { is_expected.to have_many(:instances).through(:instance_users) }
   it { is_expected.to have_many(:identities).dependent(:destroy) }
   it { is_expected.to have_many(:course_users).dependent(:destroy) }
