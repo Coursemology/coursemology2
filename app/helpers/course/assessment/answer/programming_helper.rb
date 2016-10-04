@@ -84,6 +84,17 @@ module Course::Assessment::Answer::ProgrammingHelper
     end
   end
 
+  # Return the bootstrap class for highlighting the test case row.
+  #
+  # @param [Course::Assessment::Answer::ProgrammingAutoGradingTestResult] test_case_result The
+  #   test case result.
+  # @return [String] 'bg-success text-success', 'bg-danger text-danger' or empty string
+  #   if there is no test_case_result.
+  def get_test_result_highlight(test_case_result)
+    return '' unless test_case_result
+    test_case_result.passed? ? 'bg-success text-success' : 'bg-danger text-danger'
+  end
+
   private
 
   # Inserts annotations into the generated code block.
