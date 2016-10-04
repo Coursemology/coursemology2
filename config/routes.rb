@@ -228,7 +228,7 @@ Rails.application.routes.draw do
       end
 
       resources :users, only: [:index, :show, :update, :destroy] do
-        resources :experience_points_records, only: [:index, :destroy]
+        resources :experience_points_records, only: [:index, :update, :destroy]
         get 'invite' => 'user_invitations#new', on: :collection
         post 'invite' => 'user_invitations#create', on: :collection
         get 'disburse_experience_points' => 'experience_points/disbursement#new', on: :collection

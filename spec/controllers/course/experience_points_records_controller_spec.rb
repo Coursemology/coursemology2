@@ -14,10 +14,30 @@ RSpec.describe Course::ExperiencePointsRecordsController, type: :controller do
     let(:points_record_stub) do
       stub = build_stubbed(:course_experience_points_record, course_user: course_student)
       allow(stub).to receive(:destroy).and_return(false)
+      allow(stub).to receive(:update_attributes).and_return(false)
       stub
     end
 
     before { sign_in(user) }
+
+    describe '#update' do
+      subject do
+        patch :update, format: :js, course_id: course,
+                       user_id: course_student, id: points_record_stub,
+                       experience_points_record: { reason: 'reason' }
+      end
+
+      context 'when update fails' do
+        before do
+          controller.instance_variable_set(:@experience_points_record, points_record_stub)
+          subject
+        end
+
+        it 'sets an error flash message' do
+          expect(flash[:danger]).to eq('')
+        end
+      end
+    end
 
     describe '#destroy' do
       subject do
