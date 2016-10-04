@@ -29,8 +29,7 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
 
   def destroy_success #:nodoc:
     redirect_to course_user_experience_points_records_path(current_course, @course_user),
-                success: t('course.experience_points_records.destroy.success',
-                           reason: @experience_points_record.reason)
+                success: t('course.experience_points_records.destroy.success')
   end
 
   def destroy_failure #:nodoc:
