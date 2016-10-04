@@ -17,6 +17,14 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
       includes(:updater).order(updated_at: :desc).page(page_param)
   end
 
+  def update
+    if @experience_points_record.update_attributes(experience_points_record_params)
+      flash.now[:success] = t('.success')
+    else
+      flash.now[:danger] = @experience_points_record.errors.full_messages.to_sentence
+    end
+  end
+
   def destroy # :nodoc:
     if @experience_points_record.destroy
       destroy_success
@@ -27,10 +35,13 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
 
   private
 
+  def experience_points_record_params
+    params.require(:experience_points_record).permit(:points_awarded, :reason)
+  end
+
   def destroy_success #:nodoc:
     redirect_to course_user_experience_points_records_path(current_course, @course_user),
-                success: t('course.experience_points_records.destroy.success',
-                           reason: @experience_points_record.reason)
+                success: t('course.experience_points_records.destroy.success')
   end
 
   def destroy_failure #:nodoc:
