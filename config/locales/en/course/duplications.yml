@@ -1,0 +1,8 @@
+en:
+  course:
+    duplications:
+      show:
+        header: 'Duplicate Course'
+        duplicate: :'course.duplications.show.header'
+      create:
+        duplicating: 'Your course is being duplicated (not implemented yet).'

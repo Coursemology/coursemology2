@@ -6,6 +6,8 @@ en:
       levels:
         index: :'course.levels.index.header'
         new: :'course.levels.new.header'
+      duplications:
+        show: :'course.duplications.show.header'
       admin:
         controller:
           admin: :'layouts.course.administration'
@@ -35,6 +37,7 @@ en:
         discussion:
           topic_settings:
             edit: :'course.discussion.topics.index.header'
+
       users:
         index: 'Users'
         students: :'course.users.students.header'
