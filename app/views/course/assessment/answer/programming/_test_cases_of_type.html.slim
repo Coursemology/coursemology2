@@ -4,9 +4,8 @@ div.panel.panel-default
       => type_heading
       - first_test_case = test_cases_and_results.first.first
       - if first_test_case.private_test? || first_test_case.evaluation_test?
-        span.bg-danger.text-danger
+        span.text-danger title=t('.privacy_warning')
           =< fa_icon 'exclamation-triangle'.freeze
-          =< t('.privacy_warning')
   table.table
     thead
       tr
