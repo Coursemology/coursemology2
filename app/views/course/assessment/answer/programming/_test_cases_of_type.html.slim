@@ -1,29 +1,36 @@
-h4 = type_heading
-table.table.table-striped.table-hover
-  thead
-    tr
-      th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:identifier) if is_grader
-      th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:expression)
-      th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:expected)
-      th = t('.output') if is_grader
-      - if @submission.attempting?
-        th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:hint)
-      th = t('.passed')
-  tbody
-    tr
-    - test_cases_and_results.each do |test_case, test_case_result|
-      = content_tag_for(:tr, test_case) do
-        th = format_html(test_case.identifier) if is_grader
-        td = format_html(test_case.expression)
-        td
-          div.expected = format_html(test_case.expected)
-        td = simple_format(get_output(test_case_result)) if is_grader
+div.panel.panel-default
+  div.panel-heading
+    h4.panel-title
+      => type_heading
+      - first_test_case = test_cases_and_results.first.first
+      - if first_test_case.private_test? || first_test_case.evaluation_test?
+        span.text-danger title=t('.privacy_warning')
+          =< fa_icon 'exclamation-triangle'.freeze
+  table.table
+    thead
+      tr
+        th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:identifier) if is_grader
+        th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:expression)
+        th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:expected)
+        th = t('.output') if is_grader
         - if @submission.attempting?
+          th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:hint)
+        th = t('.passed')
+    tbody
+      tr
+      - test_cases_and_results.each do |test_case, test_case_result|
+        = content_tag_for(:tr, test_case, class: test_result_class(test_case_result)) do
+          th = format_html(test_case.identifier) if is_grader
+          td = format_html(test_case.expression)
           td
-            - unless test_case_result && test_case_result.passed?
-              = simple_format(get_hint(test_case, test_case_result))
-        td
-          - if test_case_result && test_case_result.passed?
-            = fa_icon 'check'.freeze
-          - elsif test_case_result
-            = fa_icon 'times'.freeze
+            div.expected = format_html(test_case.expected)
+          td = simple_format(get_output(test_case_result)) if is_grader
+          - if @submission.attempting?
+            td
+              - unless test_case_result && test_case_result.passed?
+                = simple_format(get_hint(test_case, test_case_result))
+          td
+            - if test_case_result && test_case_result.passed?
+              = fa_icon 'check'.freeze
+            - elsif test_case_result
+              = fa_icon 'times'.freeze

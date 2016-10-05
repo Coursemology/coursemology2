@@ -33,7 +33,7 @@ en:
             test_cases: 'Test Cases'
             public: 'Public Test Cases'
             private: 'Private Test Cases'
-            privacy_warning: 'You are able to view the test cases below because you are staff. Students will not be able to see them.'
+            privacy_warning: 'You are able to view these test cases because you are staff. Students will not be able to see them.'
             evaluation: 'Evaluation Test Cases'
             identifier: 'Identifier'
             hint: 'Hint'

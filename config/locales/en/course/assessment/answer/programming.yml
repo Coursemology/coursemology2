@@ -11,7 +11,6 @@ en:
             expand_comments: 'Expand all comments'
           test_cases:
             private: :'course.assessment.question.programming.form_test_cases.private'
-            privacy_warning: :'course.assessment.question.programming.form_test_cases.privacy_warning'
             public: :'course.assessment.question.programming.form_test_cases.public'
             evaluation: :'course.assessment.question.programming.form_test_cases.evaluation'
             test_cases: :'course.assessment.question.programming.form_test_cases.test_cases'
@@ -21,5 +20,6 @@ en:
           test_cases_of_type:
             output: 'Output'
             passed: 'Passed'
+            privacy_warning: :'course.assessment.question.programming.form_test_cases.privacy_warning'
           annotation_footer:
             reply: 'Reply'

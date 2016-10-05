@@ -12,11 +12,6 @@ h3 = t('.test_cases')
               type_heading: t('.public'), is_grader: is_grader }
 
 - if is_grader
-  - if test_cases_by_type.key?('private_test') || test_cases_by_type.key?('evaluation_test')
-    span.bg-danger.text-danger
-      = fa_icon 'exclamation-triangle'.freeze
-      =< t('.privacy_warning')
-
   - if test_cases_and_results.key?('private_test')
     = render partial: 'course/assessment/answer/programming/test_cases_of_type',
       locals: { test_cases_and_results: test_cases_and_results['private_test'],
