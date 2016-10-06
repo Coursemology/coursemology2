@@ -17,6 +17,9 @@ en:
           end_at: 'End At'
           maximum_experience_points: 'Maximum Experience Points'
           requirement_for: 'Requirement For'
+          new_assessment:
+            guided: 'Guided Assessment'
+            worksheet: 'Worksheet Assessment'
         assessment:
           attempt: 'Attempt'
           condition_not_satisfied: 'You do not fulfill the requirements of the assessment'
@@ -40,7 +43,8 @@ en:
             file_upload: 'File Upload'
             programming: 'Programming'
         new:
-          header: 'New Assessment'
+          guided: 'New Guided Assessment'
+          worksheet: 'New Worksheet Assessment'
         create:
           success: 'Assessment %{title} was created.'
         update:

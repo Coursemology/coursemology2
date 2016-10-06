@@ -9,6 +9,12 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def new
+    @assessment.mode = case params[:mode]
+                       when 'guided'
+                         :guided
+                       else
+                         :worksheet
+                       end
   end
 
   def create

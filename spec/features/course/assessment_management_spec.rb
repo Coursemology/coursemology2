@@ -10,7 +10,8 @@ RSpec.feature 'Course: Assessments: Management' do
 
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
-      scenario 'I can create a new assessment' do
+
+      scenario 'I can create a new worksheet assessment' do
         assessment_tab = create(:course_assessment_tab,
                                 category: course.assessment_categories.first)
         assessment = build_stubbed(:assessment)
@@ -18,9 +19,11 @@ RSpec.feature 'Course: Assessments: Management' do
 
         visit course_assessments_path(course, category: assessment_tab.category,
                                               tab: assessment_tab)
-        click_link(I18n.t('helpers.buttons.assessment.new'))
+        click_link I18n.t('course.assessment.assessments.index.new_assessment.worksheet')
 
         expect(current_path).to eq(new_course_assessment_path(course))
+        expect(page).
+          to have_selector('h1', text: I18n.t('course.assessment.assessments.new.worksheet'))
 
         # Create an assessment with a missing title.
         fill_in 'assessment_description', with: assessment.description
@@ -30,9 +33,7 @@ RSpec.feature 'Course: Assessments: Management' do
         fill_in 'assessment_start_at', with: assessment.start_at
         fill_in 'assessment_end_at', with: assessment.end_at
         fill_in 'assessment_bonus_end_at', with: assessment.bonus_end_at
-        within '#assessment_display_mode' do
-          find("option[value='guided']").select_option
-        end
+
 
         click_button 'submit'
 
@@ -48,6 +49,34 @@ RSpec.feature 'Course: Assessments: Management' do
         expect(assessment_created.tab).to eq(assessment_tab)
         expect(page).to have_content_tag_for(assessment_created)
         expect(assessment_created.folder.materials).to be_present
+        expect(assessment_created).to be_worksheet
+      end
+
+      scenario 'I can create a new guided assessment' do
+        assessment_tab = create(:course_assessment_tab,
+                                category: course.assessment_categories.first)
+        assessment = build_stubbed(:assessment)
+
+        visit course_assessments_path(course, category: assessment_tab.category,
+                                              tab: assessment_tab)
+        click_link I18n.t('course.assessment.assessments.index.new_assessment.guided')
+
+        expect(page).
+          to have_selector('h1', text: I18n.t('course.assessment.assessments.new.guided'))
+
+        fill_in 'assessment_title', with: assessment.title
+        fill_in 'assessment_description', with: assessment.description
+        fill_in 'assessment_base_exp', with: assessment.base_exp
+        fill_in 'assessment_time_bonus_exp', with: assessment.time_bonus_exp
+        fill_in 'assessment_extra_bonus_exp', with: assessment.extra_bonus_exp
+        fill_in 'assessment_start_at', with: assessment.start_at
+        fill_in 'assessment_end_at', with: assessment.end_at
+        fill_in 'assessment_bonus_end_at', with: assessment.bonus_end_at
+
+        click_button 'submit'
+
+        assessment_created = course.assessments.last
+        expect(assessment_created.tab).to eq(assessment_tab)
         expect(assessment_created).to be_guided
       end
 

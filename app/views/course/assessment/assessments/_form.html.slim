@@ -12,10 +12,10 @@
     = f.input :draft
   = f.input :autograded, label: t('.autograded'),
                          hint: t('.autograded_hint')
-  = f.input :mode, as: :select, collection: Course::Assessment.modes.keys
   = f.folder
   = f.hidden_field :tab, value: @tab.id
   = f.hidden_field :category, value: @tab.category_id
+  = f.hidden_field :mode
 
   - if @assessment.persisted?
     = render partial: 'course/condition/conditions', locals: { conditional: @assessment }

@@ -1,3 +1,3 @@
-- add_breadcrumb :new
-= page_header
+- add_breadcrumb t(".#{@assessment.mode}")
+= page_header t(".#{@assessment.mode}")
 = render partial: 'form'
