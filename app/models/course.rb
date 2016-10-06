@@ -6,6 +6,7 @@ class Course < ActiveRecord::Base
   acts_as_tenant :instance, inverse_of: :courses
   has_settings_on :settings
   mount_uploader :logo, ImageUploader
+  acts_as_duplicable
 
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
@@ -115,6 +116,18 @@ class Course < ActiveRecord::Base
     else
       material_folders.find_by(parent: nil).present?
     end
+  end
+
+  def initialize_duplicate(duplicator, other)
+    if duplicator.time_shift
+      self.start_at += duplicator.time_shift
+      self.end_at += duplicator.time_shift
+    end
+
+    # Create an empty materials folder for now so UI can load.
+    self.material_folders.build(name: 'Root')
+
+    # TODO: duplicate children
   end
 
   private

@@ -20,13 +20,17 @@ class Course::DuplicationsController < Course::ComponentController
   #
   # @return [Boolean] True if the duplication was successful.
   def duplicate
-    duplication_service.duplicate(create_duplication_params)
+    duplication_service.duplicate
   end
 
   # Create a duplication service object for this object.
   #
   # @return [Course::DuplicationService]
   def duplication_service
-    @duplication_service ||= Course::DuplicationService.new(current_course)
+    # when selectable duplication is implemented, pass in additional arrays for all_objects
+    # and selected_objects
+    @duplication_service ||= Course::DuplicationService.new(
+      current_course, new_course_start_date: Time.zone.parse(create_duplication_params)
+    )
   end
 end
