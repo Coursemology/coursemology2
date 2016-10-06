@@ -346,5 +346,24 @@ RSpec.describe CourseUser, type: :model do
           and raise_error(ActiveRecord::RecordInvalid)
       end
     end
+
+    describe 'after_save callback for new course_user' do
+      context 'when there is a non-draft lesson_plan_items that have todos' do
+        let(:assessment) do
+          create(:course_assessment_assessment, :published_with_mcq_question, course: course)
+        end
+        subject { requested_course_user }
+
+        before do
+          # TODO: To remove when this declaration is done on the model itself
+          Course::Assessment.class_eval { def self.has_todo?; true; end } # rubocop:disable Style/SingleLineMethods
+          assessment
+        end
+
+        it 'creates todos for the lesson_plan_items' do
+          expect { subject }.to change(Course::LessonPlan::Todo.all, :count).by(1)
+        end
+      end
+    end
   end
 end
