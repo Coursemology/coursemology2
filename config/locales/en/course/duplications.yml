@@ -6,3 +6,4 @@ en:
         duplicate: :'course.duplications.show.header'
       create:
         duplicating: 'Your course is being duplicated (not implemented yet).'
+        failed: 'Uhoh, your course failed to duplicate.'
