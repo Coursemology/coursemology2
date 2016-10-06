@@ -18,7 +18,7 @@ gem 'migration_comments'
 gem 'schema_plus'
 gem 'schema_plus_association_inverses', '>= 0.1.0'
 gem 'schema_validations'
-gem 'schema_monkey' 
+gem 'schema_monkey'
 # Instance/Course settings
 gem 'settings_on_rails'
 # Manage read/unread status
@@ -205,3 +205,7 @@ gem 'coursemology-polyglot', '>= 0.1.0'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+
+# Use React.js for frontend
+gem 'react_on_rails', '~>6'
+gem 'therubyracer'
