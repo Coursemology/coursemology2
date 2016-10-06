@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::LessonPlan::Item < ActiveRecord::Base
+  include Course::LessonPlan::ItemTodoConcern
+
   actable
   has_many_attachments
 

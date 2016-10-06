@@ -7,16 +7,37 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
       include ExperiencePointsInstanceMethods
     end
 
-    # Decorator for abstractions with concrete occurrences which have
-    # the potential to award course_users EXP Points
-    def acts_as_lesson_plan_item
+    # Decorator for abstractions with concrete occurrences for student activities with a start
+    #   and end date, with the option to: (i) Award course_users with EXP Points, and/or
+    #   (ii) Appear as a todo item for each course_user once it is published
+    #
+    # Todo acts as reminders for sutdents to act on. Todos are also automatically created
+    #   when the lesson_plan_item transits from draft to non-draft, and destroyed in the
+    #   reverse case (see Course::LessonPlan::ItemTodoConcern).
+    #
+    # To declare that an actable model has todos:
+    #   - Define has_todo as true when calling acts_as_lesson_plan_item
+    #   - Define hooks to update todo's workflow_state (see Course::LessonPlan::Todo)
+    def acts_as_lesson_plan_item(has_todo: false)
       acts_as :lesson_plan_item, class_name: Course::LessonPlan::Item.name
+
+      class << self
+        attr_accessor :has_todo
+      end
+      self.has_todo = has_todo ? true : false
+      extend LessonPlanItemClassMethods
     end
   end
 
   module ExperiencePointsInstanceMethods
     def manually_awarded?
       false
+    end
+  end
+
+  module LessonPlanItemClassMethods
+    def has_todo?
+      has_todo
     end
   end
 end
