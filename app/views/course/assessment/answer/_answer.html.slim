@@ -9,7 +9,7 @@
       = specific_answer_form.hidden_field :id, value: answer.actable.id
       = render partial: specific_answer_form.object, locals: { f: specific_answer_form, last_attempt: last_attempt }
 
-      = render partial: "course/assessment/answer/#{answer.submission.assessment.display_mode}",
+      = render partial: "course/assessment/answer/#{answer.submission.assessment.mode}",
                locals: { base_answer_form: f, answer: answer, last_attempt: last_attempt }
 
       - if !submission.attempting?

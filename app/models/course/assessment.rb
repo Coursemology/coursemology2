@@ -14,7 +14,7 @@ class Course::Assessment < ActiveRecord::Base
   validate :validate_prescence_of_questions, unless: :draft?
   validate :validate_only_autograded_questions, if: :autograded?
 
-  enum display_mode: { worksheet: 0, guided: 1 }
+  enum mode: { worksheet: 0, guided: 1 }
 
   belongs_to :tab, inverse_of: :assessments
 
