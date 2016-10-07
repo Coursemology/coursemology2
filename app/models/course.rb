@@ -125,12 +125,10 @@ class Course < ActiveRecord::Base
     end
 
     # Create an empty materials folder for now so UI can load.
-    self.material_folders.build(name: 'Root')
+    material_folders.build(name: 'Root')
 
     # TODO: duplicate children
-    self.assessment_categories = other.assessment_categories.map do |assessment_category|
-      duplicator.duplicate(assessment_category)
-    end.tap(&:compact!)
+    self.assessment_categories = duplicator.duplicate(other.assessment_categories).compact
   end
 
   private

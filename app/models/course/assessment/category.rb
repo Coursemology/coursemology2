@@ -35,8 +35,11 @@ class Course::Assessment::Category < ActiveRecord::Base
   end
 
   def initialize_duplicate(duplicator, other)
-    # duplicate the folder
+    # duplicate the folder (single object)
     self.folder = duplicator.duplicate(other.folder)
+
+    # duplicate tabs
+    self.tabs = duplicator.duplicate(other.tabs).compact
   end
 
   private
