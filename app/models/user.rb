@@ -56,6 +56,7 @@ class User < ActiveRecord::Base
   end
   has_many :course_users, dependent: :destroy
   has_many :courses, through: :course_users
+  has_many :todos, class_name: Course::LessonPlan::Todo.name, inverse_of: :user, dependent: :destroy
 
   accepts_nested_attributes_for :emails
 

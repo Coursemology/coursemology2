@@ -3,6 +3,7 @@ require 'rails_helper'
 
 RSpec.describe Course::LessonPlan::Item, type: :model do
   it { is_expected.to belong_to(:course).inverse_of(:lesson_plan_items) }
+  it { is_expected.to have_many(:todos).inverse_of(:item).dependent(:destroy) }
 
   let!(:instance) { Instance.default }
   with_tenant(:instance) do
@@ -68,6 +69,40 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
         it 'is valid' do
           expect(subject).to be_valid
           expect(subject.errors[:start_at]).not_to be_present
+        end
+      end
+    end
+
+    context 'when actable object is declared to have a todo' do
+      describe 'callbacks from Course::LessonPlan::TodoConcern' do
+        # TODO: To remove when this declaration is done on the model itself
+        Course::Assessment.class_eval { def self.has_todo?; true; end } # rubocop:disable Style/SingleLineMethods
+
+        let(:course) { create(:course) }
+        let!(:students) { create_list(:course_student, 3, course: course) }
+        let(:actable) { create(:course_assessment_assessment, :with_mcq_question, course: course) }
+        subject { actable.lesson_plan_item }
+
+        context 'when actable is a draft' do
+          it 'creates todos when the actable object changes to non-draft' do
+            expect do
+              subject.draft = false
+              subject.save
+            end.to change(Course::LessonPlan::Todo.all, :count).by(course.course_users.count)
+          end
+        end
+
+        context 'when actable is non-draft' do
+          before do
+            subject.draft = false
+            subject.save
+          end
+          it 'deletes associated todos when the actable object changes to draft' do
+            expect do
+              subject.draft = true
+              subject.save
+            end.to change(Course::LessonPlan::Todo.all, :count).by(-course.course_users.count)
+          end
         end
       end
     end

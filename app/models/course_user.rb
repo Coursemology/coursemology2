@@ -3,6 +3,7 @@ class CourseUser < ActiveRecord::Base
   include Workflow
   include CourseUser::StaffConcern
   include CourseUser::LevelProgressConcern
+  include CourseUser::TodoConcern
 
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?

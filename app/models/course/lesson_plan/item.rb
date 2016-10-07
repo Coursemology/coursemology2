@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::LessonPlan::Item < ActiveRecord::Base
+  include Course::LessonPlan::ItemTodoConcern
+
   actable
   has_many_attachments
 
@@ -8,7 +10,6 @@ class Course::LessonPlan::Item < ActiveRecord::Base
   validate :validate_presence_of_bonus_end_at,
            :validate_start_at_cannot_be_after_end_at
 
-
   # @!method self.ordered_by_date
   #   Orders the lesson plan items by the starting date.
   scope :ordered_by_date, (lambda do
@@ -16,6 +17,7 @@ class Course::LessonPlan::Item < ActiveRecord::Base
   end)
 
   belongs_to :course, inverse_of: :lesson_plan_items
+  has_many :todos, class_name: Course::LessonPlan::Todo, inverse_of: :item, dependent: :destroy
 
   # Gives the maximum number of EXP Points that an EXP-awarding item
   # is allocated to give, which is the sum of base and bonus EXPs.
