@@ -35,9 +35,9 @@ RSpec.describe Duplicator, type: :model do
       end
 
       def initialize_duplicate(duplicator, other)
-        @children = other.children.map do |child|
-          duplicator.duplicate(child)
-        end.tap(&:compact!)
+        # Need compact to remove nils caused by excluded objects
+        # Alternate method is below with the ActiveRecord object
+        @children = duplicator.duplicate(other.children).tap(&:compact!)
       end
 
       def ==(other)
@@ -381,9 +381,8 @@ RSpec.describe Duplicator, type: :model do
                                         association_foreign_key: 'parent_id'
 
       def initialize_duplicate(duplicator, other)
-        self.children = other.children.map do |child|
-          duplicator.duplicate(child)
-        end.tap(&:compact!)
+        # Need compact to remove nils caused by excluded objects
+        self.children = duplicator.duplicate(other.children).compact
       end
     end
 
