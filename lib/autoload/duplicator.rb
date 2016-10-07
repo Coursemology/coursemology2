@@ -22,12 +22,16 @@ class Duplicator
   # @return duplicated_stuff A reference to a single duplicated object or an Array of duplicated
   #   objects
   def duplicate(stuff)
+    # Track if an enumerable or single object was passed in. Needed to handle single element
+    # collections.
+    # Note that ActiveRecord CollectionProxy is not an Enumerable, so check for to_a instead.
+    stuff_is_enumerable = stuff.respond_to?(:to_a)
     duplicated_stuff = []
-    stuff = [*stuff] unless stuff.is_a?(Enumerable)
+    stuff = [*stuff] unless stuff_is_enumerable
     stuff.each do |obj|
       duplicated_stuff << duplicate_object(obj)
     end
-    duplicated_stuff.length == 1 ? duplicated_stuff[0] : duplicated_stuff
+    stuff_is_enumerable ? duplicated_stuff : duplicated_stuff[0]
   end
 
   private

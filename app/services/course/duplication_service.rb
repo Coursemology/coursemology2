@@ -15,13 +15,12 @@ class Course::DuplicationService
     @duplication_params = duplication_params
   end
 
-  # Duplicate all objects with the duplicator.
+  # Duplicate the course with the duplicator.
   # Do not just pass in @selected_objects or object parents could be set incorrectly.
-  # @current_course should be in @all_objects.
   #
   # @return [Boolean] Whether the duplication succeeded.
   def duplicate
-    new_course = duplicator.duplicate(@all_objects)
+    new_course = duplicator.duplicate(@current_course)
     return new_course.save!
   end
 
