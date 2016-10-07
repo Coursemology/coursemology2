@@ -34,6 +34,11 @@ class Course::Assessment::Category < ActiveRecord::Base
     course.assessment_categories.count > 1
   end
 
+  def initialize_duplicate(duplicator, other)
+    # duplicate the folder
+    self.folder = duplicator.duplicate(other.folder)
+  end
+
   private
 
   def build_initial_tab
