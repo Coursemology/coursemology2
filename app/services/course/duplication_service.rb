@@ -21,7 +21,7 @@ class Course::DuplicationService
   # @return [Boolean] Whether the duplication succeeded.
   def duplicate
     new_course = duplicator.duplicate(@current_course)
-    return new_course.save!
+    new_course.save!
   end
 
   private
@@ -40,6 +40,6 @@ class Course::DuplicationService
   # @return [ActiveSupport::TimeWithZone]
   def time_shift
     # must be symbol key
-    @duplication_params[:new_course_start_date] - @current_course.start_at
+    @duplication_params[:new_course_start_time] - @current_course.start_at
   end
 end

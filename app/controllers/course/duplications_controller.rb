@@ -30,7 +30,7 @@ class Course::DuplicationsController < Course::ComponentController
     # when selectable duplication is implemented, pass in additional arrays for all_objects
     # and selected_objects
     @duplication_service ||= Course::DuplicationService.new(
-      current_course, new_course_start_date: Time.zone.parse(create_duplication_params)
+      current_course, new_course_start_time: Time.zone.parse(create_duplication_params)
     )
   end
 end
