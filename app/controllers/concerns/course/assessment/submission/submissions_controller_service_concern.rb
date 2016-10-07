@@ -13,6 +13,8 @@ module Course::Assessment::Submission::SubmissionsControllerServiceConcern
       Course::Assessment::Submission::UpdateGuidedAssessmentService
     when 'worksheet'
       Course::Assessment::Submission::UpdateWorksheetAssessmentService
+    when 'exam'
+      Course::Assessment::Submission::UpdateExamAssessmentService
     end
   end
 

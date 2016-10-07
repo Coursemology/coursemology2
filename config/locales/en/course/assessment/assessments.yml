@@ -20,6 +20,7 @@ en:
           new_assessment:
             guided: 'Guided Assessment'
             worksheet: 'Worksheet Assessment'
+            exam: 'Exam Assessment'
         assessment:
           attempt: 'Attempt'
           condition_not_satisfied: 'You do not fulfill the requirements of the assessment'
@@ -45,6 +46,7 @@ en:
         new:
           guided: 'New Guided Assessment'
           worksheet: 'New Worksheet Assessment'
+          exam: 'New Exam Assessment'
         create:
           success: 'Assessment %{title} was created.'
         update:
@@ -55,6 +57,8 @@ en:
         form:
           autograded: 'Automatically assign grade and experience points after finalization'
           autograded_hint: 'Note that all the questions in the assessment must be auto-gradable'
+          password_hint: 'Students must input the correct password in order to attempt the assessment'
+          password_placeholder: 'Leave blank to disable password protection'
         assessment_management_buttons:
           attempt: 'Attempt'
           resume: 'Resume'

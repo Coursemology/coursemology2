@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161006063146) do
+ActiveRecord::Schema.define(version: 20161007061116) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,6 +141,7 @@ ActiveRecord::Schema.define(version: 20161006063146) do
     t.integer  "updater_id", :null=>false, :index=>{:name=>"fk__course_assessments_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessments_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at", :null=>false
     t.datetime "updated_at", :null=>false
+    t.string   "password",   :limit=>255
   end
 
   create_table "course_assessment_questions", force: :cascade do |t|
