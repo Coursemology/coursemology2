@@ -129,6 +129,9 @@ class Course < ActiveRecord::Base
     self.material_folders.build(name: 'Root')
 
     # TODO: duplicate children
+    self.assessment_categories = other.assessment_categories.map do |assessment_category|
+      duplicator.duplicate(assessment_category)
+    end.tap(&:compact!)
   end
 
   private

@@ -61,6 +61,9 @@ class Course::Material::Folder < ActiveRecord::Base
     Pathname.new(path)
   end
 
+  def initialize_duplicate(_duplicator, _other)
+  end
+
   private
 
   def set_defaults
