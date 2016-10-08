@@ -8,4 +8,4 @@
 = div_for(@assessment, 'data-assessment-id' => @assessment.id,
                        class: single_question_flag_class(@assessment)) do
   = div_for(@submission, 'data-submission-id' => @submission.id) do
-    = render @assessment.display_mode
+    = render @assessment.mode

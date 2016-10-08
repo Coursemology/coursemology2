@@ -79,11 +79,11 @@ FactoryGirl.define do
     end
 
     trait :worksheet do
-      display_mode :worksheet
+      mode :worksheet
     end
 
     trait :guided do
-      display_mode :guided
+      mode :guided
     end
 
     # Note: Not to be used alone, as a published assessment requires at

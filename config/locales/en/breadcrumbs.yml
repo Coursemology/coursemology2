@@ -69,8 +69,6 @@ en:
             index: :'course.assessment.assessments.index.header'
         controller:
           index: :'course.assessment.assessments.index.header'
-        assessments:
-          new: :'course.assessment.assessments.new.header'
         question:
           multiple_responses:
             new: :'course.assessment.question.multiple_responses.new.header'
