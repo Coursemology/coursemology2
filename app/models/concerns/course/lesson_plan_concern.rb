@@ -32,8 +32,9 @@ module Course::LessonPlanConcern
     milestones.each { |m| milestones_hash[m] }
 
     items.each_with_object(milestones_hash) do |item, result|
-      current_milestone = milestones.shift if !milestones.empty? &&
-                                              milestones.first.start_at < item.start_at
+      while !milestones.empty? && milestones.first.start_at < item.start_at
+        current_milestone = milestones.shift
+      end
 
       result[current_milestone] << item
     end
