@@ -15,9 +15,7 @@
 
   function initializeComponents(element) {
     $('[data-toggle="popover"]', element).popover();
-    // The design of Coursemology is such that tooltips are attached to any
-    // element with a title attribute, but we do not want that for the Facebook
-    // button
+    // Tooltips are attached to elements with a title attribute, except for the Facebook button.
     // See https://github.com/Coursemology/coursemology-theme/pull/5
     $('[title]', element).not('.fb-like *').tooltip();
     $('input.toggle-all[type="checkbox"]', element).checkboxToggleAll();
