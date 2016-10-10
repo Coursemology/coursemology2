@@ -98,6 +98,15 @@ RSpec.describe Course, type: :model do
       end
       subject { course.grouped_lesson_plan_items_with_milestones }
 
+      context 'when no events fall under a milestone' do
+        let!(:empty_milestone) do
+          create(:course_lesson_plan_milestone, course: course, start_at: 4.days.ago)
+        end
+        it 'does not group any items under that milestone' do
+          expect(subject[empty_milestone]).to be_empty
+        end
+      end
+
       context 'when no milestones exist' do
         let!(:milestones) { [] }
         it 'groups all items under the nil milestone' do
