@@ -7,7 +7,8 @@ module CourseUser::TodoConcern
   end
 
   def create_todos_for_course_user
-    items = course.lesson_plan_items.includes(:actable).where(draft: false).select(&:has_todo?)
+    items =
+      Course::LessonPlan::Item.where(course_id: course_id).includes(:actable).select(&:has_todo?)
     Course::LessonPlan::Todo.create_for(items, self)
   end
 end

@@ -83,26 +83,10 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
         let(:actable) { create(:course_assessment_assessment, :with_mcq_question, course: course) }
         subject { actable.lesson_plan_item }
 
-        context 'when actable is a draft' do
-          it 'creates todos when the actable object changes to non-draft' do
-            expect do
-              subject.draft = false
-              subject.save
-            end.to change(Course::LessonPlan::Todo.all, :count).by(course.course_users.count)
-          end
-        end
-
-        context 'when actable is non-draft' do
-          before do
-            subject.draft = false
-            subject.save
-          end
-          it 'deletes associated todos when the actable object changes to draft' do
-            expect do
-              subject.draft = true
-              subject.save
-            end.to change(Course::LessonPlan::Todo.all, :count).by(-course.course_users.count)
-          end
+        it 'creates todos for newly created objects' do
+          expect do
+            create(:course_assessment_assessment, :published_with_mcq_question, course: course)
+          end.to change(Course::LessonPlan::Todo.all, :count).by(course.course_users.count)
         end
       end
     end
