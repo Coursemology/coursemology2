@@ -106,6 +106,8 @@ RSpec.feature 'Course: Assessments: Management' do
         assessment = create(:assessment, course: course)
         visit course_assessment_path(course, assessment)
         find_link(nil, href: edit_course_assessment_path(course, assessment)).click
+        expect(page).
+          to have_selector('h1', text: I18n.t('course.assessment.assessments.edit.worksheet'))
 
         new_text = 'zzzz'
         fill_in 'assessment_title', with: new_text

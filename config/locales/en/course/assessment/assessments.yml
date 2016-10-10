@@ -47,6 +47,10 @@ en:
           guided: 'New Guided Assessment'
           worksheet: 'New Worksheet Assessment'
           exam: 'New Exam Assessment'
+        edit:
+          guided: 'Edit Guided Assessment'
+          worksheet: 'Edit Worksheet Assessment'
+          exam: 'Edit Exam Assessment'
         create:
           success: 'Assessment %{title} was created.'
         update:
