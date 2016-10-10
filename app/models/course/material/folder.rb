@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Material::Folder < ActiveRecord::Base
   acts_as_forest order: :name, dependent: :destroy
+  acts_as_duplicable
   include Course::ModelComponentHost::Component
 
   after_initialize :set_defaults, if: :new_record?
@@ -61,7 +62,9 @@ class Course::Material::Folder < ActiveRecord::Base
     Pathname.new(path)
   end
 
-  def initialize_duplicate(_duplicator, _other)
+  def initialize_duplicate(duplicator, other)
+    self.start_at += duplicator.time_shift
+    self.materials = duplicator.duplicate(other.materials).compact
   end
 
   private

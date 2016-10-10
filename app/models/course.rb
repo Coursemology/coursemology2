@@ -120,16 +120,16 @@ class Course < ActiveRecord::Base
   end
 
   def initialize_duplicate(duplicator, other)
-    if duplicator.time_shift
-      self.start_at += duplicator.time_shift
-      self.end_at += duplicator.time_shift
-    end
-
-    # Create an empty materials folder for now so UI can load.
-    material_folders.build(name: 'Root')
+    self.start_at += duplicator.time_shift
+    self.end_at += duplicator.time_shift
 
     # TODO: duplicate children
     self.assessment_categories = duplicator.duplicate(other.assessment_categories).compact
+
+    # Find material_folders without owners and only duplicate those.
+    # This must be done after duplicating assessments.
+    material_folders_to_duplicate = other.material_folders.select { |folder| folder.owner_id.nil? }
+    self.material_folders = duplicator.duplicate(material_folders_to_duplicate).compact
   end
 
   private

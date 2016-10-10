@@ -5,7 +5,7 @@ class Duplicator
   #
   # @param [Enumerable] excluded_objects An Enumerable of objects to be excluded from duplication
   # @param [DateTime] time_shift The amount of time to shift dates by
-  def initialize(excluded_objects = [], time_shift = nil)
+  def initialize(excluded_objects = [], time_shift = 0)
     @duplicated_objects = {} # hash to check what has been duplicated
     @exclusion_set = excluded_objects.to_set # set to check what should be excluded
     @time_shift = time_shift
