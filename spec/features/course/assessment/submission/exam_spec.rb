@@ -19,6 +19,19 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
     context 'As a Course Student' do
       let(:user) { student }
 
+      scenario 'I need to input the password before attempting exams', js: true do
+        assessment
+        visit course_assessments_path(course)
+
+        within find(content_tag_selector(assessment)) do
+          find_link(
+            I18n.t('course.assessment.assessments.assessment_management_buttons.attempt')
+          ).trigger('click')
+        end
+
+        expect(current_path).to eq(new_course_assessment_session_path(course, assessment))
+      end
+
       scenario 'I can edit and save my submission' do
         submission
         visit edit_course_assessment_submission_path(course, assessment, submission)

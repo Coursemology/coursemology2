@@ -1,0 +1,9 @@
+en:
+  course:
+    assessment:
+      sessions:
+        new:
+          header: 'Input Password'
+          message: 'The assessment is locked, input the password to continue.'
+          placeholder: 'Password'
+          continue: 'Continue'

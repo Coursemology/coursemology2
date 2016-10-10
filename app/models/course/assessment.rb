@@ -86,6 +86,10 @@ class Course::Assessment < ActiveRecord::Base
   def precluded_for!(_course_user)
   end
 
+  def password_protected?
+    password.present?
+  end
+
   private
 
   # Sets the course of the lesson plan item to be the same as the one for the assessment.
