@@ -92,7 +92,8 @@ en:
       lesson_plan:
         items:
           index: :'course.lesson_plan.items.index.header'
-        milestones: :'breadcrumbs.course.lesson_plan.items.index'
+        milestones:
+          index: :'breadcrumbs.course.lesson_plan.items.index'
         events:
           index: :'breadcrumbs.course.lesson_plan.items.index'
       material:
