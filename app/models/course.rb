@@ -125,7 +125,8 @@ class Course < ActiveRecord::Base
     end
 
     # Create an empty materials folder for now so UI can load.
-    material_folders.build(name: 'Root')
+    # Set root folder start time to be the same as course start time
+    material_folders.build(name: 'Root', start_at: self.start_at)
 
     # TODO: duplicate children
     self.assessment_categories = duplicator.duplicate(other.assessment_categories).compact

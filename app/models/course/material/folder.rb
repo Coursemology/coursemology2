@@ -61,7 +61,8 @@ class Course::Material::Folder < ActiveRecord::Base
     Pathname.new(path)
   end
 
-  def initialize_duplicate(_duplicator, _other)
+  def initialize_duplicate(duplicator, _other)
+    self.start_at += duplicator.time_shift if duplicator.time_shift
   end
 
   private
