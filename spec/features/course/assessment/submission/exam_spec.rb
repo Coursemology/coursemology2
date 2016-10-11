@@ -11,7 +11,7 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
     end
     before { login_as(user, scope: :user) }
 
-    let(:student) { create(:course_user, :approved, course: course).user }
+    let(:student) { create(:course_student, course: course).user }
     let(:submission) do
       create(:course_assessment_submission, assessment: assessment, creator: student)
     end
@@ -28,13 +28,26 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
             I18n.t('course.assessment.assessments.assessment_management_buttons.attempt')
           ).trigger('click')
         end
+        expect(page).to have_selector('div.password-panel')
 
+        fill_in 'session_password', with: 'wrong_password'
+        click_button I18n.t('course.assessment.sessions.new.continue')
         expect(current_path).to eq(new_course_assessment_session_path(course, assessment))
+
+        fill_in 'session_password', with: assessment.password
+        click_button I18n.t('course.assessment.sessions.new.continue')
+
+        # The user should be redirect to submission edit page
+        expect(page).to have_selector('h1', text: assessment.title)
       end
 
-      scenario 'I can edit and save my submission' do
+      scenario 'I can edit and save my submission', js: true do
         submission
         visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        fill_in 'session_password', with: assessment.password
+        click_button I18n.t('course.assessment.sessions.new.continue')
+        expect(page).to have_selector('h1', text: assessment.title)
 
         option = assessment.questions.first.actable.options.first.option
         check option

@@ -8,8 +8,7 @@ class Course::Assessment::SessionsController < Course::Assessment::Controller
   end
 
   def create
-    password = create_params[:password]
-    if password == @assessment.password
+    if authentication_service.authenticate(create_params[:password])
       redirect_or_create_submission
     else
       render json: { success: false }
@@ -45,5 +44,9 @@ class Course::Assessment::SessionsController < Course::Assessment::Controller
 
   def create_params
     params.require(:session).permit(:password, :submission_id)
+  end
+
+  def authentication_service
+    @service ||= Course::Assessment::SessionAuthenticationService.new(@assessment, session)
   end
 end
