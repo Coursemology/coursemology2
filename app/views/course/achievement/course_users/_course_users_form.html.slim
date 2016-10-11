@@ -2,11 +2,12 @@
   = f.error_notification
   = f.error :achievement
 
+  - collection = course.course_users.with_approved_state.without_phantom_users.students.order_alphabetically
   table.table.table-hover
     thead
       th = t('.name')
       th
-        input.toggle-all id="toggle-all-#{css}-achievements" type='checkbox' style='display: none'
+        input.toggle-all id="toggle-all-normal-achievements" type='checkbox' style='display: none'
         '
         label for='toggle-all-achievements'
           = t('.enabled')
@@ -14,6 +15,24 @@
       = f.collection_check_boxes :course_user_ids, collection, :id, :name do |f|
         tr
           th = link_to_course_user(f.object)
-          td = f.check_box 'data-for-select-all' => "toggle-all-#{css}-achievements"
+          td = f.check_box 'data-for-select-all' => "toggle-all-normal-achievements"
 
-  = f.button :submit, t(".#{button}")
+  br
+  h4 = t('.phantom_user_header')
+
+  - collection = course.course_users.with_approved_state.phantom.students.order_alphabetically
+  table.table.table-hover
+    thead
+      th = t('.name')
+      th
+        input.toggle-all id="toggle-all-phantom-achievements" type='checkbox' style='display: none'
+        '
+        label for='toggle-all-achievements'
+          = t('.enabled')
+    tbody
+      = f.collection_check_boxes :course_user_ids, collection, :id, :name do |f|
+        tr
+          th = link_to_course_user(f.object)
+          td = f.check_box 'data-for-select-all' => "toggle-all-phantom-achievements"
+
+  = f.button :submit, t(".button")

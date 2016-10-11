@@ -7,9 +7,8 @@ en:
           name: 'Student Name'
           enabled: 'Obtained Achievement'
           button: 'Update Users'
-          phantom_button: 'Update Phantom Users'
-        index:
           phantom_user_header: 'Phantom Users'
+        index:
           notice: >
             If an Achievement has conditions associated with it, Coursemology will automatically
             award achievements when the student meets those conditions.
