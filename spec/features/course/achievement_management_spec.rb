@@ -83,6 +83,8 @@ RSpec.feature 'Course: Achievements' do
         course_user_id = "achievement_course_user_ids_#{student.id}"
         unregistered_user = create(:course_user, course: course)
         unregistered_user_id = "achievement_course_user_ids_#{unregistered_user.id}"
+        phantom_user = create(:course_user, :approved, :phantom, course: course)
+        phantom_user_id = "achievement_course_user_ids_#{phantom_user.id}"
 
         visit course_achievements_path(course)
 
@@ -97,12 +99,15 @@ RSpec.feature 'Course: Achievements' do
         end
 
         expect(page).to have_unchecked_field(course_user_id)
+        expect(page).to have_unchecked_field(phantom_user_id)
         expect(page).not_to have_field(unregistered_user_id)
         check course_user_id
+        check phantom_user_id
+
 
         expect do
           click_button I18n.t('course.achievement.course_users.course_users_form.button')
-        end.to change(manual_achievement.course_users, :count).by(1)
+        end.to change(manual_achievement.course_users, :count).by(2)
       end
     end
   end
