@@ -14,7 +14,7 @@
         label for='toggle-all-achievements'
           = t('.enabled')
     tbody
-      - collection = course.course_users.with_approved_state.students
+      - collection = course.course_users.order_alphabetically.with_approved_state.students
       = f.collection_check_boxes :course_user_ids, collection, :id, :name do |f|
         tr
           th = link_to_course_user(f.object)
