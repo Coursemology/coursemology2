@@ -418,5 +418,55 @@ RSpec.describe Course::Assessment::Submission do
         end
       end
     end
+
+    describe 'callbacks from Course::Assessment::Submission::TodoConcern' do
+      # TODO: To remove when this declaration is done on the model itself
+      Course::Assessment.class_eval do
+        def self.has_todo?; true; end # rubocop:disable Style/SingleLineMethods
+      end
+      Course::Assessment::Submission.class_eval do
+        include Course::Assessment::Submission::TodoConcern
+      end
+
+      let(:assessment_traits) { [:published_with_mcq_question] }
+      subject do
+        Course::LessonPlan::Todo.
+          find_by(item_id: assessment.lesson_plan_item.id, user_id: user1.id)
+      end
+      before { submission1 }
+
+      context 'when submission is created' do
+        let(:submission1_traits) { [:attempting] }
+        it 'transitions the todo to in progress' do
+          expect(subject.in_progress?).to be_truthy
+        end
+      end
+
+      context 'when submission transitions from attempting to submitted' do
+        let(:submission1_traits) { [:attempting] }
+        it 'transitions the todo to completed' do
+          submission1.finalise!
+          submission1.save!
+          expect(subject.completed?).to be_truthy
+        end
+      end
+
+      context 'when submission is unsubmitted' do
+        let(:submission1_traits) { [:submitted] }
+        it 'transitions the todo to in progress' do
+          submission1.unsubmit!
+          submission1.save!
+          expect(subject.in_progress?).to be_truthy
+        end
+      end
+
+      context 'when submission is destroyed' do
+        let(:submission1_traits) { [:attempting] }
+        it 'changes todo state to not started' do
+          submission1.destroy
+          expect(subject.not_started?).to be_truthy
+        end
+      end
+    end
   end
 end
