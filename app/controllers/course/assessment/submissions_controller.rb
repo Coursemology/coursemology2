@@ -10,7 +10,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
   end
 
   def pending
-    @submissions = pending_submissions.from_course(current_course).with_submitted_state
+    @submissions = pending_submissions.from_course(current_course).pending_for_grading
   end
 
   private

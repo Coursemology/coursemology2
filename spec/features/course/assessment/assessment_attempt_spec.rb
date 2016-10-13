@@ -201,12 +201,12 @@ RSpec.describe 'Course: Assessments: Attempt' do
         expect(current_path).to eq(
           edit_course_assessment_submission_path(course, assessment, submission)
         )
-        expect(submission.reload.graded?).to be(true)
+        expect(submission.reload.published?).to be(true)
         expect(submission.grade).to eq(submission_maximum_grade)
         expect(submission.points_awarded).to eq(new_exp)
       end
 
-      scenario 'I can unsubmit a submitted or graded submission' do
+      scenario 'I can unsubmit a submitted or published submission' do
         # Submitted submission
         assessment.questions.attempt(submission).each(&:save!)
         submission.finalise!
@@ -219,7 +219,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         expect(submission.points_awarded).to be_nil
         expect(submission.latest_answers.all?(&:attempting?)).to be_truthy
 
-        # Graded submission
+        # Published submission
         submission.finalise!
         submission.publish!
         submission.save!

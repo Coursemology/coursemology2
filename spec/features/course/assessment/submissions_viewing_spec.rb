@@ -12,10 +12,10 @@ RSpec.describe 'Course: Submissions Viewing' do
       let(:course_manager) { create(:course_manager, course: course) }
       let(:user) { course_manager.user }
 
-      scenario 'I can view all submitted and graded submissions' do
+      scenario 'I can view all submitted and published submissions' do
         students = create_list(:course_student, 3, course: course)
-        attempting_submission, submitted_submission, graded_submission =
-          students.zip([:attempting, :submitted, :graded]).map do |student, trait|
+        attempting_submission, submitted_submission, published_submission =
+          students.zip([:attempting, :submitted, :published]).map do |student, trait|
             create(:course_assessment_submission, trait,
                    assessment: assessment, creator: student.user)
           end
@@ -36,18 +36,18 @@ RSpec.describe 'Course: Submissions Viewing' do
             href: edit_course_assessment_submission_path(course, assessment, submitted_submission)
           )
         end
-        within find(content_tag_selector(graded_submission)) do
+        within find(content_tag_selector(published_submission)) do
           expect(page).to have_link(
             I18n.t('course.assessment.submissions.submission.view'),
-            href: edit_course_assessment_submission_path(course, assessment, graded_submission)
+            href: edit_course_assessment_submission_path(course, assessment, published_submission)
           )
         end
       end
 
       scenario 'I can access pending submissions from the sidebar and view pending submissions' do
         students = create_list(:course_student, 4, course: course)
-        attempting_submission, submitted_submission1, submitted_submission2, graded_submission =
-          students.zip([:attempting, :submitted, :submitted, :graded]).map do |student, trait|
+        attempting_submission, submitted_submission1, submitted_submission2, published_submission =
+          students.zip([:attempting, :submitted, :submitted, :published]).map do |student, trait|
             create(:course_assessment_submission, trait,
                    assessment: assessment, course: course,
                    creator: student.user, course_user: student)
@@ -58,7 +58,7 @@ RSpec.describe 'Course: Submissions Viewing' do
         expect(page).to have_content_tag_for(submitted_submission1)
         expect(page).to have_content_tag_for(submitted_submission2)
         expect(page).not_to have_content_tag_for(attempting_submission)
-        expect(page).not_to have_content_tag_for(graded_submission)
+        expect(page).not_to have_content_tag_for(published_submission)
 
         # Staff with group view pending submissions of own group students
         group = create(:course_group, course: course)
@@ -70,7 +70,7 @@ RSpec.describe 'Course: Submissions Viewing' do
         expect(page).to have_content_tag_for(submitted_submission1)
         expect(page).not_to have_content_tag_for(submitted_submission2)
         expect(page).not_to have_content_tag_for(attempting_submission)
-        expect(page).not_to have_content_tag_for(graded_submission)
+        expect(page).not_to have_content_tag_for(published_submission)
 
         # Pending submissions tab shows the tutors for the students if it exists.
         visit pending_course_submissions_path(course, my_students: false)
@@ -91,11 +91,11 @@ RSpec.describe 'Course: Submissions Viewing' do
     context 'As a Course Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I can view my submitted and graded submissions' do
+      scenario 'I can view my submitted and published submissions' do
         # Attach a submission of each trait to a unique assessment
         assessments = create_list(:course_assessment_assessment, 3, course: course)
-        attempting_submission, submitted_submission, graded_submission =
-          assessments.zip([:attempting, :submitted, :graded]).map do |assessment, trait|
+        attempting_submission, submitted_submission, published_submission =
+          assessments.zip([:attempting, :submitted, :published]).map do |assessment, trait|
             create(:course_assessment_submission, trait,
                    assessment: assessment, creator: user)
           end
@@ -105,7 +105,7 @@ RSpec.describe 'Course: Submissions Viewing' do
         expect(page).not_to have_content_tag_for(attempting_submission)
         expect(page).not_to have_selector('div.submissions-filter')
 
-        [submitted_submission, graded_submission].each do |submission|
+        [submitted_submission, published_submission].each do |submission|
           within find(content_tag_selector(submission)) do
             expect(page).to have_link(
               I18n.t('course.assessment.submissions.submission.view'),

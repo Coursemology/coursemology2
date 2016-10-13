@@ -48,7 +48,7 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
         end
 
         it 'gives the correct experience points' do
-          expect(submission).to be_graded
+          expect(submission).to be_published
 
           correct_exp = (assessment.time_bonus_exp + assessment.base_exp).to_f / 2
           expect(submission.points_awarded).to eq(correct_exp.to_i)

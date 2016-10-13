@@ -12,7 +12,7 @@
           = link_to_course_user(manager) do |course_user|
             = format_inline_text(course_user.name)
 
-  - if submission.graded?
+  - if submission.published?
     td = submission.grade.to_s + ' / ' + assessment.maximum_grade.to_s
     td = submission.points_awarded
   - else

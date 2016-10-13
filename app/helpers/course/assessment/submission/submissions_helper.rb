@@ -31,7 +31,7 @@ module Course::Assessment::Submission::SubmissionsHelper
 
   # Return the last attempted answer based on the status of current submission.
   # previous attempt if submission is in attempting state.
-  # current attempt if submission is in submitted or graded state.
+  # current attempt if submission is in submitted, graded or published state.
   #
   # @return [Course::Assessment::Answer]
   def last_attempt(answer)

@@ -25,6 +25,6 @@
           @submission), method: :post, class: ['btn', 'btn-info']
       = f.button :submit, t('.publish'), name: 'submission[publish]', class: ['btn-warning']
 
-    - if (@submission.submitted? || @submission.graded?) && can?(:grade, @submission)
+    - if (@submission.submitted? || @submission.graded? || @submission.published?) && can?(:grade, @submission)
       = f.button :submit, t('.unsubmit'), name: 'submission[unsubmit]', class: ['btn-danger'],
         data: { confirm: t('.confirm_unsubmit') }
