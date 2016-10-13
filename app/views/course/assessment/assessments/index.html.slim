@@ -14,6 +14,10 @@
             = link_to(t('.new_assessment.worksheet'),
               [:new, current_course, :assessment, category: @category.id, tab: @tab.id, mode: :worksheet],
               role: 'menuitem')
+          li role='presentation'
+            = link_to(t('.new_assessment.exam'),
+              [:new, current_course, :assessment, category: @category.id, tab: @tab.id, mode: :exam],
+              role: 'menuitem')
 
 = display_assessment_tabs
 

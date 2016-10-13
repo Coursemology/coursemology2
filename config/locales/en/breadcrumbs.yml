@@ -86,6 +86,8 @@ en:
         submissions:
           index: :'course.assessment.submissions.index.header'
           pending: :'course.assessment.submissions.pending.header'
+        sessions:
+          new: :'course.assessment.sessions.new.header'
       groups:
         index: :'course.groups.index.header'
         new: :'course.groups.new.header'

@@ -34,7 +34,6 @@ RSpec.feature 'Course: Assessments: Management' do
         fill_in 'assessment_end_at', with: assessment.end_at
         fill_in 'assessment_bonus_end_at', with: assessment.bonus_end_at
 
-
         click_button 'submit'
 
         expect(current_path).to eq(course_assessments_path(course))
@@ -80,10 +79,35 @@ RSpec.feature 'Course: Assessments: Management' do
         expect(assessment_created).to be_guided
       end
 
+      scenario 'I can create a new exam assessment' do
+        assessment_tab = create(:course_assessment_tab,
+                                category: course.assessment_categories.first)
+        assessment = build_stubbed(:assessment, :exam)
+
+        visit course_assessments_path(course, category: assessment_tab.category,
+                                              tab: assessment_tab)
+        click_link I18n.t('course.assessment.assessments.index.new_assessment.exam')
+
+        expect(page).
+          to have_selector('h1', text: I18n.t('course.assessment.assessments.new.exam'))
+
+        fill_in 'assessment_title', with: assessment.title
+        fill_in 'assessment_start_at', with: assessment.start_at
+        fill_in 'assessment_password', with: assessment.password
+
+        click_button 'submit'
+
+        assessment_created = course.assessments.last
+        expect(assessment_created).to be_exam
+        expect(assessment_created.password).to eq(assessment.password)
+      end
+
       scenario 'I can edit an assessment' do
         assessment = create(:assessment, course: course)
         visit course_assessment_path(course, assessment)
         find_link(nil, href: edit_course_assessment_path(course, assessment)).click
+        expect(page).
+          to have_selector('h1', text: I18n.t('course.assessment.assessments.edit.worksheet'))
 
         new_text = 'zzzz'
         fill_in 'assessment_title', with: new_text

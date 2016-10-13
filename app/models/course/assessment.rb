@@ -14,7 +14,7 @@ class Course::Assessment < ActiveRecord::Base
   validate :validate_prescence_of_questions, unless: :draft?
   validate :validate_only_autograded_questions, if: :autograded?
 
-  enum mode: { worksheet: 0, guided: 1 }
+  enum mode: { worksheet: 0, guided: 1, exam: 2 }
 
   belongs_to :tab, inverse_of: :assessments
 
@@ -84,6 +84,10 @@ class Course::Assessment < ActiveRecord::Base
   end
 
   def precluded_for!(_course_user)
+  end
+
+  def password_protected?
+    password.present?
   end
 
   private

@@ -9,12 +9,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def new
-    @assessment.mode = case params[:mode]
-                       when 'guided'
-                         :guided
-                       else
-                         :worksheet
-                       end
+    @assessment.mode = Course::Assessment.modes[params[:mode]] || :worksheet
   end
 
   def create
@@ -61,7 +56,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   def assessment_params
     params.require(:assessment).permit(:title, :description, :base_exp, :time_bonus_exp,
                                        :extra_bonus_exp, :start_at, :end_at, :bonus_end_at,
-                                       :draft, :mode, :autograded, folder_params)
+                                       :draft, :mode, :autograded, :password, folder_params)
   end
 
   # Merges the parameters for category and tab IDs from either the assessment parameter or the

@@ -191,6 +191,7 @@ Rails.application.routes.draw do
               get 'pending', on: :collection
             end
           end
+          resources :sessions, only: [:new, :create]
         end
       end
       resources :levels, except: [:show, :edit, :update]

@@ -6,6 +6,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   before_action :authorize_assessment!, only: :create
   skip_authorize_resource :submission, only: [:edit, :update, :auto_grade]
   before_action :authorize_submission!, only: [:edit, :update]
+  before_action :check_password, only: [:create, :edit]
   before_action :load_or_create_answers, only: [:edit, :update]
 
   delegate_to_service(:update)
@@ -75,5 +76,16 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def reload_answer_params
     params.permit(:answer_id, :reset_answer)
+  end
+
+  def check_password
+    return if !@assessment.password_protected? || can?(:manage, @assessment)
+
+    service = Course::Assessment::SessionAuthenticationService.new(@assessment, session)
+    unless service.authenticated?
+      redirect_to new_course_assessment_session_path(
+        current_course, @assessment, submission_id: @submission.id
+      )
+    end
   end
 end
