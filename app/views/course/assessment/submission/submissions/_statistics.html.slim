@@ -8,7 +8,7 @@ div.panel.panel-default
           td = display_course_user(@submission.course_user)
         tr
           th = t('.status')
-          td = @submission.workflow_state
+          td = Course::Assessment::Submission.human_attribute_name(@submission.workflow_state)
         tr
           th = @submission.class.human_attribute_name(:grade)
           td

@@ -51,7 +51,8 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
 
         [submitted_submission, attempting_submission, published_submission].each do |submission|
           within all(content_tag_selector(submission)).last do
-            expect(page).to have_text(submission.workflow_state.capitalize)
+            expect(page).
+              to have_text(submission.class.human_attribute_name(submission.workflow_state))
             expect(page).to have_text(submission.points_awarded)
           end
         end
