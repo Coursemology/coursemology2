@@ -11,7 +11,7 @@ class Course::Assessment < ActiveRecord::Base
   before_validation :assign_folder_attributes
   before_validation :propagate_course
 
-  validate :validate_prescence_of_questions, unless: :draft?
+  validate :validate_presence_of_questions, unless: :draft?
   validate :validate_only_autograded_questions, if: :autograded?
 
   enum mode: { worksheet: 0, guided: 1 }
@@ -103,7 +103,7 @@ class Course::Assessment < ActiveRecord::Base
     self.autograded ||= false
   end
 
-  def validate_prescence_of_questions
+  def validate_presence_of_questions
     errors.add(:draft, :no_questions) unless questions.present?
   end
 
