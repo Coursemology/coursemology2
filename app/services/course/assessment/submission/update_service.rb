@@ -55,7 +55,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def workflow_state_params
     result = []
     result << :finalise if can?(:update, @submission)
-    result.push(:publish, :unsubmit) if can?(:grade, @submission)
+    result.push(:publish, :mark, :unsubmit) if can?(:grade, @submission)
     result
   end
 

@@ -9,12 +9,13 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
     let(:assessment) do
       create(:assessment, :exam, :published_with_mrq_question, course: course)
     end
-    before { login_as(user, scope: :user) }
-
+    let(:mrq_questions) { assessment.reload.questions.map(&:specific) }
     let(:student) { create(:course_student, course: course).user }
     let(:submission) do
       create(:course_assessment_submission, assessment: assessment, creator: student)
     end
+
+    before { login_as(user, scope: :user) }
 
     context 'As a Course Student' do
       let(:user) { student }
@@ -57,6 +58,25 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
           edit_course_assessment_submission_path(course, assessment, submission)
         )
         expect(page).to have_checked_field(option)
+      end
+    end
+
+    context 'As a Course Staff' do
+      let(:user) { create(:course_teaching_assistant, course: course).user }
+
+      scenario 'I can submit the grading for publishing' do
+        mrq_questions.each { |q| q.attempt(submission).save! }
+        submission.finalise!
+        submission.save!
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        expect(page).to have_button(I18n.t('common.save'))
+
+        click_button I18n.t('course.assessment.submission.submissions.buttons.mark')
+        expect(current_path).
+          to eq(edit_course_assessment_submission_path(course, assessment, submission))
+        expect(submission.reload.graded?).to be_truthy
       end
     end
   end
