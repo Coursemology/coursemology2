@@ -18,21 +18,21 @@ RSpec.describe Course::Assessment::Submission do
     let(:course_student1) { create(:course_student, course: course) }
     let(:user1) { course_student1.user }
     let(:submission1) do
-      create(:course_assessment_submission, *submission1_traits,
+      create(:submission, *submission1_traits,
              assessment: assessment, creator: user1, course_user: course_student1)
     end
     let(:submission1_traits) { [] }
     let(:course_student2) { create(:course_student, course: course) }
     let(:user2) { course_student2.user }
     let(:submission2) do
-      create(:course_assessment_submission, *submission2_traits,
+      create(:submission, *submission2_traits,
              assessment: assessment, creator: user2, course_user: course_student2)
     end
     let(:submission2_traits) { [] }
     let(:course_student3) { create(:course_student, course: course) }
     let(:user3) { course_student3.user }
     let(:submission3) do
-      create(:course_assessment_submission, *submission3_traits,
+      create(:submission, *submission3_traits,
              assessment: assessment, creator: user3, course_user: course_student3)
     end
     let(:submission3_traits) { [] }
@@ -119,9 +119,9 @@ RSpec.describe Course::Assessment::Submission do
     describe '.from_category' do
       let(:new_category) { create(:course_assessment_category, course: course) }
       let(:new_tab) { create(:course_assessment_tab, course: course, category: new_category) }
-      let(:new_assessment) { create(:course_assessment_assessment, course: course, tab: new_tab) }
-      let(:new_submission) { create(:course_assessment_submission, assessment: new_assessment) }
-      let!(:submissions) { [submission1, new_submission] }
+      let(:new_assessment) { create(:assessment, course: course, tab: new_tab) }
+      let!(:new_submission) { create(:submission, assessment: new_assessment, creator: user1) }
+      let(:submissions) { [submission1, new_submission] }
       subject { Course::Assessment::Submission.from_category(new_category) }
 
       it 'returns submissions from assessments in this category' do
@@ -131,8 +131,11 @@ RSpec.describe Course::Assessment::Submission do
 
     describe '.from_course' do
       let(:new_course) { create(:course) }
-      let(:new_assessment) { create(:course_assessment_assessment, course: new_course) }
-      let!(:new_submission) { create(:course_assessment_submission, assessment: new_assessment) }
+      let(:new_student) { create(:course_student, course: new_course) }
+      let(:new_assessment) { create(:assessment, course: new_course) }
+      let!(:new_submission) do
+        create(:submission, assessment: new_assessment, creator: new_student.user)
+      end
 
       it 'returns submissions from assessments in the specified course' do
         submission1
@@ -177,7 +180,7 @@ RSpec.describe Course::Assessment::Submission do
       let(:submission3_traits) { :published }
       let!(:submissions) { [submission1, submission2, submission3] }
 
-      it 'returns the submissions with submitted or publidhrf workflow state' do
+      it 'returns the submissions with submitted or published workflow state' do
         states = assessment.submissions.confirmed.map(&:workflow_state)
         expect(states).to contain_exactly('published', 'submitted')
       end
@@ -233,8 +236,8 @@ RSpec.describe Course::Assessment::Submission do
       context 'when category id is given' do
         let(:new_category) { create(:course_assessment_category, course: course) }
         let(:new_tab) { create(:course_assessment_tab, course: course, category: new_category) }
-        let(:new_assessment) { create(:course_assessment_assessment, course: course, tab: new_tab) }
-        let(:new_submission) { create(:course_assessment_submission, assessment: new_assessment) }
+        let(:new_assessment) { create(:assessment, course: course, tab: new_tab) }
+        let(:new_submission) { create(:submission, assessment: new_assessment, creator: user2) }
         let(:params) { { category_id: new_category.id } }
 
         it 'filters submissions by category' do

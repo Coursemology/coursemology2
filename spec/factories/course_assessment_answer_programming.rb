@@ -7,6 +7,7 @@ FactoryGirl.define do
       question_traits nil
       file_count nil
       file_contents nil
+      creator { create(:user) }
     end
 
     question do

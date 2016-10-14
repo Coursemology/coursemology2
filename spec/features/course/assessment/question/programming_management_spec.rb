@@ -6,7 +6,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:assessment) { create(:course_assessment_assessment, course: course) }
+    let(:assessment) { create(:assessment, course: course) }
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do

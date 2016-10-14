@@ -7,9 +7,7 @@ RSpec.describe Course::Assessment::Submission::Answer::CommentsController do
     let(:user) { create(:user) }
     let(:course) { create(:course, creator: user) }
     let(:assessment) { create(:assessment, :with_programming_question, course: course) }
-    let(:submission) do
-      create(:course_assessment_submission, :submitted, assessment: assessment, creator: user)
-    end
+    let(:submission) { create(:submission, :submitted, assessment: assessment, creator: user) }
     let(:immutable_answer) do
       submission.answers.first.tap do |stub|
         allow(stub).to receive(:save).and_return(false)

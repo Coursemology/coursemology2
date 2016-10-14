@@ -349,7 +349,7 @@ RSpec.describe CourseUser, type: :model do
 
     describe 'after_save callback for new course_user' do
       context 'when there is a lesson_plan_items that have todos' do
-        let(:assessment) { create(:course_assessment_assessment, course: course) }
+        let(:assessment) { create(:assessment, course: course) }
         subject { requested_course_user }
 
         before do

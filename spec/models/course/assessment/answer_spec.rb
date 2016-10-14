@@ -33,7 +33,7 @@ RSpec.describe Course::Assessment::Answer do
       describe '#submission' do
         context 'when the answer is being attempted' do
           it 'validates that the submission is being attempted' do
-            subject.submission = create(:course_assessment_submission, workflow_state: 'submitted')
+            subject.submission = create(:submission, workflow_state: 'submitted')
             expect(subject.valid?).to be(false)
             expect(subject.errors[:submission]).not_to be_empty
           end
@@ -149,11 +149,16 @@ RSpec.describe Course::Assessment::Answer do
     end
 
     describe '#auto_grade!' do
-      let(:question) { build(:course_assessment_question_multiple_response).question }
+      let(:course) { create(:course) }
+      let(:student_user) { create(:course_student, course: course).user }
+      let(:assessment) { create(:assessment, course: course) }
+      let(:question) do
+        build(:course_assessment_question_multiple_response, assessment: assessment).question
+      end
       let(:answer_traits) { :submitted }
       subject do
-        create(:course_assessment_answer_multiple_response, *answer_traits, question: question).
-          answer
+        create(:course_assessment_answer_multiple_response, *answer_traits,
+               question: question, creator: student_user).answer
       end
 
       it 'creates a new auto_grading' do

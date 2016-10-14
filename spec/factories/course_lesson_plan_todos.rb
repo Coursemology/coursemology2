@@ -22,8 +22,8 @@ FactoryGirl.define do
     end
 
     after(:build) do |_todo, evaluator|
-      course_user = CourseUser.where(course: evaluator.course, user: evaluator.user)
-      create(:course_user, :approved, course: evaluator.course) if course_user.blank?
+      course_user = CourseUser.find_by(course: evaluator.course, user: evaluator.user)
+      create(:course_user, :approved, course: evaluator.course) unless course_user
     end
   end
 end

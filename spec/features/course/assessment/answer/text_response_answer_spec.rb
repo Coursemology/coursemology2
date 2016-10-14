@@ -6,14 +6,11 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:assessment) do
-      create(:course_assessment_assessment, :published_with_text_response_question, course: course)
-    end
+    let(:assessment) { create(:assessment, :published_with_text_response_question, course: course) }
     before { login_as(user, scope: :user) }
 
     let(:submission) do
-      create(:course_assessment_submission, *submission_traits, assessment: assessment,
-                                                                creator: user)
+      create(:submission, *submission_traits, assessment: assessment, creator: user)
     end
     let(:submission_traits) { nil }
 
@@ -48,7 +45,7 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
 
       scenario 'I cannot see the text box for a file upload question' do
         assessment = create(:assessment, :published_with_file_upload_question, course: course)
-        submission = create(:course_assessment_submission, assessment: assessment, creator: user)
+        submission = create(:submission, assessment: assessment, creator: user)
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 

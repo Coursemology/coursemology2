@@ -5,9 +5,15 @@ RSpec.describe Course::Assessment::Submission::AutoGradingJob do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     subject { Course::Assessment::Submission::AutoGradingJob }
-    let(:answer) { create(:course_assessment_answer_multiple_response, :submitted).answer }
-    let!(:submission) { answer.submission.tap { |submission| submission.answers.reload } }
-    let(:question) { answer.question.specific }
+    let(:course) { create(:course) }
+    let(:student_user) { create(:course_student, course: course).user }
+    let(:assessment) { create(:assessment, :published_with_mrq_question, course: course) }
+    let(:question) { assessment.questions.first.specific }
+    let(:submission) { create(:submission, assessment: assessment, creator: student_user) }
+    let(:answer) do
+      create(:course_assessment_answer_multiple_response, :submitted,
+             submission: submission, question: question.acting_as)
+    end
 
     it 'can be queued' do
       expect { subject.perform_later(submission) }.to \

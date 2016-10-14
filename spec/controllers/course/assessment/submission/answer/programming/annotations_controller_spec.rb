@@ -7,9 +7,7 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
     let(:user) { create(:user) }
     let(:course) { create(:course, creator: user) }
     let(:assessment) { create(:assessment, :with_programming_question, course: course) }
-    let(:submission) do
-      create(:course_assessment_submission, :submitted, assessment: assessment, creator: user)
-    end
+    let(:submission) { create(:submission, :submitted, assessment: assessment, creator: user) }
     let(:answer) { submission.answers.first }
     let(:file) { answer.actable.files.first }
     let(:immutable_annotation) do

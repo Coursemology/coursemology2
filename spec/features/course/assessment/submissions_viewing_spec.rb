@@ -5,7 +5,7 @@ RSpec.describe 'Course: Submissions Viewing' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:assessment) { create(:course_assessment_assessment, course: course) }
+    let(:assessment) { create(:assessment, course: course) }
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
@@ -16,11 +16,10 @@ RSpec.describe 'Course: Submissions Viewing' do
         students = create_list(:course_student, 3, course: course)
         attempting_submission, submitted_submission, published_submission =
           students.zip([:attempting, :submitted, :published]).map do |student, trait|
-            create(:course_assessment_submission, trait,
-                   assessment: assessment, creator: student.user)
+            create(:submission, trait, assessment: assessment, creator: student.user)
           end
-        staff_submission = create(:course_assessment_submission, :submitted,
-                                  assessment: assessment, creator: course_manager.user)
+        staff_submission =
+          create(:submission, :submitted, assessment: assessment, creator: course_manager.user)
 
         visit course_submissions_path(course)
 
@@ -48,9 +47,8 @@ RSpec.describe 'Course: Submissions Viewing' do
         students = create_list(:course_student, 4, course: course)
         attempting_submission, submitted_submission1, submitted_submission2, published_submission =
           students.zip([:attempting, :submitted, :submitted, :published]).map do |student, trait|
-            create(:course_assessment_submission, trait,
-                   assessment: assessment, course: course,
-                   creator: student.user, course_user: student)
+            create(:submission, trait, assessment: assessment, course: course,
+                                       creator: student.user, course_user: student)
           end
 
         # Staff without group can view all pending submissions
@@ -96,8 +94,7 @@ RSpec.describe 'Course: Submissions Viewing' do
         assessments = create_list(:course_assessment_assessment, 3, course: course)
         attempting_submission, submitted_submission, published_submission =
           assessments.zip([:attempting, :submitted, :published]).map do |assessment, trait|
-            create(:course_assessment_submission, trait,
-                   assessment: assessment, creator: user)
+            create(:submission, trait, assessment: assessment, creator: user)
           end
 
         visit course_submissions_path(course)

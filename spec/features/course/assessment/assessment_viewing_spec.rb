@@ -6,9 +6,7 @@ RSpec.describe 'Course: Assessments: Viewing' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:assessment) do
-      create(:course_assessment_assessment, :with_all_question_types, :published, course: course)
-    end
+    let(:assessment) { create(:assessment, :published_with_all_question_types, course: course) }
     before { login_as(user, scope: :user) }
 
     context 'As a Course Staff' do
@@ -54,7 +52,8 @@ RSpec.describe 'Course: Assessments: Viewing' do
       scenario 'I attempt the assessment from the show assessment page' do
         # Create a random submission which does not belong to the user.
         # The button should still be 'Attempt' with the random submission.
-        create(:course_assessment_submission, assessment: assessment)
+        student_user = create(:course_student, course: course).user
+        create(:submission, assessment: assessment, creator: student_user)
         visit course_assessment_path(course, assessment)
 
         expect(page).to have_link(

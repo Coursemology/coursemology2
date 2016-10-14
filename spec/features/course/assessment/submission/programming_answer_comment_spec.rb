@@ -8,9 +8,7 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
     let(:course) { create(:course) }
     let(:assessment) { create(:assessment, :published_with_programming_question, course: course) }
     let(:student) { create(:course_user, :approved, course: course).user }
-    let(:submission) do
-      create(:course_assessment_submission, assessment: assessment, creator: student)
-    end
+    let(:submission) { create(:submission, assessment: assessment, creator: student) }
     before { login_as(user, scope: :user) }
 
     context 'As a course student' do

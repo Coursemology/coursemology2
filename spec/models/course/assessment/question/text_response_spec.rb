@@ -20,9 +20,12 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
     end
 
     describe '#attempt' do
-      subject { create(:course_assessment_question_text_response) }
-      let(:assessment) { subject.assessment }
-      let(:submission) { create(:course_assessment_submission, assessment: assessment) }
+      let(:course) { create(:course) }
+      let(:student_user) { create(:course_student, course: course).user }
+      let(:assessment) { create(:assessment, course: course) }
+      let(:question) { create(:course_assessment_question_text_response, assessment: assessment) }
+      let(:submission) { create(:submission, assessment: assessment, creator: student_user) }
+      subject { question }
 
       it 'returns an Answer' do
         expect(subject.attempt(submission)).to be_a(Course::Assessment::Answer)

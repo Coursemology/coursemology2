@@ -80,12 +80,12 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
 
         let(:course) { create(:course) }
         let!(:students) { create_list(:course_student, 3, course: course) }
-        let(:actable) { create(:course_assessment_assessment, :with_mcq_question, course: course) }
+        let(:actable) { create(:assessment, :with_mcq_question, course: course) }
         subject { actable.lesson_plan_item }
 
         it 'creates todos for newly created objects' do
           expect do
-            create(:course_assessment_assessment, :published_with_mcq_question, course: course)
+            create(:assessment, :published_with_mcq_question, course: course)
           end.to change(Course::LessonPlan::Todo.all, :count).by(course.course_users.count)
         end
       end

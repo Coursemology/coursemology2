@@ -27,8 +27,7 @@ RSpec.describe Course::Assessment::SubmissionsController do
         let(:student) { create(:course_student, course: course).user }
         let(:assessment) { create(:assessment, :with_all_question_types, course: course, tab: tab) }
         let!(:submission) do
-          create(:course_assessment_submission, :published,
-                 creator: student, assessment: assessment)
+          create(:submission, :published, creator: student, assessment: assessment)
         end
         before { get :index, course_id: course, category: category }
 

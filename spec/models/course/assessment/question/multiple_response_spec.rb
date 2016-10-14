@@ -20,9 +20,14 @@ RSpec.describe Course::Assessment::Question::MultipleResponse do
     end
 
     describe '#attempt' do
-      subject { create(:course_assessment_question_multiple_response) }
-      let(:assessment) { subject.assessment }
-      let(:submission) { create(:course_assessment_submission, assessment: assessment) }
+      let(:course) { create(:course) }
+      let(:student_user) { create(:course_student, course: course).user }
+      let(:assessment) { create(:assessment, course: course) }
+      let(:question) do
+        create(:course_assessment_question_multiple_response, assessment: assessment)
+      end
+      let(:submission) { create(:submission, assessment: assessment, creator: student_user) }
+      subject { question }
 
       it 'returns an Answer' do
         expect(subject.attempt(submission)).to be_a(Course::Assessment::Answer)
@@ -35,9 +40,8 @@ RSpec.describe Course::Assessment::Question::MultipleResponse do
 
       context 'when last_attempt is given' do
         let(:last_attempt) do
-          create(:course_assessment_answer_multiple_response,
-                 :with_one_correct_option,
-                 question: subject.question, submission: submission)
+          build(:course_assessment_answer_multiple_response, :with_one_correct_option,
+                question: question.question)
         end
 
         it 'builds a new answer with old options' do
