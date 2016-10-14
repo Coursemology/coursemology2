@@ -19,8 +19,8 @@ module CourseUser::StaffConcern
     end)
   end
 
-  def graded_submissions # rubocop:disable Metrics/AbcSize
-    @graded_submissions ||=
+  def published_submissions # rubocop:disable Metrics/AbcSize
+    @published_submissions ||=
       Course::Assessment::Submission.
       joins { experience_points_record.course_user }.
       where { experience_points_record.course_user.course_id == my { course_id } }.
@@ -53,7 +53,7 @@ module CourseUser::StaffConcern
 
   def valid_submissions
     @valid_submissions ||=
-      graded_submissions.
+      published_submissions.
       select { |s| s.submitted_at && s.published_at && s.published_at > s.submitted_at }
   end
 

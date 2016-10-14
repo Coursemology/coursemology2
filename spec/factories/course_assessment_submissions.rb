@@ -33,6 +33,14 @@ FactoryGirl.define do
         end
 
         # Revert publisher and published at if given.
+        submission.mark!
+      end
+    end
+
+    trait :published do
+      graded
+      after(:build) do |submission, evaluator|
+        # Revert publisher and published at if given.
         submission.publish!
         submission.publisher = evaluator.publisher if evaluator.publisher
         submission.published_at = evaluator.published_at if evaluator.published_at

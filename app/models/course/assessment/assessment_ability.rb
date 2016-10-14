@@ -51,8 +51,8 @@ module Course::Assessment::AssessmentAbility
     end
   end
 
-  def submission_submitted_or_graded_hash
-    { workflow_state: ['submitted', 'graded'] }
+  def submissions_without_attempting_hash
+    { workflow_state: ['submitted', 'graded', 'published'] }
   end
 
   def allow_students_show_assessments
@@ -97,10 +97,10 @@ module Course::Assessment::AssessmentAbility
   def allow_staff_grade_submissions
     can [:read, :update, :reload_answer],
         Course::Assessment::Submission, assessment: assessment_course_staff_hash
-    can :grade, Course::Assessment::Submission, submission_submitted_or_graded_hash.merge(
+    can :grade, Course::Assessment::Submission, submissions_without_attempting_hash.merge(
       assessment: assessment_course_staff_hash
     )
-    can :grade, Course::Assessment::Answer, submission: submission_submitted_or_graded_hash.merge(
+    can :grade, Course::Assessment::Answer, submission: submissions_without_attempting_hash.merge(
       assessment: assessment_course_staff_hash
     )
   end

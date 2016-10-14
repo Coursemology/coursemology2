@@ -15,7 +15,7 @@ RSpec.describe Course::Assessment::SubmissionsHelper do
       # Create submissions of various statuses, but only 1 which is pending submission.
       create(:submission, :attempting, assessment: assessment, creator: students[0].user)
       create(:submission, :submitted, assessment: assessment, creator: students[1].user)
-      create(:submission, :graded, assessment: assessment, creator: students[2].user)
+      create(:submission, :published, assessment: assessment, creator: students[2].user)
     end
 
     describe '#pending_submissions_count' do

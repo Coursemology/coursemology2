@@ -1,3 +1,4 @@
+- display_grading_results = @submission.published? || can?(:grade, @submission)
 div.panel.panel-default
   div.panel-heading = t('.statistics')
   div.panel-body.statistics
@@ -8,30 +9,31 @@ div.panel.panel-default
           td = display_course_user(@submission.course_user)
         tr
           th = t('.status')
-          td = @submission.workflow_state
-        tr
-          th = @submission.class.human_attribute_name(:grade)
-          td
-            span#submission-statistics-total-grade>
-              = @submission.grade
-            ' /
-            span#submission-statistics-maximum-grade
-              = @submission.assessment.maximum_grade
-        tr
-          th = @submission.experience_points_record.class.human_attribute_name(:points_awarded)
-          - if can?(:grade, @submission)
-            / TODO: Factor in time-based experience points
+          td = Course::Assessment::Submission.human_attribute_name(@submission.workflow_state)
+        - if display_grading_results
+          tr
+            th = @submission.class.human_attribute_name(:grade)
             td
-              = f.input :points_awarded, label: false,
-                        input_html: { class: 'submission-points-awarded',
-                                      'data-base-points' => @submission.assessment.base_exp },
-                        wrapper_html: { class: 'form-inline points-awarded'}
-              span = ' / ' + @submission.assessment.base_exp.to_s
-              div.exp-multiplier.form-inline
-                => t('.multiplier')
-                input.form-control type='number' max='1' min ='0' value='1' step='0.1'
-          - else
-            td = @submission.points_awarded
+              span#submission-statistics-total-grade>
+                = @submission.grade
+              ' /
+              span#submission-statistics-maximum-grade
+                = @submission.assessment.maximum_grade
+          tr
+            th = @submission.experience_points_record.class.human_attribute_name(:points_awarded)
+            - if can?(:grade, @submission)
+              / TODO: Factor in time-based experience points
+              td
+                = f.input :points_awarded, label: false,
+                          input_html: { class: 'submission-points-awarded',
+                                        'data-base-points' => @submission.assessment.base_exp },
+                          wrapper_html: { class: 'form-inline points-awarded'}
+                span = ' / ' + @submission.assessment.base_exp.to_s
+                div.exp-multiplier.form-inline
+                  => t('.multiplier')
+                  input.form-control type='number' max='1' min ='0' value='1' step='0.1'
+            - else
+              td = @submission.points_awarded
         tr
           th = t('.due_at')
           td = format_datetime(@assessment.end_at) if @assessment.end_at
@@ -41,14 +43,15 @@ div.panel.panel-default
         tr
           th = @submission.class.human_attribute_name(:submitted_at)
           td = format_datetime(@submission.submitted_at)
-        tr
-          th = @submission.class.human_attribute_name(:grader)
-          td = display_course_user(@submission.publisher) if @submission.publisher
-        tr
-          th = @submission.class.human_attribute_name(:graded_at)
-          td = format_datetime(@submission.published_at) if @submission.published_at
+        - if display_grading_results
+          tr
+            th = @submission.class.human_attribute_name(:grader)
+            td = display_course_user(@submission.publisher) if @submission.publisher
+          tr
+            th = @submission.class.human_attribute_name(:graded_at)
+            td = format_datetime(@submission.published_at) if @submission.published_at
 
-    - if @assessment.questions.length > 1
+    - if @assessment.questions.length > 1 && display_grading_results
       h4 = t('.grade_summary')
       table.table.table-striped
         thead

@@ -103,8 +103,8 @@ RSpec.describe Course::Condition::Assessment, type: :model do
           end
         end
 
-        context 'when the submission is already graded' do
-          let(:submission) { create(:course_assessment_submission, :graded) }
+        context 'when the submission is already published' do
+          let(:submission) { create(:course_assessment_submission, :published) }
           it 'does not evaluate_conditional_for the affected course_user' do
             expect(Course::Condition::Assessment).
               to_not receive(:evaluate_conditional_for).with(submission.course_user)
@@ -175,9 +175,9 @@ RSpec.describe Course::Condition::Assessment, type: :model do
           end
         end
 
-        context 'when the submission is graded' do
+        context 'when the submission is published' do
           it 'returns true' do
-            create(:course_assessment_submission, workflow_state: :graded,
+            create(:course_assessment_submission, workflow_state: :published,
                                                   assessment: assessment,
                                                   creator: course_user.user)
             expect(subject.satisfied_by?(course_user)).to be_truthy
@@ -201,9 +201,9 @@ RSpec.describe Course::Condition::Assessment, type: :model do
           end
         end
 
-        context 'when there are graded submissions' do
+        context 'when there are published submissions' do
           let(:submission) do
-            create(:course_assessment_submission, workflow_state: :graded,
+            create(:course_assessment_submission, workflow_state: :published,
                                                   assessment: assessment,
                                                   creator: course_user.user)
           end
@@ -214,7 +214,7 @@ RSpec.describe Course::Condition::Assessment, type: :model do
             end
           end
 
-          context 'when all graded submissions are below the minimum grade percentage' do
+          context 'when all published submissions are below the minimum grade percentage' do
             it 'returns false' do
               answers = assessment.questions.attempt(submission)
               answers.each do |answer|

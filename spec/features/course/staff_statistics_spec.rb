@@ -24,7 +24,7 @@ RSpec.feature 'Course: Statistics: Staff' do
         submitted_at = 1.day.ago
         published_at = submitted_at + 1.day + 1.hour + 1.minute + 1.second
         assessment = create(:course_assessment_assessment, course: course)
-        submission = create(:course_assessment_submission, :graded,
+        submission = create(:course_assessment_submission, :published,
                             assessment: assessment, course: course, publisher: tutor1.user,
                             published_at: published_at)
         create(:course_assessment_answer_multiple_response, :graded,
@@ -36,7 +36,7 @@ RSpec.feature 'Course: Statistics: Staff' do
         submitted_at = 2.days.ago
         published_at = submitted_at + 2.days
         assessment = create(:course_assessment_assessment, course: course)
-        submission = create(:course_assessment_submission, :graded,
+        submission = create(:course_assessment_submission, :published,
                             assessment: assessment, course: course, publisher: tutor2.user,
                             published_at: published_at)
         create(:course_assessment_answer_multiple_response, :graded,

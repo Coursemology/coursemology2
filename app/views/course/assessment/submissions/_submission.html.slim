@@ -4,7 +4,7 @@
   td = link_to(format_inline_text(assessment.title),
                course_assessment_path(current_course, assessment))
   td = format_datetime(submission.submitted_at) if submission.submitted_at
-  td = submission.workflow_state.capitalize
+  td = Course::Assessment::Submission.human_attribute_name(submission.workflow_state)
   - if pending
     td
       - @service.group_managers_of(submission.course_user).each do |manager|
@@ -12,7 +12,7 @@
           = link_to_course_user(manager) do |course_user|
             = format_inline_text(course_user.name)
 
-  - if submission.graded?
+  - if submission.published?
     td = submission.grade.to_s + ' / ' + assessment.maximum_grade.to_s
     td = submission.points_awarded
   - else

@@ -7,6 +7,10 @@ en:
         submitted_at: :'activerecord.attributes.course/assessment/answer.submitted_at'
         grader: :'activerecord.attributes.course/assessment/answer.grader'
         graded_at: :'activerecord.attributes.course/assessment/answer.graded_at'
+        attempting: 'Attempting'
+        submitted: 'Submitted'
+        graded: 'Graded but not published'
+        published: 'Graded'
     errors:
       models:
         course/assessment/submission:

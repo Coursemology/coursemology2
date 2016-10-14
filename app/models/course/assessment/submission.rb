@@ -14,9 +14,14 @@ class Course::Assessment::Submission < ActiveRecord::Base
     end
     state :submitted do
       event :unsubmit, transitions_to: :attempting
-      event :publish, transitions_to: :graded
+      event :mark, transitions_to: :graded
+      event :publish, transitions_to: :published
     end
     state :graded do
+      event :unsubmit, transitions_to: :attempting
+      event :publish, transitions_to: :published
+    end
+    state :published do
       event :unsubmit, transitions_to: :attempting
     end
   end
@@ -108,7 +113,9 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   # @!method self.confirmed
   #   Returns submissions which have been submitted (which may or may not be graded).
-  scope :confirmed, -> { where(workflow_state: [:submitted, :graded]) }
+  scope :confirmed, -> { where.not(workflow_state: :attempting) }
+
+  scope :pending_for_grading, -> { where(workflow_state: [:submitted, :graded]) }
 
   # Filter submissions by category_id, assessment_id, group_id and/or user_id (creator)
   scope :filter, (lambda do |filter_params|
@@ -125,6 +132,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
   end)
 
   alias_method :finalise=, :finalise!
+  alias_method :mark=, :mark!
   alias_method :publish=, :publish!
   alias_method :unsubmit=, :unsubmit!
 
@@ -159,7 +167,14 @@ class Course::Assessment::Submission < ActiveRecord::Base
     answers.select(&:attempting?).each(&:finalise!)
   end
 
-  # Handles the grading of a submission.
+  # Handles the marking of a submission. This will grade all the answers.
+  def mark(_ = nil)
+    answers.each do |answer|
+      answer.publish! if answer.submitted?
+    end
+  end
+
+  # Handles the publishing of a submission.
   #
   # This grades all the answers as well.
   def publish(_ = nil)

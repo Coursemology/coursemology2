@@ -21,8 +21,8 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
                                                          course: course,
                                                          creator: students[1].user)
     end
-    let!(:graded_submission) do
-      create(:course_assessment_submission, :graded, assessment: assessment,
+    let!(:published_submission) do
+      create(:course_assessment_submission, :published, assessment: assessment,
                                                      course: course,
                                                      creator: students[2].user)
     end
@@ -49,9 +49,10 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(page).
           to have_text(I18n.t('course.assessment.submission.submissions.index.other_header'))
 
-        [submitted_submission, attempting_submission, graded_submission].each do |submission|
+        [submitted_submission, attempting_submission, published_submission].each do |submission|
           within all(content_tag_selector(submission)).last do
-            expect(page).to have_text(submission.workflow_state.capitalize)
+            expect(page).
+              to have_text(submission.class.human_attribute_name(submission.workflow_state))
             expect(page).to have_text(submission.points_awarded)
           end
         end

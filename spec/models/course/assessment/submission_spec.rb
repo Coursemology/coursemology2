@@ -174,12 +174,12 @@ RSpec.describe Course::Assessment::Submission do
     describe '.confirmed' do
       let(:submission1_traits) { :attempting }
       let(:submission2_traits) { :submitted }
-      let(:submission3_traits) { :graded }
+      let(:submission3_traits) { :published }
       let!(:submissions) { [submission1, submission2, submission3] }
 
-      it 'returns the submissions with submitted or graded workflow state' do
+      it 'returns the submissions with submitted or publidhrf workflow state' do
         states = assessment.submissions.confirmed.map(&:workflow_state)
-        expect(states).to contain_exactly('graded', 'submitted')
+        expect(states).to contain_exactly('published', 'submitted')
       end
     end
 
@@ -267,7 +267,7 @@ RSpec.describe Course::Assessment::Submission do
 
     describe '#graded_at' do
       let(:assessment_traits) { [:with_all_question_types] }
-      let(:submission1_traits) { :graded }
+      let(:submission1_traits) { :published }
       let(:submission) { submission1 }
 
       it 'takes the maximum graded_at' do
@@ -402,8 +402,8 @@ RSpec.describe Course::Assessment::Submission do
         end
       end
 
-      context 'when the submission is graded' do
-        let(:submission1_traits) { :graded }
+      context 'when the submission is published' do
+        let(:submission1_traits) { :published }
 
         it 'resets the experience points awarded' do
           expect(subject.points_awarded).to be_nil

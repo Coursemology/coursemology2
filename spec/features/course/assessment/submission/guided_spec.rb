@@ -156,7 +156,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
         wait_for_job
         visit current_path
-        expect(page).to have_selector('td', text: 'graded')
+        expect(page).to have_selector('td', text: 'published')
       end
 
       scenario 'I can reset my answer to a programming question', js: true do
@@ -200,7 +200,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         click_button I18n.t('course.assessment.submission.submissions.guided.publish')
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, submission))
-        expect(submission.reload.graded?).to be(true)
+        expect(submission.reload.published?).to be(true)
       end
 
       scenario 'I can skip steps' do
