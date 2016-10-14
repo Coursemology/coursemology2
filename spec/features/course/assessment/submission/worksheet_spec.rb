@@ -78,7 +78,7 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
         submission
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        click_button I18n.t('course.assessment.submission.submissions.worksheet.finalise')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.finalise')
         expect(current_path).to eq(
           edit_course_assessment_submission_path(course, assessment, submission)
         )
@@ -87,7 +87,7 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
         expect(page).
-          not_to have_button(I18n.t('course.assessment.submission.submissions.worksheet.finalise'))
+          not_to have_button(I18n.t('course.assessment.submission.submissions.buttons.finalise'))
       end
 
       scenario 'I can comment on answers', js: true do

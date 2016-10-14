@@ -152,7 +152,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
           answer.save!
         end
         visit current_path
-        click_button I18n.t('course.assessment.submission.submissions.guided.finalise')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.finalise')
 
         wait_for_job
         visit current_path
@@ -194,10 +194,10 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         expect(page).to have_button(I18n.t('common.save'))
-        click_link I18n.t('course.assessment.submission.submissions.guided.auto_grade')
+        click_link I18n.t('course.assessment.submission.submissions.buttons.auto_grade')
         wait_for_job
 
-        click_button I18n.t('course.assessment.submission.submissions.guided.publish')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.publish')
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.published?).to be(true)

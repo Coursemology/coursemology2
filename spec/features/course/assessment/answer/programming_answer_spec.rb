@@ -71,7 +71,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         expect(page).to have_selector('.code')
-        click_button I18n.t('course.assessment.submission.submissions.worksheet.finalise')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.finalise')
 
         within find(content_tag_selector(submission.answers.first)) do
           expect(page).not_to have_selector('.code')

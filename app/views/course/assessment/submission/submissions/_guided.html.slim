@@ -8,35 +8,20 @@ nav
   = f.error_notification
   = hidden_field_tag :step, guided_current_step
   = f.simple_fields_for :answers, guided_current_answer do |base_answer_form|
-    = render partial: base_answer_form.object.question, suffix: 'question'
-    = render partial: 'course/assessment/answer/answer', object: base_answer_form.object,
+    - answer = base_answer_form.object
+    = render partial: answer.question, suffix: 'question'
+    = render partial: 'course/assessment/answer/answer', object: answer,
              locals: { base_answer_form: base_answer_form }
 
     - unless @submission.attempting?
       = render 'statistics', f: f
 
-    div.submission-buttons
-      - if base_answer_form.object.attempting?
-        = f.button :submit, t('common.save')
-
-      - if @submission.attempting? && can?(:update, @submission)
-        = f.button :submit, t('.finalise'), name: 'submission[finalise]', class: ['btn-danger', 'finalise'],
-                                            data: { confirm: t('.confirm_finalise') },
-                                            style: guided_next_unanswered_question.nil? ? '' : 'display: none'
-
-      - unless @submission.attempting?
-        - if can?(:grade, @submission)
-          = f.button :submit, t('common.save')
-
-          - if @submission.submitted?
-            = link_to t('.auto_grade'),
-                      auto_grade_course_assessment_submission_path(current_course,
-                                                                   @submission.assessment,
-                                                                   @submission),
-                      method: :post,
-                      class: ['btn', 'btn-info']
-            = f.button :submit, t('.publish'), name: 'submission[publish]', class: ['btn-warning']
-
-
-          = f.button :submit, t('.unsubmit'), name: 'submission[unsubmit]', class: ['btn-danger'],
-            data: { confirm: t('.confirm_unsubmit') }
+    - can_grade = can?(:grade, @submission)
+    = render 'buttons', {\
+        f: f,
+        save: answer.attempting? || (!@submission.attempting? && can_grade),
+        finalise: guided_next_unanswered_question.nil?,
+        auto_grade: @submission.submitted? && can_grade,
+        publish: @submission.submitted? && can_grade,
+        unsubmit: !@submission.attempting? && can_grade\
+      }

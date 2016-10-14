@@ -23,7 +23,7 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
       scenario 'I cannot update my submission after finalising' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        click_button I18n.t('course.assessment.submission.submissions.worksheet.finalise')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.finalise')
 
         within find(content_tag_selector(submission.answers.first)) do
           # We cannot use :fillable_field because the textarea has no labels.
@@ -65,7 +65,7 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
 
       scenario 'I can view the grading scheme' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
-        click_link I18n.t('course.assessment.submission.submissions.worksheet.auto_grade')
+        click_link I18n.t('course.assessment.submission.submissions.buttons.auto_grade')
         wait_for_job
 
         expect(page).

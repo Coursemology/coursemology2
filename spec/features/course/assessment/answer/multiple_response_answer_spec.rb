@@ -59,7 +59,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
       scenario 'I cannot update my submission after finalising' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        click_button I18n.t('course.assessment.submission.submissions.worksheet.finalise')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.finalise')
 
         within find(content_tag_selector(submission.answers.first)) do
           expect(all(:field, disabled: true)).not_to be_empty
@@ -82,7 +82,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
 
       scenario 'I can view the auto grading results' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
-        click_link I18n.t('course.assessment.submission.submissions.worksheet.auto_grade')
+        click_link I18n.t('course.assessment.submission.submissions.buttons.auto_grade')
         wait_for_job
 
         expect(page).
