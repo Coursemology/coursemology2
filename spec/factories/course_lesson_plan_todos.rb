@@ -3,7 +3,7 @@ FactoryGirl.define do
   factory :course_lesson_plan_todo, class: Course::LessonPlan::Todo.name, aliases: [:todo] do
     transient do
       course { create(:course) }
-      draft false
+      draft true
     end
     item { create(:course_lesson_plan_item, course: course, base_exp: 1000, draft: draft) }
     add_attribute(:ignore) { false }
@@ -19,6 +19,20 @@ FactoryGirl.define do
 
     trait :completed do
       workflow_state :completed
+    end
+
+    trait :not_opened do
+      after(:build) do |todo|
+        todo.item.start_at = 2.days.from_now
+        todo.item.save!
+      end
+    end
+
+    trait :opened do
+      after(:build) do |todo|
+        todo.item.start_at = 2.days.ago
+        todo.item.save!
+      end
     end
 
     after(:build) do |_todo, evaluator|

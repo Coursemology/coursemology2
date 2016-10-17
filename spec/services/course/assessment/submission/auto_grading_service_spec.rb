@@ -13,7 +13,6 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
       create(:course_assessment_answer_multiple_response, :submitted,
              question: question.acting_as, submission: submission).answer
     end
-    # let(:question) { answer.question.specific }
 
     describe '#grade' do
       it 'grades all answers' do

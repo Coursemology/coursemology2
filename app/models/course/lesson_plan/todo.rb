@@ -16,10 +16,25 @@ class Course::LessonPlan::Todo < ActiveRecord::Base
     end
   end
 
+  after_initialize :set_default_values, if: :new_record?
+
   belongs_to :user, inverse_of: :todos
   belongs_to :item, class_name: Course::LessonPlan::Item.name, inverse_of: :todos
 
-  after_initialize :set_default_values, if: :new_record?
+  default_scope { joins { item }.order { item.start_at.asc } }
+
+  # Started is not used as it is defined in Extensions::TimeBoundedRecord::ActiveRecord::Base
+  scope :opened, -> { joins { item }.where { item.start_at <= Time.zone.now } }
+  scope :published, -> { joins { item }.where { item.draft == false } }
+  scope :not_ignored, -> { where(ignore: false) }
+  scope :not_completed, -> { where.not(workflow_state: :completed) }
+  scope :from_course, (lambda do |course|
+    joins { item }.where { item.course_id == course.id }
+  end)
+  scope :pending_for, (lambda do |course_user|
+    opened.published.not_ignored.from_course(course_user.course).not_completed.
+      where { user_id == course_user.user_id }
+  end)
 
   class << self
     # Creates todos to the given course_users for the given lesson_plan_item(s).
