@@ -1,0 +1,30 @@
+// This partial renders the edit buttons of the submission.
+// Currently it supports save/finalise/auto_grade/publish/mark/unsubmit. A button will only be
+// displayed if the option local variable is set to true.
+// e.g. `render 'buttons', save: true` will make the save button visible.
+
+- submission = f.object
+div.submission-buttons
+  - if local_assigns[:save]
+    = f.button :submit, t('common.save')
+
+  // The button is displayed as hidden (instead of not displaying at all) because there are frontend
+  // code will show/hide the button in some cases.
+  = f.button :submit, t('.finalise'), name: 'submission[finalise]', class: ['btn-danger', 'finalise'],
+                                      data: { confirm: t('.confirm_finalise') },
+                                      style: local_assigns[:finalise] ? '' : 'display: none'
+
+  - if local_assigns[:auto_grade]
+    = link_to t('.auto_grade'),
+      auto_grade_course_assessment_submission_path(current_course, submission.assessment, submission),
+      method: :post, class: ['btn', 'btn-info']
+
+  - if local_assigns[:publish]
+    = f.button :submit, t('.publish'), name: 'submission[publish]', class: ['btn-warning']
+
+  - if local_assigns[:mark]
+    = f.button :submit, t('.mark'), name: 'submission[mark]', class: ['btn-warning']
+
+  - if local_assigns[:unsubmit]
+    = f.button :submit, t('.unsubmit'), name: 'submission[unsubmit]', class: ['btn-danger'],
+      data: { confirm: t('.confirm_unsubmit') }

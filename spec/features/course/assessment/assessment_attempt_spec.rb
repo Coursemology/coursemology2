@@ -168,7 +168,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         # Auto grade where possible. There's one MRQ so it should be gradable.
-        click_link I18n.t('course.assessment.submission.submissions.worksheet.auto_grade')
+        click_link I18n.t('course.assessment.submission.submissions.buttons.auto_grade')
         wait_for_job
 
         expect(submission.answers.map(&:reload).all?(&:graded?)).to be(true)
@@ -197,7 +197,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         new_exp = (assessment.base_exp * multiplier).to_i
         expect(find_field('submission_points_awarded').value).to eq(new_exp.to_s)
 
-        click_button I18n.t('course.assessment.submission.submissions.worksheet.publish')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.publish')
         expect(current_path).to eq(
           edit_course_assessment_submission_path(course, assessment, submission)
         )
@@ -214,7 +214,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        click_button I18n.t('course.assessment.submission.submissions.worksheet.unsubmit')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.unsubmit')
         expect(submission.reload.attempting?).to be_truthy
         expect(submission.points_awarded).to be_nil
         expect(submission.latest_answers.all?(&:attempting?)).to be_truthy
@@ -226,7 +226,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        click_button I18n.t('course.assessment.submission.submissions.worksheet.unsubmit')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.unsubmit')
         expect(submission.reload.attempting?).to be_truthy
         expect(submission.points_awarded).to be_nil
         expect(submission.latest_answers.all?(&:attempting?)).to be_truthy

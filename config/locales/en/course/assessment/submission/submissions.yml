@@ -3,20 +3,6 @@ en:
     assessment:
       submission:
         submissions:
-          finalise: 'Finalise Submission'
-          publish: 'Publish Grade'
-          auto_grade: 'Auto Grade Submission'
-          unsubmit: 'Unsubmit Submission'
-          confirm_finalise: |+
-            THIS ACTION IS IRREVERSIBLE
-            
-            Are you sure you want to submit? You will no longer be able to amend your submission!
-          confirm_unsubmit: |+
-            This will reset the submission time and permit the student to change his submission.
-
-            NOTE THAT YOU CANNOT UNDO THIS!!
-
-            Are you sure you want to proceed?
           index:
             submissions: 'Submissions'
             my_student_header: 'My Student Submissions'
@@ -26,20 +12,22 @@ en:
             failure: 'Could not create submission: %{error}'
           edit:
             attempt: :'course.assessment.assessments.assessment.attempt'
-          worksheet:
-            finalise: :'course.assessment.submission.submissions.finalise'
-            publish: :'course.assessment.submission.submissions.publish'
-            auto_grade: :'course.assessment.submission.submissions.auto_grade'
-            unsubmit: :'course.assessment.submission.submissions.unsubmit'
-            confirm_finalise: :'course.assessment.submission.submissions.confirm_finalise'
-            confirm_unsubmit: :'course.assessment.submission.submissions.confirm_unsubmit'
-          guided:
-            finalise: :'course.assessment.submission.submissions.finalise'
-            publish: :'course.assessment.submission.submissions.publish'
-            auto_grade: :'course.assessment.submission.submissions.auto_grade'
-            unsubmit: :'course.assessment.submission.submissions.unsubmit'
-            confirm_finalise: :'course.assessment.submission.submissions.confirm_finalise'
-            confirm_unsubmit: :'course.assessment.submission.submissions.confirm_unsubmit'
+          buttons:
+            finalise: 'Finalise Submission'
+            publish: 'Publish Grade'
+            mark: 'Submit for publishing'
+            auto_grade: 'Auto Grade Submission'
+            unsubmit: 'Unsubmit Submission'
+            confirm_finalise: |+
+              THIS ACTION IS IRREVERSIBLE
+
+              Are you sure you want to submit? You will no longer be able to amend your submission!
+            confirm_unsubmit: |+
+              This will reset the submission time and permit the student to change his submission.
+
+              NOTE THAT YOU CANNOT UNDO THIS!!
+
+              Are you sure you want to proceed?
           statistics:
             student: :'course.users.role.student'
             status: 'Status'

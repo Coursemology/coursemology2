@@ -1,30 +1,17 @@
 = simple_form_for [current_course, @assessment, @submission], html: { multipart: true } do |f|
   = f.error_notification
 
-  / TODO: Implement flag to display all answers, or only latest answers.
-  - answers_by_question = f.object.latest_answers.group_by(&:question)
-  - f.object.assessment.questions.each do |question|
-    = render partial: question, suffix: 'question'
-    - answer = answers_by_question[question].last
-    = render partial: 'course/assessment/answer/answer', object: answer
+  = render 'worksheet_answers', f: f
 
   - unless @submission.attempting?
     = render 'statistics', f: f
 
-  div.submission-buttons
-    - if @submission.attempting? || can?(:grade, @submission)
-      = f.button :submit, t('common.save')
-
-    - if @submission.attempting? && can?(:update, @submission)
-      = f.button :submit, t('.finalise'), name: 'submission[finalise]', class: ['btn-danger'],
-        data: { confirm: t('.confirm_finalise') }
-
-    - if @submission.submitted? && can?(:grade, @submission)
-      = link_to t('.auto_grade'),
-        auto_grade_course_assessment_submission_path(current_course, @submission.assessment,
-          @submission), method: :post, class: ['btn', 'btn-info']
-      = f.button :submit, t('.publish'), name: 'submission[publish]', class: ['btn-warning']
-
-    - if (@submission.submitted? || @submission.graded? || @submission.published?) && can?(:grade, @submission)
-      = f.button :submit, t('.unsubmit'), name: 'submission[unsubmit]', class: ['btn-danger'],
-        data: { confirm: t('.confirm_unsubmit') }
+  - can_grade = can?(:grade, @submission)
+  = render 'buttons', {\
+      f: f,
+      save: @submission.attempting? || can_grade,
+      finalise: @submission.attempting? && can?(:update, @submission),
+      auto_grade: @submission.submitted? && can_grade,
+      publish: @submission.submitted? && can_grade,
+      unsubmit: !@submission.attempting? && can_grade\
+    }

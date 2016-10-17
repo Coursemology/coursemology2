@@ -38,7 +38,7 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         within find(content_tag_selector(submission.answers.first)) do
           find('textarea.code').set code
         end
-        click_button I18n.t('course.assessment.submission.submissions.worksheet.finalise')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.finalise')
         wait_for_job
 
         annotation = 'test annotation text'
