@@ -51,15 +51,14 @@ RSpec.describe 'Course: Assessments: Viewing' do
         expect(page).to have_content_tag_for(condition_with_achievement_conditional)
       end
 
-      scenario 'I attempt the assessment from the show assessment page' do
-        # Create a random submission which does not belong to the user.
-        # The button should still be 'Attempt' with the random submission.
-        create(:course_assessment_submission, assessment: assessment)
+      scenario 'I resume the assessment from the show assessment page' do
         visit course_assessment_path(course, assessment)
+        submission = Course::Assessment::Submission.find_by(assessment: assessment, creator: user)
+        submission_path = edit_course_assessment_submission_path(course, assessment, submission)
 
         expect(page).to have_link(
-          I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
-          href: course_assessment_submissions_path(course, assessment)
+          I18n.t('course.assessment.assessments.assessment_management_buttons.resume'),
+          href: submission_path
         )
       end
     end
