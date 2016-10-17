@@ -9,7 +9,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
     let(:assessment) { create(:assessment, :with_all_question_types, course: course) }
     before { login_as(user, scope: :user) }
 
-    let(:students) { create_list(:course_student, 3, course: course) }
+    let(:students) { create_list(:course_student, 4, course: course) }
     let(:phantom_student) { create(:course_student, :phantom, course: course) }
     let!(:submitted_submission) do
       create(:course_assessment_submission, :submitted, assessment: assessment,
@@ -26,9 +26,13 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
                                                      course: course,
                                                      creator: students[2].user)
     end
+    let!(:graded_submission) do
+      create(:submission, :graded, assessment: assessment, course: course,
+                                   creator: students[3].user)
+    end
 
     context 'As a Course Staff' do
-      let(:course_staff) { create(:course_manager, course: course) }
+      let(:course_staff) { create(:course_teaching_assistant, course: course) }
       let(:user) { course_staff.user }
       let(:group_student) do
         # Create a group and add staff and student to group
@@ -49,7 +53,8 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(page).
           to have_text(I18n.t('course.assessment.submission.submissions.index.other_header'))
 
-        [submitted_submission, attempting_submission, published_submission].each do |submission|
+        [submitted_submission, attempting_submission, published_submission, graded_submission].
+          each do |submission|
           within all(content_tag_selector(submission)).last do
             expect(page).
               to have_text(submission.class.human_attribute_name(submission.workflow_state))
@@ -59,6 +64,26 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
 
         # Phantom student did not attempt submissions
         expect(page).to have_tag('tr.no-submission', count: 1)
+      end
+    end
+
+    context 'As a Course Manager' do
+      let(:assessment) { create(:assessment, :exam, :with_all_question_types, course: course) }
+      let(:user) { create(:course_manager, course: course).user }
+
+      scenario 'I can publish all graded exams' do
+        visit course_assessment_submissions_path(course, assessment)
+
+        click_link I18n.t('course.assessment.submission.submissions.index.publish')
+        expect(graded_submission.reload).to be_published
+        expect(page).
+          to have_selector('div',
+                           I18n.t('course.assessment.submission.submissions.publish_all.success'))
+
+        click_link I18n.t('course.assessment.submission.submissions.index.publish')
+        expect(page).
+          to have_selector('div',
+                           I18n.t('course.assessment.submission.submissions.publish_all.notice'))
       end
     end
   end

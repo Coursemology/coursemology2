@@ -170,6 +170,7 @@ Rails.application.routes.draw do
             resources :submissions, only: [:index, :create, :edit, :update] do
               post :auto_grade, on: :member
               post :reload_answer, on: :member
+              patch :publish_all, on: :collection
               scope module: :answer do
                 resources :answers, only: [] do
                   resources :comments, only: [:create]

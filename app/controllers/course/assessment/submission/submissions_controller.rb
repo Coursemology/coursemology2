@@ -56,6 +56,19 @@ class Course::Assessment::Submission::SubmissionsController < \
     end
   end
 
+  # Publish all the graded submissions.
+  def publish_all
+    graded_submissions = @assessment.submissions.with_graded_state
+    if !graded_submissions.empty?
+      graded_submissions.update_all(workflow_state: 'published')
+      redirect_to course_assessment_submissions_path(current_course, @assessment),
+                  success: t('.success')
+    else
+      redirect_to course_assessment_submissions_path(current_course, @assessment),
+                  notice: t('.notice')
+    end
+  end
+
   private
 
   def create_params

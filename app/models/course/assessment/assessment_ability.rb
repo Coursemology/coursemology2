@@ -25,6 +25,7 @@ module Course::Assessment::AssessmentAbility
     allow_staff_grade_submissions
     allow_staff_manage_annotations
     allow_staff_read_answers
+    allow_manager_publish_submissions
   end
 
   def define_auto_grader_permissions
@@ -92,6 +93,11 @@ module Course::Assessment::AssessmentAbility
   def allow_managers_manage_tab_and_categories
     can :manage, Course::Assessment::Tab, category: course_managers_hash
     can :manage, Course::Assessment::Category, course_managers_hash
+  end
+
+  def allow_manager_publish_submissions
+    can :publish_all, Course::Assessment::Submission,
+        assessment: { tab: { category: course_managers_hash } }
   end
 
   def allow_staff_grade_submissions
