@@ -6,12 +6,9 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:assessment) do
-      create(:course_assessment_assessment, :published_with_programming_question, course: course)
-    end
+    let(:assessment) { create(:assessment, :published_with_programming_question, course: course) }
     let(:submission) do
-      create(:course_assessment_submission, *submission_traits, assessment: assessment,
-                                                                creator: user)
+      create(:submission, *submission_traits, assessment: assessment, creator: user)
     end
     let(:submission_traits) { nil }
 

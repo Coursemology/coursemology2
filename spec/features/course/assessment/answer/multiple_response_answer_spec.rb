@@ -6,14 +6,11 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:assessment) do
-      create(:course_assessment_assessment, :published_with_mrq_question, course: course)
-    end
+    let(:assessment) { create(:assessment, :published_with_mrq_question, course: course) }
     before { login_as(user, scope: :user) }
 
     let(:submission) do
-      create(:course_assessment_submission, *submission_traits, assessment: assessment,
-                                                                creator: user)
+      create(:submission, *submission_traits, assessment: assessment, creator: user)
     end
     let(:submission_traits) { nil }
     let(:options) { assessment.questions.first.specific.options }
@@ -23,9 +20,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
       let(:user) { create(:course_user, :approved, course: course).user }
 
       context 'when the question is a multiple choice question' do
-        let(:assessment) do
-          create(:course_assessment_assessment, :published_with_mcq_question, course: course)
-        end
+        let(:assessment) { create(:assessment, :published_with_mcq_question, course: course) }
 
         scenario 'I can save my submission' do
           visit edit_course_assessment_submission_path(course, assessment, submission)

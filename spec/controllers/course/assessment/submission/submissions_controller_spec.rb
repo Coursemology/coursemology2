@@ -9,7 +9,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
     let!(:course) { create(:course, creator: user) }
     let(:assessment) { create(:assessment, :published, :with_all_question_types, course: course) }
     let(:immutable_submission) do
-      create(:course_assessment_submission, assessment: assessment, creator: user).tap do |stub|
+      create(:submission, assessment: assessment, creator: user).tap do |stub|
         allow(stub).to receive(:save).and_return(false)
         allow(stub).to receive(:update_attributes).and_return(false)
         allow(stub).to receive(:destroy).and_return(false)
@@ -79,9 +79,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
     end
 
     describe '#reload_answer' do
-      let(:submission) do
-        create(:course_assessment_submission, assessment: assessment, creator: user)
-      end
+      let(:submission) { create(:submission, assessment: assessment, creator: user) }
 
       context 'when answer_id does not exist' do
         subject do

@@ -3,7 +3,7 @@ module Course::LessonPlan::ItemTodoConcern
   extend ActiveSupport::Concern
 
   included do
-    after_save :create_or_delete_todos, if: :has_todo?
+    after_create :create_todos, if: :has_todo?
   end
 
   def has_todo?
@@ -12,15 +12,9 @@ module Course::LessonPlan::ItemTodoConcern
 
   protected
 
-  # Callback to create or delete todos when lesson_plan_item's draft status is changed.
-  #    Todos are created for all course_users in the course.
-  # Uses ActiveModel::Dirty to check attribute changes.
-  def create_or_delete_todos
-    return unless draft_changed?
-    if draft_changed? from: true, to: false
-      Course::LessonPlan::Todo.create_for(self, course.course_users)
-    elsif draft_changed? from: false, to: true
-      Course::LessonPlan::Todo.delete_for(self)
-    end
+  # Create todos for the given lesson_plan_item for all course_users in the course.
+  def create_todos
+    course_users = CourseUser.where(course_id: course_id)
+    Course::LessonPlan::Todo.create_for(self, course_users)
   end
 end

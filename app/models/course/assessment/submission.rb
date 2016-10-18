@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission < ActiveRecord::Base
   include Workflow
+  # Workflow event transition logic must exist above Todo concern to allow for todo callbacks.
+  include Course::Assessment::Submission::WorkflowEventConcern
+  # TODO: Remove when entire todo feature is ready
+  # include Course::Assessment::Submission::TodoConcern
 
   acts_as_experience_points_record
 
@@ -156,42 +160,6 @@ class Course::Assessment::Submission < ActiveRecord::Base
   # The latest answer is last answer of the question, ordered by created_at.
   def latest_answers
     answers.group_by(&:question_id).map { |pair| pair[1].last }
-  end
-
-  protected
-
-  # Handles the finalisation of a submission.
-  #
-  # This finalises all the answers as well.
-  def finalise(_ = nil)
-    answers.select(&:attempting?).each(&:finalise!)
-  end
-
-  # Handles the marking of a submission. This will grade all the answers.
-  def mark(_ = nil)
-    answers.each do |answer|
-      answer.publish! if answer.submitted?
-    end
-  end
-
-  # Handles the publishing of a submission.
-  #
-  # This grades all the answers as well.
-  def publish(_ = nil)
-    answers.each do |answer|
-      answer.publish! if answer.submitted?
-    end
-    self.publisher = User.stamper || User.system
-    self.published_at = Time.zone.now
-  end
-
-  # Handles the unsubmission of a submitted submission.
-  def unsubmit(_ = nil)
-    # Skip the state validation in answers.
-    @unsubmitting = true
-
-    unsubmit_latest_answers
-    self.points_awarded = nil
   end
 
   private

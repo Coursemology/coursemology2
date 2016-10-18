@@ -4,9 +4,14 @@ require 'rails_helper'
 RSpec.describe Course::Assessment::Answer::AutoGradingService do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
+    let(:course) { create(:course) }
+    let(:student_user) { create(:course_student, course: course).user }
+    let(:assessment) { create(:assessment, :published_with_mrq_question, course: course) }
+    let(:question) { assessment.questions.first }
     let(:answer) do
+      submission = create(:submission, assessment: assessment, creator: student_user)
       create(:course_assessment_answer_multiple_response, :submitted,
-             submission_traits: [{ auto_grade: false }]).answer
+             question: question, submission: submission).answer
     end
     let!(:auto_grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
 

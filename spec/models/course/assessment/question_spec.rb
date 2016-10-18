@@ -117,12 +117,14 @@ RSpec.describe Course::Assessment::Question do
     end
 
     describe '#not_correctly_answered' do
+      let(:course) { assessment.course }
+      let(:student_user) { create(:course_student, course: course).user }
       let(:assessment) do
         assessment = build(:assessment)
         create_list(:course_assessment_question_multiple_response, 3, assessment: assessment)
         assessment
       end
-      let(:submission) { create(:course_assessment_submission, assessment: assessment) }
+      let(:submission) { create(:submission, assessment: assessment, creator: student_user) }
 
       context 'when there is no answer' do
         it 'returns not correctly answered questions' do
@@ -145,7 +147,7 @@ RSpec.describe Course::Assessment::Question do
     end
 
     describe '.default_scope' do
-      let(:assessment) { create(:course_assessment_assessment) }
+      let(:assessment) { create(:assessment) }
       let!(:questions) { create_list(:course_assessment_question, 2, assessment: assessment) }
       it 'orders by ascending weight' do
         weights = assessment.questions.pluck(:weight)

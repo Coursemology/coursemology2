@@ -9,30 +9,26 @@ RSpec.describe Course::Assessment do
     let(:course_user) { create(:course_student, course: course) }
     let(:coursemate) { create(:course_student, course: course) }
     let(:draft_assessment) do
-      create(:course_assessment_assessment, :with_all_question_types, course: course, draft: true)
+      create(:assessment, :with_all_question_types, course: course, draft: true)
     end
     let(:published_assessment) do
-      create(:course_assessment_assessment, :with_all_question_types, :published, course: course)
+      create(:assessment, :published_with_all_question_types, course: course)
     end
     let(:published_assessment_with_attemping_submission) do
-      create(:course_assessment_assessment, :with_all_question_types, :published, course: course)
+      create(:assessment, :published_with_all_question_types, course: course)
     end
     let(:attempting_submission) do
-      create(:course_assessment_submission, :attempting,
-             assessment: published_assessment_with_attemping_submission,
-             creator: course_user.user)
+      create(:submission, :attempting,
+             assessment: published_assessment_with_attemping_submission, creator: course_user.user)
     end
     let(:submitted_submission) do
-      create(:course_assessment_submission, :submitted, assessment: published_assessment,
-                                                        creator: course_user.user)
+      create(:submission, :submitted, assessment: published_assessment, creator: course_user.user)
     end
     let(:coursemate_attempting_submission) do
-      create(:course_assessment_submission, :attempting, assessment: published_assessment,
-                                                         creator: coursemate.user)
+      create(:submission, :attempting, assessment: published_assessment, creator: coursemate.user)
     end
     let(:coursemate_submitted_submission) do
-      create(:course_assessment_submission, :submitted, assessment: published_assessment,
-                                                        creator: coursemate.user)
+      create(:submission, :submitted, assessment: published_assessment, creator: coursemate.user)
     end
 
     context 'when the user is a Course Student' do

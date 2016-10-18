@@ -12,19 +12,16 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
     let(:students) { create_list(:course_student, 4, course: course) }
     let(:phantom_student) { create(:course_student, :phantom, course: course) }
     let!(:submitted_submission) do
-      create(:course_assessment_submission, :submitted, assessment: assessment,
-                                                        course: course,
-                                                        creator: students[0].user)
+      create(:submission, :submitted,
+             assessment: assessment, course: course, creator: students[0].user)
     end
     let!(:attempting_submission) do
-      create(:course_assessment_submission, :attempting, assessment: assessment,
-                                                         course: course,
-                                                         creator: students[1].user)
+      create(:submission, :attempting,
+             assessment: assessment, course: course, creator: students[1].user)
     end
     let!(:published_submission) do
-      create(:course_assessment_submission, :published, assessment: assessment,
-                                                     course: course,
-                                                     creator: students[2].user)
+      create(:submission, :published,
+             assessment: assessment, course: course, creator: students[2].user)
     end
     let!(:graded_submission) do
       create(:submission, :graded, assessment: assessment, course: course,

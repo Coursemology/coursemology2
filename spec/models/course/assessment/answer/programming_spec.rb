@@ -13,8 +13,18 @@ RSpec.describe Course::Assessment::Answer::Programming do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     describe '#reset_answer' do
-      let(:question) { create(:course_assessment_question_programming, template_file_count: 1) }
-      let(:answer) { create(:course_assessment_answer_programming, question: question.question) }
+      let(:course) { create(:course) }
+      let(:student_user) { create(:course_student, course: course).user }
+      let(:assessment) { create(:assessment, course: course) }
+      let(:question) do
+        create(:course_assessment_question_programming,
+               assessment: assessment, template_file_count: 1)
+      end
+      let(:submission) { create(:submission, assessment: assessment, creator: student_user) }
+      let(:answer) do
+        create(:course_assessment_answer_programming,
+               submission: submission, question: question.question)
+      end
       subject { answer.reset_answer }
 
       it 'replaces the answer with the original template files from the question' do

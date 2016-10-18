@@ -8,9 +8,10 @@ class Course::LessonPlan::Todo < ActiveRecord::Base
     end
     state :in_progress do
       event :complete, transitions_to: :completed
-      event :revert, transitions_to: :not_started
+      event :restart, transitions_to: :not_started
     end
     state :completed do
+      event :uncomplete, transitions_to: :in_progress
       event :restart, transitions_to: :not_started
     end
   end

@@ -15,6 +15,7 @@ RSpec.describe Course::Assessment do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course) { create(:course) }
+    let(:student_user) { create(:course_student, course: course).user }
     let(:assessment) { create(:assessment, *assessment_traits, course: course) }
     let(:assessment_traits) { [] }
 
@@ -125,12 +126,12 @@ RSpec.describe Course::Assessment do
     describe '.questions' do
       describe '#attempt' do
         let(:assessment) do
-          assessment = build(:assessment)
+          assessment = build(:assessment, course: course)
           create_list(:course_assessment_question_multiple_response, 3, assessment: assessment)
           create_list(:course_assessment_question_text_response, 3, assessment: assessment)
           assessment
         end
-        let(:submission) { create(:course_assessment_submission, assessment: assessment) }
+        let(:submission) { create(:submission, assessment: assessment, creator: student_user) }
         let(:answers) { assessment.questions.attempt(submission) }
 
         context 'when some questions are being attempted' do
@@ -173,8 +174,8 @@ RSpec.describe Course::Assessment do
       end
 
       describe '#step' do
-        let(:assessment_traits) { [:with_all_question_types] }
-        let(:submission) { create(:course_assessment_submission, assessment: assessment) }
+        let(:assessment_traits) { [:published_with_all_question_types] }
+        let(:submission) { create(:submission, assessment: assessment, creator: student_user) }
 
         context 'when no question is answered' do
           it 'returns the first question' do
@@ -218,7 +219,7 @@ RSpec.describe Course::Assessment do
 
       describe '#next_unanswered' do
         let(:assessment_traits) { [:with_all_question_types] }
-        let(:submission) { create(:course_assessment_submission, assessment: assessment) }
+        let(:submission) { create(:submission, assessment: assessment, creator: student_user) }
 
         subject { assessment.questions.next_unanswered(submission) }
         context 'when there is no answers' do
@@ -279,39 +280,32 @@ RSpec.describe Course::Assessment do
     end
 
     describe '.with_submissions_by' do
-      let(:user1) { create(:user) }
-      let(:submission1) do
-        create(:course_assessment_submission, assessment: assessment, creator: user1)
-      end
-      let(:user2) { create(:user) }
+      let(:submission1) { create(:submission, assessment: assessment, creator: student_user) }
+      let(:student_user2) { create(:course_student, course: course).user }
       let(:assessment2) { create(:assessment, *assessment_traits, course: course) }
-      let(:submission2) do
-        create(:course_assessment_submission, assessment: assessment, creator: user2)
-      end
-      let(:submission3) do
-        create(:course_assessment_submission, assessment: assessment2, creator: user2)
-      end
+      let(:submission2) { create(:submission, assessment: assessment, creator: student_user2) }
+      let(:submission3) { create(:submission, assessment: assessment2, creator: student_user2) }
 
       it 'returns all assessments' do
         assessment
-        expect(course.assessments.with_submissions_by(user1)).to contain_exactly(assessment)
+        expect(course.assessments.with_submissions_by(student_user)).to contain_exactly(assessment)
       end
 
       it "preloads the specified user's submissions" do
         submission1
         submission2
 
-        assessments = course.assessments.with_submissions_by(user1)
+        assessments = course.assessments.with_submissions_by(student_user)
         expect(assessments.all? { |assessment| assessment.submissions.loaded? }).to be(true)
         submissions = assessments.flat_map(&:submissions)
-        expect(submissions.all? { |submission| submission.course_user.user == user1 }).to be(true)
+        expect(submissions.all? { |submission| submission.creator == student_user }).to be(true)
       end
 
       it 'returns submissions in reverse chronological order' do
         submission2
         submission3
 
-        assessments = course.assessments.with_submissions_by(user2)
+        assessments = course.assessments.with_submissions_by(student_user2)
         submissions = assessments.map(&:submissions).flatten
         expect(submissions).to contain_exactly(submission2, submission3)
         expect(submissions.each_cons(2).all? { |a, b| a.created_at >= b.created_at }).to be(true)

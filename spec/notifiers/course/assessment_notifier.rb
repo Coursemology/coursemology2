@@ -7,7 +7,7 @@ RSpec.describe Course::AssessmentNotifier, type: :notifier do
   with_tenant(:instance) do
     describe '#assessment_attempted' do
       let(:course) { create(:course) }
-      let(:assessment) { create(:course_assessment_assessment, course: course) }
+      let(:assessment) { create(:assessment, course: course) }
       let(:user) { create(:course_user, course: course).user }
 
       subject { Course::AssessmentNotifier.assessment_attempted(user, assessment) }
@@ -19,9 +19,9 @@ RSpec.describe Course::AssessmentNotifier, type: :notifier do
 
     describe '#assessment_submitted' do
       let(:course) { create(:course) }
-      let(:submission) { create(:course_assessment_submission, course: course) }
       let(:course_user) { create(:course_user, course: course) }
       let(:user) { course_user.user }
+      let(:submission) { create(:submission, course: course, creator: user) }
 
       context 'when user do not belongs to any group' do
         subject { Course::AssessmentNotifier.assessment_submitted(user, course_user, submission) }

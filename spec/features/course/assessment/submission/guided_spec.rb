@@ -16,14 +16,12 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
     before { login_as(user, scope: :user) }
 
     let(:student) { create(:course_user, :approved, course: course).user }
-    let(:submission) do
-      create(:course_assessment_submission, assessment: assessment, creator: student)
-    end
+    let(:submission) { create(:submission, assessment: assessment, creator: student) }
     let(:programming_assessment) do
       create(:assessment, :guided, :published_with_programming_question, course: course)
     end
     let(:programming_assessment_submission) do
-      create(:course_assessment_submission, assessment: programming_assessment, creator: student)
+      create(:submission, assessment: programming_assessment, creator: student)
     end
 
     context 'As a Course Student' do

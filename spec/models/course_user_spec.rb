@@ -348,10 +348,8 @@ RSpec.describe CourseUser, type: :model do
     end
 
     describe 'after_save callback for new course_user' do
-      context 'when there is a non-draft lesson_plan_items that have todos' do
-        let(:assessment) do
-          create(:course_assessment_assessment, :published_with_mcq_question, course: course)
-        end
+      context 'when there is a lesson_plan_items that have todos' do
+        let(:assessment) { create(:assessment, course: course) }
         subject { requested_course_user }
 
         before do
@@ -360,7 +358,7 @@ RSpec.describe CourseUser, type: :model do
           assessment
         end
 
-        it 'creates todos for the lesson_plan_items' do
+        it 'creates todos for the lesson_plan_item for course_user' do
           expect { subject }.to change(Course::LessonPlan::Todo.all, :count).by(1)
         end
       end
