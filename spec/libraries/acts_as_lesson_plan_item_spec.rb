@@ -10,6 +10,14 @@ RSpec.describe 'Extension: Acts as Lesson Plan Item' do
     acts_as_lesson_plan_item
   end
 
+  class self::DummyTodoClass < ActiveRecord::Base
+    def self.columns
+      []
+    end
+
+    acts_as_lesson_plan_item has_todo: true
+  end
+
   subject(:dummy) { self.class::DummyClass.new }
   it { is_expected.to respond_to(:base_exp) }
   it { is_expected.to respond_to(:time_bonus_exp) }
@@ -32,6 +40,18 @@ RSpec.describe 'Extension: Acts as Lesson Plan Item' do
       it 'has correct total EXP' do
         expect(subject.total_exp).to eq(subject.base_exp + subject.extra_bonus_exp)
       end
+    end
+  end
+
+  context 'when declared to have a todo' do
+    subject { self.class::DummyTodoClass }
+
+    it 'sets the class to have_todo' do
+      expect(subject.has_todo?).to be_truthy
+    end
+
+    it 'sets all instances to respond with true to #can_start? by default' do
+      expect(subject.new.can_user_start?).to be_truthy
     end
   end
 end

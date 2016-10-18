@@ -66,6 +66,14 @@ class Course::LessonPlan::Todo < ActiveRecord::Base
     end
   end
 
+  # Checks if item can be started by user. #can_start? must be implemented by lesson_plan_item's
+  #   actable class, otherwise all item's are true by default.
+  #
+  # @return [Boolean] Whether the todo can be started or not.
+  def can_user_start?
+    item.can_user_start?(user)
+  end
+
   private
 
   # Sets default values
