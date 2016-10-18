@@ -8,10 +8,21 @@ en:
             my_student_header: 'My Student Submissions'
             student_header: 'Student Submissions'
             other_header: 'Other Submissions'
+            publish: 'Publish Grades'
+            confirm_publish: |
+
+              THIS ACTION IS IRREVERSIBLE
+
+              All graded submissions will be published and students will see their own grades.
+
+              Are you sure you want to publish?
           create:
             failure: 'Could not create submission: %{error}'
           edit:
             attempt: :'course.assessment.assessments.assessment.attempt'
+          publish_all:
+            success: 'All graded submissions have been published.'
+            notice: 'There are no graded submissions.'
           buttons:
             finalise: 'Finalise Submission'
             publish: 'Publish Grade'
