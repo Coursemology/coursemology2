@@ -2,6 +2,8 @@
 class AttachmentReference < ActiveRecord::Base
   before_save :update_expires_at
 
+  acts_as_duplicable
+
   belongs_to :attachable, polymorphic: true, inverse_of: nil
   belongs_to :attachment, inverse_of: :attachment_references
 
@@ -14,6 +16,10 @@ class AttachmentReference < ActiveRecord::Base
   def file=(file)
     self.name = filename(file)
     self.attachment = Attachment.find_or_initialize_by(file: file)
+  end
+
+  def initialize_duplicate(duplicator, other)
+    self.attachable = duplicator.duplicate(other.attachable)
   end
 
   private

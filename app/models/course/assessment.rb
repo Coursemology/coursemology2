@@ -5,6 +5,7 @@
 class Course::Assessment < ActiveRecord::Base
   acts_as_lesson_plan_item has_todo: true
   acts_as_conditional
+  acts_as_duplicable
   has_one_folder
 
   # Concern must be included below acts_as_lesson_plan_item to override #can_user_start?
@@ -92,6 +93,15 @@ class Course::Assessment < ActiveRecord::Base
 
   def password_protected?
     password.present?
+  end
+
+  def initialize_duplicate(duplicator, other)
+    self.lesson_plan_item = duplicator.duplicate(other.lesson_plan_item)
+    self.lesson_plan_item.actable = self
+
+    self.folder = duplicator.duplicate(other.folder)
+    self.folder.owner = self
+    self.questions = duplicator.duplicate(other.questions).compact
   end
 
   private

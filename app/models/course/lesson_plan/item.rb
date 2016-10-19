@@ -3,6 +3,7 @@ class Course::LessonPlan::Item < ActiveRecord::Base
   include Course::LessonPlan::ItemTodoConcern
 
   actable
+  acts_as_duplicable
   has_many_attachments
 
   after_initialize :set_default_values, if: :new_record?
@@ -25,6 +26,13 @@ class Course::LessonPlan::Item < ActiveRecord::Base
   # @return [Integer] Maximum EXP awardable.
   def total_exp
     base_exp + time_bonus_exp + extra_bonus_exp
+  end
+
+  def initialize_duplicate(duplicator, other)
+    # TODO: probably need to duplicate attachments
+    self.start_at += duplicator.time_shift
+    self.end_at += duplicator.time_shift if self.end_at
+    self.bonus_end_at += duplicator.time_shift if self.bonus_end_at
   end
 
   private

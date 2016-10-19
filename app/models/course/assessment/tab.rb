@@ -18,6 +18,7 @@ class Course::Assessment::Tab < ActiveRecord::Base
   end
 
   def initialize_duplicate(duplicator, other)
+    self.assessments = duplicator.duplicate(other.assessments).compact
   end
 
   private

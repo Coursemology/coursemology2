@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Question < ActiveRecord::Base
   actable
+  acts_as_duplicable
   has_many_attachments
 
   validate :validate_assessment_is_not_autograded, unless: :auto_gradable?
@@ -68,6 +69,12 @@ class Course::Assessment::Question < ActiveRecord::Base
     return question_number if title.blank?
     I18n.t('activerecord.course/assessment/question.question_with_title',
            question_number: question_number, title: title)
+  end
+
+  def initialize_duplicate(duplicator, other)
+    # TODO: Duplicate skills and continue down the rabbit hole
+    #self.skills = duplicator.duplicate(other.skills).compact
+    self.actable = duplicator.duplicate(other.actable)
   end
 
   private

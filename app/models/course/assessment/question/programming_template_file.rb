@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::ProgrammingTemplateFile < ActiveRecord::Base
+  acts_as_duplicable
+
   schema_validations except: :content
 
   before_validation :normalize_filename
@@ -17,6 +19,9 @@ class Course::Assessment::Question::ProgrammingTemplateFile < ActiveRecord::Base
   # @return [Course::Assessment::Answer::ProgrammingFile] The copied file.
   def copy_template_to(answer)
     answer.files.build(filename: filename, content: content)
+  end
+
+  def initialize_duplicate(_duplicator, _other)
   end
 
   private
