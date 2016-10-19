@@ -2,6 +2,8 @@
 class Course::CoursesController < Course::Controller
   include Course::ActivityFeedsConcern
 
+  before_action :load_todos, only: [:show]
+
   def index # :nodoc:
     @courses = Course.publicly_accessible.page(page_param)
   end
@@ -38,5 +40,14 @@ class Course::CoursesController < Course::Controller
   def course_params # :nodoc:
     params.require(:course).
       permit(:title, :description, :status, :start_at, :end_at, :logo)
+  end
+
+  def load_todos
+    if current_course_user && current_course_user.student?
+      @todos = Course::LessonPlan::Todo.pending_for(current_course_user).
+               includes(:user, item: [:actable, :course])
+      # TODO: Fix n+1 query for #can_user_start?
+      @todos = @todos.select(&:can_user_start?).first(3)
+    end
   end
 end
