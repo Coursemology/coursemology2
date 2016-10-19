@@ -1,0 +1,7 @@
+= content_tag_for(:tr, todo)
+  td = render partial: todo.item.actable, prefix: 'todo', suffix: 'title'
+  td.text-center = format_datetime(todo.item.start_at) if todo.item.start_at
+  td.text-center = format_datetime(todo.item.end_at) if todo.item.end_at
+  td
+    = render partial: todo.item.actable, prefix: 'todo', suffix: 'button', locals: { todo: todo }
+    / To implement ignore button

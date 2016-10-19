@@ -20,6 +20,9 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
     #   - Define hooks to update todo's workflow_state (see Course::LessonPlan::Todo)
     #   - For additional logic on whether a user can start an item, overwrite #can_user_start?
     #       in the actable model.
+    #   - Implement two view partials for the actable model for display in the course landing page.
+    #     1) _todo_#{actable.class.name}_title.html.slim    -> Title and any links if required.
+    #     2) _todo_#{actable.class.name}_button.html.slim   -> Action button for todo.
     def acts_as_lesson_plan_item(has_todo: false)
       acts_as :lesson_plan_item, class_name: Course::LessonPlan::Item.name
 

@@ -46,6 +46,40 @@ RSpec.feature 'Course: Homepage' do
       notifications
     end
 
+    # TODO: To remove when this declaration is done on the model itself
+    Course::Assessment.class_eval do
+      include Course::Assessment::TodoConcern
+      def self.has_todo?; true; end # rubocop:disable Style/SingleLineMethods
+    end
+    Course::Assessment::Submission.class_eval do
+      include Course::Assessment::Submission::TodoConcern
+    end
+
+    let(:assessment_todos) do
+      todos = {}
+
+      assessment = create(:assessment, :published_with_mrq_question, course: course)
+      todos[:not_started] =
+        Course::LessonPlan::Todo.find_by(user: user, item: assessment.lesson_plan_item)
+
+      assessment = create(:assessment, :published_with_mrq_question, course: course)
+      create(:submission, :attempting, assessment: assessment, creator: user)
+      todos[:in_progress] =
+        Course::LessonPlan::Todo.find_by(user: user, item: assessment.lesson_plan_item)
+
+      assessment = create(:assessment, :published_with_mrq_question, course: course)
+      create(:submission, :submitted, assessment: assessment, creator: user)
+      todos[:completed] =
+        Course::LessonPlan::Todo.find_by(user: user, item: assessment.lesson_plan_item)
+
+      assessment = create(:assessment, :with_mrq_question, draft: true, course: course)
+      create(:submission, :submitted, assessment: assessment, creator: user)
+      todos[:unpublished] =
+        Course::LessonPlan::Todo.find_by(user: user, item: assessment.lesson_plan_item)
+
+      todos
+    end
+
     before do
       login_as(user, scope: :user)
     end
@@ -75,6 +109,26 @@ RSpec.feature 'Course: Homepage' do
         visit course_path(course)
         feed_notifications.each do |notification|
           expect(page).not_to have_content_tag_for(notification)
+        end
+      end
+
+      scenario 'I am able to see the relevant assessment todos in my course homepage' do
+        assessment_todos
+        visit course_path(course)
+
+        within find(content_tag_selector(assessment_todos[:not_started])) do
+          expect(page).to have_text(
+            I18n.t('course.assessment.assessments.todo_assessment_button.attempt')
+          )
+        end
+        within find(content_tag_selector(assessment_todos[:in_progress])) do
+          expect(page).to have_text(
+            I18n.t('course.assessment.assessments.todo_assessment_button.resume')
+          )
+        end
+
+        [:completed, :unpublished].each do |status|
+          expect(page).not_to have_content_tag_for(assessment_todos[status])
         end
       end
     end

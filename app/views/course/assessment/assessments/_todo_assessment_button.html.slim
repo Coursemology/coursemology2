@@ -1,0 +1,12 @@
+- assessment = todo_assessment_button
+- if todo.not_started?
+  - if assessment.password_protected?
+    = link_to t('.attempt'), new_course_assessment_session_path(current_course, assessment),
+              class: ['btn', 'btn-info']
+  - else
+    = link_to t('.attempt'), course_assessment_submissions_path(current_course, assessment),
+              class: ['btn','btn-info'], method: :post
+- elsif todo.in_progress?
+  - submission = assessment.submissions.includes(:creator).find_by(creator: current_user)
+  = link_to(t('.resume'), edit_course_assessment_submission_path(current_course,
+            assessment, submission), class: ['btn', 'btn-info'])
