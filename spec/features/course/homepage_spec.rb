@@ -112,9 +112,13 @@ RSpec.feature 'Course: Homepage' do
         end
       end
 
-      scenario 'I am able to see the relevant assessment todos in my course homepage' do
+      scenario 'I can view and ignore the relevant assessment todos in my homepage', js: true do
         assessment_todos
         visit course_path(course)
+
+        [:completed, :unpublished].each do |status|
+          expect(page).not_to have_content_tag_for(assessment_todos[status])
+        end
 
         within find(content_tag_selector(assessment_todos[:not_started])) do
           expect(page).to have_text(
@@ -125,10 +129,12 @@ RSpec.feature 'Course: Homepage' do
           expect(page).to have_text(
             I18n.t('course.assessment.assessments.todo_assessment_button.resume')
           )
-        end
 
-        [:completed, :unpublished].each do |status|
-          expect(page).not_to have_content_tag_for(assessment_todos[status])
+          # click_button is not used because poltergist detected overlapping elements with the
+          #   navbar. See poltergeist#520 for more details.
+          find('input.btn.btn-primary').trigger('click')
+          wait_for_ajax
+          expect(assessment_todos[:in_progress].reload.ignore?).to be_truthy
         end
       end
     end

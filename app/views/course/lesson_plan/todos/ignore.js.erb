@@ -1,0 +1,8 @@
+$('<%= "#lesson_plan_todo_#{@todo.id}" %>').
+  fadeOut(400, function onFadeComplete() {
+    $('<%= "#lesson_plan_todo_#{@todo.id}" %>').remove();
+    // Scroll to the top to see flash messages.
+    $('.course-courses.show').parents('.container-fluid:first').prepend('<%= j(flash_messages) %>');
+    $('html, body').animate({ scrollTop: 0 }, 400, 'swing');
+  }
+);
