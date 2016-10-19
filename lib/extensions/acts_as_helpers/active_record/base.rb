@@ -18,6 +18,8 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
     # To declare that an actable model has todos:
     #   - Define has_todo as true when calling acts_as_lesson_plan_item
     #   - Define hooks to update todo's workflow_state (see Course::LessonPlan::Todo)
+    #   - For additional logic on whether a user can start an item, overwrite #can_user_start?
+    #       in the actable model.
     def acts_as_lesson_plan_item(has_todo: false)
       acts_as :lesson_plan_item, class_name: Course::LessonPlan::Item.name
 
@@ -26,6 +28,7 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
       end
       self.has_todo = has_todo ? true : false
       extend LessonPlanItemClassMethods
+      include LessonPlanItemInstanceMethods
     end
   end
 
@@ -38,6 +41,12 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
   module LessonPlanItemClassMethods
     def has_todo?
       has_todo
+    end
+  end
+
+  module LessonPlanItemInstanceMethods
+    def can_user_start?(_user = nil)
+      true
     end
   end
 end
