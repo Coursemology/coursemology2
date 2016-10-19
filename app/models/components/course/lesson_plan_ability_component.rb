@@ -6,6 +6,7 @@ module Course::LessonPlanAbilityComponent
     if user
       allow_registered_users_showing_milestones_items
       allow_course_staff_manage_lesson_plans
+      allow_own_users_to_ignore_own_todos
     end
 
     super
@@ -23,5 +24,9 @@ module Course::LessonPlanAbilityComponent
     can :manage, Course::LessonPlan::Milestone, course_staff_hash
     can :manage, Course::LessonPlan::Item, course_staff_hash
     can :manage, Course::LessonPlan::Event, lesson_plan_item: course_staff_hash
+  end
+
+  def allow_own_users_to_ignore_own_todos
+    can :ignore, Course::LessonPlan::Todo, user_id: user.id
   end
 end
