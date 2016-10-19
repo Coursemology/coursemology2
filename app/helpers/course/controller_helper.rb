@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 module Course::ControllerHelper
+  include Course::LessonPlan::TodosHelper
+
   # Formats the given +CourseUser+ as a user-visible string.
   #
   # @param [CourseUser] user The User to display.

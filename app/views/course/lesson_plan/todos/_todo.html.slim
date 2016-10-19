@@ -1,4 +1,4 @@
-= content_tag_for(:tr, todo)
+= content_tag_for(:tr, todo, class: todo_status_class(todo))
   td = render partial: todo.item.actable, prefix: 'todo', suffix: 'title'
   td.text-center = format_datetime(todo.item.start_at) if todo.item.start_at
   td.text-center = format_datetime(todo.item.end_at) if todo.item.end_at
