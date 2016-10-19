@@ -351,12 +351,7 @@ RSpec.describe CourseUser, type: :model do
       context 'when there is a lesson_plan_items that have todos' do
         let(:assessment) { create(:assessment, course: course) }
         subject { requested_course_user }
-
-        before do
-          # TODO: To remove when this declaration is done on the model itself
-          Course::Assessment.class_eval { def self.has_todo?; true; end } # rubocop:disable Style/SingleLineMethods
-          assessment
-        end
+        before { assessment }
 
         it 'creates todos for the lesson_plan_item for course_user' do
           expect { subject }.to change(Course::LessonPlan::Todo.all, :count).by(1)

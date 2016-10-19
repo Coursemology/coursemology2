@@ -75,9 +75,6 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
 
     context 'when actable object is declared to have a todo' do
       describe 'callbacks from Course::LessonPlan::TodoConcern' do
-        # TODO: To remove when this declaration is done on the model itself
-        Course::Assessment.class_eval { def self.has_todo?; true; end } # rubocop:disable Style/SingleLineMethods
-
         let(:course) { create(:course) }
         let!(:students) { create_list(:course_student, 3, course: course) }
         let!(:invited_student) { create(:course_user, :invited, course: course, user: nil) }

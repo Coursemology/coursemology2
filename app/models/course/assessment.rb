@@ -3,10 +3,8 @@
 #
 # An assessment is a collection of questions that can be asked.
 class Course::Assessment < ActiveRecord::Base
-  # TODO: Remove when entire todo feature is ready
-  # include Course::Assessment::TodoConcern
-  # acts_as_lesson_plan_item has_todo: true
-  acts_as_lesson_plan_item
+  include Course::Assessment::TodoConcern
+  acts_as_lesson_plan_item has_todo: true
   acts_as_conditional
   has_one_folder
 

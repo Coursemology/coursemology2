@@ -3,8 +3,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
   include Workflow
   # Workflow event transition logic must exist above Todo concern to allow for todo callbacks.
   include Course::Assessment::Submission::WorkflowEventConcern
-  # TODO: Remove when entire todo feature is ready
-  # include Course::Assessment::Submission::TodoConcern
+  include Course::Assessment::Submission::TodoConcern
 
   acts_as_experience_points_record
 

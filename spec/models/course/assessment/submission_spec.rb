@@ -420,14 +420,6 @@ RSpec.describe Course::Assessment::Submission do
     end
 
     describe 'callbacks from Course::Assessment::Submission::TodoConcern' do
-      # TODO: To remove when this declaration is done on the model itself
-      Course::Assessment.class_eval do
-        def self.has_todo?; true; end # rubocop:disable Style/SingleLineMethods
-      end
-      Course::Assessment::Submission.class_eval do
-        include Course::Assessment::Submission::TodoConcern
-      end
-
       let(:assessment_traits) { [:published_with_mcq_question] }
       subject do
         Course::LessonPlan::Todo.
