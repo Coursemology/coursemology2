@@ -3,10 +3,12 @@
 #
 # An assessment is a collection of questions that can be asked.
 class Course::Assessment < ActiveRecord::Base
-  include Course::Assessment::TodoConcern
   acts_as_lesson_plan_item has_todo: true
   acts_as_conditional
   has_one_folder
+
+  # Concern must be included below acts_as_lesson_plan_item to override #can_user_start?
+  include Course::Assessment::TodoConcern
 
   after_initialize :set_defaults, if: :new_record?
   before_validation :assign_folder_attributes
