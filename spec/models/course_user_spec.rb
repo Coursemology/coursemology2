@@ -347,7 +347,7 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
-    describe 'after_save callback for new course_user' do
+    describe 'CourseUser::TodoConcern callbacks for new course_user' do
       context 'when there is a lesson_plan_items that have todos' do
         let(:assessment) { create(:assessment, course: course) }
         subject { requested_course_user }
@@ -360,6 +360,24 @@ RSpec.describe CourseUser, type: :model do
 
         it 'creates todos for the lesson_plan_item for course_user' do
           expect { subject }.to change(Course::LessonPlan::Todo.all, :count).by(1)
+        end
+
+        context 'when course_user is invited' do
+          subject { create(:course_user, :invited, course: course, user: nil) }
+
+          it 'does not creates todos for the lesson_plan_item for course_user' do
+            expect { subject }.not_to change(Course::LessonPlan::Todo.all, :count)
+          end
+
+          describe '.accept' do
+            it 'creates todos for the lesson_plan_item for course_user' do
+              expect do
+                user = create(:user)
+                subject.accept!(user)
+                subject.save
+              end.to change(Course::LessonPlan::Todo.all, :count).by(1)
+            end
+          end
         end
       end
     end

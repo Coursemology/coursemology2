@@ -80,13 +80,16 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
 
         let(:course) { create(:course) }
         let!(:students) { create_list(:course_student, 3, course: course) }
+        let!(:invited_student) { create(:course_user, :invited, course: course, user: nil) }
         let(:actable) { create(:assessment, :with_mcq_question, course: course) }
         subject { actable.lesson_plan_item }
 
-        it 'creates todos for newly created objects' do
+        it 'creates todos for created objects for course_users (except those with invited status' do
           expect do
             create(:assessment, :published_with_mcq_question, course: course)
-          end.to change(Course::LessonPlan::Todo.all, :count).by(course.course_users.count)
+          end.
+            to change(Course::LessonPlan::Todo.all, :count).
+            by(course.course_users.where.not(workflow_state: 'invited').count)
         end
       end
     end

@@ -3,6 +3,8 @@ class CourseUser < ActiveRecord::Base
   include Workflow
   include CourseUser::StaffConcern
   include CourseUser::LevelProgressConcern
+  # Workflow event transition logic must exist above Todo concern to allow for todo callbacks.
+  include CourseUser::WorkflowConcern
   include CourseUser::TodoConcern
 
   after_initialize :set_defaults, if: :new_record?
@@ -128,19 +130,6 @@ class CourseUser < ActiveRecord::Base
   # @return [Boolean]
   def real_student?
     student? && !phantom
-  end
-
-  # Transitions the user from the invited to the accepted state.
-  #
-  # @param [User] user The user which is accepting this invitation.
-  # @return [void]
-  def accept(user)
-    self.user = user
-  end
-
-  # Callback handler for workflow state change to the rejected state.
-  def on_rejected_entry(*)
-    destroy
   end
 
   # Returns my students in the course.
