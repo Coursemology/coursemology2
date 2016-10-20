@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Course::Material < ActiveRecord::Base
+  acts_as_duplicable
   has_one_attachment
   belongs_to :folder, inverse_of: :materials, class_name: Course::Material::Folder.name, touch: true
 
@@ -11,6 +12,11 @@ class Course::Material < ActiveRecord::Base
   # @return [Pathname] The path of the material
   def path
     folder.path + name
+  end
+
+  def initialize_duplicate(duplicator, other)
+    self.attachment = duplicator.duplicate(other.attachment)
+    self.folder = duplicator.duplicate(other.folder)
   end
 
   private

@@ -100,7 +100,6 @@ class Course::Assessment < ActiveRecord::Base
     self.lesson_plan_item.actable = self
 
     self.folder = duplicator.duplicate(other.folder)
-    self.folder.owner = self
     self.questions = duplicator.duplicate(other.questions).compact
   end
 

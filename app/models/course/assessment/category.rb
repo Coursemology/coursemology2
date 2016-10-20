@@ -41,6 +41,8 @@ class Course::Assessment::Category < ActiveRecord::Base
 
     # duplicate tabs
     self.tabs = duplicator.duplicate(other.tabs).compact
+
+    self.course = duplicator.duplicate(other.course)
   end
 
   private
