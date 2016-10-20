@@ -21,6 +21,24 @@
       }
     }
 
+    .pending-tasks {
+      table-layout: fixed;
+
+      td,
+      th {
+        vertical-align: middle;
+      }
+
+      .buttons {
+        @extend .text-center;
+
+        a,
+        input {
+          margin-right: 1em;
+          margin-top: 3px;
+        }
+      }
+    }
   }
 
   &.index {

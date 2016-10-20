@@ -1,0 +1,8 @@
+en:
+  course:
+    lesson_plan:
+      todos:
+        todo:
+          ignore: 'Ignore'
+        ignore:
+          success: 'The task has been successfully ignored.'

@@ -201,6 +201,9 @@ Rails.application.routes.draw do
         get '/' => 'items#index'
         resources :milestones, except: [:index, :show]
         resources :events, except: [:index, :show]
+        resources :todos, only: [] do
+          post 'ignore', on: :member
+        end
       end
 
       scope module: :forum do

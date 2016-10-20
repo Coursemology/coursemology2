@@ -12,13 +12,26 @@
     h2 = t('.instructors')
     div
       = render partial: 'layouts/user',
-                collection: current_course.managers.includes(:user).map(&:user)
+               collection: current_course.managers.includes(:user).map(&:user)
 
   - if current_course.user?(current_user) || can?(:manage, current_course)
     - if !@currently_active_announcements.empty?
       h2 = t('.announcements')
       div.message-holder
-        = render partial: @currently_active_announcements, spacer_template: 'announcements/announcement_spacer'
+        = render partial: @currently_active_announcements,
+                 spacer_template: 'announcements/announcement_spacer'
+
+    - if @todos && !@todos.empty?
+      h2 = t('.pending_tasks')
+      table.table.table-hover.pending-tasks
+        thead
+          tr
+            th = t('.pending_tasks_title')
+            th.text-center = t('.pending_tasks_start_at')
+            th.text-center = t('.pending_tasks_end_at')
+            th
+        tbody
+          = render @todos
 
     - if !@activity_feeds.empty?
       h2 = t('.activities')

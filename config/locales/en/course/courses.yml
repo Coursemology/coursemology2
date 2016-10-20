@@ -19,3 +19,7 @@ en:
         instructors: 'Instructors'
         announcements: 'Announcements'
         activities: 'Latest Activity'
+        pending_tasks: 'Pending Tasks'
+        pending_tasks_title: 'Title'
+        pending_tasks_start_at: 'Start At'
+        pending_tasks_end_at: 'End At'
