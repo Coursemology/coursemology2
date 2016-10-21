@@ -73,7 +73,7 @@ RSpec.describe Course::Assessment do
 
           it 'is not valid' do
             expect(subject).not_to be_valid
-            expect(subject.errors['actable.base']).
+            expect(subject.errors['base']).
               to include(I18n.t('activerecord.errors.models.course/assessment.autograded'))
           end
         end
