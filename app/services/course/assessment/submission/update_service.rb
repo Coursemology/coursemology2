@@ -110,6 +110,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def grade_and_reattempt_answer(answer)
     answer.finalise! if answer.attempting?
+    answer.save!
     answer.auto_grade!(edit_submission_path, true)
   end
 

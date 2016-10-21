@@ -12,7 +12,7 @@ FactoryGirl.define do
 
     trait :attempting do
       after(:build) do |submission|
-        submission.assessment.questions.attempt(submission).each(&:save!)
+        submission.answers = submission.assessment.questions.attempt(submission)
       end
     end
 

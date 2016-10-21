@@ -11,8 +11,8 @@ class Course::Assessment < ActiveRecord::Base
   include Course::Assessment::TodoConcern
 
   after_initialize :set_defaults, if: :new_record?
-  before_validation :assign_folder_attributes
   before_validation :propagate_course
+  before_validation :assign_folder_attributes
 
   validate :validate_presence_of_questions, unless: :draft?
   validate :validate_only_autograded_questions, if: :autograded?

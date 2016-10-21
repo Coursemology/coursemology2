@@ -48,7 +48,7 @@ class Course::Condition::Assessment < ActiveRecord::Base
   end
 
   def self.on_dependent_status_change(submission)
-    return unless submission.previous_changes.key?(:workflow_state)
+    return unless submission.changes.key?(:workflow_state)
 
     submission.execute_after_commit do
       evaluate_conditional_for(submission.course_user) if submission.current_state >= :submitted

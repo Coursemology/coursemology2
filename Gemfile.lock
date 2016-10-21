@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/Coursemology/active_record-acts_as.git
+  revision: 098b5405c6d74275ba8035fa9e88b0f7cf6c422d
+  specs:
+    active_record-acts_as (2.0.1)
+      activerecord (>= 4.2)
+      activesupport (>= 4.2)
+
+GIT
   remote: git://github.com/ErwinM/acts_as_tenant.git
   revision: f87a619d79624e53342ab3c4a361607be1054334
   specs:
@@ -67,9 +75,6 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    active_record-acts_as (1.0.8)
-      activerecord (~> 4, >= 4.1.2)
-      activesupport (~> 4)
     activejob (4.2.7.1)
       activesupport (= 4.2.7.1)
       globalid (>= 0.3.0)
@@ -533,7 +538,7 @@ PLATFORMS
 
 DEPENDENCIES
   ace-rails-ap
-  active_record-acts_as (>= 1.0.8, < 2.0.0)
+  active_record-acts_as!
   activerecord-userstamp (>= 3.0.2)
   acts_as_tenant!
   after_commit_action
