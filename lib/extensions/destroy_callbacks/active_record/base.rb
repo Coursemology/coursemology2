@@ -23,7 +23,6 @@ module Extensions::DestroyCallbacks::ActiveRecord::Base
   private
 
   def update_status
-    return if destroying? # Works around Rails #13609
     @destroying = true
     yield
   ensure
