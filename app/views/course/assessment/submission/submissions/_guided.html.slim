@@ -20,7 +20,7 @@ nav
     = render 'buttons', {\
         f: f,
         save: answer.attempting? || (!@submission.attempting? && can_grade),
-        finalise: guided_next_unanswered_question.nil?,
+        finalise: @submission.attempting? && guided_next_unanswered_question.nil?,
         auto_grade: @submission.submitted? && can_grade,
         publish: @submission.submitted? && can_grade,
         unsubmit: !@submission.attempting? && can_grade\
