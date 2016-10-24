@@ -155,6 +155,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         wait_for_job
         visit current_path
         expect(page).to have_selector('td', text: 'published')
+        expect(page).not_to have_selector('.btn.finalise')
       end
 
       scenario 'I can reset my answer to a programming question', js: true do
