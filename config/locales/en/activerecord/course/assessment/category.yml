@@ -3,6 +3,8 @@ en:
     attributes:
       course/assessment/category/title:
         default: :'course.assessment.assessments.index.header'
+      course/assessment/category:
+        weight: 'Order'
     errors:
       models:
         course/assessment/category:

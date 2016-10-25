@@ -12,7 +12,7 @@ h2
       th
       th
       th = t('.title')
-      th = t('.weight')
+      th = Course::Assessment::Category.human_attribute_name(:weight)
       th = t('.parent_category')
       th
     tbody
