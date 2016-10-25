@@ -2,5 +2,5 @@
 = f.input :description
 = f.input :staff_only_comments
 = f.input :maximum_grade
-= f.input :weight
+= f.input :weight, label: Course::Assessment::Question.human_attribute_name(:weight)
 = f.association :skills, as: :token, collection: current_course.assessment_skills, multiple: true

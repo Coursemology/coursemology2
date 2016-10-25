@@ -4,5 +4,5 @@
                   url: course_admin_assessments_category_tabs_path(current_course, @category) do |f|
   = f.error_notification
   = f.input :title
-  = f.input :weight
+  = f.input :weight, label: Course::Assessment::Tab.human_attribute_name(:weight)
   = f.button :submit

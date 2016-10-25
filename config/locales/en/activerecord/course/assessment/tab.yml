@@ -3,6 +3,8 @@ en:
     attributes:
       course/assessment/tab/title:
         default: 'Default'
+      course/assessment/tab:
+        weight: 'Order'
     errors:
       models:
         course/assessment/tab:
