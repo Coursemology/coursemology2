@@ -25,6 +25,7 @@ class Duplicator
     # Track if an enumerable or single object was passed in. Needed to handle single element
     # collections.
     # Note that ActiveRecord CollectionProxy is not an Enumerable, so check for to_a instead.
+    return nil unless stuff
     stuff_is_enumerable = stuff.respond_to?(:to_a)
     duplicated_stuff = []
     stuff = [*stuff] unless stuff_is_enumerable

@@ -130,6 +130,9 @@ class Course < ActiveRecord::Base
     # This must be done after duplicating assessments.
     material_folders_to_duplicate = other.material_folders.select { |folder| folder.owner_id.nil? }
     self.material_folders = duplicator.duplicate(material_folders_to_duplicate).compact
+
+    # Skill branches are duplicated as part of skills.
+    self.assessment_skills = duplicator.duplicate(other.assessment_skills)
   end
 
   private

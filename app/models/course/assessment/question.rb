@@ -72,8 +72,7 @@ class Course::Assessment::Question < ActiveRecord::Base
   end
 
   def initialize_duplicate(duplicator, other)
-    # TODO: Duplicate skills and continue down the rabbit hole
-    #self.skills = duplicator.duplicate(other.skills).compact
+    self.skills = duplicator.duplicate(other.skills).compact
     self.actable = duplicator.duplicate(other.actable)
   end
 

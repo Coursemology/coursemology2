@@ -1,10 +1,18 @@
 # frozen_string_literal: true
 class Course::Assessment::Skill < ActiveRecord::Base
+  acts_as_duplicable
+
   belongs_to :course, inverse_of: :assessment_skills
   belongs_to :skill_branch, class_name: Course::Assessment::SkillBranch.name, inverse_of: :skills
   has_and_belongs_to_many :questions, class_name: Course::Assessment::Question.name
 
   validate :validate_consistent_course
+
+  def initialize_duplicate(duplicator, other)
+    self.course = duplicator.duplicate(other.course)
+    self.skill_branch = duplicator.duplicate(other.skill_branch)
+    self.questions = duplicator.duplicate(other.questions.map(&:actable)).compact.map(&:acting_as)
+  end
 
   private
 

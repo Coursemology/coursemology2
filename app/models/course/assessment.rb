@@ -97,7 +97,6 @@ class Course::Assessment < ActiveRecord::Base
 
   def initialize_duplicate(duplicator, other)
     self.lesson_plan_item = duplicator.duplicate(other.lesson_plan_item)
-    self.lesson_plan_item.actable = self
 
     self.folder = duplicator.duplicate(other.folder)
     self.questions = duplicator.duplicate(other.questions).compact
