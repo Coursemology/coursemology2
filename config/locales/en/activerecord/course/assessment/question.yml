@@ -8,3 +8,6 @@ en:
     course/assessment/question:
       question_number: "Question %{index}"
       question_with_title: "%{question_number}: %{title}"
+    attributes:
+      course/assessment/question:
+        weight: 'Order'
