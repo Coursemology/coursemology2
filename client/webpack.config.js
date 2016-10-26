@@ -7,7 +7,7 @@ const nodeEnv = devBuild ? 'development' : 'production';
 const config = {
   entry: [
     'babel-polyfill',
-    './app/bundles/Course/LessonPlan/startup',
+    './scripts/startup',
   ],
 
   output: {
@@ -44,6 +44,10 @@ const config = {
           'sass',
         ],
         exclude: /node_modules/,
+      },
+      {
+        test: /\.json$/,
+        loader: 'json',
       },
     ],
   },

@@ -7,9 +7,11 @@
     "npm": "3.5.0"
   },
   "scripts": {
-    "build:test": "webpack --config webpack.config.js",
-    "build:production": "NODE_ENV=production webpack --config webpack.config.js",
-    "build:development": "webpack -w --config webpack.config.js",
+    "build:test": "npm run build:translations && webpack --config webpack.config.js",
+    "build:production": "export NODE_ENV=production && npm run build:translations && webpack --config webpack.config.js --optimize-minimize",
+    "build:development": "npm run build:translations && webpack -w --config webpack.config.js",
+    "build:translations": "babel-node scripts/aggregate-translations.js",
+    "extract-translations": "npm run build:production && babel-node scripts/extract-translations.js",
     "lint": "eslint . --ext .js --ext .jsx --cache",
     "lint-fix": "eslint . --ext .js --ext .jsx --cache --fix"
   },
@@ -28,8 +30,12 @@
     "babel-preset-stage-0": "^6.5.0",
     "babel-runtime": "^6.6.1",
     "css-loader": "^0.25.0",
+    "glob": "^7.1.1",
     "immutable": "^3.8.1",
+    "intl": "^1.2.5",
+    "json-loader": "^0.5.4",
     "mirror-creator": "1.1.0",
+    "mkdirp": "^0.5.1",
     "node-sass": "^3.10.1",
     "react": "^0.14.8 || ^15.0.0",
     "react-bootstrap": "^0.30.6",
@@ -42,9 +48,10 @@
     "redux-thunk": "^2.0.1",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
-    "webpack": "^1.12.14"
+    "webpack": "^1.13.3"
   },
   "devDependencies": {
+    "babel-plugin-react-intl": "^2.2.0",
     "eslint": "^3.9.1",
     "eslint-config-airbnb": "^12.0.0",
     "eslint-plugin-import": "^2.0.1",

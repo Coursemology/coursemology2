@@ -45,3 +45,6 @@ node_modules
 
 # Ignore eslint cache
 /client/.eslintcache
+
+# Ignore build for client
+/client/build
