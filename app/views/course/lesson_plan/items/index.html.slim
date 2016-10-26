@@ -5,4 +5,5 @@
     - if can?(:create, Course::LessonPlan::Event.new(course: current_course))
       = new_button([current_course, :lesson_plan_event])
 
-= render partial: 'lesson_plan_group', collection: @lesson_plan_items.to_a, as: :group
+- props = render 'course/lesson_plan/items/index.json.jbuilder'
+= react_component("LessonPlanPlugin", props: props, prerender: false)

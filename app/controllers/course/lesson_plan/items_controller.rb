@@ -1,26 +1,50 @@
 # frozen_string_literal: true
 class Course::LessonPlan::ItemsController < Course::ComponentController
-  before_action :load_lesson_plan_items, only: [:index]
   # This can only be done with Bullet once Rails supports polymorphic +inverse_of+.
   prepend_around_action :without_bullet, only: [:index]
-  load_and_authorize_resource :lesson_plan_item,
+
+  load_and_authorize_resource :item,
                               through: :course,
-                              class: Course::LessonPlan::Item.name
+                              through_association: :lesson_plan_items,
+                              class: Course::LessonPlan::Item.name,
+                              parent: false
+
   add_breadcrumb :index, :course_lesson_plan_path
 
   def index #:nodoc:
-    @lesson_plan_items.each_value do |items|
-      items.reject! { |x| cannot?(:show, x.specific) }
-    end
+    @items =
+      @items.order(start_at: :asc).includes(:actable).to_a.select do |item|
+        can?(:show, item.actable)
+      end
+
+    @milestones = current_course.lesson_plan_milestones.order(start_at: :asc)
+
+    assessment_tabs_titles_hash
   end
 
   private
 
-  # Before the lesson plan is displayed, lesson plan items are ordered by start
-  # date and divided into groups separated by milestones. Each group, possibly
-  # except the first, is an array that has a milestone as its first item.
-  # This method assigns the list of groups to @lesson_plan_items.
-  def load_lesson_plan_items
-    @lesson_plan_items = current_course.grouped_lesson_plan_items_with_milestones
+  # Returns a hash that maps tab ids to an array containing:
+  # 1) The name of the assessment category it belongs to.
+  # 2) The tab's title, if there is more than one tab in its cateogry.
+  #
+  # @return [Hash{Integer => Array<String>]
+  def assessment_tabs_titles_hash
+    @assessment_tabs_titles_hash ||=
+      current_course.assessment_categories.includes { tabs }.map(&:tabs).flatten.
+      map do |tab|
+        [tab.id, tab_title_array(tab)]
+      end.to_h
+  end
+
+  # Maps an assessment tab to an array of strings that describes its title. If the
+  # tab is the only one in its category, it is sufficient to use its cateogry's name
+  # as its title, otherwise, we use both the category and tab name to describe it.
+  #
+  # @param [Course::Assessment::Tab]
+  # @return [Array<String>]
+  def tab_title_array(tab)
+    category_name = tab.category.title.singularize
+    tab.category.tabs.size > 1 ? [category_name, tab.title] : [category_name]
   end
 end

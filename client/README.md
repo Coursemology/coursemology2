@@ -13,3 +13,8 @@ This will extract translations keys and their default `en` translations to `/cli
 and then combine all the keys into a single file `/client/build/locales/en.json`.
 
 Next, using `en.json` as reference, create or update other translations at `client/locales`.
+
+
+## Style
+
+- Prepend Immuatable.js variables names with `$$`.

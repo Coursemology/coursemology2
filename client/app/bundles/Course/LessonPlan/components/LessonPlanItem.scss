@@ -1,0 +1,35 @@
+@import '../../../../lib/styles/variables';
+
+$card-padding: 1em;
+$shadow: rgba(0, 0, 0, 0.3);
+
+.glyph {
+  padding-right: 0.3em;
+}
+
+.lessonPlanItemTitleBar {
+  padding-left: $card-padding;
+  padding-right: $card-padding;
+}
+
+.card {
+  border-radius: 10px;
+  box-shadow: 0 4px 2px 0 $shadow;
+  margin-bottom: $card-padding;
+  padding: $card-padding;
+}
+
+.itemTypeTag {
+  color: $secondary-text-grey;
+  font-weight: bold;
+}
+
+.itemDetails {
+  color: $secondary-text-grey;
+  margin-bottom: 1em;
+}
+
+.spaceBetween {
+  display: flex;
+  justify-content: space-between;
+}
