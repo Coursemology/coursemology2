@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission < ActiveRecord::Base
   include Workflow
-  # Workflow event transition logic must exist above Todo concern to allow for todo callbacks.
   include Course::Assessment::Submission::WorkflowEventConcern
   include Course::Assessment::Submission::TodoConcern
 

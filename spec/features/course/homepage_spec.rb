@@ -59,16 +59,12 @@ RSpec.feature 'Course: Homepage' do
         Course::LessonPlan::Todo.find_by(user: user, item: assessment.lesson_plan_item)
 
       assessment = create(:assessment, :published_with_mrq_question, course: course)
-      submission2 = create(:submission, :attempting, assessment: assessment, creator: user)
-      submission2.finalise!
-      submission2.save!
+      create(:submission, :submitted, assessment: assessment, creator: user)
       todos[:completed] =
         Course::LessonPlan::Todo.find_by(user: user, item: assessment.lesson_plan_item)
 
       assessment = create(:assessment, :with_mrq_question, draft: true, course: course)
-      submission3 = create(:submission, :attempting, assessment: assessment, creator: user)
-      submission3.finalise!
-      submission3.save!
+      create(:submission, :submitted, assessment: assessment, creator: user)
       todos[:unpublished] =
         Course::LessonPlan::Todo.find_by(user: user, item: assessment.lesson_plan_item)
 
