@@ -9,8 +9,13 @@
     var airmodeOptions = $.extend(true, { airMode: true },
                                         { popover: $.summernote.options.popover });
     airmodeOptions.popover.air.unshift(['style', ['style']]);
-    $('textarea.text.airmode', element).summernote(airmodeOptions);
-    $('textarea.text', element).summernote();
+    var airmodeTextareas = $('textarea.text.airmode', element).not('.summernote-initialised');
+    airmodeTextareas.summernote(airmodeOptions);
+    airmodeTextareas.addClass('summernote-initialised');
+
+    var textareas = $('textarea.text', element).not('.airmode').not('.summernote-initialised');
+    textareas.summernote();
+    textareas.addClass('summernote-initialised');
   }
 
   function initializeComponents(element) {
