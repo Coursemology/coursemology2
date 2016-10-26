@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::MultipleResponse < ActiveRecord::Base
+  acts_as_duplicable
   acts_as :question, class_name: Course::Assessment::Question.name
 
   enum grading_scheme: [:all_correct, :any_correct]
@@ -36,6 +37,13 @@ class Course::Assessment::Question::MultipleResponse < ActiveRecord::Base
     end
 
     answer.acting_as
+  end
+
+  def initialize_duplicate(duplicator, other)
+    self.options = duplicator.duplicate(other.options)
+
+    # Set the belongs to association
+    self.question = duplicator.duplicate(other.question)
   end
 
   private
