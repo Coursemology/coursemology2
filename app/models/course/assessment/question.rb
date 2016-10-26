@@ -71,9 +71,15 @@ class Course::Assessment::Question < ActiveRecord::Base
            question_number: question_number, title: title)
   end
 
-  def initialize_duplicate(duplicator, other)
-    self.skills = duplicator.duplicate(other.skills).compact
-    self.actable = duplicator.duplicate(other.actable)
+  # Copy attributes for question from the object being duplicated.
+  #
+  # @param other [Object] The source object to copy attributes from.
+  def copy_attributes(other)
+    self.title = other.title
+    self.description = other.description
+    self.staff_only_comments = other.staff_only_comments
+    self.maximum_grade = other.maximum_grade
+    self.weight = other.weight
   end
 
   private

@@ -40,10 +40,8 @@ class Course::Assessment::Question::MultipleResponse < ActiveRecord::Base
   end
 
   def initialize_duplicate(duplicator, other)
+    copy_attributes(other)
     self.options = duplicator.duplicate(other.options)
-
-    # Set the belongs to association
-    self.question = duplicator.duplicate(other.question)
   end
 
   private

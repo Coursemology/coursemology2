@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::TextResponse < ActiveRecord::Base
   acts_as :question, class_name: Course::Assessment::Question.name
+  acts_as_duplicable
 
   validate :validate_grade
 
@@ -35,6 +36,11 @@ class Course::Assessment::Question::TextResponse < ActiveRecord::Base
     answer = submission.text_response_answers.build(submission: submission, question: question)
     answer.answer_text = last_attempt.answer_text if last_attempt
     answer.acting_as
+  end
+
+  def initialize_duplicate(duplicator, other)
+    copy_attributes(other)
+    self.solutions = duplicator.duplicate(other.solutions)
   end
 
   private

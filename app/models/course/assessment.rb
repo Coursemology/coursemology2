@@ -99,7 +99,11 @@ class Course::Assessment < ActiveRecord::Base
     self.lesson_plan_item = duplicator.duplicate(other.lesson_plan_item)
 
     self.folder = duplicator.duplicate(other.folder)
-    self.questions = duplicator.duplicate(other.questions).compact
+    self.questions = duplicator.duplicate(other.questions.map(&:actable)).compact.map(&:acting_as)
+    self.assessment_conditions = duplicator.duplicate(other.assessment_conditions)
+    # Like achievement conditions, duplicate the actable object directly and let the acting_as
+    # gem create the Condition object.
+    self.conditions = duplicator.duplicate(other.conditions.map(&:actable)).map(&:acting_as)
   end
 
   private

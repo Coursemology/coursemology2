@@ -78,11 +78,10 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
   end
 
   def initialize_duplicate(duplicator, other)
+    copy_attributes(other)
+
     # TODO: check if there are any side effects from this
     self.import_job_id = nil
-
-    # Set the actable association
-    self.question = duplicator.duplicate(other.question)
     self.template_files = duplicator.duplicate(other.template_files)
     self.test_cases = duplicator.duplicate(other.test_cases)
     self.attachment = duplicator.duplicate(other.attachment)
