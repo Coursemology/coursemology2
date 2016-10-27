@@ -3,29 +3,11 @@ module Course::Assessment::Submission::TodoConcern
   extend ActiveSupport::Concern
 
   included do
-    after_create :update_todo
+    after_save :update_todo, if: :workflow_state_changed?
     after_destroy :restart_todo
-
-    # Overrides #finalise method, which is part of the workflow event transition handler
-    # Given the need to override this method, this concern has to be placed after the
-    #   event transition handlers defined in Course::Assessment::Submission class.
-    define_method :finalise do |*args|
-      super(*args) if defined?(super)
-      return unless todo.in_progress?
-      todo.complete!
-      todo.save!
-    end
-
-    # Overrides #unsubmit method, which is part of the workflow event transition handler
-    # Given the need to override this method, this concern has to be placed after the
-    #   event transition handlers defined in Course::Assessment::Submission class.
-    define_method :unsubmit do |*args|
-      super(*args) if defined?(super)
-      return unless todo.completed?
-      todo.uncomplete!
-      todo.save!
-    end
   end
+
+  private
 
   def todo
     @todo ||= begin
@@ -35,14 +17,14 @@ module Course::Assessment::Submission::TodoConcern
   end
 
   def update_todo
-    return unless todo.not_started?
-    todo.start!
-    todo.save!
+    if attempting?
+      todo.update_column(:workflow_state, 'in_progress') unless todo.in_progress?
+    elsif submitted? || graded? || published?
+      todo.update_column(:workflow_state, 'completed') unless todo.completed?
+    end
   end
 
   def restart_todo
-    return if todo.not_started?
-    todo.restart!
-    todo.save!
+    todo.update_column(:workflow_state, 'not_started') unless todo.not_started?
   end
 end

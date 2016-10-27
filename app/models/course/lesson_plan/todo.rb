@@ -3,17 +3,9 @@ class Course::LessonPlan::Todo < ActiveRecord::Base
   include Workflow
 
   workflow do
-    state :not_started do
-      event :start, transitions_to: :in_progress
-    end
-    state :in_progress do
-      event :complete, transitions_to: :completed
-      event :restart, transitions_to: :not_started
-    end
-    state :completed do
-      event :uncomplete, transitions_to: :in_progress
-      event :restart, transitions_to: :not_started
-    end
+    state :not_started
+    state :in_progress
+    state :completed
   end
 
   after_initialize :set_default_values, if: :new_record?
