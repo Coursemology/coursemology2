@@ -38,6 +38,12 @@ class Course::Material::Folder < ActiveRecord::Base
     end
   end
 
+  # Filter out folders with owners. Keeps folders created directly.
+  # Needed for duplication.
+  def self.without_owners
+    select { |folder| folder.owner_id.nil? }
+  end
+
   scope :with_content_statistics, ->() { all.calculated(:material_count, :children_count) }
 
   def files_attributes=(files)
@@ -67,6 +73,7 @@ class Course::Material::Folder < ActiveRecord::Base
     self.materials = duplicator.duplicate(other.materials).compact
     self.owner = duplicator.duplicate(other.owner)
     self.course = duplicator.duplicate(other.course)
+    self.parent = duplicator.duplicate(other.parent)
   end
 
   private
