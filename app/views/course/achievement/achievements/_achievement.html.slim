@@ -9,11 +9,12 @@
       = display_locked_achievement_badge
 
   th
+    - if achievement.draft?
+      span title=draft_message(achievement)
+        => fa_icon 'ban'.freeze
+
     = link_to format_inline_text(achievement.title),
               course_achievement_path(current_course, achievement)
-    - if achievement.draft?
-      small title=achievement
-        =< fa_icon 'eye-slash'.freeze
 
   td.table-description colspan=2
     div.description

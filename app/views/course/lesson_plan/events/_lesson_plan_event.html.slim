@@ -13,11 +13,11 @@
       span.label.label-default
         = event.event_type
 
-      =< format_inline_text(event.title)
-
       - if event.draft?
         span data-placement='top' title=draft_message(event)
-        =< fa_icon 'eye-slash'.freeze
+          =< fa_icon 'ban'.freeze
+
+      =< format_inline_text(event.title)
 
   .lesson-plan-item-body.panel-collapse.collapse.in id=item_body_id(event)
     li.list-group-item
