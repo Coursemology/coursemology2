@@ -4,6 +4,6 @@ en:
       sessions:
         new:
           header: 'Input Password'
-          message: 'The assessment is locked, input the password to continue.'
+          message: 'The assessment is locked, please approach any course staff for assistance.'
           placeholder: 'Password'
           continue: 'Continue'

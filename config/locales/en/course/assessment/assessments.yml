@@ -61,7 +61,11 @@ en:
         form:
           autograded: 'Automatically assign grade and experience points after finalization'
           autograded_hint: 'Note that all the questions in the assessment must be auto-gradable'
-          password_hint: 'Students must input the correct password in order to attempt the assessment'
+          password_hint: >
+            When password protection is enabled, students are able to attempt the submission on the
+            first try. Further attempts at editing the submission requires the input of the
+            password (with the help of course staff). In addition, only one session is allowed to
+            access the submission at any given time.
           password_placeholder: 'Leave blank to disable password protection'
         assessment_management_buttons:
           attempt: 'Attempt'

@@ -23,7 +23,8 @@ class Course::Assessment::Submission::SubmissionsController < \
     raise IllegalStateError if @assessment.questions.empty?
     @submission.session_id = session[:session_id]
     if @submission.save
-      redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission)
+      redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission,
+                                                         new_submission: true)
     else
       redirect_to course_assessments_path(current_course),
                   danger: t('.failure', error: @submission.errors.full_messages.to_sentence)
