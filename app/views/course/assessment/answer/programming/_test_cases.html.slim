@@ -1,5 +1,5 @@
 - auto_grading = answer.auto_grading ? answer.auto_grading.actable : nil
-- is_grader = can?(:grade, answer.answer)
+- is_grader = can?(:read_tests, @submission)
 - test_cases_by_type = question.test_cases_by_type
 - test_cases_and_results = get_test_cases_and_results(test_cases_by_type, auto_grading)
 

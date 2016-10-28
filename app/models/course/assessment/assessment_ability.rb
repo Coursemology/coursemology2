@@ -26,6 +26,7 @@ module Course::Assessment::AssessmentAbility
     allow_staff_manage_annotations
     allow_staff_read_answers
     allow_manager_publish_submissions
+    allow_staff_read_tests
   end
 
   def define_auto_grader_permissions
@@ -109,6 +110,10 @@ module Course::Assessment::AssessmentAbility
     can :grade, Course::Assessment::Answer, submission: submissions_without_attempting_hash.merge(
       assessment: assessment_course_staff_hash
     )
+  end
+
+  def allow_staff_read_tests
+    can :read_tests, Course::Assessment::Submission, assessment: assessment_course_staff_hash
   end
 
   def allow_auto_grader_programming_evaluations
