@@ -90,3 +90,9 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 end
+
+Capybara.register_server(:puma) do |app, port|
+  server = Puma::Server.new(app)
+  server.add_tcp_listener(Capybara.server_host, port)
+  server.run
+end
