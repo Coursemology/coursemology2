@@ -21,6 +21,7 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def create
     raise IllegalStateError if @assessment.questions.empty?
+    @submission.last_session_id = session[:session_id]
     if @submission.save
       redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission)
     else
