@@ -1,15 +1,19 @@
 # frozen_string_literal: true
-# Authenticate the assessment and store the result in the session.
+# Authenticate the assessment and update the session_id in submission.
 class Course::Assessment::SessionAuthenticationService
   # @param [Course::Assessment] assessment The password protected assessment.
   # @param [ActionDispatch::Request::Session] session The current session.
-  def initialize(assessment, session)
+  # @param [Course::Assessment::Submission|nil] submission The session id will be stored if the
+  #   submission is given.
+  def initialize(assessment, session, submission = nil)
     @assessment = assessment
     @session = session
+    @submission = submission
   end
 
   # Check if the password from user input matches the assessment password.
-  # Further stores the password in session so that user do not need to input again.
+  # Further stores the session_id in submission, this ensures that current_user is the only one that
+  #   can access the submission.
   #
   # @param [String] password
   # @return [Boolean] true if matches
@@ -17,31 +21,27 @@ class Course::Assessment::SessionAuthenticationService
     return true unless @assessment.password_protected?
 
     if password == @assessment.password
-      store_password(password)
+      update_session_id if @submission
       true
     else
       false
     end
   end
 
-  # Check if user has inputted the correct passowrd before
+  # Check whether current session is the same session that created the submission or not.
   #
   # @return [Boolean]
   def authenticated?
-    session_password == @assessment.password
+    current_session_id == @submission.session_id
   end
 
   private
 
-  def store_password(password)
-    @session[session_key] = password
+  def update_session_id
+    @submission.update_column(:session_id, current_session_id)
   end
 
-  def session_password
-    @session[session_key]
-  end
-
-  def session_key
-    "assessment_#{@assessment.id}_password"
+  def current_session_id
+    @session[:session_id]
   end
 end

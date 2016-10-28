@@ -20,7 +20,7 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
     context 'As a Course Student' do
       let(:user) { student }
 
-      scenario 'I need to input the password before attempting exams', js: true do
+      scenario 'I need to input the password when using a different session ', js: true do
         assessment
         visit course_assessments_path(course)
 
@@ -29,6 +29,17 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
             I18n.t('course.assessment.assessments.assessment_management_buttons.attempt')
           ).trigger('click')
         end
+        # The user should be redirect to submission edit page
+        expect(page).to have_selector('h1', text: assessment.title)
+
+        submission = assessment.submissions.last
+
+        # Logout and login again and visit the same submission
+        logout
+        login_as(user)
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
         expect(page).to have_selector('div.password-panel')
 
         fill_in 'session_password', with: 'wrong_password'
@@ -38,7 +49,6 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
         fill_in 'session_password', with: assessment.password
         click_button I18n.t('course.assessment.sessions.new.continue')
 
-        # The user should be redirect to submission edit page
         expect(page).to have_selector('h1', text: assessment.title)
       end
 
