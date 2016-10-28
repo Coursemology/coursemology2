@@ -7,10 +7,15 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) { create(:assessment, :published_with_programming_question, course: course) }
+    let(:assessment_2) { create(:assessment, :published_with_programming_question, course: course) }
     let(:submission) do
       create(:submission, *submission_traits, assessment: assessment, creator: user)
     end
+    let(:submission_2) do
+      create(:submission, *submission_traits_2, assessment: assessment_2, creator: user)
+    end
     let(:submission_traits) { nil }
+    let(:submission_traits_2) { nil }
 
     before { login_as(user, scope: :user) }
 
@@ -79,12 +84,23 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
     context 'As Course Staff' do
       let(:user) { create(:course_teaching_assistant, course: course).user }
       let(:submission_traits) { :submitted }
+      let(:submission_traits_2) { :attempting }
 
       scenario 'I can view the test cases' do
+        # View test cases for submitted submission
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         within find(content_tag_selector(submission.answers.first)) do
           assessment.questions.first.actable.test_cases.each do |solution|
+            expect(page).to have_content_tag_for(solution)
+          end
+        end
+
+        # View test cases for attempting submission
+        visit edit_course_assessment_submission_path(course, assessment_2, submission_2)
+
+        within find(content_tag_selector(submission_2.answers.first)) do
+          assessment_2.questions.first.actable.test_cases.each do |solution|
             expect(page).to have_content_tag_for(solution)
           end
         end
