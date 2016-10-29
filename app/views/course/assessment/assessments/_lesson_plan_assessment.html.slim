@@ -13,11 +13,11 @@
       span.label.label-default
         = format_inline_text(assessment.tab.category.title.singularize)
 
-      =< format_inline_text(assessment.title)
-
       - if assessment.draft?
         span data-placement='top' title=draft_message(assessment)
-          =< fa_icon 'eye-slash'.freeze
+          =< fa_icon 'ban'.freeze
+
+      =< format_inline_text(assessment.title)
 
   .lesson-plan-item-body.panel-collapse.collapse.in id=item_body_id(assessment)
     li.list-group-item
