@@ -3,7 +3,8 @@ en:
     assessment:
       answer:
         error: >
-          (T_T) Sorry, the autograder is having mood swings and quit on us. Please try again.
+          (T_T) Sorry, the autograder is having mood swings and quit on us.
+          Try submitting your code again in a couple of minutes.
         worksheet:
           comments: 'Comments'
           run_code: 'Run Code'
