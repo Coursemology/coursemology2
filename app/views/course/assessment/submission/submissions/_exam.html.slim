@@ -15,3 +15,10 @@
       mark: @submission.submitted? && can_grade,
       unsubmit: !@submission.attempting? && can_grade\
      }
+
+/ Display a dialog after create the submission
+- if @assessment.password_protected? && params[:new_submission] == 'true'
+  javascript:
+    $(document).ready(function() {
+      alert(I18n.t('javascript.course.assessment.submission.submissions.exam.notice'));
+    });

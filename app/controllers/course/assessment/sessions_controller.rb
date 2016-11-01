@@ -47,6 +47,7 @@ class Course::Assessment::SessionsController < Course::Assessment::Controller
   end
 
   def authentication_service
-    @service ||= Course::Assessment::SessionAuthenticationService.new(@assessment, session)
+    @service ||=
+      Course::Assessment::SessionAuthenticationService.new(@assessment, session, @submission)
   end
 end
