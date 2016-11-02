@@ -1,0 +1,15 @@
+- auto_grading = answer.auto_grading ? answer.auto_grading.actable : nil
+- is_grader = can?(:read_tests, @submission)
+
+/ Show stdout and stderr to graders when evaluation is unsuccessful.
+- if is_grader && auto_grading && auto_grading.exit_code != 0
+  h3 = t('.stdout')
+  div.stdout
+    pre
+      = auto_grading.stdout
+
+  h3 = t('.stderr')
+  div.stderr
+    pre
+      = auto_grading.stderr
+

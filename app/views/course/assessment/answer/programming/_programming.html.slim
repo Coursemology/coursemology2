@@ -10,3 +10,5 @@ div.files
 - answer = last_attempt ? last_attempt.actable: programming
 = render partial: 'course/assessment/answer/programming/test_cases',
          locals: { question: question, answer: answer }
+= render partial: 'course/assessment/answer/programming/output_streams',
+         locals: { answer: answer }

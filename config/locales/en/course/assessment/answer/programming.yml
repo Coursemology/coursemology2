@@ -23,3 +23,6 @@ en:
             privacy_warning: :'course.assessment.question.programming.form_test_cases.privacy_warning'
           annotation_footer:
             reply: 'Reply'
+          output_streams:
+            stdout: :'course.assessment.question.programming.form_build_log.stdout'
+            stderr: :'course.assessment.question.programming.form_build_log.stderr'
