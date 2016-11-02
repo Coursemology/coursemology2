@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161027074807) do
+ActiveRecord::Schema.define(version: 20161102022455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -227,6 +227,9 @@ ActiveRecord::Schema.define(version: 20161027074807) do
   end
 
   create_table "course_assessment_answer_programming_auto_gradings", force: :cascade do |t|
+    t.text    "stdout"
+    t.text    "stderr"
+    t.integer "exit_code"
   end
 
   create_table "polyglot_languages", force: :cascade do |t|
