@@ -8,7 +8,11 @@ div.files
     = render file_fields_path, f: files_form
 
 - answer = last_attempt ? last_attempt.actable: programming
+- auto_grading = answer.auto_grading ? answer.auto_grading.actable : nil
+- is_grader = can?(:read_tests, @submission)
 = render partial: 'course/assessment/answer/programming/test_cases',
-         locals: { question: question, answer: answer }
-= render partial: 'course/assessment/answer/programming/output_streams',
-         locals: { answer: answer }
+         locals: { question: question, auto_grading: auto_grading, is_grader: is_grader }
+/ Show stdout and stderr to graders when evaluation is unsuccessful.
+- if is_grader && auto_grading && auto_grading.exit_code != 0
+  = render partial: 'course/assessment/answer/programming/output_streams',
+           locals: { auto_grading: auto_grading }
