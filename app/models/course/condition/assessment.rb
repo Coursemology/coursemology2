@@ -3,6 +3,7 @@ class Course::Condition::Assessment < ActiveRecord::Base
   include ActiveSupport::NumberHelper
 
   acts_as_condition
+  acts_as_duplicable
 
   # Trigger for evaluating the satisfiability of conditionals for a course user
   Course::Assessment::Submission.after_save do |submission|
@@ -53,6 +54,12 @@ class Course::Condition::Assessment < ActiveRecord::Base
     submission.execute_after_commit do
       evaluate_conditional_for(submission.course_user) if submission.current_state >= :submitted
     end
+  end
+
+  def initialize_duplicate(duplicator, other)
+    self.conditional_type = other.conditional_type
+    self.conditional = duplicator.duplicate(other.conditional)
+    self.course = duplicator.duplicate(other.course)
   end
 
   private

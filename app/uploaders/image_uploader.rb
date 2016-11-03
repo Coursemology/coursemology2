@@ -43,6 +43,15 @@ class ImageUploader < CarrierWave::Uploader::Base
     %w(jpg jpeg gif png)
   end
 
+  def duplicate_from(other_uploader)
+    case other_uploader.send(:storage).class.name
+    when 'CarrierWave::Storage::File'
+      cache!(File.new(other_uploader.file.path))
+    when 'CarrierWave::Storage::Fog', 'CarrierWave::Storage::AWS'
+      download!(other_uploader.url)
+    end
+  end
+
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
   # def filename

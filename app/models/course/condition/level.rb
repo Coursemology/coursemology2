@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Condition::Level < ActiveRecord::Base
   acts_as_condition
+  acts_as_duplicable
 
   # Trigger for evaluating the satisfiability of conditionals for a course user
   Course::ExperiencePointsRecord.after_save do |record|
@@ -24,6 +25,12 @@ class Course::Condition::Level < ActiveRecord::Base
   # @return [Boolean] true if the user is above or equal the minimum level and false otherwise.
   def satisfied_by?(course_user)
     course_user.level_number >= minimum_level
+  end
+
+  def initialize_duplicate(duplicator, other)
+    self.conditional_type = other.conditional_type
+    self.conditional = duplicator.duplicate(other.conditional)
+    self.course = duplicator.duplicate(other.course)
   end
 
   # Class that the condition depends on.

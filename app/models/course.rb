@@ -138,6 +138,7 @@ class Course < ActiveRecord::Base
     self.assessment_skills = duplicator.duplicate(other.assessment_skills)
 
     self.levels = duplicator.duplicate(other.levels)
+    self.achievements = duplicator.duplicate(other.achievements)
   end
 
   private
