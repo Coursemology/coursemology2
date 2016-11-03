@@ -136,6 +136,8 @@ class Course < ActiveRecord::Base
 
     # Skill branches are duplicated as part of skills.
     self.assessment_skills = duplicator.duplicate(other.assessment_skills)
+
+    self.levels = duplicator.duplicate(other.levels)
   end
 
   private

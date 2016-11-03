@@ -3,6 +3,8 @@ class Course::Level < ActiveRecord::Base
   include Course::ModelComponentHost::Component
   validates :experience_points_threshold, numericality: { greater_than_or_equal_to: 0 }
 
+  acts_as_duplicable
+
   belongs_to :course, inverse_of: :levels
 
   # By default, levels should be returned with their level_number,
@@ -58,5 +60,9 @@ class Course::Level < ActiveRecord::Base
   # level if current level is the highest.
   def next_level_threshold
     self.next ? self.next.experience_points_threshold : experience_points_threshold
+  end
+
+  def initialize_duplicate(duplicator, other)
+    self.course = duplicator.duplicate(other.course)
   end
 end
