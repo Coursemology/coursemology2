@@ -63,7 +63,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
   #   Gets the time the submission was submitted.
   #   @return [Time]
   calculated :submitted_at, (lambda do
-    Course::Assessment::Answer.unscope(:order).where do
+    Course::Assessment::Answer.unscope(:order).without_reattempting_state.where do
       course_assessment_answers.submission_id == course_assessment_submissions.id
     end.select { max(course_assessment_answers.submitted_at) }
   end)
@@ -72,7 +72,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
   #   Gets the time the submission was graded.
   #   @return [Time]
   calculated :graded_at, (lambda do
-    Course::Assessment::Answer.unscope(:order).where do
+    Course::Assessment::Answer.unscope(:order).without_reattempting_state.where do
       course_assessment_answers.submission_id == course_assessment_submissions.id
     end.select { max(course_assessment_answers.graded_at) }
   end)
@@ -157,7 +157,10 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   # The latest answer is last answer of the question, ordered by created_at.
   def latest_answers
-    answers.group_by(&:question_id).map { |pair| pair[1].last }
+    answers.
+      select { |answer| !answer.reattempting? }.
+      group_by(&:question_id).
+      map { |pair| pair[1].last }
   end
 
   private

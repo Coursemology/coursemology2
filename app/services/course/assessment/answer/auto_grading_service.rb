@@ -30,7 +30,7 @@ class Course::Assessment::Answer::AutoGradingService
       Course::Assessment::Answer.transaction do
         answer.save!
         if reattempt
-          new_answer = answer.question.attempt(answer.submission, answer)
+          new_answer = answer.question.attempt(answer.submission, last_attempt: answer)
           new_answer.save!
           # Move posts to the new answer.
           # TODO: Mount posts under a join table between submission and answer.

@@ -32,20 +32,23 @@ class Course::Assessment::Question < ActiveRecord::Base
     actable.auto_grader || (raise NotImplementedError)
   end
 
-  # Attempts the given question in the submission. This builds a new answer for the current
-  # question.
+  # Attempts the given question in the submission by building a new answer for that question.
   #
   # @param [Course::Assessment::Submission] submission The submission which the answer should
   #   belong to.
-  # @param [Course::Assessment::Answer|nil] last_attempt If last_attempt is given, fields in the
-  #   new answer will be pre-populated with data from it.
+  # @option options [Course::Assessment::Answer] :last_attempt If last_attempt is given, fields
+  #   in the new answer will be pre-populated with data from it.
+  # @option options [Boolean] :reattempt If this value is a truth value, set answer with the
+  #   +reattempting+ workflow state.
   # @return [Course::Assessment::Answer] The answer corresponding to the question. It is required
   #   that the {Course::Assessment::Answer#question} property be the same as +self+. The result
   #   should not be persisted.
   # @raise [NotImplementedError] question#attempt was not implemented.
-  def attempt(submission, last_attempt = nil)
+  def attempt(submission, options = {})
     if actable && actable.self_respond_to?(:attempt)
-      return actable.attempt(submission, last_attempt ? last_attempt.actable : nil)
+      answer = actable.attempt(submission, options[:last_attempt].try(:actable))
+      answer.workflow_state = :reattempting if options[:reattempt]
+      return answer
     end
     raise NotImplementedError, 'Questions must implement the #attempt method for submissions.'
   end

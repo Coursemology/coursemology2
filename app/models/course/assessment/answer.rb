@@ -16,14 +16,16 @@ class Course::Assessment::Answer < ActiveRecord::Base
       event :unsubmit, transitions_to: :attempting
       event :publish, transitions_to: :graded # To re-grade an answer.
     end
+
+    state :reattempting
   end
 
   validate :validate_consistent_assessment
   validate :validate_assessment_state, if: :attempting?
-  validates :submitted_at, :grade, presence: true, unless: :attempting?
-  validates :submitted_at, :grade, :grader, :graded_at, absence: true, if: :attempting?
+  validates :submitted_at, :grade, presence: true, unless: :attemptable?
+  validates :submitted_at, :grade, :grader, :graded_at, absence: true, if: :attemptable?
   validates :grader, :graded_at, presence: true, if: :graded?
-  validate :validate_consistent_grade, unless: :attempting?
+  validate :validate_consistent_grade, unless: :attemptable?
 
   belongs_to :submission, inverse_of: :answers
   belongs_to :question, class_name: Course::Assessment::Question.name, inverse_of: nil
@@ -38,6 +40,8 @@ class Course::Assessment::Answer < ActiveRecord::Base
   before_validation :set_course, if: :new_record?
 
   default_scope { order(:created_at) }
+
+  scope :without_reattempting_state, -> { where.not(workflow_state: :reattempting) }
 
   # Specific implementation of Course::Discussion::Topic#from_user, this is not supposed to be
   # called directly.
@@ -102,6 +106,10 @@ class Course::Assessment::Answer < ActiveRecord::Base
 
   def validate_consistent_grade
     errors.add(:grade, :consistent_grade) if grade.present? && grade > question.maximum_grade
+  end
+
+  def attemptable?
+    attempting? || reattempting?
   end
 
   # Ensures that an auto grading record exists for this answer.
