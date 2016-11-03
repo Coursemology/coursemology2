@@ -124,6 +124,9 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
             receive(:execute).and_wrap_original do |original, *args|
               result = original.call(*args)
               result.test_report = nil
+              result.stdout = "Makefile:6: recipe for target 'test' failed"
+              result.stderr = "ImportError: No module named 'simulation'"
+              result.exit_code = 2
               result
             end
         end
@@ -154,6 +157,15 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
               expect(test_result.messages['error']).
                 to eq 'course.assessment.answer.programming_auto_grading.grade.evaluation_failed'
             end
+          end
+
+          it 'sets stdout, stderr and exit code for the programming autograding object' do
+            subject
+            expect(answer.auto_grading.specific.stdout).
+              to eq "Makefile:6: recipe for target 'test' failed"
+            expect(answer.auto_grading.specific.stderr).
+              to eq "ImportError: No module named 'simulation'"
+            expect(answer.auto_grading.specific.exit_code).to eq 2
           end
         end
       end

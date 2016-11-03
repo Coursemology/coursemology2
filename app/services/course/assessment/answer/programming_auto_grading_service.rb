@@ -58,6 +58,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   #   correct status, grade and the programming auto grading record.
   def build_result(question, evaluation_result)
     auto_grading = Course::Assessment::Answer::ProgrammingAutoGrading.new(actable: nil)
+    set_auto_grading_results(auto_grading, evaluation_result)
     build_test_case_records(question, auto_grading, evaluation_result.test_report)
 
     number_correct = auto_grading.test_results.map(&:passed?).count(true)
@@ -122,6 +123,21 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
         passed: false,
         messages: messages
       )
+    end
+  end
+
+  # Sets results which belong to the auto grading rather than an individual test case.
+  #
+  # @param [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading The programming auto
+  #   grading result to store the test results in.
+  # @param [Course::Assessment::ProgrammingEvaluationService::Result] evaluation_result The
+  #   result of evaluating the package.
+  # @return [Course::Assessment::Answer::ProgrammingAutoGrading]
+  def set_auto_grading_results(auto_grading, evaluation_result)
+    auto_grading.tap do |ag|
+      ag.stdout = evaluation_result.stdout
+      ag.stderr = evaluation_result.stderr
+      ag.exit_code = evaluation_result.exit_code
     end
   end
 

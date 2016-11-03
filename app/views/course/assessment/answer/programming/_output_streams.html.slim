@@ -1,0 +1,27 @@
+div.panel.panel-default
+  div.panel-heading
+    h3.panel-title
+      a.collapse-toggle.collapsed [data-toggle="collapse"
+        href="#collapseStdout_#{auto_grading.id}"
+        aria-expanded="false"
+        aria-controls="collapseStdout_#{auto_grading.id}"]
+        i.fa.fa-chevron aria-hidden="true"
+        =< t('.stdout')
+  div.panel-collapse.collapse id="collapseStdout_#{auto_grading.id}"
+    div.panel-body
+      pre
+        = auto_grading.stdout
+
+div.panel.panel-default
+  div.panel-heading
+    h3.panel-title
+      a.collapse-toggle.collapsed [data-toggle="collapse"
+        href="#collapseStderr_#{auto_grading.id}"
+        aria-expanded="false"
+        aria-controls="collapseStderr_#{auto_grading.id}"]
+        i.fa.fa-chevron aria-hidden="true"
+        =< t('.stderr')
+  div.panel-collapse.collapse id="collapseStderr_#{auto_grading.id}"
+    dir.panel-body
+      pre
+        = auto_grading.stderr

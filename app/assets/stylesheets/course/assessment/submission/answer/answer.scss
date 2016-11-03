@@ -10,4 +10,15 @@
       margin-top: -15px;
     }
   }
+
+  .panel-heading .collapse-toggle .fa-chevron::after {
+    // symbol for "opened" panels
+    color: $grey;
+    content: '\f078';
+  }
+
+  .panel-heading .collapse-toggle.collapsed .fa-chevron::after {
+    // symbol for "collapsed" panels
+    content: '\f054';
+  }
 }
