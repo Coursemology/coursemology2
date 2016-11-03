@@ -21,7 +21,7 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def create
     raise IllegalStateError if @assessment.questions.empty?
-    @submission.session_id = session[:session_id]
+    @submission.session_id = authentication_service.generate_authentication_token!
     if @submission.save
       redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission,
                                                          new_submission: true)
@@ -97,12 +97,15 @@ class Course::Assessment::Submission::SubmissionsController < \
     return unless @submission.attempting?
     return if !@assessment.password_protected? || can?(:manage, @assessment)
 
-    service =
-      Course::Assessment::SessionAuthenticationService.new(@assessment, session, @submission)
-    unless service.authenticated?
+    unless authentication_service.authenticated?
       redirect_to new_course_assessment_session_path(
         current_course, @assessment, submission_id: @submission.id
       )
     end
+  end
+
+  def authentication_service
+    @auth_service ||=
+      Course::Assessment::SessionAuthenticationService.new(@assessment, session, @submission)
   end
 end

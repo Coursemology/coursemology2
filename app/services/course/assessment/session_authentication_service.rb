@@ -28,20 +28,33 @@ class Course::Assessment::SessionAuthenticationService
     end
   end
 
+  # Generates a new authentication token and stores it in current session.
+  #
+  # @return [String] the new authentication token.
+  def generate_authentication_token!
+    new_id = SecureRandom.hex(8)
+    @session[session_key] = new_id
+    new_id
+  end
+
   # Check whether current session is the same session that created the submission or not.
   #
   # @return [Boolean]
   def authenticated?
-    current_session_id == @submission.session_id
+    current_authentication_token && current_authentication_token == @submission.session_id
   end
 
   private
 
   def update_session_id
-    @submission.update_column(:session_id, current_session_id)
+    @submission.update_column(:session_id, generate_authentication_token!)
   end
 
-  def current_session_id
-    @session[:session_id]
+  def current_authentication_token
+    @session[session_key]
+  end
+
+  def session_key
+    "assessment_#{@assessment.id}_authentication_token"
   end
 end
