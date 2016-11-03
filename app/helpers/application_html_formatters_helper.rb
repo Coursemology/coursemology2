@@ -30,6 +30,10 @@ module ApplicationHTMLFormattersHelper
   # The Code formatter options to use.
   DefaultCodePipelineOptions = DefaultPipelineOptions.merge(css_table_class: 'table').freeze
 
+  # Constants that defines the size/lines limit of the code
+  MAX_CODE_SIZE = 50 * 1024 # 50 KB
+  MAX_CODE_LINES = 1000
+
   # The Code formatter pipeline.
   #
   # @param [Integer] starting_line_number The line number of the first line, default is 1.
@@ -70,9 +74,26 @@ module ApplicationHTMLFormattersHelper
   # @param [String] code The code to syntax highlight.
   # @param [Coursemology::Polyglot::Language] language The language to highlight the code block
   #   with.
-  # @param [Integer] starting_line_number The line number of the first line, default is 1. This
+  # @param [Integer] start_line The line number of the first line, default is 1. This
   #   should be provided if the code fragment does not start on the first line.
-  def format_code_block(code, language = nil, starting_line_number = 1)
+  def format_code_block(code, language = nil, start_line = 1)
+    if code_size_exceeds_limit?(code)
+      content_tag(:div, class: 'alert alert-warning') do
+        I18n.t('layouts.code_formatter.size_too_big')
+      end
+    else
+      sanitize_and_format_code(code, language, start_line)
+    end
+  end
+
+  private
+
+  # Test if the given code exceeds the size or line limit.
+  def code_size_exceeds_limit?(code)
+    code && (code.bytesize > MAX_CODE_SIZE || code.lines.size > MAX_CODE_LINES)
+  end
+
+  def sanitize_and_format_code(code, language, start_line)
     code = html_escape(code) unless code.html_safe?
     code = code.gsub(/\r\n|\r/, "\n").html_safe
     code = content_tag(:pre, lang: language ? language.rouge_lexer : nil) do
@@ -81,10 +102,8 @@ module ApplicationHTMLFormattersHelper
       end
     end
 
-    format_with_pipeline(default_code_pipeline(starting_line_number), code)
+    format_with_pipeline(default_code_pipeline(start_line), code)
   end
-
-  private
 
   # Filters the given text through the given pipeline.
   #

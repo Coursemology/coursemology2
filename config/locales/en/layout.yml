@@ -43,3 +43,5 @@ en:
       achievements: :'course.achievement.achievements.index.header'
       levels: :'course.levels.index.level'
       progress: '%{current} / %{next} EXP'
+    code_formatter:
+      size_too_big: 'The file is too big and cannot be displayed.'
