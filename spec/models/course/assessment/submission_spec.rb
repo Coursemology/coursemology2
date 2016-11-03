@@ -350,6 +350,19 @@ RSpec.describe Course::Assessment::Submission do
           expect(submission.answers.all?(&:graded?)).to be(true)
         end
       end
+
+      context 'when the assessment is guided' do
+        let(:assessment_traits) { [:with_all_question_types, :guided] }
+        before do
+          submission.publish!
+          submission.save!
+        end
+
+        it 'createa reattempting answers for each question' do
+          expect(submission.reload.answers.with_reattempting_state.map(&:question)).
+            to contain_exactly(*assessment.questions)
+        end
+      end
     end
 
     describe '#auto_grade!' do
@@ -415,6 +428,14 @@ RSpec.describe Course::Assessment::Submission do
         it 'sets all latest answers in the submission to attempting' do
           expect(subject.latest_answers.all?(&:attempting?)).to be(true)
           expect(earlier_answer.reload).to be_graded
+        end
+
+        context 'when the assessment is guided' do
+          let(:assessment_traits) { [:with_all_question_types, :guided] }
+
+          it 'deletes all reattempting answers' do
+            expect(subject.answers.with_reattempting_state.count).to eq(0)
+          end
         end
       end
     end

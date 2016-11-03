@@ -11,14 +11,14 @@ module Course::Assessment::QuestionsConcern
   #   answers.
   # @return [Array<Course::Assessment::Answer>] The answers for the questions, in the same order
   #   specified. Newly initialized answers will not be persisted.
-  def attempt(submission)
+  def attempt(submission, reattempt = false)
     attempting_answers = submission.answers.latest_answers.
                          merge(submission.answers.with_attempting_state).
                          where(question: self).
                          map { |answer| [answer.question, answer] }.to_h
 
     map do |question|
-      attempting_answers.fetch(question) { question.attempt(submission) }
+      attempting_answers.fetch(question) { question.attempt(submission, reattempt: reattempt) }
     end
   end
 

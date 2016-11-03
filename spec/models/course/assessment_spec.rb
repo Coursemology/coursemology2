@@ -171,6 +171,19 @@ RSpec.describe Course::Assessment do
             expect(answers.all?(&:persisted?)).to be(false)
           end
         end
+
+        context 'when reattempt is true' do
+          before do
+            assessment.questions.attempt(submission, reattempt: true).tap do |answers|
+              answers.each(&:save)
+            end
+          end
+
+          it 'creates new answers with reattempting state' do
+            expect(submission.reload.answers.with_reattempting_state.count).
+              to eq(assessment.questions.count)
+          end
+        end
       end
 
       describe '#step' do
