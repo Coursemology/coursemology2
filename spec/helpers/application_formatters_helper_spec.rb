@@ -80,6 +80,19 @@ RSpec.describe ApplicationFormattersHelper do
         expect(formatted_block).to have_text('<')
         expect(formatted_block).to have_text('"')
       end
+
+      context 'when the code snippet exceeds the size or lines limit' do
+        let(:snippet) do
+          too_many_lines = "new line\n" * 1500
+          size_too_big = 'Im 10bytes' * 6 * 1024 # 60KB
+
+          [too_many_lines, size_too_big].sample
+        end
+
+        it 'renders an alert' do
+          expect(formatted_block).to have_tag('div.alert')
+        end
+      end
     end
 
     describe '#sanitize' do
