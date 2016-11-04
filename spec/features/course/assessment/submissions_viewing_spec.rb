@@ -5,7 +5,8 @@ RSpec.describe 'Course: Submissions Viewing' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:assessment) { create(:assessment, course: course) }
+    let(:assessment) { create(:assessment, :worksheet, course: course) }
+    let(:autograded_assessment) { create(:assessment, :guided, autograded: true, course: course) }
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
@@ -43,13 +44,22 @@ RSpec.describe 'Course: Submissions Viewing' do
         end
       end
 
-      scenario 'I can access pending submissions from the sidebar and view pending submissions' do
+      scenario 'I can view pending submissions from all non-autograded assessments' do
         students = create_list(:course_student, 4, course: course)
         attempting_submission, submitted_submission1, submitted_submission2, published_submission =
           students.zip([:attempting, :submitted, :submitted, :published]).map do |student, trait|
             create(:submission, trait, assessment: assessment, course: course,
                                        creator: student.user, course_user: student)
           end
+        autograded_submission =
+          create(:submission, :submitted, assessment: autograded_assessment,
+                                          creator: students.first.user)
+
+        # Create group users
+        group = create(:course_group, course: course)
+        create(:course_group_manager, group: group, course: course, course_user: course_manager)
+        create(:course_group_user, group: group, course: course,
+                                   course_user: submitted_submission1.course_user)
 
         # Staff without group can view all pending submissions
         visit pending_course_submissions_path(course, my_students: false)
@@ -58,24 +68,21 @@ RSpec.describe 'Course: Submissions Viewing' do
         expect(page).not_to have_content_tag_for(attempting_submission)
         expect(page).not_to have_content_tag_for(published_submission)
 
+        # Pending submissions tab shows the tutors for the students if it exists.
+        within find(content_tag_selector(submitted_submission1)) do
+          expect(page).to have_text(course_manager.name)
+        end
+
+        # Pending submissions does not show submissions for guided assessments
+        expect(page).not_to have_content_tag_for(autograded_submission)
+
         # Staff with group view pending submissions of own group students
-        group = create(:course_group, course: course)
-        create(:course_group_manager, group: group, course: course, course_user: course_manager)
-        create(:course_group_user, group: group, course: course,
-                                   course_user: submitted_submission1.course_user)
         visit pending_course_submissions_path(course, my_students: true)
 
         expect(page).to have_content_tag_for(submitted_submission1)
         expect(page).not_to have_content_tag_for(submitted_submission2)
         expect(page).not_to have_content_tag_for(attempting_submission)
         expect(page).not_to have_content_tag_for(published_submission)
-
-        # Pending submissions tab shows the tutors for the students if it exists.
-        visit pending_course_submissions_path(course, my_students: false)
-        expect(page).to have_content_tag_for(submitted_submission1)
-        within find(content_tag_selector(submitted_submission1)) do
-          expect(page).to have_text(course_manager.name)
-        end
 
         # All Pending submissions can be assessed from the sidebar
         within find('.sidebar') do

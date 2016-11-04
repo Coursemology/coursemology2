@@ -10,7 +10,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
   end
 
   def pending
-    @submissions = pending_submissions.from_course(current_course).pending_for_grading
+    @submissions = pending_submissions.from_course(current_course)
   end
 
   private
@@ -55,9 +55,9 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
   def pending_submissions
     if pending_submission_params[:my_students] == 'true'
       my_student_ids = current_course_user ? current_course_user.my_students.select(:user_id) : []
-      @submissions.by_users(my_student_ids)
+      @submissions.by_users(my_student_ids).pending_for_grading
     else
-      @submissions
+      @submissions.pending_for_grading
     end
   end
 
