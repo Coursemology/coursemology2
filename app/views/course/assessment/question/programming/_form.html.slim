@@ -7,6 +7,8 @@
   = f.association :language
   = f.input :memory_limit
   = f.input :time_limit
+  - unless @assessment.guided?
+    = f.input :attempt_limit, placeholder: t('.attempt_limit_placeholder')
   = f.label :template_package
   = f.attachment
 

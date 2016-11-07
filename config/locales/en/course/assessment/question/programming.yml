@@ -13,6 +13,7 @@ en:
             success: 'The programming question was deleted.'
             failure: 'Could not delete programming question: %{error}'
           form:
+            attempt_limit_placeholder: 'The maximum times that students can test their answers ( does not apply to staff )'
             import_result:
               success: 'The package was successfully imported.'
               error: 'The package could not be imported: %{error}'
