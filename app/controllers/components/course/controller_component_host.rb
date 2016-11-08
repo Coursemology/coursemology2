@@ -40,6 +40,12 @@ class Course::ControllerComponentHost
       def display_name
         name
       end
+
+      # @return [Boolean] The gamfied status of the component. If true, the component will be
+      #   disabled when the gamified flag in the course is false. Value is false by default.
+      def gamified?
+        false
+      end
     end
   end
 
@@ -90,7 +96,7 @@ class Course::ControllerComponentHost
   # @return [Array<Class>] array of enabled components
   def enabled_components
     @enabled_components ||= begin
-      instance_enabled_components.select do |m|
+      course_enabled_components.select do |m|
         enabled = @course_settings.settings(m.key).enabled
         enabled.nil? ? m.enabled_by_default? : enabled
       end
@@ -113,6 +119,19 @@ class Course::ControllerComponentHost
       all_components.select do |m|
         enabled = @instance_settings.settings(m.key).enabled
         enabled.nil? ? m.enabled_by_default? : enabled
+      end
+    end
+  end
+
+  # Returns the enabled components in Course, depending on the gamified flag in Course.
+  #
+  # @return [Array<Class>] array of enabled components in Course
+  def course_enabled_components
+    @course_enabled_components = begin
+      if @context.current_course.gamified?
+        instance_enabled_components
+      else
+        instance_enabled_components - instance_enabled_components.select(&:gamified?)
       end
     end
   end

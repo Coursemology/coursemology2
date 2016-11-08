@@ -6,6 +6,10 @@ class Course::LeaderboardComponent < SimpleDelegator
     I18n.t('components.leaderboard.name')
   end
 
+  def self.gamified?
+    true
+  end
+
   def sidebar_items
     main_sidebar_items + settings_sidebar_items
   end

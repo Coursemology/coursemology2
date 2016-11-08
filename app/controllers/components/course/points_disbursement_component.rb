@@ -2,6 +2,10 @@
 class Course::PointsDisbursementComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
+  def self.gamified?
+    true
+  end
+
   def sidebar_items
     return [] unless can_create_experience_points_record?
 
