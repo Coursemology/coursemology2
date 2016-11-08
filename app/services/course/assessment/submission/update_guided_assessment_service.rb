@@ -30,4 +30,10 @@ class Course::Assessment::Submission::UpdateGuidedAssessmentService <
         end
       end
   end
+
+  # Guided assessment will ignore the attempt limit, otherwise student cannot proceed to next step
+  # if exceeds the limit.
+  def valid_for_grade?
+    true
+  end
 end

@@ -160,6 +160,11 @@ class Course::Assessment::Submission < ActiveRecord::Base
     answers.group_by(&:question_id).map { |pair| pair[1].last }
   end
 
+  # Returns all graded answers of the question in current submission.
+  def graded_answers(question)
+    answers.select { |a| a.question_id == question.id &&  a.graded? }
+  end
+
   private
 
   # Queues the submission for auto grading, after the submission has changed to the submitted state.
