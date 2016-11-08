@@ -7,7 +7,7 @@ class Course::Achievement::Controller < Course::ComponentController
 
   private
 
-  # @return [Course::AchievementsComponent] The forum component.
+  # @return [Course::AchievementsComponent] The achievement component.
   # @return [nil] If component is disabled.
   def component
     current_component_host[:course_achievements_component]

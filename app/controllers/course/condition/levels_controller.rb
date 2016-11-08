@@ -45,4 +45,12 @@ class Course::Condition::LevelsController < Course::ConditionsController
   def set_course
     @level_condition.course = current_course
   end
+
+  # Define levels component for the check whether the component is defined.
+  #
+  # @return [Course::LevelsComponent] The levels component.
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_levels_component]
+  end
 end

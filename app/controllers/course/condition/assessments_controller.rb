@@ -44,4 +44,12 @@ class Course::Condition::AssessmentsController < Course::ConditionsController
     @assessment_condition.course = current_course
     @assessment_condition.conditional = @conditional
   end
+
+  # Define assessment component for the check whether the component is defined.
+  #
+  # @return [Course::AssessmentsComponent] The assessments component.
+  # @return [nil] If component is disabled.
+  def component
+    current_component_host[:course_assessments_component]
+  end
 end
