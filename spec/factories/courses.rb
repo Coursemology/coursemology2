@@ -8,6 +8,7 @@ FactoryGirl.define do
     description 'example course'
     start_at Time.zone.now
     end_at 7.days.from_now
+    gamified true
 
     trait :closed do
       status :closed
