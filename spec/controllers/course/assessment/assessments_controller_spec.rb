@@ -94,5 +94,36 @@ RSpec.describe Course::Assessment::AssessmentsController do
         end
       end
     end
+
+    describe '#reorder' do
+      let!(:questions) do
+        create_list(:course_assessment_question, 2, assessment: immutable_assessment)
+      end
+
+      context 'when a valid ordering is given' do
+        let(:reversed_order) { immutable_assessment.questions.map(&:id).reverse }
+
+        before do
+          post :reorder, format: :js, course_id: course, id: immutable_assessment,
+                         question_order: reversed_order.map(&:to_s)
+        end
+
+        it 'reorders questions' do
+          expect(immutable_assessment.questions.pluck(:id)).to eq(reversed_order)
+        end
+      end
+
+      context 'when an invalid ordering is given' do
+        subject do
+          post :reorder, format: :js, course_id: course, id: immutable_assessment,
+                         question_order: [questions.first.id]
+        end
+
+        it 'raises ArgumentError' do
+          expect { subject }.
+            to raise_error(ArgumentError, 'Invalid ordering for assessment questions')
+        end
+      end
+    end
   end
 end

@@ -29,7 +29,6 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         fill_in 'description', with: question_attributes[:description]
         fill_in 'staff_only_comments', with: question_attributes[:staff_only_comments]
         fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
-        fill_in 'weight', with: question_attributes[:weight]
         within find_field('skills') do
           select skill.title
         end
@@ -41,7 +40,6 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         expect(page).to have_content_tag_for(question_created)
         expect(question_created).not_to be_multiple_choice
         expect(question_created.skills).to contain_exactly(skill)
-        expect(question_created.weight).to eq(question_attributes[:weight])
       end
 
       scenario 'I can create a new multiple choice question', js: true do

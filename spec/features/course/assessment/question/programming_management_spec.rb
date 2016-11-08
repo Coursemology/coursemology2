@@ -25,7 +25,6 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         fill_in 'description', with: question_attributes[:description]
         fill_in 'staff_only_comments', with: question_attributes[:staff_only_comments]
         fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
-        fill_in 'weight', with: question_attributes[:weight]
         within find_field('skills') do
           select skill.title
         end
@@ -40,7 +39,6 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         question_created = assessment.questions.first.specific
         expect(page).to have_content_tag_for(question_created)
         expect(question_created.skills).to contain_exactly(skill)
-        expect(question_created.weight).to eq(question_attributes[:weight])
         expect(question_created.memory_limit).to eq(question_attributes[:memory_limit])
         expect(question_created.time_limit).to eq(question_attributes[:time_limit])
         expect(question_created.attempt_limit).to eq(question_attributes[:attempt_limit])
