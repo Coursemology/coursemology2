@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 module Course::Achievement::ControllerHelper
   include Course::Achievement::AchievementsHelper
+  include Course::Condition::ConditionsHelper
 
   # Returns the HTML code to display a locked achievement.
   #
