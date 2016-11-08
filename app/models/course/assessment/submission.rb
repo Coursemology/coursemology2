@@ -117,7 +117,11 @@ class Course::Assessment::Submission < ActiveRecord::Base
   #   Returns submissions which have been submitted (which may or may not be graded).
   scope :confirmed, -> { where.not(workflow_state: :attempting) }
 
-  scope :pending_for_grading, -> { where(workflow_state: [:submitted, :graded]) }
+  scope :pending_for_grading, (lambda do
+    where(workflow_state: [:submitted, :graded]).
+      joins { assessment }.
+      where { assessment.autograded == false }
+  end)
 
   # Filter submissions by category_id, assessment_id, group_id and/or user_id (creator)
   scope :filter, (lambda do |filter_params|
