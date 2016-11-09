@@ -113,6 +113,14 @@ RSpec.describe Course::Assessment::Question do
             expect { subject.attempt(nil) }.to raise_error(NotImplementedError)
           end
         end
+
+        context 'when reattempt is set to true' do
+          it 'sets the answer to reattempting state' do
+            answer = build_stubbed(:course_assessment_answer, question: question)
+            expect(question).to receive(:attempt).and_return(answer)
+            expect(subject.attempt(nil, reattempt: true).reattempting?).to be_truthy
+          end
+        end
       end
     end
 

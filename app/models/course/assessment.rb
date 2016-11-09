@@ -93,6 +93,10 @@ class Course::Assessment < ActiveRecord::Base
     password.present?
   end
 
+  def reattemptable?
+    guided?
+  end
+
   private
 
   # Sets the course of the lesson plan item to be the same as the one for the assessment.

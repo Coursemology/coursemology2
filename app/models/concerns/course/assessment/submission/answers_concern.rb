@@ -3,8 +3,11 @@ module Course::Assessment::Submission::AnswersConcern
   extend ActiveSupport::Concern
 
   # Scope to obtain the latest answers for each question for Course::Assessment::Submission.
+  # TODO: Remove this and use submission#latest_answers instead. Requires refactoring on
+  #         assessment.questions#attempt
   def latest_answers
-    unscope(:order).select('DISTINCT ON (question_id) *').order(:question_id, created_at: :desc)
+    unscope(:order).select('DISTINCT ON (question_id) *').order(:question_id, created_at: :desc).
+      without_reattempting_state
   end
 
   # Load the answers of specific question.
