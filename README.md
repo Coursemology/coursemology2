@@ -16,10 +16,14 @@ educators to increase student engagement and make learning fun.
 2. Ruby on Rails
 3. PostgreSQL
 4. ImageMagick or GraphicsMagick (For [MiniMagick](https://github.com/minimagick/minimagick))
+5. Node.js
 
-Coursemology uses [Ruby on Rails](http://rubyonrails.org/). This
-[guide](https://gorails.com/setup/) written by the awesome people at
-GoRails should help you to get everything started.
+Coursemology uses [Ruby on Rails](http://rubyonrails.org/).
+In addition, some front-end components use
+[React.js](https://facebook.github.io/react/)
+(via [React on Rails](https://github.com/shakacode/react_on_rails)).
+This [guide](https://gorails.com/setup/) written by the awesome people at
+GoRails should help you to get started on Ruby on Rails.
 
 ### Getting Started
 
@@ -34,25 +38,31 @@ GoRails should help you to get everything started.
     $ gem install bundler
     ~~~
 
- 3. Install dependencies
+ 3. Install ruby dependencies
 
     ~~~ sh
     $ bundle install --without ci:production
     ~~~
 
- 4. Create and seed the database
+ 4. Install javascript dependencies
+
+    ~~~ sh
+    $ npm install --prefix ./client
+    ~~~
+
+ 5. Create and seed the database
 
     ~~~ sh
     $ bundle exec rake db:setup
     ~~~
 
- 5. Start the development app server
+ 6. Start [webpack](https://webpack.github.io/) and the development app server
 
     ~~~ sh
-    $ bundle exec rails server
+    $ foreman start -f Procfile.dev
     ~~~
 
- 6. You're all set! Simply login with the default username and password:
+ 7. You're all set! Simply login with the default username and password:
 
 > Email: `test@example.org`
 >
@@ -76,4 +86,4 @@ Copyright (c) 2015-2016 Coursemology.org. This software is licensed under the MI
 
 ## Acknowledgments
 
-The Coursemology.org Project was made possible by a number of teaching development grants from the National University of Singapore over the years. 
+The Coursemology.org Project was made possible by a number of teaching development grants from the National University of Singapore over the years.

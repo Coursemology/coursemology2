@@ -29,3 +29,12 @@ linters:
 
   SelectorDepth:
     max_depth: 5
+
+  # CSS Modules requires class selectors to be in camelCase
+  SelectorFormat:
+    ignored_types: [class]
+
+  # Allow CSS Modules composition
+  PropertySpelling:
+    extra_properties:
+      - composes
