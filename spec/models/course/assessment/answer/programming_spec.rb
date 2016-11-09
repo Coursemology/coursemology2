@@ -12,19 +12,21 @@ RSpec.describe Course::Assessment::Answer::Programming do
 
   let(:instance) { Instance.default }
   with_tenant(:instance) do
+    let(:course) { create(:course) }
+    let(:student_user) { create(:course_student, course: course).user }
+    let(:assessment) { create(:assessment, course: course) }
+    let(:attempt_limit) { 3 }
+    let(:question) do
+      create(:course_assessment_question_programming,
+             assessment: assessment, template_file_count: 1, attempt_limit: attempt_limit)
+    end
+    let(:submission) { create(:submission, assessment: assessment, creator: student_user) }
+    let(:answer) do
+      create(:course_assessment_answer_programming,
+             submission: submission, question: question.question)
+    end
+
     describe '#reset_answer' do
-      let(:course) { create(:course) }
-      let(:student_user) { create(:course_student, course: course).user }
-      let(:assessment) { create(:assessment, course: course) }
-      let(:question) do
-        create(:course_assessment_question_programming,
-               assessment: assessment, template_file_count: 1)
-      end
-      let(:submission) { create(:submission, assessment: assessment, creator: student_user) }
-      let(:answer) do
-        create(:course_assessment_answer_programming,
-               submission: submission, question: question.question)
-      end
       subject { answer.reset_answer }
 
       it 'replaces the answer with the original template files from the question' do
@@ -40,6 +42,32 @@ RSpec.describe Course::Assessment::Answer::Programming do
 
       it 'returns an Answer' do
         expect(subject).to be_a(Course::Assessment::Answer)
+      end
+    end
+
+    describe 'attempting_times_left' do
+      subject { answer.attempting_times_left }
+
+      context 'with one exiting attempts' do
+        let!(:graded_answer) do
+          create(:course_assessment_answer_programming, :graded,
+                 submission: submission, question: question.question)
+        end
+        let!(:submitted_answer) do
+          create(:course_assessment_answer_programming, :submitted,
+                 submission: submission, question: question.question)
+        end
+        it 'returns the attempting times left' do
+          expect(subject).to eq(question.attempt_limit - 1)
+        end
+      end
+
+      context 'when question do not have an attempt limit' do
+        let(:attempt_limit) { nil }
+
+        it 'returns the max attempt limits' do
+          expect(subject).to eq(answer.class::MAX_ATTEMPTING_TIMES)
+        end
       end
     end
   end

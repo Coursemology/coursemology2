@@ -53,7 +53,7 @@ class Course::Assessment::Question::ProgrammingController < \
   def programming_question_params
     params.require(:question_programming).permit(
       :title, :description, :staff_only_comments, :maximum_grade, :weight,
-      :language_id, :memory_limit, :time_limit,
+      :language_id, :memory_limit, :time_limit, :attempt_limit,
       *attachment_params,
       skill_ids: []
     )

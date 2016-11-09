@@ -58,4 +58,12 @@ module Course::Assessment::Submission::SubmissionsHelper
   def single_question_flag_class(assessment)
     assessment.questions.length > 1 ? 'multi-question' : 'single-question'
   end
+
+  def enable_submit_button?(answer)
+    if answer.attempting_times_left > 0
+      true
+    else
+      can?(:manage, answer.submission.assessment)
+    end
+  end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161102022455) do
+ActiveRecord::Schema.define(version: 20161107023238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -242,6 +242,7 @@ ActiveRecord::Schema.define(version: 20161102022455) do
     t.integer "language_id",   :null=>false, :index=>{:name=>"fk__course_assessment_question_programming_language_id"}, :foreign_key=>{:references=>"polyglot_languages", :name=>"fk_course_assessment_question_programming_language_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer "memory_limit",  :comment=>"Memory limit, in MiB"
     t.integer "time_limit",    :comment=>"Time limit, in seconds"
+    t.integer "attempt_limit"
     t.uuid    "import_job_id", :comment=>"The ID of the importing job", :index=>{:name=>"index_course_assessment_question_programming_on_import_job_id", :unique=>true}, :foreign_key=>{:references=>"jobs", :name=>"fk_course_assessment_question_programming_import_job_id", :on_update=>:no_action, :on_delete=>:nullify}
   end
 

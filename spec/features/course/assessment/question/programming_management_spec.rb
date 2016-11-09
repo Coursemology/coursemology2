@@ -32,6 +32,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         select question_attributes[:language].name, from: 'language'
         fill_in 'memory_limit', with: question_attributes[:memory_limit]
         fill_in 'time_limit', with: question_attributes[:time_limit]
+        fill_in 'attempt_limit', with: question_attributes[:attempt_limit]
         click_button 'submit'
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
@@ -40,6 +41,9 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(page).to have_content_tag_for(question_created)
         expect(question_created.skills).to contain_exactly(skill)
         expect(question_created.weight).to eq(question_attributes[:weight])
+        expect(question_created.memory_limit).to eq(question_attributes[:memory_limit])
+        expect(question_created.time_limit).to eq(question_attributes[:time_limit])
+        expect(question_created.attempt_limit).to eq(question_attributes[:attempt_limit])
       end
 
       scenario 'I can upload a template package' do

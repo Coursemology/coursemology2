@@ -97,11 +97,18 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def submit_answer
     if @submission.update_attributes(update_params)
-      job = grade_and_reattempt_answer(@submission.answers.find(answer_id_param))
+      answer = @submission.answers.find(answer_id_param)
+      if valid_for_grading?(answer)
+        job = grade_and_reattempt_answer(answer)
 
-      respond_to do |format|
-        format.html { redirect_to job_path(job.job) }
-        format.json { render json: { redirect_url: job_path(job.job) } }
+        respond_to do |format|
+          format.html { redirect_to job_path(job.job) }
+          format.json { render json: { redirect_url: job_path(job.job) } }
+        end
+      else
+        # TODO: Implement error recovery in the frontend. Code only goes here if user hacks the html
+        # and enables the submit button.
+        head :bad_request
       end
     else
       render 'edit'
@@ -126,5 +133,12 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       redirect_to edit_submission_path,
                   success: t('course.assessment.submission.submissions.update.success')
     end
+  end
+
+  # Test whether the answer can be graded or not.
+  def valid_for_grading?(answer)
+    return true unless answer.specific.is_a?(Course::Assessment::Answer::Programming)
+
+    answer.specific.attempting_times_left > 0 || can?(:manage, @assessment)
   end
 end
