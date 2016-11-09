@@ -6,8 +6,7 @@ RSpec.feature 'Course: Events' do
 
   with_tenant(:instance) do
     let!(:course) { create(:course) }
-    let(:event) { create(:course_lesson_plan_event, course: course) }
-    let(:new_event_title) { 'Modified event title' }
+    let(:events) { create_list(:course_lesson_plan_event, 2, course: course) }
 
     before do
       login_as(user, scope: :user)
@@ -28,24 +27,35 @@ RSpec.feature 'Course: Events' do
         end.to change(course.lesson_plan_events, :count).by(1)
       end
 
-      scenario 'I can edit a course event' do
-        event
+      scenario 'I can delete a course event and visit the edit event page', js: true do
+        event_to_edit, event_to_delete = events
         visit course_lesson_plan_path(course)
 
-        find_link(nil, href: edit_course_lesson_plan_event_path(course, event)).click
+        # Delete an event
+        expect(page).to have_text(event_to_delete.title)
+        find("div#lesson-plan-item-#{event_to_delete.acting_as.id} .lesson-plan-item-title-bar").
+          click
+        expect do
+          find_link(nil, href: course_lesson_plan_event_path(course, event_to_delete)).click
+        end.to change(course.lesson_plan_events, :count).by(-1)
+
+        # Go to edit event page
+        expect(page).to have_text(event_to_edit.title)
+        find("div#lesson-plan-item-#{event_to_edit.acting_as.id} .lesson-plan-item-title-bar").
+          click
+        find_link(nil, href: edit_course_lesson_plan_event_path(course, event_to_edit)).click
+        expect(current_path).to eq(edit_course_lesson_plan_event_path(course, event_to_edit))
+      end
+
+      scenario 'I can update a course event' do
+        event, = events
+        visit edit_course_lesson_plan_event_path(course, event)
+
+        new_event_title = 'Modified event title'
         fill_in 'title', with: new_event_title
         click_button I18n.t('helpers.submit.lesson_plan_event.update')
 
         expect(event.reload.title).to eq(new_event_title)
-      end
-
-      scenario 'I can delete a course event' do
-        event
-        visit course_lesson_plan_path(course)
-
-        expect do
-          find_link(nil, href: course_lesson_plan_event_path(course, event)).click
-        end.to change(course.lesson_plan_events, :count).by(-1)
       end
     end
   end

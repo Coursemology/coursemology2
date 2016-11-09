@@ -6,8 +6,7 @@ RSpec.feature 'Course: Lesson Plan Milestones' do
 
   with_tenant(:instance) do
     let!(:course) { create(:course) }
-    let(:milestone) { create(:course_lesson_plan_milestone, course: course) }
-    let(:new_milestone_title) { 'Modified milestone title' }
+    let(:milestones) { create_list(:course_lesson_plan_milestone, 2, course: course) }
 
     before do
       login_as(user, scope: :user)
@@ -28,24 +27,34 @@ RSpec.feature 'Course: Lesson Plan Milestones' do
         end.to change(course.lesson_plan_milestones, :count).by(1)
       end
 
-      scenario 'I can edit a milestone' do
-        milestone
-        visit course_lesson_plan_path(course)
+      scenario 'I can update a milestone' do
+        milestone, = milestones
+        visit edit_course_lesson_plan_milestone_path(course, milestone)
 
-        find_link(nil, href: edit_course_lesson_plan_milestone_path(course, milestone)).click
+        new_milestone_title = 'Modified milestone title'
         fill_in 'title', with: new_milestone_title
         click_button I18n.t('helpers.submit.lesson_plan_milestone.update')
 
         expect(milestone.reload.title).to eq(new_milestone_title)
       end
 
-      scenario 'I can delete a milestone' do
-        milestone
+      scenario 'I can delete a course milestone and visit the edit milestone page', js: true do
+        milestone_to_edit, milestone_to_delete = milestones
         visit course_lesson_plan_path(course)
 
+        # Delete a milestone
+        expect(page).to have_text(milestone_to_delete.title)
         expect do
-          find_link(nil, href: course_lesson_plan_milestone_path(course, milestone)).click
+          find_link(nil, href: course_lesson_plan_milestone_path(course, milestone_to_delete)).
+            click
         end.to change(course.lesson_plan_milestones, :count).by(-1)
+
+        # Go to edit milestone page
+        expect(page).to have_text(milestone_to_edit.title)
+        find_link(nil, href: edit_course_lesson_plan_milestone_path(course, milestone_to_edit)).
+          click
+        expect(current_path).
+          to eq(edit_course_lesson_plan_milestone_path(course, milestone_to_edit))
       end
     end
   end

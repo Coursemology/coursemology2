@@ -35,3 +35,16 @@
 
 # Ignore public download folder
 /public/downloads/*
+
+# Ignore installed node libraries and log
+npm-debug.log*
+node_modules
+
+# Ignore generated js bundles
+/app/assets/webpack/*
+
+# Ignore eslint cache
+/client/.eslintcache
+
+# Ignore build for client
+/client/build
