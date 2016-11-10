@@ -59,7 +59,7 @@ GoRails should help you to get started on Ruby on Rails.
  6. Start [webpack](https://webpack.github.io/) and the development app server
 
     ~~~ sh
-    $ foreman start -f Procfile.dev
+    $ foreman start
     ~~~
 
  7. You're all set! Simply login with the default username and password:

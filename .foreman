@@ -1,0 +1,2 @@
+# Defaults for foreman
+procfile: Procfile.dev
