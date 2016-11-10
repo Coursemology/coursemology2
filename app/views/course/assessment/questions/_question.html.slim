@@ -1,7 +1,10 @@
-= div_for(question, class: ['clearfix']) do
-  div.pull-right
-    div.btn-group
-      = edit_button(edit_path)
-      = delete_button(delete_path)
-  h4 = format_inline_text(question.display_title)
-  = format_html(question.description)
+.question-card data-question-dom-id=dom_id(question.acting_as)
+  .panel.panel-default.card
+    .panel-body
+      = div_for(question, class: ['clearfix']) do
+        div.pull-right
+          div.btn-group
+            = edit_button(edit_path)
+            = delete_button(delete_path)
+        h4 = format_inline_text(question.display_title)
+        = format_html(question.description)

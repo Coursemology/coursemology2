@@ -49,7 +49,7 @@ class Course::Assessment::Question::TextResponsesController < \
 
   def text_response_question_params
     params.require(:question_text_response).permit(
-      :title, :description, :staff_only_comments, :maximum_grade, :weight, :allow_attachment,
+      :title, :description, :staff_only_comments, :maximum_grade, :allow_attachment,
       :hide_text,
       skill_ids: [],
       solutions_attributes: [:_destroy, :id, :solution_type, :solution, :grade, :explanation]

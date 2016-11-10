@@ -54,3 +54,10 @@ $course-user-profile-picture: $picture-large !default;
 $course-admin-form-logo: $picture-small !default;
 $course-layout-sidebar-logo: $picture-medium !default;
 $course-course-listing-logo: $picture-medium !default;
+
+
+//== Others
+
+// Shadows
+$course-assessment-question-card-shadow: rgba(0, 0, 0, 0.12);
+$course-assessment-question-card-hover-shadow: rgba(0, 0, 0, 0.25);

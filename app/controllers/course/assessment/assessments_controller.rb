@@ -43,6 +43,19 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     end
   end
 
+  # Reorder questions for an assessment
+  def reorder
+    unless valid_ordering?(question_order_params)
+      raise ArgumentError, 'Invalid ordering for assessment questions'
+    end
+
+    Course::Assessment::Question.transaction do
+      question_order_params.each_with_index do |id, index|
+        questions_hash[id].update_attribute(:weight, index)
+      end
+    end
+  end
+
   protected
 
   def load_assessment_options
@@ -52,6 +65,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   private
+
+  def question_order_params
+    params.require(:question_order)
+  end
 
   def assessment_params
     params.require(:assessment).permit(:title, :description, :base_exp, :time_bonus_exp,
@@ -94,5 +111,22 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
       else
         current_course.assessment_categories.first!
       end
+  end
+
+  # Maps question ids to their respective questions
+  #
+  # @return [Hash{Integer => Course::Assessment::Question}]
+  def questions_hash
+    @questions_hash ||= @assessment.questions.map do |question|
+      [question.id.to_s, question]
+    end.to_h
+  end
+
+  # Checks if a proposed question ordering is valid
+  #
+  # @param [Array<Integer>] proposed_ordering
+  # @return [Boolean]
+  def valid_ordering?(proposed_ordering)
+    questions_hash.keys.sort == proposed_ordering.sort
   end
 end

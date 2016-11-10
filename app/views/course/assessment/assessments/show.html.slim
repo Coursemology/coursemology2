@@ -6,7 +6,7 @@
       = edit_button([current_course, @assessment])
       = delete_button([current_course, @assessment])
 
-= div_for(@assessment) do
+= div_for(@assessment, 'data-assessment-id' => @assessment.id) do
   h3 = t('.description')
   = format_html(@assessment.description)
 
@@ -76,4 +76,5 @@
                       role: 'menuitem')
 
     h3 = t('.questions')
-    = render @assessment.questions.map(&:specific)
+    #sortable-questions
+      = render @assessment.questions.map(&:specific)
