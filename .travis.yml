@@ -65,6 +65,9 @@ script:
   - 'if [ "$GROUP" = "checks" ]; then npm run lint --prefix ./client; fi'
   - 'if [ "$GROUP" = "test" ]; then bundle exec rake parallel:spec[2]; fi'
 
+after_script:
+  - bundle exec codeclimate-test-reporter
+
 notifications:
   webhooks:
     - https://coveralls.io/webhook?repo_token=klIDCAuOFrfbf5Eq6qt7P6lsBwXhc6vpQ
