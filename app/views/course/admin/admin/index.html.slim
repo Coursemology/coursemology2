@@ -11,11 +11,10 @@
     = f.file_field :logo
 
     = f.input :status, as: :radio_buttons, collection: Course.statuses.keys
-
     = f.input :start_at
-
     = f.input :end_at
-
+    = f.label :gamified
+    = f.input :gamified, label: t('.gamified_label')
     = f.button :submit
 
   div.delete-course
