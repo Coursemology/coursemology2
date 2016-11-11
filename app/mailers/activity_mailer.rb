@@ -13,6 +13,7 @@ class ActivityMailer < ApplicationMailer
     ActsAsTenant.without_tenant do
       @recipient = recipient
       @object = notification.activity.object
+      return unless @object # Object could be deleted already
       mail(to: recipient.email, template: view_path)
     end
   end
