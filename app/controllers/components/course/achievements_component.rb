@@ -6,6 +6,10 @@ class Course::AchievementsComponent < SimpleDelegator
     I18n.t('components.achievements.name')
   end
 
+  def self.gamified?
+    true
+  end
+
   def sidebar_items
     [
       {

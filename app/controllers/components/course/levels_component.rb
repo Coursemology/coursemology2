@@ -6,6 +6,10 @@ class Course::LevelsComponent < SimpleDelegator
     I18n.t('components.levels.name')
   end
 
+  def self.gamified?
+    true
+  end
+
   def sidebar_items
     return [] unless can?(:manage, Course::Level.new(course: current_course))
 

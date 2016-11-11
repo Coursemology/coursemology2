@@ -38,6 +38,17 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
     end
   end
 
+  class self::DummyGamifiedCourseModule
+    include Course::ControllerComponentHost::Component
+
+    def self.gamified?
+      true
+    end
+
+    def initialize(*)
+    end
+  end
+
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:user) { create(:administrator) }
@@ -180,6 +191,17 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
           it 'does not include the enabled component' do
             expect(subject.include?(sample_component)).to be_falsey
           end
+        end
+      end
+    end
+
+    describe '#course_enabled_components' do
+      subject { component_host.course_enabled_components }
+      context 'when the gamified flag for the course is set to false' do
+        let(:course) { create(:course, instance: instance, gamified: false) }
+
+        it 'does not include gamified components' do
+          expect(subject).not_to include(self.class::DummyGamifiedCourseModule)
         end
       end
     end
