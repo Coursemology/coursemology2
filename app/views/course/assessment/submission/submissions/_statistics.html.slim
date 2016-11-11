@@ -19,21 +19,22 @@ div.panel.panel-default
               ' /
               span#submission-statistics-maximum-grade
                 = @submission.assessment.maximum_grade
-          tr
-            th = @submission.experience_points_record.class.human_attribute_name(:points_awarded)
-            - if can?(:grade, @submission)
-              / TODO: Factor in time-based experience points
-              td
-                = f.input :points_awarded, label: false,
-                          input_html: { class: 'submission-points-awarded',
-                                        'data-base-points' => @submission.assessment.base_exp },
-                          wrapper_html: { class: 'form-inline points-awarded'}
-                span = ' / ' + @submission.assessment.base_exp.to_s
-                div.exp-multiplier.form-inline
-                  => t('.multiplier')
-                  input.form-control type='number' max='1' min ='0' value='1' step='0.1'
-            - else
-              td = @submission.points_awarded
+          - if current_course.gamified?
+            tr
+              th = @submission.experience_points_record.class.human_attribute_name(:points_awarded)
+              - if can?(:grade, @submission)
+                / TODO: Factor in time-based experience points
+                td
+                  = f.input :points_awarded, label: false,
+                            input_html: { class: 'submission-points-awarded',
+                                          'data-base-points' => @submission.assessment.base_exp },
+                            wrapper_html: { class: 'form-inline points-awarded'}
+                  span = ' / ' + @submission.assessment.base_exp.to_s
+                  div.exp-multiplier.form-inline
+                    => t('.multiplier')
+                    input.form-control type='number' max='1' min ='0' value='1' step='0.1'
+              - else
+                td = @submission.points_awarded
         tr
           th = t('.due_at')
           td = format_datetime(@assessment.end_at) if @assessment.end_at

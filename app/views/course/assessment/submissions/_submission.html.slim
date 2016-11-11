@@ -14,10 +14,13 @@
 
   - if submission.published?
     td = submission.grade.to_s + ' / ' + assessment.maximum_grade.to_s
-    td = submission.points_awarded
+    - if current_course.gamified?
+      td = submission.points_awarded
   - else
     td = '-- / ' + assessment.maximum_grade.to_s
-    td
+    - if current_course.gamified?
+      td
+
   td
     - button_class = ['btn', 'btn-block']
     - link_path = edit_course_assessment_submission_path(current_course, assessment, submission)

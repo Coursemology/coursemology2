@@ -5,5 +5,6 @@
       = format_inline_text(submission.course_user.name)
   td.col-md-3.col-xs-3 = Course::Assessment::Submission.human_attribute_name(submission.workflow_state)
   td = submission.grade.to_s + ' / ' + submission.assessment.maximum_grade.to_s
-  td = submission.points_awarded.to_i.to_s
+  - if current_course.gamified?
+    td = submission.points_awarded.to_i.to_s
   td

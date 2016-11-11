@@ -26,10 +26,13 @@ table.table.assessments-list.table-hover
     tr
       th = t('.title')
       th
-      th.table-experience-points = t('.maximum_experience_points')
-      th.table-requirement-for = t('.requirement_for')
+      - if current_course.gamified?
+        th.table-experience-points = t('.maximum_experience_points')
+      - unless current_component_host[:course_achievements_component].nil?
+        th.table-requirement-for = t('.requirement_for')
       th.table-start-at = t('.start_at')
-      th.table-bonus-cut-off = t('.bonus_cut_off')
+      - if current_course.gamified?
+        th.table-bonus-cut-off = t('.bonus_cut_off')
       th.table-end-at = t('.end_at')
       th
       th

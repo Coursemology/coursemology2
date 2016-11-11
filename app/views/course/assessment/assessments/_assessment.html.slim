@@ -6,20 +6,23 @@
     = link_to(format_inline_text(assessment.title),
               course_assessment_path(current_course, assessment))
 
-  td.table-experience-points = assessment.total_exp
-  td.achievement-badge.table-requirement-for
-    - achievement_conditionals = @conditional_service.achievement_conditional_for(assessment)
-    - achievement_conditionals.each do |achievement|
-      = link_to course_achievement_path(current_course, achievement) do
-        = display_achievement_badge(achievement)
+  - if current_course.gamified?
+    td.table-experience-points = assessment.total_exp
+  - unless current_component_host[:course_achievements_component].nil?
+    td.achievement-badge.table-requirement-for
+      - achievement_conditionals = @conditional_service.achievement_conditional_for(assessment)
+      - achievement_conditionals.each do |achievement|
+        = link_to course_achievement_path(current_course, achievement) do
+          = display_achievement_badge(achievement)
   td.table-start-at
     - if condition_not_satisfied(assessment)
       div.condition-not-satisfied data-toggle='tooltip' title="#{t('.condition_not_satisfied')}"
         = format_datetime(assessment.start_at, :short)
     - else
       = format_datetime(assessment.start_at, :short)
-  td.table-bonus-cut-off
-    = format_datetime(assessment.bonus_end_at, :short) if assessment.bonus_end_at.present?
+  - if current_course.gamified?
+    td.table-bonus-cut-off
+      = format_datetime(assessment.bonus_end_at, :short) if assessment.bonus_end_at.present?
   td.table-end-at
     = format_datetime(assessment.end_at, :short) if assessment.end_at.present?
   td.table-buttons colspan=2
