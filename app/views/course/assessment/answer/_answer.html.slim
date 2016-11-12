@@ -15,3 +15,9 @@
       - if !submission.attempting?
         = render partial: 'course/assessment/answer/grading',
                  locals: { base_answer_form: f, answer: answer }
+
+      h3 = t('.comments')
+      div.comments id=comments_container_id(answer)
+        - topic = answer.discussion_topic
+        = div_for(topic, 'data-topic-id' => topic.id)
+          = render partial: 'course/assessment/answer/comments', locals: { answer: answer }

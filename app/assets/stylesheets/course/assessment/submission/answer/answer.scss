@@ -5,6 +5,10 @@
     @include discussion-post;
   }
 
+  .answer .btn.continue {
+    margin-left: 5px;
+  }
+
   .answer-comment-form {
     .btn.reply-comment {
       margin-top: -15px;

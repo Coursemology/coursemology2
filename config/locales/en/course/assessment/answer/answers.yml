@@ -5,8 +5,9 @@ en:
         error: >
           (T_T) Sorry, the autograder is having mood swings and quit on us.
           Try submitting your code again in a couple of minutes.
-        worksheet:
+        answer:
           comments: 'Comments'
+        worksheet:
           run_code: 'Run Code'
           run_code_with_limit: 'Run ( %{limit} times left )'
           error: :'course.assessment.answer.error'

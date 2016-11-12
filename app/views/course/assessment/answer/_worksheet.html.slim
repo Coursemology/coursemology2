@@ -18,10 +18,3 @@
       = link_to '#', class: ['btn', 'btn-danger', 'submitted'], 'data-job-path': job_path(job), disabled: true do
         => button_text
         = fa_icon 'spinner lg spin'
-
-h3 = t('.comments')
-div.comments id=comments_container_id(answer)
-  - topic = answer.discussion_topic
-  = div_for(topic, 'data-topic-id' => topic.id)
-    = render partial: 'course/assessment/answer/comments',
-             locals: { answer: answer }
