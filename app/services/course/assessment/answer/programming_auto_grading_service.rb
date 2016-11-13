@@ -2,8 +2,9 @@
 class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   Course::Assessment::Answer::AutoGradingService
   def grade(answer)
-    answer.correct, answer.grade, programming_auto_grading = grade_answer(answer.actable)
+    answer.correct, new_grade, programming_auto_grading = grade_answer(answer.actable)
     programming_auto_grading.auto_grading = answer.auto_grading
+    answer.grade = new_grade if answer.question.assessment.autograded?
     super(answer)
   end
 
