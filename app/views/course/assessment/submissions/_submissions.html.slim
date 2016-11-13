@@ -8,7 +8,8 @@ table.table.table-middle-align.table-hover
       - if pending
         th = Course::GroupUser.human_attribute_name(:manager)
       th = Course::Assessment::Submission.human_attribute_name(:grade)
-      th = Course::ExperiencePointsRecord.human_attribute_name(:points_awarded)
+      - if current_course.gamified?
+        th = Course::ExperiencePointsRecord.human_attribute_name(:points_awarded)
       th
       th
   tbody

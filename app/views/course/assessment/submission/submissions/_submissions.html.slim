@@ -4,7 +4,8 @@ table.table.submissions
       th = t('.student_name')
       th = t('.status')
       th = t('.grade')
-      th = t('.experience_points')
+      - if current_course.gamified?
+        th = t('.experience_points')
       th
   tbody
     - course_users.each do |course_user|
