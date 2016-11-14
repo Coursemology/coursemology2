@@ -39,8 +39,9 @@ module Course::Assessment::Answer::ProgrammingTestCaseHelper
   end
 
   # Organize the test cases and test results into a hash, keyed by test case type.
-  # If there is no test result, the test case key points to nil.
-  # nil is needed to make sure test cases are still displayed before they have a test result.
+  #   If there is no test result, the test case key points to nil.
+  #   nil is needed to make sure test cases are still displayed before they have a test result.
+  #   Currently test_cases are ordered by sorting on the identifier of the ProgrammingTestCase.
   # e.g. { 'public_test': { test_case_1: result_1, test_case_2: result_2, test_case_3: nil },
   #        'private_test': { priv_case_1: priv_result_1 },
   #        'evaluation_test': { eval_case1: eval_result_1 } }
@@ -54,7 +55,7 @@ module Course::Assessment::Answer::ProgrammingTestCaseHelper
       test_cases_by_type.each do |test_case_type, test_cases|
         result[test_case_type] = test_cases.map do |test_case|
           [test_case, answer_test_results_hash[test_case]]
-        end.to_h
+        end.sort_by { |test_case, _| test_case.identifier }.to_h
       end
     end
   end
