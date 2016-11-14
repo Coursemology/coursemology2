@@ -48,6 +48,8 @@ class Course::Assessment::Answer < ActiveRecord::Base
       joins { discussion_topic }.select { discussion_topic.id }
   end)
 
+  scope :without_attempting_state, -> { where.not(workflow_state: :attempting) }
+
   # Creates an Auto Grading job for this answer. This saves the answer if there are pending changes.
   #
   # @param [String|nil] redirect_to_path The path to be redirected after auto grading job was
