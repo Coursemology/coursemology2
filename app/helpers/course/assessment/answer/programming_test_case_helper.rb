@@ -50,13 +50,11 @@ module Course::Assessment::Answer::ProgrammingTestCaseHelper
   # @param [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading Auto grading object
   # @return [Hash] The hash structure described above
   def get_test_cases_and_results(test_cases_by_type, auto_grading)
-    answer_test_results_hash = map_answers_to_test_results(auto_grading)
-    {}.tap do |result|
-      test_cases_by_type.each do |test_case_type, test_cases|
-        result[test_case_type] = test_cases.map do |test_case|
-          [test_case, answer_test_results_hash[test_case]]
-        end.sort_by { |test_case, _| test_case.identifier }.to_h
-      end
+    results_hash = auto_grading ? auto_grading.test_results.group_by(&:test_case) : {}
+    test_cases_by_type.each do |type, test_cases|
+      test_cases_by_type[type] =
+        test_cases.map { |test_case| [test_case, results_hash[test_case].try(&:first)] }.
+        sort_by { |test_case, _| test_case.identifier }.to_h
     end
   end
 
@@ -82,14 +80,5 @@ module Course::Assessment::Answer::ProgrammingTestCaseHelper
       return [[test_case, test_result]].to_h if test_result && !test_result.passed?
     end
     nil
-  end
-
-  # Convert an AutoGrading object to hash of test results, keyed by test case
-  #
-  # @param [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading Auto grading object
-  # @return [Hash] Hash of test results, keyed by test case
-  def map_answers_to_test_results(auto_grading)
-    return {} unless auto_grading
-    auto_grading.test_results.map { |result| [result.test_case, result] }.to_h
   end
 end
