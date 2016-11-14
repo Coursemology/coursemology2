@@ -2,6 +2,7 @@
 module Course::Assessment::Submission::SubmissionsHelper
   include Course::Assessment::Submission::SubmissionsGuidedHelper
   include Course::Assessment::Answer::ProgrammingHelper
+  include Course::Assessment::Answer::ProgrammingTestCaseHelper
 
   # Gets the ID for the given answer's comments container.
   #
