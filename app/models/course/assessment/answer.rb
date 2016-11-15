@@ -10,6 +10,14 @@ class Course::Assessment::Answer < ActiveRecord::Base
     end
     state :submitted do
       event :unsubmit, transitions_to: :attempting
+      event :evaluate, transitions_to: :evaluated
+      event :publish, transitions_to: :graded
+    end
+    # The state that has test case results but don't have a grade.
+    # For manually graded assessments, this should be the default state after auto-grading service
+    # is executed.
+    state :evaluated do
+      event :unsubmit, transitions_to: :attempting
       event :publish, transitions_to: :graded
     end
     state :graded do

@@ -14,7 +14,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
   # Handles the marking of a submission. This will grade all the answers.
   def mark(_ = nil)
     answers.each do |answer|
-      answer.publish! if answer.submitted?
+      answer.publish! if answer.submitted? || answer.evaluated?
     end
   end
 
@@ -23,7 +23,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
   # This grades all the answers as well.
   def publish(_ = nil)
     answers.each do |answer|
-      answer.publish! if answer.submitted?
+      answer.publish! if answer.submitted? || answer.evaluated?
     end
     self.publisher = User.stamper || User.system
     self.published_at = Time.zone.now
