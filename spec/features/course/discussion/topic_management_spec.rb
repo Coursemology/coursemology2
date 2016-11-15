@@ -35,8 +35,8 @@ RSpec.feature 'Course: Topics: Management' do
         visit course_topics_path(course)
 
         comment = 'GOOD WORK!'
+        fill_in_summernote '.post-form', comment
         within find('.post-form') do
-          fill_in 'discussion_post[text]', with: comment
           click_button 'course.discussion.posts.form.comment'
         end
         wait_for_ajax
@@ -100,9 +100,9 @@ RSpec.feature 'Course: Topics: Management' do
         visit course_topics_path(course)
 
         comment = 'THANKS !'
+        fill_in_summernote '.post-form', comment
         within find('.post-form') do
-          fill_in 'discussion_post[text]', with: comment
-          click_button 'course.discussion.posts.form.comment'
+          click_button I18n.t('course.discussion.posts.form.comment')
         end
         wait_for_ajax
 
@@ -130,8 +130,8 @@ RSpec.feature 'Course: Topics: Management' do
 
         new_post_text = 'new post text'
         find(content_tag_selector(my_comment_post)).find('.edit').click
+        fill_in_summernote '.edit-discussion-post-form', new_post_text
         within find('.edit-discussion-post-form') do
-          fill_in 'discussion_post[text]', with: new_post_text
           click_button I18n.t('javascript.course.discussion.post.submit')
         end
         wait_for_ajax

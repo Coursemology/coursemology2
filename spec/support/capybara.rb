@@ -24,6 +24,15 @@ module Capybara::TestGroupHelpers
         sleep 0.1 until page.evaluate_script('jQuery.active').zero?
       end
     end
+
+    def fill_in_summernote(selector, text)
+      script = <<-JS
+      var editorSelector = '#{selector} textarea';
+      $(editorSelector).summernote('reset');
+      $(editorSelector).summernote('editor.insertText', '#{text}');
+      JS
+      execute_script(script)
+    end
   end
 end
 

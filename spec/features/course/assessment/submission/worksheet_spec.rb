@@ -98,8 +98,9 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         comment_post_text = 'test comment'
-        within find(content_tag_selector(comment_answer)) do
-          fill_in 'discussion_post[text]', with: comment_post_text
+        answer_selector = content_tag_selector(comment_answer)
+        fill_in_summernote answer_selector, comment_post_text
+        within find(answer_selector) do
           find('.reply-comment').click
         end
 
@@ -131,8 +132,9 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
 
         find(content_tag_selector(comment_post)).find('.edit').click
         updated_post_text = 'updated comment'
-        within find(content_tag_selector(comment_post)).find('.edit-discussion-post-form') do
-          fill_in 'discussion_post[text]', with: updated_post_text
+        answer_selector = content_tag_selector(comment_answer)
+        fill_in_summernote answer_selector, updated_post_text
+        within find(answer_selector).find('.edit-discussion-post-form') do
           click_button I18n.t('javascript.course.discussion.post.submit')
         end
 
