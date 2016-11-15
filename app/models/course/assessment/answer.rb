@@ -28,11 +28,10 @@ class Course::Assessment::Answer < ActiveRecord::Base
 
   validate :validate_consistent_assessment
   validate :validate_assessment_state, if: :attempting?
-  # TODO: Deal with grade in graded state.
   validates :submitted_at, presence: true, unless: :attempting?
   validates :submitted_at, :grade, :grader, :graded_at, absence: true, if: :attempting?
-  validates :grader, :graded_at, presence: true, if: :graded?
-  validate :validate_consistent_grade, unless: :attempting?
+  validates :grade, :grader, :graded_at, presence: true, if: :graded?
+  validate :validate_consistent_grade, if: :graded?
 
   belongs_to :submission, inverse_of: :answers
   belongs_to :question, class_name: Course::Assessment::Question.name, inverse_of: nil
@@ -90,11 +89,11 @@ class Course::Assessment::Answer < ActiveRecord::Base
   protected
 
   def finalise
-    self.grade = 0
     self.submitted_at = Time.zone.now
   end
 
   def publish
+    self.grade ||= 0
     self.grader = User.stamper || User.system
     self.graded_at = Time.zone.now
   end

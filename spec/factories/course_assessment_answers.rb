@@ -34,6 +34,7 @@ FactoryGirl.define do
     end
 
     trait :graded do
+      grade 0
       submitted
       submission_traits :graded
       after(:build) do |answer| # rubocop:disable Style/SymbolProc
