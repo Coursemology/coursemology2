@@ -49,6 +49,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
           subject { super().grade(answer) }
           let(:answer_contents) { 'test code ' + SecureRandom.hex }
           let(:answer_traits) { [{ file_contents: [answer_contents] }] }
+          before { allow(answer.question.assessment).to receive(:autograded?).and_return(true) }
 
           it 'creates a new package with the correct file contents' do
             expect(Course::Assessment::ProgrammingEvaluationService).to \
@@ -74,7 +75,6 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
             it 'marks the answer correct' do
               subject
               expect(answer).to be_correct
-              pending 'Discuss when to change the grade'
               expect(answer.grade).to eq(question.maximum_grade)
             end
 
@@ -99,7 +99,6 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
             it 'gives a grade proportional to the number of test cases' do
               subject
               test_case_count = answer.question.actable.test_cases.count
-              pending 'Discuss when to change the grade'
               expect(answer.grade).to eq(answer.question.maximum_grade / test_case_count)
             end
           end
@@ -134,6 +133,8 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
         end
 
         describe '#grade' do
+          before { allow(answer.question.assessment).to receive(:autograded?).and_return(true) }
+
           subject { super().grade(answer) }
 
           it 'sets grade to 0' do

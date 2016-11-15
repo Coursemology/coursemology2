@@ -23,9 +23,9 @@ RSpec.describe Course::Assessment::Answer::AutoGradingJob do
         have_enqueued_job(subject).exactly(:once)
     end
 
-    it 'grades answers' do
+    it 'evaluates answers' do
       subject.perform_now(answer)
-      expect(answer).to be_graded
+      expect(answer).to be_evaluated
     end
   end
 end

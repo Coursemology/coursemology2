@@ -18,22 +18,26 @@ RSpec.describe Course::Assessment::Answer::AutoGradingService do
     describe '.grade' do
       subject { Course::Assessment::Answer::AutoGradingService.grade(answer) }
 
-      it 'grades the answer' do
-        subject
+      context 'when the assessment is not autograded' do
+        it 'evaluates the answer' do
+          subject
 
-        expect(auto_grading.answer).to be_graded
-      end
-    end
-
-    describe '#grade' do
-      it "sets the answer's status to graded" do
-        result = subject.grade(answer)
-        expect(result).to be_graded
+          expect(answer).to be_evaluated
+          expect(answer.grader).to be_nil
+          expect(answer.grade).to be_nil
+        end
       end
 
-      it "sets the answer's grader to the system account" do
-        result = subject.grade(answer)
-        expect(result.grader).to eq(User.system)
+      context 'when the assessment is autograded' do
+        before { allow(assessment).to receive(:autograded?).and_return(true) }
+
+        it 'grades the answer' do
+          subject
+
+          expect(answer).to be_graded
+          expect(answer.grade).to be_present
+          expect(answer.grader).to be_present
+        end
       end
     end
   end

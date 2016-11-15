@@ -214,7 +214,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   def unsubmit_latest_answers
     latest_answers.each do |answer|
-      answer.unsubmit! if answer.submitted? || answer.graded?
+      answer.unsubmit! unless answer.attempting?
     end
   end
 end
