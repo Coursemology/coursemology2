@@ -158,17 +158,18 @@
    *   associated with.
    * @param {Number} lineNumber The line number that the user is annotating.
    * @param {Number} parentId The parent post ID that the annotation will be associated with.
+   * @param {Boolean} focus Whether to focus the annotation form if it is to be created.
    * @return {jQuery} The annotation form which was found or created.
    */
   function findOrCreateAnnotationForm($element, courseId, assessmentId, submissionId, answerId,
-                                      programmingFileId, lineNumber, parentId) {
+                                      programmingFileId, lineNumber, parentId, focus) {
     var $annotationForm = findAnnotationForm($element);
     if ($annotationForm.length > 0) {
       return $annotationForm;
     }
 
     return createAnnotationForm($element, courseId, assessmentId, submissionId, answerId,
-                                programmingFileId, lineNumber, parentId);
+                                programmingFileId, lineNumber, parentId, focus);
   }
 
   /**
@@ -196,7 +197,7 @@
    * @return {jQuery} The annotation form which was created.
    */
   function createAnnotationForm($element, courseId, assessmentId, submissionId, answerId,
-                                programmingFileId, lineNumber, parentId) {
+                                programmingFileId, lineNumber, parentId, focus) {
     $element.append(render('annotation_form', {
       courseId: courseId,
       assessmentId: assessmentId,
@@ -204,7 +205,8 @@
       answerId: answerId,
       programmingFileId: programmingFileId,
       lineNumber: lineNumber,
-      parentId: parentId
+      parentId: parentId,
+      focus: focus
     }));
 
     return findAnnotationForm($element);
@@ -264,7 +266,8 @@
   }
 
   /**
-   * Creates a form to reply to a given annotation post.
+   * Creates a form to reply to a given annotation post. By default, form creation will also
+   * result in automatic focus on the form.
    *
    * @param {jQuery} $post The annotation post to reply to.
    */
@@ -279,7 +282,7 @@
     var postId = $post.data('postId');
 
     return findOrCreateAnnotationForm($replies, courseId, assessmentId, submissionId, answerId,
-                                      programmingFileId, lineNumber, postId);
+                                      programmingFileId, lineNumber, postId, true);
   }
 
   /**
@@ -294,7 +297,6 @@
     var $form = findOrCreateAnnotationReplyFormForPost($post);
 
     $element.hide();
-    $form.find('textarea').focus();
     e.preventDefault();
   }
 
