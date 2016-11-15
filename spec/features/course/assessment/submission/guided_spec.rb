@@ -196,6 +196,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         click_link I18n.t('course.assessment.submission.submissions.buttons.auto_grade')
         wait_for_job
 
+        fill_in find('input.form-control.grade')[:name], with: 0
         click_button I18n.t('course.assessment.submission.submissions.buttons.publish')
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, submission))
