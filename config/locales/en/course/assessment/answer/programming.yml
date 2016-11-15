@@ -10,6 +10,8 @@ en:
           file_fields:
             expand_comments: 'Expand all comments'
           test_cases:
+            evaluation_warning:
+              The answer is still being evaluated, come back after a while to see the latest results.
             private: :'course.assessment.question.programming.form_test_cases.private'
             public: :'course.assessment.question.programming.form_test_cases.public'
             evaluation: :'course.assessment.question.programming.form_test_cases.evaluation'
