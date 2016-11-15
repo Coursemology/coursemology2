@@ -5,17 +5,25 @@
 (function($, EVENT_HELPERS) {
   'use strict';
 
+  // Initialises Summernote
+  //   Function applies config options to summernote based on CSS classes applied in 'textarea'.
+  //   Currently supported options include `airmode` and `focus`.
   function initializeSummernote(element) {
     var airmodeOptions = $.extend(true, { airMode: true },
                                         { popover: $.summernote.options.popover });
     airmodeOptions.popover.air.unshift(['style', ['style']]);
-    var airmodeTextareas = $('textarea.text.airmode', element).not('.summernote-initialised');
-    airmodeTextareas.summernote(airmodeOptions);
-    airmodeTextareas.addClass('summernote-initialised');
 
-    var textareas = $('textarea.text', element).not('.airmode').not('.summernote-initialised');
-    textareas.summernote();
-    textareas.addClass('summernote-initialised');
+    $('textarea.text').not('.summernote-initialised').each(function(){
+      var options = {};
+      if ($(this).hasClass('airmode')) {
+        options = $.extend(true, options, airmodeOptions);
+      }
+      if ($(this).hasClass('focus')) {
+        options = $.extend(true, options, { focus: true} );
+      }
+      $(this).summernote(options);
+      $(this).addClass('summernote-initialised');
+    });
   }
 
   function initializeComponents(element) {
