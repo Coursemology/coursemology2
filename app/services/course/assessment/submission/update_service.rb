@@ -116,9 +116,13 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   def grade_and_reattempt_answer(answer)
-    answer.finalise! if answer.attempting?
-    answer.save!
-    answer.auto_grade!(edit_submission_path, true)
+    # The transaction is to make sure that auto grading and job are present when the answer is in
+    # the submitted state.
+    answer.class.transaction do
+      answer.finalise! if answer.attempting?
+      answer.save!
+      answer.auto_grade!(edit_submission_path, true)
+    end
   end
 
   def unsubmit?
