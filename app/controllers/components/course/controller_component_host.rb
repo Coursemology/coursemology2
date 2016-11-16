@@ -133,7 +133,7 @@ class Course::ControllerComponentHost
   #
   # @return [Array<Class>] array of enabled components in Course
   def course_enabled_components
-    @course_enabled_components = begin
+    @course_enabled_components ||= begin
       if @context.current_course.gamified?
         instance_enabled_components
       else
