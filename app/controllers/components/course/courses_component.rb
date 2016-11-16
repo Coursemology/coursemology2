@@ -2,6 +2,10 @@
 class Course::CoursesComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
+  def self.can_be_disabled?
+    false
+  end
+
   def sidebar_items
     admin_sidebar_items + settings_sidebar_items
   end

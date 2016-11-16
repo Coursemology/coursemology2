@@ -6,8 +6,8 @@
         th = t('.name')
         th = t('.enabled')
     tbody
-      - course_enabled_components = current_component_host.course_enabled_components
-      - collection = course_enabled_components.map { |c| [c.display_name, c.key.to_s] }
+      - course_components = current_component_host.course_disableable_components
+      - collection = course_components.map { |c| [c.display_name, c.key.to_s] }
       = f.collection_check_boxes :enabled_component_ids, collection, :last, :first do |f|
         tr
           th = f.label
