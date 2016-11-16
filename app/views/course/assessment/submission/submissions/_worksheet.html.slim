@@ -1,10 +1,14 @@
 = simple_form_for [current_course, @assessment, @submission], html: { multipart: true } do |f|
   = f.error_notification
 
-  = render 'worksheet_answers', f: f
+  div.answer-panel
+    - if @assessment.tabbed_view? && @assessment.questions.count > 1
+      = render 'worksheet_answers_tabbed', f: f
+    - else
+      = render 'worksheet_answers', f: f
 
-  - unless @submission.attempting?
-    = render 'statistics', f: f
+    - unless @submission.attempting?
+      = render 'statistics', f: f
 
   - can_grade = can?(:grade, @submission)
   = render 'buttons', {\

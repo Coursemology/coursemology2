@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161108030759) do
+ActiveRecord::Schema.define(version: 20161116075305) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -137,6 +137,7 @@ ActiveRecord::Schema.define(version: 20161108030759) do
   create_table "course_assessments", force: :cascade do |t|
     t.integer  "tab_id",     :null=>false, :index=>{:name=>"fk__course_assessments_tab_id"}, :foreign_key=>{:references=>"course_assessment_tabs", :name=>"fk_course_assessments_tab_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "mode",       :default=>0, :null=>false
+    t.boolean  "tabbed_view", :default=>false, :null=>false
     t.boolean  "autograded", :null=>false
     t.integer  "creator_id", :null=>false, :index=>{:name=>"fk__course_assessments_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessments_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "updater_id", :null=>false, :index=>{:name=>"fk__course_assessments_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessments_updater_id", :on_update=>:no_action, :on_delete=>:no_action}

@@ -15,6 +15,7 @@ FactoryGirl.define do
     base_exp 1000
     autograded false
     draft true
+    tabbed_view false
 
     trait :unopened do
       start_at { 1.day.from_now }

@@ -11,6 +11,16 @@ RSpec.describe 'Course: Assessments: Attempt' do
       create(:assessment, :published_with_all_question_types, :unopened, course: course)
     end
     let(:assessment) { create(:assessment, :published_with_all_question_types, course: course) }
+    let(:assessment_tabbed_single_question) do
+      create(:assessment, :published_with_mcq_question, :worksheet,
+             course: course, tabbed_view: true)
+    end
+    let(:assessment_tabbed) do
+      assessment = create(:assessment, :published_with_mcq_question, :worksheet,
+                          course: course, tabbed_view: true)
+      create(:course_assessment_question_programming, assessment: assessment)
+      assessment.reload
+    end
     let(:assessment_with_condition) do
       assessment_with_condition = create(:assessment, :published_with_all_question_types,
                                          course: course)
@@ -91,6 +101,43 @@ RSpec.describe 'Course: Assessments: Attempt' do
             I18n.t('course.assessment.assessments.assessment_management_buttons.attempt')
           )
         end
+      end
+
+      scenario 'I can view tabbed assessments and tabs for assessments with more than 1 question',
+               js: true do
+        assessment_tabbed_single_question
+        visit course_assessments_path(course)
+
+        within find(content_tag_selector(assessment_tabbed_single_question)) do
+          find_link(
+            I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
+            href: course_assessment_submissions_path(course, assessment_tabbed_single_question)
+          ).trigger('click')
+        end
+
+        expect(page).not_to have_selector('ul.nav.nav-tabs.tab-header')
+
+        assessment_tabbed
+        visit course_assessments_path(course)
+
+        within find(content_tag_selector(assessment_tabbed)) do
+          find_link(
+            I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
+            href: course_assessment_submissions_path(course, assessment_tabbed)
+          ).trigger('click')
+        end
+
+        # Test that tabs are visible, and the first tab is loaded.
+        expect(page).to have_selector('ul.nav.nav-tabs.tab-header')
+        expect(page).to have_selector('.tab-pane.active')
+
+        # Click on tab of second question
+        question_id = assessment_tabbed.questions.second.id
+        find(".tab-header a[href='##{question_id}']").click
+
+        # Test that ACE Editor has initialised correctly and the content is shown.
+        expect(page).to have_selector('div.ace_editor')
+        expect(find('.tab-pane.active')['id']).to eq(question_id.to_s)
       end
 
       scenario 'I can continue my attempt' do
