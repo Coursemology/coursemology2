@@ -28,6 +28,7 @@ en:
             publish: 'Publish Grade'
             mark: 'Submit for publishing'
             auto_grade: 'Auto Grade Submission'
+            evaluate_answers: 'Evaluate Answers'
             unsubmit: 'Unsubmit Submission'
             confirm_finalise: |+
               THIS ACTION IS IRREVERSIBLE

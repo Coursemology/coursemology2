@@ -15,7 +15,8 @@ div.submission-buttons
                                       style: local_assigns[:finalise] ? '' : 'display: none'
 
   - if local_assigns[:auto_grade]
-    = link_to t('.auto_grade'),
+    - auto_grade_text = @assessment.autograded? ? t('.auto_grade') : t('.evaluate_answers')
+    = link_to auto_grade_text,
       auto_grade_course_assessment_submission_path(current_course, submission.assessment, submission),
       method: :post, class: ['btn', 'btn-info']
 
