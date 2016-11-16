@@ -40,7 +40,8 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         wait_for_job
 
         annotation = 'test annotation text'
-        within find(content_tag_selector(submission.answers.first)).find('div.files') do
+        answer_selector = content_tag_selector(submission.answers.first)
+        within find(answer_selector).find('div.files') do
           first_line = find('table.codehilite tr', match: :first)
           first_line.hover
 
@@ -68,7 +69,7 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
                               'annotation_form.reset'), match: :first
           expect(page).to have_tag('.annotation-form', count: 1)
 
-          fill_in 'discussion_post[text]', with: annotation
+          fill_in_summernote answer_selector, annotation
           click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
                               'annotation_form.submit')
           wait_for_ajax
@@ -88,8 +89,8 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         find(content_tag_selector(annotation.discussion_topic)).find('.reply-annotation').click
 
         annotation_text = 'annotation'
+        fill_in_summernote '.annotation-form', annotation_text
         within find_form('.annotation-form') do
-          fill_in 'discussion_post[text]', with: annotation_text
           click_button I18n.t('javascript.course.assessment.submission.answer.programming.'\
                               'annotation_form.submit')
         end
@@ -109,8 +110,8 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         find(content_tag_selector(post)).find('.edit').click
 
         annotation_text = 'updated annotation'
+        fill_in_summernote '.edit-discussion-post-form', annotation_text
         within find_form('.edit-discussion-post-form') do
-          fill_in 'discussion_post[text]', with: annotation_text
           click_button I18n.t('javascript.course.discussion.post.submit')
         end
 
