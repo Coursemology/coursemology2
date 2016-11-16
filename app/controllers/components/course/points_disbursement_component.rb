@@ -6,6 +6,10 @@ class Course::PointsDisbursementComponent < SimpleDelegator
     true
   end
 
+  def self.display_name
+    I18n.t('components.points_disbursement.name')
+  end
+
   def sidebar_items
     return [] unless can_create_experience_points_record?
 
