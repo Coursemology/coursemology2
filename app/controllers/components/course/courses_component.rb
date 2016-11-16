@@ -32,7 +32,7 @@ class Course::CoursesComponent < SimpleDelegator
 
   def settings_index_item
     {
-      title: t('layouts.course_admin.title'),
+      title: t('layouts.course_admin.course_settings.title'),
       type: :settings,
       weight: 1,
       path: course_admin_path(current_course)
