@@ -46,6 +46,12 @@ class Course::ControllerComponentHost
       def gamified?
         false
       end
+
+      # @return [Boolean] States whether a component can be disabled. Value is true by default.
+      #   Used to hide
+      def can_be_disabled?
+        true
+      end
     end
   end
 
@@ -127,13 +133,20 @@ class Course::ControllerComponentHost
   #
   # @return [Array<Class>] array of enabled components in Course
   def course_enabled_components
-    @course_enabled_components = begin
+    @course_enabled_components ||= begin
       if @context.current_course.gamified?
         instance_enabled_components
       else
         instance_enabled_components - instance_enabled_components.select(&:gamified?)
       end
     end
+  end
+
+  # Returns the components in Course which can be disabled.
+  #
+  # @return [Array<Class>] array of disable-able components in Course
+  def course_disableable_components
+    @course_disableable_components ||= course_enabled_components.select(&:can_be_disabled?)
   end
 
   # Gets the sidebar elements.

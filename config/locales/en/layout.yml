@@ -17,7 +17,9 @@ en:
     course:
       administration: :'system.admin.admin.index.header'
     course_admin:
-      title: 'Settings'
+      title: 'Course Settings'
+      course_settings:
+        title: 'General'
       announcement_settings:
         title: :'course.announcements.index.header'
       component_settings:

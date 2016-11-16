@@ -2,6 +2,10 @@
 class Course::CoursesComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
+  def self.can_be_disabled?
+    false
+  end
+
   def sidebar_items
     admin_sidebar_items + settings_sidebar_items
   end
@@ -32,7 +36,7 @@ class Course::CoursesComponent < SimpleDelegator
 
   def settings_index_item
     {
-      title: t('layouts.course_admin.title'),
+      title: t('layouts.course_admin.course_settings.title'),
       type: :settings,
       weight: 1,
       path: course_admin_path(current_course)

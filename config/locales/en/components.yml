@@ -23,3 +23,5 @@ en:
         name: 'Comments Center'
     statistics:
       name: 'Statistics'
+    points_disbursement:
+      name: 'Points Disbursement'
