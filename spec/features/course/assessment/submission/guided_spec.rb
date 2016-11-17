@@ -196,8 +196,16 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         click_link I18n.t('course.assessment.submission.submissions.buttons.evaluate_answers')
         wait_for_job
 
+        # Publish the submission with empty answer grade
+        click_button I18n.t('course.assessment.submission.submissions.buttons.publish')
+
+        expect(page).to have_selector('div.alert-danger')
+        expect(page).
+          to have_button(I18n.t('course.assessment.submission.submissions.buttons.publish'))
+
         fill_in find('input.form-control.grade')[:name], with: 0
         click_button I18n.t('course.assessment.submission.submissions.buttons.publish')
+
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.published?).to be(true)
