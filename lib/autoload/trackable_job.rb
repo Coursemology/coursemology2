@@ -68,7 +68,7 @@ module TrackableJob
     super.tap do
       next unless @job
       @job.destroy
-      @job = Job.find(job_id)
+      @job = find_job(job_id)
     end
   end
 
@@ -98,5 +98,18 @@ module TrackableJob
   # Specifies that the job should redirect to the given path.
   def redirect_to(path)
     @job.redirect_to = path
+  end
+
+  # Find the job with retries.
+  # The retry is needed because the transaction to create the trackable job might not have finished.
+  def find_job(job_id)
+    tries ||= 5
+    @job = Job.find(job_id)
+  rescue ActiveRecord::RecordNotFound => e
+    tries -= 1
+    raise e if tries < 1
+
+    sleep 0.1
+    retry
   end
 end
