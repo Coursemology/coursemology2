@@ -12,6 +12,8 @@
     = f.input :bonus_end_at
   - unless @assessment.new_record?
     = f.input :draft
+  - if @assessment.worksheet?
+    = f.input :tabbed_view
   - if @assessment.guided? || @assessment.worksheet?
     = f.input :autograded, label: t('.autograded'), hint: t('.autograded_hint')
   - if @assessment.exam?
