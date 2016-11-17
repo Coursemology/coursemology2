@@ -143,5 +143,17 @@ RSpec.feature 'Course: Topics: Management' do
         expect(page).not_to have_content_tag_for(my_comment_post)
       end
     end
+
+    context 'As a system administrator' do
+      let(:user) { create(:administrator) }
+
+      scenario 'I can visit the comments page' do
+        answer_comment
+        visit course_topics_path(course)
+
+        expect(page).to have_selector('.nav.nav-tabs')
+        expect(page).to have_selector('div', text: answer_comment.question.assessment.title)
+      end
+    end
   end
 end
