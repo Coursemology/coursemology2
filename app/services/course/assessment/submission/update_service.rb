@@ -6,6 +6,8 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     elsif @submission.update_attributes(update_params)
       redirect_to_edit
     else
+      # The management buttons depends on the state of the submission
+      @submission.workflow_state = @submission.workflow_state_was
       render 'edit'
     end
   end
