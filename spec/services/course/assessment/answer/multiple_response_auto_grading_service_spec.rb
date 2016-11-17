@@ -20,6 +20,8 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
     end
 
     describe '#grade' do
+      before { allow(answer.question.assessment).to receive(:autograded?).and_return(true) }
+
       context 'when the question requires all correct options' do
         context 'when only the correct answer is selected' do
           let(:answer_traits) { :with_all_correct_options }

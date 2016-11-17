@@ -81,8 +81,9 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        expect(page).to have_button(I18n.t('common.save'))
+        fill_in find('input.form-control.grade')[:name], with: 0
 
+        expect(page).to have_button(I18n.t('common.save'))
         click_button I18n.t('course.assessment.submission.submissions.buttons.mark')
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, submission))

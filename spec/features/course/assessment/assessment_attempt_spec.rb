@@ -157,7 +157,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         )
       end
 
-      scenario "I can grade the student's work", js: true do
+      scenario "I can evaluate the student's work", js: true do
         assessment.questions.attempt(submission).each(&:save!)
         submission.points_awarded = nil
         submission.finalise!
@@ -166,10 +166,10 @@ RSpec.describe 'Course: Assessments: Attempt' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         # Auto grade where possible. There's one MRQ so it should be gradable.
-        click_link I18n.t('course.assessment.submission.submissions.buttons.auto_grade')
+        click_link I18n.t('course.assessment.submission.submissions.buttons.evaluate_answers')
         wait_for_job
 
-        expect(submission.answers.map(&:reload).all?(&:graded?)).to be(true)
+        expect(submission.answers.map(&:reload).all?(&:evaluated?)).to be(true)
 
         # This field should be filled when page loads
         correct_exp = (assessment.base_exp * submission.grade /

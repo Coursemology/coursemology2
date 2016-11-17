@@ -193,9 +193,10 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         expect(page).to have_button(I18n.t('common.save'))
-        click_link I18n.t('course.assessment.submission.submissions.buttons.auto_grade')
+        click_link I18n.t('course.assessment.submission.submissions.buttons.evaluate_answers')
         wait_for_job
 
+        fill_in find('input.form-control.grade')[:name], with: 0
         click_button I18n.t('course.assessment.submission.submissions.buttons.publish')
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, submission))

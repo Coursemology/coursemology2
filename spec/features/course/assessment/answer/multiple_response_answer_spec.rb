@@ -77,7 +77,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
 
       scenario 'I can view the auto grading results' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
-        click_link I18n.t('course.assessment.submission.submissions.buttons.auto_grade')
+        click_link I18n.t('course.assessment.submission.submissions.buttons.evaluate_answers')
         wait_for_job
 
         expect(page).

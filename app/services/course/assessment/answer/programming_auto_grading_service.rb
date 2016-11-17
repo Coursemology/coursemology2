@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   Course::Assessment::Answer::AutoGradingService
-  def grade(answer)
-    answer.correct, new_grade, programming_auto_grading = grade_answer(answer.actable)
+  def evaluate(answer)
+    answer.correct, grade, programming_auto_grading = evaluate_answer(answer.actable)
     programming_auto_grading.auto_grading = answer.auto_grading
-    answer.grade = new_grade if answer.question.assessment.autograded?
-    super(answer)
+    grade
   end
 
   private
@@ -15,7 +14,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   # @param [Course::Assessment::Answer::Programming] answer The answer specified by the student.
   # @return [Array<(Boolean, Integer, Course::Assessment::Answer::ProgrammingAutoGrading)>] The
   #   correct status, grade and the programming auto grading record.
-  def grade_answer(answer)
+  def evaluate_answer(answer)
     question = answer.question.actable
     question.attachment.open(binmode: true) do |temporary_file|
       package = Course::Assessment::ProgrammingPackage.new(temporary_file)

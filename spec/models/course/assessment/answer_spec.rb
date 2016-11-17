@@ -68,22 +68,11 @@ RSpec.describe Course::Assessment::Answer do
           end
         end
 
-        context 'when the answer is submitted' do
-          let(:workflow_state) { 'submitted' }
-
-          it 'must have a grade' do
-            expect(subject).not_to be_valid
-            pending 'add back validation'
-            expect(subject.errors[:grade]).not_to be_empty
-          end
-        end
-
         context 'when the answer is graded' do
           let(:workflow_state) { 'graded' }
 
           it 'must have a grade' do
             expect(subject).not_to be_valid
-            pending 'add back validation'
             expect(subject.errors[:grade]).not_to be_empty
           end
 
@@ -116,11 +105,6 @@ RSpec.describe Course::Assessment::Answer do
     end
 
     describe '#finalise!' do
-      it 'sets the grade to 0' do
-        subject.finalise!
-        expect(subject.grade).to eq(0)
-      end
-
       it 'sets submitted_at to the current time' do
         time = Time.zone.now
         subject.finalise!

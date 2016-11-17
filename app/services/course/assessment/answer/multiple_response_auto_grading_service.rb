@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::MultipleResponseAutoGradingService < \
   Course::Assessment::Answer::AutoGradingService
-  def grade(answer)
-    answer.correct, answer.grade, messages = grade_answer(answer.actable)
+  def evaluate(answer)
+    answer.correct, grade, messages = evaluate_answer(answer.actable)
     answer.auto_grading.result = { messages: messages }
-    super(answer)
+    grade
   end
 
   private
@@ -15,7 +15,7 @@ class Course::Assessment::Answer::MultipleResponseAutoGradingService < \
   #   student.
   # @return [Array<(Boolean, Integer, Object)>] The correct status, grade and the messages to be
   #   assigned to the grading.
-  def grade_answer(answer)
+  def evaluate_answer(answer)
     question = answer.question.actable
 
     if question.any_correct?

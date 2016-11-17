@@ -41,18 +41,30 @@ class Course::Assessment::Answer::AutoGradingService
     end
   end
 
-  # Grades into the given +Course::Assessment::Answer::AutoGrading+ object. This does not do
-  # anything, except mark the answer as having been graded.
-  #
-  # Subclasses should call this implementation after they are done to persist the changes to the
-  # database.
+  # Grades into the given +Course::Assessment::Answer::AutoGrading+ object. This assigns the grade
+  # and makes sure answer is in the correct state.
   #
   # @param [Course::Assessment::Answer] answer The answer to be graded.
   # @return [Course::Assessment::Answer] The graded answer. Note that this answer is not persisted
   #   yet.
   def grade(answer)
-    answer.publish!
-    answer.grader = User.system
+    grade = evaluate(answer)
+    answer.evaluate!
+
+    if answer.question.assessment.autograded?
+      answer.publish!
+      answer.grade = grade
+      answer.grader = User.system
+    end
     answer
+  end
+
+  # Evaluates and mark the answer as correct or not. This is supposed to be implemented by
+  # subclasses.
+  #
+  # @param [Course::Assessment::Answer] answer The answer to be evaluated.
+  # @return [Integer] grade The grade of the answer.
+  def evaluate(answer)
+    raise 'Not Implemented'
   end
 end
