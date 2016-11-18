@@ -62,7 +62,7 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
 
         option = assessment.questions.first.actable.options.first.option
         check option
-        click_button I18n.t('common.save')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.save')
 
         expect(current_path).to eq(
           edit_course_assessment_submission_path(course, assessment, submission)
@@ -89,7 +89,7 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
         fill_in find('input.form-control.grade')[:name], with: 0
 
         click_button I18n.t('course.assessment.submission.submissions.buttons.mark')
-        expect(page).to have_button(I18n.t('common.save'))
+        expect(page).to have_button(I18n.t('course.assessment.submission.submissions.buttons.save'))
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.graded?).to be_truthy

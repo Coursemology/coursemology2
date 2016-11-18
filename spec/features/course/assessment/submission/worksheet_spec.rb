@@ -29,7 +29,7 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
 
         option = assessment.questions.first.actable.options.first.option
         check option
-        click_button I18n.t('common.save')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.save')
 
         expect(current_path).to eq(
           edit_course_assessment_submission_path(course, assessment, submission)
@@ -81,7 +81,8 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
           edit_course_assessment_submission_path(course, assessment, submission)
         )
         expect(submission.reload).to be_submitted
-        expect(page).not_to have_button(I18n.t('common.save'))
+        expect(page).
+          not_to have_button(I18n.t('course.assessment.submission.submissions.buttons.save'))
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
         expect(page).

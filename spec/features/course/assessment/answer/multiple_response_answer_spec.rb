@@ -27,7 +27,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
 
           choose correct_option
 
-          click_button I18n.t('common.save')
+          click_button I18n.t('course.assessment.submission.submissions.buttons.save')
           expect(current_path).to eq(
             edit_course_assessment_submission_path(course, assessment, submission)
           )
@@ -42,7 +42,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
 
           check correct_option
 
-          click_button I18n.t('common.save')
+          click_button I18n.t('course.assessment.submission.submissions.buttons.save')
           expect(current_path).to eq(
             edit_course_assessment_submission_path(course, assessment, submission)
           )

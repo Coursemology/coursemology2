@@ -9,7 +9,6 @@ en:
     plain_text_link: '%{text} (%{url})'
     time_range: '%{from} to %{to}'
     draft: 'Draft'
-    save: 'Save'
     search: 'Search'
     submit: 'Submit'
     show_more: 'See all'
