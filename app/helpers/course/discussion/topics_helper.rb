@@ -25,10 +25,13 @@ module Course::Discussion::TopicsHelper
   end
 
   def my_students_unread_count
-    @my_students_unread ||= begin
+    @my_students_unread ||=
+      if current_course_user
         my_student_ids = current_course_user.my_students.select(:user_id)
         current_course.discussion_topics.globally_displayed.
           from_user(my_student_ids).pending_staff_reply.distinct.count
+      else
+        0
       end
   end
 
