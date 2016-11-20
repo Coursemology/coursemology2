@@ -1,5 +1,10 @@
 .course-assessment-submission-submissions {
   &.edit {
+    .active > .navigation-pills {
+      background-color: $course-assessment-navigation-circle-active;
+      color: $white;
+    }
+
     .answer .correct {
       background-color: $course-assessment-submission-answer-correct-bg;
 
@@ -19,6 +24,16 @@
       margin-bottom: 0;
     }
 
+    .completed > .navigation-pills {
+      background-color: $course-assessment-navigation-circle-completed;
+    }
+
+    .disabled > .navigation-pills {
+      background-color: lighten($gray, 50%);
+      color: $white;
+      pointer-events: none;
+    }
+
     .submission-buttons .btn {
       margin: 10px 20px 10px 0;
     }
@@ -30,6 +45,26 @@
 
     .exp-multiplier {
       margin-left: 1em;
+    }
+
+    .navigation {
+      display: inline-block;
+
+      > li {
+        height: 60px;
+        width: 60px;
+      }
+    }
+
+    .navigation-pills {
+      border: 1px solid lighten($gray, 50%);
+      border-radius: 50px;
+      color: $gray;
+      font-size: 120%;
+      margin: 5px;
+      padding-left: 0;
+      padding-right: 0;
+      padding-top: 13px;
     }
   }
 

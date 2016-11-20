@@ -1,8 +1,11 @@
-nav
-  ul.pagination
+div.text-center
+  ul.nav.nav-pills.navigation
     - (1..@assessment.questions.length).each do |i|
       li class="#{guided_nav_class(i)}"
-        = link_to i, [:edit, current_course, @assessment, @submission, step: i], class: ['btn', 'btn-default']
+        = link_to [:edit, current_course, @assessment, @submission, step: i], class: 'navigation-pills'
+          = i
+
+hr
 
 = simple_form_for [current_course, @assessment, @submission] do |f|
   = f.error_notification

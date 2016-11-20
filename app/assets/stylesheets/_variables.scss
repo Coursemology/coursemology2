@@ -4,14 +4,16 @@
 
 //== Colors
 //
-$red: #ff0000 !default;
 $grey: #808080 !default;
-$forum-unread-highlight: #f8e3e3 !default;
+$red: #ff0000 !default;
+$white: #ffffff !default;
 
 //## Variables for colors used in Coursemology.
 $course-achievement-granted-bg: $state-success-bg !default;
 $course-achievement-locked-bg: $gray-lighter !default;
 $course-assessment-not-started-bg: $gray-lighter !default;
+$course-assessment-navigation-circle-active: $brand-info !default;
+$course-assessment-navigation-circle-completed: #d9edf7 !default;
 $course-assessment-submission-answer-correct-border-color: $state-success-border !default;
 $course-assessment-submission-answer-correct-border-radius: $border-radius-base !default;
 $course-assessment-submission-answer-correct-bg: $state-success-bg !default;
@@ -23,6 +25,7 @@ $course-discussion-post-border-radius: $border-radius-base !default;
 $course-discussion-post-shadow-color: $gray-lighter !default;
 $course-discussion-post-annotation-trigger-bg-color: $body-bg !default;
 $course-discussion-post-annotation-trigger-color: $brand-primary !default;
+$course-forum-unread-highlight: #f8e3e3 !default;
 
 
 //== Fonts
