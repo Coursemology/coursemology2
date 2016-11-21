@@ -32,7 +32,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
         option = mrq_questions.first.options.first.option
         check option
-        click_button I18n.t('common.save')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.save')
 
         expect(page).to have_selector('div.alert-success',
                                       text: 'course.assessment.submission.submissions.update.'\
@@ -192,7 +192,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        expect(page).to have_button(I18n.t('common.save'))
+        expect(page).to have_button(I18n.t('course.assessment.submission.submissions.buttons.save'))
         click_link I18n.t('course.assessment.submission.submissions.buttons.evaluate_answers')
         wait_for_job
 

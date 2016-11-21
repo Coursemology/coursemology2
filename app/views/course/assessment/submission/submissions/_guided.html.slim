@@ -5,26 +5,26 @@ div.text-center
         = link_to [:edit, current_course, @assessment, @submission, step: i], class: 'navigation-pills'
           = i
 
-hr
+div.answer-panel
+  = simple_form_for [current_course, @assessment, @submission] do |f|
+    = f.error_notification
+    = hidden_field_tag :step, guided_current_step
+    = f.simple_fields_for :answers, guided_current_answer do |base_answer_form|
+      div.answer-content
+        - answer = base_answer_form.object
+        = render partial: answer.question, suffix: 'question'
+        = render partial: 'course/assessment/answer/answer', object: answer,
+                 locals: { base_answer_form: base_answer_form }
 
-= simple_form_for [current_course, @assessment, @submission] do |f|
-  = f.error_notification
-  = hidden_field_tag :step, guided_current_step
-  = f.simple_fields_for :answers, guided_current_answer do |base_answer_form|
-    - answer = base_answer_form.object
-    = render partial: answer.question, suffix: 'question'
-    = render partial: 'course/assessment/answer/answer', object: answer,
-             locals: { base_answer_form: base_answer_form }
+      - unless @submission.attempting?
+        = render 'statistics', f: f
 
-    - unless @submission.attempting?
-      = render 'statistics', f: f
-
-    - can_grade = can?(:grade, @submission)
-    = render 'buttons', {\
-        f: f,
-        save: answer.attempting? || (!@submission.attempting? && can_grade),
-        finalise: @submission.attempting? && guided_next_unanswered_question.nil?,
-        auto_grade: @submission.submitted? && can_grade,
-        publish: @submission.submitted? && can_grade,
-        unsubmit: !@submission.attempting? && can_grade\
-      }
+      - can_grade = can?(:grade, @submission)
+      = render 'buttons', {\
+          f: f,
+          save: answer.attempting? || (!@submission.attempting? && can_grade),
+          finalise: @submission.attempting? && guided_next_unanswered_question.nil?,
+          auto_grade: @submission.submitted? && can_grade,
+          publish: @submission.submitted? && can_grade,
+          unsubmit: !@submission.attempting? && can_grade\
+        }

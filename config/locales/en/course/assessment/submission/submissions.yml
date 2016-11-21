@@ -24,6 +24,7 @@ en:
             success: 'All graded submissions have been published.'
             notice: 'There are no graded submissions.'
           buttons:
+            save: 'Save Draft'
             finalise: 'Finalise Submission'
             publish: 'Publish Grade'
             mark: 'Submit for publishing'
@@ -59,3 +60,5 @@ en:
             experience_points: 'Experience Points'
           no_submission:
             not_started: 'Not Started'
+          worksheet_answers_tabbed:
+            question: 'Q%{number}'

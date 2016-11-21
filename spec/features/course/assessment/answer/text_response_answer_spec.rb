@@ -38,7 +38,7 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
         attach_file "submission_answers_attributes_#{answer.id}_actable_attributes_file",
                     File.join(Rails.root, '/spec/fixtures/files/text.txt')
 
-        click_button I18n.t('common.save')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.save')
 
         expect(answer.specific.attachment).to be_present
       end

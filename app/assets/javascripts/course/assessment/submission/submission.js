@@ -152,10 +152,32 @@
     return multiplier;
   }
 
+  function initializeAnswerTabs() {
+    $(MULTI_QUESTION_ASSESSMENT_SELECTOR + '.answers-tab a').click(function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+
+    // Initialize Ace Editor when tab is shown.
+    $(MULTI_QUESTION_ASSESSMENT_SELECTOR + '.tab-header a').on('shown.bs.tab', function (e) {
+      var identifier = e.target.getAttribute('aria-controls');
+      $('#' + identifier).find('textarea.code').ace();
+    });
+
+    // Show the first tab on page load.
+    $(MULTI_QUESTION_ASSESSMENT_SELECTOR + '.tab-header a:first').tab('show');
+  }
+
+  function initializeAceEditor() {
+    $(DOCUMENT_SELECTOR + 'textarea.code').not('.tab-content textarea.code').ace();
+  }
+
   $(document).on('change', MULTI_QUESTION_ASSESSMENT_SELECTOR + GRADE_INPUT_SELECTOR,
                            updateGradesAndPoints);
   $(document).on('change', SINGLE_QUESTION_ASSESSMENT_SELECTOR + GRADE_INPUT_SELECTOR,
                            updateGradesAndPointsSingleQuestion);
   $(document).on('change', DOCUMENT_SELECTOR + '.exp-multiplier input', onMultiplierChange);
   $(document).on('turbolinks:load', updateInitialPoints);
+  $(document).on('turbolinks:load', initializeAnswerTabs);
+  $(document).on('turbolinks:load', initializeAceEditor);
 })(jQuery);

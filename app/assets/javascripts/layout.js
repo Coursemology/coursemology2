@@ -32,7 +32,6 @@
     // See https://github.com/Coursemology/coursemology-theme/pull/5
     $('[title]', element).not('.fb-like *').tooltip();
     $('input.toggle-all[type="checkbox"]', element).checkboxToggleAll();
-    $('textarea.code', element).ace();
     initializeSummernote(element);
   }
 

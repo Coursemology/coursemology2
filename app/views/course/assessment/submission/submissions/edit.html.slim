@@ -3,7 +3,6 @@
 - unless @assessment.description.blank?
   div.well
     = format_html(@assessment.description)
-  hr
 
 = div_for(@assessment, 'data-assessment-id' => @assessment.id,
                        class: single_question_flag_class(@assessment)) do

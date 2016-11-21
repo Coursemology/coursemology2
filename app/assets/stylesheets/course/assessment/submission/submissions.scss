@@ -1,8 +1,12 @@
+@mixin active-navigation-pill {
+  background-color: $course-assessment-navigation-circle-active;
+  color: $white;
+}
+
 .course-assessment-submission-submissions {
   &.edit {
     .active > .navigation-pills {
-      background-color: $course-assessment-navigation-circle-active;
-      color: $white;
+      @include active-navigation-pill;
     }
 
     .answer .correct {
@@ -24,18 +28,36 @@
       margin-bottom: 0;
     }
 
+    .answer-content {
+      border-bottom: 1px solid $gray-lighter;
+      border-radius: 3px;
+    }
+
+    .answer-content,
+    .tab-content {
+      padding: 1.5em;
+    }
+
+    .answer-panel {
+      border: 1px solid $grey-light;
+      border-radius: 3px;
+      box-shadow: 0 0 4px 0 $course-assessment-submission-shadow;
+      margin-bottom: 1.5em;
+      padding: 1.5em 1.5em 0.5em;
+    }
+
     .completed > .navigation-pills {
       background-color: $course-assessment-navigation-circle-completed;
+
+      &:hover {
+        @include active-navigation-pill;
+      }
     }
 
     .disabled > .navigation-pills {
       background-color: lighten($gray, 50%);
       color: $white;
       pointer-events: none;
-    }
-
-    .submission-buttons .btn {
-      margin: 10px 20px 10px 0;
     }
 
     .exp-multiplier,
@@ -49,6 +71,7 @@
 
     .navigation {
       display: inline-block;
+      margin-bottom: 12px;
 
       > li {
         height: 60px;
@@ -65,6 +88,25 @@
       padding-left: 0;
       padding-right: 0;
       padding-top: 13px;
+    }
+
+    .submission-buttons .btn {
+      margin-bottom: 10px;
+      margin-left: 0;
+      margin-right: 20px;
+      margin-top: 20px;
+    }
+
+    .tab-content {
+      border-bottom: 1px solid $gray-lighter;
+      border-bottom-left-radius: 3px;
+      border-bottom-right-radius: 3px;
+      border-left: 1px solid $gray-lighter;
+      border-right: 1px solid $gray-lighter;
+    }
+
+    .tab-header {
+      margin-bottom: 0;
     }
   }
 

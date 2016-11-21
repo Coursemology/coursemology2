@@ -35,7 +35,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
           end
         end
 
-        click_button I18n.t('common.save')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.save')
         expect(current_path).to eq(
           edit_course_assessment_submission_path(course, assessment, submission)
         )
@@ -53,7 +53,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
             fill_in 'filename', with: new_file_name
           end
         end
-        click_button I18n.t('common.save')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.save')
 
         expected_files.each do |file|
           expect(page).to have_field('filename', with: file)
@@ -64,7 +64,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
           all(:link, I18n.t('course.assessment.answer.programming.file_fields.delete')).
             each(&:click)
         end
-        click_button I18n.t('common.save')
+        click_button I18n.t('course.assessment.submission.submissions.buttons.save')
 
         expect(page).not_to have_field('filename')
       end
