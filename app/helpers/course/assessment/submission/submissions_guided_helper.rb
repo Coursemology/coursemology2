@@ -28,8 +28,7 @@ module Course::Assessment::Submission::SubmissionsGuidedHelper
   def guided_nav_class(step)
     return 'active' if step == guided_current_step
     return 'disabled' if step > guided_max_step
-
-    ''
+    return 'completed' if step <= guided_max_step
   end
 
   def guided_current_answer
