@@ -10,12 +10,12 @@
     - unless @submission.attempting?
       = render 'statistics', f: f
 
-  - can_grade = can?(:grade, @submission)
-  = render 'buttons', {\
-      f: f,
-      save: @submission.attempting? || can_grade,
-      finalise: @submission.attempting? && can?(:update, @submission),
-      auto_grade: @submission.submitted? && can_grade,
-      publish: @submission.submitted? && can_grade,
-      unsubmit: !@submission.attempting? && can_grade\
-    }
+    - can_grade = can?(:grade, @submission)
+    = render 'buttons', {\
+        f: f,
+        save: @submission.attempting? || can_grade,
+        finalise: @submission.attempting? && can?(:update, @submission),
+        auto_grade: @submission.submitted? && can_grade,
+        publish: @submission.submitted? && can_grade,
+        unsubmit: !@submission.attempting? && can_grade\
+      }

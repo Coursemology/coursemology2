@@ -1,8 +1,12 @@
+@mixin active-navigation-pill {
+  background-color: $course-assessment-navigation-circle-active;
+  color: $white;
+}
+
 .course-assessment-submission-submissions {
   &.edit {
     .active > .navigation-pills {
-      background-color: $course-assessment-navigation-circle-active;
-      color: $white;
+      @include active-navigation-pill;
     }
 
     .answer .correct {
@@ -24,6 +28,16 @@
       margin-bottom: 0;
     }
 
+    .answer-content {
+      border-bottom: 1px solid $gray-lighter;
+      border-radius: 3px;
+    }
+
+    .answer-content,
+    .tab-content {
+      padding: 1.5em;
+    }
+
     .answer-panel {
       border: 1px solid $grey-light;
       border-radius: 3px;
@@ -34,6 +48,10 @@
 
     .completed > .navigation-pills {
       background-color: $course-assessment-navigation-circle-completed;
+
+      &:hover {
+        @include active-navigation-pill;
+      }
     }
 
     .disabled > .navigation-pills {
@@ -53,6 +71,7 @@
 
     .navigation {
       display: inline-block;
+      margin-bottom: 12px;
 
       > li {
         height: 60px;
@@ -84,7 +103,6 @@
       border-bottom-right-radius: 3px;
       border-left: 1px solid $gray-lighter;
       border-right: 1px solid $gray-lighter;
-      padding: 1.5em;
     }
 
     .tab-header {
