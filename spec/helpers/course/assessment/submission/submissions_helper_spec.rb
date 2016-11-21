@@ -44,5 +44,28 @@ RSpec.describe Course::Assessment::Submission::SubmissionsHelper do
         it { is_expected.to eq(assessment.questions.length) }
       end
     end
+
+    describe '#guided_nav_class' do
+      subject { helper.guided_nav_class(step) }
+      before do
+        allow(helper).to receive(:guided_max_step).and_return(5)
+        allow(helper).to receive(:guided_current_step).and_return(3)
+      end
+
+      context 'when step is greater than guided_max_step' do
+        let(:step) { 6 }
+        it { is_expected.to eq('disabled') }
+      end
+
+      context 'when step is guided_current_step' do
+        let(:step) { 3 }
+        it { is_expected.to eq('active') }
+      end
+
+      context 'when step less than guided_current_step' do
+        let(:step) { 2 }
+        it { is_expected.to eq('completed') }
+      end
+    end
   end
 end
