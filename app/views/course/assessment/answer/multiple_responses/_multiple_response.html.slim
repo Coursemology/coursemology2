@@ -5,7 +5,7 @@
   as: :course_assessment_answer_multiple_response,
   collection: question.options,
   display_solution: can?(:grade, multiple_response.answer) && !multiple_response.submission.attempting?,
-  label_method: :option, label: false, disabled: readonly
+  label_method: lambda { |option| format_html(option.option) }, label: false, disabled: readonly
 
 - if last_attempt && last_attempt.auto_grading && last_attempt.auto_grading.result
   = render partial: 'course/assessment/answer/explanation',
