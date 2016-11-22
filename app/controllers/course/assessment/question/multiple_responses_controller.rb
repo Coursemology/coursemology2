@@ -7,6 +7,7 @@ class Course::Assessment::Question::MultipleResponsesController < \
 
   def new
     @multiple_response_question.grading_scheme = :any_correct if params[:multiple_choice] == 'true'
+    @multiple_response_question.options.build if @multiple_response_question.options.empty?
   end
 
   def create
