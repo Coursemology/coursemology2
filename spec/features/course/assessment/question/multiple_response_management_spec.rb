@@ -32,6 +32,15 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         within find_field('skills') do
           select skill.title
         end
+
+        # Add an option
+        correct_option_attributes =
+          attributes_for(:course_assessment_question_multiple_response_option, :correct)
+        within find('#new_question_multiple_response_option') do
+          find('textarea.multiple-response-option').set correct_option_attributes[:option]
+          find('textarea.multiple-response-explanation').set correct_option_attributes[:explanation]
+          check find('input[type="checkbox"]')[:name]
+        end
         click_button I18n.t(
           'course.assessment.question.multiple_responses.form.multiple_response_button'
         )
@@ -40,9 +49,10 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         expect(page).to have_content_tag_for(question_created)
         expect(question_created).not_to be_multiple_choice
         expect(question_created.skills).to contain_exactly(skill)
+        expect(question_created.options).to be_present
       end
 
-      scenario 'I can create a new multiple choice question', js: true do
+      scenario 'I can create a new multiple choice question' do
         visit course_assessment_path(course, assessment)
         click_on I18n.t('common.new')
         click_link I18n.t('course.assessment.assessments.show.new_question.multiple_choice')
@@ -70,7 +80,6 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         )
 
         # Create a correct option
-        click_link I18n.t('course.assessment.question.multiple_responses.form.add_option')
         correct_option_attributes =
           attributes_for(:course_assessment_question_multiple_response_option, :correct)
         within find('#new_question_multiple_response_option') do
@@ -87,6 +96,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         question_created = assessment.questions.first.specific
         expect(page).to have_content_tag_for(question_created)
         expect(question_created).to be_multiple_choice
+        expect(question_created.options).to be_present
       end
 
       scenario 'I can edit a question', js: true do
