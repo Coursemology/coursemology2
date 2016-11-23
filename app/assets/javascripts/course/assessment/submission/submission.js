@@ -177,7 +177,7 @@
   $(document).on('change', SINGLE_QUESTION_ASSESSMENT_SELECTOR + GRADE_INPUT_SELECTOR,
                            updateGradesAndPointsSingleQuestion);
   $(document).on('change', DOCUMENT_SELECTOR + '.exp-multiplier input', onMultiplierChange);
-  $(document).on('turbolinks:load', updateInitialPoints);
-  $(document).on('turbolinks:load', initializeAnswerTabs);
-  $(document).on('turbolinks:load', initializeAceEditor);
+  $(document).ready(updateInitialPoints);
+  $(document).ready(initializeAnswerTabs);
+  $(document).ready(initializeAceEditor);
 })(jQuery);

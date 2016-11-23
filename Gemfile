@@ -69,9 +69,6 @@ gem 'html-pipeline'
 gem 'sanitize'
 gem 'rinku'
 gem 'html-pipeline-rouge_filter'
-# Turbolinks makes following links in your web application faster.
-# Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
 # Slim as the templating language

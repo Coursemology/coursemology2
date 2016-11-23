@@ -83,6 +83,6 @@
   }
 
   $(document).on('click', DOCUMENT_SELECTOR + '.btn.submit-answer', onAnswerSubmit);
-  $(document).on('turbolinks:load', checkSubmittedJobs);
+  $(document).ready(checkSubmittedJobs);
 
 })(jQuery);

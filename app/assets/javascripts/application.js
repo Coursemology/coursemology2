@@ -18,7 +18,6 @@
 //= require jquery_ujs
 //= require jquery-ui/sortable
 //= require jquery-ui/effect-shake
-//= require turbolinks
 //= require moment
 //= require bootstrap-datetimepicker
 //= require bootstrap-select

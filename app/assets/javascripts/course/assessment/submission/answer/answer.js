@@ -46,7 +46,7 @@
     FORM_HELPERS.enableForm($(form));
   }
 
-  $(document).on('turbolinks:load', function(x) {
+  $(document).ready(function() {
     showAnswerCommentForm(document);
   });
   EVENT_HELPERS.onNodesInserted($(DOCUMENT_SELECTOR), showAnswerCommentForm);
