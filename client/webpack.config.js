@@ -12,7 +12,9 @@ const config = {
 
   output: {
     filename: 'coursemology.bundle.js',
+    chunkFilename: '[name]-[chunkhash].bundle.js',
     path: '../app/assets/webpack',
+    publicPath: '/assets/',
   },
 
   resolve: {
