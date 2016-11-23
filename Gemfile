@@ -203,6 +203,3 @@ gem 'coursemology-polyglot', '>= 0.1.0'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-# Use React.js for frontend
-gem 'react_on_rails', '~>6'
-gem 'therubyracer'

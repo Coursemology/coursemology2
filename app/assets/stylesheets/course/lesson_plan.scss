@@ -1,0 +1,10 @@
+.course-lesson-plan-items {
+  &.index {
+    i.fa-spinner {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      margin-top: 200px;
+    }
+  }
+}

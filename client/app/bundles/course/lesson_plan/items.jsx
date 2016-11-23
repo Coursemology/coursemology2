@@ -1,6 +1,10 @@
-import ReactOnRails from 'react-on-rails';
-import LessonPlanPlugin from './startup/LessonPlanPlugin';
+import { render } from 'react-dom';
+import lessonPlanPlugin from './startup/LessonPlanPlugin';
 
-$(document).ready(function() {
-  ReactOnRails.register({ LessonPlanPlugin });
+$.getJSON('', (data) => {
+  $(document).ready(() => {
+    const locale = $("meta[name='server-context']").data('i18n-locale');
+    const LessonPlan = lessonPlanPlugin(data, locale);
+    render(LessonPlan, $('#lesson-plan-items')[0]);
+  });
 });

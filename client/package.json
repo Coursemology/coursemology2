@@ -41,7 +41,6 @@
     "react-bootstrap": "^0.30.6",
     "react-dom": "^0.14.8 || ^15.0.0",
     "react-intl": "^2.1.5",
-    "react-on-rails": "6.1.1",
     "react-overlays": "^0.6.10",
     "react-redux": "^4.4.1",
     "redux": "^3.3.1",

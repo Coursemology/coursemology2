@@ -9,8 +9,8 @@ import LessonPlanContainer from '../containers/LessonPlanContainer';
 import translations from '../../../../../build/locales/locales.json';
 
 
-export default (props, _railsContext) => {
-  const { i18nLocale } = _railsContext;
+export default (props, locale) => {
+  const i18nLocale = locale;
   const availableForeignLocales = { zh };
   const localeWithoutRegionCode = i18nLocale.toLowerCase().split(/[_-]+/)[0];
 
