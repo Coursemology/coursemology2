@@ -3,7 +3,6 @@ class Course::LessonPlan::Item < ActiveRecord::Base
   include Course::LessonPlan::ItemTodoConcern
 
   actable
-  acts_as_duplicable
   has_many_attachments
 
   after_initialize :set_default_values, if: :new_record?
@@ -28,11 +27,21 @@ class Course::LessonPlan::Item < ActiveRecord::Base
     base_exp + time_bonus_exp + extra_bonus_exp
   end
 
-  def initialize_duplicate(duplicator, other)
-    # TODO: probably need to duplicate attachments
-    self.start_at += duplicator.time_shift
-    self.end_at += duplicator.time_shift if self.end_at
-    self.bonus_end_at += duplicator.time_shift if self.bonus_end_at
+  # Copy attributes for lesson plan item from the object being duplicated.
+  # Shift the time related fields.
+  #
+  # @param other [Object] The source object to copy attributes from.
+  # @param time_shift [Float] Amount to time shift lesson plan items.
+  def copy_attributes(other, time_shift)
+    self.title = other.title
+    self.description = other.description
+    self.published = other.published
+    self.base_exp = other.base_exp
+    self.time_bonus_exp = other.time_bonus_exp
+    self.extra_bonus_exp = other.extra_bonus_exp
+    self.start_at = other.start_at + time_shift
+    self.bonus_end_at = other.bonus_end_at + time_shift if other.bonus_end_at
+    self.end_at = other.end_at + time_shift if other.end_at
   end
 
   private

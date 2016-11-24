@@ -124,7 +124,8 @@ class Course < ActiveRecord::Base
     self.end_at += duplicator.time_shift
 
     # TODO: duplicate children
-    self.assessment_categories = duplicator.duplicate(other.assessment_categories).compact
+    # This also duplicates assessments.
+    self.lesson_plan_items = duplicator.duplicate(other.lesson_plan_items.map(&:actable)).map(&:acting_as)
 
     # Find material_folders without owners and only duplicate those.
     # This must be done after duplicating assessments.

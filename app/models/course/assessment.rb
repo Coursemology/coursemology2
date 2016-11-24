@@ -96,8 +96,7 @@ class Course::Assessment < ActiveRecord::Base
   end
 
   def initialize_duplicate(duplicator, other)
-    self.lesson_plan_item = duplicator.duplicate(other.lesson_plan_item)
-
+    copy_attributes(other, duplicator.time_shift)
     self.folder = duplicator.duplicate(other.folder)
     self.questions = duplicator.duplicate(other.questions.map(&:actable)).compact.map(&:acting_as)
     self.assessment_conditions = duplicator.duplicate(other.assessment_conditions)
