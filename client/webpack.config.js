@@ -5,10 +5,21 @@ const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
 
 const config = {
-  entry: [
-    'babel-polyfill',
-    './scripts/startup',
-  ],
+  entry: {
+    coursemology: ['babel-polyfill', './scripts/startup'],
+    vendor: [
+      'immutable',
+      'react',
+      'react-bootstrap',
+      'react-dom',
+      'react-intl',
+      'react-overlays',
+      'react-redux',
+      'redux',
+      'redux-promise',
+      'redux-thunk',
+    ],
+  },
 
   output: {
     filename: 'coursemology.bundle.js',
@@ -26,6 +37,7 @@ const config = {
     },
   },
   plugins: [
+    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(nodeEnv),
