@@ -3,6 +3,8 @@ class Course::Forum < ActiveRecord::Base
   extend FriendlyId
   friendly_id :slug_candidates, use: :scoped, scope: :course
 
+  acts_as_duplicable
+
   belongs_to :course, inverse_of: :forums
   has_many :topics, dependent: :destroy, inverse_of: :forum
   has_many :subscriptions, dependent: :destroy, inverse_of: :forum
@@ -64,6 +66,10 @@ class Course::Forum < ActiveRecord::Base
   # Rewrite partial path which is used to find a suitable partial to represent the object.
   def to_partial_path
     'forums/forum'
+  end
+
+  def initialize_duplicate(duplicator, other)
+    self.course = duplicator.duplicate(other.course)
   end
 
   private

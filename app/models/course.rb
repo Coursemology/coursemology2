@@ -141,6 +141,7 @@ class Course < ActiveRecord::Base
 
     self.levels = duplicator.duplicate(other.levels)
     self.achievements = duplicator.duplicate(other.achievements)
+    self.forums = duplicator.duplicate(other.forums)
   end
 
   private
