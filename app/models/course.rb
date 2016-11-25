@@ -31,7 +31,6 @@ class Course < ActiveRecord::Base
   has_many :notifications, dependent: :destroy
 
   has_many :announcements, dependent: :destroy
-  has_many :achievements, dependent: :destroy
   # The order needs to be preserved, this makes sure that the root_folder will be saved first
   has_many :material_folders, class_name: Course::Material::Folder.name, inverse_of: :course,
                               dependent: :destroy
@@ -54,6 +53,8 @@ class Course < ActiveRecord::Base
                                     dependent: :destroy
   has_many :lesson_plan_events, through: :lesson_plan_items,
                                 source: :actable, source_type: Course::LessonPlan::Event.name
+  # Achievements must be declared after material_folders or duplication will fail.
+  has_many :achievements, dependent: :destroy
   has_many :discussion_topics, class_name: Course::Discussion::Topic.name, inverse_of: :course
   has_many :forums, dependent: :destroy, inverse_of: :course
   has_many :surveys, through: :lesson_plan_items, source: :actable, source_type: Course::Survey.name
