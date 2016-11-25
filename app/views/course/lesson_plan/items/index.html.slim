@@ -1,9 +1,9 @@
 = page_header do
   div.btn-group
     - if can?(:create, Course::LessonPlan::Milestone.new(course: current_course))
-      = new_button([current_course, :lesson_plan_milestone])
+      = new_button([current_course, :lesson_plan_milestone]) { fa_icon 'flag-checkered'.freeze }
     - if can?(:create, Course::LessonPlan::Event.new(course: current_course))
-      = new_button([current_course, :lesson_plan_event])
+      = new_button([current_course, :lesson_plan_event]) { fa_icon 'calendar-plus-o'.freeze }
 
 - props = render 'course/lesson_plan/items/index.json.jbuilder'
 = react_component("LessonPlanPlugin", props: props, prerender: false)
