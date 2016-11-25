@@ -6,5 +6,10 @@
   "rules": {
     # See https://github.com/yannickcr/eslint-plugin-react/issues/847
     "react/no-unused-prop-types": ["warn", { "skipShapeProps": true }]
+  },
+  "globals": {
+    "window": true,
+    "document": true,
+    "$": true
   }
 }

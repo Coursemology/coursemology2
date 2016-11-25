@@ -1,16 +1,16 @@
 import React from 'react';
+import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { IntlProvider, addLocaleData } from 'react-intl';
 
 import zh from 'react-intl/locale-data/zh';
 
-import createStore from '../store';
-import LessonPlanContainer from '../containers/LessonPlanContainer';
-import translations from '../../../../../build/locales/locales.json';
+import createStore from './store';
+import LessonPlanContainer from './containers/LessonPlanContainer';
+import translations from '../../../../build/locales/locales.json';
 
-
-export default (props, _railsContext) => {
-  const { i18nLocale } = _railsContext;
+function renderLessonPlan(props) {
+  const i18nLocale = $("meta[name='server-context']").data('i18n-locale');
   const availableForeignLocales = { zh };
   const localeWithoutRegionCode = i18nLocale.toLowerCase().split(/[_-]+/)[0];
 
@@ -22,13 +22,17 @@ export default (props, _railsContext) => {
 
   const store = createStore(props);
 
-  const reactComponent = (
+  render(
     <Provider store={store}>
       <IntlProvider locale={i18nLocale} messages={messages}>
         <LessonPlanContainer />
       </IntlProvider>
     </Provider>
-  );
+  , $('#lesson-plan-items')[0]);
+}
 
-  return reactComponent;
-};
+$.getJSON('', (data) => {
+  $(document).ready(() => {
+    renderLessonPlan(data);
+  });
+});

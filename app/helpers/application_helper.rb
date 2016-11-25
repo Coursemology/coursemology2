@@ -54,4 +54,20 @@ module ApplicationHelper
     end +
       t('layout.coursemology')
   end
+
+  # Returns a meta tag that has the server side context. Now the context contains following info:
+  # :controller-name The name of the current controller.
+  #   e.g. 'Course::LessonPlanController' will return 'course/lesson_plan'
+  # :i18n-locale The locale on the server side.
+  #
+  # @return [String] The html meta tag.
+  def server_context_meta_tag
+    data = {
+      name: 'server-context',
+      'data-controller-name': controller.class.name.sub(/Controller$/, '').underscore,
+      'data-i18n-locale': I18n.locale
+    }
+
+    tag(:meta, data)
+  end
 end

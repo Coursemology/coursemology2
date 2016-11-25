@@ -118,6 +118,14 @@ When using Simple Form remember to declare `f.error_notification`.
 `simple_form_for`, `simple_fields_for`, and associated methods (`f.input`, etc.) should be called
 without parentheses.
 
+## Assets
+Webpack is used to manage assets (rather than the Rails default asset pipeline).
+With webpack and some helpers, you are able to specify javascript that will be loaded on
+specific pages. When including javascript files in specific pages, use the following convention:
+
+- To include javascript in Course::LessonPlanController, add in
+`client/app/bundlers/course/lesson_plan.js`
+
 ## Controllers
 
 Controller actions (`render`, `redirect_to`) should be called without parentheses.

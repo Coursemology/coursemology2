@@ -11,18 +11,24 @@ class Course::LessonPlan::ItemsController < Course::ComponentController
 
   add_breadcrumb :index, :course_lesson_plan_path
 
-  def index #:nodoc:
-    @items =
-      @items.order(start_at: :asc).includes(:actable).to_a.select do |item|
-        can?(:show, item.actable)
-      end
+  def index
+    respond_to do |format|
+      format.html
+      format.json { render_json_response }
+    end
+  end
+
+  private
+
+  def render_json_response
+    @items = @items.order(start_at: :asc).includes(:actable).to_a.
+             select { |item| can?(:show, item.actable) }
 
     @milestones = current_course.lesson_plan_milestones.order(start_at: :asc)
 
     assessment_tabs_titles_hash
+    render 'index'
   end
-
-  private
 
   # Returns a hash that maps tab ids to an array containing:
   # 1) The name of the assessment category it belongs to.

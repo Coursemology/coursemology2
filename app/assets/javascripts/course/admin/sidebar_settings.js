@@ -1,6 +1,6 @@
 (function($) {
   'use strict';
-  $(document).on('turbolinks:load', function() {
+  $(document).ready(function() {
     var $edit = $('.course-admin-sidebar-settings.edit');
     var $table = $('table.sidebar-items', $edit);
     $('.weight', $table).hide();

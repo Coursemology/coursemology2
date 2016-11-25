@@ -5,5 +5,5 @@
     - if can?(:create, Course::LessonPlan::Event.new(course: current_course))
       = new_button([current_course, :lesson_plan_event]) { fa_icon 'calendar-plus-o'.freeze }
 
-- props = render 'course/lesson_plan/items/index.json.jbuilder'
-= react_component("LessonPlanPlugin", props: props, prerender: false)
+div#lesson-plan-items
+  = fa_icon 'spinner 4x spin'

@@ -365,7 +365,7 @@
     showReplyButton(elements);
   }
 
-  $(document).on('turbolinks:load', function() {
+  $(document).ready(function() {
     showScriptedWidgets(document);
   });
   EVENT_HELPERS.onNodesInserted($(DOCUMENT_SELECTOR), showScriptedWidgets);
