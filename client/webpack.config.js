@@ -6,7 +6,7 @@ const nodeEnv = devBuild ? 'development' : 'production';
 
 const config = {
   entry: {
-    coursemology: ['babel-polyfill', './scripts/startup'],
+    coursemology: ['babel-polyfill', './app/index'],
     vendor: [
       'immutable',
       'react',
