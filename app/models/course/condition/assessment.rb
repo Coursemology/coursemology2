@@ -11,6 +11,7 @@ class Course::Condition::Assessment < ActiveRecord::Base
   end
 
   validate :validate_assessment_condition, if: :assessment_id_changed?
+  after_save :clear_duplication_flag
 
   belongs_to :assessment, class_name: Course::Assessment.name, inverse_of: :assessment_conditions
 
@@ -60,6 +61,7 @@ class Course::Condition::Assessment < ActiveRecord::Base
     self.conditional_type = other.conditional_type
     self.conditional = duplicator.duplicate(other.conditional)
     self.course = duplicator.duplicate(other.course)
+    @duplicating = true
   end
 
   private
@@ -78,7 +80,7 @@ class Course::Condition::Assessment < ActiveRecord::Base
 
   def validate_assessment_condition
     validate_references_self
-    validate_unique_dependency
+    validate_unique_dependency unless @duplicating
     validate_acyclic_dependency
   end
 
@@ -116,5 +118,9 @@ class Course::Condition::Assessment < ActiveRecord::Base
         ) ids
       ON ids.assessment_id = course_assessments.id
     SQL
+  end
+
+  def clear_duplication_flag
+    @duplicating = nil
   end
 end
