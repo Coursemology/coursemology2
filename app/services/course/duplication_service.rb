@@ -32,7 +32,7 @@ class Course::DuplicationService
   #
   # @return [Duplicator]
   def duplicator
-    @duplicator ||= Duplicator.new(@all_objects - @selected_objects, time_shift)
+    @duplicator ||= Duplicator.new(@all_objects - @selected_objects, time_shift, new_course_title)
   end
 
   # Calculate the amount of time the objects in the new course have to be shifted by
@@ -40,6 +40,13 @@ class Course::DuplicationService
   # @return [ActiveSupport::TimeWithZone]
   def time_shift
     # must be symbol key
-    @duplication_params[:new_course_start_time] - @current_course.start_at
+    @duplication_params[:new_course_start_date] - @current_course.start_at
+  end
+
+  # Returns the new course title
+  #
+  # @return [String]
+  def new_course_title
+    @duplication_params[:new_course_title]
   end
 end

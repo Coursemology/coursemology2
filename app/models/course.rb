@@ -126,7 +126,6 @@ class Course < ActiveRecord::Base
     self.title = duplicator.new_course_title
     logo.duplicate_from(other.logo) if other.logo_url
 
-    # TODO: duplicate children
     # This also duplicates assessments.
     self.lesson_plan_items = duplicator.duplicate(other.lesson_plan_items.map(&:actable)).map(&:acting_as)
     self.lesson_plan_milestones = duplicator.duplicate(other.lesson_plan_milestones)

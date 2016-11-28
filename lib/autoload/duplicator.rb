@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 class Duplicator
-  attr_reader :time_shift
+  attr_reader :time_shift, :new_course_title
   # Create an instance of Duplicator to track duplicated objects.
   #
   # @param [Enumerable] excluded_objects An Enumerable of objects to be excluded from duplication
   # @param [DateTime] time_shift The amount of time to shift dates by
-  def initialize(excluded_objects = [], time_shift = 0)
+  def initialize(excluded_objects = [], time_shift = 0, new_course_title)
     @duplicated_objects = {} # hash to check what has been duplicated
     @exclusion_set = excluded_objects.to_set # set to check what should be excluded
     @time_shift = time_shift
+    @new_course_title = new_course_title
   end
 
   # Deep copy the arguments to this function. Objects must provide an +initialize_duplicate+

@@ -4,6 +4,8 @@ en:
       show:
         header: 'Duplicate Course'
         duplicate: :'course.duplications.show.header'
+        course_start_date: 'Current Course Start Date'
+        new_course_title: 'Copy of %{current_course_title}'
       create:
-        duplicating: 'Your course is being duplicated (not implemented yet).'
+        duplicating: 'Your course has been duplicated. Check the courses tab to find it.'
         failed: 'Uhoh, your course failed to duplicate.'

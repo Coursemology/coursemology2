@@ -13,7 +13,7 @@ class Course::DuplicationsController < Course::ComponentController
   private
 
   def create_duplication_params # :nodoc
-    params.require(:duplication).require(:new_course_start_time)
+    params.require(:duplication).permit(:new_course_start_date, :new_course_title)
   end
 
   # Duplicates the course via the service object
@@ -30,7 +30,9 @@ class Course::DuplicationsController < Course::ComponentController
     # when selectable duplication is implemented, pass in additional arrays for all_objects
     # and selected_objects
     @duplication_service ||= Course::DuplicationService.new(
-      current_course, new_course_start_time: Time.zone.parse(create_duplication_params)
+      current_course,
+      new_course_start_date: Time.zone.parse(create_duplication_params[:new_course_start_date]),
+      new_course_title: create_duplication_params[:new_course_title]
     )
   end
 end
