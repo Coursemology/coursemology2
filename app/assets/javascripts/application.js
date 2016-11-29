@@ -16,8 +16,6 @@
 //= require js-routes
 //= require bootstrap-sprockets
 //= require jquery_ujs
-//= require jquery-ui/sortable
-//= require jquery-ui/effect-shake
 //= require moment
 //= require bootstrap-datetimepicker
 //= require bootstrap-select

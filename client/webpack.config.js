@@ -9,6 +9,7 @@ const config = {
     coursemology: ['babel-polyfill', './app/index'],
     vendor: [
       'immutable',
+      'jquery-ui',
       'react',
       'react-bootstrap',
       'react-dom',
@@ -28,14 +29,17 @@ const config = {
     publicPath: '/assets/',
   },
 
+  externals: {
+    jquery: 'jQuery',
+  },
+
   resolve: {
     extensions: ['', '.js', '.jsx'],
     alias: {
-      react: path.resolve('./node_modules/react'),
-      'react-dom': path.resolve('./node_modules/react-dom'),
       lib: path.resolve('./app/lib'),
     },
   },
+
   plugins: [
     new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
     new webpack.DefinePlugin({
@@ -44,6 +48,7 @@ const config = {
       },
     }),
   ],
+
   module: {
     loaders: [
       {
@@ -66,6 +71,7 @@ const config = {
       },
     ],
   },
+
   eslint: {
     configFile: '../.eslintrc',
   },
