@@ -80,9 +80,19 @@ module ApplicationFormattersHelper
            locals: options
   end
 
+  # Custom datetime formats
+  Time::DATE_FORMATS[:date_only_long] = '%B %d, %Y'
+  Time::DATE_FORMATS[:date_only_short] = '%d %b'
+
   # Format the given datetime
   #
   # @param [DateTime] date The datetime to be formatted
+  # @param [Symbol] format The output format. Use Ruby's defaults or see above for
+  #   some predefined formats.
+  #   e.g. :long => "December 04, 2007 00:00"
+  #        :short => "04 Dec 00:00"
+  #        :date_only_long => "December 04, 2007"
+  #        :date_only_short => "04 Dec"
   # @return [String] the formatted datetime string
   def format_datetime(date, format = :long)
     user_zone = (current_user ? current_user.time_zone : nil) ||
