@@ -45,23 +45,21 @@ class Course::Forum::ForumsController < Course::Forum::Controller
   end
 
   def subscribe
-    redirect_path = course_forum_path(current_course, @forum)
     if @forum.subscriptions.create(user: current_user)
-      redirect_to redirect_path, success: t('.success', name: @forum.name)
+      flash.now[:success] = t('.success', name: @forum.name)
     else
-      redirect_to redirect_path,
-                  danger: t('.failure', error: @forum.errors.full_messages.to_sentence)
+      flash.now[:danger] = t('.failure', error: @forum.errors.full_messages.to_sentence)
     end
+    render 'update_subscribe_button'
   end
 
   def unsubscribe
-    redirect_path = course_forum_path(current_course, @forum)
-    if @forum.subscriptions.where(user: current_user).delete_all
-      redirect_to redirect_path, success: t('.success', name: @forum.name)
+    if @forum.subscriptions.where(user: current_user).delete_all > 0
+      flash.now[:success] = t('.success', name: @forum.name)
     else
-      redirect_to redirect_path,
-                  danger: t('.failure', error: @forum.errors.full_messages.to_sentence)
+      flash.now[:danger] = t('.failure')
     end
+    render 'update_subscribe_button'
   end
 
   def search

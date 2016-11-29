@@ -1,0 +1,12 @@
+// Remove current tooltip, replace subscribe button, re-enable tooltip
+BUTTON_SELECTOR = '<%= "#forum_#{@forum.id} .btn-subscribe"%>';
+$(BUTTON_SELECTOR).tooltip('destroy');
+$(BUTTON_SELECTOR).replaceWith(
+    '<%= escape_javascript(render partial: 'course/forum/forums/subscribe_button', locals: { forum: @forum, user: current_user }) %>'
+);
+$(BUTTON_SELECTOR).tooltip();
+
+// Remove older flash messages, and show users the new flash message
+$('.course-layout').parents('.container-fluid:first').find('.alert').remove();
+$('.course-layout').parents('.container-fluid:first').prepend('<%= j(flash_messages) %>');
+window.scrollTo(0, 0);

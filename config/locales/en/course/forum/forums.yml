@@ -41,7 +41,11 @@ en:
         unsubscribe:
           tag: 'Unsubscribe from email notifications'
           success: 'You have been unsubscribed from %{name}.'
-          failure: 'Failed to unsubscribe from : %{error}'
+          failure: >
+            You are not subscribed to this forum, hence the unsubscription was unsuccessful.
+        subscribe_button:
+          subscribe: 'Subscribe'
+          subscribed: 'Subscribed'
         search:
           header: 'Search Forums'
           search_panel_title: 'Forum Search'

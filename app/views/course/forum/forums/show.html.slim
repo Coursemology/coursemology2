@@ -1,21 +1,22 @@
-= page_header format_inline_text(@forum.name) do
-  = render 'controls'
+= content_tag_for(:div, @forum) do
+  = page_header format_inline_text(@forum.name) do
+    = render 'controls'
 
-table.table.forum-list.table-hover
-  thead
-    tr
-      th
-      th = t('.topics')
-      th = t('.votes')
-      th = t('.posts')
-      th = t('.views')
-      th = t('.latest_post')
-  tbody
-    - if @topics.empty?
+  table.table.forum-list.table-hover
+    thead
       tr
-        td colspan="6" align="center"
-        h3 = t('.no_topic')
-    - else
-      = render @topics
+        th
+        th = t('.topics')
+        th = t('.votes')
+        th = t('.posts')
+        th = t('.views')
+        th = t('.latest_post')
+    tbody
+      - if @topics.empty?
+        tr
+          td colspan="6" align="center"
+          h3 = t('.no_topic')
+      - else
+        = render @topics
 
-= paginate @topics
+  = paginate @topics

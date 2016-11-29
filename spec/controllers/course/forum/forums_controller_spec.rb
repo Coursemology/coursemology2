@@ -12,7 +12,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
       allow(stub).to receive(:save).and_return(false)
       allow(stub).to receive(:destroy).and_return(false)
       allow(stub.subscriptions).to receive(:create).and_return(false)
-      allow(stub.subscriptions).to receive_message_chain(:where, delete_all: false)
+      allow(stub.subscriptions).to receive_message_chain(:where, delete_all: 0)
       stub
     end
 
@@ -90,7 +90,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
     end
 
     describe '#subscribe' do
-      subject { post :subscribe, course_id: course, id: forum_stub }
+      subject { post :subscribe, course_id: course, id: forum_stub, format: 'js' }
 
       context 'when subscribe fails' do
         before do
@@ -98,20 +98,24 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
           subject
         end
 
-        it { is_expected.to redirect_to(course_forum_path(course, forum_stub)) }
+        it 'sets a failure flash message' do
+          expect(flash.now[:danger]).to eq(I18n.t('course.forum.forums.subscribe.failure'))
+        end
       end
     end
 
     describe '#unsubscribe' do
-      subject { delete :unsubscribe, course_id: course, id: forum_stub }
+      subject { delete :unsubscribe, course_id: course, id: forum_stub, format: 'js' }
 
-      context 'when unsubscribe fails' do
+      context 'when there is no subscription for the forum' do
         before do
           controller.instance_variable_set(:@forum, forum_stub)
           subject
         end
 
-        it { is_expected.to redirect_to(course_forum_path(course, forum_stub)) }
+        it 'sets a failure flash message' do
+          expect(flash.now[:danger]).to eq(I18n.t('course.forum.forums.unsubscribe.failure'))
+        end
       end
     end
   end
