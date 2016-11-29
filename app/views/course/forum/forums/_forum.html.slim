@@ -7,3 +7,4 @@
   td = forum.topic_count
   td = forum.topic_post_count
   td = forum.topic_view_count
+  td = render partial: 'subscribe_button', locals: { user: current_user, forum: forum }

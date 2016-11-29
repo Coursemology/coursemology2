@@ -8,6 +8,21 @@
     }
   }
 
+  .forum-list {
+    .btn-subscribe {
+      @extend .btn-sm;
+      @extend .hidden-xs;
+
+      max-width: 110px;
+      width: 100%;
+    }
+
+    td,
+    th {
+      vertical-align: middle;
+    }
+  }
+
   .unread-controls.btn-group {
     margin-right: 20px;
   }
