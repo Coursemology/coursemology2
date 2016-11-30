@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Submission::UpdateGuidedAssessmentService <
+class Course::Assessment::Submission::AutogradedAssessmentUpdateService <
   Course::Assessment::Submission::UpdateService
 
   def load_or_create_answers
