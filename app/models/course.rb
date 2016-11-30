@@ -127,7 +127,8 @@ class Course < ActiveRecord::Base
     logo.duplicate_from(other.logo) if other.logo_url
 
     # This also duplicates assessments.
-    self.lesson_plan_items = duplicator.duplicate(other.lesson_plan_items.map(&:actable)).map(&:acting_as)
+    self.lesson_plan_items = duplicator.duplicate(other.lesson_plan_items.map(&:actable)).
+                             map(&:acting_as)
     self.lesson_plan_milestones = duplicator.duplicate(other.lesson_plan_milestones)
 
     # Find material_folders without owners and only duplicate those.

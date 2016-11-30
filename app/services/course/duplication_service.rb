@@ -13,6 +13,9 @@ class Course::DuplicationService
     @all_objects = all_objects.append(current_course)
     @selected_objects = selected_objects.append(current_course)
     @duplication_params = duplication_params
+    @duplication_params[:new_course_start_date] = Time.zone.parse(
+      duplication_params[:new_course_start_date]
+    )
   end
 
   # Duplicate the course with the duplicator.
@@ -20,8 +23,8 @@ class Course::DuplicationService
   #
   # @return [Boolean] Whether the duplication succeeded.
   def duplicate
-    new_course = duplicator.duplicate(@current_course)
-    new_course.save!
+    @new_course = duplicator.duplicate(@current_course)
+    @new_course.save
   end
 
   private

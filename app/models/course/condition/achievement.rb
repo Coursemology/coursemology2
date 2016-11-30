@@ -45,7 +45,7 @@ class Course::Condition::Achievement < ActiveRecord::Base
   def initialize_duplicate(duplicator, other)
     self.course = duplicator.duplicate(other.course)
     self.achievement = duplicator.duplicate(other.achievement)
-    self.conditional_type = other.conditional_type    # this is a simple string
+    self.conditional_type = other.conditional_type # this is a simple string
     self.conditional = duplicator.duplicate(other.conditional)
     @duplicating = true
   end

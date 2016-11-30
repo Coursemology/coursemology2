@@ -31,8 +31,7 @@ class Course::DuplicationsController < Course::ComponentController
     # and selected_objects
     @duplication_service ||= Course::DuplicationService.new(
       current_course,
-      new_course_start_date: Time.zone.parse(create_duplication_params[:new_course_start_date]),
-      new_course_title: create_duplication_params[:new_course_title]
+      create_duplication_params
     )
   end
 end

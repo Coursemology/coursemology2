@@ -6,5 +6,9 @@ FactoryGirl.define do
     sequence(:description) { |n| "Awesome achievement #{n}" }
     sequence(:weight)
     published true
+
+    trait :with_badge do
+      badge { Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec', 'support', 'minion.png')) }
+    end
   end
 end

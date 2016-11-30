@@ -89,7 +89,6 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
     @duplicating = true
   end
 
-
   private
 
   # Queues the new question package for processing.
