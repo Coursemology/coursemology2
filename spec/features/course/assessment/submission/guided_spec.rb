@@ -78,7 +78,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
           to have_selector('div.panel', text: 'course.assessment.answer.explanation.correct')
         expect(page).to have_checked_field(correct_option)
 
-        click_link I18n.t('course.assessment.answer.guided.continue')
+        click_link I18n.t('course.assessment.answer.autograded.continue')
         expect(page).to have_selector('h3', text: mrq_questions.second.display_title)
       end
 
@@ -125,7 +125,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
         visit edit_course_assessment_submission_path(assessment.course, assessment, submission)
 
-        expect(page).to have_selector('p', text: 'course.assessment.answer.guided.error')
+        expect(page).to have_selector('p', text: 'course.assessment.answer.autograded.error')
 
         click_button I18n.t('common.submit')
         wait_for_ajax

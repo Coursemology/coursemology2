@@ -60,5 +60,5 @@ en:
             experience_points: 'Experience Points'
           no_submission:
             not_started: 'Not Started'
-          worksheet_answers_tabbed:
+          manually_graded_answers_tabbed:
             question: 'Q%{number}'

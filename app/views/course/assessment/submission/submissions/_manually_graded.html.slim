@@ -3,9 +3,9 @@
 
   div.answer-panel
     - if @assessment.tabbed_view? && @assessment.questions.count > 1
-      = render 'worksheet_answers_tabbed', f: f
+      = render 'manually_graded_answers_tabbed', f: f
     - else
-      = render 'worksheet_answers', f: f
+      = render 'manually_graded_answers', f: f
 
     - unless @submission.attempting?
       = render 'statistics', f: f
@@ -16,6 +16,7 @@
         save: @submission.attempting? || can_grade,
         finalise: @submission.attempting? && can?(:update, @submission),
         auto_grade: @submission.submitted? && can_grade,
+        mark: @submission.submitted? && can_grade,
         publish: @submission.submitted? && can_grade,
         unsubmit: !@submission.attempting? && can_grade\
       }

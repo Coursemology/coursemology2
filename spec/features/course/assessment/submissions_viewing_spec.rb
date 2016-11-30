@@ -73,7 +73,7 @@ RSpec.describe 'Course: Submissions Viewing' do
           expect(page).to have_text(course_manager.name)
         end
 
-        # Pending submissions does not show submissions for guided assessments
+        # Pending submissions does not show submissions for autograded assessments
         expect(page).not_to have_content_tag_for(autograded_submission)
 
         # Staff with group view pending submissions of own group students
