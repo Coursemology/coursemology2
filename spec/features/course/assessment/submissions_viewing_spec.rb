@@ -5,8 +5,8 @@ RSpec.describe 'Course: Submissions Viewing' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:assessment) { create(:assessment, :worksheet, course: course) }
-    let(:autograded_assessment) { create(:assessment, :guided, autograded: true, course: course) }
+    let(:assessment) { create(:assessment, course: course) }
+    let(:autograded_assessment) { create(:assessment, :autograded, course: course) }
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do

@@ -12,12 +12,11 @@ RSpec.describe 'Course: Assessments: Attempt' do
     end
     let(:assessment) { create(:assessment, :published_with_all_question_types, course: course) }
     let(:assessment_tabbed_single_question) do
-      create(:assessment, :published_with_mcq_question, :worksheet,
-             course: course, tabbed_view: true)
+      create(:assessment, :published_with_mcq_question, course: course, tabbed_view: true)
     end
     let(:assessment_tabbed) do
-      assessment = create(:assessment, :published_with_mcq_question, :worksheet,
-                          course: course, tabbed_view: true)
+      assessment =
+        create(:assessment, :published_with_mcq_question, course: course, tabbed_view: true)
       create(:course_assessment_question_programming, assessment: assessment)
       assessment.reload
     end

@@ -11,7 +11,7 @@ RSpec.feature 'Course: Assessments: Management' do
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario 'I can create a new worksheet assessment' do
+      scenario 'I can create a manually graded assessment' do
         assessment_tab = create(:course_assessment_tab,
                                 category: course.assessment_categories.first)
         assessment = build_stubbed(:assessment)
@@ -19,11 +19,10 @@ RSpec.feature 'Course: Assessments: Management' do
 
         visit course_assessments_path(course, category: assessment_tab.category,
                                               tab: assessment_tab)
-        click_link I18n.t('course.assessment.assessments.index.new_assessment.worksheet')
+        click_link I18n.t('course.assessment.assessments.index.new_assessment.manually_graded')
 
         expect(current_path).to eq(new_course_assessment_path(course))
-        expect(page).
-          to have_selector('h1', text: I18n.t('course.assessment.assessments.new.worksheet'))
+        expect(page).to have_selector('h1', text: I18n.t('course.assessment.assessments.new'))
 
         # Create an assessment with a missing title.
         fill_in 'assessment_description', with: assessment.description
@@ -48,20 +47,17 @@ RSpec.feature 'Course: Assessments: Management' do
         expect(assessment_created.tab).to eq(assessment_tab)
         expect(page).to have_content_tag_for(assessment_created)
         expect(assessment_created.folder.materials).to be_present
-        expect(assessment_created).to be_worksheet
+        expect(assessment_created).not_to be_autograded
       end
 
-      scenario 'I can create a new guided assessment' do
+      scenario 'I can create an autograded assessment' do
         assessment_tab = create(:course_assessment_tab,
                                 category: course.assessment_categories.first)
         assessment = build_stubbed(:assessment)
 
         visit course_assessments_path(course, category: assessment_tab.category,
                                               tab: assessment_tab)
-        click_link I18n.t('course.assessment.assessments.index.new_assessment.guided')
-
-        expect(page).
-          to have_selector('h1', text: I18n.t('course.assessment.assessments.new.guided'))
+        click_link I18n.t('course.assessment.assessments.index.new_assessment.autograded')
 
         fill_in 'assessment_title', with: assessment.title
         fill_in 'assessment_description', with: assessment.description
@@ -76,38 +72,13 @@ RSpec.feature 'Course: Assessments: Management' do
 
         assessment_created = course.assessments.last
         expect(assessment_created.tab).to eq(assessment_tab)
-        expect(assessment_created).to be_guided
-      end
-
-      scenario 'I can create a new exam assessment' do
-        assessment_tab = create(:course_assessment_tab,
-                                category: course.assessment_categories.first)
-        assessment = build_stubbed(:assessment, :exam)
-
-        visit course_assessments_path(course, category: assessment_tab.category,
-                                              tab: assessment_tab)
-        click_link I18n.t('course.assessment.assessments.index.new_assessment.exam')
-
-        expect(page).
-          to have_selector('h1', text: I18n.t('course.assessment.assessments.new.exam'))
-
-        fill_in 'assessment_title', with: assessment.title
-        fill_in 'assessment_start_at', with: assessment.start_at
-        fill_in 'assessment_password', with: assessment.password
-
-        click_button 'submit'
-
-        assessment_created = course.assessments.last
-        expect(assessment_created).to be_exam
-        expect(assessment_created.password).to eq(assessment.password)
+        expect(assessment_created).to be_autograded
       end
 
       scenario 'I can edit an assessment' do
         assessment = create(:assessment, course: course)
         visit course_assessment_path(course, assessment)
         find_link(nil, href: edit_course_assessment_path(course, assessment)).click
-        expect(page).
-          to have_selector('h1', text: I18n.t('course.assessment.assessments.edit.worksheet'))
 
         new_text = 'zzzz'
         fill_in 'assessment_title', with: new_text

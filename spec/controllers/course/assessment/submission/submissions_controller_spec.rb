@@ -91,8 +91,8 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       end
     end
 
-    context 'when the assessment is guided' do
-      let(:assessment) { create(:assessment, :guided, :with_mrq_question, course: course) }
+    context 'when the assessment is autograded' do
+      let(:assessment) { create(:assessment, :autograded, :with_mrq_question, course: course) }
       let!(:answer) do
         answer = assessment.questions.first.attempt(immutable_submission)
         answer.save

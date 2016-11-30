@@ -79,19 +79,6 @@ FactoryGirl.define do
       with_file_upload_question
     end
 
-    trait :worksheet do
-      mode :worksheet
-    end
-
-    trait :guided do
-      mode :guided
-    end
-
-    trait :exam do
-      mode :exam
-      password 'super_secret'
-    end
-
     # Note: Not to be used alone, as a published assessment requires at
     #   least 1 other question. Use the other published traits intead.
     trait :published do

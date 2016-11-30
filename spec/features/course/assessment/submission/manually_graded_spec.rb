@@ -7,14 +7,15 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) do
-      create(:assessment, :worksheet, :published_with_mrq_question, course: course)
+      create(:assessment, :published_with_mrq_question, course: course)
     end
+    let(:mrq_questions) { assessment.reload.questions.map(&:specific) }
     before { login_as(user, scope: :user) }
 
     let(:student) { create(:course_user, :approved, course: course).user }
     let(:submission) { create(:submission, assessment: assessment, creator: student) }
     let(:programming_assessment) do
-      create(:assessment, :worksheet, :published_with_programming_question, course: course)
+      create(:assessment, :published_with_programming_question, course: course)
     end
     let(:programming_assessment_submission) do
       create(:submission, assessment: programming_assessment, creator: student)
@@ -159,6 +160,36 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
 
         wait_for_ajax
         expect(page).not_to have_content_tag_for(comment_post)
+      end
+    end
+
+    context 'As a Course Staff' do
+      let(:user) { create(:course_teaching_assistant, course: course).user }
+
+      scenario "I can grade the student's work" do
+        mrq_questions.each { |q| q.attempt(submission).save! }
+        submission.finalise!
+        submission.save!
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        expect(page).to have_button(I18n.t('course.assessment.submission.submissions.buttons.save'))
+        click_link I18n.t('course.assessment.submission.submissions.buttons.evaluate_answers')
+        wait_for_job
+
+        # Publish the submission with empty answer grade
+        click_button I18n.t('course.assessment.submission.submissions.buttons.publish')
+
+        expect(page).to have_selector('div.alert-danger')
+        expect(page).
+          to have_button(I18n.t('course.assessment.submission.submissions.buttons.publish'))
+
+        fill_in find('input.form-control.grade')[:name], with: 0
+        click_button I18n.t('course.assessment.submission.submissions.buttons.publish')
+
+        expect(current_path).
+          to eq(edit_course_assessment_submission_path(course, assessment, submission))
+        expect(submission.reload.published?).to be(true)
       end
     end
   end

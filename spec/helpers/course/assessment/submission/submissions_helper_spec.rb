@@ -34,7 +34,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsHelper do
     end
 
     describe '#guided_max_step' do
-      let(:assessment) { build(:assessment, :guided, :published_with_mcq_question) }
+      let(:assessment) { build(:assessment, :autograded, :published_with_mcq_question) }
       before { helper.instance_variable_set(:@assessment, assessment) }
       subject { helper.guided_max_step }
 
