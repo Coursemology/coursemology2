@@ -12,11 +12,13 @@
     = f.input :bonus_end_at
   - unless @assessment.new_record?
     = f.input :draft
-  - if @assessment.worksheet?
+  - unless @assessment.autograded?
     = f.input :tabbed_view
-  - if @assessment.guided? || @assessment.worksheet?
-    = f.input :autograded, label: t('.autograded'), hint: t('.autograded_hint')
-  - if @assessment.exam?
+  - if @assessment.persisted?
+    = f.input :autograded, label: t('.autograded'), hint: t('.autograded_hint'), disabled: true
+  - else
+    = f.hidden_field :autograded
+  - unless @assessment.autograded?
     = f.input :password, placeholder: t('.password_placeholder'), hint: t('.password_hint'),
                          input_html: { value: @assessment.password, onfocus: "this.type='text'", onblur: "this.type='password'" }
   = f.folder

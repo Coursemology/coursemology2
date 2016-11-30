@@ -18,9 +18,8 @@ en:
           maximum_experience_points: 'Maximum Experience Points'
           requirement_for: 'Requirement For'
           new_assessment:
-            guided: 'Guided Assessment'
-            worksheet: 'Worksheet Assessment'
-            exam: 'Exam Assessment'
+            autograded: 'Autograded Assessment'
+            manually_graded: 'Manually Graded Assessment'
         assessment:
           attempt: 'Attempt'
           condition_not_satisfied: 'You do not fulfill the requirements of the assessment'
@@ -44,15 +43,11 @@ en:
             file_upload: 'File Upload'
             programming: 'Programming'
         new:
-          guided: 'New Guided Assessment'
-          worksheet: 'New Worksheet Assessment'
-          exam: 'New Exam Assessment'
-        edit:
-          guided: 'Edit Guided Assessment'
-          worksheet: 'Edit Worksheet Assessment'
-          exam: 'Edit Exam Assessment'
+          header: 'New Assessment'
         create:
           success: 'Assessment %{title} was created.'
+        edit:
+          header: 'Edit Assessment'
         update:
           success: 'Assessment %{title} was updated.'
         destroy:
