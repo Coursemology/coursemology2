@@ -2,7 +2,7 @@ $('<%= "#answer_#{@answer.id}"%>').replaceWith(
     '<%= escape_javascript(render partial: 'course/assessment/answer/answer', object: @new_answer) %>'
 );
 
-<% if @assessment.autograded? && guided_next_unanswered_question.nil? %>
+<% if @assessment.autograded? && next_unanswered_question.nil? %>
   $('input.finalise').show();
 <% end %>
 

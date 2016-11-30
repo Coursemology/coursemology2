@@ -18,5 +18,5 @@
   / Display a continue button if last attempt is correct
   - if !@current_question.last_question? && last_attempt && last_attempt.correct?
     = link_to t('.continue'),
-      edit_course_assessment_submission_path(current_course, @assessment, @submission, step: guided_current_step + 1),
+      edit_course_assessment_submission_path(current_course, @assessment, @submission, step: current_step + 1),
       class: ['btn', 'btn-success', 'continue']

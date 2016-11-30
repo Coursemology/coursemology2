@@ -1,15 +1,15 @@
 div.text-center
   ul.nav.nav-pills.navigation
     - (1..@assessment.questions.length).each do |i|
-      li class="#{guided_nav_class(i)}"
+      li class="#{nav_class(i)}"
         = link_to [:edit, current_course, @assessment, @submission, step: i], class: 'navigation-pills'
           = i
 
 div.answer-panel
   = simple_form_for [current_course, @assessment, @submission] do |f|
     = f.error_notification
-    = hidden_field_tag :step, guided_current_step
-    = f.simple_fields_for :answers, guided_current_answer do |base_answer_form|
+    = hidden_field_tag :step, current_step
+    = f.simple_fields_for :answers, current_answer do |base_answer_form|
       div.answer-content
         - answer = base_answer_form.object
         = render partial: answer.question, suffix: 'question'
@@ -23,7 +23,7 @@ div.answer-panel
       = render 'buttons', {\
           f: f,
           save: answer.attempting? || (!@submission.attempting? && can_grade),
-          finalise: @submission.attempting? && guided_next_unanswered_question.nil?,
+          finalise: @submission.attempting? && next_unanswered_question.nil?,
           auto_grade: @submission.submitted? && can_grade,
           publish: @submission.submitted? && can_grade,
           unsubmit: !@submission.attempting? && can_grade\

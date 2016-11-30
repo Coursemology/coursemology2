@@ -33,36 +33,36 @@ RSpec.describe Course::Assessment::Submission::SubmissionsHelper do
       end
     end
 
-    describe '#guided_max_step' do
+    describe '#max_step' do
       let(:assessment) { build(:assessment, :autograded, :published_with_mcq_question) }
       before { helper.instance_variable_set(:@assessment, assessment) }
-      subject { helper.guided_max_step }
+      subject { helper.max_step }
 
       context 'when all questions have been answered' do
-        before { allow(helper).to receive(:guided_next_unanswered_question).and_return(nil) }
+        before { allow(helper).to receive(:next_unanswered_question).and_return(nil) }
 
         it { is_expected.to eq(assessment.questions.length) }
       end
     end
 
-    describe '#guided_nav_class' do
-      subject { helper.guided_nav_class(step) }
+    describe '#nav_class' do
+      subject { helper.nav_class(step) }
       before do
-        allow(helper).to receive(:guided_max_step).and_return(5)
-        allow(helper).to receive(:guided_current_step).and_return(3)
+        allow(helper).to receive(:max_step).and_return(5)
+        allow(helper).to receive(:current_step).and_return(3)
       end
 
-      context 'when step is greater than guided_max_step' do
+      context 'when step is greater than max_step' do
         let(:step) { 6 }
         it { is_expected.to eq('disabled') }
       end
 
-      context 'when step is guided_current_step' do
+      context 'when step is current_step' do
         let(:step) { 3 }
         it { is_expected.to eq('active') }
       end
 
-      context 'when step less than guided_current_step' do
+      context 'when step less than current_step' do
         let(:step) { 2 }
         it { is_expected.to eq('completed') }
       end
