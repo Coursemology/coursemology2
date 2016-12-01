@@ -285,4 +285,5 @@ Rails.application.routes.draw do
   end
 
   resources :attachment_references, path: 'attachments', only: [:show]
+  resources :attachments, only: [:create]
 end
