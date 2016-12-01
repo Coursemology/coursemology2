@@ -65,7 +65,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
     end
 
     context 'As a Course Manager' do
-      let(:assessment) { create(:assessment, :exam, :with_all_question_types, course: course) }
+      let(:assessment) { create(:assessment, :with_all_question_types, course: course) }
       let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can publish all graded exams' do

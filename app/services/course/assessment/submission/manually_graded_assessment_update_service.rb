@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Submission::UpdateWorksheetAssessmentService <
+class Course::Assessment::Submission::ManuallyGradedAssessmentUpdateService <
   Course::Assessment::Submission::UpdateService
 
   private

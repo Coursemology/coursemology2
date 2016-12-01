@@ -5,8 +5,8 @@ RSpec.describe 'Course: Submissions Viewing' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:assessment) { create(:assessment, :worksheet, course: course) }
-    let(:autograded_assessment) { create(:assessment, :guided, autograded: true, course: course) }
+    let(:assessment) { create(:assessment, course: course) }
+    let(:autograded_assessment) { create(:assessment, :autograded, course: course) }
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
@@ -73,7 +73,7 @@ RSpec.describe 'Course: Submissions Viewing' do
           expect(page).to have_text(course_manager.name)
         end
 
-        # Pending submissions does not show submissions for guided assessments
+        # Pending submissions does not show submissions for autograded assessments
         expect(page).not_to have_content_tag_for(autograded_submission)
 
         # Staff with group view pending submissions of own group students

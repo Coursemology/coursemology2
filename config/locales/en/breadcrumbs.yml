@@ -60,12 +60,16 @@ en:
         achievements:
           new: :'course.achievement.achievements.new.header'
       assessment:
+        assessments:
+          new: :'course.assessment.assessments.new.header'
         condition:
           levels:
             index: :'course.assessment.assessments.index.header'
           achievements:
             index: :'course.assessment.assessments.index.header'
           assessments:
+            new: :'course.assessment.assessments.new.header'
+            edit: :'course.assessment.assessments.edit.header'
             index: :'course.assessment.assessments.index.header'
         controller:
           index: :'course.assessment.assessments.index.header'

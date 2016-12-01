@@ -9,8 +9,12 @@
       = specific_answer_form.hidden_field :id, value: answer.actable.id
       = render partial: specific_answer_form.object, locals: { f: specific_answer_form, last_attempt: last_attempt }
 
-      = render partial: "course/assessment/answer/#{answer.submission.assessment.mode}",
-               locals: { base_answer_form: f, answer: answer, last_attempt: last_attempt }
+      - if answer.submission.assessment.autograded?
+        = render partial: 'course/assessment/answer/autograded',
+                 locals: { base_answer_form: f, answer: answer, last_attempt: last_attempt }
+      - else
+        = render partial: 'course/assessment/answer/manually_graded',
+          locals: { base_answer_form: f, answer: answer, last_attempt: last_attempt }
 
       - if !submission.attempting?
         = render partial: 'course/assessment/answer/grading',

@@ -9,7 +9,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def new
-    @assessment.mode = Course::Assessment.modes[params[:mode]] || :worksheet
+    @assessment.autograded = params[:autograded] == 'true'
   end
 
   def create

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessment: Submissions: Guided' do
+RSpec.describe 'Course: Assessment: Submissions: Autograded' do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) do
-      create(:assessment, :guided, :published_with_mrq_question, course: course)
+      create(:assessment, :autograded, :published_with_mrq_question, course: course)
     end
     let(:mrq_questions) { assessment.reload.questions.map(&:specific) }
     let(:extra_mrq_question) do
@@ -18,7 +18,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
     let(:student) { create(:course_user, :approved, course: course).user }
     let(:submission) { create(:submission, assessment: assessment, creator: student) }
     let(:programming_assessment) do
-      create(:assessment, :guided, :published_with_programming_question, course: course)
+      create(:assessment, :autograded, :published_with_programming_question, course: course)
     end
     let(:programming_assessment_submission) do
       create(:submission, assessment: programming_assessment, creator: student)
@@ -78,7 +78,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
           to have_selector('div.panel', text: 'course.assessment.answer.explanation.correct')
         expect(page).to have_checked_field(correct_option)
 
-        click_link I18n.t('course.assessment.answer.guided.continue')
+        click_link I18n.t('course.assessment.answer.autograded.continue')
         expect(page).to have_selector('h3', text: mrq_questions.second.display_title)
       end
 
@@ -125,7 +125,7 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
         visit edit_course_assessment_submission_path(assessment.course, assessment, submission)
 
-        expect(page).to have_selector('p', text: 'course.assessment.answer.guided.error')
+        expect(page).to have_selector('p', text: 'course.assessment.answer.autograded.error')
 
         click_button I18n.t('common.submit')
         wait_for_ajax
@@ -184,32 +184,6 @@ RSpec.describe 'Course: Assessment: Submissions: Guided' do
 
     context 'As a Course Staff' do
       let(:user) { create(:course_teaching_assistant, course: course).user }
-
-      scenario "I can grade the student's work" do
-        mrq_questions.each { |q| q.attempt(submission).save! }
-        submission.finalise!
-        submission.save!
-
-        visit edit_course_assessment_submission_path(course, assessment, submission)
-
-        expect(page).to have_button(I18n.t('course.assessment.submission.submissions.buttons.save'))
-        click_link I18n.t('course.assessment.submission.submissions.buttons.evaluate_answers')
-        wait_for_job
-
-        # Publish the submission with empty answer grade
-        click_button I18n.t('course.assessment.submission.submissions.buttons.publish')
-
-        expect(page).to have_selector('div.alert-danger')
-        expect(page).
-          to have_button(I18n.t('course.assessment.submission.submissions.buttons.publish'))
-
-        fill_in find('input.form-control.grade')[:name], with: 0
-        click_button I18n.t('course.assessment.submission.submissions.buttons.publish')
-
-        expect(current_path).
-          to eq(edit_course_assessment_submission_path(course, assessment, submission))
-        expect(submission.reload.published?).to be(true)
-      end
 
       scenario 'I can skip steps' do
         extra_mrq_question

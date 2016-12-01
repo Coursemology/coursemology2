@@ -8,13 +8,10 @@ module Course::Assessment::Submission::SubmissionsControllerServiceConcern
   #
   # @return [Class] The class of the service.
   def service_class
-    case @assessment.mode
-    when 'guided'
-      Course::Assessment::Submission::UpdateGuidedAssessmentService
-    when 'worksheet'
-      Course::Assessment::Submission::UpdateWorksheetAssessmentService
-    when 'exam'
-      Course::Assessment::Submission::UpdateExamAssessmentService
+    if @assessment.autograded?
+      Course::Assessment::Submission::AutogradedAssessmentUpdateService
+    else
+      Course::Assessment::Submission::ManuallyGradedAssessmentUpdateService
     end
   end
 

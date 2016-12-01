@@ -7,4 +7,14 @@
 = div_for(@assessment, 'data-assessment-id' => @assessment.id,
                        class: single_question_flag_class(@assessment)) do
   = div_for(@submission, 'data-submission-id' => @submission.id) do
-    = render @assessment.mode
+    - if @assessment.autograded?
+      = render 'autograded'
+    - else
+      = render 'manually_graded'
+
+/ Display a dialog after creating the submission
+- if @assessment.password_protected? && params[:new_submission] == 'true'
+  javascript:
+    $(document).ready(function () {
+      alert(I18n.t('javascript.course.assessment.submission.submissions.exam.notice'));
+    });
