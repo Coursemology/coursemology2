@@ -35,13 +35,17 @@ en:
           success: 'Forum %{name} was deleted.'
           failure: 'Failed to delete forum: %{error}'
         subscribe:
-          tag: 'Subscribe to email notification for this forum'
-          success: 'You have subscribed to Forum %{name}.'
-          failure: 'Fail to subscribe to Forum: %{error}'
+          tag: 'Subscribe to email notifications'
+          success: 'You are subscribed to %{name}.'
+          failure: 'Failed to subscribe to: %{error}'
         unsubscribe:
-          tag: 'Unsubscribe from email notification for this forum'
-          success: 'You have been unsubscribed from the Forum %{name}.'
-          failure: 'Fail to unsubscribe from Forum: %{error}'
+          tag: 'Unsubscribe from email notifications'
+          success: 'You have been unsubscribed from %{name}.'
+          failure: >
+            You are not subscribed to this forum, hence the unsubscription was unsuccessful.
+        subscribe_button:
+          subscribe: 'Subscribe'
+          subscribed: 'Subscribed'
         search:
           header: 'Search Forums'
           search_panel_title: 'Forum Search'

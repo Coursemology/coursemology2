@@ -6,16 +6,7 @@ span.pull-right
                                   class: ['btn', 'btn-default'], method: :patch
   .btn-group
     - if can?(:subscribe, @forum)
-      - if @forum.subscribed_by?(current_user)
-        = link_to unsubscribe_course_forum_path(current_course, @forum),
-                  title: t('course.forum.forums.unsubscribe.tag'), class: ['btn', 'btn-danger'],
-                  method: :delete do
-          = fa_icon 'heart-o'.freeze
-      - else
-        = link_to subscribe_course_forum_path(current_course, @forum),
-                  title: t('course.forum.forums.subscribe.tag'), class: ['btn', 'btn-success'], method: :post do
-          = fa_icon 'heart'.freeze
-
+      = render partial: 'subscribe_button', locals: { user: current_user, forum: @forum }
     = new_button([current_course, @forum, :topic]) if can?(:create, Course::Forum::Topic.new(forum: @forum))
     = edit_button([current_course, @forum]) if can?(:edit, @forum)
     = delete_button([current_course, @forum]) if can?(:destroy, @forum)

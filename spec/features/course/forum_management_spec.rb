@@ -81,28 +81,37 @@ RSpec.feature 'Course: Forum: Management' do
         expect(page).not_to have_content_tag_for(forum)
       end
 
-      scenario 'I can subscribe to a forum' do
+      scenario 'I can subscribe and unsubscribe to a forum ', js: true do
         forum = create(:forum, course: course)
-        visit course_forum_path(course, forum)
-        find_link(I18n.t('course.forum.forums.subscribe.tag'),
-                  href: subscribe_course_forum_path(course, forum)).click
 
-        expect(current_path).to eq(course_forum_path(course, forum))
-        expect(page).to have_link(I18n.t('course.forum.forums.unsubscribe.tag'),
-                                  href: unsubscribe_course_forum_path(course, forum))
+        # Subscribe and unsubscribe at the specific forum page
+        visit course_forum_path(course, forum)
+        find_link(nil, href: subscribe_course_forum_path(course, forum)).trigger('click')
+        wait_for_ajax
+
         expect(Course::Forum::Subscription.where(user: user, forum: forum).count).to eq(1)
-      end
+        expect(page).to have_selector('div.alert.alert-success')
 
-      scenario 'I can unsubscribe from a forum' do
-        forum = create(:forum, course: course)
-        Course::Forum::Subscription.create(forum: forum, user: user)
-        visit course_forum_path(course, forum)
-        find_link(I18n.t('course.forum.forums.unsubscribe.tag'),
-                  href: unsubscribe_course_forum_path(course, forum)).click
+        find_link(nil, href: unsubscribe_course_forum_path(course, forum)).trigger('click')
+        wait_for_ajax
 
-        expect(current_path).to eq(course_forum_path(course, forum))
-        expect(page).to have_link(I18n.t('course.forum.forums.subscribe.tag'),
-                                  href: subscribe_course_forum_path(course, forum))
+        expect(page).to have_link(nil, href: subscribe_course_forum_path(course, forum))
+        expect(page).to have_selector('div.alert.alert-success')
+        expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
+
+        # Subscribe and unsubscribe at the course forums page
+        visit course_forums_path(course)
+        find_link(nil, href: subscribe_course_forum_path(course, forum)).trigger('click')
+        wait_for_ajax
+
+        expect(Course::Forum::Subscription.where(user: user, forum: forum).count).to eq(1)
+        expect(page).to have_selector('div.alert.alert-success')
+
+        find_link(nil, href: unsubscribe_course_forum_path(course, forum)).trigger('click')
+        wait_for_ajax
+
+        expect(page).to have_link(nil, href: subscribe_course_forum_path(course, forum))
+        expect(page).to have_selector('div.alert.alert-success')
         expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
       end
     end
@@ -118,28 +127,37 @@ RSpec.feature 'Course: Forum: Management' do
         end
       end
 
-      scenario 'I can subscribe to a forum' do
+      scenario 'I can subscribe and unsubscribe to a forum ', js: true do
         forum = create(:forum, course: course)
-        visit course_forum_path(course, forum)
-        find_link(I18n.t('course.forum.forums.subscribe.tag'),
-                  href: subscribe_course_forum_path(course, forum)).click
 
-        expect(current_path).to eq(course_forum_path(course, forum))
-        expect(page).to have_link(I18n.t('course.forum.forums.unsubscribe.tag'),
-                                  href: unsubscribe_course_forum_path(course, forum))
+        # Subscribe and unsubscribe at the specific forum page
+        visit course_forum_path(course, forum)
+        find_link(nil, href: subscribe_course_forum_path(course, forum)).trigger('click')
+        wait_for_ajax
+
         expect(Course::Forum::Subscription.where(user: user, forum: forum).count).to eq(1)
-      end
+        expect(page).to have_selector('div.alert.alert-success')
 
-      scenario 'I can unsubscribe from a forum' do
-        forum = create(:forum, course: course)
-        Course::Forum::Subscription.create(forum: forum, user: user)
-        visit course_forum_path(course, forum)
-        find_link(I18n.t('course.forum.forums.unsubscribe.tag'),
-                  href: unsubscribe_course_forum_path(course, forum)).click
+        find_link(nil, href: unsubscribe_course_forum_path(course, forum)).trigger('click')
+        wait_for_ajax
 
-        expect(current_path).to eq(course_forum_path(course, forum))
-        expect(page).to have_link(I18n.t('course.forum.forums.subscribe.tag'),
-                                  href: subscribe_course_forum_path(course, forum))
+        expect(page).to have_link(nil, href: subscribe_course_forum_path(course, forum))
+        expect(page).to have_selector('div.alert.alert-success')
+        expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
+
+        # Subscribe and unsubscribe at the course forums page
+        visit course_forums_path(course)
+        find_link(nil, href: subscribe_course_forum_path(course, forum)).trigger('click')
+        wait_for_ajax
+
+        expect(Course::Forum::Subscription.where(user: user, forum: forum).count).to eq(1)
+        expect(page).to have_selector('div.alert.alert-success')
+
+        find_link(nil, href: unsubscribe_course_forum_path(course, forum)).trigger('click')
+        wait_for_ajax
+
+        expect(page).to have_link(nil, href: subscribe_course_forum_path(course, forum))
+        expect(page).to have_selector('div.alert.alert-success')
         expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
       end
 

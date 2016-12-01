@@ -1,4 +1,28 @@
 .course-forum-forums {
+  .btn-subscribe {
+    span {
+      @extend .hidden-xs;
+      @extend .hidden-sm;
+
+      margin-left: 5px;
+    }
+  }
+
+  .forum-list {
+    .btn-subscribe {
+      @extend .btn-sm;
+      @extend .hidden-xs;
+
+      max-width: 110px;
+      width: 100%;
+    }
+
+    td,
+    th {
+      vertical-align: middle;
+    }
+  }
+
   .unread-controls.btn-group {
     margin-right: 20px;
   }

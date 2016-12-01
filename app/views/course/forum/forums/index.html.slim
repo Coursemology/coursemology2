@@ -15,10 +15,11 @@ table.table.forum-list.table-hover
       th = t('.topics')
       th = t('.posts')
       th = t('.views')
+      th
   tbody
     - if @forums.empty?
       tr
-        td colspan="5" align="center"
+        td colspan="6" align="center"
           h3 = t('.no_forum')
     - else
       = render @forums
