@@ -83,6 +83,30 @@ RSpec.describe Attachment do
     end
   end
 
+  describe '.find_or_create_by' do
+    subject { Attachment.find_or_create_by(file: file) }
+
+    it 'finds or creates an attachment from file' do
+      expect(subject).to be_present
+      expect(subject).to be_persisted
+      expect(subject.file_upload.file).not_to be_nil
+    end
+
+    context 'when the file hash does not exist' do
+      let(:file) do
+        file = Tempfile.new('')
+        file.write(SecureRandom.hex)
+        file.close
+        file
+      end
+
+      it 'creates an attachment' do
+        expect(subject).to be_persisted
+        expect(subject.file_upload.file).not_to be_nil
+      end
+    end
+  end
+
   describe '#path' do
     it 'returns a path based on the split form of the name' do
       attachment = create(:attachment, name: 'abcdef' + SecureRandom.hex(32))

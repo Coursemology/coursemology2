@@ -27,8 +27,17 @@ class Attachment < ActiveRecord::Base
       attributes[:name] = file_digest(file)
       find_by(attributes) || new(attributes.reverse_merge(file_upload: file), &block)
     end
-    # `find_or_create_by(file: file)` is not implemented.
-    private :find_or_create_by
+
+    # Supports `find_or_create_by(file: file)`. Similar to +find_or_initialize_by+, it will try
+    # to return an attachment with the same hash, otherwise, a new attachment is created.
+    #
+    # @param [Hash] attributes The hash attributes with the file.
+    # @return [Attachment] The attachment which contains the file.
+    def find_or_create_by(attributes, &block)
+      result = find_or_initialize_by(attributes, &block)
+      result.save! unless result.persisted?
+      result
+    end
 
     private
 
