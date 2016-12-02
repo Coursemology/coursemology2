@@ -67,12 +67,14 @@ RSpec.feature 'Course: Assessments: Management' do
         fill_in 'assessment_start_at', with: assessment.start_at
         fill_in 'assessment_end_at', with: assessment.end_at
         fill_in 'assessment_bonus_end_at', with: assessment.bonus_end_at
+        check 'assessment_skippable'
 
         click_button 'submit'
 
         assessment_created = course.assessments.last
         expect(assessment_created.tab).to eq(assessment_tab)
         expect(assessment_created).to be_autograded
+        expect(assessment_created).to be_skippable
       end
 
       scenario 'I can edit an assessment' do
