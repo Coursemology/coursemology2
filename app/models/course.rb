@@ -55,6 +55,7 @@ class Course < ActiveRecord::Base
                                 source: :actable, source_type: Course::LessonPlan::Event.name
   has_many :discussion_topics, class_name: Course::Discussion::Topic.name, inverse_of: :course
   has_many :forums, dependent: :destroy, inverse_of: :course
+  has_many :surveys, through: :lesson_plan_items, source: :actable, source_type: Course::Survey.name
 
   accepts_nested_attributes_for :invitations, :assessment_categories
 
