@@ -4,10 +4,10 @@ module Course::Assessment::Submission::SubmissionsAutogradedHelper
   def max_step
     @max_step ||= begin
       question = next_unanswered_question
-      if question && cannot?(:manage, @assessment)
+      if question && !@assessment.skippable && cannot?(:manage, @assessment)
         @assessment.questions.index(question) + 1
       else
-        # All questions have been answered or user is a staff.
+        # All questions have been answered or assessment is skippable or user is a staff.
         @assessment.questions.length
       end
     end
