@@ -6,5 +6,9 @@ FactoryGirl.define do
       course
     end
     survey { build(:survey, course: course) }
+
+    trait :submitted do
+      submitted_at { 1.day.ago }
+    end
   end
 end
