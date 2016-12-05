@@ -56,6 +56,7 @@ en:
         form:
           autograded: 'Automatically assign grade and experience points after finalization'
           autograded_hint: 'Note that all the questions in the assessment must be auto-gradable'
+          skippable: 'Allow students to skip steps'
           password_hint: >
             When password protection is enabled, students are able to attempt the submission on the
             first try. Further attempts at editing the submission requires the input of the

@@ -82,6 +82,16 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
         expect(page).to have_selector('h3', text: mrq_questions.second.display_title)
       end
 
+      scenario 'I can directly go to next question if the assessment is skippable' do
+        extra_mrq_question
+        assessment.update_column(:skippable, true)
+
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+
+        click_link '2'
+        expect(page).to have_selector('h3', text: mrq_questions.second.display_title)
+      end
+
       scenario 'I can resubmit the question when submission is not finalised', js: true do
         visit edit_course_assessment_submission_path(assessment.course, assessment, submission)
 

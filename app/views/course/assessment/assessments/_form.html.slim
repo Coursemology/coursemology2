@@ -14,6 +14,8 @@
     = f.input :draft
   - unless @assessment.autograded?
     = f.input :tabbed_view
+  - if @assessment.autograded?
+    = f.input :skippable, label: t('.skippable')
   - if @assessment.persisted?
     = f.input :autograded, label: t('.autograded'), hint: t('.autograded_hint'), disabled: true
   - else

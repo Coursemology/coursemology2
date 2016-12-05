@@ -47,7 +47,11 @@ module Course::Assessment::QuestionsConcern
   #   question, whichever comes first.
   def step(submission, current_index)
     current_index = 0 if current_index < 0
-    max_index = index(next_unanswered(submission) || last)
+    max_index = if submission.assessment.skippable?
+                  index(last)
+                else
+                  index(next_unanswered(submission) || last)
+                end
 
     fetch([current_index, max_index].min)
   end
