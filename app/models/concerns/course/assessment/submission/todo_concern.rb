@@ -22,9 +22,13 @@ module Course::Assessment::Submission::TodoConcern
     elsif submitted? || graded? || published?
       todo.update_column(:workflow_state, 'completed') unless todo.completed?
     end
+  rescue ActiveRecordError => error
+    raise ActiveRecord::Rollback, error.message
   end
 
   def restart_todo
     todo.update_column(:workflow_state, 'not_started') unless todo.not_started?
+  rescue ActiveRecordError => error
+    raise ActiveRecord::Rollback, error.message
   end
 end
