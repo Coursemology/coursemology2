@@ -36,12 +36,13 @@ class Course::LessonPlan::Todo < ActiveRecord::Base
     # @param [CourseUser|Array<CourseUser>] course_users
     #   The course_user, or array of course_users to create todos for.
     # @return [Array<Course::LessonPlan::Todo>|nil] Array of created todos, or nil if invalid params
-    def create_for(items, course_users)
+    # @raise [ActiveRecord::RecordInvalid] Raised if the validations to create todo fails.
+    def create_for!(items, course_users)
       return unless items && course_users
       items = [items] if items.is_a?(Course::LessonPlan::Item)
       course_users = [course_users] if course_users.is_a?(CourseUser)
       user_item_hash = items.product(course_users).map { |ary| { item: ary[0], user: ary[1].user } }
-      Course::LessonPlan::Todo.create(user_item_hash)
+      Course::LessonPlan::Todo.create!(user_item_hash)
     end
 
     # Destroy todos for the associated lesson_plan_item for specified course_users.
