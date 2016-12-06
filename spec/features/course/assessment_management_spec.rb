@@ -78,13 +78,19 @@ RSpec.feature 'Course: Assessments: Management' do
       end
 
       scenario 'I can edit an assessment' do
-        assessment = create(:assessment, course: course)
+        assessment = create(:assessment, :published_with_mrq_question, course: course)
         visit course_assessment_path(course, assessment)
+        clear_enqueued_jobs
+
         find_link(nil, href: edit_course_assessment_path(course, assessment)).click
 
         new_text = 'zzzz'
         fill_in 'assessment_title', with: new_text
         click_button 'submit'
+
+        perform_enqueued_jobs
+        wait_for_job
+        expect(unread_emails_for(user.email).count).to eq(0)
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(page).to have_selector('h1', text: new_text)

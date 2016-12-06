@@ -46,5 +46,41 @@ RSpec.describe Course::AssessmentNotifier, type: :notifier do
         end
       end
     end
+
+    describe '#assessment_opening' do
+      let(:course) { create(:course) }
+      let(:assessment) { create(:course_assessment_assessment, course: course) }
+      let(:user) { create(:course_user, course: course).user }
+
+      subject { Course::AssessmentNotifier.assessment_opening(user, assessment) }
+
+      it 'sends a course notification' do
+        expect { subject }.to change(course.notifications, :count).by(1)
+      end
+
+      it 'sends an email notification' do
+        expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(2)
+      end
+    end
+
+    describe '#assessment_closing' do
+      let!(:now) { Time.zone.now }
+
+      let(:course) { create(:course) }
+      let(:assessment) { create(:course_assessment_assessment, course: course, end_at: now) }
+      let(:user) { create(:course_user, course: course).user }
+      let!(:submitted_student) { create(:course_student, course: course) }
+      let!(:unsubmitted_student) { create(:course_student, course: course) }
+      let!(:submission) do
+        create(:course_assessment_submission, course: course, assessment: assessment,
+                                              creator: submitted_student.user)
+      end
+
+      subject { Course::AssessmentNotifier.assessment_closing(user, assessment) }
+
+      it 'sends an email notification' do
+        expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+    end
   end
 end

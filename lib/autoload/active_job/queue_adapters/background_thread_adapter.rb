@@ -38,7 +38,18 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
   end
 
   def self.enqueue_at(job, timestamp) #:nodoc:
-    @future_jobs << { job: job.serialize, at: timestamp }
+    @future_jobs << { job: job, at: timestamp }
+  end
+
+  # Add all future jobs into the pending jobs queue according to timestamp
+  def self.perform_enqueued_jobs
+    @future_jobs.sort_by { |job| -job[:at] }.each { |job| enqueue(job[:job]) }
+    clear_enqueued_jobs
+  end
+
+  # Clear all the enqueued jobs
+  def self.clear_enqueued_jobs
+    @future_jobs.clear
   end
 
   # Waits for all queued jobs to finish executing.

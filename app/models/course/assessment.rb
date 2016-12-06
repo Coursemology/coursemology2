@@ -13,6 +13,9 @@ class Course::Assessment < ActiveRecord::Base
   after_initialize :set_defaults, if: :new_record?
   before_validation :propagate_course
   before_validation :assign_folder_attributes
+  before_validation :prevent_reminder_duplication
+  before_save :setup_opening_reminders, if: :start_at_changed?
+  before_save :setup_closing_reminders, if: :end_at_changed?
 
   validate :validate_presence_of_questions, if: :published?
   validate :validate_only_autograded_questions, if: :autograded?
@@ -106,6 +109,33 @@ class Course::Assessment < ActiveRecord::Base
   def set_defaults
     self.published = false
     self.autograded ||= false
+  end
+
+  # Prevent duplicate reminder from being sent due to floating point changes
+  def prevent_reminder_duplication
+    self.start_at = start_at_was if start_at.to_f.floor == start_at_was.to_f.floor
+    self.end_at = end_at_was if end_at.to_f.floor == end_at_was.to_f.floor
+  end
+
+  def setup_opening_reminders
+    # Randomize the milliseconds of the reminders' datetime to prevent duplication
+    self.start_at += Random.rand(0...0.1).round(4)
+
+    execute_after_commit do
+      Course::Assessment::OpeningReminderJob.set(wait_until: start_at).
+        perform_later(creator, self, start_at.to_f)
+    end
+  end
+
+  def setup_closing_reminders
+    # Randomize the milliseconds of the reminders' datetime to prevent duplication
+    self.end_at += Random.rand(0...0.1).round(4)
+
+    execute_after_commit do
+      # Send notification one day before the closing date
+      Course::Assessment::ClosingReminderJob.set(wait_until: end_at - 1.day).
+        perform_later(creator, self, end_at.to_f)
+    end
   end
 
   def validate_presence_of_questions

@@ -61,6 +61,18 @@ module TrackableJob::FeatureSpecHelpers
       ActiveJob::QueueAdapters::BackgroundThreadAdapter.wait_for_jobs
     end
   end
+
+  def perform_enqueued_jobs
+    if ActiveJob::Base.queue_adapter == ActiveJob::QueueAdapters::BackgroundThreadAdapter
+      ActiveJob::QueueAdapters::BackgroundThreadAdapter.perform_enqueued_jobs
+    end
+  end
+
+  def clear_enqueued_jobs
+    if ActiveJob::Base.queue_adapter == ActiveJob::QueueAdapters::BackgroundThreadAdapter
+      ActiveJob::QueueAdapters::BackgroundThreadAdapter.clear_enqueued_jobs
+    end
+  end
 end
 
 module TrackableJob::ModelSpecHelpers
