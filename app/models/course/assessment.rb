@@ -17,8 +17,6 @@ class Course::Assessment < ActiveRecord::Base
   validate :validate_presence_of_questions, unless: :draft?
   validate :validate_only_autograded_questions, if: :autograded?
 
-  enum mode: { worksheet: 0, guided: 1, exam: 2 }
-
   belongs_to :tab, inverse_of: :assessments
 
   # `submissions` association must be put before `questions`, so that all answers will be deleted
