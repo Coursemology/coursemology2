@@ -21,6 +21,7 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
   # The maximum number of threads to maintain in the thread pool.
   MAX_THREAD_POOL_SIZE = 3
 
+  @future_jobs = []
   @pending_jobs = []
   @running_jobs = 0
   @finish_jobs_condition = ConditionVariable.new
@@ -34,6 +35,10 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
 
       payload.reverse_merge!(notification_statistics)
     end
+  end
+
+  def self.enqueue_at(job, timestamp) #:nodoc:
+    @future_jobs << { job: job.serialize, at: timestamp }
   end
 
   # Waits for all queued jobs to finish executing.
