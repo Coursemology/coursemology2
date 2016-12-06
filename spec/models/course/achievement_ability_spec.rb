@@ -7,7 +7,7 @@ RSpec.describe Course::Achievement do
     subject { Ability.new(user) }
     let(:course) { create(:course) }
     let!(:achievement) { create(:course_achievement, course: course) }
-    let!(:draft_achievement) { create(:course_achievement, course: course, draft: true) }
+    let!(:draft_achievement) { create(:course_achievement, course: course, published: false) }
 
     context 'when the user is a Course Student' do
       let(:course_user) { create(:course_student, course: course) }

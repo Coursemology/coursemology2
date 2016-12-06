@@ -27,7 +27,8 @@ RSpec.feature 'Course: Lesson Plan' do
         create(:course_lesson_plan_event,
                course: course,
                start_at: start_at,
-               title: event_title_prefix + start_at.to_s)
+               title: event_title_prefix + start_at.to_s,
+               published: true)
       end
     end
 

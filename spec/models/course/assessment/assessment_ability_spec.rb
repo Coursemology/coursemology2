@@ -9,7 +9,7 @@ RSpec.describe Course::Assessment do
     let(:course_user) { create(:course_student, course: course) }
     let(:coursemate) { create(:course_student, course: course) }
     let(:draft_assessment) do
-      create(:assessment, :with_all_question_types, course: course, draft: true)
+      create(:assessment, :with_all_question_types, course: course, published: false)
     end
     let(:published_assessment) do
       create(:assessment, :published_with_all_question_types, course: course)

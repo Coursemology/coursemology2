@@ -73,7 +73,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   def assessment_params
     params.require(:assessment).permit(:title, :description, :base_exp, :time_bonus_exp,
                                        :extra_bonus_exp, :start_at, :end_at, :bonus_end_at,
-                                       :draft, :mode, :autograded, :password, :tabbed_view,
+                                       :published, :mode, :autograded, :password, :tabbed_view,
                                        :skippable, folder_params)
   end
 

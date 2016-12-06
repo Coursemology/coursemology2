@@ -6,7 +6,7 @@ RSpec.feature 'Course: Achievements' do
 
   with_tenant(:instance) do
     let!(:course) { create(:course) }
-    let!(:draft_achievement) { create(:course_achievement, course: course, draft: true) }
+    let!(:draft_achievement) { create(:course_achievement, course: course, published: false) }
     let!(:achievement1) { create(:course_achievement, course: course) }
     let!(:achievement2) { create(:course_achievement, course: course) }
     let!(:achievements) { [achievement1, achievement2, draft_achievement] }

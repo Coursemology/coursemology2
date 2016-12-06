@@ -35,6 +35,6 @@ module Course::AchievementsAbilityComponent
   end
 
   def published_achievement_hash
-    { draft: false }
+    { published: true }
   end
 end

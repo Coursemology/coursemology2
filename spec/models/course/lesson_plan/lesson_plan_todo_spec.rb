@@ -27,16 +27,18 @@ RSpec.describe Course::LessonPlan::Todo, type: :model do
     end
 
     describe '.published' do
-      let!(:todo) { create(:course_lesson_plan_todo, draft: draft, course: course, user: user) }
+      let!(:todo) do
+        create(:course_lesson_plan_todo, published: published, course: course, user: user)
+      end
       subject { user.todos.published }
 
       context 'when item is published' do
-        let(:draft) { false }
+        let(:published) { true }
         it { is_expected.to contain_exactly(todo) }
       end
 
       context 'when item is not published' do
-        let(:draft) { true }
+        let(:published) { false }
         it { is_expected.not_to include(todo) }
       end
     end
@@ -84,7 +86,7 @@ RSpec.describe Course::LessonPlan::Todo, type: :model do
     describe '.pending_for' do
       let(:other_course_user) { create(:course_student, course: course) }
       let!(:todo) do
-        create(:course_lesson_plan_todo, :opened, draft: false, course: course, user: user)
+        create(:course_lesson_plan_todo, :opened, published: true, course: course, user: user)
       end
       let(:item) { todo.item }
       let!(:other_todo) do
@@ -99,7 +101,7 @@ RSpec.describe Course::LessonPlan::Todo, type: :model do
       context 'when todo is completed' do
         let!(:completed_todo) do
           create(:course_lesson_plan_todo, :opened, :completed,
-                 draft: false, course: course, user: user)
+                 published: true, course: course, user: user)
         end
         it 'is not included' do
           expect(subject).not_to include(completed_todo)

@@ -111,7 +111,7 @@ RSpec.feature 'Course: Assessments: Management' do
         expect(page).to have_selector('li', text: assessment_sidebar)
       end
 
-      scenario 'I can see non-draft assessments' do
+      scenario 'I can see published assessments' do
         category = course.assessment_categories.first
         assessment = create(:assessment, :published_with_mrq_question,
                             course: course, tab: category.tabs.first)

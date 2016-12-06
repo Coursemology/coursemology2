@@ -6,7 +6,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:empty_assessment) { create(:assessment, course: course, draft: true) }
+    let(:empty_assessment) { create(:assessment, course: course, published: false) }
     let(:unopened_assessment) do
       create(:assessment, :published_with_all_question_types, :unopened, course: course)
     end

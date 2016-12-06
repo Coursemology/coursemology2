@@ -7,7 +7,7 @@ RSpec.describe Course::LessonPlan::Item do
   with_tenant(:instance) do
     subject { Ability.new(user) }
     let(:course) { create(:course) }
-    let(:lesson_plan_item) { create(:course_lesson_plan_item, course: course) }
+    let(:lesson_plan_item) { create(:course_lesson_plan_item, course: course, published: true) }
 
     context 'when the user is a Course Staff' do
       let(:user) { create(:course_manager, course: course).user }

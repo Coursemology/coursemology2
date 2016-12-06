@@ -9,7 +9,7 @@
   div.achievement-form = display_achievement_badge(@achievement)
   = f.file_field :badge
 
-  = f.input :draft
+  = f.input :published
 
   - if @achievement.persisted?
     = render partial: 'course/condition/conditions', locals: { conditional: @achievement }

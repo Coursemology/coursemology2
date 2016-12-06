@@ -5,6 +5,6 @@ FactoryGirl.define do
     sequence(:title) { |n| "Achievement #{n}" }
     sequence(:description) { |n| "Awesome achievement #{n}" }
     sequence(:weight)
-    draft false
+    published true
   end
 end

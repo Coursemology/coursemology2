@@ -6,5 +6,5 @@ en:
     errors:
       models:
         course/assessment:
-          no_questions: 'Assessment can exit draft mode only after adding questions'
+          no_questions: 'Assessment can only be published after adding questions'
           autograded: 'Assessment can only be autograded if all questions are autograded'

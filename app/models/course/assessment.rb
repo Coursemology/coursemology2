@@ -14,7 +14,7 @@ class Course::Assessment < ActiveRecord::Base
   before_validation :propagate_course
   before_validation :assign_folder_attributes
 
-  validate :validate_presence_of_questions, unless: :draft?
+  validate :validate_presence_of_questions, if: :published?
   validate :validate_only_autograded_questions, if: :autograded?
 
   belongs_to :tab, inverse_of: :assessments
@@ -39,7 +39,7 @@ class Course::Assessment < ActiveRecord::Base
   has_many :assessment_conditions, class_name: Course::Condition::Assessment.name,
                                    inverse_of: :assessment, dependent: :destroy
 
-  scope :published, -> { where(draft: false) }
+  scope :published, -> { where(published: true) }
 
   # @!attribute [r] maximum_grade
   #   Gets the maximum grade allowed by this assessment. This is the sum of all questions'
@@ -104,12 +104,12 @@ class Course::Assessment < ActiveRecord::Base
   end
 
   def set_defaults
-    self.draft = true
+    self.published = false
     self.autograded ||= false
   end
 
   def validate_presence_of_questions
-    errors.add(:draft, :no_questions) unless questions.present?
+    errors.add(:published, :no_questions) unless questions.present?
   end
 
   def validate_only_autograded_questions

@@ -39,8 +39,8 @@ module Course::Assessment::AssessmentAbility
     { tab: { category: course_all_course_users_hash } }
   end
 
-  def assessment_non_draft_all_course_users_hash
-    { lesson_plan_item: { draft: false } }.reverse_merge(assessment_all_course_users_hash)
+  def assessment_published_all_course_users_hash
+    { lesson_plan_item: { published: true } }.reverse_merge(assessment_all_course_users_hash)
   end
 
   def assessment_course_staff_hash
@@ -58,12 +58,12 @@ module Course::Assessment::AssessmentAbility
   end
 
   def allow_students_show_assessments
-    can :read, Course::Assessment, assessment_non_draft_all_course_users_hash
+    can :read, Course::Assessment, assessment_published_all_course_users_hash
   end
 
   def allow_students_attempt_assessment
     can :attempt, Course::Assessment do |assessment|
-      assessment.started? && !assessment.draft? && assessment.conditions_satisfied_by?(
+      assessment.started? && assessment.published? && assessment.conditions_satisfied_by?(
         user.course_users.find_by(course: assessment.course)
       )
     end

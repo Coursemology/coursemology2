@@ -49,7 +49,7 @@ class LessonPlanItem extends React.Component {
             glyph={`chevron-${this.state.open ? 'down' : 'right'}`}
             className={styles.glyph}
           />
-          { item.get('draft') ? <Glyphicon glyph="ban-circle" className={styles.glyph} /> : '' }
+          { item.get('published') ? '' : <Glyphicon glyph="ban-circle" className={styles.glyph} /> }
           <b>{ item.get('title') }</b>
         </a>
         <span className="hidden-xs">

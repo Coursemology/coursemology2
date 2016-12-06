@@ -63,7 +63,7 @@ RSpec.feature 'Course: Homepage' do
       todos[:completed] =
         Course::LessonPlan::Todo.find_by(user: user, item: assessment.lesson_plan_item)
 
-      assessment = create(:assessment, :with_mrq_question, draft: true, course: course)
+      assessment = create(:assessment, :with_mrq_question, published: false, course: course)
       create(:submission, :submitted, assessment: assessment, creator: user)
       todos[:unpublished] =
         Course::LessonPlan::Todo.find_by(user: user, item: assessment.lesson_plan_item)

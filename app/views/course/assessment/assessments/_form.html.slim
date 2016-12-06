@@ -11,7 +11,7 @@
   - if current_course.gamified?
     = f.input :bonus_end_at
   - unless @assessment.new_record?
-    = f.input :draft
+    = f.input :published
   - unless @assessment.autograded?
     = f.input :tabbed_view
   - if @assessment.autograded?

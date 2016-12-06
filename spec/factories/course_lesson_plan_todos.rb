@@ -3,9 +3,9 @@ FactoryGirl.define do
   factory :course_lesson_plan_todo, class: Course::LessonPlan::Todo.name, aliases: [:todo] do
     transient do
       course { create(:course) }
-      draft true
+      published false
     end
-    item { create(:course_lesson_plan_item, course: course, base_exp: 1000, draft: draft) }
+    item { create(:course_lesson_plan_item, course: course, base_exp: 1000, published: published) }
     add_attribute(:ignore) { false }
     user
 
