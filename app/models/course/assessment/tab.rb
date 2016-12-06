@@ -15,6 +15,9 @@ class Course::Assessment::Tab < ActiveRecord::Base
     category.tabs.count > 1
   end
 
+  def initialize_duplicate(duplicator, other)
+  end
+
   private
 
   def validate_before_destroy

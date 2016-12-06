@@ -1,0 +1,8 @@
+- add_breadcrumb :show
+= page_header t('.header')
+
+= simple_form_for :duplication,
+  url: course_duplication_path(current_course),
+  method: :post do |f|
+  = f.input :new_course_start_time, as: :bootstrap_date_time
+  = f.button :submit, t('.duplicate')

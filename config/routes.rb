@@ -197,6 +197,7 @@ Rails.application.routes.draw do
         end
       end
       resources :levels, except: [:show, :edit, :update]
+      resource :duplication, except: [:index, :edit, :update, :destroy]
 
       namespace :lesson_plan do
         get '/' => 'items#index'
