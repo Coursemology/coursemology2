@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::TextResponse < ActiveRecord::Base
   acts_as :question, class_name: Course::Assessment::Question.name
-  acts_as_duplicable
 
   validate :validate_grade
 

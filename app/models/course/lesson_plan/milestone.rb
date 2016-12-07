@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class Course::LessonPlan::Milestone < ActiveRecord::Base
-  acts_as_duplicable
-
   belongs_to :course, inverse_of: :lesson_plan_milestones
 
   def initialize_duplicate(duplicator, other)

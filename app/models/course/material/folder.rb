@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Material::Folder < ActiveRecord::Base
   acts_as_forest order: :name, dependent: :destroy
-  acts_as_duplicable
   include Course::ModelComponentHost::Component
 
   after_initialize :set_defaults, if: :new_record?

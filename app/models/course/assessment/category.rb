@@ -3,7 +3,6 @@
 class Course::Assessment::Category < ActiveRecord::Base
   include Course::ModelComponentHost::Component
   has_one_folder
-  acts_as_duplicable
 
   belongs_to :course, inverse_of: :assessment_categories
   has_many :tabs, class_name: Course::Assessment::Tab.name,

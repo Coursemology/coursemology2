@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Question < ActiveRecord::Base
   actable
-  acts_as_duplicable
   has_many_attachments
 
   validate :validate_assessment_is_not_autograded, unless: :auto_gradable?

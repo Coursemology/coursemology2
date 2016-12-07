@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::MultipleResponseOption < ActiveRecord::Base
-  acts_as_duplicable
-
   belongs_to :question, class_name: Course::Assessment::Question::MultipleResponse.name,
                         inverse_of: :options
 

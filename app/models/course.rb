@@ -6,7 +6,6 @@ class Course < ActiveRecord::Base
   acts_as_tenant :instance, inverse_of: :courses
   has_settings_on :settings
   mount_uploader :logo, ImageUploader
-  acts_as_duplicable
 
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?

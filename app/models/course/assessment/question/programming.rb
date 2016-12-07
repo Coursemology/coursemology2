@@ -4,7 +4,6 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
   self.table_name = table_name.singularize
 
   acts_as :question, class_name: Course::Assessment::Question.name
-  acts_as_duplicable
 
   before_save :process_new_package, if: :attachment_changed?
   before_validation :assign_template_attributes

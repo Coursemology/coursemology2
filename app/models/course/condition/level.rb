@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Condition::Level < ActiveRecord::Base
   acts_as_condition
-  acts_as_duplicable
 
   # Trigger for evaluating the satisfiability of conditionals for a course user
   Course::ExperiencePointsRecord.after_save do |record|

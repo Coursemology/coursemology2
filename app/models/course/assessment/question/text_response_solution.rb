@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::TextResponseSolution < ActiveRecord::Base
   enum solution_type: [:exact_match, :keyword]
-  acts_as_duplicable
 
   before_validation :strip_whitespace
   validate :validate_grade

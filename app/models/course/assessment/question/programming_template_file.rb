@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::ProgrammingTemplateFile < ActiveRecord::Base
-  acts_as_duplicable
-
   schema_validations except: :content
 
   before_validation :normalize_filename

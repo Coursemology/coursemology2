@@ -3,7 +3,6 @@ class Course::Condition::Assessment < ActiveRecord::Base
   include ActiveSupport::NumberHelper
 
   acts_as_condition
-  acts_as_duplicable
 
   # Trigger for evaluating the satisfiability of conditionals for a course user
   Course::Assessment::Submission.after_save do |submission|

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Achievement < ActiveRecord::Base
   acts_as_conditional
-  acts_as_duplicable
   mount_uploader :badge, ImageUploader
 
   after_initialize :set_defaults, if: :new_record?

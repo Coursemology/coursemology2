@@ -2,8 +2,6 @@
 class AttachmentReference < ActiveRecord::Base
   before_save :update_expires_at
 
-  acts_as_duplicable
-
   belongs_to :attachable, polymorphic: true, inverse_of: nil
   belongs_to :attachment, inverse_of: :attachment_references
 
