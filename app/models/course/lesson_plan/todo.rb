@@ -17,7 +17,7 @@ class Course::LessonPlan::Todo < ActiveRecord::Base
 
   # Started is not used as it is defined in Extensions::TimeBoundedRecord::ActiveRecord::Base
   scope :opened, -> { joins { item }.where { item.start_at <= Time.zone.now } }
-  scope :published, -> { joins { item }.where { item.draft == false } }
+  scope :published, -> { joins { item }.where { item.published == true } }
   scope :not_ignored, -> { where(ignore: false) }
   scope :not_completed, -> { where.not(workflow_state: :completed) }
   scope :from_course, (lambda do |course|

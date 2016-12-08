@@ -11,7 +11,7 @@
   - if current_course.gamified?
     = f.input :bonus_end_at
   - unless @assessment.new_record?
-    = f.input :draft
+    = f.input :published
   - unless @assessment.autograded?
     = f.input :tabbed_view
   - if @assessment.autograded?
@@ -26,7 +26,6 @@
   = f.folder
   = f.hidden_field :tab, value: @tab.id
   = f.hidden_field :category, value: @tab.category_id
-  = f.hidden_field :mode
 
   - if @assessment.persisted?
     = render partial: 'course/condition/conditions', locals: { conditional: @assessment }

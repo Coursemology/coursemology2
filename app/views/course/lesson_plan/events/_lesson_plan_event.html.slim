@@ -13,7 +13,7 @@
       span.label.label-default
         = event.event_type
 
-      - if event.draft?
+      - unless event.published?
         span data-placement='top' title=draft_message(event)
           =< fa_icon 'ban'.freeze
 

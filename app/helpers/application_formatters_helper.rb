@@ -132,25 +132,25 @@ module ApplicationFormattersHelper
     end
   end
 
-  # A helper for generating CSS classes, based on the draft status of the item.
+  # A helper for generating CSS classes, based on the published status of the item.
   #
   # @param [ActiveRecord::Base] item An ActiveRecord object which has a draft field.
   # @return [Array<String>] An array of CSS classes applicable for the provided item.
   def draft_class(item)
-    if item.draft?
-      ['draft']
-    else
+    if item.published?
       []
+    else
+      ['draft']
     end
   end
 
-  # A helper for retrieving the title of a draft item's status.
+  # A helper for retrieving the title of a published item's status.
   #
-  # @param [ActiveRecord::Base] item An ActiveRecord object which has a draft field.
+  # @param [ActiveRecord::Base] item An ActiveRecord object which has a published field.
   # @return [String] A translated string representing the status of the item.
-  # @return [nil] If the item is not a draft.
+  # @return [nil] If the item is published.
   def draft_message(item)
-    t('common.draft') if item.draft?
+    t('common.draft') unless item.published?
   end
 
   # A helper for generating CSS classes, based on the unread status of the item.

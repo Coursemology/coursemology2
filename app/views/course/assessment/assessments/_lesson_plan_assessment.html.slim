@@ -13,7 +13,7 @@
       span.label.label-default
         = format_inline_text(assessment.tab.category.title.singularize)
 
-      - if assessment.draft?
+      - unless assessment.published?
         span data-placement='top' title=draft_message(assessment)
           =< fa_icon 'ban'.freeze
 

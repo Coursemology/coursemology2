@@ -234,33 +234,33 @@ RSpec.describe ApplicationFormattersHelper do
   describe 'draft helper' do
     let(:stub) do
       Object.new.tap do |result|
-        draft = self.draft
-        result.define_singleton_method(:draft?) { draft }
+        published = self.published
+        result.define_singleton_method(:published?) { published }
       end
     end
 
     describe '#draft_class' do
       subject { helper.draft_class(stub) }
-      context 'when the object is a draft' do
-        let(:draft) { true }
+      context 'when the object is not published' do
+        let(:published) { false }
         it { is_expected.to eq(['draft']) }
       end
 
-      context 'when the object is not a draft' do
-        let(:draft) { false }
+      context 'when the object is published' do
+        let(:published) { true }
         it { is_expected.to eq([]) }
       end
     end
 
     describe '#draft_message' do
       subject { helper.draft_message(stub) }
-      context 'when the object is a draft' do
-        let(:draft) { true }
+      context 'when the object is not published' do
+        let(:published) { false }
         it { is_expected.to eq(I18n.t('common.draft')) }
       end
 
-      context 'when the object is not a draft' do
-        let(:draft) { false }
+      context 'when the object is published' do
+        let(:published) { true }
         it { is_expected.to be_nil }
       end
     end

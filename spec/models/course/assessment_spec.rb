@@ -30,31 +30,31 @@ RSpec.describe Course::Assessment do
     end
 
     describe 'validations' do
-      context 'when it is not a draft' do
+      context 'when it is published' do
         context 'when it has no questions' do
-          subject { build(:assessment, draft: false) }
+          subject { build(:assessment, published: true) }
 
-          it 'adds a :no_questions error on :draft' do
+          it 'adds a :no_questions error on :published' do
             expect(subject.valid?).to be(false)
-            expect(subject.errors[:draft]).to include(I18n.t('activerecord.errors.models.' \
+            expect(subject.errors[:published]).to include(I18n.t('activerecord.errors.models.' \
             'course/assessment.no_questions'))
           end
         end
 
         context 'when it has questions' do
-          subject { build(:assessment, :with_all_question_types, draft: true) }
+          subject { build(:assessment, :with_all_question_types, published: false) }
           it { is_expected.to be_valid }
         end
       end
 
-      context 'when it is a draft' do
+      context 'when it is not published' do
         context 'when it has no questions' do
-          subject { build(:assessment, draft: true) }
+          subject { build(:assessment, published: false) }
           it { is_expected.to be_valid }
         end
 
         context 'when it has questions' do
-          subject { build(:assessment, :with_all_question_types, draft: true) }
+          subject { build(:assessment, :with_all_question_types, published: false) }
           it { is_expected.to be_valid }
         end
       end

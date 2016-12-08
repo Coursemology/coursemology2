@@ -14,7 +14,7 @@ FactoryGirl.define do
     title { generate(:course_assessment_assessment_name) }
     base_exp 1000
     autograded false
-    draft true
+    published false
     tabbed_view false
 
     trait :unopened do
@@ -83,7 +83,7 @@ FactoryGirl.define do
     #   least 1 other question. Use the other published traits intead.
     trait :published do
       after(:build) do |assessment|
-        assessment.draft = false
+        assessment.published = true
       end
     end
 
