@@ -49,6 +49,7 @@ class Course::Assessment::SkillsController < Course::ComponentController
   end
 
   def load_skill_branches
-    @skill_branches = current_course.assessment_skill_branches.accessible_by(current_ability)
+    @skill_branches = current_course.assessment_skill_branches.
+                      accessible_by(current_ability).ordered_by_title
   end
 end
