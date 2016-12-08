@@ -5,7 +5,7 @@ RSpec.describe 'Course: Submissions Viewing' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:assessment) { create(:assessment, course: course) }
+    let(:assessment) { create(:assessment, :published_with_mcq_question, course: course) }
     let(:autograded_assessment) { create(:assessment, :autograded, course: course) }
     before { login_as(user, scope: :user) }
 
@@ -90,6 +90,38 @@ RSpec.describe 'Course: Submissions Viewing' do
             to have_link(I18n.t('course.assessment.submissions.sidebar_title'),
                          href: pending_course_submissions_path(course, my_students: false))
         end
+      end
+
+      scenario 'I can filter submissions' do
+        # Create student, group and submission
+        student = create(:course_student, course: course)
+        group = create(:course_group, course: course)
+        create(:course_group_manager, group: group, course: course, course_user: course_manager)
+        create(:course_group_user, group: group, course: course, course_user: student)
+        submission = create(:submission, :submitted, assessment: assessment, course: course,
+                                                     creator: student.user, course_user: student)
+        visit course_submissions_path(course, category: course.assessment_categories.first.id)
+
+        # Filter submission by assessment
+        within find_field('filter[assessment_id]') do
+          select assessment.title
+        end
+        click_button I18n.t('common.submit')
+        expect(page).to have_content_tag_for(submission)
+
+        # Filter submission by group
+        within find_field('filter[group_id]') do
+          select group.name
+        end
+        click_button I18n.t('common.submit')
+        expect(page).to have_content_tag_for(submission)
+
+        # Filter submission by user
+        within find_field('filter[user_id]') do
+          select student.name
+        end
+        click_button I18n.t('common.submit')
+        expect(page).to have_content_tag_for(submission)
       end
     end
 
