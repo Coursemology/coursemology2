@@ -35,9 +35,8 @@ RSpec.describe AttachmentsController, type: :controller do
           expect(json['success']).to be_truthy
         end
 
-        it 'returns the url and name of the attachment' do
+        it 'returns the url of the attachment' do
           expect(json['url']).to eq(attachment.url)
-          expect(json['name']).to eq(attachment.name)
         end
       end
     end
