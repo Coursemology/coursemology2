@@ -98,8 +98,8 @@ class Course::Assessment::Submission < ActiveRecord::Base
   end)
 
   scope :from_group, (lambda do |group_id|
-    joins { experience_points_record.course_user.groups }.
-      where { experience_points_record.course_user.groups.id >> group_id }
+    joins(experience_points_record: [course_user: :groups]).
+      where('course_groups.id IN (?)', group_id)
   end)
 
   # @!method self.ordered_by_date
@@ -115,7 +115,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   # @!method self.confirmed
   #   Returns submissions which have been submitted (which may or may not be graded).
-  scope :confirmed, -> { where.not(workflow_state: :attempting) }
+  scope :confirmed, -> { where(workflow_state: [:submitted, :graded, :published]) }
 
   scope :pending_for_grading, (lambda do
     where(workflow_state: [:submitted, :graded]).
