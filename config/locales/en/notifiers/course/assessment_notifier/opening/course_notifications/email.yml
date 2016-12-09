@@ -1,0 +1,10 @@
+en:
+  notifiers:
+    course:
+      assessment_notifier:
+        opening:
+          course_notifications:
+            email:
+              subject: '%{course} New Assessment Available'
+              message: >
+                New Assessment Available : %{assessment}

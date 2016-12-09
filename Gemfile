@@ -103,6 +103,7 @@ group :development, :test do
   gem 'yard', group: :doc
 
   # Use RSpec for Behaviour testing
+  gem 'email_spec'
   gem 'rspec-rails'
   gem 'rspec-html-matchers'
   gem 'should_not'

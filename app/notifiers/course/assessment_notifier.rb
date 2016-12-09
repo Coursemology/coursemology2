@@ -19,4 +19,22 @@ class Course::AssessmentNotifier < Notifier::Base
     managers.each { |manager| activity.notify(manager.user, :email) }
     activity.save!
   end
+
+  def assessment_opening(user, assessment)
+    create_activity(actor: user, object: assessment, event: :opening).
+      notify(assessment.course, :email).
+      save!
+  end
+
+  def assessment_closing(user, assessment)
+    course_users = assessment.course.course_users
+    students = course_users.student.without_phantom_users.with_approved_state.includes(:user).
+               map(&:user)
+    submitted = assessment.submissions.includes([course_user: :user]).map { |s| s.course_user.user }
+    recipients = Set.new(students) - Set.new(submitted)
+
+    activity = create_activity(actor: user, object: assessment, event: :closing)
+    recipients.each { |r| activity.notify(r, :email) }
+    activity.save!
+  end
 end

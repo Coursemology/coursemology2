@@ -1,0 +1,9 @@
+- assessment = @object
+- course = assessment.course
+- host = course.instance.host
+
+- message.subject = t('.subject', course: course.title, assessment: assessment.title)
+
+= simple_format(t('.message',
+                assessment: link_to(assessment.title,
+                                    course_assessment_url(course, assessment, host: host))))

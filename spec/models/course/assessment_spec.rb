@@ -102,7 +102,7 @@ RSpec.describe Course::Assessment do
           expect(subject.folder.name).to eq(subject.title)
           expect(subject.folder.parent).to eq(subject.tab.category.folder)
           expect(subject.folder.course).to eq(subject.course)
-          expect(subject.folder.start_at).to eq(subject.start_at)
+          expect(subject.folder.start_at.round(0)).to eq(subject.start_at.round(0))
         end
       end
 

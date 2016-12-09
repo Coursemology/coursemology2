@@ -104,7 +104,6 @@ RSpec.feature 'Course: Achievements' do
         check course_user_id
         check phantom_user_id
 
-
         expect do
           click_button I18n.t('course.achievement.course_users.course_users_form.button')
         end.to change(manual_achievement.course_users, :count).by(2)
