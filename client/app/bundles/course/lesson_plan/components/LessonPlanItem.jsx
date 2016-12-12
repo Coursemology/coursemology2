@@ -2,9 +2,10 @@
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
 import { Glyphicon, ButtonGroup } from 'react-bootstrap';
-import { FormattedDate, FormattedTime, FormattedMessage, injectIntl, defineMessages } from 'react-intl';
+import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
 import DeleteButton from 'lib/components/form/DeleteButton';
 import EditButton from 'lib/components/form/EditButton';
+import isScreenXs from 'lib/helpers/viewport';
 import styles from './LessonPlanItem.scss';
 
 const propTypes = {
@@ -22,6 +23,22 @@ const translations = defineMessages({
     description: 'Confirmation message for Lesson Plan Item delete button',
   },
 });
+
+const shortDateFormat = {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+};
+
+const standardDateFormat = {
+  year: 'numeric',
+  month: 'short',
+  day: '2-digit',
+};
+
+const shortTimeFormat = {
+  hour12: false,
+};
 
 class LessonPlanItem extends React.Component {
   renderTypeTag() {
@@ -48,53 +65,37 @@ class LessonPlanItem extends React.Component {
     );
   }
 
-  renderStartAt() {
-    const { item } = this.props;
-    const startTime = item.get('start_at');
-    return (
-      <div>
-        <FormattedMessage
-          id="course.lessonPlan.lessonPlanItem.startAt"
-          description="Start date and time text for lesson plan item."
-          defaultMessage="Start: {date} {time}"
-          values={{
-            date: <FormattedDate
-              value={new Date(startTime)}
-              year="numeric"
-              month="long"
-              day="2-digit"
-            />,
-            time: <FormattedTime value={new Date(startTime)} />,
-          }}
-        />
-      </div>
-    );
-  }
+  /*
+   * Renders the date/time range of the item in one of the following formats:
+   * - August 18, 2017, 12:00 PM
+   * - November 24, 2016, 5:00 PM - 7:00 PM
+   * - November 10, 2016, 10:00 AM - November 11, 2016, 11:00 AM
+   * Output varies depending on locale.
+   */
+  renderDateTimeRange() {
+    const { item, intl } = this.props;
+    const useShortFormat = isScreenXs();
+    const dateFormat = useShortFormat ? shortDateFormat : standardDateFormat;
+    const timeFormat = useShortFormat ? shortTimeFormat : {};
+    const startDateTime = new Date(item.get('start_at'));
+    const startDate = intl.formatDate(startDateTime, dateFormat);
+    const startTime = intl.formatTime(startDateTime, timeFormat);
+    let outputString = `${startDate}, ${startTime}`;
 
-  renderEndAt() {
-    const { item } = this.props;
-    if (!item.has('end_at') || !item.get('end_at')) {
-      return '';
+    if (item.has('end_at') && item.get('end_at')) {
+      outputString += ' - ';
+      const endDateTime = Date.parse(item.get('end_at'));
+      const endDate = intl.formatDate(endDateTime, dateFormat);
+      const endTime = intl.formatTime(endDateTime, timeFormat);
+
+      if (startDate === endDate) {
+        outputString += endTime;
+      } else {
+        outputString += `${endDate}, ${endTime}`;
+      }
     }
-    const endTime = Date.parse(item.get('end_at'));
-    return (
-      <div>
-        <FormattedMessage
-          id="course.lessonPlan.lessonPlanItem.endAt"
-          description="End date and time text for lesson plan item."
-          defaultMessage="End: {date} {time}"
-          values={{
-            date: <FormattedDate
-              value={new Date(endTime)}
-              year="numeric"
-              month="long"
-              day="2-digit"
-            />,
-            time: <FormattedTime value={new Date(endTime)} />,
-          }}
-        />
-      </div>
-    );
+
+    return <span>{outputString}</span>;
   }
 
   renderLocation() {
@@ -154,8 +155,7 @@ class LessonPlanItem extends React.Component {
               <div className="visible-xs">
                 { this.renderTypeTag() }
               </div>
-              { this.renderStartAt() }
-              { this.renderEndAt() }
+              { this.renderDateTimeRange() }
               { this.renderLocation() }
             </div>
             <div>
