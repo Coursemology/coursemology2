@@ -122,6 +122,8 @@ class Course < ActiveRecord::Base
   def initialize_duplicate(duplicator, other)
     self.start_at += duplicator.time_shift
     self.end_at += duplicator.time_shift
+    self.title = duplicator.new_course_title
+    logo.duplicate_from(other.logo) if other.logo_url
 
     # TODO: duplicate children
     # This also duplicates assessments.
