@@ -1,7 +1,7 @@
-/* eslint-disable react/no-danger, jsx-a11y/no-static-element-interactions */
+/* eslint-disable react/no-danger */
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
-import { Collapse, Glyphicon, ButtonGroup } from 'react-bootstrap';
+import { Glyphicon, ButtonGroup } from 'react-bootstrap';
 import { FormattedDate, FormattedTime, FormattedMessage, injectIntl, defineMessages } from 'react-intl';
 import DeleteButton from 'lib/components/form/DeleteButton';
 import EditButton from 'lib/components/form/EditButton';
@@ -24,13 +24,6 @@ const translations = defineMessages({
 });
 
 class LessonPlanItem extends React.Component {
-  constructor(...args) {
-    super(...args);
-    this.state = {
-      open: false,
-    };
-  }
-
   renderTypeTag() {
     const { item } = this.props;
     return (
@@ -45,10 +38,6 @@ class LessonPlanItem extends React.Component {
     return (
       <div className={styles.spaceBetween}>
         <a>
-          <Glyphicon
-            glyph={`chevron-${this.state.open ? 'down' : 'right'}`}
-            className={styles.glyph}
-          />
           { item.get('published') ? '' : <Glyphicon glyph="ban-circle" className={styles.glyph} /> }
           <b>{ item.get('title') }</b>
         </a>
@@ -156,32 +145,25 @@ class LessonPlanItem extends React.Component {
     const { item } = this.props;
     return (
       <div id={`lesson-plan-item-${item.get('id')}`}>
-        <div
-          onClick={() => this.setState({ open: !this.state.open })}
-          className={`lesson-plan-item-title-bar ${styles.lessonPlanItemTitleBar}`}
-        >
+        <div className={`lesson-plan-item-title-bar ${styles.lessonPlanItemTitleBar}`}>
           { this.renderTitle() }
         </div>
-        <Collapse in={this.state.open}>
-          <div>
-            <div onClick={() => this.setState({ open: !this.state.open })} className={styles.card}>
-              <div className={styles.spaceBetween}>
-                <div className={styles.itemDetails}>
-                  <div className="visible-xs">
-                    { this.renderTypeTag() }
-                  </div>
-                  { this.renderStartAt() }
-                  { this.renderEndAt() }
-                  { this.renderLocation() }
-                </div>
-                <div>
-                  { this.renderButtons() }
-                </div>
+        <div className={styles.card}>
+          <div className={styles.spaceBetween}>
+            <div className={styles.itemDetails}>
+              <div className="visible-xs">
+                { this.renderTypeTag() }
               </div>
-              { this.renderDescription() }
+              { this.renderStartAt() }
+              { this.renderEndAt() }
+              { this.renderLocation() }
+            </div>
+            <div>
+              { this.renderButtons() }
             </div>
           </div>
-        </Collapse>
+          { this.renderDescription() }
+        </div>
       </div>
     );
   }
