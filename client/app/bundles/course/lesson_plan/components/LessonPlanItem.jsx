@@ -142,6 +142,16 @@ class LessonPlanItem extends React.Component {
     );
   }
 
+  renderDescription() {
+    const { item } = this.props;
+    if (!item.has('description') || !item.get('description')) {
+      return '';
+    }
+    return (
+      <div dangerouslySetInnerHTML={{ __html: item.get('description') }} />
+    );
+  }
+
   render() {
     const { item } = this.props;
     return (
@@ -168,7 +178,7 @@ class LessonPlanItem extends React.Component {
                   { this.renderButtons() }
                 </div>
               </div>
-              <div dangerouslySetInnerHTML={{ __html: item.get('description') }} />
+              { this.renderDescription() }
             </div>
           </div>
         </Collapse>
