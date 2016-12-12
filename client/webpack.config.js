@@ -10,6 +10,7 @@ const config = {
     vendor: [
       'immutable',
       'jquery-ui',
+      'material-ui',
       'react',
       'react-bootstrap',
       'react-dom',
@@ -18,6 +19,7 @@ const config = {
       'react-redux',
       'redux',
       'redux-promise',
+      'react-tap-event-plugin',
       'redux-thunk',
     ],
   },
