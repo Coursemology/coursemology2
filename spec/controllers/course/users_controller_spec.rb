@@ -116,7 +116,7 @@ RSpec.describe Course::UsersController, type: :controller do
       before { sign_in(user) }
       subject { delete :destroy, course_id: course, id: course_user_to_delete }
 
-      let!(:course_user_to_delete) { create(:course_user, course: course, user: create(:user)) }
+      let!(:course_user_to_delete) { create(:course_user, course: course) }
 
       context 'when the user is a manager' do
         let!(:course_user) { create(:course_manager, course: course, user: user) }
@@ -140,6 +140,14 @@ RSpec.describe Course::UsersController, type: :controller do
           it 'sets an error flash message' do
             expect(flash[:danger]).to eq('')
           end
+        end
+
+        context 'when the user is invited' do
+          let!(:course_user_to_delete) do
+            create(:course_user_invitation, course: course).course_user
+          end
+
+          it { is_expected.to redirect_to(course_users_invitations_path(course)) }
         end
       end
 

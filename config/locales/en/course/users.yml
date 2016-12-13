@@ -44,8 +44,12 @@ en:
 
           Users can key in their associated invitation code into the course registration page to
           register into this course.
+        invited_header: 'Pending Invitations'
+        accepted_header: 'Accepted Invitations'
+      course_user_invitations:
         invitation_code: 'Invitation Code'
         status: 'Status'
+        delete_tooltip: 'Delete Invitation'
       show:
         header: 'Profile'
         role: 'Role: %{role}'

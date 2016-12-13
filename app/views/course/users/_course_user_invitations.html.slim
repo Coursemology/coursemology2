@@ -1,0 +1,28 @@
+- invited = course_users.first.invited?
+table.table.table-striped.table-hover
+  thead
+    tr
+      th = t('common.name')
+      th = t('common.email')
+      th = t('.invitation_code')
+      th = t('.status')
+      th
+      - if invited
+        th
+
+  tbody
+    - course_users.each do |course_user|
+      = content_tag_for(:tr, course_user) do
+        th = course_user.name
+        td = course_user.invitation.user_email.email
+        td = course_user.invitation.invitation_key
+        - if invited
+          td = t('course.users.status.invited')
+          td
+            = delete_button([current_course, course_user],
+                            class: 'btn-xs', title: t('.delete_tooltip')) do
+              = fa_icon 'close'.freeze
+          td
+        - else
+          td = t('course.users.status.accepted')
+          td

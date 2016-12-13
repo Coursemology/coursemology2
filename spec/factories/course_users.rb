@@ -12,6 +12,7 @@ FactoryGirl.define do
     end
     trait :invited do
       workflow_state :invited
+      user nil
     end
     trait :rejected do
       workflow_state :rejected

@@ -81,12 +81,13 @@ RSpec.feature 'Courses: Invitations', js: true do
         expect(course.registration_key).to be_nil
       end
 
-      scenario 'I can track the status of invites' do
+      scenario 'I can track the status of invites and delete invites' do
         visit course_users_invitations_path(course)
 
         invitations = create_list(:course_user_invitation, 3, course: course)
         invitations.first.course_user.accept!(create(:instance_user).user)
         invitations.first.course_user.save!
+        invitation_to_delete = invitations.second
         visit course_users_invitations_path(course)
 
         expect(page).to have_selector('div.progress')
@@ -102,6 +103,11 @@ RSpec.feature 'Courses: Invitations', js: true do
             end
           end
         end
+
+        find_link(nil,
+                  href: course_user_path(course, invitation_to_delete.course_user)).click
+        expect(current_path).to eq(course_users_invitations_path(course))
+        expect(page).not_to have_content_tag_for(invitation_to_delete.course_user)
       end
     end
 
