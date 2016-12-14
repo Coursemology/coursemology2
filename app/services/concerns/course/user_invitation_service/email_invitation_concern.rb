@@ -26,6 +26,17 @@ module Course::UserInvitationService::EmailInvitationConcern
     success && send_invitation_emails(registered_users, invited_users)
   end
 
+  # Resends invitation emails to CourseUsers to the given course.
+  # This method disregards CourseUsers that do not have an 'invited' status.
+  #
+  # @param [Array<CourseUser>] invited_users An array of CourseUsers for invitations to be resent.
+  # @return [Boolean] True if there were no errors in sending invitations for invited CourseUsers.
+  #   If all provided CourseUsers have already registered, method also returns true.
+  def resend_invitation(invited_users)
+    invitations = invited_users.select(&:invited?).map(&:invitation)
+    invitations.blank? ? true : send_invitation_emails_to_invited_users(invitations)
+  end
+
   private
 
   # Invites users to the given course.
@@ -169,9 +180,22 @@ module Course::UserInvitationService::EmailInvitationConcern
     registered_users.each do |user|
       Course::Mailer.user_added_email(@current_course, user).deliver_later
     end
+    send_invitation_emails_to_invited_users(invited_users)
+  end
+
+  # Sends invitation emails to the invited users. This method also updates the sent_at timing for
+  # Course::UserInvitation objects for tracking purposes.
+  #
+  # Note that since +deliver_later+ is used, this is an approximation on the time sent.
+  #
+  # @param [Array<Course::UserInvitation>] invited_users An array of invitations sent out to users.
+  # @return [Boolean] True if the invitations were updated.
+  def send_invitation_emails_to_invited_users(invited_users)
     invited_users.each do |user|
       Course::Mailer.user_invitation_email(@current_course, user).deliver_later
     end
+    ids = invited_users.select(&:id)
+    Course::UserInvitation.where { id >> ids }.update_all(sent_at: Time.zone.now)
     true
   end
 end

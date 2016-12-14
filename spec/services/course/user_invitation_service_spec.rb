@@ -190,6 +190,37 @@ RSpec.describe Course::UserInvitationService, type: :service do
       end
     end
 
+    describe '#resend_invitation' do
+      let(:previous_sent_time) { 1.day.ago }
+      let(:invited_course_users) do
+        create_list(:course_user_invitation, 3, course: course, sent_at: previous_sent_time).
+          map(&:course_user)
+      end
+      let(:registered_course_user) { create(:course_student, course: course) }
+      let(:course_users) { invited_course_users + [registered_course_user] }
+
+      context 'when provided course users have already registered' do
+        with_active_job_queue_adapter(:test) do
+          it 'sends an email to everyone' do
+            expect do
+              subject.resend_invitation(course_users)
+            end.to change { ActionMailer::Base.deliveries.count }.by(invited_course_users.count)
+          end
+        end
+
+        it 'updates the sent_at field in each invitation' do
+          subject.resend_invitation(course_users)
+          invited_course_users.each do |course_user|
+            expect(course_user.invitation.reload.sent_at).not_to eq previous_sent_time
+          end
+        end
+
+        it 'returns true if there are no errors' do
+          expect(subject.resend_invitation(course_users)).to be_truthy
+        end
+      end
+    end
+
     describe '#invite_from_file' do
       subject { stubbed_user_invitation_service }
       let(:temp_csv) { temp_csv_from_attributes(users) }
