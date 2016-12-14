@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 class Duplicator
+  attr_reader :time_shift, :new_course_title
   # Create an instance of Duplicator to track duplicated objects.
   #
   # @param [Enumerable] excluded_objects An Enumerable of objects to be excluded from duplication
-  def initialize(excluded_objects = [])
+  # @param [DateTime] time_shift The amount of time to shift dates by
+  def initialize(excluded_objects = [], time_shift = 0, new_course_title = 'Duplicated')
     @duplicated_objects = {} # hash to check what has been duplicated
     @exclusion_set = excluded_objects.to_set # set to check what should be excluded
+    @time_shift = time_shift
+    @new_course_title = new_course_title
   end
 
   # Deep copy the arguments to this function. Objects must provide an +initialize_duplicate+
@@ -19,12 +23,17 @@ class Duplicator
   # @return duplicated_stuff A reference to a single duplicated object or an Array of duplicated
   #   objects
   def duplicate(stuff)
+    # Track if an enumerable or single object was passed in. Needed to handle single element
+    # collections.
+    # Note that ActiveRecord CollectionProxy is not an Enumerable, so check for to_a instead.
+    return nil unless stuff
+    stuff_is_enumerable = stuff.respond_to?(:to_a)
     duplicated_stuff = []
-    stuff = [*stuff] unless stuff.is_a?(Enumerable)
+    stuff = [*stuff] unless stuff_is_enumerable
     stuff.each do |obj|
       duplicated_stuff << duplicate_object(obj)
     end
-    duplicated_stuff.length == 1 ? duplicated_stuff[0] : duplicated_stuff
+    stuff_is_enumerable ? duplicated_stuff : duplicated_stuff[0]
   end
 
   private

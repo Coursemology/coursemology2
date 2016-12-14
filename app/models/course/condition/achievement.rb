@@ -12,6 +12,7 @@ class Course::Condition::Achievement < ActiveRecord::Base
   end
 
   validate :validate_achievement_condition, if: :achievement_id_changed?
+  after_save :clear_duplication_flag
 
   belongs_to :achievement, class_name: Course::Achievement.name, inverse_of: :achievement_conditions
 
@@ -38,6 +39,14 @@ class Course::Condition::Achievement < ActiveRecord::Base
   def self.on_dependent_status_change(achievement)
     return unless achievement.changes.any? || achievement.destroyed?
     achievement.execute_after_commit { evaluate_conditional_for(achievement.course_user) }
+  end
+
+  def initialize_duplicate(duplicator, other)
+    self.course = duplicator.duplicate(other.course)
+    self.achievement = duplicator.duplicate(other.achievement)
+    self.conditional_type = other.conditional_type # this is a simple string
+    self.conditional = duplicator.duplicate(other.conditional)
+    @duplicating = true
   end
 
   private
@@ -70,7 +79,7 @@ class Course::Condition::Achievement < ActiveRecord::Base
 
   def validate_achievement_condition
     validate_references_self
-    validate_unique_dependency
+    validate_unique_dependency unless @duplicating
     validate_acyclic_dependency
   end
 
@@ -87,5 +96,9 @@ class Course::Condition::Achievement < ActiveRecord::Base
   def validate_acyclic_dependency
     return unless cyclic?
     errors.add(:achievement, :cyclic_dependency)
+  end
+
+  def clear_duplication_flag
+    @duplicating = nil
   end
 end

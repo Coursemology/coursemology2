@@ -8,6 +8,10 @@ class Course::Assessment::Question::TextResponseSolution < ActiveRecord::Base
   belongs_to :question, class_name: Course::Assessment::Question::TextResponse.name,
                         inverse_of: :solutions
 
+  def initialize_duplicate(duplicator, other)
+    self.question = duplicator.duplicate(other.question)
+  end
+
   private
 
   def strip_whitespace

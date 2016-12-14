@@ -6,6 +6,12 @@ class Course::Assessment::Skill < ActiveRecord::Base
 
   validate :validate_consistent_course
 
+  def initialize_duplicate(duplicator, other)
+    self.course = duplicator.duplicate(other.course)
+    self.skill_branch = duplicator.duplicate(other.skill_branch)
+    self.questions = duplicator.duplicate(other.questions.map(&:actable)).compact.map(&:acting_as)
+  end
+
   private
 
   def validate_consistent_course

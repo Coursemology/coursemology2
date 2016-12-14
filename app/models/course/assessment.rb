@@ -94,6 +94,16 @@ class Course::Assessment < ActiveRecord::Base
     password.present?
   end
 
+  def initialize_duplicate(duplicator, other)
+    copy_attributes(other, duplicator.time_shift)
+    self.folder = duplicator.duplicate(other.folder)
+    self.questions = duplicator.duplicate(other.questions.map(&:actable)).compact.map(&:acting_as)
+    self.assessment_conditions = duplicator.duplicate(other.assessment_conditions)
+    # Like achievement conditions, duplicate the actable object directly and let the acting_as
+    # gem create the Condition object.
+    self.conditions = duplicator.duplicate(other.conditions.map(&:actable)).map(&:acting_as)
+  end
+
   private
 
   # Sets the course of the lesson plan item to be the same as the one for the assessment.

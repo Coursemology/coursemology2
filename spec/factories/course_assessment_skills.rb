@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :course_assessment_skill, class: Course::Assessment::Skill do
     course
-    title 'Skill'
+    sequence(:title) { |n| "Skill #{n}" }
     description 'Description'
   end
 end

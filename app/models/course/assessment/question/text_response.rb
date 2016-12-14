@@ -37,6 +37,11 @@ class Course::Assessment::Question::TextResponse < ActiveRecord::Base
     answer.acting_as
   end
 
+  def initialize_duplicate(duplicator, other)
+    copy_attributes(other)
+    self.solutions = duplicator.duplicate(other.solutions)
+  end
+
   private
 
   def validate_grade

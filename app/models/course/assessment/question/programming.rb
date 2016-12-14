@@ -6,6 +6,9 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
   acts_as :question, class_name: Course::Assessment::Question.name
 
   before_save :process_new_package, if: :attachment_changed?
+  before_validation :assign_template_attributes
+  before_validation :assign_test_case_attributes
+  after_save :clear_duplication_flag
 
   validates :memory_limit, numericality: { greater_than: 0 }, allow_nil: true
   validates :time_limit, numericality: { greater_than: 0,
@@ -73,6 +76,18 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
     test_cases.group_by(&:test_case_type)
   end
 
+  def initialize_duplicate(duplicator, other)
+    copy_attributes(other)
+
+    # TODO: check if there are any side effects from this
+    self.import_job_id = nil
+    self.template_files = duplicator.duplicate(other.template_files)
+    self.test_cases = duplicator.duplicate(other.test_cases)
+    self.attachment = duplicator.duplicate(other.attachment)
+
+    @duplicating = true
+  end
+
   private
 
   # Queues the new question package for processing.
@@ -81,6 +96,7 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
   # the import job.
   def process_new_package
     return remove_old_package if attachment.nil?
+    return if @duplicating
 
     new_attachment = attachment
     restore_attribute!(:attachment)
@@ -98,5 +114,21 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
     template_files.clear
     test_cases.clear
     self.import_job = nil
+  end
+
+  def assign_template_attributes
+    template_files.each do |template|
+      template.question = self
+    end
+  end
+
+  def assign_test_case_attributes
+    test_cases.each do |test_case|
+      test_case.question = self
+    end
+  end
+
+  def clear_duplication_flag
+    @duplicating = nil
   end
 end

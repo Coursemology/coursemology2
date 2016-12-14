@@ -59,4 +59,8 @@ class Course::Level < ActiveRecord::Base
   def next_level_threshold
     self.next ? self.next.experience_points_threshold : experience_points_threshold
   end
+
+  def initialize_duplicate(duplicator, other)
+    self.course = duplicator.duplicate(other.course)
+  end
 end

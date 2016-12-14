@@ -6,4 +6,8 @@ class Course::Assessment::Question::MultipleResponseOption < ActiveRecord::Base
   # @!method self.correct
   #   Gets the options which are marked as correct.
   scope :correct, ->() { where(correct: true) }
+
+  def initialize_duplicate(duplicator, other)
+    self.question = duplicator.duplicate(other.question)
+  end
 end

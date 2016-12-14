@@ -30,7 +30,6 @@ class Course < ActiveRecord::Base
   has_many :notifications, dependent: :destroy
 
   has_many :announcements, dependent: :destroy
-  has_many :achievements, dependent: :destroy
   # The order needs to be preserved, this makes sure that the root_folder will be saved first
   has_many :material_folders, class_name: Course::Material::Folder.name, inverse_of: :course,
                               dependent: :destroy
@@ -53,6 +52,8 @@ class Course < ActiveRecord::Base
                                     dependent: :destroy
   has_many :lesson_plan_events, through: :lesson_plan_items,
                                 source: :actable, source_type: Course::LessonPlan::Event.name
+  # Achievements must be declared after material_folders or duplication will fail.
+  has_many :achievements, dependent: :destroy
   has_many :discussion_topics, class_name: Course::Discussion::Topic.name, inverse_of: :course
   has_many :forums, dependent: :destroy, inverse_of: :course
   has_many :surveys, through: :lesson_plan_items, source: :actable, source_type: Course::Survey.name
@@ -116,6 +117,32 @@ class Course < ActiveRecord::Base
     else
       material_folders.find_by(parent: nil).present?
     end
+  end
+
+  def initialize_duplicate(duplicator, other)
+    self.start_at += duplicator.time_shift
+    self.end_at += duplicator.time_shift
+    self.title = duplicator.new_course_title
+    logo.duplicate_from(other.logo) if other.logo_url
+
+    # This also duplicates assessments.
+    self.lesson_plan_items = duplicator.duplicate(other.lesson_plan_items.map(&:actable)).
+                             map(&:acting_as)
+    self.lesson_plan_milestones = duplicator.duplicate(other.lesson_plan_milestones)
+
+    # Find material_folders without owners and only duplicate those.
+    # This must be done after duplicating assessments.
+    # Do not try duplicating all folders at once. Parent IDs do not seem to be populated by the
+    # edge gem until the database entries are created.
+    material_folders_to_duplicate = other.material_folders.without_owners
+    self.material_folders = duplicator.duplicate(material_folders_to_duplicate).compact
+
+    # Skill branches are duplicated as part of skills.
+    self.assessment_skills = duplicator.duplicate(other.assessment_skills)
+
+    self.levels = duplicator.duplicate(other.levels)
+    self.achievements = duplicator.duplicate(other.achievements)
+    self.forums = duplicator.duplicate(other.forums)
   end
 
   private

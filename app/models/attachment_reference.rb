@@ -16,6 +16,10 @@ class AttachmentReference < ActiveRecord::Base
     self.attachment = Attachment.find_or_initialize_by(file: file)
   end
 
+  def initialize_duplicate(duplicator, other)
+    self.attachable = duplicator.duplicate(other.attachable)
+  end
+
   private
 
   # Infer the name of the file.

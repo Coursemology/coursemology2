@@ -28,6 +28,8 @@ en:
         title: 'Sidebar'
     course_users:
       title: 'Manage Users'
+    duplication:
+      title: 'Duplicate Course'
     attachment_uploader:
       uploaded_files: 'Uploaded Files:'
       uploaded_file: 'Uploaded File:'

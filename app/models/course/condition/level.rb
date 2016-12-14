@@ -26,6 +26,12 @@ class Course::Condition::Level < ActiveRecord::Base
     course_user.level_number >= minimum_level
   end
 
+  def initialize_duplicate(duplicator, other)
+    self.conditional_type = other.conditional_type
+    self.conditional = duplicator.duplicate(other.conditional)
+    self.course = duplicator.duplicate(other.course)
+  end
+
   # Class that the condition depends on.
   def self.dependent_class
     nil

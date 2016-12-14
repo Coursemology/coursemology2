@@ -19,6 +19,9 @@ class Course::Assessment::Question::ProgrammingTemplateFile < ActiveRecord::Base
     answer.files.build(filename: filename, content: content)
   end
 
+  def initialize_duplicate(_duplicator, _other)
+  end
+
   private
 
   # Normalises the filename for use across platforms.

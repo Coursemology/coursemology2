@@ -70,6 +70,17 @@ class Course::Assessment::Question < ActiveRecord::Base
            question_number: question_number, title: title)
   end
 
+  # Copy attributes for question from the object being duplicated.
+  #
+  # @param other [Object] The source object to copy attributes from.
+  def copy_attributes(other)
+    self.title = other.title
+    self.description = other.description
+    self.staff_only_comments = other.staff_only_comments
+    self.maximum_grade = other.maximum_grade
+    self.weight = other.weight
+  end
+
   private
 
   def validate_assessment_is_not_autograded

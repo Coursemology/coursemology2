@@ -66,6 +66,10 @@ class Course::Forum < ActiveRecord::Base
     'forums/forum'
   end
 
+  def initialize_duplicate(duplicator, other)
+    self.course = duplicator.duplicate(other.course)
+  end
+
   private
 
   # Try building a slug based on the following fields in

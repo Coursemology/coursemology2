@@ -38,6 +38,11 @@ class Course::Assessment::Question::MultipleResponse < ActiveRecord::Base
     answer.acting_as
   end
 
+  def initialize_duplicate(duplicator, other)
+    copy_attributes(other)
+    self.options = duplicator.duplicate(other.options)
+  end
+
   private
 
   def validate_multiple_choice_has_solution

@@ -13,6 +13,11 @@ class Course::Material < ActiveRecord::Base
     folder.path + name
   end
 
+  def initialize_duplicate(duplicator, other)
+    self.attachment = duplicator.duplicate(other.attachment)
+    self.folder = duplicator.duplicate(other.folder)
+  end
+
   private
 
   # TODO: Not threadsafe, consider making all folders as materials

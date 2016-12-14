@@ -9,4 +9,8 @@ class Course::Assessment::Question::ProgrammingTestCase < ActiveRecord::Base
            inverse_of: :test_case,
            dependent: :destroy,
            foreign_key: :test_case_id
+
+  # Don't need to duplicate the test results
+  def initialize_duplicate(_duplicator, _other)
+  end
 end

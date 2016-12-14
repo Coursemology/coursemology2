@@ -22,8 +22,8 @@ FactoryGirl.define do
     end
 
     trait :with_mcq_question do
-      after(:build) do |assessment, evalutor|
-        evalutor.question_count.downto(1).each do
+      after(:build) do |assessment, evaluator|
+        evaluator.question_count.downto(1).each do
           question = build(:course_assessment_question_multiple_response,
                            :multiple_choice, assessment: assessment)
           assessment.questions << question.acting_as
@@ -119,6 +119,13 @@ FactoryGirl.define do
 
     trait :autograded do
       autograded true
+    end
+
+    trait :with_attachments do
+      after(:build) do |assessment|
+        material = build(:material, folder: assessment.folder)
+        assessment.folder.materials << material
+      end
     end
   end
 end
