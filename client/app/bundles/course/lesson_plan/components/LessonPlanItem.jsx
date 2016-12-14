@@ -1,10 +1,12 @@
 /* eslint-disable react/no-danger */
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
-import { Glyphicon, ButtonGroup } from 'react-bootstrap';
+import { Glyphicon } from 'react-bootstrap';
 import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
-import DeleteButton from 'lib/components/form/DeleteButton';
-import EditButton from 'lib/components/form/EditButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import isScreenXs from 'lib/helpers/viewport';
 import styles from './LessonPlanItem.scss';
 
@@ -21,6 +23,14 @@ const translations = defineMessages({
     id: 'course.lessonPlan.lessonPlanItem.deleteConfirmation',
     defaultMessage: 'Delete Lesson Plan Item?',
     description: 'Confirmation message for Lesson Plan Item delete button',
+  },
+  editItem: {
+    id: 'course.lessonPlan.lessonPlanItem.editEvent',
+    defaultMessage: 'Edit Item',
+  },
+  deleteItem: {
+    id: 'course.lessonPlan.lessonPlanItem.deleteEvent',
+    defaultMessage: 'Delete Item',
   },
 });
 
@@ -116,19 +126,35 @@ class LessonPlanItem extends React.Component {
     );
   }
 
-  renderButtons() {
+  renderMenu() {
     const { item, intl } = this.props;
+    if (!item.has('edit_path') && !item.has('delete_path')) {
+      return '';
+    }
+
     return (
-      <ButtonGroup>
-        { item.has('edit_path') ? <EditButton path={item.get('edit_path')} /> : [] }
+      <IconMenu
+        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+      >
         {
-          item.has('delete_path') ?
-            <DeleteButton
-              path={item.get('delete_path')}
-              confirmationMessage={intl.formatMessage(translations.deleteItemConfirmation)}
+          item.has('edit_path') ?
+            <MenuItem
+              primaryText={intl.formatMessage(translations.editItem)}
+              href={item.get('edit_path')}
             /> : []
         }
-      </ButtonGroup>
+        {
+          item.has('delete_path') ?
+            <MenuItem
+              primaryText={intl.formatMessage(translations.deleteItem)}
+              href={item.get('delete_path')}
+              data-method="delete"
+              data-confirm={intl.formatMessage(translations.deleteItemConfirmation)}
+            /> : []
+        }
+      </IconMenu>
     );
   }
 
@@ -159,7 +185,7 @@ class LessonPlanItem extends React.Component {
               { this.renderLocation() }
             </div>
             <div>
-              { this.renderButtons() }
+              { this.renderMenu() }
             </div>
           </div>
           { this.renderDescription() }

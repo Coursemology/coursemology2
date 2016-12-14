@@ -2,9 +2,10 @@
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
 import { FormattedDate, injectIntl, defineMessages } from 'react-intl';
-import { ButtonGroup } from 'react-bootstrap';
-import DeleteButton from 'lib/components/form/DeleteButton';
-import EditButton from 'lib/components/form/EditButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import styles from './LessonPlanMilestone.scss';
 
 const translations = defineMessages({
@@ -12,6 +13,14 @@ const translations = defineMessages({
     id: 'course.lessonPlan.lessonPlanMilestone.deleteConfirmation',
     defaultMessage: 'Delete Lesson Plan Milestone?',
     description: 'Confirmation message for Lesson Plan Milestone delete button',
+  },
+  editMilestone: {
+    id: 'course.lessonPlan.lessonPlanMilestone.editMilestone',
+    defaultMessage: 'Edit Milestone',
+  },
+  deleteMilestone: {
+    id: 'course.lessonPlan.lessonPlanMilestone.deleteMilestone',
+    defaultMessage: 'Delete Milestone',
   },
 });
 
@@ -23,20 +32,35 @@ const propTypes = {
 };
 
 class LessonPlanMilestone extends React.Component {
-
-  renderButtons() {
+  renderMenu() {
     const { milestone, intl } = this.props;
+    if (!milestone.has('edit_path') && !milestone.has('delete_path')) {
+      return '';
+    }
+
     return (
-      <ButtonGroup>
-        { milestone.has('edit_path') ? <EditButton path={milestone.get('edit_path')} /> : [] }
+      <IconMenu
+        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+      >
         {
-          milestone.has('delete_path') ?
-            <DeleteButton
-              path={milestone.get('delete_path')}
-              confirmationMessage={intl.formatMessage(translations.deleteMilestoneConfirmation)}
+          milestone.has('edit_path') ?
+            <MenuItem
+              primaryText={intl.formatMessage(translations.editMilestone)}
+              href={milestone.get('edit_path')}
             /> : []
         }
-      </ButtonGroup>
+        {
+          milestone.has('delete_path') ?
+            <MenuItem
+              primaryText={intl.formatMessage(translations.deleteMilestone)}
+              href={milestone.get('delete_path')}
+              data-method="delete"
+              data-confirm={intl.formatMessage(translations.deleteMilestoneConfirmation)}
+            /> : []
+        }
+      </IconMenu>
     );
   }
 
@@ -63,7 +87,7 @@ class LessonPlanMilestone extends React.Component {
           <div>
             <p><span dangerouslySetInnerHTML={{ __html: milestone.get('description') }} /></p>
           </div>
-          { this.renderButtons() }
+          { this.renderMenu() }
         </div>
       </div>
     );
@@ -73,4 +97,4 @@ class LessonPlanMilestone extends React.Component {
 
 LessonPlanMilestone.propTypes = propTypes;
 
-export default injectIntl(LessonPlanMilestone, styles);
+export default injectIntl(LessonPlanMilestone);
