@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161207013914) do
+ActiveRecord::Schema.define(version: 20161214050848) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -650,6 +650,7 @@ ActiveRecord::Schema.define(version: 20161207013914) do
     t.integer  "course_user_id", :null=>false, :index=>{:name=>"index_course_user_invitations_on_course_user_id", :unique=>true}, :foreign_key=>{:references=>"course_users", :name=>"fk_course_user_invitations_course_user_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "user_email_id",  :null=>false, :index=>{:name=>"fk__course_user_invitations_user_email_id"}, :foreign_key=>{:references=>"user_emails", :name=>"fk_course_user_invitations_user_email_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.string   "invitation_key", :limit=>16, :null=>false, :index=>{:name=>"index_course_user_invitations_on_invitation_key", :unique=>true}
+    t.datetime "sent_at"
     t.integer  "creator_id",     :null=>false, :index=>{:name=>"fk__course_user_invitations_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_user_invitations_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "updater_id",     :null=>false, :index=>{:name=>"fk__course_user_invitations_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_user_invitations_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at",     :null=>false
