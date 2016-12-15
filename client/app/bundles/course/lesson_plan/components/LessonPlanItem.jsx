@@ -1,24 +1,29 @@
 /* eslint-disable react/no-danger */
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
-import { Glyphicon } from 'react-bootstrap';
-import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import { injectIntl, defineMessages } from 'react-intl';
+import { Card, CardText, CardTitle, CardActions } from 'material-ui/Card';
+import Avatar from 'material-ui/Avatar';
+import Chip from 'material-ui/Chip';
+import Block from 'material-ui/svg-icons/content/block';
+import Room from 'material-ui/svg-icons/action/room';
+import DateRange from 'material-ui/svg-icons/action/date-range';
+import InfoOutline from 'material-ui/svg-icons/action/info-outline';
+import FlatButton from 'material-ui/FlatButton';
 import isScreenXs from 'lib/helpers/viewport';
-import styles from './LessonPlanItem.scss';
 
 const propTypes = {
   item: React.PropTypes.instanceOf(Immutable.Map).isRequired,
-  lessonPlanItemTypeKey: PropTypes.func.isRequired,
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
 };
 
 const translations = defineMessages({
+  notPublished: {
+    id: 'course.lessonPlan.lessonPlanItem.notPublished',
+    defaultMessage: 'Not Published',
+  },
   deleteItemConfirmation: {
     id: 'course.lessonPlan.lessonPlanItem.deleteConfirmation',
     defaultMessage: 'Delete Lesson Plan Item?',
@@ -33,6 +38,19 @@ const translations = defineMessages({
     defaultMessage: 'Delete Item',
   },
 });
+
+const styles = {
+  chip: {
+    margin: 4,
+  },
+  chipsWrapper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  card: {
+    marginBottom: 15,
+  },
+};
 
 const shortDateFormat = {
   year: 'numeric',
@@ -51,38 +69,38 @@ const shortTimeFormat = {
 };
 
 class LessonPlanItem extends React.Component {
-  renderTypeTag() {
-    const { item } = this.props;
+
+  renderNotPublishedChip() {
+    const { item, intl } = this.props;
+    if (!item.has('published') || item.get('published')) {
+      return '';
+    }
     return (
-      <span className={styles.itemTypeTag}>
-        { this.props.lessonPlanItemTypeKey(item.get('lesson_plan_item_type')) }
-      </span>
+      <Chip style={styles.chip}>
+        <Avatar icon={<Block />} backgroundColor="#900" />
+        { intl.formatMessage(translations.notPublished) }
+      </Chip>
     );
   }
 
-  renderTitle() {
+  renderTypeTagChip() {
     const { item } = this.props;
     return (
-      <div className={styles.spaceBetween}>
-        <a>
-          { item.get('published') ? '' : <Glyphicon glyph="ban-circle" className={styles.glyph} /> }
-          <b>{ item.get('title') }</b>
-        </a>
-        <span className="hidden-xs">
-          { this.renderTypeTag() }
-        </span>
-      </div>
+      <Chip style={styles.chip}>
+        <Avatar icon={<InfoOutline />} />
+        { item.get('lesson_plan_item_type').join(': ') }
+      </Chip>
     );
   }
 
   /*
-   * Renders the date/time range of the item in one of the following formats:
+   * Renders a chip with the date/time range of the item in one of the following formats:
    * - August 18, 2017, 12:00 PM
    * - November 24, 2016, 5:00 PM - 7:00 PM
    * - November 10, 2016, 10:00 AM - November 11, 2016, 11:00 AM
    * Output varies depending on locale.
    */
-  renderDateTimeRange() {
+  renderDateTimeRangeChip() {
     const { item, intl } = this.props;
     const useShortFormat = isScreenXs();
     const dateFormat = useShortFormat ? shortDateFormat : standardDateFormat;
@@ -105,92 +123,89 @@ class LessonPlanItem extends React.Component {
       }
     }
 
-    return <span>{outputString}</span>;
+    return (
+      <Chip style={styles.chip}>
+        <Avatar icon={<DateRange />} />
+        {outputString}
+      </Chip>
+    );
   }
 
-  renderLocation() {
+  renderLocationChip() {
     const { item } = this.props;
     if (!item.has('location') || !item.get('location')) {
       return '';
     }
     const location = item.get('location');
     return (
-      <div>
-        <FormattedMessage
-          id="course.lessonPlan.lessonPlanItem.location"
-          description="Location text for the lesson plan event."
-          defaultMessage="Location: {location}"
-          values={{ location }}
-        />
+      <Chip style={styles.chip}>
+        <Avatar icon={<Room />} />
+        {location}
+      </Chip>
+    );
+  }
+
+  renderChips() {
+    return (
+      <div style={styles.chipsWrapper}>
+        { this.renderNotPublishedChip() }
+        { this.renderTypeTagChip() }
+        { this.renderDateTimeRangeChip() }
+        { this.renderLocationChip() }
       </div>
     );
   }
 
-  renderMenu() {
+  renderDescription() {
+    const { item } = this.props;
+
+    if (!item.has('description') || !item.get('description')) {
+      return '';
+    }
+    return (
+      <CardText dangerouslySetInnerHTML={{ __html: item.get('description') }} />
+    );
+  }
+
+  renderActions() {
     const { item, intl } = this.props;
     if (!item.has('edit_path') && !item.has('delete_path')) {
       return '';
     }
 
     return (
-      <IconMenu
-        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-      >
+      <CardActions>
         {
           item.has('edit_path') ?
-            <MenuItem
-              primaryText={intl.formatMessage(translations.editItem)}
+            <FlatButton
+              label={intl.formatMessage(translations.editItem)}
               href={item.get('edit_path')}
             /> : []
         }
         {
           item.has('delete_path') ?
-            <MenuItem
-              primaryText={intl.formatMessage(translations.deleteItem)}
+            <FlatButton
+              label={intl.formatMessage(translations.deleteItem)}
               href={item.get('delete_path')}
               data-method="delete"
               data-confirm={intl.formatMessage(translations.deleteItemConfirmation)}
             /> : []
         }
-      </IconMenu>
-    );
-  }
-
-  renderDescription() {
-    const { item } = this.props;
-    if (!item.has('description') || !item.get('description')) {
-      return '';
-    }
-    return (
-      <div dangerouslySetInnerHTML={{ __html: item.get('description') }} />
+      </CardActions>
     );
   }
 
   render() {
     const { item } = this.props;
     return (
-      <div id={`lesson-plan-item-${item.get('id')}`}>
-        <div className={`lesson-plan-item-title-bar ${styles.lessonPlanItemTitleBar}`}>
-          { this.renderTitle() }
-        </div>
-        <div className={styles.card}>
-          <div className={styles.spaceBetween}>
-            <div className={styles.itemDetails}>
-              <div className="visible-xs">
-                { this.renderTypeTag() }
-              </div>
-              { this.renderDateTimeRange() }
-              { this.renderLocation() }
-            </div>
-            <div>
-              { this.renderMenu() }
-            </div>
-          </div>
-          { this.renderDescription() }
-        </div>
-      </div>
+      <Card style={styles.card}>
+        <CardTitle
+          title={item.get('title')}
+          subtitle={this.renderChips()}
+        />
+        { this.renderDescription() }
+        { this.renderActions() }
+      </Card>
     );
   }
 }
