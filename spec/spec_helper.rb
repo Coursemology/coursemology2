@@ -17,6 +17,7 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'capybara/rspec'
 require 'coverage_helper'
+require 'action_mailer'
 require 'email_spec'
 require 'email_spec/rspec'
 require 'should_not/rspec'
