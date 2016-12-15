@@ -1,12 +1,17 @@
 # frozen_string_literal: true
 class Course::Material < ActiveRecord::Base
   has_one_attachment
-  belongs_to :folder, inverse_of: :materials, class_name: Course::Material::Folder.name, touch: true
+  belongs_to :folder, inverse_of: :materials, class_name: Course::Material::Folder.name
 
+  before_save :touch_folder
   after_save :clear_duplication_flag
 
   validate :validate_name_is_unique_among_folders
   validates_with FilenameValidator
+
+  def touch_folder
+    folder.touch if !@duplicating && changed?
+  end
 
   # Returns the path of the material
   #

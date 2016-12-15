@@ -7,6 +7,8 @@ class Course::Material::Folder < ActiveRecord::Base
   before_validation :normalize_filename, if: :owner
   before_validation :assign_valid_name
 
+  after_save :clear_duplication_flag
+
   has_many :materials, inverse_of: :folder, dependent: :destroy, foreign_key: :folder_id,
                        class_name: Course::Material.name, autosave: true
   belongs_to :course, inverse_of: :material_folders
@@ -67,12 +69,19 @@ class Course::Material::Folder < ActiveRecord::Base
     Pathname.new(path)
   end
 
+  # Return false to prevent the userstamp gem from changing the updater during duplication
+  def record_userstamp
+    !@duplicating
+  end
+
   def initialize_duplicate(duplicator, other)
     self.start_at += duplicator.time_shift
     self.materials = duplicator.duplicate(other.materials).compact
     self.owner = duplicator.duplicate(other.owner)
     self.course = duplicator.duplicate(other.course)
     self.parent = duplicator.duplicate(other.parent)
+    self.updated_at = other.updated_at
+    @duplicating = true
   end
 
   private
@@ -121,5 +130,9 @@ class Course::Material::Folder < ActiveRecord::Base
   # Normalize the folder name
   def normalize_filename
     self.name = Pathname.normalize_filename(name)
+  end
+
+  def clear_duplication_flag
+    @duplicating = nil
   end
 end

@@ -16,6 +16,9 @@ class Course::Assessment < ActiveRecord::Base
   before_validation :prevent_reminder_duplication
   before_save :setup_opening_reminders, if: :start_at_changed?
   before_save :setup_closing_reminders, if: :end_at_changed?
+  # Other models use after_save, but some assessments are saved multiple times, causing
+  # the flag to be cleared too early.
+  after_commit :clear_duplication_flag
 
   validate :validate_presence_of_questions, if: :published?
   validate :validate_only_autograded_questions, if: :autograded?
@@ -102,6 +105,7 @@ class Course::Assessment < ActiveRecord::Base
     # Like achievement conditions, duplicate the actable object directly and let the acting_as
     # gem create the Condition object.
     self.conditions = duplicator.duplicate(other.conditions.map(&:actable)).map(&:acting_as)
+    @duplicating = true
   end
 
   private
@@ -112,6 +116,8 @@ class Course::Assessment < ActiveRecord::Base
   end
 
   def assign_folder_attributes
+    # Folder attributes are handled during duplication by folder duplication code
+    return if @duplicating
     folder.assign_attributes(name: title, course: course, parent: tab.category.folder,
                              start_at: start_at)
   end
@@ -155,5 +161,9 @@ class Course::Assessment < ActiveRecord::Base
   def validate_only_autograded_questions
     return if questions.all?(&:auto_gradable?)
     errors.add(:base, :autograded)
+  end
+
+  def clear_duplication_flag
+    @duplicating = nil
   end
 end
