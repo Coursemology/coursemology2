@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
-import { Row, Col } from 'react-bootstrap';
 import { injectIntl, defineMessages } from 'react-intl';
 import styles from './LessonPlan.scss';
 import LessonPlanNav from '../components/LessonPlanNav';
@@ -108,8 +107,9 @@ class LessonPlan extends React.Component {
     const { milestones, items, hiddenItemTypes, toggleItemTypeVisibility } = this.props;
 
     return (
-      <Row>
-        <Col md={9}>
+      <div className={styles.mainPanel}>
+        <div className={styles.navContainer}>
+          <LessonPlanNav {...{ milestones }} />
           <LessonPlanFilter
             lessonPlanItemTypeKey={LessonPlan.itemTypeKey}
             {...{
@@ -118,21 +118,18 @@ class LessonPlan extends React.Component {
               items,
             }}
           />
-          {
-            milestoneGroups.map(group =>
-              <LessonPlanGroup
-                key={group.milestone.get('id')}
-                milestone={group.milestone}
-                items={group.items}
-                lessonPlanItemTypeKey={LessonPlan.itemTypeKey}
-              />
-            )
-          }
-        </Col>
-        <Col md={3} xsHidden smHidden>
-          <LessonPlanNav {...{ milestones }} />
-        </Col>
-      </Row>
+        </div>
+        {
+          milestoneGroups.map(group =>
+            <LessonPlanGroup
+              key={group.milestone.get('id')}
+              milestone={group.milestone}
+              items={group.items}
+              lessonPlanItemTypeKey={LessonPlan.itemTypeKey}
+            />
+          )
+        }
+      </div>
     );
   }
 

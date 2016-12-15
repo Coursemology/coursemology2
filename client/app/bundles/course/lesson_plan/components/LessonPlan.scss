@@ -3,3 +3,8 @@ $secondary-text-grey: #888888;
 .grey {
   color: $secondary-text-grey;
 }
+
+.navContainer {
+  display: flex;
+  justify-content: flex-end;
+}

@@ -7,7 +7,6 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Done from 'material-ui/svg-icons/action/done';
 import KeyboardArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
-import styles from './LessonPlanFilter.scss';
 
 const propTypes = {
   lessonPlanItemTypeKey: PropTypes.func.isRequired,
@@ -65,7 +64,7 @@ class LessonPlanFilter extends React.Component {
     const lessonPlanItemTypes = items.map(item => item.get('lesson_plan_item_type')).toSet().toList().sort();
 
     return (
-      <div className={styles.filterContainer}>
+      <div>
         <RaisedButton
           onTouchTap={this.handleTouchTap}
           label={intl.formatMessage(translations.filter)}

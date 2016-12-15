@@ -1,8 +1,0 @@
-:global {
-  // This needs to be global in order for the style to have a higher specificity than Bootstrap's
-  // so that it will not be defaulted to Bootstrap's values.
-  .nav > li > a.lesson-plan-nav-link {
-    // Compact the list of links
-    padding: 1px 10px;
-  }
-}

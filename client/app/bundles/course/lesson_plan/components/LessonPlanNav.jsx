@@ -1,29 +1,106 @@
 import React, { PropTypes } from 'react';
-import { Affix } from 'react-overlays';
 import Immutable from 'immutable';
-import './LessonPlanNav.scss';
+import { injectIntl, defineMessages } from 'react-intl';
+import RaisedButton from 'material-ui/RaisedButton';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
+import KeyboardArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 
 const propTypes = {
   milestones: PropTypes.instanceOf(Immutable.List).isRequired,
+  intl: PropTypes.shape({
+    formatMessage: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
-const LessonPlanNav = ({ milestones }) => (
-  <Affix offsetTop={173} affixStyle={{ top: '70px' }} >
-    <ul className="nav nav-pills nav-stacked">
-      { milestones.map(milestone => (
-        <li key={milestone.get('id')}>
-          <a
-            href={`#lesson-plan-milestone-${milestone.get('id')}`}
-            className="lesson-plan-nav-link"
-          >
-            { milestone.get('title') }
-          </a>
-        </li>
-      )) }
-    </ul>
-  </Affix>
-);
+const translations = defineMessages({
+  goto: {
+    id: 'course.lessonPlan.lessonPlanFilter.goto',
+    defaultMessage: 'Go To Milestone',
+  },
+});
+
+const styles = {
+  navButton: {
+    marginRight: 20,
+  },
+};
+
+class LessonPlanNav extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      open: false,
+    };
+
+    this.handleTouchTap = this.handleTouchTap.bind(this);
+    this.handleRequestClose = this.handleRequestClose.bind(this);
+  }
+
+  handleTouchTap(event) {
+    // This prevents ghost click.
+    event.preventDefault();
+
+    this.setState({
+      open: true,
+      anchorEl: event.currentTarget,
+    });
+  }
+
+  handleRequestClose() {
+    this.setState({
+      open: false,
+    });
+  }
+
+  renderNav() {
+    const { milestones, intl } = this.props;
+
+    return (
+      <div>
+        <RaisedButton
+          onTouchTap={this.handleTouchTap}
+          label={intl.formatMessage(translations.goto)}
+          labelPosition="before"
+          icon={<KeyboardArrowDown />}
+          style={styles.navButton}
+        />
+        <Popover
+          open={this.state.open}
+          anchorEl={this.state.anchorEl}
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+          onRequestClose={this.handleRequestClose}
+        >
+          <Menu>
+            {
+              milestones.map(milestone => (
+                <MenuItem
+                  key={milestone.get('id')}
+                  primaryText={milestone.get('title')}
+                  href={`#lesson-plan-milestone-${milestone.get('id')}`}
+                />
+              ))
+            }
+          </Menu>
+        </Popover>
+      </div>
+    );
+  }
+
+  render() {
+    const { milestones } = this.props;
+
+    if (milestones.size > 0) {
+      return this.renderNav();
+    }
+
+    return <div />;
+  }
+}
 
 LessonPlanNav.propTypes = propTypes;
 
-export default LessonPlanNav;
+export default injectIntl(LessonPlanNav);
