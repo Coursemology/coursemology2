@@ -238,6 +238,7 @@ Rails.application.routes.draw do
         resources :experience_points_records, only: [:index, :update, :destroy]
         get 'invite' => 'user_invitations#new', on: :collection
         post 'invite' => 'user_invitations#create', on: :collection
+        post 'resend_invitations' => 'user_invitations#resend_invitations', on: :collection
         get 'disburse_experience_points' => 'experience_points/disbursement#new', on: :collection
         post 'disburse_experience_points' => 'experience_points/disbursement#create',
              on: :collection

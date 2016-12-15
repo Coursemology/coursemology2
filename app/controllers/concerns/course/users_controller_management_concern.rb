@@ -18,7 +18,7 @@ module Course::UsersControllerManagementConcern
   def destroy # :nodoc:
     if @course_user.destroy
       success = t('course.users.destroy.success', role: @course_user.role,
-                                                  email: @course_user.user.email)
+                                                  email: course_user_email)
       redirect_to delete_redirect_path, success: success
     else
       redirect_to delete_redirect_path, danger: @course_user.errors.full_messages.to_sentence
@@ -127,7 +127,9 @@ module Course::UsersControllerManagementConcern
 
   # Selects an appropriate redirect path depending on the user being deleted.
   def delete_redirect_path
-    if @course_user.staff?
+    if @course_user.invited?
+      course_users_invitations_path(current_course)
+    elsif @course_user.staff?
       course_users_staff_path(current_course)
     else
       course_users_students_path(current_course)
@@ -143,5 +145,15 @@ module Course::UsersControllerManagementConcern
   def upgrade_to_staff_failure # :nodoc:
     redirect_to course_users_staff_path(current_course),
                 danger: @course_user.errors.full_messages.to_sentence
+  end
+
+  # Returns the email of the course_user.
+  # This method handles invited course_users, which do not have a user object.
+  def course_user_email
+    if @course_user.invited?
+      @course_user.invitation.user_email.email
+    else
+      @course_user.user.email
+    end
   end
 end
