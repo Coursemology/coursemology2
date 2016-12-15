@@ -6,7 +6,7 @@ table.table.table-hover
       = CourseUser.human_attribute_name(:name)
     - unless @service.no_group_managers?
       th
-        = t('.tutor')
+        = t('.instructors')
     th.text-center
       = Course::Level.model_name.human
     th.text-center
