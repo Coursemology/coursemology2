@@ -15,6 +15,14 @@ class Course::UserInvitationsController < Course::ComponentController
     end
   end
 
+  def resend_invitations
+    if invitation_service.resend_invitation(load_course_users)
+      redirect_to course_users_invitations_path(current_course), success: t('.success')
+    else
+      redirect_to course_users_invitations_path(current_course), danger: t('.failure')
+    end
+  end
+
   private
 
   def course_user_invitation_params # :nodoc:
@@ -36,6 +44,40 @@ class Course::UserInvitationsController < Course::ComponentController
     @invitation_params ||= course_user_invitation_params[:invitations_file].try(:tempfile) ||
                            course_user_invitation_params[:invitations_attributes] ||
                            course_user_invitation_params[:registration_key] == 'checked'.freeze
+  end
+
+  # Determines the params for load_course_users.
+  def resend_invitation_params
+    @resend_invitation_params ||=
+      if params[:course].blank?
+        params
+      else
+        params.require(:course).permit(:course_user, course_users: [])
+      end
+  end
+
+  # Filters the course_user ids from resend_invitation_params
+  #
+  # @return [Array<String>|nil] Array of course_user ids. If none was found in the params,
+  #   nil is returned.
+  def course_users_from_params
+    if resend_invitation_params[:course_user]
+      [resend_invitation_params[:course_user]]
+    elsif resend_invitation_params[:course_users]
+      resend_invitation_params[:course_users]
+    end
+  end
+
+  # Loads course_users for the resending of invitations. Method handles the following cases:
+  #   1) Single course_user - specified with the course_user param
+  #   2) Multiple course_users - specified with the course_users param
+  #   3) All invited course_users - given none of the above params
+  def load_course_users
+    @course_users ||= begin
+      ids = course_users_from_params
+      ids ||= current_course.course_users.with_invited_state.pluck(:id)
+      ids.blank? ? [] : CourseUser.includes(:invitation).where { id >> ids }
+    end
   end
 
   # Prevents access to this set of pages unless the user is a staff of the course.

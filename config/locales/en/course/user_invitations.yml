@@ -28,3 +28,6 @@ en:
         remove: 'Remove'
       create:
         success: 'Successfully invited users from the uploaded file.'
+      resend_invitations:
+        success: 'Email invitations were successfully resent.'
+        failure: 'The resending of email invitations failed.'

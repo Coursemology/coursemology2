@@ -102,5 +102,51 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
         end
       end
     end
+
+    describe '#resend_invitations' do
+      before do
+        create(:course_manager, course: course, user: user)
+        sign_in(user)
+      end
+      let(:invited_course_users) do
+        create_list(:course_user_invitation, 3, course: course).map(&:course_user)
+      end
+      let(:student) { create(:course_student, course: course) }
+      subject { post :resend_invitations, course_id: course, course: invitation_params }
+
+      context 'when only 1 course_user is specified' do
+        let(:invited_course_user) { invited_course_users.first }
+        let(:invitation_params) { { course_user: invited_course_user } }
+
+        it { is_expected.to redirect_to(course_users_invitations_path(course)) }
+        it 'loads the course_user' do
+          subject
+          expect(controller.instance_variable_get(:@course_users)).
+            to contain_exactly(invited_course_user)
+        end
+      end
+
+      context 'when multiple course_users are specified' do
+        let(:invited_users) { invited_course_users[0..1] }
+        let(:invitation_params) { { course_users: invited_users } }
+
+        it 'loads the necessary course_users' do
+          subject
+          expect(controller.instance_variable_get(:@course_users)).
+            to contain_exactly(*invited_users)
+        end
+      end
+
+      context 'when no course_users are specified' do
+        before { invited_course_users }
+        subject { post :resend_invitations, course_id: course }
+
+        it 'loads the all course_users which are invited' do
+          subject
+          expect(controller.instance_variable_get(:@course_users)).
+            to contain_exactly(*invited_course_users)
+        end
+      end
+    end
   end
 end
