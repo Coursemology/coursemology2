@@ -46,6 +46,7 @@ en:
           register into this course.
         invited_header: 'Pending Invitations'
         accepted_header: 'Accepted Invitations'
+        resend_button: 'Resend All Invitations'
       course_user_invitations:
         invitation_code: 'Invitation Code'
         status: 'Status'
