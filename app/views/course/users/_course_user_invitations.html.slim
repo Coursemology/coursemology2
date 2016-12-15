@@ -6,9 +6,10 @@ table.table.table-striped.table-hover
       th = t('common.email')
       th = t('.invitation_code')
       th = t('.status')
-      th
       - if invited
+        th = t('.sent_at')
         th
+      th
 
   tbody
     - course_users.each do |course_user|
@@ -18,6 +19,9 @@ table.table.table-striped.table-hover
         td = course_user.invitation.invitation_key
         - if invited
           td = t('course.users.status.invited')
+          td
+            - if course_user.invitation.sent_at
+              = format_datetime(course_user.invitation.sent_at, :short)
           td
             = delete_button([current_course, course_user],
                             class: 'btn-xs', title: t('.delete_tooltip')) do

@@ -49,6 +49,7 @@ en:
       course_user_invitations:
         invitation_code: 'Invitation Code'
         status: 'Status'
+        sent_at: 'Invitation Sent At'
         delete_tooltip: 'Delete Invitation'
       show:
         header: 'Profile'
