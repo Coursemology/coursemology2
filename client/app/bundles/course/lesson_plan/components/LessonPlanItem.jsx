@@ -70,6 +70,18 @@ const shortTimeFormat = {
 
 class LessonPlanItem extends React.Component {
 
+  renderTitle() {
+    const { item } = this.props;
+    if (!item.has('item_path') || !item.get('item_path')) {
+      return item.get('title');
+    }
+    return (
+      <a href={item.get('item_path')}>
+        { item.get('title') }
+      </a>
+    );
+  }
+
   renderNotPublishedChip() {
     const { item, intl } = this.props;
     if (!item.has('published') || item.get('published')) {
@@ -196,11 +208,10 @@ class LessonPlanItem extends React.Component {
   }
 
   render() {
-    const { item } = this.props;
     return (
       <Card style={styles.card}>
         <CardTitle
-          title={item.get('title')}
+          title={this.renderTitle()}
           subtitle={this.renderChips()}
         />
         { this.renderDescription() }
