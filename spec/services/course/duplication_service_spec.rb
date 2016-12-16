@@ -187,21 +187,35 @@ RSpec.describe Course::DuplicationService, type: :service do
         let!(:folders) { create_list(:course_material_folder, 3, course: course) }
         let!(:content) { create(:course_material, folder: folders[0]) }
 
-        it 'duplicates the folders and their contents' do
+        before do
           course.reload
           new_course.reload
 
-          new_folders = new_course.material_folders
-          original_folders = course.material_folders
-          # Retrieve through the folders of the duplicated course
-          new_content = new_folders.select { |f| f.name == folders[0].name }[0].materials.first
+          @new_folders = new_course.material_folders
+          @original_folders = course.material_folders
+          # Retrieve duplicated material through the folders of the duplicated course
+          @new_content = @new_folders.select { |f| f.name == folders[0].name }[0].materials.first
+          # Retrieve original material from the database so the timestamp precisions will match
+          @content = @original_folders.select { |f| f.name == folders[0].name }[0].materials.first
+        end
 
-          new_folders.each do |folder|
+        it 'duplicates the folders and their contents' do
+          @new_folders.each do |folder|
             expect(folder.course).to eq new_course
           end
-          expect(new_folders.map(&:name)).to match_array original_folders.map(&:name)
-          expect(new_content.name).to eq content.name
-          expect(new_content.description).to eq content.description
+          expect(@new_folders.map(&:name)).to match_array @original_folders.map(&:name)
+          expect(@new_content.name).to eq @content.name
+          expect(@new_content.description).to eq @content.description
+        end
+
+        it 'keeps the original updater and updated time for folders and materials' do
+          # Check material's updater and updated time
+          expect(@new_content.updated_at).to eq @content.updated_at
+          expect(@new_content.updater_id).to eq @content.updater_id
+
+          # Check folders' updater and updated time
+          expect(@new_folders.map(&:updated_at)).to match_array @original_folders.map(&:updated_at)
+          expect(@new_folders.map(&:updater_id)).to match_array @original_folders.map(&:updater_id)
         end
       end
 
