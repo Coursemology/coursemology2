@@ -3,12 +3,14 @@ import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
 import { injectIntl, defineMessages } from 'react-intl';
 import { Card, CardText, CardTitle, CardActions } from 'material-ui/Card';
+import { List, ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
 import Block from 'material-ui/svg-icons/content/block';
 import Room from 'material-ui/svg-icons/action/room';
 import DateRange from 'material-ui/svg-icons/action/date-range';
 import InfoOutline from 'material-ui/svg-icons/action/info-outline';
+import Description from 'material-ui/svg-icons/action/description';
 import FlatButton from 'material-ui/FlatButton';
 import isScreenXs from 'lib/helpers/viewport';
 
@@ -69,6 +71,28 @@ const shortTimeFormat = {
 };
 
 class LessonPlanItem extends React.Component {
+  renderMaterials() {
+    const { item } = this.props;
+    if (!item.has('materials') || !item.get('materials')) {
+      return '';
+    }
+    return (
+      <CardText>
+        <List>
+          {
+            item.get('materials').map(material =>
+              <ListItem
+                key={material.get('name')}
+                primaryText={material.get('name')}
+                leftIcon={<Description />}
+                href={material.get('url')}
+              />
+            )
+          }
+        </List>
+      </CardText>
+    );
+  }
 
   renderTitle() {
     const { item } = this.props;
@@ -215,6 +239,7 @@ class LessonPlanItem extends React.Component {
           subtitle={this.renderChips()}
         />
         { this.renderDescription() }
+        { this.renderMaterials() }
         { this.renderActions() }
       </Card>
     );
