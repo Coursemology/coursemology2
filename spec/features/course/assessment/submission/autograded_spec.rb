@@ -204,6 +204,21 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
         click_link '2'
         expect(page).to have_selector('h3', text: mrq_questions.second.display_title)
       end
+
+      scenario "I can grade the student's work" do
+        mrq_questions.each { |q| q.attempt(submission).save! }
+        submission.finalise!
+        submission.save!
+
+        # Create an extra question after submission is submitted, user should still be able to
+        # grade the submission in this case.
+        extra_mrq_question
+
+        visit edit_course_assessment_submission_path(course, assessment, submission, step: 2)
+
+        no_answer_text = I18n.t('course.assessment.submission.submissions.no_answer')
+        expect(page).to have_selector('div.alert', text: no_answer_text)
+      end
     end
   end
 end
