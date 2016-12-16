@@ -6,6 +6,7 @@ import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import KeyboardArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
+import { scroller } from 'react-scroll';
 
 const propTypes = {
   milestones: PropTypes.instanceOf(Immutable.List).isRequired,
@@ -80,7 +81,11 @@ class LessonPlanNav extends React.Component {
                 <MenuItem
                   key={milestone.get('id')}
                   primaryText={milestone.get('title')}
-                  href={`#lesson-plan-milestone-${milestone.get('id')}`}
+                  onTouchTap={() => {
+                    scroller.scrollTo(`milestone-group-${milestone.get('id')}`, {
+                      offset: -50,
+                    });
+                  }}
                 />
               ))
             }

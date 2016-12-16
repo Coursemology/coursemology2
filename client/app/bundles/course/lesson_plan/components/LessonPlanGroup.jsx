@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
+import { Element } from 'react-scroll';
 import LessonPlanItem from '../components/LessonPlanItem';
 import LessonPlanMilestone from '../components/LessonPlanMilestone';
 
@@ -12,7 +13,7 @@ const propTypes = {
 const MilestoneGroup = ({ milestone, items, lessonPlanItemTypeKey }) => {
   const componentKey = node => node.get('lesson_plan_element_class') + node.get('id');
   return (
-    <div>
+    <Element name={`milestone-group-${milestone.get('id')}`}>
       <LessonPlanMilestone key={componentKey(milestone)} {...{ milestone }} />
       {
         items.map(item =>
@@ -22,7 +23,7 @@ const MilestoneGroup = ({ milestone, items, lessonPlanItemTypeKey }) => {
           />
         )
       }
-    </div>
+    </Element>
   );
 };
 

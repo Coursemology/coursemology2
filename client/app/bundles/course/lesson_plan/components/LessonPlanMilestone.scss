@@ -1,20 +1,3 @@
-$nav-clearence: 50px;
-
-// The clearence is needed to prevent the milestone from being hidden under the top nav bar
-// when the user clicks on a link to it.
-.lessonPlanBookmark {
-  margin-bottom: 2em;
-  margin-top: 1em;
-
-  &::before {
-    content: ' ';
-    display: block;
-    height: $nav-clearence;
-    margin-top: -$nav-clearence;
-    visibility: hidden;
-  }
-}
-
 .spaceBetween {
   display: flex;
   justify-content: space-between;

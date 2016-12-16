@@ -67,11 +67,7 @@ class LessonPlanMilestone extends React.Component {
   render() {
     const { milestone } = this.props;
     return (
-      <div
-        key={milestone.get('id')}
-        id={`lesson-plan-milestone-${milestone.get('id')}`}
-        className={styles.lessonPlanBookmark}
-      >
+      <div key={milestone.get('id')}>
         <div className={styles.milestoneTitleRow}>
           <h3>{ milestone.get('title') }</h3>
           <p>
