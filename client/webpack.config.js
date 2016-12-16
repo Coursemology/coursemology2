@@ -15,6 +15,7 @@ const config = {
       'react-dom',
       'react-intl',
       'react-redux',
+      'react-scroll',
       'redux',
       'redux-promise',
       'react-tap-event-plugin',

@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
 import { injectIntl, defineMessages } from 'react-intl';
+import { scroller } from 'react-scroll';
 import styles from './LessonPlan.scss';
 import LessonPlanNav from '../components/LessonPlanNav';
 import LessonPlanFilter from '../components/LessonPlanFilter';
@@ -39,6 +40,27 @@ class LessonPlan extends React.Component {
    */
   static itemTypeKey(type) {
     return type.reverse().join(' - ');
+  }
+
+  componentDidMount() {
+    const lastMilestone = this.lastPastMilestone();
+    if (lastMilestone) {
+      scroller.scrollTo(`milestone-group-${lastMilestone.get('id')}`, {
+        duration: 200,
+        delay: 100,
+        smooth: true,
+        offset: -100,
+      });
+    }
+  }
+
+  /**
+   * Returns the last milestone that has passed.
+   */
+  lastPastMilestone() {
+    const { milestones } = this.props;
+    const dateNow = Date.now();
+    return milestones.takeUntil(milestone => Date.parse(milestone.get('start_at')) > dateNow).last();
   }
 
   /**
