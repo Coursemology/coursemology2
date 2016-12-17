@@ -3,6 +3,9 @@ en:
     assessment:
       submission:
         submissions:
+          no_answer:
+            There is no answer submitted for this question - this might be caused by the addition of
+            this question after the submission is submitted.
           index:
             submissions: 'Submissions'
             my_student_header: 'My Student Submissions'

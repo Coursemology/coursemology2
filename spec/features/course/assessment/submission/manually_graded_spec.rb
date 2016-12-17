@@ -171,8 +171,14 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
         submission.finalise!
         submission.save!
 
+        # Create an extra question after submission is submitted, user should still be able to
+        # grade the submission in this case.
+        create(:course_assessment_question_multiple_response, assessment: assessment)
+
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
+        no_answer_text = I18n.t('course.assessment.submission.submissions.no_answer')
+        expect(page).to have_selector('div.alert', text: no_answer_text)
         expect(page).to have_button(I18n.t('course.assessment.submission.submissions.buttons.save'))
         click_link I18n.t('course.assessment.submission.submissions.buttons.evaluate_answers')
         wait_for_job

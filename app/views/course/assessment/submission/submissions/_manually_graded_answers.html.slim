@@ -4,5 +4,8 @@
 - f.object.assessment.questions.each do |question|
   div.answer-content
     = render partial: question, suffix: 'question'
-    - answer = answers_by_question[question].last
-    = render partial: 'course/assessment/answer/answer', object: answer
+    - if answers = answers_by_question[question]
+      = render partial: 'course/assessment/answer/answer', object: answers.last
+    - else
+      div.alert.alert-warning
+        = t('course.assessment.submission.submissions.no_answer')
