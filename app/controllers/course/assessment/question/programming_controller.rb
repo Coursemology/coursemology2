@@ -10,9 +10,7 @@ class Course::Assessment::Question::ProgrammingController < \
     respond_to do |format|
       format.html
       format.json {
-        @can_switch_package_type = true
-        @path = new_course_assessment_question_programming_path(current_course, @assessment).chomp('/new')
-        render 'props'
+        render 'new'
       }
     end
   end
@@ -45,9 +43,7 @@ class Course::Assessment::Question::ProgrammingController < \
       format.html
       format.json {
         @meta = extract_meta(@programming_question.language, @programming_question.attachment)
-        @can_switch_package_type = false
-        @path = course_assessment_question_programming_path(current_course, @assessment, @programming_question)
-        render 'props'
+        render 'edit'
       }
     end
   end
@@ -57,15 +53,29 @@ class Course::Assessment::Question::ProgrammingController < \
       @programming_question.file = file
     end
 
-    if @programming_question.save!
-      if @programming_question.import_job
-        redirect_to job_path(@programming_question.import_job)
-      else
-        redirect_to course_assessment_path(current_course, @assessment),
-                    success: t('.success')
-      end
-    else
-      render 'edit'
+    respond_to do |format|
+      format.html {
+        if @programming_question.save!
+          if @programming_question.import_job
+            redirect_to job_path(@programming_question.import_job)
+          else
+            redirect_to course_assessment_path(current_course, @assessment),
+                        success: t('.success')
+          end
+        else
+          render 'edit'
+        end
+      }
+      format.json {
+        if @programming_question.save!
+          if @programming_question.import_job
+            @redirect_url = job_path(@programming_question.import_job)
+          end
+          render '_props'
+        else
+          render '_props'
+        end
+      }
     end
   end
 

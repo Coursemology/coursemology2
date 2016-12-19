@@ -38,10 +38,12 @@ function makePackageUploadUI(templatePackageActions, $$store) {
 
 function makeOnlineEditorUI(actions, $$store) {
   const mode = $$store.get('test_ui').get('mode');
+  const isLoading = $$store.get('is_loading');
+
   switch (mode) {
     case 'python':
       const data = $$store.get('test_ui').get('python');
-      return <OnlineEditorPythonView {...{ actions, data }}/>;
+      return <OnlineEditorPythonView {...{ actions, data, isLoading }}/>;
 
     case null:
       return <div className="alert alert-warning">Please select a language.</div>;
@@ -51,12 +53,46 @@ function makeOnlineEditorUI(actions, $$store) {
   }
 }
 
+function makeImportAlertView($$store) {
+  const alertData = $$store.get('import_result').get('alert');
+
+  if (alertData) {
+    return <div className={alertData.get('class')}>{alertData.get('message')}</div>
+  } else {
+    return null;
+  }
+}
+
+function makeBuildLogView($$store) {
+  const buildLogData = $$store.get('import_result').get('build_log');
+
+  if (buildLogData) {
+    return (
+      <div className="build-log">
+        <h2>Build Log</h2>
+        <h3>Standard Output</h3>
+        <div className="stdout">
+          <pre>{buildLogData.get('stdout')}</pre>
+        </div>
+        <h3>Standard Error</h3>
+        <div className="stderr">
+          <pre>{buildLogData.get('stderr')}</pre>
+        </div>
+      </div>
+    )
+  } else {
+    return null;
+  }
+}
+
 const ProgrammingQuestion = (props) => {
   const { dispatch, $$programmingQuestionStore } = props;
   const actions = bindActionCreators(programmingQuestionActionCreators, dispatch);
   const data = {
     question: $$programmingQuestionStore.get('question'),
-    formData: $$programmingQuestionStore.get('form_data')
+    formData: $$programmingQuestionStore.get('form_data'),
+    isLoading: $$programmingQuestionStore.get('is_loading'),
+    isEvaluating: $$programmingQuestionStore.get('is_evaluating')
   };
 
   const templatePackageActions = bindActionCreators(templatePackageActionCreators, dispatch);
@@ -67,9 +103,12 @@ const ProgrammingQuestion = (props) => {
     :
     makePackageUploadUI(templatePackageActions, $$programmingQuestionStore);
 
+  const importAlertView = makeImportAlertView($$programmingQuestionStore);
+  const buildLogView = makeBuildLogView($$programmingQuestionStore);
+
   // This uses the ES2015 spread operator to pass properties as it is more DRY
   return (
-    <ProgrammingQuestionForm {...{ actions, data, testView }} />
+    <ProgrammingQuestionForm {...{ actions, data, testView, importAlertView, buildLogView }} />
   );
 };
 

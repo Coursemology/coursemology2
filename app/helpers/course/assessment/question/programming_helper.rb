@@ -4,14 +4,16 @@ module Course::Assessment::Question::ProgrammingHelper
   #
   # @return [String] If there is an import job for the question.
   # @return [nil] If there is no import job for the question.
-  def import_result_alert
+  def import_result_alert(json: false)
     import_job = @programming_question.import_job
-    return nil unless import_job
+    unless import_job
+      return json ? {} : nil
+    end
 
     if import_job.completed?
-      successful_import_alert
+      successful_import_alert(json: json)
     elsif import_job.errored?
-      errored_import_alert
+      errored_import_alert(json: json)
     end
   end
 
@@ -31,18 +33,51 @@ module Course::Assessment::Question::ProgrammingHelper
         Course::Assessment::ProgrammingEvaluationService::Error.name
   end
 
-  private
-
-  def successful_import_alert
-    content_tag(:div, class: ['alert', 'alert-success']) do
-      t('course.assessment.question.programming.form.import_result.success')
+  def editor_mode(language)
+    case
+    when language.is_a?(Coursemology::Polyglot::Language::Python)
+      :python
+    when language.is_a?(Coursemology::Polyglot::Language::JavaScript)
+      :javascript
+    else
+      nil
     end
   end
 
-  def errored_import_alert
-    content_tag(:div, class: ['alert', 'alert-danger']) do
-      t('course.assessment.question.programming.form.import_result.error',
-        error: import_error_message(@programming_question.import_job.error))
+  def can_switch_package_type?
+    params[:action] == 'new'
+  end
+
+  def can_edit_online?
+    @programming_question.package_type == 'online_editor'
+  end
+
+  private
+
+  def successful_import_alert(json: false)
+    cls = ['alert', 'alert-success']
+    msg = t('course.assessment.question.programming.form.import_result.success')
+
+    if json
+      { class: cls.join(' '), message: msg }
+    else
+      content_tag(:div, class: cls) do
+        msg
+      end
+    end
+  end
+
+  def errored_import_alert(json: false)
+    cls = ['alert', 'alert-danger']
+    msg = t('course.assessment.question.programming.form.import_result.error',
+            error: import_error_message(@programming_question.import_job.error))
+
+    if json
+      { class: cls.join(' '), message: msg }
+    else
+      content_tag(:div, class: cls) do
+        msg
+      end
     end
   end
 
@@ -62,17 +97,6 @@ module Course::Assessment::Question::ProgrammingHelper
       t('course.assessment.question.programming.form.import_result.errors.evaluation_error')
     else
       error['message']
-    end
-  end
-
-  def editor_mode(language)
-    case
-    when language.is_a?(Coursemology::Polyglot::Language::Python)
-      :python
-    when language.is_a?(Coursemology::Polyglot::Language::JavaScript)
-      :javascript
-    else
-      nil
     end
   end
 end

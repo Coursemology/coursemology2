@@ -9,7 +9,9 @@ export default class ProgrammingQuestionForm extends React.Component {
   static propTypes = {
     data: React.PropTypes.shape({
       question: PropTypes.object.isRequired,
-      formData: PropTypes.object.isRequired
+      formData: PropTypes.object.isRequired,
+      isLoading: PropTypes.bool.isRequired,
+      isEvaluating: PropTypes.bool.isRequired
     }),
     actions: React.PropTypes.shape({
       updateProgrammingQuestion: PropTypes.func.isRequired,
@@ -17,6 +19,11 @@ export default class ProgrammingQuestionForm extends React.Component {
       updateEditorMode: PropTypes.func.isRequired
     }),
   };
+
+  componentWillReceiveProps(nextProps) {
+    this.isLoading = nextProps.data.isLoading;
+    this.isEvaluating = nextProps.data.isEvaluating;
+  }
 
   handleChange(field, e) {
     var value = e.target.value;
@@ -52,6 +59,20 @@ export default class ProgrammingQuestionForm extends React.Component {
 
   onTestTypeChange(can_edit_online, e) {
     this.props.actions.updateProgrammingQuestion('can_edit_online', can_edit_online);
+  }
+
+  onSubmit(e) {
+    const async = this.props.data.formData.get('async');
+
+    if (async) {
+      e.preventDefault();
+
+      const url = this.props.data.formData.get('path');
+      const method = this.props.data.formData.get('method');
+      const formData = new FormData(this.form);
+
+      this.props.actions.submitForm(url, method, formData);
+    }
   }
 
   handleKeyPress = (event) => {
@@ -95,6 +116,7 @@ export default class ProgrammingQuestionForm extends React.Component {
                placeholder={placeholder}
                onChange={this.handleChange.bind(this, field)}
                onKeyPress={this.handleKeyPress}
+               disabled={this.isLoading}
         />
       </div>
     );
@@ -110,8 +132,9 @@ export default class ProgrammingQuestionForm extends React.Component {
                   value={value}
                   style={{display: 'none'}}
                   readOnly="true"
+                  disabled={this.isLoading}
         />
-        <ReactSummernote options={{ dialogsInBody: true }}
+        <ReactSummernote options={{ dialogsInBody: true, disabled: this.isLoading }}
                          value={value}
                          onChange={this.onSummernoteChange.bind(this, field)}
         />
@@ -130,6 +153,7 @@ export default class ProgrammingQuestionForm extends React.Component {
           value={value}
           options={options}
           onChange={onChange.bind(this)}
+          disabled={this.isLoading}
         />
       </div>
     );
@@ -146,6 +170,7 @@ export default class ProgrammingQuestionForm extends React.Component {
                 value={value}
                 onChange={onChange.bind(this, field)}
                 onKeyPress={this.handleKeyPress}
+                disabled={this.isLoading}
         >
           { options }
         </select>
@@ -165,12 +190,14 @@ export default class ProgrammingQuestionForm extends React.Component {
           <button type="button"
                   className={`btn btn-${showEditOnline ? 'primary' : 'default'}`}
                   onClick={this.onTestTypeChange.bind(this, true)}
+                  disabled={this.isLoading}
           >
             Edit Tests Online
           </button>
           <button type="button"
                   className={`btn btn-${showEditOnline ? 'default' : 'primary'}`}
                   onClick={this.onTestTypeChange.bind(this, false)}
+                  disabled={this.isLoading}
           >
             Upload Package
           </button>
@@ -200,6 +227,7 @@ export default class ProgrammingQuestionForm extends React.Component {
                  name={this.getInputName(field)}
                  id={this.getInputId(field)}
                  type="file"
+                 disabled={this.isLoading}
           />
         </div>
       );
@@ -211,7 +239,6 @@ export default class ProgrammingQuestionForm extends React.Component {
     const languages = question.get('languages');
     const pkg = question.get('package');
     const showAttemptLimit = question.get('show_attempt_limit');
-    const testView = this.props.testView;
 
     const skillsOptions = question.get('skills').toArray().map(skill => {
       return { value: skill.get('id'), label: skill.get('title') };
@@ -224,34 +251,38 @@ export default class ProgrammingQuestionForm extends React.Component {
 
     const showEditOnline = question.get('can_edit_online');
 
-    const submitButtonText = formData.get('action') === 'edit' ? 'Update Programming' : 'Create Programming';
-
     return (
-      <form id="programmming-question-form" encType="multipart/form-data" action={formData.get('path')} method="post">
-        { formData.get('action') === 'edit' ? <input type="hidden" name="_method" value="patch" /> : null }
-        <input type='hidden' name='authenticity_token' value={formData.get('auth_token')} />
+      <div>
+        { this.props.importAlertView }
+        <form id="programmming-question-form" action={formData.get('path')} method="post"
+              onSubmit={this.onSubmit.bind(this)} ref={(form) => { this.form = form; }} >
+          <input type='hidden' name='authenticity_token' value={formData.get('auth_token')} />
 
-        { this.renderInputField('title', 'Title', false, 'text', question.get('title') || '') }
-        { this.renderSummernoteField('description', 'Description', false, question.get('description') || '')}
-        { this.renderSummernoteField('staff_only_comments', 'Staff only comments', false, question.get('staff_only_comments') || '')}
-        { this.renderInputField('maximum_grade', 'Maximum Grade', true, 'number', this.convertNull(question.get('maximum_grade'))) }
-        { this.renderInputField('weight', 'Weight', true, 'number', this.convertNull(question.get('weight'))) }
-        { this.renderMultiSelectField('skill_ids', 'Skills', skillsValues, skillsOptions, this.onSkillsChange) }
-        { this.renderDropdownSelectField('language_id', 'Language', true, question.get('language_id') || undefined, languageOptions, this.onLanguageChange) }
-        { this.renderInputField('memory_limit', 'Memory Limit', false, 'number', this.convertNull(question.get('memory_limit'))) }
-        { this.renderInputField('time_limit', 'Time Limit', false, 'number', this.convertNull(question.get('time_limit'))) }
-        { showAttemptLimit ?
-          this.renderInputField('attempt_limit', 'Attempt Limit', false, 'number', this.convertNull(question.get('attempt_limit')),
-            'The maximum times that the students can test their answers (does not apply to staff)') :
-          null
-        }
+          { this.renderInputField('title', 'Title', false, 'text', question.get('title') || '') }
+          { this.renderSummernoteField('description', 'Description', false, question.get('description') || '')}
+          { this.renderSummernoteField('staff_only_comments', 'Staff only comments', false, question.get('staff_only_comments') || '')}
+          { this.renderInputField('maximum_grade', 'Maximum Grade', true, 'number', this.convertNull(question.get('maximum_grade'))) }
+          { this.renderMultiSelectField('skill_ids', 'Skills', skillsValues, skillsOptions, this.onSkillsChange) }
+          { this.renderDropdownSelectField('language_id', 'Language', true, question.get('language_id') || undefined, languageOptions, this.onLanguageChange) }
+          { this.renderInputField('memory_limit', 'Memory Limit', false, 'number', this.convertNull(question.get('memory_limit'))) }
+          { this.renderInputField('time_limit', 'Time Limit', false, 'number', this.convertNull(question.get('time_limit'))) }
+          { showAttemptLimit ?
+            this.renderInputField('attempt_limit', 'Attempt Limit', false, 'number', this.convertNull(question.get('attempt_limit')),
+              'The maximum times that the students can test their answers (does not apply to staff)') :
+            null
+          }
 
-        { this.renderSwitcher(showEditOnline, question.get('can_switch_package_type')) }
-        { this.renderPackageField('file', 'Template package', pkg, showEditOnline) }
-        { testView }
+          { this.renderSwitcher(showEditOnline, question.get('can_switch_package_type')) }
+          { this.renderPackageField('file', 'Template package', pkg, showEditOnline) }
+          { this.props.testView }
+          { this.props.buildLogView }
 
-        <input className="btn btn-primary" type="submit" value={submitButtonText} />
-      </form>
+          <button className="btn btn-primary" type="submit" disabled={this.isLoading}>
+            { this.isLoading ? (this.isEvaluating ? "Evaluating" : "Submitting") : "Submit" }
+            { this.isLoading ? <i className="fa fa-spinner fa-lg fa-spin" /> : null }
+          </button>
+        </form>
+      </div>
     );
   }
 }

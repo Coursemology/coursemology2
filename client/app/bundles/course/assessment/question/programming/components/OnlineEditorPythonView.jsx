@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import AceEditor from 'react-ace';
+import styles from './OnlineEditorPythonView.scss'
 
 import 'brace/mode/python';
 import 'brace/theme/monokai';
@@ -13,7 +14,12 @@ export default class OnlineEditorPythonView extends React.Component {
       updatePythonTestCase: PropTypes.func.isRequired,
       deletePythonTestCase: PropTypes.func.isRequired
     }),
+    isLoading: PropTypes.bool.isRequired
   };
+
+  componentWillReceiveProps(nextProps) {
+    this.isLoading = nextProps.isLoading;
+  }
 
   onCodeChange(field, e) {
     this.props.actions.updatePythonCodeBlock(field, e);
@@ -24,11 +30,15 @@ export default class OnlineEditorPythonView extends React.Component {
   }
 
   deleteTestCase(type, index, e) {
-    this.props.actions.deletePythonTestCase(type, index);
+    if (!this.isLoading) {
+      this.props.actions.deletePythonTestCase(type, index);
+    }
   }
 
   addTestCase(type, e) {
-    this.props.actions.createPythonTestCase(type);
+    if (!this.isLoading) {
+      this.props.actions.createPythonTestCase(type);
+    }
   }
 
   handleKeyPress = (event) => {
@@ -81,6 +91,7 @@ export default class OnlineEditorPythonView extends React.Component {
                value={test.get(field)}
                onChange={this.onTestCodeChange.bind(this, type, index, field)}
                onKeyPress={this.handleKeyPress}
+               disabled={this.isLoading}
         />
       );
     };
@@ -89,7 +100,8 @@ export default class OnlineEditorPythonView extends React.Component {
       return (
         <tr key={index}>
           <td>
-            <i className="btn btn-danger fa fa-minus" onClick={this.deleteTestCase.bind(this, type, index)}/>
+            <button className="btn btn-danger fa fa-minus" disabled={this.isLoading}
+                    onClick={this.deleteTestCase.bind(this, type, index)} />
           </td>
           <td>test_{type}_{startIndex + index + 1}</td>
           <td>{ renderInput(test, 'expression', index, true) }</td>
@@ -117,8 +129,10 @@ export default class OnlineEditorPythonView extends React.Component {
           <tbody>
           {rows}
           <tr style={{ cursor: 'pointer' }}>
-            <td className="text-center" colSpan="5" onClick={this.addTestCase.bind(this, type)}>
-              <i className="fa fa-plus" /> Add new test
+            <td className={styles.addNewTestRow} colSpan="5" onClick={this.addTestCase.bind(this, type)}>
+              <button className={`btn btn-default ${styles.addNewTestButton}`} disabled={this.isLoading}>
+                <i className="fa fa-plus" /> Add new test
+              </button>
             </td>
           </tr>
           </tbody>

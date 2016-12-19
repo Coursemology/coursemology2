@@ -49,10 +49,17 @@ export const $$initialState = Immutable.fromJS({
       }
     }
   },
-  alert: null,
+  import_result: {
+    alert: null,
+    build_log: null
+  },
+  is_loading: false,
+  is_evaluating: false,
   form_data: {
+    method: 'post',
     path: null,
-    auth_token: null
+    auth_token: null,
+    async: false
   },
 });
 
@@ -111,6 +118,46 @@ function pythonTestReducer($$state, action) {
   }
 }
 
+function apiReducer($$state, action) {
+  const { type } = action;
+  var data = null;
+
+  switch (type) {
+    case actionTypes.SUBMIT_FORM_LOADING:
+      const { isLoading } = action;
+      return $$state.set('is_loading', isLoading);
+
+    case actionTypes.SUBMIT_FORM_EVALUATING:
+      const { isEvaluating } = action;
+      ({ data } = action);
+
+      if (data) {
+        const { question, package_ui, test_ui, import_result } = data;
+
+        return $$state
+          .set('is_evaluating', isEvaluating)
+          .mergeDeep({ question, package_ui, test_ui, import_result });
+      } else {
+        return $$state
+          .set('is_evaluating', isEvaluating)
+          .mergeIn(['import_result'], { alert: null, build_log: null });
+      }
+
+    case actionTypes.SUBMIT_FORM_SUCCESS:
+      ({ data } = action);
+      const { question, package_ui, test_ui, import_result } = data;
+
+      return $$state.mergeDeep({ question, package_ui, test_ui, import_result });
+
+    case actionTypes.SUBMIT_FORM_FAILURE:
+      const { error } = action;
+      return $$state;
+
+    default:
+      return $$state;
+  }
+}
+
 export default function programmingQuestionReducer($$state = $$initialState, action) {
   const { type } = action;
 
@@ -134,6 +181,12 @@ export default function programmingQuestionReducer($$state = $$initialState, act
       const $$test = $$state.get('test_ui');
       const $$pythonTest = $$test.get('python');
       return $$state.set('test_ui', $$test.set('python', pythonTestReducer($$pythonTest, action)));
+
+    case actionTypes.SUBMIT_FORM_EVALUATING:
+    case actionTypes.SUBMIT_FORM_LOADING:
+    case actionTypes.SUBMIT_FORM_SUCCESS:
+    case actionTypes.SUBMIT_FORM_FAILURE:
+      return apiReducer($$state, action);
 
     default:
       return $$state;

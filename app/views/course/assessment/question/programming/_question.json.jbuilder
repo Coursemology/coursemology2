@@ -1,9 +1,3 @@
-json.form_data do
-  json.action params[:action]
-  json.auth_token form_authenticity_token
-  json.path @path
-end
-
 json.question do
   json.id @programming_question.id
   json.title @programming_question.title
@@ -37,31 +31,6 @@ json.question do
     end
   end
 
-  json.can_switch_package_type @can_switch_package_type
-  json.can_edit_online @programming_question.package_type == 'online_editor'
-end
-
-if @meta
-  json.test_ui do
-    if @meta
-      json.mode @meta[:editor_mode]
-      json.set! @meta[:editor_mode], @meta[:data]
-    end
-  end
-else
-  json.set! :test_ui, {}
-end
-
-json.package_ui do
-  json.templates @programming_question.template_files do |file|
-    json.id file.id
-    json.filename file.filename
-    json.content format_code_block(file.content, @programming_question.language)
-  end
-
-  json.test_cases do
-    json.public @programming_question.test_cases.select(&:public_test?)
-    json.private @programming_question.test_cases.select(&:private_test?)
-    json.evaluation @programming_question.test_cases.select(&:evaluation_test?)
-  end
+  json.can_switch_package_type can_switch_package_type?
+  json.can_edit_online can_edit_online?
 end
