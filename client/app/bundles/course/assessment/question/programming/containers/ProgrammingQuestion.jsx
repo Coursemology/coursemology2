@@ -1,10 +1,12 @@
 import React, { PropTypes } from 'react';
+import OnlineEditorPythonView from '../components/OnlineEditorPythonView'
 import ProgrammingQuestionForm from '../components/ProgrammingQuestionForm';
 import TemplatePackageView from '../components/TemplatePackageView'
 import TemplateTestCaseView from '../components/TemplateTestCaseView'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Immutable from 'immutable';
+import * as onlineEditorActionCreators from '../actions/onlineEditorActionCreators'
 import * as programmingQuestionActionCreators from '../actions/programmingQuestionActionCreators';
 import * as templatePackageActionCreators from '../actions/templatePackageActionCreators'
 
@@ -34,6 +36,21 @@ function makePackageUploadUI(templatePackageActions, $$store) {
   }
 }
 
+function makeOnlineEditorUI(actions, $$store) {
+  const mode = $$store.get('test_ui').get('mode');
+  switch (mode) {
+    case 'python':
+      const data = $$store.get('test_ui').get('python');
+      return <OnlineEditorPythonView {...{ actions, data }}/>;
+
+    case null:
+      return <div className="alert alert-warning">Please select a language.</div>;
+
+    default:
+      return <div className="alert alert-info">Not yet implemented :(</div>;
+  }
+}
+
 const ProgrammingQuestion = (props) => {
   const { dispatch, $$programmingQuestionStore } = props;
   const actions = bindActionCreators(programmingQuestionActionCreators, dispatch);
@@ -43,7 +60,12 @@ const ProgrammingQuestion = (props) => {
   };
 
   const templatePackageActions = bindActionCreators(templatePackageActionCreators, dispatch);
-  var testView = makePackageUploadUI(templatePackageActions, $$programmingQuestionStore);
+  const onlineEditorActions = bindActionCreators(onlineEditorActionCreators, dispatch);
+
+  var testView = data.question.get('can_edit_online') ?
+    makeOnlineEditorUI(onlineEditorActions, $$programmingQuestionStore)
+    :
+    makePackageUploadUI(templatePackageActions, $$programmingQuestionStore);
 
   // This uses the ES2015 spread operator to pass properties as it is more DRY
   return (

@@ -36,6 +36,9 @@ json.question do
       json.path attachment_reference_path(@programming_question.attachment)
     end
   end
+
+  json.can_switch_package_type @can_switch_package_type
+  json.can_edit_online true
 end
 
 json.package_ui do

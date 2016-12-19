@@ -41,6 +41,8 @@
     "mkdirp": "^0.5.1",
     "node-sass": "^3.10.1",
     "react": "^0.14.8 || ^15.0.0",
+    "react-ace": "^4.1.0",
+    "react-bootstrap": "^0.30.6",
     "react-dom": "^0.14.8 || ^15.0.0",
     "react-intl": "^2.1.5",
     "react-redux": "^4.4.1",

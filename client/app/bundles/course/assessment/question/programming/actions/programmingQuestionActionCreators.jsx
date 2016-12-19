@@ -14,3 +14,10 @@ export function updateSkills(skills) {
     skills: skills
   }
 }
+
+export function updateEditorMode(mode) {
+  return {
+    type: actionTypes.EDITOR_MODE_UPDATE,
+    mode: mode
+  }
+}

@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import ReactSummernote from 'react-summernote';
 import Select from 'react-select';
+import styles from './ProgrammingQuestionForm.scss'
 
 import 'react-select/dist/react-select.css';
 
@@ -12,7 +13,8 @@ export default class ProgrammingQuestionForm extends React.Component {
     }),
     actions: React.PropTypes.shape({
       updateProgrammingQuestion: PropTypes.func.isRequired,
-      updateSkills: PropTypes.func.isRequired
+      updateSkills: PropTypes.func.isRequired,
+      updateEditorMode: PropTypes.func.isRequired
     }),
   };
 
@@ -28,8 +30,28 @@ export default class ProgrammingQuestionForm extends React.Component {
     this.props.actions.updateProgrammingQuestion(field, e == "" ? null : e);
   }
 
+  onLanguageChange(field, e) {
+    var mode = null;
+    var id = parseInt(e.target.value);
+
+    for (let language of this.props.data.question.get('languages')) {
+      if (language.get('id') === id) {
+        mode = language.get('editor_mode');
+        break;
+      }
+      mode = null;
+    }
+
+    this.props.actions.updateEditorMode(mode);
+    this.handleChange(field, e);
+  }
+
   onSkillsChange(values) {
     this.props.actions.updateSkills(values.map(e => e.value));
+  }
+
+  onTestTypeChange(can_edit_online, e) {
+    this.props.actions.updateProgrammingQuestion('can_edit_online', can_edit_online);
   }
 
   handleKeyPress = (event) => {
@@ -131,26 +153,57 @@ export default class ProgrammingQuestionForm extends React.Component {
     );
   }
 
-  renderPackageField(field, label, pkg) {
+  renderSwitcher(showEditOnline, canSwitch) {
+    if (!canSwitch) {
+      return null;
+    }
+
+    return (
+      <div className={styles.testSelection}>
+        <hr className={styles.testSelectionRuler} />
+        <div className="btn-group">
+          <button type="button"
+                  className={`btn btn-${showEditOnline ? 'primary' : 'default'}`}
+                  onClick={this.onTestTypeChange.bind(this, true)}
+          >
+            Edit Tests Online
+          </button>
+          <button type="button"
+                  className={`btn btn-${showEditOnline ? 'default' : 'primary'}`}
+                  onClick={this.onTestTypeChange.bind(this, false)}
+          >
+            Upload Package
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  renderPackageField(field, label, pkg, showEditOnline) {
+    const downloadText = showEditOnline ? 'Download package' : 'Uploaded package';
     const downloadNode = pkg ?
       <div>
-        <strong>Uploaded package: </strong>
+        <strong>{downloadText}: </strong>
         <a target="_blank" href={pkg.get('path')}>{pkg.get('name')}</a>
       </div>
       :
       null;
 
-    return (
-      <div className="form-group" key={field}>
-        { this.renderLabel(label, false) }
-        { downloadNode }
-        <input className="form-control"
-               name={this.getInputName(field)}
-               id={this.getInputId(field)}
-               type="file"
-        />
-      </div>
-    );
+    if (showEditOnline) {
+      return downloadNode;
+    } else {
+      return (
+        <div className="form-group" key={field}>
+          { this.renderLabel(label, false) }
+          { downloadNode }
+          <input className="form-control"
+                 name={this.getInputName(field)}
+                 id={this.getInputId(field)}
+                 type="file"
+          />
+        </div>
+      );
+    }
   }
 
   render() {
@@ -169,6 +222,8 @@ export default class ProgrammingQuestionForm extends React.Component {
       return <option value={opt.get('id')} key={opt.get('id')}>{opt.get('name')}</option>
     }).unshift(<option value={null} key="null" />);
 
+    const showEditOnline = question.get('can_edit_online');
+
     const submitButtonText = formData.get('action') === 'edit' ? 'Update Programming' : 'Create Programming';
 
     return (
@@ -182,7 +237,7 @@ export default class ProgrammingQuestionForm extends React.Component {
         { this.renderInputField('maximum_grade', 'Maximum Grade', true, 'number', this.convertNull(question.get('maximum_grade'))) }
         { this.renderInputField('weight', 'Weight', true, 'number', this.convertNull(question.get('weight'))) }
         { this.renderMultiSelectField('skill_ids', 'Skills', skillsValues, skillsOptions, this.onSkillsChange) }
-        { this.renderDropdownSelectField('language_id', 'Language', true, question.get('language_id') || undefined, languageOptions, this.handleChange) }
+        { this.renderDropdownSelectField('language_id', 'Language', true, question.get('language_id') || undefined, languageOptions, this.onLanguageChange) }
         { this.renderInputField('memory_limit', 'Memory Limit', false, 'number', this.convertNull(question.get('memory_limit'))) }
         { this.renderInputField('time_limit', 'Time Limit', false, 'number', this.convertNull(question.get('time_limit'))) }
         { showAttemptLimit ?
@@ -191,7 +246,8 @@ export default class ProgrammingQuestionForm extends React.Component {
           null
         }
 
-        { this.renderPackageField('file', 'Template package', pkg) }
+        { this.renderSwitcher(showEditOnline, question.get('can_switch_package_type')) }
+        { this.renderPackageField('file', 'Template package', pkg, showEditOnline) }
         { testView }
 
         <input className="btn btn-primary" type="submit" value={submitButtonText} />

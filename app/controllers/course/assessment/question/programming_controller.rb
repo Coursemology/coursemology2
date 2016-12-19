@@ -9,6 +9,7 @@ class Course::Assessment::Question::ProgrammingController < \
     respond_to do |format|
       format.html
       format.json {
+        @can_switch_package_type = true
         @path = new_course_assessment_question_programming_path(current_course, @assessment).chomp('/new')
         render 'props'
       }
@@ -32,6 +33,7 @@ class Course::Assessment::Question::ProgrammingController < \
     respond_to do |format|
       format.html
       format.json {
+        @can_switch_package_type = false
         @path = course_assessment_question_programming_path(current_course, @assessment, @programming_question)
         render 'props'
       }
