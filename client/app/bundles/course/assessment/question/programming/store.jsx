@@ -8,13 +8,13 @@ import reducers, { initialStates } from './reducers';
 
 export default props => {
   // This is how we get initial props Rails into redux.
-  const { question, form_data } = props;
+  const { question, package_ui, form_data } = props;
   const { $$programmingQuestionState } = initialStates;
 
   // Redux expects to initialize the store using an Object, not an Immutable.Map
   const initialState = {
     $$programmingQuestionStore: $$programmingQuestionState.merge({
-      question, form_data,
+      question, package_ui, form_data,
     }),
   };
 

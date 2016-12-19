@@ -1,13 +1,37 @@
 import React, { PropTypes } from 'react';
 import ProgrammingQuestionForm from '../components/ProgrammingQuestionForm';
+import TemplatePackageView from '../components/TemplatePackageView'
+import TemplateTestCaseView from '../components/TemplateTestCaseView'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Immutable from 'immutable';
 import * as programmingQuestionActionCreators from '../actions/programmingQuestionActionCreators';
+import * as templatePackageActionCreators from '../actions/templatePackageActionCreators'
 
 function select(state) {
   // Note the use of `$$` to prefix the property name because the value is of type Immutable.js
   return { $$programmingQuestionStore: state.$$programmingQuestionStore };
+}
+
+function makePackageUploadUI(templatePackageActions, $$store) {
+  const { changeTemplateTab } = templatePackageActions;
+  const packageUI = $$store.get('package_ui');
+  const templates = packageUI.get('templates');
+  const selectedTab = packageUI.get('selected');
+  const testCases = packageUI.get('test_cases');
+
+  if ($$store.get('question').get('package')) {
+    return (
+      <div className="template-package-container">
+        <h2>Template</h2>
+        <TemplatePackageView {...{changeTemplateTab, templates, selectedTab}} />
+        <h2>Test Cases</h2>
+        <TemplateTestCaseView {...{testCases}} />
+      </div>
+    );
+  } else {
+    return null;
+  }
 }
 
 const ProgrammingQuestion = (props) => {
@@ -18,9 +42,12 @@ const ProgrammingQuestion = (props) => {
     formData: $$programmingQuestionStore.get('form_data')
   };
 
+  const templatePackageActions = bindActionCreators(templatePackageActionCreators, dispatch);
+  var testView = makePackageUploadUI(templatePackageActions, $$programmingQuestionStore);
+
   // This uses the ES2015 spread operator to pass properties as it is more DRY
   return (
-    <ProgrammingQuestionForm {...{ actions, data }} />
+    <ProgrammingQuestionForm {...{ actions, data, testView }} />
   );
 };
 

@@ -158,6 +158,7 @@ export default class ProgrammingQuestionForm extends React.Component {
     const languages = question.get('languages');
     const pkg = question.get('package');
     const showAttemptLimit = question.get('show_attempt_limit');
+    const testView = this.props.testView;
 
     const skillsOptions = question.get('skills').toArray().map(skill => {
       return { value: skill.get('id'), label: skill.get('title') };
@@ -191,6 +192,7 @@ export default class ProgrammingQuestionForm extends React.Component {
         }
 
         { this.renderPackageField('file', 'Template package', pkg) }
+        { testView }
 
         <input className="btn btn-primary" type="submit" value={submitButtonText} />
       </form>

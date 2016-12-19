@@ -64,6 +64,10 @@ export default function programmingQuestionReducer($$state = $$initialState, act
     case actionTypes.PROGRAMMING_QUESTION_UPDATE:
       return $$state.set('question', questionReducer($$state.get('question'), action));
 
+    case actionTypes.TEMPLATE_TAB_UPDATE:
+      const { selected } = action;
+      return $$state.set('package_ui', $$state.get('package_ui').set('selected', selected));
+
     default:
       return $$state;
   }
