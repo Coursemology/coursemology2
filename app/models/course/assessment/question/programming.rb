@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::Programming < ActiveRecord::Base
+  enum package_type: { zip_upload: 0, online_editor: 1 }
+
   # The table name for this model is singular.
   self.table_name = table_name.singularize
 

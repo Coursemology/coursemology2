@@ -38,7 +38,18 @@ json.question do
   end
 
   json.can_switch_package_type @can_switch_package_type
-  json.can_edit_online true
+  json.can_edit_online @programming_question.package_type == 'online_editor'
+end
+
+if @meta
+  json.test_ui do
+    if @meta
+      json.mode @meta[:editor_mode]
+      json.set! @meta[:editor_mode], @meta[:data]
+    end
+  end
+else
+  json.set! :test_ui, {}
 end
 
 json.package_ui do
