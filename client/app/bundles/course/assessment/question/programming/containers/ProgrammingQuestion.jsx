@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import BuildLog from '../components/BuildLog'
 import OnlineEditorPythonView from '../components/OnlineEditorPythonView'
 import ProgrammingQuestionForm from '../components/ProgrammingQuestionForm';
 import TemplatePackageView from '../components/TemplatePackageView'
@@ -67,19 +68,7 @@ function makeBuildLogView($$store) {
   const buildLogData = $$store.get('import_result').get('build_log');
 
   if (buildLogData) {
-    return (
-      <div className="build-log">
-        <h2>Build Log</h2>
-        <h3>Standard Output</h3>
-        <div className="stdout">
-          <pre>{buildLogData.get('stdout')}</pre>
-        </div>
-        <h3>Standard Error</h3>
-        <div className="stderr">
-          <pre>{buildLogData.get('stderr')}</pre>
-        </div>
-      </div>
-    )
+    return <BuildLog {...{ buildLogData }} />;
   } else {
     return null;
   }

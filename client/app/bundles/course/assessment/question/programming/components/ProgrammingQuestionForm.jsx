@@ -1,24 +1,67 @@
 import React, { PropTypes } from 'react';
 import ReactSummernote from 'react-summernote';
 import Select from 'react-select';
+import { injectIntl, defineMessages } from 'react-intl';
 import styles from './ProgrammingQuestionForm.scss'
 
 import 'react-select/dist/react-select.css';
 
-export default class ProgrammingQuestionForm extends React.Component {
-  static propTypes = {
-    data: React.PropTypes.shape({
-      question: PropTypes.object.isRequired,
-      formData: PropTypes.object.isRequired,
-      isLoading: PropTypes.bool.isRequired,
-      isEvaluating: PropTypes.bool.isRequired
-    }),
-    actions: React.PropTypes.shape({
-      updateProgrammingQuestion: PropTypes.func.isRequired,
-      updateSkills: PropTypes.func.isRequired,
-      updateEditorMode: PropTypes.func.isRequired
-    }),
-  };
+const translations = defineMessages({
+  attemptLimitPlaceholderMessage: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.attemptLimitPlaceholderMessage',
+    defaultMessage: 'The maximum times that the students can test their answers (does not apply to staff)',
+    description: 'Placeholder message for attempt limit input field.',
+  },
+  downloadPackage: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.downloadPackage',
+    defaultMessage: 'Download Package',
+    description: 'Title for downloading the zip package.',
+  },
+  editTestsOnlineButton: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.editTestsOnlineButton',
+    defaultMessage: 'Edit Tests Online',
+    description: 'Button for editing tests online.',
+  },
+  uploadPackageButton: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.uploadPackageButton',
+    defaultMessage: 'Upload Package',
+    description: 'Button for uploading package.',
+  },
+  submitButton: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.submitButton',
+    defaultMessage: 'Submit',
+    description: 'Button for submitting the form.',
+  },
+  evaluatingMessage: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.evaluatingMessage',
+    defaultMessage: 'Evaluating',
+    description: 'Text to be displayed when evaluating the programming question.',
+  },
+  loadingMessage: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.loadingMessage',
+    defaultMessage: 'Loading',
+    description: 'Text to be displayed when waiting for server response after form submission.',
+  },
+});
+
+const propTypes = {
+  data: React.PropTypes.shape({
+    question: PropTypes.object.isRequired,
+    formData: PropTypes.object.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    isEvaluating: PropTypes.bool.isRequired
+  }),
+  actions: React.PropTypes.shape({
+    updateProgrammingQuestion: PropTypes.func.isRequired,
+    updateSkills: PropTypes.func.isRequired,
+    updateEditorMode: PropTypes.func.isRequired
+  }),
+  intl: PropTypes.shape({
+    formatMessage: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+class ProgrammingQuestionForm extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.isLoading = nextProps.data.isLoading;
@@ -192,14 +235,14 @@ export default class ProgrammingQuestionForm extends React.Component {
                   onClick={this.onTestTypeChange.bind(this, true)}
                   disabled={this.isLoading}
           >
-            Edit Tests Online
+            {this.props.intl.formatMessage(translations.editTestsOnlineButton)}
           </button>
           <button type="button"
                   className={`btn btn-${showEditOnline ? 'default' : 'primary'}`}
                   onClick={this.onTestTypeChange.bind(this, false)}
                   disabled={this.isLoading}
           >
-            Upload Package
+            {this.props.intl.formatMessage(translations.uploadPackageButton)}
           </button>
         </div>
       </div>
@@ -207,10 +250,9 @@ export default class ProgrammingQuestionForm extends React.Component {
   }
 
   renderPackageField(field, label, pkg, showEditOnline) {
-    const downloadText = showEditOnline ? 'Download package' : 'Uploaded package';
     const downloadNode = pkg ?
       <div>
-        <strong>{downloadText}: </strong>
+        <strong>{this.props.intl.formatMessage(translations.downloadPackage)}: </strong>
         <a target="_blank" href={pkg.get('path')}>{pkg.get('name')}</a>
       </div>
       :
@@ -267,8 +309,10 @@ export default class ProgrammingQuestionForm extends React.Component {
           { this.renderInputField('memory_limit', 'Memory Limit', false, 'number', this.convertNull(question.get('memory_limit'))) }
           { this.renderInputField('time_limit', 'Time Limit', false, 'number', this.convertNull(question.get('time_limit'))) }
           { showAttemptLimit ?
-            this.renderInputField('attempt_limit', 'Attempt Limit', false, 'number', this.convertNull(question.get('attempt_limit')),
-              'The maximum times that the students can test their answers (does not apply to staff)') :
+            this.renderInputField('attempt_limit', 'Attempt Limit', false, 'number',
+              this.convertNull(question.get('attempt_limit')),
+              this.props.intl.formatMessage(translations.attemptLimitPlaceholderMessage))
+            :
             null
           }
 
@@ -278,7 +322,10 @@ export default class ProgrammingQuestionForm extends React.Component {
           { this.props.buildLogView }
 
           <button className="btn btn-primary" type="submit" disabled={this.isLoading}>
-            { this.isLoading ? (this.isEvaluating ? "Evaluating" : "Submitting") : "Submit" }
+            { this.isLoading ?
+              (this.isEvaluating ? this.props.intl.formatMessage(translations.evaluatingMessage) : this.props.intl.formatMessage(translations.loadingMessage))
+              :
+              this.props.intl.formatMessage(translations.submitButton) }
             { this.isLoading ? <i className="fa fa-spinner fa-lg fa-spin" /> : null }
           </button>
         </form>
@@ -286,3 +333,7 @@ export default class ProgrammingQuestionForm extends React.Component {
     );
   }
 }
+
+ProgrammingQuestionForm.propTypes = propTypes;
+
+export default injectIntl(ProgrammingQuestionForm);

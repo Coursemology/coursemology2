@@ -1,21 +1,89 @@
 import React, { PropTypes } from 'react';
 import AceEditor from 'react-ace';
+import { injectIntl, defineMessages } from 'react-intl';
 import styles from './OnlineEditorPythonView.scss'
 
 import 'brace/mode/python';
 import 'brace/theme/monokai';
 
-export default class OnlineEditorPythonView extends React.Component {
-  static propTypes = {
-    data: PropTypes.object.isRequired,
-    actions: React.PropTypes.shape({
-      updatePythonCodeBlock: PropTypes.func.isRequired,
-      createPythonTestCase: PropTypes.func.isRequired,
-      updatePythonTestCase: PropTypes.func.isRequired,
-      deletePythonTestCase: PropTypes.func.isRequired
-    }),
-    isLoading: PropTypes.bool.isRequired
-  };
+const translations = defineMessages({
+  prependTitle: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.prependTitle',
+    defaultMessage: 'Prepend',
+    description: 'Title for prepend code block.',
+  },
+  appendTitle: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.appendTitle',
+    defaultMessage: 'Append',
+    description: 'Title for append code block.',
+  },
+  solutionTitle: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.solutionTitle',
+    defaultMessage: 'Solution Template',
+    description: 'Title for solution template code block.',
+  },
+  submissionTitle: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.submissionTitle',
+    defaultMessage: 'Submission Template',
+    description: 'Title for submission template code block.',
+  },
+  publicTestCases: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.publicTestCases',
+    defaultMessage: 'Public Test Cases',
+    description: 'Title for public test cases panel.',
+  },
+  privateTestCases: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.privateTestCases',
+    defaultMessage: 'Private Test Cases',
+    description: 'Title for private test cases panel.',
+  },
+  evaluationTestCases: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.evaluationTestCases',
+    defaultMessage: 'Evaluation Test Cases',
+    description: 'Title for evaluation test cases panel.',
+  },
+  identifierHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.identifierHeader',
+    defaultMessage: 'Identifier',
+    description: 'Header for identifier column of test cases panel.',
+  },
+  expressionHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.expressionHeader',
+    defaultMessage: 'Expression',
+    description: 'Header for expression column of test cases panel.',
+  },
+  expectedHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.expectedHeader',
+    defaultMessage: 'Expected',
+    description: 'Header for expected column of test cases panel.',
+  },
+  hintHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.hintHeader',
+    defaultMessage: 'Hint',
+    description: 'Header for hint column of test cases panel.',
+  },
+  addNewTestButton: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.addNewTestButton',
+    defaultMessage: 'Add new test',
+    description: 'Button for adding new test case.',
+  },
+});
+
+const propTypes = {
+  data: PropTypes.object.isRequired,
+  actions: React.PropTypes.shape({
+    updatePythonCodeBlock: PropTypes.func.isRequired,
+    createPythonTestCase: PropTypes.func.isRequired,
+    updatePythonTestCase: PropTypes.func.isRequired,
+    deletePythonTestCase: PropTypes.func.isRequired
+  }),
+  isLoading: PropTypes.bool.isRequired,
+  intl: PropTypes.shape({
+    formatMessage: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+class OnlineEditorPythonView extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.isLoading = nextProps.isLoading;
@@ -120,10 +188,10 @@ export default class OnlineEditorPythonView extends React.Component {
           <thead>
           <tr>
             <th />
-            <th>Identifier</th>
-            <th>Expression</th>
-            <th>Expected</th>
-            <th>Hint</th>
+            <th>{this.props.intl.formatMessage(translations.identifierHeader)}</th>
+            <th>{this.props.intl.formatMessage(translations.expressionHeader)}</th>
+            <th>{this.props.intl.formatMessage(translations.expectedHeader)}</th>
+            <th>{this.props.intl.formatMessage(translations.hintHeader)}</th>
           </tr>
           </thead>
           <tbody>
@@ -131,7 +199,7 @@ export default class OnlineEditorPythonView extends React.Component {
           <tr style={{ cursor: 'pointer' }}>
             <td className={styles.addNewTestRow} colSpan="5" onClick={this.addTestCase.bind(this, type)}>
               <button className={`btn btn-default ${styles.addNewTestButton}`} disabled={this.isLoading}>
-                <i className="fa fa-plus" /> Add new test
+                <i className="fa fa-plus" /> {this.props.intl.formatMessage(translations.addNewTestButton)}
               </button>
             </td>
           </tr>
@@ -146,14 +214,18 @@ export default class OnlineEditorPythonView extends React.Component {
 
     return (
       <div id="python-online-editor">
-        { this.renderAceEditor('prepend', 'Prepend') }
-        { this.renderAceEditor('append', 'Append') }
-        { this.renderAceEditor('solution', 'Solution Template') }
-        { this.renderAceEditor('submission', 'Submission Template') }
-        { this.renderTestCases('Public Test Cases', testCases, 'public') }
-        { this.renderTestCases('Private Test Cases', testCases, 'private', testCases.get('public').size) }
-        { this.renderTestCases('Evaluation Test Cases', testCases, 'evaluation', testCases.get('public').size + testCases.get('private').size) }
+        { this.renderAceEditor('prepend', this.props.intl.formatMessage(translations.prependTitle)) }
+        { this.renderAceEditor('append', this.props.intl.formatMessage(translations.appendTitle)) }
+        { this.renderAceEditor('solution', this.props.intl.formatMessage(translations.solutionTitle)) }
+        { this.renderAceEditor('submission', this.props.intl.formatMessage(translations.submissionTitle)) }
+        { this.renderTestCases(this.props.intl.formatMessage(translations.publicTestCases), testCases, 'public') }
+        { this.renderTestCases(this.props.intl.formatMessage(translations.privateTestCases), testCases, 'private', testCases.get('public').size) }
+        { this.renderTestCases(this.props.intl.formatMessage(translations.evaluationTestCases), testCases, 'evaluation', testCases.get('public').size + testCases.get('private').size) }
       </div>
     );
   }
 }
+
+OnlineEditorPythonView.propTypes = propTypes;
+
+export default injectIntl(OnlineEditorPythonView);
