@@ -6,6 +6,13 @@ class Course::Assessment::Question::ProgrammingController < \
                               through: :assessment, parent: false
 
   def new
+    respond_to do |format|
+      format.html
+      format.json {
+        @path = new_course_assessment_question_programming_path(current_course, @assessment).chomp('/new')
+        render 'props'
+      }
+    end
   end
 
   def create
@@ -22,6 +29,13 @@ class Course::Assessment::Question::ProgrammingController < \
   end
 
   def edit
+    respond_to do |format|
+      format.html
+      format.json {
+        @path = course_assessment_question_programming_path(current_course, @assessment, @programming_question)
+        render 'props'
+      }
+    end
   end
 
   def update

@@ -64,4 +64,15 @@ module Course::Assessment::Question::ProgrammingHelper
       error['message']
     end
   end
+
+  def editor_mode(language)
+    case
+    when language.is_a?(Coursemology::Polyglot::Language::Python)
+      :python
+    when language.is_a?(Coursemology::Polyglot::Language::JavaScript)
+      :javascript
+    else
+      nil
+    end
+  end
 end
