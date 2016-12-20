@@ -19,6 +19,10 @@ class Course::UserInvitation < ActiveRecord::Base
     save!
   end
 
+  def confirmed?
+    confirmed_at.present?
+  end
+
   private
 
   # Generates the invitation key. All invitation keys generated start with I so we can

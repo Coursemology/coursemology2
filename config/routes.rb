@@ -199,6 +199,8 @@ Rails.application.routes.draw do
       resources :levels, except: [:show, :edit, :update]
       resource :duplication, only: [:show, :create]
 
+      resources :user_invitations, only: [:index, :new, :create, :destroy]
+
       namespace :lesson_plan do
         get '/' => 'items#index'
         resources :milestones, except: [:index, :show]
@@ -253,7 +255,6 @@ Rails.application.routes.draw do
       get 'staff' => 'users#staff', as: :users_staff
       patch 'upgrade_to_staff' => 'users#upgrade_to_staff', as: :users_upgrade_to_staff
       get 'requests' => 'users#requests', as: :users_requests
-      get 'invitations' => 'users#invitations', as: :users_invitations
 
       resources :groups, except: [:show]
 

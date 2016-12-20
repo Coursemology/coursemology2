@@ -3,12 +3,15 @@ class Course::UserInvitationsController < Course::ComponentController
   before_action :authorize_invitation!
   add_breadcrumb :index, :course_users_students_path
 
-  def new # :nodoc:
+  def index
+    @invitations = current_course.invitations.order(name: :asc)
   end
+
+  def new; end
 
   def create # :nodoc:
     if invite
-      redirect_to course_users_invitations_path(current_course), success: create_success_message
+      redirect_to course_user_invitations_path(current_course), success: create_success_message
     else
       propagate_errors
       render 'new'
@@ -17,9 +20,9 @@ class Course::UserInvitationsController < Course::ComponentController
 
   def resend_invitations
     if invitation_service.resend_invitation(load_course_users)
-      redirect_to course_users_invitations_path(current_course), success: t('.success')
+      redirect_to course_user_invitations_path(current_course), success: t('.success')
     else
-      redirect_to course_users_invitations_path(current_course), danger: t('.failure')
+      redirect_to course_user_invitations_path(current_course), danger: t('.failure')
     end
   end
 

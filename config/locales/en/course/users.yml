@@ -16,7 +16,7 @@ en:
         staff: :'course.users.staff.header'
         requests: :'course.users.requests.header'
         invite: :'course.user_invitations.new.header'
-        invitations: :'course.users.invitations.header'
+        invitations: :'course.user_invitations.index.header'
       new:
         already_registered: 'You are already registered as a %{role}.'
       update:
@@ -35,23 +35,6 @@ en:
         header: 'User Requests'
         approve: 'Approve'
         reject: 'Reject'
-      invitations:
-        header: 'Invitations'
-        progress: '%{accepted} accepted / %{total} invited'
-        manual_acceptance: >
-          The following table lists all invitations which have been sent out to date.
-
-
-          Users can key in their associated invitation code into the course registration page to
-          register into this course.
-        invited_header: 'Pending Invitations'
-        accepted_header: 'Accepted Invitations'
-        resend_button: 'Resend All Invitations'
-      course_user_invitations:
-        invitation_code: 'Invitation Code'
-        status: 'Status'
-        sent_at: 'Invitation Sent At'
-        delete_tooltip: 'Delete Invitation'
       show:
         header: 'Profile'
         role: 'Role: %{role}'
