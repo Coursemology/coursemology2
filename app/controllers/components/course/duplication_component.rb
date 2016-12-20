@@ -2,7 +2,7 @@ class Course::DuplicationComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
   def sidebar_items
-    return [] unless can?(:manage, current_course)
+    return [] unless current_user.administrator?
     [
       {
         key: :duplication,
