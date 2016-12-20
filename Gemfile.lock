@@ -85,6 +85,8 @@ GEM
       activemodel (= 4.2.7.1)
       activesupport (= 4.2.7.1)
       arel (~> 6.0)
+    activerecord-import (0.16.2)
+      activerecord (>= 3.2)
     activerecord-userstamp (3.0.4)
       activerecord (~> 4.2)
       activesupport (~> 4.2)
@@ -543,6 +545,7 @@ PLATFORMS
 DEPENDENCIES
   ace-rails-ap
   active_record-acts_as!
+  activerecord-import (>= 0.2.0)
   activerecord-userstamp (>= 3.0.2)
   acts_as_tenant!
   after_commit_action

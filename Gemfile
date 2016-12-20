@@ -200,6 +200,8 @@ gem 'nokogiri', '>= 1.6.8'
 # Polyglot support
 gem 'coursemology-polyglot', '>= 0.1.0'
 
+# To assist with bulk inserts into database
+gem 'activerecord-import', '>= 0.2.0'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-

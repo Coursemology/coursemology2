@@ -86,13 +86,6 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
             to change(Course::LessonPlan::Todo.all, :count).
             by(course.course_users.where.not(workflow_state: 'invited').count)
         end
-
-        context ' when the creation of todo fails' do
-          it 'raises an ActiveRecord::Rollback exception' do
-            subject
-            expect { subject.create_todos }.to raise_exception(ActiveRecord::Rollback)
-          end
-        end
       end
     end
   end
