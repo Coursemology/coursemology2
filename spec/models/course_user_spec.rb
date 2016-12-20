@@ -374,16 +374,6 @@ RSpec.describe CourseUser, type: :model do
             end
           end
         end
-
-        context 'when the creation of the todo fails' do
-          before { subject }
-
-          it 'raises an ActiveRecord::Rollback exception' do
-            expect do
-              subject.create_todos_for_course_user
-            end.to raise_exception(ActiveRecord::Rollback)
-          end
-        end
       end
     end
   end

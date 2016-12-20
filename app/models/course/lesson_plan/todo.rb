@@ -30,19 +30,20 @@ class Course::LessonPlan::Todo < ActiveRecord::Base
 
   class << self
     # Creates todos to the given course_users for the given lesson_plan_item(s).
+    # This uses bulk imports, hence callbacks for todos will not be called upon creation.
     #
     # @param [Course::LessonPlan::Item|Array<Course::LessonPlan::Item>] item
     #   The lesson_plan_item, or array of lesson_plan_items to create todos for.
     # @param [CourseUser|Array<CourseUser>] course_users
     #   The course_user, or array of course_users to create todos for.
-    # @return [Array<Course::LessonPlan::Todo>|nil] Array of created todos, or nil if invalid params
-    # @raise [ActiveRecord::RecordInvalid] Raised if the validations to create todo fails.
+    # @return [Array<String>] Array of string of ids of successfully created todos.
     def create_for!(items, course_users)
       return unless items && course_users
       items = [items] if items.is_a?(Course::LessonPlan::Item)
       course_users = [course_users] if course_users.is_a?(CourseUser)
-      user_item_hash = items.product(course_users).map { |ary| { item: ary[0], user: ary[1].user } }
-      Course::LessonPlan::Todo.create!(user_item_hash)
+      result = Course::LessonPlan::Todo.
+               import(*build_import_attributes_for(items, course_users), validate: false)
+      result.ids
     end
 
     # Destroy todos for the associated lesson_plan_item for specified course_users.
@@ -56,6 +57,24 @@ class Course::LessonPlan::Todo < ActiveRecord::Base
       return unless item
       user_ids = course_users ? course_users.select(:user_id) : item.todos.select(:user_id)
       item.todos.where { user_id.in(user_ids) }.destroy_all
+    end
+
+    private
+
+    # Constructs and returns the column and attribute hash. This is required for
+    # the +import+ function for the activerecord-import gem to support bulk inserts.
+    #
+    # @param [Array<Course::LessonPlan::Item>] Array of lesson_plan_items
+    # @param [Array<CourseUser>] Array of course_users
+    # @return [Array<Array<Symbol>, Array<Fixnum, String>] Returns an array with 2 arrays:
+    #   (i) array of columns, (ii) array of data arranged in columns specified in (i).
+    def build_import_attributes_for(items, course_users)
+      columns = [:item_id, :user_id, :creator_id, :updater_id, :workflow_state]
+      values =
+        items.product(course_users).map do |item, course_user|
+          [item.id, course_user.user_id, item.creator_id, item.creator_id, 'not started']
+        end
+      [columns, values]
     end
   end
 
