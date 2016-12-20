@@ -2,5 +2,5 @@ json.success !@attachment.nil?
 
 if @attachment
   json.url @attachment.url
-  json.name @attachment.name
+  json.id @attachment.id
 end
