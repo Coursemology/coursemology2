@@ -125,8 +125,9 @@ class LessonPlan extends React.Component {
     return groups;
   }
 
-  renderLessonPlan(milestoneGroups) {
+  renderLessonPlan() {
     const { milestones, items, hiddenItemTypes, toggleItemTypeVisibility } = this.props;
+    const milestoneGroups = this.milestoneGroups();
 
     return (
       <div className={styles.mainPanel}>
@@ -166,11 +167,11 @@ class LessonPlan extends React.Component {
   }
 
   render() {
-    const groups = this.milestoneGroups();
+    const { milestones, items } = this.props;
 
     return (
-      groups.length > 0 ?
-      this.renderLessonPlan(groups) :
+      milestones.size > 0 || items.size > 0 ?
+      this.renderLessonPlan() :
       this.renderEmptyLessonPlanMessage()
     );
   }

@@ -85,6 +85,9 @@ class LessonPlanNav extends React.Component {
                     scroller.scrollTo(`milestone-group-${milestone.get('id')}`, {
                       offset: -50,
                     });
+                    this.setState({
+                      open: false,
+                    });
                   }}
                 />
               ))

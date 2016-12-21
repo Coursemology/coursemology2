@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
 import { Element } from 'react-scroll';
+import Paper from 'material-ui/Paper';
 import LessonPlanItem from '../components/LessonPlanItem';
 import LessonPlanMilestone from '../components/LessonPlanMilestone';
 
@@ -15,14 +16,16 @@ const MilestoneGroup = ({ milestone, items, lessonPlanItemTypeKey }) => {
   return (
     <Element name={`milestone-group-${milestone.get('id')}`}>
       <LessonPlanMilestone key={componentKey(milestone)} {...{ milestone }} />
-      {
-        items.map(item =>
-          <LessonPlanItem
-            key={componentKey(item)}
-            {...{ lessonPlanItemTypeKey, item }}
-          />
-        )
-      }
+      <Paper>
+        {
+          items.map(item =>
+            <LessonPlanItem
+              key={componentKey(item)}
+              {...{ lessonPlanItemTypeKey, item }}
+            />
+          )
+        }
+      </Paper>
     </Element>
   );
 };

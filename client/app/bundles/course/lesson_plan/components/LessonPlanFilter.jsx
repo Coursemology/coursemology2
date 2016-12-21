@@ -86,7 +86,7 @@ class LessonPlanFilter extends React.Component {
                   <MenuItem
                     key={itemTypeKey}
                     primaryText={type.join(': ')}
-                    rightIcon={hiddenItemTypes.includes(itemTypeKey) ? '' : <Done />}
+                    rightIcon={hiddenItemTypes.includes(itemTypeKey) ? <span /> : <Done />}
                     onTouchTap={() => toggleItemTypeVisibility(itemTypeKey)}
                   />
                 );

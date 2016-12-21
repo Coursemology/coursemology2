@@ -2,17 +2,21 @@
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
 import { injectIntl, defineMessages } from 'react-intl';
-import { Card, CardText, CardTitle, CardActions } from 'material-ui/Card';
-import { List, ListItem } from 'material-ui/List';
+import { CardText, CardTitle } from 'material-ui/Card';
 import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Block from 'material-ui/svg-icons/content/block';
 import Room from 'material-ui/svg-icons/action/room';
 import DateRange from 'material-ui/svg-icons/action/date-range';
 import InfoOutline from 'material-ui/svg-icons/action/info-outline';
 import Description from 'material-ui/svg-icons/action/description';
-import FlatButton from 'material-ui/FlatButton';
+import Divider from 'material-ui/Divider';
 import isScreenXs from 'lib/helpers/viewport';
+import { red700, grey700 } from 'material-ui/styles/colors';
 
 const propTypes = {
   item: React.PropTypes.instanceOf(Immutable.Map).isRequired,
@@ -42,6 +46,9 @@ const translations = defineMessages({
 });
 
 const styles = {
+  title: {
+    paddingRight: 50,
+  },
   chip: {
     margin: 4,
   },
@@ -49,8 +56,34 @@ const styles = {
     display: 'flex',
     flexWrap: 'wrap',
   },
-  card: {
-    marginBottom: 15,
+  section: {
+    position: 'relative',
+  },
+  sectionText: {
+    padding: '0px 16px 16px 16px',
+    marginBottom: 10,
+  },
+  attachments: {
+    marginTop: 14,
+  },
+  attachment: {
+    position: 'relative',
+    paddingTop: 10,
+    paddingLeft: 35,
+  },
+  attachmentIcon: {
+    height: 20,
+    width: 20,
+    display: 'block',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    margin: 10,
+  },
+  adminMenu: {
+    top: 4,
+    right: 4,
+    position: 'absolute',
   },
 };
 
@@ -71,26 +104,36 @@ const shortTimeFormat = {
 };
 
 class LessonPlanItem extends React.Component {
-  renderMaterials() {
-    const { item } = this.props;
-    if (!item.has('materials') || !item.get('materials')) {
+  renderAdminMenu() {
+    const { item, intl } = this.props;
+    if (!item.has('edit_path') && !item.has('delete_path')) {
       return '';
     }
+
     return (
-      <CardText>
-        <List>
-          {
-            item.get('materials').map(material =>
-              <ListItem
-                key={material.get('name')}
-                primaryText={material.get('name')}
-                leftIcon={<Description />}
-                href={material.get('url')}
-              />
-            )
-          }
-        </List>
-      </CardText>
+      <IconMenu
+        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+        style={styles.adminMenu}
+      >
+        {
+          item.has('edit_path') ?
+            <MenuItem
+              primaryText={intl.formatMessage(translations.editItem)}
+              href={item.get('edit_path')}
+            /> : []
+        }
+        {
+          item.has('delete_path') ?
+            <MenuItem
+              primaryText={intl.formatMessage(translations.deleteItem)}
+              href={item.get('delete_path')}
+              data-method="delete"
+              data-confirm={intl.formatMessage(translations.deleteItemConfirmation)}
+            /> : []
+        }
+      </IconMenu>
     );
   }
 
@@ -113,7 +156,7 @@ class LessonPlanItem extends React.Component {
     }
     return (
       <Chip style={styles.chip}>
-        <Avatar icon={<Block />} backgroundColor="#900" />
+        <Avatar icon={<Block />} backgroundColor={red700} />
         { intl.formatMessage(translations.notPublished) }
       </Chip>
     );
@@ -203,45 +246,42 @@ class LessonPlanItem extends React.Component {
     );
   }
 
-  renderActions() {
-    const { item, intl } = this.props;
-    if (!item.has('edit_path') && !item.has('delete_path')) {
+  renderMaterials() {
+    const { item } = this.props;
+    if (!item.has('materials') || !item.get('materials')) {
       return '';
     }
-
     return (
-      <CardActions>
+      <div style={styles.attachments}>
         {
-          item.has('edit_path') ?
-            <FlatButton
-              label={intl.formatMessage(translations.editItem)}
-              href={item.get('edit_path')}
-            /> : []
+          item.get('materials').map(material =>
+            <div key={material.get('name')} style={styles.attachment}>
+              <Description style={styles.attachmentIcon} color={grey700} />
+              <a href={material.get('url')}>
+                { material.get('name') }
+              </a>
+            </div>
+          )
         }
-        {
-          item.has('delete_path') ?
-            <FlatButton
-              label={intl.formatMessage(translations.deleteItem)}
-              href={item.get('delete_path')}
-              data-method="delete"
-              data-confirm={intl.formatMessage(translations.deleteItemConfirmation)}
-            /> : []
-        }
-      </CardActions>
+      </div>
     );
   }
 
   render() {
     return (
-      <Card style={styles.card}>
+      <div style={styles.section}>
         <CardTitle
           title={this.renderTitle()}
-          subtitle={this.renderChips()}
+          style={styles.title}
         />
-        { this.renderDescription() }
-        { this.renderMaterials() }
-        { this.renderActions() }
-      </Card>
+        <div style={styles.sectionText}>
+          { this.renderChips() }
+          { this.renderDescription() }
+          { this.renderMaterials() }
+        </div>
+        { this.renderAdminMenu() }
+        <Divider />
+      </div>
     );
   }
 }
