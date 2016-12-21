@@ -1,4 +1,6 @@
 class Course::DuplicationsController < Course::ComponentController
+  before_action :authorize_duplication
+
   def show
   end
 
@@ -8,6 +10,12 @@ class Course::DuplicationsController < Course::ComponentController
     else
       redirect_to course_duplication_path(current_course), danger: t('.failed')
     end
+  end
+
+  protected
+
+  def authorize_duplication
+    authorize!(:duplicate, current_course)
   end
 
   private
