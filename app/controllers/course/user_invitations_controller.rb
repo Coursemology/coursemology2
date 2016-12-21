@@ -54,9 +54,8 @@ class Course::UserInvitationsController < Course::ComponentController
     @course_user_invitation_params ||= begin
       params[:course] = { invitations_attributes: {} } unless params.key?(:course)
 
-      invitations_attributes = { course_user: [:name], user_email: [:email] }
       params.require(:course).permit(:invitations_file, :registration_key,
-                                     invitations_attributes: invitations_attributes)
+                                     invitations_attributes: [:name, :email])
     end
   end
 
@@ -158,7 +157,7 @@ class Course::UserInvitationsController < Course::ComponentController
   #
   # @return [Array<String>] An array of failure messages;
   def aggregate_errors
-    invalid_course_user_errors + invalid_user_email_errors
+    invalid_course_user_errors + invalid_invitation_email_errors
   end
 
   # Aggregates Course User objects which have errors.
@@ -179,28 +178,30 @@ class Course::UserInvitationsController < Course::ComponentController
       reject { |course_user| course_user.errors.empty? }
   end
 
-  # Aggregates errors caused by a user who already exists.
+  # Aggregates errors in invitations.
   #
   # @return [Array<String>]
-  def invalid_user_email_errors
-    invalid_user_emails.map do |user_email|
-      message = user_email.errors.full_messages.to_sentence
-      t('course.user_invitations.errors.invalid_email', email: user_email.email, message: message)
+  def invalid_invitation_email_errors
+    invalid_invitations.map do |invitation|
+      message = invitation.errors.full_messages.to_sentence
+      t('course.user_invitations.errors.invalid_email', email: invitation.email, message: message)
     end
   end
 
-  # Finds all the invalid email objects in the current course.
+  # Finds all the invalid invitation objects in the current course.
   #
-  # @return [Array<User::Email>]
-  def invalid_user_emails
-    current_course.course_users.
-      map { |course_user| course_user.invitation.try(:user_email) }.
-      reject { |user_email| user_email.nil? || user_email.errors.empty? }
+  # @return [Array<Course::UserInvitation>]
+  def invalid_invitations
+    current_course.invitations.reject { |invitation| invitation.errors[:email].empty? }
   end
 
   # Returns the successful invitation creation message based on file or entry invitation.
   def create_success_message
-    invite_by_file? ? t('.file.success') : t('.manual_entry.success')
+    if invite_by_file?
+      t('course.user_invitations.create.file.success')
+    else
+      t('course.user_invitations.create.manual_entry.success')
+    end
   end
 
   # Enables or disables registration codes in the given course.

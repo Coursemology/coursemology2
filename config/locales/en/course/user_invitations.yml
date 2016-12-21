@@ -43,13 +43,13 @@ en:
           disable: 'Disable'
           disabled: 'Registration via registration codes are currently disabled.'
           enable: 'Enable'
-      invitation_fields:
-        remove: 'Remove'
-      create_success_message:
+      create:
         file:
           success: 'Successfully invited users from the uploaded file.'
         manual_entry:
           success: 'Successfully invited users with the given details.'
+      invitation_fields:
+        remove: 'Remove'
       resend_invitations:
         success: 'Email invitations were successfully resent.'
         failure: 'The resending of email invitations failed.'
