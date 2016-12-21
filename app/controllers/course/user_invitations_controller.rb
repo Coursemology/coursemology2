@@ -31,7 +31,7 @@ class Course::UserInvitationsController < Course::ComponentController
   end
 
   def resend_invitations
-    if invitation_service.resend_invitation(load_course_users)
+    if invitation_service.resend_invitation(load_invitations)
       redirect_to course_user_invitations_path(current_course), success: t('.success')
     else
       redirect_to course_user_invitations_path(current_course), danger: t('.failure')
@@ -81,31 +81,31 @@ class Course::UserInvitationsController < Course::ComponentController
       if params[:course].blank?
         params
       else
-        params.require(:course).permit(:course_user, course_users: [])
+        params.require(:course).permit(:invitation, invitations: [])
       end
   end
 
-  # Filters the course_user ids from resend_invitation_params
+  # Filters the invitation ids from resend_invitation_params
   #
-  # @return [Array<String>|nil] Array of course_user ids. If none was found in the params,
+  # @return [Array<String>|nil] Array of invitation ids. If none was found in the params,
   #   nil is returned.
-  def course_users_from_params
-    if resend_invitation_params[:course_user]
-      [resend_invitation_params[:course_user]]
-    elsif resend_invitation_params[:course_users]
-      resend_invitation_params[:course_users]
+  def invitation_form_params
+    if resend_invitation_params[:invitation]
+      [resend_invitation_params[:invitation]]
+    elsif resend_invitation_params[:invitations]
+      resend_invitation_params[:invitations]
     end
   end
 
-  # Loads course_users for the resending of invitations. Method handles the following cases:
-  #   1) Single course_user - specified with the course_user param
-  #   2) Multiple course_users - specified with the course_users param
-  #   3) All invited course_users - given none of the above params
-  def load_course_users
-    @course_users ||= begin
-      ids = course_users_from_params
-      ids ||= current_course.course_users.with_invited_state.pluck(:id)
-      ids.blank? ? [] : CourseUser.includes(:invitation).where { id >> ids }
+  # Loads existing invitations for the resending of invitations. Method handles the following cases:
+  #   1) Single invitation - specified with the course_user param
+  #   2) Multiple invitations - specified with the course_users param
+  #   3) All un-confirmed invitation - given none of the above params
+  def load_invitations
+    @pending_invitations ||= begin
+      ids = invitation_form_params
+      ids ||= current_course.invitations.unconfirmed.select(:id)
+      ids.blank? ? [] : current_course.invitations.where { id >> ids }
     end
   end
 
