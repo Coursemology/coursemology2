@@ -8,7 +8,7 @@ class Course::UserInvitationsController < Course::ComponentController
 
   def create # :nodoc:
     if invite
-      redirect_to create_redirect_path, success: t('.success')
+      redirect_to course_users_invitations_path(current_course), success: t('.success')
     else
       propagate_errors
       render 'new'
@@ -20,6 +20,16 @@ class Course::UserInvitationsController < Course::ComponentController
       redirect_to course_users_invitations_path(current_course), success: t('.success')
     else
       redirect_to course_users_invitations_path(current_course), danger: t('.failure')
+    end
+  end
+
+  def toggle_registration
+    if enable_registration_code(registration_params)
+      redirect_to invite_course_users_path(current_course, anchor: 'registration_code'),
+                  success: t('.success')
+    else
+      redirect_to invite_course_users_path(current_course, anchor: 'registration_code'),
+                  danger: t('.failure')
     end
   end
 
@@ -39,11 +49,16 @@ class Course::UserInvitationsController < Course::ComponentController
   #
   # @return [Tempfile]
   # @return [Hash]
-  # @return [Boolean]
   def invitation_params
     @invitation_params ||= course_user_invitation_params[:invitations_file].try(:tempfile) ||
-                           course_user_invitation_params[:invitations_attributes] ||
-                           course_user_invitation_params[:registration_key] == 'checked'.freeze
+                           course_user_invitation_params[:invitations_attributes]
+  end
+
+  # Returns the param on whether to enable or disable registration via registration code.
+  #
+  # @return [Boolean]
+  def registration_params
+    @registration_params ||= course_user_invitation_params[:registration_key] == 'checked'.freeze
   end
 
   # Determines the params for load_course_users.
@@ -92,29 +107,11 @@ class Course::UserInvitationsController < Course::ComponentController
     invitation_params.is_a?(Tempfile)
   end
 
-  # Determines if the user keyed in entries manually.
-  #
-  # @return [Boolean]
-  def invite_by_entry?
-    invitation_params.is_a?(Hash)
-  end
-
-  # Determines if the user is changing the registration code enabled state.
-  #
-  # @return [Boolean]
-  def invite_by_registration_code?
-    invitation_params.is_a?(TrueClass) || invitation_params.is_a?(FalseClass)
-  end
-
   # Invites the users via the service object.
   #
   # @return [Boolean] True if the invitation was successful.
   def invite
-    if invite_by_file? || invite_by_entry?
-      invitation_service.invite(invitation_params)
-    elsif invite_by_registration_code?
-      invitation_service.enable_registration_code(invitation_params)
-    end
+    invitation_service.invite(invitation_params)
   rescue CSV::MalformedCSVError => e
     current_course.errors.add(:invitations_file, e.message)
     return false
@@ -186,14 +183,17 @@ class Course::UserInvitationsController < Course::ComponentController
       reject { |user_email| user_email.nil? || user_email.errors.empty? }
   end
 
-  # The path to redirect to after the {#create} action.
+  # Enables or disables registration codes in the given course.
   #
-  # @return [String]
-  def create_redirect_path
-    if invite_by_file? || invite_by_entry?
-      course_users_invitations_path(current_course)
-    elsif invite_by_registration_code?
-      invite_course_users_path(current_course, anchor: 'registration_code')
+  # @param [Boolean] enable True if registration codes should be enabled.
+  # @return [Boolean]
+  def enable_registration_code(enable)
+    if enable
+      return true if current_course.registration_key
+      current_course.generate_registration_key
+    else
+      current_course.registration_key = nil
     end
+    current_course.save
   end
 end

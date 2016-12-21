@@ -148,5 +148,61 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
         end
       end
     end
+
+    describe '#toggle_registration' do
+      before { sign_in(user) }
+      subject do
+        post :toggle_registration, course_id: course, course: { registration_key: param }
+      end
+
+      context 'when the course_lecturer visits the page' do
+        let!(:course_lecturer) { create(:course_manager, course: course, user: user) }
+
+        context 'when registration key is requested to be enabled' do
+          let(:param) { 'checked' }
+
+          it do
+            is_expected.
+              to redirect_to invite_course_users_path(course, anchor: 'registration_code')
+          end
+
+          context 'when course has registration key disabled' do
+            it 'enables the course registration key' do
+              subject
+              expect(course.reload.registration_key).not_to be_nil
+            end
+          end
+
+          context 'when course has registration key enabled' do
+            before do
+              course.generate_registration_key
+              course.save
+            end
+
+            it 'does not change the course registration key' do
+              original_key = course.reload.registration_key
+              subject
+              expect(course.reload.registration_key).to eq(original_key)
+            end
+          end
+        end
+
+        context 'when registration key is requested to be disabled' do
+          let(:param) { '' }
+
+          context 'when course has registration key enabled' do
+            before do
+              course.generate_registration_key
+              course.save
+            end
+
+            it 'disables the course registration key' do
+              subject
+              expect(course.reload.registration_key).to be_nil
+            end
+          end
+        end
+      end
+    end
   end
 end
