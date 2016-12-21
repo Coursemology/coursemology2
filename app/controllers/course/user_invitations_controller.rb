@@ -8,7 +8,7 @@ class Course::UserInvitationsController < Course::ComponentController
 
   def create # :nodoc:
     if invite
-      redirect_to course_users_invitations_path(current_course), success: t('.success')
+      redirect_to course_users_invitations_path(current_course), success: create_success_message
     else
       propagate_errors
       render 'new'
@@ -181,6 +181,11 @@ class Course::UserInvitationsController < Course::ComponentController
     current_course.course_users.
       map { |course_user| course_user.invitation.try(:user_email) }.
       reject { |user_email| user_email.nil? || user_email.errors.empty? }
+  end
+
+  # Returns the successful invitation creation message based on file or entry invitation.
+  def create_success_message
+    invite_by_file? ? t('.file.success') : t('.manual_entry.success')
   end
 
   # Enables or disables registration codes in the given course.
