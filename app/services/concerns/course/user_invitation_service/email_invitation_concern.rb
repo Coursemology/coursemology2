@@ -20,7 +20,8 @@ module Course::UserInvitationService::EmailInvitationConcern
 
     success = Course.transaction do
       registered_users, invited_users = invite_from_source(users)
-      @current_course.save && @current_course.valid?
+      return false if @current_course.invitations.any? { |invitation| !invitation.errors.empty? }
+      @current_course.save
     end
 
     success && send_invitation_emails(registered_users, invited_users)
@@ -150,9 +151,10 @@ module Course::UserInvitationService::EmailInvitationConcern
   # @return [Array<Course::UserInvitation>)>] An array containing the list of users who were
   #   invited.
   def invite_new_users(users)
-    users.map do |user|
+    invitations = users.map do |user|
       @current_course.invitations.build(name: user[:name], email: user[:email])
     end
+    validate_new_invitation_emails(invitations)
   end
 
   # Sends invitation emails to the users invited.
@@ -181,5 +183,23 @@ module Course::UserInvitationService::EmailInvitationConcern
     ids = invitations.select(&:id)
     Course::UserInvitation.where { id >> ids }.update_all(sent_at: Time.zone.now)
     true
+  end
+
+  # Validate that the new invitation emails are unique.
+  #
+  # The uniqueness constraint of AR does not guarantee the new_records are unique among themselves.
+  # ( i.e Two new records with the same email will raise a {RecordNotUnique} error upon saving. )
+  #
+  # @param [Array<Course::UserInvitation>] invitations An array of invitations.
+  # @param [Array<Course::UserInvitation>] The validated invitations.
+  def validate_new_invitation_emails(invitations)
+    emails = invitations.map(&:email)
+    duplicates = emails.select { |email| emails.count(email) > 1 }
+    return invitations if duplicates.empty?
+
+    invitations.each do |invitation|
+      invitation.errors.add(:email, :taken) if duplicates.include?(invitation.email)
+    end
+    invitations
   end
 end

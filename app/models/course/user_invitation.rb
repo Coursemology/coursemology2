@@ -2,6 +2,10 @@
 class Course::UserInvitation < ActiveRecord::Base
   after_initialize :generate_invitation_key, if: :new_record?
 
+  validates :email, uniqueness: { scope: :course_id },
+                    format: { with: Devise.email_regexp },
+                    if: :email_changed?
+
   belongs_to :course, inverse_of: :invitations
 
   # Invitations that haven't been confirmed, i.e. pending the user's acceptance.
