@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
 import { injectIntl, defineMessages } from 'react-intl';
 import { scroller } from 'react-scroll';
+import { grey600 } from 'material-ui/styles/colors';
 import styles from './LessonPlan.scss';
 import LessonPlanNav from '../components/LessonPlanNav';
 import LessonPlanFilter from '../components/LessonPlanFilter';
@@ -28,6 +29,12 @@ const propTypes = {
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
+};
+
+const inlineStyles = {
+  emptyLessonPlanMessage: {
+    color: grey600,
+  },
 };
 
 class LessonPlan extends React.Component {
@@ -160,7 +167,7 @@ class LessonPlan extends React.Component {
     const { intl } = this.props;
 
     return (
-      <h4 className={styles.grey}>
+      <h4 style={inlineStyles.emptyLessonPlanMessage}>
         {intl.formatMessage(translations.emptyLessonPlanMessage)}
       </h4>
     );
