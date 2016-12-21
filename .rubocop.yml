@@ -21,6 +21,11 @@ Rails:
 Rails/HasAndBelongsToMany:
   Enabled: false
 
+# TODO: Cop only applies to Rails 5, to remove once upgraded.
+#       References bbatsov/rubocop#3629
+Rails/HttpPositionalArguments:
+  Enabled: false
+
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
 

@@ -239,6 +239,7 @@ Rails.application.routes.draw do
         get 'invite' => 'user_invitations#new', on: :collection
         post 'invite' => 'user_invitations#create', on: :collection
         post 'resend_invitations' => 'user_invitations#resend_invitations', on: :collection
+        post 'toggle_registration' => 'user_invitations#toggle_registration', on: :collection
         get 'disburse_experience_points' => 'experience_points/disbursement#new', on: :collection
         post 'disburse_experience_points' => 'experience_points/disbursement#create',
              on: :collection

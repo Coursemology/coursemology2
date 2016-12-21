@@ -50,7 +50,8 @@ div.methods role='tabpanel'
       = simple_format(t('.registration_code.explanation'))
       div.alert.alert-warning
         = simple_format(t('.registration_code.explanation_warning'))
-      = simple_form_for current_course, url: invite_course_users_path, method: :post do |f|
+      = simple_form_for current_course, url: toggle_registration_course_users_path,
+                                        method: :post do |f|
         - if current_course.registration_key.present?
           div.registration-code
             pre

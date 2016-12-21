@@ -2,7 +2,6 @@
 
 # Provides a service object for inviting users into a course.
 class Course::UserInvitationService
-  include RegistrationCodeConcern
   include EmailInvitationConcern
 
   # Constructor for the user invitation service object.
