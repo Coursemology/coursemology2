@@ -116,6 +116,7 @@ class LessonPlanItem extends React.Component {
         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
         targetOrigin={{ horizontal: 'right', vertical: 'top' }}
         style={styles.adminMenu}
+        className={'admin-button'}
       >
         {
           item.has('edit_path') ?
@@ -268,8 +269,10 @@ class LessonPlanItem extends React.Component {
   }
 
   render() {
+    const { item } = this.props;
+
     return (
-      <div style={styles.section}>
+      <div style={styles.section} id={`item-${item.get('id')}`}>
         <CardTitle
           title={this.renderTitle()}
           style={styles.title}

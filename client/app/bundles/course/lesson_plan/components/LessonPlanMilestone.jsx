@@ -67,7 +67,7 @@ class LessonPlanMilestone extends React.Component {
   render() {
     const { milestone } = this.props;
     return (
-      <div key={milestone.get('id')}>
+      <div key={milestone.get('id')} id={`milestone-${milestone.get('id')}`}>
         <div className={styles.milestoneTitleRow}>
           <h3>{ milestone.get('title') }</h3>
           <p>
@@ -79,7 +79,7 @@ class LessonPlanMilestone extends React.Component {
             />
           </p>
         </div>
-        <div className={styles.spaceBetween}>
+        <div className={styles.milestoneContent}>
           <div>
             <p><span dangerouslySetInnerHTML={{ __html: milestone.get('description') }} /></p>
           </div>
