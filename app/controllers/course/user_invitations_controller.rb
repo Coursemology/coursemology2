@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 class Course::UserInvitationsController < Course::ComponentController
   before_action :authorize_invitation!
+  load_resource :invitation, through: :course, class: Course::UserInvitation, parent: false,
+                             only: :destroy
   add_breadcrumb :index, :course_users_students_path
 
   def index
@@ -15,6 +17,16 @@ class Course::UserInvitationsController < Course::ComponentController
     else
       propagate_errors
       render 'new'
+    end
+  end
+
+  def destroy
+    if @invitation.destroy
+      redirect_to course_user_invitations_path(current_course),
+                  success: t('.success', name: @invitation.name)
+    else
+      redirect_to course_user_invitations_path(current_course),
+                  danger: @invitation.errors.full_messages.to_sentence
     end
   end
 

@@ -122,9 +122,7 @@ module Course::UsersControllerManagementConcern
 
   # Selects an appropriate redirect path depending on the user being deleted.
   def delete_redirect_path
-    if @course_user.invited?
-      course_user_invitations_path(current_course)
-    elsif @course_user.staff?
+    if @course_user.staff?
       course_users_staff_path(current_course)
     else
       course_users_students_path(current_course)
