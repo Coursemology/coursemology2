@@ -15,10 +15,10 @@ class CourseUser < ActiveRecord::Base
   # A set of roles which comprise the staff of a course.
   STAFF_ROLES = Set[:teaching_assistant, :manager, :owner].freeze
 
-  # A set of roles which comprise the managers of a course.
+  # A set of roles which comprise the teaching assistants and managers of a course.
   TA_AND_MANAGER_ROLES = Set[:teaching_assistant, :manager].freeze
 
-  # A set of roles which comprise the teaching assistants and managers of a course.
+  # A set of roles which comprise the managers of a course.
   MANAGER_ROLES = Set[:manager, :owner].freeze
 
   # A set of roles which comprise the auto graders of a course.
