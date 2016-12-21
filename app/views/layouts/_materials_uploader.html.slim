@@ -2,7 +2,10 @@
   div
     strong = t('.uploaded_materials')
   - f.object.materials.each do |material|
-    div = link_to format_inline_text(material.name), '#'
+    div
+      span = link_to format_inline_text(material.name), '#'
+      span.uploaded-by = t('.uploaded_by', name: material.attachment.creator.name)
+
 div
   strong = t('.new_materials')
   = f.file_field :files_attributes, multiple: true
