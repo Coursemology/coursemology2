@@ -270,6 +270,20 @@ RSpec.describe Course::UserInvitationService, type: :service do
             expect(found_user).not_to be_nil
           end
         end
+
+        context 'when provided emails are capitalised' do
+          let(:modified_existing_user_attributes) do
+            existing_user_attributes.each { |attr| attr[:email] = attr[:email].upcase }
+          end
+
+          it 'adds the correct users' do
+            subject.send(:invite_users, modified_existing_user_attributes)
+            existing_users.each do |user|
+              found_user = course.course_users.find { |course_user| course_user.user == user }
+              expect(found_user).not_to be_nil
+            end
+          end
+        end
       end
 
       context 'when users do not exist in the current instance' do
