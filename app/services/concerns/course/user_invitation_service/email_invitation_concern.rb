@@ -97,10 +97,12 @@ module Course::UserInvitationService::EmailInvitationConcern
   # Invites the given users into the course.
   #
   # @param [Array<Hash{Symbol=>String}>] users A mutable array of users to add. Each hash must have
-  #   two attributes: the +:name+ and the +:email+ of the user to add.
+  #   two attributes: the +:name+ and the +:email+ of the user to add. The provided +emails+
+  #   are NOT case sensitive.
   # @return [Array<(Array<CourseUser>, Array<Course::UserInvitation>)>] A tuple containing the
   #   list of users who were immediately registered, and the users who were invited.
   def invite_users(users)
+    users = users.each { |user| user[:email] = user[:email].downcase }
     augment_user_objects(users)
     existing_users, new_users = users.partition { |user| user[:user].present? }
 
