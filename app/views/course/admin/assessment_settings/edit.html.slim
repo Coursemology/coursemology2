@@ -44,7 +44,8 @@ h2
             td = tab_form.input :title, label: false, input_html: { class: 'tab_title' }
             td = tab_form.input :weight, as: :integer, label: false,
                                 input_html: { class: 'tab_weight' }
-            td = tab_form.association :category, label: false
+            td = tab_form.association :category, collection: current_course.assessment_categories,
+                                                 label: false
             td
               - if can?(:destroy, tab)
                 = delete_button(course_admin_assessments_category_tab_path(current_course,
