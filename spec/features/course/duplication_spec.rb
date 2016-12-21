@@ -34,20 +34,29 @@ RSpec.feature 'Course: Duplication' do
     context 'As a Course Administrator' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario 'I cannot view the Duplication Sidebar item' do
+      scenario 'I cannot view the Duplication Sidebar item but can duplicate a course' do
         visit course_path(course)
 
         expect(page).not_to have_selector('li', text: 'layouts.duplication.title')
+
+        visit course_duplication_path(course)
+
+        expect(page).to have_field('New course start date')
+        expect(page).to have_field('New course title')
       end
     end
 
     context 'As a Course Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I cannot view the Duplication Sidebar item' do
+      scenario 'I cannot view the Duplication Sidebar item and cannot duplicate a course' do
         visit course_path(course)
 
         expect(page).not_to have_selector('li', text: 'layouts.duplication.title')
+
+        visit course_duplication_path(course)
+
+        expect(page.status_code).to eq(403)
       end
     end
   end
