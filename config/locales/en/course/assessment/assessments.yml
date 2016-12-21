@@ -7,8 +7,6 @@ en:
     assessment:
       assessments:
         sidebar_title: :'course.assessment.assessments.index.header'
-        lesson_plan_assessment:
-          no_description: '(No Description)'
         index:
           header: 'Assessments'
           title: 'Title'
