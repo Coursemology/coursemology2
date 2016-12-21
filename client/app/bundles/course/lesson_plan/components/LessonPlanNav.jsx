@@ -5,7 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-import KeyboardArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
+import KeyboardArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
 import { scroller } from 'react-scroll';
 
 const propTypes = {
@@ -65,14 +65,14 @@ class LessonPlanNav extends React.Component {
           onTouchTap={this.handleTouchTap}
           label={intl.formatMessage(translations.goto)}
           labelPosition="before"
-          icon={<KeyboardArrowDown />}
+          icon={<KeyboardArrowUp />}
           style={styles.navButton}
         />
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
-          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
+          targetOrigin={{ horizontal: 'left', vertical: 'bottom' }}
           onRequestClose={this.handleRequestClose}
         >
           <Menu>

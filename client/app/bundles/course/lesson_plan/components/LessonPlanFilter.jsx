@@ -6,7 +6,7 @@ import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Done from 'material-ui/svg-icons/action/done';
-import KeyboardArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
+import KeyboardArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
 
 const propTypes = {
   lessonPlanItemTypeKey: PropTypes.func.isRequired,
@@ -69,13 +69,13 @@ class LessonPlanFilter extends React.Component {
           onTouchTap={this.handleTouchTap}
           label={intl.formatMessage(translations.filter)}
           labelPosition="before"
-          icon={<KeyboardArrowDown />}
+          icon={<KeyboardArrowUp />}
         />
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
-          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+          targetOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           onRequestClose={this.handleRequestClose}
         >
           <Menu>

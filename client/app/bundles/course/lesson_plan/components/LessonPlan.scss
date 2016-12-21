@@ -5,6 +5,13 @@ $secondary-text-grey: #888888;
 }
 
 .navContainer {
+  bottom: 12px;
   display: flex;
   justify-content: flex-end;
+  position: fixed;
+  right: 24px;
+}
+
+.mainPanel {
+  margin-bottom: 60px;
 }

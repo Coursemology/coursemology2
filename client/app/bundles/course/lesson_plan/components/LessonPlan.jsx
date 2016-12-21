@@ -130,6 +130,16 @@ class LessonPlan extends React.Component {
 
     return (
       <div className={styles.mainPanel}>
+        {
+          milestoneGroups.map(group =>
+            <LessonPlanGroup
+              key={group.milestone.get('id')}
+              milestone={group.milestone}
+              items={group.items}
+              lessonPlanItemTypeKey={LessonPlan.itemTypeKey}
+            />
+          )
+        }
         <div className={styles.navContainer}>
           <LessonPlanNav {...{ milestones }} />
           <LessonPlanFilter
@@ -141,16 +151,6 @@ class LessonPlan extends React.Component {
             }}
           />
         </div>
-        {
-          milestoneGroups.map(group =>
-            <LessonPlanGroup
-              key={group.milestone.get('id')}
-              milestone={group.milestone}
-              items={group.items}
-              lessonPlanItemTypeKey={LessonPlan.itemTypeKey}
-            />
-          )
-        }
       </div>
     );
   }
