@@ -3,6 +3,6 @@ FactoryGirl.define do
   factory :course_user_invitation, class: Course::UserInvitation do
     course
     sequence(:name) { |n| "course user #{n}" }
-    sequence(:email) { |n| "user_#{n}@domain_#{base_time}_name.com" }
+    email { generate(:email) }
   end
 end

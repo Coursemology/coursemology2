@@ -31,8 +31,7 @@ RSpec.describe Course::UserRegistrationService, type: :service do
         it 'succeeds' do
           expect do
             expect(subject.register(registration)).to be_truthy
-          end.to change { course.course_users.with_approved_state.reload.count }.by(1).and \
-            change { course.course_users.with_invited_state.reload.count }.by(-1)
+          end.to change { course.course_users.with_approved_state.reload.count }.by(1)
         end
       end
 
@@ -114,7 +113,7 @@ RSpec.describe Course::UserRegistrationService, type: :service do
       context 'when the code is valid' do
         it 'associates the user' do
           expect(subject.send(:claim_registration_code, registration)).to be_truthy
-          expect(invitation.reload.course_user.user).to eq(user)
+          expect(course.course_users.find_by(user_id: user.id)).to be_present
         end
 
         it 'increases the number of approved users' do
@@ -139,7 +138,6 @@ RSpec.describe Course::UserRegistrationService, type: :service do
       it 'accepts the given invitation' do
         invitation.save!
         expect(subject.send(:accept_invitation, registration, invitation)).to be_truthy
-        expect(registration.course_user).to eq(invitation.course_user)
         expect(registration.course_user).to be_approved
       end
     end

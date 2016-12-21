@@ -4,14 +4,12 @@ require 'rails_helper'
 RSpec.describe CourseUser, type: :model do
   it { is_expected.to belong_to(:user).inverse_of(:course_users) }
   it { is_expected.to belong_to(:course).inverse_of(:course_users) }
-  it { is_expected.to have_one(:invitation).validate(true) }
   it { is_expected.to define_enum_for(:role) }
   it do
     is_expected.to have_many(:experience_points_records).
       inverse_of(:course_user).
       dependent(:destroy)
   end
-  it { is_expected.to have_one(:invitation) }
   it { is_expected.to have_many(:course_user_achievements).inverse_of(:course_user) }
   it { is_expected.to have_many(:achievements).through(:course_user_achievements) }
   it { is_expected.to have_many(:group_users).dependent(:destroy) }

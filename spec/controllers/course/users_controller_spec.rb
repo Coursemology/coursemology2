@@ -141,14 +141,6 @@ RSpec.describe Course::UsersController, type: :controller do
             expect(flash[:danger]).to eq('')
           end
         end
-
-        context 'when the user is invited' do
-          let!(:course_user_to_delete) do
-            create(:course_user_invitation, course: course).course_user
-          end
-
-          it { is_expected.to redirect_to(course_users_invitations_path(course)) }
-        end
       end
 
       context 'when the user is a student' do
