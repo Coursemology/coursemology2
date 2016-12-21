@@ -2,8 +2,22 @@
 class Course::UserInvitation < ActiveRecord::Base
   after_initialize :generate_invitation_key, if: :new_record?
 
-  belongs_to :course_user, dependent: :destroy, inverse_of: :invitation
-  belongs_to :user_email, class_name: User::Email.name, validate: true, inverse_of: false
+  belongs_to :course, inverse_of: :invitations
+
+  # Invitations that haven't been confirmed, i.e. pending the user's acceptance.
+  scope :unconfirmed, -> { where(confirmed_at: nil) }
+
+  # Finds an invitation that matches one of the user's registered emails.
+  #
+  # @param [User] user
+  def self.for_user(user)
+    find_by(email: user.emails.select(:email))
+  end
+
+  def confirm!
+    self.confirmed_at = Time.zone.now
+    save!
+  end
 
   private
 
