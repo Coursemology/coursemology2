@@ -59,5 +59,8 @@ if ENV['CI']
     # Extra statistics to be placed in `rake stats`. We don't run that on CI, so coverage is not
     # important.
     add_filter '/lib/tasks/coursemology/stats_setup.rake'
+
+    # Rake task to seed dev database with course and assessment data.
+    add_filter '/lib/tasks/coursemology/seed.rake'
   end
 end
