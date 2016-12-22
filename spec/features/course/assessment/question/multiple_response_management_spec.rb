@@ -99,7 +99,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         expect(question_created.options).to be_present
       end
 
-      scenario 'I can edit a question', js: true do
+      scenario 'I can edit a question and delete an option', js: true do
         mrq = create(:course_assessment_question_multiple_response, assessment: assessment,
                                                                     options: [])
         options = [
@@ -141,6 +141,22 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(page).to have_selector('div.alert.alert-success')
+        expect(mrq.reload.options.count).to eq(options.count)
+
+        # Delete all MRQ options
+        visit edit_path
+        all('tr.question_multiple_response_option').each do |element|
+          within element do
+            click_link I18n.t('course.assessment.question.multiple_responses.option_fields.remove')
+          end
+        end
+        click_button I18n.t(
+          'course.assessment.question.multiple_responses.form.multiple_response_button'
+        )
+
+        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to have_selector('div.alert.alert-success')
+        expect(mrq.reload.options.count).to eq(0)
       end
 
       scenario 'I can delete a question' do

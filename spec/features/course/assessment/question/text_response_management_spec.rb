@@ -57,7 +57,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
         expect(question_created.allow_attachment).to be_truthy
       end
 
-      scenario 'I can edit a text response question', js: true do
+      scenario 'I can edit a text response question and delete options', js: true do
         question = create(:course_assessment_question_text_response, assessment: assessment,
                                                                      solutions: [])
         solutions = [
@@ -98,6 +98,19 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
         click_button I18n.t('helpers.buttons.update')
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(page).to have_selector('div.alert.alert-success')
+
+        # Delete all solutions from question
+        visit edit_path
+        all('tr.question_text_response_solution').each do |element|
+          within element do
+            click_link I18n.t('course.assessment.question.text_responses.solution_fields.remove')
+          end
+        end
+        click_button I18n.t('helpers.buttons.update')
+
+        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to have_selector('div.alert.alert-success')
+        expect(question.reload.solutions.count).to eq(0)
       end
 
       scenario 'I can delete a text response question' do
