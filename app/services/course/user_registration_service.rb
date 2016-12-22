@@ -35,7 +35,7 @@ class Course::UserRegistrationService
   # @param [Course::Registration] registration The registration object to be processed.
   # @return [CourseUser] The Course User which was created or updated from the registration.
   def register_without_registration_code(registration)
-    invitation = registration.course.invitations.pending_acceptance.for_user(registration.user)
+    invitation = registration.course.invitations.unconfirmed.for_user(registration.user)
     if invitation.nil?
       register_course_user(registration)
     else
@@ -130,7 +130,7 @@ class Course::UserRegistrationService
   #   valid.
   # @return [nil] If the code is invalid.
   def claim_course_invitation_code(registration)
-    invitations = registration.course.invitations.pending_acceptance
+    invitations = registration.course.invitations.unconfirmed
     invitation = invitations.find_by(invitation_key: registration.code)
     if invitation.nil?
       invalid_code(registration)
@@ -159,13 +159,10 @@ class Course::UserRegistrationService
   #    valid.
   # @return [nil] If the code is invalid.
   def accept_invitation(registration, invitation)
-    registration.course_user = invitation.course_user
-    invitation.course_user.accept!(registration.user)
     CourseUser.transaction do
-      assign_email_to_user(invitation.user_email, invitation.course_user.user)
-      invitation.course_user.save
+      invitation.confirm!
+      register_course_user(registration, workflow_state: :approved)
     end
-    invitation.course_user
   end
 
   # Assigns an unclaimed email address to a given user.
