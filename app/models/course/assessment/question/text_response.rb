@@ -7,7 +7,7 @@ class Course::Assessment::Question::TextResponse < ActiveRecord::Base
   has_many :solutions, class_name: Course::Assessment::Question::TextResponseSolution.name,
                        dependent: :destroy, foreign_key: :question_id, inverse_of: :question
 
-  accepts_nested_attributes_for :solutions
+  accepts_nested_attributes_for :solutions, allow_destroy: true
 
   def auto_gradable?
     !solutions.empty?
