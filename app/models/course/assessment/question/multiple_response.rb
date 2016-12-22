@@ -9,7 +9,7 @@ class Course::Assessment::Question::MultipleResponse < ActiveRecord::Base
   has_many :options, class_name: Course::Assessment::Question::MultipleResponseOption.name,
                      dependent: :destroy, foreign_key: :question_id, inverse_of: :question
 
-  accepts_nested_attributes_for :options
+  accepts_nested_attributes_for :options, allow_destroy: true
 
   # A Multiple Response Question is considered to be a Multiple Choice Question (MCQ)
   # if and only if it has an "any correct" grading scheme. The case where "any correct"
