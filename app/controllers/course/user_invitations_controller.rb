@@ -9,7 +9,9 @@ class Course::UserInvitationsController < Course::ComponentController
     @invitations = current_course.invitations.order(name: :asc)
   end
 
-  def new; end
+  def new
+    current_course.invitations.build
+  end
 
   def create # :nodoc:
     if invite
