@@ -6,12 +6,13 @@ class ChangeCourseUserInvitations < ActiveRecord::Migration
     add_column :course_user_invitations, :confirmed_at, :datetime
     add_index :course_user_invitations, [:course_id, :email], unique: true
 
-    Course::UserInvitation.includes(course_user: { user: :emails }).find_each do |invitation|
-      course_user = invitation.course_user
+    Course::UserInvitation.find_each do |invitation|
+      course_user = CourseUser.find(invitation.course_user_id)
+      email = User::Email.find(invitation.user_email_id)
       invitation.update_columns(
         course_id: course_user.course_id,
         name: course_user.name,
-        email: invitation.user_email.email,
+        email: email.email,
         confirmed_at: course_user.approved? ? course_user.user.created_at : nil
       )
     end
