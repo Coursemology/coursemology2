@@ -54,6 +54,8 @@ class User < ActiveRecord::Base
                            inverse_of: :user do
     include UserNotificationsConcern
   end
+  has_many :course_enrol_requests, dependent: :destroy, class_name: Course::EnrolRequest.name,
+                                   inverse_of: :user
   has_many :course_users, dependent: :destroy
   has_many :courses, through: :course_users
   has_many :todos, class_name: Course::LessonPlan::Todo.name, inverse_of: :user, dependent: :destroy

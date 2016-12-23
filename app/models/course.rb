@@ -17,6 +17,7 @@ class Course < ActiveRecord::Base
   PUBLIC_STATUSES = Set[:published, :opened].freeze
 
   belongs_to :instance, inverse_of: :courses
+  has_many :enrol_requests, inverse_of: :course, dependent: :destroy
   has_many :course_users, inverse_of: :course, dependent: :destroy
   # @!attribute [r] users
   # Returns all the users related to the course regardless of course_user state.
