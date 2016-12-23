@@ -1,6 +1,6 @@
 - if current_course_user.nil?
   = simple_form_for @registration, url: course_register_path(current_course) do |f|
-    - invitation = current_course.invitations.pending_acceptance.for_user(current_user)
+    - invitation = current_course.invitations.unconfirmed.for_user(current_user)
     - if invitation.present?
       = f.hidden_field :code
       = f.button :submit, value: t('.enter_course')

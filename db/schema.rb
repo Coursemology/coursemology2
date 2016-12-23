@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161214050848) do
+ActiveRecord::Schema.define(version: 20161219105620) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -605,12 +605,12 @@ ActiveRecord::Schema.define(version: 20161214050848) do
   end
 
   create_table "course_survey_responses", force: :cascade do |t|
-    t.integer  "survey_id",  :null=>false, :index=>{:name=>"fk__course_survey_responses_survey_id"}, :foreign_key=>{:references=>"course_surveys", :name=>"fk_course_survey_responses_survey_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "survey_id",    :null=>false, :index=>{:name=>"fk__course_survey_responses_survey_id"}, :foreign_key=>{:references=>"course_surveys", :name=>"fk_course_survey_responses_survey_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "submitted_at"
-    t.integer  "creator_id", :null=>false, :index=>{:name=>"fk__course_survey_responses_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_survey_responses_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "updater_id", :null=>false, :index=>{:name=>"fk__course_survey_responses_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_survey_responses_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.datetime "created_at", :null=>false
-    t.datetime "updated_at", :null=>false
+    t.integer  "creator_id",   :null=>false, :index=>{:name=>"fk__course_survey_responses_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_survey_responses_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "updater_id",   :null=>false, :index=>{:name=>"fk__course_survey_responses_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_survey_responses_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "created_at",   :null=>false
+    t.datetime "updated_at",   :null=>false
   end
 
   create_table "course_survey_answers", force: :cascade do |t|
@@ -636,26 +636,19 @@ ActiveRecord::Schema.define(version: 20161214050848) do
   end
   add_index "course_user_achievements", ["course_user_id", "achievement_id"], :name=>"index_user_achievements_on_course_user_id_and_achievement_id", :unique=>true
 
-  create_table "user_emails", force: :cascade do |t|
-    t.boolean  "primary",              :default=>false, :null=>false
-    t.integer  "user_id",              :index=>{:name=>"index_user_emails_on_user_id_and_primary", :with=>["primary"], :unique=>true, :where=>"(\"primary\" <> false)"}, :foreign_key=>{:references=>"users", :name=>"fk_user_emails_user_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.string   "email",                :limit=>255, :null=>false, :index=>{:name=>"index_user_emails_on_email", :unique=>true, :case_sensitive=>false}
-    t.string   "confirmation_token",   :limit=>255, :index=>{:name=>"index_user_emails_on_confirmation_token", :unique=>true}
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email",    :limit=>255
-  end
-
   create_table "course_user_invitations", force: :cascade do |t|
-    t.integer  "course_user_id", :null=>false, :index=>{:name=>"index_course_user_invitations_on_course_user_id", :unique=>true}, :foreign_key=>{:references=>"course_users", :name=>"fk_course_user_invitations_course_user_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "user_email_id",  :null=>false, :index=>{:name=>"fk__course_user_invitations_user_email_id"}, :foreign_key=>{:references=>"user_emails", :name=>"fk_course_user_invitations_user_email_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "course_id",      :null=>false, :index=>{:name=>"fk__course_user_invitations_course_id"}, :foreign_key=>{:references=>"courses", :name=>"fk_course_user_invitations_course_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.string   "name",           :limit=>255, :null=>false
+    t.string   "email",          :limit=>255, :null=>false, :index=>{:name=>"index_course_user_invitations_on_email", :case_sensitive=>false}
     t.string   "invitation_key", :limit=>16, :null=>false, :index=>{:name=>"index_course_user_invitations_on_invitation_key", :unique=>true}
     t.datetime "sent_at"
+    t.datetime "confirmed_at"
     t.integer  "creator_id",     :null=>false, :index=>{:name=>"fk__course_user_invitations_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_user_invitations_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "updater_id",     :null=>false, :index=>{:name=>"fk__course_user_invitations_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_user_invitations_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at",     :null=>false
     t.datetime "updated_at",     :null=>false
   end
+  add_index "course_user_invitations", ["course_id", "email"], :name=>"index_course_user_invitations_on_course_id_and_email", :unique=>true
 
   create_table "generic_announcements", force: :cascade do |t|
     t.string   "type",        :limit=>255, :null=>false
@@ -687,6 +680,16 @@ ActiveRecord::Schema.define(version: 20161214050848) do
     t.string   "reader_type",   :limit=>255
   end
   add_index "read_marks", ["reader_id", "reader_type", "readable_type", "readable_id"], :name=>"read_marks_reader_readable_index", :unique=>true
+
+  create_table "user_emails", force: :cascade do |t|
+    t.boolean  "primary",              :default=>false, :null=>false
+    t.integer  "user_id",              :index=>{:name=>"index_user_emails_on_user_id_and_primary", :with=>["primary"], :unique=>true, :where=>"(\"primary\" <> false)"}, :foreign_key=>{:references=>"users", :name=>"fk_user_emails_user_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.string   "email",                :limit=>255, :null=>false, :index=>{:name=>"index_user_emails_on_email", :unique=>true, :case_sensitive=>false}
+    t.string   "confirmation_token",   :limit=>255, :index=>{:name=>"index_user_emails_on_confirmation_token", :unique=>true}
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "unconfirmed_email",    :limit=>255
+  end
 
   create_table "user_identities", force: :cascade do |t|
     t.integer  "user_id",    :null=>false, :index=>{:name=>"fk__user_identities_user_id"}, :foreign_key=>{:references=>"users", :name=>"fk_user_identities_user_id", :on_update=>:no_action, :on_delete=>:no_action}

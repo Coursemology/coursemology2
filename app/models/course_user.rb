@@ -49,7 +49,6 @@ class CourseUser < ActiveRecord::Base
                           class_name: Course::Achievement.name do
     include CourseUser::AchievementsConcern
   end
-  has_one :invitation, class_name: Course::UserInvitation.name, dependent: :destroy, validate: true
   has_many :group_users, class_name: Course::GroupUser.name,
                          inverse_of: :course_user, dependent: :destroy
   has_many :groups, through: :group_users, class_name: Course::Group.name, source: :group

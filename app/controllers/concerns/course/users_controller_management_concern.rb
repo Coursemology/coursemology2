@@ -49,11 +49,6 @@ module Course::UsersControllerManagementConcern
     @course_users = @course_users.with_requested_state.includes(user: :emails)
   end
 
-  def invitations # :nodoc:
-    @course_users = @course_users.joins { invitation }.includes(invitation: :user_email).
-                    order(workflow_state: :desc, name: :asc)
-  end
-
   private
 
   def course_user_params # :nodoc:
@@ -127,9 +122,7 @@ module Course::UsersControllerManagementConcern
 
   # Selects an appropriate redirect path depending on the user being deleted.
   def delete_redirect_path
-    if @course_user.invited?
-      course_users_invitations_path(current_course)
-    elsif @course_user.staff?
+    if @course_user.staff?
       course_users_staff_path(current_course)
     else
       course_users_students_path(current_course)

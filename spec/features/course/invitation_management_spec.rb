@@ -19,18 +19,17 @@ RSpec.feature 'Courses: Invitations', js: true do
         expect(page).not_to have_selector(".user_invitation#user_invitation_#{invitation.id}")
 
         click_link I18n.t('course.user_invitations.new.tabs.individual')
-        click_link I18n.t('course.user_invitations.new.individual.add_user')
         name = 'My name'
         email = 'email_test@example.org'
         within find('div#individual form') do
-          fill_in find(:css, 'input.course_user_name')[:name], with: name
-          fill_in find(:css, 'input.course_user_email')[:name], with: email
+          find(:css, 'input.invitation_name').set(name)
+          find(:css, 'input.invitation_email').set(email)
           click_button 'submit'
         end
 
         expect(page).to have_selector('div.progress > div[aria-valuenow="0"]')
-        expect(page).to have_selector('tr.course_user th', text: name)
-        expect(page).to have_selector('tr.course_user td', text: email)
+        expect(page).to have_selector('tr.user_invitation th', text: name)
+        expect(page).to have_selector('tr.user_invitation td', text: email)
       end
 
       scenario 'I can invite users by uploading a file' do
@@ -48,9 +47,9 @@ RSpec.feature 'Courses: Invitations', js: true do
         end
         expect(page).to have_selector('div.progress')
         users.each do |user|
-          expect(page).to have_selector('tr.course_user th', text: user.name)
-          expect(page).to have_selector('tr.course_user td', text: user.email)
-          expect(page).to have_selector('tr.course_user td',
+          expect(page).to have_selector('tr.user_invitation th', text: user.name)
+          expect(page).to have_selector('tr.user_invitation td', text: user.email)
+          expect(page).to have_selector('tr.user_invitation td',
                                         text: I18n.t('course.users.status.invited'))
         end
       end
@@ -82,22 +81,21 @@ RSpec.feature 'Courses: Invitations', js: true do
       end
 
       scenario 'I can track the status of invites, resend invites and delete invites' do
-        visit course_users_invitations_path(course)
+        visit course_user_invitations_path(course)
 
         old_time = 1.day.ago
         invitations = create_list(:course_user_invitation, 3, course: course, sent_at: old_time)
-        invitations.first.course_user.accept!(create(:instance_user).user)
-        invitations.first.course_user.save!
+        invitations.first.confirm!
         invitation_to_delete = invitations.second
-        visit course_users_invitations_path(course)
+        visit course_user_invitations_path(course)
 
         expect(page).to have_selector('div.progress')
         invitations.each do |invitation|
-          within page.find(".course_user#course_user_#{invitation.course_user.id}") do
+          within page.find(".user_invitation#user_invitation_#{invitation.id}") do
             expect(page).to have_selector('th')
             expect(page).to have_selector('td')
 
-            if invitation.course_user.approved?
+            if invitation.confirmed?
               expect(page).to have_selector('td', text: I18n.t('course.users.status.accepted'))
             else
               expect(page).to have_selector('td', text: I18n.t('course.users.status.invited'))
@@ -105,15 +103,15 @@ RSpec.feature 'Courses: Invitations', js: true do
           end
         end
 
-        find_link(I18n.t('course.users.invitations.resend_button'),
+        find_link(I18n.t('course.user_invitations.index.resend_button'),
                   href: resend_invitations_course_users_path(course)).click
-        expect(current_path).to eq(course_users_invitations_path(course))
+        expect(current_path).to eq(course_user_invitations_path(course))
         expect(invitation_to_delete.reload.sent_at).not_to eq(old_time)
 
         find_link(nil,
-                  href: course_user_path(course, invitation_to_delete.course_user)).click
-        expect(current_path).to eq(course_users_invitations_path(course))
-        expect(page).not_to have_content_tag_for(invitation_to_delete.course_user)
+                  href: course_user_invitation_path(course, invitation_to_delete)).click
+        expect(current_path).to eq(course_user_invitations_path(course))
+        expect(page).not_to have_content_tag_for(invitation_to_delete)
       end
     end
 
@@ -123,9 +121,9 @@ RSpec.feature 'Courses: Invitations', js: true do
       let(:user) { instance_user.user }
 
       context 'when I have been invited using my current email address' do
-        let(:user_email) { user.emails.first }
+        let(:user_email) { user.email }
         let!(:invitation) do
-          create(:course_user_invitation, course: course, user_email: user_email)
+          create(:course_user_invitation, course: course, email: user_email)
         end
 
         scenario 'I can enter the course' do
@@ -133,7 +131,7 @@ RSpec.feature 'Courses: Invitations', js: true do
           expect(page).not_to have_button('.register')
 
           click_button I18n.t('course.user_registrations.registration.enter_course')
-          expect(invitation.course_user.reload).to be_approved
+          expect(course.course_users.find_by(user_id: user.id)).to be_present
         end
       end
 
@@ -146,7 +144,7 @@ RSpec.feature 'Courses: Invitations', js: true do
           click_button I18n.t('course.user_registrations.registration.register')
 
           expect(page).not_to have_selector('div.register')
-          expect(user.reload.emails).to include(invitation.user_email)
+          expect(course.course_users.find_by(user_id: user.id)).to be_present
         end
       end
 

@@ -1,4 +1,4 @@
-- invited = course_users.first.invited?
+- pending = !invitations.first.confirmed?
 table.table.table-striped.table-hover
   thead
     tr
@@ -6,24 +6,24 @@ table.table.table-striped.table-hover
       th = t('common.email')
       th = t('.invitation_code')
       th = t('.status')
-      - if invited
+      - if pending
         th = t('.sent_at')
         th
       th
 
   tbody
-    - course_users.each do |course_user|
-      = content_tag_for(:tr, course_user) do
-        th = course_user.name
-        td = course_user.invitation.user_email.email
-        td = course_user.invitation.invitation_key
-        - if invited
+    - invitations.each do |invitation|
+      = content_tag_for(:tr, invitation) do
+        th = invitation.name
+        td = invitation.email
+        td = invitation.invitation_key
+        - if pending
           td = t('course.users.status.invited')
           td
-            - if course_user.invitation.sent_at
-              = format_datetime(course_user.invitation.sent_at, :short)
+            - if invitation.sent_at
+              = format_datetime(invitation.sent_at, :short)
           td
-            = delete_button([current_course, course_user],
+            = delete_button([current_course, invitation],
                             class: 'btn-xs', title: t('.delete_tooltip')) do
               = fa_icon 'close'.freeze
           td

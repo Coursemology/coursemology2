@@ -6,11 +6,11 @@ class Course::Mailer < ApplicationMailer
   # @param [Course] course The course that was involved.
   # @param [Course::UserInvitation] invitation The invitation which was generated.
   def user_invitation_email(course, invitation)
-    @recipient = invitation.course_user
     @course = course
     @invitation = invitation
+    @recipient = invitation
 
-    mail(to: invitation.user_email.email, subject: t('.subject', course: @course.title))
+    mail(to: invitation.email, subject: t('.subject', course: @course.title))
   end
 
   # Sends a notification email to a user informing his registration in a course.

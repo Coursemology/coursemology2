@@ -1,28 +1,8 @@
 # frozen_string_literal: true
 FactoryGirl.define do
   factory :course_user_invitation, class: Course::UserInvitation do
-    transient do
-      course nil
-      user nil
-    end
-
-    course_user do
-      options = { workflow_state: :invited }
-      options[:user] = user
-      options[:course] = course if course
-      build(:course_user, options)
-    end
-    user_email do
-      if user.present?
-        user.emails.take
-      else
-        build(:user_email, :without_user, primary: false)
-      end
-    end
-
-    after(:create) do |invitation|
-      invitation.course_user.save!
-      invitation.user_email.save!
-    end
+    course
+    sequence(:name) { |n| "course user #{n}" }
+    email { generate(:email) }
   end
 end

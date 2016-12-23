@@ -43,6 +43,8 @@ div.methods role='tabpanel'
                   = link_to_add_association t('.individual.add_user'), f, :invitations,
                                             find_selector: 'tbody', insert_using: 'append'
           tbody
+            = f.simple_fields_for :invitations, current_course.invitations.select(&:new_record?) do |invitation_form|
+              = render 'invitation_fields', f: invitation_form
 
         = f.button :submit
 

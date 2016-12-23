@@ -86,11 +86,10 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
           end
 
           context 'when the user is already registered' do
-            let(:invitation) { Course::UserInvitation.find_by(invitation_key: registration_code) }
-            before do
-              invitation.course_user.accept!(user)
-              invitation.course_user.save!
-            end
+            let(:user) { create(:user) }
+            let!(:course_user) { create(:course_student, user: user, course: course) }
+            let(:invitation) { create(:course_user_invitation, email: user.email) }
+            let(:registration_code) { invitation.invitation_key }
 
             it { expect { subject }.not_to change { course.course_users.reload.count } }
             it { is_expected.to redirect_to(course_path(course)) }

@@ -20,7 +20,8 @@ module Course::UserInvitationService::EmailInvitationConcern
 
     success = Course.transaction do
       registered_users, invited_users = invite_from_source(users)
-      @current_course.save && @current_course.valid?
+      return false if @current_course.invitations.any? { |invitation| !invitation.errors.empty? }
+      @current_course.save
     end
 
     success && send_invitation_emails(registered_users, invited_users)
@@ -29,12 +30,11 @@ module Course::UserInvitationService::EmailInvitationConcern
   # Resends invitation emails to CourseUsers to the given course.
   # This method disregards CourseUsers that do not have an 'invited' status.
   #
-  # @param [Array<CourseUser>] invited_users An array of CourseUsers for invitations to be resent.
-  # @return [Boolean] True if there were no errors in sending invitations for invited CourseUsers.
+  # @param [Array<Course::UserInvitation>] invitations An array of invitations to be resent.
+  # @return [Boolean] True if there were no errors in sending invitations.
   #   If all provided CourseUsers have already registered, method also returns true.
-  def resend_invitation(invited_users)
-    invitations = invited_users.select(&:invited?).map(&:invitation)
-    invitations.blank? ? true : send_invitation_emails_to_invited_users(invitations)
+  def resend_invitation(invitations)
+    invitations.blank? ? true : resend_invitation_emails(invitations)
   end
 
   private
@@ -90,7 +90,7 @@ module Course::UserInvitationService::EmailInvitationConcern
   # @return [void]
   def invite_from_form(users)
     invite_users(users.map do |(_, value)|
-      { name: value[:course_user][:name], email: value[:user_email][:email] }
+      { name: value[:name], email: value[:email] }
     end)
   end
 
@@ -151,26 +151,10 @@ module Course::UserInvitationService::EmailInvitationConcern
   # @return [Array<Course::UserInvitation>)>] An array containing the list of users who were
   #   invited.
   def invite_new_users(users)
-    user_email_map = user_email_map(users.map { |user| user[:email] })
-
-    users.map do |user|
-      course_user = @current_course.course_users.build(name: user[:name], workflow_state: :invited,
-                                                       creator: @current_user,
-                                                       updater: @current_user)
-      user_email = user_email_map[user[:email]] || User::Email.new(email: user[:email])
-      user_email.skip_confirmation!
-      course_user.build_invitation(user_email: user_email, creator: @current_user,
-                                   updater: @current_user)
+    invitations = users.map do |user|
+      @current_course.invitations.build(name: user[:name], email: user[:email])
     end
-  end
-
-  # Creates an email-to-user mapping, given a list of email addresses.
-  #
-  # @param [Array<String>] users An array of email addresses to query.
-  # @return [Hash{String=>User::Email}] The mapping from an email address to a +User::Email+.
-  def user_email_map(users)
-    User::Email.where { email.in(users) }.
-      map { |user_email| [user_email.email, user_email] }.to_h
+    validate_new_invitation_emails(invitations)
   end
 
   # Sends invitation emails to the users invited.
@@ -182,22 +166,40 @@ module Course::UserInvitationService::EmailInvitationConcern
     registered_users.each do |user|
       Course::Mailer.user_added_email(@current_course, user).deliver_later
     end
-    send_invitation_emails_to_invited_users(invited_users)
+    resend_invitation_emails(invited_users)
   end
 
-  # Sends invitation emails to the invited users. This method also updates the sent_at timing for
+  # Resends invitation emails. This method also updates the sent_at timing for
   # Course::UserInvitation objects for tracking purposes.
   #
   # Note that since +deliver_later+ is used, this is an approximation on the time sent.
   #
-  # @param [Array<Course::UserInvitation>] invited_users An array of invitations sent out to users.
+  # @param [Array<Course::UserInvitation>] invitations An array of invitations sent out to users.
   # @return [Boolean] True if the invitations were updated.
-  def send_invitation_emails_to_invited_users(invited_users)
-    invited_users.each do |user|
-      Course::Mailer.user_invitation_email(@current_course, user).deliver_later
+  def resend_invitation_emails(invitations)
+    invitations.each do |invitation|
+      Course::Mailer.user_invitation_email(@current_course, invitation).deliver_later
     end
-    ids = invited_users.select(&:id)
+    ids = invitations.select(&:id)
     Course::UserInvitation.where { id >> ids }.update_all(sent_at: Time.zone.now)
     true
+  end
+
+  # Validate that the new invitation emails are unique.
+  #
+  # The uniqueness constraint of AR does not guarantee the new_records are unique among themselves.
+  # ( i.e Two new records with the same email will raise a {RecordNotUnique} error upon saving. )
+  #
+  # @param [Array<Course::UserInvitation>] invitations An array of invitations.
+  # @param [Array<Course::UserInvitation>] The validated invitations.
+  def validate_new_invitation_emails(invitations)
+    emails = invitations.map(&:email)
+    duplicates = emails.select { |email| emails.count(email) > 1 }
+    return invitations if duplicates.empty?
+
+    invitations.each do |invitation|
+      invitation.errors.add(:email, :taken) if duplicates.include?(invitation.email)
+    end
+    invitations
   end
 end

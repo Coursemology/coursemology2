@@ -4,6 +4,25 @@ en:
       errors:
         duplicate_user: '%{user} appears more than once in the submission.'
         invalid_email: '%{email} is an invalid email address.'
+      index:
+        header: 'Invitations'
+        progress: '%{accepted} accepted / %{total} invited'
+        manual_acceptance: >
+          The following table lists all invitations which have been sent out to date.
+
+
+          Users can key in their associated invitation code into the course registration page to
+          register into this course.
+        invited_header: 'Pending Invitations'
+        accepted_header: 'Accepted Invitations'
+        resend_button: 'Resend All Invitations'
+      destroy:
+        success: 'Invitation to %{name} was deleted.'
+      course_user_invitations:
+        invitation_code: 'Invitation Code'
+        status: 'Status'
+        sent_at: 'Invitation Sent At'
+        delete_tooltip: 'Delete Invitation'
       new:
         header: 'Invite Users'
         tabs:
@@ -24,13 +43,13 @@ en:
           disable: 'Disable'
           disabled: 'Registration via registration codes are currently disabled.'
           enable: 'Enable'
-      invitation_fields:
-        remove: 'Remove'
-      create_success_message:
+      create:
         file:
           success: 'Successfully invited users from the uploaded file.'
         manual_entry:
           success: 'Successfully invited users with the given details.'
+      invitation_fields:
+        remove: 'Remove'
       resend_invitations:
         success: 'Email invitations were successfully resent.'
         failure: 'The resending of email invitations failed.'

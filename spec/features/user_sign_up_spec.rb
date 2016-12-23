@@ -28,8 +28,8 @@ RSpec.feature 'Users: Sign Up' do
     end
 
     context 'As a user invited by course staffs' do
-      let!(:invitation) { create(:course_user_invitation, user: nil) }
-      let(:invited_email) { invitation.user_email.email }
+      let!(:invitation) { create(:course_user_invitation) }
+      let(:invited_email) { invitation.email }
 
       scenario 'I can register for an account' do
         visit new_user_registration_path

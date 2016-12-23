@@ -15,7 +15,7 @@ RSpec.describe Course::Mailer, type: :mailer do
       let(:mail) { Course::Mailer.user_invitation_email(course, invitation) }
 
       it 'sends to the correct person' do
-        expect(subject.to).to contain_exactly(invitation.user_email.email)
+        expect(subject.to).to contain_exactly(invitation.email)
       end
 
       it 'sets the correct subject' do

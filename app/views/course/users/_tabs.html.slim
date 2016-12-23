@@ -6,4 +6,4 @@
     - requests_count = current_course.course_users.with_requested_state.count
     =< badge(requests_count) if requests_count > 0
   = nav_to(t('.invite'), invite_course_users_path(current_course), class: 'dropdown')
-  = nav_to(t('.invitations'), course_users_invitations_path(current_course))
+  = nav_to(t('.invitations'), course_user_invitations_path(current_course))

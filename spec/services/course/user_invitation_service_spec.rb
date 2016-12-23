@@ -52,22 +52,13 @@ RSpec.describe Course::UserInvitationService, type: :service do
     let(:user_form_attributes) do
       user_attributes.map do |hash|
         [generate(:nested_attribute_new_id), {
-          course_user: { name: hash[:name] },
-          user_email: { email: hash[:email] }
+          name: hash[:name],
+          email: hash[:email]
         }]
       end.to_h
     end
 
     describe '#invite' do
-      def verify_new_user(user)
-        created_course_user = course.course_users.find do |course_user|
-          course_user.try(:invitation).try(:user_email).try(:email) == user.email
-        end
-        expect(created_course_user).not_to be_nil
-        expect(created_course_user).to be_invited
-        expect(created_course_user.name).to eq(user.name)
-      end
-
       def verify_existing_user(user)
         created_course_user = course.course_users.find do |course_user|
           course_user.try(:user).try(:email) == user.email
@@ -78,7 +69,6 @@ RSpec.describe Course::UserInvitationService, type: :service do
       end
 
       def verify_users
-        new_users.each(&method(:verify_new_user))
         existing_users.each(&method(:verify_existing_user))
       end
 
@@ -158,10 +148,8 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
         it 'sets the proper errors' do
           invite
-          errors = course.course_users.map(&:invitation).
-                   map { |invitation| invitation.try(:user_email).try(:errors) }.
-                   tap(&:compact!).reject(&:empty?)
-          expect(errors.length).to eq(1)
+          errors = course.invitations.map(&:errors).tap(&:compact!).reject(&:empty?)
+          expect(errors.length).to eq(2)
           expect(errors.first[:email].all? { |error| error =~ /been taken/ }).to be_truthy
         end
       end
@@ -181,9 +169,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
         it 'sets the proper errors' do
           invite
-          errors = course.course_users.map(&:invitation).
-                   map { |invitation| invitation.try(:user_email).try(:errors) }.
-                   tap(&:compact!).reject(&:empty?)
+          errors = course.invitations.map(&:errors).tap(&:compact!).reject(&:empty?)
           expect(errors.length).to eq(1)
           expect(errors.first[:email].first).to match(/invalid/)
         end
@@ -192,32 +178,27 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
     describe '#resend_invitation' do
       let(:previous_sent_time) { 1.day.ago }
-      let(:invited_course_users) do
-        create_list(:course_user_invitation, 3, course: course, sent_at: previous_sent_time).
-          map(&:course_user)
+      let(:pending_invitations) do
+        create_list(:course_user_invitation, 3, course: course, sent_at: previous_sent_time)
       end
-      let(:registered_course_user) { create(:course_student, course: course) }
-      let(:course_users) { invited_course_users + [registered_course_user] }
 
-      context 'when provided course users have already registered' do
-        with_active_job_queue_adapter(:test) do
-          it 'sends an email to everyone' do
-            expect do
-              subject.resend_invitation(course_users)
-            end.to change { ActionMailer::Base.deliveries.count }.by(invited_course_users.count)
-          end
+      with_active_job_queue_adapter(:test) do
+        it 'sends an email to everyone' do
+          expect do
+            subject.resend_invitation(pending_invitations)
+          end.to change { ActionMailer::Base.deliveries.count }.by(pending_invitations.count)
         end
+      end
 
-        it 'updates the sent_at field in each invitation' do
-          subject.resend_invitation(course_users)
-          invited_course_users.each do |course_user|
-            expect(course_user.invitation.reload.sent_at).not_to eq previous_sent_time
-          end
+      it 'updates the sent_at field in each invitation' do
+        subject.resend_invitation(pending_invitations)
+        pending_invitations.each do |invitation|
+          expect(invitation.reload.sent_at).not_to eq previous_sent_time
         end
+      end
 
-        it 'returns true if there are no errors' do
-          expect(subject.resend_invitation(course_users)).to be_truthy
-        end
+      it 'returns true if there are no errors' do
+        expect(subject.resend_invitation(pending_invitations)).to be_truthy
       end
     end
 
@@ -287,13 +268,11 @@ RSpec.describe Course::UserInvitationService, type: :service do
       end
 
       context 'when users do not exist in the current instance' do
-        it 'invites users' do
+        it 'sends the invitations' do
           subject.send(:invite_users, new_user_attributes)
           new_users.each do |user|
-            expect(course.course_users.any? do |course_user|
-              course_user.invitation.present? &&
-                course_user.invitation.user_email.email == user.email &&
-                course_user.invited?
+            expect(course.invitations.any? do |invitation|
+              invitation.email == user.email
             end).to be_truthy
           end
         end
@@ -347,63 +326,16 @@ RSpec.describe Course::UserInvitationService, type: :service do
       end
     end
 
-    describe '#add_existing_users' do
-      let(:invitations) do
-        existing_user_attributes
-      end
-
-      it 'adds all users to the course with an approved state' do
-        subject.send(:add_existing_users, invitations)
-        invitations.each do |invitation|
-          invited_user = course.course_users.each.find { |user| user.name == invitation[:name] }
-          expect(invited_user).to be_approved
-          expect(invited_user.invitation).to be_nil
-        end
-      end
-    end
-
     describe '#invite_new_users' do
-      let(:invitations) do
+      let(:invitation_params) do
         new_user_attributes
       end
 
-      it 'adds all users to the course with an invited state' do
-        subject.send(:invite_new_users, invitations)
-        invitations.each do |invitation|
-          invited_user = course.course_users.each.find { |user| user.name == invitation[:name] }
-          expect(invited_user).to be_invited
-        end
-      end
-
       it 'adds an invitation to the user' do
-        subject.send(:invite_new_users, invitations)
-        invitations.each do |invitation|
-          invited_user = course.course_users.each.find { |user| user.name == invitation[:name] }
-          expect(invited_user.invitation.user_email.email).to eq(invitation[:email])
-        end
-      end
-    end
-
-    describe '#user_email_map' do
-      it 'returns a hash' do
-        expect(subject.send(:user_email_map, [])).to be_a(Hash)
-      end
-
-      context "when the user's email exists" do
-        let!(:email) { create(:user_email, user: nil) }
-        it 'associates the email address with a User::Email object' do
-          result = subject.send(:user_email_map, [email.email])
-          expect(result).to have_key(email.email)
-          expect(result[email.email]).to eq(email)
-        end
-      end
-
-      context "when the user's email does not exist" do
-        let!(:email) { generate(:email) }
-        it 'does not define a key' do
-          result = subject.send(:user_email_map, [email])
-          expect(result).not_to have_key(email)
-          expect(result.size).to eq(0)
+        subject.send(:invite_new_users, invitation_params)
+        invitation_params.each do |hash|
+          invitation = course.invitations.find { |i| i.name == hash[:name] }
+          expect(invitation.email).to eq(hash[:email])
         end
       end
     end

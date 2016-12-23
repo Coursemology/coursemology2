@@ -12,8 +12,8 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
         course.course_users.build(user: user).save
         course.course_users.build(user: user)
 
-        course.course_users.build(workflow_state: :invited, name: generate(:name)).
-          build_invitation.build_user_email(email: 'fdgsdf@no')
+        course.course_users.build(workflow_state: :invited, name: generate(:name))
+        course.invitations.build(name: generate(:name), email: 'fdgsdf@no')
         course.save
       end
     end
@@ -28,10 +28,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
     describe '#create' do
       before { sign_in(user) }
       let(:invite_params) do
-        invitation = {
-          course_user: { name: generate(:name) },
-          user_email: { email: generate(:email) }
-        }
+        invitation = { name: generate(:name), email: generate(:email) }
         invitations = { generate(:nested_attribute_new_id) => invitation }
         { invitations_attributes: invitations }
       end
@@ -41,7 +38,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
       context 'when a course manager visits the page' do
         let!(:course_lecturer) { create(:course_manager, course: course, user: user) }
 
-        it { is_expected.to redirect_to(course_users_invitations_path(course)) }
+        it { is_expected.to redirect_to(course_user_invitations_path(course)) }
 
         context 'when the invitations do not get created successfully' do
           before do
@@ -70,7 +67,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
 
         context 'when no users are manually specified for invitations' do
           subject { post :create, course_id: course }
-          it { is_expected.to redirect_to(course_users_invitations_path(course)) }
+          it { is_expected.to redirect_to(course_user_invitations_path(course)) }
         end
       end
 
@@ -108,43 +105,43 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
         create(:course_manager, course: course, user: user)
         sign_in(user)
       end
-      let(:invited_course_users) do
-        create_list(:course_user_invitation, 3, course: course).map(&:course_user)
+      let(:pending_invitations) do
+        create_list(:course_user_invitation, 3, course: course)
       end
       let(:student) { create(:course_student, course: course) }
       subject { post :resend_invitations, course_id: course, course: invitation_params }
 
-      context 'when only 1 course_user is specified' do
-        let(:invited_course_user) { invited_course_users.first }
-        let(:invitation_params) { { course_user: invited_course_user } }
+      context 'when only 1 invitation is specified' do
+        let(:invitation) { pending_invitations.first }
+        let(:invitation_params) { { invitaiton: invitation } }
 
-        it { is_expected.to redirect_to(course_users_invitations_path(course)) }
+        it { is_expected.to redirect_to(course_user_invitations_path(course)) }
         it 'loads the course_user' do
           subject
-          expect(controller.instance_variable_get(:@course_users)).
-            to contain_exactly(invited_course_user)
+          expect(controller.instance_variable_get(:@pending_invitations)).
+            to contain_exactly(*pending_invitations)
         end
       end
 
-      context 'when multiple course_users are specified' do
-        let(:invited_users) { invited_course_users[0..1] }
-        let(:invitation_params) { { course_users: invited_users } }
+      context 'when multiple invitations are specified' do
+        let(:invitations) { pending_invitations[0..1] }
+        let(:invitation_params) { { invitations: invitations } }
 
-        it 'loads the necessary course_users' do
+        it 'loads the necessary invitations' do
           subject
-          expect(controller.instance_variable_get(:@course_users)).
-            to contain_exactly(*invited_users)
+          expect(controller.instance_variable_get(:@pending_invitations)).
+            to contain_exactly(*invitations)
         end
       end
 
-      context 'when no course_users are specified' do
-        before { invited_course_users }
+      context 'when no invitations are specified' do
+        before { pending_invitations }
         subject { post :resend_invitations, course_id: course }
 
-        it 'loads the all course_users which are invited' do
+        it 'loads the all unconfirmed invitations' do
           subject
-          expect(controller.instance_variable_get(:@course_users)).
-            to contain_exactly(*invited_course_users)
+          expect(controller.instance_variable_get(:@pending_invitations)).
+            to contain_exactly(*pending_invitations)
         end
       end
     end
