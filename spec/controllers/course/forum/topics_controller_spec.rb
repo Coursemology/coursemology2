@@ -10,7 +10,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
     let(:forum) { create(:forum, course: course) }
     let(:topic) { create(:forum_topic, forum: forum) }
     let(:topic_stub) do
-      stub = build_stubbed(:forum_topic, forum: forum)
+      stub = create(:forum_topic, forum: forum)
       allow(stub).to receive(:save).and_return(false)
       allow(stub).to receive(:destroy).and_return(false)
       allow(stub.subscriptions).to receive(:create).and_return(false)
