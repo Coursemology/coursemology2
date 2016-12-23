@@ -8,7 +8,7 @@ RSpec.describe Course::Assessment::Answer::TextResponse, type: :model do
   with_tenant(:instance) do
     describe 'validations' do
       subject do
-        build_stubbed(:course_assessment_answer_text_response, answer_text: '  content  ')
+        create(:course_assessment_answer_text_response, answer_text: '  content  ')
       end
 
       describe '#answer_text' do
