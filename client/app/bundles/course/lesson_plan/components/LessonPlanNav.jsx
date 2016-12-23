@@ -6,7 +6,7 @@ import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import KeyboardArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
-import { scroller } from 'react-scroll';
+import { scroller, Helpers } from 'react-scroll';
 
 const propTypes = {
   milestones: PropTypes.instanceOf(Immutable.List).isRequired,
@@ -34,6 +34,7 @@ class LessonPlanNav extends React.Component {
 
     this.state = {
       open: false,
+      text: props.intl.formatMessage(translations.goto),
     };
 
     this.handleTouchTap = this.handleTouchTap.bind(this);
@@ -56,14 +57,42 @@ class LessonPlanNav extends React.Component {
     });
   }
 
+  /**
+   * Ideally, these scroll listeners should be mounted with the Popover MenuItems using
+   * react-scroll's Link component. However, if we do that, the button text will not be
+   * updated when the Popover Menu is closed, since the MenuItems (and hence the listeners)
+   * will not be mounted. Instead, we mount it on empty dummy spans.
+   */
+  renderScrollSpies() {
+    const { milestones } = this.props;
+    const ScrollSpy = Helpers.Scroll('span'); // eslint-disable-line new-cap
+
+    return (
+      <span>
+        {
+          milestones.map(milestone => (
+            <ScrollSpy
+              spy
+              key={milestone.get('id')}
+              to={`milestone-group-${milestone.get('id')}`}
+              onSetActive={() => { this.setState({ text: milestone.get('title') }); }}
+              offset={-50}
+            />
+          ))
+        }
+      </span>
+    );
+  }
+
   renderNav() {
-    const { milestones, intl } = this.props;
+    const { milestones } = this.props;
 
     return (
       <div>
+        { this.renderScrollSpies() }
         <RaisedButton
           onTouchTap={this.handleTouchTap}
-          label={intl.formatMessage(translations.goto)}
+          label={this.state.text}
           labelPosition="before"
           icon={<KeyboardArrowUp />}
           style={styles.navButton}
