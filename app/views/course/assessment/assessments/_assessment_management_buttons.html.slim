@@ -1,6 +1,11 @@
 div.btn-group
   - if current_course_user
-    - submissions = assessment.submissions.select { |s| s.creator == current_user }
+    / If submissions are preloaded, find through the array. Otherwise, execute a SQL query.
+    / Remove N+1 Queries on this partial.
+    - submissions = assessment.submissions.loaded? ? \
+          assessment.submissions.select { |s| s.creator == current_user } : \
+          assessment.submissions.where(creator: current_user)
+
     - attempting_submission = submissions.find(&:attempting?)
     - submitted_submission = submissions.find { |s| !s.attempting? }
     - if attempting_submission
