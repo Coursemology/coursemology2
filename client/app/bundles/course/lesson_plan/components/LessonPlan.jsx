@@ -2,22 +2,17 @@ import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
 import { injectIntl, defineMessages } from 'react-intl';
 import { scroller } from 'react-scroll';
-import { grey600 } from 'material-ui/styles/colors';
 import styles from './LessonPlan.scss';
 import LessonPlanNav from '../components/LessonPlanNav';
 import LessonPlanFilter from '../components/LessonPlanFilter';
 import LessonPlanGroup from '../components/LessonPlanGroup';
+import LessonPlanEmpty from '../components/LessonPlanEmpty';
 
 const translations = defineMessages({
   priorItemsMilestoneTitle: {
     id: 'course.lessonPlan.lessonPlan.priorItemsMilestoneTitle',
     defaultMessage: 'Prior Items',
     description: 'Title for prior items milestones',
-  },
-  emptyLessonPlanMessage: {
-    id: 'course.lessonPlan.lessonPlan.emptyLessonPlanMessage',
-    defaultMessage: 'The lesson plan is empty. Add a new event or milestone via the buttons on the top-right.',
-    description: 'Informs user that the lesson plan is empty.',
   },
 });
 
@@ -29,12 +24,6 @@ const propTypes = {
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
-};
-
-const inlineStyles = {
-  emptyLessonPlanMessage: {
-    color: grey600,
-  },
 };
 
 class LessonPlan extends React.Component {
@@ -163,26 +152,15 @@ class LessonPlan extends React.Component {
     );
   }
 
-  renderEmptyLessonPlanMessage() {
-    const { intl } = this.props;
-
-    return (
-      <h4 style={inlineStyles.emptyLessonPlanMessage}>
-        {intl.formatMessage(translations.emptyLessonPlanMessage)}
-      </h4>
-    );
-  }
-
   render() {
     const { milestones, items } = this.props;
 
     return (
       milestones.size > 0 || items.size > 0 ?
       this.renderLessonPlan() :
-      this.renderEmptyLessonPlanMessage()
+      <LessonPlanEmpty />
     );
   }
-
 }
 
 LessonPlan.propTypes = propTypes;
