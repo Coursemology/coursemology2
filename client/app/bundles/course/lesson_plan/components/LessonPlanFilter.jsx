@@ -7,9 +7,9 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Done from 'material-ui/svg-icons/action/done';
 import KeyboardArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
+import lessonPlanItemTypeKey from '../utils';
 
 const propTypes = {
-  lessonPlanItemTypeKey: PropTypes.func.isRequired,
   toggleItemTypeVisibility: PropTypes.func.isRequired,
   hiddenItemTypes: PropTypes.instanceOf(Immutable.List).isRequired,
   items: PropTypes.instanceOf(Immutable.List).isRequired,
@@ -56,7 +56,6 @@ class LessonPlanFilter extends React.Component {
   render() {
     const {
       toggleItemTypeVisibility,
-      lessonPlanItemTypeKey,
       hiddenItemTypes,
       items,
       intl,
