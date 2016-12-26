@@ -3,7 +3,6 @@ import Immutable from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { injectIntl, defineMessages } from 'react-intl';
-import LessonPlan from '../components/LessonPlan';
 import * as actionCreators from '../actions';
 import lessonPlanItemTypeKey from '../utils';
 
@@ -23,6 +22,7 @@ const propTypes = {
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
+  children: PropTypes.element.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -100,7 +100,7 @@ class LessonPlanContainer extends React.Component {
       milestoneGroups: this.milestoneGroups(),
     };
 
-    return (<LessonPlan {...childProps} />);
+    return (React.cloneElement(this.props.children, childProps));
   }
 }
 

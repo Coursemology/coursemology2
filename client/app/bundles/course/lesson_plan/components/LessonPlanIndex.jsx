@@ -1,21 +1,23 @@
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
 import { scroller } from 'react-scroll';
-import styles from './LessonPlan.scss';
+import styles from './LessonPlanIndex.scss';
 import LessonPlanNav from '../components/LessonPlanNav';
 import LessonPlanFilter from '../components/LessonPlanFilter';
 import LessonPlanGroup from '../components/LessonPlanGroup';
 import LessonPlanEmpty from '../components/LessonPlanEmpty';
 
+// Props not marked as required to avoid false alarm warning when element is cloned.
+// See https://github.com/facebook/react/issues/4494
 const propTypes = {
-  milestones: PropTypes.instanceOf(Immutable.List).isRequired,
-  items: PropTypes.instanceOf(Immutable.List).isRequired,
-  hiddenItemTypes: PropTypes.instanceOf(Immutable.List).isRequired,
-  toggleItemTypeVisibility: PropTypes.func.isRequired,
-  milestoneGroups: PropTypes.array.isRequired,
+  milestones: PropTypes.instanceOf(Immutable.List),
+  items: PropTypes.instanceOf(Immutable.List),
+  hiddenItemTypes: PropTypes.instanceOf(Immutable.List),
+  toggleItemTypeVisibility: PropTypes.func,
+  milestoneGroups: PropTypes.array,
 };
 
-class LessonPlan extends React.Component {
+class LessonPlanIndex extends React.Component {
   componentDidMount() {
     const lastMilestone = this.lastPastMilestone();
     if (lastMilestone) {
@@ -82,6 +84,6 @@ class LessonPlan extends React.Component {
   }
 }
 
-LessonPlan.propTypes = propTypes;
+LessonPlanIndex.propTypes = propTypes;
 
-export default LessonPlan;
+export default LessonPlanIndex;

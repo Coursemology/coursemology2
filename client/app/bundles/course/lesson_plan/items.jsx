@@ -1,5 +1,5 @@
 import initializeComponent from 'lib/helpers/initializeComponent';
 import storeCreator from './store';
-import LessonPlanContainer from './containers/LessonPlanContainer';
+import LessonPlan from './containers/LessonPlan';
 
-initializeComponent(LessonPlanContainer, 'lesson-plan-items', storeCreator);
+initializeComponent(LessonPlan, 'lesson-plan-items', storeCreator);
