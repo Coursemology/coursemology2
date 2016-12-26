@@ -1,22 +1,12 @@
-import { compose, createStore, applyMiddleware, combineReducers } from 'redux';
-
-// Import thunkMiddleware for asynchronous actions
+import { compose, createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-
-import reducers, { initialStates } from './reducers';
+import rootReducer, { initialStates as defaultInitialStates } from './reducers';
 
 export default (props) => {
-  const { lessonPlan } = initialStates;
-
-  const initialState = {
-    lessonPlan: lessonPlan.merge(props),
-  };
-
-  const reducer = combineReducers(reducers);
-
+  const initialStates = defaultInitialStates.mergeDeep({ lessonPlan: props });
   const storeCreator = compose(
     applyMiddleware(thunkMiddleware)
   )(createStore);
 
-  return storeCreator(reducer, initialState);
+  return storeCreator(rootReducer, initialStates);
 };

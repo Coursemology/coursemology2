@@ -13,6 +13,7 @@ const config = {
       'material-ui',
       'react',
       'react-dom',
+      'redux-immutable',
       'react-intl',
       'react-redux',
       'react-scroll',
