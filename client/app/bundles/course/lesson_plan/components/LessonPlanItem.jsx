@@ -17,6 +17,7 @@ import Description from 'material-ui/svg-icons/action/description';
 import Divider from 'material-ui/Divider';
 import isScreenXs from 'lib/helpers/viewport';
 import { red700, grey700 } from 'material-ui/styles/colors';
+import { shortDateFormat, standardDateFormat, shortTimeFormat } from 'lib/date_time_formats';
 
 const propTypes = {
   item: React.PropTypes.instanceOf(Immutable.Map).isRequired,
@@ -85,22 +86,6 @@ const styles = {
     right: 4,
     position: 'absolute',
   },
-};
-
-const shortDateFormat = {
-  year: 'numeric',
-  month: 'numeric',
-  day: 'numeric',
-};
-
-const standardDateFormat = {
-  year: 'numeric',
-  month: 'short',
-  day: '2-digit',
-};
-
-const shortTimeFormat = {
-  hour12: false,
 };
 
 class LessonPlanItem extends React.Component {
