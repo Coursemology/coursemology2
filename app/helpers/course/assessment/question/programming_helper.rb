@@ -55,28 +55,28 @@ module Course::Assessment::Question::ProgrammingHelper
   private
 
   def successful_import_alert(json: false)
-    cls = ['alert', 'alert-success']
-    msg = t('course.assessment.question.programming.form.import_result.success')
+    klass = ['alert', 'alert-success']
+    message = t('course.assessment.question.programming.form.import_result.success')
 
     if json
-      { class: cls.join(' '), message: msg }
+      { class: klass.join(' '), message: message }
     else
-      content_tag(:div, class: cls) do
-        msg
+      content_tag(:div, class: klass) do
+        message
       end
     end
   end
 
   def errored_import_alert(json: false)
-    cls = ['alert', 'alert-danger']
-    msg = t('course.assessment.question.programming.form.import_result.error',
+    klass = ['alert', 'alert-danger']
+    message = t('course.assessment.question.programming.form.import_result.error',
             error: import_error_message(@programming_question.import_job.error))
 
     if json
-      { class: cls.join(' '), message: msg }
+      { class: klass.join(' '), message: message }
     else
-      content_tag(:div, class: cls) do
-        msg
+      content_tag(:div, class: klass) do
+        message
       end
     end
   end
