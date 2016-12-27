@@ -1,5 +1,7 @@
 import actionTypes from '../constants/programmingQuestionConstants';
 
+import 'whatwg-fetch';
+
 export function updateProgrammingQuestion(field, newValue) {
   return {
     type: actionTypes.PROGRAMMING_QUESTION_UPDATE,
