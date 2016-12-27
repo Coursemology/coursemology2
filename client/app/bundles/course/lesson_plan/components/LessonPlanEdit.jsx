@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
+import LessonPlanFilter from '../containers/LessonPlanFilter';
 
 const propTypes = {
   milestoneGroups: PropTypes.array,
@@ -14,6 +15,11 @@ const styles = {
   },
   timePickerTextField: {
     width: 100,
+  },
+  filter: {
+    bottom: 12,
+    position: 'fixed',
+    right: 24,
   },
 };
 
@@ -107,13 +113,18 @@ class LessonPlanEdit extends React.Component {
   render() {
     const { milestoneGroups } = this.props;
     return (
-      <table>
-        <tbody>
-          {
-             milestoneGroups.map(group => this.renderGroup(group))
-          }
-        </tbody>
-      </table>
+      <div>
+        <table>
+          <tbody>
+            {
+               milestoneGroups.map(group => this.renderGroup(group))
+            }
+          </tbody>
+        </table>
+        <div style={styles.filter}>
+          <LessonPlanFilter />
+        </div>
+      </div>
     );
   }
 }
