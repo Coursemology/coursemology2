@@ -3,7 +3,7 @@ import Immutable from 'immutable';
 import { scroller } from 'react-scroll';
 import styles from './LessonPlanIndex.scss';
 import LessonPlanNav from '../components/LessonPlanNav';
-import LessonPlanFilter from '../components/LessonPlanFilter';
+import LessonPlanFilter from '../containers/LessonPlanFilter';
 import LessonPlanGroup from '../components/LessonPlanGroup';
 import LessonPlanEmpty from '../components/LessonPlanEmpty';
 
@@ -12,8 +12,6 @@ import LessonPlanEmpty from '../components/LessonPlanEmpty';
 const propTypes = {
   milestones: PropTypes.instanceOf(Immutable.List),
   items: PropTypes.instanceOf(Immutable.List),
-  hiddenItemTypes: PropTypes.instanceOf(Immutable.List),
-  toggleItemTypeVisibility: PropTypes.func,
   milestoneGroups: PropTypes.array,
 };
 
@@ -42,10 +40,7 @@ class LessonPlanIndex extends React.Component {
   renderLessonPlan() {
     const {
       milestones,
-      items,
       milestoneGroups,
-      hiddenItemTypes,
-      toggleItemTypeVisibility,
     } = this.props;
 
     return (
@@ -61,13 +56,7 @@ class LessonPlanIndex extends React.Component {
         }
         <div className={styles.navContainer}>
           <LessonPlanNav {...{ milestones }} />
-          <LessonPlanFilter
-            {...{
-              toggleItemTypeVisibility,
-              hiddenItemTypes,
-              items,
-            }}
-          />
+          <LessonPlanFilter />
         </div>
       </div>
     );
