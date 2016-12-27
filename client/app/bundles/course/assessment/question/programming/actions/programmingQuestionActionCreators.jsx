@@ -1,95 +1,63 @@
-import actionTypes from '../constants/programmingQuestionConstants';
-
 import 'whatwg-fetch';
+
+import actionTypes from '../constants/programmingQuestionConstants';
 
 export function updateProgrammingQuestion(field, newValue) {
   return {
     type: actionTypes.PROGRAMMING_QUESTION_UPDATE,
-    field: field,
-    newValue: newValue
+    field,
+    newValue,
   };
 }
 
 export function updateSkills(skills) {
   return {
     type: actionTypes.SKILLS_UPDATE,
-    skills: skills
-  }
+    skills,
+  };
 }
 
 export function updateEditorMode(mode) {
   return {
     type: actionTypes.EDITOR_MODE_UPDATE,
-    mode: mode
-  }
-}
-
-export function submitForm(url, method, data) {
-  return (dispatch) => {
-    dispatch(submitFormLoading(true));
-
-    fetch(url, {
-      method: method,
-      credentials: 'same-origin',
-      headers: {
-        'Accept': 'application/json'
-      },
-      body: data
-    }).then((response) => {
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
-
-      return response.json();
-    }).then((json) => {
-      dispatch(submitFormSuccess(json));
-
-      if (json.redirect_url) {
-        dispatch(submitFormEvaluate(json.redirect_url));
-      } else {
-        dispatch(submitFormLoading(false))
-      }
-    }).catch((error) => {
-      dispatch(submitFormFailure(error));
-      dispatch(submitFormLoading(false));
-    })
-  }
+    mode,
+  };
 }
 
 function submitFormLoading(isLoading) {
   return {
     type: actionTypes.SUBMIT_FORM_LOADING,
-    isLoading: isLoading
-  }
+    isLoading,
+  };
 }
 
 function submitFormStartEvaluating() {
   return {
     type: actionTypes.SUBMIT_FORM_EVALUATING,
-    isEvaluating: true
-  }
+    isEvaluating: true,
+  };
 }
 
 function submitFormEndEvaluating(data) {
   return {
     type: actionTypes.SUBMIT_FORM_EVALUATING,
     isEvaluating: false,
-    data: data
-  }
+    data,
+  };
 }
 
 function submitFormSuccess(data) {
   return {
     type: actionTypes.SUBMIT_FORM_SUCCESS,
-    data: data
-  }
+    data,
+  };
 }
 
 function submitFormFailure(error) {
   return {
     type: actionTypes.SUBMIT_FORM_FAILURE,
-    error: error
-  }
+    error,
+  };
 }
 
 function fetchImportResult() {
@@ -97,7 +65,7 @@ function fetchImportResult() {
     fetch('', {
       credentials: 'same-origin',
       headers: {
-        'Accept': 'application/json'
+        Accept: 'application/json',
       },
     }).then((response) => {
       if (!response.ok) {
@@ -111,18 +79,18 @@ function fetchImportResult() {
     }).catch((error) => {
       dispatch(submitFormFailure(error));
       dispatch(submitFormLoading(false));
-    })
-  }
+    });
+  };
 }
 
-function submitFormEvaluate(redirect_url) {
+function submitFormEvaluate(redirectUrl) {
   return (dispatch) => {
     const delay = 500;
 
-    fetch(redirect_url, {
+    fetch(redirectUrl, {
       credentials: 'same-origin',
       headers: {
-        'Accept': 'application/json'
+        Accept: 'application/json',
       },
     }).then((response) => {
       if (!response.ok) {
@@ -133,18 +101,50 @@ function submitFormEvaluate(redirect_url) {
     }).then((json) => {
       const status = json.status;
 
-      if (status == 'submitted') {
+      if (status === 'submitted') {
         dispatch(submitFormStartEvaluating());
 
         setTimeout(() => {
-          dispatch(submitFormEvaluate(redirect_url));
-        }, delay)
+          dispatch(submitFormEvaluate(redirectUrl));
+        }, delay);
       } else {
         dispatch(fetchImportResult());
       }
     }).catch((error) => {
       dispatch(submitFormFailure(error));
       dispatch(submitFormLoading(false));
-    })
-  }
+    });
+  };
+}
+
+export function submitForm(url, method, data) {
+  return (dispatch) => {
+    dispatch(submitFormLoading(true));
+
+    fetch(url, {
+      method,
+      credentials: 'same-origin',
+      headers: {
+        Accept: 'application/json',
+      },
+      body: data,
+    }).then((response) => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+
+      return response.json();
+    }).then((json) => {
+      dispatch(submitFormSuccess(json));
+
+      if (json.redirect_url) {
+        dispatch(submitFormEvaluate(json.redirect_url));
+      } else {
+        dispatch(submitFormLoading(false));
+      }
+    }).catch((error) => {
+      dispatch(submitFormFailure(error));
+      dispatch(submitFormLoading(false));
+    });
+  };
 }

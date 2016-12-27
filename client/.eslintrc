@@ -10,6 +10,7 @@
   "globals": {
     "window": true,
     "document": true,
-    "$": true
+    "$": true,
+    "FormData": true,
   }
 }

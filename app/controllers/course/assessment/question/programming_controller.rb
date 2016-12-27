@@ -8,9 +8,7 @@ class Course::Assessment::Question::ProgrammingController < \
   def new
     respond_to do |format|
       format.html
-      format.json {
-        render 'new'
-      }
+      format.json { render 'new' }
     end
   end
 
@@ -42,10 +40,10 @@ class Course::Assessment::Question::ProgrammingController < \
   def edit
     respond_to do |format|
       format.html
-      format.json {
+      format.json do
         @meta = programming_question_service.extract_meta
         render 'edit'
-      }
+      end
     end
   end
 
@@ -57,7 +55,7 @@ class Course::Assessment::Question::ProgrammingController < \
     end
 
     respond_to do |format|
-      format.html {
+      format.html do
         if @programming_question.save!
           if @programming_question.import_job
             redirect_to job_path(@programming_question.import_job)
@@ -68,17 +66,16 @@ class Course::Assessment::Question::ProgrammingController < \
         else
           render 'edit'
         end
-      }
-      format.json {
+      end
+      format.json do
         if @programming_question.save!
           if @programming_question.import_job
             @redirect_url = job_path(@programming_question.import_job)
           end
-          render '_props'
-        else
-          render '_props'
         end
-      }
+
+        render '_props'
+      end
     end
   end
 

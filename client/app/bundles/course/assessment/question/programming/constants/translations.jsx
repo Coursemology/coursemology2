@@ -25,27 +25,27 @@ export const programmingQuestionFormTranslations = defineMessages({
     id: 'course.assessment.question.programming.programmingQuestionForm.skillsFieldLabel',
     defaultMessage: 'Skills',
     description: 'Label for the skills input field.',
-},
+  },
   languageFieldLabel: {
     id: 'course.assessment.question.programming.programmingQuestionForm.languageFieldLabel',
     defaultMessage: 'Language',
     description: 'Label for the language input field.',
   },
   memoryLimitFieldLabel: {
-  id: 'course.assessment.question.programming.programmingQuestionForm.memoryLimitFieldLabel',
+    id: 'course.assessment.question.programming.programmingQuestionForm.memoryLimitFieldLabel',
     defaultMessage: 'Memory Limit',
     description: 'Label for the memory limit input field.',
-},
+  },
   timeLimitFieldLabel: {
     id: 'course.assessment.question.programming.programmingQuestionForm.timeLimitFieldLabel',
     defaultMessage: 'Time Limit',
     description: 'Label for the time limit input field.',
   },
   attemptLimitFieldLabel: {
-  id: 'course.assessment.question.programming.programmingQuestionForm.attemptLimitFieldLabel',
+    id: 'course.assessment.question.programming.programmingQuestionForm.attemptLimitFieldLabel',
     defaultMessage: 'Attempt Limit',
     description: 'Label for the attempt limit input field.',
-},
+  },
   templatePackageFieldLabel: {
     id: 'course.assessment.question.programming.programmingQuestionForm.templatePackageFieldLabel',
     defaultMessage: 'Template Package',
@@ -109,41 +109,6 @@ export const onlineEditorPythonViewTranslations = defineMessages({
     defaultMessage: 'Submission Template',
     description: 'Title for submission template code block.',
   },
-  publicTestCases: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.publicTestCases',
-    defaultMessage: 'Public Test Cases',
-    description: 'Title for public test cases panel.',
-  },
-  privateTestCases: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.privateTestCases',
-    defaultMessage: 'Private Test Cases',
-    description: 'Title for private test cases panel.',
-  },
-  evaluationTestCases: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.evaluationTestCases',
-    defaultMessage: 'Evaluation Test Cases',
-    description: 'Title for evaluation test cases panel.',
-  },
-  identifierHeader: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.identifierHeader',
-    defaultMessage: 'Identifier',
-    description: 'Header for identifier column of test cases panel.',
-  },
-  expressionHeader: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.expressionHeader',
-    defaultMessage: 'Expression',
-    description: 'Header for expression column of test cases panel.',
-  },
-  expectedHeader: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.expectedHeader',
-    defaultMessage: 'Expected',
-    description: 'Header for expected column of test cases panel.',
-  },
-  hintHeader: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.hintHeader',
-    defaultMessage: 'Hint',
-    description: 'Header for hint column of test cases panel.',
-  },
   addNewTestButton: {
     id: 'course.assessment.question.programming.onlineEditorPythonView.addNewTestButton',
     defaultMessage: 'Add new test',
@@ -192,5 +157,43 @@ export const uploadedPackageViewer = defineMessages({
     id: 'course.assessment.question.programming.uploadedPackageViewer.testCasesHeader',
     defaultMessage: 'Test Cases',
     description: 'Header for the test cases of the uploaded package.',
+  },
+});
+
+export const testCasesTranslations = defineMessages({
+  publicTestCases: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.publicTestCases',
+    defaultMessage: 'Public Test Cases',
+    description: 'Title for public test cases panel.',
+  },
+  privateTestCases: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.privateTestCases',
+    defaultMessage: 'Private Test Cases',
+    description: 'Title for private test cases panel.',
+  },
+  evaluationTestCases: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.evaluationTestCases',
+    defaultMessage: 'Evaluation Test Cases',
+    description: 'Title for evaluation test cases panel.',
+  },
+  identifierHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.identifierHeader',
+    defaultMessage: 'Identifier',
+    description: 'Header for identifier column of test cases panel.',
+  },
+  expressionHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.expressionHeader',
+    defaultMessage: 'Expression',
+    description: 'Header for expression column of test cases panel.',
+  },
+  expectedHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.expectedHeader',
+    defaultMessage: 'Expected',
+    description: 'Header for expected column of test cases panel.',
+  },
+  hintHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.hintHeader',
+    defaultMessage: 'Hint',
+    description: 'Header for hint column of test cases panel.',
   },
 });

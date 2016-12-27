@@ -34,13 +34,10 @@ module Course::Assessment::Question::ProgrammingHelper
   end
 
   def editor_mode(language)
-    case
-    when language.is_a?(Coursemology::Polyglot::Language::Python)
+    if language.is_a?(Coursemology::Polyglot::Language::Python)
       :python
-    when language.is_a?(Coursemology::Polyglot::Language::JavaScript)
+    elsif language.is_a?(Coursemology::Polyglot::Language::JavaScript)
       :javascript
-    else
-      nil
     end
   end
 

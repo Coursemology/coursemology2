@@ -2,9 +2,9 @@ import Immutable from 'immutable';
 
 import React, { PropTypes } from 'react';
 import { injectIntl } from 'react-intl';
-import TemplatePackageView from '../components/TemplatePackageView'
-import TemplateTestCaseView from '../components/TemplateTestCaseView'
-import { uploadedPackageViewer as translations } from '../constants/translations'
+import TemplatePackageView from '../components/TemplatePackageView';
+import TemplateTestCaseView from '../components/TemplateTestCaseView';
+import { uploadedPackageViewer as translations } from '../constants/translations';
 
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
@@ -27,14 +27,14 @@ class UploadedPackageViewer extends React.Component {
       return (
         <div className="template-package-container">
           <h2>{intl.formatMessage(translations.templateHeader)}</h2>
-          <TemplatePackageView {...{changeTemplateTab, templates, selectedTab}} />
+          <TemplatePackageView {...{ changeTemplateTab, templates, selectedTab }} />
           <h2>{intl.formatMessage(translations.testCasesHeader)}</h2>
-          <TemplateTestCaseView {...{testCases}} />
+          <TemplateTestCaseView {...{ testCases }} />
         </div>
       );
-    } else {
-      return null;
     }
+
+    return null;
   }
 }
 

@@ -6,7 +6,7 @@ const editorActionTypes = mirrorCreator([
   'PYTHON_CODE_BLOCK_UPDATE',
   'PYTHON_TEST_CASE_CREATE',
   'PYTHON_TEST_CASE_UPDATE',
-  'PYTHON_TEST_CASE_DELETE'
+  'PYTHON_TEST_CASE_DELETE',
 ]);
 
 export default editorActionTypes;

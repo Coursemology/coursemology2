@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
 import actionTypes from '../constants/programmingQuestionConstants';
-import editorActionTypes from '../constants/onlineEditorConstants'
+import editorActionTypes from '../constants/onlineEditorConstants';
 
 export const initialState = Immutable.fromJS({
   // this is the default state that would be used if one were not passed into the store
@@ -33,7 +33,7 @@ export const initialState = Immutable.fromJS({
       evaluation: [],
       private: [],
       public: [],
-    }
+    },
   },
   test_ui: {
     mode: null,
@@ -46,12 +46,12 @@ export const initialState = Immutable.fromJS({
         evaluation: [],
         private: [],
         public: [],
-      }
-    }
+      },
+    },
   },
   import_result: {
     alert: null,
-    build_log: null
+    build_log: null,
   },
   is_loading: false,
   is_evaluating: false,
@@ -59,7 +59,7 @@ export const initialState = Immutable.fromJS({
     method: 'post',
     path: null,
     auth_token: null,
-    async: false
+    async: false,
   },
 });
 
@@ -67,64 +67,63 @@ function questionReducer(state, action) {
   const { type } = action;
 
   switch (type) {
-    case actionTypes.PROGRAMMING_QUESTION_UPDATE:
+    case actionTypes.PROGRAMMING_QUESTION_UPDATE: {
       const { field, newValue } = action;
       return state.set(field, newValue);
-
-    case actionTypes.SKILLS_UPDATE:
+    }
+    case actionTypes.SKILLS_UPDATE: {
       const { skills } = action;
       return state.set('skill_ids', Immutable.fromJS(skills));
-
-    default:
+    }
+    default: {
       return state;
+    }
   }
 }
 
 function pythonTestReducer(state, action) {
   const { type } = action;
-  var field, newValue, testType, index, testCases, tests;
 
   switch (type) {
-    case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE:
-      ({ field, newValue } = action);
+    case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE: {
+      const { field, newValue } = action;
       return state.set(field, newValue);
-
-    case editorActionTypes.PYTHON_TEST_CASE_CREATE:
-      ({ testType } = action);
+    }
+    case editorActionTypes.PYTHON_TEST_CASE_CREATE: {
+      const { testType } = action;
       const newTest = {
         expression: '',
         expected: '',
-        hint: ''
+        hint: '',
       };
-      tests = state.get('test_cases').get(testType).push(Immutable.fromJS(newTest));
+      const tests = state.get('test_cases').get(testType).push(Immutable.fromJS(newTest));
       return state.setIn(['test_cases', testType], tests);
-
-    case editorActionTypes.PYTHON_TEST_CASE_UPDATE:
-      ({ testType, index, field, newValue } = action);
+    }
+    case editorActionTypes.PYTHON_TEST_CASE_UPDATE: {
+      const { testType, index, field, newValue } = action;
       return state.setIn(['test_cases', testType, index, field], newValue);
-
-    case editorActionTypes.PYTHON_TEST_CASE_DELETE:
-      ({ testType, index } = action);
-      tests = state.get('test_cases').get(testType).splice(index, 1);
+    }
+    case editorActionTypes.PYTHON_TEST_CASE_DELETE: {
+      const { testType, index } = action;
+      const tests = state.get('test_cases').get(testType).splice(index, 1);
       return state.setIn(['test_cases', testType], tests);
-
-    default:
+    }
+    default: {
       return state;
+    }
   }
 }
 
 function apiReducer(state, action) {
   const { type } = action;
-  var data = null;
 
   switch (type) {
-    case actionTypes.SUBMIT_FORM_LOADING:
+    case actionTypes.SUBMIT_FORM_LOADING: {
       const { isLoading } = action;
       return state.set('is_loading', isLoading);
-
-    case actionTypes.SUBMIT_FORM_EVALUATING:
-      const { isEvaluating } = action;
-      ({ data } = action);
+    }
+    case actionTypes.SUBMIT_FORM_EVALUATING: {
+      const { isEvaluating, data } = action;
 
       if (data) {
         const { question, package_ui, test_ui, import_result } = data;
@@ -132,24 +131,24 @@ function apiReducer(state, action) {
         return state
           .set('is_evaluating', isEvaluating)
           .mergeDeep({ question, package_ui, test_ui, import_result });
-      } else {
-        return state
-          .set('is_evaluating', isEvaluating)
-          .mergeIn(['import_result'], { alert: null, build_log: null });
       }
 
-    case actionTypes.SUBMIT_FORM_SUCCESS:
-      ({ data } = action);
+      return state
+        .set('is_evaluating', isEvaluating)
+        .mergeIn(['import_result'], { alert: null, build_log: null });
+    }
+    case actionTypes.SUBMIT_FORM_SUCCESS: {
+      const { data } = action;
       const { question, package_ui, test_ui, import_result } = data;
 
       return state.mergeDeep({ question, package_ui, test_ui, import_result });
-
-    case actionTypes.SUBMIT_FORM_FAILURE:
-      const { error } = action;
+    }
+    case actionTypes.SUBMIT_FORM_FAILURE: {
       return state;
-
-    default:
+    }
+    default: {
       return state;
+    }
   }
 }
 
@@ -158,31 +157,32 @@ export default function programmingQuestionReducer(state = initialState, action)
 
   switch (type) {
     case actionTypes.SKILLS_UPDATE:
-    case actionTypes.PROGRAMMING_QUESTION_UPDATE:
+    case actionTypes.PROGRAMMING_QUESTION_UPDATE: {
       return state.set('question', questionReducer(state.get('question'), action));
-
-    case actionTypes.EDITOR_MODE_UPDATE:
+    }
+    case actionTypes.EDITOR_MODE_UPDATE: {
       const { mode } = action;
       return state.setIn(['test_ui', 'mode'], mode);
-
-    case actionTypes.TEMPLATE_TAB_UPDATE:
+    }
+    case actionTypes.TEMPLATE_TAB_UPDATE: {
       const { selected } = action;
       return state.setIn(['package_ui', 'selected'], selected);
-
+    }
     case editorActionTypes.PYTHON_TEST_CASE_CREATE:
     case editorActionTypes.PYTHON_TEST_CASE_UPDATE:
     case editorActionTypes.PYTHON_TEST_CASE_DELETE:
-    case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE:
+    case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE: {
       const pythonTest = state.get('test_ui').get('python');
       return state.setIn(['test_ui', 'python'], pythonTestReducer(pythonTest, action));
-
+    }
     case actionTypes.SUBMIT_FORM_EVALUATING:
     case actionTypes.SUBMIT_FORM_LOADING:
     case actionTypes.SUBMIT_FORM_SUCCESS:
-    case actionTypes.SUBMIT_FORM_FAILURE:
+    case actionTypes.SUBMIT_FORM_FAILURE: {
       return apiReducer(state, action);
-
-    default:
+    }
+    default: {
       return state;
+    }
   }
 }

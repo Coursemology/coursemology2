@@ -1,3 +1,5 @@
+@import '../../../../../../lib/styles/variables';
+
 .testSelection {
   margin: 10px 0;
   position: relative;
@@ -5,7 +7,7 @@
 }
 
 .testSelectionRuler {
-  border-top: 1px solid #cccccc;
+  border-top: 1px solid $btn-default-border;
   margin: 0;
   position: absolute;
   top: 50%;
