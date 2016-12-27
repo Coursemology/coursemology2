@@ -39,11 +39,10 @@ function updateLessonPlanElement(endpoint, payload, successHandler, failureHandl
   xhr.send(requestBody);
 }
 
-export function updateItemDateTime(itemId, field, dateSource, timeSource) {
-  const newDateTime = combineDateTime(dateSource, timeSource);
+export function updateItemField(id, field, value) {
   const payload = {
     item: {
-      [field]: newDateTime,
+      [field]: value,
     },
   };
 
@@ -52,9 +51,9 @@ export function updateItemDateTime(itemId, field, dateSource, timeSource) {
       dispatch({
         type: actionTypes.SET_ITEM_FIELD,
         payload: {
+          id,
           field,
-          id: itemId,
-          value: newDateTime,
+          value,
         },
       });
     };
@@ -63,8 +62,13 @@ export function updateItemDateTime(itemId, field, dateSource, timeSource) {
       // TODO
     };
 
-    updateLessonPlanElement(`items/${itemId}`, payload, successHandler, failureHandler);
+    updateLessonPlanElement(`items/${id}`, payload, successHandler, failureHandler);
   };
+}
+
+export function updateItemDateTime(id, field, dateSource, timeSource) {
+  const newDateTime = combineDateTime(dateSource, timeSource);
+  return updateItemField(id, field, newDateTime);
 }
 
 /**

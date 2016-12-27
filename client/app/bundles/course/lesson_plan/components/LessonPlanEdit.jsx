@@ -1,12 +1,14 @@
 import React, { PropTypes } from 'react';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
+import Toggle from 'material-ui/Toggle';
 import LessonPlanFilter from '../containers/LessonPlanFilter';
 
 const propTypes = {
   milestoneGroups: PropTypes.array,
   updateItemDateTime: PropTypes.func,
   updateMilestoneDateTime: PropTypes.func,
+  updateItemField: PropTypes.func,
 };
 
 const styles = {
@@ -55,12 +57,13 @@ class LessonPlanEdit extends React.Component {
         </td>
         <td />
         <td />
+        <td />
       </tr>
     );
   }
 
   renderItem(item) {
-    const { updateItemDateTime } = this.props;
+    const { updateItemDateTime, updateItemField } = this.props;
     const startAt = new Date(item.get('start_at'));
     const endAt = item.get('end_at') ? new Date(item.get('end_at')) : undefined;
     const itemId = item.get('id');
@@ -99,6 +102,12 @@ class LessonPlanEdit extends React.Component {
             value={endAt}
             textFieldStyle={styles.timePickerTextField}
             onChange={(event, newTime) => updateItemDateTime(itemId, 'end_at', endAt, newTime)}
+          />
+        </td>
+        <td>
+          <Toggle
+            toggled={item.get('published')}
+            onToggle={(event, isToggled) => updateItemField(itemId, 'published', isToggled)}
           />
         </td>
       </tr>
