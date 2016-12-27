@@ -1,0 +1,5 @@
+en:
+  course:
+    enrol_requests:
+      destroy:
+        success: 'The registration request was deleted.'

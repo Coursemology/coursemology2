@@ -200,7 +200,7 @@ Rails.application.routes.draw do
       resource :duplication, only: [:show, :create]
 
       resources :user_invitations, only: [:index, :new, :create, :destroy]
-
+      resources :enrol_requests, only: [:destroy]
       namespace :lesson_plan do
         get '/' => 'items#index'
         resources :milestones, except: [:index, :show]
@@ -250,7 +250,6 @@ Rails.application.routes.draw do
              on: :collection
       end
       post 'register' => 'user_registrations#create'
-      delete 'deregister' => 'user_registrations#destroy'
       get 'students' => 'users#students', as: :users_students
       get 'staff' => 'users#staff', as: :users_staff
       patch 'upgrade_to_staff' => 'users#upgrade_to_staff', as: :users_upgrade_to_staff

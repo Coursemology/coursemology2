@@ -10,5 +10,3 @@ en:
         invalid_code: 'You have entered an invalid registration code.'
         requested: 'You have submitted registration request to the course.'
         registered: 'You have been registered as a %{role}.'
-      destroy:
-        success: 'Registration request cancelled.'

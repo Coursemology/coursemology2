@@ -1,14 +1,16 @@
-- if current_course_user.nil?
-  = simple_form_for @registration, url: course_register_path(current_course) do |f|
-    - invitation = current_course.invitations.unconfirmed.for_user(current_user)
-    - if invitation.present?
-      = f.hidden_field :code
-      = f.button :submit, value: t('.enter_course')
-    - else
-      div.input-group
-        = f.input :code, label: false, wrapper: false, placeholder: t('.registration_code')
-        span.input-group-btn
-          = f.button :submit, value: t('.register'), class: 'register'
-- elsif current_course_user.requested? && can?(:deregister, current_course_user)
-  = delete_button(course_deregister_path(current_course)) do
-    = t('.deregister')
+- unless current_course_user
+  - if enrol_request = Course::EnrolRequest.find_by(course: current_course, user: current_user)
+    = delete_button([current_course, enrol_request]) do
+      = t('.deregister')
+  - else
+    = simple_form_for @registration, url: course_register_path(current_course) do |f|
+      - invitation = current_course.invitations.unconfirmed.for_user(current_user)
+      - if invitation.present?
+        = f.hidden_field :code
+        = f.button :submit, value: t('.enter_course')
+      - else
+        div.input-group
+          = f.input :code, label: false, wrapper: false, placeholder: t('.registration_code')
+          span.input-group-btn
+            = f.button :submit, value: t('.register'), class: 'register'
+

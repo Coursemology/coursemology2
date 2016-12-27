@@ -14,19 +14,6 @@ class Course::UserRegistrationsController < Course::ComponentController
     end
   end
 
-  # Allow users to withdraw their requests to register for a course that are pending
-  # approval/rejection.
-  def destroy
-    @course_user ||= current_course_user
-    authorize!(:deregister, @course_user)
-    if @course_user.destroy
-      redirect_to course_path(current_course), success: t('.success')
-    else
-      redirect_to course_path(current_course),
-                  danger: @course_user.errors.full_messages.to_sentence
-    end
-  end
-
   private
 
   def registration_params # :nodoc:
@@ -70,6 +57,6 @@ class Course::UserRegistrationsController < Course::ComponentController
   end
 
   def skip_participation_check?
-    return true if ['create', 'destroy'].include? action_name
+    return true if ['create'].include? action_name
   end
 end
