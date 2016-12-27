@@ -58,12 +58,12 @@ class Course::UserRegistrationsController < Course::ComponentController
   end
 
   def create_success # :nodoc:
-    role = t("course.users.role.#{@registration.course_user.role}")
     success =
-      if @registration.course_user.approved?
+      if @registration.course_user.present?
+        role = t("course.users.role.#{@registration.course_user.role}")
         t('course.user_registrations.create.registered', role: role)
       else
-        t('course.user_registrations.create.requested', role: role)
+        t('course.user_registrations.create.requested')
       end
 
     redirect_to course_path(current_course), success: success

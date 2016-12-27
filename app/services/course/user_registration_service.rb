@@ -5,11 +5,11 @@ class Course::UserRegistrationService
   # @param [Course::Registration] registration The registration object to be processed.
   # @return [Boolean] True if the registration succeeded. False if the registration failed.
   def register(registration)
-    course_user = CourseUser.transaction { create_or_update_registration(registration) }
+    course_user_or_request = create_or_update_registration(registration)
 
-    succeeded = course_user && !course_user.changed?
-    if succeeded && course_user.requested?
-      notify_course_staff(registration.course, course_user)
+    succeeded = course_user_or_request && course_user_or_request.persisted?
+    if succeeded && registration.enrol_request.present?
+      notify_course_staff(course_user_or_request)
     else
       succeeded
     end
@@ -20,9 +20,10 @@ class Course::UserRegistrationService
   # Creates the effect of performing the given registration.
   #
   # @param [Course::Registration] registration The registration object to be processed.
-  # @return [CourseUser] The Course User which was created or updated from the registration.
+  # @return [CourseUser|Course::EnrolRequest] The Course User or EnrolRequest which was created
+  # from the registration.
   def create_or_update_registration(registration)
-    if registration.code.empty?
+    if registration.code.blank?
       register_without_registration_code(registration)
     else
       claim_registration_code(registration)
@@ -37,59 +38,34 @@ class Course::UserRegistrationService
   def register_without_registration_code(registration)
     invitation = registration.course.invitations.unconfirmed.for_user(registration.user)
     if invitation.nil?
-      register_course_user(registration)
+      find_or_create_enrol_request!(registration)
     else
       accept_invitation(registration, invitation)
     end
   end
 
-  # Registers the given +user+ for a +course+. This sets the course user to the +requested+
-  # state, unless an explicit +workflow_state+ is passed in the +options+.
+  # Find or create a enrol_request.
   #
-  # This also sets the given +user+'s state as specified in the +options+ if the user already
-  # exists in the database.
-  #
-  # @param [Course::Registration] registration The registration model containing the course user
+  # @param [Course::Registration] registration The registration model containing the course and user
   #   parameters.
-  # @param [Hash] options Additional options for creating the course user.
-  # @return [CourseUser] The Course User object which was created or updated.
-  def register_course_user(registration, options = {}.freeze)
-    options = options.dup.reverse_merge(course: registration.course, user: registration.user,
-                                        updater: registration.user)
-    course_user = CourseUser.find_by(course: registration.course, user: registration.user)
-    if course_user
-      update_course_user(registration, course_user, options)
-      course_user
-    else
-      create_course_user(registration, options)
-    end
+  # @return [CourseUser] The Course User object which was found or created.
+  def find_or_create_enrol_request!(registration)
+    registration.enrol_request =
+      Course::EnrolRequest.find_or_create_by!(course: registration.course, user: registration.user)
   end
 
-  # Updates the given +course_user+ with the options specified.
+  # Find or create a course_user.
   #
-  # @param [Course::Registration] registration The registration model containing the course user
+  # @param [Course::Registration] registration The registration model containing the course and user
   #   parameters.
-  # @param [Hash] options Additional operations for updating the course user.
-  # @return [Boolean] True if the course user was updated.
-  def update_course_user(registration, course_user, options)
-    registration.course_user = course_user
-    course_user.update(options)
+  # @return [CourseUser] The Course User object which was found or created.
+  def find_or_create_course_user!(registration)
+    registration.course_user =
+      CourseUser.find_or_create_by!(course: registration.course, user: registration.user)
   end
 
-  # Creates a +course_user+ with the options specified.
-  #
-  # @param [Course::Registration] registration The registration model containing the course user
-  #   parameters.
-  # @param [Hash] options Additional operations for updating the course user.
-  # @return [CourseUser] The Course User which was built from the registration.
-  def create_course_user(registration, options)
-    course_user = CourseUser.new(options.reverse_merge!(creator: registration.user))
-    course_user.save
-    registration.course_user = course_user
-  end
-
-  # Claims a given registration code. This sets the course user to the +approved+ state. The
-  # correct type of code is deduced from the code itself and used to claim the correct code.
+  # Claims a given registration code. The correct type of code is deduced from the code itself and
+  # used to claim the correct code.
   #
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
@@ -107,7 +83,7 @@ class Course::UserRegistrationService
     end
   end
 
-  # Claims a given course registration code. This sets the course user to the +approved+ state.
+  # Claims a given course registration code.
   #
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
@@ -116,13 +92,13 @@ class Course::UserRegistrationService
   # @return [nil] If the code is invalid.
   def claim_course_registration_code(registration)
     if registration.course.registration_key == registration.code
-      register_course_user(registration, workflow_state: :approved)
+      find_or_create_course_user!(registration)
     else
       invalid_code(registration)
     end
   end
 
-  # Claims a given user's invitation code. This sets the course user to the +approved+ state.
+  # Claims a given user's invitation code.
   #
   # @param [Course::Registration] registration The registration model containing the course user
   #   parameters.
@@ -161,25 +137,16 @@ class Course::UserRegistrationService
   def accept_invitation(registration, invitation)
     CourseUser.transaction do
       invitation.confirm!
-      register_course_user(registration, workflow_state: :approved)
+      find_or_create_course_user!(registration)
     end
   end
 
-  # Assigns an unclaimed email address to a given user.
+  # Sends an email to the course staff to approve the given course enrol request.
   #
-  # @param [User::Email] email
-  # @param [User] user
-  def assign_email_to_user(email, user)
-    email.update(user: user) if email.user.nil?
-  end
-
-  # Sends an email to the course staff to approve the given course registration request.
-  #
-  # @param [Course] course The course that the user is registering into.
-  # @param [CourseUser] course_user The Course User object who registered.
+  # @param [Course::EnrolRequest] enrol_request The user enrol request.
   # @return [Boolean] True if the staff were successfully notified.
-  def notify_course_staff(course, course_user)
-    Course::Mailer.user_registered_email(course, course_user).deliver_later
+  def notify_course_staff(enrol_request)
+    Course::Mailer.user_registered_email(enrol_request).deliver_later
     true
   end
 end
