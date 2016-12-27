@@ -21,7 +21,6 @@ en:
         already_registered: 'You are already registered as a %{role}.'
       update:
         success: 'Record for %{name} has been updated.'
-        request_success: '%{name} is %{workflow_state} as a %{role}.'
       destroy:
         success: 'Deleted %{role} registration from %{email}.'
       students:

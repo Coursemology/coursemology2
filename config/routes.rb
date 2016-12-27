@@ -200,7 +200,11 @@ Rails.application.routes.draw do
       resource :duplication, only: [:show, :create]
 
       resources :user_invitations, only: [:index, :new, :create, :destroy]
-      resources :enrol_requests, only: [:destroy]
+
+      resources :enrol_requests, only: [:destroy] do
+        post 'approve', on: :member
+      end
+
       namespace :lesson_plan do
         get '/' => 'items#index'
         resources :milestones, except: [:index, :show]

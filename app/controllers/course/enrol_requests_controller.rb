@@ -13,9 +13,35 @@ class Course::EnrolRequestsController < Course::ComponentController
     end
   end
 
+  # Approve the given role request and creates the course user.
+  def approve # rubocop:disable Metrics/AbcSize
+    course_user = create_course_user
+    if course_user.persisted?
+      flash.now[:success] = t('.success', name: course_user.name, role: course_user.role)
+      Course::Mailer.user_added_email(current_course, course_user).deliver_later
+    else
+      flash.now[:danger] = course_user.errors.full_messages.to_sentence
+    end
+  end
+
   private
 
   def skip_participation_check?
     return true if ['destroy'].include? action_name
+  end
+
+  def create_course_user
+    course_user = CourseUser.new(course_user_params.
+      reverse_merge(course: current_course, user_id: @enrol_request.user_id))
+
+    CourseUser.transaction do
+      raise ActiveRecord::Rollback unless @enrol_request.destroy && course_user.save
+    end
+
+    course_user
+  end
+
+  def course_user_params
+    params.require(:course_user).permit(:name, :role, :phantom).to_h
   end
 end

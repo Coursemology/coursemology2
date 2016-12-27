@@ -3,3 +3,5 @@ en:
     enrol_requests:
       destroy:
         success: 'The registration request was deleted.'
+      approve:
+        success: '%{name} is enrolled as a %{role}.'

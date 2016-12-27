@@ -8,8 +8,8 @@ module Course::UsersControllerManagementConcern
   end
 
   def update # :nodoc:
-    if update_course_user(course_user_params)
-      flash.now[:success] = update_success_flash
+    if @course_user.update(course_user_params)
+      flash.now[:success] = t('course.users.update.success', name: @course_user.name)
     else
       flash.now[:danger] = @course_user.errors.full_messages.to_sentence
     end
@@ -82,38 +82,10 @@ module Course::UsersControllerManagementConcern
     authorize!(:manage_users, current_course)
   end
 
-  # Updates the course user. This will dispatch an email to the user if he transitions to the
-  # +approved+ state.
-  #
-  # @param [Hash] course_user_params The parameters to set on the given Course User.
-  # @return [Boolean] True if the course user was updated successfully.
-  def update_course_user(course_user_params)
-    course_user_requested = @course_user.requested?
-    result = @course_user.update(course_user_params)
-    if course_user_requested && @course_user.approved?
-      Course::Mailer.user_added_email(current_course, @course_user).deliver_later
-    end
-
-    result
-  end
-
-  # Returns the appropriate success flash message depending on the origin of the request.
-  def update_success_flash
-    if update_request_origin == :requests
-      t('course.users.update.request_success', name: @course_user.name,
-                                               workflow_state: @course_user.workflow_state,
-                                               role: t("course.users.role.#{@course_user.role}"))
-    else
-      t('course.users.update.success', name: @course_user.name)
-    end
-  end
-
   # Deduces which page the update request originated from.
   def update_request_origin
     @update_request_origin ||=
-      if course_user_params.key?(:workflow_state)
-        :requests
-      elsif course_user_params.key?(:role)
+      if course_user_params.key?(:role)
         :staff
       else
         :students
