@@ -5,6 +5,7 @@ import TimePicker from 'material-ui/TimePicker';
 const propTypes = {
   milestoneGroups: PropTypes.array,
   updateItemDateTime: PropTypes.func,
+  updateMilestoneDateTime: PropTypes.func,
 };
 
 const styles = {
@@ -17,8 +18,11 @@ const styles = {
 };
 
 class LessonPlanEdit extends React.Component {
-  static renderMilestone(milestone) {
+  renderMilestone(milestone) {
+    const { updateMilestoneDateTime } = this.props;
     const startAt = new Date(milestone.get('start_at'));
+    const milestoneId = milestone.get('id');
+
     return (
       <tr>
         <td />
@@ -32,6 +36,7 @@ class LessonPlanEdit extends React.Component {
             name="start_at"
             value={startAt}
             textFieldStyle={styles.datePickerTextField}
+            onChange={(event, newDate) => updateMilestoneDateTime(milestoneId, newDate, startAt)}
           />
         </td>
         <td>
@@ -39,6 +44,7 @@ class LessonPlanEdit extends React.Component {
             name="start_at"
             value={startAt}
             textFieldStyle={styles.timePickerTextField}
+            onChange={(event, newTime) => updateMilestoneDateTime(milestoneId, startAt, newTime)}
           />
         </td>
         <td />
@@ -95,7 +101,7 @@ class LessonPlanEdit extends React.Component {
 
   renderGroup(group) {
     return group.items.map(item => this.renderItem(item))
-           .unshift(LessonPlanEdit.renderMilestone(group.milestone));
+           .unshift(this.renderMilestone(group.milestone));
   }
 
   render() {

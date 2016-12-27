@@ -16,15 +16,36 @@ function combineDateTime(dateSource, timeSource) {
   return combinedDateTime;
 }
 
-export function updateItemDateTime(itemId, field, dateSource, timeSource) {
-  const newDateTime = combineDateTime(dateSource, timeSource);
+function updateLessonPlanElement(endpoint, payload, successHandler, failureHandler) {
+  const xhr = new XMLHttpRequest();
   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   const requestBody = JSON.stringify({
     authenticity_token: csrfToken,
+    ...payload,
+  });
+  const responseHandler = () => {
+    if (xhr.status === 200) {
+      successHandler();
+    } else {
+      failureHandler();
+    }
+  };
+
+  xhr.onload = () => { responseHandler(); };
+  xhr.ontimeout = () => { failureHandler(); };
+  xhr.open('PATCH', endpoint);
+  xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+  xhr.setRequestHeader('Accept', 'application/json');
+  xhr.send(requestBody);
+}
+
+export function updateItemDateTime(itemId, field, dateSource, timeSource) {
+  const newDateTime = combineDateTime(dateSource, timeSource);
+  const payload = {
     item: {
       [field]: newDateTime,
     },
-  });
+  };
 
   return (dispatch) => {
     const successHandler = () => {
@@ -42,19 +63,37 @@ export function updateItemDateTime(itemId, field, dateSource, timeSource) {
       // TODO
     };
 
-    const responseHandler = (xhr) => {
-      if (xhr.status === 200) {
-        successHandler();
-      } else {
-        failureHandler();
-      }
+    updateLessonPlanElement(`items/${itemId}`, payload, successHandler, failureHandler);
+  };
+}
+
+/**
+ * Milestones do not have the end_at field.
+ */
+export function updateMilestoneDateTime(milestoneId, dateSource, timeSource) {
+  const newDateTime = combineDateTime(dateSource, timeSource);
+  const payload = {
+    lesson_plan_milestone: {
+      start_at: newDateTime,
+    },
+  };
+
+  return (dispatch) => {
+    const successHandler = () => {
+      dispatch({
+        type: actionTypes.SET_MILESTONE_FIELD,
+        payload: {
+          field: 'start_at',
+          id: milestoneId,
+          value: newDateTime,
+        },
+      });
     };
 
-    const xhr = new XMLHttpRequest();
-    xhr.onload = () => { responseHandler(xhr); };
-    xhr.ontimeout = () => { failureHandler(); };
-    xhr.open('PATCH', `items/${itemId}`);
-    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-    xhr.send(requestBody);
+    const failureHandler = () => {
+      // TODO
+    };
+
+    updateLessonPlanElement(`milestones/${milestoneId}`, payload, successHandler, failureHandler);
   };
 }
