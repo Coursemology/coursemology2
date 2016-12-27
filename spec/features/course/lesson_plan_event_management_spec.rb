@@ -28,21 +28,19 @@ RSpec.feature 'Course: Events' do
       end
 
       scenario 'I can delete a course event and visit the edit event page', js: true do
-        event_to_edit, event_to_delete = events
+        event_to_delete, event_to_edit = events
         visit course_lesson_plan_path(course)
 
         # Delete an event
         expect(page).to have_text(event_to_delete.title)
-        find("div#lesson-plan-item-#{event_to_delete.acting_as.id} .lesson-plan-item-title-bar").
-          click
+        find("#item-#{event_to_delete.acting_as.id} .admin-button button").click
         expect do
           find_link(nil, href: course_lesson_plan_event_path(course, event_to_delete)).click
         end.to change(course.lesson_plan_events, :count).by(-1)
 
         # Go to edit event page
         expect(page).to have_text(event_to_edit.title)
-        find("div#lesson-plan-item-#{event_to_edit.acting_as.id} .lesson-plan-item-title-bar").
-          click
+        find("#item-#{event_to_edit.acting_as.id} .admin-button button").click
         find_link(nil, href: edit_course_lesson_plan_event_path(course, event_to_edit)).click
         expect(current_path).to eq(edit_course_lesson_plan_event_path(course, event_to_edit))
       end

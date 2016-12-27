@@ -1,29 +1,143 @@
 import React, { PropTypes } from 'react';
-import { Affix } from 'react-overlays';
 import Immutable from 'immutable';
-import './LessonPlanNav.scss';
+import { injectIntl, defineMessages } from 'react-intl';
+import RaisedButton from 'material-ui/RaisedButton';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
+import KeyboardArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
+import { scroller, Helpers } from 'react-scroll';
 
 const propTypes = {
   milestones: PropTypes.instanceOf(Immutable.List).isRequired,
+  intl: PropTypes.shape({
+    formatMessage: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
-const LessonPlanNav = ({ milestones }) => (
-  <Affix offsetTop={173} affixStyle={{ top: '70px' }} >
-    <ul className="nav nav-pills nav-stacked">
-      { milestones.map(milestone => (
-        <li key={milestone.get('id')}>
-          <a
-            href={`#lesson-plan-milestone-${milestone.get('id')}`}
-            className="lesson-plan-nav-link"
-          >
-            { milestone.get('title') }
-          </a>
-        </li>
-      )) }
-    </ul>
-  </Affix>
-);
+const translations = defineMessages({
+  goto: {
+    id: 'course.lessonPlan.lessonPlanFilter.goto',
+    defaultMessage: 'Go To Milestone',
+  },
+});
+
+const styles = {
+  navButton: {
+    marginRight: 20,
+  },
+};
+
+class LessonPlanNav extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      open: false,
+      text: props.intl.formatMessage(translations.goto),
+    };
+
+    this.handleTouchTap = this.handleTouchTap.bind(this);
+    this.handleRequestClose = this.handleRequestClose.bind(this);
+  }
+
+  handleTouchTap(event) {
+    // This prevents ghost click.
+    event.preventDefault();
+
+    this.setState({
+      open: true,
+      anchorEl: event.currentTarget,
+    });
+  }
+
+  handleRequestClose() {
+    this.setState({
+      open: false,
+    });
+  }
+
+  /**
+   * Ideally, these scroll listeners should be mounted with the Popover MenuItems using
+   * react-scroll's Link component. However, if we do that, the button text will not be
+   * updated when the Popover Menu is closed, since the MenuItems (and hence the listeners)
+   * will not be mounted. Instead, we mount it on empty dummy spans.
+   */
+  renderScrollSpies() {
+    const { milestones } = this.props;
+    const ScrollSpy = Helpers.Scroll('span'); // eslint-disable-line new-cap
+
+    return (
+      <span>
+        {
+          milestones.map(milestone => (
+            <ScrollSpy
+              spy
+              key={milestone.get('id')}
+              to={`milestone-group-${milestone.get('id')}`}
+              onSetActive={() => { this.setState({ text: milestone.get('title') }); }}
+              offset={-50}
+            />
+          ))
+        }
+      </span>
+    );
+  }
+
+  renderNav() {
+    const { milestones } = this.props;
+
+    return (
+      <div>
+        { this.renderScrollSpies() }
+        <RaisedButton
+          onTouchTap={this.handleTouchTap}
+          label={this.state.text}
+          labelPosition="before"
+          icon={<KeyboardArrowUp />}
+          style={styles.navButton}
+        />
+        <Popover
+          open={this.state.open}
+          anchorEl={this.state.anchorEl}
+          anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
+          targetOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+          onRequestClose={this.handleRequestClose}
+        >
+          <Menu>
+            {
+              milestones.map(milestone => (
+                <MenuItem
+                  key={milestone.get('id')}
+                  primaryText={milestone.get('title')}
+                  onTouchTap={() => {
+                    scroller.scrollTo(`milestone-group-${milestone.get('id')}`, {
+                      offset: -50,
+                    });
+                    this.setState({
+                      open: false,
+                    });
+                  }}
+                />
+              ))
+            }
+          </Menu>
+        </Popover>
+      </div>
+    );
+  }
+
+  render() {
+    const { milestones } = this.props;
+
+    if (milestones.size > 0) {
+      return this.renderNav();
+    }
+
+    return <div />;
+  }
+}
 
 LessonPlanNav.propTypes = propTypes;
 
-export default LessonPlanNav;
+export default injectIntl(LessonPlanNav);

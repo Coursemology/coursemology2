@@ -44,6 +44,7 @@ RSpec.feature 'Course: Lesson Plan Milestones' do
 
         # Delete a milestone
         expect(page).to have_text(milestone_to_delete.title)
+        find("#milestone-#{milestone_to_delete.id} button").click
         expect do
           find_link(nil, href: course_lesson_plan_milestone_path(course, milestone_to_delete)).
             click
@@ -51,6 +52,7 @@ RSpec.feature 'Course: Lesson Plan Milestones' do
 
         # Go to edit milestone page
         expect(page).to have_text(milestone_to_edit.title)
+        find("#milestone-#{milestone_to_edit.id} button").click
         find_link(nil, href: edit_course_lesson_plan_milestone_path(course, milestone_to_edit)).
           click
         expect(current_path).

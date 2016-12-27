@@ -1,5 +1,11 @@
-@import '../../../../lib/styles/variables';
+.navContainer {
+  bottom: 12px;
+  display: flex;
+  justify-content: flex-end;
+  position: fixed;
+  right: 24px;
+}
 
-.grey {
-  color: $secondary-text-grey;
+.mainPanel {
+  margin-bottom: 60px;
 }

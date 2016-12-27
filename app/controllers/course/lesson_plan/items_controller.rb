@@ -26,6 +26,8 @@ class Course::LessonPlan::ItemsController < Course::ComponentController
 
     @milestones = current_course.lesson_plan_milestones.order(start_at: :asc)
 
+    @folder_loader = Course::Material::PreloadService.new(current_course)
+
     assessment_tabs_titles_hash
     render 'index'
   end

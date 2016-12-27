@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
-import { Row, Col } from 'react-bootstrap';
 import { injectIntl, defineMessages } from 'react-intl';
+import { scroller } from 'react-scroll';
+import { grey600 } from 'material-ui/styles/colors';
 import styles from './LessonPlan.scss';
 import LessonPlanNav from '../components/LessonPlanNav';
 import LessonPlanFilter from '../components/LessonPlanFilter';
@@ -30,6 +31,12 @@ const propTypes = {
   }).isRequired,
 };
 
+const inlineStyles = {
+  emptyLessonPlanMessage: {
+    color: grey600,
+  },
+};
+
 class LessonPlan extends React.Component {
   /**
    * This method transforms a lesson plan item type into a standard string that is used as
@@ -40,6 +47,27 @@ class LessonPlan extends React.Component {
    */
   static itemTypeKey(type) {
     return type.reverse().join(' - ');
+  }
+
+  componentDidMount() {
+    const lastMilestone = this.lastPastMilestone();
+    if (lastMilestone) {
+      scroller.scrollTo(`milestone-group-${lastMilestone.get('id')}`, {
+        duration: 200,
+        delay: 100,
+        smooth: true,
+        offset: -100,
+      });
+    }
+  }
+
+  /**
+   * Returns the last milestone that has passed.
+   */
+  lastPastMilestone() {
+    const { milestones } = this.props;
+    const dateNow = Date.now();
+    return milestones.takeUntil(milestone => Date.parse(milestone.get('start_at')) > dateNow).last();
   }
 
   /**
@@ -104,12 +132,24 @@ class LessonPlan extends React.Component {
     return groups;
   }
 
-  renderLessonPlan(milestoneGroups) {
+  renderLessonPlan() {
     const { milestones, items, hiddenItemTypes, toggleItemTypeVisibility } = this.props;
+    const milestoneGroups = this.milestoneGroups();
 
     return (
-      <Row>
-        <Col md={9}>
+      <div className={styles.mainPanel}>
+        {
+          milestoneGroups.map(group =>
+            <LessonPlanGroup
+              key={group.milestone.get('id')}
+              milestone={group.milestone}
+              items={group.items}
+              lessonPlanItemTypeKey={LessonPlan.itemTypeKey}
+            />
+          )
+        }
+        <div className={styles.navContainer}>
+          <LessonPlanNav {...{ milestones }} />
           <LessonPlanFilter
             lessonPlanItemTypeKey={LessonPlan.itemTypeKey}
             {...{
@@ -118,21 +158,8 @@ class LessonPlan extends React.Component {
               items,
             }}
           />
-          {
-            milestoneGroups.map(group =>
-              <LessonPlanGroup
-                key={group.milestone.get('id')}
-                milestone={group.milestone}
-                items={group.items}
-                lessonPlanItemTypeKey={LessonPlan.itemTypeKey}
-              />
-            )
-          }
-        </Col>
-        <Col md={3} xsHidden smHidden>
-          <LessonPlanNav {...{ milestones }} />
-        </Col>
-      </Row>
+        </div>
+      </div>
     );
   }
 
@@ -140,18 +167,18 @@ class LessonPlan extends React.Component {
     const { intl } = this.props;
 
     return (
-      <h4 className={styles.grey}>
+      <h4 style={inlineStyles.emptyLessonPlanMessage}>
         {intl.formatMessage(translations.emptyLessonPlanMessage)}
       </h4>
     );
   }
 
   render() {
-    const groups = this.milestoneGroups();
+    const { milestones, items } = this.props;
 
     return (
-      groups.length > 0 ?
-      this.renderLessonPlan(groups) :
+      milestones.size > 0 || items.size > 0 ?
+      this.renderLessonPlan() :
       this.renderEmptyLessonPlanMessage()
     );
   }
