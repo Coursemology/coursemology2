@@ -1,9 +1,8 @@
 import React, { PropTypes } from 'react';
 import BuildLog from '../components/BuildLog'
-import OnlineEditorPythonView from '../components/OnlineEditorPythonView'
+import OnlineEditor from '../components/OnlineEditor'
 import ProgrammingQuestionForm from '../components/ProgrammingQuestionForm';
-import TemplatePackageView from '../components/TemplatePackageView'
-import TemplateTestCaseView from '../components/TemplateTestCaseView'
+import UploadedPackageViewer from '../components/UploadedPackageViewer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Immutable from 'immutable';
@@ -13,44 +12,6 @@ import * as templatePackageActionCreators from '../actions/templatePackageAction
 
 function select(state) {
   return { programmingQuestionStore: state.programmingQuestionStore };
-}
-
-function makeUploadedPackageViewer(templatePackageActions, store) {
-  const { changeTemplateTab } = templatePackageActions;
-  const packageUI = store.get('package_ui');
-  const templates = packageUI.get('templates');
-  const selectedTab = packageUI.get('selected');
-  const testCases = packageUI.get('test_cases');
-
-  if (store.get('question').get('package')) {
-    return (
-      <div className="template-package-container">
-        <h2>Template</h2>
-        <TemplatePackageView {...{changeTemplateTab, templates, selectedTab}} />
-        <h2>Test Cases</h2>
-        <TemplateTestCaseView {...{testCases}} />
-      </div>
-    );
-  } else {
-    return null;
-  }
-}
-
-function makeOnlineEditor(actions, store) {
-  const mode = store.get('test_ui').get('mode');
-  const isLoading = store.get('is_loading');
-
-  switch (mode) {
-    case 'python':
-      const data = store.get('test_ui').get('python');
-      return <OnlineEditorPythonView {...{ actions, data, isLoading }}/>;
-
-    case null:
-      return <div className="alert alert-warning">Please select a language.</div>;
-
-    default:
-      return <div className="alert alert-info">Not yet implemented :(</div>;
-  }
 }
 
 function makeImportAlert(store) {
@@ -87,9 +48,9 @@ const ProgrammingQuestion = (props) => {
   const onlineEditorActions = bindActionCreators(onlineEditorActionCreators, dispatch);
 
   var testView = data.question.get('can_edit_online') ?
-    makeOnlineEditor(onlineEditorActions, programmingQuestionStore)
+    <OnlineEditor {...{ actions: onlineEditorActions, data: programmingQuestionStore }} />
     :
-    makeUploadedPackageViewer(templatePackageActions, programmingQuestionStore);
+    <UploadedPackageViewer {...{ actions: templatePackageActions, data: programmingQuestionStore }} />;
 
   const importAlertView = makeImportAlert(programmingQuestionStore);
   const buildLogView = makeBuildLog(programmingQuestionStore);

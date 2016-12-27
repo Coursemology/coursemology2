@@ -168,3 +168,29 @@ export const buildLogTranslations = defineMessages({
     description: 'Header for standard error.',
   },
 });
+
+export const onlineEditorTranslations = defineMessages({
+  selectLanguageAlert: {
+    id: 'course.assessment.question.programming.onlineEditor.selectLanguageAlert',
+    defaultMessage: 'Please select a language.',
+    description: 'Alert message to be displayed when no language is selected.',
+  },
+  notYetImplementedAlert: {
+    id: 'course.assessment.question.programming.onlineEditor.notYetImplementedAlert',
+    defaultMessage: 'Not yet implemented :(',
+    description: 'Alert message to be displayed when selected language does not have an online editor.',
+  },
+});
+
+export const uploadedPackageViewer = defineMessages({
+  templateHeader: {
+    id: 'course.assessment.question.programming.uploadedPackageViewer.templateHeader',
+    defaultMessage: 'Template',
+    description: 'Header for submission template of the uploaded package.',
+  },
+  testCasesHeader: {
+    id: 'course.assessment.question.programming.uploadedPackageViewer.testCasesHeader',
+    defaultMessage: 'Test Cases',
+    description: 'Header for the test cases of the uploaded package.',
+  },
+});
