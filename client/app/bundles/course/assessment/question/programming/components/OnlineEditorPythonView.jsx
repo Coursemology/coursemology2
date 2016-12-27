@@ -198,7 +198,7 @@ class OnlineEditorPythonView extends React.Component {
           {rows}
           <tr style={{ cursor: 'pointer' }}>
             <td className={styles.addNewTestRow} colSpan="5" onClick={this.addTestCase.bind(this, type)}>
-              <button className={`btn btn-default ${styles.addNewTestButton}`} disabled={this.isLoading}>
+              <button className={`btn btn-default ${styles.addNewTestButton}`} disabled={this.isLoading} onClick={(e) => e.preventDefault()}>
                 <i className="fa fa-plus" /> {this.props.intl.formatMessage(translations.addNewTestButton)}
               </button>
             </td>
