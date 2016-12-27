@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::ProgrammingController < \
   Course::Assessment::QuestionsController
-  include Course::Assessment::Question::Programming::PackageGenerationConcern
   load_and_authorize_resource :programming_question,
                               class: Course::Assessment::Question::Programming,
                               through: :assessment, parent: false
@@ -16,13 +15,15 @@ class Course::Assessment::Question::ProgrammingController < \
   end
 
   def create
+    @programming_question.assign_attributes programming_question_params
+
     if programming_question_params[:file]
       @programming_question.package_type = :zip_upload
     else
       @programming_question.package_type = :online_editor
     end
 
-    package(@programming_question.language, @programming_question.attachment, params) do |file|
+    programming_question_service.generate_package(params) do |file|
       @programming_question.file = file
     end
 
@@ -42,14 +43,16 @@ class Course::Assessment::Question::ProgrammingController < \
     respond_to do |format|
       format.html
       format.json {
-        @meta = extract_meta(@programming_question.language, @programming_question.attachment)
+        @meta = programming_question_service.extract_meta
         render 'edit'
       }
     end
   end
 
   def update
-    package(@programming_question.language, @programming_question.attachment, params) do |file|
+    @programming_question.assign_attributes programming_question_params
+
+    programming_question_service.generate_package(params) do |file|
       @programming_question.file = file
     end
 
@@ -99,5 +102,9 @@ class Course::Assessment::Question::ProgrammingController < \
       *attachment_params,
       skill_ids: []
     )
+  end
+
+  def programming_question_service
+    Course::Assessment::Question::Programming::ProgrammingPackageService.new(@programming_question)
   end
 end

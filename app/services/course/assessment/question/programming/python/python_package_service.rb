@@ -1,20 +1,21 @@
 # frozen_string_literal: true
-module Course::Assessment::Question::Programming::Python::PackageConcern
+class Course::Assessment::Question::Programming::Python::PythonPackageService
+
   AUTOGRADE_PRE_PATH = File.join(File.expand_path(File.dirname(__FILE__)), 'python_autograde_pre.py').freeze
 
   AUTOGRADE_POST_PATH = File.join(File.expand_path(File.dirname(__FILE__)), 'python_autograde_post.py').freeze
 
   MAKEFILE_PATH = File.join(File.expand_path(File.dirname(__FILE__)), 'python_makefile').freeze
 
-  def python_package(old_attachment, params)
+  def generate_package(old_attachment, params)
     test_params = python_test_params params
 
-    return nil if test_params.blank? || (old_attachment.present? && test_params == python_meta(old_attachment))
+    return nil if test_params.blank? || (old_attachment.present? && test_params == extract_meta(old_attachment))
 
     generate_zip_file(test_params)
   end
 
-  def python_meta(attachment)
+  def extract_meta(attachment)
     attachment.open(binmode: true) do |temporary_file|
       begin
         package = Course::Assessment::ProgrammingPackage.new(temporary_file)
@@ -64,28 +65,27 @@ module Course::Assessment::Question::Programming::Python::PackageConcern
 
       if tests.blank?
         zip.print "    def test_public_1(self):\n"\
-                    "        self.meta['expression'] = 'This testcase has no meaning.'\n"\
-                    "        self.meta['expected'] = 'Just finalise your answer when you are done'\n"\
-                    "        self.assertEqual(True, True)\n"\
-                    "\n"
+                  "        self.meta['expression'] = #{I18n.t('course.assessment.question.programming.package.default_expression').inspect}\n"\
+                  "        self.meta['expected'] = #{I18n.t('course.assessment.question.programming.package.default_expected').inspect}\n"\
+                  "        self.assertEqual(True, True)\n"\
+                  "\n"
       else
         index = 1
         [:public, :private, :evaluation].each do |test_type|
           tests[test_type].try(:each) do |test|
-            escaped_expression = test[:expression].gsub("\\", "\\\\\\").gsub("'", "\\\\'")
-
             test_fn = "    def test_#{test_type.to_s}_#{index}(self):\n"\
-                      "        self.meta['expression'] = '#{escaped_expression}'\n"\
+                      "        self.meta['expression'] = #{test[:expression].inspect}\n"\
 
+            # String types should be displayed with quotes, other types will be converted to string
+            # with the str method.
             if test[:expected].first == '\'' && test[:expected].last == '\'' ||
               test[:expected].first == '"' && test[:expected].last == '"'
-              escaped_expected = test[:expected].gsub("\\", "\\\\\\").gsub("'", "\\\\'")
-              test_fn += "        self.meta['expected'] = '#{escaped_expected}'\n"
+              test_fn += "        self.meta['expected'] = #{test[:expected].inspect}\n"
             else
               test_fn += "        self.meta['expected'] = str(#{test[:expected]})\n"
             end
 
-            test_fn += "        self.meta['hint'] = '#{test[:hint]}'\n" unless test[:hint].blank?
+            test_fn += "        self.meta['hint'] = #{test[:hint].inspect}\n" unless test[:hint].blank?
             test_fn += "        _out = #{test[:expression]}\n"\
                        "        self.meta['output'] = _out\n"\
                        "        self.assertEqual(_out, #{test[:expected]})\n"\
