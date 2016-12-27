@@ -27,7 +27,7 @@ div.submissions-filter
         label: t('.student'),
         selected: lambda { |user| user[1] == user_id },
         include_blank: '',
-        collection: current_course.course_users.order_alphabetically.with_approved_state.student.\
+        collection: current_course.course_users.order_alphabetically.student.\
                       map { |u| [u.name, u.user_id] }
 
     = f.button :submit, t('common.submit')

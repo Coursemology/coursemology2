@@ -19,12 +19,7 @@ class Course < ActiveRecord::Base
   belongs_to :instance, inverse_of: :courses
   has_many :enrol_requests, inverse_of: :course, dependent: :destroy
   has_many :course_users, inverse_of: :course, dependent: :destroy
-  # @!attribute [r] users
-  # Returns all the users related to the course regardless of course_user state.
-  # Note that if you only want approved users you should call +users.with_approved_state+ instead.
-  has_many :users, through: :course_users do
-    include CourseUser::UsersConcern
-  end
+  has_many :users, through: :course_users
   has_many :invitations, class_name: Course::UserInvitation.name, dependent: :destroy,
                          inverse_of: :course
   has_many :notifications, dependent: :destroy
@@ -65,17 +60,16 @@ class Course < ActiveRecord::Base
   scope :publicly_accessible, -> { where(status: PUBLIC_STATUSES.map { |s| statuses[s] }) }
 
   # @!method containing_user
-  #   Selects all the courses with user as one of its approved members
+  #   Selects all the courses with user as one of its members
   scope :containing_user, (lambda do |user|
     joins { course_users }.
-    merge(CourseUser.with_approved_state).
     where { course_users.user_id == user.id }
   end)
 
   # @!method with_owners
   #   Includes all course_users with the role of owner.
   scope :with_owners, (lambda do
-    course_users = CourseUser.owner.with_approved_state.where(course: pluck(:id)).includes(:user)
+    course_users = CourseUser.owner.where(course: pluck(:id)).includes(:user)
 
     all.tap do |result|
       preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
@@ -152,7 +146,6 @@ class Course < ActiveRecord::Base
     self.start_at ||= Time.zone.now
     self.end_at ||= 1.month.from_now
 
-    course_users.build(user: creator, role: :owner, workflow_state: :approved, creator: creator,
-                       updater: updater) if creator && course_users.empty?
+    course_users.build(user: creator, role: :owner) if creator && course_users.empty?
   end
 end

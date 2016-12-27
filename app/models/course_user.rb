@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 class CourseUser < ActiveRecord::Base
-  include Workflow
   include CourseUser::StaffConcern
   include CourseUser::LevelProgressConcern
-  # Workflow event transition logic must exist above Todo concern to allow for todo callbacks.
-  include CourseUser::WorkflowConcern
   include CourseUser::TodoConcern
 
   after_initialize :set_defaults, if: :new_record?
@@ -23,21 +20,6 @@ class CourseUser < ActiveRecord::Base
 
   # A set of roles which comprise the auto graders of a course.
   AUTO_GRADER_ROLES = Set[:auto_grader].freeze
-
-  workflow do
-    state :requested do
-      event :approve, transitions_to: :approved
-      event :reject, transitions_to: :rejected
-    end
-    state :invited do
-      event :accept, transitions_to: :approved
-    end
-    state :approved
-    state :rejected
-  end
-
-  validates :user, presence: true, unless: :invited?
-  validates :user, absence: true, if: :invited?
 
   belongs_to :user, inverse_of: :course_users
   belongs_to :course, inverse_of: :course_users
@@ -107,7 +89,7 @@ class CourseUser < ActiveRecord::Base
   # @param [User] user The user to check
   # @return [Boolean] True if the user exists in the current context
   def self.user?(user)
-    with_approved_state.exists?(user: user)
+    all.exists?(user: user)
   end
 
   # Test whether this course_user is a manager (i.e. manager or owner)

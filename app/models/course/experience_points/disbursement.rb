@@ -75,11 +75,11 @@ class Course::ExperiencePoints::Disbursement
   end
 
   # Returns a list of students filtered by group if one is specified, otherwise
-  # it returns all the approved students in the course.
+  # it returns all students in the course.
   #
   # @return [Array<CourseUser>] The list of potential students awardees
   def filtered_students
-    group_id ? students_from_group(group_id) : course.course_users.student.with_approved_state
+    group_id ? students_from_group(group_id) : course.course_users.student
   end
 
   # Returns all normal course_users from the specified group.

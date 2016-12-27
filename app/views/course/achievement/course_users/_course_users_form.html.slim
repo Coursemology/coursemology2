@@ -2,7 +2,7 @@
   = f.error_notification
   = f.error :achievement
 
-  - collection = course.course_users.with_approved_state.without_phantom_users.students.order_alphabetically
+  - collection = course.course_users.without_phantom_users.students.order_alphabetically
   table.table.table-hover
     thead
       th = t('.name')
@@ -20,7 +20,7 @@
   br
   h4 = t('.phantom_user_header')
 
-  - collection = course.course_users.with_approved_state.phantom.students.order_alphabetically
+  - collection = course.course_users.phantom.students.order_alphabetically
   table.table.table-hover
     thead
       th = t('.name')

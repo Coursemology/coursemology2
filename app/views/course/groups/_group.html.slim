@@ -1,6 +1,6 @@
 = content_tag_for(:tr, group) do
   th = format_inline_text(group.name)
-  td = group.course_users.with_approved_state.count
+  td = group.course_users.count
   td
     - group.group_users.select(&:manager?).map(&:course_user).each do |manager|
       div

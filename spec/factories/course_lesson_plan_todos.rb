@@ -37,7 +37,7 @@ FactoryGirl.define do
 
     after(:build) do |_todo, evaluator|
       course_user = CourseUser.find_by(course: evaluator.course, user: evaluator.user)
-      create(:course_user, :approved, course: evaluator.course) unless course_user
+      create(:course_user, course: evaluator.course) unless course_user
     end
   end
 end

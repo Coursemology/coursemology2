@@ -18,7 +18,7 @@ module Course::UsersControllerManagementConcern
   def destroy # :nodoc:
     if @course_user.destroy
       success = t('course.users.destroy.success', role: @course_user.role,
-                                                  email: course_user_email)
+                                                  email: @course_user.user.email)
       redirect_to delete_redirect_path, success: success
     else
       redirect_to delete_redirect_path, danger: @course_user.errors.full_messages.to_sentence
@@ -26,15 +26,12 @@ module Course::UsersControllerManagementConcern
   end
 
   def students # :nodoc:
-    @course_users = @course_users.students.with_approved_state.includes(user: :emails).
-                    order_alphabetically
+    @course_users = @course_users.students.includes(user: :emails).order_alphabetically
   end
 
   def staff # :nodoc:
-    @student_options =
-      @course_users.students.with_approved_state.order_alphabetically.pluck(:name, :id)
-    @course_users = @course_users.staff.with_approved_state.includes(user: :emails).
-                    order_alphabetically
+    @student_options = @course_users.students.order_alphabetically.pluck(:name, :id)
+    @course_users = @course_users.staff.includes(user: :emails).order_alphabetically
   end
 
   def upgrade_to_staff # :nodoc:
@@ -48,8 +45,7 @@ module Course::UsersControllerManagementConcern
   private
 
   def course_user_params # :nodoc:
-    @course_user_params ||= params.require(:course_user).
-                            permit(:user_id, :name, :workflow_state, :role, :phantom)
+    @course_user_params ||= params.require(:course_user).permit(:user_id, :name, :role, :phantom)
   end
 
   def upgrade_to_staff_params # :nodoc:
@@ -106,15 +102,5 @@ module Course::UsersControllerManagementConcern
   def upgrade_to_staff_failure # :nodoc:
     redirect_to course_users_staff_path(current_course),
                 danger: @course_user.errors.full_messages.to_sentence
-  end
-
-  # Returns the email of the course_user.
-  # This method handles invited course_users, which do not have a user object.
-  def course_user_email
-    if @course_user.invited?
-      @course_user.invitation.user_email.email
-    else
-      @course_user.user.email
-    end
   end
 end

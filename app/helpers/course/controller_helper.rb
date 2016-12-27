@@ -11,7 +11,7 @@ module Course::ControllerHelper
     user.name
   end
 
-  # Links to the given +CourseUser+. If the +CourseUser+ is unconfirmed, no link will be provided.
+  # Links to the given +CourseUser+.
   #
   # @param [CourseUser] user The User to display.
   # @param [Hash] options The options to pass to +link_to+
@@ -22,12 +22,8 @@ module Course::ControllerHelper
   #   string within a link to bring to the User page.
   def link_to_course_user(user, options = {})
     link_text = capture { block_given? ? yield(user) : display_course_user(user) }
-    if user.approved?
-      link_path = course_user_path(user.course, user)
-      link_to(link_text, link_path, options)
-    else
-      content_tag('span', link_text)
-    end
+    link_path = course_user_path(user.course, user)
+    link_to(link_text, link_path, options)
   end
 
   # Links to the given User or CourseUser. If a User is given, the CourseUser under

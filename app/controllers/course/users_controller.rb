@@ -9,9 +9,7 @@ class Course::UsersController < Course::ComponentController
   def index # :nodoc:
   end
 
-  def show # :nodoc:
-    raise ActiveRecord::RecordNotFound unless @course_user.approved?
-  end
+  def show; end
 
   private
 
@@ -19,7 +17,7 @@ class Course::UsersController < Course::ComponentController
     course_users = current_course.course_users
     case params[:action]
     when 'index'
-      @course_users ||= course_users.with_approved_state.without_phantom_users.students.
+      @course_users ||= course_users.without_phantom_users.students.
                         includes(:user).order_alphabetically
     else
       return if super
