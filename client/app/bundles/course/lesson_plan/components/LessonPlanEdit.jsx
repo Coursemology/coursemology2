@@ -4,6 +4,7 @@ import TimePicker from 'material-ui/TimePicker';
 
 const propTypes = {
   milestoneGroups: PropTypes.array,
+  updateItemDateTime: PropTypes.func,
 };
 
 const styles = {
@@ -16,45 +17,6 @@ const styles = {
 };
 
 class LessonPlanEdit extends React.Component {
-  static renderItem(item) {
-    const startAt = new Date(item.get('start_at'));
-    const endAt = item.get('end_at') ? new Date(item.get('end_at')) : undefined;
-    return (
-      <tr key={item.get('id')}>
-        <td>{ item.get('lesson_plan_item_type').join(': ') }</td>
-        <td>{ item.get('title') }</td>
-        <td>
-          <DatePicker
-            name="start_at"
-            value={startAt}
-            textFieldStyle={styles.datePickerTextField}
-          />
-        </td>
-        <td>
-          <TimePicker
-            name="start_at"
-            value={startAt}
-            textFieldStyle={styles.timePickerTextField}
-          />
-        </td>
-        <td>
-          <DatePicker
-            name="end_at"
-            value={endAt}
-            textFieldStyle={styles.datePickerTextField}
-          />
-        </td>
-        <td>
-          <TimePicker
-            name="end_at"
-            value={endAt}
-            textFieldStyle={styles.timePickerTextField}
-          />
-        </td>
-      </tr>
-    );
-  }
-
   static renderMilestone(milestone) {
     const startAt = new Date(milestone.get('start_at'));
     return (
@@ -85,8 +47,54 @@ class LessonPlanEdit extends React.Component {
     );
   }
 
-  static renderGroup(group) {
-    return group.items.map(item => LessonPlanEdit.renderItem(item))
+  renderItem(item) {
+    const { updateItemDateTime } = this.props;
+    const startAt = new Date(item.get('start_at'));
+    const endAt = item.get('end_at') ? new Date(item.get('end_at')) : undefined;
+    const itemId = item.get('id');
+
+    return (
+      <tr key={itemId}>
+        <td>{ item.get('lesson_plan_item_type').join(': ') }</td>
+        <td>{ item.get('title') }</td>
+        <td>
+          <DatePicker
+            name="start_at"
+            value={startAt}
+            textFieldStyle={styles.datePickerTextField}
+            onChange={(event, newDate) => updateItemDateTime(itemId, 'start_at', newDate, startAt)}
+          />
+        </td>
+        <td>
+          <TimePicker
+            name="start_at"
+            value={startAt}
+            textFieldStyle={styles.timePickerTextField}
+            onChange={(event, newTime) => updateItemDateTime(itemId, 'start_at', startAt, newTime)}
+          />
+        </td>
+        <td>
+          <DatePicker
+            name="end_at"
+            value={endAt}
+            textFieldStyle={styles.datePickerTextField}
+            onChange={(event, newDate) => updateItemDateTime(itemId, 'end_at', newDate, endAt)}
+          />
+        </td>
+        <td>
+          <TimePicker
+            name="end_at"
+            value={endAt}
+            textFieldStyle={styles.timePickerTextField}
+            onChange={(event, newTime) => updateItemDateTime(itemId, 'end_at', endAt, newTime)}
+          />
+        </td>
+      </tr>
+    );
+  }
+
+  renderGroup(group) {
+    return group.items.map(item => this.renderItem(item))
            .unshift(LessonPlanEdit.renderMilestone(group.milestone));
   }
 
@@ -96,7 +104,7 @@ class LessonPlanEdit extends React.Component {
       <table>
         <tbody>
           {
-             milestoneGroups.map(group => LessonPlanEdit.renderGroup(group))
+             milestoneGroups.map(group => this.renderGroup(group))
           }
         </tbody>
       </table>
