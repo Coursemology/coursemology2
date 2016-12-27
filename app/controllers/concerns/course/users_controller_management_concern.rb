@@ -45,10 +45,6 @@ module Course::UsersControllerManagementConcern
     end
   end
 
-  def requests # :nodoc:
-    @course_users = @course_users.with_requested_state.includes(user: :emails)
-  end
-
   private
 
   def course_user_params # :nodoc:
@@ -65,7 +61,7 @@ module Course::UsersControllerManagementConcern
     case params[:action]
     when 'invitations'
       @course_users ||= course_users
-    when 'students', 'staff', 'requests'
+    when 'students', 'staff'
       @course_users ||= course_users.includes(:user)
     when 'upgrade_to_staff'
       @course_user ||= course_users.includes(:user).find(upgrade_to_staff_params[:id])

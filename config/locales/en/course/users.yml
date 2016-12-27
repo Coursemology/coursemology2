@@ -14,7 +14,7 @@ en:
       tabs:
         students: :'course.users.students.header'
         staff: :'course.users.staff.header'
-        requests: :'course.users.requests.header'
+        requests: :'course.enrol_requests.index.header'
         invite: :'course.user_invitations.new.header'
         invitations: :'course.user_invitations.index.header'
       new:
@@ -30,10 +30,6 @@ en:
         upgrade_to_staff: 'Upgrade to Staff'
       upgrade_to_staff:
         success: '%{name} is now a %{role}.'
-      requests:
-        header: 'User Requests'
-        approve: 'Approve'
-        reject: 'Reject'
       show:
         header: 'Profile'
         role: 'Role: %{role}'

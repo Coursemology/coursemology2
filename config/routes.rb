@@ -201,7 +201,7 @@ Rails.application.routes.draw do
 
       resources :user_invitations, only: [:index, :new, :create, :destroy]
 
-      resources :enrol_requests, only: [:destroy] do
+      resources :enrol_requests, only: [:index, :destroy] do
         post 'approve', on: :member
       end
 
@@ -257,7 +257,6 @@ Rails.application.routes.draw do
       get 'students' => 'users#students', as: :users_students
       get 'staff' => 'users#staff', as: :users_staff
       patch 'upgrade_to_staff' => 'users#upgrade_to_staff', as: :users_upgrade_to_staff
-      get 'requests' => 'users#requests', as: :users_requests
 
       resources :groups, except: [:show]
 

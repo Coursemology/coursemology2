@@ -2,6 +2,10 @@
 class Course::EnrolRequestsController < Course::ComponentController
   load_and_authorize_resource :enrol_request, through: :course, class: Course::EnrolRequest.name
 
+  def index
+    @enrol_requests = @enrol_requests.includes(:user)
+  end
+
   # Allow users to withdraw their requests to register for a course that are pending
   # approval/rejection.
   def destroy
