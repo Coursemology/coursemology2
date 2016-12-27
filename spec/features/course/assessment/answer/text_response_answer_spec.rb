@@ -15,7 +15,7 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
     let(:submission_traits) { nil }
 
     context 'As a Course Student' do
-      let(:user) { create(:course_user, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       scenario 'I cannot update my submission after finalising' do
         visit edit_course_assessment_submission_path(course, assessment, submission)

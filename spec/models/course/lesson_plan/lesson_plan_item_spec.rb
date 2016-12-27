@@ -77,14 +77,13 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
       describe 'callbacks from Course::LessonPlan::TodoConcern' do
         let(:course) { create(:course) }
         let!(:students) { create_list(:course_student, 3, course: course) }
-        let!(:invited_student) { create(:course_user, :invited, course: course, user: nil) }
         let(:actable) { create(:assessment, :with_mcq_question, course: course) }
         subject { create(:assessment, :published_with_mcq_question, course: course).acting_as }
 
-        it 'creates todos for created objects for course_users (except those with invited state)' do
-          expect { subject }.
-            to change(Course::LessonPlan::Todo.all, :count).
-            by(course.course_users.where.not(workflow_state: 'invited').count)
+        it 'creates todos for created objects for course_users' do
+          todos_for_course =
+            Course::LessonPlan::Todo.where(item_id: course.lesson_plan_items.select(:id))
+          expect { subject }.to change(todos_for_course, :count).by(course.course_users.count)
         end
       end
     end

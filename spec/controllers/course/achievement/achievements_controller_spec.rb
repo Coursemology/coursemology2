@@ -27,7 +27,7 @@ RSpec.describe Course::Achievement::AchievementsController, type: :controller do
       end
 
       context 'when the achievement is automatically awarded' do
-        let!(:course_user) { create(:course_user, :approved, course: course) }
+        let!(:course_user) { create(:course_student, course: course) }
         let!(:achievement_stub) do
           stub = create(:course_achievement, course: course)
           allow(stub).to receive(:manually_awarded?).and_return(false)

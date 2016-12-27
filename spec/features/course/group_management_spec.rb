@@ -30,7 +30,7 @@ RSpec.feature 'Courses: Groups' do
         end
       end
 
-      let!(:course_users) { create_list(:course_user, 3, :approved, course: course) }
+      let!(:course_users) { create_list(:course_student, 3, course: course) }
       let(:sample_course_user) { course_users.sample }
       scenario 'I can create a group' do
         visit new_course_group_path(course)

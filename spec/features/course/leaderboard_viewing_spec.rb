@@ -11,8 +11,7 @@ RSpec.describe 'Course: Leaderboard: View' do
 
     context 'As a student' do
       let!(:students) { create_list(:course_student, 2, course: course) }
-      let!(:unregistered_user) { create(:course_user, course: course) }
-      let!(:phantom_user) { create(:course_user, :approved, :phantom, course: course) }
+      let!(:phantom_user) { create(:course_student, :phantom, course: course) }
       let(:user) { students[0].user }
 
       scenario 'I can view the leaderboard sorted by level' do
@@ -21,7 +20,7 @@ RSpec.describe 'Course: Leaderboard: View' do
 
         within find('.leaderboard-level') do
           sorted_course_users = course.course_users.students.without_phantom_users.
-                                with_approved_state.ordered_by_experience_points
+                                ordered_by_experience_points
 
           sorted_course_users.each.with_index(1) do |student, index|
             within find(content_tag_selector(student)) do
@@ -32,7 +31,6 @@ RSpec.describe 'Course: Leaderboard: View' do
         end
 
         expect(page).not_to have_content_tag_for(phantom_user)
-        expect(page).not_to have_content_tag_for(unregistered_user)
       end
 
       scenario 'I can view the leaderboard sorted by achievement count' do
@@ -41,7 +39,7 @@ RSpec.describe 'Course: Leaderboard: View' do
 
         within find('.leaderboard-achievement') do
           sorted_course_users = course.course_users.students.without_phantom_users.
-                                with_approved_state.ordered_by_achievement_count
+                                ordered_by_achievement_count
 
           sorted_course_users.each.with_index(1) do |student, index|
             within find(content_tag_selector(student)) do
@@ -54,7 +52,6 @@ RSpec.describe 'Course: Leaderboard: View' do
         end
 
         expect(page).not_to have_content_tag_for(phantom_user)
-        expect(page).not_to have_content_tag_for(unregistered_user)
       end
 
       context 'when the group leaderboard is enabled for the course' do

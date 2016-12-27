@@ -6,8 +6,7 @@ RSpec.feature 'Courses: Staff Management' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let!(:course_approved_students) { create_list(:course_student, 2, course: course) }
-    let!(:course_unapproved_students) { create_list(:course_user, 2, course: course) }
+    let!(:course_students) { create_list(:course_student, 2, course: course) }
     let!(:course_managers) { create_list(:course_manager, 2, course: course) }
     before { login_as(user, scope: :user) }
 
@@ -49,8 +48,8 @@ RSpec.feature 'Courses: Staff Management' do
       scenario 'I can view the list of staff' do
         visit course_users_staff_path(course)
 
-        (course_approved_students + course_unapproved_students).each do |approved_student|
-          expect(page).not_to have_field('course_user_name', with: approved_student.name)
+        course_students.each do |student|
+          expect(page).not_to have_field('course_user_name', with: student.name)
         end
 
         course_managers.each do |staff|
@@ -80,7 +79,7 @@ RSpec.feature 'Courses: Staff Management' do
       scenario 'I can add new staff' do
         visit course_users_staff_path(course)
 
-        staff_to_be = course_approved_students[0]
+        staff_to_be = course_students[0]
         expect(page).not_to have_field('course_user_name', with: staff_to_be.name)
 
         find('#course_user_id').

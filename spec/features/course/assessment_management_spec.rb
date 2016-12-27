@@ -108,7 +108,7 @@ RSpec.feature 'Course: Assessments: Management' do
     end
 
     context 'As a Course Student' do
-      let(:user) { create(:course_user, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       scenario 'I can view the Assessment Sidebar item' do
         visit course_path(course)

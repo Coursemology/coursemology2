@@ -42,8 +42,8 @@ RSpec.describe Course::Mailer, type: :mailer do
     end
 
     describe '#user_registered_email' do
-      let(:course_user) { create(:course_user, course: course) }
-      let(:mail) { Course::Mailer.user_registered_email(course, course_user) }
+      let(:enrol_request) { create(:course_enrol_request, course: course) }
+      let(:mail) { Course::Mailer.user_registered_email(enrol_request) }
 
       it 'sends to the course staff' do
         expect(subject.to).to contain_exactly(*course.managers.map(&:user).map(&:email))

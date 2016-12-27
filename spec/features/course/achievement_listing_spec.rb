@@ -33,8 +33,7 @@ RSpec.feature 'Course: Achievements' do
     context 'As an Course Student' do
       let!(:course_student1) { create(:course_student, course: course) }
       let!(:course_student2) { create(:course_student, course: course) }
-      let!(:unregistered_user) { create(:course_user, course: course) }
-      let!(:phantom_user) { create(:course_user, :approved, :phantom, course: course) }
+      let!(:phantom_user) { create(:course_student, :phantom, course: course) }
       let!(:user) { course_student1.user }
       before do
         create(:course_user_achievement, course_user: course_student1, achievement: achievement1)
@@ -75,7 +74,6 @@ RSpec.feature 'Course: Achievements' do
           not_obtained.each { |course_user| expect(page).not_to have_content_tag_for(course_user) }
 
           expect(page).not_to have_content_tag_for(phantom_user)
-          expect(page).not_to have_content_tag_for(unregistered_user)
         end
       end
     end

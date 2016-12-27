@@ -12,7 +12,7 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
     let(:mrq_questions) { assessment.reload.questions.map(&:specific) }
     before { login_as(user, scope: :user) }
 
-    let(:student) { create(:course_user, :approved, course: course).user }
+    let(:student) { create(:course_student, course: course).user }
     let(:submission) { create(:submission, assessment: assessment, creator: student) }
     let(:programming_assessment) do
       create(:assessment, :published_with_programming_question, course: course)

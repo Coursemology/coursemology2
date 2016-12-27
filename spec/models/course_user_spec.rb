@@ -19,7 +19,6 @@ RSpec.describe CourseUser, type: :model do
   with_tenant(:instance) do
     let(:owner) { create(:user) }
     let(:course) { create(:course, creator: owner, updater: owner) }
-    let(:requested_course_user) { create(:course_user, course: course) }
     let!(:student) { create(:course_student, course: course) }
     let(:phantom_student) { create(:course_student, :phantom, course: course) }
     let(:teaching_assistant) { create(:course_teaching_assistant, course: course) }
@@ -86,21 +85,6 @@ RSpec.describe CourseUser, type: :model do
     describe '.managers' do
       it 'returns only owner and manager' do
         expect(course.course_users.managers).to contain_exactly(course_owner, manager)
-      end
-    end
-
-    describe '.approved' do
-      it 'returns all approved course users' do
-        expect(course.course_users.with_approved_state).to contain_exactly(student,
-                                                                           teaching_assistant,
-                                                                           course_owner)
-      end
-    end
-
-    describe '.pending' do
-      it 'returns all pending course users' do
-        expect(course.course_users.with_requested_state).
-          to contain_exactly(requested_course_user)
       end
     end
 
@@ -176,20 +160,6 @@ RSpec.describe CourseUser, type: :model do
         expect(teaching_assistant.real_student?).to be_falsey
         expect(manager.real_student?).to be_falsey
         expect(course_owner.real_student?).to be_falsey
-      end
-    end
-
-    describe '#approve!' do
-      subject { requested_course_user.tap(&:approve!).tap(&:save!) }
-      it 'increases approved course users\' count' do
-        expect { subject }.to change(CourseUser.with_approved_state, :count).by(1)
-      end
-    end
-
-    describe '#reject!' do
-      subject { requested_course_user.tap(&:reject!) }
-      it 'destroys the record' do
-        expect(subject.destroyed?).to be_truthy
       end
     end
 
@@ -345,32 +315,34 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
-    describe 'CourseUser::TodoConcern callbacks for new course_user' do
-      context 'when there is a lesson_plan_items that have todos' do
-        let(:assessment) { create(:assessment, course: course) }
-        subject { requested_course_user }
-        before { assessment }
+    describe 'CourseUser::TodoConcern' do
+      let(:user) { create(:user) }
+      let(:new_course_user) { create(:course_user, course: course, user: user) }
+      let!(:assessment) { create(:assessment, course: course) }
+
+      context 'when the course_user is created' do
+        subject { new_course_user }
 
         it 'creates todos for the lesson_plan_item for course_user' do
-          expect { subject }.to change(Course::LessonPlan::Todo.all, :count).by(1)
+          expect { subject }.to change(user.todos, :count).by(1)
         end
+      end
 
-        context 'when course_user is invited' do
-          subject { create(:course_user, :invited, course: course, user: nil) }
+      context 'when the course_user is destroyed' do
+        let(:other_course) { create(:course) }
+        let!(:other_assessment) { create(:assessment, course: other_course) }
+        let(:new_course_user) { create(:course_user, course: course, user: user) }
+        let(:other_course_user) { create(:course_user, course: other_course, user: user) }
 
-          it 'does not creates todos for the lesson_plan_item for course_user' do
-            expect { subject }.not_to change(Course::LessonPlan::Todo.all, :count)
-          end
+        before do
+          new_course_user
+          other_course_user
+        end
+        subject { new_course_user.destroy }
 
-          describe '.accept' do
-            it 'creates todos for the lesson_plan_item for course_user' do
-              expect do
-                user = create(:user)
-                subject.accept!(user)
-                subject.save
-              end.to change(Course::LessonPlan::Todo.all, :count).by(1)
-            end
-          end
+        it 'only deletes the todos for current course' do
+          expect(user.todos.count).to eq(2)
+          expect { subject }.to change(user.todos, :count).by(-1)
         end
       end
     end

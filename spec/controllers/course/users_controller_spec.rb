@@ -90,14 +90,6 @@ RSpec.describe Course::UsersController, type: :controller do
             expect(flash[:danger]).to eq('')
           end
         end
-
-        context 'when the user transitions from the requested state to the approved state' do
-          let(:course_user) { create(:course_user, course: course, role: :manager) }
-          let(:updated_course_user) { { workflow_state: :approved } }
-          it 'sends a notification email to the user' do
-            expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
-          end
-        end
       end
 
       context 'when the user is a student' do
@@ -150,21 +142,6 @@ RSpec.describe Course::UsersController, type: :controller do
 
       context 'when the user is not registered' do
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
-      end
-    end
-
-    describe '#show' do
-      before do
-        sign_in(user)
-        create(:course_user, :approved, course: course, user: user)
-      end
-      subject { get :show, course_id: course, id: course_user }
-
-      context 'when the user is not registered' do
-        let(:course_user) { create(:course_user, course: course) }
-        it 'raises an error' do
-          expect { subject }.to raise_exception(ActiveRecord::RecordNotFound)
-        end
       end
     end
 

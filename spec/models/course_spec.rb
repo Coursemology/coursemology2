@@ -160,18 +160,6 @@ RSpec.describe Course, type: :model do
       end
     end
 
-    describe '#users' do
-      let(:course) { create(:course, creator: owner, updater: owner) }
-      describe '#with_approved_state' do
-        let(:unapproved_user) { create(:course_user, course: course).user }
-        let(:approved_user) { create(:course_user, :approved, course: course).user }
-        subject { course.users.with_approved_state }
-
-        it { is_expected.to include(approved_user) }
-        it { is_expected.not_to include(unapproved_user) }
-      end
-    end
-
     describe '.search' do
       let(:keyword) { 'KeyWord' }
       let!(:course_with_keyword_in_title) do

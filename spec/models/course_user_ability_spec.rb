@@ -8,17 +8,9 @@ RSpec.describe Course, type: :model do
     let(:course_user) { create(:course_student) }
 
     context 'when the user is from the same course' do
-      context 'when the user is approved' do
-        let(:user) { create(:course_student, course: course_user.course).user }
+      let(:user) { create(:course_student, course: course_user.course).user }
 
-        it { is_expected.to be_able_to(:read, course_user) }
-      end
-
-      context 'when the user is not approved' do
-        let(:user) { create(:course_user, course: course_user.course).user }
-
-        it { is_expected.not_to be_able_to(:read, course_user) }
-      end
+      it { is_expected.to be_able_to(:read, course_user) }
     end
 
     context 'when the user is from a different course' do

@@ -20,7 +20,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Student' do
-      let(:user) { create(:course_user, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       scenario 'I can save my submission', js: true do
         pending 'Removed add/delete file links for CS1010S'
