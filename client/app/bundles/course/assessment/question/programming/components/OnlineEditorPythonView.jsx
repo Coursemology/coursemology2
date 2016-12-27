@@ -1,76 +1,16 @@
+import Immutable from 'immutable';
+
 import React, { PropTypes } from 'react';
 import AceEditor from 'react-ace';
-import { injectIntl, defineMessages } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import styles from './OnlineEditorPythonView.scss'
+import { onlineEditorPythonViewTranslations as translations } from '../constants/translations'
 
 import 'brace/mode/python';
 import 'brace/theme/monokai';
 
-const translations = defineMessages({
-  prependTitle: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.prependTitle',
-    defaultMessage: 'Prepend',
-    description: 'Title for prepend code block.',
-  },
-  appendTitle: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.appendTitle',
-    defaultMessage: 'Append',
-    description: 'Title for append code block.',
-  },
-  solutionTitle: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.solutionTitle',
-    defaultMessage: 'Solution Template',
-    description: 'Title for solution template code block.',
-  },
-  submissionTitle: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.submissionTitle',
-    defaultMessage: 'Submission Template',
-    description: 'Title for submission template code block.',
-  },
-  publicTestCases: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.publicTestCases',
-    defaultMessage: 'Public Test Cases',
-    description: 'Title for public test cases panel.',
-  },
-  privateTestCases: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.privateTestCases',
-    defaultMessage: 'Private Test Cases',
-    description: 'Title for private test cases panel.',
-  },
-  evaluationTestCases: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.evaluationTestCases',
-    defaultMessage: 'Evaluation Test Cases',
-    description: 'Title for evaluation test cases panel.',
-  },
-  identifierHeader: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.identifierHeader',
-    defaultMessage: 'Identifier',
-    description: 'Header for identifier column of test cases panel.',
-  },
-  expressionHeader: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.expressionHeader',
-    defaultMessage: 'Expression',
-    description: 'Header for expression column of test cases panel.',
-  },
-  expectedHeader: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.expectedHeader',
-    defaultMessage: 'Expected',
-    description: 'Header for expected column of test cases panel.',
-  },
-  hintHeader: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.hintHeader',
-    defaultMessage: 'Hint',
-    description: 'Header for hint column of test cases panel.',
-  },
-  addNewTestButton: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.addNewTestButton',
-    defaultMessage: 'Add new test',
-    description: 'Button for adding new test case.',
-  },
-});
-
 const propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.instanceOf(Immutable.Map).isRequired,
   actions: React.PropTypes.shape({
     updatePythonCodeBlock: PropTypes.func.isRequired,
     createPythonTestCase: PropTypes.func.isRequired,
@@ -85,10 +25,6 @@ const propTypes = {
 
 class OnlineEditorPythonView extends React.Component {
 
-  componentWillReceiveProps(nextProps) {
-    this.isLoading = nextProps.isLoading;
-  }
-
   onCodeChange(field, e) {
     this.props.actions.updatePythonCodeBlock(field, e);
   }
@@ -98,13 +34,17 @@ class OnlineEditorPythonView extends React.Component {
   }
 
   deleteTestCase(type, index, e) {
-    if (!this.isLoading) {
+    e.preventDefault();
+
+    if (!this.props.isLoading) {
       this.props.actions.deletePythonTestCase(type, index);
     }
   }
 
   addTestCase(type, e) {
-    if (!this.isLoading) {
+    e.preventDefault();
+
+    if (!this.props.isLoading) {
       this.props.actions.createPythonTestCase(type);
     }
   }
@@ -142,7 +82,7 @@ class OnlineEditorPythonView extends React.Component {
           value={this.props.data.get(field)}
           onChange={this.onCodeChange.bind(this, field)}
           editorProps={{$blockScrolling: true}}
-          setOptions={{useSoftTabs: true}}
+          setOptions={{useSoftTabs: true, readOnly: this.props.isLoading}}
         />
       </div>
     );
@@ -159,7 +99,7 @@ class OnlineEditorPythonView extends React.Component {
                value={test.get(field)}
                onChange={this.onTestCodeChange.bind(this, type, index, field)}
                onKeyPress={this.handleKeyPress}
-               disabled={this.isLoading}
+               disabled={this.props.isLoading}
         />
       );
     };
@@ -168,7 +108,7 @@ class OnlineEditorPythonView extends React.Component {
       return (
         <tr key={index}>
           <td>
-            <button className="btn btn-danger fa fa-minus" disabled={this.isLoading}
+            <button className="btn btn-danger fa fa-minus" disabled={this.props.isLoading}
                     onClick={this.deleteTestCase.bind(this, type, index)} />
           </td>
           <td>test_{type}_{startIndex + index + 1}</td>
@@ -198,7 +138,7 @@ class OnlineEditorPythonView extends React.Component {
           {rows}
           <tr style={{ cursor: 'pointer' }}>
             <td className={styles.addNewTestRow} colSpan="5" onClick={this.addTestCase.bind(this, type)}>
-              <button className={`btn btn-default ${styles.addNewTestButton}`} disabled={this.isLoading} onClick={(e) => e.preventDefault()}>
+              <button className={`btn btn-default ${styles.addNewTestButton}`} disabled={this.props.isLoading} onClick={(e) => e.preventDefault()}>
                 <i className="fa fa-plus" /> {this.props.intl.formatMessage(translations.addNewTestButton)}
               </button>
             </td>

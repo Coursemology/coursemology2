@@ -7,13 +7,11 @@ import thunkMiddleware from 'redux-thunk';
 import reducers, { initialStates } from './reducers';
 
 export default props => {
-  // This is how we get initial props Rails into redux.
   const { question, package_ui, test_ui, form_data, import_result } = props;
-  const { $$programmingQuestionState } = initialStates;
+  const { programmingQuestionState } = initialStates;
 
-  // Redux expects to initialize the store using an Object, not an Immutable.Map
   const initialState = {
-    $$programmingQuestionStore: $$programmingQuestionState.mergeDeep({
+    programmingQuestionStore: programmingQuestionState.mergeDeep({
       question, package_ui, test_ui, form_data, import_result
     }),
   };

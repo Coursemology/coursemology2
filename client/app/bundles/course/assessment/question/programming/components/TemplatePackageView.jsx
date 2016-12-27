@@ -1,9 +1,11 @@
+import Immutable from 'immutable';
+
 import React, { PropTypes } from 'react';
 
 export default class TemplatePackageView extends React.Component {
   static propTypes = {
     changeTemplateTab: PropTypes.func.isRequired,
-    templates: PropTypes.object.isRequired
+    templates: PropTypes.instanceOf(Immutable.Map).isRequired
   };
 
   onTemplateTabClick(selected, e) {

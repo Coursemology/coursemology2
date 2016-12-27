@@ -3,7 +3,7 @@ import Immutable from 'immutable';
 import actionTypes from '../constants/programmingQuestionConstants';
 import editorActionTypes from '../constants/onlineEditorConstants'
 
-export const $$initialState = Immutable.fromJS({
+export const initialState = Immutable.fromJS({
   // this is the default state that would be used if one were not passed into the store
   question: {
     assessment_id: null,
@@ -63,31 +63,31 @@ export const $$initialState = Immutable.fromJS({
   },
 });
 
-function questionReducer($$state, action) {
+function questionReducer(state, action) {
   const { type } = action;
 
   switch (type) {
     case actionTypes.PROGRAMMING_QUESTION_UPDATE:
       const { field, newValue } = action;
-      return $$state.set(field, newValue);
+      return state.set(field, newValue);
 
     case actionTypes.SKILLS_UPDATE:
       const { skills } = action;
-      return $$state.set('skill_ids', Immutable.fromJS(skills));
+      return state.set('skill_ids', Immutable.fromJS(skills));
 
     default:
-      return $$state;
+      return state;
   }
 }
 
-function pythonTestReducer($$state, action) {
+function pythonTestReducer(state, action) {
   const { type } = action;
-  var field, newValue, testType, index, $$testCases, $$tests;
+  var field, newValue, testType, index, testCases, tests;
 
   switch (type) {
     case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE:
       ({ field, newValue } = action);
-      return $$state.set(field, newValue);
+      return state.set(field, newValue);
 
     case editorActionTypes.PYTHON_TEST_CASE_CREATE:
       ({ testType } = action);
@@ -96,36 +96,31 @@ function pythonTestReducer($$state, action) {
         expected: '',
         hint: ''
       };
-      $$testCases = $$state.get('test_cases');
-      $$tests = $$testCases.get(testType).push(Immutable.fromJS(newTest));
-      return $$state.set('test_cases', $$testCases.set(testType, $$tests));
+      tests = state.get('test_cases').get(testType).push(Immutable.fromJS(newTest));
+      return state.setIn(['test_cases', testType], tests);
 
     case editorActionTypes.PYTHON_TEST_CASE_UPDATE:
       ({ testType, index, field, newValue } = action);
-      $$testCases = $$state.get('test_cases');
-      $$tests = $$testCases.get(testType);
-      $$tests = $$tests.set(index, $$tests.get(index).set(field, newValue));
-      return $$state.set('test_cases', $$testCases.set(testType, $$tests));
+      return state.setIn(['test_cases', testType, index, field], newValue);
 
     case editorActionTypes.PYTHON_TEST_CASE_DELETE:
       ({ testType, index } = action);
-      $$testCases = $$state.get('test_cases');
-      $$tests = $$testCases.get(testType).splice(index, 1);
-      return $$state.set('test_cases', $$testCases.set(testType, $$tests));
+      tests = state.get('test_cases').get(testType).splice(index, 1);
+      return state.setIn(['test_cases', testType], tests);
 
     default:
-      return $$state;
+      return state;
   }
 }
 
-function apiReducer($$state, action) {
+function apiReducer(state, action) {
   const { type } = action;
   var data = null;
 
   switch (type) {
     case actionTypes.SUBMIT_FORM_LOADING:
       const { isLoading } = action;
-      return $$state.set('is_loading', isLoading);
+      return state.set('is_loading', isLoading);
 
     case actionTypes.SUBMIT_FORM_EVALUATING:
       const { isEvaluating } = action;
@@ -134,11 +129,11 @@ function apiReducer($$state, action) {
       if (data) {
         const { question, package_ui, test_ui, import_result } = data;
 
-        return $$state
+        return state
           .set('is_evaluating', isEvaluating)
           .mergeDeep({ question, package_ui, test_ui, import_result });
       } else {
-        return $$state
+        return state
           .set('is_evaluating', isEvaluating)
           .mergeIn(['import_result'], { alert: null, build_log: null });
       }
@@ -147,48 +142,47 @@ function apiReducer($$state, action) {
       ({ data } = action);
       const { question, package_ui, test_ui, import_result } = data;
 
-      return $$state.mergeDeep({ question, package_ui, test_ui, import_result });
+      return state.mergeDeep({ question, package_ui, test_ui, import_result });
 
     case actionTypes.SUBMIT_FORM_FAILURE:
       const { error } = action;
-      return $$state;
+      return state;
 
     default:
-      return $$state;
+      return state;
   }
 }
 
-export default function programmingQuestionReducer($$state = $$initialState, action) {
+export default function programmingQuestionReducer(state = initialState, action) {
   const { type } = action;
 
   switch (type) {
     case actionTypes.SKILLS_UPDATE:
     case actionTypes.PROGRAMMING_QUESTION_UPDATE:
-      return $$state.set('question', questionReducer($$state.get('question'), action));
+      return state.set('question', questionReducer(state.get('question'), action));
 
     case actionTypes.EDITOR_MODE_UPDATE:
       const { mode } = action;
-      return $$state.set('test_ui', $$state.get('test_ui').set('mode', mode));
+      return state.setIn(['test_ui', 'mode'], mode);
 
     case actionTypes.TEMPLATE_TAB_UPDATE:
       const { selected } = action;
-      return $$state.set('package_ui', $$state.get('package_ui').set('selected', selected));
+      return state.setIn(['package_ui', 'selected'], selected);
 
     case editorActionTypes.PYTHON_TEST_CASE_CREATE:
     case editorActionTypes.PYTHON_TEST_CASE_UPDATE:
     case editorActionTypes.PYTHON_TEST_CASE_DELETE:
     case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE:
-      const $$test = $$state.get('test_ui');
-      const $$pythonTest = $$test.get('python');
-      return $$state.set('test_ui', $$test.set('python', pythonTestReducer($$pythonTest, action)));
+      const pythonTest = state.get('test_ui').get('python');
+      return state.setIn(['test_ui', 'python'], pythonTestReducer(pythonTest, action));
 
     case actionTypes.SUBMIT_FORM_EVALUATING:
     case actionTypes.SUBMIT_FORM_LOADING:
     case actionTypes.SUBMIT_FORM_SUCCESS:
     case actionTypes.SUBMIT_FORM_FAILURE:
-      return apiReducer($$state, action);
+      return apiReducer(state, action);
 
     default:
-      return $$state;
+      return state;
   }
 }

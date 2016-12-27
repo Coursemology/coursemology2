@@ -1,26 +1,11 @@
-import React, { PropTypes } from 'react';
-import { injectIntl, defineMessages } from 'react-intl';
+import Immutable from 'immutable';
 
-const translations = defineMessages({
-  header: {
-    id: 'course.assessment.question.programming.buildLog.header',
-    defaultMessage: 'Build Log',
-    description: 'Header for build log.',
-  },
-  stdoutHeader: {
-    id: 'course.assessment.question.programming.buildLog.stdoutHeader',
-    defaultMessage: 'Standard Output',
-    description: 'Header for standard output.',
-  },
-  stderrHeader: {
-    id: 'course.assessment.question.programming.buildLog.stderrHeader',
-    defaultMessage: 'Standard Error',
-    description: 'Header for standard error.',
-  },
-});
+import React, { PropTypes } from 'react';
+import { injectIntl } from 'react-intl';
+import { buildLogTranslations as translations } from '../constants/translations'
 
 const propTypes = {
-  buildLogData: PropTypes.object.isRequired,
+  buildLogData: PropTypes.instanceOf(Immutable.Map).isRequired,
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,

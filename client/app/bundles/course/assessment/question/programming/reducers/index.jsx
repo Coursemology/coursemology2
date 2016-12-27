@@ -1,10 +1,10 @@
 import programmingQuestionReducer from './programmingQuestionReducer';
-import { $$initialState as $$programmingQuestionState } from './programmingQuestionReducer';
+import { initialState as programmingQuestionState } from './programmingQuestionReducer';
 
 export default {
-  $$programmingQuestionStore: programmingQuestionReducer,
+  programmingQuestionStore: programmingQuestionReducer,
 };
 
 export const initialStates = {
-  $$programmingQuestionState,
+  programmingQuestionState,
 };

@@ -12,18 +12,17 @@ import * as programmingQuestionActionCreators from '../actions/programmingQuesti
 import * as templatePackageActionCreators from '../actions/templatePackageActionCreators'
 
 function select(state) {
-  // Note the use of `$$` to prefix the property name because the value is of type Immutable.js
-  return { $$programmingQuestionStore: state.$$programmingQuestionStore };
+  return { programmingQuestionStore: state.programmingQuestionStore };
 }
 
-function makePackageUploadUI(templatePackageActions, $$store) {
+function makeUploadedPackageViewer(templatePackageActions, store) {
   const { changeTemplateTab } = templatePackageActions;
-  const packageUI = $$store.get('package_ui');
+  const packageUI = store.get('package_ui');
   const templates = packageUI.get('templates');
   const selectedTab = packageUI.get('selected');
   const testCases = packageUI.get('test_cases');
 
-  if ($$store.get('question').get('package')) {
+  if (store.get('question').get('package')) {
     return (
       <div className="template-package-container">
         <h2>Template</h2>
@@ -37,13 +36,13 @@ function makePackageUploadUI(templatePackageActions, $$store) {
   }
 }
 
-function makeOnlineEditorUI(actions, $$store) {
-  const mode = $$store.get('test_ui').get('mode');
-  const isLoading = $$store.get('is_loading');
+function makeOnlineEditor(actions, store) {
+  const mode = store.get('test_ui').get('mode');
+  const isLoading = store.get('is_loading');
 
   switch (mode) {
     case 'python':
-      const data = $$store.get('test_ui').get('python');
+      const data = store.get('test_ui').get('python');
       return <OnlineEditorPythonView {...{ actions, data, isLoading }}/>;
 
     case null:
@@ -54,8 +53,8 @@ function makeOnlineEditorUI(actions, $$store) {
   }
 }
 
-function makeImportAlertView($$store) {
-  const alertData = $$store.get('import_result').get('alert');
+function makeImportAlert(store) {
+  const alertData = store.get('import_result').get('alert');
 
   if (alertData) {
     return <div className={alertData.get('class')}>{alertData.get('message')}</div>
@@ -64,8 +63,8 @@ function makeImportAlertView($$store) {
   }
 }
 
-function makeBuildLogView($$store) {
-  const buildLogData = $$store.get('import_result').get('build_log');
+function makeBuildLog(store) {
+  const buildLogData = store.get('import_result').get('build_log');
 
   if (buildLogData) {
     return <BuildLog {...{ buildLogData }} />;
@@ -75,27 +74,26 @@ function makeBuildLogView($$store) {
 }
 
 const ProgrammingQuestion = (props) => {
-  const { dispatch, $$programmingQuestionStore } = props;
+  const { dispatch, programmingQuestionStore } = props;
   const actions = bindActionCreators(programmingQuestionActionCreators, dispatch);
   const data = {
-    question: $$programmingQuestionStore.get('question'),
-    formData: $$programmingQuestionStore.get('form_data'),
-    isLoading: $$programmingQuestionStore.get('is_loading'),
-    isEvaluating: $$programmingQuestionStore.get('is_evaluating')
+    question: programmingQuestionStore.get('question'),
+    formData: programmingQuestionStore.get('form_data'),
+    isLoading: programmingQuestionStore.get('is_loading'),
+    isEvaluating: programmingQuestionStore.get('is_evaluating')
   };
 
   const templatePackageActions = bindActionCreators(templatePackageActionCreators, dispatch);
   const onlineEditorActions = bindActionCreators(onlineEditorActionCreators, dispatch);
 
   var testView = data.question.get('can_edit_online') ?
-    makeOnlineEditorUI(onlineEditorActions, $$programmingQuestionStore)
+    makeOnlineEditor(onlineEditorActions, programmingQuestionStore)
     :
-    makePackageUploadUI(templatePackageActions, $$programmingQuestionStore);
+    makeUploadedPackageViewer(templatePackageActions, programmingQuestionStore);
 
-  const importAlertView = makeImportAlertView($$programmingQuestionStore);
-  const buildLogView = makeBuildLogView($$programmingQuestionStore);
+  const importAlertView = makeImportAlert(programmingQuestionStore);
+  const buildLogView = makeBuildLog(programmingQuestionStore);
 
-  // This uses the ES2015 spread operator to pass properties as it is more DRY
   return (
     <ProgrammingQuestionForm {...{ actions, data, testView, importAlertView, buildLogView }} />
   );
@@ -103,15 +101,7 @@ const ProgrammingQuestion = (props) => {
 
 ProgrammingQuestion.propTypes = {
   dispatch: PropTypes.func.isRequired,
-
-  // This corresponds to the value used in function select above.
-  // We prefix all property and variable names pointing to Immutable.js objects with '$$'.
-  // This allows us to immediately know we don't call $$programmingQuestionStore['someProperty'],
-  // but instead use the Immutable.js `get` API for Immutable.Map
-  $$programmingQuestionStore: PropTypes.instanceOf(Immutable.Map).isRequired,
+  programmingQuestionStore: PropTypes.instanceOf(Immutable.Map).isRequired,
 };
 
-// Don't forget to actually use connect!
-// Note that we don't export ProgrammingQuestion, but the redux "connected" version of it.
-// See https://github.com/reactjs/react-redux/blob/master/docs/api.md#examples
 export default connect(select)(ProgrammingQuestion);
