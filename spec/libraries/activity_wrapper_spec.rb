@@ -65,7 +65,8 @@ RSpec.describe Notifier::Base::ActivityWrapper, type: :notifier do
           subject { activity.notify(course, :email).save }
 
           it 'sends emails to course users' do
-            expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(2)
+            expect { subject }.
+              to change { ActionMailer::Base.deliveries.count }.by(course.course_users.count)
           end
         end
 
