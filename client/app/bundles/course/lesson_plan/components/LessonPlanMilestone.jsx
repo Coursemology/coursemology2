@@ -79,7 +79,7 @@ class LessonPlanMilestone extends React.Component {
             />
           </p>
         </div>
-        <div className={styles.milestoneContent}>
+        <div className={styles.spaceBetween}>
           <div>
             <p><span dangerouslySetInnerHTML={{ __html: milestone.get('description') }} /></p>
           </div>

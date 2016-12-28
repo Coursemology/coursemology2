@@ -6,12 +6,7 @@ import LessonPlan from '../components/LessonPlan';
 import * as actionCreators from '../actions';
 
 function mapStateToProps(state) {
-  const lessonPlan = state.lessonPlan;
-  const items = lessonPlan.get('items');
-  const milestones = lessonPlan.get('milestones');
-  const hiddenItemTypes = lessonPlan.get('hiddenItemTypes');
-
-  return { milestones, items, hiddenItemTypes };
+  return state.get('lessonPlan').toObject();
 }
 
 const propTypes = {

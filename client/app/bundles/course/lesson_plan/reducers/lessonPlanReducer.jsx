@@ -1,24 +1,17 @@
 import Immutable from 'immutable';
-import actionTypes from '../constants';
+import { combineReducers } from 'redux-immutable';
+import items, { initialState as itemsInitialState } from './items';
+import milestones, { initialState as milestonesInitialState } from './milestones';
+import hiddenItemTypes, { initialState as hiddenItemTypesInitialState } from './hiddenItemTypes';
 
 export const initialState = Immutable.fromJS({
-  items: [],
-  milestones: [],
-  hiddenItemTypes: [],
+  items: itemsInitialState,
+  milestones: milestonesInitialState,
+  hiddenItemTypes: hiddenItemTypesInitialState,
 });
 
-export default function (state = initialState, action) {
-  const { type, itemType } = action;
-
-  switch (type) {
-    case actionTypes.TOGGLE_LESSON_PLAN_ITEM_TYPE_VISIBILITY: {
-      const hiddenItemTypes = state.get('hiddenItemTypes');
-      const updatedList = hiddenItemTypes.includes(itemType) ?
-        hiddenItemTypes.filter(hiddenType => hiddenType !== itemType) :
-        hiddenItemTypes.push(itemType);
-      return state.set('hiddenItemTypes', updatedList);
-    }
-    default:
-      return state;
-  }
-}
+export default combineReducers({
+  items,
+  milestones,
+  hiddenItemTypes,
+});
