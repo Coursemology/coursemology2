@@ -113,9 +113,15 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
 
   # Removes the template files and test cases from the old package.
   def remove_old_package
-    template_files.clear
+    unless template_files_changed?
+      template_files.clear
+    end
     test_cases.clear
     self.import_job = nil
+  end
+
+  def template_files_changed?
+    template_files.select { |f| f.new_record? || f.marked_for_destruction? }.any?
   end
 
   def assign_template_attributes

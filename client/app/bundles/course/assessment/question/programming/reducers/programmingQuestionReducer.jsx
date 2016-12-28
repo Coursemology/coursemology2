@@ -38,6 +38,7 @@ export const initialState = Immutable.fromJS({
   test_ui: {
     mode: null,
     python: {
+      autograded: true,
       prepend: '',
       append: '',
       solution: '',

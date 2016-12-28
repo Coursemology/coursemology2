@@ -40,6 +40,15 @@ class OnlineEditorPythonView extends React.Component {
     return `question_programming[test_cases][${type}][][${field}]`;
   }
 
+  constructor(props) {
+    super(props);
+    this.onAutogradedChange = this.onAutogradedChange.bind(this);
+  }
+
+  onAutogradedChange(e) {
+    this.props.actions.updatePythonCodeBlock('autograded', e.target.checked);
+  }
+
   codeChangeHandler(field) {
     return e => this.props.actions.updatePythonCodeBlock(field, e);
   }
@@ -68,7 +77,27 @@ class OnlineEditorPythonView extends React.Component {
     };
   }
 
-  renderAceEditor(field, label) {
+  renderCheckbox(label, field, value, onChange) {
+    return (
+      <div className="form-group boolean" key={field}>
+        <div className="checkbox">
+          <label className="boolean" htmlFor={field}>
+            <input
+              className="boolean"
+              type="checkbox"
+              name={OnlineEditorPythonView.getInputName(field)}
+              checked={value}
+              onChange={onChange}
+              disabled={this.props.isLoading}
+            />
+            {label}
+          </label>
+        </div>
+      </div>
+    );
+  }
+
+  renderAceEditor(label, field) {
     return (
       <div className="form-group" key={field}>
         <label htmlFor={field}>{label}</label>
@@ -158,17 +187,59 @@ class OnlineEditorPythonView extends React.Component {
   }
 
   render() {
-    const testCases = this.props.data.get('test_cases');
+    const { intl, data } = this.props;
+    const testCases = data.get('test_cases');
+    const autograded = data.get('autograded');
 
     return (
       <div id="python-online-editor">
-        { this.renderAceEditor('prepend', this.props.intl.formatMessage(translations.prependTitle)) }
-        { this.renderAceEditor('append', this.props.intl.formatMessage(translations.appendTitle)) }
-        { this.renderAceEditor('solution', this.props.intl.formatMessage(translations.solutionTitle)) }
-        { this.renderAceEditor('submission', this.props.intl.formatMessage(translations.submissionTitle)) }
-        { this.renderTestCases(this.props.intl.formatMessage(testCasesTranslations.publicTestCases), testCases, 'public') }
-        { this.renderTestCases(this.props.intl.formatMessage(testCasesTranslations.privateTestCases), testCases, 'private', testCases.get('public').size) }
-        { this.renderTestCases(this.props.intl.formatMessage(testCasesTranslations.evaluationTestCases), testCases, 'evaluation', testCases.get('public').size + testCases.get('private').size) }
+        {
+          this.renderCheckbox(intl.formatMessage(translations.autograded), 'autograded',
+            autograded, this.onAutogradedChange)
+        }
+        {
+          this.renderAceEditor(intl.formatMessage(translations.submissionTitle), 'submission')
+        }
+        {
+          autograded ?
+            this.renderAceEditor(intl.formatMessage(translations.solutionTitle), 'solution')
+            :
+            null
+        }
+        {
+          autograded ?
+            this.renderAceEditor(intl.formatMessage(translations.prependTitle), 'prepend')
+            :
+            null
+        }
+        {
+          autograded ?
+            this.renderAceEditor(intl.formatMessage(translations.appendTitle), 'append')
+            :
+            null
+        }
+        {
+          autograded ?
+            this.renderTestCases(intl.formatMessage(testCasesTranslations.publicTestCases),
+              testCases, 'public')
+            :
+            null
+        }
+        {
+          autograded ?
+            this.renderTestCases(intl.formatMessage(testCasesTranslations.privateTestCases),
+              testCases, 'private', testCases.get('public').size)
+            :
+            null
+        }
+        {
+          autograded ?
+            this.renderTestCases(intl.formatMessage(testCasesTranslations.evaluationTestCases),
+              testCases, 'evaluation',
+              testCases.get('public').size + testCases.get('private').size)
+            :
+            null
+        }
       </div>
     );
   }

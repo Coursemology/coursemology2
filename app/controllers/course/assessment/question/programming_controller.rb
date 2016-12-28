@@ -16,9 +16,7 @@ class Course::Assessment::Question::ProgrammingController < \
     @programming_question.package_type =
       programming_question_params.key?(:file) ? :zip_upload : :online_editor
 
-    programming_question_service.generate_package(params) do |file|
-      @programming_question.file = file
-    end
+    programming_package_service.generate_package(params)
 
     save_and_redirect 'new'
   end
@@ -27,7 +25,7 @@ class Course::Assessment::Question::ProgrammingController < \
     respond_to do |format|
       format.html
       format.json do
-        @meta = programming_question_service.extract_meta
+        @meta = programming_package_service.extract_meta
         render 'edit'
       end
     end
@@ -36,9 +34,7 @@ class Course::Assessment::Question::ProgrammingController < \
   def update
     @programming_question.assign_attributes programming_question_params
 
-    programming_question_service.generate_package(params) do |file|
-      @programming_question.file = file
-    end
+    programming_package_service.generate_package(params)
 
     respond_to do |format|
       format.html { save_and_redirect 'edit' }
@@ -89,7 +85,7 @@ class Course::Assessment::Question::ProgrammingController < \
     render '_props'
   end
 
-  def programming_question_service
+  def programming_package_service
     Course::Assessment::Question::Programming::ProgrammingPackageService.new(@programming_question)
   end
 end

@@ -29,6 +29,8 @@ json.question do
       json.name @programming_question.attachment.name
       json.path attachment_reference_path(@programming_question.attachment)
     end
+  else
+    json.package nil
   end
 
   json.can_switch_package_type can_switch_package_type?

@@ -89,6 +89,10 @@ export const programmingQuestionFormTranslations = defineMessages({
 });
 
 export const onlineEditorPythonViewTranslations = defineMessages({
+  autograded: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.autograded',
+    defaultMessage: 'Autograded',
+  },
   prependTitle: {
     id: 'course.assessment.question.programming.onlineEditorPythonView.prependTitle',
     defaultMessage: 'Prepend',

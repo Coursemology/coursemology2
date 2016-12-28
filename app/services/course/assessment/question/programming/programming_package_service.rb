@@ -7,6 +7,7 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
   # @param [Course::Assessment::Question::Programming] question The programming question with the
   #   programming package.
   def initialize(question)
+    @question = question
     @language = question.language
     @current_attachment = question.attachment
 
@@ -23,18 +24,30 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
   #
   # @param [ActionController::Parameters] params The parameters containing the data for package
   #   generation.
-  # @yield The package will be yielded to the provided block, and the block can save the package.
-  # @yieldparam [Tempfile] new_package The package to save.
   def generate_package(params)
-    new_package = @language_package_service.generate_package(@current_attachment, params)
-    yield new_package if new_package.present?
+    if @language_package_service.autograded?(params)
+      new_package = @language_package_service.generate_package(@current_attachment, params)
+      @question.file = new_package if new_package.present?
+    else
+      template = @language_package_service.submission_template(params)
+      @question.imported_attachment = nil
+      @question.template_files =
+        [Course::Assessment::Question::ProgrammingTemplateFile.new(template)]
+    end
   end
 
   # Retrieves the meta details from the programming package.
   #
   # @return [Hash]
   def extract_meta
-    data = @language_package_service.extract_meta(@current_attachment)
+    # attachment will be nil if the question is not autograded, in that case the meta data will be
+    # generated from the template files in the database.
+    if @current_attachment.nil?
+      data = @language_package_service.generate_non_autograded_meta(@question.template_files)
+    else
+      data = @language_package_service.extract_meta(@current_attachment)
+    end
+
     { editor_mode: @editor_mode, data: data } if data.present?
   end
 

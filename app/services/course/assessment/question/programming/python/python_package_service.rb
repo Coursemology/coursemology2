@@ -8,6 +8,17 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService
 
   MAKEFILE_PATH = File.join(File.expand_path(File.dirname(__FILE__)), 'python_makefile').freeze
 
+  def autograded?(params)
+    python_test_params(params).key?(:autograded)
+  end
+
+  def submission_template(params)
+    {
+      filename: 'template.py',
+      content: python_test_params(params)[:submission]
+    }
+  end
+
   def generate_package(old_attachment, params)
     test_params = python_test_params params
 
@@ -32,6 +43,17 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService
         temporary_file.close
       end
     end
+  end
+
+  def generate_non_autograded_meta(template_files)
+    meta = { autograded: false }
+
+    return meta if template_files.blank?
+
+    # For python editor, there is only a single submission template file.
+    meta[:submission] = template_files.first.content
+
+    meta
   end
 
   private
@@ -67,40 +89,29 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService
 
       tests = params[:test_cases]
 
-      if tests.blank?
-        expression = I18n.t('course.assessment.question.programming.package.default_expression')
-        expected = I18n.t('course.assessment.question.programming.package.default_expected')
+      index = 1
+      [:public, :private, :evaluation].each do |test_type|
+        tests[test_type].try(:each) do |test|
+          test_fn = "    def test_#{test_type}_#{index}(self):\n"\
+                    "        self.meta['expression'] = #{test[:expression].inspect}\n"\
 
-        zip.print "    def test_public_1(self):\n"\
-                  "        self.meta['expression'] = #{expression.inspect}\n"\
-                  "        self.meta['expected'] = #{expected.inspect}\n"\
-                  "        self.assertEqual(True, True)\n"\
-                  "\n"
-      else
-        index = 1
-        [:public, :private, :evaluation].each do |test_type|
-          tests[test_type].try(:each) do |test|
-            test_fn = "    def test_#{test_type}_#{index}(self):\n"\
-                      "        self.meta['expression'] = #{test[:expression].inspect}\n"\
+          # String types should be displayed with quotes, other types will be converted to string
+          # with the str method.
+          expected = string?(test[:expected]) ? test[:expected].inspect : "str(#{test[:expected]})"
+          test_fn += "        self.meta['expected'] = #{expected}\n"
 
-            # String types should be displayed with quotes, other types will be converted to string
-            # with the str method.
-            expected = string?(test[:expected]) ? test[:expected].inspect : "str(#{test[:expected]}"
-            test_fn += "        self.meta['expected'] = #{expected}\n"
-
-            unless test[:hint].blank?
-              test_fn += "        self.meta['hint'] = #{test[:hint].inspect}\n"
-            end
-
-            test_fn += "        _out = #{test[:expression]}\n"\
-                       "        self.meta['output'] = _out\n"\
-                       "        self.assertEqual(_out, #{test[:expected]})\n"\
-                       "\n"
-
-            zip.print test_fn
-
-            index += 1
+          unless test[:hint].blank?
+            test_fn += "        self.meta['hint'] = #{test[:hint].inspect}\n"
           end
+
+          test_fn += "        _out = #{test[:expression]}\n"\
+                     "        self.meta['output'] = _out\n"\
+                     "        self.assertEqual(_out, #{test[:expected]})\n"\
+                     "\n"
+
+          zip.print test_fn
+
+          index += 1
         end
       end
 
@@ -123,7 +134,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService
 
   def python_test_params(params)
     params.require(:question_programming).permit(
-      :prepend, :append, :solution, :submission,
+      :prepend, :append, :solution, :submission, :autograded,
       test_cases: {
         public: [:expression, :expected, :hint],
         private: [:expression, :expected, :hint],
