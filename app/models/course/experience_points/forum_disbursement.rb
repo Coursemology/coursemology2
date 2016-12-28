@@ -163,7 +163,7 @@ class Course::ExperiencePoints::ForumDisbursement < Course::ExperiencePoints::Di
   #
   # @return [Array<CourseUser>]
   def forum_participants
-    @forum_participants ||= course.course_users.students.with_approved_state.
+    @forum_participants ||= course.course_users.students.
                             calculated(:experience_points).includes(:user)
   end
 

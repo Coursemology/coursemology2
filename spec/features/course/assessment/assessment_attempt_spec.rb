@@ -32,7 +32,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
     before { login_as(user, scope: :user) }
 
-    let(:student) { create(:course_user, :approved, course: course).user }
+    let(:student) { create(:course_student, course: course).user }
     let(:submission) { create(:submission, assessment: assessment, creator: student) }
     let(:submitted_submission) do
       create(:submission, :submitted, assessment: assessment, creator: student)

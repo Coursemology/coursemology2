@@ -4,7 +4,7 @@ class Course::StatisticsController < Course::ComponentController
 
   def student
     preload_levels
-    course_users = current_course.course_users.with_approved_state.includes(:groups)
+    course_users = current_course.course_users.includes(:groups)
     staff = course_users.staff.without_phantom_users
     all_students = course_users.students.ordered_by_experience_points
     @phantom_students, @students = all_students.partition(&:phantom?)
@@ -12,7 +12,7 @@ class Course::StatisticsController < Course::ComponentController
   end
 
   def staff
-    @staffs = current_course.course_users.with_approved_state.teaching_assistant_and_manager.
+    @staffs = current_course.course_users.teaching_assistant_and_manager.
               without_phantom_users.ordered_by_average_marking_time
   end
 

@@ -5,8 +5,7 @@ class Course::LeaderboardsController < Course::ComponentController
   before_action :preload_course_levels, only: [:show]
 
   def show #:nodoc:
-    @course_users = @course.course_users.students.with_approved_state.without_phantom_users.
-                    includes(:user)
+    @course_users = @course.course_users.students.without_phantom_users.includes(:user)
   end
 
   def groups #:nodoc:

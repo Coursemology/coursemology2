@@ -1,0 +1,9 @@
+en:
+  course:
+    enrol_requests:
+      index:
+        header: 'User Requests'
+      destroy:
+        success: 'The registration request was deleted.'
+      approve:
+        success: '%{name} is enrolled as a %{role}.'

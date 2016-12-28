@@ -24,13 +24,14 @@ class Course::Mailer < ApplicationMailer
     mail(to: @recipient.email, subject: t('.subject', course: @course.title))
   end
 
-  # Sends a notification email to the course managers to approve a given Course Registration
-  # Request.
+  # Sends a notification email to the course managers to approve a given EnrolRequest.
   #
-  # @param [Course] course The course which the user registered in.
-  def user_registered_email(course, course_user)
-    @course = course
-    @course_user = course_user
+  # @param [Course] enrol_request The user enrol request.
+  def user_registered_email(enrol_request)
+    ActsAsTenant.without_tenant do
+      @course = enrol_request.course
+    end
+    @enrol_request = enrol_request
     @recipient = OpenStruct.new(name: t('course.mailer.user_registered_email.recipients'))
 
     mail(to: @course.managers.map(&:user).map(&:email),

@@ -1,4 +1,4 @@
-- course_requests_page = link_to(t('course.users.requests.header'), course_users_requests_url(@course))
-= simple_format(t('.message', user: link_to(@course_user.name, format('mailto: %s', @course_user.user.email)),
+- course_requests_page = link_to(t('course.enrol_requests.index.header'), course_enrol_requests_url(@course))
+= simple_format(t('.message', user: link_to(@enrol_request.user.name, format('mailto: %s', @enrol_request.user.email)),
                               course: link_to(@course.title, course_url(@course)),
                               course_requests_page: course_requests_page))

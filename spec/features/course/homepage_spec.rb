@@ -147,11 +147,11 @@ RSpec.feature 'Course: Homepage' do
         end
       end
 
-      scenario 'I am only able to see approved owner and managers in instructors list' do
+      scenario 'I am able to see owner and managers in instructors list' do
         manager = create(:course_manager, course: course)
         teaching_assistant = create(:course_teaching_assistant, course: course)
         visit course_path(course)
-        course.course_users.owner.with_approved_state.each do |course_user|
+        course.course_users.owner.each do |course_user|
           expect(page).to have_selector('span.name', text: course_user.user.name)
         end
         expect(page).to have_selector('span.name', text: manager.user.name)

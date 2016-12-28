@@ -64,7 +64,6 @@ RSpec.describe Course::UserInvitationService, type: :service do
           course_user.try(:user).try(:email) == user.email
         end
         expect(created_course_user).not_to be_nil
-        expect(created_course_user).to be_approved
         expect(created_course_user.name).to eq(user.name)
       end
 

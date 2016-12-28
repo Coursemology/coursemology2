@@ -28,7 +28,7 @@ RSpec.describe Course::ControllerHelper do
     end
 
     describe '#link_to_course_user' do
-      let(:user) { create(:course_user, :approved, course: course) }
+      let(:user) { create(:course_student, course: course) }
       subject { helper.link_to_course_user(user) }
 
       it { is_expected.to have_tag('a') }
@@ -46,23 +46,13 @@ RSpec.describe Course::ControllerHelper do
 
         it { is_expected.to include('Test') }
       end
-
-      context 'when a CourseUser is unconfirmed' do
-        let(:unconfirmed_user) { create(:course_user, course: course) }
-        subject { helper.link_to_course_user(unconfirmed_user) }
-
-        it 'does not create a link to the course user profile' do
-          expect(subject).to have_tag('span')
-          expect(subject).not_to have_link(course_user_path(course, unconfirmed_user))
-        end
-      end
     end
 
     describe '#link_to_user' do
       subject { helper.link_to_user(user) }
 
       context 'when a CourseUser is given' do
-        let(:user) { create(:course_user, :approved) }
+        let(:user) { create(:course_user) }
 
         it { is_expected.to eq(helper.link_to_course_user(user)) }
       end

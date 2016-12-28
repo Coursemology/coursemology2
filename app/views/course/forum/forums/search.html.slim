@@ -11,7 +11,7 @@ div.panel.panel-primary.search-panel
                       input_html: { class: ['form-horizontal'] } do |f|
       = f.error_notification
       = f.input :course_user_id,
-                collection: current_course.course_users.with_approved_state.order_alphabetically
+                collection: current_course.course_users.order_alphabetically
       = f.input :start_time, as: :bootstrap_date_time
       = f.input :end_time, as: :bootstrap_date_time
       = f.button :submit, t('.search')

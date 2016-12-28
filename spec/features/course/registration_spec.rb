@@ -22,7 +22,7 @@ RSpec.feature 'Courses: Registration' do
     end
 
     context 'when the user has requested to register for a course' do
-      let!(:requested_student) { create(:course_user, course: course, user: user) }
+      let!(:enrol_request) { create(:course_enrol_request, course: course, user: user) }
 
       scenario 'user can cancel his registration request' do
         visit course_path(course)
@@ -34,18 +34,8 @@ RSpec.feature 'Courses: Registration' do
       end
     end
 
-    context 'when the user has been approved' do
-      let!(:approved_student) { create(:course_student, course: course, user: user) }
-
-      scenario 'user cannot de-register or re-register for the course' do
-        visit course_path(course)
-        expect(page).not_to have_button(I18n.t('course.user_registrations.registration.register'))
-        expect(page).not_to have_link(I18n.t('course.user_registrations.registration.deregister'))
-      end
-    end
-
-    context 'when the user has been rejected' do
-      let!(:rejected_student) { create(:course_user, :rejected, course: course, user: user) }
+    context 'when the user has been enrolled' do
+      let!(:enrolled_student) { create(:course_student, course: course, user: user) }
 
       scenario 'user cannot de-register or re-register for the course' do
         visit course_path(course)

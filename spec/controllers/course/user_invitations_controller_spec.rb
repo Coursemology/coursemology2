@@ -12,7 +12,6 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
         course.course_users.build(user: user).save
         course.course_users.build(user: user)
 
-        course.course_users.build(workflow_state: :invited, name: generate(:name))
         course.invitations.build(name: generate(:name), email: 'fdgsdf@no')
         course.save
       end

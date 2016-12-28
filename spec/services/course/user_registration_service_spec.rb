@@ -31,7 +31,7 @@ RSpec.describe Course::UserRegistrationService, type: :service do
         it 'succeeds' do
           expect do
             expect(subject.register(registration)).to be_truthy
-          end.to change { course.course_users.with_approved_state.reload.count }.by(1)
+          end.to change { course.course_users.reload.count }.by(1)
         end
       end
 
@@ -41,7 +41,7 @@ RSpec.describe Course::UserRegistrationService, type: :service do
         it 'succeeds' do
           expect do
             expect(subject.register(registration)).to be_truthy
-          end.to change { course.course_users.with_approved_state.reload.count }.by(1)
+          end.to change { course.course_users.reload.count }.by(1)
         end
       end
 
@@ -49,30 +49,13 @@ RSpec.describe Course::UserRegistrationService, type: :service do
         it 'succeeds' do
           expect do
             expect(subject.register(registration)).to be_truthy
-          end.to change { course.course_users.with_requested_state.reload.count }.by(1)
+          end.to change { course.enrol_requests.count }.by(1)
         end
 
         it 'emails the course staff' do
           expect do
             expect(subject.register(registration)).to be_truthy
           end.to change { ActionMailer::Base.deliveries.count }.by(1)
-        end
-      end
-    end
-
-    describe '#register_course_user' do
-      it 'creates a new CourseUser' do
-        expect do
-          expect(subject.send(:register_course_user, registration)).to be_truthy
-        end.to change { course.course_users.with_requested_state.reload.count }.by(1)
-      end
-
-      context 'when the user provided is already part of the course' do
-        let!(:course_user) { create(:course_user, course: course, user: user) }
-        it 'does not create another user' do
-          expect do
-            subject.send(:register_course_user, registration)
-          end.to change { course.course_users.with_requested_state.reload.count }.by(0)
         end
       end
     end
@@ -94,7 +77,7 @@ RSpec.describe Course::UserRegistrationService, type: :service do
         it 'registers the user' do
           expect do
             expect(subject.send(:claim_course_registration_code, registration)).to be_truthy
-          end.to change { course.course_users.with_approved_state.reload.count }.by(1)
+          end.to change { course.course_users.reload.count }.by(1)
         end
       end
 
@@ -103,7 +86,7 @@ RSpec.describe Course::UserRegistrationService, type: :service do
           registration.code += 'A'
           expect do
             expect(subject.send(:claim_course_registration_code, registration)).to be_falsey
-          end.to change { course.course_users.with_approved_state.reload.count }.by(0)
+          end.to change { course.course_users.reload.count }.by(0)
         end
       end
     end
@@ -116,19 +99,19 @@ RSpec.describe Course::UserRegistrationService, type: :service do
           expect(course.course_users.find_by(user_id: user.id)).to be_present
         end
 
-        it 'increases the number of approved users' do
+        it 'increases the number of course users' do
           expect do
             expect(subject.send(:claim_registration_code, registration)).to be_truthy
-          end.to change { course.course_users.with_approved_state.reload.count }.by(1)
+          end.to change { course.course_users.reload.count }.by(1)
         end
       end
 
       context 'when the code is invalid' do
-        it 'does not change the number of approved users' do
+        it 'does not change the number of course users' do
           registration.code += 'A'
           expect do
             expect(subject.send(:claim_registration_code, registration)).to be_falsey
-          end.to change { course.course_users.with_approved_state.reload.count }.by(0)
+          end.to change { course.course_users.reload.count }.by(0)
         end
       end
     end
@@ -138,7 +121,7 @@ RSpec.describe Course::UserRegistrationService, type: :service do
       it 'accepts the given invitation' do
         invitation.save!
         expect(subject.send(:accept_invitation, registration, invitation)).to be_truthy
-        expect(registration.course_user).to be_approved
+        expect(registration.course_user).to be_present
       end
     end
   end

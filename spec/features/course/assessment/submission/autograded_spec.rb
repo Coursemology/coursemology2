@@ -15,7 +15,7 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
     end
     before { login_as(user, scope: :user) }
 
-    let(:student) { create(:course_user, :approved, course: course).user }
+    let(:student) { create(:course_student, course: course).user }
     let(:submission) { create(:submission, assessment: assessment, creator: student) }
     let(:programming_assessment) do
       create(:assessment, :autograded, :published_with_programming_question, course: course)

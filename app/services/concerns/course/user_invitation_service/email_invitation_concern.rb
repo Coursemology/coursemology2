@@ -140,7 +140,7 @@ module Course::UserInvitationService::EmailInvitationConcern
   def add_existing_users(users)
     users.map do |user|
       @current_course.course_users.build(user: user[:user], name: user[:name],
-                                         workflow_state: :approved, creator: @current_user,
+                                         creator: @current_user,
                                          updater: @current_user)
     end
   end

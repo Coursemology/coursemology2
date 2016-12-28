@@ -6,7 +6,7 @@ FactoryGirl.define do
     end
 
     group { build(:course_group, course: course) }
-    course_user { build(:course_user, :approved, course: course) }
+    course_user { build(:course_user, course: course) }
 
     role :normal
 

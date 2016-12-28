@@ -13,7 +13,7 @@ class ChangeCourseUserInvitations < ActiveRecord::Migration
         course_id: course_user.course_id,
         name: course_user.name,
         email: email.email,
-        confirmed_at: course_user.approved? ? course_user.user.created_at : nil
+        confirmed_at: course_user.workflow_state == 'approved' ? course_user.user.created_at : nil
       )
     end
 

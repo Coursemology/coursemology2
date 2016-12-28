@@ -126,7 +126,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
     end
 
     context 'As a Student' do
-      let(:user) { create(:course_user, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       scenario 'I cannot add questions' do
         visit new_course_assessment_question_text_response_path(course, assessment)

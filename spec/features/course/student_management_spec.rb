@@ -8,12 +8,10 @@ RSpec.feature 'Courses: Students' do
     let(:course) { create(:course) }
     let(:user) { create(:course_manager, course: course).user }
     let!(:course_students) { create_list(:course_student, 3, course: course) }
-    let!(:unregistered_user) { create(:course_user, course: course) }
     before { login_as(user, scope: :user) }
 
     scenario 'Course staff can view the list of students registered' do
       visit course_users_students_path(course)
-      expect(page).not_to have_field('course_user_name', with: unregistered_user.name)
 
       course_students.each do |course_user|
         expect(page).to have_field('course_user_name', with: course_user.name)

@@ -28,8 +28,7 @@ class Course::AssessmentNotifier < Notifier::Base
 
   def assessment_closing(user, assessment)
     course_users = assessment.course.course_users
-    students = course_users.student.without_phantom_users.with_approved_state.includes(:user).
-               map(&:user)
+    students = course_users.student.without_phantom_users.includes(:user).map(&:user)
     submitted = assessment.submissions.includes([course_user: :user]).map { |s| s.course_user.user }
     recipients = Set.new(students) - Set.new(submitted)
 

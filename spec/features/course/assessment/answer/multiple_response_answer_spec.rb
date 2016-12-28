@@ -17,7 +17,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers' do
     let(:correct_option) { options.find(&:correct?).option }
 
     context 'As a Course Student' do
-      let(:user) { create(:course_user, :approved, course: course).user }
+      let(:user) { create(:course_student, course: course).user }
 
       context 'when the question is a multiple choice question' do
         let(:assessment) { create(:assessment, :published_with_mcq_question, course: course) }

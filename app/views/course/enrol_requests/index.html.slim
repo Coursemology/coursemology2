@@ -1,0 +1,30 @@
+- add_breadcrumb t('.header')
+= page_header t('.header')
+
+= render partial: 'course/users/tabs'
+
+div.users
+  div.table-fluid
+    table.table.table-striped.table-hover
+      thead
+        tr
+          th = t('common.name')
+          th = t('common.email')
+          th = t('common.role')
+          th = t('course.users.role.phantom')
+          th
+
+      tbody
+        - @enrol_requests.each do |request|
+          = content_tag_for(:tr, request, 'data-action' => approve_course_enrol_request_path(current_course, request),
+                                       'data-method' => 'post',
+                                        class: 'course-enrol-request')
+            = simple_fields_for CourseUser.new(name: request.user.name), wrapper: :inline_form do |f|
+              th = f.input :name
+              td = request.user.email
+              td = f.input :role, as: :select, collection: CourseUser.roles.keys - ['auto_grader']
+              td = f.input :phantom, label: false
+              td
+                = f.button :submit, class: 'approve' do
+                  = fa_icon 'check'.freeze
+                = delete_button([current_course, request])

@@ -74,16 +74,14 @@ RSpec.feature 'Course: Achievements' do
         expect(achievement.reload.description).to eq(new_description)
       end
 
-      scenario 'I can only award a manually-awarded achievement to a confirmed student' do
+      scenario 'I can award a manually-awarded achievement to a student' do
         manual_achievement = create(:course_achievement, course: course)
         auto_achievement = create(:course_achievement, course: course)
         create(:course_condition_achievement, course: course, conditional: auto_achievement)
 
         student = create(:course_student, course: course)
         course_user_id = "achievement_course_user_ids_#{student.id}"
-        unregistered_user = create(:course_user, course: course)
-        unregistered_user_id = "achievement_course_user_ids_#{unregistered_user.id}"
-        phantom_user = create(:course_user, :approved, :phantom, course: course)
+        phantom_user = create(:course_student, :phantom, course: course)
         phantom_user_id = "achievement_course_user_ids_#{phantom_user.id}"
 
         visit course_achievements_path(course)
@@ -100,7 +98,6 @@ RSpec.feature 'Course: Achievements' do
 
         expect(page).to have_unchecked_field(course_user_id)
         expect(page).to have_unchecked_field(phantom_user_id)
-        expect(page).not_to have_field(unregistered_user_id)
         check course_user_id
         check phantom_user_id
 

@@ -26,7 +26,7 @@ RSpec.feature 'System: Administration: Instance: Courses' do
           expect(page).to have_link(nil, href: course_path(course))
 
           # It shows and only shows the owners
-          course.course_users.owner.with_approved_state.each do |course_user|
+          course.course_users.owner.each do |course_user|
             expect(page).to have_selector('li', text: course_user.user.name)
           end
 
