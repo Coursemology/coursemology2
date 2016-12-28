@@ -13,10 +13,12 @@ const propTypes = {
 
 const styles = {
   datePickerTextField: {
-    width: 130,
+    width: 75,
+    fontSize: 14,
   },
   timePickerTextField: {
-    width: 100,
+    width: 65,
+    fontSize: 14,
   },
   filter: {
     bottom: 12,
@@ -26,6 +28,32 @@ const styles = {
 };
 
 class LessonPlanEdit extends React.Component {
+  static renderDateCell(fieldName, originalDate, onChangeHandler) {
+    return(
+      <td>
+        <DatePicker
+          name={fieldName}
+          value={originalDate}
+          textFieldStyle={styles.datePickerTextField}
+          onChange={onChangeHandler}
+        />
+      </td>
+    );
+  }
+
+  static renderTimeCell(fieldName, originalTime, onChangeHandler) {
+    return(
+      <td>
+        <TimePicker
+          name={fieldName}
+          value={originalTime}
+          textFieldStyle={styles.timePickerTextField}
+          onChange={onChangeHandler}
+        />
+      </td>
+    );
+  }
+
   renderMilestone(milestone) {
     const { updateMilestoneDateTime } = this.props;
     const startAt = new Date(milestone.get('start_at'));
@@ -39,22 +67,16 @@ class LessonPlanEdit extends React.Component {
             { milestone.get('title') }
           </h3>
         </td>
-        <td>
-          <DatePicker
-            name="start_at"
-            value={startAt}
-            textFieldStyle={styles.datePickerTextField}
-            onChange={(event, newDate) => updateMilestoneDateTime(milestoneId, newDate, startAt)}
-          />
-        </td>
-        <td>
-          <TimePicker
-            name="start_at"
-            value={startAt}
-            textFieldStyle={styles.timePickerTextField}
-            onChange={(event, newTime) => updateMilestoneDateTime(milestoneId, startAt, newTime)}
-          />
-        </td>
+        {
+          LessonPlanEdit.renderDateCell('start_at', startAt,
+            (event, newDate) => updateMilestoneDateTime(milestoneId, newDate, startAt))
+        }
+        {
+          LessonPlanEdit.renderTimeCell('start_at', startAt,
+            (event, newTime) => updateMilestoneDateTime(milestoneId, startAt, newTime))
+        }
+        <td />
+        <td />
         <td />
         <td />
         <td />
@@ -65,6 +87,7 @@ class LessonPlanEdit extends React.Component {
   renderItem(item) {
     const { updateItemDateTime, updateItemField } = this.props;
     const startAt = new Date(item.get('start_at'));
+    const bonusEndAt = item.get('bonus_end_at') ? new Date(item.get('bonus_end_at')) : undefined;
     const endAt = item.get('end_at') ? new Date(item.get('end_at')) : undefined;
     const itemId = item.get('id');
 
@@ -72,38 +95,30 @@ class LessonPlanEdit extends React.Component {
       <tr key={itemId}>
         <td>{ item.get('lesson_plan_item_type').join(': ') }</td>
         <td>{ item.get('title') }</td>
-        <td>
-          <DatePicker
-            name="start_at"
-            value={startAt}
-            textFieldStyle={styles.datePickerTextField}
-            onChange={(event, newDate) => updateItemDateTime(itemId, 'start_at', newDate, startAt)}
-          />
-        </td>
-        <td>
-          <TimePicker
-            name="start_at"
-            value={startAt}
-            textFieldStyle={styles.timePickerTextField}
-            onChange={(event, newTime) => updateItemDateTime(itemId, 'start_at', startAt, newTime)}
-          />
-        </td>
-        <td>
-          <DatePicker
-            name="end_at"
-            value={endAt}
-            textFieldStyle={styles.datePickerTextField}
-            onChange={(event, newDate) => updateItemDateTime(itemId, 'end_at', newDate, endAt)}
-          />
-        </td>
-        <td>
-          <TimePicker
-            name="end_at"
-            value={endAt}
-            textFieldStyle={styles.timePickerTextField}
-            onChange={(event, newTime) => updateItemDateTime(itemId, 'end_at', endAt, newTime)}
-          />
-        </td>
+        {
+          LessonPlanEdit.renderDateCell('start_at', startAt,
+            (event, newDate) => updateItemDateTime(itemId, 'start_at', newDate, startAt))
+        }
+        {
+          LessonPlanEdit.renderTimeCell('start_at', startAt,
+            (event, newTime) => updateItemDateTime(itemId, 'start_at', startAt, newTime))
+        }
+        {
+          LessonPlanEdit.renderDateCell('bonus_end_at', bonusEndAt,
+            (event, newDate) => updateItemDateTime(itemId, 'bonus_end_at', newDate, bonusEndAt))
+        }
+        {
+          LessonPlanEdit.renderTimeCell('bonus_end_at', bonusEndAt,
+            (event, newTime) => updateItemDateTime(itemId, 'bonus_end_at', bonusEndAt, newTime))
+        }
+        {
+          LessonPlanEdit.renderDateCell('end_at', endAt,
+            (event, newDate) => updateItemDateTime(itemId, 'end_at', newDate, endAt))
+        }
+        {
+          LessonPlanEdit.renderTimeCell('end_at', endAt,
+            (event, newTime) => updateItemDateTime(itemId, 'end_at', endAt, newTime))
+        }
         <td>
           <Toggle
             toggled={item.get('published')}

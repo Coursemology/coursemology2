@@ -29,7 +29,7 @@ class Course::LessonPlan::ItemsController < Course::ComponentController
   private
 
   def item_params
-    params.require(:item).permit(:start_at, :end_at, :published)
+    params.require(:item).permit(:start_at, :bonus_end_at, :end_at, :published)
   end
 
   def render_json_response
