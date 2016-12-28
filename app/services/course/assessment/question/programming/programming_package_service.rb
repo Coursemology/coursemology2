@@ -11,7 +11,8 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
     @current_attachment = question.attachment
 
     if python_language
-      @language_package_service = Course::Assessment::Question::Programming::Python::PythonPackageService.new
+      @language_package_service =
+        Course::Assessment::Question::Programming::Python::PythonPackageService.new
       @editor_mode = 'python'
     else
       raise NotImplementedError

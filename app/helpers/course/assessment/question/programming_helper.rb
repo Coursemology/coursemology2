@@ -6,9 +6,8 @@ module Course::Assessment::Question::ProgrammingHelper
   # @return [nil] If there is no import job for the question.
   def import_result_alert(json: false)
     import_job = @programming_question.import_job
-    unless import_job
-      return json ? {} : nil
-    end
+
+    return json ? {} : nil unless import_job
 
     if import_job.completed?
       successful_import_alert(json: json)
@@ -67,7 +66,7 @@ module Course::Assessment::Question::ProgrammingHelper
   def errored_import_alert(json: false)
     klass = ['alert', 'alert-danger']
     message = t('course.assessment.question.programming.form.import_result.error',
-            error: import_error_message(@programming_question.import_job.error))
+                error: import_error_message(@programming_question.import_job.error))
 
     if json
       { class: klass.join(' '), message: message }

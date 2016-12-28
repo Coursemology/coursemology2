@@ -1,16 +1,20 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::Programming::Python::PythonPackageService
+  AUTOGRADE_PRE_PATH = File.join(File.expand_path(File.dirname(__FILE__)),
+                                 'python_autograde_pre.py').freeze
 
-  AUTOGRADE_PRE_PATH = File.join(File.expand_path(File.dirname(__FILE__)), 'python_autograde_pre.py').freeze
-
-  AUTOGRADE_POST_PATH = File.join(File.expand_path(File.dirname(__FILE__)), 'python_autograde_post.py').freeze
+  AUTOGRADE_POST_PATH = File.join(File.expand_path(File.dirname(__FILE__)),
+                                  'python_autograde_post.py').freeze
 
   MAKEFILE_PATH = File.join(File.expand_path(File.dirname(__FILE__)), 'python_makefile').freeze
 
   def generate_package(old_attachment, params)
     test_params = python_test_params params
 
-    return nil if test_params.blank? || (old_attachment.present? && test_params == extract_meta(old_attachment))
+    if test_params.blank? ||
+       (old_attachment.present? && test_params == extract_meta(old_attachment))
+      return nil
+    end
 
     generate_zip_file(test_params)
   end
@@ -64,28 +68,30 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService
       tests = params[:test_cases]
 
       if tests.blank?
+        expression = I18n.t('course.assessment.question.programming.package.default_expression')
+        expected = I18n.t('course.assessment.question.programming.package.default_expected')
+
         zip.print "    def test_public_1(self):\n"\
-                  "        self.meta['expression'] = #{I18n.t('course.assessment.question.programming.package.default_expression').inspect}\n"\
-                  "        self.meta['expected'] = #{I18n.t('course.assessment.question.programming.package.default_expected').inspect}\n"\
+                  "        self.meta['expression'] = #{expression.inspect}\n"\
+                  "        self.meta['expected'] = #{expected.inspect}\n"\
                   "        self.assertEqual(True, True)\n"\
                   "\n"
       else
         index = 1
         [:public, :private, :evaluation].each do |test_type|
           tests[test_type].try(:each) do |test|
-            test_fn = "    def test_#{test_type.to_s}_#{index}(self):\n"\
+            test_fn = "    def test_#{test_type}_#{index}(self):\n"\
                       "        self.meta['expression'] = #{test[:expression].inspect}\n"\
 
             # String types should be displayed with quotes, other types will be converted to string
             # with the str method.
-            if test[:expected].first == '\'' && test[:expected].last == '\'' ||
-              test[:expected].first == '"' && test[:expected].last == '"'
-              test_fn += "        self.meta['expected'] = #{test[:expected].inspect}\n"
-            else
-              test_fn += "        self.meta['expected'] = str(#{test[:expected]})\n"
+            expected = string?(test[:expected]) ? test[:expected].inspect : "str(#{test[:expected]}"
+            test_fn += "        self.meta['expected'] = #{expected}\n"
+
+            unless test[:hint].blank?
+              test_fn += "        self.meta['hint'] = #{test[:hint].inspect}\n"
             end
 
-            test_fn += "        self.meta['hint'] = #{test[:hint].inspect}\n" unless test[:hint].blank?
             test_fn += "        _out = #{test[:expression]}\n"\
                        "        self.meta['output'] = _out\n"\
                        "        self.assertEqual(_out, #{test[:expected]})\n"\
@@ -124,5 +130,10 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService
         evaluation: [:expression, :expected, :hint]
       }
     )
+  end
+
+  def string?(expected)
+    expected.first == '\'' && expected.last == '\'' ||
+      expected.first == '"' && expected.last == '"'
   end
 end

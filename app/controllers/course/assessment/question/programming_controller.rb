@@ -13,28 +13,14 @@ class Course::Assessment::Question::ProgrammingController < \
   end
 
   def create
-    @programming_question.assign_attributes programming_question_params
-
-    if programming_question_params[:file]
-      @programming_question.package_type = :zip_upload
-    else
-      @programming_question.package_type = :online_editor
-    end
+    @programming_question.package_type =
+      programming_question_params.key?(:file) ? :zip_upload : :online_editor
 
     programming_question_service.generate_package(params) do |file|
       @programming_question.file = file
     end
 
-    if @programming_question.save!
-      if @programming_question.import_job
-        redirect_to job_path(@programming_question.import_job)
-      else
-        redirect_to course_assessment_path(current_course, @assessment),
-                    success: t('.success')
-      end
-    else
-      render 'new'
-    end
+    save_and_redirect 'new'
   end
 
   def edit
@@ -55,27 +41,8 @@ class Course::Assessment::Question::ProgrammingController < \
     end
 
     respond_to do |format|
-      format.html do
-        if @programming_question.save!
-          if @programming_question.import_job
-            redirect_to job_path(@programming_question.import_job)
-          else
-            redirect_to course_assessment_path(current_course, @assessment),
-                        success: t('.success')
-          end
-        else
-          render 'edit'
-        end
-      end
-      format.json do
-        if @programming_question.save!
-          if @programming_question.import_job
-            @redirect_url = job_path(@programming_question.import_job)
-          end
-        end
-
-        render '_props'
-      end
+      format.html { save_and_redirect 'edit' }
+      format.json { save_and_render_json }
     end
   end
 
@@ -99,6 +66,27 @@ class Course::Assessment::Question::ProgrammingController < \
       *attachment_params,
       skill_ids: []
     )
+  end
+
+  def save_and_redirect(template)
+    if @programming_question.save
+      if @programming_question.import_job
+        redirect_to job_path(@programming_question.import_job)
+      else
+        redirect_to course_assessment_path(current_course, @assessment),
+                    success: t('.success')
+      end
+    else
+      render template
+    end
+  end
+
+  def save_and_render_json
+    if @programming_question.save && @programming_question.import_job
+      @redirect_url = job_path(@programming_question.import_job)
+    end
+
+    render '_props'
   end
 
   def programming_question_service
