@@ -4,6 +4,7 @@ import TimePicker from 'material-ui/TimePicker';
 import Toggle from 'material-ui/Toggle';
 import LessonPlanFilter from '../containers/LessonPlanFilter';
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel';
+import { constants } from '../constants';
 
 const propTypes = {
   milestoneGroups: PropTypes.array,
@@ -63,6 +64,10 @@ class LessonPlanEdit extends React.Component {
     const { updateMilestoneDateTime } = this.props;
     const startAt = new Date(milestone.get('start_at'));
     const milestoneId = milestone.get('id');
+
+    if (milestone.get('id') === constants.PRIOR_ITEMS_MILESTONE) {
+      return [];
+    }
 
     return (
       <tr>

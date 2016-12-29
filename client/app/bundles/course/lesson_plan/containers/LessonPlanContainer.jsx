@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { injectIntl, defineMessages } from 'react-intl';
 import * as actionCreators from '../actions';
 import lessonPlanItemTypeKey from '../utils';
+import { constants } from '../constants';
 
 const translations = defineMessages({
   priorItemsMilestoneTitle: {
@@ -58,7 +59,7 @@ class LessonPlanContainer extends React.Component {
       [] :
       [{
         milestone: Immutable.fromJS({
-          id: 'prior',
+          id: constants.PRIOR_ITEMS_MILESTONE,
           title: intl.formatMessage(translations.priorItemsMilestoneTitle),
           start_at: sortedLessonPlanElements.first().get('start_at'),
         }),
