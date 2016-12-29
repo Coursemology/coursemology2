@@ -147,7 +147,7 @@ GEM
       simplecov
     concurrent-ruby (1.0.3)
     consistency_fail (0.3.4)
-    coursemology-polyglot (0.2.4)
+    coursemology-polyglot (0.2.5)
       activesupport (~> 4.2.0, >= 4.2.2)
     coveralls (0.8.17)
       json (>= 1.8, < 3)
