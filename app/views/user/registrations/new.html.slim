@@ -5,10 +5,14 @@
 
 = simple_form_for resource, as: resource_name, url: registration_path(resource_name) do |f|
   = f.error_notification
-
   .form-inputs
-    = f.input :name, required: true, autofocus: true
-    = f.input :email, required: true
+    - if @invitation
+      = hidden_field_tag :invitation, @invitation.invitation_key
+      = f.input :name, required: true, input_html: { value: @invitation.name }, disabled: true
+      = f.input :email, required: true, input_html: { value: @invitation.email }, disabled: true
+    - else
+      = f.input :name, required: true, autofocus: true
+      = f.input :email, required: true
     = f.input :password, required: true,
               hint: (t('.password_hint', length: @minimum_password_length) if @validatable)
     = f.input :password_confirmation, required: true
