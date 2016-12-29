@@ -1,7 +1,7 @@
 = simple_format(t('.message', course: link_to(@course.title, course_url(@course)),
                               coursemology: link_to(t('layout.coursemology'), root_url),
                               email: @invitation.email,
-                              sign_up: link_to(t('layout.navbar.register'), new_user_registration_url)))
+                              click_here: link_to(t('.click_here'), new_user_registration_url(invitation: @invitation.invitation_key))))
 
 pre
   code

@@ -3,11 +3,12 @@ en:
     mailer:
       user_invitation_email:
         subject: 'Invitation to Register for %{course}'
+        click_here: 'Click here'
         message: >
           You are invited to register for %{course} on %{coursemology}.
 
 
           You do not seem to have an account registered at this email address (%{email});
-          please %{sign_up} for an account before visiting %{course} to enrol for the course.
+          %{click_here} to create an account and accept the invitation.
           If you have an existing Coursemology account registered under a different email,
-          enrol with the following non-transferable registration code:
+          visit %{course} and enrol with the following non-transferable registration code:
