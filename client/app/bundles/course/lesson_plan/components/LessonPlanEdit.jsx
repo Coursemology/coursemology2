@@ -3,6 +3,7 @@ import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import Toggle from 'material-ui/Toggle';
 import LessonPlanFilter from '../containers/LessonPlanFilter';
+import DeleteIcon from 'material-ui/svg-icons/navigation/cancel';
 
 const propTypes = {
   milestoneGroups: PropTypes.array,
@@ -24,6 +25,10 @@ const styles = {
     bottom: 12,
     position: 'fixed',
     right: 24,
+  },
+  deleteIcon: {
+    cursor: 'pointer',
+    margin: '0px 0px 0px -8px',
   },
 };
 
@@ -111,6 +116,16 @@ class LessonPlanEdit extends React.Component {
           LessonPlanEdit.renderTimeCell('bonus_end_at', bonusEndAt,
             (event, newTime) => updateItemDateTime(itemId, 'bonus_end_at', bonusEndAt, newTime))
         }
+        <td>
+          {
+            bonusEndAt ?
+              <DeleteIcon
+                style={styles.deleteIcon}
+                onTouchTap={() => updateItemField(itemId, 'bonus_end_at', null)}
+              /> :
+              []
+          }
+        </td>
         {
           LessonPlanEdit.renderDateCell('end_at', endAt,
             (event, newDate) => updateItemDateTime(itemId, 'end_at', newDate, endAt))
@@ -119,6 +134,16 @@ class LessonPlanEdit extends React.Component {
           LessonPlanEdit.renderTimeCell('end_at', endAt,
             (event, newTime) => updateItemDateTime(itemId, 'end_at', endAt, newTime))
         }
+        <td>
+          {
+            endAt ?
+              <DeleteIcon
+                style={styles.deleteIcon}
+                onTouchTap={() => updateItemField(itemId, 'end_at', null)}
+              /> :
+              []
+          }
+        </td>
         <td>
           <Toggle
             toggled={item.get('published')}
