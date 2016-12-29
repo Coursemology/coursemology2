@@ -1,16 +1,50 @@
 import React, { PropTypes } from 'react';
+import { injectIntl, defineMessages } from 'react-intl';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import Toggle from 'material-ui/Toggle';
-import LessonPlanFilter from '../containers/LessonPlanFilter';
 import DeleteIcon from 'material-ui/svg-icons/navigation/cancel';
+import LessonPlanFilter from '../containers/LessonPlanFilter';
+import './LessonPlanEdit.scss';
 import { constants } from '../constants';
+
+
+const translations = defineMessages({
+  type: {
+    id: 'course.lessonPlan.lessonPlanEdit.type',
+    defaultMessage: 'Type',
+  },
+  title: {
+    id: 'course.lessonPlan.lessonPlanEdit.title',
+    defaultMessage: 'Title',
+  },
+  startTime: {
+    id: 'course.lessonPlan.lessonPlanEdit.startTime',
+    defaultMessage: 'Start Time',
+  },
+  bonusEndTime: {
+    id: 'course.lessonPlan.lessonPlanEdit.bonusEndTime',
+    defaultMessage: 'Bonus End Time',
+  },
+  endTime: {
+    id: 'course.lessonPlan.lessonPlanEdit.endTime',
+    defaultMessage: 'End Time',
+  },
+  published: {
+    id: 'course.lessonPlan.lessonPlanEdit.published',
+    defaultMessage: 'Published',
+  },
+});
+
 
 const propTypes = {
   milestoneGroups: PropTypes.array,
   updateItemDateTime: PropTypes.func,
   updateMilestoneDateTime: PropTypes.func,
   updateItemField: PropTypes.func,
+  intl: PropTypes.shape({
+    formatMessage: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 const styles = {
@@ -35,7 +69,7 @@ const styles = {
 
 class LessonPlanEdit extends React.Component {
   static renderDateCell(fieldName, originalDate, onChangeHandler) {
-    return(
+    return (
       <td>
         <DatePicker
           name={fieldName}
@@ -48,7 +82,7 @@ class LessonPlanEdit extends React.Component {
   }
 
   static renderTimeCell(fieldName, originalTime, onChangeHandler) {
-    return(
+    return (
       <td>
         <TimePicker
           name={fieldName}
@@ -71,8 +105,7 @@ class LessonPlanEdit extends React.Component {
 
     return (
       <tr>
-        <td />
-        <td>
+        <td colSpan={2}>
           <h3>
             { milestone.get('title') }
           </h3>
@@ -85,6 +118,8 @@ class LessonPlanEdit extends React.Component {
           LessonPlanEdit.renderTimeCell('start_at', startAt,
             (event, newTime) => updateMilestoneDateTime(milestoneId, startAt, newTime, startAt))
         }
+        <td />
+        <td />
         <td />
         <td />
         <td />
@@ -105,11 +140,7 @@ class LessonPlanEdit extends React.Component {
       <tr key={itemId}>
         <td>{ item.get('lesson_plan_item_type').join(': ') }</td>
         <td>
-          <TextField
-            value={ item.get('title') }
-            hintText="Title"
-            required
-          />
+          { item.get('title') }
         </td>
         {
           LessonPlanEdit.renderDateCell('start_at', startAt,
@@ -139,11 +170,11 @@ class LessonPlanEdit extends React.Component {
         </td>
         {
           LessonPlanEdit.renderDateCell('end_at', endAt,
-            (event, newDate) => updateItemDateTime(itemId, 'end_at', newDate, endAt))
+            (event, newDate) => updateItemDateTime(itemId, 'end_at', newDate, endAt, endAt))
         }
         {
           LessonPlanEdit.renderTimeCell('end_at', endAt,
-            (event, newTime) => updateItemDateTime(itemId, 'end_at', endAt, newTime))
+            (event, newTime) => updateItemDateTime(itemId, 'end_at', endAt, newTime, endAt))
         }
         <td>
           {
@@ -171,10 +202,20 @@ class LessonPlanEdit extends React.Component {
   }
 
   render() {
-    const { milestoneGroups } = this.props;
+    const { milestoneGroups, intl } = this.props;
     return (
       <div>
         <table>
+          <thead>
+            <tr>
+              <th>{intl.formatMessage(translations.type)}</th>
+              <th>{intl.formatMessage(translations.title)}</th>
+              <th colSpan={2}>{intl.formatMessage(translations.startTime)}</th>
+              <th colSpan={3}>{intl.formatMessage(translations.bonusEndTime)}</th>
+              <th colSpan={3}>{intl.formatMessage(translations.endTime)}</th>
+              <th>{intl.formatMessage(translations.published)}</th>
+            </tr>
+          </thead>
           <tbody>
             {
                milestoneGroups.map(group => this.renderGroup(group))
@@ -191,4 +232,4 @@ class LessonPlanEdit extends React.Component {
 
 LessonPlanEdit.propTypes = propTypes;
 
-export default LessonPlanEdit;
+export default injectIntl(LessonPlanEdit);
