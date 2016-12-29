@@ -20,6 +20,7 @@
     "client/node_modules"
   ],
   "dependencies": {
+    "axios": "^0.15.3",
     "babel": "^6.5.2",
     "babel-cli": "^6.6.5",
     "babel-core": "^6.7.4",

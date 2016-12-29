@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
+import axios from 'axios';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 
 const initializeComponent = (Component, nodeId, storeCreator) => {
@@ -13,8 +14,9 @@ const initializeComponent = (Component, nodeId, storeCreator) => {
     , document.getElementById(nodeId));
   };
 
-  $.getJSON('', (data) => {
-    $(document).ready(renderComponent(data));
+  const headers = { Accept: 'application/json' };
+  axios.get('', { headers }).then((response) => {
+    $(document).ready(renderComponent(response.data));
   });
 };
 

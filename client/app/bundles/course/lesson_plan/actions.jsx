@@ -1,3 +1,4 @@
+import axios from 'axios';
 import actionTypes from './constants';
 
 export function toggleItemTypeVisibility(itemType) {
@@ -16,27 +17,12 @@ function combineDateTime(dateSource, timeSource) {
   return combinedDateTime;
 }
 
-function updateLessonPlanElement(endpoint, payload, successHandler, failureHandler) {
-  const xhr = new XMLHttpRequest();
+function patchRequest(endpoint, payload, successHandler, failureHandler) {
   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-  const requestBody = JSON.stringify({
-    authenticity_token: csrfToken,
-    ...payload,
-  });
-  const responseHandler = () => {
-    if (xhr.status === 200) {
-      successHandler();
-    } else {
-      failureHandler();
-    }
-  };
-
-  xhr.onload = () => { responseHandler(); };
-  xhr.ontimeout = () => { failureHandler(); };
-  xhr.open('PATCH', endpoint);
-  xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-  xhr.setRequestHeader('Accept', 'application/json');
-  xhr.send(requestBody);
+  const headers = { Accept: 'application/json' };
+  axios.patch(endpoint, { ...payload, authenticity_token: csrfToken }, { headers })
+    .then(successHandler)
+    .catch(failureHandler);
 }
 
 export function updateItemField(id, field, value) {
@@ -62,7 +48,7 @@ export function updateItemField(id, field, value) {
       // TODO
     };
 
-    updateLessonPlanElement(`items/${id}`, payload, successHandler, failureHandler);
+    patchRequest(`items/${id}`, payload, successHandler, failureHandler);
   };
 }
 
@@ -98,6 +84,6 @@ export function updateMilestoneDateTime(milestoneId, dateSource, timeSource) {
       // TODO
     };
 
-    updateLessonPlanElement(`milestones/${milestoneId}`, payload, successHandler, failureHandler);
+    patchRequest(`milestones/${milestoneId}`, payload, successHandler, failureHandler);
   };
 }
