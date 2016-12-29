@@ -20,8 +20,7 @@ educators to increase student engagement and make learning fun.
 
 Coursemology uses [Ruby on Rails](http://rubyonrails.org/).
 In addition, some front-end components use
-[React.js](https://facebook.github.io/react/)
-(via [React on Rails](https://github.com/shakacode/react_on_rails)).
+[React.js](https://facebook.github.io/react/).
 This [guide](https://gorails.com/setup/) written by the awesome people at
 GoRails should help you to get started on Ruby on Rails.
 
