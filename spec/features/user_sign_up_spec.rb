@@ -28,23 +28,25 @@ RSpec.feature 'Users: Sign Up' do
     end
 
     context 'As a user invited by course staffs' do
-      let!(:invitation) { create(:course_user_invitation) }
+      let(:course) { create(:course) }
+      let!(:invitation) { create(:course_user_invitation, course: course) }
       let(:invited_email) { invitation.email }
 
       scenario 'I can register for an account' do
-        visit new_user_registration_path
+        visit new_user_registration_path(invitation: invitation.invitation_key)
 
-        invited_user = attributes_for(:user).reverse_merge(email: invited_email)
-        fill_in 'user_name', with: invited_user[:name]
-        fill_in 'user_email', with: invited_user[:email]
+        invited_user = attributes_for(:user)
         fill_in 'user_password', with: invited_user[:password]
         fill_in 'user_password_confirmation', with: invited_user[:password]
 
         expect do
           click_button I18n.t('user.registrations.new.sign_up')
-        end.to change(User, :count).by(1)
-        email = User::Email.find_by(email: invited_user[:email])
+        end.to change(course.users, :count).by(1)
+
+        email = User::Email.find_by(email: invited_email)
         expect(email).to be_primary
+        expect(email).to be_confirmed
+        expect(invitation.reload).to be_confirmed
       end
     end
   end

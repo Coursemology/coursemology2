@@ -10,9 +10,14 @@ class User::RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    User.transaction do
+      super
+      if @invitation && resource.persisted?
+        @invitation.confirm!
+      end
+    end
+  end
 
   # GET /resource/edit
   # def edit
@@ -69,6 +74,13 @@ class User::RegistrationsController < Devise::RegistrationsController
   # @return [nil]
   def select_layout
     'user_admin' if ['edit', 'update'].include?(params['action'])
+  end
+
+  # Override Devise::RegistrationsController#build_resource
+  # This is for updating the user with invitation.
+  def build_resource(*)
+    super
+    resource.build_from_invitation(@invitation) if @invitation && action_name == 'create'
   end
 
   def load_invitation
