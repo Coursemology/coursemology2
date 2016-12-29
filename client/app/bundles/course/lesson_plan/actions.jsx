@@ -25,7 +25,7 @@ function patchRequest(endpoint, payload, successHandler, failureHandler) {
     .catch(failureHandler);
 }
 
-export function updateItemField(id, field, value) {
+export function updateItemField(id, field, value, oldValue) {
   const payload = {
     item: {
       [field]: value,
@@ -33,34 +33,43 @@ export function updateItemField(id, field, value) {
   };
 
   return (dispatch) => {
+    dispatch({
+      type: actionTypes.SET_ITEM_FIELD,
+      payload: {
+        id,
+        field,
+        value,
+      },
+    });
+
     const successHandler = () => {
+      // TODO Feedback to user
+    };
+
+    const failureHandler = () => {
       dispatch({
         type: actionTypes.SET_ITEM_FIELD,
         payload: {
           id,
           field,
-          value,
+          value: oldValue,
         },
       });
-    };
-
-    const failureHandler = () => {
-      // TODO
     };
 
     patchRequest(`items/${id}`, payload, successHandler, failureHandler);
   };
 }
 
-export function updateItemDateTime(id, field, dateSource, timeSource) {
+export function updateItemDateTime(id, field, dateSource, timeSource, oldValue) {
   const newDateTime = combineDateTime(dateSource, timeSource);
-  return updateItemField(id, field, newDateTime);
+  return updateItemField(id, field, newDateTime, oldValue);
 }
 
 /**
  * Milestones do not have the end_at field.
  */
-export function updateMilestoneDateTime(milestoneId, dateSource, timeSource) {
+export function updateMilestoneDateTime(milestoneId, dateSource, timeSource, oldValue) {
   const newDateTime = combineDateTime(dateSource, timeSource);
   const payload = {
     lesson_plan_milestone: {
@@ -69,19 +78,28 @@ export function updateMilestoneDateTime(milestoneId, dateSource, timeSource) {
   };
 
   return (dispatch) => {
+    dispatch({
+      type: actionTypes.SET_MILESTONE_FIELD,
+      payload: {
+        field: 'start_at',
+        id: milestoneId,
+        value: newDateTime,
+      },
+    });
+
     const successHandler = () => {
+      // TODO Feedback to user
+    };
+
+    const failureHandler = () => {
       dispatch({
         type: actionTypes.SET_MILESTONE_FIELD,
         payload: {
           field: 'start_at',
           id: milestoneId,
-          value: newDateTime,
+          value: oldValue,
         },
       });
-    };
-
-    const failureHandler = () => {
-      // TODO
     };
 
     patchRequest(`milestones/${milestoneId}`, payload, successHandler, failureHandler);

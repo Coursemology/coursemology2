@@ -79,11 +79,11 @@ class LessonPlanEdit extends React.Component {
         </td>
         {
           LessonPlanEdit.renderDateCell('start_at', startAt,
-            (event, newDate) => updateMilestoneDateTime(milestoneId, newDate, startAt))
+            (event, newDate) => updateMilestoneDateTime(milestoneId, newDate, startAt, startAt))
         }
         {
           LessonPlanEdit.renderTimeCell('start_at', startAt,
-            (event, newTime) => updateMilestoneDateTime(milestoneId, startAt, newTime))
+            (event, newTime) => updateMilestoneDateTime(milestoneId, startAt, newTime, startAt))
         }
         <td />
         <td />
@@ -104,22 +104,28 @@ class LessonPlanEdit extends React.Component {
     return (
       <tr key={itemId}>
         <td>{ item.get('lesson_plan_item_type').join(': ') }</td>
-        <td>{ item.get('title') }</td>
+        <td>
+          <TextField
+            value={ item.get('title') }
+            hintText="Title"
+            required
+          />
+        </td>
         {
           LessonPlanEdit.renderDateCell('start_at', startAt,
-            (event, newDate) => updateItemDateTime(itemId, 'start_at', newDate, startAt))
+            (event, newDate) => updateItemDateTime(itemId, 'start_at', newDate, startAt, startAt))
         }
         {
           LessonPlanEdit.renderTimeCell('start_at', startAt,
-            (event, newTime) => updateItemDateTime(itemId, 'start_at', startAt, newTime))
+            (event, newTime) => updateItemDateTime(itemId, 'start_at', startAt, newTime, startAt))
         }
         {
           LessonPlanEdit.renderDateCell('bonus_end_at', bonusEndAt,
-            (event, newDate) => updateItemDateTime(itemId, 'bonus_end_at', newDate, bonusEndAt))
+            (event, newDate) => updateItemDateTime(itemId, 'bonus_end_at', newDate, bonusEndAt, bonusEndAt))
         }
         {
           LessonPlanEdit.renderTimeCell('bonus_end_at', bonusEndAt,
-            (event, newTime) => updateItemDateTime(itemId, 'bonus_end_at', bonusEndAt, newTime))
+            (event, newTime) => updateItemDateTime(itemId, 'bonus_end_at', bonusEndAt, newTime, bonusEndAt))
         }
         <td>
           {
