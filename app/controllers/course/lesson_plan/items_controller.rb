@@ -18,7 +18,19 @@ class Course::LessonPlan::ItemsController < Course::ComponentController
     end
   end
 
+  def update
+    if @item.update_attributes(item_params)
+      head :ok
+    else
+      head :bad_request
+    end
+  end
+
   private
+
+  def item_params
+    params.require(:item).permit(:start_at, :bonus_end_at, :end_at, :published)
+  end
 
   def render_json_response
     @items = @items.order(start_at: :asc).includes(:actable).to_a.

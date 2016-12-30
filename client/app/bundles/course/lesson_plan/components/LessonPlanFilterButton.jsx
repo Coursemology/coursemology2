@@ -7,9 +7,9 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Done from 'material-ui/svg-icons/action/done';
 import KeyboardArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
+import lessonPlanItemTypeKey from '../utils';
 
 const propTypes = {
-  lessonPlanItemTypeKey: PropTypes.func.isRequired,
   toggleItemTypeVisibility: PropTypes.func.isRequired,
   hiddenItemTypes: PropTypes.instanceOf(Immutable.List).isRequired,
   items: PropTypes.instanceOf(Immutable.List).isRequired,
@@ -20,12 +20,12 @@ const propTypes = {
 
 const translations = defineMessages({
   filter: {
-    id: 'course.lessonPlan.lessonPlanFilter.filter',
+    id: 'course.lessonPlan.lessonPlanFilterButton.filter',
     defaultMessage: 'Filter',
   },
 });
 
-class LessonPlanFilter extends React.Component {
+class LessonPlanFilterButton extends React.Component {
   constructor(props) {
     super(props);
 
@@ -56,7 +56,6 @@ class LessonPlanFilter extends React.Component {
   render() {
     const {
       toggleItemTypeVisibility,
-      lessonPlanItemTypeKey,
       hiddenItemTypes,
       items,
       intl,
@@ -99,6 +98,6 @@ class LessonPlanFilter extends React.Component {
   }
 }
 
-LessonPlanFilter.propTypes = propTypes;
+LessonPlanFilterButton.propTypes = propTypes;
 
-export default injectIntl(LessonPlanFilter);
+export default injectIntl(LessonPlanFilterButton);

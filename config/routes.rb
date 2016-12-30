@@ -207,7 +207,9 @@ Rails.application.routes.draw do
 
       namespace :lesson_plan do
         get '/' => 'items#index'
+        get 'edit' => 'items#index'
         resources :milestones, except: [:index, :show]
+        resources :items, only: [:update]
         resources :events, except: [:index, :show]
         resources :todos, only: [] do
           post 'ignore', on: :member

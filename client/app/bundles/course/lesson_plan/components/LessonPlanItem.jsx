@@ -175,7 +175,8 @@ class LessonPlanItem extends React.Component {
     const startTime = intl.formatTime(startDateTime, timeFormat);
     let outputString = `${startDate}, ${startTime}`;
 
-    if (item.has('end_at') && item.get('end_at')) {
+    if (item.get('lesson_plan_element_class') === 'Course::LessonPlan::Event' &&
+        item.has('end_at') && item.get('end_at')) {
       outputString += ' - ';
       const endDateTime = Date.parse(item.get('end_at'));
       const endDate = intl.formatDate(endDateTime, dateFormat);

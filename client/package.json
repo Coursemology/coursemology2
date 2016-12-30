@@ -20,6 +20,7 @@
     "client/node_modules"
   ],
   "dependencies": {
+    "axios": "^0.15.3",
     "babel": "^6.5.2",
     "babel-cli": "^6.6.5",
     "babel-core": "^6.7.4",
@@ -43,6 +44,7 @@
     "react-dom": "^0.14.8 || ^15.0.0",
     "react-intl": "^2.1.5",
     "react-redux": "^4.4.1",
+    "react-router": "^3.0.0",
     "react-scroll": "^1.4.4",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.3.1",
