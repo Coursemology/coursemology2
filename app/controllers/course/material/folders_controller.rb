@@ -2,7 +2,7 @@
 class Course::Material::FoldersController < Course::Material::Controller
   def show
     @subfolders = @folder.children.with_content_statistics.accessible_by(current_ability).
-                  includes(:owner).without_empty_linked_folder
+                  order(:name).includes(:owner).without_empty_linked_folder
   end
 
   def edit

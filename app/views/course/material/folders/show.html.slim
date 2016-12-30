@@ -14,4 +14,4 @@ table.table.table-hover
           = link_to '...', course_material_folder_path(current_course, @folder.parent)
 
     = render @subfolders
-    = render partial: 'material', collection: @folder.materials.includes(:updater)
+    = render partial: 'material', collection: @folder.materials.order(:name).includes(:updater)
