@@ -1,6 +1,6 @@
 <%= t('.message', course: plain_link_to(@course.title, course_url(@course)),
                   coursemology: plain_link_to(t('layout.coursemology'), root_url),
                   email: @invitation.email,
-                  sign_up: plain_link_to(t('layout.navbar.register'), new_user_registration_url)) %>
+                  click_here: plain_link_to(t('.click_here'), new_user_registration_url(invitation: @invitation.invitation_key))) %>
 
 <%= @invitation.invitation_key %>

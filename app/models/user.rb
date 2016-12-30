@@ -93,6 +93,17 @@ class User < ActiveRecord::Base
     default_email_record.update_attributes(primary: true)
   end
 
+  # Update the user using the info from invitation.
+  #
+  # @param [Course::UserInvitation]
+  def build_from_invitation(invitation)
+    self.name = invitation.name
+    self.email = invitation.email
+    skip_confirmation!
+    course_users.build(course: invitation.course, name: invitation.name,
+                       creator: self, updater: self)
+  end
+
   private
 
   # Gets the default email address record.

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class User::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
+  before_action :load_invitation, only: [:new, :create]
   layout :select_layout
 
   # GET /resource/sign_up
@@ -9,9 +10,14 @@ class User::RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    User.transaction do
+      super
+      if @invitation && resource.persisted?
+        @invitation.confirm!
+      end
+    end
+  end
 
   # GET /resource/edit
   # def edit
@@ -68,5 +74,22 @@ class User::RegistrationsController < Devise::RegistrationsController
   # @return [nil]
   def select_layout
     'user_admin' if ['edit', 'update'].include?(params['action'])
+  end
+
+  # Override Devise::RegistrationsController#build_resource
+  # This is for updating the user with invitation.
+  def build_resource(*)
+    super
+    resource.build_from_invitation(@invitation) if @invitation && action_name == 'create'
+  end
+
+  def load_invitation
+    return unless invitation_param.present?
+
+    @invitation = Course::UserInvitation.unconfirmed.find_by(invitation_key: invitation_param)
+  end
+
+  def invitation_param
+    params.permit(:invitation)[:invitation]
   end
 end
