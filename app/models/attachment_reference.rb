@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class AttachmentReference < ActiveRecord::Base
   before_save :update_expires_at
+  after_save :clear_duplication_flag
 
   belongs_to :attachable, polymorphic: true, inverse_of: nil
   belongs_to :attachment, inverse_of: :attachment_references
@@ -16,8 +17,16 @@ class AttachmentReference < ActiveRecord::Base
     self.attachment = Attachment.find_or_initialize_by(file: file)
   end
 
+  # Return false to prevent the userstamp gem from changing the updater during duplication
+  def record_userstamp
+    !@duplicating
+  end
+
   def initialize_duplicate(duplicator, other)
     self.attachable = duplicator.duplicate(other.attachable)
+    self.updated_at = other.updated_at
+    self.created_at = other.created_at
+    @duplicating = true
   end
 
   private
@@ -42,5 +51,9 @@ class AttachmentReference < ActiveRecord::Base
                       else
                         1.day.from_now
                       end
+  end
+
+  def clear_duplication_flag
+    @duplicating = nil
   end
 end
