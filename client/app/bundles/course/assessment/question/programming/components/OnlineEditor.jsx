@@ -1,9 +1,21 @@
 import Immutable from 'immutable';
 
 import React, { PropTypes } from 'react';
-import { injectIntl } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 import OnlineEditorPythonView from '../components/OnlineEditorPythonView';
-import { onlineEditorTranslations as translations } from '../constants/translations';
+
+const translations = defineMessages({
+  selectLanguageAlert: {
+    id: 'course.assessment.question.programming.onlineEditor.selectLanguageAlert',
+    defaultMessage: 'Please select a language.',
+    description: 'Alert message to be displayed when no language is selected.',
+  },
+  notYetImplementedAlert: {
+    id: 'course.assessment.question.programming.onlineEditor.notYetImplementedAlert',
+    defaultMessage: 'Not yet implemented :(',
+    description: 'Alert message to be displayed when selected language does not have an online editor.',
+  },
+});
 
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,

@@ -1,10 +1,22 @@
 import Immutable from 'immutable';
 
 import React, { PropTypes } from 'react';
-import { injectIntl } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 import TemplatePackageView from '../components/TemplatePackageView';
 import TemplateTestCaseView from '../components/TemplateTestCaseView';
-import { uploadedPackageViewer as translations } from '../constants/translations';
+
+const translations = defineMessages({
+  templateHeader: {
+    id: 'course.assessment.question.programming.uploadedPackageViewer.templateHeader',
+    defaultMessage: 'Template',
+    description: 'Header for submission template of the uploaded package.',
+  },
+  testCasesHeader: {
+    id: 'course.assessment.question.programming.uploadedPackageViewer.testCasesHeader',
+    defaultMessage: 'Test Cases',
+    description: 'Header for the test cases of the uploaded package.',
+  },
+});
 
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { injectIntl } from 'react-intl';
-import { testCasesTranslations as translations } from '../constants/translations';
+import translations from './OnlineEditorPythonView.intl';
 
 const propTypes = {
   testCases: PropTypes.object.isRequired,

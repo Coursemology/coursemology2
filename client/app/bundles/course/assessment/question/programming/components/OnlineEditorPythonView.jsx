@@ -8,7 +8,7 @@ import 'brace/mode/python';
 import 'brace/theme/monokai';
 
 import styles from './OnlineEditorPythonView.scss';
-import { testCasesTranslations, onlineEditorPythonViewTranslations as translations } from '../constants/translations';
+import translations from './OnlineEditorPythonView.intl'
 
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
@@ -161,10 +161,10 @@ class OnlineEditorPythonView extends React.Component {
           <thead>
             <tr>
               <th />
-              <th>{this.props.intl.formatMessage(testCasesTranslations.identifierHeader)}</th>
-              <th>{this.props.intl.formatMessage(testCasesTranslations.expressionHeader)}</th>
-              <th>{this.props.intl.formatMessage(testCasesTranslations.expectedHeader)}</th>
-              <th>{this.props.intl.formatMessage(testCasesTranslations.hintHeader)}</th>
+              <th>{this.props.intl.formatMessage(translations.identifierHeader)}</th>
+              <th>{this.props.intl.formatMessage(translations.expressionHeader)}</th>
+              <th>{this.props.intl.formatMessage(translations.expectedHeader)}</th>
+              <th>{this.props.intl.formatMessage(translations.hintHeader)}</th>
             </tr>
           </thead>
           <tbody>
@@ -220,21 +220,21 @@ class OnlineEditorPythonView extends React.Component {
         }
         {
           autograded ?
-            this.renderTestCases(intl.formatMessage(testCasesTranslations.publicTestCases),
+            this.renderTestCases(intl.formatMessage(translations.publicTestCases),
               testCases, 'public')
             :
             null
         }
         {
           autograded ?
-            this.renderTestCases(intl.formatMessage(testCasesTranslations.privateTestCases),
+            this.renderTestCases(intl.formatMessage(translations.privateTestCases),
               testCases, 'private', testCases.get('public').size)
             :
             null
         }
         {
           autograded ?
-            this.renderTestCases(intl.formatMessage(testCasesTranslations.evaluationTestCases),
+            this.renderTestCases(intl.formatMessage(translations.evaluationTestCases),
               testCases, 'evaluation',
               testCases.get('public').size + testCases.get('private').size)
             :

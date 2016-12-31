@@ -8,7 +8,7 @@ import { injectIntl } from 'react-intl';
 import 'react-select/dist/react-select.css';
 
 import styles from './ProgrammingQuestionForm.scss';
-import { programmingQuestionFormTranslations as translations } from '../constants/translations';
+import translations from './ProgrammingQuestionForm.intl';
 
 const propTypes = {
   data: React.PropTypes.shape({
