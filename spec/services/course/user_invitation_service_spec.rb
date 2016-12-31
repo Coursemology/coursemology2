@@ -225,6 +225,24 @@ RSpec.describe Course::UserInvitationService, type: :service do
           end.to raise_exception(CSV::MalformedCSVError)
         end
       end
+
+      context 'when the provided csv file has blanks' do
+        subject do
+          stubbed_user_invitation_service.
+            send(:invite_from_file,
+                 File.open(File.join(__dir__,
+                                     '../../fixtures/course/empty_invitation.csv')))
+        end
+
+        it 'does not raise an exception' do
+          expect { subject }.not_to raise_exception
+        end
+
+        it 'ignores blank entries and only invites users with both name and emails' do
+          # Empty invitation CSV only has 1 full entry
+          expect(subject.flatten.count).to eq(1)
+        end
+      end
     end
 
     describe '#invite_from_form' do

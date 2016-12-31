@@ -64,7 +64,7 @@ module Course::UserInvitationService::EmailInvitationConcern
     invite_users(invites)
   end
 
-  # Loads the given file.
+  # Loads the given file, and entries with blanks in either fields are ignored.
   #
   # @param [File] file Reads the given file.
   # @return [Array<Hash>] The array of records read from the file.
@@ -74,7 +74,7 @@ module Course::UserInvitationService::EmailInvitationConcern
     CSV.foreach(file, headers: true) do |row|
       row = row.fields(0..1)
       row.unshift(row.first) unless row.length >= 2
-      invites << { name: row[0], email: row[1] }
+      invites << { name: row[0], email: row[1] } unless row[0].blank? || row[1].blank?
     end
 
     invites
