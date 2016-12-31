@@ -194,6 +194,10 @@ RSpec.describe Course::DuplicationService, type: :service do
           content.update_column(:updater_id, updater.id)
           folders.each.map { |folder| folder.update_column(:updater_id, updater.id) }
 
+          # Fix creator/updater for attachment reference
+          content.attachment.update_column(:creator_id, creator.id)
+          content.attachment.update_column(:updater_id, updater.id)
+
           course.reload
           new_course.reload
 
@@ -227,6 +231,14 @@ RSpec.describe Course::DuplicationService, type: :service do
           expect(@new_folders.map(&:updater_id)).to match_array @original_folders.map(&:updater_id)
           expect(@new_folders.map(&:created_at)).to match_array @original_folders.map(&:created_at)
           expect(@new_folders.map(&:creator_id)).to match_array @original_folders.map(&:creator_id)
+        end
+
+        it 'keeps the original updater/creator and updated/created time'\
+           'for attachment references' do
+          expect(@new_content.attachment.updated_at).to eq @content.attachment.updated_at
+          expect(@new_content.attachment.updater).to eq @content.attachment.updater
+          expect(@new_content.attachment.created_at).to eq @content.attachment.created_at
+          expect(@new_content.attachment.creator).to eq @content.attachment.creator
         end
       end
 
