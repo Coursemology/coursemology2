@@ -29,6 +29,7 @@ class Course::Material < ActiveRecord::Base
     self.attachment = duplicator.duplicate(other.attachment)
     self.folder = duplicator.duplicate(other.folder)
     self.updated_at = other.updated_at
+    self.created_at = other.created_at
     @duplicating = true
   end
 

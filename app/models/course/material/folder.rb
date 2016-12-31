@@ -81,6 +81,7 @@ class Course::Material::Folder < ActiveRecord::Base
     self.course = duplicator.duplicate(other.course)
     self.parent = duplicator.duplicate(other.parent)
     self.updated_at = other.updated_at
+    self.created_at = other.created_at
     @duplicating = true
   end
 

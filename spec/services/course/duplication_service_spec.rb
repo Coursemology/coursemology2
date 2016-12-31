@@ -184,10 +184,16 @@ RSpec.describe Course::DuplicationService, type: :service do
       end
 
       context 'when course has extra material folders' do
-        let!(:folders) { create_list(:course_material_folder, 3, course: course) }
-        let!(:content) { create(:course_material, folder: folders[0]) }
+        let!(:creator) { create(:course_manager, course: course).user }
+        let!(:updater) { create(:course_teaching_assistant, course: course).user }
+        let!(:folders) { create_list(:course_material_folder, 3, course: course, creator: creator) }
+        let!(:content) { create(:course_material, folder: folders[0], creator: creator) }
 
         before do
+          # Updater cannot be assigned in `create` as it will be overwritten.
+          content.update_column(:updater_id, updater.id)
+          folders.each.map { |folder| folder.update_column(:updater_id, updater.id) }
+
           course.reload
           new_course.reload
 
@@ -208,14 +214,19 @@ RSpec.describe Course::DuplicationService, type: :service do
           expect(@new_content.description).to eq @content.description
         end
 
-        it 'keeps the original updater and updated time for folders and materials' do
-          # Check material's updater and updated time
+        it 'keeps the original updater/creator and updated/created time'\
+           'for folders and materials' do
+          # Check material's updater/creator and updated/created time
           expect(@new_content.updated_at).to eq @content.updated_at
           expect(@new_content.updater_id).to eq @content.updater_id
+          expect(@new_content.created_at).to eq @content.created_at
+          expect(@new_content.creator_id).to eq @content.creator_id
 
-          # Check folders' updater and updated time
+          # Check folders' updater/creator and updated/created time
           expect(@new_folders.map(&:updated_at)).to match_array @original_folders.map(&:updated_at)
           expect(@new_folders.map(&:updater_id)).to match_array @original_folders.map(&:updater_id)
+          expect(@new_folders.map(&:created_at)).to match_array @original_folders.map(&:created_at)
+          expect(@new_folders.map(&:creator_id)).to match_array @original_folders.map(&:creator_id)
         end
       end
 
