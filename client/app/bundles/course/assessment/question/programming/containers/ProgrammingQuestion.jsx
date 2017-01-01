@@ -11,9 +11,15 @@ import * as onlineEditorActionCreators from '../actions/onlineEditorActionCreato
 import * as programmingQuestionActionCreators from '../actions/programmingQuestionActionCreators';
 import * as templatePackageActionCreators from '../actions/templatePackageActionCreators';
 
-function select(state) {
-  return { programmingQuestionStore: state.programmingQuestionStore };
+
+function mapStateToProps(state) {
+  return state.toObject();
 }
+
+const propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  programmingQuestion: PropTypes.instanceOf(Immutable.Map).isRequired,
+};
 
 function makeImportAlert(store) {
   const alertData = store.get('import_result').get('alert');
@@ -36,36 +42,33 @@ function makeBuildLog(store) {
 }
 
 const ProgrammingQuestion = (props) => {
-  const { dispatch, programmingQuestionStore } = props;
+  const { dispatch, programmingQuestion } = props;
   const actions = bindActionCreators(programmingQuestionActionCreators, dispatch);
   const data = {
-    question: programmingQuestionStore.get('question'),
-    formData: programmingQuestionStore.get('form_data'),
-    isLoading: programmingQuestionStore.get('is_loading'),
-    isEvaluating: programmingQuestionStore.get('is_evaluating'),
+    question: programmingQuestion.get('question'),
+    formData: programmingQuestion.get('form_data'),
+    isLoading: programmingQuestion.get('is_loading'),
+    isEvaluating: programmingQuestion.get('is_evaluating'),
   };
 
   const templatePackageActions = bindActionCreators(templatePackageActionCreators, dispatch);
   const onlineEditorActions = bindActionCreators(onlineEditorActionCreators, dispatch);
 
   const testView = data.question.get('can_edit_online') ?
-    <OnlineEditor {...{ actions: onlineEditorActions, data: programmingQuestionStore }} />
+    <OnlineEditor {...{ actions: onlineEditorActions, data: programmingQuestion }} />
     :
     (<UploadedPackageViewer
-      {...{ actions: templatePackageActions, data: programmingQuestionStore }}
+      {...{ actions: templatePackageActions, data: programmingQuestion }}
     />);
 
-  const importAlertView = makeImportAlert(programmingQuestionStore);
-  const buildLogView = makeBuildLog(programmingQuestionStore);
+  const importAlertView = makeImportAlert(programmingQuestion);
+  const buildLogView = makeBuildLog(programmingQuestion);
 
   return (
     <ProgrammingQuestionForm {...{ actions, data, testView, importAlertView, buildLogView }} />
   );
 };
 
-ProgrammingQuestion.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  programmingQuestionStore: PropTypes.instanceOf(Immutable.Map).isRequired,
-};
+ProgrammingQuestion.propTypes = propTypes;
 
-export default connect(select)(ProgrammingQuestion);
+export default connect(mapStateToProps)(ProgrammingQuestion);

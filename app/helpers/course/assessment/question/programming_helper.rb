@@ -44,10 +44,6 @@ module Course::Assessment::Question::ProgrammingHelper
     params[:action] == 'new'
   end
 
-  def can_edit_online?
-    @programming_question.package_type == 'online_editor'
-  end
-
   private
 
   def successful_import_alert(json: false)

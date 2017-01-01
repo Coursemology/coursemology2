@@ -16,7 +16,7 @@ class Course::Assessment::Question::ProgrammingController < \
     @programming_question.package_type =
       programming_question_params.key?(:file) ? :zip_upload : :online_editor
 
-    programming_package_service.generate_package(params)
+    programming_package_service.generate_package(params) if @programming_question.edit_online?
 
     save_and_redirect 'new'
   end
@@ -34,7 +34,7 @@ class Course::Assessment::Question::ProgrammingController < \
   def update
     @programming_question.assign_attributes programming_question_params
 
-    programming_package_service.generate_package(params)
+    programming_package_service.generate_package(params) if @programming_question.edit_online?
 
     respond_to do |format|
       format.html { save_and_redirect 'edit' }

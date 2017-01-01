@@ -30,6 +30,10 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
     !test_cases.empty?
   end
 
+  def edit_online?
+    self.package_type == 'online_editor'
+  end
+
   def auto_grader
     Course::Assessment::Answer::ProgrammingAutoGradingService.new
   end
@@ -113,9 +117,7 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
 
   # Removes the template files and test cases from the old package.
   def remove_old_package
-    unless template_files_changed?
-      template_files.clear
-    end
+    template_files.clear unless template_files_changed?
     test_cases.clear
     self.import_job = nil
   end

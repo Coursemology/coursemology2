@@ -25,6 +25,31 @@ export default defineMessages({
     defaultMessage: 'Submission Template',
     description: 'Title for submission template code block.',
   },
+  dataFilesHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.dataFilesHeader',
+    defaultMessage: 'Current Data Files',
+    description: 'Header for the current data files panel.',
+  },
+  deleteDataFilesHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.deleteDataFilesHeader',
+    defaultMessage: 'Delete?',
+    description: 'Header for delete checkbox column in current data files paenl.',
+  },
+  fileNameHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.fileNameHeader',
+    defaultMessage: 'File Name',
+    description: 'Header for file name column in current data files paenl.',
+  },
+  fileSizeHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.fileSizeHeader',
+    defaultMessage: 'File Size',
+    description: 'Header for file size column in current data files paenl.',
+  },
+  newDataFilesHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.newDataFilesHeader',
+    defaultMessage: 'New Data Files',
+    description: 'Header for the new data files panel.',
+  },
   addNewTestButton: {
     id: 'course.assessment.question.programming.onlineEditorPythonView.addNewTestButton',
     defaultMessage: 'Add new test',

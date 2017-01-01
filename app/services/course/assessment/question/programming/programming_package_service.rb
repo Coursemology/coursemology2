@@ -44,10 +44,10 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
     # generated from the template files in the database.
     if @current_attachment.nil?
       data = @language_package_service.generate_non_autograded_meta(@question.template_files)
-    else
-      data = @language_package_service.extract_meta(@current_attachment)
+      return { editor_mode: @editor_mode, data: data }
     end
 
+    data = @language_package_service.extract_meta(@current_attachment)
     { editor_mode: @editor_mode, data: data } if data.present?
   end
 

@@ -34,5 +34,5 @@ json.question do
   end
 
   json.can_switch_package_type can_switch_package_type?
-  json.can_edit_online can_edit_online?
+  json.can_edit_online @programming_question.edit_online?
 end

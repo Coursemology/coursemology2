@@ -8,15 +8,19 @@ import 'brace/mode/python';
 import 'brace/theme/monokai';
 
 import styles from './OnlineEditorPythonView.scss';
-import translations from './OnlineEditorPythonView.intl'
+import translations from './OnlineEditorPythonView.intl';
 
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
+  dataFiles: PropTypes.instanceOf(Immutable.Map).isRequired,
   actions: React.PropTypes.shape({
     updatePythonCodeBlock: PropTypes.func.isRequired,
     createPythonTestCase: PropTypes.func.isRequired,
     updatePythonTestCase: PropTypes.func.isRequired,
     deletePythonTestCase: PropTypes.func.isRequired,
+    updateNewDataFile: PropTypes.func.isRequired,
+    deleteNewDataFile: PropTypes.func.isRequired,
+    deleteExistingDataFile: PropTypes.func.isRequired,
   }),
   isLoading: PropTypes.bool.isRequired,
   intl: PropTypes.shape({
@@ -43,6 +47,7 @@ class OnlineEditorPythonView extends React.Component {
   constructor(props) {
     super(props);
     this.onAutogradedChange = this.onAutogradedChange.bind(this);
+    this.renderExistingDataFiles = this.renderExistingDataFiles.bind(this);
   }
 
   onAutogradedChange(e) {
@@ -51,6 +56,14 @@ class OnlineEditorPythonView extends React.Component {
 
   codeChangeHandler(field) {
     return e => this.props.actions.updatePythonCodeBlock(field, e);
+  }
+
+  newDataFileChangeHandler(index) {
+    return (e) => {
+      const files = e.target.files;
+      const filename = files.length === 0 ? null : files[0].name;
+      this.props.actions.updateNewDataFile(filename, index);
+    };
   }
 
   testCaseUpdateHandler(type, index, field) {
@@ -75,26 +88,6 @@ class OnlineEditorPythonView extends React.Component {
         this.props.actions.createPythonTestCase(type);
       }
     };
-  }
-
-  renderCheckbox(label, field, value, onChange) {
-    return (
-      <div className="form-group boolean" key={field}>
-        <div className="checkbox">
-          <label className="boolean" htmlFor={field}>
-            <input
-              className="boolean"
-              type="checkbox"
-              name={OnlineEditorPythonView.getInputName(field)}
-              checked={value}
-              onChange={onChange}
-              disabled={this.props.isLoading}
-            />
-            {label}
-          </label>
-        </div>
-      </div>
-    );
   }
 
   renderAceEditor(label, field) {
@@ -123,6 +116,133 @@ class OnlineEditorPythonView extends React.Component {
     );
   }
 
+  renderCheckbox(label, field, value, onChange) {
+    return (
+      <div className="form-group boolean" key={field}>
+        <div className="checkbox">
+          <label className="boolean" htmlFor={field}>
+            <input
+              className="boolean"
+              type="checkbox"
+              name={OnlineEditorPythonView.getInputName(field)}
+              checked={value}
+              onChange={onChange}
+              disabled={this.props.isLoading}
+            />
+            {label}
+          </label>
+        </div>
+      </div>
+    );
+  }
+
+  renderExistingDataFiles() {
+    if (this.props.data.get('data_files').size === 0) {
+      return null;
+    }
+
+    const formatBytes = (bytes, decimals) => {
+      if (bytes === 0) return '0 Byte';
+      const k = 1000; // or 1024 for binary
+      const dm = decimals || 3;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+    };
+
+    const renderDataFile = (fileData) => {
+      const filename = fileData.get('filename');
+      const filesize = fileData.get('size');
+      const hash = fileData.get('hash');
+      const toDelete = this.props.dataFiles.get('to_delete').has(filename);
+
+      return (
+        <tr key={hash}>
+          <td className={styles.deleteButtonCell}>
+            <input
+              className="boolean"
+              type="checkbox"
+              name={`question_programming[data_files_to_delete][${filename}]`}
+              checked={toDelete}
+              onChange={() => { this.props.actions.deleteExistingDataFile(filename); }}
+              disabled={this.props.isLoading}
+            />
+          </td>
+          <td>{filename}</td>
+          <td>{formatBytes(filesize, 2)}</td>
+        </tr>
+      );
+    };
+
+    return (
+      <div className="panel panel-default">
+        <div className="panel-heading">
+          <h4 className="panel-title">
+            {this.props.intl.formatMessage(translations.dataFilesHeader)}
+          </h4>
+        </div>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>{this.props.intl.formatMessage(translations.deleteDataFilesHeader)}</th>
+              <th>{this.props.intl.formatMessage(translations.fileNameHeader)}</th>
+              <th>{this.props.intl.formatMessage(translations.fileSizeHeader)}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.props.data.get('data_files').map(renderDataFile)}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
+  renderDataFiles() {
+    const newDataFilesRows = this.props.dataFiles.get('new').map((fileData, index) => {
+      const key = fileData.get('key');
+
+      return (
+        <tr key={key}>
+          <td className={styles.deleteButtonCell}>
+            {
+              this.props.dataFiles.get('key') === key ?
+                null
+                :
+                <button
+                  className="btn btn-danger fa fa-minus" disabled={this.props.isLoading}
+                  onClick={() => { this.props.actions.deleteNewDataFile(index); }}
+                />
+            }
+          </td>
+          <td>
+            <input
+              className="form-control"
+              name="question_programming[data_files][]"
+              type="file"
+              disabled={this.props.isLoading}
+              onChange={this.newDataFileChangeHandler(index)}
+            />
+          </td>
+        </tr>
+      );
+    });
+
+    return (
+      <div className="panel panel-default">
+        <div className="panel-heading">
+          <h4 className="panel-title">
+            {this.props.intl.formatMessage(translations.newDataFilesHeader)}
+          </h4>
+        </div>
+        <table className="table">
+          <tbody>
+            { newDataFilesRows }
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
   renderTestCases(header, testCases, type, startIndex = 0) {
     const renderInput = (test, field, index, required) => (
       <input
@@ -139,7 +259,7 @@ class OnlineEditorPythonView extends React.Component {
 
     const rows = [...testCases.get(type).toArray().entries()].map(([index, test]) => (
       <tr key={index}>
-        <td>
+        <td className={styles.deleteButtonCell}>
           <button
             className="btn btn-danger fa fa-minus" disabled={this.props.isLoading}
             onClick={this.testCaseDeleteHandler(type, index)}
@@ -215,6 +335,18 @@ class OnlineEditorPythonView extends React.Component {
         {
           autograded ?
             this.renderAceEditor(intl.formatMessage(translations.appendTitle), 'append')
+            :
+            null
+        }
+        {
+          autograded ?
+            this.renderExistingDataFiles()
+            :
+            null
+        }
+        {
+          autograded ?
+            this.renderDataFiles()
             :
             null
         }

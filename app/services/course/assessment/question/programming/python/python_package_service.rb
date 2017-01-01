@@ -22,12 +22,18 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService
   def generate_package(old_attachment, params)
     test_params = python_test_params params
 
-    if test_params.blank? ||
-       (old_attachment.present? && test_params == extract_meta(old_attachment))
-      return nil
-    end
+    return nil if test_params.blank?
 
-    generate_zip_file(test_params)
+    @tmp_dir = Dir.mktmpdir
+    @old_meta = extract_meta(old_attachment)
+    data_files_to_keep = find_data_files_to_keep(old_attachment, test_params)
+    @meta = generate_meta(data_files_to_keep, test_params)
+
+    return nil if @meta == @old_meta
+
+    file = generate_zip_file(data_files_to_keep, test_params)
+    FileUtils.remove_entry @tmp_dir if @tmp_dir.present?
+    file
   end
 
   def extract_meta(attachment)
@@ -35,9 +41,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService
       begin
         package = Course::Assessment::ProgrammingPackage.new(temporary_file)
         meta = package.meta_file
-        JSON.parse(meta) if meta.present?
-      rescue
-        nil
+        @old_meta = meta.present? ? JSON.parse(meta) : nil
       ensure
         next unless package
         temporary_file.close
@@ -58,7 +62,38 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService
 
   private
 
-  def generate_zip_file(params)
+  def extract_from_package(package, new_data_filenames, data_files_to_delete)
+    data_files_to_keep = []
+
+    if @old_meta.present?
+      package.unzip_file @tmp_dir
+
+      @old_meta['data_files'].try(:each) do |file|
+        next if data_files_to_delete.try(:include?, (file['filename']))
+        # new files overrides old ones
+        next if new_data_filenames.include?(file['filename'])
+        data_files_to_keep.append(File.new(File.join(@tmp_dir, file['filename'])))
+      end
+    end
+
+    data_files_to_keep
+  end
+
+  def find_data_files_to_keep(attachment, test_params)
+    new_data_filenames = (test_params[:data_files] || []).reject(&:nil?).map(&:original_filename)
+
+    attachment.open(binmode: true) do |temporary_file|
+      begin
+        package = Course::Assessment::ProgrammingPackage.new(temporary_file)
+        return extract_from_package(package, new_data_filenames, test_params[:data_files_to_delete])
+      ensure
+        next unless package
+        temporary_file.close
+      end
+    end
+  end
+
+  def generate_zip_file(data_files_to_keep, params)
     tmp = Tempfile.new(['package', '.zip'])
 
     Zip::OutputStream.open(tmp.path) do |zip|
@@ -122,25 +157,61 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService
       zip.print File.read(MAKEFILE_PATH)
 
       zip.put_next_entry '.meta'
-      zip.print generate_meta(params)
+      zip.print @meta.to_json
+    end
+
+    Zip::File.open(tmp.path) do |zip|
+      params[:data_files].try(:each) do |file|
+        next if file.nil?
+        zip.add(file.original_filename, file.tempfile.path)
+      end
+
+      data_files_to_keep.each do |file|
+        zip.add(File.basename(file.path), file.path)
+      end
     end
 
     tmp
   end
 
-  def generate_meta(params)
-    params.to_json
+  def get_data_files_meta(data_files_to_keep, new_data_files)
+    data_files = []
+
+    new_data_files.each do |file|
+      sha256 = Digest::SHA256.file(file.tempfile).hexdigest
+      data_files.append(filename: file.original_filename, size: file.tempfile.size, hash: sha256)
+    end
+
+    data_files_to_keep.each do |file|
+      sha256 = Digest::SHA256.file(file).hexdigest
+      data_files.append(filename: File.basename(file.path), size: file.size, hash: sha256)
+    end
+
+    data_files
+  end
+
+  def generate_meta(data_files_to_keep, params)
+    meta = params.except(:data_files, :data_files_to_delete)
+    new_data_files = (params[:data_files] || []).reject(&:nil?)
+    meta[:data_files] = get_data_files_meta(data_files_to_keep, new_data_files)
+    [:public, :private, :evaluation].each do |test_type|
+      meta[:test_cases][test_type] ||= []
+    end
+    meta
   end
 
   def python_test_params(params)
     params.require(:question_programming).permit(
       :prepend, :append, :solution, :submission, :autograded,
+      data_files: [],
       test_cases: {
         public: [:expression, :expected, :hint],
         private: [:expression, :expected, :hint],
         evaluation: [:expression, :expected, :hint]
       }
-    )
+    ).tap do |whitelisted|
+      whitelisted[:data_files_to_delete] = params['question_programming']['data_files_to_delete']
+    end
   end
 
   def string?(expected)

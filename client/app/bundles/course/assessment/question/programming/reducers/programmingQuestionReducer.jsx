@@ -48,6 +48,14 @@ export const initialState = Immutable.fromJS({
         private: [],
         public: [],
       },
+      data_files: [],
+    },
+    data_files: {
+      to_delete: Immutable.Set(),
+      new: [
+        { key: 0, filename: null },
+      ],
+      key: 0,
     },
   },
   import_result: {
@@ -115,6 +123,44 @@ function pythonTestReducer(state, action) {
   }
 }
 
+function dataFilesReducer(state, action) {
+  const { type } = action;
+
+  switch (type) {
+    case editorActionTypes.PYTHON_NEW_DATA_FILE_UPDATE: {
+      const { index, filename } = action;
+      let newFiles = state.get('new')
+        .update(index, fileData => Immutable.fromJS({ key: fileData.get('key'), filename }));
+
+      // Adds a new entry if there are no more empty non-deleted files.
+      if (newFiles.last().get('filename') !== null) {
+        const newKey = state.get('new') + 1;
+        newFiles = newFiles.push(Immutable.fromJS({ key: newKey, filename: null }));
+        return state.set('key', newKey).set('new', newFiles);
+      }
+
+      return state.set('new', newFiles);
+    }
+    case editorActionTypes.PYTHON_NEW_DATA_FILE_DELETE: {
+      const { index } = action;
+      return state.set('new', state.get('new').delete(index));
+    }
+    case editorActionTypes.PYTHON_EXISTING_DATA_FILE_DELETE: {
+      const { filename } = action;
+      const currentFilesToDelete = state.get('to_delete');
+
+      if (currentFilesToDelete.has(filename)) {
+        return state.set('to_delete', currentFilesToDelete.delete(filename));
+      }
+
+      return state.set('to_delete', currentFilesToDelete.add(filename));
+    }
+    default: {
+      return state;
+    }
+  }
+}
+
 function apiReducer(state, action) {
   const { type } = action;
 
@@ -128,10 +174,19 @@ function apiReducer(state, action) {
 
       if (data) {
         const { question, package_ui, test_ui, import_result } = data;
+        const key = state.getIn(['test_ui', 'data_files', 'key']);
 
         return state
           .set('is_evaluating', isEvaluating)
-          .mergeDeep({ question, package_ui, test_ui, import_result });
+          .mergeDeep(Immutable.fromJS({ question, package_ui, import_result }))
+          .merge({ test_ui })
+          .mergeIn(['test_ui', 'data_files'], Immutable.fromJS({
+            to_delete: Immutable.Set(),
+            new: [
+              { key, filename: null },
+            ],
+            key,
+          }));
       }
 
       return state
@@ -175,6 +230,12 @@ export default function programmingQuestionReducer(state = initialState, action)
     case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE: {
       const pythonTest = state.get('test_ui').get('python');
       return state.setIn(['test_ui', 'python'], pythonTestReducer(pythonTest, action));
+    }
+    case editorActionTypes.PYTHON_NEW_DATA_FILE_UPDATE:
+    case editorActionTypes.PYTHON_NEW_DATA_FILE_DELETE:
+    case editorActionTypes.PYTHON_EXISTING_DATA_FILE_DELETE: {
+      const dataFiles = state.get('test_ui').get('data_files');
+      return state.setIn(['test_ui', 'data_files'], dataFilesReducer(dataFiles, action));
     }
     case actionTypes.SUBMIT_FORM_EVALUATING:
     case actionTypes.SUBMIT_FORM_LOADING:

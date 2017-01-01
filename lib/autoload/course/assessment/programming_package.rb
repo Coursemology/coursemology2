@@ -107,6 +107,8 @@ class Course::Assessment::ProgrammingPackage
   # @return [String] Contents of the .meta file.
   def meta_file
     get_file(META_PATH)
+  rescue
+    nil
   end
 
   # Gets the contents of all submission files.
@@ -157,6 +159,18 @@ class Course::Assessment::ProgrammingPackage
     return if files.empty?
 
     self.submission_files = files
+  end
+
+  # Unzips the contents of the file to the destination folder.
+  #
+  # @param [String] Path to folder.
+  def unzip_file(destination)
+    ensure_file_open!
+    @file.each do |entry|
+      entry_path = File.join(destination, entry.name)
+      FileUtils.mkdir_p(File.dirname(entry_path))
+      @file.extract(entry, entry_path) unless File.exist?(entry_path)
+    end
   end
 
   private

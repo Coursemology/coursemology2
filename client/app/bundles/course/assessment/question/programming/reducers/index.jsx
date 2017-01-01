@@ -1,9 +1,11 @@
+import Immutable from 'immutable';
+import { combineReducers } from 'redux-immutable';
 import programmingQuestionReducer, { initialState as programmingQuestionState } from './programmingQuestionReducer';
 
-export default {
-  programmingQuestionStore: programmingQuestionReducer,
-};
+export const initialStates = Immutable.fromJS({
+  programmingQuestion: programmingQuestionState,
+});
 
-export const initialStates = {
-  programmingQuestionState,
-};
+export default combineReducers({
+  programmingQuestion: programmingQuestionReducer,
+});

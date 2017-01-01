@@ -1,25 +1,12 @@
-import { compose, createStore, applyMiddleware, combineReducers } from 'redux';
-
-// See
-// https://github.com/gaearon/redux-thunk and http://redux.js.org/docs/advanced/AsyncActions.html
+import { compose, createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-
-import reducers, { initialStates } from './reducers';
+import rootReducer, { initialStates as defaultInitialStates } from './reducers';
 
 export default (props) => {
-  const { question, package_ui, test_ui, form_data, import_result } = props;
-  const { programmingQuestionState } = initialStates;
-
-  const initialState = {
-    programmingQuestionStore: programmingQuestionState.mergeDeep({
-      question, package_ui, test_ui, form_data, import_result,
-    }),
-  };
-
-  const reducer = combineReducers(reducers);
-  const composedStore = compose(
+  const initialStates = defaultInitialStates.mergeDeep({ programmingQuestion: props });
+  const storeCreator = compose(
     applyMiddleware(thunkMiddleware)
-  );
-  const storeCreator = composedStore(createStore);
-  return storeCreator(reducer, initialState);
+  )(createStore);
+
+  return storeCreator(rootReducer, initialStates);
 };
