@@ -3,6 +3,8 @@ import Immutable from 'immutable';
 import React, { PropTypes } from 'react';
 import ReactSummernote from 'react-summernote';
 import { injectIntl } from 'react-intl';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 
 import ChipInput from '../../../../../../lib/components/ChipInput';
 import styles from './ProgrammingQuestionForm.scss';
@@ -118,9 +120,8 @@ class ProgrammingQuestionForm extends React.Component {
   }
 
   languageHandler(field) {
-    return (e) => {
+    return (e, key, id) => {
       let mode = null;
-      const id = parseInt(e.target.value, 10);
 
       for (const language of this.props.data.question.get('languages')) {
         if (language.get('id') === id) {
@@ -131,7 +132,7 @@ class ProgrammingQuestionForm extends React.Component {
       }
 
       this.props.actions.updateEditorMode(mode);
-      this.handleChange(field, e.target.value);
+      this.handleChange(field, id);
     };
   }
 
@@ -211,20 +212,23 @@ class ProgrammingQuestionForm extends React.Component {
 
   renderDropdownSelectField(label, field, required, value, options, onChange) {
     return (
-      <div className="form-group" key={field}>
-        { ProgrammingQuestionForm.renderLabel(label, field, required) }
-        <select
-          className="form-control"
-          required={required}
+      <div key={field}>
+        <input
           name={ProgrammingQuestionForm.getInputName(field)}
-          id={ProgrammingQuestionForm.getInputId(field)}
+          type="text"
+          value={value || ''}
+          style={{ display: 'none' }}
+          readOnly="true"
+          disabled={this.props.data.isLoading}
+        />
+        <SelectField
+          floatingLabelText={label}
           value={value}
           onChange={onChange}
-          onKeyPress={ProgrammingQuestionForm.handleKeyPress}
           disabled={this.props.data.isLoading}
-        >
-          { options }
-        </select>
+          children={options}
+          fullWidth
+        />
       </div>
     );
   }
@@ -296,7 +300,9 @@ class ProgrammingQuestionForm extends React.Component {
     const skillsOptions = question.get('skills').toJS();
     const skillsValues = question.get('skill_ids').toJS();
 
-    const languageOptions = languages.map(opt => <option value={opt.get('id')} key={opt.get('id')}>{opt.get('name')}</option>).unshift(<option value={null} key="null" />);
+    const languageOptions = languages.map(opt =>
+      <MenuItem value={opt.get('id')} key={opt.get('id')} primaryText={opt.get('name')} />
+    ).unshift(<MenuItem value={null} key="null" primaryText="" />);
 
     const showEditOnline = question.get('can_edit_online');
 
