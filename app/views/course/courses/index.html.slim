@@ -1,6 +1,7 @@
 = page_header do
   = new_button([:course]) if can?(:create, Course)
 
-= render @courses
+div.row.is-flex
+  = render @courses
 
 = paginate @courses
