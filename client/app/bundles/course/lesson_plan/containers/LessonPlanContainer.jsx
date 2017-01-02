@@ -77,18 +77,9 @@ class LessonPlanContainer extends React.Component {
       return result;
     };
 
-    // Maps a milestone group with unsorted items to a duplicate group that has the items sorted.
-    const sortItemsByType = (group) => {
-      const { milestone } = group;
-      const sortedItems =
-        Immutable.fromJS(group.items).sortBy(item => item.get('lesson_plan_item_type'));
-      return { milestone, items: sortedItems };
-    };
-
     // Build the sorted milestone groups
     const groups = sortedLessonPlanElements
-      .reduce(groupItemsWithMilestones, seedGroup)
-      .map(sortItemsByType);
+      .reduce(groupItemsWithMilestones, seedGroup);
 
     return groups;
   }
