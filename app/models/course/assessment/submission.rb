@@ -183,20 +183,18 @@ class Course::Assessment::Submission < ActiveRecord::Base
   # Validate that the submission creator is the same user as the course_user in the associated
   # experience_points_record.
   def validate_consistent_user
-    unless course_user && course_user.user == creator
-      errors.add(:experience_points_record, :inconsistent_user)
-    end
+    return if course_user && course_user.user == creator
+    errors.add(:experience_points_record, :inconsistent_user)
   end
 
   # Validate that the submission creator does not have an existing submission for this assessment.
   def validate_unique_submission
     existing = Course::Assessment::Submission.find_by(assessment_id: assessment.id,
                                                       creator_id: creator.id)
-    if existing
-      errors.clear
-      errors[:base] << I18n.t('activerecord.errors.models.course/assessment/'\
-                              'submission.submission_already_exists')
-    end
+    return unless existing
+    errors.clear
+    errors[:base] << I18n.t('activerecord.errors.models.course/assessment/'\
+                            'submission.submission_already_exists')
   end
 
   def send_attempt_notification
