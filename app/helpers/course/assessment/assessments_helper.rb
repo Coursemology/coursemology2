@@ -18,4 +18,16 @@ module Course::Assessment::AssessmentsHelper
       assessment.start_at < Time.zone.now &&
       !assessment.conditions_satisfied_by?(current_course_user)
   end
+
+  def show_bonus_end_at?
+    @show_bonus_end_at ||= begin
+      @assessments.any? { |assessment| assessment.bonus_end_at.present? }
+    end
+  end
+
+  def show_end_at?
+    @show_end_at ||= begin
+      @assessments.any? { |assessment| assessment.end_at.present? }
+    end
+  end
 end

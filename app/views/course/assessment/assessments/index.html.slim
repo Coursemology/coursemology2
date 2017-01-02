@@ -27,9 +27,10 @@ table.table.assessments-list.table-hover
       - unless current_component_host[:course_achievements_component].nil?
         th.table-requirement-for = t('.requirement_for')
       th.table-start-at = t('.start_at')
-      - if current_course.gamified?
+      - if current_course.gamified? && show_bonus_end_at?
         th.table-bonus-cut-off = t('.bonus_cut_off')
-      th.table-end-at = t('.end_at')
+      - if show_end_at?
+        th.table-end-at = t('.end_at')
       th
       th
   tbody
