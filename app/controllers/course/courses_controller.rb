@@ -5,7 +5,7 @@ class Course::CoursesController < Course::Controller
   before_action :load_todos, only: [:show]
 
   def index # :nodoc:
-    @courses = Course.publicly_accessible.page(page_param)
+    @courses = Course.publicly_accessible.ordered_by_start_at.page(page_param)
   end
 
   def show # :nodoc:
