@@ -4,6 +4,8 @@ class Course::Video::Submission < ActiveRecord::Base
 
   acts_as_experience_points_record
 
+  after_create :send_attempt_notification
+
   schema_validations except: [:creator_id, :video_id]
   validate :validate_consistent_user, :validate_unique_submission, on: :create
 
@@ -25,5 +27,11 @@ class Course::Video::Submission < ActiveRecord::Base
     errors.clear
     errors[:base] << I18n.t('activerecord.errors.models.course/video/submission.'\
                             'submission_already_exists')
+  end
+
+  def send_attempt_notification
+    return unless course_user.real_student?
+
+    Course::VideoNotifier.video_attempted(creator, video)
   end
 end

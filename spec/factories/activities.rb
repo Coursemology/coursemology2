@@ -38,5 +38,11 @@ FactoryGirl.define do
       event :replied
       notifier_type Course::Forum::PostNotifier.name
     end
+
+    trait :video_attempted do
+      object { create(:video) }
+      event :attempted
+      notifier_type Course::VideoNotifier.name
+    end
   end
 end

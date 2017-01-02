@@ -43,6 +43,14 @@ RSpec.feature 'Course: Homepage' do
       notifications << create(:course_notification, :feed,
                               activity: post_replied_activity,
                               course: course)
+
+      # Video attempted notification
+      video = create(:video, course: course)
+      video_activity = create(:activity, :video_attempted, object: video)
+      notifications << create(:course_notification, :feed,
+                              activity: video_activity,
+                              course: course)
+
       notifications
     end
 

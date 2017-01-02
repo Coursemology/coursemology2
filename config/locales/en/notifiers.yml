@@ -27,3 +27,8 @@ en:
             course_notifications:
               feed:
                 replied_to_topic_html: '%{user} replied to %{topic}'
+      video_notifier:
+        attempted:
+          course_notifications:
+            feed:
+              attempted_video_html: '%{user} attempted %{video}'

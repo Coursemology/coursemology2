@@ -2,6 +2,8 @@
 class Course::Video < ActiveRecord::Base
   acts_as_lesson_plan_item has_todo: true
 
+  include Course::ReminderConcern
+
   after_initialize :set_defaults, if: :new_record?
 
   has_many :submissions, inverse_of: :video, dependent: :destroy
