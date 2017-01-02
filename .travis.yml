@@ -1,4 +1,5 @@
 sudo: false
+dist: trusty
 language: ruby
 branches:
   except:
@@ -13,7 +14,7 @@ matrix:
     - rvm: 2.2.5
       env: GROUP="checks"
 addons:
-  postgresql: "9.5"
+  postgresql: "9.4"
   hosts:
     - coursemology.lvh.me
 bundler_args: "--jobs=3 --retry=3 --without development:production --deployment"
