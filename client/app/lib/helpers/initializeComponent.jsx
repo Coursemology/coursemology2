@@ -14,8 +14,8 @@ const initializeComponent = (Component, nodeId, storeCreator) => {
     , document.getElementById(nodeId));
   };
 
-  const headers = { Accept: 'application/json' };
-  axios.get('', { headers }).then((response) => {
+  const params = { format: 'json' };
+  axios.get('', { params }).then((response) => {
     $(document).ready(renderComponent(response.data));
   });
 };
