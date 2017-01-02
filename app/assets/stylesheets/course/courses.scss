@@ -42,14 +42,25 @@
   }
 
   &.index {
-    .thumbnail {
-      .image > img {
-        @include no-stretch;
+    .caption {
+      margin: 5px 0;
 
-        height: $course-course-listing-logo;
-        margin-top: 1em;
-        width: $course-course-listing-logo;
+      h4 {
+        height: 50px;
       }
+
+      .description {
+        height: 60px;
+        overflow-y: scroll;
+      }
+    }
+
+    .image > img {
+      @include no-stretch;
+
+      height: $course-course-listing-logo;
+      margin-top: 1em;
+      width: $course-course-listing-logo;
     }
   }
 }

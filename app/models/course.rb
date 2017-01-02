@@ -56,6 +56,7 @@ class Course < ActiveRecord::Base
   accepts_nested_attributes_for :invitations, :assessment_categories
 
   scope :ordered_by_title, -> { order(:title) }
+  scope :ordered_by_start_at, ->(direction = :desc) { order(start_at: direction) }
   scope :ordered_by_end_at, ->(direction = :desc) { order(end_at: direction) }
   scope :publicly_accessible, -> { where(status: PUBLIC_STATUSES.map { |s| statuses[s] }) }
 

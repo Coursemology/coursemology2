@@ -1,0 +1,25 @@
+// Solution to ensure equal height on bootstrap grids. Adapted from:
+// https://scotch.io/bar-talk/different-tricks-on-how-to-make-bootstrap-columns-all-the-same-height
+//
+// To use, add .is-flex to the row class, and .box after each grid.
+
+.row.is-flex {
+  display: flex;
+  flex-wrap: wrap;
+
+  > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.is-flex {
+  .box {
+    background: none;
+    position: static;
+  }
+
+  [class*="col-"] {
+    background: $white;
+  }
+}
