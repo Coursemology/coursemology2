@@ -11,7 +11,7 @@ json.question do
     json.name lang.name
     json.editor_mode editor_mode(lang)
   end
-  json.skill_ids @programming_question.skills.pluck(:id)
+  json.skill_ids @programming_question.skills.as_json(only: [:id, :title])
   json.skills current_course.assessment_skills do |skill|
     json.id skill.id
     json.title skill.title

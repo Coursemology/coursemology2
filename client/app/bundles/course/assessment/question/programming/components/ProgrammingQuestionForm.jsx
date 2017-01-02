@@ -2,11 +2,9 @@ import Immutable from 'immutable';
 
 import React, { PropTypes } from 'react';
 import ReactSummernote from 'react-summernote';
-import Select from 'react-select';
 import { injectIntl } from 'react-intl';
 
-import 'react-select/dist/react-select.css';
-
+import ChipInput from '../../../../../../lib/components/ChipInput';
 import styles from './ProgrammingQuestionForm.scss';
 import translations from './ProgrammingQuestionForm.intl';
 
@@ -64,7 +62,8 @@ class ProgrammingQuestionForm extends React.Component {
   constructor(props) {
     super(props);
     this.onSubmit = this.onSubmit.bind(this);
-    this.onSkillsChange = this.onSkillsChange.bind(this);
+    this.onChipInputSkillsAdd = this.onChipInputSkillsAdd.bind(this);
+    this.onChipInputSkillsDelete = this.onChipInputSkillsDelete.bind(this);
   }
 
   componentDidMount() {
@@ -79,8 +78,14 @@ class ProgrammingQuestionForm extends React.Component {
     return e => this.handleChange(field, e.target.value);
   }
 
-  onSkillsChange(values) {
-    this.props.actions.updateSkills(values.map(e => e.value));
+  onChipInputSkillsAdd(chip) {
+    const values = this.props.data.question.get('skill_ids');
+    this.props.actions.updateSkills(values.push(Immutable.fromJS(chip)));
+  }
+
+  onChipInputSkillsDelete(id) {
+    const values = this.props.data.question.get('skill_ids');
+    this.props.actions.updateSkills(values.filterNot(v => v.get('id') === id));
   }
 
   onTestTypeChange(canEditOnline) {
@@ -184,17 +189,20 @@ class ProgrammingQuestionForm extends React.Component {
     );
   }
 
-  renderMultiSelectField(label, field, value, options, onChange) {
+  renderMultiSelectField(label, field, value, options) {
     return (
-      <div className="form-group" key={field}>
-        { ProgrammingQuestionForm.renderLabel(label, field, false) }
-        <Select
-          name={`${ProgrammingQuestionForm.getInputName(field)}[]`}
+      <div key={field}>
+        <ChipInput
           id={ProgrammingQuestionForm.getInputId(field)}
-          multi
+          name={`${ProgrammingQuestionForm.getInputName(field)}[]`}
           value={value}
-          options={options}
-          onChange={onChange}
+          dataSource={options}
+          dataSourceConfig={{ value: 'id', text: 'title' }}
+          onRequestAdd={this.onChipInputSkillsAdd}
+          onRequestDelete={this.onChipInputSkillsDelete}
+          floatingLabelText={label}
+          openOnFocus
+          fullWidth
           disabled={this.props.data.isLoading}
         />
       </div>
@@ -285,8 +293,8 @@ class ProgrammingQuestionForm extends React.Component {
     const pkg = question.get('package');
     const showAttemptLimit = question.get('show_attempt_limit');
 
-    const skillsOptions = question.get('skills').toArray().map(skill => ({ value: skill.get('id'), label: skill.get('title') }));
-    const skillsValues = question.get('skill_ids').toArray();
+    const skillsOptions = question.get('skills').toJS();
+    const skillsValues = question.get('skill_ids').toJS();
 
     const languageOptions = languages.map(opt => <option value={opt.get('id')} key={opt.get('id')}>{opt.get('name')}</option>).unshift(<option value={null} key="null" />);
 
@@ -325,7 +333,7 @@ class ProgrammingQuestionForm extends React.Component {
           {
             this.renderMultiSelectField(
               this.props.intl.formatMessage(translations.skillsFieldLabel),
-              'skill_ids', skillsValues, skillsOptions, this.onSkillsChange)
+              'skill_ids', skillsValues, skillsOptions)
           }
           {
             this.renderDropdownSelectField(

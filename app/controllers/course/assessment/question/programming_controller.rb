@@ -33,6 +33,7 @@ class Course::Assessment::Question::ProgrammingController < \
 
   def update
     @programming_question.assign_attributes programming_question_params
+    @programming_question.skills.clear if programming_question_params[:skill_ids].blank?
 
     programming_package_service.generate_package(params) if @programming_question.edit_online?
 
