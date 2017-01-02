@@ -5,6 +5,7 @@ import ReactSummernote from 'react-summernote';
 import { injectIntl } from 'react-intl';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import TextField from 'material-ui/TextField';
 
 import ChipInput from '../../../../../../lib/components/ChipInput';
 import styles from './ProgrammingQuestionForm.scss';
@@ -74,10 +75,6 @@ class ProgrammingQuestionForm extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.summernoteEditors.attr('contenteditable', !nextProps.data.isLoading);
-  }
-
-  onChange(field) {
-    return e => this.handleChange(field, e.target.value);
   }
 
   onChipInputSkillsAdd(chip) {
@@ -150,21 +147,17 @@ class ProgrammingQuestionForm extends React.Component {
 
   renderInputField(label, field, required, type, value, placeholder = null) {
     return (
-      <div className="form-group" key={field}>
-        { ProgrammingQuestionForm.renderLabel(label, field, required) }
-        <input
-          className="form-control"
-          type={type}
-          name={ProgrammingQuestionForm.getInputName(field)}
-          id={ProgrammingQuestionForm.getInputId(field)}
-          required={required}
-          value={value}
-          placeholder={placeholder}
-          onChange={this.onChange(field)}
-          onKeyPress={ProgrammingQuestionForm.handleKeyPress}
-          disabled={this.props.data.isLoading}
-        />
-      </div>
+      <TextField
+        type={type}
+        name={ProgrammingQuestionForm.getInputName(field)}
+        id={ProgrammingQuestionForm.getInputId(field)}
+        onChange={(e, newValue) => { this.handleChange(field, newValue); }}
+        hintText={placeholder}
+        floatingLabelText={label}
+        disabled={this.props.data.isLoading}
+        value={value}
+        fullWidth
+      />
     );
   }
 
@@ -192,21 +185,19 @@ class ProgrammingQuestionForm extends React.Component {
 
   renderMultiSelectField(label, field, value, options) {
     return (
-      <div key={field}>
-        <ChipInput
-          id={ProgrammingQuestionForm.getInputId(field)}
-          name={`${ProgrammingQuestionForm.getInputName(field)}[]`}
-          value={value}
-          dataSource={options}
-          dataSourceConfig={{ value: 'id', text: 'title' }}
-          onRequestAdd={this.onChipInputSkillsAdd}
-          onRequestDelete={this.onChipInputSkillsDelete}
-          floatingLabelText={label}
-          openOnFocus
-          fullWidth
-          disabled={this.props.data.isLoading}
-        />
-      </div>
+      <ChipInput
+        id={ProgrammingQuestionForm.getInputId(field)}
+        name={`${ProgrammingQuestionForm.getInputName(field)}[]`}
+        value={value}
+        dataSource={options}
+        dataSourceConfig={{ value: 'id', text: 'title' }}
+        onRequestAdd={this.onChipInputSkillsAdd}
+        onRequestDelete={this.onChipInputSkillsDelete}
+        floatingLabelText={label}
+        openOnFocus
+        fullWidth
+        disabled={this.props.data.isLoading}
+      />
     );
   }
 
@@ -226,9 +217,10 @@ class ProgrammingQuestionForm extends React.Component {
           value={value}
           onChange={onChange}
           disabled={this.props.data.isLoading}
-          children={options}
           fullWidth
-        />
+        >
+          {options}
+        </SelectField>
       </div>
     );
   }
@@ -273,11 +265,11 @@ class ProgrammingQuestionForm extends React.Component {
       null;
 
     if (showEditOnline) {
-      return downloadNode;
+      return <div className={styles.downloadPackage}>{downloadNode}</div>;
     }
 
     return (
-      <div className="form-group" key={field}>
+      <div className={styles.downloadPackage}>
         { ProgrammingQuestionForm.renderLabel(label, field, false) }
         { downloadNode }
         <input

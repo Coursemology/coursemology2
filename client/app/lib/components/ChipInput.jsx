@@ -510,19 +510,17 @@ class ChipInput extends React.Component {
           null
         }
         {errorTextElement}
-        { value.map((val, index) => {
-          return (
-            <input
-              name={name}
-              type="text"
-              value={val[dataSourceConfig.value]}
-              style={{ display: 'none' }}
-              readOnly="true"
-              disabled={disabled}
-              key={index}
-            />
-          );
-        })}
+        { value.map((val, index) => (
+          <input
+            name={name}
+            type="text"
+            value={val[dataSourceConfig.value]}
+            style={{ display: 'none' }}
+            readOnly="true"
+            disabled={disabled}
+            key={index}
+          />
+          ))}
       </div>
     );
   }

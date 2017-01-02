@@ -3,6 +3,7 @@ import Immutable from 'immutable';
 import React, { PropTypes } from 'react';
 import AceEditor from 'react-ace';
 import { injectIntl } from 'react-intl';
+import TextField from 'material-ui/TextField';
 
 import 'brace/mode/python';
 import 'brace/theme/monokai';
@@ -244,18 +245,23 @@ class OnlineEditorPythonView extends React.Component {
   }
 
   renderTestCases(header, testCases, type, startIndex = 0) {
-    const renderInput = (test, field, index, required) => (
-      <input
-        className="form-control"
+    const renderInput = (test, field, placeholder, index, required) => (
+      <TextField
         type="text"
         name={OnlineEditorPythonView.getTestInputName(type, field)}
-        required={required}
+        onChange={(e, newValue) => {
+          this.props.actions.updatePythonTestCase(type, index, field, newValue);
+        }}
+        hintText={placeholder}
+        disabled={this.props.data.isLoading}
         value={test.get(field)}
-        onChange={this.testCaseUpdateHandler(type, index, field)}
-        onKeyPress={OnlineEditorPythonView.handleKeyPress}
-        disabled={this.props.isLoading}
+        fullWidth
       />
-      );
+    );
+
+    const expression = this.props.intl.formatMessage(translations.expressionHeader);
+    const expected = this.props.intl.formatMessage(translations.expectedHeader);
+    const hint = this.props.intl.formatMessage(translations.hintHeader);
 
     const rows = [...testCases.get(type).toArray().entries()].map(([index, test]) => (
       <tr key={index}>
@@ -265,10 +271,16 @@ class OnlineEditorPythonView extends React.Component {
             onClick={this.testCaseDeleteHandler(type, index)}
           />
         </td>
-        <td>test_{type}_{startIndex + index + 1}</td>
-        <td>{ renderInput(test, 'expression', index, true) }</td>
-        <td>{ renderInput(test, 'expected', index, true) }</td>
-        <td>{ renderInput(test, 'hint', index, false) }</td>
+        <td className={styles.testCell}>test_{type}_{startIndex + index + 1}</td>
+        <td className={styles.testCell}>
+          { renderInput(test, 'expression', expression, index, true) }
+        </td>
+        <td className={styles.testCell}>
+          { renderInput(test, 'expected', expected, index, true) }
+        </td>
+        <td className={styles.testCell}>
+          { renderInput(test, 'hint', hint, index, false) }
+        </td>
       </tr>
       ));
 
@@ -282,9 +294,9 @@ class OnlineEditorPythonView extends React.Component {
             <tr>
               <th />
               <th>{this.props.intl.formatMessage(translations.identifierHeader)}</th>
-              <th>{this.props.intl.formatMessage(translations.expressionHeader)}</th>
-              <th>{this.props.intl.formatMessage(translations.expectedHeader)}</th>
-              <th>{this.props.intl.formatMessage(translations.hintHeader)}</th>
+              <th>{expression}</th>
+              <th>{expected}</th>
+              <th>{hint}</th>
             </tr>
           </thead>
           <tbody>
