@@ -68,18 +68,34 @@ RSpec.describe Course::AssessmentNotifier, type: :notifier do
 
       let(:course) { create(:course) }
       let(:assessment) { create(:course_assessment_assessment, course: course, end_at: now) }
-      let(:user) { create(:course_user, course: course).user }
-      let!(:submitted_student) { create(:course_student, course: course) }
-      let!(:unsubmitted_student) { create(:course_student, course: course) }
+      let(:user) { create(:course_manager, course: course).user }
+      let!(:completed_student) { create(:course_student, course: course) }
+      let!(:uncompleted_student) { create(:course_student, course: course) }
+      let!(:phantom_student) { create(:course_student, :phantom, course: course) }
       let!(:submission) do
-        create(:course_assessment_submission, course: course, assessment: assessment,
-                                              creator: submitted_student.user)
+        create(:course_assessment_submission, :submitted,
+               course: course, assessment: assessment,
+               creator: completed_student.user)
+      end
+      let!(:uncompleted_submission) do
+        create(:course_assessment_submission, :attempting,
+               course: course, assessment: assessment,
+               creator: uncompleted_student.user)
+      end
+      let!(:phantom_submission) do
+        create(:course_assessment_submission, :attempting,
+               course: course, assessment: assessment,
+               creator: phantom_student.user)
       end
 
       subject { Course::AssessmentNotifier.assessment_closing(user, assessment) }
 
-      it 'sends an email notification' do
-        expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      it 'sends the accurate number of user notifications' do
+        expect { subject }.to change(UserNotification, :count).by(2)
+      end
+
+      it 'sends an notification to phantom and non-phantom with uncompleted submissions' do
+        expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(2)
       end
     end
   end
