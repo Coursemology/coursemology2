@@ -20,10 +20,11 @@
         = format_datetime(assessment.start_at, :short)
     - else
       = format_datetime(assessment.start_at, :short)
-  - if current_course.gamified?
+  - if current_course.gamified? && show_bonus_end_at?
     td.table-bonus-cut-off
       = format_datetime(assessment.bonus_end_at, :short) if assessment.bonus_end_at.present?
-  td.table-end-at
-    = format_datetime(assessment.end_at, :short) if assessment.end_at.present?
+  - if show_end_at?
+    td.table-end-at
+      = format_datetime(assessment.end_at, :short) if assessment.end_at.present?
   td.table-buttons colspan=2
     = render 'assessment_management_buttons', assessment: assessment
