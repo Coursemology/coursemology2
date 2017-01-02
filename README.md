@@ -81,7 +81,7 @@ Create an issue on the Github [issue tracker](https://github.com/Coursemology/co
 
 ## License
 
-Copyright (c) 2015-2016 Coursemology.org. This software is licensed under the MIT License.
+Copyright (c) 2015-2017 Coursemology.org. This software is licensed under the MIT License.
 
 ## Acknowledgments
 
