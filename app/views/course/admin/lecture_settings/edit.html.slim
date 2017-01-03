@@ -1,0 +1,5 @@
+= simple_form_for @settings, url: course_admin_lectures_path(current_course) do |f|
+  = f.error_notification
+  = f.input :title, as: :string, placeholder: t('.title_placeholder')
+  = f.input :pagination, as: :integer
+  = f.button :submit

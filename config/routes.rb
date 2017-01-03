@@ -90,6 +90,7 @@ Rails.application.routes.draw do
     namespace :admin do
       get '/' => 'admin#index'
       resources :announcements, except: [:show], concerns: :paginatable
+      resources :lectures, except: [:show], concerns: :paginatable
       resources :instances, except: [:show]
       resources :users, only: [:index, :update, :destroy], concerns: :paginatable
       resources :courses, only: [:index, :destroy], concerns: :paginatable
@@ -121,6 +122,9 @@ Rails.application.routes.draw do
         get 'announcements' => 'announcement_settings#edit'
         patch 'announcements' => 'announcement_settings#update'
 
+        get 'lectures' => 'lecture_settings#edit'
+        patch 'lectures' => 'lecture_settings#update'
+
         get 'assessments' => 'assessment_settings#edit'
         patch 'assessments' => 'assessment_settings#update'
 
@@ -144,6 +148,10 @@ Rails.application.routes.draw do
             resources :tabs, only: [:new, :create, :destroy]
           end
         end
+      end
+
+      resources :lectures, concerns: :paginatable do
+        get :access_link, on: :member
       end
 
       resources :announcements, concerns: :paginatable
