@@ -32,31 +32,31 @@ class Course::Material::Folder < ActiveRecord::Base
       where { children.parent_id == course_material_folders.id }
   end)
 
+  scope :with_content_statistics, ->() { all.calculated(:material_count, :children_count) }
+
   # Filter out the empty linked folders (i.e. Folder with an owner).
   def self.without_empty_linked_folder
     select do |folder|
-      folder.owner.nil? || folder.children_count != 0 || folder.material_count != 0
+      folder.concrete? || folder.children_count != 0 || folder.material_count != 0
     end
   end
 
   # Filter out folders with owners. Keeps folders created directly.
   # Needed for duplication.
-  def self.without_owners
-    select { |folder| folder.owner_id.nil? }
-  end
-
-  scope :with_content_statistics, ->() { all.calculated(:material_count, :children_count) }
-
-  def files_attributes=(files)
-    files.each do |file|
-      materials.build(name: Pathname.normalize_filename(file.original_filename), file: file)
-    end
+  def self.concrete
+    select(&:concrete?)
   end
 
   def self.after_course_initialize(course)
     return if course.persisted? || course.root_folder?
 
     course.material_folders.build(name: 'Root')
+  end
+
+  def files_attributes=(files)
+    files.each do |file|
+      materials.build(name: Pathname.normalize_filename(file.original_filename), file: file)
+    end
   end
 
   # Returns the path of the folder, note that '/' will be returned for root_folder
@@ -69,9 +69,11 @@ class Course::Material::Folder < ActiveRecord::Base
     Pathname.new(path)
   end
 
-  # Return false to prevent the userstamp gem from changing the updater during duplication
-  def record_userstamp
-    !@duplicating
+  # Check if the folder is standalone and does not belongs to any owner(e.g. assessments).
+  #
+  # @return [Boolean]
+  def concrete?
+    owner_id.nil?
   end
 
   def initialize_duplicate(duplicator, other)
@@ -135,5 +137,10 @@ class Course::Material::Folder < ActiveRecord::Base
 
   def clear_duplication_flag
     @duplicating = nil
+  end
+
+  # Return false to prevent the userstamp gem from changing the updater during duplication
+  def record_userstamp
+    !@duplicating
   end
 end
