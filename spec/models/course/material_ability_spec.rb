@@ -51,7 +51,7 @@ RSpec.describe Course::Material do
       it { is_expected.to be_able_to(:manage, valid_material) }
       it { is_expected.to be_able_to(:manage, not_started_material) }
       it { is_expected.to be_able_to(:manage, ended_material) }
-      it { is_expected.not_to be_able_to(:manage, not_started_linked_material) }
+      it { is_expected.to be_able_to(:manage, not_started_linked_material) }
       it { is_expected.to be_able_to(:show, not_started_linked_material) }
     end
   end
