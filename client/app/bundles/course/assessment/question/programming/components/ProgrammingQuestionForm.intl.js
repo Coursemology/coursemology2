@@ -86,4 +86,16 @@ export default defineMessages({
     defaultMessage: 'Loading',
     description: 'Text to be displayed when waiting for server response after form submission.',
   },
+  resolveErrorsMessage: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.resolveErrorsMessage',
+    defaultMessage: 'This form has errors, please resolve before submitting.',
+  },
+  cannotBeBlankValidationError: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.cannotBeBlankValidationError',
+    defaultMessage: 'Cannot be blank.',
+  },
+  noPackageValidationError: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.noPackageValidationError',
+    defaultMessage: 'Package file required.',
+  },
 });

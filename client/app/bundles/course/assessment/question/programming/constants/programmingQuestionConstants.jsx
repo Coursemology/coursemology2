@@ -9,6 +9,7 @@ const actionTypes = mirrorCreator([
   'SUBMIT_FORM_SUCCESS',
   'SUBMIT_FORM_FAILURE',
   'SUBMIT_FORM_EVALUATING',
+  'VALIDATION_ERRORS_SET',
 ]);
 
 export default actionTypes;

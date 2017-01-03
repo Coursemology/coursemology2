@@ -8,7 +8,7 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 
 import BuildLog from '../components/BuildLog';
-import OnlineEditor from '../components/OnlineEditor';
+import OnlineEditor, { validation as editorValidation } from '../components/OnlineEditor';
 import UploadedPackageViewer from '../components/UploadedPackageViewer';
 import ChipInput from '../../../../../../lib/components/ChipInput';
 
@@ -22,6 +22,7 @@ const propTypes = {
     updateProgrammingQuestion: PropTypes.func.isRequired,
     updateSkills: PropTypes.func.isRequired,
     updateEditorMode: PropTypes.func.isRequired,
+    setValidationErrors: PropTypes.func.isRequired,
   }),
   onlineEditorActions: PropTypes.object.isRequired,
   templatePackageActions: PropTypes.object.isRequired,
@@ -29,6 +30,43 @@ const propTypes = {
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
 };
+
+function validation(data, pathOfKeysToData, intl) {
+  const errors = [];
+  const questionErrors = {};
+  let hasError = false;
+
+  // Check maximum grade
+  if (!data.get('maximum_grade')) {
+    questionErrors.maximum_grade =
+      intl.formatMessage(translations.cannotBeBlankValidationError);
+    hasError = true;
+  }
+
+  // Check language
+  if (!data.get('language_id')) {
+    questionErrors.language_id =
+      intl.formatMessage(translations.cannotBeBlankValidationError);
+    hasError = true;
+  }
+
+  // Check file uploaded when using Upload Package mode and no previous package exists
+  if (!data.get('can_edit_online') &&
+    data.get('package') === null && data.get('package_filename') === null) {
+    questionErrors.package_filename =
+      intl.formatMessage(translations.noPackageValidationError);
+    hasError = true;
+  }
+
+  if (hasError) {
+    errors.push({
+      path: pathOfKeysToData.concat(['error']),
+      error: questionErrors,
+    });
+  }
+
+  return errors;
+}
 
 class ProgrammingQuestionForm extends React.Component {
 
@@ -65,6 +103,7 @@ class ProgrammingQuestionForm extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.onChipInputSkillsAdd = this.onChipInputSkillsAdd.bind(this);
     this.onChipInputSkillsDelete = this.onChipInputSkillsDelete.bind(this);
+    this.onPackageUploadFileChange = this.onPackageUploadFileChange.bind(this);
   }
 
   componentDidMount() {
@@ -92,7 +131,17 @@ class ProgrammingQuestionForm extends React.Component {
     };
   }
 
+  onPackageUploadFileChange(e) {
+    const files = e.target.files;
+    const filename = files.length === 0 ? null : files[0].name;
+    this.handleChange('package_filename', filename);
+  }
+
   onSubmit(e) {
+    if (!this.validationCheck()) {
+      e.preventDefault();
+      return;
+    }
     const async = this.props.data.getIn(['form_data', 'async']);
 
     if (async) {
@@ -104,6 +153,23 @@ class ProgrammingQuestionForm extends React.Component {
 
       this.props.actions.submitForm(url, method, formData);
     }
+  }
+
+  validationCheck() {
+    const { data, intl } = this.props;
+    const question = data.get('question');
+    let errors = validation(question, ['question'], intl);
+
+    // Check online editor
+    if (question.get('can_edit_online')) {
+      errors = errors.concat(
+        editorValidation(this.props.data.get('test_ui'), ['test_ui'], intl)
+      );
+    }
+
+    this.props.actions.setValidationErrors(errors);
+
+    return errors.length === 0;
   }
 
   handleChange(field, value) {
@@ -153,7 +219,7 @@ class ProgrammingQuestionForm extends React.Component {
     return null;
   }
 
-  renderInputField(label, field, required, type, value, placeholder = null) {
+  renderInputField(label, field, required, type, value, error = null, placeholder = null) {
     return (
       <TextField
         type={type}
@@ -161,7 +227,8 @@ class ProgrammingQuestionForm extends React.Component {
         id={ProgrammingQuestionForm.getInputId(field)}
         onChange={(e, newValue) => { this.handleChange(field, newValue); }}
         hintText={placeholder}
-        floatingLabelText={label}
+        errorText={error}
+        floatingLabelText={(required ? '* ' : '') + label}
         disabled={this.props.data.get('is_loading')}
         value={value}
         fullWidth
@@ -191,7 +258,7 @@ class ProgrammingQuestionForm extends React.Component {
     );
   }
 
-  renderMultiSelectField(label, field, value, options) {
+  renderMultiSelectField(label, field, value, options, error) {
     return (
       <ChipInput
         id={ProgrammingQuestionForm.getInputId(field)}
@@ -205,11 +272,12 @@ class ProgrammingQuestionForm extends React.Component {
         openOnFocus
         fullWidth
         disabled={this.props.data.get('is_loading')}
+        errorText={error}
       />
     );
   }
 
-  renderDropdownSelectField(label, field, required, value, options, onChange) {
+  renderDropdownSelectField(label, field, required, value, options, error, onChange) {
     return (
       <div key={field}>
         <input
@@ -221,10 +289,11 @@ class ProgrammingQuestionForm extends React.Component {
           disabled={this.props.data.get('is_loading')}
         />
         <SelectField
-          floatingLabelText={label}
+          floatingLabelText={(required ? '* ' : '') + label}
           value={value}
           onChange={onChange}
           disabled={this.props.data.get('is_loading')}
+          errorText={error}
           fullWidth
         >
           {options}
@@ -276,16 +345,25 @@ class ProgrammingQuestionForm extends React.Component {
       return <div className={styles.downloadPackage}>{downloadNode}</div>;
     }
 
+    const packageError = this.props.data.getIn(['question', 'error', 'package_filename']);
+
     return (
       <div className={styles.downloadPackage}>
         { ProgrammingQuestionForm.renderLabel(label, field, false) }
         { downloadNode }
+        {
+          packageError ?
+            <div className="text-danger"><strong>{packageError}</strong></div>
+            :
+            null
+        }
         <input
           className="form-control"
           name={ProgrammingQuestionForm.getInputName(field)}
           id={ProgrammingQuestionForm.getInputId(field)}
           type="file"
           disabled={this.props.data.get('is_loading')}
+          onChange={this.onPackageUploadFileChange}
         />
       </div>
     );
@@ -351,7 +429,8 @@ class ProgrammingQuestionForm extends React.Component {
           {
             this.renderInputField(
               this.props.intl.formatMessage(translations.titleFieldLabel),
-              'title', false, 'text', question.get('title') || '')
+              'title', false, 'text', question.get('title') || '',
+              this.props.data.getIn(['question', 'error', 'title']))
           }
           {
             this.renderSummernoteField(
@@ -367,29 +446,34 @@ class ProgrammingQuestionForm extends React.Component {
             this.renderInputField(
               this.props.intl.formatMessage(translations.maximumGradeFieldLabel),
               'maximum_grade', true, 'number',
-              ProgrammingQuestionForm.convertNull(question.get('maximum_grade')))
+              ProgrammingQuestionForm.convertNull(question.get('maximum_grade')),
+              this.props.data.getIn(['question', 'error', 'maximum_grade']))
           }
           {
             this.renderMultiSelectField(
               this.props.intl.formatMessage(translations.skillsFieldLabel),
-              'skill_ids', skillsValues, skillsOptions)
+              'skill_ids', skillsValues, skillsOptions,
+              this.props.data.getIn(['question', 'error', 'skill_ids']))
           }
           {
             this.renderDropdownSelectField(
               this.props.intl.formatMessage(translations.languageFieldLabel),
               'language_id', true, question.get('language_id') || undefined, languageOptions,
+              this.props.data.getIn(['question', 'error', 'language_id']),
               this.languageHandler('language_id'))
           }
           {
             this.renderInputField(
               this.props.intl.formatMessage(translations.memoryLimitFieldLabel),
               'memory_limit', false, 'number',
-              ProgrammingQuestionForm.convertNull(question.get('memory_limit')))
+              ProgrammingQuestionForm.convertNull(question.get('memory_limit')),
+              this.props.data.getIn(['question', 'error', 'memory_limit']))
           }
           {
             this.renderInputField(this.props.intl.formatMessage(translations.timeLimitFieldLabel),
               'time_limit', false, 'number',
-              ProgrammingQuestionForm.convertNull(question.get('time_limit')))
+              ProgrammingQuestionForm.convertNull(question.get('time_limit')),
+              this.props.data.getIn(['question', 'error', 'attempt_limit']))
           }
           {
             showAttemptLimit ?
@@ -397,6 +481,7 @@ class ProgrammingQuestionForm extends React.Component {
                 this.props.intl.formatMessage(translations.attemptLimitFieldLabel),
                 'attempt_limit', false, 'number',
                 ProgrammingQuestionForm.convertNull(question.get('attempt_limit')),
+                this.props.data.getIn(['question', 'error', 'attempt_limit']),
                 this.props.intl.formatMessage(translations.attemptLimitPlaceholderMessage))
               :
               null
@@ -411,6 +496,14 @@ class ProgrammingQuestionForm extends React.Component {
           { this.renderTestView() }
           { this.renderBuildLogView() }
 
+          {
+            this.props.data.get('has_errors') ?
+              <div className="alert alert-danger">
+                {this.props.intl.formatMessage(translations.resolveErrorsMessage)}
+              </div>
+              :
+              null
+          }
           <button className="btn btn-primary" type="submit" disabled={this.props.data.get('is_loading')}>
             { this.submitButtonText() }
             { this.props.data.get('is_loading') ? <i className="fa fa-spinner fa-lg fa-spin" /> : null }

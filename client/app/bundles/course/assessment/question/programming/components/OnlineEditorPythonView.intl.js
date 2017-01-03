@@ -90,4 +90,12 @@ export default defineMessages({
     defaultMessage: 'Hint',
     description: 'Header for hint column of test cases panel.',
   },
+  noTestCaseErrorAlert: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.noTestCaseErrorAlert',
+    defaultMessage: 'At least 1 test case is required for autograded programming question.',
+  },
+  cannotBeBlankValidationError: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.cannotBeBlankValidationError',
+    defaultMessage: 'Cannot be blank.',
+  },
 });

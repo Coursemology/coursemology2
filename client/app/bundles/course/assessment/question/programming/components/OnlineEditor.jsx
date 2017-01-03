@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 
 import React, { PropTypes } from 'react';
 import { injectIntl, defineMessages } from 'react-intl';
-import OnlineEditorPythonView from '../components/OnlineEditorPythonView';
+import OnlineEditorPythonView, { validation as pythonValidation } from '../components/OnlineEditorPythonView';
 
 const translations = defineMessages({
   selectLanguageAlert: {
@@ -24,6 +24,20 @@ const propTypes = {
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
 };
+
+export function validation(data, pathOfKeysToData, intl) {
+  const mode = data.get('mode');
+  const errors = [];
+
+  switch (mode) {
+    case 'python':
+      return errors.concat(
+        pythonValidation(data.get('python'), pathOfKeysToData.concat(['python']), intl)
+      );
+    default:
+      return errors;
+  }
+}
 
 const OnlineEditor = (props) => {
   const { data, actions, intl } = props;

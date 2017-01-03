@@ -29,13 +29,52 @@ const propTypes = {
   }).isRequired,
 };
 
-class OnlineEditorPythonView extends React.Component {
+export function validation(data, pathOfKeysToData, intl) {
+  const errors = [];
 
-  static handleKeyPress(event) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
+  if (data.get('autograded')) {
+    let testsCount = 0;
+
+    ['public', 'private', 'evaluation'].forEach((type) => {
+      const testCases = data.getIn(['test_cases', type]);
+      testsCount += testCases.size;
+
+      testCases.forEach((testCase, index) => {
+        const testCaseError = {};
+        let hasError = false;
+
+        if (testCase.get('expression').trim() === '') {
+          testCaseError.expression =
+            intl.formatMessage(translations.cannotBeBlankValidationError);
+          hasError = true;
+        }
+        if (testCase.get('expected').trim() === '') {
+          testCaseError.expected =
+            intl.formatMessage(translations.cannotBeBlankValidationError);
+          hasError = true;
+        }
+
+        if (hasError) {
+          errors.push({
+            path: pathOfKeysToData.concat(['test_cases', type, index, 'error']),
+            error: testCaseError,
+          });
+        }
+      });
+    });
+
+    if (testsCount === 0) {
+      errors.push({
+        path: pathOfKeysToData.concat(['test_cases', 'error']),
+        error: intl.formatMessage(translations.noTestCaseErrorAlert),
+      });
     }
   }
+
+  return errors;
+}
+
+class OnlineEditorPythonView extends React.Component {
 
   static getInputName(field) {
     return `question_programming[${field}]`;
@@ -65,10 +104,6 @@ class OnlineEditorPythonView extends React.Component {
       const filename = files.length === 0 ? null : files[0].name;
       this.props.actions.updateNewDataFile(filename, index);
     };
-  }
-
-  testCaseUpdateHandler(type, index, field) {
-    return e => this.props.actions.updatePythonTestCase(type, index, field, e.target.value);
   }
 
   testCaseDeleteHandler(type, index) {
@@ -245,7 +280,7 @@ class OnlineEditorPythonView extends React.Component {
   }
 
   renderTestCases(header, testCases, type, startIndex = 0) {
-    const renderInput = (test, field, placeholder, index, required) => (
+    const renderInput = (test, field, placeholder, index) => (
       <TextField
         type="text"
         name={OnlineEditorPythonView.getTestInputName(type, field)}
@@ -253,6 +288,7 @@ class OnlineEditorPythonView extends React.Component {
           this.props.actions.updatePythonTestCase(type, index, field, newValue);
         }}
         hintText={placeholder}
+        errorText={test.getIn(['error', field])}
         disabled={this.props.isLoading}
         value={test.get(field)}
         fullWidth
@@ -263,7 +299,7 @@ class OnlineEditorPythonView extends React.Component {
     const expected = this.props.intl.formatMessage(translations.expectedHeader);
     const hint = this.props.intl.formatMessage(translations.hintHeader);
 
-    const rows = [...testCases.get(type).toArray().entries()].map(([index, test]) => (
+    const rows = [...testCases.get(type).entries()].map(([index, test]) => (
       <tr key={index}>
         <td className={styles.deleteButtonCell}>
           <button
@@ -273,13 +309,13 @@ class OnlineEditorPythonView extends React.Component {
         </td>
         <td className={styles.testCell}>test_{type}_{startIndex + index + 1}</td>
         <td className={styles.testCell}>
-          { renderInput(test, 'expression', expression, index, true) }
+          { renderInput(test, 'expression', expression, index) }
         </td>
         <td className={styles.testCell}>
-          { renderInput(test, 'expected', expected, index, true) }
+          { renderInput(test, 'expected', expected, index) }
         </td>
         <td className={styles.testCell}>
-          { renderInput(test, 'hint', hint, index, false) }
+          { renderInput(test, 'hint', hint, index) }
         </td>
       </tr>
       ));
@@ -323,6 +359,8 @@ class OnlineEditorPythonView extends React.Component {
     const testCases = data.get('test_cases');
     const autograded = data.get('autograded');
 
+    const testCaseError = data.getIn(['test_cases', 'error']);
+
     return (
       <div id="python-online-editor">
         {
@@ -359,6 +397,12 @@ class OnlineEditorPythonView extends React.Component {
         {
           autograded ?
             this.renderDataFiles()
+            :
+            null
+        }
+        {
+          autograded && testCaseError ?
+            <div className="alert alert-danger">{testCaseError}</div>
             :
             null
         }

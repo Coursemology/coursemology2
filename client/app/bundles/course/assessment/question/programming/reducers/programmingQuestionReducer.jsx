@@ -25,6 +25,7 @@ export const initialState = Immutable.fromJS({
     package: null,
     can_switch_package_type: true,
     can_edit_online: true,
+    package_filename: null,
   },
   package_ui: {
     templates: [],
@@ -64,6 +65,7 @@ export const initialState = Immutable.fromJS({
   },
   is_loading: false,
   is_evaluating: false,
+  has_errors: false,
   form_data: {
     method: 'post',
     path: null,
@@ -78,7 +80,7 @@ function questionReducer(state, action) {
   switch (type) {
     case actionTypes.PROGRAMMING_QUESTION_UPDATE: {
       const { field, newValue } = action;
-      return state.set(field, newValue);
+      return state.set(field, newValue).deleteIn(['error', field]);
     }
     case actionTypes.SKILLS_UPDATE: {
       const { skills } = action;
@@ -106,11 +108,15 @@ function pythonTestReducer(state, action) {
         hint: '',
       };
       const tests = state.get('test_cases').get(testType).push(Immutable.fromJS(newTest));
-      return state.setIn(['test_cases', testType], tests);
+      return state
+        .setIn(['test_cases', testType], tests)
+        .deleteIn(['test_cases', 'error']);
     }
     case editorActionTypes.PYTHON_TEST_CASE_UPDATE: {
       const { testType, index, field, newValue } = action;
-      return state.setIn(['test_cases', testType, index, field], newValue);
+      return state
+        .setIn(['test_cases', testType, index, field], newValue)
+        .deleteIn(['test_cases', testType, index, 'error']);
     }
     case editorActionTypes.PYTHON_TEST_CASE_DELETE: {
       const { testType, index } = action;
@@ -242,6 +248,16 @@ export default function programmingQuestionReducer(state = initialState, action)
     case actionTypes.SUBMIT_FORM_SUCCESS:
     case actionTypes.SUBMIT_FORM_FAILURE: {
       return apiReducer(state, action);
+    }
+    case actionTypes.VALIDATION_ERRORS_SET: {
+      const { errors } = action;
+      let newState = state;
+
+      errors.forEach((error) => {
+        newState = newState.setIn(error.path, Immutable.fromJS(error.error));
+      });
+
+      return newState.set('has_errors', errors.length !== 0);
     }
     default: {
       return state;

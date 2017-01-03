@@ -23,6 +23,13 @@ export function updateEditorMode(mode) {
   };
 }
 
+export function setValidationErrors(errors) {
+  return {
+    type: actionTypes.VALIDATION_ERRORS_SET,
+    errors,
+  };
+}
+
 function submitFormLoading(isLoading) {
   return {
     type: actionTypes.SUBMIT_FORM_LOADING,
