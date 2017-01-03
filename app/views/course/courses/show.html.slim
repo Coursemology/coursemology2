@@ -10,7 +10,7 @@
     = format_html(current_course.description)
 
     h2 = t('.instructors')
-    div
+    #users-container
       = render partial: 'layouts/user',
                collection: current_course.managers.includes(:user).map(&:user)
 

@@ -51,8 +51,17 @@
     }
   }
 
+  #users-container {
+    display: flex;
+  }
+
   .user {
+    align-items: center;
+    display: flex;
+    flex: 1;
     margin: 0.5em 0;
+    max-width: 200px;
+    min-width: 100px;
 
     #user-sidebar {
       font-size: 18px;
