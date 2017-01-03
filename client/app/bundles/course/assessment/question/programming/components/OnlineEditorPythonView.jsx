@@ -253,7 +253,7 @@ class OnlineEditorPythonView extends React.Component {
           this.props.actions.updatePythonTestCase(type, index, field, newValue);
         }}
         hintText={placeholder}
-        disabled={this.props.data.isLoading}
+        disabled={this.props.isLoading}
         value={test.get(field)}
         fullWidth
       />
