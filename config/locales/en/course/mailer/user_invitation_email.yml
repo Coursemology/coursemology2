@@ -9,6 +9,9 @@ en:
 
 
           You do not seem to have an account registered at this email address (%{email});
+
           %{click_here} to create an account and accept the invitation.
+
+
           If you have an existing Coursemology account registered under a different email,
           visit %{course} and enrol with the following non-transferable registration code:
