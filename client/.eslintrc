@@ -10,7 +10,6 @@
   "globals": {
     "window": true,
     "document": true,
-    "$": true,
-    "XMLHttpRequest": true
+    "$": true
   }
 }

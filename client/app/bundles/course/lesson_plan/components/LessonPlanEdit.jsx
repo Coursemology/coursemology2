@@ -65,6 +65,9 @@ const styles = {
     cursor: 'pointer',
     margin: '0px 0px 0px -8px',
   },
+  lessonPlanEditDiv: {
+    marginBottom: 100,
+  },
 };
 
 class LessonPlanEdit extends React.Component {
@@ -197,14 +200,15 @@ class LessonPlanEdit extends React.Component {
   }
 
   renderGroup(group) {
-    return group.items.map(item => this.renderItem(item))
-           .unshift(this.renderMilestone(group.milestone));
+    const groupNodes = group.items.map(item => this.renderItem(item));
+    groupNodes.unshift(this.renderMilestone(group.milestone));
+    return groupNodes;
   }
 
   render() {
     const { milestoneGroups, intl } = this.props;
     return (
-      <div>
+      <div style={styles.lessonPlanEditDiv}>
         <table>
           <thead>
             <tr>
