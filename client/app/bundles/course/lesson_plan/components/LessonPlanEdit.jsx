@@ -65,6 +65,9 @@ const styles = {
     cursor: 'pointer',
     margin: '0px 0px 0px -8px',
   },
+  lessonPlanEditDiv: {
+    marginBottom: 100,
+  },
 };
 
 class LessonPlanEdit extends React.Component {
@@ -205,7 +208,7 @@ class LessonPlanEdit extends React.Component {
   render() {
     const { milestoneGroups, intl } = this.props;
     return (
-      <div>
+      <div style={styles.lessonPlanEditDiv}>
         <table>
           <thead>
             <tr>
