@@ -197,8 +197,9 @@ class LessonPlanEdit extends React.Component {
   }
 
   renderGroup(group) {
-    return group.items.map(item => this.renderItem(item))
-           .unshift(this.renderMilestone(group.milestone));
+    const groupNodes = group.items.map(item => this.renderItem(item));
+    groupNodes.unshift(this.renderMilestone(group.milestone));
+    return groupNodes;
   }
 
   render() {
