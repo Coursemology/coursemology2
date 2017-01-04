@@ -57,4 +57,18 @@ class Course::Assessment::Question::ProgrammingController < \
       render template
     end
   end
+
+  def save_and_render_json
+    if @programming_question.save! && @programming_question.import_job
+      @redirect_url = job_path(@programming_question.import_job)
+    end
+
+    render '_props'
+  end
+
+  def programming_package_service(params = nil)
+    Course::Assessment::Question::Programming::ProgrammingPackageService.new(
+      @programming_question, params
+    )
+  end
 end
