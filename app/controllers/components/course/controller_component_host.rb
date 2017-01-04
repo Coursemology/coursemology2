@@ -102,10 +102,7 @@ class Course::ControllerComponentHost
   # @return [Array<Class>] array of enabled components
   def enabled_components
     @enabled_components ||= begin
-      course_enabled_components.select do |m|
-        enabled = @course_settings.settings(m.key).enabled
-        enabled.nil? ? m.enabled_by_default? : enabled
-      end
+      find_enabled_components(course_available_components, @course_settings)
     end
   end
 
@@ -122,18 +119,15 @@ class Course::ControllerComponentHost
   def instance_enabled_components
     @instance_enabled_components ||= begin
       all_components = Course::ControllerComponentHost.components
-      all_components.select do |m|
-        enabled = @instance_settings.settings(m.key).enabled
-        enabled.nil? ? m.enabled_by_default? : enabled
-      end
+      find_enabled_components(all_components, @instance_settings)
     end
   end
 
-  # Returns the enabled components in Course, depending on the gamified flag in Course.
+  # Returns the available components in Course, depending on the gamified flag in Course.
   #
   # @return [Array<Class>] array of enabled components in Course
-  def course_enabled_components
-    @course_enabled_components ||= begin
+  def course_available_components
+    @course_available_components ||= begin
       if @context.current_course.gamified?
         instance_enabled_components
       else
@@ -146,7 +140,7 @@ class Course::ControllerComponentHost
   #
   # @return [Array<Class>] array of disable-able components in Course
   def course_disableable_components
-    @course_disableable_components ||= course_enabled_components.select(&:can_be_disabled?)
+    @course_disableable_components ||= course_available_components.select(&:can_be_disabled?)
   end
 
   # Gets the sidebar elements.
@@ -169,5 +163,16 @@ class Course::ControllerComponentHost
   # The elements are rendered on all Course controller subclasses as part of a nested template.
   def sidebar_items
     @sidebar_items ||= components.map(&:sidebar_items).tap(&:flatten!)
+  end
+
+  private
+
+  # Find the enabled components from settings.
+  def find_enabled_components(all_components, settings)
+    all_components.select do |m|
+      # If the component cannot be disabled, ignore the settings
+      enabled = m.can_be_disabled? ? settings.settings(m.key).enabled : true
+      enabled.nil? ? m.enabled_by_default? : enabled
+    end
   end
 end
