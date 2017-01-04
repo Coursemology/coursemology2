@@ -74,7 +74,8 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
         include Rails.application.routes.url_helpers
 
         let(:programming_question) do
-          create(:course_assessment_question_programming, assessment: assessment)
+          create(:course_assessment_question_programming,
+                 assessment: assessment, template_package: true)
         end
         let(:question_programming_attributes) do
           attributes_for(:course_assessment_question_programming, template_package: true).

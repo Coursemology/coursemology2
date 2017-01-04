@@ -25,6 +25,9 @@ FactoryGirl.define do
       File.new(File.join(Rails.root, 'spec/fixtures/course/'\
                          'programming_question_template.zip'), 'rb') if template_package
     end
+    package_type do
+      template_package ? :zip_upload : :online_editor
+    end
     test_cases do
       public_test_cases = test_case_count.downto(1).map do
         build(:course_assessment_question_programming_test_case, question: nil)

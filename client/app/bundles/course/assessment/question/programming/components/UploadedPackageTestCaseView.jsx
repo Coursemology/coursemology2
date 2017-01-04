@@ -83,7 +83,7 @@ class UploadedPackageTestCaseView extends React.Component {
 
       return (
         <Table selectable={false}>
-          <TableHeader displaySelectAll={false}>
+          <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
             <TableRow>
               <TableHeaderColumn>
                 { this.props.intl.formatMessage(translations.identifierHeader) }

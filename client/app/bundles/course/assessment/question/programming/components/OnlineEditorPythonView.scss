@@ -1,0 +1,14 @@
+// scss-lint:disable ImportantRule
+.deleteButtonCell {
+  padding-left: 12px !important;
+  text-align: center;
+  vertical-align: middle !important;
+  width: 50px;
+}
+
+.testCell {
+  text-overflow: initial !important;
+  white-space: normal !important;
+  word-break: break-word;
+}
+// scss-lint:enable ImportantRule

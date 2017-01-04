@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 
 import actionTypes from '../constants/programmingQuestionConstants';
+import editorActionTypes from '../constants/onlineEditorConstants';
 
 export const initialState = Immutable.fromJS({
   // this is the default state that would be used if one were not passed into the store
@@ -85,6 +86,43 @@ function questionReducer(state, action) {
   }
 }
 
+function pythonTestReducer(state, action) {
+  const { type } = action;
+
+  switch (type) {
+    case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE: {
+      const { field, newValue } = action;
+      return state.set(field, newValue);
+    }
+    case editorActionTypes.PYTHON_TEST_CASE_CREATE: {
+      const { testType } = action;
+      const newTest = {
+        expression: '',
+        expected: '',
+        hint: '',
+      };
+      const tests = state.get('test_cases').get(testType).push(Immutable.fromJS(newTest));
+      return state
+        .setIn(['test_cases', testType], tests)
+        .deleteIn(['test_cases', 'error']);
+    }
+    case editorActionTypes.PYTHON_TEST_CASE_UPDATE: {
+      const { testType, index, field, newValue } = action;
+      return state
+        .setIn(['test_cases', testType, index, field], newValue)
+        .deleteIn(['test_cases', testType, index, 'error']);
+    }
+    case editorActionTypes.PYTHON_TEST_CASE_DELETE: {
+      const { testType, index } = action;
+      const tests = state.get('test_cases').get(testType).splice(index, 1);
+      return state.setIn(['test_cases', testType], tests);
+    }
+    default: {
+      return state;
+    }
+  }
+}
+
 function apiReducer(state, action) {
   const { type } = action;
 
@@ -138,6 +176,13 @@ export default function programmingQuestionReducer(state = initialState, action)
     case actionTypes.EDITOR_MODE_UPDATE: {
       const { mode } = action;
       return state.setIn(['test_ui', 'mode'], mode);
+    }
+    case editorActionTypes.PYTHON_TEST_CASE_CREATE:
+    case editorActionTypes.PYTHON_TEST_CASE_UPDATE:
+    case editorActionTypes.PYTHON_TEST_CASE_DELETE:
+    case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE: {
+      const pythonTest = state.get('test_ui').get('python');
+      return state.setIn(['test_ui', 'python'], pythonTestReducer(pythonTest, action));
     }
     case actionTypes.SUBMIT_FORM_EVALUATING:
     case actionTypes.SUBMIT_FORM_LOADING:

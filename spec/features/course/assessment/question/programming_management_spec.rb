@@ -50,7 +50,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
 
       scenario 'I can upload a template package', js: true do
         question = create(:course_assessment_question_programming,
-                          assessment: assessment, template_file_count: 0)
+                          assessment: assessment, template_file_count: 0, template_package: true)
         visit edit_course_assessment_question_programming_path(course, assessment, question)
         expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
 
@@ -130,6 +130,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         fill_in 'question_programming[memory_limit]', with: question_attributes[:memory_limit]
         fill_in 'question_programming[time_limit]', with: question_attributes[:time_limit]
 
+        page.find('#upload-package-tab').click
         page.find('#question_programming_file', visible: false).click
         attach_file 'question_programming[file]',
                     File.join(ActionController::TestCase.fixture_path,

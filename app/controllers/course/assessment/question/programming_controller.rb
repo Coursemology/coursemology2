@@ -11,7 +11,10 @@ class Course::Assessment::Question::ProgrammingController < \
 
   def create
     @template = 'course/assessment/question/programming/new.json.jbuilder'
-    @programming_question.package_type = :zip_upload
+    @programming_question.package_type =
+      programming_question_params.key?(:file) ? :zip_upload : :online_editor
+
+    programming_package_service(params).generate_package if @programming_question.edit_online?
 
     save_and_redirect('new', t('.success'))
   end
@@ -24,6 +27,11 @@ class Course::Assessment::Question::ProgrammingController < \
   def update
     @programming_question.assign_attributes programming_question_params
     @programming_question.skills.clear if programming_question_params[:skill_ids].blank?
+
+    if @programming_question.edit_online?
+      programming_package_service(params).generate_package
+      @meta = programming_package_service(params).extract_meta
+    end
 
     respond_to do |format|
       format.html { save_and_redirect('edit', t('.success')) }
@@ -75,7 +83,7 @@ class Course::Assessment::Question::ProgrammingController < \
   end
 
   def programming_package_service(params = nil)
-    Course::Assessment::Question::Programming::ProgrammingPackageService.new(
+    @service ||= Course::Assessment::Question::Programming::ProgrammingPackageService.new(
       @programming_question, params
     )
   end

@@ -7,9 +7,11 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
+import { Tabs, Tab } from 'material-ui/Tabs';
 import { red500 } from 'material-ui/styles/colors';
 
 import BuildLog from './BuildLog';
+import OnlineEditor, { validation as editorValidation } from './OnlineEditor';
 import UploadedPackageView from './UploadedPackageView';
 import MaterialSummernote from '../../../../../../lib/components/MaterialSummernote';
 import ChipInput from '../../../../../../lib/components/ChipInput';
@@ -28,6 +30,7 @@ const propTypes = {
     clearHasError: PropTypes.func.isRequired,
     clearSubmissionMessage: PropTypes.func.isRequired,
   }),
+  onlineEditorActions: PropTypes.instanceOf(Object).isRequired,
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
@@ -74,6 +77,15 @@ function validation(data, pathOfKeysToData, intl) {
       hasError = true;
     }
   });
+
+  // Check file uploaded when no previous package exists
+  if (!data.get('edit_online')) {
+    if (data.get('package') === null && data.get('package_filename') === null) {
+      questionErrors.package_filename =
+        intl.formatMessage(translations.noPackageValidationError);
+      hasError = true;
+    }
+  }
 
   if (hasError) {
     errors.push({
@@ -162,7 +174,14 @@ class ProgrammingQuestionForm extends React.Component {
   validationCheck() {
     const { data, intl } = this.props;
     const question = data.get('question');
-    const errors = validation(question, ['question'], intl);
+    let errors = validation(question, ['question'], intl);
+
+    // Check online editor
+    if (question.get('edit_online')) {
+      errors = errors.concat(
+        editorValidation(this.props.data.get('test_ui'), ['test_ui'], intl)
+      );
+    }
 
     this.props.actions.setValidationErrors(errors);
 
@@ -316,30 +335,66 @@ class ProgrammingQuestionForm extends React.Component {
     );
   }
 
-  renderPackageField(label, field, pkg, newFilename) {
-    const packageError = this.props.data.getIn(['question', 'error', 'package_filename']);
+  renderSwitcher(showEditOnline, canSwitch) {
+    if (!canSwitch) {
+      return null;
+    }
+
+    const onTestTypeChange = (editOnline) => {
+      if (this.props.data.get('is_loading')) return;
+      this.props.actions.updateProgrammingQuestion('edit_online', editOnline);
+    };
+
+    return (
+      <Tabs
+        value={showEditOnline}
+        onChange={onTestTypeChange}
+        style={{ margin: '1em 0' }}
+      >
+        <Tab
+          id="test-case-editor-tab"
+          label={this.props.intl.formatMessage(translations.editTestsOnlineButton)}
+          value
+        />
+        <Tab
+          id="upload-package-tab"
+          label={this.props.intl.formatMessage(translations.uploadPackageButton)}
+          value={false}
+        />
+      </Tabs>
+    );
+  }
+
+  renderPackageField(label, field, pkg, newFilename, showEditOnline) {
     const uploadedPackageLabel = this.props.intl.formatMessage(translations.uploadedPackageLabel);
+    const downloadNode = (
+      pkg ?
+        (<div className={styles.downloadPackageContainer}>
+          <span className={styles.uploadedPackageLabel}>{uploadedPackageLabel}:</span>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href={pkg.get('path')}
+          >
+            {pkg.get('name')}
+          </a>
+        </div>)
+        :
+        null
+    );
+
+    if (showEditOnline) {
+      return downloadNode;
+    }
+
+    const packageError = this.props.data.getIn(['question', 'error', 'package_filename']);
     const newPackageButton = this.props.intl.formatMessage(translations.newPackageButton);
     const noFileMessage = this.props.intl.formatMessage(translations.noFileChosenMessage);
 
     return (
       <div>
         <h3>{label}</h3>
-        {
-          pkg ?
-            <div className={styles.fileInputContainer}>
-              <span className={styles.uploadedPackageLabel}>{uploadedPackageLabel}:</span>
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={pkg.get('path')}
-              >
-                {pkg.get('name')}
-              </a>
-            </div>
-            :
-            null
-        }
+        { downloadNode }
         <RaisedButton
           className={styles.fileInputButton}
           label={newPackageButton}
@@ -363,7 +418,18 @@ class ProgrammingQuestionForm extends React.Component {
     );
   }
 
-  renderTestView() {
+  renderTestView(showEditOnline) {
+    if (showEditOnline) {
+      return (
+        <OnlineEditor
+          {...{
+            actions: this.props.onlineEditorActions,
+            data: this.props.data,
+          }}
+        />
+      );
+    }
+
     return <UploadedPackageView {...{ data: this.props.data }} />;
   }
 
@@ -389,6 +455,8 @@ class ProgrammingQuestionForm extends React.Component {
 
     const languageOptions = languages.toJS();
     languageOptions.unshift({ id: null, name: null });
+
+    const showEditOnline = question.get('edit_online');
 
     return (
       <div>
@@ -487,12 +555,13 @@ class ProgrammingQuestionForm extends React.Component {
             }
           </div>
 
+          { this.renderSwitcher(showEditOnline, question.get('can_switch_package_type')) }
           {
             this.renderPackageField(
               this.props.intl.formatMessage(translations.templatePackageFieldLabel),
-              'file', pkg, this.props.data.getIn(['question', 'package_filename']))
+              'file', pkg, this.props.data.getIn(['question', 'package_filename']), showEditOnline)
           }
-          { this.renderTestView() }
+          { this.renderTestView(showEditOnline) }
           { this.renderBuildLogView() }
 
           <Snackbar

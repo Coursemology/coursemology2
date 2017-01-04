@@ -17,7 +17,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     [
       {
         filename: 'template.py',
-        content: @test_params[:submission]
+        content: @test_params[:submission] || ''
       }
     ]
   end
@@ -50,6 +50,8 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
   end
 
   def extract_meta(attachment, template_files)
+    return @meta if @meta.present?
+
     # attachment will be nil if the question is not autograded, in that case the meta data will be
     # generated from the template files in the database.
     return generate_non_autograded_meta(template_files) if attachment.nil?
@@ -133,6 +135,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
       # Create tests directory with prepend, append and autograde files
       zip.put_next_entry 'tests/'
       zip.put_next_entry 'tests/append.py'
+      zip.print "\n"
       zip.print @test_params[:append]
       zip.print "\n"
 
