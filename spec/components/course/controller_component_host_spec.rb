@@ -206,8 +206,8 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
       end
     end
 
-    describe '#course_enabled_components' do
-      subject { component_host.course_enabled_components }
+    describe '#course_available_components' do
+      subject { component_host.course_available_components }
       context 'when the gamified flag for the course is set to false' do
         let(:course) { create(:course, instance: instance, gamified: false) }
 
