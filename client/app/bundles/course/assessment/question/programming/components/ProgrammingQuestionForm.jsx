@@ -9,6 +9,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import { red500 } from 'material-ui/styles/colors';
 
+import BuildLog from './BuildLog';
 import UploadedPackageView from './UploadedPackageView';
 import MaterialSummernote from '../../../../../../lib/components/MaterialSummernote';
 import ChipInput from '../../../../../../lib/components/ChipInput';
@@ -365,6 +366,16 @@ class ProgrammingQuestionForm extends React.Component {
     return <UploadedPackageView {...{ data: this.props.data }} />;
   }
 
+  renderBuildLogView() {
+    const data = this.props.data.getIn(['import_result', 'build_log']);
+
+    if (data) {
+      return <BuildLog {...{ data }} />;
+    }
+
+    return null;
+  }
+
   render() {
     const question = this.props.data.get('question');
     const formData = this.props.data.get('form_data');
@@ -481,6 +492,7 @@ class ProgrammingQuestionForm extends React.Component {
               'file', pkg, this.props.data.getIn(['question', 'package_filename']))
           }
           { this.renderTestView() }
+          { this.renderBuildLogView() }
 
           <Snackbar
             open={this.props.data.get('has_errors')}
