@@ -25,3 +25,5 @@ en:
       name: 'Statistics'
     points_disbursement:
       name: 'Points Disbursement'
+    duplication:
+      name: 'Duplication'

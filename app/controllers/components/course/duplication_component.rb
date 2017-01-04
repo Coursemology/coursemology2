@@ -1,6 +1,10 @@
 class Course::DuplicationComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
+  def self.display_name
+    I18n.t('components.duplication.name')
+  end
+
   def sidebar_items
     return [] unless current_user.administrator?
     [
