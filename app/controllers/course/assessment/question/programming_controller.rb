@@ -6,6 +6,10 @@ class Course::Assessment::Question::ProgrammingController < \
                               through: :assessment, parent: false
 
   def new
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   def create
@@ -15,12 +19,22 @@ class Course::Assessment::Question::ProgrammingController < \
   end
 
   def edit
+    respond_to do |format|
+      format.html
+      format.json do
+        @meta = programming_package_service.extract_meta if @programming_question.edit_online?
+        render 'edit'
+      end
+    end
   end
 
   def update
     @programming_question.assign_attributes programming_question_params
 
-    save_and_redirect('edit', t('.success'))
+    respond_to do |format|
+      format.html { save_and_redirect('edit', t('.success')) }
+      format.json { save_and_render_json }
+    end
   end
 
   def destroy
