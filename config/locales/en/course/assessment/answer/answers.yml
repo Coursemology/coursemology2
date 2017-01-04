@@ -10,6 +10,9 @@ en:
         manually_graded:
           run_code: 'Run Code'
           run_code_with_limit: 'Run ( %{limit} times left )'
+          run_code_evaluation_warning: >
+            You are able to see this because you are a staff and can view evaluation tests.
+            Students cannot see these tests nor this button.
           error: :'course.assessment.answer.error'
         comments_footer:
           comment: 'Comment'
