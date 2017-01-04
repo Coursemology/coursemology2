@@ -7,7 +7,7 @@ RSpec.describe Course::DuplicationService, type: :service do
     let(:course) { create(:course) }
     let(:new_course) do
       dup_service = Course::DuplicationService.
-                    new(course, new_course_start_date: 1.day.from_now.iso8601,
+                    new(course, new_course_start_date: (course.start_at + 1.day).iso8601,
                                 new_course_title: I18n.t('course.duplications.show.'\
                                                          'new_course_title_prefix'))
       dup_service.duplicate
@@ -34,8 +34,8 @@ RSpec.describe Course::DuplicationService, type: :service do
         end
 
         it 'time shifts the new course' do
-          expect(new_course.start_at).to be >= course.start_at + 1.day
-          expect(new_course.end_at).to be >= course.end_at + 1.day
+          expect(new_course.start_at).to be_within(1.second).of course.start_at + 1.day
+          expect(new_course.end_at).to be_within(1.second).of course.end_at + 1.day
         end
 
         it 'duplicates levels within the course' do
@@ -73,7 +73,7 @@ RSpec.describe Course::DuplicationService, type: :service do
             expect(new_lesson_plan_events[i].actable.event_type).
               to eq original_lesson_plan_events[i].actable.event_type
             expect(new_lesson_plan_events[i].start_at).
-              to be >= original_lesson_plan_events[i].start_at + 1.day
+              to be_within(1.second).of original_lesson_plan_events[i].start_at + 1.day
             expect(new_lesson_plan_events[i].title).
               to be >= original_lesson_plan_events[i].title
             expect(new_lesson_plan_events[i].description).
@@ -94,7 +94,7 @@ RSpec.describe Course::DuplicationService, type: :service do
             expect(new_course.lesson_plan_milestones[i].description).
               to eq course.lesson_plan_milestones[i].description
             expect(new_course.lesson_plan_milestones[i].start_at).
-              to be >= course.lesson_plan_milestones[i].start_at + 1.day
+              to be_within(1.second).of course.lesson_plan_milestones[i].start_at + 1.day
           end
         end
       end
@@ -109,8 +109,9 @@ RSpec.describe Course::DuplicationService, type: :service do
           expect(new_assessment.time_bonus_exp).to eq assessment.time_bonus_exp
           expect(new_assessment.extra_bonus_exp).to eq assessment.extra_bonus_exp
           expect(new_assessment.published).to eq assessment.published
-          expect(new_assessment.start_at).to be >= assessment.start_at + 1.day
-          expect(new_assessment.bonus_end_at).to be >= assessment.bonus_end_at + 1.day
+          expect(new_assessment.start_at).to be_within(1.second).of assessment.start_at + 1.day
+          expect(new_assessment.bonus_end_at).to be_within(1.second).
+            of assessment.bonus_end_at + 1.day
           # Source assessment has no end date
           expect(new_assessment.end_at).to be_nil
         end
@@ -239,6 +240,21 @@ RSpec.describe Course::DuplicationService, type: :service do
           expect(@new_content.attachment.updater).to eq @content.attachment.updater
           expect(@new_content.attachment.created_at).to eq @content.attachment.created_at
           expect(@new_content.attachment.creator).to eq @content.attachment.creator
+        end
+
+        it 'shifts the start and end times' do
+          # Select just the folders that were created in this context and sort them by name.
+          new_standalone_folders = @new_folders.select do |folder|
+            folders.map(&:name).include?(folder.name)
+          end
+          new_standalone_folders.sort_by!(&:name)
+
+          folders_array = new_standalone_folders.zip(folders)
+          folders_array.each do |new_folder, original_folder|
+            # 1.day is the time shift specified for this duplication spec
+            expect(new_folder.start_at).to be_within(1.second).of original_folder.start_at + 1.day
+            expect(new_folder.end_at).to be_within(1.second).of original_folder.end_at + 1.day
+          end
         end
       end
 

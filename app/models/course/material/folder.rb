@@ -75,7 +75,8 @@ class Course::Material::Folder < ActiveRecord::Base
   end
 
   def initialize_duplicate(duplicator, other)
-    self.start_at += duplicator.time_shift
+    self.start_at = other.start_at + duplicator.time_shift
+    self.end_at = other.end_at + duplicator.time_shift if other.end_at
     self.materials = duplicator.duplicate(other.materials).compact
     self.owner = duplicator.duplicate(other.owner)
     self.course = duplicator.duplicate(other.course)
