@@ -1,0 +1,69 @@
+.inputContainer {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.titleInput,
+.descriptionInput,
+.staffCommentsInput,
+.skillsInput,
+.maximumGradeInput,
+.languageInput,
+.memoryLimitInput,
+.timeLimitInput,
+.attemptLimitInput {
+  flex: 1 100%;
+}
+
+@media (min-width: 375px) {
+  .maximumGradeInput,
+  .languageInput,
+  .memoryLimitInput,
+  .timeLimitInput {
+    flex: 1 50%;
+  }
+
+  .maximumGradeInput,
+  .memoryLimitInput {
+    padding-right: 1em;
+  }
+}
+
+@media (min-width: 1024px) {
+  .memoryLimitInput,
+  .timeLimitInput,
+  .attemptLimitInput {
+    flex: 1 auto;
+  }
+
+  .attemptLimitInput {
+    padding-left: 1em;
+  }
+}
+
+.uploadedPackageLabel {
+  font-weight: bold;
+  margin-right: 1em;
+}
+
+.fileInputButton {
+  cursor: pointer;
+  margin-right: 1em;
+  margin-top: 0.5em;
+}
+
+.uploadPackageInput {
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+}
+
+.submitButton {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}

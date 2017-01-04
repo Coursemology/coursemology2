@@ -32,6 +32,29 @@ module Course::Assessment::Question::ProgrammingHelper
         Course::Assessment::ProgrammingEvaluationService::Error.name
   end
 
+  # Determines if the programming question errors should be displayed.
+  #
+  # @return [Boolean]
+  def display_validation_errors?
+    @programming_question.errors.present?
+  end
+
+  # Displays the validation errors alert for programming question.
+  #
+  # @return [String] If there are validation errors for the question.
+  # @return [nil] If there are no validation errors for the question.
+  def validation_errors_alert
+    return nil if @programming_question.errors.empty?
+
+    content_tag(:div, class: ['alert', 'alert-danger']) do
+      messages = @programming_question.errors.full_messages.map do |message|
+        content_tag(:div, message)
+      end
+
+      safe_join messages
+    end
+  end
+
   def editor_mode(language)
     if language.is_a?(Coursemology::Polyglot::Language::Python)
       :python

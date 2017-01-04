@@ -13,7 +13,6 @@ en:
             success: 'The programming question was deleted.'
             failure: 'Could not delete programming question: %{error}'
           form:
-            attempt_limit_placeholder: 'The maximum times that students can test their answers ( does not apply to staff )'
             import_result:
               success: 'The package was successfully imported.'
               error: 'The package could not be imported: %{error}'
@@ -25,18 +24,11 @@ en:
                   no response was received from an evaluator within the required time.
                 evaluation_error: 'an error occurred during evaluation, see logs.'
           form_build_log:
-            title: 'Build Log'
             stdout: 'Standard Output'
             stderr: 'Standard Error'
-          form_templates:
-            templates: 'Template'
           form_test_cases:
             test_cases: 'Test Cases'
             public: 'Public Test Cases'
             private: 'Private Test Cases'
             privacy_warning: 'You are able to view these test cases because you are staff. Students will not be able to see them.'
             evaluation: 'Evaluation Test Cases'
-            identifier: 'Identifier'
-            hint: 'Hint'
-            expression: 'Expression'
-            expected: 'Expected'

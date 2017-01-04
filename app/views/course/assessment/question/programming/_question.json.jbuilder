@@ -23,7 +23,7 @@ json.question do
   json.published_assessment @assessment.published?
   json.attempt_limit @programming_question.attempt_limit
 
-  if @programming_question.attachment.present?
+  if @programming_question.attachment.present? && @programming_question.attachment.persisted?
     json.package do
       json.name @programming_question.attachment.name
       json.path attachment_reference_path(@programming_question.attachment)
