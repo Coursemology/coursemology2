@@ -20,8 +20,13 @@ class Course::Material::MaterialsController < Course::Material::Controller
 
   def destroy
     if @material.destroy
-      redirect_to course_material_folder_path(current_course, @folder),
-                  success: t('.success', name: @material.name)
+      respond_to do |format|
+        format.html do
+          redirect_to course_material_folder_path(current_course, @folder),
+                      success: t('.success', name: @material.name)
+        end
+        format.json { head :ok }
+      end
     else
       redirect_to course_material_folder_path(current_course, @folder),
                   danger: t('.failure', error: @material.errors.full_messages.to_sentence)

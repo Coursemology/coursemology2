@@ -90,7 +90,7 @@ RSpec.describe 'Extension: Materials' do
 
       it do
         is_expected.
-          to have_tag('strong', text: I18n.t('layouts.materials_uploader.new_materials'))
+          to have_tag('input[type=file]')
       end
     end
   end

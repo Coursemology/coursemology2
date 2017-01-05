@@ -1,11 +1,5 @@
-- unless f.object.materials.empty?
-  div
-    strong = t('.uploaded_materials')
-  - f.object.materials.each do |material|
-    div
-      span = link_to format_inline_text(material.name), '#'
-      span.uploaded-by = t('.uploaded_by', name: material.attachment.creator.name)
+- folder = f.object.folder
+- unless folder.materials.empty?
+  div#uploaded-files data="#{folder.materials.map { |m| { url: course_material_folder_material_path(current_course, folder, m), name: format_inline_text(m.name), updated_at: m.updated_at } }.to_json}"
 
-div
-  strong = t('.new_materials')
-  = f.file_field :files_attributes, multiple: true
+= f.file_field :files_attributes, multiple: true
