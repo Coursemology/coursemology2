@@ -9,6 +9,7 @@ FactoryGirl.define do
       template_file_count 1
       test_case_count 0
       private_test_case_count 0
+      evaluation_test_case_count 0
     end
 
     memory_limit 32
@@ -33,7 +34,11 @@ FactoryGirl.define do
         build(:course_assessment_question_programming_test_case, :private, question: nil)
       end
 
-      public_test_cases + private_test_cases
+      evaluation_test_cases = evaluation_test_case_count.downto(1).map do
+        build(:course_assessment_question_programming_test_case, :evaluation, question: nil)
+      end
+
+      public_test_cases + private_test_cases + evaluation_test_cases
     end
 
     after(:build) do |question, evaluator|

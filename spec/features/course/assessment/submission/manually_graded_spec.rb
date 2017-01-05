@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
+RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -19,6 +19,22 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
     end
     let(:programming_assessment_submission) do
       create(:submission, assessment: programming_assessment, creator: student)
+    end
+    let(:multiple_programming_assessment) do
+      # Creates a manually-graded assessment with 3 programming questions:
+      #   1. auto_gradable programming question (with test-cases)
+      #   2. auto_gradable programming question (only evaluation test-cases)
+      #   3. Non auto_gradable programming question (no test-cases)
+      assessment = create(:assessment, :published_with_programming_question, course: course)
+      create(:course_assessment_question_programming,
+             template_package: true, template_package_deferred: false, assessment: assessment,
+             evaluation_test_case_count: 1)
+      create(:course_assessment_question_programming,
+             template_package: true, template_package_deferred: false, assessment: assessment)
+      assessment.reload
+    end
+    let(:multiple_programming_submission) do
+      create(:submission, assessment: multiple_programming_assessment, creator: student)
     end
 
     context 'As a Course Student' do
@@ -38,10 +54,12 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
         expect(page).to have_checked_field(option)
       end
 
-      scenario 'I can submit programming questions', js: true do
-        programming_assessment_submission
-        visit edit_course_assessment_submission_path(course, programming_assessment,
-                                                     programming_assessment_submission)
+      scenario 'I can run code only on programming questions with private and public test cases' do
+        multiple_programming_submission
+        visit edit_course_assessment_submission_path(course, multiple_programming_assessment,
+                                                     multiple_programming_submission)
+
+        # The Run Code button is only shown for the first question
         expect(page).to have_selector('.btn.submit-answer', count: 1)
       end
 
@@ -196,6 +214,15 @@ RSpec.describe 'Course: Assessment: Submissions: Worksheet' do
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.published?).to be(true)
+      end
+
+      scenario 'I can run code on autograded programming questions' do
+        multiple_programming_submission
+        visit edit_course_assessment_submission_path(course, multiple_programming_assessment,
+                                                     multiple_programming_submission)
+
+        # The Run Code button is only shown for the auto_gradable? questions
+        expect(page).to have_selector('.btn.submit-answer', count: 2)
       end
     end
   end
