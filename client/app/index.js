@@ -19,7 +19,11 @@ function loadCurrentModule() {
   try {
     require(`../app/bundles/${modulePath}`);
   } catch (e) {
-    // Module does not exist
+    if (e.message.includes(modulePath)) {
+      // Current module does not exist
+    } else {
+      throw e;
+    }
   }
 }
 
