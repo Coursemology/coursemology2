@@ -74,6 +74,10 @@ const config = {
     ],
   },
 
+  stats: {
+    warnings: false,
+  },
+
   eslint: {
     configFile: '../.eslintrc',
   },
