@@ -133,6 +133,7 @@ en:
       video:
         videos:
           index: :'course.video.videos.index.header'
+          new: :'course.video.videos.new.header'
     system:
       admin:
         controller:

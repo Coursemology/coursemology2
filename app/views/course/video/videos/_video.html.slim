@@ -1,0 +1,14 @@
+= content_tag_for(:tr, video, class: time_period_class(video) + draft_class(video))
+  th colspan=2
+    - unless video.published?
+      span title=draft_message(video)
+        => fa_icon 'ban'.freeze
+    = link_to(format_inline_text(video.title),
+      course_video_path(current_course, video))
+  td.table-start-at
+    = format_datetime(video.start_at, :short)
+  td.table-buttons colspan=2
+    - if can?(:manage, video)
+      div.btn-group
+        = edit_button([current_course, video])
+        = delete_button([current_course, video])

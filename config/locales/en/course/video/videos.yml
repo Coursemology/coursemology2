@@ -5,3 +5,18 @@ en:
         sidebar_title: :'course.video.videos.index.header'
         index:
           header: 'Videos'
+          title: 'Title'
+          start_at: 'Start At'
+        new:
+          header: 'New Video'
+        create:
+          success: '%{title} was created.'
+        show:
+          description: 'Description'
+        edit:
+          header: 'Edit Video'
+        update:
+          success: 'Video %{title} was updated.'
+        destroy:
+          success: '%{title} was deleted.'
+          failure: 'Could not delete video: %{error}'

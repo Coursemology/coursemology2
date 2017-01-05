@@ -296,7 +296,7 @@ Rails.application.routes.draw do
       get 'statistics/staff'
 
       scope module: :video do
-        resources :videos, only: [:index]
+        resources :videos
       end
     end
   end

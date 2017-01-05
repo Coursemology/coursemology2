@@ -1,1 +1,14 @@
-= page_header
+= page_header do
+  - if can?(:manage, Course::Video.new(course: current_course))
+    = new_button([current_course, :video])
+
+table.table.videos-list.table-hover
+  thead
+    tr
+      th = t('.title')
+      th
+      th.table-start-at = t('.start_at')
+      th
+      th
+  tbody
+    = render partial: 'video', collection: @videos
