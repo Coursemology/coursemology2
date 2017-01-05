@@ -6,5 +6,14 @@ FactoryGirl.define do
     course
     title { generate(:course_video_title) }
     url 'https://www.youtube.com/watch?v=i_YiovUyMds'
+    published false
+
+    trait :not_started do
+      start_at { 1.day.from_now }
+    end
+
+    trait :published do
+      published true
+    end
   end
 end
