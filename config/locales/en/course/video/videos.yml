@@ -1,0 +1,7 @@
+en:
+  course:
+    video:
+      videos:
+        sidebar_title: :'course.video.videos.index.header'
+        index:
+          header: 'Videos'

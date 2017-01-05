@@ -114,8 +114,10 @@ Rails.application.routes.draw do
 
         get 'components' => 'component_settings#edit'
         patch 'components' => 'component_settings#update'
+
         get 'sidebar' => 'sidebar_settings#edit'
         patch 'sidebar' => 'sidebar_settings#update'
+
         get 'announcements' => 'announcement_settings#edit'
         patch 'announcements' => 'announcement_settings#update'
 
@@ -133,6 +135,9 @@ Rails.application.routes.draw do
 
         get 'topics' => 'discussion/topic_settings#edit', path: 'comments'
         patch 'topics' => 'discussion/topic_settings#update', path: 'comments'
+
+        get'videos' => 'video_settings#edit'
+        patch 'videos' => 'video_settings#update'
 
         namespace 'assessments' do
           resources :categories, only: [:new, :create, :destroy] do
@@ -289,6 +294,10 @@ Rails.application.routes.draw do
 
       get 'statistics/student'
       get 'statistics/staff'
+
+      scope module: :video do
+        resources :videos, only: [:index]
+      end
     end
   end
 

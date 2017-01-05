@@ -27,3 +27,5 @@ en:
       name: 'Points Disbursement'
     duplication:
       name: 'Duplication'
+    video:
+      name: :'course.video.videos.index.header'

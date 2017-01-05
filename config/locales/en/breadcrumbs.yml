@@ -37,7 +37,8 @@ en:
         discussion:
           topic_settings:
             edit: :'course.discussion.topics.index.header'
-
+        video_settings:
+          edit: :'course.video.videos.index.header'
       users:
         index: 'Users'
         students: :'course.users.students.header'
@@ -129,6 +130,9 @@ en:
       discussion:
         topics:
           index: :'course.discussion.topics.index.header'
+      video:
+        videos:
+          index: :'course.video.videos.index.header'
     system:
       admin:
         controller:
