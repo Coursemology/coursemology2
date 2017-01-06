@@ -38,7 +38,7 @@ const MaterialList = (props) => {
     )
   );
 
-  const notification = success !== undefined;
+  const notification = success === true || success === false;
   let message;
 
   if (success) {
