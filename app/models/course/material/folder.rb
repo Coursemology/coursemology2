@@ -126,7 +126,8 @@ class Course::Material::Folder < ActiveRecord::Base
   end
 
   def assign_valid_name
-    return unless name_changed? && owner
+    return if owner_id.nil? && owner.nil?
+    return if !name_changed? && !parent_id_changed?
 
     self.name = next_valid_name
   end
