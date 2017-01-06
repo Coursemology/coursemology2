@@ -6,7 +6,8 @@ class Course::Video < ActiveRecord::Base
 
   after_initialize :set_defaults, if: :new_record?
 
-  has_many :submissions, inverse_of: :video, dependent: :destroy
+  has_many :submissions, class_name: Course::Video::Submission.name,
+                         inverse_of: :video, dependent: :destroy
 
   def self.use_relative_model_naming?
     true
