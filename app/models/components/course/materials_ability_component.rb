@@ -41,8 +41,7 @@ module Course::MaterialsAbilityComponent
   end
 
   def allow_staff_manage_materials
-    can :read, Course::Material, material_course_staff_hash
-    can :manage, Course::Material, material_course_staff_hash.deep_merge(concrete_material_hash)
+    can :manage, Course::Material, material_course_staff_hash
 
     can :read, Course::Material::Folder, course_staff_hash
     can :manage, Course::Material::Folder, course_staff_hash.reverse_merge(concrete_folder_hash)
@@ -63,9 +62,5 @@ module Course::MaterialsAbilityComponent
   def concrete_folder_hash
     # Linked folders(folders with owners) are not manageable
     { owner_id: nil }
-  end
-
-  def concrete_material_hash
-    { folder: { owner_id: nil } }
   end
 end

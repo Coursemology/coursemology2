@@ -125,11 +125,11 @@ class Course < ActiveRecord::Base
                              map(&:acting_as)
     self.lesson_plan_milestones = duplicator.duplicate(other.lesson_plan_milestones)
 
-    # Find material_folders without owners and only duplicate those.
+    # Find concrete material_folders and only duplicate those.
     # This must be done after duplicating assessments.
     # Do not try duplicating all folders at once. Parent IDs do not seem to be populated by the
     # edge gem until the database entries are created.
-    material_folders_to_duplicate = other.material_folders.without_owners
+    material_folders_to_duplicate = other.material_folders.concrete
     self.material_folders = duplicator.duplicate(material_folders_to_duplicate).compact
 
     # Skill branches are duplicated as part of skills.

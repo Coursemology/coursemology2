@@ -32,15 +32,26 @@ const ProviderWrapper = ({ store, children }) => {
     messages = translations[localeWithoutRegionCode] || translations[i18nLocale];
   }
 
-  return (
-    <Provider store={store}>
-      <IntlProvider locale={i18nLocale} messages={messages}>
+  let providers;
+  if (store) {
+    providers =
+      (<Provider store={store}>
+        <IntlProvider locale={i18nLocale} messages={messages}>
+          <MuiThemeProvider>
+            { children }
+          </MuiThemeProvider>
+        </IntlProvider>
+      </Provider>);
+  } else {
+    providers =
+      (<IntlProvider locale={i18nLocale} messages={messages}>
         <MuiThemeProvider>
           { children }
         </MuiThemeProvider>
-      </IntlProvider>
-    </Provider>
-  );
+      </IntlProvider>);
+  }
+
+  return providers;
 };
 
 ProviderWrapper.propTypes = propTypes;

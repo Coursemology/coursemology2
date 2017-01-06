@@ -7,5 +7,5 @@
     = format_datetime(material.updated_at)
     div = link_to_user(material.updater)
   td
-    = edit_button([current_course, @folder, material]) if can?(:edit, material)
-    = delete_button([current_course, @folder, material]) if can?(:destroy, material)
+    = edit_button([current_course, @folder, material]) if @folder.concrete? && can?(:edit, material)
+    = delete_button([current_course, @folder, material]) if @folder.concrete? && can?(:destroy, material)
