@@ -1,16 +1,15 @@
 = div_for(announcement, class: time_period_class(announcement) + unread_class(announcement))
   h2.announcement-title
     - if announcement.unread?(current_user)
-      small => fa_icon 'envelope'.freeze
+      span => fa_icon 'envelope'.freeze
+    - if announcement.sticky?
+      span title=t('.sticky')
+        => fa_icon 'thumb-tack'.freeze
+    - unless announcement.currently_active?
+      span title=time_period_message(announcement)
+        => fa_icon 'calendar'.freeze
 
     = format_inline_text(announcement.title)
-
-    - if announcement.sticky?
-      small title=t('.sticky')
-        =< fa_icon 'thumb-tack'.freeze
-    - unless announcement.currently_active?
-      small title=time_period_message(announcement)
-        =< fa_icon 'calendar'.freeze
 
     div.pull-right
       div.btn-group
