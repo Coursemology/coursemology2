@@ -15,23 +15,27 @@ class MaterialListContainer extends React.Component {
   }
 
   onMaterialDelete(url) {
-    let materials = this.state.materials;
-
+    const originMaterials = this.state.materials;
     // Update UI to show the loader.
-    const [index, material] = materials.findEntry(m => m.get('url') === url);
-    const updatingMaterials = materials.set(index, material.set('deleting', true));
-    this.setState({ materials: updatingMaterials, success: null });
+    const [index, material] = originMaterials.findEntry(m => m.get('url') === url);
+    const updatedMaterials = originMaterials.set(index, material.set('deleting', true));
+    this.setState({ materials: updatedMaterials, success: null });
+    const materialName = material.get('name');
 
     axios.delete(url)
       .then(() => {
         // Remove material from the list
-        materials = materials.filter(m => m.get('url') !== url);
-        const materialName = material.get('name');
+        const materials = this.state.materials.filter(m => m.get('url') !== url);
         this.setState({ materials, success: true, materialName });
       })
       .catch(() => {
-        // Display failure message and restore to previous state
-        const materialName = material.get('name');
+        // Display failure message and restore the material to not deleting state
+        const materials = this.state.materials.update(
+          this.state.materials.findIndex(m =>
+             m.get('url') === url
+          ), m =>
+           m.set('deleting', false)
+        );
         this.setState({ materials, success: false, materialName });
       });
   }
