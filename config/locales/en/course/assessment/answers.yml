@@ -4,4 +4,3 @@ en:
       answers:
         discussion_topic_answer:
           by_html: 'By: %{user}'
-          question: 'Question: %{title}'

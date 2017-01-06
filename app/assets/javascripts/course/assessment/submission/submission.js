@@ -1,4 +1,6 @@
-(function($) {
+//= require helpers/url_helpers
+
+(function($, URL_HELPERS) {
   'use strict';
   var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ';
   var SINGLE_QUESTION_ASSESSMENT_SELECTOR = DOCUMENT_SELECTOR + '.single-question ';
@@ -164,8 +166,8 @@
       $('#' + identifier).find('textarea.code').ace();
     });
 
-    // Show the first tab on page load.
-    $(MULTI_QUESTION_ASSESSMENT_SELECTOR + '.tab-header a:first').tab('show');
+    var step = URL_HELPERS.getUrlParameter('step') || 1;
+    $(MULTI_QUESTION_ASSESSMENT_SELECTOR + '.tab-header a[step="' + step + '"]').tab('show');
   }
 
   function initializeAceEditor() {
@@ -180,4 +182,4 @@
   $(document).ready(updateInitialPoints);
   $(document).ready(initializeAnswerTabs);
   $(document).ready(initializeAceEditor);
-})(jQuery);
+})(jQuery, URL_HELPERS);
