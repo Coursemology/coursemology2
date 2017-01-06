@@ -20,7 +20,7 @@ class MaterialListContainer extends React.Component {
     // Update UI to show the loader.
     const [index, material] = materials.findEntry(m => m.get('url') === url);
     const updatingMaterials = materials.set(index, material.set('deleting', true));
-    this.setState({ materials: updatingMaterials });
+    this.setState({ materials: updatingMaterials, success: null });
 
     axios.delete(url)
       .then(() => {
