@@ -9,11 +9,12 @@
     strong = t('.new_files')
     = f.file_field :files, multiple: true
 - else
-  - if f.object.attachment.present?
+  - if f.object.attachment.present? && f.object.attachment.persisted?
     strong => t('.uploaded_file')
     div
       span = link_to format_inline_text(f.object.attachment.name),
                                attachment_reference_path(f.object.attachment), target: "_blank"
       span.uploaded-by = t('.uploaded_by', name: f.object.attachment.creator.name)
+
   div
     = f.file_field :file
