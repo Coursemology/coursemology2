@@ -4,7 +4,7 @@
 ul.nav.nav-tabs.tab-header role="tab-list"
   - f.object.assessment.questions.each.with_index(1) do |question, index|
     li role="presentation"
-      a href="##{question.id}" aria-controls="#{question.id}" role="tab" data-toggle="tab"
+      a href="##{question.id}" aria-controls="#{question.id}" role="tab" data-toggle="tab" step="#{index}"
         = t('.question', number: index)
 
 div.tab-content
