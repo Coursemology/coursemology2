@@ -1,7 +1,6 @@
-= import_result_alert
-
 = simple_form_for [current_course, @assessment, @programming_question] do |f|
   = f.error_notification
+  = import_result_alert
   = render partial: 'course/assessment/questions/form', locals: { f: f }
 
   = f.association :language

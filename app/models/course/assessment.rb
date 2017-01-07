@@ -131,8 +131,13 @@ class Course::Assessment < ActiveRecord::Base
   end
 
   def validate_only_autograded_questions
-    return if questions.all?(&:auto_gradable?)
-    errors.add(:base, :autograded)
+    return unless published?
+    non_autograded_questions = questions.select { |q| !q.auto_gradable? }
+    return if non_autograded_questions.empty?
+
+    message = I18n.t('activerecord.errors.models.course/assessment.autograded',
+                     question: non_autograded_questions.first.display_title)
+    errors.add(:published, message)
   end
 
   def clear_duplication_flag

@@ -59,12 +59,13 @@ RSpec.describe Course::Assessment do
         end
       end
 
-      context 'when the assessment is set to be autograded' do
+      context 'when an autograded assessment is set to be published' do
+        let(:assessment_traits) { [:autograded] }
         let!(:question) do
           create(:course_assessment_question_programming, *question_traits, assessment: assessment)
         end
         subject do
-          assessment.autograded = true
+          assessment.published = true
           assessment
         end
 
@@ -73,7 +74,7 @@ RSpec.describe Course::Assessment do
 
           it 'is not valid' do
             expect(subject).not_to be_valid
-            expect(subject.errors['base']).
+            expect(subject.errors['published']).
               to include(I18n.t('activerecord.errors.models.course/assessment.autograded'))
           end
         end
