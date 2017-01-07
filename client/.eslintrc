@@ -5,11 +5,13 @@
   },
   "rules": {
     # See https://github.com/yannickcr/eslint-plugin-react/issues/847
-    "react/no-unused-prop-types": ["warn", { "skipShapeProps": true }]
+    "react/no-unused-prop-types": ["warn", { "skipShapeProps": true }],
+    "new-cap": [2, { "capIsNewExceptions": ["Set"] }],
   },
   "globals": {
     "window": true,
     "document": true,
-    "$": true
+    "$": true,
+    "FormData": true,
   }
 }

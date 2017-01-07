@@ -1,0 +1,19 @@
+@import '../../../../../../lib/styles/variables';
+
+.downloadPackage {
+  margin: 1em 0;
+}
+
+.testSelection {
+  margin: 10px 0;
+  position: relative;
+  text-align: center;
+}
+
+.testSelectionRuler {
+  border-top: 1px solid $btn-default-border;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+}

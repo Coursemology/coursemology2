@@ -1,0 +1,26 @@
+// scss-lint:disable ImportantRule
+.addNewTestRow {
+  // Remove bootstrap padding.
+  padding: 0 !important;
+}
+// scss-lint:enable ImportantRule
+
+.addNewTestButton {
+  border: 0;
+  border-radius: 0;
+  width: 100%;
+}
+
+.deleteButtonCell {
+  text-align: center;
+  // scss-lint:disable ImportantRule
+  vertical-align: middle !important;
+  // scss-lint:enable ImportantRule
+  width: 50px;
+}
+
+.testCell {
+  // scss-lint:disable ImportantRule
+  vertical-align: middle !important;
+  // scss-lint:enable ImportantRule
+}

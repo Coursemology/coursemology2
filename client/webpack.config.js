@@ -59,6 +59,10 @@ const config = {
         exclude: /node_modules/,
       },
       {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader',
+      },
+      {
         test: /\.scss$/,
         loaders: [
           'style',

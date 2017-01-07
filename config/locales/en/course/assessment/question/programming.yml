@@ -40,3 +40,6 @@ en:
             hint: 'Hint'
             expression: 'Expression'
             expected: 'Expected'
+          package:
+            default_expression: 'This testcase has no meaning.'
+            default_expected: 'Just finalise your answer when you are done.'
