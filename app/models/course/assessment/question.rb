@@ -84,7 +84,7 @@ class Course::Assessment::Question < ActiveRecord::Base
   private
 
   def validate_assessment_is_not_autograded
-    return unless assessment.autograded
+    return unless assessment.autograded? && assessment.published?
     errors.add(:base, :autograded_assessment)
   end
 end

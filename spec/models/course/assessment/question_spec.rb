@@ -19,8 +19,8 @@ RSpec.describe Course::Assessment::Question do
     subject { build_stubbed(:course_assessment_question) }
 
     describe 'validations' do
-      context 'when assessment automatically releases grades' do
-        let(:assessment) { create(:assessment, :autograded) }
+      context 'when the assessment is published and autograded' do
+        let(:assessment) { create(:assessment, :published_with_mcq_question, :autograded) }
         let!(:question) { build(:course_assessment_question, assessment: assessment) }
         subject { question }
 
