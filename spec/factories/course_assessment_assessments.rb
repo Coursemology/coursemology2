@@ -17,7 +17,7 @@ FactoryGirl.define do
     published false
     tabbed_view false
 
-    trait :unopened do
+    trait :not_started do
       start_at { 1.day.from_now }
     end
 
