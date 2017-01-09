@@ -5,4 +5,3 @@ en:
         programming_file_annotations:
           discussion_topic_programming_file_annotation:
             by_html: 'By: %{user}'
-            question: 'Question: %{title}'
