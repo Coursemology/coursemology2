@@ -12,27 +12,31 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario 'I can create a new question' do
+      scenario 'I can create a new question', js: true do
         skill = create(:course_assessment_skill, course: course)
         visit course_assessment_path(course, assessment)
-        click_link I18n.t('course.assessment.assessments.show.new_question.programming')
+        page.find('.dropdown').click
+        page.find('#programming-link').click
 
         expect(current_path).to eq(
           new_course_assessment_question_programming_path(course, assessment)
         )
+        expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
         question_attributes = attributes_for(:course_assessment_question_programming)
-        fill_in 'title', with: question_attributes[:title]
-        fill_in 'description', with: question_attributes[:description]
-        fill_in 'staff_only_comments', with: question_attributes[:staff_only_comments]
-        fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
-        within find_field('skills') do
-          select skill.title
+        fill_in 'question_programming[title]', with: question_attributes[:title]
+        fill_in 'question_programming[description]', with: question_attributes[:description]
+        fill_in 'question_programming[staff_only_comments]',
+                with: question_attributes[:staff_only_comments]
+        fill_in 'question_programming[maximum_grade]', with: question_attributes[:maximum_grade]
+        within find_field('question_programming[skill_ids][]', visible: false) do
+          select skill.title, visible: false
         end
-        select question_attributes[:language].name, from: 'language'
-        fill_in 'memory_limit', with: question_attributes[:memory_limit]
-        fill_in 'time_limit', with: question_attributes[:time_limit]
-        fill_in 'attempt_limit', with: question_attributes[:attempt_limit]
-        click_button 'submit'
+        select question_attributes[:language].name,
+               from: 'question_programming[language_id]', visible: false
+        fill_in 'question_programming[memory_limit]', with: question_attributes[:memory_limit]
+        fill_in 'question_programming[time_limit]', with: question_attributes[:time_limit]
+        fill_in 'question_programming[attempt_limit]', with: question_attributes[:attempt_limit]
+        page.find('#programmming-question-form-submit').click
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
 
@@ -44,22 +48,27 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(question_created.attempt_limit).to eq(question_attributes[:attempt_limit])
       end
 
-      scenario 'I can upload a template package' do
+      scenario 'I can upload a template package', js: true do
         question = create(:course_assessment_question_programming,
                           assessment: assessment, template_file_count: 0)
         visit edit_course_assessment_question_programming_path(course, assessment, question)
+        expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
 
+        page.find('#question_programming_file', visible: false).click
         attach_file 'question_programming[file]',
                     File.join(ActionController::TestCase.fixture_path,
-                              'course/empty_programming_question_template.zip')
-        click_button 'submit'
+                              'course/empty_programming_question_template.zip'),
+                    visible: false
+        page.find('#programmming-question-form-submit').click
         wait_for_job
         expect(page).to have_selector('div.alert.alert-danger')
 
+        page.find('#question_programming_file', visible: false).click
         attach_file 'question_programming[file]',
                     File.join(ActionController::TestCase.fixture_path,
-                              'course/programming_question_template.zip')
-        click_button 'submit'
+                              'course/programming_question_template.zip'),
+                    visible: false
+        page.find('#programmming-question-form-submit').click
         wait_for_job
 
         expect(current_path).to \
@@ -67,8 +76,8 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
 
         expect(page).to have_selector('div.alert.alert-success')
         question.template_files.reload.each do |template|
-          expect(page).to have_selector('ul.nav a', text: template.filename)
-          expect(page).to have_selector('div.question_programming_template_file',
+          expect(page).to have_selector('.template-tab', text: template.filename)
+          expect(page).to have_selector('div.template-content',
                                         text: template.content)
         end
 
@@ -77,20 +86,21 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         end
       end
 
-      scenario 'I can edit a question' do
+      scenario 'I can edit a question', js: true do
         question = create(:course_assessment_question_programming, assessment: assessment)
         visit course_assessment_path(course, assessment)
 
         edit_path = edit_course_assessment_question_programming_path(course, assessment, question)
         find_link(nil, href: edit_path).click
+        expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
 
         maximum_grade = 999.9
-        fill_in 'maximum_grade', with: maximum_grade
-        click_button 'submit'
+        fill_in 'question_programming[maximum_grade]', with: maximum_grade
+        page.find('#programmming-question-form-submit').click
 
-        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
+        expect(current_path).to eq(edit_path)
         expect(question.reload.maximum_grade).to eq(maximum_grade)
-        expect(page).to have_selector('div.alert.alert-success')
       end
 
       scenario 'I can delete a question' do
@@ -104,20 +114,29 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(page).not_to have_content_tag_for(question)
       end
 
-      scenario 'I can create a new question and upload the template package' do
+      scenario 'I can create a new question and upload the template package', js: true do
+        skill = create(:course_assessment_skill, course: course)
         visit new_course_assessment_question_programming_path(course, assessment)
+        expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
         question_attributes = attributes_for(:course_assessment_question_programming)
-        fill_in 'title', with: question_attributes[:title]
-        fill_in 'description', with: question_attributes[:description]
-        fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
-        select question_attributes[:language].name, from: 'language'
-        fill_in 'memory_limit', with: question_attributes[:memory_limit]
-        fill_in 'time_limit', with: question_attributes[:time_limit]
+        fill_in 'question_programming[title]', with: question_attributes[:title]
+        fill_in 'question_programming[description]', with: question_attributes[:description]
+        fill_in 'question_programming[maximum_grade]', with: question_attributes[:maximum_grade]
+        within find_field('question_programming[skill_ids][]', visible: false) do
+          select skill.title, visible: false
+        end
+        select question_attributes[:language].name,
+               from: 'question_programming[language_id]', visible: false
+        fill_in 'question_programming[memory_limit]', with: question_attributes[:memory_limit]
+        fill_in 'question_programming[time_limit]', with: question_attributes[:time_limit]
+
+        page.find('#question_programming_file', visible: false).click
         attach_file 'question_programming[file]',
                     File.join(ActionController::TestCase.fixture_path,
-                              'course/programming_question_template.zip')
+                              'course/programming_question_template.zip'),
+                    visible: false
 
-        click_button 'submit'
+        page.find('#programmming-question-form-submit').click
         wait_for_job
 
         expect(current_path).to \
