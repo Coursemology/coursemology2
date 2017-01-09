@@ -9,32 +9,18 @@ class Course::Assessment::Question::ProgrammingController < \
   end
 
   def create
-    if @programming_question.save
-      if @programming_question.import_job
-        redirect_to job_path(@programming_question.import_job)
-      else
-        redirect_to course_assessment_path(current_course, @assessment),
-                    success: t('.success')
-      end
-    else
-      render 'new'
-    end
+    @programming_question.package_type = :zip_upload
+
+    save_and_redirect('new', t('.success'))
   end
 
   def edit
   end
 
   def update
-    if @programming_question.update_attributes(programming_question_params)
-      if @programming_question.import_job
-        redirect_to job_path(@programming_question.import_job)
-      else
-        redirect_to course_assessment_path(current_course, @assessment),
-                    success: t('.success')
-      end
-    else
-      render 'edit'
-    end
+    @programming_question.assign_attributes programming_question_params
+
+    save_and_redirect('edit', t('.success'))
   end
 
   def destroy
@@ -56,6 +42,33 @@ class Course::Assessment::Question::ProgrammingController < \
       :language_id, :memory_limit, :time_limit, :attempt_limit,
       *attachment_params,
       skill_ids: []
+    )
+  end
+
+  def save_and_redirect(template, message)
+    if @programming_question.save
+      if @programming_question.import_job
+        redirect_to job_path(@programming_question.import_job)
+      else
+        redirect_to course_assessment_path(current_course, @assessment),
+                    success: message
+      end
+    else
+      render template
+    end
+  end
+
+  def save_and_render_json
+    if @programming_question.save! && @programming_question.import_job
+      @redirect_url = job_path(@programming_question.import_job)
+    end
+
+    render '_props'
+  end
+
+  def programming_package_service(params = nil)
+    Course::Assessment::Question::Programming::ProgrammingPackageService.new(
+      @programming_question, params
     )
   end
 end

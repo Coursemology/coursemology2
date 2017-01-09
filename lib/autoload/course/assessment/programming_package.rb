@@ -31,6 +31,9 @@
 # changes to disk. Duplicate the file before modifying if you do not want to modify the original
 # file -- changes are made in-place.
 class Course::Assessment::ProgrammingPackage
+  # The path to the .meta file.
+  META_PATH = Pathname.new('.meta').freeze
+
   # The path to the Makefile.
   MAKEFILE_PATH = Pathname.new('Makefile').freeze
 
@@ -99,6 +102,15 @@ class Course::Assessment::ProgrammingPackage
     ['Makefile', 'submission/', 'tests/'].all? { |entry| @file.find_entry(entry).present? }
   end
 
+  # Gets the .meta file.
+  #
+  # @return [String] Contents of the .meta file.
+  def meta_file
+    get_file(META_PATH)
+  rescue
+    nil
+  end
+
   # Gets the contents of all submission files.
   #
   # @return [Hash<Pathname, String>] A hash mapping the file path to the file contents of each
@@ -149,6 +161,18 @@ class Course::Assessment::ProgrammingPackage
     self.submission_files = files
   end
 
+  # Unzips the contents of the file to the destination folder.
+  #
+  # @param [String] Path to folder.
+  def unzip_file(destination)
+    ensure_file_open!
+    @file.each do |entry|
+      entry_path = File.join(destination, entry.name)
+      FileUtils.mkdir_p(File.dirname(entry_path))
+      @file.extract(entry, entry_path) unless File.exist?(entry_path)
+    end
+  end
+
   private
 
   # Ensures that the zip file is open.
@@ -187,5 +211,14 @@ class Course::Assessment::ProgrammingPackage
       file_name = entry_file_name.relative_path_from(folder_path)
       [file_name, entry.get_input_stream(&:read)]
     end.to_h
+  end
+
+  # Get the contents of a file.
+  #
+  # @param [String] Path to file.
+  # @return [String]
+  def get_file(file_path)
+    ensure_file_open!
+    @file.read(file_path)
   end
 end
