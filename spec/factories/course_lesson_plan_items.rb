@@ -4,7 +4,6 @@ FactoryGirl.define do
     course
     base_exp          { rand(1..10) * 100 }
     time_bonus_exp    { rand(1..10) * 100 }
-    extra_bonus_exp   { rand(1..10) * 100 }
     start_at { 1.day.ago }
     bonus_end_at { 1.day.from_now }
     end_at { nil }

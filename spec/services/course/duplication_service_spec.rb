@@ -107,7 +107,6 @@ RSpec.describe Course::DuplicationService, type: :service do
           expect(new_assessment.description).to eq assessment.description
           expect(new_assessment.base_exp).to eq assessment.base_exp
           expect(new_assessment.time_bonus_exp).to eq assessment.time_bonus_exp
-          expect(new_assessment.extra_bonus_exp).to eq assessment.extra_bonus_exp
           expect(new_assessment.published).to eq assessment.published
           expect(new_assessment.start_at).to be_within(1.second).of assessment.start_at + 1.day
           expect(new_assessment.bonus_end_at).to be_within(1.second).

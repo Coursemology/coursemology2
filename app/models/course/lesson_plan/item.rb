@@ -30,7 +30,6 @@ class Course::LessonPlan::Item < ActiveRecord::Base
     self.published = other.published
     self.base_exp = other.base_exp
     self.time_bonus_exp = other.time_bonus_exp
-    self.extra_bonus_exp = other.extra_bonus_exp
     self.start_at = other.start_at + time_shift
     self.bonus_end_at = other.bonus_end_at + time_shift if other.bonus_end_at
     self.end_at = other.end_at + time_shift if other.end_at
@@ -42,7 +41,6 @@ class Course::LessonPlan::Item < ActiveRecord::Base
   def set_default_values
     self.base_exp ||= 0
     self.time_bonus_exp ||= 0
-    self.extra_bonus_exp ||= 0
   end
 
   # User must set bonus_end_at if there's bonus exp

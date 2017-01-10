@@ -21,7 +21,6 @@ RSpec.describe 'Extension: Acts as Lesson Plan Item' do
   subject(:dummy) { self.class::DummyClass.new }
   it { is_expected.to respond_to(:base_exp) }
   it { is_expected.to respond_to(:time_bonus_exp) }
-  it { is_expected.to respond_to(:extra_bonus_exp) }
   it { is_expected.to respond_to(:start_at) }
   it { is_expected.to respond_to(:end_at) }
   it { is_expected.to respond_to(:bonus_end_at) }

@@ -28,7 +28,6 @@ RSpec.feature 'Course: Assessments: Management' do
         fill_in 'assessment_description', with: assessment.description
         fill_in 'assessment_base_exp', with: assessment.base_exp
         fill_in 'assessment_time_bonus_exp', with: assessment.time_bonus_exp
-        fill_in 'assessment_extra_bonus_exp', with: assessment.extra_bonus_exp
         fill_in 'assessment_start_at', with: assessment.start_at
         fill_in 'assessment_end_at', with: assessment.end_at
         fill_in 'assessment_bonus_end_at', with: assessment.bonus_end_at
@@ -63,7 +62,6 @@ RSpec.feature 'Course: Assessments: Management' do
         fill_in 'assessment_description', with: assessment.description
         fill_in 'assessment_base_exp', with: assessment.base_exp
         fill_in 'assessment_time_bonus_exp', with: assessment.time_bonus_exp
-        fill_in 'assessment_extra_bonus_exp', with: assessment.extra_bonus_exp
         fill_in 'assessment_start_at', with: assessment.start_at
         fill_in 'assessment_end_at', with: assessment.end_at
         fill_in 'assessment_bonus_end_at', with: assessment.bonus_end_at
