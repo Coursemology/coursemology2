@@ -22,17 +22,12 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
       end
     end
 
-    describe '#total_exp' do
-      it 'equals base exp plus bonuses' do
-        sum = lesson_plan_item.base_exp +
-              lesson_plan_item.time_bonus_exp +
-              lesson_plan_item.extra_bonus_exp
-        expect(lesson_plan_item.total_exp).to eq sum
-      end
-    end
-
     describe '#set_default_values' do
-      subject { Course::LessonPlan::Item.new.total_exp }
+      subject do
+        item = Course::LessonPlan::Item.new
+        item.base_exp + item.time_bonus_exp
+      end
+
       it { is_expected.to eq 0 }
     end
 

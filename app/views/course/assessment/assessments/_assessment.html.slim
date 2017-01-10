@@ -7,7 +7,9 @@
               course_assessment_path(current_course, assessment))
 
   - if current_course.gamified?
-    td.table-experience-points = assessment.total_exp
+    td.table-base-exp = assessment.base_exp
+    - if show_time_bonus_exp?
+      td.table-time-bonus-exp = assessment.time_bonus_exp
   - unless current_component_host[:course_achievements_component].nil?
     td.achievement-badge.table-requirement-for
       - achievement_conditionals = @conditional_service.achievement_conditional_for(assessment)

@@ -19,14 +19,6 @@ class Course::LessonPlan::Item < ActiveRecord::Base
   belongs_to :course, inverse_of: :lesson_plan_items
   has_many :todos, class_name: Course::LessonPlan::Todo, inverse_of: :item, dependent: :destroy
 
-  # Gives the maximum number of EXP Points that an EXP-awarding item
-  # is allocated to give, which is the sum of base and bonus EXPs.
-  #
-  # @return [Integer] Maximum EXP awardable.
-  def total_exp
-    base_exp + time_bonus_exp + extra_bonus_exp
-  end
-
   # Copy attributes for lesson plan item from the object being duplicated.
   # Shift the time related fields.
   #
@@ -38,7 +30,6 @@ class Course::LessonPlan::Item < ActiveRecord::Base
     self.published = other.published
     self.base_exp = other.base_exp
     self.time_bonus_exp = other.time_bonus_exp
-    self.extra_bonus_exp = other.extra_bonus_exp
     self.start_at = other.start_at + time_shift
     self.bonus_end_at = other.bonus_end_at + time_shift if other.bonus_end_at
     self.end_at = other.end_at + time_shift if other.end_at
@@ -50,7 +41,6 @@ class Course::LessonPlan::Item < ActiveRecord::Base
   def set_default_values
     self.base_exp ||= 0
     self.time_bonus_exp ||= 0
-    self.extra_bonus_exp ||= 0
   end
 
   # User must set bonus_end_at if there's bonus exp

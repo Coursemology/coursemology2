@@ -23,7 +23,9 @@ table.table.assessments-list.table-hover
       th = t('.title')
       th
       - if current_course.gamified?
-        th.table-experience-points = t('.maximum_experience_points')
+        th.table-base-exp = Course::LessonPlan::Item.human_attribute_name(:base_exp)
+        - if show_time_bonus_exp?
+          th.table-time-bonus-exp = Course::LessonPlan::Item.human_attribute_name(:time_bonus_exp)
       - unless current_component_host[:course_achievements_component].nil?
         th.table-requirement-for = t('.requirement_for')
       th.table-start-at = t('.start_at')

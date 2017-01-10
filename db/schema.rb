@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170102053335) do
+ActiveRecord::Schema.define(version: 20170110022335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -513,7 +513,6 @@ ActiveRecord::Schema.define(version: 20170102053335) do
     t.boolean  "published",       :default=>false, :null=>false
     t.integer  "base_exp",        :null=>false
     t.integer  "time_bonus_exp",  :null=>false
-    t.integer  "extra_bonus_exp", :null=>false
     t.datetime "start_at",        :null=>false
     t.datetime "bonus_end_at"
     t.datetime "end_at"

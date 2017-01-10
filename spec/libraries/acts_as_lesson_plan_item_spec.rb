@@ -21,27 +21,11 @@ RSpec.describe 'Extension: Acts as Lesson Plan Item' do
   subject(:dummy) { self.class::DummyClass.new }
   it { is_expected.to respond_to(:base_exp) }
   it { is_expected.to respond_to(:time_bonus_exp) }
-  it { is_expected.to respond_to(:extra_bonus_exp) }
   it { is_expected.to respond_to(:start_at) }
   it { is_expected.to respond_to(:end_at) }
   it { is_expected.to respond_to(:bonus_end_at) }
-  it { is_expected.to respond_to(:total_exp) }
   it { is_expected.to respond_to(:acting_as) }
   it { expect(dummy.acting_as).to respond_to(:specific) }
-
-  context 'when functioning as an EXP Source' do
-    describe 'sets and sums EXP correctly' do
-      subject do
-        dummy.tap do |d|
-          d.base_exp = rand(1..10)
-          d.extra_bonus_exp = rand(1..10)
-        end
-      end
-      it 'has correct total EXP' do
-        expect(subject.total_exp).to eq(subject.base_exp + subject.extra_bonus_exp)
-      end
-    end
-  end
 
   context 'when declared to have a todo' do
     subject { self.class::DummyTodoClass }
