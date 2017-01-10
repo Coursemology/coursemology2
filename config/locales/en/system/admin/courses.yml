@@ -4,6 +4,8 @@ en:
       courses:
         index:
           header: 'Courses'
+          header_with_count: 'Courses (%{count})'
+          search_count: '%{count} courses found'
           title: 'Title'
           status: 'Status'
           created_at: 'Created At'
