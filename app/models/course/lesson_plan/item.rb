@@ -19,14 +19,6 @@ class Course::LessonPlan::Item < ActiveRecord::Base
   belongs_to :course, inverse_of: :lesson_plan_items
   has_many :todos, class_name: Course::LessonPlan::Todo, inverse_of: :item, dependent: :destroy
 
-  # Gives the maximum number of EXP Points that an EXP-awarding item
-  # is allocated to give, which is the sum of base and bonus EXPs.
-  #
-  # @return [Integer] Maximum EXP awardable.
-  def total_exp
-    base_exp + time_bonus_exp + extra_bonus_exp
-  end
-
   # Copy attributes for lesson plan item from the object being duplicated.
   # Shift the time related fields.
   #
