@@ -69,7 +69,8 @@
         @extend .text-center;
       }
 
-      .table-experience-points {
+      .table-base-exp,
+      .table-time-bonus-exp {
         @extend .hidden-xs;
         @extend .hidden-sm;
         @extend .text-center;

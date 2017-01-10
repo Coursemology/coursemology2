@@ -13,7 +13,6 @@ en:
           start_at: 'Start At'
           bonus_cut_off: 'Bonus Cut Off'
           end_at: 'End At'
-          maximum_experience_points: 'Maximum Experience Points'
           requirement_for: 'Requirement For'
           new_assessment:
             autograded: 'Autograded Assessment'

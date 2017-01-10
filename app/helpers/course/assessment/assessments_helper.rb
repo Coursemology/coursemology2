@@ -30,4 +30,10 @@ module Course::Assessment::AssessmentsHelper
       @assessments.any? { |assessment| assessment.end_at.present? }
     end
   end
+
+  def show_time_bonus_exp?
+    @show_time_bonus_exp ||= begin
+      @assessments.any? { |assessment| assessment.time_bonus_exp > 0 }
+    end
+  end
 end
