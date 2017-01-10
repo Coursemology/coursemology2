@@ -1,7 +1,8 @@
-= simple_format(t('.message', course: link_to(@course.title, course_url(@course)),
-                              coursemology: link_to(t('layout.coursemology'), root_url),
+= simple_format(t('.message', course: link_to(@course.title, course_url(@course, host: @course.instance.host)),
+                              coursemology: link_to(t('layout.coursemology'), @course.instance.host),
                               email: @invitation.email,
-                              click_here: link_to(t('.click_here'), new_user_registration_url(invitation: @invitation.invitation_key))))
+                              click_here: link_to(t('.click_here'), new_user_registration_url(invitation: @invitation.invitation_key,
+                                                                                              host: @course.instance.host))))
 
 pre
   code

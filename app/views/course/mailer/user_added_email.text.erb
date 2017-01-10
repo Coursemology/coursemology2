@@ -1,2 +1,2 @@
-<%= t('.message', course: plain_link_to(@course.title, course_url(@course)),
-                  coursemology: plain_link_to(t('layout.coursemology'), root_url)) %>
+<%= t('.message', course: plain_link_to(@course.title, course_url(@course, host: @course.instance.host)),
+                  coursemology: plain_link_to(t('layout.coursemology'), @course.instance.host)) %>
