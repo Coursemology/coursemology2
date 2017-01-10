@@ -44,6 +44,7 @@ html
                   - my_courses.each do |course|
                     li = link_to(format_inline_text(course.title), course_path(course))
                   li.divider role='separator'
+                  li = link_to(t('layout.navbar.my_courses'), my_courses_path)
                   li = link_to(t('layout.navbar.all_courses'), courses_path)
               - else
                 = link_to(t('layout.navbar.courses'), courses_path)

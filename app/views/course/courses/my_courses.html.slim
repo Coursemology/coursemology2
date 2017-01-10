@@ -1,0 +1,10 @@
+= page_header do
+  = new_button([:course]) if can?(:create, Course)
+
+- if @courses.present?
+  div.row.is-flex
+    = render @courses
+  = paginate @courses
+- else
+  h3.no-courses
+    = t('.no_courses')

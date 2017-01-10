@@ -106,6 +106,7 @@ Rails.application.routes.draw do
   end
 
   scope module: 'course' do
+    get 'my_courses' => 'courses#my_courses'
     resources :courses, except: [:edit, :update] do
       namespace :admin do
         get '/' => 'admin#index'

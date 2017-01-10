@@ -41,7 +41,8 @@
     }
   }
 
-  &.index {
+  &.index,
+  &.my_courses {
     .caption {
       margin: 5px 0;
 
@@ -61,6 +62,10 @@
       height: $course-course-listing-logo;
       margin-top: 1em;
       width: $course-course-listing-logo;
+    }
+
+    .no-courses {
+      color: $grey;
     }
   }
 }

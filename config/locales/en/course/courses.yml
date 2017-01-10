@@ -23,3 +23,6 @@ en:
         pending_tasks_title: 'Title'
         pending_tasks_start_at: 'Start At'
         pending_tasks_end_at: 'End At'
+      my_courses:
+        header: 'My Courses'
+        no_courses: 'You are not enrolled in any courses.'
