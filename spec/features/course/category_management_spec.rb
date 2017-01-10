@@ -66,6 +66,25 @@ RSpec.feature 'Course: Category: Management' do
         expect(page).to have_selector('div.alert.alert-danger')
         expect(page).to have_content_tag_for(category)
       end
+
+      scenario 'I can move tab to another category' do
+        default_category = course.assessment_categories.first
+        tab = create(:course_assessment_tab, course: course)
+        assessment = create(:assessment, course: course, tab: tab)
+
+        visit course_admin_assessments_path(course)
+
+        expect(assessment.folder.parent).not_to eq(default_category.folder)
+
+        # Move tab from its owne category to default category.
+        find("#tab_#{tab.id}").
+          find('#course_assessment_categories_attributes_1_tabs_attributes_1_category_id').
+          find(:xpath, 'option[2]').select_option
+
+        click_button 'submit'
+        expect(tab.reload.category).to eq(default_category)
+        expect(assessment.reload.folder.parent).to eq(default_category.folder)
+      end
     end
   end
 end
