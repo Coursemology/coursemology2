@@ -27,7 +27,8 @@ en:
             success: 'All graded submissions have been published.'
             notice: 'There are no graded submissions.'
           buttons:
-            save: 'Save Draft'
+            save: 'Save'
+            save_draft: 'Save Draft'
             finalise: 'Finalise Submission'
             publish: 'Publish Grade'
             mark: 'Submit for publishing'
