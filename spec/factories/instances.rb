@@ -8,5 +8,11 @@ FactoryGirl.define do
   factory :instance do
     sequence(:name) { |n| "Instance#{n}" }
     host
+
+    trait :with_video_component_enabled do
+      after(:build) do |instance|
+        instance.settings(:components, :course_videos_component).enabled = true
+      end
+    end
   end
 end

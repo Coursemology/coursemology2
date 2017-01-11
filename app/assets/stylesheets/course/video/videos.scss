@@ -1,0 +1,26 @@
+.course-video-videos {
+  &.show {
+    .details-table {
+      margin-top: 1.5em;
+    }
+  }
+
+  &.index {
+    .videos-list {
+      table-layout: fixed;
+
+      tr.not-started {
+        background-color: $course-video-not-started-bg;
+      }
+
+      td,
+      th {
+        vertical-align: middle;
+      }
+
+      .table-start-at {
+        @extend .text-center;
+      }
+    }
+  }
+}

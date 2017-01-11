@@ -7,8 +7,8 @@ RSpec.describe 'Course: Assessments: Attempt' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:empty_assessment) { create(:assessment, course: course, published: false) }
-    let(:unopened_assessment) do
-      create(:assessment, :published_with_all_question_types, :unopened, course: course)
+    let(:not_started_assessment) do
+      create(:assessment, :published_with_all_question_types, :not_started, course: course)
     end
     let(:assessment) { create(:assessment, :published_with_all_question_types, course: course) }
     let(:assessment_tabbed_single_question) do
@@ -91,11 +91,11 @@ RSpec.describe 'Course: Assessments: Attempt' do
           to eq(edit_course_assessment_submission_path(course, assessment, created_submission))
       end
 
-      scenario 'I cannot attempt unopened assessments' do
-        unopened_assessment
+      scenario 'I cannot attempt assessments that have not started' do
+        not_started_assessment
         visit course_assessments_path(course)
 
-        within find(content_tag_selector(unopened_assessment)) do
+        within find(content_tag_selector(not_started_assessment)) do
           expect(page).not_to have_button(
             I18n.t('course.assessment.assessments.assessment_management_buttons.attempt')
           )
@@ -188,18 +188,18 @@ RSpec.describe 'Course: Assessments: Attempt' do
         ))
       end
 
-      scenario 'I can attempt unopened assessments' do
-        unopened_assessment
+      scenario 'I can attempt assessments that have not started' do
+        not_started_assessment
         visit course_assessments_path(course)
 
-        within find(content_tag_selector(unopened_assessment)) do
+        within find(content_tag_selector(not_started_assessment)) do
           find_link(I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
-                    href: course_assessment_submissions_path(course, unopened_assessment)).click
+                    href: course_assessment_submissions_path(course, not_started_assessment)).click
         end
 
-        created_submission = unopened_assessment.submissions.last
+        created_submission = not_started_assessment.submissions.last
         expect(current_path).to eq(
-          edit_course_assessment_submission_path(course, unopened_assessment, created_submission)
+          edit_course_assessment_submission_path(course, not_started_assessment, created_submission)
         )
       end
 

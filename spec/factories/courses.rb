@@ -21,5 +21,11 @@ FactoryGirl.define do
     trait :opened do
       status :opened
     end
+
+    trait :with_video_component_enabled do
+      after(:build) do |course|
+        course.settings(:components, :course_videos_component).enabled = true
+      end
+    end
   end
 end

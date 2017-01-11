@@ -18,11 +18,11 @@ RSpec.describe Course::Condition::Assessment do
       let(:user) { create(:course_student, course: course).user }
 
       context 'when the assessment is published but has not started' do
-        let(:unopened_assessment) do
-          create(:assessment, :published_with_mrq_question, :unopened, course: course)
+        let(:not_started_assessment) do
+          create(:assessment, :published_with_mrq_question, :not_started, course: course)
         end
 
-        it { is_expected.to_not be_able_to(:attempt, unopened_assessment) }
+        it { is_expected.to_not be_able_to(:attempt, not_started_assessment) }
       end
 
       context 'when the assessment has started' do

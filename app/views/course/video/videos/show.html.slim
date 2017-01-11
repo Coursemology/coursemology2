@@ -1,0 +1,6 @@
+- add_breadcrumb format_inline_text(@video.title)
+= page_header format_inline_text(@video.title) do
+
+= div_for(@video) do
+  h3 = t('.description')
+  = format_html(@video.description)

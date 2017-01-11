@@ -24,6 +24,8 @@ RSpec.describe Course, type: :model do
     it { is_expected.to have_many(:lesson_plan_items).dependent(:destroy) }
     it { is_expected.to have_many(:lesson_plan_milestones).dependent(:destroy) }
     it { is_expected.to have_many(:material_folders).dependent(:destroy) }
+    it { is_expected.to have_many(:surveys).through(:lesson_plan_items) }
+    it { is_expected.to have_many(:videos).through(:lesson_plan_items) }
 
     it { is_expected.to validate_presence_of(:title) }
 
