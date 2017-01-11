@@ -5,7 +5,8 @@ class Course::Discussion::Topic < ActiveRecord::Base
   self.global_topic_model_names = []
 
   belongs_to :course, inverse_of: :discussion_topics
-  has_many :posts, dependent: :destroy, inverse_of: :topic do
+  # Delete all the children and skip reparent callbacks
+  has_many :posts, dependent: :delete_all, inverse_of: :topic do
     include Course::Discussion::Topic::PostsConcern
   end
   has_many :subscriptions, dependent: :destroy, inverse_of: :topic
