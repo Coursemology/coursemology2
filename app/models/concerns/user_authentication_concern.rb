@@ -9,7 +9,7 @@ module UserAuthenticationConcern
     devise :multi_email_authenticatable, :multi_email_confirmable, :multi_email_validatable,
            :registerable, :recoverable, :rememberable, :trackable, :masqueradable
 
-    before_sign_in :create_instance_user
+    before_sign_in :create_instance_user, unless: :administrator?
     after_create :create_instance_user
 
     include UserOmniauthConcern
