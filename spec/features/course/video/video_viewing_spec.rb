@@ -15,15 +15,32 @@ RSpec.describe 'Course: Videos: Viewing' do
     context 'As a Course Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I can view all published videos on the videos page' do
+      scenario 'I can view published videos and attempt open videos on the videos page' do
         videos
         visit course_videos_path(course)
 
-        [published_video, published_not_started_video].each do |video|
-          expect(page).to have_content_tag_for(video)
+        expect(page).not_to have_content_tag_for(unpublished_video)
+        expect(page).to have_content_tag_for(published_video)
+        expect(page).to have_content_tag_for(published_not_started_video)
+
+        within find(content_tag_selector(published_not_started_video)) do
+          expect(page).to have_css('a.btn.btn-info.disabled')
         end
 
-        expect(page).not_to have_content_tag_for(unpublished_video)
+        within find(content_tag_selector(published_video)) do
+          find('.btn.btn-info').click
+
+          submission =
+            Course::Video::Submission.where(video: published_video, creator: user).first
+          expect(current_path).
+            to eq(edit_course_video_submission_path(course, published_video, submission))
+        end
+
+        # Button is updated when submission exists
+        visit course_videos_path(course)
+        within find(content_tag_selector(published_video)) do
+          expect(page).to have_text(I18n.t('course.video.videos.video_attempt_button.rewatch'))
+        end
       end
     end
   end

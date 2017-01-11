@@ -20,3 +20,6 @@ en:
         destroy:
           success: '%{title} was deleted.'
           failure: 'Could not delete video: %{error}'
+        video_attempt_button:
+          watch: 'Watch'
+          rewatch: 'Re-Watch'

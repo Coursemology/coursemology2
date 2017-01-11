@@ -298,7 +298,11 @@ Rails.application.routes.draw do
       get 'statistics/staff'
 
       scope module: :video do
-        resources :videos
+        resources :videos do
+          scope module: :submission do
+            resources :submissions, only: [:create, :edit]
+          end
+        end
       end
     end
   end

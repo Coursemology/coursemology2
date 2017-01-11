@@ -7,8 +7,9 @@
       course_video_path(current_course, video))
   td.table-start-at
     = format_datetime(video.start_at, :short)
-  td.table-buttons colspan=2
+  td.table-buttons
+    div.btn-group.attempt
+      = render partial: 'video_attempt_button', locals: { video: video }
+  td.table-buttons.hidden-xs
     - if can?(:manage, video)
-      div.btn-group
-        = edit_button([current_course, video])
-        = delete_button([current_course, video])
+      = render partial: 'video_management_buttons', locals: { video: video }

@@ -1,0 +1,7 @@
+en:
+  course:
+    video:
+      submission:
+        submissions:
+          create:
+            failure: 'Could not create submission: %{error}'

@@ -1,5 +1,8 @@
 - add_breadcrumb format_inline_text(@video.title)
 = page_header format_inline_text(@video.title) do
+  - if can?(:manage, @video)
+    div.pull-right
+      = render partial: 'video_management_buttons', locals: { video: @video }
 
 = div_for(@video) do
   h3 = t('.description')

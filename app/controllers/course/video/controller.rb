@@ -6,7 +6,8 @@ class Course::Video::Controller < Course::ComponentController
   private
 
   def add_videos_breadcrumb
-    add_breadcrumb @settings.title || :index, :course_videos_path
+    add_breadcrumb @settings.title || t('breadcrumbs.course.video.videos.index'),
+                   :course_videos_path
   end
 
   # @return [Course::Video Component] The video component.
