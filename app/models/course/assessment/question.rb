@@ -6,7 +6,8 @@ class Course::Assessment::Question < ActiveRecord::Base
   validate :validate_assessment_is_not_autograded, unless: :auto_gradable?
 
   belongs_to :assessment, inverse_of: :questions
-  has_many :answers, class_name: Course::Assessment::Answer.name, inverse_of: :question
+  has_many :answers, class_name: Course::Assessment::Answer.name, dependent: :destroy,
+                     inverse_of: :question
   has_and_belongs_to_many :skills
 
   default_scope { order(weight: :asc) }
