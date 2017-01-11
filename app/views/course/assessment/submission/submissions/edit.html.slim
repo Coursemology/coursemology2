@@ -4,6 +4,11 @@
   div.well
     = format_html(@assessment.description)
 
+- unless @assessment.folder.materials.empty?
+  .files
+    h4 = t('.files')
+    = render partial: 'layouts/materials', locals: { folder: @assessment.folder }
+
 = div_for(@assessment, 'data-assessment-id' => @assessment.id,
                        class: single_question_flag_class(@assessment)) do
   = div_for(@submission, 'data-submission-id' => @submission.id) do
