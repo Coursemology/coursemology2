@@ -102,7 +102,8 @@ RSpec.describe 'Course: Assessments: Attempt' do
         end
       end
 
-      scenario 'I can view tabbed assessments and tabs for assessments with more than 1 question',
+      scenario 'I can view tabbed assessments and tabs for assessments with more than 1 question,'\
+               'and view tabs directly through a URL',
                js: true do
         assessment_tabbed_single_question
         visit course_assessments_path(course)
@@ -136,6 +137,14 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
         # Test that ACE Editor has initialised correctly and the content is shown.
         expect(page).to have_selector('div.ace_editor')
+        expect(find('.tab-pane.active')['id']).to eq(question_id.to_s)
+
+        # Test that the step parameter when editing submissions goes straight to the question
+        # Visit the 2nd question directly with the URL to test this.
+        submission = Course::Assessment::Submission.
+                     where(assessment: assessment_tabbed, creator: user).first
+
+        visit edit_course_assessment_submission_path(course, assessment_tabbed, submission, step: 2)
         expect(find('.tab-pane.active')['id']).to eq(question_id.to_s)
       end
 
