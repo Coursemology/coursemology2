@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Video::VideosController < Course::Video::Controller
   def index #:nodoc:
-    @videos = @videos.ordered_by_date
+    @videos = @videos.ordered_by_date.with_submissions_by(current_user)
   end
 
   def show; end

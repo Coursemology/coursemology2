@@ -19,6 +19,19 @@ class Course::Video < ActiveRecord::Base
       merge(Course::LessonPlan::Item.ordered_by_date)
   end)
 
+  # @!method with_submissions_by(creator)
+  #   Includes the submissions by the provided user.
+  #   @param [User] user The user to preload submissions for.
+  scope :with_submissions_by, (lambda do |user|
+    submissions = Course::Video::Submission.by_user(user).
+      where(video: distinct(false).pluck(:id))
+
+    all.to_a.tap do |result|
+      preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
+      preloader.preload(result, :submissions, submissions)
+    end
+  end)
+
   def self.use_relative_model_naming?
     true
   end
