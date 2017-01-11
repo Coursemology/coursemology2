@@ -6,9 +6,9 @@
 
   td = instance.host
 
-  td = instance.user_count
+  td = link_to instance.user_count, admin_instance_users_url(host: instance.host)
 
-  td = instance.course_count
+  td = link_to instance.course_count, admin_instance_courses_url(host: instance.host)
 
   td
     = edit_button([:admin, instance]) if can?(:edit, instance)
