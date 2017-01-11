@@ -6,7 +6,8 @@
 - submission = f.object
 div.submission-buttons
   - if local_assigns[:save]
-    = f.button :submit, t('.save')
+    - button_text = (submission.attempting? || submission.submitted?) ? t('.save_draft') : t('.save')
+    = f.button :submit, button_text
 
   // The button is displayed as hidden (instead of not displaying at all) because there are frontend
   // code will show/hide the button in some cases.
