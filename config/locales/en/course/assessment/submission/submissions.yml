@@ -23,6 +23,7 @@ en:
             failure: 'Could not create submission: %{error}'
           edit:
             attempt: :'course.assessment.assessments.assessment.attempt'
+            files: 'Files'
           publish_all:
             success: 'All graded submissions have been published.'
             notice: 'There are no graded submissions.'
