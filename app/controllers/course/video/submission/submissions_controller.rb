@@ -2,6 +2,13 @@
 class Course::Video::Submission::SubmissionsController < Course::Video::Submission::Controller
   before_action :authorize_video!, only: :create
 
+  def index
+    authorize!(:manage, @video)
+    @submissions = @submissions.includes(experience_points_record: :course_user)
+    @my_students = current_course_user.try(:my_students) || []
+    @course_students = current_course.course_users.students.order_alphabetically
+  end
+
   def create
     if @submission.save
       redirect_to edit_course_video_submission_path(current_course, @video, @submission)

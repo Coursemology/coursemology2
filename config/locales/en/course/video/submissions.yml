@@ -3,5 +3,17 @@ en:
     video:
       submission:
         submissions:
+          index:
+            submissions: 'Submissions'
+            my_student_header: 'My Student'
+            student_header: 'Students'
+            other_header: 'Others'
           create:
             failure: 'Could not create submission: %{error}'
+          submission:
+            watched: 'Watched'
+            not_watched: 'Has Not Started'
+          submissions:
+            student_name: 'Student Name'
+            status: 'Status'
+            start_at: 'Watched At'

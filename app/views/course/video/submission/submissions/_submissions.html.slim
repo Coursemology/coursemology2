@@ -1,0 +1,10 @@
+table.table.submissions
+  thead
+    tr
+      th = t('.student_name')
+      th = t('.status')
+      th = t('.start_at')
+      th
+  tbody
+    = render partial: 'submission', collection: course_users, as: :course_user,
+             locals: { submissions: submissions }

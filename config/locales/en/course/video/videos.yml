@@ -23,3 +23,5 @@ en:
         video_attempt_button:
           watch: 'Watch'
           rewatch: 'Re-Watch'
+        video_management_buttons:
+          submissions: 'Submissions'

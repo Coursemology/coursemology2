@@ -300,7 +300,7 @@ Rails.application.routes.draw do
       scope module: :video do
         resources :videos do
           scope module: :submission do
-            resources :submissions, only: [:create, :edit]
+            resources :submissions, only: [:index, :create, :edit]
           end
         end
       end
