@@ -37,6 +37,13 @@ RSpec.describe ApplicationFormattersHelper do
       it 'produces html_safe output' do
         expect(helper.format_html('')).to be_html_safe
       end
+
+      context 'when base64 images are included' do
+        it 'does not filter them out' do
+          html = '<img src="data:image/png;base64,foodata">'
+          expect(helper.format_html(html)).to include('data')
+        end
+      end
     end
 
     describe '#format_code_block' do
