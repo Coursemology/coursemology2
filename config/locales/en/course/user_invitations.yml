@@ -22,6 +22,8 @@ en:
         invitation_code: 'Invitation Code'
         status: 'Status'
         sent_at: 'Invitation Sent At'
+        confirmed_at: 'Invitation Accepted At'
+      course_user_invitation:
         delete_tooltip: 'Delete Invitation'
       new:
         header: 'Invite Users'
