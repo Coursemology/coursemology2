@@ -1,0 +1,15 @@
+en:
+  notifiers:
+    course:
+      assessment:
+        answer:
+          comment_notifier:
+            replied:
+              user_notifications:
+                email:
+                  subject: '%{course} New comment on %{topic}'
+                  message: >
+                    %{post_author} commented, %{post}
+
+                    You can reply here:
+                    %{topic}

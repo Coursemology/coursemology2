@@ -11,6 +11,7 @@ class Course::Assessment::Submission::Answer::CommentsController < \
     @answer.class.transaction do
       @post.title = @assessment.title
       if super && @answer.save
+        send_created_notification(@post)
       else
         render status: :bad_request
       end
@@ -21,5 +22,11 @@ class Course::Assessment::Submission::Answer::CommentsController < \
 
   def create_topic_subscription
     @discussion_topic.ensure_subscribed_by(current_user)
+  end
+
+  def send_created_notification(post)
+    if current_course_user && !current_course_user.phantom?
+      Course::Assessment::Answer::CommentNotifier.post_replied(current_user, post)
+    end
   end
 end
