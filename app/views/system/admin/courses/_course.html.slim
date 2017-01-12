@@ -1,4 +1,5 @@
 = content_tag_for(:tr, course)
+  td = (current_page - 1) * per_page + course_counter + 1
   th
     = link_to format_inline_text(course.title),
               course_url(course, host: course.instance.host, port: nil)
