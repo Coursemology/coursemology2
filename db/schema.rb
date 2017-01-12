@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170116103602) do
+ActiveRecord::Schema.define(version: 20170117145558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,7 +76,8 @@ ActiveRecord::Schema.define(version: 20170116103602) do
     t.string   "title",            :limit=>255, :null=>false
     t.text     "description"
     t.text     "logo"
-    t.integer  "status",           :default=>0, :null=>false
+    t.boolean  "published",        :default=>false, :null=>false
+    t.boolean  "enrollable",       :default=>false, :null=>false
     t.string   "registration_key", :limit=>16, :index=>{:name=>"index_courses_on_registration_key", :unique=>true}
     t.text     "settings"
     t.boolean  "gamified",         :default=>true, :null=>false

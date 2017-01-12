@@ -10,12 +10,6 @@ class Course < ActiveRecord::Base
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
 
-  # closed: Closed for registering.
-  # published: Accessible in courses index page.
-  # opened: published + opened for registering.
-  enum status: { closed: 0, published: 1, opened: 2 }
-  PUBLIC_STATUSES = Set[:published, :opened].freeze
-
   belongs_to :instance, inverse_of: :courses
   has_many :enrol_requests, inverse_of: :course, dependent: :destroy
   has_many :course_users, inverse_of: :course, dependent: :destroy
@@ -59,7 +53,7 @@ class Course < ActiveRecord::Base
   scope :ordered_by_title, -> { order(:title) }
   scope :ordered_by_start_at, ->(direction = :desc) { order(start_at: direction) }
   scope :ordered_by_end_at, ->(direction = :desc) { order(end_at: direction) }
-  scope :publicly_accessible, -> { where(status: PUBLIC_STATUSES.map { |s| statuses[s] }) }
+  scope :publicly_accessible, -> { where(published: true) }
 
   # @!method containing_user
   #   Selects all the courses with user as one of its members
