@@ -6,9 +6,14 @@
     td = t('course.users.status.invited')
     td = format_datetime(invitation.sent_at, :short) if invitation.sent_at
     td
-      = delete_button([current_course, invitation],
-        class: 'btn-xs', title: t('.delete_tooltip')) do
-        = fa_icon 'close'.freeze
+      div.btn-group
+        = link_to course_user_invitation_resend_invitation_path(current_course, invitation),
+                  remote: true, class: ['btn', 'btn-info', 'btn-sm'], method: :post,
+                  title: t('.resend_tooltip') do
+          = fa_icon 'envelope'.freeze
+        = delete_button([current_course, invitation],
+          class: 'btn-sm', title: t('.delete_tooltip')) do
+          = fa_icon 'close'.freeze
   - else
     td = t('course.users.status.accepted')
     td = format_datetime(invitation.confirmed_at, :short) if invitation.confirmed_at

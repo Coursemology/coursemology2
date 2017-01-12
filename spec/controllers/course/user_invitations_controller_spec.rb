@@ -99,49 +99,40 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
       end
     end
 
+    describe '#resend_invitation' do
+      before do
+        create(:course_manager, course: course, user: user)
+        sign_in(user)
+      end
+      let!(:invitation) { create(:course_user_invitation, course: course) }
+      subject { post :resend_invitations, course_id: course, user_invitation_id: invitation.id }
+
+      it 'loads the invitation' do
+        subject
+        expect(controller.instance_variable_get(:@invitations)).to contain_exactly(invitation)
+      end
+
+      context 'if the provided invitation has already been confirmed' do
+        before { invitation.confirm! }
+        it 'will not load the invitation' do
+          subject
+          expect(controller.instance_variable_get(:@invitations)).to be_empty
+        end
+      end
+    end
+
     describe '#resend_invitations' do
       before do
         create(:course_manager, course: course, user: user)
         sign_in(user)
       end
-      let(:pending_invitations) do
-        create_list(:course_user_invitation, 3, course: course)
-      end
-      let(:student) { create(:course_student, course: course) }
-      subject { post :resend_invitations, course_id: course, course: invitation_params }
+      let!(:pending_invitations) { create_list(:course_user_invitation, 3, course: course) }
+      subject { post :resend_invitations, course_id: course }
 
-      context 'when only 1 invitation is specified' do
-        let(:invitation) { pending_invitations.first }
-        let(:invitation_params) { { invitaiton: invitation } }
-
-        it { is_expected.to redirect_to(course_user_invitations_path(course)) }
-        it 'loads the course_user' do
-          subject
-          expect(controller.instance_variable_get(:@pending_invitations)).
-            to contain_exactly(*pending_invitations)
-        end
-      end
-
-      context 'when multiple invitations are specified' do
-        let(:invitations) { pending_invitations[0..1] }
-        let(:invitation_params) { { invitations: invitations } }
-
-        it 'loads the necessary invitations' do
-          subject
-          expect(controller.instance_variable_get(:@pending_invitations)).
-            to contain_exactly(*invitations)
-        end
-      end
-
-      context 'when no invitations are specified' do
-        before { pending_invitations }
-        subject { post :resend_invitations, course_id: course }
-
-        it 'loads the all unconfirmed invitations' do
-          subject
-          expect(controller.instance_variable_get(:@pending_invitations)).
-            to contain_exactly(*pending_invitations)
-        end
+      it 'loads the all unconfirmed invitations' do
+        subject
+        expect(controller.instance_variable_get(:@invitations)).
+          to contain_exactly(*pending_invitations)
       end
     end
 
