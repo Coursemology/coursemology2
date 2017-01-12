@@ -9,7 +9,9 @@
 
 = simple_format(t('.message',
                 topic: link_to(topic.title,
-                               course_forum_topic_url(course, topic.forum, topic, host: host))))
+                               course_forum_topic_url(course, topic.forum, topic, host: host)),
+                post: post.text,
+                post_author: post.creator.name))
 
 = simple_format(t('.unsubscribe.message',
                 unsubscribe_link: link_to(t('.unsubscribe.tag'), unsubscribe_url)))
