@@ -1,0 +1,10 @@
+<% if @invitation %>
+  $('<%= "#user_invitation_#{@invitation.id}"%>').replaceWith(
+    '<%= escape_javascript(render partial: 'course/user_invitations/course_user_invitation',
+                                  locals: { invitation: @invitation }) %>'
+  );
+<% end %>
+
+// Remove older flash messages, and show users the new flash message
+$('.course-layout').parents('.container-fluid:first').find('.alert').remove();
+$('.course-layout').parents('.container-fluid:first').prepend('<%= j(flash_messages) %>');

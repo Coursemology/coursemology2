@@ -32,6 +32,16 @@ class Course::UserInvitationsController < Course::ComponentController
     end
   end
 
+  def resend_invitation
+    @invitation = load_invitations.first
+    if @invitation && invitation_service.resend_invitation(load_invitations)
+      flash.now[:success] = t('.success', email: @invitation.email)
+    else
+      flash.now[:danger] = t('.failure')
+    end
+    render 'reload_course_user_invitation'
+  end
+
   def resend_invitations
     if invitation_service.resend_invitation(load_invitations)
       redirect_to course_user_invitations_path(current_course), success: t('.success')
@@ -77,37 +87,24 @@ class Course::UserInvitationsController < Course::ComponentController
     @registration_params ||= course_user_invitation_params[:registration_key] == 'checked'.freeze
   end
 
-  # Determines the params for load_course_users.
+  # Strong params for resending of invitations.
+  #
+  # @return [String|nil] Returns invitation.id. If none were found, nil is returned.
   def resend_invitation_params
     @resend_invitation_params ||=
-      if params[:course].blank?
-        params
-      else
-        params.require(:course).permit(:invitation, invitations: [])
+      unless params[:user_invitation_id].blank?
+        params.permit(:user_invitation_id)[:user_invitation_id]
       end
   end
 
-  # Filters the invitation ids from resend_invitation_params
-  #
-  # @return [Array<String>|nil] Array of invitation ids. If none was found in the params,
-  #   nil is returned.
-  def invitation_form_params
-    if resend_invitation_params[:invitation]
-      [resend_invitation_params[:invitation]]
-    elsif resend_invitation_params[:invitations]
-      resend_invitation_params[:invitations]
-    end
-  end
-
   # Loads existing invitations for the resending of invitations. Method handles the following cases:
-  #   1) Single invitation - specified with the course_user param
-  #   2) Multiple invitations - specified with the course_users param
-  #   3) All un-confirmed invitation - given none of the above params
+  #   1) Single invitation - specified with the user_invitation_id param
+  #   2) All un-confirmed invitation - if user_invitation_id param was not found
   def load_invitations
-    @pending_invitations ||= begin
-      ids = invitation_form_params
+    @invitations ||= begin
+      ids = resend_invitation_params
       ids ||= current_course.invitations.unconfirmed.select(:id)
-      ids.blank? ? [] : current_course.invitations.where { id >> ids }
+      ids.blank? ? [] : current_course.invitations.unconfirmed.where { id >> ids }
     end
   end
 

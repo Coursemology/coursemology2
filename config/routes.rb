@@ -204,7 +204,9 @@ Rails.application.routes.draw do
       resources :levels, except: [:show, :edit, :update]
       resource :duplication, only: [:show, :create]
 
-      resources :user_invitations, only: [:index, :new, :create, :destroy]
+      resources :user_invitations, only: [:index, :new, :create, :destroy] do
+        post 'resend_invitation'
+      end
 
       resources :enrol_requests, only: [:index, :destroy] do
         post 'approve', on: :member

@@ -22,7 +22,10 @@ en:
         invitation_code: 'Invitation Code'
         status: 'Status'
         sent_at: 'Invitation Sent At'
+        confirmed_at: 'Invitation Accepted At'
+      course_user_invitation:
         delete_tooltip: 'Delete Invitation'
+        resend_tooltip: 'Resend Invitation'
       new:
         header: 'Invite Users'
         tabs:
@@ -50,6 +53,11 @@ en:
           success: 'Successfully invited users with the given details.'
       invitation_fields:
         remove: 'Remove'
+      resend_invitation:
+        success: >
+          The request to resend the email invitation to %{email}
+          is received, please wait while the email is sent out.
+        failure: 'The request to resend the email invitation failed.'
       resend_invitations:
         success: 'Email invitations were successfully resent.'
         failure: 'The resending of email invitations failed.'

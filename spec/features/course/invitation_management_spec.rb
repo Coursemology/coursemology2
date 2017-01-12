@@ -80,18 +80,19 @@ RSpec.feature 'Courses: Invitations', js: true do
         expect(course.registration_key).to be_nil
       end
 
-      scenario 'I can track the status of invites, resend invites and delete invites' do
+      scenario 'I can track the status of invites, resend invites and delete invites', js: true do
         visit course_user_invitations_path(course)
 
         old_time = 1.day.ago
         invitations = create_list(:course_user_invitation, 3, course: course, sent_at: old_time)
         invitations.first.confirm!
         invitation_to_delete = invitations.second
+        invitation_to_resend = invitations.last
         visit course_user_invitations_path(course)
 
         expect(page).to have_selector('div.progress')
         invitations.each do |invitation|
-          within page.find(".user_invitation#user_invitation_#{invitation.id}") do
+          within find(content_tag_selector(invitation)) do
             expect(page).to have_selector('th')
             expect(page).to have_selector('td')
 
@@ -103,6 +104,17 @@ RSpec.feature 'Courses: Invitations', js: true do
           end
         end
 
+        # Resend individual user_invitation
+        within find(content_tag_selector(invitation_to_resend)) do
+          find_link(
+            nil,
+            href: course_user_invitation_resend_invitation_path(course, invitation_to_resend)
+          ).trigger('click')
+        end
+        wait_for_ajax
+        expect(page).to have_css('.alert.alert-success')
+
+        # Resend user_invitation for entire course
         find_link(I18n.t('course.user_invitations.index.resend_button'),
                   href: resend_invitations_course_users_path(course)).click
         expect(current_path).to eq(course_user_invitations_path(course))

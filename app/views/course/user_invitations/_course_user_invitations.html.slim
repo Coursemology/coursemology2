@@ -1,5 +1,5 @@
 - pending = !invitations.first.confirmed?
-table.table.table-striped.table-hover
+table.table.table-striped.table-hover class="#{pending ? 'pending' : 'confirmed'}"
   thead
     tr
       th = t('common.name')
@@ -8,25 +8,10 @@ table.table.table-striped.table-hover
       th = t('.status')
       - if pending
         th = t('.sent_at')
-        th
+      - else
+        th = t('.confirmed_at')
+      th
       th
 
   tbody
-    - invitations.each do |invitation|
-      = content_tag_for(:tr, invitation) do
-        th = invitation.name
-        td = invitation.email
-        td = invitation.invitation_key
-        - if pending
-          td = t('course.users.status.invited')
-          td
-            - if invitation.sent_at
-              = format_datetime(invitation.sent_at, :short)
-          td
-            = delete_button([current_course, invitation],
-                            class: 'btn-xs', title: t('.delete_tooltip')) do
-              = fa_icon 'close'.freeze
-          td
-        - else
-          td = t('course.users.status.accepted')
-          td
+    = render partial: 'course_user_invitation', collection: invitations, as: :invitation
