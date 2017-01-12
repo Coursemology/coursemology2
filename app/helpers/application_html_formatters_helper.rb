@@ -11,8 +11,21 @@ module ApplicationHTMLFormattersHelper
                                          HTML::Pipeline::RougeFilter
                                        ], DefaultPipelineOptions)
 
+  # SanitizationFilter Custom Options
+  #
+  # - Allow whitelisting of base64 encoded images for HTML text.
+  # Link: https://github.com/jch/html-pipeline#2-how-do-i-customize-a-whitelist-for-sanitizationfilters
+  # TODO: Remove 'data' once we disable Base64 encoding
+  # TODO: Figure out how to whitelist 'style' as WYSIWYG editor adds that attribute.
+  SANITIZATION_FILTER_WHITELIST ||= begin
+    list = HTML::Pipeline::SanitizationFilter::WHITELIST
+    list[:protocols]['img']['src'] << 'data' unless list[:protocols]['img']['src'].include?('data')
+    list
+  end
+
   # The HTML sanitizer options to use.
   HTMLSanitizerOptions = {
+    whitelist: SANITIZATION_FILTER_WHITELIST
   }.freeze
 
   # The HTML sanitizer to use.
