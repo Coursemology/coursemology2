@@ -28,3 +28,4 @@ en:
           output_streams:
             stdout: :'course.assessment.question.programming.form_build_log.stdout'
             stderr: :'course.assessment.question.programming.form_build_log.stderr'
+            privacy_warning: 'You can view the output streams because you are staff. Students will not be able to see them.'

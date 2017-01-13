@@ -7,6 +7,8 @@ div.panel.panel-default
         aria-controls="collapseStdout_#{auto_grading.id}"]
         i.fa.fa-chevron aria-hidden="true"
         =< t('.stdout')
+        span.text-danger title=t('.privacy_warning')
+          =< fa_icon 'exclamation-triangle'.freeze
   div.panel-collapse.collapse id="collapseStdout_#{auto_grading.id}"
     div.panel-body
       pre
@@ -21,6 +23,8 @@ div.panel.panel-default
         aria-controls="collapseStderr_#{auto_grading.id}"]
         i.fa.fa-chevron aria-hidden="true"
         =< t('.stderr')
+        span.text-danger title=t('.privacy_warning')
+          =< fa_icon 'exclamation-triangle'.freeze
   div.panel-collapse.collapse id="collapseStderr_#{auto_grading.id}"
     dir.panel-body
       pre
