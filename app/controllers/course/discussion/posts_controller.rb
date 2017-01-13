@@ -45,7 +45,7 @@ class Course::Discussion::PostsController < Course::ComponentController
 
   def send_created_notification(post)
     if current_course_user && !current_course_user.phantom?
-      Course::Assessment::Answer::CommentNotifier.post_replied(current_user, post)
+      post.topic.actable.notify(post)
     end
   end
 end

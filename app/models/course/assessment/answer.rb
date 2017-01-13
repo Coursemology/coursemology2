@@ -86,6 +86,10 @@ class Course::Assessment::Answer < ActiveRecord::Base
     actable.reset_answer
   end
 
+  def notify(post)
+    Course::Assessment::Answer::CommentNotifier.post_replied(post.creator, post)
+  end
+
   protected
 
   def finalise
