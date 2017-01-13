@@ -20,12 +20,11 @@ div.answer-panel
     - unless @submission.attempting?
       = render 'statistics', f: f
 
-    - can_grade = can?(:grade, @submission)
-    = render 'buttons', {\
-        f: f,
-        save: current_answer && current_answer.attempting? || (!@submission.attempting? && can_grade),
-        finalise: @submission.attempting? && next_unanswered_question.nil?,
-        auto_grade: @submission.submitted? && can_grade,
-        publish: @submission.submitted? && can_grade,
-        unsubmit: !@submission.attempting? && can_grade\
-      }
+    - if can?(:grade, @submission)
+      = render 'buttons', { \
+          f: f,
+          save: !@submission.attempting?,
+          auto_grade: @submission.submitted?,
+          publish: @submission.submitted?,
+          unsubmit: !@submission.attempting?\
+        }

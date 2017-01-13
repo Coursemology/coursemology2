@@ -3,7 +3,7 @@ $('<%= "#answer_#{@answer.id}"%>').replaceWith(
 );
 
 <% if @assessment.autograded? && next_unanswered_question.nil? %>
-  $('input.finalise').show();
+  $('input.finalise').first().show();
 <% end %>
 
 $('.expected').shorten({
