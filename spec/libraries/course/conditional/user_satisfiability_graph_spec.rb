@@ -28,6 +28,10 @@ RSpec.describe Course::Conditional::UserSatisfiabilityGraph do
       @satisfied = false
     end
 
+    def satisfiable?
+      true
+    end
+
     def inspect
       "<#{@id}>"
     end

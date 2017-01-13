@@ -152,6 +152,8 @@ RSpec.describe Course::Condition::Assessment, type: :model do
         assessment = create(:assessment, course: course)
         create(:course_assessment_question_multiple_response,
                maximum_grade: 10, assessment: assessment)
+        assessment.published = true
+        assessment.save!
         assessment
       end
 

@@ -34,6 +34,12 @@ class Course::Conditional::UserSatisfiabilityGraph
 
     # Walk through the graph to find all the satisfied conditionals
     @graph.each do |conditional|
+      # Remove conditional if they are not available.
+      unless conditional.satisfiable?
+        conditional.precluded_for!(course_user)
+        next
+      end
+
       conditions = conditional.specific_conditions.select { |c| c.satisfied_by?(course_user) }
       satisfied_conditions.merge(Set.new(conditions))
 

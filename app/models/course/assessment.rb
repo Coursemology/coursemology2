@@ -86,10 +86,17 @@ class Course::Assessment < ActiveRecord::Base
     'course/assessment/assessments/assessment'.freeze
   end
 
+  # @override ConditionalInstanceMethods#permitted_for!
   def permitted_for!(_course_user)
   end
 
+  # @override ConditionalInstanceMethods#precluded_for!
   def precluded_for!(_course_user)
+  end
+
+  # @override ConditionalInstanceMethods#satisfiable?
+  def satisfiable?
+    published?
   end
 
   def password_protected?
