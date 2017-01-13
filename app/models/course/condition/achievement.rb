@@ -28,6 +28,9 @@ class Course::Condition::Achievement < ActiveRecord::Base
   #   contains all achievements the subject has obtained.
   # @return [Boolean] true if the user has the required achievement and false otherwise.
   def satisfied_by?(course_user)
+    # Unpublished achievements are considered not satisfied.
+    return false unless achievement.published?
+
     course_user.achievements.exists?(achievement)
   end
 

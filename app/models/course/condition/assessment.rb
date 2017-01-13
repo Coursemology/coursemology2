@@ -33,6 +33,9 @@ class Course::Condition::Assessment < ActiveRecord::Base
   end
 
   def satisfied_by?(course_user)
+    # Unpublished assessments are considered not satisfied.
+    return false unless assessment.published?
+
     user = course_user.user
 
     if minimum_grade_percentage
