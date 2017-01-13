@@ -7,7 +7,11 @@ class Course::Discussion::PostsController < Course::ComponentController
   include Course::Discussion::PostsConcern
 
   def create
-    render status: :bad_request unless super
+    if super
+      send_created_notification(@post)
+    else
+      render status: :bad_request
+    end
   end
 
   def update
@@ -25,8 +29,7 @@ class Course::Discussion::PostsController < Course::ComponentController
   end
 
   def create_topic_subscription
-    # TODO: Implement topic subscriptions
-    true
+    @topic.ensure_subscribed_by(current_user)
   end
 
   private
@@ -38,5 +41,11 @@ class Course::Discussion::PostsController < Course::ComponentController
   def load_topic
     @topic ||= Course::Discussion::Topic.find(topic_id_param)
     @specific_topic = @topic.specific
+  end
+
+  def send_created_notification(post)
+    if current_course_user && !current_course_user.phantom?
+      Course::Assessment::Answer::CommentNotifier.post_replied(current_user, post)
+    end
   end
 end
