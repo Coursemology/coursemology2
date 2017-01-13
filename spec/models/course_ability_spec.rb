@@ -15,8 +15,13 @@ RSpec.describe Course, type: :model do
       let(:user) { create(:user) }
 
       it { is_expected.to be_able_to(:show, published_course) }
+      it { is_expected.not_to be_able_to(:register, published_course) }
+
       it { is_expected.to be_able_to(:show, opened_course) }
+      it { is_expected.to be_able_to(:register, opened_course) }
+
       it { is_expected.not_to be_able_to(:show, closed_course) }
+      it { is_expected.not_to be_able_to(:register, closed_course) }
       it { is_expected.not_to be_able_to(:participate, closed_course) }
 
       it 'sees the opened courses' do
