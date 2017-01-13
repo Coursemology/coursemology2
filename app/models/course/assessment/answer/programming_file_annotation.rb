@@ -15,6 +15,10 @@ class Course::Assessment::Answer::ProgrammingFileAnnotation < ActiveRecord::Base
       joins { discussion_topic }.select { discussion_topic.id }
   end)
 
+  def notify(post)
+    Course::Assessment::Answer::CommentNotifier.annotation_replied(post.creator, post)
+  end
+
   private
 
   # Set the course as the same course of the answer.

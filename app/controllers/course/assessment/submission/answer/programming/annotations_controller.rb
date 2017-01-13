@@ -8,6 +8,7 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
     @annotation.class.transaction do
       @post.title = @assessment.title
       if super && @annotation.save
+        send_created_notification(@post)
       else
         render status: :bad_request
       end
@@ -31,7 +32,14 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
   end
 
   def create_topic_subscription
-    # TODO: Implement topic subscriptions
-    true
+    @discussion_topic.ensure_subscribed_by(current_user)
+    # Ensure the student who wrote the code gets notified when someone comments on his code
+    @discussion_topic.ensure_subscribed_by(@answer.submission.creator)
+  end
+
+  def send_created_notification(post)
+    if current_course_user && !current_course_user.phantom?
+      post.topic.actable.notify(post)
+    end
   end
 end
