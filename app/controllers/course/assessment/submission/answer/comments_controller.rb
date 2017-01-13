@@ -22,6 +22,8 @@ class Course::Assessment::Submission::Answer::CommentsController < \
 
   def create_topic_subscription
     @discussion_topic.ensure_subscribed_by(current_user)
+    # Ensure answer's creator gets a notification when someone comments on this answer
+    @discussion_topic.ensure_subscribed_by(@answer.submission.creator)
   end
 
   def send_created_notification(post)
