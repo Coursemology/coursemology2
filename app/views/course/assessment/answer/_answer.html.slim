@@ -12,6 +12,13 @@
       - if answer.submission.assessment.autograded?
         = render partial: 'course/assessment/answer/autograded',
                  locals: { base_answer_form: f, answer: answer, last_attempt: last_attempt }
+
+        = render 'buttons', { \
+            f: f,
+            save: answer.attempting?,
+            finalise: submission.attempting? && next_unanswered_question.nil?\
+          }
+
       - else
         = render partial: 'course/assessment/answer/manually_graded',
           locals: { base_answer_form: f, answer: answer, last_attempt: last_attempt }
