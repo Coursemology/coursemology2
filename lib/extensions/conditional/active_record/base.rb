@@ -46,6 +46,12 @@ module Extensions::Conditional::ActiveRecord::Base
     def precluded_for!(_course_user)
       raise NotImplementedError, 'Subclasses must implement a precluded_for! method.'
     end
+
+    # Whether the conditional is satisfiable?.
+    # e.g. Unpublished achievements should not never be satisfied and give to users.
+    def satisfiable?
+      raise NotImplementedError, 'Subclasses must implement a #satisfiable? method.'
+    end
   end
 
   module ConditionInstanceMethods

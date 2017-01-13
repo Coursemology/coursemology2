@@ -10,5 +10,11 @@ FactoryGirl.define do
     trait :with_badge do
       badge { Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec', 'support', 'minion.png')) }
     end
+
+    trait :with_level_condition do
+      after(:build) do |achievement|
+        achievement.conditions = [build(:level_condition, course: achievement.course)]
+      end
+    end
   end
 end

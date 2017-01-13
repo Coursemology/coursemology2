@@ -37,13 +37,20 @@ class Course::Achievement < ActiveRecord::Base
     specific_conditions.empty?
   end
 
+  # @override ConditionalInstanceMethods#permitted_for!
   def permitted_for!(course_user)
     return if conditions.empty?
     course_users << course_user unless course_users.exists?(course_user.id)
   end
 
+  # @override ConditionalInstanceMethods#precluded_for!
   def precluded_for!(course_user)
     course_users.delete(course_user) if course_users.exists?(course_user.id)
+  end
+
+  # @override ConditionalInstanceMethods#satisfiable?
+  def satisfiable?
+    published?
   end
 
   def initialize_duplicate(duplicator, other)
