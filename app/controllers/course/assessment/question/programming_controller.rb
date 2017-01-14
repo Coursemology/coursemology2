@@ -6,21 +6,29 @@ class Course::Assessment::Question::ProgrammingController < \
                               through: :assessment, parent: false
 
   def new
+    @template = 'course/assessment/question/programming/new.json.jbuilder'
   end
 
   def create
+    @template = 'course/assessment/question/programming/new.json.jbuilder'
     @programming_question.package_type = :zip_upload
 
     save_and_redirect('new', t('.success'))
   end
 
   def edit
+    @template = 'course/assessment/question/programming/edit.json.jbuilder'
+    @meta = programming_package_service.extract_meta if @programming_question.edit_online?
   end
 
   def update
     @programming_question.assign_attributes programming_question_params
+    @programming_question.skills.clear if programming_question_params[:skill_ids].blank?
 
-    save_and_redirect('edit', t('.success'))
+    respond_to do |format|
+      format.html { save_and_redirect('edit', t('.success')) }
+      format.json { save_and_render_json }
+    end
   end
 
   def destroy

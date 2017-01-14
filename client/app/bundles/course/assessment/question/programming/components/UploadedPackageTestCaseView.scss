@@ -1,0 +1,13 @@
+// scss-lint:disable ImportantRule
+.testCaseCell {
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
+  text-overflow: initial !important;
+  white-space: normal !important;
+  word-break: break-word;
+}
+
+.testCaseTypeHeader {
+  font-weight: bold !important;
+}
+// scss-lint:enable ImportantRule
