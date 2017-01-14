@@ -69,7 +69,11 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
         expect(page).not_to have_field('filename')
       end
 
-      scenario 'I cannot update my submission after finalising' do
+      scenario 'I can only see public test cases but cannot update my finalized submission ' do
+        create(:course_assessment_question_programming,
+               assessment: assessment, test_case_count: 1, private_test_case_count: 1,
+               evaluation_test_case_count: 1)
+
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         expect(page).to have_selector('.code')
@@ -78,6 +82,14 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
         within find(content_tag_selector(submission.answers.first)) do
           expect(page).not_to have_selector('.code')
         end
+
+        # Check that student can only see public but not private and evalution test cases.
+        expect(page).
+          to have_text(I18n.t('course.assessment.answer.programming.test_cases.public'))
+        expect(page).
+          not_to have_text(I18n.t('course.assessment.answer.programming.test_cases.private'))
+        expect(page).
+          not_to have_text(I18n.t('course.assessment.answer.programming.test_cases.evaluation'))
       end
     end
 
