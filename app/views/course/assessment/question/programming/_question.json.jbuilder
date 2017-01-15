@@ -27,6 +27,7 @@ json.question do
     json.package do
       json.name @programming_question.attachment.name
       json.path attachment_reference_path(@programming_question.attachment)
+      json.updater_name @programming_question.attachment.updater.name
     end
   else
     json.package nil

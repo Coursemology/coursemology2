@@ -61,6 +61,21 @@ export default defineMessages({
     defaultMessage: 'Uploaded package',
     description: 'Label for the existing uploaded zip package.',
   },
+  downloadPackageLabel: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.downloadPackageLabel',
+    defaultMessage: 'Download package',
+    description: 'Label for the downloading generated zip package.',
+  },
+  packageUpdatedBy: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.packageUpdatedBy',
+    defaultMessage: 'Updated by: {name}',
+    description: 'Shows the author who last modified the package through the online editor.',
+  },
+  packageUploadedBy: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.packageUploadedBy',
+    defaultMessage: 'Uploaded by: {name}',
+    description: 'Shows the author who last uploaded the zip package.',
+  },
   newPackageButton: {
     id: 'course.assessment.question.programming.programmingQuestionForm.newPackageButton',
     defaultMessage: 'Choose new package',

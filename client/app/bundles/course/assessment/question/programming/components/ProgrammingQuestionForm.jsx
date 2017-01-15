@@ -366,22 +366,34 @@ class ProgrammingQuestionForm extends React.Component {
   }
 
   renderPackageField(label, field, pkg, newFilename, showEditOnline) {
-    const uploadedPackageLabel = this.props.intl.formatMessage(translations.uploadedPackageLabel);
-    const downloadNode = (
-      pkg ?
-        (<div className={styles.downloadPackageContainer}>
-          <span className={styles.uploadedPackageLabel}>{uploadedPackageLabel}:</span>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href={pkg.get('path')}
-          >
-            {pkg.get('name')}
-          </a>
-        </div>)
+    let downloadNode = null;
+
+    if (pkg) {
+      const uploadedPackageLabel = showEditOnline ?
+        this.props.intl.formatMessage(translations.downloadPackageLabel)
         :
-        null
-    );
+        this.props.intl.formatMessage(translations.uploadedPackageLabel);
+      const name = pkg.get('updater_name');
+      const author = showEditOnline ?
+        this.props.intl.formatMessage(translations.packageUpdatedBy, { name })
+        :
+        this.props.intl.formatMessage(translations.packageUploadedBy, { name });
+      downloadNode = (
+        <div className={styles.downloadPackageContainer}>
+          <div>
+            <span className={styles.uploadedPackageLabel}>{uploadedPackageLabel}:</span>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={pkg.get('path')}
+            >
+              {pkg.get('name')}
+            </a>
+          </div>
+          <div>{author}</div>
+        </div>
+      );
+    }
 
     if (showEditOnline) {
       return downloadNode;
