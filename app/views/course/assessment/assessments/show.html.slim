@@ -12,6 +12,9 @@
 
   table.table.table-bordered.details-table
     tbody
+      tr.type
+        th = t('.type')
+        td = @assessment.autograded? ? t('.autograded') : t('.manually_graded')
       tr.base_exp
         th = t('.base_exp')
         td = @assessment.base_exp
