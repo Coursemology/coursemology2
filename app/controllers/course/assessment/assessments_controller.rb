@@ -74,7 +74,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     params.require(:assessment).permit(:title, :description, :base_exp, :time_bonus_exp,
                                        :start_at, :end_at, :bonus_end_at,
                                        :published, :mode, :autograded, :password, :tabbed_view,
-                                       :skippable, folder_params)
+                                       :skippable, :delayed_grade_publication, folder_params)
   end
 
   # Merges the parameters for category and tab IDs from either the assessment parameter or the

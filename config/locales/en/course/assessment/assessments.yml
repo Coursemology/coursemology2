@@ -60,6 +60,11 @@ en:
             password (with the help of course staff). In addition, only one session is allowed to
             access the submission at any given time.
           password_placeholder: 'Leave blank to disable password protection'
+          delayed_grade_publication: 'Enable Delayed Grade Publication'
+          delayed_grade_publication_hint: >
+            With this enabled, gradings done by course staff will not automatically be published. To
+            publish all the gradings for this assessment, you can do so at a later time at the
+            submissions page.
         assessment_management_buttons:
           attempt: 'Attempt'
           resume: 'Resume'

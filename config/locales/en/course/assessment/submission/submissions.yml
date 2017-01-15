@@ -55,6 +55,9 @@ en:
             multiplier: 'Multiplier'
             question: 'Question'
             grade_summary: 'Grade Summary'
+            publish_grade_hint: >
+              The grades are currently not viewable to the student. You can publish the grades at
+              the submissions page of current assessment.
           update:
             success: 'Submission was updated.'
             finalise: 'Your submission is being graded, please visit this page again later.'
