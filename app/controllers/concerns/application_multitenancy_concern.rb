@@ -20,7 +20,14 @@ module ApplicationMultitenancyConcern
   # @return [nil] If there is no current tenant.
   def deduce_tenant
     tenant_host = deduce_tenant_host
-    Instance.find_tenant_by_host_or_default(tenant_host)
+    instance = Instance.find_tenant_by_host_or_default(tenant_host)
+
+    if Rails.env.production? && instance && instance.default? &&
+       instance.host.casecmp(tenant_host) != 0
+      raise ActionController::RoutingError, 'Instance Not Found'
+    end
+
+    instance
   end
 
   # Deduces the current host. We strip any leading www from the host.
