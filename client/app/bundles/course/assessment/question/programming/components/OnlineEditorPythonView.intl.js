@@ -30,6 +30,36 @@ export default defineMessages({
     defaultMessage: 'Test Cases',
     description: 'Header for the test cases of the online editor.',
   },
+  dataFilesHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.dataFilesHeader',
+    defaultMessage: 'Data Files',
+    description: 'Header for the data files of the online editor.',
+  },
+  currentDataFilesHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.currentDataFilesHeader',
+    defaultMessage: 'Current Data Files',
+    description: 'Header for the current data files panel.',
+  },
+  addDataFileButton: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.addDataFileButton',
+    defaultMessage: 'Add Data File',
+    description: 'Button for adding a new data file.',
+  },
+  fileNameHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.fileNameHeader',
+    defaultMessage: 'File Name',
+    description: 'Header for file name column in current data files paenl.',
+  },
+  fileSizeHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.fileSizeHeader',
+    defaultMessage: 'File Size',
+    description: 'Header for file size column in current data files paenl.',
+  },
+  newDataFilesHeader: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.newDataFilesHeader',
+    defaultMessage: 'New Data Files',
+    description: 'Header for the new data files panel.',
+  },
   addNewTestButton: {
     id: 'course.assessment.question.programming.onlineEditorPythonView.addNewTestButton',
     defaultMessage: 'Add new test',

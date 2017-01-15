@@ -5,11 +5,12 @@ import AceEditor from 'react-ace';
 import { injectIntl } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import { Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import transitions from 'material-ui/styles/transitions';
-import { red500 } from 'material-ui/styles/colors';
+import { grey100, grey300, white } from 'material-ui/styles/colors';
 
 import 'brace/mode/python';
 import 'brace/theme/monokai';
@@ -19,11 +20,15 @@ import translations from './OnlineEditorPythonView.intl';
 
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
+  dataFiles: PropTypes.instanceOf(Immutable.Map).isRequired,
   actions: React.PropTypes.shape({
     updatePythonCodeBlock: PropTypes.func.isRequired,
     createPythonTestCase: PropTypes.func.isRequired,
     updatePythonTestCase: PropTypes.func.isRequired,
     deletePythonTestCase: PropTypes.func.isRequired,
+    updateNewDataFile: PropTypes.func.isRequired,
+    deleteNewDataFile: PropTypes.func.isRequired,
+    deleteExistingDataFile: PropTypes.func.isRequired,
   }),
   isLoading: PropTypes.bool.isRequired,
   intl: PropTypes.shape({
@@ -93,6 +98,7 @@ class OnlineEditorPythonView extends React.Component {
   constructor(props) {
     super(props);
     this.onAutogradedChange = this.onAutogradedChange.bind(this);
+    this.renderExistingDataFiles = this.renderExistingDataFiles.bind(this);
   }
 
   onAutogradedChange(e) {
@@ -101,6 +107,14 @@ class OnlineEditorPythonView extends React.Component {
 
   codeChangeHandler(field) {
     return e => this.props.actions.updatePythonCodeBlock(field, e);
+  }
+
+  newDataFileChangeHandler(index) {
+    return (e) => {
+      const files = e.target.files;
+      const filename = files.length === 0 ? null : files[0].name;
+      this.props.actions.updateNewDataFile(filename, index);
+    };
   }
 
   testCaseDeleteHandler(type, index) {
@@ -121,6 +135,155 @@ class OnlineEditorPythonView extends React.Component {
         this.props.actions.createPythonTestCase(type);
       }
     };
+  }
+
+  renderExistingDataFiles() {
+    if (this.props.data.get('data_files').size === 0) {
+      return null;
+    }
+
+    const formatBytes = (bytes, decimals) => {
+      if (bytes === 0) return '0 Byte';
+      const k = 1000; // or 1024 for binary
+      const dm = decimals || 3;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+    };
+
+    const renderDataFile = (fileData) => {
+      const filename = fileData.get('filename');
+      const filesize = fileData.get('size');
+      const hash = fileData.get('hash');
+      const toDelete = this.props.dataFiles.get('to_delete').has(filename);
+      const buttonClass = toDelete ? 'fa fa-undo' : 'fa fa-trash';
+      const buttonColor = toDelete ? white : grey300;
+      const rowStyle = toDelete ?
+        {textDecoration: 'line-through', backgroundColor: grey100}
+        :
+        {};
+
+      return (
+        <TableRow key={hash} style={rowStyle}>
+          <TableHeaderColumn className={styles.deleteButtonCell}>
+            <RaisedButton
+              backgroundColor={buttonColor}
+              icon={<i className={buttonClass} />}
+              disabled={this.props.isLoading}
+              onClick={() => { this.props.actions.deleteExistingDataFile(filename, !toDelete); }}
+              style={{ minWidth: '40px', width: '40px' }}
+            />
+            <input
+              type="checkbox"
+              hidden={true}
+              name={`question_programming[data_files_to_delete][${filename}]`}
+              checked={toDelete}
+            />
+          </TableHeaderColumn>
+          <TableRowColumn>{filename}</TableRowColumn>
+          <TableRowColumn>{formatBytes(filesize, 2)}</TableRowColumn>
+        </TableRow>
+      );
+    };
+
+    return (
+      <Card initiallyExpanded>
+        <CardHeader
+          title={this.props.intl.formatMessage(translations.currentDataFilesHeader)}
+          textStyle={{ fontWeight: 'bold' }}
+          actAsExpander
+          showExpandableButton
+        />
+        <CardText expandable style={{ padding: 0 }}>
+          <Table selectable={false}>
+            <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+              <TableRow>
+                <TableHeaderColumn className={styles.deleteButtonCell} />
+                <TableHeaderColumn>
+                  {this.props.intl.formatMessage(translations.fileNameHeader)}
+                </TableHeaderColumn>
+                <TableHeaderColumn>
+                  {this.props.intl.formatMessage(translations.fileSizeHeader)}
+                </TableHeaderColumn>
+              </TableRow>
+            </TableHeader>
+            <TableBody displayRowCheckbox={false}>
+              {this.props.data.get('data_files').map(renderDataFile)}
+            </TableBody>
+          </Table>
+        </CardText>
+      </Card>
+    );
+  }
+
+  renderNewDataFiles() {
+    const newDataFilesRows = this.props.dataFiles.get('new').map((fileData, index) => {
+      const key = fileData.get('key');
+
+      let deleteButton = null;
+      let addFileButtonStyle = {};
+
+      if (this.props.dataFiles.get('key') !== key) {
+        // Do not show for last row
+        deleteButton = (
+          <RaisedButton
+            backgroundColor={grey300}
+            icon={<i className="fa fa-trash" />}
+            disabled={this.props.isLoading}
+            onClick={() => { this.props.actions.deleteNewDataFile(index); }}
+            style={{ minWidth: '40px', width: '40px' }}
+          />
+        );
+        // Hide button after selecting a file
+        addFileButtonStyle.display = 'none';
+      }
+
+      return (
+        <TableRow key={key}>
+          <TableHeaderColumn className={styles.deleteButtonCell}>
+            { deleteButton }
+          </TableHeaderColumn>
+          <TableRowColumn>
+            <RaisedButton
+              className={styles.fileInputButton}
+              label={this.props.intl.formatMessage(translations.addDataFileButton)}
+              labelPosition="before"
+              containerElement="label"
+              primary
+              disabled={this.props.isLoading}
+              style={addFileButtonStyle}
+            >
+              <input
+                type="file"
+                name="question_programming[data_files][]"
+                className={styles.uploadInput}
+                disabled={this.props.isLoading}
+                onChange={this.newDataFileChangeHandler(index)}
+              />
+            </RaisedButton>
+            <div style={{ display: 'inline-block' }}>{fileData.get('filename')}</div>
+          </TableRowColumn>
+        </TableRow>
+      );
+    });
+
+    return (
+      <Card initiallyExpanded>
+        <CardHeader
+          title={this.props.intl.formatMessage(translations.newDataFilesHeader)}
+          textStyle={{ fontWeight: 'bold' }}
+          actAsExpander
+          showExpandableButton
+        />
+        <CardText expandable style={{ padding: 0 }}>
+          <Table selectable={false}>
+            <TableBody displayRowCheckbox={false}>
+              { newDataFilesRows }
+            </TableBody>
+          </Table>
+        </CardText>
+      </Card>
+    );
   }
 
   renderTestCases(header, testCases, type, startIndex = 0) {
@@ -149,8 +312,8 @@ class OnlineEditorPythonView extends React.Component {
       <TableRow key={index}>
         <TableHeaderColumn className={styles.deleteButtonCell}>
           <RaisedButton
-            backgroundColor={red500}
-            icon={<i className="fa fa-minus" />}
+            backgroundColor={grey300}
+            icon={<i className="fa fa-trash" />}
             disabled={this.props.isLoading}
             onClick={this.testCaseDeleteHandler(type, index)}
             style={{ minWidth: '40px', width: '40px' }}
@@ -269,15 +432,24 @@ class OnlineEditorPythonView extends React.Component {
           { this.renderEditorCard(intl.formatMessage(translations.prependTitle), 'prepend') }
           { this.renderEditorCard(intl.formatMessage(translations.appendTitle), 'append') }
         </div>
+        <h3>{ intl.formatMessage(translations.dataFilesHeader) }</h3>
+        { this.renderExistingDataFiles() }
+        { this.renderNewDataFiles() }
         <h3>{ intl.formatMessage(translations.testCasesHeader) }</h3>
         { errorTextElement }
-        {this.renderTestCases(intl.formatMessage(translations.publicTestCases),
-          testCases, 'public')}
-        {this.renderTestCases(intl.formatMessage(translations.privateTestCases),
-          testCases, 'private', testCases.get('public').size)}
-        {this.renderTestCases(intl.formatMessage(translations.evaluationTestCases),
+        {
+          this.renderTestCases(intl.formatMessage(translations.publicTestCases),
+          testCases, 'public')
+        }
+        {
+          this.renderTestCases(intl.formatMessage(translations.privateTestCases),
+          testCases, 'private', testCases.get('public').size)
+        }
+        {
+          this.renderTestCases(intl.formatMessage(translations.evaluationTestCases),
           testCases, 'evaluation',
-          testCases.get('public').size + testCases.get('private').size)}
+          testCases.get('public').size + testCases.get('private').size)
+        }
       </div>
     );
   }
@@ -295,6 +467,7 @@ class OnlineEditorPythonView extends React.Component {
           onToggle={this.onAutogradedChange}
           disabled={this.props.isLoading}
           style={{ margin: '1em 0' }}
+          name="question_programming[autograded]"
         />
         { this.renderEditorCard(intl.formatMessage(translations.submissionTitle), 'submission') }
         { autograded ? this.renderAutogradedFields() : null }

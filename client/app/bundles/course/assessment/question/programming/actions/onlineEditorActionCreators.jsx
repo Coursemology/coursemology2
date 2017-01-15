@@ -32,3 +32,26 @@ export function deletePythonTestCase(testType, index) {
     index,
   };
 }
+
+export function updateNewDataFile(filename, index) {
+  return {
+    type: actionTypes.PYTHON_NEW_DATA_FILE_UPDATE,
+    index,
+    filename,
+  };
+}
+
+export function deleteNewDataFile(index) {
+  return {
+    type: actionTypes.PYTHON_NEW_DATA_FILE_DELETE,
+    index,
+  };
+}
+
+export function deleteExistingDataFile(filename, toDelete) {
+  return {
+    type: actionTypes.PYTHON_EXISTING_DATA_FILE_DELETE,
+    filename,
+    toDelete,
+  };
+}

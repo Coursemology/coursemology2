@@ -49,7 +49,7 @@ const OnlineEditor = (props) => {
     case 'python':
       return (<OnlineEditorPythonView
         {...{
-          actions, data: testUI.get('python'), isLoading }}
+          actions, data: testUI.get('python'), dataFiles: testUI.get('data_files'), isLoading }}
       />);
 
     case null:
