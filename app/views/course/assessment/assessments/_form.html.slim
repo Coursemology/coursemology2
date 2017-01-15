@@ -20,6 +20,8 @@
   - else
     = f.hidden_field :autograded
   - unless @assessment.autograded?
+    = f.input :delayed_grade_publication, label: t('.delayed_grade_publication'),
+                                          hint: t('.delayed_grade_publication_hint')
     = f.input :password, placeholder: t('.password_placeholder'), hint: t('.password_hint'),
                          input_html: { value: @assessment.password, onfocus: "this.type='text'", onblur: "this.type='password'" }
   = f.folder

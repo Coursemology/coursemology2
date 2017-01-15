@@ -31,6 +31,7 @@ RSpec.feature 'Course: Assessments: Management' do
         fill_in 'assessment_start_at', with: assessment.start_at
         fill_in 'assessment_end_at', with: assessment.end_at
         fill_in 'assessment_bonus_end_at', with: assessment.bonus_end_at
+        check 'assessment_delayed_grade_publication'
 
         click_button 'submit'
 
@@ -46,6 +47,7 @@ RSpec.feature 'Course: Assessments: Management' do
         expect(assessment_created.tab).to eq(assessment_tab)
         expect(page).to have_content_tag_for(assessment_created)
         expect(assessment_created.folder.materials).to be_present
+        expect(assessment_created.delayed_grade_publication?).to be_truthy
         expect(assessment_created).not_to be_autograded
       end
 
