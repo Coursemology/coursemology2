@@ -20,6 +20,7 @@ const translations = defineMessages({
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
   actions: PropTypes.object.isRequired,
+  autogradedAssessment: PropTypes.bool.isRequired,
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
@@ -40,7 +41,7 @@ export function validation(data, pathOfKeysToData, intl) {
 }
 
 const OnlineEditor = (props) => {
-  const { data, actions, intl } = props;
+  const { data, actions, intl, autogradedAssessment } = props;
   const testUI = data.get('test_ui');
   const mode = testUI.get('mode');
   const isLoading = data.get('is_loading');
@@ -49,7 +50,12 @@ const OnlineEditor = (props) => {
     case 'python':
       return (<OnlineEditorPythonView
         {...{
-          actions, data: testUI.get('python'), dataFiles: testUI.get('data_files'), isLoading }}
+          actions,
+          data: testUI.get('python'),
+          dataFiles: testUI.get('data_files'),
+          isLoading,
+          autogradedAssessment,
+        }}
       />);
 
     case null:

@@ -31,6 +31,7 @@ const propTypes = {
     deleteExistingDataFile: PropTypes.func.isRequired,
   }),
   isLoading: PropTypes.bool.isRequired,
+  autogradedAssessment: PropTypes.bool.isRequired,
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
@@ -99,6 +100,12 @@ class OnlineEditorPythonView extends React.Component {
     super(props);
     this.onAutogradedChange = this.onAutogradedChange.bind(this);
     this.renderExistingDataFiles = this.renderExistingDataFiles.bind(this);
+  }
+
+  componentWillMount() {
+    if (this.props.autogradedAssessment) {
+      this.props.actions.updatePythonCodeBlock('autograded', true);
+    }
   }
 
   onAutogradedChange(e) {
@@ -455,17 +462,21 @@ class OnlineEditorPythonView extends React.Component {
   }
 
   render() {
-    const { intl, data } = this.props;
-    const autograded = data.get('autograded');
+    const { intl, data, autogradedAssessment } = this.props;
+    const autograded = autogradedAssessment || data.get('autograded');
+    let autogradedLabel = intl.formatMessage(translations.autograded);
+    if (autogradedAssessment) {
+      autogradedLabel += ` (${intl.formatMessage(translations.autogradedAssessment)})`;
+    }
 
     return (
       <div id="python-online-editor">
         <Toggle
-          label={intl.formatMessage(translations.autograded)}
+          label={autogradedLabel}
           labelPosition="right"
           toggled={autograded}
           onToggle={this.onAutogradedChange}
-          disabled={this.props.isLoading}
+          disabled={autogradedAssessment || this.props.isLoading}
           style={{ margin: '1em 0' }}
           name="question_programming[autograded]"
         />

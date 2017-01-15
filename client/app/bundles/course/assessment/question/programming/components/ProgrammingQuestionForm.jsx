@@ -437,6 +437,7 @@ class ProgrammingQuestionForm extends React.Component {
           {...{
             actions: this.props.onlineEditorActions,
             data: this.props.data,
+            autogradedAssessment: this.props.data.getIn(['question', 'autograded_assessment']),
           }}
         />
       );

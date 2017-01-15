@@ -5,6 +5,10 @@ export default defineMessages({
     id: 'course.assessment.question.programming.onlineEditorPythonView.autograded',
     defaultMessage: 'Autograded',
   },
+  autogradedAssessment: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.autogradedAssessment',
+    defaultMessage: 'Autograded assessment cannot have non-autograded questions',
+  },
   prependTitle: {
     id: 'course.assessment.question.programming.onlineEditorPythonView.prependTitle',
     defaultMessage: 'Prepend',
