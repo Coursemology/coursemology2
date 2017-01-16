@@ -43,5 +43,45 @@ RSpec.describe Course::Video, type: :model do
         expect(submissions.all? { |submission| submission.creator == student1.user }).to be(true)
       end
     end
+
+    describe 'callbacks' do
+      context 'when updating video url' do
+        let(:youtube_embedded_url) { "https://www.youtube.com/embed/#{youtube_video_id}" }
+        let(:youtube_video_id) { 'dQw4w9WgXcQ' }
+        let(:youtube_valid_urls) do
+          [
+            "youtu.be/#{youtube_video_id}",
+            "http://youtu.be/#{youtube_video_id}",
+            "https://youtu.be/#{youtube_video_id}",
+            "youtube.com/watch?v=#{youtube_video_id}",
+            "http://youtube.com/watch?v=#{youtube_video_id}",
+            "https://youtube.com/watch?v=#{youtube_video_id}",
+            "https://www.youtube.com/watch?v=#{youtube_video_id}",
+            "https://www.youtube.com/embed/#{youtube_video_id}",
+            "https://www.youtube.com/v/#{youtube_video_id}"
+          ]
+        end
+
+        it 'updates to the youtube embed url' do
+          youtube_valid_urls.each do |url|
+            video1.reload.url = url
+            expect(video1.save).to be_truthy
+            expect(video1.reload.url).to eq(youtube_embedded_url)
+          end
+        end
+
+        context 'when url is invalid' do
+          let(:invalid_urls) { ['https://google.com', 'http://youtube.com/fooooooo'] }
+
+          it' does not update and returns an error' do
+            invalid_urls.each do |url|
+              video1.reload.url = url
+              expect(video1.save).to be_falsey
+              expect { video1.save! }.to raise_exception(ActiveRecord::RecordInvalid)
+            end
+          end
+        end
+      end
+    end
   end
 end
