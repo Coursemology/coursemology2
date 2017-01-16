@@ -10,6 +10,9 @@ en:
             other_header: 'Others'
           create:
             failure: 'Could not create submission: %{error}'
+          edit:
+            description: 'Description'
+            header: 'Viewing %{title}'
           submission:
             watched: 'Watched'
             not_watched: 'Has Not Started'

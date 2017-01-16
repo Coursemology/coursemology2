@@ -134,6 +134,9 @@ en:
         videos:
           index: :'course.video.videos.index.header'
           new: :'course.video.videos.new.header'
+        submission:
+          submissions:
+            edit: :'course.video.submission.submissions.edit.header'
     system:
       admin:
         controller:

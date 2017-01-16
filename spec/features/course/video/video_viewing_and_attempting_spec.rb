@@ -15,7 +15,7 @@ RSpec.describe 'Course: Videos: Viewing' do
     context 'As a Course Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I can view published videos and attempt open videos on the videos page' do
+      scenario 'I can view published videos and attempt these videos from the videos page' do
         videos
         visit course_videos_path(course)
 
@@ -34,13 +34,18 @@ RSpec.describe 'Course: Videos: Viewing' do
             Course::Video::Submission.where(video: published_video, creator: user).first
           expect(current_path).
             to eq(edit_course_video_submission_path(course, published_video, submission))
+
+          expect(page).to have_tag('iframe', with: { 'src': published_video.url })
         end
 
         # Button is updated when submission exists
         visit course_videos_path(course)
         within find(content_tag_selector(published_video)) do
           expect(page).to have_text(I18n.t('course.video.videos.video_attempt_button.rewatch'))
+          find('.btn.btn-info').click
         end
+
+        expect(page).to have_tag('iframe', with: { 'src': published_video.url })
       end
     end
   end

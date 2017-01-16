@@ -1,0 +1,9 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/video:
+          attributes:
+            url:
+              invalid_url: >
+                The URL you entered is not of the correct format, please try again.
