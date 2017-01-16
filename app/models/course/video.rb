@@ -5,8 +5,6 @@ class Course::Video < ActiveRecord::Base
   include Course::ReminderConcern
   include Course::Video::UrlConcern
 
-  after_initialize :set_defaults, if: :new_record?
-
   has_many :submissions, class_name: Course::Video::Submission.name,
                          inverse_of: :video, dependent: :destroy
 
@@ -39,11 +37,5 @@ class Course::Video < ActiveRecord::Base
 
   def to_partial_path
     'course/video/videos/video'.freeze
-  end
-
-  private
-
-  def set_defaults
-    self.published = false
   end
 end
