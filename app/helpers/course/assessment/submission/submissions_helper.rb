@@ -67,4 +67,19 @@ module Course::Assessment::Submission::SubmissionsHelper
       can?(:manage, answer.submission.assessment)
     end
   end
+
+  # Return the bootstrap panel class based on the status of the submission
+  def panel_class
+    if @submission.attempting?
+      'panel-info'
+    elsif @submission.submitted?
+      'panel-warning'
+    elsif @submission.graded?
+      'panel-danger'
+    elsif @submission.published?
+      'panel-success'
+    else
+      'panel-default'
+    end
+  end
 end
