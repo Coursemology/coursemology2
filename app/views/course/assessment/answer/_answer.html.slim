@@ -23,7 +23,8 @@
         = render partial: 'course/assessment/answer/manually_graded',
           locals: { base_answer_form: f, answer: answer, last_attempt: last_attempt }
 
-      - if !submission.attempting?
+      / Don't show grades to students if they are not published
+      - if submission.published? || !submission.attempting? && can?(:grade, submission)
         = render partial: 'course/assessment/answer/grading',
                  locals: { base_answer_form: f, answer: answer }
 
