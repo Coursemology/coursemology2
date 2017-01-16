@@ -7,11 +7,15 @@
       = delete_button([current_course, @assessment])
 
 = div_for(@assessment, 'data-assessment-id' => @assessment.id) do
-  h3 = t('.description')
-  = format_html(@assessment.description)
+  - unless @assessment.description.blank?
+    h3 = t('.description')
+    = format_html(@assessment.description)
 
   table.table.table-bordered.details-table
     tbody
+      tr.type
+        th = t('.type')
+        td = @assessment.autograded? ? t('.autograded') : t('.manually_graded')
       tr.base_exp
         th = t('.base_exp')
         td = @assessment.base_exp
@@ -37,10 +41,11 @@
       = content_tag_for(:li, condition) do
         = condition.title
 
-  h3 = t('.finish_to_unlock')
-  = render partial: @assessment.assessment_conditions.includes(:conditional), suffix: 'condition'
+  - if @assessment.assessment_conditions.present?
+    h3 = t('.finish_to_unlock')
+    = render partial: @assessment.assessment_conditions.includes(:conditional), suffix: 'condition'
 
-  - if can?(:attempt, @assessment)
+  - if can?(:attempt, @assessment) && @assessment.folder.materials.present?
     h3 = t('.files')
     = render partial: 'layouts/materials', locals: { folder: @assessment.folder }
 
