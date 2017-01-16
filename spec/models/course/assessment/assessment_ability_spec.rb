@@ -62,7 +62,7 @@ RSpec.describe Course::Assessment do
 
       # Course Assessment Submissions
       it { is_expected.to be_able_to(:read, attempting_submission) }
-      it { is_expected.not_to be_able_to(:grade, attempting_submission) }
+      it { is_expected.to be_able_to(:grade, attempting_submission) }
       it { is_expected.to be_able_to(:grade, submitted_submission) }
 
       it 'sees attempting submission for a given assessment' do

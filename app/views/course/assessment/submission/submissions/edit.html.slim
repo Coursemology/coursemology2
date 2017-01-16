@@ -9,6 +9,8 @@
     h4 = t('.files')
     = render partial: 'layouts/materials', locals: { folder: @assessment.folder }
 
+= render 'progress' if can?(:grade, @submission)
+
 = div_for(@assessment, 'data-assessment-id' => @assessment.id,
                        class: single_question_flag_class(@assessment)) do
   = div_for(@submission, 'data-submission-id' => @submission.id) do

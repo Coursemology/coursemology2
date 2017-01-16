@@ -46,6 +46,10 @@ en:
               NOTE THAT YOU CANNOT UNDO THIS!!
 
               Are you sure you want to proceed?
+          progress:
+            student: :'course.users.role.student'
+            attempted_at: :'course.assessment.submission.submissions.statistics.attempted_at'
+            submitted_at: 'Submitted At'
           statistics:
             student: :'course.users.role.student'
             status: 'Status'
