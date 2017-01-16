@@ -7,13 +7,10 @@ module Extensions::DiscussionTopic::ActiveRecord::Base
     # comments center.
     # @option options [Boolean] :touch Set to true if the topic need to be touched upon updating.
     def acts_as_discussion_topic(display_globally: false, touch: false)
-      acts_as :discussion_topic, class_name: Course::Discussion::Topic.name
+      acts_as :discussion_topic, class_name: Course::Discussion::Topic.name, touch: touch
       # For autoload to work correctly after class changed, we store the model name first and
       # constantize later.
       Course::Discussion::Topic.global_topic_model_names << name if display_globally
-
-      # This can be removed after https://github.com/hzamani/active_record-acts_as/pull/78
-      define_method(:touch_actable) {} unless touch
     end
   end
 end
