@@ -106,6 +106,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
         expect(page).
           not_to have_button(I18n.t('course.assessment.submission.submissions.buttons.finalise'))
+        expect(page).not_to have_selector('div.submission_answers_grade')
       end
 
       scenario 'I can comment on answers', js: true do
