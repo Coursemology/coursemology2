@@ -7,10 +7,10 @@ class Course::Video::ClosingReminderJob < ApplicationJob
 
   protected
 
-  def perform_tracked(user, video, end_at)
+  def perform_tracked(user, video, token)
     instance = Course.unscoped { video.course.instance }
     ActsAsTenant.with_tenant(instance) do
-      Course::Video::ReminderService.closing_reminder(user, video, end_at)
+      Course::Video::ReminderService.closing_reminder(user, video, token)
     end
   end
 end

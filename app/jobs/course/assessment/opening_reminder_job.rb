@@ -7,10 +7,10 @@ class Course::Assessment::OpeningReminderJob < ApplicationJob
 
   protected
 
-  def perform_tracked(user, assessment, start_at)
+  def perform_tracked(user, assessment, token)
     instance = Course.unscoped { assessment.course.instance }
     ActsAsTenant.with_tenant(instance) do
-      Course::Assessment::ReminderService.opening_reminder(user, assessment, start_at)
+      Course::Assessment::ReminderService.opening_reminder(user, assessment, token)
     end
   end
 end

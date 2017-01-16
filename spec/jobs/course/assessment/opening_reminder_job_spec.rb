@@ -4,15 +4,14 @@ require 'rails_helper'
 RSpec.describe Course::Assessment::OpeningReminderJob do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
-    let!(:now) { Time.zone.now }
+    let(:assessment) { create(:assessment) }
 
-    let(:user) { create(:course_user).user }
-    let!(:assessment) { create(:assessment) }
-    subject { Course::Assessment::OpeningReminderJob }
+    context 'when start_at of the assessment is changed' do
+      it 'creates a opening reminder job' do
+        assessment.start_at = Time.zone.now
 
-    it 'can be queued' do
-      expect { subject.perform_later(user, assessment, now.to_i) }.
-        to have_enqueued_job(subject).exactly(:once)
+        expect { assessment.save }.to have_enqueued_job(Course::Assessment::OpeningReminderJob)
+      end
     end
   end
 end

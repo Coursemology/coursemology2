@@ -17,24 +17,23 @@ RSpec.describe Course::Assessment::ReminderService do
           assessment.published = true
 
           expect_any_instance_of(Course::AssessmentNotifier).to receive(:assessment_opening).once
-          subject.opening_reminder(user, assessment, assessment.start_at.to_f)
+          subject.opening_reminder(user, assessment, assessment.opening_reminder_token)
         end
       end
 
       context 'when assessment is a draft' do
         it 'does not notify the users' do
           expect_any_instance_of(Course::AssessmentNotifier).to_not receive(:assessment_opening)
-          subject.opening_reminder(user, assessment, assessment.start_at.to_f)
+          subject.opening_reminder(user, assessment, assessment.opening_reminder_token)
         end
-      end
 
-      context "when assessment's start_date was changed" do
-        it 'does not notify the users' do
-          start_at = assessment.start_at.to_f
-          assessment.start_at = now + 1.day
+        context "when assessment's start_date was changed" do
+          it 'does not notify the users' do
+            assessment.start_at = now + 1.day
 
-          expect_any_instance_of(Course::AssessmentNotifier).to_not receive(:assessment_opening)
-          subject.opening_reminder(user, assessment, start_at)
+            expect_any_instance_of(Course::AssessmentNotifier).to_not receive(:assessment_opening)
+            subject.opening_reminder(user, assessment, assessment.opening_reminder_token)
+          end
         end
       end
     end
@@ -50,24 +49,23 @@ RSpec.describe Course::Assessment::ReminderService do
           assessment.published = true
 
           expect_any_instance_of(Course::AssessmentNotifier).to receive(:assessment_closing).once
-          subject.closing_reminder(user, assessment, assessment.end_at.to_f)
+          subject.closing_reminder(user, assessment, assessment.closing_reminder_token)
         end
       end
 
       context 'when assessment is a draft' do
         it 'does not notify the users' do
           expect_any_instance_of(Course::AssessmentNotifier).to_not receive(:assessment_closing)
-          subject.closing_reminder(user, assessment, assessment.end_at.to_f)
+          subject.closing_reminder(user, assessment, assessment.closing_reminder_token)
         end
-      end
 
-      context "when assessment's end_date was changed" do
-        it 'does not notify the users' do
-          end_at = assessment.end_at.to_f
-          assessment.end_at = now + 1.day
+        context "when assessment's end_date was changed" do
+          it 'does not notify the users' do
+            assessment.end_at = now + 1.day
 
-          expect_any_instance_of(Course::AssessmentNotifier).to_not receive(:assessment_closing)
-          subject.closing_reminder(user, assessment, end_at)
+            expect_any_instance_of(Course::AssessmentNotifier).to_not receive(:assessment_closing)
+            subject.closing_reminder(user, assessment, assessment.closing_reminder_token)
+          end
         end
       end
     end
