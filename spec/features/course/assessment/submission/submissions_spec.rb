@@ -76,6 +76,9 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
 
         click_link I18n.t('course.assessment.submission.submissions.index.publish')
         expect(graded_submission.reload).to be_published
+        expect(graded_submission.publisher).to eq(user)
+        expect(graded_submission.published_at).to be_present
+
         message = I18n.t('course.assessment.submission.submissions.publish_all.success')
         expect(page).to have_selector('div', text: message)
 
