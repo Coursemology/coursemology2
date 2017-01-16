@@ -26,3 +26,7 @@ en:
           rewatch: 'Re-Watch'
         video_management_buttons:
           submissions: 'Submissions'
+        form:
+          url_placeholder: >
+            Please provide a valid youtube URL,
+            eg. https://www.youtube.com/watch?v=dQw4w9WgXcQ
