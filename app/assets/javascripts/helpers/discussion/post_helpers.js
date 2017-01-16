@@ -14,7 +14,10 @@ var DISCUSSION_POST_HELPERS = (function($, EVENT_HELPERS,
    * @param element
    */
   function showCommentToolbar(element, selector) {
-    var $comments = $('.discussion_post', element).filter(selector + '*');
+    var $comments = $('.discussion_post', element).
+                    addBack('.discussion_post').
+                    filter(selector + '*');
+
     $comments.find('.toolbar').show();
   }
 
