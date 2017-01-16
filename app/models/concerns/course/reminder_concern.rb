@@ -8,13 +8,12 @@
 #   - #{Model-Name}::OpeningReminderJob
 #   - #{Model-Name}::CloseReminderJob
 #
-# Note that to prevent duplicate jobs, a random number of miliseconds is added to the date fields
+# Note that to prevent duplicate jobs, a random number of milliseconds is added to the date fields
 # for each change to uniquely identify the most current set of jobs.
 module Course::ReminderConcern
   extend ActiveSupport::Concern
 
   included do
-    before_validation :prevent_reminder_duplication
     before_save :setup_opening_reminders, if: :start_at_changed?
     before_save :setup_closing_reminders, if: :end_at_changed?
   end
@@ -33,30 +32,27 @@ module Course::ReminderConcern
     "#{class_name}::ClosingReminderJob".constantize
   end
 
-  # Prevent duplicate reminder from being sent due to floating point changes
-  def prevent_reminder_duplication
-    self.start_at = start_at_was if start_at.to_f.floor == start_at_was.to_f.floor
-    self.end_at = end_at_was if end_at.to_f.floor == end_at_was.to_f.floor
-  end
-
   def setup_opening_reminders
-    # Randomize the milliseconds of the reminders' datetime to prevent duplication
-    self.start_at += Random.rand(0...0.1).round(4)
+    # Use current time as token to prevent duplicate notification. The float need to be round so
+    # that the value stores in database will be consistent with the value passed to the job.
+    self.opening_reminder_token = Time.zone.now.to_f.round(5)
 
     execute_after_commit do
       opening_reminder_job_class.set(wait_until: start_at).
-        perform_later(creator, self, start_at.to_f)
+        perform_later(updater, self, opening_reminder_token)
     end
   end
 
   def setup_closing_reminders
-    # Randomize the milliseconds of the reminders' datetime to prevent duplication
-    self.end_at += Random.rand(0...0.1).round(4)
+    # Use current time as token to prevent duplicate notification.
+    self.closing_reminder_token = Time.zone.now.to_f.round(5)
 
     execute_after_commit do
       # Send notification one day before the closing date
-      closing_reminder_job_class.set(wait_until: end_at - 1.day).
-        perform_later(creator, self, end_at.to_f)
+      if end_at > Time.zone.now
+        closing_reminder_job_class.set(wait_until: end_at - 1.day).
+          perform_later(updater, self, opening_reminder_token)
+      end
     end
   end
 end

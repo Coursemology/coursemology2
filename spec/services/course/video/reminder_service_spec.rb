@@ -17,24 +17,23 @@ RSpec.describe Course::Video::ReminderService do
           video.published = true
 
           expect_any_instance_of(Course::VideoNotifier).to receive(:video_opening).once
-          subject.opening_reminder(user, video, video.start_at.to_f)
+          subject.opening_reminder(user, video, video.opening_reminder_token)
         end
       end
 
       context 'when video is a draft' do
         it 'does not notify the users' do
           expect_any_instance_of(Course::VideoNotifier).to_not receive(:video_opening)
-          subject.opening_reminder(user, video, video.start_at.to_f)
+          subject.opening_reminder(user, video, video.opening_reminder_token)
         end
-      end
 
-      context "when video's start_date was changed" do
-        it 'does not notify the users' do
-          start_at = video.start_at.to_f
-          video.start_at = now + 1.day
+        context "when video's start_date was changed" do
+          it 'does not notify the users' do
+            video.start_at = now + 1.day
 
-          expect_any_instance_of(Course::VideoNotifier).to_not receive(:video_opening)
-          subject.opening_reminder(user, video, start_at)
+            expect_any_instance_of(Course::VideoNotifier).to_not receive(:video_opening)
+            subject.opening_reminder(user, video, video.opening_reminder_token)
+          end
         end
       end
     end
@@ -50,24 +49,23 @@ RSpec.describe Course::Video::ReminderService do
           video.published = true
 
           expect_any_instance_of(Course::VideoNotifier).to receive(:video_closing).once
-          subject.closing_reminder(user, video, video.end_at.to_f)
+          subject.closing_reminder(user, video, video.closing_reminder_token)
         end
       end
 
       context 'when video is a draft' do
         it 'does not notify the users' do
           expect_any_instance_of(Course::VideoNotifier).to_not receive(:video_closing)
-          subject.closing_reminder(user, video, video.end_at.to_f)
+          subject.closing_reminder(user, video, video.closing_reminder_token)
         end
-      end
 
-      context "when video's end_date was changed" do
-        it 'does not notify the users' do
-          end_at = video.end_at.to_f
-          video.end_at = now + 1.day
+        context "when video's end_date was changed" do
+          it 'does not notify the users' do
+            video.end_at = now + 1.day
 
-          expect_any_instance_of(Course::VideoNotifier).to_not receive(:video_closing)
-          subject.closing_reminder(user, video, end_at)
+            expect_any_instance_of(Course::VideoNotifier).to_not receive(:video_closing)
+            subject.closing_reminder(user, video, video.closing_reminder_token)
+          end
         end
       end
     end
