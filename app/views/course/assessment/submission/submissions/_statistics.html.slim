@@ -10,10 +10,16 @@ div.panel.panel-default
         tr
           th = t('.status')
           td
-            = Course::Assessment::Submission.human_attribute_name(@submission.workflow_state)
             - if @submission.graded?
-              span.text-warning title=t('.publish_grade_hint')
-                =< fa_icon 'question-circle-o'.freeze
+              - if can?(:grade, @submission)
+                = Course::Assessment::Submission.human_attribute_name(@submission.workflow_state)
+                span.text-warning title=t('.publish_grade_hint')
+                  =< fa_icon 'question-circle-o'.freeze
+              - else
+                / For graded submissions, still show as submitted for students
+                = Course::Assessment::Submission.human_attribute_name(:submitted)
+            - else
+              = Course::Assessment::Submission.human_attribute_name(@submission.workflow_state)
         - if display_grading_results
           tr
             th = @submission.class.human_attribute_name(:grade)
