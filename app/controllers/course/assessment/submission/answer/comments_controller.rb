@@ -10,6 +10,11 @@ class Course::Assessment::Submission::Answer::CommentsController < \
   def create
     @answer.class.transaction do
       @post.title = @assessment.title
+      # Set parent as the topologically last pre-existing post, if it exists.
+      # @post is in @answer.posts, so we filter out @post, which has no id yet.
+      if @answer.posts.length > 1
+        @post.parent = @answer.posts.ordered_topologically.flatten.select(&:id).last
+      end
       if super && @answer.save
         send_created_notification(@post)
       else
