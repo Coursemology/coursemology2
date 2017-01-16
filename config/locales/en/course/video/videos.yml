@@ -13,6 +13,7 @@ en:
           success: '%{title} was created.'
         show:
           description: 'Description'
+          start_at: :'course.video.videos.index.start_at'
         edit:
           header: 'Edit Video'
         update:

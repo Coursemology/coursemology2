@@ -5,5 +5,13 @@
       = render partial: 'video_management_buttons', locals: { video: @video }
 
 = div_for(@video) do
-  h3 = t('.description')
-  = format_html(@video.description)
+  - unless @video.description.blank?
+    h3 = t('.description')
+    div.well
+      = format_html(@video.description)
+
+  table.table.table-bordered.details-table
+    tbody
+      tr.start_at
+        th = t('.start_at')
+        td = format_datetime(@video.start_at)
