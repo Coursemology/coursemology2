@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170115105609) do
+ActiveRecord::Schema.define(version: 20170116103602) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -507,20 +507,22 @@ ActiveRecord::Schema.define(version: 20170115105609) do
 
   create_table "course_lesson_plan_items", force: :cascade do |t|
     t.integer  "actable_id"
-    t.string   "actable_type",   :limit=>255, :index=>{:name=>"index_course_lesson_plan_items_on_actable_type_and_actable_id", :with=>["actable_id"], :unique=>true}
-    t.integer  "course_id",      :null=>false, :index=>{:name=>"fk__course_lesson_plan_items_course_id"}, :foreign_key=>{:references=>"courses", :name=>"fk_course_lesson_plan_items_course_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.string   "title",          :limit=>255, :null=>false
+    t.string   "actable_type",           :limit=>255, :index=>{:name=>"index_course_lesson_plan_items_on_actable_type_and_actable_id", :with=>["actable_id"], :unique=>true}
+    t.integer  "course_id",              :null=>false, :index=>{:name=>"fk__course_lesson_plan_items_course_id"}, :foreign_key=>{:references=>"courses", :name=>"fk_course_lesson_plan_items_course_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.string   "title",                  :limit=>255, :null=>false
     t.text     "description"
-    t.boolean  "published",      :default=>false, :null=>false
-    t.integer  "base_exp",       :null=>false
-    t.integer  "time_bonus_exp", :null=>false
-    t.datetime "start_at",       :null=>false
+    t.boolean  "published",              :default=>false, :null=>false
+    t.integer  "base_exp",               :null=>false
+    t.integer  "time_bonus_exp",         :null=>false
+    t.datetime "start_at",               :null=>false
     t.datetime "bonus_end_at"
     t.datetime "end_at"
-    t.integer  "creator_id",     :null=>false, :index=>{:name=>"fk__course_lesson_plan_items_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_lesson_plan_items_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "updater_id",     :null=>false, :index=>{:name=>"fk__course_lesson_plan_items_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_lesson_plan_items_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.datetime "created_at",     :null=>false
-    t.datetime "updated_at",     :null=>false
+    t.float    "opening_reminder_token"
+    t.float    "closing_reminder_token"
+    t.integer  "creator_id",             :null=>false, :index=>{:name=>"fk__course_lesson_plan_items_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_lesson_plan_items_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "updater_id",             :null=>false, :index=>{:name=>"fk__course_lesson_plan_items_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_lesson_plan_items_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "created_at",             :null=>false
+    t.datetime "updated_at",             :null=>false
   end
 
   create_table "course_lesson_plan_milestones", force: :cascade do |t|
