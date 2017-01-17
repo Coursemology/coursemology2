@@ -5,7 +5,6 @@
 
 div.answer-comment-form data-action=answer_comment_path data-method="post" style='display: none'
   div.form-group.text
-    input name="discussion_post[parent_id]" type="hidden" value=new_comments_post(topic).parent_id
     textarea.form-control.text.airmode.comment name="discussion_post[text]"
   button.btn.btn-primary.reply-comment
     = t('.comment')

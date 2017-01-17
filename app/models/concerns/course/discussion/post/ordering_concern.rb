@@ -9,6 +9,7 @@ module Course::Discussion::Post::OrderingConcern
     include Enumerable
     delegate :each, to: :@sorted
     delegate :length, to: :@sorted
+    delegate :flatten, to: :@sorted
     alias_method :size, :length
 
     # Constructor.

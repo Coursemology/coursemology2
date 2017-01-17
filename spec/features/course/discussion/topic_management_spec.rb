@@ -94,7 +94,7 @@ RSpec.feature 'Course: Topics: Management' do
         end
       end
 
-      scenario 'I can reply to a comment topic', js: true do
+      scenario 'I can reply to and delete a comment topic', js: true do
         # Randomly create a topic, either code_annotation or answer_comment.
         topic = [true, false].sample ? student_answer : student_annotation
         visit course_topics_path(course)
@@ -112,9 +112,25 @@ RSpec.feature 'Course: Topics: Management' do
         within find(content_tag_selector(topic.acting_as)) do
           expect(page).to have_tag('.post-form', count: 1)
         end
+
+        # Delete post
+        find(content_tag_selector(post)).find('.delete').click
+        wait_for_ajax
+        expect(page).not_to have_content_tag_for(post)
+
+        # Reply when last post of topic has just been deleted
+        reply_text = 'WELCOME (:'
+        fill_in_summernote '.post-form', reply_text
+        within find('.post-form') do
+          click_button I18n.t('course.discussion.posts.form.comment')
+        end
+        wait_for_ajax
+
+        reply = topic.posts.reload.last
+        expect(reply.text).to have_tag('*', text: reply_text)
       end
 
-      scenario 'I can edit and delete my comment post', js: true do
+      scenario 'I can edit my comment post', js: true do
         my_comment_post = student_reply
         visit course_topics_path(course)
 
@@ -136,11 +152,6 @@ RSpec.feature 'Course: Topics: Management' do
         end
         wait_for_ajax
         expect(page).to have_text(new_post_text)
-
-        # Test post deletion
-        find(content_tag_selector(my_comment_post)).find('.delete').click
-        wait_for_ajax
-        expect(page).not_to have_content_tag_for(my_comment_post)
       end
     end
 

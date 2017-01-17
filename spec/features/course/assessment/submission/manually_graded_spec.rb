@@ -109,76 +109,73 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
         expect(page).not_to have_selector('div.submission_answers_grade')
       end
 
-      scenario 'I can comment on answers', js: true do
+      scenario 'I can create, update and delete comment on answers', js: true do
         assessment.questions.attempt(submission).each(&:save!)
-        comment_answer = submission.answers.first
-        comment_topic = comment_answer.discussion_topic
-        create_list(:course_discussion_post, 2, topic: comment_topic)
-        comment_parent_post = comment_topic.posts.ordered_topologically.last
-
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        comment_post_text = 'test comment'
+        comment_answer = submission.answers.first
+        comment_topic = comment_answer.discussion_topic
+
+        # Make a first comment
         answer_selector = content_tag_selector(comment_answer)
+        comment_post_text = 'test comment'
         fill_in_summernote answer_selector, comment_post_text
         within find(answer_selector) do
           find('.reply-comment').click
         end
-
         wait_for_ajax
 
-        comment_post = comment_topic.posts.reload.last
+        comment_post = comment_topic.reload.posts.last
         expect(comment_post.text).to have_tag('*', text: comment_post_text)
-        expect(comment_post.parent).to eq(comment_parent_post)
+        expect(comment_post.parent).to eq(nil)
         expect(find(content_tag_selector(comment_answer))).
           to have_selector('.answer-comment-form')
 
-        submission.answers.each do |answer|
-          within find(content_tag_selector(answer)) do
-            answer.discussion_topic.posts.each do |post|
-              expect(page).to have_content_tag_for(post)
-            end
-          end
+        # Reply to the first comment
+        comment_reply_text = 'test reply'
+        fill_in_summernote answer_selector, comment_reply_text
+        within find(answer_selector) do
+          find('.reply-comment').click
         end
-      end
+        wait_for_ajax
 
-      scenario 'I can edit my existing comment', js: true do
-        assessment.questions.attempt(submission).each(&:save!)
-        comment_answer = submission.answers.first
-        comment_topic = comment_answer.discussion_topic
-        comment_post = create(:course_discussion_post,
-                              topic: comment_topic, creator: user, updater: user)
+        comment_reply = comment_topic.reload.posts.select { |post| post.id != comment_post.id }.last
+        expect(comment_reply.text).to have_tag('*', text: comment_reply_text)
+        expect(comment_reply.parent).to eq(comment_post)
+        expect(find(content_tag_selector(comment_answer))).
+          to have_selector('.answer-comment-form')
 
-        visit edit_course_assessment_submission_path(course, assessment, submission)
-
-        find(content_tag_selector(comment_post)).find('.edit').click
+        # Edit the last comment made
+        find(content_tag_selector(comment_reply)).find('.edit').click
         updated_post_text = 'updated comment'
-        answer_selector = content_tag_selector(comment_answer)
-        fill_in_summernote answer_selector, updated_post_text
+        edit_form_selector = '.edit-discussion-post-form'
+        fill_in_summernote edit_form_selector, updated_post_text
         within find(answer_selector).find('.edit-discussion-post-form') do
           click_button I18n.t('javascript.course.discussion.post.submit')
         end
-
         wait_for_ajax
 
-        comment_post = comment_topic.posts.reload.last
-        expect(comment_post.text).to have_tag('*', text: updated_post_text)
-      end
+        comment_reply = comment_reply.reload
+        expect(comment_reply.text).to have_tag('*', text: updated_post_text)
 
-      scenario 'I can delete comments', js: true do
-        assessment.questions.attempt(submission).each(&:save!)
-        comment_answer = submission.answers.first
-        comment_topic = comment_answer.discussion_topic
-        comment_post = create(:course_discussion_post, topic: comment_topic, creator: user)
-
-        visit edit_course_assessment_submission_path(course, assessment, submission)
-
-        within find(content_tag_selector(comment_post)) do
+        # Delete the reply
+        within find(content_tag_selector(comment_reply)) do
           find('.delete').click
         end
 
         wait_for_ajax
-        expect(page).not_to have_content_tag_for(comment_post)
+        expect(page).not_to have_content_tag_for(comment_reply)
+        expect(comment_topic.reload.posts.count).to eq(1)
+
+        # Should still be able to reply when last comment is deleted
+        comment_reply_text = 'another reply'
+        fill_in_summernote answer_selector, comment_reply_text
+        within find(answer_selector) do
+          find('.reply-comment').click
+        end
+        wait_for_ajax
+
+        expect(comment_topic.reload.posts.count).to eq(2)
       end
     end
 

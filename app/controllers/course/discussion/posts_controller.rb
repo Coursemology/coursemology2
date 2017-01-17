@@ -7,6 +7,11 @@ class Course::Discussion::PostsController < Course::ComponentController
   include Course::Discussion::PostsConcern
 
   def create
+    # Set parent as the topologically last pre-existing post, if it exists.
+    # @post is in @topic.posts, so we filter out @post, which has no id yet.
+    if @topic.posts.length > 1
+      @post.parent = @topic.posts.ordered_topologically.flatten.select(&:id).last
+    end
     if super
       send_created_notification(@post)
     else
