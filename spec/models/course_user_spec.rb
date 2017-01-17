@@ -90,11 +90,30 @@ RSpec.describe CourseUser, type: :model do
 
     describe '.ordered_by_experience_points' do
       let!(:student1) { create(:course_student, course: course) }
-      before { create(:course_experience_points_record, course_user: student) }
 
       it 'returns course_users sorted by experience points' do
+        create(:course_experience_points_record, course_user: student)
         course.course_users.student.ordered_by_experience_points.each_cons(2) do |user1, user2|
           expect(user1.experience_points).to be >= user2.experience_points
+        end
+      end
+
+      context 'when two course_users has the same experience_points obtained at different times' do
+        let(:now) { Time.zone.now }
+        before do
+          create(:course_experience_points_record, course_user: student, points_awarded: 100,
+                                                   awarded_at: now)
+          create(:course_experience_points_record, course_user: student1, points_awarded: 100,
+                                                   awarded_at: now - 1.day)
+        end
+
+        it 'returns course_users sorted by experience points' do
+          expect(student1.experience_points).to eq(student.experience_points)
+          course.course_users.student.ordered_by_experience_points.each_cons(2) do |user1, user2|
+            time1 = user1.calculated(:last_experience_points_record).last_experience_points_record
+            time2 = user2.calculated(:last_experience_points_record).last_experience_points_record
+            expect(time1 < time2).to be_truthy
+          end
         end
       end
     end
