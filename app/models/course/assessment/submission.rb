@@ -209,10 +209,4 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
     Course::AssessmentNotifier.assessment_submitted(creator, course_user, self)
   end
-
-  def unsubmit_latest_answers
-    latest_answers.each do |answer|
-      answer.unsubmit! unless answer.attempting?
-    end
-  end
 end
