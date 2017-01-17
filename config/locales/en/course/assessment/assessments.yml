@@ -58,16 +58,17 @@ en:
           autograded_hint: 'Note that all the questions in the assessment must be auto-gradable'
           skippable: 'Allow students to skip steps'
           password_hint: >
-            When password protection is enabled, students are able to attempt the submission on the
-            first try. Further attempts at editing the submission requires the input of the
-            password (with the help of course staff). In addition, only one session is allowed to
-            access the submission at any given time.
+            When password protection is enabled, students are allowed to access their submission once.
+            Further attempts at editing the submission are not allowed unless the password is
+            provided by the staff.
+            In addition, only one session is allowed to access the submission at a given time.
           password_placeholder: 'Leave blank to disable password protection'
           delayed_grade_publication: 'Enable Delayed Grade Publication'
           delayed_grade_publication_hint: >
-            With this enabled, gradings done by course staff will not automatically be published. To
-            publish all the gradings for this assessment, you can do so at a later time at the
-            submissions page.
+            When delayed grade publication is enabled, gradings done by course staff will not
+            be immediately shown to the student. To publish all gradings for this assessment,
+            click on the 'Publish Grades' button on the top right of the submissions listing
+            for this assessment.
         assessment_management_buttons:
           attempt: 'Attempt'
           resume: 'Resume'
