@@ -29,6 +29,12 @@ class Course::Assessment::Submission::Answer::CommentsController < \
     @discussion_topic.ensure_subscribed_by(current_user)
     # Ensure answer's creator gets a notification when someone comments on this answer
     @discussion_topic.ensure_subscribed_by(@answer.submission.creator)
+
+    # Ensure all group managers get a notification when someone comments on this answer
+    answer_course_user = @answer.submission.course_user
+    answer_course_user.my_managers.each do |manager|
+      @discussion_topic.ensure_subscribed_by(manager.user)
+    end
   end
 
   def send_created_notification(post)

@@ -124,6 +124,15 @@ class CourseUser < ActiveRecord::Base
       where { group_users.group.id >> my_groups }
   end
 
+  # Returns the managers of the groups I belong to in the course.
+  #
+  # @return[Array<CourseUser>]
+  def my_managers
+    my_groups = group_users.select(:group_id)
+    CourseUser.joins { group_users.group }.merge(Course::GroupUser.manager).
+      where { group_users.group.id >> my_groups }
+  end
+
   private
 
   def set_defaults # :nodoc:

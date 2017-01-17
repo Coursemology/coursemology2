@@ -292,15 +292,23 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
-    describe '#my_students' do
+    context 'when there are students in groups' do
       let(:group_owner) { create(:course_manager, course: course) }
       before do
         group = create(:course_group, course: course, creator: group_owner.user)
         create(:course_group_user, course: course, group: group, course_user: student)
       end
 
-      it 'returns all the normal users in the group' do
-        expect(group_owner.my_students).to contain_exactly(student)
+      describe '#my_students' do
+        it 'returns all the normal users in the group' do
+          expect(group_owner.my_students).to contain_exactly(student)
+        end
+      end
+
+      describe '#my_managers' do
+        it 'returns the managers of the student' do
+          expect(student.my_managers).to contain_exactly(group_owner)
+        end
       end
     end
 

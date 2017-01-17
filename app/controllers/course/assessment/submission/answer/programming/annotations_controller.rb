@@ -35,6 +35,13 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
     @discussion_topic.ensure_subscribed_by(current_user)
     # Ensure the student who wrote the code gets notified when someone comments on his code
     @discussion_topic.ensure_subscribed_by(@answer.submission.creator)
+
+    # Ensure all group managers get a notification when someone adds a programming annotation
+    # to the answer.
+    answer_course_user = @answer.submission.course_user
+    answer_course_user.my_managers.each do |manager|
+      @discussion_topic.ensure_subscribed_by(manager.user)
+    end
   end
 
   def send_created_notification(post)
