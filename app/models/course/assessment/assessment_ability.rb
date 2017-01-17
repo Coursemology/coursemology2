@@ -2,34 +2,34 @@
 module Course::Assessment::AssessmentAbility
   def define_permissions
     if user
-      define_student_permissions
-      define_staff_permissions
-      define_auto_grader_permissions
+      define_student_assessment_permissions
+      define_staff_assessment_permissions
+      define_auto_grader_assessment_permissions
     end
 
     super
   end
 
-  def define_student_permissions
+  def define_student_assessment_permissions
     allow_students_show_assessments
     allow_students_attempt_assessment
-    allow_students_create_submission
-    allow_students_update_own_submission
-    allow_students_manage_annotations_for_own_submissions
-    allow_students_read_own_answers
+    allow_students_create_assessment_submission
+    allow_students_update_own_assessment_submission
+    allow_students_manage_annotations_for_own_assessment_submissions
+    allow_students_read_own_assessment_answers
   end
 
-  def define_staff_permissions
+  def define_staff_assessment_permissions
     allow_managers_manage_tab_and_categories
     allow_staff_manage_assessments
-    allow_staff_grade_submissions
-    allow_staff_manage_annotations
-    allow_staff_read_answers
-    allow_manager_publish_submissions
-    allow_staff_read_tests
+    allow_staff_grade_assessment_submissions
+    allow_staff_manage_assessment_annotations
+    allow_staff_read_assessment_answers
+    allow_manager_publish_assessment_submissions
+    allow_staff_read_assessment_tests
   end
 
-  def define_auto_grader_permissions
+  def define_auto_grader_assessment_permissions
     allow_auto_grader_programming_evaluations
   end
 
@@ -47,7 +47,7 @@ module Course::Assessment::AssessmentAbility
     { tab: { category: course_staff_hash } }
   end
 
-  def submission_attempting_hash(user)
+  def assessment_submission_attempting_hash(user)
     { workflow_state: 'attempting' }.tap do |result|
       result.reverse_merge!(experience_points_record: { course_user: { user_id: user.id } }) if user
     end
@@ -65,16 +65,16 @@ module Course::Assessment::AssessmentAbility
     end
   end
 
-  def allow_students_create_submission
+  def allow_students_create_assessment_submission
     can :create, Course::Assessment::Submission,
         experience_points_record: { course_user: { user_id: user.id } }
-    can :update, Course::Assessment::Submission, submission_attempting_hash(user)
+    can :update, Course::Assessment::Submission, assessment_submission_attempting_hash(user)
     can [:read, :reload_answer], Course::Assessment::Submission,
         experience_points_record: { course_user: { user_id: user.id } }
   end
 
-  def allow_students_update_own_submission
-    can :update, Course::Assessment::Answer, submission: submission_attempting_hash(user)
+  def allow_students_update_own_assessment_submission
+    can :update, Course::Assessment::Answer, submission: assessment_submission_attempting_hash(user)
   end
 
   def allow_staff_manage_assessments
@@ -92,18 +92,18 @@ module Course::Assessment::AssessmentAbility
     can :manage, Course::Assessment::Category, course_managers_hash
   end
 
-  def allow_manager_publish_submissions
+  def allow_manager_publish_assessment_submissions
     can :publish_all, Course::Assessment::Submission,
         assessment: { tab: { category: course_managers_hash } }
   end
 
-  def allow_staff_grade_submissions
+  def allow_staff_grade_assessment_submissions
     can [:read, :update, :reload_answer, :grade],
         Course::Assessment::Submission, assessment: assessment_course_staff_hash
     can :grade, Course::Assessment::Answer, submission: { assessment: assessment_course_staff_hash }
   end
 
-  def allow_staff_read_tests
+  def allow_staff_read_assessment_tests
     can :read_tests, Course::Assessment::Submission, assessment: assessment_course_staff_hash
   end
 
@@ -137,21 +137,21 @@ module Course::Assessment::AssessmentAbility
     can :update_result, Course::Assessment::ProgrammingEvaluation, evaluator_id: user.id
   end
 
-  def allow_students_manage_annotations_for_own_submissions
+  def allow_students_manage_annotations_for_own_assessment_submissions
     can :manage, Course::Assessment::Answer::ProgrammingFileAnnotation,
         file: { answer: { submission: { creator_id: user.id } } }
   end
 
-  def allow_staff_manage_annotations
+  def allow_staff_manage_assessment_annotations
     can :manage, Course::Assessment::Answer::ProgrammingFileAnnotation,
         discussion_topic: course_staff_hash
   end
 
-  def allow_students_read_own_answers
+  def allow_students_read_own_assessment_answers
     can :read, Course::Assessment::Answer, submission: { creator_id: user.id }
   end
 
-  def allow_staff_read_answers
+  def allow_staff_read_assessment_answers
     can :read, Course::Assessment::Answer, discussion_topic: course_staff_hash
   end
 end

@@ -7,7 +7,7 @@ FactoryGirl.define do
     course
     title { generate(:course_video_title) }
     description { generate(:course_video_description) }
-    url 'https://www.youtube.com/watch?v=i_YiovUyMds'
+    url 'https://www.youtube.com/embed/i_YiovUyMds'
     published false
 
     trait :not_started do

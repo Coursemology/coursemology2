@@ -1,0 +1,8 @@
+= page_header t('.header', title: format_inline_text(@video.title))
+
+- unless @video.description.blank?
+  h3 = t('.description')
+  div.well
+    = format_html(@video.description)
+
+= render 'youtube', locals: { video: @video }

@@ -1,0 +1,14 @@
+- if submission = submissions[course_user]
+  = content_tag_for(:tr, submission) do
+    / TODO: Link to submission next time when there is more meaningful information
+    td = format_inline_text(submission.course_user.name)
+    td = t('.watched')
+    td = format_datetime(submission.created_at, :short)
+    td
+- else
+  tr.no-submission
+    td = format_inline_text(course_user.name)
+    td
+      strong = t('.not_watched')
+    td -
+    td

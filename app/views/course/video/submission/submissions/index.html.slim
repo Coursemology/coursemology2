@@ -1,0 +1,17 @@
+- add_breadcrumb t('.submissions')
+= page_header format_inline_text(@video.title)
+
+- submissions = @submissions.map { |s| [s.course_user, s] }.to_h
+
+- if @my_students.any?
+  h3 = t('.my_student_header')
+  = render partial: 'submissions', object: submissions, locals: { course_users: @my_students }
+
+h3 = t('.student_header')
+- students = @course_students.without_phantom_users
+= render partial: 'submissions', object: submissions, locals: { course_users: students }
+
+- other_users = @course_students - students
+- if other_users.any?
+  h3 = t('.other_header')
+  = render partial: 'submissions', object: submissions, locals: { course_users: other_users }

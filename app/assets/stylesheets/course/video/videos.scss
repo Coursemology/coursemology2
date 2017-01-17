@@ -18,7 +18,12 @@
         vertical-align: middle;
       }
 
+      .attempt .btn-info {
+        width: 90px;
+      }
+
       .table-start-at {
+        @extend .hidden-xs;
         @extend .text-center;
       }
     }

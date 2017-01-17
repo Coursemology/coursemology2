@@ -13,6 +13,7 @@ en:
           success: '%{title} was created.'
         show:
           description: 'Description'
+          start_at: :'course.video.videos.index.start_at'
         edit:
           header: 'Edit Video'
         update:
@@ -20,3 +21,12 @@ en:
         destroy:
           success: '%{title} was deleted.'
           failure: 'Could not delete video: %{error}'
+        video_attempt_button:
+          watch: 'Watch'
+          rewatch: 'Re-Watch'
+        video_management_buttons:
+          submissions: 'Submissions'
+        form:
+          url_placeholder: >
+            Please provide a valid youtube URL,
+            eg. https://www.youtube.com/watch?v=dQw4w9WgXcQ

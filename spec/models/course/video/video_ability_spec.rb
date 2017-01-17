@@ -10,6 +10,12 @@ RSpec.describe Course::Video do
     let(:draft_video) { create(:video, course: course) }
     let(:published_video) { create(:video, :published, course: course) }
     let(:published_video_not_started) { create(:video, :not_started, :published, course: course) }
+    let(:video_submission) do
+      create(:video_submission, video: published_video, creator: course_user.user)
+    end
+    let(:other_video_submission) do
+      create(:video_submission, course: course, video: published_video)
+    end
     let(:other_course) { create(:course) }
     let(:other_video) { create(:video, :published, course: other_course) }
 
@@ -26,6 +32,10 @@ RSpec.describe Course::Video do
       it { is_expected.not_to be_able_to(:attempt, draft_video) }
       it { is_expected.not_to be_able_to(:attempt, published_video_not_started) }
       it { is_expected.to be_able_to(:attempt, published_video) }
+      it { is_expected.not_to be_able_to(:create, other_video_submission) }
+      it { is_expected.not_to be_able_to(:update, other_video_submission) }
+      it { is_expected.to be_able_to(:create, video_submission) }
+      it { is_expected.to be_able_to(:update, video_submission) }
     end
 
     context 'when the user is a Course Staff' do
@@ -34,6 +44,10 @@ RSpec.describe Course::Video do
       # Course Video
       it { is_expected.to be_able_to(:manage, draft_video) }
       it { is_expected.to be_able_to(:manage, published_video) }
+      it { is_expected.to be_able_to(:update, other_video_submission) }
+      it { is_expected.to be_able_to(:read, other_video_submission) }
+      it { is_expected.to be_able_to(:update, video_submission) }
+      it { is_expected.to be_able_to(:read, video_submission) }
     end
   end
 end

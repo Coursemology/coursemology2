@@ -1,0 +1,11 @@
+- if can?(:attempt, video)
+  - submission = video.submissions.select { |s| s.creator == current_user }.first
+  - if submission
+    = link_to t('.rewatch'),
+      edit_course_video_submission_path(current_course, video, submission),
+      class: ['btn', 'btn-info']
+  - else
+    = link_to t('.watch'), course_video_submissions_path(current_course, video),
+      class: ['btn', 'btn-info'], method: :post
+- else
+  = link_to(t('.watch'), '#', class: ['btn', 'btn-info', 'disabled'])
