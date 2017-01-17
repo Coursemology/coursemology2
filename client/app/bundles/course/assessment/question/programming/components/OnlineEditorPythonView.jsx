@@ -7,7 +7,6 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import Toggle from 'material-ui/Toggle';
 import { Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import transitions from 'material-ui/styles/transitions';
 import { grey100, grey300, white } from 'material-ui/styles/colors';
@@ -31,7 +30,7 @@ const propTypes = {
     deleteExistingDataFile: PropTypes.func.isRequired,
   }),
   isLoading: PropTypes.bool.isRequired,
-  autogradedAssessment: PropTypes.bool.isRequired,
+  autograded: PropTypes.bool.isRequired,
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
@@ -43,12 +42,13 @@ const contextTypes = {
 
 export function validation(data, pathOfKeysToData, intl) {
   const errors = [];
+  const pythonData = data.getIn(pathOfKeysToData);
 
-  if (data.get('autograded')) {
+  if (data.getIn(['question', 'autograded'])) {
     let testsCount = 0;
 
     ['public', 'private', 'evaluation'].forEach((type) => {
-      const testCases = data.getIn(['test_cases', type]);
+      const testCases = pythonData.getIn(['test_cases', type]);
       testsCount += testCases.size;
 
       testCases.forEach((testCase, index) => {
@@ -98,18 +98,7 @@ class OnlineEditorPythonView extends React.Component {
 
   constructor(props) {
     super(props);
-    this.onAutogradedChange = this.onAutogradedChange.bind(this);
     this.renderExistingDataFiles = this.renderExistingDataFiles.bind(this);
-  }
-
-  componentWillMount() {
-    if (this.props.autogradedAssessment) {
-      this.props.actions.updatePythonCodeBlock('autograded', true);
-    }
-  }
-
-  onAutogradedChange(e) {
-    this.props.actions.updatePythonCodeBlock('autograded', e.target.checked);
   }
 
   codeChangeHandler(field) {
@@ -166,7 +155,7 @@ class OnlineEditorPythonView extends React.Component {
       const buttonClass = toDelete ? 'fa fa-undo' : 'fa fa-trash';
       const buttonColor = toDelete ? white : grey300;
       const rowStyle = toDelete ?
-        {textDecoration: 'line-through', backgroundColor: grey100}
+        { textDecoration: 'line-through', backgroundColor: grey100 }
         :
         {};
 
@@ -182,7 +171,7 @@ class OnlineEditorPythonView extends React.Component {
             />
             <input
               type="checkbox"
-              hidden={true}
+              hidden
               name={`question_programming[data_files_to_delete][${filename}]`}
               checked={toDelete}
             />
@@ -228,7 +217,7 @@ class OnlineEditorPythonView extends React.Component {
       const key = fileData.get('key');
 
       let deleteButton = null;
-      let addFileButtonStyle = {};
+      const addFileButtonStyle = {};
 
       if (this.props.dataFiles.get('key') !== key) {
         // Do not show for last row
@@ -462,24 +451,10 @@ class OnlineEditorPythonView extends React.Component {
   }
 
   render() {
-    const { intl, data, autogradedAssessment } = this.props;
-    const autograded = autogradedAssessment || data.get('autograded');
-    let autogradedLabel = intl.formatMessage(translations.autograded);
-    if (autogradedAssessment) {
-      autogradedLabel += ` (${intl.formatMessage(translations.autogradedAssessment)})`;
-    }
+    const { intl, autograded } = this.props;
 
     return (
       <div id="python-online-editor">
-        <Toggle
-          label={autogradedLabel}
-          labelPosition="right"
-          toggled={autograded}
-          onToggle={this.onAutogradedChange}
-          disabled={autogradedAssessment || this.props.isLoading}
-          style={{ margin: '1em 0' }}
-          name="question_programming[autograded]"
-        />
         { this.renderEditorCard(intl.formatMessage(translations.submissionTitle), 'submission') }
         { autograded ? this.renderAutogradedFields() : null }
       </div>

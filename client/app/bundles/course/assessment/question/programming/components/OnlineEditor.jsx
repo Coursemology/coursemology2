@@ -20,6 +20,8 @@ const translations = defineMessages({
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
   actions: PropTypes.object.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  autograded: PropTypes.bool.isRequired,
   autogradedAssessment: PropTypes.bool.isRequired,
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
@@ -27,13 +29,13 @@ const propTypes = {
 };
 
 export function validation(data, pathOfKeysToData, intl) {
-  const mode = data.get('mode');
+  const mode = data.getIn(pathOfKeysToData).get('mode');
   const errors = [];
 
   switch (mode) {
     case 'python':
       return errors.concat(
-        pythonValidation(data.get('python'), pathOfKeysToData.concat(['python']), intl)
+        pythonValidation(data, pathOfKeysToData.concat(['python']), intl)
       );
     default:
       return errors;
@@ -41,19 +43,18 @@ export function validation(data, pathOfKeysToData, intl) {
 }
 
 const OnlineEditor = (props) => {
-  const { data, actions, intl, autogradedAssessment } = props;
-  const testUI = data.get('test_ui');
-  const mode = testUI.get('mode');
-  const isLoading = data.get('is_loading');
+  const { data, actions, intl, isLoading, autograded, autogradedAssessment } = props;
+  const mode = data.get('mode');
 
   switch (mode) {
     case 'python':
       return (<OnlineEditorPythonView
         {...{
           actions,
-          data: testUI.get('python'),
-          dataFiles: testUI.get('data_files'),
+          data: data.get('python'),
+          dataFiles: data.get('data_files'),
           isLoading,
+          autograded,
           autogradedAssessment,
         }}
       />);

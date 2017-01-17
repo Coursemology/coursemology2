@@ -1,6 +1,14 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
+  autograded: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.autograded',
+    defaultMessage: 'Autograded',
+  },
+  autogradedAssessment: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.autogradedAssessment',
+    defaultMessage: 'Autograded assessment cannot have non-autograded questions',
+  },
   titleFieldLabel: {
     id: 'course.assessment.question.programming.programmingQuestionForm.titleFieldLabel',
     defaultMessage: 'Title',

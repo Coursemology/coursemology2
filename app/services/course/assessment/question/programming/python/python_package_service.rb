@@ -39,7 +39,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
 
   def default_meta
     {
-      submission: '', solution: '', prepend: '', append: '', autograded: false,
+      submission: '', solution: '', prepend: '', append: '',
       data_files: [],
       test_cases: {
         public: [],

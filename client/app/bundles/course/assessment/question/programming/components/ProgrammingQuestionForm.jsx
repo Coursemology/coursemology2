@@ -5,6 +5,7 @@ import { injectIntl } from 'react-intl';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
+import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import { Tabs, Tab } from 'material-ui/Tabs';
@@ -179,7 +180,7 @@ class ProgrammingQuestionForm extends React.Component {
     // Check online editor
     if (question.get('edit_online')) {
       errors = errors.concat(
-        editorValidation(this.props.data.get('test_ui'), ['test_ui'], intl)
+        editorValidation(this.props.data, ['test_ui'], intl)
       );
     }
 
@@ -436,7 +437,9 @@ class ProgrammingQuestionForm extends React.Component {
         <OnlineEditor
           {...{
             actions: this.props.onlineEditorActions,
-            data: this.props.data,
+            data: this.props.data.get('test_ui'),
+            isLoading: this.props.data.get('is_loading'),
+            autograded: this.props.data.getIn(['question', 'autograded']),
             autogradedAssessment: this.props.data.getIn(['question', 'autograded_assessment']),
           }}
         />
@@ -468,6 +471,13 @@ class ProgrammingQuestionForm extends React.Component {
 
     const languageOptions = languages.toJS();
     languageOptions.unshift({ id: null, name: null });
+
+    const autogradedAssessment = question.get('autograded_assessment');
+    const autograded = autogradedAssessment || question.get('autograded');
+    let autogradedLabel = this.props.intl.formatMessage(translations.autograded);
+    if (autogradedAssessment) {
+      autogradedLabel += ` (${this.props.intl.formatMessage(translations.autogradedAssessment)})`;
+    }
 
     const showEditOnline = question.get('edit_online');
 
@@ -533,26 +543,50 @@ class ProgrammingQuestionForm extends React.Component {
                   this.languageHandler('language_id'))
               }
             </div>
+            <div className={styles.autogradeToggle}>
+              {
+                this.props.data.getIn(['question', 'display_autograded_toggle']) ?
+                  <Toggle
+                    label={autogradedLabel}
+                    labelPosition="right"
+                    toggled={autograded}
+                    onToggle={(e) => {
+                      this.handleChange('autograded', e.target.checked);
+                    }}
+                    disabled={autogradedAssessment || this.props.data.get('is_loading')}
+                    style={{margin: '1em 0'}}
+                    name="question_programming[autograded]"
+                  />
+                  :
+                  null
+              }
+            </div>
             <div className={styles.memoryLimitInput}>
               {
-                this.renderInputField(
-                  this.props.intl.formatMessage(translations.memoryLimitFieldLabel),
-                  'memory_limit', false, 'number',
-                  ProgrammingQuestionForm.convertNull(question.get('memory_limit')),
-                  this.props.data.getIn(['question', 'error', 'memory_limit']))
+                autograded ?
+                  this.renderInputField(
+                    this.props.intl.formatMessage(translations.memoryLimitFieldLabel),
+                    'memory_limit', false, 'number',
+                    ProgrammingQuestionForm.convertNull(question.get('memory_limit')),
+                    this.props.data.getIn(['question', 'error', 'memory_limit']))
+                  :
+                  null
               }
             </div>
             <div className={styles.timeLimitInput}>
               {
-                this.renderInputField(
-                  this.props.intl.formatMessage(translations.timeLimitFieldLabel),
-                  'time_limit', false, 'number',
-                  ProgrammingQuestionForm.convertNull(question.get('time_limit')),
-                  this.props.data.getIn(['question', 'error', 'time_limit']))
+                autograded ?
+                  this.renderInputField(
+                    this.props.intl.formatMessage(translations.timeLimitFieldLabel),
+                    'time_limit', false, 'number',
+                    ProgrammingQuestionForm.convertNull(question.get('time_limit')),
+                    this.props.data.getIn(['question', 'error', 'time_limit']))
+                  :
+                  null
               }
             </div>
             {
-              showAttemptLimit ?
+              autograded && showAttemptLimit ?
                 <div className={styles.attemptLimitInput}>
                   {
                     this.renderInputField(
@@ -568,7 +602,10 @@ class ProgrammingQuestionForm extends React.Component {
             }
           </div>
 
-          { this.renderSwitcher(showEditOnline, question.get('can_switch_package_type')) }
+          {
+            this.renderSwitcher(showEditOnline,
+              question.get('can_switch_package_type') && autograded)
+          }
           {
             this.renderPackageField(
               this.props.intl.formatMessage(translations.templatePackageFieldLabel),

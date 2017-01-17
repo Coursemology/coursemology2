@@ -19,6 +19,8 @@ export const initialState = Immutable.fromJS({
     skills: [],
     memory_limit: null,
     time_limit: null,
+    autograded: false,
+    display_autograded_toggle: false,
     autograded_assessment: false,
     published_assessment: false,
     attempt_limit: null,
@@ -39,7 +41,6 @@ export const initialState = Immutable.fromJS({
   test_ui: {
     mode: null,
     python: {
-      autograded: false,
       prepend: '',
       append: '',
       solution: '',
@@ -82,6 +83,11 @@ function questionReducer(state, action) {
   switch (type) {
     case actionTypes.PROGRAMMING_QUESTION_UPDATE: {
       const { field, newValue } = action;
+
+      if (field === 'autograded' && newValue === false) {
+        return state.set(field, newValue).set('edit_online', true);
+      }
+
       return state.set(field, newValue).deleteIn(['error', field]);
     }
     case actionTypes.SKILLS_UPDATE: {
