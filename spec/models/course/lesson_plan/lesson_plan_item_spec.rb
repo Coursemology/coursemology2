@@ -34,6 +34,9 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
     describe '#validations' do
       subject { lesson_plan_item }
 
+      it { is_expected.to validate_numericality_of(:base_exp).is_greater_than_or_equal_to(0) }
+      it { is_expected.to validate_numericality_of(:time_bonus_exp).is_greater_than_or_equal_to(0) }
+
       context 'when time_bonus_exp is set without bonus_end_at' do
         let(:lesson_plan_item) do
           build(:course_lesson_plan_item, time_bonus_exp: 100, bonus_end_at: nil)
