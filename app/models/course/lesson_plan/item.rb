@@ -9,6 +9,7 @@ class Course::LessonPlan::Item < ActiveRecord::Base
 
   validate :validate_presence_of_bonus_end_at,
            :validate_start_at_cannot_be_after_end_at
+  validates :base_exp, :time_bonus_exp, numericality: { greater_than_or_equal_to: 0 }
 
   # @!method self.ordered_by_date
   #   Orders the lesson plan items by the starting date.
