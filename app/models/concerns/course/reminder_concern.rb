@@ -51,7 +51,7 @@ module Course::ReminderConcern
       # Send notification one day before the closing date
       if end_at > Time.zone.now
         closing_reminder_job_class.set(wait_until: end_at - 1.day).
-          perform_later(updater, self, opening_reminder_token)
+          perform_later(updater, self, closing_reminder_token)
       end
     end
   end

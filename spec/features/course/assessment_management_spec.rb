@@ -78,6 +78,7 @@ RSpec.feature 'Course: Assessments: Management' do
       end
 
       scenario 'I can edit an assessment' do
+        student = create(:course_student, course: course).user
         assessment = create(:assessment, :published_with_mrq_question,
                             course: course, start_at: 1.day.from_now)
         visit course_assessment_path(course, assessment)
@@ -86,14 +87,22 @@ RSpec.feature 'Course: Assessments: Management' do
         new_text = 'zzzz'
         fill_in 'assessment_title', with: new_text
         fill_in 'assessment_start_at', with: Time.zone.now
+        fill_in 'assessment_end_at', with: Time.zone.now + 1.hour
         click_button 'submit'
 
         perform_enqueued_jobs
         wait_for_job
 
-        expect(unread_emails_for(user.email)).to be_present
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(page).to have_selector('h1', text: new_text)
+
+        emails = unread_emails_for(student.email).map(&:subject)
+        opening_subject = '.notifiers.course.assessment_notifier.opening.'\
+                          'course_notifications.email.subject'
+        closing_subject = '.notifiers.course.assessment_notifier.closing.'\
+                          'user_notifications.email.subject'
+        expect(emails).to include(opening_subject)
+        expect(emails).to include(closing_subject)
       end
 
       scenario 'I can delete an assessment' do
