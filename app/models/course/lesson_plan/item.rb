@@ -17,6 +17,10 @@ class Course::LessonPlan::Item < ActiveRecord::Base
     order { start_at }
   end)
 
+  scope :ordered_by_date_and_title, (lambda do
+    order(:start_at, :title)
+  end)
+
   belongs_to :course, inverse_of: :lesson_plan_items
   has_many :todos, class_name: Course::LessonPlan::Todo, inverse_of: :item, dependent: :destroy
 

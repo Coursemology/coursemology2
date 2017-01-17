@@ -56,13 +56,13 @@ class Course::Assessment < ActiveRecord::Base
       where { course_assessment_questions.assessment_id == course_assessments.id }
   end)
 
-  # @!method self.ordered_by_date
-  #   Orders the assessments by the starting date.
-  scope :ordered_by_date, (lambda do
+  # @!method self.ordered_by_date_and_title
+  #   Orders the assessments by the starting date and title.
+  scope :ordered_by_date_and_title, (lambda do
     select('course_assessments.*').
-      select { lesson_plan_item.start_at }.
+      select { [lesson_plan_item.start_at, lesson_plan_item.title] }.
       joins { lesson_plan_item }.
-      merge(Course::LessonPlan::Item.ordered_by_date)
+      merge(Course::LessonPlan::Item.ordered_by_date_and_title)
   end)
 
   # @!method with_submissions_by(creator)

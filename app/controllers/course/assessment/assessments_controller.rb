@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   def index
-    @assessments = @assessments.ordered_by_date.with_submissions_by(current_user)
+    @assessments = @assessments.ordered_by_date_and_title.with_submissions_by(current_user)
     @conditional_service = Course::Assessment::AchievementPreloadService.new(@assessments)
   end
 
