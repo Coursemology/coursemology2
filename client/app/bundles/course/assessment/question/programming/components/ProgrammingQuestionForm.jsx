@@ -344,6 +344,7 @@ class ProgrammingQuestionForm extends React.Component {
           className={styles.fileInputButton}
           label={newPackageButton}
           labelPosition="before"
+          containerElement="label"
           primary
           disabled={this.props.data.get('is_loading')}
         >
