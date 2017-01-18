@@ -7,6 +7,8 @@ class Course::ExperiencePointsRecord < ActiveRecord::Base
   validates :reason, presence: true, if: :manually_awarded?
 
   belongs_to :course_user, inverse_of: :experience_points_records
+  # TODO: Add an optional: true when moving to Rails 5.
+  belongs_to :awarder, class_name: User.name, inverse_of: nil
 
   scope :active, -> { where { points_awarded != nil } } # rubocop:disable Style/NonNilCheck
 

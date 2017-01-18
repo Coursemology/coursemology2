@@ -30,6 +30,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   schema_validations except: [:creator_id, :assessment_id]
   validate :validate_consistent_user, :validate_unique_submission, on: :create
+  validate :validate_awarded_attributes, if: :published?
 
   belongs_to :assessment, inverse_of: :submissions
 
@@ -195,6 +196,12 @@ class Course::Assessment::Submission < ActiveRecord::Base
     errors.clear
     errors[:base] << I18n.t('activerecord.errors.models.course/assessment/'\
                             'submission.submission_already_exists')
+  end
+
+  # Validate that the awarder and awarded_at is present for published submissions
+  def validate_awarded_attributes
+    return if awarded_at && awarder
+    errors.add(:experience_points_record, :absent_award_attributes)
   end
 
   def send_attempt_notification

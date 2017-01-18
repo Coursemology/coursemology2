@@ -7,8 +7,8 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) do
-      create(:assessment, :published_with_mrq_question,
-             course: course, password: 'super_secret', delayed_grade_publication: true)
+      create(:assessment, :published_with_mrq_question, :delay_grade_publication,
+             course: course, password: 'super_secret')
     end
     let(:mrq_questions) { assessment.reload.questions.map(&:specific) }
     let(:student) { create(:course_student, course: course).user }
