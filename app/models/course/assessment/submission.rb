@@ -170,6 +170,12 @@ class Course::Assessment::Submission < ActiveRecord::Base
     answers.select { |a| a.question_id == question.id &&  a.graded? }
   end
 
+  # Return the points awarded for the submission.
+  # If submission is 'graded', return the draft value, otherwise, the return the points awarded.
+  def current_points_awarded
+    graded? ? draft_points_awarded : points_awarded
+  end
+
   private
 
   # Queues the submission for auto grading, after the submission has changed to the submitted state.

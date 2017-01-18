@@ -88,12 +88,16 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
         expect(page).to have_button(I18n.t('course.assessment.submission.submissions.buttons.mark'))
 
         fill_in find('input.form-control.grade')[:name], with: 0
+        fill_in 'submission[points_awarded]', with: 50
 
         click_button I18n.t('course.assessment.submission.submissions.buttons.mark')
         expect(page).to have_button(I18n.t('course.assessment.submission.submissions.buttons.save'))
+
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.graded?).to be_truthy
+        expect(submission.points_awarded).to be_nil
+        expect(submission.draft_points_awarded).to eq(50)
       end
     end
   end

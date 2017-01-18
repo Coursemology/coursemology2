@@ -512,6 +512,32 @@ RSpec.describe Course::Assessment::Submission do
       end
     end
 
+    describe '#current_points_awarded' do
+      let(:assessment_traits) { [:published_with_mcq_question] }
+      let(:submission1_traits) { [:submitted] }
+      let(:points_awarded) { 100 }
+      let(:draft_points_awarded) { 50 }
+      subject { submission1.current_points_awarded }
+      before do
+        submission1.points_awarded = points_awarded
+        submission1.draft_points_awarded = draft_points_awarded
+      end
+
+      context 'when submission is published' do
+        it 'returns the correct value' do
+          submission1.publish!
+          expect(subject).to eq(points_awarded)
+        end
+      end
+
+      context 'when submission is graded' do
+        it 'returns the correct value' do
+          submission1.mark!
+          expect(subject).to eq(draft_points_awarded)
+        end
+      end
+    end
+
     describe 'callbacks from Course::Assessment::Submission::TodoConcern' do
       let(:assessment_traits) { [:published_with_mcq_question] }
       subject do

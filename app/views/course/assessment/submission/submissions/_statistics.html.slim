@@ -36,8 +36,11 @@ div.panel.panel-default
                 / TODO: Factor in time-based experience points
                 td
                   = f.input :points_awarded, label: false,
-                            input_html: { class: 'submission-points-awarded',
-                                          'data-base-points' => @submission.assessment.base_exp },
+                            input_html: {\
+                              class: 'submission-points-awarded',
+                              'data-base-points' => @submission.assessment.base_exp,
+                              value: @submission.current_points_awarded
+                            },
                             wrapper_html: { class: 'form-inline points-awarded'}
                   span = ' / ' + @submission.assessment.base_exp.to_s
                   div.exp-multiplier.form-inline
