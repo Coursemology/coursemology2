@@ -5,42 +5,58 @@ RSpec.feature 'Courses: Registration' do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
-    let(:course) { create(:course, :opened) }
+    let(:course) { create(:course) }
     let(:user) { create(:user) }
     before { login_as(user, scope: :user) }
 
-    scenario 'Users can register for the course' do
-      visit course_path(course)
+    context 'when the course has unconfirmed invitations' do
+      let!(:invitation) { create(:course_user_invitation, course: course) }
 
-      expect(page).to have_text(course.description)
-      expect(page).to have_button(I18n.t('course.user_registrations.registration.register'))
-
-      click_button I18n.t('course.user_registrations.registration.register')
-      expect(current_path).to eq(course_path(course))
-
-      expect(page).not_to have_button('.register')
-    end
-
-    context 'when the user has requested to register for a course' do
-      let!(:enrol_request) { create(:course_enrol_request, course: course, user: user) }
-
-      scenario 'user can cancel his registration request' do
+      scenario 'Users can register course using invitation code' do
         visit course_path(course)
-        expect(page).not_to have_button(I18n.t('course.user_registrations.registration.register'))
 
-        click_link I18n.t('course.user_registrations.registration.deregister')
-        expect(current_path).to eq(course_path(course))
-        expect(page).to have_button(I18n.t('course.user_registrations.registration.register'))
+        # Submit with empty code
+        click_button I18n.t('course.user_registrations.registration.register')
+        expect(page).to have_selector('span.help-block')
+
+        fill_in 'registration_code', with: invitation.invitation_key
+        click_button I18n.t('course.user_registrations.registration.register')
+
+        expect(page).
+          to have_selector('div.alert', text: I18n.t('course.user_registrations.create.registered'))
       end
     end
 
-    context 'when the user has been enrolled' do
-      let!(:enrolled_student) { create(:course_student, course: course, user: user) }
+    context 'when the course allows enrol requests' do
+      let(:course) { create(:course, :enrollable) }
 
-      scenario 'user cannot de-register or re-register for the course' do
+      scenario 'Users can create and cancel enrol requests' do
         visit course_path(course)
-        expect(page).not_to have_button(I18n.t('course.user_registrations.registration.register'))
-        expect(page).not_to have_link(I18n.t('course.user_registrations.registration.deregister'))
+
+        expect(page).to have_text(course.description)
+
+        click_link I18n.t('course.user_registrations.registration.new_enrol_request_button')
+        expect(page).
+          to have_selector('div.alert', text: I18n.t('course.enrol_requests.create.success'))
+
+        # Cancel request
+        click_link I18n.t('course.user_registrations.registration.deregister')
+        expect(page).
+          to have_selector('div.alert', text: I18n.t('course.enrol_requests.destroy.success'))
+      end
+
+      context 'when the user has been enrolled' do
+        let!(:enrolled_student) { create(:course_student, course: course, user: user) }
+
+        scenario 'user cannot de-register or re-register for the course' do
+          visit course_path(course)
+
+          new_request = I18n.t('course.user_registrations.registration.new_enrol_request_button')
+          expect(page).not_to have_link(new_request)
+
+          delete_request = I18n.t('course.user_registrations.registration.deregister')
+          expect(page).not_to have_link(delete_request)
+        end
       end
     end
   end

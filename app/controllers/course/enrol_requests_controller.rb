@@ -40,7 +40,7 @@ class Course::EnrolRequestsController < Course::ComponentController
   end
 
   private
-  
+
   def create_course_user
     course_user = CourseUser.new(course_user_params.
       reverse_merge(course: current_course, user_id: @enrol_request.user_id))

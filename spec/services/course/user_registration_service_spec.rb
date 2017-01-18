@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe Course::UserRegistrationService, type: :service do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
-    let(:course) { create(:course, :opened) }
+    let(:course) { create(:course, :enrollable) }
     let(:user) { create(:user) }
     let(:registration) { Course::Registration.new(course: course, user: user, code: '') }
     subject { Course::UserRegistrationService.new }
@@ -46,16 +46,8 @@ RSpec.describe Course::UserRegistrationService, type: :service do
       end
 
       context 'when the given registration does not have a registration code' do
-        it 'succeeds' do
-          expect do
-            expect(subject.register(registration)).to be_truthy
-          end.to change { course.enrol_requests.count }.by(1)
-        end
-
-        it 'emails the course staff' do
-          expect do
-            expect(subject.register(registration)).to be_truthy
-          end.to change { ActionMailer::Base.deliveries.count }.by(1)
+        it 'fails' do
+          expect(subject.register(registration)).to be_nil
         end
       end
     end

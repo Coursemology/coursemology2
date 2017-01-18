@@ -15,7 +15,7 @@ RSpec.describe Course::Controller, type: :controller do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:user) { create(:administrator) }
-    let(:course) { create(:course, :opened) }
+    let(:course) { create(:course, :published) }
     before { sign_in(user) if user }
 
     describe '#current_course' do
@@ -28,9 +28,9 @@ RSpec.describe Course::Controller, type: :controller do
     describe '#current_course_user' do
       context 'when there is no user logged in' do
         let(:user) { nil }
-        it 'returns nil' do
-          get(:show, id: course.id)
-          expect(controller.current_course_user).to be_nil
+        subject { get(:show, id: course.id) }
+        it 'raises an error' do
+          expect { subject }.to raise_error(CanCan::AccessDenied)
         end
       end
 

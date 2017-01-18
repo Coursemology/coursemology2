@@ -128,7 +128,7 @@ RSpec.feature 'Courses: Invitations', js: true do
     end
 
     context 'As a User' do
-      let(:course) { create(:course, :opened) }
+      let(:course) { create(:course, :enrollable) }
       let(:instance_user) { create(:instance_user) }
       let(:user) { instance_user.user }
 
@@ -148,7 +148,7 @@ RSpec.feature 'Courses: Invitations', js: true do
       end
 
       context 'when I have an invitation code for another email address' do
-        let(:invitation) { create(:course_user_invitation, course: course) }
+        let!(:invitation) { create(:course_user_invitation, course: course) }
 
         scenario 'I can accept invitations' do
           visit course_path(course)
