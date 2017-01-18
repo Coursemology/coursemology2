@@ -268,15 +268,22 @@ RSpec.describe Course::Assessment do
       end
     end
 
-    describe '.ordered_by_date' do
-      let(:other_assessment) { create(:assessment, *assessment_traits, course: course) }
+    describe '.ordered_by_date_and_title' do
+      let(:course) { create(:course) }
+      let(:start_at) { DateTime.new(2017, 1, 1).utc }
+      let!(:assessment1) do
+        create(:assessment, title: 'A', course: course, start_at: start_at)
+      end
+      let!(:assessment2) do
+        create(:assessment, title: 'B', course: course, start_at: start_at)
+      end
+      let!(:assessment3) do
+        create(:assessment, title: 'A', course: course, start_at: start_at + 1.day)
+      end
 
-      it 'orders the assessments by date' do
-        assessment
-        other_assessment
-        consecutive = course.assessments.each_cons(2)
-        expect(consecutive.to_a).not_to be_empty
-        expect(consecutive.all? { |first, second| first.start_at <= second.start_at })
+      it 'orders the assessments by date and title' do
+        expect(course.assessments.ordered_by_date_and_title).
+          to eq([assessment1, assessment2, assessment3])
       end
     end
 

@@ -13,7 +13,7 @@ div.submissions-filter
         label: category.title.singularize,
         selected: lambda { |assessment| assessment[1] == assessment_id },
         include_blank: '',
-        collection: @category.assessments.ordered_by_date.published.map { |a| [a.title, a.id] }
+        collection: @category.assessments.ordered_by_date_and_title.published.map { |a| [a.title, a.id] }
     = f.input :group_id,
         as: :select,
         required: false,

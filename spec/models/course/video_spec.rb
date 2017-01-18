@@ -13,11 +13,11 @@ RSpec.describe Course::Video, type: :model do
     let(:video1) { create(:video, course: course) }
     let(:video2) { create(:video, course: course, start_at: Time.zone.now - 1.month) }
 
-    describe '.ordered_by_date' do
-      it 'orders the videos by date' do
+    describe '.ordered_by_date_and_title' do
+      it 'orders the videos by date and title' do
         video1
         video2
-        consecutive = course.videos.each_cons(2)
+        consecutive = course.videos.ordered_by_date_and_title.each_cons(2)
         expect(consecutive.to_a).not_to be_empty
         expect(consecutive.all? { |first, second| first.start_at <= second.start_at })
       end

@@ -9,13 +9,13 @@ class Course::Video < ActiveRecord::Base
                          inverse_of: :video, dependent: :destroy
 
   # TODO: Refactor this together with assessments.
-  # @!method self.ordered_by_date
-  #   Orders the videos by the starting date.
-  scope :ordered_by_date, (lambda do
+  # @!method self.ordered_by_date_and_title
+  #   Orders the videos by the starting date and title.
+  scope :ordered_by_date_and_title, (lambda do
     select('course_videos.*').
-      select('course_lesson_plan_items.start_at').
+      select('course_lesson_plan_items.start_at, course_lesson_plan_items.title').
       joins { lesson_plan_item }.
-      merge(Course::LessonPlan::Item.ordered_by_date)
+      merge(Course::LessonPlan::Item.ordered_by_date_and_title)
   end)
 
   # @!method with_submissions_by(creator)
