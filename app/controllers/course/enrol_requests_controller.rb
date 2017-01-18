@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Course::EnrolRequestsController < Course::ComponentController
+  skip_authorize_resource :course, only: [:create, :destroy]
   load_and_authorize_resource :enrol_request, through: :course, class: Course::EnrolRequest.name
 
   def index
@@ -29,10 +30,6 @@ class Course::EnrolRequestsController < Course::ComponentController
   end
 
   private
-
-  def skip_participation_check?
-    return true if ['destroy'].include? action_name
-  end
 
   def create_course_user
     course_user = CourseUser.new(course_user_params.

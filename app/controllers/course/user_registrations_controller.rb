@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Course::UserRegistrationsController < Course::ComponentController
   before_action :ensure_unregistered_user, only: [:create]
-  before_action :authorize_register!, only: [:create]
   before_action :load_registration
+  skip_authorize_resource :course, only: [:create]
 
   def create # :nodoc:
     @registration.update(registration_params.reverse_merge(course: current_course,
@@ -28,11 +28,6 @@ class Course::UserRegistrationsController < Course::ComponentController
     redirect_to course_path(current_course), info: message
   end
 
-  # Prevents registration to the course unless it is open for registration.
-  def authorize_register!
-    authorize!(:register, current_course)
-  end
-
   def load_registration
     @registration = Course::Registration.new
   end
@@ -54,9 +49,5 @@ class Course::UserRegistrationsController < Course::ComponentController
       end
 
     redirect_to course_path(current_course), success: success
-  end
-
-  def skip_participation_check?
-    return true if ['create'].include? action_name
   end
 end

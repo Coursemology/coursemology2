@@ -2,6 +2,7 @@
 class Course::CoursesController < Course::Controller
   include Course::ActivityFeedsConcern
 
+  skip_authorize_resource :course, only: [:show, :index]
   before_action :load_todos, only: [:show]
 
   def index # :nodoc:
