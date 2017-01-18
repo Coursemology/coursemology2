@@ -53,4 +53,21 @@ class Course::Mailer < ApplicationMailer
          subject: t('.subject', course: @course.title, assessment: @assessment.title))
   end
 
+  # Send an email to all instructors with the names of users who haven't done
+  # the assessment.
+  #
+  # @param [User] recipient The course instructor who will receive this email.
+  # @param [Course::Assessment] assessment The assessment that is closing.
+  # @param [String] users The users who haven't done the assessment yet.
+  def assessment_closing_summary_email(recipient, assessment, users)
+    ActsAsTenant.without_tenant do
+      @course = assessment.course
+    end
+    @recipient = recipient
+    @assessment = assessment
+    @students = users
+
+    mail(to: @recipient.email,
+         subject: t('.subject', course: @course.title, assessment: @assessment.title))
+  end
 end
