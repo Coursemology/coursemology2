@@ -3,6 +3,8 @@ en:
     enrol_requests:
       index:
         header: 'User Requests'
+      create:
+        success: 'Your request was sent, please wait for the course owner to approve.'
       destroy:
         success: 'The registration request was deleted.'
       approve:

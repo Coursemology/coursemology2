@@ -15,7 +15,7 @@
                collection: current_course.managers.includes(:user).map(&:user)
 
   - if current_course.user?(current_user) || can?(:manage, current_course)
-    - if !@currently_active_announcements.empty?
+    - if @currently_active_announcements && !@currently_active_announcements.empty?
       h2 = t('.announcements')
       div.message-holder
         = render partial: @currently_active_announcements,
@@ -33,7 +33,7 @@
         tbody
           = render @todos
 
-    - if !@activity_feeds.empty?
+    - if @activity_feeds && !@activity_feeds.empty?
       h2 = t('.activities')
       div.message-holder
         - @activity_feeds.each do |notification|

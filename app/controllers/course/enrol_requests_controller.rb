@@ -7,6 +7,16 @@ class Course::EnrolRequestsController < Course::ComponentController
     @enrol_requests = @enrol_requests.includes(:user)
   end
 
+  def create
+    @enrol_request.user = current_user
+    if @enrol_request.save
+      redirect_to course_path(current_course), success: t('.success')
+    else
+      redirect_to course_path(current_course),
+                  danger: @enrol_request.errors.full_messages.to_sentence
+    end
+  end
+
   # Allow users to withdraw their requests to register for a course that are pending
   # approval/rejection.
   def destroy
@@ -30,7 +40,7 @@ class Course::EnrolRequestsController < Course::ComponentController
   end
 
   private
-
+  
   def create_course_user
     course_user = CourseUser.new(course_user_params.
       reverse_merge(course: current_course, user_id: @enrol_request.user_id))

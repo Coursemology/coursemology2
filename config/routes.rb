@@ -208,7 +208,7 @@ Rails.application.routes.draw do
         post 'resend_invitation'
       end
 
-      resources :enrol_requests, only: [:index, :destroy] do
+      resources :enrol_requests, only: [:index, :create, :destroy] do
         post 'approve', on: :member
       end
 
