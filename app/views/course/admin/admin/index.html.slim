@@ -10,7 +10,8 @@
     div.course-logo = display_course_logo(current_course)
     = f.file_field :logo
 
-    = f.input :status, as: :radio_buttons, collection: Course.statuses.keys
+    = f.input :published, label: t('.publish_label'), hint: t('.publish_hint')
+    = f.input :enrollable, label: t('.enrollable_label')
     = f.input :start_at
     = f.input :end_at
     = f.label :gamified
