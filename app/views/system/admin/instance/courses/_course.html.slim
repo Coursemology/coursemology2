@@ -2,7 +2,6 @@
   td = (current_page - 1) * per_page + course_counter + 1
   th
     = link_to format_inline_text(course.title), course_path(course)
-  td = course.status
   td = format_datetime(course.created_at)
   td
     ul.list-unstyled

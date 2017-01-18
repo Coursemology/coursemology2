@@ -7,7 +7,6 @@ en:
           header_with_count: 'Courses (%{count})'
           serial_number: 'S/N'
           title: 'Title'
-          status: 'Status'
           created_at: 'Created At'
           instance: 'Instance'
           owners: 'Owners'

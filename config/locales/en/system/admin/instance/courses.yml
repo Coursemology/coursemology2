@@ -8,7 +8,6 @@ en:
             header_with_count: 'Courses (%{count})'
             serial_number: 'S/N'
             title: 'Title'
-            status: 'Status'
             created_at: 'Created At'
             owners: 'Owners'
             search_placeholder: 'Search course title, description or related users'
