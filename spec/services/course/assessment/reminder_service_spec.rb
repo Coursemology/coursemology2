@@ -37,37 +37,5 @@ RSpec.describe Course::Assessment::ReminderService do
         end
       end
     end
-
-    describe '#closing_reminder' do
-      let!(:now) { Time.zone.now }
-
-      let(:user) { create(:course_user, course: course).user }
-      let!(:assessment) { create(:assessment, end_at: now) }
-
-      context 'when assessment is published' do
-        it 'notify the users' do
-          assessment.published = true
-
-          expect_any_instance_of(Course::AssessmentNotifier).to receive(:assessment_closing).once
-          subject.closing_reminder(user, assessment, assessment.closing_reminder_token)
-        end
-      end
-
-      context 'when assessment is a draft' do
-        it 'does not notify the users' do
-          expect_any_instance_of(Course::AssessmentNotifier).to_not receive(:assessment_closing)
-          subject.closing_reminder(user, assessment, assessment.closing_reminder_token)
-        end
-
-        context "when assessment's end_date was changed" do
-          it 'does not notify the users' do
-            assessment.end_at = now + 1.day
-
-            expect_any_instance_of(Course::AssessmentNotifier).to_not receive(:assessment_closing)
-            subject.closing_reminder(user, assessment, assessment.closing_reminder_token)
-          end
-        end
-      end
-    end
   end
 end

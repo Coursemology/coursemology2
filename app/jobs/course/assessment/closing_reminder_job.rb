@@ -5,10 +5,10 @@ class Course::Assessment::ClosingReminderJob < ApplicationJob
 
   protected
 
-  def perform(user, assessment, token)
+  def perform(assessment, token)
     instance = Course.unscoped { assessment.course.instance }
     ActsAsTenant.with_tenant(instance) do
-      Course::Assessment::ReminderService.closing_reminder(user, assessment, token)
+      Course::Assessment::ReminderService.closing_reminder(assessment, token)
     end
   end
 end

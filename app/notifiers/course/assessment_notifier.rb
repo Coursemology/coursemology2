@@ -25,22 +25,4 @@ class Course::AssessmentNotifier < Notifier::Base
       notify(assessment.course, :email).
       save!
   end
-
-  def assessment_closing(user, assessment)
-    recipients = uncompleted_students(assessment)
-
-    activity = create_activity(actor: user, object: assessment, event: :closing)
-    recipients.each { |r| activity.notify(r, :email) }
-    activity.save!
-  end
-
-  private
-
-  def uncompleted_students(assessment)
-    course_users = assessment.course.course_users
-    students = course_users.student.includes(:user).map(&:user)
-    submitted =
-      assessment.submissions.confirmed.includes([course_user: :user]).map { |s| s.course_user.user }
-    Set.new(students) - Set.new(submitted)
-  end
 end

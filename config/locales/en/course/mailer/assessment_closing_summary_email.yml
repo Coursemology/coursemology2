@@ -1,0 +1,9 @@
+en:
+  course:
+    mailer:
+      assessment_closing_summary_email:
+        subject: '%{course}: Reminder about %{assessment}'
+        message: >
+          The following students have not submitted %{assessment}, due on %{time}:
+
+          %{students}
