@@ -37,4 +37,20 @@ class Course::Mailer < ApplicationMailer
     mail(to: @course.managers.map(&:user).map(&:email),
          subject: t('.subject', course: @course.title))
   end
+
+  # Send a reminder of the assessment closing to a single user
+  #
+  # @param [Course::Assessment] assessment The assessment that is closing.
+  # @param [User] user The user who hasn't done the assessment yet.
+  def assessment_closing_reminder_email(assessment, user)
+    @recipient = user
+    @assessment = assessment
+    ActsAsTenant.without_tenant do
+      @course = assessment.course
+    end
+
+    mail(to: @recipient.email,
+         subject: t('.subject', course: @course.title, assessment: @assessment.title))
+  end
+
 end

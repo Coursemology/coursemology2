@@ -1,0 +1,7 @@
+en:
+  course:
+    mailer:
+      assessment_closing_reminder_email:
+        subject: '%{course}: Reminder about %{assessment}'
+        message: >
+          Please be reminded that %{assessment} is due on %{time}.
