@@ -109,12 +109,8 @@ export default defineMessages({
     defaultMessage: 'Submit',
     description: 'Button for submitting the form.',
   },
-  updateSuccessMessage: {
-    id: 'course.assessment.question.programming.programmingQuestionForm.updateSuccessMessage',
-    defaultMessage: 'The question was successfully updated.',
-  },
-  updateFailureMessage: {
-    id: 'course.assessment.question.programming.programmingQuestionForm.updateFailureMessage',
+  submitFailureMessage: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.submitFailureMessage',
     defaultMessage: 'An error occurred, please try again.',
   },
   evaluatingMessage: {

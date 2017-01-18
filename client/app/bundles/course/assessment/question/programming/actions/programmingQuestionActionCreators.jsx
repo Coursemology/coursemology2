@@ -85,14 +85,21 @@ function submitFormFailure(error) {
   };
 }
 
-function fetchImportResult(successMessage, failureMessage) {
+function fetchImportResult(redirectAssessment, successMessage, failureMessage) {
   return (dispatch) => {
     axios.get('', {
       headers: { Accept: 'application/json' },
     }).then((response) => {
-      dispatch(submitFormEndEvaluating(response.data));
-      dispatch(submitFormLoading(false));
+      const { import_result: { import_errored: importErrored } } = response.data;
+
       dispatch(setSubmissionMessage(successMessage));
+
+      if (importErrored) {
+        dispatch(submitFormEndEvaluating(response.data));
+        dispatch(submitFormLoading(false));
+      } else {
+        window.location = redirectAssessment;
+      }
     }).catch((error) => {
       dispatch(submitFormFailure(error));
       dispatch(submitFormLoading(false));
@@ -101,11 +108,12 @@ function fetchImportResult(successMessage, failureMessage) {
   };
 }
 
-function submitFormEvaluate(redirectUrl, successMessage, failureMessage) {
+function submitFormEvaluate(importJobUrl, redirectEdit, redirectAssessment, successMessage,
+                            failureMessage) {
   return (dispatch) => {
     const delay = 500;
 
-    axios.get(redirectUrl, {
+    axios.get(importJobUrl, {
       headers: { Accept: 'application/json' },
     }).then((response) => {
       const status = response.data.status;
@@ -114,10 +122,27 @@ function submitFormEvaluate(redirectUrl, successMessage, failureMessage) {
         dispatch(submitFormStartEvaluating());
 
         setTimeout(() => {
-          dispatch(submitFormEvaluate(redirectUrl, successMessage, failureMessage));
+          dispatch(submitFormEvaluate(importJobUrl, redirectEdit, redirectAssessment,
+            successMessage, failureMessage));
         }, delay);
       } else {
-        dispatch(fetchImportResult(successMessage, failureMessage));
+        if (redirectEdit) {
+          // Redirect to edit page without refreshing
+          window.history.pushState(null, null, redirectEdit.url);
+          document.title = redirectEdit.page_title;
+
+          $('.page-header > h1 > span:first').text(redirectEdit.page_header);
+          $('.breadcrumb .active').text(redirectEdit.page_header);
+
+          // Reload when the user tries to return the the new programming question page
+          window.onpopstate = function (event) {
+            if (event && event.state === null) {
+              window.location.href = window.location.href;
+            }
+          };
+        }
+
+        dispatch(fetchImportResult(redirectAssessment, successMessage, failureMessage));
       }
     }).catch((error) => {
       dispatch(submitFormFailure(error));
@@ -128,7 +153,7 @@ function submitFormEvaluate(redirectUrl, successMessage, failureMessage) {
   };
 }
 
-export function submitForm(url, method, data, successMessage, failureMessage) {
+export function submitForm(url, method, data, failureMessage) {
   return (dispatch) => {
     dispatch(submitFormLoading(true));
 
@@ -138,8 +163,20 @@ export function submitForm(url, method, data, successMessage, failureMessage) {
       data,
       headers: { Accept: 'application/json' },
     }).then((response) => {
-      if (response.data.redirect_url) {
-        dispatch(submitFormEvaluate(response.data.redirect_url, successMessage, failureMessage));
+      const {
+        import_job_url: importJobUrl,
+        redirect_edit: redirectEdit,
+        redirect_assessment: redirectAssessment,
+        message: successMessage,
+      } = response.data;
+
+      if (importJobUrl) {
+        // Package is evaluating, poll for evaluation job using import_job_url
+        dispatch(submitFormEvaluate(importJobUrl, redirectEdit, redirectAssessment,
+          successMessage, failureMessage));
+      } else if (redirectAssessment) {
+        // No need for package evaluation, redirect back to assessment page
+        window.location = redirectAssessment;
       } else {
         dispatch(submitFormSuccess(response.data));
         dispatch(submitFormLoading(false));
@@ -148,7 +185,19 @@ export function submitForm(url, method, data, successMessage, failureMessage) {
     }).catch((error) => {
       dispatch(submitFormFailure(error));
       dispatch(submitFormLoading(false));
-      dispatch(setSubmissionMessage(failureMessage));
+      if (error.response) {
+        // Server responded with errors.
+        const { data: { message, errors } } = error.response;
+
+        if (errors) {
+          dispatch(setValidationErrors([{ path: ['save_errors'], error: errors }]));
+        } else {
+          dispatch(setSubmissionMessage(message || failureMessage));
+        }
+      } else {
+        // Not able to send request.
+        dispatch(setSubmissionMessage(error.message));
+      }
     });
   };
 }

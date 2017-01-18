@@ -63,6 +63,10 @@ module Course::Assessment::Question::ProgrammingHelper
     end
   end
 
+  def check_import_job?
+    @programming_question.import_job && @programming_question.import_job.status != 'completed'
+  end
+
   def display_autograded_toggle?
     @programming_question.edit_online? || can_switch_package_type?
   end

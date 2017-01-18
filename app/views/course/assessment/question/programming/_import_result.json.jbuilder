@@ -8,4 +8,6 @@ json.import_result do
       json.stderr log['stderr']
     end
   end
+
+  json.import_errored import_errored?
 end

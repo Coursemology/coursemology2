@@ -73,7 +73,6 @@ export const initialState = Immutable.fromJS({
     method: 'post',
     path: null,
     auth_token: null,
-    async: false,
   },
 });
 
@@ -181,37 +180,61 @@ function apiReducer(state, action) {
   switch (type) {
     case actionTypes.SUBMIT_FORM_LOADING: {
       const { isLoading } = action;
-      return state.set('is_loading', isLoading);
+      return state.set('is_loading', isLoading).delete('save_errors');
     }
     case actionTypes.SUBMIT_FORM_EVALUATING: {
       const { isEvaluating, data } = action;
 
+      if (isEvaluating) {
+        // Evaluation started
+        return state
+          .set('is_evaluating', isEvaluating)
+          .mergeIn(['import_result'], { alert: null, build_log: null });
+      }
+
       if (data) {
-        const { question, package_ui, test_ui, import_result } = data;
+        // Evaluation has completed, updated data retrieved from server.
+        const { form_data, question, package_ui, test_ui, import_result } = data;
         const key = state.getIn(['test_ui', 'data_files', 'key']);
-        let newState = state;
         const editorMode = test_ui.mode;
-
-        if (editorMode && test_ui[editorMode] !== undefined) {
-          newState = newState.setIn(['test_ui', editorMode], Immutable.fromJS(test_ui[editorMode]));
-        }
-
-        return newState
+        const autogradedInClient = state.getIn(['question', 'autograded']);
+        const newState = state
           .set('is_evaluating', isEvaluating)
           .mergeDeep({ question })
           .setIn(['question', 'package_filename'], null)
-          .merge({ package_ui, import_result })
-          .setIn(['test_ui', 'data_files', 'to_delete'], Immutable.Set())
+          .merge({ form_data, package_ui, import_result })
           .setIn(['test_ui', 'data_files', 'new'], Immutable.fromJS([{ key, filename: null }]));
+
+        if (import_result.import_errored) {
+          const packagePathInClient = state.getIn(['question', 'package', 'path']);
+          const packagePathFromServer = question.package ? question.package.path : undefined;
+
+          if (packagePathInClient !== packagePathFromServer) {
+            // the old package has been changed, set to what the server returned
+            return newState
+              .setIn(['test_ui', 'mode'], editorMode)
+              .setIn(['test_ui', editorMode], Immutable.fromJS(test_ui[editorMode]))
+              .setIn(['test_ui', 'data_files', 'to_delete'], Immutable.Set());
+          }
+
+          // still the same old package, the client state shall be preserved
+          return newState.setIn(['question', 'autograded'], autogradedInClient);
+        }
+
+        // Evaluation completed successfully
+        return newState
+          .setIn(['test_ui', 'mode'], editorMode)
+          .setIn(['test_ui', editorMode], Immutable.fromJS(test_ui[editorMode]))
+          .setIn(['test_ui', 'data_files', 'to_delete'], Immutable.Set());
       }
 
+      // Evaluation ended without any data retrieved from server
       return state
-        .set('is_evaluating', isEvaluating)
-        .mergeIn(['import_result'], { alert: null, build_log: null });
+        .set('is_evaluating', isEvaluating);
     }
     case actionTypes.SUBMIT_FORM_SUCCESS: {
       const { data } = action;
-      const { question, package_ui, test_ui, import_result } = data;
+      const { form_data, question, test_ui } = data;
       let newState = state;
       const editorMode = test_ui.mode;
 
@@ -221,7 +244,7 @@ function apiReducer(state, action) {
 
       return newState
         .mergeDeep({ question })
-        .merge({ package_ui, import_result });
+        .merge({ form_data });
     }
     case actionTypes.SUBMIT_FORM_FAILURE: {
       return state;

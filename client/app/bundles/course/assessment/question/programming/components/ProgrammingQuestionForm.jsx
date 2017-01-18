@@ -152,24 +152,16 @@ class ProgrammingQuestionForm extends React.Component {
   }
 
   onSubmit(e) {
-    if (!this.validationCheck()) {
-      e.preventDefault();
-      return;
-    }
-    const async = this.props.data.getIn(['form_data', 'async']);
+    e.preventDefault();
+    if (!this.validationCheck()) return;
 
-    if (async) {
-      e.preventDefault();
+    const url = this.props.data.getIn(['form_data', 'path']);
+    const method = this.props.data.getIn(['form_data', 'method']);
+    const formData = new FormData(this.form);
 
-      const url = this.props.data.getIn(['form_data', 'path']);
-      const method = this.props.data.getIn(['form_data', 'method']);
-      const formData = new FormData(this.form);
+    const failureMessage = this.props.intl.formatMessage(translations.submitFailureMessage);
 
-      const successMessage = this.props.intl.formatMessage(translations.updateSuccessMessage);
-      const failureMessage = this.props.intl.formatMessage(translations.updateFailureMessage);
-
-      this.props.actions.submitForm(url, method, formData, successMessage, failureMessage);
-    }
+    this.props.actions.submitForm(url, method, formData, failureMessage);
   }
 
   validationCheck() {
@@ -484,6 +476,16 @@ class ProgrammingQuestionForm extends React.Component {
     return (
       <div>
         { this.renderImportAlertView() }
+        {
+          this.props.data.get('save_errors') ?
+            <div className="alert alert-danger">
+              {
+                this.props.data.get('save_errors').map((errorMessage, index) => <div key={index}>{errorMessage}</div>)
+              }
+            </div>
+            :
+            null
+        }
         <form
           id="programmming-question-form"
           action={formData.get('path')}
@@ -551,10 +553,12 @@ class ProgrammingQuestionForm extends React.Component {
                     labelPosition="right"
                     toggled={autograded}
                     onToggle={(e) => {
+                      if (autogradedAssessment) return;
                       this.handleChange('autograded', e.target.checked);
                     }}
-                    disabled={autogradedAssessment || this.props.data.get('is_loading')}
-                    style={{margin: '1em 0'}}
+                    readOnly={autogradedAssessment}
+                    disabled={this.props.data.get('is_loading')}
+                    style={{ margin: '1em 0' }}
                     name="question_programming[autograded]"
                   />
                   :

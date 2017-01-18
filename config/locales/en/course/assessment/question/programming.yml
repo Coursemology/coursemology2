@@ -7,8 +7,10 @@ en:
             header: 'New Programming Question'
           create:
             success: 'The programming question was created.'
+            failure: 'Could not create programming question.'
           update:
             success: 'The programming question was updated.'
+            failure: 'Could not update programming question.'
           destroy:
             success: 'The programming question was deleted.'
             failure: 'Could not delete programming question: %{error}'

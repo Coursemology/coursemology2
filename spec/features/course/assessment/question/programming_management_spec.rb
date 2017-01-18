@@ -33,19 +33,14 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         end
         select question_attributes[:language].name,
                from: 'question_programming[language_id]', visible: false
-        fill_in 'question_programming[memory_limit]', with: question_attributes[:memory_limit]
-        fill_in 'question_programming[time_limit]', with: question_attributes[:time_limit]
-        fill_in 'question_programming[attempt_limit]', with: question_attributes[:attempt_limit]
         page.find('#programmming-question-form-submit').click
 
+        expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
         expect(current_path).to eq(course_assessment_path(course, assessment))
 
         question_created = assessment.questions.first.specific
         expect(page).to have_content_tag_for(question_created)
         expect(question_created.skills).to contain_exactly(skill)
-        expect(question_created.memory_limit).to eq(question_attributes[:memory_limit])
-        expect(question_created.time_limit).to eq(question_attributes[:time_limit])
-        expect(question_created.attempt_limit).to eq(question_attributes[:attempt_limit])
       end
 
       scenario 'I can upload a template package', js: true do
@@ -71,8 +66,9 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         page.find('#programmming-question-form-submit').click
         wait_for_job
 
-        expect(current_path).to \
-          start_with(course_assessment_path(course, assessment))
+        expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
+        expect(current_path).to eq(course_assessment_path(course, assessment))
+        visit edit_course_assessment_question_programming_path(course, assessment, question)
 
         expect(page).to have_selector('div.alert.alert-success')
         question.template_files.reload.each do |template|
@@ -99,7 +95,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         page.find('#programmming-question-form-submit').click
 
         expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
-        expect(current_path).to eq(edit_path)
+        expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(question.reload.maximum_grade).to eq(maximum_grade)
       end
 
@@ -127,8 +123,10 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         end
         select question_attributes[:language].name,
                from: 'question_programming[language_id]', visible: false
+        page.check('question_programming[autograded]', visible: false)
         fill_in 'question_programming[memory_limit]', with: question_attributes[:memory_limit]
         fill_in 'question_programming[time_limit]', with: question_attributes[:time_limit]
+        fill_in 'question_programming[attempt_limit]', with: question_attributes[:attempt_limit]
 
         page.find('#upload-package-tab').click
         page.find('#question_programming_file', visible: false).click
@@ -140,8 +138,14 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         page.find('#programmming-question-form-submit').click
         wait_for_job
 
+        expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
         expect(current_path).to \
           start_with(course_assessment_path(course, assessment))
+
+        question_created = assessment.questions.first.specific
+        expect(question_created.memory_limit).to eq(question_attributes[:memory_limit])
+        expect(question_created.time_limit).to eq(question_attributes[:time_limit])
+        expect(question_created.attempt_limit).to eq(question_attributes[:attempt_limit])
       end
     end
 

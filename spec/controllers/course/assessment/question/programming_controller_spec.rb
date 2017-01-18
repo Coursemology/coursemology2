@@ -2,6 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Question::ProgrammingController do
+  render_views
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:programming_question) { nil }
@@ -29,13 +30,26 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
 
     describe '#create' do
       subject do
+        request.accept = 'application/json'
         post :create, course_id: course, assessment_id: assessment,
                       question_programming: question_programming_attributes
       end
 
       context 'when saving fails' do
         let(:programming_question) { immutable_programming_question }
-        it { is_expected.to render_template('new') }
+
+        it 'returns the correct status' do
+          subject
+          expect(response).to have_http_status(:bad_request)
+        end
+
+        it 'returns the correct failure message' do
+          subject
+          body = JSON.parse(response.body)
+          expect(body['message']).to eq(
+            I18n.t('course.assessment.question.programming.create.failure')
+          )
+        end
       end
 
       context 'when attaching a template package' do
@@ -50,9 +64,10 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
           end
         end
 
-        it 'redirects to job progress page' do
+        it 'returns the correct import job url' do
           subject
-          expect(subject).to redirect_to(
+          body = JSON.parse(response.body)
+          expect(body['import_job_url']).to eq(
             job_path(controller.instance_variable_get(:@programming_question).import_job)
           )
         end
@@ -61,13 +76,26 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
 
     describe '#update' do
       subject do
+        request.accept = 'application/json'
         patch :update, course_id: course, assessment_id: assessment, id: programming_question,
                        question_programming: question_programming_attributes
       end
 
       context 'when the question cannot be saved' do
         let(:programming_question) { immutable_programming_question }
-        it { is_expected.to render_template('edit') }
+
+        it 'returns the correct status' do
+          subject
+          expect(response).to have_http_status(:bad_request)
+        end
+
+        it 'returns the correct failure message' do
+          subject
+          body = JSON.parse(response.body)
+          expect(body['message']).to eq(
+            I18n.t('course.assessment.question.programming.update.failure')
+          )
+        end
       end
 
       context 'when attaching a template package' do
@@ -86,9 +114,10 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
           end
         end
 
-        it 'redirects to job progress page' do
+        it 'returns the correct import job url' do
           subject
-          expect(subject).to redirect_to(
+          body = JSON.parse(response.body)
+          expect(body['import_job_url']).to eq(
             job_path(controller.instance_variable_get(:@programming_question).import_job)
           )
         end
