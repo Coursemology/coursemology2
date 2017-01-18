@@ -1,10 +1,9 @@
-- unless current_course_user
-  - if enrol_request = Course::EnrolRequest.find_by(course: current_course, user: current_user)
-    = delete_button([current_course, enrol_request]) do
-      = t('.deregister')
-  - else
+- display_code_form = current_course.code_registration_enabled? || current_course.invitations.unconfirmed.count > 0
+- invitation = current_course.invitations.unconfirmed.for_user(current_user)
+
+- if display_code_form
+  .col-lg-4.col-md-5.col-md-offset-7.col-lg-offset-8
     = simple_form_for @registration, url: course_register_path(current_course) do |f|
-      - invitation = current_course.invitations.unconfirmed.for_user(current_user)
       - if invitation.present?
         = f.hidden_field :code
         = f.button :submit, value: t('.enter_course')
@@ -14,3 +13,18 @@
           span.input-group-btn
             = f.button :submit, value: t('.register'), class: 'register'
 
+- if enrol_request = Course::EnrolRequest.find_by(course: current_course, user: current_user)
+  .col-lg-4.col-md-5.col-md-offset-7.col-lg-offset-8
+    .enrol-request.text-right
+      = link_to t('.deregister'), [current_course, enrol_request], method: :delete
+
+/ Use can directly press the enter course button is there's an invitation
+- elsif current_course.enrollable? && !invitation
+  - link = link_to t('common.click_here'), course_enrol_requests_path(current_course), method: :post
+  - if display_code_form
+    .enrol-request.col-md-5.col-md-offset-7.col-lg-4.col-lg-offset-8
+      p = t('.new_enrol_request_text_html', click_here: link)
+  - else
+    .pull-right
+      = link_to t('.new_enrol_request_button'), course_enrol_requests_path(current_course),
+                class: ['btn', 'btn-primary'], method: :post

@@ -89,6 +89,10 @@ class Course < ActiveRecord::Base
     self.registration_key = 'C'.freeze + SecureRandom.base64(8)
   end
 
+  def code_registration_enabled?
+    registration_key.present?
+  end
+
   # Returns the root folder of the course.
   # @return [Course::Material::Folder] The root folder.
   def root_folder
