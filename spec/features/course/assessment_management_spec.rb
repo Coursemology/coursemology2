@@ -99,10 +99,13 @@ RSpec.feature 'Course: Assessments: Management' do
         emails = unread_emails_for(student.email).map(&:subject)
         opening_subject = '.notifiers.course.assessment_notifier.opening.'\
                           'course_notifications.email.subject'
-        closing_subject = '.notifiers.course.assessment_notifier.closing.'\
-                          'user_notifications.email.subject'
+        closing_subject = 'course.mailer.assessment_closing_reminder_email.subject'
         expect(emails).to include(opening_subject)
         expect(emails).to include(closing_subject)
+
+        manager_emails = unread_emails_for(user.email).map(&:subject)
+        reminder_subject = 'course.mailer.assessment_closing_summary_email.subject'
+        expect(manager_emails).to include(reminder_subject)
       end
 
       scenario 'I can delete an assessment' do
