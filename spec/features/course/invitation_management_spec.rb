@@ -143,7 +143,10 @@ RSpec.feature 'Courses: Invitations', js: true do
           expect(page).not_to have_button('.register')
 
           click_button I18n.t('course.user_registrations.registration.enter_course')
-          expect(course.course_users.find_by(user_id: user.id)).to be_present
+
+          course_user = course.course_users.find_by(user_id: user.id)
+          expect(course_user).to be_present
+          expect(course_user.name).to eq(invitation.name)
         end
       end
 
@@ -156,7 +159,9 @@ RSpec.feature 'Courses: Invitations', js: true do
           click_button I18n.t('course.user_registrations.registration.register')
 
           expect(page).not_to have_selector('div.register')
-          expect(course.course_users.find_by(user_id: user.id)).to be_present
+          course_user = course.course_users.find_by(user_id: user.id)
+          expect(course_user).to be_present
+          expect(course_user.name).to eq(invitation.name)
         end
       end
 
