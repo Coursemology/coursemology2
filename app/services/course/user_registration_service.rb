@@ -58,10 +58,14 @@ class Course::UserRegistrationService
   #
   # @param [Course::Registration] registration The registration model containing the course and user
   #   parameters.
+  # @param [String] name The name of the course_user to be set.
   # @return [CourseUser] The Course User object which was found or created.
-  def find_or_create_course_user!(registration)
+  def find_or_create_course_user!(registration, name = nil)
+    name ||= registration.user.name
+
     registration.course_user =
-      CourseUser.find_or_create_by!(course: registration.course, user: registration.user)
+      CourseUser.find_or_create_by!(course: registration.course, user: registration.user,
+                                    name: name)
   end
 
   # Claims a given registration code. The correct type of code is deduced from the code itself and
@@ -137,7 +141,7 @@ class Course::UserRegistrationService
   def accept_invitation(registration, invitation)
     CourseUser.transaction do
       invitation.confirm!
-      find_or_create_course_user!(registration)
+      find_or_create_course_user!(registration, invitation.name)
     end
   end
 
