@@ -8,8 +8,9 @@
 
 = div_for(@assessment, 'data-assessment-id' => @assessment.id) do
   - unless @assessment.description.blank?
-    h3 = t('.description')
-    = format_html(@assessment.description)
+    div.well
+      h3 = t('.description')
+      = format_html(@assessment.description)
 
   table.table.table-bordered.details-table
     tbody
