@@ -15,7 +15,7 @@
   - if submission.published?
     td = submission.grade.to_s + ' / ' + assessment.maximum_grade.to_s
     - if current_course.gamified?
-      td = submission.points_awarded
+      td = submission.current_points_awarded
   - else
     td = '-- / ' + assessment.maximum_grade.to_s
     - if current_course.gamified?
