@@ -9,10 +9,12 @@ div.panel.panel-default
   table.table
     thead
       tr
-        th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:identifier) if is_grader
+        - if is_grader
+          th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:identifier)
         th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:expression)
         th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:expected)
-        th = t('.output') if is_grader
+        - if is_grader
+          th = t('.output')
         - if @submission.attempting?
           th = Course::Assessment::Question::ProgrammingTestCase.human_attribute_name(:hint)
         th = t('.passed')
@@ -20,11 +22,14 @@ div.panel.panel-default
       tr
       - test_cases_and_results.each do |test_case, test_case_result|
         = content_tag_for(:tr, test_case, class: test_result_class(test_case_result)) do
-          th = format_html(test_case.identifier) if is_grader
+          - if is_grader
+            th = format_html(test_case.identifier)
           td = format_html(test_case.expression)
           td
             div.expected = format_html(test_case.expected)
-          td = simple_format(get_output(test_case_result)) if is_grader
+          - if is_grader
+            td
+              div.output = simple_format(get_output(test_case_result))
           - if @submission.attempting?
             td
               - unless test_case_result && test_case_result.passed?
