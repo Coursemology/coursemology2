@@ -168,24 +168,21 @@ RSpec.describe Course::Condition::Assessment, type: :model do
 
         context 'when the submission is attempted' do
           it 'returns false' do
-            create(:submission, workflow_state: :attempting, assessment: assessment,
-                                creator: course_user.user)
+            create(:submission, :attempting, assessment: assessment, creator: course_user.user)
             expect(subject.satisfied_by?(course_user)).to be_falsey
           end
         end
 
         context 'when the submission is submitted' do
           it 'returns true' do
-            create(:submission, workflow_state: :submitted, assessment: assessment,
-                                creator: course_user.user)
+            create(:submission, :submitted, assessment: assessment, creator: course_user.user)
             expect(subject.satisfied_by?(course_user)).to be_truthy
           end
         end
 
         context 'when the submission is published' do
           it 'returns true' do
-            create(:submission, workflow_state: :published, assessment: assessment,
-                                creator: course_user.user)
+            create(:submission, :published, assessment: assessment, creator: course_user.user)
             expect(subject.satisfied_by?(course_user)).to be_truthy
           end
         end
@@ -200,16 +197,14 @@ RSpec.describe Course::Condition::Assessment, type: :model do
 
         context 'when there are submitted submissions' do
           it 'returns false' do
-            create(:submission, workflow_state: :submitted, assessment: assessment,
-                                creator: course_user.user)
+            create(:submission, :submitted, assessment: assessment, creator: course_user.user)
             expect(subject.satisfied_by?(course_user)).to be_falsey
           end
         end
 
         context 'when there are published submissions' do
           let(:submission) do
-            create(:submission, workflow_state: :published, assessment: assessment,
-                                creator: course_user.user)
+            create(:submission, :published, assessment: assessment, creator: course_user.user)
           end
 
           context 'when there is no answer' do
@@ -218,11 +213,10 @@ RSpec.describe Course::Condition::Assessment, type: :model do
             end
           end
 
-          context 'when all published submissions are below the minimum grade percentage' do
+          context 'when the published submission is below the minimum grade percentage' do
             it 'returns false' do
-              answers = assessment.questions.attempt(submission)
+              answers = submission.answers
               answers.each do |answer|
-                answer.finalise!
                 answer.grade = 5
                 answer.save!
               end
@@ -231,11 +225,10 @@ RSpec.describe Course::Condition::Assessment, type: :model do
             end
           end
 
-          context 'when at least one submission is at least the minimum grade percentage' do
+          context 'when the submission is at least the minimum grade percentage' do
             it 'returns true' do
-              answers = assessment.questions.attempt(submission)
+              answers = submission.answers
               answers.each do |answer|
-                answer.finalise!
                 answer.grade = 6
                 answer.save!
               end
