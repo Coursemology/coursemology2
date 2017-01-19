@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { injectIntl, defineMessages } from 'react-intl';
 import { Card, CardHeader } from 'material-ui/Card';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import ExpandableText from 'lib/components/ExpandableText';
 
 import styles from './UploadedPackageTestCaseView.scss';
 
@@ -72,7 +73,7 @@ class UploadedPackageTestCaseView extends React.Component {
             { test.get('expression') }
           </TableRowColumn>
           <TableRowColumn className={styles.testCaseCell}>
-            { test.get('expected') }
+            <ExpandableText text={test.get('expected')} />
           </TableRowColumn>
           <TableRowColumn className={styles.testCaseCell}>
             { test.get('hint') }
