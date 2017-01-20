@@ -4,6 +4,6 @@ en:
       assessment_closing_summary_email:
         subject: '%{course}: Reminder about %{assessment}'
         message: >
-          The following students have not submitted %{assessment}, due on %{time}:
+          Emails were sent to the following students to remind them that %{assessment} is due on %{time}:
 
           %{students}
