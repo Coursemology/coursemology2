@@ -578,6 +578,20 @@ RSpec.describe Course::Assessment::Submission do
           expect(subject.not_started?).to be_truthy
         end
       end
+
+      context 'when assessment is destroyed' do
+        let!(:submission1_traits) { [:published] }
+        let!(:submission2_traits) { [:graded] }
+        let!(:submission3_traits) { [:submitted] }
+
+        it 'deletes all todos' do
+          item_id = assessment.lesson_plan_item.id
+          assessment.destroy
+          expect(Course::LessonPlan::Todo.find_by(item_id: item_id, user_id: user1.id)).to be_nil
+          expect(Course::LessonPlan::Todo.find_by(item_id: item_id, user_id: user2.id)).to be_nil
+          expect(Course::LessonPlan::Todo.find_by(item_id: item_id, user_id: user3.id)).to be_nil
+        end
+      end
     end
   end
 end

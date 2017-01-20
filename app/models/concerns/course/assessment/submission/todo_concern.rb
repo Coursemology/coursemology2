@@ -18,17 +18,19 @@ module Course::Assessment::Submission::TodoConcern
 
   def update_todo
     if attempting?
-      todo.update_column(:workflow_state, 'in_progress') unless todo.in_progress?
+      todo.update_attribute(:workflow_state, 'in_progress') unless todo.in_progress?
     elsif submitted? || graded? || published?
-      todo.update_column(:workflow_state, 'completed') unless todo.completed?
+      todo.update_attribute(:workflow_state, 'completed') unless todo.completed?
     end
-  rescue ActiveRecordError => error
+  rescue ActiveRecord::ActiveRecordError => error
     raise ActiveRecord::Rollback, error.message
   end
 
+  # Skip callback if assessment is deleted as todo will be deleted.
   def restart_todo
-    todo.update_column(:workflow_state, 'not_started') unless todo.not_started?
-  rescue ActiveRecordError => error
+    return if assessment.destroying?
+    todo.update_attribute(:workflow_state, 'not_started') unless todo.not_started?
+  rescue ActiveRecord::ActiveRecordError => error
     raise ActiveRecord::Rollback, error.message
   end
 end
