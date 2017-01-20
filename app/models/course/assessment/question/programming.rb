@@ -101,7 +101,10 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
   def non_autograded_template_files=(template_files)
     self.template_files.clear
     self.template_files = template_files
-    @non_autograded_template_files = true
+
+    execute_after_commit do
+      test_cases.clear
+    end
   end
 
   private
@@ -127,7 +130,7 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
 
   # Removes the template files and test cases from the old package.
   def remove_old_package
-    template_files.clear unless @non_autograded_template_files
+    template_files.clear
     test_cases.clear
     self.import_job = nil
   end

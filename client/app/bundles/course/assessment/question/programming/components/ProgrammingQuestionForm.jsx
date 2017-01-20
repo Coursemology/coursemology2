@@ -5,11 +5,14 @@ import { injectIntl } from 'react-intl';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
+import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
+import { Tabs, Tab } from 'material-ui/Tabs';
 import { red500 } from 'material-ui/styles/colors';
 
 import BuildLog from './BuildLog';
+import OnlineEditor, { validation as editorValidation } from './OnlineEditor';
 import UploadedPackageView from './UploadedPackageView';
 import MaterialSummernote from '../../../../../../lib/components/MaterialSummernote';
 import ChipInput from '../../../../../../lib/components/ChipInput';
@@ -28,6 +31,7 @@ const propTypes = {
     clearHasError: PropTypes.func.isRequired,
     clearSubmissionMessage: PropTypes.func.isRequired,
   }),
+  onlineEditorActions: PropTypes.instanceOf(Object).isRequired,
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
@@ -74,6 +78,15 @@ function validation(data, pathOfKeysToData, intl) {
       hasError = true;
     }
   });
+
+  // Check file uploaded when no previous package exists
+  if (!data.get('edit_online')) {
+    if (data.get('package') === null && data.get('package_filename') === null) {
+      questionErrors.package_filename =
+        intl.formatMessage(translations.noPackageValidationError);
+      hasError = true;
+    }
+  }
 
   if (hasError) {
     errors.push({
@@ -139,30 +152,29 @@ class ProgrammingQuestionForm extends React.Component {
   }
 
   onSubmit(e) {
-    if (!this.validationCheck()) {
-      e.preventDefault();
-      return;
-    }
-    const async = this.props.data.getIn(['form_data', 'async']);
+    e.preventDefault();
+    if (!this.validationCheck()) return;
 
-    if (async) {
-      e.preventDefault();
+    const url = this.props.data.getIn(['form_data', 'path']);
+    const method = this.props.data.getIn(['form_data', 'method']);
+    const formData = new FormData(this.form);
 
-      const url = this.props.data.getIn(['form_data', 'path']);
-      const method = this.props.data.getIn(['form_data', 'method']);
-      const formData = new FormData(this.form);
+    const failureMessage = this.props.intl.formatMessage(translations.submitFailureMessage);
 
-      const successMessage = this.props.intl.formatMessage(translations.updateSuccessMessage);
-      const failureMessage = this.props.intl.formatMessage(translations.updateFailureMessage);
-
-      this.props.actions.submitForm(url, method, formData, successMessage, failureMessage);
-    }
+    this.props.actions.submitForm(url, method, formData, failureMessage);
   }
 
   validationCheck() {
     const { data, intl } = this.props;
     const question = data.get('question');
-    const errors = validation(question, ['question'], intl);
+    let errors = validation(question, ['question'], intl);
+
+    // Check online editor
+    if (question.get('edit_online')) {
+      errors = errors.concat(
+        editorValidation(this.props.data, ['test_ui'], intl)
+      );
+    }
 
     this.props.actions.setValidationErrors(errors);
 
@@ -316,30 +328,78 @@ class ProgrammingQuestionForm extends React.Component {
     );
   }
 
-  renderPackageField(label, field, pkg, newFilename) {
+  renderSwitcher(showEditOnline, canSwitch) {
+    if (!canSwitch) {
+      return null;
+    }
+
+    const onTestTypeChange = (editOnline) => {
+      if (this.props.data.get('is_loading')) return;
+      this.props.actions.updateProgrammingQuestion('edit_online', editOnline);
+    };
+
+    return (
+      <Tabs
+        value={showEditOnline}
+        onChange={onTestTypeChange}
+        style={{ margin: '1em 0' }}
+      >
+        <Tab
+          id="test-case-editor-tab"
+          label={this.props.intl.formatMessage(translations.editTestsOnlineButton)}
+          value
+        />
+        <Tab
+          id="upload-package-tab"
+          label={this.props.intl.formatMessage(translations.uploadPackageButton)}
+          value={false}
+        />
+      </Tabs>
+    );
+  }
+
+  renderPackageField(label, field, pkg, newFilename, showEditOnline) {
+    let downloadNode = null;
+
+    if (pkg) {
+      const uploadedPackageLabel = showEditOnline ?
+        this.props.intl.formatMessage(translations.downloadPackageLabel)
+        :
+        this.props.intl.formatMessage(translations.uploadedPackageLabel);
+      const name = pkg.get('updater_name');
+      const author = showEditOnline ?
+        this.props.intl.formatMessage(translations.packageUpdatedBy, { name })
+        :
+        this.props.intl.formatMessage(translations.packageUploadedBy, { name });
+      downloadNode = (
+        <div className={styles.downloadPackageContainer}>
+          <div>
+            <span className={styles.uploadedPackageLabel}>{uploadedPackageLabel}:</span>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={pkg.get('path')}
+            >
+              {pkg.get('name')}
+            </a>
+          </div>
+          <div>{author}</div>
+        </div>
+      );
+    }
+
+    if (showEditOnline) {
+      return downloadNode;
+    }
+
     const packageError = this.props.data.getIn(['question', 'error', 'package_filename']);
-    const uploadedPackageLabel = this.props.intl.formatMessage(translations.uploadedPackageLabel);
     const newPackageButton = this.props.intl.formatMessage(translations.newPackageButton);
     const noFileMessage = this.props.intl.formatMessage(translations.noFileChosenMessage);
 
     return (
       <div>
         <h3>{label}</h3>
-        {
-          pkg ?
-            <div className={styles.fileInputContainer}>
-              <span className={styles.uploadedPackageLabel}>{uploadedPackageLabel}:</span>
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={pkg.get('path')}
-              >
-                {pkg.get('name')}
-              </a>
-            </div>
-            :
-            null
-        }
+        { downloadNode }
         <RaisedButton
           className={styles.fileInputButton}
           label={newPackageButton}
@@ -363,7 +423,21 @@ class ProgrammingQuestionForm extends React.Component {
     );
   }
 
-  renderTestView() {
+  renderTestView(showEditOnline) {
+    if (showEditOnline) {
+      return (
+        <OnlineEditor
+          {...{
+            actions: this.props.onlineEditorActions,
+            data: this.props.data.get('test_ui'),
+            isLoading: this.props.data.get('is_loading'),
+            autograded: this.props.data.getIn(['question', 'autograded']),
+            autogradedAssessment: this.props.data.getIn(['question', 'autograded_assessment']),
+          }}
+        />
+      );
+    }
+
     return <UploadedPackageView {...{ data: this.props.data }} />;
   }
 
@@ -390,9 +464,28 @@ class ProgrammingQuestionForm extends React.Component {
     const languageOptions = languages.toJS();
     languageOptions.unshift({ id: null, name: null });
 
+    const autogradedAssessment = question.get('autograded_assessment');
+    const autograded = autogradedAssessment || question.get('autograded');
+    let autogradedLabel = this.props.intl.formatMessage(translations.autograded);
+    if (autogradedAssessment) {
+      autogradedLabel += ` (${this.props.intl.formatMessage(translations.autogradedAssessment)})`;
+    }
+
+    const showEditOnline = question.get('edit_online');
+
     return (
       <div>
         { this.renderImportAlertView() }
+        {
+          this.props.data.get('save_errors') ?
+            <div className="alert alert-danger">
+              {
+                this.props.data.get('save_errors').map((errorMessage, index) => <div key={index}>{errorMessage}</div>)
+              }
+            </div>
+            :
+            null
+        }
         <form
           id="programmming-question-form"
           action={formData.get('path')}
@@ -452,26 +545,52 @@ class ProgrammingQuestionForm extends React.Component {
                   this.languageHandler('language_id'))
               }
             </div>
+            <div className={styles.autogradeToggle}>
+              {
+                this.props.data.getIn(['question', 'display_autograded_toggle']) ?
+                  <Toggle
+                    label={autogradedLabel}
+                    labelPosition="right"
+                    toggled={autograded}
+                    onToggle={(e) => {
+                      if (autogradedAssessment) return;
+                      this.handleChange('autograded', e.target.checked);
+                    }}
+                    readOnly={autogradedAssessment}
+                    disabled={this.props.data.get('is_loading')}
+                    style={{ margin: '1em 0' }}
+                    name="question_programming[autograded]"
+                  />
+                  :
+                  null
+              }
+            </div>
             <div className={styles.memoryLimitInput}>
               {
-                this.renderInputField(
-                  this.props.intl.formatMessage(translations.memoryLimitFieldLabel),
-                  'memory_limit', false, 'number',
-                  ProgrammingQuestionForm.convertNull(question.get('memory_limit')),
-                  this.props.data.getIn(['question', 'error', 'memory_limit']))
+                autograded ?
+                  this.renderInputField(
+                    this.props.intl.formatMessage(translations.memoryLimitFieldLabel),
+                    'memory_limit', false, 'number',
+                    ProgrammingQuestionForm.convertNull(question.get('memory_limit')),
+                    this.props.data.getIn(['question', 'error', 'memory_limit']))
+                  :
+                  null
               }
             </div>
             <div className={styles.timeLimitInput}>
               {
-                this.renderInputField(
-                  this.props.intl.formatMessage(translations.timeLimitFieldLabel),
-                  'time_limit', false, 'number',
-                  ProgrammingQuestionForm.convertNull(question.get('time_limit')),
-                  this.props.data.getIn(['question', 'error', 'time_limit']))
+                autograded ?
+                  this.renderInputField(
+                    this.props.intl.formatMessage(translations.timeLimitFieldLabel),
+                    'time_limit', false, 'number',
+                    ProgrammingQuestionForm.convertNull(question.get('time_limit')),
+                    this.props.data.getIn(['question', 'error', 'time_limit']))
+                  :
+                  null
               }
             </div>
             {
-              showAttemptLimit ?
+              autograded && showAttemptLimit ?
                 <div className={styles.attemptLimitInput}>
                   {
                     this.renderInputField(
@@ -488,11 +607,15 @@ class ProgrammingQuestionForm extends React.Component {
           </div>
 
           {
+            this.renderSwitcher(showEditOnline,
+              question.get('can_switch_package_type') && autograded)
+          }
+          {
             this.renderPackageField(
               this.props.intl.formatMessage(translations.templatePackageFieldLabel),
-              'file', pkg, this.props.data.getIn(['question', 'package_filename']))
+              'file', pkg, this.props.data.getIn(['question', 'package_filename']), showEditOnline)
           }
-          { this.renderTestView() }
+          { this.renderTestView(showEditOnline) }
           { this.renderBuildLogView() }
 
           <Snackbar

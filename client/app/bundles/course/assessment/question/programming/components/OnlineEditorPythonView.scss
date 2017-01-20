@@ -1,0 +1,30 @@
+// scss-lint:disable ImportantRule
+.deleteButtonCell {
+  padding-left: 12px !important;
+  text-align: center;
+  vertical-align: middle !important;
+  width: 50px;
+}
+
+.testCell {
+  text-overflow: initial !important;
+  white-space: normal !important;
+  word-break: break-word;
+}
+
+.fileInputButton {
+  cursor: pointer;
+  margin-right: 1em;
+}
+
+.uploadInput {
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+}
+// scss-lint:enable ImportantRule

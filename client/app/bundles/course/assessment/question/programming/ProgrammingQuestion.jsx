@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import Immutable from 'immutable';
 
 import ProgrammingQuestionForm from './components/ProgrammingQuestionForm';
+import * as onlineEditorActionCreators from './actions/onlineEditorActionCreators';
 import * as programmingQuestionActionCreators from './actions/programmingQuestionActionCreators';
 
 
@@ -19,12 +20,14 @@ const propTypes = {
 const ProgrammingQuestion = (props) => {
   const { dispatch, programmingQuestion } = props;
   const actions = bindActionCreators(programmingQuestionActionCreators, dispatch);
+  const onlineEditorActions = bindActionCreators(onlineEditorActionCreators, dispatch);
 
   return (
     <ProgrammingQuestionForm
       {...{
         actions,
         data: programmingQuestion,
+        onlineEditorActions,
       }}
     />
   );

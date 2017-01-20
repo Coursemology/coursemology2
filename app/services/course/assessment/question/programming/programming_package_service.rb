@@ -9,7 +9,6 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
   def initialize(question, params)
     @question = question
     @language = question.language
-    @current_attachment = question.attachment
     @template_files = question.template_files
 
     init_language_package_service(params)
@@ -18,7 +17,7 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
   # Generates a programming package from the parameters which were passed to the controller.
   def generate_package
     if @language_package_service.autograded?
-      new_package = @language_package_service.generate_package(@current_attachment)
+      new_package = @language_package_service.generate_package(@question.attachment)
       @question.file = new_package if new_package.present?
     else
       templates = @language_package_service.submission_templates
@@ -33,7 +32,7 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
   #
   # @return [Hash]
   def extract_meta
-    data = @language_package_service.extract_meta(@current_attachment, @template_files)
+    data = @language_package_service.extract_meta(@question.attachment, @template_files)
     { editor_mode: @editor_mode, data: data } if data.present?
   end
 

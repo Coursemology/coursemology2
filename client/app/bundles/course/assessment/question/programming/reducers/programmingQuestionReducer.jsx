@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 
 import actionTypes from '../constants/programmingQuestionConstants';
+import editorActionTypes from '../constants/onlineEditorConstants';
 
 export const initialState = Immutable.fromJS({
   // this is the default state that would be used if one were not passed into the store
@@ -18,6 +19,8 @@ export const initialState = Immutable.fromJS({
     skills: [],
     memory_limit: null,
     time_limit: null,
+    autograded: false,
+    display_autograded_toggle: false,
     autograded_assessment: false,
     published_assessment: false,
     attempt_limit: null,
@@ -38,7 +41,6 @@ export const initialState = Immutable.fromJS({
   test_ui: {
     mode: null,
     python: {
-      autograded: false,
       prepend: '',
       append: '',
       solution: '',
@@ -48,6 +50,14 @@ export const initialState = Immutable.fromJS({
         private: [],
         public: [],
       },
+      data_files: [],
+    },
+    data_files: {
+      to_delete: Immutable.Set(),
+      new: [
+        { key: 0, filename: null },
+      ],
+      key: 0,
     },
   },
   import_result: {
@@ -63,7 +73,6 @@ export const initialState = Immutable.fromJS({
     method: 'post',
     path: null,
     auth_token: null,
-    async: false,
   },
 });
 
@@ -73,11 +82,91 @@ function questionReducer(state, action) {
   switch (type) {
     case actionTypes.PROGRAMMING_QUESTION_UPDATE: {
       const { field, newValue } = action;
+
+      if (field === 'autograded' && newValue === false) {
+        return state.set(field, newValue).set('edit_online', true);
+      }
+
       return state.set(field, newValue).deleteIn(['error', field]);
     }
     case actionTypes.SKILLS_UPDATE: {
       const { skills } = action;
       return state.set('skill_ids', Immutable.fromJS(skills));
+    }
+    default: {
+      return state;
+    }
+  }
+}
+
+function pythonTestReducer(state, action) {
+  const { type } = action;
+
+  switch (type) {
+    case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE: {
+      const { field, newValue } = action;
+      return state.set(field, newValue);
+    }
+    case editorActionTypes.PYTHON_TEST_CASE_CREATE: {
+      const { testType } = action;
+      const newTest = {
+        expression: '',
+        expected: '',
+        hint: '',
+      };
+      const tests = state.get('test_cases').get(testType).push(Immutable.fromJS(newTest));
+      return state
+        .setIn(['test_cases', testType], tests)
+        .deleteIn(['test_cases', 'error']);
+    }
+    case editorActionTypes.PYTHON_TEST_CASE_UPDATE: {
+      const { testType, index, field, newValue } = action;
+      return state
+        .setIn(['test_cases', testType, index, field], newValue)
+        .deleteIn(['test_cases', testType, index, 'error']);
+    }
+    case editorActionTypes.PYTHON_TEST_CASE_DELETE: {
+      const { testType, index } = action;
+      const tests = state.get('test_cases').get(testType).splice(index, 1);
+      return state.setIn(['test_cases', testType], tests);
+    }
+    default: {
+      return state;
+    }
+  }
+}
+
+function dataFilesReducer(state, action) {
+  const { type } = action;
+
+  switch (type) {
+    case editorActionTypes.PYTHON_NEW_DATA_FILE_UPDATE: {
+      const { index, filename } = action;
+      let newFiles = state.get('new')
+        .update(index, fileData => Immutable.fromJS({ key: fileData.get('key'), filename }));
+
+      // Adds a new entry if there are no more empty non-deleted files.
+      if (newFiles.last().get('filename') !== null) {
+        const newKey = state.get('new') + 1;
+        newFiles = newFiles.push(Immutable.fromJS({ key: newKey, filename: null }));
+        return state.set('key', newKey).set('new', newFiles);
+      }
+
+      return state.set('new', newFiles);
+    }
+    case editorActionTypes.PYTHON_NEW_DATA_FILE_DELETE: {
+      const { index } = action;
+      return state.set('new', state.get('new').delete(index));
+    }
+    case editorActionTypes.PYTHON_EXISTING_DATA_FILE_DELETE: {
+      const { filename, toDelete } = action;
+      const currentFilesToDelete = state.get('to_delete');
+
+      if (toDelete) {
+        return state.set('to_delete', currentFilesToDelete.add(filename));
+      }
+
+      return state.set('to_delete', currentFilesToDelete.delete(filename));
     }
     default: {
       return state;
@@ -91,32 +180,71 @@ function apiReducer(state, action) {
   switch (type) {
     case actionTypes.SUBMIT_FORM_LOADING: {
       const { isLoading } = action;
-      return state.set('is_loading', isLoading);
+      return state.set('is_loading', isLoading).delete('save_errors');
     }
     case actionTypes.SUBMIT_FORM_EVALUATING: {
       const { isEvaluating, data } = action;
 
-      if (data) {
-        const { question, package_ui, test_ui, import_result } = data;
-
+      if (isEvaluating) {
+        // Evaluation started
         return state
+          .set('is_evaluating', isEvaluating)
+          .mergeIn(['import_result'], { alert: null, build_log: null });
+      }
+
+      if (data) {
+        // Evaluation has completed, updated data retrieved from server.
+        const { form_data, question, package_ui, test_ui, import_result } = data;
+        const key = state.getIn(['test_ui', 'data_files', 'key']);
+        const editorMode = test_ui.mode;
+        const autogradedInClient = state.getIn(['question', 'autograded']);
+        const newState = state
           .set('is_evaluating', isEvaluating)
           .mergeDeep({ question })
           .setIn(['question', 'package_filename'], null)
-          .merge({ test_ui, package_ui, import_result });
+          .merge({ form_data, package_ui, import_result })
+          .setIn(['test_ui', 'data_files', 'new'], Immutable.fromJS([{ key, filename: null }]));
+
+        if (import_result.import_errored) {
+          const packagePathInClient = state.getIn(['question', 'package', 'path']);
+          const packagePathFromServer = question.package ? question.package.path : undefined;
+
+          if (packagePathInClient !== packagePathFromServer) {
+            // the old package has been changed, set to what the server returned
+            return newState
+              .setIn(['test_ui', 'mode'], editorMode)
+              .setIn(['test_ui', editorMode], Immutable.fromJS(test_ui[editorMode]))
+              .setIn(['test_ui', 'data_files', 'to_delete'], Immutable.Set());
+          }
+
+          // still the same old package, the client state shall be preserved
+          return newState.setIn(['question', 'autograded'], autogradedInClient);
+        }
+
+        // Evaluation completed successfully
+        return newState
+          .setIn(['test_ui', 'mode'], editorMode)
+          .setIn(['test_ui', editorMode], Immutable.fromJS(test_ui[editorMode]))
+          .setIn(['test_ui', 'data_files', 'to_delete'], Immutable.Set());
       }
 
+      // Evaluation ended without any data retrieved from server
       return state
-        .set('is_evaluating', isEvaluating)
-        .mergeIn(['import_result'], { alert: null, build_log: null });
+        .set('is_evaluating', isEvaluating);
     }
     case actionTypes.SUBMIT_FORM_SUCCESS: {
       const { data } = action;
-      const { question, package_ui, test_ui, import_result } = data;
+      const { form_data, question, test_ui } = data;
+      let newState = state;
+      const editorMode = test_ui.mode;
 
-      return state
+      if (editorMode && test_ui[editorMode] !== undefined) {
+        newState = newState.setIn(['test_ui', editorMode], Immutable.fromJS(test_ui[editorMode]));
+      }
+
+      return newState
         .mergeDeep({ question })
-        .merge({ test_ui, package_ui, import_result });
+        .merge({ form_data });
     }
     case actionTypes.SUBMIT_FORM_FAILURE: {
       return state;
@@ -138,6 +266,19 @@ export default function programmingQuestionReducer(state = initialState, action)
     case actionTypes.EDITOR_MODE_UPDATE: {
       const { mode } = action;
       return state.setIn(['test_ui', 'mode'], mode);
+    }
+    case editorActionTypes.PYTHON_TEST_CASE_CREATE:
+    case editorActionTypes.PYTHON_TEST_CASE_UPDATE:
+    case editorActionTypes.PYTHON_TEST_CASE_DELETE:
+    case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE: {
+      const pythonTest = state.get('test_ui').get('python');
+      return state.setIn(['test_ui', 'python'], pythonTestReducer(pythonTest, action));
+    }
+    case editorActionTypes.PYTHON_NEW_DATA_FILE_UPDATE:
+    case editorActionTypes.PYTHON_NEW_DATA_FILE_DELETE:
+    case editorActionTypes.PYTHON_EXISTING_DATA_FILE_DELETE: {
+      const dataFiles = state.get('test_ui').get('data_files');
+      return state.setIn(['test_ui', 'data_files'], dataFilesReducer(dataFiles, action));
     }
     case actionTypes.SUBMIT_FORM_EVALUATING:
     case actionTypes.SUBMIT_FORM_LOADING:

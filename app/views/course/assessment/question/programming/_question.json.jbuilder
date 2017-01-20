@@ -19,6 +19,8 @@ json.question do
   json.memory_limit @programming_question.memory_limit
   json.time_limit @programming_question.time_limit
 
+  json.autograded @assessment.autograded? || @programming_question.attachment.present?
+  json.display_autograded_toggle display_autograded_toggle?
   json.autograded_assessment @assessment.autograded?
   json.published_assessment @assessment.published?
   json.attempt_limit @programming_question.attempt_limit
@@ -27,6 +29,7 @@ json.question do
     json.package do
       json.name @programming_question.attachment.name
       json.path attachment_reference_path(@programming_question.attachment)
+      json.updater_name @programming_question.attachment.updater.name
     end
   else
     json.package nil

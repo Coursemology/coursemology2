@@ -1,6 +1,14 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
+  autograded: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.autograded',
+    defaultMessage: 'Autograded',
+  },
+  autogradedAssessment: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.autogradedAssessment',
+    defaultMessage: 'Autograded assessment cannot have non-autograded questions',
+  },
   titleFieldLabel: {
     id: 'course.assessment.question.programming.programmingQuestionForm.titleFieldLabel',
     defaultMessage: 'Title',
@@ -61,6 +69,21 @@ export default defineMessages({
     defaultMessage: 'Uploaded package',
     description: 'Label for the existing uploaded zip package.',
   },
+  downloadPackageLabel: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.downloadPackageLabel',
+    defaultMessage: 'Download package',
+    description: 'Label for the downloading generated zip package.',
+  },
+  packageUpdatedBy: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.packageUpdatedBy',
+    defaultMessage: 'Updated by: {name}',
+    description: 'Shows the author who last modified the package through the online editor.',
+  },
+  packageUploadedBy: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.packageUploadedBy',
+    defaultMessage: 'Uploaded by: {name}',
+    description: 'Shows the author who last uploaded the zip package.',
+  },
   newPackageButton: {
     id: 'course.assessment.question.programming.programmingQuestionForm.newPackageButton',
     defaultMessage: 'Choose new package',
@@ -86,12 +109,8 @@ export default defineMessages({
     defaultMessage: 'Submit',
     description: 'Button for submitting the form.',
   },
-  updateSuccessMessage: {
-    id: 'course.assessment.question.programming.programmingQuestionForm.updateSuccessMessage',
-    defaultMessage: 'The question was successfully updated.',
-  },
-  updateFailureMessage: {
-    id: 'course.assessment.question.programming.programmingQuestionForm.updateFailureMessage',
+  submitFailureMessage: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.submitFailureMessage',
     defaultMessage: 'An error occurred, please try again.',
   },
   evaluatingMessage: {

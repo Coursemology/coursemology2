@@ -63,8 +63,16 @@ module Course::Assessment::Question::ProgrammingHelper
     end
   end
 
+  def check_import_job?
+    @programming_question.import_job && @programming_question.import_job.status != 'completed'
+  end
+
+  def display_autograded_toggle?
+    @programming_question.edit_online? || can_switch_package_type?
+  end
+
   def can_switch_package_type?
-    params[:action] == 'new'
+    params[:action] == 'new' || params[:action] == 'create'
   end
 
   def can_edit_online?

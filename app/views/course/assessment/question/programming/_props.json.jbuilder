@@ -3,6 +3,6 @@ json.partial! 'package_ui'
 json.partial! 'test_ui'
 json.partial! 'import_result'
 
-if @redirect_url
-  json.redirect_url @redirect_url
+if @response
+  json.partial! 'response', locals: { response: @response }
 end

@@ -17,7 +17,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     [
       {
         filename: 'template.py',
-        content: @test_params[:submission]
+        content: @test_params[:submission] || ''
       }
     ]
   end
@@ -32,14 +32,14 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
 
     return nil if @meta == @old_meta
 
-    file = generate_zip_file(data_files_to_keep)
+    @attachment = generate_zip_file(data_files_to_keep)
     FileUtils.remove_entry @tmp_dir if @tmp_dir.present?
-    file
+    @attachment
   end
 
   def default_meta
     {
-      submission: '', solution: '', prepend: '', append: '', autograded: false,
+      submission: '', solution: '', prepend: '', append: '',
       data_files: [],
       test_cases: {
         public: [],
@@ -50,6 +50,8 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
   end
 
   def extract_meta(attachment, template_files)
+    return @meta if @meta.present? && attachment == @attachment
+
     # attachment will be nil if the question is not autograded, in that case the meta data will be
     # generated from the template files in the database.
     return generate_non_autograded_meta(template_files) if attachment.nil?
@@ -80,7 +82,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     # For python editor, there is only a single submission template file.
     meta[:submission] = template_files.first.content
 
-    meta
+    meta.as_json
   end
 
   def extract_from_package(package, new_data_filenames, data_files_to_delete)
@@ -133,6 +135,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
       # Create tests directory with prepend, append and autograde files
       zip.put_next_entry 'tests/'
       zip.put_next_entry 'tests/append.py'
+      zip.print "\n"
       zip.print @test_params[:append]
       zip.print "\n"
 
@@ -208,15 +211,13 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
       data_files.append(filename: File.basename(file.path), size: file.size, hash: sha256)
     end
 
-    data_files
+    data_files.sort_by { |file| file[:filename].downcase }
   end
 
   def generate_meta(data_files_to_keep)
     meta = default_meta
 
     [:submission, :solution, :prepend, :append].each { |field| meta[field] = @test_params[field] }
-
-    meta[:autograded] = autograded?
 
     new_data_files = (@test_params[:data_files] || []).reject(&:nil?)
     meta[:data_files] = get_data_files_meta(data_files_to_keep, new_data_files)
@@ -225,7 +226,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
       meta[:test_cases][test_type] = @test_params[:test_cases][test_type] || []
     end
 
-    meta
+    meta.as_json
   end
 
   def test_params(params)

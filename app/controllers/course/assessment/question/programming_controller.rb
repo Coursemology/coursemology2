@@ -11,9 +11,13 @@ class Course::Assessment::Question::ProgrammingController < \
 
   def create
     @template = 'course/assessment/question/programming/new.json.jbuilder'
-    @programming_question.package_type = :zip_upload
+    @programming_question.package_type =
+      programming_question_params.key?(:file) ? :zip_upload : :online_editor
+    process_package
 
-    save_and_redirect('new', t('.success'))
+    respond_to do |format|
+      format.json { save_and_render_json(t('.success'), t('.failure'), true) }
+    end
   end
 
   def edit
@@ -24,10 +28,10 @@ class Course::Assessment::Question::ProgrammingController < \
   def update
     @programming_question.assign_attributes programming_question_params
     @programming_question.skills.clear if programming_question_params[:skill_ids].blank?
+    process_package
 
     respond_to do |format|
-      format.html { save_and_redirect('edit', t('.success')) }
-      format.json { save_and_render_json }
+      format.json { save_and_render_json(t('.success'), t('.failure'), false) }
     end
   end
 
@@ -53,29 +57,30 @@ class Course::Assessment::Question::ProgrammingController < \
     )
   end
 
-  def save_and_redirect(template, message)
+  def save_and_render_json(success_message, failure_message, redirect_to_edit)
     if @programming_question.save
+      @response = { message: success_message, redirect_to_edit: redirect_to_edit }
+
       if @programming_question.import_job
-        redirect_to job_path(@programming_question.import_job)
-      else
-        redirect_to course_assessment_path(current_course, @assessment),
-                    success: message
+        @import_job_url = job_path(@programming_question.import_job)
       end
+
+      render 'edit'
     else
-      render template
+      render json: { message: failure_message, errors: @programming_question.errors.full_messages },
+             status: :bad_request
     end
   end
 
-  def save_and_render_json
-    if @programming_question.save! && @programming_question.import_job
-      @redirect_url = job_path(@programming_question.import_job)
+  def process_package
+    if @programming_question.edit_online?
+      programming_package_service(params).generate_package
+      @meta = programming_package_service(params).extract_meta
     end
-
-    render '_props'
   end
 
   def programming_package_service(params = nil)
-    Course::Assessment::Question::Programming::ProgrammingPackageService.new(
+    @service ||= Course::Assessment::Question::Programming::ProgrammingPackageService.new(
       @programming_question, params
     )
   end
