@@ -15,7 +15,7 @@ class Course::UserInvitation < ActiveRecord::Base
   #
   # @param [User] user
   def self.for_user(user)
-    find_by(email: user.emails.select(:email))
+    find_by(email: user.emails.confirmed.select(:email))
   end
 
   def confirm!

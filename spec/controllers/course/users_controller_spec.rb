@@ -5,7 +5,7 @@ RSpec.describe Course::UsersController, type: :controller do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:user) { create(:user) }
-    let(:course) { create(:course, :opened) }
+    let(:course) { create(:course, :enrollable) }
     let(:course_user_immutable_stub) do
       stub = CourseUser.new(course: course)
       allow(stub).to receive(:save).and_return(false)

@@ -9,17 +9,15 @@ FactoryGirl.define do
     start_at Time.zone.now
     end_at 7.days.from_now
     gamified true
-
-    trait :closed do
-      status :closed
-    end
+    published false
+    enrollable false
 
     trait :published do
-      status :published
+      published true
     end
 
-    trait :opened do
-      status :opened
+    trait :enrollable do
+      enrollable true
     end
 
     trait :with_video_component_enabled do

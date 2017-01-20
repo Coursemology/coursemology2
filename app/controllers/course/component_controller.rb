@@ -5,16 +5,8 @@ class Course::ComponentController < Course::Controller
   before_action :load_current_component_host
   before_action :check_component, if: :component_defined?
   before_action :load_settings, if: :component_defined?
-  before_action :check_user_participation, unless: :skip_participation_check?
 
   protected
-
-  # Check if the user can participate in the current course
-  #
-  # @raise [CanCan::AccessDenied] When the user cannot participate in the course.
-  def check_user_participation
-    authorize! :participate, current_course
-  end
 
   # Check if the component is enabled. We don't want to let user access the page through url if the
   # component is disabled.
@@ -43,13 +35,5 @@ class Course::ComponentController < Course::Controller
   # @return [Boolean]
   def component_defined?
     defined?(component)
-  end
-
-  # If child controller requires non course users to interact with it, it should override this
-  # and return true.
-  #
-  # @return [Boolean]
-  def skip_participation_check?
-    false
   end
 end

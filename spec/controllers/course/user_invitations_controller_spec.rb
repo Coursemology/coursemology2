@@ -5,9 +5,9 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:user) { create(:user) }
-    let(:course) { create(:course, :opened) }
+    let(:course) { create(:course, :enrollable) }
     let(:erroneous_course) do
-      create(:course, :opened).tap do |course|
+      create(:course, :enrollable).tap do |course|
         user = create(:user)
         course.course_users.build(user: user).save
         course.course_users.build(user: user)

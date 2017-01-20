@@ -5,7 +5,7 @@ RSpec.feature 'Course: Homepage' do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
-    let(:course) { create(:course, :opened) }
+    let(:course) { create(:course, :enrollable) }
     let(:feed_notifications) do
       notifications = []
       # Achievement gained notification

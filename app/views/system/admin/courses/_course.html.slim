@@ -3,7 +3,6 @@
   th
     = link_to format_inline_text(course.title),
               course_url(course, host: course.instance.host, port: nil)
-  td = course.status
   td = format_datetime(course.created_at)
   td
     = link_to format_inline_text(course.instance.name),

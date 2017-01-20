@@ -34,24 +34,16 @@ class Course::UserRegistrationService
   # trigger acceptance of the invitation. Otherwise, proceed to do new course user registration.
   #
   # @param [Course::Registration] registration The registration object to be processed.
-  # @return [CourseUser] The Course User which was created or updated from the registration.
+  # @return [CourseUser|nil] The Course User which was created or updated from the registration,
+  #   nil will be returned if there's no existing invitation to the user.
   def register_without_registration_code(registration)
     invitation = registration.course.invitations.unconfirmed.for_user(registration.user)
     if invitation.nil?
-      find_or_create_enrol_request!(registration)
+      registration.errors.add(:code, :blank)
+      nil
     else
       accept_invitation(registration, invitation)
     end
-  end
-
-  # Find or create a enrol_request.
-  #
-  # @param [Course::Registration] registration The registration model containing the course and user
-  #   parameters.
-  # @return [CourseUser] The Course User object which was found or created.
-  def find_or_create_enrol_request!(registration)
-    registration.enrol_request =
-      Course::EnrolRequest.find_or_create_by!(course: registration.course, user: registration.user)
   end
 
   # Find or create a course_user.
@@ -84,6 +76,8 @@ class Course::UserRegistrationService
       claim_course_registration_code(registration)
     elsif code[0] == 'I'
       claim_course_invitation_code(registration)
+    else
+      invalid_code(registration)
     end
   end
 

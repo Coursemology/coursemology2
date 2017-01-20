@@ -1,9 +1,20 @@
 # frozen_string_literal: true
 class Course::EnrolRequestsController < Course::ComponentController
+  skip_authorize_resource :course, only: [:create, :destroy]
   load_and_authorize_resource :enrol_request, through: :course, class: Course::EnrolRequest.name
 
   def index
     @enrol_requests = @enrol_requests.includes(:user)
+  end
+
+  def create
+    @enrol_request.user = current_user
+    if @enrol_request.save
+      redirect_to course_path(current_course), success: t('.success')
+    else
+      redirect_to course_path(current_course),
+                  danger: @enrol_request.errors.full_messages.to_sentence
+    end
   end
 
   # Allow users to withdraw their requests to register for a course that are pending
@@ -29,10 +40,6 @@ class Course::EnrolRequestsController < Course::ComponentController
   end
 
   private
-
-  def skip_participation_check?
-    return true if ['destroy'].include? action_name
-  end
 
   def create_course_user
     course_user = CourseUser.new(course_user_params.

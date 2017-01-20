@@ -2,11 +2,14 @@ en:
   course:
     user_registrations:
       registration:
-        registration_code: 'Registration code'
+        registration_code: 'Invitation code'
         register: 'Register'
-        deregister: 'Cancel Registration Request'
-        enter_course: 'Enter Course'
+        deregister: 'Cancel Enrolment Request'
+        enter_course: 'Accept Invitation'
+        new_enrol_request_text_html: >
+          If you don't have an invitation code, %{click_here} to request to enrol in this course
+        new_enrol_request_button: 'Request to enrol'
       create:
-        invalid_code: 'You have entered an invalid registration code.'
+        invalid_code: 'You have entered an invalid invitation code.'
         requested: 'You have submitted registration request to the course.'
         registered: 'You have been registered as a %{role}.'

@@ -33,7 +33,7 @@ RSpec.describe Course, type: :model do
       subject { Course.new(creator: owner, updater: owner) }
 
       it { is_expected.not_to be_published }
-      it { is_expected.not_to be_opened }
+      it { is_expected.not_to be_enrollable }
 
       it 'contains the provided user as the owner' do
         expect(subject.course_users.map(&:user)).to include(owner)

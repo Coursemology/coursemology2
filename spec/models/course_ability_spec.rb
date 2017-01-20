@@ -7,34 +7,22 @@ RSpec.describe Course, type: :model do
   with_tenant(:instance) do
     subject { Ability.new(user) }
     let(:course) { create(:course) }
-    let!(:closed_course) { create(:course, :closed) }
+    let!(:closed_course) { create(:course, published: false, enrollable: false) }
     let!(:published_course) { create(:course, :published) }
-    let!(:opened_course) { create(:course, :opened) }
+    let!(:enrollable_course) { create(:course, :enrollable) }
 
     context 'when the user is a Normal User' do
       let(:user) { create(:user) }
 
-      it { is_expected.to be_able_to(:show, published_course) }
-      it { is_expected.not_to be_able_to(:register, published_course) }
-
-      it { is_expected.to be_able_to(:show, opened_course) }
-      it { is_expected.to be_able_to(:register, opened_course) }
-
+      it { is_expected.not_to be_able_to(:show, published_course) }
+      it { is_expected.not_to be_able_to(:show, enrollable_course) }
       it { is_expected.not_to be_able_to(:show, closed_course) }
-      it { is_expected.not_to be_able_to(:register, closed_course) }
-      it { is_expected.not_to be_able_to(:participate, closed_course) }
-
-      it 'sees the opened courses' do
-        expect(Course.accessible_by(subject)).
-          to contain_exactly(published_course, opened_course)
-      end
     end
 
     context 'when the user is a Course Student' do
       let(:user) { create(:course_student, course: course).user }
 
       it { is_expected.to be_able_to(:show, course) }
-      it { is_expected.to be_able_to(:participate, course) }
       it { is_expected.not_to be_able_to(:manage, course) }
     end
 

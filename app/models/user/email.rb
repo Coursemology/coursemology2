@@ -9,6 +9,8 @@ class User::Email < ActiveRecord::Base
 
   belongs_to :user, inverse_of: :emails
 
+  scope :confirmed, -> { where.not(confirmed_at: nil) }
+
   # Set the email as primary. This method would cause the email record to be directly updated.
   #
   # @return [Boolean] True if transaction was done successfully, otherwise nil.

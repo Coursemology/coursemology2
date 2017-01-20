@@ -11,7 +11,7 @@ RSpec.feature 'Courses' do
 
     scenario 'Users can see a list of published courses' do
       create(:course)
-      create(:course, [:published, :opened].sample)
+      create(:course, :published)
 
       visit courses_path
       expect(all('.course').count).to eq(1)

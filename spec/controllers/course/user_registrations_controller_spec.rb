@@ -5,33 +5,13 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:user) { create(:user) }
-    let(:course) { create(:course, :opened) }
+    let(:course) { create(:course, :enrollable) }
     describe '#create' do
       before { sign_in(user) }
       subject { post :create, course_id: course, registration: registration_params }
 
       context 'when no registration code is specified' do
         let(:registration_params) { { code: '' } }
-        context 'when the user is not in the course' do
-          context 'when the course is open' do
-            it 'creates a new request' do
-              expect { subject }.
-                to change { course.enrol_requests.count }.by(1)
-            end
-            it { is_expected.to redirect_to(course_path(course)) }
-            it 'sets the proper flash message' do
-              subject
-              expect(flash[:success]).to eq(I18n.t('course.user_registrations.create.requested'))
-            end
-          end
-
-          context 'when the course is closed' do
-            before { course.update_attributes!(status: :closed) }
-            it 'rejects the request' do
-              expect { subject }.to raise_exception(CanCan::AccessDenied)
-            end
-          end
-        end
 
         context 'when the user is already registered' do
           context 'when the user is a student of the course' do
@@ -67,8 +47,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
           context 'when the user is not in the course' do
             context 'when the course is open' do
               it 'registers the user' do
-                expect { subject }.
-                  to change { course.course_users.count }.by(1)
+                expect { subject }.to change { course.course_users.count }.by(1)
               end
               it { is_expected.to redirect_to(course_path(course)) }
               it 'sets the proper flash message' do
@@ -77,10 +56,10 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
               end
             end
 
-            context 'when the course is closed' do
-              before { course.update_attributes!(status: :closed) }
+            context 'when the course does not allow enrolment requests' do
+              before { course.update_attributes!(enrollable: false) }
               it 'rejects the request' do
-                expect { subject }.to raise_exception(CanCan::AccessDenied)
+                expect { subject }.to change { course.course_users.count }.by(1)
               end
             end
           end
@@ -110,8 +89,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
           context 'when the user is not in the course' do
             context 'when the course is open' do
               it 'registers the user' do
-                expect { subject }.
-                  to change { course.course_users.count }.by(1)
+                expect { subject }.to change { course.course_users.count }.by(1)
               end
               it { is_expected.to redirect_to(course_path(course)) }
               it 'sets the proper flash message' do
@@ -120,10 +98,10 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
               end
             end
 
-            context 'when the course is closed' do
-              before { course.update_attributes!(status: :closed) }
+            context 'when the course does not allow enrolment requests' do
+              before { course.update_attributes!(enrollable: false) }
               it 'rejects the request' do
-                expect { subject }.to raise_exception(CanCan::AccessDenied)
+                expect { subject }.to change { course.course_users.count }.by(1)
               end
             end
           end
