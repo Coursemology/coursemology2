@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 
 import React, { PropTypes } from 'react';
 import AceEditor from 'react-ace';
-import { injectIntl } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -370,12 +370,13 @@ class OnlineEditorPythonView extends React.Component {
     );
   }
 
-  renderEditorCard(header, field) {
+  renderEditorCard(header, subtitle, field) {
     return (
       <Card containerStyle={{ paddingBottom: 0 }} initiallyExpanded>
         <CardHeader
           title={header}
           textStyle={{ fontWeight: 'bold' }}
+          subtitle={subtitle}
           actAsExpander
           showExpandableButton
         />
@@ -424,14 +425,50 @@ class OnlineEditorPythonView extends React.Component {
     return (
       <div>
         <div style={{ marginBottom: '1em' }}>
-          { this.renderEditorCard(intl.formatMessage(translations.solutionTitle), 'solution') }
-          { this.renderEditorCard(intl.formatMessage(translations.prependTitle), 'prepend') }
-          { this.renderEditorCard(intl.formatMessage(translations.appendTitle), 'append') }
+          {
+            this.renderEditorCard(
+              intl.formatMessage(translations.solutionTitle),
+              intl.formatMessage(translations.solutionSubtitle),
+              'solution'
+            )
+          }
+          {
+            this.renderEditorCard(
+              intl.formatMessage(translations.prependTitle),
+              intl.formatMessage(translations.prependSubtitle),
+              'prepend'
+            )
+          }
+          {
+            this.renderEditorCard(
+              intl.formatMessage(translations.appendTitle),
+              intl.formatMessage(translations.appendSubtitle),
+              'append'
+            )
+          }
         </div>
         <h3>{ intl.formatMessage(translations.dataFilesHeader) }</h3>
         { this.renderExistingDataFiles() }
         { this.renderNewDataFiles() }
         <h3>{ intl.formatMessage(translations.testCasesHeader) }</h3>
+        <div style={{ marginBottom: '0.5em' }}>
+          <FormattedMessage
+            id="course.assessment.question.programming.onlineEditorPythonView.testCasesDescription"
+            defaultMessage={
+              '{note}: The expression in the {expression} column will be compared with the ' +
+              'expression in the {expected} column using the equality operator. The return value ' +
+              'of {print} is {none} and the printed output should not be confused with the ' +
+              'return value.'
+            }
+            values={{
+              note: <b>{intl.formatMessage(translations.testCaseDescriptionNote)}</b>,
+              expression: <b>{intl.formatMessage(translations.expressionHeader)}</b>,
+              expected: <b>{intl.formatMessage(translations.expectedHeader)}</b>,
+              print: <code>{intl.formatMessage(translations.testCaseDescriptionPrint)}</code>,
+              none: <code>{intl.formatMessage(translations.testCaseDescriptionNone)}</code>,
+            }}
+          />
+        </div>
         { errorTextElement }
         {
           this.renderTestCases(intl.formatMessage(translations.publicTestCases),
@@ -455,7 +492,13 @@ class OnlineEditorPythonView extends React.Component {
 
     return (
       <div id="python-online-editor">
-        { this.renderEditorCard(intl.formatMessage(translations.submissionTitle), 'submission') }
+        {
+          this.renderEditorCard(
+            intl.formatMessage(translations.submissionTitle),
+            null,
+            'submission'
+          )
+        }
         { autograded ? this.renderAutogradedFields() : null }
       </div>
     );
