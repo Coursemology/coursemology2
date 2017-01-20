@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170117164747) do
+ActiveRecord::Schema.define(version: 20170120063357) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -156,7 +156,7 @@ ActiveRecord::Schema.define(version: 20170117164747) do
     t.text     "description"
     t.text     "staff_only_comments"
     t.decimal  "maximum_grade",       :precision=>4, :scale=>1, :null=>false
-    t.integer  "weight",              :default=>0, :null=>false
+    t.integer  "weight",              :null=>false
     t.integer  "creator_id",          :null=>false, :index=>{:name=>"fk__course_assessment_questions_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessment_questions_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "updater_id",          :null=>false, :index=>{:name=>"fk__course_assessment_questions_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessment_questions_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at",          :null=>false

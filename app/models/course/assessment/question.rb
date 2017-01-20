@@ -3,6 +3,8 @@ class Course::Assessment::Question < ActiveRecord::Base
   actable
   has_many_attachments
 
+  before_validation :set_defaults, if: :new_record?
+
   validate :validate_assessment_is_not_autograded, unless: :auto_gradable?
 
   belongs_to :assessment, inverse_of: :questions
@@ -87,5 +89,13 @@ class Course::Assessment::Question < ActiveRecord::Base
   def validate_assessment_is_not_autograded
     return unless assessment.autograded? && assessment.published?
     errors.add(:base, :autograded_assessment)
+  end
+
+  def set_defaults
+    return if weight.present? || !assessment || assessment.new_record?
+
+    # Make sure new questions appear at the end of the list.
+    max_weight = assessment.questions.pluck(:weight).max
+    self.weight ||= max_weight ? max_weight + 1 : 0
   end
 end
