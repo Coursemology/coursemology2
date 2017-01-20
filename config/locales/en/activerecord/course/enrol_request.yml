@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/enrol_request:
+          user_in_course: >
+            It seems like you are already enrolled in the course.
+            Please try refreshing the page?
