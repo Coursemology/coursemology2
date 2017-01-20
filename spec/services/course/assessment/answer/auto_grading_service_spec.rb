@@ -8,9 +8,10 @@ RSpec.describe Course::Assessment::Answer::AutoGradingService do
     let(:student_user) { create(:course_student, course: course).user }
     let(:assessment) { create(:assessment, :published_with_mrq_question, course: course) }
     let(:question) { assessment.questions.first }
+    let(:answer_traits) { :submitted }
     let(:answer) do
       submission = create(:submission, assessment: assessment, creator: student_user)
-      create(:course_assessment_answer_multiple_response, :submitted,
+      create(:course_assessment_answer_multiple_response, *answer_traits,
              question: question, submission: submission).answer
     end
     let!(:auto_grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
@@ -37,6 +38,27 @@ RSpec.describe Course::Assessment::Answer::AutoGradingService do
           expect(answer).to be_graded
           expect(answer.grade).to be_present
           expect(answer.grader).to be_present
+        end
+      end
+
+      # Check that evaluated answers can be evaluated again. Allows instructors to run
+      # test cases again when the "Evaluate Answers" button is clicked.
+      # Also allows auto grading to be run again if the question is updated after evaluation.
+      context 'when the answer is evaluated' do
+        let(:answer_traits) { :evaluated }
+        it 'allows re-evaluation and stays evaluated' do
+          expect { subject }.to_not raise_error
+          expect(answer).to be_evaluated
+        end
+      end
+
+      # Check that graded answers can be evaluated again. Allows auto grading to be run again
+      # if the question is updated after grading.
+      context 'when the answer is graded' do
+        let(:answer_traits) { :graded }
+        it 'allows re-evaluation and stays graded' do
+          expect { subject }.to_not raise_error
+          expect(answer).to be_graded
         end
       end
     end

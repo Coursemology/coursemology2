@@ -24,20 +24,15 @@ class Course::Assessment::Submission::AutoGradingService
 
   private
 
-  # Grades the answers in the provided submission which has not yet been graded and auto gradable.
+  # Grades the answers in the provided submission which are auto gradable.
   def grade_answers(submission)
-    auto_gradable_answers = ungraded_answers(submission).select do |answer|
+    auto_gradable_answers = submission.latest_answers.select do |answer|
       answer.question.auto_gradable?
     end
     jobs = auto_gradable_answers.map { |answer| grade_answer(answer) }
 
     wait_for_jobs(jobs)
     aggregate_failures(jobs.map { |job| job.job.reload })
-  end
-
-  # Gets the ungraded answers for the given submission
-  def ungraded_answers(submission)
-    submission.answers.select(&:submitted?)
   end
 
   # Grades the provided answer
