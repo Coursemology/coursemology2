@@ -6,5 +6,9 @@
       = Course::Assessment::Submission.human_attribute_name(submission.workflow_state)
   td = submission.grade.to_s + ' / ' + submission.assessment.maximum_grade.to_s
   - if current_course.gamified?
-    td = submission.points_awarded.to_i.to_s
+    td
+      = submission.current_points_awarded.to_i.to_s
+      - if submission.graded?
+        span.text-danger title=t('.graded_not_published_warning')
+          =< fa_icon 'exclamation-circle'.freeze
   td

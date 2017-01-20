@@ -13,6 +13,9 @@ FactoryGirl.define do
         create(:course_user, course: course, user: creator)
     end
     points_awarded { rand(1..20) * 100 }
+    draft_points_awarded nil
+    awarded_at nil
+    awarder nil
     reason { 'Reason for manually-awarded experience points' if manually_awarded? }
 
     trait :inactive do

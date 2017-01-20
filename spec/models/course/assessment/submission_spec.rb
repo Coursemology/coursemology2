@@ -70,6 +70,34 @@ RSpec.describe Course::Assessment::Submission do
                 'submission_already_exists'))
         end
       end
+
+      context 'when submission is published' do
+        let(:submission1_traits) { :published }
+        subject { submission1 }
+        before { subject }
+
+        context 'when awarded_at is nil' do
+          it 'is not valid' do
+            subject.awarded_at = nil
+            expect(subject).not_to be_valid
+            expect(subject.errors.messages[:experience_points_record]).
+              to include(I18n.
+                t('activerecord.errors.models.course/assessment/submission.'\
+                'attributes.experience_points_record.absent_award_attributes'))
+          end
+        end
+
+        context 'when awarder is nil' do
+          it 'is not valid' do
+            subject.awarder = nil
+            expect(subject).not_to be_valid
+            expect(subject.errors.messages[:experience_points_record]).
+              to include(I18n.
+                t('activerecord.errors.models.course/assessment/submission.'\
+                'attributes.experience_points_record.absent_award_attributes'))
+          end
+        end
+      end
     end
 
     describe '.answers' do
@@ -317,6 +345,34 @@ RSpec.describe Course::Assessment::Submission do
       end
     end
 
+    describe '#mark!' do
+      let(:assessment_traits) { [:with_all_question_types] }
+      let(:submission) { submission1 }
+      let(:submission1_traits) { :submitted }
+
+      it 'propagates the graded state to its answers' do
+        expect(submission.answers.all?(&:submitted?)).to be(true)
+        submission.mark!
+        expect(submission.answers.all?(&:graded?)).to be(true)
+      end
+
+      context 'when assessment enables delayed_grade_publication' do
+        let(:assessment_traits) { [:with_all_question_types, :delay_grade_publication] }
+        let(:points_awarded) { 50 }
+        before do
+          submission1.points_awarded = points_awarded
+          submission1.mark!
+          submission1.save!
+        end
+        subject { submission1 }
+
+        it 'sets the draft_points_awarded to points_awarded, and points_awarded to nil' do
+          expect(subject.points_awarded).to be_nil
+          expect(subject.draft_points_awarded).to eq(points_awarded)
+        end
+      end
+    end
+
     describe '#publish!' do
       let(:assessment_traits) { [:with_all_question_types] }
       let(:submission) { submission1 }
@@ -328,12 +384,16 @@ RSpec.describe Course::Assessment::Submission do
         expect(submission.answers.all?(&:graded?)).to be(true)
       end
 
-      it 'sets the publisher and published_at time' do
+      it 'sets the publisher, awarder, awarded_at and published_at time' do
         expect(submission.publisher).to be_nil
         expect(submission.published_at).to be_nil
+        expect(submission.awarder).to be_nil
+        expect(submission.awarded_at).to be_nil
         submission.publish!
         expect(submission.publisher).not_to be_nil
         expect(submission.published_at).not_to be_nil
+        expect(submission.awarder).not_to be_nil
+        expect(submission.awarded_at).not_to be_nil
       end
 
       context 'when some of the answers are already graded' do
@@ -349,6 +409,38 @@ RSpec.describe Course::Assessment::Submission do
         it 'propagates the graded state to its answers' do
           submission.publish!
           expect(submission.answers.all?(&:graded?)).to be(true)
+        end
+      end
+
+      context 'when assessment enables delayed_grade_publication and when submission is graded' do
+        let(:assessment_traits) { [:with_all_question_types, :delay_grade_publication] }
+        let(:submission1_traits) { :graded }
+
+        context 'when draft_points are set' do
+          let(:draft_points) { 50 }
+          let(:points_awarded) { nil }
+          before do
+            submission1.draft_points_awarded = draft_points
+            submission1.save!
+            submission1.points_awarded = points_awarded
+            submission1.publish!
+            submission1.save!
+          end
+
+          subject { submission1 }
+
+          it 'sets draft_points_awarded to nil and points_awarded to draft_points_awarded' do
+            expect(subject.draft_points_awarded).to be_nil
+            expect(subject.points_awarded).to eq(draft_points)
+          end
+
+          context 'when points_awarded is provided' do
+            let(:points_awarded) { 100 }
+
+            it 'updates submission with the given points_awarded' do
+              expect(subject.points_awarded).to eq(points_awarded)
+            end
+          end
         end
       end
     end
@@ -416,6 +508,32 @@ RSpec.describe Course::Assessment::Submission do
         it 'sets all latest answers in the submission to attempting' do
           expect(subject.latest_answers.all?(&:attempting?)).to be(true)
           expect(earlier_answer.reload).to be_graded
+        end
+      end
+    end
+
+    describe '#current_points_awarded' do
+      let(:assessment_traits) { [:published_with_mcq_question] }
+      let(:submission1_traits) { [:submitted] }
+      let(:points_awarded) { 100 }
+      let(:draft_points_awarded) { 50 }
+      subject { submission1.current_points_awarded }
+      before do
+        submission1.points_awarded = points_awarded
+        submission1.draft_points_awarded = draft_points_awarded
+      end
+
+      context 'when submission is published' do
+        it 'returns the correct value' do
+          submission1.publish!
+          expect(subject).to eq(points_awarded)
+        end
+      end
+
+      context 'when submission is graded' do
+        it 'returns the correct value' do
+          submission1.mark!
+          expect(subject).to eq(draft_points_awarded)
         end
       end
     end

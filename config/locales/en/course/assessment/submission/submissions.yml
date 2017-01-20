@@ -70,6 +70,11 @@ en:
             status: 'Submission Status'
             grade: 'Grade'
             experience_points: 'Experience Points'
+          submission:
+            graded_not_published_warning: >
+              The grading and experience points are in a draft state, and is currently not viewable
+              by the student. You can publish all draft grades by clicking the 'Publish Grades'
+              button at the top of this page.
           no_submission:
             not_started: 'Not Started'
           manually_graded_answers_tabbed:

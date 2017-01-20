@@ -16,6 +16,11 @@ FactoryGirl.define do
     autograded false
     published false
     tabbed_view false
+    delayed_grade_publication false
+
+    trait :delay_grade_publication do
+      delayed_grade_publication true
+    end
 
     trait :not_started do
       start_at { 1.day.from_now }

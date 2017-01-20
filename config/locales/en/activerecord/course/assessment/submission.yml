@@ -16,6 +16,9 @@ en:
         course/assessment/submission:
           experience_points_record:
             inconsistent_user: 'the creator of the submission must be the same as the course user'
+            absent_award_attributes: >
+              there is no award attributes for your submission, please try again
+              or contact the Coursemology team
           submission_already_exists: "Looks like you have already created a submission. Try again?"
         course/assessment/category:
           deletion: 'the last category cannot be deleted'

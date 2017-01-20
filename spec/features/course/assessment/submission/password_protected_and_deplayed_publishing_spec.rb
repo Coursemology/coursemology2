@@ -7,8 +7,8 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) do
-      create(:assessment, :published_with_mrq_question,
-             course: course, password: 'super_secret', delayed_grade_publication: true)
+      create(:assessment, :published_with_mrq_question, :delay_grade_publication,
+             course: course, password: 'super_secret')
     end
     let(:mrq_questions) { assessment.reload.questions.map(&:specific) }
     let(:student) { create(:course_student, course: course).user }
@@ -88,12 +88,16 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
         expect(page).to have_button(I18n.t('course.assessment.submission.submissions.buttons.mark'))
 
         fill_in find('input.form-control.grade')[:name], with: 0
+        fill_in 'submission[points_awarded]', with: 50
 
         click_button I18n.t('course.assessment.submission.submissions.buttons.mark')
         expect(page).to have_button(I18n.t('course.assessment.submission.submissions.buttons.save'))
+
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.graded?).to be_truthy
+        expect(submission.points_awarded).to be_nil
+        expect(submission.draft_points_awarded).to eq(50)
       end
     end
   end

@@ -30,6 +30,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   schema_validations except: [:creator_id, :assessment_id]
   validate :validate_consistent_user, :validate_unique_submission, on: :create
+  validate :validate_awarded_attributes, if: :published?
 
   belongs_to :assessment, inverse_of: :submissions
 
@@ -169,6 +170,12 @@ class Course::Assessment::Submission < ActiveRecord::Base
     answers.select { |a| a.question_id == question.id &&  a.graded? }
   end
 
+  # Return the points awarded for the submission.
+  # If submission is 'graded', return the draft value, otherwise, the return the points awarded.
+  def current_points_awarded
+    graded? ? draft_points_awarded : points_awarded
+  end
+
   private
 
   # Queues the submission for auto grading, after the submission has changed to the submitted state.
@@ -197,6 +204,12 @@ class Course::Assessment::Submission < ActiveRecord::Base
                             'submission.submission_already_exists')
   end
 
+  # Validate that the awarder and awarded_at is present for published submissions
+  def validate_awarded_attributes
+    return if awarded_at && awarder
+    errors.add(:experience_points_record, :absent_award_attributes)
+  end
+
   def send_attempt_notification
     return unless course_user.real_student?
 
@@ -208,11 +221,5 @@ class Course::Assessment::Submission < ActiveRecord::Base
     return if assessment.autograded?
 
     Course::AssessmentNotifier.assessment_submitted(creator, course_user, self)
-  end
-
-  def unsubmit_latest_answers
-    latest_answers.each do |answer|
-      answer.unsubmit! unless answer.attempting?
-    end
   end
 end

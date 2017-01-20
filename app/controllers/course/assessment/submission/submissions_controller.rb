@@ -62,10 +62,10 @@ class Course::Assessment::Submission::SubmissionsController < \
   def publish_all
     graded_submissions = @assessment.submissions.with_graded_state
     if !graded_submissions.empty?
-      graded_submissions.update_all(
-        workflow_state: 'published', publisher_id: current_user.id, published_at: Time.zone.now,
-        updated_at: Time.zone.now, updater_id: current_user.id
-      )
+      graded_submissions.each do |submission|
+        submission.publish!
+        submission.save!
+      end
       redirect_to course_assessment_submissions_path(current_course, @assessment),
                   success: t('.success')
     else

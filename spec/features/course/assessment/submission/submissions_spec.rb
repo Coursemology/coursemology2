@@ -66,8 +66,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
 
     context 'As a Course Manager' do
       let(:assessment) do
-        create(:assessment, :with_all_question_types,
-               course: course, delayed_grade_publication: true)
+        create(:assessment, :with_all_question_types, :delay_grade_publication, course: course)
       end
       let(:user) { create(:course_manager, course: course).user }
 
@@ -78,6 +77,10 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(graded_submission.reload).to be_published
         expect(graded_submission.publisher).to eq(user)
         expect(graded_submission.published_at).to be_present
+        expect(graded_submission.awarder).to be_present
+        expect(graded_submission.awarded_at).to be_present
+        expect(graded_submission.draft_points_awarded).to be_nil
+        expect(graded_submission.points_awarded).not_to be_nil
 
         message = I18n.t('course.assessment.submission.submissions.publish_all.success')
         expect(page).to have_selector('div', text: message)

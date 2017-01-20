@@ -34,6 +34,8 @@ FactoryGirl.define do
 
         # Revert publisher and published at if given.
         submission.mark!
+        submission.draft_points_awarded = submission.points_awarded
+        submission.points_awarded = nil
       end
     end
 
