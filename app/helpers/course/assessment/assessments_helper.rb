@@ -19,21 +19,18 @@ module Course::Assessment::AssessmentsHelper
       !assessment.conditions_satisfied_by?(current_course_user)
   end
 
-  def show_bonus_end_at?
+  def show_bonus_attributes?
     @show_bonus_end_at ||= begin
-      @assessments.any? { |assessment| assessment.bonus_end_at.present? }
+      return false unless current_course.gamified?
+      @assessments.any? do |assessment|
+        assessment.bonus_end_at.present? && assessment.time_bonus_exp > 0
+      end
     end
   end
 
   def show_end_at?
     @show_end_at ||= begin
       @assessments.any? { |assessment| assessment.end_at.present? }
-    end
-  end
-
-  def show_time_bonus_exp?
-    @show_time_bonus_exp ||= begin
-      @assessments.any? { |assessment| assessment.time_bonus_exp > 0 }
     end
   end
 end

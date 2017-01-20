@@ -24,12 +24,12 @@ table.table.assessments-list.table-hover
       th
       - if current_course.gamified?
         th.table-base-exp = Course::LessonPlan::Item.human_attribute_name(:base_exp)
-        - if show_time_bonus_exp?
-          th.table-time-bonus-exp = Course::LessonPlan::Item.human_attribute_name(:time_bonus_exp)
+      - if show_bonus_attributes?
+        th.table-time-bonus-exp = Course::LessonPlan::Item.human_attribute_name(:time_bonus_exp)
       - unless current_component_host[:course_achievements_component].nil?
         th.table-requirement-for = t('.requirement_for')
       th.table-start-at = t('.start_at')
-      - if current_course.gamified? && show_bonus_end_at?
+      - if show_bonus_attributes?
         th.table-bonus-cut-off = t('.bonus_cut_off')
       - if show_end_at?
         th.table-end-at = t('.end_at')
