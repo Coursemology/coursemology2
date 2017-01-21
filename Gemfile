@@ -175,7 +175,7 @@ gem 'themes_on_rails', '>= 0.3.1', github: 'lowjoel/themes_on_rails',
 
 # Forms made easy for Rails
 gem 'simple_form', '~> 3.2.1'
-gem 'simple_form-bootstrap'
+gem 'simple_form-bootstrap', github: 'allenwq/simple_form-bootstrap' 
 # Dynamic nested forms
 gem 'cocoon'
 gem 'momentjs-rails', '>= 2.8.1'
