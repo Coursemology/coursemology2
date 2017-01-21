@@ -38,8 +38,10 @@ module Course::ReminderConcern
     self.opening_reminder_token = Time.zone.now.to_f.round(5)
 
     execute_after_commit do
-      opening_reminder_job_class.set(wait_until: start_at).
-        perform_later(updater, self, opening_reminder_token)
+      if start_at
+        opening_reminder_job_class.set(wait_until: start_at).
+          perform_later(updater, self, opening_reminder_token)
+      end
     end
   end
 
@@ -49,7 +51,7 @@ module Course::ReminderConcern
 
     execute_after_commit do
       # Send notification one day before the closing date
-      if end_at > Time.zone.now
+      if end_at && end_at > Time.zone.now
         closing_reminder_job_class.set(wait_until: end_at - 1.day).
           perform_later(self, closing_reminder_token)
       end
