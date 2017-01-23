@@ -79,6 +79,11 @@ RSpec.feature 'Course: Homepage' do
       todos
     end
 
+    let(:video_todo) do
+      video = create(:video, :published, course: course)
+      Course::LessonPlan::Todo.find_by(user: user, item: video.lesson_plan_item)
+    end
+
     before do
       login_as(user, scope: :user)
     end
@@ -113,6 +118,7 @@ RSpec.feature 'Course: Homepage' do
 
       scenario 'I can view and ignore the relevant assessment todos in my homepage', js: true do
         assessment_todos
+        video_todo
         visit course_path(course)
 
         [:completed, :unpublished].each do |status|
@@ -134,6 +140,10 @@ RSpec.feature 'Course: Homepage' do
           find('input.btn.btn-primary').trigger('click')
           wait_for_ajax
           expect(assessment_todos[:in_progress].reload.ignore?).to be_truthy
+        end
+
+        within find(content_tag_selector(video_todo)) do
+          expect(page).to have_text(I18n.t('course.video.videos.video_attempt_button.watch'))
         end
       end
     end
