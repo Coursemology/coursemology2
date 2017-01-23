@@ -75,7 +75,7 @@ class Course::Assessment::Submission::AutoGradingService
     assessment = submission.assessment
     bonus_end_at = assessment.bonus_end_at
     total_exp = assessment.base_exp
-    if !bonus_end_at || submission.submitted_at <= bonus_end_at
+    if bonus_end_at && submission.submitted_at <= bonus_end_at
       total_exp += assessment.time_bonus_exp
     end
 

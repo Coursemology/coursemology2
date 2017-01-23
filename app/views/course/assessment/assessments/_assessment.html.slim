@@ -8,8 +8,12 @@
 
   - if current_course.gamified?
     td.table-base-exp = assessment.base_exp
-    - if show_time_bonus_exp?
-      td.table-time-bonus-exp = assessment.time_bonus_exp
+  - if show_bonus_attributes?
+    td.table-time-bonus-exp
+      - if assessment.bonus_end_at.present? && assessment.time_bonus_exp > 0
+        = assessment.time_bonus_exp
+      - else
+        = '-'
   - unless current_component_host[:course_achievements_component].nil?
     td.achievement-badge.table-requirement-for
       - achievement_conditionals = @conditional_service.achievement_conditional_for(assessment)
@@ -22,9 +26,12 @@
         = format_datetime(assessment.start_at, :short)
     - else
       = format_datetime(assessment.start_at, :short)
-  - if current_course.gamified? && show_bonus_end_at?
+  - if show_bonus_attributes?
     td.table-bonus-cut-off
-      = format_datetime(assessment.bonus_end_at, :short) if assessment.bonus_end_at.present?
+      - if assessment.bonus_end_at.present? && assessment.time_bonus_exp > 0
+        = format_datetime(assessment.bonus_end_at, :short)
+      - else
+        = '-'
   - if show_end_at?
     td.table-end-at
       = format_datetime(assessment.end_at, :short) if assessment.end_at.present?
