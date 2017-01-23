@@ -44,6 +44,15 @@ class CourseUser < ActiveRecord::Base
     end.where { course_experience_points_records.course_user_id == course_users.id }
   end)
 
+  # @!attribute [r] last_experience_points_record
+  #   Returns the time of the last awarded experience points record.
+  calculated :last_experience_points_record, (lambda do
+    Course::ExperiencePointsRecord.select(:awarded_at).limit(1).order(awarded_at: :desc).
+      where do
+        (course_experience_points_records.course_user_id == course_users.id) & (awarded_at != nil)
+    end
+  end)
+
   # @!attribute [r] achievement_count
   #   Returns the total number of achievements obtained by CourseUser in this course
   calculated :achievement_count, (lambda do
@@ -70,8 +79,13 @@ class CourseUser < ActiveRecord::Base
   scope :phantom, -> { where(phantom: true) }
   scope :without_phantom_users, -> { where(phantom: false) }
   scope :with_course_statistics, -> { all.calculated(:experience_points, :achievement_count) }
+
+  # Order course_users by experience points for use in the course leaderboard.
+  #   In the event of a tie in points, the scope will then sort by course_users who
+  #   obtained the current experience points first.
   scope :ordered_by_experience_points, (lambda do
-    all.calculated(:experience_points).order('experience_points DESC')
+    all.calculated(:experience_points, :last_experience_points_record).
+      order('experience_points DESC, last_experience_points_record ASC')
   end)
 
   # Order course_users by achievement count for use in the course leaderboard.

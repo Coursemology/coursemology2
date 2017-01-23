@@ -21,6 +21,9 @@ FactoryGirl.define do
       after(:build) do |submission, evaluator|
         submission.finalise!
         answer.send(:clear_attribute_changes, :workflow_state) unless evaluator.auto_grade
+
+        submission.awarder = nil
+        submission.awarded_at = nil
       end
     end
 
