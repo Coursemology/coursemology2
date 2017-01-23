@@ -6,15 +6,30 @@ export default defineMessages({
     defaultMessage: 'Prepend',
     description: 'Title for prepend code block.',
   },
+  prependSubtitle: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.prependSubtitle',
+    defaultMessage: '(optional, hidden, inserted before student\'s code)',
+    description: 'Subtitle for prepend code block.',
+  },
   appendTitle: {
     id: 'course.assessment.question.programming.onlineEditorPythonView.appendTitle',
     defaultMessage: 'Append',
     description: 'Title for append code block.',
   },
+  appendSubtitle: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.appendSubtitle',
+    defaultMessage: '(optional, hidden, appended after student\'s code)',
+    description: 'Subtitle for append code block.',
+  },
   solutionTitle: {
     id: 'course.assessment.question.programming.onlineEditorPythonView.solutionTitle',
     defaultMessage: 'Solution Template',
     description: 'Title for solution template code block.',
+  },
+  solutionSubtitle: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.solutionSubtitle',
+    defaultMessage: '(optional, hidden, stores solution for future reference)',
+    description: 'Subtitle for solution template code block.',
   },
   submissionTitle: {
     id: 'course.assessment.question.programming.onlineEditorPythonView.submissionTitle',
@@ -44,17 +59,32 @@ export default defineMessages({
   fileNameHeader: {
     id: 'course.assessment.question.programming.onlineEditorPythonView.fileNameHeader',
     defaultMessage: 'File Name',
-    description: 'Header for file name column in current data files paenl.',
+    description: 'Header for file name column in current data files panel.',
   },
   fileSizeHeader: {
     id: 'course.assessment.question.programming.onlineEditorPythonView.fileSizeHeader',
     defaultMessage: 'File Size',
-    description: 'Header for file size column in current data files paenl.',
+    description: 'Header for file size column in current data files panel.',
   },
   newDataFilesHeader: {
     id: 'course.assessment.question.programming.onlineEditorPythonView.newDataFilesHeader',
     defaultMessage: 'New Data Files',
     description: 'Header for the new data files panel.',
+  },
+  testCaseDescriptionNote: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.testCaseDescriptionNote',
+    defaultMessage: 'NOTE',
+    description: 'Value of the note key that is passed into the test case description.',
+  },
+  testCaseDescriptionPrint: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.testCaseDescriptionPrint',
+    defaultMessage: 'print()',
+    description: 'Value of the print key that is passed into the test case description.',
+  },
+  testCaseDescriptionNone: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.testCaseDescriptionNone',
+    defaultMessage: 'None',
+    description: 'Value of the none key that is passed into the test case description.',
   },
   addNewTestButton: {
     id: 'course.assessment.question.programming.onlineEditorPythonView.addNewTestButton',
