@@ -64,6 +64,8 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
       end
 
       scenario 'I can reset my answer to a programming question', js: true do
+        assessment.tabbed_view = true
+        assessment.save!
         programming_question = programming_assessment.questions.first
         programming_answer = create(:course_assessment_answer_programming,
                                     assessment: programming_assessment,
@@ -89,6 +91,9 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
         # Check that answer has been reset to template files
         expect(programming_answer.reload.files.first.content).
           to eq(programming_question.specific.template_files.first.content)
+
+        # Check that ACE Editor has initialised correctly
+        expect(page).to have_css('.ace_editor')
       end
 
       scenario 'I can finalise my submission only once' do
