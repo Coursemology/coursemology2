@@ -12,4 +12,10 @@ $('.expected').shorten({
   'lessText': I18n.t('common.show_less')
 });
 
-$('textarea.code').ace();
+// Reinitialise code editor window. To handle tabbed views differently from non-tabbed views,
+// as ACE editor initialises wrongly when element is hidden.
+<% if !@assessment.autograded? && @assessment.tabbed_view? %>
+  $('.tab-pane.active textarea.code').ace();
+<% else %>
+  $('textarea.code').ace();
+<% end %>
