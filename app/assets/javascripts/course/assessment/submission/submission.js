@@ -8,8 +8,8 @@
   var SUMMARY_GRADE_SELECTOR = '.submission-grades-summary-grade';
   var GRADE_INPUT_SELECTOR = 'input.grade';
   var POINTS_AWARDED_SELECTOR = 'input.submission-points-awarded';
-  var MAXIMUM_GRADE_SELECTOR = '#submission-statistics-maximum-grade';
-  var TOTAL_GRADE_SELECTOR = '#submission-statistics-total-grade';
+  var MAXIMUM_GRADE_SELECTOR = '.submission-statistics-maximum-grade';
+  var TOTAL_GRADE_SELECTOR = '.submission-statistics-total-grade';
 
   /**
    * Update the initial EXP points after page load.
@@ -116,7 +116,7 @@
   function getActualPoints(totalGrade) {
     var $pointsAwardedInput = $(POINTS_AWARDED_SELECTOR);
     var basePoints = $pointsAwardedInput.data('base-points');
-    var maximumGrade = $(MAXIMUM_GRADE_SELECTOR).text();
+    var maximumGrade = $(MAXIMUM_GRADE_SELECTOR).first().text();
 
     var actualPoints = 0;
     if (maximumGrade !== 0) {
