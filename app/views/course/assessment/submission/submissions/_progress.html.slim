@@ -26,8 +26,8 @@ div.panel class=(panel_class)
           tr
             th = @submission.class.human_attribute_name(:grade)
             td
-              span#submission-statistics-total-grade>
+              span.submission-statistics-total-grade>
                 = @submission.grade
               ' /
-              span#submission-statistics-maximum-grade>
+              span.submission-statistics-maximum-grade>
                 = @submission.assessment.maximum_grade
