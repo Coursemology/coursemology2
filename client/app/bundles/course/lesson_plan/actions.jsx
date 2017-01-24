@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'lib/axios';
 import actionTypes from './constants';
 
 export function toggleItemTypeVisibility(itemType) {
@@ -8,100 +8,112 @@ export function toggleItemTypeVisibility(itemType) {
   };
 }
 
-function combineDateTime(dateSource, timeSource) {
-  const combinedDateTime = dateSource || new Date();
-  if (timeSource) {
-    combinedDateTime.setHours(timeSource.getHours());
-    combinedDateTime.setMinutes(timeSource.getMinutes());
+export function setNotification(message) {
+  const duration = 1500;
+
+  return (dispatch) => {
+    dispatch({
+      type: actionTypes.SET_SURVEY_NOTIFICATION,
+      message,
+    });
+    setTimeout(() => {
+      dispatch({ type: actionTypes.RESET_SURVEY_NOTIFICATION });
+    }, duration);
+  };
+}
+
+export function genericUpdate(
+  endpoint,
+  id,
+  payload,
+  newValues,
+  successMessage,
+  errorMessage,
+  requestAction,
+  successAction,
+  failureAction,
+) {
+  return (dispatch) => {
+    dispatch({ type: requestAction, payload: { id } });
+
+    return axios.patch(endpoint, payload)
+      .then(() => {
+        dispatch({
+          type: successAction,
+          payload: {
+            id,
+            newValues,
+          },
+        });
+        setNotification(successMessage)(dispatch);
+      })
+      .catch(() => {
+        dispatch({ type: failureAction, payload: { id } });
+        setNotification(errorMessage)(dispatch);
+      });
+  };
+}
+
+function shiftDate(newValues, oldValues) {
+  if (!newValues.start_at || !oldValues.start_at ||
+      (!oldValues.bonus_end_at && !oldValues.end_at)) {
+    return newValues;
   }
-  return combinedDateTime;
+  const newStartAt = new Date(newValues.start_at).getTime();
+  const oldStartAt = new Date(oldValues.start_at).getTime();
+  const diff = newStartAt - oldStartAt;
+  const shiftedDates = {};
+
+  if (oldValues.bonus_end_at) {
+    const oldBonusEndAt = new Date(oldValues.bonus_end_at).getTime();
+    if (oldBonusEndAt >= oldStartAt) {
+      shiftedDates.bonus_end_at = new Date(oldBonusEndAt + diff);
+    }
+  }
+
+  if (oldValues.end_at) {
+    const oldEndAt = new Date(oldValues.end_at).getTime();
+    if (oldEndAt >= oldStartAt) {
+      shiftedDates.end_at = new Date(oldEndAt + diff);
+    }
+  }
+
+  return Object.assign(shiftedDates, newValues);
 }
 
-function patchRequest(endpoint, payload, successHandler, failureHandler) {
-  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-  const headers = { Accept: 'application/json' };
-  axios.patch(endpoint, { ...payload, authenticity_token: csrfToken }, { headers })
-    .then(successHandler)
-    .catch(failureHandler);
-}
-
-export function updateItemField(id, field, value, oldValue) {
+export function updateItem(id, newValues, oldValues, successMessage, errorMessage) {
+  const updatedValues = shiftDate(newValues, oldValues);
   const payload = {
-    item: {
-      [field]: value,
-    },
+    item: updatedValues,
   };
 
-  return (dispatch) => {
-    dispatch({
-      type: actionTypes.SET_ITEM_FIELD,
-      payload: {
-        id,
-        field,
-        value,
-      },
-    });
-
-    const successHandler = () => {
-      // TODO Feedback to user
-    };
-
-    const failureHandler = () => {
-      dispatch({
-        type: actionTypes.SET_ITEM_FIELD,
-        payload: {
-          id,
-          field,
-          value: oldValue,
-        },
-      });
-    };
-
-    patchRequest(`items/${id}`, payload, successHandler, failureHandler);
-  };
+  return genericUpdate(
+    `items/${id}`,
+    id,
+    payload,
+    updatedValues,
+    successMessage,
+    errorMessage,
+    actionTypes.ITEM_UPDATE_REQUEST,
+    actionTypes.ITEM_UPDATE_SUCCESS,
+    actionTypes.ITEM_UPDATE_FAILURE,
+  );
 }
 
-export function updateItemDateTime(id, field, dateSource, timeSource, oldValue) {
-  const newDateTime = combineDateTime(dateSource, timeSource);
-  return updateItemField(id, field, newDateTime, oldValue);
-}
-
-/**
- * Milestones do not have the end_at field.
- */
-export function updateMilestoneDateTime(milestoneId, dateSource, timeSource, oldValue) {
-  const newDateTime = combineDateTime(dateSource, timeSource);
+export function updateMilestone(id, newValues, oldValues, successMessage, errorMessage) {
   const payload = {
-    lesson_plan_milestone: {
-      start_at: newDateTime,
-    },
+    lesson_plan_milestone: newValues,
   };
 
-  return (dispatch) => {
-    dispatch({
-      type: actionTypes.SET_MILESTONE_FIELD,
-      payload: {
-        field: 'start_at',
-        id: milestoneId,
-        value: newDateTime,
-      },
-    });
-
-    const successHandler = () => {
-      // TODO Feedback to user
-    };
-
-    const failureHandler = () => {
-      dispatch({
-        type: actionTypes.SET_MILESTONE_FIELD,
-        payload: {
-          field: 'start_at',
-          id: milestoneId,
-          value: oldValue,
-        },
-      });
-    };
-
-    patchRequest(`milestones/${milestoneId}`, payload, successHandler, failureHandler);
-  };
+  return genericUpdate(
+    `milestones/${id}`,
+    id,
+    payload,
+    newValues,
+    successMessage,
+    errorMessage,
+    actionTypes.MILESTONE_UPDATE_REQUEST,
+    actionTypes.MILESTONE_UPDATE_SUCCESS,
+    actionTypes.MILESTONE_UPDATE_FAILURE,
+  );
 }

@@ -1,13 +1,12 @@
 import React, { PropTypes } from 'react';
 import { injectIntl, defineMessages } from 'react-intl';
-import DatePicker from 'material-ui/DatePicker';
-import TimePicker from 'material-ui/TimePicker';
+import moment from 'moment';
 import Toggle from 'material-ui/Toggle';
-import DeleteIcon from 'material-ui/svg-icons/navigation/cancel';
+import Snackbar from 'material-ui/Snackbar';
+import DateTimePicker from 'lib/components/form/DateTimePicker';
 import LessonPlanFilter from '../containers/LessonPlanFilter';
 import './LessonPlanEdit.scss';
 import { constants } from '../constants';
-
 
 const translations = defineMessages({
   type: {
@@ -34,73 +33,51 @@ const translations = defineMessages({
     id: 'course.lessonPlan.lessonPlanEdit.published',
     defaultMessage: 'Published',
   },
+  updateFailed: {
+    id: 'course.lessonPlan.lessonPlanEdit.updateFailed',
+    defaultMessage: 'Update Failed.',
+  },
+  updateSuccess: {
+    id: 'course.lessonPlan.lessonPlanEdit.updateSuccess',
+    defaultMessage: "'{title}' was updated.",
+  },
 });
-
 
 const propTypes = {
   milestoneGroups: PropTypes.array,
-  updateItemDateTime: PropTypes.func,
-  updateMilestoneDateTime: PropTypes.func,
-  updateItemField: PropTypes.func,
+  updateItem: PropTypes.func,
+  updateMilestone: PropTypes.func,
+  notification: PropTypes.string,
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
 };
 
 const styles = {
-  datePickerTextField: {
-    width: 75,
-    fontSize: 14,
-  },
-  timePickerTextField: {
-    width: 65,
-    fontSize: 14,
-  },
   filter: {
     bottom: 12,
     position: 'fixed',
     right: 24,
-  },
-  deleteIcon: {
-    cursor: 'pointer',
-    margin: '0px 0px 0px -8px',
   },
   lessonPlanEditDiv: {
     marginBottom: 100,
   },
 };
 
+const sameDate = (a, b) => (!a && !b) || (a && b && moment(a).isSame(b, 'minute'));
+
 class LessonPlanEdit extends React.Component {
-  static renderDateCell(fieldName, originalDate, onChangeHandler) {
-    return (
-      <td>
-        <DatePicker
-          name={fieldName}
-          value={originalDate}
-          textFieldStyle={styles.datePickerTextField}
-          onChange={onChangeHandler}
-        />
-      </td>
-    );
-  }
-
-  static renderTimeCell(fieldName, originalTime, onChangeHandler) {
-    return (
-      <td>
-        <TimePicker
-          name={fieldName}
-          value={originalTime}
-          textFieldStyle={styles.timePickerTextField}
-          onChange={onChangeHandler}
-        />
-      </td>
-    );
-  }
-
   renderMilestone(milestone) {
-    const { updateMilestoneDateTime } = this.props;
+    const { intl, updateMilestone } = this.props;
     const startAt = new Date(milestone.get('start_at'));
     const milestoneId = milestone.get('id');
+    const title = milestone.get('title');
+    const isUpdating = milestone.get('isUpdating');
+    const errorMessage = intl.formatMessage(translations.updateFailed);
+    const successMessage = intl.formatMessage(translations.updateSuccess, { title });
+    const updateValues = values => (
+      updateMilestone(milestoneId, values, milestone.toJS(), successMessage, errorMessage)
+    );
 
     if (milestone.get('id') === constants.PRIOR_ITEMS_MILESTONE) {
       return [];
@@ -110,21 +87,19 @@ class LessonPlanEdit extends React.Component {
       <tr>
         <td colSpan={2}>
           <h3>
-            { milestone.get('title') }
+            { title }
           </h3>
         </td>
-        {
-          LessonPlanEdit.renderDateCell('start_at', startAt,
-            (event, newDate) => updateMilestoneDateTime(milestoneId, newDate, startAt, startAt))
-        }
-        {
-          LessonPlanEdit.renderTimeCell('start_at', startAt,
-            (event, newTime) => updateMilestoneDateTime(milestoneId, startAt, newTime, startAt))
-        }
-        <td />
-        <td />
-        <td />
-        <td />
+        <td>
+          <DateTimePicker
+            name={'start_at'}
+            value={startAt}
+            onChange={(event, newDate) => (
+              !sameDate(startAt, newDate) && updateValues({ start_at: newDate })
+            )}
+            disabled={isUpdating}
+          />
+        </td>
         <td />
         <td />
         <td />
@@ -133,66 +108,60 @@ class LessonPlanEdit extends React.Component {
   }
 
   renderItem(item) {
-    const { updateItemDateTime, updateItemField } = this.props;
+    const { intl, updateItem } = this.props;
+    const title = item.get('title');
     const startAt = new Date(item.get('start_at'));
     const bonusEndAt = item.get('bonus_end_at') ? new Date(item.get('bonus_end_at')) : undefined;
     const endAt = item.get('end_at') ? new Date(item.get('end_at')) : undefined;
     const itemId = item.get('id');
+    const isUpdating = item.get('isUpdating');
+    const errorMessage = intl.formatMessage(translations.updateFailed);
+    const successMessage = intl.formatMessage(translations.updateSuccess, { title });
+    const updateValues = values => (
+      updateItem(itemId, values, item.toJS(), successMessage, errorMessage)
+    );
 
     return (
       <tr key={itemId}>
         <td>{ item.get('lesson_plan_item_type').join(': ') }</td>
         <td>
-          { item.get('title') }
+          { title }
         </td>
-        {
-          LessonPlanEdit.renderDateCell('start_at', startAt,
-            (event, newDate) => updateItemDateTime(itemId, 'start_at', newDate, startAt, startAt))
-        }
-        {
-          LessonPlanEdit.renderTimeCell('start_at', startAt,
-            (event, newTime) => updateItemDateTime(itemId, 'start_at', startAt, newTime, startAt))
-        }
-        {
-          LessonPlanEdit.renderDateCell('bonus_end_at', bonusEndAt,
-            (event, newDate) => updateItemDateTime(itemId, 'bonus_end_at', newDate, bonusEndAt, bonusEndAt))
-        }
-        {
-          LessonPlanEdit.renderTimeCell('bonus_end_at', bonusEndAt,
-            (event, newTime) => updateItemDateTime(itemId, 'bonus_end_at', bonusEndAt, newTime, bonusEndAt))
-        }
         <td>
-          {
-            bonusEndAt ?
-              <DeleteIcon
-                style={styles.deleteIcon}
-                onTouchTap={() => updateItemField(itemId, 'bonus_end_at', null)}
-              /> :
-              []
-          }
+          <DateTimePicker
+            name={'start_at'}
+            value={startAt}
+            onChange={(event, newDate) => (
+              !sameDate(startAt, newDate) && updateValues({ start_at: newDate })
+            )}
+            disabled={isUpdating}
+          />
         </td>
-        {
-          LessonPlanEdit.renderDateCell('end_at', endAt,
-            (event, newDate) => updateItemDateTime(itemId, 'end_at', newDate, endAt, endAt))
-        }
-        {
-          LessonPlanEdit.renderTimeCell('end_at', endAt,
-            (event, newTime) => updateItemDateTime(itemId, 'end_at', endAt, newTime, endAt))
-        }
         <td>
-          {
-            endAt ?
-              <DeleteIcon
-                style={styles.deleteIcon}
-                onTouchTap={() => updateItemField(itemId, 'end_at', null)}
-              /> :
-              []
-          }
+          <DateTimePicker
+            name={'bonus_end_at'}
+            value={bonusEndAt}
+            onChange={(event, newDate) => (
+              !sameDate(bonusEndAt, newDate) && updateValues({ bonus_end_at: newDate })
+            )}
+            disabled={isUpdating}
+          />
+        </td>
+        <td>
+          <DateTimePicker
+            name={'end_at'}
+            value={endAt}
+            onChange={(event, newDate) => (
+              !sameDate(startAt, newDate) && updateValues({ end_at: newDate })
+            )}
+            disabled={isUpdating}
+          />
         </td>
         <td>
           <Toggle
             toggled={item.get('published')}
-            onToggle={(event, isToggled) => updateItemField(itemId, 'published', isToggled)}
+            onToggle={(event, isToggled) => updateValues({ published: isToggled })}
+            disabled={isUpdating}
           />
         </td>
       </tr>
@@ -206,7 +175,7 @@ class LessonPlanEdit extends React.Component {
   }
 
   render() {
-    const { milestoneGroups, intl } = this.props;
+    const { intl, milestoneGroups, notification } = this.props;
     return (
       <div style={styles.lessonPlanEditDiv}>
         <table>
@@ -214,9 +183,9 @@ class LessonPlanEdit extends React.Component {
             <tr>
               <th>{intl.formatMessage(translations.type)}</th>
               <th>{intl.formatMessage(translations.title)}</th>
-              <th colSpan={2}>{intl.formatMessage(translations.startTime)}</th>
-              <th colSpan={3}>{intl.formatMessage(translations.bonusEndTime)}</th>
-              <th colSpan={3}>{intl.formatMessage(translations.endTime)}</th>
+              <th>{intl.formatMessage(translations.startTime)}</th>
+              <th>{intl.formatMessage(translations.bonusEndTime)}</th>
+              <th>{intl.formatMessage(translations.endTime)}</th>
               <th>{intl.formatMessage(translations.published)}</th>
             </tr>
           </thead>
@@ -229,6 +198,10 @@ class LessonPlanEdit extends React.Component {
         <div style={styles.filter}>
           <LessonPlanFilter />
         </div>
+        <Snackbar
+          open={notification !== ''}
+          message={notification}
+        />
       </div>
     );
   }
