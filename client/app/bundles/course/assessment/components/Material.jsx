@@ -5,7 +5,7 @@ import { ListItem } from 'material-ui/List';
 import CircularProgress from 'material-ui/CircularProgress';
 import Avatar from 'material-ui/Avatar';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
-import { standardDateFormat, shortTimeFormat } from 'lib/date_time_formats';
+import { standardDateFormat, shortTimeFormat } from 'lib/date_time_defaults';
 
 const iconStyle = {
   width: 32,
