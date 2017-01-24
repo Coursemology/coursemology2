@@ -18,17 +18,19 @@ module Course::Survey::Response::TodoConcern
 
   def update_todo
     if submitted?
-      todo.update_column(:workflow_state, 'completed') unless todo.completed?
+      todo.update_attribute(:workflow_state, 'completed') unless todo.completed?
     else
-      todo.update_column(:workflow_state, 'in_progress') unless todo.in_progress?
+      todo.update_attribute(:workflow_state, 'in_progress') unless todo.in_progress?
     end
-  rescue ActiveRecordError => error
+  rescue ActiveRecord::ActiveRecordError => error
     raise ActiveRecord::Rollback, error.message
   end
 
+  # Skip callback if survey is deleted as todo will be deleted.
   def restart_todo
-    todo.update_column(:workflow_state, 'not_started') unless todo.not_started?
-  rescue ActiveRecordError => error
+    return if survey.destroying?
+    todo.update_attribute(:workflow_state, 'not_started') unless todo.not_started?
+  rescue ActiveRecord::ActiveRecordError => error
     raise ActiveRecord::Rollback, error.message
   end
 end

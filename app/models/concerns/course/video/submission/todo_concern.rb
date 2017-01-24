@@ -18,9 +18,15 @@ module Course::Video::Submission::TodoConcern
 
   def complete_todo
     todo.update_attribute(:workflow_state, 'completed') unless todo.completed?
+  rescue ActiveRecord::ActiveRecordError => error
+    raise ActiveRecord::Rollback, error.message
   end
 
+  # Skip callback if video is deleted as todo will be deleted.
   def restart_todo
+    return if video.destroying?
     todo.update_attribute(:workflow_state, 'not_started') unless todo.not_started?
+  rescue ActiveRecord::ActiveRecordError => error
+    raise ActiveRecord::Rollback, error.message
   end
 end

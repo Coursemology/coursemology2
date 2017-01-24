@@ -56,6 +56,13 @@ RSpec.describe Course::Survey::Response do
           expect(subject.not_started?).to be_truthy
         end
       end
+
+      context 'when survey is destroyed' do
+        it 'deletes the todo' do
+          survey.destroy
+          expect(subject).to be_nil
+        end
+      end
     end
   end
 end
