@@ -7,15 +7,15 @@ import AddButton from '../components/AddButton';
 
 const translations = defineMessages({
   newSurvey: {
-    id: 'course.surveys.NewSurvey.title',
+    id: 'course.surveys.NewSurveyButton.title',
     defaultMessage: 'New Survey',
   },
   success: {
-    id: 'course.surveys.NewSurvey.success',
+    id: 'course.surveys.NewSurveyButton.success',
     defaultMessage: 'Survey "{title}" created.',
   },
   failure: {
-    id: 'course.surveys.NewSurvey.failure',
+    id: 'course.surveys.NewSurveyButton.failure',
     defaultMessage: 'Failed to create survey.',
   },
 });
@@ -28,7 +28,7 @@ const propTypes = {
   }).isRequired,
 };
 
-class NewSurvey extends React.Component {
+class NewSurveyButton extends React.Component {
   constructor(props) {
     super(props);
 
@@ -63,6 +63,6 @@ class NewSurvey extends React.Component {
   }
 }
 
-NewSurvey.propTypes = propTypes;
+NewSurveyButton.propTypes = propTypes;
 
-export default connect(state => state)(injectIntl(NewSurvey));
+export default connect(state => state)(injectIntl(NewSurveyButton));

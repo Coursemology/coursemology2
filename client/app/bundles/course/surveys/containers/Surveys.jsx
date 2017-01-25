@@ -4,7 +4,7 @@ import { injectIntl } from 'react-intl';
 import TitleBar from 'lib/components/TitleBar';
 import SurveysEmpty from '../components/SurveysEmpty';
 import SurveysTable from '../components/SurveysTable';
-import NewSurvey from '../containers/NewSurvey';
+import NewSurveyButton from '../containers/NewSurveyButton';
 import translations from '../translations';
 
 const propTypes = {
@@ -26,7 +26,7 @@ const Surveys = ({ intl, surveys, params: { courseId } }) => {
         title={intl.formatMessage(translations.surveys)}
       />
       { surveys.length > 0 ? <SurveysTable {...{ surveys, courseId }} /> : <SurveysEmpty /> }
-      <NewSurvey />
+      <NewSurveyButton />
     </div>
   );
 };
