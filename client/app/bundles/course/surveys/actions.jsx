@@ -2,8 +2,8 @@ import axios from 'lib/axios';
 import { submit, change, SubmissionError } from 'redux-form';
 import actionTypes from './constants';
 
-export function showSurveyForm() {
-  return { type: actionTypes.SURVEY_FORM_SHOW };
+export function showSurveyForm(formParams) {
+  return { type: actionTypes.SURVEY_FORM_SHOW, formParams };
 }
 
 export function hideSurveyForm() {

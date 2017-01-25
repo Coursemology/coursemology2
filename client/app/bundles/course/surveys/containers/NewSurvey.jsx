@@ -4,7 +4,6 @@ import { injectIntl, defineMessages } from 'react-intl';
 import { aWeekStartingTomorrow } from 'lib/date_time_defaults';
 import * as actionCreators from '../actions';
 import AddButton from '../components/AddButton';
-import SurveyFormDialogue from '../containers/SurveyFormDialogue';
 
 const translations = defineMessages({
   newSurvey: {
@@ -34,6 +33,7 @@ class NewSurvey extends React.Component {
     super(props);
 
     this.createSurveyHandler = this.createSurveyHandler.bind(this);
+    this.showNewSurveyForm = this.showNewSurveyForm.bind(this);
   }
 
   createSurveyHandler(data) {
@@ -46,24 +46,20 @@ class NewSurvey extends React.Component {
     return dispatch(createSurvey(createPath, payload, successMessage, failureMessage));
   }
 
-  render() {
-    const { dispatch, intl, createPath } = this.props;
+  showNewSurveyForm() {
+    const { dispatch, intl } = this.props;
     const { showSurveyForm } = actionCreators;
 
-    if (!createPath) {
-      return <div />;
-    }
+    return dispatch(showSurveyForm({
+      onSubmit: this.createSurveyHandler,
+      formTitle: intl.formatMessage(translations.newSurvey),
+      initialValues: Object.assign({ base_exp: 0 }, aWeekStartingTomorrow()),
+    }));
+  }
 
-    return (
-      <div>
-        <AddButton onTouchTap={() => { dispatch(showSurveyForm()); }} />
-        <SurveyFormDialogue
-          onSubmit={this.createSurveyHandler}
-          formTitle={intl.formatMessage(translations.newSurvey)}
-          initialValues={Object.assign({ base_exp: 0 }, aWeekStartingTomorrow())}
-        />
-      </div>
-    );
+  render() {
+    const { createPath } = this.props;
+    return createPath ? <AddButton onTouchTap={this.showNewSurveyForm} /> : <div />;
   }
 }
 
