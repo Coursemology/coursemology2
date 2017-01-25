@@ -29,3 +29,7 @@ en:
       name: 'Duplication'
     video:
       name: :'course.video.videos.index.header'
+    courses:
+      name: 'Courses'
+    users:
+      name: 'Users'
