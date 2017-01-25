@@ -1,26 +1,8 @@
 import React, { PropTypes } from 'react';
-import { injectIntl, defineMessages } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { standardDateFormat } from 'lib/date_time_defaults';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
-
-const translations = defineMessages({
-  title: {
-    id: 'course.surveys.SurveysTable.tableHeaders.title',
-    defaultMessage: 'Title',
-  },
-  points: {
-    id: 'course.surveys.SurveysTable.tableHeaders.points',
-    defaultMessage: 'Points',
-  },
-  opensAt: {
-    id: 'course.surveys.SurveysTable.tableHeaders.openAt',
-    defaultMessage: 'Opens At',
-  },
-  expiresAt: {
-    id: 'course.surveys.SurveysTable.tableHeaders.expiresAt',
-    defaultMessage: 'Expires At',
-  },
-});
+import translations from '../translations';
 
 const styles = {
   tableBody: {
