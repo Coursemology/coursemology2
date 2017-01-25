@@ -73,3 +73,21 @@ export function createSurvey(
       });
   };
 }
+
+export function fetchSurvey(courseId, surveyId) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.LOAD_SURVEY_REQUEST, id: surveyId });
+
+    return axios.get(`/courses/${courseId}/surveys/${surveyId}`)
+      .then((response) => {
+        dispatch({
+          id: surveyId,
+          type: actionTypes.LOAD_SURVEY_SUCCESS,
+          data: response.data,
+        });
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.LOAD_SURVEY_FAILURE, id: surveyId });
+      });
+  };
+}

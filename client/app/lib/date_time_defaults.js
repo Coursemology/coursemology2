@@ -25,3 +25,7 @@ export const aWeekStartingTomorrow = () => {
     end_at: endAt.toDate(),
   };
 };
+
+export const formatDateTime = dateTime => (
+  dateTime ? moment(dateTime).format('DD-MM-YYYY HH:mm') : ''
+);

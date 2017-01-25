@@ -14,6 +14,13 @@ class Course::SurveysController < Course::ComponentController
     end
   end
 
+  def show
+    respond_to do |format|
+      format.html { render 'index' }
+      format.json
+    end
+  end
+
   private
 
   def survey_params
