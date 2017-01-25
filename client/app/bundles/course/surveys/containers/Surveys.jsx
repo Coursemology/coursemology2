@@ -11,12 +11,15 @@ import translations from '../translations';
 const propTypes = {
   surveys: PropTypes.array.isRequired,
   notification: PropTypes.string,
+  params: PropTypes.shape({
+    courseId: PropTypes.string.isRequired,
+  }),
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
 };
 
-const Surveys = ({ intl, surveys, notification }) => {
+const Surveys = ({ intl, surveys, notification, params: { courseId } }) => {
   surveys.sort((a, b) => new Date(a.start_at) - new Date(b.start_at));
 
   return (
@@ -24,7 +27,7 @@ const Surveys = ({ intl, surveys, notification }) => {
       <TitleBar
         title={intl.formatMessage(translations.surveys)}
       />
-      { surveys.length > 0 ? <SurveysTable {...{ surveys }} /> : <SurveysEmpty /> }
+      { surveys.length > 0 ? <SurveysTable {...{ surveys, courseId }} /> : <SurveysEmpty /> }
       <NewSurvey />
       <Snackbar
         open={notification !== ''}
