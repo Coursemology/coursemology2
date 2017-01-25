@@ -6,6 +6,10 @@ class Course::CoursesComponent < SimpleDelegator
     false
   end
 
+  def self.display_name
+    I18n.t('components.courses.name')
+  end
+
   def sidebar_items
     admin_sidebar_items + settings_sidebar_items
   end
