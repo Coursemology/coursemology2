@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import Snackbar from 'material-ui/Snackbar';
 import TitleBar from 'lib/components/TitleBar';
 import SurveysEmpty from '../components/SurveysEmpty';
 import SurveysTable from '../components/SurveysTable';
@@ -10,7 +9,6 @@ import translations from '../translations';
 
 const propTypes = {
   surveys: PropTypes.array.isRequired,
-  notification: PropTypes.string,
   params: PropTypes.shape({
     courseId: PropTypes.string.isRequired,
   }),
@@ -19,7 +17,7 @@ const propTypes = {
   }).isRequired,
 };
 
-const Surveys = ({ intl, surveys, notification, params: { courseId } }) => {
+const Surveys = ({ intl, surveys, params: { courseId } }) => {
   surveys.sort((a, b) => new Date(a.start_at) - new Date(b.start_at));
 
   return (
@@ -29,10 +27,6 @@ const Surveys = ({ intl, surveys, notification, params: { courseId } }) => {
       />
       { surveys.length > 0 ? <SurveysTable {...{ surveys, courseId }} /> : <SurveysEmpty /> }
       <NewSurvey />
-      <Snackbar
-        open={notification !== ''}
-        message={notification}
-      />
     </div>
   );
 };
