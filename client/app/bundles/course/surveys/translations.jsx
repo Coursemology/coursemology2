@@ -1,6 +1,10 @@
 import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
+  surveys: {
+    id: 'course.surveys',
+    defaultMessage: 'Surveys',
+  },
   title: {
     id: 'course.surveys.fields.title',
     defaultMessage: 'Title',
