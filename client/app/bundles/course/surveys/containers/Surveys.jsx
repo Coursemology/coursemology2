@@ -26,7 +26,7 @@ const Surveys = ({ intl, surveys, params: { courseId } }) => {
         title={intl.formatMessage(translations.surveys)}
       />
       { surveys.length > 0 ? <SurveysTable {...{ surveys, courseId }} /> : <SurveysEmpty /> }
-      <NewSurveyButton />
+      <NewSurveyButton {...{ courseId }} />
     </div>
   );
 };

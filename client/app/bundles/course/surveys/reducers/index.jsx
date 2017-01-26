@@ -9,6 +9,6 @@ export default combineReducers({
   surveys,
   surveyForm,
   notification,
-  createPath: (state = '') => state,
+  canCreate: (state = false) => state,
   form: formReducer,
 });

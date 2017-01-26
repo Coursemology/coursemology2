@@ -22,7 +22,8 @@ const translations = defineMessages({
 
 const propTypes = {
   dispatch: PropTypes.func.isRequired,
-  createPath: PropTypes.string,
+  canCreate: PropTypes.bool.isRequired,
+  courseId: PropTypes.string.isRequired,
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
@@ -37,13 +38,13 @@ class NewSurveyButton extends React.Component {
   }
 
   createSurveyHandler(data) {
-    const { dispatch, intl, createPath } = this.props;
+    const { dispatch, intl, courseId } = this.props;
     const { createSurvey } = actionCreators;
 
     const payload = { survey: data };
     const successMessage = intl.formatMessage(translations.success, data);
     const failureMessage = intl.formatMessage(translations.failure);
-    return dispatch(createSurvey(createPath, payload, successMessage, failureMessage));
+    return dispatch(createSurvey(courseId, payload, successMessage, failureMessage));
   }
 
   showNewSurveyForm() {
@@ -58,8 +59,8 @@ class NewSurveyButton extends React.Component {
   }
 
   render() {
-    const { createPath } = this.props;
-    return createPath ? <AddButton onTouchTap={this.showNewSurveyForm} /> : <div />;
+    const { canCreate } = this.props;
+    return canCreate ? <AddButton onTouchTap={this.showNewSurveyForm} /> : <div />;
   }
 }
 

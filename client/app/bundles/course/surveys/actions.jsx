@@ -1,5 +1,6 @@
 import axios from 'lib/axios';
 import { submit, change, SubmissionError } from 'redux-form';
+import { browserHistory } from 'react-router';
 import actionTypes from './constants';
 
 export function showSurveyForm(formParams) {
@@ -46,15 +47,15 @@ export function setNotification(message) {
 }
 
 export function createSurvey(
-  endpoint,
+  courseId,
   surveyFields,
   successMessage,
   failureMessage
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_SURVEY_REQUEST });
-
-    return axios.post(endpoint, surveyFields)
+    const surveysEndpoint = `/courses/${courseId}/surveys`;
+    return axios.post(surveysEndpoint, surveyFields)
       .then((response) => {
         dispatch({
           type: actionTypes.CREATE_SURVEY_SUCCESS,
@@ -62,6 +63,7 @@ export function createSurvey(
         });
         dispatch(hideSurveyForm());
         setNotification(successMessage)(dispatch);
+        browserHistory.push(`${surveysEndpoint}/${response.data.id}`);
       })
       .catch((error) => {
         dispatch({ type: actionTypes.CREATE_SURVEY_FAILURE });
