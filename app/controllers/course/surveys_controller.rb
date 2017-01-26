@@ -4,6 +4,10 @@ class Course::SurveysController < Course::ComponentController
   add_breadcrumb :index, :course_surveys_path
 
   def index
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   def create

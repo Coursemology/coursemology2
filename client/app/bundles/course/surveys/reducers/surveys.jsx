@@ -15,6 +15,9 @@ export default function (state = initialState, action) {
       return index === -1 ? [...state, action.data] :
                             Object.assign([], state, { [index]: action.data });
     }
+    case actionTypes.LOAD_SURVEYS_SUCCESS: {
+      return action.data.surveys;
+    }
     default:
       return state;
   }

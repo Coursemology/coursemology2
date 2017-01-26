@@ -8,8 +8,7 @@ import routes from './surveys/routes';
 const mountNode = document.getElementById('course-survey-component');
 
 if (mountNode) {
-  const data = JSON.parse(mountNode.getAttribute('data'));
-  const store = storeCreator(data);
+  const store = storeCreator({ surveys: {} });
 
   $(document).ready(() => {
     render(

@@ -94,6 +94,22 @@ export function fetchSurvey(courseId, surveyId) {
   };
 }
 
+export function fetchSurveys(courseId) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.LOAD_SURVEYS_REQUEST });
+
+    return axios.get(`/courses/${courseId}/surveys/`)
+      .then((response) => {
+        dispatch({
+          type: actionTypes.LOAD_SURVEYS_SUCCESS,
+          data: response.data.surveys,
+        });
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.LOAD_SURVEYS_FAILURE });
+      });
+  };
+}
 
 export function updateSurvey(
   courseId,
