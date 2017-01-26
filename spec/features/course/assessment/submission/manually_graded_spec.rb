@@ -192,6 +192,26 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
         submission.finalise!
         submission.save!
 
+        # Check that there is NO late submission warning.
+        late_submission_text = I18n.t('course.assessment.submission.submissions.progress.'\
+                                      'late_submission_warning')
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+        # Submission progress panel
+        expect(page).not_to have_selector('div.alert.alert-danger', text: late_submission_text)
+        # Statistics panel
+        expect(page).not_to have_selector('td.text-danger')
+
+        # Create a late submission
+        assessment.end_at = Time.zone.now - 1.day
+        assessment.save!
+
+        # Refresh and check for the late submission warning.
+        visit edit_course_assessment_submission_path(course, assessment, submission)
+        # Submission progress panel
+        expect(page).to have_selector('div.alert.alert-danger', text: late_submission_text)
+        # Statistics panel
+        expect(page).to have_selector('td.text-danger')
+
         # Create an extra question after submission is submitted, user should still be able to
         # grade the submission in this case.
         create(:course_assessment_question_multiple_response, assessment: assessment)
