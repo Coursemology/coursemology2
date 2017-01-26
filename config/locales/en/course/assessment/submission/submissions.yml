@@ -50,6 +50,7 @@ en:
             student: :'course.users.role.student'
             attempted_at: :'course.assessment.submission.submissions.statistics.attempted_at'
             submitted_at: 'Submitted At'
+            late_submission_warning: 'This submission is LATE! You may want to penalize the student for late submission.'
           statistics:
             student: :'course.users.role.student'
             status: 'Status'
