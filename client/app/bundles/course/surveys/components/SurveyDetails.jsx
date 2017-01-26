@@ -1,9 +1,11 @@
 import React, { PropTypes } from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
+import { browserHistory } from 'react-router';
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
+import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { formatDateTime } from 'lib/date_time_defaults';
 import TitleBar from 'lib/components/TitleBar';
@@ -47,7 +49,7 @@ class SurveyDetails extends React.Component {
   }
 
   render() {
-    const { intl, survey } = this.props;
+    const { intl, survey, courseId } = this.props;
     if (!survey) {
       return <p>{intl.formatMessage(translations.loading)}</p>;
     }
@@ -57,6 +59,8 @@ class SurveyDetails extends React.Component {
         <TitleBar
           title={survey.title}
           iconElementRight={this.renderAdminMenu()}
+          iconElementLeft={<IconButton><ArrowBack /></IconButton>}
+          onLeftIconButtonTouchTap={() => browserHistory.push(`/courses/${courseId}/surveys`)}
         />
         <div style={styles.details}>
           <div>

@@ -76,12 +76,12 @@ class ShowSurvey extends React.Component {
   }
 
   render() {
-    const { surveys, params: { surveyId } } = this.props;
+    const { surveys, params: { courseId, surveyId } } = this.props;
     const survey = surveys && surveys.length > 0 ?
                    surveys.find(s => String(s.id) === String(surveyId)) : {};
     return (
       <SurveyDetails
-        {...{ survey }}
+        {...{ survey, courseId }}
         adminFunctions={this.adminFunctions(survey)}
       />
     );
