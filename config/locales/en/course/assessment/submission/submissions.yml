@@ -63,6 +63,7 @@ en:
             publish_grade_hint: >
               The grades are currently not viewable to the student. You can publish the grades at
               the submissions page of current assessment.
+            late_submission_warning: :'course.assessment.submission.submissions.progress.late_submission_warning'
           update:
             success: 'Submission was updated.'
             finalise: 'Your submission is being graded, please visit this page again later.'
