@@ -93,3 +93,41 @@ export function fetchSurvey(courseId, surveyId) {
       });
   };
 }
+
+
+export function updateSurvey(
+  courseId,
+  surveyId,
+  surveyFields,
+  successMessage,
+  failureMessage
+) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.UPDATE_SURVEY_REQUEST, id: surveyId });
+
+    return axios.patch(`/courses/${courseId}/surveys/${surveyId}`, surveyFields)
+      .then(() => {
+        const { start_at, end_at, ...fields } = surveyFields.survey;
+        const updatedSurvey = {
+          start_at: start_at.toISOString(),
+          end_at: end_at.toISOString(),
+          ...fields,
+        };
+        dispatch({
+          id: surveyId,
+          type: actionTypes.UPDATE_SURVEY_SUCCESS,
+          data: updatedSurvey,
+        });
+        dispatch(hideSurveyForm());
+        setNotification(successMessage)(dispatch);
+      })
+      .catch((error) => {
+        dispatch({ type: actionTypes.UPDATE_SURVEY_FAILURE, id: surveyId });
+        if (error.response && error.response.data) {
+          throw new SubmissionError(error.response.data.errors);
+        } else {
+          setNotification(failureMessage)(dispatch);
+        }
+      });
+  };
+}

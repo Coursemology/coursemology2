@@ -21,6 +21,14 @@ class Course::SurveysController < Course::ComponentController
     end
   end
 
+  def update
+    if @survey.update_attributes(survey_params)
+      head :ok
+    else
+      render json: { errors: @survey.errors }, status: :bad_request
+    end
+  end
+
   private
 
   def survey_params

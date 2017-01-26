@@ -9,6 +9,7 @@ export default function (state = initialState, action) {
     case actionTypes.CREATE_SURVEY_SUCCESS: {
       return [...state, action.newSurveyData];
     }
+    case actionTypes.UPDATE_SURVEY_SUCCESS:
     case actionTypes.LOAD_SURVEY_SUCCESS: {
       const index = state.findIndex(survey => String(survey.id) === String(action.id));
       return index === -1 ? [...state, action.data] :

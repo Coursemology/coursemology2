@@ -305,7 +305,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :surveys, only: [:index, :create, :show]
+      resources :surveys, only: [:index, :create, :show, :update]
     end
   end
 
