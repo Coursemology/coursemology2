@@ -27,13 +27,19 @@ function loadCurrentModule() {
   }
 }
 
+function loadModules() {
+  loadCurrentModule();
+  // Initializers
+  require('./lib/helpers/confirm_dialog');
+}
+
 if (!global.Intl) {
   require.ensure([], (require) => {
     require('intl');
     require('intl/locale-data/jsonp/en');
     require('intl/locale-data/jsonp/zh');
-    loadCurrentModule();
+    loadModules();
   }, 'intl');
 } else {
-  loadCurrentModule();
+  loadModules();
 }

@@ -19,6 +19,8 @@ const ConfirmationDialog = ({
   confirmDiscard,
   confirmDelete,
   confirmSubmit,
+  disableCancelButton,
+  disableConfirmButton,
 }) => {
   let confirmationButtonText = intl.formatMessage(formTranslations.continue);
   if (confirmButtonText) {
@@ -42,12 +44,14 @@ const ConfirmationDialog = ({
     <FlatButton
       primary
       keyboardFocused
+      disabled={disableCancelButton}
       onTouchTap={onCancel}
       style={buttonStyle}
       label={cancelButtonText || intl.formatMessage(formTranslations.cancel)}
     />,
     <FlatButton
       primary
+      disabled={disableConfirmButton}
       onTouchTap={onConfirm}
       style={buttonStyle}
       label={confirmationButtonText}
@@ -78,6 +82,8 @@ ConfirmationDialog.propTypes = {
   confirmDiscard: PropTypes.bool,
   confirmDelete: PropTypes.bool,
   confirmSubmit: PropTypes.bool,
+  disableCancelButton: PropTypes.bool,
+  disableConfirmButton: PropTypes.bool,
 };
 
 export default injectIntl(ConfirmationDialog);
