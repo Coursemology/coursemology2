@@ -33,6 +33,14 @@ class Course::SurveysController < Course::ComponentController
     end
   end
 
+  def destroy
+    if @survey.destroy
+      head :ok
+    else
+      head :bad_request
+    end
+  end
+
   private
 
   def survey_params

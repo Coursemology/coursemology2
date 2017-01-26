@@ -147,3 +147,22 @@ export function updateSurvey(
       });
   };
 }
+
+export function deleteSurvey(courseId, surveyId, successMessage, failureMessage) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.DELETE_SURVEY_REQUEST, id: surveyId });
+    return axios.delete(`/courses/${courseId}/surveys/${surveyId}`)
+      .then(() => {
+        dispatch({
+          id: surveyId,
+          type: actionTypes.DELETE_SURVEY_SUCCESS,
+        });
+        setNotification(successMessage)(dispatch);
+        browserHistory.push(`/courses/${courseId}/surveys/`);
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.DELETE_SURVEY_FAILURE, id: surveyId });
+        setNotification(failureMessage)(dispatch);
+      });
+  };
+}

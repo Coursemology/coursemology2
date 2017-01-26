@@ -18,6 +18,10 @@ export default function (state = initialState, action) {
     case actionTypes.LOAD_SURVEYS_SUCCESS: {
       return action.data.surveys;
     }
+    case actionTypes.DELETE_SURVEY_SUCCESS: {
+      const index = state.findIndex(survey => String(survey.id) === String(action.id));
+      return Object.assign([], state).splice(index, 1);
+    }
     default:
       return state;
   }

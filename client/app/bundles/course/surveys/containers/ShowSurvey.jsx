@@ -17,6 +17,18 @@ const translations = defineMessages({
     id: 'course.surveys.Survey.updateFailure',
     defaultMessage: 'Failed to update survey.',
   },
+  deleteSurvey: {
+    id: 'course.surveys.Survey.deleteSurvey',
+    defaultMessage: 'Delete Survey',
+  },
+  deleteSuccess: {
+    id: 'course.surveys.Survey.deleteSuccess',
+    defaultMessage: 'Survey "{title}" deleted.',
+  },
+  deleteFailure: {
+    id: 'course.surveys.Survey.deleteFailure',
+    defaultMessage: 'Failed to delete survey.',
+  },
 });
 
 class ShowSurvey extends React.Component {
@@ -61,6 +73,15 @@ class ShowSurvey extends React.Component {
     }));
   }
 
+  deleteSurveyHandler(survey) {
+    const { dispatch, intl, params: { courseId, surveyId } } = this.props;
+    const { deleteSurvey } = actionCreators;
+
+    const successMessage = intl.formatMessage(translations.deleteSuccess, survey);
+    const failureMessage = intl.formatMessage(translations.deleteFailure);
+    return () => dispatch(deleteSurvey(courseId, surveyId, successMessage, failureMessage));
+  }
+
   adminFunctions(survey) {
     const { intl } = this.props;
     const functions = [];
@@ -69,6 +90,13 @@ class ShowSurvey extends React.Component {
       functions.push({
         label: intl.formatMessage(translations.editSurvey),
         handler: this.showEditSurveyForm(survey),
+      });
+    }
+
+    if (survey.canDelete) {
+      functions.push({
+        label: intl.formatMessage(translations.deleteSurvey),
+        handler: this.deleteSurveyHandler(survey),
       });
     }
 
