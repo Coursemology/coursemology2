@@ -187,7 +187,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
     context 'As a Course Staff' do
       let(:user) { create(:course_teaching_assistant, course: course).user }
 
-      scenario "I can grade the student's work" do
+      scenario "I can grade the student's work", js: true do
         mrq_questions.each { |q| q.attempt(submission).save! }
         submission.finalise!
         submission.save!
@@ -237,6 +237,10 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.published?).to be(true)
+
+        # Update grade and check if grade fields are updated
+        fill_in find('input.form-control.grade')[:name], with: 1
+        expect(page.all('.submission-statistics-total-grade', text: '1').count).to eq(2)
       end
 
       scenario 'I can run code on autograded programming questions' do
