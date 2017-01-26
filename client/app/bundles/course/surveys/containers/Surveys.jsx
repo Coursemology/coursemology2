@@ -27,7 +27,10 @@ class Surveys extends React.Component {
 
   render() {
     const { intl, surveys, params: { courseId } } = this.props;
-    surveys.sort((a, b) => new Date(a.start_at) - new Date(b.start_at));
+    surveys.sort((a, b) => {
+      const dateOrder = new Date(a.start_at) - new Date(b.start_at);
+      return dateOrder === 0 ? a.title.localeCompare(b.title) : dateOrder;
+    });
     return (
       <div>
         <TitleBar
