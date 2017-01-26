@@ -31,3 +31,7 @@ div.panel class=(panel_class)
               ' /
               span.submission-statistics-maximum-grade>
                 = @submission.assessment.maximum_grade
+    - if @submission.assessment.end_at && @submission.submitted? && @submission.submitted_at > @submission.assessment.end_at
+      div.alert.alert-danger
+        span.glyphicon.glyphicon-exclamation-sign
+        =< t('.late_submission_warning')
