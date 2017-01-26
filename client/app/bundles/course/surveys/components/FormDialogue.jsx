@@ -3,6 +3,7 @@ import { injectIntl } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import formTranslations from 'lib/translations/form';
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
 const propTypes = {
   title: PropTypes.string,
@@ -69,18 +70,6 @@ class FormDialogue extends React.Component {
         {...{ disabled }}
       />,
     ];
-    const disacrdActions = [
-      <FlatButton
-        label={intl.formatMessage(formTranslations.cancel)}
-        primary
-        onTouchTap={this.handleDiscardCancel}
-      />,
-      <FlatButton
-        label={intl.formatMessage(formTranslations.discard)}
-        primary
-        onTouchTap={this.handleDiscard}
-      />,
-    ];
 
     return (
       <div>
@@ -93,14 +82,12 @@ class FormDialogue extends React.Component {
         >
           { children }
         </Dialog>
-        <Dialog
-          actions={disacrdActions}
-          modal={false}
+        <ConfirmationDialog
+          confirmDiscard
           open={this.state.discardConfirmationOpen}
-          onRequestClose={this.handleDiscardCancel}
-        >
-          { intl.formatMessage(formTranslations.discardChanges) }
-        </Dialog>
+          onCancel={this.handleDiscardCancel}
+          onConfirm={this.handleDiscard}
+        />
       </div>
     );
   }

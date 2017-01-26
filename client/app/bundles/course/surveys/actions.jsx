@@ -11,6 +11,20 @@ export function hideSurveyForm() {
   return { type: actionTypes.SURVEY_FORM_HIDE };
 }
 
+export function resetDeleteConfirmation() {
+  return { type: actionTypes.RESET_DELETE_CONFIRMATION };
+}
+
+export function showDeleteConfirmation(onConfirm) {
+  return (dispatch) => {
+    const confirmAndDismiss = () => {
+      onConfirm();
+      dispatch(resetDeleteConfirmation());
+    };
+    dispatch({ type: actionTypes.SHOW_DELETE_CONFIRMATION, onConfirm: confirmAndDismiss });
+  };
+}
+
 export function submitSurveyForm() {
   return (dispatch) => {
     dispatch(submit('survey'));

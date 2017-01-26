@@ -75,11 +75,14 @@ class ShowSurvey extends React.Component {
 
   deleteSurveyHandler(survey) {
     const { dispatch, intl, params: { courseId, surveyId } } = this.props;
-    const { deleteSurvey } = actionCreators;
+    const { deleteSurvey, showDeleteConfirmation } = actionCreators;
 
     const successMessage = intl.formatMessage(translations.deleteSuccess, survey);
     const failureMessage = intl.formatMessage(translations.deleteFailure);
-    return () => dispatch(deleteSurvey(courseId, surveyId, successMessage, failureMessage));
+    const handleDelete = () => (
+      dispatch(deleteSurvey(courseId, surveyId, successMessage, failureMessage))
+    );
+    return () => dispatch(showDeleteConfirmation(handleDelete));
   }
 
   adminFunctions(survey) {
