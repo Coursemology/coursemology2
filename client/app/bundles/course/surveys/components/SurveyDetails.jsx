@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
 import { browserHistory } from 'react-router';
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
+import { Card, CardText } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -21,11 +22,6 @@ const translations = defineMessages({
 const styles = {
   table: {
     maxWidth: 600,
-  },
-  details: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
   },
 };
 
@@ -62,9 +58,8 @@ class SurveyDetails extends React.Component {
           iconElementLeft={<IconButton><ArrowBack /></IconButton>}
           onLeftIconButtonTouchTap={() => browserHistory.push(`/courses/${courseId}/surveys`)}
         />
-        <div style={styles.details}>
+        <Card>
           <div>
-            <p>{survey.description}</p>
             <Table style={styles.table}>
               <TableBody displayRowCheckbox={false}>
                 <TableRow>
@@ -94,7 +89,10 @@ class SurveyDetails extends React.Component {
               </TableBody>
             </Table>
           </div>
-        </div>
+          <CardText>
+            <p>{survey.description}</p>
+          </CardText>
+        </Card>
       </div>
     );
   }
@@ -115,6 +113,7 @@ SurveyDetails.propTypes = {
     label: PropTypes.string,
     handler: PropTypes.func,
   })),
+  courseId: PropTypes.string.isRequired,
 };
 
 export default injectIntl(SurveyDetails);
