@@ -162,7 +162,12 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
         visit current_path
         click_button I18n.t('course.assessment.submission.submissions.buttons.finalise')
 
+        perform_enqueued_jobs
         wait_for_job
+        # Check that student is NOT notified that his submission is graded
+        emails = unread_emails_for(student.email).map(&:subject)
+        expect(emails).not_to include('course.mailer.submission_graded_email.subject')
+
         visit current_path
         expect(page).to have_selector('td', text: 'published')
         expect(page).not_to have_selector('.btn.finalise')
