@@ -1,0 +1,7 @@
+- host = @course.instance.host
+
+= simple_format(t('.message', submission: link_to(@assessment.title,
+                                                  edit_course_assessment_submission_url(@course,
+                                                                                        @assessment,
+                                                                                        @submission,
+                                                                                        host: host))))
