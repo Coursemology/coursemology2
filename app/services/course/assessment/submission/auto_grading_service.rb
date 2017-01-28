@@ -71,10 +71,13 @@ class Course::Assessment::Submission::AutoGradingService
   # Calculating scheme:
   #   Submit before bonus cutoff: ( base_exp + bonus_exp ) * actual_grade / max_grade
   #   Submit after bonus cutoff: base_exp * actual_grade / max_grade
+  #   Submit after end_at: 0
   def calculate_exp(submission)
     assessment = submission.assessment
+    end_at = assessment.end_at
     bonus_end_at = assessment.bonus_end_at
     total_exp = assessment.base_exp
+    return 0 if end_at && submission.submitted_at > end_at
     if bonus_end_at && submission.submitted_at <= bonus_end_at
       total_exp += assessment.time_bonus_exp
     end

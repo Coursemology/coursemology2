@@ -42,33 +42,79 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
       end
 
       context 'when assessment is autograded' do
+        let(:start_at) { 5.days.ago }
+        let(:bonus_end_at) { 3.days.ago }
+        let(:end_at) { 1.day.ago }
         let(:assessment) do
           create(:assessment, :published_with_mcq_question, :autograded,
-                 course: course, question_count: 2)
+                 course: course, question_count: 2, start_at: start_at, bonus_end_at: bonus_end_at,
+                 end_at: end_at)
         end
         let(:submission) { create(:submission, assessment: assessment, creator: student_user) }
-        before do
-          # Create one correct and one wrong answer.
+        let!(:correct_answer) do
           create(:course_assessment_answer_multiple_response, :with_all_correct_options,
                  question: assessment.questions.first,
                  submission: submission)
+        end
+        let!(:wrong_answer) do
           create(:course_assessment_answer_multiple_response, :with_all_wrong_options,
                  question: assessment.questions.last,
                  submission: submission)
+        end
+        before do
           submission.finalise!
           submission.save!
-          subject.grade(submission)
-        end
-
-        it 'gives the correct experience points' do
-          expect(submission).to be_published
-
-          correct_exp = (assessment.time_bonus_exp + assessment.base_exp).to_f / 2
-          expect(submission.points_awarded).to eq(correct_exp.to_i)
         end
 
         it 'grades all answers' do
+          subject.grade(submission)
           expect(submission.answers.map(&:reload).all?(&:graded?)).to be(true)
+        end
+
+        it 'pubishes the submission' do
+          subject.grade(submission)
+          expect(submission).to be_published
+        end
+
+        context 'when submission is submitted before bonus end at' do
+          before do
+            submission.answers.each do |answer|
+              answer.update_column(:submitted_at, 4.days.ago)
+            end
+            subject.grade(submission)
+          end
+
+          it 'gives the correct experience points' do
+            correct_exp = (assessment.time_bonus_exp + assessment.base_exp).to_f / 2
+            expect(submission.points_awarded).to eq(correct_exp.to_i)
+          end
+        end
+
+        context 'when submission is submitted between bonus end at and end at' do
+          before do
+            submission.answers.each do |answer|
+              answer.update_column(:submitted_at, 2.days.ago)
+            end
+            subject.grade(submission)
+          end
+
+          it 'gives the correct experience points' do
+            correct_exp = assessment.base_exp.to_f / 2
+            expect(submission.points_awarded).to eq(correct_exp.to_i)
+          end
+        end
+
+        context 'when submission is submitted after end at' do
+          before do
+            submission.answers.each do |answer|
+              answer.update_column(:submitted_at, Time.zone.now)
+            end
+            subject.grade(submission)
+          end
+
+          it 'gives 0 experience points' do
+            expect(submission.points_awarded).to eq(0)
+          end
         end
       end
     end
