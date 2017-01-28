@@ -305,7 +305,9 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :surveys, only: [:index, :create, :show, :update, :destroy]
+      scope module: :survey do
+        resources :surveys, only: [:index, :create, :show, :update, :destroy]
+      end
     end
   end
 
