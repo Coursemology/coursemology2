@@ -4,69 +4,66 @@ import { injectIntl, defineMessages } from 'react-intl';
 import { aWeekStartingTomorrow } from 'lib/date_time_defaults';
 import * as actionCreators from '../actions';
 import AddButton from '../components/AddButton';
-import SurveyFormDialogue from '../containers/SurveyFormDialogue';
 
 const translations = defineMessages({
   newSurvey: {
-    id: 'course.surveys.NewSurvey.title',
+    id: 'course.surveys.NewSurveyButton.title',
     defaultMessage: 'New Survey',
   },
   success: {
-    id: 'course.surveys.NewSurvey.success',
+    id: 'course.surveys.NewSurveyButton.success',
     defaultMessage: 'Survey "{title}" created.',
   },
   failure: {
-    id: 'course.surveys.NewSurvey.failure',
+    id: 'course.surveys.NewSurveyButton.failure',
     defaultMessage: 'Failed to create survey.',
   },
 });
 
 const propTypes = {
   dispatch: PropTypes.func.isRequired,
-  createPath: PropTypes.string,
+  canCreate: PropTypes.bool.isRequired,
+  courseId: PropTypes.string.isRequired,
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
 };
 
-class NewSurvey extends React.Component {
+class NewSurveyButton extends React.Component {
   constructor(props) {
     super(props);
 
     this.createSurveyHandler = this.createSurveyHandler.bind(this);
+    this.showNewSurveyForm = this.showNewSurveyForm.bind(this);
   }
 
   createSurveyHandler(data) {
-    const { dispatch, intl, createPath } = this.props;
+    const { dispatch, intl, courseId } = this.props;
     const { createSurvey } = actionCreators;
 
     const payload = { survey: data };
     const successMessage = intl.formatMessage(translations.success, data);
     const failureMessage = intl.formatMessage(translations.failure);
-    return dispatch(createSurvey(createPath, payload, successMessage, failureMessage));
+    return dispatch(createSurvey(courseId, payload, successMessage, failureMessage));
+  }
+
+  showNewSurveyForm() {
+    const { dispatch, intl } = this.props;
+    const { showSurveyForm } = actionCreators;
+
+    return dispatch(showSurveyForm({
+      onSubmit: this.createSurveyHandler,
+      formTitle: intl.formatMessage(translations.newSurvey),
+      initialValues: Object.assign({ base_exp: 0 }, aWeekStartingTomorrow()),
+    }));
   }
 
   render() {
-    const { dispatch, intl, createPath } = this.props;
-    const { showSurveyForm } = actionCreators;
-
-    if (!createPath) {
-      return <div />;
-    }
-
-    return (
-      <div>
-        <AddButton onTouchTap={() => { dispatch(showSurveyForm()); }} />
-        <SurveyFormDialogue
-          onSubmit={this.createSurveyHandler}
-          formTitle={intl.formatMessage(translations.newSurvey)}
-          initialValues={Object.assign({ base_exp: 0 }, aWeekStartingTomorrow())}
-        />
-      </div>
-    );
+    const { canCreate } = this.props;
+    return canCreate ? <AddButton onTouchTap={this.showNewSurveyForm} /> : <div />;
   }
 }
 
-NewSurvey.propTypes = propTypes;
+NewSurveyButton.propTypes = propTypes;
 
-export default connect(state => state)(injectIntl(NewSurvey));
+export default connect(state => state)(injectIntl(NewSurveyButton));

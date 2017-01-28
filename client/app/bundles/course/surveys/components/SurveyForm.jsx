@@ -4,6 +4,7 @@ import { reduxForm, Field, Form } from 'redux-form';
 import TextField from 'lib/components/redux-form/TextField';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import formTranslations from 'lib/translations/form';
+import translations from '../translations';
 
 const styles = {
   title: {
@@ -20,30 +21,10 @@ const styles = {
   },
 };
 
-const translations = defineMessages({
-  title: {
-    id: 'course.surveys.SurveyForm.title',
-    defaultMessage: 'Title',
-  },
-  description: {
-    id: 'course.surveys.SurveyForm.description',
-    defaultMessage: 'Description',
-  },
-  baseExp: {
-    id: 'course.surveys.SurveyForm.baseExp',
-    defaultMessage: 'Experience Points Awarded',
-  },
-  startAt: {
-    id: 'course.surveys.SurveyForm.startAt',
-    defaultMessage: 'Start At',
-  },
-  endAt: {
-    id: 'course.surveys.SurveyForm.endAt',
-    defaultMessage: 'End At',
-  },
+const surveyFormTranslations = defineMessages({
   startEndValidationError: {
     id: 'course.surveys.SurveyForm.startEndValidationError',
-    defaultMessage: "Must be after 'Start At'",
+    defaultMessage: "Must be after 'Opens At'",
   },
 });
 
@@ -58,7 +39,7 @@ const validate = (values) => {
   });
 
   if (values.end_at && new Date(values.start_at) >= new Date(values.end_at)) {
-    errors.end_at = translations.startEndValidationError;
+    errors.end_at = surveyFormTranslations.startEndValidationError;
   }
 
   return errors;
@@ -100,7 +81,7 @@ const SurveyForm = ({ handleSubmit, intl, onSubmit, disabled, shiftEndDate, form
     <div style={styles.dateTimeDiv}>
       <Field
         name="start_at"
-        floatingLabelText={intl.formatMessage(translations.startAt)}
+        floatingLabelText={intl.formatMessage(translations.opensAt)}
         component={DateTimePicker}
         afterChange={(_, newStartAt) => shiftEndDate('survey', newStartAt, formValues)}
         style={styles.dateTimeInput}
@@ -108,7 +89,7 @@ const SurveyForm = ({ handleSubmit, intl, onSubmit, disabled, shiftEndDate, form
       />
       <Field
         name="end_at"
-        floatingLabelText={intl.formatMessage(translations.endAt)}
+        floatingLabelText={intl.formatMessage(translations.expiresAt)}
         component={DateTimePicker}
         style={styles.dateTimeInput}
         {...{ disabled }}
@@ -116,7 +97,7 @@ const SurveyForm = ({ handleSubmit, intl, onSubmit, disabled, shiftEndDate, form
     </div>
     <Field
       name="base_exp"
-      floatingLabelText={intl.formatMessage(translations.baseExp)}
+      floatingLabelText={intl.formatMessage(translations.points)}
       component={TextField}
       type="number"
       {...{ disabled }}

@@ -1,26 +1,9 @@
 import React, { PropTypes } from 'react';
-import { injectIntl, defineMessages } from 'react-intl';
+import { injectIntl } from 'react-intl';
+import { Link } from 'react-router';
 import { standardDateFormat } from 'lib/date_time_defaults';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
-
-const translations = defineMessages({
-  title: {
-    id: 'course.surveys.SurveysTable.tableHeaders.title',
-    defaultMessage: 'Title',
-  },
-  points: {
-    id: 'course.surveys.SurveysTable.tableHeaders.points',
-    defaultMessage: 'Points',
-  },
-  opensAt: {
-    id: 'course.surveys.SurveysTable.tableHeaders.openAt',
-    defaultMessage: 'Opens At',
-  },
-  expiresAt: {
-    id: 'course.surveys.SurveysTable.tableHeaders.expiresAt',
-    defaultMessage: 'Expires At',
-  },
-});
+import translations from '../translations';
 
 const styles = {
   tableBody: {
@@ -31,12 +14,13 @@ const styles = {
 
 const propTypes = {
   surveys: PropTypes.array.isRequired,
+  courseId: PropTypes.string.isRequired,
   intl: PropTypes.shape({
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
 };
 
-const SurveysTable = ({ surveys, intl }) => (
+const SurveysTable = ({ intl, surveys, courseId }) => (
   <Table bodyStyle={styles.tableBody}>
     <TableHeader
       displaySelectAll={false}
@@ -57,7 +41,9 @@ const SurveysTable = ({ surveys, intl }) => (
         surveys.map(survey => (
           <TableRow key={survey.id}>
             <TableRowColumn>
-              { survey.title }
+              <Link to={`/courses/${courseId}/surveys/${survey.id}`}>
+                { survey.title }
+              </Link>
             </TableRowColumn>
             <TableRowColumn>
               { survey.base_exp }

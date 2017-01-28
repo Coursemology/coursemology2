@@ -4,6 +4,10 @@ class Course::SurveysController < Course::ComponentController
   add_breadcrumb :index, :course_surveys_path
 
   def index
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   def create
@@ -11,6 +15,29 @@ class Course::SurveysController < Course::ComponentController
       render partial: 'survey', locals: { survey: @survey }
     else
       render json: { errors: @survey.errors }, status: :bad_request
+    end
+  end
+
+  def show
+    respond_to do |format|
+      format.html { render 'index' }
+      format.json
+    end
+  end
+
+  def update
+    if @survey.update_attributes(survey_params)
+      head :ok
+    else
+      render json: { errors: @survey.errors }, status: :bad_request
+    end
+  end
+
+  def destroy
+    if @survey.destroy
+      head :ok
+    else
+      head :bad_request
     end
   end
 

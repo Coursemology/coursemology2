@@ -1,19 +1,19 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { Router, browserHistory } from 'react-router';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import storeCreator from './surveys/store';
-import Surveys from './surveys/containers/Surveys';
+import routes from './surveys/routes';
 
 const mountNode = document.getElementById('course-survey-component');
 
 if (mountNode) {
-  const data = JSON.parse(mountNode.getAttribute('data'));
-  const store = storeCreator(data);
+  const store = storeCreator({ surveys: {} });
 
   $(document).ready(() => {
     render(
       <ProviderWrapper {...{ store }}>
-        <Surveys />
+        <Router routes={routes} history={browserHistory} />
       </ProviderWrapper>
     , mountNode);
   });
