@@ -234,6 +234,14 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
         fill_in find('input.form-control.grade')[:name], with: 0
         click_button I18n.t('course.assessment.submission.submissions.buttons.publish')
 
+        # Send and wait for submission graded email
+        perform_enqueued_jobs
+        wait_for_job
+
+        # Check that student is notified that his submission is graded
+        emails = unread_emails_for(student.email).map(&:subject)
+        expect(emails).to include('course.mailer.submission_graded_email.subject')
+
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, submission))
         expect(submission.reload.published?).to be(true)
