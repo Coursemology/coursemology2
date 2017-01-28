@@ -70,4 +70,19 @@ class Course::Mailer < ApplicationMailer
     mail(to: @recipient.email,
          subject: t('.subject', course: @course.title, assessment: @assessment.title))
   end
+
+  # Send an email to the submission's creator when it has been graded.
+  #
+  # @param [Course::Assessment::Submission] submission The submission which was graded.
+  def submission_graded_email(submission)
+    ActsAsTenant.without_tenant do
+      @course = submission.assessment.course
+    end
+    @recipient = submission.creator
+    @assessment = submission.assessment
+    @submission = submission
+
+    mail(to: @recipient.email,
+         subject: t('.subject', course: @course.title, assessment: @assessment.title))
+  end
 end

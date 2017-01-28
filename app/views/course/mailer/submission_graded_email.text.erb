@@ -1,0 +1,6 @@
+<% host = @course.instance.host %>
+<%= t('.message', submission: plain_link_to(@assessment.title,
+                                            edit_course_assessment_submission_url(@course,
+                                                                                  @assessment,
+                                                                                  @submission,
+                                                                                  host: host))) %>
