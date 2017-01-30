@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170120063357) do
+ActiveRecord::Schema.define(version: 20170128041649) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -596,10 +596,6 @@ ActiveRecord::Schema.define(version: 20170120063357) do
     t.datetime "updated_at",        :null=>false
   end
 
-  create_table "course_survey_answer_text_responses", force: :cascade do |t|
-    t.text "text_response"
-  end
-
   create_table "course_surveys", force: :cascade do |t|
     t.integer  "creator_id", :null=>false, :index=>{:name=>"fk__course_surveys_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_surveys_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "updater_id", :null=>false, :index=>{:name=>"fk__course_surveys_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_surveys_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
@@ -608,14 +604,17 @@ ActiveRecord::Schema.define(version: 20170120063357) do
   end
 
   create_table "course_survey_questions", force: :cascade do |t|
-    t.integer  "actable_id"
-    t.string   "actable_type", :limit=>255, :index=>{:name=>"index_course_survey_questions_actable", :with=>["actable_id"], :unique=>true}
-    t.integer  "survey_id",    :null=>false, :index=>{:name=>"fk__course_survey_questions_survey_id"}, :foreign_key=>{:references=>"course_surveys", :name=>"fk_course_survey_questions_survey_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.text     "description",  :null=>false
-    t.integer  "creator_id",   :null=>false, :index=>{:name=>"fk__course_survey_questions_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_survey_questions_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "updater_id",   :null=>false, :index=>{:name=>"fk__course_survey_questions_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_survey_questions_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.datetime "created_at",   :null=>false
-    t.datetime "updated_at",   :null=>false
+    t.integer  "survey_id",     :null=>false, :index=>{:name=>"fk__course_survey_questions_survey_id"}, :foreign_key=>{:references=>"course_surveys", :name=>"fk_course_survey_questions_survey_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "question_type", :default=>0, :null=>false
+    t.text     "description",   :null=>false
+    t.integer  "weight",        :null=>false
+    t.boolean  "required",      :default=>false, :null=>false
+    t.integer  "max_options"
+    t.integer  "min_options"
+    t.integer  "creator_id",    :null=>false, :index=>{:name=>"fk__course_survey_questions_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_survey_questions_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "updater_id",    :null=>false, :index=>{:name=>"fk__course_survey_questions_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_survey_questions_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "created_at",    :null=>false
+    t.datetime "updated_at",    :null=>false
   end
 
   create_table "course_survey_responses", force: :cascade do |t|
@@ -628,17 +627,32 @@ ActiveRecord::Schema.define(version: 20170120063357) do
   end
 
   create_table "course_survey_answers", force: :cascade do |t|
-    t.integer  "actable_id"
-    t.string   "actable_type", :limit=>255, :index=>{:name=>"index_course_survey_answers_actable", :with=>["actable_id"], :unique=>true}
-    t.integer  "question_id",  :null=>false, :index=>{:name=>"fk__course_survey_answers_question_id"}, :foreign_key=>{:references=>"course_survey_questions", :name=>"fk_course_survey_answers_question_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "response_id",  :null=>false, :index=>{:name=>"fk__course_survey_answers_response_id"}, :foreign_key=>{:references=>"course_survey_responses", :name=>"fk_course_survey_answers_response_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "creator_id",   :null=>false, :index=>{:name=>"fk__course_survey_answers_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_survey_answers_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "updater_id",   :null=>false, :index=>{:name=>"fk__course_survey_answers_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_survey_answers_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.datetime "created_at",   :null=>false
-    t.datetime "updated_at",   :null=>false
+    t.integer  "question_id",   :null=>false, :index=>{:name=>"fk__course_survey_answers_question_id"}, :foreign_key=>{:references=>"course_survey_questions", :name=>"fk_course_survey_answers_question_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "response_id",   :null=>false, :index=>{:name=>"fk__course_survey_answers_response_id"}, :foreign_key=>{:references=>"course_survey_responses", :name=>"fk_course_survey_answers_response_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.text     "text_response"
+    t.integer  "creator_id",    :null=>false, :index=>{:name=>"fk__course_survey_answers_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_survey_answers_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "updater_id",    :null=>false, :index=>{:name=>"fk__course_survey_answers_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_survey_answers_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "created_at",    :null=>false
+    t.datetime "updated_at",    :null=>false
   end
 
-  create_table "course_survey_question_text_responses", force: :cascade do |t|
+  create_table "course_survey_question_options", force: :cascade do |t|
+    t.integer "question_id", :null=>false, :index=>{:name=>"fk__course_survey_question_options_question_id"}, :foreign_key=>{:references=>"course_survey_questions", :name=>"fk_course_survey_question_options_question_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.text    "option"
+    t.text    "image"
+    t.integer "weight",      :null=>false
+  end
+
+  create_table "course_survey_answer_options", force: :cascade do |t|
+    t.integer "answer_id",          :null=>false, :index=>{:name=>"fk__course_survey_answer_options_answer_id"}, :foreign_key=>{:references=>"course_survey_answers", :name=>"fk_course_survey_answer_options_answer_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer "question_option_id", :null=>false, :index=>{:name=>"fk__course_survey_answer_options_question_option_id"}, :foreign_key=>{:references=>"course_survey_question_options", :name=>"fk_course_survey_answer_options_question_option_id", :on_update=>:no_action, :on_delete=>:no_action}
+  end
+
+  create_table "course_survey_sections", force: :cascade do |t|
+    t.integer "survey_id",   :null=>false, :index=>{:name=>"fk__course_survey_sections_survey_id"}, :foreign_key=>{:references=>"course_surveys", :name=>"fk_course_survey_sections_survey_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.string  "title",       :limit=>255, :null=>false
+    t.text    "description"
+    t.integer "weight",      :null=>false
   end
 
   create_table "course_user_achievements", force: :cascade do |t|
