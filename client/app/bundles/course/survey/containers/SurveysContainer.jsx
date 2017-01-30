@@ -4,11 +4,13 @@ import Snackbar from 'material-ui/Snackbar';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import * as actionCreators from '../actions';
 import SurveyFormDialogue from '../containers/SurveyFormDialogue';
+import QuestionFormDialogue from '../containers/QuestionFormDialogue';
 
 const SurveysContainer = ({ dispatch, notification, children, deleteConfirmation }) => (
   <div>
     {children}
     <SurveyFormDialogue />
+    <QuestionFormDialogue />
     <ConfirmationDialog
       confirmDelete
       {...deleteConfirmation}

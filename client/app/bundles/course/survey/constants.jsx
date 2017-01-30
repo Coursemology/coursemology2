@@ -1,5 +1,15 @@
 import mirrorCreator from 'mirror-creator';
 
+export const questionTypes = {
+  TEXT: '0',
+  MULTIPLE_CHOICE: '1',
+  MULTIPLE_RESPONSE: '2',
+};
+
+export const formNames = mirrorCreator([
+  'SURVEY_QUESTION',
+]);
+
 const actionTypes = mirrorCreator([
   'CREATE_SURVEY_REQUEST',
   'CREATE_SURVEY_SUCCESS',
@@ -16,8 +26,13 @@ const actionTypes = mirrorCreator([
   'DELETE_SURVEY_REQUEST',
   'DELETE_SURVEY_SUCCESS',
   'DELETE_SURVEY_FAILURE',
+  'CREATE_SURVEY_QUESTION_REQUEST',
+  'CREATE_SURVEY_QUESTION_SUCCESS',
+  'CREATE_SURVEY_QUESTION_FAILURE',
   'SURVEY_FORM_SHOW',
   'SURVEY_FORM_HIDE',
+  'QUESTION_FORM_SHOW',
+  'QUESTION_FORM_HIDE',
   'SHOW_DELETE_CONFIRMATION',
   'RESET_DELETE_CONFIRMATION',
   'SET_SURVEY_NOTIFICATION',

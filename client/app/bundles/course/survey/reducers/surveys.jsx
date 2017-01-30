@@ -22,6 +22,17 @@ export default function (state = initialState, action) {
       const index = state.findIndex(survey => String(survey.id) === String(action.id));
       return Object.assign([], state).splice(index, 1);
     }
+    case actionTypes.CREATE_SURVEY_QUESTION_SUCCESS: {
+      const surveyIndex =
+        state.findIndex(survey => String(survey.id) === String(action.surveyId));
+      const survey = state[surveyIndex];
+      const questionIndex =
+        survey.questions.findIndex(question => String(question.id) === String(action.data.id));
+      const questions = questionIndex === -1 ?
+        [...survey.questions, action.data] :
+        Object.assign([], survey.questions, { [questionIndex]: action.data });
+      return Object.assign([], state, { [surveyIndex]: { ...survey, questions } });
+    }
     default:
       return state;
   }
