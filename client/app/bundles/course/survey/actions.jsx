@@ -39,7 +39,7 @@ export function showDeleteConfirmation(onConfirm) {
 
 export function submitSurveyForm() {
   return (dispatch) => {
-    dispatch(submit('survey'));
+    dispatch(submit(formNames.SURVEY));
   };
 }
 

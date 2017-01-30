@@ -5,6 +5,7 @@ import TextField from 'lib/components/redux-form/TextField';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import formTranslations from 'lib/translations/form';
 import translations from '../translations';
+import { formNames } from '../constants';
 
 const styles = {
   title: {
@@ -83,7 +84,7 @@ const SurveyForm = ({ handleSubmit, intl, onSubmit, disabled, shiftEndDate, form
         name="start_at"
         floatingLabelText={intl.formatMessage(translations.opensAt)}
         component={DateTimePicker}
-        afterChange={(_, newStartAt) => shiftEndDate('survey', newStartAt, formValues)}
+        afterChange={(_, newStartAt) => shiftEndDate(formNames.SURVEY, newStartAt, formValues)}
         style={styles.dateTimeInput}
         {...{ disabled }}
       />
@@ -108,6 +109,6 @@ const SurveyForm = ({ handleSubmit, intl, onSubmit, disabled, shiftEndDate, form
 SurveyForm.propTypes = propTypes;
 
 export default reduxForm({
-  form: 'survey',
+  form: formNames.SURVEY,
   validate,
 })(injectIntl(SurveyForm));

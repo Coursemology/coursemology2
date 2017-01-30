@@ -5,13 +5,14 @@ import { getFormValues, isPristine } from 'redux-form';
 import * as actionCreators from '../actions';
 import FormDialogue from '../components/FormDialogue';
 import SurveyForm from '../components/SurveyForm';
+import { formNames } from '../constants';
 
 function mapStateToProps({ surveyForm, ...state }) {
   return {
     ...surveyForm,
     ...state,
-    pristine: isPristine('survey')(state),
-    formValues: getFormValues('survey')(state),
+    pristine: isPristine(formNames.SURVEY)(state),
+    formValues: getFormValues(formNames.SURVEY)(state),
   };
 }
 

@@ -7,6 +7,7 @@ export const questionTypes = {
 };
 
 export const formNames = mirrorCreator([
+  'SURVEY',
   'SURVEY_QUESTION',
 ]);
 
