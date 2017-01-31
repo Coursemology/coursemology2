@@ -371,6 +371,8 @@ class OnlineEditorPythonView extends React.Component {
   }
 
   renderEditorCard(header, subtitle, field) {
+    const value = this.props.data.get(field) || '';
+
     return (
       <Card containerStyle={{ paddingBottom: 0 }} initiallyExpanded>
         <CardHeader
@@ -383,7 +385,7 @@ class OnlineEditorPythonView extends React.Component {
         <CardText expandable style={{ padding: 0 }}>
           <textarea
             name={OnlineEditorPythonView.getInputName(field)}
-            value={this.props.data.get(field)}
+            value={value}
             style={{ display: 'none' }}
             readOnly="true"
           />
@@ -392,9 +394,9 @@ class OnlineEditorPythonView extends React.Component {
             theme="monokai"
             width="100%"
             minLines={10}
-            maxLines={Math.max(20, this.props.data.get(field).split(/\r\n|\r|\n/).length)}
+            maxLines={Math.max(20, value.split(/\r\n|\r|\n/).length)}
             name={OnlineEditorPythonView.getInputName(field)}
-            value={this.props.data.get(field)}
+            value={value}
             onChange={this.codeChangeHandler(field)}
             editorProps={{ $blockScrolling: true }}
             setOptions={{ useSoftTabs: true, readOnly: this.props.isLoading }}
