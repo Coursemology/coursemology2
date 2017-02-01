@@ -4,6 +4,11 @@ require 'rails_helper'
 RSpec.describe Course::Assessment::Question::ProgrammingImportService do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
+    let(:user) { create(:user) }
+    let(:course) { create(:course, creator: user) }
+    let(:assessment) { create(:assessment, :with_programming_question, course: course) }
+    let!(:submission) { create(:submission, :submitted, assessment: assessment, creator: user) }
+    let(:answer) { submission.answers.first }
     let(:question) { create(:course_assessment_question_programming, template_file_count: 0) }
     let(:package_path) do
       File.join(Rails.root, 'spec/fixtures/course/programming_question_template.zip')
@@ -32,6 +37,17 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportService do
     end
 
     describe '#import' do
+      with_active_job_queue_adapter(:test) do
+        it 'regrades the answers' do
+          question = assessment.questions.first.actable
+          # Use a different service object as the question object is different.
+          expect do
+            Course::Assessment::Question::ProgrammingImportService.new(question, attachment).
+              send(:import)
+          end.to have_enqueued_job(Course::Assessment::Answer::AutoGradingJob).exactly(:once)
+        end
+      end
+
       it 'imports the test cases' do
         subject.send(:import)
         expect(question.test_cases).not_to be_empty
