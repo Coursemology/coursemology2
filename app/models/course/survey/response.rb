@@ -5,7 +5,7 @@ class Course::Survey::Response < ActiveRecord::Base
   acts_as_experience_points_record
 
   belongs_to :survey, inverse_of: :responses
-  has_many :answers, inverse_of: :response
+  has_many :answers, inverse_of: :response, dependent: :destroy
 
   def submitted?
     submitted_at.present?

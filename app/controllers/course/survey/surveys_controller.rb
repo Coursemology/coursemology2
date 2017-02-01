@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::SurveysController < Course::ComponentController
+class Course::Survey::SurveysController < Course::ComponentController
   load_and_authorize_resource :survey, through: :course, class: Course::Survey.name
   add_breadcrumb :index, :course_surveys_path
 

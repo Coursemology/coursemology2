@@ -137,8 +137,9 @@ en:
         submission:
           submissions:
             edit: :'course.video.submission.submissions.edit.header'
-      surveys:
-        index: 'Surveys'
+      survey:
+        surveys:
+          index: 'Surveys'
     system:
       admin:
         controller:
