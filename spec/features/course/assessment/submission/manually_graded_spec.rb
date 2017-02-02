@@ -83,9 +83,10 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
         visit edit_course_assessment_submission_path(course, programming_assessment,
                                                      programming_submission)
         expect(page).to have_selector('.btn.reset-answer', count: 1)
-        page.accept_alert I18n.t('course.assessment.answer.reset_answer.warning') do
-          click_link I18n.t('course.assessment.answer.reset_answer.button')
-        end
+        find('.btn.reset-answer').click
+
+        expect(page).to have_selector('.confirm-btn')
+        accept_confirm_dialog
         wait_for_ajax
 
         # Check that answer has been reset to template files
@@ -168,7 +169,10 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
           find('.delete').click
         end
 
+        expect(page).to have_selector('.confirm-btn')
+        accept_confirm_dialog
         wait_for_ajax
+
         expect(page).not_to have_content_tag_for(comment_reply)
         expect(comment_topic.reload.posts.count).to eq(1)
 

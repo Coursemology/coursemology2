@@ -37,6 +37,8 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
           find('textarea.code').set code
         end
         click_button I18n.t('course.assessment.submission.submissions.buttons.finalise')
+        expect(page).to have_selector('.confirm-btn')
+        accept_confirm_dialog
         wait_for_job
 
         annotation = 'test annotation text'
@@ -129,6 +131,7 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         within find(content_tag_selector(post)) do
           find('.delete').click
         end
+        accept_confirm_dialog
 
         wait_for_ajax
         expect(page).not_to have_content_tag_for(post)

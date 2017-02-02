@@ -33,6 +33,11 @@ module Capybara::TestGroupHelpers
       JS
       execute_script(script)
     end
+
+    def accept_confirm_dialog
+      find('.confirm-btn').click
+      find('.confirm-btn').click unless page.all('.confirm-btn').empty?
+    end
   end
 end
 

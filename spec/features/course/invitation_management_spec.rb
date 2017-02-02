@@ -122,6 +122,8 @@ RSpec.feature 'Courses: Invitations', js: true do
 
         find_link(nil,
                   href: course_user_invitation_path(course, invitation_to_delete)).click
+        expect(page).to have_selector('.confirm-btn')
+        accept_confirm_dialog
         expect(current_path).to eq(course_user_invitations_path(course))
         expect(page).not_to have_content_tag_for(invitation_to_delete)
       end

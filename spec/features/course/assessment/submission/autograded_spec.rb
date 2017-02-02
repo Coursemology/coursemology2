@@ -189,6 +189,9 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
         visit edit_course_assessment_submission_path(course, programming_assessment,
                                                      programming_submission)
         click_link I18n.t('course.assessment.answer.reset_answer.button')
+
+        expect(page).to have_selector('.confirm-btn')
+        accept_confirm_dialog
         wait_for_ajax
 
         # Check that answer has been reset to template files

@@ -44,6 +44,7 @@ const ConfirmationDialog = ({
     <FlatButton
       primary
       keyboardFocused
+      className="cancel-btn"
       disabled={disableCancelButton}
       onTouchTap={onCancel}
       style={buttonStyle}
@@ -51,6 +52,7 @@ const ConfirmationDialog = ({
     />,
     <FlatButton
       primary
+      className="confirm-btn"
       disabled={disableConfirmButton}
       onTouchTap={onConfirm}
       style={buttonStyle}

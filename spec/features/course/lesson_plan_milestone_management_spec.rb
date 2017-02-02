@@ -48,6 +48,8 @@ RSpec.feature 'Course: Lesson Plan Milestones' do
         expect do
           find_link(nil, href: course_lesson_plan_milestone_path(course, milestone_to_delete)).
             click
+          expect(page).to have_selector('.confirm-btn')
+          accept_confirm_dialog
         end.to change(course.lesson_plan_milestones, :count).by(-1)
 
         # Go to edit milestone page

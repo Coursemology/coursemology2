@@ -36,6 +36,8 @@ RSpec.feature 'Course: Events' do
         find("#item-#{event_to_delete.acting_as.id} .admin-button button").click
         expect do
           find_link(nil, href: course_lesson_plan_event_path(course, event_to_delete)).click
+          expect(page).to have_selector('.confirm-btn')
+          accept_confirm_dialog
         end.to change(course.lesson_plan_events, :count).by(-1)
 
         # Go to edit event page
