@@ -1,7 +1,6 @@
 json.package_ui do
   json.templates @programming_question.template_files do |file|
-    json.id file.id
-    json.filename file.filename
+    json.(file, :id, :filename)
     json.content format_code_block(file.content, @programming_question.language)
   end
 

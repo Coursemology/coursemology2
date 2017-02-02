@@ -1,23 +1,14 @@
 json.question do
-  json.id @programming_question.id
-  json.title @programming_question.title
-  json.description @programming_question.description
-  json.staff_only_comments @programming_question.staff_only_comments
-  json.maximum_grade @programming_question.maximum_grade
-  json.weight @programming_question.weight
-  json.language_id @programming_question.language_id
+  json.(@programming_question, :id, :title, :description, :staff_only_comments, :maximum_grade,
+                               :weight, :language_id, :memory_limit, :time_limit)
   json.languages Coursemology::Polyglot::Language.all do |lang|
-    json.id lang.id
-    json.name lang.name
+    json.(lang, :id, :name)
     json.editor_mode editor_mode(lang)
   end
   json.skill_ids @programming_question.skills.order('LOWER(title) ASC').as_json(only: [:id, :title])
   json.skills current_course.assessment_skills.order('LOWER(title) ASC') do |skill|
-    json.id skill.id
-    json.title skill.title
+    json.(skill, :id, :title)
   end
-  json.memory_limit @programming_question.memory_limit
-  json.time_limit @programming_question.time_limit
 
   json.autograded @assessment.autograded? || @programming_question.attachment.present?
   json.display_autograded_toggle display_autograded_toggle?

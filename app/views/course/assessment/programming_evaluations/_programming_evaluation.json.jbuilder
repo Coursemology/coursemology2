@@ -1,4 +1,2 @@
-json.id programming_evaluation.id
+json.(programming_evaluation, :id, :memory_limit, :time_limit)
 json.language programming_evaluation.language.class.name
-json.memory_limit programming_evaluation.memory_limit
-json.time_limit programming_evaluation.time_limit
