@@ -12,6 +12,6 @@ class Course::Survey::QuestionsController < Course::Survey::SurveysController
   def question_params
     params.require(:question).
       permit(:description, :question_type, :required, :max_options, :min_options,
-             options_attributes: [:option, :weight])
+             options_attributes: [:option, :weight, :image])
   end
 end

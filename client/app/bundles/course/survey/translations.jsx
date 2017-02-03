@@ -51,11 +51,11 @@ const translations = defineMessages({
   },
   maxOptions: {
     id: 'course.surveys.questions.fields.maxOptions',
-    defaultMessage: 'Maximum Number of Responses',
+    defaultMessage: 'Maximum Allowed Responses',
   },
   minOptions: {
     id: 'course.surveys.questions.fields.minOptions',
-    defaultMessage: 'Minimum Number of Responses',
+    defaultMessage: 'Minimum Allowed Responses',
   },
 });
 
