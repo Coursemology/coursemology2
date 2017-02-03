@@ -10,6 +10,8 @@ en:
         submission:
           grade: 'Grade'
           view: 'View'
+          graded_not_published_warning:
+            :'course.assessment.submission.submissions.submission.graded_not_published_warning'
         tabs:
           my_students_pending: 'My Students'
           all_pending: 'All Pending Submissions'
