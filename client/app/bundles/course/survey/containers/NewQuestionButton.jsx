@@ -21,6 +21,26 @@ const translations = defineMessages({
 });
 
 class NewQuestionButton extends React.Component {
+  static formatPayload(data) {
+    const payload = new FormData();
+    ['question_type', 'description', 'max_options', 'min_options', 'required'].forEach((field) => {
+      if (data[field] === 0 || data[field]) {
+        payload.append(`question[${field}]`, data[field]);
+      }
+    });
+    data.options
+      .filter(option => option && (option.option || option.image))
+      .forEach((option, index) => {
+        ['option', 'image'].forEach((field) => {
+          if (option[field]) {
+            payload.append(`question[options_attributes][${index}][${field}]`, option[field]);
+          }
+        });
+        payload.append(`question[options_attributes][${index}][weight]`, index + 1);
+      });
+    return payload;
+  }
+
   constructor(props) {
     super(props);
 
@@ -31,14 +51,8 @@ class NewQuestionButton extends React.Component {
   createQuestionHandler(data) {
     const { dispatch, intl, courseId, surveyId } = this.props;
     const { createSurveyQuestion } = actionCreators;
-    const { options, ...questionAttributes } = data;
 
-    // eslint-disable-next-line camelcase
-    const options_attributes = options
-      .filter(option => option && option.option)
-      .map((option, index) => ({ ...option, weight: index + 1 }));
-
-    const payload = { question: { options_attributes, ...questionAttributes } };
+    const payload = NewQuestionButton.formatPayload(data);
     const successMessage = intl.formatMessage(translations.success);
     const failureMessage = intl.formatMessage(translations.failure);
     return dispatch(

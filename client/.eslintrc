@@ -13,5 +13,7 @@
     "document": true,
     "$": true,
     "FormData": true,
+    "File": true,
+    "FileReader": true,
   }
 }

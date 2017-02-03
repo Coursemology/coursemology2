@@ -5,12 +5,9 @@ import TextField from 'lib/components/redux-form/TextField';
 import SelectField from 'lib/components/redux-form/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import Toggle from 'lib/components/redux-form/Toggle';
-import Checkbox from 'material-ui/Checkbox';
-import RadioButton from 'material-ui/RadioButton';
-import IconButton from 'material-ui/IconButton';
-import CloseIcon from 'material-ui/svg-icons/navigation/close';
-import FlatButton from 'material-ui/FlatButton';
+import DisplayTextField from 'material-ui/TextField';
 import formTranslations from 'lib/translations/form';
+import QuestionFormOptions from './QuestionFormOptions';
 import translations from '../translations';
 import { questionTypes, formNames } from '../constants';
 
@@ -23,11 +20,6 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'flex-end',
   },
-  option: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
   questionType: {
     width: '50%',
   },
@@ -35,13 +27,9 @@ const styles = {
     display: 'flex',
   },
   numberOfResponsesField: {
-    flex: 1,
-  },
-  numberOfResponsesInput: {
-    width: '70%',
-  },
-  widget: {
-    width: 'auto',
+    style: { flex: 1 },
+    inputStyle: { width: '80%' },
+    underlineStyle: { width: '80%' },
   },
   requiredToggle: {
     width: '35%',
@@ -51,9 +39,6 @@ const styles = {
   requiredToggleLabel: {
     fontWeight: 'normal',
   },
-  optionInput: {
-    width: '75%',
-  },
 };
 
 const questionFormTranslations = defineMessages({
@@ -61,21 +46,13 @@ const questionFormTranslations = defineMessages({
     id: 'course.surveys.QuestionForm.compulsory',
     defaultMessage: 'Question is Compulsory',
   },
-  addOption: {
-    id: 'course.surveys.QuestionForm.addOption',
-    defaultMessage: 'Add Option',
-  },
-  optionPlaceholder: {
-    id: 'course.surveys.QuestionForm.optionPlaceholder',
-    defaultMessage: 'Option {index}',
-  },
   lessThanFilledOptions: {
     id: 'course.surveys.QuestionForm.lessThanFilledOptions',
-    defaultMessage: 'Should be less than the number of filled options',
+    defaultMessage: 'Should be less than the valid option count',
   },
   noMoreThanFilledOptions: {
     id: 'course.surveys.QuestionForm.noMoreThanFilledOptions',
-    defaultMessage: 'Should not be more than the number of filled options',
+    defaultMessage: 'Should not be more than the valid option count',
   },
   atLeastOne: {
     id: 'course.surveys.QuestionForm.atLeastOne',
@@ -89,7 +66,19 @@ const questionFormTranslations = defineMessages({
     id: 'course.surveys.QuestionForm.notLessThanMin',
     defaultMessage: 'Should not be less than minimum',
   },
+  noRestriction: {
+    id: 'course.surveys.QuestionForm.noRestriction',
+    defaultMessage: 'No Restriction',
+  },
+  optionCount: {
+    id: 'course.surveys.QuestionForm.optionCount',
+    defaultMessage: 'Valid Option Count',
+  },
 });
+
+const countFilledOptions = options => (
+  options.filter(option => option && (option.option || option.image)).length
+);
 
 const validate = (values) => {
   const { MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
@@ -102,7 +91,7 @@ const validate = (values) => {
     }
   });
 
-  const filledOptions = values.options.filter(option => option && option.option).length;
+  const filledOptions = countFilledOptions(values.options);
   if ((values.question_type === MULTIPLE_CHOICE || values.question_type === MULTIPLE_RESPONSE)
       && filledOptions < 1) {
     errors.options = [{ option: formTranslations.required }];
@@ -130,100 +119,82 @@ const validate = (values) => {
 };
 
 class QuestionForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.renderMcqOptions = this.renderMcqOptions.bind(this);
-    this.renderMrqOptions = this.renderMrqOptions.bind(this);
-    this.renderSpecificFields = this.renderSpecificFields.bind(this);
+  renderNumberOfResponsesField(name, floatingLabelText) {
+    const { intl, disabled } = this.props;
+    return (
+      <Field
+        component={TextField}
+        type="number"
+        {...styles.numberOfResponsesField}
+        placeholder={intl.formatMessage(questionFormTranslations.noRestriction)}
+        {...{ name, floatingLabelText, disabled }}
+      />
+    );
   }
 
-  renderOptions(Widget) {
+  renderValidOptionCount(formValues) {
     const { intl } = this.props;
-    return ({ fields, disabled }) => (
+    const numberOfFilledOptions = formValues ? countFilledOptions(formValues.options) : 0;
+
+    return (
+      <DisplayTextField
+        disabled
+        name="filled_options"
+        value={numberOfFilledOptions}
+        {...styles.numberOfResponsesField}
+        floatingLabelText={intl.formatMessage(questionFormTranslations.optionCount)}
+      />
+    );
+  }
+
+  renderMultipleChoiceFields() {
+    const { disabled, formValues } = this.props;
+    return (
       <div>
-        {fields.map((member, index) =>
-          <div key={index} style={styles.option}>
-            <Widget disabled style={styles.widget} />
-            <Field
-              name={`${member}.option`}
-              placeholder={intl.formatMessage(
-                questionFormTranslations.optionPlaceholder,
-                { index: index + 1 }
-              )}
-              component={TextField}
-              style={styles.optionInput}
-              {...{ disabled }}
-            />
-            <IconButton onTouchTap={() => fields.remove(index)} {...{ disabled }}>
-              <CloseIcon />
-            </IconButton>
-          </div>
-        )}
-        <FlatButton
-          primary
-          label={intl.formatMessage(questionFormTranslations.addOption)}
-          onTouchTap={() => fields.push({})}
+        { this.renderValidOptionCount(formValues) }
+        <FieldArray
+          name="options"
+          multipleChoice
+          component={QuestionFormOptions}
           {...{ disabled }}
         />
       </div>
     );
   }
 
-  renderMrqOptions(props) {
-    return this.renderOptions(Checkbox)(props);
-  }
-
-  renderMcqOptions(props) {
-    return this.renderOptions(RadioButton)(props);
-  }
-
-  renderNumberOfResponsesField(name, floatingLabelText) {
-    const { disabled } = this.props;
+  renderMultipleResponseFields() {
+    const { intl, disabled, formValues } = this.props;
     return (
-      <Field
-        component={TextField}
-        type="number"
-        style={styles.numberOfResponsesField}
-        inputStyle={styles.numberOfResponsesInput}
-        underlineStyle={styles.numberOfResponsesInput}
-        {...{ name, floatingLabelText, disabled }}
-      />
+      <div>
+        <div style={styles.numberOfResponsesDiv}>
+          {this.renderValidOptionCount(formValues)}
+          {this.renderNumberOfResponsesField(
+            'min_options',
+            intl.formatMessage(translations.minOptions)
+          )}
+          {this.renderNumberOfResponsesField(
+            'max_options',
+            intl.formatMessage(translations.maxOptions)
+          )}
+        </div>
+        <FieldArray
+          name="options"
+          multipleResponse
+          component={QuestionFormOptions}
+          {...{ disabled }}
+        />
+      </div>
     );
   }
 
   renderSpecificFields(questionType) {
-    const { intl, disabled } = this.props;
-    const { TEXT, MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
+    const { MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
+    const renderer = {
+      [MULTIPLE_CHOICE]: this.renderMultipleChoiceFields,
+      [MULTIPLE_RESPONSE]: this.renderMultipleResponseFields,
+    }[questionType];
 
-    let specificFields;
-    switch (questionType) {
-      case MULTIPLE_CHOICE:
-        specificFields = (
-          <FieldArray name="options" component={this.renderMcqOptions} {...{ disabled }} />
-        );
-        break;
-      case MULTIPLE_RESPONSE:
-        specificFields = (
-          <div>
-            <div style={styles.numberOfResponsesDiv}>
-              {this.renderNumberOfResponsesField(
-                'min_options',
-                intl.formatMessage(translations.minOptions)
-              )}
-              {this.renderNumberOfResponsesField(
-                'max_options',
-                intl.formatMessage(translations.maxOptions)
-              )}
-            </div>
-            <FieldArray name="options" component={this.renderMrqOptions} {...{ disabled }} />
-          </div>
-        );
-        break;
-      case TEXT:
-      default:
-        specificFields = [];
-    }
-    return specificFields;
+    return renderer ? renderer.call(this) : null;
   }
 
   render() {
@@ -232,7 +203,7 @@ class QuestionForm extends React.Component {
     const questionType = formValues && formValues.question_type;
 
     return (
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
         <div style={styles.fieldRow}>
           <Field
             name="question_type"
@@ -272,7 +243,7 @@ class QuestionForm extends React.Component {
           rows={2}
           {...{ disabled }}
         />
-        {this.renderSpecificFields(questionType)}
+        { this.renderSpecificFields(questionType) }
       </Form>
     );
   }

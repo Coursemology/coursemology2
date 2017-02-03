@@ -4,6 +4,7 @@ import { Card, CardText } from 'material-ui/Card';
 import Checkbox from 'material-ui/Checkbox';
 import RadioButton from 'material-ui/RadioButton';
 import Subheader from 'material-ui/Subheader';
+import Thumbnail from './Thumbnail';
 import sorts from '../utils';
 import { questionTypes } from '../constants';
 import surveyTranslations from '../translations';
@@ -19,9 +20,19 @@ const styles = {
   option: {
     display: 'flex',
     justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginTop: 10,
   },
   optionWidget: {
     width: 'auto',
+  },
+  image: {
+    maxHeight: 150,
+    maxWidth: 400,
+  },
+  optionBody: {
+    display: 'flex',
+    flexDirection: 'column',
   },
 };
 
@@ -44,7 +55,11 @@ class SurveyQuestions extends React.Component {
         { question.options.sort(byWeight).map(option => (
           <div key={option.id} style={styles.option}>
             <Widget disabled style={styles.optionWidget} />
-            {option.option}
+            <div style={styles.optionBody}>
+              { option.image ?
+                <Thumbnail src={option.image} style={styles.image} /> : [] }
+              { option.option ? option.option : '' }
+            </div>
           </div>
         ))}
       </div>
@@ -97,6 +112,7 @@ SurveyQuestions.propTypes = {
       id: PropTypes.number,
       weight: PropTypes.number,
       option: PropTypes.string,
+      image: PropTypes.string,
     })),
   })),
   intl: PropTypes.shape({
