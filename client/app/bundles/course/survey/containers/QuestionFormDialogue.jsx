@@ -2,17 +2,17 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getFormValues, isPristine } from 'redux-form';
+import { formNames } from '../constants';
 import * as actionCreators from '../actions';
 import FormDialogue from '../components/FormDialogue';
-import SurveyForm from '../components/SurveyForm';
-import { formNames } from '../constants';
+import QuestionForm from '../components/QuestionForm';
 
-function mapStateToProps({ surveyForm, ...state }) {
+function mapStateToProps({ questionForm, ...state }) {
   return {
-    ...surveyForm,
+    ...questionForm,
     ...state,
-    pristine: isPristine(formNames.SURVEY)(state),
-    formValues: getFormValues(formNames.SURVEY)(state),
+    pristine: isPristine(formNames.SURVEY_QUESTION)(state),
+    formValues: getFormValues(formNames.SURVEY_QUESTION)(state),
   };
 }
 
@@ -44,21 +44,21 @@ const SurveyFormDialogue = ({
   onSubmit,
 }) => {
   const {
-    hideSurveyForm,
-    submitSurveyForm,
+    hideQuestionForm,
+    submitQuestionForm,
     shiftEndDate,
   } = bindActionCreators(actionCreators, dispatch);
 
   return (
     <FormDialogue
       title={formTitle}
-      hideForm={hideSurveyForm}
-      submitForm={submitSurveyForm}
+      hideForm={hideQuestionForm}
+      submitForm={submitQuestionForm}
       skipConfirmation={pristine}
       disabled={disabled}
       open={visible}
     >
-      <SurveyForm {...{ shiftEndDate, formValues, initialValues, onSubmit, disabled }} />
+      <QuestionForm {...{ shiftEndDate, formValues, initialValues, onSubmit, disabled }} />
     </FormDialogue>
   );
 };

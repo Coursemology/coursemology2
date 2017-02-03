@@ -14,4 +14,3 @@ const mapProps = ({ input, afterChange, ...props }) => ({
 });
 
 export default createComponent(DateTimePicker, mapProps);
-// import React, { PropTypes } from 'react';

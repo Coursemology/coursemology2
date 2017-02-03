@@ -1,7 +1,7 @@
 import axios from 'lib/axios';
 import { submit, change, SubmissionError } from 'redux-form';
 import { browserHistory } from 'react-router';
-import actionTypes from './constants';
+import actionTypes, { formNames } from './constants';
 
 export function showSurveyForm(formParams) {
   return { type: actionTypes.SURVEY_FORM_SHOW, formParams };
@@ -9,6 +9,18 @@ export function showSurveyForm(formParams) {
 
 export function hideSurveyForm() {
   return { type: actionTypes.SURVEY_FORM_HIDE };
+}
+
+export function showQuestionForm(formParams) {
+  return { type: actionTypes.QUESTION_FORM_SHOW, formParams };
+}
+
+export function hideQuestionForm() {
+  return { type: actionTypes.QUESTION_FORM_HIDE };
+}
+
+export function submitQuestionForm() {
+  return dispatch => dispatch(submit(formNames.SURVEY_QUESTION));
 }
 
 export function resetDeleteConfirmation() {
@@ -27,7 +39,7 @@ export function showDeleteConfirmation(onConfirm) {
 
 export function submitSurveyForm() {
   return (dispatch) => {
-    dispatch(submit('survey'));
+    dispatch(submit(formNames.SURVEY));
   };
 }
 
@@ -177,6 +189,37 @@ export function deleteSurvey(courseId, surveyId, successMessage, failureMessage)
       .catch(() => {
         dispatch({ type: actionTypes.DELETE_SURVEY_FAILURE, id: surveyId });
         setNotification(failureMessage)(dispatch);
+      });
+  };
+}
+
+export function createSurveyQuestion(
+  courseId,
+  surveyId,
+  fields,
+  successMessage,
+  failureMessage
+) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.CREATE_SURVEY_QUESTION_REQUEST, surveyId });
+    const endpoint = `/courses/${courseId}/surveys/${surveyId}/questions`;
+    return axios.post(endpoint, fields)
+      .then((response) => {
+        dispatch({
+          surveyId,
+          type: actionTypes.CREATE_SURVEY_QUESTION_SUCCESS,
+          data: response.data,
+        });
+        dispatch(hideQuestionForm());
+        setNotification(successMessage)(dispatch);
+      })
+      .catch((error) => {
+        dispatch({ type: actionTypes.CREATE_SURVEY_QUESTION_FAILURE, surveyId });
+        if (error.response && error.response.data) {
+          throw new SubmissionError(error.response.data.errors);
+        } else {
+          setNotification(failureMessage)(dispatch);
+        }
       });
   };
 }

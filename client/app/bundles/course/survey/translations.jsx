@@ -25,6 +25,38 @@ const translations = defineMessages({
     id: 'course.surveys.fields.points',
     defaultMessage: 'Points Awarded',
   },
+  questionText: {
+    id: 'course.surveys.questionText',
+    defaultMessage: 'Question Text',
+  },
+  questions: {
+    id: 'course.surveys.questions',
+    defaultMessage: 'Questions',
+  },
+  questionType: {
+    id: 'course.surveys.questions.fields.questionType',
+    defaultMessage: 'Question Type',
+  },
+  textResponse: {
+    id: 'course.surveys.questions.fields.questionTypes.textResponse',
+    defaultMessage: 'Text Response Question',
+  },
+  multipleChoice: {
+    id: 'course.surveys.questions.fields.questionTypes.multipleChoice',
+    defaultMessage: 'Mulitple Choice Question',
+  },
+  multipleResponse: {
+    id: 'course.surveys.questions.fields.questionTypes.multipleResponse',
+    defaultMessage: 'Mulitple Response Question',
+  },
+  maxOptions: {
+    id: 'course.surveys.questions.fields.maxOptions',
+    defaultMessage: 'Maximum Number of Responses',
+  },
+  minOptions: {
+    id: 'course.surveys.questions.fields.minOptions',
+    defaultMessage: 'Minimum Number of Responses',
+  },
 });
 
 export default translations;

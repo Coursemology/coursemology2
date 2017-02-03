@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { injectIntl, defineMessages } from 'react-intl';
 import * as actionCreators from '../actions';
 import SurveyDetails from '../components/SurveyDetails';
+import SurveyQuestions from '../components/SurveyQuestions';
+import NewQuestionButton from '../containers/NewQuestionButton';
 
 const translations = defineMessages({
   editSurvey: {
@@ -110,11 +112,16 @@ class ShowSurvey extends React.Component {
     const { surveys, params: { courseId, surveyId } } = this.props;
     const survey = surveys && surveys.length > 0 ?
                    surveys.find(s => String(s.id) === String(surveyId)) : {};
+
     return (
-      <SurveyDetails
-        {...{ survey, courseId }}
-        adminFunctions={this.adminFunctions(survey)}
-      />
+      <div>
+        <SurveyDetails
+          {...{ survey, courseId }}
+          adminFunctions={this.adminFunctions(survey)}
+        />
+        <SurveyQuestions questions={survey.questions} />
+        <NewQuestionButton {...{ courseId, surveyId }} />
+      </div>
     );
   }
 }
