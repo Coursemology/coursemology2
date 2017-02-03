@@ -130,11 +130,11 @@ RSpec.describe 'Course: Submissions Viewing' do
     context 'As a Course Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I can view my submitted and published submissions' do
+      scenario 'I can view my submitted, graded and published submissions' do
         # Attach a submission of each trait to a unique assessment
-        assessments = create_list(:course_assessment_assessment, 3, course: course)
-        attempting_submission, submitted_submission, published_submission =
-          assessments.zip([:attempting, :submitted, :published]).map do |assessment, trait|
+        assessments = create_list(:course_assessment_assessment, 4, course: course)
+        attempting_submission, submitted_submission, graded_submission, published_submission =
+          assessments.zip([:attempting, :submitted, :graded, :published]).map do |assessment, trait|
             create(:submission, trait, assessment: assessment, creator: user)
           end
 
@@ -143,13 +143,15 @@ RSpec.describe 'Course: Submissions Viewing' do
         expect(page).not_to have_content_tag_for(attempting_submission)
         expect(page).not_to have_selector('div.submissions-filter')
 
-        [submitted_submission, published_submission].each do |submission|
+        [submitted_submission, graded_submission, published_submission].each do |submission|
           within find(content_tag_selector(submission)) do
             expect(page).to have_link(
               I18n.t('course.assessment.submissions.submission.view'),
               href: edit_course_assessment_submission_path(course, submission.assessment,
                                                            submission)
             )
+            # Cannot see grades for graded submission
+            expect(page).to have_text('--') if submission.graded?
           end
         end
       end

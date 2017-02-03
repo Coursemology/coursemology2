@@ -12,7 +12,9 @@
           = link_to_course_user(manager) do |course_user|
             = format_inline_text(course_user.name)
 
-  - if submission.published? || submission.graded?
+  - can_see_grades = \
+      submission.published? || (submission.graded? && can?(:grade, submission.assessment))
+  - if can_see_grades
     td
       = submission.grade.to_s + ' / ' + assessment.maximum_grade.to_s
       - if submission.graded?
