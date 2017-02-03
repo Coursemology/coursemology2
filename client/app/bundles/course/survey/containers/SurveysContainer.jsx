@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Snackbar from 'material-ui/Snackbar';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import * as actionCreators from '../actions';
+import { resetDeleteConfirmation } from '../actions';
 import SurveyFormDialogue from '../containers/SurveyFormDialogue';
 import QuestionFormDialogue from '../containers/QuestionFormDialogue';
 
@@ -14,7 +14,7 @@ const SurveysContainer = ({ dispatch, notification, children, deleteConfirmation
     <ConfirmationDialog
       confirmDelete
       {...deleteConfirmation}
-      onCancel={() => dispatch(actionCreators.resetDeleteConfirmation())}
+      onCancel={() => dispatch(resetDeleteConfirmation())}
     />
     <Snackbar
       open={notification !== ''}

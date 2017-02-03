@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import * as actionCreators from '../actions';
+import { showQuestionForm, createSurveyQuestion } from '../actions/questions';
 import { questionTypes } from '../constants';
 import AddButton from '../components/AddButton';
 
@@ -43,7 +43,6 @@ class NewQuestionButton extends React.Component {
 
   createQuestionHandler = (data) => {
     const { dispatch, intl, courseId, surveyId } = this.props;
-    const { createSurveyQuestion } = actionCreators;
 
     const payload = NewQuestionButton.formatPayload(data);
     const successMessage = intl.formatMessage(translations.success);
@@ -55,7 +54,6 @@ class NewQuestionButton extends React.Component {
 
   showNewQuestionForm = () => {
     const { dispatch, intl } = this.props;
-    const { showQuestionForm } = actionCreators;
 
     return dispatch(showQuestionForm({
       onSubmit: this.createQuestionHandler,

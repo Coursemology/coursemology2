@@ -1,7 +1,8 @@
 import axios from 'lib/axios';
 import { submit, change, SubmissionError } from 'redux-form';
 import { browserHistory } from 'react-router';
-import actionTypes, { formNames } from './constants';
+import actionTypes, { formNames } from '../constants';
+import { setNotification } from './index';
 
 export function showSurveyForm(formParams) {
   return { type: actionTypes.SURVEY_FORM_SHOW, formParams };
@@ -9,32 +10,6 @@ export function showSurveyForm(formParams) {
 
 export function hideSurveyForm() {
   return { type: actionTypes.SURVEY_FORM_HIDE };
-}
-
-export function showQuestionForm(formParams) {
-  return { type: actionTypes.QUESTION_FORM_SHOW, formParams };
-}
-
-export function hideQuestionForm() {
-  return { type: actionTypes.QUESTION_FORM_HIDE };
-}
-
-export function submitQuestionForm() {
-  return dispatch => dispatch(submit(formNames.SURVEY_QUESTION));
-}
-
-export function resetDeleteConfirmation() {
-  return { type: actionTypes.RESET_DELETE_CONFIRMATION };
-}
-
-export function showDeleteConfirmation(onConfirm) {
-  return (dispatch) => {
-    const confirmAndDismiss = () => {
-      onConfirm();
-      dispatch(resetDeleteConfirmation());
-    };
-    dispatch({ type: actionTypes.SHOW_DELETE_CONFIRMATION, onConfirm: confirmAndDismiss });
-  };
 }
 
 export function submitSurveyForm() {
@@ -55,20 +30,6 @@ export function shiftEndDate(formName, newStartAt, oldValues, startAtField = 'st
       const newEndAt = new Date(oldEndTime + (newStartTime - oldStartTime));
       dispatch(change(formName, endAtField, newEndAt));
     }
-  };
-}
-
-export function setNotification(message) {
-  const duration = 1500;
-
-  return (dispatch) => {
-    dispatch({
-      type: actionTypes.SET_SURVEY_NOTIFICATION,
-      message,
-    });
-    setTimeout(() => {
-      dispatch({ type: actionTypes.RESET_SURVEY_NOTIFICATION });
-    }, duration);
   };
 }
 
@@ -189,37 +150,6 @@ export function deleteSurvey(courseId, surveyId, successMessage, failureMessage)
       .catch(() => {
         dispatch({ type: actionTypes.DELETE_SURVEY_FAILURE, id: surveyId });
         setNotification(failureMessage)(dispatch);
-      });
-  };
-}
-
-export function createSurveyQuestion(
-  courseId,
-  surveyId,
-  fields,
-  successMessage,
-  failureMessage
-) {
-  return (dispatch) => {
-    dispatch({ type: actionTypes.CREATE_SURVEY_QUESTION_REQUEST, surveyId });
-    const endpoint = `/courses/${courseId}/surveys/${surveyId}/questions`;
-    return axios.post(endpoint, fields)
-      .then((response) => {
-        dispatch({
-          surveyId,
-          type: actionTypes.CREATE_SURVEY_QUESTION_SUCCESS,
-          data: response.data,
-        });
-        dispatch(hideQuestionForm());
-        setNotification(successMessage)(dispatch);
-      })
-      .catch((error) => {
-        dispatch({ type: actionTypes.CREATE_SURVEY_QUESTION_FAILURE, surveyId });
-        if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
-        } else {
-          setNotification(failureMessage)(dispatch);
-        }
       });
   };
 }

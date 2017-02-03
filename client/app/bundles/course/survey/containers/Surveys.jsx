@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import TitleBar from 'lib/components/TitleBar';
-import * as actionCreators from '../actions';
+import { fetchSurveys } from '../actions/surveys';
 import SurveysEmpty from '../components/SurveysEmpty';
 import SurveysTable from '../components/SurveysTable';
 import NewSurveyButton from '../containers/NewSurveyButton';
@@ -19,7 +19,7 @@ const propTypes = {
 class Surveys extends React.Component {
   componentDidMount() {
     const { dispatch, params: { courseId } } = this.props;
-    dispatch(actionCreators.fetchSurveys(courseId));
+    dispatch(fetchSurveys(courseId));
   }
 
   render() {
