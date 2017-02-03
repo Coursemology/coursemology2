@@ -5,12 +5,7 @@ import Paper from 'material-ui/Paper';
 import LessonPlanItem from '../components/LessonPlanItem';
 import LessonPlanMilestone from '../components/LessonPlanMilestone';
 
-const propTypes = {
-  milestone: PropTypes.instanceOf(Immutable.Map).isRequired,
-  items: PropTypes.instanceOf(Immutable.List).isRequired,
-};
-
-const MilestoneGroup = ({ milestone, items }) => {
+const LessonPlanGroup = ({ milestone, items }) => {
   const componentKey = node => node.get('lesson_plan_element_class') + node.get('id');
   return (
     <Element name={`milestone-group-${milestone.get('id')}`}>
@@ -29,6 +24,11 @@ const MilestoneGroup = ({ milestone, items }) => {
   );
 };
 
-MilestoneGroup.propTypes = propTypes;
+LessonPlanGroup.propTypes = {
+  milestone: PropTypes.instanceOf(Immutable.Map).isRequired,
+  items: PropTypes.arrayOf(
+    React.PropTypes.instanceOf(Immutable.Map).isRequired
+  ).isRequired,
+};
 
-export default MilestoneGroup;
+export default LessonPlanGroup;
