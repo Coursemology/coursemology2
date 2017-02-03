@@ -22,8 +22,6 @@ en:
           condition_not_satisfied: 'You do not fulfill the requirements of the assessment'
         show:
           type: 'Assessment Type'
-          autograded: 'Autograded Assessment'
-          manually_graded: 'Manually Graded Assessment'
           description: 'Description'
           start_at: :'course.assessment.assessments.index.start_at'
           bonus_cut_off: :'course.assessment.assessments.index.bonus_cut_off'
