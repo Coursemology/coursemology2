@@ -12,8 +12,12 @@
           = link_to_course_user(manager) do |course_user|
             = format_inline_text(course_user.name)
 
-  - if submission.published?
-    td = submission.grade.to_s + ' / ' + assessment.maximum_grade.to_s
+  - if submission.published? || submission.graded?
+    td
+      = submission.grade.to_s + ' / ' + assessment.maximum_grade.to_s
+      - if submission.graded?
+        span.text-danger title=t('.graded_not_published_warning')
+          =< fa_icon 'exclamation-circle'.freeze
     - if current_course.gamified?
       td = submission.current_points_awarded
   - else

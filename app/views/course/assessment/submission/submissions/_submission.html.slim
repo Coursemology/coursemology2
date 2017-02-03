@@ -4,11 +4,11 @@
     = link_to edit_course_assessment_submission_path(current_course, submission.assessment,
                                                      submission) do
       = Course::Assessment::Submission.human_attribute_name(submission.workflow_state)
-  td = submission.grade.to_s + ' / ' + submission.assessment.maximum_grade.to_s
+  td
+    = submission.grade.to_s + ' / ' + submission.assessment.maximum_grade.to_s
+    - if submission.graded?
+      span.text-danger title=t('.graded_not_published_warning')
+        =< fa_icon 'exclamation-circle'.freeze
   - if current_course.gamified?
-    td
-      = submission.current_points_awarded.to_i.to_s
-      - if submission.graded?
-        span.text-danger title=t('.graded_not_published_warning')
-          =< fa_icon 'exclamation-circle'.freeze
+    td = submission.current_points_awarded.to_i.to_s
   td
