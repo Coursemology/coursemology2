@@ -1,10 +1,13 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import Subheader from 'material-ui/Subheader';
+import sorts from '../utils';
 import { showDeleteConfirmation } from '../actions';
+import surveyTranslations from '../translations';
 import * as surveyActions from '../actions/surveys';
 import SurveyDetails from '../components/SurveyDetails';
-import SurveyQuestions from '../components/SurveyQuestions';
+import QuestionCard from '../components/QuestionCard';
 import NewQuestionButton from '../containers/NewQuestionButton';
 
 const translations = defineMessages({
@@ -31,6 +34,10 @@ const translations = defineMessages({
   deleteFailure: {
     id: 'course.surveys.Survey.deleteFailure',
     defaultMessage: 'Failed to delete survey.',
+  },
+  empty: {
+    id: 'course.surveys.Survey.empty',
+    defaultMessage: 'This survey does not have any questions.',
   },
 });
 
@@ -109,6 +116,24 @@ class ShowSurvey extends React.Component {
     return functions;
   }
 
+  renderQuestions(questions) {
+    const { intl } = this.props;
+    const { byWeight } = sorts;
+
+    if (!questions || questions.length < 1) {
+      return <Subheader>{ intl.formatMessage(translations.empty) }</Subheader>;
+    }
+
+    return (
+      <div>
+        <Subheader>{ intl.formatMessage(surveyTranslations.questions) }</Subheader>
+        {questions.sort(byWeight).map(question =>
+          <QuestionCard key={question.id} {...{ question }} />
+        )}
+      </div>
+    );
+  }
+
   render() {
     const { surveys, params: { courseId, surveyId } } = this.props;
     const survey = surveys && surveys.length > 0 ?
@@ -120,7 +145,7 @@ class ShowSurvey extends React.Component {
           {...{ survey, courseId }}
           adminFunctions={this.adminFunctions(survey)}
         />
-        <SurveyQuestions questions={survey.questions} />
+        { this.renderQuestions(survey.questions) }
         <NewQuestionButton {...{ courseId, surveyId }} />
       </div>
     );
