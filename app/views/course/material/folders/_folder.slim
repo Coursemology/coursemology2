@@ -1,8 +1,9 @@
 = content_tag_for(:tr, folder)
   th
     = link_to course_material_folder_path(current_course, folder) do
-      = fa_icon 'folder-open'.freeze
+      => fa_icon 'folder-open'.freeze
       => format_inline_text(folder.name)
+      => "(#{format_inline_text(folder.material_count + folder.children_count)})"
 
   td = format_datetime(folder.updated_at)
   td
