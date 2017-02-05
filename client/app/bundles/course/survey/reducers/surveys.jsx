@@ -1,4 +1,5 @@
 import actionTypes from '../constants';
+import surveyReducer from './survey';
 
 const initialState = [];
 
@@ -23,15 +24,7 @@ export default function (state = initialState, action) {
       return Object.assign([], state).splice(index, 1);
     }
     case actionTypes.CREATE_SURVEY_QUESTION_SUCCESS: {
-      const surveyIndex =
-        state.findIndex(survey => String(survey.id) === String(action.surveyId));
-      const survey = state[surveyIndex];
-      const questionIndex =
-        survey.questions.findIndex(question => String(question.id) === String(action.data.id));
-      const questions = questionIndex === -1 ?
-        [...survey.questions, action.data] :
-        Object.assign([], survey.questions, { [questionIndex]: action.data });
-      return Object.assign([], state, { [surveyIndex]: { ...survey, questions } });
+      return state.map(survey => surveyReducer(survey, action));
     }
     default:
       return state;
