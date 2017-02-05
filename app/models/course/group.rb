@@ -113,7 +113,7 @@ class Course::Group < ActiveRecord::Base
   # Validation is only called on update action, as the default group manager is created for new
   # records.
   def validate_presence_of_group_manager
-    return if group_users.manager.count > 0
+    return unless group_users.select(&:manager?).reject(&:marked_for_destruction?).empty?
     errors.add(:base, :no_manager)
   end
 end
