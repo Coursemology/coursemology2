@@ -18,7 +18,7 @@ class Course::GroupManagerPreloadService
   def group_managers_of(course_user)
     course_user.groups.map do |group|
       group_managers_hash[group.id]
-    end.flatten.map(&:course_user).uniq
+    end.flatten.compact.map(&:course_user).uniq
   end
 
   # @return [Boolean] True if none of the given course users are group managers
