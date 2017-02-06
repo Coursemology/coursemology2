@@ -28,10 +28,23 @@ class Thumbnail extends React.Component {
     };
 
     if (isFromFile) {
-      const reader = new FileReader();
-      reader.onload = () => this.setState({ src: reader.result });
-      reader.readAsDataURL(file);
+      this.fetchImageFromFile(file);
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { src, file } = nextProps;
+    const isFromFile = !src && file;
+
+    if (isFromFile && this.state.file !== file) {
+      this.fetchImageFromFile(file);
+    }
+  }
+
+  fetchImageFromFile(file) {
+    const reader = new FileReader();
+    reader.onload = () => this.setState({ src: reader.result });
+    reader.readAsDataURL(file);
   }
 
   render() {
