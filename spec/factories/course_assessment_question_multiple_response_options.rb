@@ -5,6 +5,7 @@ FactoryGirl.define do
     question { build(:course_assessment_question_multiple_response) }
     correct false
     option 'Option'
+    sequence(:weight)
 
     trait :correct do
       correct true

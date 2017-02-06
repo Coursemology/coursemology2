@@ -51,6 +51,40 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
       it do
         is_expected.to render_template('edit')
       end
+
+      context 'when weight is updated' do
+        # Mutable multiple response question
+        let(:weight) { 5 }
+        let!(:multiple_response) do
+          create(:course_assessment_question_multiple_response, assessment: assessment)
+        end
+        subject do
+          question_multiple_response_attributes =
+            {
+              'options_attributes' =>
+                {
+                  '0' =>
+                    {
+                      id: multiple_response.options.first.id,
+                      weight: weight
+                    },
+                  '1' =>
+                    {
+                      id: multiple_response.options.second.id,
+                      weight: multiple_response.options.second.weight
+                    }
+                }
+            }
+          patch :update, course_id: course, assessment_id: assessment, id: multiple_response,
+                         question_multiple_response: question_multiple_response_attributes
+        end
+
+        it 'updates a valid weight' do
+          subject
+          saved_weight = multiple_response.reload.options.first.weight
+          expect(saved_weight).to eq(weight)
+        end
+      end
     end
 
     describe '#destroy' do
