@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import Subheader from 'material-ui/Subheader';
-import sorts from '../utils';
+import { sorts } from '../utils';
 import { showDeleteConfirmation } from '../actions';
 import surveyTranslations from '../translations';
 import * as surveyActions from '../actions/surveys';

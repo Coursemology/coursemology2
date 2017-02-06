@@ -3,7 +3,7 @@ import { Card, CardText } from 'material-ui/Card';
 import Checkbox from 'material-ui/Checkbox';
 import RadioButton from 'material-ui/RadioButton';
 import Thumbnail from './Thumbnail';
-import sorts from '../utils';
+import { sorts } from '../utils';
 import { questionTypes } from '../constants';
 
 const styles = {
