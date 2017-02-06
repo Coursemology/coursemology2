@@ -17,6 +17,9 @@ class Course::Assessment::Submission::SubmissionsController < \
     @submissions = @submissions.includes(:answers, experience_points_record: :course_user)
     @my_students = current_course_user.try(:my_students) || []
     @course_students = current_course.course_users.students.order_alphabetically
+    if params[:published_success]
+      flash.now[:success] = t('course.assessment.submission.submissions.publish_all.success')
+    end
   end
 
   def create
@@ -62,12 +65,9 @@ class Course::Assessment::Submission::SubmissionsController < \
   def publish_all
     graded_submissions = @assessment.submissions.with_graded_state
     if !graded_submissions.empty?
-      graded_submissions.each do |submission|
-        submission.publish!
-        submission.save!
-      end
-      redirect_to course_assessment_submissions_path(current_course, @assessment),
-                  success: t('.success')
+      job =
+        Course::Assessment::Submission::PublishingJob.perform_later(@assessment, current_user).job
+      redirect_to(job_path(job))
     else
       redirect_to course_assessment_submissions_path(current_course, @assessment),
                   notice: t('.notice')
