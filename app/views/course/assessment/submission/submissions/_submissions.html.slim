@@ -8,7 +8,7 @@ table.table.submissions
         th = t('.experience_points')
       th
   tbody
-    - course_users.each do |course_user|
+    - course_users.sort_by(&:name).each do |course_user|
       - if submissions[course_user]
         = render partial: 'submission', object: submissions[course_user]
       - else
