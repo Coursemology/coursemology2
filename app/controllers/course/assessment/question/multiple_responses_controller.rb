@@ -7,7 +7,7 @@ class Course::Assessment::Question::MultipleResponsesController < \
 
   def new
     @multiple_response_question.grading_scheme = :any_correct if params[:multiple_choice] == 'true'
-    @multiple_response_question.options.build if @multiple_response_question.options.empty?
+    @multiple_response_question.options.build(weight: 1) if @multiple_response_question.options.empty?
   end
 
   def create
@@ -48,7 +48,7 @@ class Course::Assessment::Question::MultipleResponsesController < \
     params.require(:question_multiple_response).permit(
       :title, :description, :staff_only_comments, :maximum_grade, :grading_scheme,
       skill_ids: [],
-      options_attributes: [:_destroy, :id, :correct, :option, :explanation]
+      options_attributes: [:_destroy, :id, :correct, :option, :explanation, :weight]
     )
   end
 end

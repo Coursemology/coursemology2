@@ -7,9 +7,10 @@
   div.has-error
     = f.full_error :options
 
-  table.table.table-striped.table-hover
+  table.table.table-striped.table-hover.multiple-response-options
     thead
       tr
+        th.reorder
         th = t('.correct')
         th = t('.option')
         th = t('.explanation')
