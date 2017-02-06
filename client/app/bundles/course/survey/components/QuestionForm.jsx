@@ -6,8 +6,10 @@ import SelectField from 'lib/components/redux-form/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import Toggle from 'lib/components/redux-form/Toggle';
 import DisplayTextField from 'material-ui/TextField';
+import Subheader from 'material-ui/Subheader';
 import formTranslations from 'lib/translations/form';
 import QuestionFormOptions from './QuestionFormOptions';
+import QuestionFormDeletedOptions from './QuestionFormDeletedOptions';
 import translations from '../translations';
 import { questionTypes, formNames } from '../constants';
 
@@ -74,10 +76,18 @@ const questionFormTranslations = defineMessages({
     id: 'course.surveys.QuestionForm.optionCount',
     defaultMessage: 'Valid Option Count',
   },
+  optionsToKeep: {
+    id: 'course.surveys.QuestionForm.optionsToKeep',
+    defaultMessage: 'Options To Keep',
+  },
+  optionsToDelete: {
+    id: 'course.surveys.QuestionForm.optionsToDelete',
+    defaultMessage: 'Options To Delete',
+  },
 });
 
 const countFilledOptions = options => (
-  options.filter(option => option && (option.option || option.image)).length
+  options.filter(option => option && (option.option || option.image || option.image_url)).length
 );
 
 const validate = (values) => {
@@ -132,8 +142,8 @@ class QuestionForm extends React.Component {
     );
   }
 
-  renderValidOptionCount(formValues) {
-    const { intl } = this.props;
+  renderValidOptionCount() {
+    const { intl, formValues } = this.props;
     const numberOfFilledOptions = formValues ? countFilledOptions(formValues.options) : 0;
 
     return (
@@ -147,27 +157,60 @@ class QuestionForm extends React.Component {
     );
   }
 
-  renderMultipleChoiceFields() {
-    const { disabled, formValues } = this.props;
+  renderOptionsToDelete(props) {
+    const { intl, disabled, formValues, addToOptions } = this.props;
+    if (formValues && formValues.optionsToDelete && formValues.optionsToDelete.length > 0) {
+      return (
+        <div>
+          <Subheader>
+            {intl.formatMessage(questionFormTranslations.optionsToDelete)}
+          </Subheader>
+          <FieldArray
+            name="optionsToDelete"
+            component={QuestionFormDeletedOptions}
+            {...{ disabled, addToOptions }}
+            {...props}
+          />
+          <Subheader>
+            {intl.formatMessage(questionFormTranslations.optionsToKeep)}
+          </Subheader>
+        </div>
+      );
+    }
+    return null;
+  }
+
+  renderOptionFields(props) {
+    const { disabled, addToOptionsToDelete } = this.props;
+
     return (
       <div>
-        { this.renderValidOptionCount(formValues) }
+        {this.renderOptionsToDelete(props)}
         <FieldArray
           name="options"
-          multipleChoice
           component={QuestionFormOptions}
-          {...{ disabled }}
+          {...{ disabled, addToOptionsToDelete }}
+          {...props}
         />
       </div>
     );
   }
 
+  renderMultipleChoiceFields() {
+    return (
+      <div>
+        {this.renderValidOptionCount()}
+        {this.renderOptionFields({ multipleChoice: true })}
+      </div>
+    );
+  }
+
   renderMultipleResponseFields() {
-    const { intl, disabled, formValues } = this.props;
+    const { intl } = this.props;
     return (
       <div>
         <div style={styles.numberOfResponsesDiv}>
-          {this.renderValidOptionCount(formValues)}
+          {this.renderValidOptionCount()}
           {this.renderNumberOfResponsesField(
             'min_options',
             intl.formatMessage(translations.minOptions)
@@ -177,12 +220,7 @@ class QuestionForm extends React.Component {
             intl.formatMessage(translations.maxOptions)
           )}
         </div>
-        <FieldArray
-          name="options"
-          multipleResponse
-          component={QuestionFormOptions}
-          {...{ disabled }}
-        />
+        {this.renderOptionFields({ multipleResponse: true })}
       </div>
     );
   }
@@ -255,7 +293,9 @@ QuestionForm.propTypes = {
   }),
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  intl: intlShape,
+  addToOptions: PropTypes.func.isRequired,
+  addToOptionsToDelete: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
   disabled: PropTypes.bool,
 };
 

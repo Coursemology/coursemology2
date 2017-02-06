@@ -21,8 +21,13 @@ export default function (state = initialState, action) {
     }
     case actionTypes.DELETE_SURVEY_SUCCESS: {
       const index = state.findIndex(survey => String(survey.id) === String(action.id));
-      return Object.assign([], state).splice(index, 1);
+      const updatedList = [...state];
+      updatedList.splice(index, 1);
+      return updatedList;
     }
+
+    case actionTypes.UPDATE_SURVEY_QUESTION_SUCCESS:
+    case actionTypes.DELETE_SURVEY_QUESTION_SUCCESS:
     case actionTypes.CREATE_SURVEY_QUESTION_SUCCESS: {
       return state.map(survey => surveyReducer(survey, action));
     }

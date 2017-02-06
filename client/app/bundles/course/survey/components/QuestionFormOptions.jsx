@@ -34,12 +34,7 @@ const optionsTranslations = defineMessages({
 });
 
 class QuestionFormOptions extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleSelectFiles = this.handleSelectFiles.bind(this);
-  }
-
-  handleSelectFiles(event) {
+  handleSelectFiles = (event) => {
     const { fields } = this.props;
     const options = fields.getAll();
     const files = event.target.files;

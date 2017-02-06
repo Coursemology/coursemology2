@@ -46,6 +46,8 @@ const SurveyFormDialogue = ({
   const {
     hideQuestionForm,
     submitQuestionForm,
+    addToOptions,
+    addToOptionsToDelete,
   } = bindActionCreators(actionCreators, dispatch);
 
   return (
@@ -57,7 +59,9 @@ const SurveyFormDialogue = ({
       disabled={disabled}
       open={visible}
     >
-      <QuestionForm {...{ formValues, initialValues, onSubmit, disabled }} />
+      <QuestionForm
+        {...{ formValues, initialValues, onSubmit, disabled, addToOptions, addToOptionsToDelete }}
+      />
     </FormDialogue>
   );
 };

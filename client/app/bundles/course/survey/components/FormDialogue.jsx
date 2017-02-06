@@ -23,13 +23,9 @@ class FormDialogue extends React.Component {
     this.state = {
       discardConfirmationOpen: false,
     };
-
-    this.handleFormClose = this.handleFormClose.bind(this);
-    this.handleDiscardCancel = this.handleDiscardCancel.bind(this);
-    this.handleDiscard = this.handleDiscard.bind(this);
   }
 
-  handleFormClose() {
+  handleFormClose = () => {
     const { hideForm, disabled, skipConfirmation } = this.props;
     if (disabled) {
       return;
@@ -42,11 +38,11 @@ class FormDialogue extends React.Component {
     }
   }
 
-  handleDiscardCancel() {
+  handleDiscardCancel = () => {
     this.setState({ discardConfirmationOpen: false });
   }
 
-  handleDiscard() {
+  handleDiscard = () => {
     this.setState({ discardConfirmationOpen: false });
     this.props.hideForm();
   }

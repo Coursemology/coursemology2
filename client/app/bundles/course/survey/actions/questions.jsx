@@ -1,5 +1,5 @@
 import axios from 'lib/axios';
-import { submit, SubmissionError } from 'redux-form';
+import { submit, arrayPush, SubmissionError } from 'redux-form';
 import actionTypes, { formNames } from '../constants';
 import { setNotification } from './index';
 
@@ -13,6 +13,14 @@ export function hideQuestionForm() {
 
 export function submitQuestionForm() {
   return dispatch => dispatch(submit(formNames.SURVEY_QUESTION));
+}
+
+export function addToOptions(option) {
+  return dispatch => dispatch(arrayPush(formNames.SURVEY_QUESTION, 'options', option));
+}
+
+export function addToOptionsToDelete(option) {
+  return dispatch => dispatch(arrayPush(formNames.SURVEY_QUESTION, 'optionsToDelete', option));
 }
 
 export function createSurveyQuestion(
@@ -42,6 +50,72 @@ export function createSurveyQuestion(
         } else {
           setNotification(failureMessage)(dispatch);
         }
+      });
+  };
+}
+
+export function updateSurveyQuestion(
+  courseId,
+  surveyId,
+  questionId,
+  data,
+  successMessage,
+  failureMessage
+) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.UPDATE_SURVEY_QUESTION_REQUEST, surveyId, questionId });
+
+    return axios.patch(`/courses/${courseId}/surveys/${surveyId}/questions/${questionId}`, data)
+      .then((response) => {
+        dispatch({
+          surveyId,
+          questionId,
+          type: actionTypes.UPDATE_SURVEY_QUESTION_SUCCESS,
+          data: response.data,
+        });
+        dispatch(hideQuestionForm());
+        setNotification(successMessage)(dispatch);
+      })
+      .catch((error) => {
+        dispatch({
+          surveyId,
+          questionId,
+          type: actionTypes.UPDATE_SURVEY_QUESTION_FAILURE,
+        });
+        if (error.response && error.response.data) {
+          throw new SubmissionError(error.response.data.errors);
+        } else {
+          setNotification(failureMessage)(dispatch);
+        }
+      });
+  };
+}
+
+export function deleteSurveyQuestion(
+  courseId,
+  surveyId,
+  questionId,
+  successMessage,
+  failureMessage
+) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.DELETE_SURVEY_QUESTION_REQUEST, surveyId, questionId });
+    return axios.delete(`/courses/${courseId}/surveys/${surveyId}/questions/${questionId}`)
+      .then(() => {
+        dispatch({
+          surveyId,
+          questionId,
+          type: actionTypes.DELETE_SURVEY_QUESTION_SUCCESS,
+        });
+        setNotification(successMessage)(dispatch);
+      })
+      .catch(() => {
+        dispatch({
+          surveyId,
+          questionId,
+          type: actionTypes.DELETE_SURVEY_QUESTION_FAILURE,
+        });
+        setNotification(failureMessage)(dispatch);
       });
   };
 }

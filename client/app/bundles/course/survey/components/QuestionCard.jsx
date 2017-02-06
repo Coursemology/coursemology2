@@ -2,6 +2,10 @@ import React, { PropTypes } from 'react';
 import { Card, CardText } from 'material-ui/Card';
 import Checkbox from 'material-ui/Checkbox';
 import RadioButton from 'material-ui/RadioButton';
+import IconButton from 'material-ui/IconButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Thumbnail from './Thumbnail';
 import { sorts } from '../utils';
 import { questionTypes } from '../constants';
@@ -26,7 +30,11 @@ const styles = {
   },
   adminMenu: {
     position: 'absolute',
-    right: 24,
+    right: 0,
+    top: 0,
+  },
+  cardText: {
+    position: 'relative',
   },
 };
 
@@ -39,8 +47,8 @@ class QuestionCard extends React.Component {
           <div key={option.id} style={styles.option}>
             <Widget disabled style={styles.optionWidget} />
             <div style={styles.optionBody}>
-              { option.image ?
-                <Thumbnail src={option.image} style={styles.image} /> : [] }
+              { option.image_url ?
+                <Thumbnail src={option.image_url} style={styles.image} /> : [] }
               { option.option ? option.option : '' }
             </div>
           </div>
@@ -58,18 +66,37 @@ class QuestionCard extends React.Component {
     return renderer ? renderer() : null;
   }
 
+  renderAdminMenu() {
+    const { adminFunctions } = this.props;
+
+    if (!adminFunctions) {
+      return null;
+    }
+
+    return (
+      <IconMenu
+        iconButtonElement={<IconButton style={{ height: 24 }}><MoreVertIcon /></IconButton>}
+        style={styles.adminMenu}
+      >
+        {adminFunctions.map(({ label, handler }) =>
+          <MenuItem key={label} primaryText={label} onTouchTap={handler} />
+        )}
+      </IconMenu>
+    );
+  }
+
   render() {
     const { question } = this.props;
     return (
       <Card>
-        <CardText>
+        <CardText style={styles.cardText}>
+          {this.renderAdminMenu()}
           <p>{question.description}</p>
           {QuestionCard.renderSpecificFields(question)}
         </CardText>
       </Card>
     );
   }
-
 }
 
 QuestionCard.propTypes = {
@@ -82,9 +109,13 @@ QuestionCard.propTypes = {
       id: PropTypes.number,
       weight: PropTypes.number,
       option: PropTypes.string,
-      image: PropTypes.string,
+      image_url: PropTypes.string,
     })),
   }),
+  adminFunctions: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    handler: PropTypes.func,
+  })),
 };
 
 export default QuestionCard;

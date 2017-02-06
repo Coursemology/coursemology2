@@ -7,8 +7,8 @@ import { showDeleteConfirmation } from '../actions';
 import surveyTranslations from '../translations';
 import * as surveyActions from '../actions/surveys';
 import SurveyDetails from '../components/SurveyDetails';
-import QuestionCard from '../components/QuestionCard';
 import NewQuestionButton from '../containers/NewQuestionButton';
+import ShowQuestion from '../containers/ShowQuestion';
 
 const translations = defineMessages({
   editSurvey: {
@@ -42,13 +42,6 @@ const translations = defineMessages({
 });
 
 class ShowSurvey extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.updateSurveyHandler = this.updateSurveyHandler.bind(this);
-    this.showEditSurveyForm = this.showEditSurveyForm.bind(this);
-  }
-
   componentDidMount() {
     const {
       dispatch,
@@ -57,7 +50,7 @@ class ShowSurvey extends React.Component {
     dispatch(surveyActions.fetchSurvey(courseId, surveyId));
   }
 
-  updateSurveyHandler(data) {
+  updateSurveyHandler = (data) => {
     const { dispatch, intl, params: { courseId, surveyId } } = this.props;
     const { updateSurvey } = surveyActions;
 
@@ -67,7 +60,7 @@ class ShowSurvey extends React.Component {
     return dispatch(updateSurvey(courseId, surveyId, payload, successMessage, failureMessage));
   }
 
-  showEditSurveyForm(survey) {
+  showEditSurveyForm = (survey) => {
     const { dispatch, intl } = this.props;
     const { showSurveyForm } = surveyActions;
     const { start_at, end_at, ...surveyFields } = survey;
@@ -117,7 +110,7 @@ class ShowSurvey extends React.Component {
   }
 
   renderQuestions(questions) {
-    const { intl } = this.props;
+    const { intl, params } = this.props;
     const { byWeight } = sorts;
 
     if (!questions || questions.length < 1) {
@@ -128,7 +121,7 @@ class ShowSurvey extends React.Component {
       <div>
         <Subheader>{ intl.formatMessage(surveyTranslations.questions) }</Subheader>
         {questions.sort(byWeight).map(question =>
-          <QuestionCard key={question.id} {...{ question }} />
+          <ShowQuestion key={question.id} {...{ question, params }} />
         )}
       </div>
     );

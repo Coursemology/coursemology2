@@ -21,33 +21,24 @@ const optionTranslations = defineMessages({
   },
 });
 
-const styleConstants = {
-  alignLeftMiddle: {
+const styles = {
+  option: {
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-};
-
-const styles = {
-  option: styleConstants.alignLeftMiddle,
   widget: {
     width: 'auto',
   },
   optionTextfield: {
     width: '100%',
   },
-  textOptionBody: {
-    ...styleConstants.alignLeftMiddle,
-    width: '70%',
-  },
-  imageOptionBody: {
+  optionBody: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     width: '70%',
-    marginTop: 50,
   },
   imageUploaderLabel: {
     position: 'relative',
@@ -63,6 +54,7 @@ const styles = {
     opacity: 0,
   },
   image: {
+    marginTop: 50,
     maxHeight: 150,
     maxWidth: 400,
   },
@@ -92,49 +84,38 @@ class QuestionFormOption extends React.Component {
     );
   }
 
-  static renderTextField(member, placeholder, disabled) {
-    return (
-      <Field
-        multiLine
-        name={`${member}.option`}
-        component={TextField}
-        style={styles.optionTextfield}
-        {...{ placeholder, disabled }}
-      />
-    );
-  }
+  renderOptionBody() {
+    const { intl, member, index, fields, disabled } = this.props;
+    const fieldValue = fields.get(index);
+    const imageFile = fieldValue && fieldValue.image;
 
-  renderTextOption(member, index, disabled) {
-    const { intl } = this.props;
-    const placeholder =
-      intl.formatMessage(optionTranslations.optionPlaceholder, { index: index + 1 });
+    const fileOrSrc = {};
+    let imageFileName = '';
+    let placeholder = intl.formatMessage(optionTranslations.noCaption, { index: index + 1 });
+
+    if (imageFile) {
+      fileOrSrc.file = imageFile;
+      imageFileName = imageFile.name;
+    } else if (fieldValue.image_url) {
+      fileOrSrc.src = fieldValue.image_url;
+      imageFileName = fieldValue.image_name;
+    } else {
+      placeholder = intl.formatMessage(optionTranslations.optionPlaceholder, { index: index + 1 });
+    }
 
     return (
-      <div style={styles.textOptionBody}>
-        { QuestionFormOption.renderTextField(member, placeholder, disabled) }
+      <div style={styles.optionBody}>
+        {
+          fileOrSrc.file || fileOrSrc.src ?
+            <Thumbnail style={styles.image} {...fileOrSrc} /> : null
+        }
+        <small>{imageFileName}</small>
         <Field
-          name={`${member}.image`}
-          component={QuestionFormOption.renderImageField}
-          {...{ index, disabled }}
-        />
-      </div>
-    );
-  }
-
-  renderImageOption(member, index, disabled, imageFile) {
-    const { intl } = this.props;
-    const placeholder =
-      intl.formatMessage(optionTranslations.noCaption, { index: index + 1 });
-
-    return (
-      <div style={styles.imageOptionBody}>
-        <Thumbnail file={imageFile} style={styles.image} />
-        <small>{imageFile.name}</small>
-        { QuestionFormOption.renderTextField(member, placeholder, disabled) }
-        <Field
-          name={`${member}.image`}
-          component="input"
-          type="hidden"
+          multiLine
+          name={`${member}.option`}
+          component={TextField}
+          style={styles.optionTextfield}
+          {...{ placeholder, disabled }}
         />
       </div>
     );
@@ -152,18 +133,28 @@ class QuestionFormOption extends React.Component {
   }
 
   render() {
-    const { member, index, fields, disabled } = this.props;
+    const { member, index, fields, disabled, addToOptionsToDelete } = this.props;
     const fieldValue = fields.get(index);
+    const handleRemove = () => {
+      fields.remove(index);
+      if (fieldValue.id) {
+        addToOptionsToDelete(fieldValue);
+      }
+      if (fields.length <= 1) {
+        fields.push({});
+      }
+    };
 
     return (
       <div key={index} style={styles.option}>
         { this.renderWidget() }
-        {
-          fieldValue && fieldValue.image ?
-          this.renderImageOption(member, index, disabled, fieldValue.image) :
-          this.renderTextOption(member, index, disabled)
-        }
-        <IconButton onTouchTap={() => fields.remove(index)} {...{ disabled }}>
+        { this.renderOptionBody() }
+        <Field
+          name={`${member}.image`}
+          component={QuestionFormOption.renderImageField}
+          {...{ index, disabled }}
+        />
+        <IconButton onTouchTap={handleRemove} {...{ disabled }}>
           <CloseIcon color={grey600} />
         </IconButton>
       </div>
@@ -182,6 +173,7 @@ QuestionFormOption.propTypes = {
     get: PropTypes.func.isRequired,
     remove: PropTypes.func.isRequired,
   }).isRequired,
+  addToOptionsToDelete: PropTypes.func.isRequired,
 };
 
 export default injectIntl(QuestionFormOption);
