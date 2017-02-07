@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { injectIntl } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import formTranslations from 'lib/translations/form';
@@ -12,9 +12,7 @@ const propTypes = {
   skipConfirmation: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
   open: PropTypes.bool.isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
   children: PropTypes.node,
 };
 

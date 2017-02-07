@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
 import React, { PropTypes } from 'react';
-import { injectIntl } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
@@ -32,9 +32,7 @@ const propTypes = {
     clearSubmissionMessage: PropTypes.func.isRequired,
   }),
   onlineEditorActions: PropTypes.instanceOf(Object).isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 function validation(data, pathOfKeysToData, intl) {

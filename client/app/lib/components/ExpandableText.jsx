@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { injectIntl, defineMessages } from 'react-intl';
+import { injectIntl, defineMessages, intlShape } from 'react-intl';
 
 const translations = defineMessages({
   showAll: {
@@ -15,9 +15,7 @@ const translations = defineMessages({
 const propTypes = {
   text: PropTypes.string.isRequired,
   maxChars: PropTypes.number,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 class ExpandableText extends React.Component {

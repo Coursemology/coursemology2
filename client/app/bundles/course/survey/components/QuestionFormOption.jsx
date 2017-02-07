@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { Field } from 'redux-form';
 import IconButton from 'material-ui/IconButton';
 import Checkbox from 'material-ui/Checkbox';
@@ -172,9 +172,7 @@ class QuestionFormOption extends React.Component {
 }
 
 QuestionFormOption.propTypes = {
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
   disabled: PropTypes.bool,
   multipleChoice: PropTypes.bool,
   multipleResponse: PropTypes.bool,

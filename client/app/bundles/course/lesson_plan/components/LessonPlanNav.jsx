@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
-import { injectIntl, defineMessages } from 'react-intl';
+import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
@@ -10,9 +10,7 @@ import { scroller, Helpers } from 'react-scroll';
 
 const propTypes = {
   milestones: PropTypes.instanceOf(Immutable.List).isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 const translations = defineMessages({

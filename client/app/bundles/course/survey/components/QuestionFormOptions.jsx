@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import FlatButton from 'material-ui/FlatButton';
 import QuestionFormOption from './QuestionFormOption';
 
@@ -96,9 +96,7 @@ class QuestionFormOptions extends React.Component {
 }
 
 QuestionFormOptions.propTypes = {
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
   disabled: PropTypes.bool,
   fields: PropTypes.shape({
     map: PropTypes.func.isRequired,

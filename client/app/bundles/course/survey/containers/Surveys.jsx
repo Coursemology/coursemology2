@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import TitleBar from 'lib/components/TitleBar';
 import * as actionCreators from '../actions';
 import SurveysEmpty from '../components/SurveysEmpty';
@@ -14,9 +14,6 @@ const propTypes = {
   params: PropTypes.shape({
     courseId: PropTypes.string.isRequired,
   }),
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 class Surveys extends React.Component {
@@ -26,7 +23,7 @@ class Surveys extends React.Component {
   }
 
   render() {
-    const { intl, surveys, params: { courseId } } = this.props;
+    const { surveys, params: { courseId } } = this.props;
     surveys.sort((a, b) => {
       const dateOrder = new Date(a.start_at) - new Date(b.start_at);
       return dateOrder === 0 ? a.title.localeCompare(b.title) : dateOrder;
@@ -34,7 +31,7 @@ class Surveys extends React.Component {
     return (
       <div>
         <TitleBar
-          title={intl.formatMessage(translations.surveys)}
+          title={<FormattedMessage {...translations.surveys} />}
         />
         { surveys.length > 0 ? <SurveysTable {...{ surveys, courseId }} /> : <SurveysEmpty /> }
         <NewSurveyButton {...{ courseId }} />
@@ -45,4 +42,4 @@ class Surveys extends React.Component {
 
 Surveys.propTypes = propTypes;
 
-export default connect(state => state)(injectIntl(Surveys));
+export default connect(state => state)(Surveys);

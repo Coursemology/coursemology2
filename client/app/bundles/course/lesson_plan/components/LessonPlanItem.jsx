@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
-import { injectIntl, defineMessages } from 'react-intl';
+import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { CardText, CardTitle } from 'material-ui/Card';
 import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
@@ -20,10 +20,8 @@ import { red700, grey700 } from 'material-ui/styles/colors';
 import { shortDateFormat, standardDateFormat, shortTimeFormat } from 'lib/date_time_defaults';
 
 const propTypes = {
-  item: React.PropTypes.instanceOf(Immutable.Map).isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  item: PropTypes.instanceOf(Immutable.Map).isRequired,
+  intl: intlShape.isRequired,
 };
 
 const translations = defineMessages({

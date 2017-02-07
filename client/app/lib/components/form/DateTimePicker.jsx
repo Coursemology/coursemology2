@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { injectIntl, defineMessages } from 'react-intl';
+import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import moment from 'moment';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
@@ -62,9 +62,7 @@ const propTypes = {
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
   disabled: PropTypes.bool,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
   style: PropTypes.object,
 };
 

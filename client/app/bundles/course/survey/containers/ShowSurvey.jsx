@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages } from 'react-intl';
+import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import * as actionCreators from '../actions';
 import SurveyDetails from '../components/SurveyDetails';
 import SurveyQuestions from '../components/SurveyQuestions';
@@ -133,9 +133,7 @@ ShowSurvey.propTypes = {
     surveyId: PropTypes.string.isRequired,
   }).isRequired,
   surveys: PropTypes.arrayOf(PropTypes.object).isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 export default connect(state => state)(injectIntl(ShowSurvey));

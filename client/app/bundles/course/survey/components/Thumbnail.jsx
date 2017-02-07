@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import formTranslations from 'lib/translations/form';
@@ -36,7 +36,7 @@ class Thumbnail extends React.Component {
 
   render() {
     // eslint-disable-next-line no-unused-vars
-    const { intl, src, alt, file, onTouchTap, style, ...props } = this.props;
+    const { src, alt, file, onTouchTap, style, ...props } = this.props;
     const source = src || this.state.src;
     const altText = alt || this.state.alt || src;
 
@@ -63,7 +63,7 @@ class Thumbnail extends React.Component {
 
     const actions = [
       <FlatButton
-        label={intl.formatMessage(formTranslations.close)}
+        label={<FormattedMessage {...formTranslations.close} />}
         primary
         onTouchTap={() => this.setState({ open: false })}
       />,
@@ -99,9 +99,6 @@ class Thumbnail extends React.Component {
 }
 
 Thumbnail.propTypes = {
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
   src: PropTypes.string,
   alt: PropTypes.string,
   file: PropTypes.instanceOf(File),
@@ -109,4 +106,4 @@ Thumbnail.propTypes = {
   style: PropTypes.shape(),
 };
 
-export default injectIntl(Thumbnail);
+export default Thumbnail;

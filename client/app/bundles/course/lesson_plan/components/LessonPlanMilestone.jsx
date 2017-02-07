@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
-import { FormattedDate, injectIntl, defineMessages } from 'react-intl';
+import { FormattedDate, injectIntl, defineMessages, intlShape } from 'react-intl';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
@@ -26,9 +26,7 @@ const translations = defineMessages({
 
 const propTypes = {
   milestone: PropTypes.instanceOf(Immutable.Map).isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 class LessonPlanMilestone extends React.Component {

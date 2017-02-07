@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { injectIntl, defineMessages } from 'react-intl';
+import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import moment from 'moment';
 import Toggle from 'material-ui/Toggle';
 import Snackbar from 'material-ui/Snackbar';
@@ -48,9 +48,7 @@ const propTypes = {
   updateItem: PropTypes.func,
   updateMilestone: PropTypes.func,
   notification: PropTypes.string,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 const styles = {

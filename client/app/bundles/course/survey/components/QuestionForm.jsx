@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Field, FieldArray, Form } from 'redux-form';
 import TextField from 'lib/components/redux-form/TextField';
 import SelectField from 'lib/components/redux-form/SelectField';
@@ -255,9 +255,7 @@ QuestionForm.propTypes = {
   }),
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape,
   disabled: PropTypes.bool,
 };
 
