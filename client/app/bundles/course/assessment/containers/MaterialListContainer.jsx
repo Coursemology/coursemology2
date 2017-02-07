@@ -11,10 +11,9 @@ class MaterialListContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = { materials: props.materials };
-    this.onMaterialDelete = this.onMaterialDelete.bind(this);
   }
 
-  onMaterialDelete(url) {
+  onMaterialDelete = (url) => {
     const originMaterials = this.state.materials;
     // Update UI to show the loader.
     const [index, material] = originMaterials.findEntry(m => m.get('url') === url);

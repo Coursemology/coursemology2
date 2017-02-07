@@ -23,12 +23,7 @@ const propTypes = {
 };
 
 class Material extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onDelete = this.onDelete.bind(this);
-  }
-
-  onDelete(e) {
+  onDelete = (e) => {
     e.preventDefault();
     const { url, onMaterialDelete } = this.props;
     onMaterialDelete(url);

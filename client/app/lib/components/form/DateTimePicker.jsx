@@ -82,11 +82,6 @@ class DateTimePicker extends React.Component {
     super(props);
 
     this.state = DateTimePicker.displayState(props.value);
-    this.updateDate = this.updateDate.bind(this);
-    this.updateTime = this.updateTime.bind(this);
-    this.updateDateTime = this.updateDateTime.bind(this);
-    this.handleDateFieldBlur = this.handleDateFieldBlur.bind(this);
-    this.handleTimeFieldBlur = this.handleTimeFieldBlur.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -94,7 +89,7 @@ class DateTimePicker extends React.Component {
     this.state = DateTimePicker.displayState(dateTime);
   }
 
-  updateDateTime(newDateTime) {
+  updateDateTime = (newDateTime) => {
     const { onBlur, onChange } = this.props;
     this.setState(DateTimePicker.displayState(newDateTime));
     // Marks redux-form field as 'touched' so that validation errors are shown, if any.
@@ -102,19 +97,19 @@ class DateTimePicker extends React.Component {
     if (onChange) { onChange(null, newDateTime); }
   }
 
-  updateDate(_, newDate) {
+  updateDate = (_, newDate) => {
     const { date, months, years } = moment(newDate).toObject();
     const newDateTime = moment(this.props.value).set({ date, months, years });
     this.updateDateTime(newDateTime.toDate());
   }
 
-  updateTime(_, newTime) {
+  updateTime = (_, newTime) => {
     const { hours, minutes } = moment(newTime).toObject();
     const newDateTime = moment(this.props.value).set({ hours, minutes });
     this.updateDateTime(newDateTime.toDate());
   }
 
-  handleDateFieldBlur() {
+  handleDateFieldBlur = () => {
     // Blanking out the date blanks out the whole field
     if (this.state.displayedDate === '') {
       this.updateDateTime(null, null);
@@ -129,7 +124,7 @@ class DateTimePicker extends React.Component {
     }
   }
 
-  handleTimeFieldBlur() {
+  handleTimeFieldBlur = () => {
     // Blanking out the time also blanks out the whole field
     if (this.state.displayedTime === '') {
       this.updateDateTime(null, null);

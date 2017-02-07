@@ -28,17 +28,14 @@ class ExpandableText extends React.Component {
     this.state = {
       expanded: false,
     };
-
-    this.handleShowAll = this.handleShowAll.bind(this);
-    this.handleShowLess = this.handleShowLess.bind(this);
   }
 
-  handleShowAll(e) {
+  handleShowAll = (e) => {
     e.preventDefault();
     this.setState({ expanded: true });
   }
 
-  handleShowLess(e) {
+  handleShowLess = (e) => {
     e.preventDefault();
     this.setState({ expanded: false });
   }

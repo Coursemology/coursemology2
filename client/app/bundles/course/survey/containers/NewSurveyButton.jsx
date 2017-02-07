@@ -30,14 +30,7 @@ const propTypes = {
 };
 
 class NewSurveyButton extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.createSurveyHandler = this.createSurveyHandler.bind(this);
-    this.showNewSurveyForm = this.showNewSurveyForm.bind(this);
-  }
-
-  createSurveyHandler(data) {
+  createSurveyHandler = (data) => {
     const { dispatch, intl, courseId } = this.props;
     const { createSurvey } = actionCreators;
 
@@ -47,7 +40,7 @@ class NewSurveyButton extends React.Component {
     return dispatch(createSurvey(courseId, payload, successMessage, failureMessage));
   }
 
-  showNewSurveyForm() {
+  showNewSurveyForm = () => {
     const { dispatch, intl } = this.props;
     const { showSurveyForm } = actionCreators;
 

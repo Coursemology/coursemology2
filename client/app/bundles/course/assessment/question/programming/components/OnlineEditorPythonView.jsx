@@ -96,11 +96,6 @@ class OnlineEditorPythonView extends React.Component {
     return `question_programming[test_cases][${type}][][${field}]`;
   }
 
-  constructor(props) {
-    super(props);
-    this.renderExistingDataFiles = this.renderExistingDataFiles.bind(this);
-  }
-
   codeChangeHandler(field) {
     return e => this.props.actions.updatePythonCodeBlock(field, e);
   }
@@ -133,7 +128,7 @@ class OnlineEditorPythonView extends React.Component {
     };
   }
 
-  renderExistingDataFiles() {
+  renderExistingDataFiles = () => {
     if (this.props.data.get('data_files').size === 0) {
       return null;
     }

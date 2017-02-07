@@ -36,12 +36,9 @@ class LessonPlanNav extends React.Component {
       open: false,
       text: props.intl.formatMessage(translations.goto),
     };
-
-    this.handleTouchTap = this.handleTouchTap.bind(this);
-    this.handleRequestClose = this.handleRequestClose.bind(this);
   }
 
-  handleTouchTap(event) {
+  handleTouchTap = (event) => {
     // This prevents ghost click.
     event.preventDefault();
 
@@ -51,7 +48,7 @@ class LessonPlanNav extends React.Component {
     });
   }
 
-  handleRequestClose() {
+  handleRequestClose = () => {
     this.setState({
       open: false,
     });

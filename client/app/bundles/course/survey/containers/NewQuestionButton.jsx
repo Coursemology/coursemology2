@@ -41,14 +41,7 @@ class NewQuestionButton extends React.Component {
     return payload;
   }
 
-  constructor(props) {
-    super(props);
-
-    this.createQuestionHandler = this.createQuestionHandler.bind(this);
-    this.showNewQuestionForm = this.showNewQuestionForm.bind(this);
-  }
-
-  createQuestionHandler(data) {
+  createQuestionHandler = (data) => {
     const { dispatch, intl, courseId, surveyId } = this.props;
     const { createSurveyQuestion } = actionCreators;
 
@@ -60,7 +53,7 @@ class NewQuestionButton extends React.Component {
     );
   }
 
-  showNewQuestionForm() {
+  showNewQuestionForm = () => {
     const { dispatch, intl } = this.props;
     const { showQuestionForm } = actionCreators;
 
