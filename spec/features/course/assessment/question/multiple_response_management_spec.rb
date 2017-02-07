@@ -52,7 +52,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         expect(question_created.options).to be_present
       end
 
-      scenario 'I can create a new multiple choice question' do
+      scenario 'I can create a new multiple choice question', js: true do
         visit course_assessment_path(course, assessment)
         click_on I18n.t('common.new')
         click_link I18n.t('course.assessment.assessments.show.new_question.multiple_choice')
@@ -66,6 +66,15 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         question_attributes = attributes_for(:course_assessment_question_multiple_response)
         fill_in 'title', with: question_attributes[:title]
         fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
+
+        # Fill in the option and explanation first or form can't be submitted when js is on.
+        correct_option_attributes =
+          attributes_for(:course_assessment_question_multiple_response_option, :correct)
+        within find('#new_question_multiple_response_option') do
+          find('textarea.multiple-response-option').set correct_option_attributes[:option]
+          find('textarea.multiple-response-explanation').set correct_option_attributes[:explanation]
+        end
+
         click_button I18n.t(
           'course.assessment.question.multiple_responses.form.multiple_choice_button'
         )
@@ -80,8 +89,6 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         )
 
         # Create a correct option
-        correct_option_attributes =
-          attributes_for(:course_assessment_question_multiple_response_option, :correct)
         within find('#new_question_multiple_response_option') do
           find('textarea.multiple-response-option').set correct_option_attributes[:option]
           find('textarea.multiple-response-explanation').set correct_option_attributes[:explanation]

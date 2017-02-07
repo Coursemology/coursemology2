@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170128041649) do
+ActiveRecord::Schema.define(version: 20170203020915) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -219,6 +219,7 @@ ActiveRecord::Schema.define(version: 20170128041649) do
     t.boolean "correct",     :null=>false
     t.text    "option",      :null=>false
     t.text    "explanation"
+    t.integer "weight",      :null=>false
   end
 
   create_table "course_assessment_answer_multiple_response_options", force: :cascade do |t|

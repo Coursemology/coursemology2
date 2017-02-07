@@ -17,5 +17,15 @@ RSpec.describe Course::Assessment::Question::MultipleResponseOption do
         expect(subject.all?(&:correct?)).to eq(true)
       end
     end
+
+    describe '.default_scope' do
+      let(:question) { create(:course_assessment_question_multiple_response) }
+
+      it 'orders by ascending weight' do
+        weights = question.options.pluck(:weight)
+        expect(weights.length).to be > 1
+        expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
+      end
+    end
   end
 end
