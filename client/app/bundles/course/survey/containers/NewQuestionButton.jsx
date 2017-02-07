@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages } from 'react-intl';
+import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import * as actionCreators from '../actions';
 import { questionTypes } from '../constants';
 import AddButton from '../components/AddButton';
@@ -41,14 +41,7 @@ class NewQuestionButton extends React.Component {
     return payload;
   }
 
-  constructor(props) {
-    super(props);
-
-    this.createQuestionHandler = this.createQuestionHandler.bind(this);
-    this.showNewQuestionForm = this.showNewQuestionForm.bind(this);
-  }
-
-  createQuestionHandler(data) {
+  createQuestionHandler = (data) => {
     const { dispatch, intl, courseId, surveyId } = this.props;
     const { createSurveyQuestion } = actionCreators;
 
@@ -60,7 +53,7 @@ class NewQuestionButton extends React.Component {
     );
   }
 
-  showNewQuestionForm() {
+  showNewQuestionForm = () => {
     const { dispatch, intl } = this.props;
     const { showQuestionForm } = actionCreators;
 
@@ -87,9 +80,7 @@ NewQuestionButton.propTypes = {
   dispatch: PropTypes.func.isRequired,
   courseId: PropTypes.string.isRequired,
   surveyId: PropTypes.string.isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 export default connect(state => state)(injectIntl(NewQuestionButton));

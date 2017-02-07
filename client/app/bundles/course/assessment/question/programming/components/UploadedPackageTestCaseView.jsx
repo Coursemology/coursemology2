@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { injectIntl, defineMessages } from 'react-intl';
+import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { Card, CardHeader } from 'material-ui/Card';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import ExpandableText from 'lib/components/ExpandableText';
@@ -8,9 +8,7 @@ import styles from './UploadedPackageTestCaseView.scss';
 
 const propTypes = {
   testCases: PropTypes.object.isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 const translations = defineMessages({

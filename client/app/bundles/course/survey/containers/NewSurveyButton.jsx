@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages } from 'react-intl';
+import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { aWeekStartingTomorrow } from 'lib/date_time_defaults';
 import * as actionCreators from '../actions';
 import AddButton from '../components/AddButton';
@@ -24,20 +24,11 @@ const propTypes = {
   dispatch: PropTypes.func.isRequired,
   canCreate: PropTypes.bool.isRequired,
   courseId: PropTypes.string.isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 class NewSurveyButton extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.createSurveyHandler = this.createSurveyHandler.bind(this);
-    this.showNewSurveyForm = this.showNewSurveyForm.bind(this);
-  }
-
-  createSurveyHandler(data) {
+  createSurveyHandler = (data) => {
     const { dispatch, intl, courseId } = this.props;
     const { createSurvey } = actionCreators;
 
@@ -47,7 +38,7 @@ class NewSurveyButton extends React.Component {
     return dispatch(createSurvey(courseId, payload, successMessage, failureMessage));
   }
 
-  showNewSurveyForm() {
+  showNewSurveyForm = () => {
     const { dispatch, intl } = this.props;
     const { showSurveyForm } = actionCreators;
 

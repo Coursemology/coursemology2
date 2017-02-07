@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-import { injectIntl, defineMessages } from 'react-intl';
+import React from 'react';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { grey600 } from 'material-ui/styles/colors';
 
 const translations = defineMessages({
@@ -16,18 +16,10 @@ const inlineStyles = {
   },
 };
 
-const propTypes = {
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
-};
-
-const SurveysEmpty = ({ intl }) => (
+const SurveysEmpty = () => (
   <h4 style={inlineStyles.noSurveys}>
-    {intl.formatMessage(translations.noSurveys)}
+    {<FormattedMessage {...translations.noSurveys} />}
   </h4>
 );
 
-SurveysEmpty.propTypes = propTypes;
-
-export default injectIntl(SurveysEmpty);
+export default SurveysEmpty;

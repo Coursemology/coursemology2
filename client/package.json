@@ -61,6 +61,7 @@
     "webpack": "^1.13.3"
   },
   "devDependencies": {
+    "babel-eslint": "^6.1.2",
     "babel-plugin-react-intl": "^2.2.0",
     "eslint": "^3.9.1",
     "eslint-config-airbnb": "^12.0.0",

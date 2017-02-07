@@ -167,11 +167,6 @@ class ChipInput extends React.Component {
       focusedChip: null,
       inputValue: '',
     };
-
-    this.handleInputBlur = this.handleInputBlur.bind(this);
-    this.handleInputFocus = this.handleInputFocus.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.handleKeyUp = this.handleKeyUp.bind(this);
   }
 
   componentWillMount() {
@@ -261,7 +256,7 @@ class ChipInput extends React.Component {
     if (this.input) this.getInputNode().select();
   }
 
-  handleInputBlur(event) {
+  handleInputBlur = (event) => {
     if (!this.autoComplete) return;
     setTimeout(() => {
       if (!this.autoComplete.state.open || this.autoComplete.requestsList.length === 0) {
@@ -275,7 +270,7 @@ class ChipInput extends React.Component {
     }, 1);
   }
 
-  handleInputFocus(event) {
+  handleInputFocus = (event) => {
     if (this.props.disabled) {
       return;
     }
@@ -285,7 +280,7 @@ class ChipInput extends React.Component {
     }
   }
 
-  handleKeyDown(event) {
+  handleKeyDown = (event) => {
     if (event.keyCode === 8 || event.keyCode === 46) { // Backspace and Delete
       if (event.target.value === '') {
         const chips = this.props.value;
@@ -334,7 +329,7 @@ class ChipInput extends React.Component {
     }
   }
 
-  handleKeyUp(event) {
+  handleKeyUp = (event) => {
     if (this.props.newChipKeyCodes.indexOf(event.keyCode) < 0) {
       this.setState({ inputValue: event.target.value });
     } else {

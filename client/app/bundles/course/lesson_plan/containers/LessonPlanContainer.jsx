@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { injectIntl, defineMessages } from 'react-intl';
+import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import * as actionCreators from '../actions';
 import lessonPlanItemTypeKey from '../utils';
 import { constants } from '../constants';
@@ -20,9 +20,7 @@ const propTypes = {
   items: PropTypes.instanceOf(Immutable.List).isRequired,
   hiddenItemTypes: PropTypes.instanceOf(Immutable.List).isRequired,
   dispatch: PropTypes.func.isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
   children: PropTypes.element.isRequired,
 };
 

@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { injectIntl } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import { Link } from 'react-router';
 import { standardDateFormat } from 'lib/date_time_defaults';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
@@ -15,9 +15,7 @@ const styles = {
 const propTypes = {
   surveys: PropTypes.array.isRequired,
   courseId: PropTypes.string.isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 const SurveysTable = ({ intl, surveys, courseId }) => (

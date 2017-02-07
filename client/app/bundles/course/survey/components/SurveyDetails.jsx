@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { browserHistory } from 'react-router';
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import { Card, CardText } from 'material-ui/Card';
@@ -99,9 +99,7 @@ class SurveyDetails extends React.Component {
 }
 
 SurveyDetails.propTypes = {
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
   survey: PropTypes.shape({
     title: PropTypes.string,
     description: PropTypes.string,

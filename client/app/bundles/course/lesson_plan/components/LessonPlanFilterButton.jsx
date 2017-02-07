@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
-import { injectIntl, defineMessages } from 'react-intl';
+import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
@@ -13,9 +13,7 @@ const propTypes = {
   toggleItemTypeVisibility: PropTypes.func.isRequired,
   hiddenItemTypes: PropTypes.instanceOf(Immutable.List).isRequired,
   items: PropTypes.instanceOf(Immutable.List).isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 const translations = defineMessages({
@@ -32,12 +30,9 @@ class LessonPlanFilterButton extends React.Component {
     this.state = {
       open: false,
     };
-
-    this.handleTouchTap = this.handleTouchTap.bind(this);
-    this.handleRequestClose = this.handleRequestClose.bind(this);
   }
 
-  handleTouchTap(event) {
+  handleTouchTap = (event) => {
     // This prevents ghost click.
     event.preventDefault();
 
@@ -47,7 +42,7 @@ class LessonPlanFilterButton extends React.Component {
     });
   }
 
-  handleRequestClose() {
+  handleRequestClose = () => {
     this.setState({
       open: false,
     });

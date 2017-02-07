@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
 import React, { PropTypes } from 'react';
-import { injectIntl, defineMessages } from 'react-intl';
+import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import OnlineEditorPythonView, { validation as pythonValidation } from './OnlineEditorPythonView';
 
 const translations = defineMessages({
@@ -23,9 +23,7 @@ const propTypes = {
   isLoading: PropTypes.bool.isRequired,
   autograded: PropTypes.bool.isRequired,
   autogradedAssessment: PropTypes.bool.isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 export function validation(data, pathOfKeysToData, intl) {

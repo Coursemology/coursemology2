@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-import { injectIntl, defineMessages } from 'react-intl';
+import React from 'react';
+import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { grey600 } from 'material-ui/styles/colors';
 
 const translations = defineMessages({
@@ -17,9 +17,7 @@ const inlineStyles = {
 };
 
 const propTypes = {
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 const LessonPlanEmpty = ({ intl }) => (

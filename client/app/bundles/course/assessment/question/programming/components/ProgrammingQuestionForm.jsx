@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
 import React, { PropTypes } from 'react';
-import { injectIntl } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
@@ -32,9 +32,7 @@ const propTypes = {
     clearSubmissionMessage: PropTypes.func.isRequired,
   }),
   onlineEditorActions: PropTypes.instanceOf(Object).isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 function validation(data, pathOfKeysToData, intl) {
@@ -112,13 +110,6 @@ class ProgrammingQuestionForm extends React.Component {
     return value === null ? '' : value;
   }
 
-  constructor(props) {
-    super(props);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onSelectSkills = this.onSelectSkills.bind(this);
-    this.onPackageUploadFileChange = this.onPackageUploadFileChange.bind(this);
-  }
-
   componentDidMount() {
     this.summernoteEditors = $('#programmming-question-form .note-editor .note-editable');
   }
@@ -127,7 +118,7 @@ class ProgrammingQuestionForm extends React.Component {
     this.summernoteEditors.attr('contenteditable', !nextProps.data.get('is_loading'));
   }
 
-  onSelectSkills(id) {
+  onSelectSkills = (id) => {
     const currentSkills = this.props.data.getIn(['question', 'skill_ids']);
     const currentSkillsWithoutId = currentSkills.filterNot(v => v.get('id') === id);
 
@@ -145,13 +136,13 @@ class ProgrammingQuestionForm extends React.Component {
     }
   }
 
-  onPackageUploadFileChange(e) {
+  onPackageUploadFileChange = (e) => {
     const files = e.target.files;
     const filename = files.length === 0 ? null : files[0].name;
     this.handleChange('package_filename', filename);
   }
 
-  onSubmit(e) {
+  onSubmit = (e) => {
     e.preventDefault();
     if (!this.validationCheck()) return;
 

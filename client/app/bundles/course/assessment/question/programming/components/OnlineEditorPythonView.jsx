@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 
 import React, { PropTypes } from 'react';
 import AceEditor from 'react-ace';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -31,9 +31,7 @@ const propTypes = {
   }),
   isLoading: PropTypes.bool.isRequired,
   autograded: PropTypes.bool.isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.func.isRequired,
-  }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 const contextTypes = {
@@ -96,11 +94,6 @@ class OnlineEditorPythonView extends React.Component {
     return `question_programming[test_cases][${type}][][${field}]`;
   }
 
-  constructor(props) {
-    super(props);
-    this.renderExistingDataFiles = this.renderExistingDataFiles.bind(this);
-  }
-
   codeChangeHandler(field) {
     return e => this.props.actions.updatePythonCodeBlock(field, e);
   }
@@ -133,7 +126,7 @@ class OnlineEditorPythonView extends React.Component {
     };
   }
 
-  renderExistingDataFiles() {
+  renderExistingDataFiles = () => {
     if (this.props.data.get('data_files').size === 0) {
       return null;
     }
