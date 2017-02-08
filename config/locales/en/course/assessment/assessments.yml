@@ -14,14 +14,13 @@ en:
           bonus_cut_off: 'Bonus Cut Off'
           end_at: 'End At'
           requirement_for: 'Requirement For'
-          new_assessment:
-            autograded: :'course.assessment.assessments.show.autograded'
-            manually_graded: :'course.assessment.assessments.show.manually_graded'
         assessment:
           attempt: 'Attempt'
           condition_not_satisfied: 'You do not fulfill the requirements of the assessment'
         show:
           type: 'Assessment Type'
+          autograded: 'Autograded Assessment'
+          manually_graded: 'Manually Graded Assessment'
           description: 'Description'
           start_at: :'course.assessment.assessments.index.start_at'
           bonus_cut_off: :'course.assessment.assessments.index.bonus_cut_off'

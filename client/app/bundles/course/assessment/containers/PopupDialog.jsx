@@ -6,7 +6,9 @@ import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import formTranslations from 'lib/translations/form';
+import AssessmentForm from './AssessmentForm';
 import * as actions from '../actions';
+import { formNames } from '../constants';
 import translations from './PopupDialog.intl';
 
 const style = {
@@ -22,6 +24,14 @@ class PopupDialog extends React.Component {
     tabId: PropTypes.number.isRequired,
     disabled: PropTypes.bool,
     visible: PropTypes.bool,
+  };
+
+
+  onFormSubmit = (data) => {
+    const { courseId, categoryId, tabId } = this.props;
+    this.props.dispatch(
+      actions.createAssessment(courseId, categoryId, tabId, { assessment: data })
+    );
   };
 
   handleOpen = () => {
@@ -40,7 +50,9 @@ class PopupDialog extends React.Component {
       />,
       <FlatButton
         label={<FormattedMessage {...formTranslations.submit} />}
+        className="btn-submit"
         primary
+        onTouchTap={() => this.props.dispatch(submit(formNames.ASSESSMENT))}
         disabled={this.props.disabled}
       />,
     ];
@@ -51,6 +63,7 @@ class PopupDialog extends React.Component {
       skippable: false,
       autograded: false,
       delayed_grade_publication: false,
+      tabbed_view: false,
     };
     const { intl } = this.props;
 
@@ -69,7 +82,9 @@ class PopupDialog extends React.Component {
           actions={formActions}
           onRequestClose={this.handleClose}
           autoScrollBodyContent
-        />
+        >
+          <AssessmentForm onSubmit={this.onFormSubmit} initialValues={initialValues} />
+        </Dialog>
       </div>
     );
   }

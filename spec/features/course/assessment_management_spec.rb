@@ -11,70 +11,29 @@ RSpec.feature 'Course: Assessments: Management' do
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario 'I can create a manually graded assessment' do
+      scenario 'I can create an assessment', js: true do
         assessment_tab = create(:course_assessment_tab,
                                 category: course.assessment_categories.first)
         assessment = build_stubbed(:assessment)
-        file = File.join(Rails.root, '/spec/fixtures/files/text.txt')
 
         visit course_assessments_path(course, category: assessment_tab.category,
                                               tab: assessment_tab)
-        click_link I18n.t('course.assessment.assessments.index.new_assessment.manually_graded')
+        find('div.new-btn button').click
 
-        expect(current_path).to eq(new_course_assessment_path(course))
-        expect(page).to have_selector('h1', text: I18n.t('course.assessment.assessments.new'))
+        expect(page).to have_selector('h3', text: 'New Assessment')
 
-        # Create an assessment with a missing title.
-        fill_in 'assessment_description', with: assessment.description
-        fill_in 'assessment_base_exp', with: assessment.base_exp
-        fill_in 'assessment_time_bonus_exp', with: assessment.time_bonus_exp
-        fill_in 'assessment_start_at', with: assessment.start_at
-        fill_in 'assessment_end_at', with: assessment.end_at
-        fill_in 'assessment_bonus_end_at', with: assessment.bonus_end_at
-        check 'assessment_delayed_grade_publication'
+        fill_in 'title', with: assessment.title
+        fill_in 'base_exp', with: assessment.base_exp
+        first("input[name='start_at']").set(assessment.start_at.strftime('%d-%m-%Y'))
+        find('button.btn-submit').click
 
-        click_button 'submit'
-
-        expect(current_path).to eq(course_assessments_path(course))
-        expect(page).to have_selector('div.alert.alert-danger')
-        expect(page).to have_field('assessment_base_exp', with: assessment.base_exp)
-
-        fill_in 'assessment_title', with: assessment.title
-        attach_file :assessment_files_attributes, file
-        click_button 'submit'
-
+        expect(page).not_to have_selector('h3', text: 'New Assessment')
         assessment_created = course.assessments.last
         expect(assessment_created.tab).to eq(assessment_tab)
+        expect(assessment_created.title).to eq(assessment.title)
+        expect(assessment_created.base_exp).to eq(assessment.base_exp)
         expect(page).to have_content_tag_for(assessment_created)
-        expect(assessment_created.folder.materials).to be_present
-        expect(assessment_created.delayed_grade_publication?).to be_truthy
         expect(assessment_created).not_to be_autograded
-      end
-
-      scenario 'I can create an autograded assessment' do
-        assessment_tab = create(:course_assessment_tab,
-                                category: course.assessment_categories.first)
-        assessment = build_stubbed(:assessment)
-
-        visit course_assessments_path(course, category: assessment_tab.category,
-                                              tab: assessment_tab)
-        click_link I18n.t('course.assessment.assessments.index.new_assessment.autograded')
-
-        fill_in 'assessment_title', with: assessment.title
-        fill_in 'assessment_description', with: assessment.description
-        fill_in 'assessment_base_exp', with: assessment.base_exp
-        fill_in 'assessment_time_bonus_exp', with: assessment.time_bonus_exp
-        fill_in 'assessment_start_at', with: assessment.start_at
-        fill_in 'assessment_end_at', with: assessment.end_at
-        fill_in 'assessment_bonus_end_at', with: assessment.bonus_end_at
-        check 'assessment_skippable'
-
-        click_button 'submit'
-
-        assessment_created = course.assessments.last
-        expect(assessment_created.tab).to eq(assessment_tab)
-        expect(assessment_created).to be_autograded
-        expect(assessment_created).to be_skippable
       end
 
       scenario 'I can edit an assessment' do
