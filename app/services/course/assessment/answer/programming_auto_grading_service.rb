@@ -2,7 +2,7 @@
 class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   Course::Assessment::Answer::AutoGradingService
   def evaluate(answer)
-    answer.correct, grade, programming_auto_grading = evaluate_answer(answer.actable)
+    answer.correct, grade, programming_auto_grading, = evaluate_answer(answer.actable)
     programming_auto_grading.auto_grading = answer.auto_grading
     grade
   end
@@ -66,7 +66,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
 
     all_correct = number_correct == test_count
     grade = question.maximum_grade * number_correct / test_count
-    [all_correct, grade, auto_grading]
+    [all_correct, grade, auto_grading, evaluation_result.evaluation_id]
   end
 
   # Checks presence of test report and builds the test case records.
