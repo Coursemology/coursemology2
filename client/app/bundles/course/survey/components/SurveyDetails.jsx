@@ -11,6 +11,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { formatDateTime } from 'lib/date_time_defaults';
 import TitleBar from 'lib/components/TitleBar';
 import surveyTranslations from '../translations';
+import { surveyShape } from '../propTypes';
 
 const translations = defineMessages({
   loading: {
@@ -100,13 +101,7 @@ class SurveyDetails extends React.Component {
 
 SurveyDetails.propTypes = {
   intl: intlShape.isRequired,
-  survey: PropTypes.shape({
-    title: PropTypes.string,
-    description: PropTypes.string,
-    start_at: PropTypes.string,
-    end_at: PropTypes.string,
-    base_exp: React.PropTypes.number,
-  }),
+  survey: surveyShape,
   adminFunctions: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
     handler: PropTypes.func,

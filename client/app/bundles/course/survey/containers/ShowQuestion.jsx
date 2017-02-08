@@ -3,6 +3,7 @@ import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import { showDeleteConfirmation } from '../actions';
 import { formatQuestionFormData } from '../utils';
+import { questionShape } from '../propTypes';
 import QuestionCard from '../components/QuestionCard';
 import * as questionActions from '../actions/questions';
 
@@ -112,18 +113,7 @@ ShowQuestion.propTypes = {
     courseId: PropTypes.string.isRequired,
     surveyId: PropTypes.string.isRequired,
   }).isRequired,
-  question: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    description: PropTypes.string.isRequired,
-    weight: PropTypes.number.isRequired,
-    question_type: PropTypes.number.isRequired,
-    options: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number,
-      weight: PropTypes.number,
-      option: PropTypes.string,
-      image_url: PropTypes.string,
-    })),
-  }),
+  question: questionShape,
 };
 
 export default connect(state => state)(injectIntl(ShowQuestion));

@@ -8,6 +8,7 @@ import Thumbnail from './Thumbnail';
 import sorts from '../utils';
 import { questionTypes } from '../constants';
 import surveyTranslations from '../translations';
+import { questionShape } from '../propTypes';
 
 const translations = defineMessages({
   empty: {
@@ -103,18 +104,7 @@ class SurveyQuestions extends React.Component {
 }
 
 SurveyQuestions.propTypes = {
-  questions: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    description: PropTypes.string.isRequired,
-    weight: PropTypes.number.isRequired,
-    question_type: PropTypes.number.isRequired,
-    options: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number,
-      weight: PropTypes.number,
-      option: PropTypes.string,
-      image: PropTypes.string,
-    })),
-  })),
+  questions: PropTypes.arrayOf(questionShape),
   intl: intlShape.isRequired,
 };
 
