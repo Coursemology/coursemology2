@@ -14,8 +14,14 @@ import translations from './PopupDialog.intl';
 import actionTypes, { formNames } from '../constants';
 
 
-const style = {
-  fontSize: 14,
+const styles = {
+  newButton: {
+    fontSize: 14,
+  },
+  dialog: {
+    width: '80%',
+    maxWidth: 'none',
+  },
 };
 
 class PopupDialog extends React.Component {
@@ -93,7 +99,7 @@ class PopupDialog extends React.Component {
           label={intl.formatMessage(translations.new)}
           primary
           onTouchTap={this.handleOpen}
-          style={style}
+          style={styles.newButton}
         />
         <Dialog
           title={intl.formatMessage(translations.newAssessment)}
@@ -102,6 +108,7 @@ class PopupDialog extends React.Component {
           actions={formActions}
           onRequestClose={this.handleClose}
           autoScrollBodyContent
+          contentStyle={styles.dialog}
         >
           <AssessmentForm onSubmit={this.onFormSubmit} initialValues={initialValues} />
         </Dialog>

@@ -33,6 +33,11 @@ const translations = defineMessages({
     id: 'course.assessment.form.autograded',
     defaultMessage: 'Autograded',
   },
+  autogradedHint: {
+    id: 'course.assessment.form.autogradedHint',
+    defaultMessage: 'Automatically assign grade and experience points after assessment is \
+      submitted. Note that all the questions in the assessment must be auto-gradable.',
+  },
   skippable: {
     id: 'course.assessment.form.skippable',
     defaultMessage: 'Allow to skip steps',
@@ -53,9 +58,22 @@ const translations = defineMessages({
     id: 'course.assessment.form.delayedGradePublication',
     defaultMessage: 'Delayed Grade Publication',
   },
+  delayedGradePublicationHint: {
+    id: 'course.assessment.form.delayedGradePublicationHint',
+    defaultMessage: "When delayed grade publication is enabled, gradings done by course staff will \
+      not be immediately shown to the student. To publish all gradings for this assessment, click \
+      on the 'Publish Grades' button on the top right of the submissions listing for this assessment.",
+  },
   passwordProtection: {
     id: 'course.assessment.form.passwordProtection',
     defaultMessage: 'Password Protection',
+  },
+  passwordProtectionHint: {
+    id: 'course.assessment.form.passwordProtectionHint',
+    defaultMessage: "When password protection is enabled, students are allowed to access their \
+      submission once. Further attempts at editing the submission using a different session are \
+      not allowed unless the password is provided by the staff. This can be used to prevent \
+      students from accessing each other's submissions in exams.",
   },
   password: {
     id: 'course.assessment.form.password',

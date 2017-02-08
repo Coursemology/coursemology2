@@ -16,7 +16,8 @@
         "imports": "always-multiline",
         "exports": "always-multiline",
         "functions": "never",
-    }]
+    }],
+    "no-multi-str": 0,
   },
   "globals": {
     "window": true,

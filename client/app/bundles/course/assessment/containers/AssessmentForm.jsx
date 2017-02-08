@@ -28,7 +28,11 @@ const styles = {
   },
   autogradedToggle: {
     marginTop: 24,
-  }
+  },
+  hint: {
+    fontSize: 14,
+    marginBottom: 12,
+  },
 };
 
 const validate = (values) => {
@@ -107,6 +111,9 @@ class AssessmentForm extends React.Component {
           labelPosition="right"
           disabled={submitting}
         />
+        <div style={styles.hint}>
+          <FormattedMessage {...translations.delayedGradePublicationHint} />
+        </div>
         <Field
           name="password_protected"
           component={Toggle}
@@ -125,6 +132,9 @@ class AssessmentForm extends React.Component {
             disabled={submitting}
           />
         }
+        <div style={styles.hint}>
+          <FormattedMessage {...translations.passwordProtectionHint} />
+        </div>
       </div>
     );
   }
@@ -198,6 +208,9 @@ class AssessmentForm extends React.Component {
           style={styles.autogradedToggle}
           disabled={submitting}
         />
+        <div style={styles.hint}>
+          <FormattedMessage {...translations.autogradedHint} />
+        </div>
         {this.renderExtraOptions()}
       </Form>
     );
