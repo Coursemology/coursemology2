@@ -109,17 +109,11 @@ export function updateSurvey(
     dispatch({ type: actionTypes.UPDATE_SURVEY_REQUEST, id: surveyId });
 
     return axios.patch(`/courses/${courseId}/surveys/${surveyId}`, surveyFields)
-      .then(() => {
-        const { start_at, end_at, ...fields } = surveyFields.survey;
-        const updatedSurvey = {
-          start_at: start_at.toISOString(),
-          end_at: end_at.toISOString(),
-          ...fields,
-        };
+      .then((response) => {
         dispatch({
           id: surveyId,
           type: actionTypes.UPDATE_SURVEY_SUCCESS,
-          data: updatedSurvey,
+          data: response.data,
         });
         dispatch(hideSurveyForm());
         setNotification(successMessage)(dispatch);
