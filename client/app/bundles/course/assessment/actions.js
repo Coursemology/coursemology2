@@ -3,7 +3,14 @@ import { SubmissionError } from 'redux-form';
 import actionTypes from './constants';
 
 /* eslint-disable import/prefer-default-export */
-export function createAssessment(courseId, categoryId, tabId, data) {
+export function createAssessment(
+  courseId,
+  categoryId,
+  tabId,
+  data,
+  successMessage,
+  failureMessage
+) {
   const attributes = { ...data, category: categoryId, tab: tabId };
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_ASSESSMENT_REQUEST });
@@ -12,7 +19,7 @@ export function createAssessment(courseId, categoryId, tabId, data) {
       .then((response) => {
         dispatch({
           type: actionTypes.CREATE_ASSESSMENT_SUCCESS,
-          message: response.data && response.data.message,
+          message: successMessage,
         });
         // TODO: Remove redirection when assessment index is implemented using React.
         setTimeout(() => {
@@ -22,11 +29,13 @@ export function createAssessment(courseId, categoryId, tabId, data) {
         }, 200);
       })
       .catch((error) => {
-        dispatch({ type: actionTypes.CREATE_ASSESSMENT_FAILURE });
+        dispatch({
+          type: actionTypes.CREATE_ASSESSMENT_FAILURE,
+          message: failureMessage,
+        });
+
         if (error.response && error.response.data) {
           throw new SubmissionError(error.response.data.errors);
-        } else {
-          // fail notification
         }
       });
   };

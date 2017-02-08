@@ -13,10 +13,9 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def create
     if @assessment.save
-      render json: { message: t('.success', title: @assessment.title), id: @assessment.id },
-             status: :ok
+      render json: { id: @assessment.id }, status: :ok
     else
-      render json: { errors: @assessment.errors.full_messages.to_sentence }, status: :bad_request
+      render json: { errors: @assessment.errors }, status: :bad_request
     end
   end
 

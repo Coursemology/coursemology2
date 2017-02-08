@@ -9,6 +9,14 @@ const translations = defineMessages({
     id: 'course.assessment.new',
     defaultMessage: 'New',
   },
+  creationSuccess: {
+    id: 'course.assessment.create.success',
+    defaultMessage: 'Assessment was created.',
+  },
+  creationFailure: {
+    id: 'course.assessment.create.fail',
+    defaultMessage: 'Failed to create assessment.',
+  },
 });
 
 export default translations;

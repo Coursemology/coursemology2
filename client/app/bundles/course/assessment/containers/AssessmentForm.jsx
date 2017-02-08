@@ -34,7 +34,7 @@ const styles = {
 const validate = (values) => {
   const errors = {};
 
-  const requiredFields = ['title', 'start_at', 'base_exp', 'time_bonus_exp'];
+  const requiredFields = ['title', 'base_exp', 'time_bonus_exp', 'start_at'];
   if (!values.autograded) {
     requiredFields.push('tabbed_view');
   }

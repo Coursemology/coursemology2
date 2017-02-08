@@ -41,8 +41,6 @@ en:
             programming: 'Programming'
         new:
           header: 'New Assessment'
-        create:
-          success: 'Assessment %{title} was created.'
         edit:
           header: 'Edit Assessment'
         update:

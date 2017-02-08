@@ -5,6 +5,7 @@ import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import Snackbar from 'material-ui/Snackbar';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import formTranslations from 'lib/translations/form';
 import AssessmentForm from './AssessmentForm';
@@ -26,14 +27,24 @@ class PopupDialog extends React.Component {
     tabId: PropTypes.number.isRequired,
     pristine: PropTypes.bool,
     disabled: PropTypes.bool,
-    visible: PropTypes.bool,
-    confirmationDialogOpen: PropTypes.bool,
+    visible: PropTypes.bool.isRequired,
+    confirmationDialogOpen: PropTypes.bool.isRequired,
+    notificationOpen: PropTypes.bool.isRequired,
+    notificationMessage: PropTypes.string,
   };
 
   onFormSubmit = (data) => {
-    const { courseId, categoryId, tabId } = this.props;
-    this.props.dispatch(
-      actions.createAssessment(courseId, categoryId, tabId, { assessment: data })
+    const { courseId, categoryId, tabId, intl } = this.props;
+
+    return this.props.dispatch(
+      actions.createAssessment(
+        courseId,
+        categoryId,
+        tabId,
+        { assessment: data },
+        intl.formatMessage(translations.creationSuccess),
+        intl.formatMessage(translations.creationFailure)
+      )
     );
   };
 
@@ -99,6 +110,12 @@ class PopupDialog extends React.Component {
           open={this.props.confirmationDialogOpen}
           onCancel={() => dispatch({ type: actionTypes.ASSESSMENT_FORM_CONFIRM_CANCEL })}
           onConfirm={() => dispatch({ type: actionTypes.ASSESSMENT_FORM_CONFIRM_DISCARD })}
+        />
+        <Snackbar
+          open={this.props.notificationOpen}
+          message={this.props.notificationMessage}
+          autoHideDuration={1500}
+          onRequestClose={() => dispatch({ type: actionTypes.ASSESSMENT_FORM_NOTIFICATION_HIDE })}
         />
       </div>
     );
