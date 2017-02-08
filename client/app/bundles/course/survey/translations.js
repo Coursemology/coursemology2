@@ -25,6 +25,10 @@ const translations = defineMessages({
     id: 'course.surveys.fields.points',
     defaultMessage: 'Points Awarded',
   },
+  published: {
+    id: 'course.surveys.fields.published',
+    defaultMessage: 'Published',
+  },
   questionText: {
     id: 'course.surveys.questionText',
     defaultMessage: 'Question Text',
@@ -56,6 +60,22 @@ const translations = defineMessages({
   minOptions: {
     id: 'course.surveys.questions.fields.minOptions',
     defaultMessage: 'Minimum Allowed Responses',
+  },
+  updateSuccess: {
+    id: 'course.surveys.updateSuccess',
+    defaultMessage: 'Survey "{title}" updated.',
+  },
+  updateFailure: {
+    id: 'course.surveys.updateFailure',
+    defaultMessage: 'Failed to update survey.',
+  },
+  deleteSuccess: {
+    id: 'course.surveys.deleteSuccess',
+    defaultMessage: 'Survey "{title}" deleted.',
+  },
+  deleteFailure: {
+    id: 'course.surveys.deleteFailure',
+    defaultMessage: 'Failed to delete survey.',
   },
 });
 

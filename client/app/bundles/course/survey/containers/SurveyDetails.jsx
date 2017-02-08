@@ -1,17 +1,20 @@
 import React, { PropTypes } from 'react';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import { connect } from 'react-redux';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { browserHistory } from 'react-router';
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import { Card, CardText } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
+import Toggle from 'material-ui/Toggle';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { formatDateTime } from 'lib/date_time_defaults';
 import TitleBar from 'lib/components/TitleBar';
 import surveyTranslations from '../translations';
 import { surveyShape } from '../propTypes';
+import { updateSurvey } from '../actions/surveys';
 
 const translations = defineMessages({
   loading: {
@@ -27,6 +30,28 @@ const styles = {
 };
 
 class SurveyDetails extends React.Component {
+  static propTypes = {
+    survey: surveyShape,
+    courseId: PropTypes.string.isRequired,
+    adminFunctions: PropTypes.arrayOf(PropTypes.shape({
+      label: PropTypes.string,
+      handler: PropTypes.func,
+    })),
+
+    dispatch: PropTypes.func.isRequired,
+  };
+
+  handlePublishToggle = (event, value) => {
+    const { dispatch, survey, courseId } = this.props;
+    dispatch(updateSurvey(
+      courseId,
+      survey.id,
+      { survey: { published: value } },
+      <FormattedMessage {...surveyTranslations.updateSuccess} values={survey} />,
+      <FormattedMessage {...surveyTranslations.updateFailure} values={survey} />
+    ));
+  }
+
   renderAdminMenu() {
     const { adminFunctions } = this.props;
 
@@ -45,10 +70,45 @@ class SurveyDetails extends React.Component {
     );
   }
 
+  renderDescription() {
+    const { survey } = this.props;
+
+    if (!survey.description) {
+      return null;
+    }
+
+    return (
+      <CardText>
+        <h4>
+          <FormattedMessage {...surveyTranslations.description} />
+        </h4>
+        <p>{survey.description}</p>
+      </CardText>
+    );
+  }
+
+  renderPublishToggle() {
+    const { survey } = this.props;
+    if (!survey.canUpdate) {
+      return null;
+    }
+
+    return (
+      <CardText>
+        <Toggle
+          label={<FormattedMessage {...surveyTranslations.published} />}
+          labelPosition="right"
+          toggled={survey.published}
+          onToggle={this.handlePublishToggle}
+        />
+      </CardText>
+    );
+  }
+
   render() {
-    const { intl, survey, courseId } = this.props;
+    const { survey, courseId } = this.props;
     if (!survey) {
-      return <p>{intl.formatMessage(translations.loading)}</p>;
+      return <p><FormattedMessage {...translations.loading} /></p>;
     }
 
     return (
@@ -65,7 +125,7 @@ class SurveyDetails extends React.Component {
               <TableBody displayRowCheckbox={false}>
                 <TableRow>
                   <TableRowColumn>
-                    {intl.formatMessage(surveyTranslations.opensAt)}
+                    <FormattedMessage {...surveyTranslations.opensAt} />
                   </TableRowColumn>
                   <TableRowColumn>
                     {formatDateTime(survey.start_at)}
@@ -73,7 +133,7 @@ class SurveyDetails extends React.Component {
                 </TableRow>
                 <TableRow>
                   <TableRowColumn>
-                    {intl.formatMessage(surveyTranslations.expiresAt)}
+                    <FormattedMessage {...surveyTranslations.expiresAt} />
                   </TableRowColumn>
                   <TableRowColumn>
                     {formatDateTime(survey.end_at)}
@@ -81,7 +141,7 @@ class SurveyDetails extends React.Component {
                 </TableRow>
                 <TableRow>
                   <TableRowColumn>
-                    {intl.formatMessage(surveyTranslations.points)}
+                    <FormattedMessage {...surveyTranslations.points} />
                   </TableRowColumn>
                   <TableRowColumn>
                     {survey.base_exp}
@@ -90,23 +150,12 @@ class SurveyDetails extends React.Component {
               </TableBody>
             </Table>
           </div>
-          <CardText>
-            <p>{survey.description}</p>
-          </CardText>
+          {this.renderPublishToggle()}
+          {this.renderDescription()}
         </Card>
       </div>
     );
   }
 }
 
-SurveyDetails.propTypes = {
-  intl: intlShape.isRequired,
-  survey: surveyShape,
-  adminFunctions: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    handler: PropTypes.func,
-  })),
-  courseId: PropTypes.string.isRequired,
-};
-
-export default injectIntl(SurveyDetails);
+export default connect()(SurveyDetails);

@@ -4,19 +4,20 @@ import { FormattedMessage } from 'react-intl';
 import TitleBar from 'lib/components/TitleBar';
 import { fetchSurveys } from '../actions/surveys';
 import SurveysEmpty from '../components/SurveysEmpty';
-import SurveysTable from '../components/SurveysTable';
+import SurveysTable from '../containers/SurveysTable';
 import NewSurveyButton from '../containers/NewSurveyButton';
 import translations from '../translations';
-
-const propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  surveys: PropTypes.array.isRequired,
-  params: PropTypes.shape({
-    courseId: PropTypes.string.isRequired,
-  }),
-};
+import { surveyShape } from '../propTypes';
 
 class Surveys extends React.Component {
+  static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    surveys: PropTypes.arrayOf(surveyShape),
+    params: PropTypes.shape({
+      courseId: PropTypes.string.isRequired,
+    }),
+  };
+
   componentDidMount() {
     const { dispatch, params: { courseId } } = this.props;
     dispatch(fetchSurveys(courseId));
@@ -33,13 +34,15 @@ class Surveys extends React.Component {
         <TitleBar
           title={<FormattedMessage {...translations.surveys} />}
         />
-        { surveys.length > 0 ? <SurveysTable {...{ surveys, courseId }} /> : <SurveysEmpty /> }
+        {
+          surveys.length > 0 ?
+            <SurveysTable {...{ courseId }} /> :
+            <SurveysEmpty />
+        }
         <NewSurveyButton {...{ courseId }} />
       </div>
     );
   }
 }
-
-Surveys.propTypes = propTypes;
 
 export default connect(state => state)(Surveys);

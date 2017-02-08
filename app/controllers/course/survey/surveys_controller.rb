@@ -51,6 +51,6 @@ class Course::Survey::SurveysController < Course::ComponentController
 
   def survey_params
     params.require(:survey).
-      permit(:title, :description, :base_exp, :start_at, :end_at)
+      permit(:title, :description, :base_exp, :start_at, :end_at, :published)
   end
 end
