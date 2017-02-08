@@ -15,7 +15,7 @@ export default createComponent(
   }) => ({
     ...inputProps,
     ...props,
-    toggled: value,
+    toggled: !!value,
     onToggle: onChange,
   })
 );
