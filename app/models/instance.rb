@@ -57,6 +57,14 @@ class Instance < ActiveRecord::Base
   #   Orders the instances by ID.
   scope :order_by_id, ->(direction = :asc) { order(id: direction) }
 
+  scope :order_by_name, ->(direction = :asc) { order(name: direction) }
+
+  # Custom ordering. Put default instance first, followed by the others, which are ordered by name.
+  # This is for listing all the instances on the index page.
+  scope :order_for_display, (lambda do
+    order("CASE \"id\" WHEN #{DEFAULT_INSTANCE_ID} THEN 0 ELSE 1 END").order_by_name
+  end)
+
   # @!attribute [r] course_count
   #   The number of courses in the instance.
   calculated :course_count, (lambda do
