@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getFormValues, isPristine } from 'redux-form';
-import * as actionCreators from '../actions';
+import * as actionCreators from '../actions/surveys';
 import FormDialogue from '../components/FormDialogue';
 import SurveyForm from '../components/SurveyForm';
 import { formNames } from '../constants';

@@ -17,9 +17,12 @@ export default function (state = initialState, action) {
     case actionTypes.QUESTION_FORM_HIDE: {
       return { ...state, visible: false };
     }
+    case actionTypes.UPDATE_SURVEY_QUESTION_REQUEST:
     case actionTypes.CREATE_SURVEY_QUESTION_REQUEST: {
       return { ...state, disabled: true };
     }
+    case actionTypes.UPDATE_SURVEY_QUESTION_SUCCESS:
+    case actionTypes.UPDATE_SURVEY_QUESTION_FAILURE:
     case actionTypes.CREATE_SURVEY_QUESTION_SUCCESS:
     case actionTypes.CREATE_SURVEY_QUESTION_FAILURE: {
       return { ...state, disabled: false };

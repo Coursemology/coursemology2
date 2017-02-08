@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import * as actionCreators from '../actions';
+import { showQuestionForm, createSurveyQuestion } from '../actions/questions';
 import { questionTypes } from '../constants';
+import { formatQuestionFormData } from '../utils';
 import AddButton from '../components/AddButton';
 
 const translations = defineMessages({
@@ -21,31 +22,10 @@ const translations = defineMessages({
 });
 
 class NewQuestionButton extends React.Component {
-  static formatPayload(data) {
-    const payload = new FormData();
-    ['question_type', 'description', 'max_options', 'min_options', 'required'].forEach((field) => {
-      if (data[field] === 0 || data[field]) {
-        payload.append(`question[${field}]`, data[field]);
-      }
-    });
-    data.options
-      .filter(option => option && (option.option || option.image))
-      .forEach((option, index) => {
-        ['option', 'image'].forEach((field) => {
-          if (option[field]) {
-            payload.append(`question[options_attributes][${index}][${field}]`, option[field]);
-          }
-        });
-        payload.append(`question[options_attributes][${index}][weight]`, index + 1);
-      });
-    return payload;
-  }
-
   createQuestionHandler = (data) => {
     const { dispatch, intl, courseId, surveyId } = this.props;
-    const { createSurveyQuestion } = actionCreators;
 
-    const payload = NewQuestionButton.formatPayload(data);
+    const payload = formatQuestionFormData(data);
     const successMessage = intl.formatMessage(translations.success);
     const failureMessage = intl.formatMessage(translations.failure);
     return dispatch(
@@ -55,7 +35,6 @@ class NewQuestionButton extends React.Component {
 
   showNewQuestionForm = () => {
     const { dispatch, intl } = this.props;
-    const { showQuestionForm } = actionCreators;
 
     return dispatch(showQuestionForm({
       onSubmit: this.createQuestionHandler,

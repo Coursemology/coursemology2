@@ -1,10 +1,14 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import * as actionCreators from '../actions';
+import Subheader from 'material-ui/Subheader';
+import { sorts } from '../utils';
+import { showDeleteConfirmation } from '../actions';
+import surveyTranslations from '../translations';
+import * as surveyActions from '../actions/surveys';
 import SurveyDetails from '../components/SurveyDetails';
-import SurveyQuestions from '../components/SurveyQuestions';
 import NewQuestionButton from '../containers/NewQuestionButton';
+import ShowQuestion from '../containers/ShowQuestion';
 
 const translations = defineMessages({
   editSurvey: {
@@ -31,27 +35,24 @@ const translations = defineMessages({
     id: 'course.surveys.Survey.deleteFailure',
     defaultMessage: 'Failed to delete survey.',
   },
+  empty: {
+    id: 'course.surveys.Survey.empty',
+    defaultMessage: 'This survey does not have any questions.',
+  },
 });
 
 class ShowSurvey extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.updateSurveyHandler = this.updateSurveyHandler.bind(this);
-    this.showEditSurveyForm = this.showEditSurveyForm.bind(this);
-  }
-
   componentDidMount() {
     const {
       dispatch,
       params: { courseId, surveyId },
     } = this.props;
-    dispatch(actionCreators.fetchSurvey(courseId, surveyId));
+    dispatch(surveyActions.fetchSurvey(courseId, surveyId));
   }
 
-  updateSurveyHandler(data) {
+  updateSurveyHandler = (data) => {
     const { dispatch, intl, params: { courseId, surveyId } } = this.props;
-    const { updateSurvey } = actionCreators;
+    const { updateSurvey } = surveyActions;
 
     const payload = { survey: data };
     const successMessage = intl.formatMessage(translations.updateSuccess, data);
@@ -59,9 +60,9 @@ class ShowSurvey extends React.Component {
     return dispatch(updateSurvey(courseId, surveyId, payload, successMessage, failureMessage));
   }
 
-  showEditSurveyForm(survey) {
+  showEditSurveyForm = (survey) => {
     const { dispatch, intl } = this.props;
-    const { showSurveyForm } = actionCreators;
+    const { showSurveyForm } = surveyActions;
     const { start_at, end_at, ...surveyFields } = survey;
 
     return () => dispatch(showSurveyForm({
@@ -77,7 +78,7 @@ class ShowSurvey extends React.Component {
 
   deleteSurveyHandler(survey) {
     const { dispatch, intl, params: { courseId, surveyId } } = this.props;
-    const { deleteSurvey, showDeleteConfirmation } = actionCreators;
+    const { deleteSurvey } = surveyActions;
 
     const successMessage = intl.formatMessage(translations.deleteSuccess, survey);
     const failureMessage = intl.formatMessage(translations.deleteFailure);
@@ -108,6 +109,24 @@ class ShowSurvey extends React.Component {
     return functions;
   }
 
+  renderQuestions(questions) {
+    const { intl, params } = this.props;
+    const { byWeight } = sorts;
+
+    if (!questions || questions.length < 1) {
+      return <Subheader>{ intl.formatMessage(translations.empty) }</Subheader>;
+    }
+
+    return (
+      <div>
+        <Subheader>{ intl.formatMessage(surveyTranslations.questions) }</Subheader>
+        {questions.sort(byWeight).map(question =>
+          <ShowQuestion key={question.id} {...{ question, params }} />
+        )}
+      </div>
+    );
+  }
+
   render() {
     const { surveys, params: { courseId, surveyId } } = this.props;
     const survey = surveys && surveys.length > 0 ?
@@ -119,7 +138,7 @@ class ShowSurvey extends React.Component {
           {...{ survey, courseId }}
           adminFunctions={this.adminFunctions(survey)}
         />
-        <SurveyQuestions questions={survey.questions} />
+        { this.renderQuestions(survey.questions) }
         <NewQuestionButton {...{ courseId, surveyId }} />
       </div>
     );

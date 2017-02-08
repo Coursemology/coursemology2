@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { aWeekStartingTomorrow } from 'lib/date_time_defaults';
-import * as actionCreators from '../actions';
+import { showSurveyForm, createSurvey } from '../actions/surveys';
 import AddButton from '../components/AddButton';
 
 const translations = defineMessages({
@@ -30,7 +30,6 @@ const propTypes = {
 class NewSurveyButton extends React.Component {
   createSurveyHandler = (data) => {
     const { dispatch, intl, courseId } = this.props;
-    const { createSurvey } = actionCreators;
 
     const payload = { survey: data };
     const successMessage = intl.formatMessage(translations.success, data);
@@ -40,7 +39,6 @@ class NewSurveyButton extends React.Component {
 
   showNewSurveyForm = () => {
     const { dispatch, intl } = this.props;
-    const { showSurveyForm } = actionCreators;
 
     return dispatch(showSurveyForm({
       onSubmit: this.createSurveyHandler,
