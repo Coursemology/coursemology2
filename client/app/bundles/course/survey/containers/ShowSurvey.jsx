@@ -93,9 +93,14 @@ class ShowSurvey extends React.Component {
     return functions;
   }
 
-  renderQuestions(questions) {
+  renderQuestions(survey) {
     const { intl, params } = this.props;
+    const { questions, canUpdate } = survey;
     const { byWeight } = sorts;
+
+    if (!canUpdate) {
+      return null;
+    }
 
     if (!questions || questions.length < 1) {
       return <Subheader>{ intl.formatMessage(translations.empty) }</Subheader>;
@@ -121,7 +126,7 @@ class ShowSurvey extends React.Component {
           {...{ survey, courseId, surveyId }}
           adminFunctions={this.adminFunctions(survey)}
         />
-        { this.renderQuestions(survey.questions) }
+        { this.renderQuestions(survey) }
         <NewQuestionButton {...{ courseId, surveyId }} />
       </div>
     );
