@@ -6,7 +6,7 @@ class Course::Assessment::ProgrammingEvaluationService
   CPU_TIMEOUT = Course::Assessment::ProgrammingEvaluation::CPU_TIMEOUT
 
   # Represents a result of evaluating a package.
-  Result = Struct.new(:stdout, :stderr, :test_report, :exit_code) do
+  Result = Struct.new(:stdout, :stderr, :test_report, :exit_code, :evaluation_id) do
     # Checks if the evaluation errored.
     #
     # This does not count failing test cases as an error, although the exit code is nonzero.
@@ -96,7 +96,8 @@ class Course::Assessment::ProgrammingEvaluationService
   def execute
     evaluation = create_evaluation
     wait_for_evaluation(evaluation)
-    Result.new(evaluation.stdout, evaluation.stderr, evaluation.test_report, evaluation.exit_code)
+    Result.new(evaluation.stdout, evaluation.stderr, evaluation.test_report,
+               evaluation.exit_code, evaluation.id)
   ensure
     evaluation.destroy! if evaluation
   end
