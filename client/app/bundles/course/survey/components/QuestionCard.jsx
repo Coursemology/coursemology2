@@ -69,7 +69,7 @@ class QuestionCard extends React.Component {
   renderAdminMenu() {
     const { adminFunctions } = this.props;
 
-    if (!adminFunctions) {
+    if (!adminFunctions || adminFunctions.length < 1) {
       return null;
     }
 
