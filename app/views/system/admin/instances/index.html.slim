@@ -1,14 +1,20 @@
 = page_header do
   = new_button([:admin, :instance]) if can?(:create, Instance.new)
+
+= page_entries_info(@instances)
+
 table.table.table-middle-align.table-hover
   thead
     tr
+      th= t('.serial_number')
       th= t('.name')
       th= t('.host_name')
       th= t('.users')
       th= t('.courses')
 
   tbody
-    = render @instances
+    = render partial: 'instance', collection: @instances,
+                                  locals: { current_page: @instances.current_page,
+                                            per_page: @instances.default_per_page }
 
 = paginate @instances
