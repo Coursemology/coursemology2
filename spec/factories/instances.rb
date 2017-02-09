@@ -6,7 +6,7 @@ FactoryGirl.define do
   end
 
   factory :instance do
-    sequence(:name) { |n| "Instance#{n}" }
+    sequence(:name) { |n| "Instance-#{base_time}-#{n}" }
     host
 
     trait :with_video_component_enabled do
