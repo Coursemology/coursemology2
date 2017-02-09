@@ -74,6 +74,9 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         visit course_assessment_submissions_path(course, assessment)
 
         click_link I18n.t('course.assessment.submission.submissions.index.publish')
+
+        wait_for_job
+        expect(current_path).to eq(course_assessment_submissions_path(course, assessment))
         expect(graded_submission.reload).to be_published
         expect(graded_submission.publisher).to eq(user)
         expect(graded_submission.published_at).to be_present
