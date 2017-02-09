@@ -2,10 +2,10 @@
   "parser": "babel-eslint",
   "extends": "airbnb",
   "settings": {
-    import/resolver: "webpack"
+    "import/resolver": "webpack"
   },
   "rules": {
-    # See https://github.com/yannickcr/eslint-plugin-react/issues/847
+    // See https://github.com/yannickcr/eslint-plugin-react/issues/847
     "react/no-unused-prop-types": ["warn", { "skipShapeProps": true }],
     "new-cap": [2, { "capIsNewExceptions": ["Set"] }],
   },
