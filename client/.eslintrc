@@ -2,12 +2,21 @@
   "parser": "babel-eslint",
   "extends": "airbnb",
   "settings": {
-    import/resolver: "webpack"
+    "import/resolver": "webpack"
   },
   "rules": {
-    # See https://github.com/yannickcr/eslint-plugin-react/issues/847
+    // See https://github.com/yannickcr/eslint-plugin-react/issues/847
     "react/no-unused-prop-types": ["warn", { "skipShapeProps": true }],
     "new-cap": [2, { "capIsNewExceptions": ["Set"] }],
+    "react/require-default-props": "off",
+    "react/no-array-index-key": "warn",
+    "comma-dangle": ["error", {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "always-multiline",
+        "exports": "always-multiline",
+        "functions": "never",
+    }]
   },
   "globals": {
     "window": true,
