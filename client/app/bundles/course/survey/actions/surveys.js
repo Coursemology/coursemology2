@@ -134,12 +134,12 @@ export function deleteSurvey(courseId, surveyId, successMessage, failureMessage)
     dispatch({ type: actionTypes.DELETE_SURVEY_REQUEST, id: surveyId });
     return axios.delete(`/courses/${courseId}/surveys/${surveyId}`)
       .then(() => {
+        browserHistory.push(`/courses/${courseId}/surveys/`);
         dispatch({
           id: surveyId,
           type: actionTypes.DELETE_SURVEY_SUCCESS,
         });
         setNotification(successMessage)(dispatch);
-        browserHistory.push(`/courses/${courseId}/surveys/`);
       })
       .catch(() => {
         dispatch({ type: actionTypes.DELETE_SURVEY_FAILURE, id: surveyId });
