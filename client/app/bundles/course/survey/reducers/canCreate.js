@@ -7,7 +7,7 @@ export default function (state = initialState, action) {
 
   switch (type) {
     case actionTypes.LOAD_SURVEYS_SUCCESS: {
-      return action.data.canCreate;
+      return action.canCreate;
     }
     default:
       return state;
