@@ -33,7 +33,7 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
   # @return [Hash]
   def extract_meta
     data = @language_package_service.extract_meta(@question.attachment, @template_files)
-    { editor_mode: @editor_mode, data: data } if data.present?
+    { editor_mode: @language.ace_mode, data: data } if data.present?
   end
 
   private
@@ -42,7 +42,6 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
     if python_language
       @language_package_service =
         Course::Assessment::Question::Programming::Python::PythonPackageService.new params
-      @editor_mode = 'python'
     elsif javascript_language
       raise NotImplementedError
     else

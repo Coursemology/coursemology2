@@ -55,14 +55,6 @@ module Course::Assessment::Question::ProgrammingHelper
     end
   end
 
-  def editor_mode(language)
-    if language.is_a?(Coursemology::Polyglot::Language::Python)
-      :python
-    elsif language.is_a?(Coursemology::Polyglot::Language::JavaScript)
-      :javascript
-    end
-  end
-
   def check_import_job?
     @programming_question.import_job && @programming_question.import_job.status != 'completed'
   end
