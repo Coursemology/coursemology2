@@ -56,6 +56,24 @@ RSpec.describe Instance do
     end
   end
 
+  describe '.order_for_display' do
+    let(:instances) { create_list(:instance, 2) }
+    # Use a name that comes before 'Default'
+    let!(:instance) { create(:instance, name: 'Abc') }
+
+    it 'orders the default instance first, then alphabetically by name' do
+      listing = Instance.order_for_display
+      expect(listing.first).to eq Instance.default
+
+      # Drop the 'Default' instance.
+      listing = listing.drop(1)
+      # Check that the rest of the names are ordered alphabetically.
+      names = listing.map(&:name)
+      expect(names.length).to be > 1
+      expect(names.each_cons(2).all? { |a, b| a <= b }).to be_truthy
+    end
+  end
+
   describe '.find_tenant_by_host' do
     let(:instances) { create_list(:instance, 3) }
 

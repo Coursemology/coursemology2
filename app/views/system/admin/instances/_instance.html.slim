@@ -1,4 +1,5 @@
 = content_tag_for(:tr, instance)
+  td = (current_page - 1) * per_page + instance_counter + 1
   th
     a
       = link_to format_inline_text(instance.name), \

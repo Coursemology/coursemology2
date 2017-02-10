@@ -4,6 +4,7 @@ en:
       instances:
         index:
           header: 'Instance Management'
+          serial_number: 'S/N'
           name: 'Name'
           host_name: 'Host Name'
           users: 'Total Users'

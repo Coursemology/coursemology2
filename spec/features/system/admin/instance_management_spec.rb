@@ -51,13 +51,14 @@ RSpec.feature 'System: Administration: Instances' do
 
       scenario 'I can see all instances' do
         instances = create_list(:instance, 2)
-        last_page = Instance.page.total_pages
-        instances &= Instance.order_by_id.page(last_page)
+        instances &= Instance.order_by_name
         expect(instances).not_to be_empty
 
-        visit admin_instances_path(page: last_page)
-
         instances.each do |instance|
+          # Get the page number each instance is on.
+          page_number = Instance.order_for_display.map(&:id).index(instance.id) /
+                        Instance.page.default_per_page + 1
+          visit admin_instances_path(page: page_number)
           expect(page).to have_content_tag_for(instance)
           expect(page).
             to have_link(nil, href: admin_instance_admin_url(host: instance.host, port: nil))
@@ -66,8 +67,9 @@ RSpec.feature 'System: Administration: Instances' do
 
       scenario 'I can destroy an instance' do
         instance = create(:instance)
-        last_page = Instance.page.total_pages
-        visit admin_instances_path(page: last_page)
+        page_number = Instance.order_for_display.map(&:id).index(instance.id) /
+                      Instance.page.default_per_page + 1
+        visit admin_instances_path(page: page_number)
 
         within find(content_tag_selector(instance)) do
           expect { find(:css, 'a.delete').click }.to \
