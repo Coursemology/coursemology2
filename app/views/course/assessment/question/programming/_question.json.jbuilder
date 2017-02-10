@@ -3,7 +3,7 @@ json.question do
                                :weight, :language_id, :memory_limit, :time_limit)
   json.languages Coursemology::Polyglot::Language.all do |lang|
     json.(lang, :id, :name)
-    json.editor_mode editor_mode(lang)
+    json.editor_mode lang.ace_mode
   end
   json.skill_ids @programming_question.skills.order('LOWER(title) ASC').as_json(only: [:id, :title])
   json.skills current_course.assessment_skills.order('LOWER(title) ASC') do |skill|
