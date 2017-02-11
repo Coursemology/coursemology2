@@ -17,38 +17,73 @@ function getOrCreateNode() {
 }
 
 // Loads the Dialog component.
-function loadDialogue(link, successCallback) {
+function loadDialogue(element, successCallback) {
   const mountNode = getOrCreateNode();
   // Remove existing hidden dialog, if any.
   unmountComponentAtNode(mountNode);
   render(
     <ProviderWrapper>
       <RailsConfirmationDialog
-        onConfirmCallback={() => successCallback(link)}
-        message={link.attr('data-confirm')}
+        onConfirmCallback={() => successCallback(element)}
+        message={element.attr('data-confirm')}
       />
     </ProviderWrapper>
     , mountNode
   );
 }
 
+// Create a form based on the link and submit.
+function submitLink(link) {
+  const form =
+  $('<form>', {
+    method: 'POST',
+    action: link.attr('href'),
+  });
+
+  const token =
+  $('<input>', {
+    type: 'hidden',
+    name: 'authenticity_token',
+    value: $.rails.csrfToken(),
+  });
+
+  const method =
+  $('<input>', {
+    name: '_method',
+    type: 'hidden',
+    value: link.data('method'),
+  });
+
+  form.append(token, method).appendTo(document.body).submit();
+}
+
 function overrideConfirmDialog() {
+  // Success callback if dialog is confirmed.
+  function onConfirm(element) {
+    element.removeAttr('data-confirm');
+
+    if (element.closest('body').length > 0 || element.closest('a').length === 0) {
+      // element is still visible in the page or element is not a link (button, etc).
+      element.trigger('click');
+      if ($.rails.isRemote(element)) {
+        $(document).ajaxComplete(() => unmountComponentAtNode(getOrCreateNode()));
+      }
+    } else {
+      // element is a link and it is removed from the page (This could happen because the operation
+      // is Async now.
+      const httpMethod = element.data('method') && element.data('method').toUpperCase();
+
+      if (['PUT', 'PATCH', 'DELETE'].indexOf(httpMethod) !== -1) { submitLink(element); }
+    }
+  }
+
   // Handler for elements with data-confirm attribute.
   // This intercepts Rail's popup implementation and renders a dialog instead.
-  $.rails.allowAction = (link) => {
-    if (!link.attr('data-confirm')) { return true; }
-    loadDialogue(link, $.rails.onConfirm);
+  $.rails.allowAction = (element) => {
+    if (!element.attr('data-confirm')) { return true; }
+    loadDialogue(element, onConfirm);
     // Always stops the action since code runs asynchronously
     return false;
-  };
-
-  // Success callback if dialog is confirmed.
-  $.rails.onConfirm = (link) => {
-    link.removeAttr('data-confirm');
-    link.trigger('click');
-    if ($.rails.isRemote(link)) {
-      $(document).ajaxComplete(() => unmountComponentAtNode(getOrCreateNode()));
-    }
   };
 }
 
