@@ -8,8 +8,8 @@
 = content_tag_for(:tr, experience_points_record, row_options_hash)
   = simple_fields_for experience_points_record do |f|
     td
-      - updater = @course_user_preload_service.course_user_for(experience_points_record.updater)
-      = link_to_user(updater)
+      - updater_course_user = @course_user_preload_service.course_user_for(experience_points_record.updater)
+      = link_to_user(updater_course_user || experience_points_record.updater)
     td
       - if !experience_points_record.manually_awarded?
         = render partial: experience_points_record.specific, suffix: 'experience_points_reason'
