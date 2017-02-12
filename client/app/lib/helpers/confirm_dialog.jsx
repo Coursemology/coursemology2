@@ -62,18 +62,19 @@ function overrideConfirmDialog() {
   function onConfirm(element) {
     element.removeAttr('data-confirm');
 
-    if (element.closest('body').length > 0 || element.closest('a').length === 0) {
-      // element is still visible in the page or element is not a link (button, etc).
+    if (element.is('a') && element.data('method') && !$.rails.isRemote(element)) {
+      // Manually handle and submit when the element is a link ( non-remote ).
+      // Because dialog is async now and the link could have already been removed, `trigger`
+      // might not work.
+      const httpMethod = element.data('method').toUpperCase();
+
+      if (['PUT', 'PATCH', 'DELETE'].indexOf(httpMethod) !== -1) { submitLink(element); }
+    } else {
+      // Element is a remote link, button, etc.
       element.trigger('click');
       if ($.rails.isRemote(element)) {
         $(document).ajaxComplete(() => unmountComponentAtNode(getOrCreateNode()));
       }
-    } else {
-      // element is a link and it is removed from the page (This could happen because the operation
-      // is Async now.
-      const httpMethod = element.data('method') && element.data('method').toUpperCase();
-
-      if (['PUT', 'PATCH', 'DELETE'].indexOf(httpMethod) !== -1) { submitLink(element); }
     }
   }
 
