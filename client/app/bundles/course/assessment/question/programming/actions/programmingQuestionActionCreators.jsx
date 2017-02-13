@@ -109,7 +109,7 @@ function fetchImportResult(redirectAssessment, successMessage, failureMessage) {
 }
 
 function submitFormEvaluate(importJobUrl, redirectEdit, redirectAssessment, successMessage,
-                            failureMessage) {
+  failureMessage) {
   return (dispatch) => {
     const delay = 500;
 

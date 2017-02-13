@@ -25,7 +25,7 @@ const mapError = (
       intl,
       ...props
     },
-    errorProp = 'errorText',
+    errorProp = 'errorText'
   ) => {
   const errorOrWarning = error || warning;
   return touched && errorOrWarning ?

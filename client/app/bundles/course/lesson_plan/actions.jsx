@@ -31,7 +31,7 @@ export function genericUpdate(
   errorMessage,
   requestAction,
   successAction,
-  failureAction,
+  failureAction
 ) {
   return (dispatch) => {
     dispatch({ type: requestAction, payload: { id } });
@@ -96,7 +96,7 @@ export function updateItem(id, newValues, oldValues, successMessage, errorMessag
     errorMessage,
     actionTypes.ITEM_UPDATE_REQUEST,
     actionTypes.ITEM_UPDATE_SUCCESS,
-    actionTypes.ITEM_UPDATE_FAILURE,
+    actionTypes.ITEM_UPDATE_FAILURE
   );
 }
 
@@ -114,6 +114,6 @@ export function updateMilestone(id, newValues, oldValues, successMessage, errorM
     errorMessage,
     actionTypes.MILESTONE_UPDATE_REQUEST,
     actionTypes.MILESTONE_UPDATE_SUCCESS,
-    actionTypes.MILESTONE_UPDATE_FAILURE,
+    actionTypes.MILESTONE_UPDATE_FAILURE
   );
 }
