@@ -11,6 +11,7 @@ import formTranslations from 'lib/translations/form';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import translations from './AssessmentForm.intl';
 import { formNames } from '../constants';
+import MaterialUploader from './MaterialUploader';
 
 const styles = {
   title: {
@@ -26,8 +27,8 @@ const styles = {
     flex: 1,
     marginLeft: 10,
   },
-  autogradedToggle: {
-    marginTop: 24,
+  toggle: {
+    marginTop: 16,
   },
   hint: {
     fontSize: 14,
@@ -68,6 +69,15 @@ class AssessmentForm extends React.Component {
     submitting: PropTypes.bool,
     // Above are props from redux-form.
     onSubmit: PropTypes.func.isRequired,
+    // If the Form is in editing mode, `published` button will be displayed.
+    editing: PropTypes.bool,
+    // If allow to switch between autoraded and manually graded mode.
+    modeSwitching: PropTypes.bool,
+    folderAttributes: PropTypes.shape({
+      folderId: PropTypes.number,
+      // See MaterialFormContainer for detailed PropTypes.
+      materials: PropTypes.array,
+    }),
   };
 
   renderExtraOptions() {
@@ -79,6 +89,7 @@ class AssessmentForm extends React.Component {
           component={Toggle}
           label={<FormattedMessage {...translations.skippable} />}
           labelPosition="right"
+          style={styles.toggle}
           disabled={submitting}
         />
       );
@@ -109,6 +120,7 @@ class AssessmentForm extends React.Component {
           component={Toggle}
           label={<FormattedMessage {...translations.delayedGradePublication} />}
           labelPosition="right"
+          style={styles.toggle}
           disabled={submitting}
         />
         <div style={styles.hint}>
@@ -119,6 +131,7 @@ class AssessmentForm extends React.Component {
           component={Toggle}
           label={<FormattedMessage {...translations.passwordProtection} />}
           labelPosition="right"
+          style={styles.toggle}
           disabled={submitting}
         />
         {
@@ -140,7 +153,7 @@ class AssessmentForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, onSubmit, submitting } = this.props;
+    const { handleSubmit, onSubmit, submitting, folderAttributes } = this.props;
 
     return (
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -200,18 +213,44 @@ class AssessmentForm extends React.Component {
             disabled={submitting}
           />
         </div>
+
+        {
+          this.props.editing &&
+          <Field
+            name="published"
+            component={Toggle}
+            label={<FormattedMessage {...translations.published} />}
+            labelPosition="right"
+            style={styles.toggle}
+            disabled={submitting}
+          />
+        }
+
         <Field
           name="autograded"
           component={Toggle}
           label={<FormattedMessage {...translations.autograded} />}
           labelPosition="right"
-          style={styles.autogradedToggle}
-          disabled={submitting}
+          style={styles.toggle}
+          disabled={!modeSwitching || submitting}
         />
         <div style={styles.hint}>
           <FormattedMessage {...translations.autogradedHint} />
         </div>
+
         {this.renderExtraOptions()}
+
+        {
+          folderAttributes &&
+          <div>
+            <br />
+            <MaterialUploader
+              folderId={folderAttributes.folder_id}
+              materials={folderAttributes.materials}
+            />
+          </div>
+        }
+        <br />
       </Form>
     );
   }

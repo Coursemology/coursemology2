@@ -53,7 +53,10 @@ RSpec.describe Course::Assessment::AssessmentsController do
           subject
         end
 
-        it { is_expected.to render_template('edit') }
+        it 'renders JSON errors' do
+          body = JSON.parse(response.body)
+          expect(body['errors']).to be_present
+        end
       end
     end
 

@@ -24,10 +24,9 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def update
     if @assessment.update(assessment_params)
-      redirect_to course_assessment_path(current_course, @assessment),
-                  success: t('.success', title: @assessment.title)
+      head :ok
     else
-      render 'edit'
+      render json: { errors: @assessment.errors }, status: :bad_request
     end
   end
 

@@ -33,6 +33,10 @@ const translations = defineMessages({
     id: 'course.assessment.form.autograded',
     defaultMessage: 'Autograded',
   },
+  published: {
+    id: 'course.assessment.form.published',
+    defaultMessage: 'Published',
+  },
   autogradedHint: {
     id: 'course.assessment.form.autogradedHint',
     defaultMessage: 'Automatically assign grade and experience points after assessment is \
