@@ -2,6 +2,7 @@
 class Ability
   include CanCan::Ability
   attr_reader :user
+  attr_reader :course
 
   # Load all components which declare abilities.
   AbilityHost.components.each { |component| prepend(component) }

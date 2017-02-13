@@ -38,12 +38,32 @@ RSpec.feature 'Course: Administration: Administration' do
         fill_in 'course_title',          with: new_title
         fill_in 'course_description',    with: new_description
         attach_file :course_logo, File.join(Rails.root, '/spec/fixtures/files/picture.jpg')
+
         click_button I18n.t('helpers.submit.course.update')
 
         expect(page).to have_selector('div.alert.alert-success')
         expect(page).to have_content(course.logo.medium.url)
         expect(course.reload.title).to eq(new_title)
         expect(course.reload.description).to eq(new_description)
+      end
+
+      scenario 'I can enable/disable self directed learning', js: true do
+        visit course_admin_path(course)
+
+        days = 10
+        check 'self_directed_learning'
+        fill_in 'course_advance_start_at_duration_days', with: days
+
+        click_button 'submit'
+
+        expect(page).to have_selector('div.alert-success')
+        expect(course.reload.advance_start_at_duration).to be_within(1.hour).of(days.days)
+
+        uncheck 'self_directed_learning'
+        click_button 'submit'
+
+        expect(page).to have_selector('div.alert-success')
+        expect(course.reload.advance_start_at_duration).to be_nil
       end
 
       scenario 'I can delete the course' do

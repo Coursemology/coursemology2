@@ -1,5 +1,13 @@
 .course-admin-admin {
-  .edit-course {
+  &.index {
+    .advance-start-at-time {
+      display: inline-block;
+
+      input {
+        width: 80px;
+      }
+    }
+
     .course-logo {
       .image > img {
         height: $course-admin-form-logo;
