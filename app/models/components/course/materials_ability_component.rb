@@ -27,7 +27,7 @@ module Course::MaterialsAbilityComponent
       can :read, Course::Material, material_all_course_users_hash.deep_merge(properties)
     end
 
-    currently_valid_hashes.each do |properties|
+    opened_material_hashes.each do |properties|
       can [:read, :download],
           Course::Material::Folder, course_all_course_users_hash.reverse_merge(properties)
     end
@@ -54,7 +54,7 @@ module Course::MaterialsAbilityComponent
   end
 
   def valid_materials_hashes
-    currently_valid_hashes.map do |valid_time_hash|
+    opened_material_hashes.map do |valid_time_hash|
       { folder: valid_time_hash }
     end
   end
@@ -62,5 +62,23 @@ module Course::MaterialsAbilityComponent
   def concrete_folder_hash
     # Linked folders(folders with owners) are not manageable
     { owner_id: nil }
+  end
+
+  # Involve Course#advance_start_at_duration when calculating the start_at time.
+  def opened_material_hashes
+    max_start_at = Time.zone.now
+    # Extend start_at time with self directed time from course settings.
+    max_start_at += (course.advance_start_at_duration || 0) if course
+
+    [
+      {
+        start_at: (Time.min..max_start_at),
+        end_at: nil
+      },
+      {
+        start_at: (Time.min..max_start_at),
+        end_at: (Time.zone.now..Time.max)
+      }
+    ]
   end
 end

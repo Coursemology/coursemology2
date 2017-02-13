@@ -47,7 +47,7 @@ module Course::VideosAbilityComponent
 
   def allow_student_attempt_video
     can :attempt, Course::Video do |video|
-      video.started? && video.published?
+      video.published? && video.self_directed_started?
     end
   end
 

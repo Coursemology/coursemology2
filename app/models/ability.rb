@@ -10,8 +10,10 @@ class Ability
   # Initialize the ability of user.
   #
   # @param [User|nil] user The current user. This can be nil if the no user is logged in.
-  def initialize(user)
+  # @param [Course|nil] course The current course. This can be nil if not inside a course.
+  def initialize(user, course = nil)
     @user = user
+    @course = course
     can :manage, :all if user && user.administrator?
 
     define_permissions
