@@ -4,6 +4,11 @@ require 'rails_helper'
 RSpec.feature 'Courses: CourseUser Profile' do
   let(:instance) { Instance.default }
 
+  def exp_text(course_user)
+    I18n.t('course.users.show.experience_points_earned_html',
+           points: course_user.experience_points)
+  end
+
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:course_student) { create(:course_student, course: course) }
@@ -20,8 +25,7 @@ RSpec.feature 'Courses: CourseUser Profile' do
         expect(page).to have_text(course_student.name)
         expect(page).to have_text(I18n.t('course.users.show.achievement_count'))
         expect(page).to have_link(nil, href: course_achievement_path(course, achievement))
-        expect(page).
-          to have_text(I18n.t('course.users.show.experience_points_earned_html'))
+        expect(page).to have_text(exp_text(course_student))
       end
     end
 
@@ -36,8 +40,7 @@ RSpec.feature 'Courses: CourseUser Profile' do
         expect(page).not_to have_text(I18n.t('course.users.show.achievement_count'))
         expect(page).
           not_to have_selector('h2', text: Course::Achievement.model_name.human.pluralize)
-        expect(page).
-          not_to have_text(I18n.t('course.users.show.experience_points_earned_html'))
+        expect(page).not_to have_text(exp_text(course_teaching_assistant))
       end
 
       scenario "I can view a coursemate's profile" do
@@ -48,8 +51,7 @@ RSpec.feature 'Courses: CourseUser Profile' do
         expect(page).to have_text(course_student.name)
         expect(page).to have_text(I18n.t('course.users.show.achievement_count'))
         expect(page).to have_link(nil, href: course_achievement_path(course, achievement))
-        expect(page).
-          not_to have_text(I18n.t('course.users.show.experience_points_earned_html'))
+        expect(page).not_to have_text(exp_text(course_student))
       end
 
       scenario 'I can view my own profile' do
@@ -60,8 +62,7 @@ RSpec.feature 'Courses: CourseUser Profile' do
         expect(page).to have_text(course_student.name)
         expect(page).to have_text(I18n.t('course.users.show.achievement_count'))
         expect(page).to have_link(nil, href: course_achievement_path(course, achievement))
-        expect(page).
-          to have_text(I18n.t('course.users.show.experience_points_earned_html'))
+        expect(page).to have_text(exp_text(course_student))
       end
     end
   end
