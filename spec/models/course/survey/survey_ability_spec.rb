@@ -7,7 +7,7 @@ RSpec.describe Course::LessonPlan::Event do
   with_tenant(:instance) do
     subject { Ability.new(user) }
     let(:course) { create(:course) }
-    let(:survey) { create(:survey, course: course) }
+    let(:survey) { create(:survey, course: course, published: true) }
 
     context 'when the user is a Course Staff' do
       let(:user) { create(:course_manager, course: course).user }

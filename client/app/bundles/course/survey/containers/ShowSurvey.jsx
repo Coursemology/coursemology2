@@ -127,7 +127,7 @@ class ShowSurvey extends React.Component {
           adminFunctions={this.adminFunctions(survey)}
         />
         { this.renderQuestions(survey) }
-        <NewQuestionButton {...{ courseId, surveyId }} />
+        { survey.canCreateQuestion ? <NewQuestionButton {...{ courseId, surveyId }} /> : null }
       </div>
     );
   }
