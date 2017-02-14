@@ -18,8 +18,8 @@ en:
             option: 'Option'
             explanation: 'Explanation'
             add_option: 'Add Option'
-            multiple_choice_button: 'Create Multiple Choice Question'
-            multiple_response_button: 'Create Multiple Response Question'
+            multiple_choice_button: 'Multiple Choice Question'
+            multiple_response_button: 'Multiple Response Question'
           option_fields:
             explanation_hint: 'The explanation to show after the student submits his answer.'
             remove: 'Remove'

@@ -41,9 +41,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
           find('textarea.multiple-response-explanation').set correct_option_attributes[:explanation]
           check find('input[type="checkbox"]')[:name]
         end
-        click_button I18n.t(
-          'course.assessment.question.multiple_responses.form.multiple_response_button'
-        )
+        click_button I18n.t('helpers.buttons.create')
 
         question_created = assessment.questions.first.specific
         expect(page).to have_content_tag_for(question_created)
@@ -75,9 +73,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
           find('textarea.multiple-response-explanation').set correct_option_attributes[:explanation]
         end
 
-        click_button I18n.t(
-          'course.assessment.question.multiple_responses.form.multiple_choice_button'
-        )
+        click_button I18n.t('helpers.buttons.create')
 
         # Cannot create multiple choice question without a correct option
         expect(current_path).to eq(
@@ -95,9 +91,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
           check find('input[type="checkbox"]')[:name]
         end
 
-        click_button I18n.t(
-          'course.assessment.question.multiple_responses.form.multiple_choice_button'
-        )
+        click_button I18n.t('helpers.buttons.create')
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
         question_created = assessment.questions.first.specific
@@ -120,15 +114,12 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
 
         maximum_grade = 999.9
         fill_in 'maximum_grade', with: maximum_grade
-        click_button I18n.t(
-          'course.assessment.question.multiple_responses.form.multiple_response_button'
-        )
+        click_button I18n.t('helpers.buttons.update')
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(mrq.reload.maximum_grade).to eq(maximum_grade)
 
         visit edit_path
-
         options.each_with_index do |option, i|
           click_link I18n.t('course.assessment.question.multiple_responses.form.add_option')
           within all('.edit_question_multiple_response '\
@@ -142,9 +133,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
             end
           end
         end
-        click_button I18n.t(
-          'course.assessment.question.multiple_responses.form.multiple_response_button'
-        )
+        click_button I18n.t('helpers.buttons.update')
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(page).to have_selector('div.alert.alert-success')
@@ -157,9 +146,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
             click_link I18n.t('course.assessment.question.multiple_responses.option_fields.remove')
           end
         end
-        click_button I18n.t(
-          'course.assessment.question.multiple_responses.form.multiple_response_button'
-        )
+        click_button I18n.t('helpers.buttons.update')
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(page).to have_selector('div.alert.alert-success')
