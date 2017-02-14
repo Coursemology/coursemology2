@@ -115,6 +115,8 @@ RSpec.feature 'Course: Topics: Management' do
 
         # Delete post
         find(content_tag_selector(post)).find('.delete').click
+        expect(page).to have_selector('.confirm-btn')
+        accept_confirm_dialog
         wait_for_ajax
         expect(page).not_to have_content_tag_for(post)
 

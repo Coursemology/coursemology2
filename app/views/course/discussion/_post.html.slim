@@ -14,11 +14,12 @@
     div.toolbar.pull-right style='display: none'
       div.btn-group
         - if can?(:update, post)
-          => link_to('#', class: ['edit', 'btn', 'btn-default']) do
+          => link_to('#', class: ['edit', 'btn', 'btn-default'], remote: true) do
             = fa_icon 'edit'.freeze
         - if can?(:destroy, post)
           = link_to('#', class: ['delete', 'btn', 'btn-danger'],
-                         data: { confirm: t('.confirm-delete-post') }) do
+                         data: { confirm: t('.confirm-delete-post') },
+                         remote: true) do
             = fa_icon 'trash'.freeze
 
   div.content
