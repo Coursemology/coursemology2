@@ -9,7 +9,12 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
     let(:course_student) { create(:course_student, course: course) }
     let(:submission) { create(:submission, course: course, creator: course_student.user) }
     let(:record) { submission.acting_as }
-    let(:manual_record) { create(:course_experience_points_record, course_user: course_student) }
+    let(:manual_record) do
+      # Set the updater to a user not in the course to make sure the page still works in this case.
+      record = create(:course_experience_points_record, course_user: course_student)
+      record.update_column(:updater_id, create(:user).id)
+      record
+    end
     let(:inactive_record) do
       create(:course_experience_points_record, :inactive, course_user: course_student)
     end
