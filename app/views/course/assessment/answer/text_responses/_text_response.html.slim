@@ -7,7 +7,7 @@
 
 - if last_attempt && last_attempt.auto_grading && last_attempt.auto_grading.result
   = render partial: 'course/assessment/answer/explanation',
-           locals: { answer: f.object }
+           locals: { answer: last_attempt }
 
 - if question.auto_gradable? && can?(:grade, text_response.answer)
   = render partial: 'course/assessment/answer/text_responses/solution',
