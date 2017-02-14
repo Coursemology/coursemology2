@@ -31,6 +31,11 @@ module Course::MaterialsAbilityComponent
       can [:read, :download],
           Course::Material::Folder, course_all_course_users_hash.reverse_merge(properties)
     end
+
+    can :read_owner, Course::Material::Folder do |folder|
+      # Different types of owners should define their own versions of `read_material`.
+      folder.concrete? || can?(:read_material, folder.owner)
+    end
   end
 
   def allow_students_upload_materials

@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 class Course::Material::FoldersController < Course::Material::Controller
+  before_action :authorize_read_owner!, only: [:show, :download]
+
   def show
     @subfolders = @folder.children.with_content_statistics.accessible_by(current_ability).
                   order(:name).includes(:owner).without_empty_linked_folder
+    # Don't display the folder if the user cannot access its owner.
+    @subfolders.select! { |f| can?(:read_owner, f) }
   end
 
   def edit
@@ -57,7 +61,7 @@ class Course::Material::FoldersController < Course::Material::Controller
   end
 
   def download
-    @materials = (@folder.descendants + [@folder]).
+    @materials = (@folder.descendants.select { |f| can?(:read_owner, f) } + [@folder]).
                  map { |f| f.materials.accessible_by(current_ability) }.flatten
     zip_filename = @folder.root? ? root_folder_name : @folder.name
     job = Course::Material::ZipDownloadJob.perform_later(@folder, @materials, zip_filename).job
@@ -65,6 +69,10 @@ class Course::Material::FoldersController < Course::Material::Controller
   end
 
   private
+
+  def authorize_read_owner!
+    authorize!(:read_owner, @folder)
+  end
 
   def folder_params
     params.require(:material_folder).permit(:parent_id, :name, :description, :can_student_upload,

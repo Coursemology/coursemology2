@@ -6,8 +6,24 @@ RSpec.feature 'Course: Material: Folders: Management' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:parent_folder) { course.root_folder }
-    let!(:subfolders) do
+    let(:parent_folder) { create(:folder, course: course) }
+    let(:unpublished_started_folder) do
+      folder = create(:assessment, course: course, start_at: 1.day.ago).folder
+      create(:material, folder: folder)
+      folder.update_column(:parent_id, parent_folder.id)
+      folder
+    end
+    let(:published_started_folder) do
+      folder = create(:assessment, :published_with_mcq_question,
+                      course: course, start_at: 1.day.ago).folder
+      create(:material, folder: folder)
+      folder.update_column(:parent_id, parent_folder.id)
+      folder
+    end
+    let!(:linked_subfolders) do
+      [published_started_folder, unpublished_started_folder]
+    end
+    let!(:concrete_subfolders) do
       folders = []
       folders << create(:folder, parent: parent_folder, course: course)
       folders << create(:folder, :not_started, parent: parent_folder, course: course)
@@ -20,10 +36,16 @@ RSpec.feature 'Course: Material: Folders: Management' do
       let(:user) { create(:course_manager, course: course).user }
       scenario 'I can view all the subfolders' do
         visit course_material_folder_path(course, parent_folder)
-        subfolders.each do |subfolder|
+        concrete_subfolders.each do |subfolder|
           expect(page).to have_content_tag_for(subfolder)
           expect(page).to have_link(nil, href: edit_course_material_folder_path(course, subfolder))
           expect(page).to have_link(nil, href: course_material_folder_path(course, subfolder))
+        end
+
+        linked_subfolders.each do |subfolder|
+          expect(page).to have_content_tag_for(subfolder)
+          expect(page).
+            not_to have_link(nil, href: edit_course_material_folder_path(course, subfolder))
         end
 
         empty_linked_folders = parent_folder.children.
@@ -55,7 +77,7 @@ RSpec.feature 'Course: Material: Folders: Management' do
       end
 
       scenario 'I can edit a subfolder' do
-        sample_folder = subfolders.sample
+        sample_folder = concrete_subfolders.sample
         visit course_material_folder_path(course, parent_folder)
         find_link(nil, href: edit_course_material_folder_path(course, sample_folder)).click
 
@@ -73,7 +95,7 @@ RSpec.feature 'Course: Material: Folders: Management' do
 
       scenario 'I can delete a subfolder' do
         visit course_material_folder_path(course, parent_folder)
-        sample_folder = subfolders.sample
+        sample_folder = concrete_subfolders.sample
 
         within find(content_tag_selector(sample_folder)) do
           expect { find(:css, 'a.delete').click }.to change { parent_folder.children.count }.by(-1)
@@ -125,21 +147,22 @@ RSpec.feature 'Course: Material: Folders: Management' do
       end
 
       scenario 'I can view valid subfolders' do
-        valid_folders = subfolders.select do |f|
-          f.start_at < Time.zone.now && (f.end_at.nil? || f.end_at > Time.zone.now) &&
-            (f.owner.nil? || f.materials.count > 0 && f.children.count > 0)
-        end
-        invalid_folders = subfolders - valid_folders
+        visible_folders = concrete_subfolders.select do |f|
+          f.start_at < Time.zone.now && (f.end_at.nil? || f.end_at > Time.zone.now)
+        end + [published_started_folder]
+
+        invisible_folders = concrete_subfolders - visible_folders + [unpublished_started_folder]
+
         visit course_material_folder_path(course, parent_folder)
 
         expect(page).not_to have_selector('a.btn-danger.delete')
-        valid_folders.each do |subfolder|
+        visible_folders.each do |subfolder|
           expect(page).to have_content_tag_for(subfolder)
           expect(page).
             not_to have_link(nil, href: edit_course_material_folder_path(course, subfolder))
         end
 
-        invalid_folders.each do |subfolder|
+        invisible_folders.each do |subfolder|
           expect(page).not_to have_content_tag_for(subfolder)
         end
       end

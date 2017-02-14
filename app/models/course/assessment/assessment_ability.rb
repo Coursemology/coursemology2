@@ -54,11 +54,13 @@ module Course::Assessment::AssessmentAbility
   end
 
   def allow_students_show_assessments
+    can :read_material, Course::Assessment::Category, course_all_course_users_hash
+    can :read_material, Course::Assessment::Tab, category: course_all_course_users_hash
     can :read, Course::Assessment, assessment_published_all_course_users_hash
   end
 
   def allow_students_attempt_assessment
-    can :attempt, Course::Assessment do |assessment|
+    can [:attempt, :read_material], Course::Assessment do |assessment|
       assessment.published? && assessment.self_directed_started? &&
         assessment.conditions_satisfied_by?(
           user.course_users.find_by(course: assessment.course)
