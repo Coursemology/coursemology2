@@ -32,12 +32,7 @@ RSpec.describe Course::Assessment::Question do
 
         context 'when question is not autograded' do
           before { allow(question).to receive(:auto_gradable?).and_return(false) }
-
-          it 'is not valid' do
-            expect(subject).not_to be_valid
-            expect(subject.errors[:base]).to include(I18n.t('activerecord.errors.models.' \
-            'course/assessment/question.autograded_assessment'))
-          end
+          it { is_expected.to be_valid }
         end
       end
     end

@@ -26,16 +26,33 @@
   function submitFormAndWaitForJob($form, answerId) {
     var action = $form.attr('action');
     var method = $form.attr('method');
+    var data;
 
-    var data = $form.serializeArray();
-    data.push({name: 'attempting_answer_id', value: answerId});
-    $.ajax({
+    var containsFile = $form.find(':file').filter(function() {
+      return $(this).val() !== '';
+    }).length > 0;
+
+    var ajaxOptions = {
       url: action,
       method: method,
-      data: $.param(data),
-      dataType: 'json',
       global: false
-    }).done(function(data) {
+    };
+
+    if (containsFile) {
+      data = new FormData($form[0]);
+      data.append('attempting_answer_id', answerId);
+      ajaxOptions.data = data;
+      ajaxOptions.enctype = 'multipart/form-data';
+      ajaxOptions.processData = false;
+      ajaxOptions.contentType = false;
+    } else {
+      data = $form.serializeArray();
+      data.push({name: 'attempting_answer_id', value: answerId});
+      ajaxOptions.data = $.param(data);
+      ajaxOptions.dataType = 'json';
+    }
+
+    $.ajax(ajaxOptions).done(function(data) {
       waitForJob(data.redirect_url, answerId);
     });
   }
@@ -52,7 +69,7 @@
       }).fail(function() {
         // Error message is rendered by the answer.
         reloadAnswer(answerId);
-      })
+      });
     }, delay || DELAY);
   }
 

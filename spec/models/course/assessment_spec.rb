@@ -71,12 +71,7 @@ RSpec.describe Course::Assessment do
 
         context 'when the assessment has a non-autograded question' do
           let(:question_traits) { nil }
-
-          it 'is not valid' do
-            expect(subject).not_to be_valid
-            expect(subject.errors['published']).
-              to include(I18n.t('activerecord.errors.models.course/assessment.autograded'))
-          end
+          it { is_expected.to be_valid }
         end
 
         context 'when the assessment only has autograded questions' do

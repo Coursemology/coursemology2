@@ -6,7 +6,7 @@ div.text-center
           = i
 
 div.answer-panel
-  = simple_form_for [current_course, @assessment, @submission] do |f|
+  = simple_form_for [current_course, @assessment, @submission], html: { multipart: true } do |f|
     = f.error_notification
     = hidden_field_tag :step, current_step
     div.answer-content
