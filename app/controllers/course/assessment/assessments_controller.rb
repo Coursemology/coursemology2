@@ -9,15 +9,13 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def new
-    @assessment.autograded = params[:autograded] == 'true'
   end
 
   def create
     if @assessment.save
-      redirect_to course_assessment_path(current_course, @assessment),
-                  success: t('.success', title: @assessment.title)
+      render json: { id: @assessment.id }, status: :ok
     else
-      render 'new'
+      render json: { errors: @assessment.errors }, status: :bad_request
     end
   end
 
@@ -71,10 +69,26 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def assessment_params
-    params.require(:assessment).permit(:title, :description, :base_exp, :time_bonus_exp,
-                                       :start_at, :end_at, :bonus_end_at,
-                                       :published, :mode, :autograded, :password, :tabbed_view,
-                                       :skippable, :delayed_grade_publication, folder_params)
+    base_params = [:title, :description, :base_exp, :time_bonus_exp, :start_at, :end_at,
+                   :bonus_end_at, :published]
+    base_params << :autograded if action_name == 'create'
+    if autograded?
+      base_params << :skippable
+    else
+      base_params += [:password, :tabbed_view, :delayed_grade_publication]
+    end
+    params.require(:assessment).permit(*base_params, folder_params)
+  end
+
+  # Infer the autograded state from @assessment or params.
+  def autograded?
+    if @assessment && @assessment.autograded
+      true
+    elsif @assessment && @assessment.autograded == false
+      false
+    else
+      params[:assessment] && params[:assessment][:autograded]
+    end
   end
 
   # Merges the parameters for category and tab IDs from either the assessment parameter or the

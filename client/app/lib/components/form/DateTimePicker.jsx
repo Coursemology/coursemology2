@@ -56,7 +56,10 @@ const styles = {
 
 const propTypes = {
   name: PropTypes.string.isRequired,
-  floatingLabelText: PropTypes.string,
+  floatingLabelText: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.object,
+  ]),
   value: PropTypes.instanceOf(Date),
   errorText: PropTypes.string,
   onBlur: PropTypes.func,

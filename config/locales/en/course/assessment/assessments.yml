@@ -14,9 +14,6 @@ en:
           bonus_cut_off: 'Bonus Cut Off'
           end_at: 'End At'
           requirement_for: 'Requirement For'
-          new_assessment:
-            autograded: :'course.assessment.assessments.show.autograded'
-            manually_graded: :'course.assessment.assessments.show.manually_graded'
         assessment:
           attempt: 'Attempt'
           condition_not_satisfied: 'You do not fulfill the requirements of the assessment'
@@ -44,8 +41,6 @@ en:
             programming: 'Programming'
         new:
           header: 'New Assessment'
-        create:
-          success: 'Assessment %{title} was created.'
         edit:
           header: 'Edit Assessment'
         update:

@@ -5,9 +5,12 @@ import TextFieldLabel from 'material-ui/TextField/TextFieldLabel';
 import '../styles/MaterialSummernote.scss';
 
 const propTypes = {
-  field: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  disabled: PropTypes.bool.isRequired,
+  field: PropTypes.string,
+  label: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.object,
+  ]),
+  disabled: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   name: PropTypes.string,
   inputId: PropTypes.string,
@@ -24,6 +27,12 @@ class MaterialSummernote extends React.Component {
     super(props);
     this.state = { isFocused: false };
   }
+
+  onChange = (e) => {
+    if (this.props.onChange) {
+      this.props.onChange(e.target.value);
+    }
+  };
 
   render() {
     const {
@@ -70,7 +79,7 @@ class MaterialSummernote extends React.Component {
           required={this.props.required}
           value={this.props.value}
           style={{ display: 'none' }}
-          onChange={(e) => { this.props.onChange(e.target.value); }}
+          onChange={this.onChange}
           disabled={this.props.disabled}
         />
         <div className="material-summernote">
