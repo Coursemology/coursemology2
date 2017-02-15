@@ -139,7 +139,7 @@ end
 # source files/image assets.
 group :assets do
   # Compress image assets
-  gem 'image_optim'
+  gem 'image_optim_rails'
 end
 
 group :production do
