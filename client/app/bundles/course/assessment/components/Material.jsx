@@ -7,12 +7,29 @@ import Avatar from 'material-ui/Avatar';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import { standardDateFormat, shortTimeFormat } from 'lib/dateTimeDefaults';
 
-const iconStyle = {
-  width: 32,
-  height: 32,
-  padding: 4,
-  marginRight: 16,
-};
+const styles = {
+  root: {
+    fontSize: 14,
+    lineHeight: '14px',
+  },
+  innerDiv: {
+    paddingTop: 8,
+    paddingBottom: 8,
+  },
+  avatar: {
+    top: 8,
+  },
+  iconButton: {
+    width: 24,
+    height: 24,
+    padding: 4,
+    marginRight: 16,
+    top: 8,
+  },
+  secondaryText: {
+    fontSize: 12,
+  }
+}
 
 const propTypes = {
   name: PropTypes.string.isRequired,
@@ -31,14 +48,14 @@ class Material extends React.Component {
 
   renderIcon() {
     if (this.props.deleting) {
-      return <CircularProgress style={iconStyle} />;
+      return <CircularProgress size={24} style={styles.iconButton} />;
     }
 
     return (
       <IconButton
         iconClassName="fa fa-trash"
         onClick={this.onDelete}
-        style={iconStyle}
+        style={styles.iconButton}
       />
     );
   }
@@ -46,7 +63,7 @@ class Material extends React.Component {
   render() {
     const { name, updatedAt } = this.props;
     const dateTime =
-      (<div>
+      (<div style={styles.secondaryText}>
         <FormattedDate value={new Date(updatedAt)} {...standardDateFormat} />
         {' '}
         <FormattedTime value={updatedAt} {...shortTimeFormat} />
@@ -57,8 +74,10 @@ class Material extends React.Component {
         disableKeyboardFocus
         primaryText={name}
         rightAvatar={this.renderIcon()}
-        leftAvatar={<Avatar icon={<ActionAssignment />} />}
+        leftAvatar={<Avatar size = {32} style={styles.avatar} icon={<ActionAssignment />} />}
         secondaryText={dateTime}
+        style={styles.root}
+        innerDivStyle={styles.innerDiv}
       />
     );
   }

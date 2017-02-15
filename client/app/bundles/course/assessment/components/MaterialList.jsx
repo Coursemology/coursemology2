@@ -13,16 +13,12 @@ const propTypes = {
   onMaterialDelete: PropTypes.func.isRequired,
 };
 
-const listStyle = {
-  border: 'solid 1px #d9d9d9', // Light grey border
-};
-
 const MaterialList = (props) => {
   const { materials, success, onMaterialDelete } = props;
   const header =
     (<FormattedMessage
       id="course.assessment.MaterialList.uploadedFiles"
-      defaultMessage="Uploaded Files"
+      defaultMessage="Files"
     />);
 
   const materialNodes = materials.map(material =>
@@ -59,7 +55,7 @@ const MaterialList = (props) => {
 
   return (
     <div>
-      <List style={listStyle}>
+      <List>
         <Subheader>{header}</Subheader>
         {materialNodes}
       </List>
