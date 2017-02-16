@@ -22,6 +22,8 @@ en:
             add_solution: 'Add Solution'
             file_upload: 'File Upload Question'
             text_response: 'Text Response Question'
+            text_response_autograde: 'Note: If no solutions are provided, the autograder will always award the maximum grade.'
+            file_upload_autograde: 'Note: File upload question is not auto-gradable. The autograder will always award the maximum grade.'
           solution_fields:
             explanation_hint: 'The explanation to show after the student submits his answer.'
             remove: 'Remove'

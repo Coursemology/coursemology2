@@ -36,7 +36,7 @@ const translations = defineMessages({
   autogradedHint: {
     id: 'course.assessment.form.autogradedHint',
     defaultMessage: 'Automatically assign grade and experience points after assessment is \
-      submitted. Note that all the questions in the assessment must be auto-gradable.',
+      submitted. Answers that are not auto-gradable will always receive the maximum grade.',
   },
   skippable: {
     id: 'course.assessment.form.skippable',

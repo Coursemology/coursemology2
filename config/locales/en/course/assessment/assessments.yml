@@ -39,6 +39,9 @@ en:
             text_response: 'Text Response'
             file_upload: 'File Upload'
             programming: 'Programming'
+          non_auto_gradable_questions: >
+            Some of the questions in this assessment are not auto-gradable.
+            The autograder will always award the maximum grade for these questions.
         new:
           header: 'New Assessment'
         edit:
@@ -50,7 +53,6 @@ en:
           failure: 'Could not delete assessment: %{error}'
         form:
           autograded: 'Automatically assign grade and experience points after finalization'
-          autograded_hint: 'Note that all the questions in the assessment must be auto-gradable'
           skippable: 'Allow students to skip steps'
           password_hint: >
             When password protection is enabled, students are allowed to access their submission once.

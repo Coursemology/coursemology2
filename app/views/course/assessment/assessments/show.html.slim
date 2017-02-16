@@ -82,5 +82,12 @@
                       role: 'menuitem')
 
     h3 = t('.questions')
+    br
+    - if @assessment.autograded?
+      - unless @assessment.questions.map(&:specific).all?(&:auto_gradable?)
+        div.alert.alert-warning
+          => fa_icon 'exclamation-triangle'
+          = t('.non_auto_gradable_questions')
+
     #sortable-questions
       = render @assessment.questions.map(&:specific)
