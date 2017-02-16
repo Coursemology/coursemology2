@@ -1,38 +1,27 @@
 {
-	// Default options
-	"boss": true,
+	"boss": false,
 	"browser": true,
+	"camelcase": true,
 	"curly": true,
 	"eqeqeq": true,
 	"eqnull": true,
 	"expr": true,
+	"forin": true,
+	"globals": {
+		"jQuery": true,
+		"$": true,
+		"ace": true
+	},
 	"immed": true,
 	"indent": 4,
 	"latedef": "nofunc",
+	"maxlen": 100,
 	"newcap": true,
 	"noarg": true,
+	"quotmark": "single",
+	"strict": true,
 	"sub": true,
 	"trailing": true,
 	"undef": true,
 	"unused": true,
-	"globals": {
-		"jQuery": true,
-		"$": true
-	},
-
-	// Project options: Default off
-	"camelcase": true,
-	"forin": true,
-	"quotmark": "single",
-	"strict": true,
-
-	// Project options: Default on
-	"boss": false,
-
-	// Other Project options:
-	"maxlen": 100,
-	"globals": {
-		"jQuery": true,
-		"ace": true
-	}
 }
