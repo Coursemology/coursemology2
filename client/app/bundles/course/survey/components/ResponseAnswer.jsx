@@ -34,6 +34,9 @@ const styles = {
   errorText: {
     color: red500,
   },
+  card: {
+    marginBottom: 15,
+  },
 };
 
 class ResponseAnswer extends React.Component {
@@ -147,7 +150,7 @@ class ResponseAnswer extends React.Component {
     if (!renderer) { return <div />; }
 
     return (
-      <Card>
+      <Card style={styles.card}>
         <CardText>
           <p>{`${question.weight + 1}. ${question.description}`}</p>
           <Field
