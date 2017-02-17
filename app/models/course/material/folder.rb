@@ -53,8 +53,8 @@ class Course::Material::Folder < ActiveRecord::Base
     course.material_folders.build(name: 'Root')
   end
 
-  def files_attributes=(files)
-    files.each do |file|
+  def build_materials(files)
+    files.map do |file|
       materials.build(name: Pathname.normalize_filename(file.original_filename), file: file)
     end
   end

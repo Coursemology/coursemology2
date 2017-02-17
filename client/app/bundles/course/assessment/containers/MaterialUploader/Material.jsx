@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
-import { FormattedDate, FormattedTime } from 'react-intl';
+import { FormattedDate, FormattedTime, FormattedMessage, defineMessages } from 'react-intl';
 import IconButton from 'material-ui/IconButton';
 import { ListItem } from 'material-ui/List';
 import CircularProgress from 'material-ui/CircularProgress';
 import Avatar from 'material-ui/Avatar';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import { standardDateFormat, shortTimeFormat } from 'lib/dateTimeDefaults';
 
 const styles = {
@@ -28,54 +29,71 @@ const styles = {
   },
   secondaryText: {
     fontSize: 12,
-  }
-}
+  },
+};
+
+const translations = defineMessages({
+  uploading: {
+    id: 'course.material.uploading',
+    defaultMessage: 'Uploading',
+  },
+});
 
 const propTypes = {
+  id: PropTypes.number,
   name: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
-  updatedAt: PropTypes.string.isRequired,
+  updatedAt: PropTypes.string,
   onMaterialDelete: PropTypes.func,
   deleting: PropTypes.bool,
+  uploading: PropTypes.bool,
 };
 
 class Material extends React.Component {
   onDelete = (e) => {
     e.preventDefault();
-    const { url, onMaterialDelete } = this.props;
-    onMaterialDelete(url);
+    const { id, name, onMaterialDelete } = this.props;
+    if (onMaterialDelete) onMaterialDelete(id, name);
   }
 
   renderIcon() {
-    if (this.props.deleting) {
+    if (this.props.deleting || this.props.uploading) {
       return <CircularProgress size={24} style={styles.iconButton} />;
     }
 
     return (
       <IconButton
-        iconClassName="fa fa-trash"
         onClick={this.onDelete}
         style={styles.iconButton}
-      />
+      >
+        <DeleteIcon />
+      </IconButton>
+    );
+  }
+
+  renderSecondaryText() {
+    if (this.props.uploading) {
+      return <FormattedMessage {...translations.uploading} />;
+    }
+    const { updatedAt } = this.props;
+    return (
+      <div style={styles.secondaryText}>
+        <FormattedDate value={new Date(updatedAt)} {...standardDateFormat} />
+        {' '}
+        <FormattedTime value={updatedAt} {...shortTimeFormat} />
+      </div>
     );
   }
 
   render() {
-    const { name, updatedAt } = this.props;
-    const dateTime =
-      (<div style={styles.secondaryText}>
-        <FormattedDate value={new Date(updatedAt)} {...standardDateFormat} />
-        {' '}
-        <FormattedTime value={updatedAt} {...shortTimeFormat} />
-      </div>);
+    const { name } = this.props;
 
     return (
       <ListItem
         disableKeyboardFocus
         primaryText={name}
         rightAvatar={this.renderIcon()}
-        leftAvatar={<Avatar size = {32} style={styles.avatar} icon={<ActionAssignment />} />}
-        secondaryText={dateTime}
+        leftAvatar={<Avatar size={32} style={styles.avatar} icon={<ActionAssignment />} />}
+        secondaryText={this.renderSecondaryText()}
         style={styles.root}
         innerDivStyle={styles.innerDiv}
       />

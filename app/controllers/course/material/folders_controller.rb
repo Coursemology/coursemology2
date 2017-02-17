@@ -52,11 +52,21 @@ class Course::Material::FoldersController < Course::Material::Controller
   end
 
   def upload_materials
-    if @folder.update_attributes(files_params)
-      redirect_to course_material_folder_path(current_course, @folder),
-                  success: t('.success', name: @folder.name)
-    else
-      upload_materials_failure
+    @materials = @folder.build_materials(files_params[:files_attributes])
+    respond_to do |format|
+      if @folder.save
+        format.html do
+          redirect_to course_material_folder_path(current_course, @folder),
+                      success: t('.success', name: @folder.name)
+        end
+        format.json
+      else
+        format.html { upload_materials_failure }
+        format.json do
+          render json: { message: @folder.errors.full_messages.to_sentence },
+                 status: :unprocessable_entity
+        end
+      end
     end
   end
 
