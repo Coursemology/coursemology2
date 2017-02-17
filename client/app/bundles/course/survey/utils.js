@@ -9,7 +9,9 @@ export const formatQuestionFormData = (data) => {
   );
   const filledOptionsCount = filledOptions.length;
 
-  ['question_type', 'description', 'max_options', 'min_options', 'required'].forEach((field) => {
+  [
+    'question_type', 'description', 'max_options', 'min_options', 'required', 'grid_view',
+  ].forEach((field) => {
     if (data[field] === 0 || data[field]) {
       payload.append(`question[${field}]`, data[field]);
     }

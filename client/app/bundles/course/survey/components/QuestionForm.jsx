@@ -17,11 +17,6 @@ const styles = {
   description: {
     width: '100%',
   },
-  fieldRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-  },
   questionType: {
     width: '50%',
   },
@@ -33,20 +28,33 @@ const styles = {
     inputStyle: { width: '80%' },
     underlineStyle: { width: '80%' },
   },
-  requiredToggle: {
-    width: '35%',
-    display: 'block',
+  toggle: {
+    marginTop: 10,
   },
-  // Overrides bootstrap's styling. To be removed once bootstrap is removed.
-  requiredToggleLabel: {
-    fontWeight: 'normal',
+  hint: {
+    fontSize: 14,
+    marginBottom: 12,
   },
 };
 
 const questionFormTranslations = defineMessages({
-  compulsory: {
-    id: 'course.surveys.QuestionForm.compulsory',
-    defaultMessage: 'Question is Compulsory',
+  required: {
+    id: 'course.surveys.QuestionForm.required',
+    defaultMessage: 'Required',
+  },
+  requiredHint: {
+    id: 'course.surveys.QuestionForm.requiredHint',
+    defaultMessage:
+      'When selected, student must answer this question in order to complete the survey.',
+  },
+  gridView: {
+    id: 'course.surveys.QuestionForm.gridView',
+    defaultMessage: 'Grid View',
+  },
+  gridViewHint: {
+    id: 'course.surveys.QuestionForm.gridViewHint',
+    defaultMessage: 'When selected, question options will be display as grid instead of a list. \
+      This option is meant for questions with images as options.',
   },
   lessThanFilledOptions: {
     id: 'course.surveys.QuestionForm.lessThanFilledOptions',
@@ -129,6 +137,22 @@ const validate = (values) => {
 };
 
 class QuestionForm extends React.Component {
+  renderTiledViewToggle() {
+    const { intl, disabled } = this.props;
+    return (
+      <div>
+        <Field
+          name="grid_view"
+          labelPosition="right"
+          label={intl.formatMessage(questionFormTranslations.gridView)}
+          component={Toggle}
+          style={styles.toggle}
+          {...{ disabled }}
+        />
+        <p style={styles.hint}>{ intl.formatMessage(questionFormTranslations.gridViewHint) }</p>
+      </div>
+    );
+  }
   renderNumberOfResponsesField(name, floatingLabelText) {
     const { intl, disabled } = this.props;
     return (
@@ -199,6 +223,7 @@ class QuestionForm extends React.Component {
   renderMultipleChoiceFields() {
     return (
       <div>
+        {this.renderTiledViewToggle()}
         {this.renderValidOptionCount()}
         {this.renderOptionFields({ multipleChoice: true })}
       </div>
@@ -209,6 +234,7 @@ class QuestionForm extends React.Component {
     const { intl } = this.props;
     return (
       <div>
+        {this.renderTiledViewToggle()}
         <div style={styles.numberOfResponsesDiv}>
           {this.renderValidOptionCount()}
           {this.renderNumberOfResponsesField(
@@ -242,36 +268,26 @@ class QuestionForm extends React.Component {
 
     return (
       <Form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
-        <div style={styles.fieldRow}>
-          <Field
-            name="question_type"
-            floatingLabelText={intl.formatMessage(translations.questionType)}
-            component={SelectField}
-            style={styles.questionType}
-            {...{ disabled }}
-          >
-            <MenuItem
-              value={TEXT}
-              primaryText={intl.formatMessage(translations.textResponse)}
-            />
-            <MenuItem
-              value={MULTIPLE_CHOICE}
-              primaryText={intl.formatMessage(translations.multipleChoice)}
-            />
-            <MenuItem
-              value={MULTIPLE_RESPONSE}
-              primaryText={intl.formatMessage(translations.multipleResponse)}
-            />
-          </Field>
-          <Field
-            name="required"
-            label={intl.formatMessage(questionFormTranslations.compulsory)}
-            component={Toggle}
-            style={styles.requiredToggle}
-            labelStyle={styles.requiredToggleLabel}
-            {...{ disabled }}
+        <Field
+          name="question_type"
+          floatingLabelText={intl.formatMessage(translations.questionType)}
+          component={SelectField}
+          style={styles.questionType}
+          {...{ disabled }}
+        >
+          <MenuItem
+            value={TEXT}
+            primaryText={intl.formatMessage(translations.textResponse)}
           />
-        </div>
+          <MenuItem
+            value={MULTIPLE_CHOICE}
+            primaryText={intl.formatMessage(translations.multipleChoice)}
+          />
+          <MenuItem
+            value={MULTIPLE_RESPONSE}
+            primaryText={intl.formatMessage(translations.multipleResponse)}
+          />
+        </Field>
         <Field
           name="description"
           floatingLabelText={intl.formatMessage(translations.questionText)}
@@ -281,6 +297,17 @@ class QuestionForm extends React.Component {
           rows={2}
           {...{ disabled }}
         />
+        <Field
+          name="required"
+          labelPosition="right"
+          label={intl.formatMessage(questionFormTranslations.required)}
+          component={Toggle}
+          style={styles.toggle}
+          {...{ disabled }}
+        />
+        <p style={styles.hint}>
+          { intl.formatMessage(questionFormTranslations.requiredHint) }
+        </p>
         { this.renderSpecificFields(questionType) }
       </Form>
     );
