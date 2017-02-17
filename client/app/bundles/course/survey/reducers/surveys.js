@@ -9,7 +9,7 @@ export default function (state = [], action) {
     }
     case actionTypes.UPDATE_SURVEY_SUCCESS:
     case actionTypes.LOAD_SURVEY_SUCCESS: {
-      return updateOrAppend(state, action.data);
+      return updateOrAppend(state, action.survey);
     }
     case actionTypes.LOAD_SURVEYS_SUCCESS: {
       return action.surveys;

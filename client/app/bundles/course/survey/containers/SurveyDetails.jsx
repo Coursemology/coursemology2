@@ -15,6 +15,7 @@ import TitleBar from 'lib/components/TitleBar';
 import surveyTranslations from '../translations';
 import { surveyShape } from '../propTypes';
 import { updateSurvey } from '../actions/surveys';
+import RespondButton from '../containers/RespondButton';
 
 const translations = defineMessages({
   loading: {
@@ -152,6 +153,9 @@ class SurveyDetails extends React.Component {
           </div>
           {this.renderPublishToggle()}
           {this.renderDescription()}
+          <CardText>
+            <RespondButton {...{ survey, courseId }} />
+          </CardText>
         </Card>
       </div>
     );
