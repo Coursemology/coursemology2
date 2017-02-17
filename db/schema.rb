@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170214062036) do
+ActiveRecord::Schema.define(version: 20170217041431) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -598,6 +598,8 @@ ActiveRecord::Schema.define(version: 20170214062036) do
   end
 
   create_table "course_surveys", force: :cascade do |t|
+    t.boolean  "anonymous",    :default=>false, :null=>false
+    t.boolean  "allow_modify", :default=>false, :null=>false
     t.integer  "creator_id", :null=>false, :index=>{:name=>"fk__course_surveys_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_surveys_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "updater_id", :null=>false, :index=>{:name=>"fk__course_surveys_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_surveys_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at", :null=>false
@@ -610,6 +612,7 @@ ActiveRecord::Schema.define(version: 20170214062036) do
     t.text     "description",   :null=>false
     t.integer  "weight",        :null=>false
     t.boolean  "required",      :default=>false, :null=>false
+    t.boolean  "grid_view",    :default=>false, :null=>false
     t.integer  "max_options"
     t.integer  "min_options"
     t.integer  "creator_id",    :null=>false, :index=>{:name=>"fk__course_survey_questions_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_survey_questions_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
