@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Snackbar from 'material-ui/Snackbar';
+import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { resetDeleteConfirmation } from '../actions';
 import SurveyFormDialogue from '../containers/SurveyFormDialogue';
@@ -16,19 +16,13 @@ const SurveysContainer = ({ dispatch, notification, children, deleteConfirmation
       {...deleteConfirmation}
       onCancel={() => dispatch(resetDeleteConfirmation())}
     />
-    <Snackbar
-      open={notification !== ''}
-      message={notification}
-    />
+    <NotificationBar notification={notification} />
   </div>
 );
 
 SurveysContainer.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  notification: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-  ]),
+  notification: notificationShape,
   children: PropTypes.node,
   deleteConfirmation: PropTypes.shape({
     open: PropTypes.bool.isRequired,

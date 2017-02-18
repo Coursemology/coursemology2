@@ -15,15 +15,10 @@ export function showDeleteConfirmation(onConfirm) {
 }
 
 export function setNotification(message) {
-  const duration = 1500;
-
   return (dispatch) => {
     dispatch({
       type: actionTypes.SET_SURVEY_NOTIFICATION,
       message,
     });
-    setTimeout(() => {
-      dispatch({ type: actionTypes.RESET_SURVEY_NOTIFICATION });
-    }, duration);
   };
 }
