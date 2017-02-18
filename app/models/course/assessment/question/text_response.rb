@@ -33,7 +33,12 @@ class Course::Assessment::Question::TextResponse < ActiveRecord::Base
 
   def attempt(submission, last_attempt = nil)
     answer = submission.text_response_answers.build(submission: submission, question: question)
-    answer.answer_text = last_attempt.answer_text if last_attempt
+    if last_attempt
+      answer.answer_text = last_attempt.answer_text
+      if last_attempt.attachment_reference
+        answer.attachment_reference = last_attempt.attachment_reference.dup
+      end
+    end
     answer.acting_as
   end
 

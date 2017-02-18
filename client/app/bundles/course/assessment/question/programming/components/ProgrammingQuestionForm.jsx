@@ -456,10 +456,12 @@ class ProgrammingQuestionForm extends React.Component {
     languageOptions.unshift({ id: null, name: null });
 
     const autogradedAssessment = question.get('autograded_assessment');
-    const autograded = autogradedAssessment || question.get('autograded');
+    const autograded = question.get('autograded');
     let autogradedLabel = this.props.intl.formatMessage(translations.autograded);
-    if (autogradedAssessment) {
+    if (autogradedAssessment && !autograded) {
       autogradedLabel += ` (${this.props.intl.formatMessage(translations.autogradedAssessment)})`;
+    } else if (question.get('has_auto_gradings')) {
+      autogradedLabel = ` (${this.props.intl.formatMessage(translations.autogradedToggleDisabled)})`;
     }
 
     const showEditOnline = question.get('edit_online');
@@ -544,11 +546,9 @@ class ProgrammingQuestionForm extends React.Component {
                     labelPosition="right"
                     toggled={autograded}
                     onToggle={(e) => {
-                      if (autogradedAssessment) return;
                       this.handleChange('autograded', e.target.checked);
                     }}
-                    readOnly={autogradedAssessment}
-                    disabled={this.props.data.get('is_loading')}
+                    disabled={this.props.data.get('is_loading') || question.get('has_auto_gradings')}
                     style={{ margin: '1em 0' }}
                     name="question_programming[autograded]"
                   />

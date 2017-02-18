@@ -5,8 +5,6 @@ class Course::Assessment::Question < ActiveRecord::Base
 
   before_validation :set_defaults, if: :new_record?
 
-  validate :validate_assessment_is_not_autograded, unless: :auto_gradable?
-
   belongs_to :assessment, inverse_of: :questions
   has_many :answers, class_name: Course::Assessment::Answer.name, dependent: :destroy,
                      inverse_of: :question
@@ -85,11 +83,6 @@ class Course::Assessment::Question < ActiveRecord::Base
   end
 
   private
-
-  def validate_assessment_is_not_autograded
-    return unless assessment.autograded? && assessment.published?
-    errors.add(:base, :autograded_assessment)
-  end
 
   def set_defaults
     return if weight.present? || !assessment || assessment.new_record?

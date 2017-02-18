@@ -7,7 +7,11 @@ export default defineMessages({
   },
   autogradedAssessment: {
     id: 'course.assessment.question.programming.onlineEditorPythonView.autogradedAssessment',
-    defaultMessage: 'Autograded assessment cannot have non-autograded questions',
+    defaultMessage: 'Answers to non-autograded programming questions will always receive the maximum grade',
+  },
+  autogradedToggleDisabled: {
+    id: 'course.assessment.question.programming.onlineEditorPythonView.autogradedToggleDisabled',
+    defaultMessage: 'This question cannot be switched to non-autograded as some answers have already been submitted',
   },
   titleFieldLabel: {
     id: 'course.assessment.question.programming.programmingQuestionForm.titleFieldLabel',

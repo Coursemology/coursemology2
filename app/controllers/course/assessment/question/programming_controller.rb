@@ -16,7 +16,11 @@ class Course::Assessment::Question::ProgrammingController < \
     process_package
 
     respond_to do |format|
-      format.json { save_and_render_json(t('.success'), t('.failure'), true) }
+      if @programming_question.save
+        format.json { render_success_json t('.success'), true }
+      else
+        format.json { render_failure_json t('.failure') }
+      end
     end
   end
 
@@ -26,12 +30,21 @@ class Course::Assessment::Question::ProgrammingController < \
   end
 
   def update
-    @programming_question.assign_attributes programming_question_params
-    @programming_question.skills.clear if programming_question_params[:skill_ids].blank?
-    process_package
+    result = @programming_question.class.transaction do
+      @programming_question.assign_attributes programming_question_params
+      @programming_question.skills.clear if programming_question_params[:skill_ids].blank?
+      process_package
+
+      raise ActiveRecord::Rollback unless @programming_question.save
+      true
+    end
 
     respond_to do |format|
-      format.json { save_and_render_json(t('.success'), t('.failure'), false) }
+      if result
+        format.json { render_success_json t('.success'), false }
+      else
+        format.json { render_failure_json t('.failure') }
+      end
     end
   end
 
@@ -57,19 +70,16 @@ class Course::Assessment::Question::ProgrammingController < \
     )
   end
 
-  def save_and_render_json(success_message, failure_message, redirect_to_edit)
-    if @programming_question.save
-      @response = { message: success_message, redirect_to_edit: redirect_to_edit }
+  def render_success_json(message, redirect_to_edit)
+    @response = { message: message, redirect_to_edit: redirect_to_edit }
+    @import_job_url = job_path(@programming_question.import_job) if @programming_question.import_job
 
-      if @programming_question.import_job
-        @import_job_url = job_path(@programming_question.import_job)
-      end
+    render 'edit'
+  end
 
-      render 'edit'
-    else
-      render json: { message: failure_message, errors: @programming_question.errors.full_messages },
-             status: :bad_request
-    end
+  def render_failure_json(message)
+    render json: { message: message, errors: @programming_question.errors.full_messages },
+           status: :bad_request
   end
 
   def process_package

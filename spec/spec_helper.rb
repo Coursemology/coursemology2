@@ -99,3 +99,5 @@ Capybara.register_server(:puma) do |app, port|
   server.add_tcp_listener(Capybara.server_host, port)
   server.run
 end
+
+Capybara.default_max_wait_time = 5

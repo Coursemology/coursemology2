@@ -23,6 +23,12 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
     let(:programming_assessment_submission) do
       create(:submission, assessment: programming_assessment, creator: student)
     end
+    let(:text_response_assessment) do
+      create(:assessment, :autograded, :published_with_text_response_question, course: course)
+    end
+    let(:text_response_assessment_submission) do
+      create(:submission, assessment: text_response_assessment, creator: student)
+    end
 
     context 'As a Course Student' do
       let(:user) { student }
@@ -73,6 +79,7 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
 
         click_button I18n.t('common.submit')
         wait_for_ajax
+
         # Check that previous attempt is restored.
         expect(page).
           to have_selector('div.panel', text: 'course.assessment.answer.explanation.correct')
@@ -197,6 +204,37 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
         # Check that answer has been reset to template files
         expect(programming_answer.reload.files.first.content).
           to eq(programming_question.specific.template_files.first.content)
+      end
+
+      scenario 'I can add an attachment to a file upload question', js: true do
+        visit edit_course_assessment_submission_path(course, text_response_assessment,
+                                                     text_response_assessment_submission)
+
+        answer = text_response_assessment_submission.answers.last
+        attach_file "submission_answers_attributes_#{answer.id}_actable_attributes_file",
+                    File.join(Rails.root, '/spec/fixtures/files/text.txt')
+        click_button I18n.t('common.submit')
+        wait_for_ajax
+
+        # Check that attached file is displayed
+        expect(page).to have_selector('a', text: 'text.txt')
+
+        # Check that attachment is uploaded
+        expect(answer.specific.attachment).to be_present
+      end
+
+      scenario 'I can continue to the next question when question is non-autograded', js: true do
+        text_response_assessment.questions.first.specific.solutions = []
+        create(:course_assessment_question_multiple_response, assessment: text_response_assessment)
+
+        visit edit_course_assessment_submission_path(course, text_response_assessment,
+                                                     text_response_assessment_submission)
+        click_button I18n.t('common.submit')
+        wait_for_ajax
+
+        click_link I18n.t('course.assessment.answer.autograded.continue')
+        second_question = text_response_assessment.reload.questions.second.specific
+        expect(page).to have_selector('h3', text: second_question.display_title)
       end
     end
 

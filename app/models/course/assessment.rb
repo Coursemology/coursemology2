@@ -20,7 +20,6 @@ class Course::Assessment < ActiveRecord::Base
   after_commit :clear_duplication_flag
 
   validate :validate_presence_of_questions, if: :published?
-  validate :validate_only_autograded_question_when_published
 
   belongs_to :tab, inverse_of: :assessments
 
@@ -135,17 +134,6 @@ class Course::Assessment < ActiveRecord::Base
 
   def validate_presence_of_questions
     errors.add(:published, :no_questions) unless questions.present?
-  end
-
-  def validate_only_autograded_question_when_published
-    return unless autograded? && published?
-
-    non_autograded_questions = questions.select { |q| !q.auto_gradable? }
-    return if non_autograded_questions.empty?
-
-    message = I18n.t('activerecord.errors.models.course/assessment.autograded',
-                     question: non_autograded_questions.first.display_title)
-    errors.add(:published, message)
   end
 
   def clear_duplication_flag

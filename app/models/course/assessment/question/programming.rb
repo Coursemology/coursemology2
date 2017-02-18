@@ -101,10 +101,7 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
   def non_autograded_template_files=(template_files)
     self.template_files.clear
     self.template_files = template_files
-
-    execute_after_commit do
-      test_cases.clear
-    end
+    test_cases.clear
   end
 
   private

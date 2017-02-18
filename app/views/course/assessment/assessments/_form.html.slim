@@ -16,7 +16,7 @@
   - if @assessment.autograded?
     = f.input :skippable, label: t('.skippable')
   - if @assessment.persisted?
-    = f.input :autograded, label: t('.autograded'), hint: t('.autograded_hint'), disabled: true
+    = f.input :autograded, label: t('.autograded'), disabled: true
   - else
     = f.hidden_field :autograded
   - unless @assessment.autograded?

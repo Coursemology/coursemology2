@@ -7,7 +7,11 @@ class Course::Assessment::Answer::AutoGradingService
     # @param [Course::Assessment::Answer] answer The answer to be graded.
     # @param [Boolean] reattempt Whether to reattempt the answer after grading.
     def grade(answer, reattempt = false)
-      answer = pick_grader(answer.question).grade(answer)
+      answer = if answer.question.auto_gradable?
+                 pick_grader(answer.question).grade(answer)
+               else
+                 assign_maximum_grade(answer)
+               end
       save!(answer, reattempt)
     end
 
@@ -38,6 +42,24 @@ class Course::Assessment::Answer::AutoGradingService
                                              to: new_answer.discussion_topic)
         end
       end
+    end
+
+    # Grades into the given +Course::Assessment::Answer::AutoGrading+ object. This assigns the grade
+    # and makes sure answer is in the correct state.
+    #
+    # @param [Course::Assessment::Answer] answer The answer to be graded.
+    # @return [Course::Assessment::Answer] The graded answer. Note that this answer is not persisted
+    #   yet.
+    def assign_maximum_grade(answer)
+      answer.correct = true
+      answer.evaluate!
+
+      if answer.question.assessment.autograded?
+        answer.publish!
+        answer.grade = answer.question.maximum_grade
+        answer.grader = User.system
+      end
+      answer
     end
   end
 

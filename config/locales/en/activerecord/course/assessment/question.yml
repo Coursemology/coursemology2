@@ -1,11 +1,5 @@
 en:
   activerecord:
-    errors:
-      models:
-        course/assessment/question:
-          autograded_assessment: >
-            A non-autograded question cannot be added to a published autograded assessment.
-            You might want to unpublish the assessment first.
     course/assessment/question:
       question_number: "Question %{index}"
       question_with_title: "%{question_number}: %{title}"

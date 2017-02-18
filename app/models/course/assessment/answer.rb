@@ -68,10 +68,8 @@ class Course::Assessment::Answer < ActiveRecord::Base
   #   finished.
   # @param [Boolean] reattempt Whether to create new answer based on current answer after grading.
   # @return [Course::Assessment::Answer::AutoGradingJob] The job instance.
-  # @raise [ArgumentError] When the question cannot be auto graded.
   # @raise [IllegalStateError] When the answer has not been submitted.
   def auto_grade!(redirect_to_path = nil, reattempt = false)
-    raise ArgumentError unless question.auto_gradable?
     raise IllegalStateError if attempting?
 
     ensure_auto_grading!

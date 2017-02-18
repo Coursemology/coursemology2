@@ -22,6 +22,7 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
     else
       templates = @language_package_service.submission_templates
       @question.imported_attachment = nil
+      @question.import_job_id = nil
       @question.non_autograded_template_files = templates.map do |template|
         Course::Assessment::Question::ProgrammingTemplateFile.new(template)
       end

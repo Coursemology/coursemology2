@@ -10,7 +10,10 @@ json.question do
     json.(skill, :id, :title)
   end
 
-  json.autograded @assessment.autograded? || @programming_question.attachment.present?
+  json.autograded @programming_question.persisted? ?
+    @programming_question.attachment.present? : @assessment.autograded?
+  json.has_auto_gradings @programming_question.auto_gradable? &&
+    @programming_question.answers.without_attempting_state.count > 0
   json.display_autograded_toggle display_autograded_toggle?
   json.autograded_assessment @assessment.autograded?
   json.published_assessment @assessment.published?
