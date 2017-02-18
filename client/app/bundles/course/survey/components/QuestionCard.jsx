@@ -6,27 +6,25 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import Thumbnail from './Thumbnail';
 import { sorts } from '../utils';
 import { questionTypes } from '../constants';
+import { optionShape } from '../propTypes';
+import OptionsListItem from './OptionsListItem';
 
 const styles = {
-  option: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    marginTop: 10,
-  },
   optionWidget: {
     width: 'auto',
   },
-  image: {
-    maxHeight: 150,
-    maxWidth: 400,
-  },
-  optionBody: {
+  grid: {
     display: 'flex',
-    flexDirection: 'column',
+    flexWrap: 'wrap',
+  },
+  gridOptionWidget: {
+    marginTop: 5,
+    width: 'auto',
+  },
+  gridOptionWidgetIcon: {
+    margin: 0,
   },
   adminMenu: {
     position: 'absolute',
@@ -42,31 +40,48 @@ const styles = {
 };
 
 class QuestionCard extends React.Component {
-  static renderOptions(question, Widget) {
+  static renderOptionsList(question, Widget) {
     const { byWeight } = sorts;
     return (
       <div>
-        { question.options.sort(byWeight).map(option => (
-          <div key={option.id} style={styles.option}>
-            <Widget disabled style={styles.optionWidget} />
-            <div style={styles.optionBody}>
-              { option.image_url ?
-                <Thumbnail src={option.image_url} style={styles.image} /> : [] }
-              { option.option ? option.option : '' }
-            </div>
-          </div>
-        ))}
+        {question.options.sort(byWeight).map((option) => {
+          const { option: optionText, image_url: imageUrl } = option;
+          const widget = <Widget disabled style={styles.optionWidget} />;
+          return <OptionsListItem key={option.id} {...{ optionText, imageUrl, widget }} />;
+        })}
+      </div>
+    );
+  }
+
+  static renderOptionsGrid(question, Widget) {
+    const { byWeight } = sorts;
+    return (
+      <div style={styles.grid}>
+        { question.options.sort(byWeight).map((option) => {
+          const { option: optionText, image_url: imageUrl } = option;
+          const widget = (
+            <Widget
+              disabled
+              style={styles.gridOptionWidget}
+              iconStyle={styles.gridOptionWidgetIcon}
+            />
+          );
+          return <OptionsListItem grid key={option.id} {...{ optionText, imageUrl, widget }} />;
+        })}
       </div>
     );
   }
 
   static renderSpecificFields(question) {
     const { MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
-    const renderer = {
-      [MULTIPLE_CHOICE]: () => QuestionCard.renderOptions(question, RadioButton),
-      [MULTIPLE_RESPONSE]: () => QuestionCard.renderOptions(question, Checkbox),
+    const widget = {
+      [MULTIPLE_CHOICE]: RadioButton,
+      [MULTIPLE_RESPONSE]: Checkbox,
     }[question.question_type];
-    return renderer ? renderer() : null;
+    if (!widget) { return null; }
+    return question.grid_view ?
+      QuestionCard.renderOptionsGrid(question, widget) :
+      QuestionCard.renderOptionsList(question, widget);
   }
 
   renderAdminMenu() {
@@ -108,12 +123,7 @@ QuestionCard.propTypes = {
     description: PropTypes.string.isRequired,
     weight: PropTypes.number.isRequired,
     question_type: PropTypes.number.isRequired,
-    options: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number,
-      weight: PropTypes.number,
-      option: PropTypes.string,
-      image_url: PropTypes.string,
-    })),
+    options: PropTypes.arrayOf(optionShape),
   }),
   adminFunctions: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
