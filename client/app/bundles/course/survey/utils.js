@@ -12,14 +12,14 @@ export const formatQuestionFormData = (data) => {
   [
     'question_type', 'description', 'max_options', 'min_options', 'required', 'grid_view',
   ].forEach((field) => {
-    if (data[field] === 0 || data[field]) {
+    if (data[field] !== undefined && data[field] !== null) {
       payload.append(`question[${field}]`, data[field]);
     }
   });
 
   filledOptions.forEach((option, index) => {
     ['id', 'option', 'image'].forEach((field) => {
-      if (option[field]) {
+      if (option[field] !== undefined && option[field] !== null) {
         payload.append(`question[options_attributes][${index}][${field}]`, option[field]);
       }
     });
