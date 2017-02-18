@@ -5,7 +5,7 @@ import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
-import Snackbar from 'material-ui/Snackbar';
+import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import formTranslations from 'lib/translations/form';
 import AssessmentForm from './AssessmentForm';
@@ -35,8 +35,7 @@ class PopupDialog extends React.Component {
     disabled: PropTypes.bool,
     visible: PropTypes.bool.isRequired,
     confirmationDialogOpen: PropTypes.bool.isRequired,
-    notificationOpen: PropTypes.bool.isRequired,
-    notificationMessage: PropTypes.string,
+    notification: notificationShape,
   };
 
   onFormSubmit = (data) => {
@@ -118,12 +117,7 @@ class PopupDialog extends React.Component {
           onCancel={() => dispatch({ type: actionTypes.ASSESSMENT_FORM_CONFIRM_CANCEL })}
           onConfirm={() => dispatch({ type: actionTypes.ASSESSMENT_FORM_CONFIRM_DISCARD })}
         />
-        <Snackbar
-          open={this.props.notificationOpen}
-          message={this.props.notificationMessage}
-          autoHideDuration={1500}
-          onRequestClose={() => dispatch({ type: actionTypes.ASSESSMENT_FORM_NOTIFICATION_HIDE })}
-        />
+        <NotificationBar notification={this.props.notification} />
       </div>
     );
   }
