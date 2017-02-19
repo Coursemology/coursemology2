@@ -4,6 +4,7 @@ class Course::Survey::QuestionsController < Course::Survey::SurveysController
 
   def create
     @question.weight = @survey.questions.count
+    build_existing_responses_answers
     render json: { errors: @question.errors }, status: :bad_request unless @question.save
   end
 
@@ -24,6 +25,16 @@ class Course::Survey::QuestionsController < Course::Survey::SurveysController
   end
 
   private
+
+  def build_existing_responses_answers
+    @survey.responses.each do |response|
+      @question.answers.build(response: response) do |answer|
+        @question.options.each do |option|
+          answer.options.build(question_option: option)
+        end
+      end
+    end
+  end
 
   def question_params
     params.require(:question).

@@ -1,29 +1,21 @@
 import actionTypes from '../constants';
 import surveyReducer from './survey';
+import { updateOrAppend, deleteIfFound } from './utils';
 
-const initialState = [];
-
-export default function (state = initialState, action) {
-  const { type } = action;
-
-  switch (type) {
+export default function (state = [], action) {
+  switch (action.type) {
     case actionTypes.CREATE_SURVEY_SUCCESS: {
-      return [...state, action.newSurveyData];
+      return [...state, action.survey];
     }
     case actionTypes.UPDATE_SURVEY_SUCCESS:
     case actionTypes.LOAD_SURVEY_SUCCESS: {
-      const index = state.findIndex(survey => String(survey.id) === String(action.id));
-      return index === -1 ? [...state, action.data] :
-                            Object.assign([], state, { [index]: action.data });
+      return updateOrAppend(state, action.survey);
     }
     case actionTypes.LOAD_SURVEYS_SUCCESS: {
-      return action.data.surveys;
+      return action.surveys;
     }
     case actionTypes.DELETE_SURVEY_SUCCESS: {
-      const index = state.findIndex(survey => String(survey.id) === String(action.id));
-      const updatedList = [...state];
-      updatedList.splice(index, 1);
-      return updatedList;
+      return deleteIfFound(state, action.surveyId);
     }
 
     case actionTypes.UPDATE_SURVEY_QUESTION_SUCCESS:

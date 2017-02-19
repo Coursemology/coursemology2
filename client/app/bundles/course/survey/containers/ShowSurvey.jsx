@@ -6,7 +6,7 @@ import { sorts } from '../utils';
 import { showDeleteConfirmation } from '../actions';
 import surveyTranslations from '../translations';
 import * as surveyActions from '../actions/surveys';
-import SurveyDetails from '../components/SurveyDetails';
+import SurveyDetails from '../containers/SurveyDetails';
 import NewQuestionButton from '../containers/NewQuestionButton';
 import ShowQuestion from '../containers/ShowQuestion';
 
@@ -15,25 +15,9 @@ const translations = defineMessages({
     id: 'course.surveys.Survey.editSurvey',
     defaultMessage: 'Edit Survey',
   },
-  updateSuccess: {
-    id: 'course.surveys.Survey.updateSuccess',
-    defaultMessage: 'Survey "{title}" updated.',
-  },
-  updateFailure: {
-    id: 'course.surveys.Survey.updateFailure',
-    defaultMessage: 'Failed to update survey.',
-  },
   deleteSurvey: {
     id: 'course.surveys.Survey.deleteSurvey',
     defaultMessage: 'Delete Survey',
-  },
-  deleteSuccess: {
-    id: 'course.surveys.Survey.deleteSuccess',
-    defaultMessage: 'Survey "{title}" deleted.',
-  },
-  deleteFailure: {
-    id: 'course.surveys.Survey.deleteFailure',
-    defaultMessage: 'Failed to delete survey.',
   },
   empty: {
     id: 'course.surveys.Survey.empty',
@@ -55,8 +39,8 @@ class ShowSurvey extends React.Component {
     const { updateSurvey } = surveyActions;
 
     const payload = { survey: data };
-    const successMessage = intl.formatMessage(translations.updateSuccess, data);
-    const failureMessage = intl.formatMessage(translations.updateFailure);
+    const successMessage = intl.formatMessage(surveyTranslations.updateSuccess, data);
+    const failureMessage = intl.formatMessage(surveyTranslations.updateFailure);
     return dispatch(updateSurvey(courseId, surveyId, payload, successMessage, failureMessage));
   }
 
@@ -80,8 +64,8 @@ class ShowSurvey extends React.Component {
     const { dispatch, intl, params: { courseId, surveyId } } = this.props;
     const { deleteSurvey } = surveyActions;
 
-    const successMessage = intl.formatMessage(translations.deleteSuccess, survey);
-    const failureMessage = intl.formatMessage(translations.deleteFailure);
+    const successMessage = intl.formatMessage(surveyTranslations.deleteSuccess, survey);
+    const failureMessage = intl.formatMessage(surveyTranslations.deleteFailure);
     const handleDelete = () => (
       dispatch(deleteSurvey(courseId, surveyId, successMessage, failureMessage))
     );
@@ -109,9 +93,14 @@ class ShowSurvey extends React.Component {
     return functions;
   }
 
-  renderQuestions(questions) {
+  renderQuestions(survey) {
     const { intl, params } = this.props;
+    const { questions, canUpdate } = survey;
     const { byWeight } = sorts;
+
+    if (!canUpdate) {
+      return null;
+    }
 
     if (!questions || questions.length < 1) {
       return <Subheader>{ intl.formatMessage(translations.empty) }</Subheader>;
@@ -131,15 +120,14 @@ class ShowSurvey extends React.Component {
     const { surveys, params: { courseId, surveyId } } = this.props;
     const survey = surveys && surveys.length > 0 ?
                    surveys.find(s => String(s.id) === String(surveyId)) : {};
-
     return (
       <div>
         <SurveyDetails
-          {...{ survey, courseId }}
+          {...{ survey, courseId, surveyId }}
           adminFunctions={this.adminFunctions(survey)}
         />
-        { this.renderQuestions(survey.questions) }
-        <NewQuestionButton {...{ courseId, surveyId }} />
+        { this.renderQuestions(survey) }
+        { survey.canCreateQuestion ? <NewQuestionButton {...{ courseId, surveyId }} /> : null }
       </div>
     );
   }

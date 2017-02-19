@@ -46,7 +46,7 @@ export function createSurvey(
       .then((response) => {
         dispatch({
           type: actionTypes.CREATE_SURVEY_SUCCESS,
-          newSurveyData: response.data,
+          survey: response.data,
         });
         dispatch(hideSurveyForm());
         setNotification(successMessage)(dispatch);
@@ -65,18 +65,17 @@ export function createSurvey(
 
 export function fetchSurvey(courseId, surveyId) {
   return (dispatch) => {
-    dispatch({ type: actionTypes.LOAD_SURVEY_REQUEST, id: surveyId });
+    dispatch({ type: actionTypes.LOAD_SURVEY_REQUEST, surveyId });
 
     return axios.get(`/courses/${courseId}/surveys/${surveyId}`)
       .then((response) => {
         dispatch({
-          id: surveyId,
           type: actionTypes.LOAD_SURVEY_SUCCESS,
-          data: response.data,
+          survey: response.data,
         });
       })
       .catch(() => {
-        dispatch({ type: actionTypes.LOAD_SURVEY_FAILURE, id: surveyId });
+        dispatch({ type: actionTypes.LOAD_SURVEY_FAILURE, surveyId });
       });
   };
 }
@@ -89,7 +88,8 @@ export function fetchSurveys(courseId) {
       .then((response) => {
         dispatch({
           type: actionTypes.LOAD_SURVEYS_SUCCESS,
-          data: response.data.surveys,
+          surveys: response.data.surveys.surveys,
+          canCreate: response.data.surveys.canCreate,
         });
       })
       .catch(() => {
@@ -106,26 +106,19 @@ export function updateSurvey(
   failureMessage
 ) {
   return (dispatch) => {
-    dispatch({ type: actionTypes.UPDATE_SURVEY_REQUEST, id: surveyId });
+    dispatch({ type: actionTypes.UPDATE_SURVEY_REQUEST, surveyId });
 
     return axios.patch(`/courses/${courseId}/surveys/${surveyId}`, surveyFields)
-      .then(() => {
-        const { start_at, end_at, ...fields } = surveyFields.survey;
-        const updatedSurvey = {
-          start_at: start_at.toISOString(),
-          end_at: end_at.toISOString(),
-          ...fields,
-        };
+      .then((response) => {
         dispatch({
-          id: surveyId,
           type: actionTypes.UPDATE_SURVEY_SUCCESS,
-          data: updatedSurvey,
+          survey: response.data,
         });
         dispatch(hideSurveyForm());
         setNotification(successMessage)(dispatch);
       })
       .catch((error) => {
-        dispatch({ type: actionTypes.UPDATE_SURVEY_FAILURE, id: surveyId });
+        dispatch({ type: actionTypes.UPDATE_SURVEY_FAILURE, surveyId });
         if (error.response && error.response.data) {
           throw new SubmissionError(error.response.data.errors);
         } else {
@@ -137,18 +130,18 @@ export function updateSurvey(
 
 export function deleteSurvey(courseId, surveyId, successMessage, failureMessage) {
   return (dispatch) => {
-    dispatch({ type: actionTypes.DELETE_SURVEY_REQUEST, id: surveyId });
+    dispatch({ type: actionTypes.DELETE_SURVEY_REQUEST, surveyId });
     return axios.delete(`/courses/${courseId}/surveys/${surveyId}`)
       .then(() => {
+        browserHistory.push(`/courses/${courseId}/surveys/`);
         dispatch({
-          id: surveyId,
+          surveyId,
           type: actionTypes.DELETE_SURVEY_SUCCESS,
         });
         setNotification(successMessage)(dispatch);
-        browserHistory.push(`/courses/${courseId}/surveys/`);
       })
       .catch(() => {
-        dispatch({ type: actionTypes.DELETE_SURVEY_FAILURE, id: surveyId });
+        dispatch({ type: actionTypes.DELETE_SURVEY_FAILURE, surveyId });
         setNotification(failureMessage)(dispatch);
       });
   };

@@ -38,7 +38,7 @@ export function createSurveyQuestion(
         dispatch({
           surveyId,
           type: actionTypes.CREATE_SURVEY_QUESTION_SUCCESS,
-          data: response.data,
+          question: response.data,
         });
         dispatch(hideQuestionForm());
         setNotification(successMessage)(dispatch);
@@ -71,7 +71,7 @@ export function updateSurveyQuestion(
           surveyId,
           questionId,
           type: actionTypes.UPDATE_SURVEY_QUESTION_SUCCESS,
-          data: response.data,
+          question: response.data,
         });
         dispatch(hideQuestionForm());
         setNotification(successMessage)(dispatch);

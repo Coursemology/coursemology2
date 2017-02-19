@@ -25,7 +25,10 @@ const SurveysContainer = ({ dispatch, notification, children, deleteConfirmation
 
 SurveysContainer.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  notification: PropTypes.string,
+  notification: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
   children: PropTypes.node,
   deleteConfirmation: PropTypes.shape({
     open: PropTypes.bool.isRequired,

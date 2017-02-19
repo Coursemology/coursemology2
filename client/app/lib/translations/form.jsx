@@ -9,6 +9,10 @@ const translations = defineMessages({
     id: 'lib.form.buttons.cancel',
     defaultMessage: 'Cancel',
   },
+  save: {
+    id: 'lib.form.buttons.save',
+    defaultMessage: 'Save',
+  },
   submit: {
     id: 'lib.form.buttons.submit',
     defaultMessage: 'Submit',

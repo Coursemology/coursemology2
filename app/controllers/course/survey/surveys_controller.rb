@@ -21,13 +21,15 @@ class Course::Survey::SurveysController < Course::ComponentController
   def show
     respond_to do |format|
       format.html { render 'index' }
-      format.json
+      format.json do
+        questions
+      end
     end
   end
 
   def update
     if @survey.update_attributes(survey_params)
-      head :ok
+      questions
     else
       render json: { errors: @survey.errors }, status: :bad_request
     end
@@ -43,8 +45,12 @@ class Course::Survey::SurveysController < Course::ComponentController
 
   private
 
+  def questions
+    @questions ||= @survey.questions.accessible_by(current_ability).includes(:options)
+  end
+
   def survey_params
     params.require(:survey).
-      permit(:title, :description, :base_exp, :start_at, :end_at)
+      permit(:title, :description, :base_exp, :start_at, :end_at, :published)
   end
 end

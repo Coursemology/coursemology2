@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170203020915) do
+ActiveRecord::Schema.define(version: 20170214062036) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -626,6 +626,7 @@ ActiveRecord::Schema.define(version: 20170203020915) do
     t.datetime "created_at",   :null=>false
     t.datetime "updated_at",   :null=>false
   end
+  add_index "course_survey_responses", ["survey_id", "creator_id"], :name=>"index_course_survey_responses_on_survey_id_and_creator_id", :unique=>true
 
   create_table "course_survey_answers", force: :cascade do |t|
     t.integer  "question_id",   :null=>false, :index=>{:name=>"fk__course_survey_answers_question_id"}, :foreign_key=>{:references=>"course_survey_questions", :name=>"fk_course_survey_answers_question_id", :on_update=>:no_action, :on_delete=>:no_action}
@@ -647,6 +648,7 @@ ActiveRecord::Schema.define(version: 20170203020915) do
   create_table "course_survey_answer_options", force: :cascade do |t|
     t.integer "answer_id",          :null=>false, :index=>{:name=>"fk__course_survey_answer_options_answer_id"}, :foreign_key=>{:references=>"course_survey_answers", :name=>"fk_course_survey_answer_options_answer_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer "question_option_id", :null=>false, :index=>{:name=>"fk__course_survey_answer_options_question_option_id"}, :foreign_key=>{:references=>"course_survey_question_options", :name=>"fk_course_survey_answer_options_question_option_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.boolean "selected",           :default=>false, :null=>false
   end
 
   create_table "course_survey_sections", force: :cascade do |t|

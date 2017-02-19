@@ -36,6 +36,9 @@ const styles = {
   cardText: {
     position: 'relative',
   },
+  card: {
+    marginBottom: 15,
+  },
 };
 
 class QuestionCard extends React.Component {
@@ -69,7 +72,7 @@ class QuestionCard extends React.Component {
   renderAdminMenu() {
     const { adminFunctions } = this.props;
 
-    if (!adminFunctions) {
+    if (!adminFunctions || adminFunctions.length < 1) {
       return null;
     }
 
@@ -88,7 +91,7 @@ class QuestionCard extends React.Component {
   render() {
     const { question } = this.props;
     return (
-      <Card>
+      <Card style={styles.card}>
         <CardText style={styles.cardText}>
           {this.renderAdminMenu()}
           <p>{question.description}</p>
