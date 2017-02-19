@@ -14,7 +14,19 @@
     airmodeOptions.popover.air.unshift(['style', ['style']]);
 
     $('textarea.text').not('.summernote-initialised').each(function(){
-      var options = {};
+      var options = {
+        toolbar: [
+          ['paragraph-style', ['style']],
+          ['font-style', ['bold', 'underline', 'clear']],
+          ['font-script', ['superscript', 'subscript']],
+          ['font-name', ['fontname']],
+          ['color', ['color']],
+          ['paragraph', ['ul', 'ol', 'paragraph']],
+          ['table', ['table']],
+          ['insert', ['link', 'picture', 'video']],
+          ['misc', ['fullscreen', 'codeview', 'help']],
+        ],
+      };
       if ($(this).hasClass('airmode')) {
         options = $.extend(true, options, airmodeOptions);
       }
