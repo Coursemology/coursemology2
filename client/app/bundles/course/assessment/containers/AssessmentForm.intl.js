@@ -42,6 +42,11 @@ const translations = defineMessages({
     defaultMessage: 'Automatically assign grade and experience points after assessment is \
       submitted. Answers that are not auto-gradable will always receive the maximum grade.',
   },
+  modeSwitchingDisabled: {
+    id: 'course.assessment.form.modeSwitchingHint',
+    defaultMessage: 'Autograded ( Switch to autograded mode is not allowed as there are submissions \
+      for the assessment. )',
+  },
   skippable: {
     id: 'course.assessment.form.skippable',
     defaultMessage: 'Allow to skip steps',

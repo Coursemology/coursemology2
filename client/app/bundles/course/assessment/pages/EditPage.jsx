@@ -20,6 +20,8 @@ class EditPage extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     intl: intlShape,
+    // If allow to switch between autoraded and manually graded mode.
+    modeSwitching: PropTypes.bool,
     // An array of materials of current assessment.
     folderAttributes: PropTypes.shape({}),
     // A set of assessment attributes: {:id , :title, etc}.
@@ -47,13 +49,14 @@ class EditPage extends React.Component {
   };
 
   render() {
-    const { initialValues, folderAttributes, dispatch } = this.props;
+    const { modeSwitching, initialValues, folderAttributes, dispatch } = this.props;
 
     return (
       <div>
         <AssessmentForm
           editing
           onSubmit={this.onFormSubmit}
+          modeSwitching={modeSwitching}
           folderAttributes={folderAttributes}
           initialValues={initialValues}
         />

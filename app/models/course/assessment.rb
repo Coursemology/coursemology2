@@ -85,6 +85,31 @@ class Course::Assessment < ActiveRecord::Base
     'course/assessment/assessments/assessment'.freeze
   end
 
+  # Update assessment mode from params.
+  #
+  # @param [Hash] params Params with autograded mode from user.
+  def update_mode(params)
+    target_mode = params[:autograded]
+    return if target_mode == autograded || !allow_mode_switching?
+
+    if target_mode == true
+      self.autograded = true
+      self.password = nil
+      self.delayed_grade_publication = false
+    elsif target_mode == false # Ignore the case when the params is empty.
+      self.autograded = false
+      self.skippable = false
+    end
+  end
+
+  # Whether the assessment allows mode switching.
+  # Allow mode switching if:
+  # - The assessment don't have any submissions.
+  # - Switching from autograded mode to manually graded mode.
+  def allow_mode_switching?
+    submissions.count == 0 || autograded?
+  end
+
   # @override ConditionalInstanceMethods#permitted_for!
   def permitted_for!(_course_user)
   end

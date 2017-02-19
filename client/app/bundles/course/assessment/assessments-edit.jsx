@@ -13,6 +13,7 @@ if (mountNode) {
   const Page = () => (
     <ProviderWrapper store={store}>
       <EditPage
+        modeSwitching={data.mode_switching}
         folderAttributes={data.folder_attributes}
         initialValues={{ ...data.attributes, password_protected: !!data.attributes.password }}
       />

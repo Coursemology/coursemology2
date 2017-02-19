@@ -68,6 +68,7 @@ class AssessmentForm extends React.Component {
     password_protected: PropTypes.bool,
     submitting: PropTypes.bool,
     // Above are props from redux-form.
+
     onSubmit: PropTypes.func.isRequired,
     // If the Form is in editing mode, `published` button will be displayed.
     editing: PropTypes.bool,
@@ -153,7 +154,7 @@ class AssessmentForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, onSubmit, submitting, folderAttributes } = this.props;
+    const { handleSubmit, onSubmit, modeSwitching, submitting, folderAttributes } = this.props;
 
     return (
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -229,14 +230,21 @@ class AssessmentForm extends React.Component {
         <Field
           name="autograded"
           component={Toggle}
-          label={<FormattedMessage {...translations.autograded} />}
+          label={
+            modeSwitching ? <FormattedMessage {...translations.autograded} /> :
+            <FormattedMessage {...translations.modeSwitchingDisabled} />
+          }
           labelPosition="right"
           style={styles.toggle}
           disabled={!modeSwitching || submitting}
         />
-        <div style={styles.hint}>
-          <FormattedMessage {...translations.autogradedHint} />
-        </div>
+
+        {
+          modeSwitching &&
+          <div style={styles.hint}>
+            <FormattedMessage {...translations.autogradedHint} />
+          </div>
+        }
 
         {this.renderExtraOptions()}
 

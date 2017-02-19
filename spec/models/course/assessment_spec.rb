@@ -339,5 +339,39 @@ RSpec.describe Course::Assessment do
         end
       end
     end
+
+    describe '#update_mode' do
+      let(:autograded_assessment) do
+        build(:assessment, :autograded, skippable: true)
+      end
+
+      let(:manually_graded_assessment) do
+        build(:assessment, password: 'LOL')
+      end
+
+      it 'switches to autograded mode' do
+        params = { autograded: true }
+        manually_graded_assessment.update_mode(params)
+
+        expect(manually_graded_assessment).to be_autograded
+        expect(manually_graded_assessment.password).to be_nil
+      end
+
+      it 'switches to manually graded mode' do
+        params = { autograded: false }
+        autograded_assessment.update_mode(params)
+
+        expect(autograded_assessment).not_to be_autograded
+        expect(autograded_assessment.skippable).to be_falsy
+      end
+
+      it 'does not change the mode when params is blank' do
+        params = {}
+        autograded_assessment.update_mode(params)
+
+        expect(autograded_assessment).to be_autograded
+        expect(autograded_assessment.skippable).to be_truthy
+      end
+    end
   end
 end

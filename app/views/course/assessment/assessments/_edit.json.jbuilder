@@ -3,7 +3,7 @@ json.attributes do
     :time_bonus_exp, :published, :autograded, :skippable, :tabbed_view, :password)
 end
 
-json.mode_switching @assessment.submissions.count == 0
+json.mode_switching @assessment.allow_mode_switching?
 json.folder_attributes do
   json.folder_id @assessment.folder.id
   json.materials @assessment.materials.order(:name) do |material|
