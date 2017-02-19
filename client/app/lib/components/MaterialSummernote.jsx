@@ -84,7 +84,21 @@ class MaterialSummernote extends React.Component {
         />
         <div className="material-summernote">
           <ReactSummernote
-            options={{ dialogsInBody: false, disabled: this.props.disabled }}
+            options={{
+              dialogsInBody: false,
+              disabled: this.props.disabled,
+              toolbar: [
+                ['paragraph-style', ['style']],
+                ['font-style', ['bold', 'underline', 'clear']],
+                ['font-script', ['superscript', 'subscript']],
+                ['font-name', ['fontname']],
+                ['color', ['color']],
+                ['paragraph', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['misc', ['fullscreen', 'codeview', 'help']],
+              ],
+            }}
             value={this.props.value}
             onChange={this.props.onChange}
             onFocus={() => { this.setState({ isFocused: true }); }}
