@@ -29,7 +29,7 @@ class Course::Material::MaterialsController < Course::Material::Controller
       end
     else
       redirect_to course_material_folder_path(current_course, @folder),
-                  danger: t('.failure', error: @material.errors.full_messages.to_sentence)
+                  danger: t('.failure', message: @material.errors.full_messages.to_sentence)
     end
   end
 

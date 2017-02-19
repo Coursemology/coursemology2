@@ -41,6 +41,7 @@ const config = {
     extensions: ['.js', '.jsx'],
     alias: {
       lib: path.resolve('./app/lib'),
+      api: path.resolve('./app/api'),
     },
   },
 
