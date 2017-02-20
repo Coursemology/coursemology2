@@ -29,8 +29,14 @@ RSpec.describe Course::DuplicationService, type: :service do
         end
 
         it 'duplicates a course with the new title' do
+          # Also test that a course with a registration key can be duplicated.
+          course.registration_key = 'abcde'
           expect(new_course).to_not be course
           expect(new_course.title).to eq I18n.t('course.duplications.show.new_course_title_prefix')
+
+          # Throws error if database contraints are violated.
+          new_course.save!
+          expect(new_course.registration_key).to be_nil
         end
 
         it 'time shifts the new course' do
