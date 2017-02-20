@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170217041431) do
+ActiveRecord::Schema.define(version: 20170220123952) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -644,7 +644,6 @@ ActiveRecord::Schema.define(version: 20170217041431) do
   create_table "course_survey_question_options", force: :cascade do |t|
     t.integer "question_id", :null=>false, :index=>{:name=>"fk__course_survey_question_options_question_id"}, :foreign_key=>{:references=>"course_survey_questions", :name=>"fk_course_survey_question_options_question_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.text    "option"
-    t.text    "image"
     t.integer "weight",      :null=>false
   end
 

@@ -95,7 +95,7 @@ const questionFormTranslations = defineMessages({
 });
 
 const countFilledOptions = options => (
-  options.filter(option => option && (option.option || option.image || option.image_url)).length
+  options.filter(option => option && (option.option || option.file || option.image_url)).length
 );
 
 const validate = (values) => {

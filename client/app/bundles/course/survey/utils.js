@@ -5,7 +5,7 @@ export const sorts = {
 export const formatQuestionFormData = (data) => {
   const payload = new FormData();
   const filledOptions = data.options.filter(option =>
-    option && (option.option || option.image || option.image_url)
+    option && (option.option || option.file || option.image_url)
   );
   const filledOptionsCount = filledOptions.length;
 
@@ -18,7 +18,7 @@ export const formatQuestionFormData = (data) => {
   });
 
   filledOptions.forEach((option, index) => {
-    ['id', 'option', 'image'].forEach((field) => {
+    ['id', 'option', 'file'].forEach((field) => {
       if (option[field] !== undefined && option[field] !== null) {
         payload.append(`question[options_attributes][${index}][${field}]`, option[field]);
       }

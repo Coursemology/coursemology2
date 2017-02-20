@@ -42,13 +42,13 @@ class QuestionFormOptions extends React.Component {
     // eliminate blank options
     fields.removeAll();
     options.forEach((option) => {
-      if (option.option || option.image) {
+      if (option.option || option.file) {
         fields.push(option);
       }
     });
 
     for (let i = 0; i < files.length; i += 1) {
-      fields.push({ image: files[i] });
+      fields.push({ file: files[i] });
     }
   }
 
