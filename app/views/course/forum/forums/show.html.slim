@@ -7,9 +7,9 @@
       tr
         th
         th = t('.topics')
-        th = t('.votes')
-        th = t('.posts')
-        th = t('.views')
+        th.hidden-xs = t('.votes')
+        th.hidden-xs = t('.posts')
+        th.hidden-xs = t('.views')
         th = t('.latest_post')
     tbody
       - if @topics.empty?
