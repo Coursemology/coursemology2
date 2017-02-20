@@ -53,7 +53,6 @@ const actionTypes = mirrorCreator([
   'SHOW_DELETE_CONFIRMATION',
   'RESET_DELETE_CONFIRMATION',
   'SET_SURVEY_NOTIFICATION',
-  'RESET_SURVEY_NOTIFICATION',
 ]);
 
 export default actionTypes;

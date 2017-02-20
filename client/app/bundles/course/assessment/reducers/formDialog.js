@@ -3,8 +3,6 @@ import actionTypes from '../constants';
 const initialState = {
   visible: false,
   confirmationDialogOpen: false,
-  notificationOpen: false,
-  notificationMessage: '',
 };
 
 export default function (state = initialState, action) {
@@ -22,9 +20,6 @@ export default function (state = initialState, action) {
     case actionTypes.ASSESSMENT_FORM_CONFIRM_CANCEL: {
       return { ...state, confirmationDialogOpen: false };
     }
-    case actionTypes.ASSESSMENT_FORM_NOTIFICATION_HIDE: {
-      return { ...state, notificationOpen: false };
-    }
     case actionTypes.ASSESSMENT_FORM_CONFIRM_DISCARD: {
       return { ...state, confirmationDialogOpen: false, visible: false };
     }
@@ -36,16 +31,14 @@ export default function (state = initialState, action) {
         ...state,
         visible: false,
         disabled: false,
-        notificationOpen: !!action.message,
-        notificationMessage: action.message,
+        notification: { message: action.message },
       };
     }
     case actionTypes.CREATE_ASSESSMENT_FAILURE: {
       return {
         ...state,
         disabled: false,
-        notificationOpen: !!action.message,
-        notificationMessage: action.message,
+        notification: { message: action.message },
       };
     }
     default:
