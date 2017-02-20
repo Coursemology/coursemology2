@@ -87,7 +87,7 @@ class QuestionFormOption extends React.Component {
   renderOptionBody() {
     const { intl, member, index, fields, disabled } = this.props;
     const fieldValue = fields.get(index);
-    const imageFile = fieldValue && fieldValue.image;
+    const imageFile = fieldValue && fieldValue.file;
 
     const fileOrSrc = {};
     let imageFileName = '';
@@ -150,7 +150,7 @@ class QuestionFormOption extends React.Component {
         { this.renderWidget() }
         { this.renderOptionBody() }
         <Field
-          name={`${member}.image`}
+          name={`${member}.file`}
           component={QuestionFormOption.renderImageField}
           {...{ index, disabled }}
         />

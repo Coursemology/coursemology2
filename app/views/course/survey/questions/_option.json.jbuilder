@@ -1,5 +1,5 @@
 json.(option, :id, :option, :weight)
-unless option.image.file.nil?
-  json.image_url option.image.url
-  json.image_name option.image.file.original_filename
+unless option.attachment.nil?
+  json.image_url option.attachment.url
+  json.image_name option.attachment.name
 end
