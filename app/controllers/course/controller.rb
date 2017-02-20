@@ -43,6 +43,11 @@ class Course::Controller < ApplicationController
   end
   helper_method :current_component_host
 
+  # Override of Cancancan#current_ability to provide current course.
+  def current_ability
+    @current_ability ||= Ability.new(current_user, current_course)
+  end
+
   private
 
   # Selects sidebar items of the given type.

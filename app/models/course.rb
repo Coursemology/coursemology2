@@ -113,6 +113,29 @@ class Course < ActiveRecord::Base
     end
   end
 
+  # This is the max time span that the student can access a future assignment.
+  # Used in self directed mode, which will allow students to access course contents in advance
+  # before they have started.
+  #
+  # @return [ActiveSupport::Duration]
+  def advance_start_at_duration
+    settings(:course).advance_start_at_duration
+  end
+
+  def advance_start_at_duration=(time)
+    settings(:course).advance_start_at_duration = time
+  end
+
+  # Convert the days to time duration and store it.
+  def advance_start_at_duration_days=(value)
+    value = if value.present? && value.to_i > 0
+              value.to_i.days
+            else
+              nil
+            end
+    settings(:course).advance_start_at_duration = value
+  end
+
   def initialize_duplicate(duplicator, other)
     self.start_at += duplicator.time_shift
     self.end_at += duplicator.time_shift

@@ -40,6 +40,17 @@ class Course::LessonPlan::Item < ActiveRecord::Base
     self.end_at = other.end_at + time_shift if other.end_at
   end
 
+  # Test if the lesson plan item has started for self directed learning.
+  #
+  # @return [Boolean]
+  def self_directed_started?
+    if course&.advance_start_at_duration
+      !start_at.present? || start_at - course.advance_start_at_duration < Time.zone.now
+    else
+      started?
+    end
+  end
+
   private
 
   # Sets default EXP values

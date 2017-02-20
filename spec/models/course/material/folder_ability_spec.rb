@@ -16,7 +16,13 @@ RSpec.describe Course::Material::Folder, type: :model do
     let(:not_started_linked_folder) do
       create(:assessment, course: course, start_at: 1.day.from_now).folder
     end
-
+    let(:started_published_linked_folder) do
+      create(:assessment, :published_with_mcq_question, course: course, start_at: 1.day.ago).folder
+    end
+    let(:not_started_published_linked_folder) do
+      create(:assessment, :published_with_mcq_question,
+             course: course, start_at: 1.day.from_now).folder
+    end
     context 'when the user is a Course Student' do
       let(:user) { create(:course_student, course: course).user }
 
@@ -25,6 +31,11 @@ RSpec.describe Course::Material::Folder, type: :model do
       it { is_expected.not_to be_able_to(:show, ended_folder) }
       it { is_expected.to be_able_to(:show, started_linked_folder) }
       it { is_expected.not_to be_able_to(:show, not_started_linked_folder) }
+
+      it { is_expected.not_to be_able_to(:read_owner, started_linked_folder) }
+      it { is_expected.not_to be_able_to(:read_owner, not_started_linked_folder) }
+      it { is_expected.to be_able_to(:read_owner, started_published_linked_folder) }
+      it { is_expected.not_to be_able_to(:read_owner, not_started_published_linked_folder) }
     end
 
     context 'when the user is a Course Staff' do
@@ -36,6 +47,11 @@ RSpec.describe Course::Material::Folder, type: :model do
       it { is_expected.not_to be_able_to(:manage, started_linked_folder) }
       it { is_expected.to be_able_to(:show, started_linked_folder) }
       it { is_expected.to be_able_to(:show, not_started_linked_folder) }
+
+      it { is_expected.to be_able_to(:read_owner, started_linked_folder) }
+      it { is_expected.to be_able_to(:read_owner, not_started_linked_folder) }
+      it { is_expected.to be_able_to(:read_owner, started_published_linked_folder) }
+      it { is_expected.to be_able_to(:read_owner, not_started_published_linked_folder) }
     end
 
     context 'when the user is a System Administrator' do

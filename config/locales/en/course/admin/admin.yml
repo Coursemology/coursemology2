@@ -15,6 +15,12 @@ en:
             Disabling gamification would hide these options, and students would not be able to
             see experience points either. This would also disable the following components -
             Achievements, Levels, Leaderboard and Points Disbursement.
+          self_directed_learning: 'Self Directed Learning'
+          self_directed_learning_label: >
+            Allow students to attempt the assessments that start at a future time provided they
+            have fulfilled the prerequisites.
+          self_directed_learning_time_html: >
+            Allow students to access course items %{input} days in advance of the item's start time.
           delete:
             header: 'Delete Course'
             button: 'Delete My Course'
