@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import moment from 'moment';
-import Toggle from 'material-ui/Toggle';
 import Snackbar from 'material-ui/Snackbar';
 import DateTimePicker from 'lib/components/form/DateTimePicker';
 import LessonPlanFilter from '../containers/LessonPlanFilter';
+import LessonPlanItemEdit from './LessonPlanItemEdit';
 import './LessonPlanEdit.scss';
 import { constants } from '../constants';
 
@@ -105,69 +105,10 @@ class LessonPlanEdit extends React.Component {
     );
   }
 
-  renderItem(item) {
-    const { intl, updateItem } = this.props;
-    const title = item.get('title');
-    const startAt = new Date(item.get('start_at'));
-    const bonusEndAt = item.get('bonus_end_at') ? new Date(item.get('bonus_end_at')) : undefined;
-    const endAt = item.get('end_at') ? new Date(item.get('end_at')) : undefined;
-    const itemId = item.get('id');
-    const isUpdating = item.get('isUpdating');
-    const errorMessage = intl.formatMessage(translations.updateFailed);
-    const successMessage = intl.formatMessage(translations.updateSuccess, { title });
-    const updateValues = values => (
-      updateItem(itemId, values, item.toJS(), successMessage, errorMessage)
-    );
-
-    return (
-      <tr key={itemId}>
-        <td>{ item.get('lesson_plan_item_type').join(': ') }</td>
-        <td>
-          { title }
-        </td>
-        <td>
-          <DateTimePicker
-            name={'start_at'}
-            value={startAt}
-            onChange={(event, newDate) => (
-              !sameDate(startAt, newDate) && updateValues({ start_at: newDate })
-            )}
-            disabled={isUpdating}
-          />
-        </td>
-        <td>
-          <DateTimePicker
-            name={'bonus_end_at'}
-            value={bonusEndAt}
-            onChange={(event, newDate) => (
-              !sameDate(bonusEndAt, newDate) && updateValues({ bonus_end_at: newDate })
-            )}
-            disabled={isUpdating}
-          />
-        </td>
-        <td>
-          <DateTimePicker
-            name={'end_at'}
-            value={endAt}
-            onChange={(event, newDate) => (
-              !sameDate(startAt, newDate) && updateValues({ end_at: newDate })
-            )}
-            disabled={isUpdating}
-          />
-        </td>
-        <td>
-          <Toggle
-            toggled={item.get('published')}
-            onToggle={(event, isToggled) => updateValues({ published: isToggled })}
-            disabled={isUpdating}
-          />
-        </td>
-      </tr>
-    );
-  }
-
   renderGroup(group) {
-    const groupNodes = group.items.map(item => this.renderItem(item));
+    const groupNodes = group.items.map(item => (
+      <LessonPlanItemEdit item={item} updateItem={this.props.updateItem} />
+    ));
     groupNodes.unshift(this.renderMilestone(group.milestone));
     return groupNodes;
   }
