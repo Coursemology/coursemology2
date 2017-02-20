@@ -46,9 +46,21 @@
   //   Function applies config options to summernote based on CSS classes applied in 'textarea'.
   //   Currently supported options include `airmode` and `focus`.
   function initializeSummernote(element) {
-    var airmodeOptions = $.extend(true, { airMode: true },
-                                        { popover: $.summernote.options.popover });
-    airmodeOptions.popover.air.unshift(['style', ['style']]);
+    var airmodeOptions =
+      {
+        airMode: true,
+        popover: {
+          air: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['script', ['superscript', 'subscript']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture']],
+          ]
+        }
+      };
 
     $('textarea.text').not('.summernote-initialised').each(function(){
       var $summernote = $(this);
@@ -60,15 +72,15 @@
 
       var options = {
         toolbar: [
-          ['paragraph-style', ['style']],
-          ['font-style', ['bold', 'underline', 'clear']],
-          ['font-script', ['superscript', 'subscript']],
-          ['font-name', ['fontname']],
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'clear']],
+          ['script', ['superscript', 'subscript']],
+          ['fontname', ['fontname']],
           ['color', ['color']],
-          ['paragraph', ['ul', 'ol', 'paragraph']],
+          ['para', ['ul', 'ol', 'paragraph']],
           ['table', ['table']],
           ['insert', ['link', 'picture', 'video']],
-          ['misc', ['fullscreen', 'codeview', 'help']],
+          ['view', ['fullscreen', 'codeview', 'help']],
         ],
         callbacks: {
           onImageUpload: function(files) {

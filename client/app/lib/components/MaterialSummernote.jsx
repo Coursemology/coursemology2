@@ -135,15 +135,15 @@ class MaterialSummernote extends React.Component {
               dialogsInBody: false,
               disabled: this.props.disabled,
               toolbar: [
-                ['paragraph-style', ['style']],
-                ['font-style', ['bold', 'underline', 'clear']],
-                ['font-script', ['superscript', 'subscript']],
-                ['font-name', ['fontname']],
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['script', ['superscript', 'subscript']],
+                ['fontname', ['fontname']],
                 ['color', ['color']],
-                ['paragraph', ['ul', 'ol', 'paragraph']],
+                ['para', ['ul', 'ol', 'paragraph']],
                 ['table', ['table']],
                 ['insert', ['link', 'picture', 'video']],
-                ['misc', ['fullscreen', 'codeview', 'help']],
+                ['view', ['fullscreen', 'codeview', 'help']],
               ],
             }}
             value={this.props.value}
