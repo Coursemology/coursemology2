@@ -22,9 +22,10 @@
       = f.simple_fields_for :options do |options_form|
         = render 'option_fields', f: options_form
 
-  - if @multiple_response_question.multiple_choice?
-    - button_text = t('.multiple_choice_button')
+  - type = @multiple_response_question.multiple_choice? ? t('.multiple_choice_button') : t('.multiple_response_button')
+  - if f.object.persisted?
+    - button_text = t('helpers.buttons.update', model: type)
   - else
-    - button_text = t('.multiple_response_button')
+    - button_text = t('helpers.buttons.create', model: type)
   = f.button :submit, button_text
 
