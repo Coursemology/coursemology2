@@ -3,18 +3,22 @@
 = div_for(post, class: post_class) do
   = div_for(post.creator) do
     = display_user_image(post.creator)
-    span.name = link_to_user(post.creator)
 
   div.contents
     h4.title
-      - if post.unread?(current_user)
-        => fa_icon 'envelope'.freeze
-      div.pull-right
-        .timestamp
+      span.name
+        = link_to_user(post.creator)
+      span.pull-right
+        - if post.unread?(current_user)
+          => fa_icon 'envelope'.freeze, title: 'Unread'
+        span.timestamp
           => format_datetime(post.created_at)
 
-    = format_html(post.text)
+    hr
+    div.body
+      = format_html(post.text)
 
+    hr
     div.info
       - if defined?(show_buttons)
         div.pull-right
