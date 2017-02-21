@@ -43,6 +43,20 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
     end
   end
 
+  def reorder
+    unless valid_ordering?(achievement_order_params)
+      raise ArgumentError, 'Invalid ordering for achievements'
+    end
+
+    Course::Achievement.transaction do
+      achievement_order_params.each_with_index do |id, index|
+        achievements_hash[id].update_attribute(:weight, index)
+      end
+    end
+
+    head :ok
+  end
+
   private
 
   def achievement_params #:nodoc:
@@ -51,8 +65,29 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
                                    course_user_ids: [])
   end
 
+  def achievement_order_params
+    params.require(:achievement_order)
+  end
+
   # Only allow awarding of manually awarded achievements.
   def authorize_achievement!
     authorize!(:award, @achievement) if achievement_params.include?(:course_user_ids)
+  end
+
+  # Maps achievement ids to their respective achievements
+  #
+  # @return [Hash{Integer => Course::Achievement}]
+  def achievements_hash
+    @achievements_hash ||= current_course.achievements.map do |achievement|
+      [achievement.id.to_s, achievement]
+    end.to_h
+  end
+
+  # Checks if a proposed achievement ordering is valid
+  #
+  # @param [Array<Integer>] proposed_ordering
+  # @return [Boolean]
+  def valid_ordering?(proposed_ordering)
+    achievements_hash.keys.sort == proposed_ordering.sort
   end
 end
