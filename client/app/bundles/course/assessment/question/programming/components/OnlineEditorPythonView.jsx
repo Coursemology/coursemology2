@@ -17,6 +17,8 @@ import 'brace/theme/monokai';
 import styles from './OnlineEditorPythonView.scss';
 import translations from './OnlineEditorPythonView.intl';
 
+const MAX_TEST_CASES = 99;
+
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
   dataFiles: PropTypes.instanceOf(Immutable.Map).isRequired,
@@ -275,7 +277,7 @@ class OnlineEditorPythonView extends React.Component {
     );
   }
 
-  renderTestCases(header, testCases, type, startIndex = 0) {
+  renderTestCases(header, testCases, type) {
     const renderInput = (test, field, placeholder, index) => (
       <TextField
         type="text"
@@ -292,36 +294,43 @@ class OnlineEditorPythonView extends React.Component {
       />
     );
 
+    const allTestCases = this.props.data.get('test_cases');
+    const numAllTestCases = allTestCases.get('public').size + allTestCases.get('private').size
+      + allTestCases.get('evaluation').size;
+
     const identifier = this.props.intl.formatMessage(translations.identifierHeader);
     const expression = this.props.intl.formatMessage(translations.expressionHeader);
     const expected = this.props.intl.formatMessage(translations.expectedHeader);
     const hint = this.props.intl.formatMessage(translations.hintHeader);
 
-    const rows = [...testCases.get(type).entries()].map(([index, test]) => (
-      <TableRow key={index}>
-        <TableHeaderColumn className={styles.deleteButtonCell}>
-          <RaisedButton
-            backgroundColor={grey300}
-            icon={<i className="fa fa-trash" />}
-            disabled={this.props.isLoading}
-            onClick={this.testCaseDeleteHandler(type, index)}
-            style={{ minWidth: '40px', width: '40px' }}
-          />
-        </TableHeaderColumn>
-        <TableRowColumn className={styles.testCell}>
-          test_{type}_{startIndex + index + 1}
-        </TableRowColumn>
-        <TableRowColumn className={styles.testCell}>
-          { renderInput(test, 'expression', expression, index) }
-        </TableRowColumn>
-        <TableRowColumn className={styles.testCell}>
-          { renderInput(test, 'expected', expected, index) }
-        </TableRowColumn>
-        <TableRowColumn className={styles.testCell}>
-          { renderInput(test, 'hint', hint, index) }
-        </TableRowColumn>
-      </TableRow>
-    ));
+    const rows = [...testCases.get(type).entries()].map(([index, test]) => {
+      const displayedIndex = (`0${index + 1}`).slice(-2);
+      return (
+        <TableRow key={index}>
+          <TableHeaderColumn className={styles.deleteButtonCell}>
+            <RaisedButton
+              backgroundColor={grey300}
+              icon={<i className="fa fa-trash" />}
+              disabled={this.props.isLoading}
+              onClick={this.testCaseDeleteHandler(type, index)}
+              style={{ minWidth: '40px', width: '40px' }}
+            />
+          </TableHeaderColumn>
+          <TableRowColumn className={styles.testCell}>
+            test_{type}_{displayedIndex}
+          </TableRowColumn>
+          <TableRowColumn className={styles.testCell}>
+            { renderInput(test, 'expression', expression, index) }
+          </TableRowColumn>
+          <TableRowColumn className={styles.testCell}>
+            { renderInput(test, 'expected', expected, index) }
+          </TableRowColumn>
+          <TableRowColumn className={styles.testCell}>
+            { renderInput(test, 'hint', hint, index) }
+          </TableRowColumn>
+        </TableRow>
+      );
+    });
 
     return (
       <Card initiallyExpanded>
@@ -351,7 +360,7 @@ class OnlineEditorPythonView extends React.Component {
                   <FlatButton
                     label={this.props.intl.formatMessage(translations.addNewTestButton)}
                     icon={<i className="fa fa-plus" />}
-                    disabled={this.props.isLoading}
+                    disabled={this.props.isLoading || numAllTestCases >= MAX_TEST_CASES}
                     onClick={this.testCaseCreateHandler(type)}
                   />
                 </TableRowColumn>
@@ -471,12 +480,11 @@ class OnlineEditorPythonView extends React.Component {
         }
         {
           this.renderTestCases(intl.formatMessage(translations.privateTestCases),
-          testCases, 'private', testCases.get('public').size)
+          testCases, 'private')
         }
         {
           this.renderTestCases(intl.formatMessage(translations.evaluationTestCases),
-          testCases, 'evaluation',
-          testCases.get('public').size + testCases.get('private').size)
+          testCases, 'evaluation')
         }
       </div>
     );
