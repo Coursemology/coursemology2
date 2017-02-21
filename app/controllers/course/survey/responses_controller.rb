@@ -15,11 +15,12 @@ class Course::Survey::ResponsesController < Course::Survey::SurveysController
     end
   end
 
-  def show
-    respond_to do |format|
-      format.html
-      format.json
-    end
+  def show; end
+
+  def edit
+    @response.build_missing_answers_and_options
+    head :internal_server_error unless @response.save
+    @answers = @response.answers.includes(:question, options: :question_option).to_a
   end
 
   def update
@@ -32,13 +33,7 @@ class Course::Survey::ResponsesController < Course::Survey::SurveysController
 
   def build_response
     @response.experience_points_record.course_user = current_course_user
-    @survey.questions.each do |question|
-      @response.answers.build(question: question) do |answer|
-        question.options.each do |option|
-          answer.options.build(question_option: option)
-        end
-      end
-    end
+    @response.build_missing_answers_and_options
   end
 
   def response_update_params
