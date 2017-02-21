@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { reduxForm, Field, Form, formValueSelector } from 'redux-form';
+import { reduxForm, Field, Form, formValueSelector, change } from 'redux-form';
 import { connect } from 'react-redux';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'lib/components/redux-form/TextField';
@@ -63,7 +63,20 @@ const validate = (values) => {
 
 class AssessmentForm extends React.Component {
   static propTypes = {
+    dispatch: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    start_at: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.instanceOf(Date),
+    ]),
+    end_at: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.instanceOf(Date),
+    ]),
+    bonus_end_at: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.instanceOf(Date),
+    ]),
     autograded: PropTypes.bool,
     password_protected: PropTypes.bool,
     submitting: PropTypes.bool,
@@ -80,6 +93,26 @@ class AssessmentForm extends React.Component {
       materials: PropTypes.array,
     }),
   };
+
+  onStartAtChange = (_, newStartAt) => {
+    const { start_at: startAt, end_at: endAt, bonus_end_at: bonusEndAt, dispatch } = this.props;
+    const newStartTime = newStartAt && newStartAt.getTime();
+    const oldStartTime = startAt && new Date(startAt).getTime();
+    const oldEndTime = endAt && new Date(endAt).getTime();
+    const oldBonusTime = bonusEndAt && new Date(bonusEndAt).getTime();
+
+    // Shift end_at time
+    if (newStartTime && oldStartTime && oldEndTime && oldStartTime <= oldEndTime) {
+      const newEndAt = new Date(oldEndTime + (newStartTime - oldStartTime));
+      dispatch(change(formNames.ASSESSMENT, 'end_at', newEndAt));
+    }
+
+    // Shift bonus_end_at time
+    if (newStartTime && oldStartTime && oldBonusTime && oldStartTime <= oldBonusTime) {
+      const newBonusTime = new Date(oldBonusTime + (newStartTime - oldStartTime));
+      dispatch(change(formNames.ASSESSMENT, 'bonus_end_at', newBonusTime));
+    }
+  }
 
   renderExtraOptions() {
     const { submitting } = this.props;
@@ -180,6 +213,7 @@ class AssessmentForm extends React.Component {
             floatingLabelText={<FormattedMessage {...translations.startAt} />}
             style={styles.flexChild}
             disabled={submitting}
+            afterChange={this.onStartAtChange}
           />
           <Field
             name="end_at"
@@ -265,7 +299,7 @@ class AssessmentForm extends React.Component {
 }
 
 const selector = formValueSelector(formNames.ASSESSMENT);
-export default connect(state => selector(state, 'autograded', 'password_protected'))(
+export default connect(state => selector(state, 'start_at', 'end_at', 'bonus_end_at', 'autograded', 'password_protected'))(
   reduxForm({
     form: formNames.ASSESSMENT,
     validate,
