@@ -36,7 +36,7 @@ export function fetchResponse(courseId, surveyId, responseId) {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOAD_RESPONSE_REQUEST });
 
-    return axios.get(`/courses/${courseId}/surveys/${surveyId}/responses/${responseId}`)
+    return axios.get(`/courses/${courseId}/surveys/${surveyId}/responses/${responseId}/edit`)
       .then((response) => {
         dispatch({
           type: actionTypes.LOAD_RESPONSE_SUCCESS,
