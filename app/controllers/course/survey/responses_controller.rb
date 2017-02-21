@@ -3,16 +3,14 @@ class Course::Survey::ResponsesController < Course::Survey::SurveysController
   load_and_authorize_resource :response, through: :survey, class: Course::Survey::Response.name
 
   def create
-    build_response
-    @response.save!
-  rescue ActiveRecord::RecordInvalid => error
-    @response = @survey.responses.accessible_by(current_ability).
-                find_by(course_user_id: current_course_user.id)
-    if @response
-      render json: { responseId: @response.id }, status: :bad_request
+    if current_course_user
+      build_response
+      @response.save!
     else
-      render json: { error: error.message }, status: :bad_request
+      render json: { error: t('course.survey.responses.no_course_user') }, status: :bad_request
     end
+  rescue ActiveRecord::RecordInvalid => error
+    handle_create_error(error)
   end
 
   def show; end
@@ -30,6 +28,16 @@ class Course::Survey::ResponsesController < Course::Survey::SurveysController
   end
 
   private
+
+  def handle_create_error(error)
+    @response = @survey.responses.accessible_by(current_ability).
+                find_by(course_user_id: current_course_user.id)
+    if @response
+      render json: { responseId: @response.id }, status: :bad_request
+    else
+      render json: { error: error.message }, status: :bad_request
+    end
+  end
 
   def build_response
     @response.experience_points_record.course_user = current_course_user

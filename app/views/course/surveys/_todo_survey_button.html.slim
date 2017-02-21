@@ -1,0 +1,8 @@
+- survey = todo_survey_button
+- response = survey.responses.find_by(creator: current_user)
+- if response
+  = link_to t('.respond'), course_survey_response_path(current_course, survey, response),
+            class: ['btn', 'btn-info']
+- else
+  = link_to t('.respond'), course_survey_path(current_course, survey),
+            class: ['btn', 'btn-info']
