@@ -26,7 +26,7 @@ class Course::Survey::Response < ActiveRecord::Base
     end
     self.answers = survey.questions.includes(:options).map do |question|
       answer = answers_hash[question.id]
-      answer ? answer.build_missing_options : build_response_answer(question)
+      answer ? answer.build_missing_options : build_missing_answer(question)
     end
   end
 
