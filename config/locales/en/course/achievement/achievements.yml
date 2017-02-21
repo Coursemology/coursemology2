@@ -5,6 +5,8 @@ en:
         sidebar_title: :'course.achievement.achievements.index.header'
         index:
           header: 'Achievements'
+          reorder_tooltip: 'Click to enable/disable reordering of achievements'
+          reorder_button: 'Reorder Achievements'
         show:
           users_with_achievement: 'Students with this Achievement'
         new:

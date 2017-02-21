@@ -1,6 +1,7 @@
 table.table.achievement-list.table-hover
   thead
     tr
+      th.table-reorder
       th.table-badge = t('.badge')
       th.table-title = t('.title')
       th.table-description = t('.description')
@@ -8,7 +9,7 @@ table.table.achievement-list.table-hover
       th = t('.requirements') if include_requirements
       - if can?(:manage, achievements.first)
         th.table-buttons
-  tbody
+  tbody#sortable
     = render partial: 'achievement',
              collection: achievements,
              locals: { include_requirements: include_requirements }
