@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router';
-import { standardDateFormat } from 'lib/date_time_defaults';
+import { standardDateFormat } from 'lib/dateTimeDefaults';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import Toggle from 'material-ui/Toggle';
 import translations from '../translations';

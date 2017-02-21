@@ -17,7 +17,7 @@ import Description from 'material-ui/svg-icons/action/description';
 import Divider from 'material-ui/Divider';
 import isScreenXs from 'lib/helpers/viewport';
 import { red700, grey700 } from 'material-ui/styles/colors';
-import { shortDateFormat, standardDateFormat, shortTimeFormat } from 'lib/date_time_defaults';
+import { shortDateFormat, standardDateFormat, shortTimeFormat } from 'lib/dateTimeDefaults';
 
 const propTypes = {
   item: PropTypes.instanceOf(Immutable.Map).isRequired,
