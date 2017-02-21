@@ -93,7 +93,7 @@ class QuestionCard extends React.Component {
 
     return (
       <IconMenu
-        iconButtonElement={<IconButton style={{ height: 24 }}><MoreVertIcon /></IconButton>}
+        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
         style={styles.adminMenu}
       >
         {adminFunctions.map(({ label, handler }) =>
