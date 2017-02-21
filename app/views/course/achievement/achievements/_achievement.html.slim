@@ -1,7 +1,9 @@
 = content_tag_for(:tr, achievement,
                   class: draft_class(achievement) + \
                          achievement_status_class(achievement, current_course_user)) do
-
+  td.table-reorder
+    span
+      = fa_icon 'reorder'.freeze, class: 'hidden'.freeze
   td.table-badge
     - if can?(:display_badge, achievement)
       = display_achievement_badge(achievement)

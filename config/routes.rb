@@ -151,6 +151,7 @@ Rails.application.routes.draw do
         resources :achievements do
           concerns :conditional
           resources :course_users, only: [:index]
+          post 'reorder', on: :collection
         end
       end
 

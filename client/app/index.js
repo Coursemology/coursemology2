@@ -30,7 +30,7 @@ function loadCurrentModule() {
 function loadModules() {
   loadCurrentModule();
   // Initializers
-  require('./lib/helpers/confirm_dialog');
+  require('./lib/helpers/confirmDialog');
 }
 
 if (!global.Intl) {

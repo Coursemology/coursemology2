@@ -2,23 +2,16 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import RailsConfirmationDialog from 'lib/components/RailsConfirmationDialog';
+import { getOrCreateNode } from 'lib/helpers/railsHelpers';
 
 // Replaces Rail's UJS implementation of the Confirm Dialogue using a react component.
 // Code adapted from: http://lesseverything.com/blog/customizing-confirmation-dialog-in-rails/
 
-// Create a placeholder element to render the dialog.
-function getOrCreateNode() {
-  if (!document.getElementById('confirm-dialog')) {
-    const node = document.createElement('div');
-    node.setAttribute('id', 'confirm-dialog');
-    document.body.appendChild(node);
-  }
-  return document.getElementById('confirm-dialog');
-}
+const DIALOG_ID = 'confirm-dialog';
 
 // Loads the Dialog component.
 function loadDialogue(element, successCallback) {
-  const mountNode = getOrCreateNode();
+  const mountNode = getOrCreateNode(DIALOG_ID);
   // Remove existing hidden dialog, if any.
   unmountComponentAtNode(mountNode);
   render(
@@ -73,7 +66,7 @@ function overrideConfirmDialog() {
       // Element is a remote link, button, etc.
       element.trigger('click');
       if ($.rails.isRemote(element)) {
-        $(document).ajaxComplete(() => unmountComponentAtNode(getOrCreateNode()));
+        $(document).ajaxComplete(() => unmountComponentAtNode(getOrCreateNode(DIALOG_ID)));
       }
     }
   }

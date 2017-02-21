@@ -10,7 +10,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Toggle from 'material-ui/Toggle';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { formatDateTime } from 'lib/date_time_defaults';
+import { formatDateTime } from 'lib/dateTimeDefaults';
 import TitleBar from 'lib/components/TitleBar';
 import surveyTranslations from '../translations';
 import { surveyShape } from '../propTypes';

@@ -71,10 +71,20 @@
       }
     }
 
+    .table-reorder {
+      width: 30px;
+    }
+
     .table-title {
       @media (max-width: $screen-xs-max) {
         width: 30%;
       }
+    }
+  }
+
+  &.index {
+    #reorder {
+      margin-right: 1em;
     }
   }
 
