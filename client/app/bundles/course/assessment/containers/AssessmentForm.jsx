@@ -12,6 +12,7 @@ import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import translations from './AssessmentForm.intl';
 import { formNames } from '../constants';
 import MaterialUploader from './MaterialUploader';
+import ConditionList from '../components/ConditionList';
 
 const styles = {
   title: {
@@ -33,6 +34,9 @@ const styles = {
   hint: {
     fontSize: 14,
     marginBottom: 12,
+  },
+  conditions: {
+    marginTop: 24,
   },
 };
 
@@ -91,6 +95,11 @@ class AssessmentForm extends React.Component {
       folderId: PropTypes.number,
       // See MaterialFormContainer for detailed PropTypes.
       materials: PropTypes.array,
+    }),
+    // Condtions will be displayed if the attributes are present.
+    conditionAttributes: PropTypes.shape({
+      new_condition_urls: PropTypes.array,
+      conditions: PropTypes.array,
     }),
   };
 
@@ -187,7 +196,8 @@ class AssessmentForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, onSubmit, modeSwitching, submitting, folderAttributes } = this.props;
+    const { handleSubmit, onSubmit, modeSwitching, submitting, editing, folderAttributes,
+      conditionAttributes } = this.props;
 
     return (
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -292,7 +302,15 @@ class AssessmentForm extends React.Component {
             />
           </div>
         }
-        <br />
+        {
+          editing && conditionAttributes &&
+          <div style={styles.conditions}>
+            <ConditionList
+              newConditionUrls={conditionAttributes.new_condition_urls}
+              conditions={conditionAttributes.conditions}
+            />
+          </div>
+        }
       </Form>
     );
   }

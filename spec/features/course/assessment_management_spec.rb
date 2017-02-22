@@ -37,6 +37,7 @@ RSpec.feature 'Course: Assessments: Management' do
       end
 
       scenario 'I can edit an assessment' do
+        pending 'Implement frontend test'
         student = create(:course_student, course: course).user
         assessment = create(:assessment, :published_with_mrq_question,
                             course: course, start_at: 1.day.from_now)

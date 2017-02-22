@@ -24,6 +24,10 @@ class EditPage extends React.Component {
     modeSwitching: PropTypes.bool,
     // An array of materials of current assessment.
     folderAttributes: PropTypes.shape({}),
+    conditionAttributes: PropTypes.shape({
+      new_condition_urls: PropTypes.array,
+      conditions: PropTypes.array,
+    }),
     // A set of assessment attributes: {:id , :title, etc}.
     initialValues: PropTypes.shape({}),
     // Whether to disable the inner form.
@@ -49,7 +53,8 @@ class EditPage extends React.Component {
   };
 
   render() {
-    const { modeSwitching, initialValues, folderAttributes, dispatch } = this.props;
+    const { modeSwitching, initialValues, folderAttributes,
+      conditionAttributes, dispatch } = this.props;
 
     return (
       <div>
@@ -58,6 +63,7 @@ class EditPage extends React.Component {
           onSubmit={this.onFormSubmit}
           modeSwitching={modeSwitching}
           folderAttributes={folderAttributes}
+          conditionAttributes={conditionAttributes}
           initialValues={initialValues}
         />
         <div style={styles.buttonContainer}>

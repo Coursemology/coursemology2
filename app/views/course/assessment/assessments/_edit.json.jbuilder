@@ -10,3 +10,5 @@ json.folder_attributes do
     json.partial! '/course/material/material.json', material: material, folder: @assessment.folder
   end
 end
+
+json.partial! 'course/condition/conditions.json', conditional: @assessment

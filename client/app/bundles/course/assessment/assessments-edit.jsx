@@ -15,6 +15,7 @@ if (mountNode) {
       <EditPage
         modeSwitching={data.mode_switching}
         folderAttributes={data.folder_attributes}
+        conditionAttributes={data.condition_attributes}
         initialValues={{ ...data.attributes, password_protected: !!data.attributes.password }}
       />
     </ProviderWrapper>
