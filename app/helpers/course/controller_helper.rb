@@ -11,6 +11,23 @@ module Course::ControllerHelper
     user.name
   end
 
+  # Formats the given +User+ as a user-visible string. If the current user is a course_user in
+  # the course, the course_user.name would be used instead.
+  #
+  # @param [User|CourseUser] user The User to display.
+  # @return [String] The user-visible string to represent the User, suitable for rendering as
+  #   output.
+  def display_user(user)
+    return display_course_user(user) if user.is_a?(CourseUser)
+
+    course_user = user.course_users.find_by(course: controller.current_course)
+    if course_user
+      display_course_user(course_user)
+    else
+      super(user)
+    end
+  end
+
   # Links to the given +CourseUser+.
   #
   # @param [CourseUser] user The User to display.

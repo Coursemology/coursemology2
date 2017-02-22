@@ -27,6 +27,26 @@ RSpec.describe Course::ControllerHelper do
       end
     end
 
+    describe '#display_user' do
+      let(:user) { create(:user, name: 'user') }
+      let(:course_user) { create(:course_user, course: course, user: user, name: 'course_user') }
+      subject { helper.display_user(user) }
+
+      context 'when the given user is a course_user in the current course' do
+        it 'returns the name of the course user' do
+          course_user
+          expect(subject).to eq(course_user.name)
+        end
+      end
+
+      context 'when the given user is not a course_user in the current course' do
+        it 'returns the name of the user' do
+          user
+          expect(subject).to eq(user.name)
+        end
+      end
+    end
+
     describe '#link_to_course_user' do
       let(:user) { create(:course_student, course: course) }
       subject { helper.link_to_course_user(user) }

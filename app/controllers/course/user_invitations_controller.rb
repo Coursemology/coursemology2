@@ -164,7 +164,7 @@ class Course::UserInvitationsController < Course::ComponentController
   # @return [Array<String>]
   def invalid_course_user_errors
     invalid_course_users.map do |course_user|
-      user = self.class.helpers.display_user(course_user.user || course_user)
+      user = self.class.helpers.display_course_user(course_user)
       t('course.user_invitations.errors.duplicate_user', user: user)
     end
   end
