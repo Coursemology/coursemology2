@@ -59,6 +59,7 @@ en:
             statistics: 'Statistics'
             multiplier: 'Multiplier'
             question: 'Question'
+            question_grader: 'Grader'
             grade_summary: 'Grade Summary'
             publish_grade_hint: >
               The grades are currently not viewable to the student. You can publish the grades at
