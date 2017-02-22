@@ -51,6 +51,30 @@ RSpec.describe ApplicationFormattersHelper do
         expect(helper.format_html(html)).not_to include('left')
       end
 
+      it 'does not remove embedded videos from allowed sources' do
+        html = <<-HTML
+          <iframe src="//youtube.com/video1"></iframe>
+          <iframe src="//instagram.com/video2"></iframe>
+          <iframe src="//vimeo.com/video3"></iframe>
+          <iframe src="//vine.co/video4"></iframe>
+          <iframe src="//dailymotion.com/video5"></iframe>
+          <iframe src="//youku.com/video6"></iframe>
+        HTML
+        expect(helper.format_html(html)).to eq(html)
+      end
+
+      it 'removes forbidden embedded content' do
+        html = <<-HTML
+          <iframe src="//beta.coursemology.org"></iframe>
+          <iframe src="//www.youtubeXcom.com"></iframe>
+          <iframe src="//wwwXinstagram.com"></iframe>
+          <iframe src="//vine.com"></iframe>
+          <iframe src="//dailymotion.co"></iframe>
+          <iframe src="//vimeo.org"></iframe>
+        HTML
+        expect(helper.format_html(html)).not_to include('iframe')
+      end
+
       it 'formats code' do
         html = <<-HTML
           <pre lang="python"><code>
