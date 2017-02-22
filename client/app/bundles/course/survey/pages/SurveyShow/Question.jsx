@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
-import { showDeleteConfirmation } from '../actions';
-import { formatQuestionFormData } from '../utils';
-import { questionShape } from '../propTypes';
-import QuestionCard from '../components/QuestionCard';
-import * as questionActions from '../actions/questions';
+import { showDeleteConfirmation } from '../../actions';
+import { formatQuestionFormData } from '../../utils';
+import { questionShape } from '../../propTypes';
+import QuestionCard from './QuestionCard';
+import * as questionActions from '../../actions/questions';
 
 const translations = defineMessages({
   editQuestion: {
@@ -34,7 +34,7 @@ const translations = defineMessages({
   },
 });
 
-class ShowQuestion extends React.Component {
+class Question extends React.Component {
   updateQuestionHandler = (data) => {
     const { dispatch, intl, params: { courseId, surveyId } } = this.props;
     const { updateSurveyQuestion } = questionActions;
@@ -106,7 +106,7 @@ class ShowQuestion extends React.Component {
   }
 }
 
-ShowQuestion.propTypes = {
+Question.propTypes = {
   dispatch: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
   params: PropTypes.shape({
@@ -116,4 +116,4 @@ ShowQuestion.propTypes = {
   question: questionShape,
 };
 
-export default connect(state => state)(injectIntl(ShowQuestion));
+export default connect(state => state)(injectIntl(Question));

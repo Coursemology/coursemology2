@@ -6,7 +6,7 @@ import { resetDeleteConfirmation } from '../actions';
 import SurveyFormDialogue from '../containers/SurveyFormDialogue';
 import QuestionFormDialogue from '../containers/QuestionFormDialogue';
 
-const SurveysContainer = ({ dispatch, notification, children, deleteConfirmation }) => (
+const SurveyLayout = ({ dispatch, notification, children, deleteConfirmation }) => (
   <div>
     {children}
     <SurveyFormDialogue />
@@ -20,7 +20,7 @@ const SurveysContainer = ({ dispatch, notification, children, deleteConfirmation
   </div>
 );
 
-SurveysContainer.propTypes = {
+SurveyLayout.propTypes = {
   dispatch: PropTypes.func.isRequired,
   notification: notificationShape,
   children: PropTypes.node,
@@ -30,4 +30,4 @@ SurveysContainer.propTypes = {
   }).isRequired,
 };
 
-export default connect(state => state)(SurveysContainer);
+export default connect(state => state)(SurveyLayout);

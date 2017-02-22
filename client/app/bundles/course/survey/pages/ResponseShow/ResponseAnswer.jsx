@@ -5,9 +5,9 @@ import { Card, CardText } from 'material-ui/Card';
 import { red500 } from 'material-ui/styles/colors';
 import TextField from 'lib/components/redux-form/TextField';
 import Checkbox from 'lib/components/redux-form/Checkbox';
-import { questionTypes } from '../constants';
-import { questionShape } from '../propTypes';
-import OptionsListItem from './OptionsListItem';
+import { questionTypes } from '../../constants';
+import { questionShape } from '../../propTypes';
+import OptionsListItem from '../../components/OptionsListItem';
 
 const styles = {
   textResponse: {

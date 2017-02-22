@@ -3,9 +3,9 @@ import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import { reduxForm, FieldArray, Form } from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
 import formTranslations from 'lib/translations/form';
-import { questionTypes, formNames } from '../constants';
-import { responseShape, surveyShape } from '../propTypes';
-import ResponseAnswer from '../components/ResponseAnswer';
+import { questionTypes, formNames } from '../../constants';
+import { responseShape, surveyShape } from '../../propTypes';
+import ResponseAnswer from './ResponseAnswer';
 
 const styles = {
   submitButton: {

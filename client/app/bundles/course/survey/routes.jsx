@@ -1,16 +1,16 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
-import SurveysContainer from './containers/SurveysContainer';
-import Surveys from './containers/Surveys';
-import ShowSurvey from './containers/ShowSurvey';
-import Respond from './containers/Respond';
+import SurveyLayout from './containers/SurveyLayout';
+import SurveyIndex from './pages/SurveyIndex';
+import SurveyShow from './pages/SurveyShow';
+import ResponseShow from './pages/ResponseShow';
 
 export default (
-  <Route path="courses/:courseId/surveys" component={SurveysContainer}>
-    <IndexRoute component={Surveys} />
+  <Route path="courses/:courseId/surveys" component={SurveyLayout}>
+    <IndexRoute component={SurveyIndex} />
     <Route path=":surveyId">
-      <IndexRoute component={ShowSurvey} />
-      <Route path="responses/:responseId" component={Respond} />
+      <IndexRoute component={SurveyShow} />
+      <Route path="responses/:responseId" component={ResponseShow} />
     </Route>
   </Route>
 );

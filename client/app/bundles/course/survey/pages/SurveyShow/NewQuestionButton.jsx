@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import { showQuestionForm, createSurveyQuestion } from '../actions/questions';
-import { questionTypes } from '../constants';
-import { formatQuestionFormData } from '../utils';
-import AddButton from '../components/AddButton';
+import { showQuestionForm, createSurveyQuestion } from '../../actions/questions';
+import { questionTypes } from '../../constants';
+import { formatQuestionFormData } from '../../utils';
+import AddButton from '../../components/AddButton';
 
 const translations = defineMessages({
   newQuestion: {

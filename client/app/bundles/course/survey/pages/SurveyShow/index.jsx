@@ -2,13 +2,13 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import Subheader from 'material-ui/Subheader';
-import { sorts } from '../utils';
-import { showDeleteConfirmation } from '../actions';
-import surveyTranslations from '../translations';
-import * as surveyActions from '../actions/surveys';
-import SurveyDetails from '../containers/SurveyDetails';
-import NewQuestionButton from '../containers/NewQuestionButton';
-import ShowQuestion from '../containers/ShowQuestion';
+import { sorts } from '../../utils';
+import { showDeleteConfirmation } from '../../actions';
+import surveyTranslations from '../../translations';
+import * as surveyActions from '../../actions/surveys';
+import SurveyDetails from './SurveyDetails';
+import NewQuestionButton from './NewQuestionButton';
+import Question from './Question';
 
 const translations = defineMessages({
   editSurvey: {
@@ -25,7 +25,7 @@ const translations = defineMessages({
   },
 });
 
-class ShowSurvey extends React.Component {
+class SurveyShow extends React.Component {
   componentDidMount() {
     const {
       dispatch,
@@ -110,7 +110,7 @@ class ShowSurvey extends React.Component {
       <div>
         <Subheader>{ intl.formatMessage(surveyTranslations.questions) }</Subheader>
         {questions.sort(byWeight).map(question =>
-          <ShowQuestion key={question.id} {...{ question, params }} />
+          <Question key={question.id} {...{ question, params }} />
         )}
       </div>
     );
@@ -133,7 +133,7 @@ class ShowSurvey extends React.Component {
   }
 }
 
-ShowSurvey.propTypes = {
+SurveyShow.propTypes = {
   dispatch: PropTypes.func.isRequired,
   params: PropTypes.shape({
     courseId: PropTypes.string.isRequired,
@@ -143,4 +143,4 @@ ShowSurvey.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default connect(state => state)(injectIntl(ShowSurvey));
+export default connect(state => state)(injectIntl(SurveyShow));

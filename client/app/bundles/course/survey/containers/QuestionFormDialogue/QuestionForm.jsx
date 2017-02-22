@@ -10,8 +10,8 @@ import Subheader from 'material-ui/Subheader';
 import formTranslations from 'lib/translations/form';
 import QuestionFormOptions from './QuestionFormOptions';
 import QuestionFormDeletedOptions from './QuestionFormDeletedOptions';
-import translations from '../translations';
-import { questionTypes, formNames } from '../constants';
+import translations from '../../translations';
+import { questionTypes, formNames } from '../../constants';
 
 const styles = {
   description: {

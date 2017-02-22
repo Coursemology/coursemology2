@@ -8,37 +8,37 @@ import { Card, CardText } from 'material-ui/Card';
 import TitleBar from 'lib/components/TitleBar';
 import Subheader from 'material-ui/Subheader';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
-import { sorts } from '../utils';
-import { questionTypes } from '../constants';
-import surveyTranslations from '../translations';
-import { surveyShape, responseShape } from '../propTypes';
-import { fetchResponse, updateResponse } from '../actions/responses';
-import ResponseForm from '../components/ResponseForm';
+import { sorts } from '../../utils';
+import { questionTypes } from '../../constants';
+import surveyTranslations from '../../translations';
+import { surveyShape, responseShape } from '../../propTypes';
+import { fetchResponse, updateResponse } from '../../actions/responses';
+import ResponseForm from './ResponseForm';
 
 const translations = defineMessages({
   saveSuccess: {
-    id: 'course.surveys.Respond.saveSuccess',
+    id: 'course.surveys.ResponseShow.saveSuccess',
     defaultMessage: 'Your response has been saved.',
   },
   saveFailure: {
-    id: 'course.surveys.Respond.saveFailure',
+    id: 'course.surveys.ResponseShow.saveFailure',
     defaultMessage: 'Saving Failed.',
   },
   submitSuccess: {
-    id: 'course.surveys.Respond.submitSuccess',
+    id: 'course.surveys.ResponseShow.submitSuccess',
     defaultMessage: 'Your response has been submitted.',
   },
   submitFailure: {
-    id: 'course.surveys.Respond.submitFailure',
+    id: 'course.surveys.ResponseShow.submitFailure',
     defaultMessage: 'Submit Failed.',
   },
   loading: {
-    id: 'course.surveys.Respond.loading',
+    id: 'course.surveys.ResponseShow.loading',
     defaultMessage: 'Loading survey questions...',
   },
 });
 
-class Respond extends React.Component {
+class ResponseShow extends React.Component {
   static propTypes = {
     survey: surveyShape,
     response: responseShape,
@@ -111,7 +111,7 @@ class Respond extends React.Component {
       params: { courseId, surveyId, responseId },
     } = this.props;
     const { saveSuccess, saveFailure, submitSuccess, submitFailure } = translations;
-    const payload = Respond.formatSurveyResponseData(data);
+    const payload = ResponseShow.formatSurveyResponseData(data);
     const successMessage = <FormattedMessage {...(data.submit ? submitSuccess : saveSuccess)} />;
     const failureMessage = <FormattedMessage {...(data.submit ? submitFailure : saveFailure)} />;
 
@@ -131,7 +131,7 @@ class Respond extends React.Component {
       <div>
         <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
         <ResponseForm
-          initialValues={Respond.buildInitialValues(response)}
+          initialValues={ResponseShow.buildInitialValues(response)}
           onSubmit={this.handleUpdateResponse}
           {...{ response, survey }}
         />
@@ -149,7 +149,7 @@ class Respond extends React.Component {
           iconElementLeft={<IconButton><ArrowBack /></IconButton>}
           onLeftIconButtonTouchTap={() => browserHistory.push(`/courses/${courseId}/surveys`)}
         />
-        { Respond.renderDescription(survey) }
+        { ResponseShow.renderDescription(survey) }
         { this.renderForm() }
       </div>
     );
@@ -158,4 +158,4 @@ class Respond extends React.Component {
 
 export default connect(
   state => state.responseForm
-)(Respond);
+)(ResponseShow);
