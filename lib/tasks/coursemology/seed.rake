@@ -1,7 +1,4 @@
-
 # frozen_string_literal: true
-require 'factory_girl_rails'
-require 'coursemology/polyglot'
 
 test_case_properties = [
   {
@@ -29,6 +26,9 @@ test_case_properties = [
 
 namespace :coursemology do
   task seed: 'db:seed' do
+    require 'factory_girl_rails'
+    require 'coursemology/polyglot'
+
     ActsAsTenant.with_tenant(Instance.default) do
       # Get the admin user
       admin = User::Email.find_by_email('test@example.org').user
