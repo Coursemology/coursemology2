@@ -184,7 +184,8 @@ gem 'bootstrap-select-rails'
 gem 'bootstrap_tokenfield_rails'
 gem 'twitter-typeahead-rails'
 gem 'summernote-rails'
-gem 'ace-rails-ap'
+# TODO: Remove version lock to 4.1.1, 4.1.2 results in failures in programming_management_spec.rb
+gem 'ace-rails-ap', '4.1.1'
 
 # Using CarrierWave for file uploads
 gem 'carrierwave'
