@@ -170,10 +170,10 @@ RSpec.feature 'Course: Homepage' do
         teaching_assistant = create(:course_teaching_assistant, course: course)
         visit course_path(course)
         course.course_users.owner.each do |course_user|
-          expect(page).to have_selector('span.name', text: course_user.user.name)
+          expect(page).to have_selector('span.name', text: course_user.name)
         end
-        expect(page).to have_selector('span.name', text: manager.user.name)
-        expect(page).not_to have_selector('span.name', text: teaching_assistant.user.name)
+        expect(page).to have_selector('span.name', text: manager.name)
+        expect(page).not_to have_selector('span.name', text: teaching_assistant.name)
       end
 
       scenario 'I am able to see the course description' do

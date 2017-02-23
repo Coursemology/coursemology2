@@ -1,4 +1,6 @@
 - display_grading_results = @submission.published? || can?(:grade, @submission)
+- show_graders = \
+    can?(:grade, @submission) && @submission.latest_answers.any? { |a| a.grader_id.present? }
 div.panel.panel-default
   div.panel-heading = t('.statistics')
   div.panel-body.statistics
@@ -63,7 +65,7 @@ div.panel.panel-default
         - if display_grading_results
           tr
             th = @submission.class.human_attribute_name(:grader)
-            td = display_course_user(@submission.publisher) if @submission.publisher
+            td = display_user(@submission.publisher) if @submission.publisher
           tr
             th = @submission.class.human_attribute_name(:graded_at)
             td = format_datetime(@submission.published_at) if @submission.published_at
@@ -74,13 +76,18 @@ div.panel.panel-default
         thead
           tr
             th = t('.question')
+            - if show_graders
+              th = t('.question_grader')
             th = @submission.class.human_attribute_name(:grade)
         tbody
-          - answer_by_question = @submission.latest_answers.group_by(&:question)
+          - answer_by_question = \
+              @submission.answers.latest_answers.includes(:grader).group_by(&:question)
           - @submission.assessment.questions.each do |question|
             - answer = answer_by_question[question].try(:first)
             tr
               th = format_inline_text(question.display_title)
+              - if show_graders
+                td = link_to_user(answer.grader) if answer&.grader
               td
                 - if answer
                   span.submission-grades-summary-grade> (id="submission-grades-summary-answer-#{answer.id}-grade")
