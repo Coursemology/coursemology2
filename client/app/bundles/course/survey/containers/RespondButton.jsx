@@ -41,7 +41,7 @@ const RespondButton = ({ dispatch, survey, courseId }) => {
   );
 
   let labelTranslation = translations.start;
-  let onTouchTap = () => dispatch(createResponse(courseId, id));
+  let onTouchTap = () => dispatch(createResponse(id));
   if (notYetOpen) {
     labelTranslation = translations.notOpen;
     onTouchTap = () => {};

@@ -4,16 +4,15 @@ import CourseAPI from 'api/course';
 import actionTypes from '../constants';
 import { setNotification } from './index';
 
-export function createResponse() {
+export function createResponse(surveyId) {
   const courseId = CourseAPI.survey.responses.getCourseId();
-  const surveyId = CourseAPI.survey.responses.getSurveyId();
   const goToResponse = responseId => browserHistory.push(
     `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}`
   );
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_RESPONSE_REQUEST });
 
-    return CourseAPI.survey.responses.create()
+    return CourseAPI.survey.responses.create(surveyId)
       .then((response) => {
         goToResponse(response.data.response.id);
         dispatch({
