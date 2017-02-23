@@ -26,12 +26,10 @@ export default class SurveysAPI extends BaseSurveyAPI {
   *
   * @return {Promise}
   * success response: {
-  *   surveys: {
-  *     canCreate:bool,
-  *       - true if user can create a survey
-  *     surveys:Array.<{id:number, title:string, ...etc}>
-  *       - Array of surveys without full questions details
-  *   }
+  *   canCreate:bool,
+  *     - true if user can create a survey
+  *   surveys:Array.<{id:number, title:string, ...etc}>
+  *     - Array of surveys without full questions details
   * }
   */
   index() {

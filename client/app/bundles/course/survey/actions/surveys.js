@@ -86,8 +86,8 @@ export function fetchSurveys() {
       .then((response) => {
         dispatch({
           type: actionTypes.LOAD_SURVEYS_SUCCESS,
-          surveys: response.data.surveys.surveys,
-          canCreate: response.data.surveys.canCreate,
+          surveys: response.data.surveys,
+          canCreate: response.data.canCreate,
         });
       })
       .catch(() => {
