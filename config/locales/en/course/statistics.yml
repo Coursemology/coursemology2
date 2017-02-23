@@ -4,6 +4,9 @@ en:
       serial_number: 'S/N'
       student:
         header: 'Student Statistics'
+        my_students_tab: 'My Students'
+        all_students_tab: 'All Students'
+      course_student_statistics:
         phantom_students: 'Phantom Students'
       table:
         serial_number: :'course.statistics.serial_number'
