@@ -6,10 +6,10 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { sorts } from '../utils';
-import { questionTypes } from '../constants';
-import { optionShape } from '../propTypes';
-import OptionsListItem from './OptionsListItem';
+import { sorts } from '../../utils';
+import { questionTypes } from '../../constants';
+import { optionShape } from '../../propTypes';
+import OptionsListItem from '../../components/OptionsListItem';
 
 const styles = {
   optionWidget: {

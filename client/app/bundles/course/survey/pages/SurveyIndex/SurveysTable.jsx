@@ -5,10 +5,10 @@ import { Link } from 'react-router';
 import { standardDateFormat } from 'lib/dateTimeDefaults';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import Toggle from 'material-ui/Toggle';
-import translations from '../translations';
-import { surveyShape } from '../propTypes';
-import { updateSurvey } from '../actions/surveys';
-import RespondButton from '../containers/RespondButton';
+import translations from '../../translations';
+import { surveyShape } from '../../propTypes';
+import { updateSurvey } from '../../actions/surveys';
+import RespondButton from '../../containers/RespondButton';
 
 const styles = {
   tableBody: {
@@ -28,7 +28,7 @@ class SurveysTable extends React.Component {
   };
 
   renderPublishToggle(survey) {
-    const { dispatch, courseId } = this.props;
+    const { dispatch } = this.props;
     if (!survey.canUpdate) {
       return null;
     }
@@ -39,7 +39,6 @@ class SurveysTable extends React.Component {
         toggled={survey.published}
         onToggle={(event, value) =>
           dispatch(updateSurvey(
-            courseId,
             survey.id,
             { survey: { published: value } },
             <FormattedMessage {...translations.updateSuccess} values={survey} />,

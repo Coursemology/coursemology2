@@ -1,4 +1,4 @@
-import axios from 'lib/axios';
+import CourseAPI from 'api/course';
 import { submit, arrayPush, SubmissionError } from 'redux-form';
 import actionTypes, { formNames } from '../constants';
 import { setNotification } from './index';
@@ -24,19 +24,16 @@ export function addToOptionsToDelete(option) {
 }
 
 export function createSurveyQuestion(
-  courseId,
-  surveyId,
   fields,
   successMessage,
   failureMessage
 ) {
   return (dispatch) => {
-    dispatch({ type: actionTypes.CREATE_SURVEY_QUESTION_REQUEST, surveyId });
-    const endpoint = `/courses/${courseId}/surveys/${surveyId}/questions`;
-    return axios.post(endpoint, fields)
+    dispatch({ type: actionTypes.CREATE_SURVEY_QUESTION_REQUEST });
+    return CourseAPI.survey.questions.create(fields)
       .then((response) => {
         dispatch({
-          surveyId,
+          surveyId: CourseAPI.survey.responses.getSurveyId(),
           type: actionTypes.CREATE_SURVEY_QUESTION_SUCCESS,
           question: response.data,
         });
@@ -44,7 +41,7 @@ export function createSurveyQuestion(
         setNotification(successMessage)(dispatch);
       })
       .catch((error) => {
-        dispatch({ type: actionTypes.CREATE_SURVEY_QUESTION_FAILURE, surveyId });
+        dispatch({ type: actionTypes.CREATE_SURVEY_QUESTION_FAILURE });
         if (error.response && error.response.data) {
           throw new SubmissionError(error.response.data.errors);
         } else {
@@ -55,21 +52,17 @@ export function createSurveyQuestion(
 }
 
 export function updateSurveyQuestion(
-  courseId,
-  surveyId,
   questionId,
   data,
   successMessage,
   failureMessage
 ) {
   return (dispatch) => {
-    dispatch({ type: actionTypes.UPDATE_SURVEY_QUESTION_REQUEST, surveyId, questionId });
-
-    return axios.patch(`/courses/${courseId}/surveys/${surveyId}/questions/${questionId}`, data)
+    dispatch({ type: actionTypes.UPDATE_SURVEY_QUESTION_REQUEST });
+    return CourseAPI.survey.questions.update(questionId, data)
       .then((response) => {
         dispatch({
-          surveyId,
-          questionId,
+          surveyId: CourseAPI.survey.responses.getSurveyId(),
           type: actionTypes.UPDATE_SURVEY_QUESTION_SUCCESS,
           question: response.data,
         });
@@ -77,11 +70,7 @@ export function updateSurveyQuestion(
         setNotification(successMessage)(dispatch);
       })
       .catch((error) => {
-        dispatch({
-          surveyId,
-          questionId,
-          type: actionTypes.UPDATE_SURVEY_QUESTION_FAILURE,
-        });
+        dispatch({ type: actionTypes.UPDATE_SURVEY_QUESTION_FAILURE });
         if (error.response && error.response.data) {
           throw new SubmissionError(error.response.data.errors);
         } else {
@@ -92,29 +81,23 @@ export function updateSurveyQuestion(
 }
 
 export function deleteSurveyQuestion(
-  courseId,
-  surveyId,
   questionId,
   successMessage,
   failureMessage
 ) {
   return (dispatch) => {
-    dispatch({ type: actionTypes.DELETE_SURVEY_QUESTION_REQUEST, surveyId, questionId });
-    return axios.delete(`/courses/${courseId}/surveys/${surveyId}/questions/${questionId}`)
+    dispatch({ type: actionTypes.DELETE_SURVEY_QUESTION_REQUEST });
+    return CourseAPI.survey.questions.delete(questionId)
       .then(() => {
         dispatch({
-          surveyId,
+          surveyId: CourseAPI.survey.responses.getSurveyId(),
           questionId,
           type: actionTypes.DELETE_SURVEY_QUESTION_SUCCESS,
         });
         setNotification(successMessage)(dispatch);
       })
       .catch(() => {
-        dispatch({
-          surveyId,
-          questionId,
-          type: actionTypes.DELETE_SURVEY_QUESTION_FAILURE,
-        });
+        dispatch({ type: actionTypes.DELETE_SURVEY_QUESTION_FAILURE });
         setNotification(failureMessage)(dispatch);
       });
   };

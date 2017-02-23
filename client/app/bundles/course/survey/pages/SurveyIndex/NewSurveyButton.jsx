@@ -2,8 +2,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { aWeekStartingTomorrow } from 'lib/dateTimeDefaults';
-import { showSurveyForm, createSurvey } from '../actions/surveys';
-import AddButton from '../components/AddButton';
+import { showSurveyForm, createSurvey } from '../../actions/surveys';
+import AddButton from '../../components/AddButton';
 
 const translations = defineMessages({
   newSurvey: {
@@ -23,18 +23,17 @@ const translations = defineMessages({
 const propTypes = {
   dispatch: PropTypes.func.isRequired,
   canCreate: PropTypes.bool.isRequired,
-  courseId: PropTypes.string.isRequired,
   intl: intlShape.isRequired,
 };
 
 class NewSurveyButton extends React.Component {
   createSurveyHandler = (data) => {
-    const { dispatch, intl, courseId } = this.props;
+    const { dispatch, intl } = this.props;
 
     const payload = { survey: data };
     const successMessage = intl.formatMessage(translations.success, data);
     const failureMessage = intl.formatMessage(translations.failure);
-    return dispatch(createSurvey(courseId, payload, successMessage, failureMessage));
+    return dispatch(createSurvey(payload, successMessage, failureMessage));
   }
 
   showNewSurveyForm = () => {

@@ -4,8 +4,8 @@ import { reduxForm, Field, Form } from 'redux-form';
 import TextField from 'lib/components/redux-form/TextField';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import formTranslations from 'lib/translations/form';
-import translations from '../translations';
-import { formNames } from '../constants';
+import translations from '../../translations';
+import { formNames } from '../../constants';
 
 const styles = {
   title: {

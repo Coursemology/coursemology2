@@ -1,17 +1,18 @@
-import axios from 'lib/axios';
 import { browserHistory } from 'react-router';
 import { SubmissionError } from 'redux-form';
+import CourseAPI from 'api/course';
 import actionTypes from '../constants';
 import { setNotification } from './index';
 
-export function createResponse(courseId, surveyId) {
+export function createResponse(surveyId) {
+  const courseId = CourseAPI.survey.responses.getCourseId();
   const goToResponse = responseId => browserHistory.push(
     `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}`
   );
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_RESPONSE_REQUEST });
 
-    return axios.post(`/courses/${courseId}/surveys/${surveyId}/responses`)
+    return CourseAPI.survey.responses.create(surveyId)
       .then((response) => {
         goToResponse(response.data.response.id);
         dispatch({
@@ -32,11 +33,11 @@ export function createResponse(courseId, surveyId) {
   };
 }
 
-export function fetchResponse(courseId, surveyId, responseId) {
+export function fetchResponse(responseId) {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOAD_RESPONSE_REQUEST });
 
-    return axios.get(`/courses/${courseId}/surveys/${surveyId}/responses/${responseId}/edit`)
+    return CourseAPI.survey.responses.fetch(responseId)
       .then((response) => {
         dispatch({
           type: actionTypes.LOAD_RESPONSE_SUCCESS,
@@ -51,8 +52,6 @@ export function fetchResponse(courseId, surveyId, responseId) {
 }
 
 export function updateResponse(
-  courseId,
-  surveyId,
   responseId,
   payload,
   successMessage,
@@ -61,7 +60,7 @@ export function updateResponse(
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_RESPONSE_REQUEST });
 
-    return axios.patch(`/courses/${courseId}/surveys/${surveyId}/responses/${responseId}`, payload)
+    return CourseAPI.survey.responses.update(responseId, payload)
       .then((response) => {
         dispatch({
           type: actionTypes.UPDATE_RESPONSE_SUCCESS,
@@ -70,6 +69,7 @@ export function updateResponse(
         });
 
         if (payload.response.submit) {
+          const courseId = CourseAPI.survey.responses.getCourseId();
           browserHistory.push(`/courses/${courseId}/surveys/`);
         }
 
