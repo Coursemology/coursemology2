@@ -144,7 +144,7 @@ RSpec.describe User do
         let(:built_in_user_stub) do
           stub = build(:user)
           stub.email = nil
-          stub.encrypted_password = nil
+          stub.encrypted_password = ''
           allow(stub).to receive(:built_in?).and_return(true)
           stub
         end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170220123952) do
+ActiveRecord::Schema.define(version: 20170222101701) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -486,7 +486,7 @@ ActiveRecord::Schema.define(version: 20170220123952) do
 
   create_table "course_groups", force: :cascade do |t|
     t.integer  "course_id",  :null=>false, :index=>{:name=>"fk__course_groups_course_id"}, :foreign_key=>{:references=>"courses", :name=>"fk_course_groups_course_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.string   "name",       :limit=>255, :default=>"", :null=>false
+    t.string   "name",       :limit=>255, :null=>false
     t.integer  "creator_id", :null=>false, :index=>{:name=>"fk__course_groups_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_groups_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "updater_id", :null=>false, :index=>{:name=>"fk__course_groups_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_groups_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at", :null=>false
@@ -600,10 +600,10 @@ ActiveRecord::Schema.define(version: 20170220123952) do
   create_table "course_surveys", force: :cascade do |t|
     t.boolean  "anonymous",    :default=>false, :null=>false
     t.boolean  "allow_modify", :default=>false, :null=>false
-    t.integer  "creator_id", :null=>false, :index=>{:name=>"fk__course_surveys_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_surveys_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "updater_id", :null=>false, :index=>{:name=>"fk__course_surveys_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_surveys_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.datetime "created_at", :null=>false
-    t.datetime "updated_at", :null=>false
+    t.integer  "creator_id",   :null=>false, :index=>{:name=>"fk__course_surveys_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_surveys_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "updater_id",   :null=>false, :index=>{:name=>"fk__course_surveys_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_surveys_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "created_at",   :null=>false
+    t.datetime "updated_at",   :null=>false
   end
 
   create_table "course_survey_questions", force: :cascade do |t|
@@ -612,7 +612,7 @@ ActiveRecord::Schema.define(version: 20170220123952) do
     t.text     "description",   :null=>false
     t.integer  "weight",        :null=>false
     t.boolean  "required",      :default=>false, :null=>false
-    t.boolean  "grid_view",    :default=>false, :null=>false
+    t.boolean  "grid_view",     :default=>false, :null=>false
     t.integer  "max_options"
     t.integer  "min_options"
     t.integer  "creator_id",    :null=>false, :index=>{:name=>"fk__course_survey_questions_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_survey_questions_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
