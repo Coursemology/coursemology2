@@ -36,14 +36,14 @@ const translations = defineMessages({
 
 class Question extends React.Component {
   updateQuestionHandler = (data) => {
-    const { dispatch, intl, params: { courseId, surveyId } } = this.props;
+    const { dispatch, intl } = this.props;
     const { updateSurveyQuestion } = questionActions;
 
     const payload = formatQuestionFormData(data);
     const successMessage = intl.formatMessage(translations.updateSuccess);
     const failureMessage = intl.formatMessage(translations.updateFailure);
     return dispatch(
-      updateSurveyQuestion(courseId, surveyId, data.id, payload, successMessage, failureMessage)
+      updateSurveyQuestion(data.id, payload, successMessage, failureMessage)
     );
   }
 
@@ -62,13 +62,13 @@ class Question extends React.Component {
   }
 
   deleteQuestionHandler = () => {
-    const { dispatch, question, intl, params: { courseId, surveyId } } = this.props;
+    const { dispatch, question, intl } = this.props;
     const { deleteSurveyQuestion } = questionActions;
 
     const successMessage = intl.formatMessage(translations.deleteSuccess);
     const failureMessage = intl.formatMessage(translations.deleteFailure);
     const handleDelete = () => dispatch(
-      deleteSurveyQuestion(courseId, surveyId, question.id, successMessage, failureMessage)
+      deleteSurveyQuestion(question.id, successMessage, failureMessage)
     );
     return dispatch(showDeleteConfirmation(handleDelete));
   }
@@ -109,10 +109,6 @@ class Question extends React.Component {
 Question.propTypes = {
   dispatch: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
-  params: PropTypes.shape({
-    courseId: PropTypes.string.isRequired,
-    surveyId: PropTypes.string.isRequired,
-  }).isRequired,
   question: questionShape,
 };
 

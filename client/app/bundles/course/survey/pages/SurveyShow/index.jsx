@@ -29,19 +29,19 @@ class SurveyShow extends React.Component {
   componentDidMount() {
     const {
       dispatch,
-      params: { courseId, surveyId },
+      params: { surveyId },
     } = this.props;
-    dispatch(surveyActions.fetchSurvey(courseId, surveyId));
+    dispatch(surveyActions.fetchSurvey(surveyId));
   }
 
   updateSurveyHandler = (data) => {
-    const { dispatch, intl, params: { courseId, surveyId } } = this.props;
+    const { dispatch, intl, params: { surveyId } } = this.props;
     const { updateSurvey } = surveyActions;
 
     const payload = { survey: data };
     const successMessage = intl.formatMessage(surveyTranslations.updateSuccess, data);
     const failureMessage = intl.formatMessage(surveyTranslations.updateFailure);
-    return dispatch(updateSurvey(courseId, surveyId, payload, successMessage, failureMessage));
+    return dispatch(updateSurvey(surveyId, payload, successMessage, failureMessage));
   }
 
   showEditSurveyForm = (survey) => {
@@ -61,13 +61,13 @@ class SurveyShow extends React.Component {
   }
 
   deleteSurveyHandler(survey) {
-    const { dispatch, intl, params: { courseId, surveyId } } = this.props;
+    const { dispatch, intl, params: { surveyId } } = this.props;
     const { deleteSurvey } = surveyActions;
 
     const successMessage = intl.formatMessage(surveyTranslations.deleteSuccess, survey);
     const failureMessage = intl.formatMessage(surveyTranslations.deleteFailure);
     const handleDelete = () => (
-      dispatch(deleteSurvey(courseId, surveyId, successMessage, failureMessage))
+      dispatch(deleteSurvey(surveyId, successMessage, failureMessage))
     );
     return () => dispatch(showDeleteConfirmation(handleDelete));
   }
@@ -94,7 +94,7 @@ class SurveyShow extends React.Component {
   }
 
   renderQuestions(survey) {
-    const { intl, params } = this.props;
+    const { intl } = this.props;
     const { questions, canUpdate } = survey;
     const { byWeight } = sorts;
 
@@ -110,7 +110,7 @@ class SurveyShow extends React.Component {
       <div>
         <Subheader>{ intl.formatMessage(surveyTranslations.questions) }</Subheader>
         {questions.sort(byWeight).map(question =>
-          <Question key={question.id} {...{ question, params }} />
+          <Question key={question.id} {...{ question }} />
         )}
       </div>
     );
@@ -127,7 +127,7 @@ class SurveyShow extends React.Component {
           adminFunctions={this.adminFunctions(survey)}
         />
         { this.renderQuestions(survey) }
-        { survey.canCreateQuestion ? <NewQuestionButton {...{ courseId, surveyId }} /> : null }
+        { survey.canCreateQuestion ? <NewQuestionButton /> : null }
       </div>
     );
   }

@@ -26,8 +26,8 @@ class SurveyIndex extends React.Component {
   };
 
   componentDidMount() {
-    const { dispatch, params: { courseId } } = this.props;
-    dispatch(fetchSurveys(courseId));
+    const { dispatch } = this.props;
+    dispatch(fetchSurveys());
   }
 
   render() {
@@ -46,7 +46,7 @@ class SurveyIndex extends React.Component {
             <SurveysTable {...{ courseId }} /> :
             <Subheader><FormattedMessage {...translations.noSurveys} /></Subheader>
         }
-        <NewSurveyButton {...{ courseId }} />
+        <NewSurveyButton />
       </div>
     );
   }

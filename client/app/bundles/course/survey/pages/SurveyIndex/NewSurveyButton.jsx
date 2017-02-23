@@ -23,18 +23,17 @@ const translations = defineMessages({
 const propTypes = {
   dispatch: PropTypes.func.isRequired,
   canCreate: PropTypes.bool.isRequired,
-  courseId: PropTypes.string.isRequired,
   intl: intlShape.isRequired,
 };
 
 class NewSurveyButton extends React.Component {
   createSurveyHandler = (data) => {
-    const { dispatch, intl, courseId } = this.props;
+    const { dispatch, intl } = this.props;
 
     const payload = { survey: data };
     const successMessage = intl.formatMessage(translations.success, data);
     const failureMessage = intl.formatMessage(translations.failure);
-    return dispatch(createSurvey(courseId, payload, successMessage, failureMessage));
+    return dispatch(createSurvey(payload, successMessage, failureMessage));
   }
 
   showNewSurveyForm = () => {

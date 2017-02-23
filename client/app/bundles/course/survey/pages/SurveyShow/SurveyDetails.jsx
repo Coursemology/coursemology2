@@ -43,9 +43,8 @@ class SurveyDetails extends React.Component {
   };
 
   handlePublishToggle = (event, value) => {
-    const { dispatch, survey, courseId } = this.props;
+    const { dispatch, survey } = this.props;
     dispatch(updateSurvey(
-      courseId,
       survey.id,
       { survey: { published: value } },
       <FormattedMessage {...surveyTranslations.updateSuccess} values={survey} />,

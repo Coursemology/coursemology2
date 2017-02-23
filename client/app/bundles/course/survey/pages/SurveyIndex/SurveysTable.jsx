@@ -28,7 +28,7 @@ class SurveysTable extends React.Component {
   };
 
   renderPublishToggle(survey) {
-    const { dispatch, courseId } = this.props;
+    const { dispatch } = this.props;
     if (!survey.canUpdate) {
       return null;
     }
@@ -39,7 +39,6 @@ class SurveysTable extends React.Component {
         toggled={survey.published}
         onToggle={(event, value) =>
           dispatch(updateSurvey(
-            courseId,
             survey.id,
             { survey: { published: value } },
             <FormattedMessage {...translations.updateSuccess} values={survey} />,

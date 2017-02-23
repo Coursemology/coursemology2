@@ -94,29 +94,22 @@ class ResponseShow extends React.Component {
   }
 
   componentDidMount() {
-    const {
-      dispatch,
-      isLoading,
-      params: { courseId, surveyId, responseId },
-    } = this.props;
+    const { dispatch, isLoading, params: { responseId } } = this.props;
 
     if (!isLoading) {
-      dispatch(fetchResponse(courseId, surveyId, responseId));
+      dispatch(fetchResponse(responseId));
     }
   }
 
   handleUpdateResponse = (data) => {
-    const {
-      dispatch,
-      params: { courseId, surveyId, responseId },
-    } = this.props;
+    const { dispatch, params: { responseId } } = this.props;
     const { saveSuccess, saveFailure, submitSuccess, submitFailure } = translations;
     const payload = ResponseShow.formatSurveyResponseData(data);
     const successMessage = <FormattedMessage {...(data.submit ? submitSuccess : saveSuccess)} />;
     const failureMessage = <FormattedMessage {...(data.submit ? submitFailure : saveFailure)} />;
 
     return dispatch(
-      updateResponse(courseId, surveyId, responseId, payload, successMessage, failureMessage)
+      updateResponse(responseId, payload, successMessage, failureMessage)
     );
   }
 
