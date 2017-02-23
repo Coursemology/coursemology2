@@ -19,6 +19,7 @@ addons:
 bundler_args: "--jobs=3 --retry=3 --without development:production --deployment"
 cache:
   bundler: true
+  yarn: true
   directories:
     - travis-phantomjs
     - spec-runtime
@@ -33,8 +34,10 @@ env:
     - GROUP="test"
 
 before_install:
-  - nvm install node
+  - nvm install 6
   - node --version
+  - npm install -g yarn
+  - yarn --version
   - gem update bundler
   # from https://github.com/travis-ci/travis-ci/issues/3225#issuecomment-177592725
   # and also from https://github.com/travis-ci/travis-ci/issues/3225#issuecomment-200965782
@@ -46,12 +49,12 @@ before_install:
   - "if [ $(phantomjs --version) != '2.1.1' ]; then wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2; fi"
   - "if [ $(phantomjs --version) != '2.1.1' ]; then tar -xvf $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C $PWD/travis-phantomjs; fi"
   - phantomjs --version
-  - npm install --prefix ./client
+  - cd client && yarn; cd -
 
 before_script:
   - psql -c 'create database coursemology_test;' -U postgres
   - psql -c 'create database coursemology_test2;' -U postgres
-  - 'if [ "$GROUP" = "test" ]; then npm run build:production --prefix ./client; fi'
+  - 'if [ "$GROUP" = "test" ]; then cd client && yarn run build:production; cd -; fi'
 #  - bundle exec rake db:setup
   - bundle exec rake parallel:setup[2]
   # Copy runtime log if it exists. Create runtime cache directory if absent.
@@ -61,8 +64,8 @@ before_script:
 script:
   - 'if [ "$GROUP" = "checks" ]; then bundle exec consistency_fail; fi'
   - 'if [ "$GROUP" = "checks" ]; then bundle exec i18n-tasks health; fi'
-  - 'if [ "$GROUP" = "checks" ]; then npm run build:production --prefix ./client; bundle exec rake assets:precompile; fi'
-  - 'if [ "$GROUP" = "checks" ]; then npm run lint --prefix ./client; fi'
+  - 'if [ "$GROUP" = "checks" ]; then cd client && yarn run build:production; cd -; bundle exec rake assets:precompile; fi'
+  - 'if [ "$GROUP" = "checks" ]; then cd client && yarn run lint --prefix; cd -; fi'
   - 'if [ "$GROUP" = "test" ]; then bundle exec rake parallel:spec[2]; fi'
 
 after_script:

@@ -3,15 +3,15 @@
   "version": "2.0.0",
   "description": "Coursemology Frontend",
   "engines": {
-    "node": "5.10.0",
-    "npm": "3.5.0"
+    "node": ">=5.10.0",
+    "yarn": "^0.20.3"
   },
   "scripts": {
-    "build:test": "npm run build:translations && webpack --config webpack.config.js",
-    "build:production": "export NODE_ENV=production && npm run build:translations && webpack --config webpack.config.js --optimize-minimize",
-    "build:development": "npm run build:translations && webpack -w --config webpack.config.js",
+    "build:test": "yarn run build:translations && webpack --config webpack.config.js",
+    "build:production": "export NODE_ENV=production && yarn run build:translations && webpack --config webpack.config.js --optimize-minimize",
+    "build:development": "yarn run build:translations && webpack -w --config webpack.config.js",
     "build:translations": "babel-node scripts/aggregate-translations.js",
-    "extract-translations": "npm run build:production && babel-node scripts/extract-translations.js",
+    "extract-translations": "yarn run build:production && babel-node scripts/extract-translations.js",
     "lint": "eslint . --ext .js --ext .jsx --cache",
     "lint-fix": "eslint . --ext .js --ext .jsx --cache --fix"
   },
@@ -71,8 +71,6 @@
     "eslint-plugin-react": "^6.4.1"
   },
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Coursemology/coursemology2.git"
-  }
+  "repository": "git+https://github.com/Coursemology/coursemology2.git",
+  "main": "app/index.js"
 }

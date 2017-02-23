@@ -46,7 +46,7 @@ GoRails should help you to get started on Ruby on Rails.
  4. Install javascript dependencies
 
     ~~~ sh
-    $ npm install --prefix ./client
+    $ cd client/ && yarn; cd -
     ~~~
 
  5. Create and seed the database
@@ -59,6 +59,11 @@ GoRails should help you to get started on Ruby on Rails.
 
     ~~~ sh
     $ foreman start
+    ~~~
+    Or start the rails server yourself and:
+    ~~~sh
+    # Make sure you have  ran this command to compile the assets before running the test suite.
+    $ cd client/ && yarn build:development
     ~~~
 
  7. You're all set! Simply login with the default username and password:

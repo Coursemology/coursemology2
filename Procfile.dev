@@ -1,2 +1,2 @@
 web: bundle exec rails server
-client: sh -c 'rm app/assets/webpack/* || true && npm run build:development --prefix ./client'
+client: sh -c 'rm app/assets/webpack/* || true && cd client && yarn run build:development'
