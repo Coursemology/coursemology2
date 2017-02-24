@@ -23,11 +23,11 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def update
+    @assessment.update_mode(autograded_params)
     if @assessment.update(assessment_params)
-      redirect_to course_assessment_path(current_course, @assessment),
-                  success: t('.success', title: @assessment.title)
+      head :ok
     else
-      render 'edit'
+      render json: { errors: @assessment.errors }, status: :bad_request
     end
   end
 
@@ -70,14 +70,17 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def assessment_params
     base_params = [:title, :description, :base_exp, :time_bonus_exp, :start_at, :end_at,
-                   :bonus_end_at, :published]
-    base_params << :autograded if action_name == 'create'
+                   :bonus_end_at, :published, :autograded]
     if autograded?
       base_params << :skippable
     else
       base_params += [:password, :tabbed_view, :delayed_grade_publication]
     end
     params.require(:assessment).permit(*base_params, folder_params)
+  end
+
+  def autograded_params
+    params.require(:assessment).permit(:autograded)
   end
 
   # Infer the autograded state from @assessment or params.

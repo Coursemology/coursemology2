@@ -109,7 +109,11 @@ class PopupDialog extends React.Component {
           autoScrollBodyContent
           contentStyle={styles.dialog}
         >
-          <AssessmentForm onSubmit={this.onFormSubmit} initialValues={initialValues} />
+          <AssessmentForm
+            modeSwitching
+            onSubmit={this.onFormSubmit}
+            initialValues={initialValues}
+          />
         </Dialog>
         <ConfirmationDialog
           confirmDiscard

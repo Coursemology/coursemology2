@@ -1,17 +1,23 @@
 import React from 'react';
 import { render } from 'react-dom';
-import Immutable from 'immutable';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
-import MaterialListContainer from './containers/MaterialListContainer';
+import storeCreator from './store';
+import EditPage from './pages/EditPage';
 
-const mountNode = document.getElementById('uploaded-files');
+const mountNode = document.getElementById('assessment-edit');
 if (mountNode) {
-  const data = mountNode.getAttribute('data');
-  const materials = Immutable.fromJS(JSON.parse(data));
+  const dataAttr = mountNode.getAttribute('data');
+  const data = JSON.parse(dataAttr);
+  const store = storeCreator({});
 
   const Page = () => (
-    <ProviderWrapper>
-      <MaterialListContainer materials={materials} />
+    <ProviderWrapper store={store}>
+      <EditPage
+        modeSwitching={data.mode_switching}
+        folderAttributes={data.folder_attributes}
+        conditionAttributes={data.condition_attributes}
+        initialValues={{ ...data.attributes, password_protected: !!data.attributes.password }}
+      />
     </ProviderWrapper>
   );
 

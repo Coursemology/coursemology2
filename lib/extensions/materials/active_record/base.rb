@@ -16,7 +16,7 @@ module Extensions::Materials::ActiveRecord::Base
   module InstanceMethods
     def files_attributes=(files)
       build_new_record_folder
-      folder.files_attributes = files
+      folder.build_materials(files)
     end
 
     private

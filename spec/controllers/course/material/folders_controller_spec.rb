@@ -11,6 +11,7 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
       stub = create(:folder, course: course, parent: create(:folder, course: course))
       allow(stub).to receive(:destroy).and_return(false)
       allow(stub).to receive(:update_attributes).and_return(false)
+      allow(stub).to receive(:save).and_return(false)
       stub
     end
 

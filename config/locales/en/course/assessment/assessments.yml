@@ -46,8 +46,6 @@ en:
           header: 'New Assessment'
         edit:
           header: 'Edit Assessment'
-        update:
-          success: 'Assessment %{title} was updated.'
         destroy:
           success: 'Assessment %{assessment} was deleted.'
           failure: 'Could not delete assessment: %{error}'

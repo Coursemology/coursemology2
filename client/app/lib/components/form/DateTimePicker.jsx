@@ -56,11 +56,14 @@ const styles = {
 
 const propTypes = {
   name: PropTypes.string.isRequired,
-  floatingLabelText: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.object,
+  floatingLabelText: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
   ]),
-  value: PropTypes.instanceOf(Date),
+  value: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.string, // Date format from JSON string ( e.g. 2017-01-01T12:00:00+08:00 )
+  ]),
   errorText: PropTypes.string,
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
@@ -146,6 +149,11 @@ class DateTimePicker extends React.Component {
 
   render() {
     const { intl, floatingLabelText, errorText, name, disabled, style } = this.props;
+    let value = this.props.value;
+    // Convert string value to Date, which is expected by Date/TimePicker
+    if (value && typeof (value) === 'string') {
+      value = new Date(value);
+    }
 
     return (
       <div style={Object.assign({}, styles.dateTimePicker, style)}>
@@ -171,7 +179,7 @@ class DateTimePicker extends React.Component {
           textFieldStyle={{ display: 'none' }}
           ref={input => (this.datePicker = input)}
           onChange={this.updateDate}
-          value={this.props.value || undefined}
+          value={value || undefined}
         />
         <IconButton
           onTouchTap={() => !disabled && this.timePicker.openDialog()}
@@ -194,7 +202,7 @@ class DateTimePicker extends React.Component {
           textFieldStyle={{ display: 'none' }}
           ref={input => (this.timePicker = input)}
           onChange={this.updateTime}
-          value={this.props.value || undefined}
+          value={value || undefined}
         />
       </div>
     );
