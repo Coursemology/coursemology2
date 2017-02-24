@@ -7,9 +7,9 @@
     "yarn": "^0.20.3"
   },
   "scripts": {
-    "build:test": "yarn run build:translations && webpack --config webpack.config.js",
-    "build:production": "export NODE_ENV=production && yarn run build:translations && webpack --config webpack.config.js --optimize-minimize",
-    "build:development": "yarn run build:translations && webpack -w --config webpack.config.js",
+    "build:test": "export NODE_ENV=test && yarn run build:translations && webpack",
+    "build:production": "export NODE_ENV=production && yarn run build:translations && webpack -p",
+    "build:development": "yarn run build:translations && webpack -w",
     "build:translations": "babel-node scripts/aggregate-translations.js",
     "extract-translations": "yarn run build:production && babel-node scripts/extract-translations.js",
     "lint": "eslint . --ext .js --ext .jsx --cache",
@@ -58,7 +58,8 @@
     "redux-thunk": "^2.0.1",
     "sass-loader": "^5.0.1",
     "style-loader": "^0.13.1",
-    "webpack": "^2.2.1"
+    "webpack": "^2.2.1",
+    "webpack-md5-hash": "^0.0.5"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",

@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const WebpackMd5Hash = require('webpack-md5-hash');
 
 const devBuild = process.env.NODE_ENV !== 'production';
 const nodeEnv = devBuild ? 'development' : 'production';
@@ -27,8 +28,8 @@ const config = {
   },
 
   output: {
-    filename: 'coursemology.bundle.js',
-    chunkFilename: '[name]-[chunkhash].bundle.js',
+    filename: '[name]-[chunkhash].js',
+    chunkFilename: '[name]-[chunkhash].js',
     path: '../app/assets/webpack',
     publicPath: '/assets/',
   },
@@ -46,11 +47,12 @@ const config = {
   },
 
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.bundle.js' }),
+    new WebpackMd5Hash(),
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['vendor', 'manifest'],
+    }),
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(nodeEnv),
-      },
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
     }),
   ],
 
@@ -90,10 +92,6 @@ const config = {
       },
     ],
   },
-
-  stats: {
-    warnings: false,
-  },
 };
 
 module.exports = config;
@@ -102,8 +100,5 @@ if (devBuild) {
   console.log('Webpack dev build for Rails'); // eslint-disable-line no-console
   module.exports.devtool = 'eval-source-map';
 } else {
-  config.plugins.push(
-    new webpack.optimize.DedupePlugin()
-  );
   console.log('Webpack production build for Rails'); // eslint-disable-line no-console
 }
