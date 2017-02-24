@@ -61,9 +61,7 @@ en:
             question: 'Question'
             question_grader: 'Grader'
             grade_summary: 'Grade Summary'
-            publish_grade_hint: >
-              The grades are currently not viewable to the student. You can publish the grades at
-              the submissions page of current assessment.
+            publish_grade_hint: "These grades can't be seen by the student until they are published."
             late_submission_warning: :'course.assessment.submission.submissions.progress.late_submission_warning'
           update:
             success: 'Submission was updated.'
@@ -75,9 +73,9 @@ en:
             experience_points: 'Experience Points'
           submission:
             graded_not_published_warning: >
-              The grading and experience points are in a draft state, and is currently not viewable
-              by the student. You can publish all draft grades by clicking the 'Publish Grades'
-              button at the top of this page.
+              The grade and experience points are in a draft state and cannot be seen by
+              the student. Publish all grades by clicking the 'Publish Grades' button on
+              the top right side of the page.
           no_submission:
             not_started: 'Not Started'
           manually_graded_answers_tabbed:
