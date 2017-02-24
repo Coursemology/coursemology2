@@ -70,4 +70,16 @@ module ApplicationHelper
 
     tag(:meta, data)
   end
+
+  # This helper will includes all webpack assets
+  def webpack_assets_tag
+    capture do
+      concat "\n"
+      concat javascript_include_tag(*webpack_asset_paths('manifest', extension: 'js'))
+      concat "\n"
+      concat javascript_include_tag(*webpack_asset_paths('vendor', extension: 'js'))
+      concat "\n"
+      concat javascript_include_tag(*webpack_asset_paths('coursemology', extension: 'js'))
+    end
+  end
 end

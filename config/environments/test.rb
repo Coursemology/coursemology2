@@ -13,10 +13,6 @@ Rails.application.configure do
   # preloads Rails for running tests, you may have to set it to true.
   config.eager_load = false
 
-  # Override the testing public path
-  paths['public'] = File.join(Rails.root, 'tmp', 'spec', 'public')
-  FileUtils.mkdir_p(Rails.public_path) unless Dir.exist?(Rails.public_path)
-
   # Configure static file server for tests with Cache-Control for performance.
   config.serve_static_files   = true
   config.static_cache_control = 'public, max-age=3600'

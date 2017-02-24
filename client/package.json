@@ -57,6 +57,7 @@
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.0.1",
     "sass-loader": "^5.0.1",
+    "stats-webpack-plugin": "^0.4.3",
     "style-loader": "^0.13.1",
     "webpack": "^2.2.1",
     "webpack-md5-hash": "^0.0.5"

@@ -1,9 +1,9 @@
 const webpack = require('webpack');
 const path = require('path');
 const WebpackMd5Hash = require('webpack-md5-hash');
+const StatsPlugin = require('stats-webpack-plugin');
 
 const devBuild = process.env.NODE_ENV !== 'production';
-const nodeEnv = devBuild ? 'development' : 'production';
 
 const config = {
   entry: {
@@ -30,8 +30,8 @@ const config = {
   output: {
     filename: '[name]-[chunkhash].js',
     chunkFilename: '[name]-[chunkhash].js',
-    path: '../app/assets/webpack',
-    publicPath: '/assets/',
+    path: '../public/webpack',
+    publicPath: '/webpack/',
   },
 
   externals: {
@@ -52,7 +52,15 @@ const config = {
       names: ['vendor', 'manifest'],
     }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+    }),
+    // must match config.webpack.manifest_filename
+    new StatsPlugin('manifest.json', {
+      chunkModules: false,
+      source: false,
+      chunks: false,
+      modules: false,
+      assets: true,
     }),
   ],
 
