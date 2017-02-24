@@ -5,22 +5,22 @@ import ProviderWrapper from 'lib/components/ProviderWrapper';
 import storeCreator from './programming/store';
 import ProgrammingQuestion from './programming/ProgrammingQuestion';
 
-const mountNode = document.getElementById('programming-question');
-if (mountNode) {
-  const data = mountNode.getAttribute('data');
-  const props = Immutable.fromJS(JSON.parse(data));
-  const store = storeCreator(props);
+$(document).ready(() => {
+  const mountNode = document.getElementById('programming-question');
+  if (mountNode) {
+    const data = mountNode.getAttribute('data');
+    const props = Immutable.fromJS(JSON.parse(data));
+    const store = storeCreator(props);
 
-  const Page = () => (
-    <ProviderWrapper {...{ store }}>
-      <ProgrammingQuestion />
-    </ProviderWrapper>
-  );
+    const Page = () => (
+      <ProviderWrapper {...{ store }}>
+        <ProgrammingQuestion />
+      </ProviderWrapper>
+    );
 
-  $(document).ready(() => {
     render(
       <Page />,
       mountNode
     );
-  });
-}
+  }
+});
