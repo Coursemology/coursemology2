@@ -7,9 +7,9 @@
     "yarn": "^0.20.3"
   },
   "scripts": {
-    "build:test": "export NODE_ENV=test && yarn run build:translations && webpack",
+    "build:test": "export NODE_ENV=test && yarn run build:translations && webpack -w",
     "build:production": "export NODE_ENV=production && yarn run build:translations && webpack -p",
-    "build:development": "yarn run build:translations && webpack -w",
+    "build:development": "yarn run build:translations && webpack-dev-server",
     "build:translations": "babel-node scripts/aggregate-translations.js",
     "extract-translations": "yarn run build:production && babel-node scripts/extract-translations.js",
     "lint": "eslint . --ext .js --ext .jsx --cache",
@@ -70,7 +70,8 @@
     "eslint-import-resolver-webpack": "^0.8.1",
     "eslint-plugin-import": "^2.0.1",
     "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.4.1"
+    "eslint-plugin-react": "^6.4.1",
+    "webpack-dev-server": "^2.4.1"
   },
   "license": "MIT",
   "repository": "git+https://github.com/Coursemology/coursemology2.git",
