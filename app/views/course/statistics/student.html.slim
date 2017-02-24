@@ -1,6 +1,17 @@
 = page_header
-= render 'table', students: @students
+- if current_course_user&.my_students.any?
+  ul.nav.nav-tabs.tab-header role="tab-list"
+    li role="presentation"
+      a href="#my-students" aria-controls="my-students" role="tab" data-toggle="tab"
+        = t('.my_students_tab')
+    li role="presentation"
+      a href="#all-students" aria-controls="all-students" role="tab" data-toggle="tab"
+        = t('.all_students_tab')
 
-- if @phantom_students.present?
-  h1 = t('.phantom_students')
-  = render 'table', students: @phantom_students
+  div.tab-content
+    div.tab-pane.fade role="tabpanel" id="my-students"
+      = render 'table', students: current_course_user.my_students
+    div.tab-pane.fade role="tabpanel" id="all-students"
+      = render 'course_student_statistics', students: @students, phantom_students: @phantom_students
+- else
+  = render 'course_student_statistics', students: @students, phantom_students: @phantom_students
