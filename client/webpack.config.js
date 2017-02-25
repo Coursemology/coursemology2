@@ -14,20 +14,24 @@ const config = {
   entry: {
     coursemology: ['babel-polyfill', './app/index'],
     vendor: [
+      'axios',
       'immutable',
       'jquery-ui',
       'material-ui',
       'moment',
       'react',
+      'react-ace',
       'react-dom',
-      'redux-form',
-      'redux-immutable',
       'react-intl',
       'react-redux',
+      'react-router',
       'react-scroll',
-      'redux',
-      'redux-promise',
+      'react-summernote',
       'react-tap-event-plugin',
+      'redux',
+      'redux-form',
+      'redux-immutable',
+      'redux-promise',
       'redux-thunk',
     ],
   },
@@ -57,7 +61,7 @@ const config = {
       names: ['vendor', 'manifest'],
     }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      'process.env.NODE_ENV': JSON.stringify(env),
     }),
     // must match config.webpack.manifest_filename
     new StatsPlugin('manifest.json', {
