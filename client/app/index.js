@@ -15,7 +15,6 @@
 function loadCurrentModule() {
   const modulePath = document.head.querySelector("[name='server-context']")
                        .getAttribute('data-controller-name');
-
   try {
     require(`../app/bundles/${modulePath}`);
   } catch (e) {

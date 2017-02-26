@@ -15,6 +15,8 @@
     = f.input :start_at
     = f.input :end_at
     = f.input :gamified, hint: t('.gamified_label')
+    - if current_course.settings(:components, :course_lectures_component).enabled
+      = f.input :braincert_whiteboard_api_key, placeholder: t('.braincert_whiteboard_api_key_hint')
 
     - max_time = current_course.advance_start_at_duration
     .form-group.boolean.optional
