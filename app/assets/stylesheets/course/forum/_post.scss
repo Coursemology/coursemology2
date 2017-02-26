@@ -1,9 +1,7 @@
 @mixin course-forum-post {
   .user {
     float: left;
-    margin-right: 1em;
     text-align: right;
-    width: 7em;
 
     .image {
       float: right;

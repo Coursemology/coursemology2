@@ -1,42 +1,41 @@
-span.pull-right
-  .unread-controls.btn-group
-    = link_to_next_unread
-  .btn-group
-    - if can?(:subscribe, @topic)
-      - if @topic.subscribed_by?(current_user)
-        = link_to subscribe_course_forum_topic_path(current_course, @forum, @topic, subscribe: false),
-                  title: t('course.forum.topics.unsubscribe.tag'), class: ['btn', 'btn-danger'],
-                  method: :delete do
-          = fa_icon 'heart-o'.freeze
-      - else
-        = link_to subscribe_course_forum_topic_path(current_course, @forum, @topic, subscribe: true),
-                  title: t('course.forum.topics.subscribe.tag'), class: ['btn', 'btn-success'],
-                  method: :post, role: 'button' do
-          = fa_icon 'heart'.freeze
+.unread-controls.btn-group
+  = link_to_next_unread
+.btn-group
+  - if can?(:subscribe, @topic)
+    - if @topic.subscribed_by?(current_user)
+      = link_to subscribe_course_forum_topic_path(current_course, @forum, @topic, subscribe: false),
+                title: t('course.forum.topics.unsubscribe.tag'), class: ['btn', 'btn-danger'],
+                method: :delete do
+        = fa_icon 'heart-o'.freeze
+    - else
+      = link_to subscribe_course_forum_topic_path(current_course, @forum, @topic, subscribe: true),
+                title: t('course.forum.topics.subscribe.tag'), class: ['btn', 'btn-success'],
+                method: :post, role: 'button' do
+        = fa_icon 'heart'.freeze
 
-    - if can?(:set_hidden, @topic)
-      - if @topic.hidden
-        = link_to hidden_course_forum_topic_path(current_course, @forum, @topic, hidden: false),
-                  title: t('course.forum.topics.shown.tag'), class: ['btn', 'btn-info'],
-                  method: :put do
-          = fa_icon 'eye'.freeze
-      - else
-        = link_to hidden_course_forum_topic_path(current_course, @forum, @topic, hidden: true),
-                  title: t('course.forum.topics.hidden.tag'), class: ['btn', 'btn-primary'],
-                  method: :put do
-          = fa_icon 'eye-slash'.freeze
+  - if can?(:set_hidden, @topic)
+    - if @topic.hidden
+      = link_to hidden_course_forum_topic_path(current_course, @forum, @topic, hidden: false),
+                title: t('course.forum.topics.shown.tag'), class: ['btn', 'btn-info'],
+                method: :put do
+        = fa_icon 'eye'.freeze
+    - else
+      = link_to hidden_course_forum_topic_path(current_course, @forum, @topic, hidden: true),
+                title: t('course.forum.topics.hidden.tag'), class: ['btn', 'btn-primary'],
+                method: :put do
+        = fa_icon 'eye-slash'.freeze
 
-    - if can?(:set_locked, @topic)
-      - if @topic.locked
-        = link_to locked_course_forum_topic_path(current_course, @forum, @topic, locked: false),
-                  title: t('course.forum.topics.unlocked.tag'), class: ['btn', 'btn-success'],
-                  method: :put do
-          = fa_icon 'unlock'.freeze
-      - else
-        = link_to locked_course_forum_topic_path(current_course, @forum, @topic, locked: true),
-                  title: t('course.forum.topics.locked.tag'), class: ['btn', 'btn-warning'],
-                  method: :put do
-          = fa_icon 'lock'.freeze
+  - if can?(:set_locked, @topic)
+    - if @topic.locked
+      = link_to locked_course_forum_topic_path(current_course, @forum, @topic, locked: false),
+                title: t('course.forum.topics.unlocked.tag'), class: ['btn', 'btn-success'],
+                method: :put do
+        = fa_icon 'unlock'.freeze
+    - else
+      = link_to locked_course_forum_topic_path(current_course, @forum, @topic, locked: true),
+                title: t('course.forum.topics.locked.tag'), class: ['btn', 'btn-warning'],
+                method: :put do
+        = fa_icon 'lock'.freeze
 
-    = edit_button(edit_course_forum_topic_path(current_course, @forum, @topic)) if can?(:edit, @topic)
-    = delete_button(course_forum_topic_path(current_course, @forum, @topic)) if can?(:destroy, @topic)
+  = edit_button(edit_course_forum_topic_path(current_course, @forum, @topic)) if can?(:edit, @topic)
+  = delete_button(course_forum_topic_path(current_course, @forum, @topic)) if can?(:destroy, @topic)
