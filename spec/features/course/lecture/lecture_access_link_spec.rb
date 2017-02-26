@@ -32,8 +32,8 @@ RSpec.feature 'Course: Lectures', js: true do
       scenario 'Can generate link for active lecture' do
         visit course_lectures_path(course)
         valid_lecture_eid = lecture_eid valid_lecture
-        expect(page).not_to have_selector(lecture_eid ended_lecture)
-        expect(page).not_to have_selector(lecture_eid not_started_lecture)
+        expect(page).not_to have_selector(lecture_eid(ended_lecture))
+        expect(page).not_to have_selector(lecture_eid(not_started_lecture))
         expect(page).to have_selector(valid_lecture_eid)
         page.find(valid_lecture_eid).click
         wait_for_ajax

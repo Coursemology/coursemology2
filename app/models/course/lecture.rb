@@ -78,7 +78,7 @@ class Course::Lecture < ActiveRecord::Base
     return [classroom_id, nil] if classroom_id
     res = call_braincert_api '/v2/schedule', create_classroom_params
     res_body = JSON.parse(res.body)
-    if (error = res_body['error'])
+    if (error = res_body['error']).present?
       return nil, I18n.t(:'course.lectures.error_creating_classroom', error: error)
     else
       update!(classroom_id: res_body['class_id']) && [res_body['class_id'], nil]
