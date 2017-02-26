@@ -19,6 +19,7 @@ class Course < ActiveRecord::Base
   has_many :notifications, dependent: :destroy
 
   has_many :announcements, dependent: :destroy
+  has_many :lectures, dependent: :destroy
   # The order needs to be preserved, this makes sure that the root_folder will be saved first
   has_many :material_folders, class_name: Course::Material::Folder.name, inverse_of: :course,
                               dependent: :destroy
@@ -124,6 +125,14 @@ class Course < ActiveRecord::Base
 
   def advance_start_at_duration=(time)
     settings(:course).advance_start_at_duration = time
+  end
+
+  def braincert_whiteboard_api_key
+    settings(:course).braincert_whiteboard_api_key
+  end
+
+  def braincert_whiteboard_api_key=(value)
+    settings(:course).braincert_whiteboard_api_key = value
   end
 
   # Convert the days to time duration and store it.
