@@ -25,5 +25,11 @@ FactoryGirl.define do
         course.settings(:components, :course_videos_component).enabled = true
       end
     end
+
+    trait :with_lecture_component_enabled do
+      after(:build) do |course|
+        course.settings(:components, :course_lectures_component).enabled = true
+      end
+    end
   end
 end
