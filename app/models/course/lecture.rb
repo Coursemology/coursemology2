@@ -15,7 +15,7 @@ class Course::Lecture < ActiveRecord::Base
     if (msg = lecture_inactive?).present?
       return nil, msg
     end
-    _, error = create_classroom()
+    _, error = create_classroom
     return [nil, error] if error
     generate_classroom_link(user, is_instructor)
   end
@@ -32,12 +32,12 @@ class Course::Lecture < ActiveRecord::Base
     res = call_braincert_api('/v2/getclasslaunch',
                              generate_classroom_link_params(user, is_instructor))
     res_body = JSON.parse(res.body)
-    if (error = res_body['error']).present?
+    error = res_body['error']
+    if error
       return nil, I18n.t(:'course.lectures.error_generating_link', error: error)
     else
-      link = res_body['encryptedlaunchurl']
-      update!(instructor_classroom_link: link) if is_instructor
-      [link, nil]
+      update!(instructor_classroom_link: res_body['encryptedlaunchurl']) if is_instructor
+      [res_body['encryptedlaunchurl'], nil]
     end
   end
 
@@ -80,7 +80,8 @@ class Course::Lecture < ActiveRecord::Base
     return [classroom_id, nil] if classroom_id
     res = call_braincert_api '/v2/schedule', create_classroom_params
     res_body = JSON.parse(res.body)
-    if (error = res_body['error']).present?
+    error = res_body['error']
+    if error
       return nil, I18n.t(:'course.lectures.error_creating_classroom', error: error)
     else
       update!(classroom_id: res_body['class_id']) && [res_body['class_id'], nil]

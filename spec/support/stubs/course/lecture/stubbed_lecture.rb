@@ -6,7 +6,7 @@ module Course::StubbedLecture
     update! classroom_id: 1
   end
 
-  def generate_classroom_link(user, is_instructor)
+  def generate_classroom_link(_user, is_instructor)
     link = "https://lecture_link_#{id}.com"
     update! instructor_classroom_link: link if is_instructor
     [link, nil]
