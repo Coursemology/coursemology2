@@ -2,10 +2,14 @@
 require 'rails_helper'
 
 RSpec.feature 'Course: Administration: Components' do
-  let!(:instance) { create(:instance, :with_video_component_enabled) }
+  let!(:instance) do
+    create(:instance, :with_video_component_enabled, :with_lecture_component_enabled)
+  end
 
   with_tenant(:instance) do
-    let(:course) { create(:course, :with_video_component_enabled) }
+    let(:course) do
+      create(:course, :with_video_component_enabled, :with_lecture_component_enabled)
+    end
     let(:components) { Course::ControllerComponentHost.components.select(&:can_be_disabled?) }
     let(:sample_component_id) do
       "settings_effective_enabled_component_ids_#{components.sample.key}"
