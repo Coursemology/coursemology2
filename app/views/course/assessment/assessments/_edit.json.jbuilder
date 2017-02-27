@@ -1,6 +1,6 @@
 json.attributes do
   json.(@assessment, :id, :title, :description, :start_at, :end_at, :bonus_end_at, :base_exp,
-    :time_bonus_exp, :published, :autograded, :skippable, :tabbed_view, :password)
+    :time_bonus_exp, :published, :autograded, :skippable, :tabbed_view, :password, :delayed_grade_publication)
 end
 
 json.mode_switching @assessment.allow_mode_switching?
