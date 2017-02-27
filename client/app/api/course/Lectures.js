@@ -11,7 +11,11 @@ export default class LecturesAPI extends BaseCourseAPI {
   */
   accessLink(lectureId) {
     return this.getClient()
-      .get(Routes.access_link_course_lecture_path(
-        this.getCourseId(), lectureId, { format: 'json' }));
+      .get(`${this._getUrlPrefix()}/${lectureId}/access_link`,
+        this.getCourseId(), lectureId, { format: 'json' });
+  }
+
+  _getUrlPrefix() {
+    return `/courses/${this.getCourseId()}/lectures`;
   }
 }

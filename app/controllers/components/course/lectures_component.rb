@@ -26,7 +26,7 @@ class Course::LecturesComponent < SimpleDelegator
         key: :lectures,
         icon: 'television',
         title: settings.title || t('course.lectures.sidebar_title'),
-        weight: 1,
+        weight: 1.5,
         path: course_lectures_path(current_course)
       }
     ]

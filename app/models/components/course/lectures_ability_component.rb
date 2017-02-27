@@ -14,10 +14,7 @@ module Course::LecturesAbilityComponent
   private
 
   def allow_students_show_lectures
-    can :read, Course::Lecture,
-        course_all_course_users_hash
-    can :access_link, Course::Lecture,
-        course_all_course_users_hash
+    can [:read, :access_link], Course::Lecture, course_all_course_users_hash
   end
 
   def allow_staff_manage_lectures

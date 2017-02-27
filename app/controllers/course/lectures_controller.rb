@@ -4,9 +4,11 @@ class Course::LecturesController < Course::ComponentController
   before_action :add_lecture_breadcrumb
 
   def access_link #:nodoc:
+    braincert_api_service = Course::Lecture::BraincertApiService.new(@lecture, @settings)
     respond_to do |format|
       format.json do
-        link, errors = @lecture.handle_access_link(current_user, can?(:manage, @lecture))
+        link, errors = braincert_api_service.handle_access_link(current_user,
+                                                                can?(:manage, @lecture))
         if errors.present?
           render json: { errors: errors }, status: 400
         else
@@ -17,8 +19,7 @@ class Course::LecturesController < Course::ComponentController
   end
 
   def index #:nodoc:
-    @lectures = @lectures.includes(:creator).sorted_by_date
-    @lectures = @lectures.page(page_param)
+    @lectures = @lectures.includes(:creator).sorted_by_date.page(page_param)
   end
 
   def show; end #:nodoc:
