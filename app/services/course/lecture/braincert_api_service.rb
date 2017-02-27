@@ -53,7 +53,8 @@ class Course::Lecture::BraincertApiService
     diff = @lecture.start_at - Time.zone.now
     if diff > 0
       desc = ActionController::Base.helpers.distance_of_time_in_words(
-        distance_of_time_in_words(diff))
+        distance_of_time_in_words(diff)
+      )
       I18n.t(:'course.lectures.lesson_live_in', desc: desc)
     else
       I18n.t(:'course.lectures.lesson_already_conducted')
