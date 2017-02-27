@@ -11,7 +11,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
   * error response: { errors: [] } - An array of errors will be returned upon validation error.
   */
   update(assessmentId, params) {
-    return this.getClient().patch(`${this._geturlprefix()}/${assessmentid}`, params);
+    return this.getClient().patch(`${this._getUrlPrefix()}/${assessmentId}`, params);
   }
 
   _getUrlPrefix() {
