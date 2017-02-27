@@ -3,11 +3,13 @@ json.questions do
     @question_options = question.options
     json.partial! 'course/survey/questions/question', question: question
     json.answers do
-      submitted_answers = question.answers.select { |answer| answer.response.submitted? }
-      json.array! submitted_answers do |answer|
+      student_submitted_answers = question.answers.select do |answer|
+        answer.response.submitted? && answer.response.course_user.student?
+      end
+      json.array! student_submitted_answers do |answer|
         json.(answer, :id)
         json.course_user_name answer.response.course_user.name
-        json.course_user_role answer.response.course_user.role
+        json.phantom answer.response.course_user.phantom?
         if question.text?
           json.(answer, :text_response)
         else

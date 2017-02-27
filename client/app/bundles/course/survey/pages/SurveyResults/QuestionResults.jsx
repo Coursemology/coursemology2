@@ -89,6 +89,7 @@ const translations = defineMessages({
 class QuestionResults extends React.Component {
   static propTypes = {
     index: PropTypes.number.isRequired,
+    includePhantoms: PropTypes.bool.isRequired,
     question: PropTypes.shape({
       id: PropTypes.number,
       description: PropTypes.string,
@@ -101,7 +102,7 @@ class QuestionResults extends React.Component {
       answers: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number,
         course_user_name: PropTypes.string,
-        course_user_role: PropTypes.string,
+        phantom: PropTypes.bool,
         selected_options: PropTypes.arrayOf(PropTypes.number),
       })),
     }).isRequired,
@@ -158,13 +159,14 @@ class QuestionResults extends React.Component {
    * Computes the list and count of students that selected each option for the current question.
    */
   getOptionsBreakdown() {
-    const { question: { options, answers } } = this.props;
+    const { includePhantoms, question: { options, answers } } = this.props;
     const breakdown = { length: answers.length };
     options.forEach((option) => {
       breakdown[option.id] = { count: 0, names: [] };
     });
     answers.forEach((answer) => {
       answer.selected_options.forEach((selectedOption) => {
+        if (!includePhantoms && answer.phantom) { return; }
         breakdown[selectedOption].count += 1;
         breakdown[selectedOption].names.push(answer.course_user_name);
       });
@@ -219,7 +221,8 @@ class QuestionResults extends React.Component {
   }
 
   renderTextResults() {
-    const { question: { answers } } = this.props;
+    const { includePhantoms, question: { answers } } = this.props;
+    const filteredAnswers = includePhantoms ? answers : answers.filter(answer => !answer.phantom);
     return (
       <Table height="300px">
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
@@ -233,7 +236,7 @@ class QuestionResults extends React.Component {
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
-          {answers.map((answer, index) => (
+          {filteredAnswers.map((answer, index) => (
             <TableRow key={answer.id}>
               <TableRowColumn>{ index + 1 }</TableRowColumn>
               <TableRowColumn colSpan={15}>{ answer.text_response }</TableRowColumn>

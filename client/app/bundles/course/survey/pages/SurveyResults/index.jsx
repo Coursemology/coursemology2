@@ -1,16 +1,25 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { browserHistory } from 'react-router';
 import TitleBar from 'lib/components/TitleBar';
 import IconButton from 'material-ui/IconButton';
 import Subheader from 'material-ui/Subheader';
+import Toggle from 'material-ui/Toggle';
+import { Card, CardText } from 'material-ui/Card';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import { sorts } from '../../utils';
 import surveyTranslations from '../../translations';
 import { fetchResults } from '../../actions/surveys';
 import QuestionResults from './QuestionResults';
 import { surveyShape, questionShape } from '../../propTypes';
+
+const translations = defineMessages({
+  includePhantoms: {
+    id: 'course.surveys.SurveyResults.includePhantoms',
+    defaultMessage: 'Include Phantom Students',
+  },
+});
 
 class SurveyResults extends React.Component {
   static propTypes = {
@@ -21,6 +30,11 @@ class SurveyResults extends React.Component {
     }).isRequired,
     survey: surveyShape,
     questions: PropTypes.arrayOf(questionShape),
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = { includePhantoms: false };
   }
 
   componentDidMount() {
@@ -40,6 +54,7 @@ class SurveyResults extends React.Component {
           questions.sort(byWeight).map((question, index) =>
             <QuestionResults
               key={question.id}
+              includePhantoms={this.state.includePhantoms}
               {...{ question, index }}
             />
           )
@@ -57,6 +72,15 @@ class SurveyResults extends React.Component {
           iconElementLeft={<IconButton><ArrowBack /></IconButton>}
           onLeftIconButtonTouchTap={() => browserHistory.push(`/courses/${courseId}/surveys`)}
         />
+        <Card>
+          <CardText>
+            <Toggle
+              label={<FormattedMessage {...translations.includePhantoms} />}
+              labelPosition="right"
+              onToggle={(_, value) => this.setState({ includePhantoms: value })}
+            />
+          </CardText>
+        </Card>
         <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
         {this.renderResults()}
       </div>
