@@ -60,6 +60,10 @@ class Course::AnnouncementsController < Course::ComponentController
   # @return [Course::AnnouncementsComponent] The announcement component.
   # @return [nil] If announcement component is disabled.
   def component
+    puts '###################################'
+    puts current_component_host.components
+    current_component_host.components.each { |c| puts c.key.to_s }
+    puts '###################################'
     current_component_host[:course_announcements_component]
   end
 end

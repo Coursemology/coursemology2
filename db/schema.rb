@@ -505,6 +505,20 @@ ActiveRecord::Schema.define(version: 20170222101701) do
   end
   add_index "course_group_users", ["course_user_id", "group_id"], :name=>"index_course_group_users_on_course_user_id_and_course_group_id", :unique=>true
 
+  create_table "course_lectures", force: :cascade do |t|
+    t.integer  "course_id",                 :null=>false, :index=>{:name=>"fk__course_lectures_course_id"}, :foreign_key=>{:references=>"courses", :name=>"fk_course_lectures_course_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.text     "instructor_classroom_link"
+    t.integer  "classroom_id"
+    t.string   "title",                     :limit=>255, :null=>false
+    t.text     "content"
+    t.datetime "start_at",                  :null=>false
+    t.datetime "end_at",                    :null=>false
+    t.integer  "creator_id",                :null=>false, :index=>{:name=>"fk__course_lectures_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_lectures_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "updater_id",                :null=>false, :index=>{:name=>"fk__course_lectures_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_lectures_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "created_at",                :null=>false
+    t.datetime "updated_at",                :null=>false
+  end
+
   create_table "course_lesson_plan_events", force: :cascade do |t|
     t.string  "location",   :limit=>255
     t.integer "event_type", :default=>0, :null=>false

@@ -1,0 +1,8 @@
+en:
+  course:
+    admin:
+      lecture_settings:
+        edit:
+          title_placeholder: 'Leave blank to use default title'
+        update:
+          success: 'Lecture settings updated.'
