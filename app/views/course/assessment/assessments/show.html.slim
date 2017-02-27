@@ -80,6 +80,11 @@
             = link_to(t('.new_question.programming'),
                       new_course_assessment_question_programming_path(current_course, @assessment),
                       role: 'menuitem')
+          / Uncomment code to create scribing question
+          /li role='presentation'
+          /  = link_to(t('.new_question.scribing'),
+          /            new_course_assessment_question_scribing_path(current_course, @assessment),
+          /            role: 'menuitem')
 
     h3 = t('.questions')
     br
