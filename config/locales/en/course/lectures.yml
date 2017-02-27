@@ -15,8 +15,8 @@ en:
       destroy:
         success: 'Lecture %{title} was deleted.'
         failure: 'Failed to delete lecture: %{error}'
-      lesson_already_conducted: "lesson has already been conducted"
-      lesson_live_in: "lesson will go live in %{desc}, please refresh the page when it is live"
+      lesson_already_conducted: "The lesson has already ended"
+      lesson_live_in: "The lesson will go live in %{desc}, please refresh the page when it is live"
       error_generating_link: "Error generating access link: %{error}"
       error_creating_classroom: "Error creating classroom: %{error}"
       go_to_lecture: "Go to virtual lecture"

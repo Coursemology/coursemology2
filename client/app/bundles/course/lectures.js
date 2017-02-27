@@ -1,7 +1,7 @@
 import CourseAPI from 'api/course';
 
 $(document).ready(() => {
-  $(document).on('click', '.gen-access-link', function() {
+  $(document).on('click', '.gen-access-link', function () {
     const $this = $(this);
     const splits = $this.attr('id').split('-');
     const lectureId = splits[2];
@@ -10,7 +10,7 @@ $(document).ready(() => {
       .then((res) => {
         $this.removeClass('disabled');
         const { data: { link } } = res;
-        let $link = $('#lec-link-' + lectureId);
+        const $link = $(`#lec-link-${lectureId}`);
         if ($link.length) {
           $link.attr('href', link);
         } else {
@@ -32,6 +32,6 @@ $(document).ready(() => {
               .text(errors)
             );
         }
-      })
+      });
   });
 });
