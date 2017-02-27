@@ -52,17 +52,19 @@ class MaterialSummernote extends React.Component {
     const IMAGE_MAX_WIDTH = 1920;
     const IMAGE_MAX_HEIGHT = 1080;
 
+    const img = document.createElement('img');
+    const canvas = document.createElement('canvas');
+
     const reader = new FileReader();
     reader.onload = function onload(e) {
-      const img = document.createElement('img');
-      const canvas = document.createElement('canvas');
-
       img.src = e.target.result;
+    };
+    img.onload = function onload() {
       let width = img.width;
       let height = img.height;
 
       if (width <= IMAGE_MAX_WIDTH && height <= IMAGE_MAX_HEIGHT) {
-        onImageCompressed(e.target.result);
+        onImageCompressed(img.src);
         return;
       }
       if (width > IMAGE_MAX_WIDTH) {
