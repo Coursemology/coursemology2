@@ -4,16 +4,10 @@ class Course::LecturesController < Course::ComponentController
   before_action :add_lecture_breadcrumb
 
   def access_link #:nodoc:
-    braincert_api_service = Course::Lecture::BraincertApiService.new(@lecture, @settings)
+    @braincert_api_service = Course::Lecture::BraincertApiService.new(@lecture, @settings)
     respond_to do |format|
       format.json do
-        link, errors = braincert_api_service.handle_access_link(current_user,
-                                                                can?(:manage, @lecture))
-        if errors.present?
-          render json: { errors: errors }, status: 400
-        else
-          render json: { link: link }
-        end
+        render_access_link
       end
     end
   end
@@ -57,6 +51,16 @@ class Course::LecturesController < Course::ComponentController
   end
 
   private
+
+  def render_access_link
+    link, errors = @braincert_api_service.handle_access_link(current_user,
+                                                             can?(:manage, @lecture))
+    if errors.present?
+      render json: { errors: errors }, status: 400
+    else
+      render json: { link: link }
+    end
+  end
 
   def lecture_params #:nodoc:
     params.require(:lecture).permit(:title, :content, :start_at, :end_at)

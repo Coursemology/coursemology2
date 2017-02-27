@@ -31,12 +31,9 @@ class Course::Lecture::BraincertApiService
                              generate_classroom_link_params(user, is_instructor))
     res_body = JSON.parse(res.body)
     error = res_body['error']
-    if error
-      return nil, I18n.t(:'course.lectures.error_generating_link', error: error)
-    else
-      @lecture.update!(instructor_classroom_link: res_body['encryptedlaunchurl']) if is_instructor
-      [res_body['encryptedlaunchurl'], nil]
-    end
+    return [nil, I18n.t(:'course.lectures.error_generating_link', error: error)] if error
+    @lecture.update!(instructor_classroom_link: res_body['encryptedlaunchurl']) if is_instructor
+    return res_body['encryptedlaunchurl'], nil
   end
 
   def generate_classroom_link_params(user, is_instructor)
@@ -56,7 +53,8 @@ class Course::Lecture::BraincertApiService
     diff = @lecture.start_at - Time.zone.now
     if diff > 0
       I18n.t(:'course.lectures.lesson_live_in',
-             desc: distance_of_time_in_words(diff))
+             desc: ActionController::Base.helpers.distance_of_time_in_words(
+               distance_of_time_in_words(diff)))
     else
       I18n.t(:'course.lectures.lesson_already_conducted')
     end
@@ -77,11 +75,8 @@ class Course::Lecture::BraincertApiService
     res = call_braincert_api '/v2/schedule', create_classroom_params
     res_body = JSON.parse(res.body)
     error = res_body['error']
-    if error
-      return nil, I18n.t(:'course.lectures.error_creating_classroom', error: error)
-    else
-      @lecture.update!(classroom_id: res_body['class_id']) && [res_body['class_id'], nil]
-    end
+    return [nil, I18n.t(:'course.lectures.error_creating_classroom', error: error)] if error
+    @lecture.update!(classroom_id: res_body['class_id']) && [res_body['class_id'], nil]
   end
 
   def create_classroom_params
