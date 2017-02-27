@@ -127,14 +127,6 @@ class Course < ActiveRecord::Base
     settings(:course).advance_start_at_duration = time
   end
 
-  def braincert_whiteboard_api_key
-    settings(:course).braincert_whiteboard_api_key
-  end
-
-  def braincert_whiteboard_api_key=(value)
-    settings(:course).braincert_whiteboard_api_key = value
-  end
-
   # Convert the days to time duration and store it.
   def advance_start_at_duration_days=(value)
     value = if value.present? && value.to_i > 0

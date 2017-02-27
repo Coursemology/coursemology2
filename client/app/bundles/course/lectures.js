@@ -22,16 +22,16 @@ $(document).ready(() => {
         }
       })
       .catch((error) => {
-      $this.removeClass('disabled');
-      const { response: { data: { errors } } } = error;
-      if (errors) {
-        $this.closest('.access-link')
-          .append('<br/>')
-          .append($('<i></i>')
-            .addClass('error')
-            .text(errors)
-          );
-      }
-    })
+        $this.removeClass('disabled');
+        const { response: { data: { errors } } } = error;
+        if (errors) {
+          $this.closest('.access-link')
+            .append('<br/>')
+            .append($('<i></i>')
+              .addClass('error')
+              .text(errors)
+            );
+        }
+      })
   });
 });

@@ -13,6 +13,20 @@ class Course::LectureSettings
     @settings = settings
   end
 
+  # Returns BrainCert Whiteboard API key of lectures component
+  #
+  # @return [String] The custom or default title of lectures component
+  def braincert_whiteboard_api_key
+    @settings.braincert_whiteboard_api_key
+  end
+
+  # Sets BrainCert Whiteboard API key of lectures component
+  #
+  # @param [String] value The new API key
+  def braincert_whiteboard_api_key=(value)
+    @settings.braincert_whiteboard_api_key = value
+  end
+
   # Returns the title of lectures component
   #
   # @return [String] The custom or default title of lectures component

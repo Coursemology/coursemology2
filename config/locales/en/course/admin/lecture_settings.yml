@@ -4,5 +4,8 @@ en:
       lecture_settings:
         edit:
           title_placeholder: 'Leave blank to use default title'
+          braincert_whiteboard_api_key_hint: >
+            For Lecture component
+          gamified_label: >
         update:
           success: 'Lecture settings updated.'

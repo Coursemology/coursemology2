@@ -8,7 +8,7 @@ class Course::LecturesController < Course::ComponentController
       format.json do
         link, errors = @lecture.handle_access_link(current_user, can?(:manage, @lecture))
         if errors.present?
-          render json: { errors: errors }
+          render json: { errors: errors }, status: 400
         else
           render json: { link: link }
         end

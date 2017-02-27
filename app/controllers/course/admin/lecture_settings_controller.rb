@@ -16,7 +16,7 @@ class Course::Admin::LectureSettingsController < Course::Admin::Controller
   private
 
   def lecture_settings_params #:nodoc:
-    params.require(:lecture_settings).permit(:title, :pagination)
+    params.require(:lecture_settings).permit(:title, :pagination, :braincert_whiteboard_api_key)
   end
 
   # Load our settings adapter to handle lecture settings

@@ -70,8 +70,10 @@ class Course::Lecture < ActiveRecord::Base
 
   def call_braincert_api(action, params)
     action = '/' + action unless action[0] == '/'
+    settings = Course::LectureSettings.new(course.settings(:lecture))
+    api_key = settings.braincert_whiteboard_api_key
     post "#{BRAINCERT_API_BASE_URL}#{action}",
-         params.merge(apikey: course.braincert_whiteboard_api_key)
+         params.merge(apikey: api_key)
   end
 
   def create_classroom
