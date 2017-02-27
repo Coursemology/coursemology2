@@ -34,6 +34,53 @@ class MaterialSummernote extends React.Component {
     }
   };
 
+  onImageUpload = (files) => {
+    for (let i = 0; i < files.length; i += 1) {
+      this.compressImage(files[i], (dataUrl) => {
+        const img = document.createElement('img');
+        img.src = dataUrl;
+        ReactSummernote.insertNode(img);
+      });
+    }
+  }
+
+  compressImage = (image, onImageCompressed) => {
+    // Maximum image size, images larger than this will be compressed
+    const IMAGE_MAX_WIDTH = 1920;
+    const IMAGE_MAX_HEIGHT = 1080;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const img = document.createElement('img');
+      const canvas = document.createElement('canvas');
+
+      img.src = e.target.result;
+      let width = img.width;
+      let height = img.height;
+
+      if (width <= IMAGE_MAX_WIDTH && height <= IMAGE_MAX_HEIGHT) {
+        onImageCompressed(e.target.result);
+        return;
+      }
+      if (width > IMAGE_MAX_WIDTH) {
+        height *= IMAGE_MAX_WIDTH / width;
+        width = IMAGE_MAX_WIDTH;
+      }
+      if (height > IMAGE_MAX_HEIGHT) {
+        width *= IMAGE_MAX_HEIGHT / height;
+        height = IMAGE_MAX_HEIGHT;
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      onImageCompressed(canvas.toDataURL('image/jpeg'));
+    };
+    reader.readAsDataURL(image);
+  };
+
   render() {
     const {
       baseTheme,
@@ -88,21 +135,22 @@ class MaterialSummernote extends React.Component {
               dialogsInBody: false,
               disabled: this.props.disabled,
               toolbar: [
-                ['paragraph-style', ['style']],
-                ['font-style', ['bold', 'underline', 'clear']],
-                ['font-script', ['superscript', 'subscript']],
-                ['font-name', ['fontname']],
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['script', ['superscript', 'subscript']],
+                ['fontname', ['fontname']],
                 ['color', ['color']],
-                ['paragraph', ['ul', 'ol', 'paragraph']],
+                ['para', ['ul', 'ol', 'paragraph']],
                 ['table', ['table']],
                 ['insert', ['link', 'picture', 'video']],
-                ['misc', ['fullscreen', 'codeview', 'help']],
+                ['view', ['fullscreen', 'codeview', 'help']],
               ],
             }}
             value={this.props.value}
             onChange={this.props.onChange}
             onFocus={() => { this.setState({ isFocused: true }); }}
             onBlur={() => { this.setState({ isFocused: false }); }}
+            onImageUpload={this.onImageUpload}
           />
         </div>
       </div>

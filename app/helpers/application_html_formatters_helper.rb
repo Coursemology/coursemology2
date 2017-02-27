@@ -33,7 +33,7 @@ module ApplicationHTMLFormattersHelper
 
     Sanitize.node!(node, elements: ['iframe'],
                          attributes: {
-                           'iframe' => %w(allowfullscreen frameborder height src width)
+                           'iframe' => ['allowfullscreen', 'frameborder', 'height', 'src', 'width']
                          })
 
     { node_whitelist: [node] }
@@ -51,10 +51,10 @@ module ApplicationHTMLFormattersHelper
     list[:attributes][:all] |= ['style']
     list[:attributes]['font'] = ['face']
     list[:attributes]['table'] = ['class']
-    list[:css] = { properties: %w(
-      background-color color float font-family height margin
-      margin-bottom margin-left margin-right margin-top text-align width
-    ) }
+    list[:css] = { properties: [
+      'background-color', 'color', 'float', 'font-family', 'height', 'margin',
+      'margin-bottom', 'margin-left', 'margin-right', 'margin-top', 'text-align', 'width'
+    ] }
     list[:transformers] |= [VIDEO_WHITELIST_TRANSFORMER]
     list
   end
