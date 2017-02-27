@@ -11,15 +11,51 @@ module ApplicationHTMLFormattersHelper
                                          HTML::Pipeline::RougeFilter
                                        ], DefaultPipelineOptions)
 
+  # List of video hosting site URLs to allow
+  VIDEO_URL_WHITELIST = Regexp.union(
+    /\A(?:https?:)?\/\/(?:www\.)?youtube\.com\//,
+    /\A(?:https?:)?\/\/(?:www\.)?youtu.be\//,
+    /\A(?:https?:)?\/\/(?:www\.)?vimeo\.com\//,
+    /\A(?:https?:)?\/\/(?:www\.)?vine\.co\//,
+    /\A(?:https?:)?\/\/(?:www\.)?instagram\.com\//,
+    /\A(?:https?:)?\/\/(?:www\.)?dailymotion\.com\//,
+    /\A(?:https?:)?\/\/(?:www\.)?youku\.com\//
+  )
+
+  # Transformer to whitelist iframes containing embedded video content
+  VIDEO_WHITELIST_TRANSFORMER = lambda do |env|
+    node, node_name = env[:node], env[:node_name]
+
+    return if env[:is_whitelisted] || !node.element?
+
+    return unless node_name == 'iframe'
+    return unless node['src'].match VIDEO_URL_WHITELIST
+
+    Sanitize.node!(node, elements: ['iframe'],
+                         attributes: {
+                           'iframe' => %w(allowfullscreen frameborder height src width)
+                         })
+
+    { node_whitelist: [node] }
+  end
+
   # SanitizationFilter Custom Options
   #
   # - Allow whitelisting of base64 encoded images for HTML text.
   # Link: https://github.com/jch/html-pipeline#2-how-do-i-customize-a-whitelist-for-sanitizationfilters
   # TODO: Remove 'data' once we disable Base64 encoding
-  # TODO: Figure out how to whitelist 'style' as WYSIWYG editor adds that attribute.
-  SANITIZATION_FILTER_WHITELIST ||= begin
+  SANITIZATION_FILTER_WHITELIST = begin
     list = HTML::Pipeline::SanitizationFilter::WHITELIST
-    list[:protocols]['img']['src'] << 'data' unless list[:protocols]['img']['src'].include?('data')
+    list[:protocols]['img']['src'] |= ['data']
+    list[:elements] |= ['span', 'font']
+    list[:attributes][:all] |= ['style']
+    list[:attributes]['font'] = ['face']
+    list[:attributes]['table'] = ['class']
+    list[:css] = { properties: %w(
+      background-color color float font-family height margin
+      margin-bottom margin-left margin-right margin-top text-align width
+    ) }
+    list[:transformers] |= [VIDEO_WHITELIST_TRANSFORMER]
     list
   end
 
