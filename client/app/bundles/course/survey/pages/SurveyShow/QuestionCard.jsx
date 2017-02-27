@@ -8,7 +8,7 @@ import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { sorts } from '../../utils';
 import { questionTypes } from '../../constants';
-import { optionShape } from '../../propTypes';
+import { questionShape } from '../../propTypes';
 import OptionsListItem from '../../components/OptionsListItem';
 
 const styles = {
@@ -118,13 +118,7 @@ class QuestionCard extends React.Component {
 }
 
 QuestionCard.propTypes = {
-  question: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    description: PropTypes.string.isRequired,
-    weight: PropTypes.number.isRequired,
-    question_type: PropTypes.number.isRequired,
-    options: PropTypes.arrayOf(optionShape),
-  }),
+  question: questionShape,
   adminFunctions: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
     handler: PropTypes.func,

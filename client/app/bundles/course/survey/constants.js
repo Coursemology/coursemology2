@@ -1,9 +1,9 @@
 import mirrorCreator from 'mirror-creator';
 
 export const questionTypes = {
-  TEXT: '0',
-  MULTIPLE_CHOICE: '1',
-  MULTIPLE_RESPONSE: '2',
+  TEXT: 'text',
+  MULTIPLE_CHOICE: 'multiple_choice',
+  MULTIPLE_RESPONSE: 'multiple_response',
 };
 
 export const formNames = mirrorCreator([
