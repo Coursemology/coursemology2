@@ -1,6 +1,6 @@
-import * as fs from 'fs';
-import { sync as globSync } from 'glob';
-import { sync as mkdirpSync } from 'mkdirp';
+const fs = require('fs');
+const globSync = require('glob').sync;
+const mkdirpSync = require('mkdirp').sync;
 
 const FILE_PATTERN = './build/messages/**/*.json';
 const OUTPUT_DIR = './build/locales/';

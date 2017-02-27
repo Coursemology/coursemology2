@@ -5,16 +5,16 @@ import ProviderWrapper from 'lib/components/ProviderWrapper';
 import storeCreator from './store';
 import routes from './routes';
 
-const mountNode = document.getElementById('course-survey-component');
+$(document).ready(() => {
+  const mountNode = document.getElementById('course-survey-component');
 
-if (mountNode) {
-  const store = storeCreator({ surveys: {} });
+  if (mountNode) {
+    const store = storeCreator({ surveys: {} });
 
-  $(document).ready(() => {
     render(
       <ProviderWrapper {...{ store }}>
         <Router routes={routes} history={browserHistory} />
       </ProviderWrapper>
     , mountNode);
-  });
-}
+  }
+});

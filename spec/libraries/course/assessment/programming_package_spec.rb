@@ -14,7 +14,7 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
 
   def temp_package_stream
     package_path = Rails.application.config.x.temp_folder.join('spec/packages')
-    Dir.mkdir(package_path) unless Dir.exist?(package_path)
+    FileUtils.mkdir_p(package_path) unless Dir.exist?(package_path)
     Tempfile.create('programming_package', package_path)
   end
 

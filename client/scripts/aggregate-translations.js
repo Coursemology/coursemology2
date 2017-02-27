@@ -1,7 +1,7 @@
-import { sync as globSync } from 'glob';
-import { sync as mkdirpSync } from 'mkdirp';
-import * as fs from 'fs';
-import * as path from 'path';
+const fs = require('fs');
+const path = require('path');
+const globSync = require('glob').sync;
+const mkdirpSync = require('mkdirp').sync;
 
 const OUTPUT_DIR = './build/locales/';
 

@@ -11,7 +11,6 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require coursemology.bundle
 //= require i18n/translations
 //= require js-routes
 //= require bootstrap-sprockets
