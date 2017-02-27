@@ -33,7 +33,7 @@ class Course::Lecture::BraincertApiService
     error = res_body['error']
     return [nil, I18n.t(:'course.lectures.error_generating_link', error: error)] if error
     @lecture.update!(instructor_classroom_link: res_body['encryptedlaunchurl']) if is_instructor
-    return res_body['encryptedlaunchurl'], nil
+    [res_body['encryptedlaunchurl'], nil]
   end
 
   def generate_classroom_link_params(user, is_instructor)
@@ -52,9 +52,9 @@ class Course::Lecture::BraincertApiService
     return if @lecture.currently_active?
     diff = @lecture.start_at - Time.zone.now
     if diff > 0
-      I18n.t(:'course.lectures.lesson_live_in',
-             desc: ActionController::Base.helpers.distance_of_time_in_words(
-               distance_of_time_in_words(diff)))
+      desc = ActionController::Base.helpers.distance_of_time_in_words(
+        distance_of_time_in_words(diff))
+      I18n.t(:'course.lectures.lesson_live_in', desc: desc)
     else
       I18n.t(:'course.lectures.lesson_already_conducted')
     end
