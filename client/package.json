@@ -70,6 +70,7 @@
     "intl": "^1.2.5",
     "jquery-ui": "^1.12.1",
     "json-loader": "^0.5.4",
+    "lodash": "^4.17.4",
     "material-ui": "^0.17.1",
     "mirror-creator": "1.1.0",
     "mkdirp": "^0.5.1",
