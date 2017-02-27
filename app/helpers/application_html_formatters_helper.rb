@@ -29,7 +29,7 @@ module ApplicationHTMLFormattersHelper
     return if env[:is_whitelisted] || !node.element?
 
     return unless node_name == 'iframe'
-    return unless node['src'].match VIDEO_URL_WHITELIST
+    return unless node['src']&.match VIDEO_URL_WHITELIST
 
     Sanitize.node!(node, elements: ['iframe'],
                          attributes: {

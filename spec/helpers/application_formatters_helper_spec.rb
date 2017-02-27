@@ -95,6 +95,13 @@ RSpec.describe ApplicationFormattersHelper do
           expect(helper.format_html(html)).to include('data')
         end
       end
+
+      context 'when provided iframe does not have an src attribute' do
+        it 'removes the iframe tag' do
+          html = '<iframe></iframe>'
+          expect(helper.format_html(html)).to be_empty
+        end
+      end
     end
 
     describe '#format_code_block' do
