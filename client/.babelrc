@@ -4,6 +4,11 @@
     "stage-2",
     "react"
   ],
+  "env": {
+    "test": {
+      "plugins": ["transform-es2015-modules-commonjs"]
+    }
+  },
   "plugins": [
     ["react-intl", {
         "messagesDir": "./build/messages/"

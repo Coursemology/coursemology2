@@ -1,0 +1,17 @@
+{
+  "extends": ".eslintrc",
+  "env": {
+    "jest": true
+  },
+  "globals": {
+    "courseId": true,
+    "intl": true,
+    "intlShape": true,
+    "muiTheme": true,
+    "sleep": true,
+  },
+  "rules": {
+    "react/no-find-dom-node": "off",
+    "react/jsx-filename-extension": "off",
+  },
+}

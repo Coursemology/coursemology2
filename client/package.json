@@ -12,13 +12,35 @@
     "build:development": "yarn run build:translations && webpack-dev-server",
     "build:translations": "babel-node scripts/aggregate-translations.js",
     "extract-translations": "yarn run build:production && babel-node scripts/extract-translations.js",
-    "lint": "eslint . --ext .js --ext .jsx --cache",
-    "lint-fix": "eslint . --ext .js --ext .jsx --cache --fix"
+    "lint": "eslint . --ext .js --ext .jsx --cache --ignore-pattern '**/__test__/**' && eslint . --ext .test.js --ext .test.jsx --cache -c .eslintrc.test",
+    "lint-fix": "eslint . --ext .js --ext .jsx --cache --fix --ignore-pattern '**/__test__/**' && eslint . --ext .test.js --ext .test.jsx --cache --fix -c .eslintrc.test"
   },
   "cacheDirectories": [
     "node_modules",
     "client/node_modules"
   ],
+  "jest": {
+    "transform": {
+      ".*": "<rootDir>/node_modules/babel-jest"
+    },
+    "moduleDirectories": [
+      "node_modules",
+      "app"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json"
+    ],
+    "setupTestFrameworkScriptFile": "<rootDir>/app/__test__/setup.js",
+    "snapshotSerializers": [
+      "<rootDir>/node_modules/enzyme-to-json/serializer"
+    ],
+    "moduleNameMapper": {
+      "^api(.*)$": "<rootDir>/app/api$1",
+      "^lib(.*)$": "<rootDir>/app/lib$1"
+    }
+  },
   "dependencies": {
     "@types/moment-timezone": "^0.2.34",
     "axios": "^0.15.3",
@@ -66,13 +88,19 @@
     "webpack-md5-hash": "^0.0.5"
   },
   "devDependencies": {
+    "axios-mock-adapter": "^1.7.1",
     "babel-eslint": "^7.1.1",
+    "babel-jest": "^19.0.0",
+    "enzyme": "^2.7.1",
+    "enzyme-to-json": "^1.5.0",
     "eslint": "^3.9.6",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-import-resolver-webpack": "^0.8.1",
     "eslint-plugin-import": "^2.0.1",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.4.1",
+    "jest": "^19.0.2",
+    "react-addons-test-utils": "^15.4.2",
     "webpack-dev-server": "^2.4.1"
   },
   "license": "MIT",
