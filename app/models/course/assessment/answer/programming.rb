@@ -33,7 +33,7 @@ class Course::Assessment::Answer::Programming < ActiveRecord::Base
     @times_left ||= begin
       return MAX_ATTEMPTING_TIMES unless question.actable.attempt_limit
 
-      times = question.actable.attempt_limit - submission.graded_answers(question).size
+      times = question.actable.attempt_limit - submission.evaluated_or_graded_answers(question).size
       times = 0 if times < 0
       times
     end
