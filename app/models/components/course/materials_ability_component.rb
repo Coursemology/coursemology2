@@ -48,7 +48,7 @@ module Course::MaterialsAbilityComponent
   def allow_staff_manage_materials
     can :manage, Course::Material, material_course_staff_hash
 
-    can :read, Course::Material::Folder, course_staff_hash
+    can [:read, :upload], Course::Material::Folder, course_staff_hash
     can :manage, Course::Material::Folder, course_staff_hash.reverse_merge(concrete_folder_hash)
     # Do not allow admin to edit linked folders
     cannot [:update, :destroy], Course::Material::Folder do |folder|
