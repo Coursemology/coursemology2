@@ -166,8 +166,8 @@ class Course::Assessment::Submission < ActiveRecord::Base
   end
 
   # Returns all graded answers of the question in current submission.
-  def graded_answers(question)
-    answers.select { |a| a.question_id == question.id &&  a.graded? }
+  def evaluated_or_graded_answers(question)
+    answers.select { |a| a.question_id == question.id && (a.evaluated? || a.graded?) }
   end
 
   # Return the points awarded for the submission.
