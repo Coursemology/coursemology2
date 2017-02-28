@@ -21,9 +21,7 @@ class Course::Survey::SurveysController < Course::ComponentController
   def show
     respond_to do |format|
       format.html { render 'index' }
-      format.json do
-        questions
-      end
+      format.json { preload_questions_show }
     end
   end
 
@@ -43,10 +41,24 @@ class Course::Survey::SurveysController < Course::ComponentController
     end
   end
 
+  def results
+    respond_to do |format|
+      format.html { render 'index' }
+      format.json { preload_questions_results }
+    end
+  end
+
   private
 
-  def questions
+  def preload_questions_show
     @questions ||= @survey.questions.accessible_by(current_ability).includes(:options)
+  end
+
+  def preload_questions_results
+    @questions ||= @survey.questions.includes(
+      [options: { attachment_references: :attachment },
+       answers: [:options, response: { experience_points_record: :course_user }]]
+    )
   end
 
   def survey_params

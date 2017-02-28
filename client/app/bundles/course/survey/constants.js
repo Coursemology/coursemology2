@@ -1,9 +1,9 @@
 import mirrorCreator from 'mirror-creator';
 
 export const questionTypes = {
-  TEXT: '0',
-  MULTIPLE_CHOICE: '1',
-  MULTIPLE_RESPONSE: '2',
+  TEXT: 'text',
+  MULTIPLE_CHOICE: 'multiple_choice',
+  MULTIPLE_RESPONSE: 'multiple_response',
 };
 
 export const formNames = mirrorCreator([
@@ -46,6 +46,9 @@ const actionTypes = mirrorCreator([
   'UPDATE_RESPONSE_REQUEST',
   'UPDATE_RESPONSE_SUCCESS',
   'UPDATE_RESPONSE_FAILURE',
+  'LOAD_SURVEY_RESULTS_REQUEST',
+  'LOAD_SURVEY_RESULTS_SUCCESS',
+  'LOAD_SURVEY_RESULTS_FAILURE',
   'SURVEY_FORM_SHOW',
   'SURVEY_FORM_HIDE',
   'QUESTION_FORM_SHOW',

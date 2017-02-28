@@ -77,6 +77,10 @@ const translations = defineMessages({
     id: 'course.surveys.deleteFailure',
     defaultMessage: 'Failed to delete survey.',
   },
+  results: {
+    id: 'course.surveys.results',
+    defaultMessage: 'Results',
+  },
 });
 
 export default translations;

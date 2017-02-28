@@ -142,3 +142,20 @@ export function deleteSurvey(surveyId, successMessage, failureMessage) {
       });
   };
 }
+
+export function fetchResults(surveyId) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.LOAD_SURVEY_RESULTS_REQUEST, surveyId });
+    return CourseAPI.survey.surveys.results(surveyId)
+      .then((response) => {
+        dispatch({
+          type: actionTypes.LOAD_SURVEY_RESULTS_SUCCESS,
+          survey: response.data.survey,
+          questions: response.data.questions,
+        });
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.LOAD_SURVEY_RESULTS_FAILURE, surveyId });
+      });
+  };
+}

@@ -8,6 +8,7 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import Toggle from 'material-ui/Toggle';
+import RaisedButton from 'material-ui/RaisedButton';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { formatDateTime } from 'lib/dateTimeDefaults';
@@ -27,6 +28,9 @@ const translations = defineMessages({
 const styles = {
   table: {
     maxWidth: 600,
+  },
+  resultsButton: {
+    marginRight: 15,
   },
 };
 
@@ -153,6 +157,16 @@ class SurveyDetails extends React.Component {
           {this.renderPublishToggle()}
           {this.renderDescription()}
           <CardText>
+            {
+              survey.canViewResults ?
+                <RaisedButton
+                  style={styles.resultsButton}
+                  label={<FormattedMessage {...surveyTranslations.results} />}
+                  onTouchTap={() => browserHistory.push(
+                  `/courses/${courseId}/surveys/${survey.id}/results`
+                )}
+                /> : null
+            }
             <RespondButton {...{ survey, courseId }} />
           </CardText>
         </Card>

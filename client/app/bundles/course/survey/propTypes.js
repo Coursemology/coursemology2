@@ -12,7 +12,7 @@ export const questionShape = PropTypes.shape({
   id: PropTypes.number,
   description: PropTypes.string,
   weight: PropTypes.number,
-  question_type: PropTypes.number,
+  question_type: PropTypes.string,
   required: PropTypes.bool,
   max_options: PropTypes.number,
   min_options: PropTypes.number,

@@ -3,8 +3,9 @@ import BaseSurveyAPI from './Base';
 export default class QuestionsAPI extends BaseSurveyAPI {
   /**
   * survey_question = {
-  *   id:number, question_type:number, description:string, max_options:number, ...etc.
+  *   id:number, question_type:string, description:string, max_options:number, ...etc.
   *      - Question attributes
+  *      - question_type is one of ['text', 'multiple_choice', 'multiple_response']
   *   canUpdate:bool, canDelete:bool,
   *      - true if user can update and delete question respectively
   *   options: Array.<{ id:number, option:string, image_url:string, ...etc }>,
@@ -16,7 +17,8 @@ export default class QuestionsAPI extends BaseSurveyAPI {
   * Creates a survey question
   *
   * @param {object} questionFields
-  *   - params in the format of { question: { :title, :description, etc } }
+  *   - params in the format of { question: { :title, :description, :question_type etc } }
+  *   - question_type is one of ['text', 'multiple_choice', 'multiple_response']
   * @return {Promise}
   * success response: survey_question
   * error response: { errors: [{ attribute:string }] }
@@ -29,7 +31,8 @@ export default class QuestionsAPI extends BaseSurveyAPI {
   * Updates a survey question
   *
   * @param {object} questionFields
-  *   - params in the format of { question: { :title, :description, etc } }
+  *   - params in the format of { question: { :title, :description, :question_type, etc } }
+  *   - question_type is one of ['text', 'multiple_choice', 'multiple_response']
   * @return {Promise}
   * success response: survey_question
   * error response: { errors: [{ attribute:string }] }

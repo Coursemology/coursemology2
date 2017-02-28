@@ -6,8 +6,9 @@ export default class ResponsesAPI extends BaseSurveyAPI {
   *   survey: {
   *     id:number, title:string, description:string, start_at:datetime, ...etc,
   *       - Survey attributes
-  *     questions: Array.<{description:string, question_type:number, options:Array ... etc}>,
-  *       - Array of questions belonging to the survey
+  *     questions: Array.<{description:string, options:Array, question_type:string... etc}>,
+  *        - Array of questions belonging to the survey
+  *        - question_type is one of ['text', 'multiple_choice', 'multiple_response']
   *   },
   *   response: {
   *     id:number, submitted_at:datetime,

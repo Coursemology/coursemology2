@@ -7,3 +7,4 @@ json.submitted_at current_user_response && current_user_response.submitted_at
 json.canCreateQuestion can?(:create, survey.questions.build)
 json.canUpdate can?(:update, survey)
 json.canDelete can?(:destroy, survey)
+json.canViewResults can?(:manage, survey)
