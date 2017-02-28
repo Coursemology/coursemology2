@@ -13,7 +13,9 @@ class Course::Survey::ResponsesController < Course::Survey::SurveysController
     handle_create_error(error)
   end
 
-  def show; end
+  def show
+    render 'course/survey/surveys/index'
+  end
 
   def edit
     @response.build_missing_answers_and_options
