@@ -26,6 +26,7 @@ class MaterialSummernote extends React.Component {
   constructor(props) {
     super(props);
     this.state = { isFocused: false };
+    this.reactSummernote = null;
   }
 
   onChange = (e) => {
@@ -39,7 +40,9 @@ class MaterialSummernote extends React.Component {
       this.compressImage(files[i], (dataUrl) => {
         const img = document.createElement('img');
         img.src = dataUrl;
-        ReactSummernote.insertNode(img);
+        if (this.reactSummernote != null) {
+          this.reactSummernote.editor.summernote('insertNode', img);
+        }
       });
     }
   }
@@ -49,17 +52,19 @@ class MaterialSummernote extends React.Component {
     const IMAGE_MAX_WIDTH = 1920;
     const IMAGE_MAX_HEIGHT = 1080;
 
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const img = document.createElement('img');
-      const canvas = document.createElement('canvas');
+    const img = document.createElement('img');
+    const canvas = document.createElement('canvas');
 
+    const reader = new FileReader();
+    reader.onload = function onload(e) {
       img.src = e.target.result;
+    };
+    img.onload = function onload() {
       let width = img.width;
       let height = img.height;
 
       if (width <= IMAGE_MAX_WIDTH && height <= IMAGE_MAX_HEIGHT) {
-        onImageCompressed(e.target.result);
+        onImageCompressed(img.src);
         return;
       }
       if (width > IMAGE_MAX_WIDTH) {
@@ -131,6 +136,7 @@ class MaterialSummernote extends React.Component {
         />
         <div className="material-summernote">
           <ReactSummernote
+            ref={(ref) => { this.reactSummernote = ref; }}
             options={{
               dialogsInBody: false,
               disabled: this.props.disabled,

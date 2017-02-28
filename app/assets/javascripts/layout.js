@@ -10,17 +10,19 @@
     var IMAGE_MAX_WIDTH = 1920;
     var IMAGE_MAX_HEIGHT = 1080;
 
+    var img = document.createElement('img');
+    var canvas = document.createElement('canvas');
+
     var reader = new FileReader();
     reader.onload = function(e) {
-      var img = document.createElement('img');
-      var canvas = document.createElement('canvas');
-
       img.src = e.target.result;
+    };
+    img.onload = function() {
       var width = img.width;
       var height = img.height;
 
       if (width <= IMAGE_MAX_WIDTH && height <= IMAGE_MAX_HEIGHT ) {
-       onImageCompressed(e.target.result);
+       onImageCompressed(img.src);
        return;
       }
       if (width > IMAGE_MAX_WIDTH) {
