@@ -1,8 +1,8 @@
 span.pull-right.btn-group
-  - if can?(:new_subfolder, @folder)
+  - if @folder.concrete? && can?(:new_subfolder, @folder)
     = new_button(new_subfolder_course_material_folder_path(current_course, @folder), title: t('.new')) do
       = fa_icon 'folder'.freeze
-  - if can?(:upload, @folder)
+  - if @folder.concrete? && can?(:upload, @folder)
     = link_to new_materials_course_material_folder_path(current_course, @folder),
               title: t('.upload'), class: ['btn', 'btn-primary'] do
       = fa_icon 'upload'.freeze
@@ -10,5 +10,5 @@ span.pull-right.btn-group
             title: t('.download'), class: ['btn', 'btn-primary'] do
     = fa_icon 'download'.freeze
 
-  - if can?(:edit, @folder)
+  - if @folder.concrete? && can?(:edit, @folder)
     = edit_button([current_course, @folder])

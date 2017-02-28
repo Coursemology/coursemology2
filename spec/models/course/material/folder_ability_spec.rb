@@ -44,9 +44,11 @@ RSpec.describe Course::Material::Folder, type: :model do
       it { is_expected.to be_able_to(:manage, valid_folder) }
       it { is_expected.to be_able_to(:manage, not_started_folder) }
       it { is_expected.to be_able_to(:manage, ended_folder) }
-      it { is_expected.not_to be_able_to(:manage, started_linked_folder) }
-      it { is_expected.to be_able_to(:show, started_linked_folder) }
-      it { is_expected.to be_able_to(:show, not_started_linked_folder) }
+      it { is_expected.to be_able_to(:upload_materials, started_linked_folder) }
+      it { is_expected.to be_able_to(:upload_materials, started_linked_folder) }
+      it { is_expected.to be_able_to(:upload_materials, not_started_linked_folder) }
+      it { is_expected.not_to be_able_to(:destroy, started_linked_folder) }
+      it { is_expected.not_to be_able_to(:destroy, not_started_linked_folder) }
 
       it { is_expected.to be_able_to(:read_owner, started_linked_folder) }
       it { is_expected.to be_able_to(:read_owner, not_started_linked_folder) }
