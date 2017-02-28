@@ -146,32 +146,8 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
       zip.put_next_entry 'tests/autograde.py'
       zip.print File.read(AUTOGRADE_PRE_PATH)
 
-      tests = @test_params[:test_cases]
-
-      index = 1
       [:public, :private, :evaluation].each do |test_type|
-        tests[test_type].try(:each) do |test|
-          test_fn = "    def test_#{test_type}_#{index}(self):\n"\
-                    "        self.meta['expression'] = #{test[:expression].inspect}\n"\
-
-          # String types should be displayed with quotes, other types will be converted to string
-          # with the str method.
-          expected = string?(test[:expected]) ? test[:expected].inspect : "str(#{test[:expected]})"
-          test_fn += "        self.meta['expected'] = #{expected}\n"
-
-          unless test[:hint].blank?
-            test_fn += "        self.meta['hint'] = #{test[:hint].inspect}\n"
-          end
-
-          test_fn += "        _out = #{test[:expression]}\n"\
-                     "        self.meta['output'] = _out\n"\
-                     "        self.assertEqual(_out, #{test[:expected]})\n"\
-                     "\n"
-
-          zip.print test_fn
-
-          index += 1
-        end
+        zip_test_files(test_type, zip)
       end
 
       zip.print File.read(AUTOGRADE_POST_PATH)
@@ -196,6 +172,28 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     end
 
     tmp
+  end
+
+  def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    tests = @test_params[:test_cases]
+    tests[test_type]&.each_with_index(1) do |test, index|
+      # String types should be displayed with quotes, other types will be converted to string
+      # with the str method.
+      expected = string?(test[:expected]) ? test[:expected].inspect : "str(#{test[:expected]})"
+      hint = test[:hint].blank? ? String(nil) : "self.meta['hint'] = #{test[:hint].inspect}"
+
+      test_fn = <<-PYTHON
+    def test_#{test_type}_#{format('%02i', index)}(self):
+        self.meta['expression'] = #{test[:expression].inspect}
+        self.meta['expected'] = #{expected}
+        #{hint}
+        _out = #{test[:expression]}
+        self.meta['output'] = _out
+        self.assertEqual(_out, #{test[:expected]})
+      PYTHON
+
+      zip.print test_fn
+    end
   end
 
   def get_data_files_meta(data_files_to_keep, new_data_files)
