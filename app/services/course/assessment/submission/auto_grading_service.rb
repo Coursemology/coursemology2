@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+#
+# Service to execute Course::Assessment::Submission::AutoGradingJob
 class Course::Assessment::Submission::AutoGradingService
   class << self
     # Grades into the given submission.
@@ -9,6 +11,8 @@ class Course::Assessment::Submission::AutoGradingService
 
   class SubJobError < StandardError
   end
+
+  MAX_TRIES = 5
 
   # Grades into the given submission. This only grades ungraded answers.
   #
@@ -25,10 +29,22 @@ class Course::Assessment::Submission::AutoGradingService
   private
 
   # Grades the answers in the provided submission.
+  #
+  # Retries are implemented in the case where a race condition occurs, ie. when a new
+  # attempting answer is created after the submission is finalised, but before the
+  # autograding job is run for the submission.
   def grade_answers(submission)
-    jobs = submission.latest_answers.map { |answer| grade_answer(answer) }
-    wait_for_jobs(jobs)
-    aggregate_failures(jobs.map { |job| job.job.reload })
+    tries, jobs_by_qn = 0, {}
+    ungraded_answers = ungraded_answers(submission)
+    while ungraded_answers.any? && tries <= MAX_TRIES
+      new_jobs = ungraded_answers.map { |a| [a.question_id, grade_answer(a)] }.to_h
+      wait_for_jobs(new_jobs.values)
+
+      jobs_by_qn.merge!(new_jobs)
+      ungraded_answers = ungraded_answers(submission)
+      tries += 1
+    end
+    aggregate_failures(jobs_by_qn.map { |_, job| job.job.reload })
   end
 
   # Grades the provided answer
@@ -37,6 +53,13 @@ class Course::Assessment::Submission::AutoGradingService
   # @return [Course::Assessment::Answer::AutoGradingJob] The job created to grade.
   def grade_answer(answer)
     raise ArgumentError if answer.changed?
+    answer.auto_grade!
+    # Catch errors if answer is in attempting state, caused by a race condition where
+    # a new attempting answer is created while the submission is finalised, but before the
+    # autograding job is executed.
+  rescue IllegalStateError
+    answer.finalise!
+    answer.save!
     answer.auto_grade!
   end
 
@@ -62,6 +85,11 @@ class Course::Assessment::Submission::AutoGradingService
   def publish_grade(submission)
     submission.points_awarded = calculate_exp(submission).to_i
     submission.publish!
+  end
+
+  # Gets the ungraded answers for the given submission
+  def ungraded_answers(submission)
+    submission.reload.latest_answers.select { |a| a.attempting? || a.submitted? }
   end
 
   # Calculating scheme:

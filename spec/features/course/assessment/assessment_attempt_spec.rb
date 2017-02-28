@@ -270,7 +270,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         click_button I18n.t('course.assessment.submission.submissions.buttons.unsubmit')
         expect(submission.reload.attempting?).to be_truthy
         expect(submission.points_awarded).to be_nil
-        expect(submission.latest_answers.all?(&:attempting?)).to be_truthy
+        expect(submission.reload.latest_answers.all?(&:attempting?)).to be_truthy
 
         # Published submission
         submission.finalise!

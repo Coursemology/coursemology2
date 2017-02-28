@@ -26,14 +26,17 @@ class Course::Assessment::Answer::AutoGradingService
       question.auto_grader
     end
 
-    # Save the graded answer, a new answer will be created if reattempt is set to true.
+    # Save the graded answer. If reattempt is set to true and if the submission is still in an
+    # attempting state, a new answer will be created. This is to prevent a race condition to
+    # prevent new answers from being created if the submission is attempting.
     #
     # @param [Course::Assessment::Answer] answer The answer to be graded.
     # @param [Boolean] reattempt Whether to reattempt the answer after grading.
     def save!(answer, reattempt)
       Course::Assessment::Answer.transaction do
         answer.save!
-        if reattempt
+        # Only create new answer if submission is still in an attempting state.
+        if reattempt && answer.submission.reload.attempting?
           new_answer = answer.question.attempt(answer.submission, answer)
           new_answer.save!
           # Move posts to the new answer.
