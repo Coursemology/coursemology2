@@ -176,7 +176,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
 
   def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     tests = @test_params[:test_cases]
-    tests[test_type]&.each_with_index(1) do |test, index|
+    tests[test_type]&.each.with_index(1) do |test, index|
       # String types should be displayed with quotes, other types will be converted to string
       # with the str method.
       expected = string?(test[:expected]) ? test[:expected].inspect : "str(#{test[:expected]})"
