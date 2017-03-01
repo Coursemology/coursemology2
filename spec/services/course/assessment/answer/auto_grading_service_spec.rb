@@ -8,12 +8,15 @@ RSpec.describe Course::Assessment::Answer::AutoGradingService do
     let(:student_user) { create(:course_student, course: course).user }
     let(:assessment) { create(:assessment, :published_with_mrq_question, course: course) }
     let(:question) { assessment.questions.first }
-    let(:answer_traits) { :submitted }
+    let(:submission) do
+      create(:submission, *submission_traits, assessment: assessment, creator: student_user)
+    end
+    let(:submission_traits) { nil }
     let(:answer) do
-      submission = create(:submission, assessment: assessment, creator: student_user)
       create(:course_assessment_answer_multiple_response, *answer_traits,
              question: question, submission: submission).answer
     end
+    let(:answer_traits) { :submitted }
     let!(:auto_grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
 
     describe '.grade' do
@@ -59,6 +62,18 @@ RSpec.describe Course::Assessment::Answer::AutoGradingService do
         it 'allows re-evaluation and stays graded' do
           expect { subject }.to_not raise_error
           expect(answer).to be_graded
+        end
+      end
+
+      context 'when reattempt is true' do
+        subject { Course::Assessment::Answer::AutoGradingService.grade(answer, true) }
+
+        context 'when submission state is submitted' do
+          let(:submission_traits) { :submitted }
+          it 'does not create a new attempting answer' do
+            subject
+            expect(submission.reload.latest_answers).to include(answer)
+          end
         end
       end
     end
