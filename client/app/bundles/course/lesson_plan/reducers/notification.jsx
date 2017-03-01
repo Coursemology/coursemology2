@@ -1,6 +1,6 @@
 import actionTypes from '../constants';
 
-const initialState = '';
+export const initialState = '';
 
 export default function (state = initialState, action) {
   const { type } = action;
