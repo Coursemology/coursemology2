@@ -56,7 +56,8 @@ div.panel.panel-default
           td = format_datetime(@submission.created_at)
         tr
           th = @submission.class.human_attribute_name(:submitted_at)
-          - if @assessment.end_at && @submission.submitted_at > @assessment.end_at
+          - if @assessment.end_at && @submission.submitted_at && \
+                                     @submission.submitted_at > @assessment.end_at
             td.text-danger
               strong => format_datetime(@submission.submitted_at)
               span.text-danger.glyphicon.glyphicon-exclamation-sign title=t('.late_submission_warning')
