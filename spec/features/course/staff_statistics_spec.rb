@@ -26,7 +26,7 @@ RSpec.feature 'Course: Statistics: Staff' do
         assessment = create(:assessment, course: course)
         submission = create(:submission, :published,
                             assessment: assessment, course: course, publisher: tutor1.user,
-                            published_at: published_at)
+                            published_at: published_at, submitted_at: submitted_at)
         create(:course_assessment_answer_multiple_response, :graded,
                assessment: assessment, submission: submission, submitted_at: submitted_at)
         [submission]
@@ -38,7 +38,7 @@ RSpec.feature 'Course: Statistics: Staff' do
         assessment = create(:assessment, course: course)
         submission = create(:submission, :published,
                             assessment: assessment, course: course, publisher: tutor2.user,
-                            published_at: published_at)
+                            published_at: published_at, submitted_at: submitted_at)
         create(:course_assessment_answer_multiple_response, :graded,
                assessment: assessment, submission: submission, submitted_at: submitted_at)
         [submission]
