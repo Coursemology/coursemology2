@@ -24,8 +24,7 @@ module CourseUser::StaffConcern
       Course::Assessment::Submission.
       joins { experience_points_record.course_user }.
       where { experience_points_record.course_user.course_id == my { course_id } }.
-      where { publisher_id == my { user_id } }.
-      calculated(:submitted_at)
+      where { publisher_id == my { user_id } }
   end
 
   # Returns the average marking time of the staff.

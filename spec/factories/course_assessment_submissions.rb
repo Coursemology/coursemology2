@@ -24,6 +24,7 @@ FactoryGirl.define do
 
         submission.awarder = nil
         submission.awarded_at = nil
+        submission.submitted_at = evaluator.submitted_at if evaluator.submitted_at
       end
     end
 

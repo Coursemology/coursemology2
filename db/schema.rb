@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170224072334) do
+ActiveRecord::Schema.define(version: 20170302054635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -167,6 +167,7 @@ ActiveRecord::Schema.define(version: 20170224072334) do
     t.integer  "assessment_id",  :null=>false, :index=>{:name=>"fk__course_assessment_submissions_assessment_id"}, :foreign_key=>{:references=>"course_assessments", :name=>"fk_course_assessment_submissions_assessment_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.string   "workflow_state", :limit=>255, :null=>false
     t.string   "session_id",     :limit=>255
+    t.datetime "submitted_at"
     t.integer  "creator_id",     :null=>false, :index=>{:name=>"fk__course_assessment_submissions_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessment_submissions_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "updater_id",     :null=>false, :index=>{:name=>"fk__course_assessment_submissions_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessment_submissions_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at",     :null=>false

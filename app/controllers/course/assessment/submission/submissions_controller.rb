@@ -37,7 +37,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   def edit
     return if @submission.attempting?
 
-    calculated_fields = [:submitted_at, :graded_at]
+    calculated_fields = [:graded_at]
     @submission = @submission.calculated(*calculated_fields)
   end
 

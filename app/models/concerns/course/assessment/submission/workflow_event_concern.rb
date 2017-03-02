@@ -12,6 +12,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
   #
   # This finalises all the answers as well.
   def finalise(_ = nil)
+    self.submitted_at = Time.zone.now
     answers.select(&:attempting?).each(&:finalise!)
   end
 
@@ -47,6 +48,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
     self.draft_points_awarded = nil
     self.awarded_at = nil
     self.awarder = nil
+    self.submitted_at = nil
   end
 
   private

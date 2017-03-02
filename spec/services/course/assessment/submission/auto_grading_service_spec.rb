@@ -93,9 +93,7 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
 
         context 'when submission is submitted before bonus end at' do
           before do
-            submission.answers.each do |answer|
-              answer.update_column(:submitted_at, 4.days.ago)
-            end
+            submission.update_column(:submitted_at, 4.days.ago)
             subject.grade(submission)
           end
 
@@ -107,9 +105,7 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
 
         context 'when submission is submitted between bonus end at and end at' do
           before do
-            submission.answers.each do |answer|
-              answer.update_column(:submitted_at, 2.days.ago)
-            end
+            submission.update_column(:submitted_at, 2.days.ago)
             subject.grade(submission)
           end
 

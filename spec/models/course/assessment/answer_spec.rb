@@ -33,7 +33,8 @@ RSpec.describe Course::Assessment::Answer do
       describe '#submission' do
         context 'when the answer is being attempted' do
           it 'validates that the submission is being attempted' do
-            subject.submission = create(:submission, workflow_state: 'submitted')
+            subject.submission = create(:submission, workflow_state: 'submitted',
+                                                     submitted_at: Time.zone.now)
             expect(subject.valid?).to be(false)
             expect(subject.errors[:submission]).not_to be_empty
           end
