@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { csrfToken } from 'lib/helpers/serverContext';
 
 export default class BaseAPI {
   constructor() {
@@ -9,13 +10,7 @@ export default class BaseAPI {
   getClient() {
     if (this.client) return this.client;
 
-    let token;
-    const tag = document.querySelector('meta[name="csrf-token"]');
-    if (tag) {
-      token = tag.getAttribute('content');
-    }
-
-    const headers = { Accept: 'application/json', 'X-CSRF-Token': token };
+    const headers = { Accept: 'application/json', 'X-CSRF-Token': csrfToken };
 
     this.client = axios.create({ headers });
     return this.client;

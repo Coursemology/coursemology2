@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
-import moment from 'moment';
+import moment from 'lib/moment';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import Toggle from 'material-ui/Toggle';
 import DateTimePicker from 'lib/components/form/DateTimePicker';
