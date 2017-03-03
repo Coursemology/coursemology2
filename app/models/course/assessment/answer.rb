@@ -8,6 +8,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
     state :attempting do
       event :finalise, transitions_to: :submitted
     end
+    # State where student officially indicates to submit the answer.
     state :submitted do
       event :unsubmit, transitions_to: :attempting
       event :evaluate, transitions_to: :evaluated
