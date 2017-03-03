@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import moment from 'moment';
+import moment from 'lib/moment';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';

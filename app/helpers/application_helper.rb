@@ -65,10 +65,15 @@ module ApplicationHelper
     data = {
       name: 'server-context',
       'data-controller-name': controller.class.name.sub(/Controller$/, '').underscore,
-      'data-i18n-locale': I18n.locale
+      'data-i18n-locale': I18n.locale,
+      'data-time-zone': ActiveSupport::TimeZone::MAPPING[user_time_zone]
     }
 
     tag(:meta, data)
+  end
+
+  def user_time_zone
+    user_signed_in? ? current_user.time_zone : nil
   end
 
   # This helper will includes all webpack assets

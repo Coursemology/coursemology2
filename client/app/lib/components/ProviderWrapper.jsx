@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Provider } from 'react-redux';
 import { IntlProvider, addLocaleData } from 'react-intl';
+import { i18nLocale, timeZone } from 'lib/helpers/serverContext';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -21,8 +22,6 @@ const propTypes = {
 };
 
 const ProviderWrapper = ({ store, children }) => {
-  const i18nLocale =
-    document.querySelector("meta[name='server-context']").getAttribute('data-i18n-locale');
   const availableForeignLocales = { zh };
   const localeWithoutRegionCode = i18nLocale.toLowerCase().split(/[_-]+/)[0];
 
@@ -36,7 +35,7 @@ const ProviderWrapper = ({ store, children }) => {
   if (store) {
     providers =
       (<Provider store={store}>
-        <IntlProvider locale={i18nLocale} messages={messages}>
+        <IntlProvider locale={i18nLocale} messages={messages} timeZone={timeZone}>
           <MuiThemeProvider>
             { children }
           </MuiThemeProvider>

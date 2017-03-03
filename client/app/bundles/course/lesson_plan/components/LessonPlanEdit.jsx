@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import moment from 'moment';
+import moment from 'lib/moment';
 import Snackbar from 'material-ui/Snackbar';
 import DateTimePicker from 'lib/components/form/DateTimePicker';
 import LessonPlanFilter from '../containers/LessonPlanFilter';

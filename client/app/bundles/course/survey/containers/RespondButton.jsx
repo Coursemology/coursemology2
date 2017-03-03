@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import moment from 'moment';
+import moment from 'lib/moment';
 import { browserHistory } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import { surveyShape } from '../propTypes';
