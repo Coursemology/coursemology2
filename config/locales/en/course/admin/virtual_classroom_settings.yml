@@ -5,6 +5,8 @@ en:
         edit:
           title_placeholder: 'Leave blank to use default title'
           braincert_whiteboard_api_key_hint: >
-            Braincert Whiteboard API Key for the Virtual Classroom Component
+            Braincert Virtual Classroom API Key for the Virtual Classroom Component
+          max_duration_hint: >
+            Max allowed duration of virtual classes
         update:
           success: 'Virtual classroom settings updated.'

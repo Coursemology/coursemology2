@@ -1,5 +1,9 @@
 = page_header virtual_classrooms_title do
   = new_button([current_course, :virtual_classroom]) if can?(:create, Course::VirtualClassroom.new(course: current_course))
 
-= render partial: @virtual_classrooms, spacer_template: 'course/virtual_classrooms/virtual_classroom_spacer'
-= paginate @virtual_classrooms
+- if @settings.braincert_whiteboard_api_key.present?
+  = render partial: @virtual_classrooms,
+    spacer_template: 'course/virtual_classrooms/virtual_classroom_spacer'
+  = paginate @virtual_classrooms
+- else
+  = t('course.virtual_classrooms.no_api_key')

@@ -30,7 +30,9 @@ RSpec.feature 'Course: VirtualClassrooms' do
         fill_in 'virtual_classroom_title', with: virtual_classroom.title
         fill_in 'virtual_classroom_content', with: virtual_classroom.content
         fill_in 'virtual_classroom_start_at', with: virtual_classroom.start_at
-        fill_in 'virtual_classroom_end_at', with: virtual_classroom.end_at
+        within '#virtual_classroom_duration' do
+          find("option[value='#{virtual_classroom.duration}']").select_option
+        end
         expect do
           click_button I18n.t('helpers.submit.virtual_classroom.create')
         end.to change(course.virtual_classrooms, :count).by(1)
@@ -49,8 +51,8 @@ RSpec.feature 'Course: VirtualClassrooms' do
         expect(page).to have_field('virtual_classroom_content', with: virtual_classroom.content)
         expect(page).to have_field('virtual_classroom[start_at]',
                                    with: virtual_classroom.start_at.in_time_zone(time_zone))
-        expect(page).to have_field('virtual_classroom[end_at]',
-                                   with: virtual_classroom.end_at.in_time_zone(time_zone))
+        expect(page).to have_field('virtual_classroom[duration]',
+                                   with: virtual_classroom.duration)
 
         fill_in 'virtual_classroom_title', with: ''
         click_button I18n.t('helpers.submit.virtual_classroom.update')

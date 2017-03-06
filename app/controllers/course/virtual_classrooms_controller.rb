@@ -67,7 +67,7 @@ class Course::VirtualClassroomsController < Course::ComponentController
   end
 
   def virtual_classroom_params #:nodoc:
-    params.require(:virtual_classroom).permit(:title, :content, :start_at, :end_at)
+    params.require(:virtual_classroom).permit(:title, :content, :start_at, :duration)
   end
 
   def add_virtual_classroom_breadcrumb

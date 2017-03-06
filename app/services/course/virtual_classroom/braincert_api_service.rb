@@ -32,7 +32,9 @@ class Course::VirtualClassroom::BraincertApiService
     res_body = JSON.parse(res.body)
     error = res_body['error']
     return [nil, I18n.t(:'course.virtual_classrooms.error_generating_link', error: error)] if error
-    @virtual_classroom.update!(instructor_classroom_link: res_body['encryptedlaunchurl']) if is_instructor
+    if is_instructor
+      @virtual_classroom.update! instructor_classroom_link: res_body['encryptedlaunchurl']
+    end
     [res_body['encryptedlaunchurl'], nil]
   end
 

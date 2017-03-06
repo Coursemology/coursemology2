@@ -15,10 +15,10 @@
         = delete_button(delete_button_path) if can?(:destroy, virtual_classroom)
 
   i.timestamp
-    => format_datetime(virtual_classroom.start_at)
-    ' -
-    => format_datetime(virtual_classroom.end_at)
-    ' by
+    = format_datetime(virtual_classroom.start_at)
+    ',
+    = t('course.virtual_classrooms.index.duration_minutes', duration: virtual_classroom.duration)
+    ', by
     = link_to_user(virtual_classroom.creator)
 
   div.content

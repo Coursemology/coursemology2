@@ -42,6 +42,21 @@ class Course::VirtualClassroomSettings
     @settings.title = title
   end
 
+  # Returns the max duration of virtual classrooms component
+  #
+  # @return [String] The custom or default max_duration of virtual classrooms component
+  def max_duration
+    @settings.max_duration || 60
+  end
+
+  # Sets the max duration of virtual classrooms component
+  #
+  # @param [String] max_duration The new max duration
+  def max_duration=(max_duration)
+    max_duration = nil unless max_duration.present?
+    @settings.max_duration = max_duration
+  end
+
   # Returns the virtual classroom pagination count
   #
   # @return [Integer] The pagination count of virtual classroom

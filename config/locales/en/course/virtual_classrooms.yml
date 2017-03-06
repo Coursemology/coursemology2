@@ -4,6 +4,7 @@ en:
       sidebar_title: :'course.virtual_classrooms.index.header'
       index:
         header: 'Virtual Classrooms'
+        duration_minutes: '%{duration} minutes'
       new:
         header: 'New Virtual Classroom'
       create:
@@ -25,3 +26,4 @@ en:
       get_virtual_classroom_link: "Get Virtual Classroom Link"
       ended: "Virtual Class Ended"
       not_started: "Virtual class hasn't started"
+      no_api_key: "No Virtual Classroom API key found. Please set one in course settings"

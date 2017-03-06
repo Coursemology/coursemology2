@@ -16,7 +16,9 @@ class Course::Admin::VirtualClassroomSettingsController < Course::Admin::Control
   private
 
   def virtual_classroom_settings_params #:nodoc:
-    params.require(:virtual_classroom_settings).permit(:title, :pagination, :braincert_whiteboard_api_key)
+    params.require(:virtual_classroom_settings).permit(
+      :title, :pagination, :braincert_whiteboard_api_key, :max_duration
+    )
   end
 
   # Load our settings adapter to handle virtual classroom settings
