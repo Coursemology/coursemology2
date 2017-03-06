@@ -1,0 +1,162 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Material /> renders the material 1`] = `
+<ListItem
+  autoGenerateNestedIndicator={true}
+  disableKeyboardFocus={true}
+  disabled={false}
+  initiallyOpen={false}
+  innerDivStyle={
+    Object {
+      "paddingBottom": 8,
+      "paddingTop": 8,
+    }
+  }
+  insetChildren={false}
+  leftAvatar={
+    <Avatar
+      icon={<ActionAssignment />}
+      size={32}
+      style={
+        Object {
+          "top": 8,
+        }
+      }
+    />
+  }
+  nestedItems={Array []}
+  nestedLevel={0}
+  onKeyboardFocus={[Function]}
+  onMouseEnter={[Function]}
+  onMouseLeave={[Function]}
+  onNestedListToggle={[Function]}
+  onTouchEnd={[Function]}
+  onTouchStart={[Function]}
+  open={null}
+  primaryText="Uploaded Material"
+  primaryTogglesNestedList={false}
+  rightAvatar={
+    <IconButton
+      disableTouchRipple={false}
+      disabled={false}
+      iconStyle={Object {}}
+      onClick={[Function]}
+      style={
+        Object {
+          "height": 24,
+          "marginRight": 16,
+          "padding": 4,
+          "top": 8,
+          "width": 24,
+        }
+      }
+      tooltipPosition="bottom-center"
+      touch={false}
+    >
+      <ActionDelete />
+    </IconButton>
+  }
+  secondaryText={
+    <div
+      style={
+        Object {
+          "fontSize": 12,
+        }
+      }
+    >
+      <FormattedDate
+        day="2-digit"
+        month="short"
+        value={2017-01-01T08:00:00.000Z}
+        year="numeric"
+      />
+       
+      <FormattedTime
+        hour12={false}
+        value="2017-01-01T08:00:00.0000000Z"
+      />
+    </div>
+  }
+  secondaryTextLines={1}
+  style={
+    Object {
+      "fontSize": 14,
+      "lineHeight": "14px",
+    }
+  }
+/>
+`;
+
+exports[`<MaterialList /> renders the component with materials 1`] = `
+<div>
+  <Divider
+    inset={false}
+  />
+  <List>
+    <Subheader
+      inset={false}
+    >
+      <FormattedMessage
+        defaultMessage="Files"
+        id="course.assessment.MaterialList.uploadedFiles"
+        values={Object {}}
+      />
+    </Subheader>
+    <Material
+      deleting={false}
+      id={1}
+      name="Material 1"
+      onMaterialDelete={[Function]}
+      updatedAt="2017-01-01T01:00:00.0000000Z"
+    />
+    <Material
+      deleting={false}
+      id={2}
+      name="Material 2"
+      onMaterialDelete={[Function]}
+      updatedAt="2017-01-01T02:00:00.0000000Z"
+    />
+    <FlatButton
+      containerElement="label"
+      disabled={false}
+      icon={<ContentAdd />}
+      label="Add Files"
+      labelPosition="after"
+      labelStyle={Object {}}
+      onKeyboardFocus={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      onTouchStart={[Function]}
+      primary={false}
+      secondary={false}
+      style={
+        Object {
+          "verticalAlign": "middle",
+          "width": "100%",
+        }
+      }
+    >
+      <input
+        multiple={true}
+        style={
+          Object {
+            "bottom": 0,
+            "cursor": "pointer",
+            "left": 0,
+            "opacity": 0,
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+            "width": "100%",
+          }
+        }
+        type="file"
+      />
+    </FlatButton>
+  </List>
+  <Divider
+    inset={false}
+  />
+  <NotificationBar />
+</div>
+`;
