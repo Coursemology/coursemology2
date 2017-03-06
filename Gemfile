@@ -134,6 +134,7 @@ group :ci do
   # Code Coverage reporters
   gem 'coveralls'
   gem 'codeclimate-test-reporter'
+  gem 'simplecov-lcov'
 end
 
 # This is used only when producing Production assets. Deals with things like minifying JavaScript

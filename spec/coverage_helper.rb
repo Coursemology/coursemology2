@@ -2,6 +2,7 @@
 # Simultaneous code coverage reporting to Coveralls and Code Climate.
 # Latest version can be found at https://gist.github.com/lowjoel/6c2f2d3a08bb3786994f
 require 'simplecov'
+require 'simplecov-lcov'
 
 module CoverageHelper
   class << self
@@ -45,6 +46,9 @@ module CoverageHelper
 end
 
 if ENV['CI']
+  SimpleCov::Formatter::LcovFormatter.report_with_single_file = true
+  SimpleCov.formatter = SimpleCov::Formatter::LcovFormatter
+
   # Coveralls
   CoverageHelper.load('coveralls') do
     Coveralls.wear!('rails')

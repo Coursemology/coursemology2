@@ -494,6 +494,7 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
+    simplecov-lcov (0.5.0)
     slim (3.0.7)
       temple (~> 0.7.6)
       tilt (>= 1.3.3, < 2.1)
@@ -639,6 +640,7 @@ DEPENDENCIES
   simple_form-bootstrap!
   simple_token_authentication!
   simplecov
+  simplecov-lcov
   slim-rails
   spring
   squeel
