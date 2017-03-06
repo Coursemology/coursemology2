@@ -15,7 +15,7 @@ const styles = {
   },
 };
 
-class Thumbnail extends React.Component {
+class Thumbnail extends React.PureComponent {
   constructor(props) {
     super(props);
     const { src, file } = props;
@@ -49,7 +49,7 @@ class Thumbnail extends React.Component {
 
   render() {
     // eslint-disable-next-line no-unused-vars
-    const { src, alt, file, onTouchTap, style, ...props } = this.props;
+    const { src, alt, file, onTouchTap, style, containerStyle, ...props } = this.props;
     const source = src || this.state.src;
     const altText = alt || this.state.alt || src;
 
@@ -84,13 +84,15 @@ class Thumbnail extends React.Component {
 
     return (
       <div>
-        <img
-          src={source}
-          alt={altText}
-          onTouchTap={onThumbnailTouchTap}
-          style={thumbnailStyle}
-          {...props}
-        />
+        <div style={containerStyle}>
+          <img
+            src={source}
+            alt={altText}
+            onTouchTap={onThumbnailTouchTap}
+            style={thumbnailStyle}
+            {...props}
+          />
+        </div>
         <Dialog
           actions={actions}
           modal={false}
@@ -117,6 +119,7 @@ Thumbnail.propTypes = {
   file: PropTypes.instanceOf(File),
   onTouchTap: PropTypes.func,
   style: PropTypes.shape(),
+  containerStyle: PropTypes.shape(),
 };
 
 export default Thumbnail;

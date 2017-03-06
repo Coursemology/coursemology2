@@ -21,7 +21,11 @@ const styles = {
   image: {
     maxHeight: 48,
     maxWidth: 48,
+  },
+  imageContainer: {
     marginRight: 24,
+    height: 48,
+    width: 48,
   },
   imageSpacer: {
     width: 72,
@@ -62,7 +66,11 @@ class QuestionFormDeletedOptions extends React.Component {
               {this.renderWidget()}
               {
                 option.image_url ?
-                  <Thumbnail style={styles.image} src={option.image_url} /> :
+                  <Thumbnail
+                    src={option.image_url}
+                    style={styles.image}
+                    containerStyle={styles.imageContainer}
+                  /> :
                   <div style={styles.imageSpacer} />
               }
               <span style={styles.optionBody}>{option.option}</span>
