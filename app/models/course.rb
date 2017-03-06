@@ -19,7 +19,7 @@ class Course < ActiveRecord::Base
   has_many :notifications, dependent: :destroy
 
   has_many :announcements, dependent: :destroy
-  has_many :lectures, dependent: :destroy
+  has_many :virtual_classrooms, dependent: :destroy
   # The order needs to be preserved, this makes sure that the root_folder will be saved first
   has_many :material_folders, class_name: Course::Material::Folder.name, inverse_of: :course,
                               dependent: :destroy

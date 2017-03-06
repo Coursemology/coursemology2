@@ -1,0 +1,43 @@
+- edit_button_path = [current_course, virtual_classroom]
+- delete_button_path = [current_course, virtual_classroom]
+
+= div_for(virtual_classroom, class: time_period_class(virtual_classroom) + unread_class(virtual_classroom))
+  h2.virtual-classroom-title
+    = format_inline_text(virtual_classroom.title)
+
+    - unless virtual_classroom.currently_active?
+      small title=time_period_message(virtual_classroom)
+        =< fa_icon 'calendar'.freeze
+
+    div.pull-right
+      div.btn-group
+        = edit_button(edit_button_path) if can?(:edit, virtual_classroom)
+        = delete_button(delete_button_path) if can?(:destroy, virtual_classroom)
+
+  i.timestamp
+    => format_datetime(virtual_classroom.start_at)
+    ' -
+    => format_datetime(virtual_classroom.end_at)
+    ' by
+    = link_to_user(virtual_classroom.creator)
+
+  div.content
+    = format_html(virtual_classroom.content)
+
+  div.access-link
+    - link_exists = virtual_classroom.instructor_classroom_link.present?
+    - is_instructor = can?(:edit, virtual_classroom)
+    - if virtual_classroom.currently_active?
+      - if link_exists || is_instructor
+        - if link_exists && is_instructor
+          = link_to(t('course.virtual_classrooms.go_to_virtual_classroom'),
+            virtual_classroom.instructor_classroom_link, id: "lec-link-#{virtual_classroom.id}", target: '_blank')
+        button.gen-access-link.btn.btn-sm.btn-primary id=("lec-#{virtual_classroom.course.id}-#{virtual_classroom.id}")
+          - if link_exists && is_instructor
+            = t('course.virtual_classrooms.refresh_link')
+          - else
+            = t('course.virtual_classrooms.get_virtual_classroom_link')
+      - else
+        i.info = t('course.virtual_classrooms.waiting_for_instructor')
+    - else
+      i.info = virtual_classroom.ended? ? t('course.virtual_classrooms.ended') : t('course.virtual_classrooms.not_started')

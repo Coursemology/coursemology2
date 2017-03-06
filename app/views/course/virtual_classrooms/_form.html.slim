@@ -1,0 +1,12 @@
+= simple_form_for [current_course, @virtual_classroom], resource: :course_virtual_classroom do |f|
+  = f.error_notification
+  = f.error :course_virtual_classroom
+  = f.input :title
+
+  = f.input :content
+
+  = f.input :start_at
+
+  = f.input :end_at
+
+  = f.button :submit

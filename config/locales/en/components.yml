@@ -2,8 +2,8 @@ en:
   components:
     announcements:
       name: :'course.announcements.index.header'
-    lectures:
-      name: :'course.lectures.index.header'
+    virtual_classrooms:
+      name: :'course.virtual_classrooms.index.header'
     achievements:
       name: :'course.achievement.achievements.index.header'
     lesson_plan:
