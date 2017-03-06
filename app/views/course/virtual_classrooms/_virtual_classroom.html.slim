@@ -31,13 +31,17 @@
       - if link_exists || is_instructor
         - if link_exists && is_instructor
           = link_to(t('course.virtual_classrooms.go_to_virtual_classroom'),
-            virtual_classroom.instructor_classroom_link, id: "lec-link-#{virtual_classroom.id}", target: '_blank')
-        button.gen-access-link.btn.btn-sm.btn-primary id=("lec-#{virtual_classroom.course.id}-#{virtual_classroom.id}")
-          - if link_exists && is_instructor
-            = t('course.virtual_classrooms.refresh_link')
-          - else
+            virtual_classroom.instructor_classroom_link,
+            id: "lec-link-#{virtual_classroom.id}", target: '_blank')
+        - else
+          button[class='gen-access-link btn btn-sm btn-primary'
+            id="lec-#{virtual_classroom.course.id}-#{virtual_classroom.id}"]
             = t('course.virtual_classrooms.get_virtual_classroom_link')
       - else
         i.info = t('course.virtual_classrooms.waiting_for_instructor')
     - else
-      i.info = virtual_classroom.ended? ? t('course.virtual_classrooms.ended') : t('course.virtual_classrooms.not_started')
+      i.info
+        - if virtual_classroom.ended?
+          = t('course.virtual_classrooms.ended')
+        - else
+          = t('course.virtual_classrooms.not_started')

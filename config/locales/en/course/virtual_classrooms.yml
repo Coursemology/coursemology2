@@ -21,7 +21,6 @@ en:
       error_generating_link: "Error generating access link: %{error}"
       error_creating_classroom: "Error creating classroom: %{error}"
       go_to_virtual_classroom: "Go to virtual classroom"
-      refresh_link: "Refresh Link"
       waiting_for_instructor: "Waiting for instructor, please refresh the page shortly"
       get_virtual_classroom_link: "Get Virtual Classroom Link"
       ended: "Virtual Class Ended"

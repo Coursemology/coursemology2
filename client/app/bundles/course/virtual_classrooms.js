@@ -8,7 +8,6 @@ $(document).ready(() => {
     $this.addClass('disabled');
     CourseAPI.virtualClassrooms.accessLink(virtualClassroomId)
       .then((res) => {
-        $this.removeClass('disabled');
         const { data: { link } } = res;
         const $link = $(`#lec-link-${virtualClassroomId}`);
         if ($link.length) {
@@ -20,6 +19,7 @@ $(document).ready(() => {
               .text('Go to virtual classroom')
             );
         }
+        $this.remove();
       })
       .catch((error) => {
         $this.removeClass('disabled');
