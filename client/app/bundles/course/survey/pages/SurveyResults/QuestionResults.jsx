@@ -18,7 +18,11 @@ const styles = {
   image: {
     maxHeight: 80,
     maxWidth: 80,
+  },
+  imageContainer: {
     margin: 10,
+    height: 80,
+    width: 80,
   },
   bar: {
     display: 'flex',
@@ -136,7 +140,12 @@ class QuestionResults extends React.Component {
         {
           hasImage ?
             <TableRowColumn>
-              { imageUrl ? <Thumbnail src={imageUrl} style={styles.image} /> : [] }
+              { imageUrl ?
+                <Thumbnail
+                  src={imageUrl}
+                  style={styles.image}
+                  containerStyle={styles.imageContainer}
+                /> : [] }
             </TableRowColumn> : null
         }
         <TableRowColumn colSpan={3}>

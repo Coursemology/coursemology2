@@ -54,9 +54,12 @@ const styles = {
     opacity: 0,
   },
   image: {
-    marginTop: 50,
     maxHeight: 150,
     maxWidth: 400,
+  },
+  imageContainer: {
+    marginTop: 50,
+    height: 150,
   },
 };
 
@@ -107,7 +110,11 @@ class QuestionFormOption extends React.Component {
       <div style={styles.optionBody}>
         {
           fileOrSrc.file || fileOrSrc.src ?
-            <Thumbnail style={styles.image} {...fileOrSrc} /> : null
+            <Thumbnail
+              {...fileOrSrc}
+              style={styles.image}
+              containerStyle={styles.imageContainer}
+            /> : null
         }
         <small>{imageFileName}</small>
         <Field

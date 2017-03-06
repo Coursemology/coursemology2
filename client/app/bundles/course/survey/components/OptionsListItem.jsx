@@ -13,6 +13,9 @@ const styles = {
     maxHeight: 150,
     maxWidth: 400,
   },
+  imageContainer: {
+    height: 150,
+  },
   gridCard: {
     margin: 10,
     padding: 10,
@@ -33,6 +36,10 @@ const styles = {
     maxHeight: 150,
     maxWidth: 150,
   },
+  tiledImageContainer: {
+    height: 150,
+    width: 150,
+  },
 };
 
 class OptionsListItem extends React.PureComponent {
@@ -50,7 +57,12 @@ class OptionsListItem extends React.PureComponent {
         style={styles.gridCard}
         containerStyle={styles.gridOption}
       >
-        { imageUrl ? <Thumbnail src={imageUrl} style={styles.tiledImage} /> : [] }
+        { imageUrl ?
+          <Thumbnail
+            src={imageUrl}
+            style={styles.tiledImage}
+            containerStyle={styles.tiledImageContainer}
+          /> : [] }
         <div style={styles.gridOptionBody}>
           { optionText ? <CardText>{optionText}</CardText> : null }
           { widget }
@@ -65,7 +77,12 @@ class OptionsListItem extends React.PureComponent {
       <div style={styles.option}>
         { widget }
         <div>
-          { imageUrl ? <Thumbnail src={imageUrl} style={styles.image} /> : [] }
+          { imageUrl ?
+            <Thumbnail
+              src={imageUrl}
+              style={styles.image}
+              containerStyle={styles.imageContainer}
+            /> : [] }
           { optionText || null }
         </div>
       </div>
