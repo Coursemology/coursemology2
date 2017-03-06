@@ -27,7 +27,7 @@ class Course::Survey::SurveysController < Course::ComponentController
 
   def update
     if @survey.update_attributes(survey_params)
-      questions
+      preload_questions_show
     else
       render json: { errors: @survey.errors }, status: :bad_request
     end
