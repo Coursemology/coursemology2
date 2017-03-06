@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SurveyIndex /> renders the index page 1`] = `
+<SurveyIndex
+  canCreate={false}
+  deleteConfirmation={
+    Object {
+      "onConfirm": [Function],
+      "open": false,
+    }
+  }
+  dispatch={[Function]}
+  form={Object {}}
+  notification={Object {}}
+  params={
+    Object {
+      "courseId": "1",
+    }
+  }
+  questionForm={
+    Object {
+      "disabled": false,
+      "formTitle": "",
+      "initialValues": Object {},
+      "onSubmit": [Function],
+      "visible": false,
+    }
+  }
+  responseForm={
+    Object {
+      "isLoading": false,
+      "response": Object {},
+      "survey": Object {},
+    }
+  }
+  results={
+    Object {
+      "questions": Array [],
+      "survey": Object {},
+    }
+  }
+  surveyForm={
+    Object {
+      "disabled": false,
+      "formTitle": "",
+      "initialValues": Object {},
+      "onSubmit": [Function],
+      "visible": false,
+    }
+  }
+  surveys={Array []}
+/>
+`;
