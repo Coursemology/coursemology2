@@ -15,7 +15,7 @@ const styles = {
   },
 };
 
-class Thumbnail extends React.Component {
+class Thumbnail extends React.PureComponent {
   constructor(props) {
     super(props);
     const { src, file } = props;
