@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170302054635) do
+ActiveRecord::Schema.define(version: 20170307080839) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,21 +72,21 @@ ActiveRecord::Schema.define(version: 20170302054635) do
   end
 
   create_table "courses", force: :cascade do |t|
-    t.integer  "instance_id",       :null=>false, :index=>{:name=>"fk__courses_instance_id"}, :foreign_key=>{:references=>"instances", :name=>"fk_courses_instance_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.string   "title",             :limit=>255, :null=>false
+    t.integer  "instance_id",      :null=>false, :index=>{:name=>"fk__courses_instance_id"}, :foreign_key=>{:references=>"instances", :name=>"fk_courses_instance_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.string   "title",            :limit=>255, :null=>false
     t.text     "description"
     t.text     "logo"
-    t.boolean  "published",         :default=>false, :null=>false
-    t.boolean  "enrollable",        :default=>false, :null=>false
-    t.string   "registration_key",  :limit=>16, :index=>{:name=>"index_courses_on_registration_key", :unique=>true}
+    t.boolean  "published",        :default=>false, :null=>false
+    t.boolean  "enrollable",       :default=>false, :null=>false
+    t.string   "registration_key", :limit=>16, :index=>{:name=>"index_courses_on_registration_key", :unique=>true}
     t.text     "settings"
-    t.boolean  "gamified",          :default=>true, :null=>false
-    t.datetime "start_at",          :null=>false
-    t.datetime "end_at",            :null=>false
-    t.integer  "creator_id",        :null=>false, :index=>{:name=>"fk__courses_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_courses_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "updater_id",        :null=>false, :index=>{:name=>"fk__courses_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_courses_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.datetime "created_at",        :null=>false
-    t.datetime "updated_at",        :null=>false
+    t.boolean  "gamified",         :default=>true, :null=>false
+    t.datetime "start_at",         :null=>false
+    t.datetime "end_at",           :null=>false
+    t.integer  "creator_id",       :null=>false, :index=>{:name=>"fk__courses_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_courses_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "updater_id",       :null=>false, :index=>{:name=>"fk__courses_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_courses_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "created_at",       :null=>false
+    t.datetime "updated_at",       :null=>false
   end
 
   create_table "course_achievements", force: :cascade do |t|
@@ -193,9 +193,11 @@ ActiveRecord::Schema.define(version: 20170302054635) do
   end
 
   create_table "jobs", id: :uuid, default: nil, force: :cascade do |t|
-    t.integer "status",      :default=>0, :null=>false
-    t.string  "redirect_to", :limit=>255
-    t.json    "error"
+    t.integer  "status",      :default=>0, :null=>false
+    t.string   "redirect_to", :limit=>255
+    t.json     "error"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "course_assessment_answer_auto_gradings", force: :cascade do |t|
