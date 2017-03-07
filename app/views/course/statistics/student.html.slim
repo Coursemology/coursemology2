@@ -1,5 +1,5 @@
 = page_header
-- if current_course_user&.my_students.any?
+- if current_course_user&.my_students&.any?
   ul.nav.nav-tabs.tab-header role="tab-list"
     li role="presentation"
       a href="#my-students" aria-controls="my-students" role="tab" data-toggle="tab"
