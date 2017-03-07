@@ -31,23 +31,18 @@ const ProviderWrapper = ({ store, children }) => {
     messages = translations[localeWithoutRegionCode] || translations[i18nLocale];
   }
 
-  let providers;
+  let providers =
+    (<IntlProvider locale={i18nLocale} messages={messages} timeZone={timeZone}>
+      <MuiThemeProvider>
+        { children }
+      </MuiThemeProvider>
+    </IntlProvider>);
+
   if (store) {
     providers =
       (<Provider store={store}>
-        <IntlProvider locale={i18nLocale} messages={messages} timeZone={timeZone}>
-          <MuiThemeProvider>
-            { children }
-          </MuiThemeProvider>
-        </IntlProvider>
+        {providers}
       </Provider>);
-  } else {
-    providers =
-      (<IntlProvider locale={i18nLocale} messages={messages}>
-        <MuiThemeProvider>
-          { children }
-        </MuiThemeProvider>
-      </IntlProvider>);
   }
 
   return providers;
