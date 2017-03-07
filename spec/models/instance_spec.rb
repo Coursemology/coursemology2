@@ -74,6 +74,26 @@ RSpec.describe Instance do
     end
   end
 
+  describe '#containing_user' do
+    let(:instances) { create_list(:instance, 5) }
+    let(:instances_with_user) { instances[0..2] }
+    let(:user) { create(:user) }
+
+    before do
+      instances_with_user.each do |instance|
+        ActsAsTenant.with_tenant(instance) do
+          InstanceUser.create(instance: instance, user: user)
+        end
+      end
+    end
+
+    it 'returns the correct set of instances' do
+      ActsAsTenant.without_tenant do
+        expect(Instance.containing_user(user)).to contain_exactly(*instances_with_user)
+      end
+    end
+  end
+
   describe '.find_tenant_by_host' do
     let(:instances) { create_list(:instance, 3) }
 
