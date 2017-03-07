@@ -62,6 +62,8 @@ class Course < ActiveRecord::Base
   scope :ordered_by_start_at, ->(direction = :desc) { order(start_at: direction) }
   scope :ordered_by_end_at, ->(direction = :desc) { order(end_at: direction) }
   scope :publicly_accessible, -> { where(published: true) }
+  scope :current, -> { where { end_at > Time.zone.now } }
+  scope :completed, -> { where { end_at <= Time.zone.now } }
 
   # @!method containing_user
   #   Selects all the courses with user as one of its members

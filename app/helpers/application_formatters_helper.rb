@@ -55,7 +55,7 @@ module ApplicationFormattersHelper
   # @return [String] The user-visible string, including embedded HTML which will display the
   #   string within a link to bring to the User page.
   def link_to_user(user, options = {})
-    link_path = '' # TODO: Link to the user page.
+    link_path = user_path(user)
     link_to(link_path, options) do
       if block_given?
         yield(user)
