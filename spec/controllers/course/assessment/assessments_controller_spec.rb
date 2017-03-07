@@ -67,7 +67,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
         before { controller.instance_variable_set(:@assessment, immutable_assessment) }
 
         it 'redirects with a flash message' do
-          expect(subject).to redirect_to(course_assessments_path(course))
+          expect(subject).to redirect_to(course_assessment_path(course, immutable_assessment))
           expect(flash[:danger]).to eq(I18n.t('course.assessment.assessments.destroy.failure'))
         end
       end
