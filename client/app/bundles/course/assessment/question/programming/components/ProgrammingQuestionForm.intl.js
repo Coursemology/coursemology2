@@ -45,12 +45,12 @@ export default defineMessages({
   },
   memoryLimitFieldLabel: {
     id: 'course.assessment.question.programming.programmingQuestionForm.memoryLimitFieldLabel',
-    defaultMessage: 'Memory Limit',
+    defaultMessage: 'Memory Limit (MB)',
     description: 'Label for the memory limit input field.',
   },
   timeLimitFieldLabel: {
     id: 'course.assessment.question.programming.programmingQuestionForm.timeLimitFieldLabel',
-    defaultMessage: 'Time Limit',
+    defaultMessage: 'Time Limit (s)',
     description: 'Label for the time limit input field.',
   },
   attemptLimitFieldLabel: {
@@ -149,6 +149,6 @@ export default defineMessages({
   },
   timeLimitRangeValidationError: {
     id: 'course.assessment.question.programming.programmingQuestionForm.timeLimitRangeValidationError',
-    defaultMessage: 'Time limit must be within 1 to 10.',
+    defaultMessage: 'Time limit must be within 1 to 30.',
   },
 });
