@@ -67,10 +67,12 @@ script:
   - 'if [ "$GROUP" = "checks" ]; then cd client && yarn build:production && cd -; bundle exec rake assets:precompile; fi'
   - 'if [ "$GROUP" = "checks" ]; then cd client && yarn install && yarn lint --prefix && cd -; fi'
   - 'if [ "$GROUP" = "test" ]; then cd client && yarn test; fi'
+  - 'if [ "$GROUP" = "test" ]; then cd ..; fi'
   - 'if [ "$GROUP" = "test" ]; then bundle exec rake parallel:spec[2]; fi'
-  - 'if [ "$GROUP" = "test" ]; then cat ../coverage/lcov/*.lcov coverage/lcov.info | node_modules/coveralls/bin/coveralls.js; cd ..; fi'
 after_script:
-  - bundle exec codeclimate-test-reporter
+  - 'if [ "$GROUP" = "test" ]; then cat coverage/lcov/*.lcov client/coverage/lcov.info > results.lcov; fi'
+  - 'if [ "$GROUP" = "test" ]; then client/node_modules/coveralls/bin/coveralls.js < results.lcov; fi'
+  - 'if [ "$GROUP" = "test" ]; then bundle exec codeclimate-test-reporter < results.lcov; fi'
 
 notifications:
   webhooks:

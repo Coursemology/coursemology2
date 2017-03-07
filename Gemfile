@@ -132,7 +132,6 @@ end
 
 group :ci do
   # Code Coverage reporters
-  gem 'coveralls'
   gem 'codeclimate-test-reporter'
   gem 'simplecov-lcov'
 end
