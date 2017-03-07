@@ -70,10 +70,13 @@ RSpec.feature 'Course: Assessments: Management' do
 
       scenario 'I can delete an assessment' do
         assessment = create(:assessment, course: course)
+        category_id, tab_id = assessment.tab.category_id, assessment.tab_id
         visit course_assessment_path(course, assessment)
 
-        find(:css, 'div.page-header a.btn-danger').click
-        expect(current_path).to eq(course_assessments_path(course))
+        expect { find(:css, 'div.page-header a.btn-danger').click }.
+          to change { course.reload.assessments.count }.by(-1)
+        expect(page).
+          to have_current_path course_assessments_path(course, category: category_id, tab: tab_id)
 
         expect(page).not_to have_selector("#assessment_#{assessment.id}")
       end

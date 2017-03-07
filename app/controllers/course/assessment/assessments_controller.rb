@@ -33,10 +33,11 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def destroy
     if @assessment.destroy
-      redirect_to course_assessments_path(current_course),
+      redirect_to course_assessments_path(current_course, category: @assessment.tab.category_id,
+                                                          tab: @assessment.tab_id),
                   success: t('.success', assessment: @assessment.title)
     else
-      redirect_to course_assessments_path(current_course),
+      redirect_to course_assessment_path(current_course, @assessment),
                   danger: t('.failure', error: @assessment.errors.full_messages.to_sentence)
     end
   end
