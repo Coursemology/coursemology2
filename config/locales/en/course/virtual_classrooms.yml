@@ -1,0 +1,28 @@
+en:
+  course:
+    virtual_classrooms:
+      sidebar_title: :'course.virtual_classrooms.index.header'
+      index:
+        header: 'Virtual Classrooms'
+        duration_minutes: '%{duration} minutes'
+      new:
+        header: 'New Virtual Classroom'
+      create:
+        success: 'Virtual classroom %{title} was created.'
+      edit:
+        header: 'Edit Virtual Classroom'
+      update:
+        success: 'Virtual classroom %{title} was updated.'
+      destroy:
+        success: 'Virtual classroom %{title} was deleted.'
+        failure: 'Failed to delete virtual classroom: %{error}'
+      lesson_already_conducted: "The lesson has already ended"
+      lesson_live_in: "The lesson will go live in %{desc}, please refresh the page when it is live"
+      error_generating_link: "Error generating access link: %{error}"
+      error_creating_classroom: "Error creating classroom: %{error}"
+      go_to_virtual_classroom: "Go to virtual classroom"
+      waiting_for_instructor: "Waiting for instructor, please refresh the page shortly"
+      get_virtual_classroom_link: "Get Virtual Classroom Link"
+      ended: "Virtual Class Ended"
+      not_started: "Virtual class hasn't started"
+      no_api_key: "No Virtual Classroom API key found. Please set one in course settings"

@@ -1,5 +1,0 @@
-= page_header lectures_title do
-  = new_button([current_course, :lecture]) if can?(:create, Course::Lecture.new(course: current_course))
-
-= render partial: @lectures, spacer_template: 'course/lectures/lecture_spacer'
-= paginate @lectures

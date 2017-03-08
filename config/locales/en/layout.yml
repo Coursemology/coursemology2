@@ -22,8 +22,8 @@ en:
         title: 'General'
       announcement_settings:
         title: :'course.announcements.index.header'
-      lecture_settings:
-        title: :'course.lectures.index.header'
+      virtual_classroom_settings:
+        title: :'course.virtual_classrooms.index.header'
       component_settings:
         title: :'course.admin.component_settings.index.header'
       sidebar_settings:

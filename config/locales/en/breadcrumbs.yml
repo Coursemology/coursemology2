@@ -15,8 +15,8 @@ en:
           index: :'course.assessment.assessments.index.header'
         announcement_settings:
           edit: :'course.announcements.index.header'
-        lecture_settings:
-          edit: :'course.lectures.index.header'
+        virtual_classroom_settings:
+          edit: :'course.virtual_classrooms.index.header'
         component_settings:
           edit: :'course.admin.component_settings.index.header'
         sidebar_settings:
@@ -53,9 +53,9 @@ en:
       announcements:
         index: :'course.announcements.index.header'
         new: :'course.announcements.new.header'
-      lectures:
-        index: :'course.lectures.index.header'
-        new: :'course.lectures.new.header'
+      virtual_classrooms:
+        index: :'course.virtual_classrooms.index.header'
+        new: :'course.virtual_classrooms.new.header'
       achievement:
         condition:
           levels:

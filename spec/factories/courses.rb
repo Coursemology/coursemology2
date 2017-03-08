@@ -26,9 +26,10 @@ FactoryGirl.define do
       end
     end
 
-    trait :with_lecture_component_enabled do
+    trait :with_virtual_classroom_component_enabled do
       after(:build) do |course|
-        course.settings(:components, :course_lectures_component).enabled = true
+        course.settings(:components, :course_virtual_classrooms_component).enabled = true
+        course.settings(:virtual_classroom).braincert_whiteboard_api_key = 'FAKE_API_KEY'
       end
     end
   end

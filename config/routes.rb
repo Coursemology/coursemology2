@@ -121,8 +121,8 @@ Rails.application.routes.draw do
         get 'announcements' => 'announcement_settings#edit'
         patch 'announcements' => 'announcement_settings#update'
 
-        get 'lectures' => 'lecture_settings#edit'
-        patch 'lectures' => 'lecture_settings#update'
+        get 'virtual_classrooms' => 'virtual_classroom_settings#edit'
+        patch 'virtual_classrooms' => 'virtual_classroom_settings#update'
 
         get 'assessments' => 'assessment_settings#edit'
         patch 'assessments' => 'assessment_settings#update'
@@ -149,7 +149,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :lectures, concerns: :paginatable do
+      resources :virtual_classrooms, concerns: :paginatable do
         get :access_link, on: :member
       end
 
