@@ -14,7 +14,6 @@ $(document).ready(() => {
     const Page = () => (
       <ProviderWrapper store={store}>
         <AssessmentIndexPage
-          courseId={attributes.course_id}
           categoryId={attributes.category_id}
           tabId={attributes.tab_id}
         />

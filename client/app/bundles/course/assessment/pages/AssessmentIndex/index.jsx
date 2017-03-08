@@ -28,7 +28,6 @@ class PopupDialog extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     intl: intlShape,
-    courseId: PropTypes.number.isRequired,
     categoryId: PropTypes.number.isRequired,
     tabId: PropTypes.number.isRequired,
     pristine: PropTypes.bool,
@@ -39,11 +38,10 @@ class PopupDialog extends React.Component {
   };
 
   onFormSubmit = (data) => {
-    const { courseId, categoryId, tabId, intl } = this.props;
+    const { categoryId, tabId, intl } = this.props;
 
     return this.props.dispatch(
       actions.createAssessment(
-        courseId,
         categoryId,
         tabId,
         { assessment: data },
