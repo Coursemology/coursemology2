@@ -3,13 +3,13 @@ prepare:
 compile:
 
 test:	answer.py
-	PYTHONPATH="$(shell pwd)/submission":"$(shell pwd)/tests" python3 answer.py
+	PYTHONPATH="$(shell pwd)/submission":"$(shell pwd)/tests" $(PYTHON) answer.py
 
 answer.py:	tests/autograde.py submission/template.py tests/prepend.py tests/append.py
 	cat tests/prepend.py submission/template.py tests/append.py tests/autograde.py > answer.py
 
 solution:	solution.py
-	PYTHONPATH="$(shell pwd)/solution":"$(shell pwd)/tests" python3 solution.py
+	PYTHONPATH="$(shell pwd)/solution":"$(shell pwd)/tests" $(PYTHON) solution.py
 
 solution.py:	tests/autograde.py solution/template.py tests/prepend.py tests/append.py
 	cat tests/prepend.py solution/template.py tests/append.py tests/autograde.py > solution.py
