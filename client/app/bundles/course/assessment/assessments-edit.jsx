@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import storeCreator from './store';
-import EditPage from './pages/EditPage';
+import AssessmentEditPage from './pages/AssessmentEdit';
 
 $(document).ready(() => {
   const mountNode = document.getElementById('assessment-edit');
@@ -13,7 +13,7 @@ $(document).ready(() => {
 
     const Page = () => (
       <ProviderWrapper store={store}>
-        <EditPage
+        <AssessmentEditPage
           modeSwitching={data.mode_switching}
           folderAttributes={data.folder_attributes}
           conditionAttributes={data.condition_attributes}

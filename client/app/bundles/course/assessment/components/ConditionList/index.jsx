@@ -8,7 +8,7 @@ import MenuItem from 'material-ui/MenuItem';
 import NewIcon from 'material-ui/svg-icons/content/add';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import translations from './ConditionList.intl';
+import translations from './translations.intl';
 
 const styles = {
   alignRight: {

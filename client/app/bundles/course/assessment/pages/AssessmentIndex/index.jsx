@@ -8,10 +8,10 @@ import FlatButton from 'material-ui/FlatButton';
 import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import formTranslations from 'lib/translations/form';
-import AssessmentForm from './AssessmentForm';
-import * as actions from '../actions';
-import translations from './PopupDialog.intl';
-import actionTypes, { formNames } from '../constants';
+import AssessmentForm from '../../containers/AssessmentForm';
+import * as actions from '../../actions';
+import translations from './translations.intl';
+import actionTypes, { formNames } from '../../constants';
 
 
 const styles = {
