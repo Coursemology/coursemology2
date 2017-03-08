@@ -27,9 +27,10 @@
   div.access-link
     - link_exists = virtual_classroom.instructor_classroom_link.present?
     - is_instructor = can?(:edit, virtual_classroom)
+    - is_main_instructor = virtual_classroom.instructor == current_user
     - if virtual_classroom.currently_active?
       - if link_exists || is_instructor
-        - if link_exists && is_instructor
+        - if link_exists && is_main_instructor
           = link_to(t('course.virtual_classrooms.go_to_virtual_classroom'),
             virtual_classroom.instructor_classroom_link,
             id: "lec-link-#{virtual_classroom.id}", target: '_blank')

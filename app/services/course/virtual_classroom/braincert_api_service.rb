@@ -32,10 +32,15 @@ class Course::VirtualClassroom::BraincertApiService
     res_body = JSON.parse(res.body)
     error = res_body['error']
     return [nil, I18n.t(:'course.virtual_classrooms.error_generating_link', error: error)] if error
-    if is_instructor
-      @virtual_classroom.update! instructor_classroom_link: res_body['encryptedlaunchurl']
-    end
-    [res_body['encryptedlaunchurl'], nil]
+    access_link = res_body['encryptedlaunchurl']
+    save_instructor_info(access_link, user) if is_instructor
+    [access_link, nil]
+  end
+
+  def save_instructor_info(access_link, user)
+    @virtual_classroom.instructor_classroom_link = access_link
+    @virtual_classroom.instructor ||= user
+    @virtual_classroom.save!
   end
 
   def generate_classroom_link_params(user, is_instructor)

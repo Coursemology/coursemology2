@@ -4,6 +4,7 @@ class Course::VirtualClassroom < ActiveRecord::Base
   before_validation :convert_duration_to_end_at
   acts_as_readable on: :updated_at
   has_many_attachments on: :content
+  belongs_to :instructor, class_name: 'User', foreign_key: :instructor_id, inverse_of: nil
 
   belongs_to :course, inverse_of: :virtual_classrooms
 
