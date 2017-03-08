@@ -35,6 +35,8 @@ const propTypes = {
   intl: intlShape.isRequired,
 };
 
+const DEFAULT_TIME_LIMIT = 10, HARD_TIME_LIMIT = 30;
+
 function validation(data, pathOfKeysToData, intl) {
   const errors = [];
   const questionErrors = {};
@@ -61,7 +63,7 @@ function validation(data, pathOfKeysToData, intl) {
 
   // Check time limit
   const timeLimit = data.get('time_limit');
-  if (timeLimit && (timeLimit > 10 || timeLimit <= 0)) {
+  if (timeLimit && (timeLimit > HARD_TIME_LIMIT || timeLimit <= 0)) {
     questionErrors.time_limit =
       intl.formatMessage(translations.timeLimitRangeValidationError);
     hasError = true;
@@ -577,7 +579,7 @@ class ProgrammingQuestionForm extends React.Component {
                   this.renderInputField(
                     this.props.intl.formatMessage(translations.timeLimitFieldLabel),
                     'time_limit', false, 'number',
-                    ProgrammingQuestionForm.convertNull(question.get('time_limit')),
+                    question.get('time_limit') === null ? DEFAULT_TIME_LIMIT : question.get('time_limit'),
                     this.props.data.getIn(['question', 'error', 'time_limit']))
                   :
                   null
