@@ -2,19 +2,30 @@ import BaseSurveyAPI from './Base';
 
 export default class ResponsesAPI extends BaseSurveyAPI {
   /**
-  * answer_with_response = {
+  * survey_response = {
   *   survey: {
-  *     id:number, title:string, description:string, start_at:datetime, ...etc,
+  *     id: number, title: string, description: string, start_at: datetime, ...etc,
   *       - Survey attributes
-  *     questions: Array.<{description:string, options:Array, question_type:string... etc}>,
-  *        - Array of questions belonging to the survey
-  *        - question_type is one of ['text', 'multiple_choice', 'multiple_response']
   *   },
   *   response: {
-  *     id:number, submitted_at:datetime,
+  *     id: number, submitted_at: datetime,
   *       - Response Attributes
-  *     answers: Array.<question_id:number, text_response:string, options:Array. etc...>,
-  *       - Answer attributes
+  *     sections:
+  *       Array.<{
+  *         id: number, title: string, weight: number, ...etc,
+  *           - Section attributes
+  *         answers:
+  *           Array.<{
+  *             id: number, text_response: string, options: Array, ...etc,
+  *               - Answer attributes
+  *             questions: Array.<{
+  *               description: string, options: Array, weight: number, ...etc
+  *                 - Array of questions belonging to the survey
+  *               question_type: string,
+  *                 - question_type is one of ['text', 'multiple_choice', 'multiple_response']
+  *             }>,
+  *           }>
+  *       }>
   *   }
   * }
   */
@@ -24,7 +35,7 @@ export default class ResponsesAPI extends BaseSurveyAPI {
   *
   * @param {number} responseId
   * @return {Promise}
-  * success response: answer_with_response
+  * success response: survey_response
   * error response: {}
   */
   fetch(responseId) {
@@ -36,10 +47,10 @@ export default class ResponsesAPI extends BaseSurveyAPI {
   *
   * @param {number} surveyId
   * @return {Promise}
-  * success response: answer_with_response
+  * success response: survey_response
   * error response:
-  *   { responseId:number } if user has an existing survey response
-  *   { error:string } if there is some other error
+  *   { responseId: number } if user has an existing survey response
+  *   { error: string } if there is some other error
   */
   create(surveyId) {
     return this.getClient().post(this._getUrlPrefix(surveyId));
@@ -52,13 +63,14 @@ export default class ResponsesAPI extends BaseSurveyAPI {
   * @param {object} responseFields - params in the format of
   *   {
   *     response: {
-  *       answers_attributes:Array.<{id:number, text_response:string, etc}>,
-  *       submit:bool, - true if user is finalizing his update in this submission
+  *       answers_attributes: Array.<{ id: number, text_response: string, ...etc }>,
+  *       submit: bool,
+  *         - true if user is finalizing his update in this submission
   *     }
   *   }
   * @return {Promise}
-  * success response: answer_with_response
-  * error response: { errors: [{ attribute:string }] }
+  * success response: survey_response
+  * error response: { errors: [{ attribute: string }] }
   */
   update(responseId, responseFields) {
     return this.getClient().patch(`${this._getUrlPrefix()}/${responseId}`, responseFields);

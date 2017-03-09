@@ -34,6 +34,7 @@ export function createSurveyQuestion(
       .then((response) => {
         dispatch({
           surveyId: CourseAPI.survey.responses.getSurveyId(),
+          sectionId: response.data.section_id,
           type: actionTypes.CREATE_SURVEY_QUESTION_SUCCESS,
           question: response.data,
         });
@@ -63,6 +64,7 @@ export function updateSurveyQuestion(
       .then((response) => {
         dispatch({
           surveyId: CourseAPI.survey.responses.getSurveyId(),
+          sectionId: response.data.section_id,
           type: actionTypes.UPDATE_SURVEY_QUESTION_SUCCESS,
           question: response.data,
         });
@@ -81,17 +83,18 @@ export function updateSurveyQuestion(
 }
 
 export function deleteSurveyQuestion(
-  questionId,
+  question,
   successMessage,
   failureMessage
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.DELETE_SURVEY_QUESTION_REQUEST });
-    return CourseAPI.survey.questions.delete(questionId)
+    return CourseAPI.survey.questions.delete(question.id)
       .then(() => {
         dispatch({
           surveyId: CourseAPI.survey.responses.getSurveyId(),
-          questionId,
+          sectionId: question.section_id,
+          questionId: question.id,
           type: actionTypes.DELETE_SURVEY_QUESTION_SUCCESS,
         });
         setNotification(successMessage)(dispatch);

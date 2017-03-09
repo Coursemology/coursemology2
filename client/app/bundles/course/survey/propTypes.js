@@ -1,5 +1,12 @@
 import { PropTypes } from 'react';
 
+export const sectionShape = PropTypes.shape({
+  id: PropTypes.number,
+  title: PropTypes.string,
+  description: PropTypes.string,
+  weight: PropTypes.number,
+});
+
 export const optionShape = PropTypes.shape({
   id: PropTypes.number,
   weight: PropTypes.number,
@@ -27,7 +34,6 @@ export const surveyShape = PropTypes.shape({
   end_at: PropTypes.string,
   base_exp: PropTypes.number,
   published: PropTypes.bool,
-  questions: PropTypes.arrayOf(questionShape),
 });
 
 export const answerOptionShape = PropTypes.shape({
@@ -46,5 +52,5 @@ export const answerShape = PropTypes.shape({
 export const responseShape = PropTypes.shape({
   id: PropTypes.number,
   submitted_at: PropTypes.string,
-  answers: PropTypes.arrayOf(answerShape),
+  sections: PropTypes.arrayOf(sectionShape),
 });

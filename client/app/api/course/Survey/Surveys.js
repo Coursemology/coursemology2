@@ -3,11 +3,22 @@ import BaseSurveyAPI from './Base';
 export default class SurveysAPI extends BaseSurveyAPI {
   /**
   * survey_with_questions = {
-  *   id:number, title:string, description:string, start_at:datetime, ...etc
+  *   id: number, title: string, description: string, start_at: datetime, ...etc
   *      - Survey attributes
-  *   questions: Array.<{description:string, options:Array, question_type:string, ...etc}>,
-  *      - Array of questions belonging to the survey
-  *      - question_type is one of ['text', 'multiple_choice', 'multiple_response']
+  *   canCreateSection: bool,
+  *      - true if user can create sections for this survey
+  *   canViewResults: bool,
+  *      - true if user can view results for this survey
+  *   canUpdate: bool, canDelete: bool,
+  *      - true if user can update and delete this survey respectively
+  *   sections:
+  *     Array.<{
+  *       id: number, title: string, weight: number, ...etc
+  *         - Section attributes
+  *       questions: Array.<{ description: string, options: Array, question_type: string, ...etc }>,
+  *          - Array of questions belonging to the survey
+  *          - question_type is one of ['text', 'multiple_choice', 'multiple_response']
+  *     }>
   * }
   */
 
@@ -27,9 +38,9 @@ export default class SurveysAPI extends BaseSurveyAPI {
   *
   * @return {Promise}
   * success response: {
-  *   canCreate:bool,
+  *   canCreate: bool,
   *     - true if user can create a survey
-  *   surveys:Array.<{id:number, title:string, ...etc}>
+  *   surveys:Array.<{ id: number, title: string, ...etc }>
   *     - Array of surveys without full questions details
   * }
   */
@@ -43,7 +54,7 @@ export default class SurveysAPI extends BaseSurveyAPI {
   * @param {object} surveyFields - params in the format of { survey: { :title, :description, etc } }
   * @return {Promise}
   * success response: survey_with_questions
-  * error response: { errors: [{ attribute:string }] }
+  * error response: { errors: [{ attribute: string }] }
   */
   create(surveyFields) {
     return this.getClient().post(this._getUrlPrefix(), surveyFields);
@@ -56,7 +67,7 @@ export default class SurveysAPI extends BaseSurveyAPI {
   * @param {object} surveyFields - params in the format of { survey: { :title, :description, etc } }
   * @return {Promise}
   * success response: survey_with_questions
-  * error response: { errors: [{ attribute:string }] }
+  * error response: { errors: [{ attribute: string }] }
   */
   update(surveyId, surveyFields) {
     return this.getClient().patch(`${this._getUrlPrefix()}/${surveyId}`, surveyFields);
@@ -80,19 +91,21 @@ export default class SurveysAPI extends BaseSurveyAPI {
   * @param {number} surveyId
   * @return {Promise}
   * success response: {
-  *   questions: Array.<
-  *     ...survey_question,
-  *       - Question fields. See ./Questions.js.
-  *     answers: Array.<
-  *       id:number, course_user_name:string, course_user_role:string,
-  *       text_response:string
-  *         - included only if it is a text response question
-  *       selected_options:Array.<number>
-  *         - included only if it is a multiple choice or multiple response question
-  *     >
-  *   >,
-  *  survey: { id:number, title:string, description:string, start_at:datetime, ...etc }
-  *      - Survey attributes
+  *   sections: Array.<{
+  *     questions: Array.<{
+  *       description: string, options: Array, question_type: string, options: Array, ...etc
+  *         - Question attributes
+  *       answers: Array.<{
+  *         id: number, course_user_name: string, course_user_role: string,
+  *         text_response: string
+  *           - included only if it is a text response question
+  *         selected_options: Array.<number>
+  *           - included only if it is a multiple choice or multiple response question
+  *       }>
+  *     }>
+  *   }>
+  *   survey: { id: number, title: string, description: string, start_at: datetime, ...etc }
+  *     - Survey attributes
   * }
   * error response: {}
   */

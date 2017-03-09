@@ -151,7 +151,7 @@ export function fetchResults(surveyId) {
         dispatch({
           type: actionTypes.LOAD_SURVEY_RESULTS_SUCCESS,
           survey: response.data.survey,
-          questions: response.data.questions,
+          sections: response.data.sections,
         });
       })
       .catch(() => {

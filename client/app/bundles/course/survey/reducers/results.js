@@ -2,7 +2,7 @@ import actionTypes from '../constants';
 
 const initialState = {
   survey: {},
-  questions: [],
+  sections: [],
 };
 
 export default function (state = initialState, action) {
@@ -10,7 +10,7 @@ export default function (state = initialState, action) {
     case actionTypes.LOAD_SURVEY_RESULTS_SUCCESS: {
       return {
         survey: action.survey,
-        questions: action.questions,
+        sections: action.sections,
       };
     }
     default:
