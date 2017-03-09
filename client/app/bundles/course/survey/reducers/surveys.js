@@ -18,6 +18,9 @@ export default function (state = [], action) {
       return deleteIfFound(state, action.surveyId);
     }
 
+    case actionTypes.UPDATE_SURVEY_SECTION_SUCCESS:
+    case actionTypes.DELETE_SURVEY_SECTION_SUCCESS:
+    case actionTypes.CREATE_SURVEY_SECTION_SUCCESS:
     case actionTypes.UPDATE_SURVEY_QUESTION_SUCCESS:
     case actionTypes.DELETE_SURVEY_QUESTION_SUCCESS:
     case actionTypes.CREATE_SURVEY_QUESTION_SUCCESS: {

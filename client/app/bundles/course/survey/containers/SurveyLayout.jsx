@@ -5,12 +5,14 @@ import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { resetDeleteConfirmation } from '../actions';
 import SurveyFormDialogue from '../containers/SurveyFormDialogue';
 import QuestionFormDialogue from '../containers/QuestionFormDialogue';
+import SectionFormDialogue from '../containers/SectionFormDialogue';
 
 const SurveyLayout = ({ dispatch, notification, children, deleteConfirmation }) => (
   <div>
     {children}
     <SurveyFormDialogue />
     <QuestionFormDialogue />
+    <SectionFormDialogue />
     <ConfirmationDialog
       confirmDelete
       {...deleteConfirmation}

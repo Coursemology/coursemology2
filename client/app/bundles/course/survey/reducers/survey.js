@@ -16,9 +16,14 @@ export default function (survey = initialState, action) {
       const sections = survey.sections.map(section => sectionReducer(section, action));
       return { ...survey, sections };
     }
-    case actionTypes.DELETE_SURVEY_QUESTION_SUCCESS: {
-      const questions = deleteIfFound(survey.questions, action.questionId);
-      return { ...survey, questions };
+    case actionTypes.UPDATE_SURVEY_SECTION_SUCCESS:
+    case actionTypes.CREATE_SURVEY_SECTION_SUCCESS: {
+      const sections = updateOrAppend(survey.sections, action.section);
+      return { ...survey, sections };
+    }
+    case actionTypes.DELETE_SURVEY_SECTION_SUCCESS: {
+      const sections = deleteIfFound(survey.sections, action.sectionId);
+      return { ...survey, sections };
     }
     default:
       return survey;

@@ -318,6 +318,7 @@ Rails.application.routes.draw do
           get 'results', on: :member
           resources :questions, only: [:create, :update, :destroy]
           resources :responses, only: [:create, :show, :edit, :update]
+          resources :sections, only: [:create, :update, :destroy]
         end
       end
     end

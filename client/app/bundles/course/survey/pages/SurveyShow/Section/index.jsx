@@ -6,6 +6,8 @@ import { sorts } from '../../../utils';
 import { sectionShape } from '../../../propTypes';
 import Question from './Question';
 import NewQuestionButton from './NewQuestionButton';
+import EditSectionButton from './EditSectionButton';
+import DeleteSectionButton from './DeleteSectionButton';
 
 const styles = {
   card: {
@@ -63,6 +65,8 @@ class Section extends React.Component {
         </CardText>
         <CardActions>
           { section.canCreateQuestion ? <NewQuestionButton sectionId={section.id} /> : null }
+          { section.canUpdate ? <EditSectionButton {...{ section }} /> : null }
+          { section.canDelete ? <DeleteSectionButton sectionId={section.id} /> : null }
         </CardActions>
       </Card>
     );
