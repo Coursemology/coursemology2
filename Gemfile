@@ -37,7 +37,7 @@ gem 'calculated_attributes', '>= 0.1.3'
 gem 'squeel'
 # For multiple table inheritance
 #   TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
-gem 'active_record-acts_as', github: 'Coursemology/active_record-acts_as' 
+gem 'active_record-acts_as', github: 'Coursemology/active_record-acts_as'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Create pretty URLs and work with human-friendly strings
@@ -176,7 +176,7 @@ gem 'themes_on_rails', '>= 0.3.1', github: 'lowjoel/themes_on_rails',
 
 # Forms made easy for Rails
 gem 'simple_form', '~> 3.2.1'
-gem 'simple_form-bootstrap', github: 'allenwq/simple_form-bootstrap' 
+gem 'simple_form-bootstrap', github: 'allenwq/simple_form-bootstrap'
 # Dynamic nested forms
 gem 'cocoon'
 gem 'momentjs-rails', '>= 2.8.1'
@@ -185,8 +185,6 @@ gem 'bootstrap-select-rails'
 gem 'bootstrap_tokenfield_rails'
 gem 'twitter-typeahead-rails'
 gem 'summernote-rails'
-# TODO: Remove version lock to 4.1.1, 4.1.2 results in failures in programming_management_spec.rb
-gem 'ace-rails-ap', '4.1.1'
 
 # Using CarrierWave for file uploads
 gem 'carrierwave'

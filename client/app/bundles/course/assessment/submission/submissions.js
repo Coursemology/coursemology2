@@ -1,25 +1,27 @@
-//= require helpers/url_helpers
+import getUrlParameter from 'lib/helpers/url_helpers';
 
-(function($, URL_HELPERS) {
-  'use strict';
-  var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ';
-  var SINGLE_QUESTION_ASSESSMENT_SELECTOR = DOCUMENT_SELECTOR + '.single-question ';
-  var MULTI_QUESTION_ASSESSMENT_SELECTOR = DOCUMENT_SELECTOR + '.multi-question ';
-  var SUMMARY_GRADE_SELECTOR = '.submission-grades-summary-grade';
-  var GRADE_INPUT_SELECTOR = 'input.grade';
-  var POINTS_AWARDED_SELECTOR = 'input.submission-points-awarded';
-  var MAXIMUM_GRADE_SELECTOR = '.submission-statistics-maximum-grade';
-  var TOTAL_GRADE_SELECTOR = '.submission-statistics-total-grade';
+/* eslint wrap-iife: ["error", "inside"] */
+/* eslint no-use-before-define: ["error", { "functions": false }] */
+/* global $:false, jQuery:false */
+(function ($) {
+  const DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ';
+  const SINGLE_QUESTION_ASSESSMENT_SELECTOR = `${DOCUMENT_SELECTOR}.single-question `;
+  const MULTI_QUESTION_ASSESSMENT_SELECTOR = `${DOCUMENT_SELECTOR}.multi-question `;
+  const SUMMARY_GRADE_SELECTOR = '.submission-grades-summary-grade';
+  const GRADE_INPUT_SELECTOR = 'input.grade';
+  const POINTS_AWARDED_SELECTOR = 'input.submission-points-awarded';
+  const MAXIMUM_GRADE_SELECTOR = '.submission-statistics-maximum-grade';
+  const TOTAL_GRADE_SELECTOR = '.submission-statistics-total-grade';
 
   /**
    * Update the initial EXP points after page load.
    */
   function updateInitialPoints() {
     if ($(DOCUMENT_SELECTOR).length !== 0) {
-      var totalGrade = Number($(TOTAL_GRADE_SELECTOR).text());
+      const totalGrade = Number($(TOTAL_GRADE_SELECTOR).text());
       if (isNaN(totalGrade)) { return; }
 
-      var assignedExp = $(POINTS_AWARDED_SELECTOR).val();
+      const assignedExp = $(POINTS_AWARDED_SELECTOR).val();
       if (!assignedExp) {
         updateExperiencePointsAwarded(totalGrade);
       }
@@ -35,15 +37,15 @@
    * @param {Event} event The event object.
    */
   function updateGradesAndPoints(event) {
-    var $changedGradeInput = $(event.target);
-    var newGrade = $changedGradeInput.val();
+    const $changedGradeInput = $(event.target);
+    const newGrade = $changedGradeInput.val();
 
     if (!$.isNumeric(newGrade)) { return; }
 
-    var answerId = $changedGradeInput.data('answer-id');
+    const answerId = $changedGradeInput.data('answer-id');
     updateGradesSummary(answerId, newGrade);
 
-    var newTotalGrade = computeNewTotalGrade();
+    const newTotalGrade = computeNewTotalGrade();
     updateTotalGrade(newTotalGrade);
     updateExperiencePointsAwarded(newTotalGrade);
   }
@@ -56,8 +58,8 @@
    * @param {Event} event The event object.
    */
   function updateGradesAndPointsSingleQuestion(event) {
-    var $changedGradeInput = $(event.target);
-    var newGrade = $changedGradeInput.val();
+    const $changedGradeInput = $(event.target);
+    const newGrade = $changedGradeInput.val();
 
     if (!$.isNumeric(newGrade)) { return; }
 
@@ -72,7 +74,7 @@
    * @param {Number} newGrade The new grade
    */
   function updateGradesSummary(answerId, newGrade) {
-    $('#submission-grades-summary-answer-' + answerId + '-grade').text(newGrade);
+    $(`#submission-grades-summary-answer-${answerId}-grade`).text(newGrade);
   }
 
   /**
@@ -81,9 +83,9 @@
    * @return {Number} The new total grade for the submission
    */
   function computeNewTotalGrade() {
-    return $(SUMMARY_GRADE_SELECTOR).toArray().reduce(function(sum, element) {
-      return sum + Number($(element).text());
-    }, 0);
+    return $(SUMMARY_GRADE_SELECTOR).toArray().reduce((sum, element) =>
+       (sum + Number($(element).text()))
+    , 0);
   }
 
   /**
@@ -102,8 +104,8 @@
    * @param {Number} newTotalGrade The new total grade
    */
   function updateExperiencePointsAwarded(newTotalGrade) {
-    var actualPoints = getActualPoints(newTotalGrade);
-    var newPointsAwarded = Math.floor(actualPoints * getMultiplier());
+    const actualPoints = getActualPoints(newTotalGrade);
+    const newPointsAwarded = Math.floor(actualPoints * getMultiplier());
     $(POINTS_AWARDED_SELECTOR).val(newPointsAwarded);
   }
 
@@ -114,13 +116,13 @@
    * @returns {Number}
    */
   function getActualPoints(totalGrade) {
-    var $pointsAwardedInput = $(POINTS_AWARDED_SELECTOR);
-    var basePoints = $pointsAwardedInput.data('base-points');
-    var maximumGrade = $(MAXIMUM_GRADE_SELECTOR).first().text();
+    const $pointsAwardedInput = $(POINTS_AWARDED_SELECTOR);
+    const basePoints = $pointsAwardedInput.data('base-points');
+    const maximumGrade = $(MAXIMUM_GRADE_SELECTOR).first().text();
 
-    var actualPoints = 0;
+    let actualPoints = 0;
     if (maximumGrade !== 0) {
-      actualPoints = Math.floor(basePoints * totalGrade / maximumGrade);
+      actualPoints = Math.floor((basePoints * totalGrade) / maximumGrade);
     }
 
     return actualPoints;
@@ -130,13 +132,13 @@
    * Handles the event when the value of the multiplier changes.
    */
   function onMultiplierChange(e) {
-    var $pointsAwardedInput = $(POINTS_AWARDED_SELECTOR);
-    var multiplier = Number(e.target.value);
-    var totalGrade = Number($(TOTAL_GRADE_SELECTOR).text());
+    const $pointsAwardedInput = $(POINTS_AWARDED_SELECTOR);
+    const multiplier = Number(e.target.value);
+    const totalGrade = Number($(TOTAL_GRADE_SELECTOR).text());
     if (isNaN(multiplier) || isNaN(totalGrade)) { return; }
 
-    var actualPoints = getActualPoints(totalGrade);
-    var newPoints = Math.floor(actualPoints * multiplier);
+    const actualPoints = getActualPoints(totalGrade);
+    const newPoints = Math.floor(actualPoints * multiplier);
     $pointsAwardedInput.val(newPoints);
   }
 
@@ -146,7 +148,7 @@
    * @returns {Number}
    */
   function getMultiplier() {
-    var multiplier = Number($('.exp-multiplier input').val());
+    let multiplier = Number($('.exp-multiplier input').val());
     if (isNaN(multiplier)) {
       multiplier = 1;
     }
@@ -155,31 +157,31 @@
   }
 
   function initializeAnswerTabs() {
-    $(MULTI_QUESTION_ASSESSMENT_SELECTOR + '.answers-tab a').click(function (e) {
+    $(`${MULTI_QUESTION_ASSESSMENT_SELECTOR}.answers-tab a`).click(function (e) {
       e.preventDefault();
       $(this).tab('show');
     });
 
     // Initialize Ace Editor when tab is shown.
-    $(MULTI_QUESTION_ASSESSMENT_SELECTOR + '.tab-header a').on('shown.bs.tab', function (e) {
-      var identifier = e.target.getAttribute('aria-controls');
-      $('#' + identifier).find('textarea.code').ace();
+    $(`${MULTI_QUESTION_ASSESSMENT_SELECTOR}.tab-header a`).on('shown.bs.tab', (e) => {
+      const identifier = e.target.getAttribute('aria-controls');
+      $(`#${identifier}`).find('textarea.code').ace();
     });
 
-    var step = URL_HELPERS.getUrlParameter('step') || 1;
-    $(MULTI_QUESTION_ASSESSMENT_SELECTOR + '.tab-header a[step="' + step + '"]').tab('show');
+    const step = getUrlParameter('step') || 1;
+    $(`${MULTI_QUESTION_ASSESSMENT_SELECTOR}.tab-header a[step="${step}"]`).tab('show');
   }
 
   function initializeAceEditor() {
-    $(DOCUMENT_SELECTOR + 'textarea.code').not('.tab-content textarea.code').ace();
+    $(`${DOCUMENT_SELECTOR}textarea.code`).not('.tab-content textarea.code').ace();
   }
 
   $(document).on('change', MULTI_QUESTION_ASSESSMENT_SELECTOR + GRADE_INPUT_SELECTOR,
                            updateGradesAndPoints);
   $(document).on('change', SINGLE_QUESTION_ASSESSMENT_SELECTOR + GRADE_INPUT_SELECTOR,
                            updateGradesAndPointsSingleQuestion);
-  $(document).on('change', DOCUMENT_SELECTOR + '.exp-multiplier input', onMultiplierChange);
+  $(document).on('change', `${DOCUMENT_SELECTOR}.exp-multiplier input`, onMultiplierChange);
   $(document).ready(updateInitialPoints);
   $(document).ready(initializeAnswerTabs);
   $(document).ready(initializeAceEditor);
-})(jQuery, URL_HELPERS);
+})(jQuery);
