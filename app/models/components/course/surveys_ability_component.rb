@@ -23,6 +23,7 @@ module Course::SurveysAbilityComponent
 
   def define_staff_survey_permissions
     allow_staff_manage_surveys
+    allow_staff_manage_sections
     allow_staff_manage_questions
     allow_staff_manage_responses
   end
@@ -31,8 +32,13 @@ module Course::SurveysAbilityComponent
     can :manage, Course::Survey, lesson_plan_item: course_staff_hash
   end
 
+  def allow_staff_manage_sections
+    can :manage, Course::Survey::Section, survey: { lesson_plan_item: course_staff_hash }
+  end
+
   def allow_staff_manage_questions
-    can :manage, Course::Survey::Question, survey: { lesson_plan_item: course_staff_hash }
+    can :manage, Course::Survey::Question,
+        section: { survey: { lesson_plan_item: course_staff_hash } }
   end
 
   def allow_staff_manage_responses
@@ -41,7 +47,7 @@ module Course::SurveysAbilityComponent
 
   def define_student_survey_permissions
     allow_students_show_published_surveys
-    allow_students_show_open_survey_questions
+    allow_students_show_open_survey_sections
     allow_students_read_update_own_response
     allow_students_create_response
   end
@@ -50,8 +56,8 @@ module Course::SurveysAbilityComponent
     can :read, Course::Survey, surveys_published_all_course_users_hash
   end
 
-  def allow_students_show_open_survey_questions
-    can :read, Course::Survey::Question, survey: surveys_open_published_all_course_users_hash
+  def allow_students_show_open_survey_sections
+    can :read, Course::Survey::Section, survey: surveys_open_published_all_course_users_hash
   end
 
   def allow_students_read_update_own_response

@@ -8,6 +8,6 @@ class Course::Survey < ActiveRecord::Base
   # with autoloading of files in production where eager_load is enabled.
   has_many :responses, inverse_of: :survey, dependent: :destroy,
                        class_name: Course::Survey::Response.name
-  has_many :questions, inverse_of: :survey, dependent: :destroy
+  has_many :questions, through: :sections
   has_many :sections, inverse_of: :survey, dependent: :destroy
 end
