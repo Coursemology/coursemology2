@@ -6,6 +6,7 @@ class Course::Survey::ResponsesController < Course::Survey::SurveysController
     if current_course_user
       build_response
       @response.save!
+      render_response_json
     else
       render json: { error: t('course.survey.responses.no_course_user') }, status: :bad_request
     end
@@ -19,14 +20,20 @@ class Course::Survey::ResponsesController < Course::Survey::SurveysController
 
   def edit
     @response.build_missing_answers_and_options
-    head :internal_server_error unless @response.save
-    @answers = @response.answers.includes(:question, options: :question_option).to_a
+    if @response.save
+      render_response_json
+    else
+      head :internal_server_error
+    end
   end
 
   def update
     @response.submit if params[:response][:submit]
-    render json: { errors: @response.errors }, status: :bad_request \
-      unless @response.update_attributes(response_update_params)
+    if @response.update_attributes(response_update_params)
+      render_response_json
+    else
+      render json: { errors: @response.errors }, status: :bad_request
+    end
   end
 
   private
@@ -44,6 +51,15 @@ class Course::Survey::ResponsesController < Course::Survey::SurveysController
   def build_response
     @response.experience_points_record.course_user = current_course_user
     @response.build_missing_answers_and_options
+  end
+
+  def load_answers
+    @answers ||= @response.answers.includes(:options, question: [:section, :options])
+  end
+
+  def render_response_json
+    load_answers
+    render partial: 'response', locals: { response: @response, survey: @survey }
   end
 
   def response_update_params
