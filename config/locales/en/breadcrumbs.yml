@@ -96,6 +96,10 @@ en:
         skill_branches:
           index: :'breadcrumbs.course.assessment.skills.index'
           new: :'course.assessment.skill_branches.new.header'
+        submission:
+          logs:
+            index: :'course.assessment.submission.logs.index.header'
+            submissions: :'course.assessment.submissions.index.header'
         submissions:
           index: :'course.assessment.submissions.index.header'
           pending: :'course.assessment.submissions.pending.header'

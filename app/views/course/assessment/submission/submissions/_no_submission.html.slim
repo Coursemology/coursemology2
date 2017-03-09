@@ -4,5 +4,6 @@ tr.no-submission
   td.col-md-3.col-xs-3
     strong = t('.not_started')
   td -
-  td -
+  - if current_course.gamified?
+    td -
   td

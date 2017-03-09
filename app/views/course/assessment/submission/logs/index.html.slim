@@ -1,0 +1,32 @@
+h1 = t('.header')
+
+table.table.table-bordered.details-table
+  tbody
+    tr
+      th = t('.assessment_title')
+      td = link_to @assessment.title, course_assessment_path(current_course, @assessment)
+    tr
+      th = t('.student_name')
+      td = link_to_user @submission.course_user
+    tr
+      th = t('.status')
+      td = link_to edit_course_assessment_submission_path(current_course, @submission.assessment,
+                                                          @submission) do
+          = Course::Assessment::Submission.human_attribute_name(@submission.workflow_state)
+
+table.table
+  thead
+    tr
+      th = t('.timestamp')
+      th = t('.ip_address')
+      th = t('.user_agent')
+      th = t('.user_session_id')
+      th = t('.submission_session_id')
+  tbody
+    - @submission.logs.ordered_by_date.each do |log|
+      tr
+        td = format_datetime(log.created_at)
+        td = log.ip_address
+        td = log.user_agent
+        td = log.user_session_id
+        td = log.submission_session_id

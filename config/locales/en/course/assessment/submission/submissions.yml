@@ -76,6 +76,7 @@ en:
               The grade and experience points are in a draft state and cannot be seen by
               the student. Publish all grades by clicking the 'Publish Grades' button on
               the top right side of the page.
+            logs: 'View Access Logs'
           no_submission:
             not_started: 'Not Started'
           manually_graded_answers_tabbed:

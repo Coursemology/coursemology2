@@ -1,0 +1,15 @@
+en:
+  course:
+    assessment:
+      submission:
+        logs:
+          index:
+            assessment_title: 'Assessment Title'
+            header: 'Access Logs'
+            ip_address: 'IP Address'
+            student_name: :'course.assessment.submission.submissions.submissions.student_name'
+            submission_session_id: 'Submission Session Token'
+            status: :'course.assessment.submission.submissions.submissions.status'
+            timestamp: 'Timestamp'
+            user_agent: 'User Agent'
+            user_session_id: 'User Session Token'
