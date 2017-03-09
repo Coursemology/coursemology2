@@ -7,8 +7,7 @@ import { showDeleteConfirmation } from '../../actions';
 import surveyTranslations from '../../translations';
 import * as surveyActions from '../../actions/surveys';
 import SurveyDetails from './SurveyDetails';
-import NewQuestionButton from './NewQuestionButton';
-import Question from './Question';
+import Section from './Section';
 
 const translations = defineMessages({
   editSurvey: {
@@ -47,7 +46,7 @@ class SurveyShow extends React.Component {
   showEditSurveyForm = (survey) => {
     const { dispatch, intl } = this.props;
     const { showSurveyForm } = surveyActions;
-    const { start_at, end_at, ...surveyFields } = survey;
+    const { start_at, end_at, title, description, base_exp } = survey;
 
     return () => dispatch(showSurveyForm({
       onSubmit: this.updateSurveyHandler,
@@ -55,7 +54,9 @@ class SurveyShow extends React.Component {
       initialValues: {
         start_at: new Date(start_at),
         end_at: new Date(end_at),
-        ...surveyFields,
+        title,
+        description,
+        base_exp,
       },
     }));
   }
@@ -93,25 +94,27 @@ class SurveyShow extends React.Component {
     return functions;
   }
 
-  renderQuestions(survey) {
+  renderSections(survey) {
     const { intl } = this.props;
-    const { questions, canUpdate } = survey;
+    const { sections, canUpdate } = survey;
     const { byWeight } = sorts;
 
     if (!canUpdate) {
       return null;
     }
 
-    if (!questions || questions.length < 1) {
+    if (!sections || sections.length < 1) {
       return <Subheader>{ intl.formatMessage(translations.empty) }</Subheader>;
     }
 
     return (
       <div>
         <Subheader>{ intl.formatMessage(surveyTranslations.questions) }</Subheader>
-        {questions.sort(byWeight).map(question =>
-          <Question key={question.id} {...{ question }} />
-        )}
+        {
+          sections.sort(byWeight).map(section =>
+            <Section key={section.id} {...{ section }} />
+          )
+        }
       </div>
     );
   }
@@ -126,8 +129,7 @@ class SurveyShow extends React.Component {
           {...{ survey, courseId, surveyId }}
           adminFunctions={this.adminFunctions(survey)}
         />
-        { this.renderQuestions(survey) }
-        { survey.canCreateQuestion ? <NewQuestionButton /> : null }
+        { this.renderSections(survey) }
       </div>
     );
   }

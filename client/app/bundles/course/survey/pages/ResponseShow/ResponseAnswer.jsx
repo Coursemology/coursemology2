@@ -6,7 +6,6 @@ import { red500 } from 'material-ui/styles/colors';
 import TextField from 'lib/components/redux-form/TextField';
 import Checkbox from 'lib/components/redux-form/Checkbox';
 import { questionTypes } from '../../constants';
-import { questionShape } from '../../propTypes';
 import OptionsListItem from '../../components/OptionsListItem';
 
 const styles = {
@@ -41,9 +40,11 @@ const styles = {
 
 class ResponseAnswer extends React.Component {
   static propTypes = {
-    question: questionShape,
     member: PropTypes.string.isRequired,
     index: PropTypes.number.isRequired,
+    fields: PropTypes.shape({
+      get: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   static renderTextResponseField(question, member) {
@@ -147,7 +148,10 @@ class ResponseAnswer extends React.Component {
 
   render() {
     const { TEXT, MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
-    const { question, member, index } = this.props;
+    const { member, index, fields } = this.props;
+    const answer = fields.get(index);
+    const question = answer.question;
+
     if (!question) { return <div />; }
 
     const renderer = {

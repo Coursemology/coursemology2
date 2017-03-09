@@ -11,8 +11,8 @@ import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import { sorts } from '../../utils';
 import surveyTranslations from '../../translations';
 import { fetchResults } from '../../actions/surveys';
-import QuestionResults from './QuestionResults';
-import { surveyShape, questionShape } from '../../propTypes';
+import ResultsSection from './ResultsSection';
+import { surveyShape, sectionShape } from '../../propTypes';
 
 const translations = defineMessages({
   includePhantoms: {
@@ -29,7 +29,7 @@ class SurveyResults extends React.Component {
       surveyId: PropTypes.string.isRequired,
     }).isRequired,
     survey: surveyShape,
-    questions: PropTypes.arrayOf(questionShape),
+    sections: PropTypes.arrayOf(sectionShape),
   }
 
   constructor(props) {
@@ -46,16 +46,17 @@ class SurveyResults extends React.Component {
   }
 
   renderResults() {
-    const { questions } = this.props;
+    const { sections } = this.props;
     const { byWeight } = sorts;
+
     return (
       <div>
         {
-          questions.sort(byWeight).map((question, index) =>
-            <QuestionResults
-              key={question.id}
+          sections.sort(byWeight).map((section, index) =>
+            <ResultsSection
+              key={section.id}
               includePhantoms={this.state.includePhantoms}
-              {...{ question, index }}
+              {...{ section, index }}
             />
           )
         }
