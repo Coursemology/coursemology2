@@ -21,13 +21,13 @@ class Course::Survey::SurveysController < Course::ComponentController
   def show
     respond_to do |format|
       format.html { render 'index' }
-      format.json { preload_questions_show }
+      format.json { render_survey_with_questions_json }
     end
   end
 
   def update
     if @survey.update_attributes(survey_params)
-      preload_questions_show
+      render_survey_with_questions_json
     else
       render json: { errors: @survey.errors }, status: :bad_request
     end
@@ -50,14 +50,23 @@ class Course::Survey::SurveysController < Course::ComponentController
 
   private
 
-  def preload_questions_show
-    @questions ||= @survey.questions.accessible_by(current_ability).includes(:options)
+  def load_sections
+    @sections ||=
+      @survey.sections.accessible_by(current_ability).
+      includes(questions: { options: { attachment_references: :attachment } })
+  end
+
+  def render_survey_with_questions_json
+    load_sections
+    render partial: 'survey_with_questions', locals: { survey: @survey }
   end
 
   def preload_questions_results
-    @questions ||= @survey.questions.includes(
-      [options: { attachment_references: :attachment },
-       answers: [:options, response: { experience_points_record: :course_user }]]
+    @sections ||= @survey.sections.includes(
+      questions: {
+        options: { attachment_references: :attachment },
+        answers: [{ response: { experience_points_record: :course_user } }, :options]
+      }
     )
   end
 
