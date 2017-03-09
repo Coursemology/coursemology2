@@ -50,9 +50,9 @@ module ActionMailer::MessageDelivery::TestDeliveryHelpers
 end
 ActionMailer::MessageDelivery.prepend(ActionMailer::MessageDelivery::TestDeliveryHelpers)
 
-module TrackableJob::FeatureSpecHelpers
+module TrackableJob::SpecHelpers
   def wait_for_job
-    if current_path.start_with?(job_path(''))
+    if defined?(current_path) && current_path.start_with?(job_path(''))
       job_guid = current_path[(current_path.rindex('/') + 1)..-1]
       job = TrackableJob::Job.find(job_guid)
       job.wait(while_callback: -> { job.reload.submitted? })
@@ -89,7 +89,8 @@ RSpec.configure do |config|
                 &ActiveJob::TestGroupHelpers.with_active_job_queue_adapter_method)
   config.around(:each,
                 &ActiveJob::TestGroupHelpers.method(:ensure_jobs_completion))
-  config.include TrackableJob::FeatureSpecHelpers, type: :feature
+  config.include TrackableJob::SpecHelpers, type: :controller
+  config.include TrackableJob::SpecHelpers, type: :feature
   config.include TrackableJob::ModelSpecHelpers, type: :model
 
   config.backtrace_exclusion_patterns << /\/spec\/support\/active_job\.rb/

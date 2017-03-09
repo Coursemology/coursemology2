@@ -36,38 +36,6 @@ RSpec.feature 'Course: Assessments: Management' do
         expect(assessment_created).not_to be_autograded
       end
 
-      scenario 'I can edit an assessment' do
-        pending 'Implement frontend test'
-        student = create(:course_student, course: course).user
-        assessment = create(:assessment, :published_with_mrq_question,
-                            course: course, start_at: 1.day.from_now)
-        visit course_assessment_path(course, assessment)
-        find_link(nil, href: edit_course_assessment_path(course, assessment)).click
-
-        new_text = 'zzzz'
-        fill_in 'assessment_title', with: new_text
-        fill_in 'assessment_start_at', with: Time.zone.now
-        fill_in 'assessment_end_at', with: Time.zone.now + 1.hour
-        click_button 'submit'
-
-        perform_enqueued_jobs
-        wait_for_job
-
-        expect(current_path).to eq(course_assessment_path(course, assessment))
-        expect(page).to have_selector('h1', text: new_text)
-
-        emails = unread_emails_for(student.email).map(&:subject)
-        opening_subject = '.notifiers.course.assessment_notifier.opening.'\
-                          'course_notifications.email.subject'
-        closing_subject = 'course.mailer.assessment_closing_reminder_email.subject'
-        expect(emails).to include(opening_subject)
-        expect(emails).to include(closing_subject)
-
-        manager_emails = unread_emails_for(user.email).map(&:subject)
-        reminder_subject = 'course.mailer.assessment_closing_summary_email.subject'
-        expect(manager_emails).to include(reminder_subject)
-      end
-
       scenario 'I can delete an assessment' do
         assessment = create(:assessment, course: course)
         category_id, tab_id = assessment.tab.category_id, assessment.tab_id
