@@ -59,6 +59,9 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   belongs_to :publisher, class_name: User.name, inverse_of: nil
 
+  has_many :logs, class_name: Course::Assessment::Submission::Log.name,
+                  inverse_of: :submission, dependent: :destroy
+
   accepts_nested_attributes_for :answers
 
   # @!attribute [r] graded_at

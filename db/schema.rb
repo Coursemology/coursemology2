@@ -350,6 +350,12 @@ ActiveRecord::Schema.define(version: 20170309094211) do
     t.integer "skill_id",    :null=>false, :index=>{:name=>"course_assessment_question_skills_skill_index"}, :foreign_key=>{:references=>"course_assessment_skills", :name=>"fk_course_assessment_questions_skills_skill_id", :on_update=>:no_action, :on_delete=>:no_action}
   end
 
+  create_table "course_assessment_submission_logs", force: :cascade do |t|
+    t.integer  "submission_id", :null=>false, :index=>{:name=>"fk__course_assessment_submission_logs_submission_id"}, :foreign_key=>{:references=>"course_assessment_submissions", :name=>"fk_course_assessment_submission_logs_submission_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.jsonb    "request"
+    t.datetime "created_at",    :null=>false
+  end
+
   create_table "course_condition_achievements", force: :cascade do |t|
     t.integer "achievement_id", :null=>false, :index=>{:name=>"fk__course_condition_achievements_achievement_id"}, :foreign_key=>{:references=>"course_achievements", :name=>"fk_course_condition_achievements_achievement_id", :on_update=>:no_action, :on_delete=>:no_action}
   end
