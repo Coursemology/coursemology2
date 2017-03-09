@@ -45,6 +45,9 @@ const config = {
 
   externals: {
     jquery: 'jQuery',
+    'react/addons': true,
+    'react/lib/ExecutionEnvironment': true,
+    'react/lib/ReactContext': true,
   },
 
   resolve: {
@@ -56,6 +59,7 @@ const config = {
   },
 
   plugins: [
+    new webpack.IgnorePlugin(/__test__/),
     new WebpackMd5Hash(),
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor', 'manifest'],
