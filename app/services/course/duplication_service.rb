@@ -5,11 +5,14 @@ class Course::DuplicationService
   # Constructor for the duplication service object.
   #
   # @param [Course] current_course The current course.
+  # @param [User] current_user The user that initiated the duplication service.
   # @param [Hash] duplication_params A hash of duplication parameters.
   # @param [Array] all_objects All the objects in the course.
   # @param [Array] selected_objects The objects to duplicate.
-  def initialize(current_course, duplication_params = {}, all_objects = [], selected_objects = [])
+  def initialize(current_course, current_user,
+                 duplication_params = {}, all_objects = [], selected_objects = [])
     @current_course = current_course
+    @current_user = current_user
     @all_objects = all_objects.append(current_course)
     @selected_objects = selected_objects.append(current_course)
     @duplication_params = duplication_params
@@ -35,7 +38,8 @@ class Course::DuplicationService
   #
   # @return [Duplicator]
   def duplicator
-    @duplicator ||= Duplicator.new(@all_objects - @selected_objects, time_shift, new_course_title)
+    @duplicator ||=
+      Duplicator.new(@all_objects - @selected_objects, time_shift, new_course_title, @current_user)
   end
 
   # Calculate the amount of time the objects in the new course have to be shifted by

@@ -4,12 +4,14 @@ require 'rails_helper'
 RSpec.describe Course::DuplicationService, type: :service do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
+    let(:admin) { create(:administrator) }
     let(:course) { create(:course) }
     let(:new_course) do
-      dup_service = Course::DuplicationService.
-                    new(course, new_course_start_date: (course.start_at + 1.day).iso8601,
-                                new_course_title: I18n.t('course.duplications.show.'\
-                                                         'new_course_title_prefix'))
+      dup_service = Course::DuplicationService.new(
+        course, admin,
+        new_course_start_date: (course.start_at + 1.day).iso8601,
+        new_course_title: I18n.t('course.duplications.show.new_course_title_prefix')
+      )
       dup_service.duplicate
       dup_service.instance_variable_get(:@new_course)
     end
@@ -37,6 +39,11 @@ RSpec.describe Course::DuplicationService, type: :service do
           # Throws error if database contraints are violated.
           new_course.save!
           expect(new_course.registration_key).to be_nil
+        end
+
+        it 'sets the creator of the new course to the current user' do
+          expect(new_course.creator).to be admin
+          expect(new_course.creator).not_to be course.creator
         end
 
         it 'time shifts the new course' do

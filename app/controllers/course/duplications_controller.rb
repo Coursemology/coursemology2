@@ -39,6 +39,7 @@ class Course::DuplicationsController < Course::ComponentController
     # and selected_objects
     @duplication_service ||= Course::DuplicationService.new(
       current_course,
+      current_user,
       create_duplication_params
     )
   end
