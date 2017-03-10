@@ -12,6 +12,10 @@ import Thumbnail from '../../components/Thumbnail';
 
 const styles = {
   percentageBarThreshold: 10,
+  table: {
+    height: '400px',
+    optionThresholdQuantity: 10,
+  },
   card: {
     marginBottom: 15,
   },
@@ -197,7 +201,9 @@ class ResultsQuestion extends React.Component {
     const sortMethod = this.state.sortByPercentage ? sortByCount : byWeight;
 
     return (
-      <Table>
+      <Table
+        height={options.length >= styles.table.optionThresholdQuantity ? styles.table.height : null}
+      >
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn>
@@ -233,7 +239,12 @@ class ResultsQuestion extends React.Component {
     const { includePhantoms, question: { answers } } = this.props;
     const filteredAnswers = includePhantoms ? answers : answers.filter(answer => !answer.phantom);
     return (
-      <Table height="300px">
+      <Table
+        height={
+          filteredAnswers.length >= styles.table.optionThresholdQuantity ?
+          styles.table.height : null
+        }
+      >
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn>
