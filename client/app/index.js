@@ -11,14 +11,6 @@
   in the path that matches the controller path if you want it to be required automatically.
  */
 
-export default function loadAceEditorDependencies() {
-  require('brace/mode/c_cpp');
-  require('brace/mode/java');
-  require('brace/mode/javascript');
-  require('brace/mode/python');
-  require('brace/theme/github');
-}
-
 
 function loadCurrentModule() {
   const { modulePath } = require('./lib/helpers/serverContext');
@@ -34,7 +26,6 @@ function loadCurrentModule() {
 }
 
 function loadModules() {
-  loadAceEditorDependencies();
   require('./lib/layout_ace_editor.js');
   loadCurrentModule();
   // Initializers
