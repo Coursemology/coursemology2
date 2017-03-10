@@ -102,6 +102,7 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.4.1",
     "jest": "^19.0.2",
+    "jquery": "^3.1.1",
     "react-addons-test-utils": "^15.4.2",
     "webpack-dev-server": "^2.4.1"
   },

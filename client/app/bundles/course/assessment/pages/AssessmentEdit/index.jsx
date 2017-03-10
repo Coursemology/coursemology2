@@ -4,10 +4,10 @@ import { submit } from 'redux-form';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import RaisedButton from 'material-ui/RaisedButton';
 import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
-import AssessmentForm from '../containers/AssessmentForm';
-import * as actions from '../actions';
-import translations from './EditPage.intl';
-import { formNames } from '../constants';
+import AssessmentForm from '../../containers/AssessmentForm';
+import * as actions from '../../actions';
+import translations from './translations.intl';
+import { formNames } from '../../constants';
 
 const styles = {
   buttonContainer: {

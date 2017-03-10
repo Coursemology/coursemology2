@@ -9,10 +9,10 @@ import Toggle from 'lib/components/redux-form/Toggle';
 import SelectField from 'lib/components/redux-form/SelectField';
 import formTranslations from 'lib/translations/form';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
-import translations from './AssessmentForm.intl';
-import { formNames } from '../constants';
-import MaterialUploader from './MaterialUploader';
-import ConditionList from '../components/ConditionList';
+import translations from './translations.intl';
+import { formNames } from '../../constants';
+import MaterialUploader from '../MaterialUploader';
+import ConditionList from '../../components/ConditionList';
 
 const styles = {
   title: {

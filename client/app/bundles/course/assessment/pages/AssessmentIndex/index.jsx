@@ -8,10 +8,10 @@ import FlatButton from 'material-ui/FlatButton';
 import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import formTranslations from 'lib/translations/form';
-import AssessmentForm from './AssessmentForm';
-import * as actions from '../actions';
-import translations from './PopupDialog.intl';
-import actionTypes, { formNames } from '../constants';
+import AssessmentForm from '../../containers/AssessmentForm';
+import * as actions from '../../actions';
+import translations from './translations.intl';
+import actionTypes, { formNames } from '../../constants';
 
 
 const styles = {
@@ -28,7 +28,6 @@ class PopupDialog extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     intl: intlShape,
-    courseId: PropTypes.number.isRequired,
     categoryId: PropTypes.number.isRequired,
     tabId: PropTypes.number.isRequired,
     pristine: PropTypes.bool,
@@ -39,11 +38,10 @@ class PopupDialog extends React.Component {
   };
 
   onFormSubmit = (data) => {
-    const { courseId, categoryId, tabId, intl } = this.props;
+    const { categoryId, tabId, intl } = this.props;
 
     return this.props.dispatch(
       actions.createAssessment(
-        courseId,
         categoryId,
         tabId,
         { assessment: data },

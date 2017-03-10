@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import CourseAPI from 'api/course';
 import MaterialList from './MaterialList';
-import translations from './MaterialUploader.intl';
+import translations from './translations.intl';
 
 const propTypes = {
   folderId: PropTypes.number.isRequired,

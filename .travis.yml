@@ -76,5 +76,5 @@ after_script:
 
 notifications:
   webhooks:
-    - https://coveralls.io/webhook?repo_token=klIDCAuOFrfbf5Eq6qt7P6lsBwXhc6vpQ
+    - https://coveralls.io/webhook?repo_token=$COVERALLS_REPO_TOKEN
   slack: coursemology:kdSjdF4xtXGOBIvMsbIF4gQ6

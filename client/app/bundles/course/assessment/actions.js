@@ -1,10 +1,8 @@
-import axios from 'lib/axios';
 import { SubmissionError } from 'redux-form';
 import CourseAPI from 'api/course';
 import actionTypes from './constants';
 
 export function createAssessment(
-  courseId,
   categoryId,
   tabId,
   data,
@@ -15,7 +13,7 @@ export function createAssessment(
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_ASSESSMENT_REQUEST });
 
-    return axios.post(`/courses/${courseId}/assessments`, attributes)
+    return CourseAPI.assessments.create(attributes)
       .then((response) => {
         dispatch({
           type: actionTypes.CREATE_ASSESSMENT_SUCCESS,
@@ -24,7 +22,7 @@ export function createAssessment(
         // TODO: Remove redirection when assessment index is implemented using React.
         setTimeout(() => {
           if (response.data && response.data.id) {
-            window.location = `/courses/${courseId}/assessments/${response.data.id}`;
+            window.location = `/courses/${CourseAPI.assessments.getCourseId()}/assessments/${response.data.id}`;
           }
         }, 200);
       })
