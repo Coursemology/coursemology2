@@ -49,6 +49,8 @@ module Course::Assessment::Submission::WorkflowEventConcern
     self.awarded_at = nil
     self.awarder = nil
     self.submitted_at = nil
+    self.publisher = nil
+    self.published_at = nil
   end
 
   private

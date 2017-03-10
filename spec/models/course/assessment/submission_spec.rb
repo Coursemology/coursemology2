@@ -506,23 +506,26 @@ RSpec.describe Course::Assessment::Submission do
         wait_for_job
         answer
       end
-
-      subject { submission1 }
-      before do
+      def unsubmit_and_save_subject
         subject.unsubmit!
         subject.save!
         subject.reload
       end
 
+      subject { submission1 }
+
       context 'when the submission is submitted' do
         let(:submission1_traits) { :submitted }
 
         it 'resets the experience points awarded and submitted_at time' do
+          expect(subject.submitted_at).not_to be_nil
+          unsubmit_and_save_subject
           expect(subject.points_awarded).to be_nil
           expect(subject.submitted_at).to be_nil
         end
 
         it 'sets all latest answers in the submission to attempting' do
+          unsubmit_and_save_subject
           expect(subject.latest_answers.all?(&:attempting?)).to be(true)
           expect(earlier_answer.reload).to be_graded
         end
@@ -530,13 +533,25 @@ RSpec.describe Course::Assessment::Submission do
 
       context 'when the submission is published' do
         let(:submission1_traits) { :published }
+        before do
+          submission1.points_awarded = 200
+          submission1.save!
+        end
 
-        it 'resets the experience points awarded and submitted_at time' do
+        it 'resets experience points, submitted_at, publish_at and publisher attributes' do
+          expect(subject.points_awarded).not_to be_nil
+          expect(subject.submitted_at).not_to be_nil
+          expect(subject.published_at).not_to be_nil
+          expect(subject.publisher).not_to be_nil
+          unsubmit_and_save_subject
           expect(subject.points_awarded).to be_nil
           expect(subject.submitted_at).to be_nil
+          expect(subject.published_at).to be_nil
+          expect(subject.publisher).to be_nil
         end
 
         it 'sets all latest answers in the submission to attempting' do
+          unsubmit_and_save_subject
           expect(subject.latest_answers.all?(&:attempting?)).to be(true)
           expect(earlier_answer.reload).to be_graded
         end
