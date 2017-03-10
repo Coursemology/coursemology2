@@ -15,6 +15,7 @@ const config = {
     coursemology: ['babel-polyfill', './app/index'],
     vendor: [
       'axios',
+      'brace',
       'immutable',
       'jquery-ui',
       'material-ui',
