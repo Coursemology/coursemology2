@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import { showQuestionForm, createSurveyQuestion } from '../../actions/questions';
-import { questionTypes } from '../../constants';
-import { formatQuestionFormData } from '../../utils';
-import AddButton from '../../components/AddButton';
+import { injectIntl, defineMessages, intlShape, FormattedMessage } from 'react-intl';
+import FlatButton from 'material-ui/FlatButton';
+import { showQuestionForm, createSurveyQuestion } from '../../../actions/questions';
+import { questionTypes } from '../../../constants';
+import { formatQuestionFormData } from '../../../utils';
 
 const translations = defineMessages({
   newQuestion: {
@@ -19,27 +19,39 @@ const translations = defineMessages({
     id: 'course.surveys.NewQuestionButton.failure',
     defaultMessage: 'Failed to create question.',
   },
+  addQuestion: {
+    id: 'course.surveys.NewQuestionButton.addQuestion',
+    defaultMessage: 'Add Question',
+  },
 });
 
 class NewQuestionButton extends React.Component {
+  static propTypes = {
+    sectionId: PropTypes.number.isRequired,
+
+    dispatch: PropTypes.func.isRequired,
+    intl: intlShape.isRequired,
+  };
+
   createQuestionHandler = (data) => {
-    const { dispatch, intl } = this.props;
+    const { dispatch } = this.props;
 
     const payload = formatQuestionFormData(data);
-    const successMessage = intl.formatMessage(translations.success);
-    const failureMessage = intl.formatMessage(translations.failure);
+    const successMessage = <FormattedMessage {...translations.success} />;
+    const failureMessage = <FormattedMessage {...translations.failure} />;
     return dispatch(
       createSurveyQuestion(payload, successMessage, failureMessage)
     );
   }
 
   showNewQuestionForm = () => {
-    const { dispatch, intl } = this.props;
+    const { dispatch, intl, sectionId } = this.props;
 
     return dispatch(showQuestionForm({
       onSubmit: this.createQuestionHandler,
       formTitle: intl.formatMessage(translations.newQuestion),
       initialValues: {
+        section_id: sectionId,
         question_type: questionTypes.MULTIPLE_RESPONSE,
         required: false,
         description: '',
@@ -51,13 +63,14 @@ class NewQuestionButton extends React.Component {
   }
 
   render() {
-    return <AddButton onTouchTap={this.showNewQuestionForm} />;
+    return (
+      <FlatButton
+        primary
+        label={<FormattedMessage {...translations.addQuestion} />}
+        onTouchTap={this.showNewQuestionForm}
+      />
+    );
   }
 }
-
-NewQuestionButton.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
-};
 
 export default connect(state => state)(injectIntl(NewQuestionButton));

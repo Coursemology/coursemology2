@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
-import { showDeleteConfirmation } from '../../actions';
-import { formatQuestionFormData } from '../../utils';
-import { questionShape } from '../../propTypes';
+import { showDeleteConfirmation } from '../../../actions';
+import { formatQuestionFormData } from '../../../utils';
+import { questionShape } from '../../../propTypes';
 import QuestionCard from './QuestionCard';
-import * as questionActions from '../../actions/questions';
+import * as questionActions from '../../../actions/questions';
 
 const translations = defineMessages({
   editQuestion: {
@@ -35,6 +35,13 @@ const translations = defineMessages({
 });
 
 class Question extends React.Component {
+  static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    intl: intlShape.isRequired,
+    question: questionShape,
+    expanded: PropTypes.bool.isRequired,
+  };
+
   updateQuestionHandler = (data) => {
     const { dispatch, intl } = this.props;
     const { updateSurveyQuestion } = questionActions;
@@ -68,7 +75,7 @@ class Question extends React.Component {
     const successMessage = intl.formatMessage(translations.deleteSuccess);
     const failureMessage = intl.formatMessage(translations.deleteFailure);
     const handleDelete = () => dispatch(
-      deleteSurveyQuestion(question.id, successMessage, failureMessage)
+      deleteSurveyQuestion(question, successMessage, failureMessage)
     );
     return dispatch(showDeleteConfirmation(handleDelete));
   }
@@ -96,20 +103,14 @@ class Question extends React.Component {
   }
 
   render() {
-    const { question } = this.props;
+    const { question, expanded } = this.props;
     return (
       <QuestionCard
-        {...{ question }}
+        {...{ question, expanded }}
         adminFunctions={this.adminFunctions()}
       />
     );
   }
 }
-
-Question.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
-  question: questionShape,
-};
 
 export default connect(state => state)(injectIntl(Question));

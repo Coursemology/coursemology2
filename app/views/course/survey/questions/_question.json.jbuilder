@@ -1,6 +1,6 @@
 json.(question, :id, :description, :required, :question_type, :max_options, :min_options, :weight,
-      :grid_view)
+      :grid_view, :section_id)
 json.canUpdate can?(:update, question)
 json.canDelete can?(:destroy, question)
-options = @question_options || question.options.includes(:attachment_references).order(weight: :asc)
+options = @question_options || question.options
 json.options options, partial: 'course/survey/questions/option', as: :option

@@ -49,39 +49,48 @@ class ResponseShow extends React.Component {
     dispatch: PropTypes.func.isRequired,
   };
 
-  static buildInitialValues({ answers }) {
-    if (!answers) { return {}; }
-
-    const buildAnswer = (answer) => {
-      const { options, ...answerFields } = answer;
-      if (answerFields.question_type.toString() === questionTypes.MULTIPLE_CHOICE) {
-        const selected_option = options.find(option => option.selected);
-        if (selected_option) {
-          answerFields.selected_option = selected_option.question_option_id.toString();
-        }
+  static buildAnswer(answer) {
+    const { options, ...answerFields } = answer;
+    if (answerFields.question.question_type === questionTypes.MULTIPLE_CHOICE) {
+      const selected_option = options.find(option => option.selected);
+      if (selected_option) {
+        answerFields.selected_option = selected_option.question_option_id.toString();
       }
-      return { ...answerFields, options: options.sort(sorts.byWeight) };
-    };
-
-    return { answers: answers.sort(sorts.byWeight).map(buildAnswer) };
+    }
+    return { ...answerFields, options: options.sort(sorts.byWeight) };
   }
 
+  /**
+   * Transforms the data from the server into the shaped used by the form.
+   */
+  static buildInitialValues({ sections }) {
+    if (!sections) { return {}; }
+    const byQuestionWeight = (a, b) => a.question.weight - b.question.weight;
+    const buildSection = ({ answers, ...sectionFields }) => (
+      { ...sectionFields, answers: answers.sort(byQuestionWeight).map(ResponseShow.buildAnswer) }
+    );
+    return { sections: sections.sort(sorts.byWeight).map(buildSection) };
+  }
+
+  static formatAnswer(answer) {
+    const { id, text_response, options, selected_option, question } = answer;
+    const isMultipleChoice =
+      question.question_type === questionTypes.MULTIPLE_CHOICE && selected_option;
+    const reduceOption = ({ id: optionId, selected, question_option_id }) => ({
+      id: optionId,
+      selected: isMultipleChoice ? (question_option_id.toString() === selected_option) : selected,
+    });
+    return ({ id, text_response, options_attributes: options.map(reduceOption) });
+  }
+
+  /**
+   * Transforms the form data into the JSON shape that the endpoint expects to receive.
+   */
   static formatSurveyResponseData(data) {
-    const formatAnswer = ({ id, text_response, options, selected_option, question_type }) => {
-      const isMultipleChoice =
-        question_type.toString() === questionTypes.MULTIPLE_CHOICE && selected_option;
-      const reduceOption = ({ id: optionId, selected, question_option_id }) => ({
-        id: optionId,
-        selected: isMultipleChoice ? (question_option_id.toString() === selected_option) : selected,
-      });
-      return ({ id, text_response, options_attributes: options.map(reduceOption) });
-    };
-    return {
-      response: {
-        answers_attributes: data.answers.map(formatAnswer),
-        submit: data.submit,
-      },
-    };
+    const answers_attributes = data.sections.reduce((accumulator, section) => (
+      accumulator.concat(section.answers.map(ResponseShow.formatAnswer))
+    ), []);
+    return { response: { answers_attributes, submit: data.submit } };
   }
 
   static renderDescription(survey) {
@@ -114,7 +123,7 @@ class ResponseShow extends React.Component {
   }
 
   renderForm() {
-    const { response, survey, isLoading } = this.props;
+    const { response, isLoading } = this.props;
 
     if (isLoading) {
       return <Subheader><FormattedMessage {...translations.loading} /></Subheader>;
@@ -126,7 +135,7 @@ class ResponseShow extends React.Component {
         <ResponseForm
           initialValues={ResponseShow.buildInitialValues(response)}
           onSubmit={this.handleUpdateResponse}
-          {...{ response, survey }}
+          {...{ response }}
         />
       </div>
     );

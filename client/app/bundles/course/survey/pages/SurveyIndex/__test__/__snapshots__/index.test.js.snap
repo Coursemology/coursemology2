@@ -35,8 +35,17 @@ exports[`<SurveyIndex /> renders the index page 1`] = `
   }
   results={
     Object {
-      "questions": Array [],
+      "sections": Array [],
       "survey": Object {},
+    }
+  }
+  sectionForm={
+    Object {
+      "disabled": false,
+      "formTitle": "",
+      "initialValues": Object {},
+      "onSubmit": [Function],
+      "visible": false,
     }
   }
   surveyForm={

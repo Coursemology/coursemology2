@@ -4,8 +4,8 @@ import { reduxForm, FieldArray, Form } from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
 import formTranslations from 'lib/translations/form';
 import { questionTypes, formNames } from '../../constants';
-import { responseShape, surveyShape } from '../../propTypes';
-import ResponseAnswer from './ResponseAnswer';
+import { responseShape } from '../../propTypes';
+import ResponseSection from './ResponseSection';
 
 const styles = {
   submitButton: {
@@ -29,14 +29,14 @@ const responseFormTranslations = defineMessages({
 });
 
 const validateTextResponseAnswer = (formatMessage, answer) => {
-  if (answer.required && !answer.text_response) {
+  if (answer.question.required && !answer.text_response) {
     return { text_response: formatMessage(formTranslations.required) };
   }
   return {};
 };
 
 const validateMultipleChoiceAnswer = (formatMessage, answer) => {
-  if (answer.required && !answer.selected_option) {
+  if (answer.question.required && !answer.selected_option) {
     return { selected_option: {
       _error: formatMessage(responseFormTranslations.selectAtLeast, { count: 1 }),
     } };
@@ -46,22 +46,24 @@ const validateMultipleChoiceAnswer = (formatMessage, answer) => {
 
 const validateMultipleResponseAnswer = (formatMessage, answer) => {
   const optionCount = answer.options.filter(option => option.selected).length;
-  if (!answer.required && optionCount === 0) { return {}; }
-  if (answer.min_options && optionCount < answer.min_options) {
+  const minOptions = answer.question && answer.question.min_options;
+  const maxOptions = answer.question && answer.question.max_options;
+  if (!answer.question.required && optionCount === 0) { return {}; }
+  if (minOptions && optionCount < minOptions) {
     return { options: {
-      _error: formatMessage(responseFormTranslations.selectAtLeast, { count: answer.min_options }),
+      _error: formatMessage(responseFormTranslations.selectAtLeast, { count: minOptions }),
     } };
   }
-  if (answer.max_options && optionCount > answer.max_options) {
+  if (maxOptions && optionCount > maxOptions) {
     return { options: {
-      _error: formatMessage(responseFormTranslations.selectAtMost, { count: answer.max_options }),
+      _error: formatMessage(responseFormTranslations.selectAtMost, { count: maxOptions }),
     } };
   }
   return {};
 };
 
 const validate = (values, props) => {
-  if (!values || !values.answers) { return {}; }
+  if (!values || !values.sections) { return {}; }
 
   const { TEXT, MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
   const validatorMap = {
@@ -69,21 +71,23 @@ const validate = (values, props) => {
     [MULTIPLE_CHOICE]: validateMultipleChoiceAnswer,
     [MULTIPLE_RESPONSE]: validateMultipleResponseAnswer,
   };
-  const answerErrors = values.answers.map((answer) => {
-    const validator = validatorMap[answer.question_type.toString()];
-    if (validator) {
-      return validator(props.intl.formatMessage, answer);
-    }
-    return {};
-  });
 
-  return { answers: answerErrors };
+  const sectionsErrors = values.sections.map((section) => {
+    const answersErrors = section.answers.map((answer) => {
+      const validator = validatorMap[answer.question.question_type];
+      if (validator) {
+        return validator(props.intl.formatMessage, answer);
+      }
+      return {};
+    });
+    return { answers: answersErrors };
+  });
+  return { sections: sectionsErrors };
 };
 
 
 class ResponseForm extends React.Component {
   static propTypes = {
-    survey: surveyShape.isRequired,
     response: responseShape.isRequired,
     onSubmit: PropTypes.func.isRequired,
     pristine: PropTypes.bool.isRequired,
@@ -91,34 +95,27 @@ class ResponseForm extends React.Component {
     handleSubmit: PropTypes.func.isRequired,
   };
 
-  static renderAnswers(props) {
-    const { fields, questionsHash } = props;
-
+  static renderSections(props) {
+    const { fields } = props;
     return (
       <div>
-        {fields.map((member, index) => {
-          const answer = fields.get(index);
-          const question = questionsHash[answer.question_id];
-          return (
-            <ResponseAnswer
-              key={answer.id}
-              {...{ question, member, index }}
-            />
-          );
-        })}
+        {
+          fields.map((member, index) => {
+            const section = fields.get(index);
+            return (
+              <ResponseSection
+                key={section.id}
+                {...{ member, index, fields }}
+              />
+            );
+          })
+        }
       </div>
     );
   }
 
   render() {
-    const { handleSubmit, onSubmit, response, survey, pristine } = this.props;
-
-    const questionsHash = {};
-    if (survey.questions) {
-      survey.questions.forEach((question) => {
-        questionsHash[question.id] = question;
-      });
-    }
+    const { handleSubmit, onSubmit, response, pristine } = this.props;
 
     const submitButtonTranslation =
       response.submitted_at ? responseFormTranslations.submitted : formTranslations.submit;
@@ -126,9 +123,9 @@ class ResponseForm extends React.Component {
     return (
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FieldArray
-          name="answers"
-          component={ResponseForm.renderAnswers}
-          {...{ questionsHash }}
+          name="sections"
+          component={ResponseForm.renderSections}
+          {...{ response }}
         />
         <br />
         <RaisedButton

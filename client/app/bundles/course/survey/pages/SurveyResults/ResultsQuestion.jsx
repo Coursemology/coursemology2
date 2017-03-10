@@ -61,36 +61,36 @@ const styles = {
 
 const translations = defineMessages({
   serial: {
-    id: 'course.surveys.QuestionResults.serial',
+    id: 'course.surveys.ResultsQuestion.serial',
     defaultMessage: 'S/N',
   },
   count: {
-    id: 'course.surveys.QuestionResults.count',
+    id: 'course.surveys.ResultsQuestion.count',
     defaultMessage: 'Count',
   },
   percentage: {
-    id: 'course.surveys.QuestionResults.percentage',
+    id: 'course.surveys.ResultsQuestion.percentage',
     defaultMessage: 'Percentage',
   },
   sortByPercentage: {
-    id: 'course.surveys.QuestionResults.sortByPercentage',
+    id: 'course.surveys.ResultsQuestion.sortByPercentage',
     defaultMessage: 'Sort By Percentage',
   },
   responses: {
-    id: 'course.surveys.QuestionResults.responses',
+    id: 'course.surveys.ResultsQuestion.responses',
     defaultMessage: 'Responses',
   },
   multipleChoiceOption: {
-    id: 'course.surveys.QuestionResults.multipleChoiceOption',
+    id: 'course.surveys.ResultsQuestion.multipleChoiceOption',
     defaultMessage: 'Multiple Choice Option',
   },
   multipleResponseOption: {
-    id: 'course.surveys.QuestionResults.multipleResponseOption',
+    id: 'course.surveys.ResultsQuestion.multipleResponseOption',
     defaultMessage: 'Multiple Response Option',
   },
 });
 
-class QuestionResults extends React.Component {
+class ResultsQuestion extends React.Component {
   static propTypes = {
     index: PropTypes.number.isRequired,
     includePhantoms: PropTypes.bool.isRequired,
@@ -153,7 +153,7 @@ class QuestionResults extends React.Component {
         </TableRowColumn>
         <TableRowColumn>{breakdown[id].count}</TableRowColumn>
         <TableRowColumn colSpan={6}>
-          {QuestionResults.renderPercentageBar(percentage)}
+          {ResultsQuestion.renderPercentageBar(percentage)}
         </TableRowColumn>
       </TableRow>
     );
@@ -222,7 +222,7 @@ class QuestionResults extends React.Component {
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
           {options.sort(sortMethod).map((option, index) =>
-            QuestionResults.renderOptionRow(breakdown, hasImage, option, index)
+            ResultsQuestion.renderOptionRow(breakdown, hasImage, option, index)
           )}
         </TableBody>
       </Table>
@@ -299,4 +299,4 @@ class QuestionResults extends React.Component {
   }
 }
 
-export default QuestionResults;
+export default ResultsQuestion;

@@ -17,6 +17,7 @@ import surveyTranslations from '../../translations';
 import { surveyShape } from '../../propTypes';
 import { updateSurvey } from '../../actions/surveys';
 import RespondButton from '../../containers/RespondButton';
+import NewSectionButton from './NewSectionButton';
 
 const translations = defineMessages({
   loading: {
@@ -157,6 +158,7 @@ class SurveyDetails extends React.Component {
           {this.renderPublishToggle()}
           {this.renderDescription()}
           <CardText>
+            { survey.canCreateSection ? <NewSectionButton /> : null }
             {
               survey.canViewResults ?
                 <RaisedButton

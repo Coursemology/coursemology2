@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170307090147) do
+ActiveRecord::Schema.define(version: 20170309094211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -609,8 +609,15 @@ ActiveRecord::Schema.define(version: 20170307090147) do
     t.datetime "updated_at",   :null=>false
   end
 
+  create_table "course_survey_sections", force: :cascade do |t|
+    t.integer "survey_id",   :null=>false, :index=>{:name=>"fk__course_survey_sections_survey_id"}, :foreign_key=>{:references=>"course_surveys", :name=>"fk_course_survey_sections_survey_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.string  "title",       :limit=>255, :null=>false
+    t.text    "description"
+    t.integer "weight",      :null=>false
+  end
+
   create_table "course_survey_questions", force: :cascade do |t|
-    t.integer  "survey_id",     :null=>false, :index=>{:name=>"fk__course_survey_questions_survey_id"}, :foreign_key=>{:references=>"course_surveys", :name=>"fk_course_survey_questions_survey_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "section_id",    :null=>false, :index=>{:name=>"index_course_survey_questions_on_section_id"}, :foreign_key=>{:references=>"course_survey_sections", :name=>"fk_course_survey_questions_section_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "question_type", :default=>0, :null=>false
     t.text     "description",   :null=>false
     t.integer  "weight",        :null=>false
@@ -654,13 +661,6 @@ ActiveRecord::Schema.define(version: 20170307090147) do
     t.integer "answer_id",          :null=>false, :index=>{:name=>"fk__course_survey_answer_options_answer_id"}, :foreign_key=>{:references=>"course_survey_answers", :name=>"fk_course_survey_answer_options_answer_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer "question_option_id", :null=>false, :index=>{:name=>"fk__course_survey_answer_options_question_option_id"}, :foreign_key=>{:references=>"course_survey_question_options", :name=>"fk_course_survey_answer_options_question_option_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.boolean "selected",           :default=>false, :null=>false
-  end
-
-  create_table "course_survey_sections", force: :cascade do |t|
-    t.integer "survey_id",   :null=>false, :index=>{:name=>"fk__course_survey_sections_survey_id"}, :foreign_key=>{:references=>"course_surveys", :name=>"fk_course_survey_sections_survey_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.string  "title",       :limit=>255, :null=>false
-    t.text    "description"
-    t.integer "weight",      :null=>false
   end
 
   create_table "course_user_achievements", force: :cascade do |t|

@@ -1,15 +1,18 @@
 import React, { PropTypes } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { Card, CardText } from 'material-ui/Card';
+import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
 import RadioButton from 'material-ui/RadioButton';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { sorts } from '../../utils';
-import { questionTypes } from '../../constants';
-import { questionShape } from '../../propTypes';
-import OptionsListItem from '../../components/OptionsListItem';
+import { sorts } from '../../../utils';
+import { questionTypes } from '../../../constants';
+import { questionShape } from '../../../propTypes';
+import translations from '../../../translations';
+import OptionsListItem from '../../../components/OptionsListItem';
 
 const styles = {
   optionWidget: {
@@ -37,9 +40,24 @@ const styles = {
   card: {
     marginBottom: 15,
   },
+  textField: {
+    width: '100%',
+  },
+  fields: {
+    marginTop: 0,
+  },
 };
 
 class QuestionCard extends React.Component {
+  static propTypes = {
+    question: questionShape,
+    adminFunctions: PropTypes.arrayOf(PropTypes.shape({
+      label: PropTypes.string,
+      handler: PropTypes.func,
+    })),
+    expanded: PropTypes.bool.isRequired,
+  };
+
   static renderOptionsList(question, Widget) {
     const { byWeight } = sorts;
     return (
@@ -72,7 +90,7 @@ class QuestionCard extends React.Component {
     );
   }
 
-  static renderSpecificFields(question) {
+  static renderOptionsFields(question) {
     const { MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
     const widget = {
       [MULTIPLE_CHOICE]: RadioButton,
@@ -82,6 +100,24 @@ class QuestionCard extends React.Component {
     return question.grid_view ?
       QuestionCard.renderOptionsGrid(question, widget) :
       QuestionCard.renderOptionsList(question, widget);
+  }
+
+  static renderTextField() {
+    return (
+      <TextField
+        disabled
+        style={styles.textField}
+        hintText={<FormattedMessage {...translations.textResponse} />}
+      />
+    );
+  }
+
+  static renderSpecificFields(question) {
+    const { TEXT } = questionTypes;
+    if (question.question_type === TEXT) {
+      return QuestionCard.renderTextField();
+    }
+    return QuestionCard.renderOptionsFields(question);
   }
 
   renderAdminMenu() {
@@ -104,25 +140,19 @@ class QuestionCard extends React.Component {
   }
 
   render() {
-    const { question } = this.props;
+    const { question, expanded } = this.props;
     return (
-      <Card style={styles.card}>
+      <Card style={styles.card} {...{ expanded }}>
         <CardText style={styles.cardText}>
-          {this.renderAdminMenu()}
+          { this.renderAdminMenu() }
           <p>{question.description}</p>
-          {QuestionCard.renderSpecificFields(question)}
+        </CardText>
+        <CardText expandable style={styles.fields}>
+          { QuestionCard.renderSpecificFields(question) }
         </CardText>
       </Card>
     );
   }
 }
-
-QuestionCard.propTypes = {
-  question: questionShape,
-  adminFunctions: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    handler: PropTypes.func,
-  })),
-};
 
 export default QuestionCard;
