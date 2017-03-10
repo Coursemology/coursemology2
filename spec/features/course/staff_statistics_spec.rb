@@ -17,6 +17,7 @@ RSpec.feature 'Course: Statistics: Staff' do
       let(:tutor1) { create(:course_teaching_assistant, course: course) }
       let(:tutor2) { create(:course_teaching_assistant, course: course) }
       let!(:tutor3) { create(:course_teaching_assistant, course: course) }
+      let(:student) { create(:course_student, course: course) }
       let(:user) { tutor1.user }
 
       # Create submissions for tutors, with given submitted at and published_at
@@ -44,6 +45,18 @@ RSpec.feature 'Course: Statistics: Staff' do
         [submission]
       end
 
+      let!(:tutor3_submissions) do
+        submitted_at, published_at = 2.days.ago, 2.days.ago
+        assessment = create(:assessment, course: course)
+        submission = create(:submission, :published,
+                            assessment: assessment, course: course, publisher: tutor3.user,
+                            published_at: published_at, submitted_at: submitted_at,
+                            creator: tutor3.user)
+        create(:course_assessment_answer_multiple_response, :graded,
+               assessment: assessment, submission: submission, submitted_at: submitted_at)
+        [submission]
+      end
+
       scenario 'I can view staff summary' do
         visit course_statistics_staff_path(course)
 
@@ -63,6 +76,7 @@ RSpec.feature 'Course: Statistics: Staff' do
           expect(page).to have_selector('td', text: "2 #{I18n.t('time.day')} 00:00:00")
         end
 
+        # Do not show reflect staff submissions as part of staff statistics.
         within find(content_tag_selector(tutor3)) do
           expect(page).to have_selector('td', text: '3')
           expect(page).to have_selector('td', text: tutor3.name)

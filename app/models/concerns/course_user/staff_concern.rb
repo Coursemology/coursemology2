@@ -19,10 +19,15 @@ module CourseUser::StaffConcern
     end)
   end
 
+  # Returns the published submissions for the purpose of calculating marking statistics.
+  #
+  # This inlcudes only submissions from non-phantom, student course_users.
   def published_submissions # rubocop:disable Metrics/AbcSize
     @published_submissions ||=
       Course::Assessment::Submission.
       joins { experience_points_record.course_user }.
+      where { experience_points_record.course_user.role == CourseUser.roles[:student] }.
+      where { experience_points_record.course_user.phantom == false  }.
       where { experience_points_record.course_user.course_id == my { course_id } }.
       where { publisher_id == my { user_id } }
   end
