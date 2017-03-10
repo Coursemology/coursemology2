@@ -66,7 +66,6 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    ace-rails-ap (4.1.1)
     actionmailer (4.2.7.1)
       actionpack (= 4.2.7.1)
       actionview (= 4.2.7.1)
@@ -555,7 +554,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  ace-rails-ap (= 4.1.1)
   active_record-acts_as!
   activerecord-import (>= 0.2.0)
   activerecord-userstamp (>= 3.0.2)
@@ -651,4 +649,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   1.14.3
+   1.14.6

@@ -1,5 +1,4 @@
 //= require helpers/event_helpers
-//= require layout_ace_editor
 //= require layout_checkbox_toggle_all
 
 (function($, EVENT_HELPERS) {

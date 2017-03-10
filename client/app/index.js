@@ -26,6 +26,7 @@ function loadCurrentModule() {
 }
 
 function loadModules() {
+  require('./lib/layout_ace_editor.js');
   loadCurrentModule();
   // Initializers
   require('./lib/helpers/confirmDialog');

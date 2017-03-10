@@ -5,5 +5,4 @@
 // the compiled file.
 //
 //= require application
-//= require ace/theme-github
 //= require_tree .
