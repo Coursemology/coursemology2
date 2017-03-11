@@ -36,6 +36,7 @@ RSpec.describe 'Course: Assessment: Submissions: Logs' do
 
         submission = protected_assessment.submissions.last
         expect(submission.logs.count).to equal(1)
+        expect(submission.logs.last.valid_attempt?).to be(true)
 
         expect do
           visit edit_course_assessment_submission_path(course, protected_assessment, submission)
@@ -48,11 +49,13 @@ RSpec.describe 'Course: Assessment: Submissions: Logs' do
         expect do
           visit edit_course_assessment_submission_path(course, protected_assessment, submission)
         end.to change { submission.logs.count }.by(1)
+        expect(submission.logs.last.valid_attempt?).to be(false)
 
         expect do
           fill_in 'session_password', with: protected_assessment.password
           click_button I18n.t('course.assessment.sessions.new.continue')
         end.to change { submission.logs.count }.by(1)
+        expect(submission.logs.last.valid_attempt?).to be(true)
       end
 
       scenario 'My access to the unprotected assessment is not logged' do

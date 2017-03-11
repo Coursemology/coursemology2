@@ -24,7 +24,7 @@ table.table
       th = t('.submission_session_id')
   tbody
     - @submission.logs.ordered_by_date.each do |log|
-      tr
+      tr class=('danger' unless log.valid_attempt?)
         td = format_datetime(log.created_at)
         td = log.ip_address
         td = log.user_agent

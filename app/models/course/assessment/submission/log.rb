@@ -20,4 +20,8 @@ class Course::Assessment::Submission::Log < ActiveRecord::Base
   def submission_session_id
     request['SUBMISSION_SESSION_ID']
   end
+
+  def valid_attempt?
+    user_session_id == submission_session_id
+  end
 end
