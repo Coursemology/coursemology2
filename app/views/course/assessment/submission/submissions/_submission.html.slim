@@ -12,3 +12,7 @@
   - if current_course.gamified?
     td = submission.current_points_awarded.to_i.to_s
   td
+    - if @assessment.password_protected?
+      = link_to course_assessment_submission_logs_path(current_course, submission.assessment,
+                                                       submission), class: ['btn', 'btn-primary'] do
+        = t('.logs')

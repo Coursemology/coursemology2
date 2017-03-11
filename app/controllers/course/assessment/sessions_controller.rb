@@ -34,6 +34,7 @@ class Course::Assessment::SessionsController < Course::Assessment::Controller
 
   def redirect_or_create_submission
     if @submission
+      log_service.log_submission_access(request)
       url = edit_course_assessment_submission_path(current_course, @assessment, @submission)
       render json: { success: true, submission_url: url }
     else
@@ -47,7 +48,12 @@ class Course::Assessment::SessionsController < Course::Assessment::Controller
   end
 
   def authentication_service
-    @service ||=
+    @auth_service ||=
       Course::Assessment::SessionAuthenticationService.new(@assessment, session, @submission)
+  end
+
+  def log_service
+    @log_service ||=
+      Course::Assessment::SessionLogService.new(@assessment, session, @submission)
   end
 end
