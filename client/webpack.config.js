@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const path = require('path');
-const WebpackMd5Hash = require('webpack-md5-hash');
 const StatsPlugin = require('stats-webpack-plugin');
 
 const env = process.env.NODE_ENV || 'development';
@@ -13,12 +12,10 @@ const devServerPort = 8080;
 const config = {
   entry: {
     coursemology: ['babel-polyfill', './app/index'],
-    vendor: [
+    lib: [
       'axios',
       'brace',
       'immutable',
-      'jquery-ui',
-      'material-ui',
       'moment',
       'react',
       'react-ace',
@@ -34,6 +31,12 @@ const config = {
       'redux-immutable',
       'redux-promise',
       'redux-thunk',
+    ],
+    // Vendor contains the libraries that are not in a single bundle (size could change depends on
+    // application code)
+    vendor: [
+      'jquery-ui',
+      'material-ui',
     ],
   },
 
@@ -61,13 +64,15 @@ const config = {
 
   plugins: [
     new webpack.IgnorePlugin(/__test__/),
-    new WebpackMd5Hash(),
+    new webpack.HashedModuleIdsPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendor', 'manifest'],
+      names: ['vendor', 'lib', 'manifest'], // `vendor` depends on `lib` depends on `manifest`
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(env),
     }),
+    // Do not require all locles in moment
+    new webpack.ContextReplacementPlugin(/moment\/locale$/, /^\.\/(en-.*|zh-.*)$/),
     // must match config.webpack.manifest_filename
     new StatsPlugin('manifest.json', {
       chunkModules: false,

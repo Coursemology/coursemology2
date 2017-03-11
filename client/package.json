@@ -85,8 +85,7 @@
     "sass-loader": "^6.0.2",
     "stats-webpack-plugin": "^0.4.3",
     "style-loader": "^0.13.2",
-    "webpack": "^2.2.1",
-    "webpack-md5-hash": "^0.0.5"
+    "webpack": "^2.2.1"
   },
   "devDependencies": {
     "axios-mock-adapter": "^1.7.1",
