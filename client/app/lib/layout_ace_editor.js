@@ -107,11 +107,10 @@ function reassignLabelsToAce($from, $editor) {
 
 $.fn.ace = function (opt) {
   const options = $.extend({}, $.fn.ace.defaults, opt);
-
-  return this.each(() => {
+  return this.each(function () {
     const $this = $(this);
     const elementOptions = $.extend({}, options,
-      { lang: $this[0].lang,
+      { lang: this.lang,
         readOnly: $this[0].readOnly });
     const $editor = findOrBuildEditorContainer($this, elementOptions);
 
