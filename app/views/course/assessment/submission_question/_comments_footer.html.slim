@@ -1,0 +1,10 @@
+- submission_question = topic.specific
+- submission = submission_question.submission
+- assessment = submission.assessment
+- submission_question_comment_path = course_assessment_submission_question_comments_path(current_course, assessment, submission_question)
+
+div.submission-question-comment-form data-action=submission_question_comment_path data-method="post" style='display: none'
+  div.form-group.text
+    textarea.form-control.text.airmode.comment name="discussion_post[text]"
+  button.btn.btn-primary.reply-comment
+    = t('.comment')

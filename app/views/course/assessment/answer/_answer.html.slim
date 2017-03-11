@@ -28,6 +28,3 @@
         = render partial: 'course/assessment/answer/grading',
                  locals: { base_answer_form: f, answer: answer }
 
-      h3 = t('.comments')
-      div.comments id=comments_container_id(answer)
-        = render partial: 'course/assessment/answer/comments', locals: { answer: answer }

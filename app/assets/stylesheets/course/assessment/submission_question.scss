@@ -1,0 +1,13 @@
+@import '../discussion/post';
+
+.course-assessment-submission-submissions.edit {
+  .comments {
+    @include discussion-post;
+  }
+
+  .submission-question-comment-form {
+    .btn.reply-comment {
+      margin-top: -15px;
+    }
+  }
+}

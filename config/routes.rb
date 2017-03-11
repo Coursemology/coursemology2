@@ -192,7 +192,6 @@ Rails.application.routes.draw do
               resources :logs, only: [:index]
               scope module: :answer do
                 resources :answers, only: [] do
-                  resources :comments, only: [:create]
                   namespace :programming do
                     resources :files, only: [] do
                       resources :annotations, only: [:create]
@@ -200,6 +199,11 @@ Rails.application.routes.draw do
                   end
                 end
               end
+            end
+          end
+          scope module: :submission_question do
+            resources :submission_questions, only: [] do
+              resources :comments, only: [:create]
             end
           end
           concerns :conditional

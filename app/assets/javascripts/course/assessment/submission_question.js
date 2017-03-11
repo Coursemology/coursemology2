@@ -14,8 +14,8 @@
    * @param element
    */
   function showAnswerCommentForm(element) {
-    var $form = $('.answer-comment-form', element).
-                addBack('.answer-comment-form').
+    var $form = $('.submission-question-comment-form', element).
+                addBack('.submission-question-comment-form').
                 filter(DOCUMENT_SELECTOR + '*');
     $form.show();
   }
