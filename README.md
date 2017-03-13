@@ -88,9 +88,31 @@ GoRails should help you to get started on Ruby on Rails.
 
 Create an issue on the Github [issue tracker](https://github.com/Coursemology/coursemology2/issues) or come talk to us over at our [Slack channels](https://coursemology-slack.herokuapp.com/).
 
+## Contributing
+
+We welcome contributions to Coursemology!
+Check out the [issue tracker](https://github.com/coursemology/coursemology2/issues) and pick
+something you'll like to work on.
+Please read our
+[Contributor's Guide](https://github.com/Coursemology/coursemology2/blob/master/CONTRIBUTING.md)
+for guidance on our conventions.
+
+If you are a student from NUS Computing looking for an FYP project, do check with
+[Prof Ben Leong](http://www.comp.nus.edu.sg/~bleong/).
+
 ## License
 
 Copyright (c) 2015-2017 Coursemology.org. This software is licensed under the MIT License.
+
+## Using Coursemology
+
+You're more than welcome to use Coursemology for your own school or organization.
+If you need more help, [join](http://coursemology-slack.herokuapp.com/) our Slack channel
+to reach our core developers.
+
+We are actively running Coursemology in beta and can provide free use of our infrastructure
+on a case by case basis. Please contact [Prof Ben Leong](http://www.comp.nus.edu.sg/~bleong/)
+if you would like to explore this option.
 
 ## Acknowledgments
 
