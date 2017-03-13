@@ -9,7 +9,7 @@ class Course::Discussion::TopicsController < Course::ComponentController
     @topics = all_topics
 
     if current_course_user && current_course_user.student?
-      @topics = @topics.from_user(current_course_user.user_id)
+      @topics = @topics.merge(Course::Discussion::Topic.from_user(current_course_user.user_id))
     end
   end
 
@@ -47,7 +47,7 @@ class Course::Discussion::TopicsController < Course::ComponentController
     @topics = @topics.
               globally_displayed.
               ordered_by_updated_at.
-              from_user(my_student_ids).
+              merge(Course::Discussion::Topic.from_user(my_student_ids)).
               includes(:actable).
               page(page_param)
   end
