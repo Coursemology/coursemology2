@@ -59,7 +59,11 @@ function submitFormAndWaitForJob($form, answerId) {
   }
 
   $.ajax(ajaxOptions).done((response) => {
-    waitForJob(response.redirect_url, answerId);
+    if (response.redirect_url) {
+      waitForJob(response.redirect_url, answerId);
+    } else {
+      reloadAnswer(answerId);
+    }
   });
 }
 

@@ -17,7 +17,7 @@ RSpec.describe Course::Assessment::Question::AnswersEvaluationService do
       before { subject.call }
 
       it 'auto grades the associated answers' do
-        expect(answers.map { |a| a.auto_grading.job }.all?(&:present?)).to be_truthy
+        expect(answers.all?(&:graded?)).to be_truthy
       end
     end
   end

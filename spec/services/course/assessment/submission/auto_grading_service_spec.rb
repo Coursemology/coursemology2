@@ -46,13 +46,13 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
           create(:course_assessment_answer_programming, :submitted,
                  question: non_autograded_question.acting_as, submission: submission).answer
         end
-        it 'does not grade the answer' do
+        it 'evaluates the answer' do
           answer
           expect(subject.grade(submission)).to eq(true)
 
           gradable_answers = submission.answers.reject { |answer| answer.question.auto_gradable? }
           expect(gradable_answers).not_to be_empty
-          expect(gradable_answers.map(&:reload).all?(&:graded?)).to be(false)
+          expect(gradable_answers.map(&:reload).all?(&:evaluated?)).to be(true)
         end
       end
 
@@ -144,6 +144,9 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
 
       it 'fails with a SubJobError' do
         answer
+        allow(subject).to receive(:ungraded_answers).and_return([answer])
+        allow(answer).to receive(:grade_inline?).and_return(false)
+
         expect { subject.grade(submission) }.to \
           raise_error(Course::Assessment::Submission::AutoGradingService::SubJobError, '0')
       end

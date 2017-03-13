@@ -63,20 +63,26 @@ class Course::Assessment::Answer < ActiveRecord::Base
 
   scope :without_attempting_state, -> { where.not(workflow_state: :attempting) }
 
-  # Creates an Auto Grading job for this answer. This saves the answer if there are pending changes.
+  # Autogrades the answer. This saves the answer if there are pending changes.
   #
   # @param [String|nil] redirect_to_path The path to be redirected after auto grading job was
   #   finished.
   # @param [Boolean] reattempt Whether to create new answer based on current answer after grading.
-  # @return [Course::Assessment::Answer::AutoGradingJob] The job instance.
+  # @return [Course::Assessment::Answer::AutoGradingJob|nil] The autograding job instance will be
+  #   returned if the answer is graded using a job, nil will be returned if answer is graded inline.
   # @raise [IllegalStateError] When the answer has not been submitted.
   def auto_grade!(redirect_to_path = nil, reattempt = false)
     raise IllegalStateError if attempting?
 
     ensure_auto_grading!
-    Course::Assessment::Answer::AutoGradingJob.
-      perform_later(self, redirect_to_path, reattempt).tap do |job|
-      auto_grading.update_column(:job_id, job.job_id)
+    if grade_inline?
+      Course::Assessment::Answer::AutoGradingService.grade(self, reattempt)
+      nil
+    else
+      Course::Assessment::Answer::AutoGradingJob.
+        perform_later(self, redirect_to_path, reattempt).tap do |job|
+        auto_grading.update_column(:job_id, job.job_id)
+      end
     end
   end
 
@@ -88,6 +94,17 @@ class Course::Assessment::Answer < ActiveRecord::Base
   def reset_answer
     raise NotImplementedError unless actable.self_respond_to?(:reset_answer)
     actable.reset_answer
+  end
+
+  # Whether we should directly grade the answer in app server.
+  #
+  # @return [Boolean]
+  def grade_inline?
+    if actable.self_respond_to?(:grade_inline?)
+      actable.grade_inline?
+    else
+      true
+    end
   end
 
   def notify(post)

@@ -38,4 +38,9 @@ class Course::Assessment::Answer::Programming < ActiveRecord::Base
       times
     end
   end
+
+  # Programming answers should be graded in a job.
+  def grade_inline?
+    false
+  end
 end
