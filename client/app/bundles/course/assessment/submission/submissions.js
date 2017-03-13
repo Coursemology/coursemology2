@@ -1,5 +1,6 @@
 import getUrlParameter from 'lib/helpers/url_helpers';
 
+require('./submit-answer');
 require('./calculate-grade-exp');
 
 const MULTI_QUESTION_ASSESSMENT_SELECTOR = '.multi-question';
