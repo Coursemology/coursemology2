@@ -4,12 +4,12 @@
       - if answer.specific.is_a?(Course::Assessment::Answer::Programming)
         = link_to_reset_answer(answer)
       = base_answer_form.button :button, t('common.submit'), value: answer.id,
-          name: 'attempting_answer_id', class: ['btn-danger', 'submit-answer']
+          name: 'answer_id', class: ['btn-danger', 'submit-answer']
   - elsif answer.submitted? && job = answer.try(:auto_grading).try(:job)
     - if job.errored?
       p.bg-danger = t('.error')
       = base_answer_form.button :button, t('common.submit'), value: answer.id,
-          name: 'attempting_answer_id', class: ['btn-danger', 'submit-answer']
+          name: 'answer_id', class: ['btn-danger', 'submit-answer']
     - elsif job.submitted?
       = link_to '#', class: ['btn', 'btn-default', 'submitted'], 'data-job-path': job_path(job), disabled: true do
         => t('common.submit')

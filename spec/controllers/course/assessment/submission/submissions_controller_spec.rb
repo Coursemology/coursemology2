@@ -102,7 +102,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       describe '#submit_answer' do
         subject do
           put :update, course_id: course, assessment_id: assessment, id: immutable_submission,
-                       attempting_answer_id: answer.id, submission: { title: '' }
+                       answer_id: answer.id, submission: { title: '' }
         end
 
         context 'when update fails' do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update
-    if params[:attempting_answer_id]
+    if params[:answer_id]
       submit_answer
     elsif @submission.update_attributes(update_params)
       redirect_to_edit
@@ -90,7 +90,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   def answer_id_param
-    params.permit(:attempting_answer_id)[:attempting_answer_id]
+    params.permit(:answer_id)[:answer_id]
   end
 
   def edit_submission_path

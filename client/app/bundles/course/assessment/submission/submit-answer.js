@@ -46,14 +46,14 @@ function submitFormAndWaitForJob($form, answerId) {
 
   if (containsFile) {
     data = new FormData($form[0]);
-    data.append('attempting_answer_id', answerId);
+    data.append('answer_id', answerId);
     ajaxOptions.data = data;
     ajaxOptions.enctype = 'multipart/form-data';
     ajaxOptions.processData = false;
     ajaxOptions.contentType = false;
   } else {
     data = $form.serializeArray();
-    data.push({ name: 'attempting_answer_id', value: answerId });
+    data.push({ name: 'answer_id', value: answerId });
     ajaxOptions.data = $.param(data);
     ajaxOptions.dataType = 'json';
   }
