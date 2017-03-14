@@ -8,6 +8,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   before_action :authorize_submission!, only: [:edit, :update]
   before_action :check_password, only: [:edit, :update]
   before_action :load_or_create_answers, only: [:edit, :update]
+  before_action :check_zombie_jobs, only: [:edit]
 
   delegate_to_service(:update)
   delegate_to_service(:load_or_create_answers)
@@ -118,5 +119,26 @@ class Course::Assessment::Submission::SubmissionsController < \
   def log_service
     @log_service ||=
       Course::Assessment::SessionLogService.new(@assessment, session, @submission)
+  end
+
+  # Check for zombie jobs, create new grading jobs if there's any zombie jobs.
+  # TODO: Remove this method after found the cause of the dead jobs.
+  def check_zombie_jobs # rubocop:disable MethodLength, Metrics/AbcSize
+    submitted_answers = @submission.latest_answers.select(&:submitted?)
+    return if submitted_answers.empty?
+
+    dead_answers = submitted_answers.select do |a|
+      job = a.auto_grading&.job
+      job && job.submitted? &&
+        job.created_at < Time.zone.now - Course::Assessment::ProgrammingEvaluation::TIMEOUT
+    end
+
+    dead_answers.each do |a|
+      old_job = a.auto_grading.job
+      job = a.auto_grade!(old_job.redirect_to, true)
+
+      logger.debug(message: 'Restart Answer Grading', answer_id: a.id, job_id: job.job.id,
+                   old_job_id: old_job.id)
+    end
   end
 end
