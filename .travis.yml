@@ -5,13 +5,6 @@ branches:
     - /^bundle-update-[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{6}+$/
 rvm:
   - 2.3.1
-  - 2.3.3
-matrix:
-  allow_failures:
-    - rvm: ruby-head
-  exclude:
-    - rvm: 2.3.3
-      env: GROUP="checks"
 addons:
   postgresql: "9.4"
   hosts:
@@ -22,16 +15,15 @@ cache:
   yarn: true
   directories:
     - travis-phantomjs
-    - spec-runtime
-before_cache:
-  - mv $TRAVIS_BUILD_DIR/tmp/parallel_runtime_rspec.log $TRAVIS_BUILD_DIR/spec-runtime/parallel_runtime_rspec.log
 env:
   global:
     - RAILS_ENV=test
-    - COVERALLS_PARALLEL=true
   matrix:
-    - GROUP="checks"
-    - GROUP="test"
+    - GROUP="1,2"
+    - GROUP="3,4"
+    - GROUP="5,6"
+    - GROUP="7,8"
+    - GROUP="misc"
 
 before_install:
   - nvm install 6
@@ -49,33 +41,27 @@ before_install:
   - "if [ $(phantomjs --version) != '2.1.1' ]; then wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2; fi"
   - "if [ $(phantomjs --version) != '2.1.1' ]; then tar -xvf $PWD/travis-phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C $PWD/travis-phantomjs; fi"
   - phantomjs --version
-  - cd client && yarn install && cd -
+  - cd client && yarn install --production && cd -
 
 before_script:
   - psql -c 'create database coursemology_test;' -U postgres
   - psql -c 'create database coursemology_test2;' -U postgres
-  - 'if [ "$GROUP" = "test" ]; then cd client && yarn build:production && cd -; fi'
-#  - bundle exec rake db:setup
+  - cd client && yarn build:production && cd -
   - bundle exec rake parallel:setup[2]
-  # Copy runtime log if it exists. Create runtime cache directory if absent.
-  - 'if [ -f "$TRAVIS_BUILD_DIR/spec-runtime/parallel_runtime_rspec.log" ]; then mkdir -p $TRAVIS_BUILD_DIR/tmp; cp $TRAVIS_BUILD_DIR/spec-runtime/parallel_runtime_rspec.log $TRAVIS_BUILD_DIR/tmp/parallel_runtime_rspec.log; cat $TRAVIS_BUILD_DIR/tmp/parallel_runtime_rspec.log; fi'
-  - 'if [ ! -d "spec-runtime" ]; then mkdir spec-runtime; fi'
 
 script:
-  - 'if [ "$GROUP" = "checks" ]; then bundle exec consistency_fail; fi'
-  - 'if [ "$GROUP" = "checks" ]; then bundle exec i18n-tasks health; fi'
-  - 'if [ "$GROUP" = "checks" ]; then bundle exec rake factory_girl:lint; fi'
-  - 'if [ "$GROUP" = "checks" ]; then cd client && yarn build:production && cd -; bundle exec rake assets:precompile; fi'
-  - 'if [ "$GROUP" = "checks" ]; then cd client && yarn install && yarn lint --prefix && cd -; fi'
-  - 'if [ "$GROUP" = "test" ]; then cd client && yarn test; fi'
-  - 'if [ "$GROUP" = "test" ]; then cd ..; fi'
-  - 'if [ "$GROUP" = "test" ]; then bundle exec rake parallel:spec[2]; fi'
+  - 'if [ "$GROUP" = "misc" ]; then bundle exec consistency_fail; fi'
+  - 'if [ "$GROUP" = "misc" ]; then bundle exec i18n-tasks health; fi'
+  - 'if [ "$GROUP" = "misc" ]; then bundle exec rake factory_girl:lint; fi'
+  - 'if [ "$GROUP" = "misc" ]; then bundle exec rake assets:precompile; fi'
+  - 'if [ "$GROUP" = "misc" ]; then cd client && yarn; fi'
+  - 'if [ "$GROUP" = "misc" ]; then yarn lint --prefix; fi'
+  - 'if [ "$GROUP" = "misc" ]; then yarn test; fi'
+  - 'if [ "$GROUP" = "misc" ]; then cd ..; fi'
+  - 'if [ "$GROUP" != "misc" ]; then export CODECOV_FLAG=backend; fi'
+  - 'if [ "$GROUP" != "misc" ]; then bundle exec parallel_rspec spec -n 8 --only-group $GROUP --runtime-log spec/fixtures/parallel_runtime_rspec.log; fi'
 after_script:
-  - 'if [ "$GROUP" = "test" ]; then cat coverage/lcov/*.lcov client/coverage/lcov.info > results.lcov; fi'
-  - 'if [ "$GROUP" = "test" ]; then client/node_modules/coveralls/bin/coveralls.js < results.lcov; fi'
-  - 'if [ "$GROUP" = "test" ]; then bundle exec codeclimate-test-reporter < results.lcov; fi'
+  - 'if [ "$GROUP" = "misc" ]; then bash <(curl -s https://codecov.io/bash) -F frontend -s client/coverage; fi'
 
 notifications:
-  webhooks:
-    - https://coveralls.io/webhook?repo_token=$COVERALLS_REPO_TOKEN
   slack: coursemology:kdSjdF4xtXGOBIvMsbIF4gQ6
