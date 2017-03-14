@@ -140,6 +140,12 @@ class MaterialSummernote extends React.Component {
             options={{
               dialogsInBody: false,
               disabled: this.props.disabled,
+              fontNames: [
+                'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New',
+                'Helvetica Neue', 'Helvetica', 'Impact', 'Lucida Grande',
+                'Roboto', 'Tahoma', 'Times New Roman', 'Verdana',
+              ],
+              fontNamesIgnoreCheck: ['Roboto'],
               toolbar: [
                 ['style', ['style']],
                 ['font', ['bold', 'underline', 'clear']],
