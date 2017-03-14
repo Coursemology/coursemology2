@@ -5,6 +5,10 @@ Code styles are predefined in the RubyMine/IntelliJ project files. Also, the
 [Rails Community Style Guide](https://github.com/bbatsov/ruby-style-guide) covers majority of the
 styles that we use.
 
+Our frontend code style follows Airbnb's [JavaScript](https://github.com/airbnb/javascript) and
+[React](https://github.com/airbnb/javascript/tree/master/react) style guide. Run `yarn lint` in the
+client folder and fix all issues before making a pull request.
+
 ### Documentation
 Write Yardoc when implementing classes. Yardoc is preferred because RubyMine is able to infer
 parameter and return types when annotated using it.
@@ -51,6 +55,25 @@ When running specs, all deferred mail deliveries are converted to immediate deli
 track of the number of pending mail deliveries.
 
 Trackable Jobs can be waited -- use the `TrackableJob#wait` method.
+
+### Frontend
+`enzyme` and `jest` are used for frontend testing. All test files should be put under a folder
+named `__test__`, which is excluded by webpack from the main bundler.
+
+#### Unit tests
+To do unit tests on components, we use Enzyme's `shallow` rendering to render the component, then
+use jest's `expect` together with the [snapshot](https://facebook.github.io/jest/docs/snapshot-testing.html) 
+feature to assert the component's state given different inputs/props.
+
+#### Integration tests
+When writing integration tests, ensure that all components including `redux` (actions, reducers, etc)
+and `react-router` are tested. Note that there is no server when running the front-end tests, hence
+all server API calls to get data should be mocked. To test if the components make the correct API call,
+use `jest`'s `spy` function to ensure that the API is called with the correct parameters.
+
+Enzyme's `mount` rendering should be used in integration tests. Where possible, avoid snapshots of
+the `mount` rendered components. This is because the output of `mount` is large, unreadable, and
+results in tests becoming implicit as they are only assertions of the snapshots.
 
 ## Developer Tools
 The project's Gemfile contains a few developer tools to help keep the project tidy:
