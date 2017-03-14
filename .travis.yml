@@ -64,6 +64,7 @@ before_script:
 script:
   - 'if [ "$GROUP" = "checks" ]; then bundle exec consistency_fail; fi'
   - 'if [ "$GROUP" = "checks" ]; then bundle exec i18n-tasks health; fi'
+  - 'if [ "$GROUP" = "checks" ]; then bundle exec rake factory_girl:lint; fi'
   - 'if [ "$GROUP" = "checks" ]; then cd client && yarn build:production && cd -; bundle exec rake assets:precompile; fi'
   - 'if [ "$GROUP" = "checks" ]; then cd client && yarn install && yarn lint --prefix && cd -; fi'
   - 'if [ "$GROUP" = "test" ]; then cd client && yarn test; fi'
