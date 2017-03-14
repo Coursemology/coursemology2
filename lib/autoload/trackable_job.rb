@@ -59,7 +59,9 @@ module TrackableJob
   end
 
   def perform(*args)
+    logger.debug(message: 'Perform job', id: @job&.id)
     perform_tracked(*args)
+    logger.debug(message: 'Finish performing job', id: @job&.id)
     @job.status = :completed
     @job.save!
   end
