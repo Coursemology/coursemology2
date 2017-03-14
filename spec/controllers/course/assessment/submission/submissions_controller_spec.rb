@@ -15,6 +15,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         allow(stub).to receive(:destroy).and_return(false)
       end
     end
+    let(:submission) { create(:submission, assessment: assessment, creator: user) }
 
     before { sign_in(user) }
 
@@ -94,24 +95,27 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
     context 'when the assessment is autograded' do
       let(:assessment) { create(:assessment, :autograded, :with_mrq_question, course: course) }
       let!(:answer) do
-        answer = assessment.questions.first.attempt(immutable_submission)
+        answer = assessment.questions.first.attempt(submission)
         answer.save
         answer
       end
 
       describe '#submit_answer' do
         subject do
-          put :update, course_id: course, assessment_id: assessment, id: immutable_submission,
-                       attempting_answer_id: answer.id, submission: { title: '' }
+          put :update,
+              course_id: course, assessment_id: assessment, id: submission, answer_id: answer.id,
+              submission: { answers_attributes: { answer.id.to_s => { actable_attributes: {} } } }
         end
 
         context 'when update fails' do
           before do
-            controller.instance_variable_set(:@submission, immutable_submission)
+            allow(answer).to receive(:update_attributes).and_return(false)
+            allow(submission.answers).to receive(:find).and_return(answer)
+            controller.instance_variable_set(:@submission, submission)
             subject
           end
 
-          it { is_expected.to render_template('edit') }
+          it { is_expected.to have_http_status(400) }
         end
       end
     end

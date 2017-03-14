@@ -15,7 +15,7 @@
         - if has_public_or_private_tests
           = base_answer_form.button :button, button_text,
                                     value: answer.id,
-                                    name: 'attempting_answer_id',
+                                    name: 'answer_id',
                                     class: ['submit-answer', 'btn-danger'],
                                     disabled: !enable_submit_button?(programming_answer)
         / If autograded programming question has no public or private tests,
@@ -23,14 +23,14 @@
         - elsif can?(:manage, answer.question.specific)
           = base_answer_form.button :button, button_text,
                                              value: answer.id,
-                                             name: 'attempting_answer_id',
+                                             name: 'answer_id',
                                              class: ['submit-answer', 'btn-danger'],
                                              title: t('.run_code_evaluation_warning'),
                                              disabled: !enable_submit_button?(programming_answer)
   - elsif answer.submitted? && job = answer.try(:auto_grading).try(:job)
     - if job.errored?
       p.bg-danger = t('.error')
-      = base_answer_form.button :button, button_text, value: answer.id, name: 'attempting_answer_id', class: ['submit-answer', 'btn-danger']
+      = base_answer_form.button :button, button_text, value: answer.id, name: 'answer_id', class: ['submit-answer', 'btn-danger']
     - elsif job.submitted?
       = link_to '#', class: ['btn', 'btn-danger', 'submitted'], 'data-job-path': job_path(job), disabled: true do
         => button_text

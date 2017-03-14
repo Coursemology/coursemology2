@@ -37,7 +37,8 @@ class Course::Assessment::Submission::AutoGradingService
     tries, jobs_by_qn = 0, {}
     ungraded_answers = ungraded_answers(submission)
     while ungraded_answers.any? && tries <= MAX_TRIES
-      new_jobs = ungraded_answers.map { |a| [a.question_id, grade_answer(a)] }.to_h
+      new_jobs = ungraded_answers.map { |a| [a.question_id, grade_answer(a)] }.
+                 select { |e| e[1].present? }.to_h # Filter out answers which does not return a job
       wait_for_jobs(new_jobs.values)
 
       jobs_by_qn.merge!(new_jobs)

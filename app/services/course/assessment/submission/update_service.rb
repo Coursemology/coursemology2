@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update
-    if params[:attempting_answer_id]
+    if params[:answer_id]
       submit_answer
     elsif @submission.update_attributes(update_params)
       redirect_to_edit
@@ -51,6 +51,11 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       end
   end
 
+  def submit_answer_params
+    params.require(:submission).require(:answers_attributes).
+      require(answer_id_param).permit(actable_attributes: [:id, update_answer_type_params])
+  end
+
   private
 
   # The permitted state changes that will be provided to the model.
@@ -90,7 +95,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   def answer_id_param
-    params.permit(:attempting_answer_id)[:attempting_answer_id]
+    params.permit(:answer_id)[:answer_id]
   end
 
   def edit_submission_path
@@ -98,14 +103,15 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   def submit_answer
-    if @submission.update_attributes(update_params)
-      answer = @submission.answers.find(answer_id_param)
+    answer = @submission.answers.find(answer_id_param)
+
+    if answer.update_attributes(submit_answer_params)
       if valid_for_grading?(answer)
         job = grade_and_reattempt_answer(answer)
 
         respond_to do |format|
-          format.html { redirect_to job_path(job.job) }
-          format.json { render json: { redirect_url: job_path(job.job) } }
+          format.html { job ? redirect_to(job_path(job.job)) : redirect_to_edit }
+          format.json { render json: { redirect_url: job ? job_path(job.job) : nil } }
         end
       else
         # TODO: Implement error recovery in the frontend. Code only goes here if user hacks the html
@@ -113,7 +119,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
         head :bad_request
       end
     else
-      render 'edit'
+      head :bad_request
     end
   end
 
@@ -122,7 +128,8 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     # the submitted state.
     answer.class.transaction do
       answer.finalise! if answer.attempting?
-      answer.save!
+      # Only save if answer is graded in another server
+      answer.save! unless answer.grade_inline?
       answer.auto_grade!(edit_submission_path, true)
     end
   end

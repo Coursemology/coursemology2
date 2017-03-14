@@ -153,26 +153,14 @@ RSpec.describe Course::Assessment::Answer do
         expect(subject.auto_grading).to be_persisted
       end
 
-      it 'returns an ActiveJob' do
-        expect(subject.auto_grade!).to be_a(ActiveJob::Base)
-      end
-
-      with_active_job_queue_adapter(:test) do
-        it 'queues the job' do
-          subject
-          expect { subject.auto_grade! }.to \
-            have_enqueued_job(Course::Assessment::Answer::AutoGradingJob).exactly(:once)
-        end
-      end
-
       context 'when the answer has been graded before' do
         let(:answer_traits) { :graded }
         it 'allows re-grading' do
-          new_grade = subject.grade = 1
-          subject.auto_grade!.wait
+          old_grade = subject.grade
+          subject.auto_grade!
           subject.reload
 
-          expect(subject.grade).not_to eq(new_grade)
+          expect(subject.grade).to eq(old_grade)
         end
       end
 
@@ -180,6 +168,30 @@ RSpec.describe Course::Assessment::Answer do
         let(:answer_traits) { nil }
         it 'fails with an IllegalStateError' do
           expect { subject.auto_grade! }.to raise_error(IllegalStateError)
+        end
+      end
+
+      context 'when grade inline' do
+        before { allow(subject).to receive(:grade_inline?).and_return(true) }
+
+        it 'returns nil' do
+          expect(subject.auto_grade!).to be_nil
+        end
+      end
+
+      context 'when not grade inline' do
+        before { allow(subject).to receive(:grade_inline?).and_return(false) }
+
+        it 'returns an ActiveJob' do
+          expect(subject.auto_grade!).to be_a(ActiveJob::Base)
+        end
+
+        with_active_job_queue_adapter(:test) do
+          it 'queues the job' do
+            subject
+            expect { subject.auto_grade! }.to \
+              have_enqueued_job(Course::Assessment::Answer::AutoGradingJob).exactly(:once)
+          end
         end
       end
     end

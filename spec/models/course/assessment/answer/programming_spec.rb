@@ -45,6 +45,12 @@ RSpec.describe Course::Assessment::Answer::Programming do
       end
     end
 
+    describe '#grade_inline?' do
+      it 'returns false' do
+        expect(answer.acting_as.grade_inline?).to be_falsy
+      end
+    end
+
     describe 'attempting_times_left' do
       subject { answer.attempting_times_left }
 
