@@ -96,21 +96,21 @@ class Course::Assessment::ProgrammingTestCaseReport
     #
     # @return [String]
     def expression
-      @expression ||= get_meta_attribute('expression')
+      @expression ||= get_test_case_metadata('expression')
     end
 
     # The expected value from running the test expression
     #
     # @return [String]
     def expected
-      @expected ||= get_meta_attribute('expected')
+      @expected ||= get_test_case_metadata('expected')
     end
 
     # A hint to help the student pass the test case
     #
     # @return [String]
     def hint
-      @hint ||= get_meta_attribute('hint')
+      @hint ||= get_test_case_metadata('hint')
     end
 
     # The output from the function under test.
@@ -118,7 +118,7 @@ class Course::Assessment::ProgrammingTestCaseReport
     #
     # @return [String]
     def output
-      @output ||= get_meta_attribute('output')
+      @output ||= get_test_case_metadata('output')
     end
 
     # If there's an error, return the error type and error message.
@@ -219,13 +219,19 @@ class Course::Assessment::ProgrammingTestCaseReport
 
     private
 
-    # Looks up the attribute value in the meta element in the test case XML.
+    # Looks for the metadata attribute value in the test case XML.
+    # This can be stored either as attributes of the test case XML tag
+    # or as attributes of a child meta tag.
     #
     # @param [String] attribute_name The name of the attribute to retrieve.
     # @return [String]
-    def get_meta_attribute(attribute_name)
+    def get_test_case_metadata(attribute_name)
       meta = @test_case.search('meta')
-      meta.present? && meta[0][attribute_name] ? meta[0][attribute_name] : ''
+      if meta.present? && meta[0][attribute_name]
+        meta[0][attribute_name]
+      else
+        @test_case[attribute_name] || ''
+      end
     end
   end
 
