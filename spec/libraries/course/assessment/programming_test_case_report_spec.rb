@@ -172,9 +172,17 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
           expect(subject.expected).to eq('solution_rune')
         end
       end
+
       describe '#hint' do
         it 'returns the hint attribute' do
           expect(subject.hint).to eq('Is there a rune?')
+        end
+      end
+
+      describe '#output' do
+        it 'returns the output attribute' do
+          expect(subject.output).
+            to eq('TypeError: mosaic() takes 1 positional argument but 4 were given')
         end
       end
     end
@@ -195,6 +203,82 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
       end
 
       describe '#hint' do
+        it 'returns an empty string as the hint attribute' do
+          expect(subject.hint).to eq('')
+        end
+      end
+
+      describe '#output' do
+        it 'returns an empty string as the hint attribute' do
+          expect(subject.hint).to eq('')
+        end
+      end
+    end
+  end
+
+  context 'when given a report with meta information attached to test case tags' do
+    let(:report_path) do
+      File.join(Rails.root, 'spec/fixtures/course/'\
+                'programming_single_test_suite_report_test_case_meta.xml')
+    end
+
+    let(:report_xml) { File.read(report_path) }
+
+    let(:parsed_report) do
+      Course::Assessment::ProgrammingTestCaseReport.new(report_xml)
+    end
+    let(:test_cases) { parsed_report.test_suites.first.test_cases }
+
+    describe Course::Assessment::ProgrammingTestCaseReport::TestCase do
+      subject { test_cases.first }
+
+      describe '#expression' do
+        it 'returns the expression attribute' do
+          expect(subject.expression).to eq('mosaic(rcross_bb, sail_bb, corner_bb, nova_bb)')
+        end
+      end
+
+      describe '#expected' do
+        it 'returns the expected attribute' do
+          expect(subject.expected).to eq('solution_rune')
+        end
+      end
+      describe '#hint' do
+        it 'returns the hint attribute' do
+          expect(subject.hint).to eq('Is there a rune?')
+        end
+      end
+
+      describe '#output' do
+        it 'returns the output attribute' do
+          expect(subject.output).
+            to eq('TypeError: mosaic() takes 1 positional argument but 4 were given')
+        end
+      end
+    end
+
+    describe 'when there is no meta information' do
+      subject { test_cases.second }
+
+      describe '#expression' do
+        it 'returns an empty string as the expression attribute' do
+          expect(subject.expression).to eq('')
+        end
+      end
+
+      describe '#expected' do
+        it 'returns an empty string as the expected attribute' do
+          expect(subject.expected).to eq('')
+        end
+      end
+
+      describe '#hint' do
+        it 'returns an empty string as the hint attribute' do
+          expect(subject.hint).to eq('')
+        end
+      end
+
+      describe '#output' do
         it 'returns an empty string as the hint attribute' do
           expect(subject.hint).to eq('')
         end
