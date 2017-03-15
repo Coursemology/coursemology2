@@ -722,6 +722,7 @@ ActiveRecord::Schema.define(version: 20170309094211) do
     t.datetime "created_at",                :null=>false
     t.datetime "updated_at",                :null=>false
     t.integer  "instructor_id",             :index=>{:name=>"index_course_virtual_classrooms_on_instructor_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_virtual_classrooms_instructor_id", :on_update=>:cascade, :on_delete=>:nullify}
+    t.jsonb    "recorded_videos"
   end
 
   create_table "generic_announcements", force: :cascade do |t|

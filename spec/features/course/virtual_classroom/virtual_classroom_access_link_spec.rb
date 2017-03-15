@@ -41,6 +41,13 @@ RSpec.feature 'Course: VirtualClassrooms', js: true do
         valid_virtual_classroom.reload
         expect(valid_virtual_classroom.instructor_classroom_link).to be_truthy
       end
+
+      scenario 'I can fetch recorded videos if they exist' do
+        visit course_virtual_classrooms_path(course)
+        page.find("#lec-#{course.id}-#{ended_virtual_classroom.id}-list").click
+        wait_for_ajax
+        expect(page).to have_selector('.recorded-video-link')
+      end
     end
 
     context 'As a Student' do
@@ -60,6 +67,11 @@ RSpec.feature 'Course: VirtualClassrooms', js: true do
         valid_virtual_classroom.reload
         # Make sure link remains as instructor link
         expect(valid_virtual_classroom.instructor_classroom_link).to eq(instructor_link)
+      end
+
+      scenario 'I cannot access recorded videos' do
+        visit course_virtual_classrooms_path(course)
+        expect(page).not_to have_selector "#lec-#{course.id}-#{ended_virtual_classroom.id}-list"
       end
     end
   end

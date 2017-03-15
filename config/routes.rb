@@ -151,7 +151,10 @@ Rails.application.routes.draw do
 
       resources :virtual_classrooms, concerns: :paginatable do
         get :access_link, on: :member
+        get :recorded_videos, on: :member
       end
+      get 'virtual_classrooms/recorded_video_link/:record_id' =>
+            'virtual_classrooms#recorded_video_link'
 
       resources :announcements, concerns: :paginatable
       scope module: :achievement do

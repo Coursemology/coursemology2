@@ -15,6 +15,18 @@ class Course::VirtualClassroom < ActiveRecord::Base
     @duration ||= ((end_at - start_at) / 60).to_i
   end
 
+  def recorded_videos_error?
+    recorded_videos_fetched? && !recorded_videos.empty? && recorded_videos[0]['status'] == 'error'
+  end
+
+  def recorded_videos_exist?
+    recorded_videos_fetched? && !recorded_videos_error? && !recorded_videos.empty?
+  end
+
+  def recorded_videos_fetched?
+    recorded_videos != nil
+  end
+
   private
 
   def convert_duration_to_end_at

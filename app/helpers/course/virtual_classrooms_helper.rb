@@ -18,4 +18,31 @@ module Course::VirtualClassroomsHelper
       [I18n.t('course.virtual_classrooms.index.duration_minutes', duration: i), i]
     end
   end
+
+  def list_recorded_videos(virtual_classroom)
+    content_tag :p do
+      result = content_tag(:span, t('course.virtual_classrooms.recorded_videos') + ': ')
+      result = recorded_video_links(result, virtual_classroom)
+      result
+    end
+  end
+
+  private
+
+  def recorded_video_links(result, virtual_classroom)
+    virtual_classroom.recorded_videos.each_with_index do |vid, index|
+      result = recorded_video_link(result, vid)
+      result = result.safe_concat(', ') unless virtual_classroom.recorded_videos.count - 1 == index
+    end
+    result
+  end
+
+  def recorded_video_link(result, vid)
+    result.safe_concat(
+      content_tag(:a, vid['name'],
+                  href: '#',
+                  class: 'recorded-video-link',
+                  data: { record_id: vid['id'] })
+    )
+  end
 end

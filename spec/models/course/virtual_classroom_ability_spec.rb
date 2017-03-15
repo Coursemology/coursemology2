@@ -19,6 +19,7 @@ RSpec.describe Course::VirtualClassroom do
       it { is_expected.to be_able_to(:show, ended_virtual_classroom) }
       it { is_expected.to be_able_to(:show, not_started_virtual_classroom) }
       it { is_expected.not_to be_able_to(:manage, valid_virtual_classroom) }
+      it { is_expected.not_to be_able_to(:access_recorded_videos, course) }
 
       it 'sees the started virtual_classrooms' do
         expect(course.virtual_classrooms.accessible_by(subject)).

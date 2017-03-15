@@ -19,5 +19,6 @@ module Course::VirtualClassroomsAbilityComponent
 
   def allow_staff_manage_virtual_classrooms
     can :manage, Course::VirtualClassroom, course_staff_hash
+    can :access_recorded_videos, Course, course_user_hash(*CourseUser::STAFF_ROLES.to_a)
   end
 end
