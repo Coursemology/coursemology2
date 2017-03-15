@@ -2,7 +2,6 @@
 
 exports[`<SurveyIndex /> renders the index page 1`] = `
 <SurveyIndex
-  canCreate={false}
   deleteConfirmation={
     Object {
       "onConfirm": [Function],
@@ -58,5 +57,10 @@ exports[`<SurveyIndex /> renders the index page 1`] = `
     }
   }
   surveys={Array []}
+  surveysFlags={
+    Object {
+      "canCreate": false,
+    }
+  }
 />
 `;

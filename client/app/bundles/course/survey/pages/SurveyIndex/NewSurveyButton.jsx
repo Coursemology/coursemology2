@@ -54,4 +54,4 @@ class NewSurveyButton extends React.Component {
 
 NewSurveyButton.propTypes = propTypes;
 
-export default connect(state => state)(injectIntl(NewSurveyButton));
+export default connect(state => state.surveysFlags)(injectIntl(NewSurveyButton));
