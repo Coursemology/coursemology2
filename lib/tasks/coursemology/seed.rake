@@ -84,7 +84,8 @@ namespace :coursemology do
           )
         end
         assessment = FactoryGirl.build(
-          :assessment, course: course, title: 'Published, Autograded with Programming Question'
+          :assessment, :autograded, course: course,
+                                    title: 'Published, Autograded with Programming Question'
         )
         question = FactoryGirl.create(
           :course_assessment_question_programming, :auto_gradable,
