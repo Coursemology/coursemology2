@@ -232,6 +232,26 @@ RSpec.feature 'Course: Forum: Post: Management' do
         visit course_forum_topic_path(course, forum, topic)
         expect(page).to have_selector(content_tag_selector(topic.posts.first, class: 'unread'))
       end
+
+      scenario 'I can see topics with unread posts' do
+        create_list(:course_discussion_post, 2, topic: topic.acting_as)
+        post = topic.posts.reload.sample
+
+        reader = create(:course_user, course: course).user
+
+        expect(topic.unread?(reader)).to be_falsy
+
+        visit course_forum_topic_path(course, forum, topic)
+
+        find_link(nil, href: reply_course_forum_topic_post_path(course, forum, topic, post)).click
+
+        within '#new_discussion_post' do
+          fill_in 'discussion_post_text', with: 'test'
+          click_button 'submit'
+        end
+
+        expect(topic.unread?(reader)).to be_truthy
+      end
     end
   end
 end
