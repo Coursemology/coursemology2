@@ -1,3 +1,4 @@
+dist: trusty
 sudo: false
 language: ruby
 branches:
@@ -15,6 +16,9 @@ cache:
   yarn: true
   directories:
     - travis-phantomjs
+    - $HOME/.cache/yarn
+    - $(npm root -g)
+    - $(npm prefix -g)/bin
 env:
   global:
     - RAILS_ENV=test
@@ -26,9 +30,8 @@ env:
     - GROUP="misc"
 
 before_install:
-  - nvm install 6
   - node --version
-  - npm install -g yarn
+  - npm list -g yarn --depth=0 || npm install -g yarn
   - yarn --version
   - gem update bundler
   # from https://github.com/travis-ci/travis-ci/issues/3225#issuecomment-177592725
