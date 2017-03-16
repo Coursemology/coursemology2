@@ -19,10 +19,12 @@ coverage:
     project:
       default: off
       frontend:
-        target: 25%
+        target: auto
+        threshold: 0.1%
         flags: frontend
       backend:
-        target: 80%
+        target: auto
+        threshold: 0.1%
         flags: backend
     patch: yes
     changes: no
