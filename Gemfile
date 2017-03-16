@@ -133,7 +133,8 @@ end
 group :ci do
   # Code Coverage reporters
   gem 'codeclimate-test-reporter'
-  gem 'simplecov-lcov'
+  gem 'codecov', :require => false
+  gem 'rspec-retry'
 end
 
 # This is used only when producing Production assets. Deals with things like minifying JavaScript

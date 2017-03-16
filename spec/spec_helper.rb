@@ -22,6 +22,8 @@ require 'email_spec'
 require 'email_spec/rspec'
 require 'should_not/rspec'
 
+require 'rspec/retry' if ENV['CI']
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
@@ -92,6 +94,18 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
+
+  if ENV['CI']
+    # show retry status in spec process
+    config.verbose_retry = true
+    # show exception that triggers a retry if verbose_retry is set to true
+    config.display_try_failure_messages = true
+
+    # run retry only on js feature tests
+    config.around :each, :js do |example|
+      example.run_with_retry retry: 3
+    end
+  end
 end
 
 Capybara.register_server(:puma) do |app, port|

@@ -2,10 +2,8 @@
 require 'simplecov'
 
 if ENV['CI']
-  require 'simplecov-lcov'
-
-  SimpleCov::Formatter::LcovFormatter.report_with_single_file = true
-  SimpleCov.formatter = SimpleCov::Formatter::LcovFormatter
+  require 'codecov'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
 
   # Code coverage exclusions
   SimpleCov.start('rails') do
