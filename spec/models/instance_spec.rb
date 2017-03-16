@@ -57,7 +57,7 @@ RSpec.describe Instance do
   end
 
   describe '.order_for_display' do
-    let(:instances) { create_list(:instance, 2) }
+    let!(:instances) { create_list(:instance, 2) }
     # Use a name that comes before 'Default'
     let!(:instance) { create(:instance, name: 'Abc') }
 
