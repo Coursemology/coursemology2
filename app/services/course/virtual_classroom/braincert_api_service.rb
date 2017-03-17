@@ -14,6 +14,26 @@ class Course::VirtualClassroom::BraincertApiService
     generate_classroom_link(user, is_instructor)
   end
 
+  def fetch_recorded_videos
+    return nil unless @virtual_classroom.classroom_id && @virtual_classroom.ended?
+    response = call_braincert_api '/v2/getclassrecording', class_id: @virtual_classroom.classroom_id
+    response_body = [JSON.parse(response.body)].flatten.select do |h|
+      h['id'].present? || h['status'] == 'error'
+    end
+    @virtual_classroom.update! recorded_videos: response_body
+    response_body
+  end
+
+  def fetch_recorded_video_link(record_id)
+    response = call_braincert_api('/v2/getrecording', record_id: record_id)
+    response_body = JSON.parse(response.body)
+    if response_body.is_a?(Hash)
+      error = response_body['error']
+      return [nil, I18n.t(:'course.virtual_classrooms.error_generating_video_link', error: error)]
+    end
+    [response_body[0]['record_url'], nil]
+  end
+
   private
 
   TIME_BRAINCERT = '%I:%M%p'
@@ -27,15 +47,20 @@ class Course::VirtualClassroom::BraincertApiService
   #   (has "manage" permission of virtual_classroom)
   # @return [Array] of format [link, errors]
   def generate_classroom_link(user, is_instructor)
-    res = call_braincert_api('/v2/getclasslaunch',
+    response = call_braincert_api('/v2/getclasslaunch',
                              generate_classroom_link_params(user, is_instructor))
-    res_body = JSON.parse(res.body)
-    error = res_body['error']
+    response_body = JSON.parse(response.body)
+    error = response_body['error']
     return [nil, I18n.t(:'course.virtual_classrooms.error_generating_link', error: error)] if error
-    if is_instructor
-      @virtual_classroom.update! instructor_classroom_link: res_body['encryptedlaunchurl']
-    end
-    [res_body['encryptedlaunchurl'], nil]
+    access_link = response_body['encryptedlaunchurl']
+    save_instructor_info(access_link, user) if is_instructor
+    [access_link, nil]
+  end
+
+  def save_instructor_info(access_link, user)
+    @virtual_classroom.instructor_classroom_link = access_link
+    @virtual_classroom.instructor ||= user
+    @virtual_classroom.save!
   end
 
   def generate_classroom_link_params(user, is_instructor)
@@ -75,14 +100,15 @@ class Course::VirtualClassroom::BraincertApiService
 
   def create_classroom
     return [@virtual_classroom.classroom_id, nil] if @virtual_classroom.classroom_id
-    res = call_braincert_api '/v2/schedule', create_classroom_params
-    res_body = JSON.parse(res.body)
-    error = res_body['error']
+    response = call_braincert_api '/v2/schedule', create_classroom_params
+    response_body = JSON.parse(response.body)
+    error = response_body['error']
     if error
       return [nil, I18n.t(:'course.virtual_classrooms.error_creating_classroom',
                           error: error)]
     end
-    @virtual_classroom.update!(classroom_id: res_body['class_id']) && [res_body['class_id'], nil]
+    @virtual_classroom.update!(classroom_id: response_body['class_id']) &&
+      [response_body['class_id'], nil]
   end
 
   def create_classroom_params
@@ -92,9 +118,7 @@ class Course::VirtualClassroom::BraincertApiService
       start_time: @virtual_classroom.start_at.in_time_zone(0).strftime(TIME_BRAINCERT),
       end_time: @virtual_classroom.end_at.in_time_zone(0).strftime(TIME_BRAINCERT),
       date: @virtual_classroom.start_at.in_time_zone(0).to_date.strftime(DATE_ISO),
-      ispaid: 0,
-      is_recurring: 0,
-      seat_attendees: 25, record: 1, isRegion: 7
+      ispaid: 0, is_recurring: 0, seat_attendees: 25, record: 1, isRegion: 2
     }
   end
 end

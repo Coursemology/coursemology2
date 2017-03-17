@@ -24,12 +24,13 @@
   div.content
     = format_html(virtual_classroom.content)
 
+  - link_exists = virtual_classroom.instructor_classroom_link.present?
+  - is_instructor = can?(:edit, virtual_classroom)
+  - is_main_instructor = virtual_classroom.instructor == current_user
   div.access-link
-    - link_exists = virtual_classroom.instructor_classroom_link.present?
-    - is_instructor = can?(:edit, virtual_classroom)
     - if virtual_classroom.currently_active?
       - if link_exists || is_instructor
-        - if link_exists && is_instructor
+        - if link_exists && is_main_instructor
           = link_to(t('course.virtual_classrooms.go_to_virtual_classroom'),
             virtual_classroom.instructor_classroom_link,
             id: "lec-link-#{virtual_classroom.id}", target: '_blank')
@@ -45,3 +46,15 @@
           = t('course.virtual_classrooms.ended')
         - else
           = t('course.virtual_classrooms.not_started')
+  - if is_instructor && virtual_classroom.ended?
+    div.recorded-videos
+      - if virtual_classroom.recorded_videos_exist?
+        = list_recorded_videos(virtual_classroom)
+      - elsif virtual_classroom.recorded_videos_error?
+        i.error = t('course.virtual_classrooms.videos_error')
+      - elsif virtual_classroom.recorded_videos_fetched?
+        i.info = t('course.virtual_classrooms.no_recorded_videos')
+      br
+      button[class='fetch-recorded-videos btn btn-sm btn-primary'
+        id="lec-#{virtual_classroom.course.id}-#{virtual_classroom.id}-list"]
+        = t('course.virtual_classrooms.get_recorded_videos_list')

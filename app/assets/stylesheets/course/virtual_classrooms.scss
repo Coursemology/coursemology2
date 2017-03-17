@@ -81,7 +81,12 @@
         max-width: 100%;
       }
 
-      .access-link {
+      .recorded-videos {
+        margin-top: 15px;
+      }
+
+      .access-link,
+      .recorded-videos {
         > a {
           padding-right: 15px;
         }

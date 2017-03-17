@@ -4,6 +4,7 @@ class Course::VirtualClassroom < ActiveRecord::Base
   before_validation :convert_duration_to_end_at
   acts_as_readable on: :updated_at
   has_many_attachments on: :content
+  belongs_to :instructor, class_name: 'User', foreign_key: :instructor_id, inverse_of: nil
 
   belongs_to :course, inverse_of: :virtual_classrooms
 
@@ -12,6 +13,18 @@ class Course::VirtualClassroom < ActiveRecord::Base
   def duration
     return nil unless start_at && end_at
     @duration ||= ((end_at - start_at) / 60).to_i
+  end
+
+  def recorded_videos_error?
+    recorded_videos_fetched? && !recorded_videos.empty? && recorded_videos[0]['status'] == 'error'
+  end
+
+  def recorded_videos_exist?
+    recorded_videos_fetched? && !recorded_videos_error? && !recorded_videos.empty?
+  end
+
+  def recorded_videos_fetched?
+    recorded_videos != nil
   end
 
   private

@@ -16,6 +16,30 @@ class Course::VirtualClassroomsController < Course::ComponentController
     end
   end
 
+  def recorded_videos #:nodoc:
+    authorize! :manage, @virtual_classroom
+    @braincert_api_service = Course::VirtualClassroom::BraincertApiService.new(
+      @virtual_classroom, @settings
+    )
+    respond_to do |format|
+      format.json do
+        render json: @braincert_api_service.fetch_recorded_videos
+      end
+    end
+  end
+
+  def recorded_video_link #:nodoc:
+    authorize! :access_recorded_videos, current_course
+    @braincert_api_service = Course::VirtualClassroom::BraincertApiService.new(
+      nil, @settings
+    )
+    respond_to do |format|
+      format.json do
+        render_video_link
+      end
+    end
+  end
+
   def index #:nodoc:
     @virtual_classrooms = @virtual_classrooms.includes(:creator).sorted_by_date.page(page_param)
   end
@@ -55,6 +79,15 @@ class Course::VirtualClassroomsController < Course::ComponentController
   end
 
   private
+
+  def render_video_link
+    link, errors = @braincert_api_service.fetch_recorded_video_link(params[:record_id])
+    if errors.present?
+      render json: { errors: errors }, status: 400
+    else
+      render json: { link: link }
+    end
+  end
 
   def render_access_link
     link, errors = @braincert_api_service.handle_access_link(current_user,

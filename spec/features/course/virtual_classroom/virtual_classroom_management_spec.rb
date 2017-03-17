@@ -100,6 +100,29 @@ RSpec.feature 'Course: VirtualClassrooms' do
         expect(page).to have_selector('div.alert.alert-success',
                                       text: I18n.t('course.virtual_classrooms.destroy.success'))
       end
+
+      scenario 'I can see existing virtual_classroom link if I was the first instructor' do
+        virtual_classroom = create(
+          :course_virtual_classroom,
+          course: course,
+          instructor: user,
+          instructor_classroom_link: 'www.example.com'
+        )
+        visit course_virtual_classrooms_path(course)
+        expect(page).to have_selector("#lec-link-#{virtual_classroom.id}")
+      end
+
+      scenario 'I cannot see existing virtual_classroom link if I was not the first instructor' do
+        user2 = create(:course_manager, course: course).user
+        virtual_classroom = create(
+          :course_virtual_classroom,
+          course: course,
+          instructor: user2,
+          instructor_classroom_link: 'www.example.com'
+        )
+        visit course_virtual_classrooms_path(course)
+        expect(page).not_to have_selector("#lec-link-#{virtual_classroom.id}")
+      end
     end
 
     context 'As a Course Student' do
