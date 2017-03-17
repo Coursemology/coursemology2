@@ -28,6 +28,8 @@ class PopupDialog extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     intl: intlShape,
+    // If the gamification feature is enabled in the course.
+    gamified: PropTypes.bool,
     categoryId: PropTypes.number.isRequired,
     tabId: PropTypes.number.isRequired,
     pristine: PropTypes.bool,
@@ -108,6 +110,7 @@ class PopupDialog extends React.Component {
           contentStyle={styles.dialog}
         >
           <AssessmentForm
+            gamified={this.props.gamified}
             modeSwitching
             onSubmit={this.onFormSubmit}
             initialValues={initialValues}

@@ -4,6 +4,8 @@ json.attributes do
 end
 
 json.mode_switching @assessment.allow_mode_switching?
+json.gamified current_course.gamified?
+
 json.folder_attributes do
   json.folder_id @assessment.folder.id
   json.materials @assessment.materials.order(:name) do |material|

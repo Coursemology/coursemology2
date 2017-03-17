@@ -14,6 +14,7 @@ $(document).ready(() => {
     const Page = () => (
       <ProviderWrapper store={store}>
         <AssessmentIndexPage
+          gamified={attributes.gamified}
           categoryId={attributes.category_id}
           tabId={attributes.tab_id}
         />
