@@ -1,6 +1,7 @@
 import actionTypes from '../constants';
 import sectionReducer from './section';
 import { updateOrAppend, deleteIfFound } from './utils';
+import { sortSurveyElements } from '../utils';
 
 const initialState = {};
 
@@ -19,7 +20,7 @@ export default function (survey = initialState, action) {
     case actionTypes.UPDATE_SURVEY_SECTION_SUCCESS:
     case actionTypes.CREATE_SURVEY_SECTION_SUCCESS: {
       const sections = updateOrAppend(survey.sections, action.section);
-      return { ...survey, sections };
+      return sortSurveyElements({ ...survey, sections });
     }
     case actionTypes.DELETE_SURVEY_SECTION_SUCCESS: {
       const sections = deleteIfFound(survey.sections, action.sectionId);

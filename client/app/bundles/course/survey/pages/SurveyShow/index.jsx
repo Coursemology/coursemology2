@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import Subheader from 'material-ui/Subheader';
-import { sorts } from '../../utils';
 import { showDeleteConfirmation } from '../../actions';
 import surveyTranslations from '../../translations';
 import * as surveyActions from '../../actions/surveys';
@@ -97,7 +96,6 @@ class SurveyShow extends React.Component {
   renderSections(survey) {
     const { intl } = this.props;
     const { sections, canUpdate } = survey;
-    const { byWeight } = sorts;
 
     if (!canUpdate) {
       return null;
@@ -111,7 +109,7 @@ class SurveyShow extends React.Component {
       <div>
         <Subheader>{ intl.formatMessage(surveyTranslations.questions) }</Subheader>
         {
-          sections.sort(byWeight).map(section =>
+          sections.map(section =>
             <Section key={section.id} {...{ section }} />
           )
         }
