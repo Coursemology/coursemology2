@@ -30,11 +30,12 @@ const styles = {
   },
   adminMenu: {
     position: 'absolute',
-    right: 0,
-    top: 0,
+    right: 8,
+    top: 12,
   },
   cardText: {
     position: 'relative',
+    paddingTop: 34,
   },
   card: {
     marginBottom: 15,
@@ -117,6 +118,11 @@ class QuestionCard extends React.Component {
     return QuestionCard.renderOptionsFields(question);
   }
 
+  constructor(props) {
+    super(props);
+    this.state = { hovered: false };
+  }
+
   renderAdminMenu() {
     const { adminFunctions } = this.props;
 
@@ -138,8 +144,14 @@ class QuestionCard extends React.Component {
 
   render() {
     const { question, expanded } = this.props;
+    const cursorStyle = this.state.hovered ? { cursor: 'move' } : null;
     return (
-      <Card style={styles.card} {...{ expanded }}>
+      <Card
+        style={{ ...styles.card, ...cursorStyle }}
+        onMouseOver={() => this.setState({ hovered: true })}
+        onMouseOut={() => this.setState({ hovered: false })}
+        {...{ expanded }}
+      >
         <CardText style={styles.cardText}>
           { this.renderAdminMenu() }
           <p>{question.description}</p>

@@ -8,6 +8,7 @@ export default function (state = [], action) {
     case actionTypes.CREATE_SURVEY_SUCCESS: {
       return sortSurveysByDate([...state, sortSurveyElements(action.survey)]);
     }
+    case actionTypes.UPDATE_QUESTION_ORDER_SUCCESS:
     case actionTypes.UPDATE_SURVEY_SUCCESS:
     case actionTypes.LOAD_SURVEY_SUCCESS: {
       return sortSurveysByDate(updateOrAppend(state, sortSurveyElements(action.survey)));
@@ -19,6 +20,9 @@ export default function (state = [], action) {
       return deleteIfFound(state, action.surveyId);
     }
 
+    case actionTypes.SET_DRAGGED_QUESTION:
+    case actionTypes.REORDER_QUESTION:
+    case actionTypes.CHANGE_QUESTION_SECTION:
     case actionTypes.UPDATE_SURVEY_SECTION_SUCCESS:
     case actionTypes.DELETE_SURVEY_SECTION_SUCCESS:
     case actionTypes.CREATE_SURVEY_SECTION_SUCCESS:

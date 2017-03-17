@@ -1,76 +1,69 @@
-import React from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { Card, CardText, CardTitle, CardActions } from 'material-ui/Card';
-import Subheader from 'material-ui/Subheader';
-import { sorts } from '../../../utils';
-import { sectionShape } from '../../../propTypes';
-import Question from './Question';
-import NewQuestionButton from './NewQuestionButton';
-import EditSectionButton from './EditSectionButton';
-import DeleteSectionButton from './DeleteSectionButton';
-
-const styles = {
-  card: {
-    marginBottom: 15,
-  },
-};
-
-const translations = defineMessages({
-  noQuestions: {
-    id: 'course.surveys.Section.noQuestions',
-    defaultMessage:
-      'This section has no questions. Empty sections will not be shown in the survey \
-      response form.',
-  },
-});
+/* eslint-disable new-cap */
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { DropTarget } from 'react-dnd';
+import { draggableTypes } from '../../../constants';
+import { changeSection } from '../../../actions/questions';
+import SectionCard from './SectionCard';
 
 class Section extends React.Component {
   static propTypes = {
-    section: sectionShape,
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = { expanded: true };
+    connectDropTarget: PropTypes.func.isRequired,
   }
 
   render() {
-    const { section } = this.props;
-    const { byWeight } = sorts;
-    return (
-      <Card
-        style={styles.card}
-        expanded={this.state.expanded}
-        onExpandChange={value => this.setState({ expanded: value })}
-      >
-        <CardTitle
-          title={section.title}
-          subtitle={section.description}
-          showExpandableButton={section.questions.length > 0}
-        />
-        <CardText>
-          {
-            section.questions.length < 1 ?
-              <Subheader><FormattedMessage {...translations.noQuestions} /></Subheader> : null
-          }
-          {
-            section.questions.sort(byWeight).map(question =>
-              <Question
-                key={question.id}
-                expanded={this.state.expanded}
-                {...{ question }}
-              />
-            )
-          }
-        </CardText>
-        <CardActions>
-          { section.canCreateQuestion ? <NewQuestionButton sectionId={section.id} /> : null }
-          { section.canUpdate ? <EditSectionButton {...{ section }} /> : null }
-          { section.canDelete ? <DeleteSectionButton sectionId={section.id} /> : null }
-        </CardActions>
-      </Card>
+    return this.props.connectDropTarget(
+      <div ref={(node) => { this.DOMNode = node; }}>
+        <SectionCard {...this.props} />
+      </div>
     );
   }
 }
 
-export default Section;
+function collect(connector) {
+  return {
+    connectDropTarget: connector.dropTarget(),
+  };
+}
+
+const sectionTarget = {
+  hover(props, monitor, component) {
+    const {
+      index: sourceIndex,
+      sectionIndex: sourceSectionIndex,
+      sectionId: sourceSectionId,
+    } = props.survey.draggedQuestion;
+    const hoverSectionIndex = props.index;
+    const hoverSectionId = props.section.id;
+
+    // Only handle questions cards that are dragged in from other sections
+    if (sourceSectionId === hoverSectionId) { return; }
+
+    // Determine whether question is being dragged in from the section above or the one below
+    let moveDownwards;
+    const pointerPosition = monitor.getClientOffset();
+    const hoverBoundingRect = component.DOMNode.getBoundingClientRect();
+    const fromAbove =
+      sourceSectionIndex < hoverSectionIndex && pointerPosition.y > hoverBoundingRect.top;
+    const fromBelow =
+      sourceSectionIndex > hoverSectionIndex && pointerPosition.y < hoverBoundingRect.bottom;
+    if (fromAbove) {
+      moveDownwards = true;
+    } else if (fromBelow) {
+      moveDownwards = false;
+    } else {
+      return;
+    }
+
+    props.dispatch(changeSection(
+      moveDownwards,
+      sourceIndex,
+      sourceSectionIndex,
+      hoverSectionIndex
+    ));
+  },
+};
+
+export default connect(state => state)(
+  DropTarget(draggableTypes.QUESTION, sectionTarget, collect)(Section)
+);
