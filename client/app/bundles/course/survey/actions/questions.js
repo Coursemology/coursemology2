@@ -33,7 +33,7 @@ export function createSurveyQuestion(
     return CourseAPI.survey.questions.create(fields)
       .then((response) => {
         dispatch({
-          surveyId: CourseAPI.survey.responses.getSurveyId(),
+          surveyId: CourseAPI.survey.questions.getSurveyId(),
           sectionId: response.data.section_id,
           type: actionTypes.CREATE_SURVEY_QUESTION_SUCCESS,
           question: response.data,
@@ -63,7 +63,7 @@ export function updateSurveyQuestion(
     return CourseAPI.survey.questions.update(questionId, data)
       .then((response) => {
         dispatch({
-          surveyId: CourseAPI.survey.responses.getSurveyId(),
+          surveyId: CourseAPI.survey.questions.getSurveyId(),
           sectionId: response.data.section_id,
           type: actionTypes.UPDATE_SURVEY_QUESTION_SUCCESS,
           question: response.data,
@@ -92,7 +92,7 @@ export function deleteSurveyQuestion(
     return CourseAPI.survey.questions.delete(question.id)
       .then(() => {
         dispatch({
-          surveyId: CourseAPI.survey.responses.getSurveyId(),
+          surveyId: CourseAPI.survey.questions.getSurveyId(),
           sectionId: question.section_id,
           questionId: question.id,
           type: actionTypes.DELETE_SURVEY_QUESTION_SUCCESS,
