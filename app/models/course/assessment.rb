@@ -127,6 +127,10 @@ class Course::Assessment < ActiveRecord::Base
     password.present?
   end
 
+  def downloadable?
+    questions.any?(&:downloadable?)
+  end
+
   def initialize_duplicate(duplicator, other)
     copy_attributes(other, duplicator.time_shift)
     self.folder = duplicator.duplicate(other.folder)

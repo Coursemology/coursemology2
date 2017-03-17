@@ -82,6 +82,10 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
     test_cases.group_by(&:test_case_type)
   end
 
+  def downloadable?
+    true
+  end
+
   def initialize_duplicate(duplicator, other)
     copy_attributes(other)
 

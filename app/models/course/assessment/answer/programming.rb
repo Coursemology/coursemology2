@@ -43,4 +43,13 @@ class Course::Assessment::Answer::Programming < ActiveRecord::Base
   def grade_inline?
     false
   end
+
+  def download(dir)
+    files.each do |src_file|
+      dst_path = File.join(dir, src_file.filename)
+      File.open(dst_path, 'w') do |dst_file|
+        dst_file.write(src_file.content)
+      end
+    end
+  end
 end

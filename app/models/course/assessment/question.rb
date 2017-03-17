@@ -71,6 +71,17 @@ class Course::Assessment::Question < ActiveRecord::Base
            question_number: question_number, title: title)
   end
 
+  # Whether the answer has downloadable content.
+  #
+  # @return [Boolean]
+  def downloadable?
+    if actable.self_respond_to?(:downloadable?)
+      actable.downloadable?
+    else
+      false
+    end
+  end
+
   # Copy attributes for question from the object being duplicated.
   #
   # @param other [Object] The source object to copy attributes from.

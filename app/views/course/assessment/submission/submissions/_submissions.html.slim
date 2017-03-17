@@ -1,3 +1,10 @@
+h3
+  = title
+  - if @assessment.downloadable? && course_users.map { |u| submissions[u] }.any? { |s| s && s.workflow_state != 'attempting' }
+    div.pull-right
+      = link_to t('.download'), download_all_course_assessment_submissions_path(current_course, @assessment, students: students),
+            class: ['btn', 'btn-primary']
+
 table.table.submissions
   thead
     tr

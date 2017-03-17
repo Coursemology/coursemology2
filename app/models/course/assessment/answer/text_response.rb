@@ -13,6 +13,30 @@ class Course::Assessment::Answer::TextResponse < ActiveRecord::Base
     acting_as
   end
 
+  def download(dir)
+    download_answer(dir) unless question.actable.file_upload_question?
+    download_attachment(dir) if attachment
+  end
+
+  def download_answer(dir)
+    answer_path = File.join(dir, 'answer.txt')
+    File.open(answer_path, 'w') do |file|
+      file.write(answer_text)
+    end
+  end
+
+  def download_attachment(dir)
+    name_generator = FileName.new(File.join(dir, attachment.name), position: :middle,
+                                                                   format: '(%d)',
+                                                                   delimiter: ' ')
+    attachment_path = name_generator.create
+    File.open(attachment_path, 'wb') do |file|
+      attachment.open(binmode: true) do |attachment_stream|
+        FileUtils.copy_stream(attachment_stream, file)
+      end
+    end
+  end
+
   private
 
   def set_default
