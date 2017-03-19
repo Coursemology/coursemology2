@@ -65,6 +65,8 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   # Publish all the graded submissions.
   def publish_all
+    # TODO: Modify assessment ability to implement this in a cleaner way
+    authorize!(:publish_all, Course::Assessment::Submission.new(assessment: @assessment))
     graded_submissions = @assessment.submissions.with_graded_state
     if !graded_submissions.empty?
       job = Course::Assessment::Submission::PublishingJob.
