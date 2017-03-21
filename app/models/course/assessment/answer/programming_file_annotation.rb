@@ -23,6 +23,6 @@ class Course::Assessment::Answer::ProgrammingFileAnnotation < ActiveRecord::Base
 
   # Set the course as the same course of the answer.
   def set_course
-    self.course ||= file.answer.course if file && file.answer
+    self.course ||= file.answer.question.assessment.course if file && file.answer
   end
 end
