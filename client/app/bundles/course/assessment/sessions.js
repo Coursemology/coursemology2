@@ -1,4 +1,4 @@
-import { enableForm, submitAndDisableForm } from 'lib/helpers/formHelpers';
+import { enableForm, submitAndDisableForm } from 'lib/helpers/form-helpers';
 
 require('jquery-ui/ui/effects/effect-shake');
 

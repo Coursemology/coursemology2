@@ -6,7 +6,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 import Avatar from 'material-ui/Avatar';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import { standardDateFormat, shortTimeFormat } from 'lib/dateTimeDefaults';
+import { standardDateFormat, shortTimeFormat } from 'lib/date-time-defaults';
 
 const styles = {
   root: {

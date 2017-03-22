@@ -1,5 +1,5 @@
 import originAxios from 'axios';
-import { csrfToken } from 'lib/helpers/serverContext';
+import { csrfToken } from 'lib/helpers/server-context';
 
 const headers = { Accept: 'application/json', 'X-CSRF-Token': csrfToken };
 

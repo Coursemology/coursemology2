@@ -13,7 +13,7 @@
 
 
 function loadCurrentModule() {
-  const { modulePath } = require('./lib/helpers/serverContext');
+  const { modulePath } = require('./lib/helpers/server-context');
   try {
     require(`../app/bundles/${modulePath}`);
   } catch (e) {
@@ -26,10 +26,10 @@ function loadCurrentModule() {
 }
 
 function loadModules() {
-  require('./lib/layout_ace_editor.js');
-  loadCurrentModule();
   // Initializers
-  require('./lib/helpers/confirmDialog');
+  require('./lib/helpers/ace-editor.js');
+  require('./lib/helpers/confirm-dialog');
+  loadCurrentModule();
 }
 
 if (!global.Intl) {
