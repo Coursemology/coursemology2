@@ -65,14 +65,32 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   # Publish all the graded submissions.
   def publish_all
+    # TODO: Modify assessment ability to implement this in a cleaner way
+    authorize!(:publish_all, Course::Assessment::Submission.new(assessment: @assessment))
     graded_submissions = @assessment.submissions.with_graded_state
     if !graded_submissions.empty?
-      job =
-        Course::Assessment::Submission::PublishingJob.perform_later(@assessment, current_user).job
+      job = Course::Assessment::Submission::PublishingJob.
+            perform_later(@assessment, current_user).job
       redirect_to(job_path(job))
     else
       redirect_to course_assessment_submissions_path(current_course, @assessment),
                   notice: t('.notice')
+    end
+  end
+
+  # Download either all of or a subset of submissions for an assessment.
+  def download_all
+    authorize!(:manage, @assessment)
+    if !@assessment.downloadable?
+      redirect_to course_assessment_submissions_path(current_course, @assessment),
+                  notice: t('.not_downloadable')
+    elsif @assessment.submissions.confirmed.empty?
+      redirect_to course_assessment_submissions_path(current_course, @assessment),
+                  notice: t('.no_submissions')
+    else
+      job = Course::Assessment::Submission::ZipDownloadJob.
+            perform_later(current_course_user, @assessment, params[:students]).job
+      redirect_to job_path(job)
     end
   end
 

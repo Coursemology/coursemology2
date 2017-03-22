@@ -92,6 +92,32 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       end
     end
 
+    describe '#publish_all' do
+      subject do
+        patch :publish_all, course_id: course, assessment_id: assessment
+      end
+
+      context 'when a student tries to publish submissions' do
+        let(:course) { create(:course) }
+        let(:user) { create(:course_student, course: course).user }
+
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+    end
+
+    describe '#download_all' do
+      subject do
+        get :download_all, course_id: course, assessment_id: assessment
+      end
+
+      context 'when a student tries to download submissions' do
+        let(:course) { create(:course) }
+        let(:user) { create(:course_student, course: course).user }
+
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+    end
+
     context 'when the assessment is autograded' do
       let(:assessment) { create(:assessment, :autograded, :with_mrq_question, course: course) }
       let!(:answer) do
