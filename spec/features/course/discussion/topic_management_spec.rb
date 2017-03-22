@@ -6,8 +6,8 @@ RSpec.feature 'Course: Topics: Management' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:answer_comment) do
-      create(:course_assessment_answer, :with_post, course: course)
+    let(:comment) do
+      create(:course_assessment_submission_question, :with_post, course: course)
     end
     let(:code_annotation) do
       create(:course_assessment_answer_programming_file_annotation, :with_post, course: course)
@@ -19,19 +19,19 @@ RSpec.feature 'Course: Topics: Management' do
       let(:user) { create(:course_teaching_assistant, course: course).user }
 
       scenario 'I can see all the comments' do
-        answer_comment
+        comment
         code_annotation
         visit course_topics_path(course)
 
         expect(page).to have_selector('.nav.nav-tabs')
-        expect(page).to have_selector('div', text: answer_comment.question.assessment.title)
+        expect(page).to have_selector('div', text: comment.question.assessment.title)
         expect(page).
           to have_selector('div', text: code_annotation.file.answer.question.assessment.title)
       end
 
       scenario 'I can reply to a comment topic', js: true do
-        # Randomly create a topic, either code_annotation or answer_comment.
-        topic = [true, false].sample ? code_annotation : answer_comment
+        # Randomly create a topic, either code_annotation or comment.
+        topic = [true, false].sample ? code_annotation : comment
         visit course_topics_path(course)
 
         comment = 'GOOD WORK!'
@@ -50,7 +50,7 @@ RSpec.feature 'Course: Topics: Management' do
       end
 
       scenario 'I can mark a topic as pending', js: true do
-        topic = ([true, false].sample ? code_annotation : answer_comment).acting_as
+        topic = ([true, false].sample ? code_annotation : comment).acting_as
         visit course_topics_path(course)
 
         click_link I18n.t('course.discussion.topics.mark_as_pending')
@@ -66,20 +66,23 @@ RSpec.feature 'Course: Topics: Management' do
     context 'As a Course Student' do
       let(:user) { create(:course_student, course: course).user }
       let(:student_answer) do
-        create(:course_assessment_answer, :with_post, course: course, creator: user)
+        create(:course_assessment_answer, course: course, creator: user)
+      end
+      let(:student_comment) do
+        create(:course_assessment_submission_question, :with_post, course: course, user: user)
       end
       let(:student_annotation) do
         create(:course_assessment_answer_programming_file_annotation, :with_post,
                course: course, creator: user)
       end
       let(:student_reply) do
-        create(:course_discussion_post, topic: student_answer.acting_as, creator: user,
+        create(:course_discussion_post, topic: student_comment.acting_as, creator: user,
                                         text: '<p>Content with html tags</p>')
       end
 
       scenario 'I can see all my comments' do
-        other_comments = [answer_comment, code_annotation].map(&:acting_as)
-        my_comments = [student_answer, student_annotation].map(&:acting_as)
+        other_comments = [comment, code_annotation].map(&:acting_as)
+        my_comments = [student_comment, student_annotation].map(&:acting_as)
         visit course_topics_path(course)
 
         expect(page).not_to have_selector('.nav.nav-tabs')
@@ -95,8 +98,8 @@ RSpec.feature 'Course: Topics: Management' do
       end
 
       scenario 'I can reply to and delete a comment topic', js: true do
-        # Randomly create a topic, either code_annotation or answer_comment.
-        topic = [true, false].sample ? student_answer : student_annotation
+        # Randomly create a topic, either code_annotation or comment.
+        topic = [true, false].sample ? student_comment : student_annotation
         visit course_topics_path(course)
 
         comment = 'THANKS !'
@@ -161,11 +164,11 @@ RSpec.feature 'Course: Topics: Management' do
       let(:user) { create(:administrator) }
 
       scenario 'I can visit the comments page' do
-        answer_comment
+        comment
         visit course_topics_path(course)
 
         expect(page).to have_selector('.nav.nav-tabs')
-        expect(page).to have_selector('div', text: answer_comment.question.assessment.title)
+        expect(page).to have_selector('div', text: comment.question.assessment.title)
       end
     end
   end

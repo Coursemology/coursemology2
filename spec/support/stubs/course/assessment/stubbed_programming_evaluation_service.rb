@@ -3,14 +3,14 @@ module Course::Assessment::StubbedProgrammingEvaluationService
   private
 
   def wait_for_evaluation(evaluation)
-    tenant = ActsAsTenant.current_tenant
-    Thread.new do
+    thread = Thread.new do
       ActiveRecord::Base.connection_pool.with_connection do
-        ActsAsTenant.with_tenant(tenant) do
+        ActsAsTenant.without_tenant do
           populate_mock_result(evaluation)
         end
       end
     end
+    thread.abort_on_exception = true
 
     super
   end

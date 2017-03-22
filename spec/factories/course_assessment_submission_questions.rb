@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 FactoryGirl.define do
-  factory :course_assessment_submission_questions, class: Course::Assessment::SubmissionQuestion,
-                                                   aliases: [:submission_question] do
+  factory :course_assessment_submission_question, class: Course::Assessment::SubmissionQuestion,
+                                                  parent: :course_discussion_topic,
+                                                  aliases: [:submission_question] do
     transient do
       course { create(:course) }
       # submission must be created by a student enrolled in the course for the todo items to be

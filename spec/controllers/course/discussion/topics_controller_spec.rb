@@ -9,11 +9,12 @@ RSpec.describe Course::Discussion::TopicsController do
     let(:staff) { create(:course_teaching_assistant, course: course).user }
     let(:student) { create(:course_student, course: course).user }
     let!(:topic) do
-      create(:course_assessment_answer, :with_post, course: course, creator: student).acting_as
+      create(:course_assessment_submission_question, :with_post,
+             course: course, user: student).acting_as
     end
     let!(:pending_topic) do
-      create(:course_assessment_answer, :with_post, :pending,
-             course: course, creator: student).acting_as
+      create(:course_assessment_submission_question, :with_post, :pending,
+             course: course, user: student).acting_as
     end
     let(:topics) { controller.instance_variable_get(:@topics) }
 

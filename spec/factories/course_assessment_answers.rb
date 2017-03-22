@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 FactoryGirl.define do
-  factory :course_assessment_answer, class: Course::Assessment::Answer,
-                                     parent: :course_discussion_topic do
+  factory :course_assessment_answer, class: Course::Assessment::Answer do
     transient do
       course { build(:course) }
       assessment { build(:assessment, course: course) }
@@ -19,10 +18,6 @@ FactoryGirl.define do
       build(:course_assessment_submission, *traits, options)
     end
     question { build(:course_assessment_question, assessment: assessment) }
-
-    after(:build) do |answer, evaluator|
-      answer.course = evaluator.course
-    end
 
     trait :submitted do
       submission_traits :submitted
