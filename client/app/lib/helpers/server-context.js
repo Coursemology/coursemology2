@@ -4,7 +4,8 @@ function getServerContextAttribute(attributeName) {
   return serverContext ? serverContext.getAttribute(attributeName) : null;
 }
 
-const modulePath = getServerContextAttribute('data-controller-name');
+const modulePath = getServerContextAttribute('data-controller-name').replace('_', '-');
+
 const i18nLocale = getServerContextAttribute('data-i18n-locale');
 const timeZone = getServerContextAttribute('data-time-zone');
 
