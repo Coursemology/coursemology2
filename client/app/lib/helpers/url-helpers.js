@@ -21,5 +21,25 @@ function getUrlParameter(sParam) {
   return '';
 }
 
+/**
+ * Get the course id from URL.
+ *
+ * return {number}
+ */
+function getCourseId() {
+  const match = window.location.pathname.match(/^\/courses\/(\d+)/);
+  return match && match[1];
+}
+
+/**
+ * Get the survey id from URL.
+ *
+ * return {number}
+ */
+function getSurveyId() {
+  const match = window.location.pathname.match(/^\/courses\/\d+\/surveys\/(\d+)/);
+  return match && match[1];
+}
+
 /* eslint-disable import/prefer-default-export */
-export { getUrlParameter };
+export { getUrlParameter, getCourseId, getSurveyId };

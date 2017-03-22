@@ -1,5 +1,6 @@
 import CourseAPI from 'api/course';
 import { submit, arrayPush, SubmissionError } from 'redux-form';
+import { getSurveyId } from 'lib/helpers/url-helpers';
 import actionTypes, { formNames } from '../constants';
 import { setNotification } from './index';
 
@@ -36,7 +37,7 @@ export function addToOptionsToDelete(option) {
 export function setDraggedQuestion(index, sectionIndex, sectionId) {
   return {
     type: actionTypes.SET_DRAGGED_QUESTION,
-    surveyId: CourseAPI.survey.questions.getSurveyId(),
+    surveyId: getSurveyId(),
     index,
     sectionIndex,
     sectionId,
@@ -65,7 +66,7 @@ export function changeSection(
 ) {
   return {
     type: actionTypes.CHANGE_QUESTION_SECTION,
-    surveyId: CourseAPI.survey.questions.getSurveyId(),
+    surveyId: getSurveyId(),
     prepend,
     sourceIndex,
     sourceSectionIndex,
@@ -91,7 +92,7 @@ export function reorder(
 ) {
   return {
     type: actionTypes.REORDER_QUESTION,
-    surveyId: CourseAPI.survey.questions.getSurveyId(),
+    surveyId: getSurveyId(),
     sectionIndex,
     sourceIndex,
     targetIndex,
@@ -109,7 +110,7 @@ export function finalizeOrder(successMessage, failureMessage) {
     const { surveysFlags: { isQuestionMoved }, surveys } = getState();
     if (!isQuestionMoved) { return; }
 
-    const surveyId = CourseAPI.survey.questions.getSurveyId();
+    const surveyId = getSurveyId();
     const survey = surveys.find(item => String(item.id) === surveyId);
     const ordering = survey.sections.map(section => (
       [section.id, section.questions.map(question => question.id)]
@@ -141,7 +142,7 @@ export function createSurveyQuestion(
     return CourseAPI.survey.questions.create(fields)
       .then((response) => {
         dispatch({
-          surveyId: CourseAPI.survey.questions.getSurveyId(),
+          surveyId: getSurveyId(),
           sectionId: response.data.section_id,
           type: actionTypes.CREATE_SURVEY_QUESTION_SUCCESS,
           question: response.data,
@@ -171,7 +172,7 @@ export function updateSurveyQuestion(
     return CourseAPI.survey.questions.update(questionId, data)
       .then((response) => {
         dispatch({
-          surveyId: CourseAPI.survey.questions.getSurveyId(),
+          surveyId: getSurveyId(),
           sectionId: response.data.section_id,
           type: actionTypes.UPDATE_SURVEY_QUESTION_SUCCESS,
           question: response.data,
@@ -200,7 +201,7 @@ export function deleteSurveyQuestion(
     return CourseAPI.survey.questions.delete(question.id)
       .then(() => {
         dispatch({
-          surveyId: CourseAPI.survey.questions.getSurveyId(),
+          surveyId: getSurveyId(),
           sectionId: question.section_id,
           questionId: question.id,
           type: actionTypes.DELETE_SURVEY_QUESTION_SUCCESS,

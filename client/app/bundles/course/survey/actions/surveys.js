@@ -1,6 +1,7 @@
 import { submit, change, SubmissionError } from 'redux-form';
 import { browserHistory } from 'react-router';
 import CourseAPI from 'api/course';
+import { getCourseId } from 'lib/helpers/url-helpers';
 import actionTypes, { formNames } from '../constants';
 import { setNotification } from './index';
 
@@ -48,7 +49,7 @@ export function createSurvey(
         });
         dispatch(hideSurveyForm());
         setNotification(successMessage)(dispatch);
-        const courseId = CourseAPI.survey.surveys.getCourseId();
+        const courseId = getCourseId();
         browserHistory.push(`/courses/${courseId}/surveys/${response.data.id}`);
       })
       .catch((error) => {
@@ -129,7 +130,7 @@ export function deleteSurvey(surveyId, successMessage, failureMessage) {
     dispatch({ type: actionTypes.DELETE_SURVEY_REQUEST, surveyId });
     return CourseAPI.survey.surveys.delete(surveyId)
       .then(() => {
-        browserHistory.push(`/courses/${CourseAPI.survey.surveys.getCourseId()}/surveys/`);
+        browserHistory.push(`/courses/${getCourseId()}/surveys/`);
         dispatch({
           surveyId,
           type: actionTypes.DELETE_SURVEY_SUCCESS,
