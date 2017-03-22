@@ -24,9 +24,12 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
         question_attributes = attributes_for(:course_assessment_question_programming)
         fill_in 'question_programming[title]', with: question_attributes[:title]
-        fill_in 'question_programming[description]', with: question_attributes[:description]
-        fill_in 'question_programming[staff_only_comments]',
-                with: question_attributes[:staff_only_comments]
+
+        fill_in_react_summernote 'textarea#question_programming_description',
+                                 question_attributes[:description]
+        fill_in_react_summernote 'textarea#question_programming_staff_only_comments',
+                                 question_attributes[:staff_only_comments]
+
         fill_in 'question_programming[maximum_grade]', with: question_attributes[:maximum_grade]
         within find_field('question_programming[skill_ids][]', visible: false) do
           select skill.title, visible: false
@@ -38,8 +41,12 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
         expect(current_path).to eq(course_assessment_path(course, assessment))
 
-        question_created = assessment.questions.first.specific
+        question_created = assessment.questions.first.specific.reload
         expect(page).to have_content_tag_for(question_created)
+        expect(question_created.description).
+          to include(question_attributes[:description])
+        expect(question_created.staff_only_comments).
+          to include(question_attributes[:staff_only_comments])
         expect(question_created.skills).to contain_exactly(skill)
       end
 
@@ -116,7 +123,8 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
         question_attributes = attributes_for(:course_assessment_question_programming)
         fill_in 'question_programming[title]', with: question_attributes[:title]
-        fill_in 'question_programming[description]', with: question_attributes[:description]
+        fill_in_react_summernote 'textarea#question_programming_description',
+                                 question_attributes[:description]
         fill_in 'question_programming[maximum_grade]', with: question_attributes[:maximum_grade]
         within find_field('question_programming[skill_ids][]', visible: false) do
           select skill.title, visible: false

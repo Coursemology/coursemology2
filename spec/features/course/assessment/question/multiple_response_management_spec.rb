@@ -69,8 +69,10 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         correct_option_attributes =
           attributes_for(:course_assessment_question_multiple_response_option, :correct)
         within find('#new_question_multiple_response_option') do
-          find('textarea.multiple-response-option').set correct_option_attributes[:option]
-          find('textarea.multiple-response-explanation').set correct_option_attributes[:explanation]
+          fill_in_rails_summernote '.question_multiple_response_options_option',
+                                   correct_option_attributes[:option]
+          fill_in_rails_summernote '.question_multiple_response_options_explanation',
+                                   correct_option_attributes[:explanation]
         end
 
         click_button I18n.t('helpers.buttons.create')
@@ -86,8 +88,10 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
 
         # Create a correct option
         within find('#new_question_multiple_response_option') do
-          find('textarea.multiple-response-option').set correct_option_attributes[:option]
-          find('textarea.multiple-response-explanation').set correct_option_attributes[:explanation]
+          fill_in_rails_summernote '.question_multiple_response_options_option',
+                                   correct_option_attributes[:option]
+          fill_in_rails_summernote '.question_multiple_response_options_explanation',
+                                   correct_option_attributes[:explanation]
           check find('input[type="checkbox"]')[:name]
         end
 
@@ -124,8 +128,13 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
           click_link I18n.t('course.assessment.question.multiple_responses.form.add_option')
           within all('.edit_question_multiple_response '\
             'tr.question_multiple_response_option')[i] do
-            find('textarea.multiple-response-option').set option[:option]
-            find('textarea.multiple-response-explanation').set option[:explanation]
+            # A custom css selector, :last is added here because +fill_in_rails_summernote+ doesn't
+            # acknowledge the scope defined by capabara.
+            # This works only if +click_link+ is executed before each option.
+            fill_in_rails_summernote '.question_multiple_response_options_option:last',
+                                     option[:option]
+            fill_in_rails_summernote '.question_multiple_response_options_explanation:last',
+                                     option[:explanation]
             if option[:correct]
               check find('input[type="checkbox"]')[:name]
             else

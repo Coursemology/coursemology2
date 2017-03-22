@@ -25,18 +25,39 @@ module Capybara::TestGroupHelpers
       end
     end
 
+    def accept_confirm_dialog
+      find('.confirm-btn').click
+      find('.confirm-btn').click unless page.all('.confirm-btn').empty?
+    end
+
+    # Helper to fill in summernote textareas. Only to be used where javascript is enabled.
+    #
+    # The method provides an alternative method to fill up the textarea, which would
+    # otherwise be very slow if capybara's +find+ and +set+ were used.
     def fill_in_summernote(selector, text)
       script = <<-JS
-      var editorSelector = '#{selector} textarea';
+      var editorSelector = '#{selector}';
       $(editorSelector).summernote('reset');
       $(editorSelector).summernote('editor.insertText', '#{text}');
       JS
       execute_script(script)
     end
 
-    def accept_confirm_dialog
-      find('.confirm-btn').click
-      find('.confirm-btn').click unless page.all('.confirm-btn').empty?
+    # Special helper to fill in summernote textarea defined by react.
+    #
+    # Selector should specify the class of the target +textarea+, and method targets the +div+
+    # within. This should change when the internals of the summernote react component is changed.
+    def fill_in_react_summernote(selector, text)
+      react_selector = ' + div.material-summernote > div[id^="react-summernote-"]'
+      fill_in_summernote(selector + react_selector, text)
+    end
+
+    # Special helper to fill in summernote textarea defined in rails.
+    #
+    # Selector should specify the class of the target +div+, and method targets the textarea within.
+    def fill_in_rails_summernote(selector, text)
+      rails_selector = ' textarea'
+      fill_in_summernote(selector + rails_selector, text)
     end
   end
 end

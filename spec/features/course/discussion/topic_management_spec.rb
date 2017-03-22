@@ -35,7 +35,7 @@ RSpec.feature 'Course: Topics: Management' do
         visit course_topics_path(course)
 
         comment = 'GOOD WORK!'
-        fill_in_summernote '.post-form', comment
+        fill_in_rails_summernote '.post-form', comment
         within find('.post-form') do
           click_button 'course.discussion.posts.form.comment'
         end
@@ -100,7 +100,7 @@ RSpec.feature 'Course: Topics: Management' do
         visit course_topics_path(course)
 
         comment = 'THANKS !'
-        fill_in_summernote '.post-form', comment
+        fill_in_rails_summernote '.post-form', comment
         within find('.post-form') do
           click_button I18n.t('course.discussion.posts.form.comment')
         end
@@ -122,7 +122,7 @@ RSpec.feature 'Course: Topics: Management' do
 
         # Reply when last post of topic has just been deleted
         reply_text = 'WELCOME (:'
-        fill_in_summernote '.post-form', reply_text
+        fill_in_rails_summernote '.post-form', reply_text
         within find('.post-form') do
           click_button I18n.t('course.discussion.posts.form.comment')
         end
@@ -148,7 +148,7 @@ RSpec.feature 'Course: Topics: Management' do
 
         new_post_text = 'new post text'
         find(content_tag_selector(my_comment_post)).find('.edit').click
-        fill_in_summernote '.edit-discussion-post-form', new_post_text
+        fill_in_rails_summernote '.edit-discussion-post-form', new_post_text
         within find('.edit-discussion-post-form') do
           click_button I18n.t('javascript.course.discussion.post.submit')
         end

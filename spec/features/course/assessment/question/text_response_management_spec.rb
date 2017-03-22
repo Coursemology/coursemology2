@@ -83,8 +83,13 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
           find('a.add_fields', text: link).trigger('click')
           within all('.edit_question_text_response '\
             'tr.question_text_response_solution')[i] do
-            find('textarea.text-response-solution').set solution[:solution]
-            find('textarea.text-response-explanation').set solution[:explanation]
+            # A custom css selector, :last is added here because +fill_in_rails_summernote+ doesn't
+            # acknowledge the scope defined by capabara.
+            # This works only if +click_link+ is executed before each option.
+            fill_in_rails_summernote '.question_text_response_solutions_solution:last',
+                                     solution[:solution]
+            fill_in_rails_summernote '.question_text_response_solutions_explanation:last',
+                                     solution[:explanation]
             solution_type = find('select.text-response-solution-type', visible: :all)
             # Twitter Bootstrap hides <select> element and creates a div.
             # The usual #select method is broken as it does not seem to work with hidden elements.
@@ -98,6 +103,10 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
         click_button I18n.t('helpers.buttons.update')
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(page).to have_selector('div.alert.alert-success')
+        expect(question.reload.solutions.count).to eq(solutions.count)
+        # Ensure that explanation has been saved by randomly checking on an explanation
+        expect(question.reload.solutions.map(&:explanation).join).
+          to include(solutions.sample[:explanation])
 
         # Delete all solutions from question
         visit edit_path

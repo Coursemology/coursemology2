@@ -10,10 +10,12 @@ FactoryGirl.define do
     trait :correct do
       correct true
       option 'Correct'
+      explanation 'Correct because this is correct'
     end
     trait :wrong do
       correct false
       option 'Wrong'
+      explanation 'Wrong because this is wrong'
     end
   end
 end
