@@ -207,4 +207,6 @@ gem 'activerecord-import', '>= 0.2.0'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-gem 'capybara-screenshot', :group => :test
+gem 'capybara-screenshot'
+gem 'aws-sdk'
+

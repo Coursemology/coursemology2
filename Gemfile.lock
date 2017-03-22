@@ -116,6 +116,14 @@ GEM
     autoprefixer-rails (6.7.7)
       execjs
     awesome_print (1.7.0)
+    aws-sdk (2.8.9)
+      aws-sdk-resources (= 2.8.9)
+    aws-sdk-core (2.8.9)
+      aws-sigv4 (~> 1.0)
+      jmespath (~> 1.0)
+    aws-sdk-resources (2.8.9)
+      aws-sdk-core (= 2.8.9)
+    aws-sigv4 (1.0.0)
     bcrypt (3.1.11)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
@@ -242,6 +250,7 @@ GEM
     jbuilder (2.6.3)
       activesupport (>= 3.0.0, < 5.2)
       multi_json (~> 1.2)
+    jmespath (1.3.1)
     jquery-cdn (2.2.4)
       sprockets (>= 2)
     jquery-rails (4.2.2)
@@ -568,6 +577,7 @@ DEPENDENCIES
   acts_as_tenant!
   after_commit_action
   autoprefixer-rails
+  aws-sdk
   bootstrap-sass
   bootstrap-sass-extras (>= 0.0.7)
   bootstrap-select-rails
