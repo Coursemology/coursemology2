@@ -8,15 +8,18 @@ module CourseUser::StaffConcern
     # Sort the staff by their average marking time.
     # Note that nil time will be considered as the largest, which will come to the bottom of the
     #   list.
-    scope :ordered_by_average_marking_time, (lambda do
-      all.sort do |x, y|
+    #
+    # @param [Array<CourseUser>] staff Course users to be sorted by average marking time.
+    # @return [Array<CourseUser>] Course users sorted by average marking time.
+    def self.order_by_average_marking_time(staff)
+      staff.sort do |x, y|
         if x.average_marking_time && y.average_marking_time
           x.average_marking_time <=> y.average_marking_time
         else
           x.average_marking_time ? -1 : 1
         end
       end
-    end)
+    end
   end
 
   # Returns the published submissions for the purpose of calculating marking statistics.
