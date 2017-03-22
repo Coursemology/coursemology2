@@ -77,6 +77,8 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
                  submission: submission)
         end
         before do
+          # Stub #auto_grade_submission so that job is not created upon save
+          allow(submission).to receive(:auto_grade_submission).and_return(true)
           submission.finalise!
           submission.save!
         end
