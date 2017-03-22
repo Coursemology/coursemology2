@@ -36,6 +36,70 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
       Course::Assessment::Submission::ZipDownloadService.send(:new, course_staff, assessment, nil)
     end
 
+    describe '#download_to_base_dir' do
+      let(:dir) { service.instance_variable_get(:@base_dir) }
+      subject { service.send(:download_to_base_dir) }
+
+      let(:student2) { create(:course_user, course: course, name: 'Student 2') }
+      let(:student3) { create(:course_user, :phantom, course: course, name: 'Student 3') }
+
+      let(:submission3) do
+        create(:submission, :submitted, assessment: assessment,
+                                        course: course, creator: student3.user)
+      end
+
+      # Add student 2 to a group
+      let!(:group) do
+        group = create(:course_group, course: course)
+        create(:course_group_manager, course: course, group: group, course_user: course_staff)
+        create(:course_group_student, course: course, group: group, course_user: student2)
+        group
+      end
+
+      types = Course::Assessment::Submission::ZipDownloadService::STUDENTS
+
+      before do
+        submission1
+        submission2
+        submission3
+      end
+
+      context 'when downloading submissions by my students' do
+        it 'downloads the correct submissions' do
+          service.instance_variable_set(:@students, types[:my])
+          subject
+
+          file_names = Dir.entries(dir)
+          expect(file_names).not_to include(student1.name)
+          expect(file_names).to include(student2.name)
+          expect(file_names).not_to include(student3.name)
+        end
+      end
+
+      context 'when downloading submissions by non-phantom students' do
+        it 'downloads the correct submissions' do
+          subject
+
+          file_names = Dir.entries(dir)
+          expect(file_names).to include(student1.name)
+          expect(file_names).to include(student2.name)
+          expect(file_names).not_to include(student3.name)
+        end
+      end
+
+      context 'when downloading submissions by phantom students' do
+        it 'downloads the correct submissions' do
+          service.instance_variable_set(:@students, types[:phantom])
+          subject
+
+          file_names = Dir.entries(dir)
+          expect(file_names).not_to include(student1.name)
+          expect(file_names).not_to include(student2.name)
+          expect(file_names).to include(student3.name)
+        end
+      end
+    end
+
     describe '#zip_base_dir' do
       let(:dir) do
         service.send(:download_to_base_dir)
