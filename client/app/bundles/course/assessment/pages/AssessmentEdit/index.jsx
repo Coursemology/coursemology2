@@ -20,6 +20,8 @@ class EditPage extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     intl: intlShape,
+    // If the gamification feature is enabled in the course.
+    gamified: PropTypes.bool,
     // If allow to switch between autoraded and manually graded mode.
     modeSwitching: PropTypes.bool,
     // An array of materials of current assessment.
@@ -53,13 +55,14 @@ class EditPage extends React.Component {
   };
 
   render() {
-    const { modeSwitching, initialValues, folderAttributes,
+    const { gamified, modeSwitching, initialValues, folderAttributes,
       conditionAttributes, dispatch } = this.props;
 
     return (
       <div>
         <AssessmentForm
           editing
+          gamified={gamified}
           onSubmit={this.onFormSubmit}
           modeSwitching={modeSwitching}
           folderAttributes={folderAttributes}

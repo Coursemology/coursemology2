@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Toggle /> renders a toggle with an error 1`] = `
+<div>
+  <Toggle
+    defaultToggled={false}
+    disabled={false}
+    labelPosition="left"
+    name="Not very awesome toggle"
+    onToggle={[Function]}
+    toggled={false}
+  />
+  <div
+    style={
+      Object {
+        "color": "#f44336",
+      }
+    }
+  >
+    Ooops
+  </div>
+</div>
+`;
+
+exports[`<Toggle /> renders a toggled toggle 1`] = `
+<div>
+  <Toggle
+    defaultToggled={false}
+    disabled={false}
+    labelPosition="left"
+    name="Awesome toggle"
+    onToggle={[Function]}
+    toggled={true}
+  />
+</div>
+`;

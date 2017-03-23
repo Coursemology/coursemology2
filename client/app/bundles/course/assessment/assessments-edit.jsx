@@ -15,6 +15,7 @@ $(document).ready(() => {
       <ProviderWrapper store={store}>
         <AssessmentEditPage
           modeSwitching={data.mode_switching}
+          gamified={data.gamified}
           folderAttributes={data.folder_attributes}
           conditionAttributes={data.condition_attributes}
           initialValues={{ ...data.attributes, password_protected: !!data.attributes.password }}

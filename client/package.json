@@ -39,8 +39,10 @@
     ],
     "moduleNameMapper": {
       "^api(.*)$": "<rootDir>/app/api$1",
-      "^lib(.*)$": "<rootDir>/app/lib$1"
-    }
+      "^lib(.*)$": "<rootDir>/app/lib$1",
+      "^utils(.*)$": "<rootDir>/app/__test__/utils$1"
+    },
+    "coveragePathIgnorePatterns": ["/node_modules/", "/__test__/"]
   },
   "dependencies": {
     "@types/moment-timezone": "^0.2.34",

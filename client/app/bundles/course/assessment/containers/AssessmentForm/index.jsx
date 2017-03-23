@@ -89,6 +89,8 @@ class AssessmentForm extends React.Component {
     onSubmit: PropTypes.func.isRequired,
     // If the Form is in editing mode, `published` button will be displayed.
     editing: PropTypes.bool,
+    // if the EXP fields should be displayed
+    gamified: PropTypes.bool,
     // If allow to switch between autoraded and manually graded mode.
     modeSwitching: PropTypes.bool,
     folderAttributes: PropTypes.shape({
@@ -102,6 +104,10 @@ class AssessmentForm extends React.Component {
       conditions: PropTypes.array,
     }),
   };
+
+  static defaultProps = {
+    gamified: true,
+  }
 
   onStartAtChange = (_, newStartAt) => {
     const { start_at: startAt, end_at: endAt, bonus_end_at: bonusEndAt, dispatch } = this.props;
@@ -196,7 +202,7 @@ class AssessmentForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, onSubmit, modeSwitching, submitting, editing, folderAttributes,
+    const { handleSubmit, onSubmit, gamified, modeSwitching, submitting, editing, folderAttributes,
       conditionAttributes } = this.props;
 
     return (
@@ -232,35 +238,41 @@ class AssessmentForm extends React.Component {
             style={styles.flexChild}
             disabled={submitting}
           />
-          <Field
-            name="bonus_end_at"
-            component={DateTimePicker}
-            floatingLabelText={<FormattedMessage {...translations.bonusEndAt} />}
-            style={styles.flexChild}
-            disabled={submitting}
-          />
+          {
+            gamified &&
+            <Field
+              name="bonus_end_at"
+              component={DateTimePicker}
+              floatingLabelText={<FormattedMessage {...translations.bonusEndAt} />}
+              style={styles.flexChild}
+              disabled={submitting}
+            />
+          }
         </div>
-        <div style={styles.flexGroup}>
-          <Field
-            name="base_exp"
-            component={TextField}
-            floatingLabelText={<FormattedMessage {...translations.baseExp} />}
-            type="number"
-            style={styles.flexChild}
-            disabled={submitting}
-          />
-          <Field
-            name="time_bonus_exp"
-            component={TextField}
-            floatingLabelText={<FormattedMessage {...translations.timeBonusExp} />}
-            type="number"
-            style={styles.flexChild}
-            disabled={submitting}
-          />
-        </div>
+        {
+          gamified &&
+          <div style={styles.flexGroup}>
+            <Field
+              name="base_exp"
+              component={TextField}
+              floatingLabelText={<FormattedMessage {...translations.baseExp} />}
+              type="number"
+              style={styles.flexChild}
+              disabled={submitting}
+            />
+            <Field
+              name="time_bonus_exp"
+              component={TextField}
+              floatingLabelText={<FormattedMessage {...translations.timeBonusExp} />}
+              type="number"
+              style={styles.flexChild}
+              disabled={submitting}
+            />
+          </div>
+        }
 
         {
-          this.props.editing &&
+          editing &&
           <Field
             name="published"
             component={Toggle}

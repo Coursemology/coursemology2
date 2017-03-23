@@ -13,5 +13,13 @@
   "rules": {
     "react/no-find-dom-node": "off",
     "react/jsx-filename-extension": "off",
+    "import/no-extraneous-dependencies": "off",
+    "import/extensions": "off",
+    "import/no-unresolved": [
+      "error",
+      {
+        "ignore": [ 'utils/' ]
+      }
+    ]
   },
 }
