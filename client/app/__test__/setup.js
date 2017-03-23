@@ -7,7 +7,7 @@ const jQuery = require('jquery');
 
 const timeZone = "Asia/Singapore";
 const intlProvider = new IntlProvider({ locale: 'en', timeZone }, {});
-const courseId = 1;
+const courseId = "1";
 
 // Global variables
 global.courseId = courseId;

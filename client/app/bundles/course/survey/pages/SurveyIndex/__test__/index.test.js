@@ -8,7 +8,7 @@ describe('<SurveyIndex />', () => {
     const store = storeCreator({ surveys: {} });
 
     const indexPage = shallow(
-      <SurveyIndex params={{ courseId: courseId.toString() }} />,
+      <SurveyIndex params={{ courseId }} />,
       {
         context: { intl, store, muiTheme },
         childContextTypes: { muiTheme: React.PropTypes.object, intl: intlShape },
