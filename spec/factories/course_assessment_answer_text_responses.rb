@@ -12,14 +12,14 @@ FactoryGirl.define do
             assessment: assessment).question
     end
 
-    answer_text 'xxx'
+    answer_text '<p>xxx</p>'
 
     trait :exact_match do
-      answer_text 'exact match'
+      answer_text '<p>exact match</p>'
     end
 
     trait :keyword do
-      answer_text 'my answer contains keyword match'
+      answer_text '<p>my answer contains keyword match</p>'
     end
 
     trait :no_match do
