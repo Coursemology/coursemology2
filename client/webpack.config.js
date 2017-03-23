@@ -19,6 +19,8 @@ const config = {
       'moment',
       'react',
       'react-ace',
+      'react-dnd',
+      'react-dnd-html5-backend',
       'react-dom',
       'react-intl',
       'react-redux',

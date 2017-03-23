@@ -1,4 +1,5 @@
 import actionTypes from '../constants';
+import { sortResponseElements } from '../utils';
 
 const initialState = {
   isLoading: false,
@@ -18,7 +19,7 @@ export default function (state = initialState, action) {
     case actionTypes.LOAD_RESPONSE_SUCCESS: {
       return {
         survey: action.survey,
-        response: action.response,
+        response: sortResponseElements(action.response),
         isLoading: false,
       };
     }

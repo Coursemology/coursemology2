@@ -6,6 +6,10 @@ export const questionTypes = {
   MULTIPLE_RESPONSE: 'multiple_response',
 };
 
+export const draggableTypes = mirrorCreator([
+  'QUESTION',
+]);
+
 export const formNames = mirrorCreator([
   'SURVEY',
   'SURVEY_QUESTION',
@@ -68,6 +72,12 @@ const actionTypes = mirrorCreator([
   'SHOW_DELETE_CONFIRMATION',
   'RESET_DELETE_CONFIRMATION',
   'SET_SURVEY_NOTIFICATION',
+  'SET_DRAGGED_QUESTION',
+  'REORDER_QUESTION',
+  'CHANGE_QUESTION_SECTION',
+  'UPDATE_QUESTION_ORDER_REQUEST',
+  'UPDATE_QUESTION_ORDER_SUCCESS',
+  'UPDATE_QUESTION_ORDER_FAILURE',
 ]);
 
 export default actionTypes;

@@ -1,4 +1,5 @@
 import actionTypes from '../constants';
+import { sorts, sortResultsSectionElements } from '../utils';
 
 const initialState = {
   survey: {},
@@ -10,7 +11,8 @@ export default function (state = initialState, action) {
     case actionTypes.LOAD_SURVEY_RESULTS_SUCCESS: {
       return {
         survey: action.survey,
-        sections: action.sections,
+        sections: action.sections ?
+          action.sections.map(sortResultsSectionElements).sort(sorts.byWeight) : [],
       };
     }
     default:

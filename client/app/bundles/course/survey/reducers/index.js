@@ -7,7 +7,7 @@ import responseForm from './responseForm';
 import sectionForm from './sectionForm';
 import deleteConfirmation from './deleteConfirmation';
 import notification from './notification';
-import canCreate from './canCreate';
+import surveysFlags from './surveysFlags';
 import results from './results';
 
 
@@ -20,6 +20,6 @@ export default combineReducers({
   sectionForm,
   deleteConfirmation,
   notification,
-  canCreate,
+  surveysFlags,
   form: formReducer,
 });

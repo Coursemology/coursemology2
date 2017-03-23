@@ -8,7 +8,6 @@ import Subheader from 'material-ui/Subheader';
 import Toggle from 'material-ui/Toggle';
 import { Card, CardText } from 'material-ui/Card';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
-import { sorts } from '../../utils';
 import surveyTranslations from '../../translations';
 import { fetchResults } from '../../actions/surveys';
 import ResultsSection from './ResultsSection';
@@ -46,13 +45,10 @@ class SurveyResults extends React.Component {
   }
 
   renderResults() {
-    const { sections } = this.props;
-    const { byWeight } = sorts;
-
     return (
       <div>
         {
-          sections.sort(byWeight).map((section, index) =>
+          this.props.sections.map((section, index) =>
             <ResultsSection
               key={section.id}
               includePhantoms={this.state.includePhantoms}

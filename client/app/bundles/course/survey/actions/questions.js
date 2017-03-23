@@ -23,6 +23,114 @@ export function addToOptionsToDelete(option) {
   return dispatch => dispatch(arrayPush(formNames.SURVEY_QUESTION, 'optionsToDelete', option));
 }
 
+/**
+ * Sets the index of the current question being dragged, as well as the id and index of the section
+ * it currently belongs to. These values may change as the question is being dragged around,
+ * which is why they are not specified in the item descriptor created by `beginDrag` instead.
+ *
+ * @param {number} index
+ * @param {number} sectionIndex
+ * @param {number} sectionId
+ * @return {Object} The action
+ */
+export function setDraggedQuestion(index, sectionIndex, sectionId) {
+  return {
+    type: actionTypes.SET_DRAGGED_QUESTION,
+    surveyId: CourseAPI.survey.questions.getSurveyId(),
+    index,
+    sectionIndex,
+    sectionId,
+  };
+}
+
+/**
+ * Changes which section the specified question belongs to.
+ *
+ * @param {boolean} prepend
+ *   true if item is to be prepended to the traget section,
+ *   false if it to be appended.
+ * @param {number} sourceIndex
+ *   The array index of the question being moved.
+ * @param {number} sourceSectionIndex
+ *   The array index of the section that the question is being moved form.
+ * @param {number} targetSectionIndex
+ *   The array index of the section that the question is being moved to.
+ * @return {Object} The action
+ */
+export function changeSection(
+  prepend,
+  sourceIndex,
+  sourceSectionIndex,
+  targetSectionIndex
+) {
+  return {
+    type: actionTypes.CHANGE_QUESTION_SECTION,
+    surveyId: CourseAPI.survey.questions.getSurveyId(),
+    prepend,
+    sourceIndex,
+    sourceSectionIndex,
+    targetSectionIndex,
+  };
+}
+
+/**
+ * Reorders a question within a section.
+ *
+ * @param {number} sectionIndex
+ *   The array index of the section that the question is being moved within.
+ * @param {number} sourceIndex
+ *   The original index of the question
+ * @param {number} targetIndex
+ *   The new index of the question
+ * @return {Object} The action
+ */
+export function reorder(
+  sectionIndex,
+  sourceIndex,
+  targetIndex
+) {
+  return {
+    type: actionTypes.REORDER_QUESTION,
+    surveyId: CourseAPI.survey.questions.getSurveyId(),
+    sectionIndex,
+    sourceIndex,
+    targetIndex,
+  };
+}
+
+/**
+ * Persists the new ordering if some question has been moved.
+ *
+ * @param {string} successMessage
+ * @param {string} failureMessage
+ */
+export function finalizeOrder(successMessage, failureMessage) {
+  return (dispatch, getState) => {
+    const { surveysFlags: { isQuestionMoved }, surveys } = getState();
+    if (!isQuestionMoved) { return; }
+
+    const surveyId = CourseAPI.survey.questions.getSurveyId();
+    const survey = surveys.find(item => String(item.id) === surveyId);
+    const ordering = survey.sections.map(section => (
+      [section.id, section.questions.map(question => question.id)]
+    ));
+
+    dispatch({ type: actionTypes.UPDATE_QUESTION_ORDER_REQUEST });
+    CourseAPI.survey.surveys.reorderQuestions({ ordering })
+      .then((response) => {
+        dispatch({
+          type: actionTypes.UPDATE_QUESTION_ORDER_SUCCESS,
+          survey: response.data,
+        });
+        setNotification(successMessage)(dispatch);
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.UPDATE_QUESTION_ORDER_FAILURE });
+        setNotification(failureMessage)(dispatch);
+      });
+  };
+}
+
 export function createSurveyQuestion(
   fields,
   successMessage,
@@ -33,7 +141,7 @@ export function createSurveyQuestion(
     return CourseAPI.survey.questions.create(fields)
       .then((response) => {
         dispatch({
-          surveyId: CourseAPI.survey.responses.getSurveyId(),
+          surveyId: CourseAPI.survey.questions.getSurveyId(),
           sectionId: response.data.section_id,
           type: actionTypes.CREATE_SURVEY_QUESTION_SUCCESS,
           question: response.data,
@@ -63,7 +171,7 @@ export function updateSurveyQuestion(
     return CourseAPI.survey.questions.update(questionId, data)
       .then((response) => {
         dispatch({
-          surveyId: CourseAPI.survey.responses.getSurveyId(),
+          surveyId: CourseAPI.survey.questions.getSurveyId(),
           sectionId: response.data.section_id,
           type: actionTypes.UPDATE_SURVEY_QUESTION_SUCCESS,
           question: response.data,
@@ -92,7 +200,7 @@ export function deleteSurveyQuestion(
     return CourseAPI.survey.questions.delete(question.id)
       .then(() => {
         dispatch({
-          surveyId: CourseAPI.survey.responses.getSurveyId(),
+          surveyId: CourseAPI.survey.questions.getSurveyId(),
           sectionId: question.section_id,
           questionId: question.id,
           type: actionTypes.DELETE_SURVEY_QUESTION_SUCCESS,

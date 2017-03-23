@@ -1,8 +1,10 @@
+/* eslint-disable new-cap */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import Subheader from 'material-ui/Subheader';
-import { sorts } from '../../utils';
 import { showDeleteConfirmation } from '../../actions';
 import surveyTranslations from '../../translations';
 import * as surveyActions from '../../actions/surveys';
@@ -97,7 +99,6 @@ class SurveyShow extends React.Component {
   renderSections(survey) {
     const { intl } = this.props;
     const { sections, canUpdate } = survey;
-    const { byWeight } = sorts;
 
     if (!canUpdate) {
       return null;
@@ -111,8 +112,8 @@ class SurveyShow extends React.Component {
       <div>
         <Subheader>{ intl.formatMessage(surveyTranslations.questions) }</Subheader>
         {
-          sections.sort(byWeight).map(section =>
-            <Section key={section.id} {...{ section }} />
+          sections.map((section, index) =>
+            <Section key={section.id} {...{ section, index, survey }} />
           )
         }
       </div>
@@ -145,4 +146,8 @@ SurveyShow.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default connect(state => state)(injectIntl(SurveyShow));
+export default connect(state => state)(
+  DragDropContext(HTML5Backend)(
+    injectIntl(SurveyShow)
+  )
+);

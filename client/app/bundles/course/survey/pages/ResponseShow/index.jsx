@@ -8,7 +8,6 @@ import { Card, CardText } from 'material-ui/Card';
 import TitleBar from 'lib/components/TitleBar';
 import Subheader from 'material-ui/Subheader';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
-import { sorts } from '../../utils';
 import { questionTypes } from '../../constants';
 import surveyTranslations from '../../translations';
 import { surveyShape, responseShape } from '../../propTypes';
@@ -50,14 +49,13 @@ class ResponseShow extends React.Component {
   };
 
   static buildAnswer(answer) {
-    const { options, ...answerFields } = answer;
-    if (answerFields.question.question_type === questionTypes.MULTIPLE_CHOICE) {
-      const selected_option = options.find(option => option.selected);
+    if (answer.question.question_type === questionTypes.MULTIPLE_CHOICE) {
+      const selected_option = answer.options.find(option => option.selected);
       if (selected_option) {
-        answerFields.selected_option = selected_option.question_option_id.toString();
+        return { ...answer, selected_option: selected_option.question_option_id.toString() };
       }
     }
-    return { ...answerFields, options: options.sort(sorts.byWeight) };
+    return answer;
   }
 
   /**
@@ -65,11 +63,10 @@ class ResponseShow extends React.Component {
    */
   static buildInitialValues({ sections }) {
     if (!sections) { return {}; }
-    const byQuestionWeight = (a, b) => a.question.weight - b.question.weight;
     const buildSection = ({ answers, ...sectionFields }) => (
-      { ...sectionFields, answers: answers.sort(byQuestionWeight).map(ResponseShow.buildAnswer) }
+      { ...sectionFields, answers: answers.map(ResponseShow.buildAnswer) }
     );
-    return { sections: sections.sort(sorts.byWeight).map(buildSection) };
+    return { sections: sections.map(buildSection) };
   }
 
   static formatAnswer(answer) {

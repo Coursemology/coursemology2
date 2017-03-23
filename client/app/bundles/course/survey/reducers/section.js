@@ -1,5 +1,6 @@
 import actionTypes from '../constants';
 import { updateOrAppend, deleteIfFound } from './utils';
+import { sortSectionElements } from '../utils';
 
 const initialState = {};
 
@@ -12,7 +13,7 @@ export default function (section = initialState, action) {
     case actionTypes.UPDATE_SURVEY_QUESTION_SUCCESS:
     case actionTypes.CREATE_SURVEY_QUESTION_SUCCESS: {
       const questions = updateOrAppend(section.questions, action.question);
-      return { ...section, questions };
+      return sortSectionElements({ ...section, questions });
     }
     case actionTypes.DELETE_SURVEY_QUESTION_SUCCESS: {
       const questions = deleteIfFound(section.questions, action.questionId);

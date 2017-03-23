@@ -8,7 +8,6 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { sorts } from '../../../utils';
 import { questionTypes } from '../../../constants';
 import { questionShape } from '../../../propTypes';
 import translations from '../../../translations';
@@ -31,11 +30,12 @@ const styles = {
   },
   adminMenu: {
     position: 'absolute',
-    right: 0,
-    top: 0,
+    right: 8,
+    top: 12,
   },
   cardText: {
     position: 'relative',
+    paddingTop: 34,
   },
   card: {
     marginBottom: 15,
@@ -59,10 +59,9 @@ class QuestionCard extends React.Component {
   };
 
   static renderOptionsList(question, Widget) {
-    const { byWeight } = sorts;
     return (
       <div>
-        {question.options.sort(byWeight).map((option) => {
+        {question.options.map((option) => {
           const { option: optionText, image_url: imageUrl } = option;
           const widget = <Widget disabled style={styles.optionWidget} />;
           return <OptionsListItem key={option.id} {...{ optionText, imageUrl, widget }} />;
@@ -72,10 +71,9 @@ class QuestionCard extends React.Component {
   }
 
   static renderOptionsGrid(question, Widget) {
-    const { byWeight } = sorts;
     return (
       <div style={styles.grid}>
-        { question.options.sort(byWeight).map((option) => {
+        { question.options.map((option) => {
           const { option: optionText, image_url: imageUrl } = option;
           const widget = (
             <Widget
@@ -120,6 +118,11 @@ class QuestionCard extends React.Component {
     return QuestionCard.renderOptionsFields(question);
   }
 
+  constructor(props) {
+    super(props);
+    this.state = { hovered: false };
+  }
+
   renderAdminMenu() {
     const { adminFunctions } = this.props;
 
@@ -141,8 +144,14 @@ class QuestionCard extends React.Component {
 
   render() {
     const { question, expanded } = this.props;
+    const cursorStyle = this.state.hovered ? { cursor: 'move' } : null;
     return (
-      <Card style={styles.card} {...{ expanded }}>
+      <Card
+        style={{ ...styles.card, ...cursorStyle }}
+        onMouseOver={() => this.setState({ hovered: true })}
+        onMouseOut={() => this.setState({ hovered: false })}
+        {...{ expanded }}
+      >
         <CardText style={styles.cardText}>
           { this.renderAdminMenu() }
           <p>{question.description}</p>

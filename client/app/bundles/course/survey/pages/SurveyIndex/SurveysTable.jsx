@@ -29,7 +29,9 @@ class SurveysTable extends React.Component {
     courseId: PropTypes.string.isRequired,
 
     surveys: PropTypes.arrayOf(surveyShape),
-    canCreate: PropTypes.bool.isRequired,
+    surveysFlags: PropTypes.shape({
+      canCreate: PropTypes.bool.isRequired,
+    }).isRequired,
     intl: intlShape.isRequired,
     dispatch: PropTypes.func.isRequired,
   };
@@ -57,7 +59,7 @@ class SurveysTable extends React.Component {
   }
 
   render() {
-    const { intl, surveys, courseId, canCreate } = this.props;
+    const { intl, surveys, courseId, surveysFlags: { canCreate } } = this.props;
     return (
       <Table bodyStyle={styles.tableBody}>
         <TableHeader
