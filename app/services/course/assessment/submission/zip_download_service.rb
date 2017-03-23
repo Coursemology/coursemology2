@@ -78,9 +78,9 @@ class Course::Assessment::Submission::ZipDownloadService
       when STUDENTS[:my]
         @course_user.my_students
       when STUDENTS[:phantom]
-        @course_user.course.course_users.students.phantom
+        @assessment.course.course_users.students.phantom
       else
-        @course_user.course.course_users.students.without_phantom_users
+        @assessment.course.course_users.students.without_phantom_users
       end.select(:user_id)
   end
 end
