@@ -13,6 +13,10 @@ class Course::Assessment::Answer::TextResponse < ActiveRecord::Base
     acting_as
   end
 
+  def sanitized_answer_text
+    Sanitize.fragment(answer_text).strip
+  end
+
   def download(dir)
     download_answer(dir) unless question.actable.file_upload_question?
     download_attachment(dir) if attachment
@@ -21,7 +25,7 @@ class Course::Assessment::Answer::TextResponse < ActiveRecord::Base
   def download_answer(dir)
     answer_path = File.join(dir, 'answer.txt')
     File.open(answer_path, 'w') do |file|
-      file.write(answer_text)
+      file.write(sanitized_answer_text)
     end
   end
 

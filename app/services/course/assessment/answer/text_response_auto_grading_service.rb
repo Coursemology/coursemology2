@@ -17,7 +17,7 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   #   assigned to the grading.
   def evaluate_answer(answer)
     question = answer.question.actable
-    answer_text = answer.answer_text
+    answer_text = answer.sanitized_answer_text
     exact_matches, keywords = question.solutions.partition(&:exact_match?)
 
     solutions = find_exact_match(answer_text, exact_matches)

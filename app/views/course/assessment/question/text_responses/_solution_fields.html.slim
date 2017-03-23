@@ -3,8 +3,8 @@
                collection: Course::Assessment::Question::TextResponseSolution.solution_types.keys,
                input_html: { class: ['text-response-solution-type'] },
                label: false
-  td = f.input :solution, label: false, input_html: { class: ['text-response-solution'] }
+  td = f.input :solution, as: :string, label: false, input_html: { class: ['text-response-solution'] }
   td = f.input :grade, label: false, input_html: { class: ['text-response-grade'] }
   td = f.input :explanation, label: false, placeholder: t('.explanation_hint'),
-               input_html: { class: ['text-response-explanation'] }
+               input_html: { class: ['text-response-explanation', 'airmode'] }
   td = link_to_remove_association t('.remove'), f

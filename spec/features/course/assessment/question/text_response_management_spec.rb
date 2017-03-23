@@ -83,13 +83,10 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
           find('a.add_fields', text: link).trigger('click')
           within all('.edit_question_text_response '\
             'tr.question_text_response_solution')[i] do
-            # A custom css selector, :last is added here because +fill_in_rails_summernote+ doesn't
-            # acknowledge the scope defined by capabara.
-            # This works only if +click_link+ is executed before each option.
-            fill_in_rails_summernote '.question_text_response_solutions_solution:last',
-                                     solution[:solution]
+            find('input.text-response-solution').set solution[:solution]
             fill_in_rails_summernote '.question_text_response_solutions_explanation:last',
                                      solution[:explanation]
+
             solution_type = find('select.text-response-solution-type', visible: :all)
             # Twitter Bootstrap hides <select> element and creates a div.
             # The usual #select method is broken as it does not seem to work with hidden elements.
