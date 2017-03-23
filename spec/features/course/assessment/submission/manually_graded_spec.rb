@@ -125,7 +125,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
         # Make a first comment
         answer_selector = content_tag_selector(comment_answer)
         comment_post_text = 'test comment'
-        fill_in_summernote answer_selector, comment_post_text
+        fill_in_rails_summernote answer_selector, comment_post_text
         within find(answer_selector) do
           find('.reply-comment').click
         end
@@ -139,7 +139,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
 
         # Reply to the first comment
         comment_reply_text = 'test reply'
-        fill_in_summernote answer_selector, comment_reply_text
+        fill_in_rails_summernote answer_selector, comment_reply_text
         within find(answer_selector) do
           find('.reply-comment').click
         end
@@ -155,7 +155,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
         find(content_tag_selector(comment_reply)).find('.edit').click
         updated_post_text = 'updated comment'
         edit_form_selector = '.edit-discussion-post-form'
-        fill_in_summernote edit_form_selector, updated_post_text
+        fill_in_rails_summernote edit_form_selector, updated_post_text
         within find(answer_selector).find('.edit-discussion-post-form') do
           click_button I18n.t('javascript.course.discussion.post.submit')
         end
@@ -178,7 +178,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
 
         # Should still be able to reply when last comment is deleted
         comment_reply_text = 'another reply'
-        fill_in_summernote answer_selector, comment_reply_text
+        fill_in_rails_summernote answer_selector, comment_reply_text
         within find(answer_selector) do
           find('.reply-comment').click
         end
