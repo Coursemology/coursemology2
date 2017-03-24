@@ -1,4 +1,4 @@
-import getUrlParameter from 'lib/helpers/url_helpers';
+import { getUrlParameter } from 'lib/helpers/url-helpers';
 
 require('./submit-answer');
 require('./calculate-grade-exp');

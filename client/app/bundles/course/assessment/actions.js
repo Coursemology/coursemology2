@@ -1,5 +1,6 @@
 import { SubmissionError } from 'redux-form';
 import CourseAPI from 'api/course';
+import { getCourseId } from 'lib/helpers/url-helpers';
 import actionTypes from './constants';
 
 export function createAssessment(
@@ -22,7 +23,7 @@ export function createAssessment(
         // TODO: Remove redirection when assessment index is implemented using React.
         setTimeout(() => {
           if (response.data && response.data.id) {
-            window.location = `/courses/${CourseAPI.assessments.getCourseId()}/assessments/${response.data.id}`;
+            window.location = `/courses/${getCourseId()}/assessments/${response.data.id}`;
           }
         }, 200);
       })
@@ -53,7 +54,7 @@ export function updateAssessment(assessmentId, data, successMessage, failureMess
         // TODO: Remove redirection when assessment index is implemented using React.
         setTimeout(() => {
           window.location =
-            `/courses/${CourseAPI.assessments.getCourseId()}/assessments/${assessmentId}`;
+            `/courses/${getCourseId()}/assessments/${assessmentId}`;
         }, 500);
       })
       .catch((error) => {

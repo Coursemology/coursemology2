@@ -1,6 +1,6 @@
 import axios from 'lib/axios';
 import { defineMessages } from 'react-intl';
-import renderNotificationBar from 'lib/helpers/railsNotificationBar';
+import renderNotificationBar from 'lib/helpers/renderNotificationBar';
 
 require('jquery-ui/ui/widgets/sortable');
 

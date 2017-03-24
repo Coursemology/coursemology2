@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import { aWeekStartingTomorrow } from 'lib/dateTimeDefaults';
+import { aWeekStartingTomorrow } from 'lib/date-time-defaults';
 import { showSurveyForm, createSurvey } from '../../actions/surveys';
 import AddButton from '../../components/AddButton';
 

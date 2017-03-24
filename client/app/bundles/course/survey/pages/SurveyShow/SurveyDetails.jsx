@@ -11,7 +11,7 @@ import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { formatDateTime } from 'lib/dateTimeDefaults';
+import { formatDateTime } from 'lib/date-time-defaults';
 import TitleBar from 'lib/components/TitleBar';
 import surveyTranslations from '../../translations';
 import { surveyShape } from '../../propTypes';

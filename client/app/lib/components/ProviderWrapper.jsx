@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Provider } from 'react-redux';
 import { IntlProvider, addLocaleData } from 'react-intl';
-import { i18nLocale, timeZone } from 'lib/helpers/serverContext';
+import { i18nLocale, timeZone } from 'lib/helpers/server-context';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 

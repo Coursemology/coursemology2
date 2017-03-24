@@ -6,8 +6,7 @@
 *
 * Taken from http://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js
 */
-
-export default function getUrlParameter(sParam) {
+function getUrlParameter(sParam) {
   const sPageURL = decodeURIComponent(window.location.search.substring(1));
   const sURLVariables = sPageURL.split('&');
   let sParameterName;
@@ -21,3 +20,26 @@ export default function getUrlParameter(sParam) {
   }
   return '';
 }
+
+/**
+ * Get the course id from URL.
+ *
+ * return {number}
+ */
+function getCourseId() {
+  const match = window.location.pathname.match(/^\/courses\/(\d+)/);
+  return match && match[1];
+}
+
+/**
+ * Get the survey id from URL.
+ *
+ * return {number}
+ */
+function getSurveyId() {
+  const match = window.location.pathname.match(/^\/courses\/\d+\/surveys\/(\d+)/);
+  return match && match[1];
+}
+
+/* eslint-disable import/prefer-default-export */
+export { getUrlParameter, getCourseId, getSurveyId };

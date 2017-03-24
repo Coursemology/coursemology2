@@ -1,3 +1,3 @@
 import initializeAjaxForms from 'lib/helpers/initializeAjaxForms';
 
-initializeAjaxForms('tr.instance-user #update');
+initializeAjaxForms('tr.experience-points-record #update');

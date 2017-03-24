@@ -1,5 +1,6 @@
 import { submit, SubmissionError } from 'redux-form';
 import CourseAPI from 'api/course';
+import { getSurveyId } from 'lib/helpers/url-helpers';
 import actionTypes, { formNames } from '../constants';
 import { setNotification } from './index';
 
@@ -27,7 +28,7 @@ export function createSurveySection(
     return CourseAPI.survey.sections.create(fields)
       .then((response) => {
         dispatch({
-          surveyId: CourseAPI.survey.responses.getSurveyId(),
+          surveyId: getSurveyId(),
           type: actionTypes.CREATE_SURVEY_SECTION_SUCCESS,
           section: response.data,
         });
@@ -56,7 +57,7 @@ export function updateSurveySection(
     return CourseAPI.survey.sections.update(sectionId, data)
       .then((response) => {
         dispatch({
-          surveyId: CourseAPI.survey.responses.getSurveyId(),
+          surveyId: getSurveyId(),
           type: actionTypes.UPDATE_SURVEY_SECTION_SUCCESS,
           section: response.data,
         });
@@ -84,7 +85,7 @@ export function deleteSurveySection(
     return CourseAPI.survey.sections.delete(sectionId)
       .then(() => {
         dispatch({
-          surveyId: CourseAPI.survey.responses.getSurveyId(),
+          surveyId: getSurveyId(),
           sectionId,
           type: actionTypes.DELETE_SURVEY_SECTION_SUCCESS,
         });

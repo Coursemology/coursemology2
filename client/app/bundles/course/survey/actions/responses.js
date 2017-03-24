@@ -1,11 +1,12 @@
 import { browserHistory } from 'react-router';
 import { SubmissionError } from 'redux-form';
 import CourseAPI from 'api/course';
+import { getCourseId } from 'lib/helpers/url-helpers';
 import actionTypes from '../constants';
 import { setNotification } from './index';
 
 export function createResponse(surveyId) {
-  const courseId = CourseAPI.survey.responses.getCourseId();
+  const courseId = getCourseId();
   const goToResponse = responseId => browserHistory.push(
     `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}`
   );
@@ -69,7 +70,7 @@ export function updateResponse(
         });
 
         if (payload.response.submit) {
-          const courseId = CourseAPI.survey.responses.getCourseId();
+          const courseId = getCourseId();
           browserHistory.push(`/courses/${courseId}/surveys/`);
         }
 
