@@ -57,6 +57,7 @@ class FormDialogue extends React.Component {
         {...{ disabled }}
       />,
       <FlatButton
+        ref={(button) => { this.submitButton = button; }}
         label={intl.formatMessage(formTranslations.submit)}
         primary
         keyboardFocused
