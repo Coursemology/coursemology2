@@ -75,7 +75,10 @@ class Course::Material::FoldersController < Course::Material::Controller
                  map { |f| f.materials.accessible_by(current_ability) }.flatten
     zip_filename = @folder.root? ? root_folder_name : @folder.name
     job = Course::Material::ZipDownloadJob.perform_later(@folder, @materials, zip_filename).job
-    redirect_to job_path(job)
+    respond_to do |format|
+      format.html { redirect_to(job_path(job)) }
+      format.json { render json: { redirect_url: job_path(job) } }
+    end
   end
 
   private

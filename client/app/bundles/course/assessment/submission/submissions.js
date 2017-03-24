@@ -1,4 +1,5 @@
 import { getUrlParameter } from 'lib/helpers/url-helpers';
+import initializeDownloadLink from 'lib/helpers/initializeDownloadLink';
 
 require('./submit-answer');
 require('./calculate-grade-exp');
@@ -22,3 +23,4 @@ function initializeAceEditor() {
 
 $(document).ready(initializeAnswerTabs);
 $(document).ready(initializeAceEditor);
+initializeDownloadLink('.btn.download');
