@@ -29,6 +29,7 @@
 # Ignore generated code coverage information
 /spec/coverage/*
 /coverage/*
+/client/coverage/*
 
 # Ignore additional themes
 /app/themes/*

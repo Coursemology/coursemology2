@@ -13,8 +13,10 @@
     "build:development": "yarn run build:translations && webpack-dev-server",
     "build:translations": "babel-node scripts/aggregate-translations.js",
     "extract-translations": "yarn run build:production && babel-node scripts/extract-translations.js",
-    "lint": "eslint . --ext .js --ext .jsx --cache --ignore-pattern '**/__test__/**' && eslint . --ext .test.js --ext .test.jsx --cache -c .eslintrc.test",
-    "lint-fix": "eslint . --ext .js --ext .jsx --cache --fix --ignore-pattern '**/__test__/**' && eslint . --ext .test.js --ext .test.jsx --cache --fix -c .eslintrc.test"
+    "lint-src": "eslint . --ext .js --ext .jsx --cache --ignore-pattern '**/__test__/**' --ignore-pattern 'coverage/**'",
+    "lint-tests": "eslint . --ext .test.js --ext .test.jsx --cache -c .eslintrc.test",
+    "lint": "yarn run lint-src && yarn run lint-tests",
+    "lint-fix": "yarn run lint-src -- --fix && yarn run lint-tests -- --fix"
   },
   "cacheDirectories": [
     "node_modules",
