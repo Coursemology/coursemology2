@@ -16,3 +16,4 @@ en:
               attemptable_state: 'must be in the attempting state'
             grade:
               consistent_grade: 'must be less than question maximum grade'
+              non_negative_grade: 'cannot be negative'
