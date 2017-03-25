@@ -33,7 +33,7 @@ const propTypes = {
   formValues: PropTypes.object,
 };
 
-const SurveyFormDialogue = ({
+const QuestionFormDialogue = ({
   dispatch,
   visible,
   disabled,
@@ -66,6 +66,6 @@ const SurveyFormDialogue = ({
   );
 };
 
-SurveyFormDialogue.propTypes = propTypes;
+QuestionFormDialogue.propTypes = propTypes;
 
-export default connect(mapStateToProps)(SurveyFormDialogue);
+export default connect(mapStateToProps)(QuestionFormDialogue);

@@ -3,13 +3,12 @@ import { Provider } from 'react-redux';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { i18nLocale, timeZone } from 'lib/helpers/server-context';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import injectTapEventPlugin from 'lib/injectTapEventPlugin';
 
 import zh from 'react-intl/locale-data/zh';
 
 import translations from '../../../build/locales/locales.json';
 
-// Needed for onTouchTap http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
 const propTypes = {

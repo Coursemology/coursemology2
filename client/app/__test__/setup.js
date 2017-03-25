@@ -1,5 +1,8 @@
 import { IntlProvider, intlShape } from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import injectTapEventPlugin from 'lib/injectTapEventPlugin';
+
+injectTapEventPlugin();
 
 require('babel-polyfill');
 // Our jquery is from CDN and loaded at runtime, so this is required in test.
@@ -7,7 +10,7 @@ const jQuery = require('jquery');
 
 const timeZone = "Asia/Singapore";
 const intlProvider = new IntlProvider({ locale: 'en', timeZone }, {});
-const courseId = 1;
+const courseId = "1";
 
 // Global variables
 global.courseId = courseId;
