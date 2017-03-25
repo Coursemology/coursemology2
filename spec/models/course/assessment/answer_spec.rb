@@ -76,11 +76,29 @@ RSpec.describe Course::Assessment::Answer do
             expect(subject).not_to be_valid
             expect(subject.errors[:grade]).not_to be_empty
           end
+        end
+
+        context 'when the answer has a grade' do
+          let(:answers) do
+            ['submitted', 'evaluated', 'graded'].map do |workflow_state|
+              build_stubbed(:course_assessment_answer, workflow_state: workflow_state)
+            end
+          end
 
           it 'must be less than or equal to the question maximum grade' do
-            subject.grade = subject.question.maximum_grade + 1
-            expect(subject).not_to be_valid
-            expect(subject.errors[:grade]).not_to be_empty
+            answers.each do |answer|
+              answer.grade = answer.question.maximum_grade + 1
+              expect(answer).not_to be_valid
+              expect(answer.errors[:grade]).not_to be_empty
+            end
+          end
+
+          it 'cannot be negative' do
+            answers.each do |answer|
+              answer.grade = -1
+              expect(answer).not_to be_valid
+              expect(answer.errors[:grade]).not_to be_empty
+            end
           end
         end
       end

@@ -13,14 +13,17 @@ const MAXIMUM_GRADE_SELECTOR = '.submission-statistics-maximum-grade';
 const TOTAL_GRADE_SELECTOR = '.submission-statistics-total-grade';
 
 /**
-* Update the initial EXP points after page load.
+* Update the initial grade and EXP points after page ready.
 */
-function updateInitialPoints() {
-  const totalGrade = Number($(TOTAL_GRADE_SELECTOR).text());
-  if (isNaN(totalGrade)) { return; }
+function updateInitialGradesAndPoints() {
+  const allGrades = $(GRADE_INPUT_SELECTOR);
+  for (let i = 0, len = allGrades.length; i < len; i++) {
+    updateGradesSummary(allGrades[i].getAttribute('data-answer-id'), allGrades[i].value);
+  }
 
+  const totalGrade = Number($(TOTAL_GRADE_SELECTOR).text());
   const assignedExp = $(POINTS_AWARDED_SELECTOR).val();
-  if (!assignedExp) {
+  if (!isNaN(totalGrade) && !assignedExp) {
     updateExperiencePointsAwarded(totalGrade);
   }
 }
@@ -154,7 +157,7 @@ function getMultiplier() {
   return multiplier;
 }
 
-$(document).ready(updateInitialPoints);
+$(document).ready(updateInitialGradesAndPoints);
 $(document).on('change', MULTI_QUESTION_ASSESSMENT_SELECTOR + GRADE_INPUT_SELECTOR, updateGradesAndPoints);
 $(document).on('change', SINGLE_QUESTION_ASSESSMENT_SELECTOR + GRADE_INPUT_SELECTOR, updateGradesAndPointsSingleQuestion);
 $(document).on('change', '.exp-multiplier input', onMultiplierChange);

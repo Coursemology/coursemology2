@@ -37,7 +37,7 @@ class Course::Assessment::Answer < ActiveRecord::Base
   validates :submitted_at, presence: true, unless: :attempting?
   validates :submitted_at, :grade, :grader, :graded_at, absence: true, if: :attempting?
   validates :grade, :grader, :graded_at, presence: true, if: :graded?
-  validate :validate_consistent_grade, if: :graded?
+  validate :validate_grade, unless: :attempting?
 
   belongs_to :submission, inverse_of: :answers
   belongs_to :question, class_name: Course::Assessment::Question.name, inverse_of: nil
@@ -135,8 +135,9 @@ class Course::Assessment::Answer < ActiveRecord::Base
     end
   end
 
-  def validate_consistent_grade
+  def validate_grade
     errors.add(:grade, :consistent_grade) if grade.present? && grade > question.maximum_grade
+    errors.add(:grade, :non_negative_grade) if grade.present? && grade < 0
   end
 
   # Ensures that an auto grading record exists for this answer.
