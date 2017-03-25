@@ -3,12 +3,9 @@ import ReactDOM from 'react-dom';
 import { mount, ReactWrapper } from 'enzyme';
 import ReactTestUtils from 'react-addons-test-utils';
 import CourseAPI from 'api/course';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import storeCreator from '../../../store';
 import NewSurveyButton from '../NewSurveyButton';
 import SurveyFormDialogue from '../../../containers/SurveyFormDialogue';
-
-injectTapEventPlugin();
 
 describe('<NewSurveyButton />', () => {
   it('injects handlers that allow surveys to be created', () => {

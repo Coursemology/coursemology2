@@ -3,12 +3,9 @@ import ReactDOM from 'react-dom';
 import { mount, ReactWrapper } from 'enzyme';
 import ReactTestUtils from 'react-addons-test-utils';
 import CourseAPI from 'api/course';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import storeCreator from '../../../store';
 import NewSectionButton from '../NewSectionButton';
 import SectionFormDialogue from '../../../containers/SectionFormDialogue';
-
-injectTapEventPlugin();
 
 describe('<NewSectionButton />', () => {
   it('injects handlers that allow survey sections to be created', () => {

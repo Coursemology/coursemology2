@@ -3,12 +3,9 @@ import ReactDOM from 'react-dom';
 import { mount, ReactWrapper } from 'enzyme';
 import ReactTestUtils from 'react-addons-test-utils';
 import CourseAPI from 'api/course';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import storeCreator from '../../../../store';
 import NewQuestionButton from '../NewQuestionButton';
 import QuestionFormDialogue from '../../../../containers/QuestionFormDialogue';
-
-injectTapEventPlugin();
 
 describe('<NewQuestionButton />', () => {
   it('injects handlers that allow survey questions to be created', () => {
@@ -44,7 +41,9 @@ describe('<NewQuestionButton />', () => {
 
     expect(spyCreate).toHaveBeenCalled();
     const formData = spyCreate.mock.calls[0][0];
-    // Test one by one because jsdom does not support 'FormData#getAll' yet
+    // formData is an instance of FormData. To enumerate all the items, we should be able to use
+    // `#entries` or `#keys`, but jsdom doesn't seem to support these methods yet.
+    // See https://github.com/tmpvar/jsdom/issues/1671
     expect(formData.get('question[question_type]')).toBe('multiple_response');
     expect(formData.get('question[required]')).toBe('false');
     expect(formData.get('question[description]')).toBe(questionText);
