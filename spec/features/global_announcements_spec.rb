@@ -46,11 +46,11 @@ RSpec.feature 'Global announcements' do
       end
 
       scenario 'I should see both types of announcements' do
-        announcements = (-3..0).flat_map do |i|
+        announcements = 2.downto(-1).flat_map do |i|
           now = Time.zone.now
           [
-            create(:instance_announcement, end_at: now - i.seconds, instance: instance),
-            create(:system_announcement, start_at: now - i.seconds)
+            create(:instance_announcement, end_at: now + i.minutes, instance: instance),
+            create(:system_announcement, start_at: now + i.minutes)
           ]
         end
 
