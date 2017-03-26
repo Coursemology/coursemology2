@@ -90,7 +90,10 @@ class Course::Assessment::Submission::SubmissionsController < \
     else
       job = Course::Assessment::Submission::ZipDownloadJob.
             perform_later(current_course_user, @assessment, params[:students]).job
-      redirect_to job_path(job)
+      respond_to do |format|
+        format.html { redirect_to(job_path(job)) }
+        format.json { render json: { redirect_url: job_path(job) } }
+      end
     end
   end
 

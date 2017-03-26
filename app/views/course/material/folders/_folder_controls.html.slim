@@ -7,7 +7,7 @@ span.pull-right.btn-group
               title: t('.upload'), class: ['btn', 'btn-primary'] do
       = fa_icon 'upload'.freeze
   = link_to download_course_material_folder_path(current_course, @folder),
-            title: t('.download'), class: ['btn', 'btn-primary'], target: '_blank' do
+            title: t('.download'), class: ['btn', 'btn-primary', 'download'] do
     = fa_icon 'download'.freeze
 
   - if @folder.concrete? && can?(:edit, @folder)
