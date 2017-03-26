@@ -22,10 +22,10 @@ module Course::Assessment::AssessmentAbility
   def define_staff_assessment_permissions
     allow_managers_manage_tab_and_categories
     allow_staff_manage_assessments
+    allow_manager_publish_assessment_submission_grades
     allow_staff_grade_assessment_submissions
     allow_staff_manage_assessment_annotations
     allow_staff_read_assessment_answers
-    allow_manager_publish_assessment_submissions
     allow_staff_read_assessment_tests
   end
 
@@ -90,14 +90,16 @@ module Course::Assessment::AssessmentAbility
         question: { assessment: assessment_course_staff_hash }
   end
 
+  # Only managers are allowed to publish assessment submission grades
+  # Teaching assistants have all assessment abilities except :publish_grades
+  def allow_manager_publish_assessment_submission_grades
+    cannot :publish_grades, Course::Assessment, assessment_course_staff_hash
+    can :publish_grades, Course::Assessment, course_managers_hash
+  end
+
   def allow_managers_manage_tab_and_categories
     can :manage, Course::Assessment::Tab, category: course_managers_hash
     can :manage, Course::Assessment::Category, course_managers_hash
-  end
-
-  def allow_manager_publish_assessment_submissions
-    can :publish_all, Course::Assessment::Submission,
-        assessment: { tab: { category: course_managers_hash } }
   end
 
   def allow_staff_grade_assessment_submissions
