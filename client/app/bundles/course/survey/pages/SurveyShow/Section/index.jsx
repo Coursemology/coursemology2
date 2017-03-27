@@ -64,6 +64,6 @@ const sectionTarget = {
   },
 };
 
-export default connect(state => state)(
+export default connect()(
   DropTarget(draggableTypes.QUESTION, sectionTarget, collect)(Section)
 );

@@ -204,7 +204,7 @@ function sourceCollect(connector, monitor) {
 
 // TODO By default, React DnD takes a screenshot of the element being dragged using the HTML5
 // backend. However, any overlapping elements also appears in the screenshot. To fix this.
-export default connect(state => state)(
+export default connect()(
   injectIntl(
     DropTarget(draggableTypes.QUESTION, questionTarget, targetCollect)(
       DragSource(draggableTypes.QUESTION, questionSource, sourceCollect)(
