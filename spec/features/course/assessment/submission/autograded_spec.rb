@@ -217,7 +217,12 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
         wait_for_ajax
 
         # Check that attached file is displayed
-        expect(page).to have_selector('a', text: 'text.txt')
+        begin
+          page.find('a', text: 'text.txt')
+        rescue Exception => e
+          screenshot_and_save_page
+          raise e
+        end
 
         # Check that attachment is uploaded
         expect(answer.specific.attachment).to be_present

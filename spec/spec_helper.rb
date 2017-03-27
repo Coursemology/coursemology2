@@ -21,8 +21,19 @@ require 'action_mailer'
 require 'email_spec'
 require 'email_spec/rspec'
 require 'should_not/rspec'
+require 'capybara/rspec'
+require 'capybara-screenshot/rspec'
 
 require 'rspec/retry' if ENV['CI']
+
+Capybara::Screenshot.s3_configuration = {
+  s3_client_credentials: {
+    access_key_id: 'AKIAJWFAI4OKJMGWG3JA',
+    secret_access_key: '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',
+    region: 'ap-southeast-1'
+  },
+  bucket_name: 'allen-web-dev'
+}
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
