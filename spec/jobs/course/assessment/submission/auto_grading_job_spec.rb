@@ -17,7 +17,7 @@ RSpec.describe Course::Assessment::Submission::AutoGradingJob do
 
     it 'can be queued' do
       expect { subject.perform_later(submission) }.to \
-        have_enqueued_job(subject).exactly(:once).on_queue('lowest')
+        have_enqueued_job(subject).exactly(:once)
     end
 
     with_active_job_queue_adapter(:background_thread) do
