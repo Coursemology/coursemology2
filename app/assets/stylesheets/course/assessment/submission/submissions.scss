@@ -118,7 +118,21 @@
     .submissions {
       .no-submission {
         strong {
-          color: $course-assessment-submission-not-started;
+          color: $course-assessment-submission-not-started-text;
+        }
+      }
+    }
+
+    .submission-state-histogram {
+      border-radius: 10px;
+      display: flex;
+      overflow: hidden;
+      text-align: center;
+
+      @each $submission-state, $color in $course-assessment-submission-state-colors {
+        .#{$submission-state} {
+          background-color: $color;
+          min-width: 50px;
         }
       }
     }

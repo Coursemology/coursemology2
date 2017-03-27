@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 module Course::Assessment::Submission::SubmissionsHelper
   include Course::Assessment::Submission::SubmissionsAutogradedHelper
+  include Course::Assessment::Submission::SubmissionsWorkflowStateHelper
   include Course::Assessment::Answer::ProgrammingHelper
   include Course::Assessment::Answer::ProgrammingTestCaseHelper
 
@@ -60,11 +61,9 @@ module Course::Assessment::Submission::SubmissionsHelper
   # Return the bootstrap panel class based on the status of the submission
   def panel_class
     if @submission.attempting?
-      'panel-info'
-    elsif @submission.submitted?
       'panel-warning'
     elsif @submission.graded?
-      'panel-danger'
+      'panel-info'
     elsif @submission.published?
       'panel-success'
     else
