@@ -46,6 +46,7 @@ RSpec.feature 'Course: Events' do
         expect(page).to have_text(event_to_edit.title)
         find("#item-#{event_to_edit.acting_as.id} .admin-button button").click
         find_link(nil, href: edit_course_lesson_plan_event_path(course, event_to_edit)).click
+        expect(page).to have_selector('h1', text: I18n.t('course.lesson_plan.events.edit.header'))
         expect(current_path).to eq(edit_course_lesson_plan_event_path(course, event_to_edit))
       end
 

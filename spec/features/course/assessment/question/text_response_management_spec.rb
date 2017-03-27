@@ -73,6 +73,8 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
         fill_in 'maximum_grade', with: maximum_grade
         click_button I18n.t('helpers.buttons.update')
 
+        message = I18n.t('course.assessment.question.text_responses.update.success')
+        expect(page).to have_selector('div.alert', text: message)
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(question.reload.maximum_grade).to eq(maximum_grade)
 
@@ -114,8 +116,8 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
         end
         click_button I18n.t('helpers.buttons.update')
 
-        expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(page).to have_selector('div.alert.alert-success')
+        expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(question.reload.solutions.count).to eq(0)
       end
 
