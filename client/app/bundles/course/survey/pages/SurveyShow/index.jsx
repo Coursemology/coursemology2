@@ -146,8 +146,8 @@ SurveyShow.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default connect(state => state)(
-  DragDropContext(HTML5Backend)(
-    injectIntl(SurveyShow)
-  )
+export const ConnectedSurveyShow = connect(state => ({ surveys: state.surveys }))(
+  injectIntl(SurveyShow)
 );
+
+export default DragDropContext(HTML5Backend)(ConnectedSurveyShow);

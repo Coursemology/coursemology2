@@ -73,4 +73,4 @@ class NewQuestionButton extends React.Component {
   }
 }
 
-export default connect(state => state)(injectIntl(NewQuestionButton));
+export default connect()(injectIntl(NewQuestionButton));

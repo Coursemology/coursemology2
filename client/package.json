@@ -108,6 +108,7 @@
     "jest": "^19.0.2",
     "jquery": "^3.1.1",
     "react-addons-test-utils": "^15.4.2",
+    "react-dnd-test-backend": "^2.3.0",
     "webpack-dev-server": "^2.4.1"
   },
   "license": "MIT",
