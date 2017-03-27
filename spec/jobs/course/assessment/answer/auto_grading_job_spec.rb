@@ -20,7 +20,7 @@ RSpec.describe Course::Assessment::Answer::AutoGradingJob do
 
     it 'can be queued' do
       expect { subject.perform_later(answer) }.to \
-        have_enqueued_job(subject).exactly(:once)
+        have_enqueued_job(subject).exactly(:once).on_queue('highest')
     end
 
     it 'evaluates answers' do

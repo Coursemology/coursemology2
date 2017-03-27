@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::ZipDownloadJob < ApplicationJob
   include TrackableJob
+  queue_as :lowest
 
   protected
 
