@@ -8,84 +8,90 @@ const buttonStyle = {
   margin: 3,
 };
 
-const ConfirmationDialog = ({
-  intl,
-  open,
-  onCancel,
-  onConfirm,
-  message,
-  cancelButtonText,
-  confirmButtonText,
-  confirmDiscard,
-  confirmDelete,
-  confirmSubmit,
-  disableCancelButton,
-  disableConfirmButton,
-}) => {
-  let confirmationButtonText = intl.formatMessage(formTranslations.continue);
-  if (confirmButtonText) {
-    confirmationButtonText = confirmButtonText;
-  } else if (confirmDelete) {
-    confirmationButtonText = intl.formatMessage(formTranslations.delete);
-  } else if (confirmDiscard) {
-    confirmationButtonText = intl.formatMessage(formTranslations.discard);
-  } else if (confirmSubmit) {
-    confirmationButtonText = intl.formatMessage(formTranslations.submit);
+class ConfirmationDialog extends React.Component {
+  static propTypes = {
+    open: PropTypes.bool.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    onConfirm: PropTypes.func.isRequired,
+    message: PropTypes.string,
+    cancelButtonText: PropTypes.string,
+    confirmButtonText: PropTypes.string,
+    confirmDiscard: PropTypes.bool,
+    confirmDelete: PropTypes.bool,
+    confirmSubmit: PropTypes.bool,
+    disableCancelButton: PropTypes.bool,
+    disableConfirmButton: PropTypes.bool,
+
+    intl: intlShape.isRequired,
   }
 
-  let confirmationMessage = intl.formatMessage(formTranslations.areYouSure);
-  if (message) {
-    confirmationMessage = message;
-  } else if (confirmDiscard) {
-    confirmationMessage = intl.formatMessage(formTranslations.discardChanges);
+  render() {
+    const {
+      intl,
+      open,
+      onCancel,
+      onConfirm,
+      message,
+      cancelButtonText,
+      confirmButtonText,
+      confirmDiscard,
+      confirmDelete,
+      confirmSubmit,
+      disableCancelButton,
+      disableConfirmButton,
+    } = this.props;
+
+    let confirmationButtonText = intl.formatMessage(formTranslations.continue);
+    if (confirmButtonText) {
+      confirmationButtonText = confirmButtonText;
+    } else if (confirmDelete) {
+      confirmationButtonText = intl.formatMessage(formTranslations.delete);
+    } else if (confirmDiscard) {
+      confirmationButtonText = intl.formatMessage(formTranslations.discard);
+    } else if (confirmSubmit) {
+      confirmationButtonText = intl.formatMessage(formTranslations.submit);
+    }
+
+    let confirmationMessage = intl.formatMessage(formTranslations.areYouSure);
+    if (message) {
+      confirmationMessage = message;
+    } else if (confirmDiscard) {
+      confirmationMessage = intl.formatMessage(formTranslations.discardChanges);
+    }
+
+    const actions = [
+      <FlatButton
+        primary
+        keyboardFocused
+        className="cancel-btn"
+        disabled={disableCancelButton}
+        onTouchTap={onCancel}
+        style={buttonStyle}
+        label={cancelButtonText || intl.formatMessage(formTranslations.cancel)}
+      />,
+      <FlatButton
+        primary
+        className="confirm-btn"
+        disabled={disableConfirmButton}
+        onTouchTap={onConfirm}
+        style={buttonStyle}
+        label={confirmationButtonText}
+        ref={button => (this.confirmButton = button)}
+      />,
+    ];
+
+    return (
+      <div>
+        <Dialog
+          {...{ open, actions }}
+          modal={false}
+          onRequestClose={onCancel}
+        >
+          { confirmationMessage }
+        </Dialog>
+      </div>
+    );
   }
-
-  const actions = [
-    <FlatButton
-      primary
-      keyboardFocused
-      className="cancel-btn"
-      disabled={disableCancelButton}
-      onTouchTap={onCancel}
-      style={buttonStyle}
-      label={cancelButtonText || intl.formatMessage(formTranslations.cancel)}
-    />,
-    <FlatButton
-      primary
-      className="confirm-btn"
-      disabled={disableConfirmButton}
-      onTouchTap={onConfirm}
-      style={buttonStyle}
-      label={confirmationButtonText}
-    />,
-  ];
-
-  return (
-    <div>
-      <Dialog
-        {...{ open, actions }}
-        modal={false}
-        onRequestClose={onCancel}
-      >
-        { confirmationMessage }
-      </Dialog>
-    </div>
-  );
-};
-
-ConfirmationDialog.propTypes = {
-  intl: intlShape.isRequired,
-  open: PropTypes.bool.isRequired,
-  onCancel: PropTypes.func.isRequired,
-  onConfirm: PropTypes.func.isRequired,
-  message: PropTypes.string,
-  cancelButtonText: PropTypes.string,
-  confirmButtonText: PropTypes.string,
-  confirmDiscard: PropTypes.bool,
-  confirmDelete: PropTypes.bool,
-  confirmSubmit: PropTypes.bool,
-  disableCancelButton: PropTypes.bool,
-  disableConfirmButton: PropTypes.bool,
-};
+}
 
 export default injectIntl(ConfirmationDialog);

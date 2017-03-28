@@ -139,7 +139,7 @@ class ResponseForm extends React.Component {
           type="submit"
           primary
           label={<FormattedMessage {...submitButtonTranslation} />}
-          onClick={handleSubmit(data => onSubmit({ ...data, submit: true }))}
+          onTouchTap={handleSubmit(data => onSubmit({ ...data, submit: true }))}
           style={styles.submitButton}
           disabled={!!response.submitted_at}
         />
