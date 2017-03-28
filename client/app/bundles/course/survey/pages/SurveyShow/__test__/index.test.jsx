@@ -5,7 +5,6 @@ import CourseAPI from 'api/course';
 import MockAdapter from 'axios-mock-adapter';
 import TestBackend from 'react-dnd-test-backend';
 import { DragDropContext } from 'react-dnd';
-import * as urlHelpers from 'lib/helpers/url-helpers';
 import storeCreator from '../../../store';
 import { ConnectedSurveyShow } from '../index';
 
@@ -13,13 +12,8 @@ import { ConnectedSurveyShow } from '../index';
 const client = CourseAPI.survey.surveys.getClient();
 const mock = new MockAdapter(client);
 
-// Set surveyId
-const surveyId = 1;
-urlHelpers.getSurveyId = jest.fn();
-urlHelpers.getSurveyId.mockReturnValue(surveyId.toString());
-
 const surveyData = {
-  id: surveyId,
+  id: 1,
   title: 'Test survey',
   isStarted: true,
   responseId: 1,
@@ -85,15 +79,17 @@ beforeEach(() => {
 describe('<SurveyShow />', () => {
   it('allows questions to be re-ordered', async () => {
     // Set up mock and spies
-    mock.onGet(`/courses/${courseId}/surveys/${surveyId}`).reply(200, surveyData);
+    const surveyUrl = `/courses/${courseId}/surveys/${surveyData.id}`;
+    mock.onGet(surveyUrl).reply(200, surveyData);
     const spyFetch = jest.spyOn(CourseAPI.survey.surveys, 'fetch');
     const spyFinalizeOrder = jest.spyOn(CourseAPI.survey.surveys, 'reorderQuestions');
 
     // Mount showPage and wait for survey data to load
+    Object.defineProperty(window.location, 'pathname', { value: surveyUrl });
     const store = storeCreator({ surveys: {} });
     const WrappedSurveyShow = wrapInTestContext(ConnectedSurveyShow);
     const showPage = mount(
-      <WrappedSurveyShow params={{ courseId, surveyId: surveyId.toString() }} />,
+      <WrappedSurveyShow params={{ courseId, surveyId: surveyData.id.toString() }} />,
       contextOptions(store)
     );
     await sleep(1);

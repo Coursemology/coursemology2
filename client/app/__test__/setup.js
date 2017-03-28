@@ -25,6 +25,7 @@ document.head.innerHTML =
   `<meta name="server-context" data-i18n-locale="en" data-time-zone="${timeZone}">`;
 
 Object.defineProperty(window.location, 'pathname', {
+  configurable: true,
   value: `/courses/${courseId}`,
 });
 
