@@ -217,7 +217,9 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
         wait_for_ajax
 
         # Check that attached file is displayed
-        expect(page).to have_selector('a', text: 'text.txt')
+        # find is used here, so that an exception will be raised when fail and rspec will retry
+        # the test.
+        expect(find('a', text: 'text.txt')).to be_present
 
         # Check that attachment is uploaded
         expect(answer.specific.attachment).to be_present
