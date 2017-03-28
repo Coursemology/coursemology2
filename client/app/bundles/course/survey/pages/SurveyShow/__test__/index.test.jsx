@@ -5,7 +5,7 @@ import CourseAPI from 'api/course';
 import MockAdapter from 'axios-mock-adapter';
 import TestBackend from 'react-dnd-test-backend';
 import { DragDropContext } from 'react-dnd';
-import storeCreator from '../../../store';
+import storeCreator from 'course/survey/store';
 import { ConnectedSurveyShow } from '../index';
 
 // Mock axios

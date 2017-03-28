@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import CourseAPI from 'api/course';
 import MockAdapter from 'axios-mock-adapter';
-import storeCreator from '../../../store';
+import storeCreator from 'course/survey/store';
 import SurveyResults from '../index';
 
 const client = CourseAPI.survey.surveys.getClient();

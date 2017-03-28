@@ -13,10 +13,10 @@ import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { formatDateTime } from 'lib/date-time-defaults';
 import TitleBar from 'lib/components/TitleBar';
-import surveyTranslations from '../../translations';
-import { surveyShape } from '../../propTypes';
-import { updateSurvey } from '../../actions/surveys';
-import RespondButton from '../../containers/RespondButton';
+import surveyTranslations from 'course/survey/translations';
+import { surveyShape } from 'course/survey/propTypes';
+import { updateSurvey } from 'course/survey/actions/surveys';
+import RespondButton from 'course/survey/containers/RespondButton';
 import NewSectionButton from './NewSectionButton';
 
 const translations = defineMessages({

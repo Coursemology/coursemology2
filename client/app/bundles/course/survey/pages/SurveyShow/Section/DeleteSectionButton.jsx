@@ -2,8 +2,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import FlatButton from 'material-ui/FlatButton';
-import { showDeleteConfirmation } from '../../../actions';
-import { deleteSurveySection } from '../../../actions/sections';
+import { showDeleteConfirmation } from 'course/survey/actions';
+import { deleteSurveySection } from 'course/survey/actions/sections';
 
 const translations = defineMessages({
   deleteSection: {

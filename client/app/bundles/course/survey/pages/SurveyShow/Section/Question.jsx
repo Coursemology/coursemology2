@@ -3,12 +3,12 @@ import React, { PropTypes } from 'react';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import { DragSource, DropTarget } from 'react-dnd';
-import { showDeleteConfirmation } from '../../../actions';
-import { formatQuestionFormData } from '../../../utils';
-import { questionShape } from '../../../propTypes';
-import { draggableTypes } from '../../../constants';
+import { showDeleteConfirmation } from 'course/survey/actions';
+import { formatQuestionFormData } from 'course/survey/utils';
+import { questionShape } from 'course/survey/propTypes';
+import { draggableTypes } from 'course/survey/constants';
+import * as questionActions from 'course/survey/actions/questions';
 import QuestionCard from './QuestionCard';
-import * as questionActions from '../../../actions/questions';
 
 const translations = defineMessages({
   editQuestion: {

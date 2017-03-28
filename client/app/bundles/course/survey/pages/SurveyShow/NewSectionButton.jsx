@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape, FormattedMessage } from 'react-intl';
 import RaisedButton from 'material-ui/RaisedButton';
-import { showSectionForm, createSurveySection } from '../../actions/sections';
+import { showSectionForm, createSurveySection } from 'course/survey/actions/sections';
 
 const translations = defineMessages({
   newSection: {

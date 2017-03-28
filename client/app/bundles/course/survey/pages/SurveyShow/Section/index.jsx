@@ -2,8 +2,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { DropTarget } from 'react-dnd';
-import { draggableTypes } from '../../../constants';
-import { changeSection } from '../../../actions/questions';
+import { draggableTypes } from 'course/survey/constants';
+import { changeSection } from 'course/survey/actions/questions';
 import SectionCard from './SectionCard';
 
 class Section extends React.Component {

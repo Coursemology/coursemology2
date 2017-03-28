@@ -8,10 +8,10 @@ import Toggle from 'lib/components/redux-form/Toggle';
 import DisplayTextField from 'material-ui/TextField';
 import Subheader from 'material-ui/Subheader';
 import formTranslations from 'lib/translations/form';
+import translations from 'course/survey/translations';
+import { questionTypes, formNames } from 'course/survey/constants';
 import QuestionFormOptions from './QuestionFormOptions';
 import QuestionFormDeletedOptions from './QuestionFormDeletedOptions';
-import translations from '../../translations';
-import { questionTypes, formNames } from '../../constants';
 
 const styles = {
   description: {

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { resetDeleteConfirmation } from '../../actions';
+import { resetDeleteConfirmation } from 'course/survey/actions';
 
 const DeleteConfirmation = ({ dispatch, deleteConfirmation }) => (
   <ConfirmationDialog

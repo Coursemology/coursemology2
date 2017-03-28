@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 import ReactTestUtils from 'react-addons-test-utils';
 import CourseAPI from 'api/course';
 import MockAdapter from 'axios-mock-adapter';
-import storeCreator from '../../../store';
+import storeCreator from 'course/survey/store';
 import ResponseShow from '../index';
 
 const client = CourseAPI.survey.responses.getClient();

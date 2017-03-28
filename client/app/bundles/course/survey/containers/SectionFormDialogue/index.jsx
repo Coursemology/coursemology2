@@ -2,11 +2,11 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isPristine } from 'redux-form';
-import * as actionCreators from '../../actions/sections';
-import FormDialogue from '../../components/FormDialogue';
-import { formNames } from '../../constants';
+import * as actionCreators from 'course/survey/actions/sections';
+import FormDialogue from 'course/survey/components/FormDialogue';
+import { formNames } from 'course/survey/constants';
+import { sectionShape } from 'course/survey/propTypes';
 import SectionForm from './SectionForm';
-import { sectionShape } from '../../propTypes';
 
 function mapStateToProps({ sectionForm, ...state }) {
   return {

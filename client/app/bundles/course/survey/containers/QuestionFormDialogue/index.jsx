@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getFormValues, isPristine } from 'redux-form';
-import { formNames } from '../../constants';
-import * as actionCreators from '../../actions/questions';
-import FormDialogue from '../../components/FormDialogue';
+import { formNames } from 'course/survey/constants';
+import * as actionCreators from 'course/survey/actions/questions';
+import FormDialogue from 'course/survey/components/FormDialogue';
 import QuestionForm from './QuestionForm';
 
 function mapStateToProps({ questionForm, ...state }) {
