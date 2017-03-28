@@ -36,6 +36,7 @@ const styles = {
   cardText: {
     position: 'relative',
     paddingTop: 34,
+    paddingRight: 64,
   },
   card: {
     marginBottom: 15,
