@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Card, CardText } from 'material-ui/Card';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import Toggle from 'material-ui/Toggle';
+import RaisedButton from 'material-ui/RaisedButton';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import { cyan500, grey50, grey300 } from 'material-ui/styles/colors';
 import { sorts } from 'course/survey/utils';
@@ -9,13 +10,9 @@ import { questionTypes } from 'course/survey/constants';
 import { optionShape } from 'course/survey/propTypes';
 import Thumbnail from 'course/survey/components/Thumbnail';
 
-
 const styles = {
   percentageBarThreshold: 10,
-  table: {
-    height: '400px',
-    optionThresholdQuantity: 10,
-  },
+  optionThresholdQuantity: 10,
   card: {
     marginBottom: 15,
   },
@@ -61,6 +58,14 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  expandToggleStyle: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  wrapText: {
+    whiteSpace: 'normal',
+    wordWrap: 'break-word',
+  },
 };
 
 const translations = defineMessages({
@@ -91,6 +96,22 @@ const translations = defineMessages({
   multipleResponseOption: {
     id: 'course.surveys.ResultsQuestion.multipleResponseOption',
     defaultMessage: 'Multiple Response Option',
+  },
+  showResponses: {
+    id: 'course.surveys.ResultsQuestion.showResponses',
+    defaultMessage: 'Show All {quantity} Responses',
+  },
+  hideResponses: {
+    id: 'course.surveys.ResultsQuestion.hideResponses',
+    defaultMessage: 'Hide All {quantity} Responses',
+  },
+  showOptions: {
+    id: 'course.surveys.ResultsQuestion.showOptions',
+    defaultMessage: 'Show All {quantity} Options',
+  },
+  hideOptions: {
+    id: 'course.surveys.ResultsQuestion.hideOptions',
+    defaultMessage: 'Hide All {quantity} Options',
   },
 });
 
@@ -152,7 +173,7 @@ class ResultsQuestion extends React.Component {
                 /> : [] }
             </TableRowColumn> : null
         }
-        <TableRowColumn colSpan={3}>
+        <TableRowColumn colSpan={hasImage ? 3 : 6} style={styles.wrapText}>
           { optionText || imageName || null }
         </TableRowColumn>
         <TableRowColumn>{breakdown[id].count}</TableRowColumn>
@@ -163,9 +184,43 @@ class ResultsQuestion extends React.Component {
     );
   }
 
+  static renderTextResultsTable(answers) {
+    return (
+      <Table>
+        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+          <TableRow>
+            <TableHeaderColumn>
+              <FormattedMessage {...translations.serial} />
+            </TableHeaderColumn>
+            <TableHeaderColumn colSpan={15}>
+              <FormattedMessage {...translations.responses} />
+            </TableHeaderColumn>
+          </TableRow>
+        </TableHeader>
+        <TableBody displayRowCheckbox={false}>
+          {answers.map((answer, index) => (
+            <TableRow key={answer.id}>
+              <TableRowColumn>{ index + 1 }</TableRowColumn>
+              <TableRowColumn colSpan={15} style={styles.wrapText}>
+                { answer.text_response }
+              </TableRowColumn>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    );
+  }
+
   constructor(props) {
     super(props);
-    this.state = { sortByPercentage: false };
+    const { question: { question_type: questionType, answers, options } } = props;
+    const maxRows = questionType === questionTypes.TEXT ? answers.length : options.length;
+    const expandable = maxRows > styles.optionThresholdQuantity;
+    this.state = {
+      expandable,
+      expanded: !expandable,
+      sortByPercentage: false,
+    };
   }
 
   /**
@@ -187,6 +242,25 @@ class ResultsQuestion extends React.Component {
     return breakdown;
   }
 
+  renderExpandToggle(quantity) {
+    if (!this.state.expandable) { return null; }
+    const { question } = this.props;
+    let labelTranslation;
+    if (question.question_type === questionTypes.TEXT) {
+      labelTranslation = this.state.expanded ? 'hideResponses' : 'showResponses';
+    } else {
+      labelTranslation = this.state.expanded ? 'hideOptions' : 'showOptions';
+    }
+    return (
+      <CardText style={styles.expandToggleStyle}>
+        <RaisedButton
+          label={<FormattedMessage {...translations[labelTranslation]} values={{ quantity }} />}
+          onTouchTap={() => this.setState({ expanded: !this.state.expanded })}
+        />
+      </CardText>
+    );
+  }
+
   renderOptionsResultsTable() {
     const { question: { options, question_type: questionType } } = this.props;
     const { MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
@@ -201,15 +275,13 @@ class ResultsQuestion extends React.Component {
     const sortMethod = this.state.sortByPercentage ? sortByCount : byWeight;
 
     return (
-      <Table
-        height={options.length >= styles.table.optionThresholdQuantity ? styles.table.height : null}
-      >
+      <Table>
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn>
               <FormattedMessage {...translations.serial} />
             </TableHeaderColumn>
-            <TableHeaderColumn colSpan={(hasImage ? 1 : 0) + 3}>
+            <TableHeaderColumn colSpan={hasImage ? 4 : 6}>
               <FormattedMessage {...optionsHeaderTranslation} />
             </TableHeaderColumn>
             <TableHeaderColumn>
@@ -238,47 +310,25 @@ class ResultsQuestion extends React.Component {
   renderTextResults() {
     const { includePhantoms, question: { answers } } = this.props;
     const filteredAnswers = includePhantoms ? answers : answers.filter(answer => !answer.phantom);
-    return (
-      <Table
-        height={
-          filteredAnswers.length >= styles.table.optionThresholdQuantity ?
-          styles.table.height : null
-        }
-      >
-        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-          <TableRow>
-            <TableHeaderColumn>
-              <FormattedMessage {...translations.serial} />
-            </TableHeaderColumn>
-            <TableHeaderColumn colSpan={15}>
-              <FormattedMessage {...translations.responses} />
-            </TableHeaderColumn>
-          </TableRow>
-        </TableHeader>
-        <TableBody displayRowCheckbox={false}>
-          {filteredAnswers.map((answer, index) => (
-            <TableRow key={answer.id}>
-              <TableRowColumn>{ index + 1 }</TableRowColumn>
-              <TableRowColumn colSpan={15}>{ answer.text_response }</TableRowColumn>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    );
-  }
-
-  renderMultipleChoiceResults() {
+    const nonEmptyAnswers = filteredAnswers.filter(answer => (
+      answer.text_response && answer.text_response.trim().length > 0
+    ));
     return (
       <div>
-        {this.renderOptionsResultsTable()}
+        { this.renderExpandToggle(nonEmptyAnswers.length) }
+        { this.state.expanded ? ResultsQuestion.renderTextResultsTable(nonEmptyAnswers) : null }
+        { this.state.expanded ? this.renderExpandToggle(nonEmptyAnswers.length) : null}
       </div>
     );
   }
 
-  renderMultipleResponseResults() {
+  renderOptionsResults() {
+    const optionsCount = this.props.question.options.length;
     return (
       <div>
-        {this.renderOptionsResultsTable()}
+        { this.renderExpandToggle(optionsCount) }
+        { this.state.expanded ? this.renderOptionsResultsTable() : null }
+        { this.state.expanded ? this.renderExpandToggle(optionsCount) : null }
       </div>
     );
   }
@@ -288,8 +338,8 @@ class ResultsQuestion extends React.Component {
     const { TEXT, MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
     const renderer = {
       [TEXT]: this.renderTextResults,
-      [MULTIPLE_CHOICE]: this.renderMultipleChoiceResults,
-      [MULTIPLE_RESPONSE]: this.renderMultipleResponseResults,
+      [MULTIPLE_CHOICE]: this.renderOptionsResults,
+      [MULTIPLE_RESPONSE]: this.renderOptionsResults,
     }[question.question_type];
 
     if (!renderer) { return null; }
