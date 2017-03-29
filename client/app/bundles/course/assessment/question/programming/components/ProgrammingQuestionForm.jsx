@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import Immutable from 'immutable';
 
 import React, { PropTypes } from 'react';

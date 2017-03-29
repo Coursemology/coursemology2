@@ -8,10 +8,10 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { questionTypes } from '../../../constants';
-import { questionShape } from '../../../propTypes';
-import translations from '../../../translations';
-import OptionsListItem from '../../../components/OptionsListItem';
+import { questionTypes } from 'course/survey/constants';
+import { questionShape } from 'course/survey/propTypes';
+import translations from 'course/survey/translations';
+import OptionsListItem from 'course/survey/components/OptionsListItem';
 
 const styles = {
   optionWidget: {

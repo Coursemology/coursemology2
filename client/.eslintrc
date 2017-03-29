@@ -21,6 +21,7 @@
     // Use `_` to indicate that the method is private
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     "no-underscore-dangle": 0,
+    "func-names": 0,
   },
   "globals": {
     "window": true,

@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import Subheader from 'material-ui/Subheader';
 import TitleBar from 'lib/components/TitleBar';
-import { fetchSurveys } from '../../actions/surveys';
+import { fetchSurveys } from 'course/survey/actions/surveys';
+import surveyTranslations from 'course/survey/translations';
+import { surveyShape } from 'course/survey/propTypes';
 import SurveysTable from './SurveysTable';
 import NewSurveyButton from './NewSurveyButton';
-import surveyTranslations from '../../translations';
-import { surveyShape } from '../../propTypes';
 
 const translations = defineMessages({
   noSurveys: {

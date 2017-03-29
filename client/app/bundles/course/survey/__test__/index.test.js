@@ -6,8 +6,8 @@ import MockAdapter from 'axios-mock-adapter';
 import ReactTestUtils from 'react-addons-test-utils';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import CourseAPI from 'api/course';
-import storeCreator from '../store';
-import routes from '../routes';
+import storeCreator from 'course/survey/store';
+import routes from 'course/survey/routes';
 
 // Mock axios
 const client = CourseAPI.survey.surveys.getClient();

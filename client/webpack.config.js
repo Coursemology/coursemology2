@@ -61,6 +61,7 @@ const config = {
     alias: {
       lib: path.resolve('./app/lib'),
       api: path.resolve('./app/api'),
+      course: path.resolve('./app/bundles/course'),
     },
   },
 

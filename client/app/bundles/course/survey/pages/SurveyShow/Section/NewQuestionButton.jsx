@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape, FormattedMessage } from 'react-intl';
 import FlatButton from 'material-ui/FlatButton';
-import { showQuestionForm, createSurveyQuestion } from '../../../actions/questions';
-import { questionTypes } from '../../../constants';
-import { formatQuestionFormData } from '../../../utils';
+import { showQuestionForm, createSurveyQuestion } from 'course/survey/actions/questions';
+import { questionTypes } from 'course/survey/constants';
+import { formatQuestionFormData } from 'course/survey/utils';
 
 const translations = defineMessages({
   newQuestion: {

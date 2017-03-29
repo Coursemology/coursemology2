@@ -8,10 +8,10 @@ import { Card, CardText } from 'material-ui/Card';
 import TitleBar from 'lib/components/TitleBar';
 import Subheader from 'material-ui/Subheader';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
-import { questionTypes } from '../../constants';
-import surveyTranslations from '../../translations';
-import { surveyShape, responseShape } from '../../propTypes';
-import { fetchResponse, updateResponse } from '../../actions/responses';
+import { questionTypes } from 'course/survey/constants';
+import surveyTranslations from 'course/survey/translations';
+import { surveyShape, responseShape } from 'course/survey/propTypes';
+import { fetchResponse, updateResponse } from 'course/survey/actions/responses';
 import ResponseForm from './ResponseForm';
 
 const translations = defineMessages({

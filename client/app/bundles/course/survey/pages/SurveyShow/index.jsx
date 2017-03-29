@@ -5,9 +5,9 @@ import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import Subheader from 'material-ui/Subheader';
-import { showDeleteConfirmation } from '../../actions';
-import surveyTranslations from '../../translations';
-import * as surveyActions from '../../actions/surveys';
+import { showDeleteConfirmation } from 'course/survey/actions';
+import surveyTranslations from 'course/survey/translations';
+import * as surveyActions from 'course/survey/actions/surveys';
 import SurveyDetails from './SurveyDetails';
 import Section from './Section';
 

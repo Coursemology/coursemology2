@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import { mount, ReactWrapper } from 'enzyme';
 import ReactTestUtils from 'react-addons-test-utils';
 import CourseAPI from 'api/course';
-import storeCreator from '../../../store';
+import storeCreator from 'course/survey/store';
+import SurveyFormDialogue from 'course/survey/containers/SurveyFormDialogue';
 import NewSurveyButton from '../NewSurveyButton';
-import SurveyFormDialogue from '../../../containers/SurveyFormDialogue';
 
 describe('<NewSurveyButton />', () => {
   it('injects handlers that allow surveys to be created', () => {

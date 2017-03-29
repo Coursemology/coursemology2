@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import storeCreator from '../../../store';
+import storeCreator from 'course/survey/store';
 import SurveyIndex from '../index';
 
 describe('<SurveyIndex />', () => {

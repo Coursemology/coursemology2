@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import { mount } from 'enzyme';
 import ReactTestUtils from 'react-addons-test-utils';
 import CourseAPI from 'api/course';
-import storeCreator from '../../../../store';
+import storeCreator from 'course/survey/store';
+import DeleteConfirmation from 'course/survey/containers/SurveyLayout/DeleteConfirmation';
 import DeleteSectionButton from '../DeleteSectionButton';
-import DeleteConfirmation from '../../../../containers/SurveyLayout/DeleteConfirmation';
 
 describe('<DeleteSectionButton />', () => {
   it('injects handlers that allow survey sections to be deleted', () => {

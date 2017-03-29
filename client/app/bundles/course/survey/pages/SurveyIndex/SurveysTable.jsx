@@ -6,10 +6,10 @@ import { standardDateFormat } from 'lib/date-time-defaults';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
-import translations from '../../translations';
-import { surveyShape } from '../../propTypes';
-import { updateSurvey } from '../../actions/surveys';
-import RespondButton from '../../containers/RespondButton';
+import translations from 'course/survey/translations';
+import { surveyShape } from 'course/survey/propTypes';
+import { updateSurvey } from 'course/survey/actions/surveys';
+import RespondButton from 'course/survey/containers/RespondButton';
 
 const styles = {
   tableBody: {

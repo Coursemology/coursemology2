@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Card, CardText, CardTitle, CardActions } from 'material-ui/Card';
 import Subheader from 'material-ui/Subheader';
-import { surveyShape, sectionShape } from '../../../propTypes';
+import { surveyShape, sectionShape } from 'course/survey/propTypes';
 import Question from './Question';
 import NewQuestionButton from './NewQuestionButton';
 import EditSectionButton from './EditSectionButton';

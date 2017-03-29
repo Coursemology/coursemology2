@@ -11,8 +11,9 @@ export default class BaseAPI {
     if (this.client) return this.client;
 
     const headers = { Accept: 'application/json', 'X-CSRF-Token': csrfToken };
+    const params = { format: 'json' };
 
-    this.client = axios.create({ headers });
+    this.client = axios.create({ headers, params });
     return this.client;
   }
 }

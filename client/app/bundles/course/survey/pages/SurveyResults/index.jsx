@@ -8,10 +8,10 @@ import Subheader from 'material-ui/Subheader';
 import Toggle from 'material-ui/Toggle';
 import { Card, CardText } from 'material-ui/Card';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
-import surveyTranslations from '../../translations';
-import { fetchResults } from '../../actions/surveys';
+import surveyTranslations from 'course/survey/translations';
+import { fetchResults } from 'course/survey/actions/surveys';
+import { surveyShape, sectionShape } from 'course/survey/propTypes';
 import ResultsSection from './ResultsSection';
-import { surveyShape, sectionShape } from '../../propTypes';
 
 const translations = defineMessages({
   includePhantoms: {

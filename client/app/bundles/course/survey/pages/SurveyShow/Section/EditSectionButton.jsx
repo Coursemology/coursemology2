@@ -2,8 +2,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape, FormattedMessage } from 'react-intl';
 import FlatButton from 'material-ui/FlatButton';
-import { showSectionForm, updateSurveySection } from '../../../actions/sections';
-import { sectionShape } from '../../../propTypes';
+import { showSectionForm, updateSurveySection } from 'course/survey/actions/sections';
+import { sectionShape } from 'course/survey/propTypes';
 
 const translations = defineMessages({
   editSection: {
