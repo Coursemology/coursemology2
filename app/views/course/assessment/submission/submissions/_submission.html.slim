@@ -1,11 +1,17 @@
+/ @assessment.maximum_grade is a calculated column using a database query
+/ to retrieve the sum of maximum_grade of all questions in the assessment.
+/ This partial uses the controller instance variable @assessment to avoid
+/ recalculating @assessment.maximum_grade for each submission.
+/ In general, accessing instance variables in view partials should be avoided.
+
 = content_tag_for(:tr, submission) do
-  td.col-md-4.col-xs-4 = link_to_course_user(submission.course_user)
+  td.col-md-4.col-xs-4 = link_to_course_user(course_user)
   td.col-md-3.col-xs-3
     = link_to edit_course_assessment_submission_path(current_course, submission.assessment,
                                                      submission) do
       = Course::Assessment::Submission.human_attribute_name(submission.workflow_state)
   td
-    = submission.grade.to_s + ' / ' + submission.assessment.maximum_grade.to_s
+    = submission.grade.to_s + ' / ' + @assessment.maximum_grade.to_s
     - if submission.graded?
       span.text-danger title=t('.graded_not_published_warning')
         =< fa_icon 'exclamation-circle'.freeze

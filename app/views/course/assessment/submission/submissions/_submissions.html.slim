@@ -27,7 +27,7 @@ table.table.submissions
       th
   tbody
     - course_users.each do |course_user|
-      - if submissions_hash[course_user]
-        = render partial: 'submission', object: submissions_hash[course_user]
+      - if submissions_hash[course_user.id]
+        = render partial: 'submission', object: submissions_hash[course_user.id], locals: { course_user: course_user }
       - else
         = render partial: 'no_submission', locals: { course_user: course_user }

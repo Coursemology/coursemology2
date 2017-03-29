@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 module Course::Assessment::Submission::SubmissionsWorkflowStateHelper
-  # Returns a hash of course_user to submission for searching by course_user
+  # Returns a hash of course_user_id to submission
   #
-  # @return [Hash]
+  # @return [Hash] Hash of submissions by course_user_id
   def submissions_hash
-    @submissions_hash ||= @submissions.map { |s| [s.course_user, s] }.to_h
+    @submissions_hash ||= @submissions.map { |s| [s.course_user_id, s] }.to_h
   end
 
   # Whether there are any confirmed submissions from a group of students
@@ -12,7 +12,8 @@ module Course::Assessment::Submission::SubmissionsWorkflowStateHelper
   # @param [Array<CourseUser>] course_users The course_users to check
   # @return [Boolean] Whether there are any submissions
   def any_confirmed_submissions_by?(course_users)
-    course_users.map { |u| submissions_hash[u] }.any? { |s| s && s.workflow_state != 'attempting' }
+    submissions = course_users.map { |u| submissions_hash[u.id] }
+    submissions.any? { |s| s && s.workflow_state != 'attempting' }
   end
 
   # Returns the list of possible submission states in order
@@ -29,7 +30,7 @@ module Course::Assessment::Submission::SubmissionsWorkflowStateHelper
   # @return [Hash] Hash containing counts for each submission state
   def submission_state_counts(course_users)
     course_users.each_with_object(Hash.new(0)) do |course_user, hash|
-      submission = submissions_hash[course_user]
+      submission = submissions_hash[course_user.id]
       workflow_state = submission ? submission.workflow_state : 'not_started'
       hash[workflow_state] += 1
     end
