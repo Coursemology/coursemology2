@@ -69,12 +69,19 @@ RSpec.describe Course::Assessment do
       end
     end
 
+    context 'when the user is a Course Teaching Assistant' do
+      let(:user) { create(:course_teaching_assistant, course: course).user }
+      it { is_expected.to be_able_to(:manage, published_started_assessment) }
+      it { is_expected.not_to be_able_to(:publish_grades, published_started_assessment) }
+    end
+
     context 'when the user is a Course Staff' do
       let(:user) { create(:course_manager, course: course).user }
 
       # Course Assessments
       it { is_expected.to be_able_to(:manage, unpublished_assessment) }
       it { is_expected.to be_able_to(:manage, published_started_assessment) }
+      it { is_expected.to be_able_to(:publish_grades, published_started_assessment) }
       it 'can manage all questions in the assessment' do
         unpublished_assessment.questions.each do |question|
           expect(subject).to be_able_to(:manage, question.specific)

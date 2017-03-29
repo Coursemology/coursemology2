@@ -1,6 +1,6 @@
 - add_breadcrumb t('.submissions')
 = page_header format_inline_text(@assessment.title) do
-  - can_publish_grades = can?(:publish_all, Course::Assessment::Submission.new(assessment: @assessment))
+  - can_publish_grades = can?(:publish_grades, @assessment)
   - if can_publish_grades && @assessment.delayed_grade_publication?
     = link_to t('.publish'), publish_all_course_assessment_submissions_path(current_course, @assessment),
         class: ['btn', 'btn-danger'], method: :patch, data: { confirm: t('.confirm_publish') }
