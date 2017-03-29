@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { PropTypes } from 'react';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import FlatButton from 'material-ui/FlatButton';

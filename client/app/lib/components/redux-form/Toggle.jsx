@@ -9,17 +9,15 @@ const errorStyle = {
 };
 
 // Toggle implementation with an error displayed at the bottom.
-const Toggle = function ({ errorText, ...props }) {
-  return (
-    <div>
-      <MaterialToggle {...props} />
-      {
+const Toggle = ({ errorText, ...props }) => (
+  <div>
+    <MaterialToggle {...props} />
+    {
         errorText &&
         <div style={errorStyle}>{errorText}</div>
       }
-    </div>
-  );
-};
+  </div>
+);
 
 Toggle.propTypes = {
   errorText: PropTypes.string,
