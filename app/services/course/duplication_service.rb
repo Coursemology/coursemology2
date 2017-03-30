@@ -35,7 +35,12 @@ class Course::DuplicationService
   # @return [Boolean] Whether the duplication succeeded.
   def duplicate
     @new_course = duplicator.duplicate(@current_course)
-    @new_course.save
+    result = @new_course.save
+    if result
+      Course::Mailer.course_duplicated_email(@current_course, @new_course,
+                                             @current_user).deliver_now
+    end
+    result
   end
 
   private

@@ -1,0 +1,10 @@
+en:
+  course:
+    mailer:
+      course_duplicated_email:
+        subject: 'Course Duplication Completed: %{new_course}'
+        click_here: 'Click here'
+        message: >
+          Duplication of %{original_course} to %{new_course} has completed.
+
+          %{click_here} to view the duplicated course.

@@ -1,0 +1,3 @@
+= simple_format(t('.message', original_course: @original_course.title,
+                              new_course: @new_course.title,
+                              click_here: plain_link_to(t('.click_here'), course_url(@new_course, host: @new_course.instance.host))))
