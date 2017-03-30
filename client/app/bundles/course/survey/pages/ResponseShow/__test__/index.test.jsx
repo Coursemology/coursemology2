@@ -13,6 +13,9 @@ const mock = new MockAdapter(client);
 const responseData = {
   response: {
     id: 5,
+    creator: {
+      name: 'user',
+    },
     sections: [{
       id: 2,
       weight: 0,
@@ -38,6 +41,7 @@ const responseData = {
     title: 'Test Response',
     description: 'Form working?',
   },
+  isCreator: false,
 };
 
 beforeEach(() => {

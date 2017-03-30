@@ -39,11 +39,13 @@ export function fetchResponse(responseId) {
     dispatch({ type: actionTypes.LOAD_RESPONSE_REQUEST });
 
     return CourseAPI.survey.responses.fetch(responseId)
-      .then((response) => {
+      .then(response => response.data)
+      .then((data) => {
         dispatch({
           type: actionTypes.LOAD_RESPONSE_SUCCESS,
-          survey: response.data.survey,
-          response: response.data.response,
+          is_creator: data.is_creator,
+          survey: data.survey,
+          response: data.response,
         });
       })
       .catch(() => {

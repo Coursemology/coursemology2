@@ -13,8 +13,10 @@ export default (
     <Route path=":surveyId">
       <IndexRoute component={SurveyShow} />
       <Route path="results" component={SurveyResults} />
-      <Route path="responses" component={ResponseIndex} />
-      <Route path="responses/:responseId" component={ResponseShow} />
+      <Route path="responses">
+        <IndexRoute component={ResponseIndex} />
+        <Route path=":responseId" component={ResponseShow} />
+      </Route>
     </Route>
   </Route>
 );

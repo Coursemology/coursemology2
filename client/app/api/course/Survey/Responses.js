@@ -8,7 +8,7 @@ export default class ResponsesAPI extends BaseSurveyAPI {
   *       - Survey attributes
   *   },
   *   response: {
-  *     id: number, submitted_at: datetime,
+  *     id: number, submitted_at: datetime, creator_name: string
   *       - Response Attributes
   *     sections:
   *       Array.<{

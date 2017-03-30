@@ -18,6 +18,7 @@ export default function (state = initialState, action) {
     case actionTypes.LOAD_RESPONSE_SUCCESS: {
       return {
         response: sortResponseElements(action.response),
+        isCreator: action.is_creator,
         isLoading: false,
       };
     }

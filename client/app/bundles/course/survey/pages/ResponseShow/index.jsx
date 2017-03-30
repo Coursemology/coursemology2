@@ -3,11 +3,13 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { browserHistory } from 'react-router';
+import moment from 'moment';
 import IconButton from 'material-ui/IconButton';
 import { Card, CardText } from 'material-ui/Card';
 import TitleBar from 'lib/components/TitleBar';
 import Subheader from 'material-ui/Subheader';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import { Table, TableBody, TableRow, TableHeaderColumn, TableRowColumn } from 'material-ui/Table';
 import { questionTypes } from 'course/survey/constants';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
@@ -16,6 +18,10 @@ import LoadingIndicator from 'course/survey/components/LoadingIndicator';
 import ResponseForm from './ResponseForm';
 
 const translations = defineMessages({
+  notSubmitted: {
+    id: 'course.surveys.ResponseShow.notSubmitted',
+    defaultMessage: 'Not submitted',
+  },
   saveSuccess: {
     id: 'course.surveys.ResponseShow.saveSuccess',
     defaultMessage: 'Your response has been saved.',
@@ -34,10 +40,18 @@ const translations = defineMessages({
   },
 });
 
+const styles = {
+  submissionInfoTable: {
+    marginTop: 10,
+    maxWidth: 600,
+  },
+};
+
 class ResponseShow extends React.Component {
   static propTypes = {
     surveys: PropTypes.arrayOf(surveyShape),
     response: responseShape,
+    isCreator: PropTypes.bool,
     isLoading: PropTypes.bool.isRequired,
     params: PropTypes.shape({
       courseId: PropTypes.string.isRequired,
@@ -104,12 +118,36 @@ class ResponseShow extends React.Component {
     );
   }
 
+  renderSubmissionInfo() {
+    const { response } = this.props;
+    return (
+      <Table style={styles.submissionInfoTable}>
+        <TableBody displayRowCheckbox={false}>
+          <TableRow selectable={false}>
+            <TableHeaderColumn>Student</TableHeaderColumn>
+            <TableRowColumn>{response.creator_name}</TableRowColumn>
+          </TableRow>
+          <TableRow selectable={false}>
+            <TableHeaderColumn>Submitted At</TableHeaderColumn>
+            <TableRowColumn>
+              {response.submitted_at ?
+                moment(response.submitted_at).format('DD MMM YYYY, h:mma') :
+                <FormattedMessage {...translations.notSubmitted} />
+              }
+            </TableRowColumn>
+          </TableRow>
+        </TableBody>
+      </Table>
+    );
+  }
+
   renderBody() {
-    const { response, isLoading } = this.props;
+    const { isCreator, response, isLoading } = this.props;
     if (isLoading) { return <LoadingIndicator />; }
 
     return (
       <div>
+        { isCreator ? this.renderSubmissionInfo() : null }
         <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
         <ResponseForm
           initialValues={ResponseShow.buildInitialValues(response)}
@@ -124,6 +162,7 @@ class ResponseShow extends React.Component {
     const { surveys, params: { courseId, surveyId } } = this.props;
     const survey = surveys && surveys.length > 0 ?
                    surveys.find(s => String(s.id) === String(surveyId)) : {};
+
     return (
       <div>
         <TitleBar

@@ -8,7 +8,7 @@ import { responseShape } from 'course/survey/propTypes';
 import ResponseSection from './ResponseSection';
 
 const styles = {
-  submitButton: {
+  formButton: {
     marginRight: 10,
   },
 };
@@ -84,7 +84,6 @@ const validate = (values, props) => {
   });
   return { sections: sectionsErrors };
 };
-
 
 class ResponseForm extends React.Component {
   static propTypes = {
