@@ -19,7 +19,7 @@ $course-assessment-submission-answer-correct-border-color: $state-success-border
 $course-assessment-submission-answer-correct-border-radius: $border-radius-base !default;
 $course-assessment-submission-answer-correct-bg: $state-success-bg !default;
 $course-assessment-submission-answer-correct-border-text: $state-success-text !default;
-$course-assessment-submission-not-started: $red !default;
+$course-assessment-submission-not-started-text: $red !default;
 $course-discussion-post-border: 1px solid $panel-default-border !default;
 $course-discussion-post-border-color: $panel-default-border !default;
 $course-discussion-post-border-radius: $border-radius-base !default;
@@ -30,6 +30,13 @@ $course-forum-unread-highlight: #f8e3e3 !default;
 $course-video-not-started-bg: $gray-lighter !default;
 $course-video-submission-not-started: $red !default;
 
+$course-assessment-submission-state-colors: (
+  not-started: #ffaaaa,
+  attempting: #fffbaa,
+  submitted: #dddddd,
+  graded: #aaeeff,
+  published: #adffaa
+);
 
 //== Fonts
 //

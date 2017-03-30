@@ -2,21 +2,21 @@
 = page_header format_inline_text(@assessment.title) do
   - can_publish_grades = can?(:publish_grades, @assessment)
   - if can_publish_grades && @assessment.delayed_grade_publication?
-    = link_to t('.publish'), publish_all_course_assessment_submissions_path(current_course, @assessment),
-        class: ['btn', 'btn-danger'], method: :patch, data: { confirm: t('.confirm_publish') }
+    = link_to publish_all_course_assessment_submissions_path(current_course, @assessment),
+        class: ['btn', 'btn-success'], method: :patch, data: { confirm: t('.confirm_publish') } do
+      = t('.publish')
 
-- submissions = @submissions.map { |s| [s.course_user, s] }.to_h
 - types = Course::Assessment::Submission::ZipDownloadService::STUDENTS
 
 - if !@my_students.empty?
-  = render partial: 'submissions', object: submissions,
+  = render partial: 'submissions',
       locals: { course_users: @my_students, title: t('.my_student_header'), students: types[:my] }
 
 - students = @course_students.without_phantom_users
-= render partial: 'submissions', object: submissions,
+= render partial: 'submissions',
     locals: { course_users: students, title: t('.student_header'), students: nil }
 
 - other_users = @course_students - students
-= render partial: 'submissions', object: submissions,
+= render partial: 'submissions',
     locals: { course_users: other_users, title: t('.other_header'), students: types[:phantom] }
 end

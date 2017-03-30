@@ -1,9 +1,20 @@
 h3
   = title
-  - if @assessment.downloadable? && course_users.map { |u| submissions[u] }.any? { |s| s && s.workflow_state != 'attempting' }
+  - if @assessment.downloadable? && any_confirmed_submissions_by?(course_users)
     div.pull-right
       = link_to t('.download'), download_all_course_assessment_submissions_path(current_course, @assessment, students: students),
             class: ['btn', 'btn-primary', 'download']
+
+- if students.nil? && course_users.any?
+  br
+  div.submission-state-histogram
+    - workflow_state_counts = submission_state_counts(course_users)
+    - submission_state_names.each do |state|
+      - count = workflow_state_counts[state]
+      - if count > 0
+        div class="#{state.dasherize}" style="flex: #{count}" title=Course::Assessment::Submission.human_attribute_name(state)
+          = count
+  br
 
 table.table.submissions
   thead
@@ -16,7 +27,7 @@ table.table.submissions
       th
   tbody
     - course_users.each do |course_user|
-      - if submissions[course_user]
-        = render partial: 'submission', object: submissions[course_user]
+      - if submissions_hash[course_user.id]
+        = render partial: 'submission', object: submissions_hash[course_user.id], locals: { course_user: course_user }
       - else
         = render partial: 'no_submission', locals: { course_user: course_user }
