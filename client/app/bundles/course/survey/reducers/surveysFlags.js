@@ -1,6 +1,7 @@
 import actionTypes from '../constants';
 
 const initialState = {
+  isLoadingSurvey: false,
   isLoadingSurveys: false,
   canCreate: false,
   isQuestionMoved: false,
@@ -10,6 +11,13 @@ export default function (state = initialState, action) {
   const { type } = action;
 
   switch (type) {
+    case actionTypes.LOAD_SURVEY_REQUEST: {
+      return { ...state, isLoadingSurvey: true };
+    }
+    case actionTypes.LOAD_SURVEY_FAILURE:
+    case actionTypes.LOAD_SURVEY_SUCCESS: {
+      return { ...state, isLoadingSurvey: false };
+    }
     case actionTypes.LOAD_SURVEYS_REQUEST: {
       return { ...state, isLoadingSurveys: true };
     }

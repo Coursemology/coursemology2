@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { browserHistory } from 'react-router';
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import { Card, CardText } from 'material-ui/Card';
@@ -18,13 +18,6 @@ import { surveyShape } from 'course/survey/propTypes';
 import { updateSurvey } from 'course/survey/actions/surveys';
 import RespondButton from 'course/survey/containers/RespondButton';
 import NewSectionButton from './NewSectionButton';
-
-const translations = defineMessages({
-  loading: {
-    id: 'course.surveys.SurveyDetails.loading',
-    defaultMessage: 'Loading Survey...',
-  },
-});
 
 const styles = {
   table: {
@@ -110,12 +103,63 @@ class SurveyDetails extends React.Component {
     );
   }
 
+  renderBody() {
+    const { survey, courseId } = this.props;
+    if (!survey) { return null; }
+    return (
+      <Card>
+        <div>
+          <Table style={styles.table}>
+            <TableBody displayRowCheckbox={false}>
+              <TableRow>
+                <TableRowColumn>
+                  <FormattedMessage {...surveyTranslations.opensAt} />
+                </TableRowColumn>
+                <TableRowColumn>
+                  {formatDateTime(survey.start_at)}
+                </TableRowColumn>
+              </TableRow>
+              <TableRow>
+                <TableRowColumn>
+                  <FormattedMessage {...surveyTranslations.expiresAt} />
+                </TableRowColumn>
+                <TableRowColumn>
+                  {formatDateTime(survey.end_at)}
+                </TableRowColumn>
+              </TableRow>
+              <TableRow>
+                <TableRowColumn>
+                  <FormattedMessage {...surveyTranslations.points} />
+                </TableRowColumn>
+                <TableRowColumn>
+                  {survey.base_exp}
+                </TableRowColumn>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+        {this.renderPublishToggle()}
+        {this.renderDescription()}
+        <CardText>
+          { survey.canCreateSection ? <NewSectionButton /> : null }
+          {
+            survey.canViewResults ?
+              <RaisedButton
+                style={styles.resultsButton}
+                label={<FormattedMessage {...surveyTranslations.results} />}
+                onTouchTap={() => browserHistory.push(
+                `/courses/${courseId}/surveys/${survey.id}/results`
+              )}
+              /> : null
+          }
+          <RespondButton {...{ survey, courseId }} />
+        </CardText>
+      </Card>
+    );
+  }
+
   render() {
     const { survey, courseId } = this.props;
-    if (!survey) {
-      return <p><FormattedMessage {...translations.loading} /></p>;
-    }
-
     return (
       <div>
         <TitleBar
@@ -124,54 +168,7 @@ class SurveyDetails extends React.Component {
           iconElementLeft={<IconButton><ArrowBack /></IconButton>}
           onLeftIconButtonTouchTap={() => browserHistory.push(`/courses/${courseId}/surveys`)}
         />
-        <Card>
-          <div>
-            <Table style={styles.table}>
-              <TableBody displayRowCheckbox={false}>
-                <TableRow>
-                  <TableRowColumn>
-                    <FormattedMessage {...surveyTranslations.opensAt} />
-                  </TableRowColumn>
-                  <TableRowColumn>
-                    {formatDateTime(survey.start_at)}
-                  </TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn>
-                    <FormattedMessage {...surveyTranslations.expiresAt} />
-                  </TableRowColumn>
-                  <TableRowColumn>
-                    {formatDateTime(survey.end_at)}
-                  </TableRowColumn>
-                </TableRow>
-                <TableRow>
-                  <TableRowColumn>
-                    <FormattedMessage {...surveyTranslations.points} />
-                  </TableRowColumn>
-                  <TableRowColumn>
-                    {survey.base_exp}
-                  </TableRowColumn>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </div>
-          {this.renderPublishToggle()}
-          {this.renderDescription()}
-          <CardText>
-            { survey.canCreateSection ? <NewSectionButton /> : null }
-            {
-              survey.canViewResults ?
-                <RaisedButton
-                  style={styles.resultsButton}
-                  label={<FormattedMessage {...surveyTranslations.results} />}
-                  onTouchTap={() => browserHistory.push(
-                  `/courses/${courseId}/surveys/${survey.id}/results`
-                )}
-                /> : null
-            }
-            <RespondButton {...{ survey, courseId }} />
-          </CardText>
-        </Card>
+        { this.renderBody() }
       </div>
     );
   }
