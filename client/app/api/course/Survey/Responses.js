@@ -43,6 +43,24 @@ export default class ResponsesAPI extends BaseSurveyAPI {
   }
 
   /**
+  * Fetches all student responses for the current survey
+  *
+  * @return {Promise}
+  * success response: {
+  *   responses: Array.<{
+  *     started: bool, submitted_at: string, path: string,
+  *     course_user: { id: number, name: string, phantom: bool, path: string },
+  *   }>,
+  *     - Expect responses to be sorted by course_user name
+  *   survey: { id: number, title: string, ...etc }
+  * }
+  * error response: {}
+  */
+  index() {
+    return this.getClient().get(this._getUrlPrefix());
+  }
+
+  /**
   * Creates a blank survey response
   *
   * @param {number} surveyId

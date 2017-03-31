@@ -19,7 +19,7 @@ const styles = {
   buttonsColumn: {
     display: 'flex',
   },
-  resultsButton: {
+  button: {
     marginRight: 15,
   },
 };
@@ -84,7 +84,7 @@ class SurveysTable extends React.Component {
                 </TableHeaderColumn> :
                 null
             }
-            <TableHeaderColumn colSpan={canCreate ? 3 : 2} />
+            <TableHeaderColumn colSpan={canCreate ? 4 : 2} />
           </TableRow>
         </TableHeader>
         <TableBody
@@ -115,15 +115,26 @@ class SurveysTable extends React.Component {
                     </TableHeaderColumn> :
                     null
                 }
-                <TableHeaderColumn colSpan={canCreate ? 3 : 2}>
+                <TableHeaderColumn colSpan={canCreate ? 4 : 2}>
                   <div style={styles.buttonsColumn}>
                     {
                       survey.canViewResults ?
                         <RaisedButton
-                          style={styles.resultsButton}
+                          style={styles.button}
                           label={<FormattedMessage {...translations.results} />}
                           onTouchTap={() => browserHistory.push(
                             `/courses/${courseId}/surveys/${survey.id}/results`
+                          )}
+                        /> :
+                        null
+                    }
+                    {
+                      survey.canViewResults ?
+                        <RaisedButton
+                          style={styles.button}
+                          label={<FormattedMessage {...translations.responses} />}
+                          onTouchTap={() => browserHistory.push(
+                            `/courses/${courseId}/surveys/${survey.id}/responses`
                           )}
                         /> :
                         null

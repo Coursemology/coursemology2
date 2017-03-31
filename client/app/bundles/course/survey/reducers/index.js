@@ -9,10 +9,12 @@ import deleteConfirmation from './deleteConfirmation';
 import notification from './notification';
 import surveysFlags from './surveysFlags';
 import results from './results';
+import responses from './responses';
 
 
 export default combineReducers({
   surveys,
+  responses,
   results,
   surveyForm,
   questionForm,

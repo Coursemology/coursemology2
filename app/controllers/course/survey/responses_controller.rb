@@ -2,6 +2,15 @@
 class Course::Survey::ResponsesController < Course::Survey::SurveysController
   load_and_authorize_resource :response, through: :survey, class: Course::Survey::Response.name
 
+  def index
+    authorize!(:manage, @survey)
+    @course_students = current_course.course_users.students.order_alphabetically
+    respond_to do |format|
+      format.html { render 'course/survey/surveys/index' }
+      format.json
+    end
+  end
+
   def create
     if current_course_user
       build_response

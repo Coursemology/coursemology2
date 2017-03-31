@@ -5,6 +5,7 @@ import SurveyIndex from './pages/SurveyIndex';
 import SurveyShow from './pages/SurveyShow';
 import SurveyResults from './pages/SurveyResults';
 import ResponseShow from './pages/ResponseShow';
+import ResponseIndex from './pages/ResponseIndex';
 
 export default (
   <Route path="courses/:courseId/surveys" component={SurveyLayout}>
@@ -12,6 +13,7 @@ export default (
     <Route path=":surveyId">
       <IndexRoute component={SurveyShow} />
       <Route path="results" component={SurveyResults} />
+      <Route path="responses" component={ResponseIndex} />
       <Route path="responses/:responseId" component={ResponseShow} />
     </Route>
   </Route>

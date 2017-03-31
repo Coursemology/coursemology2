@@ -23,7 +23,7 @@ const styles = {
   table: {
     maxWidth: 600,
   },
-  resultsButton: {
+  button: {
     marginRight: 15,
   },
 };
@@ -145,10 +145,20 @@ class SurveyDetails extends React.Component {
           {
             survey.canViewResults ?
               <RaisedButton
-                style={styles.resultsButton}
+                style={styles.button}
                 label={<FormattedMessage {...surveyTranslations.results} />}
                 onTouchTap={() => browserHistory.push(
                 `/courses/${courseId}/surveys/${survey.id}/results`
+              )}
+              /> : null
+          }
+          {
+            survey.canViewResults ?
+              <RaisedButton
+                style={styles.button}
+                label={<FormattedMessage {...surveyTranslations.responses} />}
+                onTouchTap={() => browserHistory.push(
+                `/courses/${courseId}/surveys/${survey.id}/responses`
               )}
               /> : null
           }
