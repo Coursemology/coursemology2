@@ -7,10 +7,11 @@
   "rules": {
     // See https://github.com/yannickcr/eslint-plugin-react/issues/847
     "react/no-unused-prop-types": ["warn", { "skipShapeProps": true }],
-    "new-cap": [2, { "capIsNewExceptions": ["Set"] }],
     "react/require-default-props": "off",
     "react/no-array-index-key": "warn",
-    "import/no-extraneous-dependencies": ["warn", { devDependencies: true }],
+    "import/no-extraneous-dependencies": ["warn", { "devDependencies": true }],
+    "max-len": ["warn", 120],
+    "new-cap": ["error", { "capIsNewExceptions": ["Set"] }],
     "comma-dangle": ["error", {
         "arrays": "always-multiline",
         "objects": "always-multiline",
@@ -18,11 +19,11 @@
         "exports": "always-multiline",
         "functions": "never",
     }],
-    "no-multi-str": 0,
+    "no-multi-str": "off",
     // Use `_` to indicate that the method is private
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
-    "no-underscore-dangle": 0,
-    "func-names": 0,
+    "no-underscore-dangle": "off",
+    "func-names": "off"
   },
   "globals": {
     "window": true,
