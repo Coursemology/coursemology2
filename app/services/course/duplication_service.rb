@@ -32,15 +32,14 @@ class Course::DuplicationService
   # Duplicate the course with the duplicator.
   # Do not just pass in @selected_objects or object parents could be set incorrectly.
   #
-  # @return [Boolean] Whether the duplication succeeded.
+  # @return [Course] The duplicate course
   def duplicate
     @new_course = duplicator.duplicate(@current_course)
-    result = @new_course.save
-    if result
+    if @new_course.save
       Course::Mailer.course_duplicated_email(@current_course, @new_course,
                                              @current_user).deliver_now
     end
-    result
+    @new_course
   end
 
   private

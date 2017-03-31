@@ -5,10 +5,13 @@ class Course::DuplicationsController < Course::ComponentController
   def show; end
 
   def create
-    if duplicate
-      redirect_to course_duplication_path(current_course), success: t('.duplicating')
-    else
-      redirect_to course_duplication_path(current_course), danger: t('.failed')
+    # when selectable duplication is implemented, pass in additional arrays for all_objects
+    # and selected_objects
+    job = Course::DuplicationJob.perform_later(current_course, current_user,
+                                               create_duplication_params).job
+    respond_to do |format|
+      format.html { redirect_to(job_path(job)) }
+      format.json { render json: { redirect_url: job_path(job) } }
     end
   end
 
@@ -22,15 +25,5 @@ class Course::DuplicationsController < Course::ComponentController
 
   def create_duplication_params # :nodoc
     params.require(:duplication).permit(:new_course_start_date, :new_course_title)
-  end
-
-  # Creates a duplication job for the course
-  #
-  # @return [Boolean] True if the duplication was successful.
-  def duplicate
-    # when selectable duplication is implemented, pass in additional arrays for all_objects
-    # and selected_objects
-    job = Course::DuplicationJob.perform_later(current_course, current_user,
-                                               create_duplication_params).job
   end
 end

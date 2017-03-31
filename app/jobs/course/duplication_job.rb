@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::DuplicationJob < ApplicationJob
   include TrackableJob
+  include Rails.application.routes.url_helpers
   queue_as :lowest
 
   protected
@@ -15,8 +16,10 @@ class Course::DuplicationJob < ApplicationJob
   def perform_tracked(current_course, current_user, duplication_params = {},
                       all_objects = [], selected_objects = [])
     ActsAsTenant.without_tenant do
-      Course::DuplicationService.duplicate(current_course, current_user, duplication_params,
-                                           all_objects, selected_objects)
+      new_course =
+        Course::DuplicationService.duplicate(current_course, current_user, duplication_params,
+                                             all_objects, selected_objects)
+      redirect_to course_path(new_course) if new_course.valid?
     end
   end
 end

@@ -40,7 +40,8 @@ class Course::Mailer < ApplicationMailer
 
   # Send a notification email to a user informing the completion of his course duplication.
   #
-  # @param [Course] course The course that was duplicated.
+  # @param [Course] original_course The original course that was duplicated.
+  # @param [Course] new_course The resulting course of the duplication.
   # @param [User] user The user who performed the duplication.
   def course_duplicated_email(original_course, new_course, user)
     @original_course = original_course
