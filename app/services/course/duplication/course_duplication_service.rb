@@ -14,8 +14,7 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
     # @param [Array] selected_objects The objects to duplicate.
     # @return [Course] The duplicated course
     def duplicate_course(current_course, options = {}, all_objects = [], selected_objects = [])
-      # TODO: To remove survey from excluded objects after survey duplication is implemented
-      excluded_objects = all_objects - selected_objects | current_course.surveys
+      excluded_objects = all_objects - selected_objects
       options[:excluded_objects] = excluded_objects
       options[:current_course] = current_course
       options[:time_shift] =
