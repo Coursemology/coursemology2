@@ -34,7 +34,8 @@ class SurveyIndex extends React.Component {
   }
 
   renderBody() {
-    const { surveys, params: { courseId } } = this.props;
+    const { surveys, isLoading, params: { courseId } } = this.props;
+    if (isLoading) { return <LoadingIndicator />; }
     if (surveys.length < 1) {
       return <Subheader><FormattedMessage {...translations.noSurveys} /></Subheader>;
     }
@@ -42,7 +43,6 @@ class SurveyIndex extends React.Component {
   }
 
   render() {
-    if (this.props.isLoading) { return <LoadingIndicator />; }
     return (
       <div>
         <TitleBar

@@ -99,8 +99,9 @@ class SurveyShow extends React.Component {
   }
 
   renderBody(survey) {
-    const { intl } = this.props;
+    const { intl, isLoading } = this.props;
     const { sections, canUpdate } = survey;
+    if (isLoading) { return <LoadingIndicator />; }
     if (!canUpdate) { return null; }
     if (!sections || sections.length < 1) {
       return <Subheader>{ intl.formatMessage(translations.empty) }</Subheader>;
@@ -118,10 +119,7 @@ class SurveyShow extends React.Component {
   }
 
   render() {
-    const { surveys, isLoading, params: { courseId, surveyId } } = this.props;
-
-    if (isLoading) { return <LoadingIndicator />; }
-
+    const { surveys, params: { courseId, surveyId } } = this.props;
     const survey = surveys && surveys.length > 0 ?
                    surveys.find(s => String(s.id) === String(surveyId)) : {};
     return (

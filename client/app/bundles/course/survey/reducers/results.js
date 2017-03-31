@@ -3,7 +3,6 @@ import { sorts, sortResultsSectionElements } from '../utils';
 
 const initialState = {
   isLoading: false,
-  survey: {},
   sections: [],
 };
 
@@ -15,7 +14,6 @@ export default function (state = initialState, action) {
     case actionTypes.LOAD_SURVEY_RESULTS_SUCCESS: {
       return {
         isLoading: false,
-        survey: action.survey,
         sections: action.sections ?
           action.sections.map(sortResultsSectionElements).sort(sorts.byWeight) : [],
       };

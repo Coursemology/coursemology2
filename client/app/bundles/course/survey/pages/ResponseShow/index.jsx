@@ -36,7 +36,7 @@ const translations = defineMessages({
 
 class ResponseShow extends React.Component {
   static propTypes = {
-    survey: surveyShape,
+    surveys: PropTypes.arrayOf(surveyShape),
     response: responseShape,
     isLoading: PropTypes.bool.isRequired,
     params: PropTypes.shape({
@@ -87,15 +87,6 @@ class ResponseShow extends React.Component {
     return { response: { answers_attributes, submit: data.submit } };
   }
 
-  static renderDescription(survey) {
-    if (!survey.description) { return null; }
-    return (
-      <Card>
-        <CardText>{survey.description}</CardText>
-      </Card>
-    );
-  }
-
   componentDidMount() {
     const { dispatch, params: { responseId } } = this.props;
     dispatch(fetchResponse(responseId));
@@ -113,19 +104,12 @@ class ResponseShow extends React.Component {
     );
   }
 
-  render() {
-    const { survey, response, isLoading, params: { courseId } } = this.props;
-
+  renderBody() {
+    const { response, isLoading } = this.props;
     if (isLoading) { return <LoadingIndicator />; }
 
     return (
       <div>
-        <TitleBar
-          title={survey.title}
-          iconElementLeft={<IconButton><ArrowBack /></IconButton>}
-          onLeftIconButtonTouchTap={() => browserHistory.push(`/courses/${courseId}/surveys`)}
-        />
-        { ResponseShow.renderDescription(survey) }
         <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
         <ResponseForm
           initialValues={ResponseShow.buildInitialValues(response)}
@@ -135,8 +119,28 @@ class ResponseShow extends React.Component {
       </div>
     );
   }
+
+  render() {
+    const { surveys, params: { courseId, surveyId } } = this.props;
+    const survey = surveys && surveys.length > 0 ?
+                   surveys.find(s => String(s.id) === String(surveyId)) : {};
+    return (
+      <div>
+        <TitleBar
+          title={survey.title}
+          iconElementLeft={<IconButton><ArrowBack /></IconButton>}
+          onLeftIconButtonTouchTap={() => browserHistory.push(`/courses/${courseId}/surveys`)}
+        />
+        { survey.description ? <Card><CardText>{survey.description}</CardText></Card> : null }
+        { this.renderBody() }
+      </div>
+    );
+  }
 }
 
 export default connect(
-  state => state.responseForm
+  state => ({
+    ...state.responseForm,
+    surveys: state.surveys,
+  })
 )(ResponseShow);

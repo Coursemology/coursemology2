@@ -37,7 +37,7 @@ class SurveyResults extends React.Component {
       courseId: PropTypes.string.isRequired,
       surveyId: PropTypes.string.isRequired,
     }).isRequired,
-    survey: surveyShape,
+    surveys: PropTypes.arrayOf(surveyShape),
     sections: PropTypes.arrayOf(sectionShape),
   }
 
@@ -85,8 +85,9 @@ class SurveyResults extends React.Component {
   }
 
   renderBody() {
-    const { sections } = this.props;
+    const { sections, isLoading } = this.props;
     const noSections = sections && sections.length < 1;
+    if (isLoading) { return <LoadingIndicator />; }
     if (noSections) {
       return <Subheader><FormattedMessage {...translations.noSections} /></Subheader>;
     }
@@ -128,8 +129,9 @@ class SurveyResults extends React.Component {
   }
 
   render() {
-    const { survey, isLoading, params: { courseId } } = this.props;
-    if (isLoading) { return <LoadingIndicator />; }
+    const { surveys, params: { courseId, surveyId } } = this.props;
+    const survey = surveys && surveys.length > 0 ?
+                   surveys.find(s => String(s.id) === String(surveyId)) : {};
     return (
       <div>
         <TitleBar
@@ -142,5 +144,8 @@ class SurveyResults extends React.Component {
     );
   }
 }
-
-export default connect(state => state.results)(SurveyResults);
+const mapStateToProps = state => ({
+  ...state.results,
+  surveys: state.surveys,
+});
+export default connect(mapStateToProps)(SurveyResults);
