@@ -66,6 +66,9 @@ const styles = {
     whiteSpace: 'normal',
     wordWrap: 'break-word',
   },
+  tableWrapper: {
+    overflow: 'inherit',
+  },
 };
 
 const translations = defineMessages({
@@ -275,7 +278,7 @@ class ResultsQuestion extends React.Component {
     const sortMethod = this.state.sortByPercentage ? sortByCount : byWeight;
 
     return (
-      <Table>
+      <Table wrapperStyle={styles.tableWrapper}>
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn>
