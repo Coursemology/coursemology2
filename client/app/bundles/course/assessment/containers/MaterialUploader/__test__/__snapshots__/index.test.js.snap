@@ -3,6 +3,7 @@
 exports[`<Material /> renders the material 1`] = `
 <ListItem
   autoGenerateNestedIndicator={true}
+  containerElement="span"
   disableKeyboardFocus={true}
   disabled={false}
   initiallyOpen={false}
@@ -119,6 +120,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
     <FlatButton
       containerElement="label"
       disabled={false}
+      fullWidth={false}
       icon={<ContentAdd />}
       label="Add Files"
       labelPosition="after"
