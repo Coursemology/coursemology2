@@ -10,6 +10,7 @@
     "new-cap": [2, { "capIsNewExceptions": ["Set"] }],
     "react/require-default-props": "off",
     "react/no-array-index-key": "warn",
+    "import/no-extraneous-dependencies": ["warn", { devDependencies: true }],
     "comma-dangle": ["error", {
         "arrays": "always-multiline",
         "objects": "always-multiline",
