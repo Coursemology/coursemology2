@@ -8,25 +8,27 @@ import Subheader from 'material-ui/Subheader';
 import { showDeleteConfirmation } from 'course/survey/actions';
 import surveyTranslations from 'course/survey/translations';
 import * as surveyActions from 'course/survey/actions/surveys';
+import LoadingIndicator from 'course/survey/components/LoadingIndicator';
 import SurveyDetails from './SurveyDetails';
 import Section from './Section';
 
 const translations = defineMessages({
   editSurvey: {
-    id: 'course.surveys.Survey.editSurvey',
+    id: 'course.surveys.SurveyShow.editSurvey',
     defaultMessage: 'Edit Survey',
   },
   deleteSurvey: {
-    id: 'course.surveys.Survey.deleteSurvey',
+    id: 'course.surveys.SurveyShow.deleteSurvey',
     defaultMessage: 'Delete Survey',
   },
   empty: {
-    id: 'course.surveys.Survey.empty',
+    id: 'course.surveys.SurveyShow.empty',
     defaultMessage: 'This survey does not have any questions.',
   },
 });
 
 class SurveyShow extends React.Component {
+
   componentDidMount() {
     const {
       dispatch,
@@ -96,18 +98,14 @@ class SurveyShow extends React.Component {
     return functions;
   }
 
-  renderSections(survey) {
-    const { intl } = this.props;
+  renderBody(survey) {
+    const { intl, isLoading } = this.props;
     const { sections, canUpdate } = survey;
-
-    if (!canUpdate) {
-      return null;
-    }
-
+    if (isLoading) { return <LoadingIndicator />; }
+    if (!canUpdate) { return null; }
     if (!sections || sections.length < 1) {
       return <Subheader>{ intl.formatMessage(translations.empty) }</Subheader>;
     }
-
     return (
       <div>
         <Subheader>{ intl.formatMessage(surveyTranslations.questions) }</Subheader>
@@ -130,7 +128,7 @@ class SurveyShow extends React.Component {
           {...{ survey, courseId, surveyId }}
           adminFunctions={this.adminFunctions(survey)}
         />
-        { this.renderSections(survey) }
+        { this.renderBody(survey) }
       </div>
     );
   }
@@ -144,10 +142,12 @@ SurveyShow.propTypes = {
   }).isRequired,
   surveys: PropTypes.arrayOf(PropTypes.object).isRequired,
   intl: intlShape.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 
-export const ConnectedSurveyShow = connect(state => ({ surveys: state.surveys }))(
-  injectIntl(SurveyShow)
-);
-
+const mapStateToProps = state => ({
+  surveys: state.surveys,
+  isLoading: state.surveysFlags.isLoadingSurvey,
+});
+export const ConnectedSurveyShow = connect(mapStateToProps)(injectIntl(SurveyShow));
 export default DragDropContext(HTML5Backend)(ConnectedSurveyShow);

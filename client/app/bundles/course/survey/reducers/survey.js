@@ -4,6 +4,7 @@ import { updateOrAppend, deleteIfFound } from './utils';
 import { sortSurveyElements } from '../utils';
 
 const initialState = {
+  sections: [],
   draggedQuestion: {
     index: null,
     sectionIndex: null,

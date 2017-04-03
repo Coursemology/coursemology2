@@ -61,7 +61,7 @@ describe('<ResponseShow />', () => {
       childContextTypes: { muiTheme: React.PropTypes.object, intl: intlShape },
     };
     const responseShow = mount(
-      <ResponseShow params={{ courseId, responseId: responseId.toString() }} />,
+      <ResponseShow params={{ courseId, surveyId, responseId: responseId.toString() }} />,
       contextOptions
     );
     await sleep(1);

@@ -3,7 +3,6 @@ import { sortResponseElements } from '../utils';
 
 const initialState = {
   isLoading: false,
-  survey: {},
   response: {},
 };
 
@@ -18,7 +17,6 @@ export default function (state = initialState, action) {
     case actionTypes.CREATE_RESPONSE_SUCCESS:
     case actionTypes.LOAD_RESPONSE_SUCCESS: {
       return {
-        survey: action.survey,
         response: sortResponseElements(action.response),
         isLoading: false,
       };

@@ -12,6 +12,9 @@ const styles = {
   card: {
     marginBottom: 15,
   },
+  subtitle: {
+    paddingRight: 64,
+  },
 };
 
 const translations = defineMessages({
@@ -46,6 +49,7 @@ class SectionCard extends React.Component {
         <CardTitle
           title={section.title}
           subtitle={section.description}
+          subtitleStyle={styles.subtitle}
           showExpandableButton={section.questions.length > 0}
         />
         <CardText>

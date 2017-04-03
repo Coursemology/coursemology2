@@ -6,6 +6,7 @@ import TitleBar from 'lib/components/TitleBar';
 import { fetchSurveys } from 'course/survey/actions/surveys';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
+import LoadingIndicator from 'course/survey/components/LoadingIndicator';
 import SurveysTable from './SurveysTable';
 import NewSurveyButton from './NewSurveyButton';
 
@@ -18,8 +19,10 @@ const translations = defineMessages({
 
 class SurveyIndex extends React.Component {
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
     surveys: PropTypes.arrayOf(surveyShape),
+    isLoading: PropTypes.bool.isRequired,
+
+    dispatch: PropTypes.func.isRequired,
     params: PropTypes.shape({
       courseId: PropTypes.string.isRequired,
     }),
@@ -30,22 +33,31 @@ class SurveyIndex extends React.Component {
     dispatch(fetchSurveys());
   }
 
+  renderBody() {
+    const { surveys, isLoading, params: { courseId } } = this.props;
+    if (isLoading) { return <LoadingIndicator />; }
+    if (surveys.length < 1) {
+      return <Subheader><FormattedMessage {...translations.noSurveys} /></Subheader>;
+    }
+    return <SurveysTable {...{ courseId }} />;
+  }
+
   render() {
-    const { surveys, params: { courseId } } = this.props;
     return (
       <div>
         <TitleBar
           title={<FormattedMessage {...surveyTranslations.surveys} />}
         />
-        {
-          surveys.length > 0 ?
-            <SurveysTable {...{ courseId }} /> :
-            <Subheader><FormattedMessage {...translations.noSurveys} /></Subheader>
-        }
+        { this.renderBody() }
         <NewSurveyButton />
       </div>
     );
   }
 }
 
-export default connect(state => state)(SurveyIndex);
+const mapStateToProps = state => ({
+  surveys: state.surveys,
+  isLoading: state.surveysFlags.isLoadingSurveys,
+});
+
+export default connect(mapStateToProps)(SurveyIndex);

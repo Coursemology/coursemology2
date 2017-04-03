@@ -12,6 +12,7 @@ import { questionTypes } from 'course/survey/constants';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 import { fetchResponse, updateResponse } from 'course/survey/actions/responses';
+import LoadingIndicator from 'course/survey/components/LoadingIndicator';
 import ResponseForm from './ResponseForm';
 
 const translations = defineMessages({
@@ -31,15 +32,11 @@ const translations = defineMessages({
     id: 'course.surveys.ResponseShow.submitFailure',
     defaultMessage: 'Submit Failed.',
   },
-  loading: {
-    id: 'course.surveys.ResponseShow.loading',
-    defaultMessage: 'Loading survey questions...',
-  },
 });
 
 class ResponseShow extends React.Component {
   static propTypes = {
-    survey: surveyShape,
+    surveys: PropTypes.arrayOf(surveyShape),
     response: responseShape,
     isLoading: PropTypes.bool.isRequired,
     params: PropTypes.shape({
@@ -90,21 +87,9 @@ class ResponseShow extends React.Component {
     return { response: { answers_attributes, submit: data.submit } };
   }
 
-  static renderDescription(survey) {
-    if (!survey.description) { return null; }
-    return (
-      <Card>
-        <CardText>{survey.description}</CardText>
-      </Card>
-    );
-  }
-
   componentDidMount() {
-    const { dispatch, isLoading, params: { responseId } } = this.props;
-
-    if (!isLoading) {
-      dispatch(fetchResponse(responseId));
-    }
+    const { dispatch, params: { responseId } } = this.props;
+    dispatch(fetchResponse(responseId));
   }
 
   handleUpdateResponse = (data) => {
@@ -119,12 +104,9 @@ class ResponseShow extends React.Component {
     );
   }
 
-  renderForm() {
+  renderBody() {
     const { response, isLoading } = this.props;
-
-    if (isLoading) {
-      return <Subheader><FormattedMessage {...translations.loading} /></Subheader>;
-    }
+    if (isLoading) { return <LoadingIndicator />; }
 
     return (
       <div>
@@ -139,8 +121,9 @@ class ResponseShow extends React.Component {
   }
 
   render() {
-    const { survey, params: { courseId } } = this.props;
-
+    const { surveys, params: { courseId, surveyId } } = this.props;
+    const survey = surveys && surveys.length > 0 ?
+                   surveys.find(s => String(s.id) === String(surveyId)) : {};
     return (
       <div>
         <TitleBar
@@ -148,13 +131,16 @@ class ResponseShow extends React.Component {
           iconElementLeft={<IconButton><ArrowBack /></IconButton>}
           onLeftIconButtonTouchTap={() => browserHistory.push(`/courses/${courseId}/surveys`)}
         />
-        { ResponseShow.renderDescription(survey) }
-        { this.renderForm() }
+        { survey.description ? <Card><CardText>{survey.description}</CardText></Card> : null }
+        { this.renderBody() }
       </div>
     );
   }
 }
 
 export default connect(
-  state => state.responseForm
+  state => ({
+    ...state.responseForm,
+    surveys: state.surveys,
+  })
 )(ResponseShow);
