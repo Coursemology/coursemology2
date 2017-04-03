@@ -9,6 +9,8 @@ class Course::Survey::Response < ActiveRecord::Base
 
   accepts_nested_attributes_for :answers
 
+  scope :submitted, -> { where.not(submitted_at: nil) }
+
   def submitted?
     submitted_at.present?
   end

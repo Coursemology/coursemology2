@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::ReminderService
+  include Course::ReminderServiceConcern
+
   class << self
     delegate :opening_reminder, to: :new
     delegate :closing_reminder, to: :new
@@ -23,9 +25,10 @@ class Course::Assessment::ReminderService
 
     # Send an email to each instructor with a list of students who haven't submitted.
     course_instructors = assessment.course.instructors.includes(:user).map(&:user)
+    student_list = name_list(recipients)
     course_instructors.each do |instructor|
       Course::Mailer.assessment_closing_summary_email(
-        instructor, assessment, uncompleted_students_list(recipients)
+        instructor, assessment, student_list
       ).deliver_later
     end
   end
@@ -44,14 +47,5 @@ class Course::Assessment::ReminderService
       assessment.submissions.confirmed.includes(experience_points_record: { course_user: :user }).
       map(&:course_user)
     Set.new(students) - Set.new(submitted)
-  end
-
-  # Converts a set of students to a string, with each name on a new line.
-  # Sorts the names alphabetically and prepends an index number to each name.
-  def uncompleted_students_list(students)
-    students = students.to_a.map(&:name).sort!
-    students.each_with_index do |student, index|
-      students[index] = "#{index + 1}. #{student}"
-    end.join("\n")
   end
 end

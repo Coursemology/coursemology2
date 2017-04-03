@@ -1,0 +1,7 @@
+en:
+  course:
+    mailer:
+      survey_opening_reminder_email:
+        subject: '%{course}: %{survey} has opened.'
+        message: >
+          You may respond to the survey %{survey}.

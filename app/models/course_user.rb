@@ -78,6 +78,7 @@ class CourseUser < ActiveRecord::Base
   scope :students, -> { where(role: roles[:student]) }
   scope :phantom, -> { where(phantom: true) }
   scope :without_phantom_users, -> { where(phantom: false) }
+  scope :human, -> { where.not(role: roles[:auto_grader]) }
   scope :with_course_statistics, -> { all.calculated(:experience_points, :achievement_count) }
 
   # Order course_users by experience points for use in the course leaderboard.

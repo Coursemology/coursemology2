@@ -85,4 +85,52 @@ class Course::Mailer < ApplicationMailer
     mail(to: @recipient.email,
          subject: t('.subject', course: @course.title, assessment: @assessment.title))
   end
+
+  # Send an email to notify a course user that the survey is open.
+  #
+  # @param [User] recipient The course user to notify.
+  # @param [Course::Survey] survey The survey that has opened.
+  def survey_opening_reminder_email(recipient, survey)
+    ActsAsTenant.without_tenant do
+      @course = survey.course
+    end
+    @recipient = recipient
+    @survey = survey
+
+    mail(to: @recipient.email,
+         subject: t('.subject', course: @course.title, survey: @survey.title))
+  end
+
+  # Send a reminder of the survey closing to a single user.
+  #
+  # @param [User] recipient The student who has not completed the survey.
+  # @param [Course::Survey] survey The survey that has opened.
+  def survey_closing_reminder_email(recipient, survey)
+    ActsAsTenant.without_tenant do
+      @course = survey.course
+    end
+    @recipient = recipient
+    @survey = survey
+
+    mail(to: @recipient.email,
+         subject: t('.subject', course: @course.title, survey: @survey.title))
+  end
+
+  # Send an email to a course instructor with the names of users who have not completed
+  # the survey.
+  #
+  # @param [User] recipient The course instructor who will receive this email.
+  # @param [Course::Survey] survey The survey that is closing.
+  # @param [String] student_list The list of students who have not completed the survey.
+  def survey_closing_summary_email(recipient, survey, student_list)
+    ActsAsTenant.without_tenant do
+      @course = survey.course
+    end
+    @recipient = recipient
+    @survey = survey
+    @student_list = student_list
+
+    mail(to: @recipient.email,
+         subject: t('.subject', course: @course.title, survey: @survey.title))
+  end
 end
