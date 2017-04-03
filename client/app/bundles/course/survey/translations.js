@@ -81,6 +81,10 @@ const translations = defineMessages({
     id: 'course.surveys.results',
     defaultMessage: 'Results',
   },
+  responses: {
+    id: 'course.surveys.responses',
+    defaultMessage: 'Responses',
+  },
 });
 
 export default translations;

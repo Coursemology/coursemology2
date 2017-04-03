@@ -12,6 +12,7 @@ export default function (state = [], action) {
     case actionTypes.UPDATE_RESPONSE_SUCCESS:
     case actionTypes.CREATE_RESPONSE_SUCCESS:
     case actionTypes.LOAD_RESPONSE_SUCCESS:
+    case actionTypes.LOAD_RESPONSES_SUCCESS:
     case actionTypes.UPDATE_QUESTION_ORDER_SUCCESS:
     case actionTypes.UPDATE_SURVEY_SUCCESS:
     case actionTypes.LOAD_SURVEY_SUCCESS: {

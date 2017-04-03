@@ -323,7 +323,7 @@ Rails.application.routes.draw do
           get 'results', on: :member
           post 'reorder_questions', on: :member
           resources :questions, only: [:create, :update, :destroy]
-          resources :responses, only: [:create, :show, :edit, :update]
+          resources :responses, only: [:index, :create, :show, :edit, :update]
           resources :sections, only: [:create, :update, :destroy]
         end
       end

@@ -86,3 +86,21 @@ export function updateResponse(
       });
   };
 }
+
+export function fetchResponses() {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.LOAD_RESPONSES_REQUEST });
+
+    return CourseAPI.survey.responses.index()
+      .then((response) => {
+        dispatch({
+          type: actionTypes.LOAD_RESPONSES_SUCCESS,
+          responses: response.data.responses,
+          survey: response.data.survey,
+        });
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.LOAD_RESPONSE_FAILURE });
+      });
+  };
+}
