@@ -36,7 +36,8 @@ class Duplicator
     duplicated_stuff = []
     stuff = [*stuff] unless stuff_is_enumerable
     stuff.each do |obj|
-      duplicated_stuff << duplicate_object(obj)
+      duplicated_object = duplicate_object(obj)
+      duplicated_stuff << duplicated_object unless duplicated_object.nil?
     end
     stuff_is_enumerable ? duplicated_stuff : duplicated_stuff[0]
   end

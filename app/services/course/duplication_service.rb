@@ -2,13 +2,21 @@
 
 # Provides a service object for duplicating courses
 class Course::DuplicationService
-  # Constructor for the duplication service object.
-  #
-  # @param [Course] current_course The current course.
-  # @param [User] current_user The user that initiated the duplication service.
-  # @param [Hash] duplication_params A hash of duplication parameters.
-  # @param [Array] all_objects All the objects in the course.
-  # @param [Array] selected_objects The objects to duplicate.
+  class << self
+    # Constructor for the duplication service object.
+    #
+    # @param [Course] current_course The course to duplicate.
+    # @param [User] current_user The user that initiated the duplication service.
+    # @param [Hash] duplication_params A hash of duplication parameters.
+    # @param [Array] all_objects All the objects in the course.
+    # @param [Array] selected_objects The objects to duplicate.
+    def duplicate(current_course, current_user, duplication_params = {},
+                  all_objects = [], selected_objects = [])
+      service = new(current_course, current_user, duplication_params, all_objects, selected_objects)
+      service.duplicate
+    end
+  end
+
   def initialize(current_course, current_user,
                  duplication_params = {}, all_objects = [], selected_objects = [])
     @current_course = current_course
@@ -24,10 +32,14 @@ class Course::DuplicationService
   # Duplicate the course with the duplicator.
   # Do not just pass in @selected_objects or object parents could be set incorrectly.
   #
-  # @return [Boolean] Whether the duplication succeeded.
+  # @return [Course] The duplicate course
   def duplicate
     @new_course = duplicator.duplicate(@current_course)
-    @new_course.save
+    if @new_course.save
+      Course::Mailer.course_duplicated_email(@current_course, @new_course,
+                                             @current_user).deliver_now
+    end
+    @new_course
   end
 
   private
@@ -38,8 +50,10 @@ class Course::DuplicationService
   #
   # @return [Duplicator]
   def duplicator
+    # TODO: Include survey objects after survey duplication is implemented
+    excluded_objects = @all_objects - @selected_objects | @current_course.surveys
     @duplicator ||=
-      Duplicator.new(@all_objects - @selected_objects, time_shift, new_course_title, @current_user)
+      Duplicator.new(excluded_objects, time_shift, new_course_title, @current_user)
   end
 
   # Calculate the amount of time the objects in the new course have to be shifted by

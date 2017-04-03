@@ -13,4 +13,8 @@ div.panel.panel-default
       input_html: { value: 1.day.from_now }
   = f.input :new_course_title,
       input_html: { value: t('.new_course_title', current_course_title: current_course.title) }
-  = f.button :submit, t('.duplicate')
+  = f.button :submit, t('.duplicate'), class: 'duplicate'
+br
+div
+  p = t('.close_window')
+  p = t('.email_notify')

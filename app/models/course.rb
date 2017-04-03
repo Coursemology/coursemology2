@@ -172,6 +172,7 @@ class Course < ActiveRecord::Base
     self.start_at ||= Time.zone.now
     self.end_at ||= 1.month.from_now
 
-    course_users.build(user: creator, role: :owner) if creator && course_users.empty?
+    return unless creator && course_users.empty?
+    course_users.build(user: creator, role: :owner, creator: creator, updater: updater)
   end
 end

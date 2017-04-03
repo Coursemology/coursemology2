@@ -26,10 +26,15 @@ RSpec.feature 'Course: Duplication' do
         expect(page).to have_field('New course start date')
         expect(page).to have_field('New course title')
 
-        expect { click_button I18n.t('course.duplications.show.duplicate') }.
-          to change { instance.courses.count }.by(1)
-        # After duplicating, go back to the duplication page
-        expect(current_path).to eq(course_duplication_path(course))
+        expect do
+          click_button I18n.t('course.duplications.show.duplicate')
+          wait_for_job
+        end.to change { instance.courses.count }.by(1)
+
+        new_course = instance.courses.last
+
+        # After duplicating, redirect to the new course
+        expect(current_path).to eq(course_path(new_course))
       end
     end
 

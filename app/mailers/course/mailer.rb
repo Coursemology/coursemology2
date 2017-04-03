@@ -38,6 +38,19 @@ class Course::Mailer < ApplicationMailer
          subject: t('.subject', course: @course.title))
   end
 
+  # Send a notification email to a user informing the completion of his course duplication.
+  #
+  # @param [Course] original_course The original course that was duplicated.
+  # @param [Course] new_course The resulting course of the duplication.
+  # @param [User] user The user who performed the duplication.
+  def course_duplicated_email(original_course, new_course, user)
+    @original_course = original_course
+    @new_course = new_course
+    @recipient = user
+
+    mail(to: @recipient.email, subject: t('.subject', new_course: @new_course.title))
+  end
+
   # Send a reminder of the assessment closing to a single user
   #
   # @param [Course::Assessment] assessment The assessment that is closing.
