@@ -16,9 +16,9 @@ FactoryGirl.define do
       sequence(:title) { |n| "Example Tutorial #{n}" }
     end
 
-    factory :virtual_classroom do
-      event_type :virtual_classroom
-      sequence(:title) { |n| "Example VirtualClassroom #{n}" }
+    factory :lecture do
+      event_type :lecture
+      sequence(:title) { |n| "Example Lecture #{n}" }
     end
   end
 end

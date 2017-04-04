@@ -27,7 +27,7 @@ RSpec.describe Course::DuplicationService, type: :service do
           create(:course_lesson_plan_event, course: course)
           create(:recitation, course: course)
           create(:tutorial, course: course)
-          create(:virtual_classroom, course: course)
+          create(:lecture, course: course)
         end
 
         it 'duplicates a course with the new title' do
