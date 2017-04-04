@@ -356,6 +356,14 @@ ActiveRecord::Schema.define(version: 20170309094211) do
     t.datetime "created_at",    :null=>false
   end
 
+  create_table "course_assessment_submission_questions", force: :cascade do |t|
+    t.integer  "submission_id", :null=>false, :index=>{:name=>"fk__course_assessment_submission_questions_submission_id"}, :foreign_key=>{:references=>"course_assessment_submissions", :name=>"fk_course_assessment_submission_questions_submission_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "question_id",   :null=>false, :index=>{:name=>"fk__course_assessment_submission_questions_question_id"}, :foreign_key=>{:references=>"course_assessment_questions", :name=>"fk_course_assessment_submission_questions_question_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "created_at",    :null=>false
+    t.datetime "updated_at",    :null=>false
+  end
+  add_index "course_assessment_submission_questions", ["submission_id", "question_id"], :name=>"idx_course_assessment_submission_questions_on_sub_and_qn", :unique=>true
+
   create_table "course_condition_achievements", force: :cascade do |t|
     t.integer "achievement_id", :null=>false, :index=>{:name=>"fk__course_condition_achievements_achievement_id"}, :foreign_key=>{:references=>"course_achievements", :name=>"fk_course_condition_achievements_achievement_id", :on_update=>:no_action, :on_delete=>:no_action}
   end
