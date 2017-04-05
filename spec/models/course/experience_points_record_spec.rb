@@ -10,18 +10,23 @@ RSpec.describe Course::ExperiencePointsRecord do
     let(:course) { create(:course) }
     let(:course_user) { create(:course_user, course: course) }
 
-    describe 'callbacks' do
+    describe 'after_create callbacks' do
       context 'when record is manually awarded' do
-        subject { create(:course_experience_points_record) }
-        it 'sets awarded_at' do
+        # Build a record with nil attributes and test if the callback sets the attributes correctly.
+        subject do
+          build(:course_experience_points_record, awarder: nil, awarded_at: nil).tap(&:save)
+        end
+        it 'sets the awarded attributes' do
           expect(subject.reload.awarded_at).not_to be_nil
+          expect(subject.reload.awarder).not_to be_nil
         end
       end
 
-      context 'when record is no manually awarded' do
+      context 'when record is not manually awarded' do
         subject { create(:course_assessment_submission).acting_as }
-        it 'does not set awarded_at' do
+        it 'does not set awarded attributes' do
           expect(subject.reload.awarded_at).to be_nil
+          expect(subject.reload.awarder).to be_nil
         end
       end
     end
