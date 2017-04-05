@@ -21,6 +21,12 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     @submission.answers.reload if new_answers && @submission.answers.loaded?
   end
 
+  def load_or_create_submission_questions
+    if create_missing_submission_questions && @submission.submission_questions.loaded?
+      @submission.submission_questions.reload
+    end
+  end
+
   protected
 
   # Service for handling the submission management logic, this serves as the super class for the
@@ -100,6 +106,24 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def edit_submission_path
     edit_course_assessment_submission_path(current_course, @assessment, @submission)
+  end
+
+  # Find the questions for this submission without submission_questions.
+  # Build and save! new submission_questions.
+  #
+  # @raise [ActiveRecord::RecordInvalid] If the new submission_questions cannot be saved.
+  # @return[Boolean] If new submission_questions were created.
+  def create_missing_submission_questions
+    questions_with_submission_questions = @submission.submission_questions.map(&:question)
+    questions_without_submission_questions = questions_to_attempt - questions_with_submission_questions
+    new_submission_questions = []
+    questions_without_submission_questions.each do |question|
+      new_submission_questions <<
+        @submission.submission_questions.build(question: question)
+    end
+    new_submission_questions.each(&:save!)
+
+    new_submission_questions.any?
   end
 
   def submit_answer

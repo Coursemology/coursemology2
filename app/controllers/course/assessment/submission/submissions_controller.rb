@@ -9,9 +9,14 @@ class Course::Assessment::Submission::SubmissionsController < \
   before_action :check_password, only: [:edit, :update]
   before_action :load_or_create_answers, only: [:edit, :update]
   before_action :check_zombie_jobs, only: [:edit]
+  # Questions may be added to assessments with existing submissions.
+  # In these cases, new submission_questions must be created when the submission is next
+  # edited or updated.
+  before_action :load_or_create_submission_questions, only: [:edit, :update]
 
   delegate_to_service(:update)
   delegate_to_service(:load_or_create_answers)
+  delegate_to_service(:load_or_create_submission_questions)
 
   def index
     authorize!(:manage, @assessment)

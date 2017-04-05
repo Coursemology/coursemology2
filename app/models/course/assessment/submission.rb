@@ -35,6 +35,9 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   belongs_to :assessment, inverse_of: :submissions
 
+  has_many :submission_questions, class_name: Course::Assessment::SubmissionQuestion.name,
+                                  dependent: :destroy, inverse_of: :submission
+
   # @!attribute [r] answers
   #   The answers associated with this submission. There can be more than one answer per submission,
   #   this is because every answer is saved over time. Use the {.latest} scope of the answers if
