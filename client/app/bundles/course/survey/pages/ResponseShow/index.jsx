@@ -3,11 +3,13 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { browserHistory } from 'react-router';
+import moment from 'moment';
 import IconButton from 'material-ui/IconButton';
 import { Card, CardText } from 'material-ui/Card';
 import TitleBar from 'lib/components/TitleBar';
 import Subheader from 'material-ui/Subheader';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import { Table, TableBody, TableRow, TableHeaderColumn, TableRowColumn } from 'material-ui/Table';
 import { questionTypes } from 'course/survey/constants';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
@@ -16,6 +18,10 @@ import LoadingIndicator from 'course/survey/components/LoadingIndicator';
 import ResponseForm from './ResponseForm';
 
 const translations = defineMessages({
+  notSubmitted: {
+    id: 'course.surveys.ResponseShow.notSubmitted',
+    defaultMessage: 'Not submitted',
+  },
   saveSuccess: {
     id: 'course.surveys.ResponseShow.saveSuccess',
     defaultMessage: 'Your response has been saved.',
@@ -32,12 +38,29 @@ const translations = defineMessages({
     id: 'course.surveys.ResponseShow.submitFailure',
     defaultMessage: 'Submit Failed.',
   },
+  unsubmitSuccess: {
+    id: 'course.surveys.ResponseShow.unsubmitSuccess',
+    defaultMessage: 'The response has been unsubmitted.',
+  },
+  unsubmitFailure: {
+    id: 'course.surveys.ResponseShow.unsubmitFailure',
+    defaultMessage: 'Unsubmit Failed.',
+  },
 });
+
+const styles = {
+  submissionInfoTable: {
+    marginTop: 10,
+    maxWidth: 600,
+  },
+};
 
 class ResponseShow extends React.Component {
   static propTypes = {
     surveys: PropTypes.arrayOf(surveyShape),
     response: responseShape,
+    canUnsubmit: PropTypes.bool,
+    isResponseCreator: PropTypes.bool,
     isLoading: PropTypes.bool.isRequired,
     params: PropTypes.shape({
       courseId: PropTypes.string.isRequired,
@@ -84,7 +107,7 @@ class ResponseShow extends React.Component {
     const answers_attributes = data.sections.reduce((accumulator, section) => (
       accumulator.concat(section.answers.map(ResponseShow.formatAnswer))
     ), []);
-    return { response: { answers_attributes, submit: data.submit } };
+    return { response: { answers_attributes, submit: data.submit, unsubmit: data.unsubmit } };
   }
 
   componentDidMount() {
@@ -104,16 +127,55 @@ class ResponseShow extends React.Component {
     );
   }
 
+  handleUnsubmitResponse = () => {
+    const { dispatch, params: { responseId } } = this.props;
+    const { unsubmitSuccess, unsubmitFailure } = translations;
+    const payload = { response: { unsubmit: true } };
+    const successMessage = <FormattedMessage {...(unsubmitSuccess)} />;
+    const failureMessage = <FormattedMessage {...(unsubmitFailure)} />;
+
+    return dispatch(
+      updateResponse(responseId, payload, successMessage, failureMessage)
+    );
+  }
+
+  renderSubmissionInfo() {
+    const { response } = this.props;
+    return (
+      <Table style={styles.submissionInfoTable}>
+        <TableBody displayRowCheckbox={false}>
+          <TableRow selectable={false}>
+            <TableHeaderColumn>Student</TableHeaderColumn>
+            <TableRowColumn>{response.creator_name}</TableRowColumn>
+          </TableRow>
+          <TableRow selectable={false}>
+            <TableHeaderColumn>Submitted At</TableHeaderColumn>
+            <TableRowColumn>
+              {response.submitted_at ?
+                moment(response.submitted_at).format('DD MMM YYYY, h:mma') :
+                <FormattedMessage {...translations.notSubmitted} />
+              }
+            </TableRowColumn>
+          </TableRow>
+        </TableBody>
+      </Table>
+    );
+  }
+
   renderBody() {
-    const { response, isLoading } = this.props;
+    const { canUnsubmit, isResponseCreator, response, isLoading } = this.props;
     if (isLoading) { return <LoadingIndicator />; }
 
     return (
       <div>
+        { canUnsubmit ? this.renderSubmissionInfo() : null }
         <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
         <ResponseForm
+          canUnsubmit={canUnsubmit}
+          isResponseCreator={isResponseCreator}
           initialValues={ResponseShow.buildInitialValues(response)}
           onSubmit={this.handleUpdateResponse}
+          onUnsubmit={this.handleUnsubmitResponse}
           {...{ response }}
         />
       </div>
@@ -124,6 +186,7 @@ class ResponseShow extends React.Component {
     const { surveys, params: { courseId, surveyId } } = this.props;
     const survey = surveys && surveys.length > 0 ?
                    surveys.find(s => String(s.id) === String(surveyId)) : {};
+
     return (
       <div>
         <TitleBar

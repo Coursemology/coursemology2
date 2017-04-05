@@ -51,6 +51,7 @@ export const answerShape = PropTypes.shape({
 
 export const responseShape = PropTypes.shape({
   id: PropTypes.number,
+  name: PropTypes.string,
   submitted_at: PropTypes.string,
   sections: PropTypes.arrayOf(sectionShape),
 });

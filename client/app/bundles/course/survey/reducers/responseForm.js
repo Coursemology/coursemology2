@@ -18,6 +18,8 @@ export default function (state = initialState, action) {
     case actionTypes.LOAD_RESPONSE_SUCCESS: {
       return {
         response: sortResponseElements(action.response),
+        canUnsubmit: action.canUnsubmit,
+        isResponseCreator: action.isResponseCreator,
         isLoading: false,
       };
     }

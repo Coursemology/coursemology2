@@ -18,6 +18,11 @@ class Course::Survey::Response < ActiveRecord::Base
     self.points_awarded = survey.base_exp
   end
 
+  def unsubmit
+    self.submitted_at = nil
+    self.points_awarded = 0
+  end
+
   def build_missing_answers_and_options
     answers_hash = {}.tap do |hash|
       answers.includes(options: :question_option, question: :options).each do |answer|
