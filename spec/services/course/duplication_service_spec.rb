@@ -7,13 +7,12 @@ RSpec.describe Course::DuplicationService, type: :service do
     let(:admin) { create(:administrator) }
     let(:course) { create(:course) }
     let(:new_course) do
-      dup_service = Course::DuplicationService.new(
-        course, admin,
+      options = {
+        current_user: admin,
         new_course_start_date: (course.start_at + 1.day).iso8601,
         new_course_title: I18n.t('course.duplications.show.new_course_title_prefix')
-      )
-      dup_service.duplicate
-      dup_service.instance_variable_get(:@new_course)
+      }
+      Course::DuplicationService.duplicate_course(course, options)
     end
     let!(:assessment) { create(:assessment, *assessment_traits, course: course) }
     let(:assessment_traits) { [] }

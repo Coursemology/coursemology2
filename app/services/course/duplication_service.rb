@@ -6,40 +6,34 @@ class Course::DuplicationService
     # Constructor for the duplication service object.
     #
     # @param [Course] current_course The course to duplicate.
-    # @param [User] current_user The user that initiated the duplication service.
-    # @param [Hash] duplication_params A hash of duplication parameters.
     # @param [Array] all_objects All the objects in the course.
     # @param [Array] selected_objects The objects to duplicate.
-    def duplicate(current_course, current_user, duplication_params = {},
-                  all_objects = [], selected_objects = [])
-      service = new(current_course, current_user, duplication_params, all_objects, selected_objects)
-      service.duplicate
+    # @param [Hash] options The options to be sent to the Duplicator object.
+    # @option options [User] :current_user The user triggering the duplication.
+    # @option options [String] :new_course_title The new course_title for the duplicated course.
+    # @option options [DateTime] :new_course_start_date Start date for the duplicated course.
+    # @return [Course] The duplicated course
+    def duplicate_course(current_course, options = {}, all_objects = [], selected_objects = [])
+      service = new(current_course, options, all_objects, selected_objects)
+      service.duplicate_course
     end
   end
 
-  def initialize(current_course, current_user,
-                 duplication_params = {}, all_objects = [], selected_objects = [])
+  def initialize(current_course, options = {}, all_objects = [], selected_objects = [])
     @current_course = current_course
-    @current_user = current_user
     @all_objects = all_objects.append(current_course)
     @selected_objects = selected_objects.append(current_course)
-    @duplication_params = duplication_params
-    @duplication_params[:new_course_start_date] = Time.zone.parse(
-      duplication_params[:new_course_start_date]
-    )
+    @options = options
   end
 
   # Duplicate the course with the duplicator.
   # Do not just pass in @selected_objects or object parents could be set incorrectly.
   #
-  # @return [Course] The duplicate course
-  def duplicate
-    @new_course = duplicator.duplicate(@current_course)
-    if @new_course.save
-      Course::Mailer.course_duplicated_email(@current_course, @new_course,
-                                             @current_user).deliver_now
+  # @return [Course] The duplicated course
+  def duplicate_course
+    duplicator.duplicate(@current_course).tap do |new_course|
+      notify_duplication_complete(new_course) if new_course.save
     end
-    @new_course
   end
 
   private
@@ -50,24 +44,51 @@ class Course::DuplicationService
   #
   # @return [Duplicator]
   def duplicator
-    # TODO: Include survey objects after survey duplication is implemented
-    excluded_objects = @all_objects - @selected_objects | @current_course.surveys
-    @duplicator ||=
-      Duplicator.new(excluded_objects, time_shift, new_course_title, @current_user)
+    @duplicator ||= begin
+      # TODO: Include survey objects after survey duplication is implemented
+      excluded_objects = @all_objects - @selected_objects | @current_course.surveys
+      Duplicator.new(excluded_objects, duplicator_options)
+    end
+  end
+
+  # Builds the hash of options to be sent to the duplicator. If options do not exist, set default
+  # options.
+  #
+  # @return [Hash] A hash of options to be sent to the duplicator.
+  def duplicator_options
+    {}.tap do |options|
+      options[:time_shift] = time_shift
+      options[:new_course_title] = new_course_title
+      options[:current_user] = current_user
+    end
+  end
+
+  # Sends an email to current_user to notify that the duplication is complete.
+  #
+  # @param [Course] new_course The duplicated course
+  def notify_duplication_complete(new_course)
+    Course::Mailer.course_duplicated_email(@current_course, new_course, current_user).deliver_now
   end
 
   # Calculate the amount of time the objects in the new course have to be shifted by
   #
-  # @return [ActiveSupport::TimeWithZone]
+  # @return [Float]
   def time_shift
-    # must be symbol key
-    @duplication_params[:new_course_start_date] - @current_course.start_at
+    return 0 unless @options[:new_course_start_date]
+    Time.zone.parse(@options[:new_course_start_date]) - @current_course.start_at
   end
 
-  # Returns the new course title
+  # Returns the new course title, or sets the default course_title
   #
   # @return [String]
   def new_course_title
-    @duplication_params[:new_course_title]
+    @options[:new_course_title] || 'Duplicated'
+  end
+
+  # Returns the current_user of the duplication object, or sets it to the system user.
+  #
+  # @return [User]
+  def current_user
+    @options[:current_user] || User.system
   end
 end
