@@ -43,7 +43,8 @@ export function fetchResponse(responseId) {
       .then((data) => {
         dispatch({
           type: actionTypes.LOAD_RESPONSE_SUCCESS,
-          is_creator: data.is_creator,
+          canUnsubmit: data.canUnsubmit,
+          isResponseCreator: data.isResponseCreator,
           survey: data.survey,
           response: data.response,
         });
@@ -64,14 +65,17 @@ export function updateResponse(
     dispatch({ type: actionTypes.UPDATE_RESPONSE_REQUEST });
 
     return CourseAPI.survey.responses.update(responseId, payload)
-      .then((response) => {
+      .then(response => response.data)
+      .then((data) => {
         dispatch({
           type: actionTypes.UPDATE_RESPONSE_SUCCESS,
-          survey: response.data.survey,
-          response: response.data.response,
+          canUnsubmit: data.canUnsubmit,
+          isResponseCreator: data.isResponseCreator,
+          survey: data.survey,
+          response: data.response,
         });
 
-        if (payload.response.submit) {
+        if (payload.response.submit || payload.response.unsubmit) {
           const courseId = getCourseId();
           browserHistory.push(`/courses/${courseId}/surveys/`);
         }

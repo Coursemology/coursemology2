@@ -14,4 +14,5 @@ json.response do
   end
 end
 
-json.is_creator current_user.id == @survey.creator_id
+json.canUnsubmit can?(:manage, @survey)
+json.isResponseCreator current_user.id == @response.creator_id

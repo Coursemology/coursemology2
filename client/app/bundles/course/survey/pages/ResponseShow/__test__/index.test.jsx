@@ -13,9 +13,7 @@ const mock = new MockAdapter(client);
 const responseData = {
   response: {
     id: 5,
-    creator: {
-      name: 'user',
-    },
+    creator_name: 'user',
     sections: [{
       id: 2,
       weight: 0,
@@ -41,7 +39,8 @@ const responseData = {
     title: 'Test Response',
     description: 'Form working?',
   },
-  isCreator: false,
+  canUnsubmit: false,
+  isResponseCreator: true,
 };
 
 beforeEach(() => {
@@ -76,7 +75,7 @@ describe('<ResponseShow />', () => {
     const textResponse = responseForm.find('textarea').last();
     const newAnswer = 'New Answer';
     textResponse.simulate('change', { target: { value: newAnswer } });
-    const submitButton = responseForm.find('RaisedButton').last().find('button').first();
+    const submitButton = responseForm.find('RaisedButton').at(1).find('button').first();
     ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(submitButton.node));
 
     const expectedPayload = {

@@ -37,11 +37,10 @@ class Course::Survey::ResponsesController < Course::Survey::SurveysController
   end
 
   def update
-    @response.submit if params[:response][:submit]
-    if @response.update_attributes(response_update_params)
-      render_response_json
+    if params[:response][:unsubmit]
+      handle_unsubmit
     else
-      render json: { errors: @response.errors }, status: :bad_request
+      handle_update
     end
   end
 
@@ -54,6 +53,25 @@ class Course::Survey::ResponsesController < Course::Survey::SurveysController
       render json: { responseId: @response.id }, status: :bad_request
     else
       render json: { error: error.message }, status: :bad_request
+    end
+  end
+
+  def handle_unsubmit
+    authorize!(:manage, @survey)
+    @response.unsubmit
+    if @response.save
+      render_response_json
+    else
+      render json: { errors: @response.errors }, status: :bad_request
+    end
+  end
+
+  def handle_update
+    @response.submit if params[:response][:submit]
+    if @response.update_attributes(response_update_params)
+      render_response_json
+    else
+      render json: { errors: @response.errors }, status: :bad_request
     end
   end
 

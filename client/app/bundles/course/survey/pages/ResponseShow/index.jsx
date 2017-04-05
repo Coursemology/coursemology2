@@ -38,6 +38,14 @@ const translations = defineMessages({
     id: 'course.surveys.ResponseShow.submitFailure',
     defaultMessage: 'Submit Failed.',
   },
+  unsubmitSuccess: {
+    id: 'course.surveys.ResponseShow.unsubmitSuccess',
+    defaultMessage: 'The response has been unsubmitted.',
+  },
+  unsubmitFailure: {
+    id: 'course.surveys.ResponseShow.unsubmitFailure',
+    defaultMessage: 'Unsubmit Failed.',
+  },
 });
 
 const styles = {
@@ -51,7 +59,8 @@ class ResponseShow extends React.Component {
   static propTypes = {
     surveys: PropTypes.arrayOf(surveyShape),
     response: responseShape,
-    isCreator: PropTypes.bool,
+    canUnsubmit: PropTypes.bool,
+    isResponseCreator: PropTypes.bool,
     isLoading: PropTypes.bool.isRequired,
     params: PropTypes.shape({
       courseId: PropTypes.string.isRequired,
@@ -98,7 +107,7 @@ class ResponseShow extends React.Component {
     const answers_attributes = data.sections.reduce((accumulator, section) => (
       accumulator.concat(section.answers.map(ResponseShow.formatAnswer))
     ), []);
-    return { response: { answers_attributes, submit: data.submit } };
+    return { response: { answers_attributes, submit: data.submit, unsubmit: data.unsubmit } };
   }
 
   componentDidMount() {
@@ -112,6 +121,18 @@ class ResponseShow extends React.Component {
     const payload = ResponseShow.formatSurveyResponseData(data);
     const successMessage = <FormattedMessage {...(data.submit ? submitSuccess : saveSuccess)} />;
     const failureMessage = <FormattedMessage {...(data.submit ? submitFailure : saveFailure)} />;
+
+    return dispatch(
+      updateResponse(responseId, payload, successMessage, failureMessage)
+    );
+  }
+
+  handleUnsubmitResponse = () => {
+    const { dispatch, params: { responseId } } = this.props;
+    const { unsubmitSuccess, unsubmitFailure } = translations;
+    const payload = { response: { unsubmit: true } };
+    const successMessage = <FormattedMessage {...(unsubmitSuccess)} />;
+    const failureMessage = <FormattedMessage {...(unsubmitFailure)} />;
 
     return dispatch(
       updateResponse(responseId, payload, successMessage, failureMessage)
@@ -142,16 +163,19 @@ class ResponseShow extends React.Component {
   }
 
   renderBody() {
-    const { isCreator, response, isLoading } = this.props;
+    const { canUnsubmit, isResponseCreator, response, isLoading } = this.props;
     if (isLoading) { return <LoadingIndicator />; }
 
     return (
       <div>
-        { isCreator ? this.renderSubmissionInfo() : null }
+        { canUnsubmit ? this.renderSubmissionInfo() : null }
         <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
         <ResponseForm
+          canUnsubmit={canUnsubmit}
+          isResponseCreator={isResponseCreator}
           initialValues={ResponseShow.buildInitialValues(response)}
           onSubmit={this.handleUpdateResponse}
+          onUnsubmit={this.handleUnsubmitResponse}
           {...{ response }}
         />
       </div>
