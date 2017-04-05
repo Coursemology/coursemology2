@@ -2,6 +2,8 @@
 class Course::Survey < ActiveRecord::Base
   acts_as_lesson_plan_item has_todo: true
 
+  include Course::ReminderConcern
+
   enum question_type: { text_response: 0, multiple_choice: 1, multiple_response: 2 }
 
   # To call Course::Survey::Response.name to force it to load. Otherwise, there might be issues

@@ -1,0 +1,5 @@
+- host = @course.instance.host
+- time = Time.use_zone(@recipient.time_zone) { @survey.end_at.to_formatted_s(:long) }
+
+= simple_format(t('.message', survey: link_to(@survey.title, course_survey_url(@course, @survey, host: host)),
+                              time: time, student_list: @student_list))
