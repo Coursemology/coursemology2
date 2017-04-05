@@ -14,7 +14,7 @@ FactoryGirl.define do
     end
     points_awarded { rand(1..20) * 100 }
     draft_points_awarded nil
-    awarded_at { 1.day.ago }
+    awarded_at nil
     awarder { creator }
     reason { 'Reason for manually-awarded experience points' if manually_awarded? }
 

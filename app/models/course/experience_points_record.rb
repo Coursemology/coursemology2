@@ -3,6 +3,7 @@ class Course::ExperiencePointsRecord < ActiveRecord::Base
   actable
 
   before_save :send_notification, if: :reached_new_level?
+  before_create :set_awarded_at, if: :manually_awarded?
 
   validates :reason, presence: true, if: :manually_awarded?
 
@@ -53,5 +54,9 @@ class Course::ExperiencePointsRecord < ActiveRecord::Base
     exp_changed = points_awarded - (points_awarded_was || 0)
     current_exp = course_user.experience_points
     course_user.course.level_for(current_exp + exp_changed)
+  end
+
+  def set_awarded_at
+    self.awarded_at ||= Time.zone.now
   end
 end

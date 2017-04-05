@@ -10,6 +10,22 @@ RSpec.describe Course::ExperiencePointsRecord do
     let(:course) { create(:course) }
     let(:course_user) { create(:course_user, course: course) }
 
+    describe 'callbacks' do
+      context 'when record is manually awarded' do
+        subject { create(:course_experience_points_record) }
+        it 'sets awarded_at' do
+          expect(subject.reload.awarded_at).not_to be_nil
+        end
+      end
+
+      context 'when record is no manually awarded' do
+        subject { create(:course_assessment_submission).acting_as }
+        it 'does not set awarded_at' do
+          expect(subject.reload.awarded_at).to be_nil
+        end
+      end
+    end
+
     describe '.active' do
       it 'only returns active records' do
         active = create_list(:course_experience_points_record, 2, course_user: course_user)
