@@ -16,10 +16,11 @@ class ResponseSection extends React.Component {
     fields: PropTypes.shape({
       get: PropTypes.func.isRequired,
     }).isRequired,
+    disabled: PropTypes.bool.isRequired,
   }
 
   static renderAnswers(props) {
-    const { fields } = props;
+    const { fields, disabled } = props;
     return (
       <CardText>
         {
@@ -28,7 +29,7 @@ class ResponseSection extends React.Component {
             return (
               <ResponseAnswer
                 key={answer.id || `q${answer.question.id}`}
-                {...{ member, index, fields }}
+                {...{ member, index, fields, disabled }}
               />
             );
           })
@@ -38,7 +39,7 @@ class ResponseSection extends React.Component {
   }
 
   render() {
-    const { member, index, fields } = this.props;
+    const { member, index, fields, disabled } = this.props;
     const section = fields.get(index);
 
     if (section.answers.length < 1) {
@@ -54,6 +55,7 @@ class ResponseSection extends React.Component {
         <FieldArray
           name={`${member}.answers`}
           component={ResponseSection.renderAnswers}
+          disabled={disabled}
         />
       </Card>
     );

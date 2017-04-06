@@ -115,7 +115,7 @@ class ResponseForm extends React.Component {
             const section = fields.get(index);
             return (
               <ResponseSection
-                disabled={response.submitted_at}
+                disabled={!!response.submitted_at}
                 key={section.id}
                 {...{ member, index, fields }}
               />
