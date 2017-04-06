@@ -1,7 +1,7 @@
 namespace :db do
   task insert_submission_questions: :environment do
     ActsAsTenant.without_tenant do
-      SLICE_SIZE = 20_000
+      SLICE_SIZE = 5_000
       connection = ActiveRecord::Base.connection
 
       # Each row contains course id, submission id, and question id
@@ -19,7 +19,13 @@ namespace :db do
           ON cac.id = cat.category_id
       SQL
 
-      # This is NOT idempotent. Duplicate submission_id/question_id pairs will cause errors.
+      # DROP unique index, allowing duplicates to be inserted.
+      connection.exec_query(<<-SQL)
+        DROP INDEX idx_course_assessment_submission_questions_on_sub_and_qn
+      SQL
+
+      # This will insert duplicate submission_id, question_id pairs.
+      # Duplicates will be removed in a later query.
       submission_question_tuples.each_slice(SLICE_SIZE) do |sq_tuples|
         submission_ids = sq_tuples.map { |x| x['submission_id'] }
         question_ids = sq_tuples.map { |x| x['question_id'] }
@@ -36,6 +42,25 @@ namespace :db do
           VALUES #{sub_qn_values}
         SQL
       end
+
+      # Clear the duplicates
+      # http://stackoverflow.com/questions/6583916/delete-completely-duplicate-rows-in-postgresql-and-keep-only-1
+      # This deletes the later version of the row.
+      connection.exec_query(<<-SQL)
+        DELETE FROM course_assessment_submission_questions a
+        USING (SELECT MIN(ctid) AS ctid, submission_id, question_id
+                FROM course_assessment_submission_questions GROUP BY (submission_id, question_id)
+                HAVING COUNT(*)>1) b
+        WHERE a.submission_id = b.submission_id AND a.question_id = b.question_id
+          AND a.ctid <> b.ctid
+      SQL
+
+      # Replace the index
+      connection.exec_query(<<-SQL)
+        CREATE UNIQUE INDEX idx_course_assessment_submission_questions_on_sub_and_qn
+        ON course_assessment_submission_questions USING btree
+        (submission_id, question_id)
+      SQL
     end
   end
 end
