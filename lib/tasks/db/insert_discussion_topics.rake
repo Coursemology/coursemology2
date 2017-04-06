@@ -32,6 +32,12 @@ namespace :db do
           ON (cdt.actable_id = caa.id AND cdt.actable_type = 'Course::Assessment::Answer')
         GROUP BY (cac.course_id, casq.id, casq.submission_id, casq.question_id)
       SQL
+      byebug
+
+      # DROP UNIQUE index
+      connection.exec_query(<<-SQL)
+        DROP INDEX index_course_discussion_topics_on_actable_type_and_actable_id
+      SQL
 
       course_sq_tuples.each_slice(SLICE_SIZE) do |csq_tuples|
         course_ids = csq_tuples.map { |x| x['course_id'] }
@@ -49,6 +55,7 @@ namespace :db do
         combined_arr = sq_ids.zip(actable_type_strings, course_ids, pending_staff_reply, created_at,
                                   updated_at)
         discussion_topic_values = combined_arr.map { |x| '(' + x.join(',') + ')'}.join(',')
+        byebug
         connection.exec_query(<<-SQL)
           INSERT INTO course_discussion_topics
                         (actable_id,
@@ -60,6 +67,23 @@ namespace :db do
           VALUES #{discussion_topic_values}
         SQL
       end
+
+      # Remove duplicates
+      connection.exec_query(<<-SQL)
+        DELETE FROM course_discussion_topics a
+        USING (SELECT MIN(ctid) AS ctid, actable_type, actable_id
+                FROM course_discussion_topics GROUP BY (actable_type, actable_id)
+                HAVING COUNT(*) > 1) b
+        WHERE a.actable_type = b.actable_type AND a.actable_id = b.actable_id
+          AND a.ctid <> b.ctid
+      SQL
+      
+      # Add back unique index
+      connection.exec_query(<<-SQL)
+        CREATE UNIQUE INDEX index_course_discussion_topics_on_actable_type_and_actable_id
+        ON course_discussion_topics USING btree
+        (actable_type, actable_id)
+      SQL
     end
   end
 end
