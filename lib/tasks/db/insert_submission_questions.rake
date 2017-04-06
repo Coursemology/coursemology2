@@ -49,7 +49,7 @@ namespace :db do
       connection.exec_query(<<-SQL)
         DELETE FROM course_assessment_submission_questions a
         USING (SELECT MIN(ctid) AS ctid, submission_id, question_id
-                FROM course_assessment_submission_questions GROUP BY (submission_id, question_id)
+                FROM course_assessment_submission_questions GROUP BY submission_id, question_id
                 HAVING COUNT(*)>1) b
         WHERE a.submission_id = b.submission_id AND a.question_id = b.question_id
           AND a.ctid <> b.ctid
