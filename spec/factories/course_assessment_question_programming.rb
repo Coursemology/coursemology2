@@ -5,7 +5,6 @@ FactoryGirl.define do
           parent: :course_assessment_question do
     transient do
       template_package false
-      template_package_deferred true # Set false to immediately assign the package to the question.
       template_file_count 1
       test_case_count 0
       private_test_case_count 0
@@ -21,9 +20,12 @@ FactoryGirl.define do
         build(:course_assessment_question_programming_template_file, question: nil)
       end
     end
-    file do
-      File.new(File.join(Rails.root, 'spec/fixtures/course/'\
-                         'programming_question_template.zip'), 'rb') if template_package
+    imported_attachment do
+      if template_package
+        file = File.new(File.join(Rails.root, 'spec/fixtures/course/'\
+                          'programming_question_template.zip'), 'rb')
+        AttachmentReference.new(file: file)
+      end
     end
     package_type do
       template_package ? :zip_upload : :online_editor
@@ -44,13 +46,26 @@ FactoryGirl.define do
       public_test_cases + private_test_cases + evaluation_test_cases
     end
 
-    after(:build) do |question, evaluator|
-      # Suppress the deferred assignment of the attachment.
-      question.send(:clear_attribute_changes, :attachment) unless \
-        evaluator.template_package_deferred
+    after(:build) do |question|
+      # We don't want to evaluate the package to import test cases during creation, it will
+      # overwrite the defined test cases.
+      question.instance_eval do
+        def skip_process_package?
+          true
+        end
+      end
+    end
+
+    after(:create) do |question|
+      question.instance_eval do
+        def skip_process_package?
+          super
+        end
+      end
     end
 
     trait :auto_gradable do
+      template_package true
       test_case_count 1
       private_test_case_count 1
     end

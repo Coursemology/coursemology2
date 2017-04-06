@@ -103,8 +103,8 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         within find(content_tag_selector(submission.answers.first)) do
-          assessment.questions.first.actable.test_cases.each do |solution|
-            expect(page).to have_content_tag_for(solution)
+          assessment.questions.first.actable.test_cases.each do |test_case|
+            expect(page).to have_content_tag_for(test_case)
           end
         end
 

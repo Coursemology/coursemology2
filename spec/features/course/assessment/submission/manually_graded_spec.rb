@@ -27,10 +27,10 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
       #   3. Non auto_gradable programming question (no test-cases)
       assessment = create(:assessment, :published_with_programming_question, course: course)
       create(:course_assessment_question_programming,
-             template_package: true, template_package_deferred: false, assessment: assessment,
+             template_package: true, assessment: assessment,
              evaluation_test_case_count: 1)
       create(:course_assessment_question_programming,
-             template_package: true, template_package_deferred: false, assessment: assessment)
+             template_package: true, assessment: assessment)
       assessment.reload
     end
     let(:multiple_programming_submission) do
