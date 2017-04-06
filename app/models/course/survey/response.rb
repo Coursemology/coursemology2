@@ -18,11 +18,15 @@ class Course::Survey::Response < ActiveRecord::Base
   def submit
     self.submitted_at = Time.zone.now
     self.points_awarded = survey.base_exp
+    self.awarded_at = Time.zone.now
+    self.awarder = creator
   end
 
   def unsubmit
     self.submitted_at = nil
     self.points_awarded = 0
+    self.awarded_at = nil
+    self.awarder = nil
   end
 
   def build_missing_answers_and_options
