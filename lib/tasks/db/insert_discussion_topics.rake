@@ -5,7 +5,7 @@ namespace :db do
     #
     # Pending staff reply flag will NOT be set correctly after this.
     ActsAsTenant.without_tenant do
-      SLICE_SIZE = 10_000
+      SLICE_SIZE = 50
       connection = ActiveRecord::Base.connection
 
       # Get tuples of course_id, submission_question_id, submission_id, question_id, and the
@@ -32,12 +32,15 @@ namespace :db do
           ON (cdt.actable_id = caa.id AND cdt.actable_type = 'Course::Assessment::Answer')
         GROUP BY (cac.course_id, casq.id, casq.submission_id, casq.question_id)
       SQL
-      byebug
 
+      puts "DROP UNIQUE index"
       # DROP UNIQUE index
       connection.exec_query(<<-SQL)
         DROP INDEX index_course_discussion_topics_on_actable_type_and_actable_id
       SQL
+
+      slice_index = 1
+      total_slices = (course_sq_tuples.count / SLICE_SIZE.to_f).ceil
 
       course_sq_tuples.each_slice(SLICE_SIZE) do |csq_tuples|
         course_ids = csq_tuples.map { |x| x['course_id'] }
@@ -55,7 +58,9 @@ namespace :db do
         combined_arr = sq_ids.zip(actable_type_strings, course_ids, pending_staff_reply, created_at,
                                   updated_at)
         discussion_topic_values = combined_arr.map { |x| '(' + x.join(',') + ')'}.join(',')
-        byebug
+
+        puts "Start INSERT of #{combined_arr.count} rows: Slice #{slice_index} of #{total_slices}"
+        start_time = Time.now
         connection.exec_query(<<-SQL)
           INSERT INTO course_discussion_topics
                         (actable_id,
@@ -66,23 +71,31 @@ namespace :db do
                          updated_at)
           VALUES #{discussion_topic_values}
         SQL
+        end_time = Time.now
+        puts "End INSERT: #{(end_time - start_time) * 1000} milliseconds"
+        slice_index += 1
       end
 
+      puts "Removing duplicates..."
       # Remove duplicates
+      # http://stackoverflow.com/questions/6583916/delete-completely-duplicate-rows-in-postgresql-and-keep-only-1
+      start_time = Time.now
       connection.exec_query(<<-SQL)
         DELETE FROM course_discussion_topics a
         USING (SELECT MIN(ctid) AS ctid, actable_type, actable_id
-                FROM course_discussion_topics GROUP BY (actable_type, actable_id)
+                FROM course_discussion_topics GROUP BY actable_type, actable_id
                 HAVING COUNT(*) > 1) b
         WHERE a.actable_type = b.actable_type AND a.actable_id = b.actable_id
           AND a.ctid <> b.ctid
       SQL
+      end_time = Time.now
+      puts "Finished removing duplicates: #{(end_time - start_time) * 1000} milliseconds"
       
+      puts "Restoring unique index"
       # Add back unique index
       connection.exec_query(<<-SQL)
         CREATE UNIQUE INDEX index_course_discussion_topics_on_actable_type_and_actable_id
-        ON course_discussion_topics USING btree
-        (actable_type, actable_id)
+        ON course_discussion_topics USING btree (actable_type, actable_id)
       SQL
     end
   end
