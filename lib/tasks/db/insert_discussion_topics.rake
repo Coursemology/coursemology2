@@ -30,7 +30,7 @@ namespace :db do
           ON (caa.submission_id = casq.submission_id AND caa.question_id = casq.question_id)
         LEFT JOIN course_discussion_topics cdt
           ON (cdt.actable_id = caa.id AND cdt.actable_type = 'Course::Assessment::Answer')
-        GROUP BY (cac.course_id, casq.id, casq.submission_id, casq.question_id)
+        GROUP BY cac.course_id, casq.id, casq.submission_id, casq.question_id
       SQL
 
       puts "DROP UNIQUE index"
