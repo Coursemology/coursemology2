@@ -1,7 +1,7 @@
-- answer = discussion_topic_answer
-- topic = answer.acting_as
-- question = answer.question
-- submission = answer.submission
+- submission_question = discussion_topic_submission_question
+- topic = submission_question.acting_as
+- question = submission_question.question
+- submission = submission_question.submission
 - assessment = question.assessment
 
 = div_for(topic, 'data-topic-id' => topic.id) do
@@ -13,5 +13,5 @@
   h4
     = t('.by_html', user: link_to_user(submission.creator))
 
-  = display_topic answer.acting_as, post_partial: 'course/discussion/post',
-                                    footer: 'course/discussion/posts/form'
+  = display_topic submission_question.acting_as, post_partial: 'course/discussion/post',
+                                                 footer: 'course/discussion/posts/form'

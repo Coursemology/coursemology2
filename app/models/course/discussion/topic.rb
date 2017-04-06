@@ -39,19 +39,6 @@ class Course::Discussion::Topic < ActiveRecord::Base
 
   scope :pending_staff_reply, -> { where(pending_staff_reply: true) }
 
-  # Move posts and pending status from a topic to another topic.
-  def self.migrate!(from:, to:)
-    return if from.posts.empty?
-
-    from.posts.update_all(topic_id: to.id)
-    if from.pending_staff_reply
-      to.pending_staff_reply = true
-      from.pending_staff_reply = false
-      from.save!
-      to.save!
-    end
-  end
-
   # Return if a user has subscribed to this topic
   #
   # @param [User] user The user to check

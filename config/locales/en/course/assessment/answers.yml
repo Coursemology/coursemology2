@@ -1,6 +1,0 @@
-en:
-  course:
-    assessment:
-      answers:
-        discussion_topic_answer:
-          by_html: 'By: %{user}'

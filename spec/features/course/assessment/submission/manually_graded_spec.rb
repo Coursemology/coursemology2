@@ -119,14 +119,14 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
         assessment.questions.attempt(submission).each(&:save!)
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        comment_answer = submission.answers.first
+        comment_answer = submission.submission_questions.first
         comment_topic = comment_answer.discussion_topic
 
         # Make a first comment
-        answer_selector = content_tag_selector(comment_answer)
+        comments_selector = '.comments'
         comment_post_text = 'test comment'
-        fill_in_rails_summernote answer_selector, comment_post_text
-        within find(answer_selector) do
+        fill_in_rails_summernote comments_selector, comment_post_text
+        within find(comments_selector) do
           find('.reply-comment').click
         end
         wait_for_ajax
@@ -134,13 +134,13 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
         comment_post = comment_topic.reload.posts.last
         expect(comment_post.text).to have_tag('*', text: comment_post_text)
         expect(comment_post.parent).to eq(nil)
-        expect(find(content_tag_selector(comment_answer))).
-          to have_selector('.answer-comment-form')
+        expect(find('.comments')).
+          to have_selector('.submission-question-comment-form')
 
         # Reply to the first comment
         comment_reply_text = 'test reply'
-        fill_in_rails_summernote answer_selector, comment_reply_text
-        within find(answer_selector) do
+        fill_in_rails_summernote comments_selector, comment_reply_text
+        within find(comments_selector) do
           find('.reply-comment').click
         end
         wait_for_ajax
@@ -148,15 +148,15 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
         comment_reply = comment_topic.reload.posts.select { |post| post.id != comment_post.id }.last
         expect(comment_reply.text).to have_tag('*', text: comment_reply_text)
         expect(comment_reply.parent).to eq(comment_post)
-        expect(find(content_tag_selector(comment_answer))).
-          to have_selector('.answer-comment-form')
+        expect(find('.comments')).
+          to have_selector('.submission-question-comment-form')
 
         # Edit the last comment made
         find(content_tag_selector(comment_reply)).find('.edit').click
         updated_post_text = 'updated comment'
         edit_form_selector = '.edit-discussion-post-form'
         fill_in_rails_summernote edit_form_selector, updated_post_text
-        within find(answer_selector).find('.edit-discussion-post-form') do
+        within find(comments_selector).find('.edit-discussion-post-form') do
           click_button I18n.t('javascript.course.discussion.post.submit')
         end
         wait_for_ajax
@@ -178,8 +178,8 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
 
         # Should still be able to reply when last comment is deleted
         comment_reply_text = 'another reply'
-        fill_in_rails_summernote answer_selector, comment_reply_text
-        within find(answer_selector) do
+        fill_in_rails_summernote comments_selector, comment_reply_text
+        within find(comments_selector) do
           find('.reply-comment').click
         end
         wait_for_ajax

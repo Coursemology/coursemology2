@@ -1,5 +1,5 @@
-- topic = answer.discussion_topic
+- topic = submission_question.discussion_topic
 = div_for(topic, 'data-topic-id' => topic.id)
   = display_topic topic,
                   post_partial: 'course/discussion/post',
-                  footer: 'course/assessment/answer/comments_footer'
+                  footer: 'course/assessment/submission_question/comments_footer'

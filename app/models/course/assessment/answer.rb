@@ -2,7 +2,6 @@
 class Course::Assessment::Answer < ActiveRecord::Base
   include Workflow
   actable
-  acts_as_discussion_topic display_globally: true
 
   workflow do
     state :attempting do
@@ -46,20 +45,8 @@ class Course::Assessment::Answer < ActiveRecord::Base
                          dependent: :destroy, inverse_of: :answer, autosave: true
 
   accepts_nested_attributes_for :actable
-  accepts_nested_attributes_for :discussion_topic
-
-  after_initialize :set_course, if: :new_record?
-  before_validation :set_course, if: :new_record?
 
   default_scope { order(:created_at) }
-
-  # Specific implementation of Course::Discussion::Topic#from_user, this is not supposed to be
-  # called directly.
-  scope :from_user, (lambda do |user_id|
-    joins { submission }.
-      where { submission.creator_id >> user_id }.
-      joins { discussion_topic }.select { discussion_topic.id }
-  end)
 
   scope :without_attempting_state, -> { where.not(workflow_state: :attempting) }
 
@@ -105,10 +92,6 @@ class Course::Assessment::Answer < ActiveRecord::Base
     else
       true
     end
-  end
-
-  def notify(post)
-    Course::Assessment::Answer::CommentNotifier.post_replied(post.creator, post)
   end
 
   protected
@@ -158,11 +141,6 @@ class Course::Assessment::Answer < ActiveRecord::Base
     raise e if e.is_a?(ActiveRecord::RecordInvalid) && e.record.errors[:answer_id].empty?
     association(:auto_grading).reload
     auto_grading
-  end
-
-  # Set the course as the same course of the assessment.
-  def set_course
-    self.course ||= submission.assessment.course if submission && submission.assessment
   end
 
   def unsubmit

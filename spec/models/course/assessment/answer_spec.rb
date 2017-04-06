@@ -3,8 +3,6 @@ require 'rails_helper'
 
 RSpec.describe Course::Assessment::Answer do
   it { is_expected.to be_actable }
-  it { is_expected.to act_as(Course::Discussion::Topic) }
-  it { is_expected.to accept_nested_attributes_for(:discussion_topic) }
   it { is_expected.to belong_to(:submission) }
   it { is_expected.to belong_to(:question) }
   it { is_expected.to accept_nested_attributes_for(:actable) }
@@ -248,6 +246,13 @@ RSpec.describe Course::Assessment::Answer do
 
       context 'when the question does not implement #reset_attempt' do
         let(:answer) { create(:course_assessment_answer) }
+
+        before do
+          actable = double
+          allow(actable).to receive(:self_respond_to?).and_return(false)
+          allow(answer).to receive(:actable).and_return(actable)
+        end
+
         it 'raises a not implemented error' do
           expect { subject }.to raise_error(NotImplementedError)
         end

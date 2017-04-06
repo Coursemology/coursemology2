@@ -17,6 +17,7 @@ module Course::Assessment::AssessmentAbility
     allow_students_update_own_assessment_submission
     allow_students_manage_annotations_for_own_assessment_submissions
     allow_students_read_own_assessment_answers
+    allow_students_read_submission_question
   end
 
   def define_staff_assessment_permissions
@@ -27,6 +28,7 @@ module Course::Assessment::AssessmentAbility
     allow_staff_manage_assessment_annotations
     allow_staff_read_assessment_answers
     allow_staff_read_assessment_tests
+    allow_staff_read_submission_questions
   end
 
   def define_auto_grader_assessment_permissions
@@ -158,5 +160,13 @@ module Course::Assessment::AssessmentAbility
 
   def allow_staff_read_assessment_answers
     can :read, Course::Assessment::Answer, discussion_topic: course_staff_hash
+  end
+
+  def allow_students_read_submission_question
+    can :read, Course::Assessment::SubmissionQuestion, submission: { creator_id: user.id }
+  end
+
+  def allow_staff_read_submission_questions
+    can :read, Course::Assessment::SubmissionQuestion, discussion_topic: course_staff_hash
   end
 end

@@ -1,16 +1,16 @@
 - post = @object
-- answer = post.topic.actable
-- assessment = answer.question.assessment
-- question = answer.question
-- course = answer.course
+- submission_question = post.topic.actable
+- assessment = submission_question.question.assessment
+- question = submission_question.question
+- course = assessment.course
 - host = course.instance.host
 
 - message.subject = t('.subject', course: course.title, topic: "#{assessment.title}: #{question.display_title}")
 - step = assessment.questions.index(question) + 1
 
 = simple_format(t('.message',
-                  topic: link_to("#{assessment.title}: #{answer.question.display_title}",
-                                  edit_course_assessment_submission_url(course, assessment, answer.submission,
+                  topic: link_to("#{assessment.title}: #{submission_question.question.display_title}",
+                                  edit_course_assessment_submission_url(course, assessment, submission_question.submission,
                                                                         step: step, host: host)),
                                   post: post.text,
                                   post_author: post.creator.name))

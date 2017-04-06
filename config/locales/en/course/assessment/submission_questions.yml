@@ -1,0 +1,10 @@
+en:
+  course:
+    assessment:
+      submission_question:
+        comments_footer:
+          comment: 'Comment'
+      submission_questions:
+        comments: 'Comments'
+        discussion_topic_submission_question:
+          by_html: 'By: %{user}'

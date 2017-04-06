@@ -91,10 +91,7 @@ RSpec.describe Course::Discussion::Topic, type: :model do
           acting_as
       end
       let!(:comment) do
-        create(:course_assessment_answer, :with_post, course: course).acting_as
-      end
-      let!(:comment_without_post) do
-        create(:course_assessment_answer, course: course).acting_as
+        create(:course_assessment_submission_question, :with_post, course: course).acting_as
       end
 
       it 'only returns comments and annotations with posts' do
@@ -105,7 +102,7 @@ RSpec.describe Course::Discussion::Topic, type: :model do
 
     describe '.ordered_by_updated_at' do
       let!(:topics) do
-        create(:course_assessment_answer)
+        create(:course_assessment_submission_question)
         create(:course_assessment_answer_programming_file_annotation)
       end
 
@@ -117,14 +114,15 @@ RSpec.describe Course::Discussion::Topic, type: :model do
 
     describe '.from_user' do
       let(:course) { create(:course) }
-      let(:annotation_creator) { create(:user) }
-      let(:comment_creator) { create(:user) }
+      # Comment and Annotation creators must belong to the course.
+      let(:annotation_creator) { create(:course_student, course: course).user }
+      let(:comment_creator) { create(:course_student, course: course).user }
       let!(:annotation) do
         create(:course_assessment_answer_programming_file_annotation,
                course: course, creator: annotation_creator).acting_as
       end
       let!(:comment) do
-        create(:course_assessment_answer, course: course, creator: comment_creator).acting_as
+        create(:submission_question, course: course, user: comment_creator).acting_as
       end
       subject { course.discussion_topics.from_user(user_id) }
 
@@ -155,28 +153,6 @@ RSpec.describe Course::Discussion::Topic, type: :model do
         end
 
         it { is_expected.to contain_exactly(annotation, comment) }
-      end
-    end
-
-    describe '.migrate!' do
-      let(:from_topic) { create(:course_assessment_answer, :with_post, :pending).acting_as }
-      let(:to_topic) { create(:course_assessment_answer).acting_as }
-      let(:posts) { from_topic.posts }
-
-      subject { Course::Discussion::Topic.migrate!(from: from_topic, to: to_topic) }
-
-      it 'moves all the posts to the new topic' do
-        subject
-
-        expect(from_topic.posts.count).to be(0)
-        expect(to_topic.reload.posts).to contain_exactly(*posts)
-      end
-
-      it 'sets the pending status of the new topic' do
-        subject
-
-        expect(from_topic.pending_staff_reply).to be_falsey
-        expect(to_topic.pending_staff_reply).to be_truthy
       end
     end
   end

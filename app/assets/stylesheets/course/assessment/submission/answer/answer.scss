@@ -1,18 +1,8 @@
 @import '../../../discussion/post';
 
 .course-assessment-submission-submissions.edit {
-  .answer .comments {
-    @include discussion-post;
-  }
-
   .answer .btn.continue {
     margin-left: 5px;
-  }
-
-  .answer-comment-form {
-    .btn.reply-comment {
-      margin-top: -15px;
-    }
   }
 
   .panel-heading .collapse-toggle .fa-chevron::after {

@@ -28,3 +28,15 @@ div.answer-panel
           publish: @submission.submitted?,
           unsubmit: !@submission.attempting?\
         }
+
+    / Display comments and comments reply box for autograded questions
+    / The `if` check allows the page to load even if the submission_questions mysteriously go missing.
+    / When changing this code, check _manually_graded_answers.html.slim
+    / and _manually_graded_answers_tabbed.html.slim as well.
+    - submission_questions_by_question = f.object.submission_questions.group_by(&:question)
+    - if !submission_questions_by_question[@current_question].nil?
+      - submission_question = submission_questions_by_question[@current_question].first
+      h3 = t('course.assessment.submission_questions.comments')
+      div.comments id=comments_container_id(submission_question)
+        = render partial: 'course/assessment/submission_question/comments',
+                 locals: { submission_question: submission_question }
