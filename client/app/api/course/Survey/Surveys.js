@@ -11,6 +11,10 @@ export default class SurveysAPI extends BaseSurveyAPI {
   *      - true if user can view results for this survey
   *   canUpdate: bool, canDelete: bool,
   *      - true if user can update and delete this survey respectively
+  *   allow_response_after_end: bool,
+  *      - true if user can respond to a survey after it expires
+  *   allow_modify_after_submit: bool,
+  *      - true if user can update survey after it has been submitted
   *   sections:
   *     Array.<{
   *       id: number, title: string, weight: number, ...etc

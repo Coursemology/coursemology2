@@ -21,6 +21,26 @@ const translations = defineMessages({
     id: 'course.surveys.fields.expiresAt',
     defaultMessage: 'Expires At',
   },
+  anonymous: {
+    id: 'course.surveys.fields.anonymous',
+    defaultMessage: 'Anonymous',
+  },
+  allowResponseAfterEnd: {
+    id: 'course.surveys.fields.allowResponseAfterEnd',
+    defaultMessage: 'Allow Responses After Survey Expires',
+  },
+  allowModifyAfterSubmit: {
+    id: 'course.surveys.fields.allowModifyAfterSubmit',
+    defaultMessage: 'Allow Submitted Responses To Be Modified',
+  },
+  basePoints: {
+    id: 'course.surveys.fields.basePoints',
+    defaultMessage: 'Base Points Awarded',
+  },
+  bonusPoints: {
+    id: 'course.surveys.fields.bonusPoints',
+    defaultMessage: 'Bonus Points Awarded',
+  },
   points: {
     id: 'course.surveys.fields.points',
     defaultMessage: 'Points Awarded',

@@ -105,3 +105,17 @@ export const formatQuestionFormData = (data) => {
 
   return payload;
 };
+
+export const formatSurveyFormData = (data) => {
+  const payload = { ...data };
+  if (data.allow_response_after_end) {
+    payload.bonus_end_at = data.end_at;
+  } else {
+    payload.bonus_end_at = null;
+    payload.time_bonus_exp = 0;
+  }
+
+  return (
+    { survey: payload }
+  );
+};

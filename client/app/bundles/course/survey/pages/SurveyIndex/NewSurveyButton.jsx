@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { aWeekStartingTomorrow } from 'lib/date-time-defaults';
 import { showSurveyForm, createSurvey } from 'course/survey/actions/surveys';
+import { formatSurveyFormData } from 'course/survey/utils';
 import AddButton from 'course/survey/components/AddButton';
 
 const translations = defineMessages({
@@ -30,7 +31,7 @@ class NewSurveyButton extends React.Component {
   createSurveyHandler = (data) => {
     const { dispatch, intl } = this.props;
 
-    const payload = { survey: data };
+    const payload = formatSurveyFormData(data);
     const successMessage = intl.formatMessage(translations.success, data);
     const failureMessage = intl.formatMessage(translations.failure);
     return dispatch(createSurvey(payload, successMessage, failureMessage));

@@ -73,6 +73,7 @@ class Course::Survey::SurveysController < Course::ComponentController
 
   def survey_params
     params.require(:survey).
-      permit(:title, :description, :base_exp, :start_at, :end_at, :published)
+      permit(:title, :description, :base_exp, :time_bonus_exp, :start_at, :bonus_end_at, :end_at,
+             :published, :anonymous, :allow_response_after_end, :allow_modify_after_submit)
   end
 end

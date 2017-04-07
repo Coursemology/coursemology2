@@ -7,6 +7,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import Subheader from 'material-ui/Subheader';
 import { showDeleteConfirmation } from 'course/survey/actions';
 import surveyTranslations from 'course/survey/translations';
+import { formatSurveyFormData } from 'course/survey/utils';
 import * as surveyActions from 'course/survey/actions/surveys';
 import LoadingIndicator from 'course/survey/components/LoadingIndicator';
 import SurveyDetails from './SurveyDetails';
@@ -41,7 +42,7 @@ class SurveyShow extends React.Component {
     const { dispatch, intl, params: { surveyId } } = this.props;
     const { updateSurvey } = surveyActions;
 
-    const payload = { survey: data };
+    const payload = formatSurveyFormData(data);
     const successMessage = intl.formatMessage(surveyTranslations.updateSuccess, data);
     const failureMessage = intl.formatMessage(surveyTranslations.updateFailure);
     return dispatch(updateSurvey(surveyId, payload, successMessage, failureMessage));
@@ -50,17 +51,14 @@ class SurveyShow extends React.Component {
   showEditSurveyForm = (survey) => {
     const { dispatch, intl } = this.props;
     const { showSurveyForm } = surveyActions;
-    const { start_at, end_at, title, description, base_exp } = survey;
 
     return () => dispatch(showSurveyForm({
       onSubmit: this.updateSurveyHandler,
       formTitle: intl.formatMessage(translations.editSurvey),
       initialValues: {
-        start_at: new Date(start_at),
-        end_at: new Date(end_at),
-        title,
-        description,
-        base_exp,
+        ...survey,
+        start_at: new Date(survey.start_at),
+        end_at: new Date(survey.end_at),
       },
     }));
   }
