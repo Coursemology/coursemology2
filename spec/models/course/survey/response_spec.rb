@@ -30,6 +30,29 @@ RSpec.describe Course::Survey::Response do
       end
     end
 
+    describe '#submit' do
+      subject { response.tap(&:submit) }
+
+      it 'sets the correct attributes' do
+        expect(subject.submitted_at).not_to be_nil
+        expect(subject.points_awarded).to eq(survey.base_exp)
+        expect(subject.awarded_at).not_to be_nil
+        expect(subject.awarder).to eq(subject.creator)
+      end
+    end
+
+    describe '#unsubmit' do
+      let(:response_traits) { :submitted }
+      subject { response.tap(&:unsubmit) }
+
+      it 'sets the correct attributes' do
+        expect(subject.submitted_at).to be_nil
+        expect(subject.points_awarded).to eq(0)
+        expect(subject.awarded_at).to be_nil
+        expect(subject.awarder).to be_nil
+      end
+    end
+
     describe 'callbacks from Course::Survey::Response::TodoConcern' do
       subject do
         Course::LessonPlan::Todo.find_by(item_id: survey.lesson_plan_item.id, user_id: student.id)
