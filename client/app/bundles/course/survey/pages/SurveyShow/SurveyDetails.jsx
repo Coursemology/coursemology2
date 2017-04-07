@@ -13,6 +13,7 @@ import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { formatDateTime } from 'lib/date-time-defaults';
 import TitleBar from 'lib/components/TitleBar';
+import libTranslations from 'lib/translations';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
 import { updateSurvey } from 'course/survey/actions/surveys';
@@ -129,10 +130,46 @@ class SurveyDetails extends React.Component {
               </TableRow>
               <TableRow>
                 <TableRowColumn>
-                  <FormattedMessage {...surveyTranslations.points} />
+                  <FormattedMessage {...surveyTranslations.basePoints} />
                 </TableRowColumn>
                 <TableRowColumn>
                   {survey.base_exp}
+                </TableRowColumn>
+              </TableRow>
+              <TableRow>
+                <TableRowColumn>
+                  <FormattedMessage {...surveyTranslations.bonusPoints} />
+                </TableRowColumn>
+                <TableRowColumn>
+                  {survey.allow_response_after_end ? survey.time_bonus_exp : '-'}
+                </TableRowColumn>
+              </TableRow>
+              <TableRow>
+                <TableRowColumn>
+                  <FormattedMessage {...surveyTranslations.anonymous} />
+                </TableRowColumn>
+                <TableRowColumn>
+                  <FormattedMessage {...libTranslations[survey.anonymous ? 'yes' : 'no']} />
+                </TableRowColumn>
+              </TableRow>
+              <TableRow>
+                <TableRowColumn>
+                  <FormattedMessage {...surveyTranslations.allowResponseAfterEnd} />
+                </TableRowColumn>
+                <TableRowColumn>
+                  <FormattedMessage
+                    {...libTranslations[survey.allow_response_after_end ? 'yes' : 'no']}
+                  />
+                </TableRowColumn>
+              </TableRow>
+              <TableRow>
+                <TableRowColumn>
+                  <FormattedMessage {...surveyTranslations.allowModifyAfterSubmit} />
+                </TableRowColumn>
+                <TableRowColumn>
+                  <FormattedMessage
+                    {...libTranslations[survey.allow_modify_after_submit ? 'yes' : 'no']}
+                  />
                 </TableRowColumn>
               </TableRow>
             </TableBody>

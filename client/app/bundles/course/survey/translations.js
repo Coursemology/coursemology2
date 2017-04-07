@@ -35,15 +35,11 @@ const translations = defineMessages({
   },
   basePoints: {
     id: 'course.surveys.fields.basePoints',
-    defaultMessage: 'Base Points Awarded',
+    defaultMessage: 'Base Points',
   },
   bonusPoints: {
     id: 'course.surveys.fields.bonusPoints',
-    defaultMessage: 'Bonus Points Awarded',
-  },
-  points: {
-    id: 'course.surveys.fields.points',
-    defaultMessage: 'Points Awarded',
+    defaultMessage: 'Bonus Points',
   },
   published: {
     id: 'course.surveys.fields.published',
