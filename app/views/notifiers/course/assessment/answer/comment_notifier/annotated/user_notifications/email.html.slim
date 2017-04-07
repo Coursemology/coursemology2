@@ -3,7 +3,7 @@
 - answer = annotation.file.answer
 - assessment = answer.question.assessment
 - question = answer.question
-- course = answer.course
+- course = assessment.course
 - host = course.instance.host
 
 - message.subject = t('.subject', course: course.title, topic: "#{assessment.title}: #{question.display_title}")
