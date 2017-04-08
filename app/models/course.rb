@@ -140,7 +140,7 @@ class Course < ActiveRecord::Base
   def initialize_duplicate(duplicator, other)
     self.start_at += duplicator.time_shift
     self.end_at += duplicator.time_shift
-    self.title = duplicator.options[:new_course_title]
+    self.title = duplicator.options[:new_title]
     self.creator = duplicator.options[:current_user]
     self.registration_key = nil
     logo.duplicate_from(other.logo) if other.logo_url

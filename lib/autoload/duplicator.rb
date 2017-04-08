@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Duplicator
-  attr_reader :options, :time_shift
+  attr_reader :options, :time_shift, :mode
 
   # Create an instance of Duplicator to track duplicated objects.
   #
@@ -13,6 +13,7 @@ class Duplicator
     @exclusion_set = excluded_objects.to_set # set to check what should be excluded
     @options = options
     @time_shift = options[:time_shift]
+    @mode = options[:mode]
   end
 
   # Deep copy the arguments to this function. Objects must provide an +initialize_duplicate+

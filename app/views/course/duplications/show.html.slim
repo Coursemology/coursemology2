@@ -9,9 +9,8 @@ div.panel.panel-default
 = simple_form_for :duplication,
   url: course_duplication_path(current_course),
   method: :post do |f|
-  = f.input :new_course_start_date, as: :bootstrap_date_time,
-      input_html: { value: 1.day.from_now }
-  = f.input :new_course_title,
+  = f.input :new_start_date, as: :bootstrap_date_time, input_html: { value: 1.day.from_now }
+  = f.input :new_title,
       input_html: { value: t('.new_course_title', current_course_title: current_course.title) }
   = f.button :submit, t('.duplicate'), class: 'duplicate'
 br
