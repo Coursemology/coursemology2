@@ -6,6 +6,8 @@ en:
           title_placeholder: 'Leave blank to use default title'
           braincert_whiteboard_api_key_hint: >
             Braincert Virtual Classroom API Key for the Virtual Classroom Component
+          braincert_server_region_hint: >
+            Braincert Virtual Classroom Server Region
           max_duration_hint: >
             Max allowed duration of virtual classes
         update:

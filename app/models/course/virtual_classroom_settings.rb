@@ -27,6 +27,20 @@ class Course::VirtualClassroomSettings
     @settings.braincert_whiteboard_api_key = value
   end
 
+  # Returns BrainCert Virtual Classroom server region
+  #
+  # @return [String] The custom or default title of virtual classrooms component
+  def braincert_server_region
+    @settings.braincert_server_region || 7 # 7 is code for Singapore
+  end
+
+  # Sets BrainCert Virtual Classroom server region
+  #
+  # @param [String] value The new API key
+  def braincert_server_region=(value)
+    @settings.braincert_server_region = value
+  end
+
   # Returns the title of virtual classrooms component
   #
   # @return [String] The custom or default title of virtual classrooms component
