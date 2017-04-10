@@ -150,7 +150,7 @@ group :production do
 end
 
 # Multitenancy
-gem 'acts_as_tenant', github: 'ErwinM/acts_as_tenant'
+gem 'acts_as_tenant'
 
 # Internationalization
 gem 'http_accept_language'
@@ -172,12 +172,12 @@ gem 'cancancan-squeel'
 gem 'rails_utils', '>= 3.3.3'
 
 # Themes for instances
-gem 'themes_on_rails', '>= 0.3.1', github: 'lowjoel/themes_on_rails',
+gem 'themes_on_rails', '>= 0.3.1', github: 'Coursemology/themes_on_rails',
                                    branch: 'cache-theme-templates'
 
 # Forms made easy for Rails
 gem 'simple_form', '~> 3.2.1'
-gem 'simple_form-bootstrap', github: 'allenwq/simple_form-bootstrap'
+gem 'simple_form-bootstrap'
 # Dynamic nested forms
 gem 'cocoon'
 gem 'momentjs-rails', '>= 2.8.1'
