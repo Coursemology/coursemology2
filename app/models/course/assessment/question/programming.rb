@@ -7,7 +7,7 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
 
   acts_as :question, class_name: Course::Assessment::Question.name
 
-  before_save :process_new_package, if: :attachment_changed?
+  before_save :process_package, unless: :skip_process_package?
   before_validation :assign_template_attributes
   before_validation :assign_test_case_attributes
   after_save :clear_duplication_flag
@@ -110,14 +110,29 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
 
   private
 
+  # Create new package or re-evaluate the old package.
+  def process_package
+    if attachment_changed?
+      attachment ? process_new_package : remove_old_package
+    elsif time_limit_changed? || memory_limit_changed? || language_id_changed?
+      # For non-autograded questions, the attachment is not present
+      evaluate_package if attachment
+    end
+  end
+
+  def evaluate_package
+    execute_after_commit do
+      import_job =
+        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, attachment)
+      update_column(:import_job_id, import_job.job_id)
+    end
+  end
+
   # Queues the new question package for processing.
   #
   # We restore the original package, but capture the new package into a local for processing by
   # the import job.
   def process_new_package
-    return remove_old_package if attachment.nil?
-    return if @duplicating
-
     new_attachment = attachment
     restore_attribute!(:attachment)
 
@@ -125,7 +140,7 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
       new_attachment.save!
       import_job =
         Course::Assessment::Question::ProgrammingImportJob.perform_later(self, new_attachment)
-      update(import_job_id: import_job.job_id)
+      update_column(:import_job_id, import_job.job_id)
     end
   end
 
@@ -150,5 +165,9 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
 
   def clear_duplication_flag
     @duplicating = nil
+  end
+
+  def skip_process_package?
+    !!@duplicating
   end
 end

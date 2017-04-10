@@ -33,22 +33,14 @@ RSpec.describe Course::Assessment::Question::Programming do
     end
 
     describe 'callbacks' do
-      let(:question_attributes) { [] }
-      subject { build(:course_assessment_question_programming, *question_attributes) }
+      subject { create(:course_assessment_question_programming, :auto_gradable) }
 
       describe 'before_save' do
         with_active_job_queue_adapter(:test) do
-          before { subject.send(:clear_attribute_changes, :attachment) }
-
           context 'when a package is removed' do
-            let(:question_attributes) do
-              [{
-                template_file_count: 1,
-                template_package: true,
-                import_job_id: SecureRandom.uuid
-              }]
+            before do
+              subject.attachment = nil
             end
-            before { subject.attachment = nil }
 
             it 'does not queue any import jobs' do
               expect { subject.save }.not_to \
@@ -73,21 +65,35 @@ RSpec.describe Course::Assessment::Question::Programming do
           end
 
           context 'when a new package is uploaded' do
-            before do
-              file = File.new(File.join(Rails.root, 'spec/fixtures/course/'\
-                                                    'programming_question_template.zip'))
-              subject.attachment = build(:attachment_reference, file: file)
+            let(:file) do
+              File.new(File.join(Rails.root,
+                                 'spec/fixtures/course/programming_question_template.zip'))
             end
 
             it 'queues a new import job' do
-              expect(subject.import_job).to be_nil
+              old_job_id = subject.import_job
+
+              subject.file = file
               expect { subject.save }.to \
                 have_enqueued_job(Course::Assessment::Question::ProgrammingImportJob).exactly(:once)
-              expect(subject.import_job).not_to be_nil
+              expect(subject.reload.import_job).not_to eq(old_job_id)
             end
 
             it 'reverts the change to the attachment' do
-              expect { subject.save }.to change { subject.attachment }.to(nil)
+              original_attachment = subject.attachment
+
+              subject.file = file
+              expect { subject.save }.to change { subject.attachment }.to(original_attachment)
+            end
+          end
+
+          context 'when memory/time limit or language changed' do
+            it 'queues a new import job' do
+              old_job_id = subject.import_job
+
+              subject.memory_limit = 10
+              subject.save!
+              expect(subject.reload.import_job).not_to eq(old_job_id)
             end
           end
         end
@@ -163,7 +169,7 @@ RSpec.describe Course::Assessment::Question::Programming do
 
     describe '#imported_attachment=' do
       with_active_job_queue_adapter(:test) do
-        subject { build(:course_assessment_question_programming) }
+        subject { create(:course_assessment_question_programming) }
         it 'does not enqueue another import job' do
           subject.imported_attachment = build(:attachment_reference)
           expect { subject.save }.not_to have_enqueued_job

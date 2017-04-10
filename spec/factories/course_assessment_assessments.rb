@@ -51,8 +51,7 @@ FactoryGirl.define do
       after(:build) do |assessment, evaluator|
         evaluator.question_count.downto(1).each do
           question = build(:course_assessment_question_programming, :auto_gradable,
-                           template_package: true, template_package_deferred: false,
-                           assessment: assessment)
+                           template_package: true, assessment: assessment)
           assessment.questions << question.acting_as
         end
       end
