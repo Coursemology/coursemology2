@@ -5,6 +5,7 @@ class Course::Assessment::Answer::ProgrammingFile < ActiveRecord::Base
   before_validation :normalize_filename
 
   validates :content, exclusion: [nil]
+  validate :validate_content_size
 
   belongs_to :answer, class_name: Course::Assessment::Answer::Programming.name, inverse_of: :files
   has_many :annotations, class_name: Course::Assessment::Answer::ProgrammingFileAnnotation.name,
@@ -12,6 +13,8 @@ class Course::Assessment::Answer::ProgrammingFile < ActiveRecord::Base
 
   # Separate the lines by `\r` `\n` or `\r\n`
   LINE_SEPARATOR = /\r\n|\r|\n/
+  MAX_LINES = ApplicationHTMLFormattersHelper::MAX_CODE_LINES
+  MAX_SIZE = ApplicationHTMLFormattersHelper::MAX_CODE_SIZE
 
   # Returns the code at lines.
   #
@@ -37,5 +40,12 @@ class Course::Assessment::Answer::ProgrammingFile < ActiveRecord::Base
   # Normalises the filename for use across platforms.
   def normalize_filename
     self.filename = Pathname.normalize_path(filename)
+  end
+
+  def validate_content_size
+    return unless content.present?
+    return if content.bytesize <= MAX_SIZE && content.lines.size <= MAX_LINES
+
+    errors.add(:content, :exceed_size_limit)
   end
 end
