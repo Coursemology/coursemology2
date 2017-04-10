@@ -29,6 +29,7 @@ const responseData = {
           required: true,
           weight: 0,
         },
+        present: true,
         text_response: 'Current answer',
         options: [],
       }],

@@ -16,8 +16,10 @@ export default class ResponsesAPI extends BaseSurveyAPI {
   *           - Section attributes
   *         answers:
   *           Array.<{
+  *             present: bool,
+  *               - true if an answer object has been created for the nested question.
   *             id: number, text_response: string, options: Array, ...etc,
-  *               - Answer attributes
+  *               - Answer attributes, if the answer exists
   *             questions: Array.<{
   *               description: string, options: Array, weight: number, ...etc
   *                 - Array of questions belonging to the survey

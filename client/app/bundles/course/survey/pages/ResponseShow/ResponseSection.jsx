@@ -27,7 +27,7 @@ class ResponseSection extends React.Component {
             const answer = fields.get(index);
             return (
               <ResponseAnswer
-                key={answer.id}
+                key={answer.id || `q${answer.question.id}`}
                 {...{ member, index, fields }}
               />
             );
