@@ -95,8 +95,9 @@ const validate = (values, props) => {
 
 class ResponseForm extends React.Component {
   static propTypes = {
-    canUnsubmit: PropTypes.bool,
-    isResponseCreator: PropTypes.bool,
+    canUnsubmit: PropTypes.bool.isRequired,
+    isResponseCreator: PropTypes.bool.isRequired,
+    isUnsubmitting: PropTypes.bool.isRequired,
     response: responseShape.isRequired,
     onSubmit: PropTypes.func.isRequired,
     onUnsubmit: PropTypes.func.isRequired,
@@ -176,16 +177,15 @@ class ResponseForm extends React.Component {
   }
 
   renderUnsubmitButton() {
-    const { handleSubmit, onUnsubmit, response } = this.props;
+    const { onUnsubmit, response, isUnsubmitting } = this.props;
     return (
       <RaisedButton
         style={styles.formButton}
-        type="submit"
         primary
         label={<FormattedMessage {...responseFormTranslations.unsubmit} />}
-        onTouchTap={handleSubmit(data => onUnsubmit({ ...data, unsubmit: true }))}
+        onTouchTap={onUnsubmit}
         buttonStyle={styles.unsubmitButton}
-        disabled={!response.submitted_at}
+        disabled={!response.submitted_at || isUnsubmitting}
       />
     );
   }

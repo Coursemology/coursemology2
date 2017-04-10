@@ -94,6 +94,18 @@ export default class ResponsesAPI extends BaseSurveyAPI {
     return this.getClient().patch(`${this._getUrlPrefix()}/${responseId}`, responseFields);
   }
 
+  /**
+  * Unsubmits a survey response
+  *
+  * @param {number} responseId
+  * @return {Promise}
+  * success response: survey_response
+  * error response: {}
+  */
+  unsubmit(responseId) {
+    return this.getClient().post(`${this._getUrlPrefix()}/${responseId}/unsubmit`);
+  }
+
   _getUrlPrefix(surveyId) {
     const id = surveyId || this.getSurveyId();
     return `/courses/${this.getCourseId()}/surveys/${id}/responses`;
