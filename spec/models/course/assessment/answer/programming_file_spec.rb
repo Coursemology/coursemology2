@@ -60,5 +60,26 @@ RSpec.describe Course::Assessment::Answer::ProgrammingFile do
         it { is_expected.to eq('1') }
       end
     end
+
+    describe 'validations' do
+      context 'when the content exceeds the size or lines limit' do
+        let(:invalid_content) do
+          too_many_lines = "new line\n" * 1500
+          size_too_big = 'Im 10bytes' * 6 * 1024 # 60KB
+
+          [too_many_lines, size_too_big].sample
+        end
+        let(:file) do
+          create(:course_assessment_answer_programming_file)
+        end
+
+        it 'is not valid' do
+          expect(file).to be_valid
+
+          file.content = invalid_content
+          expect(file).not_to be_valid
+        end
+      end
+    end
   end
 end
