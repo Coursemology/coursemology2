@@ -118,7 +118,8 @@ class Course::VirtualClassroom::BraincertApiService
       start_time: @virtual_classroom.start_at.in_time_zone(0).strftime(TIME_BRAINCERT),
       end_time: @virtual_classroom.end_at.in_time_zone(0).strftime(TIME_BRAINCERT),
       date: @virtual_classroom.start_at.in_time_zone(0).to_date.strftime(DATE_ISO),
-      ispaid: 0, is_recurring: 0, seat_attendees: 25, record: 1, isRegion: 2
+      ispaid: 0, is_recurring: 0, seat_attendees: 25, record: 1,
+      isRegion: @settings.braincert_server_region
     }
   end
 end

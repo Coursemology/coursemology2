@@ -17,7 +17,7 @@ class Course::Admin::VirtualClassroomSettingsController < Course::Admin::Control
 
   def virtual_classroom_settings_params #:nodoc:
     params.require(:virtual_classroom_settings).permit(
-      :title, :pagination, :braincert_whiteboard_api_key, :max_duration
+      :title, :pagination, :braincert_whiteboard_api_key, :max_duration, :braincert_server_region
     )
   end
 
