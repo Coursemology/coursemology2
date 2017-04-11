@@ -23,8 +23,8 @@ RSpec.feature 'Course: Duplication' do
       scenario 'I can duplicate a course' do
         visit course_duplication_path(course)
 
-        expect(page).to have_field('New course start date')
-        expect(page).to have_field('New course title')
+        expect(page).to have_field('New start date')
+        expect(page).to have_field('New title')
 
         expect do
           click_button I18n.t('course.duplications.show.duplicate')
@@ -50,8 +50,8 @@ RSpec.feature 'Course: Duplication' do
 
         # Just test that the Duplicate form can be seen since the actual duplication is already
         # tested under the System Administrator context.
-        expect(page).to have_field('New course start date')
-        expect(page).to have_field('New course title')
+        expect(page).to have_field('New start date')
+        expect(page).to have_field('New title')
       end
     end
 

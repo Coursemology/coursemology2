@@ -1,24 +1,23 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Course::DuplicationService, type: :service do
+RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:admin) { create(:administrator) }
     let(:course) { create(:course) }
     let(:new_course) do
-      dup_service = Course::DuplicationService.new(
-        course, admin,
-        new_course_start_date: (course.start_at + 1.day).iso8601,
-        new_course_title: I18n.t('course.duplications.show.new_course_title_prefix')
-      )
-      dup_service.duplicate
-      dup_service.instance_variable_get(:@new_course)
+      options = {
+        current_user: admin,
+        new_start_date: (course.start_at + 1.day).iso8601,
+        new_title: I18n.t('course.duplications.show.new_course_title_prefix')
+      }
+      Course::Duplication::CourseDuplicationService.duplicate_course(course, options)
     end
     let!(:assessment) { create(:assessment, *assessment_traits, course: course) }
     let(:assessment_traits) { [] }
 
-    describe '#duplicate' do
+    describe '#duplicate_course' do
       context 'when children are simple' do
         let!(:forum) { create(:forum, course: course) }
         let!(:milestones) { create_list(:course_lesson_plan_milestone, 3, course: course) }

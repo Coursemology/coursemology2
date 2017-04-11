@@ -44,10 +44,12 @@ class Course::Mailer < ApplicationMailer
   # @param [Course] new_course The resulting course of the duplication.
   # @param [User] user The user who performed the duplication.
   def course_duplicated_email(original_course, new_course, user)
+    # Based on DuplicationService, user might default to User.system which has no email.
+    return unless user.email
+
     @original_course = original_course
     @new_course = new_course
     @recipient = user
-
     mail(to: @recipient.email, subject: t('.subject', new_course: @new_course.title))
   end
 

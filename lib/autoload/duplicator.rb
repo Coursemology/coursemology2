@@ -1,20 +1,19 @@
 # frozen_string_literal: true
 class Duplicator
-  attr_reader :time_shift, :new_course_title, :current_user
+  attr_reader :options, :time_shift, :mode
 
   # Create an instance of Duplicator to track duplicated objects.
   #
+  # Options are used to store information that persists across duplication of objects.
+  #
   # @param [Enumerable] excluded_objects An Enumerable of objects to be excluded from duplication
-  # @param [DateTime] time_shift The amount of time to shift dates by
-  # @param [String] new_course_title The new course title
-  # @param [User] current_user Current user who initiated the duplication of the objects
-  def initialize(excluded_objects = [], time_shift = 0, new_course_title = 'Duplicated',
-                 current_user = User.system)
+  # @param [Hash] options Set of options to be stored in the duplicator object.
+  def initialize(excluded_objects = [], options = {})
     @duplicated_objects = {} # hash to check what has been duplicated
     @exclusion_set = excluded_objects.to_set # set to check what should be excluded
-    @time_shift = time_shift
-    @new_course_title = new_course_title
-    @current_user = current_user
+    @options = options
+    @time_shift = options[:time_shift]
+    @mode = options[:mode]
   end
 
   # Deep copy the arguments to this function. Objects must provide an +initialize_duplicate+
