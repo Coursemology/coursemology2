@@ -43,10 +43,9 @@ export function fetchResponse(responseId) {
       .then((data) => {
         dispatch({
           type: actionTypes.LOAD_RESPONSE_SUCCESS,
-          canUnsubmit: data.canUnsubmit,
-          isResponseCreator: data.isResponseCreator,
           survey: data.survey,
           response: data.response,
+          flags: data.flags,
         });
       })
       .catch(() => {
@@ -69,10 +68,9 @@ export function updateResponse(
       .then((data) => {
         dispatch({
           type: actionTypes.UPDATE_RESPONSE_SUCCESS,
-          canUnsubmit: data.canUnsubmit,
-          isResponseCreator: data.isResponseCreator,
           survey: data.survey,
           response: data.response,
+          flags: data.flags,
         });
 
         if (payload.response.submit) {
@@ -106,7 +104,9 @@ export function unsubmitResponse(
       .then((data) => {
         dispatch({
           type: actionTypes.UNSUBMIT_RESPONSE_SUCCESS,
+          survey: data.survey,
           response: data.response,
+          flags: data.flags,
         });
         setNotification(successMessage)(dispatch);
       })
@@ -130,7 +130,7 @@ export function fetchResponses() {
         });
       })
       .catch(() => {
-        dispatch({ type: actionTypes.LOAD_RESPONSE_FAILURE });
+        dispatch({ type: actionTypes.LOAD_RESPONSES_FAILURE });
       });
   };
 }

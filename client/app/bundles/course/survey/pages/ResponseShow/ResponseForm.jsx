@@ -32,7 +32,7 @@ const responseFormTranslations = defineMessages({
   },
   unsubmit: {
     id: 'course.surveys.ResponseForm.unsubmit',
-    defaultMessage: 'Unsubmit Submission',
+    defaultMessage: 'Unsubmit Response',
   },
 });
 
@@ -95,9 +95,13 @@ const validate = (values, props) => {
 
 class ResponseForm extends React.Component {
   static propTypes = {
-    canUnsubmit: PropTypes.bool.isRequired,
-    isResponseCreator: PropTypes.bool.isRequired,
-    isUnsubmitting: PropTypes.bool.isRequired,
+    flags: PropTypes.shape({
+      canModify: PropTypes.bool.isRequired,
+      canSubmit: PropTypes.bool.isRequired,
+      canUnsubmit: PropTypes.bool.isRequired,
+      isResponseCreator: PropTypes.bool.isRequired,
+      isUnsubmitting: PropTypes.bool.isRequired,
+    }),
     response: responseShape.isRequired,
     onSubmit: PropTypes.func.isRequired,
     onUnsubmit: PropTypes.func.isRequired,
@@ -107,7 +111,7 @@ class ResponseForm extends React.Component {
   };
 
   static renderSections(props) {
-    const { fields, response } = props;
+    const { fields, disabled } = props;
     return (
       <div>
         {
@@ -115,9 +119,8 @@ class ResponseForm extends React.Component {
             const section = fields.get(index);
             return (
               <ResponseSection
-                disabled={!!response.submitted_at}
                 key={section.id}
-                {...{ member, index, fields }}
+                {...{ member, index, fields, disabled }}
               />
             );
           })
@@ -126,27 +129,10 @@ class ResponseForm extends React.Component {
     );
   }
 
-  shouldDisableSaveButton() {
-    const { pristine, response, isResponseCreator } = this.props;
-
-    if (!!response.submitted_at || pristine || !isResponseCreator) {
-      return true;
-    }
-    return false;
-  }
-
-  shouldDisableSubmitButton() {
-    const { response, isResponseCreator } = this.props;
-
-    if (response.submitted_at) {
-      return true;
-    } else if (isResponseCreator !== undefined && !isResponseCreator) {
-      return true;
-    }
-    return false;
-  }
-
   renderSaveButton() {
+    const { pristine, flags: { canModify } } = this.props;
+    if (!canModify) { return null; }
+
     return (
       <RaisedButton
         style={styles.formButton}
@@ -154,13 +140,19 @@ class ResponseForm extends React.Component {
         primary
         label={<FormattedMessage {...formTranslations.save} />}
         buttonStyle={styles.saveButton}
-        disabled={this.shouldDisableSaveButton()}
+        disabled={pristine}
       />
     );
   }
 
   renderSubmitButton() {
-    const { handleSubmit, onSubmit, response } = this.props;
+    const {
+      handleSubmit, onSubmit, response, flags: { canSubmit, isResponseCreator },
+    } = this.props;
+
+    if (!isResponseCreator) { return null; }
+    if (!response.submitted_at && !canSubmit) { return null; }
+
     const submitButtonTranslation =
       response.submitted_at ? responseFormTranslations.submitted : formTranslations.submit;
 
@@ -171,13 +163,15 @@ class ResponseForm extends React.Component {
         primary
         label={<FormattedMessage {...submitButtonTranslation} />}
         onTouchTap={handleSubmit(data => onSubmit({ ...data, submit: true }))}
-        disabled={this.shouldDisableSubmitButton()}
+        disabled={!!response.submitted_at}
       />
     );
   }
 
   renderUnsubmitButton() {
-    const { onUnsubmit, response, isUnsubmitting } = this.props;
+    const { onUnsubmit, flags: { isUnsubmitting, canUnsubmit } } = this.props;
+    if (!canUnsubmit) { return null; }
+
     return (
       <RaisedButton
         style={styles.formButton}
@@ -185,24 +179,28 @@ class ResponseForm extends React.Component {
         label={<FormattedMessage {...responseFormTranslations.unsubmit} />}
         onTouchTap={onUnsubmit}
         buttonStyle={styles.unsubmitButton}
-        disabled={!response.submitted_at || isUnsubmitting}
+        disabled={isUnsubmitting}
       />
     );
   }
 
   render() {
-    const { handleSubmit, onSubmit, canUnsubmit, response, isResponseCreator } = this.props;
+    const {
+      handleSubmit, onSubmit, response, flags: { canSubmit, canModify },
+    } = this.props;
+
     return (
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FieldArray
           name="sections"
           component={ResponseForm.renderSections}
+          disabled={!(canModify || canSubmit)}
           {...{ response }}
         />
         <br />
-        {isResponseCreator && !response.submitted_at ? this.renderSaveButton() : null}
-        {isResponseCreator ? this.renderSubmitButton() : null}
-        {canUnsubmit ? this.renderUnsubmitButton() : null}
+        { this.renderSaveButton() }
+        { this.renderSubmitButton() }
+        { this.renderUnsubmitButton() }
       </Form>
     );
   }
