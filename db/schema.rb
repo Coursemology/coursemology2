@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170309094211) do
+ActiveRecord::Schema.define(version: 20170407083553) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -615,12 +615,14 @@ ActiveRecord::Schema.define(version: 20170309094211) do
   end
 
   create_table "course_surveys", force: :cascade do |t|
-    t.boolean  "anonymous",    :default=>false, :null=>false
-    t.boolean  "allow_modify", :default=>false, :null=>false
-    t.integer  "creator_id",   :null=>false, :index=>{:name=>"fk__course_surveys_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_surveys_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "updater_id",   :null=>false, :index=>{:name=>"fk__course_surveys_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_surveys_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.datetime "created_at",   :null=>false
-    t.datetime "updated_at",   :null=>false
+    t.boolean  "anonymous",                 :default=>false, :null=>false
+    t.boolean  "allow_modify_after_submit", :default=>false, :null=>false
+    t.boolean  "allow_response_after_end",  :default=>false, :null=>false
+    t.datetime "closing_reminded_at"
+    t.integer  "creator_id",                :null=>false, :index=>{:name=>"fk__course_surveys_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_surveys_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "updater_id",                :null=>false, :index=>{:name=>"fk__course_surveys_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_surveys_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "created_at",                :null=>false
+    t.datetime "updated_at",                :null=>false
   end
 
   create_table "course_survey_sections", force: :cascade do |t|

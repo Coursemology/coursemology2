@@ -5,6 +5,7 @@ class Course::Survey < ActiveRecord::Base
   include Course::ReminderConcern
 
   enum question_type: { text_response: 0, multiple_choice: 1, multiple_response: 2 }
+  validates :end_at, presence: true, if: :allow_response_after_end
 
   # To call Course::Survey::Response.name to force it to load. Otherwise, there might be issues
   # with autoloading of files in production where eager_load is enabled.
