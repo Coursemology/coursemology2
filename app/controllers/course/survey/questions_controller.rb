@@ -5,7 +5,6 @@ class Course::Survey::QuestionsController < Course::Survey::SurveysController
   def create
     last_weight = @survey.questions.maximum(:weight)
     @question.weight = last_weight ? last_weight + 1 : 0
-    build_existing_responses_answers
     if @question.save
       render_question_json
     else
@@ -38,16 +37,6 @@ class Course::Survey::QuestionsController < Course::Survey::SurveysController
   def render_question_json
     load_question_options
     render partial: 'question', locals: { question: @question }
-  end
-
-  def build_existing_responses_answers
-    @survey.responses.each do |response|
-      @question.answers.build(response: response) do |answer|
-        @question.options.each do |option|
-          answer.options.build(question_option: option)
-        end
-      end
-    end
   end
 
   def question_params
