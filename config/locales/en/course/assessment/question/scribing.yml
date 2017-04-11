@@ -1,0 +1,16 @@
+en:
+  course:
+    assessment:
+      question:
+        scribing:
+          new:
+            header: 'New Scribing Question'
+          create:
+            success: 'The scribing question was created.'
+            failure: 'Could not create scribing question.'
+          update:
+            success: 'The scribing question was updated.'
+            failure: 'Could not update scribing question.'
+          destroy:
+            success: 'The scribing question was deleted.'
+            failure: 'Could not delete scribing question: %{error}'

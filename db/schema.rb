@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170309094211) do
+ActiveRecord::Schema.define(version: 20170315023554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -283,6 +283,9 @@ ActiveRecord::Schema.define(version: 20170309094211) do
     t.integer "line",    :null=>false
   end
 
+  create_table "course_assessment_answer_scribings", force: :cascade do |t|
+  end
+
   create_table "course_assessment_answer_text_responses", force: :cascade do |t|
     t.text "answer_text"
   end
@@ -310,6 +313,12 @@ ActiveRecord::Schema.define(version: 20170309094211) do
     t.text    "content",     :null=>false
   end
   add_index "course_assessment_question_programming_template_files", ["question_id", "filename"], :name=>"index_course_assessment_question_programming_template_filenames", :unique=>true, :case_sensitive=>false
+
+  create_table "course_assessment_question_scribings", force: :cascade do |t|
+    t.datetime "created_at",    :null=>false
+    t.datetime "updated_at",    :null=>false
+    t.integer  "attempt_limit"
+  end
 
   create_table "course_assessment_question_text_responses", force: :cascade do |t|
     t.boolean "allow_attachment", :default=>false
