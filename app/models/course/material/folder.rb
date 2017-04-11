@@ -79,12 +79,17 @@ class Course::Material::Folder < ActiveRecord::Base
   def initialize_duplicate(duplicator, other)
     self.start_at = other.start_at + duplicator.time_shift
     self.end_at = other.end_at + duplicator.time_shift if other.end_at
-    self.materials = duplicator.duplicate(other.materials).compact
-    self.owner = duplicator.duplicate(other.owner)
-    self.course = duplicator.duplicate(other.course)
-    self.parent = duplicator.duplicate(other.parent)
     self.updated_at = other.updated_at
     self.created_at = other.created_at
+    self.materials = duplicator.duplicate(other.materials).compact
+    self.owner = duplicator.duplicate(other.owner)
+    if duplicator.mode == :course
+      self.course = duplicator.duplicate(other.course)
+      self.parent = duplicator.duplicate(other.parent)
+    elsif duplicator.mode == :object
+      self.course = duplicator.options[:target_course]
+      self.parent = duplicator.options[:target_course].root_folder
+    end
     @duplicating = true
   end
 

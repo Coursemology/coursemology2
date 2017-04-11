@@ -135,10 +135,18 @@ class Course::Assessment < ActiveRecord::Base
     copy_attributes(other, duplicator.time_shift)
     self.folder = duplicator.duplicate(other.folder)
     self.questions = duplicator.duplicate(other.questions.map(&:actable)).compact.map(&:acting_as)
-    self.assessment_conditions = duplicator.duplicate(other.assessment_conditions)
-    # Like achievement conditions, duplicate the actable object directly and let the acting_as
-    # gem create the Condition object.
-    self.conditions = duplicator.duplicate(other.conditions.map(&:actable)).map(&:acting_as)
+    if duplicator.mode == :course
+      self.assessment_conditions = duplicator.duplicate(other.assessment_conditions)
+      # Like achievement conditions, duplicate the actable object directly and let the acting_as
+      # gem create the Condition object.
+      self.conditions = duplicator.duplicate(other.conditions.map(&:actable)).map(&:acting_as)
+    elsif duplicator.mode == :object
+      target_category = duplicator.options[:target_course].assessment_categories.first
+      target_tab = target_category.tabs.first
+      self.tab = target_tab
+      self.folder.parent = target_category.folder
+      self.folder.owner = self
+    end
     @duplicating = true
   end
 
