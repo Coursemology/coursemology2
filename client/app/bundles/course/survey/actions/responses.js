@@ -75,7 +75,7 @@ export function updateResponse(
           response: data.response,
         });
 
-        if (payload.response.submit || payload.response.unsubmit) {
+        if (payload.response.submit) {
           const courseId = getCourseId();
           browserHistory.push(`/courses/${courseId}/surveys/`);
         }
@@ -89,6 +89,30 @@ export function updateResponse(
         } else {
           setNotification(failureMessage)(dispatch);
         }
+      });
+  };
+}
+
+export function unsubmitResponse(
+  responseId,
+  successMessage,
+  failureMessage
+) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.UNSUBMIT_RESPONSE_REQUEST });
+
+    return CourseAPI.survey.responses.unsubmit(responseId)
+      .then(response => response.data)
+      .then((data) => {
+        dispatch({
+          type: actionTypes.UNSUBMIT_RESPONSE_SUCCESS,
+          response: data.response,
+        });
+        setNotification(successMessage)(dispatch);
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.UNSUBMIT_RESPONSE_FAILURE });
+        setNotification(failureMessage)(dispatch);
       });
   };
 }

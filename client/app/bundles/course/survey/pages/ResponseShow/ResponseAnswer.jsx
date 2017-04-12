@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Field, FieldArray } from 'redux-form';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { RadioButton } from 'material-ui/RadioButton';
 import { Card, CardText } from 'material-ui/Card';
 import { red500 } from 'material-ui/styles/colors';
@@ -37,6 +38,13 @@ const styles = {
     margin: 0,
   },
 };
+
+const translations = defineMessages({
+  noAnswer: {
+    id: 'course.surveys.ResponseShow.ResponseAnswer.noAnswer',
+    defaultMessage: 'Answer is missing. Question was likely created after response was made.',
+  },
+});
 
 class ResponseAnswer extends React.Component {
   static propTypes = {
@@ -165,11 +173,16 @@ class ResponseAnswer extends React.Component {
       <Card style={styles.answerCard}>
         <CardText>
           <p>{`${index + 1}. ${question.description}`}</p>
-          <Field
-            name={`${member}[${index}][id]`}
-            component="hidden"
-          />
-          { renderer(question, member) }
+          {
+            answer.present ?
+              <div>
+                <Field name={`${member}[${index}][id]`} component="hidden" />
+                { renderer(question, member) }
+              </div> :
+              <div style={styles.errorText}>
+                <FormattedMessage {...translations.noAnswer} />
+              </div>
+          }
         </CardText>
       </Card>
     );

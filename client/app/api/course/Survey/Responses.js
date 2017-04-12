@@ -16,8 +16,10 @@ export default class ResponsesAPI extends BaseSurveyAPI {
   *           - Section attributes
   *         answers:
   *           Array.<{
+  *             present: bool,
+  *               - true if an answer object has been created for the nested question.
   *             id: number, text_response: string, options: Array, ...etc,
-  *               - Answer attributes
+  *               - Answer attributes, if the answer exists
   *             questions: Array.<{
   *               description: string, options: Array, weight: number, ...etc
   *                 - Array of questions belonging to the survey
@@ -92,6 +94,18 @@ export default class ResponsesAPI extends BaseSurveyAPI {
   */
   update(responseId, responseFields) {
     return this.getClient().patch(`${this._getUrlPrefix()}/${responseId}`, responseFields);
+  }
+
+  /**
+  * Unsubmits a survey response
+  *
+  * @param {number} responseId
+  * @return {Promise}
+  * success response: survey_response
+  * error response: {}
+  */
+  unsubmit(responseId) {
+    return this.getClient().post(`${this._getUrlPrefix()}/${responseId}/unsubmit`);
   }
 
   _getUrlPrefix(surveyId) {

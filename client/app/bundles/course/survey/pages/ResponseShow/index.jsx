@@ -13,7 +13,7 @@ import { Table, TableBody, TableRow, TableHeaderColumn, TableRowColumn } from 'm
 import { questionTypes } from 'course/survey/constants';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
-import { fetchResponse, updateResponse } from 'course/survey/actions/responses';
+import { fetchResponse, updateResponse, unsubmitResponse } from 'course/survey/actions/responses';
 import LoadingIndicator from 'course/survey/components/LoadingIndicator';
 import ResponseForm from './ResponseForm';
 
@@ -59,8 +59,9 @@ class ResponseShow extends React.Component {
   static propTypes = {
     surveys: PropTypes.arrayOf(surveyShape),
     response: responseShape,
-    canUnsubmit: PropTypes.bool,
-    isResponseCreator: PropTypes.bool,
+    canUnsubmit: PropTypes.bool.isRequired,
+    isResponseCreator: PropTypes.bool.isRequired,
+    isUnsubmitting: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
     params: PropTypes.shape({
       courseId: PropTypes.string.isRequired,
@@ -130,12 +131,11 @@ class ResponseShow extends React.Component {
   handleUnsubmitResponse = () => {
     const { dispatch, params: { responseId } } = this.props;
     const { unsubmitSuccess, unsubmitFailure } = translations;
-    const payload = { response: { unsubmit: true } };
     const successMessage = <FormattedMessage {...(unsubmitSuccess)} />;
     const failureMessage = <FormattedMessage {...(unsubmitFailure)} />;
 
     return dispatch(
-      updateResponse(responseId, payload, successMessage, failureMessage)
+      unsubmitResponse(responseId, successMessage, failureMessage)
     );
   }
 
@@ -163,15 +163,16 @@ class ResponseShow extends React.Component {
   }
 
   renderBody() {
-    const { canUnsubmit, isResponseCreator, response, isLoading } = this.props;
+    const { canUnsubmit, isResponseCreator, response, isLoading, isUnsubmitting } = this.props;
     if (isLoading) { return <LoadingIndicator />; }
 
     return (
       <div>
-        { canUnsubmit ? this.renderSubmissionInfo() : null }
+        { !isResponseCreator ? this.renderSubmissionInfo() : null }
         <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
         <ResponseForm
           canUnsubmit={canUnsubmit}
+          isUnsubmitting={isUnsubmitting}
           isResponseCreator={isResponseCreator}
           initialValues={ResponseShow.buildInitialValues(response)}
           onSubmit={this.handleUpdateResponse}
