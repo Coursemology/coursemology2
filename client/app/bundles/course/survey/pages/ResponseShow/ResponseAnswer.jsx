@@ -53,21 +53,23 @@ class ResponseAnswer extends React.Component {
     fields: PropTypes.shape({
       get: PropTypes.func.isRequired,
     }).isRequired,
+    disabled: PropTypes.bool.isRequired,
   };
 
-  static renderTextResponseField(question, member) {
+  static renderTextResponseField(question, member, disabled) {
     return (
       <Field
         name={`${member}[text_response]`}
         component={TextField}
         style={styles.textResponse}
+        disabled={disabled}
         multiLine
       />
     );
   }
 
   static renderMultipleResponseOptions(props) {
-    const { fields, question, meta: { dirty, error } } = props;
+    const { fields, question, disabled, meta: { dirty, error } } = props;
     const { grid_view: grid, options } = question;
 
     return (
@@ -86,6 +88,7 @@ class ResponseAnswer extends React.Component {
                   component={Checkbox}
                   style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
                   iconStyle={grid ? styles.gridOptionWidgetIcon : {}}
+                  disabled={disabled}
                 />
               );
               const { option: optionText, image_url: imageUrl } = option;
@@ -102,17 +105,17 @@ class ResponseAnswer extends React.Component {
     );
   }
 
-  static renderMultipleResponseField(question, member) {
+  static renderMultipleResponseField(question, member, disabled) {
     return (
       <FieldArray
         name={`${member}[options]`}
         component={ResponseAnswer.renderMultipleResponseOptions}
-        {...{ question }}
+        {...{ question, disabled }}
       />
     );
   }
 
-  static renderMultipleChoiceOptions({ question, ...props }) {
+  static renderMultipleChoiceOptions({ question, disabled, ...props }) {
     const { input: { onChange, value }, meta: { dirty, error } } = props;
     const { grid_view: grid, options } = question;
 
@@ -130,6 +133,7 @@ class ResponseAnswer extends React.Component {
                 iconStyle={grid ? styles.gridOptionWidgetIcon : {}}
                 onCheck={(event, buttonValue) => onChange(buttonValue)}
                 checked={id === value}
+                disabled={disabled}
               />
             );
             return (
@@ -144,19 +148,19 @@ class ResponseAnswer extends React.Component {
     );
   }
 
-  static renderMultipleChoiceField(question, member) {
+  static renderMultipleChoiceField(question, member, disabled) {
     return (
       <Field
         name={`${member}[selected_option]`}
         component={ResponseAnswer.renderMultipleChoiceOptions}
-        {...{ question }}
+        {...{ question, disabled }}
       />
     );
   }
 
   render() {
     const { TEXT, MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
-    const { member, index, fields } = this.props;
+    const { member, index, fields, disabled } = this.props;
     const answer = fields.get(index);
     const question = answer.question;
 
@@ -177,7 +181,7 @@ class ResponseAnswer extends React.Component {
             answer.present ?
               <div>
                 <Field name={`${member}[${index}][id]`} component="hidden" />
-                { renderer(question, member) }
+                { renderer(question, member, disabled) }
               </div> :
               <div style={styles.errorText}>
                 <FormattedMessage {...translations.noAnswer} />

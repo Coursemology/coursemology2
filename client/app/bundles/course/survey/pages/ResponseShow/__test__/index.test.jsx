@@ -40,8 +40,12 @@ const responseData = {
     title: 'Test Response',
     description: 'Form working?',
   },
-  canUnsubmit: false,
-  isResponseCreator: true,
+  flags: {
+    canModify: true,
+    canSubmit: true,
+    canUnsubmit: false,
+    isResponseCreator: true,
+  },
 };
 
 beforeEach(() => {

@@ -2,11 +2,15 @@ import actionTypes from '../constants';
 import { sortResponseElements } from '../utils';
 
 const initialState = {
-  isLoading: false,
-  isUnsubmitting: false,
-  canUnsubmit: false,
-  isResponseCreator: false,
   response: {},
+  flags: {
+    isLoading: false,
+    isUnsubmitting: false,
+    canModify: false,
+    canSubmit: false,
+    canUnsubmit: false,
+    isResponseCreator: false,
+  },
 };
 
 export default function (state = initialState, action) {
@@ -14,7 +18,7 @@ export default function (state = initialState, action) {
   switch (type) {
     case actionTypes.CREATE_RESPONSE_REQUEST:
     case actionTypes.LOAD_RESPONSE_REQUEST: {
-      return { ...state, isLoading: true };
+      return { ...state, flags: { ...state.flags, isLoading: true } };
     }
     case actionTypes.UPDATE_RESPONSE_SUCCESS:
     case actionTypes.CREATE_RESPONSE_SUCCESS:
@@ -22,27 +26,25 @@ export default function (state = initialState, action) {
       return {
         ...state,
         response: sortResponseElements(action.response),
-        canUnsubmit: action.canUnsubmit,
-        isResponseCreator: action.isResponseCreator,
-        isLoading: false,
+        flags: { ...state.flags, ...action.flags, isLoading: false },
       };
     }
     case actionTypes.CREATE_RESPONSE_FAILURE:
     case actionTypes.LOAD_RESPONSE_FAILURE: {
-      return { ...state, isLoading: false };
+      return { ...state, flags: { ...state.flags, isLoading: false } };
     }
     case actionTypes.UNSUBMIT_RESPONSE_REQUEST: {
-      return { ...state, isUnsubmitting: true };
+      return { ...state, flags: { ...state.flags, isUnsubmitting: true } };
     }
     case actionTypes.UNSUBMIT_RESPONSE_SUCCESS: {
       return {
         ...state,
         response: sortResponseElements(action.response),
-        isUnsubmitting: false,
+        flags: { ...state.flags, ...action.flags, isUnsubmitting: false },
       };
     }
     case actionTypes.UNSUBMIT_RESPONSE_FAILURE: {
-      return { ...state, isUnsubmitting: false };
+      return { ...state, flags: { ...state.flags, isUnsubmitting: false } };
     }
     default:
       return state;

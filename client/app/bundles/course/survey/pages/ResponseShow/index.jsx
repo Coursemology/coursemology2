@@ -59,10 +59,10 @@ class ResponseShow extends React.Component {
   static propTypes = {
     surveys: PropTypes.arrayOf(surveyShape),
     response: responseShape,
-    canUnsubmit: PropTypes.bool.isRequired,
-    isResponseCreator: PropTypes.bool.isRequired,
-    isUnsubmitting: PropTypes.bool.isRequired,
-    isLoading: PropTypes.bool.isRequired,
+    flags: PropTypes.shape({
+      isResponseCreator: PropTypes.bool.isRequired,
+      isLoading: PropTypes.bool.isRequired,
+    }),
     params: PropTypes.shape({
       courseId: PropTypes.string.isRequired,
     }).isRequired,
@@ -163,21 +163,18 @@ class ResponseShow extends React.Component {
   }
 
   renderBody() {
-    const { canUnsubmit, isResponseCreator, response, isLoading, isUnsubmitting } = this.props;
-    if (isLoading) { return <LoadingIndicator />; }
+    const { response, flags } = this.props;
+    if (flags.isLoading) { return <LoadingIndicator />; }
 
     return (
       <div>
-        { !isResponseCreator ? this.renderSubmissionInfo() : null }
+        { !flags.isResponseCreator ? this.renderSubmissionInfo() : null }
         <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
         <ResponseForm
-          canUnsubmit={canUnsubmit}
-          isUnsubmitting={isUnsubmitting}
-          isResponseCreator={isResponseCreator}
           initialValues={ResponseShow.buildInitialValues(response)}
           onSubmit={this.handleUpdateResponse}
           onUnsubmit={this.handleUnsubmitResponse}
-          {...{ response }}
+          {...{ response, flags }}
         />
       </div>
     );

@@ -28,7 +28,11 @@ export default class ResponsesAPI extends BaseSurveyAPI {
   *             }>,
   *           }>
   *       }>
-  *   }
+  *   },
+  *   flags: {
+  *     canModify: bool, canSubmit: bool, canUnsubmit: bool, isResponseCreator: bool,
+  *       - Flags that define actions user can perform
+  *   },
   * }
   */
 
