@@ -13,4 +13,9 @@ class Course::Survey < ActiveRecord::Base
                        class_name: Course::Survey::Response.name
   has_many :questions, through: :sections
   has_many :sections, inverse_of: :survey, dependent: :destroy
+
+  def initialize_duplicate(duplicator, other)
+    copy_attributes(other, duplicator.time_shift)
+    self.sections = duplicator.duplicate(other.sections)
+  end
 end

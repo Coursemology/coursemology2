@@ -9,4 +9,8 @@ class Course::Survey::Question < ActiveRecord::Base
                      inverse_of: :question, dependent: :destroy
 
   accepts_nested_attributes_for :options, allow_destroy: true
+
+  def initialize_duplicate(duplicator, other)
+    self.options = duplicator.duplicate(other.options)
+  end
 end

@@ -16,6 +16,7 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
     end
     let!(:assessment) { create(:assessment, *assessment_traits, course: course) }
     let(:assessment_traits) { [] }
+    let!(:survey) { create(:survey, course: course) }
 
     describe '#duplicate_course' do
       context 'when children are simple' do
@@ -350,6 +351,99 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           # Check that condition types match
           expect(new_conditions.map(&:actable_type)).
             to match_array original_conditions.map(&:actable_type)
+        end
+      end
+
+      context 'when survey has no children' do
+        let!(:survey) { create(:survey, section_count: 0, course: course) }
+        it 'duplicates assessment attributes' do
+          new_survey = new_course.surveys.first
+          expect(new_survey).to_not be survey
+          expect(new_survey.title).to eq survey.title
+          expect(new_survey.description).to eq survey.description
+          expect(new_survey.base_exp).to eq survey.base_exp
+          expect(new_survey.time_bonus_exp).to eq survey.time_bonus_exp
+          expect(new_survey.published).to eq survey.published
+          expect(new_survey.start_at).to be_within(1.second).of survey.start_at + 1.day
+          expect(new_survey.bonus_end_at).to be_within(1.second).
+            of survey.bonus_end_at + 1.day
+          # Source survey has no end date
+          expect(new_survey.end_at).to be_nil
+        end
+
+        it 'duplicates lesson plan items acting as assessments' do
+          new_lesson_plan_item = new_course.lesson_plan_items.second
+          expect(new_lesson_plan_item).to_not be course.lesson_plan_items.second
+          expect(new_lesson_plan_item).to_not eq course.lesson_plan_items.second
+        end
+      end
+
+      context 'when survey has all question types' do
+        let!(:survey) do
+          create(:survey, section_traits: [:with_all_question_types], course: course)
+        end
+
+        it 'duplicates questions' do
+          # Check that the surveys have the same number of sections
+          new_survey = new_course.surveys.first
+          expect(new_survey.sections.size).to eq survey.sections.size
+
+          # Check that the survey sections have the same number of questions
+          new_section = new_survey.sections.first
+          section = survey.sections.first
+          expect(new_section.questions.size).to eq section.questions.size
+
+          new_questions = new_section.questions
+          questions = survey.questions
+
+          # Check that the attributes are duplicated
+          attributes = [:question_type, :description, :weight, :required, :grid_view,
+                        :max_options, :min_options]
+          attributes.each do |attribute|
+            new_attribs = new_questions.map(&attribute)
+            attribs = questions.map(&attribute)
+            expect(new_attribs).to match_array attribs
+          end
+
+          # Check that duplicated questions belong to the duplicated course
+          new_questions.each do |question|
+            expect(question.section.survey.course).to eq new_course
+          end
+        end
+      end
+
+      context 'when survey question options has attachments' do
+        let!(:survey_question) do
+          create(:survey_question, :multiple_choice, section: survey.sections.first,
+                                                     option_traits: [:with_attachment])
+        end
+
+        it 'duplicates the question options' do
+          new_survey_question = new_course.surveys.first.sections.first.questions.first
+
+          # Check that the survey questions have the same number of options
+          expect(new_survey_question.options.size).to eq survey_question.options.size
+
+          # Check that the attributes are duplicated
+          attributes = [:option, :weight]
+          attributes.each do |attribute|
+            new_attribs = new_survey_question.options.map(&attribute)
+            attribs = survey_question.options.map(&attribute)
+            expect(new_attribs).to match_array attribs
+          end
+        end
+
+        it 'duplicates the attachment references but not the attachments' do
+          new_survey_question = new_course.surveys.first.sections.first.questions.first
+          new_attachment_reference = new_survey_question.options.first.attachment_reference
+          attachment_reference = survey_question.options.first.attachment
+
+          expect(new_attachment_reference).to_not be attachment_reference
+          expect(new_attachment_reference).to_not eq attachment_reference
+
+          new_attachment = new_attachment_reference.attachment
+          attachment = attachment_reference.attachment
+          expect(new_attachment).to eq attachment
         end
       end
     end
