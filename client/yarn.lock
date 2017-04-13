@@ -5920,6 +5920,10 @@ wbuf@^1.1.0, wbuf@^1.4.0:
   dependencies:
     minimalistic-assert "^1.0.0"
 
+webfontloader@^1.6.27:
+  version "1.6.27"
+  resolved "https://registry.yarnpkg.com/webfontloader/-/webfontloader-1.6.27.tgz#c3899649b0653aa57d0a23388f82409e0df224ba"
+
 webidl-conversions@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"

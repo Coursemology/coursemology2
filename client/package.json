@@ -95,6 +95,7 @@
     "sass-loader": "^6.0.3",
     "stats-webpack-plugin": "^0.6.0",
     "style-loader": "^0.16.1",
+    "webfontloader": "^1.6.27",
     "webpack": "^2.3.2"
   },
   "devDependencies": {
