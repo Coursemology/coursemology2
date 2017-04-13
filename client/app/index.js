@@ -30,6 +30,8 @@ function loadModules() {
   require('lib/initializers/ace-editor.js');
   require('lib/initializers/confirm-dialog');
   loadCurrentModule();
+  // Require web font last so that it doesn't block the load of current module.
+  require('lib/initializers/webfont');
 }
 
 if (!global.Intl) {
