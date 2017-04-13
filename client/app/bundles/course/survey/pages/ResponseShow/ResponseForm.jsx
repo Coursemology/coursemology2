@@ -1,19 +1,16 @@
 import React, { PropTypes } from 'react';
-import { red500 } from 'material-ui/styles/colors';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import { reduxForm, FieldArray, Form } from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
 import formTranslations from 'lib/translations/form';
 import { questionTypes, formNames } from 'course/survey/constants';
 import { responseShape } from 'course/survey/propTypes';
+import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
 import ResponseSection from './ResponseSection';
 
 const styles = {
   formButton: {
     marginRight: 10,
-  },
-  unsubmitButton: {
-    backgroundColor: red500,
   },
 };
 
@@ -29,10 +26,6 @@ const responseFormTranslations = defineMessages({
   submitted: {
     id: 'course.surveys.ResponseForm.submitted',
     defaultMessage: 'Submitted',
-  },
-  unsubmit: {
-    id: 'course.surveys.ResponseForm.unsubmit',
-    defaultMessage: 'Unsubmit Response',
   },
 });
 
@@ -100,11 +93,9 @@ class ResponseForm extends React.Component {
       canSubmit: PropTypes.bool.isRequired,
       canUnsubmit: PropTypes.bool.isRequired,
       isResponseCreator: PropTypes.bool.isRequired,
-      isUnsubmitting: PropTypes.bool.isRequired,
     }),
     response: responseShape.isRequired,
     onSubmit: PropTypes.func.isRequired,
-    onUnsubmit: PropTypes.func.isRequired,
     pristine: PropTypes.bool.isRequired,
 
     handleSubmit: PropTypes.func.isRequired,
@@ -169,19 +160,9 @@ class ResponseForm extends React.Component {
   }
 
   renderUnsubmitButton() {
-    const { onUnsubmit, flags: { isUnsubmitting, canUnsubmit } } = this.props;
+    const { response, flags: { canUnsubmit } } = this.props;
     if (!canUnsubmit) { return null; }
-
-    return (
-      <RaisedButton
-        style={styles.formButton}
-        primary
-        label={<FormattedMessage {...responseFormTranslations.unsubmit} />}
-        onTouchTap={onUnsubmit}
-        buttonStyle={styles.unsubmitButton}
-        disabled={isUnsubmitting}
-      />
-    );
+    return <UnsubmitButton responseId={response.id} />;
   }
 
   render() {

@@ -13,7 +13,7 @@ import { Table, TableBody, TableRow, TableHeaderColumn, TableRowColumn } from 'm
 import { questionTypes } from 'course/survey/constants';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
-import { fetchResponse, updateResponse, unsubmitResponse } from 'course/survey/actions/responses';
+import { fetchResponse, updateResponse } from 'course/survey/actions/responses';
 import LoadingIndicator from 'course/survey/components/LoadingIndicator';
 import ResponseForm from './ResponseForm';
 
@@ -37,14 +37,6 @@ const translations = defineMessages({
   submitFailure: {
     id: 'course.surveys.ResponseShow.submitFailure',
     defaultMessage: 'Submit Failed.',
-  },
-  unsubmitSuccess: {
-    id: 'course.surveys.ResponseShow.unsubmitSuccess',
-    defaultMessage: 'The response has been unsubmitted.',
-  },
-  unsubmitFailure: {
-    id: 'course.surveys.ResponseShow.unsubmitFailure',
-    defaultMessage: 'Unsubmit Failed.',
   },
 });
 
@@ -128,17 +120,6 @@ class ResponseShow extends React.Component {
     );
   }
 
-  handleUnsubmitResponse = () => {
-    const { dispatch, params: { responseId } } = this.props;
-    const { unsubmitSuccess, unsubmitFailure } = translations;
-    const successMessage = <FormattedMessage {...(unsubmitSuccess)} />;
-    const failureMessage = <FormattedMessage {...(unsubmitFailure)} />;
-
-    return dispatch(
-      unsubmitResponse(responseId, successMessage, failureMessage)
-    );
-  }
-
   renderSubmissionInfo() {
     const { response } = this.props;
     return (
@@ -173,7 +154,6 @@ class ResponseShow extends React.Component {
         <ResponseForm
           initialValues={ResponseShow.buildInitialValues(response)}
           onSubmit={this.handleUpdateResponse}
-          onUnsubmit={this.handleUnsubmitResponse}
           {...{ response, flags }}
         />
       </div>
