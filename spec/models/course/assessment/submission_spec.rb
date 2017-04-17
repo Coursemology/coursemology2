@@ -384,22 +384,6 @@ RSpec.describe Course::Assessment::Submission do
         submission.mark!
         expect(submission.answers.all?(&:graded?)).to be(true)
       end
-
-      context 'when assessment enables delayed_grade_publication' do
-        let(:assessment_traits) { [:with_all_question_types, :delay_grade_publication] }
-        let(:points_awarded) { 50 }
-        before do
-          submission1.points_awarded = points_awarded
-          submission1.mark!
-          submission1.save!
-        end
-        subject { submission1 }
-
-        it 'sets the draft_points_awarded to points_awarded, and points_awarded to nil' do
-          expect(subject.points_awarded).to be_nil
-          expect(subject.draft_points_awarded).to eq(points_awarded)
-        end
-      end
     end
 
     describe '#publish!' do

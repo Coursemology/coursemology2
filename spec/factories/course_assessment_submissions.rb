@@ -9,6 +9,7 @@ FactoryGirl.define do
       creator
     end
     assessment { build(:assessment, course: course) }
+    points_awarded nil
 
     trait :attempting do
       after(:build) do |submission|
@@ -38,8 +39,7 @@ FactoryGirl.define do
 
         # Revert publisher and published at if given.
         submission.mark!
-        submission.draft_points_awarded = submission.points_awarded
-        submission.points_awarded = nil
+        submission.draft_points_awarded = rand(1..10) * 100
       end
     end
 
@@ -50,6 +50,7 @@ FactoryGirl.define do
         submission.publish!
         submission.publisher = evaluator.publisher if evaluator.publisher
         submission.published_at = evaluator.published_at if evaluator.published_at
+        submission.points_awarded = rand(1..10) * 100
       end
     end
   end

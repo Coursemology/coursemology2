@@ -37,7 +37,8 @@ div.panel.panel-default
               - if can?(:grade, @submission)
                 / TODO: Factor in time-based experience points
                 td
-                  = f.input :points_awarded, label: false,
+                  - exp_field = @submission.published? ? :points_awarded : :draft_points_awarded
+                  = f.input exp_field, label: false,
                             input_html: { class: 'submission-points-awarded',
                                           'data-base-points' => @submission.assessment.base_exp,
                                           value: @submission.current_points_awarded },

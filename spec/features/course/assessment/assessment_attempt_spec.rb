@@ -229,7 +229,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         # This field should be filled when page loads
         correct_exp = (assessment.base_exp * submission.grade /
           assessment.questions.map(&:maximum_grade).sum).to_i
-        expect(find_field('submission_points_awarded').value).to eq(correct_exp.to_s)
+        expect(find_field('submission_draft_points_awarded').value).to eq(correct_exp.to_s)
 
         submission_maximum_grade = 0
         submission.answers.each do |answer|
@@ -240,7 +240,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         end
 
         # This field should be automatically filled
-        expect(find_field('submission_points_awarded').value).to eq(assessment.base_exp.to_s)
+        expect(find_field('submission_draft_points_awarded').value).to eq(assessment.base_exp.to_s)
 
         # Test EXP multiplier
         multiplier = 0.5
@@ -248,7 +248,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
           find('input').set multiplier
         end
         new_exp = (assessment.base_exp * multiplier).to_i
-        expect(find_field('submission_points_awarded').value).to eq(new_exp.to_s)
+        expect(find_field('submission_draft_points_awarded').value).to eq(new_exp.to_s)
 
         click_button I18n.t('course.assessment.submission.submissions.buttons.publish')
         expect(current_path).to eq(

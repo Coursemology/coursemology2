@@ -51,7 +51,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       else
         params.require(:submission).permit(
           *workflow_state_params,
-          :points_awarded,
+          :draft_points_awarded,
           answers_attributes: [:id] + update_answers_params
         )
       end

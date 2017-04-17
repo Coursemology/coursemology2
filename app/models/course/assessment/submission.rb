@@ -169,7 +169,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
   # Return the points awarded for the submission.
   # If submission is 'graded', return the draft value, otherwise, the return the points awarded.
   def current_points_awarded
-    graded? ? draft_points_awarded : points_awarded
+    published? ? points_awarded : draft_points_awarded
   end
 
   private
