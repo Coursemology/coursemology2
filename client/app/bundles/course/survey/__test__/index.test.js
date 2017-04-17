@@ -24,10 +24,10 @@ describe('Surveys', () => {
           base_exp: 20,
           canViewResults: true,
           title: 'First Survey',
-          isStarted: false,
           published: true,
           start_at: '2017-02-27T00:00:00.000+08:00',
           end_at: '2017-03-12T23:59:00.000+08:00',
+          response: null,
         }],
         canCreate: true,
       });
