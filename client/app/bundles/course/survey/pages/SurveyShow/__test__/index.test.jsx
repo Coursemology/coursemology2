@@ -19,6 +19,8 @@ const surveyData = {
   canDelete: true,
   canCreateSection: true,
   canViewResults: true,
+  start_at: new Date('2017-03-24').toISOString(),
+  end_at: new Date('2017-03-29').toISOString(),
   response: {
     submitted_at: new Date('2017-03-26').toISOString(),
     responseId: 1,

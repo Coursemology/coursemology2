@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import moment from 'lib/moment';
 import { browserHistory } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
-import { surveyShape } from '../propTypes';
 import { createResponse } from '../actions/responses';
 
 const translations = defineMessages({
@@ -16,6 +15,10 @@ const translations = defineMessages({
     id: 'course.surveys.RespondButton.continue',
     defaultMessage: 'Continue',
   },
+  expired: {
+    id: 'course.surveys.RespondButton.expired',
+    defaultMessage: 'Expired',
+  },
   view: {
     id: 'course.surveys.RespondButton.view',
     defaultMessage: 'View',
@@ -26,47 +29,72 @@ const translations = defineMessages({
   },
 });
 
-const RespondButton = ({ dispatch, survey, courseId }) => {
-  const {
-    id,
-    isStarted,
-    canUpdate,
-    responseId,
-    start_at: startAt,
-    submitted_at: submittedAt,
-  } = survey;
-  const notYetOpen = !canUpdate && moment(startAt).isAfter();
-  const goToResponse = () => browserHistory.push(
-    `/courses/${courseId}/surveys/${id}/responses/${responseId}`
-  );
+const RespondButton = ({
+  courseId, surveyId, responseId,
+  canRespond, canModify, canSubmit,
+  startAt, endAt, submittedAt, dispatch,
+}) => {
+  const isStarted = !!responseId;
+  const responsePath = `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}`;
+  const goToResponseShow = () => browserHistory.push(responsePath);
+  const goToResponseEdit = () => browserHistory.push(`${responsePath}/edit`);
+  const goToResponseCreate = () => dispatch(createResponse(surveyId));
 
-  let labelTranslation = translations.start;
-  let onTouchTap = () => dispatch(createResponse(id));
-  if (notYetOpen) {
-    labelTranslation = translations.notOpen;
-    onTouchTap = () => {};
+  let labelTranslation = translations.notOpen;
+  let onTouchTap = () => {};
+  let disabled = false;
+  let primary = false;
+
+  if (isStarted && (canModify || canSubmit)) {
+    labelTranslation = submittedAt ? translations.view : translations.continue;
+    onTouchTap = goToResponseEdit;
+    primary = !submittedAt;
+  } else if (!isStarted && (canRespond || canModify || canSubmit)) {
+    labelTranslation = translations.start;
+    onTouchTap = goToResponseCreate;
+    primary = true;
   } else if (submittedAt) {
+    // From this case on, both canModify and canSubmit both false
     labelTranslation = translations.view;
-    onTouchTap = goToResponse;
-  } else if (isStarted) {
-    labelTranslation = translations.continue;
-    onTouchTap = goToResponse;
+    onTouchTap = canModify ? goToResponseEdit : goToResponseShow;
+  } else if (startAt && moment(startAt).isAfter()) {
+    disabled = true;
+  } else if (endAt && moment(endAt).isBefore()) {
+    labelTranslation = translations.expired;
+    if (isStarted) {
+      onTouchTap = goToResponseShow;
+    } else {
+      disabled = true;
+    }
   }
 
   return (
     <RaisedButton
       label={<FormattedMessage {...labelTranslation} />}
-      disabled={notYetOpen}
-      primary={!notYetOpen && !submittedAt}
-      {...{ onTouchTap }}
+      {...{ onTouchTap, disabled, primary }}
     />
   );
 };
 
 RespondButton.propTypes = {
+  courseId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  surveyId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  responseId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  canRespond: PropTypes.bool.isRequired,
+  canModify: PropTypes.bool.isRequired,
+  canSubmit: PropTypes.bool.isRequired,
+  startAt: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
+  endAt: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
+  submittedAt: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
+
   dispatch: PropTypes.func.isRequired,
-  survey: surveyShape,
-  courseId: PropTypes.string.isRequired,
+};
+
+RespondButton.defaultProps = {
+  responseId: null,
+  canRespond: false,
+  canModify: false,
+  canSubmit: false,
 };
 
 export default connect()(RespondButton);
