@@ -147,6 +147,7 @@ end
 group :production do
   # Puma will be our app server
   gem 'puma'
+  gem 'newrelic_rpm'
 end
 
 # Multitenancy
