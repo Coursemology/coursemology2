@@ -54,6 +54,26 @@ export function fetchResponse(responseId) {
   };
 }
 
+export function fetchEditableResponse(responseId) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.LOAD_RESPONSE_EDIT_REQUEST });
+
+    return CourseAPI.survey.responses.edit(responseId)
+      .then(response => response.data)
+      .then((data) => {
+        dispatch({
+          type: actionTypes.LOAD_RESPONSE_EDIT_SUCCESS,
+          survey: data.survey,
+          response: data.response,
+          flags: data.flags,
+        });
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.LOAD_RESPONSE_EDIT_FAILURE });
+      });
+  };
+}
+
 export function updateResponse(
   responseId,
   payload,

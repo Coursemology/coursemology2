@@ -45,6 +45,18 @@ export default class ResponsesAPI extends BaseSurveyAPI {
   * error response: {}
   */
   fetch(responseId) {
+    return this.getClient().get(`${this._getUrlPrefix()}/${responseId}/`);
+  }
+
+  /**
+  * Fetches a survey response with missing answers and options populated for student to edit.
+  *
+  * @param {number} responseId
+  * @return {Promise}
+  * success response: survey_response
+  * error response: {}
+  */
+  edit(responseId) {
     return this.getClient().get(`${this._getUrlPrefix()}/${responseId}/edit`);
   }
 

@@ -16,11 +16,13 @@ export default function (state = initialState, action) {
   const { type } = action;
   switch (type) {
     case actionTypes.CREATE_RESPONSE_REQUEST:
+    case actionTypes.LOAD_RESPONSE_EDIT_REQUEST:
     case actionTypes.LOAD_RESPONSE_REQUEST: {
       return { ...state, flags: { ...state.flags, isLoading: true } };
     }
     case actionTypes.UPDATE_RESPONSE_SUCCESS:
     case actionTypes.CREATE_RESPONSE_SUCCESS:
+    case actionTypes.LOAD_RESPONSE_EDIT_SUCCESS:
     case actionTypes.LOAD_RESPONSE_SUCCESS: {
       return {
         ...state,
@@ -29,6 +31,7 @@ export default function (state = initialState, action) {
       };
     }
     case actionTypes.CREATE_RESPONSE_FAILURE:
+    case actionTypes.LOAD_RESPONSE_EDIT_FAILURE:
     case actionTypes.LOAD_RESPONSE_FAILURE: {
       return { ...state, flags: { ...state.flags, isLoading: false } };
     }
