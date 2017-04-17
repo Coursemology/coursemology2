@@ -5,7 +5,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import formTranslations from 'lib/translations/form';
 import { questionTypes, formNames } from 'course/survey/constants';
 import { responseShape } from 'course/survey/propTypes';
-import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
 import ResponseSection from './ResponseSection';
 
 const styles = {
@@ -88,6 +87,7 @@ const validate = (values, props) => {
 
 class ResponseForm extends React.Component {
   static propTypes = {
+    readOnly: PropTypes.bool.isRequired,
     flags: PropTypes.shape({
       canModify: PropTypes.bool.isRequired,
       canSubmit: PropTypes.bool.isRequired,
@@ -100,6 +100,12 @@ class ResponseForm extends React.Component {
 
     handleSubmit: PropTypes.func.isRequired,
   };
+
+  static defaultProps = {
+    readOnly: false,
+    // onSubmit will not be passed in when form is read-only
+    onSubmit: () => {},
+  }
 
   static renderSections(props) {
     const { fields, disabled } = props;
@@ -159,15 +165,9 @@ class ResponseForm extends React.Component {
     );
   }
 
-  renderUnsubmitButton() {
-    const { response, flags: { canUnsubmit } } = this.props;
-    if (!canUnsubmit) { return null; }
-    return <UnsubmitButton responseId={response.id} />;
-  }
-
   render() {
     const {
-      handleSubmit, onSubmit, response, flags: { canSubmit, canModify },
+      handleSubmit, onSubmit, response, flags: { canSubmit, canModify }, readOnly,
     } = this.props;
 
     return (
@@ -175,13 +175,12 @@ class ResponseForm extends React.Component {
         <FieldArray
           name="sections"
           component={ResponseForm.renderSections}
-          disabled={!(canModify || canSubmit)}
+          disabled={readOnly || !(canModify || canSubmit)}
           {...{ response }}
         />
         <br />
-        { this.renderSaveButton() }
-        { this.renderSubmitButton() }
-        { this.renderUnsubmitButton() }
+        { !readOnly && this.renderSaveButton() }
+        { !readOnly && this.renderSubmitButton() }
       </Form>
     );
   }

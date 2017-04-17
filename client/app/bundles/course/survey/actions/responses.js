@@ -93,7 +93,7 @@ export function updateResponse(
           flags: data.flags,
         });
 
-        if (payload.response.submit) {
+        if (payload.response.submit && !data.flags.canModify) {
           const courseId = getCourseId();
           browserHistory.push(`/courses/${courseId}/surveys/`);
         }

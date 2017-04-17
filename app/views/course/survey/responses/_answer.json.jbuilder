@@ -10,7 +10,13 @@ end
 if answer
   json.present true
   json.(answer, :id, :question_id, :text_response)
-  json.options answer.options.includes(:question_option), partial: 'option', as: :option
+  answer_options = answer.options.includes(:question_option)
+  json.options answer_options, partial: 'option', as: :option
+
+  if answer.question.multiple_choice?
+    selected_option = answer_options.find(&:selected)
+    json.selected_option selected_option && selected_option.question_option_id
+  end
 else
   json.present false
 end
