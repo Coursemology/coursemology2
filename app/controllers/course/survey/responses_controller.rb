@@ -47,7 +47,13 @@ class Course::Survey::ResponsesController < Course::Survey::SurveysController
   end
 
   def update
-    @response.submit if params[:response][:submit]
+    if params[:response][:submit]
+      authorize!(:submit, @response)
+      @response.submit
+    else
+      authorize!(:modify, @response)
+    end
+
     if @response.update_attributes(response_update_params)
       render_response_json
     else
@@ -56,7 +62,6 @@ class Course::Survey::ResponsesController < Course::Survey::SurveysController
   end
 
   def unsubmit
-    authorize!(:manage, @survey)
     @response.unsubmit
     if @response.save
       render_response_json
