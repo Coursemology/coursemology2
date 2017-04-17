@@ -13,6 +13,8 @@ class ActiveRecord::Associations::Preloader
       case preloader_class.name
       when HasMany.name
         ActiveRecord::Associations::Preloader::ManualHasMany
+      when HasManyThrough.name
+        ActiveRecord::Associations::Preloader::ManualHasManyThrough
       when NullPreloader.name, AlreadyLoaded.name
         preloader_class
       else
