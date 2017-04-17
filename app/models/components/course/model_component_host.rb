@@ -44,6 +44,18 @@ class Course::ModelComponentHost
     end
   end
 
+  module Duplicable
+    extend ActiveSupport::Concern
+
+    def initialize_duplicate(_duplicator, _other)
+      fail "Implement your own initialize_duplicate method for this component."
+    end
+
+    def duplicator_display_string
+      fail "Return the string to display on the duplication UI page."
+    end
+  end
+
   const_get(:Component).module_eval do
     const_set(:ClassMethods, ::Module.new) unless const_defined?(:ClassMethods)
     include CourseComponentMethods
