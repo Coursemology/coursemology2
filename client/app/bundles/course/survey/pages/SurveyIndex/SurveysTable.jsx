@@ -151,7 +151,17 @@ class SurveysTable extends React.Component {
                         /> :
                         null
                     }
-                    <RespondButton {...{ survey, courseId }} />
+                    <RespondButton
+                      courseId={courseId}
+                      surveyId={survey.id}
+                      responseId={survey.response && survey.response.id}
+                      canRespond={survey.canRespond}
+                      canModify={!!survey.response && survey.response.canModify}
+                      canSubmit={!!survey.response && survey.response.canSubmit}
+                      startAt={survey.start_at}
+                      endAt={survey.end_at}
+                      submittedAt={survey.response && survey.response.submitted_at}
+                    />
                   </div>
                 </TableHeaderColumn>
               </TableRow>

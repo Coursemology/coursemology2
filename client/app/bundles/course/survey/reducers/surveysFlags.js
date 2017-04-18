@@ -5,6 +5,7 @@ const initialState = {
   isLoadingSurveys: false,
   canCreate: false,
   isQuestionMoved: false,
+  isUnsubmittingResponse: false,
 };
 
 export default function (state = initialState, action) {
@@ -33,6 +34,13 @@ export default function (state = initialState, action) {
     }
     case actionTypes.UPDATE_QUESTION_ORDER_SUCCESS: {
       return { ...state, isQuestionMoved: false };
+    }
+    case actionTypes.UNSUBMIT_RESPONSE_REQUEST: {
+      return { ...state, isUnsubmittingResponse: true };
+    }
+    case actionTypes.UNSUBMIT_RESPONSE_FAILURE:
+    case actionTypes.UNSUBMIT_RESPONSE_SUCCESS: {
+      return { ...state, isUnsubmittingResponse: false };
     }
     default:
       return state;

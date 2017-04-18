@@ -18,6 +18,7 @@ class Course::Survey::Response < ActiveRecord::Base
   def submit
     self.submitted_at = Time.zone.now
     self.points_awarded = survey.base_exp
+    self.points_awarded += survey.time_bonus_exp if submitted_at <= survey.end_at
     self.awarded_at = Time.zone.now
     self.awarder = creator
   end

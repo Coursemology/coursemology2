@@ -41,7 +41,7 @@ const styles = {
 
 const translations = defineMessages({
   noAnswer: {
-    id: 'course.surveys.ResponseShow.ResponseAnswer.noAnswer',
+    id: 'course.surveys.ResponseForm.ResponseAnswer.noAnswer',
     defaultMessage: 'Answer is missing. Question was likely created after response was made.',
   },
 });
@@ -125,7 +125,7 @@ class ResponseAnswer extends React.Component {
         <div style={grid ? styles.grid : {}}>
           { options.map((option) => {
             const { option: optionText, image_url: imageUrl } = option;
-            const id = option.id.toString();
+            const id = option.id;
             const widget = (
               <RadioButton
                 value={id}

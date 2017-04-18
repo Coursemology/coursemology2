@@ -1,9 +1,9 @@
 /**
- * Searches an array for the first object that has the given id and returns it.
+ * Searches an array for the first object that has the given id and returns its index.
  *
  * @param {Object[]} array
  * @param {String|Number} id
- * @return {Object}
+ * @return {Number}
  */
 export const findById = (array, id) => (
   array.findIndex(item => String(item.id) === String(id))

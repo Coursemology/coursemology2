@@ -24,20 +24,36 @@ class Course::Survey::ResponsesController < Course::Survey::SurveysController
   end
 
   def show
-    render 'course/survey/surveys/index'
+    respond_to do |format|
+      format.html { render 'course/survey/surveys/index' }
+      format.json { render_response_json }
+    end
   end
 
   def edit
-    @response.build_missing_answers_and_options
-    if @response.save
-      render_response_json
-    else
-      head :internal_server_error
+    raise CanCan::AccessDenied if cannot?(:submit, @response) && cannot?(:modify, @response)
+
+    respond_to do |format|
+      format.html { render 'course/survey/surveys/index' }
+      format.json do
+        @response.build_missing_answers_and_options
+        if @response.save
+          render_response_json
+        else
+          head :internal_server_error
+        end
+      end
     end
   end
 
   def update
-    @response.submit if params[:response][:submit]
+    if params[:response][:submit]
+      authorize!(:submit, @response)
+      @response.submit
+    else
+      authorize!(:modify, @response)
+    end
+
     if @response.update_attributes(response_update_params)
       render_response_json
     else
@@ -46,7 +62,6 @@ class Course::Survey::ResponsesController < Course::Survey::SurveysController
   end
 
   def unsubmit
-    authorize!(:manage, @survey)
     @response.unsubmit
     if @response.save
       render_response_json

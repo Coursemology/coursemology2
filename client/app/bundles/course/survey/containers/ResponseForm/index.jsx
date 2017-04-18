@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { red500 } from 'material-ui/styles/colors';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import { reduxForm, FieldArray, Form } from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -11,9 +10,6 @@ import ResponseSection from './ResponseSection';
 const styles = {
   formButton: {
     marginRight: 10,
-  },
-  unsubmitButton: {
-    backgroundColor: red500,
   },
 };
 
@@ -29,10 +25,6 @@ const responseFormTranslations = defineMessages({
   submitted: {
     id: 'course.surveys.ResponseForm.submitted',
     defaultMessage: 'Submitted',
-  },
-  unsubmit: {
-    id: 'course.surveys.ResponseForm.unsubmit',
-    defaultMessage: 'Unsubmit Response',
   },
 });
 
@@ -95,20 +87,25 @@ const validate = (values, props) => {
 
 class ResponseForm extends React.Component {
   static propTypes = {
+    readOnly: PropTypes.bool.isRequired,
     flags: PropTypes.shape({
       canModify: PropTypes.bool.isRequired,
       canSubmit: PropTypes.bool.isRequired,
       canUnsubmit: PropTypes.bool.isRequired,
       isResponseCreator: PropTypes.bool.isRequired,
-      isUnsubmitting: PropTypes.bool.isRequired,
     }),
     response: responseShape.isRequired,
     onSubmit: PropTypes.func.isRequired,
-    onUnsubmit: PropTypes.func.isRequired,
     pristine: PropTypes.bool.isRequired,
 
     handleSubmit: PropTypes.func.isRequired,
   };
+
+  static defaultProps = {
+    readOnly: false,
+    // onSubmit will not be passed in when form is read-only
+    onSubmit: () => {},
+  }
 
   static renderSections(props) {
     const { fields, disabled } = props;
@@ -168,25 +165,9 @@ class ResponseForm extends React.Component {
     );
   }
 
-  renderUnsubmitButton() {
-    const { onUnsubmit, flags: { isUnsubmitting, canUnsubmit } } = this.props;
-    if (!canUnsubmit) { return null; }
-
-    return (
-      <RaisedButton
-        style={styles.formButton}
-        primary
-        label={<FormattedMessage {...responseFormTranslations.unsubmit} />}
-        onTouchTap={onUnsubmit}
-        buttonStyle={styles.unsubmitButton}
-        disabled={isUnsubmitting}
-      />
-    );
-  }
-
   render() {
     const {
-      handleSubmit, onSubmit, response, flags: { canSubmit, canModify },
+      handleSubmit, onSubmit, response, flags: { canSubmit, canModify }, readOnly,
     } = this.props;
 
     return (
@@ -194,13 +175,12 @@ class ResponseForm extends React.Component {
         <FieldArray
           name="sections"
           component={ResponseForm.renderSections}
-          disabled={!(canModify || canSubmit)}
+          disabled={readOnly || !(canModify || canSubmit)}
           {...{ response }}
         />
         <br />
-        { this.renderSaveButton() }
-        { this.renderSubmitButton() }
-        { this.renderUnsubmitButton() }
+        { !readOnly && this.renderSaveButton() }
+        { !readOnly && this.renderSubmitButton() }
       </Form>
     );
   }

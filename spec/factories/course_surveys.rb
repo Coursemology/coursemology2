@@ -27,6 +27,7 @@ FactoryGirl.define do
 
     trait :allow_response_after_end do
       allow_response_after_end true
+      bonus_end_at { end_at || 1.day.ago }
     end
 
     trait :allow_modify_after_submit do

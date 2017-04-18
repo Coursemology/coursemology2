@@ -13,7 +13,7 @@ class ConfirmationDialog extends React.Component {
     open: PropTypes.bool.isRequired,
     onCancel: PropTypes.func.isRequired,
     onConfirm: PropTypes.func.isRequired,
-    message: PropTypes.string,
+    message: PropTypes.node,
     cancelButtonText: PropTypes.string,
     confirmButtonText: PropTypes.string,
     confirmDiscard: PropTypes.bool,

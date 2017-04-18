@@ -5,6 +5,7 @@ import SurveyIndex from './pages/SurveyIndex';
 import SurveyShow from './pages/SurveyShow';
 import SurveyResults from './pages/SurveyResults';
 import ResponseShow from './pages/ResponseShow';
+import ResponseEdit from './pages/ResponseEdit';
 import ResponseIndex from './pages/ResponseIndex';
 
 export default (
@@ -15,7 +16,10 @@ export default (
       <Route path="results" component={SurveyResults} />
       <Route path="responses">
         <IndexRoute component={ResponseIndex} />
-        <Route path=":responseId" component={ResponseShow} />
+        <Route path=":responseId">
+          <IndexRoute component={ResponseShow} />
+          <Route path="edit" component={ResponseEdit} />
+        </Route>
       </Route>
     </Route>
   </Route>
