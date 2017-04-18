@@ -19,7 +19,7 @@ const responsesData = {
       phantom: true,
       path: '/courses/1/users/1',
     },
-    started: true,
+    present: true,
     submitted_at: '2017-03-01T09:10:01.180+08:00',
     path: '/courses/1/surveys/2/responses/5',
   }, {
@@ -29,7 +29,7 @@ const responsesData = {
       phantom: false,
       path: '/courses/1/users/2',
     },
-    started: false,
+    present: false,
   }, {
     course_user: {
       id: 3,
@@ -37,13 +37,24 @@ const responsesData = {
       phantom: false,
       path: '/courses/1/users/3',
     },
-    started: true,
+    present: true,
     submitted_at: null,
     path: '/courses/1/surveys/2/responses/6',
+  }, {
+    course_user: {
+      id: 4,
+      name: 'Student D',
+      phantom: true,
+      path: '/courses/1/users/4',
+    },
+    present: true,
+    submitted_at: '2017-03-03T09:10:01.180+08:00',
+    path: '/courses/1/surveys/2/responses/7',
   }],
   survey: {
     id: 2,
     title: 'Test Responses Page',
+    end_at: '2017-03-02T09:10:01.180+08:00',
   },
 };
 
@@ -76,7 +87,7 @@ describe('<ResponseIndex />', () => {
     const tableBodies = responseIndex.find('TableBody');
     const phantomStudentRows = tableBodies.at(2).find('TableRow');
     const realStudentRows = tableBodies.at(1).find('TableRow');
-    const getStatus = row => row.find('td').last().text();
+    const getStatus = row => row.find('td').at(1).text();
     expect(getStatus(phantomStudentRows.first())).toBe('Submitted');
     expect(getStatus(realStudentRows.first())).toBe('Not Started');
     expect(getStatus(realStudentRows.last())).toBe('Responding');
