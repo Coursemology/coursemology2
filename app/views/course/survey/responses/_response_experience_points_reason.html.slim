@@ -1,4 +1,7 @@
 - response = response_experience_points_reason
 - survey = response.survey
-= link_to(format_inline_text(survey.title),
-          course_survey_response_path(current_course, survey, response))
+- title = format_inline_text(survey.title)
+- if can?(:read_answers, response)
+  = link_to(title, course_survey_response_path(current_course, survey, response))
+- else
+  = link_to(title, course_survey_responses_path(current_course, survey))
