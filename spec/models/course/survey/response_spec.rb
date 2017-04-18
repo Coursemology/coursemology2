@@ -10,7 +10,7 @@ RSpec.describe Course::Survey::Response do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:student) { create(:course_student, course: course).user }
-    let(:survey) { create(:course_survey, course: course) }
+    let(:survey) { create(:course_survey, :currently_active, course: course) }
     let(:response) do
       create(:course_survey_response, *response_traits, survey: survey, creator: student)
     end
@@ -35,7 +35,7 @@ RSpec.describe Course::Survey::Response do
 
       it 'sets the correct attributes' do
         expect(subject.submitted_at).not_to be_nil
-        expect(subject.points_awarded).to eq(survey.base_exp)
+        expect(subject.points_awarded).to eq(survey.base_exp + survey.time_bonus_exp)
         expect(subject.awarded_at).not_to be_nil
         expect(subject.awarder).to eq(subject.creator)
       end
