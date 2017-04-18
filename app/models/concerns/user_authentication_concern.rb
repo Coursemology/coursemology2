@@ -44,5 +44,11 @@ module UserAuthenticationConcern
     def password_required?
       built_in? ? false : super
     end
+
+    # This sends Devise emails through the existing queue.
+    # See https://github.com/plataformatec/devise#activejob-integration
+    def send_devise_notification(notification, *args)
+      devise_mailer.send(notification, self, *args).deliver_later
+    end
   end
 end
