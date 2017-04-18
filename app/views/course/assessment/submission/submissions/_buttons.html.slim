@@ -27,6 +27,9 @@ div.submission-buttons
   - if local_assigns[:mark]
     = f.button :submit, t('.mark'), name: 'submission[mark]', class: ['btn-warning']
 
+  - if local_assigns[:unmark]
+    = f.button :submit, t('.unmark'), name: 'submission[unmark]', class: ['btn-warning']
+
   - if local_assigns[:unsubmit]
     = f.button :submit, t('.unsubmit'), name: 'submission[unsubmit]', class: ['btn-danger'],
       data: { confirm: t('.confirm_unsubmit') }

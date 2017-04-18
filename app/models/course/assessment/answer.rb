@@ -24,6 +24,8 @@ class Course::Assessment::Answer < ActiveRecord::Base
     end
     state :graded do
       event :unsubmit, transitions_to: :attempting
+      # Does nothing but revert the state, for the case we want to keep the grading info
+      event :unmark, transitions_to: :evaluated
       event :publish, transitions_to: :graded # To re-grade an answer.
       # Allows answers to be re-evaluated even after being graded. Useful if programming questions
       # get additional test cases.

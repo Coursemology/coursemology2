@@ -20,7 +20,8 @@ class Course::Assessment::Submission < ActiveRecord::Base
       event :publish, transitions_to: :published
     end
     state :graded do
-      event :unsubmit, transitions_to: :attempting
+      # Revert to submitted state but keep the grading info.
+      event :unmark, transitions_to: :submitted
       event :publish, transitions_to: :published
     end
     state :published do
@@ -136,6 +137,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   alias_method :finalise=, :finalise!
   alias_method :mark=, :mark!
+  alias_method :unmark=, :unmark!
   alias_method :publish=, :publish!
   alias_method :unsubmit=, :unsubmit!
 

@@ -23,6 +23,12 @@ module Course::Assessment::Submission::WorkflowEventConcern
     publish_answers
   end
 
+  def unmark(_ = nil)
+    answers.each do |answer|
+      answer.unmark! if answer.graded?
+    end
+  end
+
   # Handles the publishing of a submission.
   #
   # This grades all the answers as well.
