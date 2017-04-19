@@ -19,6 +19,7 @@ function mapStateToProps({ surveyForm, ...state }) {
 const propTypes = {
   dispatch: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
+  hasStudentResponse: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
   pristine: PropTypes.bool.isRequired,
   formTitle: PropTypes.string,
@@ -40,6 +41,7 @@ const SurveyFormDialogue = ({
   pristine,
   formValues,
   formTitle,
+  hasStudentResponse,
   initialValues,
   onSubmit,
 }) => {
@@ -48,6 +50,15 @@ const SurveyFormDialogue = ({
     submitSurveyForm,
     shiftEndDate,
   } = bindActionCreators(actionCreators, dispatch);
+
+  const surveyFormProps = {
+    shiftEndDate,
+    formValues,
+    initialValues,
+    onSubmit,
+    disabled,
+    disableAnonymousToggle: initialValues && initialValues.anonymous && hasStudentResponse,
+  };
 
   return (
     <FormDialogue
@@ -58,7 +69,7 @@ const SurveyFormDialogue = ({
       disabled={disabled}
       open={visible}
     >
-      <SurveyForm {...{ shiftEndDate, formValues, initialValues, onSubmit, disabled }} />
+      <SurveyForm {...surveyFormProps} />
     </FormDialogue>
   );
 };

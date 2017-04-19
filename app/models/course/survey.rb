@@ -14,6 +14,12 @@ class Course::Survey < ActiveRecord::Base
   has_many :questions, through: :sections
   has_many :sections, inverse_of: :survey, dependent: :destroy
 
+  def has_student_response?
+    responses.find do |response|
+      response.experience_points_record.course_user.student?
+    end.present?
+  end
+
   def initialize_duplicate(duplicator, other)
     copy_attributes(other, duplicator.time_shift)
     self.sections = duplicator.duplicate(other.sections)

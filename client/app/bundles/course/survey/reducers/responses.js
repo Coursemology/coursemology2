@@ -1,4 +1,5 @@
 import actionTypes from '../constants';
+import { updateOrAppend } from './utils';
 
 const initialState = {
   isLoading: false,
@@ -19,6 +20,12 @@ export default function (state = initialState, action) {
     }
     case actionTypes.LOAD_RESPONSES_FAILURE: {
       return { ...state, isLoading: false };
+    }
+    case actionTypes.UNSUBMIT_RESPONSE_SUCCESS: {
+      const { canUnsubmit } = action.flags;
+      const response = { ...action.response, canUnsubmit };
+      const responses = updateOrAppend(state.responses, response);
+      return { ...state, responses };
     }
     default:
       return state;

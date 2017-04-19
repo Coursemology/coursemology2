@@ -51,14 +51,29 @@ class SurveyShow extends React.Component {
   showEditSurveyForm = (survey) => {
     const { dispatch, intl } = this.props;
     const { showSurveyForm } = surveyActions;
+    const {
+      title, description, base_exp, time_bonus_exp, start_at, end_at, hasStudentResponse,
+      allow_response_after_end, allow_modify_after_submit, anonymous,
+    } = survey;
+
+    const initialValues = {
+      title,
+      description,
+      base_exp,
+      time_bonus_exp,
+      allow_response_after_end,
+      allow_modify_after_submit,
+      anonymous,
+    };
 
     return () => dispatch(showSurveyForm({
       onSubmit: this.updateSurveyHandler,
       formTitle: intl.formatMessage(translations.editSurvey),
+      hasStudentResponse,
       initialValues: {
-        ...survey,
-        start_at: new Date(survey.start_at),
-        end_at: new Date(survey.end_at),
+        ...initialValues,
+        start_at: new Date(start_at),
+        end_at: new Date(end_at),
       },
     }));
   }

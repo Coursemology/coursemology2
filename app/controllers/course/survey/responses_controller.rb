@@ -24,6 +24,7 @@ class Course::Survey::ResponsesController < Course::Survey::SurveysController
   end
 
   def show
+    authorize!(:read_answers, @response)
     respond_to do |format|
       format.html { render 'course/survey/surveys/index' }
       format.json { render_response_json }

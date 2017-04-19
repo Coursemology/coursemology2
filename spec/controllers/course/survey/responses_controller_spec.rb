@@ -81,6 +81,24 @@ RSpec.describe Course::Survey::ResponsesController do
           expect(response_answer_count).not_to eq(survey.questions.count)
         end
       end
+
+      context 'when the survey is anonymous' do
+        let(:survey_traits) { [:published, :currently_active, :anonymous] }
+
+        context "when staff views a student's response" do
+          let(:user) { manager.user }
+
+          it 'denies access' do
+            expect { subject }.to raise_exception(CanCan::AccessDenied)
+          end
+        end
+
+        context 'when user views his own response' do
+          let(:user) { student.user }
+
+          it { is_expected.to render_template('course/survey/responses/_response') }
+        end
+      end
     end
 
     describe '#edit' do
@@ -102,6 +120,14 @@ RSpec.describe Course::Survey::ResponsesController do
         it 'creates answers for all new question' do
           response_answer_count = survey.responses.find(survey_response.id).answers.count
           expect(response_answer_count).to eq(survey.questions.count)
+        end
+      end
+
+      context 'when user is not response creator' do
+        let(:user) { manager.user }
+
+        it 'denies access' do
+          expect { subject }.to raise_exception(CanCan::AccessDenied)
         end
       end
     end

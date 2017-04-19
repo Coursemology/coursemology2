@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Link, browserHistory } from 'react-router';
 import { Card } from 'material-ui/Card';
@@ -12,10 +13,11 @@ import { formatDateTime } from 'lib/date-time-defaults';
 import { fetchResponses } from 'course/survey/actions/responses';
 import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'course/survey/components/LoadingIndicator';
+import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 
 const styles = {
-  notStarted: {
+  red: {
     color: red500,
   },
   table: {
@@ -47,6 +49,10 @@ const translations = defineMessages({
     id: 'course.surveys.ResponseIndex.responding',
     defaultMessage: 'Responding',
   },
+  submittedAt: {
+    id: 'course.surveys.ResponseIndex.submittedAt',
+    defaultMessage: 'Submitted At',
+  },
   phantoms: {
     id: 'course.surveys.ResponseIndex.phantoms',
     defaultMessage: 'Phantom Students',
@@ -65,19 +71,32 @@ class ResponseIndex extends React.Component {
     }).isRequired,
   };
 
-  static renderReponseStatus(response) {
-    if (!response.started) {
-      return <div style={styles.notStarted}><FormattedMessage {...translations.notStarted} /></div>;
+  static renderReponseStatus(response, survey) {
+    if (!response.present) {
+      return <div style={styles.red}><FormattedMessage {...translations.notStarted} /></div>;
     }
     const status = response.submitted_at ? 'submitted' : 'responding';
     return (
-      <Link to={response.path}>
-        <FormattedMessage {...translations[status]} />
-      </Link>
+      survey.anonymous ?
+        <FormattedMessage {...translations[status]} /> :
+        <Link to={response.path}>
+          <FormattedMessage {...translations[status]} />
+        </Link>
     );
   }
 
-  static renderTable(responses) {
+  static renderSubmittedAt(response, survey) {
+    if (!response.submitted_at) {
+      return null;
+    }
+    const submittedAt = moment(response.submitted_at).format('DD MMM YYYY, h:mma');
+    if (survey.end_at && moment(response.submitted_at).isAfter(survey.end_at)) {
+      return <div style={styles.red}>{ submittedAt }</div>;
+    }
+    return submittedAt;
+  }
+
+  static renderTable(responses, survey) {
     return (
       <Table>
         <TableHeader
@@ -91,6 +110,10 @@ class ResponseIndex extends React.Component {
             <TableHeaderColumn>
               <FormattedMessage {...translations.responseStatus} />
             </TableHeaderColumn>
+            <TableHeaderColumn>
+              <FormattedMessage {...translations.submittedAt} />
+            </TableHeaderColumn>
+            <TableHeaderColumn />
           </TableRow>
         </TableHeader>
         <TableBody
@@ -106,7 +129,16 @@ class ResponseIndex extends React.Component {
                   </a>
                 </TableRowColumn>
                 <TableRowColumn>
-                  { ResponseIndex.renderReponseStatus(response) }
+                  { ResponseIndex.renderReponseStatus(response, survey) }
+                </TableRowColumn>
+                <TableRowColumn>
+                  { ResponseIndex.renderSubmittedAt(response, survey) }
+                </TableRowColumn>
+                <TableRowColumn>
+                  {
+                    response.present && response.canUnsubmit ?
+                      <UnsubmitButton responseId={response.id} /> : null
+                  }
                 </TableRowColumn>
               </TableRow>
             ))
@@ -116,13 +148,13 @@ class ResponseIndex extends React.Component {
     );
   }
 
-  static renderPhantomTable(responses) {
+  static renderPhantomTable(responses, survey) {
     if (responses.length < 1) { return null; }
 
     return (
       <div>
         <h1><FormattedMessage {...translations.phantoms} /></h1>
-        { ResponseIndex.renderTable(responses) }
+        { ResponseIndex.renderTable(responses, survey) }
       </div>
     );
   }
@@ -132,10 +164,8 @@ class ResponseIndex extends React.Component {
     dispatch(fetchResponses());
   }
 
-  renderHeader() {
-    const { surveys, params: { courseId, surveyId } } = this.props;
-    const survey = surveys && surveys.length > 0 ?
-                   surveys.find(s => String(s.id) === String(surveyId)) : {};
+  renderHeader(survey) {
+    const { params: { courseId, surveyId } } = this.props;
     return (
       <div>
         <TitleBar
@@ -169,7 +199,7 @@ class ResponseIndex extends React.Component {
     );
   }
 
-  renderBody() {
+  renderBody(survey) {
     const { responses, isLoading } = this.props;
     if (isLoading) { return <LoadingIndicator />; }
 
@@ -184,17 +214,20 @@ class ResponseIndex extends React.Component {
 
     return (
       <div>
-        { ResponseIndex.renderTable(realResponses) }
-        { ResponseIndex.renderPhantomTable(phantomResponses) }
+        { ResponseIndex.renderTable(realResponses, survey) }
+        { ResponseIndex.renderPhantomTable(phantomResponses, survey) }
       </div>
     );
   }
 
   render() {
+    const { surveys, params: { surveyId } } = this.props;
+    const survey = surveys && surveys.length > 0 ?
+                   surveys.find(s => String(s.id) === String(surveyId)) : {};
     return (
       <div>
-        { this.renderHeader() }
-        { this.renderBody() }
+        { this.renderHeader(survey) }
+        { this.renderBody(survey) }
       </div>
     );
   }

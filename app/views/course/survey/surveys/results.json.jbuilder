@@ -10,7 +10,7 @@ json.sections @sections do |section|
     end
     json.answers student_submitted_answers do |answer|
       json.(answer, :id)
-      json.course_user_name answer.response.course_user.name
+      json.course_user_name answer.response.course_user.name unless @survey.anonymous?
       json.phantom answer.response.course_user.phantom?
       if question.text?
         json.(answer, :text_response)
