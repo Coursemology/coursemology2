@@ -15,6 +15,8 @@ export default class SurveysAPI extends BaseSurveyAPI {
   *      - true if user can respond to a survey after it expires
   *   allow_modify_after_submit: bool,
   *      - true if user can update survey after it has been submitted
+  *   hasStudentResponse: bool,
+  *      - true if there is at least one student response for the survey
   *   response: Array.<{ id: number, submitted_at: string, canModify: bool, canSubmit: bool }>
   *      - Response details if it exists. Otherwise, null.
   *   sections:

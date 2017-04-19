@@ -5,6 +5,7 @@ const initialState = {
   disabled: false,
   onSubmit: () => {},
   formTitle: '',
+  hasStudentResponse: false,
   initialValues: {},
 };
 

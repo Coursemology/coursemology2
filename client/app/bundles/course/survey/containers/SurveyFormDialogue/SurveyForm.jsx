@@ -53,6 +53,10 @@ const surveyFormTranslations = defineMessages({
       results but not individual responses. You may not toggle this setting once there is one \
       or more student submissions.',
   },
+  hasStudentResponse: {
+    id: 'course.surveys.SurveyForm.hasStudentResponse',
+    defaultMessage: 'At least one student has responded to this survey. You may not remove anonymity.',
+  },
 });
 
 const validate = (values) => {
@@ -85,10 +89,13 @@ const propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
+  disableAnonymousToggle: PropTypes.bool,
   disabled: PropTypes.bool,
 };
 
-const SurveyForm = ({ handleSubmit, intl, onSubmit, disabled, shiftEndDate, formValues }) => (
+const SurveyForm = ({
+  handleSubmit, intl, onSubmit, disabled, disableAnonymousToggle, shiftEndDate, formValues,
+}) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Field
       name="title"
@@ -153,7 +160,7 @@ const SurveyForm = ({ handleSubmit, intl, onSubmit, disabled, shiftEndDate, form
       label={intl.formatMessage(translations.allowResponseAfterEnd)}
       labelPosition="right"
       style={styles.toggle}
-      disabled={false}
+      disabled={disabled}
     />
     <div style={styles.hint}>
       { intl.formatMessage(surveyFormTranslations.allowResponseAfterEndHint) }
@@ -164,7 +171,7 @@ const SurveyForm = ({ handleSubmit, intl, onSubmit, disabled, shiftEndDate, form
       label={intl.formatMessage(translations.allowModifyAfterSubmit)}
       labelPosition="right"
       style={styles.toggle}
-      disabled={false}
+      disabled={disabled}
     />
     <div style={styles.hint}>
       { intl.formatMessage(surveyFormTranslations.allowModifyAfterSubmitHint) }
@@ -175,10 +182,14 @@ const SurveyForm = ({ handleSubmit, intl, onSubmit, disabled, shiftEndDate, form
       label={intl.formatMessage(translations.anonymous)}
       labelPosition="right"
       style={styles.toggle}
-      disabled={false}
+      disabled={disableAnonymousToggle || disabled}
     />
     <div style={styles.hint}>
-      { intl.formatMessage(surveyFormTranslations.anonymousHint) }
+      {
+        disableAnonymousToggle ?
+        intl.formatMessage(surveyFormTranslations.hasStudentResponse) :
+        intl.formatMessage(surveyFormTranslations.anonymousHint)
+      }
     </div>
   </Form>
 );
