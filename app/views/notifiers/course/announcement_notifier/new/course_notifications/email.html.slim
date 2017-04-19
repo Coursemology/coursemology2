@@ -4,7 +4,7 @@
 
 - message.subject = t('.subject', course: course.title, announcement: announcement.title)
 
-= simple_format(t('.message', course: link_to(course.title, course_url(course, host: host)),
+= format_html(t('.message', course: link_to(course.title, course_url(course, host: host)),
                               announcement: link_to(:announcement,
                                                     course_announcements_url(course, host: host)),
                               content: announcement.content))

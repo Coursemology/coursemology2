@@ -8,6 +8,5 @@ en:
               subject: >
                 %{course} New Announcement: %{announcement}
               message: >
-                New %{announcement} from course: %{course}
-
+                <p>New %{announcement} from course: %{course}</p>
                 %{content}
