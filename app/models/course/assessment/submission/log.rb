@@ -6,7 +6,7 @@ class Course::Assessment::Submission::Log < ActiveRecord::Base
   scope :ordered_by_date, ->(direction = :desc) { order(created_at: direction) }
 
   def ip_address
-    request['REMOTE_ADDR']
+    request['HTTP_X_FORWARDED_FOR']
   end
 
   def user_agent
