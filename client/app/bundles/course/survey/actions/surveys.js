@@ -160,3 +160,18 @@ export function fetchResults(surveyId) {
       });
   };
 }
+
+export function sendReminderEmail(successMessage, failureMessage) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.SEND_REMINDER_REQUEST });
+    return CourseAPI.survey.surveys.remind()
+      .then(() => {
+        dispatch({ type: actionTypes.SEND_REMINDER_SUCCESS });
+        setNotification(successMessage)(dispatch);
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.SEND_REMINDER_FAILURE });
+        setNotification(failureMessage)(dispatch);
+      });
+  };
+}

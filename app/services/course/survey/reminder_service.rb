@@ -31,6 +31,7 @@ class Course::Survey::ReminderService
     students = uncompleted_students(survey)
     closing_reminder_students(survey, students)
     closing_reminder_staff(survey, students)
+    survey.update_attribute(:closing_reminded_at, Time.zone.now)
   end
 
   private

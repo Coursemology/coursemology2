@@ -18,6 +18,7 @@ import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'course/survey/components/LoadingIndicator';
 import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
+import RemindButton from './RemindButton';
 
 const styles = {
   red: {
@@ -243,8 +244,19 @@ class ResponseIndex extends React.Component {
                   {formatDateTime(survey.end_at)}
                 </TableRowColumn>
               </TableRow>
+              <TableRow>
+                <TableRowColumn>
+                  <FormattedMessage {...surveyTranslations.closingRemindedAt} />
+                </TableRowColumn>
+                <TableRowColumn>
+                  {survey.closing_reminded_at ? formatDateTime(survey.closing_reminded_at) : '-'}
+                </TableRowColumn>
+              </TableRow>
             </TableBody>
           </Table>
+          <CardText>
+            <RemindButton />
+          </CardText>
         </Card>
       </div>
     );

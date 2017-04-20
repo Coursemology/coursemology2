@@ -68,6 +68,7 @@ class ConfirmationDialog extends React.Component {
         onTouchTap={onCancel}
         style={buttonStyle}
         label={cancelButtonText || intl.formatMessage(formTranslations.cancel)}
+        ref={button => (this.cancelButton = button)}
       />,
       <FlatButton
         primary
