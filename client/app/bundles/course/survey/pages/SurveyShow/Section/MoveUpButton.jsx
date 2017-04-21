@@ -22,8 +22,14 @@ const translations = defineMessages({
 class MoveUpButton extends React.Component {
   static propTypes = {
     sectionIndex: PropTypes.number.isRequired,
+    disabled: PropTypes.bool,
+
     dispatch: PropTypes.func.isRequired,
   };
+
+  static defaultProps = {
+    disabled: false,
+  }
 
   moveSectionUp = () => {
     const { dispatch, sectionIndex } = this.props;
@@ -37,6 +43,7 @@ class MoveUpButton extends React.Component {
       <FlatButton
         label={<FormattedMessage {...translations.moveSectionUp} />}
         onTouchTap={this.moveSectionUp}
+        disabled={this.props.disabled}
       />
     );
   }

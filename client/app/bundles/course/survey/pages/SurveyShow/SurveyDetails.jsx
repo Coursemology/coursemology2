@@ -37,6 +37,7 @@ class SurveyDetails extends React.Component {
       label: PropTypes.string,
       handler: PropTypes.func,
     })),
+    disabled: PropTypes.bool.isRequired,
 
     dispatch: PropTypes.func.isRequired,
   };
@@ -105,7 +106,7 @@ class SurveyDetails extends React.Component {
   }
 
   renderBody() {
-    const { survey, courseId } = this.props;
+    const { survey, courseId, disabled } = this.props;
     if (!survey) { return null; }
     return (
       <Card>
@@ -178,7 +179,7 @@ class SurveyDetails extends React.Component {
         {this.renderPublishToggle()}
         {this.renderDescription()}
         <CardText>
-          { survey.canCreateSection ? <NewSectionButton /> : null }
+          { survey.canCreateSection ? <NewSectionButton {...{ disabled }} /> : null }
           {
             survey.canViewResults ?
               <RaisedButton

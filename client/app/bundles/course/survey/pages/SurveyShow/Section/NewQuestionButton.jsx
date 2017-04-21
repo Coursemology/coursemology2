@@ -28,10 +28,15 @@ const translations = defineMessages({
 class NewQuestionButton extends React.Component {
   static propTypes = {
     sectionId: PropTypes.number.isRequired,
+    disabled: PropTypes.bool,
 
     dispatch: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   };
+
+  static defaultProps = {
+    disabled: false,
+  }
 
   createQuestionHandler = (data) => {
     const { dispatch } = this.props;
@@ -68,6 +73,7 @@ class NewQuestionButton extends React.Component {
         primary
         label={<FormattedMessage {...translations.addQuestion} />}
         onTouchTap={this.showNewQuestionForm}
+        disabled={this.props.disabled}
       />
     );
   }

@@ -27,8 +27,14 @@ const styles = {
 
 class NewSectionButton extends React.Component {
   static propTypes = {
+    disabled: PropTypes.bool,
+
     dispatch: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
+  }
+
+  static defaultProps = {
+    disabled: false,
   }
 
   createSectionHandler = (data) => {
@@ -54,6 +60,7 @@ class NewSectionButton extends React.Component {
         style={styles.button}
         label={<FormattedMessage {...translations.newSection} />}
         onTouchTap={this.showNewSectionForm}
+        disabled={this.props.disabled}
       />
     );
   }

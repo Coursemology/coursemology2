@@ -23,10 +23,15 @@ const translations = defineMessages({
 class EditSectionButton extends React.Component {
   static propTypes = {
     section: sectionShape,
+    disabled: PropTypes.bool,
 
     dispatch: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   };
+
+  static defaultProps = {
+    disabled: false,
+  }
 
   updateSectionHandler = (data) => {
     const { dispatch, section } = this.props;
@@ -50,6 +55,7 @@ class EditSectionButton extends React.Component {
       <FlatButton
         label={<FormattedMessage {...translations.editSection} />}
         onTouchTap={this.showEditSectionForm}
+        disabled={this.props.disabled}
       />
     );
   }

@@ -35,6 +35,7 @@ class SectionCard extends React.Component {
     index: PropTypes.number.isRequired,
     first: PropTypes.bool.isRequired,
     last: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool.isRequired,
   }
 
   constructor(props) {
@@ -43,7 +44,7 @@ class SectionCard extends React.Component {
   }
 
   render() {
-    const { section, first, last, index: sectionIndex, survey: { draggedQuestion } } = this.props;
+    const { section, first, last, disabled, index: sectionIndex, survey: { draggedQuestion } } = this.props;
     return (
       <Card
         style={styles.card}
@@ -72,11 +73,11 @@ class SectionCard extends React.Component {
           }
         </CardText>
         <CardActions>
-          { section.canCreateQuestion ? <NewQuestionButton sectionId={section.id} /> : null }
-          { section.canUpdate ? <EditSectionButton {...{ section }} /> : null }
-          { section.canDelete ? <DeleteSectionButton sectionId={section.id} /> : null }
-          { section.canUpdate && !first ? <MoveUpButton {...{ sectionIndex }} /> : null }
-          { section.canUpdate && !last ? <MoveDownButton {...{ sectionIndex }} /> : null }
+          { section.canCreateQuestion ? <NewQuestionButton sectionId={section.id} {...{ disabled }} /> : null }
+          { section.canUpdate ? <EditSectionButton {...{ section, disabled }} /> : null }
+          { section.canDelete ? <DeleteSectionButton sectionId={section.id} {...{ disabled }} /> : null }
+          { section.canUpdate && !first ? <MoveUpButton {...{ sectionIndex, disabled }} /> : null }
+          { section.canUpdate && !last ? <MoveDownButton {...{ sectionIndex, disabled }} /> : null }
         </CardActions>
       </Card>
     );
