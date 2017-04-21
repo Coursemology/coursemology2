@@ -14,7 +14,7 @@ export function createAssessment(
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_ASSESSMENT_REQUEST });
 
-    return CourseAPI.assessments.create(attributes)
+    return CourseAPI.assessment.assessments.create(attributes)
       .then((response) => {
         dispatch({
           type: actionTypes.CREATE_ASSESSMENT_SUCCESS,
@@ -45,7 +45,7 @@ export function updateAssessment(assessmentId, data, successMessage, failureMess
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_ASSESSMENT_REQUEST });
 
-    return CourseAPI.assessments.update(assessmentId, attributes)
+    return CourseAPI.assessment.assessments.update(assessmentId, attributes)
       .then(() => {
         dispatch({
           type: actionTypes.UPDATE_ASSESSMENT_SUCCESS,

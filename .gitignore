@@ -31,8 +31,9 @@
 # Ignore additional themes
 /app/themes/*
 
-# Ignore public download folder
+# Ignore public download/upload folders
 /public/downloads/*
+/public/uploads/*
 
 # Ignore installed node libraries and log
 npm-debug.log*

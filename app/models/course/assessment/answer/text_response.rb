@@ -41,6 +41,12 @@ class Course::Assessment::Answer::TextResponse < ActiveRecord::Base
     end
   end
 
+  def assign_params(params)
+    acting_as.assign_params(params)
+    self.answer_text = params[:answer_text] if params[:answer_text]
+    self.file = params[:file] if params[:file]
+  end
+
   private
 
   def set_default

@@ -1,27 +1,3 @@
 - add_breadcrumb t('.attempt')
 = page_header format_inline_text(@assessment.title)
-- unless @assessment.description.blank?
-  div.well
-    = format_html(@assessment.description)
-
-- unless @assessment.folder.materials.empty?
-  .files
-    h4 = t('.files')
-    = render partial: 'layouts/materials', locals: { folder: @assessment.folder }
-
-= render 'progress' if can?(:grade, @submission)
-
-= div_for(@assessment, 'data-assessment-id' => @assessment.id,
-                       class: single_question_flag_class(@assessment)) do
-  = div_for(@submission, 'data-submission-id' => @submission.id) do
-    - if @assessment.autograded?
-      = render 'autograded'
-    - else
-      = render 'manually_graded'
-
-/ Display a dialog after creating the submission
-- if @assessment.password_protected? && params[:new_submission] == 'true'
-  javascript:
-    $(document).ready(function () {
-      alert(I18n.t('javascript.course.assessment.submission.submissions.exam.notice'));
-    });
+div#submission-edit

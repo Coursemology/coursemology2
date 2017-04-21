@@ -98,6 +98,10 @@ class Course::Assessment::Answer < ActiveRecord::Base
     end
   end
 
+  def assign_params(params)
+    self.grade = params[:grade] if params[:grade]
+  end
+
   protected
 
   def finalise

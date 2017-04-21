@@ -32,4 +32,12 @@ class Course::Assessment::Answer::MultipleResponse < ActiveRecord::Base
     options.clear
     acting_as
   end
+
+  def assign_params(params)
+    acting_as.assign_params(params)
+    if params[:option_ids]
+      option_ids = params[:option_ids].map(&:to_i)
+      self.options = question.specific.options.select { |option| option_ids.include?(option.id) }
+    end
+  end
 end

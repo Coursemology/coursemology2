@@ -1,6 +1,7 @@
 import { getUrlParameter } from 'lib/helpers/url-helpers';
 import initializeDownloadLink from 'lib/helpers/initializeDownloadLink';
 
+require('./submission');
 require('./submit-answer');
 require('./calculate-grade-exp');
 

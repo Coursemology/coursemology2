@@ -1,14 +1,10 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update
-    if params[:answer_id]
-      submit_answer
-    elsif @submission.update_attributes(update_params)
-      redirect_to_edit
+    if update_submission
+      render partial: 'submission'
     else
-      # The management buttons depends on the state of the submission
-      @submission.workflow_state = @submission.workflow_state_was
-      render 'edit'
+      render json: { errors: @response.errors }, status: :bad_request
     end
   end
 
@@ -52,7 +48,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
         params.require(:submission).permit(
           *workflow_state_params,
           points_awarded_param,
-          answers_attributes: [:id] + update_answers_params
+          answers: [:id] + update_answers_params
         )
       end
   end
@@ -63,6 +59,17 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   private
+
+  def update_submission
+      puts params
+     update_params[:answers].each do |answer_params|
+       puts answer_params
+       answer = @submission.answers.find { |answer| answer.id == answer_params[:id].to_i }
+       actable_answer = answer.specific
+       actable_answer.assign_params(answer_params)
+       actable_answer.save!
+    end
+  end
 
   # The permitted state changes that will be provided to the model.
   def workflow_state_params
@@ -82,11 +89,8 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   # This varies depending on the permissions of the user.
   def update_answers_params
     [].tap do |result|
-      actable_attributes = [:id]
-      actable_attributes.push(update_answer_type_params) if can?(:update, @submission)
-
-      result.push(:grade) if can?(:grade, @submission)
-      result.push(actable_attributes: actable_attributes)
+      result.push(*update_answer_type_params) if can?(:update, @submission)
+      result.push(:grade) if can?(:grade, @submission) and !@submission.attempting?
     end
   end
 
@@ -94,13 +98,12 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update_answer_type_params
     scalar_params = [].tap do |result|
       result.push(:answer_text) # Text response answer
-      result.push(:option_ids) # MCQ answer
       result.push(attachments_params) # User uploaded files
     end
     # Parameters that must be an array of permitted values
     array_params = {}.tap do |result|
       result[:option_ids] = [] # MRQ answer
-      result[:files_attributes] = [:id, :_destroy, :filename, :content] # Programming answer
+      result[:files] = [:id, :_destroy, :filename, :content] # Programming answer
     end
     scalar_params.push(array_params)
   end

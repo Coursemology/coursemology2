@@ -1,37 +1,39 @@
 {
-  "parser": "babel-eslint",
-  "extends": "airbnb",
-  "settings": {
-    "import/resolver": "webpack"
+  parser: "babel-eslint",
+  extends: "airbnb",
+  settings: {
+    import/resolver: "webpack"
   },
-  "rules": {
+  rules: {
     // See https://github.com/yannickcr/eslint-plugin-react/issues/847
-    "react/no-unused-prop-types": ["warn", { "skipShapeProps": true }],
-    "react/require-default-props": "off",
-    "react/no-danger": "off",
-    "react/no-array-index-key": "warn",
-    "import/no-extraneous-dependencies": ["warn", { "devDependencies": true }],
-    "max-len": ["warn", 120],
-    "new-cap": ["error", { "capIsNewExceptions": ["Set"] }],
-    "comma-dangle": ["error", {
-        "arrays": "always-multiline",
-        "objects": "always-multiline",
-        "imports": "always-multiline",
-        "exports": "always-multiline",
-        "functions": "never",
+    react/no-unused-prop-types: ["warn", { skipShapeProps: true }],
+    react/prefer-stateless-function: "off",
+    react/require-default-props: "off",
+    react/no-array-index-key: "warn",
+    import/no-extraneous-dependencies: ["warn", { devDependencies: true }],
+    jsx-a11y/label-has-for: "off",
+    max-len: ["warn", 120],
+    new-cap: ["error", { capIsNewExceptions: ["Set"] }],
+    camelcase: ["warn", { properties: "never" }],
+    comma-dangle: ["error", {
+        arrays: "always-multiline",
+        objects: "always-multiline",
+        imports: "always-multiline",
+        exports: "always-multiline",
+        functions: "never",
     }],
-    "no-multi-str": "off",
+    no-multi-str: "off",
     // Use `_` to indicate that the method is private
-    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
-    "no-underscore-dangle": "off",
-    "func-names": "off"
+    no-plusplus: ["error", { allowForLoopAfterthoughts: true }],
+    no-underscore-dangle: "off",
+    func-names: "off"
   },
-  "globals": {
-    "window": true,
-    "document": true,
-    "$": true,
-    "FormData": true,
-    "File": true,
-    "FileReader": true,
+  globals: {
+    window: true,
+    document: true,
+    $: true,
+    FormData: true,
+    File: true,
+    FileReader: true,
   }
 }

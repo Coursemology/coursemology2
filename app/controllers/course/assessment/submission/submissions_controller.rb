@@ -45,8 +45,13 @@ class Course::Assessment::Submission::SubmissionsController < \
   def edit
     return if @submission.attempting?
 
-    calculated_fields = [:graded_at]
-    @submission = @submission.calculated(*calculated_fields)
+    respond_to do |format|
+      format.html { render 'edit' }
+      format.json do
+        calculated_fields = [:graded_at]
+        @submission = @submission.calculated(*calculated_fields)
+      end
+    end
   end
 
   def auto_grade
