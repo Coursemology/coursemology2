@@ -21,6 +21,10 @@ const translations = defineMessages({
     id: 'course.surveys.fields.expiresAt',
     defaultMessage: 'Expires At',
   },
+  closingRemindedAt: {
+    id: 'course.surveys.fields.closingRemindedAt',
+    defaultMessage: 'Last Reminder Sent At',
+  },
   anonymous: {
     id: 'course.surveys.fields.anonymous',
     defaultMessage: 'Anonymous',

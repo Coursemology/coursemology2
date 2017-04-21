@@ -92,6 +92,13 @@ describe('<ResponseIndex />', () => {
     expect(getStatus(realStudentRows.first())).toBe('Not Started');
     expect(getStatus(realStudentRows.last())).toBe('Responding');
 
+    // Include phantom students in statistics
+    const statsCard = responseIndex.find('Card').last();
+    const submittedChip = statsCard.find('Chip').last();
+    expect(submittedChip.text()).toEqual('0 Submitted');
+    statsCard.find('Toggle').first().props().onToggle(null, true);
+    expect(submittedChip.text()).toEqual('2 Submitted');
+
     const backButton = responseIndex.find('TitleBar').first().find('button').first();
     ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(backButton.node));
     expect(browserHistory.push).toHaveBeenCalledWith('/courses/1/surveys/2');

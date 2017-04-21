@@ -122,6 +122,17 @@ export default class SurveysAPI extends BaseSurveyAPI {
   }
 
   /**
+  * Sends emails to remind students to complete the survey.
+  *
+  * @return {Promise}
+  * success response: {}
+  * error response: {}
+  */
+  remind() {
+    return this.getClient().post(`${this._getUrlPrefix()}/${this.getSurveyId()}/remind`);
+  }
+
+  /**
   * Updates the ordering of questions within the survey.
   *
   * @param {Array.<Array.<number, Array.<number>>>} ordering

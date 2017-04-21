@@ -3,18 +3,22 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Link, browserHistory } from 'react-router';
-import { Card } from 'material-ui/Card';
+import mirrorCreator from 'mirror-creator';
+import { Card, CardText } from 'material-ui/Card';
+import Toggle from 'material-ui/Toggle';
 import IconButton from 'material-ui/IconButton';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import { red500 } from 'material-ui/styles/colors';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import TitleBar from 'lib/components/TitleBar';
+import BarChart from 'lib/components/BarChart';
 import { formatDateTime } from 'lib/date-time-defaults';
 import { fetchResponses } from 'course/survey/actions/responses';
 import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'course/survey/components/LoadingIndicator';
 import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
+import RemindButton from './RemindButton';
 
 const styles = {
   red: {
@@ -26,7 +30,22 @@ const styles = {
   detailsCard: {
     marginBottom: 30,
   },
+  statsCard: {
+    marginBottom: 30,
+  },
+  statsHeader: {
+    marginBottom: 30,
+  },
+  toggle: {
+    marginTop: 30,
+  },
 };
+
+const responseStatus = mirrorCreator([
+  'NOT_STARTED',
+  'SUBMITTED',
+  'RESPONDING',
+]);
 
 const translations = defineMessages({
   name: {
@@ -37,15 +56,15 @@ const translations = defineMessages({
     id: 'course.surveys.ResponseIndex.responseStatus',
     defaultMessage: 'Response Status',
   },
-  notStarted: {
+  [responseStatus.NOT_STARTED]: {
     id: 'course.surveys.ResponseIndex.notStarted',
     defaultMessage: 'Not Started',
   },
-  submitted: {
+  [responseStatus.SUBMITTED]: {
     id: 'course.surveys.ResponseIndex.submitted',
     defaultMessage: 'Submitted',
   },
-  responding: {
+  [responseStatus.RESPONDING]: {
     id: 'course.surveys.ResponseIndex.responding',
     defaultMessage: 'Responding',
   },
@@ -56,6 +75,14 @@ const translations = defineMessages({
   phantoms: {
     id: 'course.surveys.ResponseIndex.phantoms',
     defaultMessage: 'Phantom Students',
+  },
+  stats: {
+    id: 'course.surveys.ResponseIndex.stats',
+    defaultMessage: 'Response Statistics',
+  },
+  includePhantoms: {
+    id: 'course.surveys.ResponseIndex.includePhantoms',
+    defaultMessage: 'Include Phantom Students',
   },
 });
 
@@ -71,18 +98,36 @@ class ResponseIndex extends React.Component {
     }).isRequired,
   };
 
+  static computeStatuses(responses) {
+    const summary = {
+      [responseStatus.NOT_STARTED]: 0,
+      [responseStatus.SUBMITTED]: 0,
+      [responseStatus.RESPONDING]: 0,
+    };
+    const responsesWithStatuses = [];
+    const updateStatus = (response, status) => {
+      summary[status] += 1;
+      responsesWithStatuses.push({ ...response, status });
+    };
+    responses.forEach((response) => {
+      if (!response.present) {
+        updateStatus(response, responseStatus.NOT_STARTED);
+      } else if (response.submitted_at) {
+        updateStatus(response, responseStatus.SUBMITTED);
+      } else {
+        updateStatus(response, responseStatus.RESPONDING);
+      }
+    });
+
+    return { responses: responsesWithStatuses, summary };
+  }
+
   static renderReponseStatus(response, survey) {
-    if (!response.present) {
-      return <div style={styles.red}><FormattedMessage {...translations.notStarted} /></div>;
+    const status = <FormattedMessage {...translations[response.status]} />;
+    if (response.status === responseStatus.NOT_STARTED) {
+      return <div style={styles.red}>{ status }</div>;
     }
-    const status = response.submitted_at ? 'submitted' : 'responding';
-    return (
-      survey.anonymous ?
-        <FormattedMessage {...translations[status]} /> :
-        <Link to={response.path}>
-          <FormattedMessage {...translations[status]} />
-        </Link>
-    );
+    return survey.anonymous ? status : <Link to={response.path}>{ status }</Link>;
   }
 
   static renderSubmittedAt(response, survey) {
@@ -136,7 +181,7 @@ class ResponseIndex extends React.Component {
                 </TableRowColumn>
                 <TableRowColumn>
                   {
-                    response.present && response.canUnsubmit ?
+                    response.status === responseStatus.SUBMITTED && response.canUnsubmit ?
                       <UnsubmitButton responseId={response.id} /> : null
                   }
                 </TableRowColumn>
@@ -157,6 +202,13 @@ class ResponseIndex extends React.Component {
         { ResponseIndex.renderTable(responses, survey) }
       </div>
     );
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      includePhantomsInStats: false,
+    };
   }
 
   componentDidMount() {
@@ -192,10 +244,51 @@ class ResponseIndex extends React.Component {
                   {formatDateTime(survey.end_at)}
                 </TableRowColumn>
               </TableRow>
+              <TableRow>
+                <TableRowColumn>
+                  <FormattedMessage {...surveyTranslations.closingRemindedAt} />
+                </TableRowColumn>
+                <TableRowColumn>
+                  {survey.closing_reminded_at ? formatDateTime(survey.closing_reminded_at) : '-'}
+                </TableRowColumn>
+              </TableRow>
             </TableBody>
           </Table>
+          <CardText>
+            <RemindButton />
+          </CardText>
         </Card>
       </div>
+    );
+  }
+
+  renderStats(realResponsesStatuses, phantomResponsesStatuses) {
+    const { NOT_STARTED, RESPONDING, SUBMITTED } = responseStatus;
+    const dataColor = { [NOT_STARTED]: 'red', [RESPONDING]: 'yellow', [SUBMITTED]: 'green' };
+    const chartData = [NOT_STARTED, RESPONDING, SUBMITTED].map((state) => {
+      const count = this.state.includePhantomsInStats ?
+        realResponsesStatuses[state] + phantomResponsesStatuses[state] :
+        realResponsesStatuses[state];
+      return {
+        count,
+        color: dataColor[state],
+        label: <FormattedMessage {...translations[state]} />,
+      };
+    });
+
+    return (
+      <Card style={styles.statsCard}>
+        <CardText>
+          <h3 style={styles.statsHeader}><FormattedMessage {...translations.stats} /></h3>
+          <BarChart data={chartData} />
+          <Toggle
+            style={styles.toggle}
+            labelPosition="right"
+            label={<FormattedMessage {...translations.includePhantoms} />}
+            onToggle={(_, value) => this.setState({ includePhantomsInStats: value })}
+          />
+        </CardText>
+      </Card>
     );
   }
 
@@ -212,10 +305,16 @@ class ResponseIndex extends React.Component {
       { realResponses: [], phantomResponses: [] }
     );
 
+    const { responses: realResponsesWithStatuses, summary: realResponsesStatuses } =
+      ResponseIndex.computeStatuses(realResponses);
+    const { responses: phantomResponsesWithStatuses, summary: phantomResponsesStatuses } =
+      ResponseIndex.computeStatuses(phantomResponses);
+
     return (
       <div>
-        { ResponseIndex.renderTable(realResponses, survey) }
-        { ResponseIndex.renderPhantomTable(phantomResponses, survey) }
+        { this.renderStats(realResponsesStatuses, phantomResponsesStatuses) }
+        { ResponseIndex.renderTable(realResponsesWithStatuses, survey) }
+        { ResponseIndex.renderPhantomTable(phantomResponsesWithStatuses, survey) }
       </div>
     );
   }

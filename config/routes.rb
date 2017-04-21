@@ -325,6 +325,7 @@ Rails.application.routes.draw do
       scope module: :survey do
         resources :surveys, only: [:index, :create, :show, :update, :destroy] do
           get 'results', on: :member
+          post 'remind', on: :member
           post 'reorder_questions', on: :member
           resources :questions, only: [:create, :update, :destroy]
           resources :responses, only: [:index, :create, :show, :edit, :update] do

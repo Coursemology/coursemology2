@@ -51,6 +51,12 @@ class Course::Survey::SurveysController < Course::ComponentController
     end
   end
 
+  def remind
+    authorize!(:manage, @survey)
+    Course::Survey::ReminderService.send_closing_reminder(@survey)
+    head :ok
+  end
+
   private
 
   def load_sections
