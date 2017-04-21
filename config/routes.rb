@@ -327,6 +327,7 @@ Rails.application.routes.draw do
           get 'results', on: :member
           post 'remind', on: :member
           post 'reorder_questions', on: :member
+          post 'reorder_sections', on: :member
           resources :questions, only: [:create, :update, :destroy]
           resources :responses, only: [:index, :create, :show, :edit, :update] do
             post 'unsubmit', on: :member

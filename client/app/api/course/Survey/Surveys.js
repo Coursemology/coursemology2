@@ -146,6 +146,18 @@ export default class SurveysAPI extends BaseSurveyAPI {
     return this.getClient().post(`${this._getUrlPrefix()}/${this.getSurveyId()}/reorder_questions`, ordering);
   }
 
+  /**
+  * Updates the ordering of sections within the survey.
+  *
+  * @param {Array.<number>} ordering Ordered list of section ids
+  * @return {Promise}
+  * success response: survey_with_questions
+  * error response: {}
+  */
+  reorderSections(ordering) {
+    return this.getClient().post(`${this._getUrlPrefix()}/${this.getSurveyId()}/reorder_sections`, ordering);
+  }
+
   _getUrlPrefix() {
     return `/courses/${this.getCourseId()}/surveys`;
   }

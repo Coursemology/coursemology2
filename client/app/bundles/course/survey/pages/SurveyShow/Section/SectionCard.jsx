@@ -7,6 +7,8 @@ import Question from './Question';
 import NewQuestionButton from './NewQuestionButton';
 import EditSectionButton from './EditSectionButton';
 import DeleteSectionButton from './DeleteSectionButton';
+import MoveUpButton from './MoveUpButton';
+import MoveDownButton from './MoveDownButton';
 
 const styles = {
   card: {
@@ -31,6 +33,8 @@ class SectionCard extends React.Component {
     survey: surveyShape,
     section: sectionShape,
     index: PropTypes.number.isRequired,
+    first: PropTypes.bool.isRequired,
+    last: PropTypes.bool.isRequired,
   }
 
   constructor(props) {
@@ -39,7 +43,7 @@ class SectionCard extends React.Component {
   }
 
   render() {
-    const { section, index: sectionIndex, survey: { draggedQuestion } } = this.props;
+    const { section, first, last, index: sectionIndex, survey: { draggedQuestion } } = this.props;
     return (
       <Card
         style={styles.card}
@@ -71,6 +75,8 @@ class SectionCard extends React.Component {
           { section.canCreateQuestion ? <NewQuestionButton sectionId={section.id} /> : null }
           { section.canUpdate ? <EditSectionButton {...{ section }} /> : null }
           { section.canDelete ? <DeleteSectionButton sectionId={section.id} /> : null }
+          { section.canUpdate && !first ? <MoveUpButton {...{ sectionIndex }} /> : null }
+          { section.canUpdate && !last ? <MoveDownButton {...{ sectionIndex }} /> : null }
         </CardActions>
       </Card>
     );

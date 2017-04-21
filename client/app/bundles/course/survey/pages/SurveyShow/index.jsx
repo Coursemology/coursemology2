@@ -119,12 +119,19 @@ class SurveyShow extends React.Component {
     if (!sections || sections.length < 1) {
       return <Subheader>{ intl.formatMessage(translations.empty) }</Subheader>;
     }
+    const lastIndex = sections.length - 1;
+
     return (
       <div>
         <Subheader>{ intl.formatMessage(surveyTranslations.questions) }</Subheader>
         {
           sections.map((section, index) =>
-            <Section key={section.id} {...{ section, index, survey }} />
+            <Section
+              key={section.id}
+              first={index === 0}
+              last={index === lastIndex}
+              {...{ section, index, survey }}
+            />
           )
         }
       </div>
