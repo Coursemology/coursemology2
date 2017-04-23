@@ -98,15 +98,6 @@ module ApplicationHTMLFormattersHelper
     format_with_pipeline(HTMLSanitizerPipeline, text)
   end
 
-  # Replaces the Rails simple_format to escape HTML.
-  #
-  # @return [String]
-  def simple_format(text, *args)
-    text = html_escape(text) unless text.html_safe?
-    args.unshift(text)
-    super(*args)
-  end
-
   # Sanitises and formats the given user-input string. The string is assumed to contain HTML markup.
   #
   # @param [String] text The text to display

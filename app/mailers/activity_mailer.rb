@@ -3,7 +3,7 @@
 #
 # @api private
 class ActivityMailer < ApplicationMailer
-  helper ApplicationHTMLFormattersHelper
+  helper ApplicationFormattersHelper
 
   # Emails a recipient, informing him of an activity.
   #

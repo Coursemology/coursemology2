@@ -166,9 +166,9 @@ RSpec.describe ApplicationFormattersHelper do
       end
     end
 
-    describe '#simple_format' do
+    describe '#format_block_text' do
       it 'escapes HTML' do
-        expect(helper.simple_format('<')).to have_tag('p') do
+        expect(helper.format_block_text('<')).to have_tag('p') do
           with_text('<')
         end
       end

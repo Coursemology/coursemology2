@@ -8,11 +8,9 @@ en:
               email:
                 subject: '%{course} New reply for forum topic: %{topic}'
                 message: >
-                  %{post_author} replied,
+                  <p>%{post_author} replied,</p>
                   %{post}
-
-                  You can respond here: %{topic}
-
+                  <p>You can respond here: %{topic}</p>
                 unsubscribe:
                   tag: 'Unsubscribe'
                   message: '%{unsubscribe_link} from email notifications for this topic'
