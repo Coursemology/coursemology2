@@ -6,9 +6,12 @@
 - unsubscribe_url = unsubscribe_course_forum_url(course, topic.forum, host: host)
 - topic_url = course_forum_topic_url(course, topic.forum, topic, host: host)
 
-- message.subject = t('.subject', course: course.title, forum: topic.forum.name)
+- course_title = format_inline_text(course.title)
+- forum_name = format_inline_text(topic.forum.name)
 
-= simple_format(t('.message', topic: topic_url, post: post.text))
+- message.subject = t('.subject', course: course_title, forum: forum_name)
+
+= format_html(t('.message', topic: topic_url, post: post.text))
 
 = simple_format(t('.unsubscribe.message',
                 unsubscribe_link: link_to(t('.unsubscribe.tag'), unsubscribe_url)))

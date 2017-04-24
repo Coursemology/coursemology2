@@ -11,7 +11,7 @@ module ApplicationFormattersHelper
   # @param [String] text The text to display.
   # @return [String]
   def format_block_text(text)
-    format_html(simple_format(text, {}, sanitize: false))
+    simple_format(html_escape(text), {}, sanitize: false)
   end
 
   # Formats the given user-input string. The string is assumed not to contain HTML markup.
@@ -19,7 +19,7 @@ module ApplicationFormattersHelper
   # @param [String] text The text to display.
   # @return [String]
   def format_inline_text(text)
-    format_html(html_escape(text))
+    html_escape(text)
   end
 
   # Formats the given User as a user-visible string.

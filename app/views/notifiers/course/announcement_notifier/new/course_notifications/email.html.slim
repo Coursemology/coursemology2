@@ -4,7 +4,9 @@
 
 - message.subject = t('.subject', course: course.title, announcement: announcement.title)
 
-= format_html(t('.message', course: link_to(course.title, course_url(course, host: host)),
-                              announcement: link_to(:announcement,
-                                                    course_announcements_url(course, host: host)),
-                              content: announcement.content))
+- course_link = link_to(format_inline_text(course.title), course_url(course, host: host))
+- announcement_link = link_to(:announcement, course_announcements_url(course, host: host))
+
+= format_html(t('.message', course: course_link,
+                            announcement: announcement_link,
+                            content: announcement.content))

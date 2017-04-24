@@ -8,8 +8,7 @@ en:
               email:
                 subject: '%{course} New topic created in forum: %{forum}'
                 message: >
-                  A new topic has been created in the forum: %{topic}
-
+                  <p>A new topic has been created in the forum: %{topic}</p>
                   %{post}
 
                 unsubscribe:

@@ -23,13 +23,13 @@ div.panel.panel-default
       - test_cases_and_results.each do |test_case, test_case_result|
         = content_tag_for(:tr, test_case, class: test_result_class(test_case_result)) do
           - if is_grader
-            th = format_html(test_case.identifier)
-          td = format_html(test_case.expression)
+            th = format_inline_text(test_case.identifier)
+          td = format_inline_text(test_case.expression)
           td
-            div.expected = format_html(test_case.expected)
+            div.expected = format_inline_text(test_case.expected)
           - if is_grader
             td
-              div.output = simple_format(get_output(test_case_result))
+              div.output = format_inline_text(get_output(test_case_result))
           - if @submission.attempting?
             td
               - unless test_case_result && test_case_result.passed?
