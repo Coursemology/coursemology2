@@ -5,6 +5,7 @@ en:
       toggle_sidebar: 'Toggle Sidebar'
       toggle_navigation: 'Toggle Navigation'
       courses: 'Courses'
+      my_courses: 'My Courses'
       all_courses: 'All Courses'
       help: 'Help'
       register: 'Register'

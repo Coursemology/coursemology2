@@ -27,6 +27,13 @@ RSpec.feature 'Courses' do
       expect(page).to have_link(course_attending.title, href: course_path(course_attending))
       expect(page).to have_link(course_teaching.title, href: course_path(course_teaching))
       expect(page).not_to have_link(other_course.title, href: course_path(other_course))
+
+      visit my_courses_path
+      within find('.my_courses') do
+        expect(page).to have_link(course_attending.title, href: course_path(course_attending))
+        expect(page).to have_link(course_teaching.title, href: course_path(course_teaching))
+        expect(page).not_to have_link(other_course.title, href: course_path(other_course))
+      end
     end
 
     scenario 'Users can create a new course' do

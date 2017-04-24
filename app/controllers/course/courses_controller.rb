@@ -30,6 +30,10 @@ class Course::CoursesController < Course::Controller
   def destroy # :nodoc:
   end
 
+  def my_courses
+    @courses = Course.containing_user(current_user).ordered_by_end_at.page(page_param)
+  end
+
   protected
 
   def publicly_accessible?
