@@ -9,7 +9,7 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
     # @param [Hash] options The options to be sent to the Duplicator object.
     # @option options [User] :current_user (+User.system+) The user triggering the duplication.
     # @option options [String] :new_title ('Duplicated') The title for the duplicated course.
-    # @option options [DateTime] :new_start_date Start date for the duplicated course.
+    # @option options [DateTime] :new_start_at Start date and time for the duplicated course.
     # @param [Array] all_objects All the objects in the course.
     # @param [Array] selected_objects The objects to duplicate.
     # @return [Course] The duplicated course
@@ -18,8 +18,8 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
       options[:excluded_objects] = excluded_objects
       options[:current_course] = current_course
       options[:time_shift] =
-        if options[:new_start_date]
-          Time.zone.parse(options[:new_start_date]) - current_course.start_at
+        if options[:new_start_at]
+          Time.zone.parse(options[:new_start_at]) - current_course.start_at
         else
           0
         end
