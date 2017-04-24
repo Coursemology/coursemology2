@@ -1,0 +1,157 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ResponseShow /> shows form and admin buttons if user has permissions and page is loaded 1`] = `
+<div>
+  <TitleBar
+    iconElementLeft={
+      <IconButton
+        disableTouchRipple={false}
+        disabled={false}
+        iconStyle={Object {}}
+        tooltipPosition="bottom-center"
+        touch={false}
+      >
+        <NavigationArrowBack />
+      </IconButton>
+    }
+    onLeftIconButtonTouchTap={[Function]}
+    title="Survey"
+  />
+  <Card
+    expandable={false}
+    expanded={null}
+    initiallyExpanded={false}
+  >
+    <CardText>
+      Description
+    </CardText>
+  </Card>
+  <div>
+    <Table
+      allRowsSelected={false}
+      fixedFooter={true}
+      fixedHeader={true}
+      height="inherit"
+      multiSelectable={false}
+      selectable={true}
+      style={
+        Object {
+          "marginTop": 10,
+          "maxWidth": 600,
+        }
+      }
+    >
+      <TableBody
+        allRowsSelected={false}
+        deselectOnClickaway={true}
+        displayRowCheckbox={false}
+        multiSelectable={false}
+        preScanRows={true}
+        selectable={true}
+        style={Object {}}
+      >
+        <TableRow
+          displayBorder={true}
+          hoverable={false}
+          hovered={false}
+          selectable={false}
+          selected={false}
+          striped={false}
+        >
+          <TableHeaderColumn>
+            Student
+          </TableHeaderColumn>
+          <TableRowColumn
+            hoverable={false}
+          >
+            Staff
+          </TableRowColumn>
+        </TableRow>
+        <TableRow
+          displayBorder={true}
+          hoverable={false}
+          hovered={false}
+          selectable={false}
+          selected={false}
+          striped={false}
+        >
+          <TableHeaderColumn>
+            Submitted At
+          </TableHeaderColumn>
+          <TableRowColumn
+            hoverable={false}
+          >
+            01 Jan 2100, 12:00am
+          </TableRowColumn>
+        </TableRow>
+      </TableBody>
+    </Table>
+    <Subheader
+      inset={false}
+    >
+      <FormattedMessage
+        defaultMessage="Questions"
+        id="course.surveys.questions"
+        values={Object {}}
+      />
+    </Subheader>
+    <InjectIntl(ReduxForm)
+      flags={
+        Object {
+          "canModify": true,
+          "canSubmit": true,
+          "canUnsubmit": true,
+          "isLoading": false,
+          "isResponseCreator": true,
+        }
+      }
+      initialValues={
+        Object {
+          "creator_name": "Staff",
+          "id": 2,
+          "submitted_at": "2099-12-31T16:00:00.000Z",
+        }
+      }
+      readOnly={true}
+      response={
+        Object {
+          "creator_name": "Staff",
+          "id": 2,
+          "submitted_at": "2099-12-31T16:00:00.000Z",
+        }
+      }
+    />
+  </div>
+  <Connect(RespondButton)
+    canModify={true}
+    canSubmit={true}
+    courseId="1"
+    responseId={2}
+    submittedAt="2099-12-31T16:00:00.000Z"
+    surveyId={2}
+  />
+  <Connect(UnsubmitButton)
+    responseId={2}
+  />
+</div>
+`;
+
+exports[`<ResponseShow /> shows only title and loading indicator when loading 1`] = `
+<div>
+  <TitleBar
+    iconElementLeft={
+      <IconButton
+        disableTouchRipple={false}
+        disabled={false}
+        iconStyle={Object {}}
+        tooltipPosition="bottom-center"
+        touch={false}
+      >
+        <NavigationArrowBack />
+      </IconButton>
+    }
+    onLeftIconButtonTouchTap={[Function]}
+  />
+  <LoadingIndicator />
+</div>
+`;

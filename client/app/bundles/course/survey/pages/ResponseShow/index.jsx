@@ -94,8 +94,8 @@ class ResponseShow extends React.Component {
   }
 
   renderRespondButton(survey) {
-    const { response, params: { courseId }, flags: { canModify, canSubmit } } = this.props;
-    if (!(canModify || canSubmit)) { return null; }
+    const { response, params: { courseId }, flags: { canModify, canSubmit, isLoading } } = this.props;
+    if (!(canModify || canSubmit) || isLoading) { return null; }
 
     return (
       <RespondButton
@@ -112,8 +112,8 @@ class ResponseShow extends React.Component {
   }
 
   renderUnsubmitButton() {
-    const { response, flags: { canUnsubmit } } = this.props;
-    if (!canUnsubmit) { return null; }
+    const { response, flags: { canUnsubmit, isLoading } } = this.props;
+    if (!canUnsubmit || isLoading) { return null; }
     return <UnsubmitButton responseId={response.id} />;
   }
 
@@ -139,6 +139,8 @@ class ResponseShow extends React.Component {
     );
   }
 }
+
+export const UnconnectedResponseShow = ResponseShow;
 
 export default connect(
   state => ({
