@@ -15,6 +15,7 @@ export default function (state = [], action) {
     case actionTypes.LOAD_RESPONSE_EDIT_SUCCESS:
     case actionTypes.LOAD_RESPONSES_SUCCESS:
     case actionTypes.UPDATE_QUESTION_ORDER_SUCCESS:
+    case actionTypes.UPDATE_SECTION_ORDER_SUCCESS:
     case actionTypes.UPDATE_SURVEY_SUCCESS:
     case actionTypes.LOAD_SURVEY_SUCCESS: {
       return sortSurveysByDate(updateOrAppend(state, sortSurveyElements(action.survey)));

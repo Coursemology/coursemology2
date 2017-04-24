@@ -23,9 +23,14 @@ const translations = defineMessages({
 class DeleteSectionButton extends React.PureComponent {
   static propTypes = {
     sectionId: PropTypes.number.isRequired,
+    disabled: PropTypes.bool,
 
     dispatch: PropTypes.func.isRequired,
   };
+
+  static defaultProps = {
+    disabled: false,
+  }
 
   deleteSectionHandler = () => {
     const { dispatch, sectionId } = this.props;
@@ -43,6 +48,7 @@ class DeleteSectionButton extends React.PureComponent {
       <FlatButton
         label={<FormattedMessage {...translations.deleteSection} />}
         onTouchTap={this.deleteSectionHandler}
+        disabled={this.props.disabled}
       />
     );
   }

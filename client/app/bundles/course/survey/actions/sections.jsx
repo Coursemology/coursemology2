@@ -97,3 +97,36 @@ export function deleteSurveySection(
       });
   };
 }
+
+/**
+ * Changes the order of survey sections so that the section originally at index oldIndex
+ * is moved to newIndex.
+ *
+ * @param {number} oldIndex
+ * @param {number} newIndex
+ * @param {string} successMessage
+ * @param {string} failureMessage
+ */
+export function changeSectionOrder(oldIndex, newIndex, successMessage, failureMessage) {
+  return (dispatch, getState) => {
+    const { surveys } = getState();
+    const surveyId = getSurveyId();
+    const survey = surveys.find(item => String(item.id) === surveyId);
+    const ordering = survey.sections.map(section => section.id);
+    ordering.splice(newIndex, 0, ordering.splice(oldIndex, 1)[0]);
+
+    dispatch({ type: actionTypes.UPDATE_SECTION_ORDER_REQUEST });
+    CourseAPI.survey.surveys.reorderSections({ ordering })
+      .then((response) => {
+        dispatch({
+          type: actionTypes.UPDATE_SECTION_ORDER_SUCCESS,
+          survey: response.data,
+        });
+        setNotification(successMessage)(dispatch);
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.UPDATE_SECTION_ORDER_FAILURE });
+        setNotification(failureMessage)(dispatch);
+      });
+  };
+}
