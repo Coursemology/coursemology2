@@ -89,8 +89,7 @@ namespace :coursemology do
         )
         question = FactoryGirl.create(
           :course_assessment_question_programming, :auto_gradable,
-          template_files: [template_file], test_cases: test_cases,
-          assessment: assessment, template_package_deferred: false,
+          template_files: [template_file], test_cases: test_cases, assessment: assessment,
           file: File.new(Rails.root.join('lib/tasks/coursemology/programming_question.zip'))
         )
         assessment.questions << question.acting_as
