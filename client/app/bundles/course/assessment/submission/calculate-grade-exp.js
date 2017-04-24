@@ -159,5 +159,6 @@ function getMultiplier() {
 
 $(document).ready(updateInitialGradesAndPoints);
 $(document).on('change', MULTI_QUESTION_ASSESSMENT_SELECTOR + GRADE_INPUT_SELECTOR, updateGradesAndPoints);
-$(document).on('change', SINGLE_QUESTION_ASSESSMENT_SELECTOR + GRADE_INPUT_SELECTOR, updateGradesAndPointsSingleQuestion);
+$(document).on('change', SINGLE_QUESTION_ASSESSMENT_SELECTOR + GRADE_INPUT_SELECTOR,
+               updateGradesAndPointsSingleQuestion);
 $(document).on('change', '.exp-multiplier input', onMultiplierChange);

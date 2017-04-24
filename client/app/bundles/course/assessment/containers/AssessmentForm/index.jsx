@@ -329,7 +329,9 @@ class AssessmentForm extends React.Component {
 }
 
 const selector = formValueSelector(formNames.ASSESSMENT);
-export default connect(state => selector(state, 'start_at', 'end_at', 'bonus_end_at', 'autograded', 'password_protected'))(
+export default connect(state =>
+  selector(state, 'start_at', 'end_at', 'bonus_end_at', 'autograded', 'password_protected')
+)(
   reduxForm({
     form: formNames.ASSESSMENT,
     validate,

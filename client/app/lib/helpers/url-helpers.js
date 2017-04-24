@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* Get the given parameter from the URL.
 * e.g. With this URL -> http://dummy.com/?technology=jquery&blog=jquerybyexample
 *
