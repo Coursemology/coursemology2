@@ -40,6 +40,7 @@ RSpec.feature 'Course: Events' do
           expect(page).not_to have_link(nil, href: deletion_path)
           expect(page).to have_selector('.confirm-btn')
           accept_confirm_dialog
+          expect(page).to have_selector('div.alert-success')
         end.to change(course.lesson_plan_events, :count).by(-1)
 
         # Go to edit event page

@@ -142,10 +142,10 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
             end
           end
         end
-        click_button I18n.t('helpers.buttons.update')
+        find(:button, I18n.t('helpers.buttons.update')).trigger('click')
 
-        expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(page).to have_selector('div.alert.alert-success')
+        expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(mrq.reload.options.count).to eq(options.count)
 
         # Delete all MRQ options
