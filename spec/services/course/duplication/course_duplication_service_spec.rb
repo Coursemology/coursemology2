@@ -9,7 +9,7 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
     let(:new_course) do
       options = {
         current_user: admin,
-        new_start_date: (course.start_at + 1.day).iso8601,
+        new_start_at: (course.start_at + 1.day).iso8601,
         new_title: I18n.t('course.duplications.show.new_course_title_prefix')
       }
       Course::Duplication::CourseDuplicationService.duplicate_course(course, options)

@@ -23,7 +23,7 @@ class Course::DuplicationsController < Course::ComponentController
   private
 
   def create_duplication_params # :nodoc
-    params.require(:duplication).permit(:new_start_date, :new_title)
+    params.require(:duplication).permit(:new_start_at, :new_title)
   end
 
   # Construct the options to be sent to the duplication job.

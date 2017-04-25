@@ -1,15 +1,18 @@
 - add_breadcrumb :show
 = page_header t('.header')
 
+- t = Date.tomorrow
+- new_start_at = current_course.start_at.change(year: t.year, month: t.month, day: t.day)
+
 div.panel.panel-default
   div.panel-heading
-    h4.panel-title = t('.course_start_date')
-  div.panel-body = format_datetime(current_course.start_at, :date_only_long)
+    h4.panel-title = t('.course_start_time')
+  div.panel-body = format_datetime(current_course.start_at, :rfc822)
 
 = simple_form_for :duplication,
   url: course_duplication_path(current_course),
   method: :post do |f|
-  = f.input :new_start_date, as: :bootstrap_date_time, input_html: { value: 1.day.from_now }
+  = f.input :new_start_at, as: :bootstrap_date_time, input_html: { value: new_start_at }
   = f.input :new_title,
       input_html: { value: t('.new_course_title', current_course_title: current_course.title) }
   = f.button :submit, t('.duplicate'), class: 'duplicate'

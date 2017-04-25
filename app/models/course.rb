@@ -169,8 +169,8 @@ class Course < ActiveRecord::Base
 
   # Set default values
   def set_defaults
-    self.start_at ||= Time.zone.now
-    self.end_at ||= 1.month.from_now
+    self.start_at ||= Time.zone.now.beginning_of_hour
+    self.end_at ||= self.start_at + 1.month
 
     return unless creator && course_users.empty?
     course_users.build(user: creator, role: :owner, creator: creator, updater: updater)
