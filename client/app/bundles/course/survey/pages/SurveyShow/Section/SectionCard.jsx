@@ -43,8 +43,21 @@ class SectionCard extends React.Component {
     this.state = { expanded: true };
   }
 
+  renderActions() {
+    const { section, first, last, disabled, index: sectionIndex } = this.props;
+    return (
+      <CardActions>
+        { section.canCreateQuestion ? <NewQuestionButton sectionId={section.id} {...{ disabled }} /> : null }
+        { section.canUpdate ? <EditSectionButton {...{ section, disabled }} /> : null }
+        { section.canDelete ? <DeleteSectionButton sectionId={section.id} {...{ disabled }} /> : null }
+        { section.canUpdate && !first ? <MoveUpButton {...{ sectionIndex, disabled }} /> : null }
+        { section.canUpdate && !last ? <MoveDownButton {...{ sectionIndex, disabled }} /> : null }
+      </CardActions>
+    );
+  }
+
   render() {
-    const { section, first, last, disabled, index: sectionIndex, survey: { draggedQuestion } } = this.props;
+    const { section, index: sectionIndex, survey: { draggedQuestion } } = this.props;
     return (
       <Card
         style={styles.card}
@@ -57,6 +70,7 @@ class SectionCard extends React.Component {
           subtitleStyle={styles.subtitle}
           showExpandableButton={section.questions.length > 0}
         />
+        { section.questions.length > 1 ? this.renderActions() : null }
         <CardText>
           {
             section.questions.length < 1 ?
@@ -72,13 +86,7 @@ class SectionCard extends React.Component {
             )
           }
         </CardText>
-        <CardActions>
-          { section.canCreateQuestion ? <NewQuestionButton sectionId={section.id} {...{ disabled }} /> : null }
-          { section.canUpdate ? <EditSectionButton {...{ section, disabled }} /> : null }
-          { section.canDelete ? <DeleteSectionButton sectionId={section.id} {...{ disabled }} /> : null }
-          { section.canUpdate && !first ? <MoveUpButton {...{ sectionIndex, disabled }} /> : null }
-          { section.canUpdate && !last ? <MoveDownButton {...{ sectionIndex, disabled }} /> : null }
-        </CardActions>
+        { this.renderActions() }
       </Card>
     );
   }
