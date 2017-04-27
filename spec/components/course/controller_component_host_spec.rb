@@ -86,6 +86,14 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
       end
     end
 
+    describe '.disableable_components' do
+      subject { Course::ControllerComponentHost.disableable_components }
+
+      it 'does not include components that cannot be disabled' do
+        expect(subject).not_to include(self.class::DummyCoreCourseModule)
+      end
+    end
+
     describe '#initialize' do
       it 'instantiates all enabled components' do
         expect(self.class::DummyCourseModule).to receive(:new).and_call_original
@@ -219,12 +227,10 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
 
     describe '#course_disableable_components' do
       subject { component_host.course_disableable_components }
-      context 'when the component cannot be disabled' do
-        let(:course) { create(:course, instance: instance) }
+      let(:course) { create(:course, instance: instance) }
 
-        it 'does not include gamified components' do
-          expect(subject).not_to include(self.class::DummyCoreCourseModule)
-        end
+      it 'does not include components that cannot be disabled' do
+        expect(subject).not_to include(self.class::DummyCoreCourseModule)
       end
     end
 

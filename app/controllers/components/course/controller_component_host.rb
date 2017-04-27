@@ -66,6 +66,15 @@ class Course::ControllerComponentHost
   # Eager load all the components declared.
   eager_load_components(File.join(__dir__, '../'))
 
+  class << self
+    # Returns all components which can be disabled.
+    #
+    # @return [Array<Class>] array of disable-able components
+    def disableable_components
+      @disableable_components ||= components.select(&:can_be_disabled?)
+    end
+  end
+
   # Initializes the component host instance.
   #
   # This loads all components.

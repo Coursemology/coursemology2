@@ -6,7 +6,7 @@ RSpec.feature 'System: Administration: Components', type: :feature do
 
   with_tenant(:instance) do
     let(:admin) { create(:administrator) }
-    let(:components) { Course::ControllerComponentHost.components }
+    let(:components) { Course::ControllerComponentHost.disableable_components }
     let(:sample_component_id) do
       "settings_effective_enabled_component_ids_#{components.sample.key}"
     end
