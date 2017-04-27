@@ -45,6 +45,10 @@ const translations = defineMessages({
     id: 'lib.form.validation.required',
     defaultMessage: 'Required',
   },
+  starRequired: {
+    id: 'lib.form.validation.starRequired',
+    defaultMessage: '* Required',
+  },
   invalid: {
     id: 'lib.form.validation.invalid',
     defaultMessage: 'Invalid',
