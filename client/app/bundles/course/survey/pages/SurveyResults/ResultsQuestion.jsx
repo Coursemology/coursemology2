@@ -5,6 +5,7 @@ import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import { cyan500, grey50, grey300 } from 'material-ui/styles/colors';
+import formTranslations from 'lib/translations/form';
 import { sorts } from 'course/survey/utils';
 import { questionTypes } from 'course/survey/constants';
 import { optionShape } from 'course/survey/propTypes';
@@ -68,6 +69,9 @@ const styles = {
   },
   tableWrapper: {
     overflow: 'inherit',
+  },
+  required: {
+    fontStyle: 'italic',
   },
 };
 
@@ -355,7 +359,9 @@ class ResultsQuestion extends React.Component {
     return (
       <Card style={styles.card}>
         <CardText>
-          {`${index + 1}. ${question.description}`}
+          <p>{ `${index + 1}. ${question.description}` }</p>
+          { question.required ?
+            <p style={styles.required}><FormattedMessage {...formTranslations.starRequired} /></p> : null }
         </CardText>
         {this.renderSpecificResults()}
       </Card>

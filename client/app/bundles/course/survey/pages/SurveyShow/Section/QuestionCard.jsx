@@ -8,6 +8,7 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import formTranslations from 'lib/translations/form';
 import { questionTypes } from 'course/survey/constants';
 import { questionShape } from 'course/survey/propTypes';
 import translations from 'course/survey/translations';
@@ -46,6 +47,9 @@ const styles = {
   },
   fields: {
     marginTop: 0,
+  },
+  required: {
+    fontStyle: 'italic',
   },
 };
 
@@ -155,7 +159,9 @@ class QuestionCard extends React.Component {
       >
         <CardText style={styles.cardText}>
           { this.renderAdminMenu() }
-          <p>{question.description}</p>
+          <p>{ question.description }</p>
+          { question.required ?
+            <p style={styles.required}><FormattedMessage {...formTranslations.starRequired} /></p> : null }
         </CardText>
         <CardText expandable style={styles.fields}>
           { QuestionCard.renderSpecificFields(question) }
