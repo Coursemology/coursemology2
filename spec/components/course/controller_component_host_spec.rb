@@ -181,39 +181,6 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
       end
     end
 
-    describe '#disabled_components' do
-      subject { component_host.disabled_components }
-
-      it 'memoises its result' do
-        expect(component_host.disabled_components).to be(subject)
-      end
-
-      context 'without preferences' do
-        it 'returns empty' do
-          expect(subject).to eq([])
-        end
-      end
-
-      context 'with preferences' do
-        let(:sample_component) { default_enabled_components.first }
-        context 'disable a component' do
-          before { course.settings(sample_component.key).enabled = false }
-
-          it 'includes the disabled component' do
-            expect(subject.include?(sample_component)).to be_truthy
-          end
-        end
-
-        context 'enable a component' do
-          before { course.settings(sample_component.key).enabled = true }
-
-          it 'does not include the enabled component' do
-            expect(subject.include?(sample_component)).to be_falsey
-          end
-        end
-      end
-    end
-
     describe '#course_available_components' do
       subject { component_host.course_available_components }
       context 'when the gamified flag for the course is set to false' do

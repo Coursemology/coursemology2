@@ -125,13 +125,6 @@ class Course::ControllerComponentHost
     end
   end
 
-  # Apply preferences to all the components, returns the disabled components.
-  #
-  # @return [Array<Class>] array of disabled components
-  def disabled_components
-    @disabled_components ||= instance_enabled_components - enabled_components
-  end
-
   # Returns the enabled components in instance.
   #
   # @return [Array<Class>] array of enabled components in instance
