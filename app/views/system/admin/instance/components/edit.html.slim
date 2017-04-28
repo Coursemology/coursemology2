@@ -1,5 +1,6 @@
 = page_header
 = simple_form_for @settings, url: admin_instance_components_path, method: :patch do |f|
+  = f.error_notification message: f.object.errors.full_messages.first
   table.table.table-hover
     thead
       tr

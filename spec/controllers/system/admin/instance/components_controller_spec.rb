@@ -14,27 +14,44 @@ RSpec.describe System::Admin::Instance::ComponentsController, type: :controller 
 
     describe '#update' do
       let(:ids_to_enable) do
-        all_component_ids = Course::ControllerComponentHost.components.map { |c| c.key.to_s }
+        all_component_ids =
+          Course::ControllerComponentHost.disableable_components.map { |c| c.key.to_s }
         all_component_ids.sample(1 + rand(all_component_ids.count))
       end
       let(:components_params) { { enabled_component_ids: ids_to_enable } }
-      subject { patch :update, settings_effective: components_params }
+      subject { patch :update, settings_components: components_params }
 
       context 'enable/disable components' do
         let(:settings) do
-          Instance::Settings::Effective.new(instance.reload, Course::ControllerComponentHost)
+          Instance::Settings::Components.new(instance.reload)
         end
 
         it 'enables the component to enabled and disables all other components' do
           subject
-          expect(settings.enabled_component_ids).to eq(ids_to_enable)
+          expect(settings.enabled_component_ids.to_set).to eq(ids_to_enable.to_set)
         end
       end
 
-      context 'when instance cannot save' do
+      context 'when parameters are invalid' do
+        let(:components_params) do
+          { enabled_component_ids: ids_to_enable << 'invalid-key' }
+        end
+
+        it 'raises an error' do
+          expect { subject }.to raise_exception(ArgumentError)
+        end
+      end
+
+      context 'when updated settings are invalid' do
+        let(:settings_stub) do
+          stub = double
+          allow(stub).to receive(:valid_params?).and_return(true)
+          allow(stub).to receive(:update).and_return(false)
+          stub
+        end
+
         before do
-          allow(instance).to receive(:save).and_return(false)
-          allow(controller).to receive(:current_tenant).and_return(instance)
+          controller.instance_variable_set(:@settings, settings_stub)
           subject
         end
 
