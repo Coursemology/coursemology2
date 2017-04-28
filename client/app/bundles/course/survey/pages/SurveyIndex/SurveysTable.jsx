@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Link, browserHistory } from 'react-router';
-import { standardDateFormat } from 'lib/date-time-defaults';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
+import moment from 'lib/moment';
 import translations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
 import { updateSurvey } from 'course/survey/actions/surveys';
@@ -36,7 +36,6 @@ class SurveysTable extends React.Component {
     surveysFlags: PropTypes.shape({
       canCreate: PropTypes.bool.isRequired,
     }).isRequired,
-    intl: intlShape.isRequired,
     dispatch: PropTypes.func.isRequired,
   };
 
@@ -63,7 +62,7 @@ class SurveysTable extends React.Component {
   }
 
   render() {
-    const { intl, surveys, courseId, surveysFlags: { canCreate } } = this.props;
+    const { surveys, courseId, surveysFlags: { canCreate } } = this.props;
     return (
       <Table bodyStyle={styles.tableBody}>
         <TableHeader
@@ -72,24 +71,24 @@ class SurveysTable extends React.Component {
         >
           <TableRow>
             <TableHeaderColumn colSpan={6}>
-              {intl.formatMessage(translations.title)}
+              <FormattedMessage {...translations.title} />
             </TableHeaderColumn>
             <TableHeaderColumn colSpan={3} style={styles.wrap}>
-              {intl.formatMessage(translations.basePoints)}
+              <FormattedMessage {...translations.basePoints} />
             </TableHeaderColumn>
             <TableHeaderColumn colSpan={3} style={styles.wrap}>
-              {intl.formatMessage(translations.bonusPoints)}
+              <FormattedMessage {...translations.bonusPoints} />
             </TableHeaderColumn>
             <TableHeaderColumn colSpan={5}>
-              {intl.formatMessage(translations.opensAt)}
+              <FormattedMessage {...translations.opensAt} />
             </TableHeaderColumn>
             <TableHeaderColumn colSpan={5}>
-              {intl.formatMessage(translations.expiresAt)}
+              <FormattedMessage {...translations.expiresAt} />
             </TableHeaderColumn>
             {
               canCreate ?
                 <TableHeaderColumn colSpan={2}>
-                  {intl.formatMessage(translations.published)}
+                  <FormattedMessage {...translations.published} />
                 </TableHeaderColumn> :
                 null
             }
@@ -115,10 +114,10 @@ class SurveysTable extends React.Component {
                   { survey.allow_response_after_end ? survey.time_bonus_exp : '-' }
                 </TableRowColumn>
                 <TableRowColumn colSpan={5}>
-                  { intl.formatDate(survey.start_at, standardDateFormat) }
+                  { moment(survey.start_at).format('DD-MM-YYYY') }
                 </TableRowColumn>
                 <TableRowColumn colSpan={5}>
-                  { survey.end_at ? intl.formatDate(survey.end_at, standardDateFormat) : [] }
+                  { survey.end_at ? moment(survey.end_at).format('DD-MM-YYYY') : [] }
                 </TableRowColumn>
                 {
                   canCreate ?
@@ -173,4 +172,4 @@ class SurveysTable extends React.Component {
   }
 }
 
-export default connect(state => state)(injectIntl(SurveysTable));
+export default connect(state => state)(SurveysTable);
