@@ -1,11 +1,14 @@
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
 import { connect } from 'react-redux';
+import { Route, Switch } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import * as actionCreators from '../actions';
 import lessonPlanItemTypeKey from '../utils';
 import { constants } from '../constants';
+import LessonPlanEdit from '../components/LessonPlanEdit';
+import LessonPlanIndex from '../components/LessonPlanIndex';
 
 const translations = defineMessages({
   priorItemsMilestoneTitle: {
@@ -21,7 +24,6 @@ const propTypes = {
   hiddenItemTypes: PropTypes.instanceOf(Immutable.List).isRequired,
   dispatch: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
-  children: PropTypes.element.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -89,8 +91,14 @@ class LessonPlanContainer extends React.Component {
       ...actions,
       milestoneGroups: this.milestoneGroups(),
     };
+    const pageRenderer = Page => props => <Page {...props} {...childProps} />;
 
-    return (React.cloneElement(this.props.children, childProps));
+    return (
+      <Switch>
+        <Route exact path="/courses/:courseId/lesson_plan" render={pageRenderer(LessonPlanIndex)} />
+        <Route exact path="/courses/:courseId/lesson_plan/edit" render={pageRenderer(LessonPlanEdit)} />
+      </Switch>
+    );
   }
 }
 
