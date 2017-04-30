@@ -11,11 +11,7 @@ describe('<RemindButton />', () => {
   it('injects handlers that trigger the reminder', () => {
     const spyRemind = jest.spyOn(CourseAPI.survey.surveys, 'remind');
     const store = storeCreator({ surveys: {} });
-    const contextOptions = {
-      context: { intl, store, muiTheme },
-      childContextTypes: { muiTheme: React.PropTypes.object, intl: intlShape },
-    };
-    const remindButton = mount(<RemindButton />, contextOptions);
+    const remindButton = mount(<RemindButton />, buildContextOptions(store));
     const remindButtonNode = ReactDOM.findDOMNode(remindButton.find('button').node);
     ReactTestUtils.Simulate.touchTap(remindButtonNode);
     const cancelButton = remindButton.find('ConfirmationDialog').first().node.cancelButton;

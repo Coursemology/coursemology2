@@ -1,13 +1,13 @@
-import { browserHistory } from 'react-router';
 import { SubmissionError } from 'redux-form';
 import CourseAPI from 'api/course';
+import history from 'lib/history';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import actionTypes from '../constants';
 import { setNotification } from './index';
 
 export function createResponse(surveyId) {
   const courseId = getCourseId();
-  const goToResponse = responseId => browserHistory.push(
+  const goToResponse = responseId => history.push(
     `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}`
   );
   return (dispatch) => {
@@ -95,7 +95,7 @@ export function updateResponse(
 
         if (payload.response.submit && !data.flags.canModify) {
           const courseId = getCourseId();
-          browserHistory.push(`/courses/${courseId}/surveys/`);
+          history.push(`/courses/${courseId}/surveys/`);
         }
 
         setNotification(successMessage)(dispatch);

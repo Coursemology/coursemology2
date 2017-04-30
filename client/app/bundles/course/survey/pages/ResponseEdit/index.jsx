@@ -2,12 +2,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { browserHistory } from 'react-router';
-import IconButton from 'material-ui/IconButton';
 import { Card, CardText } from 'material-ui/Card';
-import TitleBar from 'lib/components/TitleBar';
 import Subheader from 'material-ui/Subheader';
-import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import { questionTypes } from 'course/survey/constants';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
@@ -36,15 +32,15 @@ const translations = defineMessages({
 
 class ResponseEdit extends React.Component {
   static propTypes = {
-    surveys: PropTypes.arrayOf(surveyShape),
+    survey: surveyShape,
     response: responseShape,
     flags: PropTypes.shape({
       isLoading: PropTypes.bool.isRequired,
     }),
-    params: PropTypes.shape({
-      courseId: PropTypes.string.isRequired,
-      surveyId: PropTypes.string.isRequired,
-      responseId: PropTypes.string.isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        responseId: PropTypes.string.isRequired,
+      }).isRequired,
     }).isRequired,
     dispatch: PropTypes.func.isRequired,
   };
@@ -71,12 +67,12 @@ class ResponseEdit extends React.Component {
   }
 
   componentDidMount() {
-    const { dispatch, params: { responseId } } = this.props;
+    const { dispatch, match: { params: { responseId } } } = this.props;
     dispatch(fetchEditableResponse(responseId));
   }
 
   handleUpdateResponse = (data) => {
-    const { dispatch, params: { responseId } } = this.props;
+    const { dispatch, match: { params: { responseId } } } = this.props;
     const { saveSuccess, saveFailure, submitSuccess, submitFailure } = translations;
     const payload = ResponseEdit.formatSurveyResponseData(data);
     const successMessage = <FormattedMessage {...(data.submit ? submitSuccess : saveSuccess)} />;
@@ -104,19 +100,9 @@ class ResponseEdit extends React.Component {
   }
 
   render() {
-    const { surveys, params: { courseId, surveyId } } = this.props;
-    const survey = surveys && surveys.length > 0 ?
-                   surveys.find(s => String(s.id) === String(surveyId)) : {};
-
+    const { survey } = this.props;
     return (
       <div>
-        <TitleBar
-          title={survey.title}
-          iconElementLeft={<IconButton><ArrowBack /></IconButton>}
-          onLeftIconButtonTouchTap={
-            () => browserHistory.push(`/courses/${courseId}/surveys/${surveyId}`)
-          }
-        />
         { survey.description ? <Card><CardText>{survey.description}</CardText></Card> : null }
         { this.renderBody() }
       </div>
@@ -124,9 +110,4 @@ class ResponseEdit extends React.Component {
   }
 }
 
-export default connect(
-  state => ({
-    ...state.responseForm,
-    surveys: state.surveys,
-  })
-)(ResponseEdit);
+export default connect(state => state.responseForm)(ResponseEdit);

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
 import { mount } from 'enzyme';
 import ReactTestUtils from 'react-addons-test-utils';
 import CourseAPI from 'api/course';
@@ -52,6 +53,10 @@ beforeEach(() => {
   mock.reset();
 });
 
+const InjectedResponseEdit = connect(
+  state => ({ survey: state.surveys[0] || {} })
+)(ResponseEdit);
+
 describe('<ResponseEdit />', () => {
   it('allows responses to be saved', async () => {
     const surveyId = responseData.survey.id.toString();
@@ -63,14 +68,9 @@ describe('<ResponseEdit />', () => {
 
     // Mount response show page and wait for data to load
     Object.defineProperty(window.location, 'pathname', { value: responseUrl });
-    const store = storeCreator({ surveys: {} });
-    const contextOptions = {
-      context: { intl, store, muiTheme },
-      childContextTypes: { muiTheme: React.PropTypes.object, intl: intlShape },
-    };
     const responseShow = mount(
-      <ResponseEdit params={{ courseId, surveyId, responseId }} />,
-      contextOptions
+      <InjectedResponseEdit {...{ match: { params: { responseId } } }} />,
+      buildContextOptions(storeCreator({}))
     );
     await sleep(1);
     expect(spyEdit).toHaveBeenCalled();

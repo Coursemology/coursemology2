@@ -7,8 +7,8 @@
     "courseId": true,
     "intl": true,
     "intlShape": true,
-    "muiTheme": true,
     "sleep": true,
+    "buildContextOptions": true,
   },
   "rules": {
     "react/no-find-dom-node": "off",

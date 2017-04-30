@@ -2,15 +2,12 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 import mirrorCreator from 'mirror-creator';
 import { Card, CardText } from 'material-ui/Card';
 import Toggle from 'material-ui/Toggle';
-import IconButton from 'material-ui/IconButton';
-import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import { red500 } from 'material-ui/styles/colors';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
-import TitleBar from 'lib/components/TitleBar';
 import BarChart from 'lib/components/BarChart';
 import { formatDateTime } from 'lib/date-time-defaults';
 import { fetchResponses } from 'course/survey/actions/responses';
@@ -88,14 +85,10 @@ const translations = defineMessages({
 
 class ResponseIndex extends React.Component {
   static propTypes = {
+    survey: surveyShape,
     dispatch: PropTypes.func.isRequired,
-    surveys: PropTypes.arrayOf(surveyShape),
     responses: PropTypes.arrayOf(responseShape),
     isLoading: PropTypes.bool.isRequired,
-    params: PropTypes.shape({
-      courseId: PropTypes.string.isRequired,
-      surveyId: PropTypes.string.isRequired,
-    }).isRequired,
   };
 
   static computeStatuses(responses) {
@@ -216,49 +209,42 @@ class ResponseIndex extends React.Component {
     dispatch(fetchResponses());
   }
 
-  renderHeader(survey) {
-    const { params: { courseId, surveyId } } = this.props;
+  renderHeader() {
+    const { survey } = this.props;
     return (
-      <div>
-        <TitleBar
-          title={survey.title}
-          iconElementLeft={<IconButton><ArrowBack /></IconButton>}
-          onLeftIconButtonTouchTap={() => browserHistory.push(`/courses/${courseId}/surveys/${surveyId}`)}
-        />
-        <Card style={styles.detailsCard}>
-          <Table style={styles.table}>
-            <TableBody displayRowCheckbox={false}>
-              <TableRow>
-                <TableRowColumn>
-                  <FormattedMessage {...surveyTranslations.opensAt} />
-                </TableRowColumn>
-                <TableRowColumn>
-                  {formatDateTime(survey.start_at)}
-                </TableRowColumn>
-              </TableRow>
-              <TableRow>
-                <TableRowColumn>
-                  <FormattedMessage {...surveyTranslations.expiresAt} />
-                </TableRowColumn>
-                <TableRowColumn>
-                  {formatDateTime(survey.end_at)}
-                </TableRowColumn>
-              </TableRow>
-              <TableRow>
-                <TableRowColumn>
-                  <FormattedMessage {...surveyTranslations.closingRemindedAt} />
-                </TableRowColumn>
-                <TableRowColumn>
-                  {survey.closing_reminded_at ? formatDateTime(survey.closing_reminded_at) : '-'}
-                </TableRowColumn>
-              </TableRow>
-            </TableBody>
-          </Table>
-          <CardText>
-            <RemindButton />
-          </CardText>
-        </Card>
-      </div>
+      <Card style={styles.detailsCard}>
+        <Table style={styles.table}>
+          <TableBody displayRowCheckbox={false}>
+            <TableRow>
+              <TableRowColumn>
+                <FormattedMessage {...surveyTranslations.opensAt} />
+              </TableRowColumn>
+              <TableRowColumn>
+                {formatDateTime(survey.start_at)}
+              </TableRowColumn>
+            </TableRow>
+            <TableRow>
+              <TableRowColumn>
+                <FormattedMessage {...surveyTranslations.expiresAt} />
+              </TableRowColumn>
+              <TableRowColumn>
+                {formatDateTime(survey.end_at)}
+              </TableRowColumn>
+            </TableRow>
+            <TableRow>
+              <TableRowColumn>
+                <FormattedMessage {...surveyTranslations.closingRemindedAt} />
+              </TableRowColumn>
+              <TableRowColumn>
+                {survey.closing_reminded_at ? formatDateTime(survey.closing_reminded_at) : '-'}
+              </TableRowColumn>
+            </TableRow>
+          </TableBody>
+        </Table>
+        <CardText>
+          <RemindButton />
+        </CardText>
+      </Card>
     );
   }
 
@@ -292,8 +278,8 @@ class ResponseIndex extends React.Component {
     );
   }
 
-  renderBody(survey) {
-    const { responses, isLoading } = this.props;
+  renderBody() {
+    const { survey, responses, isLoading } = this.props;
     if (isLoading) { return <LoadingIndicator />; }
 
     const { realResponses, phantomResponses } = responses.reduce(
@@ -320,19 +306,13 @@ class ResponseIndex extends React.Component {
   }
 
   render() {
-    const { surveys, params: { surveyId } } = this.props;
-    const survey = surveys && surveys.length > 0 ?
-                   surveys.find(s => String(s.id) === String(surveyId)) : {};
     return (
       <div>
-        { this.renderHeader(survey) }
-        { this.renderBody(survey) }
+        { this.renderHeader() }
+        { this.renderBody() }
       </div>
     );
   }
 }
 
-export default connect(state => ({
-  ...state.responses,
-  surveys: state.surveys,
-}))(ResponseIndex);
+export default connect(state => state.responses)(ResponseIndex);

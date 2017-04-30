@@ -23,16 +23,12 @@ describe('<MoveDownButton />', () => {
     const sectionIndex = 3;
     const spyMove = jest.spyOn(CourseAPI.survey.surveys, 'reorderSections');
     const store = storeCreator({ surveys: { surveys } });
-    const contextOptions = {
-      context: { intl, store, muiTheme },
-      childContextTypes: { muiTheme: React.PropTypes.object, intl: intlShape },
-    };
 
     Object.defineProperty(window.location, 'pathname', {
       value: `/courses/${courseId}/surveys/${surveyId}`,
     });
     const moveSectionButton =
-      mount(<MoveDownButton sectionIndex={sectionIndex} />, contextOptions);
+      mount(<MoveDownButton sectionIndex={sectionIndex} />, buildContextOptions(store));
     const moveSectionButtonNode = ReactDOM.findDOMNode(moveSectionButton.find('button').node);
     ReactTestUtils.Simulate.touchTap(moveSectionButtonNode);
 

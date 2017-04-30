@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
+import history from 'lib/history';
 import moment from 'lib/moment';
 import translations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
@@ -133,7 +134,7 @@ class SurveysTable extends React.Component {
                         <RaisedButton
                           style={styles.button}
                           label={<FormattedMessage {...translations.results} />}
-                          onTouchTap={() => browserHistory.push(
+                          onTouchTap={() => history.push(
                             `/courses/${courseId}/surveys/${survey.id}/results`
                           )}
                         /> :
@@ -144,7 +145,7 @@ class SurveysTable extends React.Component {
                         <RaisedButton
                           style={styles.button}
                           label={<FormattedMessage {...translations.responses} />}
-                          onTouchTap={() => browserHistory.push(
+                          onTouchTap={() => history.push(
                             `/courses/${courseId}/surveys/${survey.id}/responses`
                           )}
                         /> :

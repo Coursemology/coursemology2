@@ -23,8 +23,10 @@ class SurveyIndex extends React.Component {
     isLoading: PropTypes.bool.isRequired,
 
     dispatch: PropTypes.func.isRequired,
-    params: PropTypes.shape({
-      courseId: PropTypes.string.isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        courseId: PropTypes.string.isRequired,
+      }),
     }),
   };
 
@@ -34,7 +36,7 @@ class SurveyIndex extends React.Component {
   }
 
   renderBody() {
-    const { surveys, isLoading, params: { courseId } } = this.props;
+    const { surveys, isLoading, match: { params: { courseId } } } = this.props;
     if (isLoading) { return <LoadingIndicator />; }
     if (surveys.length < 1) {
       return <Subheader><FormattedMessage {...translations.noSurveys} /></Subheader>;

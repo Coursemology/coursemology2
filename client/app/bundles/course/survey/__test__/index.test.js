@@ -1,11 +1,11 @@
 import React from 'react';
-import { Router, createMemoryHistory } from 'react-router';
+import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
 import MockAdapter from 'axios-mock-adapter';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
-import routes from 'course/survey/routes';
+import SurveysLayout from 'course/survey/containers/SurveysLayout';
 
 // Mock axios
 const client = CourseAPI.survey.surveys.getClient();
@@ -31,15 +31,15 @@ describe('Surveys', () => {
         }],
         canCreate: true,
       });
-    // Set the route to index page
-    const history = createMemoryHistory(`/courses/${courseId}/surveys`);
 
     const spyIndex = jest.spyOn(CourseAPI.survey.surveys, 'index');
     const store = storeCreator({ surveys: {} });
 
     const indexPage = mount(
       <ProviderWrapper store={store}>
-        <Router routes={routes} history={history} />
+        <MemoryRouter initialEntries={[`/courses/${courseId}/surveys`]}>
+          <SurveysLayout />
+        </MemoryRouter>
       </ProviderWrapper>
     );
 

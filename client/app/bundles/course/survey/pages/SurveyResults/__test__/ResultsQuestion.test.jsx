@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { mount } from 'enzyme';
 import ReactDOM from 'react-dom';
 import storeCreator from 'course/survey/store';
@@ -48,15 +48,10 @@ const getMultipleChoiceData = (optionCount) => {
   };
 };
 
-const contextOptions = {
-  context: { intl, store: storeCreator({ surveys: {} }), muiTheme },
-  childContextTypes: { muiTheme: PropTypes.object, store: PropTypes.object, intl: intlShape },
-};
-
 const testExpandLongQuestion = (question) => {
   const resultsQuestion = mount(
     <ResultsQuestion {...{ question }} includePhantoms anonymous={false} index={1} />,
-    contextOptions
+    buildContextOptions(storeCreator({}))
   );
   expect(resultsQuestion.find('Table')).toHaveLength(0);
   const expandButton = resultsQuestion.find('RaisedButton').first().find('button');
@@ -79,7 +74,7 @@ describe('<ResultsQuestion />', () => {
     const question = getMultipleChoiceData(2);
     const resultsQuestion = mount(
       <ResultsQuestion {...{ question }} includePhantoms={false} anonymous={false} index={1} />,
-      contextOptions
+      buildContextOptions(storeCreator({}))
     );
     const lastOptionCountCell = () => resultsQuestion.find('TableRow').last().find('td').at(3);
     const lastOptionCountBeforeSort = lastOptionCountCell().text();
