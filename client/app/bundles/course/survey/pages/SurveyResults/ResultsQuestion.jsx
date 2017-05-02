@@ -106,11 +106,12 @@ const translations = defineMessages({
   },
   showResponses: {
     id: 'course.surveys.ResultsQuestion.showResponses',
-    defaultMessage: 'Show All {quantity} Responses',
+    defaultMessage: 'Show Responses ({quantity}/{total} responded{phantoms, plural, \
+      =0 {} one {, {phantoms} Phantom} other {, {phantoms} Phantoms}})',
   },
   hideResponses: {
     id: 'course.surveys.ResultsQuestion.hideResponses',
-    defaultMessage: 'Hide All {quantity} Responses',
+    defaultMessage: 'Hide Responses',
   },
   showOptions: {
     id: 'course.surveys.ResultsQuestion.showOptions',
@@ -249,8 +250,9 @@ class ResultsQuestion extends React.Component {
     return breakdown;
   }
 
-  renderExpandToggle(quantity) {
+  renderExpandToggle(values) {
     if (!this.state.expandable) { return null; }
+
     const { question } = this.props;
     let labelTranslation;
     if (question.question_type === questionTypes.TEXT) {
@@ -258,10 +260,11 @@ class ResultsQuestion extends React.Component {
     } else {
       labelTranslation = this.state.expanded ? 'hideOptions' : 'showOptions';
     }
+
     return (
       <CardText style={styles.expandToggleStyle}>
         <RaisedButton
-          label={<FormattedMessage {...translations[labelTranslation]} values={{ quantity }} />}
+          label={<FormattedMessage {...translations[labelTranslation]} values={values} />}
           onTouchTap={() => this.setState({ expanded: !this.state.expanded })}
         />
       </CardText>
@@ -320,22 +323,30 @@ class ResultsQuestion extends React.Component {
     const nonEmptyAnswers = filteredAnswers.filter(answer => (
       answer.text_response && answer.text_response.trim().length > 0
     ));
+    const validPhantomResponses = includePhantoms ? nonEmptyAnswers.filter(answer => answer.phantom) : [];
+    const toggle = this.renderExpandToggle({
+      total: filteredAnswers.length,
+      quantity: nonEmptyAnswers.length,
+      phantoms: validPhantomResponses.length,
+    });
+
     return (
       <div>
-        { this.renderExpandToggle(nonEmptyAnswers.length) }
+        { toggle }
         { this.state.expanded ? ResultsQuestion.renderTextResultsTable(nonEmptyAnswers) : null }
-        { this.state.expanded ? this.renderExpandToggle(nonEmptyAnswers.length) : null}
+        { this.state.expanded ? toggle : null}
       </div>
     );
   }
 
   renderOptionsResults() {
     const optionsCount = this.props.question.options.length;
+    const toggle = this.renderExpandToggle({ quantity: optionsCount });
     return (
       <div>
-        { this.renderExpandToggle(optionsCount) }
+        { toggle }
         { this.state.expanded ? this.renderOptionsResultsTable() : null }
-        { this.state.expanded ? this.renderExpandToggle(optionsCount) : null }
+        { this.state.expanded ? toggle : null }
       </div>
     );
   }
