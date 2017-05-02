@@ -5,8 +5,8 @@
 - unsubscribe_url = subscribe_course_forum_topic_url(course, topic.forum, topic, subscribe: false,
                                                      host: host)
 
-- course_title = format_inline_text(course_title)
-- topic_title = format_inline_text(topic_title)
+- course_title = format_inline_text(course.title)
+- topic_title = format_inline_text(topic.title)
 - post_author = format_inline_text(post.creator.name)
 
 - message.subject = t('.subject', course: course_title, topic: topic_title)
