@@ -74,7 +74,7 @@ class SurveyResults extends React.Component {
     return { totalStudents, realStudents };
   }
 
-  renderBody() {
+  renderBody(anonymous) {
     const { sections, isLoading } = this.props;
     const noSections = sections && sections.length < 1;
     if (isLoading) { return <LoadingIndicator />; }
@@ -112,7 +112,7 @@ class SurveyResults extends React.Component {
             <ResultsSection
               key={section.id}
               includePhantoms={this.state.includePhantoms}
-              {...{ section, index }}
+              {...{ section, index, anonymous }}
             />
           )
         }
@@ -131,7 +131,7 @@ class SurveyResults extends React.Component {
           iconElementLeft={<IconButton><ArrowBack /></IconButton>}
           onLeftIconButtonTouchTap={() => browserHistory.push(`/courses/${courseId}/surveys`)}
         />
-        { this.renderBody() }
+        { this.renderBody(survey && survey.anonymous) }
       </div>
     );
   }

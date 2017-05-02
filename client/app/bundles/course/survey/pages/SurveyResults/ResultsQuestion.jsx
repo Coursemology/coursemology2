@@ -80,6 +80,10 @@ const translations = defineMessages({
     id: 'course.surveys.ResultsQuestion.serial',
     defaultMessage: 'S/N',
   },
+  respondent: {
+    id: 'course.surveys.ResultsQuestion.respondent',
+    defaultMessage: 'Respondent',
+  },
   count: {
     id: 'course.surveys.ResultsQuestion.count',
     defaultMessage: 'Count',
@@ -121,12 +125,17 @@ const translations = defineMessages({
     id: 'course.surveys.ResultsQuestion.hideOptions',
     defaultMessage: 'Hide All {quantity} Options',
   },
+  phantomStudentName: {
+    id: 'course.surveys.ResultsQuestion.phantomStudentName',
+    defaultMessage: '{name} (Phantom)',
+  },
 });
 
 class ResultsQuestion extends React.Component {
   static propTypes = {
     index: PropTypes.number.isRequired,
     includePhantoms: PropTypes.bool.isRequired,
+    anonymous: PropTypes.bool.isRequired,
     question: PropTypes.shape({
       id: PropTypes.number,
       description: PropTypes.string,
@@ -192,14 +201,20 @@ class ResultsQuestion extends React.Component {
     );
   }
 
-  static renderTextResultsTable(answers) {
+  static renderTextResultsTable(answers, anonymous) {
     return (
       <Table>
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
-            <TableHeaderColumn>
+            <TableHeaderColumn colSpan={2}>
               <FormattedMessage {...translations.serial} />
             </TableHeaderColumn>
+            {
+              anonymous ||
+              <TableHeaderColumn colSpan={5}>
+                <FormattedMessage {...translations.respondent} />
+              </TableHeaderColumn>
+            }
             <TableHeaderColumn colSpan={15}>
               <FormattedMessage {...translations.responses} />
             </TableHeaderColumn>
@@ -208,7 +223,22 @@ class ResultsQuestion extends React.Component {
         <TableBody displayRowCheckbox={false}>
           {answers.map((answer, index) => (
             <TableRow key={answer.id}>
-              <TableRowColumn>{ index + 1 }</TableRowColumn>
+              <TableRowColumn colSpan={2}>
+                { index + 1 }
+              </TableRowColumn>
+              {
+                anonymous ||
+                <TableRowColumn colSpan={5} style={styles.wrapText}>
+                  {
+                    answer.phantom ?
+                      <FormattedMessage
+                        {...translations.phantomStudentName}
+                        values={{ name: answer.course_user_name }}
+                      /> :
+                    answer.course_user_name
+                  }
+                </TableRowColumn>
+              }
               <TableRowColumn colSpan={15} style={styles.wrapText}>
                 { answer.text_response }
               </TableRowColumn>
@@ -318,22 +348,24 @@ class ResultsQuestion extends React.Component {
   }
 
   renderTextResults() {
-    const { includePhantoms, question: { answers } } = this.props;
+    const { includePhantoms, question: { answers }, anonymous } = this.props;
     const filteredAnswers = includePhantoms ? answers : answers.filter(answer => !answer.phantom);
     const nonEmptyAnswers = filteredAnswers.filter(answer => (
       answer.text_response && answer.text_response.trim().length > 0
     ));
-    const validPhantomResponses = includePhantoms ? nonEmptyAnswers.filter(answer => answer.phantom) : [];
+    const sortedAnswers = anonymous ? nonEmptyAnswers :
+      nonEmptyAnswers.sort((a, b) => a.course_user_name.localeCompare(b.course_user_name));
+    const validPhantomResponses = includePhantoms ? sortedAnswers.filter(answer => answer.phantom) : [];
     const toggle = this.renderExpandToggle({
       total: filteredAnswers.length,
-      quantity: nonEmptyAnswers.length,
+      quantity: sortedAnswers.length,
       phantoms: validPhantomResponses.length,
     });
 
     return (
       <div>
         { toggle }
-        { this.state.expanded ? ResultsQuestion.renderTextResultsTable(nonEmptyAnswers) : null }
+        { this.state.expanded ? ResultsQuestion.renderTextResultsTable(sortedAnswers, anonymous) : null }
         { this.state.expanded ? toggle : null}
       </div>
     );

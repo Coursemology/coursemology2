@@ -35,6 +35,7 @@ const resultsData = {
   survey: {
     id: 6,
     title: 'Test Response',
+    anonymous: false,
   },
 };
 

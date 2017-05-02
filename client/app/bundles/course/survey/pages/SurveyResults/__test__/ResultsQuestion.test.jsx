@@ -54,7 +54,7 @@ const contextOptions = {
 
 const testExpandLongQuestion = (question) => {
   const resultsQuestion = mount(
-    <ResultsQuestion {...{ question }} includePhantoms index={1} />,
+    <ResultsQuestion {...{ question }} includePhantoms anonymous={false} index={1} />,
     contextOptions
   );
   expect(resultsQuestion.find('Table')).toHaveLength(0);
@@ -77,7 +77,7 @@ describe('<ResultsQuestion />', () => {
   it('allows sorting by percentage', () => {
     const question = getMultipleChoiceData(2);
     const resultsQuestion = mount(
-      <ResultsQuestion {...{ question }} includePhantoms={false} index={1} />,
+      <ResultsQuestion {...{ question }} includePhantoms={false} anonymous={false} index={1} />,
       contextOptions
     );
     const lastOptionCountCell = () => resultsQuestion.find('TableRow').last().find('td').at(3);
