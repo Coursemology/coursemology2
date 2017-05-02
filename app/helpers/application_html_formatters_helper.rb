@@ -47,7 +47,7 @@ module ApplicationHTMLFormattersHelper
   SANITIZATION_FILTER_WHITELIST = begin
     list = HTML::Pipeline::SanitizationFilter::WHITELIST
     list[:protocols]['img']['src'] |= ['data']
-    list[:elements] |= ['span', 'font']
+    list[:elements] |= ['span', 'font', 'u']
     list[:attributes][:all] |= ['style']
     list[:attributes]['font'] = ['face']
     list[:attributes]['table'] = ['class']
