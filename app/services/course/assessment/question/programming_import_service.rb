@@ -53,6 +53,7 @@ class Course::Assessment::Question::ProgrammingImportService
 
     raise evaluation_result if evaluation_result.error?
     save!(template_files, evaluation_result)
+    regrade_answers
   end
 
   # Evaluates the package to obtain the set of tests.
@@ -124,5 +125,11 @@ class Course::Assessment::Question::ProgrammingImportService
   # @return [Array<>]
   def parse_test_report(test_report)
     Course::Assessment::ProgrammingTestCaseReport.new(test_report).test_cases
+  end
+
+  # Auto grade all answers for the question which are not in the attempting state.
+  def regrade_answers
+    @question.answers.where("workflow_state <> 'attempting'").
+      find_each { |answer| answer.auto_grade! }
   end
 end
