@@ -104,7 +104,7 @@ export default class SurveysAPI extends BaseSurveyAPI {
   *       description: string, options: Array, question_type: string, options: Array, ...etc
   *         - Question attributes
   *       answers: Array.<{
-  *         id: number, course_user_name: string, course_user_role: string,
+  *         id: number, course_user_name: string, course_user_id: number, phantom: bool,
   *         text_response: string
   *           - included only if it is a text response question
   *         selected_options: Array.<number>

@@ -244,7 +244,7 @@ RSpec.describe Course::Survey::SurveysController do
           )
 
           expect(multiple_choice_question['answers'][0].keys).to contain_exactly(
-            'id', 'course_user_name', 'phantom', 'selected_options'
+            'id', 'course_user_name', 'course_user_id', 'phantom', 'selected_options'
           )
 
           expect(multiple_choice_question['options'][0].keys).to contain_exactly(

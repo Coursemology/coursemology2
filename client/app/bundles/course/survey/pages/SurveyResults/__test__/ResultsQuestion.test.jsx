@@ -40,6 +40,7 @@ const getMultipleChoiceData = (optionCount) => {
     options,
     answers: [{
       id: 22,
+      course_user_id: 122,
       course_user_name: 'Lee',
       phantom: false,
       selected_options: [optionCount > 0 ? optionCount - 1 : 0],

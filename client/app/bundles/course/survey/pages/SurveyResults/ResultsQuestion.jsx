@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Card, CardText } from 'material-ui/Card';
+import Chip from 'material-ui/Chip';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -73,6 +74,13 @@ const styles = {
   required: {
     fontStyle: 'italic',
   },
+  optionStudentNames: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  nameChip: {
+    margin: 2,
+  },
 };
 
 const translations = defineMessages({
@@ -83,6 +91,10 @@ const translations = defineMessages({
   respondent: {
     id: 'course.surveys.ResultsQuestion.respondent',
     defaultMessage: 'Respondent',
+  },
+  respondents: {
+    id: 'course.surveys.ResultsQuestion.respondents',
+    defaultMessage: 'Respondents',
   },
   count: {
     id: 'course.surveys.ResultsQuestion.count',
@@ -95,6 +107,10 @@ const translations = defineMessages({
   sortByPercentage: {
     id: 'course.surveys.ResultsQuestion.sortByPercentage',
     defaultMessage: 'Sort By Percentage',
+  },
+  sortByCount: {
+    id: 'course.surveys.ResultsQuestion.sortByCount',
+    defaultMessage: 'Sort By Count',
   },
   responses: {
     id: 'course.surveys.ResultsQuestion.responses',
@@ -172,7 +188,7 @@ class ResultsQuestion extends React.Component {
     );
   }
 
-  static renderOptionRow(breakdown, hasImage, option, index) {
+  static renderOptionRow(breakdown, hasImage, option, index, anonymous) {
     const percentage = (100 * breakdown[option.id].count) / breakdown.length;
     const { id, option: optionText, image_url: imageUrl, image_name: imageName } = option;
 
@@ -194,8 +210,22 @@ class ResultsQuestion extends React.Component {
           { optionText || imageName || null }
         </TableRowColumn>
         <TableRowColumn>{breakdown[id].count}</TableRowColumn>
-        <TableRowColumn colSpan={6}>
-          {ResultsQuestion.renderPercentageBar(percentage)}
+        <TableRowColumn colSpan={6} >
+          <div style={styles.optionStudentNames}>
+            {
+              anonymous ?
+              ResultsQuestion.renderPercentageBar(percentage) :
+              breakdown[id].students.map(student =>
+                <Chip key={student.id} style={styles.nameChip}>
+                  {
+                    student.phantom ?
+                      <FormattedMessage {...translations.phantomStudentName} values={{ name: student.name }} /> :
+                    student.name
+                  }
+                </Chip>
+              )
+            }
+          </div>
         </TableRowColumn>
       </TableRow>
     );
@@ -268,13 +298,17 @@ class ResultsQuestion extends React.Component {
     const { includePhantoms, question: { options, answers } } = this.props;
     const breakdown = { length: answers.length };
     options.forEach((option) => {
-      breakdown[option.id] = { count: 0, names: [] };
+      breakdown[option.id] = { count: 0, students: [] };
     });
     answers.forEach((answer) => {
       answer.selected_options.forEach((selectedOption) => {
         if (!includePhantoms && answer.phantom) { return; }
         breakdown[selectedOption].count += 1;
-        breakdown[selectedOption].names.push(answer.course_user_name);
+        breakdown[selectedOption].students.push({
+          id: answer.course_user_id,
+          name: answer.course_user_name,
+          phantom: answer.phantom,
+        });
       });
     });
     return breakdown;
@@ -302,7 +336,7 @@ class ResultsQuestion extends React.Component {
   }
 
   renderOptionsResultsTable() {
-    const { question: { options, question_type: questionType } } = this.props;
+    const { question: { options, question_type: questionType }, anonymous } = this.props;
     const { MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
     const { byWeight } = sorts;
     const breakdown = this.getOptionsBreakdown();
@@ -329,9 +363,9 @@ class ResultsQuestion extends React.Component {
             </TableHeaderColumn>
             <TableHeaderColumn colSpan={6} >
               <div style={styles.percentageHeader} >
-                <FormattedMessage {...translations.percentage} />
+                <FormattedMessage {...translations[anonymous ? 'percentage' : 'respondents']} />
                 <div style={styles.sortByPercentage}>
-                  <FormattedMessage {...translations.sortByPercentage} />
+                  <FormattedMessage {...translations[anonymous ? 'sortByPercentage' : 'sortByCount']} />
                   <Toggle onToggle={(_, value) => this.setState({ sortByPercentage: value })} />
                 </div>
               </div>
@@ -340,7 +374,7 @@ class ResultsQuestion extends React.Component {
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
           {options.sort(sortMethod).map((option, index) =>
-            ResultsQuestion.renderOptionRow(breakdown, hasImage, option, index)
+            ResultsQuestion.renderOptionRow(breakdown, hasImage, option, index, anonymous)
           )}
         </TableBody>
       </Table>
@@ -353,19 +387,17 @@ class ResultsQuestion extends React.Component {
     const nonEmptyAnswers = filteredAnswers.filter(answer => (
       answer.text_response && answer.text_response.trim().length > 0
     ));
-    const sortedAnswers = anonymous ? nonEmptyAnswers :
-      nonEmptyAnswers.sort((a, b) => a.course_user_name.localeCompare(b.course_user_name));
-    const validPhantomResponses = includePhantoms ? sortedAnswers.filter(answer => answer.phantom) : [];
+    const validPhantomResponses = includePhantoms ? nonEmptyAnswers.filter(answer => answer.phantom) : [];
     const toggle = this.renderExpandToggle({
       total: filteredAnswers.length,
-      quantity: sortedAnswers.length,
+      quantity: nonEmptyAnswers.length,
       phantoms: validPhantomResponses.length,
     });
 
     return (
       <div>
         { toggle }
-        { this.state.expanded ? ResultsQuestion.renderTextResultsTable(sortedAnswers, anonymous) : null }
+        { this.state.expanded ? ResultsQuestion.renderTextResultsTable(nonEmptyAnswers, anonymous) : null }
         { this.state.expanded ? toggle : null}
       </div>
     );
