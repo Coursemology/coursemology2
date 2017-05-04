@@ -35,6 +35,7 @@ const resultsData = {
   survey: {
     id: 6,
     title: 'Test Response',
+    anonymous: false,
   },
 };
 
@@ -43,7 +44,7 @@ beforeEach(() => {
 });
 
 describe('<SurveyResults />', () => {
-  it('allows phantom students to be included in the results', async () => {
+  it('allows phantom students to be excluded from the results', async () => {
     const surveyId = resultsData.survey.id;
     const resultsUrl = `/courses/${courseId}/surveys/${surveyId}/results`;
     mock.onGet(resultsUrl).reply(200, resultsData);
@@ -65,8 +66,8 @@ describe('<SurveyResults />', () => {
     // Toggling 'include phantoms' should result in one more entry
     const rowsPriorToToggle = surveyResults.find('TableRow').length;
     const includePhantomToggle = surveyResults.find('Toggle').first();
-    includePhantomToggle.props().onToggle(null, true);
+    includePhantomToggle.props().onToggle(null, false);
     const rowsAfterToggle = surveyResults.find('TableRow').length;
-    expect(rowsAfterToggle).toBe(rowsPriorToToggle + 1);
+    expect(rowsAfterToggle).toBe(rowsPriorToToggle - 1);
   });
 });

@@ -12,10 +12,11 @@ export default function (state = initialState, action) {
       return { ...state, isLoading: true };
     }
     case actionTypes.LOAD_SURVEY_RESULTS_SUCCESS: {
+      const anonymous = action.survey.anonymous;
       return {
         isLoading: false,
         sections: action.sections ?
-          action.sections.map(sortResultsSectionElements).sort(sorts.byWeight) : [],
+          action.sections.map(sortResultsSectionElements(anonymous)).sort(sorts.byWeight) : [],
       };
     }
     case actionTypes.LOAD_SURVEY_RESULTS_FAILURE: {

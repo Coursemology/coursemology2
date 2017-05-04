@@ -27,6 +27,10 @@ const translations = defineMessages({
     id: 'course.surveys.SurveyResults.noSections',
     defaultMessage: 'This survey does not have any questions yet.',
   },
+  noPhantoms: {
+    id: 'course.surveys.SurveyResults.noPhantoms',
+    defaultMessage: 'No phantom student responses.',
+  },
 });
 
 class SurveyResults extends React.Component {
@@ -43,7 +47,7 @@ class SurveyResults extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { includePhantoms: false };
+    this.state = { includePhantoms: true };
   }
 
   componentDidMount() {
@@ -70,21 +74,7 @@ class SurveyResults extends React.Component {
     return { totalStudents, realStudents };
   }
 
-  renderIncludePhantomToggle() {
-    return (
-      <Card>
-        <CardText>
-          <Toggle
-            label={<FormattedMessage {...translations.includePhantoms} />}
-            labelPosition="right"
-            onToggle={(_, value) => this.setState({ includePhantoms: value })}
-          />
-        </CardText>
-      </Card>
-    );
-  }
-
-  renderBody() {
+  renderBody(anonymous) {
     const { sections, isLoading } = this.props;
     const noSections = sections && sections.length < 1;
     if (isLoading) { return <LoadingIndicator />; }
@@ -105,12 +95,14 @@ class SurveyResults extends React.Component {
               />
             </h4>
             {
-              totalStudents === realStudents ? null :
-              <Toggle
-                label={<FormattedMessage {...translations.includePhantoms} />}
-                labelPosition="right"
-                onToggle={(_, value) => this.setState({ includePhantoms: value })}
-              />
+              totalStudents === realStudents ?
+                <p><FormattedMessage {...translations.noPhantoms} /></p> :
+                <Toggle
+                  label={<FormattedMessage {...translations.includePhantoms} />}
+                  labelPosition="right"
+                  toggled={this.state.includePhantoms}
+                  onToggle={(_, value) => this.setState({ includePhantoms: value })}
+                />
             }
           </CardText>
         </Card>
@@ -120,7 +112,7 @@ class SurveyResults extends React.Component {
             <ResultsSection
               key={section.id}
               includePhantoms={this.state.includePhantoms}
-              {...{ section, index }}
+              {...{ section, index, anonymous }}
             />
           )
         }
@@ -139,7 +131,7 @@ class SurveyResults extends React.Component {
           iconElementLeft={<IconButton><ArrowBack /></IconButton>}
           onLeftIconButtonTouchTap={() => browserHistory.push(`/courses/${courseId}/surveys`)}
         />
-        { this.renderBody() }
+        { this.renderBody(survey && survey.anonymous) }
       </div>
     );
   }

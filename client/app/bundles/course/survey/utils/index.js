@@ -4,7 +4,7 @@ export const sorts = {
 
 /**
  * Sorts an array attribute of an object and returns the updated item.
- * By default, the attribute is sorted by weight. Each member of the  array attribute may
+ * By default, the attribute is sorted by weight. Each member of the array attribute may
  * be further sorted by specifying an appropriate mapMethod.
  *
  * @param {Object} item
@@ -16,7 +16,7 @@ export const sorts = {
 export const sortAttributeArray = (
   item,
   attribute,
-  mapMethod = option => option,
+  mapMethod = attr => attr,
   sortMethod = sorts.byWeight
 ) => {
   const attributeArray = item[attribute];
@@ -57,13 +57,23 @@ export const sortResponseElements = response => (
   sortAttributeArray(response, 'sections', sortResponseSectionElements)
 );
 
+const sortResultsQuestionElements = (question) => {
+  const sortAnswersByStudentName = (a, b) => a.course_user_name.localeCompare(b.course_user_name);
+  return sortAttributeArray(question, 'answers', attr => attr, sortAnswersByStudentName);
+};
+
 /**
  * Returns the given survey results section with it's descendent elements sorted appropriately.
+ * Sort answers by respondent's name unless the survey is anonymous and names are not given.
  *
+ * @param {Object} anonymous
  * @param {Object} section
  * @return {Object} The updated section
  */
-export const sortResultsSectionElements = section => sortAttributeArray(section, 'questions');
+export const sortResultsSectionElements = anonymous => section => (
+  anonymous ? sortAttributeArray(section, 'questions') :
+  sortAttributeArray(section, 'questions', sortResultsQuestionElements)
+);
 
 export const sortSurveysByDate = surveys => surveys.sort((a, b) => {
   const dateOrder = new Date(a.start_at) - new Date(b.start_at);
