@@ -32,7 +32,7 @@ class Course::Discussion::TopicsController < Course::ComponentController
                 @topic.unmark_as_pending
               end
 
-    render status: :bad_request unless success
+    head :bad_request unless success
   end
 
   private
