@@ -17,7 +17,7 @@ class Course::Assessment::SubmissionQuestion::CommentsController < Course::Asses
       if super && @submission_question.save
         send_created_notification(@post)
       else
-        render status: :bad_request
+        head :bad_request
       end
     end
   end

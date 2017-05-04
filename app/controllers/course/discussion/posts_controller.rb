@@ -15,16 +15,16 @@ class Course::Discussion::PostsController < Course::ComponentController
     if super
       send_created_notification(@post)
     else
-      render status: :bad_request
+      head :bad_request
     end
   end
 
   def update
-    render status: :bad_request unless super
+    head :bad_request unless super
   end
 
   def destroy
-    render status: :bad_request unless super
+    head :bad_request unless super
   end
 
   protected
