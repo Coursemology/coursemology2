@@ -2,17 +2,15 @@
 
 import React, { PropTypes } from 'react';
 import { Field } from 'redux-form';
-import { questionTypes } from '../../constants';
-import Answers from '../../components/Answers';
+import { AnswerProp } from '../propTypes';
+import { questionTypes } from '../constants';
+import Answers from './Answers';
 
 class SubmissionAnswer extends React.Component {
   static propTypes = {
     canGrade: PropTypes.bool.isRequired,
     member: PropTypes.string.isRequired,
-    index: PropTypes.number.isRequired,
-    fields: PropTypes.shape({
-      get: PropTypes.func.isRequired,
-    }).isRequired,
+    answer: AnswerProp,
   };
 
   static getRenderer(answer) {
@@ -34,8 +32,7 @@ class SubmissionAnswer extends React.Component {
   }
 
   render() {
-    const { canGrade, member, index, fields } = this.props;
-    const answer = fields.get(index);
+    const { canGrade, member, answer } = this.props;
 
     const renderer = SubmissionAnswer.getRenderer(answer);
     if (!renderer) { return <div />; }

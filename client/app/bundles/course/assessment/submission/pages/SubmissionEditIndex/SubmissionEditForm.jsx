@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { FieldArray, reduxForm } from 'redux-form';
 
-import SubmissionAnswer from './SubmissionAnswer';
+import SubmissionAnswer from '../../components/SubmissionAnswer';
 
 class SubmissionEditForm extends Component {
 
@@ -15,7 +15,7 @@ class SubmissionEditForm extends Component {
             return (
               <SubmissionAnswer
                 key={answer.id}
-                {...{ canGrade, member, index, fields }}
+                {...{ canGrade, member, answer }}
               />
             );
           })
