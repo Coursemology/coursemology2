@@ -1,12 +1,13 @@
 = page_header
 = simple_form_for @settings, url: admin_instance_components_path, method: :patch do |f|
+  = f.error_notification message: f.object.errors.full_messages.first
   table.table.table-hover
     thead
       tr
         th = t('.name')
         th = t('.enabled')
     tbody
-      - collection = Course::ControllerComponentHost.components.map { |c| [c.display_name, c.key.to_s] }
+      - collection = Course::ControllerComponentHost.disableable_components.map { |c| [c.display_name, c.key.to_s] }
       = f.collection_check_boxes :enabled_component_ids, collection, :last, :first do |f|
         tr
           th = f.label

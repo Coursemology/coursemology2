@@ -1,5 +1,6 @@
 = page_header
 = simple_form_for @settings, url: course_admin_components_path(current_course) do |f|
+  = f.error_notification message: f.object.errors.full_messages.first
   table.table.table-hover
     thead
       tr

@@ -12,7 +12,7 @@ RSpec.feature 'Course: Administration: Components' do
     end
     let(:components) { Course::ControllerComponentHost.components.select(&:can_be_disabled?) }
     let(:sample_component_id) do
-      "settings_effective_enabled_component_ids_#{components.sample.key}"
+      "settings_components_enabled_component_ids_#{components.sample.key}"
     end
     before { login_as(user, scope: :user) }
 
@@ -26,7 +26,7 @@ RSpec.feature 'Course: Administration: Components' do
           expect(page).to have_selector('th', text: component.display_name)
           enabled = course.reload.settings(:components, component.key).enabled
           enabled = enabled.nil? ? component.enabled_by_default? : enabled
-          checkbox = find("#settings_effective_enabled_component_ids_#{component.key}")
+          checkbox = find("#settings_components_enabled_component_ids_#{component.key}")
           if enabled
             expect(checkbox).to be_checked
           else

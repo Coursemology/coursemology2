@@ -86,6 +86,14 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
       end
     end
 
+    describe '.disableable_components' do
+      subject { Course::ControllerComponentHost.disableable_components }
+
+      it 'does not include components that cannot be disabled' do
+        expect(subject).not_to include(self.class::DummyCoreCourseModule)
+      end
+    end
+
     describe '#initialize' do
       it 'instantiates all enabled components' do
         expect(self.class::DummyCourseModule).to receive(:new).and_call_original
@@ -173,39 +181,6 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
       end
     end
 
-    describe '#disabled_components' do
-      subject { component_host.disabled_components }
-
-      it 'memoises its result' do
-        expect(component_host.disabled_components).to be(subject)
-      end
-
-      context 'without preferences' do
-        it 'returns empty' do
-          expect(subject).to eq([])
-        end
-      end
-
-      context 'with preferences' do
-        let(:sample_component) { default_enabled_components.first }
-        context 'disable a component' do
-          before { course.settings(sample_component.key).enabled = false }
-
-          it 'includes the disabled component' do
-            expect(subject.include?(sample_component)).to be_truthy
-          end
-        end
-
-        context 'enable a component' do
-          before { course.settings(sample_component.key).enabled = true }
-
-          it 'does not include the enabled component' do
-            expect(subject.include?(sample_component)).to be_falsey
-          end
-        end
-      end
-    end
-
     describe '#course_available_components' do
       subject { component_host.course_available_components }
       context 'when the gamified flag for the course is set to false' do
@@ -219,12 +194,10 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
 
     describe '#course_disableable_components' do
       subject { component_host.course_disableable_components }
-      context 'when the component cannot be disabled' do
-        let(:course) { create(:course, instance: instance) }
+      let(:course) { create(:course, instance: instance) }
 
-        it 'does not include gamified components' do
-          expect(subject).not_to include(self.class::DummyCoreCourseModule)
-        end
+      it 'does not include components that cannot be disabled' do
+        expect(subject).not_to include(self.class::DummyCoreCourseModule)
       end
     end
 

@@ -66,6 +66,24 @@ class Course::ControllerComponentHost
   # Eager load all the components declared.
   eager_load_components(File.join(__dir__, '../'))
 
+  class << self
+    # Returns all components which can be disabled.
+    #
+    # @return [Array<Class>] array of disable-able components
+    def disableable_components
+      @disableable_components ||= components.select(&:can_be_disabled?)
+    end
+
+    # Find the enabled components from settings.
+    def find_enabled_components(all_components, settings)
+      all_components.select do |m|
+        # If the component cannot be disabled, ignore the settings
+        enabled = m.can_be_disabled? ? settings.settings(m.key).enabled : true
+        enabled.nil? ? m.enabled_by_default? : enabled
+      end
+    end
+  end
+
   # Initializes the component host instance.
   #
   # This loads all components.
@@ -102,15 +120,9 @@ class Course::ControllerComponentHost
   # @return [Array<Class>] array of enabled components
   def enabled_components
     @enabled_components ||= begin
-      find_enabled_components(course_available_components, @course_settings)
+      Course::ControllerComponentHost.
+        find_enabled_components(course_available_components, @course_settings)
     end
-  end
-
-  # Apply preferences to all the components, returns the disabled components.
-  #
-  # @return [Array<Class>] array of disabled components
-  def disabled_components
-    @disabled_components ||= instance_enabled_components - enabled_components
   end
 
   # Returns the enabled components in instance.
@@ -119,7 +131,8 @@ class Course::ControllerComponentHost
   def instance_enabled_components
     @instance_enabled_components ||= begin
       all_components = Course::ControllerComponentHost.components
-      find_enabled_components(all_components, @instance_settings)
+      Course::ControllerComponentHost.
+        find_enabled_components(all_components, @instance_settings)
     end
   end
 
@@ -163,16 +176,5 @@ class Course::ControllerComponentHost
   # The elements are rendered on all Course controller subclasses as part of a nested template.
   def sidebar_items
     @sidebar_items ||= components.map(&:sidebar_items).tap(&:flatten!)
-  end
-
-  private
-
-  # Find the enabled components from settings.
-  def find_enabled_components(all_components, settings)
-    all_components.select do |m|
-      # If the component cannot be disabled, ignore the settings
-      enabled = m.can_be_disabled? ? settings.settings(m.key).enabled : true
-      enabled.nil? ? m.enabled_by_default? : enabled
-    end
   end
 end
