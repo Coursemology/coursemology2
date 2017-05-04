@@ -13,19 +13,19 @@ class Course::LessonPlan::Todo < ActiveRecord::Base
   belongs_to :user, inverse_of: :todos
   belongs_to :item, class_name: Course::LessonPlan::Item.name, inverse_of: :todos
 
-  default_scope { joins { item }.order { item.start_at.asc } }
+  default_scope { joins(:item).order('course_lesson_plan_items.start_at ASC') }
 
   # Started is not used as it is defined in Extensions::TimeBoundedRecord::ActiveRecord::Base
-  scope :opened, -> { joins { item }.where { item.start_at <= Time.zone.now } }
-  scope :published, -> { joins { item }.where { item.published == true } }
+  scope :opened, -> { joins(:item).where.has { item.start_at <= Time.zone.now } }
+  scope :published, -> { joins(:item).where('course_lesson_plan_items.published = ?', true) }
   scope :not_ignored, -> { where(ignore: false) }
   scope :not_completed, -> { where.not(workflow_state: :completed) }
   scope :from_course, (lambda do |course|
-    joins { item }.where { item.course_id == course.id }
+    joins(:item).where('course_lesson_plan_items.course_id = ?', course.id)
   end)
   scope :pending_for, (lambda do |course_user|
     opened.published.not_ignored.from_course(course_user.course).not_completed.
-      where { user_id == course_user.user_id }
+      where('course_lesson_plan_todos.user_id = ?', course_user.user_id)
   end)
 
   class << self
@@ -56,7 +56,7 @@ class Course::LessonPlan::Todo < ActiveRecord::Base
     def delete_for(item, course_users = nil)
       return unless item
       user_ids = course_users ? course_users.select(:user_id) : item.todos.select(:user_id)
-      item.todos.where { user_id.in(user_ids) }.destroy_all
+      item.todos.where.has { user_id.in(user_ids) }.destroy_all
     end
 
     private

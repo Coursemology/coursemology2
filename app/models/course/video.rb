@@ -12,9 +12,8 @@ class Course::Video < ActiveRecord::Base
   # @!method self.ordered_by_date_and_title
   #   Orders the videos by the starting date and title.
   scope :ordered_by_date_and_title, (lambda do
-    select('course_videos.*').
-      select('course_lesson_plan_items.start_at, course_lesson_plan_items.title').
-      joins { lesson_plan_item }.
+    select('course_videos.*, course_lesson_plan_items.start_at, course_lesson_plan_items.title').
+      joins(:lesson_plan_item).
       merge(Course::LessonPlan::Item.ordered_by_date_and_title)
   end)
 

@@ -6,7 +6,11 @@ RSpec.feature 'Course: Lesson Plan Milestones' do
 
   with_tenant(:instance) do
     let!(:course) { create(:course) }
-    let(:milestones) { create_list(:course_lesson_plan_milestone, 2, course: course) }
+    let(:milestones) do
+      [2.days.ago, 2.days.from_now].map do |start_at|
+        create(:course_lesson_plan_milestone, course: course, start_at: start_at)
+      end
+    end
 
     before do
       login_as(user, scope: :user)

@@ -51,17 +51,18 @@ class Course::Assessment < ActiveRecord::Base
   #   @return [Fixnum]
   calculated :maximum_grade, (lambda do
     Course::Assessment::Question.unscope(:order).
-      select { coalesce(sum(course_assessment_questions.maximum_grade), 0) }.
-      where { course_assessment_questions.assessment_id == course_assessments.id }
+      select('coalesce(sum(course_assessment_questions.maximum_grade), 0)').
+      where('course_assessment_questions.assessment_id = course_assessments.id')
   end)
 
   # @!method self.ordered_by_date_and_title
   #   Orders the assessments by the starting date and title.
   scope :ordered_by_date_and_title, (lambda do
-    select('course_assessments.*').
-      select { [lesson_plan_item.start_at, lesson_plan_item.title] }.
-      joins { lesson_plan_item }.
-      merge(Course::LessonPlan::Item.ordered_by_date_and_title)
+    select(<<~SQL).
+    course_assessments.*, course_lesson_plan_items.start_at, course_lesson_plan_items.title
+    SQL
+    joins(:lesson_plan_item).
+    merge(Course::LessonPlan::Item.ordered_by_date_and_title)
   end)
 
   # @!method with_submissions_by(creator)

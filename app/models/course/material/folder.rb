@@ -20,16 +20,16 @@ class Course::Material::Folder < ActiveRecord::Base
   # @!attribute [r] material_count
   #   Returns the number of files in current folder.
   calculated :material_count, (lambda do
-    Course::Material.select { count('*') }.
-      where { course_materials.folder_id == course_material_folders.id }
+    Course::Material.select("count('*')").
+      where('course_materials.folder_id = course_material_folders.id')
   end)
 
   # @!attribute [r] children_count
   #   Returns the number of subfolders in current folder.
   calculated :children_count, (lambda do
-    select { count('*') }.
+    select("count('*')").
       from('course_material_folders children').
-      where { children.parent_id == course_material_folders.id }
+      where('children.parent_id = course_material_folders.id')
   end)
 
   scope :with_content_statistics, ->() { all.calculated(:material_count, :children_count) }
@@ -104,7 +104,7 @@ class Course::Material::Folder < ActiveRecord::Base
   def validate_name_is_unique_among_materials
     return if parent.nil?
 
-    conflicts = parent.materials.where { name =~ my { name } }
+    conflicts = parent.materials.where.has { |parent| name =~ parent.name }
     errors.add(:name, :taken) unless conflicts.empty?
   end
 

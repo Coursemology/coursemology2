@@ -2,7 +2,6 @@
 require 'rails_helper'
 
 RSpec.feature 'Course: Lesson Plan' do
-  subject { page }
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -32,10 +31,6 @@ RSpec.feature 'Course: Lesson Plan' do
       end
     end
 
-    let!(:assessments) do
-      create_list(:course_assessment_assessment, 1, course: course)
-    end
-
     before do
       login_as(user, scope: :user)
     end
@@ -45,13 +40,11 @@ RSpec.feature 'Course: Lesson Plan' do
 
       scenario 'I can view all lesson plan items and milestones', js: true do
         visit course_lesson_plan_path(course)
-        milestones.each do |m|
-          expect(subject).to have_text(m.title)
-        end
+        expect(page).to have_link(nil, href: new_course_lesson_plan_event_path(course))
+        expect(page).to have_link(nil, href: new_course_lesson_plan_milestone_path(course))
 
-        events.each do |item|
-          expect(subject).to have_text(item.title)
-        end
+        milestones.each { |milestone| expect(page).to have_text(milestone.title) }
+        events.each { |event| expect(page).to have_text(event.title) }
       end
     end
 
@@ -69,13 +62,8 @@ RSpec.feature 'Course: Lesson Plan' do
         expect(page).not_to have_link(nil, href: new_course_lesson_plan_event_path(course))
         expect(page).not_to have_link(nil, href: new_course_lesson_plan_milestone_path(course))
 
-        milestones.each do |m|
-          expect(subject).to have_text(m.title)
-        end
-
-        events.each do |item|
-          expect(subject).to have_text(item.title)
-        end
+        milestones.each { |milestone| expect(page).to have_text(milestone.title) }
+        events.each { |event| expect(page).to have_text(event.title) }
       end
     end
   end

@@ -14,7 +14,7 @@ class Course::LessonPlan::Item < ActiveRecord::Base
   # @!method self.ordered_by_date
   #   Orders the lesson plan items by the starting date.
   scope :ordered_by_date, (lambda do
-    order { start_at }
+    order(:start_at)
   end)
 
   scope :ordered_by_date_and_title, (lambda do

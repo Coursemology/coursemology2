@@ -100,6 +100,8 @@ GEM
     autoprefixer-rails (7.0.1)
       execjs
     awesome_print (1.7.0)
+    baby_squeel (0.3.1)
+      activerecord (>= 4.0.0)
     bcrypt (3.1.11)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
@@ -555,6 +557,7 @@ DEPENDENCIES
   acts_as_tenant
   after_commit_action
   autoprefixer-rails
+  baby_squeel
   bootstrap-sass
   bootstrap-sass-extras (>= 0.0.7)
   bootstrap-select-rails
@@ -630,7 +633,6 @@ DEPENDENCIES
   simplecov
   slim-rails
   spring
-  squeel
   summernote-rails
   themes_on_rails (>= 0.3.1)!
   traceroute
@@ -643,7 +645,6 @@ DEPENDENCIES
   webpack-rails
   workflow
   yard
-
 
 BUNDLED WITH
    1.14.6

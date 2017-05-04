@@ -12,9 +12,9 @@ module UserSearchConcern
       return all if keyword.blank?
 
       condition = "%#{keyword}%"
-      joins { emails.outer }.
-        where { (name =~ condition) | (emails.email =~ condition) }.
-        group { users.id }
+      joining { emails.outer }.
+        where.has { (name =~ condition) | (emails.email =~ condition) }.
+        group('users.id')
     end
   end
 end

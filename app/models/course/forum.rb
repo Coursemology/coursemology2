@@ -10,30 +10,31 @@ class Course::Forum < ActiveRecord::Base
   # @!attribute [r] topic_count
   #   The number of topics in this forum.
   calculated :topic_count, (lambda do
-    Course::Forum::Topic.where { course_forum_topics.forum_id == course_forums.id }.
-      select { count('*') }
+    Course::Forum::Topic.where('course_forum_topics.forum_id = course_forums.id').
+      select("count('*')")
   end)
 
   # @!attribute [r] topic_post_count
   #   The number of posts in this forum.
   calculated :topic_post_count, (lambda do
-    Course::Forum::Topic.joins { discussion_topic.outer.posts.outer }.
-      where { course_forum_topics.forum_id == course_forums.id }.
-      select { count('*') }
+    Course::Forum::Topic.
+      joining { discussion_topic.outer.posts.outer }.
+      where('course_forum_topics.forum_id = course_forums.id').
+      select("count('*')")
   end)
 
   # @!attribute [r] topic_view_count
   #   The number of views in this forum.
   calculated :topic_view_count, (lambda do
-    Course::Forum::Topic.joins { views }.
-      where { course_forum_topics.forum_id == course_forums.id }.
-      select { count('*') }
+    Course::Forum::Topic.joins(:views).
+      where('course_forum_topics.forum_id = course_forums.id').
+      select("count('*')")
   end)
 
   calculated :topic_unread_count, (lambda do |user|
-    Course::Forum::Topic.where { course_forum_topics.forum_id == course_forums.id }.
+    Course::Forum::Topic.where('course_forum_topics.forum_id = course_forums.id').
       unread_by(user).
-      select { count('*') }
+      select("count('*')")
   end)
 
   # @!method self.with_forum_statistics

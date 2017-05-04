@@ -10,9 +10,9 @@ class Course::Assessment::Answer::ProgrammingFileAnnotation < ActiveRecord::Base
   # Specific implementation of Course::Discussion::Topic#from_user, this is not supposed to be
   # called directly.
   scope :from_user, (lambda do |user_id|
-    joins { file.answer.answer.submission }.
-      where { file.answer.answer.submission.creator_id >> user_id }.
-      joins { discussion_topic }.select { discussion_topic.id }
+    joining { file.answer.answer.submission }.
+      where.has { file.answer.answer.submission.creator_id.in(user_id) }.
+      joining { discussion_topic }.selecting { discussion_topic.id }
   end)
 
   def notify(post)

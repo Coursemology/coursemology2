@@ -55,7 +55,7 @@ class Course::Assessment::ProgrammingEvaluation < ActiveRecord::Base
   #   Gets the programming evaluation jobs which are in the submitted state, and pending
   #   allocation to an evaluator.
   scope :pending, (lambda do
-    where do
+    where.has do
       (status == 'submitted') | (
         (status == 'assigned') & (assigned_at < Time.zone.now - TIMEOUT))
     end
@@ -64,7 +64,7 @@ class Course::Assessment::ProgrammingEvaluation < ActiveRecord::Base
   # @!method self.finished
   #   Gets the programming evaluation jobs which have finished, which are those which are
   #   completed or errored.
-  scope :finished, -> { where { (status == 'completed') | (status == 'errored') } }
+  scope :finished, -> { where(status: ['completed', 'errored']) }
 
   # Checks if the given task is still pending assignment to an evaluator.
   #

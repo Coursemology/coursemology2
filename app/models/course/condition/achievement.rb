@@ -62,7 +62,7 @@ class Course::Condition::Achievement < ActiveRecord::Base
   def required_achievements_for(conditional)
     # Course::Condition::Achievement.
     #   joins { condition.conditional(Course::Achievement) }.
-    #   where { condition.conditional.id == achievement.id }.
+    #   where.has { condition.conditional.id == achievement.id }.
     #   map(&:achievement)
 
     # Workaround, pending the squeel bugfix (activerecord-hackery/squeel#390) that will allow

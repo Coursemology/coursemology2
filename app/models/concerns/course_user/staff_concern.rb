@@ -28,11 +28,11 @@ module CourseUser::StaffConcern
   def published_submissions # rubocop:disable Metrics/AbcSize
     @published_submissions ||=
       Course::Assessment::Submission.
-      joins { experience_points_record.course_user }.
-      where { experience_points_record.course_user.role == CourseUser.roles[:student] }.
-      where { experience_points_record.course_user.phantom == false  }.
-      where { experience_points_record.course_user.course_id == my { course_id } }.
-      where { publisher_id == my { user_id } }
+      joins(experience_points_record: :course_user).
+      where('course_users.role = ?', CourseUser.roles[:student]).
+      where('course_users.phantom = ?', false).
+      where('course_assessment_submissions.publisher_id = ?', user_id).
+      where('course_users.course_id = ?', course_id)
   end
 
   # Returns the average marking time of the staff.

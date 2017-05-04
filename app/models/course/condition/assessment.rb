@@ -75,9 +75,9 @@ class Course::Condition::Assessment < ActiveRecord::Base
 
   def published_submissions_with_minimum_grade(user, minimum_grade)
     assessment.submissions.by_user(user).with_published_state.
-      joins { answers }.
-      group { course_assessment_submissions.id }.
-      having { coalesce(sum(answers.grade), 0) >= minimum_grade }
+      joins(:answers).
+      group('course_assessment_submissions.id').
+      when_having { coalesce(sum(answers.grade), 0) >= minimum_grade }
   end
 
   def validate_assessment_condition

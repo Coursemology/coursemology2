@@ -104,7 +104,11 @@ class Course::UserInvitationsController < Course::ComponentController
     @invitations ||= begin
       ids = resend_invitation_params
       ids ||= current_course.invitations.unconfirmed.select(:id)
-      ids.blank? ? [] : current_course.invitations.unconfirmed.where { id >> ids }
+      if ids.blank?
+        []
+      else
+        current_course.invitations.unconfirmed.where('course_user_invitations.id IN (?)', ids)
+      end
     end
   end
 

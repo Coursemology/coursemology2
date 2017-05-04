@@ -13,8 +13,8 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
       Course::CourseUserPreloadService.new(updater_ids, current_course)
 
     @experience_points_records =
-      @experience_points_records.active.includes { actable }.
-      includes(:updater).order(updated_at: :desc).page(page_param)
+      @experience_points_records.active.
+      includes(:actable, :updater).order(updated_at: :desc).page(page_param)
   end
 
   def update

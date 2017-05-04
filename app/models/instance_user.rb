@@ -9,6 +9,6 @@ class InstanceUser < ActiveRecord::Base
   scope :ordered_by_username, -> { joins(:user).merge(User.order(name: :asc)) }
 
   def self.search_and_ordered_by_username(keyword)
-    keyword.blank? ? ordered_by_username : search(keyword).group { user.name }.ordered_by_username
+    keyword.blank? ? ordered_by_username : search(keyword).group('users.name').ordered_by_username
   end
 end

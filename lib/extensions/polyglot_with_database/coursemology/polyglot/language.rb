@@ -26,7 +26,7 @@ module Extensions::PolyglotWithDatabase::Coursemology::Polyglot::Language
       if !languages || languages.empty?
         all
       else
-        where { name.in(languages) }
+        where(name: languages)
       end
     end)
   end
