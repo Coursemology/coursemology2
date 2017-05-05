@@ -143,7 +143,7 @@ RSpec.describe Course::Survey::ResponsesController do
         let(:response_params) { { submit: true } }
 
         context 'when the response is on time' do
-          let(:survey_traits) { [:published, :currently_active] }
+          let(:survey_traits) { [:published, :currently_active, :allow_response_after_end] }
 
           it 'sets submitted_at and awards full points' do
             expect { subject }.to change { student.experience_points }.
