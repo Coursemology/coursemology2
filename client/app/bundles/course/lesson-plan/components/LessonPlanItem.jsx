@@ -1,4 +1,3 @@
-/* eslint-disable react/no-danger */
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';

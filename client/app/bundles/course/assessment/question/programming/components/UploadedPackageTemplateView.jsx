@@ -1,4 +1,3 @@
-/* eslint-disable react/no-danger */
 import Immutable from 'immutable';
 
 import React, { PropTypes } from 'react';

@@ -8,6 +8,7 @@
     // See https://github.com/yannickcr/eslint-plugin-react/issues/847
     "react/no-unused-prop-types": ["warn", { "skipShapeProps": true }],
     "react/require-default-props": "off",
+    "react/no-danger": "off",
     "react/no-array-index-key": "warn",
     "import/no-extraneous-dependencies": ["warn", { "devDependencies": true }],
     "max-len": ["warn", 120],
