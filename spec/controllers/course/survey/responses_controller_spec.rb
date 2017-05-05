@@ -46,10 +46,17 @@ RSpec.describe Course::Survey::ResponsesController do
         end
 
         context 'when response has already been created' do
+          render_views
+
           before { survey_response }
-          it 'responds with the id of the existing survey response' do
+          it 'responds with details of the existing survey response' do
             expect { create_response_request }.to change { survey.responses.count }.by(0)
-            expect(response.body).to eq({ responseId: survey_response.id }.to_json)
+            expect(response.status).to eq(303)
+            expect(JSON.parse(response.body)).to eq(
+              'responseId' => survey_response.id,
+              'canModify' => true,
+              'canSubmit' => true
+            )
           end
         end
       end
@@ -143,7 +150,7 @@ RSpec.describe Course::Survey::ResponsesController do
         let(:response_params) { { submit: true } }
 
         context 'when the response is on time' do
-          let(:survey_traits) { [:published, :currently_active] }
+          let(:survey_traits) { [:published, :currently_active, :allow_response_after_end] }
 
           it 'sets submitted_at and awards full points' do
             expect { subject }.to change { student.experience_points }.

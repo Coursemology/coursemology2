@@ -10,7 +10,9 @@ RSpec.describe Course::Survey::Response do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:student) { create(:course_student, course: course).user }
-    let(:survey) { create(:course_survey, :currently_active, course: course) }
+    let(:survey) do
+      create(:course_survey, :currently_active, :allow_response_after_end, course: course)
+    end
     let(:response) do
       create(:course_survey_response, *response_traits, survey: survey, creator: student)
     end

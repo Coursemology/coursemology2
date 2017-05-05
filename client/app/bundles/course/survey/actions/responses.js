@@ -10,12 +10,16 @@ export function createResponse(surveyId) {
   const goToResponse = responseId => history.push(
     `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}`
   );
+  const goToResponseEdit = responseId => history.push(
+    `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}/edit`
+  );
+
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_RESPONSE_REQUEST });
 
     return CourseAPI.survey.responses.create(surveyId)
       .then((response) => {
-        goToResponse(response.data.response.id);
+        goToResponseEdit(response.data.response.id);
         dispatch({
           type: actionTypes.CREATE_RESPONSE_SUCCESS,
           survey: response.data.survey,
@@ -25,9 +29,10 @@ export function createResponse(surveyId) {
       .catch((error) => {
         dispatch({ type: actionTypes.CREATE_RESPONSE_FAILURE });
         if (!error.response || !error.response.data) { return; }
-        if (error.response.data.responseId) {
-          goToResponse(error.response.data.responseId);
-        } else if (error.response.data.error) {
+        const data = error.response.data;
+        if (error.response.status === 303) {
+          (data.canModify || data.canSubmit ? goToResponseEdit : goToResponse)(data.responseId);
+        } else if (data.error) {
           setNotification(error.response.data.error)(dispatch);
         }
       });

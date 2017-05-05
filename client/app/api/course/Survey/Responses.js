@@ -84,8 +84,9 @@ export default class ResponsesAPI extends BaseSurveyAPI {
   * @param {number} surveyId
   * @return {Promise}
   * success response: survey_response
+  * redirect response with HTTP status 303 See Other:
+  *   { responseId: number, canSubmit: bool, canModify: bool  } if user has an existing survey response
   * error response:
-  *   { responseId: number } if user has an existing survey response
   *   { error: string } if there is some other error
   */
   create(surveyId) {
