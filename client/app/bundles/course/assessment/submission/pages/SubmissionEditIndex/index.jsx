@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import ProgressPanel from '../../components/ProgressPanel';
 import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
+import SubmissionEditTabForm from './SubmissionEditTabForm';
 import { fetchSubmission, updateSubmission } from '../../actions';
 import { AssessmentProp, ProgressProp, ReduxFormProp, SubmissionProp } from '../../propTypes';
 import { DATA_STATES } from '../../constants';
@@ -29,7 +30,7 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   renderContent() {
-    const { assessment: { autograded, skippable }, submission, canGrade } = this.props;
+    const { assessment: { autograded, tabbed_view, skippable }, submission, canGrade } = this.props;
     if (autograded) {
       return (
         <SubmissionEditStepForm
@@ -38,6 +39,14 @@ class VisibleSubmissionEditIndex extends Component {
           canGrade={canGrade}
           skippable={skippable}
           {...{ submission }}
+        />
+      );
+    } else if (tabbed_view) { // eslint-disable-line camelcase
+      return (
+        <SubmissionEditTabForm
+          handleSubmit={() => this.handleSubmit()}
+          initialValues={submission}
+          canGrade={canGrade}
         />
       );
     }
