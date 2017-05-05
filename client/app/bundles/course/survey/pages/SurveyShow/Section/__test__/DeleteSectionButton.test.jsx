@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 import ReactTestUtils from 'react-addons-test-utils';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
-import DeleteConfirmation from 'course/survey/containers/SurveyLayout/DeleteConfirmation';
+import DeleteConfirmation from 'course/survey/containers/SurveysLayout/DeleteConfirmation';
 import DeleteSectionButton from '../DeleteSectionButton';
 
 describe('<DeleteSectionButton />', () => {
@@ -12,15 +12,11 @@ describe('<DeleteSectionButton />', () => {
     const surveyId = 1;
     const sectionId = 7;
     const spyDelete = jest.spyOn(CourseAPI.survey.sections, 'delete');
-    const store = storeCreator({ surveys: {} });
-    const contextOptions = {
-      context: { intl, store, muiTheme },
-      childContextTypes: { muiTheme: React.PropTypes.object, intl: intlShape },
-    };
 
     Object.defineProperty(window.location, 'pathname', {
       value: `/courses/${courseId}/surveys/${surveyId}`,
     });
+    const contextOptions = buildContextOptions(storeCreator({}));
     const deleteConfirmation = mount(<DeleteConfirmation />, contextOptions);
     const deleteSectionButton =
       mount(<DeleteSectionButton sectionId={sectionId} />, contextOptions);

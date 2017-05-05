@@ -2,21 +2,6 @@
 
 exports[`<ResponseShow /> shows form and admin buttons if user has permissions and page is loaded 1`] = `
 <div>
-  <TitleBar
-    iconElementLeft={
-      <IconButton
-        disableTouchRipple={false}
-        disabled={false}
-        iconStyle={Object {}}
-        tooltipPosition="bottom-center"
-        touch={false}
-      >
-        <NavigationArrowBack />
-      </IconButton>
-    }
-    onLeftIconButtonTouchTap={[Function]}
-    title="Survey"
-  />
   <Card
     expandable={false}
     expanded={null}
@@ -138,20 +123,6 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
 
 exports[`<ResponseShow /> shows only title and loading indicator when loading 1`] = `
 <div>
-  <TitleBar
-    iconElementLeft={
-      <IconButton
-        disableTouchRipple={false}
-        disabled={false}
-        iconStyle={Object {}}
-        tooltipPosition="bottom-center"
-        touch={false}
-      >
-        <NavigationArrowBack />
-      </IconButton>
-    }
-    onLeftIconButtonTouchTap={[Function]}
-  />
   <LoadingIndicator />
 </div>
 `;

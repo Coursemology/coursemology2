@@ -10,11 +10,7 @@ import NewSectionButton from '../NewSectionButton';
 describe('<NewSectionButton />', () => {
   it('injects handlers that allow survey sections to be created', () => {
     const spyCreate = jest.spyOn(CourseAPI.survey.sections, 'create');
-    const store = storeCreator({ surveys: {} });
-    const contextOptions = {
-      context: { intl, store, muiTheme },
-      childContextTypes: { muiTheme: React.PropTypes.object, intl: intlShape },
-    };
+    const contextOptions = buildContextOptions(storeCreator({}));
     const newSectionButton = mount(<NewSectionButton />, contextOptions);
     const sectionFormDialogue = mount(<SectionFormDialogue />, contextOptions);
 

@@ -11,13 +11,10 @@ describe('<NewSurveyButton />', () => {
   it('injects handlers that allow surveys to be created', () => {
     const spyCreate = jest.spyOn(CourseAPI.survey.surveys, 'create');
     const store = storeCreator({ surveys: { surveysFlags: { canCreate: true } } });
-    const contextOptions = {
-      context: { intl, store, muiTheme },
-      childContextTypes: { muiTheme: React.PropTypes.object, intl: intlShape },
-    };
+    const contextOptions = buildContextOptions(store);
 
-    const newSurveyButton = mount(<NewSurveyButton />, contextOptions);
     const surveyFormDialogue = mount(<SurveyFormDialogue />, contextOptions);
+    const newSurveyButton = mount(<NewSurveyButton />, contextOptions);
 
     // Click 'new survey' button
     const newSurveyButtonNode = ReactDOM.findDOMNode(newSurveyButton.find('button').node);

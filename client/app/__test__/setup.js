@@ -1,3 +1,4 @@
+import { PropTypes } from 'react';
 import { IntlProvider, intlShape } from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'lib/injectTapEventPlugin';
@@ -12,13 +13,23 @@ const timeZone = "Asia/Singapore";
 const intlProvider = new IntlProvider({ locale: 'en', timeZone }, {});
 const courseId = "1";
 
+const muiTheme = getMuiTheme();
+const buildContextOptions = store => ({
+  context: { intl, store, muiTheme },
+  childContextTypes: {
+    muiTheme: PropTypes.object,
+    store: PropTypes.object,
+    intl: intlShape,
+  },
+});
+
 // Global variables
 global.courseId = courseId;
 global.intl = intlProvider.getChildContext().intl;
 global.intlShape = intlShape;
-global.muiTheme = getMuiTheme();
 global.$ = jQuery;
 global.jQuery = jQuery;
+global.buildContextOptions = buildContextOptions;
 
 // Global mocks
 document.head.innerHTML =

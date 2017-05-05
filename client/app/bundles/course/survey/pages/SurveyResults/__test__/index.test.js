@@ -1,5 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import { connect } from 'react-redux';
 import CourseAPI from 'api/course';
 import MockAdapter from 'axios-mock-adapter';
 import storeCreator from 'course/survey/store';
@@ -39,26 +40,24 @@ const resultsData = {
   },
 };
 
+const InjectedSurveyResults = connect(
+  state => ({ survey: state.surveys[0] || {} })
+)(SurveyResults);
+
 beforeEach(() => {
   mock.reset();
 });
 
 describe('<SurveyResults />', () => {
   it('allows phantom students to be excluded from the results', async () => {
-    const surveyId = resultsData.survey.id;
+    const surveyId = resultsData.survey.id.toString();
     const resultsUrl = `/courses/${courseId}/surveys/${surveyId}/results`;
     mock.onGet(resultsUrl).reply(200, resultsData);
     const spyResults = jest.spyOn(CourseAPI.survey.surveys, 'results');
 
-    // Mount survey restuls page and wait for data to load
-    const store = storeCreator({ surveys: {} });
-    const contextOptions = {
-      context: { intl, store, muiTheme },
-      childContextTypes: { muiTheme: React.PropTypes.object, intl: intlShape },
-    };
     const surveyResults = mount(
-      <SurveyResults params={{ courseId, surveyId: surveyId.toString() }} />,
-      contextOptions
+      <InjectedSurveyResults {...{ courseId, surveyId }} />,
+      buildContextOptions(storeCreator({}))
     );
     await sleep(1);
     expect(spyResults).toHaveBeenCalled();

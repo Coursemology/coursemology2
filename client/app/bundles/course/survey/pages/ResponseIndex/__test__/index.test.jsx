@@ -1,8 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
-import ReactTestUtils from 'react-addons-test-utils';
-import { browserHistory } from 'react-router';
 import MockAdapter from 'axios-mock-adapter';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
@@ -60,8 +59,11 @@ const responsesData = {
 
 beforeEach(() => {
   mock.reset();
-  browserHistory.push = jest.fn();
 });
+
+const InjectedResponseIndex = connect(
+  state => ({ survey: state.surveys[0] || {} })
+)(ResponseIndex);
 
 describe('<ResponseIndex />', () => {
   it('allows responses to be saved', async () => {
@@ -72,14 +74,11 @@ describe('<ResponseIndex />', () => {
 
     // Mount response index page and wait for data to load
     Object.defineProperty(window.location, 'pathname', { value: responseUrl });
-    const store = storeCreator({ surveys: {} });
-    const contextOptions = {
-      context: { intl, store, muiTheme },
-      childContextTypes: { muiTheme: React.PropTypes.object, intl: intlShape },
-    };
     const responseIndex = mount(
-      <ResponseIndex params={{ courseId, surveyId: surveyId.toString() }} />,
-      contextOptions
+      <MemoryRouter>
+        <InjectedResponseIndex />
+      </MemoryRouter>,
+      buildContextOptions(storeCreator({}))
     );
     await sleep(1);
 
@@ -98,9 +97,5 @@ describe('<ResponseIndex />', () => {
     expect(submittedChip.text()).toEqual('0 Submitted');
     statsCard.find('Toggle').first().props().onToggle(null, true);
     expect(submittedChip.text()).toEqual('2 Submitted');
-
-    const backButton = responseIndex.find('TitleBar').first().find('button').first();
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(backButton.node));
-    expect(browserHistory.push).toHaveBeenCalledWith('/courses/1/surveys/2');
   });
 });

@@ -1,9 +1,10 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, browserHistory } from 'react-router';
+import { Router } from 'react-router-dom';
+import history from 'lib/history';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
+import SurveysLayout from 'course/survey/containers/SurveysLayout';
 import storeCreator from './store';
-import routes from './routes';
 
 $(document).ready(() => {
   const mountNode = document.getElementById('course-survey-component');
@@ -13,7 +14,9 @@ $(document).ready(() => {
 
     render(
       <ProviderWrapper {...{ store }}>
-        <Router routes={routes} history={browserHistory} />
+        <Router history={history}>
+          <SurveysLayout />
+        </Router>
       </ProviderWrapper>
     , mountNode);
   }

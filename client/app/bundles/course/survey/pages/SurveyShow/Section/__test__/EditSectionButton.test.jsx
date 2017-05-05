@@ -16,15 +16,11 @@ describe('<EditSectionButton />', () => {
   it('injects handlers that allow survey sections to be edited', () => {
     const surveyId = 1;
     const spyUpdate = jest.spyOn(CourseAPI.survey.sections, 'update');
-    const store = storeCreator({ surveys: {} });
-    const contextOptions = {
-      context: { intl, store, muiTheme },
-      childContextTypes: { muiTheme: React.PropTypes.object, intl: intlShape },
-    };
 
     Object.defineProperty(window.location, 'pathname', {
       value: `/courses/${courseId}/surveys/${surveyId}`,
     });
+    const contextOptions = buildContextOptions(storeCreator({}));
     const sectionFormDialogue = mount(<SectionFormDialogue />, contextOptions);
     const editSectionButton = mount(<EditSectionButton section={section} />, contextOptions);
     const editSectionButtonNode = ReactDOM.findDOMNode(editSectionButton.find('button').node);

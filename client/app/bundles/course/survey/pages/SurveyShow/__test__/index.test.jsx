@@ -1,6 +1,7 @@
 /* eslint-disable new-cap */
 import React from 'react';
 import { mount } from 'enzyme';
+import { connect } from 'react-redux';
 import CourseAPI from 'api/course';
 import MockAdapter from 'axios-mock-adapter';
 import TestBackend from 'react-dnd-test-backend';
@@ -58,21 +59,13 @@ const surveyData = {
   }],
 };
 
-const contextOptions = store => ({
-  context: { intl, store, muiTheme },
-  childContextTypes: {
-    muiTheme: React.PropTypes.object,
-    store: React.PropTypes.object,
-    intl: intlShape,
-  },
-});
-
 /**
  * Wraps a component into a DragDropContext that uses the TestBackend.
  */
 function wrapInTestContext(DecoratedComponent) {
   const TestContextContainer = props => <DecoratedComponent {...props} />;
-  return DragDropContext(TestBackend)(TestContextContainer);
+  const mapStateToProps = state => ({ survey: state.surveys[0] || {} });
+  return connect(mapStateToProps)(DragDropContext(TestBackend)(TestContextContainer));
 }
 
 beforeEach(() => {
@@ -92,8 +85,8 @@ describe('<SurveyShow />', () => {
     const store = storeCreator({ surveys: {} });
     const WrappedSurveyShow = wrapInTestContext(ConnectedSurveyShow);
     const showPage = mount(
-      <WrappedSurveyShow params={{ courseId, surveyId: surveyData.id.toString() }} />,
-      contextOptions(store)
+      <WrappedSurveyShow {...{ courseId, surveyId: surveyData.id.toString() }} />,
+      buildContextOptions(store)
     );
     await sleep(1);
     expect(spyFetch).toHaveBeenCalled();
@@ -111,7 +104,8 @@ describe('<SurveyShow />', () => {
       .mockReturnValue({ bottom: 200, height: 100, left: 0, right: 0, top: 100, width: 0 });
 
     // Simulate dragging first question down past the mid-line of the second question
-    const dragDropBackend = showPage.node.getManager().getBackend();
+    const dragDropContext = showPage.find('DragDropContext(TestContextContainer)').first();
+    const dragDropBackend = dragDropContext.node.getManager().getBackend();
     const sourceQuestionHandlerId =
       sourceQuestion.node.getDecoratedComponentInstance().getHandlerId();
     const targetQuestionHandlerId = targetQuestion.node.getHandlerId();
