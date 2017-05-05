@@ -1,8 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 import { FieldArray, reduxForm } from 'redux-form';
 import { Tabs, Tab } from 'material-ui/Tabs';
+import { Card } from 'material-ui/Card';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import SubmissionAnswer from '../../components/SubmissionAnswer';
+
+const styles = {
+  questionContainer: {
+    marginTop: 20,
+    padding: 20,
+  },
+  formButton: {
+    marginRight: 10,
+  },
+};
 
 class SubmissionEditTabForm extends Component {
 
@@ -25,7 +37,7 @@ class SubmissionEditTabForm extends Component {
   render() {
     const { canGrade, pristine, submitting, handleSubmit } = this.props;
     return (
-      <div>
+      <Card style={styles.questionContainer}>
         <form>
           <FieldArray
             name="answers"
@@ -33,10 +45,22 @@ class SubmissionEditTabForm extends Component {
             {...{ canGrade }}
           />
         </form>
-        <button onClick={handleSubmit} disabled={pristine || submitting}>
-          Finalise Submission
-        </button>
-      </div>
+        <hr />
+        <RaisedButton
+          style={styles.formButton}
+          primary
+          label="Save Draft"
+          onTouchTap={handleSubmit}
+          disabled={pristine || submitting}
+        />
+        <RaisedButton
+          style={styles.formButton}
+          secondary
+          label="Finalise Submission"
+          onTouchTap={handleSubmit}
+          disabled={pristine || submitting}
+        />
+      </Card>
     );
   }
 }

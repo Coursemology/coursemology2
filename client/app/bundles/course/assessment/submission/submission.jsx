@@ -1,7 +1,11 @@
+/* eslint-disable import/no-extraneous-dependencies, import/extensions, import/no-unresolved */
+
 import React from 'react';
 import { render } from 'react-dom';
+import { Router } from 'react-router';
+import history from 'lib/history';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
-import { Router, browserHistory } from 'react-router';
+
 import store from './store';
 import routes from './routes';
 
@@ -11,7 +15,7 @@ $(document).ready(() => {
   if (mountNode) {
     render(
       <ProviderWrapper store={store}>
-        <Router routes={routes} history={browserHistory} />
+        <Router history={history}>{routes}</Router>
       </ProviderWrapper>
     , mountNode);
   }

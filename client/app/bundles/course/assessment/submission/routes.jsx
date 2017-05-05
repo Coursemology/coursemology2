@@ -1,14 +1,16 @@
 import React from 'react';
-import { Route, IndexRoute } from 'react-router';
+import { Switch, Route } from 'react-router-dom';
 
 import SubmissionEditLayout from './containers/SubmissionEditLayout';
 import SubmissionEditIndex from './pages/SubmissionEditIndex';
 
 export default (
-  <Route
-    path="courses/:courseId/assessments/:assessmentId/submissions/:submissionId/edit"
-    component={SubmissionEditLayout}
-  >
-    <IndexRoute component={SubmissionEditIndex} />
-  </Route>
+  <SubmissionEditLayout>
+    <Switch>
+      <Route
+        exact path="/courses/:courseId/assessments/:assessmentId/submissions/:submissionId/edit"
+        component={SubmissionEditIndex}
+      />
+    </Switch>
+  </SubmissionEditLayout>
 );

@@ -1,7 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { FieldArray, reduxForm } from 'redux-form';
+import { Card } from 'material-ui/Card';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import SubmissionAnswer from '../../components/SubmissionAnswer';
+
+const styles = {
+  questionContainer: {
+    marginTop: 20,
+    padding: 40,
+  },
+  formButton: {
+    marginRight: 10,
+  },
+};
 
 class SubmissionEditForm extends Component {
 
@@ -9,17 +21,10 @@ class SubmissionEditForm extends Component {
     const { canGrade, fields } = props;
     return (
       <div>
-        {
-          fields.map((member, index) => {
-            const answer = fields.get(index);
-            return (
-              <SubmissionAnswer
-                key={answer.id}
-                {...{ canGrade, member, answer }}
-              />
-            );
-          })
-        }
+        {fields.map((member, index) => {
+          const answer = fields.get(index);
+          return <SubmissionAnswer key={answer.id} {...{ canGrade, member, answer }} />;
+        })}
       </div>
     );
   }
@@ -27,7 +32,7 @@ class SubmissionEditForm extends Component {
   render() {
     const { canGrade, pristine, submitting, handleSubmit } = this.props;
     return (
-      <div>
+      <Card style={styles.questionContainer}>
         <form>
           <FieldArray
             name="answers"
@@ -35,8 +40,22 @@ class SubmissionEditForm extends Component {
             {...{ canGrade }}
           />
         </form>
-        <button onClick={handleSubmit} disabled={pristine || submitting}>Save Draft</button>
-      </div>
+        <hr />
+        <RaisedButton
+          style={styles.formButton}
+          primary
+          label="Save Draft"
+          onTouchTap={handleSubmit}
+          disabled={pristine || submitting}
+        />
+        <RaisedButton
+          style={styles.formButton}
+          secondary
+          label="Finalise Submission"
+          onTouchTap={handleSubmit}
+          disabled={pristine || submitting}
+        />
+      </Card>
     );
   }
 }

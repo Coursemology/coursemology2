@@ -11,12 +11,12 @@ import { DATA_STATES } from '../../constants';
 
 class VisibleSubmissionEditIndex extends Component {
   componentDidMount() {
-    const { fetchData, params } = this.props;
+    const { fetchData, match: { params } } = this.props;
     fetchData(params.submissionId);
   }
 
   handleSubmit() {
-    const { form, updateData, params } = this.props;
+    const { form, updateData, match: { params } } = this.props;
     const data = { submission: form.values };
     updateData(params.submissionId, data);
   }
@@ -76,10 +76,12 @@ class VisibleSubmissionEditIndex extends Component {
 }
 
 VisibleSubmissionEditIndex.propTypes = {
-  params: PropTypes.shape({
-    courseId: PropTypes.string,
-    assessmentId: PropTypes.string,
-    submissionId: PropTypes.string,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      courseId: PropTypes.string,
+      assessmentId: PropTypes.string,
+      submissionId: PropTypes.string,
+    }),
   }),
   assessment: AssessmentProp,
   canGrade: PropTypes.bool,

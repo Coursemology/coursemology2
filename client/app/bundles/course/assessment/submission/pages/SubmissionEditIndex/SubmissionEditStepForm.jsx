@@ -2,9 +2,22 @@ import React, { Component, PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Card } from 'material-ui/Card';
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import { SubmissionProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
+
+const styles = {
+  questionContainer: {
+    marginTop: 20,
+  },
+  questionCardContainer: {
+    padding: 40,
+  },
+  formButton: {
+    marginRight: 10,
+  },
+};
 
 class SubmissionEditStepForm extends Component {
 
@@ -84,9 +97,9 @@ class SubmissionEditStepForm extends Component {
     const { stepIndex } = this.state;
     const { canGrade, submission: { answers }, pristine, submitting } = this.props;
     return (
-      <div>
+      <div style={styles.questionContainer}>
         {this.renderStepper()}
-        <Card>
+        <Card style={styles.questionCardContainer}>
           <form>
             <Field
               name={`answers[${stepIndex}]`}
@@ -94,7 +107,21 @@ class SubmissionEditStepForm extends Component {
               {...{ canGrade, answer: answers[stepIndex] }}
             />
           </form>
-          <button onClick={() => this.handleQuestionSubmit()} disabled={pristine || submitting}>Submit</button>
+          <hr />
+          <RaisedButton
+            style={styles.formButton}
+            primary
+            label="Save Draft"
+            onTouchTap={() => this.handleQuestionSubmit()}
+            disabled={pristine || submitting}
+          />
+          <RaisedButton
+            style={styles.formButton}
+            secondary
+            label="Finalise Submission"
+            onTouchTap={() => this.handleQuestionSubmit()}
+            disabled={pristine || submitting}
+          />
         </Card>
       </div>
     );
