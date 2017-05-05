@@ -6,6 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import { SubmissionProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
+import Comments from '../../components/Comments';
 
 const styles = {
   questionContainer: {
@@ -28,10 +29,14 @@ class SubmissionEditStepForm extends Component {
   static renderAnswers(props) {
     const { input: { name }, canGrade, answer } = props;
     return (
-      <SubmissionAnswer
-        key={answer.id}
-        {...{ canGrade, member: name, answer }}
-      />
+      <div>
+        <SubmissionAnswer
+          key={answer.id}
+          {...{ canGrade, member: name, answer }}
+        />
+        <hr />
+        <Comments />
+      </div>
     );
   }
 
