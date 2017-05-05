@@ -1,8 +1,9 @@
 answer = @answers_hash[question.id]
 
 json.question do
-  json.(question, :id, :description, :required, :question_type, :max_options, :min_options,
+  json.(question, :id, :required, :question_type, :max_options, :min_options,
         :weight, :grid_view)
+  json.description format_html(question.description)
   json.options question.options.includes(attachment_references: :attachment),
                partial: 'course/survey/questions/option', as: :option
 end

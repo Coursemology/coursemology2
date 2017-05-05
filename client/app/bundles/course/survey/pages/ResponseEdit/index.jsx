@@ -103,7 +103,11 @@ class ResponseEdit extends React.Component {
     const { survey } = this.props;
     return (
       <div>
-        { survey.description ? <Card><CardText>{survey.description}</CardText></Card> : null }
+        {
+          survey.description ?
+            <Card><CardText dangerouslySetInnerHTML={{ __html: survey.description }} /></Card> :
+          null
+        }
         { this.renderBody() }
       </div>
     );

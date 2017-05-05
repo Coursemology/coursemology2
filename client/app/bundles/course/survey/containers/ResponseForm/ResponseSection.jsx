@@ -50,7 +50,7 @@ class ResponseSection extends React.Component {
       <Card style={styles.card}>
         <CardTitle
           title={section.title}
-          subtitle={section.description}
+          subtitle={<div dangerouslySetInnerHTML={{ __html: section.description }} />}
         />
         <FieldArray
           name={`${member}.answers`}

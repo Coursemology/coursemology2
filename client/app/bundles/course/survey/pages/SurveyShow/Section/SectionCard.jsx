@@ -66,7 +66,7 @@ class SectionCard extends React.Component {
       >
         <CardTitle
           title={section.title}
-          subtitle={section.description}
+          subtitle={<div dangerouslySetInnerHTML={{ __html: section.description }} />}
           subtitleStyle={styles.subtitle}
           showExpandableButton={section.questions.length > 0}
         />

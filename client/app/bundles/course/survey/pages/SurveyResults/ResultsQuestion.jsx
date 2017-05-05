@@ -69,7 +69,7 @@ class ResultsQuestion extends React.Component {
     return (
       <Card style={styles.card}>
         <CardText>
-          <p>{ `${index + 1}. ${question.description}` }</p>
+          <p dangerouslySetInnerHTML={{ __html: `${index + 1}. ${question.description}` }} />
           { question.required ?
             <p style={styles.required}><FormattedMessage {...formTranslations.starRequired} /></p> : null }
         </CardText>
