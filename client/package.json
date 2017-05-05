@@ -66,6 +66,7 @@
     "brace": "^0.10.0",
     "css-loader": "^0.28.0",
     "glob": "^7.1.1",
+    "history": "^4.6.1",
     "immutable": "^3.8.1",
     "intl": "^1.2.5",
     "jquery-ui": "^1.12.1",
