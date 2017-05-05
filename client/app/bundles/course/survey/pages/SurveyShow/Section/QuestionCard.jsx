@@ -159,7 +159,7 @@ class QuestionCard extends React.Component {
       >
         <CardText style={styles.cardText}>
           { this.renderAdminMenu() }
-          <p>{ question.description }</p>
+          <p dangerouslySetInnerHTML={{ __html: question.description }} />
           { question.required ?
             <p style={styles.required}><FormattedMessage {...formTranslations.starRequired} /></p> : null }
         </CardText>

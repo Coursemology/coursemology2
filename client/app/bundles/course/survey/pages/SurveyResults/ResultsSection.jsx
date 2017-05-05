@@ -13,7 +13,7 @@ const ResultsSection = ({ section, includePhantoms, anonymous }) => (
   <Card style={styles.card}>
     <CardTitle
       title={section.title}
-      subtitle={section.description}
+      subtitle={<div dangerouslySetInnerHTML={{ __html: section.description }} />}
     />
     <CardText>
       {

@@ -119,7 +119,11 @@ class ResponseShow extends React.Component {
 
     return (
       <div>
-        { survey.description ? <Card><CardText>{survey.description}</CardText></Card> : null }
+        {
+          survey.description ?
+            <Card><CardText dangerouslySetInnerHTML={{ __html: survey.description }} /></Card> :
+          null
+        }
         { this.renderBody() }
         { this.renderRespondButton() }
         { this.renderUnsubmitButton() }

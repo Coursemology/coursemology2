@@ -1,8 +1,11 @@
 json.sections @sections do |section|
-  json.(section, :id, :title, :description, :weight)
+  json.(section, :id, :title, :weight)
+  json.description format_html(section.description)
+
   json.questions section.questions do |question|
-    json.(question, :id, :description, :required, :question_type, :max_options, :min_options, :weight,
+    json.(question, :id, :required, :question_type, :max_options, :min_options, :weight,
           :grid_view)
+    json.description format_html(question.description)
     json.options question.options, partial: 'course/survey/questions/option', as: :option
 
     student_submitted_answers = question.answers.select do |answer|

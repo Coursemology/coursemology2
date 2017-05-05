@@ -7,9 +7,13 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
     expanded={null}
     initiallyExpanded={false}
   >
-    <CardText>
-      Description
-    </CardText>
+    <CardText
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "Description",
+        }
+      }
+    />
   </Card>
   <div>
     <Table

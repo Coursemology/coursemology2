@@ -176,7 +176,7 @@ class ResponseAnswer extends React.Component {
     return (
       <Card style={styles.answerCard}>
         <CardText>
-          <p>{`${index + 1}. ${question.description}`}</p>
+          <p dangerouslySetInnerHTML={{ __html: `${index + 1}. ${question.description}` }} />
           {
             answer.present ?
               <div>
