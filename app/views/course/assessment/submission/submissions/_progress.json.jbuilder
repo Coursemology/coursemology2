@@ -1,14 +1,14 @@
 # Show submission as submitted to students if grading is not published yet
-displayed_workflow_state = !@can_grade && @submission.graded? ?
+@apparent_workflow_state = !@can_grade && @submission.graded? ?
   'submitted' : @submission.workflow_state
 
-json.workflow_state displayed_workflow_state
+json.workflow_state @apparent_workflow_state
 json.submitter display_course_user(@submission.course_user)
 
 json.due_at @assessment.end_at
 json.attempted_at @submission.created_at
 json.submitted_at @submission.submitted_at
-if ['graded', 'published'].include? displayed_workflow_state
+if ['graded', 'published'].include? @apparent_workflow_state
   # Display the published time first, else show the graded time if available.
   # For showing timestamps from delayed grade publication.
   json.graded_at @submission.published_at || @submission.graded_at

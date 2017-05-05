@@ -21,3 +21,7 @@ json.submission do
     end
   end
 end
+
+json.progress do
+  json.partial! 'progress'
+end

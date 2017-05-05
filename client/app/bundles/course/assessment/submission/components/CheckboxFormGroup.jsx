@@ -10,24 +10,24 @@ export default class CheckboxFormGroup extends Component {
     return (
       <div>
         {options.map(option =>
-          <div key={option.id}>
-            <label>
-              <Checkbox
-                value={option.id}
-                checked={input.value.indexOf(option.id) !== -1}
-                onCheck={(event, isInputChecked) => {
-                  const newValue = [...input.value];
-                  if (isInputChecked) {
-                    newValue.push(option.id);
-                  } else {
-                    newValue.splice(newValue.indexOf(option.id), 1);
-                  }
-                  return input.onChange(newValue);
-                }}
-              />
+          <Checkbox
+            key={option.id}
+            value={option.id}
+            checked={input.value.indexOf(option.id) !== -1}
+            onCheck={(event, isInputChecked) => {
+              const newValue = [...input.value];
+              if (isInputChecked) {
+                newValue.push(option.id);
+              } else {
+                newValue.splice(newValue.indexOf(option.id), 1);
+              }
+              return input.onChange(newValue);
+            }}
+            label={(
               <div dangerouslySetInnerHTML={{ __html: option.option.trim() }} />
-            </label>
-          </div>
+            )}
+            labelStyle={{ verticalAlign: 'middle' }}
+          />
         )}
       </div>
     );

@@ -39,6 +39,7 @@ export default function submissionEditReducer(state = initialState, action) {
     case actions.UPDATE_SUBMISSION_SUCCESS:
       return {
         ...state,
+        progress: action.progress,
         submission: action.submission,
         dataState: DATA_STATES.Received,
       };

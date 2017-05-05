@@ -52,8 +52,15 @@ class SubmissionEditForm extends Component {
           style={styles.formButton}
           secondary
           label="Finalise Submission"
-          onTouchTap={handleSubmit}
-          disabled={pristine || submitting}
+          onTouchTap={() => handleSubmit('finalise')}
+          disabled={submitting}
+        />
+        <RaisedButton
+          style={styles.formButton}
+          secondary
+          label="Unsubmit Submission"
+          onTouchTap={() => handleSubmit('unsubmit')}
+          disabled={submitting}
         />
       </Card>
     );

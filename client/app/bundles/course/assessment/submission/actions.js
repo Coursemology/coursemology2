@@ -33,6 +33,7 @@ export function updateSubmission(
       .then((data) => {
         dispatch({
           type: actionTypes.UPDATE_SUBMISSION_SUCCESS,
+          progress: data.progress,
           submission: data.submission,
         });
       })

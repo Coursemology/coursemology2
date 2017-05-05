@@ -15,9 +15,10 @@ class VisibleSubmissionEditIndex extends Component {
     fetchData(params.submissionId);
   }
 
-  handleSubmit() {
+  handleSubmit(action) {
     const { form, updateData, match: { params } } = this.props;
     const data = { submission: form.values };
+    if (action) data.submission[action] = true;
     updateData(params.submissionId, data);
   }
 
@@ -34,7 +35,7 @@ class VisibleSubmissionEditIndex extends Component {
     if (autograded) {
       return (
         <SubmissionEditStepForm
-          handleSubmit={() => this.handleSubmit()}
+          handleSubmit={this.handleSubmit}
           initialValues={submission}
           canGrade={canGrade}
           skippable={skippable}
@@ -52,7 +53,7 @@ class VisibleSubmissionEditIndex extends Component {
     }
     return (
       <SubmissionEditForm
-        handleSubmit={() => this.handleSubmit()}
+        handleSubmit={action => this.handleSubmit(action)}
         initialValues={submission}
         canGrade={canGrade}
       />

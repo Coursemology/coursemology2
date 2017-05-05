@@ -17,7 +17,6 @@ import FileInput from '../components/FileInput';
 import Editor from '../components/Editor';
 import { TestCaseTypes } from '../constants';
 
-
 export default class Answers extends Component {
   static renderMultipleChoice(answer, member) {
     return (
@@ -34,14 +33,15 @@ export default class Answers extends Component {
     return (
       <div>
         {answer.options.map(option =>
-          <label key={option.id}>
-            <RadioButton
-              value={option.id}
-              onCheck={(event, buttonValue) => onChange(buttonValue)}
-              checked={option.id === value}
-            />
-            <div dangerouslySetInnerHTML={{ __html: option.option.trim() }} />
-          </label>
+          <RadioButton
+            key={option.id}
+            value={option.id}
+            onCheck={(event, buttonValue) => onChange(buttonValue)}
+            checked={option.id === value}
+            label={(
+              <div dangerouslySetInnerHTML={{ __html: option.option.trim() }} />
+            )}
+          />
         )}
       </div>
     );
