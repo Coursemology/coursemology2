@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import moment, { shortDateTime, shortTime } from 'lib/moment';
 import { CardText, CardTitle } from 'material-ui/Card';
 import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
@@ -14,9 +15,7 @@ import DateRange from 'material-ui/svg-icons/action/date-range';
 import InfoOutline from 'material-ui/svg-icons/action/info-outline';
 import Description from 'material-ui/svg-icons/action/description';
 import Divider from 'material-ui/Divider';
-import isScreenXs from 'lib/helpers/viewport';
 import { red700, grey700 } from 'material-ui/styles/colors';
-import { shortDateFormat, standardDateFormat, shortTimeFormat } from 'lib/date-time-defaults';
 
 const propTypes = {
   item: PropTypes.instanceOf(Immutable.Map).isRequired,
@@ -83,6 +82,32 @@ const styles = {
     right: 4,
     position: 'absolute',
   },
+};
+
+/*
+ * Returns a string representing a date/time range in one of the following formats:
+ * - ""  if startAt does not represent a valid date
+ * - "18-08-2017 12:00"  if no valid endAt is provided
+ * - "18-08-2017 17:00 - 19:00" if endAt falls on the same day as startAt
+ * - "18-08-2017 17:00 - 19-08-2017 19:00" if startAt and endAt are on different days
+ *
+ * @param {String | Date} startAt
+ * @param {String | Date} endAt
+ * @return {String} the formatted date range
+ */
+export const formatDateRange = (startAt, endAt) => {
+  const start = moment(startAt);
+  if (!start.isValid()) { return ''; }
+
+  const end = moment(endAt);
+  if (!end.isValid()) {
+    return start.format(shortDateTime);
+  }
+
+  if (end.isSame(start, 'day')) {
+    return `${start.format(shortDateTime)} - ${end.format(shortTime)}`;
+  }
+  return `${start.format(shortDateTime)} - ${end.format(shortDateTime)}`;
 };
 
 class LessonPlanItem extends React.Component {
@@ -155,40 +180,15 @@ class LessonPlanItem extends React.Component {
     );
   }
 
-  /*
-   * Renders a chip with the date/time range of the item in one of the following formats:
-   * - August 18, 2017, 12:00 PM
-   * - November 24, 2016, 5:00 PM - 7:00 PM
-   * - November 10, 2016, 10:00 AM - November 11, 2016, 11:00 AM
-   * Output varies depending on locale.
-   */
   renderDateTimeRangeChip() {
-    const { item, intl } = this.props;
-    const useShortFormat = isScreenXs();
-    const dateFormat = useShortFormat ? shortDateFormat : standardDateFormat;
-    const timeFormat = useShortFormat ? shortTimeFormat : {};
-    const startDateTime = new Date(item.get('start_at'));
-    const startDate = intl.formatDate(startDateTime, dateFormat);
-    const startTime = intl.formatTime(startDateTime, timeFormat);
-    let outputString = `${startDate}, ${startTime}`;
-
-    if (item.has('end_at') && item.get('end_at')) {
-      outputString += ' - ';
-      const endDateTime = Date.parse(item.get('end_at'));
-      const endDate = intl.formatDate(endDateTime, dateFormat);
-      const endTime = intl.formatTime(endDateTime, timeFormat);
-
-      if (startDate === endDate) {
-        outputString += endTime;
-      } else {
-        outputString += `${endDate}, ${endTime}`;
-      }
-    }
+    const { item } = this.props;
+    const startAt = item.get('start_at');
+    const endAt = item.has('end_at') && item.get('end_at');
 
     return (
       <Chip style={styles.chip}>
         <Avatar icon={<DateRange />} />
-        {outputString}
+        { formatDateRange(startAt, endAt) }
       </Chip>
     );
   }
