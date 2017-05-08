@@ -8,7 +8,7 @@ const styles = {
   },
 };
 
-export default class Comments extends Component {
+export default class CommentField extends Component {
   render() {
     return (
       <div style={styles.comments}>

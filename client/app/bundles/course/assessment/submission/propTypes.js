@@ -27,6 +27,15 @@ const TestCaseProp =
     type: PropTypes.string.isRequired,
   });
 
+const PostProp =
+  PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string,
+    text: PropTypes.string,
+    creator: PropTypes.string.isRequired,
+    createdAt: PropTypes.string.isRequired,
+  });
+
 export const AnswerProp =
   PropTypes.shape({
     id: PropTypes.number.isRequired,
@@ -80,4 +89,10 @@ export const ReduxFormProp =
   PropTypes.shape({
     registeredField: PropTypes.object,
     values: PropTypes.any,
+  });
+
+export const TopicProp =
+  PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    posts: PropTypes.arrayOf(PostProp),
   });

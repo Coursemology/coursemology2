@@ -3,8 +3,10 @@ import { FieldArray, reduxForm } from 'redux-form';
 import { Card } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 
+import { TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import Comments from '../../components/Comments';
+import CommentField from '../../components/CommentField';
 
 const styles = {
   questionCardContainer: {
@@ -22,15 +24,17 @@ const styles = {
 class SubmissionEditForm extends Component {
 
   static renderAnswers(props) {
-    const { canGrade, fields } = props;
+    const { canGrade, topics, fields } = props;
     return (
       <div>
         {fields.map((member, index) => {
           const answer = fields.get(index);
+          const topic = topics.filter(t => t.id === answer.id)[0];
           return (
             <div key={answer.id} style={styles.questionContainer}>
               <SubmissionAnswer {...{ canGrade, member, answer }} />
-              <Comments />
+              <Comments topic={topic} />
+              <CommentField />
               <hr />
             </div>
           );
@@ -40,14 +44,14 @@ class SubmissionEditForm extends Component {
   }
 
   render() {
-    const { canGrade, pristine, submitting, handleSubmit } = this.props;
+    const { canGrade, topics, pristine, submitting, handleSubmit } = this.props;
     return (
       <Card style={styles.questionCardContainer}>
         <form>
           <FieldArray
             name="answers"
             component={SubmissionEditForm.renderAnswers}
-            {...{ canGrade }}
+            {...{ canGrade, topics }}
           />
         </form>
         <RaisedButton
@@ -78,6 +82,7 @@ class SubmissionEditForm extends Component {
 
 SubmissionEditForm.propTypes = {
   canGrade: PropTypes.bool.isRequired,
+  topics: PropTypes.arrayOf(TopicProp),
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
   handleSubmit: PropTypes.func,

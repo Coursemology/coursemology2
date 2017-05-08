@@ -4,9 +4,10 @@ import { Card } from 'material-ui/Card';
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import { SubmissionProp } from '../../propTypes';
+import { SubmissionProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import Comments from '../../components/Comments';
+import CommentField from '../../components/CommentField';
 
 const styles = {
   questionContainer: {
@@ -27,7 +28,8 @@ class SubmissionEditStepForm extends Component {
   }
 
   static renderAnswers(props) {
-    const { input: { name }, canGrade, answer } = props;
+    const { input: { name }, canGrade, topics, answer } = props;
+    const topic = topics.filter(t => t.id === answer.id)[0];
     return (
       <div>
         <SubmissionAnswer
@@ -35,7 +37,8 @@ class SubmissionEditStepForm extends Component {
           {...{ canGrade, member: name, answer }}
         />
         <hr />
-        <Comments />
+        <Comments topic={topic} />
+        <CommentField />
       </div>
     );
   }
@@ -100,7 +103,7 @@ class SubmissionEditStepForm extends Component {
 
   render() {
     const { stepIndex } = this.state;
-    const { canGrade, submission: { answers }, pristine, submitting } = this.props;
+    const { canGrade, topics, submission: { answers }, pristine, submitting } = this.props;
     return (
       <div style={styles.questionContainer}>
         {this.renderStepper()}
@@ -109,7 +112,7 @@ class SubmissionEditStepForm extends Component {
             <Field
               name={`answers[${stepIndex}]`}
               component={SubmissionEditStepForm.renderAnswers}
-              {...{ canGrade, answer: answers[stepIndex] }}
+              {...{ canGrade, topics, answer: answers[stepIndex] }}
             />
           </form>
           <hr />
@@ -137,6 +140,7 @@ SubmissionEditStepForm.propTypes = {
   canGrade: PropTypes.bool.isRequired,
   skippable: PropTypes.bool.isRequired,
   submission: SubmissionProp,
+  topics: PropTypes.arrayOf(TopicProp),
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
   handleSubmit: PropTypes.func,

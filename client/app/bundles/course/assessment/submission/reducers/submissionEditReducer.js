@@ -6,6 +6,7 @@ const initialState = {
   canUpdate: false,
   progress: null,
   submission: null,
+  topics: null,
   dataState: DATA_STATES.Unfetched,
 };
 
@@ -24,6 +25,7 @@ export default function submissionEditReducer(state = initialState, action) {
         canUpdate: action.payload.canUpdate,
         progress: action.payload.progress,
         submission: action.payload.submission,
+        topics: action.payload.topics,
         dataState: DATA_STATES.Received,
       };
     case actions.FETCH_SUBMISSION_FAILURE:

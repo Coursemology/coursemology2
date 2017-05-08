@@ -6,7 +6,7 @@ import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEditTabForm from './SubmissionEditTabForm';
 import { fetchSubmission, updateSubmission } from '../../actions';
-import { AssessmentProp, ProgressProp, ReduxFormProp, SubmissionProp } from '../../propTypes';
+import { AssessmentProp, ProgressProp, ReduxFormProp, SubmissionProp, TopicProp } from '../../propTypes';
 import { DATA_STATES } from '../../constants';
 
 class VisibleSubmissionEditIndex extends Component {
@@ -31,7 +31,7 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   renderContent() {
-    const { assessment: { autograded, tabbed_view, skippable }, submission, canGrade } = this.props;
+    const { assessment: { autograded, tabbed_view, skippable }, submission, topics, canGrade } = this.props;
     if (autograded) {
       return (
         <SubmissionEditStepForm
@@ -39,6 +39,7 @@ class VisibleSubmissionEditIndex extends Component {
           initialValues={submission}
           canGrade={canGrade}
           skippable={skippable}
+          topics={topics}
           {...{ submission }}
         />
       );
@@ -48,6 +49,7 @@ class VisibleSubmissionEditIndex extends Component {
           handleSubmit={() => this.handleSubmit()}
           initialValues={submission}
           canGrade={canGrade}
+          topics={topics}
         />
       );
     }
@@ -56,6 +58,7 @@ class VisibleSubmissionEditIndex extends Component {
         handleSubmit={action => this.handleSubmit(action)}
         initialValues={submission}
         canGrade={canGrade}
+        topics={topics}
       />
     );
   }
@@ -89,6 +92,7 @@ VisibleSubmissionEditIndex.propTypes = {
   form: ReduxFormProp,
   progress: ProgressProp,
   submission: SubmissionProp,
+  topics: PropTypes.arrayOf(TopicProp),
   dataState: PropTypes.string.isRequired,
 
   fetchData: PropTypes.func.isRequired,
@@ -102,6 +106,7 @@ function mapStateToProps(state) {
     form: state.form.submissionEdit,
     progress: state.submissionEdit.progress,
     submission: state.submissionEdit.submission,
+    topics: state.submissionEdit.topics,
     dataState: state.submissionEdit.dataState,
   };
 }
