@@ -110,7 +110,7 @@ class ResponseShow extends React.Component {
 
   renderUnsubmitButton() {
     const { response, flags: { canUnsubmit, isLoading } } = this.props;
-    if (!canUnsubmit || isLoading) { return null; }
+    if (!canUnsubmit || isLoading || !response.submitted_at) { return null; }
     return <UnsubmitButton responseId={response.id} />;
   }
 
