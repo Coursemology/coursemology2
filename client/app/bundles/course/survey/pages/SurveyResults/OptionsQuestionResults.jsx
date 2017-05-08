@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
+import { Link } from 'react-router-dom';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { CardText } from 'material-ui/Card';
 import Chip from 'material-ui/Chip';
-import { defineMessages, FormattedMessage } from 'react-intl';
 import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
@@ -162,11 +163,13 @@ class OptionsQuestionResults extends React.Component {
         {
           students.map(student =>
             <Chip key={student.id} style={styles.nameChip}>
-              {
-                student.phantom ?
-                  <FormattedMessage {...translations.phantomStudentName} values={{ name: student.name }} /> :
-                  student.name
-              }
+              <Link to={student.response_path}>
+                {
+                  student.phantom ?
+                    <FormattedMessage {...translations.phantomStudentName} values={{ name: student.name }} /> :
+                    student.name
+                }
+              </Link>
             </Chip>
           )
         }
@@ -234,6 +237,7 @@ class OptionsQuestionResults extends React.Component {
         breakdown[selectedOption].students.push({
           id: answer.course_user_id,
           name: answer.course_user_name,
+          response_path: answer.response_path,
           phantom: answer.phantom,
         });
       });

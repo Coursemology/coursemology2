@@ -14,6 +14,7 @@ json.sections @sections do |section|
     json.answers student_submitted_answers do |answer|
       json.(answer, :id)
       unless @survey.anonymous?
+        json.response_path course_survey_response_path(current_course, @survey, answer.response)
         json.course_user_name answer.response.course_user.name
         json.course_user_id answer.response.course_user.id
       end

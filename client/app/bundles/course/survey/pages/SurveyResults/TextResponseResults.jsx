@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
-import { CardText } from 'material-ui/Card';
+import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 
@@ -57,6 +58,21 @@ class TextResponseResults extends React.Component {
     })),
   }
 
+  static renderStudentName(answer) {
+    return (
+      <Link to={answer.response_path}>
+        {
+          answer.phantom ?
+            <FormattedMessage
+              {...translations.phantomStudentName}
+              values={{ name: answer.course_user_name }}
+            /> :
+            answer.course_user_name
+        }
+      </Link>
+    );
+  }
+
   static renderTextResultsTable(answers, anonymous) {
     return (
       <Table>
@@ -85,14 +101,7 @@ class TextResponseResults extends React.Component {
               {
                 anonymous ? null :
                 <TableRowColumn colSpan={5} style={styles.wrapText}>
-                  {
-                    answer.phantom ?
-                      <FormattedMessage
-                        {...translations.phantomStudentName}
-                        values={{ name: answer.course_user_name }}
-                      /> :
-                      answer.course_user_name
-                  }
+                  { TextResponseResults.renderStudentName(answer) }
                 </TableRowColumn>
               }
               <TableRowColumn colSpan={15} style={styles.wrapText}>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { connect } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 import CourseAPI from 'api/course';
 import MockAdapter from 'axios-mock-adapter';
 import storeCreator from 'course/survey/store';
@@ -25,11 +26,13 @@ const resultsData = {
         course_user_name: 'Normal student',
         phantom: false,
         text_response: 'Normal answer',
+        response_path: `/courses/${courseId}/surveys/6/responses/9`,
       }, {
         id: 124,
         course_user_name: 'Phantom student',
         phantom: true,
         text_response: 'Phantom answer',
+        response_path: `/courses/${courseId}/surveys/6/responses/10`,
       }],
     }],
   }],
@@ -56,7 +59,9 @@ describe('<SurveyResults />', () => {
     const spyResults = jest.spyOn(CourseAPI.survey.surveys, 'results');
 
     const surveyResults = mount(
-      <InjectedSurveyResults {...{ courseId, surveyId }} />,
+      <MemoryRouter>
+        <InjectedSurveyResults {...{ courseId, surveyId }} />
+      </MemoryRouter>,
       buildContextOptions(storeCreator({}))
     );
     await sleep(1);
