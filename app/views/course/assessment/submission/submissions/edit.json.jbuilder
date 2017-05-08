@@ -11,3 +11,4 @@ json.assessment do
 end
 
 json.partial! 'submission'
+json.partial! 'submission_question'
