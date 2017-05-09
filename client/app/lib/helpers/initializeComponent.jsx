@@ -16,7 +16,7 @@ const initializeComponent = (Component, nodeId, storeCreator) => {
 
   const params = { format: 'json' };
   axios.get('', { params }).then((response) => {
-    $(document).ready(renderComponent(response.data));
+    $(document).ready(() => { renderComponent(response.data); });
   });
 };
 
