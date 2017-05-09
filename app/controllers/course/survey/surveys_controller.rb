@@ -1,8 +1,6 @@
 # frozen_string_literal: true
-class Course::Survey::SurveysController < Course::ComponentController
+class Course::Survey::SurveysController < Course::Survey::Controller
   include Course::Survey::ReorderingConcern
-  load_and_authorize_resource :survey, through: :course, class: Course::Survey.name
-  add_breadcrumb :index, :course_surveys_path
 
   def index
     respond_to do |format|

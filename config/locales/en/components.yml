@@ -36,4 +36,4 @@ en:
     users:
       name: 'Users'
     surveys:
-      name: :'breadcrumbs.course.survey.surveys.index'
+      name: :'breadcrumbs.course.survey.controller.index'

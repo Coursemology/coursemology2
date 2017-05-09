@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Survey::ResponsesController < Course::Survey::SurveysController
+class Course::Survey::ResponsesController < Course::Survey::Controller
   load_and_authorize_resource :response, through: :survey, class: Course::Survey::Response.name
 
   def index
