@@ -109,12 +109,8 @@ en:
         index: :'course.groups.index.header'
         new: :'course.groups.new.header'
       lesson_plan:
-        items:
+        controller:
           index: :'course.lesson_plan.items.index.header'
-        milestones:
-          index: :'breadcrumbs.course.lesson_plan.items.index'
-        events:
-          index: :'breadcrumbs.course.lesson_plan.items.index'
       material:
         folders:
           new_subfolder: :'course.material.folders.new_subfolder.header'

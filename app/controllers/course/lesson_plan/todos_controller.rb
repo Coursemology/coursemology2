@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::LessonPlan::TodosController < Course::ComponentController
+class Course::LessonPlan::TodosController < Course::LessonPlan::Controller
   load_and_authorize_resource :todo, class: Course::LessonPlan::Todo.name
 
   def ignore

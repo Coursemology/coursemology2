@@ -1,8 +1,7 @@
 # frozen_string_literal: true
-class Course::LessonPlan::EventsController < Course::ComponentController
+class Course::LessonPlan::EventsController < Course::LessonPlan::Controller
   load_and_authorize_resource :event, class: Course::LessonPlan::Event.name, through: :course,
                                       through_association: :lesson_plan_events
-  add_breadcrumb :index, :course_lesson_plan_path
 
   def new #:nodoc:
   end

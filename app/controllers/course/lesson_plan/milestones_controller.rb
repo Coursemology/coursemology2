@@ -1,9 +1,8 @@
 # frozen_string_literal: true
-class Course::LessonPlan::MilestonesController < Course::ComponentController
+class Course::LessonPlan::MilestonesController < Course::LessonPlan::Controller
   load_and_authorize_resource :milestone,
                               through: :course, through_association: :lesson_plan_milestones,
                               class: Course::LessonPlan::Milestone.name
-  add_breadcrumb :index, :course_lesson_plan_path
 
   def new #:nodoc:
   end
