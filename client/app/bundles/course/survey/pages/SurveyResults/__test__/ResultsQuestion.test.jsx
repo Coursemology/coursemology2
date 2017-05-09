@@ -1,9 +1,12 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import ReactDOM from 'react-dom';
+import { MemoryRouter } from 'react-router-dom';
 import storeCreator from 'course/survey/store';
 import ReactTestUtils from 'react-addons-test-utils';
 import ResultsQuestion from '../ResultsQuestion';
+
+const surveyId = '6';
 
 const getTextResponseData = (answerCount) => {
   const answers = [];
@@ -12,6 +15,7 @@ const getTextResponseData = (answerCount) => {
       id: i,
       course_user_name: `S${i}`,
       text_response: `A${i}`,
+      response_path: `/courses/${courseId}/surveys/${surveyId}/responses/${i}`,
     });
   }
 
@@ -42,6 +46,7 @@ const getMultipleChoiceData = (optionCount) => {
       id: 22,
       course_user_id: 122,
       course_user_name: 'Lee',
+      response_path: `/courses/${courseId}/surveys/${surveyId}/responses/222`,
       phantom: false,
       selected_options: [optionCount > 0 ? optionCount - 1 : 0],
     }],
@@ -50,7 +55,9 @@ const getMultipleChoiceData = (optionCount) => {
 
 const testExpandLongQuestion = (question) => {
   const resultsQuestion = mount(
-    <ResultsQuestion {...{ question }} includePhantoms anonymous={false} index={1} />,
+    <MemoryRouter>
+      <ResultsQuestion {...{ question }} includePhantoms anonymous={false} index={1} />
+    </MemoryRouter>,
     buildContextOptions(storeCreator({}))
   );
   expect(resultsQuestion.find('Table')).toHaveLength(0);
@@ -73,7 +80,9 @@ describe('<ResultsQuestion />', () => {
   it('allows sorting by percentage', () => {
     const question = getMultipleChoiceData(2);
     const resultsQuestion = mount(
-      <ResultsQuestion {...{ question }} includePhantoms={false} anonymous={false} index={1} />,
+      <MemoryRouter>
+        <ResultsQuestion {...{ question }} includePhantoms={false} anonymous={false} index={1} />
+      </MemoryRouter>,
       buildContextOptions(storeCreator({}))
     );
     const lastOptionCountCell = () => resultsQuestion.find('TableRow').last().find('td').at(3);
