@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import moment from 'moment';
+import { formatLongDateTime } from 'lib/moment';
 import { Card, CardText } from 'material-ui/Card';
 import Subheader from 'material-ui/Subheader';
 import { Table, TableBody, TableRow, TableHeaderColumn, TableRowColumn } from 'material-ui/Table';
@@ -63,7 +63,7 @@ class ResponseShow extends React.Component {
             <TableHeaderColumn>Submitted At</TableHeaderColumn>
             <TableRowColumn>
               {response.submitted_at ?
-                moment(response.submitted_at).format('DD MMM YYYY, h:mma') :
+                formatLongDateTime(response.submitted_at) :
                 <FormattedMessage {...translations.notSubmitted} />
               }
             </TableRowColumn>

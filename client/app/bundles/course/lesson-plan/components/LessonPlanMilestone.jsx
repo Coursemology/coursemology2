@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import Immutable from 'immutable';
-import { FormattedDate, injectIntl, defineMessages, intlShape } from 'react-intl';
+import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import moment, { longDate } from 'lib/moment';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
@@ -68,12 +69,7 @@ class LessonPlanMilestone extends React.Component {
         <div className={styles.milestoneTitleRow}>
           <h3>{ milestone.get('title') }</h3>
           <p>
-            <FormattedDate
-              value={new Date(milestone.get('start_at'))}
-              year="numeric"
-              month="long"
-              day="2-digit"
-            />
+            { moment(milestone.get('start_at')).format(longDate) }
           </p>
         </div>
         <div className={styles.spaceBetween}>

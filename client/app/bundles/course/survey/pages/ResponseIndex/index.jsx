@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
+import moment, { formatLongDateTime } from 'lib/moment';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import mirrorCreator from 'mirror-creator';
@@ -9,7 +9,6 @@ import Toggle from 'material-ui/Toggle';
 import { red500 } from 'material-ui/styles/colors';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import BarChart from 'lib/components/BarChart';
-import { formatDateTime } from 'lib/date-time-defaults';
 import { fetchResponses } from 'course/survey/actions/responses';
 import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'course/survey/components/LoadingIndicator';
@@ -127,7 +126,7 @@ class ResponseIndex extends React.Component {
     if (!response.submitted_at) {
       return null;
     }
-    const submittedAt = moment(response.submitted_at).format('DD MMM YYYY, h:mma');
+    const submittedAt = formatLongDateTime(response.submitted_at);
     if (survey.end_at && moment(response.submitted_at).isAfter(survey.end_at)) {
       return <div style={styles.red}>{ submittedAt }</div>;
     }
@@ -220,7 +219,7 @@ class ResponseIndex extends React.Component {
                 <FormattedMessage {...surveyTranslations.opensAt} />
               </TableRowColumn>
               <TableRowColumn>
-                {formatDateTime(survey.start_at)}
+                { formatLongDateTime(survey.start_at) }
               </TableRowColumn>
             </TableRow>
             <TableRow>
@@ -228,7 +227,7 @@ class ResponseIndex extends React.Component {
                 <FormattedMessage {...surveyTranslations.expiresAt} />
               </TableRowColumn>
               <TableRowColumn>
-                {formatDateTime(survey.end_at)}
+                { formatLongDateTime(survey.end_at) }
               </TableRowColumn>
             </TableRow>
             <TableRow>
@@ -236,7 +235,7 @@ class ResponseIndex extends React.Component {
                 <FormattedMessage {...surveyTranslations.closingRemindedAt} />
               </TableRowColumn>
               <TableRowColumn>
-                {survey.closing_reminded_at ? formatDateTime(survey.closing_reminded_at) : '-'}
+                { formatLongDateTime(survey.closing_reminded_at, '-') }
               </TableRowColumn>
             </TableRow>
           </TableBody>

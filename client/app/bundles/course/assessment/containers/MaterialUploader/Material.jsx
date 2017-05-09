@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
-import { FormattedDate, FormattedTime, FormattedMessage, defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
+import { formatLongDateTime } from 'lib/moment';
 import IconButton from 'material-ui/IconButton';
 import { ListItem } from 'material-ui/List';
 import CircularProgress from 'material-ui/CircularProgress';
 import Avatar from 'material-ui/Avatar';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import { standardDateFormat, shortTimeFormat } from 'lib/date-time-defaults';
 
 const styles = {
   root: {
@@ -77,9 +77,7 @@ class Material extends React.Component {
     const { updatedAt } = this.props;
     return (
       <div style={styles.secondaryText}>
-        <FormattedDate value={new Date(updatedAt)} {...standardDateFormat} />
-        {' '}
-        <FormattedTime value={updatedAt} {...shortTimeFormat} />
+        { formatLongDateTime(updatedAt) }
       </div>
     );
   }

@@ -65,17 +65,7 @@ exports[`<Material /> renders the material 1`] = `
         }
       }
     >
-      <FormattedDate
-        day="2-digit"
-        month="short"
-        value={2017-01-01T08:00:00.000Z}
-        year="numeric"
-      />
-       
-      <FormattedTime
-        hour12={false}
-        value="2017-01-01T08:00:00.0000000Z"
-      />
+      01 Jan 2017, 4:00pm
     </div>
   }
   secondaryTextLines={1}

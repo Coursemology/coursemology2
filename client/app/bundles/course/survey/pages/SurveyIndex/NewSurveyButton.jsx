@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import { aWeekStartingTomorrow } from 'lib/date-time-defaults';
+import moment from 'lib/moment';
 import { showSurveyForm, createSurvey } from 'course/survey/actions/surveys';
 import { formatSurveyFormData } from 'course/survey/utils';
 import AddButton from 'course/survey/components/AddButton';
@@ -25,6 +25,16 @@ const propTypes = {
   dispatch: PropTypes.func.isRequired,
   canCreate: PropTypes.bool.isRequired,
   intl: intlShape.isRequired,
+};
+
+const aWeekStartingTomorrow = () => {
+  const startAt = moment().add(1, 'd').startOf('day');
+  const endAt = moment(startAt).add(6, 'd').endOf('day').startOf('minute');
+
+  return {
+    start_at: startAt.toDate(),
+    end_at: endAt.toDate(),
+  };
 };
 
 class NewSurveyButton extends React.Component {

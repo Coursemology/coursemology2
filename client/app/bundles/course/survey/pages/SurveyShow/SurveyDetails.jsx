@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { formatLongDateTime } from 'lib/moment';
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import { Card, CardText } from 'material-ui/Card';
 import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
-import { formatDateTime } from 'lib/date-time-defaults';
 import libTranslations from 'lib/translations';
 import history from 'lib/history';
 import surveyTranslations from 'course/survey/translations';
@@ -90,7 +90,7 @@ class SurveyDetails extends React.Component {
                   <FormattedMessage {...surveyTranslations.opensAt} />
                 </TableRowColumn>
                 <TableRowColumn>
-                  {formatDateTime(survey.start_at)}
+                  { formatLongDateTime(survey.start_at) }
                 </TableRowColumn>
               </TableRow>
               <TableRow>
@@ -98,7 +98,7 @@ class SurveyDetails extends React.Component {
                   <FormattedMessage {...surveyTranslations.expiresAt} />
                 </TableRowColumn>
                 <TableRowColumn>
-                  {formatDateTime(survey.end_at)}
+                  { formatLongDateTime(survey.end_at) }
                 </TableRowColumn>
               </TableRow>
               <TableRow>

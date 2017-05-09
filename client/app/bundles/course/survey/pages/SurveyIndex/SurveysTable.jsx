@@ -6,7 +6,7 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
 import history from 'lib/history';
-import moment from 'lib/moment';
+import { formatShortDateTime } from 'lib/moment';
 import translations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
 import { updateSurvey } from 'course/survey/actions/surveys';
@@ -115,10 +115,10 @@ class SurveysTable extends React.Component {
                   { survey.allow_response_after_end ? survey.time_bonus_exp : '-' }
                 </TableRowColumn>
                 <TableRowColumn colSpan={5}>
-                  { moment(survey.start_at).format('DD-MM-YYYY') }
+                  { formatShortDateTime(survey.start_at) }
                 </TableRowColumn>
                 <TableRowColumn colSpan={5}>
-                  { survey.end_at ? moment(survey.end_at).format('DD-MM-YYYY') : [] }
+                  { formatShortDateTime(survey.end_at) }
                 </TableRowColumn>
                 {
                   canCreate ?
