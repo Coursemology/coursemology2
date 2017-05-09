@@ -7,7 +7,9 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:course_student) { create(:course_student, course: course) }
-    let(:submission) { create(:submission, course: course, creator: course_student.user) }
+    let(:submission) do
+      create(:submission, :published, course: course, creator: course_student.user)
+    end
     let(:record) { submission.acting_as }
     let(:manual_record) do
       # Set the updater to a user not in the course to make sure the page still works in this case.

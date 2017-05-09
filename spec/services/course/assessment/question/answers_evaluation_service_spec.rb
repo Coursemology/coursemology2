@@ -8,7 +8,7 @@ RSpec.describe Course::Assessment::Question::AnswersEvaluationService do
     let(:question) { create(:course_assessment_question_multiple_response) }
     let(:student) { create(:course_student, course: question.assessment.course).user }
     let!(:submission) do
-      create(:submission, :graded, assessment: question.assessment, creator: student)
+      create(:submission, :submitted, assessment: question.assessment, creator: student)
     end
     let!(:answers) { submission.answers }
     subject { Course::Assessment::Question::AnswersEvaluationService.new(question) }
@@ -17,7 +17,9 @@ RSpec.describe Course::Assessment::Question::AnswersEvaluationService do
       before { subject.call }
 
       it 'auto grades the associated answers' do
-        expect(answers.all?(&:graded?)).to be_truthy
+        wait_for_job
+        answers.each(&:reload)
+        expect(answers.all?(&:evaluated?)).to be_truthy
       end
     end
   end

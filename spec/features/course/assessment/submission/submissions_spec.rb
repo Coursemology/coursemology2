@@ -55,7 +55,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
           within all(content_tag_selector(submission)).last do
             expect(page).
               to have_text(submission.class.human_attribute_name(submission.workflow_state))
-            expect(page).to have_text(submission.points_awarded)
+            expect(page).to have_text(submission.current_points_awarded)
           end
         end
 

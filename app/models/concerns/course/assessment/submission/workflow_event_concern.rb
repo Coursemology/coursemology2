@@ -23,6 +23,12 @@ module Course::Assessment::Submission::WorkflowEventConcern
     publish_answers
   end
 
+  def unmark(_ = nil)
+    answers.each do |answer|
+      answer.unmark! if answer.graded?
+    end
+  end
+
   # Handles the publishing of a submission.
   #
   # This grades all the answers as well.
@@ -59,14 +65,10 @@ module Course::Assessment::Submission::WorkflowEventConcern
   # not set during the event transition, hence they are not modifiable within the method itself.
   def assign_experience_points
     # publish event (from grade) - Deduce points awarded from draft or updated attribute.
-    if workflow_state_was == 'graded' && workflow_state == 'published'
+    if workflow_state == 'published' &&
+       (workflow_state_was == 'graded' || workflow_state_was == 'submitted')
       self.points_awarded ||= draft_points_awarded
       self.draft_points_awarded = nil
-
-    # grade event - If points are awarded, ignore draft_points, otherwise use draft_points_awarded.
-    elsif workflow_state_was == 'submitted' && workflow_state == 'graded'
-      self.draft_points_awarded = points_awarded
-      self.points_awarded = nil
     end
   end
 

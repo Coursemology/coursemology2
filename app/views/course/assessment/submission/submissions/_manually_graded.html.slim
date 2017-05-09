@@ -17,6 +17,7 @@
         finalise: @submission.attempting? && can?(:update, @submission),
         auto_grade: @submission.submitted? && can_grade,
         mark: @submission.submitted? && @assessment.delayed_grade_publication? && can_grade,
+        unmark: @submission.graded? && can_grade,
         publish: @submission.submitted? && !@assessment.delayed_grade_publication? && can_grade,
-        unsubmit: !@submission.attempting? && can_grade\
+        unsubmit: !@submission.attempting? && !@submission.graded? && can_grade\
       }
