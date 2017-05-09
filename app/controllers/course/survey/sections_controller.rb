@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Survey::SectionsController < Course::Survey::SurveysController
+class Course::Survey::SectionsController < Course::Survey::Controller
   load_and_authorize_resource :section, through: :survey, class: Course::Survey::Section.name
 
   def create

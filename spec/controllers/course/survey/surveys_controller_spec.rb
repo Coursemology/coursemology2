@@ -38,6 +38,17 @@ RSpec.describe Course::Survey::SurveysController do
         subject { get :index, course_id: course.id }
 
         it { is_expected.to render_template('index') }
+
+        context 'when survey component is disabled' do
+          before do
+            allow(controller).
+              to receive_message_chain('current_component_host.[]').and_return(nil)
+          end
+
+          it 'raises an component not found error' do
+            expect { subject }.to raise_error(ComponentNotFoundError)
+          end
+        end
       end
 
       context 'when json data is requested' do
