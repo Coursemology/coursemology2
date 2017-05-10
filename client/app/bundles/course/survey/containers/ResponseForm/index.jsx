@@ -93,6 +93,7 @@ class ResponseForm extends React.Component {
       canSubmit: PropTypes.bool.isRequired,
       canUnsubmit: PropTypes.bool.isRequired,
       isResponseCreator: PropTypes.bool.isRequired,
+      isSubmitting: PropTypes.bool.isRequired,
     }),
     response: responseShape.isRequired,
     onSubmit: PropTypes.func.isRequired,
@@ -127,7 +128,7 @@ class ResponseForm extends React.Component {
   }
 
   renderSaveButton() {
-    const { pristine, flags: { canModify } } = this.props;
+    const { pristine, flags: { canModify, isSubmitting } } = this.props;
     if (!canModify) { return null; }
 
     return (
@@ -137,14 +138,14 @@ class ResponseForm extends React.Component {
         primary
         label={<FormattedMessage {...formTranslations.save} />}
         buttonStyle={styles.saveButton}
-        disabled={pristine}
+        disabled={isSubmitting || pristine}
       />
     );
   }
 
   renderSubmitButton() {
     const {
-      handleSubmit, onSubmit, response, flags: { canSubmit, isResponseCreator },
+      handleSubmit, onSubmit, response, flags: { canSubmit, isResponseCreator, isSubmitting },
     } = this.props;
 
     if (!isResponseCreator) { return null; }
@@ -160,14 +161,14 @@ class ResponseForm extends React.Component {
         primary
         label={<FormattedMessage {...submitButtonTranslation} />}
         onTouchTap={handleSubmit(data => onSubmit({ ...data, submit: true }))}
-        disabled={!!response.submitted_at}
+        disabled={isSubmitting || !!response.submitted_at}
       />
     );
   }
 
   render() {
     const {
-      handleSubmit, onSubmit, response, flags: { canSubmit, canModify }, readOnly,
+      handleSubmit, onSubmit, response, flags: { canSubmit, canModify, isSubmitting }, readOnly,
     } = this.props;
 
     return (
@@ -175,7 +176,7 @@ class ResponseForm extends React.Component {
         <FieldArray
           name="sections"
           component={ResponseForm.renderSections}
-          disabled={readOnly || !(canModify || canSubmit)}
+          disabled={isSubmitting || readOnly || !(canModify || canSubmit)}
           {...{ response }}
         />
         <br />

@@ -20,6 +20,10 @@ class Course::Survey < ActiveRecord::Base
     end.present?
   end
 
+  def can_toggle_anonymity?
+    !anonymous || !has_student_response?
+  end
+
   def initialize_duplicate(duplicator, other)
     copy_attributes(other, duplicator.time_shift)
     self.sections = duplicator.duplicate(other.sections)
