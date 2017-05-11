@@ -54,13 +54,13 @@ export const AnswerProp =
 export const AssessmentProp =
   PropTypes.shape({
     autograded: PropTypes.bool.isRequired,
-    delayed_grade_publication: PropTypes.bool.isRequired,
+    delayedGradePublication: PropTypes.bool.isRequired,
     description: PropTypes.string,
     password: PropTypes.string,
-    password_protected: PropTypes.bool.isRequired,
+    passwordProtected: PropTypes.bool.isRequired,
     published: PropTypes.bool,
     skippable: PropTypes.bool.isRequired,
-    tabbed_view: PropTypes.bool.isRequired,
+    tabbedView: PropTypes.bool.isRequired,
     title: PropTypes.string,
   });
 

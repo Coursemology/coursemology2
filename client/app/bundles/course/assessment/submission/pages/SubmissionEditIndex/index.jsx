@@ -5,7 +5,7 @@ import ProgressPanel from '../../components/ProgressPanel';
 import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEditTabForm from './SubmissionEditTabForm';
-import { fetchSubmission, updateSubmission } from '../../actions';
+import { updateAnswer, fetchSubmission, updateSubmission } from '../../actions';
 import { AssessmentProp, ProgressProp, ReduxFormProp, SubmissionProp, TopicProp } from '../../propTypes';
 import { DATA_STATES } from '../../constants';
 
@@ -22,6 +22,19 @@ class VisibleSubmissionEditIndex extends Component {
     updateData(params.submissionId, data);
   }
 
+  handleSubmitAnswer(answerIndex, action) {
+    const { form, updateAnswerData, match: { params } } = this.props;
+    const data = {
+      submission: {
+        answers: [
+          form.values.answers[answerIndex],
+        ],
+      },
+    };
+    if (action) data.submission[action] = true;
+    updateAnswerData(params.submissionId, data);
+  }
+
   renderProgress() {
     const { progress, canGrade } = this.props;
     if (canGrade) {
@@ -31,22 +44,32 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   renderContent() {
-    const { assessment: { autograded, tabbed_view, skippable }, submission, topics, canGrade } = this.props;
+    const {
+      assessment: { autograded, tabbedView, skippable },
+      canGrade,
+      maxStep,
+      submission,
+      topics,
+    } = this.props;
+
     if (autograded) {
       return (
         <SubmissionEditStepForm
-          handleSubmit={this.handleSubmit}
+          enableReinitialize
+          handleSubmit={(answer, action) => this.handleSubmitAnswer(answer, action)}
           initialValues={submission}
           canGrade={canGrade}
+          maxStep={maxStep}
           skippable={skippable}
           topics={topics}
           {...{ submission }}
         />
       );
-    } else if (tabbed_view) { // eslint-disable-line camelcase
+    } else if (tabbedView) { // eslint-disable-line camelcase
       return (
         <SubmissionEditTabForm
-          handleSubmit={() => this.handleSubmit()}
+          enableReinitialize
+          handleSubmit={action => this.handleSubmit(action)}
           initialValues={submission}
           canGrade={canGrade}
           topics={topics}
@@ -55,6 +78,7 @@ class VisibleSubmissionEditIndex extends Component {
     }
     return (
       <SubmissionEditForm
+        enableReinitialize
         handleSubmit={action => this.handleSubmit(action)}
         initialValues={submission}
         canGrade={canGrade}
@@ -90,6 +114,7 @@ VisibleSubmissionEditIndex.propTypes = {
   assessment: AssessmentProp,
   canGrade: PropTypes.bool,
   form: ReduxFormProp,
+  maxStep: PropTypes.number,
   progress: ProgressProp,
   submission: SubmissionProp,
   topics: PropTypes.arrayOf(TopicProp),
@@ -97,6 +122,7 @@ VisibleSubmissionEditIndex.propTypes = {
 
   fetchData: PropTypes.func.isRequired,
   updateData: PropTypes.func.isRequired,
+  updateAnswerData: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -104,6 +130,7 @@ function mapStateToProps(state) {
     assessment: state.submissionEdit.assessment,
     canGrade: state.submissionEdit.canGrade,
     form: state.form.submissionEdit,
+    maxStep: state.submissionEdit.maxStep,
     progress: state.submissionEdit.progress,
     submission: state.submissionEdit.submission,
     topics: state.submissionEdit.topics,
@@ -115,6 +142,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchData: id => dispatch(fetchSubmission(id)),
     updateData: (id, payload) => dispatch(updateSubmission(id, payload)),
+    updateAnswerData: (id, payload) => dispatch(updateAnswer(id, payload)),
   };
 }
 

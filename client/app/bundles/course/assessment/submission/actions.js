@@ -14,17 +14,12 @@ export function fetchSubmission(id) {
         });
       })
       .catch(() => {
-        dispatch({
-          type: actionTypes.FETCH_SUBMISSION_FAILURE,
-        });
+        dispatch({ type: actionTypes.FETCH_SUBMISSION_FAILURE });
       });
   };
 }
 
-export function updateSubmission(
-  submissionId,
-  payload
-) {
+export function updateSubmission(submissionId, payload) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_SUBMISSION_REQUEST });
 
@@ -39,6 +34,25 @@ export function updateSubmission(
       })
       .catch(() => {
         dispatch({ type: actionTypes.UPDATE_SUBMISSION_FAILURE });
+      });
+  };
+}
+
+export function updateAnswer(submissionId, payload) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.UPDATE_ANSWER_REQUEST });
+
+    return CourseAPI.assessment.submissions.update(submissionId, payload)
+      .then(response => response.data)
+      .then((data) => {
+        console.log(data);
+        dispatch({
+          type: actionTypes.UPDATE_ANSWER_SUCCESS,
+          answer: data,
+        });
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.UPDATE_ANSWER_FAILURE });
       });
   };
 }

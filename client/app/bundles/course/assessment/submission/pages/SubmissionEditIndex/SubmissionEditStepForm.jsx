@@ -28,8 +28,7 @@ class SubmissionEditStepForm extends Component {
   }
 
   static renderAnswers(props) {
-    const { input: { name }, canGrade, topics, answer } = props;
-    const topic = topics.filter(t => t.id === answer.id)[0];
+    const { input: { name }, canGrade, topic, answer } = props;
     return (
       <div>
         <SubmissionAnswer
@@ -43,8 +42,12 @@ class SubmissionEditStepForm extends Component {
     );
   }
 
-  state = {
-    stepIndex: 0,
+  constructor(props) {
+    console.log(props.maxStep);
+    super(props);
+    this.state = {
+      stepIndex: props.maxStep,
+    };
   }
 
   handleNext() {
@@ -55,21 +58,20 @@ class SubmissionEditStepForm extends Component {
   }
 
   handleStepClick(index) {
-    const { stepIndex } = this.state;
-    const { skippable } = this.props;
+    const { skippable, maxStep } = this.props;
 
-    if (skippable || index < stepIndex) {
+    if (skippable || index < maxStep) {
       this.setState({
         stepIndex: index,
       });
     }
   }
 
-  handleQuestionSubmit() {
+  handleQuestionSubmit(action) {
     const { stepIndex } = this.state;
     const { submission: { answers }, handleSubmit } = this.props;
 
-    handleSubmit();
+    handleSubmit(stepIndex, action);
     if (!SubmissionEditStepForm.isLastQuestion(answers, stepIndex)) {
       this.handleNext();
     }
@@ -112,7 +114,7 @@ class SubmissionEditStepForm extends Component {
             <Field
               name={`answers[${stepIndex}]`}
               component={SubmissionEditStepForm.renderAnswers}
-              {...{ canGrade, topics, answer: answers[stepIndex] }}
+              {...{ canGrade, topic: topics[stepIndex], answer: answers[stepIndex] }}
             />
           </form>
           <hr />
@@ -126,10 +128,19 @@ class SubmissionEditStepForm extends Component {
           <RaisedButton
             style={styles.formButton}
             secondary
-            label="Finalise Submission"
-            onTouchTap={() => this.handleQuestionSubmit()}
-            disabled={pristine || submitting}
+            label="Submit"
+            onTouchTap={() => this.handleQuestionSubmit('auto_grade')}
+            disabled={submitting}
           />
+          { SubmissionEditStepForm.isLastQuestion(answers, stepIndex) ?
+            <RaisedButton
+              style={styles.formButton}
+              secondary
+              label="Finalise Submission"
+              onTouchTap={() => this.handleQuestionSubmit('finalise')}
+              disabled={pristine || submitting}
+            /> : null
+          }
         </Card>
       </div>
     );
@@ -138,11 +149,12 @@ class SubmissionEditStepForm extends Component {
 
 SubmissionEditStepForm.propTypes = {
   canGrade: PropTypes.bool.isRequired,
+  maxStep: PropTypes.number.isRequired,
+  pristine: PropTypes.bool,
   skippable: PropTypes.bool.isRequired,
   submission: SubmissionProp,
-  topics: PropTypes.arrayOf(TopicProp),
-  pristine: PropTypes.bool,
   submitting: PropTypes.bool,
+  topics: PropTypes.arrayOf(TopicProp),
   handleSubmit: PropTypes.func,
 };
 

@@ -29,6 +29,9 @@ const actionTypes = mirrorCreator([
   'UPDATE_SUBMISSION_REQUEST',
   'UPDATE_SUBMISSION_SUCCESS',
   'UPDATE_SUBMISSION_FAILURE',
+  'UPDATE_ANSWER_REQUEST',
+  'UPDATE_ANSWER_SUCCESS',
+  'UPDATE_ANSWER_FAILURE',
 ]);
 
 export default actionTypes;

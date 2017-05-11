@@ -63,7 +63,7 @@ class SubmissionEditTabForm extends Component {
           style={styles.formButton}
           secondary
           label="Finalise Submission"
-          onTouchTap={handleSubmit}
+          onTouchTap={() => handleSubmit('finalise')}
           disabled={pristine || submitting}
         />
       </Card>

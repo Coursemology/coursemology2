@@ -1,5 +1,0 @@
-div.panel class="#{explanation_panel_class(answer)}"
-  div.panel-heading = answer.correct? ? t('.correct') : t('.wrong')
-  div.panel-body
-    - answer.auto_grading.result['messages'].each do |explanation|
-      div = format_html(explanation)

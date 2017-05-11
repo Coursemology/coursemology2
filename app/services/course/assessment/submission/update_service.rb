@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update
-    if update_submission
-      render partial: 'submission'
+    if auto_grade?
+      submit_answer
+    elsif update_submission
+      render partial: 'submission', locals: { can_grade: can?(:grade, @submission),
+                                              submission: @submission }
     else
       render json: { errors: @submission.errors }, status: :bad_request
     end
@@ -48,11 +51,6 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     params.require(:submission).permit(answers: [:id] + update_answer_params)
   end
 
-  def submit_answer_params
-    params.require(:submission).require(:answers_attributes).
-      require(answer_id_param).permit(actable_attributes: [:id, update_answer_type_params])
-  end
-
   private
 
   # The permitted state changes that will be provided to the model.
@@ -92,12 +90,12 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     scalar_params.push(array_params)
   end
 
-  def answer_id_param
-    params.permit(:answer_id)[:answer_id]
-  end
-
   def edit_submission_path
     edit_course_assessment_submission_path(current_course, @assessment, @submission)
+  end
+
+  def questions_to_attempt
+    @questions_to_attempt ||= @submission.assessment.questions
   end
 
   # Find the questions for this submission without submission_questions.
@@ -118,36 +116,49 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     new_submission_questions.any?
   end
 
+  def submit_answer
+    answer_params = update_answers_params[:answers].first
+    answer = @submission.answers.find(answer_params[:id].to_i)
+    update_answer(answer, answer_params)
+    auto_grade(answer)
+
+  end
+
   def update_submission
     @submission.class.transaction do
       update_answers_params[:answers].each do |answer_params|
         answer = @submission.answers.find { |answer| answer.id == answer_params[:id].to_i }
-        actable_answer = answer.specific
-        actable_answer.assign_params(answer_params)
-        actable_answer.save!
+        update_answer(answer, answer_params)
       end unless unsubmit?
 
       @submission.update(update_submission_params)
     end
   end
 
-  def submit_answer
-    answer = @submission.answers.find(answer_id_param)
+  def update_answer(answer, answer_params)
+    specific_answer = answer.specific
+    specific_answer.assign_params(answer_params)
+    specific_answer.save!
+  end
 
-    if answer.update_attributes(submit_answer_params)
-      if valid_for_grading?(answer)
-        job = grade_and_reattempt_answer(answer)
+  def unsubmit?
+    params[:submission] && params[:submission][:unsubmit].present?
+  end
 
-        respond_to do |format|
-          format.json { render json: { redirect_url: job ? job_path(job.job) : nil } }
-        end
-      else
-        # TODO: Implement error recovery in the frontend. Code only goes here if user hacks the html
-        # and enables the submit button.
-        head :bad_request
-      end
+  def auto_grade?
+    params[:submission] && params[:submission][:auto_grade].present?
+  end
+
+  def auto_grade(answer)
+    return unless valid_for_grading?(answer)
+    job = grade_and_reattempt_answer(answer)
+    if job
+      render json: { redirect_url: job_path(job.job) }
     else
-      head :bad_request
+      current_question = answer.try(:question)
+      new_answer = @submission.answers.from_question(current_question.id).last
+      render partial: new_answer, locals: { answer: new_answer,
+                                            can_grade: can?(:grade, @submission) }
     end
   end
 
@@ -163,12 +174,9 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     end
   end
 
-  def unsubmit?
-    params[:submission] && params[:submission][:unsubmit].present?
-  end
-
   # Test whether the answer can be graded or not.
   def valid_for_grading?(answer)
+    return true if @assessment.autograded?
     return true unless answer.specific.is_a?(Course::Assessment::Answer::Programming)
 
     answer.specific.attempting_times_left > 0 || can?(:manage, @assessment)
