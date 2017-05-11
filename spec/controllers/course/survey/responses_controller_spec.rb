@@ -24,8 +24,41 @@ RSpec.describe Course::Survey::ResponsesController do
     end
     let(:survey_traits) { nil }
     let(:response_traits) { nil }
+    let(:json_response) { JSON.parse(response.body) }
 
     before { sign_in(user) }
+
+    describe '#index' do
+      let(:user) { create(:administrator) }
+
+      context 'when html page is requested' do
+        subject { get :index, course_id: course.id, survey_id: survey.id }
+
+        it { is_expected.to render_template('index') }
+      end
+
+      context 'when json data is requested' do
+        render_views
+        subject { get :index, format: :json, course_id: course.id, survey_id: survey.id }
+        before do
+          survey_response
+          subject
+        end
+
+        it 'responds with the necessary fields' do
+          expect(json_response.keys).to contain_exactly('survey', 'responses')
+
+          first_response = json_response['responses'].first
+          expect(first_response.keys).to contain_exactly(
+            'present', 'course_user', 'canUnsubmit', 'id', 'path', 'submitted_at'
+          )
+
+          expect(first_response['course_user'].keys).to contain_exactly(
+            'id', 'name', 'path', 'phantom'
+          )
+        end
+      end
+    end
 
     describe '#create' do
       let(:create_response_request) do
@@ -52,7 +85,7 @@ RSpec.describe Course::Survey::ResponsesController do
           it 'responds with details of the existing survey response' do
             expect { create_response_request }.to change { survey.responses.count }.by(0)
             expect(response.status).to eq(303)
-            expect(JSON.parse(response.body)).to eq(
+            expect(json_response).to eq(
               'responseId' => survey_response.id,
               'canModify' => true,
               'canSubmit' => true

@@ -17,5 +17,5 @@ json.responses @course_students do |student|
   end
 end
 json.survey do
-  json.partial! 'survey', survey: @survey
+  json.partial! 'course/survey/surveys/survey', survey: @survey
 end

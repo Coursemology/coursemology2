@@ -4,10 +4,11 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
 
   def index
     authorize!(:manage, @survey)
-    @course_students = current_course.course_users.students.order_alphabetically
     respond_to do |format|
       format.html { render 'course/survey/surveys/index' }
-      format.json
+      format.json do
+        @course_students = current_course.course_users.students.order_alphabetically
+      end
     end
   end
 
