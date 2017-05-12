@@ -12,4 +12,10 @@ class Course::Survey::Controller < Course::ComponentController
   def component
     current_component_host[:course_survey_component]
   end
+
+  def load_sections
+    @sections ||=
+      @survey.sections.accessible_by(current_ability).
+      includes(questions: { options: { attachment_references: :attachment } })
+  end
 end

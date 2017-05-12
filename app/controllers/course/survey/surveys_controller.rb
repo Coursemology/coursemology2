@@ -57,12 +57,6 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   private
 
-  def load_sections
-    @sections ||=
-      @survey.sections.accessible_by(current_ability).
-      includes(questions: { options: { attachment_references: :attachment } })
-  end
-
   def render_survey_with_questions_json
     load_sections
     render partial: 'survey_with_questions', locals: { survey: @survey }
