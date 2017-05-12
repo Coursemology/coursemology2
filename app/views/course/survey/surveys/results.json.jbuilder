@@ -22,7 +22,7 @@ json.sections @sections do |section|
       if question.text?
         json.(answer, :text_response)
       else
-        json.selected_options answer.options.select(&:selected).map(&:question_option_id)
+        json.selected_options answer.options.map(&:question_option_id)
       end
     end
   end
