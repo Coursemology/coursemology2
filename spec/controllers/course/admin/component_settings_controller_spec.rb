@@ -36,7 +36,7 @@ RSpec.describe Course::Admin::ComponentSettingsController, type: :controller do
         expect(settings.enabled_component_ids.to_set).to eq(ids_to_enable.to_set)
       end
 
-      context 'when updated settings are invalid', focus: true do
+      context 'when updated settings are invalid' do
         let(:settings_stub) do
           stub = double
           allow(stub).to receive(:valid_params?).and_return(true)
