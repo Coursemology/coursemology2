@@ -232,7 +232,7 @@ RSpec.describe Course::Survey::SurveysController do
 
         subject { get :results, format: :json, course_id: course.id, id: survey.id }
         before do
-          student_response.build_missing_answers_and_options
+          student_response.build_missing_answers
           student_response.save!
           subject
         end

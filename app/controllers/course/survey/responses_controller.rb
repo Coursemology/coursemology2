@@ -38,7 +38,7 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
     respond_to do |format|
       format.html { render 'course/survey/surveys/index' }
       format.json do
-        @response.build_missing_answers_and_options
+        @response.build_missing_answers
         if @response.save
           render_response_json
         else
@@ -86,7 +86,7 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
 
   def build_response
     @response.experience_points_record.course_user = current_course_user
-    @response.build_missing_answers_and_options
+    @response.build_missing_answers
   end
 
   def load_answers
