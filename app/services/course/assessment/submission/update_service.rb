@@ -4,8 +4,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     if auto_grade?
       submit_answer
     elsif update_submission
-      render partial: 'submission', locals: { can_grade: can?(:grade, @submission),
-                                              submission: @submission }
+      render 'edit'
     else
       render json: { errors: @submission.errors }, status: :bad_request
     end
@@ -121,7 +120,6 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     answer = @submission.answers.find(answer_params[:id].to_i)
     update_answer(answer, answer_params)
     auto_grade(answer)
-
   end
 
   def update_submission
@@ -157,8 +155,9 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     else
       current_question = answer.try(:question)
       new_answer = @submission.answers.from_question(current_question.id).last
-      render partial: new_answer, locals: { answer: new_answer,
-                                            can_grade: can?(:grade, @submission) }
+      render partial: 'answers', locals: { latest_attempts: [new_answer],
+                                           previous_attempts: [answer],
+                                           can_grade: can?(:grade, @submission) }
     end
   end
 

@@ -6,7 +6,7 @@ import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEditTabForm from './SubmissionEditTabForm';
 import { updateAnswer, fetchSubmission, updateSubmission } from '../../actions';
-import { AssessmentProp, ProgressProp, ReduxFormProp, SubmissionProp, TopicProp } from '../../propTypes';
+import { AnswerProp, AssessmentProp, ProgressProp, QuestionProp, ReduxFormProp, TopicProp } from '../../propTypes';
 import { DATA_STATES } from '../../constants';
 
 class VisibleSubmissionEditIndex extends Component {
@@ -17,17 +17,17 @@ class VisibleSubmissionEditIndex extends Component {
 
   handleSubmit(action) {
     const { form, updateData, match: { params } } = this.props;
-    const data = { submission: form.values };
+    const data = { submission: { answers: Object.values(form.values) } };
     if (action) data.submission[action] = true;
     updateData(params.submissionId, data);
   }
 
-  handleSubmitAnswer(answerIndex, action) {
+  handleSubmitAnswer(answerId, action) {
     const { form, updateAnswerData, match: { params } } = this.props;
     const data = {
       submission: {
         answers: [
-          form.values.answers[answerIndex],
+          form.values[answerId],
         ],
       },
     };
@@ -48,7 +48,8 @@ class VisibleSubmissionEditIndex extends Component {
       assessment: { autograded, tabbedView, skippable },
       canGrade,
       maxStep,
-      submission,
+      answers,
+      questions,
       topics,
     } = this.props;
 
@@ -57,12 +58,12 @@ class VisibleSubmissionEditIndex extends Component {
         <SubmissionEditStepForm
           enableReinitialize
           handleSubmit={(answer, action) => this.handleSubmitAnswer(answer, action)}
-          initialValues={submission}
+          initialValues={answers}
           canGrade={canGrade}
           maxStep={maxStep}
           skippable={skippable}
+          questions={questions}
           topics={topics}
-          {...{ submission }}
         />
       );
     } else if (tabbedView) { // eslint-disable-line camelcase
@@ -70,8 +71,9 @@ class VisibleSubmissionEditIndex extends Component {
         <SubmissionEditTabForm
           enableReinitialize
           handleSubmit={action => this.handleSubmit(action)}
-          initialValues={submission}
+          initialValues={answers}
           canGrade={canGrade}
+          questions={questions}
           topics={topics}
         />
       );
@@ -80,8 +82,9 @@ class VisibleSubmissionEditIndex extends Component {
       <SubmissionEditForm
         enableReinitialize
         handleSubmit={action => this.handleSubmit(action)}
-        initialValues={submission}
+        initialValues={answers}
         canGrade={canGrade}
+        questions={questions}
         topics={topics}
       />
     );
@@ -111,13 +114,18 @@ VisibleSubmissionEditIndex.propTypes = {
       submissionId: PropTypes.string,
     }),
   }),
+  answers: PropTypes.objectOf(AnswerProp),
   assessment: AssessmentProp,
   canGrade: PropTypes.bool,
+  canUpdate: PropTypes.bool,
   form: ReduxFormProp,
   maxStep: PropTypes.number,
   progress: ProgressProp,
-  submission: SubmissionProp,
-  topics: PropTypes.arrayOf(TopicProp),
+  questions: PropTypes.shape({
+    byId: PropTypes.objectOf(QuestionProp),
+    allIds: PropTypes.arrayOf(PropTypes.number),
+  }),
+  topics: PropTypes.objectOf(TopicProp),
   dataState: PropTypes.string.isRequired,
 
   fetchData: PropTypes.func.isRequired,
@@ -127,13 +135,14 @@ VisibleSubmissionEditIndex.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    answers: state.answers,
     assessment: state.submissionEdit.assessment,
     canGrade: state.submissionEdit.canGrade,
     form: state.form.submissionEdit,
     maxStep: state.submissionEdit.maxStep,
     progress: state.submissionEdit.progress,
-    submission: state.submissionEdit.submission,
-    topics: state.submissionEdit.topics,
+    questions: state.questions,
+    topics: state.topics,
     dataState: state.submissionEdit.dataState,
   };
 }

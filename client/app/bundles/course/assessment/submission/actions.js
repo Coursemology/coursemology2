@@ -28,8 +28,7 @@ export function updateSubmission(submissionId, payload) {
       .then((data) => {
         dispatch({
           type: actionTypes.UPDATE_SUBMISSION_SUCCESS,
-          progress: data.progress,
-          submission: data.submission,
+          payload: data,
         });
       })
       .catch(() => {
@@ -45,10 +44,9 @@ export function updateAnswer(submissionId, payload) {
     return CourseAPI.assessment.submissions.update(submissionId, payload)
       .then(response => response.data)
       .then((data) => {
-        console.log(data);
         dispatch({
           type: actionTypes.UPDATE_ANSWER_SUCCESS,
-          answer: data,
+          payload: data,
         });
       })
       .catch(() => {

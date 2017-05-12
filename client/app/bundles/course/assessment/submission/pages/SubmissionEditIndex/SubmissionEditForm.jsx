@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import { FieldArray, reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import { Card } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import { TopicProp } from '../../propTypes';
+import { QuestionProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import Comments from '../../components/Comments';
 import CommentField from '../../components/CommentField';
@@ -23,16 +23,17 @@ const styles = {
 
 class SubmissionEditForm extends Component {
 
-  static renderAnswers(props) {
-    const { canGrade, topics, fields } = props;
+  renderQuestions() {
+    const { canGrade, questions, topics } = this.props;
     return (
       <div>
-        {fields.map((member, index) => {
-          const answer = fields.get(index);
-          const topic = topics.filter(t => t.id === answer.id)[0];
+        {questions.allIds.map((id) => {
+          const question = questions.byId[id];
+          const answerId = question.answerId;
+          const topic = topics[question.topicId];
           return (
-            <div key={answer.id} style={styles.questionContainer}>
-              <SubmissionAnswer {...{ canGrade, member, answer }} />
+            <div key={id} style={styles.questionContainer}>
+              <SubmissionAnswer {...{ canGrade, answerId, question }} />
               <Comments topic={topic} />
               <CommentField />
               <hr />
@@ -44,15 +45,13 @@ class SubmissionEditForm extends Component {
   }
 
   render() {
-    const { canGrade, topics, pristine, submitting, handleSubmit } = this.props;
+    const {
+      canGrade, pristine, submitting, handleSubmit,
+    } = this.props;
     return (
       <Card style={styles.questionCardContainer}>
         <form>
-          <FieldArray
-            name="answers"
-            component={SubmissionEditForm.renderAnswers}
-            {...{ canGrade, topics }}
-          />
+          {this.renderQuestions()}
         </form>
         <RaisedButton
           style={styles.formButton}
@@ -82,7 +81,11 @@ class SubmissionEditForm extends Component {
 
 SubmissionEditForm.propTypes = {
   canGrade: PropTypes.bool.isRequired,
-  topics: PropTypes.arrayOf(TopicProp),
+  questions: PropTypes.shape({
+    byIds: PropTypes.objectOf(QuestionProp),
+    allIds: PropTypes.arrayOf(PropTypes.number),
+  }),
+  topics: PropTypes.objectOf(TopicProp),
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
   handleSubmit: PropTypes.func,

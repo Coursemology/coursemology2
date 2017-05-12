@@ -18,21 +18,21 @@ import Editor from '../components/Editor';
 import { TestCaseTypes } from '../constants';
 
 export default class Answers extends Component {
-  static renderMultipleChoice(answer, member) {
+  static renderMultipleChoice(question, answerId) {
     return (
       <Field
-        name={`${member}[option_ids][0]`}
+        name={`${answerId}[option_ids][0]`}
         component={Answers.renderMultipleChoiceOptions}
-        {...{ answer, member }}
+        {...{ question, answerId }}
       />
     );
   }
 
   static renderMultipleChoiceOptions(props) {
-    const { answer, input: { onChange, value } } = props;
+    const { question, input: { onChange, value } } = props;
     return (
       <div>
-        {answer.options.map(option =>
+        {question.options.map(option =>
           <RadioButton
             key={option.id}
             value={option.id}
@@ -47,48 +47,48 @@ export default class Answers extends Component {
     );
   }
 
-  static renderMultipleResponse(answer, member) {
+  static renderMultipleResponse(question, answerId) {
     return (
       <Field
-        name={`${member}[option_ids]`}
+        name={`${answerId}[option_ids]`}
         component={CheckboxFormGroup}
-        options={answer.options}
+        options={question.options}
       />
     );
   }
 
-  static renderFileUploader(answer, member) {
+  static renderFileUploader(question, answerId) {
     return (
-      <FileInput name={`${member}[file]`} inputOptions={{ multiple: false }}>
+      <FileInput name={`${answerId}[file]`} inputOptions={{ multiple: false }}>
         <p>Choose file</p>
       </FileInput>
     );
   }
 
-  static renderTextResponse(answer, member) {
-    const allowUpload = answer.allow_attachment;
+  static renderTextResponse(question, answerId) {
+    const allowUpload = question.allow_attachment;
 
     return (
       <div>
-        <Field name={`${member}[answer_text]`} component={RichTextField} multiLine />
-        {allowUpload ? Answers.renderFileUploader(answer, member) : null}
+        <Field name={`${answerId}[answer_text]`} component={RichTextField} multiLine />
+        {allowUpload ? Answers.renderFileUploader(question, answerId) : null}
       </div>
     );
   }
 
-  static renderFileUpload(answer, member) {
+  static renderFileUpload(question, answerId) {
     return (
       <div>
-        {Answers.renderFileUploader(answer, member)}
+        {Answers.renderFileUploader(question, answerId)}
       </div>
     );
   }
 
-  static renderProgrammingEditor(file, member, language) {
+  static renderProgrammingEditor(file, answerId, language) {
     return (
       <div key={file.filename}>
         <h5>Content</h5>
-        <Editor name={`${member}[content]`} filename={file.filename} language={language} />
+        <Editor name={`${answerId}[content]`} filename={file.filename} language={language} />
       </div>
     );
   }
@@ -183,22 +183,22 @@ export default class Answers extends Component {
     const { fields } = props;
     return (
       <div>
-        {fields.map((member, index) => {
+        {fields.map((answerId, index) => {
           const file = fields.get(index);
-          return Answers.renderProgrammingEditor(file, member, 'python');
+          return Answers.renderProgrammingEditor(file, answerId, 'python');
         })}
       </div>
     );
   }
 
-  static renderProgramming(answer, member, canGrade) {
+  static renderProgramming(question, answerId, canGrade) {
     return (
       <div>
         <FieldArray
-          name={`${member}[files]`}
+          name={`${answerId}[files]`}
           component={Answers.renderProgrammingFiles}
         />
-        {Answers.renderProgrammingTestCases(answer.test_cases, canGrade)}
+        {Answers.renderProgrammingTestCases(question.test_cases, canGrade)}
       </div>
     );
   }

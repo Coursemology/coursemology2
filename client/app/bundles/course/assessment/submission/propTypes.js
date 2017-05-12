@@ -1,21 +1,10 @@
 import { PropTypes } from 'react';
 
-export const QuestionProp =
-PropTypes.shape({
-  description: PropTypes.string.isRequired,
-  display_title: PropTypes.string.isRequired,
-});
-
 const OptionProp =
   PropTypes.shape({
     id: PropTypes.number.isRequired,
     option: PropTypes.string.isRequired,
-  });
-
-const FileProp =
-  PropTypes.shape({
-    content: PropTypes.string,
-    filename: PropTypes.string,
+    correct: PropTypes.bool,
   });
 
 const TestCaseProp =
@@ -25,6 +14,27 @@ const TestCaseProp =
     expected: PropTypes.string.isRequired,
     hint: PropTypes.string,
     type: PropTypes.string.isRequired,
+  });
+
+export const QuestionProp =
+PropTypes.shape({
+  allow_attachment: PropTypes.bool,
+  description: PropTypes.string.isRequired,
+  displayTitle: PropTypes.string.isRequired,
+  language: PropTypes.string,
+  maximumGrade: PropTypes.number.isRequired,
+  options: PropTypes.arrayOf(OptionProp),
+  type: PropTypes.string.isRequired,
+  answerId: PropTypes.number,
+  explanationId: PropTypes.number,
+  topicId: PropTypes.number,
+  testCases: PropTypes.arrayOf(TestCaseProp),
+});
+
+const FileProp =
+  PropTypes.shape({
+    content: PropTypes.string,
+    filename: PropTypes.string,
   });
 
 const PostProp =
@@ -38,17 +48,10 @@ const PostProp =
 
 export const AnswerProp =
   PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    allow_attachment: PropTypes.bool,
     answer_text: PropTypes.string,
     file: PropTypes.object,
     files: PropTypes.arrayOf(FileProp),
-    language: PropTypes.string,
-    options: PropTypes.arrayOf(OptionProp),
     option_ids: PropTypes.arrayOf(PropTypes.number),
-    question: QuestionProp.isRequired,
-    test_cases: PropTypes.arrayOf(TestCaseProp),
-    type: PropTypes.string.isRequired,
   });
 
 export const AssessmentProp =
@@ -73,16 +76,10 @@ export const ProgressProp =
     graded_at: PropTypes.string,
     grader: PropTypes.string,
     late: PropTypes.bool,
-    maximum_grade: PropTypes.number,
     points_awarded: PropTypes.number,
     submitted_at: PropTypes.string,
     submitter: PropTypes.string,
     workflow_state: PropTypes.string,
-  });
-
-export const SubmissionProp =
-  PropTypes.shape({
-    answers: PropTypes.arrayOf(AnswerProp),
   });
 
 export const ReduxFormProp =

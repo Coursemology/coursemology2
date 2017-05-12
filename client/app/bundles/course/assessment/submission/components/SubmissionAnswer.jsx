@@ -1,21 +1,20 @@
 /* eslint-disable react/no-danger */
 
 import React, { PropTypes } from 'react';
-import { Field } from 'redux-form';
-import { AnswerProp } from '../propTypes';
+import { QuestionProp } from '../propTypes';
 import { questionTypes } from '../constants';
 import Answers from './Answers';
 
 class SubmissionAnswer extends React.Component {
   static propTypes = {
     canGrade: PropTypes.bool.isRequired,
-    member: PropTypes.string.isRequired,
-    answer: AnswerProp,
+    question: QuestionProp,
+    answerId: PropTypes.number,
   };
 
-  static getRenderer(answer) {
+  static getRenderer(question) {
     const { MultipleChoice, MultipleResponse, TextResponse, FileUpload, Programming } = questionTypes;
-    switch (answer.type) {
+    switch (question.type) {
       case MultipleChoice:
         return Answers.renderMultipleChoice;
       case MultipleResponse:
@@ -32,18 +31,17 @@ class SubmissionAnswer extends React.Component {
   }
 
   render() {
-    const { canGrade, member, answer } = this.props;
+    const { canGrade, question, answerId } = this.props;
 
-    const renderer = SubmissionAnswer.getRenderer(answer);
+    const renderer = SubmissionAnswer.getRenderer(question);
     if (!renderer) { return <div />; }
 
     return (
       <div>
-        <h3>{answer.question.display_title}</h3>
-        <div dangerouslySetInnerHTML={{ __html: answer.question.description }} />
+        <h3>{question.display_title}</h3>
+        <div dangerouslySetInnerHTML={{ __html: question.description }} />
         <hr />
-        <Field name={`${member}[id]`} component="hidden" />
-        { renderer(answer, member, canGrade) }
+        { renderer(question, answerId, canGrade) }
       </div>
     );
   }

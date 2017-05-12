@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import { Card } from 'material-ui/Card';
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import { SubmissionProp, TopicProp } from '../../propTypes';
+import { QuestionProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import Comments from '../../components/Comments';
 import CommentField from '../../components/CommentField';
@@ -23,27 +23,11 @@ const styles = {
 
 class SubmissionEditStepForm extends Component {
 
-  static isLastQuestion(answers, stepIndex) {
-    return stepIndex + 1 === answers.length;
-  }
-
-  static renderAnswers(props) {
-    const { input: { name }, canGrade, topic, answer } = props;
-    return (
-      <div>
-        <SubmissionAnswer
-          key={answer.id}
-          {...{ canGrade, member: name, answer }}
-        />
-        <hr />
-        <Comments topic={topic} />
-        <CommentField />
-      </div>
-    );
+  static isLastQuestion(questions, stepIndex) {
+    return stepIndex + 1 === questions.length;
   }
 
   constructor(props) {
-    console.log(props.maxStep);
     super(props);
     this.state = {
       stepIndex: props.maxStep,
@@ -69,23 +53,45 @@ class SubmissionEditStepForm extends Component {
 
   handleQuestionSubmit(action) {
     const { stepIndex } = this.state;
-    const { submission: { answers }, handleSubmit } = this.props;
+    const { questions, handleSubmit } = this.props;
 
-    handleSubmit(stepIndex, action);
-    if (!SubmissionEditStepForm.isLastQuestion(answers, stepIndex)) {
+    const questionId = questions.allIds[stepIndex];
+    const question = questions.byId[questionId];
+    const answerId = question.answerId;
+
+    handleSubmit(answerId, action);
+    if (!SubmissionEditStepForm.isLastQuestion(questions.allIds, stepIndex)) {
       this.handleNext();
     }
   }
 
+  renderStepQuestion() {
+    const { stepIndex } = this.state;
+    const { canGrade, questions, topics } = this.props;
+
+    const id = questions.allIds[stepIndex];
+    const question = questions.byId[id];
+    const answerId = question.answerId;
+    const topic = topics[question.topicId];
+    return (
+      <div>
+        <SubmissionAnswer {...{ canGrade, answerId, question }} />
+        <hr />
+        <Comments topic={topic} />
+        <CommentField />
+      </div>
+    );
+  }
+
   renderStepper() {
     const { stepIndex } = this.state;
-    const { skippable, submission: { answers } } = this.props;
+    const { skippable, questions: { allIds: questions } } = this.props;
 
     if (skippable) {
       return (
         <Stepper activeStep={stepIndex} linear={false}>
-          {answers.map((answer, index) =>
-            <Step key={answer.id}>
+          {questions.map((questionId, index) =>
+            <Step key={questionId}>
               <StepButton onClick={() => this.handleStepClick(index)} />
             </Step>
           )}
@@ -94,8 +100,8 @@ class SubmissionEditStepForm extends Component {
     }
     return (
       <Stepper activeStep={stepIndex}>
-        {answers.map((answer, index) =>
-          <Step key={answer.id} onClick={() => this.handleStepClick(index)}>
+        {questions.map((questionId, index) =>
+          <Step key={questionId} onClick={() => this.handleStepClick(index)}>
             <StepLabel />
           </Step>
         )}
@@ -105,17 +111,13 @@ class SubmissionEditStepForm extends Component {
 
   render() {
     const { stepIndex } = this.state;
-    const { canGrade, topics, submission: { answers }, pristine, submitting } = this.props;
+    const { pristine, questions, submitting } = this.props;
     return (
       <div style={styles.questionContainer}>
         {this.renderStepper()}
         <Card style={styles.questionCardContainer}>
           <form>
-            <Field
-              name={`answers[${stepIndex}]`}
-              component={SubmissionEditStepForm.renderAnswers}
-              {...{ canGrade, topic: topics[stepIndex], answer: answers[stepIndex] }}
-            />
+            {this.renderStepQuestion()}
           </form>
           <hr />
           <RaisedButton
@@ -132,7 +134,7 @@ class SubmissionEditStepForm extends Component {
             onTouchTap={() => this.handleQuestionSubmit('auto_grade')}
             disabled={submitting}
           />
-          { SubmissionEditStepForm.isLastQuestion(answers, stepIndex) ?
+          { SubmissionEditStepForm.isLastQuestion(questions, stepIndex) ?
             <RaisedButton
               style={styles.formButton}
               secondary
@@ -152,9 +154,12 @@ SubmissionEditStepForm.propTypes = {
   maxStep: PropTypes.number.isRequired,
   pristine: PropTypes.bool,
   skippable: PropTypes.bool.isRequired,
-  submission: SubmissionProp,
   submitting: PropTypes.bool,
-  topics: PropTypes.arrayOf(TopicProp),
+  questions: PropTypes.shape({
+    byIds: PropTypes.objectOf(QuestionProp),
+    allIds: PropTypes.arrayOf(PropTypes.number),
+  }),
+  topics: PropTypes.objectOf(TopicProp),
   handleSubmit: PropTypes.func,
 };
 

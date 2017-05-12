@@ -12,5 +12,23 @@ json.assessment do
   json.tabbedView @assessment.tabbed_view
 end
 
-json.partial! 'submission', submission: @submission, can_grade: can_grade
-json.partial! 'submission_question', submission: @submission
+if @assessment.autograded?
+  question = @assessment.questions.next_unanswered(@submission)
+  if question
+    json.maxStep @assessment.questions.index(question)
+  else
+    json.maxStep @assessment.questions.length - 1
+  end
+end
+
+latest_attempts = @submission.answers.latest_answers
+if @assessment.autograded? && @submission.attempting?
+  previous_attempts = latest_attempts.map { |a| last_attempt(a) }.reject(&:nil?)
+end
+
+json.partial! 'questions', assessment: @assessment, submission: @submission,
+                           previous_attempts: previous_attempts, can_grade: can_grade
+json.partial! 'answers', latest_attempts: latest_attempts, previous_attempts: previous_attempts,
+                         can_grade: can_grade
+json.partial! 'topics', submission: @submission
+json.partial! 'progress', submission: @submission, can_grade: can_grade
