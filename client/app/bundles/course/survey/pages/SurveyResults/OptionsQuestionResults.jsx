@@ -135,7 +135,7 @@ class OptionsQuestionResults extends React.Component {
       course_user_id: PropTypes.number,
       course_user_name: PropTypes.string,
       phantom: PropTypes.bool,
-      selected_options: PropTypes.arrayOf(PropTypes.number),
+      question_option_ids: PropTypes.arrayOf(PropTypes.number),
     })),
   }
 
@@ -231,7 +231,7 @@ class OptionsQuestionResults extends React.Component {
       breakdown[option.id] = { count: 0, students: [] };
     });
     answers.forEach((answer) => {
-      answer.selected_options.forEach((selectedOption) => {
+      answer.question_option_ids.forEach((selectedOption) => {
         if (!includePhantoms && answer.phantom) { return; }
         breakdown[selectedOption].count += 1;
         breakdown[selectedOption].students.push({

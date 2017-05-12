@@ -48,7 +48,7 @@ const getMultipleChoiceData = (optionCount) => {
       course_user_name: 'Lee',
       response_path: `/courses/${courseId}/surveys/${surveyId}/responses/222`,
       phantom: false,
-      selected_options: [optionCount > 0 ? optionCount - 1 : 0],
+      question_option_ids: [optionCount > 0 ? optionCount - 1 : 0],
     }],
   };
 };

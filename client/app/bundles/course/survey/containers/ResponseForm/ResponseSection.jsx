@@ -1,13 +1,28 @@
 import React, { PropTypes } from 'react';
 import { FieldArray } from 'redux-form';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Card, CardText, CardTitle } from 'material-ui/Card';
+import { red500 } from 'material-ui/styles/colors';
 import ResponseAnswer from './ResponseAnswer';
 
 const styles = {
   card: {
     marginBottom: 50,
   },
+  questionCard: {
+    marginBottom: 15,
+  },
+  errorText: {
+    color: red500,
+  },
 };
+
+const translations = defineMessages({
+  noAnswer: {
+    id: 'course.surveys.ResponseForm.ResponseSection.noAnswer',
+    defaultMessage: 'Answer is missing. Question was likely created after response was made.',
+  },
+});
 
 class ResponseSection extends React.Component {
   static propTypes = {
@@ -19,18 +34,27 @@ class ResponseSection extends React.Component {
     disabled: PropTypes.bool.isRequired,
   }
 
-  static renderAnswers(props) {
+  static renderQuestions(props) {
     const { fields, disabled } = props;
+
     return (
       <CardText>
         {
           fields.map((member, index) => {
-            const answer = fields.get(index);
+            const question = fields.get(index);
             return (
-              <ResponseAnswer
-                key={answer.id || `q${answer.question.id}`}
-                {...{ member, index, fields, disabled }}
-              />
+              <Card key={question.id} style={styles.questionCard}>
+                <CardText>
+                  <p dangerouslySetInnerHTML={{ __html: `${index + 1}. ${question.description}` }} />
+                  {
+                    question.answer && question.answer.present ?
+                      <ResponseAnswer {...{ member, question, disabled }} /> :
+                      <div style={styles.errorText}>
+                        <FormattedMessage {...translations.noAnswer} />
+                      </div>
+                  }
+                </CardText>
+              </Card>
             );
           })
         }
@@ -42,7 +66,7 @@ class ResponseSection extends React.Component {
     const { member, index, fields, disabled } = this.props;
     const section = fields.get(index);
 
-    if (section.answers.length < 1) {
+    if (section.questions.length < 1) {
       return <div />;
     }
 
@@ -53,8 +77,8 @@ class ResponseSection extends React.Component {
           subtitle={<div dangerouslySetInnerHTML={{ __html: section.description }} />}
         />
         <FieldArray
-          name={`${member}.answers`}
-          component={ResponseSection.renderAnswers}
+          name={`${member}.questions`}
+          component={ResponseSection.renderQuestions}
           disabled={disabled}
         />
       </Card>

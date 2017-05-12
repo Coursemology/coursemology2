@@ -1,5 +1,4 @@
 import actionTypes from '../constants';
-import { sortResponseElements } from '../utils';
 
 const initialState = {
   response: {},
@@ -30,7 +29,7 @@ export default function (state = initialState, action) {
     case actionTypes.LOAD_RESPONSE_SUCCESS: {
       return {
         ...state,
-        response: sortResponseElements(action.response),
+        response: action.response,
         flags: { ...state.flags, ...action.flags, isLoading: false, isSubmitting: false },
       };
     }
@@ -45,7 +44,7 @@ export default function (state = initialState, action) {
     case actionTypes.UNSUBMIT_RESPONSE_SUCCESS: {
       return {
         ...state,
-        response: sortResponseElements(action.response),
+        response: action.response,
         flags: { ...state.flags, ...action.flags },
       };
     }

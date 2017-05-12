@@ -1,17 +1,18 @@
-@answers_hash = response.answers.map { |answer| [answer.question_id, answer] }.to_h
-
 json.survey do
-  json.(survey, :id, :title, :start_at, :end_at, :base_exp, :published)
-  json.description format_html(survey.description)
+  json.partial! 'course/survey/surveys/survey_with_questions', survey: survey
 end
 
 json.response do
   json.(response, :id, :submitted_at)
   json.creator_name response.creator.name
-  json.sections survey.sections do |section|
-    json.(section, :id, :title, :weight)
-    json.description format_html(section.description)
-    json.answers section.questions, partial: 'answer', as: :question
+
+  json.answers answers do |answer|
+    if answer
+      json.present true
+      json.(answer, :id, :question_id, :text_response, :question_option_ids)
+    else
+      json.present false
+    end
   end
 end
 

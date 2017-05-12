@@ -56,7 +56,7 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
       authorize!(:modify, @response)
     end
 
-    if @response.update_attributes(response_update_params)
+    if @response.update(response_update_params)
       render_response_json
     else
       render json: { errors: @response.errors }, status: :bad_request
@@ -90,17 +90,19 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
   end
 
   def load_answers
-    @answers ||= @response.answers.includes(:options, question: [:section, :options])
+    @answers ||= @response.answers.includes(:options)
   end
 
   def render_response_json
+    load_sections
     load_answers
-    render partial: 'response', locals: { response: @response, survey: @survey }
+    render partial: 'response',
+           locals: { response: @response, answers: @answers, survey: @survey }
   end
 
   def response_update_params
     params.
       require(:response).
-      permit(answers_attributes: [:id, :text_response, options_attributes: [:id, :selected]])
+      permit(answers_attributes: [:id, :text_response, question_option_ids: []])
   end
 end

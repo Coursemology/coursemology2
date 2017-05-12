@@ -9,7 +9,7 @@ RSpec.describe Course::Survey::ResponsesController do
     let!(:course) { create(:course, creator: admin) }
     let(:manager) { create(:course_manager, course: course) }
     let!(:student) { create(:course_student, course: course) }
-    let!(:survey) { create(:survey, *survey_traits, course: course) }
+    let!(:survey) { create(:survey, *survey_traits, { course: course }.merge(survey_options)) }
     let!(:survey_question) do
       section = create(:course_survey_section, survey: survey)
       create(:course_survey_question, question_type: :text, section: section)
@@ -23,6 +23,7 @@ RSpec.describe Course::Survey::ResponsesController do
              survey: survey, creator: student.user, course_user: student)
     end
     let(:survey_traits) { nil }
+    let(:survey_options) { {} }
     let(:response_traits) { nil }
     let(:json_response) { JSON.parse(response.body) }
 
@@ -173,13 +174,63 @@ RSpec.describe Course::Survey::ResponsesController do
     end
 
     describe '#update' do
+      let(:user) { student.user }
+
       subject do
         patch :update, format: :json, response: response_params,
                        course_id: course.id, survey_id: survey.id, id: survey_response.id
       end
 
+      context 'when student submits an answer for a multiple response question' do
+        let(:survey_traits) { [:published, :currently_active] }
+        let(:survey_options) { { section_traits: [:with_mrq_question, :with_mcq_question] } }
+        let(:multiple_response_question) { survey.questions.multiple_response.first }
+        let(:multiple_choice_question) { survey.questions.multiple_choice.first }
+        let(:question_option_ids) { multiple_response_question.options.map(&:id) }
+        let(:initially_selected_option_ids) { question_option_ids[0, 2] }
+        let(:multiple_response_answer) do
+          survey_response.answers.find_by(question_id: multiple_response_question.id)
+        end
+        let(:response_params) do
+          {
+            answers_attributes: {
+              id: multiple_response_answer.id,
+              question_option_ids: selected_option_ids
+            }
+          }
+        end
+        let(:selected_option_ids) { [] }
+
+        before do
+          survey_response.build_missing_answers
+          survey_response.save
+          multiple_response_answer.question_option_ids = initially_selected_option_ids
+          survey_response.save
+        end
+
+        context 'when valid options are selected' do
+          let(:selected_option_ids) { [question_option_ids.last] }
+
+          before { subject }
+
+          it "updates the question's options" do
+            expect(multiple_response_answer.reload.question_option_ids).
+              to eq([question_option_ids.last])
+          end
+        end
+
+        context 'when invalid options are selected' do
+          let(:selected_option_ids) { [multiple_choice_question.options.first.id] }
+
+          it "does not update the question's options" do
+            expect { subject }.to raise_exception(ActiveRecord::RecordInvalid)
+            expect(multiple_response_answer.reload.question_option_ids).
+              to eq(initially_selected_option_ids)
+          end
+        end
+      end
+
       context 'when the response is being submitted' do
-        let(:user) { student.user }
         let(:response_params) { { submit: true } }
 
         context 'when the response is on time' do

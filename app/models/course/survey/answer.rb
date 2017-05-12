@@ -4,6 +4,7 @@ class Course::Survey::Answer < ActiveRecord::Base
   belongs_to :question, inverse_of: :answers
   has_many :options, class_name: Course::Survey::AnswerOption.name,
                      inverse_of: :answer, dependent: :destroy
+  has_many :question_options, through: :options
 
   accepts_nested_attributes_for :options
 end

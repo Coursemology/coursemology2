@@ -1,9 +1,10 @@
+/* eslint-disable camelcase */
 import React, { PropTypes } from 'react';
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { reduxForm, FieldArray, Form } from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
 import formTranslations from 'lib/translations/form';
-import { questionTypes, formNames } from 'course/survey/constants';
+import { formNames } from 'course/survey/constants';
 import { responseShape } from 'course/survey/propTypes';
 import ResponseSection from './ResponseSection';
 
@@ -14,75 +15,44 @@ const styles = {
 };
 
 const responseFormTranslations = defineMessages({
-  selectAtLeast: {
-    id: 'course.surveys.ResponseForm.selectAtLeast',
-    defaultMessage: 'Please select at least {count} option(s).',
-  },
-  selectAtMost: {
-    id: 'course.surveys.ResponseForm.selectAtMost',
-    defaultMessage: 'Please select at most {count} option(s).',
-  },
   submitted: {
     id: 'course.surveys.ResponseForm.submitted',
     defaultMessage: 'Submitted',
   },
 });
 
-const validateTextResponseAnswer = (formatMessage, answer) => {
-  if (answer.question.required && !answer.text_response) {
-    return { text_response: formatMessage(formTranslations.required) };
-  }
-  return {};
+/**
+ * Merges response answers into survey data to form initialValues for redux-form.
+ */
+export const buildInitialValues = (survey, response) => {
+  if (!survey || !response || !response.answers) { return {}; }
+
+  const answersHash = {};
+  response.answers.forEach((answer) => { answersHash[answer.question_id] = answer; });
+
+  const augmentQuestionWithAnswer = question => (
+    { ...question, answer: answersHash[question.id] }
+  );
+  const augmentSectionWithAnswers = section => (
+    { ...section, questions: section.questions && section.questions.map(augmentQuestionWithAnswer) }
+  );
+
+  return { ...survey, sections: survey.sections && survey.sections.map(augmentSectionWithAnswers) };
 };
 
-const validateMultipleChoiceAnswer = (formatMessage, answer) => {
-  if (answer.question.required && !answer.selected_option) {
-    return { selected_option: {
-      _error: formatMessage(responseFormTranslations.selectAtLeast, { count: 1 }),
-    } };
-  }
-  return {};
-};
-
-const validateMultipleResponseAnswer = (formatMessage, answer) => {
-  const optionCount = answer.options.filter(option => option.selected).length;
-  const minOptions = answer.question && answer.question.min_options;
-  const maxOptions = answer.question && answer.question.max_options;
-  if (!answer.question.required && optionCount === 0) { return {}; }
-  if (minOptions && optionCount < minOptions) {
-    return { options: {
-      _error: formatMessage(responseFormTranslations.selectAtLeast, { count: minOptions }),
-    } };
-  }
-  if (maxOptions && optionCount > maxOptions) {
-    return { options: {
-      _error: formatMessage(responseFormTranslations.selectAtMost, { count: maxOptions }),
-    } };
-  }
-  return {};
-};
-
-const validate = (values, props) => {
-  if (!values || !values.sections) { return {}; }
-
-  const { TEXT, MULTIPLE_CHOICE, MULTIPLE_RESPONSE } = questionTypes;
-  const validatorMap = {
-    [TEXT]: validateTextResponseAnswer,
-    [MULTIPLE_CHOICE]: validateMultipleChoiceAnswer,
-    [MULTIPLE_RESPONSE]: validateMultipleResponseAnswer,
+/**
+ * Transforms the redux-form data into the JSON shape that the endpoint expects to receive.
+ */
+export const buildResponsePayload = (data) => {
+  const getFormattedAnswer = (question) => {
+    if (!question.answer) { return {}; }
+    const { id, text_response, question_option_ids } = question.answer;
+    return { id, text_response, question_option_ids: question_option_ids || [] };
   };
-
-  const sectionsErrors = values.sections.map((section) => {
-    const answersErrors = section.answers.map((answer) => {
-      const validator = validatorMap[answer.question.question_type];
-      if (validator) {
-        return validator(props.intl.formatMessage, answer);
-      }
-      return {};
-    });
-    return { answers: answersErrors };
-  });
-  return { sections: sectionsErrors };
+  const answers_attributes = data.sections.reduce((accumulator, section) => (
+    accumulator.concat(section.questions.map(getFormattedAnswer))
+  ), []);
+  return { response: { answers_attributes, submit: data.submit } };
 };
 
 class ResponseForm extends React.Component {
@@ -91,7 +61,6 @@ class ResponseForm extends React.Component {
     flags: PropTypes.shape({
       canModify: PropTypes.bool.isRequired,
       canSubmit: PropTypes.bool.isRequired,
-      canUnsubmit: PropTypes.bool.isRequired,
       isResponseCreator: PropTypes.bool.isRequired,
       isSubmitting: PropTypes.bool.isRequired,
     }),
@@ -104,6 +73,7 @@ class ResponseForm extends React.Component {
 
   static defaultProps = {
     readOnly: false,
+    response: {},
     // onSubmit will not be passed in when form is read-only
     onSubmit: () => {},
   }
@@ -137,7 +107,6 @@ class ResponseForm extends React.Component {
         type="submit"
         primary
         label={<FormattedMessage {...formTranslations.save} />}
-        buttonStyle={styles.saveButton}
         disabled={isSubmitting || pristine}
       />
     );
@@ -168,7 +137,7 @@ class ResponseForm extends React.Component {
 
   render() {
     const {
-      handleSubmit, onSubmit, response, flags: { canSubmit, canModify, isSubmitting }, readOnly,
+      handleSubmit, onSubmit, flags: { canSubmit, canModify, isSubmitting }, readOnly,
     } = this.props;
 
     return (
@@ -177,7 +146,6 @@ class ResponseForm extends React.Component {
           name="sections"
           component={ResponseForm.renderSections}
           disabled={isSubmitting || readOnly || !(canModify || canSubmit)}
-          {...{ response }}
         />
         <br />
         { !readOnly && this.renderSaveButton() }
@@ -187,8 +155,7 @@ class ResponseForm extends React.Component {
   }
 }
 
-export default injectIntl(reduxForm({
+export default reduxForm({
   form: formNames.SURVEY_RESPONSE,
-  validate,
   enableReinitialize: true,
-})(ResponseForm));
+})(ResponseForm);
