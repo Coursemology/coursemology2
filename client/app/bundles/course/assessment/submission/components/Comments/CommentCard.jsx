@@ -2,11 +2,17 @@
 
 import React, { Component, PropTypes } from 'react';
 import Avatar from 'material-ui/Avatar';
+import TextField from 'material-ui/TextField';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import { red500, grey100 } from 'material-ui/styles/colors';
-// eslint-disable-next-line import/extensions, import/no-extraneous-dependencies, import/no-unresolved
+
+/* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import moment from 'lib/moment';
+/* eslint-enable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 
 const styles = {
   card: {
@@ -23,13 +29,10 @@ const styles = {
   },
   buttonContainer: {
     display: 'flex',
+    marginRight: 5,
+    marginBottom: 2,
   },
-  editButton: {
-    height: 35,
-    width: 40,
-    minWidth: 40,
-  },
-  deleteButton: {
+  headerButton: {
     height: 35,
     width: 40,
     minWidth: 40,
@@ -45,7 +48,8 @@ export default class CommentCard extends Component {
     avatar: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
     content: PropTypes.string,
-    onDelete: PropTypes.func,
+    saveComment: PropTypes.func,
+    deleteComment: PropTypes.func,
   }
 
   static formatDateTime(dateTime) {
@@ -54,6 +58,16 @@ export default class CommentCard extends Component {
 
   state = {
     editMode: false,
+    deleteConfirmation: false,
+  }
+
+  onSave() {
+    this.props.saveComment();
+    this.setState({ editMode: false });
+  }
+
+  onDelete() {
+    this.setState({ deleteConfirmation: true });
   }
 
   toggleEditMode() {
@@ -61,8 +75,43 @@ export default class CommentCard extends Component {
     this.setState({ editMode: !editMode });
   }
 
+  renderCommentContent() {
+    const { editMode } = this.state;
+    const { content } = this.props;
+
+    if (editMode) {
+      return (
+        <div>
+          <TextField
+            fullWidth
+            multiLine
+            rows={2}
+            rowsMax={4}
+            defaultValue={content}
+          />
+          <div style={styles.buttonContainer}>
+            <FlatButton
+              style={styles.editButton}
+              labelStyle={styles.editButton}
+              label="Cancel"
+              onClick={() => this.setState({ editMode: false })}
+            />
+            <FlatButton
+              style={styles.deleteButton}
+              labelStyle={styles.deleteButton}
+              label="Save"
+              primary
+              onClick={() => this.onSave()}
+            />
+          </div>
+        </div>
+      );
+    }
+    return <div dangerouslySetInnerHTML={{ __html: content }} />;
+  }
+
   render() {
-    const { name, avatar, date, content, onDelete } = this.props;
+    const { name, avatar, date, deleteComment } = this.props;
     return (
       <Card style={styles.card}>
         <div style={styles.header}>
@@ -74,24 +123,28 @@ export default class CommentCard extends Component {
           {CommentCard.formatDateTime(date)}
           <div style={styles.buttonContainer}>
             <FlatButton
-              style={styles.editButton}
-              labelStyle={styles.editButton}
-              backgroundColor="white"
-              icon={<i className="fa fa-edit" />}
+              style={styles.headerButton}
+              labelStyle={styles.headerButton}
+              icon={<EditIcon />}
               onClick={() => this.toggleEditMode()}
             />
             <FlatButton
-              style={styles.deleteButton}
-              labelStyle={styles.deleteButton}
-              backgroundColor={red500}
-              icon={<i className="fa fa-trash" />}
-              onClick={onDelete}
+              style={styles.headerButton}
+              labelStyle={styles.headerButton}
+              icon={<DeleteIcon color={red500} />}
+              onClick={() => this.onDelete()}
             />
           </div>
         </div>
         <CardText style={styles.commentContent}>
-          <div dangerouslySetInnerHTML={{ __html: content }} />
+          {this.renderCommentContent()}
         </CardText>
+        <ConfirmationDialog
+          confirmDelete
+          open={this.state.deleteConfirmation}
+          onCancel={() => this.setState({ deleteConfirmation: false })}
+          onConfirm={() => deleteComment()}
+        />
       </Card>
     );
   }
