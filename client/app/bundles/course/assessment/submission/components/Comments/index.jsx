@@ -12,6 +12,7 @@ export default class Comments extends Component {
     const { topic } = this.props;
     return (
       <div>
+        <h3>Comments</h3>
         {topic.posts.map(post =>
           <CommentCard
             key={post.id}

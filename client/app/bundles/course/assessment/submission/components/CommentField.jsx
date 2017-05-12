@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 const styles = {
   comments: {
-    marginTop: 30,
+    marginTop: -30,
   },
 };
 
