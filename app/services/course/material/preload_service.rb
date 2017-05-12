@@ -22,6 +22,7 @@ class Course::Material::PreloadService
 
   def assessments_folders
     @assessments_folders ||=
-      @course.material_folders.where { owner_type == Course::Assessment.name }.includes(:materials)
+      @course.material_folders.includes(:materials).
+      where('course_material_folders.owner_type = ?', Course::Assessment.name)
   end
 end

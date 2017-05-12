@@ -27,7 +27,8 @@ class Course::Discussion::Post < ActiveRecord::Base
   scope :with_user_votes, (lambda do |user|
     post_ids = pluck('course_discussion_posts.id')
     votes = Course::Discussion::Post::Vote.
-      where { post_id.in(post_ids) & (creator_id == user.id) }
+      where('course_discussion_post_votes.post_id IN (?)', post_ids).
+      where('course_discussion_post_votes.creator_id = ?', user.id)
 
     all.tap do |result|
       preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
@@ -39,16 +40,16 @@ class Course::Discussion::Post < ActiveRecord::Base
   #   The number of upvotes for the given post.
   calculated :upvotes, (lambda do
     Vote.upvotes.
-      select { count(id) }.
-      where { post_id == course_discussion_posts.id }
+      select('count(id)').
+      where('post_id = course_discussion_posts.id')
   end)
 
   # @!attribute [r] downvotes
   #   The number of downvotes for the given post.
   calculated :downvotes, (lambda do
     Vote.downvotes.
-      select { count(id) }.
-      where { post_id == course_discussion_posts.id }
+      select('count(id)').
+      where('post_id = course_discussion_posts.id')
   end)
 
   # Calculates the total number of votes given to this post.

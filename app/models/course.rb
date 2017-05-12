@@ -59,8 +59,7 @@ class Course < ActiveRecord::Base
   # @!method containing_user
   #   Selects all the courses with user as one of its members
   scope :containing_user, (lambda do |user|
-    joins { course_users }.
-    where { course_users.user_id == user.id }
+    joins(:course_users).where('course_users.user_id = ?', user.id)
   end)
 
   # @!method with_owners

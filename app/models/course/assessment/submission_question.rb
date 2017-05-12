@@ -14,9 +14,9 @@ class Course::Assessment::SubmissionQuestion < ActiveRecord::Base
   # Specific implementation of Course::Discussion::Topic#from_user, this is not supposed to be
   # called directly.
   scope :from_user, (lambda do |user_id|
-    joins { submission }.
-      where { submission.creator_id >> user_id }.
-      joins { discussion_topic }.select { discussion_topic.id }
+    joining { submission }.
+      where.has { submission.creator_id.in(user_id) }.
+      joining { discussion_topic }.selecting { discussion_topic.id }
   end)
 
   def notify(post)

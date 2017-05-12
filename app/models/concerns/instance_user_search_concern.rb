@@ -12,9 +12,9 @@ module InstanceUserSearchConcern
       return all if keyword.blank?
 
       condition = "%#{keyword}%"
-      joins { user.emails.outer }.
-        where { (user.name =~ condition) | (user.emails.email =~ condition) }.
-        group { instance_users.id }
+      joining { user.emails.outer }.
+        where.has { (sql('users.name') =~ condition) | (sql('user_emails.email') =~ condition) }.
+        group('instance_users.id')
     end
   end
 end

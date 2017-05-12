@@ -4,11 +4,11 @@ module Course::ForumParticipationConcern
 
   module ClassMethods
     def forum_posts
-      joins { topic }.where { topic.actable_type == Course::Forum::Topic }
+      joins(:topic).where('course_discussion_topics.actable_type = ?', Course::Forum::Topic.name)
     end
 
     def from_course(course)
-      joins { topic }.where { topic.course_id == course.id }
+      joins(:topic).where('course_discussion_topics.course_id = ?', course.id)
     end
   end
 end

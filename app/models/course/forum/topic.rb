@@ -20,29 +20,25 @@ class Course::Forum::Topic < ActiveRecord::Base
   # @!attribute [r] vote_count
   #   The number of votes in this topic.
   calculated :vote_count, (lambda do
-    Course::Discussion::Post::Vote.joins { post.topic }.
-      where do
-        (course_forum_topics.id == course_discussion_topics.actable_id) &
-          (course_discussion_topics.actable_type == Course::Forum::Topic.name)
-      end.select { count('*') }
+    Course::Discussion::Post::Vote.joins(post: :topic).
+      where('course_forum_topics.id = course_discussion_topics.actable_id').
+      where('course_discussion_topics.actable_type = ?', Course::Forum::Topic.name).
+      select("count('*')")
   end)
 
   # @!attribute [r] post_count
   #   The number of posts in this topic.
   calculated :post_count, (lambda do
-    Course::Discussion::Topic.joins { posts.inner }.
-      where do
-        (actable_id == course_forum_topics.id) &
-        (actable_type == Course::Forum::Topic.name)
-      end.select { count('*') }
+    Course::Discussion::Topic.joins(:posts).
+      where('actable_id = course_forum_topics.id').
+      where(actable_type: Course::Forum::Topic.name).
+      select("count('*')")
   end)
 
   # @!attribute [r] view_count
   #   The number of views in this topic.
   calculated :view_count, (lambda do
-    Course::Forum::Topic::View.where do
-      topic_id == course_forum_topics.id
-    end.select { count('*') }
+    Course::Forum::Topic::View.where('topic_id = course_forum_topics.id').select("count('*')")
   end)
 
   # @!method self.order_by_date
@@ -57,8 +53,9 @@ class Course::Forum::Topic < ActiveRecord::Base
   scope :with_latest_post, (lambda do
     topic_ids = distinct(false).pluck('course_discussion_topics.id')
     ids = Course::Discussion::Post.unscope(:order).
-          select { max(id) }.group { course_discussion_posts.topic_id }.
-          where { topic_id.in(topic_ids) }
+          select('max(id)').
+          group('course_discussion_posts.topic_id').
+          where(topic_id: topic_ids)
     last_posts = Course::Discussion::Post.with_creator.where(id: ids)
 
     all.tap do |result|
@@ -73,7 +70,7 @@ class Course::Forum::Topic < ActiveRecord::Base
         -> { all.calculated(:post_count, :view_count) }
 
   # Get all the topics from specified course.
-  scope :from_course, ->(course) { joins { forum }.where { forum.course_id == course } }
+  scope :from_course, ->(course) { joins(:forum).where('course_forums.course_id = ?', course.id) }
 
   # Create view record for a user
   #

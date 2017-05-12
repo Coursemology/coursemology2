@@ -11,9 +11,9 @@ module Course::SearchConcern
       return all if keyword.blank?
 
       condition = "%#{keyword}%"
-      joins { users.outer }.
-        where { (title =~ condition) | (description =~ condition) | (users.name =~ condition) }.
-        group { courses.id }
+      joining { users.outer }.
+        where.has { (title =~ condition) | (description =~ condition) | (users.name =~ condition) }.
+        group('courses.id')
     end
   end
 end

@@ -20,7 +20,7 @@ class Instance < ActiveRecord::Base
     #   as www) are not handled automatically.
     # @return [Instance]
     def find_tenant_by_host(host)
-      where { lower(self.host) == lower(host) }.take
+      where.has { self.host.lower == host.downcase }.take
     end
 
     # Finds the given tenant by host, falling back to the default is none is found.
@@ -29,8 +29,8 @@ class Instance < ActiveRecord::Base
     #   as www) are not handled automatically.
     # @return [Instance]
     def find_tenant_by_host_or_default(host)
-      tenants = where do
-        (lower(self.host) == lower(host)) | (id == DEFAULT_INSTANCE_ID)
+      tenants = where.has do
+        (self.host.lower == host.downcase) | (id == DEFAULT_INSTANCE_ID)
       end.to_a
 
       tenants.find { |tenant| !tenant.default? } || tenants.first
@@ -68,15 +68,13 @@ class Instance < ActiveRecord::Base
   # @!attribute [r] course_count
   #   The number of courses in the instance.
   calculated :course_count, (lambda do
-    Course.unscoped.where { courses.instance_id == instances.id }.
-      select { count('*') }
+    Course.unscoped.where('courses.instance_id = instances.id').select("count('*')")
   end)
 
   # @!attribute [r] user_count
   #   The number of users in the instance.
   calculated :user_count, (lambda do
-    InstanceUser.unscoped.where { instance_users.instance_id == instances.id }.
-      select { count('*') }
+    InstanceUser.unscoped.where('instance_users.instance_id = instances.id').select("count('*')")
   end)
 
   def self.use_relative_model_naming?

@@ -39,32 +39,30 @@ class CourseUser < ActiveRecord::Base
   #   Sums the total experience points for the course user.
   #   Default value is 0 when CourseUser does not have Course::ExperiencePointsRecord
   calculated :experience_points, (lambda do
-    Course::ExperiencePointsRecord.select do
-      coalesce(sum(course_experience_points_records.points_awarded), 0)
-    end.where { course_experience_points_records.course_user_id == course_users.id }
+    Course::ExperiencePointsRecord.selecting { coalesce(sum(points_awarded), 0) }.
+      where('course_experience_points_records.course_user_id = course_users.id')
   end)
 
   # @!attribute [r] last_experience_points_record
   #   Returns the time of the last awarded experience points record.
   calculated :last_experience_points_record, (lambda do
     Course::ExperiencePointsRecord.select(:awarded_at).limit(1).order(awarded_at: :desc).
-      where do
-        (course_experience_points_records.course_user_id == course_users.id) & (awarded_at != nil)
-    end
+      where('course_experience_points_records.course_user_id = course_users.id').
+      where('course_experience_points_records.awarded_at IS NOT NULL')
   end)
 
   # @!attribute [r] achievement_count
   #   Returns the total number of achievements obtained by CourseUser in this course
   calculated :achievement_count, (lambda do
-    Course::UserAchievement.select { count('*') }.
-      where { course_user_achievements.course_user_id == course_users.id }
+    Course::UserAchievement.select("count('*')").
+      where('course_user_achievements.course_user_id = course_users.id')
   end)
 
   # @!attribute [r] last_obtained_achievement
   #   Returns the time of the last obtained achievement
   calculated :last_obtained_achievement, (lambda do
     Course::UserAchievement.select(:obtained_at).limit(1).order(obtained_at: :desc).
-      where { course_user_achievements.course_user_id == course_users.id }
+      where('course_user_achievements.course_user_id = course_users.id')
   end)
 
   # Gets the staff associated with the course.
@@ -135,8 +133,8 @@ class CourseUser < ActiveRecord::Base
   # @return[Array<CourseUser>]
   def my_students
     my_groups = group_users.manager.select(:group_id)
-    CourseUser.joins { group_users.group }.merge(Course::GroupUser.normal).
-      where { group_users.group.id >> my_groups }
+    CourseUser.joining { group_users.group }.merge(Course::GroupUser.normal).
+      where.has { group_users.group.id.in(my_groups) }
   end
 
   # Returns the managers of the groups I belong to in the course.
@@ -144,8 +142,8 @@ class CourseUser < ActiveRecord::Base
   # @return[Array<CourseUser>]
   def my_managers
     my_groups = group_users.select(:group_id)
-    CourseUser.joins { group_users.group }.merge(Course::GroupUser.manager).
-      where { group_users.group.id >> my_groups }
+    CourseUser.joining { group_users.group }.merge(Course::GroupUser.manager).
+      where.has { group_users.group.id.in(my_groups) }
   end
 
   private

@@ -32,7 +32,7 @@ class Course::Forum::Search
 
     @posts ||=
       Course::Discussion::Post.forum_posts.from_course(@course).
-      includes { topic.actable.forum }.
+      includes(topic: { actable: :forum }).
       calculated(:upvotes, :downvotes).
       where(created_at: start_time..end_time).
       where(creator_id: @user)

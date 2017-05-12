@@ -144,10 +144,12 @@ class Course::ExperiencePoints::ForumDisbursement < Course::ExperiencePoints::Di
   # @return [Array<Course::Discussion::Post>]
   def discussion_posts
     return [] if end_time_preceeds_start_time?
-    @discussion_posts ||=
+    @discussion_posts ||= begin
+      user_ids = forum_participants.map(&:user_id)
       Course::Discussion::Post.forum_posts.from_course(course).calculated(:upvotes, :downvotes).
-      where(created_at: start_time..end_time).
-      where { creator_id >> my { forum_participants.map(&:user_id) } }
+        where(created_at: start_time..end_time).
+        where(creator_id: user_ids)
+    end
   end
 
   # Check if end time preceeds start time and sets an error if necessary.

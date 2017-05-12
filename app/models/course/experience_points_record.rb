@@ -11,7 +11,7 @@ class Course::ExperiencePointsRecord < ActiveRecord::Base
   # TODO: Add an optional: true when moving to Rails 5.
   belongs_to :awarder, class_name: User.name, inverse_of: nil
 
-  scope :active, -> { where { points_awarded != nil } } # rubocop:disable Style/NonNilCheck
+  scope :active, -> { where.not(points_awarded: nil) }
 
   # Checks if the current record is active, i.e. it has been granted by a course staff.
   #

@@ -18,14 +18,14 @@ class Course::Group < ActiveRecord::Base
   # @!attribute [r] average_experience_points
   #   Returns the average experience points of group users in this group who are students.
   calculated :average_experience_points, (lambda do
-    Course::GroupUser.where { group_id == course_groups.id }.
-      joins { course_user.experience_points_records.outer }.
-      where { course_user.role == CourseUser.roles[:student] }.
+    Course::GroupUser.where('course_group_users.group_id = course_groups.id').
+      joining { course_user.experience_points_records.outer }.
+      where('course_users.role = ?', CourseUser.roles[:student]).
       # CAST is used to force a float division (integer division by default).
       # greatest(#, 1) is used to avoid division by 0.
-      select do
-        cast(coalesce(sum(course_experience_points_records.points_awarded), 0.0).as(float)) /
-        greatest(count(distinct(course_group_users.course_user_id)), 1.0)
+      selecting do
+        cast(sql('coalesce(sum(course_experience_points_records.points_awarded), 0.0) as float')) /
+        greatest(sql('count(distinct(course_group_users.course_user_id)), 1.0'))
       end
   end)
 
@@ -33,14 +33,14 @@ class Course::Group < ActiveRecord::Base
   #   Returns the average number of achievements obtained by group users in this group who are
   #   students.
   calculated :average_achievement_count, (lambda do
-    Course::GroupUser.where { group_id == course_groups.id }.
-      joins { course_user.course_user_achievements.outer }.
-      where { course_user.role == CourseUser.roles[:student] }.
+    Course::GroupUser.where('course_group_users.group_id = course_groups.id').
+      joining { course_user.course_user_achievements.outer }.
+      where('course_users.role = ?', CourseUser.roles[:student]).
       # CAST is used to force a float division (integer division by default).
       # greatest(#, 1) is used to avoid division by 0.
-      select do
-        cast(count(course_user_achievements.id).as(float)) /
-        greatest(count(distinct(course_group_users.course_user_id)), 1.0)
+      selecting do
+        cast(sql('count(course_user_achievements.id) as float')) /
+        greatest(sql('count(distinct(course_group_users.course_user_id)), 1.0'))
       end
   end)
 
@@ -48,10 +48,10 @@ class Course::Group < ActiveRecord::Base
   #   Returns the time of the last obtained achievement by group users in this group who are
   #   students.
   calculated :last_obtained_achievement, (lambda do
-    Course::GroupUser.where { group_id == course_groups.id }.
-      joins { course_user.course_user_achievements }.
-      where { course_user.role == CourseUser.roles[:student] }.
-      select { course_user_achievements.obtained_at }.limit(1).order('obtained_at DESC')
+    Course::GroupUser.where('course_group_users.group_id = course_groups.id').
+      joins(course_user: :course_user_achievements).
+      where('course_users.role = ?', CourseUser.roles[:student]).
+      select('course_user_achievements.obtained_at').limit(1).order('obtained_at DESC')
   end)
 
   scope :ordered_by_experience_points, (lambda do

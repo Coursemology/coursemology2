@@ -8,11 +8,11 @@ module Extensions::TimeBoundedRecord::ActiveRecord::Base
     private
 
     def started
-      where { (start_at == nil) | (start_at <= Time.zone.now) }
+      where.has { (start_at == nil) | (start_at <= Time.zone.now) }
     end
 
     def ended
-      where { (end_at == nil) | (end_at >= Time.zone.now) }
+      where.has { (end_at == nil) | (end_at >= Time.zone.now) }
     end
   end
 

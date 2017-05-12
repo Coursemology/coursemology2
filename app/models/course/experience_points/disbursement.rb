@@ -87,9 +87,7 @@ class Course::ExperiencePoints::Disbursement
   # @param [Integer] group_id The id of the group
   # @return [Array<CourseUser>] The students in the group
   def students_from_group(group_id)
-    course.course_users.
-      joins { group_users }.
-      merge(Course::GroupUser.normal).
-      where { group_users.group_id == group_id }
+    course.course_users.joins(:group_users).where('course_group_users.group_id = ?', group_id).
+      merge(Course::GroupUser.normal)
   end
 end

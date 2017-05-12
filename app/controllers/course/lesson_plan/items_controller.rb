@@ -49,7 +49,7 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
   # @return [Hash{Integer => Array<String>]
   def assessment_tabs_titles_hash
     @assessment_tabs_titles_hash ||=
-      current_course.assessment_categories.includes { tabs }.map(&:tabs).flatten.
+      current_course.assessment_categories.includes(:tabs).map(&:tabs).flatten.
       map do |tab|
         [tab.id, tab_title_array(tab)]
       end.to_h
