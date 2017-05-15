@@ -82,6 +82,7 @@
     "react-dnd": "^2.3.0",
     "react-dnd-html5-backend": "^2.3.0",
     "react-dom": "^0.14.8 || ^15.0.0",
+    "react-dropzone": "^3.13.1",
     "react-intl": "jeremyyap/react-intl#build",
     "react-redux": "^5.0.3",
     "react-router-dom": "^4.1.1",
