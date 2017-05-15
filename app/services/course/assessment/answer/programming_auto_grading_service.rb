@@ -16,6 +16,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   #   correct status, grade and the programming auto grading record.
   def evaluate_answer(answer)
     question = answer.question.actable
+    assessment = answer.submission.assessment
     question.attachment.open(binmode: true) do |temporary_file|
       package = Course::Assessment::ProgrammingPackage.new(temporary_file)
       package.submission_files = build_submission_files(answer)
@@ -23,7 +24,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
       package.save
 
       evaluation_result = evaluate_package(question, package)
-      build_result(question, evaluation_result)
+      build_result(question, evaluation_result, ignore_evaluation: assessment.autograded?)
     end
   end
 
@@ -54,18 +55,31 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   #   graded.
   # @param [Course::Assessment::ProgrammingEvaluationService::Result] evaluation_result The
   #   result of evaluating the package.
+  # @param [Boolean] ignore_evaluation If set to true, the evaluation results will be ignored when
+  #   determine the correctness of the answer.
   # @return [Array<(Boolean, Integer, Course::Assessment::Answer::ProgrammingAutoGrading)>] The
   #   correct status, grade and the programming auto grading record.
-  def build_result(question, evaluation_result)
+  def build_result(question, evaluation_result, ignore_evaluation:)
     auto_grading = Course::Assessment::Answer::ProgrammingAutoGrading.new(actable: nil)
     set_auto_grading_results(auto_grading, evaluation_result)
     build_test_case_records(question, auto_grading, evaluation_result.test_report)
+    test_results = auto_grading.test_results
+    test_cases = question.test_cases
 
-    number_correct = auto_grading.test_results.map(&:passed?).count(true)
-    test_count = question.test_cases.count
+    if ignore_evaluation
+      test_results = test_results.reject { |r| r.test_case.evaluation_test? }
+      test_cases = test_cases.reject(&:evaluation_test?)
+    end
+
+    number_correct = test_results.map(&:passed?).count(true)
+    test_count = test_cases.size
 
     all_correct = number_correct == test_count
-    grade = question.maximum_grade * number_correct / test_count
+    grade = if test_count == 0
+              question.maximum_grade
+            else
+              question.maximum_grade * number_correct / test_count
+            end
     [all_correct, grade, auto_grading, evaluation_result.evaluation_id]
   end
 
