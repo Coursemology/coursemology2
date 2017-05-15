@@ -33,6 +33,22 @@ const translations = defineMessages({
     id: 'course.assessment.form.autograded',
     defaultMessage: 'Autograded',
   },
+  showPrivate: {
+    id: 'course.assessment.form.showPrivate',
+    defaultMessage: 'Show private tests',
+  },
+  showPrivateHint: {
+    id: 'course.assessment.form.showPrivateHint',
+    defaultMessage: 'Show private tests after students answer the question correctly (For programming questions)',
+  },
+  showEvaluation: {
+    id: 'course.assessment.form.showEvaluation',
+    defaultMessage: 'Show evaluation tests',
+  },
+  showEvaluationHint: {
+    id: 'course.assessment.form.showEvaluationHint',
+    defaultMessage: 'Show evaluation tests after students answer the question correctly (For programming questions)',
+  },
   published: {
     id: 'course.assessment.form.published',
     defaultMessage: 'Published',

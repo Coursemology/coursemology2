@@ -133,14 +133,38 @@ class AssessmentForm extends React.Component {
     const { submitting } = this.props;
     if (this.props.autograded) {
       return (
-        <Field
-          name="skippable"
-          component={Toggle}
-          label={<FormattedMessage {...translations.skippable} />}
-          labelPosition="right"
-          style={styles.toggle}
-          disabled={submitting}
-        />
+        <div>
+          <Field
+            name="skippable"
+            component={Toggle}
+            label={<FormattedMessage {...translations.skippable} />}
+            labelPosition="right"
+            style={styles.toggle}
+            disabled={submitting}
+          />
+          <Field
+            name="show_private"
+            component={Toggle}
+            label={<FormattedMessage {...translations.showPrivate} />}
+            labelPosition="right"
+            style={styles.toggle}
+            disabled={submitting}
+          />
+          <div style={styles.hint}>
+            <FormattedMessage {...translations.showPrivateHint} />
+          </div>
+          <Field
+            name="show_evaluation"
+            component={Toggle}
+            label={<FormattedMessage {...translations.showEvaluation} />}
+            labelPosition="right"
+            style={styles.toggle}
+            disabled={submitting}
+          />
+          <div style={styles.hint}>
+            <FormattedMessage {...translations.showEvaluationHint} />
+          </div>
+        </div>
       );
     }
 
