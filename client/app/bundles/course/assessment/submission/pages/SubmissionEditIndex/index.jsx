@@ -6,7 +6,10 @@ import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEditTabForm from './SubmissionEditTabForm';
 import { updateAnswer, fetchSubmission, updateSubmission } from '../../actions';
-import { AnswerProp, AssessmentProp, ProgressProp, QuestionProp, ReduxFormProp, TopicProp } from '../../propTypes';
+import {
+  AnswerProp, AssessmentProp, ProgressProp, QuestionProp,
+  ReduxFormProp, TopicProp, ExplanationProp,
+} from '../../propTypes';
 import { DATA_STATES } from '../../constants';
 
 class VisibleSubmissionEditIndex extends Component {
@@ -51,6 +54,7 @@ class VisibleSubmissionEditIndex extends Component {
       answers,
       questions,
       topics,
+      explanations,
     } = this.props;
 
     if (autograded) {
@@ -64,6 +68,7 @@ class VisibleSubmissionEditIndex extends Component {
           skippable={skippable}
           questions={questions}
           topics={topics}
+          explanations={explanations}
         />
       );
     } else if (tabbedView) { // eslint-disable-line camelcase
@@ -126,6 +131,7 @@ VisibleSubmissionEditIndex.propTypes = {
     allIds: PropTypes.arrayOf(PropTypes.number),
   }),
   topics: PropTypes.objectOf(TopicProp),
+  explanations: PropTypes.objectOf(ExplanationProp),
   dataState: PropTypes.string.isRequired,
 
   fetchData: PropTypes.func.isRequired,
@@ -143,6 +149,7 @@ function mapStateToProps(state) {
     progress: state.submissionEdit.progress,
     questions: state.questions,
     topics: state.topics,
+    explanations: state.explanations,
     dataState: state.submissionEdit.dataState,
   };
 }

@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
-import { Card } from 'material-ui/Card';
+import { Card, CardHeader, CardText } from 'material-ui/Card';
+import { green500, green900, red300, red900 } from 'material-ui/styles/colors';
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import { QuestionProp, TopicProp } from '../../propTypes';
+import { QuestionProp, TopicProp, ExplanationProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import Comments from '../../components/Comments';
 import CommentField from '../../components/CommentField';
@@ -15,6 +16,14 @@ const styles = {
   },
   questionCardContainer: {
     padding: 40,
+  },
+  explanationContainer: {
+    marginTop: 30,
+    borderRadius: 5,
+  },
+  explanationHeader: {
+    borderRadius: '5px 5px 0 0',
+    padding: 12,
   },
   formButton: {
     marginRight: 10,
@@ -65,6 +74,31 @@ class SubmissionEditStepForm extends Component {
     }
   }
 
+  renderExplanationPanel(questionId) {
+    const { questions, explanations } = this.props;
+    const explanationId = questions.byId[questionId].explanationId;
+
+    if (explanationId) {
+      const explanation = explanations[explanationId];
+      return (
+        <Card style={styles.explanationContainer}>
+          <CardHeader
+            style={{
+              ...styles.explanationHeader,
+              backgroundColor: explanation.correct ? green500 : red300,
+            }}
+            title={explanation.correct ? 'Correct!' : 'Wrong!'}
+            titleColor={explanation.correct ? green900 : red900}
+          />
+          <CardText>
+            {explanation.explanations.map(exp => <div dangerouslySetInnerHtml={{ __html: exp }} />)}
+          </CardText>
+        </Card>
+      );
+    }
+    return null;
+  }
+
   renderStepQuestion() {
     const { stepIndex } = this.state;
     const { canGrade, questions, topics } = this.props;
@@ -76,6 +110,7 @@ class SubmissionEditStepForm extends Component {
     return (
       <div>
         <SubmissionAnswer {...{ canGrade, answerId, question }} />
+        {this.renderExplanationPanel(id)}
         <hr />
         <Comments topic={topic} />
         <CommentField />
@@ -116,9 +151,7 @@ class SubmissionEditStepForm extends Component {
       <div style={styles.questionContainer}>
         {this.renderStepper()}
         <Card style={styles.questionCardContainer}>
-          <form>
-            {this.renderStepQuestion()}
-          </form>
+          <form>{this.renderStepQuestion()}</form>
           <hr />
           <RaisedButton
             style={styles.formButton}
@@ -160,6 +193,7 @@ SubmissionEditStepForm.propTypes = {
     allIds: PropTypes.arrayOf(PropTypes.number),
   }),
   topics: PropTypes.objectOf(TopicProp),
+  explanations: PropTypes.objectOf(ExplanationProp),
   handleSubmit: PropTypes.func,
 };
 

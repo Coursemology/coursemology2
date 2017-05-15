@@ -93,3 +93,12 @@ export const TopicProp =
     id: PropTypes.number.isRequired,
     posts: PropTypes.arrayOf(PostProp),
   });
+
+export const ExplanationProp =
+  PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    questionId: PropTypes.number.isRequired,
+    correct: PropTypes.bool,
+    explanations: PropTypes.arrayOf(PropTypes.string).isRequired,
+    option_ids: PropTypes.arrayOf(PropTypes.number),
+  });
