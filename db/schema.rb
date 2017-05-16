@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170426024809) do
+ActiveRecord::Schema.define(version: 20170506010828) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -283,6 +283,17 @@ ActiveRecord::Schema.define(version: 20170426024809) do
     t.integer "line",    :null=>false
   end
 
+  create_table "course_assessment_answer_scribings", force: :cascade do |t|
+  end
+
+  create_table "course_assessment_answer_scribing_scribbles", force: :cascade do |t|
+    t.text     "content"
+    t.integer  "answer_id",  :index=>{:name=>"fk__course_assessment_answer_scribing_scribbles_scribing_answer"}, :foreign_key=>{:references=>"course_assessment_answer_scribings", :name=>"fk_course_assessment_answer_scribing_scribbles_answer_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "creator_id", :null=>false, :index=>{:name=>"fk__course_assessment_answer_scribing_scribbles_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessment_answer_scribing_scribbles_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "created_at", :null=>false
+    t.datetime "updated_at", :null=>false
+  end
+
   create_table "course_assessment_answer_text_responses", force: :cascade do |t|
     t.text "answer_text"
   end
@@ -310,6 +321,9 @@ ActiveRecord::Schema.define(version: 20170426024809) do
     t.text    "content",     :null=>false
   end
   add_index "course_assessment_question_programming_template_files", ["question_id", "filename"], :name=>"index_course_assessment_question_programming_template_filenames", :unique=>true, :case_sensitive=>false
+
+  create_table "course_assessment_question_scribings", force: :cascade do |t|
+  end
 
   create_table "course_assessment_question_text_responses", force: :cascade do |t|
     t.boolean "allow_attachment", :default=>false
