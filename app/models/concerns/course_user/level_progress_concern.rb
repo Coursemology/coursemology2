@@ -11,7 +11,7 @@ module CourseUser::LevelProgressConcern
     @current_level ||= course.level_for(experience_points)
   end
 
-  # Computes the percentage (a fixnum ranging from 0-100) of the CourseUser's EXP progress
+  # Computes the percentage (a Integer ranging from 0-100) of the CourseUser's EXP progress
   # between the current level and the next.  If the CourseUser is at the highest level,
   # the percentage will be set at 100.
   #

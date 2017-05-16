@@ -66,7 +66,7 @@ class Course::LessonPlan::Todo < ActiveRecord::Base
     #
     # @param [Array<Course::LessonPlan::Item>] Array of lesson_plan_items
     # @param [Array<CourseUser>] Array of course_users
-    # @return [Array<Array<Symbol>, Array<Fixnum, String>] Returns an array with 2 arrays:
+    # @return [Array<Array<Symbol>, Array<Integer, String>] Returns an array with 2 arrays:
     #   (i) array of columns, (ii) array of data arranged in columns specified in (i).
     def build_import_attributes_for(items, course_users)
       columns = [:item_id, :user_id, :creator_id, :updater_id, :workflow_state]
