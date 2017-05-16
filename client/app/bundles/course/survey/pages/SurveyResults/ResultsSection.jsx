@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardText, CardTitle } from 'material-ui/Card';
 import { sectionShape } from 'course/survey/propTypes';
 import ResultsQuestion from './ResultsQuestion';

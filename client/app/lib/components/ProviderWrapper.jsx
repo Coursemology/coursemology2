@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { i18nLocale, timeZone } from 'lib/helpers/server-context';
@@ -17,7 +18,7 @@ const propTypes = {
     dispatch: PropTypes.func.isRequired,
     getState: PropTypes.func.isRequired,
   }),
-  children: React.PropTypes.element.isRequired,
+  children: PropTypes.element.isRequired,
 };
 
 const ProviderWrapper = ({ store, children }) => {

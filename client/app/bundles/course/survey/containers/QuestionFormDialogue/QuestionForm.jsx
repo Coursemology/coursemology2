@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Field, FieldArray, Form } from 'redux-form';
 import TextField from 'lib/components/redux-form/TextField';

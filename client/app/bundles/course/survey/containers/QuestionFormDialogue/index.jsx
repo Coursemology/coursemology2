@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getFormValues, isPristine } from 'redux-form';
@@ -28,7 +29,7 @@ const propTypes = {
     description: PropTypes.string,
     start_at: PropTypes.instanceOf(Date),
     end_at: PropTypes.instanceOf(Date),
-    base_exp: React.PropTypes.number,
+    base_exp: PropTypes.number,
   }).isRequired,
   formValues: PropTypes.object,
 };

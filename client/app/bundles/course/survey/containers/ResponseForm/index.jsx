@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { reduxForm, FieldArray, Form } from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';

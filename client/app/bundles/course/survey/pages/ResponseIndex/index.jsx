@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment, { formatLongDateTime } from 'lib/moment';
 import { defineMessages, FormattedMessage } from 'react-intl';

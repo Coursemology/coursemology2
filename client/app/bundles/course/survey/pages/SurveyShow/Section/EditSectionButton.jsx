@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape, FormattedMessage } from 'react-intl';
 import FlatButton from 'material-ui/FlatButton';
