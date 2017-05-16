@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import ReactDOM from 'react-dom';
 import { MemoryRouter } from 'react-router-dom';
 import storeCreator from 'course/survey/store';
-import ReactTestUtils from 'react-addons-test-utils';
+import ReactTestUtils from 'react-dom/test-utils';
 import ResultsQuestion from '../ResultsQuestion';
 
 const surveyId = '6';

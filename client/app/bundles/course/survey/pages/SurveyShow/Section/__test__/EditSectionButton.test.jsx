@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { mount, ReactWrapper } from 'enzyme';
-import ReactTestUtils from 'react-addons-test-utils';
+import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
 import SectionFormDialogue from 'course/survey/containers/SectionFormDialogue';
