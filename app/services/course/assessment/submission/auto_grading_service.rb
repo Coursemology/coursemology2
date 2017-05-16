@@ -22,7 +22,7 @@ class Course::Assessment::Submission::AutoGradingService
   def grade(submission)
     grade_answers(submission)
     submission.reload
-    publish_grade(submission) if submission.assessment.autograded?
+    assign_exp_and_publish_grade(submission) if submission.assessment.autograded?
     submission.save!
   end
 
@@ -83,7 +83,7 @@ class Course::Assessment::Submission::AutoGradingService
     raise SubJobError, error_messages.to_sentence
   end
 
-  def publish_grade(submission)
+  def assign_exp_and_publish_grade(submission)
     submission.points_awarded = calculate_exp(submission).to_i
     submission.publish!
   end
