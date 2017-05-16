@@ -86,7 +86,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
   scope :by_user, ->(user) { where(creator: user) }
 
   # @!method self.by_users(user)
-  #   @param [Fixnum|Array<Fixnum>] user_ids The user ids to filter submissions by
+  #   @param [Integer|Array<Integer>] user_ids The user ids to filter submissions by
   scope :by_users, ->(user_ids) { where(creator_id: user_ids) }
 
   # @!method self.from_category(category)

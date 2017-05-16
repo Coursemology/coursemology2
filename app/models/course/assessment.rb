@@ -48,7 +48,7 @@ class Course::Assessment < ActiveRecord::Base
   # @!attribute [r] maximum_grade
   #   Gets the maximum grade allowed by this assessment. This is the sum of all questions'
   #   maximum grade.
-  #   @return [Fixnum]
+  #   @return [Integer]
   calculated :maximum_grade, (lambda do
     Course::Assessment::Question.unscope(:order).
       select('coalesce(sum(course_assessment_questions.maximum_grade), 0)').

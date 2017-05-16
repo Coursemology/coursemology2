@@ -24,7 +24,7 @@ module Course::Assessment::SubmissionsHelper
 
   # Returns the count of submissions given the student ids
   #
-  # @param [Array<Fixnum>] student_ids The submissions for the given user_ids of student
+  # @param [Array<Integer>] student_ids The submissions for the given user_ids of student
   # @return [Integer] The required count
   def pending_submission_count_for(student_ids)
     return 0 if student_ids.blank?
