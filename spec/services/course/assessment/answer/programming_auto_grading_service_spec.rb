@@ -115,6 +115,27 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
                 to eq('TypeError: mosaic() takes 1 positional argument but 4 were given')
             end
           end
+
+          context 'when an autograded assessment has evaluation tests' do
+            let(:question_test_cases) do
+              report = File.read(question_test_report_path)
+              Course::Assessment::ProgrammingTestCaseReport.new(report).test_cases.map do |t|
+                Course::Assessment::Question::ProgrammingTestCase.new(
+                  identifier: t.identifier, test_case_type: :evaluation_test
+                )
+              end
+            end
+
+            before do
+              allow(answer.submission.assessment).to receive(:autograded?).and_return(true)
+            end
+
+            it 'ignores the evaluation tests and marks the answer correct' do
+              subject
+              expect(answer).to be_correct
+              expect(answer.grade).to eq(question.maximum_grade)
+            end
+          end
         end
       end
 
