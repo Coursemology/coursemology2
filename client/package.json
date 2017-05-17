@@ -83,7 +83,7 @@
     "react-dnd": "^2.4.0",
     "react-dnd-html5-backend": "^2.4.1",
     "react-dom": "^15.5.4",
-    "react-intl": "jeremyyap/react-intl#build",
+    "react-intl": "^2.3.0",
     "react-redux": "^5.0.4",
     "react-router-dom": "^4.1.1",
     "react-scroll": "^1.5.2",

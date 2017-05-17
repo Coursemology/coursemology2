@@ -49,7 +49,6 @@ exports[`<AdminMenu /> does not render button if user cannot edit or update 1`] 
           "messages": Object {},
           "now": [Function],
           "textComponent": "span",
-          "timeZone": "Asia/Singapore",
         }
       }
       survey={

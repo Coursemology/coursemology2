@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { IntlProvider, addLocaleData } from 'react-intl';
-import { i18nLocale, timeZone } from 'lib/helpers/server-context';
+import { i18nLocale } from 'lib/helpers/server-context';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'lib/injectTapEventPlugin';
 
@@ -32,7 +32,7 @@ const ProviderWrapper = ({ store, children }) => {
   }
 
   let providers =
-    (<IntlProvider locale={i18nLocale} messages={messages} timeZone={timeZone}>
+    (<IntlProvider locale={i18nLocale} messages={messages}>
       <MuiThemeProvider>
         { children }
       </MuiThemeProvider>
