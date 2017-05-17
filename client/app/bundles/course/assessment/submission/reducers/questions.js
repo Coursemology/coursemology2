@@ -5,12 +5,14 @@ import arrayToObjectById from './utils';
 function byId(state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
-    case actions.UPDATE_SUBMISSION_SUCCESS:
+    case actions.SAVE_DRAFT_SUCCESS:
+    case actions.SUBMISSION_SUCCESS:
+    case actions.UNSUBMIT_SUCCESS:
       return {
         ...state,
         ...arrayToObjectById(action.payload.questions),
       };
-    case actions.UPDATE_ANSWER_SUCCESS: {
+    case actions.AUTOGRADE_SUCCESS: {
       const questionId = action.payload.answers[0].questionId;
       return {
         ...state,
@@ -29,9 +31,10 @@ function byId(state = {}, action) {
 function allIds(state = [], action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
-    case actions.UPDATE_SUBMISSION_SUCCESS:
+    case actions.SAVE_DRAFT_SUCCESS:
+    case actions.SUBMISSION_SUCCESS:
+    case actions.UNSUBMIT_SUCCESS:
       return [
-        ...state,
         ...action.payload.questions.map(question => question.id),
       ];
     default:

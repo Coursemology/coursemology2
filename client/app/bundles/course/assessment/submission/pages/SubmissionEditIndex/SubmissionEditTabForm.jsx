@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import { FieldArray, reduxForm } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { Card } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import { red900 } from 'material-ui/styles/colors';
 
 import { QuestionProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
@@ -42,30 +43,32 @@ class SubmissionEditTabForm extends Component {
   }
 
   render() {
-    const { canGrade, topics, pristine, submitting, handleSubmit } = this.props;
+    const { pristine, submitting, handleSaveDraft, handleSubmit, handleUnsubmit } = this.props;
     return (
       <Card style={styles.questionContainer}>
-        <form>
-          <FieldArray
-            name="answers"
-            component={SubmissionEditTabForm.renderAnswers}
-            {...{ canGrade, topics }}
-          />
-        </form>
+        <form>{this.renderQuestions()}</form>
         <hr />
         <RaisedButton
           style={styles.formButton}
           primary
           label="Save Draft"
-          onTouchTap={handleSubmit}
+          onTouchTap={handleSaveDraft}
           disabled={pristine || submitting}
         />
         <RaisedButton
           style={styles.formButton}
           secondary
           label="Finalise Submission"
-          onTouchTap={() => handleSubmit('finalise')}
+          onTouchTap={handleSubmit}
           disabled={pristine || submitting}
+        />
+        <RaisedButton
+          style={styles.formButton}
+          backgroundColor={red900}
+          secondary
+          label="Unsubmit Submission"
+          onTouchTap={handleUnsubmit}
+          disabled={submitting}
         />
       </Card>
     );
@@ -81,7 +84,9 @@ SubmissionEditTabForm.propTypes = {
   topics: PropTypes.objectOf(TopicProp),
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
+  handleSaveDraft: PropTypes.func,
   handleSubmit: PropTypes.func,
+  handleUnsubmit: PropTypes.func,
 };
 
 export default reduxForm({

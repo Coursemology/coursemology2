@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-import { green500, green900, red300, red900 } from 'material-ui/styles/colors';
+import { white, green500, green900, red300, red900 } from 'material-ui/styles/colors';
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 
@@ -9,6 +9,7 @@ import { QuestionProp, TopicProp, ExplanationProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import Comments from '../../components/Comments';
 import CommentField from '../../components/CommentField';
+import { SAVE_STATES } from '../../constants';
 
 const styles = {
   questionContainer: {
@@ -19,11 +20,15 @@ const styles = {
   },
   explanationContainer: {
     marginTop: 30,
+    marginBottom: 30,
     borderRadius: 5,
   },
   explanationHeader: {
     borderRadius: '5px 5px 0 0',
     padding: 12,
+  },
+  formButtonContainer: {
+    marginBottom: 20,
   },
   formButton: {
     marginRight: 10,
@@ -33,7 +38,7 @@ const styles = {
 class SubmissionEditStepForm extends Component {
 
   static isLastQuestion(questions, stepIndex) {
-    return stepIndex + 1 === questions.length;
+    return stepIndex + 1 === questions.allIds.length;
   }
 
   constructor(props) {
@@ -41,6 +46,24 @@ class SubmissionEditStepForm extends Component {
     this.state = {
       stepIndex: props.maxStep,
     };
+  }
+
+  shouldRenderContinueButton() {
+    const { stepIndex } = this.state;
+    const { questions, saveState } = this.props;
+    return saveState === SAVE_STATES.Saved && !SubmissionEditStepForm.isLastQuestion(questions, stepIndex);
+  }
+
+  shouldDisableContinueButton() {
+    const { stepIndex } = this.state;
+    const { explanations, questions, submitting } = this.props;
+    const questionId = questions.allIds[stepIndex];
+    const explanationId = questions.byId[questionId].explanationId;
+
+    if (explanations[explanationId] && explanations[explanationId].correct && !submitting) {
+      return false;
+    }
+    return true;
   }
 
   handleNext() {
@@ -57,20 +80,6 @@ class SubmissionEditStepForm extends Component {
       this.setState({
         stepIndex: index,
       });
-    }
-  }
-
-  handleQuestionSubmit(action) {
-    const { stepIndex } = this.state;
-    const { questions, handleSubmit } = this.props;
-
-    const questionId = questions.allIds[stepIndex];
-    const question = questions.byId[questionId];
-    const answerId = question.answerId;
-
-    handleSubmit(answerId, action);
-    if (!SubmissionEditStepForm.isLastQuestion(questions.allIds, stepIndex)) {
-      this.handleNext();
     }
   }
 
@@ -101,7 +110,10 @@ class SubmissionEditStepForm extends Component {
 
   renderStepQuestion() {
     const { stepIndex } = this.state;
-    const { canGrade, questions, topics } = this.props;
+    const {
+      canGrade, questions, topics, pristine, submitting,
+      handleAutograde, handleSaveDraft, handleSubmit, handleUnsubmit,
+    } = this.props;
 
     const id = questions.allIds[stepIndex];
     const question = questions.byId[id];
@@ -111,6 +123,48 @@ class SubmissionEditStepForm extends Component {
       <div>
         <SubmissionAnswer {...{ canGrade, answerId, question }} />
         {this.renderExplanationPanel(id)}
+        <div style={styles.formButtonContainer}>
+          <RaisedButton
+            style={styles.formButton}
+            secondary
+            label="Submit"
+            onTouchTap={() => handleAutograde(answerId)}
+            disabled={submitting}
+          />
+          {this.shouldRenderContinueButton() ?
+            <RaisedButton
+              style={styles.formButton}
+              backgroundColor={green500}
+              labelColor={white}
+              label="Continue"
+              onTouchTap={() => this.handleNext()}
+              disabled={this.shouldDisableContinueButton()}
+            /> : null
+          }
+          <RaisedButton
+            style={styles.formButton}
+            primary
+            label="Save Draft"
+            onTouchTap={() => handleSaveDraft(answerId)}
+            disabled={pristine || submitting}
+          />
+        </div>
+        <div style={styles.formButtonContainer}>
+          <RaisedButton
+            style={styles.formButton}
+            secondary
+            label="Finalise Submission"
+            onTouchTap={handleSubmit}
+            disabled={pristine || submitting}
+          />
+          <RaisedButton
+            style={styles.formButton}
+            backgroundColor={red900}
+            secondary
+            label="Unsubmit Submission"
+            onTouchTap={handleUnsubmit}
+          />
+        </div>
         <hr />
         <Comments topic={topic} />
         <CommentField />
@@ -145,37 +199,11 @@ class SubmissionEditStepForm extends Component {
   }
 
   render() {
-    const { stepIndex } = this.state;
-    const { pristine, questions, submitting } = this.props;
     return (
       <div style={styles.questionContainer}>
         {this.renderStepper()}
         <Card style={styles.questionCardContainer}>
           <form>{this.renderStepQuestion()}</form>
-          <hr />
-          <RaisedButton
-            style={styles.formButton}
-            primary
-            label="Save Draft"
-            onTouchTap={() => this.handleQuestionSubmit()}
-            disabled={pristine || submitting}
-          />
-          <RaisedButton
-            style={styles.formButton}
-            secondary
-            label="Submit"
-            onTouchTap={() => this.handleQuestionSubmit('auto_grade')}
-            disabled={submitting}
-          />
-          { SubmissionEditStepForm.isLastQuestion(questions, stepIndex) ?
-            <RaisedButton
-              style={styles.formButton}
-              secondary
-              label="Finalise Submission"
-              onTouchTap={() => this.handleQuestionSubmit('finalise')}
-              disabled={pristine || submitting}
-            /> : null
-          }
         </Card>
       </div>
     );
@@ -194,7 +222,11 @@ SubmissionEditStepForm.propTypes = {
   }),
   topics: PropTypes.objectOf(TopicProp),
   explanations: PropTypes.objectOf(ExplanationProp),
+  saveState: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func,
+  handleUnsubmit: PropTypes.func,
+  handleSaveDraft: PropTypes.func,
+  handleAutograde: PropTypes.func,
 };
 
 export default reduxForm({

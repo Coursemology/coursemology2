@@ -4,12 +4,14 @@ import arrayToObjectById from './utils';
 export default function (state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
-    case actions.UPDATE_SUBMISSION_SUCCESS:
+    case actions.SAVE_DRAFT_SUCCESS:
+    case actions.SUBMISSION_SUCCESS:
+    case actions.UNSUBMIT_SUCCESS:
       return {
         ...state,
         ...arrayToObjectById(action.payload.explanations),
       };
-    case actions.UPDATE_ANSWER_SUCCESS:
+    case actions.AUTOGRADE_SUCCESS:
       return action.payload.explanations[0] ? {
         ...arrayToObjectById(
           Object.values(state).filter(explanation => (

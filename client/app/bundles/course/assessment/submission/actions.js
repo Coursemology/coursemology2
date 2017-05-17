@@ -13,44 +13,74 @@ export function fetchSubmission(id) {
           payload: data,
         });
       })
-      .catch(() => {
-        dispatch({ type: actionTypes.FETCH_SUBMISSION_FAILURE });
-      });
+      .catch(() => dispatch({ type: actionTypes.FETCH_SUBMISSION_FAILURE }));
   };
 }
 
-export function updateSubmission(submissionId, payload) {
+export function saveDraft(submissionId, answers) {
+  const payload = { submission: { answers } };
   return (dispatch) => {
-    dispatch({ type: actionTypes.UPDATE_SUBMISSION_REQUEST });
+    dispatch({ type: actionTypes.SAVE_DRAFT_REQUEST });
 
     return CourseAPI.assessment.submissions.update(submissionId, payload)
       .then(response => response.data)
       .then((data) => {
         dispatch({
-          type: actionTypes.UPDATE_SUBMISSION_SUCCESS,
+          type: actionTypes.SAVE_DRAFT_SUCCESS,
           payload: data,
         });
       })
-      .catch(() => {
-        dispatch({ type: actionTypes.UPDATE_SUBMISSION_FAILURE });
-      });
+      .catch(() => dispatch({ type: actionTypes.SAVE_DRAFT_FAILURE }));
   };
 }
 
-export function updateAnswer(submissionId, payload) {
+export function submit(submissionId, answers) {
+  const payload = { submission: { answers, finalise: true } };
   return (dispatch) => {
-    dispatch({ type: actionTypes.UPDATE_ANSWER_REQUEST });
+    dispatch({ type: actionTypes.SUBMISSION_REQUEST });
 
     return CourseAPI.assessment.submissions.update(submissionId, payload)
       .then(response => response.data)
       .then((data) => {
         dispatch({
-          type: actionTypes.UPDATE_ANSWER_SUCCESS,
+          type: actionTypes.SUBMISSION_SUCCESS,
           payload: data,
         });
       })
-      .catch(() => {
-        dispatch({ type: actionTypes.UPDATE_ANSWER_FAILURE });
-      });
+      .catch(() => dispatch({ type: actionTypes.SUBMISSION_FAILURE }));
+  };
+}
+
+export function unsubmit(submissionId) {
+  const payload = { submission: { unsubmit: true } };
+  return (dispatch) => {
+    dispatch({ type: actionTypes.UNSUBMIT_REQUEST });
+
+    return CourseAPI.assessment.submissions.update(submissionId, payload)
+      .then(response => response.data)
+      .then((data) => {
+        dispatch({
+          type: actionTypes.UNSUBMIT_SUCCESS,
+          payload: data,
+        });
+      })
+      .catch(() => dispatch({ type: actionTypes.UNSUBMIT_FAILURE }));
+  };
+}
+
+export function autograde(submissionId, answers) {
+  const payload = { submission: { answers, auto_grade: true } };
+  return (dispatch) => {
+    dispatch({ type: actionTypes.AUTOGRADE_REQUEST });
+
+    return CourseAPI.assessment.submissions.update(submissionId, payload)
+      .then(response => response.data)
+      .then((data) => {
+        dispatch({
+          type: actionTypes.AUTOGRADE_SUCCESS,
+          payload: data,
+        });
+      })
+      .catch(() => dispatch({ type: actionTypes.AUTOGRADE_FAILURE }));
   };
 }

@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import { Card } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import { red900 } from 'material-ui/styles/colors';
 
 import { QuestionProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
@@ -45,9 +46,8 @@ class SubmissionEditForm extends Component {
   }
 
   render() {
-    const {
-      canGrade, pristine, submitting, handleSubmit,
-    } = this.props;
+    const { pristine, submitting, handleSubmit, handleUnsubmit, handleSaveDraft } = this.props;
+
     return (
       <Card style={styles.questionCardContainer}>
         <form>
@@ -57,21 +57,22 @@ class SubmissionEditForm extends Component {
           style={styles.formButton}
           primary
           label="Save Draft"
-          onTouchTap={handleSubmit}
+          onTouchTap={handleSaveDraft}
           disabled={pristine || submitting}
         />
         <RaisedButton
           style={styles.formButton}
           secondary
           label="Finalise Submission"
-          onTouchTap={() => handleSubmit('finalise')}
+          onTouchTap={handleSubmit}
           disabled={submitting}
         />
         <RaisedButton
           style={styles.formButton}
+          backgroundColor={red900}
           secondary
           label="Unsubmit Submission"
-          onTouchTap={() => handleSubmit('unsubmit')}
+          onTouchTap={handleUnsubmit}
           disabled={submitting}
         />
       </Card>
@@ -88,7 +89,9 @@ SubmissionEditForm.propTypes = {
   topics: PropTypes.objectOf(TopicProp),
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
+  handleSaveDraft: PropTypes.func,
   handleSubmit: PropTypes.func,
+  handleUnsubmit: PropTypes.func,
 };
 
 export default reduxForm({

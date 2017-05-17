@@ -7,6 +7,13 @@ export const DATA_STATES = {
   Received: 'received',
 };
 
+export const SAVE_STATES = {
+  Error: 'error',
+  Idle: 'idle',
+  Saving: 'saving',
+  Saved: 'saved',
+};
+
 export const questionTypes = mirrorCreator([
   'MultipleChoice',
   'MultipleResponse',
@@ -23,15 +30,11 @@ export const TestCaseTypes = {
 };
 
 const actionTypes = mirrorCreator([
-  'FETCH_SUBMISSION_REQUEST',
-  'FETCH_SUBMISSION_SUCCESS',
-  'FETCH_SUBMISSION_FAILURE',
-  'UPDATE_SUBMISSION_REQUEST',
-  'UPDATE_SUBMISSION_SUCCESS',
-  'UPDATE_SUBMISSION_FAILURE',
-  'UPDATE_ANSWER_REQUEST',
-  'UPDATE_ANSWER_SUCCESS',
-  'UPDATE_ANSWER_FAILURE',
+  'FETCH_SUBMISSION_REQUEST', 'FETCH_SUBMISSION_SUCCESS', 'FETCH_SUBMISSION_FAILURE',
+  'SAVE_DRAFT_REQUEST', 'SAVE_DRAFT_SUCCESS', 'SAVE_DRAFT_FAILURE',
+  'SUBMISSION_REQUEST', 'SUBMISSION_SUCCESS', 'SUBMISSION_FAILURE',
+  'UNSUBMIT_REQUEST', 'UNSUBMIT_SUCCESS', 'UNSUBMIT_FAILURE',
+  'AUTOGRADE_REQUEST', 'AUTOGRADE_SUCCESS', 'AUTOGRADE_FAILURE',
 ]);
 
 export default actionTypes;
