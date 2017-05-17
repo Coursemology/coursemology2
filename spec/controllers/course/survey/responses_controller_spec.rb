@@ -223,9 +223,8 @@ RSpec.describe Course::Survey::ResponsesController do
           let(:selected_option_ids) { [multiple_choice_question.options.first.id] }
 
           it "does not update the question's options" do
-            expect { subject }.to raise_exception(ActiveRecord::RecordInvalid)
             expect(multiple_response_answer.reload.question_option_ids).
-              to eq(initially_selected_option_ids)
+              to match_array(initially_selected_option_ids)
           end
         end
       end
