@@ -2,12 +2,11 @@
 class Course::AnnouncementsController < Course::ComponentController
   load_and_authorize_resource :announcement, through: :course, class: Course::Announcement.name
   before_action :add_announcement_breadcrumb
+  after_action :mark_announcements_as_read, only: :index
 
   def index #:nodoc:
     @announcements = @announcements.includes(:creator).sorted_by_sticky.sorted_by_date
     @announcements = @announcements.page(page_param).with_read_marks_for(current_user)
-    unread = @announcements.unread_by(current_user)
-    Course::Announcement.mark_array_as_read(unread, current_user)
   end
 
   def show #:nodoc:
@@ -61,5 +60,10 @@ class Course::AnnouncementsController < Course::ComponentController
   # @return [nil] If announcement component is disabled.
   def component
     current_component_host[:course_announcements_component]
+  end
+
+  def mark_announcements_as_read
+    unread = Course::Announcement.where(id: @announcements.map(&:id)).unread_by(current_user)
+    Course::Announcement.mark_array_as_read(unread, current_user)
   end
 end

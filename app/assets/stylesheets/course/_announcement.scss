@@ -11,6 +11,12 @@
 
   @include timestamp;
 
+  &.unread {
+    background-color: $unread-highlight;
+    border-radius: 4px;
+    padding: 4px;
+  }
+
   .content {
     font-size: 13px;
     line-height: 18px;

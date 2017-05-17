@@ -10,6 +10,7 @@ $white: #ffffff !default;
 $grey-light: #cccccc !default;
 
 //## Variables for colors used in Coursemology.
+$unread-highlight: #f8e3e3 !default;
 $course-achievement-granted-bg: $state-success-bg !default;
 $course-achievement-locked-bg: $gray-lighter !default;
 $course-assessment-not-started-bg: $gray-lighter !default;
@@ -26,7 +27,7 @@ $course-discussion-post-border-radius: $border-radius-base !default;
 $course-discussion-post-shadow-color: $gray-lighter !default;
 $course-discussion-post-annotation-trigger-bg-color: $body-bg !default;
 $course-discussion-post-annotation-trigger-color: $brand-primary !default;
-$course-forum-unread-highlight: #f8e3e3 !default;
+$course-forum-unread-highlight: $unread-highlight !default;
 $course-video-not-started-bg: $gray-lighter !default;
 $course-video-submission-not-started: $red !default;
 
