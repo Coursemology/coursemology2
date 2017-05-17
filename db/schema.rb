@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170510233359) do
+ActiveRecord::Schema.define(version: 20170515061739) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -139,6 +139,8 @@ ActiveRecord::Schema.define(version: 20170510233359) do
     t.integer  "tab_id",                    :null=>false, :index=>{:name=>"fk__course_assessments_tab_id"}, :foreign_key=>{:references=>"course_assessment_tabs", :name=>"fk_course_assessments_tab_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.boolean  "tabbed_view",               :default=>false, :null=>false
     t.boolean  "autograded",                :null=>false
+    t.boolean  "show_private",              :default=>false, :comment=>"Show private test cases  after students answer correctly"
+    t.boolean  "show_evaluation",           :default=>false, :comment=>"Show evaluation test cases after after students answer correctly"
     t.boolean  "skippable",                 :default=>false
     t.boolean  "delayed_grade_publication", :default=>false
     t.string   "password",                  :limit=>255

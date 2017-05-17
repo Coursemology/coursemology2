@@ -7,14 +7,14 @@ div.files
   = f.simple_fields_for :files do |files_form|
     = render file_fields_path, f: files_form
 
-- answer = last_attempt ? last_attempt.actable: programming
+- answer = last_attempt ? last_attempt.actable : programming
 - auto_grading = answer.auto_grading ? answer.auto_grading.actable : nil
 - is_grader = can?(:read_tests, @submission)
 
 - if question.test_cases.present?
   / Render test cases by type, and test case output.
   = render partial: 'course/assessment/answer/programming/test_cases',
-           locals: { question: question, auto_grading: auto_grading, is_grader: is_grader }
+           locals: { question: question, answer: answer, is_grader: is_grader }
 
   / Show stdout and stderr to graders when evaluation is unsuccessful.
   - if is_grader && auto_grading && auto_grading.exit_code && auto_grading.exit_code != 0

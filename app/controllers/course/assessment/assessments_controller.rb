@@ -73,7 +73,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     base_params = [:title, :description, :base_exp, :time_bonus_exp, :start_at, :end_at,
                    :bonus_end_at, :published, :autograded]
     if autograded?
-      base_params << :skippable
+      base_params += [:skippable, :show_private, :show_evaluation]
     else
       base_params += [:password, :tabbed_view, :delayed_grade_publication]
     end
