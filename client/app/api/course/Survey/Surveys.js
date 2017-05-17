@@ -108,7 +108,7 @@ export default class SurveysAPI extends BaseSurveyAPI {
   *         response_path: string,
   *         text_response: string
   *           - included only if it is a text response question
-  *         selected_options: Array.<number>
+  *         question_option_ids: Array.<number>
   *           - included only if it is a multiple choice or multiple response question
   *       }>
   *     }>

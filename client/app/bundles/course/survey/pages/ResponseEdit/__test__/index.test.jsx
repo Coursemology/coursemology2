@@ -15,31 +15,31 @@ const responseData = {
   response: {
     id: 5,
     creator_name: 'user',
-    sections: [{
-      id: 2,
-      weight: 0,
-      title: 'Only section',
-      description: 'Has one question',
-      answers: [{
-        id: 3,
-        question_id: 4,
-        question: {
-          id: 4,
-          question_type: 'text',
-          description: 'Why?',
-          required: true,
-          weight: 0,
-        },
-        present: true,
-        text_response: 'Current answer',
-        options: [],
-      }],
+    answers: [{
+      id: 3,
+      question_id: 4,
+      present: true,
+      text_response: 'Current answer',
+      options: [],
     }],
   },
   survey: {
     id: 6,
     title: 'Test Response',
     description: 'Form working?',
+    sections: [{
+      id: 2,
+      weight: 0,
+      title: 'Only section',
+      description: 'Has one question',
+      questions: [{
+        id: 4,
+        question_type: 'text',
+        description: 'Why?',
+        required: true,
+        weight: 0,
+      }],
+    }],
   },
   flags: {
     canModify: true,
@@ -85,7 +85,7 @@ describe('<ResponseEdit />', () => {
 
     const expectedPayload = {
       response: {
-        answers_attributes: [{ id: 3, text_response: newAnswer, options_attributes: [] }],
+        answers_attributes: [{ id: 3, text_response: newAnswer, question_option_ids: [] }],
         submit: true,
       },
     };

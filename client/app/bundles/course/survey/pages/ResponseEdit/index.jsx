@@ -1,15 +1,13 @@
-/* eslint-disable camelcase */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Card, CardText } from 'material-ui/Card';
 import Subheader from 'material-ui/Subheader';
-import { questionTypes } from 'course/survey/constants';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 import { fetchEditableResponse, updateResponse } from 'course/survey/actions/responses';
 import LoadingIndicator from 'course/survey/components/LoadingIndicator';
-import ResponseForm from 'course/survey/containers/ResponseForm';
+import ResponseForm, { buildInitialValues, buildResponsePayload } from 'course/survey/containers/ResponseForm';
 
 const translations = defineMessages({
   saveSuccess: {
@@ -45,27 +43,6 @@ class ResponseEdit extends React.Component {
     dispatch: PropTypes.func.isRequired,
   };
 
-  static formatAnswer(answer) {
-    const { id, text_response, options, selected_option, question } = answer;
-    const isMultipleChoice =
-      question.question_type === questionTypes.MULTIPLE_CHOICE && selected_option;
-    const reduceOption = ({ id: optionId, selected, question_option_id }) => ({
-      id: optionId,
-      selected: isMultipleChoice ? (question_option_id === selected_option) : selected,
-    });
-    return ({ id, text_response, options_attributes: options.map(reduceOption) });
-  }
-
-  /**
-   * Transforms the form data into the JSON shape that the endpoint expects to receive.
-   */
-  static formatSurveyResponseData(data) {
-    const answers_attributes = data.sections.reduce((accumulator, section) => (
-      accumulator.concat(section.answers.map(ResponseEdit.formatAnswer))
-    ), []);
-    return { response: { answers_attributes, submit: data.submit, unsubmit: data.unsubmit } };
-  }
-
   componentDidMount() {
     const { dispatch, match: { params: { responseId } } } = this.props;
     dispatch(fetchEditableResponse(responseId));
@@ -74,7 +51,7 @@ class ResponseEdit extends React.Component {
   handleUpdateResponse = (data) => {
     const { dispatch, match: { params: { responseId } } } = this.props;
     const { saveSuccess, saveFailure, submitSuccess, submitFailure } = translations;
-    const payload = ResponseEdit.formatSurveyResponseData(data);
+    const payload = buildResponsePayload(data);
     const successMessage = <FormattedMessage {...(data.submit ? submitSuccess : saveSuccess)} />;
     const failureMessage = <FormattedMessage {...(data.submit ? submitFailure : saveFailure)} />;
 
@@ -84,16 +61,16 @@ class ResponseEdit extends React.Component {
   }
 
   renderBody() {
-    const { response, flags } = this.props;
+    const { survey, response, flags } = this.props;
     if (flags.isLoading) { return <LoadingIndicator />; }
 
+    const initialValues = buildInitialValues(survey, response);
     return (
       <div>
         <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
         <ResponseForm
-          initialValues={response}
           onSubmit={this.handleUpdateResponse}
-          {...{ response, flags }}
+          {...{ response, flags, initialValues }}
         />
       </div>
     );

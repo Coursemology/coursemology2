@@ -84,7 +84,7 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
         values={Object {}}
       />
     </Subheader>
-    <InjectIntl(ReduxForm)
+    <ReduxForm
       flags={
         Object {
           "canModify": true,
@@ -94,13 +94,7 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
           "isResponseCreator": true,
         }
       }
-      initialValues={
-        Object {
-          "creator_name": "Staff",
-          "id": 2,
-          "submitted_at": "2099-12-31T16:00:00.000Z",
-        }
-      }
+      initialValues={Object {}}
       readOnly={true}
       response={
         Object {

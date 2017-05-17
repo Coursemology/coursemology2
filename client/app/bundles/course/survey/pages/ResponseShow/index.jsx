@@ -9,7 +9,7 @@ import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 import { fetchResponse } from 'course/survey/actions/responses';
 import LoadingIndicator from 'course/survey/components/LoadingIndicator';
-import ResponseForm from 'course/survey/containers/ResponseForm';
+import ResponseForm, { buildInitialValues } from 'course/survey/containers/ResponseForm';
 import RespondButton from 'course/survey/containers/RespondButton';
 import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
 
@@ -74,8 +74,9 @@ class ResponseShow extends React.Component {
   }
 
   renderBody() {
-    const { response, flags } = this.props;
+    const { survey, response, flags } = this.props;
     if (flags.isLoading) { return <LoadingIndicator />; }
+    const initialValues = buildInitialValues(survey, response);
 
     return (
       <div>
@@ -83,8 +84,7 @@ class ResponseShow extends React.Component {
         <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
         <ResponseForm
           readOnly
-          initialValues={response}
-          {...{ response, flags }}
+          {...{ response, flags, initialValues }}
         />
       </div>
     );

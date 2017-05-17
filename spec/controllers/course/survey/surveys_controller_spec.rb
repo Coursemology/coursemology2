@@ -232,7 +232,7 @@ RSpec.describe Course::Survey::SurveysController do
 
         subject { get :results, format: :json, course_id: course.id, id: survey.id }
         before do
-          student_response.build_missing_answers_and_options
+          student_response.build_missing_answers
           student_response.save!
           subject
         end
@@ -255,7 +255,7 @@ RSpec.describe Course::Survey::SurveysController do
           )
 
           expect(multiple_choice_question['answers'][0].keys).to contain_exactly(
-            'id', 'course_user_name', 'course_user_id', 'phantom', 'selected_options',
+            'id', 'course_user_name', 'course_user_id', 'phantom', 'question_option_ids',
             'response_path'
           )
 

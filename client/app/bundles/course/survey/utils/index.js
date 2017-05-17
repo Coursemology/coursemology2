@@ -40,23 +40,6 @@ export const sortSurveyElements = survey => (
   sortAttributeArray(survey, 'sections', sortSectionElements)
 );
 
-const sortAnswerElements = answer => sortAttributeArray(answer, 'options');
-
-const sortResponseSectionElements = (section) => {
-  const sortByQuestionWeight = (a, b) => a.question.weight - b.question.weight;
-  return sortAttributeArray(section, 'answers', sortAnswerElements, sortByQuestionWeight);
-};
-
-/**
- * Returns the given survey response with it's descendent elements sorted appropriately.
- *
- * @param {Object} response
- * @return {Object} The updated response
- */
-export const sortResponseElements = response => (
-  sortAttributeArray(response, 'sections', sortResponseSectionElements)
-);
-
 const sortResultsQuestionElements = (question) => {
   const sortAnswersByStudentName = (a, b) => a.course_user_name.localeCompare(b.course_user_name);
   return sortAttributeArray(question, 'answers', attr => attr, sortAnswersByStudentName);

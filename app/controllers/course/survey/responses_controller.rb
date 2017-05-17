@@ -4,10 +4,11 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
 
   def index
     authorize!(:manage, @survey)
-    @course_students = current_course.course_users.students.order_alphabetically
     respond_to do |format|
       format.html { render 'course/survey/surveys/index' }
-      format.json
+      format.json do
+        @course_students = current_course.course_users.students.order_alphabetically
+      end
     end
   end
 
@@ -37,7 +38,7 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
     respond_to do |format|
       format.html { render 'course/survey/surveys/index' }
       format.json do
-        @response.build_missing_answers_and_options
+        @response.build_missing_answers
         if @response.save
           render_response_json
         else
@@ -55,7 +56,7 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
       authorize!(:modify, @response)
     end
 
-    if @response.update_attributes(response_update_params)
+    if @response.update(response_update_params)
       render_response_json
     else
       render json: { errors: @response.errors }, status: :bad_request
@@ -85,21 +86,23 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
 
   def build_response
     @response.experience_points_record.course_user = current_course_user
-    @response.build_missing_answers_and_options
+    @response.build_missing_answers
   end
 
   def load_answers
-    @answers ||= @response.answers.includes(:options, question: [:section, :options])
+    @answers ||= @response.answers.includes(:options)
   end
 
   def render_response_json
+    load_sections
     load_answers
-    render partial: 'response', locals: { response: @response, survey: @survey }
+    render partial: 'response',
+           locals: { response: @response, answers: @answers, survey: @survey }
   end
 
   def response_update_params
     params.
       require(:response).
-      permit(answers_attributes: [:id, :text_response, options_attributes: [:id, :selected]])
+      permit(answers_attributes: [:id, :text_response, question_option_ids: []])
   end
 end

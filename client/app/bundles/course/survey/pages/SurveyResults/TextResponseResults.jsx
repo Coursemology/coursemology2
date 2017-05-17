@@ -54,7 +54,7 @@ class TextResponseResults extends React.Component {
       course_user_id: PropTypes.number,
       course_user_name: PropTypes.string,
       phantom: PropTypes.bool,
-      selected_options: PropTypes.arrayOf(PropTypes.number),
+      question_option_ids: PropTypes.arrayOf(PropTypes.number),
     })),
   }
 

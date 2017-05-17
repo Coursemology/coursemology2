@@ -9,7 +9,7 @@ RSpec.describe Course::Survey::ResponsesController do
     let!(:course) { create(:course, creator: admin) }
     let(:manager) { create(:course_manager, course: course) }
     let!(:student) { create(:course_student, course: course) }
-    let!(:survey) { create(:survey, *survey_traits, course: course) }
+    let!(:survey) { create(:survey, *survey_traits, { course: course }.merge(survey_options)) }
     let!(:survey_question) do
       section = create(:course_survey_section, survey: survey)
       create(:course_survey_question, question_type: :text, section: section)
@@ -23,9 +23,43 @@ RSpec.describe Course::Survey::ResponsesController do
              survey: survey, creator: student.user, course_user: student)
     end
     let(:survey_traits) { nil }
+    let(:survey_options) { {} }
     let(:response_traits) { nil }
+    let(:json_response) { JSON.parse(response.body) }
 
     before { sign_in(user) }
+
+    describe '#index' do
+      let(:user) { create(:administrator) }
+
+      context 'when html page is requested' do
+        subject { get :index, course_id: course.id, survey_id: survey.id }
+
+        it { is_expected.to render_template('index') }
+      end
+
+      context 'when json data is requested' do
+        render_views
+        subject { get :index, format: :json, course_id: course.id, survey_id: survey.id }
+        before do
+          survey_response
+          subject
+        end
+
+        it 'responds with the necessary fields' do
+          expect(json_response.keys).to contain_exactly('survey', 'responses')
+
+          first_response = json_response['responses'].first
+          expect(first_response.keys).to contain_exactly(
+            'present', 'course_user', 'canUnsubmit', 'id', 'path', 'submitted_at'
+          )
+
+          expect(first_response['course_user'].keys).to contain_exactly(
+            'id', 'name', 'path', 'phantom'
+          )
+        end
+      end
+    end
 
     describe '#create' do
       let(:create_response_request) do
@@ -52,7 +86,7 @@ RSpec.describe Course::Survey::ResponsesController do
           it 'responds with details of the existing survey response' do
             expect { create_response_request }.to change { survey.responses.count }.by(0)
             expect(response.status).to eq(303)
-            expect(JSON.parse(response.body)).to eq(
+            expect(json_response).to eq(
               'responseId' => survey_response.id,
               'canModify' => true,
               'canSubmit' => true
@@ -140,13 +174,62 @@ RSpec.describe Course::Survey::ResponsesController do
     end
 
     describe '#update' do
+      let(:user) { student.user }
+
       subject do
         patch :update, format: :json, response: response_params,
                        course_id: course.id, survey_id: survey.id, id: survey_response.id
       end
 
+      context 'when student submits an answer for a multiple response question' do
+        let(:survey_traits) { [:published, :currently_active] }
+        let(:survey_options) { { section_traits: [:with_mrq_question, :with_mcq_question] } }
+        let(:multiple_response_question) { survey.questions.multiple_response.first }
+        let(:multiple_choice_question) { survey.questions.multiple_choice.first }
+        let(:question_option_ids) { multiple_response_question.options.map(&:id) }
+        let(:initially_selected_option_ids) { question_option_ids[0, 2] }
+        let(:multiple_response_answer) do
+          survey_response.answers.find_by(question_id: multiple_response_question.id)
+        end
+        let(:response_params) do
+          {
+            answers_attributes: {
+              id: multiple_response_answer.id,
+              question_option_ids: selected_option_ids
+            }
+          }
+        end
+        let(:selected_option_ids) { [] }
+
+        before do
+          survey_response.build_missing_answers
+          survey_response.save
+          multiple_response_answer.question_option_ids = initially_selected_option_ids
+          survey_response.save
+        end
+
+        context 'when valid options are selected' do
+          let(:selected_option_ids) { [question_option_ids.last] }
+
+          before { subject }
+
+          it "updates the question's options" do
+            expect(multiple_response_answer.reload.question_option_ids).
+              to eq([question_option_ids.last])
+          end
+        end
+
+        context 'when invalid options are selected' do
+          let(:selected_option_ids) { [multiple_choice_question.options.first.id] }
+
+          it "does not update the question's options" do
+            expect(multiple_response_answer.reload.question_option_ids).
+              to match_array(initially_selected_option_ids)
+          end
+        end
+      end
+
       context 'when the response is being submitted' do
-        let(:user) { student.user }
         let(:response_params) { { submit: true } }
 
         context 'when the response is on time' do

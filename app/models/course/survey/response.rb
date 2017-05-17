@@ -7,7 +7,7 @@ class Course::Survey::Response < ActiveRecord::Base
   belongs_to :survey, inverse_of: :responses
   has_many :answers, inverse_of: :response, dependent: :destroy
 
-  accepts_nested_attributes_for :answers
+  accepts_nested_attributes_for :answers, reject_if: :options_invalid
 
   scope :submitted, -> { where.not(submitted_at: nil) }
 
@@ -31,23 +31,41 @@ class Course::Survey::Response < ActiveRecord::Base
     self.awarder = nil
   end
 
-  def build_missing_answers_and_options
-    answers_hash = {}.tap do |hash|
-      answers.includes(options: :question_option, question: :options).each do |answer|
-        hash[answer.question_id] = answer
-      end
-    end
-    self.answers = survey.questions.includes(:options).map do |question|
-      answer = answers_hash[question.id]
-      answer ? answer.build_missing_options : build_missing_answer(question)
+  def build_missing_answers
+    answer_id_set = answers.pluck(:question_id).to_set
+    survey.questions.each do |question|
+      answers.build(question: question) unless answer_id_set.include?(question.id)
     end
   end
 
-  def build_missing_answer(question)
-    answers.build(question: question) do |answer|
-      question.options.each do |option|
-        answer.options.build(question_option: option)
-      end
+  private
+
+  def options_invalid(attributes)
+    if attributes[:question_option_ids]
+      !valid_option_ids?(attributes[:id], attributes[:question_option_ids])
+    else
+      false
     end
+  end
+
+  # Checks if the given question option ids belong to the answer's question.
+  #
+  # @param [Integer] answer_id ID of the answer
+  # @param [Array<Integer>] ids ID of the selected options
+  # @return [Boolean] true if options are valid
+  def valid_option_ids?(answer_id, ids)
+    question_id = question_ids_hash[answer_id]
+    valid_option_ids = valid_option_ids_hash[question_id]
+    ids.to_set.subset?(valid_option_ids)
+  end
+
+  def question_ids_hash
+    @question_ids_hash ||= answers.map { |answer| [answer.id, answer.question_id] }.to_h
+  end
+
+  def valid_option_ids_hash
+    @valid_option_ids_hash ||= survey.questions.includes(:options).map do |question|
+      [question.id, question.options.map(&:id).to_set]
+    end.to_h
   end
 end
