@@ -79,11 +79,11 @@ class SectionCard extends React.Component {
           }
           {
             section.questions.map((question, index) =>
-              <Question
+              (<Question
                 key={question.id}
                 expanded={this.state.expanded}
                 {...{ question, index, sectionIndex, draggedQuestion }}
-              />
+              />)
             )
           }
         </CardText>

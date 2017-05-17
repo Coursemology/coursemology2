@@ -239,12 +239,12 @@ class LessonPlanItem extends React.Component {
       <div style={styles.attachments}>
         {
           item.get('materials').map(material =>
-            <div key={material.get('name')} style={styles.attachment}>
+            (<div key={material.get('name')} style={styles.attachment}>
               <Description style={styles.attachmentIcon} color={grey700} />
               <a href={material.get('url')}>
                 { material.get('name') }
               </a>
-            </div>
+            </div>)
           )
         }
       </div>

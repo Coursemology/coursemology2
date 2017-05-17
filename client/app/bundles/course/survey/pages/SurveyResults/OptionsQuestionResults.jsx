@@ -163,7 +163,7 @@ class OptionsQuestionResults extends React.Component {
       <div style={styles.optionStudentNames}>
         {
           students.map(student =>
-            <Chip key={student.id} style={styles.nameChip}>
+            (<Chip key={student.id} style={styles.nameChip}>
               <Link to={student.response_path}>
                 {
                   student.phantom ?
@@ -171,7 +171,7 @@ class OptionsQuestionResults extends React.Component {
                     student.name
                 }
               </Link>
-            </Chip>
+            </Chip>)
           )
         }
       </div>

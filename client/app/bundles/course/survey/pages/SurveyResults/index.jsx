@@ -100,11 +100,11 @@ class SurveyResults extends React.Component {
         <Subheader><FormattedMessage {...surveyTranslations.questions} /></Subheader>
         {
           this.props.sections.map((section, index) =>
-            <ResultsSection
+            (<ResultsSection
               key={section.id}
               includePhantoms={this.state.includePhantoms}
               {...{ section, index, anonymous }}
-            />
+            />)
           )
         }
       </div>

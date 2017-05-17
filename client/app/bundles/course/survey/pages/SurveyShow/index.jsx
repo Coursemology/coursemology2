@@ -41,12 +41,12 @@ class SurveyShow extends React.Component {
         <Subheader>{ intl.formatMessage(surveyTranslations.questions) }</Subheader>
         {
           sections.map((section, index) =>
-            <Section
+            (<Section
               key={section.id}
               first={index === 0}
               last={index === lastIndex}
               {...{ section, index, survey, disabled }}
-            />
+            />)
           )
         }
       </div>

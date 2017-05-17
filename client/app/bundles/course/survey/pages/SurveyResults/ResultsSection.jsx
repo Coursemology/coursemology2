@@ -19,10 +19,10 @@ const ResultsSection = ({ section, includePhantoms, anonymous }) => (
     <CardText>
       {
           section.questions.map((question, index) =>
-            <ResultsQuestion
+            (<ResultsQuestion
               key={question.id}
               {...{ question, index, includePhantoms, anonymous }}
-            />
+            />)
           )
         }
     </CardText>

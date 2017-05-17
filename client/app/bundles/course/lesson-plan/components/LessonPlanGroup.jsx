@@ -14,10 +14,10 @@ const LessonPlanGroup = ({ milestone, items }) => {
       <Paper>
         {
           items.map(item =>
-            <LessonPlanItem
+            (<LessonPlanItem
               key={componentKey(item)}
               {...{ item }}
-            />
+            />)
           )
         }
       </Paper>

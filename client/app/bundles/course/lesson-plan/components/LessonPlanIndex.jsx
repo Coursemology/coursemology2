@@ -48,11 +48,11 @@ class LessonPlanIndex extends React.Component {
       <div className={styles.mainPanel}>
         {
           milestoneGroups.map(group =>
-            <LessonPlanGroup
+            (<LessonPlanGroup
               key={group.milestone.get('id')}
               milestone={group.milestone}
               items={group.items}
-            />
+            />)
           )
         }
         <div className={styles.navContainer}>
