@@ -18,16 +18,16 @@ h3 = t('.test_cases')
               type_heading: t('.public'), is_grader: is_grader }
 
 / Display the private tests to students, only if the `show_private` option is enabled and
-/ the student get the answer correct.
-- if is_grader || answer.correct? && assessment.show_private?
+/ the submission is published.
+- if is_grader || submission.published? && assessment.show_private?
   - if test_cases_and_results['private_test'].present?
     = render partial: 'course/assessment/answer/programming/test_cases_of_type',
       locals: { test_cases_and_results: test_cases_and_results['private_test'],
                 type_heading: t('.private'), is_grader: is_grader }
 
 / Display the evaluation tests to students, only if the `show_evaluation` option is enabled and
-/ the student get the answer correct.
-- if is_grader || answer.correct? && assessment.show_evaluation?
+/ the submission is published.
+- if is_grader || submission.published? && assessment.show_evaluation?
   - if test_cases_and_results['evaluation_test'].present?
     = render partial: 'course/assessment/answer/programming/test_cases_of_type',
       locals: { test_cases_and_results: test_cases_and_results['evaluation_test'],
