@@ -39,7 +39,7 @@ const translations = defineMessages({
   },
   showPrivateHint: {
     id: 'course.assessment.form.showPrivateHint',
-    defaultMessage: 'Show private tests after students answer the question correctly (For programming questions)',
+    defaultMessage: 'Show private tests to students after the submission is graded and published (For programming questions)',
   },
   showEvaluation: {
     id: 'course.assessment.form.showEvaluation',
@@ -47,7 +47,7 @@ const translations = defineMessages({
   },
   showEvaluationHint: {
     id: 'course.assessment.form.showEvaluationHint',
-    defaultMessage: 'Show evaluation tests after students answer the question correctly (For programming questions)',
+    defaultMessage: 'Show evaluation tests to students after the submission is graded and published (For programming questions)',
   },
   published: {
     id: 'course.assessment.form.published',

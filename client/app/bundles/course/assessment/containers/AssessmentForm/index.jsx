@@ -142,28 +142,6 @@ class AssessmentForm extends React.Component {
             style={styles.toggle}
             disabled={submitting}
           />
-          <Field
-            name="show_private"
-            component={Toggle}
-            label={<FormattedMessage {...translations.showPrivate} />}
-            labelPosition="right"
-            style={styles.toggle}
-            disabled={submitting}
-          />
-          <div style={styles.hint}>
-            <FormattedMessage {...translations.showPrivateHint} />
-          </div>
-          <Field
-            name="show_evaluation"
-            component={Toggle}
-            label={<FormattedMessage {...translations.showEvaluation} />}
-            labelPosition="right"
-            style={styles.toggle}
-            disabled={submitting}
-          />
-          <div style={styles.hint}>
-            <FormattedMessage {...translations.showEvaluationHint} />
-          </div>
         </div>
       );
     }
@@ -327,6 +305,29 @@ class AssessmentForm extends React.Component {
         }
 
         {this.renderExtraOptions()}
+
+        <Field
+          name="show_private"
+          component={Toggle}
+          label={<FormattedMessage {...translations.showPrivate} />}
+          labelPosition="right"
+          style={styles.toggle}
+          disabled={submitting}
+        />
+        <div style={styles.hint}>
+          <FormattedMessage {...translations.showPrivateHint} />
+        </div>
+        <Field
+          name="show_evaluation"
+          component={Toggle}
+          label={<FormattedMessage {...translations.showEvaluation} />}
+          labelPosition="right"
+          style={styles.toggle}
+          disabled={submitting}
+        />
+        <div style={styles.hint}>
+          <FormattedMessage {...translations.showEvaluationHint} />
+        </div>
 
         {
           folderAttributes &&
