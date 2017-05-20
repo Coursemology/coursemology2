@@ -4,7 +4,7 @@ import { Card } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import { red900 } from 'material-ui/styles/colors';
 
-import { QuestionProp, TopicProp } from '../../propTypes';
+import { PostProp, QuestionProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import Comments from '../../components/Comments';
 import CommentField from '../../components/CommentField';
@@ -25,17 +25,18 @@ const styles = {
 class SubmissionEditForm extends Component {
 
   renderQuestions() {
-    const { canGrade, questions, topics } = this.props;
+    const { canGrade, questions, posts, topics } = this.props;
     return (
       <div>
         {questions.allIds.map((id) => {
           const question = questions.byId[id];
           const answerId = question.answerId;
           const topic = topics[question.topicId];
+          const postsInTopic = topic.postIds.map(postId => posts[postId])
           return (
             <div key={id} style={styles.questionContainer}>
               <SubmissionAnswer {...{ canGrade, answerId, question }} />
-              <Comments topic={topic} />
+              <Comments posts={postsInTopic} />
               <CommentField />
               <hr />
             </div>
@@ -86,6 +87,7 @@ SubmissionEditForm.propTypes = {
     byIds: PropTypes.objectOf(QuestionProp),
     allIds: PropTypes.arrayOf(PropTypes.number),
   }),
+  posts: PropTypes.objectOf(PostProp),
   topics: PropTypes.objectOf(TopicProp),
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,

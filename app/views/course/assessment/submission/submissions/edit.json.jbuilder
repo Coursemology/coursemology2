@@ -30,5 +30,5 @@ json.partial! 'questions', assessment: @assessment, submission: @submission,
                            previous_attempts: previous_attempts, can_grade: can_grade
 json.partial! 'answers', latest_attempts: latest_attempts, previous_attempts: previous_attempts,
                          can_grade: can_grade
-json.partial! 'topics', submission: @submission
+json.partial! 'comments', submission: @submission
 json.partial! 'progress', submission: @submission, can_grade: can_grade

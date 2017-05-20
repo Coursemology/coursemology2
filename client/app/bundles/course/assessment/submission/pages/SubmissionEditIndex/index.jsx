@@ -7,7 +7,7 @@ import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEditTabForm from './SubmissionEditTabForm';
 import { fetchSubmission, saveDraft, submit, unsubmit, autograde } from '../../actions';
 import {
-  AnswerProp, AssessmentProp, ProgressProp, QuestionProp,
+  AnswerProp, AssessmentProp, PostProp, ProgressProp, QuestionProp,
   ReduxFormProp, TopicProp, ExplanationProp,
 } from '../../propTypes';
 import { DATA_STATES } from '../../constants';
@@ -55,6 +55,7 @@ class VisibleSubmissionEditIndex extends Component {
       canGrade,
       maxStep,
       answers,
+      posts,
       questions,
       topics,
       explanations,
@@ -73,6 +74,7 @@ class VisibleSubmissionEditIndex extends Component {
           canGrade={canGrade}
           maxStep={maxStep}
           skippable={skippable}
+          posts={posts}
           questions={questions}
           topics={topics}
           explanations={explanations}
@@ -88,6 +90,7 @@ class VisibleSubmissionEditIndex extends Component {
           handleUnsubmit={() => this.handleUnsubmit()}
           initialValues={answers}
           canGrade={canGrade}
+          posts={posts}
           questions={questions}
           topics={topics}
         />
@@ -101,6 +104,7 @@ class VisibleSubmissionEditIndex extends Component {
         handleUnsubmit={() => this.handleUnsubmit()}
         initialValues={answers}
         canGrade={canGrade}
+        posts={posts}
         questions={questions}
         topics={topics}
       />
@@ -137,6 +141,7 @@ VisibleSubmissionEditIndex.propTypes = {
   canUpdate: PropTypes.bool,
   form: ReduxFormProp,
   maxStep: PropTypes.number,
+  posts: PropTypes.objectOf(PostProp),
   progress: ProgressProp,
   questions: PropTypes.shape({
     byId: PropTypes.objectOf(QuestionProp),
@@ -161,6 +166,7 @@ function mapStateToProps(state) {
     canGrade: state.submissionEdit.canGrade,
     form: state.form.submissionEdit,
     maxStep: state.submissionEdit.maxStep,
+    posts: state.posts,
     progress: state.submissionEdit.progress,
     questions: state.questions,
     topics: state.topics,

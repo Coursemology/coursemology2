@@ -44,6 +44,7 @@ const styles = {
 
 export default class CommentCard extends Component {
   static propTypes = {
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,

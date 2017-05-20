@@ -38,7 +38,7 @@ class SubmissionAnswer extends React.Component {
 
     return (
       <div>
-        <h3>{question.display_title}</h3>
+        <h3>{question.displayTitle}</h3>
         <div dangerouslySetInnerHTML={{ __html: question.description }} />
         <hr />
         { renderer(question, answerId, canGrade) }

@@ -16,6 +16,7 @@ class Course::Assessment::SubmissionQuestion::CommentsController < Course::Asses
       @post.parent = last_post_from(@submission_question) if @submission_question.posts.length > 1
       if super && @submission_question.save
         send_created_notification(@post)
+        render_create_response
       else
         head :bad_request
       end
@@ -44,5 +45,12 @@ class Course::Assessment::SubmissionQuestion::CommentsController < Course::Asses
   def last_post_from(submission_question)
     # @post is in submission_question.posts, so we filter out @post, which has no id yet.
     submission_question.posts.ordered_topologically.flatten.select(&:id).last
+  end
+
+  def render_create_response
+    respond_to do |format|
+      format.js
+      format.json { render partial: post }
+    end
   end
 end

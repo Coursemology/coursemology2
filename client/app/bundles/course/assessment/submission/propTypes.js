@@ -37,9 +37,10 @@ const FileProp =
     filename: PropTypes.string,
   });
 
-const PostProp =
+export const PostProp =
   PropTypes.shape({
     id: PropTypes.number.isRequired,
+    topicId: PropTypes.number.isRequired,
     title: PropTypes.string,
     text: PropTypes.string,
     creator: PropTypes.string.isRequired,
@@ -91,7 +92,7 @@ export const ReduxFormProp =
 export const TopicProp =
   PropTypes.shape({
     id: PropTypes.number.isRequired,
-    posts: PropTypes.arrayOf(PostProp),
+    postIds: PropTypes.arrayOf(PropTypes.number),
   });
 
 export const ExplanationProp =

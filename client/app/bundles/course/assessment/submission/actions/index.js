@@ -1,5 +1,5 @@
 import CourseAPI from 'api/course';
-import actionTypes from './constants';
+import actionTypes from '../constants';
 
 export function fetchSubmission(id) {
   return (dispatch) => {
@@ -13,7 +13,7 @@ export function fetchSubmission(id) {
           payload: data,
         });
       })
-      .catch(() => dispatch({ type: actionTypes.FETCH_SUBMISSION_FAILURE }));
+      .catch(e => console.log(e) || dispatch({ type: actionTypes.FETCH_SUBMISSION_FAILURE }));
   };
 }
 

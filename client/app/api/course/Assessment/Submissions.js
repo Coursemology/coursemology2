@@ -38,6 +38,9 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     }
 
     if (data instanceof Array) {
+      if (data.length === 0) {
+        formData.append(`${prefix}[]`, null);
+      }
       data.forEach((item) => {
         SubmissionsAPI.appendFormData(formData, item, `${prefix}[]`);
       });
