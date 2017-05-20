@@ -5,7 +5,7 @@ import { white, green500, green900, red300, red900 } from 'material-ui/styles/co
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import { QuestionProp, TopicProp, ExplanationProp } from '../../propTypes';
+import { PostProp, QuestionProp, TopicProp, ExplanationProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import Comments from '../../components/Comments';
 import CommentField from '../../components/CommentField';
@@ -111,7 +111,7 @@ class SubmissionEditStepForm extends Component {
   renderStepQuestion() {
     const { stepIndex } = this.state;
     const {
-      canGrade, questions, topics, pristine, submitting,
+      canGrade, posts, questions, topics, pristine, submitting,
       handleAutograde, handleSaveDraft, handleSubmit, handleUnsubmit,
     } = this.props;
 
@@ -119,6 +119,7 @@ class SubmissionEditStepForm extends Component {
     const question = questions.byId[id];
     const answerId = question.answerId;
     const topic = topics[question.topicId];
+    const postsInTopic = topic.postIds.map(postId => posts[postId]);
     return (
       <div>
         <SubmissionAnswer {...{ canGrade, answerId, question }} />
@@ -166,7 +167,7 @@ class SubmissionEditStepForm extends Component {
           />
         </div>
         <hr />
-        <Comments topic={topic} />
+        <Comments posts={postsInTopic} />
         <CommentField />
       </div>
     );
@@ -216,6 +217,7 @@ SubmissionEditStepForm.propTypes = {
   pristine: PropTypes.bool,
   skippable: PropTypes.bool.isRequired,
   submitting: PropTypes.bool,
+  posts: PropTypes.objectOf(PostProp),
   questions: PropTypes.shape({
     byIds: PropTypes.objectOf(QuestionProp),
     allIds: PropTypes.arrayOf(PropTypes.number),

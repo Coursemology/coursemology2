@@ -89,10 +89,6 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     scalar_params.push(array_params)
   end
 
-  def edit_submission_path
-    edit_course_assessment_submission_path(current_course, @assessment, @submission)
-  end
-
   def questions_to_attempt
     @questions_to_attempt ||= @submission.assessment.questions
   end
@@ -159,6 +155,10 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
                                            previous_attempts: [answer.reload],
                                            can_grade: can?(:grade, @submission) }
     end
+  end
+
+  def answer_path(answer)
+    course_assessment_submission_answer_path(current_course, @assessment, @submission, answer)
   end
 
   def grade_and_reattempt_answer(answer)

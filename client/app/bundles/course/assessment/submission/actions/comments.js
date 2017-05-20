@@ -35,7 +35,7 @@ export function update(topicId, postId, comment) {
   };
 }
 
-export function delete(topicId, postId) {
+export function destroy(topicId, postId) {
   return (dispatch) => {
     dispatch({ type: actionTypes.DELETE_COMMENT_REQUEST });
 

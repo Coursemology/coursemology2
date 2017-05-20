@@ -32,7 +32,7 @@ class SubmissionEditForm extends Component {
           const question = questions.byId[id];
           const answerId = question.answerId;
           const topic = topics[question.topicId];
-          const postsInTopic = topic.postIds.map(postId => posts[postId])
+          const postsInTopic = topic.postIds.map(postId => posts[postId]);
           return (
             <div key={id} style={styles.questionContainer}>
               <SubmissionAnswer {...{ canGrade, answerId, question }} />

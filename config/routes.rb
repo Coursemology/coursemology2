@@ -188,7 +188,7 @@ Rails.application.routes.draw do
               patch :publish_all, on: :collection
               resources :logs, only: [:index]
               scope module: :answer do
-                resources :answers, only: [] do
+                resources :answers, only: [:show] do
                   namespace :programming do
                     resources :files, only: [] do
                       resources :annotations, only: [:create]
