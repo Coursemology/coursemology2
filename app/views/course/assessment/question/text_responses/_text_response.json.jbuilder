@@ -1,4 +1,4 @@
-json.allow_attachment question.allow_attachment? unless question.hide_text?
+json.allowAttachment question.allow_attachment? unless question.hide_text?
 
 json.solutions question.solutions.each do |solution|
   json.solutionType solution.solution_type

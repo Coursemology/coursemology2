@@ -18,16 +18,16 @@ const TestCaseProp =
 
 export const QuestionProp =
 PropTypes.shape({
-  allow_attachment: PropTypes.bool,
+  allowAttachment: PropTypes.bool,
   description: PropTypes.string.isRequired,
   displayTitle: PropTypes.string.isRequired,
   language: PropTypes.string,
   maximumGrade: PropTypes.number.isRequired,
   options: PropTypes.arrayOf(OptionProp),
   type: PropTypes.string.isRequired,
-  answerId: PropTypes.number,
+  answerId: PropTypes.number.isRequired,
   explanationId: PropTypes.number,
-  topicId: PropTypes.number,
+  topicId: PropTypes.number.isRequired,
   testCases: PropTypes.arrayOf(TestCaseProp),
 });
 
@@ -49,10 +49,14 @@ export const PostProp =
 
 export const AnswerProp =
   PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    questionId: PropTypes.number.isRequired,
     answer_text: PropTypes.string,
     file: PropTypes.object,
     files: PropTypes.arrayOf(FileProp),
     option_ids: PropTypes.arrayOf(PropTypes.number),
+    correct: PropTypes.bool,
+    explanations: PropTypes.arrayOf(PropTypes.string),
   });
 
 export const AssessmentProp =
@@ -60,27 +64,28 @@ export const AssessmentProp =
     autograded: PropTypes.bool.isRequired,
     delayedGradePublication: PropTypes.bool.isRequired,
     description: PropTypes.string,
-    password: PropTypes.string,
-    passwordProtected: PropTypes.bool.isRequired,
     published: PropTypes.bool,
     skippable: PropTypes.bool.isRequired,
     tabbedView: PropTypes.bool.isRequired,
     title: PropTypes.string,
+    questionIds: PropTypes.arrayOf(PropTypes.number),
   });
 
-export const ProgressProp =
+export const SubmissionProp =
   PropTypes.shape({
     attempted_at: PropTypes.string,
-    base_points: PropTypes.number,
-    due_at: PropTypes.string,
+    basePoints: PropTypes.number,
+    canGrade: PropTypes.bool,
+    canUpdate: PropTypes.bool,
+    dueAt: PropTypes.string,
     grade: PropTypes.number,
-    graded_at: PropTypes.string,
+    gradedAt: PropTypes.string,
     grader: PropTypes.string,
     late: PropTypes.bool,
-    points_awarded: PropTypes.number,
-    submitted_at: PropTypes.string,
+    pointsAwarded: PropTypes.number,
+    submittedAt: PropTypes.string,
     submitter: PropTypes.string,
-    workflow_state: PropTypes.string,
+    workflowState: PropTypes.string,
   });
 
 export const ReduxFormProp =
@@ -92,14 +97,5 @@ export const ReduxFormProp =
 export const TopicProp =
   PropTypes.shape({
     id: PropTypes.number.isRequired,
-    postIds: PropTypes.arrayOf(PropTypes.number),
-  });
-
-export const ExplanationProp =
-  PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    questionId: PropTypes.number.isRequired,
-    correct: PropTypes.bool,
-    explanations: PropTypes.arrayOf(PropTypes.string).isRequired,
-    option_ids: PropTypes.arrayOf(PropTypes.number),
+    posts: PropTypes.arrayOf(PropTypes.number),
   });

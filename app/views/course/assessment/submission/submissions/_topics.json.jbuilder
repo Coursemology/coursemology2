@@ -6,9 +6,7 @@ json.topics submission.submission_questions do |submission_question|
   json.postIds topic.post_ids
 end
 
-posts = submission.submission_questions.reduce([]) do |posts, submission_question|
-  posts + submission_question.discussion_topic.posts
-end
+posts = submission.submission_questions.map(&:discussion_topic).map(&:posts).flatten(1)
 
 json.posts posts do |post|
   json.partial! post, post: post

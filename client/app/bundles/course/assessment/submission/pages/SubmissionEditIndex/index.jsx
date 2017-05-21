@@ -7,8 +7,8 @@ import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEditTabForm from './SubmissionEditTabForm';
 import { fetchSubmission, saveDraft, submit, unsubmit, autograde } from '../../actions';
 import {
-  AnswerProp, AssessmentProp, PostProp, ProgressProp, QuestionProp,
-  ReduxFormProp, TopicProp, ExplanationProp,
+  AnswerProp, AssessmentProp, PostProp, QuestionProp,
+  ReduxFormProp, SubmissionProp, TopicProp,
 } from '../../propTypes';
 import { DATA_STATES } from '../../constants';
 
@@ -42,23 +42,22 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   renderProgress() {
-    const { progress, canGrade } = this.props;
-    if (canGrade) {
-      return <ProgressPanel progress={progress} />;
+    const { submission } = this.props;
+    if (submission.canGrade) {
+      return <ProgressPanel submission={submission} />;
     }
     return null;
   }
 
   renderContent() {
     const {
-      assessment: { autograded, tabbedView, skippable },
-      canGrade,
-      maxStep,
+      assessment: { autograded, tabbedView, skippable, questionIds },
+      submission: { canGrade, maxStep },
       answers,
+      explanations,
       posts,
       questions,
       topics,
-      explanations,
       saveState,
     } = this.props;
 
@@ -71,13 +70,14 @@ class VisibleSubmissionEditIndex extends Component {
           handleSaveDraft={() => this.handleSaveDraft()}
           handleAutograde={answerId => this.handleAutograde(answerId)}
           initialValues={answers}
+          explanations={explanations}
           canGrade={canGrade}
           maxStep={maxStep}
           skippable={skippable}
           posts={posts}
+          questionIds={questionIds}
           questions={questions}
           topics={topics}
-          explanations={explanations}
           saveState={saveState}
         />
       );
@@ -91,6 +91,7 @@ class VisibleSubmissionEditIndex extends Component {
           initialValues={answers}
           canGrade={canGrade}
           posts={posts}
+          questionIds={questionIds}
           questions={questions}
           topics={topics}
         />
@@ -105,6 +106,7 @@ class VisibleSubmissionEditIndex extends Component {
         initialValues={answers}
         canGrade={canGrade}
         posts={posts}
+        questionIds={questionIds}
         questions={questions}
         topics={topics}
       />
@@ -137,18 +139,12 @@ VisibleSubmissionEditIndex.propTypes = {
   }),
   answers: PropTypes.objectOf(AnswerProp),
   assessment: AssessmentProp,
-  canGrade: PropTypes.bool,
-  canUpdate: PropTypes.bool,
+  explanations: PropTypes.objectOf(AnswerProp),
   form: ReduxFormProp,
-  maxStep: PropTypes.number,
   posts: PropTypes.objectOf(PostProp),
-  progress: ProgressProp,
-  questions: PropTypes.shape({
-    byId: PropTypes.objectOf(QuestionProp),
-    allIds: PropTypes.arrayOf(PropTypes.number),
-  }),
+  questions: PropTypes.objectOf(QuestionProp),
+  submission: SubmissionProp,
   topics: PropTypes.objectOf(TopicProp),
-  explanations: PropTypes.objectOf(ExplanationProp),
   dataState: PropTypes.string.isRequired,
   saveState: PropTypes.string.isRequired,
 
@@ -163,14 +159,13 @@ function mapStateToProps(state) {
   return {
     answers: state.answers,
     assessment: state.submissionEdit.assessment,
-    canGrade: state.submissionEdit.canGrade,
+    explanations: state.explanations,
     form: state.form.submissionEdit,
     maxStep: state.submissionEdit.maxStep,
     posts: state.posts,
-    progress: state.submissionEdit.progress,
+    submission: state.submissionEdit.submission,
     questions: state.questions,
     topics: state.topics,
-    explanations: state.explanations,
     dataState: state.submissionEdit.dataState,
     saveState: state.submissionEdit.saveState,
   };

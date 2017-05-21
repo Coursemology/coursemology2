@@ -14,7 +14,7 @@ export default function (state = {}, action) {
         ...state,
         [topicId]: {
           ...state[topicId],
-          postIds: [...state.postIds, postId],
+          posts: [...state.posts, postId],
         },
       };
     }
@@ -22,9 +22,7 @@ export default function (state = {}, action) {
       const { topicId, id: postId } = action.payload;
       return {
         ...state,
-        [topicId]: state.topicId.filter(comment => (
-          comment.id !== postId
-        )),
+        [topicId]: state.topicId.filter(comment => comment.id !== postId),
       };
     }
     default:

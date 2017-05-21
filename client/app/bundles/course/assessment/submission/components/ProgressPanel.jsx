@@ -6,7 +6,7 @@ import WarningIcon from 'material-ui/svg-icons/alert/warning';
 // eslint-disable-next-line import/extensions, import/no-extraneous-dependencies, import/no-unresolved
 import moment from 'lib/moment';
 
-import { ProgressProp } from '../propTypes';
+import { SubmissionProp } from '../propTypes';
 
 const styles = {
   header: {
@@ -48,23 +48,22 @@ class ProgressPanel extends Component {
     );
   }
 
-  /* eslint-disable camelcase */
   renderGrading() {
-    const { base_points, grade, graded_at, grader, maximum_grade, points_awarded } = this.props.progress;
+    const { basePoints, grade, gradedAt, grader, maximumGrade, pointsAwarded } = this.props.submission;
     return (
       <Table selectable={false} style={styles.table}>
         <TableBody displayRowCheckbox={false}>
           <TableRow>
             <TableRowColumn>Grade</TableRowColumn>
-            <TableRowColumn>{grade} / {maximum_grade}</TableRowColumn>
+            <TableRowColumn>{grade} / {maximumGrade}</TableRowColumn>
           </TableRow>
           <TableRow>
             <TableRowColumn>Experience Points</TableRowColumn>
-            <TableRowColumn>{points_awarded} / {base_points}</TableRowColumn>
+            <TableRowColumn>{pointsAwarded} / {basePoints}</TableRowColumn>
           </TableRow>
           <TableRow>
             <TableRowColumn>Graded At</TableRowColumn>
-            <TableRowColumn>{ProgressPanel.formatDateTime(graded_at)}</TableRowColumn>
+            <TableRowColumn>{ProgressPanel.formatDateTime(gradedAt)}</TableRowColumn>
           </TableRow>
           <TableRow>
             <TableRowColumn>Grader</TableRowColumn>
@@ -74,24 +73,23 @@ class ProgressPanel extends Component {
       </Table>
     );
   }
-  /* eslint-enable camelcase */
 
   renderTimes() {
-    const { attempted_at, due_at, submitted_at } = this.props.progress;
+    const { attemptedAt, dueAt, submittedAt } = this.props.submission;
     return (
       <Table selectable={false} style={styles.table}>
         <TableBody displayRowCheckbox={false}>
           <TableRow>
             <TableRowColumn>Attempted At</TableRowColumn>
-            <TableRowColumn>{ProgressPanel.formatDateTime(attempted_at)}</TableRowColumn>
+            <TableRowColumn>{ProgressPanel.formatDateTime(attemptedAt)}</TableRowColumn>
           </TableRow>
           <TableRow>
             <TableRowColumn>Submitted At</TableRowColumn>
-            <TableRowColumn>{ProgressPanel.formatDateTime(submitted_at)}</TableRowColumn>
+            <TableRowColumn>{ProgressPanel.formatDateTime(submittedAt)}</TableRowColumn>
           </TableRow>
           <TableRow>
             <TableRowColumn>Due At</TableRowColumn>
-            <TableRowColumn>{ProgressPanel.formatDateTime(due_at)}</TableRowColumn>
+            <TableRowColumn>{ProgressPanel.formatDateTime(dueAt)}</TableRowColumn>
           </TableRow>
         </TableBody>
       </Table>
@@ -99,19 +97,19 @@ class ProgressPanel extends Component {
   }
 
   render() {
-    const { late, submitter, workflow_state } = this.props.progress;
+    const { late, submitter, workflowState } = this.props.submission;
     const title = {
       attempting: 'Attempting',
       submitted: 'Submitted',
       graded: 'Graded but not published',
       published: 'Graded',
-    }[workflow_state];
+    }[workflowState];
     return (
       <Card>
         <CardHeader
           title={`Submission by ${submitter}`}
           subtitle={title}
-          style={styles.header[workflow_state]}
+          style={styles.header[workflowState]}
           actAsExpander
           showExpandableButton
         />
@@ -128,7 +126,7 @@ class ProgressPanel extends Component {
 }
 
 ProgressPanel.propTypes = {
-  progress: ProgressProp.isRequired,
+  submission: SubmissionProp.isRequired,
 };
 
 export default ProgressPanel;

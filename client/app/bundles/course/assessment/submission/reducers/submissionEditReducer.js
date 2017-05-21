@@ -2,10 +2,7 @@ import actions, { DATA_STATES, SAVE_STATES } from '../constants';
 
 const initialState = {
   assessment: null,
-  canGrade: false,
-  canUpdate: false,
-  maxStep: null,
-  progress: null,
+  submission: null,
   dataState: DATA_STATES.Unfetched,
   saveState: SAVE_STATES.Idle,
 };
@@ -21,10 +18,7 @@ export default function submissionEditReducer(state = initialState, action) {
       return {
         ...state,
         assessment: action.payload.assessment,
-        canGrade: action.payload.canGrade,
-        canUpdate: action.payload.canUpdate,
-        maxStep: action.payload.maxStep,
-        progress: action.payload.progress,
+        submission: action.payload.submission,
         dataState: DATA_STATES.Received,
       };
     case actions.FETCH_SUBMISSION_FAILURE:
@@ -45,7 +39,7 @@ export default function submissionEditReducer(state = initialState, action) {
     case actions.UNSUBMIT_SUCCESS:
       return {
         ...state,
-        progress: action.payload.progress,
+        submission: action.payload.submission,
         saveState: SAVE_STATES.Saved,
       };
     case actions.AUTOGRADE_SUCCESS:

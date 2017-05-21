@@ -11,14 +11,15 @@ export default function (state = {}, action) {
         ...state,
         ...arrayToObjectById(action.payload.answers),
       };
-    case actions.AUTOGRADE_SUCCESS:
-      return {
-        ...arrayToObjectById(
-          Object.values(state).filter(answer => (
-            answer.questionId !== action.payload.answers[0].questionId
-          )).concat(action.payload.answers)
-        ),
-      };
+    case actions.AUTOGRADE_SUCCESS: {
+      const { questionId, id } = action.payload.answers[0];
+      return Object.keys(state).reduce((obj, key) => {
+        if (state[key].questionId !== questionId) {
+          return { ...obj, [key]: state[key] };
+        }
+        return obj;
+      }, { [id]: action.payload.answers[0] });
+    }
     default:
       return state;
   }
