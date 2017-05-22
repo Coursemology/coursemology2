@@ -28,6 +28,44 @@ In addition, some front-end components use
 This [guide](https://gorails.com/setup/) written by the awesome people at
 GoRails should help you to get started on Ruby on Rails.
 
+### For Windows Setup Only
+
+ 1. Set up Ubuntu Bash by following the instructions [here](http://www.windowscentral.com/how-install-bash-shell-command-line-windows-10).
+
+ 2. Setup the aforementioned System Requirements on your Ubuntu bash. Subsequently, follow the steps in 'Getting Started' to finish your setup.
+
+ 3. If you wish to setup the evaluator, you will need to install Docker on Ubuntu Bash and Docker for Windows ([here](https://docs.docker.com/docker-for-windows/)), and then connect them via TCP. On Ubuntu Bash:
+
+    ~~~ sh
+    cd
+    wget https://get.docker.com/builds/Linux/x86_64/docker-17.04.0-ce.tgz
+    tar -xzvf docker-*.tgz
+    cd docker
+    ./docker -H tcp://0.0.0.0:2375 ps
+    ~~~
+
+    or 
+
+    ~~~ sh
+    env DOCKER_HOST=tcp://0.0.0.0:2375 ./docker ps
+    ~~~
+    
+    To make it permanent:
+
+    ~~~ sh
+    mkdir ~/bin
+    mv ~/docker/docker ~/bin
+    ~~~
+
+    Add the corresponding variables to .bashrc
+
+    ~~~ sh
+    export DOCKER_HOST=tcp://0.0.0.0:2375
+    export PATH=$PATH:~/bin
+    ~~~
+
+    For more information, you can refer to the original [post](https://serverfault.com/questions/767994/can-you-run-docker-natively-on-the-new-windows-10-ubuntu-bash-userspace).
+
 ### Getting Started
 
  1. We use submodules in the git repo; use this command to update submodules:  
