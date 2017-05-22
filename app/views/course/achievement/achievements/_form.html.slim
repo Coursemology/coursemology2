@@ -6,8 +6,11 @@
   = f.input :description
 
   = f.label t('.badge')
-  div.achievement-form = display_achievement_badge(@achievement)
-  = f.file_field :badge
+  - badge_url = \
+      @achievement.new_record? ? image_url('achievement_blank.png') : @achievement.badge.medium.url
+  div.achievement-form#achievement-badge data-badge-url=badge_url
+    = display_achievement_badge(@achievement)
+    = f.file_field :badge
 
   = f.input :published
 

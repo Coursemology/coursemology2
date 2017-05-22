@@ -1,10 +1,15 @@
+import React from 'react';
 import axios from 'lib/axios';
+import { render } from 'react-dom';
 import { defineMessages } from 'react-intl';
+import ProviderWrapper from 'lib/components/ProviderWrapper';
 import renderNotificationBar from 'lib/helpers/renderNotificationBar';
+import BadgeUploader from './badge-uploader';
 
 require('jquery-ui/ui/widgets/sortable');
 
 const ACHIEVEMENTS_SELECTOR = '#sortable ';
+const BADGE_UPLOADER_SELECTOR = 'achievement-badge';
 const BUTTON_SELECTOR = '#reorder ';
 const REORDER_ICON_SELECTOR = '.fa-reorder ';
 
@@ -75,6 +80,22 @@ function initializeReorderingButton() {
   });
 }
 
+// Function to render the drag-and-drop badge uploader.
+function renderBadgeUploader() {
+  const mountNode = document.getElementById(BADGE_UPLOADER_SELECTOR);
+  const fileUrl = mountNode.getAttribute('data-badge-url');
+  render(
+    <ProviderWrapper>
+      <BadgeUploader
+        currentFileUrl={fileUrl}
+      />
+    </ProviderWrapper>
+    , mountNode
+  );
+}
+
+
 $(document).ready(() => {
   initializeReorderingButton();
+  renderBadgeUploader();
 });
