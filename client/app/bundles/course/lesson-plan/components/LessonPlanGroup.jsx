@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import { Element } from 'react-scroll';
 import Paper from 'material-ui/Paper';
@@ -13,10 +14,10 @@ const LessonPlanGroup = ({ milestone, items }) => {
       <Paper>
         {
           items.map(item =>
-            <LessonPlanItem
+            (<LessonPlanItem
               key={componentKey(item)}
               {...{ item }}
-            />
+            />)
           )
         }
       </Paper>
@@ -27,7 +28,7 @@ const LessonPlanGroup = ({ milestone, items }) => {
 LessonPlanGroup.propTypes = {
   milestone: PropTypes.instanceOf(Immutable.Map).isRequired,
   items: PropTypes.arrayOf(
-    React.PropTypes.instanceOf(Immutable.Map).isRequired
+    PropTypes.instanceOf(Immutable.Map).isRequired
   ).isRequired,
 };
 

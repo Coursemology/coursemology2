@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import FlatButton from 'material-ui/FlatButton';
 import QuestionFormOption from './QuestionFormOption';

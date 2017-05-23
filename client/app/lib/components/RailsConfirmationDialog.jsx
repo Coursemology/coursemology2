@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
 class RailsConfirmationDialog extends React.Component {

@@ -16,7 +16,9 @@ const config = {
       'axios',
       'brace',
       'immutable',
+      'mirror-creator',
       'moment',
+      'moment-timezone',
       'react',
       'react-ace',
       'react-dnd',
@@ -33,6 +35,7 @@ const config = {
       'redux-immutable',
       'redux-promise',
       'redux-thunk',
+      'webfontloader',
     ],
     // Vendor contains the libraries that are not in a single bundle (size could change depends on
     // application code)
@@ -51,9 +54,6 @@ const config = {
 
   externals: {
     jquery: 'jQuery',
-    'react/addons': true,
-    'react/lib/ExecutionEnvironment': true,
-    'react/lib/ReactContext': true,
   },
 
   resolve: {
@@ -87,15 +87,15 @@ const config = {
   ],
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
-        loader: 'babel-loader',
+        use: 'babel-loader',
         exclude: /node_modules/,
       },
       {
         test: /\.scss$/,
-        loaders: [
+        use: [
           'style-loader',
           'css-loader',
           'sass-loader',
@@ -106,19 +106,22 @@ const config = {
       },
       {
         test: /\.scss$/,
-        loaders: [
+        use: [
           'style-loader',
-          'css-loader?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              modules: true,
+              localIdentName: '[path]___[name]__[local]___[hash:base64:5]',
+            },
+          },
           'sass-loader',
         ],
         exclude: [
           /node_modules/,
           path.resolve(__dirname, 'app/lib/styles/MaterialSummernote.scss'),
         ],
-      },
-      {
-        test: /\.json$/,
-        loader: 'json-loader',
       },
     ],
   },

@@ -1,7 +1,8 @@
 /* eslint-disable react/no-array-index-key */
 import Immutable from 'immutable';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -23,7 +24,7 @@ import translations from './ProgrammingQuestionForm.intl';
 
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
-  actions: React.PropTypes.shape({
+  actions: PropTypes.shape({
     submitForm: PropTypes.func.isRequired,
     updateProgrammingQuestion: PropTypes.func.isRequired,
     updateSkills: PropTypes.func.isRequired,

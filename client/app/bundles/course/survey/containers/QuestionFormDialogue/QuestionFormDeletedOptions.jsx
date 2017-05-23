@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Checkbox from 'material-ui/Checkbox';
 import RadioButton from 'material-ui/RadioButton';
 import IconButton from 'material-ui/IconButton';

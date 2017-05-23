@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Card } from 'material-ui/Card';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { cyan500, grey300 } from 'material-ui/styles/colors';

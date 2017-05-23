@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import { scroller } from 'react-scroll';
 import styles from './LessonPlanIndex.scss';
@@ -47,11 +48,11 @@ class LessonPlanIndex extends React.Component {
       <div className={styles.mainPanel}>
         {
           milestoneGroups.map(group =>
-            <LessonPlanGroup
+            (<LessonPlanGroup
               key={group.milestone.get('id')}
               milestone={group.milestone}
               items={group.items}
-            />
+            />)
           )
         }
         <div className={styles.navContainer}>

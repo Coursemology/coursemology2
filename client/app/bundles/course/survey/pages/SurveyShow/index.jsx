@@ -1,5 +1,6 @@
 /* eslint-disable new-cap */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { DragDropContext } from 'react-dnd';
@@ -40,12 +41,12 @@ class SurveyShow extends React.Component {
         <Subheader>{ intl.formatMessage(surveyTranslations.questions) }</Subheader>
         {
           sections.map((section, index) =>
-            <Section
+            (<Section
               key={section.id}
               first={index === 0}
               last={index === lastIndex}
               {...{ section, index, survey, disabled }}
-            />
+            />)
           )
         }
       </div>

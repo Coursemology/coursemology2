@@ -44,7 +44,6 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
           hoverable={false}
           hovered={false}
           selectable={false}
-          selected={false}
           striped={false}
         >
           <TableHeaderColumn>
@@ -61,7 +60,6 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
           hoverable={false}
           hovered={false}
           selectable={false}
-          selected={false}
           striped={false}
         >
           <TableHeaderColumn>

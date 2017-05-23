@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { red500 } from 'material-ui/styles/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';

@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
@@ -24,7 +25,7 @@ const MAX_TEST_CASES = 99;
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
   dataFiles: PropTypes.instanceOf(Immutable.Map).isRequired,
-  actions: React.PropTypes.shape({
+  actions: PropTypes.shape({
     updatePythonCodeBlock: PropTypes.func.isRequired,
     createPythonTestCase: PropTypes.func.isRequired,
     updatePythonTestCase: PropTypes.func.isRequired,
@@ -39,7 +40,7 @@ const propTypes = {
 };
 
 const contextTypes = {
-  muiTheme: React.PropTypes.object.isRequired,
+  muiTheme: PropTypes.object.isRequired,
 };
 
 export function validation(data, pathOfKeysToData, intl) {

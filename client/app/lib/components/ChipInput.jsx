@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import TextFieldUnderline from 'material-ui/TextField/TextFieldUnderline';
 import TextFieldHint from 'material-ui/TextField/TextFieldHint';
 import TextFieldLabel from 'material-ui/TextField/TextFieldLabel';
@@ -152,7 +153,7 @@ const defaultProps = {
 };
 
 const contextTypes = {
-  muiTheme: React.PropTypes.object.isRequired,
+  muiTheme: PropTypes.object.isRequired,
 };
 
 

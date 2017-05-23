@@ -1,5 +1,6 @@
 /* eslint-disable new-cap */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { DropTarget } from 'react-dnd';
 import { draggableTypes } from 'course/survey/constants';

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import Subheader from 'material-ui/Subheader';
@@ -93,7 +94,7 @@ class ConditionList extends React.Component {
   renderConditionRows() {
     return (
       this.props.conditions.map(condition =>
-        <TableRow key={condition.edit_url}>
+        (<TableRow key={condition.edit_url}>
           <TableRowColumn colSpan="1">{condition.type}</TableRowColumn>
           <TableRowColumn colSpan="3">{condition.description}</TableRowColumn>
           <TableRowColumn colSpan="2" style={styles.alignRight}>
@@ -109,7 +110,7 @@ class ConditionList extends React.Component {
               <DeleteIcon />
             </IconButton>
           </TableRowColumn>
-        </TableRow>
+        </TableRow>)
       )
     );
   }

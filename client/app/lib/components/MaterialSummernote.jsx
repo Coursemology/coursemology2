@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import ReactSummernote from 'react-summernote';
 import TextFieldLabel from 'material-ui/TextField/TextFieldLabel';
 
@@ -6,9 +7,9 @@ import '../styles/MaterialSummernote.scss';
 
 const propTypes = {
   field: PropTypes.string,
-  label: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.object,
+  label: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
   ]),
   disabled: PropTypes.bool,
   onChange: PropTypes.func.isRequired,

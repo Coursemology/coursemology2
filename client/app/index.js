@@ -35,12 +35,15 @@ function loadModules() {
 }
 
 if (!global.Intl) {
-  require.ensure([], (require) => {
-    require('intl');
-    require('intl/locale-data/jsonp/en');
-    require('intl/locale-data/jsonp/zh');
+  Promise.all([
+    import(/* webpackChunkName: "intl" */ 'intl'),
+    import(/* webpackChunkName: "intl" */ 'intl/locale-data/jsonp/en'),
+    import(/* webpackChunkName: "intl" */ 'intl/locale-data/jsonp/zh'),
+  ]).then(() => {
     loadModules();
-  }, 'intl');
+  }).catch((e) => {
+    throw e;
+  });
 } else {
   loadModules();
 }

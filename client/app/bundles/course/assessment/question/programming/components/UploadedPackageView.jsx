@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import UploadedPackageTemplateView from './UploadedPackageTemplateView';
 import UploadedPackageTestCaseView from './UploadedPackageTestCaseView';
@@ -23,27 +24,25 @@ const propTypes = {
   intl: intlShape.isRequired,
 };
 
-class UploadedPackageView extends React.Component {
-  render() {
-    const { data, intl } = this.props;
-    const packageUI = data.get('package_ui');
-    const templates = packageUI.get('templates');
-    const testCases = packageUI.get('test_cases');
+const UploadedPackageView = (props) => {
+  const { data, intl } = props;
+  const packageUI = data.get('package_ui');
+  const templates = packageUI.get('templates');
+  const testCases = packageUI.get('test_cases');
 
-    if (data.get('question').get('package')) {
-      return (
-        <div className="template-package-container">
-          <h3>{intl.formatMessage(translations.templateHeader)}</h3>
-          <UploadedPackageTemplateView {...{ templates }} />
-          <h3>{intl.formatMessage(translations.testCasesHeader)}</h3>
-          <UploadedPackageTestCaseView {...{ testCases }} />
-        </div>
-      );
-    }
-
-    return null;
+  if (data.get('question').get('package')) {
+    return (
+      <div className="template-package-container">
+        <h3>{intl.formatMessage(translations.templateHeader)}</h3>
+        <UploadedPackageTemplateView {...{ templates }} />
+        <h3>{intl.formatMessage(translations.testCasesHeader)}</h3>
+        <UploadedPackageTestCaseView {...{ testCases }} />
+      </div>
+    );
   }
-}
+
+  return null;
+};
 
 UploadedPackageView.propTypes = propTypes;
 
