@@ -46,14 +46,10 @@ class SubmissionEditForm extends Component {
     );
   }
 
-  render() {
-    const { pristine, submitting, handleSubmit, handleUnsubmit, handleSaveDraft } = this.props;
-
-    return (
-      <Card style={styles.questionCardContainer}>
-        <form>
-          {this.renderQuestions()}
-        </form>
+  renderSaveDraftButton() {
+    const { pristine, submitting, submitted, handleSaveDraft } = this.props;
+    if (!submitted) {
+      return (
         <RaisedButton
           style={styles.formButton}
           primary
@@ -61,6 +57,15 @@ class SubmissionEditForm extends Component {
           onTouchTap={handleSaveDraft}
           disabled={pristine || submitting}
         />
+      );
+    }
+    return null;
+  }
+
+  renderSubmitButton() {
+    const { submitting, submitted, handleSubmit } = this.props;
+    if (!submitted) {
+      return (
         <RaisedButton
           style={styles.formButton}
           secondary
@@ -68,14 +73,36 @@ class SubmissionEditForm extends Component {
           onTouchTap={handleSubmit}
           disabled={submitting}
         />
+      );
+    }
+    return null;
+  }
+
+  renderUnsubmitButton() {
+    const { canGrade, submitted, handleUnsubmit } = this.props;
+    if (canGrade && submitted) {
+      return (
         <RaisedButton
           style={styles.formButton}
           backgroundColor={red900}
           secondary
           label="Unsubmit Submission"
           onTouchTap={handleUnsubmit}
-          disabled={submitting}
         />
+      );
+    }
+    return null;
+  }
+
+  render() {
+    return (
+      <Card style={styles.questionCardContainer}>
+        <form>
+          {this.renderQuestions()}
+        </form>
+        {this.renderSaveDraftButton()}
+        {this.renderSubmitButton()}
+        {this.renderUnsubmitButton()}
       </Card>
     );
   }
@@ -83,6 +110,7 @@ class SubmissionEditForm extends Component {
 
 SubmissionEditForm.propTypes = {
   canGrade: PropTypes.bool.isRequired,
+  submitted: PropTypes.bool.isRequired,
   posts: PropTypes.objectOf(PostProp),
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(QuestionProp),

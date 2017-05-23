@@ -43,12 +43,10 @@ class SubmissionEditTabForm extends Component {
     );
   }
 
-  render() {
-    const { pristine, submitting, handleSaveDraft, handleSubmit, handleUnsubmit } = this.props;
-    return (
-      <Card style={styles.questionContainer}>
-        <form>{this.renderQuestions()}</form>
-        <hr />
+  renderSaveDraftButton() {
+    const { pristine, submitting, submitted, handleSaveDraft } = this.props;
+    if (!submitted) {
+      return (
         <RaisedButton
           style={styles.formButton}
           primary
@@ -56,21 +54,51 @@ class SubmissionEditTabForm extends Component {
           onTouchTap={handleSaveDraft}
           disabled={pristine || submitting}
         />
+      );
+    }
+    return null;
+  }
+
+  renderSubmitButton() {
+    const { submitting, submitted, handleSubmit } = this.props;
+    if (!submitted) {
+      return (
         <RaisedButton
           style={styles.formButton}
           secondary
           label="Finalise Submission"
           onTouchTap={handleSubmit}
-          disabled={pristine || submitting}
+          disabled={submitting}
         />
+      );
+    }
+    return null;
+  }
+
+  renderUnsubmitButton() {
+    const { canGrade, submitted, handleUnsubmit } = this.props;
+    if (canGrade && submitted) {
+      return (
         <RaisedButton
           style={styles.formButton}
           backgroundColor={red900}
           secondary
           label="Unsubmit Submission"
           onTouchTap={handleUnsubmit}
-          disabled={submitting}
         />
+      );
+    }
+    return null;
+  }
+
+  render() {
+    return (
+      <Card style={styles.questionContainer}>
+        <form>{this.renderQuestions()}</form>
+        <hr />
+        {this.renderSaveDraftButton()}
+        {this.renderSubmitButton()}
+        {this.renderUnsubmitButton()}
       </Card>
     );
   }
@@ -78,6 +106,7 @@ class SubmissionEditTabForm extends Component {
 
 SubmissionEditTabForm.propTypes = {
   canGrade: PropTypes.bool.isRequired,
+  submitted: PropTypes.bool.isRequired,
   posts: PropTypes.objectOf(PostProp),
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(QuestionProp),

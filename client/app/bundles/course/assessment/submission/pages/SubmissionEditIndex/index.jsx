@@ -52,7 +52,7 @@ class VisibleSubmissionEditIndex extends Component {
   renderContent() {
     const {
       assessment: { autograded, tabbedView, skippable, questionIds },
-      submission: { canGrade, maxStep },
+      submission: { canGrade, maxStep, submittedAt },
       answers,
       explanations,
       posts,
@@ -72,6 +72,7 @@ class VisibleSubmissionEditIndex extends Component {
           initialValues={answers}
           explanations={explanations}
           canGrade={canGrade}
+          submitted={!!submittedAt}
           maxStep={maxStep}
           skippable={skippable}
           posts={posts}
@@ -90,6 +91,7 @@ class VisibleSubmissionEditIndex extends Component {
           handleUnsubmit={() => this.handleUnsubmit()}
           initialValues={answers}
           canGrade={canGrade}
+          submitted={!!submittedAt}
           posts={posts}
           questionIds={questionIds}
           questions={questions}
@@ -105,6 +107,7 @@ class VisibleSubmissionEditIndex extends Component {
         handleUnsubmit={() => this.handleUnsubmit()}
         initialValues={answers}
         canGrade={canGrade}
+        submitted={!!submittedAt}
         posts={posts}
         questionIds={questionIds}
         questions={questions}
