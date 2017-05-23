@@ -158,7 +158,8 @@ gem 'http_accept_language'
 # User authentication
 gem 'devise', github: 'allenwq/devise', branch: '3-stable'
 gem 'devise_masquerade'
-gem 'devise-multi_email'
+# TODO: To remove restriction once v2.0 stabilises.
+gem 'devise-multi_email', '~>1.0.5'
 gem 'simple_token_authentication', github: 'lowjoel/simple_token_authentication',
                                    branch: 'optional-params-headers'
 gem 'omniauth'
