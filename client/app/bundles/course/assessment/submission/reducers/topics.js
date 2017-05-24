@@ -14,15 +14,18 @@ export default function (state = {}, action) {
         ...state,
         [topicId]: {
           ...state[topicId],
-          posts: [...state.posts, postId],
+          postIds: [...state[topicId].postIds, postId],
         },
       };
     }
     case actions.DELETE_COMMENT_SUCCESS: {
-      const { topicId, id: postId } = action.payload;
+      const { topicId, postId } = action.payload;
       return {
         ...state,
-        [topicId]: state.topicId.filter(comment => comment.id !== postId),
+        [topicId]: {
+          ...state[topicId],
+          postIds: state[topicId].postIds.filter(id => id !== postId),
+        },
       };
     }
     default:

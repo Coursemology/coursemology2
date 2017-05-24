@@ -1,15 +1,19 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 
-import { PostProp } from '../../propTypes';
+import { PostProp, TopicProp } from '../../propTypes';
 import CommentCard from './CommentCard';
+import CommentField from './CommentField';
+import * as commentActions from '../../actions/comments';
 
-export default class Comments extends Component {
-  static propTypes = {
-    posts: PropTypes.arrayOf(PostProp),
-  };
-
+class VisibleComments extends Component {
   render() {
-    const { posts } = this.props;
+    const {
+      commentForms, posts, topic,
+      handleCreateChange, handleUpdateChange,
+      createComment, updateComment, deleteComment,
+    } = this.props;
+
     return (
       <div>
         <h3>Comments</h3>
@@ -21,9 +25,59 @@ export default class Comments extends Component {
             avatar=""
             date={post.createdAt}
             content={post.text}
+            editValue={commentForms.posts[post.id]}
+            updateComment={value => updateComment(post.id, value)}
+            deleteComment={() => deleteComment(post.id)}
+            handleChange={value => handleUpdateChange(post.id, value)}
           />
         )}
+        <CommentField
+          value={commentForms.topics[topic.id]}
+          createComment={createComment}
+          handleChange={handleCreateChange}
+        />
       </div>
     );
   }
 }
+
+VisibleComments.propTypes = {
+  commentForms: PropTypes.shape({
+    topics: PropTypes.objectOf(PropTypes.string),
+    posts: PropTypes.objectOf(PropTypes.string),
+  }),
+  posts: PropTypes.arrayOf(PostProp),
+  topic: TopicProp,
+
+  handleCreateChange: PropTypes.func.isRequired,
+  handleUpdateChange: PropTypes.func.isRequired,
+  createComment: PropTypes.func.isRequired,
+  updateComment: PropTypes.func.isRequired,
+  deleteComment: PropTypes.func.isRequired,
+};
+
+function mapStateToProps(state, ownProps) {
+  const { topic } = ownProps;
+  return {
+    commentForms: state.commentForms,
+    posts: state.topics[topic.id].postIds.map(postId => state.posts[postId]),
+  };
+}
+
+function mapDispatchToProps(dispatch, ownProps) {
+  const { topic } = ownProps;
+
+  return {
+    handleCreateChange: comment => dispatch(commentActions.onCreateChange(topic.id, comment)),
+    handleUpdateChange: (postId, comment) => dispatch(commentActions.onUpdateChange(postId, comment)),
+    createComment: comment => dispatch(commentActions.create(topic.submissionQuestionId, comment)),
+    updateComment: (postId, comment) => dispatch(commentActions.update(topic.id, postId, comment)),
+    deleteComment: postId => dispatch(commentActions.destroy(topic.id, postId)),
+  };
+}
+
+const Comments = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(VisibleComments);
+export default Comments;

@@ -13,7 +13,7 @@ export function fetchSubmission(id) {
           payload: data,
         });
       })
-      .catch((e) => console.log(e) || dispatch({ type: actionTypes.FETCH_SUBMISSION_FAILURE }));
+      .catch(dispatch({ type: actionTypes.FETCH_SUBMISSION_FAILURE }));
   };
 }
 

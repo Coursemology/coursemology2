@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
@@ -9,7 +9,20 @@ const styles = {
 };
 
 export default class CommentField extends Component {
+  static propTypes = {
+    value: PropTypes.string,
+
+    createComment: PropTypes.func,
+    handleChange: PropTypes.func,
+  };
+
+  onChange(event) {
+    const { handleChange } = this.props;
+    handleChange(event.target.value);
+  }
+
   render() {
+    const { value, createComment } = this.props;
     return (
       <div style={styles.comments}>
         <TextField
@@ -18,11 +31,14 @@ export default class CommentField extends Component {
           multiLine
           rows={2}
           rowsMax={4}
+          value={value}
+          onChange={event => this.onChange(event)}
         />
         <RaisedButton
           primary
           label="Comment"
-          onTouchTap={() => {}}
+          onTouchTap={() => createComment(value)}
+          disabled={value === ''}
         />
       </div>
     );

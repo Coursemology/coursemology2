@@ -18,7 +18,7 @@ export default function (state = {}, action) {
     }
     case actions.DELETE_COMMENT_SUCCESS:
       return Object.keys(state).reduce((obj, key) => {
-        if (key !== action.payload.postId) {
+        if (key !== action.payload.postId.toString()) {
           return { ...obj, [key]: state[key] };
         }
         return obj;

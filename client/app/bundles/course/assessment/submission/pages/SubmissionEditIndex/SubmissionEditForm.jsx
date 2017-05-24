@@ -4,10 +4,9 @@ import { Card } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import { red900 } from 'material-ui/styles/colors';
 
-import { PostProp, QuestionProp, TopicProp } from '../../propTypes';
+import { QuestionProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import Comments from '../../components/Comments';
-import CommentField from '../../components/CommentField';
 
 const styles = {
   questionCardContainer: {
@@ -25,19 +24,17 @@ const styles = {
 class SubmissionEditForm extends Component {
 
   renderQuestions() {
-    const { canGrade, questionIds, questions, posts, topics } = this.props;
+    const { canGrade, questionIds, questions, topics } = this.props;
     return (
       <div>
         {questionIds.map((id) => {
           const question = questions[id];
-          const { answerId } = question;
-          const topic = topics[question.topicId];
-          const postsInTopic = topic.postIds.map(postId => posts[postId]);
+          const { answerId, topicId } = question;
+          const topic = topics[topicId];
           return (
             <div key={id} style={styles.questionContainer}>
               <SubmissionAnswer {...{ canGrade, answerId, question }} />
-              <Comments posts={postsInTopic} />
-              <CommentField />
+              <Comments topic={topic} />
               <hr />
             </div>
           );
@@ -111,7 +108,6 @@ class SubmissionEditForm extends Component {
 SubmissionEditForm.propTypes = {
   canGrade: PropTypes.bool.isRequired,
   submitted: PropTypes.bool.isRequired,
-  posts: PropTypes.objectOf(PostProp),
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(QuestionProp),
   topics: PropTypes.objectOf(TopicProp),

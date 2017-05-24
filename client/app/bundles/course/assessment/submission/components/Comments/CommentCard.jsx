@@ -44,12 +44,15 @@ const styles = {
 
 export default class CommentCard extends Component {
   static propTypes = {
-    id: PropTypes.number.isRequired,
+    id: PropTypes.number,
+    editValue: PropTypes.string,
     name: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
     content: PropTypes.string,
-    saveComment: PropTypes.func,
+
+    handleChange: PropTypes.func,
+    updateComment: PropTypes.func,
     deleteComment: PropTypes.func,
   }
 
@@ -62,8 +65,14 @@ export default class CommentCard extends Component {
     deleteConfirmation: false,
   }
 
+  onChange(event) {
+    const { handleChange } = this.props;
+    handleChange(event.target.value);
+  }
+
   onSave() {
-    this.props.saveComment();
+    const { editValue } = this.props;
+    this.props.updateComment(editValue);
     this.setState({ editMode: false });
   }
 
@@ -73,22 +82,26 @@ export default class CommentCard extends Component {
 
   toggleEditMode() {
     const { editMode } = this.state;
+    const { handleChange, content } = this.props;
     this.setState({ editMode: !editMode });
+    handleChange(content);
   }
 
   renderCommentContent() {
     const { editMode } = this.state;
-    const { content } = this.props;
+    const { content, editValue, id } = this.props;
 
     if (editMode) {
       return (
         <div>
           <TextField
+            id={id.toString()}
             fullWidth
             multiLine
             rows={2}
             rowsMax={4}
-            defaultValue={content}
+            value={editValue}
+            onChange={event => this.onChange(event)}
           />
           <div style={styles.buttonContainer}>
             <FlatButton
