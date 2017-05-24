@@ -4,6 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import OnlineEditorPythonView, { validation as pythonValidation } from './OnlineEditorPythonView';
+import OnlineEditorCppView, { validation as cppValidation } from './OnlineEditorCppView';
 
 const translations = defineMessages({
   selectLanguageAlert: {
@@ -36,6 +37,10 @@ export function validation(data, pathOfKeysToData, intl) {
       return errors.concat(
         pythonValidation(data, pathOfKeysToData.concat(['python']), intl)
       );
+    case 'c_cpp':
+      return errors.concat(
+        cppValidation(data, pathOfKeysToData.concat(['c_cpp']), intl)
+      );
     default:
       return errors;
   }
@@ -51,6 +56,18 @@ const OnlineEditor = (props) => {
         {...{
           actions,
           data: data.get('python'),
+          dataFiles: data.get('data_files'),
+          isLoading,
+          autograded,
+          autogradedAssessment,
+        }}
+      />);
+
+    case 'c_cpp':
+      return (<OnlineEditorCppView
+        {...{
+          actions,
+          data: data.get('c_cpp'),
           dataFiles: data.get('data_files'),
           isLoading,
           autograded,

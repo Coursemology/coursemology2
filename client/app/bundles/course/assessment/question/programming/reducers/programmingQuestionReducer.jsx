@@ -52,6 +52,18 @@ export const initialState = Immutable.fromJS({
       },
       data_files: [],
     },
+    c_cpp: {
+      prepend: '',
+      append: '',
+      solution: '',
+      submission: '',
+      test_cases: {
+        evaluation: [],
+        private: [],
+        public: [],
+      },
+      data_files: [],
+    },
     data_files: {
       to_delete: Immutable.Set(),
       new: [
@@ -99,14 +111,16 @@ function questionReducer(state, action) {
   }
 }
 
-function pythonTestReducer(state, action) {
+function TestReducer(state, action) {
   const { type } = action;
 
   switch (type) {
+    case editorActionTypes.CPP_CODE_BLOCK_UPDATE:
     case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE: {
       const { field, newValue } = action;
       return state.set(field, newValue);
     }
+    case editorActionTypes.CPP_TEST_CASE_CREATE:
     case editorActionTypes.PYTHON_TEST_CASE_CREATE: {
       const { testType } = action;
       const newTest = {
@@ -119,12 +133,14 @@ function pythonTestReducer(state, action) {
         .setIn(['test_cases', testType], tests)
         .deleteIn(['test_cases', 'error']);
     }
+    case editorActionTypes.CPP_TEST_CASE_UPDATE:
     case editorActionTypes.PYTHON_TEST_CASE_UPDATE: {
       const { testType, index, field, newValue } = action;
       return state
         .setIn(['test_cases', testType, index, field], newValue)
         .deleteIn(['test_cases', testType, index, 'error']);
     }
+    case editorActionTypes.CPP_TEST_CASE_DELETE:
     case editorActionTypes.PYTHON_TEST_CASE_DELETE: {
       const { testType, index } = action;
       const tests = state.get('test_cases').get(testType).splice(index, 1);
@@ -140,6 +156,7 @@ function dataFilesReducer(state, action) {
   const { type } = action;
 
   switch (type) {
+    case editorActionTypes.CPP_NEW_DATA_FILE_UPDATE:
     case editorActionTypes.PYTHON_NEW_DATA_FILE_UPDATE: {
       const { index, filename } = action;
       let newFiles = state.get('new')
@@ -154,10 +171,12 @@ function dataFilesReducer(state, action) {
 
       return state.set('new', newFiles);
     }
+    case editorActionTypes.CPP_NEW_DATA_FILE_DELETE:
     case editorActionTypes.PYTHON_NEW_DATA_FILE_DELETE: {
       const { index } = action;
       return state.set('new', state.get('new').delete(index));
     }
+    case editorActionTypes.CPP_EXISTING_DATA_FILE_DELETE:
     case editorActionTypes.PYTHON_EXISTING_DATA_FILE_DELETE: {
       const { filename, toDelete } = action;
       const currentFilesToDelete = state.get('to_delete');
@@ -267,13 +286,23 @@ export default function programmingQuestionReducer(state = initialState, action)
       const { mode } = action;
       return state.setIn(['test_ui', 'mode'], mode);
     }
+    case editorActionTypes.CPP_TEST_CASE_CREATE:
+    case editorActionTypes.CPP_TEST_CASE_UPDATE:
+    case editorActionTypes.CPP_TEST_CASE_DELETE:
+    case editorActionTypes.CPP_CODE_BLOCK_UPDATE: {
+      const cppTest = state.get('test_ui').get('c_cpp');
+      return state.setIn(['test_ui', 'c_cpp'], TestReducer(cppTest, action));
+    }
     case editorActionTypes.PYTHON_TEST_CASE_CREATE:
     case editorActionTypes.PYTHON_TEST_CASE_UPDATE:
     case editorActionTypes.PYTHON_TEST_CASE_DELETE:
     case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE: {
       const pythonTest = state.get('test_ui').get('python');
-      return state.setIn(['test_ui', 'python'], pythonTestReducer(pythonTest, action));
+      return state.setIn(['test_ui', 'python'], TestReducer(pythonTest, action));
     }
+    case editorActionTypes.CPP_NEW_DATA_FILE_UPDATE:
+    case editorActionTypes.CPP_NEW_DATA_FILE_DELETE:
+    case editorActionTypes.CPP_EXISTING_DATA_FILE_DELETE:
     case editorActionTypes.PYTHON_NEW_DATA_FILE_UPDATE:
     case editorActionTypes.PYTHON_NEW_DATA_FILE_DELETE:
     case editorActionTypes.PYTHON_EXISTING_DATA_FILE_DELETE: {

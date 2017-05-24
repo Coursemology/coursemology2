@@ -1,7 +1,6 @@
 import Immutable from 'immutable';
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { PropTypes } from 'react';
 import AceEditor from 'react-ace';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
@@ -14,25 +13,25 @@ import {
 import transitions from 'material-ui/styles/transitions';
 import { grey100, grey300, white } from 'material-ui/styles/colors';
 
-import 'brace/mode/python';
+import 'brace/mode/c_cpp';
 import 'brace/theme/monokai';
 
-import styles from './OnlineEditorPythonView.scss';
-import translations from './OnlineEditorPythonView.intl';
+import styles from './OnlineEditorCppView.scss';
+import translations from './OnlineEditorCppView.intl';
 
 const MAX_TEST_CASES = 99;
 
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
   dataFiles: PropTypes.instanceOf(Immutable.Map).isRequired,
-  actions: PropTypes.shape({
-    updatePythonCodeBlock: PropTypes.func.isRequired,
-    createPythonTestCase: PropTypes.func.isRequired,
-    updatePythonTestCase: PropTypes.func.isRequired,
-    deletePythonTestCase: PropTypes.func.isRequired,
-    updatePythonNewDataFile: PropTypes.func.isRequired,
-    deletePythonNewDataFile: PropTypes.func.isRequired,
-    deletePythonExistingDataFile: PropTypes.func.isRequired,
+  actions: React.PropTypes.shape({
+    updateCppCodeBlock: PropTypes.func.isRequired,
+    createCppTestCase: PropTypes.func.isRequired,
+    updateCppTestCase: PropTypes.func.isRequired,
+    deleteCppTestCase: PropTypes.func.isRequired,
+    updateCppNewDataFile: PropTypes.func.isRequired,
+    deleteCppNewDataFile: PropTypes.func.isRequired,
+    deleteCppExistingDataFile: PropTypes.func.isRequired,
   }),
   isLoading: PropTypes.bool.isRequired,
   autograded: PropTypes.bool.isRequired,
@@ -40,18 +39,17 @@ const propTypes = {
 };
 
 const contextTypes = {
-  muiTheme: PropTypes.object.isRequired,
+  muiTheme: React.PropTypes.object.isRequired,
 };
 
 export function validation(data, pathOfKeysToData, intl) {
   const errors = [];
-  const pythonData = data.getIn(pathOfKeysToData);
-
+  const cppData = data.getIn(pathOfKeysToData);
   if (data.getIn(['question', 'autograded'])) {
     let testsCount = 0;
 
     ['public', 'private', 'evaluation'].forEach((type) => {
-      const testCases = pythonData.getIn(['test_cases', type]);
+      const testCases = cppData.getIn(['test_cases', type]);
       testsCount += testCases.size;
 
       testCases.forEach((testCase, index) => {
@@ -89,7 +87,7 @@ export function validation(data, pathOfKeysToData, intl) {
   return errors;
 }
 
-class OnlineEditorPythonView extends React.Component {
+class OnlineEditorCppView extends React.Component {
 
   static getInputName(field) {
     return `question_programming[${field}]`;
@@ -100,14 +98,14 @@ class OnlineEditorPythonView extends React.Component {
   }
 
   codeChangeHandler(field) {
-    return e => this.props.actions.updatePythonCodeBlock(field, e);
+    return e => this.props.actions.updateCppCodeBlock(field, e);
   }
 
   newDataFileChangeHandler(index) {
     return (e) => {
       const files = e.target.files;
       const filename = files.length === 0 ? null : files[0].name;
-      this.props.actions.updatePythonNewDataFile(filename, index);
+      this.props.actions.updateCppNewDataFile(filename, index);
     };
   }
 
@@ -116,7 +114,7 @@ class OnlineEditorPythonView extends React.Component {
       e.preventDefault();
 
       if (!this.props.isLoading) {
-        this.props.actions.deletePythonTestCase(type, index);
+        this.props.actions.deleteCppTestCase(type, index);
       }
     };
   }
@@ -126,7 +124,7 @@ class OnlineEditorPythonView extends React.Component {
       e.preventDefault();
 
       if (!this.props.isLoading) {
-        this.props.actions.createPythonTestCase(type);
+        this.props.actions.createCppTestCase(type);
       }
     };
   }
@@ -164,7 +162,7 @@ class OnlineEditorPythonView extends React.Component {
               backgroundColor={buttonColor}
               icon={<i className={buttonClass} />}
               disabled={this.props.isLoading}
-              onClick={() => { this.props.actions.deletePythonExistingDataFile(filename, !toDelete); }}
+              onClick={() => { this.props.actions.deleteCppExistingDataFile(filename, !toDelete); }}
               style={{ minWidth: '40px', width: '40px' }}
             />
             <input
@@ -224,7 +222,7 @@ class OnlineEditorPythonView extends React.Component {
             backgroundColor={grey300}
             icon={<i className="fa fa-trash" />}
             disabled={this.props.isLoading}
-            onClick={() => { this.props.actions.deletePythonNewDataFile(index); }}
+            onClick={() => { this.props.actions.deleteCppNewDataFile(index); }}
             style={{ minWidth: '40px', width: '40px' }}
           />
         );
@@ -284,9 +282,9 @@ class OnlineEditorPythonView extends React.Component {
     const renderInput = (test, field, placeholder, index) => (
       <TextField
         type="text"
-        name={OnlineEditorPythonView.getTestInputName(type, field)}
+        name={OnlineEditorCppView.getTestInputName(type, field)}
         onChange={(e, newValue) => {
-          this.props.actions.updatePythonTestCase(type, index, field, newValue);
+          this.props.actions.updateCppTestCase(type, index, field, newValue);
         }}
         hintText={placeholder}
         errorText={test.getIn(['error', field])}
@@ -389,18 +387,18 @@ class OnlineEditorPythonView extends React.Component {
         />
         <CardText expandable style={{ padding: 0 }}>
           <textarea
-            name={OnlineEditorPythonView.getInputName(field)}
+            name={OnlineEditorCppView.getInputName(field)}
             value={value}
             style={{ display: 'none' }}
             readOnly="true"
           />
           <AceEditor
-            mode="python"
+            mode="c_cpp"
             theme="monokai"
             width="100%"
             minLines={10}
             maxLines={Math.max(20, value.split(/\r\n|\r|\n/).length)}
-            name={OnlineEditorPythonView.getInputName(field)}
+            name={OnlineEditorCppView.getInputName(field)}
             value={value}
             onChange={this.codeChangeHandler(field)}
             editorProps={{ $blockScrolling: true }}
@@ -460,7 +458,7 @@ class OnlineEditorPythonView extends React.Component {
         <h3>{ intl.formatMessage(translations.testCasesHeader) }</h3>
         <div style={{ marginBottom: '0.5em' }}>
           <FormattedMessage
-            id="course.assessment.question.programming.onlineEditorPythonView.testCasesDescription"
+            id="course.assessment.question.programming.onlineEditorCppView.testCasesDescription"
             defaultMessage={
               '{note}: The expression in the {expression} column will be compared with the ' +
               'expression in the {expected} column using the equality operator. The return value ' +
@@ -497,7 +495,7 @@ class OnlineEditorPythonView extends React.Component {
     const { intl, autograded } = this.props;
 
     return (
-      <div id="python-online-editor">
+      <div id="cpp-online-editor">
         {
           this.renderEditorCard(
             intl.formatMessage(translations.submissionTitle),
@@ -511,7 +509,7 @@ class OnlineEditorPythonView extends React.Component {
   }
 }
 
-OnlineEditorPythonView.propTypes = propTypes;
-OnlineEditorPythonView.contextTypes = contextTypes;
+OnlineEditorCppView.propTypes = propTypes;
+OnlineEditorCppView.contextTypes = contextTypes;
 
-export default injectIntl(OnlineEditorPythonView);
+export default injectIntl(OnlineEditorCppView);
