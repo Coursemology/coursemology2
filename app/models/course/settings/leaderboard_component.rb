@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::LeaderboardSettings
+class Course::Settings::LeaderboardComponent
   include ActiveModel::Model
   include ActiveModel::Conversion
   include ActiveModel::Validations

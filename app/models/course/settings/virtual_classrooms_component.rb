@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::VirtualClassroomSettings
+class Course::Settings::VirtualClassroomsComponent
   include ActiveModel::Model
   include ActiveModel::Conversion
   include ActiveModel::Validations
