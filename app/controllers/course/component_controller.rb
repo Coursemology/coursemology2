@@ -18,7 +18,7 @@ class Course::ComponentController < Course::Controller
 
   # Load current component's settings
   def load_settings
-    @settings = component.settings if component.respond_to?(:settings)
+    @settings = component.settings
   end
 
   private

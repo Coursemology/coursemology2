@@ -17,16 +17,17 @@ RSpec.feature 'Course: Administration: VirtualClassroom' do
         invalid_pagination_count = -1
         valid_pagination_count = 100
 
-        fill_in 'virtual_classroom_settings_pagination', with: invalid_pagination_count
+        pagination_field = 'settings_virtual_classrooms_component_pagination'
+        fill_in pagination_field, with: invalid_pagination_count
         click_button 'update'
         expect(page).to have_css('div.has-error')
 
-        fill_in 'virtual_classroom_settings_pagination', with: valid_pagination_count
+        fill_in pagination_field, with: valid_pagination_count
         click_button 'update'
         expect(page).
           to have_selector('div',
                            text: I18n.t('course.admin.virtual_classroom_settings.update.success'))
-        expect(page).to have_field('virtual_classroom_settings_pagination',
+        expect(page).to have_field(pagination_field,
                                    with: valid_pagination_count)
       end
 
@@ -36,15 +37,16 @@ RSpec.feature 'Course: Administration: VirtualClassroom' do
         new_title = 'New Title'
         empty_title = ''
 
-        fill_in 'virtual_classroom_settings_title', with: new_title
+        title_field = 'settings_virtual_classrooms_component_title'
+        fill_in title_field, with: new_title
         click_button 'update'
         expect(page).
           to have_selector('div',
                            text: I18n.t('course.admin.virtual_classroom_settings.update.success'))
-        expect(page).to have_field('virtual_classroom_settings_title', with: new_title)
+        expect(page).to have_field(title_field, with: new_title)
         expect(page).to have_selector('li a', text: new_title)
 
-        fill_in 'virtual_classroom_settings_title', with: empty_title
+        fill_in title_field, with: empty_title
         click_button 'update'
         expect(page).
           to have_selector('div',

@@ -19,7 +19,7 @@ RSpec.describe Course::Admin::ForumSettingsController, type: :controller do
         allow(controller).to receive(:current_course).and_return(course)
       end
       context 'when course cannot be saved' do
-        subject { patch :update, course_id: course, forum_settings: { title: '' } }
+        subject { patch :update, course_id: course, settings_forums_component: { title: '' } }
         it { is_expected.to render_template(:edit) }
       end
     end

@@ -64,7 +64,8 @@ RSpec.describe 'Course: Leaderboard: View' do
         end
 
         before do
-          settings = Course::LeaderboardSettings.new(course.settings(:leaderboard))
+          settings = Course::Settings::LeaderboardComponent.
+                     new(course.settings(:course_leaderboard_component))
           settings.enable_group_leaderboard = true
           course.save
         end

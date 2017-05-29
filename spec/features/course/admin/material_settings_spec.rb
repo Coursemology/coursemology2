@@ -17,14 +17,15 @@ RSpec.feature 'Course: Administration: Materials' do
         new_title = 'New Title'
         empty_title = ''
 
-        fill_in 'material_settings_title', with: new_title
+        title_field = 'settings_materials_component_title'
+        fill_in title_field, with: new_title
         click_button 'update'
         expect(page).
           to have_selector('div', text: I18n.t('course.admin.material_settings.update.success'))
-        expect(page).to have_field('material_settings_title', with: new_title)
+        expect(page).to have_field(title_field, with: new_title)
         expect(page).to have_selector('li a', text: new_title)
 
-        fill_in 'material_settings_title', with: empty_title
+        fill_in title_field, with: empty_title
         click_button 'update'
         expect(page).
           to have_selector('div', text: I18n.t('course.admin.material_settings.update.success'))
