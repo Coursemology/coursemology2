@@ -253,6 +253,12 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments' do
         # Update grade and check if grade fields are updated
         fill_in find('input.form-control.grade')[:name], with: 1
         expect(page.all('.submission-statistics-total-grade', text: '1').count).to eq(2)
+
+        # Save grade and ensure that points awarded is updated correctly.
+        click_button I18n.t('course.assessment.submission.submissions.buttons.save')
+        exp =
+          submission.assessment.base_exp * submission.grade / submission.assessment.maximum_grade
+        expect(submission.reload.points_awarded).to eq(exp)
       end
 
       scenario 'I can run code on autograded programming questions' do

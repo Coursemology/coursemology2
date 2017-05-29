@@ -51,7 +51,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       else
         params.require(:submission).permit(
           *workflow_state_params,
-          :draft_points_awarded,
+          points_awarded_param,
           answers_attributes: [:id] + update_answers_params
         )
       end
@@ -70,6 +70,11 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     result << :finalise if can?(:update, @submission)
     result.push(:publish, :mark, :unmark, :unsubmit) if can?(:grade, @submission)
     result
+  end
+
+  # Permit the accurate points_awarded column field based on submission's workflow state.
+  def points_awarded_param
+    @submission.published? ? :points_awarded : :draft_points_awarded
   end
 
   # The permitted parameters for answers and their specific answer types.
