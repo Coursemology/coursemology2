@@ -14,11 +14,12 @@ class Course::ControllerComponentHost
     end
   end
 
-  module Enableable
+  module Settings
     extend ActiveSupport::Concern
 
     delegate :enabled_by_default?, to: :class
     delegate :key, to: :class
+    delegate :settings_class, to: :class
 
     module ClassMethods
       # @return [Boolean] the default enabled status of the component
@@ -52,6 +53,25 @@ class Course::ControllerComponentHost
       def can_be_disabled?
         true
       end
+
+      # Returns a model which the current component can use to interface with its persisted
+      # settings.
+      #
+      # Example:
+      # If the component Course::FoobarComponent has settings, define a class
+      # Course::Settings::FoobarComponent in the file
+      # app/models/course/settings/foobar_component.rb.
+      #
+      # @return [Class] The settings interface class
+      # @return [nil] if the class does not exist
+      def settings_class
+        @settings_class ||= "Course::Settings::#{name.demodulize}".safe_constantize
+      end
+    end
+
+    # Override this method to use a different settings key or settings_on_rails instance.
+    def settings
+      @settings ||= settings_class&.new(current_course.settings(key))
     end
   end
 
@@ -60,7 +80,7 @@ class Course::ControllerComponentHost
     const_set(:ClassMethods, ::Module.new) unless const_defined?(:ClassMethods)
 
     include Sidebar
-    include Enableable
+    include Settings
   end
 
   # Eager load all the components declared.

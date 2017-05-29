@@ -10,10 +10,6 @@ class Course::ForumsComponent < SimpleDelegator
     main_sidebar_items + settings_sidebar_items
   end
 
-  def settings
-    @settings ||= Course::ForumSettings.new(current_course.settings(:forum))
-  end
-
   private
 
   def main_sidebar_items

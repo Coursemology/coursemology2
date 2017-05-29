@@ -10,10 +10,6 @@ class Course::MaterialsComponent < SimpleDelegator
     main_sidebar_items + settings_sidebar_items
   end
 
-  def settings
-    @settings ||= Course::MaterialSettings.new(current_course.settings(:material))
-  end
-
   private
 
   def main_sidebar_items
