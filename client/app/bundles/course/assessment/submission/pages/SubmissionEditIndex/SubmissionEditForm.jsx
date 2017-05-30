@@ -24,7 +24,7 @@ const styles = {
 class SubmissionEditForm extends Component {
 
   renderQuestions() {
-    const { canGrade, questionIds, questions, topics } = this.props;
+    const { canGrade, submitted, questionIds, questions, topics } = this.props;
     return (
       <div>
         {questionIds.map((id) => {
@@ -33,7 +33,7 @@ class SubmissionEditForm extends Component {
           const topic = topics[topicId];
           return (
             <div key={id} style={styles.questionContainer}>
-              <SubmissionAnswer {...{ canGrade, answerId, question }} />
+              <SubmissionAnswer {...{ canGrade, readOnly: submitted, answerId, question }} />
               <Comments topic={topic} />
               <hr />
             </div>

@@ -22,7 +22,7 @@ const styles = {
 class SubmissionEditTabForm extends Component {
 
   renderQuestions() {
-    const { canGrade, questionIds, questions, topics } = this.props;
+    const { canGrade, submitted, questionIds, questions, topics } = this.props;
     return (
       <Tabs>
         {questionIds.map((id, index) => {
@@ -31,7 +31,7 @@ class SubmissionEditTabForm extends Component {
           const topic = topics[topicId];
           return (
             <Tab key={id} label={index + 1}>
-              <SubmissionAnswer {...{ canGrade, answerId, question }} />
+              <SubmissionAnswer {...{ canGrade, readOnly: submitted, answerId, question }} />
               <Comments topic={topic} />
             </Tab>
           );

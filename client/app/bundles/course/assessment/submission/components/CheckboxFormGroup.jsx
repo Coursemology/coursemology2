@@ -6,11 +6,12 @@ import Checkbox from 'material-ui/Checkbox';
 export default class CheckboxFormGroup extends Component {
 
   render() {
-    const { options, input } = this.props;
+    const { readOnly, options, input } = this.props;
     return (
       <div>
         {options.map(option =>
           <Checkbox
+            disabled={readOnly}
             key={option.id}
             value={option.id}
             checked={input.value.indexOf(option.id) !== -1}
@@ -35,6 +36,7 @@ export default class CheckboxFormGroup extends Component {
 }
 
 CheckboxFormGroup.propTypes = {
+  readOnly: PropTypes.bool,
   options: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     option: PropTypes.string.isRequired,
@@ -42,4 +44,8 @@ CheckboxFormGroup.propTypes = {
   input: PropTypes.shape({
     onChange: PropTypes.func,
   }).isRequired,
+};
+
+CheckboxFormGroup.defaultProps = {
+  readOnly: false,
 };

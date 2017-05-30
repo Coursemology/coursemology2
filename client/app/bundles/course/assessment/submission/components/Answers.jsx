@@ -18,18 +18,18 @@ import Editor from '../components/Editor';
 import { TestCaseTypes } from '../constants';
 
 export default class Answers extends Component {
-  static renderMultipleChoice(question, answerId) {
+  static renderMultipleChoice(question, readOnly, answerId) {
     return (
       <Field
         name={`${answerId}[option_ids][0]`}
         component={Answers.renderMultipleChoiceOptions}
-        {...{ question, answerId }}
+        {...{ question, answerId, readOnly }}
       />
     );
   }
 
   static renderMultipleChoiceOptions(props) {
-    const { question, input: { onChange, value } } = props;
+    const { readOnly, question, input: { onChange, value } } = props;
     return (
       <div>
         {question.options.map(option =>
@@ -41,54 +41,62 @@ export default class Answers extends Component {
             label={(
               <div dangerouslySetInnerHTML={{ __html: option.option.trim() }} />
             )}
+            disabled={readOnly}
           />
         )}
       </div>
     );
   }
 
-  static renderMultipleResponse(question, answerId) {
+  static renderMultipleResponse(question, readOnly, answerId) {
     return (
       <Field
         name={`${answerId}[option_ids]`}
         component={CheckboxFormGroup}
         options={question.options}
+        {...{ readOnly }}
       />
     );
   }
 
-  static renderFileUploader(question, answerId) {
+  static renderFileUploader(question, readOnly, answerId) {
     return (
-      <FileInput name={`${answerId}[file]`} inputOptions={{ multiple: false }}>
+      <FileInput name={`${answerId}[file]`} inputOptions={{ multiple: false }} disabled={readOnly}>
         <p>Choose file</p>
       </FileInput>
     );
   }
 
-  static renderTextResponse(question, answerId) {
-    const allowUpload = question.allow_attachment;
+  static renderTextResponse(question, readOnly, answerId) {
+    const allowUpload = question.allowAttachment;
 
     return (
       <div>
-        <Field name={`${answerId}[answer_text]`} component={RichTextField} multiLine />
-        {allowUpload ? Answers.renderFileUploader(question, answerId) : null}
+        <Field
+          name={`${answerId}[answer_text]`}
+          component={RichTextField}
+          multiLine
+          {...{ disabled: readOnly }}
+        />
+        {allowUpload && !readOnly ? Answers.renderFileUploader(question, readOnly, answerId) : null}
       </div>
     );
   }
 
-  static renderFileUpload(question, answerId) {
-    return (
-      <div>
-        {Answers.renderFileUploader(question, answerId)}
-      </div>
-    );
+  static renderFileUpload(question, readOnly, answerId) {
+    return <div>{Answers.renderFileUploader(question, readOnly, answerId)}</div>;
   }
 
-  static renderProgrammingEditor(file, answerId, language) {
+  static renderProgrammingEditor(file, readOnly, answerId, language) {
     return (
       <div key={file.filename}>
         <h5>Content</h5>
-        <Editor name={`${answerId}[content]`} filename={file.filename} language={language} />
+        <Editor
+          name={`${answerId}[content]`}
+          filename={file.filename}
+          language={language}
+          readOnly={readOnly}
+        />
       </div>
     );
   }
@@ -180,23 +188,24 @@ export default class Answers extends Component {
   }
 
   static renderProgrammingFiles(props) {
-    const { fields } = props;
+    const { fields, readOnly } = props;
     return (
       <div>
         {fields.map((answerId, index) => {
           const file = fields.get(index);
-          return Answers.renderProgrammingEditor(file, answerId, 'python');
+          return Answers.renderProgrammingEditor(file, readOnly, answerId, 'python');
         })}
       </div>
     );
   }
 
-  static renderProgramming(question, answerId, canGrade) {
+  static renderProgramming(question, readOnly, answerId, canGrade) {
     return (
       <div>
         <FieldArray
           name={`${answerId}[files]`}
           component={Answers.renderProgrammingFiles}
+          {...{ readOnly }}
         />
         {Answers.renderProgrammingTestCases(question.test_cases, canGrade)}
       </div>

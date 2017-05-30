@@ -109,14 +109,14 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderSubmitButton(answerId) {
-    const { submitting, handleAutograde } = this.props;
+    const { submitting, submitted, handleAutograde } = this.props;
     return (
       <RaisedButton
         style={styles.formButton}
         secondary
         label="Submit"
         onTouchTap={() => handleAutograde(answerId)}
-        disabled={submitting}
+        disabled={submitting || submitted}
       />
     );
   }
@@ -187,7 +187,7 @@ class SubmissionEditStepForm extends Component {
 
   renderStepQuestion() {
     const { stepIndex } = this.state;
-    const { canGrade, questionIds, questions, topics } = this.props;
+    const { canGrade, submitted, questionIds, questions, topics } = this.props;
 
     const id = questionIds[stepIndex];
     const question = questions[id];
@@ -195,7 +195,7 @@ class SubmissionEditStepForm extends Component {
     const topic = topics[topicId];
     return (
       <div>
-        <SubmissionAnswer {...{ canGrade, answerId, question }} />
+        <SubmissionAnswer {...{ canGrade, readOnly: submitted, answerId, question }} />
         {this.renderExplanationPanel(id)}
         <div style={styles.formButtonContainer}>
           {this.renderSubmitButton(answerId)}

@@ -8,8 +8,13 @@ import Answers from './Answers';
 class SubmissionAnswer extends React.Component {
   static propTypes = {
     canGrade: PropTypes.bool.isRequired,
+    readOnly: PropTypes.bool,
     question: QuestionProp,
     answerId: PropTypes.number,
+  };
+
+  static defaultProps = {
+    readOnly: false,
   };
 
   static getRenderer(question) {
@@ -31,7 +36,7 @@ class SubmissionAnswer extends React.Component {
   }
 
   render() {
-    const { canGrade, question, answerId } = this.props;
+    const { canGrade, readOnly, question, answerId } = this.props;
 
     const renderer = SubmissionAnswer.getRenderer(question);
     if (!renderer) { return <div />; }
@@ -41,7 +46,7 @@ class SubmissionAnswer extends React.Component {
         <h3>{question.displayTitle}</h3>
         <div dangerouslySetInnerHTML={{ __html: question.description }} />
         <hr />
-        { renderer(question, answerId, canGrade) }
+        { renderer(question, readOnly, answerId, canGrade) }
       </div>
     );
   }
