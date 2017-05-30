@@ -10,7 +10,7 @@ en:
         phantom_students: 'Phantom Students'
       table:
         serial_number: :'course.statistics.serial_number'
-        tutor: 'Tutor'
+        instructors: 'Instructor(s)'
         experience_points: 'Experience Points'
       staff:
         header: 'Staff Statistics'
