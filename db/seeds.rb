@@ -16,10 +16,14 @@ Instance.find_or_initialize_by(id: Instance::DEFAULT_INSTANCE_ID, name: 'Default
 ActsAsTenant.with_tenant(Instance.default) do
   # Create the Coursemology built in accounts.
   unless User.exists?(User::SYSTEM_USER_ID)
-    User.create!(id: User::SYSTEM_USER_ID, name: 'System')
+    system_user = User.new(id: User::SYSTEM_USER_ID, name: 'System')
+    system_user.skip_confirmation!
+    system_user.save!
   end
   unless User.exists?(User::DELETED_USER_ID)
-    User.create!(id: User::DELETED_USER_ID, name: 'Deleted')
+    deleted_user = User.new(id: User::DELETED_USER_ID, name: 'Deleted')
+    deleted_user.skip_confirmation!
+    deleted_user.save!
   end
 end
 
