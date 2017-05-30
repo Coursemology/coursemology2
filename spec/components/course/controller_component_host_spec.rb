@@ -158,9 +158,19 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
     describe '#[]' do
       subject { component_host }
 
-      context 'when the key specified does not exist' do
+      context 'when the key refers to a disabled component' do
+        let(:disabled_key) { self.class::DummyCourseModule.key }
+        before { course.settings(disabled_key).enabled = false }
+
         it 'returns nil' do
-          expect(subject['i_do_not_exist']).to be_nil
+          expect(subject[disabled_key]).to be_nil
+        end
+      end
+
+      context 'when the key is invalid' do
+        it 'raises an error' do
+          expect { subject[:non_existent_component_key] }.to \
+            raise_error(ArgumentError)
         end
       end
 
