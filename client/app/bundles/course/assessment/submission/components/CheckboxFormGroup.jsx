@@ -1,6 +1,7 @@
 /* eslint-disable react/no-danger */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Checkbox from 'material-ui/Checkbox';
 
 export default class CheckboxFormGroup extends Component {

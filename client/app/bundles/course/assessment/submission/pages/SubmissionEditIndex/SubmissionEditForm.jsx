@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { Card } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';

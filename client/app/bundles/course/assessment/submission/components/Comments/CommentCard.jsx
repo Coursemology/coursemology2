@@ -1,6 +1,7 @@
 /* eslint-disable react/no-danger */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Avatar from 'material-ui/Avatar';
 import TextField from 'material-ui/TextField';
 import { Card, CardHeader, CardText } from 'material-ui/Card';

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { white, green500, green900, red300, red900 } from 'material-ui/styles/colors';
