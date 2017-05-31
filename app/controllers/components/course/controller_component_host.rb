@@ -1,14 +1,38 @@
 # frozen_string_literal: true
+#
+# The course component framework isolates features as components. The intent is to allow
+# each feature to be enabled / disabled indepenedently within a course.
+#
+# When creating a component:
+#
+# - Your component class should `include Course::ControllerComponentHost::Component`.
+# This injects the methods found in the {Course::ControllerComponentHost::Sidebar Sidebar}
+# and {Course::ControllerComponentHost::Settings Settings} modules
+# into the component. Override these methods to customise your component.
+#
+# - Your component class's initializer should take in the component host's context (a controller)
+# as its only argument. You may do this by having your component inherit from `SimpleDelegator`.
+# This allows you to call methods on the given context from your component, e.g. a call to
+# {Course::Controller#current_course} will be delegated to the controller.
+#
+# - If your component has settings, you may define a settings model for it.
+# (See {Course::ControllerComponentHost::Settings::ClassMethods#settings_class} for
+# conventions to follow.)
+#
+# - You will also need to associate controllers for a component with the component class
+# in order for it to be automatically enabled / disabled based on the course's settings
+# (see {Course::ComponentController}).
+#
 class Course::ControllerComponentHost
   include Componentize
 
   module Sidebar
     extend ActiveSupport::Concern
 
-    # Get the sidebar items from this component.
+    # Get the sidebar items and admin menu tab items from this component.
     #
     # @return [Array] An array of hashes containing the sidebar items exposed by this component.
-    #   See #{Course::ControllerComponentHost#sidebar} for the format.
+    #   See {Course::ControllerComponentHost#sidebar_items} for the format.
     def sidebar_items
       []
     end
@@ -158,7 +182,7 @@ class Course::ControllerComponentHost
     end
   end
 
-  # Returns the available components in Course, depending on the gamified flag in Course.
+  # Returns the available components in `Course`, depending on the gamified flag in `Course`.
   #
   # @return [Array<Class>] array of enabled components in Course
   def course_available_components
@@ -171,7 +195,7 @@ class Course::ControllerComponentHost
     end
   end
 
-  # Returns the components in Course which can be disabled.
+  # Returns the components in `Course` which can be disabled.
   #
   # @return [Array<Class>] array of disable-able components in Course
   def course_disableable_components
@@ -182,6 +206,7 @@ class Course::ControllerComponentHost
   #
   # Sidebar elements have the given format:
   #
+  # ```
   #   {
   #      key: :item_key, # The unique key of the item to identify it among others. Can be nil if
   #                      # there is no need to distinguish between items.
@@ -194,6 +219,7 @@ class Course::ControllerComponentHost
   #      path: path_to_the_component,
   #      unread: 0 # Number of unread items. Can be +nil+, if not needed.
   #   }
+  # ```
   #
   # The elements are rendered on all Course controller subclasses as part of a nested template.
   def sidebar_items
