@@ -92,31 +92,12 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
     context 'when the evaluation times out' do
       it 'raises a Timeout::Error' do
         expect do
+          # Pass in a non-zero timeout as Ruby's Timeout treats 0 as infinite.
           subject.execute(course, Coursemology::Polyglot::Language::Python::Python2Point7.instance,
                           64, 5.seconds, File.join(Rails.root, 'spec', 'fixtures', 'course',
-                                                   'programming_question_template.zip'), 0.seconds)
+                                                   'programming_question_template.zip'),
+                          0.1.seconds)
         end.to raise_error(Timeout::Error)
-      end
-    end
-
-    describe '#create_evaluation' do
-      subject do
-        Course::Assessment::ProgrammingEvaluationService.
-          new(course, Coursemology::Polyglot::Language::Python::Python2Point7.instance, 64,
-              5.seconds, File.join(Rails.root, 'spec', 'fixtures', 'course',
-                                   'programming_question_template.zip'), 5.seconds)
-      end
-
-      it 'creates the package for the evaluator to download' do
-        evaluation = subject.send(:create_evaluation)
-
-        # Remove the leading / because Pathname treats it as an absolute path.
-        expect(Rails.public_path + evaluation.package_path[1..-1]).to exist
-      end
-
-      it 'successfully creates the evaluation' do
-        evaluation = subject.send(:create_evaluation)
-        expect(evaluation).to be_persisted
       end
     end
   end
