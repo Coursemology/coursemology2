@@ -11,10 +11,11 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require jquery2
+//= require jquery_ujs
 //= require i18n/translations
 //= require js-routes
 //= require bootstrap-sprockets
-//= require jquery_ujs
 //= require moment
 //= require bootstrap-datetimepicker
 //= require bootstrap-select

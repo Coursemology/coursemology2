@@ -56,7 +56,6 @@ gem 'i18n-js', '>= 3.0.0.rc1'
 gem 'js-routes'
 
 # Use jQuery as the JavaScript library
-gem 'jquery-cdn'
 gem 'jquery-rails'
 # Our Coursemology will be themed using Bootstrap
 gem 'bootstrap-sass'
