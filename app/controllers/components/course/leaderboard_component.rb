@@ -14,10 +14,6 @@ class Course::LeaderboardComponent < SimpleDelegator
     main_sidebar_items + settings_sidebar_items
   end
 
-  def settings
-    @settings ||= Course::LeaderboardSettings.new(current_course.settings(:leaderboard))
-  end
-
   private
 
   def main_sidebar_items

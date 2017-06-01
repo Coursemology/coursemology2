@@ -14,10 +14,6 @@ class Course::VirtualClassroomsComponent < SimpleDelegator
     false
   end
 
-  def settings
-    @settings ||= Course::VirtualClassroomSettings.new(current_course.settings(:virtual_classroom))
-  end
-
   private
 
   def main_sidebar_items

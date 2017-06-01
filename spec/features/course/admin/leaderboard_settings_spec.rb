@@ -17,16 +17,16 @@ RSpec.feature 'Course: Administration: Leaderboard' do
         invalid_display_user_count = -1
         valid_display_user_count = 100
 
-        fill_in 'leaderboard_settings_display_user_count', with: invalid_display_user_count
+        user_count_field = 'settings_leaderboard_component_display_user_count'
+        fill_in user_count_field, with: invalid_display_user_count
         click_button 'update'
         expect(page).to have_css('div.has-error')
 
-        fill_in 'leaderboard_settings_display_user_count', with: valid_display_user_count
+        fill_in user_count_field, with: valid_display_user_count
         click_button 'update'
         expect(page).
           to have_selector('div', text: I18n.t('course.admin.leaderboard_settings.update.success'))
-        expect(page).to have_field('leaderboard_settings_display_user_count',
-                                   with: valid_display_user_count)
+        expect(page).to have_field(user_count_field, with: valid_display_user_count)
       end
 
       scenario 'I can change the leaderboard title' do
@@ -35,14 +35,15 @@ RSpec.feature 'Course: Administration: Leaderboard' do
         new_title = 'New Title'
         empty_title = ''
 
-        fill_in 'leaderboard_settings_title', with: new_title
+        title_field = 'settings_leaderboard_component_title'
+        fill_in title_field, with: new_title
         click_button 'update'
         expect(page).
           to have_selector('div', text: I18n.t('course.admin.leaderboard_settings.update.success'))
-        expect(page).to have_field('leaderboard_settings_title', with: new_title)
+        expect(page).to have_field(title_field, with: new_title)
         expect(page).to have_selector('li a', text: new_title)
 
-        fill_in 'leaderboard_settings_title', with: empty_title
+        fill_in title_field, with: empty_title
         click_button 'update'
         expect(page).
           to have_selector('div', text: I18n.t('course.admin.leaderboard_settings.update.success'))
@@ -52,8 +53,9 @@ RSpec.feature 'Course: Administration: Leaderboard' do
       scenario 'I can enable and disable the group leaderboard' do
         visit course_admin_leaderboard_path(course)
 
-        expect(page).not_to have_checked_field('leaderboard_settings_enable_group_leaderboard')
-        check('leaderboard_settings_enable_group_leaderboard')
+        enable_group_leaderboard_field = 'settings_leaderboard_component_enable_group_leaderboard'
+        expect(page).not_to have_checked_field(enable_group_leaderboard_field)
+        check(enable_group_leaderboard_field)
         click_button 'update'
 
         visit group_course_leaderboard_path(course)
@@ -61,8 +63,8 @@ RSpec.feature 'Course: Administration: Leaderboard' do
           to have_selector('li a', text: I18n.t('course.leaderboards.tabs.group_leaderboard'))
 
         visit course_admin_leaderboard_path(course)
-        expect(page).to have_checked_field('leaderboard_settings_enable_group_leaderboard')
-        uncheck('leaderboard_settings_enable_group_leaderboard')
+        expect(page).to have_checked_field(enable_group_leaderboard_field)
+        uncheck(enable_group_leaderboard_field)
         click_button 'update'
 
         visit course_leaderboard_path(course)
@@ -76,19 +78,20 @@ RSpec.feature 'Course: Administration: Leaderboard' do
         new_title = 'New Title'
         empty_title = ''
 
-        check('leaderboard_settings_enable_group_leaderboard')
-        fill_in 'leaderboard_settings_group_leaderboard_title', with: new_title
+        group_leaderboard_title_field = 'settings_leaderboard_component_group_leaderboard_title'
+        check('settings_leaderboard_component_enable_group_leaderboard')
+        fill_in group_leaderboard_title_field, with: new_title
         click_button 'update'
         expect(page).
           to have_selector('div', text: I18n.t('course.admin.leaderboard_settings.update.success'))
-        expect(page).to have_field('leaderboard_settings_group_leaderboard_title', with: new_title)
+        expect(page).to have_field(group_leaderboard_title_field, with: new_title)
 
         visit group_course_leaderboard_path(course)
         expect(page).to have_selector('h1', text: new_title)
         expect(page).to have_selector('li a', text: new_title)
 
         visit course_admin_leaderboard_path(course)
-        fill_in 'leaderboard_settings_group_leaderboard_title', with: empty_title
+        fill_in group_leaderboard_title_field, with: empty_title
         click_button 'update'
         expect(page).
           to have_selector('div', text: I18n.t('course.admin.leaderboard_settings.update.success'))

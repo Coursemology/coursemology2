@@ -20,7 +20,7 @@ RSpec.describe Course::Admin::Discussion::TopicSettingsController do
       end
 
       context 'when course cannot be saved' do
-        subject { patch :update, course_id: course, discussion_topic_settings: { title: '' } }
+        subject { patch :update, course_id: course, settings_topics_component: { title: '' } }
         it { is_expected.to render_template(:edit) }
       end
     end

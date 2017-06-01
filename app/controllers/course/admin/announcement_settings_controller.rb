@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Admin::AnnouncementSettingsController < Course::Admin::Controller
   add_breadcrumb :edit, :course_admin_announcements_path
-  before_action :load_settings
 
   def edit #:nodoc:
   end
@@ -17,11 +16,10 @@ class Course::Admin::AnnouncementSettingsController < Course::Admin::Controller
   private
 
   def announcement_settings_params #:nodoc:
-    params.require(:announcement_settings).permit(:title, :pagination)
+    params.require(:settings_announcements_component).permit(:title, :pagination)
   end
 
-  # Load our settings adapter to handle announcement settings
-  def load_settings
-    @settings ||= Course::AnnouncementSettings.new(current_course.settings(:announcement))
+  def component
+    current_component_host[:course_announcements_component]
   end
 end

@@ -1,24 +1,49 @@
 # frozen_string_literal: true
+#
+# The course component framework isolates features as components. The intent is to allow
+# each feature to be enabled / disabled indepenedently within a course.
+#
+# When creating a component:
+#
+# - Your component class should `include Course::ControllerComponentHost::Component`.
+# This injects the methods found in the {Course::ControllerComponentHost::Sidebar Sidebar}
+# and {Course::ControllerComponentHost::Settings Settings} modules
+# into the component. Override these methods to customise your component.
+#
+# - Your component class's initializer should take in the component host's context (a controller)
+# as its only argument. You may do this by having your component inherit from `SimpleDelegator`.
+# This allows you to call methods on the given context from your component, e.g. a call to
+# {Course::Controller#current_course} will be delegated to the controller.
+#
+# - If your component has settings, you may define a settings model for it.
+# (See {Course::ControllerComponentHost::Settings::ClassMethods#settings_class} for
+# conventions to follow.)
+#
+# - You will also need to associate controllers for a component with the component class
+# in order for it to be automatically enabled / disabled based on the course's settings
+# (see {Course::ComponentController}).
+#
 class Course::ControllerComponentHost
   include Componentize
 
   module Sidebar
     extend ActiveSupport::Concern
 
-    # Get the sidebar items from this component.
+    # Get the sidebar items and admin menu tab items from this component.
     #
     # @return [Array] An array of hashes containing the sidebar items exposed by this component.
-    #   See #{Course::ControllerComponentHost#sidebar} for the format.
+    #   See {Course::ControllerComponentHost#sidebar_items} for the format.
     def sidebar_items
       []
     end
   end
 
-  module Enableable
+  module Settings
     extend ActiveSupport::Concern
 
     delegate :enabled_by_default?, to: :class
     delegate :key, to: :class
+    delegate :settings_class, to: :class
 
     module ClassMethods
       # @return [Boolean] the default enabled status of the component
@@ -52,6 +77,25 @@ class Course::ControllerComponentHost
       def can_be_disabled?
         true
       end
+
+      # Returns a model which the current component can use to interface with its persisted
+      # settings.
+      #
+      # Example:
+      # If the component Course::FoobarComponent has settings, define a class
+      # Course::Settings::FoobarComponent in the file
+      # app/models/course/settings/foobar_component.rb.
+      #
+      # @return [Class] The settings interface class
+      # @return [nil] if the class does not exist
+      def settings_class
+        @settings_class ||= "Course::Settings::#{name.demodulize}".safe_constantize
+      end
+    end
+
+    # Override this method to use a different settings key or settings_on_rails instance.
+    def settings
+      @settings ||= settings_class&.new(current_course.settings(key))
     end
   end
 
@@ -60,7 +104,7 @@ class Course::ControllerComponentHost
     const_set(:ClassMethods, ::Module.new) unless const_defined?(:ClassMethods)
 
     include Sidebar
-    include Enableable
+    include Settings
   end
 
   # Eager load all the components declared.
@@ -112,6 +156,8 @@ class Course::ControllerComponentHost
   # @return [Object] The component with the given key.
   # @return [nil] If component is not enabled.
   def [](component_key)
+    raise ArgumentError, "Invalid component key: #{component_key}" \
+      unless valid_component_keys.include?(component_key.to_s)
     components.find { |component| component.key.to_s == component_key.to_s }
   end
 
@@ -136,7 +182,7 @@ class Course::ControllerComponentHost
     end
   end
 
-  # Returns the available components in Course, depending on the gamified flag in Course.
+  # Returns the available components in `Course`, depending on the gamified flag in `Course`.
   #
   # @return [Array<Class>] array of enabled components in Course
   def course_available_components
@@ -149,7 +195,7 @@ class Course::ControllerComponentHost
     end
   end
 
-  # Returns the components in Course which can be disabled.
+  # Returns the components in `Course` which can be disabled.
   #
   # @return [Array<Class>] array of disable-able components in Course
   def course_disableable_components
@@ -160,6 +206,7 @@ class Course::ControllerComponentHost
   #
   # Sidebar elements have the given format:
   #
+  # ```
   #   {
   #      key: :item_key, # The unique key of the item to identify it among others. Can be nil if
   #                      # there is no need to distinguish between items.
@@ -172,9 +219,19 @@ class Course::ControllerComponentHost
   #      path: path_to_the_component,
   #      unread: 0 # Number of unread items. Can be +nil+, if not needed.
   #   }
+  # ```
   #
   # The elements are rendered on all Course controller subclasses as part of a nested template.
   def sidebar_items
     @sidebar_items ||= components.map(&:sidebar_items).tap(&:flatten!)
+  end
+
+  private
+
+  # Caches the keys generated by all components that exist.
+  #
+  # @return [Array<String>] array of valid component keys
+  def valid_component_keys
+    @valid_component_keys ||= Course::ControllerComponentHost.components.map(&:key).map(&:to_s)
   end
 end

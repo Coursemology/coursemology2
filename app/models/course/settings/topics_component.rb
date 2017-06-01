@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Discussion::TopicSettings
+class Course::Settings::TopicsComponent
   include ActiveModel::Model
   include ActiveModel::Conversion
   include ActiveModel::Validations

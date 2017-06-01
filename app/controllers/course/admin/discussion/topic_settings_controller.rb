@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Admin::Discussion::TopicSettingsController < Course::Admin::Controller
   add_breadcrumb :edit, :course_admin_topics_path
-  before_action :load_settings
 
   def edit
   end
@@ -17,10 +16,10 @@ class Course::Admin::Discussion::TopicSettingsController < Course::Admin::Contro
   private
 
   def topic_settings_params
-    params.require(:discussion_topic_settings).permit(:title, :pagination)
+    params.require(:settings_topics_component).permit(:title, :pagination)
   end
 
-  def load_settings
-    @settings ||= Course::Discussion::TopicSettings.new(current_course.settings(:discussion_topics))
+  def component
+    current_component_host[:course_discussion_topics_component]
   end
 end

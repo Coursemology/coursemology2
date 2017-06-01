@@ -14,10 +14,6 @@ class Course::VideosComponent < SimpleDelegator
     main_sidebar_items + settings_sidebar_items
   end
 
-  def settings
-    @settings ||= Course::VideoSettings.new(current_course.settings(:video))
-  end
-
   private
 
   def main_sidebar_items

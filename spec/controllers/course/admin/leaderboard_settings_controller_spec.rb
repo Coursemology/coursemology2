@@ -19,7 +19,7 @@ RSpec.describe Course::Admin::LeaderboardSettingsController, type: :controller d
         allow(controller).to receive(:current_course).and_return(course)
       end
       context 'when course cannot be saved' do
-        subject { patch :update, course_id: course, leaderboard_settings: { title: '' } }
+        subject { patch :update, course_id: course, settings_leaderboard_component: { title: '' } }
         it { is_expected.to render_template(:edit) }
       end
     end

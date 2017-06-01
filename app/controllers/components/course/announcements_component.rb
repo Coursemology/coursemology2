@@ -10,10 +10,6 @@ class Course::AnnouncementsComponent < SimpleDelegator
     main_sidebar_items + settings_sidebar_items
   end
 
-  def settings
-    @settings ||= Course::AnnouncementSettings.new(current_course.settings(:announcement))
-  end
-
   private
 
   def main_sidebar_items

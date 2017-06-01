@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Admin::VirtualClassroomSettingsController < Course::Admin::Controller
   add_breadcrumb :edit, :course_admin_virtual_classrooms_path
-  before_action :load_settings
 
   def edit; end #:nodoc:
 
@@ -16,13 +15,12 @@ class Course::Admin::VirtualClassroomSettingsController < Course::Admin::Control
   private
 
   def virtual_classroom_settings_params #:nodoc:
-    params.require(:virtual_classroom_settings).permit(
+    params.require(:settings_virtual_classrooms_component).permit(
       :title, :pagination, :braincert_whiteboard_api_key, :max_duration, :braincert_server_region
     )
   end
 
-  # Load our settings adapter to handle virtual classroom settings
-  def load_settings
-    @settings ||= Course::VirtualClassroomSettings.new(current_course.settings(:virtual_classroom))
+  def component
+    current_component_host[:course_virtual_classrooms_component]
   end
 end

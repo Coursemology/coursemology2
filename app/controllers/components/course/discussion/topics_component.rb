@@ -11,10 +11,6 @@ class Course::Discussion::TopicsComponent < SimpleDelegator
     main_sidebar_items + settings_sidebar_items
   end
 
-  def settings
-    @settings ||= Course::Discussion::TopicSettings.new(current_course.settings(:discussion_topics))
-  end
-
   private
 
   def main_sidebar_items

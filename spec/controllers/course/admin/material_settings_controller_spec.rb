@@ -19,7 +19,7 @@ RSpec.describe Course::Admin::MaterialSettingsController, type: :controller do
         allow(controller).to receive(:current_course).and_return(course)
       end
       context 'when course cannot be saved' do
-        subject { patch :update, course_id: course, material_settings: { title: '' } }
+        subject { patch :update, course_id: course, settings_materials_component: { title: '' } }
         it { is_expected.to render_template(:edit) }
       end
     end
