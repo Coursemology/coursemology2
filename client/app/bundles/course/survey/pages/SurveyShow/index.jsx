@@ -9,7 +9,7 @@ import Subheader from 'material-ui/Subheader';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
 import * as surveyActions from 'course/survey/actions/surveys';
-import LoadingIndicator from 'course/survey/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import SurveyDetails from './SurveyDetails';
 import Section from './Section';
 

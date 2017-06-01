@@ -12,7 +12,7 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import BarChart from 'lib/components/BarChart';
 import { fetchResponses } from 'course/survey/actions/responses';
 import surveyTranslations from 'course/survey/translations';
-import LoadingIndicator from 'course/survey/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 import RemindButton from './RemindButton';

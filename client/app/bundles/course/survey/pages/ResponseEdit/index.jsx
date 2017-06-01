@@ -7,7 +7,7 @@ import Subheader from 'material-ui/Subheader';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 import { fetchEditableResponse, updateResponse } from 'course/survey/actions/responses';
-import LoadingIndicator from 'course/survey/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import ResponseForm, { buildInitialValues, buildResponsePayload } from 'course/survey/containers/ResponseForm';
 
 const translations = defineMessages({

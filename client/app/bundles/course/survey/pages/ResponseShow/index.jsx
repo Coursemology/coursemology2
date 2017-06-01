@@ -9,7 +9,7 @@ import { Table, TableBody, TableRow, TableHeaderColumn, TableRowColumn } from 'm
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 import { fetchResponse } from 'course/survey/actions/responses';
-import LoadingIndicator from 'course/survey/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import ResponseForm, { buildInitialValues } from 'course/survey/containers/ResponseForm';
 import RespondButton from 'course/survey/containers/RespondButton';
 import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
