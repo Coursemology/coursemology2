@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module ApplicationThemingHelper
   def application_resources
-    include_jquery
+    # Used to include external javascript/css files, Currently it's empty
   end
 
   def page_class

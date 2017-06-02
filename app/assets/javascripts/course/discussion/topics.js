@@ -28,9 +28,10 @@
     // TODO: Display error messages.
   }
 
-  $(document).ready(showCommentBoxes);
+  $(document).ready(function() {
+    showCommentBoxes();
+    DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR);
+  });
   $(document).on('submit', DOCUMENT_SELECTOR + '.post-form', onPostFormSubmit);
-
-  DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR);
 })(jQuery, FORM_HELPERS,
            DISCUSSION_POST_HELPERS);

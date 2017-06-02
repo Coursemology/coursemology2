@@ -3,7 +3,8 @@
 //= require helpers/discussion/post_helpers
 
 (function($, FORM_HELPERS,
-             DISCUSSION_POST_HELPERS) {
+             DISCUSSION_POST_HELPERS,
+             EVENT_HELPERS) {
   /* global Routes */
   'use strict';
   var DOCUMENT_SELECTOR = '.course-assessment-submission-submissions.edit ';
@@ -48,11 +49,11 @@
 
   $(document).ready(function() {
     showAnswerCommentForm(document);
+    EVENT_HELPERS.onNodesInserted($(DOCUMENT_SELECTOR), showAnswerCommentForm);
+    DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR + '.comments ');
   });
-  EVENT_HELPERS.onNodesInserted($(DOCUMENT_SELECTOR), showAnswerCommentForm);
 
   $(document).on('click', DOCUMENT_SELECTOR + '.comments .reply-comment', onCommentReply);
-  DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR + '.comments ');
 })(jQuery, FORM_HELPERS,
            DISCUSSION_POST_HELPERS,
            EVENT_HELPERS);

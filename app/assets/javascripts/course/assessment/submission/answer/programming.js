@@ -367,8 +367,9 @@
 
   $(document).ready(function() {
     showScriptedWidgets(document);
+    EVENT_HELPERS.onNodesInserted($(DOCUMENT_SELECTOR), showScriptedWidgets);
+    DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR + '.line-annotation ');
   });
-  EVENT_HELPERS.onNodesInserted($(DOCUMENT_SELECTOR), showScriptedWidgets);
 
   $(document).on('click', DOCUMENT_SELECTOR + 'table.codehilite .add-annotation',
     onAddProgrammingAnnotation);
@@ -382,7 +383,6 @@
     onAnnotationTrigger);
   $(document).on('change', DOCUMENT_SELECTOR + '.annotation-trigger-toggle-all',
     onAnnotationExpandAll);
-  DISCUSSION_POST_HELPERS.initializeToolbar(document, DOCUMENT_SELECTOR + '.line-annotation ');
 })(jQuery, FORM_HELPERS,
            COURSE_HELPERS,
            ANSWER_HELPERS,
