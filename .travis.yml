@@ -1,11 +1,13 @@
 dist: trusty
-sudo: false
+sudo: true
 language: ruby
 branches:
   except:
     - /^bundle-update-[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{6}+$/
 rvm:
   - 2.3.1
+services:
+  - docker
 addons:
   apt:
     packages:
@@ -33,9 +35,11 @@ env:
     - GROUP="misc"
 
 before_install:
+  - nvm install 6
   - node --version
   - npm list -g yarn --depth=0 || npm install -g yarn
   - yarn --version
+  - docker --version
   - gem update bundler
   # from https://github.com/travis-ci/travis-ci/issues/3225#issuecomment-177592725
   # and also from https://github.com/travis-ci/travis-ci/issues/3225#issuecomment-200965782
