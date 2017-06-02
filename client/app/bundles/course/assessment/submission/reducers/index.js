@@ -8,6 +8,7 @@ import posts from './posts';
 import questions from './questions';
 import topics from './topics';
 import grading from './grading';
+import testCases from './testCases';
 
 export default combineReducers({
   submissionEdit,
@@ -19,4 +20,5 @@ export default combineReducers({
   questions,
   topics,
   grading,
+  testCases,
 });

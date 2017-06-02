@@ -10,7 +10,7 @@ import { QuestionProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
-import Comments from '../../components/Comments';
+import Comments from '../../containers/Comments';
 
 const styles = {
   questionContainer: {
@@ -108,6 +108,22 @@ class SubmissionEditTabForm extends Component {
     return null;
   }
 
+  renderPublishButton() {
+    const { canGrade, submitted, handlePublish } = this.props;
+    if (canGrade && submitted) {
+      return (
+        <RaisedButton
+          style={styles.formButton}
+          backgroundColor={red900}
+          secondary
+          label="Publish Submission"
+          onTouchTap={handlePublish}
+        />
+      );
+    }
+    return null;
+  }
+
   render() {
     return (
       <Card style={styles.questionContainer}>
@@ -117,6 +133,7 @@ class SubmissionEditTabForm extends Component {
         {this.renderSaveDraftButton()}
         {this.renderSubmitButton()}
         {this.renderUnsubmitButton()}
+        {this.renderPublishButton()}
       </Card>
     );
   }
@@ -133,6 +150,8 @@ SubmissionEditTabForm.propTypes = {
   handleSaveDraft: PropTypes.func,
   handleSubmit: PropTypes.func,
   handleUnsubmit: PropTypes.func,
+  handleMark: PropTypes.func,
+  handlePublish: PropTypes.func,
 };
 
 export default reduxForm({

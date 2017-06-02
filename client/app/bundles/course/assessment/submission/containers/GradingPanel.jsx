@@ -5,7 +5,7 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { Table, TableHeader, TableBody, TableRow, TableHeaderColumn, TableRowColumn } from 'material-ui/Table';
 
 import { formatDateTime } from '../utils';
-import { QuestionProp, SubmissionProp } from '../propTypes';
+import { GradingProp, QuestionProp, SubmissionProp } from '../propTypes';
 
 const styles = {
   panel: {
@@ -113,7 +113,7 @@ class VisibleGradingPanel extends Component {
                 >
                   {question.displayTitle}
                 </TableHeaderColumn>
-                <TableRowColumn>{`${grading[question.id]} / ${question.maximumGrade}`}</TableRowColumn>
+                <TableRowColumn>{`${grading[question.id].grade} / ${question.maximumGrade}`}</TableRowColumn>
               </TableRow>
             )}
           </TableBody>
@@ -138,7 +138,7 @@ class VisibleGradingPanel extends Component {
 VisibleGradingPanel.propTypes = {
   questions: PropTypes.objectOf(QuestionProp),
   submission: SubmissionProp.isRequired,
-  grading: PropTypes.objectOf(PropTypes.number),
+  grading: PropTypes.objectOf(GradingProp),
 };
 
 function mapStateToProps(state) {

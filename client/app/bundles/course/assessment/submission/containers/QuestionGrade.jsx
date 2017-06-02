@@ -5,7 +5,7 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { grey100 } from 'material-ui/styles/colors';
 import NumericInput from 'react-numeric-input';
 
-import { QuestionProp } from '../propTypes';
+import { GradingProp, QuestionProp } from '../propTypes';
 import actionTypes from '../constants';
 
 const styles = {
@@ -18,13 +18,13 @@ class VisibleQuestionGrade extends Component {
   static propTypes = {
     id: PropTypes.number.isRequired,
     questions: PropTypes.objectOf(QuestionProp),
-    grading: PropTypes.objectOf(PropTypes.number).isRequired,
+    grading: PropTypes.objectOf(GradingProp).isRequired,
     updateGrade: PropTypes.func.isRequired,
   };
 
   render() {
     const { id, questions, grading, updateGrade } = this.props;
-    const initialGrade = grading[id];
+    const initialGrade = grading[id].grade;
     const maxGrade = questions[id].maximumGrade;
     return (
       <Card style={styles.container}>

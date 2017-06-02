@@ -1,5 +1,4 @@
 import actions from '../constants';
-import { arrayToObjectById } from '../utils';
 
 export default function (state = {}, action) {
   switch (action.type) {
@@ -7,9 +6,16 @@ export default function (state = {}, action) {
     case actions.SAVE_DRAFT_SUCCESS:
     case actions.SUBMISSION_SUCCESS:
     case actions.UNSUBMIT_SUCCESS:
+    case actions.MARK_SUCCESS:
+    case actions.PUBLISH_SUCCESS:
       return {
         ...state,
-        ...arrayToObjectById(action.payload.answers),
+        ...action.payload.answers.reduce((obj, answer) =>
+          ({
+            ...obj,
+            [answer.fields.id]: answer.fields,
+          })
+        , {}),
       };
     case actions.AUTOGRADE_SUCCESS: {
       const { questionId, id } = action.payload.answers[0];
@@ -18,7 +24,7 @@ export default function (state = {}, action) {
           return { ...obj, [key]: state[key] };
         }
         return obj;
-      }, { [id]: action.payload.answers[0] });
+      }, { [id]: action.payload.answers[0].fields });
     }
     default:
       return state;

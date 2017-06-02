@@ -6,9 +6,12 @@ import ProgressPanel from '../../components/ProgressPanel';
 import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEditTabForm from './SubmissionEditTabForm';
-import { fetchSubmission, saveDraft, submit, unsubmit, autograde } from '../../actions';
 import {
-  AnswerProp, AssessmentProp, PostProp, QuestionProp,
+  fetchSubmission, saveDraft, submit,
+  unsubmit, autograde, mark, publish,
+} from '../../actions';
+import {
+  AnswerProp, AssessmentProp, ExplanationProp, GradingProp, PostProp, QuestionProp,
   ReduxFormProp, SubmissionProp, TopicProp,
 } from '../../propTypes';
 import { DATA_STATES } from '../../constants';
@@ -40,6 +43,16 @@ class VisibleSubmissionEditIndex extends Component {
     const { form, match: { params }, autogradeAnswer } = this.props;
     const answers = [form.values[answerId]];
     autogradeAnswer(params.submissionId, answers);
+  }
+
+  handleMark() {
+    const { match: { params }, grading, markAnswer } = this.props;
+    markAnswer(params.submissionId, Object.values(grading));
+  }
+
+  handlePublish() {
+    const { match: { params }, grading, publishAnswer } = this.props;
+    publishAnswer(params.submissionId, Object.values(grading));
   }
 
   renderProgress() {
@@ -90,6 +103,8 @@ class VisibleSubmissionEditIndex extends Component {
           handleSaveDraft={() => this.handleSaveDraft()}
           handleSubmit={() => this.handleSubmit()}
           handleUnsubmit={() => this.handleUnsubmit()}
+          handleMark={() => this.handleMark()}
+          handlePublish={() => this.handlePublish()}
           initialValues={answers}
           canGrade={canGrade}
           submitted={!!submittedAt}
@@ -106,6 +121,8 @@ class VisibleSubmissionEditIndex extends Component {
         handleSaveDraft={() => this.handleSaveDraft()}
         handleSubmit={() => this.handleSubmit()}
         handleUnsubmit={() => this.handleUnsubmit()}
+        handleMark={() => this.handleMark()}
+        handlePublish={() => this.handlePublish()}
         initialValues={answers}
         canGrade={canGrade}
         submitted={!!submittedAt}
@@ -143,8 +160,9 @@ VisibleSubmissionEditIndex.propTypes = {
   }),
   answers: PropTypes.objectOf(AnswerProp),
   assessment: AssessmentProp,
-  explanations: PropTypes.objectOf(AnswerProp),
+  explanations: PropTypes.objectOf(ExplanationProp),
   form: ReduxFormProp,
+  grading: PropTypes.objectOf(GradingProp),
   posts: PropTypes.objectOf(PostProp),
   questions: PropTypes.objectOf(QuestionProp),
   submission: SubmissionProp,
@@ -157,6 +175,8 @@ VisibleSubmissionEditIndex.propTypes = {
   unsubmitAnswer: PropTypes.func.isRequired,
   saveDraftAnswer: PropTypes.func.isRequired,
   autogradeAnswer: PropTypes.func.isRequired,
+  markAnswer: PropTypes.func.isRequired,
+  publishAnswer: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -165,6 +185,7 @@ function mapStateToProps(state) {
     assessment: state.submissionEdit.assessment,
     explanations: state.explanations,
     form: state.form.submissionEdit,
+    grading: state.grading,
     maxStep: state.submissionEdit.maxStep,
     posts: state.posts,
     submission: state.submissionEdit.submission,
@@ -182,6 +203,8 @@ function mapDispatchToProps(dispatch) {
     unsubmitAnswer: id => dispatch(unsubmit(id)),
     saveDraftAnswer: (id, answers) => dispatch(saveDraft(id, answers)),
     autogradeAnswer: (id, answers) => dispatch(autograde(id, answers)),
+    markAnswer: (id, grades) => dispatch(mark(id, grades)),
+    publishAnswer: (id, grades) => dispatch(publish(id, grades)),
   };
 }
 

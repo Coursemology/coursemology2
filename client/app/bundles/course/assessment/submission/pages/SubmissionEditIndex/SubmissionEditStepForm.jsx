@@ -1,3 +1,5 @@
+/* eslint-disable react/no-danger */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
@@ -6,11 +8,11 @@ import { white, green500, green900, red300, red900 } from 'material-ui/styles/co
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import { AnswerProp, QuestionProp, TopicProp } from '../../propTypes';
+import { ExplanationProp, QuestionProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
-import Comments from '../../components/Comments';
+import Comments from '../../containers/Comments';
 import { SAVE_STATES } from '../../constants';
 
 const styles = {
@@ -59,11 +61,10 @@ class SubmissionEditStepForm extends Component {
 
   shouldDisableContinueButton() {
     const { stepIndex } = this.state;
-    const { explanations, questionIds, questions, submitting } = this.props;
+    const { explanations, questionIds, submitting } = this.props;
     const questionId = questionIds[stepIndex];
-    const { explanationId } = questions[questionId];
 
-    if (explanations[explanationId] && explanations[explanationId].correct && !submitting) {
+    if (explanations[questionId] && explanations[questionId].correct && !submitting) {
       return false;
     }
     return true;
@@ -79,7 +80,7 @@ class SubmissionEditStepForm extends Component {
   handleStepClick(index) {
     const { skippable, maxStep } = this.props;
 
-    if (skippable || index < maxStep) {
+    if (skippable || index <= maxStep) {
       this.setState({
         stepIndex: index,
       });
@@ -103,12 +104,10 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderExplanationPanel(questionId) {
-    const { questions, explanations } = this.props;
-    const { explanationId } = questions[questionId];
+    const { explanations } = this.props;
+    const explanation = explanations[questionId];
 
-    if (explanationId && explanations[explanationId].explanations) {
-      const explanation = explanations[explanationId];
-      console.log(explanation);
+    if (explanation) {
       return (
         <Card style={styles.explanationContainer}>
           <CardHeader
@@ -120,7 +119,7 @@ class SubmissionEditStepForm extends Component {
             titleColor={explanation.correct ? green900 : red900}
           />
           <CardText>
-            {explanation.explanations.map(exp => <div dangerouslySetInnerHtml={{ __html: exp }} />)}
+            {explanation.explanations.map(exp => <div dangerouslySetInnerHTML={{ __html: exp }} />)}
           </CardText>
         </Card>
       );
@@ -236,25 +235,25 @@ class SubmissionEditStepForm extends Component {
 
   renderStepper() {
     const { stepIndex } = this.state;
+    const { maxStep } = this.props;
     const { skippable, questionIds } = this.props;
-    if (skippable) {
-      return (
-        <Stepper activeStep={stepIndex} linear={false}>
-          {questionIds.map((questionId, index) =>
-            <Step key={questionId}>
-              <StepButton onClick={() => this.handleStepClick(index)} />
-            </Step>
-          )}
-        </Stepper>
-      );
-    }
+
     return (
-      <Stepper activeStep={stepIndex}>
-        {questionIds.map((questionId, index) =>
-          <Step key={questionId} onClick={() => this.handleStepClick(index)}>
-            <StepLabel />
-          </Step>
-        )}
+      <Stepper activeStep={stepIndex} linear={false}>
+        {questionIds.map((questionId, index) => {
+          if (skippable || index <= maxStep) {
+            return (
+              <Step key={questionId} active={index <= maxStep}>
+                <StepButton onClick={() => this.handleStepClick(index)} />
+              </Step>
+            );
+          }
+          return (
+            <Step key={questionId}>
+              <StepLabel />
+            </Step>
+          );
+        })}
       </Stepper>
     );
   }
@@ -278,7 +277,7 @@ SubmissionEditStepForm.propTypes = {
   pristine: PropTypes.bool,
   skippable: PropTypes.bool.isRequired,
   submitting: PropTypes.bool,
-  explanations: PropTypes.objectOf(AnswerProp),
+  explanations: PropTypes.objectOf(ExplanationProp),
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(QuestionProp),
   topics: PropTypes.objectOf(TopicProp),

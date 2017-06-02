@@ -7,18 +7,21 @@ export default function (state = {}, action) {
     case actions.SUBMISSION_SUCCESS:
     case actions.UNSUBMIT_SUCCESS:
     case actions.MARK_SUCCESS:
-    case actions.PUBLISH_SUCCESS: {
+    case actions.PUBLISH_SUCCESS:
       return {
         ...state,
         ...action.payload.answers.reduce((obj, answer) =>
-          ({ ...obj, [answer.questionId]: answer.grading })
+          ({ ...obj, [answer.questionId]: answer.testCases })
         , {}),
       };
-    }
-    case actions.UPDATE_GRADING: {
-      const newState = { ...state };
-      newState[action.id].grade = action.grade;
-      return newState;
+    case actions.AUTOGRADE_SUCCESS: {
+      const { questionId, id } = action.payload.testCase[0];
+      return Object.keys(state).reduce((obj, key) => {
+        if (state[key].questionId !== questionId) {
+          return { ...obj, [key]: state[key] };
+        }
+        return obj;
+      }, { [id]: action.payload.answers[0].testCases });
     }
     default:
       return state;

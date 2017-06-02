@@ -7,6 +7,8 @@ export default function (state = {}, action) {
     case actions.SAVE_DRAFT_SUCCESS:
     case actions.SUBMISSION_SUCCESS:
     case actions.UNSUBMIT_SUCCESS:
+    case actions.MARK_SUCCESS:
+    case actions.PUBLISH_SUCCESS:
       return {
         ...state,
         ...arrayToObjectById(action.payload.questions),
@@ -18,7 +20,6 @@ export default function (state = {}, action) {
         [questionId]: {
           ...state[questionId],
           answerId: action.payload.answers[0].id,
-          explanationId: action.payload.explanations[0].id,
         },
       };
     }

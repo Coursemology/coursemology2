@@ -13,14 +13,8 @@ end
 
 answers = @submission.latest_answers
 
-if @assessment.autograded? && @submission.attempting?
-  explanations = answers.map { |a| last_attempt(a) }.reject(&:nil?)
-else
-  explanations = nil
-end
-
 json.partial! 'questions', assessment: @assessment, submission: @submission, can_grade: can_grade,
-                           answers: answers, explanations: explanations
+                           answers: answers
 json.partial! 'answers', submission: @submission, can_grade: can_grade,
-                         answers: answers, explanations: explanations
+                         answers: answers
 json.partial! 'topics', submission: @submission, can_grade: can_grade

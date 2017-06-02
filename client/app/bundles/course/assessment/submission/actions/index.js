@@ -14,7 +14,7 @@ export function fetchSubmission(id) {
           payload: data,
         });
       })
-      .catch(dispatch({ type: actionTypes.FETCH_SUBMISSION_FAILURE }));
+      .catch(() => dispatch({ type: actionTypes.FETCH_SUBMISSION_FAILURE }));
   };
 }
 
@@ -83,5 +83,39 @@ export function autograde(submissionId, answers) {
         });
       })
       .catch(() => dispatch({ type: actionTypes.AUTOGRADE_FAILURE }));
+  };
+}
+
+export function mark(submissionId, answers) {
+  const payload = { submission: { answers, mark: true } };
+  return (dispatch) => {
+    dispatch({ type: actionTypes.MARK_REQUEST });
+
+    return CourseAPI.assessment.submissions.update(submissionId, payload)
+      .then(response => response.data)
+      .then((data) => {
+        dispatch({
+          type: actionTypes.MARK_SUCCESS,
+          payload: data,
+        });
+      })
+      .catch(() => dispatch({ type: actionTypes.MARK_FAILURE }));
+  };
+}
+
+export function publish(submissionId, answers) {
+  const payload = { submission: { answers, publish: true } };
+  return (dispatch) => {
+    dispatch({ type: actionTypes.PUBLISH_REQUEST });
+
+    return CourseAPI.assessment.submissions.update(submissionId, payload)
+      .then(response => response.data)
+      .then((data) => {
+        dispatch({
+          type: actionTypes.PUBLISH_SUCCESS,
+          payload: data,
+        });
+      })
+      .catch(() => dispatch({ type: actionTypes.PUBLISH_FAILURE }));
   };
 }

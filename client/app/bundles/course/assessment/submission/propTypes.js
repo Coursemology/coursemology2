@@ -7,13 +7,12 @@ const OptionProp =
     correct: PropTypes.bool,
   });
 
-const TestCaseProp =
+export const TestCaseProp =
   PropTypes.shape({
     identifier: PropTypes.string.isRequired,
     expression: PropTypes.string.isRequired,
     expected: PropTypes.string.isRequired,
     hint: PropTypes.string,
-    type: PropTypes.string.isRequired,
   });
 
 export const QuestionProp =
@@ -26,15 +25,19 @@ PropTypes.shape({
   options: PropTypes.arrayOf(OptionProp),
   type: PropTypes.string.isRequired,
   answerId: PropTypes.number.isRequired,
-  explanationId: PropTypes.number,
   topicId: PropTypes.number.isRequired,
-  testCases: PropTypes.arrayOf(TestCaseProp),
 });
 
 const FileProp =
   PropTypes.shape({
     content: PropTypes.string,
     filename: PropTypes.string,
+  });
+
+export const GradingProp =
+  PropTypes.shape({
+    grade: PropTypes.number,
+    grader: PropTypes.string,
   });
 
 export const PostProp =
@@ -55,6 +58,10 @@ export const AnswerProp =
     file: PropTypes.object,
     files: PropTypes.arrayOf(FileProp),
     option_ids: PropTypes.arrayOf(PropTypes.number),
+  });
+
+export const ExplanationProp =
+  PropTypes.shape({
     correct: PropTypes.bool,
     explanations: PropTypes.arrayOf(PropTypes.string),
   });
