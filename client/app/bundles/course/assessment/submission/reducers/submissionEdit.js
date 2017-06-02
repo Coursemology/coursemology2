@@ -7,7 +7,7 @@ const initialState = {
   saveState: SAVE_STATES.Idle,
 };
 
-export default function submissionEditReducer(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_REQUEST:
       return {

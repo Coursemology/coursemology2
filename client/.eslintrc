@@ -5,12 +5,13 @@
     import/resolver: "webpack"
   },
   rules: {
-    // See https://github.com/yannickcr/eslint-plugin-react/issues/847
+    react/jsx-wrap-multilines: ["error", { arrow: false }],
     react/no-unused-prop-types: ["warn", { skipShapeProps: true }],
     react/prefer-stateless-function: "off",
     react/require-default-props: "off",
     react/no-array-index-key: "warn",
     import/no-extraneous-dependencies: ["warn", { devDependencies: true }],
+    import/prefer-default-export: "warn",
     jsx-a11y/label-has-for: "off",
     max-len: ["warn", 120],
     new-cap: ["error", { capIsNewExceptions: ["Set"] }],

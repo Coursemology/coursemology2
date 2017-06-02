@@ -11,6 +11,9 @@
 # Ignore user-specific Intellij project files
 /.idea/*
 
+# Ignore user-specific VSCode project files
+.vscode
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal

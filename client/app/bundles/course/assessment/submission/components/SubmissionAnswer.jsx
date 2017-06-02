@@ -1,11 +1,12 @@
 /* eslint-disable react/no-danger */
 
-import React, { PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { QuestionProp } from '../propTypes';
 import { questionTypes } from '../constants';
 import Answers from './Answers';
 
-class SubmissionAnswer extends React.Component {
+class SubmissionAnswer extends Component {
   static propTypes = {
     canGrade: PropTypes.bool.isRequired,
     readOnly: PropTypes.bool,

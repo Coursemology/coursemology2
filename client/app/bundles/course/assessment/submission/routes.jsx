@@ -8,7 +8,8 @@ export default (
   <SubmissionEditLayout>
     <Switch>
       <Route
-        exact path="/courses/:courseId/assessments/:assessmentId/submissions/:submissionId/edit"
+        exact
+        path="/courses/:courseId/assessments/:assessmentId/submissions/:submissionId/edit"
         component={SubmissionEditIndex}
       />
     </Switch>

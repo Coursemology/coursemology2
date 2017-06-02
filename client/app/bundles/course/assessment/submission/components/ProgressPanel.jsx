@@ -3,9 +3,8 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import { red100, yellow100, grey100, green100, blue100 } from 'material-ui/styles/colors';
 import WarningIcon from 'material-ui/svg-icons/alert/warning';
-// eslint-disable-next-line import/extensions, import/no-extraneous-dependencies, import/no-unresolved
-import moment from 'lib/moment';
 
+import { formatDateTime } from '../utils';
 import { SubmissionProp } from '../propTypes';
 
 const styles = {
@@ -33,9 +32,6 @@ const styles = {
 };
 
 class ProgressPanel extends Component {
-  static formatDateTime(dateTime) {
-    return dateTime ? moment(dateTime).format('DD MMM YYYY, h:mma') : null;
-  }
 
   static renderLateWarning() {
     return (
@@ -48,48 +44,14 @@ class ProgressPanel extends Component {
     );
   }
 
-  renderGrading() {
-    const { basePoints, grade, gradedAt, grader, maximumGrade, pointsAwarded } = this.props.submission;
-    return (
-      <Table selectable={false} style={styles.table}>
-        <TableBody displayRowCheckbox={false}>
-          <TableRow>
-            <TableRowColumn>Grade</TableRowColumn>
-            <TableRowColumn>{grade} / {maximumGrade}</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableRowColumn>Experience Points</TableRowColumn>
-            <TableRowColumn>{pointsAwarded} / {basePoints}</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableRowColumn>Graded At</TableRowColumn>
-            <TableRowColumn>{ProgressPanel.formatDateTime(gradedAt)}</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableRowColumn>Grader</TableRowColumn>
-            <TableRowColumn>{grader}</TableRowColumn>
-          </TableRow>
-        </TableBody>
-      </Table>
-    );
-  }
-
   renderTimes() {
-    const { attemptedAt, dueAt, submittedAt } = this.props.submission;
+    const { submittedAt } = this.props.submission;
     return (
       <Table selectable={false} style={styles.table}>
         <TableBody displayRowCheckbox={false}>
-          <TableRow>
-            <TableRowColumn>Attempted At</TableRowColumn>
-            <TableRowColumn>{ProgressPanel.formatDateTime(attemptedAt)}</TableRowColumn>
-          </TableRow>
           <TableRow>
             <TableRowColumn>Submitted At</TableRowColumn>
-            <TableRowColumn>{ProgressPanel.formatDateTime(submittedAt)}</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableRowColumn>Due At</TableRowColumn>
-            <TableRowColumn>{ProgressPanel.formatDateTime(dueAt)}</TableRowColumn>
+            <TableRowColumn>{formatDateTime(submittedAt)}</TableRowColumn>
           </TableRow>
         </TableBody>
       </Table>
@@ -110,16 +72,9 @@ class ProgressPanel extends Component {
           title={`Submission by ${submitter}`}
           subtitle={title}
           style={styles.header[workflowState]}
-          actAsExpander
-          showExpandableButton
         />
-        <CardText>
-          {this.renderGrading()}
-          {late ? ProgressPanel.renderLateWarning() : null}
-        </CardText>
-        <CardText expandable>
-          {this.renderTimes()}
-        </CardText>
+        <CardText>{late ? ProgressPanel.renderLateWarning() : null}</CardText>
+        <CardText>{this.renderTimes()}</CardText>
       </Card>
     );
   }

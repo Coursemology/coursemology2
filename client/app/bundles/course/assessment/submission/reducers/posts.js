@@ -1,5 +1,5 @@
 import actions from '../constants';
-import arrayToObjectById from './utils';
+import { arrayToObjectById } from '../utils';
 
 export default function (state = {}, action) {
   switch (action.type) {

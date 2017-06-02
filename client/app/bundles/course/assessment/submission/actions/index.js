@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved, import/extensions, import/no-extraneous-dependencies
 import CourseAPI from 'api/course';
 import actionTypes from '../constants';
 

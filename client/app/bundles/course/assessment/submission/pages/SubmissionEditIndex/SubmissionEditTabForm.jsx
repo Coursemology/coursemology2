@@ -8,6 +8,8 @@ import { red900 } from 'material-ui/styles/colors';
 
 import { QuestionProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
+import QuestionGrade from '../../containers/QuestionGrade';
+import GradingPanel from '../../containers/GradingPanel';
 import Comments from '../../components/Comments';
 
 const styles = {
@@ -22,6 +24,14 @@ const styles = {
 
 class SubmissionEditTabForm extends Component {
 
+  renderQuestionGrading(id) {
+    const { submitted } = this.props;
+    if (submitted) {
+      return <QuestionGrade id={id} />;
+    }
+    return null;
+  }
+
   renderQuestions() {
     const { canGrade, submitted, questionIds, questions, topics } = this.props;
     return (
@@ -33,12 +43,21 @@ class SubmissionEditTabForm extends Component {
           return (
             <Tab key={id} label={index + 1}>
               <SubmissionAnswer {...{ canGrade, readOnly: submitted, answerId, question }} />
+              {this.renderQuestionGrading(id)}
               <Comments topic={topic} />
             </Tab>
           );
         })}
       </Tabs>
     );
+  }
+
+  renderGradingPanel() {
+    const { submitted } = this.props;
+    if (submitted) {
+      return <GradingPanel />;
+    }
+    return null;
   }
 
   renderSaveDraftButton() {
@@ -94,6 +113,7 @@ class SubmissionEditTabForm extends Component {
       <Card style={styles.questionContainer}>
         <form>{this.renderQuestions()}</form>
         <hr />
+        {this.renderGradingPanel()}
         {this.renderSaveDraftButton()}
         {this.renderSubmitButton()}
         {this.renderUnsubmitButton()}
