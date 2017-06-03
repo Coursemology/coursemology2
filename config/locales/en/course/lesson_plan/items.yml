@@ -5,8 +5,3 @@ en:
         sidebar_title: :'course.lesson_plan.items.index.header'
         index:
           header: 'Lesson Plan'
-        group_with_milestone:
-          no_description: '(No Description)'
-        group_without_milestone:
-          ungrouped_items_title: 'Ungrouped Items'
-          ungrouped_items_description: 'Insert milestones to group these items.'
