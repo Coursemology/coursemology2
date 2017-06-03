@@ -33,7 +33,7 @@ RSpec.feature 'Course: Events' do
 
         # Delete an event
         expect(page).to have_text(event_to_delete.title)
-        find("#item-#{event_to_delete.acting_as.id} .admin-button button").click
+        find("#item-#{event_to_delete.acting_as.id} button").click
         deletion_path = course_lesson_plan_event_path(course, event_to_delete)
         expect do
           find_link(nil, href: deletion_path).click
@@ -45,7 +45,7 @@ RSpec.feature 'Course: Events' do
 
         # Go to edit event page
         expect(page).to have_text(event_to_edit.title)
-        find("#item-#{event_to_edit.acting_as.id} .admin-button button").click
+        find("#item-#{event_to_edit.acting_as.id} button").click
         find_link(nil, href: edit_course_lesson_plan_event_path(course, event_to_edit)).click
         expect(page).to have_selector('h1', text: I18n.t('course.lesson_plan.events.edit.header'))
         expect(current_path).to eq(edit_course_lesson_plan_event_path(course, event_to_edit))
