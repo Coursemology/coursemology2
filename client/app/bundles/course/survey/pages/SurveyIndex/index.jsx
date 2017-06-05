@@ -7,7 +7,7 @@ import TitleBar from 'lib/components/TitleBar';
 import { fetchSurveys } from 'course/survey/actions/surveys';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
-import LoadingIndicator from 'course/survey/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import SurveysTable from './SurveysTable';
 import NewSurveyButton from './NewSurveyButton';
 

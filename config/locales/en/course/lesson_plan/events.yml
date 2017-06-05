@@ -13,6 +13,3 @@ en:
         destroy:
           success: 'New event %{title} removed.'
           failure: 'Failed to remove event.'
-        lesson_plan_event:
-          location: 'Location: %{location}'
-          no_description: '(No Description)'

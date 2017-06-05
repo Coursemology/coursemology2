@@ -1,9 +1,0 @@
-.spaceBetween {
-  display: flex;
-  justify-content: space-between;
-}
-
-.milestoneTitleRow {
-  align-items: flex-end;
-  composes: spaceBetween;
-}

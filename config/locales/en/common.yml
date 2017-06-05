@@ -7,7 +7,6 @@ en:
     not_started: 'Not started'
     ended: 'Ended'
     plain_text_link: '%{text} (%{url})'
-    time_range: '%{from} to %{to}'
     draft: 'Draft'
     search: 'Search'
     submit: 'Submit'

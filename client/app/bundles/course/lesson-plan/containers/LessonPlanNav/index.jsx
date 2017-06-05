@@ -1,22 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Immutable from 'immutable';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { connect } from 'react-redux';
+import { defineMessages, FormattedMessage } from 'react-intl';
+import { scroller, Helpers } from 'react-scroll';
 import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import KeyboardArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
-import { scroller, Helpers } from 'react-scroll';
-
-const propTypes = {
-  milestones: PropTypes.instanceOf(Immutable.List).isRequired,
-  intl: intlShape.isRequired,
-};
 
 const translations = defineMessages({
   goto: {
-    id: 'course.lessonPlan.lessonPlanFilter.goto',
+    id: 'course.lessonPlan.LessonPlanNav.goto',
     defaultMessage: 'Go To Milestone',
   },
 });
@@ -28,12 +23,19 @@ const styles = {
 };
 
 class LessonPlanNav extends React.Component {
+  static propTypes = {
+    groups: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+      milestone: PropTypes.object,
+    })).isRequired,
+  }
+
   constructor(props) {
     super(props);
 
     this.state = {
       open: false,
-      text: props.intl.formatMessage(translations.goto),
+      text: <FormattedMessage {...translations.goto} />,
     };
   }
 
@@ -54,34 +56,42 @@ class LessonPlanNav extends React.Component {
   }
 
   /**
+   * Sets up ScrollSpies for each milestone group. Each scrollspy will update the nav button
+   * text when the group it is spying on scrolls into view.
+   *
    * Ideally, these scroll listeners should be mounted with the Popover MenuItems using
    * react-scroll's Link component. However, if we do that, the button text will not be
    * updated when the Popover Menu is closed, since the MenuItems (and hence the listeners)
    * will not be mounted. Instead, we mount it on empty dummy spans.
    */
   renderScrollSpies() {
-    const { milestones } = this.props;
+    const { groups } = this.props;
     const ScrollSpy = Helpers.Scroll('span'); // eslint-disable-line new-cap
 
     return (
       <span>
         {
-          milestones.map(milestone => (
-            <ScrollSpy
-              spy
-              key={milestone.get('id')}
-              to={`milestone-group-${milestone.get('id')}`}
-              onSetActive={() => { this.setState({ text: milestone.get('title') }); }}
-              offset={-50}
-            />
-          ))
+          groups.map((group) => {
+            if (!group.milestone) { return null; }
+            return (
+              <ScrollSpy
+                spy
+                key={group.id}
+                to={group.id}
+                onSetActive={() => { this.setState({ text: group.milestone.title }); }}
+                offset={-50}
+              />
+            );
+          })
         }
       </span>
     );
   }
 
-  renderNav() {
-    const { milestones } = this.props;
+  render() {
+    const { groups } = this.props;
+
+    if (groups.length < 2) { return null; }
 
     return (
       <div>
@@ -102,38 +112,27 @@ class LessonPlanNav extends React.Component {
         >
           <Menu>
             {
-              milestones.map(milestone => (
-                <MenuItem
-                  key={milestone.get('id')}
-                  primaryText={milestone.get('title')}
-                  onTouchTap={() => {
-                    scroller.scrollTo(`milestone-group-${milestone.get('id')}`, {
-                      offset: -50,
-                    });
-                    this.setState({
-                      open: false,
-                    });
-                  }}
-                />
-              ))
+              groups.map((group) => {
+                if (!group.milestone) { return null; }
+                return (
+                  <MenuItem
+                    key={group.id}
+                    primaryText={group.milestone.title}
+                    onTouchTap={() => {
+                      scroller.scrollTo(group.id, { offset: -50 });
+                      this.setState({ open: false });
+                    }}
+                  />
+                );
+              })
             }
           </Menu>
         </Popover>
       </div>
     );
   }
-
-  render() {
-    const { milestones } = this.props;
-
-    if (milestones.size > 0) {
-      return this.renderNav();
-    }
-
-    return <div />;
-  }
 }
 
-LessonPlanNav.propTypes = propTypes;
-
-export default injectIntl(LessonPlanNav);
+export default connect(state => ({
+  groups: state.groups,
+}))(LessonPlanNav);

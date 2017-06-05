@@ -7,7 +7,7 @@ import Toggle from 'material-ui/Toggle';
 import { Card, CardText } from 'material-ui/Card';
 import surveyTranslations from 'course/survey/translations';
 import { fetchResults } from 'course/survey/actions/surveys';
-import LoadingIndicator from 'course/survey/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { surveyShape, sectionShape } from 'course/survey/propTypes';
 import ResultsSection from './ResultsSection';
 
