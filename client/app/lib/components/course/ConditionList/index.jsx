@@ -51,6 +51,7 @@ class ConditionList extends React.Component {
             iconButtonElement={<IconButton><NewIcon /></IconButton>}
             anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
             targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+            className="add-condition-btn"
           >
             {
             this.props.newConditionUrls.map(url => (
@@ -120,7 +121,10 @@ class ConditionList extends React.Component {
       <div>
         <Table selectable={false} >
           {this.renderHeaderRows()}
-          <TableBody displayRowCheckbox={false}>
+          <TableBody
+            className="conditions-list"
+            displayRowCheckbox={false}
+          >
             {this.renderConditionRows()}
           </TableBody>
         </Table>
