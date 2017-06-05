@@ -13,6 +13,7 @@ const config = {
   entry: {
     coursemology: ['babel-polyfill', './app/index'],
     lib: [
+      'babel-polyfill',
       'axios',
       'brace',
       'immutable',
