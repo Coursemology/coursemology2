@@ -196,7 +196,7 @@ GEM
       rouge (~> 2.0.7)
     htmlentities (4.3.4)
     http_accept_language (2.1.0)
-    i18n (0.8.1)
+    i18n (0.8.4)
     i18n-js (3.0.0)
       i18n (~> 0.6, >= 0.6.6)
     i18n-tasks (0.9.15)
@@ -215,7 +215,7 @@ GEM
       image_size (~> 1.5)
       in_threads (~> 1.3)
       progress (~> 3.0, >= 3.0.1)
-    image_optim_rails (0.3.0)
+    image_optim_rails (0.4.0)
       image_optim (~> 0.24.0)
       rails
       sprockets
@@ -278,7 +278,7 @@ GEM
     multipart-post (2.0.0)
     nokogiri (1.7.2)
       mini_portile2 (~> 2.1.0)
-    nokogumbo (1.4.11)
+    nokogumbo (1.4.12)
       nokogiri
     oauth2 (1.3.1)
       faraday (>= 0.8, < 0.12)
@@ -309,7 +309,7 @@ GEM
       activerecord (>= 3.0)
     progress (3.3.1)
     public_suffix (2.0.5)
-    puma (3.8.2)
+    puma (3.9.0)
     rack (1.6.8)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -642,6 +642,7 @@ DEPENDENCIES
   webpack-rails
   workflow
   yard
+
 
 BUNDLED WITH
    1.14.6
