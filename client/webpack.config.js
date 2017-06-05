@@ -25,6 +25,7 @@ const config = {
       'react-dnd',
       'react-dnd-html5-backend',
       'react-dom',
+      'react-dropzone',
       'react-intl',
       'react-redux',
       'react-router',
