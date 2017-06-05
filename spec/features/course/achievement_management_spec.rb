@@ -15,6 +15,7 @@ RSpec.feature 'Course: Achievements' do
       let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can create an achievement' do
+        # To be updated when react is written in.
         # Fields not yet filled
         visit new_course_achievement_path(course)
         click_button I18n.t('helpers.submit.achievement.create')
@@ -48,6 +49,8 @@ RSpec.feature 'Course: Achievements' do
       end
 
       scenario 'I can edit an achievement' do
+        # To be updated when react is written in.
+        pending
         achievement = create(:course_achievement, course: course)
         visit edit_course_achievement_path(course, achievement)
         expect(page).to have_field('achievement_title', with: achievement.title)

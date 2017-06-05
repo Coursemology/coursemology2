@@ -158,7 +158,7 @@ Rails.application.routes.draw do
 
       resources :announcements, concerns: :paginatable
       scope module: :achievement do
-        resources :achievements do
+        resources :achievements, except: [:new] do
           concerns :conditional
           resources :course_users, only: [:index]
           post 'reorder', on: :collection
