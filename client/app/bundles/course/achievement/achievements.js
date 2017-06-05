@@ -3,6 +3,8 @@ import { defineMessages } from 'react-intl';
 import renderNotificationBar from 'lib/helpers/renderNotificationBar';
 
 require('jquery-ui/ui/widgets/sortable');
+require('./achievements-edit');
+require('./achievements-index');
 
 const ACHIEVEMENTS_SELECTOR = '#sortable ';
 const BUTTON_SELECTOR = '#reorder ';

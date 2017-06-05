@@ -83,8 +83,15 @@
   }
 
   &.index {
+    .new-btn {
+      display: inline-block;
+    }
+
     #reorder {
+      // To remove height and vertical-align, used to align material and bootstrap buttons.
+      height: 38px;
       margin-right: 1em;
+      vertical-align: bottom;
     }
   }
 

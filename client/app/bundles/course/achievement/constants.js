@@ -1,0 +1,20 @@
+import mirrorCreator from 'mirror-creator';
+
+export const formNames = mirrorCreator([
+  'ACHIEVEMENT',
+]);
+
+const actionTypes = mirrorCreator([
+  'ACHIEVEMENT_FORM_SHOW',
+  'ACHIEVEMENT_FORM_CANCEL',
+  'ACHIEVEMENT_FORM_CONFIRM_CANCEL',
+  'ACHIEVEMENT_FORM_CONFIRM_DISCARD',
+  'CREATE_ACHIEVEMENT_REQUEST',
+  'CREATE_ACHIEVEMENT_SUCCESS',
+  'CREATE_ACHIEVEMENT_FAILURE',
+  'UPDATE_ACHIEVEMENT_REQUEST',
+  'UPDATE_ACHIEVEMENT_SUCCESS',
+  'UPDATE_ACHIEVEMENT_FAILURE',
+]);
+
+export default actionTypes;

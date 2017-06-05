@@ -14,25 +14,35 @@ RSpec.feature 'Course: Achievements' do
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario 'I can create an achievement' do
-        # To be updated when react is written in.
-        # Fields not yet filled
-        visit new_course_achievement_path(course)
-        click_button I18n.t('helpers.submit.achievement.create')
-        expect(page).to have_button(I18n.t('helpers.submit.achievement.create'))
-        expect(page).to have_css('div.has-error')
+      scenario 'I can create and edit an achievement', js: true do
+        visit course_achievements_path(course)
 
-        achievement = build(:course_achievement, course: course)
-        fill_in 'achievement_title', with: achievement.title
-        fill_in 'achievement_description', with: achievement.description
-        attach_file :achievement_badge, File.join(Rails.root, '/spec/fixtures/files/picture.jpg')
-        expect do
-          click_button I18n.t('helpers.submit.achievement.create')
-        end.to change(course.achievements, :count).by(1)
-        expect(page).to have_selector('div', text: I18n.t('course.achievement.achievements.create.'\
-                                                          'success'))
+        # Open new achievement modal and fill up fields.
+        find('div.new-btn button').click
+        expect(page).to have_selector('h3', text: 'New Achievement')
+        achievement = attributes_for(:course_achievement, course: course)
+        fill_in 'title', with: achievement[:title]
+
+        # Create the achievement
+        find('button.btn-submit').click
+        expect(page).not_to have_selector('h3', text: 'New Achievement')
+        achievement_created = course.achievements.last
+        expect(current_path).to eq(course_achievement_path(course, achievement_created))
+        expect(page).to have_text(achievement[:title])
+
+        # Edit the achivement
+        visit edit_course_achievement_path(course, achievement_created)
+        expect(page).
+          to have_selector('h1', text: I18n.t('course.achievement.achievements.edit.header'))
+        new_achievement = attributes_for(:course_achievement, course: course)
+        fill_in 'title', with: new_achievement[:title]
+
+        # Edit the achievement
+        find('.btn-submit').click
+        expect(page).
+          not_to have_selector('h1', text: I18n.t('course.achievement.achievements.edit.header'))
         expect(current_path).to eq(course_achievements_path(course))
-        expect(page).to have_content(achievement.badge.medium.url)
+        expect(page).to have_text(new_achievement[:title])
       end
 
       scenario 'I can delete an achievement' do
@@ -46,35 +56,6 @@ RSpec.feature 'Course: Achievements' do
         end
         expect(page).to have_selector('div', text: I18n.t('course.achievement.achievements.'\
                                                           'destroy.success'))
-      end
-
-      scenario 'I can edit an achievement' do
-        # To be updated when react is written in.
-        pending
-        achievement = create(:course_achievement, course: course)
-        visit edit_course_achievement_path(course, achievement)
-        expect(page).to have_field('achievement_title', with: achievement.title)
-        expect(page).to have_field('achievement_description', with: achievement.description)
-        expect(page).to have_checked_field('achievement_published')
-
-        # Invalid fields
-        fill_in 'achievement_title', with: ''
-        click_button I18n.t('helpers.submit.achievement.update')
-        expect(page).to have_button(I18n.t('helpers.submit.achievement.update'))
-        expect(page).to have_css('div.has-error')
-
-        new_title = 'New Title'
-        new_description = 'New description'
-        fill_in 'achievement_title', with: new_title
-        fill_in 'achievement_description', with: new_description
-        attach_file :achievement_badge, File.join(Rails.root, '/spec/fixtures/files/picture.jpg')
-        click_button I18n.t('helpers.submit.achievement.update')
-        expect(current_path).to eq course_achievements_path(course)
-        expect(page).to have_selector('div', text: I18n.t('course.achievement.achievements.update.'\
-                                                          'success'))
-        expect(page).to have_content(achievement.badge.medium.url)
-        expect(achievement.reload.title).to eq(new_title)
-        expect(achievement.reload.description).to eq(new_description)
       end
 
       scenario 'I can award a manually-awarded achievement to a student' do

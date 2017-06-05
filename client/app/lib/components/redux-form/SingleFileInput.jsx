@@ -17,8 +17,9 @@ const styles = {
   },
   badge: {
     height: 120,
+    marginBottom: 10,
     marginRight: 16,
-    width: 250,
+    width: 150,
   },
   badgeIconActive: {
     backgroundColor: grey400,
@@ -39,7 +40,7 @@ const styles = {
 const translations = defineMessages({
   dropzone: {
     id: 'components.reduxForm.singleFileInput.dropzone',
-    defaultMessage: 'Drag and drop your file here!',
+    defaultMessage: 'Drag your file here, or click to select file',
   },
   removeFile: {
     id: 'components.reduxForm.singleFileInput.removeFile',
@@ -127,9 +128,11 @@ class SingleFileInput extends React.Component {
           <div className="file-name">
             {fileName}
             {fileName && fileName.length > 0 && <br />}
-            <FormattedMessage {...translations.dropzone} />
           </div>
         </Badge>
+        <div>
+          <FormattedMessage {...translations.dropzone} />
+        </div>
       </div>
     );
   }
