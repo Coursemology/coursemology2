@@ -71,7 +71,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update_answer_params
     [].tap do |result|
       result.push(*update_answer_type_params) if can?(:update, @submission)
-      result.push(:grade) if can?(:grade, @submission) and !@submission.attempting?
+      result.push(:grade) if can?(:grade, @submission) && !@submission.attempting?
     end
   end
 
@@ -121,7 +121,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update_submission
     @submission.class.transaction do
       update_answers_params[:answers].each do |answer_params|
-        answer = @submission.answers.find { |answer| answer.id == answer_params[:id].to_i }
+        answer = @submission.answers.detect { |answer| answer.id == answer_params[:id].to_i }
         update_answer(answer, answer_params)
       end unless unsubmit?
 
@@ -132,7 +132,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update_answer(answer, answer_params)
     specific_answer = answer.specific
     specific_answer.assign_params(answer_params)
-    specific_answer.save!
+    answer.save!
   end
 
   def unsubmit?

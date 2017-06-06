@@ -24,7 +24,7 @@ const styles = {
 
 class VisibleGradingPanel extends Component {
   static calculateTotalGrade(grading) {
-    return Object.values(grading).reduce((a, b) => a + b, 0);
+    return Object.values(grading).reduce((acc, b) => acc + b.grade, 0);
   }
 
   static calculateMaxGrade(questions) {
