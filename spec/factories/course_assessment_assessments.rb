@@ -83,6 +83,7 @@ FactoryGirl.define do
       with_programming_question
       with_text_response_question
       with_file_upload_question
+      # TODO: To add scribing question once it is completed
     end
 
     # Note: Not to be used alone, as a published assessment requires at

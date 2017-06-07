@@ -90,6 +90,8 @@ module Course::Assessment::AssessmentAbility
         question: { assessment: assessment_course_staff_hash }
     can :manage, Course::Assessment::Question::Programming,
         question: { assessment: assessment_course_staff_hash }
+    can :manage, Course::Assessment::Question::Scribing,
+        question: { assessment: assessment_course_staff_hash }
   end
 
   # Only managers are allowed to publish assessment submission grades
