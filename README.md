@@ -16,11 +16,12 @@ educators to increase student engagement and make learning fun.
 ### System Requirements
 
 1. Ruby (>= 2.3.1)
-2. Ruby on Rails
-3. PostgreSQL
-4. ImageMagick or GraphicsMagick (For [MiniMagick](https://github.com/minimagick/minimagick))
-5. Node.js
-6. Yarn
+1. Ruby on Rails
+1. PostgreSQL
+1. ImageMagick or GraphicsMagick (For [MiniMagick](https://github.com/minimagick/minimagick)-
+if PDF processing doesn't work for the import of scribing questions, download Ghostscript)
+1. Node.js
+1. Yarn
 
 Coursemology uses [Ruby on Rails](http://rubyonrails.org/).
 In addition, some front-end components use

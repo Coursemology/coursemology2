@@ -1,0 +1,13 @@
+en:
+  course:
+    assessment:
+      question:
+        scribing:
+          create:
+            success: 'The scribin question was created.'
+            failure: 'Could not create scribing question.'
+          update:
+            failure: 'Could not update scribing question.'
+          destroy:
+            success: 'The scribing question was deleted.'
+            failure: 'Could not delete scribing question: %{error}'
