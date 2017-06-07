@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170602094949) do
+ActiveRecord::Schema.define(version: 20170607033748) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -543,6 +543,39 @@ ActiveRecord::Schema.define(version: 20170602094949) do
     t.integer "event_type", :default=>0, :null=>false
   end
 
+  create_table "course_material_folders", force: :cascade do |t|
+    t.integer  "parent_id",          :index=>{:name=>"fk__course_material_folders_parent_id"}, :foreign_key=>{:references=>"course_material_folders", :name=>"fk_course_material_folders_parent_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "course_id",          :null=>false, :index=>{:name=>"fk__course_material_folders_course_id"}, :foreign_key=>{:references=>"courses", :name=>"fk_course_material_folders_course_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "owner_id",           :index=>{:name=>"index_course_material_folders_on_owner_id_and_owner_type", :with=>["owner_type"], :unique=>true}
+    t.string   "owner_type",         :limit=>255, :index=>{:name=>"fk__course_material_folders_owner_id", :with=>["owner_id"]}
+    t.string   "name",               :limit=>255, :null=>false
+    t.text     "description"
+    t.boolean  "can_student_upload", :default=>false, :null=>false
+    t.datetime "start_at",           :null=>false
+    t.datetime "end_at"
+    t.integer  "creator_id",         :null=>false, :index=>{:name=>"fk__course_material_folders_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_material_folders_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "updater_id",         :null=>false, :index=>{:name=>"fk__course_material_folders_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_material_folders_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "created_at",         :null=>false
+    t.datetime "updated_at",         :null=>false
+  end
+  add_index "course_material_folders", ["parent_id", "name"], :name=>"index_course_material_folders_on_parent_id_and_name", :unique=>true, :case_sensitive=>false
+
+  create_table "course_materials", force: :cascade do |t|
+    t.integer  "folder_id",   :null=>false, :index=>{:name=>"fk__course_materials_folder_id"}, :foreign_key=>{:references=>"course_material_folders", :name=>"fk_course_materials_folder_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.string   "name",        :limit=>255, :null=>false
+    t.text     "description"
+    t.integer  "creator_id",  :null=>false, :index=>{:name=>"fk__course_materials_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_materials_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "updater_id",  :null=>false, :index=>{:name=>"fk__course_materials_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_materials_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "created_at",  :null=>false
+    t.datetime "updated_at",  :null=>false
+  end
+  add_index "course_materials", ["folder_id", "name"], :name=>"index_course_materials_on_folder_id_and_name", :unique=>true, :case_sensitive=>false
+
+  create_table "course_lesson_plan_event_materials", force: :cascade do |t|
+    t.integer "lesson_plan_event_id", :null=>false, :index=>{:name=>"fk__course_lesson_plan_event_materials_lesson_plan_event_id"}, :foreign_key=>{:references=>"course_lesson_plan_events", :name=>"fk_course_lesson_plan_event_materials_lesson_plan_event_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer "material_id",          :null=>false, :index=>{:name=>"fk__course_lesson_plan_event_materials_material_id"}, :foreign_key=>{:references=>"course_materials", :name=>"fk_course_lesson_plan_event_materials_material_id", :on_update=>:no_action, :on_delete=>:no_action}
+  end
+
   create_table "course_lesson_plan_items", force: :cascade do |t|
     t.integer  "actable_id"
     t.string   "actable_type",           :limit=>255, :index=>{:name=>"index_course_lesson_plan_items_on_actable_type_and_actable_id", :with=>["actable_id"], :unique=>true}
@@ -593,34 +626,6 @@ ActiveRecord::Schema.define(version: 20170602094949) do
     t.datetime "updated_at",                  :null=>false
   end
   add_index "course_levels", ["course_id", "experience_points_threshold"], :name=>"index_experience_points_threshold_on_course_id", :unique=>true
-
-  create_table "course_material_folders", force: :cascade do |t|
-    t.integer  "parent_id",          :index=>{:name=>"fk__course_material_folders_parent_id"}, :foreign_key=>{:references=>"course_material_folders", :name=>"fk_course_material_folders_parent_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "course_id",          :null=>false, :index=>{:name=>"fk__course_material_folders_course_id"}, :foreign_key=>{:references=>"courses", :name=>"fk_course_material_folders_course_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "owner_id",           :index=>{:name=>"index_course_material_folders_on_owner_id_and_owner_type", :with=>["owner_type"], :unique=>true}
-    t.string   "owner_type",         :limit=>255, :index=>{:name=>"fk__course_material_folders_owner_id", :with=>["owner_id"]}
-    t.string   "name",               :limit=>255, :null=>false
-    t.text     "description"
-    t.boolean  "can_student_upload", :default=>false, :null=>false
-    t.datetime "start_at",           :null=>false
-    t.datetime "end_at"
-    t.integer  "creator_id",         :null=>false, :index=>{:name=>"fk__course_material_folders_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_material_folders_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "updater_id",         :null=>false, :index=>{:name=>"fk__course_material_folders_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_material_folders_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.datetime "created_at",         :null=>false
-    t.datetime "updated_at",         :null=>false
-  end
-  add_index "course_material_folders", ["parent_id", "name"], :name=>"index_course_material_folders_on_parent_id_and_name", :unique=>true, :case_sensitive=>false
-
-  create_table "course_materials", force: :cascade do |t|
-    t.integer  "folder_id",   :null=>false, :index=>{:name=>"fk__course_materials_folder_id"}, :foreign_key=>{:references=>"course_material_folders", :name=>"fk_course_materials_folder_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.string   "name",        :limit=>255, :null=>false
-    t.text     "description"
-    t.integer  "creator_id",  :null=>false, :index=>{:name=>"fk__course_materials_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_materials_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "updater_id",  :null=>false, :index=>{:name=>"fk__course_materials_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_materials_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.datetime "created_at",  :null=>false
-    t.datetime "updated_at",  :null=>false
-  end
-  add_index "course_materials", ["folder_id", "name"], :name=>"index_course_materials_on_folder_id_and_name", :unique=>true, :case_sensitive=>false
 
   create_table "course_notifications", force: :cascade do |t|
     t.integer  "activity_id",       :null=>false, :index=>{:name=>"index_course_notifications_on_activity_id"}, :foreign_key=>{:references=>"activities", :name=>"fk_course_notifications_activity_id", :on_update=>:no_action, :on_delete=>:no_action}
