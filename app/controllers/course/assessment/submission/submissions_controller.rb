@@ -163,7 +163,8 @@ class Course::Assessment::Submission::SubmissionsController < \
 
     dead_answers.each do |a|
       old_job = a.auto_grading.job
-      job = a.auto_grade!(old_job.redirect_to, true)
+      job = a.auto_grade!(redirect_to_path: old_job.redirect_to,
+                          reattempt: true, reduce_priority: true)
 
       logger.debug(message: 'Restart Answer Grading', answer_id: a.id, job_id: job.job.id,
                    old_job_id: old_job.id)
