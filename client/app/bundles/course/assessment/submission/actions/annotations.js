@@ -2,36 +2,40 @@
 import CourseAPI from 'api/course';
 import actionTypes from '../constants';
 
-export function onCreateChange(topicId, text) {
+export function onCreateChange(fileId, line, text) {
   return (dispatch) => {
     dispatch({
-      type: actionTypes.CREATE_COMMENT_CHANGE,
-      payload: { topicId, text },
+      type: actionTypes.CREATE_ANNOTATION_CHANGE,
+      payload: { fileId, line, text },
     });
   };
 }
 
-export function create(submissionQuestionId, text) {
-  const payload = { discussion_post: { text } };
+export function create(submissionId, answerId, fileId, line, text) {
+  const payload = {
+    annotation: { line },
+    discussion_post: { text },
+  };
   return (dispatch) => {
-    dispatch({ type: actionTypes.CREATE_COMMENT_REQUEST });
+    dispatch({ type: actionTypes.CREATE_ANNOTATION_REQUEST });
 
-    return CourseAPI.assessment.submissionQuestions.createComment(submissionQuestionId, payload)
+    return CourseAPI.assessment.submissions.createProgrammingAnnotation(
+      submissionId, answerId, fileId, payload)
       .then(response => response.data)
       .then((data) => {
         dispatch({
-          type: actionTypes.CREATE_COMMENT_SUCCESS,
-          payload: data,
+          type: actionTypes.CREATE_ANNOTATION_SUCCESS,
+          payload: { ...data, fileId, line },
         });
       })
-      .catch(() => dispatch({ type: actionTypes.CREATE_COMMENT_FAILURE }));
+      .catch(() => dispatch({ type: actionTypes.CREATE_ANNOTATION_FAILURE }));
   };
 }
 
 export function onUpdateChange(postId, text) {
   return (dispatch) => {
     dispatch({
-      type: actionTypes.UPDATE_COMMENT_CHANGE,
+      type: actionTypes.UPDATE_ANNOTATION_CHANGE,
       payload: { postId, text },
     });
   };
@@ -40,32 +44,32 @@ export function onUpdateChange(postId, text) {
 export function update(topicId, postId, text) {
   const payload = { discussion_post: { text } };
   return (dispatch) => {
-    dispatch({ type: actionTypes.UPDATE_COMMENT_REQUEST });
+    dispatch({ type: actionTypes.UPDATE_ANNOTATION_REQUEST });
 
     return CourseAPI.comments.update(topicId, postId, payload)
       .then(response => response.data)
       .then((data) => {
         dispatch({
-          type: actionTypes.UPDATE_COMMENT_SUCCESS,
+          type: actionTypes.UPDATE_ANNOTATION_SUCCESS,
           payload: data,
         });
       })
-      .catch(() => dispatch({ type: actionTypes.UPDATE_COMMENT_FAILURE }));
+      .catch(() => dispatch({ type: actionTypes.UPDATE_ANNOTATION_FAILURE }));
   };
 }
 
 export function destroy(topicId, postId) {
   return (dispatch) => {
-    dispatch({ type: actionTypes.DELETE_COMMENT_REQUEST });
+    dispatch({ type: actionTypes.DELETE_ANNOTATION_REQUEST });
 
     return CourseAPI.comments.delete(topicId, postId)
       .then(response => response.data)
       .then(() => {
         dispatch({
-          type: actionTypes.DELETE_COMMENT_SUCCESS,
+          type: actionTypes.DELETE_ANNOTATION_SUCCESS,
           payload: { topicId, postId },
         });
       })
-      .catch(() => dispatch({ type: actionTypes.DELETE_COMMENT_FAILURE }));
+      .catch(() => dispatch({ type: actionTypes.DELETE_ANNOTATION_FAILURE }));
   };
 }

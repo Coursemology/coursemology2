@@ -9,6 +9,7 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
       @post.title = @assessment.title
       if super && @annotation.save
         send_created_notification(@post)
+        render_create_response
       else
         head :bad_request
       end
@@ -47,6 +48,13 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
   def send_created_notification(post)
     if current_course_user && !current_course_user.phantom?
       post.topic.actable.notify(post)
+    end
+  end
+
+  def render_create_response
+    respond_to do |format|
+      format.js
+      format.json { render partial: @post }
     end
   end
 end

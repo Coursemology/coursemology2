@@ -1,6 +1,7 @@
 import actions from '../constants';
 
 const initialState = {
+  annotations: {},
   topics: {},
   posts: {},
 };
@@ -13,14 +14,42 @@ export default function (state = initialState, action) {
         topics: action.payload.topics.reduce((obj, topic) => (
           { ...obj, [topic.id]: '' }
         ), {}),
+        annotations: action.payload.annotations.reduce((obj, annotation) => (
+          { ...obj, [annotation.fileId]: {} }
+        ), {}),
       };
+    case actions.CREATE_ANNOTATION_CHANGE: {
+      const { fileId, line, text } = action.payload;
+      return {
+        ...state,
+        annotations: {
+          ...state.annotations,
+          [fileId]: { [line]: text },
+        },
+      };
+    }
+    case actions.CREATE_ANNOTATION_SUCCESS: {
+      const { fileId, line } = action.payload;
+      return {
+        ...state,
+        annotations: {
+          ...state.annotations,
+          [fileId]: Object.keys(state.annotations[fileId]).reduce((obj, key) => {
+            if (key !== line) {
+              return { ...obj, [key]: state.annotations[fileId][key] };
+            }
+            return obj;
+          }, {}),
+        },
+      };
+    }
     case actions.CREATE_COMMENT_CHANGE: {
-      const { topicId, comment } = action.payload;
+      const { topicId, text } = action.payload;
       return {
         ...state,
         topics: {
           ...state.topics,
-          [topicId]: comment,
+          [topicId]: text,
         },
       };
     }
@@ -34,16 +63,18 @@ export default function (state = initialState, action) {
         },
       };
     }
+    case actions.UPDATE_ANNOTATION_CHANGE:
     case actions.UPDATE_COMMENT_CHANGE: {
-      const { postId, comment } = action.payload;
+      const { postId, text } = action.payload;
       return {
         ...state,
         posts: {
           ...state.posts,
-          [postId]: comment,
+          [postId]: text,
         },
       };
     }
+    case actions.UPDATE_ANNOTATION_SUCCESS:
     case actions.UPDATE_COMMENT_SUCCESS: {
       const { id } = action.payload;
       return {
@@ -54,6 +85,7 @@ export default function (state = initialState, action) {
         },
       };
     }
+    case actions.DELETE_ANNOTATION_SUCCESS:
     case actions.DELETE_COMMENT_SUCCESS: {
       return {
         ...state,
