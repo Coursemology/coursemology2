@@ -33,6 +33,7 @@ class VisibleQuestionGrade extends Component {
           <NumericInput
             min={0}
             max={maxGrade}
+            precision={1}
             value={initialGrade}
             onChange={grade => updateGrade(id, grade)}
           />
