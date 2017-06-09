@@ -35,12 +35,12 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         answer = submission.answers.last
-        attach_file "submission_answers_attributes_#{answer.id}_actable_attributes_file",
+        attach_file "submission_answers_attributes_#{answer.id}_actable_attributes_files",
                     File.join(Rails.root, '/spec/fixtures/files/text.txt')
 
         click_button I18n.t('course.assessment.submission.submissions.buttons.save')
 
-        expect(answer.specific.attachment).to be_present
+        expect(answer.specific.attachments).not_to be_empty
       end
 
       scenario 'I cannot see the text box for a file upload question' do

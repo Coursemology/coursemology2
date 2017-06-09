@@ -211,7 +211,7 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
                                                      text_response_assessment_submission)
 
         answer = text_response_assessment_submission.answers.last
-        attach_file "submission_answers_attributes_#{answer.id}_actable_attributes_file",
+        attach_file "submission_answers_attributes_#{answer.id}_actable_attributes_files",
                     File.join(Rails.root, '/spec/fixtures/files/text.txt')
         click_button I18n.t('common.submit')
         wait_for_ajax
@@ -222,7 +222,7 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
         expect(find('a', text: 'text.txt')).to be_present
 
         # Check that attachment is uploaded
-        expect(answer.specific.attachment).to be_present
+        expect(answer.specific.attachments).not_to be_empty
       end
 
       scenario 'I can continue to the next question when question is non-autograded', js: true do

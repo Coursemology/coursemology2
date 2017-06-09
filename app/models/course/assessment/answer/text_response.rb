@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::TextResponse < ActiveRecord::Base
   acts_as :answer, class_name: Course::Assessment::Answer.name
-  has_one_attachment
+  has_many_attachments
 
   after_initialize :set_default
   before_validation :strip_whitespace
@@ -19,7 +19,7 @@ class Course::Assessment::Answer::TextResponse < ActiveRecord::Base
 
   def download(dir)
     download_answer(dir) unless question.actable.file_upload_question?
-    download_attachment(dir) if attachment
+    attachments.each { |a| download_attachment(a, dir) }
   end
 
   def download_answer(dir)
@@ -29,7 +29,7 @@ class Course::Assessment::Answer::TextResponse < ActiveRecord::Base
     end
   end
 
-  def download_attachment(dir)
+  def download_attachment(attachment, dir)
     name_generator = FileName.new(File.join(dir, attachment.name), position: :middle,
                                                                    format: '(%d)',
                                                                    delimiter: ' ')

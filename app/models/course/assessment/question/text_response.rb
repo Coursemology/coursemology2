@@ -35,8 +35,8 @@ class Course::Assessment::Question::TextResponse < ActiveRecord::Base
     answer = submission.text_response_answers.build(submission: submission, question: question)
     if last_attempt
       answer.answer_text = last_attempt.answer_text
-      if last_attempt.attachment_reference
-        answer.attachment_reference = last_attempt.attachment_reference.dup
+      if last_attempt.attachment_references.any?
+        answer.attachment_references = last_attempt.attachment_references.map(&:dup)
       end
     end
     answer.acting_as
