@@ -9,6 +9,8 @@ class Course::Assessment::Question::AnswersEvaluationService
   end
 
   def call
-    @question.answers.without_attempting_state.each(&:auto_grade!)
+    @question.answers.without_attempting_state.find_each do |a|
+      a.auto_grade!(reduce_priority: true)
+    end
   end
 end

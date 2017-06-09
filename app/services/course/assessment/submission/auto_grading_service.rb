@@ -54,14 +54,14 @@ class Course::Assessment::Submission::AutoGradingService
   # @return [Course::Assessment::Answer::AutoGradingJob] The job created to grade.
   def grade_answer(answer)
     raise ArgumentError if answer.changed?
-    answer.auto_grade!
+    answer.auto_grade!(reduce_priority: true)
     # Catch errors if answer is in attempting state, caused by a race condition where
     # a new attempting answer is created while the submission is finalised, but before the
     # autograding job is executed.
   rescue IllegalStateError
     answer.finalise!
     answer.save!
-    answer.auto_grade!
+    answer.auto_grade!(reduce_priority: true)
   end
 
   # Waits for the given list of +TrackableJob::Job+s to enter the finished state.
