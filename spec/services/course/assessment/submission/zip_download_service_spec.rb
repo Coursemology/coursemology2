@@ -16,7 +16,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
         attachment = create(:attachment_reference, name: 'answer.txt')
         attachment.save!
         answer = submission.answers.first.specific
-        answer.attachment_reference = attachment
+        answer.attachment_references << attachment
         answer.save!
       end
     end
@@ -27,7 +27,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
         attachment = create(:attachment_reference, name: 'answer.txt')
         attachment.save!
         answer = submission.answers.first.specific
-        answer.attachment_reference = attachment
+        answer.attachment_references << attachment
         answer.save!
       end
     end
