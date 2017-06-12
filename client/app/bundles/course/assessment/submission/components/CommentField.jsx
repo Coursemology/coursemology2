@@ -3,12 +3,6 @@ import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
-const styles = {
-  comments: {
-    marginTop: -30,
-  },
-};
-
 export default class CommentField extends Component {
   static propTypes = {
     value: PropTypes.string,
@@ -25,7 +19,7 @@ export default class CommentField extends Component {
   render() {
     const { value, createComment } = this.props;
     return (
-      <div style={styles.comments}>
+      <div>
         <TextField
           floatingLabelText={<h4>Comments</h4>}
           fullWidth

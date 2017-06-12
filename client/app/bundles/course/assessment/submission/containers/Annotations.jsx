@@ -71,6 +71,13 @@ VisibleAnnotations.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   const { annotation } = ownProps;
+
+  if (!annotation) {
+    return {
+      commentForms: state.commentForms,
+      posts: [],
+    };
+  }
   return {
     commentForms: state.commentForms,
     posts: annotation.postIds.map(postId => state.posts[postId]),
@@ -79,6 +86,16 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch, ownProps) {
   const { match: { params: { submissionId } }, answerId, fileId, lineNumber, annotation } = ownProps;
+
+  if (!annotation) {
+    return {
+      handleCreateChange: comment => dispatch(annotationActions.onCreateChange(fileId, lineNumber, comment)),
+      handleUpdateChange: (postId, comment) => dispatch(annotationActions.onUpdateChange(postId, comment)),
+      createComment: comment => dispatch(annotationActions.create(submissionId, answerId, fileId, lineNumber, comment)),
+      updateComment: () => {},
+      deleteComment: () => {},
+    };
+  }
   return {
     handleCreateChange: comment => dispatch(annotationActions.onCreateChange(fileId, lineNumber, comment)),
     handleUpdateChange: (postId, comment) => dispatch(annotationActions.onUpdateChange(postId, comment)),

@@ -140,13 +140,15 @@ export default class ReadOnlyEditor extends Component {
   renderCommentIcon(lineNumber) {
     const { expanded } = this.state;
     const { annotations } = this.props;
+
     const annotation = annotations.find(a => a.line === lineNumber);
+    const shouldShow = annotation || expanded[lineNumber - 1];
 
     return (
       <div
         ref={(c) => { this[`comment-${lineNumber}`] = c; }}
-        style={{ display: 'flex', visibility: annotation ? 'visible' : 'hidden', zIndex: 1000 }}
         onClick={() => this.toggleCommentState(lineNumber)}
+        style={{ display: 'flex', visibility: shouldShow ? 'visible' : 'hidden', zIndex: 1000 }}
       >
         <i className="fa fa-comment" style={styles.commentIcon} />
         <i
@@ -162,21 +164,18 @@ export default class ReadOnlyEditor extends Component {
     const { answerId, fileId, annotations } = this.props;
     const annotation = annotations.find(a => a.line === lineNumber);
 
-    if (annotation) {
-      return (
-        <Overlay
-          show={expanded[lineNumber - 1]}
-          onHide={() => this.setCommentState(lineNumber, false)}
-          placement="bottom"
-          target={() => findDOMNode(this[`comment-${lineNumber}`])}
-        >
-          <OverlayTooltip>
-            <Annotations answerId={answerId} fileId={fileId} lineNumber={lineNumber} annotation={annotation} />
-          </OverlayTooltip>
-        </Overlay>
-      );
-    }
-    return null;
+    return (
+      <Overlay
+        show={expanded[lineNumber - 1]}
+        onHide={() => this.setCommentState(lineNumber, false)}
+        placement="bottom"
+        target={() => findDOMNode(this[`comment-${lineNumber}`])}
+      >
+        <OverlayTooltip>
+          <Annotations answerId={answerId} fileId={fileId} lineNumber={lineNumber} annotation={annotation} />
+        </OverlayTooltip>
+      </Overlay>
+    );
   }
 
   renderLineNumberColumn(lineNumber) {
@@ -187,7 +186,7 @@ export default class ReadOnlyEditor extends Component {
           {this.renderComments(lineNumber)}
         </div>
         {lineNumber}
-        <AddCommentIcon />
+        <AddCommentIcon onClick={() => this.setCommentState(lineNumber, true)} />
       </div>
     );
   }
