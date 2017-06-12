@@ -13,6 +13,7 @@
     import/no-extraneous-dependencies: ["warn", { devDependencies: true }],
     import/prefer-default-export: "warn",
     jsx-a11y/label-has-for: "off",
+    jsx-a11y/no-static-element-interactions: "off",
     max-len: ["warn", 120],
     new-cap: ["error", { capIsNewExceptions: ["Set"] }],
     camelcase: ["warn", { properties: "never" }],

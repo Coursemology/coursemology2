@@ -52,6 +52,19 @@ class SubmissionEditStepForm extends Component {
     };
   }
 
+  componentDidMount() {
+    this.updateScreenWidth();
+    window.addEventListener('resize', () => this.updateScreenWidth());
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', () => this.updateScreenWidth());
+  }
+
+  updateScreenWidth() {
+    this.setState({ width: window.innerWidth });
+  }
+
   shouldRenderContinueButton() {
     const { stepIndex } = this.state;
     const { questionIds, saveState } = this.props;

@@ -5,6 +5,7 @@ import 'brace/theme/github';
 import React, { Component } from 'react';
 import { Field, FieldArray } from 'redux-form';
 import { RadioButton } from 'material-ui/RadioButton';
+
 // eslint-disable-next-line import/extensions, import/no-extraneous-dependencies, import/no-unresolved
 import RichTextField from 'lib/components/redux-form/RichTextField';
 
@@ -12,6 +13,7 @@ import CheckboxFormGroup from '../components/CheckboxFormGroup';
 import FileInput from '../components/FileInput';
 import Editor from '../components/Editor';
 import TestCaseView from '../containers/TestCaseView';
+import ReadOnlyEditor from '../containers/ReadOnlyEditor';
 
 export default class Answers extends Component {
   static renderMultipleChoice(question, readOnly, answerId) {
@@ -83,7 +85,7 @@ export default class Answers extends Component {
     return <div>{Answers.renderFileUploader(question, readOnly, answerId)}</div>;
   }
 
-  static renderProgrammingEditor(file, readOnly, answerId, language) {
+  static renderProgrammingEditor(file, answerId, language) {
     return (
       <div key={file.filename}>
         <h5>Content</h5>
@@ -91,9 +93,20 @@ export default class Answers extends Component {
           name={`${answerId}[content]`}
           filename={file.filename}
           language={language}
-          readOnly={readOnly}
         />
       </div>
+    );
+  }
+
+  static renderReadOnlyProgrammingEditor(file, answerId) {
+    const content = file.content.split('\n');
+    return (
+      <ReadOnlyEditor
+        key={answerId}
+        answerId={parseInt(answerId.split('[')[0], 10)}
+        fileId={file.id}
+        content={content}
+      />
     );
   }
 
@@ -103,7 +116,10 @@ export default class Answers extends Component {
       <div>
         {fields.map((answerId, index) => {
           const file = fields.get(index);
-          return Answers.renderProgrammingEditor(file, readOnly, answerId, 'python');
+          if (readOnly) {
+            return Answers.renderReadOnlyProgrammingEditor(file, answerId);
+          }
+          return Answers.renderProgrammingEditor(file, answerId, 'python');
         })}
       </div>
     );
