@@ -72,7 +72,7 @@ class Course::LessonPlan::Todo < ActiveRecord::Base
       columns = [:item_id, :user_id, :creator_id, :updater_id, :workflow_state]
       values =
         items.product(course_users).map do |item, course_user|
-          [item.id, course_user.user_id, item.creator_id, item.creator_id, 'not started']
+          [item.id, course_user.user_id, item.creator_id, item.creator_id, 'not_started']
         end
       [columns, values]
     end
