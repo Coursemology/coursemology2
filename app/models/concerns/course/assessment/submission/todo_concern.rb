@@ -17,6 +17,8 @@ module Course::Assessment::Submission::TodoConcern
   end
 
   def update_todo
+    return unless todo
+
     if attempting?
       todo.update_attribute(:workflow_state, 'in_progress') unless todo.in_progress?
     elsif submitted? || graded? || published?
@@ -28,7 +30,8 @@ module Course::Assessment::Submission::TodoConcern
 
   # Skip callback if assessment is deleted as todo will be deleted.
   def restart_todo
-    return if assessment.destroying?
+    return if assessment.destroying? || todo.nil?
+
     todo.update_attribute(:workflow_state, 'not_started') unless todo.not_started?
   rescue ActiveRecord::ActiveRecordError => error
     raise ActiveRecord::Rollback, error.message

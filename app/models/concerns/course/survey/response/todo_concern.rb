@@ -17,6 +17,8 @@ module Course::Survey::Response::TodoConcern
   end
 
   def update_todo
+    return unless todo
+
     if submitted?
       todo.update_attribute(:workflow_state, 'completed') unless todo.completed?
     else
@@ -28,7 +30,7 @@ module Course::Survey::Response::TodoConcern
 
   # Skip callback if survey is deleted as todo will be deleted.
   def restart_todo
-    return if survey.destroying?
+    return if survey.destroying? || todo.nil?
     todo.update_attribute(:workflow_state, 'not_started') unless todo.not_started?
   rescue ActiveRecord::ActiveRecordError => error
     raise ActiveRecord::Rollback, error.message
