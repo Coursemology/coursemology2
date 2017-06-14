@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import { Card, CardText } from 'material-ui/Card';
 
 import { PostProp, AnnotationProp } from '../propTypes';
 import CommentCard from '../components/CommentCard';
@@ -17,27 +18,29 @@ class VisibleAnnotations extends Component {
     } = this.props;
 
     return (
-      <div>
-        {posts.map(post =>
-          <CommentCard
-            key={post.id}
-            id={post.id}
-            name={post.creator}
-            avatar=""
-            date={post.createdAt}
-            content={post.text}
-            editValue={commentForms.posts[post.id]}
-            updateComment={value => updateComment(post.id, value)}
-            deleteComment={() => deleteComment(post.id)}
-            handleChange={value => handleUpdateChange(post.id, value)}
+      <Card>
+        <CardText>
+          {posts.map(post =>
+            <CommentCard
+              key={post.id}
+              id={post.id}
+              name={post.creator}
+              avatar=""
+              date={post.createdAt}
+              content={post.text}
+              editValue={commentForms.posts[post.id]}
+              updateComment={value => updateComment(post.id, value)}
+              deleteComment={() => deleteComment(post.id)}
+              handleChange={value => handleUpdateChange(post.id, value)}
+            />
+          )}
+          <CommentField
+            value={commentForms.annotations[fileId][lineNumber]}
+            createComment={createComment}
+            handleChange={handleCreateChange}
           />
-        )}
-        <CommentField
-          value={commentForms.annotations[fileId][lineNumber]}
-          createComment={createComment}
-          handleChange={handleCreateChange}
-        />
-      </div>
+        </CardText>
+      </Card>
     );
   }
 }

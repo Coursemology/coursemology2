@@ -81,6 +81,12 @@ export default class CommentCard extends Component {
     this.setState({ deleteConfirmation: true });
   }
 
+  onConfirmDelete() {
+    const { deleteComment } = this.props;
+    deleteComment();
+    this.setState({ deleteConfirmation: false });
+  }
+
   toggleEditMode() {
     const { editMode } = this.state;
     const { handleChange, content } = this.props;
@@ -126,7 +132,7 @@ export default class CommentCard extends Component {
   }
 
   render() {
-    const { name, avatar, date, deleteComment } = this.props;
+    const { name, avatar, date } = this.props;
     return (
       <Card style={styles.card}>
         <div style={styles.header}>
@@ -158,7 +164,7 @@ export default class CommentCard extends Component {
           confirmDelete
           open={this.state.deleteConfirmation}
           onCancel={() => this.setState({ deleteConfirmation: false })}
-          onConfirm={() => deleteComment()}
+          onConfirm={() => this.onConfirmDelete()}
         />
       </Card>
     );

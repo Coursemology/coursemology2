@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-const TooltipStyle = {
+const tooltipStyle = {
   position: 'absolute',
   padding: '0 5px',
 };
 
-const TooltipInnerStyle = {
+const tooltipInnerStyle = {
   marginLeft: 57,
   padding: '3px 8px',
   color: '#000',
@@ -15,7 +15,7 @@ const TooltipInnerStyle = {
   backgroundColor: '#FFF',
 };
 
-const TooltipArrowStyle = {
+const tooltipArrowStyle = {
   position: 'absolute',
   width: 0,
   height: 0,
@@ -26,14 +26,21 @@ const TooltipArrowStyle = {
   borderStyle: 'solid',
 };
 
-const PlacementStyle = {
-  tooltip: { marginBottom: 3, padding: '5px 0' },
-  arrow: { top: 0, marginLeft: -5, borderWidth: '0 5px 5px', borderBottomColor: '#FFF' },
+const placementStyles = {
+  left: {
+    tooltip: { marginLeft: -3, padding: '0 5px' },
+    arrow: { right: 0, marginTop: -5, borderWidth: '5px 0 5px 5px', borderLeftColor: '#FFF' },
+  },
+  bottom: {
+    tooltip: { marginBottom: 3, padding: '5px 0' },
+    arrow: { top: 0, marginLeft: -5, borderWidth: '0 5px 5px', borderBottomColor: '#FFF' },
+  },
 };
 
 export default class OverlayTooltip extends Component {
   static propTypes = {
     style: PropTypes.object,            // eslint-disable-line react/forbid-prop-types
+    placement: PropTypes.oneOf(['left', 'bottom']).isRequired,
     arrowOffsetLeft: PropTypes.string,
     arrowOffsetTop: PropTypes.string,
     children: PropTypes.node,
@@ -42,15 +49,16 @@ export default class OverlayTooltip extends Component {
   render() {
     const {
       style,
-      arrowOffsetLeft: left = PlacementStyle.arrow.left,
-      arrowOffsetTop: top = PlacementStyle.arrow.top,
+      placement,
+      arrowOffsetLeft: left = placementStyles[placement].arrow.left,
+      arrowOffsetTop: top = placementStyles[placement].arrow.top,
       children,
     } = this.props;
 
     return (
-      <div style={{ ...TooltipStyle, ...PlacementStyle.tooltip, ...style }}>
-        <div style={{ ...TooltipArrowStyle, ...PlacementStyle.arrow, left, top }} />
-        <div style={TooltipInnerStyle}>
+      <div style={{ ...tooltipStyle, ...placementStyles[placement].tooltip, ...style }}>
+        <div style={{ ...tooltipArrowStyle, ...placementStyles[placement].arrow, left, top }} />
+        <div style={tooltipInnerStyle}>
           {children}
         </div>
       </div>
