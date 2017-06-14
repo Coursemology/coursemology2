@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import editPage from './editPage';
-import formDialog from './formDialog';
+import indexFormDialog from './indexFormDialog';
 
 export default combineReducers({
-  formDialog,
+  indexFormDialog,
   editPage,
   form: formReducer,
 });

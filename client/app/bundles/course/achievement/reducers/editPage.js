@@ -1,6 +1,9 @@
 import actionTypes from '../constants';
 
-const initialState = {};
+const initialState = {
+  disabled: false,
+  notification: null,
+};
 
 export default function (state = initialState, action) {
   switch (action.type) {

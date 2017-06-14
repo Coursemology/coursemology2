@@ -41,7 +41,7 @@ class EditPage extends React.Component {
   };
 
   onFormSubmit = (data) => {
-    const attributes = Object.assign({}, data);
+    const attributes = { ...data };
     const { intl } = this.props;
 
     return this.props.dispatch(

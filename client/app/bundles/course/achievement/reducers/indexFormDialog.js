@@ -3,6 +3,8 @@ import actionTypes from '../constants';
 const initialState = {
   visible: false,
   confirmationDialogOpen: false,
+  disabled: false,
+  notification: null,
 };
 
 export default function (state = initialState, action) {

@@ -24,8 +24,10 @@ RSpec.feature 'Course: Achievements' do
         fill_in 'title', with: achievement[:title]
 
         # Create the achievement
-        find('button.btn-submit').click
-        expect(page).not_to have_selector('h3', text: 'New Achievement')
+        expect do
+          find('button.btn-submit').click
+          expect(page).not_to have_selector('h3', text: 'New Achievement')
+        end.to change { course.achievements.count }.by(1)
         achievement_created = course.achievements.last
         expect(current_path).to eq(course_achievement_path(course, achievement_created))
         expect(page).to have_text(achievement[:title])
@@ -46,7 +48,6 @@ RSpec.feature 'Course: Achievements' do
       end
 
       scenario 'I can delete an achievement' do
-        visit new_course_achievement_path(course)
         achievement = create(:course_achievement, course: course)
         visit course_achievements_path(course)
 
