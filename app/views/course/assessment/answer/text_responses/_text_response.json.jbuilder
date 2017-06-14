@@ -5,8 +5,9 @@ json.fields do
 
   json.answer_text answer.answer_text unless question.hide_text
   json.file do
-    json.name answer.attachment&.name
-  end if question.allow_attachment?
+    # TODO: display multiple uploaded files
+    json.name answer.attachments.first.name
+  end if question.allow_attachment? && answer.attachments.any?
 end
 
 last_attempt = last_attempt(answer)

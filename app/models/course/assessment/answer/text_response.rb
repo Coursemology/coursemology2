@@ -44,7 +44,8 @@ class Course::Assessment::Answer::TextResponse < ActiveRecord::Base
   def assign_params(params)
     acting_as.assign_params(params)
     self.answer_text = params[:answer_text] if params[:answer_text]
-    self.file = params[:file] if params[:file]
+    # TODO: allow multiple file upload
+    self.files = [params[:file]] if params[:file]
   end
 
   private
