@@ -6,6 +6,10 @@ class Course::Assessment::Skill < ActiveRecord::Base
 
   validate :validate_consistent_course
 
+  # @!method self.order_by_title(direction = :asc)
+  #   Orders the skills alphabetically by title.
+  scope :order_by_title, ->(direction = :asc) { order(title: direction) }
+
   def initialize_duplicate(duplicator, other)
     self.course = duplicator.duplicate(other.course)
     self.skill_branch = duplicator.duplicate(other.skill_branch)

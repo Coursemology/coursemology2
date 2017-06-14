@@ -182,6 +182,7 @@ Rails.application.routes.draw do
             resources :multiple_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :text_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :programming, only: [:new, :create, :edit, :update, :destroy]
+            resources :scribing, only: [:show, :new, :create, :edit, :update, :destroy]
           end
           scope module: :submission do
             resources :submissions, only: [:index, :create, :edit, :update] do

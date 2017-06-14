@@ -1,0 +1,4 @@
+- edit_path = edit_course_assessment_question_scribing_path(current_course, @assessment, scribing)
+- delete_path = course_assessment_question_scribing_path(current_course, @assessment, scribing)
+= render partial: 'course/assessment/questions/question',
+         locals: { question: scribing, edit_path: edit_path, delete_path: delete_path }
