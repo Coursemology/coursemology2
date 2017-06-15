@@ -29,7 +29,7 @@ class ReadOnlyEditorContainer extends Component {
 function mapStateToProps(state, ownProps) {
   const { fileId } = ownProps;
   return {
-    annotations: state.annotations[fileId].topics,
+    annotations: Object.values(state.annotations[fileId].topics),
   };
 }
 

@@ -9,7 +9,9 @@ export default function (state = {}, action) {
         ...arrayToObjectById(action.payload.posts),
       };
     case actions.CREATE_COMMENT_SUCCESS:
-    case actions.UPDATE_COMMENT_SUCCESS: {
+    case actions.UPDATE_COMMENT_SUCCESS:
+    case actions.CREATE_ANNOTATION_SUCCESS:
+    case actions.UPDATE_ANNOTATION_SUCCESS: {
       const { id } = action.payload;
       return {
         ...state,
@@ -17,6 +19,7 @@ export default function (state = {}, action) {
       };
     }
     case actions.DELETE_COMMENT_SUCCESS:
+    case actions.DELETE_ANNOTATION_SUCCESS:
       return Object.keys(state).reduce((obj, key) => {
         if (key !== action.payload.postId.toString()) {
           return { ...obj, [key]: state[key] };

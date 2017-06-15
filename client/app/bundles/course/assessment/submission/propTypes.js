@@ -109,7 +109,6 @@ export const TopicProp =
 
 export const AnnotationProp =
   PropTypes.shape({
-    annotationId: PropTypes.number.isRequired,
     id: PropTypes.number.isRequired,
     line: PropTypes.number.isRequired,
     postIds: PropTypes.arrayOf(PropTypes.number),

@@ -34,12 +34,10 @@ export default function (state = initialState, action) {
         ...state,
         annotations: {
           ...state.annotations,
-          [fileId]: Object.keys(state.annotations[fileId]).reduce((obj, key) => {
-            if (key !== line) {
-              return { ...obj, [key]: state.annotations[fileId][key] };
-            }
-            return obj;
-          }, {}),
+          [fileId]: {
+            ...state.annotations[fileId],
+            [line]: '',
+          },
         },
       };
     }

@@ -58,7 +58,7 @@ export function update(topicId, postId, text) {
   };
 }
 
-export function destroy(topicId, postId) {
+export function destroy(fileId, topicId, postId) {
   return (dispatch) => {
     dispatch({ type: actionTypes.DELETE_ANNOTATION_REQUEST });
 
@@ -67,7 +67,7 @@ export function destroy(topicId, postId) {
       .then(() => {
         dispatch({
           type: actionTypes.DELETE_ANNOTATION_SUCCESS,
-          payload: { topicId, postId },
+          payload: { fileId, topicId, postId },
         });
       })
       .catch(() => dispatch({ type: actionTypes.DELETE_ANNOTATION_FAILURE }));

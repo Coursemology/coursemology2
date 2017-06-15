@@ -104,7 +104,7 @@ function mapDispatchToProps(dispatch, ownProps) {
     handleUpdateChange: (postId, comment) => dispatch(annotationActions.onUpdateChange(postId, comment)),
     createComment: comment => dispatch(annotationActions.create(submissionId, answerId, fileId, lineNumber, comment)),
     updateComment: (postId, comment) => dispatch(annotationActions.update(annotation.id, postId, comment)),
-    deleteComment: postId => dispatch(annotationActions.destroy(annotation.id, postId)),
+    deleteComment: postId => dispatch(annotationActions.destroy(fileId, annotation.id, postId)),
   };
 }
 

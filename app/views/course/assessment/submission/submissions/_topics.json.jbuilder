@@ -12,10 +12,9 @@ end.map(&:specific)
 
 json.annotations programming_answers.flat_map(&:files) do |file|
   json.fileId file.id
-  json.topics file.annotations do |annotation|
+  json.topics file.annotations.reject { |a| a.discussion_topic.post_ids.empty? } do |annotation|
     topic = annotation.discussion_topic
     json.id topic.id
-    json.annotationId annotation.id
     json.postIds topic.post_ids
     json.line annotation.line
   end
