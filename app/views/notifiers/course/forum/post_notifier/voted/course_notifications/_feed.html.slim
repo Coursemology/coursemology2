@@ -7,5 +7,5 @@
   // TODO: Display user image here.
   - user_link = link_to_user(activity.actor)
   - topic_link = link_to topic.title, topic_path
-  => t('.replied_to_topic_html', user: user_link, topic: topic_link)
+  => t('.voted_on_topic_html', user: user_link, topic: topic_link)
   i.clearfix.timestamp = format_datetime(activity.created_at)

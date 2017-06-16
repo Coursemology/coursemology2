@@ -27,6 +27,10 @@ en:
             course_notifications:
               feed:
                 replied_to_topic_html: '%{user} replied to %{topic}'
+          voted:
+            course_notifications:
+              feed:
+                voted_on_topic_html: '%{user} voted on %{topic}'
       video_notifier:
         attempted:
           course_notifications:

@@ -1,6 +1,8 @@
 - post_class = ['post']
 - post_class.concat(unread_class(post))
 = div_for(post, class: post_class) do
+  a name=dom_id(post)
+
   = div_for(post.creator) do
     = display_user_image(post.creator)
     span.name = link_to_user(post.creator)
