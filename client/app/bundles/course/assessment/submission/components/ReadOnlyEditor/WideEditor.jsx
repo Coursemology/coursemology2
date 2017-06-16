@@ -69,10 +69,11 @@ export default class WideEditor extends Component {
 
   renderEditor() {
     /* eslint-disable react/no-array-index-key */
+    /* eslint-disable react/no-danger */
     const { content } = this.props;
     return (
       <div style={styles.editorContainer}>
-        <table style={styles.editor}>
+        <table className="codehilite" style={styles.editor}>
           <tbody>
             <tr>
               <td style={{ width: 75 }}>
@@ -83,18 +84,20 @@ export default class WideEditor extends Component {
                 )}
               </td>
               <td>
-                {content.map((line, index) => {
-                  if (line.trim().length === 0) {
-                    return <div key={`${index}-break`}><br /></div>;
-                  }
-                  return <div key={`${index}-${line}`} style={styles.editorLine}>{line}</div>;
-                })}
+                {content.map((line, index) => (
+                  <div
+                    key={`${index}-${line}`}
+                    style={styles.editorLine}
+                    dangerouslySetInnerHTML={{ __html: line }}
+                  />
+                ))}
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     );
+    /* eslint-enable react/no-danger */
     /* eslint-enable react/no-array-index-key */
   }
 

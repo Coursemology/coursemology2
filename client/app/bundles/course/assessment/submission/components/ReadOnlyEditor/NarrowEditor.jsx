@@ -100,12 +100,13 @@ export default class NarrowEditor extends Component {
 
   render() {
     /* eslint-disable react/no-array-index-key */
+    /* eslint-disable react/no-danger */
     const { content } = this.props;
     return (
-      <table style={styles.editor}>
+      <table className="codehilite" style={styles.editor}>
         <tbody>
           <tr>
-            <td style={{ width: 75 }}>
+            <td style={{ width: 75, userSelect: 'none' }}>
               {content.map((line, index) =>
                 <div key={`${index}-${line}`}>
                   {this.renderLineNumberColumn(index + 1)}
@@ -113,17 +114,19 @@ export default class NarrowEditor extends Component {
               )}
             </td>
             <td>
-              {content.map((line, index) => {
-                if (line.trim().length === 0) {
-                  return <div key={`${index}-break`}><br /></div>;
-                }
-                return <div key={`${index}-${line}`} style={styles.editorLine}>{line}</div>;
-              })}
+              {content.map((line, index) => (
+                <div
+                  key={`${index}-${line}`}
+                  style={styles.editorLine}
+                  dangerouslySetInnerHTML={{ __html: line }}
+                />
+              ))}
             </td>
           </tr>
         </tbody>
       </table>
     );
+    /* eslint-enable react/no-danger */
     /* eslint-enable react/no-array-index-key */
   }
 }
