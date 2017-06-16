@@ -19,7 +19,7 @@ class VisibleAnnotations extends Component {
 
     return (
       <Card>
-        <CardText>
+        <CardText style={{ textAlign: 'left' }}>
           {posts.map(post =>
             <CommentCard
               key={post.id}

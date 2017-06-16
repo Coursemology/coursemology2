@@ -56,12 +56,12 @@ export default class ReadOnlyEditor extends Component {
   //   this.setState({ expanded: newExpanded });
   // }
 
-  // setAllCommentStateCollapsed() {
-  //   const { expanded } = this.state;
-  //   const newExpanded = expanded.slice(0);
-  //   newExpanded.forEach((_, index) => { newExpanded[index] = false; });
-  //   this.setState({ expanded: newExpanded });
-  // }
+  setAllCommentStateCollapsed() {
+    const { expanded } = this.state;
+    const newExpanded = expanded.slice(0);
+    newExpanded.forEach((_, index) => { newExpanded[index] = false; });
+    this.setState({ expanded: newExpanded });
+  }
 
   setExpandedLine(lineNumber) {
     const { expanded } = this.state;
@@ -95,6 +95,7 @@ export default class ReadOnlyEditor extends Component {
   }
 
   windowResizing(e) {
+    this.setAllCommentStateCollapsed();
     if (e.currentTarget.innerWidth < EDITOR_THRESHOLD) {
       this.setState({ editorMode: EDITOR_MODE_NARROW });
     } else {

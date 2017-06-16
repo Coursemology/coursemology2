@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import { Overlay } from 'react-overlays';
-import { grey200, blue500 } from 'material-ui/styles/colors';
+import { grey200, grey400, blue500 } from 'material-ui/styles/colors';
 
 import AddCommentIcon from './AddCommentIcon';
 import OverlayTooltip from './OverlayTooltip';
@@ -19,6 +19,7 @@ const styles = {
     width: '100%',
   },
   editorLine: {
+    height: 20,
     paddingLeft: 5,
     whiteSpace: 'nowrap',
   },
@@ -32,12 +33,12 @@ const styles = {
     padding: '0 5px',
   },
   commentIcon: {
+    color: grey400,
+  },
+  commentIconExpanded: {
     color: blue500,
   },
   chevronIcon: {
-    fontSize: 10,
-  },
-  chevronIconCollapsed: {
     fontSize: 10,
     transform: 'rotate(-90deg)',
   },
@@ -56,10 +57,9 @@ export default class NarrowEditor extends Component {
         onClick={() => toggleLine(lineNumber)}
         style={{ display: 'flex', visibility: shouldShow ? 'visible' : 'hidden', zIndex: 1000 }}
       >
-        <i className="fa fa-comment" style={styles.commentIcon} />
         <i
-          className="fa fa-chevron-down"
-          style={expanded[lineNumber - 1] ? styles.chevronIcon : styles.chevronIconCollapsed}
+          className="fa fa-comment"
+          style={expanded[lineNumber - 1] ? styles.commentIconExpanded : styles.commentIcon}
         />
       </div>
     );
@@ -68,7 +68,7 @@ export default class NarrowEditor extends Component {
   renderComments(lineNumber) {
     const { answerId, fileId, annotations, expanded, collapseLine } = this.props;
     const annotation = annotations.find(a => a.line === lineNumber);
-    const placement = 'bottom';
+    const placement = 'right';
 
     return (
       <Overlay

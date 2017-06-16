@@ -28,6 +28,7 @@ const styles = {
     overflow: 'hidden',
   },
   editorLine: {
+    height: 20,
     paddingLeft: 5,
     whiteSpace: 'nowrap',
   },
