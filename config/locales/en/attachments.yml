@@ -1,0 +1,4 @@
+en:
+  attachments:
+    attachment:
+      uploaded_by: :'layouts.materials_uploader.uploaded_by'

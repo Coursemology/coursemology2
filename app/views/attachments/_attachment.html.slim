@@ -1,0 +1,4 @@
+= content_tag_for(:div, attachment, class: ['attachment'])
+  span = link_to format_inline_text(attachment.name), attachment_reference_path(attachment),
+                 target: "_blank"
+  span.uploaded-by = t('.uploaded_by', name: attachment.creator.name)

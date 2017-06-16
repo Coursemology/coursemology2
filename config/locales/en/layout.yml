@@ -36,7 +36,6 @@ en:
       uploaded_files: 'Uploaded Files:'
       uploaded_file: 'Uploaded File:'
       new_files: 'Upload New Files'
-      uploaded_by: :'layouts.materials_uploader.uploaded_by'
     materials_uploader:
       uploaded_by: 'Uploaded By: %{name}'
     mailer:
