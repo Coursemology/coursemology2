@@ -1,15 +1,16 @@
-json.fields do
-  json.questionId answer.question_id
-  json.id answer.acting_as.id
-  json.files answer.files do |file|
-    json.(file, :id, :filename, :content)
-  end
-end
-
 submission = answer.submission
 assessment = submission.assessment
 question = answer.question.specific
 last_attempt = last_attempt(answer)
+
+json.fields do
+  json.questionId answer.question_id
+  json.id answer.acting_as.id
+  json.files answer.files do |file|
+    json.(file, :id, :filename)
+    json.content submission.attempting? ? file.content : highlight_code_block(file.content, question.language)
+  end
+end
 
 can_read_tests = can?(:read_tests, submission)
 show_private = can_read_tests || last_attempt&.correct? && assessment.show_private?

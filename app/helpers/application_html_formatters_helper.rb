@@ -126,6 +126,22 @@ module ApplicationHTMLFormattersHelper
     end
   end
 
+  def highlight_code_block(code, language = nil)
+    code = html_escape(code) unless code.html_safe?
+    code = code.gsub(/\r\n|\r/, "\n").html_safe
+
+    code = content_tag(:pre, lang: language ? language.rouge_lexer : nil) do
+      content_tag(:code) do
+        code
+      end
+    end
+
+    pipeline = HTML::Pipeline.new(DefaultPipeline.filters +
+                                  [PreformattedTextLineSplitFilter],
+                                  DefaultCodePipelineOptions)
+    format_with_pipeline(pipeline, code)
+  end
+
   private
 
   # Test if the given code exceeds the size or line limit.
@@ -135,7 +151,6 @@ module ApplicationHTMLFormattersHelper
 
   def sanitize_and_format_code(code, language, start_line)
     code = html_escape(code) unless code.html_safe?
-    code = code.gsub(/\r\n|\r/, "\n").html_safe
     code = content_tag(:pre, lang: language ? language.rouge_lexer : nil) do
       content_tag(:code) do
         code
