@@ -18,6 +18,7 @@ module Course::Assessment::AssessmentAbility
     allow_students_manage_annotations_for_own_assessment_submissions
     allow_students_read_own_assessment_answers
     allow_students_read_submission_question
+    allow_student_to_destroy_own_attachments_text_response_question
   end
 
   def define_staff_assessment_permissions
@@ -170,5 +171,12 @@ module Course::Assessment::AssessmentAbility
 
   def allow_staff_read_submission_questions
     can :read, Course::Assessment::SubmissionQuestion, discussion_topic: course_staff_hash
+  end
+
+  # Prevent everyone from destroying their own attachment, unless they are attempting the question.
+  def allow_student_to_destroy_own_attachments_text_response_question
+    cannot :destroy_attachment, Course::Assessment::Answer::TextResponse
+    can :destroy_attachment, Course::Assessment::Answer::TextResponse,
+        submission: assessment_submission_attempting_hash(user)
   end
 end
