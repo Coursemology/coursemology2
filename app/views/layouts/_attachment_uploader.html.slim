@@ -1,15 +1,17 @@
-- if multiple
-  - unless f.object.attachments.empty?
-    strong = t('.uploaded_files')
-    - f.object.attachments.each do |attachment|
-      = render partial: 'attachments/attachment', locals: { attachment: attachment }
-  div
-    strong = t('.new_files')
-    = f.file_field :files, multiple: true
-- else
-  - if f.object.attachment.present? && f.object.attachment.persisted?
-    strong => t('.uploaded_file')
-    = render partial: 'attachments/attachment', locals: { attachment: f.object.attachment }
-
-  div
-    = f.file_field :file
+div.attachment-uploader
+  - if multiple
+    - unless f.object.attachments.empty?
+      strong => t('.uploaded_files')
+      - f.object.attachments.each do |attachment|
+        = render partial: 'attachments/attachment',
+                 locals: { attachment: attachment, delete: allow_delete }
+    div
+      strong = t('.new_files')
+      = f.file_field :files, multiple: true
+  - else
+    - if f.object.attachment.present? && f.object.attachment.persisted?
+      strong => t('.uploaded_file')
+      = render partial: 'attachments/attachment',
+               locals: { attachment: f.object.attachment, delete: allow_delete }
+    div
+      = f.file_field :file

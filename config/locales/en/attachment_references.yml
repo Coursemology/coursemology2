@@ -1,0 +1,5 @@
+en:
+  attachment_references:
+    destroy:
+      success: 'Attachment has been deleted'
+      failure: 'Failed to delete attachment: %{error}'

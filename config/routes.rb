@@ -339,6 +339,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :attachment_references, path: 'attachments', only: [:show]
+  resources :attachment_references, path: 'attachments', only: [:show, :destroy]
   resources :attachments, only: [:create]
 end

@@ -1,0 +1,8 @@
+<%- if @attachment_reference.destroyed? %>
+  $('#<%= dom_id(@attachment_reference) %>').remove();
+<% end %>
+
+// Remove older flash messages, and show users the new flash message
+$('.course-layout').parents('.container-fluid:first').find('.alert').remove();
+$('.course-layout').parents('.container-fluid:first').prepend('<%= j(flash_messages) %>');
+window.scrollTo(0, 0);
