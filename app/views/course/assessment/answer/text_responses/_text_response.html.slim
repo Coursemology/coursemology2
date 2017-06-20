@@ -1,9 +1,17 @@
 - question = text_response.question.specific
+- submission = text_response.submission
+
 - unless question.hide_text?
   - readonly = cannot?(:update, text_response.answer)
   = f.input :answer_text, label: false, readonly: readonly
+
 - if question.allow_attachment?
-  = f.attachment
+  - if submission.attempting?
+    = f.attachment allow_delete: can?(:destroy_attachment, text_response)
+  - else
+    strong => t('.uploaded_files')
+    - text_response.attachments.each do |attachment|
+      = render partial: 'attachments/attachment', locals: { attachment: attachment }
 
 - if last_attempt && last_attempt.auto_grading && last_attempt.auto_grading.result
   = render partial: 'course/assessment/answer/explanation',
@@ -11,4 +19,4 @@
 
 - if question.auto_gradable? && can?(:grade, text_response.answer)
   = render partial: 'course/assessment/answer/text_responses/solution',
-    locals: { question: question }
+           locals: { question: question }

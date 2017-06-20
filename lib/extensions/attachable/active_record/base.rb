@@ -12,8 +12,12 @@ module Extensions::Attachable::ActiveRecord::Base
     # @example Has many attachments on a column
     #   has_many_attachments on: :description #=> description is associated with the attachments
     #   of the model, updating description will result in attachments changing.
+    #
     #   You can further implement `description_attachment_references_removed` reader in this case to
     #   override the default method. The attachment_references ids returned by it will be removed.
+    #
+    #   For deletion of attachments, it is necessary for the model to implement the
+    #   +:destroy_attachment+ CanCanCan permission on the +attachable+ object.
     def has_many_attachments(options = {}) # rubocop:disable Style/PredicateName
       include HasManyAttachments
 

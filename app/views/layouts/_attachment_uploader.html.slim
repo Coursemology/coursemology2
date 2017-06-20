@@ -1,20 +1,17 @@
-- if multiple
-  - unless f.object.attachments.empty?
-    strong = t('.uploaded_files')
-    - f.object.attachments.each do |attachment|
-      div
-        span = link_to format_inline_text(attachment.name), '#'
-        span.uploaded-by = t('.uploaded_by', name: attachment.creator.name)
-  div
-    strong = t('.new_files')
-    = f.file_field :files, multiple: true
-- else
-  - if f.object.attachment.present? && f.object.attachment.persisted?
-    strong => t('.uploaded_file')
+div.attachment-uploader
+  - if multiple
+    - unless f.object.attachments.empty?
+      strong => t('.uploaded_files')
+      - f.object.attachments.each do |attachment|
+        = render partial: 'attachments/attachment',
+                 locals: { attachment: attachment, delete: allow_delete }
     div
-      span = link_to format_inline_text(f.object.attachment.name),
-                               attachment_reference_path(f.object.attachment), target: "_blank"
-      span.uploaded-by = t('.uploaded_by', name: f.object.attachment.creator.name)
-
-  div
-    = f.file_field :file
+      strong = t('.new_files')
+      = f.file_field :files, multiple: true
+  - else
+    - if f.object.attachment.present? && f.object.attachment.persisted?
+      strong => t('.uploaded_file')
+      = render partial: 'attachments/attachment',
+               locals: { attachment: f.object.attachment, delete: allow_delete }
+    div
+      = f.file_field :file

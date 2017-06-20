@@ -3,6 +3,8 @@ en:
     assessment:
       answer:
         text_responses:
+          text_response:
+            uploaded_files: 'Uploaded Files'
           solution:
             solutions: 'Solutions'
             solution_type: :'course.assessment.question.text_responses.form.solution_type'

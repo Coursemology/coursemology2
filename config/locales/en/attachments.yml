@@ -1,0 +1,6 @@
+en:
+  attachments:
+    attachment:
+      uploaded_by: :'layouts.materials_uploader.uploaded_by'
+      delete_attachment: 'Delete'
+      confirm_delete_attachment: 'Are you sure you want to delete this attachment?'
