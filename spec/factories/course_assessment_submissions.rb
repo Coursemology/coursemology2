@@ -53,5 +53,11 @@ FactoryGirl.define do
         submission.points_awarded = rand(1..10) * 100
       end
     end
+
+    # Ensure that creator of submission is the same as creator of experience_points_record
+    after(:build) do |submission, evaluator|
+      user = evaluator.creator ? evaluator.creator : submission.creator
+      submission.experience_points_record.creator = user
+    end
   end
 end
