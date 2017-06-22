@@ -1,0 +1,4 @@
+- template = 'course/assessment/answer/scribing/scribing_answer.json.jbuilder'
+- scribing_answer = f.object.answer
+
+div.scribing-answer data=(render partial: template, locals: {scribing_answer: scribing_answer})
