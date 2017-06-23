@@ -12,10 +12,11 @@ RSpec.describe Course::Assessment do
       create(:assessment, :with_all_question_types, course: course, published: false)
     end
     let(:published_started_assessment) do
-      create(:assessment, :published_with_mcq_question, course: course)
+      create(:assessment, :published_with_all_question_types, course: course)
     end
     let(:published_not_started_assessment) do
-      create(:assessment, :published_with_mcq_question, start_at: 1.day.from_now, course: course)
+      create(:assessment, :published_with_all_question_types,
+             start_at: 1.day.from_now, course: course)
     end
     let(:published_assessment_with_attemping_submission) do
       create(:assessment, :published_with_all_question_types, course: course)
