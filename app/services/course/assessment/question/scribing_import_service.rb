@@ -73,7 +73,8 @@ class Course::Assessment::Question::ScribingImportService
     next_weight = max_weight ? max_weight + 1 : 0
     files.map.with_index(next_weight) do |file, weight|
       build_scribing_question(weight).tap do |question|
-        question.file = file
+        question.build_attachment(attachment: Attachment.find_or_create_by(file: file),
+                                  name: file.original_filename)
       end
     end
   end
