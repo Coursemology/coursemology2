@@ -39,19 +39,20 @@ class Course::Assessment::Question::ScribingImportService
 
     MiniMagick::Image.new(file.tempfile.path).pages.each_with_index.map do |page, index|
       temp_name = "#{filename}[#{index + 1}].png"
-      process_pdf(page.path, temp_name)
+      temp_file = Tempfile.new([temp_name, '.png'])
+      process_pdf(page.path, temp_file.path)
 
       # Leave filename sanitization to attachment reference
       ActionDispatch::Http::UploadedFile.
-        new(tempfile: Tempfile.new(temp_name), filename: temp_name.dup, type: 'image/png')
+        new(tempfile: temp_file, filename: temp_name.dup, type: 'image/png')
     end
   end
 
   # Process the PDF given the image path, with the new_name as the new file name.
   #
   # @param [String] image_path
-  # @param [String] new_name File name of newly processed file
-  def process_pdf(image_path, new_name)
+  # @param [String] new_image_path File path of newly processed file
+  def process_pdf(image_path, new_image_path)
     MiniMagick::Tool::Convert.new do |convert|
       convert.render
       convert.density(300)
@@ -59,7 +60,7 @@ class Course::Assessment::Question::ScribingImportService
       convert.background('white')
       convert.flatten
       convert << image_path
-      convert << new_name
+      convert << new_image_path
     end
   end
 
