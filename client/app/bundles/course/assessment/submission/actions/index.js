@@ -1,4 +1,5 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions, import/no-extraneous-dependencies
+import axios from 'axios';
 import CourseAPI from 'api/course';
 import actionTypes from '../constants';
 
@@ -69,6 +70,39 @@ export function unsubmit(submissionId) {
   };
 }
 
+function getEvaluationResult(url) {
+  return (dispatch) => {
+    axios.get(url, { params: { format: 'json' } })
+      .then(response => response.data)
+      .then((data) => {
+        dispatch({
+          type: actionTypes.AUTOGRADE_SUCCESS,
+          payload: data,
+        });
+      })
+      .catch(() => dispatch({ type: actionTypes.AUTOGRADE_FAILURE }));
+  };
+}
+
+function pollEvaluation(url) {
+  return (dispatch) => {
+    const poller = setInterval(() => {
+      axios.get(url, { params: { format: 'json' } })
+        .then(response => response.data)
+        .then((data) => {
+          if (data.status === 'completed') {
+            clearInterval(poller);
+            dispatch(getEvaluationResult(data.redirect_url));
+          } else if (data.status === 'errored') {
+            clearInterval(poller);
+            dispatch({ type: actionTypes.AUTOGRADE_FAILURE });
+          }
+        })
+        .catch(() => dispatch({ type: actionTypes.AUTOGRADE_FAILURE }));
+    }, 500);
+  };
+}
+
 export function autograde(submissionId, answers) {
   const payload = { submission: { answers, auto_grade: true } };
   return (dispatch) => {
@@ -77,10 +111,14 @@ export function autograde(submissionId, answers) {
     return CourseAPI.assessment.submissions.update(submissionId, payload)
       .then(response => response.data)
       .then((data) => {
-        dispatch({
-          type: actionTypes.AUTOGRADE_SUCCESS,
-          payload: data,
-        });
+        if (data.redirect_url) {
+          dispatch(pollEvaluation(data.redirect_url));
+        } else {
+          dispatch({
+            type: actionTypes.AUTOGRADE_SUCCESS,
+            payload: data,
+          });
+        }
       })
       .catch(() => dispatch({ type: actionTypes.AUTOGRADE_FAILURE }));
   };
