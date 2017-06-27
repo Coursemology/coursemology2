@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form, formValueSelector, change } from 'redux-form';
 import { connect } from 'react-redux';
 import MenuItem from 'material-ui/MenuItem';
+import ConditionList from 'lib/components/course/ConditionList';
 import TextField from 'lib/components/redux-form/TextField';
 import RichTextField from 'lib/components/redux-form/RichTextField';
 import Toggle from 'lib/components/redux-form/Toggle';
@@ -13,7 +14,6 @@ import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import translations from './translations.intl';
 import { formNames } from '../../constants';
 import MaterialUploader from '../MaterialUploader';
-import ConditionList from '../../components/ConditionList';
 
 const styles = {
   title: {

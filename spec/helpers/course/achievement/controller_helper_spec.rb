@@ -6,26 +6,45 @@ RSpec.describe Course::Achievement::ControllerHelper do
   with_tenant(:instance) do
     let(:achievement) { create(:course_achievement) }
 
-    describe '#display_achievement_badge' do
-      subject { helper.display_achievement_badge(achievement) }
+    describe '#achievement_badge_path' do
+      context 'when no achievement is provided' do
+        subject { helper.achievement_badge_path }
 
-      context 'when an achievement badge is uploaded' do
-        let(:icon) { File.join(Rails.root, '/spec/fixtures/files/picture.jpg') }
-        before do
-          file = File.open(icon, 'rb')
-          achievement.badge = file
-          file.close
-        end
-
-        it 'displays the achievement badge' do
-          expect(subject).to include(achievement.badge.medium.url)
+        it 'returns the path of the default achievement badge' do
+          expect(subject).to include('/assets/achievement_blank-')
         end
       end
 
-      context 'when an achievement badge is not uploaded' do
-        it 'displays the default achievement badge' do
-          expect(subject).to have_tag('img', with: { 'src^': '/assets/achievement_blank-' })
+      context 'when an achievement is provided' do
+        subject { helper.achievement_badge_path(achievement) }
+
+        context 'when an achievement badge is uploaded' do
+          let(:icon) { Rails.root.join('spec', 'fixtures', 'files', 'picture.jpg') }
+          before do
+            file = File.open(icon, 'rb')
+            achievement.badge = file
+            file.close
+          end
+
+          it 'returns the path of the achievement badge' do
+            expect(subject).to eq(achievement.badge.medium.url)
+          end
         end
+
+        context 'when an achievement badge is not uploaded' do
+          it 'returns the path of the default achievement badge' do
+            expect(subject).to include('/assets/achievement_blank-')
+          end
+        end
+      end
+    end
+
+    describe '#display_achievement_badge' do
+      subject { helper.display_achievement_badge(achievement) }
+
+      it 'displays the default achievement badge' do
+        expect(subject).to have_tag('span.image')
+        expect(subject).to have_tag('img')
       end
     end
 

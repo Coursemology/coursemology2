@@ -1,9 +1,9 @@
 = page_header do
+  - if can?(:create, Course::Achievement.new(course: current_course))
+    div.new-btn data="#{{ badge: { url: achievement_badge_path } }.to_json}"
   - if can?(:reorder, Course::Achievement.new(course: current_course)) && @achievements.count > 1
     a.btn.btn-default.hidden-sm.hidden-xs#reorder title=t('.reorder_tooltip')
       = fa_icon 'sort', text: t('.reorder_button')
-  - if can?(:create, Course::Achievement.new(course: current_course))
-    = new_button([current_course, :achievement])
 
 = render partial: 'achievements',
          locals: { include_requirements: true, achievements: @achievements }

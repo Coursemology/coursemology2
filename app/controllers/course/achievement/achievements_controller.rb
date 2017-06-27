@@ -9,15 +9,11 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
   def show #:nodoc:
   end
 
-  def new #:nodoc:
-  end
-
   def create #:nodoc:
     if @achievement.save
-      redirect_to course_achievements_path(current_course),
-                  success: t('.success', title: @achievement.title)
+      render json: { id: @achievement.id }, status: :ok
     else
-      render 'new'
+      render json: { errors: @achievement.errors }, status: :bad_request
     end
   end
 
@@ -26,10 +22,9 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
 
   def update #:nodoc:
     if @achievement.update_attributes(achievement_params)
-      redirect_to course_achievements_path(current_course),
-                  success: t('.success', title: @achievement.title)
+      head :ok
     else
-      render 'edit'
+      render json: { errors: @achievement.errors }, status: :bad_request
     end
   end
 

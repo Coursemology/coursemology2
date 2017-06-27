@@ -20,8 +20,6 @@ RSpec.feature 'Course: Achievements' do
       let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can view all achievements' do
-        expect(page).to have_link(nil, href: new_course_achievement_path(course))
-
         achievements.each do |achievement|
           expect(page).to have_content_tag_for(achievement)
           expect(page).to have_link(nil, href: edit_course_achievement_path(course, achievement))
@@ -42,7 +40,9 @@ RSpec.feature 'Course: Achievements' do
 
       scenario 'I can view all published achievements and whether I have obtained them' do
         visit course_achievements_path(course)
-        expect(page).not_to have_link(nil, href: new_course_achievement_path(course))
+
+        # Ensure no 'New' button for achievement creation
+        expect(page).not_to have_selector('.page-header .new-btn')
         expect(page).not_to have_content_tag_for(draft_achievement)
 
         expect(page).not_to have_link(nil, href: edit_course_achievement_path(course, achievement1))
