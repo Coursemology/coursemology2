@@ -4,7 +4,7 @@ en:
       question:
         scribing:
           create:
-            success: 'The scribin question was created.'
+            success: 'The scribing question was created.'
             failure: 'Could not create scribing question.'
           update:
             failure: 'Could not update scribing question.'
