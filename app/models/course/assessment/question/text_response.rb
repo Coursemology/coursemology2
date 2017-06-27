@@ -32,7 +32,7 @@ class Course::Assessment::Question::TextResponse < ActiveRecord::Base
   end
 
   def attempt(submission, last_attempt = nil)
-    answer = submission.text_response_answers.build(submission: submission, question: question)
+    answer = Course::Assessment::Answer::TextResponse.new(submission: submission, question: question)
     if last_attempt
       answer.answer_text = last_attempt.answer_text
       if last_attempt.attachment_references.any?

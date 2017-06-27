@@ -14,12 +14,12 @@ export default function (state = {}, action) {
         ...arrayToObjectById(action.payload.questions),
       };
     case actions.AUTOGRADE_SUCCESS: {
-      const { questionId } = action.payload.answers[0];
+      const { questionId } = action.payload;
       return {
         ...state,
         [questionId]: {
           ...state[questionId],
-          answerId: action.payload.answers[0].id,
+          answerId: action.payload.fields.id,
         },
       };
     }

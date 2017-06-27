@@ -40,7 +40,7 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
   end
 
   def attempt(submission, last_attempt = nil)
-    answer = submission.programming_answers.build(submission: submission, question: question)
+    answer = Course::Assessment::Answer::Programming.new(submission: submission, question: question)
     if last_attempt
       last_attempt.files.each do |file|
         answer.files.build(filename: file.filename, content: file.content)

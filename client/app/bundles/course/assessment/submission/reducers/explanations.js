@@ -15,13 +15,13 @@ export default function (state = {}, action) {
         , {}),
       };
     case actions.AUTOGRADE_SUCCESS: {
-      const { questionId, id } = action.payload.answers[0];
+      const { questionId } = action.payload;
       return Object.keys(state).reduce((obj, key) => {
-        if (state[key].questionId !== questionId) {
+        if (key !== questionId.toString()) {
           return { ...obj, [key]: state[key] };
         }
         return obj;
-      }, { [id]: action.payload.answers[0].explanation });
+      }, { [questionId]: action.payload.explanation });
     }
     default:
       return state;

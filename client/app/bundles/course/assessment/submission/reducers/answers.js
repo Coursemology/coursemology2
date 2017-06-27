@@ -18,13 +18,13 @@ export default function (state = {}, action) {
         , {}),
       };
     case actions.AUTOGRADE_SUCCESS: {
-      const { questionId, id } = action.payload.answers[0];
+      const { questionId, fields: { id } } = action.payload;
       return Object.keys(state).reduce((obj, key) => {
         if (state[key].questionId !== questionId) {
           return { ...obj, [key]: state[key] };
         }
         return obj;
-      }, { [id]: action.payload.answers[0].fields });
+      }, { [id]: action.payload.fields });
     }
     default:
       return state;
