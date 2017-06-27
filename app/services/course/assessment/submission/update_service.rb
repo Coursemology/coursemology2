@@ -168,7 +168,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       answer.finalise! if answer.attempting?
       # Only save if answer is graded in another server
       answer.save! unless answer.grade_inline?
-      answer.auto_grade!(redirect_to_path: edit_submission_path,
+      answer.auto_grade!(redirect_to_path: course_assessment_submission_answer_path(current_course, @assessment, @submission, answer),
                          reattempt: true, reduce_priority: false)
     end
   end
