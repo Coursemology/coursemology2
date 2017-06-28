@@ -6,6 +6,7 @@ json.partial! 'submission', submission: @submission, assessment: @assessment,
 
 json.assessment do
   json.(@assessment, :title, :description, :autograded, :skippable)
+  json.baseExp @assessment.base_exp
   json.delayedGradePublication @assessment.delayed_grade_publication
   json.tabbedView @assessment.tabbed_view
   json.questionIds @assessment.questions.map(&:id)
