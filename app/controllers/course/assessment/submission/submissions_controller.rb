@@ -72,6 +72,12 @@ class Course::Assessment::Submission::SubmissionsController < \
     else
       @new_answer = @submission.answers.from_question(@current_question.id).last
     end
+
+    if @new_answer
+      respond_to do |format|
+        format.json { render @new_answer }
+      end
+    end
   end
 
   # Publish all the graded submissions.

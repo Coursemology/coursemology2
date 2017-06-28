@@ -2,6 +2,7 @@ json.questionId answer.question_id
 
 last_attempt = last_attempt(answer)
 specific_answer = answer.specific
+can_grade = can?(:grade, answer.submission)
 
 json.partial! specific_answer, answer: specific_answer, can_grade: can_grade
 

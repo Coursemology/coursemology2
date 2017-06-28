@@ -151,12 +151,12 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     else
       current_question = answer.try(:question)
       new_answer = @submission.answers.from_question(current_question.id).last
-      render new_answer, locals: { can_grade: can?(:grade, @submission) }
+      render new_answer
     end
   end
 
-  def answer_path(answer)
-    course_assessment_submission_answer_path(current_course, @assessment, @submission, answer)
+  def reload_answer_path
+    reload_answer_course_assessment_submission_path(current_course, @assessment, @submission)
   end
 
   def grade_and_reattempt_answer(answer)
@@ -166,7 +166,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       answer.finalise! if answer.attempting?
       # Only save if answer is graded in another server
       answer.save! unless answer.grade_inline?
-      answer.auto_grade!(redirect_to_path: course_assessment_submission_answer_path(current_course, @assessment, @submission, answer),
+      answer.auto_grade!(redirect_to_path: reload_answer_path,
                          reattempt: true, reduce_priority: false)
     end
   end

@@ -16,6 +16,5 @@ answers = @submission.latest_answers
 
 json.partial! 'questions', assessment: @assessment, submission: @submission, can_grade: can_grade,
                            answers: answers
-json.partial! 'answers', submission: @submission, can_grade: can_grade,
-                         answers: answers
+json.partial! 'answers', submission: @submission, answers: answers
 json.partial! 'topics', submission: @submission, can_grade: can_grade
