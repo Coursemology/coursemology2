@@ -88,7 +88,6 @@
     "react-dom": "^15.5.4",
     "react-dropzone": "^3.13.2",
     "react-intl": "^2.3.0",
-    "react-numeric-input": "^2.0.7",
     "react-overlays": "^0.7.0",
     "react-redux": "^5.0.5",
     "react-router": "^4.1.1",

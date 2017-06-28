@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { grey100 } from 'material-ui/styles/colors';
-import NumericInput from 'react-numeric-input';
 
 import { GradingProp, QuestionProp } from '../propTypes';
 import actionTypes from '../constants';
@@ -30,12 +29,14 @@ class VisibleQuestionGrade extends Component {
       <Card style={styles.container}>
         <CardHeader style={{ backgroundColor: grey100 }} title="Grading" />
         <CardText>
-          <NumericInput
-            min={0}
-            max={maxGrade}
-            precision={1}
+          <input
+            style={{ width: '100px' }}
+            type="number"
+            min="0"
+            max={maxGrade.toString()}
+            step="1"
             value={initialGrade}
-            onChange={grade => updateGrade(id, grade)}
+            onChange={e => updateGrade(id, parseFloat(parseFloat(e.target.value).toPrecision(1)))}
           />
           {` / ${maxGrade}`}
         </CardText>
