@@ -22,6 +22,16 @@ class VisibleSubmissionEditIndex extends Component {
     fetchData(params.submissionId);
   }
 
+  allCorrect() {
+    const { explanations, questions } = this.props;
+    if (Object.keys(explanations).length !== Object.keys(questions).length) {
+      return false;
+    }
+
+    const numIncorrect = Object.keys(explanations).filter(qid => !explanations[qid].correct).length;
+    return numIncorrect === 0;
+  }
+
   handleSubmit() {
     const { form, match: { params }, submitAnswer } = this.props;
     const answers = Object.values(form.values);
@@ -85,6 +95,7 @@ class VisibleSubmissionEditIndex extends Component {
           handleAutograde={answerId => this.handleAutograde(answerId)}
           initialValues={answers}
           explanations={explanations}
+          allCorrect={this.allCorrect()}
           canGrade={canGrade}
           submitted={!!submittedAt}
           maxStep={maxStep}

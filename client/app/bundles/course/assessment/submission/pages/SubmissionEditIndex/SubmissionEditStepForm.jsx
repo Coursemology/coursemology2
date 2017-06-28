@@ -186,8 +186,8 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderFinaliseSubmitButton() {
-    const { submitting, submitted, handleSubmit } = this.props;
-    if (!submitted) {
+    const { submitting, submitted, allCorrect, handleSubmit } = this.props;
+    if (!submitted && allCorrect) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -291,6 +291,7 @@ SubmissionEditStepForm.propTypes = {
   skippable: PropTypes.bool.isRequired,
   submitting: PropTypes.bool,
   explanations: PropTypes.objectOf(ExplanationProp),
+  allCorrect: PropTypes.bool.isRequired,
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(QuestionProp),
   topics: PropTypes.objectOf(TopicProp),
