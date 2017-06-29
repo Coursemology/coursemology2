@@ -26,6 +26,10 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     return this.getClient().patch(`${this._getUrlPrefix()}/${submissionId}`, formData, config);
   }
 
+  reloadAnswer(submissionId, params) {
+    return this.getClient().post(`${this._getUrlPrefix()}/${submissionId}/reload_answer`, params);
+  }
+
   createProgrammingAnnotation(submissionId, answerId, fileId, params) {
     const url = `${this._getUrlPrefix()}/${submissionId}/answers/${answerId}/programming/files/${fileId}/annotations`;
     return this.getClient().post(url, params);

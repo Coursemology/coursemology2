@@ -70,12 +70,9 @@ export function unsubmit(submissionId) {
   };
 }
 
-function getEvaluationResult(url, answerId) {
+function getEvaluationResult(submissionId, answerId) {
   return (dispatch) => {
-    CourseAPI.assessment.submissions.getClient().post(url, {
-      params: { format: 'json' },
-      answer_id: answerId,
-    })
+    CourseAPI.assessment.submissions.reloadAnswer(submissionId, { answer_id: answerId })
       .then(response => response.data)
       .then((data) => {
         dispatch({
@@ -87,7 +84,7 @@ function getEvaluationResult(url, answerId) {
   };
 }
 
-function pollEvaluation(url, answerId) {
+function pollEvaluation(url, submissionId, answerId) {
   return (dispatch) => {
     const poller = setInterval(() => {
       axios.get(url, { params: { format: 'json' } })
@@ -95,7 +92,7 @@ function pollEvaluation(url, answerId) {
         .then((data) => {
           if (data.status === 'completed') {
             clearInterval(poller);
-            dispatch(getEvaluationResult(data.redirect_url, answerId));
+            dispatch(getEvaluationResult(submissionId, answerId));
           } else if (data.status === 'errored') {
             clearInterval(poller);
             dispatch({ type: actionTypes.AUTOGRADE_FAILURE });
@@ -115,7 +112,7 @@ export function autograde(submissionId, answers) {
       .then(response => response.data)
       .then((data) => {
         if (data.redirect_url) {
-          dispatch(pollEvaluation(data.redirect_url, answers[0].id));
+          dispatch(pollEvaluation(data.redirect_url, submissionId, answers[0].id));
         } else {
           dispatch({
             type: actionTypes.AUTOGRADE_SUCCESS,
