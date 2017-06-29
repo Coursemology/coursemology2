@@ -6,6 +6,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHeaderColumn, TableRowCol
 
 import { formatDateTime } from '../utils';
 import { GradingProp, QuestionProp, SubmissionProp } from '../propTypes';
+import actionTypes from '../constants';
 
 const styles = {
   panel: {
@@ -27,26 +28,84 @@ class VisibleGradingPanel extends Component {
     return Object.values(grades).reduce((acc, b) => acc + b.grade, 0);
   }
 
-  static calculateMaxGrade(questions) {
-    let maxGrade = 0;
-    Object.values(questions).forEach((question) => { maxGrade += question.maximumGrade; });
-    return maxGrade;
+  handleExpField(value) {
+    const { updateExp } = this.props;
+    const parsedValue = parseFloat(value);
+
+    if (parsedValue < 0) {
+      updateExp(0);
+    } else {
+      updateExp(parseFloat(parsedValue.toFixed(1)));
+    }
   }
 
-  static generateTotalGrade(questionGrades, questions) {
-    const totalGrade = VisibleGradingPanel.calculateTotalGrade(questionGrades);
-    const maxGrade = VisibleGradingPanel.calculateMaxGrade(questions);
-    return `${totalGrade} / ${maxGrade}`;
+  handleMultiplierField(value) {
+    const {
+      grading: { questions },
+      submission: { maximumGrade, basePoints },
+      updateMultiplier,
+    } = this.props;
+    const totalGrade = VisibleGradingPanel.calculateTotalGrade(questions);
+    const defaultExp = (totalGrade / maximumGrade) * basePoints;
+    const parsedValue = parseFloat(value);
+
+    if (isNaN(parsedValue) || parsedValue < 0) {
+      updateMultiplier(0, 0);
+    } else if (parsedValue > 1) {
+      updateMultiplier(defaultExp, 1);
+    } else {
+      const multiplier = parseFloat(parsedValue.toFixed(1));
+      updateMultiplier(defaultExp * multiplier, multiplier);
+    }
+  }
+
+  renderTotalGrade() {
+    const { grading: { questions }, submission: { maximumGrade } } = this.props;
+    return <div>{`${VisibleGradingPanel.calculateTotalGrade(questions)} / ${maximumGrade}`}</div>;
+  }
+
+  renderExperiencePoints() {
+    const {
+      grading: { questions, exp, expMultiplier },
+      submission: { basePoints, maximumGrade },
+    } = this.props;
+    const totalGrade = VisibleGradingPanel.calculateTotalGrade(questions);
+    const defaultExp = (totalGrade / maximumGrade) * basePoints * expMultiplier;
+    return (
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ width: 80 }}>
+          <input
+            style={{ width: 50 }}
+            type="number"
+            min={0}
+            step={1}
+            value={exp || defaultExp}
+            onChange={e => this.handleExpField(e.target.value)}
+          />
+          {` / ${basePoints}`}
+        </div>
+        <div style={{ marginLeft: 20 }}>
+          Multiplier
+          <input
+            style={{ marginLeft: 5, width: 50 }}
+            type="number"
+            min={0}
+            max={1}
+            step={0.1}
+            value={expMultiplier}
+            onChange={e => this.handleMultiplierField(e.target.value)}
+          />
+        </div>
+      </div>
+    );
   }
 
   renderSubmissionTable() {
     const {
-      questions,
       submission: {
-        submitter, workflowState, basePoints, dueAt,
-        attemptedAt, submittedAt, grader, gradedAt,
+        submitter, workflowState, dueAt, attemptedAt,
+        submittedAt, grader, gradedAt,
       },
-      grading,
     } = this.props;
     return (
       <Table selectable={false} style={styles.table}>
@@ -61,11 +120,11 @@ class VisibleGradingPanel extends Component {
           </TableRow>
           <TableRow>
             <TableHeaderColumn style={styles.hdColumn} columnNumber={0}>Total Grade</TableHeaderColumn>
-            <TableRowColumn>{VisibleGradingPanel.generateTotalGrade(grading.questions, questions)}</TableRowColumn>
+            <TableRowColumn>{this.renderTotalGrade()}</TableRowColumn>
           </TableRow>
           <TableRow>
             <TableHeaderColumn style={styles.hdColumn} columnNumber={0}>Experience Points Awarded</TableHeaderColumn>
-            <TableRowColumn>{`todo / ${basePoints}`}</TableRowColumn>
+            <TableRowColumn>{this.renderExperiencePoints()}</TableRowColumn>
           </TableRow>
           <TableRow>
             <TableHeaderColumn style={styles.hdColumn} columnNumber={0}>Due At</TableHeaderColumn>
@@ -138,7 +197,9 @@ class VisibleGradingPanel extends Component {
 VisibleGradingPanel.propTypes = {
   questions: PropTypes.objectOf(QuestionProp),
   submission: SubmissionProp.isRequired,
-  grading: PropTypes.objectOf(GradingProp),
+  grading: GradingProp.isRequired,
+  updateExp: PropTypes.func.isRequired,
+  updateMultiplier: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -149,7 +210,15 @@ function mapStateToProps(state) {
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    updateExp: exp => dispatch({ type: actionTypes.UPDATE_EXP, exp }),
+    updateMultiplier: (exp, multiplier) => dispatch({ type: actionTypes.UPDATE_MULTIPLIER, exp, multiplier }),
+  };
+}
+
 const GradingPanel = connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(VisibleGradingPanel);
 export default GradingPanel;

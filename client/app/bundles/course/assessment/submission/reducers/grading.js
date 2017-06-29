@@ -2,6 +2,7 @@ import actions from '../constants';
 
 const initialState = {
   questions: {},
+  expMultiplier: 1,
 };
 
 export default function (state = initialState, action) {
@@ -30,11 +31,17 @@ export default function (state = initialState, action) {
       };
     }
     case actions.UPDATE_EXP: {
-      return state;
+      return {
+        ...state,
+        exp: action.exp,
+      };
     }
-    case actions.UPDATE_MULTIPLER: {
-      return state;
-    }
+    case actions.UPDATE_MULTIPLIER:
+      return {
+        ...state,
+        exp: action.exp,
+        expMultiplier: action.multiplier,
+      };
     default:
       return state;
   }

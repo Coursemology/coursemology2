@@ -17,7 +17,7 @@ class VisibleQuestionGrade extends Component {
   static propTypes = {
     id: PropTypes.number.isRequired,
     questions: PropTypes.objectOf(QuestionProp),
-    grading: PropTypes.objectOf(GradingProp).isRequired,
+    grading: GradingProp.isRequired,
     updateGrade: PropTypes.func.isRequired,
   };
 
@@ -26,10 +26,10 @@ class VisibleQuestionGrade extends Component {
     const maxGrade = questions[id].maximumGrade;
     const parsedValue = parseFloat(value);
 
-    if (parsedValue > maxGrade) {
-      updateGrade(id, maxGrade);
-    } else if (parsedValue < 0) {
+    if (isNaN(parsedValue) || parsedValue < 0) {
       updateGrade(id, 0);
+    } else if (parsedValue > maxGrade) {
+      updateGrade(id, maxGrade);
     } else {
       updateGrade(id, parseFloat(parsedValue.toFixed(1)));
     }
@@ -44,11 +44,11 @@ class VisibleQuestionGrade extends Component {
         <CardHeader style={{ backgroundColor: grey100 }} title="Grading" />
         <CardText>
           <input
-            style={{ width: '100px' }}
+            style={{ width: 100 }}
             type="number"
-            min="0"
+            min={0}
             max={maxGrade}
-            step="1"
+            step={1}
             value={initialGrade}
             onChange={e => this.handleGradingField(e.target.value)}
           />

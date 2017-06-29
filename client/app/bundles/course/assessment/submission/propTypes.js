@@ -34,11 +34,14 @@ const FileProp =
     filename: PropTypes.string,
   });
 
-export const GradingProp =
-  PropTypes.shape({
+export const GradingProp = PropTypes.shape({
+  questions: PropTypes.shape({
     grade: PropTypes.number,
     grader: PropTypes.string,
-  });
+  }),
+  exp: PropTypes.number,
+  expMultiplier: PropTypes.number,
+});
 
 export const PostProp =
   PropTypes.shape({

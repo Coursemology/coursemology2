@@ -173,7 +173,7 @@ VisibleSubmissionEditIndex.propTypes = {
   assessment: AssessmentProp,
   explanations: PropTypes.objectOf(ExplanationProp),
   form: ReduxFormProp,
-  grading: PropTypes.objectOf(GradingProp),
+  grading: GradingProp.isRequired,
   posts: PropTypes.objectOf(PostProp),
   questions: PropTypes.objectOf(QuestionProp),
   submission: SubmissionProp,
