@@ -37,7 +37,7 @@ class VisibleQuestionGrade extends Component {
 
   render() {
     const { id, questions, grading } = this.props;
-    const initialGrade = grading[id].grade;
+    const initialGrade = grading.questions[id].grade;
     const maxGrade = questions[id].maximumGrade;
     return (
       <Card style={styles.container}>

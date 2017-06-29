@@ -23,8 +23,8 @@ const styles = {
 };
 
 class VisibleGradingPanel extends Component {
-  static calculateTotalGrade(grading) {
-    return Object.values(grading).reduce((acc, b) => acc + b.grade, 0);
+  static calculateTotalGrade(grades) {
+    return Object.values(grades).reduce((acc, b) => acc + b.grade, 0);
   }
 
   static calculateMaxGrade(questions) {
@@ -33,8 +33,8 @@ class VisibleGradingPanel extends Component {
     return maxGrade;
   }
 
-  static generateTotalGrade(grading, questions) {
-    const totalGrade = VisibleGradingPanel.calculateTotalGrade(grading);
+  static generateTotalGrade(questionGrades, questions) {
+    const totalGrade = VisibleGradingPanel.calculateTotalGrade(questionGrades);
     const maxGrade = VisibleGradingPanel.calculateMaxGrade(questions);
     return `${totalGrade} / ${maxGrade}`;
   }
@@ -61,7 +61,7 @@ class VisibleGradingPanel extends Component {
           </TableRow>
           <TableRow>
             <TableHeaderColumn style={styles.hdColumn} columnNumber={0}>Total Grade</TableHeaderColumn>
-            <TableRowColumn>{VisibleGradingPanel.generateTotalGrade(grading, questions)}</TableRowColumn>
+            <TableRowColumn>{VisibleGradingPanel.generateTotalGrade(grading.questions, questions)}</TableRowColumn>
           </TableRow>
           <TableRow>
             <TableHeaderColumn style={styles.hdColumn} columnNumber={0}>Experience Points Awarded</TableHeaderColumn>
@@ -113,7 +113,7 @@ class VisibleGradingPanel extends Component {
                 >
                   {question.displayTitle}
                 </TableHeaderColumn>
-                <TableRowColumn>{`${grading[question.id].grade} / ${question.maximumGrade}`}</TableRowColumn>
+                <TableRowColumn>{`${grading.questions[question.id].grade} / ${question.maximumGrade}`}</TableRowColumn>
               </TableRow>
             )}
           </TableBody>

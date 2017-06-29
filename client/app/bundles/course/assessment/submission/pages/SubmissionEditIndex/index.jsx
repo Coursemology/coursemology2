@@ -196,7 +196,7 @@ function mapStateToProps(state) {
     assessment: state.submissionEdit.assessment,
     explanations: state.explanations,
     form: state.form.submissionEdit,
-    grading: state.grading,
+    grading: state.grading.questions,
     maxStep: state.submissionEdit.maxStep,
     posts: state.posts,
     submission: state.submissionEdit.submission,
