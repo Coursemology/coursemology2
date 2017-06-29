@@ -108,8 +108,8 @@ export default class WideEditor extends Component {
         <table>
           <tbody>
             <tr>
-              <td style={{ width: '50%' }}>{this.renderComments()}</td>
-              <td style={{ width: '50%' }}>{this.renderEditor()}</td>
+              <td style={{ width: '40%' }}>{this.renderComments()}</td>
+              <td style={{ width: '60%' }}>{this.renderEditor()}</td>
             </tr>
           </tbody>
         </table>
