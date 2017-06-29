@@ -154,6 +154,9 @@ GEM
       railties (>= 3.0)
     diff-lcs (1.3)
     docile (1.1.5)
+    docker-api (1.33.2)
+      excon (>= 0.38.0)
+      json
     easy_translate (0.5.0)
       json
       thread
@@ -166,6 +169,7 @@ GEM
       launchy (~> 2.1)
       mail (~> 2.6)
     erubis (2.7.0)
+    excon (0.55.0)
     execjs (2.7.0)
     exifr (1.2.5)
     factory_girl (4.8.0)
@@ -576,6 +580,7 @@ DEPENDENCIES
   devise!
   devise-multi_email (~> 1.0.5)
   devise_masquerade
+  docker-api
   edge
   ejs
   email_spec
@@ -642,7 +647,6 @@ DEPENDENCIES
   webpack-rails
   workflow
   yard
-
 
 BUNDLED WITH
    1.14.6

@@ -75,10 +75,9 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
     end
   end
 
-  subject { Course::Assessment::ProgrammingEvaluationService }
-
   let(:instance) { Instance.default }
   with_tenant(:instance) do
+    subject { Course::Assessment::ProgrammingEvaluationService }
     let(:course) { create(:course) }
 
     it 'returns the result of evaluating' do
@@ -92,31 +91,47 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
     context 'when the evaluation times out' do
       it 'raises a Timeout::Error' do
         expect do
+          # Pass in a non-zero timeout as Ruby's Timeout treats 0 as infinite.
           subject.execute(course, Coursemology::Polyglot::Language::Python::Python2Point7.instance,
                           64, 5.seconds, File.join(Rails.root, 'spec', 'fixtures', 'course',
-                                                   'programming_question_template.zip'), 0.seconds)
+                                                   'programming_question_template.zip'),
+                          0.1.seconds)
         end.to raise_error(Timeout::Error)
       end
     end
 
-    describe '#create_evaluation' do
-      subject do
-        Course::Assessment::ProgrammingEvaluationService.
-          new(course, Coursemology::Polyglot::Language::Python::Python2Point7.instance, 64,
-              5.seconds, File.join(Rails.root, 'spec', 'fixtures', 'course',
-                                   'programming_question_template.zip'), 5.seconds)
+    describe '#create_container' do
+      let(:memory_limit) { nil }
+      let(:time_limit) { nil }
+      let(:service_instance) do
+        subject.new(course, Coursemology::Polyglot::Language::Python::Python2Point7.instance,
+                    memory_limit, time_limit, Rails.root.join('spec', 'fixtures', 'course',
+                                                              'programming_question_template.zip'),
+                    nil)
+      end
+      let(:image) { 'python:2.7' }
+      let(:container) { service_instance.send(:create_container, image) }
+
+      it 'prefixes the image with coursemology/evaluator-image' do
+        # 30 seconds is the default time limit when unspecified.
+        expect(CoursemologyDockerContainer).to \
+          receive(:create).with("coursemology/evaluator-image-#{image}",
+                                hash_including(argv: ['-c30']))
+
+        container
       end
 
-      it 'creates the package for the evaluator to download' do
-        evaluation = subject.send(:create_evaluation)
+      context 'when resource limits are specified' do
+        let(:memory_limit) { 16 }
+        let(:time_limit) { 5 }
 
-        # Remove the leading / because Pathname treats it as an absolute path.
-        expect(Rails.public_path + evaluation.package_path[1..-1]).to exist
-      end
+        it 'specifies them when creating the container' do
+          expect(CoursemologyDockerContainer).to \
+            receive(:create).with("coursemology/evaluator-image-#{image}",
+                                  hash_including(argv: ['-c5', '-m16384']))
 
-      it 'successfully creates the evaluation' do
-        evaluation = subject.send(:create_evaluation)
-        expect(evaluation).to be_persisted
+          container
+        end
       end
     end
   end

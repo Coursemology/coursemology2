@@ -5,6 +5,9 @@ class Course::Assessment::ProgrammingEvaluationService
   DEFAULT_TIMEOUT = Course::Assessment::ProgrammingEvaluation::TIMEOUT
   CPU_TIMEOUT = Course::Assessment::ProgrammingEvaluation::CPU_TIMEOUT
 
+  # The ratio to multiply the memory limits from our evaluation to the container by.
+  MEMORY_LIMIT_RATIO = 1.megabyte / 1.kilobyte
+
   # Represents a result of evaluating a package.
   Result = Struct.new(:stdout, :stderr, :test_report, :exit_code, :evaluation_id) do
     # Checks if the evaluation errored.
@@ -90,37 +93,39 @@ class Course::Assessment::ProgrammingEvaluationService
     @timeout = timeout || DEFAULT_TIMEOUT
   end
 
-  # Creates the evaluation, waits for its completion, then returns the result.
+  # Evaluate the package in a Docker container and return the output that matters.
   #
   # @return [Result]
-  def execute
-    evaluation = create_evaluation
-    wait_for_evaluation(evaluation)
-    Result.new(evaluation.stdout, evaluation.stderr, evaluation.test_report,
-               evaluation.exit_code, evaluation.id)
-  ensure
-    evaluation.destroy! if evaluation
-  end
-
-  # Creates a new evaluation, attaching the provided package and specifying all its input
-  # parameters.
-  #
-  # @return [Course::Assessment::ProgrammingEvaluation]
-  def create_evaluation
-    Course::Assessment::ProgrammingEvaluation.create(
-      course: @course, language: @language, package_path: @package, memory_limit: @memory_limit,
-      time_limit: @time_limit
-    )
-  end
-
-  # Waits for the given evaluation to enter the finished state.
-  #
-  # @param [Course::Assessment::ProgrammingEvaluation] evaluation The evaluation to wait for.
   # @raise [Timeout::Error] When the evaluation timeout has elapsed.
-  def wait_for_evaluation(evaluation)
-    wait_result = evaluation.wait(timeout: @timeout,
-                                  while_callback: -> { !evaluation.tap(&:reload).finished? })
+  def execute
+    stdout, stderr, test_report, exit_code = Timeout.timeout(@timeout) { evaluate_in_container }
+    Result.new(stdout, stderr, test_report, exit_code)
+  end
 
-    raise Timeout::Error if wait_result.nil?
+  def create_container(image)
+    image_identifier = "coursemology/evaluator-image-#{image}"
+    CoursemologyDockerContainer.create(image_identifier, argv: container_arguments)
+  end
+
+  def container_arguments
+    result = []
+    result.push("-c#{@time_limit}") if @time_limit
+    result.push("-m#{@memory_limit * MEMORY_LIMIT_RATIO}") if @memory_limit
+
+    result
+  end
+
+  # Creates a container to run the evaluation, waits for its completion, then returns the
+  # stuff Coursemology cares about.
+  #
+  # @return [Array<(String, String, String, Integer)>] The stdout, stderr, test report and exit
+  #   code.
+  def evaluate_in_container
+    container = create_container(@language.class.docker_image)
+    container.copy_package(@package)
+    container.execute_package
+    container.evaluation_result
+  ensure
+    container&.delete
   end
 end

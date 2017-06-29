@@ -206,7 +206,7 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
       end
 
       context 'with preferences' do
-        let(:sample_component) { default_enabled_components.first }
+        let(:sample_component) { default_enabled_components.select(&:can_be_disabled?).first }
         context 'disable a component in course' do
           before { course.settings(sample_component.key).enabled = false }
 
