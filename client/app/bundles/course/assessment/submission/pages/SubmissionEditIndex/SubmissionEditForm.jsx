@@ -10,6 +10,7 @@ import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
 import Comments from '../../containers/Comments';
+import UnsubmitDialog from '../../components/UnsubmitDialog';
 
 const styles = {
   questionCardContainer: {
@@ -25,6 +26,14 @@ const styles = {
 };
 
 class SubmissionEditForm extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      submitConfirmation: false,
+      unsubmitConfirmation: false,
+    };
+  }
 
   renderQuestionGrading(id) {
     const { submitted } = this.props;
@@ -87,7 +96,10 @@ class SubmissionEditForm extends Component {
           style={styles.formButton}
           secondary
           label="Finalise Submission"
-          onTouchTap={handleSubmit}
+          onTouchTap={() => {
+            this.setState({ submitConfirmation: true });
+            handleSubmit();
+          }}
           disabled={submitting}
         />
       );
@@ -96,7 +108,7 @@ class SubmissionEditForm extends Component {
   }
 
   renderUnsubmitButton() {
-    const { canGrade, submitted, handleUnsubmit } = this.props;
+    const { canGrade, submitted } = this.props;
     if (canGrade && submitted) {
       return (
         <RaisedButton
@@ -104,7 +116,7 @@ class SubmissionEditForm extends Component {
           backgroundColor={red900}
           secondary
           label="Unsubmit Submission"
-          onTouchTap={handleUnsubmit}
+          onTouchTap={() => this.setState({ unsubmitConfirmation: true })}
         />
       );
     }
@@ -127,6 +139,21 @@ class SubmissionEditForm extends Component {
     return null;
   }
 
+  renderUnsubmitDialog() {
+    const { unsubmitConfirmation } = this.state;
+    const { handleUnsubmit } = this.props;
+    return (
+      <UnsubmitDialog
+        open={unsubmitConfirmation}
+        onCancel={() => this.setState({ unsubmitConfirmation: false })}
+        onConfirm={() => {
+          this.setState({ unsubmitConfirmation: false });
+          handleUnsubmit();
+        }}
+      />
+    );
+  }
+
   render() {
     return (
       <Card style={styles.questionCardContainer}>
@@ -136,6 +163,7 @@ class SubmissionEditForm extends Component {
         {this.renderSubmitButton()}
         {this.renderUnsubmitButton()}
         {this.renderPublishButton()}
+        {this.renderUnsubmitDialog()}
       </Card>
     );
   }
