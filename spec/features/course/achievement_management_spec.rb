@@ -29,8 +29,8 @@ RSpec.feature 'Course: Achievements' do
           expect(page).not_to have_selector('h3', text: 'New Achievement')
         end.to change { course.achievements.count }.by(1)
         achievement_created = course.achievements.last
-        expect(current_path).to eq(course_achievement_path(course, achievement_created))
         expect(page).to have_text(achievement[:title])
+        expect(current_path).to eq(course_achievement_path(course, achievement_created))
 
         # Edit the achivement
         visit edit_course_achievement_path(course, achievement_created)
