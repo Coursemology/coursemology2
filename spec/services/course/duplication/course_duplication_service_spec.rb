@@ -6,10 +6,11 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
   with_tenant(:instance) do
     let(:admin) { create(:administrator) }
     let(:course) { create(:course) }
+    let(:time_shift) { 3.days }
     let(:new_course) do
       options = {
         current_user: admin,
-        new_start_at: (course.start_at + 1.day).iso8601,
+        new_start_at: (course.start_at + time_shift).iso8601,
         new_title: I18n.t('course.duplications.show.new_course_title_prefix')
       }
       Course::Duplication::CourseDuplicationService.duplicate_course(course, options)
@@ -29,6 +30,7 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           create(:tutorial, course: course)
           create(:lecture, course: course)
         end
+        let!(:video) { create(:video, course: course) }
 
         it 'duplicates a course with the new title' do
           # Also test that a course with a registration key can be duplicated.
@@ -47,8 +49,8 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
         end
 
         it 'time shifts the new course' do
-          expect(new_course.start_at).to be_within(1.second).of course.start_at + 1.day
-          expect(new_course.end_at).to be_within(1.second).of course.end_at + 1.day
+          expect(new_course.start_at).to be_within(1.second).of course.start_at + time_shift
+          expect(new_course.end_at).to be_within(1.second).of course.end_at + time_shift
         end
 
         it 'duplicates levels within the course' do
@@ -86,7 +88,7 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
             expect(new_lesson_plan_events[i].actable.event_type).
               to eq original_lesson_plan_events[i].actable.event_type
             expect(new_lesson_plan_events[i].start_at).
-              to be_within(1.second).of original_lesson_plan_events[i].start_at + 1.day
+              to be_within(1.second).of original_lesson_plan_events[i].start_at + time_shift
             expect(new_lesson_plan_events[i].title).
               to be >= original_lesson_plan_events[i].title
             expect(new_lesson_plan_events[i].description).
@@ -107,8 +109,17 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
             expect(new_course.lesson_plan_milestones[i].description).
               to eq course.lesson_plan_milestones[i].description
             expect(new_course.lesson_plan_milestones[i].start_at).
-              to be_within(1.second).of course.lesson_plan_milestones[i].start_at + 1.day
+              to be_within(1.second).of course.lesson_plan_milestones[i].start_at + time_shift
           end
+        end
+
+        it 'duplicates videos' do
+          new_video = new_course.videos.first
+
+          expect(new_video.title).to eq video.title
+          expect(new_video.url).to eq video.url
+          expect(new_video.creator).to eq video.creator
+          expect(new_video.start_at).to be_within(1.second).of video.start_at + time_shift
         end
       end
 
@@ -121,9 +132,9 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           expect(new_assessment.base_exp).to eq assessment.base_exp
           expect(new_assessment.time_bonus_exp).to eq assessment.time_bonus_exp
           expect(new_assessment.published).to eq assessment.published
-          expect(new_assessment.start_at).to be_within(1.second).of assessment.start_at + 1.day
+          expect(new_assessment.start_at).to be_within(1.second).of assessment.start_at + time_shift
           expect(new_assessment.bonus_end_at).to be_within(1.second).
-            of assessment.bonus_end_at + 1.day
+            of assessment.bonus_end_at + time_shift
           # Source assessment has no end date
           expect(new_assessment.end_at).to be_nil
         end
@@ -263,9 +274,9 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
 
           folders_array = new_standalone_folders.zip(folders)
           folders_array.each do |new_folder, original_folder|
-            # 1.day is the time shift specified for this duplication spec
-            expect(new_folder.start_at).to be_within(1.second).of original_folder.start_at + 1.day
-            expect(new_folder.end_at).to be_within(1.second).of original_folder.end_at + 1.day
+            expect(new_folder.start_at).
+              to be_within(1.second).of original_folder.start_at + time_shift
+            expect(new_folder.end_at).to be_within(1.second).of original_folder.end_at + time_shift
           end
         end
       end
@@ -364,9 +375,9 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           expect(new_survey.base_exp).to eq survey.base_exp
           expect(new_survey.time_bonus_exp).to eq survey.time_bonus_exp
           expect(new_survey.published).to eq survey.published
-          expect(new_survey.start_at).to be_within(1.second).of survey.start_at + 1.day
+          expect(new_survey.start_at).to be_within(1.second).of survey.start_at + time_shift
           expect(new_survey.bonus_end_at).to be_within(1.second).
-            of survey.bonus_end_at + 1.day
+            of survey.bonus_end_at + time_shift
           # Source survey has no end date
           expect(new_survey.end_at).to be_nil
         end
