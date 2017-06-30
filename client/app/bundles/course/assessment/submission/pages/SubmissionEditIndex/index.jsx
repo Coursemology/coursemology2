@@ -28,7 +28,7 @@ class VisibleSubmissionEditIndex extends Component {
       return false;
     }
 
-    const numIncorrect = Object.keys(explanations).filter(qid => !explanations[qid].correct).length;
+    const numIncorrect = Object.keys(explanations).filter(qid => explanations[qid] && !explanations[qid].correct).length;
     return numIncorrect === 0;
   }
 

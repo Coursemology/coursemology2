@@ -13,6 +13,7 @@ import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
 import Comments from '../../containers/Comments';
+import SubmitDialog from '../../components/SubmitDialog';
 import UnsubmitDialog from '../../components/UnsubmitDialog';
 import { SAVE_STATES } from '../../constants';
 
@@ -50,8 +51,8 @@ class SubmissionEditStepForm extends Component {
     super(props);
     this.state = {
       stepIndex: props.maxStep,
-      unsubmitConfirmation: false,
       submitConfirmation: false,
+      unsubmitConfirmation: false,
     };
   }
 
@@ -189,14 +190,14 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderFinaliseSubmitButton() {
-    const { submitting, submitted, allCorrect, handleSubmit } = this.props;
+    const { submitting, submitted, allCorrect } = this.props;
     if (!submitted && allCorrect) {
       return (
         <RaisedButton
           style={styles.formButton}
           secondary
           label="Finalise Submission"
-          onTouchTap={handleSubmit}
+          onTouchTap={() => this.setState({ submitConfirmation: true })}
           disabled={submitting}
         />
       );
@@ -274,6 +275,21 @@ class SubmissionEditStepForm extends Component {
     );
   }
 
+  renderSubmitDialog() {
+    const { submitConfirmation } = this.state;
+    const { handleSubmit } = this.props;
+    return (
+      <SubmitDialog
+        open={submitConfirmation}
+        onCancel={() => this.setState({ submitConfirmation: false })}
+        onConfirm={() => {
+          this.setState({ submitConfirmation: false });
+          handleSubmit();
+        }}
+      />
+    );
+  }
+
   renderUnsubmitDialog() {
     const { unsubmitConfirmation } = this.state;
     const { handleUnsubmit } = this.props;
@@ -296,6 +312,7 @@ class SubmissionEditStepForm extends Component {
         <Card style={styles.questionCardContainer}>
           <form>{this.renderStepQuestion()}</form>
         </Card>
+        {this.renderSubmitDialog()}
         {this.renderUnsubmitDialog()}
       </div>
     );

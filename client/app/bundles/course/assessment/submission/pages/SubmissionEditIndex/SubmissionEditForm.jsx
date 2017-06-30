@@ -10,6 +10,7 @@ import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
 import Comments from '../../containers/Comments';
+import SubmitDialog from '../../components/SubmitDialog';
 import UnsubmitDialog from '../../components/UnsubmitDialog';
 
 const styles = {
@@ -89,17 +90,14 @@ class SubmissionEditForm extends Component {
   }
 
   renderSubmitButton() {
-    const { submitting, submitted, handleSubmit } = this.props;
+    const { submitting, submitted } = this.props;
     if (!submitted) {
       return (
         <RaisedButton
           style={styles.formButton}
           secondary
           label="Finalise Submission"
-          onTouchTap={() => {
-            this.setState({ submitConfirmation: true });
-            handleSubmit();
-          }}
+          onTouchTap={() => this.setState({ submitConfirmation: true })}
           disabled={submitting}
         />
       );
@@ -139,6 +137,21 @@ class SubmissionEditForm extends Component {
     return null;
   }
 
+  renderSubmitDialog() {
+    const { submitConfirmation } = this.state;
+    const { handleSubmit } = this.props;
+    return (
+      <SubmitDialog
+        open={submitConfirmation}
+        onCancel={() => this.setState({ submitConfirmation: false })}
+        onConfirm={() => {
+          this.setState({ submitConfirmation: false });
+          handleSubmit();
+        }}
+      />
+    );
+  }
+
   renderUnsubmitDialog() {
     const { unsubmitConfirmation } = this.state;
     const { handleUnsubmit } = this.props;
@@ -163,6 +176,7 @@ class SubmissionEditForm extends Component {
         {this.renderSubmitButton()}
         {this.renderUnsubmitButton()}
         {this.renderPublishButton()}
+        {this.renderSubmitDialog()}
         {this.renderUnsubmitDialog()}
       </Card>
     );
