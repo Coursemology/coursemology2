@@ -15,7 +15,8 @@ import GradingPanel from '../../containers/GradingPanel';
 import Comments from '../../containers/Comments';
 import SubmitDialog from '../../components/SubmitDialog';
 import UnsubmitDialog from '../../components/UnsubmitDialog';
-import { SAVE_STATES } from '../../constants';
+import ResetDialog from '../../components/ResetDialog';
+import { SAVE_STATES, questionTypes } from '../../constants';
 
 const styles = {
   questionContainer: {
@@ -53,6 +54,7 @@ class SubmissionEditStepForm extends Component {
       stepIndex: props.maxStep,
       submitConfirmation: false,
       unsubmitConfirmation: false,
+      resetConfirmation: false,
     };
   }
 
@@ -139,6 +141,26 @@ class SubmissionEditStepForm extends Component {
             {explanation.explanations.map(exp => <div dangerouslySetInnerHTML={{ __html: exp }} />)}
           </CardText>
         </Card>
+      );
+    }
+    return null;
+  }
+
+  renderResetButton() {
+    const { stepIndex } = this.state;
+    const { questionIds, questions } = this.props;
+    const id = questionIds[stepIndex];
+    const question = questions[id];
+    const { answerId } = question;
+
+    if (question.type === questionTypes.Programming) {
+      return (
+        <RaisedButton
+          style={styles.formButton}
+          backgroundColor={white}
+          label="Reset Answer"
+          onTouchTap={() => this.setState({ resetConfirmation: true, resetAnswerId: answerId })}
+        />
       );
     }
     return null;
@@ -236,11 +258,12 @@ class SubmissionEditStepForm extends Component {
         {this.renderQuestionGrading(id)}
         {this.renderGradingPanel()}
         <div style={styles.formButtonContainer}>
+          {this.renderResetButton(answerId)}
           {this.renderSubmitButton(answerId)}
           {this.renderContinueButton()}
-          {this.renderSaveDraftButton()}
         </div>
         <div style={styles.formButtonContainer}>
+          {this.renderSaveDraftButton()}
           {this.renderFinaliseSubmitButton()}
           {this.renderUnsubmitButton()}
         </div>
@@ -305,6 +328,21 @@ class SubmissionEditStepForm extends Component {
     );
   }
 
+  renderResetDialog() {
+    const { resetConfirmation, resetAnswerId } = this.state;
+    const { handleReset } = this.props;
+    return (
+      <ResetDialog
+        open={resetConfirmation}
+        onCancel={() => this.setState({ resetConfirmation: false, resetAnswerId: null })}
+        onConfirm={() => {
+          this.setState({ resetConfirmation: false, resetAnswerId: null });
+          handleReset(resetAnswerId);
+        }}
+      />
+    );
+  }
+
   render() {
     return (
       <div style={styles.questionContainer}>
@@ -314,6 +352,7 @@ class SubmissionEditStepForm extends Component {
         </Card>
         {this.renderSubmitDialog()}
         {this.renderUnsubmitDialog()}
+        {this.renderResetDialog()}
       </div>
     );
   }
@@ -336,6 +375,7 @@ SubmissionEditStepForm.propTypes = {
   handleUnsubmit: PropTypes.func,
   handleSaveDraft: PropTypes.func,
   handleAutograde: PropTypes.func,
+  handleReset: PropTypes.func,
 };
 
 export default reduxForm({

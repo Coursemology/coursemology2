@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { Card } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
-import { red900 } from 'material-ui/styles/colors';
+import { red900, white } from 'material-ui/styles/colors';
 
 import { QuestionProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
@@ -12,6 +12,8 @@ import GradingPanel from '../../containers/GradingPanel';
 import Comments from '../../containers/Comments';
 import SubmitDialog from '../../components/SubmitDialog';
 import UnsubmitDialog from '../../components/UnsubmitDialog';
+import ResetDialog from '../../components/ResetDialog';
+import { questionTypes } from '../../constants';
 
 const styles = {
   questionCardContainer: {
@@ -33,6 +35,8 @@ class SubmissionEditForm extends Component {
     this.state = {
       submitConfirmation: false,
       unsubmitConfirmation: false,
+      resetConfirmation: false,
+      resetAnswerId: null,
     };
   }
 
@@ -40,6 +44,37 @@ class SubmissionEditForm extends Component {
     const { submitted } = this.props;
     if (submitted) {
       return <QuestionGrade id={id} />;
+    }
+    return null;
+  }
+
+  renderProgrammingQuestionActions(id) {
+    const { submitted, questions, handleAutograde } = this.props;
+    const question = questions[id];
+    const { answerId } = question;
+
+    if (submitted) {
+      return null;
+    }
+
+    if (question.type === questionTypes.Programming) {
+      return (
+        <div>
+          <RaisedButton
+            style={styles.formButton}
+            backgroundColor={white}
+            label="Reset Answer"
+            onTouchTap={() => this.setState({ resetConfirmation: true, resetAnswerId: answerId })}
+          />
+          <RaisedButton
+            style={styles.formButton}
+            backgroundColor={red900}
+            secondary
+            label="Submit"
+            onTouchTap={() => handleAutograde(answerId)}
+          />
+        </div>
+      );
     }
     return null;
   }
@@ -56,6 +91,7 @@ class SubmissionEditForm extends Component {
             <div key={id} style={styles.questionContainer}>
               <SubmissionAnswer {...{ canGrade, readOnly: submitted, answerId, question }} />
               {this.renderQuestionGrading(id)}
+              {this.renderProgrammingQuestionActions(id)}
               <Comments topic={topic} />
               <hr />
             </div>
@@ -167,6 +203,21 @@ class SubmissionEditForm extends Component {
     );
   }
 
+  renderResetDialog() {
+    const { resetConfirmation, resetAnswerId } = this.state;
+    const { handleReset } = this.props;
+    return (
+      <ResetDialog
+        open={resetConfirmation}
+        onCancel={() => this.setState({ resetConfirmation: false, resetAnswerId: null })}
+        onConfirm={() => {
+          this.setState({ resetConfirmation: false, resetAnswerId: null });
+          handleReset(resetAnswerId);
+        }}
+      />
+    );
+  }
+
   renderUnsubmitDialog() {
     const { unsubmitConfirmation } = this.state;
     const { handleUnsubmit } = this.props;
@@ -194,6 +245,7 @@ class SubmissionEditForm extends Component {
         {this.renderPublishButton()}
         {this.renderSubmitDialog()}
         {this.renderUnsubmitDialog()}
+        {this.renderResetDialog()}
       </Card>
     );
   }
@@ -211,6 +263,8 @@ SubmissionEditForm.propTypes = {
   handleSaveDraft: PropTypes.func,
   handleSubmit: PropTypes.func,
   handleUnsubmit: PropTypes.func,
+  handleAutograde: PropTypes.func,
+  handleReset: PropTypes.func,
   handleSaveGrade: PropTypes.func,
   handleMark: PropTypes.func,
   handlePublish: PropTypes.func,

@@ -18,7 +18,8 @@ export default function (state = {}, action) {
           })
         , {}),
       };
-    case actions.AUTOGRADE_SUCCESS: {
+    case actions.AUTOGRADE_SUCCESS:
+    case actions.RESET_SUCCESS: {
       const { questionId, fields: { id } } = action.payload;
       return Object.keys(state).reduce((obj, key) => {
         if (state[key].questionId !== questionId) {

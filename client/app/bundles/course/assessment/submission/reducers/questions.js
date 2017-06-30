@@ -14,7 +14,8 @@ export default function (state = {}, action) {
         ...state,
         ...arrayToObjectById(action.payload.questions),
       };
-    case actions.AUTOGRADE_SUCCESS: {
+    case actions.AUTOGRADE_SUCCESS:
+    case actions.RESET_SUCCESS: {
       const { questionId } = action.payload;
       return {
         ...state,

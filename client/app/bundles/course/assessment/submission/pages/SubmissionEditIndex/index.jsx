@@ -8,7 +8,7 @@ import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEditTabForm from './SubmissionEditTabForm';
 import {
   fetchSubmission, saveDraft, submit,
-  unsubmit, autograde, saveGrade, mark, publish,
+  unsubmit, autograde, reset, saveGrade, mark, publish,
 } from '../../actions';
 import {
   AnswerProp, AssessmentProp, ExplanationProp, GradingProp, PostProp, QuestionProp,
@@ -58,6 +58,10 @@ class VisibleSubmissionEditIndex extends Component {
   handleSaveGrade() {
     const { match: { params }, grading, saveAnswerGrade } = this.props;
     saveAnswerGrade(params.submissionId, Object.values(grading));
+
+  handleReset(answerId) {
+    const { match: { params }, resetAnswer } = this.props;
+    resetAnswer(params.submissionId, answerId);
   }
 
   handleMark() {
@@ -94,10 +98,11 @@ class VisibleSubmissionEditIndex extends Component {
       return (
         <SubmissionEditStepForm
           enableReinitialize
+          handleSaveDraft={() => this.handleSaveDraft()}
           handleSubmit={() => this.handleSubmit()}
           handleUnsubmit={() => this.handleUnsubmit()}
-          handleSaveDraft={() => this.handleSaveDraft()}
           handleAutograde={answerId => this.handleAutograde(answerId)}
+          handleReset={answerId => this.handleReset(answerId)}
           initialValues={answers}
           explanations={explanations}
           allCorrect={this.allCorrect()}
@@ -120,6 +125,8 @@ class VisibleSubmissionEditIndex extends Component {
           handleSubmit={() => this.handleSubmit()}
           handleUnsubmit={() => this.handleUnsubmit()}
           handleSaveGrade={() => this.handleSaveGrade()}
+          handleAutograde={answerId => this.handleAutograde(answerId)}
+          handleReset={answerId => this.handleReset(answerId)}
           handleMark={() => this.handleMark()}
           handlePublish={() => this.handlePublish()}
           initialValues={answers}
@@ -140,6 +147,8 @@ class VisibleSubmissionEditIndex extends Component {
         handleSubmit={() => this.handleSubmit()}
         handleUnsubmit={() => this.handleUnsubmit()}
         handleSaveGrade={() => this.handleSaveGrade()}
+        handleAutograde={answerId => this.handleAutograde(answerId)}
+        handleReset={answerId => this.handleReset(answerId)}
         handleMark={() => this.handleMark()}
         handlePublish={() => this.handlePublish()}
         initialValues={answers}
@@ -196,6 +205,7 @@ VisibleSubmissionEditIndex.propTypes = {
   saveDraftAnswer: PropTypes.func.isRequired,
   autogradeAnswer: PropTypes.func.isRequired,
   saveAnswerGrade: PropTypes.func.isRequired,
+  resetAnswer: PropTypes.func.isRequired,
   markAnswer: PropTypes.func.isRequired,
   publishAnswer: PropTypes.func.isRequired,
 };
@@ -225,6 +235,7 @@ function mapDispatchToProps(dispatch) {
     saveDraftAnswer: (id, answers) => dispatch(saveDraft(id, answers)),
     autogradeAnswer: (id, answers) => dispatch(autograde(id, answers)),
     saveAnswerGrade: (id, grades) => dispatch(saveGrade(id, grades)),
+    resetAnswer: (id, answerId) => dispatch(reset(id, answerId)),
     markAnswer: (id, grades) => dispatch(mark(id, grades)),
     publishAnswer: (id, grades) => dispatch(publish(id, grades)),
   };

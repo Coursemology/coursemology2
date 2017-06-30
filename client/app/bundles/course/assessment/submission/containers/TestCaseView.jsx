@@ -17,6 +17,9 @@ const styles = {
     correct: { backgroundColor: green100 },
     wrong: { backgroundColor: red100 },
   },
+  testCasesContainer: {
+    marginBottom: 20,
+  },
 };
 
 class VisibleTestCaseView extends Component {
@@ -102,7 +105,7 @@ class VisibleTestCaseView extends Component {
     }
 
     return (
-      <div>
+      <div style={styles.testCasesContainer}>
         <h3>Test Cases</h3>
         {VisibleTestCaseView.renderTestCases(
           testCases.public_test,

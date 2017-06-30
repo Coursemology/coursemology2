@@ -124,6 +124,23 @@ export function autograde(submissionId, answers) {
   };
 }
 
+export function reset(submissionId, answerId) {
+  const payload = { answer_id: answerId, reset_answer: true };
+  return (dispatch) => {
+    dispatch({ type: actionTypes.RESET_REQUEST });
+
+    return CourseAPI.assessment.submissions.reloadAnswer(submissionId, payload)
+      .then(response => response.data)
+      .then((data) => {
+        dispatch({
+          type: actionTypes.RESET_SUCCESS,
+          payload: data,
+        });
+      })
+      .catch(() => dispatch({ type: actionTypes.RESET_FAILURE }));
+  };
+}
+
 export function saveGrade(submissionId, grades) {
   const payload = { submission: { answers: grades } };
   return (dispatch) => {

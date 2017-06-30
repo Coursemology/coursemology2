@@ -15,7 +15,8 @@ export default function (state = {}, action) {
           ({ ...obj, [answer.questionId]: answer.explanation })
         , {}),
       };
-    case actions.AUTOGRADE_SUCCESS: {
+    case actions.AUTOGRADE_SUCCESS:
+    case actions.RESET_SUCCESS: {
       const { questionId } = action.payload;
       return Object.keys(state).reduce((obj, key) => {
         if (key !== questionId.toString()) {

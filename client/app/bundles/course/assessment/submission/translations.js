@@ -9,6 +9,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.unsubmitConfirmation',
     defaultMessage: 'This will reset the submission time and permit the student to change his submission. NOTE THAT YOU CANNOT UNDO THIS!! Are you sure you want to proceed?',
   },
+  resetConfirmation: {
+    id: 'course.assessment.submission.resetConfirmation',
+    defaultMessage: 'Are you sure you want to reset your answer? This action is irreversible and you will lose all your current work for this question.',
+  },
 });
 
 export default translations;

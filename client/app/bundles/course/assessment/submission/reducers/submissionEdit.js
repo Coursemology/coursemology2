@@ -46,6 +46,7 @@ export default function (state = initialState, action) {
         saveState: SAVE_STATES.Saved,
       };
     case actions.AUTOGRADE_SUCCESS:
+    case actions.RESET_SUCCESS:
       return {
         ...state,
         saveState: SAVE_STATES.Saved,
