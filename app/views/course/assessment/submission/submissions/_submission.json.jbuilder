@@ -25,7 +25,7 @@ json.submission do
     # Display the published time first, else show the graded time if available.
     # For showing timestamps from delayed grade publication.
     json.gradedAt submission.published_at || submission.graded_at
-    json.grader display_user(submission.publisher)
+    json.grader display_user(submission.publisher) if apparent_workflow_state == 'published'
     json.grade submission.grade.to_f
     json.maximumGrade assessment.maximum_grade.to_f
   end

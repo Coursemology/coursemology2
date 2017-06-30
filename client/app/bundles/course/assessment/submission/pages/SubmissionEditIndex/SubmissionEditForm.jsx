@@ -89,6 +89,21 @@ class SubmissionEditForm extends Component {
     return null;
   }
 
+  renderSaveGradeButton() {
+    const { canGrade, submitted, handleSaveGrade } = this.props;
+    if (canGrade && submitted) {
+      return (
+        <RaisedButton
+          style={styles.formButton}
+          primary
+          label="Save"
+          onTouchTap={handleSaveGrade}
+        />
+      );
+    }
+    return null;
+  }
+
   renderSubmitButton() {
     const { submitting, submitted } = this.props;
     if (!submitted) {
@@ -122,8 +137,8 @@ class SubmissionEditForm extends Component {
   }
 
   renderPublishButton() {
-    const { canGrade, submitted, handlePublish } = this.props;
-    if (canGrade && submitted) {
+    const { delayedGradePublication, canGrade, submitted, handlePublish } = this.props;
+    if (!delayedGradePublication && canGrade && submitted) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -173,6 +188,7 @@ class SubmissionEditForm extends Component {
         <form>{this.renderQuestions()}</form>
         {this.renderGradingPanel()}
         {this.renderSaveDraftButton()}
+        {this.renderSaveGradeButton()}
         {this.renderSubmitButton()}
         {this.renderUnsubmitButton()}
         {this.renderPublishButton()}
@@ -191,9 +207,11 @@ SubmissionEditForm.propTypes = {
   topics: PropTypes.objectOf(TopicProp),
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
+  delayedGradePublication: PropTypes.bool.isRequired,
   handleSaveDraft: PropTypes.func,
   handleSubmit: PropTypes.func,
   handleUnsubmit: PropTypes.func,
+  handleSaveGrade: PropTypes.func,
   handleMark: PropTypes.func,
   handlePublish: PropTypes.func,
 };

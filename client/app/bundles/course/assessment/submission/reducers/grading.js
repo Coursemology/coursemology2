@@ -11,6 +11,7 @@ export default function (state = initialState, action) {
     case actions.SAVE_DRAFT_SUCCESS:
     case actions.SUBMISSION_SUCCESS:
     case actions.UNSUBMIT_SUCCESS:
+    case actions.SAVE_GRADE_SUCCESS:
     case actions.MARK_SUCCESS:
     case actions.PUBLISH_SUCCESS: {
       return {

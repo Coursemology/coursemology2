@@ -8,7 +8,7 @@ import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEditTabForm from './SubmissionEditTabForm';
 import {
   fetchSubmission, saveDraft, submit,
-  unsubmit, autograde, mark, publish,
+  unsubmit, autograde, saveGrade, mark, publish,
 } from '../../actions';
 import {
   AnswerProp, AssessmentProp, ExplanationProp, GradingProp, PostProp, QuestionProp,
@@ -55,6 +55,11 @@ class VisibleSubmissionEditIndex extends Component {
     autogradeAnswer(params.submissionId, answers);
   }
 
+  handleSaveGrade() {
+    const { match: { params }, grading, saveAnswerGrade } = this.props;
+    saveAnswerGrade(params.submissionId, Object.values(grading));
+  }
+
   handleMark() {
     const { match: { params }, grading, markAnswer } = this.props;
     markAnswer(params.submissionId, Object.values(grading));
@@ -75,7 +80,7 @@ class VisibleSubmissionEditIndex extends Component {
 
   renderContent() {
     const {
-      assessment: { autograded, tabbedView, skippable, questionIds },
+      assessment: { autograded, delayedGradePublication, tabbedView, skippable, questionIds },
       submission: { canGrade, maxStep, submittedAt },
       answers,
       explanations,
@@ -114,6 +119,7 @@ class VisibleSubmissionEditIndex extends Component {
           handleSaveDraft={() => this.handleSaveDraft()}
           handleSubmit={() => this.handleSubmit()}
           handleUnsubmit={() => this.handleUnsubmit()}
+          handleSaveGrade={() => this.handleSaveGrade()}
           handleMark={() => this.handleMark()}
           handlePublish={() => this.handlePublish()}
           initialValues={answers}
@@ -123,6 +129,7 @@ class VisibleSubmissionEditIndex extends Component {
           questionIds={questionIds}
           questions={questions}
           topics={topics}
+          delayedGradePublication={delayedGradePublication}
         />
       );
     }
@@ -132,6 +139,7 @@ class VisibleSubmissionEditIndex extends Component {
         handleSaveDraft={() => this.handleSaveDraft()}
         handleSubmit={() => this.handleSubmit()}
         handleUnsubmit={() => this.handleUnsubmit()}
+        handleSaveGrade={() => this.handleSaveGrade()}
         handleMark={() => this.handleMark()}
         handlePublish={() => this.handlePublish()}
         initialValues={answers}
@@ -141,6 +149,7 @@ class VisibleSubmissionEditIndex extends Component {
         questionIds={questionIds}
         questions={questions}
         topics={topics}
+        delayedGradePublication={delayedGradePublication}
       />
     );
   }
@@ -186,6 +195,7 @@ VisibleSubmissionEditIndex.propTypes = {
   unsubmitAnswer: PropTypes.func.isRequired,
   saveDraftAnswer: PropTypes.func.isRequired,
   autogradeAnswer: PropTypes.func.isRequired,
+  saveAnswerGrade: PropTypes.func.isRequired,
   markAnswer: PropTypes.func.isRequired,
   publishAnswer: PropTypes.func.isRequired,
 };
@@ -214,6 +224,7 @@ function mapDispatchToProps(dispatch) {
     unsubmitAnswer: id => dispatch(unsubmit(id)),
     saveDraftAnswer: (id, answers) => dispatch(saveDraft(id, answers)),
     autogradeAnswer: (id, answers) => dispatch(autograde(id, answers)),
+    saveAnswerGrade: (id, grades) => dispatch(saveGrade(id, grades)),
     markAnswer: (id, grades) => dispatch(mark(id, grades)),
     publishAnswer: (id, grades) => dispatch(publish(id, grades)),
   };

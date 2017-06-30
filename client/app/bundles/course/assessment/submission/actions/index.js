@@ -124,8 +124,25 @@ export function autograde(submissionId, answers) {
   };
 }
 
-export function mark(submissionId, answers) {
-  const payload = { submission: { answers, mark: true } };
+export function saveGrade(submissionId, grades) {
+  const payload = { submission: { answers: grades } };
+  return (dispatch) => {
+    dispatch({ type: actionTypes.SAVE_GRADE_REQUEST });
+
+    return CourseAPI.assessment.submissions.update(submissionId, payload)
+      .then(response => response.data)
+      .then((data) => {
+        dispatch({
+          type: actionTypes.SAVE_GRADE_SUCCESS,
+          payload: data,
+        });
+      })
+      .catch(() => dispatch({ type: actionTypes.SAVE_GRADE_FAILURE }));
+  };
+}
+
+export function mark(submissionId, grades) {
+  const payload = { submission: { answers: grades, mark: true } };
   return (dispatch) => {
     dispatch({ type: actionTypes.MARK_REQUEST });
 
@@ -141,8 +158,8 @@ export function mark(submissionId, answers) {
   };
 }
 
-export function publish(submissionId, answers) {
-  const payload = { submission: { answers, publish: true } };
+export function publish(submissionId, grades) {
+  const payload = { submission: { answers: grades, publish: true } };
   return (dispatch) => {
     dispatch({ type: actionTypes.PUBLISH_REQUEST });
 
