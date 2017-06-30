@@ -58,6 +58,7 @@ class VisibleSubmissionEditIndex extends Component {
   handleSaveGrade() {
     const { match: { params }, grading, saveAnswerGrade } = this.props;
     saveAnswerGrade(params.submissionId, Object.values(grading));
+  }
 
   handleReset(answerId) {
     const { match: { params }, resetAnswer } = this.props;
