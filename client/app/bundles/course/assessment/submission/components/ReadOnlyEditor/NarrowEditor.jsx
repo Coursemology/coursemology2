@@ -17,11 +17,13 @@ const styles = {
     borderRadius: 5,
     padding: 5,
     width: '100%',
+    tableLayout: 'fixed',
   },
   editorLine: {
     height: 20,
     paddingLeft: 5,
     whiteSpace: 'nowrap',
+    overflow: 'visible',
   },
   editorLineNumber: {
     alignItems: 'center',
@@ -113,13 +115,15 @@ export default class NarrowEditor extends Component {
                 </div>
               )}
             </td>
-            <td>
+            <td style={{ overflow: 'scroll' }}>
               {content.map((line, index) => (
-                <div
-                  key={`${index}-${line}`}
-                  style={styles.editorLine}
-                  dangerouslySetInnerHTML={{ __html: line }}
-                />
+                <div key={`${index}-${line}`} style={styles.editorLine} >
+                  <pre style={{ overflow: 'visible' }}>
+                    <code
+                      dangerouslySetInnerHTML={{ __html: line }}
+                      style={{ whiteSpace: 'inherit' }}
+                    /></pre>
+                </div>
               ))}
             </td>
           </tr>

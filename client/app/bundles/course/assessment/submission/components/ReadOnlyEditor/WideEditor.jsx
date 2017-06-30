@@ -26,6 +26,7 @@ const styles = {
     padding: 5,
     width: '100%',
     overflow: 'hidden',
+    tableLayout: 'fixed',
   },
   editorLine: {
     height: 20,
@@ -84,13 +85,15 @@ export default class WideEditor extends Component {
                   </div>
                 )}
               </td>
-              <td>
+              <td style={{ overflow: 'scroll' }}>
                 {content.map((line, index) => (
-                  <div
-                    key={`${index}-${line}`}
-                    style={styles.editorLine}
-                    dangerouslySetInnerHTML={{ __html: line }}
-                  />
+                  <div key={`${index}-${line}`} style={styles.editorLine} >
+                    <pre style={{ overflow: 'visible' }}>
+                      <code
+                        dangerouslySetInnerHTML={{ __html: line }}
+                        style={{ whiteSpace: 'inherit' }}
+                      /></pre>
+                  </div>
                 ))}
               </td>
             </tr>
