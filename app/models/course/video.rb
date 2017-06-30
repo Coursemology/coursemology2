@@ -37,4 +37,8 @@ class Course::Video < ActiveRecord::Base
   def to_partial_path
     'course/video/videos/video'.freeze
   end
+
+  def initialize_duplicate(duplicator, other)
+    copy_attributes(other, duplicator.time_shift)
+  end
 end
