@@ -17,7 +17,7 @@ import 'brace/mode/c_cpp';
 import 'brace/theme/monokai';
 
 import styles from './OnlineEditorCppView.scss';
-import translations from './OnlineEditorCppView.intl';
+import translations from './OnlineEditorView.intl';
 
 const MAX_TEST_CASES = 99;
 

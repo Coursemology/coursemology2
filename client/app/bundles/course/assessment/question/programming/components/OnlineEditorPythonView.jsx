@@ -18,7 +18,7 @@ import 'brace/mode/python';
 import 'brace/theme/monokai';
 
 import styles from './OnlineEditorPythonView.scss';
-import translations from './OnlineEditorPythonView.intl';
+import translations from './OnlineEditorView.intl';
 
 const MAX_TEST_CASES = 99;
 
