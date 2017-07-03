@@ -17,7 +17,7 @@ import { grey100, grey300, white } from 'material-ui/styles/colors';
 import 'brace/mode/python';
 import 'brace/theme/monokai';
 
-import styles from './OnlineEditorPythonView.scss';
+import styles from './OnlineEditorView.scss';
 import translations from './OnlineEditorView.intl';
 
 const MAX_TEST_CASES = 99;
