@@ -29,9 +29,9 @@ const propTypes = {
     createCppTestCase: PropTypes.func.isRequired,
     updateCppTestCase: PropTypes.func.isRequired,
     deleteCppTestCase: PropTypes.func.isRequired,
-    updateCppNewDataFile: PropTypes.func.isRequired,
-    deleteCppNewDataFile: PropTypes.func.isRequired,
-    deleteCppExistingDataFile: PropTypes.func.isRequired,
+    updateNewDataFile: PropTypes.func.isRequired,
+    deleteNewDataFile: PropTypes.func.isRequired,
+    deleteExistingDataFile: PropTypes.func.isRequired,
   }),
   isLoading: PropTypes.bool.isRequired,
   autograded: PropTypes.bool.isRequired,
@@ -105,7 +105,7 @@ class OnlineEditorCppView extends React.Component {
     return (e) => {
       const files = e.target.files;
       const filename = files.length === 0 ? null : files[0].name;
-      this.props.actions.updateCppNewDataFile(filename, index);
+      this.props.actions.updateNewDataFile(filename, index);
     };
   }
 
@@ -162,7 +162,7 @@ class OnlineEditorCppView extends React.Component {
               backgroundColor={buttonColor}
               icon={<i className={buttonClass} />}
               disabled={this.props.isLoading}
-              onClick={() => { this.props.actions.deleteCppExistingDataFile(filename, !toDelete); }}
+              onClick={() => { this.props.actions.deleteExistingDataFile(filename, !toDelete); }}
               style={{ minWidth: '40px', width: '40px' }}
             />
             <input
@@ -222,7 +222,7 @@ class OnlineEditorCppView extends React.Component {
             backgroundColor={grey300}
             icon={<i className="fa fa-trash" />}
             disabled={this.props.isLoading}
-            onClick={() => { this.props.actions.deleteCppNewDataFile(index); }}
+            onClick={() => { this.props.actions.deleteNewDataFile(index); }}
             style={{ minWidth: '40px', width: '40px' }}
           />
         );

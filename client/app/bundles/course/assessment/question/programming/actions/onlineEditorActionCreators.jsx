@@ -33,29 +33,6 @@ export function deletePythonTestCase(testType, index) {
   };
 }
 
-export function updatePythonNewDataFile(filename, index) {
-  return {
-    type: actionTypes.PYTHON_NEW_DATA_FILE_UPDATE,
-    index,
-    filename,
-  };
-}
-
-export function deletePythonNewDataFile(index) {
-  return {
-    type: actionTypes.PYTHON_NEW_DATA_FILE_DELETE,
-    index,
-  };
-}
-
-export function deletePythonExistingDataFile(filename, toDelete) {
-  return {
-    type: actionTypes.PYTHON_EXISTING_DATA_FILE_DELETE,
-    filename,
-    toDelete,
-  };
-}
-
 export function updateCppCodeBlock(field, newValue) {
   return {
     type: actionTypes.CPP_CODE_BLOCK_UPDATE,
@@ -89,24 +66,24 @@ export function deleteCppTestCase(testType, index) {
   };
 }
 
-export function updateCppNewDataFile(filename, index) {
+export function updateNewDataFile(filename, index) {
   return {
-    type: actionTypes.CPP_NEW_DATA_FILE_UPDATE,
+    type: actionTypes.NEW_DATA_FILE_UPDATE,
     index,
     filename,
   };
 }
 
-export function deleteCppNewDataFile(index) {
+export function deleteNewDataFile(index) {
   return {
-    type: actionTypes.CPP_NEW_DATA_FILE_DELETE,
+    type: actionTypes.NEW_DATA_FILE_DELETE,
     index,
   };
 }
 
-export function deleteCppExistingDataFile(filename, toDelete) {
+export function deleteExistingDataFile(filename, toDelete) {
   return {
-    type: actionTypes.CPP_EXISTING_DATA_FILE_DELETE,
+    type: actionTypes.EXISTING_DATA_FILE_DELETE,
     filename,
     toDelete,
   };

@@ -156,8 +156,7 @@ function dataFilesReducer(state, action) {
   const { type } = action;
 
   switch (type) {
-    case editorActionTypes.CPP_NEW_DATA_FILE_UPDATE:
-    case editorActionTypes.PYTHON_NEW_DATA_FILE_UPDATE: {
+    case editorActionTypes.NEW_DATA_FILE_UPDATE: {
       const { index, filename } = action;
       let newFiles = state.get('new')
         .update(index, fileData => Immutable.fromJS({ key: fileData.get('key'), filename }));
@@ -171,13 +170,11 @@ function dataFilesReducer(state, action) {
 
       return state.set('new', newFiles);
     }
-    case editorActionTypes.CPP_NEW_DATA_FILE_DELETE:
-    case editorActionTypes.PYTHON_NEW_DATA_FILE_DELETE: {
+    case editorActionTypes.NEW_DATA_FILE_DELETE: {
       const { index } = action;
       return state.set('new', state.get('new').delete(index));
     }
-    case editorActionTypes.CPP_EXISTING_DATA_FILE_DELETE:
-    case editorActionTypes.PYTHON_EXISTING_DATA_FILE_DELETE: {
+    case editorActionTypes.EXISTING_DATA_FILE_DELETE: {
       const { filename, toDelete } = action;
       const currentFilesToDelete = state.get('to_delete');
 
@@ -300,12 +297,9 @@ export default function programmingQuestionReducer(state = initialState, action)
       const pythonTest = state.get('test_ui').get('python');
       return state.setIn(['test_ui', 'python'], TestReducer(pythonTest, action));
     }
-    case editorActionTypes.CPP_NEW_DATA_FILE_UPDATE:
-    case editorActionTypes.CPP_NEW_DATA_FILE_DELETE:
-    case editorActionTypes.CPP_EXISTING_DATA_FILE_DELETE:
-    case editorActionTypes.PYTHON_NEW_DATA_FILE_UPDATE:
-    case editorActionTypes.PYTHON_NEW_DATA_FILE_DELETE:
-    case editorActionTypes.PYTHON_EXISTING_DATA_FILE_DELETE: {
+    case editorActionTypes.NEW_DATA_FILE_UPDATE:
+    case editorActionTypes.NEW_DATA_FILE_DELETE:
+    case editorActionTypes.EXISTING_DATA_FILE_DELETE: {
       const dataFiles = state.get('test_ui').get('data_files');
       return state.setIn(['test_ui', 'data_files'], dataFilesReducer(dataFiles, action));
     }

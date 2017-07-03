@@ -30,9 +30,9 @@ const propTypes = {
     createPythonTestCase: PropTypes.func.isRequired,
     updatePythonTestCase: PropTypes.func.isRequired,
     deletePythonTestCase: PropTypes.func.isRequired,
-    updatePythonNewDataFile: PropTypes.func.isRequired,
-    deletePythonNewDataFile: PropTypes.func.isRequired,
-    deletePythonExistingDataFile: PropTypes.func.isRequired,
+    updateNewDataFile: PropTypes.func.isRequired,
+    deleteNewDataFile: PropTypes.func.isRequired,
+    deleteExistingDataFile: PropTypes.func.isRequired,
   }),
   isLoading: PropTypes.bool.isRequired,
   autograded: PropTypes.bool.isRequired,
@@ -107,7 +107,7 @@ class OnlineEditorPythonView extends React.Component {
     return (e) => {
       const files = e.target.files;
       const filename = files.length === 0 ? null : files[0].name;
-      this.props.actions.updatePythonNewDataFile(filename, index);
+      this.props.actions.updateNewDataFile(filename, index);
     };
   }
 
@@ -164,7 +164,7 @@ class OnlineEditorPythonView extends React.Component {
               backgroundColor={buttonColor}
               icon={<i className={buttonClass} />}
               disabled={this.props.isLoading}
-              onClick={() => { this.props.actions.deletePythonExistingDataFile(filename, !toDelete); }}
+              onClick={() => { this.props.actions.deleteExistingDataFile(filename, !toDelete); }}
               style={{ minWidth: '40px', width: '40px' }}
             />
             <input
@@ -224,7 +224,7 @@ class OnlineEditorPythonView extends React.Component {
             backgroundColor={grey300}
             icon={<i className="fa fa-trash" />}
             disabled={this.props.isLoading}
-            onClick={() => { this.props.actions.deletePythonNewDataFile(index); }}
+            onClick={() => { this.props.actions.deleteNewDataFile(index); }}
             style={{ minWidth: '40px', width: '40px' }}
           />
         );
