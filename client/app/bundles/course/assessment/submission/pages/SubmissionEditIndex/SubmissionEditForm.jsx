@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { Card } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
-import { red900, white } from 'material-ui/styles/colors';
+import { red900, yellow900, white } from 'material-ui/styles/colors';
 
 import { QuestionProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
@@ -41,19 +41,19 @@ class SubmissionEditForm extends Component {
   }
 
   renderQuestionGrading(id) {
-    const { submitted } = this.props;
-    if (submitted) {
+    const { attempting } = this.props;
+    if (!attempting) {
       return <QuestionGrade id={id} />;
     }
     return null;
   }
 
   renderProgrammingQuestionActions(id) {
-    const { submitted, questions, handleAutograde } = this.props;
+    const { attempting, questions, handleAutograde } = this.props;
     const question = questions[id];
     const { answerId } = question;
 
-    if (submitted) {
+    if (!attempting) {
       return null;
     }
 
@@ -80,7 +80,7 @@ class SubmissionEditForm extends Component {
   }
 
   renderQuestions() {
-    const { canGrade, submitted, questionIds, questions, topics } = this.props;
+    const { canGrade, attempting, questionIds, questions, topics } = this.props;
     return (
       <div>
         {questionIds.map((id) => {
@@ -89,7 +89,7 @@ class SubmissionEditForm extends Component {
           const topic = topics[topicId];
           return (
             <div key={id} style={styles.questionContainer}>
-              <SubmissionAnswer {...{ canGrade, readOnly: submitted, answerId, question }} />
+              <SubmissionAnswer {...{ canGrade, readOnly: !attempting, answerId, question }} />
               {this.renderQuestionGrading(id)}
               {this.renderProgrammingQuestionActions(id)}
               <Comments topic={topic} />
@@ -102,16 +102,16 @@ class SubmissionEditForm extends Component {
   }
 
   renderGradingPanel() {
-    const { submitted } = this.props;
-    if (submitted) {
+    const { attempting } = this.props;
+    if (!attempting) {
       return <GradingPanel />;
     }
     return null;
   }
 
   renderSaveDraftButton() {
-    const { pristine, submitting, submitted, handleSaveDraft } = this.props;
-    if (!submitted) {
+    const { pristine, submitting, attempting, handleSaveDraft } = this.props;
+    if (attempting) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -126,8 +126,8 @@ class SubmissionEditForm extends Component {
   }
 
   renderSaveGradeButton() {
-    const { canGrade, submitted, handleSaveGrade } = this.props;
-    if (canGrade && submitted) {
+    const { canGrade, attempting, handleSaveGrade } = this.props;
+    if (canGrade && !attempting) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -141,8 +141,8 @@ class SubmissionEditForm extends Component {
   }
 
   renderSubmitButton() {
-    const { submitting, submitted } = this.props;
-    if (!submitted) {
+    const { canUpdate, submitting, attempting } = this.props;
+    if (attempting && canUpdate) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -157,8 +157,8 @@ class SubmissionEditForm extends Component {
   }
 
   renderUnsubmitButton() {
-    const { canGrade, submitted } = this.props;
-    if (canGrade && submitted) {
+    const { canGrade, submitted, published } = this.props;
+    if (canGrade && (submitted || published)) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -166,6 +166,38 @@ class SubmissionEditForm extends Component {
           secondary
           label="Unsubmit Submission"
           onTouchTap={() => this.setState({ unsubmitConfirmation: true })}
+        />
+      );
+    }
+    return null;
+  }
+
+  renderMarkButton() {
+    const { delayedGradePublication, canGrade, submitted, handleMark } = this.props;
+    if (delayedGradePublication && canGrade && submitted) {
+      return (
+        <RaisedButton
+          style={styles.formButton}
+          backgroundColor={yellow900}
+          labelColor={white}
+          label="Submit For Publishing"
+          onTouchTap={handleMark}
+        />
+      );
+    }
+    return null;
+  }
+
+  renderUnmarkButton() {
+    const { canGrade, graded, handleUnmark } = this.props;
+    if (canGrade && graded) {
+      return (
+        <RaisedButton
+          style={styles.formButton}
+          backgroundColor={yellow900}
+          labelColor={white}
+          label="Revert to Submitted"
+          onTouchTap={handleUnmark}
         />
       );
     }
@@ -238,11 +270,15 @@ class SubmissionEditForm extends Component {
       <Card style={styles.questionCardContainer}>
         <form>{this.renderQuestions()}</form>
         {this.renderGradingPanel()}
+
         {this.renderSaveDraftButton()}
         {this.renderSaveGradeButton()}
         {this.renderSubmitButton()}
         {this.renderUnsubmitButton()}
+        {this.renderMarkButton()}
+        {this.renderUnmarkButton()}
         {this.renderPublishButton()}
+
         {this.renderSubmitDialog()}
         {this.renderUnsubmitDialog()}
         {this.renderResetDialog()}
@@ -253,13 +289,20 @@ class SubmissionEditForm extends Component {
 
 SubmissionEditForm.propTypes = {
   canGrade: PropTypes.bool.isRequired,
+  canUpdate: PropTypes.bool.isRequired,
+
+  attempting: PropTypes.bool.isRequired,
   submitted: PropTypes.bool.isRequired,
+  graded: PropTypes.bool.isRequired,
+  published: PropTypes.bool.isRequired,
+
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(QuestionProp),
   topics: PropTypes.objectOf(TopicProp),
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
   delayedGradePublication: PropTypes.bool.isRequired,
+
   handleSaveDraft: PropTypes.func,
   handleSubmit: PropTypes.func,
   handleUnsubmit: PropTypes.func,
@@ -267,6 +310,7 @@ SubmissionEditForm.propTypes = {
   handleReset: PropTypes.func,
   handleSaveGrade: PropTypes.func,
   handleMark: PropTypes.func,
+  handleUnmark: PropTypes.func,
   handlePublish: PropTypes.func,
 };
 

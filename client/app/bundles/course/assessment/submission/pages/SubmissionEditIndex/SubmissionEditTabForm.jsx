@@ -4,7 +4,7 @@ import { reduxForm } from 'redux-form';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { Card } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
-import { red900, white } from 'material-ui/styles/colors';
+import { red900, yellow900, white } from 'material-ui/styles/colors';
 
 import { QuestionProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
@@ -107,8 +107,8 @@ class SubmissionEditTabForm extends Component {
   }
 
   renderSaveDraftButton() {
-    const { pristine, submitting, submitted, handleSaveDraft } = this.props;
-    if (!submitted) {
+    const { pristine, submitting, attempting, handleSaveDraft } = this.props;
+    if (attempting) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -123,8 +123,8 @@ class SubmissionEditTabForm extends Component {
   }
 
   renderSaveGradeButton() {
-    const { delayedGradePublication, submitted, handleSaveGrade } = this.props;
-    if (delayedGradePublication && submitted) {
+    const { canGrade, attempting, handleSaveGrade } = this.props;
+    if (canGrade && !attempting) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -138,8 +138,8 @@ class SubmissionEditTabForm extends Component {
   }
 
   renderSubmitButton() {
-    const { submitting, submitted } = this.props;
-    if (!submitted) {
+    const { canUpdate, submitting, attempting } = this.props;
+    if (attempting && canUpdate) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -154,8 +154,8 @@ class SubmissionEditTabForm extends Component {
   }
 
   renderUnsubmitButton() {
-    const { canGrade, submitted } = this.props;
-    if (canGrade && submitted) {
+    const { canGrade, submitted, published } = this.props;
+    if (canGrade && (submitted || published)) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -163,6 +163,38 @@ class SubmissionEditTabForm extends Component {
           secondary
           label="Unsubmit Submission"
           onTouchTap={() => this.setState({ unsubmitConfirmation: true })}
+        />
+      );
+    }
+    return null;
+  }
+
+  renderMarkButton() {
+    const { delayedGradePublication, canGrade, submitted, handleMark } = this.props;
+    if (delayedGradePublication && canGrade && submitted) {
+      return (
+        <RaisedButton
+          style={styles.formButton}
+          backgroundColor={yellow900}
+          labelColor={white}
+          label="Submit For Publishing"
+          onTouchTap={handleMark}
+        />
+      );
+    }
+    return null;
+  }
+
+  renderUnmarkButton() {
+    const { canGrade, graded, handleUnmark } = this.props;
+    if (canGrade && graded) {
+      return (
+        <RaisedButton
+          style={styles.formButton}
+          backgroundColor={yellow900}
+          labelColor={white}
+          label="Revert to Submitted"
+          onTouchTap={handleUnmark}
         />
       );
     }
@@ -236,11 +268,15 @@ class SubmissionEditTabForm extends Component {
         <form>{this.renderQuestions()}</form>
         <hr />
         {this.renderGradingPanel()}
+
         {this.renderSaveDraftButton()}
         {this.renderSaveGradeButton()}
         {this.renderSubmitButton()}
         {this.renderUnsubmitButton()}
+        {this.renderMarkButton()}
+        {this.renderUnmarkButton()}
         {this.renderPublishButton()}
+
         {this.renderSubmitDialog()}
         {this.renderUnsubmitDialog()}
         {this.renderResetDialog()}
@@ -251,13 +287,20 @@ class SubmissionEditTabForm extends Component {
 
 SubmissionEditTabForm.propTypes = {
   canGrade: PropTypes.bool.isRequired,
+  canUpdate: PropTypes.bool.isRequired,
+
+  attempting: PropTypes.bool.isRequired,
   submitted: PropTypes.bool.isRequired,
+  graded: PropTypes.bool.isRequired,
+  published: PropTypes.bool.isRequired,
+
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(QuestionProp),
   topics: PropTypes.objectOf(TopicProp),
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
   delayedGradePublication: PropTypes.bool.isReqruied,
+
   handleSaveDraft: PropTypes.func,
   handleSubmit: PropTypes.func,
   handleUnsubmit: PropTypes.func,
@@ -265,6 +308,7 @@ SubmissionEditTabForm.propTypes = {
   handleReset: PropTypes.func,
   handleSaveGrade: PropTypes.func,
   handleMark: PropTypes.func,
+  handleUnmark: PropTypes.func,
   handlePublish: PropTypes.func,
 };
 

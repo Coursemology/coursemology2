@@ -107,16 +107,16 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderQuestionGrading(id) {
-    const { submitted } = this.props;
-    if (submitted) {
+    const { attempting } = this.props;
+    if (!attempting) {
       return <QuestionGrade id={id} />;
     }
     return null;
   }
 
   renderGradingPanel() {
-    const { submitted } = this.props;
-    if (submitted) {
+    const { attempting } = this.props;
+    if (!attempting) {
       return <GradingPanel />;
     }
     return null;
@@ -167,14 +167,14 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderSubmitButton(answerId) {
-    const { submitting, submitted, handleAutograde } = this.props;
+    const { submitting, attempting, handleAutograde } = this.props;
     return (
       <RaisedButton
         style={styles.formButton}
         secondary
         label="Submit"
         onTouchTap={() => handleAutograde(answerId)}
-        disabled={submitting || submitted}
+        disabled={submitting || !attempting}
       />
     );
   }
@@ -196,8 +196,8 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderSaveDraftButton() {
-    const { pristine, submitting, submitted, handleSaveDraft } = this.props;
-    if (!submitted) {
+    const { pristine, submitting, attempting, handleSaveDraft } = this.props;
+    if (attempting) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -212,8 +212,8 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderFinaliseSubmitButton() {
-    const { submitting, submitted, allCorrect } = this.props;
-    if (!submitted && allCorrect) {
+    const { submitting, attempting, allCorrect } = this.props;
+    if (attempting && allCorrect) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -228,8 +228,8 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderUnsubmitButton() {
-    const { canGrade, submitted } = this.props;
-    if (canGrade && submitted) {
+    const { canGrade, attempting } = this.props;
+    if (canGrade && !attempting) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -245,7 +245,7 @@ class SubmissionEditStepForm extends Component {
 
   renderStepQuestion() {
     const { stepIndex } = this.state;
-    const { canGrade, submitted, questionIds, questions, topics } = this.props;
+    const { canGrade, attempting, questionIds, questions, topics } = this.props;
 
     const id = questionIds[stepIndex];
     const question = questions[id];
@@ -253,15 +253,15 @@ class SubmissionEditStepForm extends Component {
     const topic = topics[topicId];
     return (
       <div>
-        <SubmissionAnswer {...{ canGrade, readOnly: submitted, answerId, question }} />
+        <SubmissionAnswer {...{ canGrade, readOnly: !attempting, answerId, question }} />
         {this.renderExplanationPanel(id)}
         {this.renderQuestionGrading(id)}
         {this.renderGradingPanel()}
-        <div style={styles.formButtonContainer}>
+        {attempting ? <div style={styles.formButtonContainer}>
           {this.renderResetButton(answerId)}
           {this.renderSubmitButton(answerId)}
           {this.renderContinueButton()}
-        </div>
+        </div> : null}
         <div style={styles.formButtonContainer}>
           {this.renderSaveDraftButton()}
           {this.renderFinaliseSubmitButton()}
@@ -361,7 +361,10 @@ class SubmissionEditStepForm extends Component {
 SubmissionEditStepForm.propTypes = {
   canGrade: PropTypes.bool.isRequired,
   maxStep: PropTypes.number.isRequired,
+
+  attempting: PropTypes.bool.isRequired,
   submitted: PropTypes.bool.isRequired,
+
   pristine: PropTypes.bool,
   skippable: PropTypes.bool.isRequired,
   submitting: PropTypes.bool,
@@ -371,6 +374,7 @@ SubmissionEditStepForm.propTypes = {
   questions: PropTypes.objectOf(QuestionProp),
   topics: PropTypes.objectOf(TopicProp),
   saveState: PropTypes.string.isRequired,
+
   handleSubmit: PropTypes.func,
   handleUnsubmit: PropTypes.func,
   handleSaveDraft: PropTypes.func,

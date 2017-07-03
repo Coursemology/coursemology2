@@ -8,13 +8,13 @@ import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEditTabForm from './SubmissionEditTabForm';
 import {
   fetchSubmission, saveDraft, submit,
-  unsubmit, autograde, reset, saveGrade, mark, publish,
+  unsubmit, autograde, reset, saveGrade, mark, unmark, publish,
 } from '../../actions';
 import {
   AnswerProp, AssessmentProp, ExplanationProp, GradingProp, PostProp, QuestionProp,
   ReduxFormProp, SubmissionProp, TopicProp,
 } from '../../propTypes';
-import { DATA_STATES } from '../../constants';
+import { DATA_STATES, workflowStates } from '../../constants';
 
 class VisibleSubmissionEditIndex extends Component {
   componentDidMount() {
@@ -70,6 +70,11 @@ class VisibleSubmissionEditIndex extends Component {
     markAnswer(params.submissionId, Object.values(grading));
   }
 
+  handleUnmark() {
+    const { match: { params }, unmarkAnswer } = this.props;
+    unmarkAnswer(params.submissionId);
+  }
+
   handlePublish() {
     const { match: { params }, grading, publishAnswer } = this.props;
     publishAnswer(params.submissionId, Object.values(grading));
@@ -86,7 +91,7 @@ class VisibleSubmissionEditIndex extends Component {
   renderContent() {
     const {
       assessment: { autograded, delayedGradePublication, tabbedView, skippable, questionIds },
-      submission: { canGrade, maxStep, submittedAt },
+      submission: { canGrade, canUpdate, maxStep, workflowState },
       answers,
       explanations,
       posts,
@@ -108,7 +113,8 @@ class VisibleSubmissionEditIndex extends Component {
           explanations={explanations}
           allCorrect={this.allCorrect()}
           canGrade={canGrade}
-          submitted={!!submittedAt}
+          attempting={workflowState === workflowStates.Attempting}
+          submitted={workflowState === workflowStates.Submitted}
           maxStep={maxStep}
           skippable={skippable}
           posts={posts}
@@ -129,10 +135,15 @@ class VisibleSubmissionEditIndex extends Component {
           handleAutograde={answerId => this.handleAutograde(answerId)}
           handleReset={answerId => this.handleReset(answerId)}
           handleMark={() => this.handleMark()}
+          handleUnmark={() => this.handleUnmark()}
           handlePublish={() => this.handlePublish()}
           initialValues={answers}
           canGrade={canGrade}
-          submitted={!!submittedAt}
+          canUpdate={canUpdate}
+          attempting={workflowState === workflowStates.Attempting}
+          submitted={workflowState === workflowStates.Submitted}
+          graded={workflowState === workflowStates.Graded}
+          published={workflowState === workflowStates.Published}
           posts={posts}
           questionIds={questionIds}
           questions={questions}
@@ -151,10 +162,15 @@ class VisibleSubmissionEditIndex extends Component {
         handleAutograde={answerId => this.handleAutograde(answerId)}
         handleReset={answerId => this.handleReset(answerId)}
         handleMark={() => this.handleMark()}
+        handleUnmark={() => this.handleUnmark()}
         handlePublish={() => this.handlePublish()}
         initialValues={answers}
         canGrade={canGrade}
-        submitted={!!submittedAt}
+        canUpdate={canUpdate}
+        attempting={workflowState === workflowStates.Attempting}
+        submitted={workflowState === workflowStates.Submitted}
+        graded={workflowState === workflowStates.Graded}
+        published={workflowState === workflowStates.Published}
         posts={posts}
         questionIds={questionIds}
         questions={questions}
@@ -208,6 +224,7 @@ VisibleSubmissionEditIndex.propTypes = {
   saveAnswerGrade: PropTypes.func.isRequired,
   resetAnswer: PropTypes.func.isRequired,
   markAnswer: PropTypes.func.isRequired,
+  unmarkAnswer: PropTypes.func.isRequired,
   publishAnswer: PropTypes.func.isRequired,
 };
 
@@ -238,6 +255,7 @@ function mapDispatchToProps(dispatch) {
     saveAnswerGrade: (id, grades) => dispatch(saveGrade(id, grades)),
     resetAnswer: (id, answerId) => dispatch(reset(id, answerId)),
     markAnswer: (id, grades) => dispatch(mark(id, grades)),
+    unmarkAnswer: id => dispatch(unmark(id)),
     publishAnswer: (id, grades) => dispatch(publish(id, grades)),
   };
 }

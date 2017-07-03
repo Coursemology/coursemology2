@@ -27,8 +27,8 @@ json.submission do
     json.gradedAt submission.published_at || submission.graded_at
     json.grader display_user(submission.publisher) if apparent_workflow_state == 'published'
     json.grade submission.grade.to_f
-    json.maximumGrade assessment.maximum_grade.to_f
   end
+  json.maximumGrade assessment.maximum_grade.to_f
 
   json.late assessment.end_at && submission.submitted_at &&
     submission.submitted_at > assessment.end_at

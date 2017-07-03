@@ -22,6 +22,13 @@ export const questionTypes = mirrorCreator([
   'FileUpload',
 ]);
 
+export const workflowStates = {
+  Attempting: 'attempting',
+  Submitted: 'submitted',
+  Graded: 'graded',
+  Published: 'published',
+};
+
 export const TestCaseTypes = {
   Public: 'public_test',
   Private: 'private_test',
@@ -37,6 +44,7 @@ const actionTypes = mirrorCreator([
   'RESET_REQUEST', 'RESET_SUCCESS', 'RESET_FAILURE',
   'SAVE_GRADE_REQUEST', 'SAVE_GRADE_SUCCESS', 'SAVE_GRADE_FAILURE',
   'MARK_REQUEST', 'MARK_SUCCESS', 'MARK_FAILURE',
+  'UNMARK_REQUEST', 'UNMARK_SUCCESS', 'UNMARK_FAILURE',
   'PUBLISH_REQUEST', 'PUBLISH_SUCCESS', 'PUBLISH_FAILURE',
   'CREATE_COMMENT_REQUEST', 'CREATE_COMMENT_SUCCESS', 'CREATE_COMMENT_FAILURE', 'CREATE_COMMENT_CHANGE',
   'UPDATE_COMMENT_REQUEST', 'UPDATE_COMMENT_SUCCESS', 'UPDATE_COMMENT_FAILURE', 'UPDATE_COMMENT_CHANGE',

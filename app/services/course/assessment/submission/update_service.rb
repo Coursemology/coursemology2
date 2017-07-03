@@ -123,7 +123,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       update_answers_params[:answers].each do |answer_params|
         answer = @submission.answers.detect { |answer| answer.id == answer_params[:id].to_i }
         update_answer(answer, answer_params)
-      end unless unsubmit?
+      end unless unsubmit? || unmark?
 
       @submission.update(update_submission_params)
     end
@@ -137,6 +137,10 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def unsubmit?
     params[:submission] && params[:submission][:unsubmit].present?
+  end
+
+  def unmark?
+    params[:submission] && params[:submission][:unmark].present?
   end
 
   def auto_grade?

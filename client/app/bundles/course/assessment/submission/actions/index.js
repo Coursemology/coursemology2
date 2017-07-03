@@ -27,6 +27,9 @@ export function saveDraft(submissionId, answers) {
     return CourseAPI.assessment.submissions.update(submissionId, payload)
       .then(response => response.data)
       .then((data) => {
+        if (data.redirect_url) {
+          window.location = data.redirect_url;
+        }
         dispatch({
           type: actionTypes.SAVE_DRAFT_SUCCESS,
           payload: data,
@@ -44,6 +47,9 @@ export function submit(submissionId, answers) {
     return CourseAPI.assessment.submissions.update(submissionId, payload)
       .then(response => response.data)
       .then((data) => {
+        if (data.redirect_url) {
+          window.location = data.redirect_url;
+        }
         dispatch({
           type: actionTypes.SUBMISSION_SUCCESS,
           payload: data,
@@ -172,6 +178,23 @@ export function mark(submissionId, grades) {
         });
       })
       .catch(() => dispatch({ type: actionTypes.MARK_FAILURE }));
+  };
+}
+
+export function unmark(submissionId) {
+  const payload = { submission: { unmark: true } };
+  return (dispatch) => {
+    dispatch({ type: actionTypes.UNMARK_REQUEST });
+
+    return CourseAPI.assessment.submissions.update(submissionId, payload)
+      .then(response => response.data)
+      .then((data) => {
+        dispatch({
+          type: actionTypes.UNMARK_SUCCESS,
+          payload: data,
+        });
+      })
+      .catch(() => dispatch({ type: actionTypes.UNMARK_FAILURE }));
   };
 }
 
