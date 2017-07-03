@@ -25,10 +25,10 @@ const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
   dataFiles: PropTypes.instanceOf(Immutable.Map).isRequired,
   actions: React.PropTypes.shape({
-    updateCppCodeBlock: PropTypes.func.isRequired,
-    createCppTestCase: PropTypes.func.isRequired,
-    updateCppTestCase: PropTypes.func.isRequired,
-    deleteCppTestCase: PropTypes.func.isRequired,
+    updateCodeBlock: PropTypes.func.isRequired,
+    createTestCase: PropTypes.func.isRequired,
+    updateTestCase: PropTypes.func.isRequired,
+    deleteTestCase: PropTypes.func.isRequired,
     updateNewDataFile: PropTypes.func.isRequired,
     deleteNewDataFile: PropTypes.func.isRequired,
     deleteExistingDataFile: PropTypes.func.isRequired,
@@ -98,7 +98,7 @@ class OnlineEditorCppView extends React.Component {
   }
 
   codeChangeHandler(field) {
-    return e => this.props.actions.updateCppCodeBlock(field, e);
+    return e => this.props.actions.updateCodeBlock(field, e);
   }
 
   newDataFileChangeHandler(index) {
@@ -114,7 +114,7 @@ class OnlineEditorCppView extends React.Component {
       e.preventDefault();
 
       if (!this.props.isLoading) {
-        this.props.actions.deleteCppTestCase(type, index);
+        this.props.actions.deleteTestCase(type, index);
       }
     };
   }
@@ -124,7 +124,7 @@ class OnlineEditorCppView extends React.Component {
       e.preventDefault();
 
       if (!this.props.isLoading) {
-        this.props.actions.createCppTestCase(type);
+        this.props.actions.createTestCase(type);
       }
     };
   }
@@ -284,7 +284,7 @@ class OnlineEditorCppView extends React.Component {
         type="text"
         name={OnlineEditorCppView.getTestInputName(type, field)}
         onChange={(e, newValue) => {
-          this.props.actions.updateCppTestCase(type, index, field, newValue);
+          this.props.actions.updateTestCase(type, index, field, newValue);
         }}
         hintText={placeholder}
         errorText={test.getIn(['error', field])}

@@ -111,17 +111,15 @@ function questionReducer(state, action) {
   }
 }
 
-function TestReducer(state, action) {
+function testReducer(state, action) {
   const { type } = action;
 
   switch (type) {
-    case editorActionTypes.CPP_CODE_BLOCK_UPDATE:
-    case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE: {
+    case editorActionTypes.CODE_BLOCK_UPDATE: {
       const { field, newValue } = action;
       return state.set(field, newValue);
     }
-    case editorActionTypes.CPP_TEST_CASE_CREATE:
-    case editorActionTypes.PYTHON_TEST_CASE_CREATE: {
+    case editorActionTypes.TEST_CASE_CREATE: {
       const { testType } = action;
       const newTest = {
         expression: '',
@@ -133,15 +131,13 @@ function TestReducer(state, action) {
         .setIn(['test_cases', testType], tests)
         .deleteIn(['test_cases', 'error']);
     }
-    case editorActionTypes.CPP_TEST_CASE_UPDATE:
-    case editorActionTypes.PYTHON_TEST_CASE_UPDATE: {
+    case editorActionTypes.TEST_CASE_UPDATE: {
       const { testType, index, field, newValue } = action;
       return state
         .setIn(['test_cases', testType, index, field], newValue)
         .deleteIn(['test_cases', testType, index, 'error']);
     }
-    case editorActionTypes.CPP_TEST_CASE_DELETE:
-    case editorActionTypes.PYTHON_TEST_CASE_DELETE: {
+    case editorActionTypes.TEST_CASE_DELETE: {
       const { testType, index } = action;
       const tests = state.get('test_cases').get(testType).splice(index, 1);
       return state.setIn(['test_cases', testType], tests);
@@ -283,19 +279,13 @@ export default function programmingQuestionReducer(state = initialState, action)
       const { mode } = action;
       return state.setIn(['test_ui', 'mode'], mode);
     }
-    case editorActionTypes.CPP_TEST_CASE_CREATE:
-    case editorActionTypes.CPP_TEST_CASE_UPDATE:
-    case editorActionTypes.CPP_TEST_CASE_DELETE:
-    case editorActionTypes.CPP_CODE_BLOCK_UPDATE: {
-      const cppTest = state.get('test_ui').get('c_cpp');
-      return state.setIn(['test_ui', 'c_cpp'], TestReducer(cppTest, action));
-    }
-    case editorActionTypes.PYTHON_TEST_CASE_CREATE:
-    case editorActionTypes.PYTHON_TEST_CASE_UPDATE:
-    case editorActionTypes.PYTHON_TEST_CASE_DELETE:
-    case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE: {
-      const pythonTest = state.get('test_ui').get('python');
-      return state.setIn(['test_ui', 'python'], TestReducer(pythonTest, action));
+    case editorActionTypes.TEST_CASE_CREATE:
+    case editorActionTypes.TEST_CASE_UPDATE:
+    case editorActionTypes.TEST_CASE_DELETE:
+    case editorActionTypes.CODE_BLOCK_UPDATE: {
+      const mode = state.get('test_ui').get('mode');
+      const test = state.get('test_ui').get(mode);
+      return state.setIn(['test_ui', mode], testReducer(test, action));
     }
     case editorActionTypes.NEW_DATA_FILE_UPDATE:
     case editorActionTypes.NEW_DATA_FILE_DELETE:

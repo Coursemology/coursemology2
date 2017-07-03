@@ -26,10 +26,10 @@ const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
   dataFiles: PropTypes.instanceOf(Immutable.Map).isRequired,
   actions: PropTypes.shape({
-    updatePythonCodeBlock: PropTypes.func.isRequired,
-    createPythonTestCase: PropTypes.func.isRequired,
-    updatePythonTestCase: PropTypes.func.isRequired,
-    deletePythonTestCase: PropTypes.func.isRequired,
+    updateCodeBlock: PropTypes.func.isRequired,
+    createTestCase: PropTypes.func.isRequired,
+    updateTestCase: PropTypes.func.isRequired,
+    deleteTestCase: PropTypes.func.isRequired,
     updateNewDataFile: PropTypes.func.isRequired,
     deleteNewDataFile: PropTypes.func.isRequired,
     deleteExistingDataFile: PropTypes.func.isRequired,
@@ -100,7 +100,7 @@ class OnlineEditorPythonView extends React.Component {
   }
 
   codeChangeHandler(field) {
-    return e => this.props.actions.updatePythonCodeBlock(field, e);
+    return e => this.props.actions.updateCodeBlock(field, e);
   }
 
   newDataFileChangeHandler(index) {
@@ -116,7 +116,7 @@ class OnlineEditorPythonView extends React.Component {
       e.preventDefault();
 
       if (!this.props.isLoading) {
-        this.props.actions.deletePythonTestCase(type, index);
+        this.props.actions.deleteTestCase(type, index);
       }
     };
   }
@@ -126,7 +126,7 @@ class OnlineEditorPythonView extends React.Component {
       e.preventDefault();
 
       if (!this.props.isLoading) {
-        this.props.actions.createPythonTestCase(type);
+        this.props.actions.createTestCase(type);
       }
     };
   }
@@ -286,7 +286,7 @@ class OnlineEditorPythonView extends React.Component {
         type="text"
         name={OnlineEditorPythonView.getTestInputName(type, field)}
         onChange={(e, newValue) => {
-          this.props.actions.updatePythonTestCase(type, index, field, newValue);
+          this.props.actions.updateTestCase(type, index, field, newValue);
         }}
         hintText={placeholder}
         errorText={test.getIn(['error', field])}
