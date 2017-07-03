@@ -135,6 +135,12 @@ class Course::Assessment::Submission::SubmissionsController < \
     params.permit(:answer_id, :reset_answer)
   end
 
+  def new_session_path
+    new_course_assessment_session_path(
+      current_course, @assessment, submission_id: @submission.id
+    )
+  end
+
   def check_password
     return unless @submission.attempting?
     return if !@assessment.password_protected? || can?(:manage, @assessment)
@@ -142,9 +148,10 @@ class Course::Assessment::Submission::SubmissionsController < \
     unless authentication_service.authenticated?
       log_service.log_submission_access(request)
 
-      redirect_to new_course_assessment_session_path(
-        current_course, @assessment, submission_id: @submission.id
-      )
+      respond_to do |format|
+        format.html { redirect_to new_session_path }
+        format.json { render json: { redirect_url: new_session_path, format: 'html' } }
+      end
     end
   end
 
