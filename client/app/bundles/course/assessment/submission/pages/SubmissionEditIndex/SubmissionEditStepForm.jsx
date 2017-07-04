@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
+import { injectIntl, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { white, green500, green900, red300, red900 } from 'material-ui/styles/colors';
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
@@ -17,6 +18,7 @@ import SubmitDialog from '../../components/SubmitDialog';
 import UnsubmitDialog from '../../components/UnsubmitDialog';
 import ResetDialog from '../../components/ResetDialog';
 import { SAVE_STATES, questionTypes } from '../../constants';
+import translations from '../../translations';
 
 const styles = {
   questionContainer: {
@@ -148,7 +150,7 @@ class SubmissionEditStepForm extends Component {
 
   renderResetButton() {
     const { stepIndex } = this.state;
-    const { questionIds, questions } = this.props;
+    const { intl, questionIds, questions } = this.props;
     const id = questionIds[stepIndex];
     const question = questions[id];
     const { answerId } = question;
@@ -158,7 +160,7 @@ class SubmissionEditStepForm extends Component {
         <RaisedButton
           style={styles.formButton}
           backgroundColor={white}
-          label="Reset Answer"
+          label={intl.formatMessage(translations.reset)}
           onTouchTap={() => this.setState({ resetConfirmation: true, resetAnswerId: answerId })}
         />
       );
@@ -167,12 +169,12 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderSubmitButton(answerId) {
-    const { submitting, attempting, handleAutograde } = this.props;
+    const { intl, submitting, attempting, handleAutograde } = this.props;
     return (
       <RaisedButton
         style={styles.formButton}
         secondary
-        label="Submit"
+        label={intl.formatMessage(translations.submit)}
         onTouchTap={() => handleAutograde(answerId)}
         disabled={submitting || !attempting}
       />
@@ -180,13 +182,14 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderContinueButton() {
+    const { intl } = this.props;
     if (this.shouldRenderContinueButton()) {
       return (
         <RaisedButton
           style={styles.formButton}
           backgroundColor={green500}
           labelColor={white}
-          label="Continue"
+          label={intl.formatMessage(translations.continue)}
           onTouchTap={() => this.handleNext()}
           disabled={this.shouldDisableContinueButton()}
         />
@@ -196,13 +199,13 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderSaveDraftButton() {
-    const { pristine, submitting, attempting, handleSaveDraft } = this.props;
+    const { intl, pristine, submitting, attempting, handleSaveDraft } = this.props;
     if (attempting) {
       return (
         <RaisedButton
           style={styles.formButton}
           primary
-          label="Save Draft"
+          label={intl.formatMessage(translations.saveDraft)}
           onTouchTap={handleSaveDraft}
           disabled={pristine || submitting}
         />
@@ -212,13 +215,13 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderFinaliseSubmitButton() {
-    const { submitting, attempting, allCorrect } = this.props;
+    const { intl, submitting, attempting, allCorrect } = this.props;
     if (attempting && allCorrect) {
       return (
         <RaisedButton
           style={styles.formButton}
           secondary
-          label="Finalise Submission"
+          label={intl.formatMessage(translations.finalise)}
           onTouchTap={() => this.setState({ submitConfirmation: true })}
           disabled={submitting}
         />
@@ -228,14 +231,14 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderUnsubmitButton() {
-    const { canGrade, attempting } = this.props;
+    const { intl, canGrade, attempting } = this.props;
     if (canGrade && !attempting) {
       return (
         <RaisedButton
           style={styles.formButton}
           backgroundColor={red900}
           secondary
-          label="Unsubmit Submission"
+          label={intl.formatMessage(translations.unsubmit)}
           onTouchTap={() => this.setState({ unsubmitConfirmation: true })}
         />
       );
@@ -359,6 +362,8 @@ class SubmissionEditStepForm extends Component {
 }
 
 SubmissionEditStepForm.propTypes = {
+  intl: intlShape.isRequired,
+
   canGrade: PropTypes.bool.isRequired,
   maxStep: PropTypes.number.isRequired,
 
@@ -384,4 +389,4 @@ SubmissionEditStepForm.propTypes = {
 
 export default reduxForm({
   form: 'submissionEdit',
-})(SubmissionEditStepForm);
+})(injectIntl(SubmissionEditStepForm));

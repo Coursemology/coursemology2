@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
+import { injectIntl, intlShape } from 'react-intl';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { Card } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -15,6 +16,7 @@ import SubmitDialog from '../../components/SubmitDialog';
 import UnsubmitDialog from '../../components/UnsubmitDialog';
 import ResetDialog from '../../components/ResetDialog';
 import { questionTypes } from '../../constants';
+import translations from '../../translations';
 
 const styles = {
   questionContainer: {
@@ -47,7 +49,7 @@ class SubmissionEditTabForm extends Component {
   }
 
   renderProgrammingQuestionActions(id) {
-    const { submitted, questions, handleAutograde } = this.props;
+    const { intl, submitted, questions, handleAutograde } = this.props;
     const question = questions[id];
     const { answerId } = question;
 
@@ -61,14 +63,14 @@ class SubmissionEditTabForm extends Component {
           <RaisedButton
             style={styles.formButton}
             backgroundColor={white}
-            label="Reset Answer"
+            label={intl.formatMessage(translations.reset)}
             onTouchTap={() => this.setState({ resetConfirmation: true, resetAnswerId: answerId })}
           />
           <RaisedButton
             style={styles.formButton}
             backgroundColor={red900}
             secondary
-            label="Submit"
+            label={intl.formatMessage(translations.submit)}
             onTouchTap={() => handleAutograde(answerId)}
           />
         </div>
@@ -107,13 +109,13 @@ class SubmissionEditTabForm extends Component {
   }
 
   renderSaveDraftButton() {
-    const { pristine, submitting, attempting, handleSaveDraft } = this.props;
+    const { intl, pristine, submitting, attempting, handleSaveDraft } = this.props;
     if (attempting) {
       return (
         <RaisedButton
           style={styles.formButton}
           primary
-          label="Save Draft"
+          label={intl.formatMessage(translations.saveDraft)}
           onTouchTap={handleSaveDraft}
           disabled={pristine || submitting}
         />
@@ -123,13 +125,13 @@ class SubmissionEditTabForm extends Component {
   }
 
   renderSaveGradeButton() {
-    const { canGrade, attempting, handleSaveGrade } = this.props;
+    const { intl, canGrade, attempting, handleSaveGrade } = this.props;
     if (canGrade && !attempting) {
       return (
         <RaisedButton
           style={styles.formButton}
           primary
-          label="Save"
+          label={intl.formatMessage(translations.saveGrade)}
           onTouchTap={handleSaveGrade}
         />
       );
@@ -138,13 +140,13 @@ class SubmissionEditTabForm extends Component {
   }
 
   renderSubmitButton() {
-    const { canUpdate, submitting, attempting } = this.props;
+    const { intl, canUpdate, submitting, attempting } = this.props;
     if (attempting && canUpdate) {
       return (
         <RaisedButton
           style={styles.formButton}
           secondary
-          label="Finalise Submission"
+          label={intl.formatMessage(translations.finalise)}
           onTouchTap={() => this.setState({ submitConfirmation: true })}
           disabled={submitting}
         />
@@ -154,14 +156,14 @@ class SubmissionEditTabForm extends Component {
   }
 
   renderUnsubmitButton() {
-    const { canGrade, submitted, published } = this.props;
+    const { intl, canGrade, submitted, published } = this.props;
     if (canGrade && (submitted || published)) {
       return (
         <RaisedButton
           style={styles.formButton}
           backgroundColor={red900}
           secondary
-          label="Unsubmit Submission"
+          label={intl.formatMessage(translations.unsubmit)}
           onTouchTap={() => this.setState({ unsubmitConfirmation: true })}
         />
       );
@@ -170,14 +172,14 @@ class SubmissionEditTabForm extends Component {
   }
 
   renderMarkButton() {
-    const { delayedGradePublication, canGrade, submitted, handleMark } = this.props;
+    const { intl, delayedGradePublication, canGrade, submitted, handleMark } = this.props;
     if (delayedGradePublication && canGrade && submitted) {
       return (
         <RaisedButton
           style={styles.formButton}
           backgroundColor={yellow900}
           labelColor={white}
-          label="Submit For Publishing"
+          label={intl.formatMessage(translations.mark)}
           onTouchTap={handleMark}
         />
       );
@@ -186,14 +188,14 @@ class SubmissionEditTabForm extends Component {
   }
 
   renderUnmarkButton() {
-    const { canGrade, graded, handleUnmark } = this.props;
+    const { intl, canGrade, graded, handleUnmark } = this.props;
     if (canGrade && graded) {
       return (
         <RaisedButton
           style={styles.formButton}
           backgroundColor={yellow900}
           labelColor={white}
-          label="Revert to Submitted"
+          label={intl.formatMessage(translations.unmark)}
           onTouchTap={handleUnmark}
         />
       );
@@ -202,14 +204,14 @@ class SubmissionEditTabForm extends Component {
   }
 
   renderPublishButton() {
-    const { delayedGradePublication, canGrade, submitted, handlePublish } = this.props;
+    const { intl, delayedGradePublication, canGrade, submitted, handlePublish } = this.props;
     if (!delayedGradePublication && canGrade && submitted) {
       return (
         <RaisedButton
           style={styles.formButton}
           backgroundColor={red900}
           secondary
-          label="Publish Submission"
+          label={intl.formatMessage(translations.publish)}
           onTouchTap={handlePublish}
         />
       );
@@ -286,6 +288,8 @@ class SubmissionEditTabForm extends Component {
 }
 
 SubmissionEditTabForm.propTypes = {
+  intl: intlShape.isRequired,
+
   canGrade: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,
 
@@ -314,4 +318,4 @@ SubmissionEditTabForm.propTypes = {
 
 export default reduxForm({
   form: 'submissionEdit',
-})(SubmissionEditTabForm);
+})(injectIntl(SubmissionEditTabForm));

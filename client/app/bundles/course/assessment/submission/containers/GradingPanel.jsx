@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { Table, TableHeader, TableBody, TableRow, TableHeaderColumn, TableRowColumn } from 'material-ui/Table';
 
 import { formatDateTime } from '../utils';
 import { GradingProp, QuestionProp, SubmissionProp } from '../propTypes';
 import actionTypes from '../constants';
+import translations from '../translations';
 
 const styles = {
   panel: {
@@ -85,7 +87,7 @@ class VisibleGradingPanel extends Component {
           {` / ${basePoints}`}
         </div>
         <div style={{ marginLeft: 20 }}>
-          Multiplier
+          <FormattedMessage {...translations.multiplier} />
           <input
             style={{ marginLeft: 5, width: 50 }}
             type="number"
@@ -105,47 +107,30 @@ class VisibleGradingPanel extends Component {
       submission: {
         submitter, workflowState, dueAt, attemptedAt,
         submittedAt, grader, gradedAt,
-      },
+      }, intl,
     } = this.props;
+
+    const tableRow = (field, value) => (
+      <TableRow>
+        <TableHeaderColumn style={styles.hdColumn} columnNumber={0}>
+          <FormattedMessage {...translations[field]} />
+        </TableHeaderColumn>
+        <TableRowColumn>{value}</TableRowColumn>
+      </TableRow>
+    );
+
     return (
       <Table selectable={false} style={styles.table}>
         <TableBody displayRowCheckbox={false}>
-          <TableRow>
-            <TableHeaderColumn style={styles.hdColumn} columnNumber={0}>Student</TableHeaderColumn>
-            <TableRowColumn>{submitter}</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableHeaderColumn style={styles.hdColumn} columnNumber={0}>Status</TableHeaderColumn>
-            <TableRowColumn>{workflowState}</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableHeaderColumn style={styles.hdColumn} columnNumber={0}>Total Grade</TableHeaderColumn>
-            <TableRowColumn>{this.renderTotalGrade()}</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableHeaderColumn style={styles.hdColumn} columnNumber={0}>Experience Points Awarded</TableHeaderColumn>
-            <TableRowColumn>{this.renderExperiencePoints()}</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableHeaderColumn style={styles.hdColumn} columnNumber={0}>Due At</TableHeaderColumn>
-            <TableRowColumn>{formatDateTime(dueAt)}</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableHeaderColumn style={styles.hdColumn} columnNumber={0}>Attempted At</TableHeaderColumn>
-            <TableRowColumn>{formatDateTime(attemptedAt)}</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableHeaderColumn style={styles.hdColumn} columnNumber={0}>Submitted At</TableHeaderColumn>
-            <TableRowColumn>{formatDateTime(submittedAt)}</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableHeaderColumn style={styles.hdColumn} columnNumber={0}>Grader</TableHeaderColumn>
-            <TableRowColumn>{grader}</TableRowColumn>
-          </TableRow>
-          <TableRow>
-            <TableHeaderColumn style={styles.hdColumn} columnNumber={0}>Graded At</TableHeaderColumn>
-            <TableRowColumn>{formatDateTime(gradedAt)}</TableRowColumn>
-          </TableRow>
+          {tableRow('student', submitter)}
+          {tableRow('status', intl.formatMessage(translations[workflowState]))}
+          {tableRow('totalGrade', this.renderTotalGrade())}
+          {tableRow('expAwarded', this.renderExperiencePoints())}
+          {tableRow('dueAt', formatDateTime(dueAt))}
+          {tableRow('attemptedAt', formatDateTime(attemptedAt))}
+          {tableRow('submittedAt', formatDateTime(submittedAt))}
+          {tableRow('grader', grader)}
+          {tableRow('gradedAt', formatDateTime(gradedAt))}
         </TableBody>
       </Table>
     );
@@ -168,15 +153,19 @@ class VisibleGradingPanel extends Component {
   }
 
   renderGradeTable() {
-    const { questions } = this.props;
+    const { intl, questions } = this.props;
     return (
       <div>
         <h1>Grade Summary</h1>
         <Table selectable={false} style={styles.table}>
           <TableHeader adjustForCheckbox={false} displaySelectAll={false} enableSelectAll={false}>
             <TableRow>
-              <TableHeaderColumn style={styles.hdColumn}>Question</TableHeaderColumn>
-              <TableHeaderColumn style={styles.hdColumn}>Total Grade</TableHeaderColumn>
+              <TableHeaderColumn style={styles.hdColumn}>
+                {intl.formatMessage(translations.question)}
+              </TableHeaderColumn>
+              <TableHeaderColumn style={styles.hdColumn}>
+                {intl.formatMessage(translations.totalGrade)}
+              </TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
@@ -201,6 +190,7 @@ class VisibleGradingPanel extends Component {
 }
 
 VisibleGradingPanel.propTypes = {
+  intl: intlShape.isRequired,
   questions: PropTypes.objectOf(QuestionProp),
   submission: SubmissionProp.isRequired,
   grading: GradingProp.isRequired,
@@ -226,5 +216,5 @@ function mapDispatchToProps(dispatch) {
 const GradingPanel = connect(
   mapStateToProps,
   mapDispatchToProps
-)(VisibleGradingPanel);
+)(injectIntl(VisibleGradingPanel));
 export default GradingPanel;

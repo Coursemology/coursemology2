@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 import ReactTooltip from 'react-tooltip';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
@@ -21,6 +22,54 @@ const styles = {
     marginBottom: 20,
   },
 };
+
+const translations = defineMessages({
+  testCases: {
+    id: 'course.assessment.submission.TestCaseView.testCases',
+    defaultMessage: 'Test Cases',
+  },
+  identifier: {
+    id: 'course.assessment.submission.TestCaseView.identifier',
+    defaultMessage: 'Identifier',
+  },
+  expression: {
+    id: 'course.assessment.submission.TestCaseView.experession',
+    defaultMessage: 'Expression',
+  },
+  expected: {
+    id: 'course.assessment.submission.TestCaseView.expected',
+    defaultMessage: 'Expected',
+  },
+  output: {
+    id: 'course.assessment.submission.TestCaseView.output',
+    defaultMessage: 'Output',
+  },
+  hint: {
+    id: 'course.assessment.submission.TestCaseView.hint',
+    defaultMessage: 'Hint',
+  },
+  passed: {
+    id: 'course.assessment.submission.TestCaseView.passed',
+    defaultMessage: 'Passed',
+  },
+  publicTestCases: {
+    id: 'course.assessment.submission.TestCaseView.publicTestCases',
+    defaultMessage: 'Public Test Cases',
+  },
+  privateTestCases: {
+    id: 'course.assessment.submission.TestCaseView.privateTestCases',
+    defaultMessage: 'Private Test Cases',
+  },
+  evaluationTestCases: {
+    id: 'course.assessment.submission.TestCaseView.evaluationTestCases',
+    defaultMessage: 'Evaluation Test Cases',
+  },
+  staffOnlyVisibleTestCase: {
+    id: 'course.assessment.submission.TestCaseView.staffOnlyVisibleTestCase',
+    defaultMessage: 'You are able to view these test cases because you are staff. \
+                    Students will not be able to see them.',
+  },
+});
 
 class VisibleTestCaseView extends Component {
 
@@ -60,12 +109,12 @@ class VisibleTestCaseView extends Component {
             <Table selectable={false} style={{}}>
               <TableHeader displaySelectAll={false}>
                 <TableRow>
-                  <TableHeaderColumn>Identifier</TableHeaderColumn>
-                  <TableHeaderColumn>Expression</TableHeaderColumn>
-                  <TableHeaderColumn>Expected</TableHeaderColumn>
-                  <TableHeaderColumn>Output</TableHeaderColumn>
-                  <TableHeaderColumn>Hint</TableHeaderColumn>
-                  <TableHeaderColumn>Passed</TableHeaderColumn>
+                  <TableHeaderColumn><FormattedMessage {...translations.identifier} /></TableHeaderColumn>
+                  <TableHeaderColumn><FormattedMessage {...translations.expression} /></TableHeaderColumn>
+                  <TableHeaderColumn><FormattedMessage {...translations.expected} /></TableHeaderColumn>
+                  <TableHeaderColumn><FormattedMessage {...translations.output} /></TableHeaderColumn>
+                  <TableHeaderColumn><FormattedMessage {...translations.hint} /></TableHeaderColumn>
+                  <TableHeaderColumn><FormattedMessage {...translations.passed} /></TableHeaderColumn>
                 </TableRow>
               </TableHeader>
               <TableBody displayRowCheckbox={false}>
@@ -83,16 +132,16 @@ class VisibleTestCaseView extends Component {
       <div>
         <a data-tip data-for="exclamation-triangle"><i className="fa fa-exclamation-triangle" /></a>
         <ReactTooltip id="exclamation-triangle" effect="solid">
-          You are able to view these test cases because you are staff. Students will not be able to see them.
+          <FormattedMessage {...translations.staffOnlyVisibleTestCase} />
         </ReactTooltip>
       </div>
     );
   }
 
-  static renderTitle(title, warn) {
+  static renderTitle(testCaseType, warn) {
     return (
       <div>
-        {title}
+        <FormattedMessage {...translations[testCaseType]} />
         {warn ? VisibleTestCaseView.renderExclamationTriangle() : null}
       </div>
     );
@@ -106,18 +155,18 @@ class VisibleTestCaseView extends Component {
 
     return (
       <div style={styles.testCasesContainer}>
-        <h3>Test Cases</h3>
+        <h3><FormattedMessage {...translations.testCases} /></h3>
         {VisibleTestCaseView.renderTestCases(
           testCases.public_test,
-          VisibleTestCaseView.renderTitle('Public Test Cases', false)
+          VisibleTestCaseView.renderTitle('publicTestCases', false)
         )}
         {canGrade ? VisibleTestCaseView.renderTestCases(
           testCases.private_test,
-          VisibleTestCaseView.renderTitle('Private Test Cases', true)
+          VisibleTestCaseView.renderTitle('privateTestCases', true)
         ) : null}
         {canGrade ? VisibleTestCaseView.renderTestCases(
           testCases.evaluation_test,
-          VisibleTestCaseView.renderTitle('Evaluation Test Cases', true)
+          VisibleTestCaseView.renderTitle('evaluationTestCases', true)
         ) : null}
       </div>
     );
