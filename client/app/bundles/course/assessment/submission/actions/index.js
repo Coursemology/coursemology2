@@ -104,7 +104,10 @@ function pollEvaluation(url, submissionId, answerId) {
             dispatch({ type: actionTypes.AUTOGRADE_FAILURE });
           }
         })
-        .catch(() => dispatch({ type: actionTypes.AUTOGRADE_FAILURE }));
+        .catch(() => {
+          clearInterval(poller);
+          dispatch({ type: actionTypes.AUTOGRADE_FAILURE });
+        });
     }, 500);
   };
 }
