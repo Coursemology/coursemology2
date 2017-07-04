@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { grey100 } from 'material-ui/styles/colors';
 
-import { GradingProp, QuestionProp } from '../propTypes';
+import { QuestionGradeProp, QuestionProp } from '../propTypes';
 import actionTypes from '../constants';
 
 const styles = {
@@ -16,14 +16,14 @@ const styles = {
 class VisibleQuestionGrade extends Component {
   static propTypes = {
     id: PropTypes.number.isRequired,
-    questions: PropTypes.objectOf(QuestionProp),
-    grading: GradingProp.isRequired,
+    question: QuestionProp,
+    grading: QuestionGradeProp,
     updateGrade: PropTypes.func.isRequired,
   };
 
   handleGradingField(value) {
-    const { id, questions, updateGrade } = this.props;
-    const maxGrade = questions[id].maximumGrade;
+    const { id, question, updateGrade } = this.props;
+    const maxGrade = question.maximumGrade;
     const parsedValue = parseFloat(value);
 
     if (isNaN(parsedValue) || parsedValue < 0) {
@@ -36,9 +36,15 @@ class VisibleQuestionGrade extends Component {
   }
 
   render() {
-    const { id, questions, grading } = this.props;
-    const initialGrade = grading.questions[id].grade;
-    const maxGrade = questions[id].maximumGrade;
+    const { question, grading } = this.props;
+
+    if (!grading) {
+      return null;
+    }
+
+    const initialGrade = grading.grade;
+    const maxGrade = question.maximumGrade;
+
     return (
       <Card style={styles.container}>
         <CardHeader style={{ backgroundColor: grey100 }} title="Grading" />
@@ -59,10 +65,11 @@ class VisibleQuestionGrade extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
+  const { id } = ownProps;
   return {
-    questions: state.questions,
-    grading: state.grading,
+    question: state.questions[id],
+    grading: state.grading.questions[id],
   };
 }
 

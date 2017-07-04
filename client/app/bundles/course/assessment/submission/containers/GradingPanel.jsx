@@ -151,8 +151,24 @@ class VisibleGradingPanel extends Component {
     );
   }
 
+  renderGradeRow(question) {
+    const { grading } = this.props;
+    const questionGrade = grading.questions[question.id] ? grading.questions[question.id].grade : 0;
+    return (
+      <TableRow key={question.id}>
+        <TableHeaderColumn
+          style={styles.hdColumn}
+          columnNumber={0}
+        >
+          {question.displayTitle}
+        </TableHeaderColumn>
+        <TableRowColumn>{`${questionGrade} / ${question.maximumGrade}`}</TableRowColumn>
+      </TableRow>
+    );
+  }
+
   renderGradeTable() {
-    const { questions, grading } = this.props;
+    const { questions } = this.props;
     return (
       <div>
         <h1>Grade Summary</h1>
@@ -164,17 +180,7 @@ class VisibleGradingPanel extends Component {
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
-            {Object.values(questions).map(question =>
-              <TableRow key={question.id}>
-                <TableHeaderColumn
-                  style={styles.hdColumn}
-                  columnNumber={0}
-                >
-                  {question.displayTitle}
-                </TableHeaderColumn>
-                <TableRowColumn>{`${grading.questions[question.id].grade} / ${question.maximumGrade}`}</TableRowColumn>
-              </TableRow>
-            )}
+            {Object.values(questions).map(question => this.renderGradeRow(question))}
           </TableBody>
         </Table>
       </div>

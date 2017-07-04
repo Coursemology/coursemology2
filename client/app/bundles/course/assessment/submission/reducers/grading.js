@@ -25,11 +25,12 @@ export default function (state = initialState, action) {
       };
     }
     case actions.UPDATE_GRADING: {
-      const newQuestionGrades = state.questions;
-      newQuestionGrades[action.id].grade = action.grade;
       return {
         ...state,
-        questions: newQuestionGrades,
+        questions: {
+          ...state.questions,
+          [action.id]: { grade: action.grade },
+        },
       };
     }
     case actions.UPDATE_EXP: {

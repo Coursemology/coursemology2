@@ -2,12 +2,17 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { injectIntl, intlShape } from 'react-intl';
+import { Card, CardText } from 'material-ui/Card';
+import { yellow100 } from 'material-ui/styles/colors';
 import { QuestionProp } from '../propTypes';
 import { questionTypes } from '../constants';
 import Answers from './Answers';
+import translations from '../translations';
 
 class SubmissionAnswer extends Component {
   static propTypes = {
+    intl: intlShape.isRequired,
     canGrade: PropTypes.bool.isRequired,
     readOnly: PropTypes.bool,
     question: QuestionProp,
@@ -36,10 +41,22 @@ class SubmissionAnswer extends Component {
     }
   }
 
+  renderMissingAnswerPanel() {
+    const { intl } = this.props;
+    return (
+      <Card style={{ backgroundColor: yellow100 }}>
+        <CardText>
+          <span>{intl.formatMessage(translations.missingAnswer)}</span>
+        </CardText>
+      </Card>
+    );
+  }
+
   render() {
     const { canGrade, readOnly, question, answerId } = this.props;
 
     const renderer = SubmissionAnswer.getRenderer(question);
+
     if (!renderer) { return <div />; }
 
     return (
@@ -47,10 +64,10 @@ class SubmissionAnswer extends Component {
         <h3>{question.displayTitle}</h3>
         <div dangerouslySetInnerHTML={{ __html: question.description }} />
         <hr />
-        { renderer(question, readOnly, answerId, canGrade) }
+        { answerId ? renderer(question, readOnly, answerId, canGrade) : this.renderMissingAnswerPanel() }
       </div>
     );
   }
 }
 
-export default SubmissionAnswer;
+export default injectIntl(SubmissionAnswer);

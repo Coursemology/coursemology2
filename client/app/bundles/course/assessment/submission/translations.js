@@ -13,6 +13,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.resetConfirmation',
     defaultMessage: 'Are you sure you want to reset your answer? This action is irreversible and you will lose all your current work for this question.',
   },
+  missingAnswer: {
+    id: 'course.assessment.submission.missingAnswer',
+    defaultMessage: 'There is no answer submitted for this question - this might be caused by the addition of this question after the submission is submitted.',
+  },
 });
 
 export default translations;

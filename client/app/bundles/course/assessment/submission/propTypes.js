@@ -24,7 +24,7 @@ PropTypes.shape({
   maximumGrade: PropTypes.number.isRequired,
   options: PropTypes.arrayOf(OptionProp),
   type: PropTypes.string.isRequired,
-  answerId: PropTypes.number.isRequired,
+  answerId: PropTypes.number,
   topicId: PropTypes.number.isRequired,
 });
 
@@ -34,11 +34,13 @@ const FileProp =
     filename: PropTypes.string,
   });
 
+export const QuestionGradeProp = PropTypes.shape({
+  grade: PropTypes.number,
+  grader: PropTypes.string,
+});
+
 export const GradingProp = PropTypes.shape({
-  questions: PropTypes.shape({
-    grade: PropTypes.number,
-    grader: PropTypes.string,
-  }),
+  questions: PropTypes.objectOf(QuestionGradeProp),
   exp: PropTypes.number,
   expMultiplier: PropTypes.number,
 });
