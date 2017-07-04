@@ -1,9 +1,10 @@
 - delete = local_assigns[:delete] ? local_assigns[:delete] : false
-= content_tag_for(:div, attachment, class: ['attachment'])
-  span = link_to format_inline_text(attachment.name), attachment_reference_path(attachment),
-                 target: "_blank"
-  span.uploaded-by = t('.uploaded_by', name: attachment.creator.name)
-  - if delete
-    span.delete-attachment
-      = link_to t('.delete_attachment'), attachment_reference_path(attachment),
-                data: { confirm: t('.confirm_delete_attachment') }, method: :delete, remote: true
+- if attachment
+  = content_tag_for(:div, attachment, class: ['attachment'])
+    span = link_to format_inline_text(attachment.name), attachment_reference_path(attachment),
+                   target: "_blank"
+    span.uploaded-by = t('.uploaded_by', name: attachment.creator.name)
+    - if delete
+      span.delete-attachment
+        = link_to t('.delete_attachment'), attachment_reference_path(attachment),
+                  data: { confirm: t('.confirm_delete_attachment') }, method: :delete, remote: true
