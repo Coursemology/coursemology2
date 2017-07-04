@@ -122,8 +122,7 @@ export function autograde(submissionId, answers) {
       .then((data) => {
         if (data.redirect_url && data.format === 'html') {
           window.location = data.redirect_url;
-        }
-        else if (data.redirect_url) {
+        } else if (data.redirect_url) {
           dispatch(pollEvaluation(data.redirect_url, submissionId, answers[0].id));
         } else {
           dispatch({
