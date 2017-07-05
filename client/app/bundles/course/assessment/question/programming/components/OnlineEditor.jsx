@@ -3,8 +3,9 @@ import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import OnlineEditorPythonView, { validation as pythonValidation } from './OnlineEditorPythonView';
-import OnlineEditorCppView, { validation as cppValidation } from './OnlineEditorCppView';
+import OnlineEditorPythonView from './OnlineEditorPythonView';
+import OnlineEditorCppView from './OnlineEditorCppView';
+import { validation as editorValidation } from './OnlineEditorBase';
 
 const translations = defineMessages({
   selectLanguageAlert: {
@@ -34,12 +35,9 @@ export function validation(data, pathOfKeysToData, intl) {
 
   switch (mode) {
     case 'python':
-      return errors.concat(
-        pythonValidation(data, pathOfKeysToData.concat(['python']), intl)
-      );
     case 'c_cpp':
       return errors.concat(
-        cppValidation(data, pathOfKeysToData.concat(['c_cpp']), intl)
+        editorValidation(data, pathOfKeysToData.concat([mode]), intl)
       );
     default:
       return errors;
