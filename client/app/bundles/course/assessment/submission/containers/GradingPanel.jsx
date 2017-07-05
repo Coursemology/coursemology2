@@ -27,7 +27,9 @@ const styles = {
 
 class VisibleGradingPanel extends Component {
   static calculateTotalGrade(grades) {
-    return Object.values(grades).reduce((acc, b) => acc + b.grade, 0);
+    return Object.values(grades)
+      .filter(grade => grade !== null)
+      .reduce((acc, b) => acc + b.grade, 0);
   }
 
   handleExpField(value) {
@@ -137,8 +139,8 @@ class VisibleGradingPanel extends Component {
   }
 
   renderGradeRow(question) {
-    const { grading } = this.props;
-    const questionGrade = grading.questions[question.id] ? grading.questions[question.id].grade : 0;
+    const questionGrading = this.props.grading.questions[question.id];
+    const questionGrade = questionGrading && questionGrading.grade !== null ? questionGrading.grade : '';
     return (
       <TableRow key={question.id}>
         <TableHeaderColumn

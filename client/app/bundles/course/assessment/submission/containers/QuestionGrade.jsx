@@ -55,7 +55,7 @@ class VisibleQuestionGrade extends Component {
             min={0}
             max={maxGrade}
             step={1}
-            value={initialGrade}
+            value={initialGrade === null ? '' : initialGrade}
             onChange={e => this.handleGradingField(e.target.value)}
           />
           {` / ${maxGrade}`}
