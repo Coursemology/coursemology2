@@ -107,6 +107,7 @@ class VisibleSubmissionEditIndex extends Component {
         <SubmissionEditStepForm
           enableReinitialize
           handleSaveDraft={() => this.handleSaveDraft()}
+          handleSaveGrade={() => this.handleSaveGrade()}
           handleSubmit={() => this.handleSubmit()}
           handleUnsubmit={() => this.handleUnsubmit()}
           handleAutograde={answerId => this.handleAutograde(answerId)}

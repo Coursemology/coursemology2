@@ -214,6 +214,21 @@ class SubmissionEditStepForm extends Component {
     return null;
   }
 
+  renderSaveGradeButton() {
+    const { intl, canGrade, attempting, handleSaveGrade } = this.props;
+    if (canGrade && !attempting) {
+      return (
+        <RaisedButton
+          style={styles.formButton}
+          primary
+          label={intl.formatMessage(translations.saveGrade)}
+          onTouchTap={handleSaveGrade}
+        />
+      );
+    }
+    return null;
+  }
+
   renderFinaliseSubmitButton() {
     const { intl, submitting, attempting, allCorrect } = this.props;
     if (attempting && allCorrect) {
@@ -266,6 +281,7 @@ class SubmissionEditStepForm extends Component {
           {this.renderContinueButton()}
         </div> : null}
         <div style={styles.formButtonContainer}>
+          {this.renderSaveGradeButton()}
           {this.renderSaveDraftButton()}
           {this.renderFinaliseSubmitButton()}
           {this.renderUnsubmitButton()}
@@ -383,6 +399,7 @@ SubmissionEditStepForm.propTypes = {
   handleSubmit: PropTypes.func,
   handleUnsubmit: PropTypes.func,
   handleSaveDraft: PropTypes.func,
+  handleSaveGrade: PropTypes.func,
   handleAutograde: PropTypes.func,
   handleReset: PropTypes.func,
 };
