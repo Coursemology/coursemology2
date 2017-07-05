@@ -7,7 +7,7 @@ import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEditTabForm from './SubmissionEditTabForm';
 import {
-  fetchSubmission, saveDraft, submit,
+  fetchSubmission, autogradeSubmission, saveDraft, submit,
   unsubmit, autograde, reset, saveGrade, mark, unmark, publish,
 } from '../../actions';
 import {
@@ -32,6 +32,11 @@ class VisibleSubmissionEditIndex extends Component {
       qid => explanations[qid] && !explanations[qid].correct
     ).length;
     return numIncorrect === 0;
+  }
+
+  handleAutogradeSubmission() {
+    const { match: { params }, autogradeAll } = this.props;
+    autogradeAll(params.submissionId);
   }
 
   handleSubmit() {
@@ -112,6 +117,7 @@ class VisibleSubmissionEditIndex extends Component {
           handleUnsubmit={() => this.handleUnsubmit()}
           handleAutograde={answerId => this.handleAutograde(answerId)}
           handleReset={answerId => this.handleReset(answerId)}
+          handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
           initialValues={answers}
           explanations={explanations}
           allCorrect={this.allCorrect()}
@@ -137,10 +143,12 @@ class VisibleSubmissionEditIndex extends Component {
           handleSaveGrade={() => this.handleSaveGrade()}
           handleAutograde={answerId => this.handleAutograde(answerId)}
           handleReset={answerId => this.handleReset(answerId)}
+          handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
           handleMark={() => this.handleMark()}
           handleUnmark={() => this.handleUnmark()}
           handlePublish={() => this.handlePublish()}
           initialValues={answers}
+          explanations={explanations}
           canGrade={canGrade}
           canUpdate={canUpdate}
           attempting={workflowState === workflowStates.Attempting}
@@ -164,10 +172,12 @@ class VisibleSubmissionEditIndex extends Component {
         handleSaveGrade={() => this.handleSaveGrade()}
         handleAutograde={answerId => this.handleAutograde(answerId)}
         handleReset={answerId => this.handleReset(answerId)}
+        handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
         handleMark={() => this.handleMark()}
         handleUnmark={() => this.handleUnmark()}
         handlePublish={() => this.handlePublish()}
         initialValues={answers}
+        explanations={explanations}
         canGrade={canGrade}
         canUpdate={canUpdate}
         attempting={workflowState === workflowStates.Attempting}
@@ -220,6 +230,7 @@ VisibleSubmissionEditIndex.propTypes = {
   saveState: PropTypes.string.isRequired,
 
   fetchData: PropTypes.func.isRequired,
+  autogradeAll: PropTypes.func.isRequired,
   submitAnswer: PropTypes.func.isRequired,
   unsubmitAnswer: PropTypes.func.isRequired,
   saveDraftAnswer: PropTypes.func.isRequired,
@@ -251,6 +262,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchData: id => dispatch(fetchSubmission(id)),
+    autogradeAll: id => dispatch(autogradeSubmission(id)),
     submitAnswer: (id, answers) => dispatch(submit(id, answers)),
     unsubmitAnswer: id => dispatch(unsubmit(id)),
     saveDraftAnswer: (id, answers) => dispatch(saveDraft(id, answers)),

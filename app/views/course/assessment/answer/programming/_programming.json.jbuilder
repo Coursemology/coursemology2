@@ -46,7 +46,7 @@ failed_test_cases_by_type = get_failed_test_cases_by_type(test_cases_and_results
 
 json.explanation do
   assessment = answer.submission.assessment
-  if assessment.autograded? && last_attempt
+  if last_attempt
     explanations = []
     if failed_test_cases_by_type['public_test']
       failed_test_cases_by_type['public_test'].each do |test_case, test_result|
@@ -64,7 +64,7 @@ json.explanation do
       end
     end
 
-    json.correct last_attempt.correct?
+    json.correct last_attempt.correct
     json.explanations explanations
   end
 end

@@ -3,6 +3,26 @@ import axios from 'axios';
 import CourseAPI from 'api/course';
 import actionTypes from '../constants';
 
+function pollJob(url, onSuccess, onFailure) {
+  const poller = setInterval(() => {
+    axios.get(url, { params: { format: 'json' } })
+      .then(response => response.data)
+      .then((data) => {
+        if (data.status === 'completed') {
+          clearInterval(poller);
+          onSuccess();
+        } else if (data.status === 'errored') {
+          clearInterval(poller);
+          onFailure();
+        }
+      })
+      .catch(() => {
+        clearInterval(poller);
+        onFailure();
+      });
+  }, 500);
+}
+
 export function fetchSubmission(id) {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_SUBMISSION_REQUEST });
@@ -16,6 +36,25 @@ export function fetchSubmission(id) {
         });
       })
       .catch(() => dispatch({ type: actionTypes.FETCH_SUBMISSION_FAILURE }));
+  };
+}
+
+export function autogradeSubmission(id) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_REQUEST });
+
+    return CourseAPI.assessment.submissions.autoGrade(id)
+      .then(response => response.data)
+      .then((data) => {
+        pollJob(data.redirect_url,
+          () => {
+            dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_SUCCESS });
+            fetchSubmission(id);
+          },
+          () => dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_FAILURE })
+        );
+      })
+    .catch(() => dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_FAILURE }));
   };
 }
 
@@ -90,28 +129,6 @@ function getEvaluationResult(submissionId, answerId) {
   };
 }
 
-function pollEvaluation(url, submissionId, answerId) {
-  return (dispatch) => {
-    const poller = setInterval(() => {
-      axios.get(url, { params: { format: 'json' } })
-        .then(response => response.data)
-        .then((data) => {
-          if (data.status === 'completed') {
-            clearInterval(poller);
-            dispatch(getEvaluationResult(submissionId, answerId));
-          } else if (data.status === 'errored') {
-            clearInterval(poller);
-            dispatch({ type: actionTypes.AUTOGRADE_FAILURE });
-          }
-        })
-        .catch(() => {
-          clearInterval(poller);
-          dispatch({ type: actionTypes.AUTOGRADE_FAILURE });
-        });
-    }, 500);
-  };
-}
-
 export function autograde(submissionId, answers) {
   const payload = { submission: { answers, auto_grade: true } };
   return (dispatch) => {
@@ -123,7 +140,10 @@ export function autograde(submissionId, answers) {
         if (data.redirect_url && data.format === 'html') {
           window.location = data.redirect_url;
         } else if (data.redirect_url) {
-          dispatch(pollEvaluation(data.redirect_url, submissionId, answers[0].id));
+          pollJob(data.redirect_url,
+            () => dispatch(getEvaluationResult(submissionId, answers[0].id)),
+            () => dispatch({ type: actionTypes.AUTOGRADE_FAILURE })
+          );
         } else {
           dispatch({
             type: actionTypes.AUTOGRADE_SUCCESS,

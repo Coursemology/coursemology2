@@ -128,7 +128,7 @@ class SubmissionEditStepForm extends Component {
     const { explanations } = this.props;
     const explanation = explanations[questionId];
 
-    if (explanation) {
+    if (explanation && explanation.correct !== null) {
       return (
         <Card style={styles.explanationContainer}>
           <CardHeader

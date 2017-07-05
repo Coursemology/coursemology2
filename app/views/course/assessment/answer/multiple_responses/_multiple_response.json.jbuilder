@@ -8,8 +8,8 @@ last_attempt = last_attempt(answer)
 
 json.explanation do
   assessment = answer.submission.assessment
-  if assessment.autograded? && last_attempt&.auto_grading&.result
-    json.correct last_attempt.correct?
+  if last_attempt&.auto_grading&.result
+    json.correct last_attempt.correct
     json.explanations last_attempt.auto_grading.result['messages'].each do |explanation|
       format_html(explanation)
     end

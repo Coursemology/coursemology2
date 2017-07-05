@@ -30,6 +30,10 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     return this.getClient().post(`${this._getUrlPrefix()}/${submissionId}/reload_answer`, params);
   }
 
+  autoGrade(submissionId) {
+    return this.getClient().post(`${this._getUrlPrefix()}/${submissionId}/auto_grade`);
+  }
+
   createProgrammingAnnotation(submissionId, answerId, fileId, params) {
     const url = `${this._getUrlPrefix()}/${submissionId}/answers/${answerId}/programming/files/${fileId}/annotations`;
     return this.getClient().post(url, params);

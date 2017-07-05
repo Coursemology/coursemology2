@@ -1,13 +1,15 @@
+/* eslint-disable react/no-danger */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape } from 'react-intl';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import { Card } from 'material-ui/Card';
+import { Card, CardHeader, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
-import { red900, yellow900, white } from 'material-ui/styles/colors';
+import { red900, yellow900, green900, red300, green500, white } from 'material-ui/styles/colors';
 
-import { QuestionProp, TopicProp } from '../../propTypes';
+import { ExplanationProp, QuestionProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
@@ -22,6 +24,11 @@ const styles = {
   questionContainer: {
     marginTop: 20,
     padding: 20,
+  },
+  explanationContainer: {
+    marginTop: 30,
+    marginBottom: 30,
+    borderRadius: 5,
   },
   formButton: {
     marginRight: 10,
@@ -74,6 +81,30 @@ class SubmissionEditTabForm extends Component {
             onTouchTap={() => handleAutograde(answerId)}
           />
         </div>
+      );
+    }
+    return null;
+  }
+
+  renderExplanationPanel(questionId) {
+    const { explanations } = this.props;
+    const explanation = explanations[questionId];
+
+    if (explanation && explanation.correct !== null) {
+      return (
+        <Card style={styles.explanationContainer}>
+          <CardHeader
+            style={{
+              ...styles.explanationHeader,
+              backgroundColor: explanation.correct ? green500 : red300,
+            }}
+            title={explanation.correct ? 'Correct!' : 'Wrong!'}
+            titleColor={explanation.correct ? green900 : red900}
+          />
+          <CardText>
+            {explanation.explanations.map(exp => <div dangerouslySetInnerHTML={{ __html: exp }} />)}
+          </CardText>
+        </Card>
       );
     }
     return null;
@@ -133,6 +164,21 @@ class SubmissionEditTabForm extends Component {
           primary
           label={intl.formatMessage(translations.saveGrade)}
           onTouchTap={handleSaveGrade}
+        />
+      );
+    }
+    return null;
+  }
+
+  renderAutogradeSubmissionButton() {
+    const { intl, canGrade, submitted, handleAutogradeSubmission } = this.props;
+    if (canGrade && submitted) {
+      return (
+        <RaisedButton
+          style={styles.formButton}
+          primary
+          label={intl.formatMessage(translations.autograde)}
+          onTouchTap={handleAutogradeSubmission}
         />
       );
     }
@@ -303,8 +349,10 @@ SubmissionEditTabForm.propTypes = {
   topics: PropTypes.objectOf(TopicProp),
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
+  explanations: PropTypes.objectOf(ExplanationProp),
   delayedGradePublication: PropTypes.bool.isReqruied,
 
+  handleAutogradeSubmission: PropTypes.func,
   handleSaveDraft: PropTypes.func,
   handleSubmit: PropTypes.func,
   handleUnsubmit: PropTypes.func,

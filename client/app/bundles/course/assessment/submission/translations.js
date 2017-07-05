@@ -47,7 +47,11 @@ const translations = defineMessages({
   },
   publish: {
     id: 'course.assessment.submission.publish',
-    defaultMessage: 'Publish Submission',
+    defaultMessage: 'Publish Grade',
+  },
+  autograde: {
+    id: 'course.assessment.submission.autograde',
+    defaultMessage: 'Evaluate Answers',
   },
   submit: {
     id: 'course.asssessment.submission.submit',

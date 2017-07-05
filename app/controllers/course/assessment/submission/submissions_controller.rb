@@ -57,7 +57,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   def auto_grade
     authorize!(:grade, @submission)
     job = @submission.auto_grade!
-    redirect_to(job_path(job.job))
+    render json: { redirect_url: job_path(job.job) }
   end
 
   # Reload answer to either its latest status or to a fresh answer, depending on parameters.
