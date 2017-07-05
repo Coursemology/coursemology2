@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import ProgressPanel from '../../components/ProgressPanel';
 import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
-import SubmissionEditTabForm from './SubmissionEditTabForm';
 import {
   fetchSubmission, autogradeSubmission, saveDraft, submit,
   unsubmit, autograde, reset, saveGrade, mark, unmark, publish,
@@ -133,35 +132,6 @@ class VisibleSubmissionEditIndex extends Component {
           saveState={saveState}
         />
       );
-    } else if (tabbedView) {
-      return (
-        <SubmissionEditTabForm
-          enableReinitialize
-          handleSaveDraft={() => this.handleSaveDraft()}
-          handleSubmit={() => this.handleSubmit()}
-          handleUnsubmit={() => this.handleUnsubmit()}
-          handleSaveGrade={() => this.handleSaveGrade()}
-          handleAutograde={answerId => this.handleAutograde(answerId)}
-          handleReset={answerId => this.handleReset(answerId)}
-          handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
-          handleMark={() => this.handleMark()}
-          handleUnmark={() => this.handleUnmark()}
-          handlePublish={() => this.handlePublish()}
-          initialValues={answers}
-          explanations={explanations}
-          canGrade={canGrade}
-          canUpdate={canUpdate}
-          attempting={workflowState === workflowStates.Attempting}
-          submitted={workflowState === workflowStates.Submitted}
-          graded={workflowState === workflowStates.Graded}
-          published={workflowState === workflowStates.Published}
-          posts={posts}
-          questionIds={questionIds}
-          questions={questions}
-          topics={topics}
-          delayedGradePublication={delayedGradePublication}
-        />
-      );
     }
     return (
       <SubmissionEditForm
@@ -187,6 +157,7 @@ class VisibleSubmissionEditIndex extends Component {
         posts={posts}
         questionIds={questionIds}
         questions={questions}
+        tabbedView={tabbedView}
         topics={topics}
         delayedGradePublication={delayedGradePublication}
       />

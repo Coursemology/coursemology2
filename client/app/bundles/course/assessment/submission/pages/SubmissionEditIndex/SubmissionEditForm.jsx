@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape } from 'react-intl';
+import { Tabs, Tab } from 'material-ui/Tabs';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import { red900, yellow900, green900, red300, green500, white } from 'material-ui/styles/colors';
@@ -110,6 +111,29 @@ class SubmissionEditForm extends Component {
       );
     }
     return null;
+  }
+
+  renderTabbedQuestions() {
+    const { canGrade, attempting, questionIds, questions, topics } = this.props;
+    return (
+      <Tabs>
+        {questionIds.map((id, index) => {
+          const question = questions[id];
+          const { answerId, topicId } = question;
+          const topic = topics[topicId];
+          return (
+            <Tab key={id} label={index + 1}>
+              <SubmissionAnswer {...{ canGrade, readOnly: !attempting, answerId, question }} />
+              {this.renderExplanationPanel(id)}
+              {this.renderQuestionGrading(id)}
+              {this.renderProgrammingQuestionActions(id)}
+              <Comments topic={topic} />
+              <hr />
+            </Tab>
+          );
+        })}
+      </Tabs>
+    );
   }
 
   renderQuestions() {
@@ -284,21 +308,6 @@ class SubmissionEditForm extends Component {
     );
   }
 
-  renderResetDialog() {
-    const { resetConfirmation, resetAnswerId } = this.state;
-    const { handleReset } = this.props;
-    return (
-      <ResetDialog
-        open={resetConfirmation}
-        onCancel={() => this.setState({ resetConfirmation: false, resetAnswerId: null })}
-        onConfirm={() => {
-          this.setState({ resetConfirmation: false, resetAnswerId: null });
-          handleReset(resetAnswerId);
-        }}
-      />
-    );
-  }
-
   renderUnsubmitDialog() {
     const { unsubmitConfirmation } = this.state;
     const { handleUnsubmit } = this.props;
@@ -314,10 +323,26 @@ class SubmissionEditForm extends Component {
     );
   }
 
+  renderResetDialog() {
+    const { resetConfirmation, resetAnswerId } = this.state;
+    const { handleReset } = this.props;
+    return (
+      <ResetDialog
+        open={resetConfirmation}
+        onCancel={() => this.setState({ resetConfirmation: false, resetAnswerId: null })}
+        onConfirm={() => {
+          this.setState({ resetConfirmation: false, resetAnswerId: null });
+          handleReset(resetAnswerId);
+        }}
+      />
+    );
+  }
+
   render() {
+    const { tabbedView } = this.props;
     return (
       <Card style={styles.questionCardContainer}>
-        <form>{this.renderQuestions()}</form>
+        <form>{tabbedView ? this.renderTabbedQuestions() : this.renderQuestions()}</form>
         {this.renderGradingPanel()}
 
         {this.renderSaveDraftButton()}
@@ -342,6 +367,7 @@ SubmissionEditForm.propTypes = {
 
   canGrade: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,
+  tabbedView: PropTypes.bool.isRequired,
 
   attempting: PropTypes.bool.isRequired,
   submitted: PropTypes.bool.isRequired,
