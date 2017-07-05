@@ -13,11 +13,11 @@ import Snackbar from 'material-ui/Snackbar';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { red500 } from 'material-ui/styles/colors';
 
-import BuildLog from './BuildLog';
-import OnlineEditor, { validation as editorValidation } from './OnlineEditor';
-import UploadedPackageView from './UploadedPackageView';
-import MaterialSummernote from '../../../../../../lib/components/MaterialSummernote';
-import ChipInput from '../../../../../../lib/components/ChipInput';
+import BuildLog from './../../components/BuildLog';
+import OnlineEditor, { validation as editorValidation } from './../OnlineEditor/OnlineEditor';
+import UploadedPackageView from './../../components/UploadedPackageView';
+import MaterialSummernote from '../../../../../../../lib/components/MaterialSummernote';
+import ChipInput from '../../../../../../../lib/components/ChipInput';
 
 import styles from './ProgrammingQuestionForm.scss';
 import translations from './ProgrammingQuestionForm.intl';

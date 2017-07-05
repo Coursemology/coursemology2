@@ -1,8 +1,7 @@
 import translations from './OnlineEditorView.intl';
-import { FormattedMessage } from 'react-intl';
-import ExistingDataFile from './ExistingDataFile';
-import NewDataFile from './NewDataFile';
-import TestCase from './TestCase';
+import ExistingDataFile from './../../components/ExistingDataFile';
+import NewDataFile from './../../components/NewDataFile';
+import TestCase from './../../components/TestCase';
 
 export function validation(data, pathOfKeysToData, intl) {
   const errors = [];
@@ -52,5 +51,5 @@ export function validation(data, pathOfKeysToData, intl) {
 export {
   ExistingDataFile,
   NewDataFile,
-  TestCase
-}
+  TestCase,
+};

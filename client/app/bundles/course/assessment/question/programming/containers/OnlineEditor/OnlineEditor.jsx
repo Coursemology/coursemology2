@@ -3,8 +3,8 @@ import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
-import OnlineEditorPythonView from './OnlineEditorPythonView';
-import OnlineEditorCppView from './OnlineEditorCppView';
+import OnlineEditorPythonView from './Python/OnlineEditorPythonView';
+import OnlineEditorCppView from './Cpp/OnlineEditorCppView';
 import { validation as editorValidation } from './OnlineEditorBase';
 
 const translations = defineMessages({

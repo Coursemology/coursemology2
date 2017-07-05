@@ -1,25 +1,21 @@
 import Immutable from 'immutable';
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { PropTypes } from 'react';
 import AceEditor from 'react-ace';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
 import {
   Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn,
 } from 'material-ui/Table';
 import transitions from 'material-ui/styles/transitions';
-import { grey100, grey300, white } from 'material-ui/styles/colors';
 
-import 'brace/mode/python';
+import 'brace/mode/c_cpp';
 import 'brace/theme/monokai';
 
-import styles from './OnlineEditorView.scss';
-import translations from './OnlineEditorView.intl';
-import { ExistingDataFile, NewDataFile, TestCase } from './OnlineEditorBase';
+import styles from './../OnlineEditorView.scss';
+import translations from './../OnlineEditorView.intl';
+import { ExistingDataFile, NewDataFile, TestCase } from './../OnlineEditorBase';
 
 const MAX_TEST_CASES = 99;
 
@@ -69,7 +65,7 @@ class OnlineEditorPythonView extends React.Component {
   }
 
   renderExistingDataFiles = () => {
-    let numFiles = this.props.data.get('data_files').size;
+    const numFiles = this.props.data.get('data_files').size;
     if (numFiles === 0) {
       return null;
     }
@@ -82,12 +78,12 @@ class OnlineEditorPythonView extends React.Component {
         <ExistingDataFile
           key={hash}
           {...{
-            filename: filename,
+            filename,
             filesize: fileData.get('size'),
             toDelete: this.props.dataFiles.get('to_delete').has(filename),
             deleteExistingDataFile: this.props.actions.deleteExistingDataFile,
             isLoading: this.props.isLoading,
-            isLast: numFiles === index+1
+            isLast: numFiles === index + 1,
           }}
         />
       );
@@ -130,17 +126,17 @@ class OnlineEditorPythonView extends React.Component {
         <NewDataFile
           key={key}
           {...{
-            index: index,
+            index,
             filename: fileData.get('filename'),
             showDeleteButton: this.props.dataFiles.get('key') !== key,
             isLoading: this.props.isLoading,
             intl: this.props.intl,
             updateNewDataFile: this.props.actions.updateNewDataFile,
-            deleteNewDataFile: this.props.actions.deleteNewDataFile
+            deleteNewDataFile: this.props.actions.deleteNewDataFile,
           }}
         />
       );
-    }
+    };
     const newDataFilesRows = this.props.dataFiles.get('new').map(renderNewFile);
 
     return (
@@ -172,24 +168,22 @@ class OnlineEditorPythonView extends React.Component {
     const expected = this.props.intl.formatMessage(translations.expectedHeader);
     const hint = this.props.intl.formatMessage(translations.hintHeader);
 
-    const rows = [...testCases.get(type).entries()].map(([index, test]) => {
-      return (
-        <TestCase
-          key={index}
-          {...{
-            updateTestCase: this.props.actions.updateTestCase,
-            deleteTestCase: this.props.actions.deleteTestCase,
-            isLoading: this.props.isLoading,
-            type: type,
-            index: index,
-            test: test,
-            expression: expression,
-            expected: expected,
-            hint: hint
-          }}
-        />
-      );
-    });
+    const rows = [...testCases.get(type).entries()].map(([index, test]) => (
+      <TestCase
+        key={index}
+        {...{
+          updateTestCase: this.props.actions.updateTestCase,
+          deleteTestCase: this.props.actions.deleteTestCase,
+          isLoading: this.props.isLoading,
+          type,
+          index,
+          test,
+          expression,
+          expected,
+          hint,
+        }}
+      />
+      ));
 
     return (
       <Card initiallyExpanded>

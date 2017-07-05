@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  TableHeader, TableHeaderColumn, TableRow, TableRowColumn,
+  TableHeaderColumn, TableRow, TableRowColumn,
 } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
-import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
-import styles from './OnlineEditorView.scss';
-import translations from './OnlineEditorView.intl';
-import { grey100, grey300, white } from 'material-ui/styles/colors';
+import { injectIntl, intlShape } from 'react-intl';
+import { grey300 } from 'material-ui/styles/colors';
+import styles from './../containers/OnlineEditor/OnlineEditorView.scss';
+import translations from './../containers/OnlineEditor/OnlineEditorView.intl';
 
 class NewDataFile extends React.Component {
   static propTypes = {
@@ -17,7 +17,7 @@ class NewDataFile extends React.Component {
     isLoading: PropTypes.bool.isRequired,
     intl: intlShape.isRequired,
     updateNewDataFile: PropTypes.func.isRequired,
-    deleteNewDataFile: PropTypes.func.isRequired
+    deleteNewDataFile: PropTypes.func.isRequired,
   }
 
   newDataFileChangeHandler(index) {
@@ -29,8 +29,8 @@ class NewDataFile extends React.Component {
   }
 
   render() {
-    const { 
-      index, filename, showDeleteButton, isLoading, intl
+    const {
+      index, filename, showDeleteButton, isLoading, intl,
     } = this.props;
     let deleteButton = null;
     const addFileButtonStyle = {};
@@ -80,4 +80,4 @@ class NewDataFile extends React.Component {
   }
 }
 
-export default injectIntl(NewDataFile)
+export default injectIntl(NewDataFile);
