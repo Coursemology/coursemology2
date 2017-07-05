@@ -18,7 +18,7 @@ import 'brace/theme/monokai';
 
 import styles from './OnlineEditorView.scss';
 import translations from './OnlineEditorView.intl';
-import { ExistingDataFile, NewDataFile } from './OnlineEditorBase';
+import { ExistingDataFile, NewDataFile, TestCase } from './OnlineEditorBase';
 
 const MAX_TEST_CASES = 99;
 
@@ -55,16 +55,6 @@ class OnlineEditorCppView extends React.Component {
 
   codeChangeHandler(field) {
     return e => this.props.actions.updateCodeBlock(field, e);
-  }
-
-  testCaseDeleteHandler(type, index) {
-    return (e) => {
-      e.preventDefault();
-
-      if (!this.props.isLoading) {
-        this.props.actions.deleteTestCase(type, index);
-      }
-    };
   }
 
   testCaseCreateHandler(type) {
@@ -172,22 +162,6 @@ class OnlineEditorCppView extends React.Component {
   }
 
   renderTestCases(header, testCases, type) {
-    const renderInput = (test, field, placeholder, index) => (
-      <TextField
-        type="text"
-        name={OnlineEditorCppView.getTestInputName(type, field)}
-        onChange={(e, newValue) => {
-          this.props.actions.updateTestCase(type, index, field, newValue);
-        }}
-        hintText={placeholder}
-        errorText={test.getIn(['error', field])}
-        disabled={this.props.isLoading}
-        value={test.get(field)}
-        fullWidth
-        multiLine
-      />
-    );
-
     const allTestCases = this.props.data.get('test_cases');
     const numAllTestCases = allTestCases.get('public').size + allTestCases.get('private').size
       + allTestCases.get('evaluation').size;
@@ -198,31 +172,21 @@ class OnlineEditorCppView extends React.Component {
     const hint = this.props.intl.formatMessage(translations.hintHeader);
 
     const rows = [...testCases.get(type).entries()].map(([index, test]) => {
-      const displayedIndex = (`0${index + 1}`).slice(-2);
       return (
-        <TableRow key={index}>
-          <TableHeaderColumn className={styles.deleteButtonCell}>
-            <RaisedButton
-              backgroundColor={grey300}
-              icon={<i className="fa fa-trash" />}
-              disabled={this.props.isLoading}
-              onClick={this.testCaseDeleteHandler(type, index)}
-              style={{ minWidth: '40px', width: '40px' }}
-            />
-          </TableHeaderColumn>
-          <TableRowColumn className={styles.testCell}>
-            test_{type}_{displayedIndex}
-          </TableRowColumn>
-          <TableRowColumn className={styles.testCell}>
-            { renderInput(test, 'expression', expression, index) }
-          </TableRowColumn>
-          <TableRowColumn className={styles.testCell}>
-            { renderInput(test, 'expected', expected, index) }
-          </TableRowColumn>
-          <TableRowColumn className={styles.testCell}>
-            { renderInput(test, 'hint', hint, index) }
-          </TableRowColumn>
-        </TableRow>
+        <TestCase
+          key={index}
+          {...{
+            updateTestCase: this.props.actions.updateTestCase,
+            deleteTestCase: this.props.actions.deleteTestCase,
+            isLoading: this.props.isLoading,
+            type: type,
+            index: index,
+            test: test,
+            expression: expression,
+            expected: expected,
+            hint: hint
+          }}
+        />
       );
     });
 

@@ -30,7 +30,7 @@ class NewDataFile extends React.Component {
 
   render() {
     const { 
-      index, filename, showDeleteButton, isLoading, deleteNewDataFile, newDataFileChangeHandler, intl 
+      index, filename, showDeleteButton, isLoading, intl
     } = this.props;
     let deleteButton = null;
     const addFileButtonStyle = {};
