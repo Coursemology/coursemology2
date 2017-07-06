@@ -9,14 +9,13 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import { red900, yellow900, green900, red300, green500, white } from 'material-ui/styles/colors';
 
+/* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { ExplanationProp, QuestionProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
 import Comments from '../../containers/Comments';
-import SubmitDialog from '../../components/SubmitDialog';
-import UnsubmitDialog from '../../components/UnsubmitDialog';
-import ResetDialog from '../../components/ResetDialog';
 import { questionTypes } from '../../constants';
 import translations from '../../translations';
 
@@ -295,45 +294,48 @@ class SubmissionEditForm extends Component {
 
   renderSubmitDialog() {
     const { submitConfirmation } = this.state;
-    const { handleSubmit } = this.props;
+    const { intl, handleSubmit } = this.props;
     return (
-      <SubmitDialog
+      <ConfirmationDialog
         open={submitConfirmation}
         onCancel={() => this.setState({ submitConfirmation: false })}
         onConfirm={() => {
           this.setState({ submitConfirmation: false });
           handleSubmit();
         }}
+        message={intl.formatMessage(translations.submitConfirmation)}
       />
     );
   }
 
   renderUnsubmitDialog() {
     const { unsubmitConfirmation } = this.state;
-    const { handleUnsubmit } = this.props;
+    const { intl, handleUnsubmit } = this.props;
     return (
-      <UnsubmitDialog
+      <ConfirmationDialog
         open={unsubmitConfirmation}
         onCancel={() => this.setState({ unsubmitConfirmation: false })}
         onConfirm={() => {
           this.setState({ unsubmitConfirmation: false });
           handleUnsubmit();
         }}
+        message={intl.formatMessage(translations.unsubmitConfirmation)}
       />
     );
   }
 
   renderResetDialog() {
     const { resetConfirmation, resetAnswerId } = this.state;
-    const { handleReset } = this.props;
+    const { intl, handleReset } = this.props;
     return (
-      <ResetDialog
+      <ConfirmationDialog
         open={resetConfirmation}
         onCancel={() => this.setState({ resetConfirmation: false, resetAnswerId: null })}
         onConfirm={() => {
           this.setState({ resetConfirmation: false, resetAnswerId: null });
           handleReset(resetAnswerId);
         }}
+        message={intl.formatMessage(translations.resetConfirmation)}
       />
     );
   }
