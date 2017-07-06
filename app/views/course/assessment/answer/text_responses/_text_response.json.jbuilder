@@ -4,10 +4,10 @@ json.fields do
   question = answer.question.specific
 
   json.answer_text answer.answer_text unless question.hide_text
-  json.file do
-    # TODO: display multiple uploaded files
-    json.name answer.attachments.first.name
-  end if question.allow_attachment? && answer.attachments.any?
+end
+
+json.attachments answer.attachments do |attachment|
+  json.(attachment, :name, :id)
 end
 
 last_attempt = last_attempt(answer)

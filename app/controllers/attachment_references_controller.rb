@@ -8,11 +8,31 @@ class AttachmentReferencesController < ApplicationController
 
   def destroy
     authorize!(:destroy_attachment, @attachment_reference.attachable)
-    if @attachment_reference.destroy
+
+    success = @attachment_reference.destroy
+
+    respond_to do |format|
+      format.html { render_html_response(success) }
+      format.json { render_json_response(success) }
+    end
+  end
+
+  private
+
+  def render_html_response(success)
+    if success
       flash.now[:success] = t('.success')
     else
       flash.now[:danger] = t('.failure',
                              error: @attachment_reference.errors.full_messsages.to_sentence)
+    end
+  end
+
+  def render_json_response(success)
+    if success
+      head :ok
+    else
+      head :bad_request
     end
   end
 end

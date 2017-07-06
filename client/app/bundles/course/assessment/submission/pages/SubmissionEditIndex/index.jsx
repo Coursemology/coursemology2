@@ -10,8 +10,8 @@ import {
   unsubmit, autograde, reset, saveGrade, mark, unmark, publish,
 } from '../../actions';
 import {
-  AnswerProp, AssessmentProp, ExplanationProp, GradingProp, PostProp, QuestionProp,
-  ReduxFormProp, SubmissionProp, TopicProp,
+  AnswerProp, AssessmentProp, ExplanationProp, GradingProp,
+  PostProp, QuestionProp, ReduxFormProp, SubmissionProp, TopicProp,
 } from '../../propTypes';
 import { DATA_STATES, workflowStates } from '../../constants';
 

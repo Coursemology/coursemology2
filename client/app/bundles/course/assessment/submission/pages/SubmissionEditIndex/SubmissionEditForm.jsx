@@ -370,19 +370,19 @@ SubmissionEditForm.propTypes = {
   canGrade: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,
   tabbedView: PropTypes.bool.isRequired,
+  delayedGradePublication: PropTypes.bool.isRequired,
 
   attempting: PropTypes.bool.isRequired,
   submitted: PropTypes.bool.isRequired,
   graded: PropTypes.bool.isRequired,
   published: PropTypes.bool.isRequired,
 
+  explanations: PropTypes.objectOf(ExplanationProp),
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(QuestionProp),
   topics: PropTypes.objectOf(TopicProp),
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
-  explanations: PropTypes.objectOf(ExplanationProp),
-  delayedGradePublication: PropTypes.bool.isRequired,
 
   handleAutogradeSubmission: PropTypes.func,
   handleSaveDraft: PropTypes.func,

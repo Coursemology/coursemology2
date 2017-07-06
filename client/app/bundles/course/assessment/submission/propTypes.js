@@ -71,6 +71,12 @@ export const ExplanationProp =
     explanations: PropTypes.arrayOf(PropTypes.string),
   });
 
+export const AttachmentProp =
+  PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+  });
+
 export const AssessmentProp =
   PropTypes.shape({
     autograded: PropTypes.bool.isRequired,

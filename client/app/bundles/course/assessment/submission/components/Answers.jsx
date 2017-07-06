@@ -14,6 +14,7 @@ import FileInput from '../components/FileInput';
 import Editor from '../components/Editor';
 import TestCaseView from '../containers/TestCaseView';
 import ReadOnlyEditor from '../containers/ReadOnlyEditor';
+import UploadedFileView from '../containers/UploadedFileView';
 
 export default class Answers extends Component {
   static renderMultipleChoice(question, readOnly, answerId) {
@@ -59,9 +60,12 @@ export default class Answers extends Component {
 
   static renderFileUploader(question, readOnly, answerId) {
     return (
-      <FileInput name={`${answerId}[file]`} inputOptions={{ multiple: false }} disabled={readOnly}>
-        <p>Choose file</p>
-      </FileInput>
+      <div>
+        <UploadedFileView questionId={question.id} />
+        <FileInput name={`${answerId}[file]`} inputOptions={{ multiple: false }} disabled={readOnly}>
+          <p>Choose file</p>
+        </FileInput>
+      </div>
     );
   }
 

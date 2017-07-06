@@ -3,6 +3,7 @@ import { reducer as form } from 'redux-form';
 import submissionEdit from './submissionEdit';
 import annotations from './annotations';
 import answers from './answers';
+import attachments from './attachments';
 import commentForms from './commentForms';
 import explanations from './explanations';
 import posts from './posts';
@@ -16,6 +17,7 @@ export default combineReducers({
   form,
   annotations,
   answers,
+  attachments,
   commentForms,
   explanations,
   posts,

@@ -384,19 +384,19 @@ SubmissionEditStepForm.propTypes = {
 
   canGrade: PropTypes.bool.isRequired,
   maxStep: PropTypes.number.isRequired,
+  skippable: PropTypes.bool.isRequired,
 
   attempting: PropTypes.bool.isRequired,
   submitted: PropTypes.bool.isRequired,
 
-  pristine: PropTypes.bool,
-  skippable: PropTypes.bool.isRequired,
-  submitting: PropTypes.bool,
   explanations: PropTypes.objectOf(ExplanationProp),
   allCorrect: PropTypes.bool.isRequired,
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(QuestionProp),
   topics: PropTypes.objectOf(TopicProp),
   saveState: PropTypes.string.isRequired,
+  pristine: PropTypes.bool,
+  submitting: PropTypes.bool,
 
   handleSubmit: PropTypes.func,
   handleUnsubmit: PropTypes.func,
