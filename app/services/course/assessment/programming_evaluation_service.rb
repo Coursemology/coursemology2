@@ -2,8 +2,8 @@
 # Sets up a programming evaluation, queues it for execution by evaluators, then returns the results.
 class Course::Assessment::ProgrammingEvaluationService
   # The default timeout for the job to finish.
-  DEFAULT_TIMEOUT = Course::Assessment::ProgrammingEvaluation::TIMEOUT
-  CPU_TIMEOUT = Course::Assessment::ProgrammingEvaluation::CPU_TIMEOUT
+  DEFAULT_TIMEOUT = 5.minutes
+  CPU_TIMEOUT = Course::Assessment::Question::Programming::CPU_TIMEOUT
 
   # The ratio to multiply the memory limits from our evaluation to the container by.
   MEMORY_LIMIT_RATIO = 1.megabyte / 1.kilobyte

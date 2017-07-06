@@ -30,9 +30,6 @@ class Course < ActiveRecord::Base
                                dependent: :destroy
   has_many :assessment_skill_branches, class_name: Course::Assessment::SkillBranch.name,
                                        dependent: :destroy
-  has_many :assessment_programming_evaluations,
-           class_name: Course::Assessment::ProgrammingEvaluation.name, dependent: :destroy,
-           inverse_of: :course
   has_many :levels, dependent: :destroy, inverse_of: :course do
     include Course::LevelsConcern
   end

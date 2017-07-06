@@ -4,7 +4,6 @@ module Course::Assessment::AssessmentAbility
     if user
       define_student_assessment_permissions
       define_staff_assessment_permissions
-      define_auto_grader_assessment_permissions
     end
 
     super
@@ -30,10 +29,6 @@ module Course::Assessment::AssessmentAbility
     allow_staff_read_assessment_answers
     allow_staff_read_assessment_tests
     allow_staff_read_submission_questions
-  end
-
-  def define_auto_grader_assessment_permissions
-    allow_auto_grader_programming_evaluations
   end
 
   private
@@ -115,36 +110,6 @@ module Course::Assessment::AssessmentAbility
 
   def allow_staff_read_assessment_tests
     can :read_tests, Course::Assessment::Submission, assessment: assessment_course_staff_hash
-  end
-
-  def allow_auto_grader_programming_evaluations
-    if user.auto_grader?
-      allow_system_auto_grader_programming_evaluations
-    else
-      allow_instance_auto_grader_programming_evaluations
-      allow_course_auto_grader_programming_evaluations
-    end
-  end
-
-  def allow_system_auto_grader_programming_evaluations
-    can :read, Course::Assessment::ProgrammingEvaluation
-    can :update_result, Course::Assessment::ProgrammingEvaluation, evaluator_id: user.id
-  end
-
-  def allow_instance_auto_grader_programming_evaluations
-    instance_auto_grader_hash = {
-      instance: {
-        instance_users: { user_id: user.id, role: InstanceUser.roles[:auto_grader] }
-      }
-    }
-    can :read, Course::Assessment::ProgrammingEvaluation, course: instance_auto_grader_hash
-    can :update_result, Course::Assessment::ProgrammingEvaluation, evaluator_id: user.id
-  end
-
-  def allow_course_auto_grader_programming_evaluations
-    can :read, Course::Assessment::ProgrammingEvaluation,
-        course_course_user_hash(*CourseUser::AUTO_GRADER_ROLES.to_a)
-    can :update_result, Course::Assessment::ProgrammingEvaluation, evaluator_id: user.id
   end
 
   def allow_students_manage_annotations_for_own_assessment_submissions

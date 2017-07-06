@@ -3,8 +3,11 @@ module Course::Assessment::StubbedProgrammingEvaluationService
   private
 
   def evaluate_in_container
-    attributes = FactoryGirl.attributes_for(:course_assessment_programming_evaluation, :completed).
-                   slice(:stdout, :stderr, :test_report, :exit_code)
+    attributes = { stdout: '',
+                   stderr: '',
+                   test_report: File.read(Rails.root.join('spec/fixtures/course/' \
+                                                          'programming_multiple_test_suite_report.xml')),
+                   exit_code: 0 }
     # For timeout testing
     sleep(0.2)
 
