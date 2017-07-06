@@ -165,16 +165,6 @@ Rails.application.routes.draw do
         end
       end
 
-      collection do
-        namespace :assessment do
-          resources :programming_evaluations, only: [:index, :show], defaults: { format: 'json' } do
-            post 'allocate' => 'programming_evaluations#allocate', on: :collection
-            get 'package' => 'programming_evaluations#package'
-            put 'result' => 'programming_evaluations#update_result'
-          end
-        end
-      end
-
       scope module: :assessment do
         resources :assessments do
           post 'reorder', on: :member
