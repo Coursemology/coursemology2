@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { reset } from 'redux-form';
 
 import ProgressPanel from '../../components/ProgressPanel';
 import SubmissionEditForm from './SubmissionEditForm';
@@ -39,9 +40,10 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   handleSubmit() {
-    const { form, match: { params }, boundFinalise } = this.props;
+    const { form, match: { params }, boundFinalise, resetForm } = this.props;
     const answers = Object.values(form.values);
     boundFinalise(params.submissionId, answers);
+    resetForm();
   }
 
   handleUnsubmit() {
@@ -50,9 +52,10 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   handleSaveDraft() {
-    const { form, match: { params }, boundSaveDraft } = this.props;
+    const { form, match: { params }, boundSaveDraft, resetForm } = this.props;
     const answers = Object.values(form.values);
     boundSaveDraft(params.submissionId, answers);
+    resetForm();
   }
 
   handleSaveGrade() {
@@ -211,6 +214,7 @@ VisibleSubmissionEditIndex.propTypes = {
   boundMark: PropTypes.func.isRequired,
   boundUnmark: PropTypes.func.isRequired,
   boundPublish: PropTypes.func.isRequired,
+  resetForm: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -243,6 +247,7 @@ function mapDispatchToProps(dispatch) {
     boundMark: (id, grades) => dispatch(mark(id, grades)),
     boundUnmark: id => dispatch(unmark(id)),
     boundPublish: (id, grades) => dispatch(publish(id, grades)),
+    resetForm: () => dispatch(reset('submissionEdit')),
   };
 }
 
