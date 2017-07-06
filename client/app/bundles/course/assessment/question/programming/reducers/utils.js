@@ -1,7 +1,8 @@
+/* eslint-disable import/prefer-default-export */
 /**
  * Formats the display for file sizes
  */
-export default function formatBytes(bytes, decimals) {
+export function formatBytes(bytes, decimals) {
   if (bytes === 0) return '0 Byte';
   const k = 1000; // or 1024 for binary
   const dm = decimals || 3;

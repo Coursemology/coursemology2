@@ -7,7 +7,7 @@ import {
 import RaisedButton from 'material-ui/RaisedButton';
 import { grey100, grey300, white } from 'material-ui/styles/colors';
 import styles from './../containers/OnlineEditor/OnlineEditorView.scss';
-import formatBytes from './../reducers/utils';
+import { formatBytes } from './../reducers/utils';
 
 function ExistingDataFile(props) {
   const { filename, filesize, toDelete, deleteExistingDataFile, isLoading, isLast } = props;
@@ -41,5 +41,14 @@ function ExistingDataFile(props) {
     </TableRow>
   );
 }
+
+ExistingDataFile.propTypes = {
+  filename: PropTypes.string.isRequired,
+  filesize: PropTypes.number.isRequired,
+  toDelete: PropTypes.bool.isRequired,
+  deleteExistingDataFile: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  isLast: PropTypes.bool.isRequired,
+};
 
 export default injectIntl(ExistingDataFile);

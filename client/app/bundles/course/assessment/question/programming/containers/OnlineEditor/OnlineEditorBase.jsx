@@ -2,6 +2,7 @@ import translations from './OnlineEditorView.intl';
 import ExistingDataFile from './../../components/ExistingDataFile';
 import NewDataFile from './../../components/NewDataFile';
 import TestCase from './../../components/TestCase';
+import EditorCard from './../../components/EditorCard';
 
 export function validation(data, pathOfKeysToData, intl) {
   const errors = [];
@@ -52,4 +53,5 @@ export {
   ExistingDataFile,
   NewDataFile,
   TestCase,
+  EditorCard,
 };

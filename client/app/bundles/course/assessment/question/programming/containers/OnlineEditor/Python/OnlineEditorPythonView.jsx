@@ -1,7 +1,6 @@
 import Immutable from 'immutable';
 
 import React, { PropTypes } from 'react';
-import AceEditor from 'react-ace';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
@@ -15,7 +14,7 @@ import 'brace/theme/monokai';
 
 import styles from './../OnlineEditorView.scss';
 import translations from './../OnlineEditorView.intl';
-import { ExistingDataFile, NewDataFile, TestCase } from './../OnlineEditorBase';
+import { ExistingDataFile, NewDataFile, TestCase, EditorCard } from './../OnlineEditorBase';
 
 const MAX_TEST_CASES = 99;
 
@@ -41,18 +40,6 @@ const contextTypes = {
 };
 
 class OnlineEditorPythonView extends React.Component {
-
-  static getInputName(field) {
-    return `question_programming[${field}]`;
-  }
-
-  static getTestInputName(type, field) {
-    return `question_programming[test_cases][${type}][][${field}]`;
-  }
-
-  codeChangeHandler(field) {
-    return e => this.props.actions.updateCodeBlock(field, e);
-  }
 
   testCaseCreateHandler(type) {
     return (e) => {
@@ -227,37 +214,18 @@ class OnlineEditorPythonView extends React.Component {
 
   renderEditorCard(header, subtitle, field) {
     const value = this.props.data.get(field) || '';
-
     return (
-      <Card containerStyle={{ paddingBottom: 0 }} initiallyExpanded>
-        <CardHeader
-          title={header}
-          textStyle={{ fontWeight: 'bold' }}
-          subtitle={subtitle}
-          actAsExpander
-          showExpandableButton
-        />
-        <CardText expandable style={{ padding: 0 }}>
-          <textarea
-            name={OnlineEditorPythonView.getInputName(field)}
-            value={value}
-            style={{ display: 'none' }}
-            readOnly="true"
-          />
-          <AceEditor
-            mode="python"
-            theme="monokai"
-            width="100%"
-            minLines={10}
-            maxLines={Math.max(20, value.split(/\r\n|\r|\n/).length)}
-            name={OnlineEditorPythonView.getInputName(field)}
-            value={value}
-            onChange={this.codeChangeHandler(field)}
-            editorProps={{ $blockScrolling: true }}
-            setOptions={{ useSoftTabs: true, readOnly: this.props.isLoading }}
-          />
-        </CardText>
-      </Card>
+      <EditorCard
+        {...{
+          updateCodeBlock: this.props.actions.updateCodeBlock,
+          mode: 'python',
+          field,
+          value,
+          header,
+          subtitle,
+          isLoading: this.props.isLoading,
+        }}
+      />
     );
   }
 

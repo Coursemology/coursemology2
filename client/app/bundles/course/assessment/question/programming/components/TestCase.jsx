@@ -57,8 +57,7 @@ class TestCase extends React.Component {
 
   render() {
     const displayedIndex = (`0${this.props.index + 1}`).slice(-2);
-
-  	return (
+    return (
       <TableRow>
         <TableHeaderColumn className={styles.deleteButtonCell}>
           <RaisedButton
