@@ -2,15 +2,15 @@ import { defineMessages } from 'react-intl';
 
 export default defineMessages({
   autograded: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.autograded',
+    id: 'course.assessment.question.programming.onlineEditorView.autograded',
     defaultMessage: 'Autograded',
   },
   autogradedAssessment: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.autogradedAssessment',
+    id: 'course.assessment.question.programming.onlineEditorView.autogradedAssessment',
     defaultMessage: 'Answers to non-autograded programming questions will always receive the maximum grade',
   },
   autogradedToggleDisabled: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.autogradedToggleDisabled',
+    id: 'course.assessment.question.programming.onlineEditorView.autogradedToggleDisabled',
     defaultMessage: 'This question cannot be switched to non-autograded as some answers have already been submitted',
   },
   titleFieldLabel: {

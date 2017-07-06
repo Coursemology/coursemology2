@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Immutable from 'immutable';
 
-import ProgrammingQuestionForm from './components/ProgrammingQuestionForm';
+import ProgrammingQuestionForm from './containers/ProgrammingQuestionForm/ProgrammingQuestionForm';
 import * as onlineEditorActionCreators from './actions/onlineEditorActionCreators';
 import * as programmingQuestionActionCreators from './actions/programmingQuestionActionCreators';
 

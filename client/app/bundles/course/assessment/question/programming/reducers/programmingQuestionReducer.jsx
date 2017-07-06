@@ -52,6 +52,18 @@ export const initialState = Immutable.fromJS({
       },
       data_files: [],
     },
+    c_cpp: {
+      prepend: '',
+      append: '',
+      solution: '',
+      submission: '',
+      test_cases: {
+        evaluation: [],
+        private: [],
+        public: [],
+      },
+      data_files: [],
+    },
     data_files: {
       to_delete: Immutable.Set(),
       new: [
@@ -99,15 +111,15 @@ function questionReducer(state, action) {
   }
 }
 
-function pythonTestReducer(state, action) {
+function testReducer(state, action) {
   const { type } = action;
 
   switch (type) {
-    case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE: {
+    case editorActionTypes.CODE_BLOCK_UPDATE: {
       const { field, newValue } = action;
       return state.set(field, newValue);
     }
-    case editorActionTypes.PYTHON_TEST_CASE_CREATE: {
+    case editorActionTypes.TEST_CASE_CREATE: {
       const { testType } = action;
       const newTest = {
         expression: '',
@@ -119,13 +131,13 @@ function pythonTestReducer(state, action) {
         .setIn(['test_cases', testType], tests)
         .deleteIn(['test_cases', 'error']);
     }
-    case editorActionTypes.PYTHON_TEST_CASE_UPDATE: {
+    case editorActionTypes.TEST_CASE_UPDATE: {
       const { testType, index, field, newValue } = action;
       return state
         .setIn(['test_cases', testType, index, field], newValue)
         .deleteIn(['test_cases', testType, index, 'error']);
     }
-    case editorActionTypes.PYTHON_TEST_CASE_DELETE: {
+    case editorActionTypes.TEST_CASE_DELETE: {
       const { testType, index } = action;
       const tests = state.get('test_cases').get(testType).splice(index, 1);
       return state.setIn(['test_cases', testType], tests);
@@ -140,7 +152,7 @@ function dataFilesReducer(state, action) {
   const { type } = action;
 
   switch (type) {
-    case editorActionTypes.PYTHON_NEW_DATA_FILE_UPDATE: {
+    case editorActionTypes.NEW_DATA_FILE_UPDATE: {
       const { index, filename } = action;
       let newFiles = state.get('new')
         .update(index, fileData => Immutable.fromJS({ key: fileData.get('key'), filename }));
@@ -154,11 +166,11 @@ function dataFilesReducer(state, action) {
 
       return state.set('new', newFiles);
     }
-    case editorActionTypes.PYTHON_NEW_DATA_FILE_DELETE: {
+    case editorActionTypes.NEW_DATA_FILE_DELETE: {
       const { index } = action;
       return state.set('new', state.get('new').delete(index));
     }
-    case editorActionTypes.PYTHON_EXISTING_DATA_FILE_DELETE: {
+    case editorActionTypes.EXISTING_DATA_FILE_DELETE: {
       const { filename, toDelete } = action;
       const currentFilesToDelete = state.get('to_delete');
 
@@ -267,16 +279,17 @@ export default function programmingQuestionReducer(state = initialState, action)
       const { mode } = action;
       return state.setIn(['test_ui', 'mode'], mode);
     }
-    case editorActionTypes.PYTHON_TEST_CASE_CREATE:
-    case editorActionTypes.PYTHON_TEST_CASE_UPDATE:
-    case editorActionTypes.PYTHON_TEST_CASE_DELETE:
-    case editorActionTypes.PYTHON_CODE_BLOCK_UPDATE: {
-      const pythonTest = state.get('test_ui').get('python');
-      return state.setIn(['test_ui', 'python'], pythonTestReducer(pythonTest, action));
+    case editorActionTypes.TEST_CASE_CREATE:
+    case editorActionTypes.TEST_CASE_UPDATE:
+    case editorActionTypes.TEST_CASE_DELETE:
+    case editorActionTypes.CODE_BLOCK_UPDATE: {
+      const mode = state.get('test_ui').get('mode');
+      const test = state.get('test_ui').get(mode);
+      return state.setIn(['test_ui', mode], testReducer(test, action));
     }
-    case editorActionTypes.PYTHON_NEW_DATA_FILE_UPDATE:
-    case editorActionTypes.PYTHON_NEW_DATA_FILE_DELETE:
-    case editorActionTypes.PYTHON_EXISTING_DATA_FILE_DELETE: {
+    case editorActionTypes.NEW_DATA_FILE_UPDATE:
+    case editorActionTypes.NEW_DATA_FILE_DELETE:
+    case editorActionTypes.EXISTING_DATA_FILE_DELETE: {
       const dataFiles = state.get('test_ui').get('data_files');
       return state.setIn(['test_ui', 'data_files'], dataFilesReducer(dataFiles, action));
     }
