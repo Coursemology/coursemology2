@@ -7,7 +7,7 @@ class CourseUser < ActiveRecord::Base
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
 
-  enum role: { student: 0, teaching_assistant: 1, manager: 2, owner: 3, auto_grader: 4 }
+  enum role: { student: 0, teaching_assistant: 1, manager: 2, owner: 3 }
 
   # A set of roles which comprise the staff of a course.
   STAFF_ROLES = Set[:teaching_assistant, :manager, :owner].freeze
@@ -17,9 +17,6 @@ class CourseUser < ActiveRecord::Base
 
   # A set of roles which comprise the managers of a course.
   MANAGER_ROLES = Set[:manager, :owner].freeze
-
-  # A set of roles which comprise the auto graders of a course.
-  AUTO_GRADER_ROLES = Set[:auto_grader].freeze
 
   belongs_to :user, inverse_of: :course_users
   belongs_to :course, inverse_of: :course_users
@@ -76,7 +73,6 @@ class CourseUser < ActiveRecord::Base
   scope :students, -> { where(role: roles[:student]) }
   scope :phantom, -> { where(phantom: true) }
   scope :without_phantom_users, -> { where(phantom: false) }
-  scope :human, -> { where.not(role: roles[:auto_grader]) }
   scope :with_course_statistics, -> { all.calculated(:experience_points, :achievement_count) }
 
   # Order course_users by experience points for use in the course leaderboard.

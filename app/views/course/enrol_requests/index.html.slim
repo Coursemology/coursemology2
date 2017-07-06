@@ -22,7 +22,7 @@ div.users
             = simple_fields_for CourseUser.new(name: request.user.name), wrapper: :inline_form do |f|
               th = f.input :name
               td = request.user.email
-              td = f.input :role, as: :select, collection: CourseUser.roles.keys - ['auto_grader']
+              td = f.input :role, as: :select, collection: CourseUser.roles.keys
               td = f.input :phantom, label: false
               td
                 = f.button :submit, class: 'approve' do

@@ -34,7 +34,7 @@ div.users
             = simple_fields_for user, resource: :course_user do |f|
               th = f.input :name, label: false
               td = f.object.user.email
-              td = f.input :role, as: :select, collection: CourseUser.roles.keys - ['auto_grader'], label: false
+              td = f.input :role, as: :select, collection: CourseUser.roles.keys, label: false
               td = f.input :phantom
               td
                 = f.button :submit, id: 'update' do

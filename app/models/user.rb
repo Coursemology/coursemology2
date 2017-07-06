@@ -9,13 +9,13 @@ class User < ActiveRecord::Base
   acts_as_reader
   mount_uploader :profile_photo, ImageUploader
 
-  enum role: { normal: 0, administrator: 1, auto_grader: 2 }
+  enum role: { normal: 0, administrator: 1 }
 
   class << self
     # Finds the System user.
     #
     # This account cannot be logged into (because it has no email and a null password), and the
-    # User Authentication Concern explcitly rejects any user with the system user ID.
+    # User Authentication Concern explicitly rejects any user with the system user ID.
     #
     # @return [User]
     def system

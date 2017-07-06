@@ -11,10 +11,6 @@ FactoryGirl.define do
     trait :instructor do
       role :instructor
     end
-
-    trait :auto_grader do
-      role :auto_grader
-    end
   end
 
   factory :instance_administrator, parent: :instance_user do

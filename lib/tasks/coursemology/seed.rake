@@ -33,9 +33,6 @@ namespace :coursemology do
       # Get the admin user
       admin = User::Email.find_by_email('test@example.org').user
 
-      # Get the autograder user
-      autograder = User::Email.find_by_email('autograder@example.org').user
-
       # Create a course owner
       course_owner = FactoryGirl.create(:user, name: 'Course Owner')
 
@@ -56,10 +53,6 @@ namespace :coursemology do
         FactoryGirl.create_list(:course_student, 20, course: course)
         FactoryGirl.create_list(:course_teaching_assistant, 5, course: course)
         FactoryGirl.create_list(:course_manager, 5, course: course)
-
-        # Add the autograder to the course
-        FactoryGirl.create(:course_user, :auto_grader, user: autograder, course: course,
-                                                       name: 'Autograder')
 
         # Add assessments
         FactoryGirl.create(:assessment, :published_with_all_question_types,
