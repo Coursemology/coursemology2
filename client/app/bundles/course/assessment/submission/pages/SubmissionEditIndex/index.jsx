@@ -7,7 +7,7 @@ import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
 import {
   fetchSubmission, autogradeSubmission, saveDraft, submit,
-  unsubmit, autograde, reset, saveGrade, mark, unmark, publish,
+  unsubmit, autogradeAnswer, resetAnswer, saveGrade, mark, unmark, publish,
 } from '../../actions';
 import {
   AnswerProp, AssessmentProp, ExplanationProp, GradingProp,
@@ -17,8 +17,8 @@ import { DATA_STATES, workflowStates } from '../../constants';
 
 class VisibleSubmissionEditIndex extends Component {
   componentDidMount() {
-    const { fetchData, match: { params } } = this.props;
-    fetchData(params.submissionId);
+    const { boundFetchSubmission, match: { params } } = this.props;
+    boundFetchSubmission(params.submissionId);
   }
 
   allCorrect() {
@@ -34,56 +34,56 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   handleAutogradeSubmission() {
-    const { match: { params }, autogradeAll } = this.props;
-    autogradeAll(params.submissionId);
+    const { match: { params }, boundAutogradeSubmission } = this.props;
+    boundAutogradeSubmission(params.submissionId);
   }
 
   handleSubmit() {
-    const { form, match: { params }, submitAnswer } = this.props;
+    const { form, match: { params }, boundFinalise } = this.props;
     const answers = Object.values(form.values);
-    submitAnswer(params.submissionId, answers);
+    boundFinalise(params.submissionId, answers);
   }
 
   handleUnsubmit() {
-    const { match: { params }, unsubmitAnswer } = this.props;
-    unsubmitAnswer(params.submissionId);
+    const { match: { params }, boundUnsubmit } = this.props;
+    boundUnsubmit(params.submissionId);
   }
 
   handleSaveDraft() {
-    const { form, match: { params }, saveDraftAnswer } = this.props;
+    const { form, match: { params }, boundSaveDraft } = this.props;
     const answers = Object.values(form.values);
-    saveDraftAnswer(params.submissionId, answers);
-  }
-
-  handleAutograde(answerId) {
-    const { form, match: { params }, autogradeAnswer } = this.props;
-    const answers = [form.values[answerId]];
-    autogradeAnswer(params.submissionId, answers);
+    boundSaveDraft(params.submissionId, answers);
   }
 
   handleSaveGrade() {
-    const { match: { params }, grading, saveAnswerGrade } = this.props;
-    saveAnswerGrade(params.submissionId, Object.values(grading));
+    const { match: { params }, grading, boundSaveGrade } = this.props;
+    boundSaveGrade(params.submissionId, Object.values(grading));
   }
 
   handleReset(answerId) {
-    const { match: { params }, resetAnswer } = this.props;
-    resetAnswer(params.submissionId, answerId);
+    const { match: { params }, boundResetAnswer } = this.props;
+    boundResetAnswer(params.submissionId, answerId);
+  }
+
+  handleAutograde(answerId) {
+    const { form, match: { params }, boundAutograde } = this.props;
+    const answers = [form.values[answerId]];
+    boundAutograde(params.submissionId, answers);
   }
 
   handleMark() {
-    const { match: { params }, grading, markAnswer } = this.props;
-    markAnswer(params.submissionId, Object.values(grading));
+    const { match: { params }, grading, boundMark } = this.props;
+    boundMark(params.submissionId, Object.values(grading));
   }
 
   handleUnmark() {
-    const { match: { params }, unmarkAnswer } = this.props;
-    unmarkAnswer(params.submissionId);
+    const { match: { params }, boundUnmark } = this.props;
+    boundUnmark(params.submissionId);
   }
 
   handlePublish() {
-    const { match: { params }, grading, publishAnswer } = this.props;
-    publishAnswer(params.submissionId, Object.values(grading));
+    const { match: { params }, grading, boundPublish } = this.props;
+    boundPublish(params.submissionId, Object.values(grading));
   }
 
   renderProgress() {
@@ -200,17 +200,17 @@ VisibleSubmissionEditIndex.propTypes = {
   dataState: PropTypes.string.isRequired,
   saveState: PropTypes.string.isRequired,
 
-  fetchData: PropTypes.func.isRequired,
-  autogradeAll: PropTypes.func.isRequired,
-  submitAnswer: PropTypes.func.isRequired,
-  unsubmitAnswer: PropTypes.func.isRequired,
-  saveDraftAnswer: PropTypes.func.isRequired,
-  autogradeAnswer: PropTypes.func.isRequired,
-  saveAnswerGrade: PropTypes.func.isRequired,
-  resetAnswer: PropTypes.func.isRequired,
-  markAnswer: PropTypes.func.isRequired,
-  unmarkAnswer: PropTypes.func.isRequired,
-  publishAnswer: PropTypes.func.isRequired,
+  boundFetchSubmission: PropTypes.func.isRequired,
+  boundAutogradeSubmission: PropTypes.func.isRequired,
+  boundResetAnswer: PropTypes.func.isRequired,
+  boundAutograde: PropTypes.func.isRequired,
+  boundSaveDraft: PropTypes.func.isRequired,
+  boundSaveGrade: PropTypes.func.isRequired,
+  boundFinalise: PropTypes.func.isRequired,
+  boundUnsubmit: PropTypes.func.isRequired,
+  boundMark: PropTypes.func.isRequired,
+  boundUnmark: PropTypes.func.isRequired,
+  boundPublish: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -232,17 +232,17 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchData: id => dispatch(fetchSubmission(id)),
-    autogradeAll: id => dispatch(autogradeSubmission(id)),
-    submitAnswer: (id, answers) => dispatch(submit(id, answers)),
-    unsubmitAnswer: id => dispatch(unsubmit(id)),
-    saveDraftAnswer: (id, answers) => dispatch(saveDraft(id, answers)),
-    autogradeAnswer: (id, answers) => dispatch(autograde(id, answers)),
-    saveAnswerGrade: (id, grades) => dispatch(saveGrade(id, grades)),
-    resetAnswer: (id, answerId) => dispatch(reset(id, answerId)),
-    markAnswer: (id, grades) => dispatch(mark(id, grades)),
-    unmarkAnswer: id => dispatch(unmark(id)),
-    publishAnswer: (id, grades) => dispatch(publish(id, grades)),
+    boundFetchSubmission: id => dispatch(fetchSubmission(id)),
+    boundAutogradeSubmission: id => dispatch(autogradeSubmission(id)),
+    boundResetAnswer: (id, answerId) => dispatch(resetAnswer(id, answerId)),
+    boundAutograde: (id, answers) => dispatch(autogradeAnswer(id, answers)),
+    boundSaveDraft: (id, answers) => dispatch(saveDraft(id, answers)),
+    boundSaveGrade: (id, grades) => dispatch(saveGrade(id, grades)),
+    boundFinalise: (id, answers) => dispatch(submit(id, answers)),
+    boundUnsubmit: id => dispatch(unsubmit(id)),
+    boundMark: (id, grades) => dispatch(mark(id, grades)),
+    boundUnmark: id => dispatch(unmark(id)),
+    boundPublish: (id, grades) => dispatch(publish(id, grades)),
   };
 }
 

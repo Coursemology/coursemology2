@@ -129,7 +129,7 @@ function getEvaluationResult(submissionId, answerId) {
   };
 }
 
-export function autograde(submissionId, answers) {
+export function autogradeAnswer(submissionId, answers) {
   const payload = { submission: { answers, auto_grade: true } };
   return (dispatch) => {
     dispatch({ type: actionTypes.AUTOGRADE_REQUEST });
@@ -155,7 +155,7 @@ export function autograde(submissionId, answers) {
   };
 }
 
-export function reset(submissionId, answerId) {
+export function resetAnswer(submissionId, answerId) {
   const payload = { answer_id: answerId, reset_answer: true };
   return (dispatch) => {
     dispatch({ type: actionTypes.RESET_REQUEST });
