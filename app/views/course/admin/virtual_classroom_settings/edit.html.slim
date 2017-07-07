@@ -3,6 +3,8 @@
   = f.input :title, as: :string, placeholder: t('.title_placeholder')
   = f.input :braincert_whiteboard_api_key, placeholder: t('.braincert_whiteboard_api_key_hint')
   = f.input :braincert_server_region, placeholder: t('.braincert_server_region_hint')
+  = f.input :braincert_whiteboard_timezone, placeholder: t('.braincert_whiteboard_timezone_hint'),
+    as: :integer
   = f.input :max_duration, placeholder: t('.max_duration_hint')
   = f.input :pagination, as: :integer
   = f.button :submit
