@@ -29,9 +29,5 @@ FactoryGirl.define do
       role :owner
       sequence(:name) { |n| "owner #{n}" }
     end
-
-    trait :auto_grader do
-      role :auto_grader
-    end
   end
 end

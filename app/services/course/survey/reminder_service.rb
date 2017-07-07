@@ -20,8 +20,7 @@ class Course::Survey::ReminderService
   end
 
   def send_opening_reminder(survey)
-    # Send notification email to all course users that do not have auto_grader role
-    recipients = survey.course.course_users.human.includes(:user)
+    recipients = survey.course.course_users.includes(:user)
     recipients.each do |recipient|
       Course::Mailer.survey_opening_reminder_email(recipient.user, survey).deliver_later
     end

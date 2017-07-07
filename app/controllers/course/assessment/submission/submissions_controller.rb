@@ -158,7 +158,8 @@ class Course::Assessment::Submission::SubmissionsController < \
     dead_answers = submitted_answers.select do |a|
       job = a.auto_grading&.job
       job && job.submitted? &&
-        job.created_at < Time.zone.now - Course::Assessment::ProgrammingEvaluation::TIMEOUT
+        job.created_at < Time.zone.now -
+                         Course::Assessment::ProgrammingEvaluationService::DEFAULT_TIMEOUT
     end
 
     dead_answers.each do |a|

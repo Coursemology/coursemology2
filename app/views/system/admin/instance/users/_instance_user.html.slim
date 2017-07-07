@@ -7,8 +7,7 @@
     td = user.email
     / TODO: Add links after user public profile page was implemented
     td = link_to user.courses.length, '#'
-    td = f.input :role, as: :select, collection: InstanceUser.roles.keys - ['auto_grader'],
-                 label: false
+    td = f.input :role, as: :select, collection: InstanceUser.roles.keys, label: false
     td
       = f.button :submit, id: 'update' do
         = fa_icon 'check'.freeze

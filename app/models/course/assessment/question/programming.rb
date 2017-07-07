@@ -5,6 +5,9 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
   # The table name for this model is singular.
   self.table_name = table_name.singularize
 
+  # Maximum CPU time a programming question can allow before the evaluation gets killed.
+  CPU_TIMEOUT = 30.seconds
+
   acts_as :question, class_name: Course::Assessment::Question.name
 
   before_save :process_package, unless: :skip_process_package?
@@ -13,9 +16,7 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
   after_save :clear_duplication_flag
 
   validates :memory_limit, numericality: { greater_than: 0 }, allow_nil: true
-  validates :time_limit, numericality: { greater_than: 0,
-                                         less_than_or_equal_to:
-                                           Course::Assessment::ProgrammingEvaluation::CPU_TIMEOUT },
+  validates :time_limit, numericality: { greater_than: 0, less_than_or_equal_to: CPU_TIMEOUT },
                          allow_nil: true
 
   belongs_to :import_job, class_name: TrackableJob::Job.name, inverse_of: nil

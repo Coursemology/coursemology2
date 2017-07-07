@@ -8,16 +8,6 @@ ActsAsTenant.with_tenant(Instance.default) do
     user.save!
   end
 
-  # Create an autograder account.
-  user = User::Email.find_by_email('autograder@example.org')
-  unless user
-    user = User.new(name: 'Autograder', email: 'autograder@example.org',
-                    password: 'randompassword', role: :auto_grader,
-                    authentication_token: 'randomtoken')
-    user.skip_confirmation!
-    user.save!
-  end
-
   # Create a normal user account.
   user = User::Email.find_by_email('user1@example.org')
   unless user
