@@ -1,6 +1,7 @@
 json.submission do
   json.canGrade can_grade
   json.canUpdate can_update
+  json.isCreator current_user == submission.creator
 
   if assessment.autograded?
     question = assessment.questions.next_unanswered(submission)

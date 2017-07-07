@@ -8,6 +8,7 @@ import Chip from 'material-ui/Chip';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { AttachmentProp } from '../propTypes';
 import destroy from '../actions/attachments';
+import { workflowStates } from '../constants';
 
 const translations = defineMessages({
   uploadedFiles: {
@@ -47,9 +48,9 @@ class VisibleUploadedFileView extends Component {
   }
 
   renderAttachment(attachment) {
-    const { canUpdate } = this.props;
+    const { canDestroyAttachments } = this.props;
 
-    const onRequestDelete = canUpdate ? () => this.setState({
+    const onRequestDelete = canDestroyAttachments ? () => this.setState({
       deleteConfirmation: true,
       deleteAttachmentId: attachment.id,
     }) : null;
@@ -98,7 +99,7 @@ class VisibleUploadedFileView extends Component {
 
 VisibleUploadedFileView.propTypes = {
   intl: intlShape.isRequired,
-  canUpdate: PropTypes.bool,
+  canDestroyAttachments: PropTypes.bool,
   attachments: PropTypes.arrayOf(AttachmentProp),
 
   deleteAttachment: PropTypes.func,
@@ -106,8 +107,14 @@ VisibleUploadedFileView.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   const { questionId } = ownProps;
+  const { submission } = state.submissionEdit;
+
+  const canDestroyAttachments =
+    submission.workflowState === workflowStates.Attempting &&
+    submission.isCreator;
+
   return {
-    canUpdate: state.submissionEdit.submission.canUpdate,
+    canDestroyAttachments,
     attachments: state.attachments[questionId],
   };
 }
