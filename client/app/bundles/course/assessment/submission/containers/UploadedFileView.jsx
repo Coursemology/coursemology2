@@ -18,6 +18,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.UploadedFileView.deleteConfirmation',
     defaultMessage: 'Are you sure you want to delete this attachment?',
   },
+  noFiles: {
+    id: 'course.assessment.submission.UploadedFileView.noFiles',
+    defaultMessage: 'No files uploaded.',
+  },
 });
 
 const styles = {
@@ -27,6 +31,7 @@ const styles = {
   wrapper: {
     display: 'flex',
     flexWrap: 'wrap',
+    marginTop: 10,
   },
 };
 
@@ -51,7 +56,9 @@ class VisibleUploadedFileView extends Component {
 
     return (
       <Chip key={attachment.id} style={styles.chip} onRequestDelete={onRequestDelete}>
-        <a href={this.buildAttachmentUrl(attachment)} download>{attachment.name}</a>
+        <a href={this.buildAttachmentUrl(attachment)} download>
+          {attachment.name}
+        </a>
       </Chip>
     );
   }
@@ -78,7 +85,10 @@ class VisibleUploadedFileView extends Component {
       <div>
         <strong>{intl.formatMessage(translations.uploadedFiles)}</strong>
         <div style={styles.wrapper}>
-          {attachments.map(this.renderAttachment, this)}
+          {attachments.length ?
+            attachments.map(this.renderAttachment, this) :
+            <span>{intl.formatMessage(translations.noFiles)}</span>
+          }
         </div>
         {this.renderDeleteDialog()}
       </div>

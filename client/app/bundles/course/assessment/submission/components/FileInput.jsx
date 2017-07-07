@@ -2,10 +2,21 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import { Field } from 'redux-form';
-import RaisedButton from 'material-ui/RaisedButton';
 import Chip from 'material-ui/Chip';
 import { Card, CardText } from 'material-ui/Card';
-import AddIcon from 'material-ui/svg-icons/content/add';
+import FileUploadIcon from 'material-ui/svg-icons/file/file-upload';
+import { defineMessages, FormattedMessage } from 'react-intl';
+
+const translations = defineMessages({
+  uploadDisabled: {
+    id: 'course.assessment.submission.UploadedFileView.uploadDisabled',
+    defaultMessage: 'File upload disabled',
+  },
+  uploadLabel: {
+    id: 'course.assessment.submission.UploadedFileView.uploadLabel',
+    defaultMessage: 'Drag and drop or click to upload files',
+  },
+});
 
 const styles = {
   chip: {
@@ -17,6 +28,7 @@ const styles = {
     marginTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
+    textAlign: 'center',
   },
   wrapper: {
     display: 'flex',
@@ -37,7 +49,6 @@ class FileInput extends Component {
       error: PropTypes.bool,
       touched: PropTypes.bool,
     }).isRequired,
-    children: PropTypes.node,
     input: PropTypes.shape({
       onChange: PropTypes.func,
     }).isRequired,
@@ -51,26 +62,8 @@ class FileInput extends Component {
   };
 
   state = {
-    dragging: false,
     dropzoneActive: false,
   };
-
-  displayFileNames(files) {
-    const { disabled } = this.props;
-    const { dragging, dropzoneActive } = this.state;
-    if (dropzoneActive) {
-      return <AddIcon style={{ width: 60, height: 60 }} />;
-    }
-
-    if (!files || dragging) {
-      return (
-        <h4>{disabled ? 'File upload disabled' : 'Drag and drop or click to upload files'}</h4>
-      );
-    }
-    return (<div style={styles.wrapper}>
-      {files.map(f => (<Chip style={styles.chip} key={f.name}>{f.name}</Chip>))}
-    </div>);
-  }
 
   onDragEnter() {
     this.setState({ dropzoneActive: true });
@@ -88,6 +81,30 @@ class FileInput extends Component {
       return onChange(files);
     }
     return () => {};
+  }
+
+  displayFileNames(files) {
+    const { disabled } = this.props;
+    const { dropzoneActive } = this.state;
+    if (dropzoneActive) {
+      return <FileUploadIcon style={{ width: 60, height: 60 }} />;
+    }
+
+    if (!files || !files.length) {
+      return (
+        <h4>
+          {disabled ?
+            <FormattedMessage {...translations.uploadDisabled} /> :
+            <FormattedMessage {...translations.uploadLabel} />
+          }
+        </h4>
+      );
+    }
+    return (<div>
+      <div style={styles.wrapper}>
+        {files.map(f => (<Chip style={styles.chip} key={f.name}>{f.name}</Chip>))}
+      </div>
+    </div>);
   }
 
   render() {

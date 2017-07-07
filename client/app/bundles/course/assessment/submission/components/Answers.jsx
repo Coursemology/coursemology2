@@ -61,7 +61,6 @@ export default class Answers extends Component {
   static renderFileUploader(question, readOnly, answerId) {
     return (
       <div>
-        <UploadedFileView questionId={question.id} />
         <FileInput name={`${answerId}[files]`} disabled={readOnly} />
       </div>
     );
@@ -78,13 +77,19 @@ export default class Answers extends Component {
           multiLine
           {...{ disabled: readOnly }}
         />
+        <UploadedFileView questionId={question.id} />
         {allowUpload && !readOnly ? Answers.renderFileUploader(question, readOnly, answerId) : null}
       </div>
     );
   }
 
   static renderFileUpload(question, readOnly, answerId) {
-    return <div>{Answers.renderFileUploader(question, readOnly, answerId)}</div>;
+    return (
+      <div>
+        <UploadedFileView questionId={question.id} />
+        {!readOnly ? Answers.renderFileUploader(question, readOnly, answerId) : null}
+      </div>
+    );
   }
 
   static renderProgrammingEditor(file, answerId, language) {
