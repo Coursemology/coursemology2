@@ -15,9 +15,23 @@ class Course::Settings::VirtualClassroomsComponent
 
   # Returns BrainCert Whiteboard API key of virtual classrooms component
   #
-  # @return [String] The custom or default title of virtual classrooms component
+  # @return [String] The custom or default API key for virtual classrooms component
   def braincert_whiteboard_api_key
     @settings.braincert_whiteboard_api_key
+  end
+
+  # Returns BrainCert timezone of Virtual Classrooms component
+  #
+  # @return [Integer] The custom or default timezone for virtual classrooms component
+  def braincert_whiteboard_timezone
+    @settings.braincert_whiteboard_timezone || 28 # 28 is GMT
+  end
+
+  # Sets BrainCert Whiteboard timezone
+  #
+  # @return [Integer] The custom or default timezone for virtual classrooms component
+  def braincert_whiteboard_timezone=(value)
+    @settings.braincert_whiteboard_timezone = value
   end
 
   # Sets BrainCert Whiteboard API key of virtual classrooms component

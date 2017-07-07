@@ -8,6 +8,8 @@ en:
             Braincert Virtual Classroom API Key for the Virtual Classroom Component
           braincert_server_region_hint: >
             Braincert Virtual Classroom Server Region
+          braincert_whiteboard_timezone_hint: >
+            Braincert Virtual Classroom Timezone
           max_duration_hint: >
             Max allowed duration of virtual classes
         update:

@@ -114,7 +114,7 @@ class Course::VirtualClassroom::BraincertApiService
   def create_classroom_params
     {
       title: @virtual_classroom.title,
-      timezone: 30, # GMT Time
+      timezone: @settings.braincert_whiteboard_timezone,
       start_time: @virtual_classroom.start_at.in_time_zone(0).strftime(TIME_BRAINCERT),
       end_time: @virtual_classroom.end_at.in_time_zone(0).strftime(TIME_BRAINCERT),
       date: @virtual_classroom.start_at.in_time_zone(0).to_date.strftime(DATE_ISO),
