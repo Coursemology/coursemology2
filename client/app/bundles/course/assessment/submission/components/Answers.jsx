@@ -62,9 +62,7 @@ export default class Answers extends Component {
     return (
       <div>
         <UploadedFileView questionId={question.id} />
-        <FileInput name={`${answerId}[file]`} inputOptions={{ multiple: false }} disabled={readOnly}>
-          <p>Choose file</p>
-        </FileInput>
+        <FileInput name={`${answerId}[files]`} disabled={readOnly} />
       </div>
     );
   }
@@ -133,7 +131,7 @@ export default class Answers extends Component {
     return (
       <div>
         <FieldArray
-          name={`${answerId}[files]`}
+          name={`${answerId}[files_attributes]`}
           component={Answers.renderProgrammingFiles}
           {...{ readOnly }}
         />

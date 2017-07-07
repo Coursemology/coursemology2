@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl, defineMessages, FormattedMessage } from 'react-intl';
+import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
-import IconButton from 'material-ui/IconButton';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import Chip from 'material-ui/Chip';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { AttachmentProp } from '../propTypes';
 import destroy from '../actions/attachments';
 
 const translations = defineMessages({
-  delete: {
-    id: 'course.assessment.submission.UploadedFileView.delete',
-    defaultMessage: 'Delete File',
-  },
   uploadedFiles: {
     id: 'course.assessment.submission.UploadedFileView.uploadedFiles',
     defaultMessage: 'Uploaded Files:',
@@ -24,6 +19,16 @@ const translations = defineMessages({
     defaultMessage: 'Are you sure you want to delete this attachment?',
   },
 });
+
+const styles = {
+  chip: {
+    margin: 4,
+  },
+  wrapper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+};
 
 class VisibleUploadedFileView extends Component {
 
@@ -36,22 +41,18 @@ class VisibleUploadedFileView extends Component {
     return `/attachments/${attachment.id}`;
   }
 
-  renderAttachmentRow(attachment) {
-    const { intl } = this.props;
+  renderAttachment(attachment) {
+    const { canUpdate } = this.props;
+
+    const onRequestDelete = canUpdate ? () => this.setState({
+      deleteConfirmation: true,
+      deleteAttachmentId: attachment.id,
+    }) : null;
+
     return (
-      <tr>
-        <td>
-          <a href={this.buildAttachmentUrl(attachment)} download>{attachment.name}</a>
-        </td>
-        <td>
-          <IconButton
-            tooltip={intl.formatMessage(translations.delete)}
-            onTouchTap={() => this.setState({ deleteConfirmation: true, deleteAttachmentId: attachment.id })}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </td>
-      </tr>
+      <Chip key={attachment.id} style={styles.chip} onRequestDelete={onRequestDelete}>
+        <a href={this.buildAttachmentUrl(attachment)} download>{attachment.name}</a>
+      </Chip>
     );
   }
 
@@ -72,15 +73,13 @@ class VisibleUploadedFileView extends Component {
   }
 
   render() {
-    const { attachments } = this.props;
+    const { intl, attachments } = this.props;
     return (
       <div>
-        <FormattedMessage {...translations.uploadedFiles} />
-        <table>
-          <tbody>
-            {attachments.map(attachment => this.renderAttachmentRow(attachment))}
-          </tbody>
-        </table>
+        <strong>{intl.formatMessage(translations.uploadedFiles)}</strong>
+        <div style={styles.wrapper}>
+          {attachments.map(this.renderAttachment, this)}
+        </div>
         {this.renderDeleteDialog()}
       </div>
     );
@@ -89,6 +88,7 @@ class VisibleUploadedFileView extends Component {
 
 VisibleUploadedFileView.propTypes = {
   intl: intlShape.isRequired,
+  canUpdate: PropTypes.bool,
   attachments: PropTypes.arrayOf(AttachmentProp),
 
   deleteAttachment: PropTypes.func,
@@ -97,6 +97,7 @@ VisibleUploadedFileView.propTypes = {
 function mapStateToProps(state, ownProps) {
   const { questionId } = ownProps;
   return {
+    canUpdate: state.submissionEdit.submission.canUpdate,
     attachments: state.attachments[questionId],
   };
 }

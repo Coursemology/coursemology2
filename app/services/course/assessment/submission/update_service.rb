@@ -84,7 +84,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     # Parameters that must be an array of permitted values
     array_params = {}.tap do |result|
       result[:option_ids] = [] # MRQ answer
-      result[:files] = [:id, :_destroy, :filename, :content] # Programming answer
+      result[:files_attributes] = [:id, :_destroy, :filename, :content] # Programming answer
     end
     scalar_params.push(array_params)
   end

@@ -2,6 +2,27 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import { Field } from 'redux-form';
+import RaisedButton from 'material-ui/RaisedButton';
+import Chip from 'material-ui/Chip';
+import { Card, CardText } from 'material-ui/Card';
+import AddIcon from 'material-ui/svg-icons/content/add';
+
+const styles = {
+  chip: {
+    margin: 4,
+  },
+  paper: {
+    display: 'flex',
+    height: 100,
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  wrapper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+};
 
 class FileInput extends Component {
   static propTypes = {
@@ -29,18 +50,50 @@ class FileInput extends Component {
     callback: () => {},
   };
 
-  generateFilename(name) {
+  state = {
+    dragging: false,
+    dropzoneActive: false,
+  };
+
+  displayFileNames(files) {
     const { disabled } = this.props;
-    if (!name) {
-      return disabled ? 'File upload disabled' : 'No file chosen';
+    const { dragging, dropzoneActive } = this.state;
+    if (dropzoneActive) {
+      return <AddIcon style={{ width: 60, height: 60 }} />;
     }
-    return name;
+
+    if (!files || dragging) {
+      return (
+        <h4>{disabled ? 'File upload disabled' : 'Drag and drop or click to upload files'}</h4>
+      );
+    }
+    return (<div style={styles.wrapper}>
+      {files.map(f => (<Chip style={styles.chip} key={f.name}>{f.name}</Chip>))}
+    </div>);
+  }
+
+  onDragEnter() {
+    this.setState({ dropzoneActive: true });
+  }
+
+  onDragLeave() {
+    this.setState({ dropzoneActive: false });
+  }
+
+  onDrop(files) {
+    const { callback, disabled, input: { onChange } } = this.props;
+    this.setState({ dropzoneActive: false });
+    if (!disabled) {
+      callback(files);
+      return onChange(files);
+    }
+    return () => {};
   }
 
   render() {
     const {
       name, className, inputOptions, disabled, meta: { error, touched },
-      children, input: { onChange, value }, callback,
+      input: { value },
     } = this.props;
 
     return (
@@ -48,18 +101,15 @@ class FileInput extends Component {
         <Dropzone
           {...inputOptions}
           disableClick={disabled}
-          onDrop={(f) => {
-            if (!disabled) {
-              callback(f[0]);
-              return onChange(f[0]);
-            }
-            return () => {};
-          }}
+          onDragEnter={() => this.onDragEnter()}
+          onDragLeave={() => this.onDragLeave()}
+          onDrop={files => this.onDrop(files)}
           className="dropzone-input"
           name={name}
         >
-          {children}
-          {this.generateFilename(value.name)}
+          <Card style={styles.paper}>
+            <CardText>{this.displayFileNames(value)}</CardText>
+          </Card>
         </Dropzone>
         {error && touched ? error : ''}
       </div>
