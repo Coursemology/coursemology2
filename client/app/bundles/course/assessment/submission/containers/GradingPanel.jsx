@@ -7,7 +7,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHeaderColumn, TableRowCol
 
 import { formatDateTime } from '../utils';
 import { GradingProp, QuestionProp, SubmissionProp } from '../propTypes';
-import actionTypes from '../constants';
+import actionTypes, { workflowStates } from '../constants';
 import translations from '../translations';
 
 const styles = {
@@ -71,8 +71,13 @@ class VisibleGradingPanel extends Component {
   renderExperiencePoints() {
     const {
       grading: { questions, exp, expMultiplier },
-      submission: { basePoints, maximumGrade },
+      submission: { basePoints, maximumGrade, canGrade },
     } = this.props;
+
+    if (!canGrade) {
+      return exp;
+    }
+
     const totalGrade = VisibleGradingPanel.calculateTotalGrade(questions);
     const defaultExp = (totalGrade / maximumGrade) * basePoints * expMultiplier;
     return (
@@ -108,9 +113,12 @@ class VisibleGradingPanel extends Component {
     const {
       submission: {
         submitter, workflowState, dueAt, attemptedAt,
-        submittedAt, grader, gradedAt,
+        submittedAt, grader, gradedAt, canGrade,
       }, intl,
     } = this.props;
+
+    const published = workflowState === workflowStates.Published;
+    const shouldRenderGrading = published || canGrade;
 
     const tableRow = (field, value) => (
       <TableRow>
@@ -126,13 +134,13 @@ class VisibleGradingPanel extends Component {
         <TableBody displayRowCheckbox={false}>
           {tableRow('student', submitter)}
           {tableRow('status', intl.formatMessage(translations[workflowState]))}
-          {tableRow('totalGrade', this.renderTotalGrade())}
-          {tableRow('expAwarded', this.renderExperiencePoints())}
+          {shouldRenderGrading ? tableRow('totalGrade', this.renderTotalGrade()) : null}
+          {shouldRenderGrading ? tableRow('expAwarded', this.renderExperiencePoints()) : null}
           {tableRow('dueAt', formatDateTime(dueAt))}
           {tableRow('attemptedAt', formatDateTime(attemptedAt))}
           {tableRow('submittedAt', formatDateTime(submittedAt))}
-          {tableRow('grader', grader)}
-          {tableRow('gradedAt', formatDateTime(gradedAt))}
+          {shouldRenderGrading ? tableRow('grader', grader) : null}
+          {shouldRenderGrading ? tableRow('gradedAt', formatDateTime(gradedAt)) : null}
         </TableBody>
       </Table>
     );
@@ -155,7 +163,12 @@ class VisibleGradingPanel extends Component {
   }
 
   renderGradeTable() {
-    const { intl, questions } = this.props;
+    const { intl, questions, submission: { canGrade } } = this.props;
+
+    if (!canGrade) {
+      return null;
+    }
+
     return (
       <div>
         <h1>Grade Summary</h1>

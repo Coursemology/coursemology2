@@ -108,8 +108,8 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderQuestionGrading(id) {
-    const { attempting } = this.props;
-    if (!attempting) {
+    const { attempting, canGrade } = this.props;
+    if (!attempting && canGrade) {
       return <QuestionGrade id={id} />;
     }
     return null;
