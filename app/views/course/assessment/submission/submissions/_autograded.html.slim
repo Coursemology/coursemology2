@@ -10,7 +10,8 @@ div.answer-panel
     = f.error_notification
     = hidden_field_tag :step, current_step
     div.answer-content
-      = render partial: @current_question, suffix: 'question'
+      - if @current_question
+        = render partial: @current_question, suffix: 'question'
       - if current_answer
         = render partial: 'course/assessment/answer/answer', object: current_answer,
                  locals: { base_answer_form: f }
