@@ -30,7 +30,7 @@ export default function (state = initialState, action) {
         ...state,
         questions: {
           ...state.questions,
-          [action.id]: { grade: action.grade },
+          [action.id]: { ...state.questions[action.id], grade: action.grade },
         },
       };
     }
