@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import ProgressPanel from '../../components/ProgressPanel';
 import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
@@ -181,7 +182,7 @@ class VisibleSubmissionEditIndex extends Component {
     } else if (dataState === DATA_STATES.Error) {
       return <p>Error...</p>;
     }
-    return <p>Loading...</p>;
+    return <LoadingIndicator />;
   }
 }
 
