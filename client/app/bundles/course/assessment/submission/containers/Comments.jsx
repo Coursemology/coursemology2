@@ -22,8 +22,8 @@ class VisibleComments extends Component {
           <CommentCard
             key={post.id}
             id={post.id}
-            name={post.creator}
-            avatar=""
+            name={post.creator.name}
+            avatar={post.creator.avatar}
             date={post.createdAt}
             content={post.text}
             editValue={commentForms.posts[post.id]}

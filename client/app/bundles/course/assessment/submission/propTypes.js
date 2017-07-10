@@ -51,7 +51,10 @@ export const PostProp =
     topicId: PropTypes.number.isRequired,
     title: PropTypes.string,
     text: PropTypes.string,
-    creator: PropTypes.string.isRequired,
+    creator: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      avatar: PropTypes.string.isRequired,
+    }),
     createdAt: PropTypes.string.isRequired,
   });
 

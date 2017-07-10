@@ -16,6 +16,7 @@ const styles = {
     maxHeight: 20,
     overflow: 'visible',
     position: 'relative',
+    zIndex: 5,
   },
   minimiseButton: {
     height: 20,

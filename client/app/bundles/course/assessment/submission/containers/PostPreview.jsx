@@ -29,7 +29,7 @@ function mapStateToProps(state, ownProps) {
   const { annotation } = ownProps;
   if (annotation.postIds.length > 0) {
     return {
-      creator: state.posts[annotation.postIds[0]].creator,
+      creator: state.posts[annotation.postIds[0]].creator.name,
       text: state.posts[annotation.postIds[0]].text,
     };
   }
