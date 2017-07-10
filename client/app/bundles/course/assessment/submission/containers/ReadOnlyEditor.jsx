@@ -7,11 +7,15 @@ import { TopicProp } from '../propTypes';
 
 class ReadOnlyEditorContainer extends Component {
   static propTypes = {
+    annotations: PropTypes.objectOf(TopicProp),
     answerId: PropTypes.number.isRequired,
-    fileId: PropTypes.number.isRequired,
     content: PropTypes.arrayOf(PropTypes.string),
-    annotations: PropTypes.arrayOf(TopicProp),
+    fileId: PropTypes.number.isRequired,
   };
+
+  shouldComponentUpdate(nextProps) {
+    return nextProps.annotations !== this.props.annotations;
+  }
 
   render() {
     const { answerId, fileId, annotations, content } = this.props;
@@ -19,7 +23,7 @@ class ReadOnlyEditorContainer extends Component {
       <ReadOnlyEditorComponent
         answerId={answerId}
         fileId={fileId}
-        annotations={annotations}
+        annotations={Object.values(annotations)}
         content={content}
       />
     );
@@ -29,7 +33,7 @@ class ReadOnlyEditorContainer extends Component {
 function mapStateToProps(state, ownProps) {
   const { fileId } = ownProps;
   return {
-    annotations: Object.values(state.annotations[fileId].topics),
+    annotations: state.annotations[fileId].topics,
   };
 }
 

@@ -3,12 +3,24 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { AnnotationProp } from '../propTypes';
 
+const styles = {
+  chevron: {
+    fontSize: 10,
+    marginRight: 5,
+    transform: 'rotate(-90deg)',
+  },
+  postPreview: {
+    paddingLeft: 5,
+    width: '100%',
+  },
+};
+
 class VisiblePostPreview extends Component {
   render() {
     const { style, creator, text } = this.props;
     return (
-      <div style={style}>
-        {`${creator}: ${text}`}
+      <div style={Object.assign(styles.postPreview, style)}>
+        <span className="fa fa-chevron-down" style={styles.chevron} />{`${creator}: ${text}`}
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { grey200 } from 'material-ui/styles/colors';
+import { grey200, grey400 } from 'material-ui/styles/colors';
 
 import WideComments from './WideComments';
 import AddCommentIcon from './AddCommentIcon';
@@ -42,15 +42,39 @@ const styles = {
     borderRightColor: grey200,
     padding: '0 5px',
   },
+  editorLineNumberWithComments: {
+    alignItems: 'center',
+    backgroundColor: grey400,
+    display: 'flex',
+    justifyContent: 'space-between',
+    borderRightWidth: 1,
+    borderRightStyle: 'solid',
+    borderRightColor: grey200,
+    padding: '0 5px',
+  },
 };
 
 export default class WideEditor extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { lineHovered: -1 };
+  }
+
   renderLineNumberColumn(lineNumber) {
-    const { expandLine } = this.props;
+    const { lineHovered } = this.state;
+    const { annotations, expandLine } = this.props;
+    const annotation = annotations.find(a => a.line === lineNumber);
+
     return (
-      <div style={styles.editorLineNumber}>
+      <div
+        style={annotation ? styles.editorLineNumberWithComments : styles.editorLineNumber}
+        onClick={() => this.toggleComment(lineNumber)}
+        onMouseOver={() => this.setState({ lineHovered: lineNumber })}
+        onMouseOut={() => this.setState({ lineHovered: -1 })}
+      >
         {lineNumber}
-        <AddCommentIcon onClick={() => expandLine(lineNumber)} />
+        <AddCommentIcon onClick={() => expandLine(lineNumber)} hovered={lineHovered === lineNumber} />
       </div>
     );
   }
@@ -78,23 +102,25 @@ export default class WideEditor extends Component {
         <table className="codehilite" style={styles.editor}>
           <tbody>
             <tr>
-              <td style={{ width: 75 }}>
+              <td style={{ width: 50, userSelect: 'none', paddingBottom: 20 }}>
                 {content.map((line, index) =>
                   <div key={`${index}-${line}`}>
                     {this.renderLineNumberColumn(index + 1)}
                   </div>
                 )}
               </td>
-              <td style={{ overflow: 'scroll' }}>
-                {content.map((line, index) => (
-                  <div key={`${index}-${line}`} style={styles.editorLine} >
-                    <pre style={{ overflow: 'visible' }}>
-                      <code
-                        dangerouslySetInnerHTML={{ __html: line }}
-                        style={{ whiteSpace: 'inherit' }}
-                      /></pre>
-                  </div>
-                ))}
+              <td style={{ display: 'block', overflowX: 'scroll' }}>
+                <div style={{ display: 'inline-block' }}>
+                  {content.map((line, index) => (
+                    <div key={`${index}-${line}`} style={styles.editorLine} >
+                      <pre style={{ overflow: 'visible' }}>
+                        <code
+                          dangerouslySetInnerHTML={{ __html: line }}
+                          style={{ whiteSpace: 'inherit' }}
+                        /></pre>
+                    </div>
+                  ))}
+                </div>
               </td>
             </tr>
           </tbody>
@@ -111,7 +137,7 @@ export default class WideEditor extends Component {
         <table>
           <tbody>
             <tr>
-              <td style={{ width: '40%' }}>{this.renderComments()}</td>
+              <td style={{ maxWidth: 200 }}>{this.renderComments()}</td>
               <td style={{ width: '60%' }}>{this.renderEditor()}</td>
             </tr>
           </tbody>
@@ -129,9 +155,11 @@ WideEditor.propTypes = {
   content: PropTypes.arrayOf(PropTypes.string).isRequired,
   expandLine: PropTypes.func,
   collapseLine: PropTypes.func,
+  toggleLine: PropTypes.func,
 };
 
 WideEditor.defaultProps = {
   expandLine: () => {},
   collapseLine: () => {},
+  toggleLine: () => {},
 };

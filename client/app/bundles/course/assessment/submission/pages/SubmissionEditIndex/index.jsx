@@ -129,6 +129,7 @@ class VisibleSubmissionEditIndex extends Component {
           canGrade={canGrade}
           attempting={workflowState === workflowStates.Attempting}
           submitted={workflowState === workflowStates.Submitted}
+          published={workflowState === workflowStates.Published}
           maxStep={maxStep}
           skippable={skippable}
           posts={posts}

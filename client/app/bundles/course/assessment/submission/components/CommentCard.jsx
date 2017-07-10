@@ -45,6 +45,7 @@ const styles = {
     minWidth: 40,
   },
   commentContent: {
+    wordWrap: 'break-word',
     padding: 7,
   },
 };

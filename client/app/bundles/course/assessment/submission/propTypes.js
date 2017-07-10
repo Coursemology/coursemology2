@@ -84,12 +84,12 @@ export const AttachmentProp =
 
 export const AssessmentProp =
   PropTypes.shape({
-    autograded: PropTypes.bool.isRequired,
-    delayedGradePublication: PropTypes.bool.isRequired,
+    autograded: PropTypes.bool,
+    delayedGradePublication: PropTypes.bool,
     description: PropTypes.string,
     published: PropTypes.bool,
-    skippable: PropTypes.bool.isRequired,
-    tabbedView: PropTypes.bool.isRequired,
+    skippable: PropTypes.bool,
+    tabbedView: PropTypes.bool,
     title: PropTypes.string,
     questionIds: PropTypes.arrayOf(PropTypes.number),
   });

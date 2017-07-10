@@ -10,7 +10,13 @@ import CommentField from '../components/CommentField';
 import * as annotationActions from '../actions/annotations';
 
 class VisibleAnnotations extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { fieldVisible: false };
+  }
+
   render() {
+    const { fieldVisible } = this.state;
     const {
       fileId, lineNumber, commentForms, posts,
       createComment, updateComment, deleteComment,
@@ -18,7 +24,7 @@ class VisibleAnnotations extends Component {
     } = this.props;
 
     return (
-      <Card>
+      <Card onClick={() => this.setState({ fieldVisible: true })}>
         <CardText style={{ textAlign: 'left' }}>
           {posts.map(post =>
             <CommentCard
@@ -30,11 +36,11 @@ class VisibleAnnotations extends Component {
               handleChange={value => handleUpdateChange(post.id, value)}
             />
           )}
-          <CommentField
+          {posts.length === 0 || fieldVisible ? <CommentField
             value={commentForms.annotations[fileId][lineNumber]}
             createComment={createComment}
             handleChange={handleCreateChange}
-          />
+          /> : null}
         </CardText>
       </Card>
     );

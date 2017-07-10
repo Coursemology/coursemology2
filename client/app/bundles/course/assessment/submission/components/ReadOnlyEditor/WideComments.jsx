@@ -10,13 +10,17 @@ import { AnnotationProp } from '../../propTypes';
 const styles = {
   collapsed: {
     height: 20,
-    overflow: 'hidden',
   },
   expanded: {
     maxHeight: 20,
     overflow: 'visible',
     position: 'relative',
     zIndex: 5,
+  },
+  postPreview: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
   minimiseButton: {
     height: 20,
@@ -30,12 +34,12 @@ export default class WideComments extends Component {
 
     if (expanded[lineNumber - 1]) {
       return (
-        <div key={lineNumber} style={styles.expanded}>
+        <div key={lineNumber} style={{ ...styles.expanded, zIndex: lineNumber + styles.expanded.zIndex }}>
           <RaisedButton
             style={styles.minimiseButton}
             onClick={() => collapseLine(lineNumber)}
           >
-            Click to close
+            <span className="fa fa-chevron-down" />
           </RaisedButton>
           <Annotations answerId={answerId} fileId={fileId} lineNumber={lineNumber} annotation={annotation} />
         </div>
@@ -48,7 +52,7 @@ export default class WideComments extends Component {
         zDepth={1}
         onClick={() => expandLine(lineNumber)}
       >
-        <PostPreview annotation={annotation} />
+        <PostPreview style={styles.postPreview} annotation={annotation} />
       </Paper>
     );
   }
@@ -64,7 +68,7 @@ export default class WideComments extends Component {
         comments.push(<div style={styles.collapsed} key={i} />);
       }
     }
-    return <div>{comments}</div>;
+    return <div style={{ paddingBottom: 20 }}>{comments}</div>;
   }
 }
 

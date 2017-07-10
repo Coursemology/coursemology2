@@ -51,11 +51,11 @@ class SubmissionEditForm extends Component {
   }
 
   renderQuestionGrading(id) {
-    const { attempting, canGrade } = this.props;
-    if (!attempting && canGrade) {
-      return <QuestionGrade id={id} />;
-    }
-    return null;
+    const { attempting, published, canGrade } = this.props;
+    const editable = !attempting && canGrade;
+    const visible = editable || published;
+
+    return visible ? <QuestionGrade id={id} editable={editable} /> : null;
   }
 
   renderProgrammingQuestionActions(id) {

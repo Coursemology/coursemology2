@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import { Overlay } from 'react-overlays';
-import { grey200, grey400, blue500 } from 'material-ui/styles/colors';
+import { grey200, grey400 } from 'material-ui/styles/colors';
 
 import AddCommentIcon from './AddCommentIcon';
 import OverlayTooltip from './OverlayTooltip';
@@ -34,37 +34,23 @@ const styles = {
     borderRightColor: grey200,
     padding: '0 5px',
   },
-  commentIcon: {
-    color: grey400,
-  },
-  commentIconExpanded: {
-    color: blue500,
-  },
-  chevronIcon: {
-    fontSize: 10,
-    transform: 'rotate(-90deg)',
+  editorLineNumberWithComments: {
+    alignItems: 'center',
+    backgroundColor: grey400,
+    display: 'flex',
+    justifyContent: 'space-between',
+    borderRightWidth: 1,
+    borderRightStyle: 'solid',
+    borderRightColor: grey200,
+    padding: '0 5px',
   },
 };
 
 export default class NarrowEditor extends Component {
-  renderCommentIcon(lineNumber) {
-    const { expanded, annotations, toggleLine } = this.props;
-
-    const annotation = annotations.find(a => a.line === lineNumber);
-    const shouldShow = annotation || expanded[lineNumber - 1];
-
-    return (
-      <div
-        ref={(c) => { this[`comment-${lineNumber}`] = c; }}
-        onClick={() => toggleLine(lineNumber)}
-        style={{ display: 'flex', visibility: shouldShow ? 'visible' : 'hidden', zIndex: 1000 }}
-      >
-        <i
-          className="fa fa-comment"
-          style={expanded[lineNumber - 1] ? styles.commentIconExpanded : styles.commentIcon}
-        />
-      </div>
-    );
+  
+  constructor(props) {
+    super(props);
+    this.state = { lineHovered: -1 };
   }
 
   renderComments(lineNumber) {
@@ -74,6 +60,7 @@ export default class NarrowEditor extends Component {
 
     return (
       <Overlay
+        style={{ zIndex: lineNumber }}
         show={expanded[lineNumber - 1]}
         onHide={() => collapseLine(lineNumber)}
         placement={placement}
@@ -87,15 +74,21 @@ export default class NarrowEditor extends Component {
   }
 
   renderLineNumberColumn(lineNumber) {
-    const { expandLine } = this.props;
+    const { lineHovered } = this.state;
+    const { annotations, expandLine, toggleLine } = this.props;
+    const annotation = annotations.find(a => a.line === lineNumber);
     return (
-      <div style={styles.editorLineNumber}>
-        <div>
-          {this.renderCommentIcon(lineNumber)}
-          {this.renderComments(lineNumber)}
+      <div
+        style={annotation ? styles.editorLineNumberWithComments : styles.editorLineNumber}
+        onClick={() => toggleLine(lineNumber)}
+        onMouseOver={() => this.setState({ lineHovered: lineNumber })}
+        onMouseOut={() => this.setState({ lineHovered: -1 })}
+      >
+        <div ref={(c) => { this[`comment-${lineNumber}`] = c; }}>
+          {lineNumber}
         </div>
-        {lineNumber}
-        <AddCommentIcon onClick={() => expandLine(lineNumber)} />
+        {this.renderComments(lineNumber)}
+        <AddCommentIcon onClick={() => expandLine(lineNumber)} hovered={lineHovered === lineNumber} />
       </div>
     );
   }
@@ -108,23 +101,25 @@ export default class NarrowEditor extends Component {
       <table className="codehilite" style={styles.editor}>
         <tbody>
           <tr>
-            <td style={{ width: 75, userSelect: 'none' }}>
+            <td style={{ width: 50, userSelect: 'none', paddingBottom: 20 }}>
               {content.map((line, index) =>
                 <div key={`${index}-${line}`}>
                   {this.renderLineNumberColumn(index + 1)}
                 </div>
               )}
             </td>
-            <td style={{ overflow: 'scroll' }}>
-              {content.map((line, index) => (
-                <div key={`${index}-${line}`} style={styles.editorLine} >
-                  <pre style={{ overflow: 'visible' }}>
-                    <code
-                      dangerouslySetInnerHTML={{ __html: line }}
-                      style={{ whiteSpace: 'inherit' }}
-                    /></pre>
-                </div>
-              ))}
+            <td style={{ display: 'block', overflowX: 'scroll' }}>
+              <div style={{ display: 'inline-block' }}>
+                {content.map((line, index) => (
+                  <div key={`${index}-${line}`} style={styles.editorLine} >
+                    <pre style={{ overflow: 'visible' }}>
+                      <code
+                        dangerouslySetInnerHTML={{ __html: line }}
+                        style={{ whiteSpace: 'inherit' }}
+                      /></pre>
+                  </div>
+                ))}
+              </div>
             </td>
           </tr>
         </tbody>

@@ -10,24 +10,14 @@ export default class AddCommentIcon extends Component {
     onClick: () => {},
   };
 
-  constructor(props) {
-    super(props);
-    this.state = { hovered: false };
-  }
-
-  onMouseOver() {
-    this.setState({ hovered: true });
-  }
-
-  onMouseOut() {
-    this.setState({ hovered: false });
+  shouldComponentUpdate(nextProps) {
+    return nextProps.hovered !== this.props.hovered;
   }
 
   render() {
-    const { hovered } = this.state;
-    const { onClick } = this.props;
+    const { hovered, onClick } = this.props;
     return (
-      <div onClick={onClick} onMouseOver={() => this.onMouseOver()} onMouseOut={() => this.onMouseOut()}>
+      <div onClick={onClick}>
         <i className="fa fa-plus-square" style={{ visibility: hovered ? 'visible' : 'hidden' }} />
       </div>
     );
