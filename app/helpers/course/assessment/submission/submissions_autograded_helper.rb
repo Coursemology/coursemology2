@@ -20,7 +20,7 @@ module Course::Assessment::Submission::SubmissionsAutogradedHelper
   # The step that current user is on.
   def current_step
     @current_step ||= begin
-      @assessment.questions.index(@current_question) + 1
+      @current_question ? @assessment.questions.index(@current_question) + 1 : nil
     end
   end
 

@@ -22,7 +22,9 @@ class Course::Assessment::Submission::AutogradedAssessmentUpdateService <
     @current_question ||=
       begin
         step = step_param.to_i - 1
-        if @submission.attempting? && cannot?(:manage, @assessment)
+        if @assessment.questions.empty?
+          nil
+        elsif @submission.attempting? && cannot?(:manage, @assessment)
           @assessment.questions.step(@submission, step)
         else
           step = [[0, step].max, @assessment.questions.length - 1].min
