@@ -36,6 +36,6 @@ json.submission do
 
   if current_course.gamified?
     json.basePoints assessment.base_exp
-    json.pointsAwarded submission.points_awarded
+    json.pointsAwarded submission.current_points_awarded
   end
 end

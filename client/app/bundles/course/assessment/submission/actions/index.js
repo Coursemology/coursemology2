@@ -172,8 +172,15 @@ export function resetAnswer(submissionId, answerId) {
   };
 }
 
-export function saveGrade(submissionId, grades) {
-  const payload = { submission: { answers: grades } };
+export function saveGrade(submissionId, grades, exp, published) {
+  const expParam = published ? 'points_awarded' : 'draft_points_awarded';
+  const payload = {
+    submission: {
+      answers: grades,
+      [expParam]: exp,
+    },
+  };
+
   return (dispatch) => {
     dispatch({ type: actionTypes.SAVE_GRADE_REQUEST });
 
@@ -189,8 +196,15 @@ export function saveGrade(submissionId, grades) {
   };
 }
 
-export function mark(submissionId, grades) {
-  const payload = { submission: { answers: grades, mark: true } };
+export function mark(submissionId, grades, exp) {
+  const payload = {
+    submission: {
+      answers: grades,
+      draft_points_awarded: exp,
+      mark: true,
+    },
+  };
+
   return (dispatch) => {
     dispatch({ type: actionTypes.MARK_REQUEST });
 
@@ -223,8 +237,14 @@ export function unmark(submissionId) {
   };
 }
 
-export function publish(submissionId, grades) {
-  const payload = { submission: { answers: grades, publish: true } };
+export function publish(submissionId, grades, exp) {
+  const payload = {
+    submission: {
+      answers: grades,
+      draft_points_awarded: exp,
+      publish: true,
+    },
+  };
   return (dispatch) => {
     dispatch({ type: actionTypes.PUBLISH_REQUEST });
 

@@ -22,6 +22,7 @@ export default function (state = initialState, action) {
             ({ ...obj, [answer.questionId]: answer.grading })
           , {}),
         },
+        exp: action.payload.submission.pointsAwarded,
       };
     }
     case actions.UPDATE_GRADING: {

@@ -59,8 +59,10 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   handleSaveGrade() {
-    const { match: { params }, grading, boundSaveGrade } = this.props;
-    boundSaveGrade(params.submissionId, Object.values(grading));
+    const { match: { params }, grading, exp, boundSaveGrade,
+            submission: { workflowState } } = this.props;
+    const published = workflowState === workflowStates.Published;
+    boundSaveGrade(params.submissionId, Object.values(grading), exp, published);
   }
 
   handleReset(answerId) {
@@ -75,8 +77,8 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   handleMark() {
-    const { match: { params }, grading, boundMark } = this.props;
-    boundMark(params.submissionId, Object.values(grading));
+    const { match: { params }, grading, exp, boundMark } = this.props;
+    boundMark(params.submissionId, Object.values(grading), exp);
   }
 
   handleUnmark() {
@@ -85,8 +87,8 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   handlePublish() {
-    const { match: { params }, grading, boundPublish } = this.props;
-    boundPublish(params.submissionId, Object.values(grading));
+    const { match: { params }, grading, exp, boundPublish } = this.props;
+    boundPublish(params.submissionId, Object.values(grading), exp);
   }
 
   renderProgress() {
@@ -193,6 +195,7 @@ VisibleSubmissionEditIndex.propTypes = {
   }),
   answers: PropTypes.objectOf(AnswerProp),
   assessment: AssessmentProp,
+  exp: PropTypes.number,
   explanations: PropTypes.objectOf(ExplanationProp),
   form: ReduxFormProp,
   grading: GradingProp.isRequired,
@@ -221,6 +224,7 @@ function mapStateToProps(state) {
   return {
     answers: state.answers,
     assessment: state.submissionEdit.assessment,
+    exp: state.grading.exp,
     explanations: state.explanations,
     form: state.form.submissionEdit,
     grading: state.grading.questions,
@@ -241,12 +245,12 @@ function mapDispatchToProps(dispatch) {
     boundResetAnswer: (id, answerId) => dispatch(resetAnswer(id, answerId)),
     boundAutograde: (id, answers) => dispatch(autogradeAnswer(id, answers)),
     boundSaveDraft: (id, answers) => dispatch(saveDraft(id, answers)),
-    boundSaveGrade: (id, grades) => dispatch(saveGrade(id, grades)),
+    boundSaveGrade: (id, grades, exp, published) => dispatch(saveGrade(id, grades, exp, published)),
     boundFinalise: (id, answers) => dispatch(submit(id, answers)),
     boundUnsubmit: id => dispatch(unsubmit(id)),
-    boundMark: (id, grades) => dispatch(mark(id, grades)),
+    boundMark: (id, grades, exp) => dispatch(mark(id, grades, exp)),
     boundUnmark: id => dispatch(unmark(id)),
-    boundPublish: (id, grades) => dispatch(publish(id, grades)),
+    boundPublish: (id, grades, exp) => dispatch(publish(id, grades, exp)),
     resetForm: () => dispatch(reset('submissionEdit')),
   };
 }
