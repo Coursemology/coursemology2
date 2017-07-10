@@ -9,6 +9,7 @@ import FlatButton from 'material-ui/FlatButton';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import { red500, grey100 } from 'material-ui/styles/colors';
+import { PostProp } from '../propTypes';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -38,6 +39,11 @@ const styles = {
     width: 40,
     minWidth: 40,
   },
+  headerButtonHidden: {
+    height: 35,
+    width: 40,
+    minWidth: 40,
+  },
   commentContent: {
     padding: 7,
   },
@@ -45,12 +51,8 @@ const styles = {
 
 export default class CommentCard extends Component {
   static propTypes = {
-    id: PropTypes.number,
+    post: PostProp.isRequired,
     editValue: PropTypes.string,
-    name: PropTypes.string.isRequired,
-    avatar: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    content: PropTypes.string,
 
     handleChange: PropTypes.func,
     updateComment: PropTypes.func,
@@ -89,14 +91,14 @@ export default class CommentCard extends Component {
 
   toggleEditMode() {
     const { editMode } = this.state;
-    const { handleChange, content } = this.props;
+    const { handleChange, post: { text } } = this.props;
     this.setState({ editMode: !editMode });
-    handleChange(content);
+    handleChange(text);
   }
 
   renderCommentContent() {
     const { editMode } = this.state;
-    const { content, editValue, id } = this.props;
+    const { editValue, post: { text, id } } = this.props;
 
     if (editMode) {
       return (
@@ -128,33 +130,35 @@ export default class CommentCard extends Component {
         </div>
       );
     }
-    return <div dangerouslySetInnerHTML={{ __html: content }} />;
+    return <div dangerouslySetInnerHTML={{ __html: text }} />;
   }
 
   render() {
-    const { name, avatar, date } = this.props;
+    const { creator: { name, avatar }, createdAt, canUpdate, canDestroy } = this.props.post;
     return (
       <Card style={styles.card}>
         <div style={styles.header}>
           <CardHeader
             style={styles.cardHeader}
             title={name}
+            subtitle={CommentCard.formatDateTime(createdAt)}
+            titleStyle={{ display: 'inline-block', marginRight: 20 }}
+            subtitleStyle={{ display: 'inline-block' }}
             avatar={<Avatar src={avatar} size={25} />}
           />
-          {CommentCard.formatDateTime(date)}
           <div style={styles.buttonContainer}>
-            <FlatButton
+            { canUpdate ? <FlatButton
               style={styles.headerButton}
               labelStyle={styles.headerButton}
               icon={<EditIcon />}
               onClick={() => this.toggleEditMode()}
-            />
-            <FlatButton
+            /> : null }
+            { canDestroy ? <FlatButton
               style={styles.headerButton}
               labelStyle={styles.headerButton}
               icon={<DeleteIcon color={red500} />}
               onClick={() => this.onDelete()}
-            />
+            /> : null }
           </div>
         </div>
         <CardText style={styles.commentContent}>

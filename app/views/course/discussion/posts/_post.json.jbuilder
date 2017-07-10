@@ -7,3 +7,5 @@ json.creator do
 end
 json.createdAt post.created_at
 json.topicId post.topic_id
+json.canUpdate can?(:update, post)
+json.canDestroy can?(:destroy, post)

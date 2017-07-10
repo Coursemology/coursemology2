@@ -23,11 +23,7 @@ class VisibleAnnotations extends Component {
           {posts.map(post =>
             <CommentCard
               key={post.id}
-              id={post.id}
-              name={post.creator.name}
-              avatar={post.creator.avatar}
-              date={post.createdAt}
-              content={post.text}
+              post={post}
               editValue={commentForms.posts[post.id]}
               updateComment={value => updateComment(post.id, value)}
               deleteComment={() => deleteComment(post.id)}

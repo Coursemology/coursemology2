@@ -56,6 +56,8 @@ export const PostProp =
       avatar: PropTypes.string.isRequired,
     }),
     createdAt: PropTypes.string.isRequired,
+    canUpdate: PropTypes.bool.isRequired,
+    canDestroy: PropTypes.bool.isRequired,
   });
 
 export const AnswerProp =
