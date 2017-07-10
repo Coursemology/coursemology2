@@ -3,6 +3,9 @@ import axios from 'axios';
 import CourseAPI from 'api/course';
 import actionTypes from '../constants';
 
+const JOB_POLL_DELAY = 500;
+const JOB_STAGGER_DELAY = 400;
+
 function pollJob(url, onSuccess, onFailure) {
   const poller = setInterval(() => {
     axios.get(url, { params: { format: 'json' } })
@@ -20,7 +23,21 @@ function pollJob(url, onSuccess, onFailure) {
         clearInterval(poller);
         onFailure();
       });
-  }, 500);
+  }, JOB_POLL_DELAY);
+}
+
+function getEvaluationResult(submissionId, answerId) {
+  return (dispatch) => {
+    CourseAPI.assessment.submissions.reloadAnswer(submissionId, { answer_id: answerId })
+      .then(response => response.data)
+      .then((data) => {
+        dispatch({
+          type: actionTypes.AUTOGRADE_SUCCESS,
+          payload: data,
+        });
+      })
+      .catch(() => dispatch({ type: actionTypes.AUTOGRADE_FAILURE }));
+  };
 }
 
 export function fetchSubmission(id) {
@@ -30,6 +47,15 @@ export function fetchSubmission(id) {
     return CourseAPI.assessment.submissions.edit(id)
       .then(response => response.data)
       .then((data) => {
+        data.answers.filter(a => a.job).forEach((answer, index) => {
+          setTimeout(() => {
+            pollJob(answer.job,
+              () => dispatch(getEvaluationResult(id, answer.fields.id)),
+              () => dispatch({ type: actionTypes.AUTOGRADE_FAILURE })
+            );
+          }, JOB_STAGGER_DELAY * index);
+        });
+
         dispatch({
           type: actionTypes.FETCH_SUBMISSION_SUCCESS,
           payload: data,
@@ -112,20 +138,6 @@ export function unsubmit(submissionId) {
         });
       })
       .catch(() => dispatch({ type: actionTypes.UNSUBMIT_FAILURE }));
-  };
-}
-
-function getEvaluationResult(submissionId, answerId) {
-  return (dispatch) => {
-    CourseAPI.assessment.submissions.reloadAnswer(submissionId, { answer_id: answerId })
-      .then(response => response.data)
-      .then((data) => {
-        dispatch({
-          type: actionTypes.AUTOGRADE_SUCCESS,
-          payload: data,
-        });
-      })
-      .catch(() => dispatch({ type: actionTypes.AUTOGRADE_FAILURE }));
   };
 }
 

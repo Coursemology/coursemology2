@@ -12,6 +12,10 @@ json.fields do
   end
 end
 
+if answer.submitted? && job = answer.try(:auto_grading).try(:job)
+  json.job job_path(job) if job.submitted?
+end
+
 can_read_tests = can?(:read_tests, submission)
 show_private = can_read_tests || last_attempt&.correct? && assessment.show_private?
 show_evaluation = can_read_tests || last_attempt&.correct? && assessment.show_evaluation?
