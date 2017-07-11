@@ -129,3 +129,9 @@ export const AnnotationProp =
     line: PropTypes.number.isRequired,
     postIds: PropTypes.arrayOf(PropTypes.number),
   });
+
+export const QuestionFlagsProp =
+  PropTypes.shape({
+    isAutograding: PropTypes.bool.isRequired,
+    isResetting: PropTypes.bool.isRequired,
+  });

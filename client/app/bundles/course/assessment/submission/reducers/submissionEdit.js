@@ -1,8 +1,6 @@
 import actions, { DATA_STATES, SAVE_STATES } from '../constants';
 
 const initialState = {
-  assessment: null,
-  submission: null,
   dataState: DATA_STATES.Unfetched,
   saveState: SAVE_STATES.Idle,
 };
@@ -17,8 +15,6 @@ export default function (state = initialState, action) {
     case actions.FETCH_SUBMISSION_SUCCESS:
       return {
         ...state,
-        assessment: action.payload.assessment,
-        submission: action.payload.submission,
         dataState: DATA_STATES.Received,
       };
     case actions.FETCH_SUBMISSION_FAILURE:
@@ -41,11 +37,6 @@ export default function (state = initialState, action) {
     case actions.MARK_SUCCESS:
     case actions.UNMARK_SUCCESS:
     case actions.PUBLISH_SUCCESS:
-      return {
-        ...state,
-        submission: action.payload.submission,
-        saveState: SAVE_STATES.Saved,
-      };
     case actions.AUTOGRADE_SUCCESS:
     case actions.RESET_SUCCESS:
       return {

@@ -6,12 +6,13 @@ import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape } from 'react-intl';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
+import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import { red900, yellow900, green900, red300, green500, white } from 'material-ui/styles/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { ExplanationProp, QuestionProp, TopicProp } from '../../propTypes';
+import { ExplanationProp, QuestionProp, QuestionFlagsProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
@@ -58,9 +59,10 @@ class SubmissionEditForm extends Component {
   }
 
   renderProgrammingQuestionActions(id) {
-    const { intl, attempting, questions, handleAutograde } = this.props;
+    const { intl, attempting, questions, questionsFlags, handleAutograde } = this.props;
     const question = questions[id];
     const { answerId } = question;
+    const { isAutograding, isResetting } = questionsFlags[id];
 
     if (!attempting) {
       return null;
@@ -74,6 +76,7 @@ class SubmissionEditForm extends Component {
             backgroundColor={white}
             label={intl.formatMessage(translations.reset)}
             onTouchTap={() => this.setState({ resetConfirmation: true, resetAnswerId: answerId })}
+            disabled={isAutograding || isResetting}
           />
           <RaisedButton
             style={styles.formButton}
@@ -81,7 +84,9 @@ class SubmissionEditForm extends Component {
             secondary
             label={intl.formatMessage(translations.submit)}
             onTouchTap={() => handleAutograde(answerId)}
+            disabled={isAutograding || isResetting}
           />
+          {isAutograding || isResetting ? <CircularProgress size={36} style={{ position: 'absolute' }} /> : null}
         </div>
       );
     }
@@ -380,6 +385,7 @@ SubmissionEditForm.propTypes = {
   explanations: PropTypes.objectOf(ExplanationProp),
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(QuestionProp),
+  questionsFlags: PropTypes.objectOf(QuestionFlagsProp),
   topics: PropTypes.objectOf(TopicProp),
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,

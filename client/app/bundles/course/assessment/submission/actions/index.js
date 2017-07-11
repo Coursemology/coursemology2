@@ -26,7 +26,7 @@ function pollJob(url, onSuccess, onFailure) {
   }, JOB_POLL_DELAY);
 }
 
-function getEvaluationResult(submissionId, answerId) {
+function getEvaluationResult(submissionId, answerId, questionId) {
   return (dispatch) => {
     CourseAPI.assessment.submissions.reloadAnswer(submissionId, { answer_id: answerId })
       .then(response => response.data)
@@ -34,9 +34,10 @@ function getEvaluationResult(submissionId, answerId) {
         dispatch({
           type: actionTypes.AUTOGRADE_SUCCESS,
           payload: data,
+          questionId,
         });
       })
-      .catch(() => dispatch({ type: actionTypes.AUTOGRADE_FAILURE }));
+      .catch(() => dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId }));
   };
 }
 
@@ -143,8 +144,11 @@ export function unsubmit(submissionId) {
 
 export function autogradeAnswer(submissionId, answers) {
   const payload = { submission: { answers, auto_grade: true } };
+  const answer = answers[0];
+  const questionId = answer.questionId;
+
   return (dispatch) => {
-    dispatch({ type: actionTypes.AUTOGRADE_REQUEST });
+    dispatch({ type: actionTypes.AUTOGRADE_REQUEST, questionId });
 
     return CourseAPI.assessment.submissions.update(submissionId, payload)
       .then(response => response.data)
@@ -153,24 +157,25 @@ export function autogradeAnswer(submissionId, answers) {
           window.location = data.redirect_url;
         } else if (data.redirect_url) {
           pollJob(data.redirect_url,
-            () => dispatch(getEvaluationResult(submissionId, answers[0].id)),
-            () => dispatch({ type: actionTypes.AUTOGRADE_FAILURE })
+            () => dispatch(getEvaluationResult(submissionId, answer.id, questionId)),
+            () => dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId })
           );
         } else {
           dispatch({
             type: actionTypes.AUTOGRADE_SUCCESS,
             payload: data,
+            questionId,
           });
         }
       })
-      .catch(() => dispatch({ type: actionTypes.AUTOGRADE_FAILURE }));
+      .catch(() => dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId }));
   };
 }
 
-export function resetAnswer(submissionId, answerId) {
+export function resetAnswer(submissionId, answerId, questionId) {
   const payload = { answer_id: answerId, reset_answer: true };
   return (dispatch) => {
-    dispatch({ type: actionTypes.RESET_REQUEST });
+    dispatch({ type: actionTypes.RESET_REQUEST, questionId });
 
     return CourseAPI.assessment.submissions.reloadAnswer(submissionId, payload)
       .then(response => response.data)
@@ -178,9 +183,10 @@ export function resetAnswer(submissionId, answerId) {
         dispatch({
           type: actionTypes.RESET_SUCCESS,
           payload: data,
+          questionId,
         });
       })
-      .catch(() => dispatch({ type: actionTypes.RESET_FAILURE }));
+      .catch(() => dispatch({ type: actionTypes.RESET_FAILURE, questionId }));
   };
 }
 

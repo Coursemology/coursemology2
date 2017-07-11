@@ -2,8 +2,8 @@
 import moment from 'lib/moment';
 
 export function arrayToObjectById(array) {
-  return array.reduce((obj, answer) => (
-    { ...obj, [answer.id]: answer }
+  return array.reduce((obj, item) => (
+    { ...obj, [item.id]: item }
   ), {});
 }
 

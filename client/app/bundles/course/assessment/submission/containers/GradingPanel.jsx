@@ -216,7 +216,7 @@ VisibleGradingPanel.propTypes = {
 function mapStateToProps(state) {
   return {
     questions: state.questions,
-    submission: state.submissionEdit.submission,
+    submission: state.submission,
     grading: state.grading,
   };
 }

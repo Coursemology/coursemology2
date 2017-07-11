@@ -12,8 +12,8 @@ import {
   unsubmit, autogradeAnswer, resetAnswer, saveGrade, mark, unmark, publish,
 } from '../../actions';
 import {
-  AnswerProp, AssessmentProp, ExplanationProp, GradingProp,
-  PostProp, QuestionProp, ReduxFormProp, SubmissionProp, TopicProp,
+  AnswerProp, AssessmentProp, ExplanationProp, GradingProp, PostProp,
+  QuestionFlagsProp, QuestionProp, ReduxFormProp, SubmissionProp, TopicProp,
 } from '../../propTypes';
 import { DATA_STATES, workflowStates } from '../../constants';
 
@@ -67,8 +67,9 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   handleReset(answerId) {
-    const { match: { params }, boundResetAnswer } = this.props;
-    boundResetAnswer(params.submissionId, answerId);
+    const { form, match: { params }, boundResetAnswer } = this.props;
+    const questionId = form.values[answerId].questionId;
+    boundResetAnswer(params.submissionId, answerId, questionId);
   }
 
   handleAutograde(answerId) {
@@ -108,6 +109,7 @@ class VisibleSubmissionEditIndex extends Component {
       explanations,
       posts,
       questions,
+      questionsFlags,
       topics,
       saveState,
     } = this.props;
@@ -134,6 +136,7 @@ class VisibleSubmissionEditIndex extends Component {
           posts={posts}
           questionIds={questionIds}
           questions={questions}
+          questionsFlags={questionsFlags}
           topics={topics}
           saveState={saveState}
         />
@@ -163,6 +166,7 @@ class VisibleSubmissionEditIndex extends Component {
         posts={posts}
         questionIds={questionIds}
         questions={questions}
+        questionsFlags={questionsFlags}
         tabbedView={tabbedView}
         topics={topics}
         delayedGradePublication={delayedGradePublication}
@@ -202,6 +206,7 @@ VisibleSubmissionEditIndex.propTypes = {
   grading: GradingProp.isRequired,
   posts: PropTypes.objectOf(PostProp),
   questions: PropTypes.objectOf(QuestionProp),
+  questionsFlags: PropTypes.objectOf(QuestionFlagsProp),
   submission: SubmissionProp,
   topics: PropTypes.objectOf(TopicProp),
   dataState: PropTypes.string.isRequired,
@@ -224,15 +229,15 @@ VisibleSubmissionEditIndex.propTypes = {
 function mapStateToProps(state) {
   return {
     answers: state.answers,
-    assessment: state.submissionEdit.assessment,
+    assessment: state.assessment,
     exp: state.grading.exp,
     explanations: state.explanations,
     form: state.form.submissionEdit,
     grading: state.grading.questions,
-    maxStep: state.submissionEdit.maxStep,
     posts: state.posts,
-    submission: state.submissionEdit.submission,
+    submission: state.submission,
     questions: state.questions,
+    questionsFlags: state.questionsFlags,
     topics: state.topics,
     dataState: state.submissionEdit.dataState,
     saveState: state.submissionEdit.saveState,
@@ -243,7 +248,7 @@ function mapDispatchToProps(dispatch) {
   return {
     boundFetchSubmission: id => dispatch(fetchSubmission(id)),
     boundAutogradeSubmission: id => dispatch(autogradeSubmission(id)),
-    boundResetAnswer: (id, answerId) => dispatch(resetAnswer(id, answerId)),
+    boundResetAnswer: (id, answerId, questionId) => dispatch(resetAnswer(id, answerId, questionId)),
     boundAutograde: (id, answers) => dispatch(autogradeAnswer(id, answers)),
     boundSaveDraft: (id, answers) => dispatch(saveDraft(id, answers)),
     boundSaveGrade: (id, grades, exp, published) => dispatch(saveGrade(id, grades, exp, published)),

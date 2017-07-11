@@ -7,11 +7,12 @@ import { injectIntl, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { white, green500, green900, red300, red900 } from 'material-ui/styles/colors';
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
+import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { ExplanationProp, QuestionProp, TopicProp } from '../../propTypes';
+import { ExplanationProp, QuestionProp, QuestionFlagsProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
@@ -81,10 +82,10 @@ class SubmissionEditStepForm extends Component {
 
   shouldDisableContinueButton() {
     const { stepIndex } = this.state;
-    const { explanations, questionIds, submitting } = this.props;
+    const { explanations, questionIds } = this.props;
     const questionId = questionIds[stepIndex];
 
-    if (explanations[questionId] && explanations[questionId].correct && !submitting) {
+    if (explanations[questionId] && explanations[questionId].correct) {
       return false;
     }
     return true;
@@ -149,10 +150,11 @@ class SubmissionEditStepForm extends Component {
 
   renderResetButton() {
     const { stepIndex } = this.state;
-    const { intl, questionIds, questions } = this.props;
+    const { intl, questionIds, questions, questionsFlags } = this.props;
     const id = questionIds[stepIndex];
     const question = questions[id];
     const { answerId } = question;
+    const { isAutograding, isResetting } = questionsFlags[id];
 
     if (question.type === questionTypes.Programming) {
       return (
@@ -161,21 +163,27 @@ class SubmissionEditStepForm extends Component {
           backgroundColor={white}
           label={intl.formatMessage(translations.reset)}
           onTouchTap={() => this.setState({ resetConfirmation: true, resetAnswerId: answerId })}
+          disabled={isAutograding || isResetting}
         />
       );
     }
     return null;
   }
 
-  renderSubmitButton(answerId) {
-    const { intl, submitting, attempting, handleAutograde } = this.props;
+  renderSubmitButton() {
+    const { stepIndex } = this.state;
+    const { intl, questionIds, questions, questionsFlags, handleAutograde } = this.props;
+    const id = questionIds[stepIndex];
+    const question = questions[id];
+    const { answerId } = question;
+    const { isAutograding, isResetting } = questionsFlags[id];
     return (
       <RaisedButton
         style={styles.formButton}
         secondary
         label={intl.formatMessage(translations.submit)}
         onTouchTap={() => handleAutograde(answerId)}
-        disabled={submitting || !attempting}
+        disabled={isAutograding || isResetting }
       />
     );
   }
@@ -197,8 +205,20 @@ class SubmissionEditStepForm extends Component {
     return null;
   }
 
+  renderCircularProgress() {
+    const { stepIndex } = this.state;
+    const { questionIds, questionsFlags } = this.props;
+    const id = questionIds[stepIndex];
+    const { isAutograding, isResetting } = questionsFlags[id];
+
+    if (isAutograding || isResetting) {
+      return <CircularProgress size={36} style={{ position: 'absolute' }} />;
+    }
+    return null;
+  }
+
   renderSaveDraftButton() {
-    const { intl, pristine, submitting, attempting, handleSaveDraft } = this.props;
+    const { intl, pristine, attempting, handleSaveDraft } = this.props;
     if (attempting) {
       return (
         <RaisedButton
@@ -206,7 +226,7 @@ class SubmissionEditStepForm extends Component {
           primary
           label={intl.formatMessage(translations.saveDraft)}
           onTouchTap={handleSaveDraft}
-          disabled={pristine || submitting}
+          disabled={pristine}
         />
       );
     }
@@ -229,7 +249,7 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderFinaliseSubmitButton() {
-    const { intl, submitting, attempting, allCorrect } = this.props;
+    const { intl, attempting, allCorrect } = this.props;
     if (attempting && allCorrect) {
       return (
         <RaisedButton
@@ -237,7 +257,6 @@ class SubmissionEditStepForm extends Component {
           secondary
           label={intl.formatMessage(translations.finalise)}
           onTouchTap={() => this.setState({ submitConfirmation: true })}
-          disabled={submitting}
         />
       );
     }
@@ -275,9 +294,10 @@ class SubmissionEditStepForm extends Component {
         {this.renderQuestionGrading(id)}
         {this.renderGradingPanel()}
         {attempting ? <div style={styles.formButtonContainer}>
-          {this.renderResetButton(answerId)}
-          {this.renderSubmitButton(answerId)}
+          {this.renderResetButton()}
+          {this.renderSubmitButton()}
           {this.renderContinueButton()}
+          {this.renderCircularProgress()}
         </div> : null}
         <div style={styles.formButtonContainer}>
           {this.renderSaveGradeButton()}
@@ -393,10 +413,10 @@ SubmissionEditStepForm.propTypes = {
   allCorrect: PropTypes.bool.isRequired,
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(QuestionProp),
+  questionsFlags: PropTypes.objectOf(QuestionFlagsProp),
   topics: PropTypes.objectOf(TopicProp),
   saveState: PropTypes.string.isRequired,
   pristine: PropTypes.bool,
-  submitting: PropTypes.bool,
 
   handleSubmit: PropTypes.func,
   handleUnsubmit: PropTypes.func,
