@@ -99,42 +99,42 @@ class VisibleTestCaseView extends Component {
     }
 
     return (
-      <div>
-        <Card>
-          <CardHeader
-            title={title}
-            style={{}}
-          />
-          <CardText>
-            <Table selectable={false} style={{}}>
-              <TableHeader displaySelectAll={false}>
-                <TableRow>
-                  <TableHeaderColumn><FormattedMessage {...translations.identifier} /></TableHeaderColumn>
-                  <TableHeaderColumn><FormattedMessage {...translations.expression} /></TableHeaderColumn>
-                  <TableHeaderColumn><FormattedMessage {...translations.expected} /></TableHeaderColumn>
-                  <TableHeaderColumn><FormattedMessage {...translations.output} /></TableHeaderColumn>
-                  <TableHeaderColumn><FormattedMessage {...translations.hint} /></TableHeaderColumn>
-                  <TableHeaderColumn><FormattedMessage {...translations.passed} /></TableHeaderColumn>
-                </TableRow>
-              </TableHeader>
-              <TableBody displayRowCheckbox={false}>
-                {testCases.map(VisibleTestCaseView.renderTestCaseRow)}
-              </TableBody>
-            </Table>
-          </CardText>
-        </Card>
-      </div>
+      <Card>
+        <CardHeader
+          title={title}
+          style={{}}
+        />
+        <CardText>
+          <Table selectable={false} style={{}}>
+            <TableHeader displaySelectAll={false}>
+              <TableRow>
+                <TableHeaderColumn><FormattedMessage {...translations.identifier} /></TableHeaderColumn>
+                <TableHeaderColumn><FormattedMessage {...translations.expression} /></TableHeaderColumn>
+                <TableHeaderColumn><FormattedMessage {...translations.expected} /></TableHeaderColumn>
+                <TableHeaderColumn><FormattedMessage {...translations.output} /></TableHeaderColumn>
+                <TableHeaderColumn><FormattedMessage {...translations.hint} /></TableHeaderColumn>
+                <TableHeaderColumn><FormattedMessage {...translations.passed} /></TableHeaderColumn>
+              </TableRow>
+            </TableHeader>
+            <TableBody displayRowCheckbox={false}>
+              {testCases.map(VisibleTestCaseView.renderTestCaseRow)}
+            </TableBody>
+          </Table>
+        </CardText>
+      </Card>
     );
   }
 
   static renderExclamationTriangle() {
     return (
-      <div>
-        <a data-tip data-for="exclamation-triangle"><i className="fa fa-exclamation-triangle" /></a>
+      <span style={{ display: 'inline-block', marginLeft: 5 }}>
+        <a data-tip data-for="exclamation-triangle" data-offset="{'left' : -8}">
+          <i className="fa fa-exclamation-triangle" />
+        </a>
         <ReactTooltip id="exclamation-triangle" effect="solid">
           <FormattedMessage {...translations.staffOnlyVisibleTestCase} />
         </ReactTooltip>
-      </div>
+      </span>
     );
   }
 
