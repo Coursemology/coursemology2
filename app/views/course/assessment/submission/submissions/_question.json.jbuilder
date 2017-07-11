@@ -13,6 +13,8 @@ json.type case question.actable_type
             question.actable.hide_text? ? 'FileUpload' : 'TextResponse'
           when Course::Assessment::Question::Programming.name
             'Programming'
+          when Course::Assessment::Question::Scribing.name
+            'Scribing'
           end
 
 json.partial! question, question: question.specific, can_grade: can_grade

@@ -2,13 +2,24 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl, intlShape, defineMessages } from 'react-intl';
 import { Card, CardText } from 'material-ui/Card';
 import { yellow100 } from 'material-ui/styles/colors';
 import { QuestionProp } from '../propTypes';
 import { questionTypes } from '../constants';
 import Answers from './Answers';
-import translations from '../translations';
+
+const translations = defineMessages({
+  missingAnswer: {
+    id: 'course.assessment.submission.missingAnswer',
+    defaultMessage: 'There is no answer submitted for this question - this might be caused by \
+                    the addition of this question after the submission is submitted.',
+  },
+  rendererNotImplemented: {
+    id: 'course.assessment.submission.rendererNotImplemented',
+    defaultMessage: 'The display for this question type has not been implemented yet.',
+  },
+})
 
 class SubmissionAnswer extends Component {
   static propTypes = {
@@ -23,7 +34,7 @@ class SubmissionAnswer extends Component {
     readOnly: false,
   };
 
-  static getRenderer(question) {
+  getRenderer(question) {
     const { MultipleChoice, MultipleResponse, TextResponse, FileUpload, Programming } = questionTypes;
     switch (question.type) {
       case MultipleChoice:
@@ -37,8 +48,19 @@ class SubmissionAnswer extends Component {
       case Programming:
         return Answers.renderProgramming;
       default:
-        return null;
+        return this.renderMissingRenderer.bind(this);
     }
+  }
+
+  renderMissingRenderer() {
+    const { intl } = this.props;
+    return (
+      <Card style={{ backgroundColor: yellow100 }}>
+        <CardText>
+          <span>{intl.formatMessage(translations.rendererNotImplemented)}</span>
+        </CardText>
+      </Card>
+    );
   }
 
   renderMissingAnswerPanel() {
@@ -55,9 +77,7 @@ class SubmissionAnswer extends Component {
   render() {
     const { canGrade, readOnly, question, answerId } = this.props;
 
-    const renderer = SubmissionAnswer.getRenderer(question);
-
-    if (!renderer) { return <div />; }
+    const renderer = this.getRenderer(question);
 
     return (
       <div>

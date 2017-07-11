@@ -7,7 +7,7 @@ class Course::Assessment::Answer::Scribing < ActiveRecord::Base
   accepts_nested_attributes_for :scribbles, allow_destroy: true
 
   def to_partial_path
-    'course/assessment/answer/scribing/scribing'
+    'course/assessment/answer/scribing/scribing'.freeze
   end
 
   # Specific implementation of Course::Assessment::Answer#reset_answer

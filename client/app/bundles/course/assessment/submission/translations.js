@@ -124,11 +124,6 @@ const translations = defineMessages({
     defaultMessage: 'Are you sure you want to reset your answer? This action is irreversible \
                     and you will lose all your current work for this question.',
   },
-  missingAnswer: {
-    id: 'course.assessment.submission.missingAnswer',
-    defaultMessage: 'There is no answer submitted for this question - this might be caused by \
-                    the addition of this question after the submission is submitted.',
-  },
   lateSubmission: {
     id: 'course.assessment.submission.lateSubmission',
     defaultMessage: 'This submission is LATE! You may want to penalize the student for late submission.',

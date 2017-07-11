@@ -9,7 +9,7 @@ class Course::Assessment::Question::Scribing < ActiveRecord::Base
 
   # Scribing is not autogradable, don't need last attempt
   def attempt(submission, _last_attempt = nil)
-    answer = Course::Assessment::Answer::TextResponse.new(submission: submission, question: question)
+    answer = Course::Assessment::Answer::Scribing.new(submission: submission, question: question)
     answer.acting_as
   end
 end
