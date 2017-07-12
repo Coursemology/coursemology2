@@ -58,3 +58,6 @@ Style/RegexpLiteral:
 
 Style/NumericPredicate:
   EnforcedStyle: comparison
+
+Layout/EmptyLineAfterMagicComment:
+  Enabled: false
