@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170706030838) do
+ActiveRecord::Schema.define(version: 20170713082612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -356,10 +356,11 @@ ActiveRecord::Schema.define(version: 20170706030838) do
   end
 
   create_table "course_assessment_submission_questions", force: :cascade do |t|
-    t.integer  "submission_id", :null=>false, :index=>{:name=>"fk__course_assessment_submission_questions_submission_id"}, :foreign_key=>{:references=>"course_assessment_submissions", :name=>"fk_course_assessment_submission_questions_submission_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "question_id",   :null=>false, :index=>{:name=>"fk__course_assessment_submission_questions_question_id"}, :foreign_key=>{:references=>"course_assessment_questions", :name=>"fk_course_assessment_submission_questions_question_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.datetime "created_at",    :null=>false
-    t.datetime "updated_at",    :null=>false
+    t.integer  "submission_id",     :null=>false, :index=>{:name=>"fk__course_assessment_submission_questions_submission_id"}, :foreign_key=>{:references=>"course_assessment_submissions", :name=>"fk_course_assessment_submission_questions_submission_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "question_id",       :null=>false, :index=>{:name=>"fk__course_assessment_submission_questions_question_id"}, :foreign_key=>{:references=>"course_assessment_questions", :name=>"fk_course_assessment_submission_questions_question_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "current_answer_id", :index=>{:name=>"fk__course_assessment_submission_questions_current_answer_id"}, :foreign_key=>{:references=>"course_assessment_answers", :name=>"fk_course_assessment_submission_questions_current_answer_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "created_at",        :null=>false
+    t.datetime "updated_at",        :null=>false
   end
   add_index "course_assessment_submission_questions", ["submission_id", "question_id"], :name=>"idx_course_assessment_submission_questions_on_sub_and_qn", :unique=>true
 

@@ -7,6 +7,8 @@ class Course::Assessment::SubmissionQuestion < ActiveRecord::Base
                           inverse_of: :submission_questions
   belongs_to :question, class_name: Course::Assessment::Question.name,
                         inverse_of: :submission_questions
+  belongs_to :current_answer, class_name: Course::Assessment::Answer.name,
+                              inverse_of: false
 
   after_initialize :set_course, if: :new_record?
   before_validation :set_course, if: :new_record?
