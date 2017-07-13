@@ -64,8 +64,8 @@ RSpec.describe 'Course: Leaderboard: View' do
         end
 
         before do
-          settings = Course::Settings::LeaderboardComponent.
-                     new(course.settings(:course_leaderboard_component))
+          context = OpenStruct.new(current_course: course, key: Course::LeaderboardComponent.key)
+          settings = Course::Settings::LeaderboardComponent.new(context)
           settings.enable_group_leaderboard = true
           course.save
         end

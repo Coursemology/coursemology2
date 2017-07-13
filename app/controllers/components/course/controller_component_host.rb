@@ -79,7 +79,8 @@ class Course::ControllerComponentHost
       end
 
       # Returns a model which the current component can use to interface with its persisted
-      # settings.
+      # settings. The class initializer should take an instance of the component as its only
+      # argument.
       #
       # Example:
       # If the component Course::FoobarComponent has settings, define a class
@@ -93,9 +94,12 @@ class Course::ControllerComponentHost
       end
     end
 
-    # Override this method to use a different settings key or settings_on_rails instance.
+    # The settings interface instance for this component.
+    #
+    # @return An instance of the settings interface for the current component.
+    # @return [nil] if the settings interface is not implemented.
     def settings
-      @settings ||= settings_class&.new(current_course.settings(key))
+      @settings ||= settings_class&.new(self)
     end
   end
 
