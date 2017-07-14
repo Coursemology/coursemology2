@@ -37,8 +37,11 @@ module Course::ReminderConcern
     # that the value stores in database will be consistent with the value passed to the job.
     self.opening_reminder_token = Time.zone.now.to_f.round(5)
 
+    # Determine whether or not to send the opening reminder.
+    send_opening_reminder = start_at && should_send_opening_reminder
+
     execute_after_commit do
-      if start_at
+      if send_opening_reminder
         opening_reminder_job_class.set(wait_until: start_at).
           perform_later(updater, self, opening_reminder_token)
       end
@@ -56,5 +59,18 @@ module Course::ReminderConcern
           perform_later(self, closing_reminder_token)
       end
     end
+  end
+
+  # Determines whether the opening reminder should be sent. Reminders always should be sent unless
+  # the start_at and the old start_at dates are both in the past.
+  #
+  # Note: This should be invoked outside of the +execute_after_commit+ block, as
+  # ActiveRecord::Dirty methods and attributes are not applied as the record has been saved.
+  #
+  # @return [Boolean] True if an opening reminder should be sent
+  def should_send_opening_reminder
+    time_now = Time.zone.now
+    return false if start_at && start_at_was && start_at < time_now && start_at_was < time_now
+    true
   end
 end
