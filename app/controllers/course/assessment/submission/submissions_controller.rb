@@ -7,12 +7,14 @@ class Course::Assessment::Submission::SubmissionsController < \
   skip_authorize_resource :submission, only: [:edit, :update, :auto_grade]
   before_action :authorize_submission!, only: [:edit, :update]
   before_action :check_password, only: [:edit, :update]
-  before_action :load_or_create_answers, only: [:edit, :update]
   before_action :check_zombie_jobs, only: [:edit]
   # Questions may be added to assessments with existing submissions.
   # In these cases, new submission_questions must be created when the submission is next
   # edited or updated.
   before_action :load_or_create_submission_questions, only: [:edit, :update]
+  # When the first answer is created, it is assigned to its submission_question.
+  # Thus when a new submission is created, submission_questions must be created first.
+  before_action :load_or_create_answers, only: [:edit, :update]
 
   delegate_to_service(:update)
   delegate_to_service(:load_or_create_answers)

@@ -15,10 +15,11 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def load_or_create_answers
     return unless @submission.attempting?
 
-    new_answers = questions_to_attempt.not_answered(@submission).attempt(@submission).
-                  map { |answer| answer.save! if answer.new_record? }.
-                  reduce(false) { |a, e| a || e }
-    @submission.answers.reload if new_answers && @submission.answers.loaded?
+    new_answers = questions_to_attempt.not_answered(@submission).attempt(@submission)
+    new_answers_created = new_answers.map { |answer| answer.save! if answer.new_record? }.
+                          reduce(false) { |a, e| a || e }
+    assign_to_submission_question(new_answers) if new_answers_created
+    @submission.answers.reload if new_answers_created && @submission.answers.loaded?
   end
 
   def load_or_create_submission_questions
@@ -129,6 +130,17 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     new_submission_questions.each(&:save!)
 
     new_submission_questions.any?
+  end
+
+  # Assign newly created answers as current_answer to their corresponding submission_question.
+  #
+  # @param [Array<Course::Assessment::Answer>] new_answers The answers which were just created.
+  def assign_to_submission_question(new_answers)
+    new_answers.each do |ans|
+      sub_qn = @submission.submission_questions.select { |sq| sq.question == ans.question }.first
+      sub_qn.current_answer = ans if sub_qn.current_answer.nil?
+      sub_qn.save!
+    end
   end
 
   def submit_answer
