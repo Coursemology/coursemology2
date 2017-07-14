@@ -1,8 +1,17 @@
 # frozen_string_literal: true
 class Course::Settings::AnnouncementsComponent < Course::Settings::Component
   include ActiveModel::Conversion
+  include Course::Settings::EmailSettingsConcern
 
   validates :pagination, numericality: { greater_than: 0 }
+
+  def self.email_setting_items
+    { new_announcement: { enabled_by_default: true } }
+  end
+
+  def self.component_class
+    Course::AnnouncementsComponent
+  end
 
   # Returns the title of announcements component
   #

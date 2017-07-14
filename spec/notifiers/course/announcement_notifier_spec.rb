@@ -23,6 +23,23 @@ RSpec.describe Course::AnnouncementNotifier, type: :notifier do
       it 'sends an email notification' do
         expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(2)
       end
+
+      context 'when email notification for new announcement is disabled' do
+        before do
+          context = OpenStruct.new(key: Course::AnnouncementsComponent.key, current_course: course)
+          Course::Settings::AnnouncementsComponent.new(context).
+            update_email_setting('key' => 'new_announcement', 'enabled' => false)
+          course.save!
+        end
+
+        it 'does not send a course notification' do
+          expect { subject }.to change(course.notifications, :count).by(0)
+        end
+
+        it 'does not send an email notification' do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+      end
     end
   end
 end
