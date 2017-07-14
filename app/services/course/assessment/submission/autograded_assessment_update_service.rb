@@ -8,6 +8,13 @@ class Course::Assessment::Submission::AutogradedAssessmentUpdateService <
     @answers = @submission.answers.where(question: current_question)
   end
 
+  def load_or_create_submission_questions
+    super if @submission.attempting?
+
+    @current_submission_question = @submission.submission_questions.
+                                   where(question: current_question).first
+  end
+
   private
 
   def step_param
