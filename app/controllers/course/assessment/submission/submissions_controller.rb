@@ -73,10 +73,8 @@ class Course::Assessment::Submission::SubmissionsController < \
       @new_answer = @submission.answers.from_question(@current_question.id).last
     end
 
-    if @new_answer
-      respond_to do |format|
-        format.json { render @new_answer }
-      end
+    respond_to do |format|
+      format.json { render @new_answer }
     end
   end
 

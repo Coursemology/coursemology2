@@ -131,9 +131,7 @@ module ApplicationHTMLFormattersHelper
     code = code.gsub(/\r\n|\r/, "\n").html_safe
 
     code = content_tag(:pre, lang: language ? language.rouge_lexer : nil) do
-      content_tag(:code) do
-        code
-      end
+      content_tag(:code) { code }
     end
 
     pipeline = HTML::Pipeline.new(DefaultPipeline.filters +
