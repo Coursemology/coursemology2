@@ -11,8 +11,11 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def submit_answer
     answer = @submission.answers.find(submit_answer_params[:id].to_i)
-    update_answer(answer, submit_answer_params)
-    auto_grade(answer)
+    if update_answer(answer, submit_answer_params)
+      auto_grade(answer)
+    else
+      head :bad_request
+    end
   end
 
   def load_or_create_answers
@@ -122,7 +125,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def update_submission
     @submission.class.transaction do
-      update_answers_params[:answers].each do |answer_params|
+      update_answers_params[:answers]&.each do |answer_params|
         answer = @submission.answers.detect { |answer| answer.id == answer_params[:id].to_i }
         update_answer(answer, answer_params)
       end unless unsubmit? || unmark?
@@ -134,7 +137,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update_answer(answer, answer_params)
     specific_answer = answer.specific
     specific_answer.assign_params(answer_params)
-    answer.save!
+    answer.save
   end
 
   def unsubmit?

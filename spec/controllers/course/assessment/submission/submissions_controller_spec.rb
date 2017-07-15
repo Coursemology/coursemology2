@@ -63,7 +63,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
           subject
         end
 
-        it { is_expected.to render_template('edit') }
+        it { is_expected.to have_http_status(400) }
       end
     end
 
@@ -85,7 +85,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       context 'when answer_id does not exist' do
         subject do
           post :reload_answer, course_id: course, assessment_id: assessment.id,
-                               id: submission.id, answer_id: -1, format: :js
+                               id: submission.id, answer_id: -1, format: :json
         end
 
         it { is_expected.to have_http_status(:bad_request) }
@@ -102,14 +102,14 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
       describe '#submit_answer' do
         subject do
-          put :update,
+          put :submit_answer,
               course_id: course, assessment_id: assessment, id: submission, answer_id: answer.id,
-              submission: { answers_attributes: { answer.id.to_s => { actable_attributes: {} } } }
+              answer: { id: answer.id }, format: :json
         end
 
         context 'when update fails' do
           before do
-            allow(answer).to receive(:update_attributes).and_return(false)
+            allow(answer).to receive(:save).and_return(false)
             allow(submission.answers).to receive(:find).and_return(answer)
             controller.instance_variable_set(:@submission, submission)
             subject

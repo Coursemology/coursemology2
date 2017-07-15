@@ -5,7 +5,7 @@ json.submission do
 
   if assessment.autograded?
     question = assessment.questions.next_unanswered(submission)
-    if question
+    if question && !can_grade
       json.maxStep assessment.questions.index(question)
     else
       json.maxStep assessment.questions.length - 1

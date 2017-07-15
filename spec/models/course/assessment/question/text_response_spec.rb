@@ -31,11 +31,6 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
         expect(subject.attempt(submission)).to be_a(Course::Assessment::Answer)
       end
 
-      it 'associates the answer with the submission' do
-        answer = subject.attempt(submission)
-        expect(submission.text_response_answers).to include(answer.actable)
-      end
-
       context 'when last_attempt is given' do
         let(:last_attempt) { build(:course_assessment_answer_text_response) }
 

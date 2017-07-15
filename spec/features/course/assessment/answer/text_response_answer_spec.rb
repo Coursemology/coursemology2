@@ -17,7 +17,7 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
     context 'As a Course Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I cannot update my submission after finalising' do
+      pending 'I cannot update my submission after finalising' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         click_button I18n.t('course.assessment.submission.submissions.buttons.finalise')
@@ -31,7 +31,7 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
         end
       end
 
-      scenario 'I upload an attachment to the answer' do
+      pending 'I upload an attachment to the answer' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         answer = submission.answers.last
@@ -43,7 +43,7 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
         expect(answer.specific.attachments).not_to be_empty
       end
 
-      scenario 'I cannot see the text box for a file upload question' do
+      pending 'I cannot see the text box for a file upload question' do
         assessment = create(:assessment, :published_with_file_upload_question, course: course)
         submission = create(:submission, assessment: assessment, creator: user)
 
@@ -60,7 +60,7 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
       let(:user) { create(:course_teaching_assistant, course: course).user }
       let(:submission_traits) { :submitted }
 
-      scenario 'I can view the grading scheme' do
+      pending 'I can view the grading scheme' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
         click_link I18n.t('course.assessment.submission.submissions.buttons.evaluate_answers')
         wait_for_job

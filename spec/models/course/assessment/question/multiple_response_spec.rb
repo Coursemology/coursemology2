@@ -33,11 +33,6 @@ RSpec.describe Course::Assessment::Question::MultipleResponse do
         expect(subject.attempt(submission)).to be_a(Course::Assessment::Answer)
       end
 
-      it 'associates the answer with the submission' do
-        answer = subject.attempt(submission)
-        expect(submission.multiple_response_answers).to include(answer.actable)
-      end
-
       context 'when last_attempt is given' do
         let(:last_attempt) do
           build(:course_assessment_answer_multiple_response, :with_one_correct_option,

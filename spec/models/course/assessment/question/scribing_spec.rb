@@ -17,11 +17,6 @@ RSpec.describe Course::Assessment::Question::Scribing, type: :model do
       it 'returns an Answer' do
         expect(subject.attempt(submission)).to be_a(Course::Assessment::Answer)
       end
-
-      it 'associates the answer with the submission' do
-        answer = subject.attempt(submission)
-        expect(submission.scribing_answers).to include(answer.actable)
-      end
     end
   end
 end

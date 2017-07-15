@@ -131,11 +131,6 @@ RSpec.describe Course::Assessment::Question::Programming do
         expect(subject.attempt(submission)).to be_a(Course::Assessment::Answer)
       end
 
-      it 'associates the answer with the submission' do
-        answer = subject.attempt(submission)
-        expect(submission.programming_answers).to include(answer.actable)
-      end
-
       it 'copies all the template files' do
         answer = subject.attempt(submission).specific
         expect(subject.template_files).not_to be_empty
