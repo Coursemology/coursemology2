@@ -183,7 +183,7 @@ class SubmissionEditStepForm extends Component {
         secondary
         label={intl.formatMessage(translations.submit)}
         onTouchTap={() => handleAutograde(answerId)}
-        disabled={isAutograding || isResetting }
+        disabled={isAutograding || isResetting}
       />
     );
   }

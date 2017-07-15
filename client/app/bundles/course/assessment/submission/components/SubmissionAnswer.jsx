@@ -19,7 +19,7 @@ const translations = defineMessages({
     id: 'course.assessment.submission.rendererNotImplemented',
     defaultMessage: 'The display for this question type has not been implemented yet.',
   },
-})
+});
 
 class SubmissionAnswer extends Component {
   static propTypes = {

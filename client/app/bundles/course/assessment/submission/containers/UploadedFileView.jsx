@@ -38,14 +38,15 @@ const styles = {
 
 class VisibleUploadedFileView extends Component {
 
+
+  static buildAttachmentUrl(attachment) {
+    return `/attachments/${attachment.id}`;
+  }
+
   state = {
     deleteConfirmation: false,
     deleteAttachmentId: null,
   };
-
-  buildAttachmentUrl(attachment) {
-    return `/attachments/${attachment.id}`;
-  }
 
   renderAttachment(attachment) {
     const { canDestroyAttachments } = this.props;
@@ -57,7 +58,7 @@ class VisibleUploadedFileView extends Component {
 
     return (
       <Chip key={attachment.id} style={styles.chip} onRequestDelete={onRequestDelete}>
-        <a href={this.buildAttachmentUrl(attachment)} download>
+        <a href={VisibleUploadedFileView.buildAttachmentUrl(attachment)} download>
           {attachment.name}
         </a>
       </Chip>

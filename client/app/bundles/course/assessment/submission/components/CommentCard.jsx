@@ -9,12 +9,12 @@ import FlatButton from 'material-ui/FlatButton';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import { red500, grey100 } from 'material-ui/styles/colors';
-import { PostProp } from '../propTypes';
-
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import moment from 'lib/moment';
 /* eslint-enable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
+
+import { PostProp } from '../propTypes';
 
 const styles = {
   card: {
