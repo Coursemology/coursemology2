@@ -3,9 +3,6 @@ en:
     assessment:
       submission:
         submissions:
-          no_answer:
-            There is no answer submitted for this question - this might be caused by the addition of
-            this question after the submission is submitted.
           index:
             submissions: 'Submissions'
             my_student_header: 'My Student Submissions'
@@ -23,53 +20,14 @@ en:
             failure: 'Could not create submission: %{error}'
           edit:
             attempt: :'course.assessment.assessments.assessment.attempt'
-            files: :'course.assessment.assessments.show.files'
           publish_all:
             success: 'All graded submissions have been published.'
             notice: 'There are no graded submissions.'
           download_all:
             not_downloadable: 'This assessment has no downloadable files.'
             no_submissions: 'There are no confirmed submissions.'
-          buttons:
-            save: 'Save'
-            save_draft: 'Save Draft'
-            finalise: 'Finalise Submission'
-            publish: 'Publish Grade'
-            mark: 'Submit for publishing'
-            auto_grade: 'Auto Grade Submission'
-            evaluate_answers: 'Evaluate Answers'
-            unsubmit: 'Unsubmit Submission'
-            unmark: 'Revert to Submitted'
-            confirm_finalise: |+
-              THIS ACTION IS IRREVERSIBLE
-
-              Are you sure you want to submit? You will no longer be able to amend your submission!
-            confirm_unsubmit: |+
-              This will reset the submission time and permit the student to change his submission.
-
-              NOTE THAT YOU CANNOT UNDO THIS!!
-
-              Are you sure you want to proceed?
-          progress:
-            student: :'course.users.role.student'
-            attempted_at: :'course.assessment.submission.submissions.statistics.attempted_at'
-            submitted_at: 'Submitted At'
-            late_submission_warning: 'This submission is LATE! You may want to penalize the student for late submission.'
           statistics:
-            student: :'course.users.role.student'
-            status: 'Status'
-            due_at: 'Due At'
-            attempted_at: 'Attempted At'
-            statistics: 'Statistics'
-            multiplier: 'Multiplier'
-            question: 'Question'
-            question_grader: 'Grader'
-            grade_summary: 'Grade Summary'
             publish_grade_hint: "These grades can't be seen by the student until they are published."
-            late_submission_warning: :'course.assessment.submission.submissions.progress.late_submission_warning'
-          update:
-            success: 'Submission was updated.'
-            finalise: 'Your submission is being graded, please visit this page again later.'
           submissions:
             student_name: 'Student Name'
             status: 'Submission Status'
@@ -84,5 +42,3 @@ en:
             logs: 'View Access Logs'
           no_submission:
             not_started: 'Not Started'
-          manually_graded_answers_tabbed:
-            question: 'Q%{number}'

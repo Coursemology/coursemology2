@@ -1,5 +1,5 @@
 en:
   attachment_references:
-    destroy:
+    render_html_response:
       success: 'Attachment has been deleted'
       failure: 'Failed to delete attachment: %{error}'

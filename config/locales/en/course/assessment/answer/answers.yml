@@ -5,23 +5,6 @@ en:
         error: >
           (T_T) Sorry, the autograder is having mood swings and quit on us.
           Try submitting your code again in a couple of minutes.
-        manually_graded:
-          run_code: 'Run Code'
-          run_code_with_limit: 'Run ( %{limit} times left )'
-          run_code_evaluation_warning: >
-            You are able to see this because you are a staff and can view evaluation tests.
-            Students cannot see these tests nor this button.
-          error: :'course.assessment.answer.error'
-        autograded:
-          continue: 'Continue'
-          error: :'course.assessment.answer.error'
-        grading:
-          grading: 'Grading'
-          maximum_grade: '/ %{maximum_grade}'
-          grade: 'Grade: %{grade} / %{maximum_grade}'
-        explanation:
-          correct: 'Correct!'
-          wrong: 'Wrong!'
         reset_answer:
           button: 'Reset Answer'
           tooltip: 'Reset your current answer to the template'
