@@ -28,6 +28,8 @@ en:
         title: :'course.admin.component_settings.index.header'
       sidebar_settings:
         title: 'Sidebar'
+      notifications:
+        title: 'Notifications'
     course_users:
       title: 'Manage Users'
     duplication:

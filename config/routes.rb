@@ -118,6 +118,9 @@ Rails.application.routes.draw do
         get 'sidebar' => 'sidebar_settings#edit'
         patch 'sidebar' => 'sidebar_settings#update'
 
+        get 'notifications' => 'notification_settings#edit'
+        patch 'notifications' => 'notification_settings#update'
+
         get 'announcements' => 'announcement_settings#edit'
         patch 'announcements' => 'announcement_settings#update'
 

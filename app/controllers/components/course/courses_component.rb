@@ -34,7 +34,8 @@ class Course::CoursesComponent < SimpleDelegator
     [
       settings_index_item,
       settings_components_item,
-      settings_sidebar_item
+      settings_sidebar_item,
+      settings_notifications
     ]
   end
 
@@ -62,6 +63,15 @@ class Course::CoursesComponent < SimpleDelegator
       type: :settings,
       weight: 3,
       path: course_admin_sidebar_path(current_course)
+    }
+  end
+
+  def settings_notifications
+    {
+      title: t('layouts.course_admin.notifications.title'),
+      type: :settings,
+      weight: 8,
+      path: course_admin_notifications_path(current_course)
     }
   end
 end
