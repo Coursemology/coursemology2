@@ -39,7 +39,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
     self.published_at = Time.zone.now
     self.awarder = User.stamper || User.system
     self.awarded_at = Time.zone.now
-    if persisted? && !assessment.autograded?
+    if persisted? && !assessment.autograded? && submission_graded_email_enabled?
       execute_after_commit { Course::Mailer.submission_graded_email(self).deliver_later }
     end
   end
@@ -60,6 +60,10 @@ module Course::Assessment::Submission::WorkflowEventConcern
   end
 
   private
+
+  def submission_graded_email_enabled?
+    Course::Settings::AssessmentsComponent.email_enabled?(assessment.tab.category, :new_grading)
+  end
 
   # Defined outside of the workflow transition as points_awarded and draft_points_awarded are
   # not set during the event transition, hence they are not modifiable within the method itself.
