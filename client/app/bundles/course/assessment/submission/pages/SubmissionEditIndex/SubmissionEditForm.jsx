@@ -5,14 +5,14 @@ import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape } from 'react-intl';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
+import { Card } from 'material-ui/Card';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
-import { red900, yellow900, green900, red300, green500, white } from 'material-ui/styles/colors';
+import { red900, yellow900, white } from 'material-ui/styles/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { ExplanationProp, QuestionProp, QuestionFlagsProp, TopicProp } from '../../propTypes';
+import { QuestionProp, QuestionFlagsProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
@@ -93,32 +93,8 @@ class SubmissionEditForm extends Component {
     return null;
   }
 
-  renderExplanationPanel(questionId) {
-    const { explanations } = this.props;
-    const explanation = explanations[questionId];
-
-    if (explanation && explanation.correct !== null) {
-      return (
-        <Card style={styles.explanationContainer}>
-          <CardHeader
-            style={{
-              ...styles.explanationHeader,
-              backgroundColor: explanation.correct ? green500 : red300,
-            }}
-            title={explanation.correct ? 'Correct!' : 'Wrong!'}
-            titleColor={explanation.correct ? green900 : red900}
-          />
-          <CardText>
-            {explanation.explanations.map(exp => <div dangerouslySetInnerHTML={{ __html: exp }} />)}
-          </CardText>
-        </Card>
-      );
-    }
-    return null;
-  }
-
   renderTabbedQuestions() {
-    const { canGrade, attempting, questionIds, questions, topics } = this.props;
+    const { intl, canGrade, attempting, questionIds, questions, topics } = this.props;
     return (
       <Tabs>
         {questionIds.map((id, index) => {
@@ -126,9 +102,8 @@ class SubmissionEditForm extends Component {
           const { answerId, topicId } = question;
           const topic = topics[topicId];
           return (
-            <Tab key={id} label={index + 1}>
+            <Tab key={id} label={intl.formatMessage(translations.questionNumber, { number: index + 1 })}>
               <SubmissionAnswer {...{ canGrade, readOnly: !attempting, answerId, question }} />
-              {this.renderExplanationPanel(id)}
               {this.renderQuestionGrading(id)}
               {this.renderProgrammingQuestionActions(id)}
               <Comments topic={topic} />
@@ -151,7 +126,6 @@ class SubmissionEditForm extends Component {
           return (
             <div key={id} style={styles.questionContainer}>
               <SubmissionAnswer {...{ canGrade, readOnly: !attempting, answerId, question }} />
-              {this.renderExplanationPanel(id)}
               {this.renderQuestionGrading(id)}
               {this.renderProgrammingQuestionActions(id)}
               <Comments topic={topic} />
@@ -382,7 +356,6 @@ SubmissionEditForm.propTypes = {
   graded: PropTypes.bool.isRequired,
   published: PropTypes.bool.isRequired,
 
-  explanations: PropTypes.objectOf(ExplanationProp),
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(QuestionProp),
   questionsFlags: PropTypes.objectOf(QuestionFlagsProp),

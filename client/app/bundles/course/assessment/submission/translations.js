@@ -128,6 +128,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.lateSubmission',
     defaultMessage: 'This submission is LATE! You may want to penalize the student for late submission.',
   },
+  questionNumber: {
+    id: 'course.assessment.submission.questionNumber',
+    defaultMessage: 'Q{number}',
+  },
 });
 
 export default translations;
