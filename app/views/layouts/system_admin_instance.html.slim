@@ -5,11 +5,11 @@
       = sidebar do
         ul.nav.nav-pills.nav-stacked
           li
+            = link_to(t('system.admin.instance.navbar.announcements'), admin_instance_announcements_path)
+          li
             = link_to(t('system.admin.instance.navbar.users'), admin_instance_users_path)
           li
             = link_to(t('system.admin.instance.navbar.courses'), admin_instance_courses_path)
-          li
-            = link_to(t('system.admin.instance.navbar.announcements'), admin_instance_announcements_path)
           li
             = link_to(t('system.admin.instance.navbar.components'), admin_instance_components_path)
       div.col-lg-10.col.md-9.col-sm-8 class=page_class
