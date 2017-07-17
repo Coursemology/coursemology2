@@ -11,11 +11,13 @@ class Course::Survey::ReminderService
 
   def opening_reminder(survey, token)
     return unless survey.opening_reminder_token == token && survey.published?
+    return unless email_enabled?(survey, :survey_opening)
     send_opening_reminder(survey)
   end
 
   def closing_reminder(survey, token)
     return unless survey.closing_reminder_token == token && survey.published?
+    return unless email_enabled?(survey, :survey_closing)
     send_closing_reminder(survey)
   end
 
@@ -34,6 +36,10 @@ class Course::Survey::ReminderService
   end
 
   private
+
+  def email_enabled?(survey, key)
+    Course::Settings::SurveyComponent.email_enabled?(survey.course, key)
+  end
 
   # Send reminder emails to each student who hasn't submitted.
   #
