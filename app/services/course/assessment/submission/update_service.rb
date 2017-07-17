@@ -148,7 +148,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
     if answer.update_attributes(submit_answer_params)
       if valid_for_grading?(answer)
-        job = grade_and_reattempt_answer(answer)
+        job = reattempt_and_grade_answer(answer)
 
         respond_to do |format|
           format.html { job ? redirect_to(job_path(job.job)) : redirect_to_edit }
@@ -164,15 +164,14 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     end
   end
 
-  def grade_and_reattempt_answer(answer)
-    # The transaction is to make sure that auto grading and job are present when the answer is in
-    # the submitted state.
+  def reattempt_and_grade_answer(answer)
+    # The transaction is to make sure that the new attempt, auto grading and job are present when
+    # the working answer is submitted.
     answer.class.transaction do
-      answer.finalise! if answer.attempting?
-      # Only save if answer is graded in another server
-      answer.save! unless answer.grade_inline?
-      answer.auto_grade!(redirect_to_path: edit_submission_path,
-                         reattempt: true, reduce_priority: false)
+      new_answer = answer.question.attempt(answer.submission, answer)
+      new_answer.finalise!
+      new_answer.save!
+      new_answer.auto_grade!(redirect_to_path: edit_submission_path, reduce_priority: false)
     end
   end
 

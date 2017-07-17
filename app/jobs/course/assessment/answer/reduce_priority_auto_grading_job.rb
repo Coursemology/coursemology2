@@ -23,10 +23,9 @@ class Course::Assessment::Answer::ReducePriorityAutoGradingJob < ApplicationJob
   #   finished.
   # @param [Course::Assessment::Answer] answer the answer to be graded.
   # @param [String] redirect_to_path The path to redirect when job finishes.
-  # @param [Boolean] reattempt Whether to create new answer based on current answer after grading.
-  def perform_tracked(answer, redirect_to_path = nil, reattempt = false)
+  def perform_tracked(answer, redirect_to_path = nil)
     ActsAsTenant.without_tenant do
-      Course::Assessment::Answer::AutoGradingService.grade(answer, reattempt)
+      Course::Assessment::Answer::AutoGradingService.grade(answer)
     end
 
     redirect_to redirect_to_path
