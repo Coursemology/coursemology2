@@ -67,7 +67,10 @@ class Course::Assessment::Submission::SubmissionsController < \
     elsif reload_answer_params[:reset_answer]
       @new_answer = @answer.reset_answer
     else
-      @new_answer = @submission.answers.from_question(@current_question.id).last
+      # Return the current_answer referenced from the submission_question when reloading,
+      # instead of using the latest answer.
+      @new_answer = @submission.submission_questions.where(question: @current_question).first.
+                    current_answer
     end
   end
 

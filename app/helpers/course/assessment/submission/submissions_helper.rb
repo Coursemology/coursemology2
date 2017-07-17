@@ -21,15 +21,15 @@ module Course::Assessment::Submission::SubmissionsHelper
     answer.correct ? 'panel-success' : 'panel-danger'
   end
 
-  # Return the last attempted answer based on the status of current submission.
-  # previous attempt if submission is in attempting state.
-  # current attempt if submission is in submitted, graded or published state.
+  # Return the last graded attempted answer based on the status of current submission,
+  # or the last attempt if there are no evaluated or graded answers.
   #
   # @return [Course::Assessment::Answer]
   def last_attempt(answer)
     submission = answer.submission
     attempts = submission.answers.from_question(answer.question_id)
-    submission.attempting? ? attempts[-2] : attempts[-1]
+    graded_or_evaluated = attempts.select { |x| ['evaluated', 'graded'].include?(x.workflow_state) }
+    graded_or_evaluated.empty? ? attempts.last : graded_or_evaluated.last
   end
 
   # Display button to allow the resetting of an answer.
