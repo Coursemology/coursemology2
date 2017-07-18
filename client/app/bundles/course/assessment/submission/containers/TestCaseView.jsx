@@ -64,10 +64,23 @@ const translations = defineMessages({
     id: 'course.assessment.submission.TestCaseView.evaluationTestCases',
     defaultMessage: 'Evaluation Test Cases',
   },
-  staffOnlyVisibleTestCase: {
-    id: 'course.assessment.submission.TestCaseView.staffOnlyVisibleTestCase',
+  staffOnlyTestCases: {
+    id: 'course.assessment.submission.TestCaseView.staffOnlyTestCases',
     defaultMessage: 'You are able to view these test cases because you are staff. \
                     Students will not be able to see them.',
+  },
+  staffOnlyOutputStream: {
+    id: 'course.assessment.submission.TestCaseView.staffOnlyOutputStream',
+    defaultMessage: 'You can view the output streams because you are staff. \
+                    Students will not be able to see them.',
+  },
+  standardOutput: {
+    id: 'course.assessment.submission.TestCaseView.standardOutput',
+    defaultMessage: 'Standard Output',
+  },
+  standardError: {
+    id: 'course.assessment.submission.TestCaseView.standardError',
+    defaultMessage: 'Standard Error',
   },
 });
 
@@ -125,16 +138,46 @@ class VisibleTestCaseView extends Component {
     );
   }
 
-  static renderExclamationTriangle() {
+  static renderStaffOnlyTestCasesWarning() {
     return (
       <span style={{ display: 'inline-block', marginLeft: 5 }}>
-        <a data-tip data-for="exclamation-triangle" data-offset="{'left' : -8}">
+        <a data-tip data-for="staff-only-test-cases" data-offset="{'left' : -8}">
           <i className="fa fa-exclamation-triangle" />
         </a>
-        <ReactTooltip id="exclamation-triangle" effect="solid">
-          <FormattedMessage {...translations.staffOnlyVisibleTestCase} />
+        <ReactTooltip id="staff-only-test-cases" effect="solid">
+          <FormattedMessage {...translations.staffOnlyTestCases} />
         </ReactTooltip>
       </span>
+    );
+  }
+
+  static renderStaffOnlyOutputStreamWarning() {
+    return (
+      <span style={{ display: 'inline-block', marginLeft: 5 }}>
+        <a data-tip data-for="staff-only-output-stream" data-offset="{'left' : -8}">
+          <i className="fa fa-exclamation-triangle" />
+        </a>
+        <ReactTooltip id="staff-only-output-stream" effect="solid">
+          <FormattedMessage {...translations.staffOnlyOutputStream} />
+        </ReactTooltip>
+      </span>
+    );
+  }
+
+  static renderOutputStream(outputStreamType, output) {
+    return (
+      <Card>
+        <CardHeader
+          showExpandableButton
+          title={
+            <div>
+              <FormattedMessage {...translations[outputStreamType]} />
+              {VisibleTestCaseView.renderStaffOnlyOutputStreamWarning()}
+            </div>
+          }
+        />
+        <CardText expandable><pre>{output}</pre></CardText>
+      </Card>
     );
   }
 
@@ -142,7 +185,7 @@ class VisibleTestCaseView extends Component {
     return (
       <div>
         <FormattedMessage {...translations[testCaseType]} />
-        {warn ? VisibleTestCaseView.renderExclamationTriangle() : null}
+        {warn ? VisibleTestCaseView.renderStaffOnlyTestCasesWarning() : null}
       </div>
     );
   }
@@ -160,14 +203,16 @@ class VisibleTestCaseView extends Component {
           testCases.public_test,
           VisibleTestCaseView.renderTitle('publicTestCases', false)
         )}
-        {canGrade ? VisibleTestCaseView.renderTestCases(
+        {VisibleTestCaseView.renderTestCases(
           testCases.private_test,
-          VisibleTestCaseView.renderTitle('privateTestCases', true)
-        ) : null}
-        {canGrade ? VisibleTestCaseView.renderTestCases(
+          VisibleTestCaseView.renderTitle('privateTestCases', canGrade)
+        )}
+        {VisibleTestCaseView.renderTestCases(
           testCases.evaluation_test,
-          VisibleTestCaseView.renderTitle('evaluationTestCases', true)
-        ) : null}
+          VisibleTestCaseView.renderTitle('evaluationTestCases', canGrade)
+        )}
+        {VisibleTestCaseView.renderOutputStream('standardOutput', testCases.stdout)}
+        {VisibleTestCaseView.renderOutputStream('standardError', testCases.stderr)}
       </div>
     );
   }
@@ -179,6 +224,8 @@ VisibleTestCaseView.propTypes = {
     evaluation_test: PropTypes.arrayOf(TestCaseProp),
     private_test: PropTypes.arrayOf(TestCaseProp),
     public_test: PropTypes.arrayOf(TestCaseProp),
+    stdout: PropTypes.string,
+    stderr: PropTypes.string,
   }),
 };
 

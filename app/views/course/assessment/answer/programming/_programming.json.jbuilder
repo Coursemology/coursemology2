@@ -2,6 +2,7 @@ submission = answer.submission
 assessment = submission.assessment
 question = answer.question.specific
 last_attempt = last_attempt(answer)
+auto_grading = last_attempt.try(:auto_grading).try(:specific)
 
 json.fields do
   json.questionId answer.question_id
@@ -12,7 +13,7 @@ json.fields do
   end
 end
 
-if answer.submitted? && job = answer.try(:auto_grading).try(:job)
+if answer.submitted? && job = auto_grading.try(:job)
   json.job job_path(job) if job.submitted?
 end
 
@@ -21,7 +22,7 @@ show_private = can_read_tests || last_attempt&.correct? && assessment.show_priva
 show_evaluation = can_read_tests || last_attempt&.correct? && assessment.show_evaluation?
 
 test_cases_by_type = question.test_cases_by_type
-test_cases_and_results = get_test_cases_and_results(test_cases_by_type, last_attempt&.auto_grading&.specific)
+test_cases_and_results = get_test_cases_and_results(test_cases_by_type, auto_grading)
 
 displayed_test_case_types = ['public_test']
 displayed_test_case_types << 'private_test' if show_private
@@ -43,6 +44,10 @@ json.testCases do
         end
       end
     end
+  end
+
+  if can_read_tests && auto_grading && auto_grading.exit_code && auto_grading.exit_code != 0
+    json.(auto_grading, :stdout, :stderr)
   end
 end
 
