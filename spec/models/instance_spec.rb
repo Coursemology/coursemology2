@@ -99,6 +99,27 @@ RSpec.describe Instance do
 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
+    describe '.active_course_count' do
+      let!(:courses) { create_list(:course, 2, instance: instance) }
+      # Make one of the courses active
+      before { courses.first.course_users.first.update_column(:last_active_at, Time.zone.now) }
+
+      subject { Instance.where(id: instance.id).calculated(:active_course_count).first }
+
+      it 'shows the correct count' do
+        expect(subject.active_course_count).to eq(1)
+      end
+
+      context 'when viewing from another instance' do
+        let(:new_instance) { create(:instance) }
+        it 'shows the correct count' do
+          ActsAsTenant.with_tenant(new_instance) do
+            expect(subject.active_course_count).to eq(1)
+          end
+        end
+      end
+    end
+
     describe '.course_count' do
       let!(:courses) { create_list(:course, 2, instance: instance) }
       subject { Instance.where(id: instance.id).calculated(:course_count).first }
@@ -112,6 +133,26 @@ RSpec.describe Instance do
         it 'shows the correct count' do
           ActsAsTenant.with_tenant(new_instance) do
             expect(subject.course_count).to eq(courses.size)
+          end
+        end
+      end
+    end
+
+    describe '.active_user_count' do
+      let!(:instance_users) { create_list(:instance_user, 2, instance: instance) }
+      # Make one of the users active
+      before { instance_users.first.user.update_column(:current_sign_in_at, Time.zone.now) }
+      subject { Instance.where(id: instance.id).calculated(:active_user_count).first }
+
+      it 'shows the correct count' do
+        expect(subject.active_user_count).to eq(1)
+      end
+
+      context 'when viewing from another instance' do
+        let(:new_instance) { create(:instance) }
+        it 'shows the correct count' do
+          ActsAsTenant.with_tenant(new_instance) do
+            expect(subject.active_user_count).to eq(1)
           end
         end
       end

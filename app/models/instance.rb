@@ -65,6 +65,12 @@ class Instance < ActiveRecord::Base
     order("CASE \"id\" WHEN #{DEFAULT_INSTANCE_ID} THEN 0 ELSE 1 END").order_by_name
   end)
 
+  # The number of active courses (in the past 7 days) in the instance.
+  calculated :active_course_count, (lambda do
+    Course.unscoped.active_in_past_7_days.where('courses.instance_id = instances.id').
+      select("count('*')")
+  end)
+
   # @!attribute [r] course_count
   #   The number of courses in the instance.
   calculated :course_count, (lambda do
@@ -75,6 +81,13 @@ class Instance < ActiveRecord::Base
   #   The number of users in the instance.
   calculated :user_count, (lambda do
     InstanceUser.unscoped.where('instance_users.instance_id = instances.id').select("count('*')")
+  end)
+
+  # The number of active users (in the past 7 days) in the instance.
+  calculated :active_user_count, (lambda do
+    InstanceUser.unscoped.joins(:user).merge(User.active_in_past_7_days).
+      where('instance_users.instance_id = instances.id').
+      select("count('*')")
   end)
 
   def self.use_relative_model_naming?

@@ -9,8 +9,12 @@ table.table.table-middle-align.table-hover
       th= t('.serial_number')
       th= t('.name')
       th= t('.host_name')
-      th= t('.users')
-      th= t('.courses')
+      th
+        div data-toggle="tooltip" title="#{t('.users_hint')}"
+          = t('.users')
+      th
+        div data-toggle="tooltip" title="#{t('.courses_hint')}"
+          = t('.courses')
 
   tbody
     = render partial: 'instance', collection: @instances,
