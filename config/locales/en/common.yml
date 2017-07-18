@@ -12,6 +12,7 @@ en:
     submit: 'Submit'
     show_more: 'See all'
     show_less: 'See less'
+    summary: 'Summary'
     click_here: 'Click here'
   helpers:
     submit:
