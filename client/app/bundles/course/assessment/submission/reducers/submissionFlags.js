@@ -1,8 +1,8 @@
-import actions, { DATA_STATES, SAVE_STATES } from '../constants';
+import actions from '../constants';
 
 const initialState = {
-  dataState: DATA_STATES.Unfetched,
-  saveState: SAVE_STATES.Idle,
+  isLoading: true,
+  isSaving: false,
 };
 
 export default function (state = initialState, action) {
@@ -10,46 +10,52 @@ export default function (state = initialState, action) {
     case actions.FETCH_SUBMISSION_REQUEST:
       return {
         ...state,
-        dataState: DATA_STATES.Fetching,
+        isLoading: true,
       };
     case actions.FETCH_SUBMISSION_SUCCESS:
-      return {
-        ...state,
-        dataState: DATA_STATES.Received,
-      };
     case actions.FETCH_SUBMISSION_FAILURE:
       return {
         ...state,
-        dataState: DATA_STATES.Error,
+        isLoading: false,
       };
     case actions.SAVE_DRAFT_REQUEST:
-    case actions.SUBMISSION_REQUEST:
+    case actions.SAVE_GRADE_REQUEST:
+    case actions.FINALISE_REQUEST:
     case actions.UNSUBMIT_REQUEST:
     case actions.AUTOGRADE_REQUEST:
+    case actions.RESET_REQUEST:
+    case actions.MARK_REQUEST:
+    case actions.UNMARK_REQUEST:
+    case actions.PUBLISH_REQUEST:
       return {
         ...state,
-        saveState: SAVE_STATES.Saving,
+        isSaving: true,
       };
     case actions.SAVE_DRAFT_SUCCESS:
-    case actions.SUBMISSION_SUCCESS:
-    case actions.UNSUBMIT_SUCCESS:
     case actions.SAVE_GRADE_SUCCESS:
+    case actions.FINALISE_SUCCESS:
+    case actions.UNSUBMIT_SUCCESS:
+    case actions.AUTOGRADE_SUCCESS:
+    case actions.RESET_SUCCESS:
     case actions.MARK_SUCCESS:
     case actions.UNMARK_SUCCESS:
     case actions.PUBLISH_SUCCESS:
-    case actions.AUTOGRADE_SUCCESS:
-    case actions.RESET_SUCCESS:
       return {
         ...state,
-        saveState: SAVE_STATES.Saved,
+        isSaving: false,
       };
     case actions.SAVE_DRAFT_FAILURE:
-    case actions.SUBMISSION_FAILURE:
+    case actions.SAVE_GRADE_FAILURE:
+    case actions.FINALISE_FAILURE:
     case actions.UNSUBMIT_FAILURE:
     case actions.AUTOGRADE_FAILURE:
+    case actions.RESET_FAILURE:
+    case actions.MARK_FAILURE:
+    case actions.UNMARK_FAILURE:
+    case actions.PUBLISH_FAILURE:
       return {
         ...state,
-        saveState: SAVE_STATES.Error,
+        isSaving: false,
       };
     default:
       return state;

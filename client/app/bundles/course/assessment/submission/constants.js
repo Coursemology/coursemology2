@@ -1,18 +1,8 @@
 import mirrorCreator from 'mirror-creator';
 
-export const DATA_STATES = {
-  Error: 'error',
-  Unfetched: 'unfetched',
-  Fetching: 'fetching',
-  Received: 'received',
-};
-
-export const SAVE_STATES = {
-  Error: 'error',
-  Idle: 'idle',
-  Saving: 'saving',
-  Saved: 'saved',
-};
+export const formNames = mirrorCreator([
+  'SUBMISSION',
+]);
 
 export const questionTypes = mirrorCreator([
   'MultipleChoice',
@@ -39,7 +29,7 @@ const actionTypes = mirrorCreator([
   'FETCH_SUBMISSION_REQUEST', 'FETCH_SUBMISSION_SUCCESS', 'FETCH_SUBMISSION_FAILURE',
   'AUTOGRADE_SUBMISSION_REQUEST', 'AUTOGRADE_SUBMISSION_SUCCESS', 'AUTOGRADE_SUBMISSION_FAILURE',
   'SAVE_DRAFT_REQUEST', 'SAVE_DRAFT_SUCCESS', 'SAVE_DRAFT_FAILURE',
-  'SUBMISSION_REQUEST', 'SUBMISSION_SUCCESS', 'SUBMISSION_FAILURE',
+  'FINALISE_REQUEST', 'FINALISE_SUCCESS', 'FINALISE_FAILURE',
   'UNSUBMIT_REQUEST', 'UNSUBMIT_SUCCESS', 'UNSUBMIT_FAILURE',
   'AUTOGRADE_REQUEST', 'AUTOGRADE_SUCCESS', 'AUTOGRADE_FAILURE',
   'RESET_REQUEST', 'RESET_SUCCESS', 'RESET_FAILURE',

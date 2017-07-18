@@ -17,7 +17,7 @@ import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
 import Comments from '../../containers/Comments';
-import { questionTypes } from '../../constants';
+import { formNames, questionTypes } from '../../constants';
 import translations from '../../translations';
 
 const styles = {
@@ -59,7 +59,7 @@ class SubmissionEditForm extends Component {
   }
 
   renderProgrammingQuestionActions(id) {
-    const { intl, attempting, questions, questionsFlags, handleAutograde } = this.props;
+    const { intl, attempting, questions, questionsFlags, handleAutograde, isSaving } = this.props;
     const question = questions[id];
     const { answerId } = question;
     const { isAutograding, isResetting } = questionsFlags[id];
@@ -76,7 +76,7 @@ class SubmissionEditForm extends Component {
             backgroundColor={white}
             label={intl.formatMessage(translations.reset)}
             onTouchTap={() => this.setState({ resetConfirmation: true, resetAnswerId: answerId })}
-            disabled={isAutograding || isResetting}
+            disabled={isAutograding || isResetting || isSaving}
           />
           <RaisedButton
             style={styles.formButton}
@@ -84,7 +84,7 @@ class SubmissionEditForm extends Component {
             secondary
             label={intl.formatMessage(translations.submit)}
             onTouchTap={() => handleAutograde(answerId)}
-            disabled={isAutograding || isResetting}
+            disabled={isAutograding || isResetting || isSaving}
           />
           {isAutograding || isResetting ? <CircularProgress size={36} style={{ position: 'absolute' }} /> : null}
         </div>
@@ -146,7 +146,7 @@ class SubmissionEditForm extends Component {
   }
 
   renderSaveDraftButton() {
-    const { intl, pristine, submitting, attempting, handleSaveDraft } = this.props;
+    const { intl, pristine, attempting, handleSaveDraft, isSaving } = this.props;
     if (attempting) {
       return (
         <RaisedButton
@@ -154,7 +154,7 @@ class SubmissionEditForm extends Component {
           primary
           label={intl.formatMessage(translations.saveDraft)}
           onTouchTap={handleSaveDraft}
-          disabled={pristine || submitting}
+          disabled={pristine || isSaving}
         />
       );
     }
@@ -162,7 +162,7 @@ class SubmissionEditForm extends Component {
   }
 
   renderSaveGradeButton() {
-    const { intl, canGrade, attempting, handleSaveGrade } = this.props;
+    const { intl, canGrade, attempting, handleSaveGrade, isSaving } = this.props;
     if (canGrade && !attempting) {
       return (
         <RaisedButton
@@ -170,6 +170,7 @@ class SubmissionEditForm extends Component {
           primary
           label={intl.formatMessage(translations.saveGrade)}
           onTouchTap={handleSaveGrade}
+          disabled={isSaving}
         />
       );
     }
@@ -177,7 +178,7 @@ class SubmissionEditForm extends Component {
   }
 
   renderAutogradeSubmissionButton() {
-    const { intl, canGrade, submitted, handleAutogradeSubmission } = this.props;
+    const { intl, canGrade, submitted, handleAutogradeSubmission, isSaving } = this.props;
     if (canGrade && submitted) {
       return (
         <RaisedButton
@@ -185,6 +186,7 @@ class SubmissionEditForm extends Component {
           primary
           label={intl.formatMessage(translations.autograde)}
           onTouchTap={handleAutogradeSubmission}
+          disabled={isSaving}
         />
       );
     }
@@ -192,7 +194,7 @@ class SubmissionEditForm extends Component {
   }
 
   renderSubmitButton() {
-    const { intl, canUpdate, submitting, attempting } = this.props;
+    const { intl, canUpdate, attempting, isSaving } = this.props;
     if (attempting && canUpdate) {
       return (
         <RaisedButton
@@ -200,7 +202,7 @@ class SubmissionEditForm extends Component {
           secondary
           label={intl.formatMessage(translations.finalise)}
           onTouchTap={() => this.setState({ submitConfirmation: true })}
-          disabled={submitting}
+          disabled={isSaving}
         />
       );
     }
@@ -208,7 +210,7 @@ class SubmissionEditForm extends Component {
   }
 
   renderUnsubmitButton() {
-    const { intl, canGrade, submitted, published } = this.props;
+    const { intl, canGrade, submitted, published, isSaving } = this.props;
     if (canGrade && (submitted || published)) {
       return (
         <RaisedButton
@@ -217,6 +219,7 @@ class SubmissionEditForm extends Component {
           secondary
           label={intl.formatMessage(translations.unsubmit)}
           onTouchTap={() => this.setState({ unsubmitConfirmation: true })}
+          disabled={isSaving}
         />
       );
     }
@@ -224,7 +227,7 @@ class SubmissionEditForm extends Component {
   }
 
   renderMarkButton() {
-    const { intl, delayedGradePublication, canGrade, submitted, handleMark } = this.props;
+    const { intl, delayedGradePublication, canGrade, submitted, handleMark, isSaving } = this.props;
     if (delayedGradePublication && canGrade && submitted) {
       return (
         <RaisedButton
@@ -233,6 +236,7 @@ class SubmissionEditForm extends Component {
           labelColor={white}
           label={intl.formatMessage(translations.mark)}
           onTouchTap={handleMark}
+          disabled={isSaving}
         />
       );
     }
@@ -240,7 +244,7 @@ class SubmissionEditForm extends Component {
   }
 
   renderUnmarkButton() {
-    const { intl, canGrade, graded, handleUnmark } = this.props;
+    const { intl, canGrade, graded, handleUnmark, isSaving } = this.props;
     if (canGrade && graded) {
       return (
         <RaisedButton
@@ -249,6 +253,7 @@ class SubmissionEditForm extends Component {
           labelColor={white}
           label={intl.formatMessage(translations.unmark)}
           onTouchTap={handleUnmark}
+          disabled={isSaving}
         />
       );
     }
@@ -256,7 +261,7 @@ class SubmissionEditForm extends Component {
   }
 
   renderPublishButton() {
-    const { intl, delayedGradePublication, canGrade, submitted, handlePublish } = this.props;
+    const { intl, delayedGradePublication, canGrade, submitted, handlePublish, isSaving } = this.props;
     if (!delayedGradePublication && canGrade && submitted) {
       return (
         <RaisedButton
@@ -265,6 +270,7 @@ class SubmissionEditForm extends Component {
           secondary
           label={intl.formatMessage(translations.publish)}
           onTouchTap={handlePublish}
+          disabled={isSaving}
         />
       );
     }
@@ -360,6 +366,7 @@ SubmissionEditForm.propTypes = {
   questions: PropTypes.objectOf(QuestionProp),
   questionsFlags: PropTypes.objectOf(QuestionFlagsProp),
   topics: PropTypes.objectOf(TopicProp),
+  isSaving: PropTypes.bool.isRequired,
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
 
@@ -376,5 +383,5 @@ SubmissionEditForm.propTypes = {
 };
 
 export default reduxForm({
-  form: 'submissionEdit',
+  form: formNames.SUBMISSION,
 })(injectIntl(SubmissionEditForm));

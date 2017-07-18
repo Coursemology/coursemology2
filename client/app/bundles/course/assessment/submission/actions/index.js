@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { reset } from 'redux-form';
 import CourseAPI from 'api/course';
-import actionTypes from '../constants';
+import actionTypes, { formNames } from '../constants';
 import translations from '../translations';
 
 const JOB_POLL_DELAY = 500;
@@ -106,7 +106,7 @@ export function saveDraft(submissionId, answers) {
           window.location = data.redirect_url;
         }
         dispatch({ type: actionTypes.SAVE_DRAFT_SUCCESS, payload: data });
-        dispatch(reset('submissionEdit'));
+        dispatch(reset(formNames.SUBMISSION));
         dispatch(setNotification(translations.updateSuccess));
       })
       .catch(() => {
@@ -116,10 +116,10 @@ export function saveDraft(submissionId, answers) {
   };
 }
 
-export function submit(submissionId, answers) {
+export function finalise(submissionId, answers) {
   const payload = { submission: { answers, finalise: true } };
   return (dispatch) => {
-    dispatch({ type: actionTypes.SUBMISSION_REQUEST });
+    dispatch({ type: actionTypes.FINALISE_REQUEST });
 
     return CourseAPI.assessment.submissions.update(submissionId, payload)
       .then(response => response.data)
@@ -127,12 +127,12 @@ export function submit(submissionId, answers) {
         if (data.redirect_url && data.format === 'html') {
           window.location = data.redirect_url;
         }
-        dispatch({ type: actionTypes.SUBMISSION_SUCCESS, payload: data });
-        dispatch(reset('submissionEdit'));
+        dispatch({ type: actionTypes.FINALISE_SUCCESS, payload: data });
+        dispatch(reset(formNames.SUBMISSION));
         dispatch(setNotification(translations.updateSuccess));
       })
       .catch(() => {
-        dispatch({ type: actionTypes.SUBMISSION_FAILURE });
+        dispatch({ type: actionTypes.FINALISE_FAILURE });
         dispatch(setNotification(translations.updateFailure));
       });
   };

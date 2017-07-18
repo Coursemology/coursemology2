@@ -8,14 +8,14 @@ import ProgressPanel from '../../components/ProgressPanel';
 import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
 import {
-  fetchSubmission, autogradeSubmission, saveDraft, submit,
+  fetchSubmission, autogradeSubmission, saveDraft, finalise,
   unsubmit, autogradeAnswer, resetAnswer, saveGrade, mark, unmark, publish,
 } from '../../actions';
 import {
   AnswerProp, AssessmentProp, ExplanationProp, GradingProp, PostProp,
   QuestionFlagsProp, QuestionProp, ReduxFormProp, SubmissionProp, TopicProp,
 } from '../../propTypes';
-import { DATA_STATES, workflowStates } from '../../constants';
+import { formNames, workflowStates } from '../../constants';
 
 class VisibleSubmissionEditIndex extends Component {
   componentDidMount() {
@@ -43,7 +43,7 @@ class VisibleSubmissionEditIndex extends Component {
   handleSubmit() {
     const { dispatch, form, match: { params } } = this.props;
     const answers = Object.values(form.values);
-    dispatch(submit(params.submissionId, answers));
+    dispatch(finalise(params.submissionId, answers));
   }
 
   handleUnsubmit() {
@@ -109,7 +109,7 @@ class VisibleSubmissionEditIndex extends Component {
       questions,
       questionsFlags,
       topics,
-      saveState,
+      isSaving,
     } = this.props;
 
     if (autograded) {
@@ -136,7 +136,7 @@ class VisibleSubmissionEditIndex extends Component {
           questions={questions}
           questionsFlags={questionsFlags}
           topics={topics}
-          saveState={saveState}
+          isSaving={isSaving}
         />
       );
     }
@@ -168,25 +168,24 @@ class VisibleSubmissionEditIndex extends Component {
         tabbedView={tabbedView}
         topics={topics}
         delayedGradePublication={delayedGradePublication}
+        isSaving={isSaving}
       />
     );
   }
 
   render() {
-    const { dataState, notification } = this.props;
+    const { isLoading, isSaving, notification } = this.props;
 
-    if (dataState === DATA_STATES.Received) {
-      return (
-        <div>
-          {this.renderProgress()}
-          {this.renderContent()}
-          <IntlNotificationBar notification={notification} />
-        </div>
-      );
-    } else if (dataState === DATA_STATES.Error) {
-      return <p>Error...</p>;
+    if (isLoading) {
+      return <LoadingIndicator />;
     }
-    return <LoadingIndicator />;
+    return (
+      <div>
+        {this.renderProgress()}
+        {this.renderContent()}
+        <IntlNotificationBar notification={notification} />
+      </div>
+    );
   }
 }
 
@@ -211,8 +210,8 @@ VisibleSubmissionEditIndex.propTypes = {
   questionsFlags: PropTypes.objectOf(QuestionFlagsProp),
   submission: SubmissionProp,
   topics: PropTypes.objectOf(TopicProp),
-  dataState: PropTypes.string.isRequired,
-  saveState: PropTypes.string.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  isSaving: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -221,7 +220,7 @@ function mapStateToProps(state) {
     assessment: state.assessment,
     exp: state.grading.exp,
     explanations: state.explanations,
-    form: state.form.submissionEdit,
+    form: state.form[formNames.SUBMISSION],
     grading: state.grading.questions,
     notification: state.notification,
     posts: state.posts,
@@ -229,8 +228,8 @@ function mapStateToProps(state) {
     questions: state.questions,
     questionsFlags: state.questionsFlags,
     topics: state.topics,
-    dataState: state.submissionEdit.dataState,
-    saveState: state.submissionEdit.saveState,
+    isLoading: state.submissionFlags.isLoading,
+    isSaving: state.submissionFlags.isSaving,
   };
 }
 
