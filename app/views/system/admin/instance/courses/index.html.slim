@@ -1,8 +1,11 @@
-/ Show  number of courses in instance when search field is blank (nil or empty string)
+= page_header
+
 - if params['search'].blank?
-  = page_header t('.header_with_count', count: @courses.total_count)
-- else
-  = page_header
+  .panel.panel-default
+    .panel-heading = t('common.summary')
+    .panel-body
+      div = t('.total_courses_html', count: Course.count)
+      div = t('.active_courses_html', count: Course.active_in_past_7_days.count)
 
 = render partial: 'layouts/search_form', locals: { url: admin_instance_courses_path, placeholder: t('.search_placeholder') }
 

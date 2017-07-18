@@ -70,6 +70,8 @@ class Course < ActiveRecord::Base
     end
   end)
 
+  scope :active_in_past_7_days, -> { joins(:course_users).merge(CourseUser.active_in_past_7_days) }
+
   delegate :staff, to: :course_users
   delegate :instructors, to: :course_users
   delegate :managers, to: :course_users

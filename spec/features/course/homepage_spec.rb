@@ -89,7 +89,15 @@ RSpec.feature 'Course: Homepage' do
     end
 
     context 'As a user registered for the course' do
-      let(:user) { create(:course_student, course: course).user }
+      let(:course_user) { create(:course_student, course: course) }
+      let(:user) { course_user.user }
+
+      scenario 'I can visit the course homepage' do
+        visit course_path(course)
+
+        expect(course_user.reload.last_active_at).to be_within(1.hour).of(Time.zone.now)
+      end
+
       scenario 'I am able to see announcements in course homepage' do
         valid_announcement = create(:course_announcement, course: course)
         visit course_path(course)
