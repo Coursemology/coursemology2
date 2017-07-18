@@ -1,0 +1,28 @@
+import mirrorCreator from 'mirror-creator';
+
+export const formNames = mirrorCreator([
+  'QUESTION_SCRIBING',
+]);
+
+export const questionNamePrefix = 'question_scribing.';
+export const questionIdPrefix = 'question_scribing_';
+
+const actionTypes = mirrorCreator([
+  'FETCH_SKILLS_REQUEST',
+  'FETCH_SKILLS_SUCCESS',
+  'FETCH_SKILLS_FAILURE',
+  'FETCH_SCRIBING_QUESTION_REQUEST',
+  'FETCH_SCRIBING_QUESTION_SUCCESS',
+  'FETCH_SCRIBING_QUESTION_FAILURE',
+  'CREATE_SCRIBING_QUESTION_REQUEST',
+  'CREATE_SCRIBING_QUESTION_SUCCESS',
+  'CREATE_SCRIBING_QUESTION_FAILURE',
+  'UPDATE_SCRIBING_QUESTION_REQUEST',
+  'UPDATE_SCRIBING_QUESTION_SUCCESS',
+  'UPDATE_SCRIBING_QUESTION_FAILURE',
+  'DELETE_SCRIBING_QUESTION_REQUEST',
+  'DELETE_SCRIBING_QUESTION_FAILURE',
+  'CLEAR_SUBMIT_ERROR',
+]);
+
+export default actionTypes;

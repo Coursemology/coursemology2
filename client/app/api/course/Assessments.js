@@ -30,6 +30,16 @@ export default class AssessmentsAPI extends BaseCourseAPI {
     return this.getClient().patch(`${this._getUrlPrefix()}/${assessmentId}`, params);
   }
 
+  /**
+   * Fetches assessment skills
+   *
+   * @return {Promise}
+   * success response: array of skills
+   */
+  fetchSkills() {
+    return this.getClient().get(`${this._getUrlPrefix()}/skills`);
+  }
+
   _getUrlPrefix() {
     return `/courses/${this.getCourseId()}/assessments`;
   }

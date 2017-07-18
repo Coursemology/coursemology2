@@ -8,6 +8,7 @@ class Course::Assessment::Question::ScribingController < \
   def new
     respond_to do |format|
       format.html { render 'new' }
+      format.json { render_scribing_question_json }
     end
   end
 

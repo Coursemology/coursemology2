@@ -42,5 +42,26 @@ function getSurveyId() {
   return match && match[1];
 }
 
+/**
+ * Get the assignment id from URL.
+ *
+ * return {number}
+ */
+function getAssessmentId() {
+  const match = window.location.pathname.match(/^\/courses\/\d+\/assessments\/(\d+)/);
+  return match && match[1];
+}
+
+/**
+ * Get the scribing id from URL.
+ *
+ * return {number}
+ */
+function getScribingId() {
+  const match = window.location.pathname.match(/^\/courses\/\d+\/assessments\/\d+\/question\/scribing\/(\d+)/);
+  return match && match[1];
+}
+
+
 /* eslint-disable import/prefer-default-export */
-export { getUrlParameter, getCourseId, getSurveyId };
+export { getUrlParameter, getCourseId, getSurveyId, getAssessmentId, getScribingId };

@@ -43,7 +43,8 @@
       "^api(.*)$": "<rootDir>/app/api$1",
       "^lib(.*)$": "<rootDir>/app/lib$1",
       "^utils(.*)$": "<rootDir>/app/__test__/utils$1",
-      "^course(.*)$": "<rootDir>/app/bundles/course$1"
+      "^course(.*)$": "<rootDir>/app/bundles/course$1",
+      ".scss$": "<rootDir>/SassStub.js"
     },
     "coveragePathIgnorePatterns": [
       "/node_modules/",
