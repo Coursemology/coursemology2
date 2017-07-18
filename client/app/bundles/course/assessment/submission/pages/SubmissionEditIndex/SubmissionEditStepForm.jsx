@@ -5,10 +5,12 @@ import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-import { white, green500, green900, red300, red900 } from 'material-ui/styles/colors';
+import { white, red300, red900, green500, green900,
+         lightBlue400, blue800 } from 'material-ui/styles/colors';
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
+import SvgIcon from 'material-ui/SvgIcon';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -53,6 +55,7 @@ class SubmissionEditStepForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      maxStep: props.maxStep,
       stepIndex: props.maxStep,
       submitConfirmation: false,
       unsubmitConfirmation: false,
@@ -92,14 +95,16 @@ class SubmissionEditStepForm extends Component {
   }
 
   handleNext() {
-    const { stepIndex } = this.state;
+    const { maxStep, stepIndex } = this.state;
     this.setState({
+      maxStep: Math.max(maxStep, stepIndex + 1),
       stepIndex: stepIndex + 1,
     });
   }
 
   handleStepClick(index) {
-    const { skippable, maxStep } = this.props;
+    const { skippable } = this.props;
+    const { maxStep } = this.state;
 
     if (skippable || index <= maxStep) {
       this.setState({
@@ -312,8 +317,7 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderStepper() {
-    const { stepIndex } = this.state;
-    const { maxStep } = this.props;
+    const { maxStep, stepIndex } = this.state;
     const { skippable, questionIds } = this.props;
 
     return (
@@ -322,7 +326,18 @@ class SubmissionEditStepForm extends Component {
           if (skippable || index <= maxStep) {
             return (
               <Step key={questionId} active={index <= maxStep}>
-                <StepButton onClick={() => this.handleStepClick(index)} />
+                <StepButton
+                  iconContainerStyle={{ padding: 0 }}
+                  icon={
+                    <SvgIcon color={index === stepIndex ? blue800 : lightBlue400}>
+                      <circle cx="12" cy="12" r="10" />
+                      <text x="12" y="16" textAnchor="middle" fontSize="12" fill="#fff">
+                        {index + 1}
+                      </text>
+                    </SvgIcon>
+                  }
+                  onClick={() => this.handleStepClick(index)}
+                />
               </Step>
             );
           }
