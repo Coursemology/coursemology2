@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { reset } from 'redux-form';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import IntlNotificationBar, { notificationShape } from 'lib/components/IntlNotificationBar';
 import ProgressPanel from '../../components/ProgressPanel';
 import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
@@ -19,8 +19,8 @@ import { DATA_STATES, workflowStates } from '../../constants';
 
 class VisibleSubmissionEditIndex extends Component {
   componentDidMount() {
-    const { boundFetchSubmission, match: { params } } = this.props;
-    boundFetchSubmission(params.submissionId);
+    const { dispatch, match: { params } } = this.props;
+    dispatch(fetchSubmission(params.submissionId));
   }
 
   allCorrect() {
@@ -30,67 +30,65 @@ class VisibleSubmissionEditIndex extends Component {
     }
 
     const numIncorrect = Object.keys(explanations).filter(
-      qid => explanations[qid] && !explanations[qid].correct
+      qid => !explanations[qid] || !explanations[qid].correct
     ).length;
     return numIncorrect === 0;
   }
 
   handleAutogradeSubmission() {
-    const { match: { params }, boundAutogradeSubmission } = this.props;
-    boundAutogradeSubmission(params.submissionId);
+    const { dispatch, match: { params } } = this.props;
+    dispatch(autogradeSubmission(params.submissionId));
   }
 
   handleSubmit() {
-    const { form, match: { params }, boundFinalise, resetForm } = this.props;
+    const { dispatch, form, match: { params } } = this.props;
     const answers = Object.values(form.values);
-    boundFinalise(params.submissionId, answers);
-    resetForm();
+    dispatch(submit(params.submissionId, answers));
   }
 
   handleUnsubmit() {
-    const { match: { params }, boundUnsubmit } = this.props;
-    boundUnsubmit(params.submissionId);
+    const { dispatch, match: { params } } = this.props;
+    dispatch(unsubmit(params.submissionId));
   }
 
   handleSaveDraft() {
-    const { form, match: { params }, boundSaveDraft, resetForm } = this.props;
+    const { dispatch, form, match: { params } } = this.props;
     const answers = Object.values(form.values);
-    boundSaveDraft(params.submissionId, answers);
-    resetForm();
+    dispatch(saveDraft(params.submissionId, answers));
   }
 
   handleSaveGrade() {
-    const { match: { params }, grading, exp, boundSaveGrade,
+    const { dispatch, match: { params }, grading, exp,
             submission: { workflowState } } = this.props;
     const published = workflowState === workflowStates.Published;
-    boundSaveGrade(params.submissionId, Object.values(grading), exp, published);
+    dispatch(saveGrade(params.submissionId, Object.values(grading), exp, published));
   }
 
   handleReset(answerId) {
-    const { form, match: { params }, boundResetAnswer } = this.props;
+    const { dispatch, form, match: { params } } = this.props;
     const questionId = form.values[answerId].questionId;
-    boundResetAnswer(params.submissionId, answerId, questionId);
+    dispatch(resetAnswer(params.submissionId, answerId, questionId));
   }
 
   handleAutograde(answerId) {
-    const { form, match: { params }, boundAutograde } = this.props;
+    const { dispatch, form, match: { params } } = this.props;
     const answers = [form.values[answerId]];
-    boundAutograde(params.submissionId, answers);
+    dispatch(autogradeAnswer(params.submissionId, answers));
   }
 
   handleMark() {
-    const { match: { params }, grading, exp, boundMark } = this.props;
-    boundMark(params.submissionId, Object.values(grading), exp);
+    const { dispatch, match: { params }, grading, exp } = this.props;
+    dispatch(mark(params.submissionId, Object.values(grading), exp));
   }
 
   handleUnmark() {
-    const { match: { params }, boundUnmark } = this.props;
-    boundUnmark(params.submissionId);
+    const { dispatch, match: { params } } = this.props;
+    dispatch(unmark(params.submissionId));
   }
 
   handlePublish() {
-    const { match: { params }, grading, exp, boundPublish } = this.props;
-    boundPublish(params.submissionId, Object.values(grading), exp);
+    const { dispatch, match: { params }, grading, exp } = this.props;
+    dispatch(publish(params.submissionId, Object.values(grading), exp));
   }
 
   renderProgress() {
@@ -175,12 +173,14 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   render() {
-    const { dataState } = this.props;
+    const { dataState, notification } = this.props;
+
     if (dataState === DATA_STATES.Received) {
       return (
         <div>
           {this.renderProgress()}
           {this.renderContent()}
+          <IntlNotificationBar notification={notification} />
         </div>
       );
     } else if (dataState === DATA_STATES.Error) {
@@ -191,6 +191,7 @@ class VisibleSubmissionEditIndex extends Component {
 }
 
 VisibleSubmissionEditIndex.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       courseId: PropTypes.string,
@@ -204,6 +205,7 @@ VisibleSubmissionEditIndex.propTypes = {
   explanations: PropTypes.objectOf(ExplanationProp),
   form: ReduxFormProp,
   grading: GradingProp.isRequired,
+  notification: notificationShape,
   posts: PropTypes.objectOf(PostProp),
   questions: PropTypes.objectOf(QuestionProp),
   questionsFlags: PropTypes.objectOf(QuestionFlagsProp),
@@ -211,19 +213,6 @@ VisibleSubmissionEditIndex.propTypes = {
   topics: PropTypes.objectOf(TopicProp),
   dataState: PropTypes.string.isRequired,
   saveState: PropTypes.string.isRequired,
-
-  boundFetchSubmission: PropTypes.func.isRequired,
-  boundAutogradeSubmission: PropTypes.func.isRequired,
-  boundResetAnswer: PropTypes.func.isRequired,
-  boundAutograde: PropTypes.func.isRequired,
-  boundSaveDraft: PropTypes.func.isRequired,
-  boundSaveGrade: PropTypes.func.isRequired,
-  boundFinalise: PropTypes.func.isRequired,
-  boundUnsubmit: PropTypes.func.isRequired,
-  boundMark: PropTypes.func.isRequired,
-  boundUnmark: PropTypes.func.isRequired,
-  boundPublish: PropTypes.func.isRequired,
-  resetForm: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -234,6 +223,7 @@ function mapStateToProps(state) {
     explanations: state.explanations,
     form: state.form.submissionEdit,
     grading: state.grading.questions,
+    notification: state.notification,
     posts: state.posts,
     submission: state.submission,
     questions: state.questions,
@@ -244,25 +234,5 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    boundFetchSubmission: id => dispatch(fetchSubmission(id)),
-    boundAutogradeSubmission: id => dispatch(autogradeSubmission(id)),
-    boundResetAnswer: (id, answerId, questionId) => dispatch(resetAnswer(id, answerId, questionId)),
-    boundAutograde: (id, answers) => dispatch(autogradeAnswer(id, answers)),
-    boundSaveDraft: (id, answers) => dispatch(saveDraft(id, answers)),
-    boundSaveGrade: (id, grades, exp, published) => dispatch(saveGrade(id, grades, exp, published)),
-    boundFinalise: (id, answers) => dispatch(submit(id, answers)),
-    boundUnsubmit: id => dispatch(unsubmit(id)),
-    boundMark: (id, grades, exp) => dispatch(mark(id, grades, exp)),
-    boundUnmark: id => dispatch(unmark(id)),
-    boundPublish: (id, grades, exp) => dispatch(publish(id, grades, exp)),
-    resetForm: () => dispatch(reset('submissionEdit')),
-  };
-}
-
-const SubmissionEditIndex = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(VisibleSubmissionEditIndex);
+const SubmissionEditIndex = connect(mapStateToProps)(VisibleSubmissionEditIndex);
 export default SubmissionEditIndex;

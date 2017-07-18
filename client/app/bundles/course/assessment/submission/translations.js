@@ -109,6 +109,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.question',
     defaultMessage: 'Question',
   },
+  questionNumber: {
+    id: 'course.assessment.submission.questionNumber',
+    defaultMessage: 'Q{number}',
+  },
   submitConfirmation: {
     id: 'course.assessment.submission.submitConfirmation',
     defaultMessage: 'THIS ACTION IS IRREVERSIBLE Are you sure you want to submit? \
@@ -128,9 +132,13 @@ const translations = defineMessages({
     id: 'course.assessment.submission.lateSubmission',
     defaultMessage: 'This submission is LATE! You may want to penalize the student for late submission.',
   },
-  questionNumber: {
-    id: 'course.assessment.submission.questionNumber',
-    defaultMessage: 'Q{number}',
+  updateSuccess: {
+    id: 'course.assessment.submission.updateSuccess',
+    defaultMessage: 'Submission updated successfully.',
+  },
+  updateFailure: {
+    id: 'course.assessment.submission.updateFailure',
+    defaultMessage: 'Submission update failed.',
   },
 });
 

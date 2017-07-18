@@ -1,10 +1,19 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions, import/no-extraneous-dependencies
 import axios from 'axios';
+import { reset } from 'redux-form';
 import CourseAPI from 'api/course';
 import actionTypes from '../constants';
+import translations from '../translations';
 
 const JOB_POLL_DELAY = 500;
 const JOB_STAGGER_DELAY = 400;
+
+export function setNotification(message) {
+  return {
+    type: actionTypes.SET_NOTIFICATION,
+    message,
+  };
+}
 
 function pollJob(url, onSuccess, onFailure) {
   const poller = setInterval(() => {
@@ -96,12 +105,14 @@ export function saveDraft(submissionId, answers) {
         if (data.redirect_url && data.format === 'html') {
           window.location = data.redirect_url;
         }
-        dispatch({
-          type: actionTypes.SAVE_DRAFT_SUCCESS,
-          payload: data,
-        });
+        dispatch({ type: actionTypes.SAVE_DRAFT_SUCCESS, payload: data });
+        dispatch(reset('submissionEdit'));
+        dispatch(setNotification(translations.updateSuccess));
       })
-      .catch(() => dispatch({ type: actionTypes.SAVE_DRAFT_FAILURE }));
+      .catch(() => {
+        dispatch({ type: actionTypes.SAVE_DRAFT_FAILURE });
+        dispatch(setNotification(translations.updateFailure));
+      });
   };
 }
 
@@ -116,12 +127,14 @@ export function submit(submissionId, answers) {
         if (data.redirect_url && data.format === 'html') {
           window.location = data.redirect_url;
         }
-        dispatch({
-          type: actionTypes.SUBMISSION_SUCCESS,
-          payload: data,
-        });
+        dispatch({ type: actionTypes.SUBMISSION_SUCCESS, payload: data });
+        dispatch(reset('submissionEdit'));
+        dispatch(setNotification(translations.updateSuccess));
       })
-      .catch(() => dispatch({ type: actionTypes.SUBMISSION_FAILURE }));
+      .catch(() => {
+        dispatch({ type: actionTypes.SUBMISSION_FAILURE });
+        dispatch(setNotification(translations.updateFailure));
+      });
   };
 }
 
@@ -133,12 +146,13 @@ export function unsubmit(submissionId) {
     return CourseAPI.assessment.submissions.update(submissionId, payload)
       .then(response => response.data)
       .then((data) => {
-        dispatch({
-          type: actionTypes.UNSUBMIT_SUCCESS,
-          payload: data,
-        });
+        dispatch({ type: actionTypes.UNSUBMIT_SUCCESS, payload: data });
+        dispatch(setNotification(translations.updateSuccess));
       })
-      .catch(() => dispatch({ type: actionTypes.UNSUBMIT_FAILURE }));
+      .catch(() => {
+        dispatch({ type: actionTypes.UNSUBMIT_FAILURE });
+        dispatch(setNotification(translations.updateFailure));
+      });
   };
 }
 
@@ -205,12 +219,13 @@ export function saveGrade(submissionId, grades, exp, published) {
     return CourseAPI.assessment.submissions.update(submissionId, payload)
       .then(response => response.data)
       .then((data) => {
-        dispatch({
-          type: actionTypes.SAVE_GRADE_SUCCESS,
-          payload: data,
-        });
+        dispatch({ type: actionTypes.SAVE_GRADE_SUCCESS, payload: data });
+        dispatch(setNotification(translations.updateSuccess));
       })
-      .catch(() => dispatch({ type: actionTypes.SAVE_GRADE_FAILURE }));
+      .catch(() => {
+        dispatch({ type: actionTypes.SAVE_GRADE_FAILURE });
+        dispatch(setNotification(translations.updateFailure));
+      });
   };
 }
 
@@ -229,12 +244,13 @@ export function mark(submissionId, grades, exp) {
     return CourseAPI.assessment.submissions.update(submissionId, payload)
       .then(response => response.data)
       .then((data) => {
-        dispatch({
-          type: actionTypes.MARK_SUCCESS,
-          payload: data,
-        });
+        dispatch({ type: actionTypes.MARK_SUCCESS, payload: data });
+        dispatch(setNotification(translations.updateSuccess));
       })
-      .catch(() => dispatch({ type: actionTypes.MARK_FAILURE }));
+      .catch(() => {
+        dispatch({ type: actionTypes.MARK_FAILURE });
+        dispatch(setNotification(translations.updateFailure));
+      });
   };
 }
 
@@ -246,12 +262,13 @@ export function unmark(submissionId) {
     return CourseAPI.assessment.submissions.update(submissionId, payload)
       .then(response => response.data)
       .then((data) => {
-        dispatch({
-          type: actionTypes.UNMARK_SUCCESS,
-          payload: data,
-        });
+        dispatch({ type: actionTypes.UNMARK_SUCCESS, payload: data });
+        dispatch(setNotification(translations.updateSuccess));
       })
-      .catch(() => dispatch({ type: actionTypes.UNMARK_FAILURE }));
+      .catch(() => {
+        dispatch({ type: actionTypes.UNMARK_FAILURE });
+        dispatch(setNotification(translations.updateFailure));
+      });
   };
 }
 
@@ -269,11 +286,12 @@ export function publish(submissionId, grades, exp) {
     return CourseAPI.assessment.submissions.update(submissionId, payload)
       .then(response => response.data)
       .then((data) => {
-        dispatch({
-          type: actionTypes.PUBLISH_SUCCESS,
-          payload: data,
-        });
+        dispatch({ type: actionTypes.PUBLISH_SUCCESS, payload: data });
+        dispatch(setNotification(translations.updateSuccess));
       })
-      .catch(() => dispatch({ type: actionTypes.PUBLISH_FAILURE }));
+      .catch(() => {
+        dispatch({ type: actionTypes.PUBLISH_FAILURE });
+        dispatch(setNotification(translations.updateFailure));
+      });
   };
 }

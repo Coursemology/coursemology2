@@ -7,6 +7,7 @@ import assessment from './assessment';
 import attachments from './attachments';
 import commentForms from './commentForms';
 import explanations from './explanations';
+import notification from './notification';
 import posts from './posts';
 import questionsFlags from './questionsFlags';
 import questions from './questions';
@@ -24,6 +25,7 @@ export default combineReducers({
   assessment,
   commentForms,
   explanations,
+  notification,
   posts,
   questionsFlags,
   questions,
