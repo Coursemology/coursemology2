@@ -242,5 +242,25 @@ RSpec.describe Course, type: :model do
         expect(new_count).to eq(old_count + 1)
       end
     end
+
+    describe 'calculated attributes' do
+      let(:course) { create(:course) }
+      let!(:course_users) { create_list(:course_user, 2, course: course) }
+
+      describe '.active_user_count' do
+        before { course_users.sample.update_column(:last_active_at, Time.zone.now) }
+        subject do
+          Course.where(id: course.id).calculated(:active_user_count).first.active_user_count
+        end
+
+        it { is_expected.to eq(1) }
+      end
+
+      describe '.user_count' do
+        subject { Course.where(id: course.id).calculated(:user_count).first.user_count }
+
+        it { is_expected.to eq(course.course_users.count) }
+      end
+    end
   end
 end

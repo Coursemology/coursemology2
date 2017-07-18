@@ -1,0 +1,12 @@
+.system-admin-courses,
+.system-admin-instance-courses {
+  &.index {
+    td.active-level {
+      text-align: center;
+    }
+
+    .progress {
+      margin-bottom: 3px;
+    }
+  }
+}

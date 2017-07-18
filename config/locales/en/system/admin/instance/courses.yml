@@ -10,6 +10,7 @@ en:
             serial_number: 'S/N'
             title: 'Title'
             created_at: 'Created At'
+            users: 'Active / Total Users'
             owners: 'Owners'
             search_placeholder: 'Search course title, description or related users'
           destroy:
