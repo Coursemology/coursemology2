@@ -54,7 +54,13 @@ export const settingDescriptions = defineMessages({
   },
   new_submission: {
     id: 'course.admin.NotificationSettings.settingDescriptions.new_submission',
-    defaultMessage: "Notify a student's group managers when the student makes a submission.",
+    defaultMessage: "Notify student's group managers when the student makes a submission. Select whether to\
+      send this notification for phantom students via the 'New Phantom Submission' setting.",
+  },
+  new_phantom_submission: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.new_phantom_submission',
+    defaultMessage: "Sends 'New Submission' email for phantom students also. If 'New Submission' email\
+      notification is disabled, no emails will be sent even though this setting is enabled.",
   },
   new_grading: {
     id: 'course.admin.NotificationSettings.settingDescriptions.new_grading',
@@ -86,6 +92,10 @@ export const settingTitles = defineMessages({
   new_submission: {
     id: 'course.admin.NotificationSettings.settingTitles.new_submission',
     defaultMessage: 'New Submission',
+  },
+  new_phantom_submission: {
+    id: 'course.admin.NotificationSettings.settingTitles.new_phantom_submission',
+    defaultMessage: 'New Phantom Submission',
   },
   new_grading: {
     id: 'course.admin.NotificationSettings.settingTitles.new_grading',

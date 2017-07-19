@@ -6,6 +6,7 @@ class Course::Settings::AssessmentsComponent < Course::Settings::Component
         assessment_opening: { enabled_by_default: true },
         assessment_closing: { enabled_by_default: true },
         new_submission: { enabled_by_default: true },
+        new_phantom_submission: { enabled_by_default: true },
         new_grading: { enabled_by_default: true }
       }
     end

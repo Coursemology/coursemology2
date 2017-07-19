@@ -15,12 +15,13 @@ RSpec.describe Course::Assessment::Submission do
     let(:assessment) { create(:assessment, *assessment_traits, course: course) }
     let(:assessment_traits) { [] }
 
-    let(:course_student1) { create(:course_student, course: course) }
+    let(:course_student1) { create(:course_student, *course_student1_traits, course: course) }
     let(:user1) { course_student1.user }
     let(:submission1) do
       create(:submission, *submission1_traits,
              assessment: assessment, creator: user1, course_user: course_student1)
     end
+    let(:course_student1_traits) { [] }
     let(:submission1_traits) { [] }
     let(:course_student2) { create(:course_student, course: course) }
     let(:user2) { course_student2.user }
@@ -584,6 +585,34 @@ RSpec.describe Course::Assessment::Submission do
         it 'returns the correct value' do
           submission1.mark!
           expect(subject).to eq(draft_points_awarded)
+        end
+      end
+    end
+
+    describe '#send_submit_notification' do
+      subject { submission1.send(:send_submit_notification) }
+
+      it 'sends the email notification' do
+        expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+
+      context 'when the student is a phantom' do
+        let(:course_student1_traits) { [:phantom] }
+
+        context 'when submission email notifications for phantoms is disabled' do
+          before do
+            context = OpenStruct.new(key: Course::AssessmentsComponent.key, current_course: course)
+            setting = {
+              'key' => 'new_phantom_submission', 'enabled' => false,
+              'options' => { 'category_id' => assessment.tab.category.id }
+            }
+            Course::Settings::AssessmentsComponent.new(context).update_email_setting(setting)
+            course.save!
+          end
+
+          it 'does not send the email notification' do
+            expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+          end
         end
       end
     end
