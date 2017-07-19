@@ -8,7 +8,6 @@ RSpec.describe Course::Assessment::ReminderService do
 
     describe '#opening_reminder' do
       let!(:now) { Time.zone.now }
-
       let(:user) { create(:course_user, course: course).user }
       let!(:assessment) { create(:assessment, start_at: now) }
 
@@ -34,6 +33,33 @@ RSpec.describe Course::Assessment::ReminderService do
             expect_any_instance_of(Course::AssessmentNotifier).to_not receive(:assessment_opening)
             subject.opening_reminder(user, assessment, assessment.opening_reminder_token)
           end
+        end
+      end
+    end
+
+    describe '#closing_reminder' do
+      let(:assessment) do
+        create(:assessment, :published, :with_text_response_question, course: course)
+      end
+
+      subject do
+        Course::Assessment::ReminderService.
+          closing_reminder(assessment, assessment.closing_reminder_token)
+      end
+
+      context 'when "assessment closing" emails are disabled' do
+        before do
+          context = OpenStruct.new(key: Course::AssessmentsComponent.key, current_course: course)
+          setting = {
+            'key' => 'assessment_closing', 'enabled' => false,
+            'options' => { 'category_id' => assessment.tab.category.id }
+          }
+          Course::Settings::AssessmentsComponent.new(context).update_email_setting(setting)
+          course.save!
+        end
+
+        it 'does not send email notifications' do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
       end
     end

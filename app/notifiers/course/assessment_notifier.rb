@@ -8,6 +8,8 @@ class Course::AssessmentNotifier < Notifier::Base
 
   # To be called when user submitted an assessment.
   def assessment_submitted(user, course_user, submission)
+    return unless email_enabled?(submission.assessment, :new_submission)
+
     # TODO: Replace with a group_manager method in course_user
     managers = course_user.groups.includes(group_users: [course_user: [:user]]).
                flat_map { |g| g.group_users.select(&:manager?) }.map(&:course_user)
@@ -21,8 +23,16 @@ class Course::AssessmentNotifier < Notifier::Base
   end
 
   def assessment_opening(user, assessment)
+    return unless email_enabled?(assessment, :assessment_opening)
+
     create_activity(actor: user, object: assessment, event: :opening).
       notify(assessment.course, :email).
       save!
+  end
+
+  private
+
+  def email_enabled?(assessment, key)
+    Course::Settings::AssessmentsComponent.email_enabled?(assessment.tab.category, key)
   end
 end

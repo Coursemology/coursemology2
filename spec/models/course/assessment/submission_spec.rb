@@ -409,6 +409,26 @@ RSpec.describe Course::Assessment::Submission do
         expect(submission.awarded_at).not_to be_nil
       end
 
+      it 'sends an email notification' do
+        expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+
+      context 'when "submission graded" emails are disabled' do
+        before do
+          context = OpenStruct.new(key: Course::AssessmentsComponent.key, current_course: course)
+          setting = {
+            'key' => 'new_grading', 'enabled' => false,
+            'options' => { 'category_id' => assessment.tab.category.id }
+          }
+          Course::Settings::AssessmentsComponent.new(context).update_email_setting(setting)
+          course.save!
+        end
+
+        it 'does not send email notifications' do
+          expect { submission.publish! }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+      end
+
       context 'when some of the answers are already graded' do
         before do
           submission.answers.sample.tap do |answer|

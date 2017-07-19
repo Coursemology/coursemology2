@@ -37,6 +37,19 @@ RSpec.describe Course::Survey::ReminderService do
         end.body.parts.first.body
         expect(email_body).to include('course.mailer.survey_opening_reminder_email.message')
       end
+
+      context 'when "survey opening" emails are disabled' do
+        before do
+          context = OpenStruct.new(key: Course::SurveyComponent.key, current_course: course)
+          Course::Settings::SurveyComponent.new(context).
+            update_email_setting('key' => 'survey_opening', 'enabled' => false)
+          course.save!
+        end
+
+        it 'does not send email notifications' do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+      end
     end
 
     describe '#closing_reminder' do
@@ -57,6 +70,19 @@ RSpec.describe Course::Survey::ReminderService do
 
         expect(student_email_body).to include('course.mailer.survey_closing_reminder_email.message')
         expect(staff_email_body).to include('course.mailer.survey_closing_summary_email.message')
+      end
+
+      context 'when "survey opening" emails are disabled' do
+        before do
+          context = OpenStruct.new(key: Course::SurveyComponent.key, current_course: course)
+          Course::Settings::SurveyComponent.new(context).
+            update_email_setting('key' => 'survey_closing', 'enabled' => false)
+          course.save!
+        end
+
+        it 'does not send email notifications' do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
       end
     end
   end

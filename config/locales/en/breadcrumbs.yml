@@ -41,6 +41,8 @@ en:
             edit: :'course.discussion.topics.index.header'
         video_settings:
           edit: :'course.video.videos.index.header'
+        notification_settings:
+          edit: :'layouts.course_admin.notifications.title'
       users:
         index: 'Users'
         students: :'course.users.students.header'

@@ -15,6 +15,7 @@ class Course::Assessment::ReminderService
 
   def closing_reminder(assessment, token)
     return unless assessment.closing_reminder_token == token && assessment.published?
+    return unless email_enabled?(assessment, :assessment_closing)
 
     # Send reminder emails to each student who hasn't submitted.
     recipients = uncompleted_students(assessment)
@@ -34,6 +35,10 @@ class Course::Assessment::ReminderService
   end
 
   private
+
+  def email_enabled?(assessment, key)
+    Course::Settings::AssessmentsComponent.email_enabled?(assessment.tab.category, key)
+  end
 
   # Returns a Set of students who have not completed the given assessment.
   #
