@@ -59,9 +59,10 @@ class SubmissionEditForm extends Component {
   }
 
   renderProgrammingQuestionActions(id) {
-    const { intl, attempting, questions, questionsFlags, handleAutograde, isSaving } = this.props;
+    const { intl, attempting, canGrade, questions, questionsFlags,
+            handleAutograde, isSaving } = this.props;
     const question = questions[id];
-    const { answerId } = question;
+    const { answerId, attemptsLeft, attemptLimit } = question;
     const { isAutograding, isResetting } = questionsFlags[id];
 
     if (!attempting) {
@@ -69,6 +70,10 @@ class SubmissionEditForm extends Component {
     }
 
     if (question.type === questionTypes.Programming) {
+      const runCodeLabel = attemptLimit ?
+        intl.formatMessage(translations.runCodeWithLimit, { attemptsLeft }) :
+        intl.formatMessage(translations.runCode);
+
       return (
         <div>
           <RaisedButton
@@ -82,9 +87,9 @@ class SubmissionEditForm extends Component {
             style={styles.formButton}
             backgroundColor={red900}
             secondary
-            label={intl.formatMessage(translations.submit)}
+            label={runCodeLabel}
             onTouchTap={() => handleAutograde(answerId)}
-            disabled={isAutograding || isResetting || isSaving}
+            disabled={isAutograding || isResetting || isSaving || (!canGrade && attemptsLeft === 0)}
           />
           {isAutograding || isResetting ? <CircularProgress size={36} style={{ position: 'absolute' }} /> : null}
         </div>

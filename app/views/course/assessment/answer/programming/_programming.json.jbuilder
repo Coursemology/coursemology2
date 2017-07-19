@@ -77,3 +77,5 @@ json.explanation do
     json.explanations explanations
   end
 end
+
+json.attemptsLeft answer.attempting_times_left if question.attempt_limit

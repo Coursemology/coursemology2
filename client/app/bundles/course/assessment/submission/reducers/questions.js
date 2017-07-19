@@ -13,7 +13,13 @@ export default function (state = {}, action) {
     case actions.PUBLISH_SUCCESS:
       return {
         ...state,
-        ...arrayToObjectById(action.payload.questions),
+        ...arrayToObjectById(
+          action.payload.questions.map((question) => {
+            const answer = action.payload.answers.find(a => a.questionId === question.id);
+            return answer && answer.attemptsLeft !== undefined ?
+              { ...question, attemptsLeft: answer.attemptsLeft } : question;
+          })
+        ),
       };
     case actions.AUTOGRADE_SUCCESS:
     case actions.RESET_SUCCESS: {
@@ -23,6 +29,7 @@ export default function (state = {}, action) {
         [questionId]: {
           ...state[questionId],
           answerId: action.payload.fields.id,
+          attemptsLeft: action.payload.attemptsLeft,
         },
       };
     }

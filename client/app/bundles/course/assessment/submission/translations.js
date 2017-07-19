@@ -57,6 +57,14 @@ const translations = defineMessages({
     id: 'course.asssessment.submission.submit',
     defaultMessage: 'Submit',
   },
+  runCode: {
+    id: 'course.assessment.submission.runCode',
+    defaultMessage: 'Run Code',
+  },
+  runCodeWithLimit: {
+    id: 'course.assessment.submission.runCodeWithLimit',
+    defaultMessage: 'Run Code ({attemptsLeft, plural, one {# attempt} other {# attempts}} left)',
+  },
   reset: {
     id: 'course.assessment.submission.reset',
     defaultMessage: 'Reset Answer',
