@@ -3,11 +3,14 @@ import actions from '../constants';
 export default function (state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
-      return action.payload.answers.reduce((obj, answer) => ({
+      return action.payload.questions.map(question => ({
+        id: question.id,
+        answer: action.payload.answers.find(a => a.questionId === question.id),
+      })).reduce((obj, question) => ({
         ...obj,
-        [answer.questionId]: {
+        [question.id]: {
           isResetting: false,
-          isAutograding: !!answer.job,
+          isAutograding: !!question.answer && !!question.answer.job,
         },
       }), {});
     case actions.AUTOGRADE_REQUEST: {
