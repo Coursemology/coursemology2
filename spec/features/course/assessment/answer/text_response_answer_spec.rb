@@ -58,7 +58,7 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers' do
 
     context 'As Course Staff' do
       let(:user) { create(:course_teaching_assistant, course: course).user }
-      let(:submission_traits) { :submitted }
+      let(:submission_traits) { [:submitted, :with_submission_questions] }
 
       scenario 'I can view the grading scheme' do
         visit edit_course_assessment_submission_path(course, assessment, submission)

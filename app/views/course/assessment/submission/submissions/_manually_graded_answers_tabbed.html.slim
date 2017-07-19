@@ -1,5 +1,4 @@
 / TODO: Implement flag to display all answers, or only latest answers.
-- answers_by_question = f.object.latest_answers.group_by(&:question)
 - submission_questions_by_question = f.object.submission_questions.group_by(&:question)
 
 ul.nav.nav-tabs.tab-header role="tab-list"
@@ -12,8 +11,9 @@ div.tab-content
   - f.object.assessment.questions.each do |question|
     div.tab-pane.fade role="tabpanel" id="#{question.id}"
       = render partial: question, suffix: 'question'
-      - if answers = answers_by_question[question]
-        = render partial: 'course/assessment/answer/answer', object: answers.last
+      - if submission_question = submission_questions_by_question[question].first
+        = render partial: 'course/assessment/answer/answer',
+                 object: submission_question.current_answer
       - else
         div.alert.alert-warning
           = t('course.assessment.submission.submissions.no_answer')

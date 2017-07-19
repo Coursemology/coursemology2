@@ -31,7 +31,8 @@ module Course::Assessment::Submission::SubmissionsAutogradedHelper
     return 'completed' if step <= max_step
   end
 
+  # Get current_answer from the submission question.
   def current_answer
-    @answers.last
+    @current_submission_question.current_answer
   end
 end

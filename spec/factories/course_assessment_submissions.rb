@@ -54,7 +54,25 @@ FactoryGirl.define do
       end
     end
 
+    # Build submission questions, assign current_answer if available.
+    # Declare this trait after the ones above so answers will be created.
+    trait :with_submission_questions do
+      after(:build) do |submission|
+        assessment = submission.assessment
+        assessment.questions.each do |qn|
+          sub_qn = build(:course_assessment_submission_question, course: assessment.course,
+                                                                 assessment: assessment,
+                                                                 submission: submission,
+                                                                 question: qn)
+          answer = submission.answers.find { |ans| ans.question == sub_qn.question }
+          sub_qn.current_answer = answer if answer
+          submission.submission_questions << sub_qn
+        end
+      end
+    end
+
     # Ensure that creator of submission is the same as creator of experience_points_record
+    # Build submission questions.
     after(:build) do |submission, evaluator|
       user = evaluator.creator ? evaluator.creator : submission.creator
       submission.experience_points_record.creator = user
