@@ -211,8 +211,8 @@ class VisibleTestCaseView extends Component {
           testCases.evaluation_test,
           VisibleTestCaseView.renderTitle('evaluationTestCases', canGrade)
         )}
-        {VisibleTestCaseView.renderOutputStream('standardOutput', testCases.stdout)}
-        {VisibleTestCaseView.renderOutputStream('standardError', testCases.stderr)}
+        {canGrade ? VisibleTestCaseView.renderOutputStream('standardOutput', testCases.stdout) : null}
+        {canGrade ? VisibleTestCaseView.renderOutputStream('standardError', testCases.stderr) : null}
       </div>
     );
   }
