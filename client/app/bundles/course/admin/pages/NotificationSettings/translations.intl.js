@@ -62,8 +62,8 @@ export const settingDescriptions = defineMessages({
     defaultMessage: "Sends 'New Submission' email for phantom students also. If 'New Submission' email\
       notification is disabled, no emails will be sent even though this setting is enabled.",
   },
-  new_grading: {
-    id: 'course.admin.NotificationSettings.settingDescriptions.new_grading',
+  grades_released: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.grades_released',
     defaultMessage: 'Notify a student when grades for a submission have been released.',
   },
 });
@@ -97,9 +97,9 @@ export const settingTitles = defineMessages({
     id: 'course.admin.NotificationSettings.settingTitles.new_phantom_submission',
     defaultMessage: 'New Phantom Submission',
   },
-  new_grading: {
-    id: 'course.admin.NotificationSettings.settingTitles.new_grading',
-    defaultMessage: 'New Grading',
+  grades_released: {
+    id: 'course.admin.NotificationSettings.settingTitles.grades_released',
+    defaultMessage: 'Grades Released',
   },
 });
 

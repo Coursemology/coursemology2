@@ -418,7 +418,7 @@ RSpec.describe Course::Assessment::Submission do
         before do
           context = OpenStruct.new(key: Course::AssessmentsComponent.key, current_course: course)
           setting = {
-            'key' => 'new_grading', 'enabled' => false,
+            'key' => 'grades_released', 'enabled' => false,
             'options' => { 'category_id' => assessment.tab.category.id }
           }
           Course::Settings::AssessmentsComponent.new(context).update_email_setting(setting)

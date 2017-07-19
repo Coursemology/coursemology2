@@ -40,7 +40,7 @@ RSpec.describe Course::Settings::AssessmentsComponent do
       subject { settings.update_email_setting(payload) && course.save! }
 
       context 'when all arguments are valid' do
-        let(:key) { :new_grading }
+        let(:key) { :grades_released }
         before { subject }
 
         it 'persists the setting' do

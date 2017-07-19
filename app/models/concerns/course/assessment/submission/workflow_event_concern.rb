@@ -62,7 +62,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
   private
 
   def submission_graded_email_enabled?
-    Course::Settings::AssessmentsComponent.email_enabled?(assessment.tab.category, :new_grading)
+    Course::Settings::AssessmentsComponent.email_enabled?(assessment.tab.category, :grades_released)
   end
 
   # Defined outside of the workflow transition as points_awarded and draft_points_awarded are
