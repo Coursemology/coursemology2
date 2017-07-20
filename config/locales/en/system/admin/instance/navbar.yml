@@ -7,3 +7,4 @@ en:
           courses: :'system.admin.instance.courses.index.header'
           announcements: :'system.admin.instance.announcements.index.header'
           components: :'system.admin.instance.components.edit.header'
+          role_requests: :'instance_user_role_requests.index.header'

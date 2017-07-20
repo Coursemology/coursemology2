@@ -1,7 +1,17 @@
 en:
   instance_user_role_requests:
+    index:
+      header: 'Role Requests'
+      empty: 'No pending requests'
+      designation: 'Designation'
+      organization: 'Organization'
+      reason: 'Reason'
     new:
       header: 'Request to be an instructor or administrator'
       hint: 'Please provide the following information for us to review your request.'
     create:
       success: 'Your role request was submitted.'
+    destroy:
+      success: 'The request was deleted.'
+    approve:
+      success: '%{user} has been approved as %{role}.'

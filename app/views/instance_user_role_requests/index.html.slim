@@ -1,0 +1,18 @@
+= page_header
+
+- if !@user_role_requests.empty?
+  table.table.table-middle-align.table-hover
+    thead
+      tr
+        th = t('common.name')
+        th = t('common.email')
+        th = t('.organization')
+        th = t('.designation')
+        th = t('.reason')
+        th = t('common.role')
+        th
+    tbody
+      = render partial: 'user_role_request', collection:  @user_role_requests
+- else
+    div.alert.alert-info
+      = t('.empty')

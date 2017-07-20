@@ -12,5 +12,11 @@
             = link_to(t('system.admin.instance.navbar.courses'), admin_instance_courses_path)
           li
             = link_to(t('system.admin.instance.navbar.components'), admin_instance_components_path)
+          li
+            = link_to instance_user_role_requests_path do
+              div
+                = t('system.admin.instance.navbar.role_requests')
+                - requests_count = current_tenant.user_role_requests.count
+                =< badge(requests_count) if requests_count > 0
       div.col-lg-10.col.md-9.col-sm-8 class=page_class
         = yield

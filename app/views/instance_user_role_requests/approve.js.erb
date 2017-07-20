@@ -1,0 +1,8 @@
+$('.instance-user-role-requests').parents('.container-fluid:first').prepend('<%= j(flash_messages) %>');
+
+<% if @success %>
+$('tr#user_role_request_<%= @user_role_request.id %>').fadeOut();
+<% end %>
+
+// Show users the flash messages
+window.scrollTo(0, 0);
