@@ -89,66 +89,6 @@ const translations = defineMessages({
 
 class VisibleTestCaseView extends Component {
 
-  static renderTestCaseRow(testCase) {
-    let testCaseResult = 'unattempted';
-    let testCaseIcon;
-    if (testCase.output) {
-      testCaseResult = testCase.passed ? 'correct' : 'wrong';
-      testCaseIcon = testCase.passed ? <CorrectIcon /> : <WrongIcon />;
-    }
-
-    return (
-      <TableRow key={testCase.identifier} style={styles.testCaseRow[testCaseResult]}>
-        <TableRowColumn style={styles.testCaseCell}>{testCase.identifier}</TableRowColumn>
-        <TableRowColumn style={styles.testCaseCell}>{testCase.expression}</TableRowColumn>
-        <TableRowColumn style={styles.testCaseCell}><ExpandableText text={testCase.expected || ''} /></TableRowColumn>
-        <TableRowColumn style={styles.testCaseCell}><ExpandableText text={testCase.output || ''} /></TableRowColumn>
-        <TableRowColumn>{testCaseIcon}</TableRowColumn>
-      </TableRow>
-    );
-  }
-
-  static renderTestCases(testCases, title) {
-    if (!testCases || testCases.length === 0) {
-      return null;
-    }
-
-    return (
-      <Card>
-        <CardHeader
-          title={title}
-          style={{}}
-        />
-        <CardText>
-          <Table selectable={false} style={{}}>
-            <TableHeader displaySelectAll={false}>
-              <TableRow>
-                <TableHeaderColumn style={styles.testCaseCell}>
-                  <FormattedMessage {...translations.identifier} />
-                </TableHeaderColumn>
-                <TableHeaderColumn style={styles.testCaseCell}>
-                  <FormattedMessage {...translations.expression} />
-                </TableHeaderColumn>
-                <TableHeaderColumn style={styles.testCaseCell}>
-                  <FormattedMessage {...translations.expected} />
-                </TableHeaderColumn>
-                <TableHeaderColumn style={styles.testCaseCell}>
-                  <FormattedMessage {...translations.output} />
-                </TableHeaderColumn>
-                <TableHeaderColumn style={styles.testCaseCell}>
-                  <FormattedMessage {...translations.passed} />
-                </TableHeaderColumn>
-              </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={false}>
-              {testCases.map(VisibleTestCaseView.renderTestCaseRow)}
-            </TableBody>
-          </Table>
-        </CardText>
-      </Card>
-    );
-  }
-
   static renderStaffOnlyTestCasesWarning() {
     return (
       <span style={{ display: 'inline-block', marginLeft: 5 }}>
@@ -201,6 +141,67 @@ class VisibleTestCaseView extends Component {
     );
   }
 
+  renderTestCases(testCases, title) {
+    const { canGrade } = this.props;
+
+    if (!testCases || testCases.length === 0) {
+      return null;
+    }
+
+    const tableHeaderColumnFor = field => (
+      <TableHeaderColumn style={styles.testCaseCell}>
+        <FormattedMessage {...translations[field]} />
+      </TableHeaderColumn>
+    );
+
+    return (
+      <Card>
+        <CardHeader title={title} />
+        <CardText>
+          <Table selectable={false} style={{}}>
+            <TableHeader displaySelectAll={false}>
+              <TableRow>
+                { canGrade ? tableHeaderColumnFor('identifier') : null }
+                { tableHeaderColumnFor('expression') }
+                { tableHeaderColumnFor('expected') }
+                { canGrade ? tableHeaderColumnFor('output') : null }
+                { tableHeaderColumnFor('passed') }
+              </TableRow>
+            </TableHeader>
+            <TableBody displayRowCheckbox={false}>
+              {testCases.map(this.renderTestCaseRow.bind(this))}
+            </TableBody>
+          </Table>
+        </CardText>
+      </Card>
+    );
+  }
+
+  renderTestCaseRow(testCase) {
+    const { canGrade } = this.props;
+
+    let testCaseResult = 'unattempted';
+    let testCaseIcon;
+    if (testCase.output) {
+      testCaseResult = testCase.passed ? 'correct' : 'wrong';
+      testCaseIcon = testCase.passed ? <CorrectIcon /> : <WrongIcon />;
+    }
+
+    const tableRowColumnFor = field => (
+      <TableRowColumn style={styles.testCaseCell}>{field}</TableRowColumn>
+    );
+
+    return (
+      <TableRow key={testCase.identifier} style={styles.testCaseRow[testCaseResult]}>
+        { canGrade ? tableRowColumnFor(testCase.identifier) : null }
+        {tableRowColumnFor(testCase.expression)}
+        {tableRowColumnFor(<ExpandableText text={testCase.expected || ''} /> || '')}
+        { canGrade ? tableRowColumnFor(<ExpandableText text={testCase.output || ''} /> || '') : null }
+        <TableRowColumn>{testCaseIcon}</TableRowColumn>
+      </TableRow>
+    );
+  }
+
   render() {
     const { testCases, canGrade } = this.props;
     if (!testCases) {
@@ -210,15 +211,15 @@ class VisibleTestCaseView extends Component {
     return (
       <div style={styles.testCasesContainer}>
         <h3><FormattedMessage {...translations.testCases} /></h3>
-        {VisibleTestCaseView.renderTestCases(
+        {this.renderTestCases(
           testCases.public_test,
           VisibleTestCaseView.renderTitle('publicTestCases', false)
         )}
-        {VisibleTestCaseView.renderTestCases(
+        {this.renderTestCases(
           testCases.private_test,
           VisibleTestCaseView.renderTitle('privateTestCases', canGrade)
         )}
-        {VisibleTestCaseView.renderTestCases(
+        {this.renderTestCases(
           testCases.evaluation_test,
           VisibleTestCaseView.renderTitle('evaluationTestCases', canGrade)
         )}

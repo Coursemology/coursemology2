@@ -152,6 +152,7 @@ class SubmissionEditStepForm extends Component {
         title = intl.formatMessage(translations.wrong);
       }
 
+      /* eslint-disable react/no-array-index-key */
       return (
         <Card style={styles.explanationContainer}>
           <CardHeader
@@ -163,10 +164,11 @@ class SubmissionEditStepForm extends Component {
             titleColor={explanation.correct ? green900 : red900}
           />
           <CardText>
-            {explanation.explanations.map(exp => <div dangerouslySetInnerHTML={{ __html: exp }} />)}
+            {explanation.explanations.map((exp, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: exp }} />)}
           </CardText>
         </Card>
       );
+      /* eslint-enable react/no-array-index-key */
     }
     return null;
   }
