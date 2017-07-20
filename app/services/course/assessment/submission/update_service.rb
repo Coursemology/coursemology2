@@ -21,10 +21,16 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def load_or_create_answers
     return unless @submission.attempting?
 
-    new_answers = questions_to_attempt.not_answered(@submission).attempt(@submission).
-                  map { |answer| answer.save! if answer.new_record? }.
-                  reduce(false) { |a, e| a || e }
-    @submission.answers.reload if new_answers && @submission.answers.loaded?
+    new_answers = questions_to_attempt.not_answered(@submission).attempt(@submission)
+    new_answers_created = new_answers.map do |answer|
+      # When there are no existing answers, the first one will be the current_answer.
+      if answer.new_record?
+        answer.current_answer = true
+        answer.save!
+      end
+    end
+    new_answers_created = new_answers_created.reduce(false) { |a, e| a || e }
+    @submission.answers.reload if new_answers_created && @submission.answers.loaded?
   end
 
   def load_or_create_submission_questions
