@@ -16,6 +16,10 @@ export const defaultComponentTitles = defineMessages({
     id: 'course.admin.componentTitles.course_survey_component',
     defaultMessage: 'Surveys',
   },
+  course_users_component: {
+    id: 'course.admin.componentTitles.course_users_component',
+    defaultMessage: 'Users',
+  },
 });
 
 export default translations;

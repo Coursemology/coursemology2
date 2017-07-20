@@ -70,6 +70,10 @@ export const settingDescriptions = defineMessages({
     id: 'course.admin.NotificationSettings.settingDescriptions.new_comment',
     defaultMessage: 'Notify users when comments or programming question annotations are made.',
   },
+  new_enrol_request: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.new_enrol_request',
+    defaultMessage: 'Notify staff when users request to enrol in the course.',
+  },
 });
 
 export const settingTitles = defineMessages({
@@ -108,6 +112,10 @@ export const settingTitles = defineMessages({
   new_comment: {
     id: 'course.admin.NotificationSettings.settingTitles.new_comment',
     defaultMessage: 'New Comment',
+  },
+  new_enrol_request: {
+    id: 'course.admin.NotificationSettings.settingTitles.new_enrol_request',
+    defaultMessage: 'New Enrol Request',
   },
 });
 
