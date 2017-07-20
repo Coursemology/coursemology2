@@ -1,17 +1,13 @@
 import actions from '../constants';
 
 const initialState = {
+  isAutograding: false,
   isLoading: true,
   isSaving: false,
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case actions.FETCH_SUBMISSION_REQUEST:
-      return {
-        ...state,
-        isLoading: true,
-      };
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.FETCH_SUBMISSION_FAILURE:
       return {
@@ -56,6 +52,17 @@ export default function (state = initialState, action) {
       return {
         ...state,
         isSaving: false,
+      };
+    case actions.AUTOGRADE_SUBMISSION_REQUEST:
+      return {
+        ...state,
+        isAutograding: true,
+      };
+    case actions.AUTOGRADE_SUBMISSION_SUCCESS:
+    case actions.AUTOGRADE_SUBMISSION_FAILURE:
+      return {
+        ...state,
+        isAutograding: false,
       };
     default:
       return state;

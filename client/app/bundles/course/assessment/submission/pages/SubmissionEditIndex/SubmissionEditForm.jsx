@@ -219,15 +219,19 @@ class SubmissionEditForm extends Component {
   }
 
   renderAutogradeSubmissionButton() {
-    const { intl, canGrade, submitted, handleAutogradeSubmission, isSaving } = this.props;
+    const { intl, canGrade, submitted, handleAutogradeSubmission,
+            isAutograding, isSaving } = this.props;
     if (canGrade && submitted) {
+      const progressIcon = <CircularProgress size={24} />;
+
       return (
         <RaisedButton
           style={styles.formButton}
           primary
           label={intl.formatMessage(translations.autograde)}
+          icon={isAutograding ? progressIcon : null}
           onTouchTap={handleAutogradeSubmission}
-          disabled={isSaving}
+          disabled={isSaving || isAutograding}
         />
       );
     }
@@ -416,6 +420,7 @@ SubmissionEditForm.propTypes = {
   questions: PropTypes.objectOf(QuestionProp),
   questionsFlags: PropTypes.objectOf(QuestionFlagsProp),
   topics: PropTypes.objectOf(TopicProp),
+  isAutograding: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
   pristine: PropTypes.bool,
 

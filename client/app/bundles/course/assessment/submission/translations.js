@@ -164,6 +164,14 @@ const translations = defineMessages({
     id: 'course.assessment.submission.updateFailure',
     defaultMessage: 'Submission update failed.',
   },
+  autogradeSubmissionSuccess: {
+    id: 'course.assessment.submission.autogradeSubmissionSuccess',
+    defaultMessage: 'All answers have been evaluated.',
+  },
+  autogradeSubmissionFailure: {
+    id: 'course.assessment.submission.autogradeSubmissionFailure',
+    defaultMessage: 'An error occurred while evaluating the answers.',
+  },
 });
 
 export default translations;

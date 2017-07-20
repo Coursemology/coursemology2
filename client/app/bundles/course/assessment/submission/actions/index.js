@@ -85,7 +85,8 @@ export function autogradeSubmission(id) {
         pollJob(data.redirect_url,
           () => {
             dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_SUCCESS });
-            fetchSubmission(id);
+            fetchSubmission(id)(dispatch);
+            dispatch(setNotification(translations.autogradeSubmissionSuccess));
           },
           () => dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_FAILURE })
         );
