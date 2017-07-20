@@ -66,6 +66,10 @@ export const settingDescriptions = defineMessages({
     id: 'course.admin.NotificationSettings.settingDescriptions.grades_released',
     defaultMessage: 'Notify a student when grades for a submission have been released.',
   },
+  new_comment: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.new_comment',
+    defaultMessage: 'Notify users when comments or programming question annotations are made.',
+  },
 });
 
 export const settingTitles = defineMessages({
@@ -100,6 +104,10 @@ export const settingTitles = defineMessages({
   grades_released: {
     id: 'course.admin.NotificationSettings.settingTitles.grades_released',
     defaultMessage: 'Grades Released',
+  },
+  new_comment: {
+    id: 'course.admin.NotificationSettings.settingTitles.new_comment',
+    defaultMessage: 'New Comment',
   },
 });
 

@@ -23,7 +23,7 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
       subject do
         post :create, format: :js, course_id: course, assessment_id: assessment,
                       submission_id: submission, answer_id: answer, file_id: file,
-                      id: immutable_annotation,
+                      id: immutable_annotation, line: 1,
                       annotation: {
                         answer_id: answer.id
                       },
@@ -40,6 +40,45 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
 
         it 'returns HTTP 400' do
           expect(response.status).to eq(400)
+        end
+      end
+
+      context 'when saving succeeds' do
+        it 'returns HTTP 200' do
+          subject
+          expect(response.status).to eq(200)
+        end
+
+        context 'when other users are subscribed to notifications' do
+          let(:annotation) do
+            create(:course_assessment_answer_programming_file_annotation, file: file, line: 1)
+          end
+          let!(:subscriber) do
+            user = create(:course_manager, course: course).user
+            annotation.acting_as.subscriptions.create!(user: user)
+            user
+          end
+
+          it 'sends email notifications' do
+            expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+          end
+
+          context 'when "New Comment" email notification is disabled' do
+            before do
+              context =
+                OpenStruct.new(key: Course::AssessmentsComponent.key, current_course: course)
+              setting = {
+                'key' => 'new_comment', 'enabled' => false,
+                'options' => { 'category_id' => assessment.tab.category.id }
+              }
+              Course::Settings::AssessmentsComponent.new(context).update_email_setting(setting)
+              course.save!
+            end
+
+            it 'does not send email notifications' do
+              expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+            end
+          end
         end
       end
     end

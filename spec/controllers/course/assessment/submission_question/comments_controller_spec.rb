@@ -43,6 +43,35 @@ RSpec.describe Course::Assessment::SubmissionQuestion::CommentsController do
         it 'adds a new comment' do
           expect { subject }.to change(Course::Discussion::Post, :count).by(1)
         end
+
+        context 'when other users are subscribed to notifications' do
+          let!(:subscriber) do
+            user = create(:course_manager, course: course).user
+            submission_question.acting_as.subscriptions.create!(user: user)
+            user
+          end
+
+          it 'sends email notifications' do
+            expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
+          end
+
+          context 'when "New Comment" email notification is disabled' do
+            before do
+              context =
+                OpenStruct.new(key: Course::AssessmentsComponent.key, current_course: course)
+              setting = {
+                'key' => 'new_comment', 'enabled' => false,
+                'options' => { 'category_id' => assessment.tab.category.id }
+              }
+              Course::Settings::AssessmentsComponent.new(context).update_email_setting(setting)
+              course.save!
+            end
+
+            it 'does not send email notifications' do
+              expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+            end
+          end
+        end
       end
     end
   end
