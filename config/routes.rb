@@ -77,6 +77,7 @@ Rails.application.routes.draw do
     post 'mark_as_read'
   end
   resources :jobs, only: [:show]
+  resources :instance_user_role_requests, only: [:index, :new, :create], path: 'role_requests'
 
   namespace :user do
     resources :emails, only: [:index, :create, :destroy] do

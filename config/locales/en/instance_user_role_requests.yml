@@ -1,0 +1,7 @@
+en:
+  instance_user_role_requests:
+    new:
+      header: 'Request to be an instructor or administrator'
+      hint: 'Please provide the following information for us to review your request.'
+    create:
+      success: 'Your role request was submitted.'

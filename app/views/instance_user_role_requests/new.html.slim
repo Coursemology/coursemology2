@@ -1,0 +1,10 @@
+= page_header
+p = t('.hint')
+
+= simple_form_for @user_role_request, url: instance_user_role_requests_path do |f|
+  = f.input :role, as: :select, collection: Instance::UserRoleRequest.roles.keys
+  = f.input :organization
+  = f.input :designation
+  = f.input :reason
+
+  = f.button :submit
