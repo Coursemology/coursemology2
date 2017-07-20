@@ -105,6 +105,7 @@ class VisibleSubmissionEditIndex extends Component {
       submission: { canGrade, canUpdate, maxStep, workflowState },
       answers,
       explanations,
+      grading,
       posts,
       questions,
       questionsFlags,
@@ -156,6 +157,7 @@ class VisibleSubmissionEditIndex extends Component {
         handlePublish={() => this.handlePublish()}
         initialValues={answers}
         explanations={explanations}
+        grading={grading}
         canGrade={canGrade}
         canUpdate={canUpdate}
         attempting={workflowState === workflowStates.Attempting}
@@ -175,7 +177,7 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   render() {
-    const { isLoading, isSaving, notification } = this.props;
+    const { isLoading, notification } = this.props;
 
     if (isLoading) {
       return <LoadingIndicator />;

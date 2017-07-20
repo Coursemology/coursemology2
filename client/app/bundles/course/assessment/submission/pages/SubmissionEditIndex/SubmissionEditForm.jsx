@@ -12,7 +12,8 @@ import { red200, red900, yellow900, green200, green900, white } from 'material-u
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { ExplanationProp, QuestionProp, QuestionFlagsProp, TopicProp } from '../../propTypes';
+import { ExplanationProp, QuestionProp, QuestionFlagsProp,
+        QuestionGradeProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
@@ -267,8 +268,11 @@ class SubmissionEditForm extends Component {
   }
 
   renderMarkButton() {
-    const { intl, delayedGradePublication, canGrade, submitted, handleMark, isSaving } = this.props;
+    const { intl, delayedGradePublication, grading,
+            canGrade, submitted, handleMark, isSaving } = this.props;
     if (delayedGradePublication && canGrade && submitted) {
+      const anyUngraded = Object.values(grading).some(
+        q => q.grade === undefined || q.grade === null);
       return (
         <RaisedButton
           style={styles.formButton}
@@ -276,7 +280,7 @@ class SubmissionEditForm extends Component {
           labelColor={white}
           label={intl.formatMessage(translations.mark)}
           onTouchTap={handleMark}
-          disabled={isSaving}
+          disabled={isSaving || anyUngraded}
         />
       );
     }
@@ -301,8 +305,12 @@ class SubmissionEditForm extends Component {
   }
 
   renderPublishButton() {
-    const { intl, delayedGradePublication, canGrade, submitted, handlePublish, isSaving } = this.props;
+    const { intl, delayedGradePublication, canGrade, grading,
+            submitted, handlePublish, isSaving } = this.props;
     if (!delayedGradePublication && canGrade && submitted) {
+      const anyUngraded = Object.values(grading).some(
+        q => q.grade === undefined || q.grade === null);
+
       return (
         <RaisedButton
           style={styles.formButton}
@@ -310,7 +318,7 @@ class SubmissionEditForm extends Component {
           secondary
           label={intl.formatMessage(translations.publish)}
           onTouchTap={handlePublish}
-          disabled={isSaving}
+          disabled={isSaving || anyUngraded}
         />
       );
     }
@@ -403,6 +411,7 @@ SubmissionEditForm.propTypes = {
   published: PropTypes.bool.isRequired,
 
   explanations: PropTypes.objectOf(ExplanationProp),
+  grading: PropTypes.objectOf(QuestionGradeProp),
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(QuestionProp),
   questionsFlags: PropTypes.objectOf(QuestionFlagsProp),
