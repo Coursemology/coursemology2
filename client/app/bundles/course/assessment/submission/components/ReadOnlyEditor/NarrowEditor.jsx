@@ -47,27 +47,45 @@ const styles = {
 };
 
 export default class NarrowEditor extends Component {
-  
+
   constructor(props) {
     super(props);
-    this.state = { lineHovered: -1 };
+    this.state = {
+      activeComment: 0,
+      lineHovered: 0,
+    };
+  }
+
+  toggleComment(lineNumber) {
+    this.props.toggleLine(lineNumber);
+    this.setState({ activeComment: lineNumber });
+  }
+
+  expandComment(lineNumber) {
+    this.props.expandLine(lineNumber);
+    this.setState({ activeComment: lineNumber });
   }
 
   renderComments(lineNumber) {
+    const { activeComment } = this.state;
     const { answerId, fileId, annotations, expanded, collapseLine } = this.props;
     const annotation = annotations.find(a => a.line === lineNumber);
     const placement = 'right';
 
     return (
       <Overlay
-        style={{ zIndex: lineNumber }}
         show={expanded[lineNumber - 1]}
         onHide={() => collapseLine(lineNumber)}
         placement={placement}
         target={() => findDOMNode(this[`comment-${lineNumber}`])}
       >
-        <OverlayTooltip placement={placement}>
-          <Annotations answerId={answerId} fileId={fileId} lineNumber={lineNumber} annotation={annotation} />
+        <OverlayTooltip
+          placement={placement}
+          style={{ zIndex: activeComment === lineNumber ? 9999 : lineNumber }}
+        >
+          <div onClick={() => this.setState({ activeComment: lineNumber })}>
+            <Annotations answerId={answerId} fileId={fileId} lineNumber={lineNumber} annotation={annotation} />
+          </div>
         </OverlayTooltip>
       </Overlay>
     );
@@ -75,20 +93,20 @@ export default class NarrowEditor extends Component {
 
   renderLineNumberColumn(lineNumber) {
     const { lineHovered } = this.state;
-    const { annotations, expandLine, toggleLine } = this.props;
+    const { annotations } = this.props;
     const annotation = annotations.find(a => a.line === lineNumber);
     return (
       <div
         style={annotation ? styles.editorLineNumberWithComments : styles.editorLineNumber}
-        onClick={() => toggleLine(lineNumber)}
+        onClick={() => this.toggleComment(lineNumber)}
         onMouseOver={() => this.setState({ lineHovered: lineNumber })}
-        onMouseOut={() => this.setState({ lineHovered: -1 })}
+        onMouseOut={() => this.setState({ lineHovered: 0 })}
       >
         <div ref={(c) => { this[`comment-${lineNumber}`] = c; }}>
           {lineNumber}
         </div>
         {this.renderComments(lineNumber)}
-        <AddCommentIcon onClick={() => expandLine(lineNumber)} hovered={lineHovered === lineNumber} />
+        <AddCommentIcon onClick={() => this.expandComment(lineNumber)} hovered={lineHovered === lineNumber} />
       </div>
     );
   }

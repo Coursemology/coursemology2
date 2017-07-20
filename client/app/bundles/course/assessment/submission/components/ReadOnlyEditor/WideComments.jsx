@@ -29,12 +29,23 @@ const styles = {
 };
 
 export default class WideComments extends Component {
+
   renderComments(lineNumber, annotation) {
-    const { answerId, fileId, expanded, expandLine, collapseLine } = this.props;
+    const {
+      activeComment, answerId, fileId, expanded,
+      expandLine, collapseLine, onClick,
+    } = this.props;
 
     if (expanded[lineNumber - 1]) {
       return (
-        <div key={lineNumber} style={{ ...styles.expanded, zIndex: lineNumber + styles.expanded.zIndex }}>
+        <div
+          key={lineNumber}
+          style={{
+            ...styles.expanded,
+            zIndex: activeComment === lineNumber ? 9999 : lineNumber + styles.expanded.zIndex,
+          }}
+          onClick={() => onClick(lineNumber)}
+        >
           <RaisedButton
             style={styles.minimiseButton}
             onClick={() => collapseLine(lineNumber)}
@@ -73,16 +84,19 @@ export default class WideComments extends Component {
 }
 
 WideComments.propTypes = {
+  activeComment: PropTypes.number.isRequired,
   answerId: PropTypes.number.isRequired,
   fileId: PropTypes.number.isRequired,
   expanded: PropTypes.arrayOf(PropTypes.bool).isRequired,
   annotations: PropTypes.arrayOf(AnnotationProp),
   expandLine: PropTypes.func,
   collapseLine: PropTypes.func,
+  onClick: PropTypes.func,
 };
 
 WideComments.defaultProps = {
   annotations: [],
   expandLine: () => {},
   collapseLine: () => {},
+  onClick: () => {},
 };
