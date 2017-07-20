@@ -752,6 +752,17 @@ ActiveRecord::Schema.define(version: 20170721061506) do
     t.datetime "updated_at",  :null=>false
   end
 
+  create_table "instance_user_role_requests", force: :cascade do |t|
+    t.integer  "instance_id",  :null=>false, :index=>{:name=>"fk__instance_user_role_requests_instance_id"}, :foreign_key=>{:references=>"instances", :name=>"fk_instance_user_role_requests_instance_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "user_id",      :null=>false, :index=>{:name=>"fk__instance_user_role_requests_user_id"}, :foreign_key=>{:references=>"users", :name=>"fk_instance_user_role_requests_user_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "role",         :null=>false
+    t.string   "organization", :limit=>255
+    t.string   "designation",  :limit=>255
+    t.text     "reason"
+    t.datetime "created_at",   :null=>false
+    t.datetime "updated_at",   :null=>false
+  end
+
   create_table "instance_users", force: :cascade do |t|
     t.integer  "instance_id", :null=>false, :index=>{:name=>"fk__instance_users_instance_id"}, :foreign_key=>{:references=>"instances", :name=>"fk_instance_users_instance_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "user_id",     :null=>false, :foreign_key=>{:references=>"users", :name=>"fk_instance_users_user_id", :on_update=>:no_action, :on_delete=>:no_action}
