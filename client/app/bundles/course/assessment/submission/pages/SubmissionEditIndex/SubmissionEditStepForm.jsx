@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-import { white, red300, red900, green500, green900,
+import { white, red200, red900, green200, green500, green900,
          lightBlue400, blue800 } from 'material-ui/styles/colors';
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
 import CircularProgress from 'material-ui/CircularProgress';
@@ -132,19 +132,34 @@ class SubmissionEditStepForm extends Component {
     return null;
   }
 
-  renderExplanationPanel(questionId) {
-    const { explanations } = this.props;
-    const explanation = explanations[questionId];
+  renderExplanationPanel(question) {
+    const { intl, explanations } = this.props;
+    const explanation = explanations[question.id];
 
     if (explanation && explanation.correct !== null) {
+      if (question.type === questionTypes.Programming && explanation.correct) {
+        return null;
+      }
+
+      let title = '';
+      if (explanation.correct) {
+        title = intl.formatMessage(translations.correct);
+      } else if (explanation.failureType === 'public_test') {
+        title = intl.formatMessage(translations.publicTestCaseFailure);
+      } else if (explanation.failureType === 'private_test') {
+        title = intl.formatMessage(translations.privateTestCaseFailure);
+      } else {
+        title = intl.formatMessage(translations.wrong);
+      }
+
       return (
         <Card style={styles.explanationContainer}>
           <CardHeader
             style={{
               ...styles.explanationHeader,
-              backgroundColor: explanation.correct ? green500 : red300,
+              backgroundColor: explanation.correct ? green200 : red200,
             }}
-            title={explanation.correct ? 'Correct!' : 'Wrong!'}
+            title={title}
             titleColor={explanation.correct ? green900 : red900}
           />
           <CardText>
@@ -299,7 +314,7 @@ class SubmissionEditStepForm extends Component {
     return (
       <div>
         <SubmissionAnswer {...{ canGrade, readOnly: !attempting, answerId, question }} />
-        {this.renderExplanationPanel(id)}
+        {this.renderExplanationPanel(question)}
         {this.renderQuestionGrading(id)}
         {this.renderGradingPanel()}
         {attempting ? <div style={styles.formButtonContainer}>
@@ -347,7 +362,7 @@ class SubmissionEditStepForm extends Component {
           }
           return (
             <Step key={questionId}>
-              <StepLabel />
+              <StepLabel iconContainerStyle={{ padding: 0 }} />
             </Step>
           );
         })}

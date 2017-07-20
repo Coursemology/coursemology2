@@ -5,14 +5,14 @@ import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape } from 'react-intl';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import { Card } from 'material-ui/Card';
+import { Card, CardHeader, CardText } from 'material-ui/Card';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
-import { red900, yellow900, white } from 'material-ui/styles/colors';
+import { red200, red900, yellow900, green200, green900, white } from 'material-ui/styles/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { QuestionProp, QuestionFlagsProp, TopicProp } from '../../propTypes';
+import { ExplanationProp, QuestionProp, QuestionFlagsProp, TopicProp } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
@@ -98,6 +98,39 @@ class SubmissionEditForm extends Component {
     return null;
   }
 
+  renderExplanationPanel(questionId) {
+    const { intl, explanations } = this.props;
+    const explanation = explanations[questionId];
+
+    if (explanation && explanation.correct === false) {
+      let title = '';
+      if (explanation.failureType === 'public_test') {
+        title = intl.formatMessage(translations.publicTestCaseFailure);
+      } else if (explanation.failureType === 'private_test') {
+        title = intl.formatMessage(translations.privateTestCaseFailure);
+      } else {
+        title = intl.formatMessage(translations.wrong);
+      }
+
+      return (
+        <Card style={styles.explanationContainer}>
+          <CardHeader
+            style={{
+              ...styles.explanationHeader,
+              backgroundColor: explanation.correct ? green200 : red200,
+            }}
+            title={title}
+            titleColor={explanation.correct ? green900 : red900}
+          />
+          <CardText>
+            {explanation.explanations.map(exp => <div dangerouslySetInnerHTML={{ __html: exp }} />)}
+          </CardText>
+        </Card>
+      );
+    }
+    return null;
+  }
+
   renderTabbedQuestions() {
     const { intl, canGrade, attempting, questionIds, questions, topics } = this.props;
     return (
@@ -109,6 +142,7 @@ class SubmissionEditForm extends Component {
           return (
             <Tab key={id} label={intl.formatMessage(translations.questionNumber, { number: index + 1 })}>
               <SubmissionAnswer {...{ canGrade, readOnly: !attempting, answerId, question }} />
+              {question.type === questionTypes.Programming ? this.renderExplanationPanel(id) : null}
               {this.renderQuestionGrading(id)}
               {this.renderProgrammingQuestionActions(id)}
               <Comments topic={topic} />
@@ -131,6 +165,7 @@ class SubmissionEditForm extends Component {
           return (
             <div key={id} style={styles.questionContainer}>
               <SubmissionAnswer {...{ canGrade, readOnly: !attempting, answerId, question }} />
+              {question.type === questionTypes.Programming ? this.renderExplanationPanel(id) : null}
               {this.renderQuestionGrading(id)}
               {this.renderProgrammingQuestionActions(id)}
               <Comments topic={topic} />
@@ -367,13 +402,13 @@ SubmissionEditForm.propTypes = {
   graded: PropTypes.bool.isRequired,
   published: PropTypes.bool.isRequired,
 
+  explanations: PropTypes.objectOf(ExplanationProp),
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(QuestionProp),
   questionsFlags: PropTypes.objectOf(QuestionFlagsProp),
   topics: PropTypes.objectOf(TopicProp),
   isSaving: PropTypes.bool.isRequired,
   pristine: PropTypes.bool,
-  submitting: PropTypes.bool,
 
   handleAutogradeSubmission: PropTypes.func,
   handleSaveDraft: PropTypes.func,

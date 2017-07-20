@@ -36,7 +36,6 @@ json.testCases do
           json.identifier test_case.identifier
           json.expression test_case.expression
           json.expected test_case.expected
-          json.hint format_html(test_case.hint)
           if test_result
             json.output get_output(test_result)
             json.passed test_result.passed?
@@ -57,20 +56,18 @@ json.explanation do
   assessment = answer.submission.assessment
   if last_attempt
     explanations = []
+
     if failed_test_cases_by_type['public_test']
       failed_test_cases_by_type['public_test'].each do |test_case, test_result|
         explanations << simple_format(get_hint(test_case, test_result))
       end
+      json.failureType 'public_test'
+
     elsif failed_test_cases_by_type['private_test']
       failed_test_cases_by_type['private_test'].each do |test_case, test_result|
         explanations << simple_format(get_hint(test_case, test_result))
       end
-    end
-
-    if can_read_tests && failed_test_cases_by_type['evaluation_test']
-      failed_test_cases_by_type['evaluation_test'].each do |test_case, test_result|
-        explanations << simple_format(get_hint(test_case, test_result))
-      end
+      json.failureType 'private_test'
     end
 
     json.correct last_attempt.correct

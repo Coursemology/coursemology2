@@ -7,16 +7,23 @@ import ReactTooltip from 'react-tooltip';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import WrongIcon from 'material-ui/svg-icons/navigation/close';
 import CorrectIcon from 'material-ui/svg-icons/action/done';
-import { red100, green100 } from 'material-ui/styles/colors';
+import { red50, green50 } from 'material-ui/styles/colors';
 import { Table, TableHeader, TableHeaderColumn, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 
+import ExpandableText from 'lib/components/ExpandableText';
 import { TestCaseProp } from '../propTypes';
 
 const styles = {
-  testCase: {
+  testCaseRow: {
     unattempted: {},
-    correct: { backgroundColor: green100 },
-    wrong: { backgroundColor: red100 },
+    correct: { backgroundColor: green50 },
+    wrong: { backgroundColor: red50 },
+  },
+  testCaseCell: {
+    padding: '0.5em',
+    textOverflow: 'initial',
+    whiteSpace: 'normal',
+    wordBreak: 'break-word',
   },
   testCasesContainer: {
     marginBottom: 20,
@@ -43,10 +50,6 @@ const translations = defineMessages({
   output: {
     id: 'course.assessment.submission.TestCaseView.output',
     defaultMessage: 'Output',
-  },
-  hint: {
-    id: 'course.assessment.submission.TestCaseView.hint',
-    defaultMessage: 'Hint',
   },
   passed: {
     id: 'course.assessment.submission.TestCaseView.passed',
@@ -95,12 +98,11 @@ class VisibleTestCaseView extends Component {
     }
 
     return (
-      <TableRow key={testCase.identifier} style={styles.testCase[testCaseResult]}>
-        <TableRowColumn>{testCase.identifier}</TableRowColumn>
-        <TableRowColumn>{testCase.expression}</TableRowColumn>
-        <TableRowColumn>{testCase.expected}</TableRowColumn>
-        <TableRowColumn>{testCase.output}</TableRowColumn>
-        <TableRowColumn dangerouslySetInnerHTML={{ __html: testCase.hint }} />
+      <TableRow key={testCase.identifier} style={styles.testCaseRow[testCaseResult]}>
+        <TableRowColumn style={styles.testCaseCell}>{testCase.identifier}</TableRowColumn>
+        <TableRowColumn style={styles.testCaseCell}>{testCase.expression}</TableRowColumn>
+        <TableRowColumn style={styles.testCaseCell}><ExpandableText text={testCase.expected || ''} /></TableRowColumn>
+        <TableRowColumn style={styles.testCaseCell}><ExpandableText text={testCase.output || ''} /></TableRowColumn>
         <TableRowColumn>{testCaseIcon}</TableRowColumn>
       </TableRow>
     );
@@ -121,12 +123,21 @@ class VisibleTestCaseView extends Component {
           <Table selectable={false} style={{}}>
             <TableHeader displaySelectAll={false}>
               <TableRow>
-                <TableHeaderColumn><FormattedMessage {...translations.identifier} /></TableHeaderColumn>
-                <TableHeaderColumn><FormattedMessage {...translations.expression} /></TableHeaderColumn>
-                <TableHeaderColumn><FormattedMessage {...translations.expected} /></TableHeaderColumn>
-                <TableHeaderColumn><FormattedMessage {...translations.output} /></TableHeaderColumn>
-                <TableHeaderColumn><FormattedMessage {...translations.hint} /></TableHeaderColumn>
-                <TableHeaderColumn><FormattedMessage {...translations.passed} /></TableHeaderColumn>
+                <TableHeaderColumn style={styles.testCaseCell}>
+                  <FormattedMessage {...translations.identifier} />
+                </TableHeaderColumn>
+                <TableHeaderColumn style={styles.testCaseCell}>
+                  <FormattedMessage {...translations.expression} />
+                </TableHeaderColumn>
+                <TableHeaderColumn style={styles.testCaseCell}>
+                  <FormattedMessage {...translations.expected} />
+                </TableHeaderColumn>
+                <TableHeaderColumn style={styles.testCaseCell}>
+                  <FormattedMessage {...translations.output} />
+                </TableHeaderColumn>
+                <TableHeaderColumn style={styles.testCaseCell}>
+                  <FormattedMessage {...translations.passed} />
+                </TableHeaderColumn>
               </TableRow>
             </TableHeader>
             <TableBody displayRowCheckbox={false}>

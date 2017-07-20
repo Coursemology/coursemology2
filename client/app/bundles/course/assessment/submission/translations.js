@@ -121,6 +121,22 @@ const translations = defineMessages({
     id: 'course.assessment.submission.questionNumber',
     defaultMessage: 'Q{number}',
   },
+  correct: {
+    id: 'course.assessment.submission.correct',
+    defaultMessage: 'Correct!',
+  },
+  wrong: {
+    id: 'course.assessment.submission.wrong',
+    defaultMessage: 'Wrong!',
+  },
+  publicTestCaseFailure: {
+    id: 'course.assessment.submission.publicTestCaseFailure',
+    defaultMessage: 'Your code fails one or more public test cases.',
+  },
+  privateTestCaseFailure: {
+    id: 'course.assessment.submission.privateTestCaseFailure',
+    defaultMessage: 'Your code fails one or more private test cases.',
+  },
   submitConfirmation: {
     id: 'course.assessment.submission.submitConfirmation',
     defaultMessage: 'THIS ACTION IS IRREVERSIBLE Are you sure you want to submit? \
