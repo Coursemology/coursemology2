@@ -157,7 +157,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def auto_grade(answer)
     return unless valid_for_grading?(answer)
-    job = grade_and_reattempt_answer(answer)
+    job = reattempt_and_grade_answer(answer)
     if job
       render json: { redirect_url: job_path(job.job) }
     else
@@ -167,9 +167,26 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     end
   end
 
+  # Returns all answers for the same question as `current_answer` where the
+  # autograding job has failed.
+  #
+  # @param [Course::Assessment::Answer] current_answer The Course::Assessment::Answer for a
+  #   question where current_answer is set to true.
+  # @return [Array<Course::Assessment::Answer>] An array containing answers with errored jobs.
+  def errored_answers(current_answer)
+    attempts = current_answer.submission.answers.from_question(current_answer.question_id)
+    attempts.select do |attempt|
+      attempt&.auto_grading&.job&.errored?
+    end
+  end
+
   def reattempt_and_grade_answer(answer)
     # The transaction is to make sure that the new attempt, auto grading and job are present when
     # the current answer is submitted.
+    #
+    # If the latest answer has an errored job, the user may still modify current_answer before
+    # grading again. Failed autograding jobs should not count towards their answer attempt limit,
+    # so destroy the failed job answer and re-grade the current entry.
     answer.class.transaction do
       last_answer = answer.submission.answers.select { |ans| ans.question_id == answer.question_id }.last
       last_answer.destroy! if last_answer&.auto_grading&.job&.errored?
