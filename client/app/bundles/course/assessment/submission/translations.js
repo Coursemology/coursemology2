@@ -156,6 +156,11 @@ const translations = defineMessages({
     id: 'course.assessment.submission.lateSubmission',
     defaultMessage: 'This submission is LATE! You may want to penalize the student for late submission.',
   },
+  unpublishedGrades: {
+    id: 'course.assessment.submission.unpublishedGrades',
+    defaultMessage: 'These grades will not be visible to the student until they are published. \
+                    This can be done at the submissions page of this assessment.',
+  },
   updateSuccess: {
     id: 'course.assessment.submission.updateSuccess',
     defaultMessage: 'Submission updated successfully.',
@@ -163,6 +168,11 @@ const translations = defineMessages({
   updateFailure: {
     id: 'course.assessment.submission.updateFailure',
     defaultMessage: 'Submission update failed.',
+  },
+  autogradeFailure: {
+    id: 'course.assessment.submission.autogradeFailure',
+    defaultMessage: '(T_T) Sorry, the autograder is having mood swings and quit on us. \
+                    Try submitting your code again in a couple of minutes.',
   },
   autogradeSubmissionSuccess: {
     id: 'course.assessment.submission.autogradeSubmissionSuccess',

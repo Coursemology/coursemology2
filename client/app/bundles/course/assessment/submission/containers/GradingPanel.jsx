@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { Table, TableHeader, TableBody, TableRow, TableHeaderColumn, TableRowColumn } from 'material-ui/Table';
+import ReactTooltip from 'react-tooltip';
 
 import { formatDateTime } from '../utils';
 import { GradingProp, QuestionProp, SubmissionProp } from '../propTypes';
@@ -18,10 +19,11 @@ const styles = {
   table: {
     maxWidth: 600,
   },
-  hdColumn: {
+  headerColumn: {
     color: 'black',
     fontWeight: 'bold',
     fontSize: 14,
+    overflow: 'hidden',
   },
 };
 
@@ -66,6 +68,23 @@ class VisibleGradingPanel extends Component {
   renderTotalGrade() {
     const { grading: { questions }, submission: { maximumGrade } } = this.props;
     return <div>{`${VisibleGradingPanel.calculateTotalGrade(questions)} / ${maximumGrade}`}</div>;
+  }
+
+  renderSubmissionStatus() {
+    const { intl, submission: { workflowState } } = this.props;
+    return (<div>
+      {intl.formatMessage(translations[workflowState])}
+      {workflowState === workflowStates.Graded ? (
+        <span style={{ display: 'inline-block', marginLeft: 5 }}>
+          <a data-tip data-for="staff-only-test-cases" data-offset="{'left' : -8}">
+            <i className="fa fa-exclamation-triangle" />
+          </a>
+          <ReactTooltip id="staff-only-test-cases" effect="solid">
+            <FormattedMessage {...translations.unpublishedGrades} />
+          </ReactTooltip>
+        </span>
+      ) : null}
+    </div>);
   }
 
   renderExperiencePoints() {
@@ -114,7 +133,7 @@ class VisibleGradingPanel extends Component {
       submission: {
         submitter, workflowState, dueAt, attemptedAt,
         submittedAt, grader, gradedAt, canGrade,
-      }, intl,
+      },
     } = this.props;
 
     const published = workflowState === workflowStates.Published;
@@ -122,7 +141,7 @@ class VisibleGradingPanel extends Component {
 
     const tableRow = (field, value) => (
       <TableRow>
-        <TableHeaderColumn style={styles.hdColumn} columnNumber={0}>
+        <TableHeaderColumn style={styles.headerColumn} columnNumber={0}>
           <FormattedMessage {...translations[field]} />
         </TableHeaderColumn>
         <TableRowColumn>{value}</TableRowColumn>
@@ -133,7 +152,7 @@ class VisibleGradingPanel extends Component {
       <Table selectable={false} style={styles.table}>
         <TableBody displayRowCheckbox={false}>
           {tableRow('student', submitter)}
-          {tableRow('status', intl.formatMessage(translations[workflowState]))}
+          {tableRow('status', this.renderSubmissionStatus())}
           {shouldRenderGrading ? tableRow('totalGrade', this.renderTotalGrade()) : null}
           {shouldRenderGrading ? tableRow('expAwarded', this.renderExperiencePoints()) : null}
           {tableRow('dueAt', formatDateTime(dueAt))}
@@ -151,10 +170,7 @@ class VisibleGradingPanel extends Component {
     const questionGrade = questionGrading && questionGrading.grade !== null ? questionGrading.grade : '';
     return (
       <TableRow key={question.id}>
-        <TableHeaderColumn
-          style={styles.hdColumn}
-          columnNumber={0}
-        >
+        <TableHeaderColumn style={styles.headerColumn} columnNumber={0} colSpan={2}>
           {question.displayTitle}
         </TableHeaderColumn>
         <TableRowColumn>{`${questionGrade} / ${question.maximumGrade}`}</TableRowColumn>
@@ -163,22 +179,22 @@ class VisibleGradingPanel extends Component {
   }
 
   renderGradeTable() {
-    const { intl, questions, submission: { canGrade } } = this.props;
+    const { intl, questions, submission: { canGrade, workflowState } } = this.props;
 
-    if (!canGrade) {
+    if (!canGrade && workflowState !== workflowStates.Published) {
       return null;
     }
 
     return (
       <div>
-        <h1>Grade Summary</h1>
+        <h4>Grade Summary</h4>
         <Table selectable={false} style={styles.table}>
           <TableHeader adjustForCheckbox={false} displaySelectAll={false} enableSelectAll={false}>
             <TableRow>
-              <TableHeaderColumn style={styles.hdColumn}>
+              <TableHeaderColumn style={styles.headerColumn} colSpan={2}>
                 {intl.formatMessage(translations.question)}
               </TableHeaderColumn>
-              <TableHeaderColumn style={styles.hdColumn}>
+              <TableHeaderColumn style={styles.headerColumn}>
                 {intl.formatMessage(translations.totalGrade)}
               </TableHeaderColumn>
             </TableRow>

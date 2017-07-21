@@ -24,7 +24,6 @@ const translations = defineMessages({
 class SubmissionAnswer extends Component {
   static propTypes = {
     intl: intlShape.isRequired,
-    canGrade: PropTypes.bool.isRequired,
     readOnly: PropTypes.bool,
     question: QuestionProp,
     answerId: PropTypes.number,
@@ -75,7 +74,7 @@ class SubmissionAnswer extends Component {
   }
 
   render() {
-    const { canGrade, readOnly, question, answerId } = this.props;
+    const { readOnly, question, answerId } = this.props;
 
     const renderer = this.getRenderer(question);
 
@@ -84,7 +83,7 @@ class SubmissionAnswer extends Component {
         <h3>{question.displayTitle}</h3>
         <div dangerouslySetInnerHTML={{ __html: question.description }} />
         <hr />
-        { answerId ? renderer(question, readOnly, answerId, canGrade) : this.renderMissingAnswerPanel() }
+        { answerId ? renderer(question, readOnly, answerId) : this.renderMissingAnswerPanel() }
       </div>
     );
   }

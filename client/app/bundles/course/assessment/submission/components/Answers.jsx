@@ -8,6 +8,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { RadioButton } from 'material-ui/RadioButton';
 import { Table, TableBody, TableHeader, TableHeaderColumn,
          TableRow, TableRowColumn } from 'material-ui/Table';
+import { green50 } from 'material-ui/styles/colors';
 
 // eslint-disable-next-line import/extensions, import/no-extraneous-dependencies, import/no-unresolved
 import RichTextField from 'lib/components/redux-form/RichTextField';
@@ -60,7 +61,10 @@ export default class Answers extends Component {
             onCheck={(event, buttonValue) => onChange(buttonValue)}
             checked={option.id === value}
             label={(
-              <div dangerouslySetInnerHTML={{ __html: option.option.trim() }} />
+              <div
+                style={option.correct && readOnly ? { backgroundColor: green50 } : null}
+                dangerouslySetInnerHTML={{ __html: option.option.trim() }}
+              />
             )}
             disabled={readOnly}
           />
@@ -89,6 +93,7 @@ export default class Answers extends Component {
   }
 
   static renderTextResponseSolutions(question) {
+    /* eslint-disable react/no-array-index-key */
     return (
       <div>
         <hr />
@@ -102,8 +107,8 @@ export default class Answers extends Component {
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
-            {question.solutions.map(solution => (
-              <TableRow>
+            {question.solutions.map((solution, index) => (
+              <TableRow key={index}>
                 <TableRowColumn>{solution.solutionType}</TableRowColumn>
                 <TableRowColumn>{solution.solution}</TableRowColumn>
                 <TableRowColumn>{solution.grade}</TableRowColumn>
@@ -113,6 +118,7 @@ export default class Answers extends Component {
         </Table>
       </div>
     );
+    /* eslint-enable react/no-array-index-key */
   }
 
   static renderTextResponse(question, readOnly, answerId) {
@@ -188,7 +194,7 @@ export default class Answers extends Component {
     );
   }
 
-  static renderProgramming(question, readOnly, answerId, canGrade) {
+  static renderProgramming(question, readOnly, answerId) {
     return (
       <div>
         <FieldArray
@@ -196,7 +202,7 @@ export default class Answers extends Component {
           component={Answers.renderProgrammingFiles}
           {...{ readOnly }}
         />
-        <TestCaseView questionId={question.id} canGrade={canGrade} />
+        <TestCaseView questionId={question.id} />
       </div>
     );
   }

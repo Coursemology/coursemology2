@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
+import Paper from 'material-ui/Paper';
 import { Table, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import { red100, yellow100, grey100, green100, blue100 } from 'material-ui/styles/colors';
 import WarningIcon from 'material-ui/svg-icons/alert/warning';
@@ -38,12 +39,10 @@ class ProgressPanel extends Component {
   renderLateWarning() {
     const { intl } = this.props;
     return (
-      <Card style={{ backgroundColor: red100 }}>
-        <CardText>
-          <WarningIcon style={styles.warningIcon} />
-          <span>{intl.formatMessage(translations.lateSubmission)}</span>
-        </CardText>
-      </Card>
+      <Paper style={{ backgroundColor: red100, padding: 10 }}>
+        <WarningIcon style={styles.warningIcon} />
+        <span>{intl.formatMessage(translations.lateSubmission)}</span>
+      </Paper>
     );
   }
 

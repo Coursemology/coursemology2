@@ -4,6 +4,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     if auto_grade?
       submit_answer
     elsif update_submission
+      load_or_create_answers if unsubmit?
       render 'edit'
     else
       render json: { errors: @submission.errors }, status: :bad_request

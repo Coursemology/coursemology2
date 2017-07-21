@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Paper } from 'material-ui/Paper';
+import Paper from 'material-ui/Paper';
 import { grey100 } from 'material-ui/styles/colors';
 
 import { QuestionGradeProp, QuestionProp } from '../propTypes';

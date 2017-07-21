@@ -32,6 +32,7 @@ class Editor extends Component {
         editorProps={{ $blockScrolling: true }}
         setOptions={{ useSoftTabs: true }}
         readOnly={readOnly}
+        style={{ marginBottom: 10 }}
       />
     );
   }

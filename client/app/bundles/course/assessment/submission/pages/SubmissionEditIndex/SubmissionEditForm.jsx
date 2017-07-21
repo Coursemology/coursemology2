@@ -8,7 +8,9 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
-import { red200, red900, yellow900, green200, green900, white } from 'material-ui/styles/colors';
+import Paper from 'material-ui/Paper';
+import { red100, red200, red900, yellow900,
+         green200, green900, grey100, white } from 'material-ui/styles/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -35,6 +37,7 @@ const styles = {
     paddingTop: 10,
   },
   formButton: {
+    marginBottom: 10,
     marginRight: 10,
   },
 };
@@ -63,8 +66,8 @@ class SubmissionEditForm extends Component {
     const { intl, attempting, canGrade, questions, questionsFlags,
             handleAutograde, isSaving } = this.props;
     const question = questions[id];
-    const { answerId, attemptsLeft, attemptLimit } = question;
-    const { isAutograding, isResetting } = questionsFlags[id];
+    const { answerId, attemptsLeft, attemptLimit, autogradable } = question;
+    const { hasError, isAutograding, isResetting } = questionsFlags[id] || {};
 
     if (!attempting) {
       return null;
@@ -77,6 +80,9 @@ class SubmissionEditForm extends Component {
 
       return (
         <div>
+          {hasError ? <Paper style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}>
+            {intl.formatMessage(translations.autogradeFailure)}
+          </Paper> : null}
           <RaisedButton
             style={styles.formButton}
             backgroundColor={white}
@@ -84,14 +90,14 @@ class SubmissionEditForm extends Component {
             onTouchTap={() => this.setState({ resetConfirmation: true, resetAnswerId: answerId })}
             disabled={isAutograding || isResetting || isSaving}
           />
-          <RaisedButton
+          {autogradable ? <RaisedButton
             style={styles.formButton}
             backgroundColor={red900}
             secondary
             label={runCodeLabel}
             onTouchTap={() => handleAutograde(answerId)}
             disabled={isAutograding || isResetting || isSaving || (!canGrade && attemptsLeft === 0)}
-          />
+          /> : null}
           {isAutograding || isResetting ? <CircularProgress size={36} style={{ position: 'absolute' }} /> : null}
         </div>
       );
@@ -100,10 +106,10 @@ class SubmissionEditForm extends Component {
   }
 
   renderExplanationPanel(questionId) {
-    const { intl, explanations } = this.props;
+    const { intl, explanations, attempting } = this.props;
     const explanation = explanations[questionId];
 
-    if (explanation && explanation.correct === false) {
+    if (explanation && explanation.correct === false && attempting) {
       let title = '';
       if (explanation.failureType === 'public_test') {
         title = intl.formatMessage(translations.publicTestCaseFailure);
@@ -133,7 +139,7 @@ class SubmissionEditForm extends Component {
   }
 
   renderTabbedQuestions() {
-    const { intl, canGrade, attempting, questionIds, questions, topics } = this.props;
+    const { intl, attempting, questionIds, questions, topics } = this.props;
     return (
       <Tabs>
         {questionIds.map((id, index) => {
@@ -142,7 +148,7 @@ class SubmissionEditForm extends Component {
           const topic = topics[topicId];
           return (
             <Tab key={id} label={intl.formatMessage(translations.questionNumber, { number: index + 1 })}>
-              <SubmissionAnswer {...{ canGrade, readOnly: !attempting, answerId, question }} />
+              <SubmissionAnswer {...{ readOnly: !attempting, answerId, question }} />
               {question.type === questionTypes.Programming ? this.renderExplanationPanel(id) : null}
               {this.renderQuestionGrading(id)}
               {this.renderProgrammingQuestionActions(id)}
@@ -156,7 +162,7 @@ class SubmissionEditForm extends Component {
   }
 
   renderQuestions() {
-    const { canGrade, attempting, questionIds, questions, topics } = this.props;
+    const { attempting, questionIds, questions, topics } = this.props;
     return (
       <div>
         {questionIds.map((id) => {
@@ -165,7 +171,7 @@ class SubmissionEditForm extends Component {
           const topic = topics[topicId];
           return (
             <div key={id} style={styles.questionContainer}>
-              <SubmissionAnswer {...{ canGrade, readOnly: !attempting, answerId, question }} />
+              <SubmissionAnswer {...{ readOnly: !attempting, answerId, question }} />
               {question.type === questionTypes.Programming ? this.renderExplanationPanel(id) : null}
               {this.renderQuestionGrading(id)}
               {this.renderProgrammingQuestionActions(id)}

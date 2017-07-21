@@ -132,6 +132,7 @@ export const AnnotationProp =
 
 export const QuestionFlagsProp =
   PropTypes.shape({
+    hasError: PropTypes.bool.isRequired,
     isAutograding: PropTypes.bool.isRequired,
     isResetting: PropTypes.bool.isRequired,
   });

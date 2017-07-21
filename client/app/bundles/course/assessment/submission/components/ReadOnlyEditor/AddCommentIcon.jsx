@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 export default class AddCommentIcon extends Component {
   static propTypes = {
     onClick: PropTypes.func,
+    hovered: PropTypes.bool,
   };
 
   static defaultProps = {

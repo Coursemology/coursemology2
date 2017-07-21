@@ -7,11 +7,13 @@ import ReactTooltip from 'react-tooltip';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import WrongIcon from 'material-ui/svg-icons/navigation/close';
 import CorrectIcon from 'material-ui/svg-icons/action/done';
-import { red50, green50 } from 'material-ui/styles/colors';
+import { red50, yellow100, green50 } from 'material-ui/styles/colors';
 import { Table, TableHeader, TableHeaderColumn, TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
+import Paper from 'material-ui/Paper';
 
 import ExpandableText from 'lib/components/ExpandableText';
 import { TestCaseProp } from '../propTypes';
+import { workflowStates } from '../constants';
 
 const styles = {
   testCaseRow: {
@@ -84,6 +86,11 @@ const translations = defineMessages({
   standardError: {
     id: 'course.assessment.submission.TestCaseView.standardError',
     defaultMessage: 'Standard Error',
+  },
+  autogradeProgress: {
+    id: 'course.assessment.submission.TestCaseView.autogradeProgress',
+    defaultMessage: 'The answer is currently being evaluated, come back after a while \
+                    to see the latest results.',
   },
 });
 
@@ -159,7 +166,7 @@ class VisibleTestCaseView extends Component {
         <CardHeader title={title} />
         <CardText>
           <Table selectable={false} style={{}}>
-            <TableHeader displaySelectAll={false}>
+            <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
               <TableRow>
                 { canGrade ? tableHeaderColumnFor('identifier') : null }
                 { tableHeaderColumnFor('expression') }
@@ -197,19 +204,25 @@ class VisibleTestCaseView extends Component {
         {tableRowColumnFor(testCase.expression)}
         {tableRowColumnFor(<ExpandableText text={testCase.expected || ''} /> || '')}
         { canGrade ? tableRowColumnFor(<ExpandableText text={testCase.output || ''} /> || '') : null }
-        <TableRowColumn>{testCaseIcon}</TableRowColumn>
+        {tableRowColumnFor(testCaseIcon)}
       </TableRow>
     );
   }
 
   render() {
-    const { testCases, canGrade } = this.props;
+    const { attempting, canGrade, isAutograding, testCases } = this.props;
     if (!testCases) {
       return null;
     }
 
     return (
       <div style={styles.testCasesContainer}>
+        { !attempting && isAutograding ? (
+          <Paper style={{ padding: 10, backgroundColor: yellow100, marginBottom: 20 }}>
+            <FormattedMessage {...translations.autogradeProgress} />
+          </Paper>
+          ) : null
+        }
         <h3><FormattedMessage {...translations.testCases} /></h3>
         {this.renderTestCases(
           testCases.public_test,
@@ -231,7 +244,9 @@ class VisibleTestCaseView extends Component {
 }
 
 VisibleTestCaseView.propTypes = {
+  attempting: PropTypes.bool,
   canGrade: PropTypes.bool,
+  isAutograding: PropTypes.bool,
   testCases: PropTypes.shape({
     evaluation_test: PropTypes.arrayOf(TestCaseProp),
     private_test: PropTypes.arrayOf(TestCaseProp),
@@ -244,6 +259,9 @@ VisibleTestCaseView.propTypes = {
 function mapStateToProps(state, ownProps) {
   const { questionId } = ownProps;
   return {
+    attempting: state.submission.workflowState === workflowStates.Attempting,
+    canGrade: state.submission.canGrade,
+    isAutograding: state.questionsFlags[questionId].isAutograding,
     testCases: state.testCases[questionId],
   };
 }

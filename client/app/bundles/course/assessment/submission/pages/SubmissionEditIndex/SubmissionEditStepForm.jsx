@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-import { white, red200, red900, green200, green500, green900,
+import Paper from 'material-ui/Paper';
+import { white, red100, red200, red900, green200, green500, green900,
          lightBlue400, blue800 } from 'material-ui/styles/colors';
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
 import CircularProgress from 'material-ui/CircularProgress';
@@ -38,10 +39,8 @@ const styles = {
     borderRadius: '5px 5px 0 0',
     padding: 12,
   },
-  formButtonContainer: {
-    marginBottom: 20,
-  },
   formButton: {
+    marginBottom: 10,
     marginRight: 10,
   },
 };
@@ -173,13 +172,28 @@ class SubmissionEditStepForm extends Component {
     return null;
   }
 
+  renderAutogradingErrorPanel(id) {
+    const { intl, questionsFlags } = this.props;
+    const { hasError } = questionsFlags[id] || {};
+
+    if (hasError) {
+      return (
+        <Paper style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}>
+          {intl.formatMessage(translations.autogradeFailure)}
+        </Paper>
+      );
+    }
+
+    return null;
+  }
+
   renderResetButton() {
     const { stepIndex } = this.state;
     const { intl, questionIds, questions, questionsFlags, isSaving } = this.props;
     const id = questionIds[stepIndex];
     const question = questions[id];
     const { answerId } = question;
-    const { isAutograding, isResetting } = questionsFlags[id];
+    const { isAutograding, isResetting } = questionsFlags[id] || {};
 
     if (question.type === questionTypes.Programming) {
       return (
@@ -201,7 +215,7 @@ class SubmissionEditStepForm extends Component {
     const id = questionIds[stepIndex];
     const question = questions[id];
     const { answerId } = question;
-    const { isAutograding, isResetting } = questionsFlags[id];
+    const { isAutograding, isResetting } = questionsFlags[id] || {};
     return (
       <RaisedButton
         style={styles.formButton}
@@ -234,7 +248,7 @@ class SubmissionEditStepForm extends Component {
     const { stepIndex } = this.state;
     const { questionIds, questionsFlags } = this.props;
     const id = questionIds[stepIndex];
-    const { isAutograding, isResetting } = questionsFlags[id];
+    const { isAutograding, isResetting } = questionsFlags[id] || {};
 
     if (isAutograding || isResetting) {
       return <CircularProgress size={36} style={{ position: 'absolute' }} />;
@@ -307,7 +321,7 @@ class SubmissionEditStepForm extends Component {
 
   renderStepQuestion() {
     const { stepIndex } = this.state;
-    const { canGrade, attempting, questionIds, questions, topics } = this.props;
+    const { attempting, questionIds, questions, topics } = this.props;
 
     const id = questionIds[stepIndex];
     const question = questions[id];
@@ -315,17 +329,18 @@ class SubmissionEditStepForm extends Component {
     const topic = topics[topicId];
     return (
       <div>
-        <SubmissionAnswer {...{ canGrade, readOnly: !attempting, answerId, question }} />
+        <SubmissionAnswer {...{ readOnly: !attempting, answerId, question }} />
+        {this.renderAutogradingErrorPanel(id)}
         {this.renderExplanationPanel(question)}
         {this.renderQuestionGrading(id)}
         {this.renderGradingPanel()}
-        {attempting ? <div style={styles.formButtonContainer}>
+        {attempting ? <div>
           {this.renderResetButton()}
           {this.renderSubmitButton()}
           {this.renderContinueButton()}
           {this.renderAnswerLoadingIndicator()}
         </div> : null}
-        <div style={styles.formButtonContainer}>
+        <div>
           {this.renderSaveGradeButton()}
           {this.renderSaveDraftButton()}
           {this.renderFinaliseButton()}
