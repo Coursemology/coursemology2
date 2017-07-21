@@ -31,6 +31,9 @@ class Course::Mailer < ApplicationMailer
     ActsAsTenant.without_tenant do
       @course = enrol_request.course
     end
+
+    return unless Course::Settings::UsersComponent.email_enabled?(@course, :new_enrol_request)
+
     @enrol_request = enrol_request
     @recipient = OpenStruct.new(name: t('course.mailer.user_registered_email.recipients'))
 

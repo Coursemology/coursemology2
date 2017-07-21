@@ -10,6 +10,13 @@ import { updateNotificationSetting } from 'course/admin/actions/notifications';
 import adminTranslations, { defaultComponentTitles } from 'course/admin/translations.intl';
 import translations, { settingTitles, settingDescriptions } from './translations.intl';
 
+const styles = {
+  wrapText: {
+    whiteSpace: 'normal',
+    wordWrap: 'break-word',
+  },
+};
+
 class NotificationSettings extends React.Component {
   static propTypes = {
     notification: notificationShape,
@@ -46,13 +53,13 @@ class NotificationSettings extends React.Component {
 
     return (
       <TableRow key={setting.component + setting.component_title + setting.key}>
-        <TableRowColumn>
+        <TableRowColumn colSpan={2}>
           { componentTitle }
         </TableRowColumn>
-        <TableRowColumn>
+        <TableRowColumn colSpan={3}>
           { settingTitle }
         </TableRowColumn>
-        <TableRowColumn colSpan={2}>
+        <TableRowColumn colSpan={7} style={styles.wrapText}>
           { settingDescription }
         </TableRowColumn>
         <TableRowColumn>
@@ -79,13 +86,13 @@ class NotificationSettings extends React.Component {
           displaySelectAll={false}
         >
           <TableRow>
-            <TableHeaderColumn>
+            <TableHeaderColumn colSpan={2}>
               <FormattedMessage {...adminTranslations.component} />
             </TableHeaderColumn>
-            <TableHeaderColumn>
+            <TableHeaderColumn colSpan={3}>
               <FormattedMessage {...translations.setting} />
             </TableHeaderColumn>
-            <TableHeaderColumn colSpan={2}>
+            <TableHeaderColumn colSpan={7}>
               <FormattedMessage {...translations.description} />
             </TableHeaderColumn>
             <TableHeaderColumn>

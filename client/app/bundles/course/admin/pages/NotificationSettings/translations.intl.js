@@ -54,11 +54,25 @@ export const settingDescriptions = defineMessages({
   },
   new_submission: {
     id: 'course.admin.NotificationSettings.settingDescriptions.new_submission',
-    defaultMessage: "Notify a student's group managers when the student makes a submission.",
+    defaultMessage: "Notify student's group managers when the student makes a submission. Select whether to\
+      send this notification for phantom students via the 'New Phantom Submission' setting.",
   },
-  new_grading: {
-    id: 'course.admin.NotificationSettings.settingDescriptions.new_grading',
+  new_phantom_submission: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.new_phantom_submission',
+    defaultMessage: "Sends 'New Submission' email for phantom students also. If 'New Submission' email\
+      notification is disabled, no emails will be sent even though this setting is enabled.",
+  },
+  grades_released: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.grades_released',
     defaultMessage: 'Notify a student when grades for a submission have been released.',
+  },
+  new_comment: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.new_comment',
+    defaultMessage: 'Notify users when comments or programming question annotations are made.',
+  },
+  new_enrol_request: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.new_enrol_request',
+    defaultMessage: 'Notify staff when users request to enrol in the course.',
   },
 });
 
@@ -87,9 +101,21 @@ export const settingTitles = defineMessages({
     id: 'course.admin.NotificationSettings.settingTitles.new_submission',
     defaultMessage: 'New Submission',
   },
-  new_grading: {
-    id: 'course.admin.NotificationSettings.settingTitles.new_grading',
-    defaultMessage: 'New Grading',
+  new_phantom_submission: {
+    id: 'course.admin.NotificationSettings.settingTitles.new_phantom_submission',
+    defaultMessage: 'New Phantom Submission',
+  },
+  grades_released: {
+    id: 'course.admin.NotificationSettings.settingTitles.grades_released',
+    defaultMessage: 'Grades Released',
+  },
+  new_comment: {
+    id: 'course.admin.NotificationSettings.settingTitles.new_comment',
+    defaultMessage: 'New Comment',
+  },
+  new_enrol_request: {
+    id: 'course.admin.NotificationSettings.settingTitles.new_enrol_request',
+    defaultMessage: 'New Enrol Request',
   },
 });
 

@@ -52,6 +52,19 @@ RSpec.describe Course::Mailer, type: :mailer do
       it 'sets the correct subject' do
         expect(subject.subject).to eq(I18n.t('course.mailer.user_registered_email.subject'))
       end
+
+      context 'when email notification for new enrol request is disabled' do
+        before do
+          context = OpenStruct.new(key: Course::UsersComponent.key, current_course: course)
+          Course::Settings::UsersComponent.new(context).
+            update_email_setting('key' => 'new_enrol_request', 'enabled' => false)
+          course.save!
+        end
+
+        it 'does not send an email notification' do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+      end
     end
   end
 end
