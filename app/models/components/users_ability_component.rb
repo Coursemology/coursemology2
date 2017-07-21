@@ -17,6 +17,6 @@ module UsersAbilityComponent
 
   def allow_registered_user_submit_role_requests
     can :create, Instance::UserRoleRequest
-    can :edit, Instance::UserRoleRequest, user_id: user.id
+    can :update, Instance::UserRoleRequest, user_id: user.id
   end
 end

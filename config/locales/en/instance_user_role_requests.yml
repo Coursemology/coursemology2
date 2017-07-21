@@ -8,9 +8,19 @@ en:
       reason: 'Reason'
     new:
       header: 'Request to be an instructor or administrator'
+    edit:
+      header: 'Edit Role Request'
+    form:
       hint: 'Please provide the following information for us to review your request.'
+      role_label: 'Request to be'
+      instructor: 'Instructor (can create courses)'
+      administrator: 'Administrator (can create courses and give others instructor permissions)'
+      create_button: 'Submit Request'
+      edit_button: 'Edit Request'
     create:
       success: 'Your role request was submitted.'
+    update:
+      success: 'Your role request was updated.'
     destroy:
       success: 'The request was deleted.'
     approve:

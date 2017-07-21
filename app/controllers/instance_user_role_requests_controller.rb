@@ -20,6 +20,17 @@ class InstanceUserRoleRequestsController < ApplicationController
     end
   end
 
+  def edit
+  end
+
+  def update
+    if @user_role_request.update(user_role_request_params)
+      redirect_to courses_path, success: t('.success')
+    else
+      render 'edit'
+    end
+  end
+
   def approve
     @user_role_request.assign_attributes(user_role_request_params)
 

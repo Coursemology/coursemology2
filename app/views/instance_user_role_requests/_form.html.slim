@@ -1,0 +1,10 @@
+p = t('.hint')
+
+= simple_form_for [:instance, @user_role_request] do |f|
+  = f.input :role, as: :select, collection: Instance::UserRoleRequest.roles.keys.map { |k| [t(".#{k}"), k]},
+                   label: t('.role_label')
+  = f.input :organization
+  = f.input :designation
+  = f.input :reason
+
+  = f.button :submit, f.object.persisted? ? t('.edit_button') : t('.create_button')
