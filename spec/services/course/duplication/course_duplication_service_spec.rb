@@ -23,13 +23,7 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
       context 'when children are simple' do
         let!(:forum) { create(:forum, course: course) }
         let!(:milestones) { create_list(:course_lesson_plan_milestone, 3, course: course) }
-        # Create one of each type of lesson plan event
-        let!(:events) do
-          create(:course_lesson_plan_event, course: course)
-          create(:recitation, course: course)
-          create(:tutorial, course: course)
-          create(:lecture, course: course)
-        end
+        let!(:event) { create(:course_lesson_plan_event, course: course) }
         let!(:video) { create(:video, course: course) }
 
         it 'duplicates a course with the new title' do

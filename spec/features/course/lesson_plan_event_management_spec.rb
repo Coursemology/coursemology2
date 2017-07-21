@@ -21,6 +21,7 @@ RSpec.feature 'Course: Events' do
 
         fill_in 'title', with: 'Title'
         fill_in 'start_at', with: 1.day.from_now
+        fill_in 'event_type', with: 'Live Lecture'
 
         expect do
           click_button I18n.t('helpers.submit.lesson_plan_event.create')

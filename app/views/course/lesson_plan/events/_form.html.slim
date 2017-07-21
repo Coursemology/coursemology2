@@ -1,5 +1,5 @@
 = simple_form_for [current_course, @event], resource: :course_lesson_plan_event do |f|
-  = f.input :event_type, collection: Course::LessonPlan::Event.event_types.keys
+  = f.input :event_type
   = f.input :title
   = f.input :description
   = f.input :location
