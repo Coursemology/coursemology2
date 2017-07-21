@@ -182,7 +182,7 @@ class VisibleTestCaseView extends Component {
 
     let testCaseResult = 'unattempted';
     let testCaseIcon;
-    if (testCase.output) {
+    if (testCase.passed !== undefined) {
       testCaseResult = testCase.passed ? 'correct' : 'wrong';
       testCaseIcon = testCase.passed ? <CorrectIcon /> : <WrongIcon />;
     }
