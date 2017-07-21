@@ -5,14 +5,13 @@ class Course::Assessment::Answer::AutoGradingService
     # +Course::Assessment::Answer::AutoGrading+ object.
     #
     # @param [Course::Assessment::Answer] answer The answer to be graded.
-    # @param [Boolean] reattempt Whether to reattempt the answer after grading.
-    def grade(answer, reattempt = false)
+    def grade(answer)
       answer = if answer.question.auto_gradable?
                  pick_grader(answer.question).grade(answer)
                else
                  assign_maximum_grade(answer)
                end
-      save!(answer, reattempt)
+      answer.save!
     end
 
     private
@@ -24,23 +23,6 @@ class Course::Assessment::Answer::AutoGradingService
     #   grade this question.
     def pick_grader(question)
       question.auto_grader
-    end
-
-    # Save the graded answer. If reattempt is set to true and if the submission is still in an
-    # attempting state, a new answer will be created. This is to prevent a race condition to
-    # prevent new answers from being created if the submission is attempting.
-    #
-    # @param [Course::Assessment::Answer] answer The answer to be graded.
-    # @param [Boolean] reattempt Whether to reattempt the answer after grading.
-    def save!(answer, reattempt)
-      Course::Assessment::Answer.transaction do
-        answer.save!
-        # Only create new answer if submission is still in an attempting state.
-        if reattempt && answer.submission.reload.attempting?
-          new_answer = answer.question.attempt(answer.submission, answer)
-          new_answer.save!
-        end
-      end
     end
 
     # Grades into the given +Course::Assessment::Answer::AutoGrading+ object. This assigns the grade

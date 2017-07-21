@@ -167,15 +167,16 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     end
   end
 
-  def grade_and_reattempt_answer(answer)
-    # The transaction is to make sure that auto grading and job are present when the answer is in
-    # the submitted state.
+  def reattempt_and_grade_answer(answer)
+    # The transaction is to make sure that the new attempt, auto grading and job are present when
+    # the current answer is submitted.
     answer.class.transaction do
-      answer.finalise! if answer.attempting?
-      # Only save if answer is graded in another server
-      answer.save! unless answer.grade_inline?
-      answer.auto_grade!(redirect_to_path: nil,
-                         reattempt: true, reduce_priority: false)
+      last_answer = answer.submission.answers.select { |ans| ans.question_id == answer.question_id }.last
+      last_answer.destroy! if last_answer&.auto_grading&.job&.errored?
+      new_answer = answer.question.attempt(answer.submission, answer)
+      new_answer.finalise!
+      new_answer.save!
+      new_answer.auto_grade!(redirect_to_path: nil, reduce_priority: false)
     end
   end
 
