@@ -20,7 +20,7 @@ json.assessment do
   json.categoryId @assessment.tab.category_id
 end
 
-answers = @submission.latest_answers
+answers = @submission.current_answers
 
 json.partial! 'questions', assessment: @assessment, submission: @submission, can_grade: can_grade,
                            answers: answers

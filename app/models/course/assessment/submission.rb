@@ -166,12 +166,21 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   # The total grade of the submission
   def grade
-    latest_answers.map { |a| a.grade || 0 }.sum
+    current_answers.map { |a| a.grade || 0 }.sum
   end
 
-  # The latest answer is last answer of the question, ordered by created_at.
+  # The latest answer is the last answer of the question, ordered by created_at.
   def latest_answers
     answers.group_by(&:question_id).map { |pair| pair[1].last }
+  end
+
+  # The answers with current_answer flag set to true.
+  #
+  # If there are multiple current_answers for a particular question, return the first one.
+  # This guards against a race condition creating multiple current_answers for a given
+  # question in load_or_create_answers.
+  def current_answers
+    answers.select(&:current_answer?).group_by(&:question_id).map { |pair| pair[1].first }
   end
 
   # Returns all graded answers of the question in current submission.
