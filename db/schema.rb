@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170720071725) do
+ActiveRecord::Schema.define(version: 20170721061506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -523,8 +523,8 @@ ActiveRecord::Schema.define(version: 20170720071725) do
   add_index "course_group_users", ["course_user_id", "group_id"], :name=>"index_course_group_users_on_course_user_id_and_course_group_id", :unique=>true
 
   create_table "course_lesson_plan_events", force: :cascade do |t|
-    t.string  "location",   :limit=>255
-    t.integer "event_type", :default=>0, :null=>false
+    t.string "location",   :limit=>255
+    t.string "event_type", :limit=>255, :null=>false
   end
 
   create_table "course_material_folders", force: :cascade do |t|
