@@ -10,6 +10,7 @@ class Course::EnrolRequestsController < Course::ComponentController
   def create
     @enrol_request.user = current_user
     if @enrol_request.save
+      Course::Mailer.user_enrol_requested_email(@enrol_request).deliver_later
       redirect_to course_path(current_course), success: t('.success')
     else
       redirect_to course_path(current_course),

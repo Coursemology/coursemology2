@@ -27,7 +27,7 @@ class Course::Mailer < ApplicationMailer
   # Sends a notification email to the course managers to approve a given EnrolRequest.
   #
   # @param [Course] enrol_request The user enrol request.
-  def user_registered_email(enrol_request)
+  def user_enrol_requested_email(enrol_request)
     ActsAsTenant.without_tenant do
       @course = enrol_request.course
     end
@@ -35,7 +35,7 @@ class Course::Mailer < ApplicationMailer
     return unless Course::Settings::UsersComponent.email_enabled?(@course, :new_enrol_request)
 
     @enrol_request = enrol_request
-    @recipient = OpenStruct.new(name: t('course.mailer.user_registered_email.recipients'))
+    @recipient = OpenStruct.new(name: t('course.mailer.user_enrol_requested_email.recipients'))
 
     mail(to: @course.managers.map(&:user).map(&:email),
          subject: t('.subject', course: @course.title))

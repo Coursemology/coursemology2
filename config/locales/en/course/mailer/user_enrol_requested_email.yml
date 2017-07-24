@@ -1,11 +1,11 @@
 en:
   course:
     mailer:
-      user_registered_email:
-        subject: 'Registration Request for %{course}'
+      user_enrol_requested_email:
+        subject: 'Enrol Request for %{course}'
         recipients: 'Course Managers'
         message: >
-          %{user} has requested to register for %{course}
+          %{user} has requested to enrol in %{course}
 
 
           You can visit the %{course_requests_page} to view and approve requests.
