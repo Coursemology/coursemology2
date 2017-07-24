@@ -14,6 +14,7 @@ class InstanceUserRoleRequestsController < ApplicationController
   def create
     @user_role_request.user = current_user
     if @user_role_request.save
+      @user_role_request.send_new_request_email(current_tenant)
       redirect_to courses_path, success: t('.success')
     else
       render 'new'
@@ -36,6 +37,7 @@ class InstanceUserRoleRequestsController < ApplicationController
 
     @success, instance_user = @user_role_request.approve_and_destroy!
     if @success
+      InstanceUserRoleRequestMailer.role_request_approved(instance_user).deliver_later
       flash.now[:success] = t('.success', user: instance_user.user.name, role: instance_user.role)
     else
       flash.now[:danger] = instance_user.errors.full_messages.to_sentence

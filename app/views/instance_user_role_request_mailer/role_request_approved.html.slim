@@ -1,0 +1,6 @@
+= simple_format(\
+    t('.message',
+      role: @instance_user.role,
+      click_here: link_to(t('common.click_here'), new_course_url(host: @instance.host))\
+    )\
+  )

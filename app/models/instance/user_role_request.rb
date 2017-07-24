@@ -21,6 +21,19 @@ class Instance::UserRoleRequest < ActiveRecord::Base
     [success, instance_user]
   end
 
+  def send_new_request_email(instance)
+    ActsAsTenant.without_tenant do
+      admins = instance.instance_users.administrator.map(&:user).to_set
+
+      # Also send emails to global admins if it's default instance.
+      admins += User.administrator if instance.default? || admins.empty?
+
+      admins.each do |admin|
+        InstanceUserRoleRequestMailer.new_role_request(self, admin).deliver_later
+      end
+    end
+  end
+
   private
 
   def set_default_role

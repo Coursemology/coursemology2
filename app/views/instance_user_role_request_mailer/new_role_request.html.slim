@@ -1,0 +1,12 @@
+- user = @request.user
+= simple_format(\
+    t('.message_html',
+      user: user.name,
+      email: user.email,
+      role: @request.role,
+      organization: @request.organization || t('.empty'),
+      designation: @request.designation || t('.empty'),
+      reason: @request.reason || t('.empty'),
+      click_here: link_to(t('common.click_here'), instance_user_role_requests_url(host: @request.instance.host))\
+    )\
+  )

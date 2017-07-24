@@ -1,0 +1,7 @@
+<%=
+  t(
+    '.message',
+    role: @instance_user.role,
+    click_here: plain_link_to(t('common.click_here'), new_course_url(host: @instance.host))
+   )
+%>
