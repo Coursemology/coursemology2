@@ -1,9 +1,14 @@
+- active_level = course.user_count == 0 ? 0 : course.active_user_count * 100 / course.user_count.to_f
+
 = content_tag_for(:tr, course)
   td = (current_page - 1) * per_page + course_counter + 1
   th
     = link_to format_inline_text(course.title),
               course_url(course, host: course.instance.host, port: nil)
-  td = format_datetime(course.created_at)
+  td = format_datetime(course.created_at, :date_only_long)
+  td.active-level
+    = display_progress_bar(active_level, 'progress-bar-success')
+    = "#{course.active_user_count} / #{course.user_count}"
   td
     = link_to format_inline_text(course.instance.name),
               root_url(host: course.instance.host, port: nil)

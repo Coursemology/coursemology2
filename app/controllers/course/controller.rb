@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Controller < ApplicationController
   load_and_authorize_resource :course
+  before_action :set_last_active_at
   helper name
 
   before_action :add_course_breadcrumb
@@ -73,5 +74,14 @@ class Course::Controller < ApplicationController
   def add_course_breadcrumb
     add_breadcrumb(current_course.title, course_path(current_course)) if
       current_course.present? && current_course.id.present?
+  end
+
+  def set_last_active_at
+    return if current_course.nil? || current_course_user.nil?
+
+    # Only update the timestamp every hour
+    return if current_course_user.last_active_at && current_course_user.last_active_at > 1.hour.ago
+
+    current_course_user.update_column(:last_active_at, Time.zone.now)
   end
 end

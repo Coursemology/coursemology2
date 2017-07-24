@@ -3,12 +3,14 @@ en:
     admin:
       instances:
         index:
-          header: 'Instance Management'
+          header: 'Instances'
           serial_number: 'S/N'
           name: 'Name'
           host_name: 'Host Name'
-          users: 'Total Users'
-          courses: 'Total Courses'
+          users: 'Active / Total Users'
+          users_hint: 'Number of active users in the past 7 days'
+          courses: 'Active / Total Courses'
+          courses_hint: 'Number of active courses in the past 7 days'
         new:
           header: 'New Instance'
         create:

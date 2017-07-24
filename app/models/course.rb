@@ -48,6 +48,16 @@ class Course < ActiveRecord::Base
 
   accepts_nested_attributes_for :invitations, :assessment_categories
 
+  calculated :user_count, (lambda do
+    CourseUser.select("count('*')").
+      where('course_users.course_id = courses.id')
+  end)
+
+  calculated :active_user_count, (lambda do
+    CourseUser.select("count('*')").
+      where('course_users.course_id = courses.id').merge(CourseUser.active_in_past_7_days)
+  end)
+
   scope :ordered_by_title, -> { order(:title) }
   scope :ordered_by_start_at, ->(direction = :desc) { order(start_at: direction) }
   scope :ordered_by_end_at, ->(direction = :desc) { order(end_at: direction) }
@@ -69,6 +79,8 @@ class Course < ActiveRecord::Base
       preloader.preload(result, :course_users, course_users)
     end
   end)
+
+  scope :active_in_past_7_days, -> { joins(:course_users).merge(CourseUser.active_in_past_7_days) }
 
   delegate :staff, to: :course_users
   delegate :instructors, to: :course_users

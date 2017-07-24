@@ -92,6 +92,7 @@ class CourseUser < ActiveRecord::Base
   end)
 
   scope :order_alphabetically, ->(direction = :asc) { order(name: direction) }
+  scope :active_in_past_7_days, -> { where('last_active_at > ?', 7.days.ago) }
 
   # Test whether the current scope includes the current user.
   #

@@ -1,5 +1,12 @@
 = page_header
 
+- if params[:search].blank?
+  .panel.panel-default
+    .panel-heading = t('common.summary')
+    .panel-body
+      div = t('.total_users_html', count: User.count)
+      div = t('.active_users_html', count: User.active_in_past_7_days.count)
+
 = render partial: 'layouts/search_form', locals: { url: admin_users_path, placeholder: t('.search_placeholder') }
 
 table.table.table-middle-align.table-hover

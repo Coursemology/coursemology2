@@ -64,6 +64,7 @@ class User < ActiveRecord::Base
 
   scope :ordered_by_name, -> { order(:name) }
   scope :human_users, -> { where.not(id: [User::SYSTEM_USER_ID, User::DELETED_USER_ID]) }
+  scope :active_in_past_7_days, -> { where('current_sign_in_at > ?', 7.days.ago) }
 
   # Gets whether the current user is one of the the built in users.
   #

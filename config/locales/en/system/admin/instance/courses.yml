@@ -5,10 +5,12 @@ en:
         courses:
           index:
             header: 'Courses'
-            header_with_count: 'Courses (%{count})'
+            total_courses_html: 'Total Courses: <strong>%{count}</strong>'
+            active_courses_html: 'Active Courses (in the past 7 days): <strong>%{count}</strong>'
             serial_number: 'S/N'
             title: 'Title'
             created_at: 'Created At'
+            users: 'Active / Total Users'
             owners: 'Owners'
             search_placeholder: 'Search course title, description or related users'
           destroy:

@@ -1,8 +1,13 @@
+- active_level = course.user_count == 0 ? 0 : course.active_user_count * 100 / course.user_count.to_f
+
 = content_tag_for(:tr, course)
   td = (current_page - 1) * per_page + course_counter + 1
   th
     = link_to format_inline_text(course.title), course_path(course)
   td = format_datetime(course.created_at)
+  td.active-level
+    = display_progress_bar(active_level, 'progress-bar-success')
+    = "#{course.active_user_count} / #{course.user_count}"
   td
     ul.list-unstyled
       - course.course_users.each do |course_owner|

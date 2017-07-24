@@ -5,7 +5,7 @@ class System::Admin::CoursesController < System::Admin::Controller
 
   def index
     @courses = Course.ordered_by_title.page(page_param).includes(:instance).
-               search(search_param).with_owners
+               search(search_param).calculated(:active_user_count, :user_count).with_owners
   end
 
   def destroy
