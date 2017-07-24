@@ -13,6 +13,8 @@ import { red100, red200, red900, yellow900,
          green200, green900, grey100, white } from 'material-ui/styles/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { ExplanationProp, QuestionProp, QuestionFlagsProp,
         QuestionGradeProp, TopicProp } from '../../propTypes';
@@ -45,8 +47,8 @@ const styles = {
 class SubmissionEditForm extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
+      examNotice: props.newSubmission && props.passwordProtected,
       submitConfirmation: false,
       unsubmitConfirmation: false,
       resetConfirmation: false,
@@ -383,6 +385,27 @@ class SubmissionEditForm extends Component {
     );
   }
 
+  renderExamDialog() {
+    const { intl } = this.props;
+
+    return (
+      <Dialog
+        title={intl.formatMessage(translations.examDialogTitle)}
+        actions={
+          <FlatButton
+            primary
+            label="OK"
+            onTouchTap={() => this.setState({ examNotice: false })}
+          />
+        }
+        modal
+        open={this.state.examNotice}
+      >
+        {intl.formatMessage(translations.examDialogMessage)}
+      </Dialog>
+    );
+  }
+
   render() {
     const { tabbedView } = this.props;
     return (
@@ -402,6 +425,7 @@ class SubmissionEditForm extends Component {
         {this.renderSubmitDialog()}
         {this.renderUnsubmitDialog()}
         {this.renderResetDialog()}
+        {this.renderExamDialog()}
       </Card>
     );
   }
@@ -412,8 +436,10 @@ SubmissionEditForm.propTypes = {
 
   canGrade: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,
-  tabbedView: PropTypes.bool.isRequired,
   delayedGradePublication: PropTypes.bool.isRequired,
+  newSubmission: PropTypes.bool.isRequired,
+  passwordProtected: PropTypes.bool.isRequired,
+  tabbedView: PropTypes.bool.isRequired,
 
   attempting: PropTypes.bool.isRequired,
   submitted: PropTypes.bool.isRequired,

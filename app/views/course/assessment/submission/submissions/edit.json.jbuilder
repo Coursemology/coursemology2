@@ -9,6 +9,7 @@ json.assessment do
   json.delayedGradePublication @assessment.delayed_grade_publication
   json.tabbedView @assessment.tabbed_view
   json.questionIds @assessment.questions.map(&:id)
+  json.passwordProtected @assessment.password_protected?
 end
 
 answers = @submission.latest_answers

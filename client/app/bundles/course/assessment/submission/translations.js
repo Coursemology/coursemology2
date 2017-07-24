@@ -182,6 +182,15 @@ const translations = defineMessages({
     id: 'course.assessment.submission.autogradeSubmissionFailure',
     defaultMessage: 'An error occurred while evaluating the answers.',
   },
+  examDialogTitle: {
+    id: 'course.assessment.submission.examDialogTitle',
+    defaultMessage: 'You are entering an exam.',
+  },
+  examDialogMessage: {
+    id: 'course.assessment.submission.examDialogMessage',
+    defaultMessage: 'Please do not sign out or close the browser, otherwise \
+                    you may have trouble continuing the exam.',
+  },
 });
 
 export default translations;

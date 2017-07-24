@@ -18,6 +18,15 @@ import {
 import { formNames, workflowStates } from '../../constants';
 
 class VisibleSubmissionEditIndex extends Component {
+  constructor(props) {
+    super(props);
+    const { location: { search } } = props;
+    const query = new URLSearchParams(search);
+    this.state = {
+      newSubmission: !!query.get('new_submission'),
+    };
+  }
+
   componentDidMount() {
     const { dispatch, match: { params } } = this.props;
     dispatch(fetchSubmission(params.submissionId));
@@ -100,8 +109,10 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   renderContent() {
+    const { newSubmission } = this.state;
     const {
-      assessment: { autograded, delayedGradePublication, tabbedView, skippable, questionIds },
+      assessment: { autograded, delayedGradePublication, tabbedView,
+                    skippable, questionIds, passwordProtected },
       submission: { canGrade, canUpdate, maxStep, workflowState },
       answers,
       explanations,
@@ -164,6 +175,8 @@ class VisibleSubmissionEditIndex extends Component {
         attempting={workflowState === workflowStates.Attempting}
         submitted={workflowState === workflowStates.Submitted}
         graded={workflowState === workflowStates.Graded}
+        newSubmission={newSubmission}
+        passwordProtected={passwordProtected}
         published={workflowState === workflowStates.Published}
         posts={posts}
         questionIds={questionIds}
@@ -196,6 +209,9 @@ class VisibleSubmissionEditIndex extends Component {
 
 VisibleSubmissionEditIndex.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  location: PropTypes.shape({
+    search: PropTypes.string,
+  }),
   match: PropTypes.shape({
     params: PropTypes.shape({
       courseId: PropTypes.string,
