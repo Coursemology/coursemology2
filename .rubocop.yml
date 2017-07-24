@@ -13,7 +13,16 @@ AllCops:
   TargetRubyVersion: 2.3
 
 Metrics/LineLength:
-  Max: 100
+  Max: 120
+
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/MethodLength:
+  Max: 15
+
+Metrics/BlockLength:
+  Enabled: false
 
 Rails:
   Enabled: true
@@ -21,22 +30,22 @@ Rails:
 Rails/HasAndBelongsToMany:
   Enabled: false
 
+Rails/SkipsModelValidations:
+  Enabled: false
+
 # TODO: Cop only applies to Rails 5, to remove once upgraded.
 #       References bbatsov/rubocop#3629
 Rails/HttpPositionalArguments:
   Enabled: false
 
+Rails/ApplicationRecord:
+  Enabled: false
+
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
 
-Style/DotPosition:
-  EnforcedStyle: trailing
-
 Style/Documentation:
   Enabled: false
-
-Style/IndentHash:
-  EnforcedStyle: consistent
 
 Style/IfUnlessModifier:
   MaxLineLength: 100
@@ -53,11 +62,26 @@ Style/WhileUntilModifier:
 Style/WordArray:
   Enabled: false
 
+Style/SymbolArray:
+  Enabled: false
+
 Style/RegexpLiteral:
   AllowInnerSlashes: true
 
 Style/NumericPredicate:
   EnforcedStyle: comparison
 
+Style/EmptyMethod:
+  Enabled: false
+
+Style/SignalException:
+  EnforcedStyle: only_raise
+
 Layout/EmptyLineAfterMagicComment:
   Enabled: false
+
+Layout/IndentHash:
+  EnforcedStyle: consistent
+
+Layout/DotPosition:
+  EnforcedStyle: trailing
