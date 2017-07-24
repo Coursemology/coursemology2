@@ -5,7 +5,7 @@
         = link_to_reset_answer(answer)
       = base_answer_form.button :button, t('common.submit'), value: answer.id,
           name: 'answer_id', class: ['btn-danger', 'submit-answer']
-  - elsif answer.submitted? && job = answer.try(:auto_grading).try(:job)
+  - elsif answer.submitted? && job = answer&.auto_grading&.job
     - if job.errored?
       p.bg-danger = t('.error')
       = base_answer_form.button :button, t('common.submit'), value: answer.id,

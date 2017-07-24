@@ -10,7 +10,7 @@ FactoryGirl.define do
 
     tab do
       category = course.assessment_categories.first
-      category.try(:tabs).try(:first) || build(:course_assessment_tab, course: course)
+      category&.tabs&.first || build(:course_assessment_tab, course: course)
     end
     title { generate(:course_assessment_assessment_name) }
     description { generate(:course_assessment_assessment_description) }

@@ -91,7 +91,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     if @old_meta.present?
       package.unzip_file @tmp_dir
 
-      @old_meta['data_files'].try(:each) do |file|
+      @old_meta['data_files']&.each do |file|
         next if data_files_to_delete.try(:include?, (file['filename']))
         # new files overrides old ones
         next if new_data_filenames.include?(file['filename'])
@@ -161,7 +161,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     end
 
     Zip::File.open(tmp.path) do |zip|
-      @test_params[:data_files].try(:each) do |file|
+      @test_params[:data_files]&.each do |file|
         next if file.nil?
         zip.add(file.original_filename, file.tempfile.path)
       end

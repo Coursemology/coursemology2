@@ -27,7 +27,7 @@
                                              class: ['submit-answer', 'btn-danger'],
                                              title: t('.run_code_evaluation_warning'),
                                              disabled: !enable_submit_button?(programming_answer)
-  - elsif answer.submitted? && job = answer.try(:auto_grading).try(:job)
+  - elsif answer.submitted? && job = answer&.auto_grading&.job
     - if job.errored?
       p.bg-danger = t('.error')
       = base_answer_form.button :button, button_text, value: answer.id, name: 'answer_id', class: ['submit-answer', 'btn-danger']

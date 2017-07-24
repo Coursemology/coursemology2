@@ -46,7 +46,7 @@ module ApplicationCocoonHelper
   #   @return [String]
   def link_to_add_association(name, form, association = nil, html_options = nil, &block)
     name, form, association, html_options = nil, name, form, association if block_given?
-    html_options = html_options.try(:dup) || {}
+    html_options = html_options&.dup || {}
     replace_cocoon_keys(html_options)
     super(*[name, form, association, html_options].compact, &block)
   end

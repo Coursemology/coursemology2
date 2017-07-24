@@ -25,7 +25,7 @@ module ApplicationWidgetsHelper
     name, options, html_options = [nil, name, options] unless html_options
     options = [:new] + [*options] unless options.is_a?(String)
     block ||= proc { fa_icon 'file'.freeze }
-    resource_button(:new, 'btn-primary'.freeze, name || block, options, html_options.try(:dup))
+    resource_button(:new, 'btn-primary'.freeze, name || block, options, html_options&.dup)
   end
 
   # Create a +edit+ button.
@@ -53,7 +53,7 @@ module ApplicationWidgetsHelper
     name, options, html_options = [nil, name, options] unless html_options
     options = [:edit] + [*options] unless options.is_a?(String)
     block ||= proc { fa_icon 'edit'.freeze }
-    resource_button(:edit, 'btn-default'.freeze, name || block, options, html_options.try(:dup))
+    resource_button(:edit, 'btn-default'.freeze, name || block, options, html_options&.dup)
   end
 
   # Create a +delete+ button.
@@ -81,7 +81,7 @@ module ApplicationWidgetsHelper
     name, options, html_options = [nil, name, options] unless html_options
     block ||= proc { fa_icon 'trash'.freeze }
 
-    html_options = html_options.try(:dup) || {}
+    html_options = html_options&.dup || {}
     html_options.reverse_merge!(method: :delete,
                                 data: { confirm: t('helpers.buttons.delete_confirm_message') })
     resource_button(:delete, 'btn-danger'.freeze, name || block, options, html_options)

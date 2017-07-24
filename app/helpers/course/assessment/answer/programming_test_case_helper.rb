@@ -53,7 +53,7 @@ module Course::Assessment::Answer::ProgrammingTestCaseHelper
     results_hash = auto_grading ? auto_grading.test_results.group_by(&:test_case) : {}
     test_cases_by_type.each do |type, test_cases|
       test_cases_by_type[type] =
-        test_cases.map { |test_case| [test_case, results_hash[test_case].try(&:first)] }.
+        test_cases.map { |test_case| [test_case, results_hash[test_case]&.first] }.
         sort_by { |test_case, _| test_case.identifier }.to_h
     end
   end

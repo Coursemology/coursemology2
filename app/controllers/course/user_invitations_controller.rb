@@ -76,7 +76,7 @@ class Course::UserInvitationsController < Course::ComponentController
   # @return [Tempfile]
   # @return [Hash]
   def invitation_params
-    @invitation_params ||= course_user_invitation_params[:invitations_file].try(:tempfile) ||
+    @invitation_params ||= course_user_invitation_params[:invitations_file]&.tempfile ||
                            course_user_invitation_params[:invitations_attributes]
   end
 
