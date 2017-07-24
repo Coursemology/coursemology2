@@ -10,10 +10,10 @@ module Course::Assessment::Submission::WorkflowEventConcern
 
   # Handles the finalisation of a submission.
   #
-  # This finalises all latest answers as well.
+  # This finalises all current answers as well.
   def finalise(_ = nil)
     self.submitted_at = Time.zone.now
-    latest_answers.select(&:attempting?).each(&:finalise!)
+    current_answers.select(&:attempting?).each(&:finalise!)
   end
 
   # Handles the marking of a submission.
@@ -49,7 +49,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
     # Skip the state validation in answers.
     @unsubmitting = true
 
-    unsubmit_latest_answers
+    unsubmit_current_answers
     self.points_awarded = nil
     self.draft_points_awarded = nil
     self.awarded_at = nil
@@ -82,8 +82,8 @@ module Course::Assessment::Submission::WorkflowEventConcern
     end
   end
 
-  def unsubmit_latest_answers
-    latest_answers.each do |answer|
+  def unsubmit_current_answers
+    current_answers.each do |answer|
       answer.unsubmit! unless answer.attempting?
     end
   end

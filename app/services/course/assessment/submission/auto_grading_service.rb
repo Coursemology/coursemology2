@@ -88,9 +88,10 @@ class Course::Assessment::Submission::AutoGradingService
     submission.publish!
   end
 
-  # Gets the ungraded answers for the given submission
+  # Gets the ungraded answers for the given submission.
+  # When the submission is being graded, the `current_answers` are the ones to grade.
   def ungraded_answers(submission)
-    submission.reload.latest_answers.select { |a| a.attempting? || a.submitted? }
+    submission.reload.current_answers.select { |a| a.attempting? || a.submitted? }
   end
 
   # Calculating scheme:
