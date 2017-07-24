@@ -1,0 +1,33 @@
+GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
+                $(GTEST_DIR)/include/gtest/internal/*.h
+
+CPPFLAGS += -isystem $(GTEST_DIR)/include
+CXXFLAGS += -g -w -Wall -Wextra -pthread -std=c++11
+
+prepare: answer.cc
+
+compile: answer.bin
+
+test:
+	./answer.bin
+
+answer.bin: answer.cc ${GTEST_HEADERS} ${GTEST_DIR}/libgtest.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) answer.cc ${GTEST_DIR}/libgtest.a -o $@
+
+answer.cc: tests/prepend.cc submission/template.c tests/append.cc tests/autograde.cc
+	cat tests/prepend.cc submission/template.c tests/append.cc tests/autograde.cc > answer.cc
+
+solution: solution.bin
+	./solution.bin
+
+solution.bin: solution.cc ${GTEST_HEADERS} ${GTEST_DIR}/libgtest.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ solution.cc ${GTEST_DIR}/libgtest.a
+
+solution.cc: tests/prepend.cc solution/template.c tests/append.cc tests/autograde.cc
+	cat tests/prepend.cc solution/template.c tests/append.cc tests/autograde.cc > solution.cc
+
+clean:
+	rm -f *.cc *.o *.bin report.xml
+
+.PHONY: prepare compile test solution clean
+
