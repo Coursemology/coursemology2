@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getFormValues, isPristine } from 'redux-form';
 import * as actionCreators from 'course/survey/actions/surveys';
-import FormDialogue from 'course/survey/components/FormDialogue';
+import FormDialogue from 'lib/components/FormDialogue';
 import { formNames } from 'course/survey/constants';
 import SurveyForm from './SurveyForm';
 

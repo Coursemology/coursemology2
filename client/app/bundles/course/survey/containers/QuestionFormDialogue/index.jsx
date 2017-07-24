@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { getFormValues, isPristine } from 'redux-form';
 import { formNames } from 'course/survey/constants';
 import * as actionCreators from 'course/survey/actions/questions';
-import FormDialogue from 'course/survey/components/FormDialogue';
+import FormDialogue from 'lib/components/FormDialogue';
 import QuestionForm from './QuestionForm';
 
 function mapStateToProps({ questionForm, ...state }) {
