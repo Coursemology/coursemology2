@@ -35,9 +35,11 @@ RSpec.feature 'Courses: Registration' do
 
         expect(page).to have_text(course.description)
 
+        expect(ActionMailer::Base.deliveries.count).to eq(0)
         click_link I18n.t('course.user_registrations.registration.new_enrol_request_button')
         expect(page).
           to have_selector('div.alert', text: I18n.t('course.enrol_requests.create.success'))
+        expect(ActionMailer::Base.deliveries.count).not_to eq(0)
 
         # Cancel request
         click_link I18n.t('course.user_registrations.registration.deregister')

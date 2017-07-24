@@ -47,7 +47,7 @@ RSpec.describe Course::UserRegistrationService, type: :service do
 
       context 'when the given registration does not have a registration code' do
         it 'fails' do
-          expect(subject.register(registration)).to be_nil
+          expect(subject.register(registration)).to eq(false)
         end
       end
     end

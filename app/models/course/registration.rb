@@ -26,12 +26,6 @@ class Course::Registration
   #   @return [CourseUser]
   attr_accessor :course_user
 
-  # @!attribute [rw] enrol_request
-  #   The enrol request created from the registration object.
-  #   @return [nil]
-  #   @return [Course::EnrolRequest]
-  attr_accessor :enrol_request
-
   # @!attribute [r] errors
   #   The errors associated with this model.
   #   @return [Hash]

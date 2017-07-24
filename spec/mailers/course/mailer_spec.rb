@@ -41,16 +41,16 @@ RSpec.describe Course::Mailer, type: :mailer do
       end
     end
 
-    describe '#user_registered_email' do
+    describe '#user_enrol_requested_email' do
       let(:enrol_request) { create(:course_enrol_request, course: course) }
-      let(:mail) { Course::Mailer.user_registered_email(enrol_request) }
+      let(:mail) { Course::Mailer.user_enrol_requested_email(enrol_request) }
 
       it 'sends to the course staff' do
         expect(subject.to).to contain_exactly(*course.managers.map(&:user).map(&:email))
       end
 
       it 'sets the correct subject' do
-        expect(subject.subject).to eq(I18n.t('course.mailer.user_registered_email.subject'))
+        expect(subject.subject).to eq(I18n.t('course.mailer.user_enrol_requested_email.subject'))
       end
 
       context 'when email notification for new enrol request is disabled' do

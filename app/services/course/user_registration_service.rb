@@ -5,14 +5,8 @@ class Course::UserRegistrationService
   # @param [Course::Registration] registration The registration object to be processed.
   # @return [Boolean] True if the registration succeeded. False if the registration failed.
   def register(registration)
-    course_user_or_request = create_or_update_registration(registration)
-
-    succeeded = course_user_or_request && course_user_or_request.persisted?
-    if succeeded && registration.enrol_request.present?
-      notify_course_staff(course_user_or_request)
-    else
-      succeeded
-    end
+    course_user = create_or_update_registration(registration)
+    course_user.nil? ? false : course_user.persisted?
   end
 
   private
@@ -20,8 +14,8 @@ class Course::UserRegistrationService
   # Creates the effect of performing the given registration.
   #
   # @param [Course::Registration] registration The registration object to be processed.
-  # @return [CourseUser|Course::EnrolRequest] The Course User or EnrolRequest which was created
-  # from the registration.
+  # @return [CourseUser] The Course User created from the registration.
+  # @return [nil] If registration was unsuccessful.
   def create_or_update_registration(registration)
     if registration.code.blank?
       register_without_registration_code(registration)
@@ -137,14 +131,5 @@ class Course::UserRegistrationService
       invitation.confirm!
       find_or_create_course_user!(registration, invitation.name)
     end
-  end
-
-  # Sends an email to the course staff to approve the given course enrol request.
-  #
-  # @param [Course::EnrolRequest] enrol_request The user enrol request.
-  # @return [Boolean] True if the staff were successfully notified.
-  def notify_course_staff(enrol_request)
-    Course::Mailer.user_registered_email(enrol_request).deliver_later
-    true
   end
 end
