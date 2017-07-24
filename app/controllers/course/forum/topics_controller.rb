@@ -72,7 +72,7 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
 
   def add_topic_breadcrumb
     add_breadcrumb @topic.title, course_forum_topic_path(current_course, @forum,
-                                                         @topic) if @topic.try(:persisted?)
+                                                         @topic) if @topic&.persisted?
   end
 
   def mark_posts_read

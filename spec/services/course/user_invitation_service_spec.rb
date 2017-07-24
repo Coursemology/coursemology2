@@ -61,7 +61,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
     describe '#invite' do
       def verify_existing_user(user)
         created_course_user = course.course_users.find do |course_user|
-          course_user.try(:user).try(:email) == user.email
+          course_user&.user&.email == user.email
         end
         expect(created_course_user).not_to be_nil
         expect(created_course_user.name).to eq(user.name)

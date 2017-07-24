@@ -186,7 +186,7 @@ class Course::Assessment::ProgrammingPackage
     if @path
       @file = Zip::File.open(@path.to_s)
     elsif @stream
-      @file = Zip::File.new(@stream.try(:path), true, true)
+      @file = Zip::File.new(@stream&.path, true, true)
       @file.read_from_stream(@stream)
       @file.instance_variable_set(:@stored_entries, @file.instance_variable_get(:@entry_set).dup)
     end

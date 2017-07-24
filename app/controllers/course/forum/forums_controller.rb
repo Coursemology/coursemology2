@@ -106,7 +106,7 @@ class Course::Forum::ForumsController < Course::Forum::Controller
   end
 
   def add_forum_item_breadcrumb
-    add_breadcrumb @forum.name, course_forum_path(current_course, @forum) if @forum.try(:persisted?)
+    add_breadcrumb @forum.name, course_forum_path(current_course, @forum) if @forum&.persisted?
   end
 
   def skip_load_forum?

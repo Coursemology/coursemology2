@@ -22,7 +22,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     authorize!(:manage, @assessment)
     @assessment = @assessment.calculated(:maximum_grade)
     @submissions = @submissions.includes(:answers)
-    @my_students = current_course_user.try(:my_students) || []
+    @my_students = current_course_user&.my_students || []
     @course_students = current_course.course_users.students.order_alphabetically
     if params[:published_success]
       flash.now[:success] = t('course.assessment.submission.submissions.publish_all.success')
@@ -58,7 +58,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   # Reload answer to either its latest status or to a fresh answer, depending on parameters.
   def reload_answer
     @answer = @submission.answers.find_by(id: reload_answer_params[:answer_id])
-    @current_question = @answer.try(:question)
+    @current_question = @answer&.question
 
     if @answer.nil?
       head :bad_request

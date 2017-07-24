@@ -85,7 +85,7 @@ div.panel.panel-default
           - answer_by_question = \
               @submission.answers.latest_answers.includes(:grader).group_by(&:question)
           - @submission.assessment.questions.each do |question|
-            - answer = answer_by_question[question].try(:first)
+            - answer = answer_by_question[question]&.first
             tr
               th = format_inline_text(question.display_title)
               - if show_graders
