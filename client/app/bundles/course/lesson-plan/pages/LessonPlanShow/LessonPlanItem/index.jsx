@@ -72,5 +72,5 @@ LessonPlanItem.propTypes = {
 };
 
 export default connect(state => ({
-  visibility: state.visibilityByType,
+  visibility: state.lessonPlan.visibilityByType,
 }))(LessonPlanItem);

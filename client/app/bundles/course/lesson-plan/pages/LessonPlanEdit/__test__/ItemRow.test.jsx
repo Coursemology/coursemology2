@@ -27,8 +27,10 @@ describe('<ItemRow />', () => {
     mock.onPatch(`/courses/${courseId}/lesson_plan/items/${itemData.id}`).reply(200);
     const spy = jest.spyOn(CourseAPI.lessonPlan, 'updateItem');
     const store = storeCreator({
-      visibilityByType: { [itemData.itemTypeKey]: true },
-      items: [itemData],
+      lessonPlan: {
+        visibilityByType: { [itemData.itemTypeKey]: true },
+        items: [itemData],
+      },
     });
 
     const table = mount(

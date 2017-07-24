@@ -103,5 +103,5 @@ class LessonPlanEdit extends React.Component {
 }
 
 export default connect(state => ({
-  groups: state.groups,
+  groups: state.lessonPlan.groups,
 }))(LessonPlanEdit);

@@ -22,7 +22,7 @@ describe('<MilestoneRow />', () => {
   it('allows milestone start_at to be updated', () => {
     mock.onPatch(`/courses/${courseId}/lesson_plan/milestones/${milestoneData.id}`).reply(200);
     const spy = jest.spyOn(CourseAPI.lessonPlan, 'updateMilestone');
-    const store = storeCreator({ milestones: [milestoneData] });
+    const store = storeCreator({ lessonPlan: { milestones: [milestoneData] } });
 
 
     const table = mount(

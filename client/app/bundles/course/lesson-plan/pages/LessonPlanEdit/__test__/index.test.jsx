@@ -24,8 +24,10 @@ const groupData = {
 describe('<LessonPlanEdit />', () => {
   it('renders item and milestone rows', () => {
     const store = storeCreator({
-      groups: [groupData],
-      visibilityByType: { [groupData.items[0].itemTypeKey]: true },
+      lessonPlan: {
+        groups: [groupData],
+        visibilityByType: { [groupData.items[0].itemTypeKey]: true },
+      },
     });
 
     const lessonPlanEdit = mount(

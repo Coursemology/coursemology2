@@ -78,7 +78,7 @@ class LessonPlanLayout extends React.Component {
 }
 
 export default connect(state => ({
-  isLoading: state.isLoading,
-  groups: state.groups,
+  isLoading: state.lessonPlan.isLoading,
+  groups: state.lessonPlan.groups,
   notification: state.notification,
 }))(LessonPlanLayout);
