@@ -1,18 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::Programming::Python::PythonPackageService < \
   Course::Assessment::Question::Programming::LanguagePackageService
-  AUTOGRADE_PRE_PATH = File.join(File.expand_path(File.dirname(__FILE__)),
-                                 'python_autograde_pre.py').freeze
-
-  AUTOGRADE_POST_PATH = File.join(File.expand_path(File.dirname(__FILE__)),
-                                  'python_autograde_post.py').freeze
-
-  MAKEFILE_PATH = File.join(File.expand_path(File.dirname(__FILE__)), 'python_makefile').freeze
-
-  def autograded?
-    @test_params.key?(:autograded)
-  end
-
   def submission_templates
     [
       {
@@ -35,18 +23,6 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     @attachment = generate_zip_file(data_files_to_keep)
     FileUtils.remove_entry @tmp_dir if @tmp_dir.present?
     @attachment
-  end
-
-  def default_meta
-    {
-      submission: '', solution: '', prepend: '', append: '',
-      data_files: [],
-      test_cases: {
-        public: [],
-        private: [],
-        evaluation: []
-      }
-    }
   end
 
   def extract_meta(attachment, template_files)
@@ -118,6 +94,9 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
 
   def generate_zip_file(data_files_to_keep)
     tmp = Tempfile.new(['package', '.zip'])
+    autograde_pre_path = get_file_path('python_autograde_pre.py')
+    autograde_post_path = get_file_path('python_autograde_post.py')
+    makefile_path = get_file_path('python_makefile')
 
     Zip::OutputStream.open(tmp.path) do |zip|
       # Create solution directory with template file
@@ -144,17 +123,17 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
       zip.print "\n"
 
       zip.put_next_entry 'tests/autograde.py'
-      zip.print File.read(AUTOGRADE_PRE_PATH)
+      zip.print File.read(autograde_pre_path)
 
       [:public, :private, :evaluation].each do |test_type|
         zip_test_files(test_type, zip)
       end
 
-      zip.print File.read(AUTOGRADE_POST_PATH)
+      zip.print File.read(autograde_post_path)
 
       # Creates Makefile
       zip.put_next_entry 'Makefile'
-      zip.print File.read(MAKEFILE_PATH)
+      zip.print File.read(makefile_path)
 
       zip.put_next_entry '.meta'
       zip.print @meta.to_json
@@ -172,6 +151,13 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     end
 
     tmp
+  end
+
+  # Retrieves the absolute path of the file specified
+  #
+  # @param [String] filename The filename of the file to get the path of
+  def get_file_path(filename)
+    File.join(File.expand_path(File.dirname(__FILE__)), filename).freeze
   end
 
   def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -225,24 +211,5 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     end
 
     meta.as_json
-  end
-
-  def test_params(params)
-    test_params = params.require(:question_programming).permit(
-      :prepend, :append, :solution, :submission, :autograded,
-      data_files: [],
-      test_cases: {
-        public: [:expression, :expected, :hint],
-        private: [:expression, :expected, :hint],
-        evaluation: [:expression, :expected, :hint]
-      }
-    )
-    whitelist(params, test_params)
-  end
-
-  def whitelist(params, test_params)
-    test_params.tap do |whitelisted|
-      whitelisted[:data_files_to_delete] = params['question_programming']['data_files_to_delete']
-    end
   end
 end
