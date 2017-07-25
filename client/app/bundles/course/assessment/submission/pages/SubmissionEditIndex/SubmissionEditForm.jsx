@@ -9,8 +9,8 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
-import { red100, red200, red900, yellow900,
-         green200, green900, grey100, white } from 'material-ui/styles/colors';
+import { red100, red200, red900, yellow900, grey100, blue500,
+         green200, green900, white } from 'material-ui/styles/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import Dialog from 'material-ui/Dialog';
@@ -143,13 +143,17 @@ class SubmissionEditForm extends Component {
   renderTabbedQuestions() {
     const { intl, attempting, questionIds, questions, topics } = this.props;
     return (
-      <Tabs>
+      <Tabs inkBarStyle={{ backgroundColor: blue500, height: 5, marginTop: -5 }} tabItemContainerStyle={{ backgroundColor: grey100 }}>
         {questionIds.map((id, index) => {
           const question = questions[id];
           const { answerId, topicId } = question;
           const topic = topics[topicId];
           return (
-            <Tab key={id} label={intl.formatMessage(translations.questionNumber, { number: index + 1 })}>
+            <Tab
+              buttonStyle={{ color: blue500 }}
+              key={id}
+              label={intl.formatMessage(translations.questionNumber, { number: index + 1 })}
+            >
               <SubmissionAnswer {...{ readOnly: !attempting, answerId, question }} />
               {question.type === questionTypes.Programming ? this.renderExplanationPanel(id) : null}
               {this.renderQuestionGrading(id)}

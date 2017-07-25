@@ -357,7 +357,7 @@ class SubmissionEditStepForm extends Component {
     const { skippable, questionIds } = this.props;
 
     return (
-      <Stepper activeStep={stepIndex} linear={false}>
+      <Stepper activeStep={stepIndex} linear={false} connector={<div />} style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
         {questionIds.map((questionId, index) => {
           if (skippable || index <= maxStep) {
             return (
@@ -366,7 +366,7 @@ class SubmissionEditStepForm extends Component {
                   iconContainerStyle={{ padding: 0 }}
                   icon={
                     <SvgIcon color={index === stepIndex ? blue800 : lightBlue400}>
-                      <circle cx="12" cy="12" r="10" />
+                      <circle cx="12" cy="12" r="12" />
                       <text x="12" y="16" textAnchor="middle" fontSize="12" fill="#fff">
                         {index + 1}
                       </text>
