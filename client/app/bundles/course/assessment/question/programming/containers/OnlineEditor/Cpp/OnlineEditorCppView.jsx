@@ -267,7 +267,7 @@ class OnlineEditorCppView extends React.Component {
           {
             this.renderEditorCard(
               intl.formatMessage(translations.appendTitle),
-              intl.formatMessage(translations.appendSubtitle),
+              intl.formatMessage(translations.cppAppendSubtitle),
               'append'
             )
           }
