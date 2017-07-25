@@ -29,7 +29,7 @@ en:
       sidebar_settings:
         title: 'Sidebar'
       notifications:
-        title: 'Notifications'
+        title: 'Email'
     course_users:
       title: 'Manage Users'
     duplication:
