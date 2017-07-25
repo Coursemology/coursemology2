@@ -1,6 +1,6 @@
+import { updateOrAppend, deleteIfFound } from 'lib/helpers/reducer-helpers';
 import actionTypes from '../constants';
 import sectionReducer from './section';
-import { updateOrAppend, deleteIfFound } from './utils';
 import { sortSurveyElements } from '../utils';
 
 const initialState = {

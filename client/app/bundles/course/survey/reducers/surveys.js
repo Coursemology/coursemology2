@@ -1,6 +1,6 @@
+import { updateOrAppend, deleteIfFound } from 'lib/helpers/reducer-helpers';
 import actionTypes from '../constants';
 import surveyReducer from './survey';
-import { updateOrAppend, deleteIfFound } from './utils';
 import { sortSurveyElements, sortSurveysByDate } from '../utils';
 
 export default function (state = [], action) {
