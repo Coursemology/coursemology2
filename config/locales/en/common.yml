@@ -14,6 +14,7 @@ en:
     show_less: 'See less'
     summary: 'Summary'
     click_here: 'Click here'
+    created_at: 'Created At'
   helpers:
     submit:
       condition_level:
