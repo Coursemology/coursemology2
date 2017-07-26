@@ -9,6 +9,7 @@ import WarningIcon from 'material-ui/svg-icons/alert/warning';
 import { formatDateTime } from '../utils';
 import { SubmissionProp } from '../propTypes';
 import translations from '../translations';
+import { workflowStates } from '../constants';
 
 const styles = {
   header: {
@@ -72,7 +73,9 @@ class ProgressPanel extends Component {
           subtitle={title}
           style={styles.header[workflowState]}
         />
-        <CardText>{late ? this.renderLateWarning() : null}</CardText>
+        <CardText>
+          {late && workflowState !== workflowStates.Submitted ? this.renderLateWarning() : null}
+        </CardText>
         <CardText>{this.renderTimes()}</CardText>
       </Card>
     );

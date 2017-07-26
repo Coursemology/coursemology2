@@ -53,9 +53,13 @@ class SubmissionEditStepForm extends Component {
 
   constructor(props) {
     super(props);
+    let initialStep = props.step || 0;
+    initialStep = initialStep < 0 ? 0 : initialStep;
+    initialStep = initialStep > props.maxStep ? props.maxStep : initialStep;
+
     this.state = {
       maxStep: props.maxStep,
-      stepIndex: props.maxStep,
+      stepIndex: initialStep,
       submitConfirmation: false,
       unsubmitConfirmation: false,
       resetConfirmation: false,
@@ -357,7 +361,12 @@ class SubmissionEditStepForm extends Component {
     const { skippable, questionIds } = this.props;
 
     return (
-      <Stepper activeStep={stepIndex} linear={false} connector={<div />} style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
+      <Stepper
+        activeStep={stepIndex}
+        linear={false}
+        connector={<div />}
+        style={{ justifyContent: 'center', flexWrap: 'wrap' }}
+      >
         {questionIds.map((questionId, index) => {
           if (skippable || index <= maxStep) {
             return (
@@ -455,6 +464,7 @@ SubmissionEditStepForm.propTypes = {
 
   canGrade: PropTypes.bool.isRequired,
   maxStep: PropTypes.number.isRequired,
+  step: PropTypes.number,
   skippable: PropTypes.bool.isRequired,
 
   attempting: PropTypes.bool.isRequired,

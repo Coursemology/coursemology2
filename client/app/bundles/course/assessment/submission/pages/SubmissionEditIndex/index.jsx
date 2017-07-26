@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import IntlNotificationBar, { notificationShape } from 'lib/components/IntlNotificationBar';
+import { getUrlParameter } from 'lib/helpers/url-helpers';
 import ProgressPanel from '../../components/ProgressPanel';
 import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
@@ -20,11 +21,12 @@ import { formNames, workflowStates } from '../../constants';
 class VisibleSubmissionEditIndex extends Component {
   constructor(props) {
     super(props);
-    const { location: { search } } = props;
-    const query = new URLSearchParams(search);
-    this.state = {
-      newSubmission: !!query.get('new_submission'),
-    };
+
+    const newSubmission = !!getUrlParameter('new_submission') && getUrlParameter('new_submission') === 'true';
+    const stepString = getUrlParameter('step');
+    const step = isNaN(stepString) || stepString === '' ? null : parseInt(stepString, 10) - 1;
+
+    this.state = { newSubmission, step };
   }
 
   componentDidMount() {
@@ -109,7 +111,7 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   renderContent() {
-    const { newSubmission } = this.state;
+    const { newSubmission, step } = this.state;
     const {
       assessment: { autograded, delayedGradePublication, tabbedView,
                     skippable, questionIds, passwordProtected },
@@ -144,6 +146,7 @@ class VisibleSubmissionEditIndex extends Component {
           submitted={workflowState === workflowStates.Submitted}
           published={workflowState === workflowStates.Published}
           maxStep={maxStep}
+          step={step}
           skippable={skippable}
           posts={posts}
           questionIds={questionIds}
@@ -182,6 +185,7 @@ class VisibleSubmissionEditIndex extends Component {
         questionIds={questionIds}
         questions={questions}
         questionsFlags={questionsFlags}
+        step={step}
         tabbedView={tabbedView}
         topics={topics}
         delayedGradePublication={delayedGradePublication}
@@ -209,9 +213,6 @@ class VisibleSubmissionEditIndex extends Component {
 
 VisibleSubmissionEditIndex.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  location: PropTypes.shape({
-    search: PropTypes.string,
-  }),
   match: PropTypes.shape({
     params: PropTypes.shape({
       courseId: PropTypes.string,

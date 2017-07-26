@@ -1,0 +1,20 @@
+- file_annotation = discussion_topic_programming_file_annotation
+- topic = file_annotation.acting_as
+- answer = file_annotation.file.answer
+- question = answer.question
+- submission = answer.submission
+- assessment = question.assessment
+
+= div_for(topic, 'data-topic-id' => topic.id) do
+  h3
+    - comment_title = "#{assessment.title}: #{question.display_title}"
+    = link_to comment_title, edit_course_assessment_submission_path(current_course, assessment, submission, step: assessment.questions.index(question) +1)
+  - if can?(:manage, topic)
+    = link_to_toggle_pending(topic)
+
+  h4
+    = t('.by_html', user: link_to_user(submission.creator))
+
+  = display_code_lines(file_annotation.file, file_annotation.line - 5, file_annotation.line)
+  = display_topic topic, post_partial: 'course/discussion/post',
+                         footer: 'course/discussion/posts/form'

@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { injectIntl, intlShape } from 'react-intl';
+import { Element, scroller } from 'react-scroll';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import CircularProgress from 'material-ui/CircularProgress';
@@ -54,6 +55,17 @@ class SubmissionEditForm extends Component {
       resetConfirmation: false,
       resetAnswerId: null,
     };
+  }
+
+  componentDidMount() {
+    const { questionIds } = this.props;
+    let initialStep = this.props.step;
+
+    if (initialStep !== null) {
+      initialStep = initialStep < 0 ? 0 : initialStep;
+      initialStep = initialStep >= questionIds.length - 1 ? questionIds.length - 1 : initialStep;
+      scroller.scrollTo(`step${initialStep}`, { offset: -60 });
+    }
   }
 
   renderQuestionGrading(id) {
@@ -141,9 +153,18 @@ class SubmissionEditForm extends Component {
   }
 
   renderTabbedQuestions() {
-    const { intl, attempting, questionIds, questions, topics } = this.props;
+    const { intl, attempting, questionIds, questions, topics, step } = this.props;
+
+    let initialStep = step || 0;
+    initialStep = initialStep < 0 ? 0 : initialStep;
+    initialStep = initialStep >= questionIds.length - 1 ? questionIds.length - 1 : initialStep;
+
     return (
-      <Tabs inkBarStyle={{ backgroundColor: blue500, height: 5, marginTop: -5 }} tabItemContainerStyle={{ backgroundColor: grey100 }}>
+      <Tabs
+        inkBarStyle={{ backgroundColor: blue500, height: 5, marginTop: -5 }}
+        tabItemContainerStyle={{ backgroundColor: grey100 }}
+        initialSelectedIndex={initialStep}
+      >
         {questionIds.map((id, index) => {
           const question = questions[id];
           const { answerId, topicId } = question;
@@ -171,19 +192,19 @@ class SubmissionEditForm extends Component {
     const { attempting, questionIds, questions, topics } = this.props;
     return (
       <div>
-        {questionIds.map((id) => {
+        {questionIds.map((id, index) => {
           const question = questions[id];
           const { answerId, topicId } = question;
           const topic = topics[topicId];
           return (
-            <div key={id} style={styles.questionContainer}>
+            <Element name={`step${index}`} key={id} style={styles.questionContainer}>
               <SubmissionAnswer {...{ readOnly: !attempting, answerId, question }} />
               {question.type === questionTypes.Programming ? this.renderExplanationPanel(id) : null}
               {this.renderQuestionGrading(id)}
               {this.renderProgrammingQuestionActions(id)}
               <Comments topic={topic} />
               <hr />
-            </div>
+            </Element>
           );
         })}
       </div>
@@ -444,6 +465,7 @@ SubmissionEditForm.propTypes = {
   newSubmission: PropTypes.bool.isRequired,
   passwordProtected: PropTypes.bool.isRequired,
   tabbedView: PropTypes.bool.isRequired,
+  step: PropTypes.number,
 
   attempting: PropTypes.bool.isRequired,
   submitted: PropTypes.bool.isRequired,
