@@ -101,8 +101,13 @@ RSpec.describe Instance do
   with_tenant(:instance) do
     describe '.active_course_count' do
       let!(:courses) { create_list(:course, 2, instance: instance) }
+      let(:active_course) { courses.sample }
       # Make one of the courses active
-      before { courses.first.course_users.first.update_column(:last_active_at, Time.zone.now) }
+      before do
+        # Create another course user to ensure the result is correct after after joins
+        create(:course_student, course: active_course)
+        active_course.course_users.update_all(last_active_at: Time.zone.now)
+      end
 
       subject { Instance.where(id: instance.id).calculated(:active_course_count).first }
 

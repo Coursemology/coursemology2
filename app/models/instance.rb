@@ -68,7 +68,7 @@ class Instance < ActiveRecord::Base
   # The number of active courses (in the past 7 days) in the instance.
   calculated :active_course_count, (lambda do
     Course.unscoped.active_in_past_7_days.where('courses.instance_id = instances.id').
-      select("count('*')")
+      select('count(distinct courses.id)')
   end)
 
   # @!attribute [r] course_count
