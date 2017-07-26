@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import { mount, ReactWrapper } from 'enzyme';
 import ReactTestUtils from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
+import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
 import storeCreator from 'course/survey/store';
-import DeleteConfirmation from 'course/survey/containers/SurveysLayout/DeleteConfirmation';
 import SurveyFormDialogue from 'course/survey/containers/SurveyFormDialogue';
 import AdminMenu from '../AdminMenu';
 

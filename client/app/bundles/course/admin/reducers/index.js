@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import notification from './notification';
+import notificationPopup from 'lib/reducers/notificationPopup';
 import notificationSettings from './notificationSettings';
 
 export default combineReducers({
-  notification,
+  notificationPopup,
   notificationSettings,
 });

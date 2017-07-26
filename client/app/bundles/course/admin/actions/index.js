@@ -1,11 +1,4 @@
 /* eslint-disable import/prefer-default-export */
-import actionTypes from '../constants';
+import { setNotification } from 'lib/actions';
 
-export function setNotification(message) {
-  return (dispatch) => {
-    dispatch({
-      type: actionTypes.SET_ADMIN_NOTIFICATION,
-      message,
-    });
-  };
-}
+export { setNotification };

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { resetDeleteConfirmation } from 'course/survey/actions';
+import { resetDeleteConfirmation } from 'lib/actions';
 
 const DeleteConfirmation = ({ dispatch, deleteConfirmation }) => (
   <ConfirmationDialog
@@ -20,4 +20,6 @@ DeleteConfirmation.propTypes = {
   }).isRequired,
 };
 
-export default connect(({ deleteConfirmation }) => ({ deleteConfirmation }))(DeleteConfirmation);
+export default connect(state => ({
+  deleteConfirmation: state.deleteConfirmation,
+}))(DeleteConfirmation);
