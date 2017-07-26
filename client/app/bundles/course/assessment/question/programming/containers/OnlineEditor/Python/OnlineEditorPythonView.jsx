@@ -9,7 +9,7 @@ import {
 } from 'material-ui/Table';
 import transitions from 'material-ui/styles/transitions';
 
-import 'brace/mode/c_cpp';
+import 'brace/mode/python';
 import 'brace/theme/monokai';
 
 import styles from './../OnlineEditorView.scss';

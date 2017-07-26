@@ -2,6 +2,9 @@ import Immutable from 'immutable';
 
 import actionTypes from '../constants/programmingQuestionConstants';
 import editorActionTypes from '../constants/onlineEditorConstants';
+import templates from '../constants/onlineEditorDefaultTemplates';
+
+const cppAppend = templates.data;
 
 export const initialState = Immutable.fromJS({
   // this is the default state that would be used if one were not passed into the store
@@ -54,7 +57,7 @@ export const initialState = Immutable.fromJS({
     },
     c_cpp: {
       prepend: '',
-      append: '',
+      append: cppAppend,
       solution: '',
       submission: '',
       test_cases: {

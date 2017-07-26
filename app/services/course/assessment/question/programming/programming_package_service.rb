@@ -40,27 +40,14 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
   private
 
   def init_language_package_service(params)
-    if python_language
-      @language_package_service =
+    @language_package_service =
+      if @language.is_a?(Coursemology::Polyglot::Language::Python)
         Course::Assessment::Question::Programming::Python::PythonPackageService.new params
-    elsif javascript_language
-      raise NotImplementedError
-    else
-      raise NotImplementedError
-    end
+      elsif @language.is_a?(Coursemology::Polyglot::Language::CPlusPlus)
+        Course::Assessment::Question::Programming::Cpp::CppPackageService.new params
+      else
+        raise NotImplementedError
+      end
   end
 
-  # Checks that the language is Python, regardless of Python2 or Python3
-  #
-  # @return [Boolean]
-  def python_language
-    @language.is_a?(Coursemology::Polyglot::Language::Python)
-  end
-
-  # Checks that the language is Javascript
-  #
-  # @return [Boolean]
-  def javascript_language
-    @language.is_a?(Coursemology::Polyglot::Language::JavaScript)
-  end
 end

@@ -24,7 +24,7 @@ class Course::Assessment::Question::Programming::LanguagePackageService
   #
   # @return [Boolean]
   def autograded?
-    raise NotImplementedError, 'You must implement this'
+    @test_params.key?(:autograded)
   end
 
   # Array of arguments used to create template files for non-autograded programming question.
@@ -46,7 +46,15 @@ class Course::Assessment::Question::Programming::LanguagePackageService
   #
   # @return [Hash]
   def default_meta
-    raise NotImplementedError, 'You must implement this'
+    {
+      submission: '', solution: '', prepend: '', append: '',
+      data_files: [],
+      test_cases: {
+        public: [],
+        private: [],
+        evaluation: []
+      }
+    }
   end
 
   # Retrieves the meta details from the programming package, or the template files if the package
@@ -66,8 +74,23 @@ class Course::Assessment::Question::Programming::LanguagePackageService
   #
   # @param [ActionController::Parameters] params The parameters containing the data for package
   #   generation.
-  def test_params(params) # rubocop:disable UnusedMethodArgument
-    raise NotImplementedError, 'You must implement this'
+  def test_params(params)
+    test_params = params.require(:question_programming).permit(
+      :prepend, :append, :solution, :submission, :autograded,
+      data_files: [],
+      test_cases: {
+        public: [:expression, :expected, :hint],
+        private: [:expression, :expected, :hint],
+        evaluation: [:expression, :expected, :hint]
+      }
+    )
+    whitelist(params, test_params)
+  end
+
+  def whitelist(params, test_params)
+    test_params.tap do |whitelisted|
+      whitelisted[:data_files_to_delete] = params['question_programming']['data_files_to_delete']
+    end
   end
 
   # Checks that the test case field is meant to be a string.

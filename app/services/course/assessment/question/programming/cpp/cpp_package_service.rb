@@ -1,10 +1,10 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::Programming::Python::PythonPackageService < \
+class Course::Assessment::Question::Programming::Cpp::CppPackageService < \
   Course::Assessment::Question::Programming::LanguagePackageService
   def submission_templates
     [
       {
-        filename: 'template.py',
+        filename: 'template.c',
         content: @test_params[:submission] || ''
       }
     ]
@@ -55,7 +55,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
 
     return meta if template_files.blank?
 
-    # For python editor, there is only a single submission template file.
+    # For cpp editor, there is only a single submission template file.
     meta[:submission] = template_files.first.content
 
     meta.as_json
@@ -67,7 +67,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     if @old_meta.present?
       package.unzip_file @tmp_dir
 
-      @old_meta['data_files']&.each do |file|
+      @old_meta['data_files'].try(:each) do |file|
         next if data_files_to_delete.try(:include?, (file['filename']))
         # new files overrides old ones
         next if new_data_filenames.include?(file['filename'])
@@ -94,41 +94,47 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
 
   def generate_zip_file(data_files_to_keep)
     tmp = Tempfile.new(['package', '.zip'])
-    autograde_pre_path = get_file_path('python_autograde_pre.py')
-    autograde_post_path = get_file_path('python_autograde_post.py')
-    makefile_path = get_file_path('python_makefile')
+    autograde_include_path = get_file_path('cpp_autograde_include.cc')
+    autograde_pre_path = get_file_path('cpp_autograde_pre.cc')
+    autograde_post_path = get_file_path('cpp_autograde_post.cc')
+    makefile_path = get_file_path('cpp_makefile')
 
     Zip::OutputStream.open(tmp.path) do |zip|
       # Create solution directory with template file
       zip.put_next_entry 'solution/'
-      zip.put_next_entry 'solution/template.py'
+      zip.put_next_entry 'solution/template.c'
       zip.print @test_params[:solution]
       zip.print "\n"
 
       # Create submission directory with template file
       zip.put_next_entry 'submission/'
-      zip.put_next_entry 'submission/template.py'
+      zip.put_next_entry 'submission/template.c'
       zip.print @test_params[:submission]
       zip.print "\n"
 
       # Create tests directory with prepend, append and autograde files
       zip.put_next_entry 'tests/'
-      zip.put_next_entry 'tests/append.py'
+      zip.put_next_entry 'tests/append.cc'
       zip.print "\n"
       zip.print @test_params[:append]
       zip.print "\n"
 
-      zip.put_next_entry 'tests/prepend.py'
+      zip.put_next_entry 'tests/prepend.cc'
+      zip.print "\n"
+      zip.print File.read(autograde_include_path)
+      zip.print "\n"
       zip.print @test_params[:prepend]
       zip.print "\n"
-
-      zip.put_next_entry 'tests/autograde.py'
       zip.print File.read(autograde_pre_path)
+      zip.print "\n"
+
+      zip.put_next_entry 'tests/autograde.cc'
 
       [:public, :private, :evaluation].each do |test_type|
         zip_test_files(test_type, zip)
       end
 
+      zip.print "\n"
       zip.print File.read(autograde_post_path)
 
       # Creates Makefile
@@ -140,7 +146,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     end
 
     Zip::File.open(tmp.path) do |zip|
-      @test_params[:data_files]&.each do |file|
+      @test_params[:data_files].try(:each) do |file|
         next if file.nil?
         zip.add(file.original_filename, file.tempfile.path)
       end
@@ -165,18 +171,16 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
     tests[test_type]&.each&.with_index(1) do |test, index|
       # String types should be displayed with quotes, other types will be converted to string
       # with the str method.
-      expected = string?(test[:expected]) ? test[:expected].inspect : "str(#{test[:expected]})"
-      hint = test[:hint].blank? ? String(nil) : "self.meta['hint'] = #{test[:hint].inspect}"
+      expected = string?(test[:expected]) ? test[:expected].inspect : "#{test[:expected]}"
+      hint = test[:hint].blank? ? String(nil) : "RecordProperty(\"hint\", #{test[:hint].inspect})"
 
-      test_fn = <<-PYTHON
-    def test_#{test_type}_#{format('%02i', index)}(self):
-        self.meta['expression'] = #{test[:expression].inspect}
-        self.meta['expected'] = #{expected}
-        #{hint}
-        _out = #{test[:expression]}
-        self.meta['output'] = _out
-        self.assertEqual(_out, #{test[:expected]})
-      PYTHON
+      test_fn = <<-CPlusPlus
+        TEST(Autograder, test_#{test_type}_#{format('%02i', index)}) {
+          RecordProperty("expression", #{test[:expression].inspect});
+          custom_evaluation(#{test[:expression]}, #{test[:expected]});
+          #{hint};
+        }
+      CPlusPlus
 
       zip.print test_fn
     end

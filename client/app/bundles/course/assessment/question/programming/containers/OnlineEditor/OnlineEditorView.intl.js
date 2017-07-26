@@ -21,6 +21,11 @@ export default defineMessages({
     defaultMessage: '(optional, hidden, appended after student\'s code)',
     description: 'Subtitle for append code block.',
   },
+  cppAppendSubtitle: {
+    id: 'course.assessment.question.programming.onlineEditorView.cppAppendSubtitle',
+    defaultMessage: 'For any function/variable declarations (optional, hidden, appended after student\'s code)',
+    description: 'Subtitle for append code block.',
+  },
   solutionTitle: {
     id: 'course.assessment.question.programming.onlineEditorView.solutionTitle',
     defaultMessage: 'Solution Template',
