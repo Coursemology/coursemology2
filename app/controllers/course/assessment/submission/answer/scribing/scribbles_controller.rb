@@ -8,6 +8,8 @@ class Course::Assessment::Submission::Answer::Scribing::ScribblesController < \
     if @scribble
       @scribble.update_attributes(scribble_params)
     else
+      answer = Course::Assessment::Answer.find_by(id: scribble_params[:answer_id])
+      params[:scribble][:answer_id] = answer.actable_id
       @scribble = Course::Assessment::Answer::ScribingScribble.new(scribble_params)
       @scribble.save
     end
