@@ -40,23 +40,38 @@ class ProgressPanel extends Component {
   renderLateWarning() {
     const { intl } = this.props;
     return (
-      <Paper style={{ backgroundColor: red100, padding: 10 }}>
-        <WarningIcon style={styles.warningIcon} />
-        <span>{intl.formatMessage(translations.lateSubmission)}</span>
-      </Paper>
+      <CardText>
+        <Paper style={{ backgroundColor: red100, padding: 10 }}>
+          <WarningIcon style={styles.warningIcon} />
+          <span>{intl.formatMessage(translations.lateSubmission)}</span>
+        </Paper>
+      </CardText>
     );
   }
 
-  renderTimes() {
-    const { intl } = this.props;
-    const { submittedAt } = this.props.submission;
+  renderSummary() {
+    const { intl, submission } = this.props;
+    const { workflowState } = submission;
+
+    const displayedTime = {
+      [workflowStates.Attempting]: 'attemptedAt',
+      [workflowStates.Submitted]: 'submittedAt',
+      [workflowStates.Graded]: 'gradedAt',
+      [workflowStates.Published]: 'gradedAt',
+    }[workflowState];
+
     return (
       <Table selectable={false} style={styles.table}>
         <TableBody displayRowCheckbox={false}>
           <TableRow>
-            <TableRowColumn>{intl.formatMessage(translations.submittedAt)}</TableRowColumn>
-            <TableRowColumn>{formatDateTime(submittedAt)}</TableRowColumn>
+            <TableRowColumn>{intl.formatMessage(translations[displayedTime])}</TableRowColumn>
+            <TableRowColumn>{formatDateTime(submission[displayedTime])}</TableRowColumn>
           </TableRow>
+          { workflowState === workflowStates.Graded || workflowState === workflowStates.Published ?
+            <TableRow>
+              <TableRowColumn>{intl.formatMessage(translations.totalGrade)}</TableRowColumn>
+              <TableRowColumn>{`${submission.grade} / ${submission.maximumGrade}`}</TableRowColumn>
+            </TableRow> : null }
         </TableBody>
       </Table>
     );
@@ -73,10 +88,8 @@ class ProgressPanel extends Component {
           subtitle={title}
           style={styles.header[workflowState]}
         />
-        <CardText>
-          {late && workflowState !== workflowStates.Submitted ? this.renderLateWarning() : null}
-        </CardText>
-        <CardText>{this.renderTimes()}</CardText>
+        {late && workflowState === workflowStates.Submitted ? this.renderLateWarning() : null}
+        {this.renderSummary()}
       </Card>
     );
   }
