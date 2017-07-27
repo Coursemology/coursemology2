@@ -121,6 +121,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.questionNumber',
     defaultMessage: 'Q{number}',
   },
+  comments: {
+    id: 'course.assessment.submission.comments',
+    defaultMessage: 'Comments',
+  },
   correct: {
     id: 'course.assessment.submission.correct',
     defaultMessage: 'Correct!',

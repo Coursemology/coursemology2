@@ -157,7 +157,7 @@ export default class Answers extends Component {
   static renderProgrammingEditor(file, answerId, language) {
     return (
       <div key={file.filename}>
-        <h5>Content</h5>
+        <h5>{file.filename}</h5>
         <Editor
           name={`${answerId}[content]`}
           filename={file.filename}

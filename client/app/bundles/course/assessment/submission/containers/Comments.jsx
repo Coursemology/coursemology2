@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 
 import { postShape, topicShape } from '../propTypes';
 import CommentCard from '../components/CommentCard';
 import CommentField from '../components/CommentField';
 import * as commentActions from '../actions/comments';
+import translations from '../translations';
 
 class VisibleComments extends Component {
   render() {
@@ -17,7 +19,7 @@ class VisibleComments extends Component {
 
     return (
       <div>
-        <h3>Comments</h3>
+        <h3><FormattedMessage {...translations.comments} /></h3>
         {posts.map(post =>
           <CommentCard
             key={post.id}
