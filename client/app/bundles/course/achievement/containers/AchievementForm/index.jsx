@@ -79,6 +79,7 @@ const AchievementForm = ({
     />
     <Field
       name="published"
+      parse={Boolean}
       component={Toggle}
       label={<FormattedMessage {...translations.published} />}
       labelPosition="right"
