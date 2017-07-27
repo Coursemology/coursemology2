@@ -16,8 +16,7 @@ RSpec.feature 'Course: Events' do
       let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can create a course event' do
-        visit course_lesson_plan_path(course)
-        find_link(nil, href: new_course_lesson_plan_event_path(course)).click
+        visit new_course_lesson_plan_event_path(course)
 
         fill_in 'title', with: 'Title'
         fill_in 'start_at', with: 1.day.from_now

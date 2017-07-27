@@ -42,18 +42,19 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
           let(:user) { admin }
 
           it 'responds with all items' do
-            expect(json_response.keys).to contain_exactly('milestones', 'items')
+            expect(json_response.keys).to contain_exactly('milestones', 'items', 'flags')
             expect(json_response['items'].length).to eq(2)
 
             milestone_data = json_response['milestones'][0]
             item_data = json_response['items'][0]
             expect(milestone_data.keys).to contain_exactly(
-              'id', 'title', 'description', 'start_at', 'edit_path', 'delete_path'
+              'id', 'title', 'description', 'start_at'
             )
             expect(item_data.keys).to contain_exactly(
               'id', 'title', 'description', 'published', 'location', 'lesson_plan_item_type',
               'start_at', 'bonus_end_at', 'end_at', 'edit_path', 'delete_path'
             )
+            expect(json_response['flags']['canManageLessonPlan']).to be(true)
           end
         end
         context 'when user is student' do
@@ -71,6 +72,7 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
               'id', 'title', 'description', 'published', 'location', 'lesson_plan_item_type',
               'start_at', 'bonus_end_at', 'end_at'
             )
+            expect(json_response['flags']['canManageLessonPlan']).to be(false)
           end
         end
       end

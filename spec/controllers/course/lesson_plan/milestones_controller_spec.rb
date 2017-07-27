@@ -17,8 +17,15 @@ RSpec.describe Course::LessonPlan::MilestonesController, type: :controller do
 
     before { sign_in(user) }
 
-    describe '#save' do
-      subject { post :create, course_id: course, lesson_plan_milestone: milestone_immutable_stub }
+    describe '#create' do
+      subject do
+        post :create, format: :json, course_id: course,
+                      lesson_plan_milestone: attributes_for(:course_lesson_plan_milestone)
+      end
+
+      context 'when saving succeeds' do
+        it { is_expected.to render_template('_milestone') }
+      end
 
       context 'when saving fails' do
         before do
@@ -26,15 +33,18 @@ RSpec.describe Course::LessonPlan::MilestonesController, type: :controller do
           subject
         end
 
-        it { is_expected.to render_template('new') }
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
 
     describe '#update' do
       subject do
-        patch :update, course_id: course,
-                       id: milestone_immutable_stub,
-                       lesson_plan_milestone: { id: milestone_immutable_stub.id }
+        patch :update, format: :json, course_id: course, id: milestone_immutable_stub,
+                       lesson_plan_milestone: attributes_for(:course_lesson_plan_milestone)
+      end
+
+      context 'when update succeeds' do
+        it { is_expected.to render_template('_milestone') }
       end
 
       context 'when update fails' do
@@ -43,12 +53,16 @@ RSpec.describe Course::LessonPlan::MilestonesController, type: :controller do
           subject
         end
 
-        it { is_expected.to render_template('edit') }
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
 
     describe '#destroy' do
       subject { delete :destroy, course_id: course, id: milestone_immutable_stub }
+
+      context 'when destroy succeeds' do
+        it { is_expected.to have_http_status(:ok) }
+      end
 
       context 'when destroy fails' do
         before do
@@ -56,7 +70,7 @@ RSpec.describe Course::LessonPlan::MilestonesController, type: :controller do
           subject
         end
 
-        it { is_expected.to redirect_to(course_lesson_plan_path(course)) }
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
   end
