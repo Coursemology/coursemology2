@@ -1,3 +1,4 @@
+import { deleteIfFound } from 'lib/helpers/reducer-helpers';
 import actionTypes from '../constants';
 import itemReducer from './item';
 import milestoneReducer from './milestone';
@@ -45,8 +46,24 @@ export default function (state = initialState, action) {
         groups: groupItemsUnderMilestones(items, state.milestones),
       };
     }
+    case actionTypes.MILESTONE_CREATE_SUCCESS: {
+      const milestones = [...state.milestones, action.milestone];
+      return {
+        ...state,
+        milestones,
+        groups: groupItemsUnderMilestones(state.items, milestones),
+      };
+    }
     case actionTypes.MILESTONE_UPDATE_SUCCESS: {
       const milestones = state.milestones.map(item => milestoneReducer(item, action));
+      return {
+        ...state,
+        milestones,
+        groups: groupItemsUnderMilestones(state.items, milestones),
+      };
+    }
+    case actionTypes.MILESTONE_DELETE_SUCCESS: {
+      const milestones = deleteIfFound(state.milestones, action.milestoneId);
       return {
         ...state,
         milestones,

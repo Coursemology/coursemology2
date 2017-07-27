@@ -6,6 +6,12 @@ import translations from 'course/lesson-plan/translations';
 import MilestoneRow from './MilestoneRow';
 import ItemRow from './ItemRow';
 
+const styles = {
+  page: {
+    marginTop: 30,
+  },
+};
+
 class LessonPlanEdit extends React.Component {
   static propTypes = {
     groups: PropTypes.arrayOf(PropTypes.shape({
@@ -64,7 +70,7 @@ class LessonPlanEdit extends React.Component {
     const { groups } = this.props;
 
     return (
-      <div>
+      <div style={styles.page}>
         <table>
           { LessonPlanEdit.renderHeader() }
           <tbody>

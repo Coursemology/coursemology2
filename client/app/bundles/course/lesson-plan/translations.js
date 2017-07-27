@@ -9,6 +9,10 @@ const translations = defineMessages({
     id: 'course.lessonPlan.title',
     defaultMessage: 'Title',
   },
+  description: {
+    id: 'course.lessonPlan.description',
+    defaultMessage: 'Description',
+  },
   startAt: {
     id: 'course.lessonPlan.startAt',
     defaultMessage: 'Start At',
