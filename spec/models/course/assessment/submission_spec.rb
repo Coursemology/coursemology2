@@ -113,6 +113,24 @@ RSpec.describe Course::Assessment::Submission do
       end
     end
 
+    describe 'before_validation callbacks' do
+      context 'when submission is created by an administrator who is not in the course' do
+        let(:administrator) { create(:administrator) }
+        let(:submission) do
+          create(:submission, assessment: assessment, creator: administrator, course_user: nil)
+        end
+        subject { submission }
+
+        it 'builds the course_user as a phantom manager' do
+          expect(subject).to be_valid
+          subject.save
+          expect(subject).to be_persisted
+          expect(subject.course_user.phantom?).to be_truthy
+          expect(subject.course_user.manager?).to be_truthy
+        end
+      end
+    end
+
     describe '.answers' do
       describe '.latest_answers' do
         context 'when the submission has multiple answers for the same question' do

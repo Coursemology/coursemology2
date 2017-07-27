@@ -1,4 +1,7 @@
 div.btn-group
+  - new_attempt_button = link_to t('.attempt'),
+                                 course_assessment_submissions_path(current_course, assessment),
+                                 class: ['btn','btn-info'], method: :post
   - if current_course_user
     / If submissions are preloaded, find through the array. Otherwise, execute a SQL query.
     / Remove N+1 Queries on this partial.
@@ -15,8 +18,9 @@ div.btn-group
       = link_to(t('.view'), edit_course_assessment_submission_path(current_course,
           assessment, submitted_submission), class: ['btn', 'btn-info'])
     - elsif can?(:attempt, assessment)
-      = link_to t('.attempt'), course_assessment_submissions_path(current_course, assessment),
-                class: ['btn','btn-info'], method: :post
+      = new_attempt_button
+  - elsif current_user.administrator?
+      = new_attempt_button
   - else
     = link_to(t('.attempt'), '#', class: ['btn', 'btn-info', 'disabled'])
 

@@ -6,6 +6,7 @@ class Course::Assessment::Submission < ActiveRecord::Base
 
   acts_as_experience_points_record
 
+  before_validation :build_course_user, if: :new_record?
   after_save :auto_grade_submission, if: :submitted?
   after_save :send_submit_notification, if: :submitted?
   after_create :send_attempt_notification
@@ -187,6 +188,14 @@ class Course::Assessment::Submission < ActiveRecord::Base
     execute_after_commit do
       auto_grade!
     end
+  end
+
+  # Callback before validation to build a course_user for administrators (not enrolled in the
+  # course) to attempt submissions.
+  def build_course_user
+    return unless creator.administrator? && course_user.nil?
+    self.course_user = CourseUser.new(course: assessment.course, user: creator, phantom: true,
+                                      role: CourseUser.roles[:manager])
   end
 
   # Validate that the submission creator is the same user as the course_user in the associated
