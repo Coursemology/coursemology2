@@ -15,6 +15,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   before_action :load_or_create_submission_questions, only: [:edit, :update]
 
   delegate_to_service(:update)
+  delegate_to_service(:submit_answer)
   delegate_to_service(:load_or_create_answers)
   delegate_to_service(:load_or_create_submission_questions)
 

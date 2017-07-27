@@ -10,7 +10,7 @@ import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
 import {
   fetchSubmission, autogradeSubmission, saveDraft, finalise,
-  unsubmit, autogradeAnswer, resetAnswer, saveGrade, mark, unmark, publish,
+  unsubmit, submitAnswer, resetAnswer, saveGrade, mark, unmark, publish,
 } from '../../actions';
 import {
   answerShape, assessmentShape, explanationShape, gradingShape, postShape,
@@ -81,10 +81,10 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(resetAnswer(params.submissionId, answerId, questionId));
   }
 
-  handleAutograde(answerId) {
+  handleSubmitAnswer(answerId) {
     const { dispatch, form, match: { params } } = this.props;
-    const answers = [form.values[answerId]];
-    dispatch(autogradeAnswer(params.submissionId, answers));
+    const answer = form.values[answerId];
+    dispatch(submitAnswer(params.submissionId, answer));
   }
 
   handleMark() {
@@ -135,7 +135,7 @@ class VisibleSubmissionEditIndex extends Component {
           handleSaveGrade={() => this.handleSaveGrade()}
           handleSubmit={() => this.handleSubmit()}
           handleUnsubmit={() => this.handleUnsubmit()}
-          handleAutograde={answerId => this.handleAutograde(answerId)}
+          handleSubmitAnswer={answerId => this.handleSubmitAnswer(answerId)}
           handleReset={answerId => this.handleReset(answerId)}
           handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
           initialValues={answers}
@@ -164,7 +164,7 @@ class VisibleSubmissionEditIndex extends Component {
         handleSubmit={() => this.handleSubmit()}
         handleUnsubmit={() => this.handleUnsubmit()}
         handleSaveGrade={() => this.handleSaveGrade()}
-        handleAutograde={answerId => this.handleAutograde(answerId)}
+        handleSubmitAnswer={answerId => this.handleSubmitAnswer(answerId)}
         handleReset={answerId => this.handleReset(answerId)}
         handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
         handleMark={() => this.handleMark()}

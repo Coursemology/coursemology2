@@ -215,7 +215,7 @@ class SubmissionEditStepForm extends Component {
 
   renderSubmitButton() {
     const { stepIndex } = this.state;
-    const { intl, questionIds, questions, questionsFlags, handleAutograde, isSaving } = this.props;
+    const { intl, questionIds, questions, questionsFlags, handleSubmitAnswer, isSaving } = this.props;
     const id = questionIds[stepIndex];
     const question = questions[id];
     const { answerId } = question;
@@ -225,7 +225,7 @@ class SubmissionEditStepForm extends Component {
         style={styles.formButton}
         secondary
         label={intl.formatMessage(translations.submit)}
-        onTouchTap={() => handleAutograde(answerId)}
+        onTouchTap={() => handleSubmitAnswer(answerId)}
         disabled={isAutograding || isResetting || isSaving}
       />
     );
@@ -483,7 +483,7 @@ SubmissionEditStepForm.propTypes = {
   handleUnsubmit: PropTypes.func,
   handleSaveDraft: PropTypes.func,
   handleSaveGrade: PropTypes.func,
-  handleAutograde: PropTypes.func,
+  handleSubmitAnswer: PropTypes.func,
   handleReset: PropTypes.func,
 };
 

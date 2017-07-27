@@ -78,7 +78,7 @@ class SubmissionEditForm extends Component {
 
   renderProgrammingQuestionActions(id) {
     const { intl, attempting, canGrade, questions, questionsFlags,
-            handleAutograde, isSaving } = this.props;
+            handleSubmitAnswer, isSaving } = this.props;
     const question = questions[id];
     const { answerId, attemptsLeft, attemptLimit, autogradable } = question;
     const { hasError, isAutograding, isResetting } = questionsFlags[id] || {};
@@ -109,7 +109,7 @@ class SubmissionEditForm extends Component {
             backgroundColor={red900}
             secondary
             label={runCodeLabel}
-            onTouchTap={() => handleAutograde(answerId)}
+            onTouchTap={() => handleSubmitAnswer(answerId)}
             disabled={isAutograding || isResetting || isSaving || (!canGrade && attemptsLeft === 0)}
           /> : null}
           {isAutograding || isResetting ? <CircularProgress size={36} style={{ position: 'absolute' }} /> : null}
@@ -486,7 +486,7 @@ SubmissionEditForm.propTypes = {
   handleSaveDraft: PropTypes.func,
   handleSubmit: PropTypes.func,
   handleUnsubmit: PropTypes.func,
-  handleAutograde: PropTypes.func,
+  handleSubmitAnswer: PropTypes.func,
   handleReset: PropTypes.func,
   handleSaveGrade: PropTypes.func,
   handleMark: PropTypes.func,

@@ -157,15 +157,14 @@ export function unsubmit(submissionId) {
   };
 }
 
-export function autogradeAnswer(submissionId, answers) {
-  const payload = { submission: { answers, auto_grade: true } };
-  const answer = answers[0];
+export function submitAnswer(submissionId, answer) {
+  const payload = { answer };
   const questionId = answer.questionId;
 
   return (dispatch) => {
     dispatch({ type: actionTypes.AUTOGRADE_REQUEST, questionId });
 
-    return CourseAPI.assessment.submissions.update(submissionId, payload)
+    return CourseAPI.assessment.submissions.submitAnswer(submissionId, payload)
       .then(response => response.data)
       .then((data) => {
         if (data.redirect_url && data.format === 'html') {

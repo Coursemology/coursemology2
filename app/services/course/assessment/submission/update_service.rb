@@ -1,14 +1,18 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update
-    if auto_grade?
-      submit_answer
-    elsif update_submission
+    if update_submission
       load_or_create_answers if unsubmit?
       render 'edit'
     else
       render json: { errors: @submission.errors }, status: :bad_request
     end
+  end
+
+  def submit_answer
+    answer = @submission.answers.find(submit_answer_params[:id].to_i)
+    update_answer(answer, submit_answer_params)
+    auto_grade(answer)
   end
 
   def load_or_create_answers
@@ -90,6 +94,10 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     scalar_params.push(array_params)
   end
 
+  def submit_answer_params
+    params.require(:answer).permit([:id] + update_answer_type_params)
+  end
+
   def questions_to_attempt
     @questions_to_attempt ||= @submission.assessment.questions
   end
@@ -110,13 +118,6 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     new_submission_questions.each(&:save!)
 
     new_submission_questions.any?
-  end
-
-  def submit_answer
-    answer_params = update_answers_params[:answers].first
-    answer = @submission.answers.find(answer_params[:id].to_i)
-    update_answer(answer, answer_params)
-    auto_grade(answer)
   end
 
   def update_submission
@@ -142,10 +143,6 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def unmark?
     params[:submission] && params[:submission][:unmark].present?
-  end
-
-  def auto_grade?
-    params[:submission] && params[:submission][:auto_grade].present?
   end
 
   def auto_grade(answer)
