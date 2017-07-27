@@ -126,6 +126,14 @@ module ApplicationHTMLFormattersHelper
     end
   end
 
+  # Syntax highlights the given code fragment without adding line numbers.
+  #
+  # This filter will normalise all line endings to Unix format (\n) for use with the Rouge
+  # highlighter.
+  #
+  # @param [String] code The code to syntax highlight.
+  # @param [Coursemology::Polyglot::Language] language The language to highlight the code block
+  #   with.
   def highlight_code_block(code, language = nil)
     code = html_escape(code) unless code.html_safe?
     code = code.gsub(/\r\n|\r/, "\n").html_safe
@@ -149,6 +157,7 @@ module ApplicationHTMLFormattersHelper
 
   def sanitize_and_format_code(code, language, start_line)
     code = html_escape(code) unless code.html_safe?
+    code = code.gsub(/\r\n|\r/, "\n").html_safe
     code = content_tag(:pre, lang: language ? language.rouge_lexer : nil) do
       content_tag(:code) do
         code
