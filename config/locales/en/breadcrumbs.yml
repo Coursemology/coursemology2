@@ -2,6 +2,8 @@ en:
   breadcrumbs:
     announcements:
       index: :'announcements.index.header'
+    instance_user_role_requests:
+      index: :'instance_user_role_requests.index.header'
     course:
       levels:
         index: :'course.levels.index.header'

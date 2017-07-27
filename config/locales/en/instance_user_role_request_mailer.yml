@@ -1,0 +1,31 @@
+en:
+  instance_user_role_request_mailer:
+    new_role_request:
+      subject: 'New role request!'
+      empty: '(Not specified)'
+      message_html: >
+        %{user} (%{email}) requests to become an %{role}.
+
+        <strong>Organization</strong>
+
+        %{organization}
+
+
+        <strong>Designation</strong>
+
+        %{designation}
+
+
+        <strong>Reason</strong>
+
+        %{reason}
+
+
+        %{click_here} to review the request.
+
+    role_request_approved:
+      subject: 'Your role request has been approved!'
+      message: >
+        You have been approved to be an %{role} on Coursemology!
+
+        %{click_here} to create a new course and get started!

@@ -3,6 +3,8 @@ en:
     courses:
       index:
         header: 'Courses'
+        new_role_request: 'Request to be an instructor'
+        edit_role_request: 'Edit my role request'
       create:
         success: 'Course %{title} was created.'
       new:

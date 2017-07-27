@@ -42,6 +42,10 @@ class Instance < ActiveRecord::Base
   # @!attribute [r] instance_users
   #   @note You are scoped by the current tenant, you might not see all.
   has_many :instance_users, dependent: :destroy
+
+  has_many :user_role_requests, class_name: Instance::UserRoleRequest.name, dependent: :destroy,
+                                inverse_of: :instance
+
   # @!attribute [r] users
   #   @note You are scoped by the current tenant, you might not see all.
   has_many :users, through: :instance_users
