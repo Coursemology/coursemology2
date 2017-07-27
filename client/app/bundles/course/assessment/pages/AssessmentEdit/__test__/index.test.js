@@ -47,7 +47,7 @@ describe('<AssessmentEdit />', () => {
     const titleInput = editPage.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: newTitle } });
 
-    const spy = jest.spyOn(CourseAPI.assessments, 'update');
+    const spy = jest.spyOn(CourseAPI.assessment.assessments, 'update');
     const form = editPage.find('form');
     form.simulate('submit');
     expect(spy).toHaveBeenCalledWith(id,
