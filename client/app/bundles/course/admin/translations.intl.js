@@ -20,6 +20,10 @@ export const defaultComponentTitles = defineMessages({
     id: 'course.admin.componentTitles.course_users_component',
     defaultMessage: 'Users',
   },
+  course_forums_component: {
+    id: 'course.admin.componentTitles.course_forums_component',
+    defaultMessage: 'Forums',
+  },
 });
 
 export default translations;

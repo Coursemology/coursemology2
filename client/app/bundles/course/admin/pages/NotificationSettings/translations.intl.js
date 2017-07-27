@@ -74,6 +74,14 @@ export const settingDescriptions = defineMessages({
     id: 'course.admin.NotificationSettings.settingDescriptions.new_enrol_request',
     defaultMessage: 'Notify staff when users request to enrol in the course.',
   },
+  post_replied: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.post_replied',
+    defaultMessage: 'Notify users who are subscribed to a forum topic when a replied is made to that topic.',
+  },
+  topic_created: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.topic_created',
+    defaultMessage: 'Notify users who are subscribed to a forum when a topic is created for that forum.',
+  },
 });
 
 export const settingTitles = defineMessages({
@@ -116,6 +124,14 @@ export const settingTitles = defineMessages({
   new_enrol_request: {
     id: 'course.admin.NotificationSettings.settingTitles.new_enrol_request',
     defaultMessage: 'New Enrol Request',
+  },
+  post_replied: {
+    id: 'course.admin.NotificationSettings.settingTitles.post_replied',
+    defaultMessage: 'Post Replied',
+  },
+  topic_created: {
+    id: 'course.admin.NotificationSettings.settingTitles.topic_created',
+    defaultMessage: 'Topic Created',
   },
 });
 

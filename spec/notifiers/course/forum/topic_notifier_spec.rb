@@ -29,6 +29,19 @@ RSpec.describe Course::Forum::TopicNotifier, type: :notifier do
       it 'sends an email notification' do
         expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
+
+      context 'when email notifications are disabled' do
+        before do
+          context = OpenStruct.new(key: Course::ForumsComponent.key, current_course: course)
+          setting = { 'key' => 'topic_created', 'enabled' => false }
+          Course::Settings::ForumsComponent.new(context).update_email_setting(setting)
+          course.save!
+        end
+
+        it 'does not send an email notifications' do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+      end
     end
   end
 end
