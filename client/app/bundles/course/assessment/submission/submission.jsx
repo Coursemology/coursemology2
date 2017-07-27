@@ -7,7 +7,7 @@ import history from 'lib/history';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 
 import store from './store';
-import routes from './routes';
+import SubmissionEditLayout from './containers/SubmissionEditLayout';
 
 $(document).ready(() => {
   const mountNode = document.getElementById('submission-edit');
@@ -15,7 +15,9 @@ $(document).ready(() => {
   if (mountNode) {
     render(
       <ProviderWrapper store={store}>
-        <Router history={history}>{routes}</Router>
+        <Router history={history}>
+          <SubmissionEditLayout />
+        </Router>
       </ProviderWrapper>
     , mountNode);
   }
