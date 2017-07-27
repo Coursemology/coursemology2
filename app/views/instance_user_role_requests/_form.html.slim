@@ -5,6 +5,6 @@ p = t('.hint')
                    label: t('.role_label')
   = f.input :organization
   = f.input :designation
-  = f.input :reason
+  = f.input :reason, as: :string
 
   = f.button :submit, f.object.persisted? ? t('.edit_button') : t('.create_button')
