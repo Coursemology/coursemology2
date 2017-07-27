@@ -7,7 +7,7 @@ import { grey200, grey400 } from 'material-ui/styles/colors';
 import AddCommentIcon from './AddCommentIcon';
 import OverlayTooltip from './OverlayTooltip';
 import Annotations from '../../containers/Annotations';
-import { AnnotationProp } from '../../propTypes';
+import { annotationShape } from '../../propTypes';
 
 const styles = {
   editor: {
@@ -152,7 +152,7 @@ NarrowEditor.propTypes = {
   expanded: PropTypes.arrayOf(PropTypes.bool).isRequired,
   answerId: PropTypes.number.isRequired,
   fileId: PropTypes.number.isRequired,
-  annotations: PropTypes.arrayOf(AnnotationProp),
+  annotations: PropTypes.arrayOf(annotationShape),
   content: PropTypes.arrayOf(PropTypes.string).isRequired,
   expandLine: PropTypes.func,
   collapseLine: PropTypes.func,

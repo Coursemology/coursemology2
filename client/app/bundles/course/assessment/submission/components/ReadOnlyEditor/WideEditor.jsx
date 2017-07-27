@@ -4,7 +4,7 @@ import { grey200, grey400 } from 'material-ui/styles/colors';
 
 import WideComments from './WideComments';
 import AddCommentIcon from './AddCommentIcon';
-import { AnnotationProp } from '../../propTypes';
+import { annotationShape } from '../../propTypes';
 
 const styles = {
   layout: {
@@ -167,7 +167,7 @@ WideEditor.propTypes = {
   expanded: PropTypes.arrayOf(PropTypes.bool).isRequired,
   answerId: PropTypes.number.isRequired,
   fileId: PropTypes.number.isRequired,
-  annotations: PropTypes.arrayOf(AnnotationProp),
+  annotations: PropTypes.arrayOf(annotationShape),
   content: PropTypes.arrayOf(PropTypes.string).isRequired,
   expandLine: PropTypes.func,
   collapseLine: PropTypes.func,

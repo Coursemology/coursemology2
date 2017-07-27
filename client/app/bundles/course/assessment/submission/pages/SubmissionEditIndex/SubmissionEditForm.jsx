@@ -17,8 +17,8 @@ import { red100, red200, red900, yellow900, grey100, blue500,
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { ExplanationProp, QuestionProp, QuestionFlagsProp,
-        QuestionGradeProp, TopicProp } from '../../propTypes';
+import { explanationShape, questionShape, questionFlagsShape,
+        questionGradeShape, topicShape } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
@@ -472,12 +472,12 @@ SubmissionEditForm.propTypes = {
   graded: PropTypes.bool.isRequired,
   published: PropTypes.bool.isRequired,
 
-  explanations: PropTypes.objectOf(ExplanationProp),
-  grading: PropTypes.objectOf(QuestionGradeProp),
+  explanations: PropTypes.objectOf(explanationShape),
+  grading: PropTypes.objectOf(questionGradeShape),
   questionIds: PropTypes.arrayOf(PropTypes.number),
-  questions: PropTypes.objectOf(QuestionProp),
-  questionsFlags: PropTypes.objectOf(QuestionFlagsProp),
-  topics: PropTypes.objectOf(TopicProp),
+  questions: PropTypes.objectOf(questionShape),
+  questionsFlags: PropTypes.objectOf(questionFlagsShape),
+  topics: PropTypes.objectOf(topicShape),
   isAutograding: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
   pristine: PropTypes.bool,

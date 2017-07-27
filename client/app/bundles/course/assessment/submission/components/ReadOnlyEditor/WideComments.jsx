@@ -5,7 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import Annotations from '../../containers/Annotations';
 import PostPreview from '../../containers/PostPreview';
-import { AnnotationProp } from '../../propTypes';
+import { annotationShape } from '../../propTypes';
 
 const styles = {
   collapsed: {
@@ -88,7 +88,7 @@ WideComments.propTypes = {
   answerId: PropTypes.number.isRequired,
   fileId: PropTypes.number.isRequired,
   expanded: PropTypes.arrayOf(PropTypes.bool).isRequired,
-  annotations: PropTypes.arrayOf(AnnotationProp),
+  annotations: PropTypes.arrayOf(annotationShape),
   expandLine: PropTypes.func,
   collapseLine: PropTypes.func,
   onClick: PropTypes.func,

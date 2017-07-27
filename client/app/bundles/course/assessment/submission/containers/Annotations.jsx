@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Card, CardText } from 'material-ui/Card';
 
-import { PostProp, AnnotationProp } from '../propTypes';
+import { postShape, annotationShape } from '../propTypes';
 import CommentCard from '../components/CommentCard';
 import CommentField from '../components/CommentField';
 import * as annotationActions from '../actions/annotations';
@@ -54,7 +54,7 @@ VisibleAnnotations.propTypes = {
   }),
   fileId: PropTypes.number.isRequired,
   lineNumber: PropTypes.number.isRequired,
-  posts: PropTypes.arrayOf(PostProp),
+  posts: PropTypes.arrayOf(postShape),
   /* eslint-disable react/no-unused-prop-types */
   match: PropTypes.shape({
     params: PropTypes.shape({
@@ -63,7 +63,7 @@ VisibleAnnotations.propTypes = {
       submissionId: PropTypes.string,
     }),
   }),
-  annotation: AnnotationProp,
+  annotation: annotationShape,
   answerId: PropTypes.number.isRequired,
   /* eslint-enable react/no-unused-prop-types */
 

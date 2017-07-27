@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, intlShape, defineMessages } from 'react-intl';
 import { Card, CardText } from 'material-ui/Card';
 import { yellow100 } from 'material-ui/styles/colors';
-import { QuestionProp } from '../propTypes';
+import { questionShape } from '../propTypes';
 import { questionTypes } from '../constants';
 import Answers from './Answers';
 
@@ -25,7 +25,7 @@ class SubmissionAnswer extends Component {
   static propTypes = {
     intl: intlShape.isRequired,
     readOnly: PropTypes.bool,
-    question: QuestionProp,
+    question: questionShape,
     answerId: PropTypes.number,
   };
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { AnnotationProp } from '../propTypes';
+import { annotationShape } from '../propTypes';
 
 const styles = {
   chevron: {
@@ -28,7 +28,7 @@ class VisiblePostPreview extends Component {
 
 VisiblePostPreview.propTypes = {
   style: PropTypes.object,                  // eslint-disable-line react/forbid-prop-types
-  annotation: AnnotationProp.isRequired,    // eslint-disable-line react/no-unused-prop-types
+  annotation: annotationShape.isRequired,    // eslint-disable-line react/no-unused-prop-types
   creator: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
 };

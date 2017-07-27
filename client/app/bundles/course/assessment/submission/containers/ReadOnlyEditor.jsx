@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import ReadOnlyEditorComponent from '../components/ReadOnlyEditor';
-import { TopicProp } from '../propTypes';
+import { topicShape } from '../propTypes';
 
 class ReadOnlyEditorContainer extends Component {
   static propTypes = {
-    annotations: PropTypes.objectOf(TopicProp),
+    annotations: PropTypes.objectOf(topicShape),
     answerId: PropTypes.number.isRequired,
     content: PropTypes.arrayOf(PropTypes.string),
     fileId: PropTypes.number.isRequired,

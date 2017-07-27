@@ -12,7 +12,7 @@ import { Table, TableHeader, TableHeaderColumn, TableBody, TableRow, TableRowCol
 import Paper from 'material-ui/Paper';
 
 import ExpandableText from 'lib/components/ExpandableText';
-import { TestCaseProp } from '../propTypes';
+import { testCaseShape } from '../propTypes';
 import { workflowStates } from '../constants';
 
 const styles = {
@@ -248,9 +248,9 @@ VisibleTestCaseView.propTypes = {
   canGrade: PropTypes.bool,
   isAutograding: PropTypes.bool,
   testCases: PropTypes.shape({
-    evaluation_test: PropTypes.arrayOf(TestCaseProp),
-    private_test: PropTypes.arrayOf(TestCaseProp),
-    public_test: PropTypes.arrayOf(TestCaseProp),
+    evaluation_test: PropTypes.arrayOf(testCaseShape),
+    private_test: PropTypes.arrayOf(testCaseShape),
+    public_test: PropTypes.arrayOf(testCaseShape),
     stdout: PropTypes.string,
     stderr: PropTypes.string,
   }),

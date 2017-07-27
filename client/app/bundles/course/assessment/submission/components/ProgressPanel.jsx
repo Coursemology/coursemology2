@@ -7,7 +7,7 @@ import { red100, yellow100, grey100, green100, blue100 } from 'material-ui/style
 import WarningIcon from 'material-ui/svg-icons/alert/warning';
 
 import { formatDateTime } from '../utils';
-import { SubmissionProp } from '../propTypes';
+import { submissionShape } from '../propTypes';
 import translations from '../translations';
 import { workflowStates } from '../constants';
 
@@ -84,7 +84,7 @@ class ProgressPanel extends Component {
 
 ProgressPanel.propTypes = {
   intl: intlShape.isRequired,
-  submission: SubmissionProp.isRequired,
+  submission: submissionShape.isRequired,
 };
 
 export default injectIntl(ProgressPanel);

@@ -14,7 +14,7 @@ import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import moment from 'lib/moment';
 /* eslint-enable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 
-import { PostProp } from '../propTypes';
+import { postShape } from '../propTypes';
 
 const styles = {
   card: {
@@ -52,7 +52,7 @@ const styles = {
 
 export default class CommentCard extends Component {
   static propTypes = {
-    post: PostProp.isRequired,
+    post: postShape.isRequired,
     editValue: PropTypes.string,
 
     handleChange: PropTypes.func,

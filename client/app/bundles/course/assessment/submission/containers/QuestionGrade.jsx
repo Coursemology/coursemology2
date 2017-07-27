@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import { grey100 } from 'material-ui/styles/colors';
 
-import { QuestionGradeProp, QuestionProp } from '../propTypes';
+import { questionGradeShape, questionShape } from '../propTypes';
 import actionTypes from '../constants';
 
 const styles = {
@@ -16,9 +16,9 @@ const styles = {
 class VisibleQuestionGrade extends Component {
   static propTypes = {
     editable: PropTypes.bool.isRequired,
-    grading: QuestionGradeProp,
+    grading: questionGradeShape,
     id: PropTypes.number.isRequired,
-    question: QuestionProp,
+    question: questionShape,
     updateGrade: PropTypes.func.isRequired,
   };
 

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import NarrowEditor from './NarrowEditor';
 import WideEditor from './WideEditor';
 import Checkbox from './Checkbox';
-import { AnnotationProp } from '../../propTypes';
+import { annotationShape } from '../../propTypes';
 
 const EDITOR_THRESHOLD = 1063;
 const EDITOR_MODE_NARROW = 'narrow';
@@ -12,7 +12,7 @@ const EDITOR_MODE_WIDE = 'wide';
 
 export default class ReadOnlyEditor extends Component {
   static propTypes = {
-    annotations: PropTypes.arrayOf(AnnotationProp),
+    annotations: PropTypes.arrayOf(annotationShape),
     answerId: PropTypes.number.isRequired,
     content: PropTypes.arrayOf(PropTypes.string),
     fileId: PropTypes.number.isRequired,

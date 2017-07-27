@@ -7,7 +7,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHeaderColumn, TableRowCol
 import ReactTooltip from 'react-tooltip';
 
 import { formatDateTime } from '../utils';
-import { GradingProp, QuestionProp, SubmissionProp } from '../propTypes';
+import { gradingShape, questionShape, submissionShape } from '../propTypes';
 import actionTypes, { workflowStates } from '../constants';
 import translations from '../translations';
 
@@ -222,9 +222,9 @@ class VisibleGradingPanel extends Component {
 
 VisibleGradingPanel.propTypes = {
   intl: intlShape.isRequired,
-  questions: PropTypes.objectOf(QuestionProp),
-  submission: SubmissionProp.isRequired,
-  grading: GradingProp.isRequired,
+  questions: PropTypes.objectOf(questionShape),
+  submission: submissionShape.isRequired,
+  grading: gradingShape.isRequired,
   updateExp: PropTypes.func.isRequired,
   updateMultiplier: PropTypes.func.isRequired,
 };

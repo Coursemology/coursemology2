@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { PostProp, TopicProp } from '../propTypes';
+import { postShape, topicShape } from '../propTypes';
 import CommentCard from '../components/CommentCard';
 import CommentField from '../components/CommentField';
 import * as commentActions from '../actions/comments';
@@ -43,8 +43,8 @@ VisibleComments.propTypes = {
     topics: PropTypes.objectOf(PropTypes.string),
     posts: PropTypes.objectOf(PropTypes.string),
   }),
-  posts: PropTypes.arrayOf(PostProp),
-  topic: TopicProp,
+  posts: PropTypes.arrayOf(postShape),
+  topic: topicShape,
 
   handleCreateChange: PropTypes.func.isRequired,
   handleUpdateChange: PropTypes.func.isRequired,

@@ -15,7 +15,7 @@ import SvgIcon from 'material-ui/SvgIcon';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { ExplanationProp, QuestionProp, QuestionFlagsProp, TopicProp } from '../../propTypes';
+import { explanationShape, questionShape, questionFlagsShape, topicShape } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
@@ -470,12 +470,12 @@ SubmissionEditStepForm.propTypes = {
   attempting: PropTypes.bool.isRequired,
   published: PropTypes.bool.isRequired,
 
-  explanations: PropTypes.objectOf(ExplanationProp),
+  explanations: PropTypes.objectOf(explanationShape),
   allCorrect: PropTypes.bool.isRequired,
   questionIds: PropTypes.arrayOf(PropTypes.number),
-  questions: PropTypes.objectOf(QuestionProp),
-  questionsFlags: PropTypes.objectOf(QuestionFlagsProp),
-  topics: PropTypes.objectOf(TopicProp),
+  questions: PropTypes.objectOf(questionShape),
+  questionsFlags: PropTypes.objectOf(questionFlagsShape),
+  topics: PropTypes.objectOf(topicShape),
   isSaving: PropTypes.bool.isRequired,
   pristine: PropTypes.bool,
 

@@ -6,7 +6,7 @@ import { intlShape, injectIntl, defineMessages } from 'react-intl';
 import Chip from 'material-ui/Chip';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { AttachmentProp } from '../propTypes';
+import { attachmentShape } from '../propTypes';
 import destroy from '../actions/attachments';
 import { workflowStates } from '../constants';
 
@@ -101,7 +101,7 @@ class VisibleUploadedFileView extends Component {
 VisibleUploadedFileView.propTypes = {
   intl: intlShape.isRequired,
   canDestroyAttachments: PropTypes.bool,
-  attachments: PropTypes.arrayOf(AttachmentProp),
+  attachments: PropTypes.arrayOf(attachmentShape),
 
   deleteAttachment: PropTypes.func,
 };
