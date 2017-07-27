@@ -1,8 +1,20 @@
 # frozen_string_literal: true
 class Course::Settings::ForumsComponent < Course::Settings::Component
   include ActiveModel::Conversion
+  include Course::Settings::EmailSettingsConcern
 
   validates :pagination, numericality: { greater_than: 0 }
+
+  def self.email_setting_items
+    {
+      post_replied: { enabled_by_default: true },
+      topic_created: { enabled_by_default: true }
+    }
+  end
+
+  def self.component_class
+    Course::ForumsComponent
+  end
 
   # Returns the title of forums component
   #
