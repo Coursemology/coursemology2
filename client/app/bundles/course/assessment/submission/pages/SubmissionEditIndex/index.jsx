@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Card, CardHeader, CardText } from 'material-ui/Card';
+import FileIcon from 'material-ui/svg-icons/editor/insert-drive-file';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import IntlNotificationBar, { notificationShape } from 'lib/components/IntlNotificationBar';
@@ -100,6 +102,26 @@ class VisibleSubmissionEditIndex extends Component {
   handlePublish() {
     const { dispatch, match: { params }, grading, exp } = this.props;
     dispatch(publish(params.submissionId, Object.values(grading), exp));
+  }
+
+  renderAssessment() {
+    const { assessment } = this.props;
+
+    const renderFile = file => (<div>
+      <FileIcon style={{ verticalAlign: 'middle' }} />
+      <a href={file.url}><span>{file.name}</span></a>
+    </div>);
+
+    return (
+      <Card style={{ marginBottom: 20 }}>
+        <CardHeader title={<h3>{assessment.title}</h3>} />
+        <CardText dangerouslySetInnerHTML={{ __html: assessment.description }} />
+        {assessment.files ? (<CardText>
+          <h4>Files</h4>
+          {assessment.files.map(renderFile)}
+        </CardText>) : null}
+      </Card>
+    );
   }
 
   renderProgress() {
@@ -203,6 +225,7 @@ class VisibleSubmissionEditIndex extends Component {
     }
     return (
       <div>
+        {this.renderAssessment()}
         {this.renderProgress()}
         {this.renderContent()}
         <IntlNotificationBar notification={notification} />

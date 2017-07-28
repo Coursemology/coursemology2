@@ -10,6 +10,11 @@ json.assessment do
   json.tabbedView @assessment.tabbed_view
   json.questionIds @assessment.questions.map(&:id)
   json.passwordProtected @assessment.password_protected?
+  json.description @assessment.description
+  json.files @assessment.folder.materials do |material|
+    json.url url_for([@assessment.course, @assessment.folder, material])
+    json.name format_inline_text(material.name)
+  end
 end
 
 answers = @submission.latest_answers
