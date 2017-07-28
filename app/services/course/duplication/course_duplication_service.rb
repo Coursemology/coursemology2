@@ -38,7 +38,12 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
   # @return [Course] The duplicated course
   def duplicate_course(current_course)
     duplicator.duplicate(current_course).tap do |new_course|
-      notify_duplication_complete(new_course) if new_course.save
+      duplication_successful = Course.transaction do
+        raise ActiveRecord::Rollback unless new_course.save
+        raise ActiveRecord::Rollback unless update_course_settings(@duplicator, new_course, current_course)
+        true
+      end
+      notify_duplication_complete(new_course) if duplication_successful
     end
   end
 
@@ -60,5 +65,20 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
     Course::Mailer.
       course_duplicated_email(@options[:current_course], new_course, @options[:current_user]).
       deliver_now
+  end
+
+  # Updates category_ids in the duplicated course settings. This is to be run after the course has
+  # been saved and category_ids are available.
+  def update_course_settings(duplicator, new_course, old_course)
+    component_key = Course::AssessmentsComponent.key
+    old_category_settings = old_course.settings.public_send(component_key)
+    return true if old_category_settings.nil?
+    new_category_settings = {}
+    old_course.assessment_categories.each do |old_category|
+      new_category = duplicator.duplicate(old_category)
+      new_category_settings[new_category.id.to_s] = old_category_settings[old_category.id.to_s]
+    end
+    new_course.settings.public_send("#{component_key}=", new_category_settings)
+    new_course.save
   end
 end

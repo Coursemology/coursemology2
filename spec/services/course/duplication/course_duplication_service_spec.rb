@@ -451,6 +451,30 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           expect(new_attachment).to eq attachment
         end
       end
+
+      context 'when assessment categories have settings' do
+        let!(:categories) { create_list(:course_assessment_category, 2, course: course) }
+
+        before do
+          context = OpenStruct.new(key: Course::AssessmentsComponent.key, current_course: course)
+          settings_interface = Course::Settings::AssessmentsComponent.new(context)
+          course.assessment_categories.each do |category|
+            setting = {
+              'key' => 'new_comment', 'enabled' => false, 'options' => { 'category_id' => category.id }
+            }
+            settings_interface.update_email_setting(setting)
+          end
+          course.save!
+        end
+
+        it 'duplicates the settings' do
+          all_new_comment_emails_disabled = new_course.assessment_categories.none? do |category|
+            Course::Settings::AssessmentsComponent.email_enabled?(category, :new_comment)
+          end
+
+          expect(all_new_comment_emails_disabled).to be(true)
+        end
+      end
     end
   end
 end
