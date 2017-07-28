@@ -135,6 +135,7 @@ class VisibleGradingPanel extends Component {
         submitter, workflowState, dueAt, attemptedAt,
         submittedAt, grader, gradedAt, canGrade,
       },
+      gamified,
     } = this.props;
 
     const published = workflowState === workflowStates.Published;
@@ -155,7 +156,7 @@ class VisibleGradingPanel extends Component {
           {tableRow('student', submitter)}
           {tableRow('status', this.renderSubmissionStatus())}
           {shouldRenderGrading ? tableRow('totalGrade', this.renderTotalGrade()) : null}
-          {shouldRenderGrading ? tableRow('expAwarded', this.renderExperiencePoints()) : null}
+          {shouldRenderGrading && gamified ? tableRow('expAwarded', this.renderExperiencePoints()) : null}
           {tableRow('dueAt', formatDateTime(dueAt))}
           {tableRow('attemptedAt', formatDateTime(attemptedAt))}
           {tableRow('submittedAt', formatDateTime(submittedAt))}
@@ -240,18 +241,20 @@ class VisibleGradingPanel extends Component {
 
 VisibleGradingPanel.propTypes = {
   intl: intlShape.isRequired,
+  gamified: PropTypes.bool.isRequired,
+  grading: gradingShape.isRequired,
   questions: PropTypes.objectOf(questionShape),
   submission: submissionShape.isRequired,
-  grading: gradingShape.isRequired,
   updateExp: PropTypes.func.isRequired,
   updateMultiplier: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
+    gamified: state.assessment.gamified,
+    grading: state.grading,
     questions: state.questions,
     submission: state.submission,
-    grading: state.grading,
   };
 }
 

@@ -11,6 +11,7 @@ json.assessment do
   json.questionIds @assessment.questions.map(&:id)
   json.passwordProtected @assessment.password_protected?
   json.description @assessment.description
+  json.gamified @assessment.course.gamified?
   json.files @assessment.folder.materials do |material|
     json.url url_for([@assessment.course, @assessment.folder, material])
     json.name format_inline_text(material.name)
