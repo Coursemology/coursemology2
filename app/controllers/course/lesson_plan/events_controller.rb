@@ -3,37 +3,27 @@ class Course::LessonPlan::EventsController < Course::LessonPlan::Controller
   load_and_authorize_resource :event, class: Course::LessonPlan::Event.name, through: :course,
                                       through_association: :lesson_plan_events
 
-  def new #:nodoc:
-  end
-
   def create #:nodoc:
     if @event.save
-      redirect_to course_lesson_plan_path(current_course),
-                  success: t('.success', title: @event.title)
+      render partial: 'event_lesson_plan_item', locals: { item: @event }
     else
-      render 'new'
+      render json: { errors: @event.errors }, status: :bad_request
     end
-  end
-
-  def edit #:nodoc:
   end
 
   def update #:nodoc:
     if @event.update_attributes(event_params)
-      redirect_to course_lesson_plan_path(current_course),
-                  success: t('.success', title: @event.title)
+      render partial: 'event_lesson_plan_item', locals: { item: @event }
     else
-      render 'edit'
+      render json: { errors: @event.errors }, status: :bad_request
     end
   end
 
   def destroy #:nodoc:
     if @event.destroy
-      redirect_to course_lesson_plan_path(current_course),
-                  success: t('.success', title: @event.title)
+      head :ok
     else
-      redirect_to course_lesson_plan_path(current_course),
-                  failure: t('.failure')
+      head :bad_request
     end
   end
 

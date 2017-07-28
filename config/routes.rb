@@ -231,7 +231,7 @@ Rails.application.routes.draw do
         get 'edit' => 'items#index'
         resources :milestones, only: [:create, :update, :destroy]
         resources :items, only: [:update]
-        resources :events, except: [:index, :show]
+        resources :events, only: [:create, :update, :destroy]
         resources :todos, only: [] do
           post 'ignore', on: :member
         end
