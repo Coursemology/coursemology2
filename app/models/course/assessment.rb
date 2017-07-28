@@ -19,8 +19,6 @@ class Course::Assessment < ActiveRecord::Base
   # the flag to be cleared too early.
   after_commit :clear_duplication_flag
 
-  validate :validate_presence_of_questions, if: :published?
-
   belongs_to :tab, inverse_of: :assessments
 
   # `submissions` association must be put before `questions`, so that all answers will be deleted
@@ -171,10 +169,6 @@ class Course::Assessment < ActiveRecord::Base
   def set_defaults
     self.published = false
     self.autograded ||= false
-  end
-
-  def validate_presence_of_questions
-    errors.add(:published, :no_questions) unless questions.present?
   end
 
   def clear_duplication_flag
