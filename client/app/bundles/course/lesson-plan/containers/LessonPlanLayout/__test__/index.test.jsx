@@ -17,6 +17,7 @@ beforeEach(() => {
 const lessonPlanData = {
   items: [{
     id: 9,
+    eventId: 8,
     published: false,
     lesson_plan_item_type: ['Other'],
     title: 'Other Event',
@@ -24,8 +25,6 @@ const lessonPlanData = {
     location: 'The pits',
     start_at: '2017-01-04T02:03:00.000+08:00',
     end_at: '2017-01-05T02:03:00.000+08:00',
-    edit_path: `/courses/${courseId}/lesson_plan/events/9`,
-    delete_path: `/courses/${courseId}/lesson_plan/events/9/edit`,
     materials: [{
       id: 22,
       name: 'Fire',

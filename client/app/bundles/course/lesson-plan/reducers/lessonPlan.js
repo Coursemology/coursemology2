@@ -68,6 +68,34 @@ export default function (state = initialState, action) {
         groups: groupItemsUnderMilestones(state.items, milestones),
       };
     }
+    case actionTypes.EVENT_CREATE_SUCCESS: {
+      const items = [...state.items, generateTypeKey(action.event)];
+      return {
+        ...state,
+        items,
+        groups: groupItemsUnderMilestones(items, state.milestones),
+        visibilityByType: initializeVisibility(items),
+      };
+    }
+    case actionTypes.EVENT_UPDATE_SUCCESS: {
+      const items = updateOrAppend(state.items, generateTypeKey(action.event));
+
+      return {
+        ...state,
+        items,
+        groups: groupItemsUnderMilestones(items, state.milestones),
+        visibilityByType: initializeVisibility(items),
+      };
+    }
+    case actionTypes.EVENT_DELETE_SUCCESS: {
+      const items = deleteIfFound(state.items, action.itemId);
+      return {
+        ...state,
+        items,
+        groups: groupItemsUnderMilestones(items, state.milestones),
+        visibilityByType: initializeVisibility(items),
+      };
+    }
     default:
       return state;
   }

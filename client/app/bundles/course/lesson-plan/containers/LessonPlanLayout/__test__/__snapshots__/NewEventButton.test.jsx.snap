@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NewEventButton /> is hidden when canManageLessonPlan is false 1`] = `
+<Connect(InjectIntl(NewEventButton))>
+  <InjectIntl(NewEventButton)
+    canManageLessonPlan={false}
+    dispatch={[Function]}
+  >
+    <NewEventButton
+      canManageLessonPlan={false}
+      disabled={false}
+      dispatch={[Function]}
+      intl={
+        Object {
+          "defaultFormats": Object {},
+          "defaultLocale": "en",
+          "formatDate": [Function],
+          "formatHTMLMessage": [Function],
+          "formatMessage": [Function],
+          "formatNumber": [Function],
+          "formatPlural": [Function],
+          "formatRelative": [Function],
+          "formatTime": [Function],
+          "formats": Object {},
+          "formatters": Object {
+            "getDateTimeFormat": [Function],
+            "getMessageFormat": [Function],
+            "getNumberFormat": [Function],
+            "getPluralFormat": [Function],
+            "getRelativeFormat": [Function],
+          },
+          "locale": "en",
+          "messages": Object {},
+          "now": [Function],
+          "textComponent": "span",
+        }
+      }
+    >
+      <div />
+    </NewEventButton>
+  </InjectIntl(NewEventButton)>
+</Connect(InjectIntl(NewEventButton))>
+`;
