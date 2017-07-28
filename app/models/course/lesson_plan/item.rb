@@ -67,7 +67,7 @@ class Course::LessonPlan::Item < ActiveRecord::Base
   end
 
   def validate_start_at_cannot_be_after_end_at
-    return unless end_at && start_at > end_at
+    return unless end_at && start_at && start_at > end_at
     errors.add(:start_at, :cannot_be_after_end_at)
   end
 end
