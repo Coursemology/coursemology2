@@ -32,7 +32,10 @@ const fileShape = PropTypes.shape({
 
 export const questionGradeShape = PropTypes.shape({
   grade: PropTypes.number,
-  grader: PropTypes.string,
+  grader: PropTypes.shape({
+    name: PropTypes.string,
+    id: PropTypes.number,
+  }),
 });
 
 export const gradingShape = PropTypes.shape({

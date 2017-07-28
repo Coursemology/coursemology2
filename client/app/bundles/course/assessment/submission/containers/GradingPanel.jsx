@@ -6,6 +6,7 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { Table, TableHeader, TableBody, TableRow, TableHeaderColumn, TableRowColumn } from 'material-ui/Table';
 import ReactTooltip from 'react-tooltip';
 
+import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatDateTime } from '../utils';
 import { gradingShape, questionShape, submissionShape } from '../propTypes';
 import actionTypes, { workflowStates } from '../constants';
@@ -165,14 +166,25 @@ class VisibleGradingPanel extends Component {
     );
   }
 
-  renderGradeRow(question) {
+  renderGradeRow(question, showGrader) {
     const questionGrading = this.props.grading.questions[question.id];
     const questionGrade = questionGrading && questionGrading.grade !== null ? questionGrading.grade : '';
+    const grader = questionGrading.grader;
+
+    const courseId = getCourseId();
+    const getCourseUserURL = id => `/courses/${courseId}/users/${id}`;
+
     return (
       <TableRow key={question.id}>
-        <TableHeaderColumn style={styles.headerColumn} columnNumber={0} colSpan={2}>
+        <TableHeaderColumn style={styles.headerColumn} colSpan={2}>
           {question.displayTitle}
         </TableHeaderColumn>
+        {showGrader ? <TableHeaderColumn style={styles.headerColumn}>
+          {grader.id ?
+            <a href={getCourseUserURL(grader.id)}>{grader.name}</a> :
+            grader.name
+          }
+        </TableHeaderColumn> : null}
         <TableRowColumn>{`${questionGrade} / ${question.maximumGrade}`}</TableRowColumn>
       </TableRow>
     );
@@ -185,6 +197,9 @@ class VisibleGradingPanel extends Component {
       return null;
     }
 
+    const showGrader = canGrade && (
+      workflowState === workflowStates.Graded || workflowState === workflowStates.Published);
+
     return (
       <div>
         <h4>Grade Summary</h4>
@@ -194,13 +209,16 @@ class VisibleGradingPanel extends Component {
               <TableHeaderColumn style={styles.headerColumn} colSpan={2}>
                 {intl.formatMessage(translations.question)}
               </TableHeaderColumn>
+              { showGrader ? <TableHeaderColumn style={styles.headerColumn}>
+                {intl.formatMessage(translations.grader)}
+              </TableHeaderColumn> : null }
               <TableHeaderColumn style={styles.headerColumn}>
                 {intl.formatMessage(translations.totalGrade)}
               </TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
-            {Object.values(questions).map(question => this.renderGradeRow(question))}
+            {Object.values(questions).map(question => this.renderGradeRow(question, showGrader))}
           </TableBody>
         </Table>
       </div>
