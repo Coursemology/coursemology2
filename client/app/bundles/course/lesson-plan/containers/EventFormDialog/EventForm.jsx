@@ -55,7 +55,7 @@ const validate = (values) => {
   return errors;
 };
 
-const EventForm = ({ handleSubmit, onSubmit, disabled }) => (
+const EventForm = ({ handleSubmit, onSubmit, disabled, formValues, shiftEndDate }) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Field
       name="title"
@@ -94,6 +94,7 @@ const EventForm = ({ handleSubmit, onSubmit, disabled }) => (
         name="start_at"
         floatingLabelText={<FormattedMessage {...translations.startAt} />}
         component={DateTimePicker}
+        afterChange={(_, newStartAt) => shiftEndDate(formNames.EVENT, newStartAt, formValues)}
         style={styles.oneColumn}
         {...{ disabled }}
       />
@@ -118,6 +119,8 @@ const EventForm = ({ handleSubmit, onSubmit, disabled }) => (
 );
 
 EventForm.propTypes = {
+  formValues: PropTypes.shape(),
+  shiftEndDate: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
