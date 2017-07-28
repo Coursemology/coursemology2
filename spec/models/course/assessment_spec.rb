@@ -33,13 +33,12 @@ RSpec.describe Course::Assessment do
     describe 'validations' do
       context 'when it is published' do
         context 'when it has no questions' do
+          # This used to be invalid, but some instructors create assessments to provide
+          # instructions for tasks outside of Coursemology.
+          #
+          # See https://github.com/Coursemology/coursemology2/issues/2387
           subject { build(:assessment, published: true) }
-
-          it 'adds a :no_questions error on :published' do
-            expect(subject.valid?).to be(false)
-            expect(subject.errors[:published]).to include(I18n.t('activerecord.errors.models.' \
-            'course/assessment.no_questions'))
-          end
+          it { is_expected.to be_valid }
         end
 
         context 'when it has questions' do

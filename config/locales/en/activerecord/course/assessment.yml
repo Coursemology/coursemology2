@@ -3,7 +3,3 @@ en:
     attributes:
       course/assessment/assessment:
         title: 'Title'
-    errors:
-      models:
-        course/assessment:
-          no_questions: 'Assessment can only be published after adding questions'
