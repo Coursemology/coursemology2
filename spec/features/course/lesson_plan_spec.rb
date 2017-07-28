@@ -40,8 +40,6 @@ RSpec.feature 'Course: Lesson Plan' do
 
       scenario 'I can view all lesson plan items and milestones', js: true do
         visit course_lesson_plan_path(course)
-        expect(page).to have_link(nil, href: new_course_lesson_plan_event_path(course))
-        expect(page).to have_link(nil, href: new_course_lesson_plan_milestone_path(course))
 
         milestones.each { |milestone| expect(page).to have_text(milestone.title) }
         events.each { |event| expect(page).to have_text(event.title) }
@@ -59,8 +57,6 @@ RSpec.feature 'Course: Lesson Plan' do
 
       scenario 'I can view all lesson plan items and milestones', js: true do
         visit course_lesson_plan_path(course)
-        expect(page).not_to have_link(nil, href: new_course_lesson_plan_event_path(course))
-        expect(page).not_to have_link(nil, href: new_course_lesson_plan_milestone_path(course))
 
         milestones.each { |milestone| expect(page).to have_text(milestone.title) }
         events.each { |event| expect(page).to have_text(event.title) }

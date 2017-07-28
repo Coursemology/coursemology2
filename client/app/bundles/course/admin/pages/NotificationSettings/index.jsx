@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import Subheader from 'material-ui/Subheader';
 import Toggle from 'material-ui/Toggle';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
-import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
+import NotificationPopup from 'lib/containers/NotificationPopup';
 import { updateNotificationSetting } from 'course/admin/actions/notifications';
 import adminTranslations, { defaultComponentTitles } from 'course/admin/translations.intl';
 import translations, { settingTitles, settingDescriptions } from './translations.intl';
@@ -19,7 +19,6 @@ const styles = {
 
 class NotificationSettings extends React.Component {
   static propTypes = {
-    notification: notificationShape,
     emailSettings: PropTypes.arrayOf(PropTypes.shape({
       component: PropTypes.string,
       component_title: PropTypes.string,
@@ -110,20 +109,17 @@ class NotificationSettings extends React.Component {
   }
 
   render() {
-    const { notification } = this.props;
-
     return (
       <div>
         <h2><FormattedMessage {...translations.emailSettings} /></h2>
         {this.renderEmailSettingsTable()}
 
-        <NotificationBar notification={notification} />
+        <NotificationPopup />
       </div>
     );
   }
 }
 
 export default connect(state => ({
-  notification: state.notification,
   emailSettings: state.notificationSettings,
 }))(NotificationSettings);

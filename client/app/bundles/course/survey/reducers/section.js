@@ -1,5 +1,5 @@
+import { updateOrAppend, deleteIfFound } from 'lib/helpers/reducer-helpers';
 import actionTypes from '../constants';
-import { updateOrAppend, deleteIfFound } from './utils';
 import { sortSectionElements } from '../utils';
 
 const initialState = {};

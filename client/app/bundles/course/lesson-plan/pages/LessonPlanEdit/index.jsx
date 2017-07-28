@@ -1,36 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+import translations from 'course/lesson-plan/translations';
 import MilestoneRow from './MilestoneRow';
 import ItemRow from './ItemRow';
 
-const translations = defineMessages({
-  type: {
-    id: 'course.lessonPlan.LessonPlanEdit.type',
-    defaultMessage: 'Type',
+const styles = {
+  page: {
+    marginTop: 30,
   },
-  title: {
-    id: 'course.lessonPlan.LessonPlanEdit.title',
-    defaultMessage: 'Title',
-  },
-  startTime: {
-    id: 'course.lessonPlan.LessonPlanEdit.startTime',
-    defaultMessage: 'Start Time',
-  },
-  bonusEndTime: {
-    id: 'course.lessonPlan.LessonPlanEdit.bonusEndTime',
-    defaultMessage: 'Bonus End Time',
-  },
-  endTime: {
-    id: 'course.lessonPlan.LessonPlanEdit.endTime',
-    defaultMessage: 'End Time',
-  },
-  published: {
-    id: 'course.lessonPlan.LessonPlanEdit.published',
-    defaultMessage: 'Published',
-  },
-});
+};
 
 class LessonPlanEdit extends React.Component {
   static propTypes = {
@@ -48,9 +28,9 @@ class LessonPlanEdit extends React.Component {
         <tr>
           {rowFor('type')}
           {rowFor('title')}
-          {rowFor('startTime')}
-          {rowFor('bonusEndTime')}
-          {rowFor('endTime')}
+          {rowFor('startAt')}
+          {rowFor('bonusEndAt')}
+          {rowFor('endAt')}
           {rowFor('published')}
         </tr>
       </thead>
@@ -90,7 +70,7 @@ class LessonPlanEdit extends React.Component {
     const { groups } = this.props;
 
     return (
-      <div>
+      <div style={styles.page}>
         <table>
           { LessonPlanEdit.renderHeader() }
           <tbody>
@@ -103,5 +83,5 @@ class LessonPlanEdit extends React.Component {
 }
 
 export default connect(state => ({
-  groups: state.groups,
+  groups: state.lessonPlan.groups,
 }))(LessonPlanEdit);

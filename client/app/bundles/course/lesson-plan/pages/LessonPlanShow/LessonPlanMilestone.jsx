@@ -1,17 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import moment, { longDate } from 'lib/moment';
+import {
+  showMilestoneForm,
+  updateMilestone,
+  deleteMilestone,
+  showDeleteConfirmation,
+} from 'course/lesson-plan/actions';
 
 const translations = defineMessages({
-  deleteMilestoneConfirmation: {
-    id: 'course.lessonPlan.LessonPlanMilestone.deleteConfirmation',
-    defaultMessage: 'Delete Lesson Plan Milestone?',
-  },
   editMilestone: {
     id: 'course.lessonPlan.LessonPlanMilestone.editMilestone',
     defaultMessage: 'Edit Milestone',
@@ -19,6 +22,22 @@ const translations = defineMessages({
   deleteMilestone: {
     id: 'course.lessonPlan.LessonPlanMilestone.deleteMilestone',
     defaultMessage: 'Delete Milestone',
+  },
+  updateSuccess: {
+    id: 'course.lessonPlan.LessonPlanMilestone.updateSuccess',
+    defaultMessage: 'Milestone updated.',
+  },
+  updateFailure: {
+    id: 'course.lessonPlan.LessonPlanMilestone.updateFailure',
+    defaultMessage: 'Failed to update milestone.',
+  },
+  deleteSuccess: {
+    id: 'course.lessonPlan.LessonPlanMilestone.deleteSuccess',
+    defaultMessage: 'Milestone deleted.',
+  },
+  deleteFailure: {
+    id: 'course.lessonPlan.LessonPlanMilestone.deleteFailure',
+    defaultMessage: 'Failed to delete milestone.',
   },
 });
 
@@ -43,15 +62,43 @@ class LessonPlanMilestone extends React.PureComponent {
     title: PropTypes.string.isRequired,
     description: PropTypes.string,
     startAt: PropTypes.string.isRequired,
-    editPath: PropTypes.string,
-    deletePath: PropTypes.string,
+    canManageLessonPlan: PropTypes.bool.isRequired,
 
+    dispatch: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   }
 
+  updateMilestoneHandler = (data) => {
+    const { dispatch, intl, id } = this.props;
+
+    const successMessage = intl.formatMessage(translations.updateSuccess);
+    const failureMessage = intl.formatMessage(translations.updateFailure);
+    return dispatch(updateMilestone(id, data, successMessage, failureMessage));
+  }
+
+  showEditMilestoneDialog = () => {
+    const { dispatch, intl, title, description, startAt } = this.props;
+
+    return dispatch(showMilestoneForm({
+      onSubmit: this.updateMilestoneHandler,
+      formTitle: intl.formatMessage(translations.editMilestone),
+      initialValues: { title, description, start_at: startAt },
+    }));
+  }
+
+  deleteMilestoneHandler = () => {
+    const { dispatch, intl, id } = this.props;
+    const successMessage = intl.formatMessage(translations.deleteSuccess);
+    const failureMessage = intl.formatMessage(translations.deleteFailure);
+    const handleDelete = () => (
+      dispatch(deleteMilestone(id, successMessage, failureMessage))
+    );
+    return dispatch(showDeleteConfirmation(handleDelete));
+  }
+
   renderAdminMenu() {
-    const { intl, editPath, deletePath } = this.props;
-    if (!editPath && !deletePath) { return null; }
+    const { intl, id, canManageLessonPlan } = this.props;
+    if (!canManageLessonPlan || id === undefined) { return null; }
 
     return (
       <IconMenu
@@ -59,20 +106,14 @@ class LessonPlanMilestone extends React.PureComponent {
         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
         targetOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
-        {
-          editPath && <MenuItem
-            primaryText={intl.formatMessage(translations.editMilestone)}
-            href={editPath}
-          />
-        }
-        {
-          deletePath && <MenuItem
-            primaryText={intl.formatMessage(translations.deleteMilestone)}
-            href={deletePath}
-            data-method="delete"
-            data-confirm={intl.formatMessage(translations.deleteMilestoneConfirmation)}
-          />
-        }
+        <MenuItem
+          primaryText={intl.formatMessage(translations.editMilestone)}
+          onTouchTap={this.showEditMilestoneDialog}
+        />
+        <MenuItem
+          primaryText={intl.formatMessage(translations.deleteMilestone)}
+          onTouchTap={this.deleteMilestoneHandler}
+        />
       </IconMenu>
     );
   }
@@ -97,4 +138,6 @@ class LessonPlanMilestone extends React.PureComponent {
   }
 }
 
-export default injectIntl(LessonPlanMilestone);
+export default connect(state => ({
+  canManageLessonPlan: state.flags.canManageLessonPlan,
+}))(injectIntl(LessonPlanMilestone));

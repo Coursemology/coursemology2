@@ -1,11 +1,2 @@
-= page_header do
-  div.btn-group
-    - if can?(:manage, Course::LessonPlan::Item.new(course: current_course))
-      = edit_button(course_lesson_plan_edit_path(current_course))
-    - if can?(:create, Course::LessonPlan::Milestone.new(course: current_course))
-      = new_button([current_course, :lesson_plan_milestone]) { fa_icon 'flag-checkered'.freeze }
-    - if can?(:create, Course::LessonPlan::Event.new(course: current_course))
-      = new_button([current_course, :lesson_plan_event]) { fa_icon 'calendar-plus-o'.freeze }
-
 div#lesson-plan-items
   = fa_icon 'spinner 4x spin'

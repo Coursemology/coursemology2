@@ -31,8 +31,6 @@ class LessonPlanGroup extends React.Component {
         title={milestone.title}
         description={milestone.description}
         startAt={milestone.start_at}
-        editPath={milestone.edit_path}
-        deletePath={milestone.delete_path}
       />
     );
   }

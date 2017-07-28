@@ -1,7 +1,10 @@
 import mirrorCreator from 'mirror-creator';
 
+export const formNames = mirrorCreator([
+  'MILESTONE',
+]);
+
 const actionTypes = mirrorCreator([
-  'SET_NOTIFICATION',
   'SET_ITEM_TYPE_VISIBILITY',
   'LOAD_LESSON_PLAN_REQUEST',
   'LOAD_LESSON_PLAN_SUCCESS',
@@ -9,9 +12,17 @@ const actionTypes = mirrorCreator([
   'ITEM_UPDATE_REQUEST',
   'ITEM_UPDATE_SUCCESS',
   'ITEM_UPDATE_FAILURE',
+  'MILESTONE_FORM_SHOW',
+  'MILESTONE_FORM_HIDE',
   'MILESTONE_UPDATE_REQUEST',
   'MILESTONE_UPDATE_SUCCESS',
   'MILESTONE_UPDATE_FAILURE',
+  'MILESTONE_CREATE_REQUEST',
+  'MILESTONE_CREATE_SUCCESS',
+  'MILESTONE_CREATE_FAILURE',
+  'MILESTONE_DELETE_REQUEST',
+  'MILESTONE_DELETE_SUCCESS',
+  'MILESTONE_DELETE_FAILURE',
 ]);
 
 export default actionTypes;

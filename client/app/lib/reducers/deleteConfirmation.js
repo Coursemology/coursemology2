@@ -1,4 +1,4 @@
-import actionTypes from '../constants';
+import actionTypes from 'lib/constants';
 
 const initialState = {
   open: false,

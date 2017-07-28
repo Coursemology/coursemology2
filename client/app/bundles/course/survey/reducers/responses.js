@@ -1,5 +1,5 @@
+import { updateOrAppend } from 'lib/helpers/reducer-helpers';
 import actionTypes from '../constants';
-import { updateOrAppend } from './utils';
 
 const initialState = {
   isLoading: false,

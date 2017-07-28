@@ -1,13 +1,15 @@
 import actionTypes from '../constants';
 
-const initialState = {};
+const initialState = {
+  canManageLessonPlan: false,
+};
 
 export default function (state = initialState, action) {
   const { type } = action;
 
   switch (type) {
-    case actionTypes.SET_ADMIN_NOTIFICATION: {
-      return { message: action.message };
+    case actionTypes.LOAD_LESSON_PLAN_SUCCESS: {
+      return { ...state, ...action.flags };
     }
     default:
       return state;

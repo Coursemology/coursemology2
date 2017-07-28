@@ -121,5 +121,5 @@ class ItemRow extends React.Component {
 }
 
 export default connect(state => ({
-  visibility: state.visibilityByType,
+  visibility: state.lessonPlan.visibilityByType,
 }))(ItemRow);

@@ -36,8 +36,6 @@ const lessonPlanData = {
     id: 6,
     title: 'Post BBQ',
     start_at: '2017-01-08T02:03:00.000+08:00',
-    edit_path: `/courses/${courseId}/lesson_plan/milestones/6/edit`,
-    delete_path: `/courses/${courseId}/lesson_plan/milestones/6`,
   }],
 };
 
