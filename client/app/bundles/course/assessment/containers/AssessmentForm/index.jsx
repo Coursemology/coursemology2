@@ -138,6 +138,7 @@ class AssessmentForm extends React.Component {
           <Field
             name="skippable"
             component={Toggle}
+            parse={Boolean}
             label={<FormattedMessage {...translations.skippable} />}
             labelPosition="right"
             style={styles.toggle}
@@ -170,6 +171,7 @@ class AssessmentForm extends React.Component {
         <Field
           name="delayed_grade_publication"
           component={Toggle}
+          parse={Boolean}
           label={<FormattedMessage {...translations.delayedGradePublication} />}
           labelPosition="right"
           style={styles.toggle}
@@ -181,6 +183,7 @@ class AssessmentForm extends React.Component {
         <Field
           name="password_protected"
           component={Toggle}
+          parse={Boolean}
           label={<FormattedMessage {...translations.passwordProtection} />}
           labelPosition="right"
           style={styles.toggle}
@@ -279,6 +282,7 @@ class AssessmentForm extends React.Component {
           <Field
             name="published"
             component={Toggle}
+            parse={Boolean}
             label={<FormattedMessage {...translations.published} />}
             labelPosition="right"
             style={styles.toggle}
@@ -289,6 +293,7 @@ class AssessmentForm extends React.Component {
         <Field
           name="autograded"
           component={Toggle}
+          parse={Boolean}
           label={
             modeSwitching ? <FormattedMessage {...translations.autograded} /> :
             <FormattedMessage {...translations.modeSwitchingDisabled} />
@@ -310,6 +315,7 @@ class AssessmentForm extends React.Component {
         <Field
           name="show_private"
           component={Toggle}
+          parse={Boolean}
           label={<FormattedMessage {...translations.showPrivate} />}
           labelPosition="right"
           style={styles.toggle}
@@ -321,6 +327,7 @@ class AssessmentForm extends React.Component {
         <Field
           name="show_evaluation"
           component={Toggle}
+          parse={Boolean}
           label={<FormattedMessage {...translations.showEvaluation} />}
           labelPosition="right"
           style={styles.toggle}

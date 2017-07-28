@@ -147,6 +147,7 @@ class QuestionForm extends React.Component {
           labelPosition="right"
           label={intl.formatMessage(questionFormTranslations.gridView)}
           component={Toggle}
+          parse={Boolean}
           style={styles.toggle}
           {...{ disabled }}
         />
@@ -303,6 +304,7 @@ class QuestionForm extends React.Component {
           labelPosition="right"
           label={intl.formatMessage(questionFormTranslations.required)}
           component={Toggle}
+          parse={Boolean}
           style={styles.toggle}
           {...{ disabled }}
         />

@@ -158,6 +158,7 @@ const SurveyForm = ({
     <Field
       name="allow_response_after_end"
       component={Toggle}
+      parse={Boolean}
       label={intl.formatMessage(translations.allowResponseAfterEnd)}
       labelPosition="right"
       style={styles.toggle}
@@ -169,6 +170,7 @@ const SurveyForm = ({
     <Field
       name="allow_modify_after_submit"
       component={Toggle}
+      parse={Boolean}
       label={intl.formatMessage(translations.allowModifyAfterSubmit)}
       labelPosition="right"
       style={styles.toggle}
@@ -180,6 +182,7 @@ const SurveyForm = ({
     <Field
       name="anonymous"
       component={Toggle}
+      parse={Boolean}
       label={intl.formatMessage(translations.anonymous)}
       labelPosition="right"
       style={styles.toggle}
