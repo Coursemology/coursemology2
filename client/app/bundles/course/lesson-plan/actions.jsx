@@ -76,7 +76,7 @@ export function updateMilestone(id, values, successMessage, failureMessage) {
         dispatch({
           type: actionTypes.MILESTONE_UPDATE_SUCCESS,
           milestoneId: id,
-          values: response.data,
+          milestone: response.data,
         });
         dispatch(hideMilestoneForm());
         setNotification(successMessage)(dispatch);
@@ -117,8 +117,7 @@ export function updateItem(id, values, successMessage, failureMessage) {
       .then(() => {
         dispatch({
           type: actionTypes.ITEM_UPDATE_SUCCESS,
-          itemId: id,
-          values,
+          item: { id, ...values },
         });
         setNotification(successMessage)(dispatch);
       })

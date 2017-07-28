@@ -1,7 +1,5 @@
-import { deleteIfFound } from 'lib/helpers/reducer-helpers';
+import { deleteIfFound, updateOrAppend } from 'lib/helpers/reducer-helpers';
 import actionTypes from '../constants';
-import itemReducer from './item';
-import milestoneReducer from './milestone';
 import { groupItemsUnderMilestones, initializeVisibility, generateTypeKey } from './utils';
 
 const initialState = {
@@ -39,7 +37,7 @@ export default function (state = initialState, action) {
       };
     }
     case actionTypes.ITEM_UPDATE_SUCCESS: {
-      const items = state.items.map(item => itemReducer(item, action));
+      const items = updateOrAppend(state.items, generateTypeKey(action.item));
       return {
         ...state,
         items,
@@ -55,7 +53,7 @@ export default function (state = initialState, action) {
       };
     }
     case actionTypes.MILESTONE_UPDATE_SUCCESS: {
-      const milestones = state.milestones.map(item => milestoneReducer(item, action));
+      const milestones = updateOrAppend(state.milestones, action.milestone);
       return {
         ...state,
         milestones,
