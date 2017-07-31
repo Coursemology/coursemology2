@@ -6,12 +6,6 @@ import ProviderWrapper from 'lib/components/ProviderWrapper';
 import storeCreator from '../../../store';
 import AchievementIndex from '../index';
 
-// summernote does not work well with jsdom in tests, stub it to normal text field.
-jest.mock('lib/components/redux-form/RichTextField', () => {
-  const TextField = require.requireActual('lib/components/redux-form/TextField');
-  return TextField;
-});
-
 describe('<AchievementIndex />', () => {
   it('renders the index page', async () => {
     const store = storeCreator({ achievements: {} });

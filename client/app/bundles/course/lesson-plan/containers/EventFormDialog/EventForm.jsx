@@ -4,6 +4,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
 import AutoCompleteFilters from 'material-ui/AutoComplete';
 import TextField from 'lib/components/redux-form/TextField';
+import RichTextField from 'lib/components/redux-form/RichTextField';
 import AutoComplete from 'lib/components/redux-form/AutoComplete';
 import Toggle from 'lib/components/redux-form/Toggle';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
@@ -89,8 +90,8 @@ const EventForm = ({ handleSubmit, onSubmit, disabled, formValues, shiftEndDate,
     <Field
       fullWidth
       name="description"
-      floatingLabelText={<FormattedMessage {...translations.description} />}
-      component={TextField}
+      label={<FormattedMessage {...translations.description} />}
+      component={RichTextField}
       multiLine
       rows={2}
       {...{ disabled }}
