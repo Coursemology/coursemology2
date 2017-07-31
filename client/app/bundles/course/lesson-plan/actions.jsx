@@ -45,6 +45,20 @@ export function submitMilestoneForm() {
   };
 }
 
+export function showEventForm(formParams) {
+  return { type: actionTypes.EVENT_FORM_SHOW, formParams };
+}
+
+export function hideEventForm() {
+  return { type: actionTypes.EVENT_FORM_HIDE };
+}
+
+export function submitEventForm() {
+  return (dispatch) => {
+    dispatch(submit(formNames.EVENT));
+  };
+}
+
 export function createMilestone(values, successMessage, failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.MILESTONE_CREATE_REQUEST });
@@ -76,7 +90,7 @@ export function updateMilestone(id, values, successMessage, failureMessage) {
         dispatch({
           type: actionTypes.MILESTONE_UPDATE_SUCCESS,
           milestoneId: id,
-          values: response.data,
+          milestone: response.data,
         });
         dispatch(hideMilestoneForm());
         setNotification(successMessage)(dispatch);
@@ -117,13 +131,77 @@ export function updateItem(id, values, successMessage, failureMessage) {
       .then(() => {
         dispatch({
           type: actionTypes.ITEM_UPDATE_SUCCESS,
-          itemId: id,
-          values,
+          item: { id, ...values },
         });
         setNotification(successMessage)(dispatch);
       })
       .catch(() => {
         dispatch({ type: actionTypes.ITEM_UPDATE_FAILURE });
+        setNotification(failureMessage)(dispatch);
+      });
+  };
+}
+
+export function createEvent(values, successMessage, failureMessage) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.EVENT_CREATE_REQUEST });
+    return CourseAPI.lessonPlan.createEvent({ lesson_plan_event: values })
+      .then((response) => {
+        dispatch({
+          type: actionTypes.EVENT_CREATE_SUCCESS,
+          event: response.data,
+        });
+        dispatch(hideEventForm());
+        setNotification(successMessage)(dispatch);
+      })
+      .catch((error) => {
+        dispatch({ type: actionTypes.EVENT_CREATE_FAILURE });
+        if (error.response && error.response.data) {
+          throw new SubmissionError(error.response.data.errors);
+        } else {
+          setNotification(failureMessage)(dispatch);
+        }
+      });
+  };
+}
+
+export function updateEvent(eventId, values, successMessage, failureMessage) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.EVENT_UPDATE_REQUEST });
+    return CourseAPI.lessonPlan.updateEvent(eventId, { lesson_plan_event: values })
+      .then((response) => {
+        dispatch({
+          type: actionTypes.EVENT_UPDATE_SUCCESS,
+          eventId,
+          event: response.data,
+        });
+        dispatch(hideEventForm());
+        setNotification(successMessage)(dispatch);
+      })
+      .catch((error) => {
+        dispatch({ type: actionTypes.EVENT_UPDATE_FAILURE });
+        if (error.response && error.response.data) {
+          throw new SubmissionError(error.response.data.errors);
+        } else {
+          setNotification(failureMessage)(dispatch);
+        }
+      });
+  };
+}
+
+export function deleteEvent(itemId, eventId, successMessage, failureMessage) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.EVENT_DELETE_REQUEST });
+    return CourseAPI.lessonPlan.deleteEvent(eventId)
+      .then(() => {
+        dispatch({
+          type: actionTypes.EVENT_DELETE_SUCCESS,
+          itemId,
+        });
+        setNotification(successMessage)(dispatch);
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.EVENT_DELETE_FAILURE });
         setNotification(failureMessage)(dispatch);
       });
   };

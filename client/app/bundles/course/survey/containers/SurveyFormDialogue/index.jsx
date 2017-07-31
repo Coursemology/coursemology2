@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getFormValues, isPristine } from 'redux-form';
 import * as actionCreators from 'course/survey/actions/surveys';
+import * as libActionCreators from 'lib/actions';
 import FormDialogue from 'lib/components/FormDialogue';
 import { formNames } from 'course/survey/constants';
 import SurveyForm from './SurveyForm';
@@ -46,11 +47,8 @@ const SurveyFormDialogue = ({
   initialValues,
   onSubmit,
 }) => {
-  const {
-    hideSurveyForm,
-    submitSurveyForm,
-    shiftEndDate,
-  } = bindActionCreators(actionCreators, dispatch);
+  const { hideSurveyForm, submitSurveyForm } = bindActionCreators(actionCreators, dispatch);
+  const { shiftEndDate } = bindActionCreators(libActionCreators, dispatch);
 
   const surveyFormProps = {
     shiftEndDate,

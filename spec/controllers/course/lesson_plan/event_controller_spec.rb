@@ -17,23 +17,34 @@ RSpec.describe Course::LessonPlan::EventsController, type: :controller do
 
     before { sign_in(user) }
 
-    describe '#save' do
-      context 'when save fails' do
-        subject { post :create, course_id: course, event: event_immutable_stub }
+    describe '#create' do
+      subject do
+        post :create, format: :json, course_id: course,
+                      lesson_plan_event: attributes_for(:course_lesson_plan_event)
+      end
+
+      context 'when saving succeeds' do
+        it { is_expected.to render_template('_event_lesson_plan_item') }
+      end
+
+      context 'when saving fails' do
         before do
           controller.instance_variable_set(:@event, event_immutable_stub)
           subject
         end
 
-        it { is_expected.to render_template('new') }
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
 
     describe '#update' do
       subject do
-        patch :update, course_id: course,
-                       id: event_immutable_stub,
-                       lesson_plan_event: { id: event_immutable_stub.id }
+        patch :update, format: :json, course_id: course, id: event_immutable_stub,
+                       lesson_plan_event: attributes_for(:course_lesson_plan_event)
+      end
+
+      context 'when update succeeds' do
+        it { is_expected.to render_template('_event_lesson_plan_item') }
       end
 
       context 'when update fails' do
@@ -42,12 +53,16 @@ RSpec.describe Course::LessonPlan::EventsController, type: :controller do
           subject
         end
 
-        it { is_expected.to render_template('edit') }
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
 
     describe '#destroy' do
       subject { delete :destroy, course_id: course, id: event_immutable_stub }
+
+      context 'when destroy succeeds' do
+        it { is_expected.to have_http_status(:ok) }
+      end
 
       context 'when destroy fails' do
         before do
@@ -55,7 +70,7 @@ RSpec.describe Course::LessonPlan::EventsController, type: :controller do
           subject
         end
 
-        it { is_expected.to redirect_to(course_lesson_plan_path(course)) }
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
   end

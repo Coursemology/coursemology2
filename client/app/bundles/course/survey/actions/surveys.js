@@ -1,4 +1,4 @@
-import { submit, change, SubmissionError } from 'redux-form';
+import { submit, SubmissionError } from 'redux-form';
 import CourseAPI from 'api/course';
 import history from 'lib/history';
 import { getCourseId } from 'lib/helpers/url-helpers';
@@ -16,21 +16,6 @@ export function hideSurveyForm() {
 export function submitSurveyForm() {
   return (dispatch) => {
     dispatch(submit(formNames.SURVEY));
-  };
-}
-
-export function shiftEndDate(formName, newStartAt, oldValues, startAtField = 'start_at', endAtField = 'end_at') {
-  return (dispatch) => {
-    const { [startAtField]: oldStartAt, [endAtField]: oldEndAt } = oldValues;
-    const oldStartTime = oldStartAt.getTime();
-    const newStartTime = newStartAt.getTime();
-    const oldEndTime = oldEndAt && oldEndAt.getTime();
-
-    // if start time is before end time, allow user to clear the error
-    if (oldEndAt && oldStartTime <= oldEndTime) {
-      const newEndAt = new Date(oldEndTime + (newStartTime - oldStartTime));
-      dispatch(change(formName, endAtField, newEndAt));
-    }
   };
 }
 

@@ -52,7 +52,7 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
             )
             expect(item_data.keys).to contain_exactly(
               'id', 'title', 'description', 'published', 'location', 'lesson_plan_item_type',
-              'start_at', 'bonus_end_at', 'end_at', 'edit_path', 'delete_path'
+              'start_at', 'bonus_end_at', 'end_at', 'eventId'
             )
             expect(json_response['flags']['canManageLessonPlan']).to be(true)
           end
@@ -70,7 +70,7 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
             )
             expect(item_data.keys).to contain_exactly(
               'id', 'title', 'description', 'published', 'location', 'lesson_plan_item_type',
-              'start_at', 'bonus_end_at', 'end_at'
+              'start_at', 'bonus_end_at', 'end_at', 'eventId'
             )
             expect(json_response['flags']['canManageLessonPlan']).to be(false)
           end

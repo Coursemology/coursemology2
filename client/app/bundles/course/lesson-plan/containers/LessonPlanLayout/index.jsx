@@ -15,6 +15,7 @@ import LessonPlanEdit from 'course/lesson-plan/pages/LessonPlanEdit';
 import LessonPlanFilter from 'course/lesson-plan/containers/LessonPlanFilter';
 import LessonPlanNav from 'course/lesson-plan/containers/LessonPlanNav';
 import MilestoneFormDialog from 'course/lesson-plan/containers/MilestoneFormDialog';
+import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
 import ExitEditModeButton from './ExitEditModeButton';
 import EnterEditModeButton from './EnterEditModeButton';
 import NewMilestoneButton from './NewMilestoneButton';
@@ -110,6 +111,7 @@ class LessonPlanLayout extends React.Component {
         </div>
         <NotificationPopup />
         <DeleteConfirmation />
+        <EventFormDialog />
         <MilestoneFormDialog />
       </div>
     );

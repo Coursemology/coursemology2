@@ -15,18 +15,14 @@ const styles = {
 };
 
 const LessonPlanItem = (props) => {
+  const { item, visibility } = props;
   const {
-    item: {
-      id, title, published, location, description, materials,
-      itemTypeKey: itemType,
-      start_at: startAt,
-      end_at: endAt,
-      item_path: itemPath,
-      edit_path: editPath,
-      delete_path: deletePath,
-    },
-    visibility,
-  } = props;
+    id, title, published, location, description, materials,
+    itemTypeKey: itemType,
+    start_at: startAt,
+    end_at: endAt,
+    item_path: itemPath,
+  } = item;
 
   const isHidden = !visibility[itemType];
   if (isHidden) { return null; }
@@ -47,7 +43,7 @@ const LessonPlanItem = (props) => {
           ))
         }
       </CardText>
-      <AdminMenu {...{ editPath, deletePath }} />
+      <AdminMenu {...{ item }} />
       <Divider />
     </div>
   );
@@ -65,8 +61,6 @@ LessonPlanItem.propTypes = {
     start_at: PropTypes.string,
     end_at: PropTypes.string,
     item_path: PropTypes.string,
-    edit_path: PropTypes.string,
-    delete_path: PropTypes.string,
   }).isRequired,
   visibility: PropTypes.shape().isRequired,
 };

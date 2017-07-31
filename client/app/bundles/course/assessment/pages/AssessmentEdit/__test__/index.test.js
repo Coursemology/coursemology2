@@ -5,12 +5,6 @@ import CourseAPI from 'api/course';
 import storeCreator from '../../../store';
 import AssessmentEdit from '../index';
 
-// summernote does not work well with jsdom in tests, stub it to normal text field.
-jest.mock('lib/components/redux-form/RichTextField', () => {
-  const TextField = require.requireActual('lib/components/redux-form/TextField');
-  return TextField;
-});
-
 describe('<AssessmentEdit />', () => {
   const store = storeCreator({});
   const id = 1;

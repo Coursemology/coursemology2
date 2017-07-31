@@ -5,6 +5,10 @@ const translations = defineMessages({
     id: 'course.lessonPlan.type',
     defaultMessage: 'Type',
   },
+  eventType: {
+    id: 'course.lessonPlan.eventType',
+    defaultMessage: 'Event Type',
+  },
   title: {
     id: 'course.lessonPlan.title',
     defaultMessage: 'Title',
@@ -12,6 +16,10 @@ const translations = defineMessages({
   description: {
     id: 'course.lessonPlan.description',
     defaultMessage: 'Description',
+  },
+  location: {
+    id: 'course.lessonPlan.location',
+    defaultMessage: 'Location',
   },
   startAt: {
     id: 'course.lessonPlan.startAt',
