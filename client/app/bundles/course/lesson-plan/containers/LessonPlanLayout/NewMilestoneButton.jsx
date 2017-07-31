@@ -50,6 +50,7 @@ class NewMilestoneButton extends React.Component {
     return dispatch(showMilestoneForm({
       onSubmit: this.createMilestoneHandler,
       formTitle: intl.formatMessage(translations.newMilestone),
+      initialValues: {},
     }));
   }
 
