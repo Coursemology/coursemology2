@@ -6,6 +6,10 @@ class Course::Assessment::SkillsController < Course::ComponentController
   add_breadcrumb :index, :course_assessments_skills_path
 
   def index
+    respond_to do |format|
+      format.html { render 'index' }
+      format.json { render partial: 'index' }
+    end
   end
 
   def new
