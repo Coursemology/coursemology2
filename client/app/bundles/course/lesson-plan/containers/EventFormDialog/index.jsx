@@ -18,9 +18,17 @@ const EventFormDialog = ({
   pristine,
   dispatch,
   formValues,
+  items,
 }) => {
   const { hideEventForm, submitEventForm } = bindActionCreators(actionCreators, dispatch);
   const { shiftEndDate } = bindActionCreators(libActionCreators, dispatch);
+
+  const { eventTypes, eventLocations } = items.reduce((values, item) => {
+    if (!item.eventId) { return values; }
+    if (item.location) { values.eventLocations.push(item.location); }
+    values.eventTypes.push(item.lesson_plan_item_type[0]);
+    return values;
+  }, { eventTypes: [], eventLocations: [] });
 
   return (
     <FormDialogue
@@ -31,7 +39,11 @@ const EventFormDialog = ({
       disabled={disabled}
       hideForm={hideEventForm}
     >
-      <EventForm {...{ initialValues, onSubmit, disabled, shiftEndDate, formValues }} />
+      <EventForm
+        {...{ initialValues, onSubmit, disabled, shiftEndDate, formValues }}
+        eventTypes={[...new Set(eventTypes)]}
+        eventLocations={[...new Set(eventLocations)]}
+      />
     </FormDialogue>
   );
 };
@@ -56,6 +68,11 @@ EventFormDialog.propTypes = {
     end_at: PropTypes.string,
     published: PropTypes.bool,
   }),
+  items: PropTypes.arrayOf(PropTypes.shape({
+    eventId: PropTypes.number,
+    location: PropTypes.string,
+    lesson_plan_item_type: PropTypes.arrayOf(PropTypes.string),
+  })),
   formValues: PropTypes.shape(),
   onSubmit: PropTypes.func.isRequired,
   pristine: PropTypes.bool.isRequired,
@@ -64,6 +81,7 @@ EventFormDialog.propTypes = {
 
 export default connect(({ eventForm, ...state }) => ({
   ...eventForm,
+  items: state.lessonPlan.items,
   pristine: isPristine(formNames.EVENT)(state),
   formValues: getFormValues(formNames.EVENT)(state),
 }))(EventFormDialog);

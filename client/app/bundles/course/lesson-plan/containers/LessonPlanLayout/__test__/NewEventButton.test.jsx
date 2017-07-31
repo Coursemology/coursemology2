@@ -34,6 +34,7 @@ describe('<NewEventButton />', () => {
     titleInput.simulate('change', { target: { value: eventData.title } });
     const eventTypeInput = eventForm.find('input[name="event_type"]');
     eventTypeInput.simulate('change', { target: { value: eventData.event_type } });
+    eventTypeInput.simulate('blur');
     const startAtDateInput = eventForm.find('input[name="start_at"]').first();
     startAtDateInput.simulate('change', { target: { value: startAt } });
     startAtDateInput.simulate('blur');

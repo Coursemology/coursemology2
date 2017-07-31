@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { reduxForm, Field, Form } from 'redux-form';
+import AutoCompleteFilters from 'material-ui/AutoComplete';
 import TextField from 'lib/components/redux-form/TextField';
+import AutoComplete from 'lib/components/redux-form/AutoComplete';
 import Toggle from 'lib/components/redux-form/Toggle';
 import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import formTranslations from 'lib/translations/form';
@@ -10,12 +12,6 @@ import translations from 'course/lesson-plan/translations';
 import { formNames } from 'course/lesson-plan/constants';
 
 const styles = {
-  title: {
-    width: '100%',
-  },
-  description: {
-    width: '100%',
-  },
   columns: {
     display: 'flex',
   },
@@ -55,36 +51,46 @@ const validate = (values) => {
   return errors;
 };
 
-const EventForm = ({ handleSubmit, onSubmit, disabled, formValues, shiftEndDate }) => (
+const EventForm = ({ handleSubmit, onSubmit, disabled, formValues, shiftEndDate, eventTypes, eventLocations }) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Field
+      fullWidth
       name="title"
       floatingLabelText={<FormattedMessage {...translations.title} />}
       component={TextField}
-      style={styles.title}
       {...{ disabled }}
     />
     <div style={styles.columns}>
       <Field
+        fullWidth
+        openOnFocus
         name="event_type"
         floatingLabelText={<FormattedMessage {...translations.eventType} />}
-        component={TextField}
+        component={AutoComplete}
+        dataSource={eventTypes}
+        filter={AutoCompleteFilters.caseInsensitiveFilter}
+        menuProps={{ desktop: true }}
         style={styles.eventType}
         {...{ disabled }}
       />
       <Field
+        fullWidth
+        openOnFocus
         name="location"
         floatingLabelText={<FormattedMessage {...translations.location} />}
-        component={TextField}
+        component={AutoComplete}
+        dataSource={eventLocations}
+        filter={AutoCompleteFilters.caseInsensitiveFilter}
+        menuProps={{ desktop: true }}
         style={styles.oneColumn}
         {...{ disabled }}
       />
     </div>
     <Field
+      fullWidth
       name="description"
       floatingLabelText={<FormattedMessage {...translations.description} />}
       component={TextField}
-      style={styles.description}
       multiLine
       rows={2}
       {...{ disabled }}
@@ -119,6 +125,8 @@ const EventForm = ({ handleSubmit, onSubmit, disabled, formValues, shiftEndDate 
 );
 
 EventForm.propTypes = {
+  eventTypes: PropTypes.arrayOf(PropTypes.string),
+  eventLocations: PropTypes.arrayOf(PropTypes.string),
   formValues: PropTypes.shape(),
   shiftEndDate: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
