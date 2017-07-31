@@ -110,7 +110,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
     <FlatButton
       containerElement="label"
       disabled={false}
-      fullWidth={false}
+      fullWidth={true}
       icon={<ContentAdd />}
       label="Add Files"
       labelPosition="after"
@@ -124,7 +124,6 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
       style={
         Object {
           "verticalAlign": "middle",
-          "width": "100%",
         }
       }
     >
@@ -139,7 +138,6 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
             "position": "absolute",
             "right": 0,
             "top": 0,
-            "width": "100%",
           }
         }
         type="file"

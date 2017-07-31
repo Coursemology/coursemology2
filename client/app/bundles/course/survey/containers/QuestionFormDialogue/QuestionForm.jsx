@@ -15,9 +15,6 @@ import QuestionFormOptions from './QuestionFormOptions';
 import QuestionFormDeletedOptions from './QuestionFormDeletedOptions';
 
 const styles = {
-  description: {
-    width: '100%',
-  },
   questionType: {
     width: '50%',
   },
@@ -291,10 +288,10 @@ class QuestionForm extends React.Component {
           />
         </Field>
         <Field
+          fullWidth
           name="description"
           floatingLabelText={intl.formatMessage(translations.questionText)}
           component={TextField}
-          style={styles.description}
           multiLine
           rows={2}
           {...{ disabled }}

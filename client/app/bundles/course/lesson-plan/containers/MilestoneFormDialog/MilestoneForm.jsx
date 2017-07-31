@@ -8,15 +8,6 @@ import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import translations from 'course/lesson-plan/translations';
 import { formNames } from 'course/lesson-plan/constants';
 
-const styles = {
-  title: {
-    width: '100%',
-  },
-  description: {
-    width: '100%',
-  },
-};
-
 const validate = (values) => {
   const errors = {};
 
@@ -33,18 +24,18 @@ const validate = (values) => {
 const MilestoneForm = ({ handleSubmit, onSubmit, disabled }) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Field
+      fullWidth
       name="title"
       floatingLabelText={<FormattedMessage {...translations.title} />}
       component={TextField}
-      style={styles.title}
       {...{ disabled }}
     />
     <br />
     <Field
+      fullWidth
       name="description"
       floatingLabelText={<FormattedMessage {...translations.description} />}
       component={TextField}
-      style={styles.description}
       multiLine
       rows={2}
       {...{ disabled }}

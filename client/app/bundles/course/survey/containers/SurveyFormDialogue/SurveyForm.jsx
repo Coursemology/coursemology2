@@ -10,12 +10,6 @@ import translations from 'course/survey/translations';
 import { formNames } from 'course/survey/constants';
 
 const styles = {
-  title: {
-    width: '100%',
-  },
-  description: {
-    width: '100%',
-  },
   columns: {
     display: 'flex',
   },
@@ -99,18 +93,18 @@ const SurveyForm = ({
 }) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Field
+      fullWidth
       name="title"
       floatingLabelText={intl.formatMessage(translations.title)}
       component={TextField}
-      style={styles.title}
       {...{ disabled }}
     />
     <br />
     <Field
+      fullWidth
       name="description"
       floatingLabelText={intl.formatMessage(translations.description)}
       component={TextField}
-      style={styles.description}
       multiLine
       rows={2}
       {...{ disabled }}

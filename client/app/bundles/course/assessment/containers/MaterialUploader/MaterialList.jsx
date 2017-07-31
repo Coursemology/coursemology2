@@ -38,7 +38,6 @@ const defaultProps = {
 
 const styles = {
   newFileButton: {
-    width: '100%',
     verticalAlign: 'middle',
   },
   uploadInput: {
@@ -48,7 +47,6 @@ const styles = {
     bottom: 0,
     right: 0,
     left: 0,
-    width: '100%',
     opacity: 0,
   },
 };
@@ -86,6 +84,7 @@ const MaterialList = (props) => {
 
   const newFileButton = (
     <FlatButton
+      fullWidth
       label="Add Files"
       icon={<ContentAdd />}
       containerElement="label"

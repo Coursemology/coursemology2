@@ -43,9 +43,6 @@ const styles = {
   card: {
     marginBottom: 15,
   },
-  textField: {
-    width: '100%',
-  },
   fields: {
     marginTop: 0,
   },
@@ -109,8 +106,8 @@ class QuestionCard extends React.Component {
   static renderTextField() {
     return (
       <TextField
+        fullWidth
         disabled
-        style={styles.textField}
         hintText={<FormattedMessage {...translations.textResponse} />}
       />
     );

@@ -12,9 +12,6 @@ import { questionShape } from 'course/survey/propTypes';
 import OptionsListItem from 'course/survey/components/OptionsListItem';
 
 const styles = {
-  textResponse: {
-    width: '100%',
-  },
   errorText: {
     color: red500,
   },
@@ -188,9 +185,9 @@ class ResponseAnswer extends React.Component {
 
     return (
       <Field
+        fullWidth
         name={`${member}.answer.text_response`}
         component={TextField}
-        style={styles.textResponse}
         disabled={disabled}
         validate={checkRequired}
         multiLine

@@ -31,9 +31,6 @@ const styles = {
   widget: {
     width: 'auto',
   },
-  optionTextfield: {
-    width: '100%',
-  },
   optionBody: {
     display: 'flex',
     flexDirection: 'column',
@@ -51,7 +48,6 @@ const styles = {
     bottom: 0,
     right: 0,
     left: 0,
-    width: '100%',
     opacity: 0,
   },
   image: {
@@ -119,10 +115,10 @@ class QuestionFormOption extends React.Component {
         }
         <small>{imageFileName}</small>
         <Field
+          fullWidth
           multiLine
           name={`${member}.option`}
           component={TextField}
-          style={styles.optionTextfield}
           {...{ placeholder, disabled }}
         />
       </div>

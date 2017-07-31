@@ -13,7 +13,6 @@ const styles = {
     bottom: 0,
     right: 0,
     left: 0,
-    width: '100%',
     opacity: 0,
   },
   buttons: {
