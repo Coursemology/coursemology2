@@ -9,10 +9,7 @@
 /vendor/bundle
 
 # Ignore user-specific Intellij project files
-/.idea/dictionaries/*
-/.idea/.rakeTasks
-/.idea/.generators
-/.idea/workspace.xml
+/.idea/*
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
