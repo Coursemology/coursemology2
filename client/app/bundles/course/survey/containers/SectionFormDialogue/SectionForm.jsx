@@ -7,15 +7,6 @@ import formTranslations from 'lib/translations/form';
 import translations from 'course/survey/translations';
 import { formNames } from 'course/survey/constants';
 
-const styles = {
-  title: {
-    width: '100%',
-  },
-  description: {
-    width: '100%',
-  },
-};
-
 const validate = (values) => {
   const errors = {};
 
@@ -33,18 +24,18 @@ const validate = (values) => {
 const SectionForm = ({ handleSubmit, intl, onSubmit, disabled }) => (
   <Form onSubmit={handleSubmit(onSubmit)}>
     <Field
+      fullWidth
       name="title"
       floatingLabelText={intl.formatMessage(translations.title)}
       component={TextField}
-      style={styles.title}
       {...{ disabled }}
     />
     <br />
     <Field
+      fullWidth
       name="description"
       floatingLabelText={intl.formatMessage(translations.description)}
       component={TextField}
-      style={styles.description}
       multiLine
       rows={2}
       {...{ disabled }}

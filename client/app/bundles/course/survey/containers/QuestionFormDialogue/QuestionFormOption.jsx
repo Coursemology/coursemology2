@@ -31,9 +31,6 @@ const styles = {
   widget: {
     width: 'auto',
   },
-  optionTextfield: {
-    width: '100%',
-  },
   optionBody: {
     display: 'flex',
     flexDirection: 'column',
@@ -41,7 +38,7 @@ const styles = {
     alignItems: 'flex-start',
     width: '70%',
   },
-  imageUploaderLabel: {
+  imageUploaderDiv: {
     position: 'relative',
   },
   imageUploader: {
@@ -51,7 +48,6 @@ const styles = {
     bottom: 0,
     right: 0,
     left: 0,
-    width: '100%',
     opacity: 0,
   },
   image: {
@@ -65,14 +61,16 @@ const styles = {
 };
 
 class QuestionFormOption extends React.Component {
-  static renderImageField(props) {
-    const { input, index, disabled } = props;
+  renderImageField = (fieldProps) => {
+    const { input, index, disabled } = fieldProps;
     const fieldId = `option-${index}-image-field`;
     return (
-      <label style={styles.imageUploaderLabel} htmlFor={fieldId}>
-        <IconButton {...{ disabled }}>
-          <PhotoIcon color={grey700} />
-        </IconButton>
+      <div style={styles.imageUploaderDiv}>
+        <label htmlFor={fieldId}>
+          <IconButton {...{ disabled }} onTouchTap={() => this.fileInput.click()}>
+            <PhotoIcon color={grey700} />
+          </IconButton>
+        </label>
         <input
           id={fieldId}
           type="file"
@@ -82,9 +80,10 @@ class QuestionFormOption extends React.Component {
             input.onChange(image);
             input.onBlur(image);
           }}
+          ref={field => (this.fileInput = field)}
           {...{ disabled }}
         />
-      </label>
+      </div>
     );
   }
 
@@ -119,10 +118,10 @@ class QuestionFormOption extends React.Component {
         }
         <small>{imageFileName}</small>
         <Field
+          fullWidth
           multiLine
           name={`${member}.option`}
           component={TextField}
-          style={styles.optionTextfield}
           {...{ placeholder, disabled }}
         />
       </div>
@@ -159,7 +158,7 @@ class QuestionFormOption extends React.Component {
         { this.renderOptionBody() }
         <Field
           name={`${member}.file`}
-          component={QuestionFormOption.renderImageField}
+          component={this.renderImageField}
           {...{ index, disabled }}
         />
         <IconButton onTouchTap={handleRemove} {...{ disabled }}>

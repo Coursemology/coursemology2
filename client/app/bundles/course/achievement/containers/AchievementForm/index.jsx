@@ -12,12 +12,6 @@ import translations from './translations.intl';
 import { formNames } from '../../constants';
 
 const styles = {
-  title: {
-    width: '100%',
-  },
-  description: {
-    width: '100%',
-  },
   toggle: {
     marginTop: 16,
   },
@@ -57,10 +51,10 @@ const AchievementForm = ({
 }) => (
   <Form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
     <Field
+      fullWidth
       name="title"
       component={TextField}
       floatingLabelText={<FormattedMessage {...translations.title} />}
-      style={styles.title}
       disabled={submitting}
     />
     <br />
@@ -68,7 +62,6 @@ const AchievementForm = ({
       name="description"
       component={RichTextField}
       label={<FormattedMessage {...translations.description} />}
-      style={styles.description}
       disabled={submitting}
     />
     <Field

@@ -16,12 +16,6 @@ import { formNames } from '../../constants';
 import MaterialUploader from '../MaterialUploader';
 
 const styles = {
-  title: {
-    width: '100%',
-  },
-  description: {
-    width: '100%',
-  },
   flexGroup: {
     display: 'flex',
   },
@@ -214,10 +208,10 @@ class AssessmentForm extends React.Component {
     return (
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Field
+          fullWidth
           name="title"
           component={TextField}
           floatingLabelText={<FormattedMessage {...translations.title} />}
-          style={styles.title}
           disabled={submitting}
         />
         <br />
@@ -225,7 +219,6 @@ class AssessmentForm extends React.Component {
           name="description"
           component={RichTextField}
           label={<FormattedMessage {...translations.description} />}
-          style={styles.description}
           disabled={submitting}
         />
         <div style={styles.flexGroup}>
