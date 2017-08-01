@@ -116,10 +116,13 @@
   //
   // This prevents missing definitions for things like Ace themes, which are loaded after the
   // application script.
-  setTimeout(function() { initializeComponents(document); }, 0);
+  $(document).ready(function() {
+    initializeComponents(document);
 
-  EVENT_HELPERS.onNodesInserted($(document), initializeComponents);
-  $(document).on('nested:fieldAdded', function(e) {
-    initializeComponents(e.field);
+    EVENT_HELPERS.onNodesInserted($(document), initializeComponents);
+
+    $(document).on('nested:fieldAdded', function(e) {
+        initializeComponents(e.field);
+    });
   });
 })(jQuery, EVENT_HELPERS);

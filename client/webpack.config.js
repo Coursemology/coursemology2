@@ -17,6 +17,7 @@ const config = {
       'axios',
       'brace',
       'immutable',
+      'jquery',
       'mirror-creator',
       'moment',
       'moment-timezone',
@@ -52,10 +53,6 @@ const config = {
     chunkFilename: production ? '[name]-[chunkhash].js' : '[name].js',
     path: path.join(__dirname, '..', 'public', 'webpack'),
     publicPath: '/webpack/',
-  },
-
-  externals: {
-    jquery: 'jQuery',
   },
 
   resolve: {
@@ -124,6 +121,16 @@ const config = {
           /node_modules/,
           path.resolve(__dirname, 'app/lib/styles/MaterialSummernote.scss'),
         ],
+      },
+      {
+        test: require.resolve('jquery'),
+        use: [{
+          loader: 'expose-loader',
+          options: 'jQuery',
+        }, {
+          loader: 'expose-loader',
+          options: '$',
+        }],
       },
     ],
   },
