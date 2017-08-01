@@ -1,0 +1,69 @@
+<project name="testng">
+	<property name="build" value="./build"></property>
+	<property name="test" value="./tests"></property>
+	<property name="src" value="./submission"></property>
+	<property name="soln" value="./solution"></property>
+	<property name="aux" value="."></property>
+	<property name="lib" value="./../lib"></property>
+
+	<path id="classpath">
+		<pathelement location="${build}"/>
+		<fileset dir="${lib}">
+			<include name="jcommander-1.72.jar"/>
+			<include name="testng-6.11.jar" />
+		</fileset>
+	</path>
+
+	<target name="aux-compile">
+		<mkdir dir="${aux}"/>
+		<mkdir dir="${build}"/>
+		<javac srcdir="${aux}" destdir="${build}" includes="*.java" includeantruntime="false"/>
+	</target>
+
+	<!-- To compile the submission files -->
+	<target name="src-compile" depends="aux-compile">
+		<mkdir dir="${build}"/>
+		<javac srcdir="${src}" destdir="${build}" includeantruntime="false">
+			<classpath refid="classpath"></classpath>
+		</javac>
+	</target>
+
+	<target name="test-compile" depends="src-compile">
+		<mkdir dir="${build}"/>
+		<javac srcdir="${test}" destdir="${build}" includeantruntime="false">
+		    <classpath refid="classpath"></classpath>
+		</javac>
+	</target>
+
+	<taskdef name="testng" classname="org.testng.TestNGAntTask" classpathref="classpath"></taskdef>
+
+	<target name="testng" depends="test-compile">
+		<java classname="RunTests">
+			<classpath refid="classpath"></classpath>
+		</java>
+	</target>
+
+
+	<!-- To compile the solution files -->
+	<target name="sol-compile" depends="aux-compile">
+		<mkdir dir="${build}"/>
+		<javac srcdir="${soln}" destdir="${build}" includeantruntime="false">
+		    <classpath refid="classpath"></classpath>
+		</javac>
+	</target>
+
+	<target name="testsol-compile" depends="sol-compile">
+		<mkdir dir="${build}"/>
+		<javac srcdir="${test}" destdir="${build}" includeantruntime="false">
+		    <classpath refid="classpath"></classpath>
+		</javac>
+	</target>
+
+	<taskdef name="testng-sol" classname="org.testng.TestNGAntTask" classpathref="classpath"></taskdef>
+
+	<target name="testng-sol" depends="testsol-compile">
+		<java classname="RunTests">
+			<classpath refid="classpath"></classpath>
+		</java>
+	</target>
+</project>
