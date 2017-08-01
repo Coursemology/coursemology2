@@ -3,6 +3,8 @@ en:
     assessment:
       question:
         scribing:
+          new:
+            header: 'New Scribing Question'
           create:
             success: 'The scribing question was created.'
             failure: 'Could not create scribing question.'

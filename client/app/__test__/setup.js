@@ -25,6 +25,7 @@ const buildContextOptions = store => ({
 
 // Global variables
 global.courseId = courseId;
+global.window = window;
 global.intl = intlProvider.getChildContext().intl;
 global.intlShape = intlShape;
 global.$ = jQuery;

@@ -94,6 +94,8 @@ en:
             new_file_upload: :'course.assessment.question.text_responses.new.file_upload'
           programming:
             new: :'course.assessment.question.programming.new.header'
+          scribing:
+            new: :'course.assessment.question.scribing.new.header'
         skills:
           new: :'course.assessment.skills.new.header'
           index: :'course.assessment.skills.index.header'

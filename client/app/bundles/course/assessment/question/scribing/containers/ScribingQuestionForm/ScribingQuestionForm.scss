@@ -1,0 +1,80 @@
+$color-red: #f44336;
+
+.inputContainer {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.titleInput,
+.descriptionInput,
+.staffCommentsInput,
+.skillsInput,
+.maximumGradeInput,
+.attemptLimitInput {
+  flex: 1 100%;
+}
+
+.fileInputField {
+  display: none;
+}
+
+.skillMenu {
+  max-height: 80vh;
+  overflow-y: scroll;
+}
+
+.skillOption {
+  display: none;
+}
+
+@media (min-width: 375px) {
+  .maximumGradeInput {
+    flex: 1 50%;
+  }
+
+  .maximumGradeInput {
+    padding-right: 1em;
+  }
+}
+
+@media (min-width: 1024px) {
+  .attemptLimitInput {
+    flex: 1 auto;
+    padding-left: 1em;
+  }
+}
+
+.fileInputButton {
+  cursor: pointer;
+  display: none;
+  margin-right: 1em;
+  margin-top: 0.5em;
+}
+
+.submitButton {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.fileInputDiv {
+  display: block;
+  margin-bottom: 1em;
+  margin-top: 1em;
+  min-width: 100%;
+  width: 100%;
+}
+
+.fileInput {
+  display: none;
+}
+
+.row {
+  display: block;
+  min-width: 100%;
+  width: 100%;
+
+  label {
+    font-family: Roboto, sans-serif;
+    font-size: inherit;
+  }
+}
