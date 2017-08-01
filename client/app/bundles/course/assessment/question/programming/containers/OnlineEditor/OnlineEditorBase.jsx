@@ -1,6 +1,6 @@
 import translations from './OnlineEditorView.intl';
-import ExistingDataFile from './../../components/ExistingDataFile';
-import NewDataFile from './../../components/NewDataFile';
+import ExistingPackageFile from './../../components/ExistingPackageFile';
+import NewPackageFile from './../../components/NewPackageFile';
 import TestCase from './../../components/TestCase';
 import EditorCard from './../../components/EditorCard';
 
@@ -50,8 +50,8 @@ export function validation(data, pathOfKeysToData, intl) {
 }
 
 export {
-  ExistingDataFile,
-  NewDataFile,
+  ExistingPackageFile,
+  NewPackageFile,
   TestCase,
   EditorCard,
 };

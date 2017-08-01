@@ -1,4 +1,10 @@
 // scss-lint:disable ImportantRule
+.codeEditorButtonCell {
+  text-align: center;
+  vertical-align: middle !important;
+  width: 50px;
+}
+
 .deleteButtonCell {
   padding-left: 12px !important;
   text-align: center;
@@ -25,5 +31,10 @@
   position: absolute;
   right: 0;
   top: 0;
+}
+
+.submitAsFileToggle {
+  flex: 1 100%;
+  padding-bottom: 10px;
 }
 // scss-lint:enable ImportantRule

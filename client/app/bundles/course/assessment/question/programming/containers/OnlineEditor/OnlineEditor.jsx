@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import OnlineEditorPythonView from './Python/OnlineEditorPythonView';
 import OnlineEditorCppView from './Cpp/OnlineEditorCppView';
+import OnlineEditorJavaView from './Java/OnlineEditorJavaView';
 import { validation as editorValidation } from './OnlineEditorBase';
 
 const translations = defineMessages({
@@ -27,6 +28,7 @@ const propTypes = {
   autograded: PropTypes.bool.isRequired,
   autogradedAssessment: PropTypes.bool.isRequired,
   intl: intlShape.isRequired,
+  hasSubmissions: PropTypes.bool.isRequired,
 };
 
 export function validation(data, pathOfKeysToData, intl) {
@@ -36,6 +38,7 @@ export function validation(data, pathOfKeysToData, intl) {
   switch (mode) {
     case 'python':
     case 'c_cpp':
+    case 'java':
       return errors.concat(
         editorValidation(data, pathOfKeysToData.concat([mode]), intl)
       );
@@ -45,9 +48,8 @@ export function validation(data, pathOfKeysToData, intl) {
 }
 
 const OnlineEditor = (props) => {
-  const { data, actions, intl, isLoading, autograded, autogradedAssessment } = props;
+  const { data, actions, intl, isLoading, autograded, autogradedAssessment, hasSubmissions } = props;
   const mode = data.get('mode');
-
   switch (mode) {
     case 'python':
       return (<OnlineEditorPythonView
@@ -70,6 +72,19 @@ const OnlineEditor = (props) => {
           isLoading,
           autograded,
           autogradedAssessment,
+        }}
+      />);
+
+    case 'java':
+      return (<OnlineEditorJavaView
+        {...{
+          actions,
+          data: data.get('java'),
+          testData: data,
+          isLoading,
+          autograded,
+          autogradedAssessment,
+          hasSubmissions,
         }}
       />);
 
