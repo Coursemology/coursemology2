@@ -45,6 +45,8 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
         Course::Assessment::Question::Programming::Python::PythonPackageService.new params
       elsif @language.is_a?(Coursemology::Polyglot::Language::CPlusPlus)
         Course::Assessment::Question::Programming::Cpp::CppPackageService.new params
+      elsif @language.is_a?(Coursemology::Polyglot::Language::Java)
+        Course::Assessment::Question::Programming::Java::JavaPackageService.new params
       else
         raise NotImplementedError
       end
