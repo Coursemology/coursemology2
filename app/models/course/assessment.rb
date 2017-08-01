@@ -134,7 +134,7 @@ class Course::Assessment < ActiveRecord::Base
   end
 
   def initialize_duplicate(duplicator, other)
-    copy_attributes(other, duplicator.time_shift)
+    copy_attributes(other, duplicator)
     self.folder = duplicator.duplicate(other.folder)
     self.questions = duplicator.duplicate(other.questions.map(&:actable)).compact.map(&:acting_as)
     if duplicator.mode == :course
