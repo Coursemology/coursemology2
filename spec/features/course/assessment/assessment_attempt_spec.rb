@@ -7,6 +7,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:empty_assessment) { create(:assessment, course: course, published: false) }
+    let(:published_empty_assessment) { create(:assessment, course: course, published: true) }
     let(:not_started_assessment) do
       create(:assessment, :published_with_all_question_types, :not_started, course: course)
     end
@@ -47,6 +48,18 @@ RSpec.describe 'Course: Assessments: Attempt' do
         visit course_assessments_path(course)
 
         expect(page).not_to have_content_tag_for(empty_assessment)
+      end
+
+      scenario 'Attempting empty assessments shows the assessment description' do
+        published_empty_assessment
+        visit course_assessments_path(course)
+
+        within find(content_tag_selector(published_empty_assessment)) do
+          find_link(I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
+                    href: course_assessment_submissions_path(course, published_empty_assessment)).
+            click
+        end
+        expect(current_path).to eq(course_assessment_path(course, published_empty_assessment))
       end
 
       scenario 'I cannot attempt unsatisfied assessments' do

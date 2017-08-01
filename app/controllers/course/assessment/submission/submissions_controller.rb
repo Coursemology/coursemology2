@@ -30,7 +30,14 @@ class Course::Assessment::Submission::SubmissionsController < \
   end
 
   def create
-    raise IllegalStateError if @assessment.questions.empty?
+    # Show the assessment description if there are no questions.
+    # https://github.com/Coursemology/coursemology2/issues/2387
+    if @assessment.questions.empty?
+      redirect_to course_assessment_path(current_course, @assessment),
+                  danger: t('.no_questions')
+      return
+    end
+
     @submission.session_id = authentication_service.generate_authentication_token!
     if @submission.save
       log_service.log_submission_access(request) if @assessment.password_protected?
