@@ -2,6 +2,26 @@
 require 'rails_helper'
 
 RSpec.describe Duplicator, type: :model do
+  describe '#time_shift' do
+    subject { Duplicator.new([], time_shift: 1.year).time_shift(original_date) }
+
+    context 'when shifted date will be below the cap' do
+      let(:original_date) { Time.zone.now }
+      # Full time shifted date
+      let(:expected_date) { original_date + 1.year }
+
+      it { is_expected.to be_within(1.second).of expected_date }
+    end
+
+    context 'when shifted date will be above the cap' do
+      let(:original_date) { DateTime.new(9999, 8, 1).in_time_zone('UTC') }
+      # Capped date
+      let(:expected_date) { DateTime.new(9999, 12, 31).in_time_zone('UTC') }
+
+      it { is_expected.to be_within(1.second).of expected_date }
+    end
+  end
+
   context 'when Plain Old Ruby Objects' do
     class SimpleObject
       attr_reader :id
