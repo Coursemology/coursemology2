@@ -98,6 +98,9 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
 
         maximum_grade = 999.9
+        # For some reasons we have to clear the old field first then can fill in the value, otherwise
+        # the new value will append to the new value instead of replacing it.
+        fill_in 'question_programming[maximum_grade]', with: ''
         fill_in 'question_programming[maximum_grade]', with: maximum_grade
         page.find('#programmming-question-form-submit').click
 
@@ -133,6 +136,9 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
                from: 'question_programming[language_id]', visible: false
         page.check('question_programming[autograded]', visible: false)
         fill_in 'question_programming[memory_limit]', with: question_attributes[:memory_limit]
+        # For some reasons we have to clear the old field first then can fill in the value, otherwise
+        # the new value will append to the new value instead of replacing it.
+        fill_in 'question_programming[time_limit]', with: ''
         fill_in 'question_programming[time_limit]', with: question_attributes[:time_limit]
         fill_in 'question_programming[attempt_limit]', with: question_attributes[:attempt_limit]
 
