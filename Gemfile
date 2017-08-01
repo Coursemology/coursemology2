@@ -114,7 +114,8 @@ group :development, :test do
 
   # Capybara for feature testing
   gem 'capybara'
-  gem 'poltergeist'
+  gem 'capybara-selenium'
+  gem 'chromedriver-helper'
 
   # Factory Girl for factories
   gem 'factory_girl_rails'
