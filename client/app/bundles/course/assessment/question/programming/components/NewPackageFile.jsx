@@ -4,34 +4,36 @@ import {
   TableHeaderColumn, TableRow, TableRowColumn,
 } from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { grey300 } from 'material-ui/styles/colors';
 import styles from './../containers/OnlineEditor/OnlineEditorView.scss';
-import translations from './../containers/OnlineEditor/OnlineEditorView.intl';
 
-class NewDataFile extends React.Component {
+class NewPackageFile extends React.Component {
   static propTypes = {
     index: PropTypes.number.isRequired,
+    fileType: PropTypes.string.isRequired,
     filename: PropTypes.string,
     showDeleteButton: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
-    intl: intlShape.isRequired,
-    updateNewDataFile: PropTypes.func.isRequired,
-    deleteNewDataFile: PropTypes.func.isRequired,
+    updateNewPackageFile: PropTypes.func.isRequired,
+    deleteNewPackageFile: PropTypes.func.isRequired,
+    buttonLabel: PropTypes.string.isRequired,
   }
 
-  newDataFileChangeHandler(index) {
+  static getPackageFileName(fileType) {
+    return `question_programming[${fileType}][]`;
+  }
+
+  newPackageFileChangeHandler(index) {
     return (e) => {
       const files = e.target.files;
       const filename = files.length === 0 ? null : files[0].name;
-      this.props.updateNewDataFile(filename, index);
+      this.props.updateNewPackageFile(this.props.fileType, filename, index);
     };
   }
 
   render() {
-    const {
-      index, filename, showDeleteButton, isLoading, intl,
-    } = this.props;
+    const { index, filename, showDeleteButton, isLoading } = this.props;
     let deleteButton = null;
     const addFileButtonStyle = {};
     let rowStyle = { borderBottom: 'none' };
@@ -42,7 +44,7 @@ class NewDataFile extends React.Component {
           backgroundColor={grey300}
           icon={<i className="fa fa-trash" />}
           disabled={isLoading}
-          onClick={() => { this.props.deleteNewDataFile(index); }}
+          onClick={() => { this.props.deleteNewPackageFile(this.props.fileType, index); }}
           style={{ minWidth: '40px', width: '40px' }}
         />
       );
@@ -58,7 +60,7 @@ class NewDataFile extends React.Component {
         <TableRowColumn>
           <RaisedButton
             className={styles.fileInputButton}
-            label={intl.formatMessage(translations.addDataFileButton)}
+            label={this.props.buttonLabel}
             labelPosition="before"
             containerElement="label"
             primary
@@ -67,10 +69,10 @@ class NewDataFile extends React.Component {
           >
             <input
               type="file"
-              name="question_programming[data_files][]"
+              name={NewPackageFile.getPackageFileName(this.props.fileType)}
               className={styles.uploadInput}
               disabled={isLoading}
-              onChange={this.newDataFileChangeHandler(index)}
+              onChange={this.newPackageFileChangeHandler(index)}
             />
           </RaisedButton>
           <div style={{ display: 'inline-block' }}>{filename}</div>
@@ -80,4 +82,4 @@ class NewDataFile extends React.Component {
   }
 }
 
-export default injectIntl(NewDataFile);
+export default injectIntl(NewPackageFile);
