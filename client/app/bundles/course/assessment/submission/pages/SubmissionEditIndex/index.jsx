@@ -115,8 +115,10 @@ class VisibleSubmissionEditIndex extends Component {
     return (
       <Card style={{ marginBottom: 20 }}>
         <CardHeader title={<h3>{assessment.title}</h3>} />
-        <CardText dangerouslySetInnerHTML={{ __html: assessment.description }} />
-        {assessment.files ? (<CardText>
+        {assessment.description ? <CardText
+          dangerouslySetInnerHTML={{ __html: assessment.description }}
+        /> : null}
+        {assessment.files.length > 0 ? (<CardText>
           <h4>Files</h4>
           {assessment.files.map(renderFile)}
         </CardText>) : null}

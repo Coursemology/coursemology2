@@ -23,7 +23,7 @@ class Course::Discussion::PostsController < Course::ComponentController
     if super
       respond_to do |format|
         format.js
-        format.json { head :ok }
+        format.json { render @post }
       end
     else
       head :bad_request
