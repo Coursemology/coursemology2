@@ -39,6 +39,6 @@ class Course::Video < ActiveRecord::Base
   end
 
   def initialize_duplicate(duplicator, other)
-    copy_attributes(other, duplicator.time_shift)
+    copy_attributes(other, duplicator)
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Duplicator
-  attr_reader :options, :time_shift, :mode
+  attr_reader :options, :mode
 
   # Create an instance of Duplicator to track duplicated objects.
   #
@@ -12,7 +12,7 @@ class Duplicator
     @duplicated_objects = {} # hash to check what has been duplicated
     @exclusion_set = excluded_objects.to_set # set to check what should be excluded
     @options = options
-    @time_shift = options[:time_shift]
+    @time_shift_amount = options[:time_shift]
     @mode = options[:mode]
   end
 
@@ -39,6 +39,20 @@ class Duplicator
       duplicated_stuff << duplicated_object unless duplicated_object.nil?
     end
     stuff_is_enumerable ? duplicated_stuff : duplicated_stuff[0]
+  end
+
+  # Time shifts the datetime passed to this function.
+  # Cap the maximum datetime to 31 December 9999 0:00:00 as the frontend JS cannot support
+  # 5 digit years.
+  #
+  # @param [DateTime] original_time The DateTime value to be time shifted.
+  # @return [DateTime] The time shifted DateTime, capped to 31 December 9999.
+  def time_shift(original_time)
+    # TODO: Move max_time declaration to facilitate re-use.
+    # config/application.rb could be unsuitable as `Time.zone.local` does not work there.
+    max_time = Time.zone.local(9999, 12, 31, 0, 0, 0)
+    shifted_time = original_time + @time_shift_amount
+    shifted_time < max_time ? shifted_time : max_time
   end
 
   private

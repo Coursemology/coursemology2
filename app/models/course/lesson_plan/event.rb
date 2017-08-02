@@ -4,6 +4,6 @@ class Course::LessonPlan::Event < ActiveRecord::Base
 
   def initialize_duplicate(duplicator, other)
     self.course = duplicator.duplicate(other.course)
-    copy_attributes(other, duplicator.time_shift)
+    copy_attributes(other, duplicator)
   end
 end

@@ -28,16 +28,16 @@ class Course::LessonPlan::Item < ActiveRecord::Base
   # Shift the time related fields.
   #
   # @param other [Object] The source object to copy attributes from.
-  # @param time_shift [Float] Amount to time shift lesson plan items.
-  def copy_attributes(other, time_shift)
+  # @param duplicator [Duplicator] The Duplicator object
+  def copy_attributes(other, duplicator)
     self.title = other.title
     self.description = other.description
     self.published = other.published
     self.base_exp = other.base_exp
     self.time_bonus_exp = other.time_bonus_exp
-    self.start_at = other.start_at + time_shift
-    self.bonus_end_at = other.bonus_end_at + time_shift if other.bonus_end_at
-    self.end_at = other.end_at + time_shift if other.end_at
+    self.start_at = duplicator.time_shift(other.start_at)
+    self.bonus_end_at = duplicator.time_shift(other.bonus_end_at) if other.bonus_end_at
+    self.end_at = duplicator.time_shift(other.end_at) if other.end_at
   end
 
   # Test if the lesson plan item has started for self directed learning.

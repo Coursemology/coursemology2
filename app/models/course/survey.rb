@@ -25,7 +25,7 @@ class Course::Survey < ActiveRecord::Base
   end
 
   def initialize_duplicate(duplicator, other)
-    copy_attributes(other, duplicator.time_shift)
+    copy_attributes(other, duplicator)
     self.sections = duplicator.duplicate(other.sections)
   end
 end
