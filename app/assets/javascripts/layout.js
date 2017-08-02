@@ -63,7 +63,7 @@
         }
       };
 
-    $('textarea.text').not('.summernote-initialised').each(function() {
+    $('textarea.text').not('.summernote-initialised').not('.no-summernote').each(function() {
       var $summernote = $(this);
       function onImageCompressed(dataUrl) {
         var img = document.createElement('img');

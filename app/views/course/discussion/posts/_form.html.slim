@@ -2,5 +2,5 @@
 div.post-form style='display: none'
   = simple_form_for Course::Discussion::Post.new, url: course_topic_posts_path(current_course, topic) do |f|
     = f.hidden_field :parent_id
-    = f.input :text, label: false, input_html: { class: ['airmode'] }
+    = f.input :text, label: false, input_html: { class: ['no-summernote'] }
     = f.button :submit, t('.comment')
