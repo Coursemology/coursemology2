@@ -1,14 +1,20 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update
-    if params[:answer_id]
-      submit_answer
-    elsif @submission.update_attributes(update_params)
-      redirect_to_edit
-    else
-      # The management buttons depends on the state of the submission
-      @submission.workflow_state = @submission.workflow_state_was
+    if update_submission
+      load_or_create_answers if unsubmit?
       render 'edit'
+    else
+      render json: { errors: @submission.errors }, status: :bad_request
+    end
+  end
+
+  def submit_answer
+    answer = @submission.answers.find(submit_answer_params[:id].to_i)
+    if update_answer(answer, submit_answer_params)
+      auto_grade(answer)
+    else
+      head :bad_request
     end
   end
 
@@ -44,22 +50,12 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     end
   end
 
-  def update_params
-    @update_params ||=
-      if unsubmit? # Attributes like grades and exp should be not updated.
-        params.require(:submission).permit(*workflow_state_params)
-      else
-        params.require(:submission).permit(
-          *workflow_state_params,
-          points_awarded_param,
-          answers_attributes: [:id] + update_answers_params
-        )
-      end
+  def update_submission_params
+    params.require(:submission).permit(*workflow_state_params, points_awarded_param)
   end
 
-  def submit_answer_params
-    params.require(:submission).require(:answers_attributes).
-      require(answer_id_param).permit(actable_attributes: [:id, update_answer_type_params])
+  def update_answers_params
+    params.require(:submission).permit(answers: [:id] + update_answer_params)
   end
 
   private
@@ -80,13 +76,10 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   # The permitted parameters for answers and their specific answer types.
   #
   # This varies depending on the permissions of the user.
-  def update_answers_params
+  def update_answer_params
     [].tap do |result|
-      actable_attributes = [:id]
-      actable_attributes.push(update_answer_type_params) if can?(:update, @submission)
-
-      result.push(:grade) if can?(:grade, @submission)
-      result.push(actable_attributes: actable_attributes)
+      result.push(*update_answer_type_params) if can?(:update, @submission)
+      result.push(:grade) if can?(:grade, @submission) && !@submission.attempting?
     end
   end
 
@@ -94,7 +87,6 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update_answer_type_params
     scalar_params = [].tap do |result|
       result.push(:answer_text) # Text response answer
-      result.push(:option_ids) # MCQ answer
       result.push(attachments_params) # User uploaded files
     end
     # Parameters that must be an array of permitted values
@@ -105,12 +97,12 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     scalar_params.push(array_params)
   end
 
-  def answer_id_param
-    params.permit(:answer_id)[:answer_id]
+  def submit_answer_params
+    params.require(:answer).permit([:id] + update_answer_type_params)
   end
 
-  def edit_submission_path
-    edit_course_assessment_submission_path(current_course, @assessment, @submission)
+  def questions_to_attempt
+    @questions_to_attempt ||= @submission.assessment.questions
   end
 
   # Find the questions for this submission without submission_questions.
@@ -131,24 +123,40 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     new_submission_questions.any?
   end
 
-  def submit_answer
-    answer = @submission.answers.find(answer_id_param)
+  def update_submission
+    @submission.class.transaction do
+      update_answers_params[:answers]&.each do |answer_params|
+        answer = @submission.answers.detect { |answer| answer.id == answer_params[:id].to_i }
+        update_answer(answer, answer_params)
+      end unless unsubmit? || unmark?
 
-    if answer.update_attributes(submit_answer_params)
-      if valid_for_grading?(answer)
-        job = grade_and_reattempt_answer(answer)
+      @submission.update(update_submission_params)
+    end
+  end
 
-        respond_to do |format|
-          format.html { job ? redirect_to(job_path(job.job)) : redirect_to_edit }
-          format.json { render json: { redirect_url: job ? job_path(job.job) : nil } }
-        end
-      else
-        # TODO: Implement error recovery in the frontend. Code only goes here if user hacks the html
-        # and enables the submit button.
-        head :bad_request
-      end
+  def update_answer(answer, answer_params)
+    specific_answer = answer.specific
+    specific_answer.assign_params(answer_params)
+    answer.save
+  end
+
+  def unsubmit?
+    params[:submission] && params[:submission][:unsubmit].present?
+  end
+
+  def unmark?
+    params[:submission] && params[:submission][:unmark].present?
+  end
+
+  def auto_grade(answer)
+    return unless valid_for_grading?(answer)
+    job = grade_and_reattempt_answer(answer)
+    if job
+      render json: { redirect_url: job_path(job.job) }
     else
-      head :bad_request
+      current_question = answer.try(:question)
+      new_answer = @submission.answers.from_question(current_question.id).last
+      render new_answer
     end
   end
 
@@ -159,27 +167,14 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       answer.finalise! if answer.attempting?
       # Only save if answer is graded in another server
       answer.save! unless answer.grade_inline?
-      answer.auto_grade!(redirect_to_path: edit_submission_path,
+      answer.auto_grade!(redirect_to_path: nil,
                          reattempt: true, reduce_priority: false)
-    end
-  end
-
-  def unsubmit?
-    params[:submission] && params[:submission][:unsubmit].present?
-  end
-
-  def redirect_to_edit
-    if update_params[:finalise] && @submission.assessment.autograded?
-      redirect_to edit_submission_path,
-                  success: t('course.assessment.submission.submissions.update.finalise')
-    else
-      redirect_to edit_submission_path,
-                  success: t('course.assessment.submission.submissions.update.success')
     end
   end
 
   # Test whether the answer can be graded or not.
   def valid_for_grading?(answer)
+    return true if @assessment.autograded?
     return true unless answer.specific.is_a?(Course::Assessment::Answer::Programming)
 
     answer.specific.attempting_times_left > 0 || can?(:manage, @assessment)

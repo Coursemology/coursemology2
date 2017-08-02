@@ -28,7 +28,7 @@ class Course::Assessment::Question::MultipleResponse < ActiveRecord::Base
 
   def attempt(submission, last_attempt = nil)
     answer =
-      submission.multiple_response_answers.build(submission: submission, question: question)
+      Course::Assessment::Answer::MultipleResponse.new(submission: submission, question: question)
     if last_attempt
       last_attempt.answer_options.each do |answer_option|
         answer.answer_options.build(option_id: answer_option.option_id)

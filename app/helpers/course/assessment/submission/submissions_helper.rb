@@ -14,13 +14,6 @@ module Course::Assessment::Submission::SubmissionsHelper
     "course_assessment_submission_question_#{submission_question.id}_comments"
   end
 
-  # Return the CSS class of the explanation based on the correctness of the answer.
-  #
-  # @return [String]
-  def explanation_panel_class(answer)
-    answer.correct ? 'panel-success' : 'panel-danger'
-  end
-
   # Return the last attempted answer based on the status of current submission.
   # previous attempt if submission is in attempting state.
   # current attempt if submission is in submitted, graded or published state.
@@ -30,45 +23,5 @@ module Course::Assessment::Submission::SubmissionsHelper
     submission = answer.submission
     attempts = submission.answers.from_question(answer.question_id)
     submission.attempting? ? attempts[-2] : attempts[-1]
-  end
-
-  # Display button to allow the resetting of an answer.
-  #
-  # @return [String]
-  def link_to_reset_answer(answer)
-    submission, assessment = answer.submission, answer.submission.assessment
-    path =
-      reload_answer_course_assessment_submission_path(
-        current_course, assessment, submission, answer_id: answer.id, reset_answer: true
-      )
-    link_to t('course.assessment.answer.reset_answer.button'), path,
-            remote: true, method: :post, class: ['btn', 'btn-default', 'reset-answer'],
-            title: t('course.assessment.answer.reset_answer.tooltip'),
-            data: { confirm: t('course.assessment.answer.reset_answer.warning') }
-  end
-
-  def single_question_flag_class(assessment)
-    assessment.questions.length > 1 ? 'multi-question' : 'single-question'
-  end
-
-  def enable_submit_button?(answer)
-    if answer.attempting_times_left > 0
-      true
-    else
-      can?(:manage, answer.submission.assessment)
-    end
-  end
-
-  # Return the bootstrap panel class based on the status of the submission
-  def panel_class
-    if @submission.attempting?
-      'panel-warning'
-    elsif @submission.graded?
-      'panel-info'
-    elsif @submission.published?
-      'panel-success'
-    else
-      'panel-default'
-    end
   end
 end

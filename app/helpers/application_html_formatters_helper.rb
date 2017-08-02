@@ -126,6 +126,28 @@ module ApplicationHTMLFormattersHelper
     end
   end
 
+  # Syntax highlights the given code fragment without adding line numbers.
+  #
+  # This filter will normalise all line endings to Unix format (\n) for use with the Rouge
+  # highlighter.
+  #
+  # @param [String] code The code to syntax highlight.
+  # @param [Coursemology::Polyglot::Language] language The language to highlight the code block
+  #   with.
+  def highlight_code_block(code, language = nil)
+    code = html_escape(code) unless code.html_safe?
+    code = code.gsub(/\r\n|\r/, "\n").html_safe
+
+    code = content_tag(:pre, lang: language ? language.rouge_lexer : nil) do
+      content_tag(:code) { code }
+    end
+
+    pipeline = HTML::Pipeline.new(DefaultPipeline.filters +
+                                  [PreformattedTextLineSplitFilter],
+                                  DefaultCodePipelineOptions)
+    format_with_pipeline(pipeline, code)
+  end
+
   private
 
   # Test if the given code exceeds the size or line limit.

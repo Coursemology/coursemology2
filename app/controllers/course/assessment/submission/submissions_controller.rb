@@ -15,6 +15,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   before_action :load_or_create_submission_questions, only: [:edit, :update]
 
   delegate_to_service(:update)
+  delegate_to_service(:submit_answer)
   delegate_to_service(:load_or_create_answers)
   delegate_to_service(:load_or_create_submission_questions)
 
@@ -45,14 +46,19 @@ class Course::Assessment::Submission::SubmissionsController < \
   def edit
     return if @submission.attempting?
 
-    calculated_fields = [:graded_at]
-    @submission = @submission.calculated(*calculated_fields)
+    respond_to do |format|
+      format.html { render 'edit' }
+      format.json do
+        calculated_fields = [:graded_at]
+        @submission = @submission.calculated(*calculated_fields)
+      end
+    end
   end
 
   def auto_grade
     authorize!(:grade, @submission)
     job = @submission.auto_grade!
-    redirect_to(job_path(job.job))
+    render json: { redirect_url: job_path(job.job) }
   end
 
   # Reload answer to either its latest status or to a fresh answer, depending on parameters.
@@ -62,10 +68,15 @@ class Course::Assessment::Submission::SubmissionsController < \
 
     if @answer.nil?
       head :bad_request
+      return
     elsif reload_answer_params[:reset_answer]
       @new_answer = @answer.reset_answer
     else
       @new_answer = @submission.answers.from_question(@current_question.id).last
+    end
+
+    respond_to do |format|
+      format.json { render @new_answer }
     end
   end
 
@@ -124,6 +135,12 @@ class Course::Assessment::Submission::SubmissionsController < \
     params.permit(:answer_id, :reset_answer)
   end
 
+  def new_session_path
+    new_course_assessment_session_path(
+      current_course, @assessment, submission_id: @submission.id
+    )
+  end
+
   def check_password
     return unless @submission.attempting?
     return if !@assessment.password_protected? || can?(:manage, @assessment)
@@ -131,9 +148,10 @@ class Course::Assessment::Submission::SubmissionsController < \
     unless authentication_service.authenticated?
       log_service.log_submission_access(request)
 
-      redirect_to new_course_assessment_session_path(
-        current_course, @assessment, submission_id: @submission.id
-      )
+      respond_to do |format|
+        format.html { redirect_to new_session_path }
+        format.json { render json: { redirect_url: new_session_path, format: 'html' } }
+      end
     end
   end
 

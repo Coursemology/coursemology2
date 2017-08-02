@@ -102,7 +102,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         end
       end
 
-      scenario 'I can view tabbed assessments and tabs for assessments with more than 1 question,'\
+      pending 'I can view tabbed assessments and tabs for assessments with more than 1 question,'\
                'and view tabs directly through a URL',
                js: true do
         assessment_tabbed_single_question
@@ -159,7 +159,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         )
       end
 
-      scenario 'I can view my submission statistics' do
+      pending 'I can view my submission statistics' do
         submission.assessment.questions.attempt(submission).each(&:save!)
         submission.finalise!
         submission.publish!
@@ -212,7 +212,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         )
       end
 
-      scenario "I can evaluate the student's work", js: true do
+      pending "I can evaluate the student's work", js: true do
         assessment.questions.attempt(submission).each(&:save!)
         submission.points_awarded = nil
         submission.finalise!
@@ -259,7 +259,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         expect(submission.points_awarded).to eq(new_exp)
       end
 
-      scenario 'I can unsubmit a submitted or published submission' do
+      pending 'I can unsubmit a submitted or published submission' do
         # Submitted submission
         assessment.questions.attempt(submission).each(&:save!)
         submission.finalise!

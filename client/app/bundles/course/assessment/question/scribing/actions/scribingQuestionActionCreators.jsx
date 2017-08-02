@@ -13,7 +13,7 @@ function redirectToAssessment() {
 export function fetchSkills() {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_SKILLS_REQUEST });
-    return CourseAPI.assessments.fetchSkills()
+    return CourseAPI.assessment.assessments.fetchSkills()
       .then((response) => {
         dispatch({
           type: actionTypes.FETCH_SKILLS_SUCCESS,

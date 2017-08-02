@@ -43,7 +43,7 @@ function getSurveyId() {
 }
 
 /**
- * Get the assignment id from URL.
+ * Get the assessment id from URL.
  *
  * return {number}
  */
@@ -62,6 +62,6 @@ function getScribingId() {
   return match && match[1];
 }
 
-
 /* eslint-disable import/prefer-default-export */
 export { getUrlParameter, getCourseId, getSurveyId, getAssessmentId, getScribingId };
+

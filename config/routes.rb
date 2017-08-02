@@ -184,11 +184,12 @@ Rails.application.routes.draw do
             resources :submissions, only: [:index, :create, :edit, :update] do
               post :auto_grade, on: :member
               post :reload_answer, on: :member
+              patch :submit_answer, on: :member
               get :download_all, on: :collection
               patch :publish_all, on: :collection
               resources :logs, only: [:index]
               scope module: :answer do
-                resources :answers, only: [] do
+                resources :answers, only: [:show] do
                   namespace :programming do
                     resources :files, only: [] do
                       resources :annotations, only: [:create]

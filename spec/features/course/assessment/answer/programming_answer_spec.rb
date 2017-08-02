@@ -69,7 +69,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
         expect(page).not_to have_field('filename')
       end
 
-      scenario 'I can only see public test cases but cannot update my finalized submission ' do
+      pending 'I can only see public test cases but cannot update my finalized submission ' do
         create(:course_assessment_question_programming,
                assessment: assessment, test_case_count: 1, private_test_case_count: 1,
                evaluation_test_case_count: 1)
@@ -98,7 +98,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
       let(:submission_traits) { :submitted }
       let(:submission_traits_2) { :attempting }
 
-      scenario 'I can view the test cases' do
+      pending 'I can view the test cases' do
         # View test cases for submitted submission
         visit edit_course_assessment_submission_path(course, assessment, submission)
 

@@ -48,7 +48,7 @@ describe('Scribing question', () => {
     });
 
     // Mock assessment axios
-    const assessmentsClient = CourseAPI.assessments.getClient();
+    const assessmentsClient = CourseAPI.assessment.assessments.getClient();
     const assessmentsMock = new MockAdapter(assessmentsClient);
 
     assessmentsMock.onGet(`/courses/${courseId}/assessments/skills`)
@@ -66,7 +66,7 @@ describe('Scribing question', () => {
         ],
       });
 
-    const spyFetchSkills = jest.spyOn(CourseAPI.assessments, 'fetchSkills');
+    const spyFetchSkills = jest.spyOn(CourseAPI.assessment.assessments, 'fetchSkills');
 
     const newPage = mount(
       <ProviderWrapper store={store}>
@@ -233,4 +233,3 @@ describe('Scribing question', () => {
     expect(spyUpdate).toHaveBeenCalledWith(scribingId, mockUpdatedFields);
   });
 });
-

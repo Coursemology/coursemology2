@@ -20,11 +20,25 @@ class Course::Discussion::PostsController < Course::ComponentController
   end
 
   def update
-    head :bad_request unless super
+    if super
+      respond_to do |format|
+        format.js
+        format.json { head :ok }
+      end
+    else
+      head :bad_request
+    end
   end
 
   def destroy
-    head :bad_request unless super
+    if super
+      respond_to do |format|
+        format.js
+        format.json { head :ok }
+      end
+    else
+      head :bad_request
+    end
   end
 
   protected

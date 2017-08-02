@@ -69,7 +69,7 @@ module Course::Assessment::AssessmentAbility
   def allow_students_create_assessment_submission
     can :create, Course::Assessment::Submission,
         experience_points_record: { course_user: { user_id: user.id } }
-    can :update, Course::Assessment::Submission, assessment_submission_attempting_hash(user)
+    can [:update, :submit_answer], Course::Assessment::Submission, assessment_submission_attempting_hash(user)
     can [:read, :reload_answer], Course::Assessment::Submission,
         experience_points_record: { course_user: { user_id: user.id } }
   end

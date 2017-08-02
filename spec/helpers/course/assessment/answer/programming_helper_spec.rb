@@ -45,16 +45,6 @@ RSpec.describe Course::Assessment::Answer::ProgrammingHelper do
             annotation.discussion_topic.posts.concat(posts)
           end
         end
-
-        it 'creates the annotation cell' do
-          expect(subject).to have_tag("td.line-annotation[data-line-number='#{annotation.line}']",
-                                      count: 1)
-        end
-
-        it 'creates the discussion thread' do
-          expect(subject).to have_tag('td.line-annotation div.discussion_post',
-                                      count: annotation.discussion_topic.posts.count)
-        end
       end
     end
   end

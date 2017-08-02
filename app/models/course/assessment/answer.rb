@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer < ActiveRecord::Base
   include Workflow
-  actable
+  actable inverse_of: :answer
 
   workflow do
     state :attempting do
@@ -96,6 +96,10 @@ class Course::Assessment::Answer < ActiveRecord::Base
     else
       true
     end
+  end
+
+  def assign_params(params)
+    self.grade = params[:grade].to_f if params[:grade]
   end
 
   protected

@@ -52,4 +52,13 @@ class Course::Assessment::Answer::Programming < ActiveRecord::Base
       end
     end
   end
+
+  def assign_params(params)
+    acting_as.assign_params(params)
+
+    params[:files_attributes]&.each do |file_attributes|
+      file = files.find { |f| f.id == file_attributes[:id].to_i }
+      file.content = file_attributes[:content]
+    end
+  end
 end

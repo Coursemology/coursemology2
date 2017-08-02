@@ -1,5 +1,0 @@
-div.panel.panel-danger
-  div.panel-heading = panel_heading
-  div.panel-body
-    - test_case_and_result.each do |test_case, test_result|
-      = simple_format(get_hint(test_case, test_result))

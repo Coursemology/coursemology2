@@ -8,11 +8,7 @@ module Course::Assessment::Submission::SubmissionsControllerServiceConcern
   #
   # @return [Class] The class of the service.
   def service_class
-    if @assessment.autograded?
-      Course::Assessment::Submission::AutogradedAssessmentUpdateService
-    else
-      Course::Assessment::Submission::ManuallyGradedAssessmentUpdateService
-    end
+    Course::Assessment::Submission::UpdateService
   end
 
   # Instantiate a service based on the assessment display mode.

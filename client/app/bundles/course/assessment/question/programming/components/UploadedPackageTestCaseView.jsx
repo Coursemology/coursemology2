@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { Card, CardHeader } from 'material-ui/Card';
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import { Table, TableBody, TableHeader, TableHeaderColumn,
+         TableRow, TableRowColumn } from 'material-ui/Table';
 import ExpandableText from 'lib/components/ExpandableText';
 
 import styles from './UploadedPackageTestCaseView.scss';
