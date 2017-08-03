@@ -7,7 +7,7 @@ import MaterialFoldersAPI from './MaterialFolders';
 import LessonPlanAPI from './LessonPlan';
 import SurveyAPI from './Survey';
 import AdminAPI from './Admin';
-import ScribingQuestionAPI from './assessment/question/scribing';
+import ScribingQuestionAPI from './Assessment/question/scribing';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
