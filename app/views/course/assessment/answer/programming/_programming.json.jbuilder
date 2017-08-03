@@ -2,7 +2,7 @@ submission = answer.submission
 assessment = submission.assessment
 question = answer.question.specific
 last_attempt = last_attempt(answer)
-auto_grading = last_attempt.try(:auto_grading).try(:specific)
+auto_grading = last_attempt&.auto_grading&.specific
 
 json.fields do
   json.questionId answer.question_id
@@ -13,7 +13,7 @@ json.fields do
   end
 end
 
-if answer.submitted? && job = answer.try(:auto_grading).try(:job)
+if answer.submitted? && job = answer&.auto_grading&.job
   json.autograding do
     json.path job_path(job) if job.submitted?
     json.status job.status
