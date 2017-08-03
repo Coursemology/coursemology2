@@ -3,6 +3,7 @@ en:
     errors:
       models:
         course/video/submission:
-          experience_points_record:
-            inconsistent_user: 'the creator of the submission must be the same as the course user'
+          attributes:
+            experience_points_record:
+              inconsistent_user: 'creator must be the same as the course user record'
           submission_already_exists: "Looks like you have already created a submission. Try again?"

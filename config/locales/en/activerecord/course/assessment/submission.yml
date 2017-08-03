@@ -15,7 +15,7 @@ en:
       models:
         course/assessment/submission:
           experience_points_record:
-            inconsistent_user: 'the creator of the submission must be the same as the course user'
+            inconsistent_user: 'creator must be the same as the course user record'
             absent_award_attributes: >
               there is no award attributes for your submission, please try again
               or contact the Coursemology team
