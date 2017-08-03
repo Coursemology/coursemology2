@@ -28,7 +28,7 @@ module ApplicationFormattersHelper
   # @return [String] The user-visible string to represent the User, suitable for rendering as
   #   output.
   def display_user(user)
-    user.name
+    user&.name
   end
 
   # Displays the given user's image.

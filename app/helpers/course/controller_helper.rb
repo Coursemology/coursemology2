@@ -18,6 +18,7 @@ module Course::ControllerHelper
   # @return [String] The user-visible string to represent the User, suitable for rendering as
   #   output.
   def display_user(user)
+    return nil unless user
     return display_course_user(user) if user.is_a?(CourseUser)
 
     course_user = user.course_users.find_by(course: controller.current_course)
