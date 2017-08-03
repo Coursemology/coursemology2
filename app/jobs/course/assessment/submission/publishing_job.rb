@@ -24,9 +24,11 @@ class Course::Assessment::Submission::PublishingJob < ApplicationJob
   # @param [User] publisher The user object who would be publishing the submission.
   def publish_submissions(assessment, publisher)
     User.with_stamper(publisher) do
-      assessment.submissions.with_graded_state.each do |submission|
-        submission.publish!
-        submission.save!
+      Course::Assessment::Submission.transaction do
+        assessment.submissions.with_graded_state.each do |submission|
+          submission.publish!
+          submission.save!
+        end
       end
     end
   end
