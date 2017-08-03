@@ -36,12 +36,13 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
         end
 
         subject { get :index, format: :json, course_id: course.id }
-        before { subject }
 
         context 'when user is staff' do
           let(:user) { admin }
 
           it 'responds with all items' do
+            subject
+
             expect(json_response.keys).to contain_exactly('milestones', 'items', 'flags')
             expect(json_response['items'].length).to eq(2)
 
@@ -56,11 +57,32 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
             )
             expect(json_response['flags']['canManageLessonPlan']).to be(true)
           end
+
+          context 'when the video component is enabled' do
+            before do
+              instance.settings(:components, :course_videos_component).enabled = true
+              instance.save!
+              course.settings(:components, :course_videos_component).enabled = true
+              course.save!
+            end
+            let!(:milestone) { create(:course_lesson_plan_milestone, course: course) }
+            let!(:video) { create(:video, course: course) }
+
+            it 'responds with the list of videos' do
+              subject
+
+              expect(json_response['items'].map { |i| i['lesson_plan_item_type'][0] }).
+                to include(I18n.t('components.video.name'))
+            end
+          end
         end
+
         context 'when user is student' do
           let(:user) { student.user }
 
           it 'responds with published items only' do
+            subject
+
             expect(json_response['items'].length).to eq(1)
 
             milestone_data = json_response['milestones'][0]
