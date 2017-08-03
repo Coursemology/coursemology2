@@ -88,6 +88,7 @@ class ConfirmationDialog extends React.Component {
           {...{ open, actions }}
           modal={false}
           onRequestClose={onCancel}
+          style={{ zIndex: 9999 }}
         >
           { confirmationMessage }
         </Dialog>
