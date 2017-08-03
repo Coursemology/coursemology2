@@ -174,7 +174,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
         self.meta['expected'] = #{expected}
         #{hint}
         _out = #{test[:expression]}
-        self.meta['output'] = _out
+        self.meta['output'] = "'" + _out + "'" if isinstance(_out, str) else _out
         self.assertEqual(_out, #{test[:expected]})
       PYTHON
 
