@@ -1,4 +1,4 @@
-- if can?(:attempt, video)
+- if can?(:attempt, video) && current_course_user
   - submission = video.submissions.select { |s| s.creator == current_user }.first
   - if submission
     = link_to t('.rewatch'),
