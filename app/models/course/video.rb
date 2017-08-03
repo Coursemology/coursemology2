@@ -40,5 +40,6 @@ class Course::Video < ActiveRecord::Base
 
   def initialize_duplicate(duplicator, other)
     copy_attributes(other, duplicator)
+    self.url = other.url
   end
 end
