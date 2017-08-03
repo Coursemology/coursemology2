@@ -107,7 +107,7 @@ class VisibleSubmissionEditIndex extends Component {
   renderAssessment() {
     const { assessment } = this.props;
 
-    const renderFile = file => (<div>
+    const renderFile = (file, index) => (<div key={index}>
       <FileIcon style={{ verticalAlign: 'middle' }} />
       <a href={file.url}><span>{file.name}</span></a>
     </div>);
