@@ -10,8 +10,7 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
-import { red100, red200, red900, yellow900, grey100, blue500,
-         green200, green900, white } from 'material-ui/styles/colors';
+import { red100, red200, red900, yellow900, grey100, blue500, white } from 'material-ui/styles/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import Dialog from 'material-ui/Dialog';
@@ -58,10 +57,10 @@ class SubmissionEditForm extends Component {
   }
 
   componentDidMount() {
-    const { questionIds } = this.props;
+    const { questionIds, tabbedView } = this.props;
     let initialStep = this.props.step;
 
-    if (initialStep !== null) {
+    if (initialStep !== null && !tabbedView) {
       initialStep = initialStep < 0 ? 0 : initialStep;
       initialStep = initialStep >= questionIds.length - 1 ? questionIds.length - 1 : initialStep;
       scroller.scrollTo(`step${initialStep}`, { offset: -60 });
@@ -130,7 +129,7 @@ class SubmissionEditForm extends Component {
       } else if (explanation.failureType === 'private_test') {
         title = intl.formatMessage(translations.privateTestCaseFailure);
       } else {
-        title = intl.formatMessage(translations.wrong);
+        return null;
       }
 
       return (
@@ -138,10 +137,10 @@ class SubmissionEditForm extends Component {
           <CardHeader
             style={{
               ...styles.explanationHeader,
-              backgroundColor: explanation.correct ? green200 : red200,
+              backgroundColor: red200,
             }}
             title={title}
-            titleColor={explanation.correct ? green900 : red900}
+            titleColor={red900}
           />
           <CardText>
             {explanation.explanations.map(exp => <div dangerouslySetInnerHTML={{ __html: exp }} />)}

@@ -5,6 +5,7 @@ export default class Checkbox extends Component {
   static propTypes = {
     style: PropTypes.object,        // eslint-disable-line react/forbid-prop-types
     checked: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool.isRequired,
     indeterminate: PropTypes.bool,
     onChange: PropTypes.func,
   };
@@ -16,7 +17,7 @@ export default class Checkbox extends Component {
   };
 
   render() {
-    const { style, checked, indeterminate, onChange } = this.props;
+    const { disabled, style, checked, indeterminate, onChange } = this.props;
     return (
       <input
         type="checkbox"
@@ -28,6 +29,7 @@ export default class Checkbox extends Component {
           }
         }}
         onChange={onChange}
+        disabled={disabled}
       />
     );
   }
