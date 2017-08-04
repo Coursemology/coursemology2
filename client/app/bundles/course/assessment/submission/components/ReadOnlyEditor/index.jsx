@@ -95,7 +95,7 @@ export default class ReadOnlyEditor extends Component {
         return false;
       }
     }
-    return true;
+    return annotations.length > 0;
   }
 
   isIndeterminateState() {
@@ -140,6 +140,7 @@ export default class ReadOnlyEditor extends Component {
             }
           }}
           checked={this.isAllExpanded()}
+          disabled={this.props.annotations.length === 0}
           indeterminate={this.isIndeterminateState()}
         />
         Expand all comments
