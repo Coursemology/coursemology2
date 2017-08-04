@@ -57,10 +57,10 @@ class SubmissionEditForm extends Component {
   }
 
   componentDidMount() {
-    const { questionIds } = this.props;
+    const { questionIds, tabbedView } = this.props;
     let initialStep = this.props.step;
 
-    if (initialStep !== null) {
+    if (initialStep !== null && !tabbedView) {
       initialStep = initialStep < 0 ? 0 : initialStep;
       initialStep = initialStep >= questionIds.length - 1 ? questionIds.length - 1 : initialStep;
       scroller.scrollTo(`step${initialStep}`, { offset: -60 });
