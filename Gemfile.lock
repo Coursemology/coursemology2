@@ -144,7 +144,7 @@ GEM
       url
     concurrent-ruby (1.0.5)
     consistency_fail (0.3.5)
-    coursemology-polyglot (0.2.7)
+    coursemology-polyglot (0.2.9)
       activesupport (~> 4.2.0, >= 4.2.2)
     crass (1.0.2)
     devise-multi_email (1.0.5)
@@ -580,7 +580,7 @@ DEPENDENCIES
   codeclimate-test-reporter
   codecov
   consistency_fail
-  coursemology-polyglot (>= 0.1.0)
+  coursemology-polyglot (>= 0.2.9)
   devise!
   devise-multi_email (~> 1.0.5)
   devise_masquerade
@@ -652,6 +652,5 @@ DEPENDENCIES
   workflow
   yard
 
-
 BUNDLED WITH
-   1.14.6
+   1.15.3
