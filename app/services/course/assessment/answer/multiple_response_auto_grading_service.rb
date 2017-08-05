@@ -43,10 +43,10 @@ class Course::Assessment::Answer::MultipleResponseAutoGradingService < \
   def grade_all_correct(question, answer)
     correct_answers = question.options.correct
     correct_selection = correct_answers & answer.options.uniq
-    correct = (correct_selection.length == correct_answers.length) &&
-              (correct_selection.length == answer.options.length)
+    wrong_selection = (answer.options.uniq | correct_answers) - correct_selection
+    correct = wrong_selection.empty?
 
-    [correct, grade_for(question, correct), explanations_for(answer.options)]
+    [correct, grade_for(question, correct), explanations_for(wrong_selection[0, 1])]
   end
 
   # Returns the grade for the given correctness.
