@@ -78,7 +78,7 @@ class FileInput extends Component {
     this.setState({ dropzoneActive: false });
     if (!disabled) {
       callback(files);
-      return onChange(files);
+      return onChange(files.length > 0 ? files : null);
     }
     return () => {};
   }
