@@ -195,6 +195,10 @@ const translations = defineMessages({
     defaultMessage: 'Please do not sign out or close the browser, otherwise \
                     you may have trouble continuing the exam.',
   },
+  emptyAssessment: {
+    id: 'course.assessment.submission.emptyAssessment',
+    defaultMessage: 'This assessment currently has no questions.',
+  },
 });
 
 export default translations;

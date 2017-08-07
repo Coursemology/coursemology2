@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
@@ -19,6 +20,7 @@ import {
   questionFlagsShape, questionShape, reduxFormShape, submissionShape, topicShape,
 } from '../../propTypes';
 import { formNames, workflowStates } from '../../constants';
+import translations from '../../translations';
 
 class VisibleSubmissionEditIndex extends Component {
   constructor(props) {
@@ -150,6 +152,10 @@ class VisibleSubmissionEditIndex extends Component {
       isAutograding,
       isSaving,
     } = this.props;
+
+    if (Object.values(questions).length === 0) {
+      return <h4><FormattedMessage {...translations.emptyAssessment} /></h4>;
+    }
 
     if (autograded) {
       return (
