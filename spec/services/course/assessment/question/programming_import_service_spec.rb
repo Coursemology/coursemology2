@@ -68,7 +68,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportService do
       end
 
       it 'infers that the test case is private' do
-        expect(subject.send(:infer_test_case_type, 'test_fractal')).to eq(:private_test)
+        expect(subject.send(:infer_test_case_type, 'test_private_fractal')).to eq(:private_test)
       end
 
       it 'infers that the test case is an evaluation test' do

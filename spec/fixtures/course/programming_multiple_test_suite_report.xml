@@ -7,12 +7,12 @@
             <property name="compiler.debug" value="on" />
             <property name="project.jdk.classpath" value="jdk.classpath.1.6" />
         </properties>
-        <testcase classname="JUnitXmlReporter.constructor" name="should default path to an empty string" time="0.006">
+        <testcase classname="JUnitXmlReporter.constructor" name="test_public_1" time="0.006">
             <failure message="test failure">Assertion failed</failure>
         </testcase>
-        <testcase classname="JUnitXmlReporter.constructor" name="should default consolidate to true" time="0">
+        <testcase classname="JUnitXmlReporter.constructor" name="test_private_2" time="0">
             <skipped />
         </testcase>
-        <testcase classname="JUnitXmlReporter.constructor" name="should default useDotNotation to true" time="0" />
+        <testcase classname="JUnitXmlReporter.constructor" name="test_evaluation_3" time="0" />
     </testsuite>
 </testsuites>
