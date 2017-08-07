@@ -15,6 +15,20 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
         Course::Duplication::ObjectDuplicationService.duplicate_objects(source_objects, options)
       end
 
+      context 'when an item fails to duplicate' do
+        let(:milestone) { create(:course_lesson_plan_milestone, course: source_course) }
+        let(:invalid_skill) do
+          create(:course_assessment_skill, course: source_course).tap do |skill|
+            skill.title = nil
+          end
+        end
+        let(:source_objects) { [invalid_skill, milestone] }
+
+        it 'rolls back the whole transaction' do
+          expect { duplicate_objects }.to change { destination_course.lesson_plan_milestones.count }.by(0)
+        end
+      end
+
       context 'when an achievement is selected' do
         let(:achievement) { create(:course_achievement, :with_badge, course: source_course) }
         let(:source_objects) { [achievement] }

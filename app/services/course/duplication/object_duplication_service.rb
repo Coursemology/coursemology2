@@ -37,8 +37,11 @@ class Course::Duplication::ObjectDuplicationService < Course::Duplication::BaseS
   # @return [Course] The duplicated objects
   def duplicate_objects(objects)
     # TODO: Inform the user when the duplication is complete.
-    duplicator.duplicate(objects).tap do |duplicated|
-      duplicated.respond_to?(:save!) ? duplicated.save! : duplicated.map(&:save!)
+    Course.transaction do
+      duplicated = duplicator.duplicate(objects)
+      success = duplicated.respond_to?(:save) ? duplicated.save : duplicated.all?(&:save)
+      raise ActiveRecord::Rollback unless success
+      duplicated
     end
   end
 
