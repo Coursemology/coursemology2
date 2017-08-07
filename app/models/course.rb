@@ -69,17 +69,6 @@ class Course < ActiveRecord::Base
     joins(:course_users).where('course_users.user_id = ?', user.id)
   end)
 
-  # @!method with_owners
-  #   Includes all course_users with the role of owner.
-  scope :with_owners, (lambda do
-    course_users = CourseUser.owner.where(course: pluck(:id)).includes(:user)
-
-    all.tap do |result|
-      preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
-      preloader.preload(result, :course_users, course_users)
-    end
-  end)
-
   scope :active_in_past_7_days, -> { joins(:course_users).merge(CourseUser.active_in_past_7_days).uniq }
 
   delegate :staff, to: :course_users
