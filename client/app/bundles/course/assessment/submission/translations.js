@@ -171,7 +171,7 @@ const translations = defineMessages({
   },
   updateFailure: {
     id: 'course.assessment.submission.updateFailure',
-    defaultMessage: 'Submission update failed.',
+    defaultMessage: 'Submission update failed: {errors}',
   },
   autogradeFailure: {
     id: 'course.assessment.submission.autogradeFailure',

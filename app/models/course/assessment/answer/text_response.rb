@@ -5,6 +5,7 @@ class Course::Assessment::Answer::TextResponse < ActiveRecord::Base
 
   after_initialize :set_default
   before_validation :strip_whitespace
+  validate :validate_filenames_are_unique, if: :attachments_changed?
 
   # Specific implementation of Course::Assessment::Answer#reset_answer
   def reset_answer
@@ -55,5 +56,11 @@ class Course::Assessment::Answer::TextResponse < ActiveRecord::Base
 
   def strip_whitespace
     answer_text.strip!
+  end
+
+  def validate_filenames_are_unique
+    return if attachments.map(&:name).uniq.count == attachments.size
+
+    errors.add(:attachments, :unique)
   end
 end

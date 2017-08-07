@@ -42,10 +42,21 @@ module Extensions::Attachable::ActiveRecord::Base
       self.attachable_columns ||= []
 
       has_many :attachment_references, as: :attachable, class_name: "::#{AttachmentReference.name}",
-                                       inverse_of: :attachable, dependent: :destroy, autosave: true
+                                       inverse_of: :attachable, dependent: :destroy, autosave: true,
+                                       after_add: :mark_attachments_as_changed
       # Attachment references can substitute attachments, so allow access using the `attachments`
       # identifier.
       alias_method :attachments, :attachment_references
+
+      def attachments_changed?
+        !!@attachments_changed
+      end
+
+      private
+
+      def mark_attachments_as_changed(*)
+        @attachments_changed = true
+      end
     end
 
     ATTACHMENT_REMOVED_SUFFIX = '_attachment_references_removed'.freeze

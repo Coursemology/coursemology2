@@ -8,6 +8,7 @@ export const notificationShape = PropTypes.shape({
   message: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }),
+  errors: PropTypes.string,
 });
 
 /*
@@ -30,9 +31,10 @@ class IntlNotificationBar extends React.Component {
   render() {
     const { intl, notification, ...options } = this.props;
     const message = notification && notification.message;
+    const errors = notification && notification.errors;
     return (
       <NotificationBar
-        notification={message ? { message: intl.formatMessage(message) } : null}
+        notification={message ? { message: intl.formatMessage(message, { errors }) } : null}
         {...options}
       />
     );
