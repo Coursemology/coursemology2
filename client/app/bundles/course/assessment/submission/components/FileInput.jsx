@@ -26,6 +26,7 @@ const styles = {
     display: 'flex',
     height: 100,
     marginTop: 10,
+    marginBottom: 10,
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
