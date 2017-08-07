@@ -11,9 +11,13 @@ class Course::Assessment::Skill < ActiveRecord::Base
   scope :order_by_title, ->(direction = :asc) { order(title: direction) }
 
   def initialize_duplicate(duplicator, other)
-    self.course = duplicator.duplicate(other.course)
-    self.skill_branch = duplicator.duplicate(other.skill_branch)
-    self.questions = duplicator.duplicate(other.questions.map(&:actable)).compact.map(&:acting_as)
+    if duplicator.mode == :course
+      self.course = duplicator.duplicate(other.course)
+      self.skill_branch = duplicator.duplicate(other.skill_branch)
+      self.questions = duplicator.duplicate(other.questions.map(&:actable)).compact.map(&:acting_as)
+    elsif duplicator.mode == :object
+      self.course = duplicator.options[:target_course]
+    end
   end
 
   private

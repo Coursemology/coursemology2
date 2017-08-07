@@ -61,6 +61,10 @@ class Course::Level < ActiveRecord::Base
   end
 
   def initialize_duplicate(duplicator, other)
-    self.course = duplicator.duplicate(other.course)
+    if duplicator.mode == :course
+      self.course = duplicator.duplicate(other.course)
+    elsif duplicator.mode == :object
+      self.course = duplicator.options[:target_course]
+    end
   end
 end

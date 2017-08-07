@@ -62,7 +62,13 @@ class Course::Condition::Assessment < ActiveRecord::Base
   def initialize_duplicate(duplicator, other)
     self.conditional_type = other.conditional_type
     self.conditional = duplicator.duplicate(other.conditional)
-    self.course = duplicator.duplicate(other.course)
+
+    if duplicator.mode == :course
+      self.course = duplicator.duplicate(other.course)
+    elsif duplicator.mode == :object
+      self.course = duplicator.options[:target_course]
+    end
+
     @duplicating = true
   end
 

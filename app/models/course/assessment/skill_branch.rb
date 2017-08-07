@@ -5,7 +5,11 @@ class Course::Assessment::SkillBranch < ActiveRecord::Base
   scope :ordered_by_title, -> { order(:title) }
 
   def initialize_duplicate(duplicator, other)
-    self.course = duplicator.duplicate(other.course)
-    self.skills = duplicator.duplicate(other.skills)
+    if duplicator.mode == :course
+      self.course = duplicator.duplicate(other.course)
+      self.skills = duplicator.duplicate(other.skills)
+    elsif duplicator.mode == :object
+      self.course = duplicator.options[:target_course]
+    end
   end
 end
