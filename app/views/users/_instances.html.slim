@@ -1,0 +1,11 @@
+table.table
+  thead
+    tr
+      th = Instance.human_attribute_name(:instance)
+
+  tbody
+    - instances.each do |instance|
+      tr
+        td 
+          = link_to format_inline_text(instance.name),
+                    user_url(@user, host: instance.host)

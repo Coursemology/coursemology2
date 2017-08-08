@@ -4,6 +4,7 @@
     td = f.input :name, label: false
     td = user.email
     / TODO: implement after rails #13775 was closed.
+    td
     td = f.input :role, as: :select, collection: User.roles.keys - ['auto_grader'], label: false
     td
       = f.button :submit, id: 'update' do

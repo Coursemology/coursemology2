@@ -1,0 +1,20 @@
+table.table
+  thead
+    tr
+      th = CourseUser.human_attribute_name(:course)
+      th = CourseUser.human_attribute_name(:name)
+      th = CourseUser.human_attribute_name(:role)
+      th = CourseUser.human_attribute_name(:level_number)
+      th = CourseUser.human_attribute_name(:achievements)
+      th = CourseUser.human_attribute_name(:created_at)
+
+  tbody
+    - course_users.each do |course_user|
+      - course = course_user.course
+      tr
+        td = link_to course.title, course_path(course)
+        td = link_to course_user.name, course_user_path(course, course_user)
+        td = course_user.role
+        td = course_user.level_number
+        td = course_user.achievements.count
+        td = format_datetime(course_user.created_at)

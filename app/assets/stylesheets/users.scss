@@ -1,0 +1,7 @@
+.users {
+  &.show {
+    .image > img {
+      @include fit-round-img($user-profile-picture);
+    }
+  }
+}

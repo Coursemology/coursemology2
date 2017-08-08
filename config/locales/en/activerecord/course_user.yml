@@ -3,3 +3,6 @@ en:
     attributes:
       course/course_user:
         name: 'Name'
+      course_user:
+        level_number: 'Level'
+        created_at: 'Enrolled at'

@@ -217,7 +217,7 @@ RSpec.describe ApplicationFormattersHelper do
     end
 
     describe '#link_to_user' do
-      let(:user) { build(:user) }
+      let(:user) { build_stubbed(:user) }
       subject { helper.link_to_user(user) }
 
       it { is_expected.to have_tag('a') }

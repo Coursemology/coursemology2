@@ -1,0 +1,17 @@
+= div_for(@user) do
+  = display_user_image(@user)
+  span.name.h1
+    = display_user(@user)
+
+- if @current_course_users.any?
+  h3 = t('.current_courses')
+  = render partial: 'courses', locals: { course_users: @current_course_users }
+
+- if @completed_course_users.any?
+  h3 = t('.completed_courses')
+  = render partial: 'courses', locals: { course_users: @completed_course_users }
+
+- if current_user&.administrator?
+  - if @instances.any?
+    div = t('.other_instances', name: @user.name)
+    = render partial: 'instances', locals: { instances: @instances }
