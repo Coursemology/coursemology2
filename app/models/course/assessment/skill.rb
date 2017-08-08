@@ -17,6 +17,7 @@ class Course::Assessment::Skill < ActiveRecord::Base
       self.questions = duplicator.duplicate(other.questions.map(&:actable)).compact.map(&:acting_as)
     elsif duplicator.mode == :object
       self.course = duplicator.options[:target_course]
+      self.skill_branch = duplicator.duplicated?(other.skill_branch) ? duplicator.duplicate(other.skill_branch) : nil
     end
   end
 

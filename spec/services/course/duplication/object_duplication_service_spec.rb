@@ -59,25 +59,52 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
         end
       end
 
-      context 'when an assessment skill is selected' do
-        let(:skill) { create(:course_assessment_skill, course: source_course) }
-        let(:source_objects) { [skill] }
-
-        it 'duplicates it' do
-          expect { duplicate_objects }.to change { destination_course.assessment_skills.count }.by(1)
-          expect(duplicate_objects.first.title).to eq(skill.title)
-        end
-      end
-
-      context 'when an assessment skill branch is selected' do
+      context 'when assessment skills and branches are present' do
         let(:branch) do
           create(:course_assessment_skill_branch, :with_skill, course: source_course, skill_count: 2)
         end
-        let(:source_objects) { [branch] }
+        let(:skill) { branch.skills.first }
 
-        it 'duplicates it' do
-          expect { duplicate_objects }.to change { destination_course.assessment_skill_branches.count }.by(1)
-          expect(duplicate_objects.first.title).to eq(branch.title)
+        context 'when an assessment skill is selected but not its branch' do
+          let(:source_objects) { skill }
+
+          it 'duplicates the skill but not the branch' do
+            expect { duplicate_objects }.to change { destination_course.assessment_skills.count }.by(1)
+            expect(duplicate_objects.title).to eq(skill.title)
+            expect(duplicate_objects.skill_branch).to be_nil
+          end
+        end
+
+        context 'when an assessment skill branch is selected but not the skills under it' do
+          let(:source_objects) { branch }
+
+          it 'duplicates the branch but not its skills' do
+            expect { duplicate_objects }.to change { destination_course.assessment_skill_branches.count }.by(1)
+            expect(duplicate_objects.title).to eq(branch.title)
+            expect(duplicate_objects.skills.count).to eq(0)
+          end
+        end
+
+        context 'when a skill is duplicated after its branch' do
+          let(:source_objects) { [branch, skill] }
+
+          it 'forms the association with the duplicate branch' do
+            expect { duplicate_objects }.to change { destination_course.assessment_skills.count }.by(1)
+            duplicate_branch, duplicate_skill = duplicate_objects
+            expect(duplicate_skill.skill_branch).to be(duplicate_branch)
+            expect(duplicate_branch.skills.count).to eq(1)
+          end
+        end
+
+        context 'when a branch is duplicated after a skill under it' do
+          let(:source_objects) { [skill, branch] }
+
+          it 'forms associations with all its skills that are duplicated' do
+            expect { duplicate_objects }.to change { destination_course.assessment_skills.count }.by(1)
+            duplicate_skill, duplicate_branch = duplicate_objects
+            expect(duplicate_skill.skill_branch).to be(duplicate_branch)
+            expect(duplicate_branch.skills.count).to eq(1)
+          end
         end
       end
 
