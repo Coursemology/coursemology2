@@ -14,7 +14,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     if update_answer(answer, submit_answer_params)
       auto_grade(answer)
     else
-      render json: { errors: @submission.errors }, status: :bad_request
+      render json: { errors: answer.errors }, status: :bad_request
     end
   end
 
