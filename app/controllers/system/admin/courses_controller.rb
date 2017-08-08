@@ -4,8 +4,11 @@ class System::Admin::CoursesController < System::Admin::Controller
   add_breadcrumb :index, :admin_courses_path
 
   def index
-    @courses = Course.ordered_by_title.page(page_param).includes(:instance).
-               search(search_param).calculated(:active_user_count, :user_count).with_owners
+    @courses = Course.includes(:instance).search(search_param).calculated(:active_user_count, :user_count)
+    @courses = @courses.active_in_past_7_days.order('active_user_count DESC, user_count') if params[:active]
+    @courses = @courses.ordered_by_title.page(page_param)
+
+    @owner_preload_service = Course::CourseOwnerPreloadService.new(@courses.map(&:id))
   end
 
   def destroy

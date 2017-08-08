@@ -10,6 +10,6 @@
     = "#{course.active_user_count} / #{course.user_count}"
   td
     ul.list-unstyled
-      - course.course_users.each do |course_owner|
+      - @owner_preload_service.course_owners_for(course.id)&.each do |course_owner|
         li = link_to_user(course_owner.user)
   td = delete_button([:admin, :instance, course])

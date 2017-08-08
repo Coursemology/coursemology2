@@ -4,8 +4,10 @@ class System::Admin::UsersController < System::Admin::Controller
   add_breadcrumb :index, :admin_users_path
 
   def index
-    @users = @users.human_users.ordered_by_name.includes(:emails).page(page_param).
+    @users = @users.human_users.ordered_by_name.includes(:emails).calculated(:instance_user_count).page(page_param).
              search(search_param)
+
+    @users = @users.active_in_past_7_days if params[:active]
   end
 
   def update

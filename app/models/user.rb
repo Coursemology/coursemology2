@@ -66,6 +66,10 @@ class User < ActiveRecord::Base
   scope :human_users, -> { where.not(id: [User::SYSTEM_USER_ID, User::DELETED_USER_ID]) }
   scope :active_in_past_7_days, -> { where('current_sign_in_at > ?', 7.days.ago) }
 
+  calculated :instance_user_count, (lambda do
+    InstanceUser.unscoped.where('instance_users.user_id = users.id').select('count(*)')
+  end)
+
   # Gets whether the current user is one of the the built in users.
   #
   # @return [Boolean]
