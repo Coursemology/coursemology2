@@ -8,9 +8,17 @@ RSpec.feature 'System: Administration: Courses' do
     let(:last_page) { Course.unscoped.page.total_pages }
     let!(:courses) do
       courses = create_list(:course, 2)
-      other_instance = Instance.default
+      other_instance = create(:instance)
       courses.last.update_column(:instance_id, other_instance)
       Course.unscoped.ordered_by_title.page(last_page)
+    end
+    let(:active_course) do
+      course = create(:course)
+      create_list(:course_student, 5, last_active_at: 1.day.ago, course: course)
+      course
+    end
+    let(:inactive_course) do
+      Course.unscoped.where.not(id: Course.unscoped.active_in_past_7_days.pluck(:id)).sample || create(:course)
     end
 
     context 'As a System Administrator' do
@@ -25,6 +33,18 @@ RSpec.feature 'System: Administration: Courses' do
           expect(page).
             to have_link(nil, href: course_url(course, host: course.instance.host, port: nil))
         end
+      end
+
+      scenario 'I can only view active courses' do
+        active_course
+        inactive_course
+
+        visit admin_courses_path(active: 'true')
+
+        expect(page).to have_selector('tr.course th', text: active_course.title)
+        expect(page).to have_link(nil, href: course_url(active_course, host: active_course.instance.host, port: nil))
+
+        expect(page).not_to have_selector('tr.course th', text: inactive_course.title)
       end
 
       scenario 'I can delete a course' do
