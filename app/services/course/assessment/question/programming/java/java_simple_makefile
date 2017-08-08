@@ -1,0 +1,21 @@
+prepare:
+
+compile:
+
+Autograder.java:
+	cat tests/prepend tests/append submission/template tests/autograde >> tests/Autograder.java
+
+test: Autograder.java
+	ant testng
+	# Change the filename of the output file for Coursemology to extract
+	mv testng-results.xml report.xml
+
+solution:
+	ant testng-sol
+	# Change the filename of the output file for Coursemology to extract
+	mv testng-results.xml report.xml
+
+clean:
+	rm -rf report.xml test-output build tests/Autograder.java
+
+.PHONY: prepare compile test solution clean

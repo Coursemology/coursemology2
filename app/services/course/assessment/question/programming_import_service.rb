@@ -113,7 +113,7 @@ class Course::Assessment::Question::ProgrammingImportService
       :public_test
     elsif test_case_name =~ /evaluation/i
       :evaluation_test
-    else
+    elsif test_case_name =~ /private/i
       :private_test
     end
   end
@@ -123,6 +123,10 @@ class Course::Assessment::Question::ProgrammingImportService
   # @param [String] test_report The test case report from evaluating the package.
   # @return [Array<>]
   def parse_test_report(test_report)
-    Course::Assessment::ProgrammingTestCaseReport.new(test_report).test_cases
+    if @question.language.is_a?(Coursemology::Polyglot::Language::Java)
+      Course::Assessment::Java::JavaProgrammingTestCaseReport.new(test_report).test_cases
+    else
+      Course::Assessment::ProgrammingTestCaseReport.new(test_report).test_cases
+    end
   end
 end

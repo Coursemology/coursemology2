@@ -21,11 +21,6 @@ export default defineMessages({
     defaultMessage: '(optional, hidden, appended after student\'s code)',
     description: 'Subtitle for append code block.',
   },
-  cppAppendSubtitle: {
-    id: 'course.assessment.question.programming.onlineEditorView.cppAppendSubtitle',
-    defaultMessage: 'For any function/variable declarations (optional, hidden, appended after student\'s code)',
-    description: 'Subtitle for append code block.',
-  },
   solutionTitle: {
     id: 'course.assessment.question.programming.onlineEditorView.solutionTitle',
     defaultMessage: 'Solution Template',
@@ -95,6 +90,16 @@ export default defineMessages({
     id: 'course.assessment.question.programming.onlineEditorView.addNewTestButton',
     defaultMessage: 'Add new test',
     description: 'Button for adding new test case.',
+  },
+  showTestCaseCodeEditorButton: {
+    id: 'course.assessment.question.programming.onlineEditorView.showTestCaseCodeEditorButton',
+    defaultMessage: 'Code',
+    description: 'Button for showing the test case inline code editor.',
+  },
+  hideTestCaseCodeEditorButton: {
+    id: 'course.assessment.question.programming.onlineEditorView.hideTestCaseCodeEditorButton',
+    defaultMessage: 'Hide',
+    description: 'Button for hiding the test case inline code editor.',
   },
   publicTestCases: {
     id: 'course.assessment.question.programming.onlineEditorView.publicTestCases',

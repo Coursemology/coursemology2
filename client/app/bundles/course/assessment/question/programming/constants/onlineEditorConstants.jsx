@@ -3,13 +3,14 @@
 import mirrorCreator from 'mirror-creator';
 
 const editorActionTypes = mirrorCreator([
+  'TOGGLE_SUBMIT_AS_FILE',
   'CODE_BLOCK_UPDATE',
   'TEST_CASE_CREATE',
   'TEST_CASE_UPDATE',
   'TEST_CASE_DELETE',
-  'NEW_DATA_FILE_UPDATE',
-  'NEW_DATA_FILE_DELETE',
-  'EXISTING_DATA_FILE_DELETE',
+  'NEW_PACKAGE_FILE_UPDATE',
+  'NEW_PACKAGE_FILE_DELETE',
+  'EXISTING_PACKAGE_FILE_DELETE',
 ]);
 
 export default editorActionTypes;

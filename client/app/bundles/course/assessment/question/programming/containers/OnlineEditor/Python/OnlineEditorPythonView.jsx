@@ -14,7 +14,7 @@ import 'brace/theme/monokai';
 
 import styles from './../OnlineEditorView.scss';
 import translations from './../OnlineEditorView.intl';
-import { ExistingDataFile, NewDataFile, TestCase, EditorCard } from './../OnlineEditorBase';
+import { ExistingPackageFile, NewPackageFile, TestCase, EditorCard } from './../OnlineEditorBase';
 
 const MAX_TEST_CASES = 99;
 
@@ -26,9 +26,9 @@ const propTypes = {
     createTestCase: PropTypes.func.isRequired,
     updateTestCase: PropTypes.func.isRequired,
     deleteTestCase: PropTypes.func.isRequired,
-    updateNewDataFile: PropTypes.func.isRequired,
-    deleteNewDataFile: PropTypes.func.isRequired,
-    deleteExistingDataFile: PropTypes.func.isRequired,
+    updateNewPackageFile: PropTypes.func.isRequired,
+    deleteNewPackageFile: PropTypes.func.isRequired,
+    deleteExistingPackageFile: PropTypes.func.isRequired,
   }),
   isLoading: PropTypes.bool.isRequired,
   autograded: PropTypes.bool.isRequired,
@@ -51,8 +51,8 @@ class OnlineEditorPythonView extends React.Component {
     };
   }
 
-  renderExistingDataFiles = () => {
-    const numFiles = this.props.data.get('data_files').size;
+  renderExistingPackageFiles(fileType, header) {
+    const numFiles = this.props.data.get(fileType).size;
     if (numFiles === 0) {
       return null;
     }
@@ -62,13 +62,14 @@ class OnlineEditorPythonView extends React.Component {
       const filename = fileData.get('filename');
 
       return (
-        <ExistingDataFile
+        <ExistingPackageFile
           key={hash}
           {...{
             filename,
+            fileType,
             filesize: fileData.get('size'),
             toDelete: this.props.dataFiles.get('to_delete').has(filename),
-            deleteExistingDataFile: this.props.actions.deleteExistingDataFile,
+            deleteExistingPackageFile: this.props.actions.deleteExistingPackageFile,
             isLoading: this.props.isLoading,
             isLast: numFiles === index + 1,
           }}
@@ -79,7 +80,7 @@ class OnlineEditorPythonView extends React.Component {
     return (
       <Card initiallyExpanded>
         <CardHeader
-          title={this.props.intl.formatMessage(translations.currentDataFilesHeader)}
+          title={header}
           textStyle={{ fontWeight: 'bold' }}
           actAsExpander
           showExpandableButton
@@ -106,30 +107,31 @@ class OnlineEditorPythonView extends React.Component {
     );
   }
 
-  renderNewDataFiles() {
+  renderNewPackageFiles(fileType, header, buttonLabel) {
     const renderNewFile = (fileData, index) => {
       const key = fileData.get('key');
       return (
-        <NewDataFile
+        <NewPackageFile
           key={key}
           {...{
             index,
+            fileType,
             filename: fileData.get('filename'),
             showDeleteButton: this.props.dataFiles.get('key') !== key,
             isLoading: this.props.isLoading,
-            intl: this.props.intl,
-            updateNewDataFile: this.props.actions.updateNewDataFile,
-            deleteNewDataFile: this.props.actions.deleteNewDataFile,
+            updateNewPackageFile: this.props.actions.updateNewPackageFile,
+            deleteNewPackageFile: this.props.actions.deleteNewPackageFile,
+            buttonLabel,
           }}
         />
       );
     };
-    const newDataFilesRows = this.props.dataFiles.get('new').map(renderNewFile);
+    const newPackageFilesRows = this.props.dataFiles.get('new').map(renderNewFile);
 
     return (
       <Card initiallyExpanded>
         <CardHeader
-          title={this.props.intl.formatMessage(translations.newDataFilesHeader)}
+          title={header}
           textStyle={{ fontWeight: 'bold' }}
           actAsExpander
           showExpandableButton
@@ -137,7 +139,7 @@ class OnlineEditorPythonView extends React.Component {
         <CardText expandable style={{ padding: 0 }}>
           <Table selectable={false}>
             <TableBody displayRowCheckbox={false}>
-              { newDataFilesRows }
+              { newPackageFilesRows }
             </TableBody>
           </Table>
         </CardText>
@@ -168,6 +170,9 @@ class OnlineEditorPythonView extends React.Component {
           expression,
           expected,
           hint,
+          enableInlineCodeEditor: false,
+          showCodeEditor: test.get('showCodeEditor') || false,
+          intl: this.props.intl,
         }}
       />
       ));
@@ -273,12 +278,22 @@ class OnlineEditorPythonView extends React.Component {
           }
         </div>
         <h3>{ intl.formatMessage(translations.dataFilesHeader) }</h3>
-        { this.renderExistingDataFiles() }
-        { this.renderNewDataFiles() }
+        {
+          this.renderExistingPackageFiles(
+            'data_files',
+            this.props.intl.formatMessage(translations.currentDataFilesHeader)
+          )
+        }
+        {
+          this.renderNewPackageFiles('data_files',
+            this.props.intl.formatMessage(translations.newDataFilesHeader),
+            intl.formatMessage(translations.addDataFileButton)
+          )
+        }
         <h3>{ intl.formatMessage(translations.testCasesHeader) }</h3>
         <div style={{ marginBottom: '0.5em' }}>
           <FormattedMessage
-            id="course.assessment.question.programming.onlineEditorPythonView.testCasesDescription"
+            id="course.assessment.question.programming.OnlineEditorViewitorPythonView.testCasesDescription"
             defaultMessage={
               '{note}: The expression in the {expression} column will be compared with the ' +
               'expression in the {expected} column using the equality operator. The return value ' +

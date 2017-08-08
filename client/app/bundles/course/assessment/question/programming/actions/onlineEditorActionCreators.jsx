@@ -1,5 +1,12 @@
 import actionTypes from '../constants/onlineEditorConstants';
 
+export function toggleSubmitAsFile(newValue) {
+  return {
+    type: actionTypes.TOGGLE_SUBMIT_AS_FILE,
+    newValue,
+  };
+}
+
 export function updateCodeBlock(field, newValue) {
   return {
     type: actionTypes.CODE_BLOCK_UPDATE,
@@ -33,24 +40,27 @@ export function deleteTestCase(testType, index) {
   };
 }
 
-export function updateNewDataFile(filename, index) {
+export function updateNewPackageFile(fileType, filename, index) {
   return {
-    type: actionTypes.NEW_DATA_FILE_UPDATE,
+    type: actionTypes.NEW_PACKAGE_FILE_UPDATE,
+    fileType,
     index,
     filename,
   };
 }
 
-export function deleteNewDataFile(index) {
+export function deleteNewPackageFile(fileType, index) {
   return {
-    type: actionTypes.NEW_DATA_FILE_DELETE,
+    type: actionTypes.NEW_PACKAGE_FILE_DELETE,
+    fileType,
     index,
   };
 }
 
-export function deleteExistingDataFile(filename, toDelete) {
+export function deleteExistingPackageFile(fileType, filename, toDelete) {
   return {
-    type: actionTypes.EXISTING_DATA_FILE_DELETE,
+    type: actionTypes.EXISTING_PACKAGE_FILE_DELETE,
+    fileType,
     filename,
     toDelete,
   };

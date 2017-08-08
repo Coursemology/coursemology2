@@ -9,7 +9,7 @@
 TypeError: mosaic() takes 1 positional argument but 4 were given
 ]]>			</error>
 		</testcase>
-		<testcase classname="Mission01" name="test_simple_fractal" time="0.000">
+		<testcase classname="Mission01" name="test_private_simple_fractal" time="0.000">
 			<error message="module 'mission01-template' has no attribute 'simple_fractal'" type="AttributeError">
 <![CDATA[Traceback (most recent call last):
   File "tests/test_autograde_runes.py", line 69, in test_simple_fractal

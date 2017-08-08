@@ -428,6 +428,7 @@ class ProgrammingQuestionForm extends React.Component {
             isLoading: this.props.data.get('is_loading'),
             autograded: this.props.data.getIn(['question', 'autograded']),
             autogradedAssessment: this.props.data.getIn(['question', 'autograded_assessment']),
+            hasSubmissions: this.props.data.getIn(['question', 'has_submissions']),
           }}
         />
       );

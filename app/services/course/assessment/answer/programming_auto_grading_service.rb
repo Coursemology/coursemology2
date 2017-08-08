@@ -109,7 +109,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   # @return [Array<Course::Assessment::Question::ProgrammingTestCase>]
   def build_test_case_records_from_report(question, auto_grading, test_report)
     test_cases = question.test_cases.map { |test_case| [test_case.identifier, test_case] }.to_h
-    test_results = parse_test_report(test_report)
+    test_results = parse_test_report(question.language, test_report)
 
     test_results.map do |test_result|
       test_case = find_test_case(test_cases, test_result)
@@ -169,9 +169,15 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
 
   # Parses the test report for test cases and statuses.
   #
+  # @param [Coursemology::Polyglot::Language] lanugage The language of which the
+  #   test_report will be parsed based on
   # @param [String] test_report The test case report from evaluating the package.
   # @return [Array<>]
-  def parse_test_report(test_report)
-    Course::Assessment::ProgrammingTestCaseReport.new(test_report).test_cases
+  def parse_test_report(language, test_report)
+    if language.is_a?(Coursemology::Polyglot::Language::Java)
+      Course::Assessment::Java::JavaProgrammingTestCaseReport.new(test_report).test_cases
+    else
+      Course::Assessment::ProgrammingTestCaseReport.new(test_report).test_cases
+    end
   end
 end

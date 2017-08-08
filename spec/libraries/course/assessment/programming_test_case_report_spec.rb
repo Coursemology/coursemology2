@@ -64,7 +64,7 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
 
       describe '#name' do
         it 'returns the name attribute' do
-          expect(subject.name).to eq('should default path to an empty string')
+          expect(subject.name).to eq('test_public_1')
         end
       end
 
