@@ -16,6 +16,13 @@ export default function (state = {}, action) {
           ({ ...obj, [answer.questionId]: answer.attachments })
         , {}),
       };
+    case actions.AUTOGRADE_SUCCESS: {
+      const { questionId } = action.payload;
+      return {
+        ...state,
+        [questionId]: action.payload.attachments,
+      };
+    }
     case actions.DELETE_ATTACHMENT_SUCCESS: {
       const { questionId, attachmentId } = action.payload;
       return {

@@ -8,11 +8,22 @@ import translations from '../translations';
 const JOB_POLL_DELAY = 500;
 const JOB_STAGGER_DELAY = 400;
 
-export function setNotification(message) {
+export function setNotification(message, errors) {
   return {
     type: actionTypes.SET_NOTIFICATION,
     message,
+    errors,
   };
+}
+
+function buildErrorMessage(error) {
+  if (typeof error.response.data.error === 'string') {
+    return error.response.data.error;
+  }
+
+  return Object.values(error.response.data.errors).reduce(
+    (flat, errors) => flat.concat(errors), []
+  ).join(', ');
 }
 
 function pollJob(url, onSuccess, onFailure) {
@@ -110,9 +121,9 @@ export function saveDraft(submissionId, answers) {
         dispatch(reset(formNames.SUBMISSION));
         dispatch(setNotification(translations.updateSuccess));
       })
-      .catch(() => {
+      .catch((error) => {
         dispatch({ type: actionTypes.SAVE_DRAFT_FAILURE });
-        dispatch(setNotification(translations.updateFailure));
+        dispatch(setNotification(translations.updateFailure, buildErrorMessage(error)));
       });
   };
 }
@@ -132,9 +143,9 @@ export function finalise(submissionId, answers) {
         dispatch(reset(formNames.SUBMISSION));
         dispatch(setNotification(translations.updateSuccess));
       })
-      .catch(() => {
+      .catch((error) => {
         dispatch({ type: actionTypes.FINALISE_FAILURE });
-        dispatch(setNotification(translations.updateFailure));
+        dispatch(setNotification(translations.updateFailure, buildErrorMessage(error)));
       });
   };
 }
@@ -150,9 +161,9 @@ export function unsubmit(submissionId) {
         dispatch({ type: actionTypes.UNSUBMIT_SUCCESS, payload: data });
         dispatch(setNotification(translations.updateSuccess));
       })
-      .catch(() => {
+      .catch((error) => {
         dispatch({ type: actionTypes.UNSUBMIT_FAILURE });
-        dispatch(setNotification(translations.updateFailure));
+        dispatch(setNotification(translations.updateFailure, buildErrorMessage(error)));
       });
   };
 }
@@ -222,9 +233,9 @@ export function saveGrade(submissionId, grades, exp, published) {
         dispatch({ type: actionTypes.SAVE_GRADE_SUCCESS, payload: data });
         dispatch(setNotification(translations.updateSuccess));
       })
-      .catch(() => {
+      .catch((error) => {
         dispatch({ type: actionTypes.SAVE_GRADE_FAILURE });
-        dispatch(setNotification(translations.updateFailure));
+        dispatch(setNotification(translations.updateFailure, buildErrorMessage(error)));
       });
   };
 }
@@ -247,9 +258,9 @@ export function mark(submissionId, grades, exp) {
         dispatch({ type: actionTypes.MARK_SUCCESS, payload: data });
         dispatch(setNotification(translations.updateSuccess));
       })
-      .catch(() => {
+      .catch((error) => {
         dispatch({ type: actionTypes.MARK_FAILURE });
-        dispatch(setNotification(translations.updateFailure));
+        dispatch(setNotification(translations.updateFailure, buildErrorMessage(error)));
       });
   };
 }
@@ -265,9 +276,9 @@ export function unmark(submissionId) {
         dispatch({ type: actionTypes.UNMARK_SUCCESS, payload: data });
         dispatch(setNotification(translations.updateSuccess));
       })
-      .catch(() => {
+      .catch((error) => {
         dispatch({ type: actionTypes.UNMARK_FAILURE });
-        dispatch(setNotification(translations.updateFailure));
+        dispatch(setNotification(translations.updateFailure, buildErrorMessage(error)));
       });
   };
 }
@@ -289,9 +300,9 @@ export function publish(submissionId, grades, exp) {
         dispatch({ type: actionTypes.PUBLISH_SUCCESS, payload: data });
         dispatch(setNotification(translations.updateSuccess));
       })
-      .catch(() => {
+      .catch((error) => {
         dispatch({ type: actionTypes.PUBLISH_FAILURE });
-        dispatch(setNotification(translations.updateFailure));
+        dispatch(setNotification(translations.updateFailure, buildErrorMessage(error)));
       });
   };
 }

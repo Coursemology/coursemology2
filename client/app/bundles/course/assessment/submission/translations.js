@@ -171,7 +171,7 @@ const translations = defineMessages({
   },
   updateFailure: {
     id: 'course.assessment.submission.updateFailure',
-    defaultMessage: 'Submission update failed.',
+    defaultMessage: 'Submission update failed: {errors}',
   },
   autogradeFailure: {
     id: 'course.assessment.submission.autogradeFailure',
@@ -194,6 +194,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.examDialogMessage',
     defaultMessage: 'Please do not sign out or close the browser, otherwise \
                     you may have trouble continuing the exam.',
+  },
+  emptyAssessment: {
+    id: 'course.assessment.submission.emptyAssessment',
+    defaultMessage: 'This assessment currently has no questions.',
   },
 });
 
