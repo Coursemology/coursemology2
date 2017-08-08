@@ -30,8 +30,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
             subject.grade(answer)
             expect(answer.grade).to eq(question.maximum_grade)
             expect(answer).to be_correct
-            expect(grading.result['messages']).
-              to contain_exactly(*answer.specific.options.map(&:explanation))
+            expect(grading.result['messages']).to be_empty
           end
         end
 
@@ -43,7 +42,7 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
             expect(answer).not_to be_correct
             expect(answer.grade).to eq(0)
             expect(grading.result['messages']).
-              to contain_exactly(*answer.specific.options.map(&:explanation))
+              to contain_exactly(answer.specific.options.first.explanation)
           end
         end
 
@@ -54,8 +53,10 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
             subject.grade(answer)
             expect(answer).not_to be_correct
             expect(answer.grade).to eq(0)
+
+            wrong_selections = answer.specific.options - question.specific.options.correct
             expect(grading.result['messages']).
-              to contain_exactly(*answer.specific.options.map(&:explanation))
+              to contain_exactly(wrong_selections.first.explanation)
           end
         end
       end
