@@ -177,10 +177,11 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderAutogradingErrorPanel(id) {
-    const { intl, questionsFlags } = this.props;
+    const { intl, questionsFlags, questions } = this.props;
     const { hasError } = questionsFlags[id] || {};
+    const { type } = questions[id];
 
-    if (hasError) {
+    if (type === questionTypes.Programming && hasError) {
       return (
         <Paper style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}>
           {intl.formatMessage(translations.autogradeFailure)}

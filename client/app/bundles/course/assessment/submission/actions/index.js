@@ -193,7 +193,10 @@ export function submitAnswer(submissionId, answer) {
           });
         }
       })
-      .catch(() => dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId }));
+      .catch((error) => {
+        dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId });
+        dispatch(setNotification(translations.updateFailure, buildErrorMessage(error)));
+      });
   };
 }
 
