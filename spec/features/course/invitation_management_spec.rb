@@ -109,7 +109,7 @@ RSpec.feature 'Courses: Invitations', js: true do
           find_link(
             nil,
             href: course_user_invitation_resend_invitation_path(course, invitation_to_resend)
-          ).trigger('click')
+          ).click
         end
         wait_for_ajax
         expect(page).to have_css('.alert.alert-success')

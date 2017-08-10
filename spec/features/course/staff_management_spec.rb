@@ -65,7 +65,7 @@ RSpec.feature 'Courses: Staff Management' do
         within find(content_tag_selector(staff_to_change)) do
           fill_in 'course_user_name', with: new_name
           find('.dropdown-toggle').click
-          find('ul.dropdown-menu.inner').find('span', text: 'owner').trigger('click')
+          find('ul.dropdown-menu.inner').find('span', text: 'owner').click
           click_button 'update'
         end
 

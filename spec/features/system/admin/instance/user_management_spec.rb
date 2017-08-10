@@ -28,7 +28,7 @@ RSpec.feature 'System: Administration: Instance: Users' do
         user_to_change = instance_users.sample
         within find(content_tag_selector(user_to_change)) do
           find('.dropdown-toggle').click
-          find('ul.dropdown-menu.inner').find('span', text: /^$/).trigger('click')
+          find('ul.dropdown-menu.inner').find('span', text: /^$/).click
           click_button 'update'
         end
 

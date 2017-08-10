@@ -125,7 +125,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
           find_link(
             I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
             href: course_assessment_submissions_path(course, assessment_tabbed_single_question)
-          ).trigger('click')
+          ).click
         end
 
         expect(page).not_to have_selector('ul.nav.nav-tabs.tab-header')
@@ -137,7 +137,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
           find_link(
             I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
             href: course_assessment_submissions_path(course, assessment_tabbed)
-          ).trigger('click')
+          ).click
         end
 
         # Test that tabs are visible, and the first tab is loaded.

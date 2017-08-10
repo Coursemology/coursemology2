@@ -142,7 +142,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
             end
           end
         end
-        find(:button, I18n.t('helpers.buttons.update')).trigger('click')
+        find(:button, I18n.t('helpers.buttons.update')).click
 
         expect(page).to have_selector('div.alert.alert-success')
         expect(current_path).to eq(course_assessment_path(course, assessment))
