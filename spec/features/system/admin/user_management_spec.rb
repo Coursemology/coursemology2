@@ -27,8 +27,9 @@ RSpec.feature 'System: Administration: Users' do
 
         user_to_change = users.sample
         within find(content_tag_selector(user_to_change)) do
-          find('.dropdown-toggle').trigger('click')
-          find('ul.dropdown-menu.inner').find('span', text: /^$/).trigger('click')
+          within find_field('user_role', visible: false) do
+            select ''
+          end
           click_button 'update'
         end
 
@@ -38,7 +39,7 @@ RSpec.feature 'System: Administration: Users' do
         new_name = 'updated user name'
         within find(content_tag_selector(user_to_change)) do
           fill_in 'user_name', with: new_name
-          find('.dropdown-toggle').trigger('click')
+          find('.dropdown-toggle').click
           find('ul.dropdown-menu.inner').find('span', text: 'administrator').click
           click_button 'update'
         end
