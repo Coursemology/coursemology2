@@ -39,23 +39,89 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
         end
       end
 
-      context 'when an assessment is selected' do
-        let(:assessment) { create(:assessment, course: source_course) }
-        let(:source_objects) { [assessment] }
+      context 'when an assessments are present' do
+        let!(:assessments) { create_list(:assessment, 2, course: source_course) }
+        let(:assessment) { assessments.first }
+        let(:tab) { assessment.tab }
+        let(:category) { tab.category }
 
-        it 'duplicates it' do
-          expect { duplicate_objects }.to change { destination_course.assessments.count }.by(1)
-          expect(duplicate_objects.first.title).to eq(assessment.title)
+        context 'when only a category is selected' do
+          let(:source_objects) { category }
+
+          it 'duplicates it without any tabs' do
+            expect { duplicate_objects }.to change { destination_course.assessment_categories.count }.by(1)
+            expect(duplicate_objects.title).to eq(category.title)
+            expect(duplicate_objects.tabs.length).to eq(0)
+          end
         end
-      end
 
-      context 'when an assessment category is selected' do
-        let(:category) { create(:course_assessment_category, course: source_course) }
-        let(:source_objects) { [category] }
+        context 'when only a tab is selected' do
+          let(:source_objects) { tab }
+          before { category.update!(title: 'Non-default title') }
 
-        it 'duplicates it' do
-          expect { duplicate_objects }.to change { destination_course.assessment_categories.count }.by(1)
-          expect(duplicate_objects.first.title).to eq(category.title)
+          it "adds it to the target course's default category without assessments" do
+            expect { duplicate_objects }.to change {
+              destination_course.reload.assessment_categories.map(&:tabs).flatten.count
+            }.by(1)
+            expect(duplicate_objects.title).to eq(tab.title)
+            expect(duplicate_objects.category.title).not_to eq(category.reload.title)
+            expect(duplicate_objects.assessments.length).to eq(0)
+          end
+        end
+
+        context 'when an assessment is selected, but not its tab' do
+          let(:source_objects) { [category, assessment] }
+          before { tab.update!(title: 'Non-default title') }
+
+          it "adds it to the target course's default tab" do
+            expect { duplicate_objects }.to change { destination_course.assessments.count }.by(1)
+            duplicate_category, duplicate_assessment = duplicate_objects
+            expect(duplicate_assessment.title).to eq(assessment.title)
+            expect(duplicate_assessment.tab.title).not_to eq(tab.reload.title)
+            expect(duplicate_assessment.folder.parent.owner).not_to be(duplicate_category)
+          end
+        end
+
+        context 'when a category is duplicated after its tab' do
+          let(:source_objects) { [assessment, tab, category] }
+
+          it 'associates the duplicates' do
+            duplicate_assessment, duplicate_tab, duplicate_category = duplicate_objects
+            expect(duplicate_category.tabs.length).to eq(1)
+            expect(duplicate_tab.title).to eq(tab.title)
+            expect(duplicate_assessment.folder.parent.owner).to be(duplicate_category)
+          end
+        end
+
+        context 'when a tab is duplicated after its category' do
+          let(:source_objects) { [assessment, category, tab] }
+
+          it 'associates the duplicates' do
+            duplicate_assessment, duplicate_category, duplicate_tab = duplicate_objects
+            expect(duplicate_category.reload.tabs.length).to eq(1)
+            expect(duplicate_tab.title).to eq(tab.title)
+            expect(duplicate_assessment.folder.parent.owner).to be(duplicate_category)
+          end
+        end
+
+        context 'when an assessment is duplicated after its tab' do
+          let(:source_objects) { [tab, assessment] }
+
+          it 'associates the duplicates' do
+            duplicate_tab, duplicate_assessment = duplicate_objects
+            expect(duplicate_assessment.tab).to be(duplicate_tab)
+            expect(duplicate_assessment.folder.parent.owner).to be(duplicate_tab.category)
+          end
+        end
+
+        context 'when a tab is duplicated after its assessment' do
+          let(:source_objects) { [assessment, tab] }
+
+          it 'associates the duplicates' do
+            duplicate_assessment, duplicate_tab = duplicate_objects
+            expect(duplicate_assessment.tab).to be(duplicate_tab)
+            expect(duplicate_assessment.folder.parent.owner).to be(duplicate_tab.category)
+          end
         end
       end
 

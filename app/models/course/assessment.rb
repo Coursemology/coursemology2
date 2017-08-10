@@ -145,11 +145,15 @@ class Course::Assessment < ActiveRecord::Base
       # gem create the Condition object.
       self.conditions = duplicator.duplicate(other.conditions.map(&:actable)).map(&:acting_as)
     elsif duplicator.mode == :object
-      target_category = duplicator.options[:target_course].assessment_categories.first
-      target_tab = target_category.tabs.first
+      if duplicator.duplicated?(other.tab)
+        target_tab = duplicator.duplicate(other.tab)
+        target_category = target_tab.category
+      else
+        target_category = duplicator.options[:target_course].assessment_categories.first
+        target_tab = target_category.tabs.first
+      end
       self.tab = target_tab
-      self.folder.parent = target_category.folder
-      self.folder.owner = self
+      folder.parent = target_category.folder
     end
     @duplicating = true
   end

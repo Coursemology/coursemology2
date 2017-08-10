@@ -43,6 +43,11 @@ class Course::Assessment::Category < ActiveRecord::Base
       self.tabs = duplicator.duplicate(other.tabs).compact
     elsif duplicator.mode == :object
       self.course = duplicator.options[:target_course]
+      tabs << other.tabs.select { |tab| duplicator.duplicated?(tab) }.map do |tab|
+        duplicator.duplicate(tab).tap do |duplicate_tab|
+          duplicate_tab.assessments.each { |assessment| assessment.folder.parent = folder }
+        end
+      end
     end
   end
 
