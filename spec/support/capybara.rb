@@ -1,5 +1,17 @@
 # frozen_string_literal: true
-require 'capybara/poltergeist'
+
+require 'selenium/webdriver'
+
+Capybara.register_driver :chrome do |app|
+  Capybara::Selenium::Driver.new(app, browser: :chrome)
+end
+
+Capybara.register_driver :headless_chrome do |app|
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(chromeOptions: { args: %w(headless disable-gpu) })
+  Capybara::Selenium::Driver.new(app, browser: :chrome, desired_capabilities: capabilities)
+end
+
+Capybara.javascript_driver = :headless_chrome
 
 # Adds extra matchers for Capybara
 module Capybara::TestGroupHelpers
@@ -70,8 +82,6 @@ RSpec.configure do |config|
 
   config.backtrace_exclusion_patterns << /\/spec\/support\/capybara\.rb/
 end
-
-Capybara.javascript_driver = :poltergeist
 
 module Capybara::CustomFinders
   # Supplements find to try for alternative elements.

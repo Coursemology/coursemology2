@@ -145,7 +145,7 @@ RSpec.feature 'Course: Homepage' do
 
           # click_button is not used because poltergist detected overlapping elements with the
           #   navbar. See poltergeist#520 for more details.
-          find('input.btn.btn-primary').trigger('click')
+          find('input.btn.btn-primary').click
           wait_for_ajax
           expect(assessment_todos[:in_progress].reload.ignore?).to be_truthy
         end

@@ -28,7 +28,7 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
         within find(content_tag_selector(assessment)) do
           find_link(
             I18n.t('course.assessment.assessments.assessment_management_buttons.attempt')
-          ).trigger('click')
+          ).click
         end
         # The user should be redirect to submission edit page
         expect(page).to have_selector('div#submission-edit')
