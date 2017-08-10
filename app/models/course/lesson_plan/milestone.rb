@@ -4,6 +4,11 @@ class Course::LessonPlan::Milestone < ActiveRecord::Base
 
   def initialize_duplicate(duplicator, other)
     self.start_at = duplicator.time_shift(start_at)
-    self.course = duplicator.duplicate(other.course)
+
+    if duplicator.mode == :course
+      self.course = duplicator.duplicate(other.course)
+    elsif duplicator.mode == :object
+      self.course = duplicator.options[:target_course]
+    end
   end
 end

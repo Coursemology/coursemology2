@@ -38,10 +38,12 @@ class Course::Assessment::Category < ActiveRecord::Base
     # duplicate the folder (single object)
     self.folder = duplicator.duplicate(other.folder)
 
-    # duplicate tabs
-    self.tabs = duplicator.duplicate(other.tabs).compact
-
-    self.course = duplicator.duplicate(other.course)
+    if duplicator.mode == :course
+      self.course = duplicator.duplicate(other.course)
+      self.tabs = duplicator.duplicate(other.tabs).compact
+    elsif duplicator.mode == :object
+      self.course = duplicator.options[:target_course]
+    end
   end
 
   private

@@ -55,6 +55,14 @@ class Duplicator
     shifted_time < max_time ? shifted_time : max_time
   end
 
+  # Checks if an item has been duplicated.
+  #
+  # @param [#initialize_duplicate] source_object
+  # @return [Boolean] true if source_object has been duplicated
+  def duplicated?(source_object)
+    @duplicated_objects.key?(source_object)
+  end
+
   private
 
   # Deep copy +source_object+ and its children. +source_object+ must provide a
