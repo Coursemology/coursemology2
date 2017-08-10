@@ -172,6 +172,38 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
             expect(duplicate_branch.skills.count).to eq(1)
           end
         end
+
+        context 'when a skill has an associated question' do
+          let(:assessment) { create(:assessment, :with_mcq_question, course: source_course) }
+          before do
+            skill.questions << assessment.questions.first
+            skill.save!
+          end
+
+          context 'when a skill is duplicated after its associated question' do
+            let(:source_objects) { [assessment, skill] }
+
+            it 'associates the duplicates' do
+              expect { duplicate_objects }.to change { destination_course.assessment_skills.count }.by(1)
+              duplicate_assessment, duplicate_skill = duplicate_objects
+              expect(duplicate_assessment.reload.questions.first.skills.length).to eq(1)
+              expect(duplicate_skill.questions.length).to eq(1)
+              expect(duplicate_skill.questions.first.id).to eq(duplicate_assessment.questions.first.id)
+            end
+          end
+
+          context 'when a question is duplicated after its associated skill' do
+            let(:source_objects) { [skill, assessment] }
+
+            it 'associates the duplicates' do
+              expect { duplicate_objects }.to change { destination_course.assessment_skills.count }.by(1)
+              duplicate_skill, duplicate_assessment = duplicate_objects
+              expect(duplicate_assessment.questions.first.skills.length).to eq(1)
+              expect(duplicate_skill.reload.questions.length).to eq(1)
+              expect(duplicate_skill.questions.first.id).to eq(duplicate_assessment.questions.first.id)
+            end
+          end
+        end
       end
 
       context 'when a forum is selected' do

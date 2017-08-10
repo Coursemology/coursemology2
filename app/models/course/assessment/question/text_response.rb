@@ -49,6 +49,8 @@ class Course::Assessment::Question::TextResponse < ActiveRecord::Base
 
   def initialize_duplicate(duplicator, other)
     copy_attributes(other)
+    associate_duplicated_skills(duplicator, other)
+
     self.solutions = duplicator.duplicate(other.solutions)
   end
 
