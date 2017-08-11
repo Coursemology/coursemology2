@@ -89,6 +89,14 @@ class Course::Material::Folder < ActiveRecord::Base
     elsif duplicator.mode == :object
       self.course = duplicator.options[:target_course]
       self.parent = duplicator.options[:target_course].root_folder
+      self.parent = if duplicator.duplicated?(other.parent)
+                      duplicator.duplicate(other.parent)
+                    else
+                      duplicator.options[:target_course].root_folder
+                    end
+      children << other.children.
+                  select { |folder| duplicator.duplicated?(folder) }.
+                  map { |folder| duplicator.duplicate(folder) }
     end
     @duplicating = true
   end
