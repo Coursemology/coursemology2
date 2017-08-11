@@ -206,6 +206,91 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
         end
       end
 
+      context 'when conditions are present' do
+        let(:required_achievement) { create(:course_achievement, course: source_course) }
+        let(:required_assessment) { create(:assessment, course: source_course) }
+        let(:unlockable_achievement) do
+          create(:course_achievement, course: source_course).tap do |unlockable|
+            create(:assessment_condition,
+                   assessment: required_assessment, conditional: unlockable, course: source_course)
+            create(:achievement_condition,
+                   achievement: required_achievement, conditional: unlockable, course: source_course)
+          end
+        end
+        let(:unlockable_assessment) do
+          create(:assessment, course: source_course).tap do |unlockable|
+            create(:assessment_condition,
+                   assessment: required_assessment, conditional: unlockable, course: source_course)
+            create(:achievement_condition,
+                   achievement: required_achievement, conditional: unlockable, course: source_course)
+          end
+        end
+        let!(:unlockable_achievement_level_condition) do
+          create(:course_condition_level, minimum_level: 2, conditional: unlockable_achievement, course: source_course)
+        end
+        let!(:unlockable_assessment_level_condition) do
+          create(:course_condition_level, minimum_level: 2, conditional: unlockable_assessment, course: source_course)
+        end
+
+        context 'when conditionals are duplicated but not their required items' do
+          let(:source_objects) { [unlockable_achievement, unlockable_assessment] }
+
+          it 'does not duplicate any conditions' do
+            expect { duplicate_objects }.to change { Course::Condition.count }.by(0)
+          end
+        end
+
+        context 'when required items are duplicated but not their conditionals' do
+          let(:source_objects) { [required_achievement, required_assessment] }
+
+          it 'does not duplicate any conditions' do
+            expect { duplicate_objects }.to change { Course::Condition.count }.by(0)
+          end
+        end
+
+        context 'when conditionals are duplicated after their required items' do
+          let(:source_objects) do
+            [required_achievement, required_assessment, unlockable_achievement, unlockable_assessment]
+          end
+
+          it 'duplicates all conditions except level conditions' do
+            expect { duplicate_objects }.to change { Course::Condition.count }.by(4)
+            duplicate_required_achievement, duplicate_required_assessment,
+              duplicate_unlockable_achievement, duplicate_unlockable_assessment = duplicate_objects
+
+            expect(duplicate_required_achievement.reload.achievement_conditions.map(&:conditional)).
+              to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
+            expect(duplicate_required_assessment.reload.assessment_conditions.map(&:conditional)).
+              to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
+            expect(duplicate_unlockable_achievement.conditions.map(&:actable).map(&:dependent_object)).
+              to contain_exactly(duplicate_required_achievement, duplicate_required_assessment)
+            expect(duplicate_unlockable_assessment.conditions.map(&:actable).map(&:dependent_object)).
+              to contain_exactly(duplicate_required_achievement, duplicate_required_assessment)
+          end
+        end
+
+        context 'when conditionals are duplicated before their required items' do
+          let(:source_objects) do
+            [unlockable_achievement, unlockable_assessment, required_achievement, required_assessment]
+          end
+
+          it 'duplicates all conditions except level conditions' do
+            expect { duplicate_objects }.to change { Course::Condition.count }.by(4)
+            duplicate_unlockable_achievement, duplicate_unlockable_assessment,
+              duplicate_required_achievement, duplicate_required_assessment = duplicate_objects
+
+            expect(duplicate_required_achievement.achievement_conditions.map(&:conditional)).
+              to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
+            expect(duplicate_required_assessment.assessment_conditions.map(&:conditional)).
+              to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
+            expect(duplicate_unlockable_achievement.reload.conditions.map(&:actable).map(&:dependent_object)).
+              to contain_exactly(duplicate_required_achievement, duplicate_required_assessment)
+            expect(duplicate_unlockable_assessment.reload.conditions.map(&:actable).map(&:dependent_object)).
+              to contain_exactly(duplicate_required_achievement, duplicate_required_assessment)
+          end
+        end
+      end
+
       context 'when a forum is selected' do
         let(:forum) { create(:forum, course: source_course) }
         let(:source_objects) { [forum] }

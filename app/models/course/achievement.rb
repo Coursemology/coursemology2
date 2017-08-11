@@ -63,6 +63,11 @@ class Course::Achievement < ActiveRecord::Base
       self.conditions = duplicator.duplicate(other.conditions.map(&:actable)).map(&:acting_as)
     elsif duplicator.mode == :object
       self.course = duplicator.options[:target_course]
+
+      duplicate_conditions(duplicator, other)
+      achievement_conditions << other.achievement_conditions.
+                                select { |condition| duplicator.duplicated?(condition.conditional) }.
+                                map { |condition| duplicator.duplicate(condition) }
     end
   end
 end

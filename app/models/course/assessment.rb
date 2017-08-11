@@ -154,6 +154,11 @@ class Course::Assessment < ActiveRecord::Base
       end
       self.tab = target_tab
       folder.parent = target_category.folder
+
+      duplicate_conditions(duplicator, other)
+      assessment_conditions << other.assessment_conditions.
+                               select { |condition| duplicator.duplicated?(condition.conditional) }.
+                               map { |condition| duplicator.duplicate(condition) }
     end
     @duplicating = true
   end
