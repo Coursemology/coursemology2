@@ -92,18 +92,20 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
 
         it 'duplicates lesson plan milestones' do
           # Check that new milestones are assigned to the new course
-          new_course.lesson_plan_milestones.each do |new_milestone|
+          old_milestones = course.lesson_plan_milestones.sort_by(&:title)
+          new_milestones = new_course.lesson_plan_milestones.sort_by(&:title)
+          new_milestones.each do |new_milestone|
             expect(new_milestone.course).to eq new_course
           end
 
           # Check attributes of duplicated milestones
-          course.lesson_plan_milestones.each_index do |i|
+          new_milestones.each_index do |i|
             expect(new_course.lesson_plan_milestones[i].title).
-              to eq course.lesson_plan_milestones[i].title
+              to eq old_milestones[i].title
             expect(new_course.lesson_plan_milestones[i].description).
-              to eq course.lesson_plan_milestones[i].description
+              to eq old_milestones[i].description
             expect(new_course.lesson_plan_milestones[i].start_at).
-              to be_within(1.second).of course.lesson_plan_milestones[i].start_at + time_shift
+              to be_within(1.second).of old_milestones[i].start_at + time_shift
           end
         end
 
