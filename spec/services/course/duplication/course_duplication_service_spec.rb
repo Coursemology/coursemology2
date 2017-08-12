@@ -20,6 +20,19 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
     let!(:survey) { create(:survey, course: course) }
 
     describe '#duplicate_course' do
+      context 'when saving fails' do
+        let!(:invalid_event) do
+          create(:course_lesson_plan_event, course: course).tap do |event|
+            event.acting_as.update_columns(time_bonus_exp: 1, bonus_end_at: nil)
+          end
+        end
+
+        it 'rolls back the whole transaction' do
+          expect { new_course }.to change { Course.count }.by(0)
+          expect(new_course).to be_nil
+        end
+      end
+
       context 'when children are simple' do
         let!(:forum) { create(:forum, course: course) }
         let!(:milestones) { create_list(:course_lesson_plan_milestone, 3, course: course) }

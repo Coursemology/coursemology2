@@ -35,18 +35,11 @@ class Course::Assessment::Category < ActiveRecord::Base
   end
 
   def initialize_duplicate(duplicator, other)
-    # duplicate the folder (single object)
     self.folder = duplicator.duplicate(other.folder)
-
-    if duplicator.mode == :course
-      self.course = duplicator.duplicate(other.course)
-      self.tabs = duplicator.duplicate(other.tabs).compact
-    elsif duplicator.mode == :object
-      self.course = duplicator.options[:target_course]
-      tabs << other.tabs.select { |tab| duplicator.duplicated?(tab) }.map do |tab|
-        duplicator.duplicate(tab).tap do |duplicate_tab|
-          duplicate_tab.assessments.each { |assessment| assessment.folder.parent = folder }
-        end
+    self.course = duplicator.options[:target_course]
+    tabs << other.tabs.select { |tab| duplicator.duplicated?(tab) }.map do |tab|
+      duplicator.duplicate(tab).tap do |duplicate_tab|
+        duplicate_tab.assessments.each { |assessment| assessment.folder.parent = folder }
       end
     end
   end

@@ -52,6 +52,10 @@ class Duplicator
     @duplicated_objects.key?(source_object)
   end
 
+  def set_option(key, value)
+    @options[key] = value
+  end
+
   private
 
   # Maps a block onto a single item or a collection of items. An array is returned if a collection received.
