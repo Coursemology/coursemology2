@@ -10,6 +10,7 @@ export const questionTypes = mirrorCreator([
   'Programming',
   'TextResponse',
   'FileUpload',
+  'Scribing',
 ]);
 
 export const workflowStates = {
@@ -25,6 +26,71 @@ export const TestCaseTypes = {
   Private: 'private_test',
   Evaluation: 'evaluation_test',
 };
+
+export const scribingPopoverTypes = mirrorCreator([
+  'TYPE',
+  'DRAW',
+  'LINE',
+  'SHAPE',
+  'LAYER',
+]);
+
+export const scribingToolColor = mirrorCreator([
+  'TYPE',
+  'DRAW',
+  'LINE',
+  'SHAPE_BORDER',
+  'SHAPE_FILL',
+]);
+
+export const scribingToolThickness = mirrorCreator([
+  'DRAW',
+  'LINE',
+  'SHAPE_BORDER',
+]);
+
+export const scribingToolLineStyle = mirrorCreator([
+  'LINE',
+  'SHAPE_BORDER',
+]);
+
+export const scribingTools = mirrorCreator([
+  'TYPE',
+  'DRAW',
+  'LINE',
+  'SHAPE',
+  'SELECT',
+  'PAN',
+  'ZOOM_IN',
+  'ZOOM_OUT',
+  'DELETE',
+]);
+
+export const scribingShapes = mirrorCreator([
+  'RECT',
+  'ELLIPSE',
+]);
+
+export const canvasActionTypes = mirrorCreator([
+  'SET_CANVAS',
+  'SET_CANVAS_LOADED',
+  'SET_TOOL_SELECTED',
+  'SET_FONT_FAMILY',
+  'SET_FONT_SIZE',
+  'SET_LINE_STYLE_CHIP',
+  'SET_COLORING_TOOL_COLOR',
+  'SET_TOOL_THICKNESS',
+  'SET_SELECTED_SHAPE',
+  'SET_CANVAS_LOADED',
+  'OPEN_HOVER_TOOL_TIP',
+  'CLOSE_HOVER_TOOL_TIP',
+  'OPEN_COLOR_PICKER',
+  'CLOSE_COLOR_PICKER',
+  'OPEN_POPOVER',
+  'CLOSE_POPOVER',
+  'ADD_LAYER',
+  'SET_LAYER_DISPLAY',
+]);
 
 const actionTypes = mirrorCreator([
   'FETCH_SUBMISSION_REQUEST', 'FETCH_SUBMISSION_SUCCESS', 'FETCH_SUBMISSION_FAILURE',
@@ -52,6 +118,12 @@ const actionTypes = mirrorCreator([
   'DOWNLOAD_SUBMISSIONS_REQUEST', 'DOWNLOAD_SUBMISSIONS_SUCCESS', 'DOWNLOAD_SUBMISSIONS_FAILURE',
 
   'SET_NOTIFICATION',
+  // Scribing answer action types
+  'SET_CANVAS_LOADED',
+  'FETCH_SCRIBING_QUESTION_REQUEST', 'FETCH_SCRIBING_QUESTION_SUCCESS', 'FETCH_SCRIBING_QUESTION_FAILURE',
+  'FETCH_SCRIBING_ANSWER_REQUEST', 'FETCH_SCRIBING_ANSWER_SUCCESS', 'FETCH_SCRIBING_ANSWER_FAILURE',
+  'UPDATE_SCRIBING_ANSWER_REQUEST', 'UPDATE_SCRIBING_ANSWER_SUCCESS', 'UPDATE_SCRIBING_ANSWER_FAILURE',
+  'UPDATE_SCRIBING_ANSWER_IN_LOCAL', 'CLEAR_SAVING_STATUS',
 ]);
 
 export default actionTypes;

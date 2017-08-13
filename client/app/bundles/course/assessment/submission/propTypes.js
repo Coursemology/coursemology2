@@ -125,3 +125,24 @@ export const questionFlagsShape = PropTypes.shape({
   isAutograding: PropTypes.bool.isRequired,
   isResetting: PropTypes.bool.isRequired,
 });
+
+export const scribbleShape = PropTypes.shape({
+  content: PropTypes.string,
+});
+
+export const scribingAnswerShape = PropTypes.shape({
+  scribbles: PropTypes.arrayOf(scribbleShape),
+  image_path: PropTypes.string,
+  user_id: PropTypes.number,
+  answer_id: PropTypes.number,
+});
+
+export const scribingShape = PropTypes.shape({
+  answer: scribingAnswerShape,
+  canvas: PropTypes.object,
+  isCanvasLoaded: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  isSaving: PropTypes.bool,
+  isSaved: PropTypes.bool,
+  hasError: PropTypes.bool,
+});
