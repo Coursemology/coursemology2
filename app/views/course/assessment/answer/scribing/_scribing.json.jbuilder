@@ -1,5 +1,5 @@
 json.scribing_answer do
-  # json.image_path attachment_reference_path(answer.question.actable.attachment_references[0])
+  json.image_path attachment_reference_path(answer.question.actable.attachment_references[0])
   json.user_id current_user.id
   json.answer_id answer.id
   json.scribbles answer.actable.scribbles do |scribble|
