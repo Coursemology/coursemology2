@@ -4,6 +4,31 @@
 (function($, EVENT_HELPERS) {
   'use strict';
 
+  function inlineCodeButton(context) {
+    var ui = $.summernote.ui;
+
+    var button = ui.button({
+      contents: '<i class="fa fa-code"' +
+                    'style="color: #c7254e;' +
+                    'font-weight: bold;' +
+                    'background-color: #f9f2f4"/>',
+      tooltip: 'Inline Code',
+      click: function() {
+        var node = $(window.getSelection().getRangeAt(0).commonAncestorContainer);
+        if(node.parent().is('code')) {
+          node.unwrap();
+        } else {
+          var range = context.invoke('editor.createRange'), text = range.toString();
+          if (text !== '') {
+            context.invoke('editor.insertNode', $('<code>'+text+'</code>')[0]);
+          }
+        }
+      },
+    });
+
+    return button.render();
+  }
+
   function compressImage(image, onImageCompressed) {
     // Maximum image size, images larger than this will be compressed
     var IMAGE_MAX_WIDTH = 1920;
@@ -53,7 +78,7 @@
         popover: {
           air: [
             ['style', ['style']],
-            ['font', ['bold', 'underline', 'clear']],
+            ['font', ['bold', 'underline', 'inlineCode', 'clear']],
             ['script', ['superscript', 'subscript']],
             ['color', ['color']],
             ['para', ['ul', 'ol', 'paragraph']],
@@ -74,7 +99,7 @@
       var options = {
         toolbar: [
           ['style', ['style']],
-          ['font', ['bold', 'underline', 'clear']],
+          ['font', ['bold', 'underline', 'inlineCode', 'clear']],
           ['script', ['superscript', 'subscript']],
           ['fontname', ['fontname']],
           ['color', ['color']],
@@ -89,7 +114,10 @@
               compressImage(files[i], onImageCompressed);
             }
           }
-        }
+        },
+        buttons: {
+          inlineCode: inlineCodeButton,
+        },
       };
 
       if ($(this).hasClass('airmode')) {
