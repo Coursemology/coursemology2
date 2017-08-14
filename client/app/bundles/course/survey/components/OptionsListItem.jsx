@@ -84,7 +84,7 @@ class OptionsListItem extends React.PureComponent {
               style={styles.image}
               containerStyle={styles.imageContainer}
             /> : [] }
-          { optionText || null }
+          <p dangerouslySetInnerHTML={{ __html: optionText || null }} />
         </div>
       </div>
     );
