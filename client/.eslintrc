@@ -10,6 +10,7 @@
     react/prefer-stateless-function: "off",
     react/require-default-props: "off",
     react/no-array-index-key: "warn",
+    react/no-danger: "off",
     import/no-extraneous-dependencies: ["warn", { devDependencies: true }],
     import/prefer-default-export: "warn",
     jsx-a11y/label-has-for: "off",
