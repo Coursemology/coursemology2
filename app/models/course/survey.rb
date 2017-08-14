@@ -14,6 +14,10 @@ class Course::Survey < ActiveRecord::Base
   has_many :questions, through: :sections
   has_many :sections, inverse_of: :survey, dependent: :destroy
 
+  def can_user_start?(_user)
+    allow_response_after_end || Time.zone.now < end_at
+  end
+
   def has_student_response?
     responses.find do |response|
       response.experience_points_record.course_user.student?

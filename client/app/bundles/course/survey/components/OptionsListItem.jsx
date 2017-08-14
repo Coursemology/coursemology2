@@ -67,8 +67,8 @@ class OptionsListItem extends React.PureComponent {
         <div style={styles.gridOptionBody}>
           {
             optionText ?
-            <CardText><p dangerouslySetInnerHTML={{ __html: optionText }} /></CardText> :
-            null
+              <CardText><p dangerouslySetInnerHTML={{ __html: optionText }} /></CardText> :
+              null
           }
           { widget }
         </div>
