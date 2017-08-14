@@ -88,7 +88,7 @@ const responseData = {
 };
 
 describe('<ResponseForm />', () => {
-  it('validates answers', () => {
+  it('validates answers when submitting but not when saving', () => {
     const { flags, response, survey } = responseData;
     const mockEndpoint = jest.fn();
     const onSubmit = data => mockEndpoint(buildResponsePayload(data));
@@ -122,6 +122,28 @@ describe('<ResponseForm />', () => {
       multipleResponseAnswer.find('renderMultipleResponseOptions').find('p').first().text();
     expect(multipleResponseAnswerError).toEqual('Please select at most 2 option(s).');
 
+    const saveButton = responseForm.find('button').first();
+    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(saveButton.node));
+    const saveExpectedPayload = {
+      response: {
+        answers_attributes: [{
+          id: 3,
+          question_option_ids: [],
+          text_response: null,
+        }, {
+          id: 4,
+          question_option_ids: [],
+          text_response: undefined,
+        }, {
+          id: 5,
+          question_option_ids: [3, 4, 5],
+          text_response: undefined,
+        }],
+        submit: false,
+      },
+    };
+    expect(mockEndpoint).toHaveBeenCalledWith(saveExpectedPayload);
+
     const textResponse = textResponseAnswer.find('textarea').last();
     const newAnswer = 'New Answer';
     textResponse.simulate('change', { target: { value: newAnswer } });
@@ -130,7 +152,7 @@ describe('<ResponseForm />', () => {
     lastMRQOptionCheckbox.props().onCheck(null, false);
 
     ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(submitButton.node));
-    const expectedPayload = {
+    const submitExpectedPayload = {
       response: {
         answers_attributes: [{
           id: 3,
@@ -148,6 +170,6 @@ describe('<ResponseForm />', () => {
         submit: true,
       },
     };
-    expect(mockEndpoint).toHaveBeenCalledWith(expectedPayload);
+    expect(mockEndpoint).toHaveBeenCalledWith(submitExpectedPayload);
   });
 });
