@@ -2,6 +2,7 @@
 class Course::UserInvitation < ActiveRecord::Base
   after_initialize :generate_invitation_key, if: :new_record?
 
+  schema_validations auto_create: false
   validates :email, uniqueness: { scope: :course_id },
                     format: { with: Devise.email_regexp },
                     if: :email_changed?

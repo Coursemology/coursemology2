@@ -148,7 +148,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
         it 'sets the proper errors' do
           invite
           errors = course.invitations.map(&:errors).tap(&:compact!).reject(&:empty?)
-          expect(errors.length).to eq(2)
+          expect(errors.length).to eq(1)
           expect(errors.first[:email].all? { |error| error =~ /been taken/ }).to be_truthy
         end
       end

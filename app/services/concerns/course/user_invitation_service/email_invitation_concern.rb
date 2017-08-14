@@ -15,16 +15,17 @@ module Course::UserInvitationService::EmailInvitationConcern
   #   that this method would add to the provided course is in the +course_users+ association.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite(users)
-    registered_users = nil
-    invited_users = nil
+    course_users = nil
+    invitations = nil
 
     success = Course.transaction do
-      registered_users, invited_users = invite_from_source(users)
-      return false if @current_course.invitations.any? { |invitation| !invitation.errors.empty? }
-      @current_course.save
+      course_users, invitations = invite_from_source(users)
+      raise ActiveRecord::Rollback unless invitations.all?(&:save)
+      raise ActiveRecord::Rollback unless course_users.all?(&:save)
+      true
     end
 
-    success && send_invitation_emails(registered_users, invited_users)
+    success && send_registered_emails(course_users) && send_invitation_emails(invitations)
   end
 
   # Resends invitation emails to CourseUsers to the given course.
@@ -34,7 +35,7 @@ module Course::UserInvitationService::EmailInvitationConcern
   # @return [Boolean] True if there were no errors in sending invitations.
   #   If all provided CourseUsers have already registered, method also returns true.
   def resend_invitation(invitations)
-    invitations.blank? ? true : resend_invitation_emails(invitations)
+    invitations.blank? ? true : send_invitation_emails(invitations)
   end
 
   private
@@ -158,31 +159,32 @@ module Course::UserInvitationService::EmailInvitationConcern
     validate_new_invitation_emails(invitations)
   end
 
-  # Sends invitation emails to the users invited.
+  # Sends registered emails to the users invited.
   #
   # @param [Array<CourseUser>] registered_users An array of users who were registered.
-  # @param [Array<Course::UserInvitation>] invited_users An array of invitations sent out to users.
   # @return [Boolean] True if the emails were dispatched.
-  def send_invitation_emails(registered_users, invited_users)
+  def send_registered_emails(registered_users)
     registered_users.each do |user|
       Course::Mailer.user_added_email(@current_course, user).deliver_later
     end
-    resend_invitation_emails(invited_users)
+
+    true
   end
 
-  # Resends invitation emails. This method also updates the sent_at timing for
+  # Sends invitation emails. This method also updates the sent_at timing for
   # Course::UserInvitation objects for tracking purposes.
   #
   # Note that since +deliver_later+ is used, this is an approximation on the time sent.
   #
   # @param [Array<Course::UserInvitation>] invitations An array of invitations sent out to users.
   # @return [Boolean] True if the invitations were updated.
-  def resend_invitation_emails(invitations)
+  def send_invitation_emails(invitations)
     invitations.each do |invitation|
       Course::Mailer.user_invitation_email(@current_course, invitation).deliver_later
     end
     ids = invitations.select(&:id)
     Course::UserInvitation.where(id: ids).update_all(sent_at: Time.zone.now)
+
     true
   end
 
