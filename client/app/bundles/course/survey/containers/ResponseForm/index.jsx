@@ -1,8 +1,9 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { reduxForm, FieldArray, Form } from 'redux-form';
+import { reduxForm, FieldArray, Form, getFormValues } from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
 import formTranslations from 'lib/translations/form';
 import { formNames } from 'course/survey/constants';
@@ -68,6 +69,7 @@ class ResponseForm extends React.Component {
     response: responseShape.isRequired,
     onSubmit: PropTypes.func.isRequired,
     pristine: PropTypes.bool.isRequired,
+    formValues: PropTypes.shape(),
 
     handleSubmit: PropTypes.func.isRequired,
   };
@@ -99,7 +101,7 @@ class ResponseForm extends React.Component {
   }
 
   renderSaveButton() {
-    const { pristine, flags: { canModify, isSubmitting } } = this.props;
+    const { pristine, onSubmit, formValues, flags: { canModify, isSubmitting } } = this.props;
     if (!canModify) { return null; }
 
     return (
@@ -108,6 +110,7 @@ class ResponseForm extends React.Component {
         type="submit"
         primary
         label={<FormattedMessage {...formTranslations.save} />}
+        onTouchTap={() => onSubmit({ ...formValues, submit: false })}
         disabled={isSubmitting || pristine}
       />
     );
@@ -159,4 +162,6 @@ class ResponseForm extends React.Component {
 export default reduxForm({
   form: formNames.SURVEY_RESPONSE,
   enableReinitialize: true,
-})(ResponseForm);
+})(connect(state => ({
+  formValues: getFormValues(formNames.SURVEY_RESPONSE)(state),
+}))(ResponseForm));
