@@ -65,7 +65,11 @@ class OptionsListItem extends React.PureComponent {
             containerStyle={styles.tiledImageContainer}
           /> : [] }
         <div style={styles.gridOptionBody}>
-          { optionText ? <CardText>{optionText}</CardText> : null }
+          {
+            optionText ?
+            <CardText><p dangerouslySetInnerHTML={{ __html: optionText }} /></CardText> :
+            null
+          }
           { widget }
         </div>
       </Card>
