@@ -28,7 +28,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
     subject { Course::UserInvitationService.new(user, course) }
 
     let(:existing_users) do
-      (1..2).map do
+      (1..3).map do
         create(:instance_user).user
       end
     end
@@ -38,7 +38,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
       end
     end
     let(:new_users) do
-      (1..2).map do
+      (1..3).map do
         build(:user)
       end
     end
@@ -77,7 +77,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
       context 'when a list of invitation form attributes are provided' do
         it 'registers everyone' do
-          expect(invite).to be_truthy
+          expect(invite).to eq([new_users.size, 0, existing_users.size, 0])
           verify_users
         end
 
@@ -93,7 +93,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
         it 'accepts a CSV file with a header' do
           expect(subject.invite(temp_csv_from_attributes(user_attributes.map do |attributes|
             OpenStruct.new(attributes)
-          end))).to be_truthy
+          end))).to eq([new_users.size, 0, existing_users.size, 0])
 
           verify_users
         end
@@ -109,26 +109,24 @@ RSpec.describe Course::UserInvitationService, type: :service do
         end
       end
 
-      context 'when an invited user is already in the course' do
-        let!(:existing_course_user) do
-          course.course_users.build(user: existing_users.first).tap(&:save!)
+      context 'when the user is already in the course or already invited' do
+        let(:users_in_course) { [existing_users.sample] }
+        let(:users_invited) { [new_users.sample] }
+        before do
+          users_in_course.each { |user| create(:course_student, course: course, user: user) }
+          users_invited.each { |user| create(:course_user_invitation, course: course, email: user.email) }
         end
 
-        it 'fails' do
-          expect(invite).to be_falsey
+        it 'succeeds' do
+          expect(invite).to eq([new_users.size - users_invited.size, users_invited.size,
+                                existing_users.size - users_in_course.size, users_in_course.size])
         end
 
-        it 'does not send any notifications' do
-          expect { invite }.to change { ActionMailer::Base.deliveries.count }.by(0)
-        end
-
-        it 'sets the proper errors' do
-          invite
-          errors = course.course_users.map(&:errors).
-                   tap(&:compact!).reject(&:empty?)
-          expect(errors.length).to eq(1)
-          expect(errors.first[:user_id].first).to match(/been taken/)
-          expect(errors.first[:course_id].first).to match(/been taken/)
+        with_active_job_queue_adapter(:test) do
+          it 'does not send notification to the exiting users' do
+            expect { invite }.to change { ActionMailer::Base.deliveries.count }.
+              by(user_attributes.size - users_invited.size - users_in_course.size)
+          end
         end
       end
 
