@@ -13,9 +13,10 @@ class Course::UserInvitationsController < Course::ComponentController
     current_course.invitations.build
   end
 
-  def create # :nodoc:
-    if invite
-      redirect_to course_user_invitations_path(current_course), success: create_success_message
+  def create
+    result = invite
+    if result
+      redirect_to course_user_invitations_path(current_course), success: create_success_message(*result)
     else
       propagate_errors
       render 'new'
@@ -199,11 +200,15 @@ class Course::UserInvitationsController < Course::ComponentController
   end
 
   # Returns the successful invitation creation message based on file or entry invitation.
-  def create_success_message
+  def create_success_message(new_invitations, existing_invitations, new_course_users, existing_course_users)
     if invite_by_file?
-      t('course.user_invitations.create.file.success')
+      t('.file.success',
+        new_invitations: t('.file.summary.new_invitations', count: new_invitations),
+        already_invited: t('.file.summary.already_invited', count: existing_invitations),
+        new_course_users: t('.file.summary.new_course_users', count: new_course_users),
+        already_enrolled: t('.file.summary.already_enrolled', count: existing_course_users))
     else
-      t('course.user_invitations.create.manual_entry.success')
+      t('.manual_entry.success')
     end
   end
 

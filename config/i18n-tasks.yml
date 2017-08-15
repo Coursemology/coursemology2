@@ -86,6 +86,9 @@ ignore_missing:
   - 'errors.messages.*'
   - 'activerecord.errors.messages.*'
 
+# I18n-tasks gives the wrong results for normal (non action) methods in the controller, ignore them here.
+  - 'course.user_invitations.create_success_message.*'
+
 ## Consider these keys used:
 ignore_unused:
 - 'activerecord.attributes.*'
@@ -104,6 +107,9 @@ ignore_unused:
 - 'activemodel.errors.*'
 # Used dynamically by the page_header helper
 - '*.*.header'
+
+# I18n-tasks gives the wrong results for normal (non action) methods in the controller, ignore them here.
+- 'course.user_invitations.create.*'
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:

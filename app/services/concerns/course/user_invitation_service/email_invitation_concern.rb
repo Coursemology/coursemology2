@@ -11,21 +11,25 @@ module Course::UserInvitationService::EmailInvitationConcern
   # because Rails does not handle duplicate nested attribute uniqueness constraints.
   #
   # @param [Array<Hash>|File|TempFile] users Invites the given users.
-  # @return [Boolean] True if the invitations were successfully created and sent out. The errors
-  #   that this method would add to the provided course is in the +course_users+ association.
+  # @return [Array<Integer>|nil] An array containing the the size of new_invitations, existing_invitations,
+  #   new_course_users and existing_course_users respectively if success. nil when fail.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite(users)
-    course_users = nil
-    invitations = nil
+    new_invitations = nil
+    existing_invitations = nil
+    new_course_users = nil
+    existing_course_users = nil
 
     success = Course.transaction do
-      course_users, invitations = invite_from_source(users)
-      raise ActiveRecord::Rollback unless invitations.all?(&:save)
-      raise ActiveRecord::Rollback unless course_users.all?(&:save)
+      new_invitations, existing_invitations, new_course_users, existing_course_users = invite_from_source(users)
+      raise ActiveRecord::Rollback unless new_invitations.all?(&:save)
+      raise ActiveRecord::Rollback unless new_course_users.all?(&:save)
       true
     end
 
-    success && send_registered_emails(course_users) && send_invitation_emails(invitations)
+    send_registered_emails(new_course_users) if success
+    send_invitation_emails(new_invitations) if success
+    success ? [new_invitations, existing_invitations, new_course_users, existing_course_users].map(&:size) : nil
   end
 
   # Resends invitation emails to CourseUsers to the given course.
@@ -43,8 +47,9 @@ module Course::UserInvitationService::EmailInvitationConcern
   # Invites users to the given course.
   #
   # @param [Array<Hash>|File|TempFile] users Invites the given users.
-  # @return [Array<(Array<CourseUser>, Array<Course::UserInvitation>)>] A tuple containing the
-  #   list of users who were immediately registered, and the users who were invited.
+  # @return
+  #   [Array<(Array<Course::UserInvitation>, Array<Course::UserInvitation>, Array<CourseUser>, Array<CourseUser>)>]
+  #   A tuple containing the users newly invited, already invited, newly registered and already registered respectively.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite_from_source(users)
     if users.is_a?(File) || users.is_a?(Tempfile)
@@ -57,8 +62,9 @@ module Course::UserInvitationService::EmailInvitationConcern
   # Loads the given file, then invites the users.
   #
   # @param [File] file Reads the given file, in CSV format, for the name and email.
-  # @return [Array<(Array<CourseUser>, Array<Course::UserInvitation>)>] A tuple containing the
-  #   list of users who were immediately registered, and the users who were invited.
+  # @return
+  #   [Array<(Array<Course::UserInvitation>, Array<Course::UserInvitation>, Array<CourseUser>, Array<CourseUser>)>]
+  #   A tuple containing the users newly invited, already invited, newly registered and already registered respectively.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def invite_from_file(file)
     invites = load_from_file(file)
@@ -105,14 +111,15 @@ module Course::UserInvitationService::EmailInvitationConcern
   # @param [Array<Hash{Symbol=>String}>] users A mutable array of users to add. Each hash must have
   #   two attributes: the +:name+ and the +:email+ of the user to add. The provided +emails+
   #   are NOT case sensitive.
-  # @return [Array<(Array<CourseUser>, Array<Course::UserInvitation>)>] A tuple containing the
-  #   list of users who were immediately registered, and the users who were invited.
+  # @return
+  #   [Array<(Array<Course::UserInvitation>, Array<Course::UserInvitation>, Array<CourseUser>, Array<CourseUser>)>]
+  #   A tuple containing the users newly invited, already invited, newly registered and already registered respectively.
   def invite_users(users)
     users = users.each { |user| user[:email] = user[:email].downcase }
     augment_user_objects(users)
     existing_users, new_users = users.partition { |user| user[:user].present? }
 
-    [add_existing_users(existing_users), invite_new_users(new_users)]
+    [*invite_new_users(new_users), *add_existing_users(existing_users)]
   end
 
   # Given an array of hashes containing the email address and name of a user to invite, finds the
@@ -143,25 +150,44 @@ module Course::UserInvitationService::EmailInvitationConcern
   # Adds existing users to the course.
   #
   # @param [Array<Hash>] users The user descriptions to add to the course.
-  # @return [Array<CourseUser>] An array containing a list of users who were immediately registered.
+  # @return [Array(Array<CourseUser>, Array<CourseUser>)] A tuple containing the list of users who were newly enrolled
+  #   and already enrolled.
   def add_existing_users(users)
-    users.map do |user|
-      @current_course.course_users.build(user: user[:user], name: user[:name],
-                                         creator: @current_user,
-                                         updater: @current_user)
+    all_course_users = @current_course.course_users.map { |cu| [cu.user_id, cu] }.to_h
+    existing_course_users = []
+    new_course_users = []
+    users.each do |user|
+      course_user = all_course_users[user[:user].id]
+      if course_user
+        existing_course_users << course_user
+      else
+        new_course_users << @current_course.course_users.build(user: user[:user], name: user[:name],
+                                                               creator: @current_user, updater: @current_user)
+      end
     end
+
+    [new_course_users, existing_course_users]
   end
 
   # Generates invitations for users to the course.
   #
   # @param [Array<Hash>] users The user descriptions to invite.
-  # @return [Array<Course::UserInvitation>)>] An array containing the list of users who were
-  #   invited.
+  # @return [Array(Array<Course::UserInvitation>, Array<Course::UserInvitation>)] A tuple containing the list of users
+  #   who were newly invited and already invited.
   def invite_new_users(users)
-    invitations = users.map do |user|
-      @current_course.invitations.build(name: user[:name], email: user[:email])
+    all_invitations = @current_course.invitations.map { |i| [i.email.downcase, i] }.to_h
+    new_invitations = []
+    existing_invitations = []
+    users.each do |user|
+      invitation = all_invitations[user[:email]]
+      if invitation
+        existing_invitations << invitation
+      else
+        new_invitations << @current_course.invitations.build(name: user[:name], email: user[:email])
+      end
     end
-    validate_new_invitation_emails(invitations)
+
+    [validate_new_invitation_emails(new_invitations), existing_invitations]
   end
 
   # Sends registered emails to the users invited.
@@ -199,7 +225,7 @@ module Course::UserInvitationService::EmailInvitationConcern
   # ( i.e Two new records with the same email will raise a {RecordNotUnique} error upon saving. )
   #
   # @param [Array<Course::UserInvitation>] invitations An array of invitations.
-  # @param [Array<Course::UserInvitation>] The validated invitations.
+  # @return [Array<Course::UserInvitation>] The validated invitations.
   def validate_new_invitation_emails(invitations)
     emails = invitations.map(&:email)
     duplicates = emails.select { |email| emails.count(email) > 1 }

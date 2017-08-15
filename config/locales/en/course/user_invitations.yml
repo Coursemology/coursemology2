@@ -48,7 +48,18 @@ en:
           enable: 'Enable'
       create:
         file:
-          success: 'Successfully invited users from the uploaded file.'
+          success: >
+            Successfully invited users from the uploaded file:
+            %{new_invitations}, %{already_invited}, %{new_course_users}, %{already_enrolled}.
+          summary:
+            new_invitations:
+              one: '1 new invitation sent'
+              other: '%{count} new invitations sent'
+            new_course_users:
+              one: '1 user just enrolled'
+              other: '%{count} users just enrolled'
+            already_enrolled: '%{count} already enrolled'
+            already_invited: '%{count} already invited'
         manual_entry:
           success: 'Successfully invited users with the given details.'
       invitation_fields:
