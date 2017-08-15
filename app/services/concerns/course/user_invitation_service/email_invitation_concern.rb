@@ -66,14 +66,19 @@ module Course::UserInvitationService::EmailInvitationConcern
   end
 
   # Loads the given file, and entries with blanks in either fields are ignored.
+  # The first row is ignored if it's a header row (contains "name, email"),
+  # else it's treated like a row of student data.
   #
   # @param [File] file Reads the given file.
   # @return [Array<Hash>] The array of records read from the file.
   # @raise [CSV::MalformedCSVError] When the file provided is invalid.
   def load_from_file(file)
     invites = []
-    CSV.foreach(file, headers: true) do |row|
+
+    CSV.foreach(file, headers: ['Name', 'Email']).with_index(1) do |row, row_number|
       row = row.fields(0..1)
+      # Ignore first row if it's a header row.
+      next if row_number == 1 && row[0].casecmp('Name') == 0 && row[1].casecmp('Email') == 0
       row.unshift(row.first) unless row.length >= 2
       invites << { name: row[0], email: row[1] } unless row[0].blank? || row[1].blank?
     end
