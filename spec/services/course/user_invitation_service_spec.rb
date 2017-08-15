@@ -243,6 +243,24 @@ RSpec.describe Course::UserInvitationService, type: :service do
           expect(subject.flatten.count).to eq(1)
         end
       end
+
+      context 'when the provided csv file has no header' do
+        subject do
+          stubbed_user_invitation_service.
+            send(:invite_from_file,
+                 File.open(File.join(__dir__,
+                                     '../../fixtures/course/no_header_invitation.csv')))
+        end
+
+        it 'does not raise an exception' do
+          expect { subject }.not_to raise_exception
+        end
+
+        it 'invites all users including the first row' do
+          # No header CSV has 2 entries
+          expect(subject.flatten.count).to eq(2)
+        end
+      end
     end
 
     describe '#invite_from_form' do
