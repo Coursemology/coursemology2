@@ -5,6 +5,17 @@ const initialState = {
   expMultiplier: 1,
 };
 
+function sum(array) {
+  return array.filter(i => i).reduce((acc, i) => acc + i, 0);
+}
+
+function computeExp(questions, maximumGrade, basePoints, expMultiplier) {
+  return parseInt(
+    (sum(Object.values(questions).map(q => q.grade)) / maximumGrade)
+    * basePoints * expMultiplier,
+  10);
+}
+
 export default function (state = initialState, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
@@ -23,15 +34,21 @@ export default function (state = initialState, action) {
           , {}),
         },
         exp: action.payload.submission.pointsAwarded,
+        basePoints: action.payload.submission.basePoints,
+        maximumGrade: sum(Object.values(action.payload.questions).map(q => q.maximumGrade)),
       };
     }
     case actions.UPDATE_GRADING: {
+      const { maximumGrade, basePoints, expMultiplier } = state;
+      const questions = {
+        ...state.questions,
+        [action.id]: { ...state.questions[action.id], grade: action.grade },
+      };
+
       return {
         ...state,
-        questions: {
-          ...state.questions,
-          [action.id]: { ...state.questions[action.id], grade: action.grade },
-        },
+        questions,
+        exp: computeExp(questions, maximumGrade, basePoints, expMultiplier),
       };
     }
     case actions.UPDATE_EXP: {
@@ -40,12 +57,15 @@ export default function (state = initialState, action) {
         exp: action.exp,
       };
     }
-    case actions.UPDATE_MULTIPLIER:
+    case actions.UPDATE_MULTIPLIER: {
+      const { questions, maximumGrade, basePoints } = state;
+
       return {
         ...state,
-        exp: action.exp,
+        exp: computeExp(questions, maximumGrade, basePoints, action.multiplier),
         expMultiplier: action.multiplier,
       };
+    }
     default:
       return state;
   }
