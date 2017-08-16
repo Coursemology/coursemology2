@@ -32,14 +32,15 @@ describe('<AssessmentEdit />', () => {
     const autogradedInput = editPage.find('input[name="autograded"]');
     expect(autogradedInput.props().value).toBeFalsy();
 
-    expect(editPage.find('SelectField')).toHaveLength(1); // layout select field
+    // Select field for Tab and Layout
+    expect(editPage.find('SelectField')).toHaveLength(2);
     expect(editPage.find('input[name="password_protected"]')).toHaveLength(1);
     expect(editPage.find('input[name="skippable"]')).toHaveLength(0);
 
     // Enable autograded field
     autogradedInput.simulate('change', { target: { value: true } });
+    expect(editPage.find('SelectField')).toHaveLength(1); // Only Tab, no more Layout Field
     expect(editPage.find('input[name="password_protected"]')).toHaveLength(0);
-    expect(editPage.find('SelectField')).toHaveLength(0);
     expect(editPage.find('input[name="skippable"]')).toHaveLength(1);
 
     // Change title

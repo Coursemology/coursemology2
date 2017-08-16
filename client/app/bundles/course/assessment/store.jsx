@@ -4,9 +4,10 @@ import rootReducer from './reducers';
 
 export default ({ assessments }) => {
   const initialStates = assessments;
-  const storeCreator = compose(
-    applyMiddleware(thunkMiddleware)
-  )(createStore);
+  const storeCreator = (process.env.NODE_ENV === 'development') ?
+    // eslint-disable-next-line global-require
+    compose(applyMiddleware(thunkMiddleware, require('redux-logger').logger))(createStore) :
+    compose(applyMiddleware(thunkMiddleware))(createStore);
 
   return storeCreator(rootReducer, initialStates);
 };
