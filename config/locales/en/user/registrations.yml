@@ -7,6 +7,10 @@ en:
           Already registered? If you have an existing Coursemology account, you can %{sign_in}.
         password_hint: "#{length} characters minimum"
         sign_up: :'user.registrations.new.header'
+        used: >
+          The provided invitation code has been claimed by another account, please use that account to log in instead.
+        used_with_email: >
+          The provided invitation code has been claimed by %{email}, please use that account to log in instead.
       edit:
         header: 'Account Settings'
         new_password_hint: "Leave blank if you don't want to change it"
