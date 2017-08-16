@@ -128,7 +128,7 @@ class Course::UserRegistrationService
   # @return [nil] If the code is invalid.
   def accept_invitation(registration, invitation)
     CourseUser.transaction do
-      invitation.confirm!
+      invitation.confirm!(confirmer: registration.user)
       find_or_create_course_user!(registration, invitation.name)
     end
   end

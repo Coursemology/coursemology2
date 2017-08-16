@@ -47,6 +47,7 @@ RSpec.feature 'Users: Sign Up' do
         expect(email).to be_primary
         expect(email).to be_confirmed
         expect(invitation.reload).to be_confirmed
+        expect(invitation.confirmer).to eq(email.user)
       end
     end
   end

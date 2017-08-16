@@ -85,7 +85,7 @@ RSpec.feature 'Courses: Invitations', js: true do
 
         old_time = 1.day.ago
         invitations = create_list(:course_user_invitation, 3, course: course, sent_at: old_time)
-        invitations.first.confirm!
+        invitations.first.confirm!(confirmer: user)
         invitation_to_delete = invitations.second
         invitation_to_resend = invitations.last
         visit course_user_invitations_path(course)
