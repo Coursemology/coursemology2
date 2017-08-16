@@ -47,22 +47,16 @@ class VisibleGradingPanel extends Component {
   }
 
   handleMultiplierField(value) {
-    const {
-      grading: { questions },
-      submission: { maximumGrade, basePoints },
-      updateMultiplier,
-    } = this.props;
-    const totalGrade = VisibleGradingPanel.calculateTotalGrade(questions);
-    const defaultExp = (totalGrade / maximumGrade) * basePoints;
+    const { updateMultiplier } = this.props;
     const parsedValue = parseFloat(value);
 
     if (isNaN(parsedValue) || parsedValue < 0) {
-      updateMultiplier(0, 0);
+      updateMultiplier(0);
     } else if (parsedValue > 1) {
-      updateMultiplier(defaultExp, 1);
+      updateMultiplier(1);
     } else {
       const multiplier = parseFloat(parsedValue.toFixed(1));
-      updateMultiplier(defaultExp * multiplier, multiplier);
+      updateMultiplier(multiplier);
     }
   }
 
@@ -90,16 +84,14 @@ class VisibleGradingPanel extends Component {
 
   renderExperiencePoints() {
     const {
-      grading: { questions, exp, expMultiplier },
-      submission: { basePoints, maximumGrade, canGrade },
+      grading: { exp, expMultiplier },
+      submission: { basePoints, canGrade },
     } = this.props;
 
     if (!canGrade) {
       return exp;
     }
 
-    const totalGrade = VisibleGradingPanel.calculateTotalGrade(questions);
-    const defaultExp = (totalGrade / maximumGrade) * basePoints * expMultiplier;
     return (
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <div style={{ width: 80 }}>
@@ -108,7 +100,7 @@ class VisibleGradingPanel extends Component {
             type="number"
             min={0}
             step={1}
-            value={exp || defaultExp}
+            value={exp}
             onChange={e => this.handleExpField(e.target.value)}
           />
           {` / ${basePoints}`}
@@ -261,7 +253,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     updateExp: exp => dispatch({ type: actionTypes.UPDATE_EXP, exp }),
-    updateMultiplier: (exp, multiplier) => dispatch({ type: actionTypes.UPDATE_MULTIPLIER, exp, multiplier }),
+    updateMultiplier: multiplier => dispatch({ type: actionTypes.UPDATE_MULTIPLIER, multiplier }),
   };
 }
 
