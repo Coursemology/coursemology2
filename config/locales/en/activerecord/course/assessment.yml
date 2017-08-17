@@ -3,3 +3,10 @@ en:
     attributes:
       course/assessment/assessment:
         title: 'Title'
+    errors:
+      models:
+        course/assessment:
+          attributes:
+            tab:
+              not_in_same_course: >
+                The tab that you have selected is not in the same course as the assessment

@@ -79,15 +79,32 @@ RSpec.describe Course::Assessment do
           it { is_expected.to be_valid }
         end
       end
+
+      context 'when re-parented to another tab in a different course' do
+        let!(:other_tab) do
+          other_course = create(:course)
+          create(:course_assessment_tab, course: other_course)
+        end
+
+        it 'is invalid' do
+          assessment.tab_id = other_tab.id
+          expect(assessment).to be_invalid
+          expect(assessment.errors[:tab]).to include(
+            I18n.t('activerecord.errors.models.course/assessment.attributes.tab.not_in_same_course')
+          )
+        end
+      end
     end
 
     describe 'callbacks' do
       describe 'after assessment was initialized' do
-        subject { build(:assessment) }
+        context 'if the assessment is a new record' do
+          subject { build(:assessment) }
 
-        it 'sets the course of the lesson plan item' do
-          assessment = create(:assessment, course: course)
-          expect(assessment.course).to eq(assessment.tab.category.course)
+          it 'sets the course of the lesson plan item' do
+            assessment = create(:assessment, course: course)
+            expect(assessment.course).to eq(assessment.tab.category.course)
+          end
         end
       end
 
