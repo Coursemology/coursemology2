@@ -29,7 +29,7 @@ RSpec.feature 'Users: Sign Up' do
 
     context 'As a user invited by course staffs' do
       let(:course) { create(:course) }
-      let!(:invitation) { create(:course_user_invitation, course: course) }
+      let(:invitation) { create(:course_user_invitation, course: course) }
       let(:invited_email) { invitation.email }
 
       scenario 'I can register for an account' do
@@ -47,6 +47,18 @@ RSpec.feature 'Users: Sign Up' do
         expect(email).to be_primary
         expect(email).to be_confirmed
         expect(invitation.reload).to be_confirmed
+        expect(invitation.confirmer).to eq(email.user)
+      end
+
+      context 'when the invitation code is confirmed' do
+        let(:invitation) { create(:course_user_invitation, :confirmed, course: course) }
+
+        scenario 'I am redirected with an error' do
+          visit new_user_registration_path(invitation: invitation.invitation_key)
+
+          expect(current_path).to eq(root_path)
+          expect(page).to have_selector('div.alert', text: I18n.t('user.registrations.new.used_with_email'))
+        end
       end
     end
   end

@@ -5,16 +5,21 @@ class User::RegistrationsController < Devise::RegistrationsController
   layout :select_layout
 
   # GET /resource/sign_up
-  # def new
-  #   super
-  # end
+  def new
+    if @invitation&.confirmed?
+      message = @invitation.confirmer ? t('.used_with_email', email: @invitation.confirmer.email) : t('.used')
+      redirect_to root_path, danger: message
+    else
+      super
+    end
+  end
 
   # POST /resource
   def create
     User.transaction do
       super
-      if @invitation && resource.persisted?
-        @invitation.confirm!
+      if @invitation && !@invitation.confirmed? && resource.persisted?
+        @invitation.confirm!(confirmer: resource)
       end
     end
   end
@@ -86,7 +91,7 @@ class User::RegistrationsController < Devise::RegistrationsController
   def load_invitation
     return unless invitation_param.present?
 
-    @invitation = Course::UserInvitation.unconfirmed.find_by(invitation_key: invitation_param)
+    @invitation = Course::UserInvitation.find_by(invitation_key: invitation_param)
   end
 
   def invitation_param

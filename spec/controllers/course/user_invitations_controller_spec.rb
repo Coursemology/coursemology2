@@ -113,7 +113,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
       end
 
       context 'if the provided invitation has already been confirmed' do
-        before { invitation.confirm! }
+        before { invitation.confirm!(confirmer: user) }
         it 'will not load the invitation' do
           subject
           expect(controller.instance_variable_get(:@invitations)).to be_empty

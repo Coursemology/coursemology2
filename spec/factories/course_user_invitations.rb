@@ -4,5 +4,10 @@ FactoryGirl.define do
     course
     sequence(:name) { |n| "course user #{n}" }
     email { generate(:email) }
+
+    trait :confirmed do
+      confirmed_at 1.day.ago
+      confirmer { build(:user) }
+    end
   end
 end

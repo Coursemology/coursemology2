@@ -8,6 +8,7 @@ class Course::UserInvitation < ActiveRecord::Base
                     if: :email_changed?
 
   belongs_to :course, inverse_of: :invitations
+  belongs_to :confirmer, class_name: User.name, inverse_of: nil
 
   # Invitations that haven't been confirmed, i.e. pending the user's acceptance.
   scope :unconfirmed, -> { where(confirmed_at: nil) }
@@ -19,8 +20,9 @@ class Course::UserInvitation < ActiveRecord::Base
     find_by(email: user.emails.confirmed.select(:email))
   end
 
-  def confirm!
+  def confirm!(confirmer:)
     self.confirmed_at = Time.zone.now
+    self.confirmer = confirmer
     save!
   end
 

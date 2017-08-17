@@ -5,3 +5,5 @@ en:
         subject: 'Added to Course %{course}'
         message: >
           You have been added to the course %{course} on %{coursemology}.
+
+          To view the course, please log in with %{email}.

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170721061506) do
+ActiveRecord::Schema.define(version: 20170816073714) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -699,6 +699,7 @@ ActiveRecord::Schema.define(version: 20170721061506) do
     t.string   "invitation_key", :limit=>32, :null=>false, :index=>{:name=>"index_course_user_invitations_on_invitation_key", :unique=>true}
     t.datetime "sent_at"
     t.datetime "confirmed_at"
+    t.integer  "confirmer_id",   :index=>{:name=>"fk__course_user_invitations_confirmer_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_user_invitations_confirmer_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "creator_id",     :null=>false, :index=>{:name=>"fk__course_user_invitations_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_user_invitations_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "updater_id",     :null=>false, :index=>{:name=>"fk__course_user_invitations_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_user_invitations_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at",     :null=>false

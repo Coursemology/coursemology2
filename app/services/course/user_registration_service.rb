@@ -98,10 +98,12 @@ class Course::UserRegistrationService
   #   valid.
   # @return [nil] If the code is invalid.
   def claim_course_invitation_code(registration)
-    invitations = registration.course.invitations.unconfirmed
+    invitations = registration.course.invitations
     invitation = invitations.find_by(invitation_key: registration.code)
     if invitation.nil?
       invalid_code(registration)
+    elsif invitation.confirmed?
+      code_taken(registration, invitation)
     else
       accept_invitation(registration, invitation)
     end
@@ -117,6 +119,17 @@ class Course::UserRegistrationService
     nil
   end
 
+  def code_taken(registration, invitation)
+    confirmed_by = invitation.confirmer
+    if confirmed_by
+      registration.errors.
+        add(:code, I18n.t('course.user_registrations.create.code_taken_with_email', email: confirmed_by.email))
+    else
+      registration.errors.add(:code, I18n.t('course.user_registrations.create.code_taken'))
+    end
+    nil
+  end
+
   # Accepts the invitation specified, sets the registration's +course_user+ to be that found in
   # the invitation.
   #
@@ -128,7 +141,7 @@ class Course::UserRegistrationService
   # @return [nil] If the code is invalid.
   def accept_invitation(registration, invitation)
     CourseUser.transaction do
-      invitation.confirm!
+      invitation.confirm!(confirmer: registration.user)
       find_or_create_course_user!(registration, invitation.name)
     end
   end
