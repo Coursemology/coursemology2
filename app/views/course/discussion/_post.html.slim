@@ -1,4 +1,4 @@
-= div_for(post, 'data-post-id' => post.id) do
+= div_for(post, 'data-post-id' => post.id, 'data-content' => post.text.to_json) do
 
   div.header
     div.profile-picture
@@ -23,4 +23,4 @@
             = fa_icon 'trash'.freeze
 
   div.content
-    = format_html(post.text)
+    = format_html(simple_format(post.text))
