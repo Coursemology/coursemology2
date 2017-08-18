@@ -12,7 +12,7 @@ class Course::Assessment < ActiveRecord::Base
   include Course::ReminderConcern
 
   after_initialize :set_defaults, if: :new_record?
-  before_validation :propagate_course
+  before_validation :propagate_course, if: :new_record?
   before_validation :assign_folder_attributes
 
   # Other models use after_save, but some assessments are saved multiple times, causing
@@ -43,6 +43,8 @@ class Course::Assessment < ActiveRecord::Base
            source_type: Course::Assessment::Question::Scribing.name
   has_many :assessment_conditions, class_name: Course::Condition::Assessment.name,
                                    inverse_of: :assessment, dependent: :destroy
+
+  validate :tab_in_same_course
 
   scope :published, -> { where(published: true) }
 
@@ -173,5 +175,10 @@ class Course::Assessment < ActiveRecord::Base
 
   def clear_duplication_flag
     @duplicating = nil
+  end
+
+  def tab_in_same_course
+    return unless tab_id_changed?
+    errors.add(:tab, :not_in_same_course) unless tab.category.course == course
   end
 end

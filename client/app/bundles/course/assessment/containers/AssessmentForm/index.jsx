@@ -14,6 +14,7 @@ import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
 import translations from './translations.intl';
 import { formNames } from '../../constants';
 import MaterialUploader from '../MaterialUploader';
+import { fetchTabs } from './actions';
 
 const styles = {
   flexGroup: {
@@ -79,6 +80,10 @@ class AssessmentForm extends React.Component {
     autograded: PropTypes.bool,
     password_protected: PropTypes.bool,
     submitting: PropTypes.bool,
+    tabs: PropTypes.arrayOf(PropTypes.shape({
+      tab_id: PropTypes.number,
+      title: PropTypes.string,
+    })),
     // Above are props from redux-form.
 
     onSubmit: PropTypes.func.isRequired,
@@ -104,6 +109,16 @@ class AssessmentForm extends React.Component {
     gamified: true,
   }
 
+  componentDidMount() {
+    const { dispatch, editing } = this.props;
+    // TODO: Shift the fetchTabs only when the selection menu is clicked on. This would
+    //  prevent unnecessary loading of the tabs every time the assessment form is loaded.
+    if (editing) {
+      const failureMessage = <FormattedMessage {...translations.fetchTabFailure} />;
+      dispatch(fetchTabs(failureMessage));
+    }
+  }
+
   onStartAtChange = (_, newStartAt) => {
     const { start_at: startAt, end_at: endAt, bonus_end_at: bonusEndAt, dispatch } = this.props;
     const newStartTime = newStartAt && newStartAt.getTime();
@@ -122,6 +137,29 @@ class AssessmentForm extends React.Component {
       const newBonusTime = new Date(oldBonusTime + (newStartTime - oldStartTime));
       dispatch(change(formNames.ASSESSMENT, 'bonus_end_at', newBonusTime));
     }
+  }
+
+  renderTabs() {
+    const { tabs, editing, submitting } = this.props;
+
+    return (
+      <Field
+        name="tab_id"
+        component={SelectField}
+        style={styles.flexChild}
+        floatingLabelText={<FormattedMessage {...translations.tab} />}
+        floatingLabelFixed
+        disabled={editing && submitting}
+      >
+        {tabs && tabs.map(tab =>
+          <MenuItem
+            key={tab.tab_id}
+            value={tab.tab_id}
+            primaryText={tab.title}
+          />
+        )}
+      </Field>
+    );
   }
 
   renderExtraOptions() {
@@ -207,13 +245,16 @@ class AssessmentForm extends React.Component {
 
     return (
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Field
-          fullWidth
-          name="title"
-          component={TextField}
-          floatingLabelText={<FormattedMessage {...translations.title} />}
-          disabled={submitting}
-        />
+        <div style={styles.flexGroup}>
+          <Field
+            name="title"
+            component={TextField}
+            style={styles.flexChild}
+            floatingLabelText={<FormattedMessage {...translations.title} />}
+            disabled={submitting}
+          />
+          {editing && this.renderTabs()}
+        </div>
         <br />
         <Field
           name="description"
@@ -354,10 +395,17 @@ class AssessmentForm extends React.Component {
   }
 }
 
-const selector = formValueSelector(formNames.ASSESSMENT);
-export default connect(state =>
-  selector(state, 'start_at', 'end_at', 'bonus_end_at', 'autograded', 'password_protected')
-)(
+const formSelector = formValueSelector(formNames.ASSESSMENT);
+
+function mapStateToProps(state) {
+  return {
+    // Load all tabs if data is loaded, otherwise fall back to current assessment tab.
+    tabs: state.editPage.tabs || formSelector(state, 'tabs'),
+    ...formSelector(state, 'start_at', 'end_at', 'bonus_end_at', 'autograded', 'password_protected'),
+  };
+}
+
+export default connect(mapStateToProps)(
   reduxForm({
     form: formNames.ASSESSMENT,
     validate,

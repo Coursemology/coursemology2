@@ -1,7 +1,13 @@
 json.attributes do
   json.(@assessment, :id, :title, :description, :start_at, :end_at, :bonus_end_at, :base_exp,
-    :time_bonus_exp, :published, :autograded, :show_private, :show_evaluation, :skippable, :tabbed_view,
-    :password, :delayed_grade_publication)
+    :time_bonus_exp, :published, :autograded, :show_private, :show_evaluation, :skippable,
+    :tabbed_view, :password, :delayed_grade_publication, :tab_id)
+end
+
+json.tab_attributes do
+  json.tab_title @tab.title
+  json.category_title @category.title
+  json.only_tab @category.tabs.count == 1 ? true : false
 end
 
 json.mode_switching @assessment.allow_mode_switching?

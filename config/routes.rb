@@ -215,6 +215,7 @@ Rails.application.routes.draw do
           end
           resources :sessions, only: [:new, :create]
         end
+        resources :categories, only: [:index]
       end
       resources :levels, except: [:show, :edit, :update]
       resource :duplication, only: [:show, :create]

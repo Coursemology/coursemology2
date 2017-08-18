@@ -110,6 +110,14 @@ const translations = defineMessages({
     id: 'course.assessment.form.startEndValidationError',
     defaultMessage: "Must be after 'Start At'",
   },
+  fetchTabFailure: {
+    id: 'course.assessment.form.fetchCategoryFailure',
+    defaultMessage: 'Loading of Tabs failed. Please refresh the page, or try again.',
+  },
+  tab: {
+    id: 'course.assessment.form.tab',
+    defaultMessage: 'Tab',
+  },
 });
 
 export default translations;
