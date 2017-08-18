@@ -30,9 +30,4 @@ module Course::Assessment::Submission::SubmissionsAutogradedHelper
     return 'disabled' if step > max_step
     return 'completed' if step <= max_step
   end
-
-  # Fallback to the last answer if current_answer flag is not set on any answer.
-  def current_answer
-    @answers.find { |ans| ans.current_answer == true } || @answers.last
-  end
 end

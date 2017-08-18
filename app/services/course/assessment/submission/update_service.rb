@@ -161,9 +161,8 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     if job
       render json: { redirect_url: job_path(job.job) }
     else
-      current_question = answer&.question
-      new_answer = @submission.answers.from_question(current_question.id).last
-      render new_answer
+      # Render the current_answer.
+      render answer
     end
   end
 
