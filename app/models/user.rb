@@ -101,7 +101,7 @@ class User < ActiveRecord::Base
     self.name = invitation.name
     self.email = invitation.email
     skip_confirmation!
-    course_users.build(course: invitation.course, name: invitation.name,
+    course_users.build(course: invitation.course, name: invitation.name, role: invitation.role,
                        creator: self, updater: self)
   end
 

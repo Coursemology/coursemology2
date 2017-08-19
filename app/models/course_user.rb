@@ -152,5 +152,6 @@ class CourseUser < ActiveRecord::Base
 
   def set_defaults # :nodoc:
     self.name ||= user.name if user
+    self.role ||= CourseUser.roles[:student]
   end
 end
