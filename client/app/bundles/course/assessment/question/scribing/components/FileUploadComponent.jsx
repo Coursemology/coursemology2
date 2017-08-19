@@ -53,7 +53,7 @@ const style = {
 
 class FileUploadComponent extends Component {
   renderFileNameLabel() {
-    const fileName = this.props.value && this.props.value[0].name;
+    const fileName = this.props.value && this.props.value[0] && this.props.value[0].name;
     if (fileName) {
       return (<div className="fileLabel" style={style.fileLabel} >{fileName}</div>);
     } else if (this.props.meta && this.props.meta.touched && this.props.meta.invalid && this.props.meta.error) {

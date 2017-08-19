@@ -108,17 +108,21 @@ class ScribingQuestionForm extends React.Component {
           autoHideDuration={5000}
         />
         <Snackbar
-          open={this.props.data.error
+          open={(this.props.data.error
             && this.props.data.saveErrors
-            && this.props.data.saveErrors.length > 0}
+            && this.props.data.saveErrors.length > 0)
+            || false
+          }
           message={this.props.intl.formatMessage(translations.submitFailureMessage)}
           autoHideDuration={5000}
           onRequestClose={() => { this.props.actions.clearSubmitError(); }}
         />
         <Snackbar
-          open={this.props.data.error
+          open={(this.props.data.error
             && this.props.data.saveErrors
-            && this.props.data.saveErrors.length === 0}
+            && this.props.data.saveErrors.length === 0)
+            || false
+          }
           message={this.props.intl.formatMessage(translations.fetchFailureMessage)}
           autoHideDuration={5000}
         />
