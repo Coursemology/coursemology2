@@ -1,5 +1,5 @@
 json.(post, :id, :title, :text)
-
+json.formattedText format_html(simple_format(post.text))
 creator = post.creator
 json.creator do
   json.name creator.name

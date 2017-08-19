@@ -22,7 +22,7 @@ var EDIT_DISCUSSION_POST = (function($, FORM_HELPERS,
     var courseId = COURSE_HELPERS.courseIdForElement($element);
     var topicId = $topic.data('topicId');
     var postId = $post.data('postId');
-    var postContent = $post.find('.content').html().trim();
+    var postContent = JSON.parse($post.data('content'));
     var postCommenter = $post.find('.user').html();
 
     $post.children().hide();
