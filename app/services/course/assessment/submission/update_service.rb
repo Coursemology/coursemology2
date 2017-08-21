@@ -126,8 +126,9 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update_submission
     @submission.class.transaction do
       update_answers_params[:answers]&.each do |answer_params|
-        answer = @submission.answers.detect { |answer| answer.id == answer_params[:id].to_i }
-        update_answer(answer, answer_params)
+        next if answer_params[:id].blank?
+        answer = @submission.answers.includes(:actable).detect { |a| a.id == answer_params[:id].to_i }
+        raise ActiveRecord::Rollback if answer && !update_answer(answer, answer_params)
       end unless unsubmit? || unmark?
 
       @submission.update(update_submission_params)
