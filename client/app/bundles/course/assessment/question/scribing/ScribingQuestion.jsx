@@ -20,6 +20,7 @@ function buildInitialValues(scribingQuestion) {
       staff_only_comments: scribingQuestion.question.staff_only_comments,
       maximum_grade: scribingQuestion.question.maximum_grade || undefined,
       skill_ids: scribingQuestion.question.skill_ids,
+      attachment: scribingQuestion.question.attachment || {},
     },
   } : {};
 }

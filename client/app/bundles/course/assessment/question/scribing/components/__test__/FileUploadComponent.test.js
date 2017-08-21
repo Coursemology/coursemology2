@@ -13,9 +13,11 @@ describe('<FileUploadComponent />', () => {
     const fileUploadComponent = shallowUntil(
       <FileUploadComponent
         input={{
-          value: [{
-            name: 'floor-plan-grid.png',
-          }],
+          value: {
+            0: {
+              name: 'floor-plan-grid.png',
+            },
+          },
           onChange: jest.fn(),
         }}
         field="attachment"
