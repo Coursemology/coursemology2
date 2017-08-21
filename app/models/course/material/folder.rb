@@ -83,14 +83,27 @@ class Course::Material::Folder < ActiveRecord::Base
     self.created_at = other.created_at
     self.materials = duplicator.duplicate(other.materials).compact
     self.owner = duplicator.duplicate(other.owner)
-    if duplicator.mode == :course
-      self.course = duplicator.duplicate(other.course)
-      self.parent = duplicator.duplicate(other.parent)
-    elsif duplicator.mode == :object
-      self.course = duplicator.options[:target_course]
-      self.parent = duplicator.options[:target_course].root_folder
-    end
+    self.course = duplicator.options[:target_course]
+    initialize_duplicate_parent(duplicator, other)
+    initialize_duplicate_children(duplicator, other)
     @duplicating = true
+  end
+
+  def initialize_duplicate_parent(duplicator, other)
+    duplicating_course_root_folder = duplicator.mode == :course && other.parent.nil?
+    self.parent = if duplicating_course_root_folder
+                    nil
+                  elsif duplicator.duplicated?(other.parent)
+                    duplicator.duplicate(other.parent)
+                  else
+                    duplicator.options[:target_course].root_folder
+                  end
+  end
+
+  def initialize_duplicate_children(duplicator, other)
+    children << other.children.
+                select { |folder| duplicator.duplicated?(folder) }.
+                map { |folder| duplicator.duplicate(folder) }
   end
 
   private

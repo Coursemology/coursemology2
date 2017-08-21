@@ -25,6 +25,7 @@ class Course < ActiveRecord::Base
                               dependent: :destroy
   has_many :assessment_categories, class_name: Course::Assessment::Category.name,
                                    dependent: :destroy, inverse_of: :course
+  has_many :assessment_tabs, source: :tabs, through: :assessment_categories
   has_many :assessments, through: :assessment_categories
   has_many :assessment_skills, class_name: Course::Assessment::Skill.name,
                                dependent: :destroy
@@ -141,26 +142,26 @@ class Course < ActiveRecord::Base
     self.creator = duplicator.options[:current_user]
     self.registration_key = nil
     logo.duplicate_from(other.logo) if other.logo_url
+    material_folders << duplicator.duplicate(other.root_folder)
+  end
 
-    # This also duplicates assessments.
-    self.assessment_categories = duplicator.duplicate(other.assessment_categories)
-    self.lesson_plan_items = duplicator.duplicate(other.lesson_plan_items.map(&:actable)).
-                             map(&:acting_as)
-    self.lesson_plan_milestones = duplicator.duplicate(other.lesson_plan_milestones)
-
-    # Find concrete material_folders and only duplicate those.
-    # This must be done after duplicating assessments.
-    # Do not try duplicating all folders at once. Parent IDs do not seem to be populated by the
-    # edge gem until the database entries are created.
-    material_folders_to_duplicate = other.material_folders.concrete
-    self.material_folders = duplicator.duplicate(material_folders_to_duplicate).compact
-
-    # Skill branches are duplicated as part of skills.
-    self.assessment_skills = duplicator.duplicate(other.assessment_skills)
-
-    self.levels = duplicator.duplicate(other.levels)
-    self.achievements = duplicator.duplicate(other.achievements)
-    self.forums = duplicator.duplicate(other.forums)
+  # List of top-level items that need to be duplicated for the whole course to be considered duplicated.
+  def duplication_manifest
+    [
+      *material_folders.concrete,
+      *levels,
+      *assessment_categories,
+      *assessment_tabs,
+      *assessments,
+      *assessment_skills,
+      *assessment_skill_branches,
+      *achievements,
+      *surveys,
+      *videos,
+      *lesson_plan_events,
+      *lesson_plan_milestones,
+      *forums
+    ]
   end
 
   private

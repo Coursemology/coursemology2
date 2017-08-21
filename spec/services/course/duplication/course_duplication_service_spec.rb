@@ -20,6 +20,19 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
     let!(:survey) { create(:survey, course: course) }
 
     describe '#duplicate_course' do
+      context 'when saving fails' do
+        let!(:invalid_event) do
+          create(:course_lesson_plan_event, course: course).tap do |event|
+            event.acting_as.update_columns(time_bonus_exp: 1, bonus_end_at: nil)
+          end
+        end
+
+        it 'rolls back the whole transaction' do
+          expect { new_course }.to change { Course.count }.by(0)
+          expect(new_course).to be_nil
+        end
+      end
+
       context 'when children are simple' do
         let!(:forum) { create(:forum, course: course) }
         let!(:milestones) { create_list(:course_lesson_plan_milestone, 3, course: course) }
@@ -92,18 +105,20 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
 
         it 'duplicates lesson plan milestones' do
           # Check that new milestones are assigned to the new course
-          new_course.lesson_plan_milestones.each do |new_milestone|
+          old_milestones = course.lesson_plan_milestones.sort_by(&:title)
+          new_milestones = new_course.lesson_plan_milestones.sort_by(&:title)
+          new_milestones.each do |new_milestone|
             expect(new_milestone.course).to eq new_course
           end
 
           # Check attributes of duplicated milestones
-          course.lesson_plan_milestones.each_index do |i|
+          new_milestones.each_index do |i|
             expect(new_course.lesson_plan_milestones[i].title).
-              to eq course.lesson_plan_milestones[i].title
+              to eq old_milestones[i].title
             expect(new_course.lesson_plan_milestones[i].description).
-              to eq course.lesson_plan_milestones[i].description
+              to eq old_milestones[i].description
             expect(new_course.lesson_plan_milestones[i].start_at).
-              to be_within(1.second).of course.lesson_plan_milestones[i].start_at + time_shift
+              to be_within(1.second).of old_milestones[i].start_at + time_shift
           end
         end
 

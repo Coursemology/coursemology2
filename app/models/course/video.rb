@@ -40,11 +40,6 @@ class Course::Video < ActiveRecord::Base
 
   def initialize_duplicate(duplicator, other)
     copy_attributes(other, duplicator)
-
-    if duplicator.mode == :course
-      self.course = duplicator.duplicate(other.course)
-    elsif duplicator.mode == :object
-      self.course = duplicator.options[:target_course]
-    end
+    self.course = duplicator.options[:target_course]
   end
 end

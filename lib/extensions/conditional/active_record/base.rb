@@ -52,6 +52,16 @@ module Extensions::Conditional::ActiveRecord::Base
     def satisfiable?
       raise NotImplementedError, 'Subclasses must implement a #satisfiable? method.'
     end
+
+    # Duplicate conditions if dependent objects have been duplicated
+    def duplicate_conditions(duplicator, other)
+      conditions_to_duplicate = other.conditions.to_a.select do |condition|
+        dependent_object = condition.actable.dependent_object
+        duplicated = duplicator.duplicated?(condition.actable.dependent_object)
+        duplicator.mode == :course ? (dependent_object.nil? || duplicated) : duplicated
+      end.map(&:actable)
+      conditions << duplicator.duplicate(conditions_to_duplicate).map(&:acting_as)
+    end
   end
 
   module ConditionInstanceMethods

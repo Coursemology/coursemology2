@@ -60,11 +60,7 @@ class Course::Level < ActiveRecord::Base
     self.next ? self.next.experience_points_threshold : experience_points_threshold
   end
 
-  def initialize_duplicate(duplicator, other)
-    if duplicator.mode == :course
-      self.course = duplicator.duplicate(other.course)
-    elsif duplicator.mode == :object
-      self.course = duplicator.options[:target_course]
-    end
+  def initialize_duplicate(duplicator, _other)
+    self.course = duplicator.options[:target_course]
   end
 end

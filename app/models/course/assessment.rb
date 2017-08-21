@@ -137,21 +137,33 @@ class Course::Assessment < ActiveRecord::Base
 
   def initialize_duplicate(duplicator, other)
     copy_attributes(other, duplicator)
+    target_tab = initialize_duplicate_tab(duplicator, other)
     self.folder = duplicator.duplicate(other.folder)
+    folder.parent = target_tab.category.folder
     self.questions = duplicator.duplicate(other.questions.map(&:actable)).compact.map(&:acting_as)
-    if duplicator.mode == :course
-      self.assessment_conditions = duplicator.duplicate(other.assessment_conditions)
-      # Like achievement conditions, duplicate the actable object directly and let the acting_as
-      # gem create the Condition object.
-      self.conditions = duplicator.duplicate(other.conditions.map(&:actable)).map(&:acting_as)
-    elsif duplicator.mode == :object
+    initialize_duplicate_conditions(duplicator, other)
+    @duplicating = true
+  end
+
+  # Parents the assessment under its duplicated parent tab, if it exists.
+  #
+  # @return [Course::Assessment::Tab] The duplicated assessment's tab
+  def initialize_duplicate_tab(duplicator, other)
+    if duplicator.duplicated?(other.tab)
+      target_tab = duplicator.duplicate(other.tab)
+    else
       target_category = duplicator.options[:target_course].assessment_categories.first
       target_tab = target_category.tabs.first
-      self.tab = target_tab
-      self.folder.parent = target_category.folder
-      self.folder.owner = self
     end
-    @duplicating = true
+    self.tab = target_tab
+  end
+
+  # Set up conditions that depend on this assessment and conditions that this assessment depends on.
+  def initialize_duplicate_conditions(duplicator, other)
+    duplicate_conditions(duplicator, other)
+    assessment_conditions << other.assessment_conditions.
+                             select { |condition| duplicator.duplicated?(condition.conditional) }.
+                             map { |condition| duplicator.duplicate(condition) }
   end
 
   private

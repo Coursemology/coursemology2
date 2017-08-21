@@ -55,14 +55,10 @@ class Course::Achievement < ActiveRecord::Base
 
   def initialize_duplicate(duplicator, other)
     badge.duplicate_from(other.badge) if other.badge_url
-
-    if duplicator.mode == :course
-      self.course = duplicator.duplicate(other.course)
-      self.achievement_conditions = duplicator.duplicate(other.achievement_conditions)
-      # Duplicate actable object directly and let the acting_as gem create the Condition object
-      self.conditions = duplicator.duplicate(other.conditions.map(&:actable)).map(&:acting_as)
-    elsif duplicator.mode == :object
-      self.course = duplicator.options[:target_course]
-    end
+    self.course = duplicator.options[:target_course]
+    duplicate_conditions(duplicator, other)
+    achievement_conditions << other.achievement_conditions.
+                              select { |condition| duplicator.duplicated?(condition.conditional) }.
+                              map { |condition| duplicator.duplicate(condition) }
   end
 end

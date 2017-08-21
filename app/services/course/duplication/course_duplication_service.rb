@@ -37,14 +37,19 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
   #
   # @return [Course] The duplicated course
   def duplicate_course(current_course)
-    duplicator.duplicate(current_course).tap do |new_course|
-      duplication_successful = Course.transaction do
-        raise ActiveRecord::Rollback unless new_course.save
-        raise ActiveRecord::Rollback unless update_course_settings(@duplicator, new_course, current_course)
-        true
+    duplicated_course = Course.transaction do
+      new_course = duplicator.duplicate(current_course)
+      raise ActiveRecord::Rollback unless new_course.save
+      duplicator.set_option(:target_course, new_course)
+
+      current_course.duplication_manifest.each do |item|
+        raise ActiveRecord::Rollback unless duplicator.duplicate(item).save
       end
-      notify_duplication_complete(new_course) if duplication_successful
+      raise ActiveRecord::Rollback unless update_course_settings(duplicator, new_course, current_course)
+      new_course
     end
+    notify_duplication_complete(duplicated_course) unless duplicated_course.nil?
+    duplicated_course
   end
 
   private

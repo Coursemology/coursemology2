@@ -89,6 +89,7 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
 
   def initialize_duplicate(duplicator, other)
     copy_attributes(other)
+    associate_duplicated_skills(duplicator, other)
 
     # TODO: check if there are any side effects from this
     self.import_job_id = nil

@@ -27,18 +27,7 @@ class Duplicator
   # @return duplicated_stuff A reference to a single duplicated object or an Array of duplicated
   #   objects
   def duplicate(stuff)
-    # Track if an enumerable or single object was passed in. Needed to handle single element
-    # collections.
-    # Note that ActiveRecord CollectionProxy is not an Enumerable, so check for to_a instead.
-    return nil unless stuff
-    stuff_is_enumerable = stuff.respond_to?(:to_a)
-    duplicated_stuff = []
-    stuff = [*stuff] unless stuff_is_enumerable
-    stuff.each do |obj|
-      duplicated_object = duplicate_object(obj)
-      duplicated_stuff << duplicated_object unless duplicated_object.nil?
-    end
-    stuff_is_enumerable ? duplicated_stuff : duplicated_stuff[0]
+    map_item_or_collection(stuff) { |item| duplicate_object(item) }
   end
 
   # Time shifts the datetime passed to this function.
@@ -63,7 +52,17 @@ class Duplicator
     @duplicated_objects.key?(source_object)
   end
 
+  def set_option(key, value)
+    @options[key] = value
+  end
+
   private
+
+  # Maps a block onto a single item or a collection of items. An array is returned if a collection received.
+  # Otherwise, the result of the block is returned.
+  def map_item_or_collection(item_or_collection, &block)
+    item_or_collection.respond_to?(:to_ary) ? item_or_collection.map(&block) : yield(item_or_collection)
+  end
 
   # Deep copy +source_object+ and its children. +source_object+ must provide a
   # +initialize_duplicate+ method which duplicates its children.
@@ -71,6 +70,7 @@ class Duplicator
   # @param [#initialize_duplicate] source_object The object to be duplicated.
   # @return duplicated_object A reference to the duplicated object.
   def duplicate_object(source_object)
+    return nil unless source_object
     @duplicated_objects.fetch(source_object) do |key|
       if !@exclusion_set.include?(key)
         source_object.dup.tap do |duplicate|

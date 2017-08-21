@@ -7,6 +7,13 @@ class Course::Assessment::Question::Scribing < ActiveRecord::Base
     'course/assessment/question/scribing/scribing'
   end
 
+  def initialize_duplicate(duplicator, other)
+    copy_attributes(other)
+    associate_duplicated_skills(duplicator, other)
+
+    self.attachment = duplicator.duplicate(other.attachment)
+  end
+
   # Scribing is not autogradable, don't need last attempt
   def attempt(submission, _last_attempt = nil)
     answer = Course::Assessment::Answer::Scribing.new(submission: submission, question: question)

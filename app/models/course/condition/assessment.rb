@@ -60,6 +60,7 @@ class Course::Condition::Assessment < ActiveRecord::Base
   end
 
   def initialize_duplicate(duplicator, other)
+    self.assessment = duplicator.duplicate(other.assessment)
     self.conditional_type = other.conditional_type
     self.conditional = duplicator.duplicate(other.conditional)
 

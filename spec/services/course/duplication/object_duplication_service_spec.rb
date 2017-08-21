@@ -39,23 +39,89 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
         end
       end
 
-      context 'when an assessment is selected' do
-        let(:assessment) { create(:assessment, course: source_course) }
-        let(:source_objects) { [assessment] }
+      context 'when an assessments are present' do
+        let!(:assessments) { create_list(:assessment, 2, course: source_course) }
+        let(:assessment) { assessments.first }
+        let(:tab) { assessment.tab }
+        let(:category) { tab.category }
 
-        it 'duplicates it' do
-          expect { duplicate_objects }.to change { destination_course.assessments.count }.by(1)
-          expect(duplicate_objects.first.title).to eq(assessment.title)
+        context 'when only a category is selected' do
+          let(:source_objects) { category }
+
+          it 'duplicates it without any tabs' do
+            expect { duplicate_objects }.to change { destination_course.assessment_categories.count }.by(1)
+            expect(duplicate_objects.title).to eq(category.title)
+            expect(duplicate_objects.tabs.length).to eq(0)
+          end
         end
-      end
 
-      context 'when an assessment category is selected' do
-        let(:category) { create(:course_assessment_category, course: source_course) }
-        let(:source_objects) { [category] }
+        context 'when only a tab is selected' do
+          let(:source_objects) { tab }
+          before { category.update!(title: 'Non-default title') }
 
-        it 'duplicates it' do
-          expect { duplicate_objects }.to change { destination_course.assessment_categories.count }.by(1)
-          expect(duplicate_objects.first.title).to eq(category.title)
+          it "adds it to the target course's default category without assessments" do
+            expect { duplicate_objects }.to change {
+              destination_course.reload.assessment_categories.map(&:tabs).flatten.count
+            }.by(1)
+            expect(duplicate_objects.title).to eq(tab.title)
+            expect(duplicate_objects.category.title).not_to eq(category.reload.title)
+            expect(duplicate_objects.assessments.length).to eq(0)
+          end
+        end
+
+        context 'when an assessment is selected, but not its tab' do
+          let(:source_objects) { [category, assessment] }
+          before { tab.update!(title: 'Non-default title') }
+
+          it "adds it to the target course's default tab" do
+            expect { duplicate_objects }.to change { destination_course.assessments.count }.by(1)
+            duplicate_category, duplicate_assessment = duplicate_objects
+            expect(duplicate_assessment.title).to eq(assessment.title)
+            expect(duplicate_assessment.tab.title).not_to eq(tab.reload.title)
+            expect(duplicate_assessment.folder.parent.owner).not_to be(duplicate_category)
+          end
+        end
+
+        context 'when a category is duplicated after its tab' do
+          let(:source_objects) { [assessment, tab, category] }
+
+          it 'associates the duplicates' do
+            duplicate_assessment, duplicate_tab, duplicate_category = duplicate_objects
+            expect(duplicate_category.tabs.length).to eq(1)
+            expect(duplicate_tab.title).to eq(tab.title)
+            expect(duplicate_assessment.folder.parent.owner).to be(duplicate_category)
+          end
+        end
+
+        context 'when a tab is duplicated after its category' do
+          let(:source_objects) { [assessment, category, tab] }
+
+          it 'associates the duplicates' do
+            duplicate_assessment, duplicate_category, duplicate_tab = duplicate_objects
+            expect(duplicate_category.reload.tabs.length).to eq(1)
+            expect(duplicate_tab.title).to eq(tab.title)
+            expect(duplicate_assessment.folder.parent.owner).to be(duplicate_category)
+          end
+        end
+
+        context 'when an assessment is duplicated after its tab' do
+          let(:source_objects) { [tab, assessment] }
+
+          it 'associates the duplicates' do
+            duplicate_tab, duplicate_assessment = duplicate_objects
+            expect(duplicate_assessment.tab).to be(duplicate_tab)
+            expect(duplicate_assessment.folder.parent.owner).to be(duplicate_tab.category)
+          end
+        end
+
+        context 'when a tab is duplicated after its assessment' do
+          let(:source_objects) { [assessment, tab] }
+
+          it 'associates the duplicates' do
+            duplicate_assessment, duplicate_tab = duplicate_objects
+            expect(duplicate_assessment.tab).to be(duplicate_tab)
+            expect(duplicate_assessment.folder.parent.owner).to be(duplicate_tab.category)
+          end
         end
       end
 
@@ -106,6 +172,123 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
             expect(duplicate_branch.skills.count).to eq(1)
           end
         end
+
+        context 'when a skill has an associated question' do
+          let(:assessment) { create(:assessment, :with_mcq_question, course: source_course) }
+          before do
+            skill.questions << assessment.questions.first
+            skill.save!
+          end
+
+          context 'when a skill is duplicated after its associated question' do
+            let(:source_objects) { [assessment, skill] }
+
+            it 'associates the duplicates' do
+              expect { duplicate_objects }.to change { destination_course.assessment_skills.count }.by(1)
+              duplicate_assessment, duplicate_skill = duplicate_objects
+              expect(duplicate_assessment.reload.questions.first.skills.length).to eq(1)
+              expect(duplicate_skill.questions.length).to eq(1)
+              expect(duplicate_skill.questions.first.id).to eq(duplicate_assessment.questions.first.id)
+            end
+          end
+
+          context 'when a question is duplicated after its associated skill' do
+            let(:source_objects) { [skill, assessment] }
+
+            it 'associates the duplicates' do
+              expect { duplicate_objects }.to change { destination_course.assessment_skills.count }.by(1)
+              duplicate_skill, duplicate_assessment = duplicate_objects
+              expect(duplicate_assessment.questions.first.skills.length).to eq(1)
+              expect(duplicate_skill.reload.questions.length).to eq(1)
+              expect(duplicate_skill.questions.first.id).to eq(duplicate_assessment.questions.first.id)
+            end
+          end
+        end
+      end
+
+      context 'when conditions are present' do
+        let(:required_achievement) { create(:course_achievement, course: source_course) }
+        let(:required_assessment) { create(:assessment, course: source_course) }
+        let(:unlockable_achievement) do
+          create(:course_achievement, course: source_course).tap do |unlockable|
+            create(:assessment_condition,
+                   assessment: required_assessment, conditional: unlockable, course: source_course)
+            create(:achievement_condition,
+                   achievement: required_achievement, conditional: unlockable, course: source_course)
+          end
+        end
+        let(:unlockable_assessment) do
+          create(:assessment, course: source_course).tap do |unlockable|
+            create(:assessment_condition,
+                   assessment: required_assessment, conditional: unlockable, course: source_course)
+            create(:achievement_condition,
+                   achievement: required_achievement, conditional: unlockable, course: source_course)
+          end
+        end
+        let!(:unlockable_achievement_level_condition) do
+          create(:course_condition_level, minimum_level: 2, conditional: unlockable_achievement, course: source_course)
+        end
+        let!(:unlockable_assessment_level_condition) do
+          create(:course_condition_level, minimum_level: 2, conditional: unlockable_assessment, course: source_course)
+        end
+
+        context 'when conditionals are duplicated but not their required items' do
+          let(:source_objects) { [unlockable_achievement, unlockable_assessment] }
+
+          it 'does not duplicate any conditions' do
+            expect { duplicate_objects }.to change { Course::Condition.count }.by(0)
+          end
+        end
+
+        context 'when required items are duplicated but not their conditionals' do
+          let(:source_objects) { [required_achievement, required_assessment] }
+
+          it 'does not duplicate any conditions' do
+            expect { duplicate_objects }.to change { Course::Condition.count }.by(0)
+          end
+        end
+
+        context 'when conditionals are duplicated after their required items' do
+          let(:source_objects) do
+            [required_achievement, required_assessment, unlockable_achievement, unlockable_assessment]
+          end
+
+          it 'duplicates all conditions except level conditions' do
+            expect { duplicate_objects }.to change { Course::Condition.count }.by(4)
+            duplicate_required_achievement, duplicate_required_assessment,
+              duplicate_unlockable_achievement, duplicate_unlockable_assessment = duplicate_objects
+
+            expect(duplicate_required_achievement.reload.achievement_conditions.map(&:conditional)).
+              to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
+            expect(duplicate_required_assessment.reload.assessment_conditions.map(&:conditional)).
+              to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
+            expect(duplicate_unlockable_achievement.conditions.map(&:actable).map(&:dependent_object)).
+              to contain_exactly(duplicate_required_achievement, duplicate_required_assessment)
+            expect(duplicate_unlockable_assessment.conditions.map(&:actable).map(&:dependent_object)).
+              to contain_exactly(duplicate_required_achievement, duplicate_required_assessment)
+          end
+        end
+
+        context 'when conditionals are duplicated before their required items' do
+          let(:source_objects) do
+            [unlockable_achievement, unlockable_assessment, required_achievement, required_assessment]
+          end
+
+          it 'duplicates all conditions except level conditions' do
+            expect { duplicate_objects }.to change { Course::Condition.count }.by(4)
+            duplicate_unlockable_achievement, duplicate_unlockable_assessment,
+              duplicate_required_achievement, duplicate_required_assessment = duplicate_objects
+
+            expect(duplicate_required_achievement.achievement_conditions.map(&:conditional)).
+              to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
+            expect(duplicate_required_assessment.assessment_conditions.map(&:conditional)).
+              to contain_exactly(duplicate_unlockable_achievement, duplicate_unlockable_assessment)
+            expect(duplicate_unlockable_achievement.reload.conditions.map(&:actable).map(&:dependent_object)).
+              to contain_exactly(duplicate_required_achievement, duplicate_required_assessment)
+            expect(duplicate_unlockable_assessment.reload.conditions.map(&:actable).map(&:dependent_object)).
+              to contain_exactly(duplicate_required_achievement, duplicate_required_assessment)
+          end
+        end
       end
 
       context 'when a forum is selected' do
@@ -147,14 +330,50 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
         end
       end
 
-      context 'when a material folder is selected' do
-        let(:folder) { create(:course_material_folder, course: source_course) }
+      context 'when a material folder are present' do
+        let(:grandparent_folder) { create(:course_material_folder, course: source_course) }
+        let(:parent_folder) do
+          create(:course_material_folder, course: source_course, parent: grandparent_folder)
+        end
+        let(:folder) do
+          create(:course_material_folder, course: source_course, parent: parent_folder)
+        end
         let!(:content) { create(:course_material, folder: folder) }
-        let(:source_objects) { [folder] }
 
-        it 'duplicates the folder and its contents' do
-          expect { duplicate_objects }.to change { destination_course.material_folders.count }.by(1)
-          expect(folder.reload.materials.first.name).to eq(content.name)
+        context 'when folders are duplicated but not their parents' do
+          let(:source_objects) { [grandparent_folder, folder] }
+
+          it 'sets the root folders as their parents' do
+            expect { duplicate_objects }.to change { destination_course.material_folders.count }.by(2)
+            duplicate_grandparent_folder, duplicate_folder = duplicate_objects
+            expect(duplicate_folder.materials.first.name).to eq(content.name)
+            expect(duplicate_grandparent_folder.parent.id).to be(destination_course.root_folder.id)
+            expect(duplicate_folder.parent.id).to be(destination_course.root_folder.id)
+          end
+        end
+
+        context 'when children are duplicated before their parents' do
+          let(:source_objects) { [folder, parent_folder, grandparent_folder] }
+
+          it 'associates them' do
+            expect { duplicate_objects }.to change { destination_course.material_folders.count }.by(3)
+            duplicate_folder, duplicate_parent_folder, duplicate_grandparent_folder = duplicate_objects
+            expect(duplicate_grandparent_folder.parent.id).to be(destination_course.root_folder.id)
+            expect(duplicate_parent_folder.parent).to be(duplicate_grandparent_folder)
+            expect(duplicate_folder.parent).to be(duplicate_parent_folder)
+          end
+        end
+
+        context 'when children are duplicated after their parents' do
+          let(:source_objects) { [grandparent_folder, parent_folder, folder] }
+
+          it 'associates them' do
+            expect { duplicate_objects }.to change { destination_course.material_folders.count }.by(3)
+            duplicate_grandparent_folder, duplicate_parent_folder, duplicate_folder = duplicate_objects
+            expect(duplicate_grandparent_folder.parent.id).to be(destination_course.root_folder.id)
+            expect(duplicate_parent_folder.parent).to be(duplicate_grandparent_folder)
+            expect(duplicate_folder.parent).to be(duplicate_parent_folder)
+          end
         end
       end
 

@@ -95,6 +95,13 @@ class Course::Assessment::Question < ActiveRecord::Base
     self.weight = other.weight
   end
 
+  # Associates duplicated skills with the current question
+  def associate_duplicated_skills(duplicator, other)
+    skills << other.skills.
+              select { |skill| duplicator.duplicated?(skill) }.
+              map { |skill| duplicator.duplicate(skill) }
+  end
+
   private
 
   def set_defaults
