@@ -1,7 +1,9 @@
 = content_tag_for(:tr, material)
-  th
+  td
     => fa_icon 'file-o'.freeze
     = link_to format_inline_text(material.name), [current_course, @folder, material]
+    p.description
+      = format_html(material.description)
 
   td
     = format_datetime(material.updated_at)
