@@ -3,6 +3,8 @@
 = content_tag_for(:tr, topic, class: topic_class) do
   td = fa_icon 'envelope' if topic.unread?(current_user)
   th
+    - if topic.locked?
+      span => fa_icon 'lock'.freeze, title: t('.locked')
     = link_to(format_inline_text(topic.title),
               course_forum_topic_path(current_course, @forum, topic))
     div.started-by
