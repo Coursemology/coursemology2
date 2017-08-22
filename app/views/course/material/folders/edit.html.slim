@@ -3,7 +3,7 @@
 = simple_form_for [current_course, @folder] do |f|
   = f.error_notification
   = f.input :name
-  = f.input :description
+  = f.input :description, input_html: { class: ['no-summernote'] }
   = f.input :can_student_upload
   = f.input :start_at
   = f.input :end_at
