@@ -56,9 +56,8 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   handleSubmit() {
-    const { dispatch, form, questions, match: { params } } = this.props;
-    const answerIds = Object.values(questions).map(q => q.answerId);
-    const answers = answerIds.map(answerId => form.values[answerId]);
+    const { dispatch, form, match: { params } } = this.props;
+    const answers = Object.values(form.values);
     dispatch(finalise(params.submissionId, answers));
   }
 
@@ -68,9 +67,8 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   handleSaveDraft() {
-    const { dispatch, form, questions, match: { params } } = this.props;
-    const answerIds = Object.values(questions).map(q => q.answerId);
-    const answers = answerIds.map(answerId => form.values[answerId]);
+    const { dispatch, form, match: { params } } = this.props;
+    const answers = Object.values(form.values);
     dispatch(saveDraft(params.submissionId, answers));
   }
 
@@ -163,7 +161,6 @@ class VisibleSubmissionEditIndex extends Component {
       return (
         <SubmissionEditStepForm
           enableReinitialize
-          keepDirtyOnReinitialize
           handleSaveDraft={() => this.handleSaveDraft()}
           handleSaveGrade={() => this.handleSaveGrade()}
           handleSubmit={() => this.handleSubmit()}
@@ -193,7 +190,6 @@ class VisibleSubmissionEditIndex extends Component {
     return (
       <SubmissionEditForm
         enableReinitialize
-        keepDirtyOnReinitialize
         handleSaveDraft={() => this.handleSaveDraft()}
         handleSubmit={() => this.handleSubmit()}
         handleUnsubmit={() => this.handleUnsubmit()}
