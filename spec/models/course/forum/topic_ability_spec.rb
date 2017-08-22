@@ -7,8 +7,9 @@ RSpec.describe Course::Forum::Topic, type: :model do
     subject(:ability) { Ability.new(user) }
     let(:course) { create(:course) }
     let(:forum) { create(:forum, course: course) }
-    let(:shown_topic) { build_stubbed(:forum_topic, forum: forum, hidden: false) }
-    let(:hidden_topic) { build_stubbed(:forum_topic, forum: forum, hidden: true) }
+    let(:shown_topic) { build_stubbed(:forum_topic, forum: forum) }
+    let(:hidden_topic) { build_stubbed(:forum_topic, :hidden, forum: forum) }
+    let(:locked_topic) { build_stubbed(:forum_topic, :locked, forum: forum) }
 
     context 'when the user is a Course Student' do
       let(:user) { create(:course_student, course: course).user }
@@ -26,6 +27,8 @@ RSpec.describe Course::Forum::Topic, type: :model do
       it { is_expected.not_to be_able_to(:update, my_hidden_topic) }
       it { is_expected.not_to be_able_to(:update, shown_topic) }
       it { is_expected.not_to be_able_to(:update, hidden_topic) }
+      it { is_expected.to be_able_to(:reply, shown_topic) }
+      it { is_expected.not_to be_able_to(:reply, locked_topic) }
     end
 
     context 'when the user is a Course Staff' do

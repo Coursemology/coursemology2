@@ -23,7 +23,7 @@
         div.pull-right
           .btn-group
             / remove reply button to replies of post
-            - if post.parent_id.nil?
+            - if post.parent_id.nil? && can?(:reply, @topic)
               = link_to reply_course_forum_topic_post_path(current_course, @forum, @topic, post),
                         title: t('.reply'), class: ['btn', 'btn-primary'] do
                 = fa_icon 'mail-reply'.freeze

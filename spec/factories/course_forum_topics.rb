@@ -13,6 +13,14 @@ FactoryGirl.define do
     hidden false
     topic_type :normal
 
+    trait :locked do
+      locked true
+    end
+
+    trait :hidden do
+      hidden true
+    end
+
     after(:build) do |forum_topic, evaluator|
       forum_topic.course = evaluator.course
       forum_topic.posts.each { |p| p.text = 'I am a post' }
