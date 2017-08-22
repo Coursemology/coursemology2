@@ -99,7 +99,7 @@ GEM
       io-like (~> 0.3.0)
     arel (6.0.4)
     ast (2.3.0)
-    autoprefixer-rails (7.1.2.3)
+    autoprefixer-rails (7.1.2.4)
       execjs
     awesome_print (1.8.0)
     baby_squeel (0.3.1)
@@ -177,6 +177,7 @@ GEM
       htmlentities (~> 4.3.3)
       launchy (~> 2.1)
       mail (~> 2.6)
+    erubi (1.6.1)
     erubis (2.7.0)
     excon (0.58.0)
     execjs (2.7.0)
@@ -212,11 +213,11 @@ GEM
     i18n (0.8.6)
     i18n-js (3.0.1)
       i18n (~> 0.6, >= 0.6.6)
-    i18n-tasks (0.9.16)
+    i18n-tasks (0.9.17)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       easy_translate (>= 0.5.0)
-      erubis
+      erubi
       highline (>= 1.7.3)
       i18n
       parser (>= 2.2.3.0)
@@ -481,7 +482,7 @@ GEM
       activerecord (>= 4.2.1, < 5.1)
       schema_plus_columns
       valuable
-    selenium-webdriver (3.4.4)
+    selenium-webdriver (3.5.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
     settings_on_rails (0.3.0)
@@ -659,6 +660,7 @@ DEPENDENCIES
   webpack-rails
   workflow
   yard
+
 
 BUNDLED WITH
    1.15.3
