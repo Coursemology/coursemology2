@@ -7,7 +7,11 @@
                                   with_votes: true
 hr
 
-h3 = t('.post_reply')
-= render partial: 'course/forum/posts/form',
-         locals: { post: @reply_post,
-                   url: course_forum_topic_posts_path(current_course, @forum, @topic), }
+- if can?(:reply, @topic)
+  h3 = t('.post_reply')
+  = render partial: 'course/forum/posts/form',
+           locals: { post: @reply_post,
+                     url: course_forum_topic_posts_path(current_course, @forum, @topic), }
+- else
+  div.alert.alert-info
+    = t('.locked_topic')

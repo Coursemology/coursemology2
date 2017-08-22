@@ -2,6 +2,7 @@
 class Course::Forum::PostsController < Course::Forum::ComponentController
   before_action :load_topic
   authorize_resource :topic
+  before_action :authorize_locked_topic, only: [:create]
   before_action :add_topic_breadcrumb
 
   include Course::Discussion::PostsConcern
@@ -82,5 +83,9 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
     if current_course_user && !current_course_user.phantom?
       Course::Forum::PostNotifier.post_replied(current_user, post)
     end
+  end
+
+  def authorize_locked_topic
+    authorize!(:reply, @topic)
   end
 end
