@@ -1,0 +1,6 @@
+en:
+  users:
+    show:
+      current_courses: 'Current Courses'
+      completed_courses: 'Completed Courses'
+      other_instances: 'Other Instances'

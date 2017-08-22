@@ -3,40 +3,47 @@ require 'rails_helper'
 
 RSpec.feature 'User: Profile' do
   let(:instance) { Instance.default }
+  let(:other_instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let(:user) { create(:user) }
+    let(:student) { create(:user) }
+    let(:admin) { create(:administrator) }
+    let(:viewed_user) { create(:user) }
+    let(:completed_course) { create(:course, start_at: 7.days.ago, end_at: 2.days.ago) }
+    let(:current_course) { create(:course) }
+
+    let!(:other_instance_course) do
+      ActsAsTenant.with_tenant(other_instance) do
+        create(:course_user, user: viewed_user).course
+      end
+    end
+
     before do
+      create(:course_user, user: viewed_user, course: completed_course)
+      create(:course_user, user: viewed_user, course: current_course)
       login_as(user, scope: :user)
-      visit edit_user_profile_path
+      visit user_path(viewed_user)
     end
 
     context 'As a registered user' do
-      scenario 'I can change my profile' do
-        new_name = 'New Name'
-        empty_name = ''
-        time_zone = 'Singapore'
+      let(:user) { student }
 
-        fill_in :user_name, with: empty_name
-        click_button 'submit'
-        expect(page).to have_selector('div.alert-danger')
-
-        fill_in :user_name, with: new_name
-        find('#user_time_zone').find(:xpath, "option[@value='#{time_zone}']").select_option
-        attach_file :user_profile_photo, File.join(Rails.root, '/spec/fixtures/files/picture.jpg')
-        click_button 'submit'
-
-        expect(page).to have_selector('div', text: I18n.t('user.profiles.update.success'))
-        expect(page).to have_field('user_name', with: new_name)
-        expect(user.reload.profile_photo.url).to be_present
-        expect(user.reload.time_zone).to eq(time_zone)
+      scenario 'I can view another user\'s profile' do
+        expect(page).to have_text(completed_course.title)
+        expect(page).to have_text(current_course.title)
       end
 
-      scenario 'I can link my account to facebook' do
-        facebook_link = find_link(nil, href: user_omniauth_authorize_path(:facebook))
-        expect { facebook_link.click }.to change { user.identities.count }.by(1)
-        expect(page).to have_selector('div',
-                                      text: I18n.t('user.omniauth_callbacks.facebook.success'))
+      scenario 'I cannot see another user\'s related instances' do
+        expect(page).not_to have_text(other_instance.name)
+        expect(page).not_to have_text(other_instance_course.title)
+      end
+    end
+
+    context 'As an admin' do
+      let(:user) { admin }
+
+      scenario 'I can see another user\'s related instances' do
+        expect(page).to have_text(other_instance.name)
       end
     end
   end

@@ -69,6 +69,13 @@ class Instance < ActiveRecord::Base
     order("CASE \"id\" WHEN #{DEFAULT_INSTANCE_ID} THEN 0 ELSE 1 END").order_by_name
   end)
 
+  # @!method containing_user
+  #   Selects all the instance with user as one of its members
+  #   Note: Must be used with ActsAsTenant#without_tenant block.
+  scope :containing_user, (lambda do |user|
+    joins(:instance_users).where('instance_users.user_id = ?', user.id)
+  end)
+
   # The number of active courses (in the past 7 days) in the instance.
   calculated :active_course_count, (lambda do
     Course.unscoped.active_in_past_7_days.where('courses.instance_id = instances.id').
