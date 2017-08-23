@@ -181,7 +181,7 @@ class SubmissionEditStepForm extends Component {
     const { hasError } = questionsFlags[id] || {};
     const { type } = questions[id];
 
-    if (type === questionTypes.Programming && hasError) {
+    if (type === questionTypes.Programming && jobError) {
       return (
         <Paper style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}>
           {intl.formatMessage(translations.autogradeFailure)}
