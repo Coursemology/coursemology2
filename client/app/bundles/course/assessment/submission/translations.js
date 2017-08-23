@@ -173,6 +173,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.updateFailure',
     defaultMessage: 'Submission update failed: {errors}',
   },
+  requestFailure: {
+    id: 'course.assessment.submission.requestFailure',
+    defaultMessage: 'An error occurred while processing your request.',
+  },
   autogradeFailure: {
     id: 'course.assessment.submission.autogradeFailure',
     defaultMessage: '(T_T) Sorry, the autograder is having mood swings and quit on us. \

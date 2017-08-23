@@ -178,7 +178,7 @@ class SubmissionEditStepForm extends Component {
 
   renderAutogradingErrorPanel(id) {
     const { intl, questionsFlags, questions } = this.props;
-    const { hasError } = questionsFlags[id] || {};
+    const { jobError } = questionsFlags[id] || {};
     const { type } = questions[id];
 
     if (type === questionTypes.Programming && jobError) {

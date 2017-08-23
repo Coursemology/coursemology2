@@ -80,7 +80,7 @@ class SubmissionEditForm extends Component {
             handleSubmitAnswer, isSaving } = this.props;
     const question = questions[id];
     const { answerId, attemptsLeft, attemptLimit, autogradable } = question;
-    const { hasError, isAutograding, isResetting } = questionsFlags[id] || {};
+    const { jobError, isAutograding, isResetting } = questionsFlags[id] || {};
 
     if (!attempting) {
       return null;
@@ -93,7 +93,7 @@ class SubmissionEditForm extends Component {
 
       return (
         <div>
-          {hasError ? <Paper style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}>
+          {jobError ? <Paper style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}>
             {intl.formatMessage(translations.autogradeFailure)}
           </Paper> : null}
           <RaisedButton

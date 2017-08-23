@@ -17,6 +17,10 @@ export function setNotification(message, errors) {
 }
 
 function buildErrorMessage(error) {
+  if (!error || !error.response || !error.data) {
+    return '';
+  }
+
   if (typeof error.response.data.error === 'string') {
     return error.response.data.error;
   }
@@ -36,7 +40,7 @@ function pollJob(url, onSuccess, onFailure) {
           onSuccess();
         } else if (data.status === 'errored') {
           clearInterval(poller);
-          onFailure();
+          onFailure(data);
         }
       })
       .catch(() => {
@@ -57,7 +61,10 @@ function getEvaluationResult(submissionId, answerId, questionId) {
           questionId,
         });
       })
-      .catch(() => dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId }));
+      .catch(() => {
+        dispatch(setNotification(translations.requestFailure));
+        dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId });
+      });
   };
 }
 
@@ -160,6 +167,7 @@ export function unsubmit(submissionId) {
       .then((data) => {
         dispatch({ type: actionTypes.UNSUBMIT_SUCCESS, payload: data });
         dispatch(setNotification(translations.updateSuccess));
+        dispatch(reset(formNames.SUBMISSION));
       })
       .catch((error) => {
         dispatch({ type: actionTypes.UNSUBMIT_FAILURE });
@@ -183,7 +191,10 @@ export function submitAnswer(submissionId, answer) {
         } else if (data.redirect_url) {
           pollJob(data.redirect_url,
             () => dispatch(getEvaluationResult(submissionId, answer.id, questionId)),
-            () => dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId })
+            (errorData) => {
+              dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId, payload: errorData });
+              dispatch(setNotification(translations.requestFailure));
+            }
           );
         } else {
           dispatch({
@@ -193,9 +204,9 @@ export function submitAnswer(submissionId, answer) {
           });
         }
       })
-      .catch((error) => {
+      .catch(() => {
         dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId });
-        dispatch(setNotification(translations.updateFailure, buildErrorMessage(error)));
+        dispatch(setNotification(translations.requestFailure));
       });
   };
 }
