@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
-import { reducer as form } from 'redux-form';
+import form from './form';
 import annotations from './annotations';
-import answers from './answers';
 import assessment from './assessment';
 import attachments from './attachments';
 import commentForms from './commentForms';
@@ -17,9 +16,7 @@ import grading from './grading';
 import testCases from './testCases';
 
 export default combineReducers({
-  form,
   annotations,
-  answers,
   attachments,
   assessment,
   commentForms,
@@ -33,4 +30,5 @@ export default combineReducers({
   topics,
   grading,
   testCases,
+  form,
 });

@@ -1,8 +1,7 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions, import/no-extraneous-dependencies
 import axios from 'axios';
-import { reset } from 'redux-form';
 import CourseAPI from 'api/course';
-import actionTypes, { formNames } from '../constants';
+import actionTypes from '../constants';
 import translations from '../translations';
 
 const JOB_POLL_DELAY = 500;
@@ -118,7 +117,6 @@ export function saveDraft(submissionId, answers) {
           window.location = data.redirect_url;
         }
         dispatch({ type: actionTypes.SAVE_DRAFT_SUCCESS, payload: data });
-        dispatch(reset(formNames.SUBMISSION));
         dispatch(setNotification(translations.updateSuccess));
       })
       .catch((error) => {
@@ -140,7 +138,6 @@ export function finalise(submissionId, answers) {
           window.location = data.redirect_url;
         }
         dispatch({ type: actionTypes.FINALISE_SUCCESS, payload: data });
-        dispatch(reset(formNames.SUBMISSION));
         dispatch(setNotification(translations.updateSuccess));
       })
       .catch((error) => {
