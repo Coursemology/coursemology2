@@ -17,3 +17,19 @@ export function capitaliseFirstLetter(word) {
   }
   return '';
 }
+
+export function parseLanguages(language) {
+  switch (language) {
+    case 'C/C++':
+      return 'c_cpp';
+    case 'Java':
+      return 'java';
+    case 'Python 3.6':
+    case 'Python 3.5':
+    case 'Python 3.4':
+    case 'Python 2.7':
+      return 'python';
+    default:
+      return '';
+  }
+}

@@ -19,6 +19,7 @@ import Editor from '../components/Editor';
 import TestCaseView from '../containers/TestCaseView';
 import ReadOnlyEditor from '../containers/ReadOnlyEditor';
 import UploadedFileView from '../containers/UploadedFileView';
+import { parseLanguages } from '../utils';
 
 const translations = defineMessages({
   solutions: {
@@ -180,7 +181,7 @@ export default class Answers extends Component {
   }
 
   static renderProgrammingFiles(props) {
-    const { fields, readOnly } = props;
+    const { fields, readOnly, language } = props;
     return (
       <div>
         {fields.map((answerId, index) => {
@@ -188,7 +189,7 @@ export default class Answers extends Component {
           if (readOnly) {
             return Answers.renderReadOnlyProgrammingEditor(file, answerId);
           }
-          return Answers.renderProgrammingEditor(file, answerId, 'python');
+          return Answers.renderProgrammingEditor(file, answerId, language);
         })}
       </div>
     );
@@ -200,7 +201,10 @@ export default class Answers extends Component {
         <FieldArray
           name={`${answerId}[files_attributes]`}
           component={Answers.renderProgrammingFiles}
-          {...{ readOnly }}
+          {...{
+            readOnly,
+            language: parseLanguages(question.language),
+          }}
         />
         <TestCaseView questionId={question.id} />
       </div>
