@@ -8,6 +8,10 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
   # Maximum CPU time a programming question can allow before the evaluation gets killed.
   CPU_TIMEOUT = 30.seconds
 
+  # Maximum memory (in MB) the programming question can allow.
+  # Do NOT change this to num.megabytes as the ProgramingEvaluationService expects it in MB.
+  MEMORY_LIMIT = 128
+
   acts_as :question, class_name: Course::Assessment::Question.name
 
   before_save :process_package, unless: :skip_process_package?
