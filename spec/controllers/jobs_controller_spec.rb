@@ -4,6 +4,7 @@ require 'rails_helper'
 RSpec.describe JobsController do
   let(:job) { create(:trackable_job, *job_traits) }
   let(:job_traits) { nil }
+  let(:format) { :html }
   before do
     controller.instance_variable_set(:@job, job)
   end
@@ -18,7 +19,7 @@ RSpec.describe JobsController do
       it { is_expected.to redirect_to(redirect_path) }
     end
 
-    before { get 'show', id: job.id }
+    before { get 'show', id: job.id, format: format }
 
     context 'when the job is in progress' do
       it { is_expected.to respond_with(:accepted) }
@@ -37,8 +38,19 @@ RSpec.describe JobsController do
         expect_to_redirect_to_job_redirect_to
       end
 
-      context 'when the job does not have a redirec_to path' do
-        it { is_expected.to respond_with(:internal_server_error) }
+      context 'when the job does not have a redirect_to path' do
+        it { is_expected.to respond_with(:ok) }
+      end
+
+      context 'when the requested format is json' do
+        render_views
+        let(:format) { :json }
+        let(:json_response) { JSON.parse(response.body) }
+
+        it 'responses with an errored job status' do
+          expect(response.status).to be(200)
+          expect(json_response['status']).to eq('errored')
+        end
       end
     end
   end

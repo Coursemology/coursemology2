@@ -9,7 +9,7 @@ export default function (state = {}, action) {
         [answer.questionId]: {
           isResetting: false,
           isAutograding: !!answer.autograding && answer.autograding.status === 'submitted',
-          hasError: !!answer.autograding && answer.autograding.status === 'errored',
+          jobError: !!answer.autograding && answer.autograding.status === 'errored',
         },
       }), {});
     case actions.AUTOGRADE_REQUEST: {
@@ -29,18 +29,19 @@ export default function (state = {}, action) {
         [questionId]: {
           ...state[questionId],
           isAutograding: false,
-          hasError: false,
+          jobError: false,
         },
       };
     }
     case actions.AUTOGRADE_FAILURE: {
-      const { questionId } = action;
+      const { questionId, payload } = action;
+      const jobError = payload && payload.status === 'errored';
       return {
         ...state,
         [questionId]: {
           ...state[questionId],
           isAutograding: false,
-          hasError: true,
+          jobError: !!jobError,
         },
       };
     }

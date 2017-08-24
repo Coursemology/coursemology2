@@ -32,10 +32,9 @@ class JobsController < ApplicationController
   end
 
   def show_errored_job
-    if @job.redirect_to.present?
-      redirect_to @job.redirect_to
-    else
-      response.status = :internal_server_error
+    respond_to do |format|
+      format.html { redirect_to(@job.redirect_to) if @job.redirect_to.present? }
+      format.json {}
     end
   end
 
