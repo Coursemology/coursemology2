@@ -162,21 +162,28 @@ class VisibleGradingPanel extends Component {
   renderGradeRow(question, showGrader) {
     const questionGrading = this.props.grading.questions[question.id];
     const questionGrade = questionGrading && questionGrading.grade !== null ? questionGrading.grade : '';
-    const grader = questionGrading.grader;
+    const grader = questionGrading && questionGrading.grader;
 
     const courseId = getCourseId();
     const getCourseUserURL = id => `/courses/${courseId}/users/${id}`;
 
+    let graderInfo = null;
+    if (showGrader) {
+      if (grader && grader.id) {
+        graderInfo = <a href={getCourseUserURL(grader.id)}>{grader.name}</a>;
+      } else if (grader) {
+        graderInfo = grader.name;
+      } else {
+        graderInfo = '';
+      }
+    }
     return (
       <TableRow key={question.id}>
         <TableHeaderColumn style={styles.headerColumn} colSpan={2}>
           {question.displayTitle}
         </TableHeaderColumn>
         {showGrader ? <TableHeaderColumn style={styles.headerColumn}>
-          {grader.id ?
-            <a href={getCourseUserURL(grader.id)}>{grader.name}</a> :
-            grader.name
-          }
+          {graderInfo}
         </TableHeaderColumn> : null}
         <TableRowColumn>{`${questionGrade} / ${question.maximumGrade}`}</TableRowColumn>
       </TableRow>
