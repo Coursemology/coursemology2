@@ -97,16 +97,14 @@ group :development do
 
   # General cleanliness
   gem 'traceroute', require: false
-end
 
-group :development, :test do
   # bundle exec yardoc generates the API under doc/.
   # Use yard stats --list-undoc to find what needs documenting.
   gem 'yard', group: :doc
+end
 
-  # Use RSpec for Behaviour testing
+group :test do
   gem 'email_spec'
-  gem 'rspec-rails'
   gem 'rspec-html-matchers'
   gem 'should_not'
   gem 'simplecov'
@@ -116,6 +114,14 @@ group :development, :test do
   gem 'capybara'
   gem 'capybara-selenium'
   gem 'chromedriver-helper'
+
+  # Make screen shots in tests, helps with the debugging of JavaScript tests.
+  gem 'capybara-screenshot'
+end
+
+group :development, :test do
+  # Use RSpec for Behaviour testing
+  gem 'rspec-rails'
 
   # Factory Girl for factories
   gem 'factory_girl_rails'
@@ -130,6 +136,9 @@ group :development, :test do
   gem 'bullet', '>= 4.14.9'
 
   gem 'parallel_tests'
+
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug', platform: :mri
 end
 
 group :ci do
