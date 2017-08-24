@@ -164,7 +164,6 @@ export function unsubmit(submissionId) {
       .then((data) => {
         dispatch({ type: actionTypes.UNSUBMIT_SUCCESS, payload: data });
         dispatch(setNotification(translations.updateSuccess));
-        dispatch(reset(formNames.SUBMISSION));
       })
       .catch((error) => {
         dispatch({ type: actionTypes.UNSUBMIT_FAILURE });
