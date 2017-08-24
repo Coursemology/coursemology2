@@ -16,7 +16,7 @@ import {
   unsubmit, submitAnswer, resetAnswer, saveGrade, mark, unmark, publish,
 } from '../../actions';
 import {
-  answerShape, assessmentShape, explanationShape, gradingShape, postShape,
+  assessmentShape, explanationShape, gradingShape, postShape,
   questionFlagsShape, questionShape, reduxFormShape, submissionShape, topicShape,
 } from '../../propTypes';
 import { formNames, workflowStates } from '../../constants';
@@ -142,7 +142,6 @@ class VisibleSubmissionEditIndex extends Component {
       assessment: { autograded, delayedGradePublication, tabbedView,
                     skippable, questionIds, passwordProtected },
       submission: { canGrade, canUpdate, maxStep, workflowState },
-      answers,
       explanations,
       grading,
       posts,
@@ -160,7 +159,6 @@ class VisibleSubmissionEditIndex extends Component {
     if (autograded) {
       return (
         <SubmissionEditStepForm
-          enableReinitialize
           handleSaveDraft={() => this.handleSaveDraft()}
           handleSaveGrade={() => this.handleSaveGrade()}
           handleSubmit={() => this.handleSubmit()}
@@ -168,7 +166,6 @@ class VisibleSubmissionEditIndex extends Component {
           handleSubmitAnswer={answerId => this.handleSubmitAnswer(answerId)}
           handleReset={answerId => this.handleReset(answerId)}
           handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
-          initialValues={answers}
           explanations={explanations}
           allCorrect={this.allCorrect()}
           canGrade={canGrade}
@@ -189,7 +186,6 @@ class VisibleSubmissionEditIndex extends Component {
     }
     return (
       <SubmissionEditForm
-        enableReinitialize
         handleSaveDraft={() => this.handleSaveDraft()}
         handleSubmit={() => this.handleSubmit()}
         handleUnsubmit={() => this.handleUnsubmit()}
@@ -200,7 +196,6 @@ class VisibleSubmissionEditIndex extends Component {
         handleMark={() => this.handleMark()}
         handleUnmark={() => this.handleUnmark()}
         handlePublish={() => this.handlePublish()}
-        initialValues={answers}
         explanations={explanations}
         grading={grading}
         canGrade={canGrade}
@@ -251,7 +246,6 @@ VisibleSubmissionEditIndex.propTypes = {
       submissionId: PropTypes.string,
     }),
   }),
-  answers: PropTypes.objectOf(answerShape),
   assessment: assessmentShape,
   exp: PropTypes.number,
   explanations: PropTypes.objectOf(explanationShape),
@@ -270,7 +264,6 @@ VisibleSubmissionEditIndex.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    answers: state.answers,
     assessment: state.assessment,
     exp: state.grading.exp,
     explanations: state.explanations,
