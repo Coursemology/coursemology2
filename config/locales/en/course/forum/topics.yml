@@ -10,7 +10,7 @@ en:
         edit_topic:
           header: 'Edit Topic'
         show:
-          post_reply: 'Post a reply'
+          post_reply: 'Add a post'
           locked_topic: 'You are unable to reply as this topic is locked by the teaching staff.'
         new:
           header: 'New Topic'

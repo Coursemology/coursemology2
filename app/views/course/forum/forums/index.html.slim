@@ -5,7 +5,10 @@
       = link_to t('.mark_all_as_read'), mark_all_as_read_course_forums_path(current_course),
                                         title: t('.mark_all_description'),
                                         class: ['btn', 'btn-default'], method: :patch
-    = new_button([current_course, :forum]) if can?(:create, Course::Forum.new(course: current_course))
+    - if can?(:create, Course::Forum.new(course: current_course))
+      = new_button([current_course, :forum], title: '') do
+        => fa_icon 'file'
+        = t('.new_forum')
 
 table.table.forum-list.table-hover
   thead

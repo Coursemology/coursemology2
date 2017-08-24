@@ -119,7 +119,6 @@ RSpec.feature 'Course: Forum: Post: Management' do
 
         new_post = topic.posts.reload.last
         expect(new_post.text).to eq(post_content)
-        expect(new_post.parent).to eq(parent_post)
         expect(page).to have_content_tag_for(new_post)
       end
 
@@ -213,7 +212,6 @@ RSpec.feature 'Course: Forum: Post: Management' do
 
         new_post = topic.posts.reload.last
         expect(new_post.text).to eq(post_content)
-        expect(new_post.parent).to eq(parent_post)
         expect(page).to have_content_tag_for(new_post)
       end
 

@@ -14,6 +14,7 @@ en:
           posts: 'Posts'
           views: 'Views'
           no_forum: 'No Forum'
+          new_forum: 'New Forum'
           mark_all_as_read: 'Mark all as read'
           mark_all_description: 'Mark all forum topics as read'
         show:
@@ -65,5 +66,6 @@ en:
         mark_as_read:
           success: 'All topics in the forum have been marked as read'
         controls:
+          new_topic: 'New topic'
           mark_as_read: 'Mark as read'
           mark_forum_description: 'Mark all topics in current forum as read'
