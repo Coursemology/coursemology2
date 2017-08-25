@@ -10,6 +10,11 @@ class CoursemologyDockerContainer < Docker::Container
   # The path to where the test report will be at.
   REPORT_PATH = File.join(PACKAGE_PATH, 'report.xml')
 
+  # Maximum amount of memory the docker container can use.
+  # Enforced by Docker.
+  # https://docs.docker.com/engine/admin/resource_constraints/
+  CONTAINER_MEMORY_LIMIT = 128.megabytes
+
   class << self
     def create(image, argv: nil)
       pull_image(image) unless Docker::Image.exist?(image)
@@ -18,6 +23,7 @@ class CoursemologyDockerContainer < Docker::Container
                                               image: image) do |payload|
         options = { 'Image' => image }
         options['Cmd'] = argv if argv.present?
+        options['HostConfig'] = { 'memory' => CONTAINER_MEMORY_LIMIT }
 
         payload[:container] = super(options)
       end
