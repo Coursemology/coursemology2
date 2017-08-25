@@ -298,16 +298,16 @@ class OnlineEditorCppView extends React.Component {
             id="course.assessment.question.programming.onlineEditorCppView.testCasesDescription"
             defaultMessage={
               '{note}: The expression in the {expression} column will be compared with the ' +
-              'expression in the {expected} column using the equality operator. The return value ' +
-              'of {print} is {none} and the printed output should not be confused with the ' +
-              'return value.'
+              'expression in the {expected} column using {expect_star} assertions from the ' +
+              '{googletest}. Floating point numbers are formatted with {tostring}.'
             }
             values={{
               note: <b>{intl.formatMessage(translations.testCaseDescriptionNote)}</b>,
               expression: <b>{intl.formatMessage(translations.expressionHeader)}</b>,
               expected: <b>{intl.formatMessage(translations.expectedHeader)}</b>,
-              print: <code>{intl.formatMessage(translations.testCaseDescriptionPrint)}</code>,
-              none: <code>{intl.formatMessage(translations.testCaseDescriptionNone)}</code>,
+              expect_star: <code>EXPECT_*</code>,
+              googletest: <a href="https://github.com/google/googletest">{intl.formatMessage(translations.testCaseDescriptionGoogleTest)}</a>,
+              tostring: <code><a href="http://en.cppreference.com/w/cpp/string/basic_string/to_string">std::to_string</a></code>,
             }}
           />
         </div>

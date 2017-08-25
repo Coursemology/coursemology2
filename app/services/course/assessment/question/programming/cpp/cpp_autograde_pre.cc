@@ -105,26 +105,15 @@ void RecordProperties(T1 a, T2 b) {
 
 // Generates the properties for the `output` and `expected` fields
 // in the Primitive_visitor() for floating point numbers.
-// If the float is integral, display it with a '.0' to make it clear
-// to students that it's a float or double type.
+// Use to_string() for number conversions as it matches what students see when they use printf.
 //
-// https://stackoverflow.com/questions/15313808/how-to-check-if-float-is-a-whole-number
+// http://en.cppreference.com/w/cpp/string/basic_string/to_string
 template<typename T1, typename T2>
 void RecordFloatProperties(T1 a, T2 b) {
 	std::ostringstream output;
 	std::ostringstream expected;
-	if (a == floor(a)) {
-		output << std::fixed << std::setprecision(1) << a;
-	}
-	else {
-		output << a;
-	}
-	if (b == floor(b)) {
-		expected << std::fixed << std::setprecision(1) << b;
-	}
-	else {
-		expected << b;
-	}
+	output << std::to_string(a);
+	expected << std::to_string(b);
 	::testing::Test::RecordProperty("output", output.str());
 	::testing::Test::RecordProperty("expected", expected.str());
 }
