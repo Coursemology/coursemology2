@@ -86,6 +86,11 @@ export default defineMessages({
     defaultMessage: 'None',
     description: 'Value of the none key that is passed into the test case description.',
   },
+  testCaseDescriptionGoogleTest: {
+    id: 'course.assessment.question.programming.onlineEditorView.testCaseDescriptionGoogleTest',
+    defaultMessage: 'Google Test Framework',
+    description: "Name of Google's C++ test framework",
+  },
   addNewTestButton: {
     id: 'course.assessment.question.programming.onlineEditorView.addNewTestButton',
     defaultMessage: 'Add new test',
