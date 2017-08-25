@@ -13,6 +13,10 @@ end
 
 Capybara.javascript_driver = :headless_chrome
 
+Capybara::Screenshot.register_driver(:headless_chrome) do |driver, path|
+  driver.browser.save_screenshot(path)
+end
+
 # Adds extra matchers for Capybara
 module Capybara::TestGroupHelpers
   module FeatureHelpers
