@@ -34,7 +34,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
     end
     let(:existing_user_attributes) do
       existing_users.map do |user|
-        { name: user.name, email: user.email }
+        { name: user.name, email: user.email, role: Course::UserInvitation.roles.values.sample }
       end
     end
     let(:new_users) do
@@ -44,7 +44,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
     end
     let(:new_user_attributes) do
       new_users.map do |user|
-        { name: user.name, email: user.email }
+        { name: user.name, email: user.email, role: Course::UserInvitation.roles.values.sample }
       end
     end
     let(:users) { existing_users + new_users }
@@ -53,7 +53,8 @@ RSpec.describe Course::UserInvitationService, type: :service do
       user_attributes.map do |hash|
         [generate(:nested_attribute_new_id), {
           name: hash[:name],
-          email: hash[:email]
+          email: hash[:email],
+          role: hash[:role]
         }]
       end.to_h
     end
@@ -211,7 +212,8 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
       it 'calls #invite_users with appropriate user attributes' do
         result = subject.send(:invite_from_file, temp_csv)
-        expect(result).to eq(user_attributes)
+        # TODO: file upload role support to be implemented separately
+        expect(result).to eq(user_attributes.map { |usr| usr.except(:role) })
       end
 
       context 'when the provided file is invalid' do
@@ -307,6 +309,19 @@ RSpec.describe Course::UserInvitationService, type: :service do
             expect(course.invitations.any? do |invitation|
               invitation.email == user.email
             end).to be_truthy
+          end
+        end
+      end
+
+      context 'when no roles are specified' do
+        let(:user_attributes_without_role) do
+          user_attributes.map { |attr| attr.except(:role) }
+        end
+
+        it 'defaults to :student for roles' do
+          result_new, _, result_existing = subject.send(:invite_users, user_attributes_without_role)
+          (result_new + result_existing).each do |invit|
+            expect(invit.student?).to be_truthy
           end
         end
       end

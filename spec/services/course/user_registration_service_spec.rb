@@ -86,15 +86,31 @@ RSpec.describe Course::UserRegistrationService, type: :service do
     describe '#claim_course_invitation_code' do
       registration_with_invitation_code
       context 'when the code is valid' do
-        it 'associates the user' do
-          expect(subject.send(:claim_registration_code, registration)).to be_truthy
-          expect(course.course_users.find_by(user_id: user.id)).to be_present
-        end
-
         it 'increases the number of course users' do
           expect do
             expect(subject.send(:claim_registration_code, registration)).to be_truthy
           end.to change { course.course_users.reload.count }.by(1)
+        end
+
+        context 'when role is not specified' do
+          it 'associates the user as student' do
+            expect(subject.send(:claim_registration_code, registration)).to be_truthy
+            expect(course.course_users.find_by(user_id: user.id)).to be_present
+            expect(course.course_users.find_by(user_id: user.id).role).to eq('student')
+          end
+        end
+
+        context 'when a role is specified' do
+          let!(:invitation_with_role) do
+            create(:course_user_invitation, course: course, role: Course::UserInvitation.roles[:teaching_assistant])
+          end
+          let(:registration_with_role) do
+            Course::Registration.new(course: course, user: user, code: invitation_with_role.invitation_key.dup)
+          end
+          it 'associates the user with the specified role' do
+            expect(subject.send(:claim_registration_code, registration_with_role)).to be_truthy
+            expect(course.course_users.find_by(user_id: user.id).role).to eq('teaching_assistant')
+          end
         end
       end
 
