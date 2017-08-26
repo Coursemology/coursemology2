@@ -81,12 +81,13 @@ module Course::UserInvitationService::EmailInvitationConcern
   def load_from_file(file)
     invites = []
 
-    CSV.foreach(file, headers: ['Name', 'Email']).with_index(1) do |row, row_number|
-      row = row.fields(0..1)
+    CSV.foreach(file).with_index(1) do |row, row_number|
       # Ignore first row if it's a header row.
       next if row_number == 1 && row[0].casecmp('Name') == 0 && row[1].casecmp('Email') == 0
       row.unshift(row.first) unless row.length >= 2
-      invites << { name: row[0], email: row[1] } unless row[0].blank? || row[1].blank?
+
+      role = parse_file_role(row[2])
+      invites << { name: row[0], email: row[1], role: role } unless row[0].blank? || row[1].blank?
     end
 
     invites
@@ -188,6 +189,19 @@ module Course::UserInvitationService::EmailInvitationConcern
     end
 
     [validate_new_invitation_emails(new_invitations), existing_invitations]
+  end
+
+  # Parses the role column from the CSV file.
+  # This method handles the case where the role is not specified too, where "student" will be assumed.
+  #
+  # @param [String] role The role as specified in the CSV file
+  # @return [Integer] The enum integer for +Course::UserInvitation.role+ matching the input.
+  #                   (+Course::UserInvitation.roles[:student]+) is returned by default.
+  def parse_file_role(role)
+    return Course::UserInvitation.roles[:student] if role.blank?
+
+    symbol = role.parameterize('_').to_sym
+    Course::UserInvitation.roles[symbol] || Course::UserInvitation.roles[:student]
   end
 
   # Sends registered emails to the users invited.
