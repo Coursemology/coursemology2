@@ -19,11 +19,11 @@ div.methods role='tabpanel'
     div.tab-pane.active#file role='tabpanel'
       div.panel.panel-primary
         div.panel-body
-          = t('.file.format')
+          = t('.file.format_html')
           pre
             code
-              = "#{t('common.name')},#{t('common.email')}\n"
-              = "#{t('common.name')},test@example.org"
+              = "#{t('common.name')},#{t('common.email')}[,#{t('common.role')}]\n"
+              = "#{t('common.name')},test@example.org[,student]"
 
       = simple_form_for current_course, url: invite_course_users_path, method: :post do |f|
         = f.error_notification
