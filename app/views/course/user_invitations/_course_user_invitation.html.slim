@@ -1,6 +1,7 @@
 = content_tag_for(:tr, invitation) do
   th = invitation.name
   td = invitation.email
+  td = t("course.user.role.#{invitation.role}")
   td = invitation.invitation_key
   - if !invitation.confirmed?
     td = t('course.users.status.invited')
