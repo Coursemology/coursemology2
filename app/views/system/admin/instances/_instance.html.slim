@@ -8,12 +8,12 @@
   td = instance.host
 
   td
-    = instance.active_user_count
+    = link_to instance.active_user_count, admin_instance_users_url(host: instance.host, active: true)
     = ' / '
     = link_to instance.user_count, admin_instance_users_url(host: instance.host)
 
   td
-    = instance.active_course_count
+    = link_to instance.active_course_count, admin_instance_courses_url(host: instance.host, active: true)
     = ' / '
     = link_to instance.course_count, admin_instance_courses_url(host: instance.host)
 
