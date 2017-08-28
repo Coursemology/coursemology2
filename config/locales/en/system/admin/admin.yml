@@ -3,5 +3,4 @@ en:
     admin:
       admin:
         index:
-          message: 'Pages'
           header: 'Administration'
