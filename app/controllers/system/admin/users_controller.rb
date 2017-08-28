@@ -4,12 +4,10 @@ class System::Admin::UsersController < System::Admin::Controller
   add_breadcrumb :index, :admin_users_path
 
   def index
-    @users = @users.human_users.ordered_by_name.page(page_param).search(search_param)
+    @users = @users.human_users.includes(:emails).ordered_by_name.page(page_param).search(search_param)
     @users = @users.active_in_past_7_days if params[:active]
 
-    # The users are fetched using 2 queries for performance reasons.
-    @calculated_users = User.where(id: @users.map(&:id)).includes(:emails).calculated(:instance_user_count).
-                        ordered_by_name
+    @instances_preload_service = User::InstancePreloadService.new(@users.map(&:id))
   end
 
   def update
