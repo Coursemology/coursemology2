@@ -51,12 +51,12 @@ class Course < ActiveRecord::Base
 
   calculated :user_count, (lambda do
     CourseUser.select("count('*')").
-      where('course_users.course_id = courses.id')
+      where('course_users.course_id = courses.id').merge(CourseUser.student)
   end)
 
   calculated :active_user_count, (lambda do
     CourseUser.select("count('*')").
-      where('course_users.course_id = courses.id').merge(CourseUser.active_in_past_7_days)
+      where('course_users.course_id = courses.id').merge(CourseUser.active_in_past_7_days).merge(CourseUser.student)
   end)
 
   scope :ordered_by_title, -> { order(:title) }
@@ -72,7 +72,9 @@ class Course < ActiveRecord::Base
     joins(:course_users).where('course_users.user_id = ?', user.id)
   end)
 
-  scope :active_in_past_7_days, -> { joins(:course_users).merge(CourseUser.active_in_past_7_days).uniq }
+  scope :active_in_past_7_days, (lambda do
+    joins(:course_users).merge(CourseUser.active_in_past_7_days).merge(CourseUser.student).uniq
+  end)
 
   delegate :staff, to: :course_users
   delegate :instructors, to: :course_users
