@@ -13,7 +13,7 @@ FactoryGirl.define do
 
     memory_limit 32
     time_limit 10
-    attempt_limit 3
+    attempt_limit nil
     language { Coursemology::Polyglot::Language::Python::Python2Point7.instance }
     template_files do
       template_file_count.downto(1).map do

@@ -54,6 +54,7 @@ class VisibleQuestionGrade extends Component {
       <div style={{ display: 'inline-block', paddingLeft: 10 }}>
         <input
           style={{ width: 100 }}
+          className="grade"
           type="number"
           min={0}
           max={maxGrade}

@@ -150,12 +150,14 @@ export default class CommentCard extends Component {
           />
           <div style={styles.buttonContainer}>
             { canUpdate ? <FlatButton
+              className="edit-comment"
               style={styles.headerButton}
               labelStyle={styles.headerButton}
               icon={<EditIcon />}
               onClick={() => this.toggleEditMode()}
             /> : null }
             { canDestroy ? <FlatButton
+              className="delete-comment"
               style={styles.headerButton}
               labelStyle={styles.headerButton}
               icon={<DeleteIcon color={red500} />}
