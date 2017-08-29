@@ -259,7 +259,7 @@ RSpec.describe Course, type: :model do
       describe '.user_count' do
         subject { Course.where(id: course.id).calculated(:user_count).first.user_count }
 
-        it { is_expected.to eq(course.course_users.count) }
+        it { is_expected.to eq(course.course_users.student.count) }
       end
     end
   end
