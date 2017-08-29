@@ -14,3 +14,4 @@ en:
           success: '%{user} was destroyed.'
         user:
           masquerade: 'Masquerade'
+          not_confirmed: 'Account not confirmed'
