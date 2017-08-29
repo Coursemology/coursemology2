@@ -15,7 +15,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         allow(stub).to receive(:destroy).and_return(false)
       end
     end
-    let(:submission) { create(:submission, assessment: assessment, creator: user) }
+    let(:submission) { create(:submission, :attempting, assessment: assessment, creator: user) }
 
     before { sign_in(user) }
 
@@ -80,7 +80,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
     end
 
     describe '#reload_answer' do
-      let(:submission) { create(:submission, assessment: assessment, creator: user) }
+      let!(:submission) { create(:submission, :attempting, assessment: assessment, creator: user) }
 
       context 'when answer_id does not exist' do
         subject do
@@ -90,32 +90,66 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
         it { is_expected.to have_http_status(:bad_request) }
       end
+
+      # The normal case when the user checks his answer with the autograder.
+      context 'when answer_id exists' do
+        render_views
+        let(:answer) { submission.answers.first }
+        subject do
+          post :reload_answer, course_id: course, assessment_id: assessment.id,
+                               id: submission.id, answer_id: answer.id, format: :json
+        end
+
+        it 'returns the answer' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+          expect(json_result['questionId']).to eq answer.question.id
+        end
+      end
     end
 
     context 'when the assessment is autograded' do
       let(:assessment) { create(:assessment, :autograded, :with_mrq_question, course: course) }
-      let!(:answer) do
-        answer = assessment.questions.first.attempt(submission)
-        answer.save
-        answer
-      end
+      let!(:current_answer) { submission.answers.first }
 
       describe '#submit_answer' do
         subject do
           put :submit_answer,
-              course_id: course, assessment_id: assessment, id: submission, answer_id: answer.id,
-              answer: { id: answer.id }, format: :json
+              course_id: course, assessment_id: assessment, id: submission, answer_id: current_answer.id,
+              answer: { id: current_answer.id }, format: :json
         end
 
         context 'when update fails' do
           before do
-            allow(answer).to receive(:save).and_return(false)
-            allow(submission.answers).to receive(:find).and_return(answer)
+            allow(current_answer).to receive(:save).and_return(false)
+            allow(submission.answers).to receive(:find).and_return(current_answer)
             controller.instance_variable_set(:@submission, submission)
             subject
           end
 
           it { is_expected.to have_http_status(400) }
+        end
+
+        context 'when update succeeds' do
+          it 'creates a new answer and grades it' do
+            original_answers = submission.answers
+            expect { subject }.to change { submission.answers.count }.by(1)
+
+            last_answer = submission.reload.answers.last
+            expect(original_answers).not_to include(last_answer)
+            expect(last_answer.current_answer).to be_falsey
+            expect(last_answer.workflow_state).to eq 'graded'
+          end
+
+          it 'leaves current_answer in the attempting state' do
+            subject
+
+            # Reload the current_answer (there's only 1 question in this assessment)
+            # after running submit_answer
+            current_answer = submission.reload.current_answers.first
+            expect(current_answer.current_answer).to be_truthy
+            expect(current_answer.workflow_state).to eq 'attempting'
+          end
         end
       end
     end

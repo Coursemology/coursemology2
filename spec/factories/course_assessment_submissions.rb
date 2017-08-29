@@ -14,6 +14,11 @@ FactoryGirl.define do
     trait :attempting do
       after(:build) do |submission|
         submission.answers = submission.assessment.questions.attempt(submission)
+        # These are the first answers, so set their `current_answer` flag.
+        submission.answers.map do |answer|
+          answer.current_answer = true
+          answer.save!
+        end
       end
     end
 

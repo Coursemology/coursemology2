@@ -64,18 +64,6 @@ RSpec.describe Course::Assessment::Answer::AutoGradingService do
           expect(answer).to be_graded
         end
       end
-
-      context 'when reattempt is true' do
-        subject { Course::Assessment::Answer::AutoGradingService.grade(answer, true) }
-
-        context 'when submission state is submitted' do
-          let(:submission_traits) { :submitted }
-          it 'does not create a new attempting answer' do
-            subject
-            expect(submission.reload.latest_answers).to include(answer)
-          end
-        end
-      end
     end
   end
 end

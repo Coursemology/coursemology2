@@ -13,12 +13,12 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
     before { login_as(user, scope: :user) }
 
     let(:student) { create(:course_student, course: course).user }
-    let(:submission) { create(:submission, assessment: assessment, creator: student) }
+    let(:submission) { create(:submission, :attempting, assessment: assessment, creator: student) }
     let(:programming_assessment) do
       create(:assessment, :published_with_programming_question, course: course)
     end
     let(:programming_assessment_submission) do
-      create(:submission, assessment: programming_assessment, creator: student)
+      create(:submission, :submitted, assessment: programming_assessment, creator: student)
     end
     let(:multiple_programming_assessment) do
       # Creates a manually-graded assessment with 3 programming questions:
@@ -51,7 +51,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
         click_button('Save Draft')
 
         expect(page).to have_selector('span', text: 'Submission updated successfully.')
-        expect(submission.latest_answers.first.specific.reload.options).to include(option)
+        expect(submission.current_answers.first.specific.reload.options).to include(option)
       end
 
       scenario 'I can reset my answer to a programming question' do
@@ -59,6 +59,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
         assessment.save!
         programming_question = programming_assessment.questions.first
         programming_answer = create(:course_assessment_answer_programming,
+                                    current_answer: true,
                                     assessment: programming_assessment,
                                     question: programming_question,
                                     creator: student,
@@ -99,7 +100,6 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
       end
 
       scenario 'I can create, update and delete comment on answers', js: true do
-        assessment.questions.attempt(submission).each(&:save!)
         visit edit_course_assessment_submission_path(course, assessment, submission)
         expect(page).to have_selector('div', text: assessment.description)
 
@@ -202,6 +202,18 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
 
         # The Run Code button is only shown for the auto_gradable? questions
         expect(page).to have_selector('span', text: 'RUN CODE', count: 2)
+      end
+
+      scenario 'I see submitted programmming answers with code tags' do
+        # Modify programming answer content
+        programming_answer = programming_assessment_submission.answers.first.actable
+        file = programming_answer.files.first
+        file.content = 'a = 123'
+        file.save
+
+        visit edit_course_assessment_submission_path(course, programming_assessment,
+                                                     programming_assessment_submission)
+        expect(page).to have_selector('code', text: 'a = 123')
       end
     end
   end

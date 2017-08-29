@@ -150,7 +150,11 @@ RSpec.describe Course::Assessment do
         context 'when some questions are being attempted' do
           before do
             assessment.questions.limit(1).attempt(submission).tap do |answers|
+              # In actual use, load_or_create_answers in the Submission update service sets
+              # current_answer to true.
+              answers.map { |ans| ans.current_answer = true }
               answers.each(&:save)
+              submission.answers << answers
             end
           end
 
@@ -163,7 +167,11 @@ RSpec.describe Course::Assessment do
         context 'when all questions are being attempted' do
           before do
             assessment.questions.attempt(submission).tap do |answers|
+              # In actual use, load_or_create_answers in the Submission update service sets
+              # current_answer to true.
+              answers.map { |ans| ans.current_answer = true }
               answers.each(&:save)
+              submission.answers << answers
             end
           end
 
