@@ -21,6 +21,6 @@ div.row
 
 - unless current_component_host[:course_achievements_component].nil?
   - if @course_user.student? && @course_user.achievements.present?
-    div.row
-      h2 = Course::Achievement.model_name.human.pluralize
+    h2 = Course::Achievement.model_name.human.pluralize
+    div.row.automatically-clear
       = render partial: 'achievement', collection: @course_user.achievements
