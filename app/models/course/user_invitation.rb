@@ -1,11 +1,16 @@
 # frozen_string_literal: true
 class Course::UserInvitation < ActiveRecord::Base
   after_initialize :generate_invitation_key, if: :new_record?
+  after_initialize :set_defaults, if: :new_record?
+  before_validation :set_defaults, if: :new_record?
 
   schema_validations auto_create: false
   validates :email, uniqueness: { scope: :course_id },
                     format: { with: Devise.email_regexp },
                     if: :email_changed?
+  validates :role, presence: true
+
+  enum role: CourseUser.roles
 
   belongs_to :course, inverse_of: :invitations
   belongs_to :confirmer, class_name: User.name, inverse_of: nil
@@ -38,5 +43,13 @@ class Course::UserInvitation < ActiveRecord::Base
   # @return [void]
   def generate_invitation_key
     self.invitation_key ||= 'I'.freeze + SecureRandom.base64(8)
+  end
+
+  # Sets the default for non-null fields.
+  # Currently sets the role attribute to :student is it's null.
+  #
+  # @return [void]
+  def set_defaults
+    self.role ||= Course::UserInvitation.roles[:student]
   end
 end

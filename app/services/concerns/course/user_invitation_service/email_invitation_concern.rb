@@ -102,15 +102,15 @@ module Course::UserInvitationService::EmailInvitationConcern
   # @return [void]
   def invite_from_form(users)
     invite_users(users.map do |(_, value)|
-      { name: value[:name], email: value[:email] }
+      { name: value[:name], email: value[:email], role: value[:role] }
     end)
   end
 
   # Invites the given users into the course.
   #
   # @param [Array<Hash{Symbol=>String}>] users A mutable array of users to add. Each hash must have
-  #   two attributes: the +:name+ and the +:email+ of the user to add. The provided +emails+
-  #   are NOT case sensitive.
+  #   three attributes: the +:name+, the +:email+ of the user to add, as well as his intended +:role+ in the course.
+  #   The provided +emails+ are NOT case sensitive.
   # @return
   #   [Array<(Array<Course::UserInvitation>, Array<Course::UserInvitation>, Array<CourseUser>, Array<CourseUser>)>]
   #   A tuple containing the users newly invited, already invited, newly registered and already registered respectively.
@@ -161,7 +161,7 @@ module Course::UserInvitationService::EmailInvitationConcern
       if course_user
         existing_course_users << course_user
       else
-        new_course_users << @current_course.course_users.build(user: user[:user], name: user[:name],
+        new_course_users << @current_course.course_users.build(user: user[:user], name: user[:name], role: user[:role],
                                                                creator: @current_user, updater: @current_user)
       end
     end
@@ -183,7 +183,7 @@ module Course::UserInvitationService::EmailInvitationConcern
       if invitation
         existing_invitations << invitation
       else
-        new_invitations << @current_course.invitations.build(name: user[:name], email: user[:email])
+        new_invitations << @current_course.invitations.build(name: user[:name], email: user[:email], role: user[:role])
       end
     end
 

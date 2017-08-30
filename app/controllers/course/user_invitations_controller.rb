@@ -68,7 +68,7 @@ class Course::UserInvitationsController < Course::ComponentController
       params[:course] = { invitations_attributes: {} } unless params.key?(:course)
 
       params.require(:course).permit(:invitations_file, :registration_key,
-                                     invitations_attributes: [:name, :email])
+                                     invitations_attributes: [:name, :email, :role])
     end
   end
 
