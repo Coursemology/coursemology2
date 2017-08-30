@@ -15,7 +15,7 @@ const style = {
   savingStatus: {
     width: '50px',
   },
-  saving_status_label: {
+  savingStatusLabel: {
     fontSize: '14px',
     fontWeight: '500',
     letterSpacing: '0px',
@@ -43,7 +43,7 @@ const SavingIndicator = (props) => {
       <label
         htmlFor="saving"
         style={{
-          ...style.saving_status_label,
+          ...style.savingStatusLabel,
           color: hasError ? '#e74c3c' : '#bdc3c7',
         }}
       >
