@@ -60,6 +60,7 @@ export default class ScribingCanvas extends React.Component {
 
     this.viewportLeft = 0;
     this.viewportTop = 0;
+    this.textCreated = false;
   }
 
   componentDidMount() {
@@ -84,7 +85,15 @@ export default class ScribingCanvas extends React.Component {
     this.viewportTop = this.canvas.viewportTransform[5];
     this.mouseStartPoint = this.getMousePoint(options.e);
 
-    if (!this.isOverText && this.props.scribing.selectedTool === scribingTools.TYPE) {
+    if (this.props.scribing.selectedTool !== scribingTools.TYPE
+        && this.textCreated) {
+      this.textCreated = false;
+
+    // Only allow one i-text to be created per selection of TEXT mode
+    // Second click in non-text area will exit to SELECT mode
+    } else if (!this.isOverText
+        && this.props.scribing.selectedTool === scribingTools.TYPE
+        && !this.textCreated) {
       const text = new fabric.IText('Text', {
         fontFamily: this.props.scribing.fontFamily,
         fontSize: this.props.scribing.fontSize,
@@ -95,6 +104,10 @@ export default class ScribingCanvas extends React.Component {
       this.canvas.add(text);
       this.canvas.setActiveObject(text);
       this.canvas.renderAll();
+      this.textCreated = true;
+    } else if (!this.isOverText && this.textCreated) {
+      this.props.setToolSelected(this.props.answerId, scribingTools.SELECT);
+      this.textCreated = false;
     }
   }
 
