@@ -1,11 +1,12 @@
 import React from 'react';
+import { PropTypes } from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
-
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-import { red100, yellow100, grey100, green100, blue100 } from 'material-ui/styles/colors';
+import { red100, red600, yellow100, grey100, green100, blue100 } from 'material-ui/styles/colors';
 
+import { getCourseUserURL, getEditSubmissionURL } from 'lib/helpers/url-builders';
 import { workflowStates } from '../../constants';
 import translations from '../../translations';
 
@@ -24,6 +25,10 @@ const styles = {
     graded: { backgroundColor: blue100 },
     published: { backgroundColor: green100 },
   },
+  unstartedText: {
+    color: red600,
+    fontWeight: 'bold',
+  },
 };
 
 class SubmissionsIndex extends React.Component {
@@ -35,19 +40,42 @@ class SubmissionsIndex extends React.Component {
     this.setState(data);
   }
 
-  renderGrade(grade) {
-    const { maximumGrade } = this.state.assessment;
-    return `${grade} / ${maximumGrade}`;
+  renderSubmissionWorkflowState(submission) {
+    const { courseId, assessmentId } = this.props.match.params;
+
+    if (submission.workflowState === workflowStates.Unstarted) {
+      return (
+        <div style={styles.unstartedText}>
+          <FormattedMessage {...translations[submission.workflowState]} />
+        </div>
+      );
+    }
+    return (
+      <a href={getEditSubmissionURL(courseId, assessmentId, submission.id)}>
+        <FormattedMessage {...translations[submission.workflowState]} />
+      </a>
+    );
   }
 
   renderStudents() {
-    const { submissions, gamified } = this.state;
+    const { courseId } = this.props.match.params;
+    const { assessment: { maximumGrade }, submissions, gamified } = this.state;
     return submissions.map(submission => (
       <TableRow key={submission.courseStudent.id}>
-        <TableRowColumn>{submission.courseStudent.name}</TableRowColumn>
-        <TableRowColumn><FormattedMessage {...translations[submission.workflowState]} /></TableRowColumn>
-        <TableRowColumn>{submission.grade ? this.renderGrade(submission.grade) : null}</TableRowColumn>
-        {gamified ? <TableRowColumn>{submission.pointsAwarded || null}</TableRowColumn> : null}
+        <TableRowColumn>
+          <a href={getCourseUserURL(courseId, submission.courseStudent.id)}>
+            {submission.courseStudent.name}
+          </a>
+        </TableRowColumn>
+        <TableRowColumn>
+          {this.renderSubmissionWorkflowState(submission)}
+        </TableRowColumn>
+        <TableRowColumn>
+          {submission.grade ? `${submission.grade} / ${maximumGrade}` : null}
+        </TableRowColumn>
+        {gamified ? <TableRowColumn>
+          {submission.pointsAwarded || null}
+        </TableRowColumn> : null}
       </TableRow>
     ));
   }
@@ -122,5 +150,15 @@ class SubmissionsIndex extends React.Component {
     );
   }
 }
+
+SubmissionsIndex.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      courseId: PropTypes.string,
+      assessmentId: PropTypes.string,
+      submissionId: PropTypes.string,
+    }),
+  }),
+};
 
 export default SubmissionsIndex;

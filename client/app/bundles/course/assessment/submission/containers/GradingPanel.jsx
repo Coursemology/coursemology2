@@ -7,6 +7,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHeaderColumn, TableRowCol
 import ReactTooltip from 'react-tooltip';
 
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { formatDateTime } from '../utils';
 import { gradingShape, questionShape, submissionShape } from '../propTypes';
 import actionTypes, { workflowStates } from '../constants';
@@ -165,12 +166,11 @@ class VisibleGradingPanel extends Component {
     const grader = questionGrading && questionGrading.grader;
 
     const courseId = getCourseId();
-    const getCourseUserURL = id => `/courses/${courseId}/users/${id}`;
 
     let graderInfo = null;
     if (showGrader) {
       if (grader && grader.id) {
-        graderInfo = <a href={getCourseUserURL(grader.id)}>{grader.name}</a>;
+        graderInfo = <a href={getCourseUserURL(courseId, grader.id)}>{grader.name}</a>;
       } else if (grader) {
         graderInfo = grader.name;
       } else {
