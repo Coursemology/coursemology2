@@ -13,7 +13,7 @@ public:
 
 // This function will be called on the expected and expression-output entered in the test case.
 template<typename T1, typename T2>
-void custom_evaluation(T1 expression, T2 expected) {
+void custom_evaluation(T1 expected, T2 expression) {
     // void expect_equals(a, b) is overloaded to generate the appropriate test assertions
     // for the respective type-pairs,
     // It also records the 'expected' and 'output' properties for you
@@ -24,7 +24,7 @@ void custom_evaluation(T1 expression, T2 expected) {
     // You will also have to use ::testing::Test::RecordProperty()
     // to record the 'expected' and 'output' properties
 
-    expect_equals(expression, expected);
+    expect_equals(expected, expression);
 }
 `;
 

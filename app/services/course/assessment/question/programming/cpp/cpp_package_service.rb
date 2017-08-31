@@ -177,7 +177,7 @@ class Course::Assessment::Question::Programming::Cpp::CppPackageService < \
       test_fn = <<-CPlusPlus
         TEST(Autograder, test_#{test_type}_#{format('%02i', index)}) {
           RecordProperty("expression", #{test[:expression].inspect});
-          custom_evaluation(#{test[:expression]}, #{test[:expected]});
+          custom_evaluation(#{test[:expected]}, #{test[:expression]});
           #{hint};
         }
       CPlusPlus

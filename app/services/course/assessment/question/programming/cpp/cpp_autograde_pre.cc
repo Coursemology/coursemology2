@@ -95,10 +95,10 @@ void expect_equals(const char * a, const char * b) {
 // in the Primitive_visitor() regardless of their types.
 template<typename T1, typename T2>
 void RecordProperties(T1 a, T2 b) {
-	std::ostringstream output;
 	std::ostringstream expected;
-	output << a;
-	expected << b;
+	std::ostringstream output;
+	expected << a;
+	output << b;
 	::testing::Test::RecordProperty("output", output.str());
 	::testing::Test::RecordProperty("expected", expected.str());
 }
@@ -110,13 +110,13 @@ void RecordProperties(T1 a, T2 b) {
 // http://en.cppreference.com/w/cpp/string/basic_string/to_string
 template<typename T1, typename T2>
 void RecordFloatProperties(T1 a, T2 b) {
-	std::ostringstream output;
 	std::ostringstream expected;
-	output << std::to_string(a);
-	expected << std::to_string(b);
+	std::ostringstream output;
+	expected << std::to_string(a);
+	output << std::to_string(b);
 	::testing::Test::RecordProperty("output", output.str());
 	::testing::Test::RecordProperty("expected", expected.str());
 }
 
 template<typename T1, typename T2>
-void custom_evaluation(T1 expression, T2 expected);
+void custom_evaluation(T1 expected, T2 expression);
