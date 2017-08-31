@@ -9,8 +9,8 @@
     .message-holder {
       border: 1px solid $gray-lighter;
       border-radius: 4px;
-      padding: 10px;
       margin-bottom: 10px;
+      padding: 10px;
 
       .announcement {
         @include announcement;
@@ -38,6 +38,26 @@
   }
 
   &.index {
+    .box {
+      transition: background-color 0.2s, box-shadow 0.2s;
+
+      &:hover {
+        background-color: $course-course-hover-bg;
+        box-shadow: 2px 2px 2px $course-course-hover-shadow;
+      }
+
+      > a {
+        display: block;
+        height: 100%;
+        margin: -4px;
+        padding: 4px;
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+
     .caption {
       margin: 5px 0;
 

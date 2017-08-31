@@ -21,6 +21,7 @@ $course-assessment-submission-answer-correct-border-radius: $border-radius-base 
 $course-assessment-submission-answer-correct-bg: $state-success-bg !default;
 $course-assessment-submission-answer-correct-border-text: $state-success-text !default;
 $course-assessment-submission-not-started-text: $red !default;
+$course-course-hover-bg: #87cefa !default;
 $course-discussion-post-border: 1px solid $panel-default-border !default;
 $course-discussion-post-border-color: $panel-default-border !default;
 $course-discussion-post-border-radius: $border-radius-base !default;
@@ -77,3 +78,4 @@ $user-profile-picture: $picture-large !default;
 $course-assessment-question-card-shadow: rgba(0, 0, 0, 0.12) !default;
 $course-assessment-question-card-hover-shadow: rgba(0, 0, 0, 0.25) !default;
 $course-assessment-submission-shadow: rgba(0, 0, 0, 0.2) !default;
+$course-course-hover-shadow: rgba(0, 0, 0, 0.1) !default;
