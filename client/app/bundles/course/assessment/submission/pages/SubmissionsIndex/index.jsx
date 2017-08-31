@@ -1,12 +1,16 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { red100, red600, yellow100, grey100, green100, blue100 } from 'material-ui/styles/colors';
 
+import fetchSubmissions from '../../actions/submissions';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { getCourseUserURL, getEditSubmissionURL } from 'lib/helpers/url-builders';
+import { assessmentShape } from '../../propTypes';
 import { workflowStates } from '../../constants';
 import translations from '../../translations';
 
@@ -31,13 +35,11 @@ const styles = {
   },
 };
 
-class SubmissionsIndex extends React.Component {
+class VisibleSubmissionsIndex extends React.Component {
 
-  componentWillMount() {
-    const mountNode = document.getElementById('course-assessment-submission');
-    const dataAttr = mountNode.getAttribute('data');
-    const data = JSON.parse(dataAttr);
-    this.setState(data);
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch(fetchSubmissions());
   }
 
   renderSubmissionWorkflowState(submission) {
@@ -59,7 +61,7 @@ class SubmissionsIndex extends React.Component {
 
   renderStudents() {
     const { courseId } = this.props.match.params;
-    const { assessment: { maximumGrade }, submissions, gamified } = this.state;
+    const { assessment: { maximumGrade, gamified }, submissions } = this.props;
     return submissions.map(submission => (
       <TableRow key={submission.courseStudent.id}>
         <TableRowColumn>
@@ -71,7 +73,7 @@ class SubmissionsIndex extends React.Component {
           {this.renderSubmissionWorkflowState(submission)}
         </TableRowColumn>
         <TableRowColumn>
-          {submission.grade ? `${submission.grade} / ${maximumGrade}` : null}
+          {submission.grade !== undefined ? `${submission.grade} / ${maximumGrade}` : null}
         </TableRowColumn>
         {gamified ? <TableRowColumn>
           {submission.pointsAwarded || null}
@@ -81,7 +83,7 @@ class SubmissionsIndex extends React.Component {
   }
 
   renderHistogram() {
-    const { submissions } = this.state;
+    const { submissions } = this.props;
     const workflowStatesArray = Object.values(workflowStates);
 
     const submissionStateCounts = submissions.reduce((counts, submission) => ({
@@ -113,7 +115,7 @@ class SubmissionsIndex extends React.Component {
   }
 
   renderHeader() {
-    const { title } = this.state.assessment;
+    const { title } = this.props.assessment;
     return (
       <Card style={{ marginBottom: 20 }}>
         <CardHeader title={<h3>{title}</h3>} subtitle="Submissions" />
@@ -123,7 +125,7 @@ class SubmissionsIndex extends React.Component {
   }
 
   renderTable() {
-    const { gamified } = this.state;
+    const { gamified } = this.props.assessment;
     return (
       <Table selectable={false}>
         <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
@@ -142,6 +144,12 @@ class SubmissionsIndex extends React.Component {
   }
 
   render() {
+    const { isLoading } = this.props;
+
+    if (isLoading) {
+      return <LoadingIndicator />;
+    }
+
     return (
       <div>
         {this.renderHeader()}
@@ -151,7 +159,8 @@ class SubmissionsIndex extends React.Component {
   }
 }
 
-SubmissionsIndex.propTypes = {
+VisibleSubmissionsIndex.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       courseId: PropTypes.string,
@@ -159,6 +168,25 @@ SubmissionsIndex.propTypes = {
       submissionId: PropTypes.string,
     }),
   }),
+  assessment: assessmentShape.isRequired,
+  submissions: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      workflowState: PropTypes.string,
+      grade: PropTypes.number,
+      pointsAwarded: PropTypes.number,
+    })
+  ),
+  isLoading: PropTypes.bool.isRequired,
 };
 
+function mapStateToProps(state) {
+  return {
+    assessment: state.assessment,
+    submissions: state.submissions,
+    isLoading: state.submissionFlags.isLoading,
+  };
+}
+
+const SubmissionsIndex = connect(mapStateToProps)(VisibleSubmissionsIndex);
 export default SubmissionsIndex;

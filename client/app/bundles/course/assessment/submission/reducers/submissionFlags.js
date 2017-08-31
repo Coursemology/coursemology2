@@ -10,6 +10,8 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.FETCH_SUBMISSION_FAILURE:
+    case actions.FETCH_SUBMISSIONS_SUCCESS:
+    case actions.FETCH_SUBMISSIONS_FAILURE:
       return {
         ...state,
         isLoading: false,

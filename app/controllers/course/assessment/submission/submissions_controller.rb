@@ -21,12 +21,15 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def index
     authorize!(:manage, @assessment)
-    @assessment = @assessment.calculated(:maximum_grade)
-    @submissions = @submissions.includes(:answers)
-    @my_students = current_course_user&.my_students || []
-    @course_students = current_course.course_users.students.order_alphabetically
-    if params[:published_success]
-      flash.now[:success] = t('course.assessment.submission.submissions.publish_all.success')
+
+    respond_to do |format|
+      format.html {}
+      format.json do
+        @assessment = @assessment.calculated(:maximum_grade)
+        @submissions = @submissions.includes(:answers)
+        @my_students = current_course_user&.my_students || []
+        @course_students = current_course.course_users.students.order_alphabetically
+      end
     end
   end
 
@@ -54,7 +57,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     return if @submission.attempting?
 
     respond_to do |format|
-      format.html { render 'edit' }
+      format.html {}
       format.json do
         calculated_fields = [:graded_at]
         @submission = @submission.calculated(*calculated_fields)
