@@ -1,6 +1,10 @@
 import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
+  unstarted: {
+    id: 'course.assessment.submission.unstarted',
+    defaultMessage: 'Not Started',
+  },
   attempting: {
     id: 'course.assessment.submission.attempting',
     defaultMessage: 'Attempting',

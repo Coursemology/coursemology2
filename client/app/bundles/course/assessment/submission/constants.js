@@ -13,6 +13,7 @@ export const questionTypes = mirrorCreator([
 ]);
 
 export const workflowStates = {
+  Unstarted: 'unstarted',
   Attempting: 'attempting',
   Submitted: 'submitted',
   Graded: 'graded',

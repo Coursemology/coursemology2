@@ -7,16 +7,16 @@ import history from 'lib/history';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 
 import store from './store';
-import SubmissionEditLayout from './containers/SubmissionEditLayout';
+import SubmissionsLayout from './containers/SubmissionsLayout';
 
 $(document).ready(() => {
-  const mountNode = document.getElementById('submission-edit');
+  const mountNode = document.getElementById('course-assessment-submission');
 
   if (mountNode) {
     render(
       <ProviderWrapper store={store}>
         <Router history={history}>
-          <SubmissionEditLayout />
+          <SubmissionsLayout />
         </Router>
       </ProviderWrapper>
     , mountNode);
