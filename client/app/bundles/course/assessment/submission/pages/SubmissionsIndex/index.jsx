@@ -4,10 +4,13 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
+import CircularProgress from 'material-ui/CircularProgress';
 import { red100, red600, yellow100, grey100, green100, blue100 } from 'material-ui/styles/colors';
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
-import fetchSubmissions from '../../actions/submissions';
+import { fetchSubmissions, publishSubmissions, downloadSubmissions } from '../../actions/submissions';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { getCourseUserURL, getEditSubmissionURL } from 'lib/helpers/url-builders';
 import { assessmentShape } from '../../propTypes';
@@ -37,9 +40,26 @@ const styles = {
 
 class VisibleSubmissionsIndex extends React.Component {
 
+  state = {
+    publishConfirmation: false,
+  };
+
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(fetchSubmissions());
+  }
+
+  canPublish() {
+    const { submissions } = this.props;
+    return submissions.some(s => s.workflowState === workflowStates.Graded);
+  }
+
+  canDownload() {
+    const { assessment, submissions } = this.props;
+    return assessment.downloadable && submissions.some(s =>
+      s.workflowState !== workflowStates.Unstarted &&
+      s.workflowState !== workflowStates.Attempting
+    );
   }
 
   renderSubmissionWorkflowState(submission) {
@@ -115,11 +135,29 @@ class VisibleSubmissionsIndex extends React.Component {
   }
 
   renderHeader() {
-    const { title } = this.props.assessment;
+    const { assessment: { title }, dispatch, isPublishing, isDownloading } = this.props;
     return (
       <Card style={{ marginBottom: 20 }}>
         <CardHeader title={<h3>{title}</h3>} subtitle="Submissions" />
         <CardText>{this.renderHistogram()}</CardText>
+        <CardActions>
+          <FlatButton
+            disabled={isPublishing || !this.canPublish()}
+            secondary
+            label="Publish All"
+            labelPosition="before"
+            icon={isPublishing ? <CircularProgress size={24} /> : null}
+            onTouchTap={() => this.setState({ publishConfirmation: true })}
+          />
+          <FlatButton
+            disabled={isDownloading || !this.canDownload()}
+            primary
+            label="Download All"
+            labelPosition="before"
+            icon={isDownloading ? <CircularProgress size={24} /> : null}
+            onTouchTap={() => dispatch(downloadSubmissions())}
+          />
+        </CardActions>
       </Card>
     );
   }
@@ -143,6 +181,22 @@ class VisibleSubmissionsIndex extends React.Component {
     );
   }
 
+  renderPublishConfirmation() {
+    const { dispatch } = this.props;
+    const { publishConfirmation } = this.state;
+    return (
+      <ConfirmationDialog
+        open={publishConfirmation}
+        onCancel={() => this.setState({ publishConfirmation: false })}
+        onConfirm={() => {
+          dispatch(publishSubmissions());
+          this.setState({ publishConfirmation: false });
+        }}
+        message={<FormattedMessage {...translations.publishConfirmation} />}
+      />
+    );
+  }
+
   render() {
     const { isLoading } = this.props;
 
@@ -154,6 +208,7 @@ class VisibleSubmissionsIndex extends React.Component {
       <div>
         {this.renderHeader()}
         {this.renderTable()}
+        {this.renderPublishConfirmation()}
       </div>
     );
   }
@@ -178,6 +233,8 @@ VisibleSubmissionsIndex.propTypes = {
     })
   ),
   isLoading: PropTypes.bool.isRequired,
+  isDownloading: PropTypes.bool.isRequired,
+  isPublishing: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -185,6 +242,8 @@ function mapStateToProps(state) {
     assessment: state.assessment,
     submissions: state.submissions,
     isLoading: state.submissionFlags.isLoading,
+    isDownloading: state.submissionFlags.isDownloading,
+    isPublishing: state.submissionFlags.isPublishing,
   };
 }
 

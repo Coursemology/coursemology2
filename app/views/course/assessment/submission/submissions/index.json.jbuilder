@@ -4,6 +4,7 @@ json.assessment do
   json.title format_inline_text(@assessment.title)
   json.maximumGrade @assessment.maximum_grade.to_f
   json.gamified current_course.gamified?
+  json.downloadable @assessment.downloadable?
 end
 
 json.submissions @course_students do |course_student|

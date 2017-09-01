@@ -97,10 +97,12 @@ class Course::Assessment::Submission::SubmissionsController < \
     if !graded_submissions.empty?
       job = Course::Assessment::Submission::PublishingJob.
             perform_later(@assessment, current_user).job
-      redirect_to(job_path(job))
+      respond_to do |format|
+        format.html { redirect_to(job_path(job)) }
+        format.json { render json: { redirect_url: job_path(job) } }
+      end
     else
-      redirect_to course_assessment_submissions_path(current_course, @assessment),
-                  notice: t('.notice')
+      head :ok
     end
   end
 

@@ -1,6 +1,7 @@
-// eslint-disable-next-line import/no-unresolved, import/extensions, import/no-extraneous-dependencies
-import axios from 'axios';
+/* eslint-disable import/no-unresolved, import/extensions, import/no-extraneous-dependencies */
 import CourseAPI from 'api/course';
+import pollJob from 'lib/helpers/job-helpers';
+/* eslint-enable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import actionTypes from '../constants';
 import translations from '../translations';
 
@@ -27,26 +28,6 @@ function buildErrorMessage(error) {
   return Object.values(error.response.data.errors).reduce(
     (flat, errors) => flat.concat(errors), []
   ).join(', ');
-}
-
-function pollJob(url, onSuccess, onFailure) {
-  const poller = setInterval(() => {
-    axios.get(url, { params: { format: 'json' } })
-      .then(response => response.data)
-      .then((data) => {
-        if (data.status === 'completed') {
-          clearInterval(poller);
-          onSuccess();
-        } else if (data.status === 'errored') {
-          clearInterval(poller);
-          onFailure(data);
-        }
-      })
-      .catch(() => {
-        clearInterval(poller);
-        onFailure();
-      });
-  }, JOB_POLL_DELAY);
 }
 
 function getEvaluationResult(submissionId, answerId, questionId) {
@@ -76,7 +57,7 @@ export function fetchSubmission(id) {
       .then((data) => {
         data.answers.filter(a => a.autograding && a.autograding.path).forEach((answer, index) => {
           setTimeout(() => {
-            pollJob(answer.autograding.path,
+            pollJob(answer.autograding.path, JOB_POLL_DELAY,
               () => dispatch(getEvaluationResult(id, answer.fields.id, answer.questionId)),
               () => dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId: answer.questionId })
             );
@@ -99,7 +80,7 @@ export function autogradeSubmission(id) {
     return CourseAPI.assessment.submissions.autoGrade(id)
       .then(response => response.data)
       .then((data) => {
-        pollJob(data.redirect_url,
+        pollJob(data.redirect_url, JOB_POLL_DELAY,
           () => {
             dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_SUCCESS });
             fetchSubmission(id)(dispatch);
@@ -185,7 +166,7 @@ export function submitAnswer(submissionId, answer) {
         if (data.redirect_url && data.format === 'html') {
           window.location = data.redirect_url;
         } else if (data.redirect_url) {
-          pollJob(data.redirect_url,
+          pollJob(data.redirect_url, JOB_POLL_DELAY,
             () => dispatch(getEvaluationResult(submissionId, answer.id, questionId)),
             (errorData) => {
               dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId, payload: errorData });

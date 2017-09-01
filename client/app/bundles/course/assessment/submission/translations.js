@@ -160,6 +160,11 @@ const translations = defineMessages({
     defaultMessage: 'Are you sure you want to reset your answer? This action is irreversible \
                     and you will lose all your current work for this question.',
   },
+  publishConfirmation: {
+    id: 'course.assessment.submission.publishConfirmation',
+    defaultMessage: 'THIS ACTION IS IRREVERSIBLE All graded submissions will be published and \
+                     students will see their own grades. Are you sure you want to publish?',
+  },
   lateSubmission: {
     id: 'course.assessment.submission.lateSubmission',
     defaultMessage: 'This submission is LATE! You may want to penalize the student for late submission.',
