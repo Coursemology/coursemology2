@@ -139,6 +139,7 @@ class VisibleSubmissionsIndex extends React.Component {
       >
         {myStudentSubmissions.length > 0 ?
           <Tab
+            id="my-students-tab"
             buttonStyle={{ color: blue500 }}
             icon={<GroupIcon style={{ color: blue500 }} />}
             label="My Students"
@@ -151,6 +152,7 @@ class VisibleSubmissionsIndex extends React.Component {
           </Tab>
         : null}
         <Tab
+          id="students-tab"
           buttonStyle={{ color: blue500 }}
           icon={<PersonIcon style={{ color: blue500 }} />}
           label="Students"
@@ -162,6 +164,7 @@ class VisibleSubmissionsIndex extends React.Component {
           />
         </Tab>
         <Tab
+          id="others-tab"
           buttonStyle={{ color: blue500 }}
           icon={<PersonOutlineIcon style={{ color: blue500 }} />}
           label="Others"

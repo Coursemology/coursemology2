@@ -133,6 +133,7 @@ export default class SubmissionsTable extends React.Component {
 
     return (
       <IconButton
+        className="download-submissions"
         iconStyle={{ color: blue600 }}
         onTouchTap={handleDownload}
         disabled={isDownloading || !this.canDownload()}
