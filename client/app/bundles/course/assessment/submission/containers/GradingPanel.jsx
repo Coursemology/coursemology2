@@ -72,10 +72,10 @@ class VisibleGradingPanel extends Component {
       {intl.formatMessage(translations[workflowState])}
       {workflowState === workflowStates.Graded ? (
         <span style={{ display: 'inline-block', marginLeft: 5 }}>
-          <a data-tip data-for="staff-only-test-cases" data-offset="{'left' : -8}">
+          <a data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
             <i className="fa fa-exclamation-triangle" />
           </a>
-          <ReactTooltip id="staff-only-test-cases" effect="solid">
+          <ReactTooltip id="unpublished-grades" effect="solid">
             <FormattedMessage {...translations.unpublishedGrades} />
           </ReactTooltip>
         </span>

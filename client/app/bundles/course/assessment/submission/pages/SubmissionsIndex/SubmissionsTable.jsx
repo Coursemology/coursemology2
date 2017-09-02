@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import { red600, blue600 } from 'material-ui/styles/colors';
@@ -27,7 +27,30 @@ const styles = {
   },
 };
 
+const submissionsTranslations = defineMessages({
+  publishTop: {
+    id: 'course.assessment.submission.publishTop',
+    defaultMessage: 'The grade and experience points are not visible to the student. \
+                    Publish all grades by clicking the button at the top of this page.',
+  },
+});
+
 export default class SubmissionsTable extends React.Component {
+
+  static renderUnpublishedWarning(submission) {
+    if (submission.workflowState !== workflowStates.Graded) return null;
+
+    return (
+      <span style={{ display: 'inline-block', marginRight: 5 }}>
+        <a data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
+          <i className="fa fa-exclamation-triangle" />
+        </a>
+        <ReactTooltip id="unpublished-grades" effect="solid">
+          <FormattedMessage {...submissionsTranslations.publishTop} />
+        </ReactTooltip>
+      </span>
+    );
+  }
 
   canDownload() {
     const { assessment, submissions } = this.props;
@@ -36,6 +59,7 @@ export default class SubmissionsTable extends React.Component {
       s.workflowState !== workflowStates.Attempting
     );
   }
+
 
   renderSubmissionWorkflowState(submission) {
     const { courseId, assessmentId } = this.props;
@@ -47,10 +71,14 @@ export default class SubmissionsTable extends React.Component {
         </div>
       );
     }
+
     return (
-      <a href={getEditSubmissionURL(courseId, assessmentId, submission.id)}>
-        <FormattedMessage {...translations[submission.workflowState]} />
-      </a>
+      <div>
+        {SubmissionsTable.renderUnpublishedWarning(submission)}
+        <a href={getEditSubmissionURL(courseId, assessmentId, submission.id)}>
+          <FormattedMessage {...translations[submission.workflowState]} />
+        </a>
+      </div>
     );
   }
 
