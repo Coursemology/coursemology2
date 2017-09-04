@@ -90,7 +90,7 @@ export default class SubmissionsTable extends React.Component {
     return (
       <div data-tip data-for={`access-logs-${submission.id}`}>
         <a href={getSubmissionLogsURL(courseId, assessmentId, submission.id)}>
-          <HistoryIcon style={{ color: blue600 }} />
+          <HistoryIcon style={{ color: submission.logCount > 1 ? red600 : blue600 }} />
           <ReactTooltip id={`access-logs-${submission.id}`} effect="solid">
             Access Logs
           </ReactTooltip>

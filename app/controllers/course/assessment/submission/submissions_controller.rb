@@ -26,7 +26,7 @@ class Course::Assessment::Submission::SubmissionsController < \
       format.html {}
       format.json do
         @assessment = @assessment.calculated(:maximum_grade)
-        @submissions = @submissions.includes(:answers)
+        @submissions = @submissions.calculated(:log_count).includes(:answers)
         @my_students = current_course_user&.my_students || []
         @course_students = current_course.course_users.students.order_alphabetically
       end

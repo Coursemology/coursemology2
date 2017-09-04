@@ -24,6 +24,7 @@ json.submissions @course_students do |course_student|
     json.workflowState submission.workflow_state
     json.grade submission.grade.to_f
     json.pointsAwarded submission.current_points_awarded
+    json.logCount submission.log_count
   else
     json.workflowState 'unstarted'
   end

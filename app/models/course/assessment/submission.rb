@@ -80,6 +80,13 @@ class Course::Assessment::Submission < ActiveRecord::Base
       select('max(course_assessment_answers.graded_at)')
   end)
 
+  # @!attribute [r] log_count
+  #   Returns the total number of access logs for the submission.
+  calculated :log_count, (lambda do
+    Course::Assessment::Submission::Log.select("count('*')").
+      where('course_assessment_submission_logs.submission_id = course_assessment_submissions.id')
+  end)
+
   # @!method self.by_user(user)
   #   Finds all the submissions by the given user.
   #   @param [User] user The user to filter submissions by
