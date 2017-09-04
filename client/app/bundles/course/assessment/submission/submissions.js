@@ -1,15 +1,6 @@
 /* eslint-disable global-require */
 import initializeDownloadLink from 'lib/helpers/initializeDownloadLink';
 
-function initialize() {
-  // Initializers
-  require('./submission');
-  initializeDownloadLink('.btn.download');
-}
+require('./submission');
 
-Promise.all([
-  import(/* webpackChunkName: "react-color" */ 'react-color'),
-  import(/* webpackChunkName: "fabric" */ 'fabric'),
-]).then(() => {
-  initialize();
-});
+initializeDownloadLink('.btn.download');

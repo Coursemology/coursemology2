@@ -54,3 +54,6 @@ jest.mock('lib/components/redux-form/RichTextField', () => {
   const TextField = require.requireActual('lib/components/redux-form/TextField');
   return TextField;
 });
+
+// stub import function
+jest.mock('course/assessment/submission/loaders/ScribingViewLoader', () => (() => Promise.resolve()));

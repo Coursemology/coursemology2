@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import scribingViewLoader from 'course/assessment/submission/loaders/ScribingViewLoader';
 import ScribingToolbar from './ScribingToolbar';
 import ScribingCanvas from './ScribingCanvas';
 import style from './ScribingView.scss'; // eslint-disable-line no-unused-vars
@@ -18,6 +19,12 @@ const styles = {
 };
 
 export default class ScribingViewComponent extends React.Component {
+  componentWillMount() {
+    scribingViewLoader().then(() => {
+      this.forceUpdate();
+    });
+  }
+
   render() {
     const { answerId, submission } = this.props;
     return (answerId ?
