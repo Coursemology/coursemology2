@@ -110,11 +110,9 @@ class Course::Assessment::Submission::SubmissionsController < \
   def download_all
     authorize!(:manage, @assessment)
     if !@assessment.downloadable?
-      redirect_to course_assessment_submissions_path(current_course, @assessment),
-                  notice: t('.not_downloadable')
+      head :bad_request
     elsif @assessment.submissions.confirmed.empty?
-      redirect_to course_assessment_submissions_path(current_course, @assessment),
-                  notice: t('.no_submissions')
+      head :bad_request
     else
       job = Course::Assessment::Submission::ZipDownloadJob.
             perform_later(current_course_user, @assessment, params[:students]).job

@@ -3,16 +3,20 @@ import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+import Toggle from 'material-ui/Toggle';
 import FlatButton from 'material-ui/FlatButton';
 import CircularProgress from 'material-ui/CircularProgress';
-import { red100, red600, yellow100, grey100, green100, blue100 } from 'material-ui/styles/colors';
+import { Tabs, Tab } from 'material-ui/Tabs';
+import GroupIcon from 'material-ui/svg-icons/social/group';
+import PersonIcon from 'material-ui/svg-icons/social/person';
+import PersonOutlineIcon from 'material-ui/svg-icons/social/person-outline';
+import { red100, yellow100, grey100, green100, blue100, blue500 } from 'material-ui/styles/colors';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 
 import { fetchSubmissions, publishSubmissions, downloadSubmissions } from '../../actions/submissions';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import { getCourseUserURL, getEditSubmissionURL } from 'lib/helpers/url-builders';
+import SubmissionsTable from './SubmissionsTable';
 import { assessmentShape } from '../../propTypes';
 import { workflowStates } from '../../constants';
 import translations from '../../translations';
@@ -25,16 +29,12 @@ const styles = {
     textAlign: 'center',
   },
   histogramCells: {
-    common: { minWidth: 50 },
+    common: { transition: 'flex .5s, min-width .5s' },
     unstarted: { backgroundColor: red100 },
     attempting: { backgroundColor: yellow100 },
     submitted: { backgroundColor: grey100 },
     graded: { backgroundColor: blue100 },
     published: { backgroundColor: green100 },
-  },
-  unstartedText: {
-    color: red600,
-    fontWeight: 'bold',
   },
 };
 
@@ -42,6 +42,7 @@ class VisibleSubmissionsIndex extends React.Component {
 
   state = {
     publishConfirmation: false,
+    includePhantoms: false,
   };
 
   componentDidMount() {
@@ -54,62 +55,22 @@ class VisibleSubmissionsIndex extends React.Component {
     return submissions.some(s => s.workflowState === workflowStates.Graded);
   }
 
-  canDownload() {
-    const { assessment, submissions } = this.props;
-    return assessment.downloadable && submissions.some(s =>
-      s.workflowState !== workflowStates.Unstarted &&
-      s.workflowState !== workflowStates.Attempting
-    );
-  }
-
-  renderSubmissionWorkflowState(submission) {
-    const { courseId, assessmentId } = this.props.match.params;
-
-    if (submission.workflowState === workflowStates.Unstarted) {
-      return (
-        <div style={styles.unstartedText}>
-          <FormattedMessage {...translations[submission.workflowState]} />
-        </div>
-      );
-    }
-    return (
-      <a href={getEditSubmissionURL(courseId, assessmentId, submission.id)}>
-        <FormattedMessage {...translations[submission.workflowState]} />
-      </a>
-    );
-  }
-
-  renderStudents() {
-    const { courseId } = this.props.match.params;
-    const { assessment: { maximumGrade, gamified }, submissions } = this.props;
-    return submissions.map(submission => (
-      <TableRow key={submission.courseStudent.id}>
-        <TableRowColumn>
-          <a href={getCourseUserURL(courseId, submission.courseStudent.id)}>
-            {submission.courseStudent.name}
-          </a>
-        </TableRowColumn>
-        <TableRowColumn>
-          {this.renderSubmissionWorkflowState(submission)}
-        </TableRowColumn>
-        <TableRowColumn>
-          {submission.grade !== undefined ? `${submission.grade} / ${maximumGrade}` : null}
-        </TableRowColumn>
-        {gamified ? <TableRowColumn>
-          {submission.pointsAwarded || null}
-        </TableRowColumn> : null}
-      </TableRow>
-    ));
-  }
-
   renderHistogram() {
     const { submissions } = this.props;
+    const { includePhantoms } = this.state;
     const workflowStatesArray = Object.values(workflowStates);
 
-    const submissionStateCounts = submissions.reduce((counts, submission) => ({
-      ...counts,
-      [submission.workflowState]: counts[submission.workflowState] + 1,
-    }), workflowStatesArray.reduce((counts, w) => ({ ...counts, [w]: 0 }), {}));
+    const initialCounts = workflowStatesArray.reduce((counts, w) => ({ ...counts, [w]: 0 }), {});
+
+    const submissionStateCounts = submissions.reduce((counts, submission) => {
+      if (includePhantoms || !submission.courseStudent.phantom) {
+        return {
+          ...counts,
+          [submission.workflowState]: counts[submission.workflowState] + 1,
+        };
+      }
+      return counts;
+    }, initialCounts);
 
     return (
       <div style={styles.histogram}>
@@ -119,11 +80,12 @@ class VisibleSubmissionsIndex extends React.Component {
             ...styles.histogramCells.common,
             ...styles.histogramCells[w],
             flex: count,
+            minWidth: count > 0 ? 50 : 0,
           };
 
-          return count === 0 ? null : (
+          return (
             <div key={w} style={cellStyle} data-tip data-for={w}>
-              {count}
+              {count > 0 ? count : null}
               <ReactTooltip id={w} effect="solid">
                 <FormattedMessage {...translations[w]} />
               </ReactTooltip>
@@ -135,49 +97,82 @@ class VisibleSubmissionsIndex extends React.Component {
   }
 
   renderHeader() {
-    const { assessment: { title }, dispatch, isPublishing, isDownloading } = this.props;
+    const { assessment: { title }, isPublishing } = this.props;
+    const { includePhantoms } = this.state;
     return (
       <Card style={{ marginBottom: 20 }}>
         <CardHeader title={<h3>{title}</h3>} subtitle="Submissions" />
         <CardText>{this.renderHistogram()}</CardText>
         <CardActions>
+          <Toggle
+            label="Include phantom students"
+            labelPosition="right"
+            toggled={includePhantoms}
+            onToggle={() => this.setState({ includePhantoms: !includePhantoms })}
+          />
           <FlatButton
             disabled={isPublishing || !this.canPublish()}
             secondary
-            label="Publish All"
+            label="Publish Grades"
             labelPosition="before"
             icon={isPublishing ? <CircularProgress size={24} /> : null}
             onTouchTap={() => this.setState({ publishConfirmation: true })}
-          />
-          <FlatButton
-            disabled={isDownloading || !this.canDownload()}
-            primary
-            label="Download All"
-            labelPosition="before"
-            icon={isDownloading ? <CircularProgress size={24} /> : null}
-            onTouchTap={() => dispatch(downloadSubmissions())}
           />
         </CardActions>
       </Card>
     );
   }
 
-  renderTable() {
-    const { gamified } = this.props.assessment;
+  renderTabs() {
+    const { courseId, assessmentId } = this.props.match.params;
+    const { dispatch, submissions, assessment, isDownloading } = this.props;
+    const myStudentSubmissions = submissions.filter(s => s.courseStudent.myStudent);
+    const studentSubmissions = submissions.filter(s => !s.courseStudent.phantom);
+    const otherSubmissions = submissions.filter(s => s.courseStudent.phantom);
+
+    const props = { courseId, assessmentId, assessment, isDownloading };
+
     return (
-      <Table selectable={false}>
-        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-          <TableRow>
-            <TableHeaderColumn>Student Name</TableHeaderColumn>
-            <TableHeaderColumn>Submission Status</TableHeaderColumn>
-            <TableHeaderColumn>Grade</TableHeaderColumn>
-            {gamified ? <TableHeaderColumn>Experience Points</TableHeaderColumn> : null}
-          </TableRow>
-        </TableHeader>
-        <TableBody displayRowCheckbox={false}>
-          {this.renderStudents()}
-        </TableBody>
-      </Table>
+      <Tabs
+        inkBarStyle={{ backgroundColor: blue500, height: 5, marginTop: -5 }}
+        tabItemContainerStyle={{ backgroundColor: grey100 }}
+      >
+        {myStudentSubmissions.length > 0 ?
+          <Tab
+            buttonStyle={{ color: blue500 }}
+            icon={<GroupIcon style={{ color: blue500 }} />}
+            label="My Students"
+          >
+            <SubmissionsTable
+              submissions={myStudentSubmissions}
+              handleDownload={() => dispatch(downloadSubmissions('my'))}
+              {...props}
+            />
+          </Tab>
+        : null}
+        <Tab
+          buttonStyle={{ color: blue500 }}
+          icon={<PersonIcon style={{ color: blue500 }} />}
+          label="Students"
+        >
+          <SubmissionsTable
+            submissions={studentSubmissions}
+            handleDownload={() => dispatch(downloadSubmissions())}
+            {...props}
+          />
+        </Tab>
+        <Tab
+          buttonStyle={{ color: blue500 }}
+          icon={<PersonOutlineIcon style={{ color: blue500 }} />}
+          label="Others"
+        >
+          <SubmissionsTable
+            submissions={otherSubmissions}
+            handleDownload={() => dispatch(downloadSubmissions('others'))}
+            {...props}
+          />
+        </Tab>
+      </Tabs>
     );
   }
 
@@ -207,7 +202,7 @@ class VisibleSubmissionsIndex extends React.Component {
     return (
       <div>
         {this.renderHeader()}
-        {this.renderTable()}
+        {this.renderTabs()}
         {this.renderPublishConfirmation()}
       </div>
     );
