@@ -2,6 +2,8 @@
 import CourseAPI from 'api/course';
 import pollJob from 'lib/helpers/job-helpers';
 /* eslint-enable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
+import { setNotification } from './index';
+import translations from '../translations';
 import actionTypes from '../constants';
 
 const DOWNLOAD_JOB_POLL_INTERVAL = 2000;
@@ -27,22 +29,27 @@ export function publishSubmissions() {
   return (dispatch) => {
     dispatch({ type: actionTypes.PUBLISH_SUBMISSIONS_REQUEST });
 
+    const handleSuccess = () => {
+      dispatch({ type: actionTypes.PUBLISH_SUBMISSIONS_SUCCESS });
+      dispatch(setNotification(translations.publishSuccess));
+      fetchSubmissions()(dispatch);
+    };
+
+    const handleFailure = () => {
+      dispatch({ type: actionTypes.PUBLISH_SUBMISSIONS_FAILURE });
+      dispatch(setNotification(translations.requestFailure));
+    };
+
     return CourseAPI.assessment.submissions.publishAll()
       .then(response => response.data)
       .then((data) => {
         if (data.redirect_url) {
-          pollJob(data.redirect_url, PUBLISH_JOB_POLL_INTERVAL,
-            () => {
-              dispatch({ type: actionTypes.PUBLISH_SUBMISSIONS_SUCCESS });
-              fetchSubmissions()(dispatch);
-            },
-            () => dispatch({ type: actionTypes.PUBLISH_SUBMISSIONS_FAILURE })
-          );
+          pollJob(data.redirect_url, PUBLISH_JOB_POLL_INTERVAL, handleSuccess, handleFailure);
         } else {
-          dispatch({ type: actionTypes.PUBLISH_SUBMISSIONS_SUCCESS });
+          handleSuccess();
         }
       })
-      .catch(() => dispatch({ type: actionTypes.PUBLISH_SUBMISSIONS_FAILURE }));
+      .catch(handleFailure);
   };
 }
 
@@ -50,17 +57,21 @@ export function downloadSubmissions(type) {
   return (dispatch) => {
     dispatch({ type: actionTypes.DOWNLOAD_SUBMISSIONS_REQUEST });
 
+    const handleSuccess = (successData) => {
+      window.location.href = successData.redirect_url;
+      dispatch({ type: actionTypes.DOWNLOAD_SUBMISSIONS_SUCCESS });
+    };
+
+    const handleFailure = () => {
+      dispatch({ type: actionTypes.DOWNLOAD_SUBMISSIONS_FAILURE });
+      dispatch(setNotification(translations.requestFailure));
+    };
+
     return CourseAPI.assessment.submissions.downloadAll(type)
       .then(response => response.data)
       .then((data) => {
-        pollJob(data.redirect_url, DOWNLOAD_JOB_POLL_INTERVAL,
-          (successData) => {
-            window.location.href = successData.redirect_url;
-            dispatch({ type: actionTypes.DOWNLOAD_SUBMISSIONS_SUCCESS });
-          },
-          () => dispatch({ type: actionTypes.DOWNLOAD_SUBMISSIONS_FAILURE })
-        );
+        pollJob(data.redirect_url, DOWNLOAD_JOB_POLL_INTERVAL, handleSuccess, handleFailure);
       })
-      .catch(() => dispatch({ type: actionTypes.DOWNLOAD_SUBMISSIONS_FAILURE }));
+      .catch(handleFailure);
   };
 }

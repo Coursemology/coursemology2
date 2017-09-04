@@ -12,9 +12,10 @@ import GroupIcon from 'material-ui/svg-icons/social/group';
 import PersonIcon from 'material-ui/svg-icons/social/person';
 import PersonOutlineIcon from 'material-ui/svg-icons/social/person-outline';
 import { red100, yellow100, grey100, green100, blue100, blue500 } from 'material-ui/styles/colors';
+
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-
+import IntlNotificationBar, { notificationShape } from 'lib/components/IntlNotificationBar';
 import { fetchSubmissions, publishSubmissions, downloadSubmissions } from '../../actions/submissions';
 import SubmissionsTable from './SubmissionsTable';
 import { assessmentShape } from '../../propTypes';
@@ -196,7 +197,7 @@ class VisibleSubmissionsIndex extends React.Component {
   }
 
   render() {
-    const { isLoading } = this.props;
+    const { isLoading, notification } = this.props;
 
     if (isLoading) {
       return <LoadingIndicator />;
@@ -207,6 +208,7 @@ class VisibleSubmissionsIndex extends React.Component {
         {this.renderHeader()}
         {this.renderTabs()}
         {this.renderPublishConfirmation()}
+        <IntlNotificationBar notification={notification} />
       </div>
     );
   }
@@ -230,6 +232,7 @@ VisibleSubmissionsIndex.propTypes = {
       pointsAwarded: PropTypes.number,
     })
   ),
+  notification: notificationShape,
   isLoading: PropTypes.bool.isRequired,
   isDownloading: PropTypes.bool.isRequired,
   isPublishing: PropTypes.bool.isRequired,
@@ -238,6 +241,7 @@ VisibleSubmissionsIndex.propTypes = {
 function mapStateToProps(state) {
   return {
     assessment: state.assessment,
+    notification: state.notification,
     submissions: state.submissions,
     isLoading: state.submissionFlags.isLoading,
     isDownloading: state.submissionFlags.isDownloading,

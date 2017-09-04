@@ -12,9 +12,10 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.FETCH_SUBMISSION_FAILURE:
+      return { ...state, isLoading: false };
     case actions.FETCH_SUBMISSIONS_SUCCESS:
     case actions.FETCH_SUBMISSIONS_FAILURE:
-      return { ...state, isLoading: false };
+      return { ...state, isLoading: false, isPublishing: false };
 
     case actions.SAVE_DRAFT_REQUEST:
     case actions.SAVE_GRADE_REQUEST:
@@ -61,7 +62,6 @@ export default function (state = initialState, action) {
 
     case actions.PUBLISH_SUBMISSIONS_REQUEST:
       return { ...state, isPublishing: true };
-    case actions.PUBLISH_SUBMISSIONS_SUCCESS:
     case actions.PUBLISH_SUBMISSIONS_FAILURE:
       return { ...state, isPublishing: false };
     default:

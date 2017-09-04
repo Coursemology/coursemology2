@@ -199,6 +199,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.autogradeSubmissionFailure',
     defaultMessage: 'An error occurred while evaluating the answers.',
   },
+  publishSuccess: {
+    id: 'course.assessment.submission.publishSuccess',
+    defaultMessage: 'All graded submissions have been published.',
+  },
   examDialogTitle: {
     id: 'course.assessment.submission.examDialogTitle',
     defaultMessage: 'You are entering an exam.',
