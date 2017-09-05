@@ -25,9 +25,9 @@ module Course::Forum::TopicControllerHidingConcern
     when [true, false]
       t('course.forum.topics.hidden.failure')
     when [false, true]
-      t('course.forum.topics.shown.success')
+      t('course.forum.topics.unhidden.success')
     when [false, false]
-      t('course.forum.topics.shown.failure')
+      t('course.forum.topics.unhidden.failure')
     end
   end
 end

@@ -16,7 +16,7 @@
   - if can?(:set_hidden, @topic)
     - if @topic.hidden
       = link_to hidden_course_forum_topic_path(current_course, @forum, @topic, hidden: false),
-                title: t('course.forum.topics.shown.tag'), class: ['btn', 'btn-info'],
+                title: t('course.forum.topics.unhidden.tag'), class: ['btn', 'btn-info'],
                 method: :put do
         = fa_icon 'eye'.freeze
     - else

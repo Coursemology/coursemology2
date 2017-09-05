@@ -48,7 +48,19 @@ en:
           tag: 'Hide'
           success: "The topic was successfully hidden."
           failure: "The topic could not be hidden."
-        shown:
-          tag: 'Show'
-          success: "The topic was successfully shown."
-          failure: "The topic could not be shown."
+        unhidden:
+          tag: 'Unhide'
+          success: "The topic was successfully unhidden."
+          failure: "The topic could not be unhidden."
+        resolved:
+          message: 'This question topic has been resolved.'
+          tag: 'Mark as resolved'
+          tag_html: '%{resolve_link} once you have found the answer.'
+          success: "The topic was successfully marked as resolved."
+          failure: "The topic could not be marked as resolved."
+        unresolved:
+          message: 'This question topic is unresolved.'
+          tag: 'Mark as unresolved'
+          tag_html: '%{unresolve_link}.'
+          success: "The topic was successfully marked as unresolved."
+          failure: "The topic could not be marked as unresolved."

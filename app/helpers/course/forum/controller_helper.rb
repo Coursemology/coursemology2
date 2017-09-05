@@ -11,10 +11,11 @@ module Course::Forum::ControllerHelper
     case topic.topic_type
     when 'question'
       if topic.resolved?
-        fa_icon 'question-circle', title: t('course.forum.topics.topic.question.resolved')
+        fa_icon 'check-circle', title: t('course.forum.topics.topic.question.resolved'),
+                                class: 'text-info'
       else
         fa_icon 'question-circle', title: t('course.forum.topics.topic.question.unresolved'),
-                                   style: 'color: red'
+                                   class: 'text-warning'
       end
     when 'sticky'
       fa_icon 'thumb-tack', title: t('course.forum.topics.topic.sticky')

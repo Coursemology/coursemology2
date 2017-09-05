@@ -9,6 +9,7 @@ module Course::ForumsAbilityComponent
       allow_students_create_topics
       allow_students_update_topics
       allow_student_reply_unlocked_topics
+      allow_student_resolve_own_topics
       allow_staff_manage_forums
       allow_staff_manage_topics
     end
@@ -48,6 +49,10 @@ module Course::ForumsAbilityComponent
   def allow_student_reply_unlocked_topics
     can :reply, Course::Forum::Topic, topic_all_course_users_hash.reverse_merge(locked: false)
     cannot :reply, Course::Forum::Topic, topic_all_course_users_hash.reverse_merge(locked: true)
+  end
+
+  def allow_student_resolve_own_topics
+    can :resolve, Course::Forum::Topic, creator_id: user.id
   end
 
   def allow_staff_manage_forums
