@@ -4,12 +4,12 @@ require 'rails_helper'
 RSpec.describe Course::UserInvitationService, type: :service do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
-    def temp_csv_from_attributes(records)
+    def temp_csv_from_attributes(records, roles = [])
       Tempfile.new(File.basename(__FILE__, '.*')).tap do |file|
         file.write(CSV.generate do |csv|
-          csv << [:name, :email]
-          records.each do |user|
-            csv << [user.name, user.email]
+          csv << [:name, :email, :role]
+          records.zip(roles).each do |user, role|
+            csv << (role.blank? ? [user.name, user.email] : [user.name, user.email, role])
           end
         end)
         file.rewind
@@ -27,27 +27,30 @@ RSpec.describe Course::UserInvitationService, type: :service do
     end
     subject { Course::UserInvitationService.new(user, course) }
 
+    let(:existing_roles) { Course::UserInvitation.roles.keys.sample(3) }
     let(:existing_users) do
       (1..3).map do
         create(:instance_user).user
       end
     end
     let(:existing_user_attributes) do
-      existing_users.map do |user|
-        { name: user.name, email: user.email, role: Course::UserInvitation.roles.values.sample }
+      existing_users.each_with_index.map do |user, id|
+        { name: user.name, email: user.email, role: Course::UserInvitation.roles[existing_roles[id]] }
       end
     end
+    let(:new_roles) { Course::UserInvitation.roles.keys.sample(3) }
     let(:new_users) do
       (1..3).map do
         build(:user)
       end
     end
     let(:new_user_attributes) do
-      new_users.map do |user|
-        { name: user.name, email: user.email, role: Course::UserInvitation.roles.values.sample }
+      new_users.each_with_index.map do |user, id|
+        { name: user.name, email: user.email, role: Course::UserInvitation.roles[new_roles[id]] }
       end
     end
     let(:users) { existing_users + new_users }
+    let(:roles) { existing_roles + new_roles }
     let(:user_attributes) { existing_user_attributes + new_user_attributes }
     let(:user_form_attributes) do
       user_attributes.map do |hash|
@@ -202,7 +205,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
     describe '#invite_from_file' do
       subject { stubbed_user_invitation_service }
-      let(:temp_csv) { temp_csv_from_attributes(users) }
+      let(:temp_csv) { temp_csv_from_attributes(users, roles) }
       after { temp_csv.close! }
 
       it 'accepts a file with name/header' do
@@ -212,8 +215,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
       it 'calls #invite_users with appropriate user attributes' do
         result = subject.send(:invite_from_file, temp_csv)
-        # TODO: file upload role support to be implemented separately
-        expect(result).to eq(user_attributes.map { |usr| usr.except(:role) })
+        expect(result).to eq(user_attributes)
       end
 
       context 'when the provided file is invalid' do
@@ -223,6 +225,36 @@ RSpec.describe Course::UserInvitationService, type: :service do
                          File.open(File.join(__dir__,
                                              '../../fixtures/course/invalid_invitation.csv')))
           end.to raise_exception(CSV::MalformedCSVError)
+        end
+      end
+
+      context 'when the provided file has no roles' do
+        let(:temp_csv_without_role) { temp_csv_from_attributes(users) }
+        after { temp_csv_without_role.close! }
+
+        it `defaults the role to student` do
+          result = subject.send(:invite_from_file, temp_csv_without_role)
+          result.each do |attr|
+            expect(attr[:role]).to eq(Course::UserInvitation.roles[:student])
+          end
+        end
+      end
+
+      context 'when the provided csv file has slightly invalid role specifications' do
+        subject do
+          stubbed_user_invitation_service.
+            send(:invite_from_file,
+                 File.open(File.join(__dir__,
+                                     '../../fixtures/course/fuzzy_roles_invitation.csv')))
+        end
+
+        it 'defaults blank columns to student' do
+          expect(subject[0][:role]).to eq(Course::UserInvitation.roles[:student])
+        end
+
+        it 'parses roles correctly anyway' do
+          expect(subject[1][:role]).to eq(Course::UserInvitation.roles[:teaching_assistant])
+          expect(subject[2][:role]).to eq(Course::UserInvitation.roles[:teaching_assistant])
         end
       end
 

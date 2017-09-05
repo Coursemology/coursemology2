@@ -33,7 +33,10 @@ en:
           individual: 'Individually add users'
           registration_code: 'Registration code'
         file:
-          format: 'Files uploaded must be in the following format:'
+          format_html: >
+           Files uploaded must be in the following format below:<br />
+           Roles are optional and can be either of [student, teaching_assistant, manager, owner], and defaults to
+           student if omitted
         individual:
           add_user: 'Add User'
         registration_code:
