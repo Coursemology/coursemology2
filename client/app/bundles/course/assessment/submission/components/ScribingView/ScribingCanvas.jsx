@@ -66,7 +66,7 @@ export default class ScribingCanvas extends React.Component {
   componentDidMount() {
     this.initializeCanvas(
         this.props.answerId,
-        this.props.scribing.answer.image_path);
+        this.props.scribing.answer.image_url);
   }
 
   shouldComponentUpdate() {
@@ -360,8 +360,7 @@ export default class ScribingCanvas extends React.Component {
     this.isScribblesLoaded = true;
   }
 
-  initializeCanvas(answerId, imagePath) {
-    const imageUrl = `${window.location.origin}/${imagePath}`;
+  initializeCanvas(answerId, imageUrl) {
     this.image = new Image(); // eslint-disable-line no-undef
     this.image.src = imageUrl;
 

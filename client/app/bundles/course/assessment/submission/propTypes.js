@@ -132,7 +132,7 @@ export const scribbleShape = PropTypes.shape({
 
 export const scribingAnswerShape = PropTypes.shape({
   scribbles: PropTypes.arrayOf(scribbleShape),
-  image_path: PropTypes.string,
+  image_url: PropTypes.string,
   user_id: PropTypes.number,
   answer_id: PropTypes.number,
 });
