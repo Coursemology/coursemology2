@@ -5,6 +5,8 @@
   th
     - if topic.locked?
       span => fa_icon 'lock'.freeze, title: t('.locked')
+    span => topic_type_icon(topic)
+
     = link_to(format_inline_text(topic.title),
               course_forum_topic_path(current_course, @forum, topic))
 

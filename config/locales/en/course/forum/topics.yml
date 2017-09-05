@@ -4,6 +4,11 @@ en:
       topics:
         topic:
           locked: 'This topic is locked.'
+          question:
+            resolved: 'Question'
+            unresolved: 'Question (unresolved)'
+          sticky: 'Sticky'
+          announcement: 'Announcement'
           started_by_html: 'Started by %{user}'
         new_topic:
           header: 'New Topic'
