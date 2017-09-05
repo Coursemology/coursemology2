@@ -1,6 +1,10 @@
 import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
+  unstarted: {
+    id: 'course.assessment.submission.unstarted',
+    defaultMessage: 'Not Started',
+  },
   attempting: {
     id: 'course.assessment.submission.attempting',
     defaultMessage: 'Attempting',
@@ -156,6 +160,11 @@ const translations = defineMessages({
     defaultMessage: 'Are you sure you want to reset your answer? This action is irreversible \
                     and you will lose all your current work for this question.',
   },
+  publishConfirmation: {
+    id: 'course.assessment.submission.publishConfirmation',
+    defaultMessage: 'THIS ACTION IS IRREVERSIBLE All graded submissions will be published and \
+                     students will see their own grades. Are you sure you want to publish?',
+  },
   lateSubmission: {
     id: 'course.assessment.submission.lateSubmission',
     defaultMessage: 'This submission is LATE! You may want to penalize the student for late submission.',
@@ -189,6 +198,10 @@ const translations = defineMessages({
   autogradeSubmissionFailure: {
     id: 'course.assessment.submission.autogradeSubmissionFailure',
     defaultMessage: 'An error occurred while evaluating the answers.',
+  },
+  publishSuccess: {
+    id: 'course.assessment.submission.publishSuccess',
+    defaultMessage: 'All graded submissions have been published.',
   },
   examDialogTitle: {
     id: 'course.assessment.submission.examDialogTitle',

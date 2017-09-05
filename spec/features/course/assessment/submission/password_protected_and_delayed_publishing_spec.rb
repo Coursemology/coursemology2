@@ -31,7 +31,7 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
           ).click
         end
         # The user should be redirect to submission edit page
-        expect(page).to have_selector('div#submission-edit')
+        expect(page).to have_selector('div#course-assessment-submission')
 
         submission = assessment.submissions.last
 
@@ -50,7 +50,7 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
         fill_in 'session_password', with: assessment.password
         click_button I18n.t('course.assessment.sessions.new.continue')
 
-        expect(page).to have_selector('div#submission-edit')
+        expect(page).to have_selector('div#course-assessment-submission')
       end
 
       pending 'I can edit and save my submission', js: true do

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 module Course::Assessment::Submission::SubmissionsHelper
   include Course::Assessment::Submission::SubmissionsAutogradedHelper
-  include Course::Assessment::Submission::SubmissionsWorkflowStateHelper
   include Course::Assessment::Answer::ProgrammingHelper
   include Course::Assessment::Answer::ProgrammingTestCaseHelper
 

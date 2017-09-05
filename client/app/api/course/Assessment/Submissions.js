@@ -1,13 +1,19 @@
 import BaseAssessmentAPI from './Base';
 
 export default class SubmissionsAPI extends BaseAssessmentAPI {
-  /**
-  * Fetches a Submission
-  *
-  * @param {number} submissionId
-  * @return {Promise}
-  * success response: submission_with_questions_and_answers
-  */
+
+  index() {
+    return this.getClient().get(this._getUrlPrefix());
+  }
+
+  downloadAll(students) {
+    return this.getClient().get(`${this._getUrlPrefix()}/download_all`, { params: { students } });
+  }
+
+  publishAll() {
+    return this.getClient().patch(`${this._getUrlPrefix()}/publish_all`);
+  }
+
   edit(submissionId) {
     return this.getClient().get(`${this._getUrlPrefix()}/${submissionId}/edit`);
   }

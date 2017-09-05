@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessment: Submissions: Submissions' do
+RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -43,24 +43,22 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         group_student
         visit course_assessment_submissions_path(course, assessment)
 
-        expect(page).
-          to have_text(I18n.t('course.assessment.submission.submissions.index.student_header'))
-        expect(page).
-          to have_text(I18n.t('course.assessment.submission.submissions.index.my_student_header'))
-        expect(page).
-          to have_text(I18n.t('course.assessment.submission.submissions.index.other_header'))
+        expect(page).to have_text(/My Students/i)
+        expect(page).to have_text(/Students/i)
+        expect(page).to have_text(/Others/i)
+
+        find('#students-tab').click
 
         [submitted_submission, attempting_submission, published_submission, graded_submission].
           each do |submission|
-          within all(content_tag_selector(submission)).last do
-            expect(page).
-              to have_text(submission.class.human_attribute_name(submission.workflow_state))
-            expect(page).to have_text(submission.current_points_awarded)
-          end
+          expect(page).to have_text(submission.course_user.name)
+          expect(page).to have_text(submission.current_points_awarded)
         end
 
         # Phantom student did not attempt submissions
-        expect(page).to have_tag('tr.no-submission', count: 1)
+        find('#others-tab').click
+        expect(page).to have_text(phantom_student.name)
+        expect(page).to have_text('Not Started')
       end
     end
 
@@ -73,10 +71,13 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
       scenario 'I can publish all graded exams' do
         visit course_assessment_submissions_path(course, assessment)
 
-        click_link I18n.t('course.assessment.submission.submissions.index.publish')
+        find('#students-tab').click
 
-        wait_for_job
-        expect(current_path).to eq(course_assessment_submissions_path(course, assessment))
+        expect(page).to have_text('Graded but not published')
+        click_button('Publish Grades')
+        accept_confirm_dialog
+        expect(page).not_to have_text('Graded but not published')
+
         expect(graded_submission.reload).to be_published
         expect(graded_submission.publisher).to eq(user)
         expect(graded_submission.published_at).to be_present
@@ -84,13 +85,6 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(graded_submission.awarded_at).to be_present
         expect(graded_submission.draft_points_awarded).to be_nil
         expect(graded_submission.points_awarded).not_to be_nil
-
-        message = I18n.t('course.assessment.submission.submissions.publish_all.success')
-        expect(page).to have_selector('div', text: message)
-
-        click_link I18n.t('course.assessment.submission.submissions.index.publish')
-        message = I18n.t('course.assessment.submission.submissions.publish_all.notice')
-        expect(page).to have_selector('div', text: message)
       end
     end
   end

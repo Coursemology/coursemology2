@@ -5,41 +5,8 @@ en:
         submissions:
           index:
             submissions: 'Submissions'
-            my_student_header: 'My Student Submissions'
-            student_header: 'Student Submissions'
-            other_header: 'Other Submissions'
-            publish: 'Publish Grades'
-            confirm_publish: |
-
-              THIS ACTION IS IRREVERSIBLE
-
-              All graded submissions will be published and students will see their own grades.
-
-              Are you sure you want to publish?
           create:
             failure: 'Could not create submission: %{error}'
             no_questions: 'This assessment has no questions. Check the description for your tasks.'
           edit:
             attempt: :'course.assessment.assessments.assessment.attempt'
-          publish_all:
-            success: 'All graded submissions have been published.'
-            notice: 'There are no graded submissions.'
-          download_all:
-            not_downloadable: 'This assessment has no downloadable files.'
-            no_submissions: 'There are no confirmed submissions.'
-          statistics:
-            publish_grade_hint: "These grades can't be seen by the student until they are published."
-          submissions:
-            student_name: 'Student Name'
-            status: 'Submission Status'
-            grade: 'Grade'
-            experience_points: 'Experience Points'
-            download: 'Download'
-          submission:
-            graded_not_published_warning: >
-              The grade and experience points are in a draft state and cannot be seen by
-              the student. Publish all grades by clicking the 'Publish Grades' button on
-              the top right side of the page.
-            logs: 'View Access Logs'
-          no_submission:
-            not_started: 'Not Started'

@@ -7,6 +7,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHeaderColumn, TableRowCol
 import ReactTooltip from 'react-tooltip';
 
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { formatDateTime } from '../utils';
 import { gradingShape, questionShape, submissionShape } from '../propTypes';
 import actionTypes, { workflowStates } from '../constants';
@@ -71,10 +72,10 @@ class VisibleGradingPanel extends Component {
       {intl.formatMessage(translations[workflowState])}
       {workflowState === workflowStates.Graded ? (
         <span style={{ display: 'inline-block', marginLeft: 5 }}>
-          <a data-tip data-for="staff-only-test-cases" data-offset="{'left' : -8}">
+          <a data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
             <i className="fa fa-exclamation-triangle" />
           </a>
-          <ReactTooltip id="staff-only-test-cases" effect="solid">
+          <ReactTooltip id="unpublished-grades" effect="solid">
             <FormattedMessage {...translations.unpublishedGrades} />
           </ReactTooltip>
         </span>
@@ -165,12 +166,11 @@ class VisibleGradingPanel extends Component {
     const grader = questionGrading && questionGrading.grader;
 
     const courseId = getCourseId();
-    const getCourseUserURL = id => `/courses/${courseId}/users/${id}`;
 
     let graderInfo = null;
     if (showGrader) {
       if (grader && grader.id) {
-        graderInfo = <a href={getCourseUserURL(grader.id)}>{grader.name}</a>;
+        graderInfo = <a href={getCourseUserURL(courseId, grader.id)}>{grader.name}</a>;
       } else if (grader) {
         graderInfo = grader.name;
       } else {

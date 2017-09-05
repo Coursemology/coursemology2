@@ -10,8 +10,8 @@ en:
         submission:
           grade: 'Grade'
           view: 'View'
-          graded_not_published_warning:
-            :'course.assessment.submission.submissions.statistics.publish_grade_hint'
+          graded_not_published_warning: >
+            These grades can't be seen by the student until they are published.
         tabs:
           my_students_pending: 'My Students'
           all_pending: 'All Pending Submissions'

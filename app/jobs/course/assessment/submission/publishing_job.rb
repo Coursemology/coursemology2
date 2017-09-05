@@ -11,8 +11,7 @@ class Course::Assessment::Submission::PublishingJob < ApplicationJob
       publish_submissions(assessment, publisher)
     end
 
-    redirect_to course_assessment_submissions_path(assessment.course, assessment,
-                                                   published_success: true)
+    redirect_to course_assessment_submissions_path(assessment.course, assessment)
   end
 
   private

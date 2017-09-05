@@ -21,12 +21,15 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def index
     authorize!(:manage, @assessment)
-    @assessment = @assessment.calculated(:maximum_grade)
-    @submissions = @submissions.includes(:answers)
-    @my_students = current_course_user&.my_students || []
-    @course_students = current_course.course_users.students.order_alphabetically
-    if params[:published_success]
-      flash.now[:success] = t('course.assessment.submission.submissions.publish_all.success')
+
+    respond_to do |format|
+      format.html {}
+      format.json do
+        @assessment = @assessment.calculated(:maximum_grade)
+        @submissions = @submissions.calculated(:log_count).includes(:answers)
+        @my_students = current_course_user&.my_students || []
+        @course_students = current_course.course_users.students.order_alphabetically
+      end
     end
   end
 
@@ -54,7 +57,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     return if @submission.attempting?
 
     respond_to do |format|
-      format.html { render 'edit' }
+      format.html {}
       format.json do
         calculated_fields = [:graded_at]
         @submission = @submission.calculated(*calculated_fields)
@@ -94,10 +97,12 @@ class Course::Assessment::Submission::SubmissionsController < \
     if !graded_submissions.empty?
       job = Course::Assessment::Submission::PublishingJob.
             perform_later(@assessment, current_user).job
-      redirect_to(job_path(job))
+      respond_to do |format|
+        format.html { redirect_to(job_path(job)) }
+        format.json { render json: { redirect_url: job_path(job) } }
+      end
     else
-      redirect_to course_assessment_submissions_path(current_course, @assessment),
-                  notice: t('.notice')
+      head :ok
     end
   end
 
@@ -105,11 +110,9 @@ class Course::Assessment::Submission::SubmissionsController < \
   def download_all
     authorize!(:manage, @assessment)
     if !@assessment.downloadable?
-      redirect_to course_assessment_submissions_path(current_course, @assessment),
-                  notice: t('.not_downloadable')
+      head :bad_request
     elsif @assessment.submissions.confirmed.empty?
-      redirect_to course_assessment_submissions_path(current_course, @assessment),
-                  notice: t('.no_submissions')
+      head :bad_request
     else
       job = Course::Assessment::Submission::ZipDownloadJob.
             perform_later(current_course_user, @assessment, params[:students]).job

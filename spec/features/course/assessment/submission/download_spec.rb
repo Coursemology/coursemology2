@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessment: Submissions: Download' do
+RSpec.describe 'Course: Assessment: Submissions: Download', js: true do
   let(:instance) { Instance.default }
   let(:types) { Course::Assessment::Submission::ZipDownloadService::STUDENTS }
 
@@ -23,14 +23,8 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
         submission
         visit course_assessment_submissions_path(course, assessment)
 
-        find_link(
-          I18n.t('course.assessment.submission.submissions.submissions.download'), href:
-          download_all_course_assessment_submissions_path(course, assessment)
-        ).click
-
-        wait_for_job
-
-        expect(page.response_headers['Content-Type']).to eq('application/zip')
+        find('#students-tab').click
+        expect(page).to have_css('.download-submissions:enabled')
       end
 
       context 'when there are phantom students' do
@@ -40,15 +34,8 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
           submission
           visit course_assessment_submissions_path(course, assessment)
 
-          find_link(
-            I18n.t('course.assessment.submission.submissions.submissions.download'), href:
-            download_all_course_assessment_submissions_path(course, assessment,
-                                                            students: types[:phantom])
-          ).click
-
-          wait_for_job
-
-          expect(page.response_headers['Content-Type']).to eq('application/zip')
+          find('#others-tab').click
+          expect(page).to have_css('.download-submissions:enabled')
         end
       end
 
@@ -66,57 +53,27 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
           submission
           visit course_assessment_submissions_path(course, assessment)
 
-          find_link(
-            I18n.t('course.assessment.submission.submissions.submissions.download'), href:
-            download_all_course_assessment_submissions_path(course, assessment,
-                                                            students: types[:my])
-          ).click
-
-          wait_for_job
-
-          expect(page.response_headers['Content-Type']).to eq('application/zip')
+          find('#my-students-tab').click
+          expect(page).to have_css('.download-submissions:enabled')
         end
       end
 
       context 'when there are no confirmed submissions' do
-        scenario 'I should not see the download button' do
+        scenario 'The download button should be disabled' do
           visit course_assessment_submissions_path(course, assessment)
 
-          expect(page).not_to have_link(
-            I18n.t('course.assessment.submission.submissions.submissions.download'), href:
-            download_all_course_assessment_submissions_path(course, assessment)
-          )
-        end
-
-        scenario 'I should not be able to download a zip file' do
-          visit download_all_course_assessment_submissions_path(course, assessment)
-
-          expect(page).to have_text(
-            I18n.t('course.assessment.submission.submissions.download_all.no_submissions')
-          )
+          expect(page).not_to have_css('.download-submissions:enabled')
         end
       end
 
       context 'when the assessment has no downloadable answers' do
         let(:assessment) { create(:assessment, :published_with_mcq_question, course: course) }
 
-        scenario 'I should not see the download button' do
+        scenario 'The download button should be disabled' do
           submission
           visit course_assessment_submissions_path(course, assessment)
 
-          expect(page).not_to have_link(
-            I18n.t('course.assessment.submission.submissions.submissions.download'), href:
-            download_all_course_assessment_submissions_path(course, assessment)
-          )
-        end
-
-        scenario 'I should not be able to download a zip file' do
-          submission
-          visit download_all_course_assessment_submissions_path(course, assessment)
-
-          expect(page).to have_text(
-            I18n.t('course.assessment.submission.submissions.download_all.not_downloadable')
-          )
+          expect(page).not_to have_css('.download-submissions:enabled')
         end
       end
     end
