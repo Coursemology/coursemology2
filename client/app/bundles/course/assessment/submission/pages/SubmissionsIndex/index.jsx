@@ -21,6 +21,7 @@ import SubmissionsTable from './SubmissionsTable';
 import { assessmentShape } from '../../propTypes';
 import { workflowStates } from '../../constants';
 import translations from '../../translations';
+import submissionsTranslations from './translations';
 
 const styles = {
   histogram: {
@@ -106,7 +107,7 @@ class VisibleSubmissionsIndex extends React.Component {
         <CardText>{this.renderHistogram()}</CardText>
         <CardActions>
           <Toggle
-            label="Include phantom students"
+            label={<FormattedMessage {...submissionsTranslations.includePhantoms} />}
             labelPosition="right"
             toggled={includePhantoms}
             onToggle={() => this.setState({ includePhantoms: !includePhantoms })}
@@ -114,7 +115,7 @@ class VisibleSubmissionsIndex extends React.Component {
           <FlatButton
             disabled={isPublishing || !this.canPublish()}
             secondary
-            label="Publish Grades"
+            label={<FormattedMessage {...submissionsTranslations.publishGrades} />}
             labelPosition="before"
             icon={isPublishing ? <CircularProgress size={24} /> : null}
             onTouchTap={() => this.setState({ publishConfirmation: true })}
@@ -143,7 +144,7 @@ class VisibleSubmissionsIndex extends React.Component {
             id="my-students-tab"
             buttonStyle={{ color: blue500 }}
             icon={<GroupIcon style={{ color: blue500 }} />}
-            label="My Students"
+            label={<FormattedMessage {...submissionsTranslations.myStudents} />}
           >
             <SubmissionsTable
               submissions={myStudentSubmissions}
@@ -156,7 +157,7 @@ class VisibleSubmissionsIndex extends React.Component {
           id="students-tab"
           buttonStyle={{ color: blue500 }}
           icon={<PersonIcon style={{ color: blue500 }} />}
-          label="Students"
+          label={<FormattedMessage {...submissionsTranslations.students} />}
         >
           <SubmissionsTable
             submissions={studentSubmissions}
@@ -168,7 +169,7 @@ class VisibleSubmissionsIndex extends React.Component {
           id="others-tab"
           buttonStyle={{ color: blue500 }}
           icon={<PersonOutlineIcon style={{ color: blue500 }} />}
-          label="Others"
+          label={<FormattedMessage {...submissionsTranslations.others} />}
         >
           <SubmissionsTable
             submissions={otherSubmissions}

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import { red600, blue600 } from 'material-ui/styles/colors';
@@ -13,6 +13,7 @@ import { getCourseUserURL, getEditSubmissionURL, getSubmissionLogsURL } from 'li
 import { assessmentShape } from '../../propTypes';
 import { workflowStates } from '../../constants';
 import translations from '../../translations';
+import submissionsTranslations from './translations';
 
 const styles = {
   unstartedText: {
@@ -27,14 +28,6 @@ const styles = {
   },
 };
 
-const submissionsTranslations = defineMessages({
-  publishTop: {
-    id: 'course.assessment.submission.publishTop',
-    defaultMessage: 'The grade and experience points are not visible to the student. \
-                    Publish all grades by clicking the button at the top of this page.',
-  },
-});
-
 export default class SubmissionsTable extends React.Component {
 
   static renderUnpublishedWarning(submission) {
@@ -46,7 +39,7 @@ export default class SubmissionsTable extends React.Component {
           <i className="fa fa-exclamation-triangle" />
         </a>
         <ReactTooltip id="unpublished-grades" effect="solid">
-          <FormattedMessage {...submissionsTranslations.publishTop} />
+          <FormattedMessage {...submissionsTranslations.publishNotice} />
         </ReactTooltip>
       </span>
     );
@@ -92,7 +85,7 @@ export default class SubmissionsTable extends React.Component {
         <a href={getSubmissionLogsURL(courseId, assessmentId, submission.id)}>
           <HistoryIcon style={{ color: submission.logCount > 1 ? red600 : blue600 }} />
           <ReactTooltip id={`access-logs-${submission.id}`} effect="solid">
-            Access Logs
+            <FormattedMessage {...submissionsTranslations.accessLogs} />
           </ReactTooltip>
         </a>
       </div>
@@ -142,7 +135,7 @@ export default class SubmissionsTable extends React.Component {
       >
         <DownloadIcon />
         <ReactTooltip id="download-btn" effect="solid">
-          Download
+          <FormattedMessage {...submissionsTranslations.download} />
         </ReactTooltip>
       </IconButton>
     );
@@ -151,16 +144,20 @@ export default class SubmissionsTable extends React.Component {
   render() {
     const { submissions, assessment } = this.props;
 
+    const tableHeaderColumnFor = field => (
+      <TableHeaderColumn style={styles.tableCell}>
+        <FormattedMessage {...submissionsTranslations[field]} />
+      </TableHeaderColumn>
+    );
+
     return (
       <Table selectable={false}>
         <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
           <TableRow>
-            <TableHeaderColumn style={styles.tableCell}>Student Name</TableHeaderColumn>
-            <TableHeaderColumn style={styles.tableCell}>Submission Status</TableHeaderColumn>
-            <TableHeaderColumn style={styles.tableCell}>Grade</TableHeaderColumn>
-            {assessment.gamified ?
-              <TableHeaderColumn style={styles.tableCell}>Experience Points</TableHeaderColumn>
-            : null}
+            {tableHeaderColumnFor('studentName')}
+            {tableHeaderColumnFor('submissionStatus')}
+            {tableHeaderColumnFor('grade')}
+            {assessment.gamified ? tableHeaderColumnFor('experiencePoints') : null}
             <TableHeaderColumn style={{ width: 48, padding: 0 }}>
               {this.renderDownloadButton()}
             </TableHeaderColumn>
