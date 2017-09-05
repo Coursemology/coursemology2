@@ -18,7 +18,6 @@ const propTypes = {
   iconComponent: PropTypes.func,
   onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
-  popoverComponent: PropTypes.func,
 };
 
 const style = {
@@ -70,8 +69,7 @@ export default class ToolDropdown extends Component {
   render() {
     const {
       onClick, onClickIcon, onTouchTapChevron,
-      popoverComponent, tooltip, showTooltip,
-      onMouseEnter, onMouseLeave,
+      tooltip, showTooltip, onMouseEnter, onMouseLeave,
     } = this.props;
 
     return (
@@ -100,8 +98,6 @@ export default class ToolDropdown extends Component {
             onTouchTap={onTouchTapChevron}
           />
         </div>
-
-        { popoverComponent() }
       </div>
     );
   }

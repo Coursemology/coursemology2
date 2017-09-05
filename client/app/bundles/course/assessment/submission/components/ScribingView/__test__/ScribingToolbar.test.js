@@ -1,14 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
+import shallowUntil from 'utils/shallowUntil';
 import MockAdapter from 'axios-mock-adapter';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import CourseAPI from 'api/course';
 import store from 'course/assessment/submission/store';
 import ScribingView from 'course/assessment/submission/containers/ScribingView';
-import { openPopover, closePopover, openColorPicker, closeColorPicker,
-         setColoringToolColor } from '../../../actions/scribing';
-import actionTypes, { scribingToolColor, scribingPopoverTypes } from '../../../constants';
+import ScribingToolbar from 'course/assessment/submission/components/ScribingView/ScribingToolbar';
+import { setColoringToolColor } from '../../../actions/scribing';
+import actionTypes, { scribingTools, scribingToolColor, scribingToolThickness,
+      scribingToolLineStyle, scribingPopoverTypes } from '../../../constants';
 
 const client = CourseAPI.assessment.answer.scribing.getClient();
 const mock = new MockAdapter(client);
@@ -65,6 +68,61 @@ mockAnchor.getBoundingClientRect.mockReturnValue({
   height: 100,
 });
 
+function initializeToolColor() {
+  const colors = {};
+  Object.values(scribingToolColor).forEach(toolType =>
+   (colors[toolType] = '#000000')
+  );
+  return colors;
+}
+
+function initializeToolThickness() {
+  const thickness = {};
+  Object.values(scribingToolThickness).forEach(toolType =>
+   (thickness[toolType] = 1)
+  );
+  return thickness;
+}
+
+function initializeLineStyles() {
+  const lineStyles = {};
+  Object.values(scribingToolLineStyle).forEach(toolType =>
+   (lineStyles[toolType] = 'solid')
+  );
+  return lineStyles;
+}
+
+const props = {
+  answerId: 1,
+  scribing: {
+    answer: {
+      scribbles: [],
+      image_path: '',
+      user_id: 1,
+      answer_id: 1,
+    },
+    colors: initializeToolColor(),
+    lineStyles: initializeLineStyles(),
+    thickness: initializeToolThickness(),
+    canvas: {},
+    isCanvasLoaded: false,
+    isLoading: false,
+    isSaving: false,
+    isSaved: false,
+    hasError: false,
+    selectedTool: scribingTools.SELECT,
+  },
+  setLayerDisplay: jest.fn(),
+  setToolSelected: jest.fn(),
+  setFontFamily: jest.fn(),
+  setFontSize: jest.fn(),
+  setLineStyleChip: jest.fn(),
+  setColoringToolColor: jest.fn(),
+  setToolThickness: jest.fn(),
+  setSelectedShape: jest.fn(),
+  clearSavingStatus: jest.fn(),
+};
+
 beforeEach(() => {
   mock.reset();
   store.dispatch({
@@ -75,41 +133,55 @@ beforeEach(() => {
 
 describe('ScribingToolbar', () => {
   it('renders tool popovers', async () => {
-    const editPage = mount(
-      <ProviderWrapper store={store}>
-        <MemoryRouter
-          initialEntries={[`/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`]}
-        >
-          <ScribingView answerId={answerId} />
-        </MemoryRouter>
-      </ProviderWrapper>
+    const scribingToolbar = shallowUntil(
+      <ScribingToolbar {...props} />,
+      {
+        context: { intl, muiTheme }, // eslint-disable-line no-undef
+        childContextTypes: {
+          intl: intlShape,
+          muiTheme: PropTypes.object,
+        },
+      },
+      'ScribingToolbar'
     );
 
-    const popoverType = scribingPopoverTypes.DRAW;
-    store.dispatch(openPopover(answerId, popoverType, mockAnchor));
-    expect(editPage.find('DrawPopover').prop('open')).toEqual(true);
-
-    store.dispatch(closePopover(answerId, popoverType));
-    expect(editPage.find('DrawPopover').prop('open')).toEqual(false);
+    scribingToolbar.setState({
+      popovers: {
+        [scribingPopoverTypes.TYPE]: true,
+      },
+    });
+    scribingToolbar.update();
+    expect(scribingToolbar.find('InjectIntl(TypePopover)').prop('open')).toEqual(true);
   });
 
   it('renders color pickers', async () => {
-    const editPage = mount(
-      <ProviderWrapper store={store}>
-        <MemoryRouter
-          initialEntries={[`/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`]}
-        >
-          <ScribingView answerId={answerId} />
-        </MemoryRouter>
-      </ProviderWrapper>
+    const scribingToolbar = shallowUntil(
+      <ScribingToolbar {...props} />,
+      {
+        context: { intl, muiTheme }, // eslint-disable-line no-undef
+        childContextTypes: {
+          intl: intlShape,
+          muiTheme: PropTypes.object,
+        },
+      },
+      'ScribingToolbar'
     );
 
-    const toolType = scribingToolColor.TYPE;
-    store.dispatch(openColorPicker(answerId, toolType, mockAnchor));
-    expect(editPage.find('TypePopover').prop('colorPickerPopoverOpen')).toEqual(true);
+    scribingToolbar.setState({
+      colorDropdowns: {
+        [scribingToolColor.TYPE]: true,
+      },
+    });
+    scribingToolbar.update();
+    expect(scribingToolbar.find('InjectIntl(TypePopover)').prop('colorPickerPopoverOpen')).toEqual(true);
 
-    store.dispatch(closeColorPicker(answerId, toolType));
-    expect(editPage.find('TypePopover').prop('colorPickerPopoverOpen')).toEqual(false);
+    scribingToolbar.setState({
+      colorDropdowns: {
+        [scribingToolColor.TYPE]: false,
+      },
+    });
+    scribingToolbar.update();
+    expect(scribingToolbar.find('InjectIntl(TypePopover)').prop('colorPickerPopoverOpen')).toEqual(false);
   });
 
   it('sets the color from the color picker', async () => {

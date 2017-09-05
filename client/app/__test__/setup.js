@@ -28,6 +28,7 @@ global.courseId = courseId;
 global.window = window;
 global.intl = intlProvider.getChildContext().intl;
 global.intlShape = intlShape;
+global.muiTheme = muiTheme;
 global.$ = jQuery;
 global.jQuery = jQuery;
 global.buildContextOptions = buildContextOptions;

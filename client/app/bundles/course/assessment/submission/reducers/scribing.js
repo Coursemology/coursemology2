@@ -1,6 +1,6 @@
 import actions, { canvasActionTypes, scribingTools, scribingShapes,
       scribingToolColor, scribingToolThickness, scribingToolLineStyle,
-      scribingPopoverTypes } from '../constants';
+      } from '../constants';
 
 function initializeToolColor() {
   const colors = {};
@@ -26,22 +26,6 @@ function initializeLineStyles() {
   return lineStyles;
 }
 
-function initializeColorDropdowns() {
-  const colorDropdowns = {};
-  Object.values(scribingToolColor).forEach(toolType =>
-   (colorDropdowns[toolType] = false)
-  );
-  return colorDropdowns;
-}
-
-function initializePopovers() {
-  const popovers = {};
-  Object.values(scribingPopoverTypes).forEach(popoverType =>
-   (popovers[popoverType] = false)
-  );
-  return popovers;
-}
-
 export default function (state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS: {
@@ -55,18 +39,13 @@ export default function (state = {}, action) {
               layers: [],
               selectedTool: scribingTools.SELECT,
               selectedShape: scribingShapes.RECT,
-              hoveredToolTip: '',
               imageWidth: 0,
               imageHeight: 0,
               fontFamily: 'Arial',
               fontSize: 12,
               colors: initializeToolColor(),
-              colorDropdowns: initializeColorDropdowns(),
               lineStyles: initializeLineStyles(),
               thickness: initializeToolThickness(),
-              popovers: initializePopovers(),
-              popoverAnchor: undefined,
-              popoverColorPickerAnchor: undefined,
               isCanvasLoaded: false,
               isLoading: false,
               isSaving: false,
@@ -250,7 +229,6 @@ export default function (state = {}, action) {
         },
       };
     }
-
     case canvasActionTypes.SET_SELECTED_SHAPE: {
       const { answerId, selectedShape } = action.payload;
       return {
@@ -258,72 +236,6 @@ export default function (state = {}, action) {
         [answerId]: {
           ...state[answerId],
           selectedShape,
-        },
-      };
-    }
-    case canvasActionTypes.OPEN_HOVER_TOOL_TIP: {
-      const { answerId, hoveredToolTip } = action.payload;
-      return {
-        ...state,
-        [answerId]: {
-          ...state[answerId],
-          hoveredToolTip,
-        },
-      };
-    }
-    case canvasActionTypes.CLOSE_HOVER_TOOL_TIP: {
-      const { answerId } = action.payload;
-      return {
-        ...state,
-        [answerId]: {
-          ...state[answerId],
-          hoveredToolTip: '',
-        },
-      };
-    }
-    case canvasActionTypes.OPEN_COLOR_PICKER: {
-      const { answerId, toolType, popoverColorPickerAnchor } = action.payload;
-      const { colorDropdowns } = state;
-      return {
-        ...state,
-        [answerId]: {
-          ...state[answerId],
-          colorDropdowns: { ...colorDropdowns, [toolType]: true },
-          popoverColorPickerAnchor,
-        },
-      };
-    }
-    case canvasActionTypes.OPEN_POPOVER: {
-      const { answerId, popoverType, popoverAnchor } = action.payload;
-      const { popovers } = state;
-      return {
-        ...state,
-        [answerId]: {
-          ...state[answerId],
-          popovers: { ...popovers, [popoverType]: true },
-          popoverAnchor,
-        },
-      };
-    }
-    case canvasActionTypes.CLOSE_COLOR_PICKER: {
-      const { answerId, toolType } = action.payload;
-      const { colorDropdowns } = state;
-      return {
-        ...state,
-        [answerId]: {
-          ...state[answerId],
-          colorDropdowns: { ...colorDropdowns, [toolType]: false },
-        },
-      };
-    }
-    case canvasActionTypes.CLOSE_POPOVER: {
-      const { answerId, popoverType } = action.payload;
-      const { popovers } = state;
-      return {
-        ...state,
-        [answerId]: {
-          ...state[answerId],
-          popovers: { ...popovers, [popoverType]: false },
         },
       };
     }
