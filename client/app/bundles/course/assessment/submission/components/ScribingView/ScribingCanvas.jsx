@@ -70,6 +70,7 @@ export default class ScribingCanvas extends React.Component {
   }
 
   shouldComponentUpdate() {
+    // Render canvas only at the beginning
     return !this.props.scribing.isCanvasLoaded;
   }
 
@@ -307,11 +308,6 @@ export default class ScribingCanvas extends React.Component {
     let userScribble = [];
 
     layers.forEach(layer => this.canvas.add(layer.scribbleGroup));
-    // if (isFirstInit) {
-    //   this.canvas.layers = [];
-    // } else {
-    //   this.canvas.layers.forEach(layer => this.canvas.add(layer.scribbleGroup));
-    // }
 
     if (scribbles) {
       scribbles.forEach((scribble) => {
@@ -348,7 +344,6 @@ export default class ScribingCanvas extends React.Component {
             scribbleGroup,
           };
           this.props.addLayer(this.props.answerId, newScribble);
-          // this.canvas.layers = [...this.canvas.layers, newScribble];
           this.canvas.add(scribbleGroup);
         } else if (scribble.creator_id === userId) {
           // Add other user's layers first to avoid blocking of user's layer

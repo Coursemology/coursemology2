@@ -12,7 +12,7 @@ const propTypes = {
 };
 
 const styles = {
-  canvas_div: {
+  canvasDiv: {
     alignItems: 'center',
     margin: 'auto',
   },
@@ -28,7 +28,7 @@ export default class ScribingViewComponent extends React.Component {
   render() {
     const { answerId, submission } = this.props;
     return (answerId ?
-      <div style={styles.canvas_div}>
+      <div style={styles.canvasDiv}>
         {submission.canUpdate ? <ScribingToolbar {...this.props} /> : null }
         <ScribingCanvas {...this.props} />
       </div> : null
