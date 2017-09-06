@@ -92,7 +92,7 @@ RSpec.describe Course::Forum::Topic, type: :model do
       end
     end
 
-    describe '.order_by_date' do
+    describe '.order_by_latest_post' do
       let!(:topics) { create_list(:forum_topic, topic_count, forum: forum) }
       let(:topic_count) { 3 }
 

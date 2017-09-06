@@ -6,6 +6,7 @@ class Course::Forum::Topic < ActiveRecord::Base
   acts_as_readable on: :updated_at
   acts_as_discussion_topic
 
+  after_initialize :set_defaults, if: :new_record?
   after_initialize :generate_initial_post, unless: :persisted?
   after_create :mark_as_read_for_creator
   after_update :mark_as_read_for_updater
@@ -41,11 +42,10 @@ class Course::Forum::Topic < ActiveRecord::Base
     Course::Forum::Topic::View.where('topic_id = course_forum_topics.id').select("count('*')")
   end)
 
-  # @!method self.order_by_date
-  #   Orders the topics by their date. This uses the modification date, so topics with new posts
-  #   will float to the top.
-  scope :order_by_date, (lambda do
-    order(updated_at: :desc)
+  # @!method self.order_by_latest_post
+  #   Orders the topics by their latest post
+  scope :order_by_latest_post, (lambda do
+    order(latest_post_at: :desc)
   end)
 
   # @!method self.with_latest_post
@@ -110,5 +110,9 @@ class Course::Forum::Topic < ActiveRecord::Base
   # Set the course as the same course of the forum.
   def set_course
     self.course ||= forum.course if forum
+  end
+
+  def set_defaults
+    self.latest_post_at ||= Time.zone.now
   end
 end

@@ -9,8 +9,7 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
 
   def create
     if super
-      # Update parent topic updated_at to invalidate all read marks
-      @topic.touch
+      @topic.update_column(:latest_post_at, @post.created_at)
       send_created_notification(@post)
       redirect_to course_forum_topic_path(current_course, @forum, @topic),
                   success: t('course.discussion.posts.create.success')
@@ -38,6 +37,7 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
 
   def destroy
     if super
+      @topic.update_column(:latest_post_at, @topic.posts.last&.created_at || @topic.created_at)
       redirect_to course_forum_topic_path(current_course, @forum, @topic),
                   success: t('course.discussion.posts.destroy.success')
     else
