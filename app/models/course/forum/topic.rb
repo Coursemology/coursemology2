@@ -3,7 +3,7 @@ class Course::Forum::Topic < ActiveRecord::Base
   extend FriendlyId
   friendly_id :slug_candidates, use: :scoped, scope: :forum
 
-  acts_as_readable on: :updated_at
+  acts_as_readable on: :latest_post_at
   acts_as_discussion_topic
 
   after_initialize :set_defaults, if: :new_record?
