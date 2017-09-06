@@ -114,10 +114,9 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
 
       it 'prefixes the image with coursemology/evaluator-image' do
         # 30 seconds is the default time limit when unspecified.
-        # 128 MB is the default memory limit when unspecified. Value here is in kilobytes.
         expect(CoursemologyDockerContainer).to \
           receive(:create).with("coursemology/evaluator-image-#{image}",
-                                hash_including(argv: ['-c30', '-m131072']))
+                                hash_including(argv: ['-c30']))
 
         container
       end
