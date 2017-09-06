@@ -10,7 +10,9 @@ class Course::Assessment::Question::Programming < ActiveRecord::Base
 
   # Maximum memory (in MB) the programming question can allow.
   # Do NOT change this to num.megabytes as the ProgramingEvaluationService expects it in MB.
-  MEMORY_LIMIT = 128
+  # Currently set to nil as Java evaluations do not work with a `ulimit` below 3 GB.
+  # Docker container memory limits will keep the evaluation in check.
+  MEMORY_LIMIT = nil
 
   acts_as :question, class_name: Course::Assessment::Question.name
 
