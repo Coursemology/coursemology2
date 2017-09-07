@@ -1,7 +1,9 @@
+// eslint-disable-next-line import/extensions, import/no-extraneous-dependencies, import/no-unresolved
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
+import moment from 'lib/moment';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import { red600, blue600 } from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
@@ -29,6 +31,10 @@ const styles = {
 };
 
 export default class SubmissionsTable extends React.Component {
+
+  static formatDate(date) {
+    return date ? moment(date).format('DD MMM H:mm') : null;
+  }
 
   static renderUnpublishedWarning(submission) {
     if (submission.workflowState !== workflowStates.Graded) return null;
@@ -110,6 +116,12 @@ export default class SubmissionsTable extends React.Component {
         {assessment.gamified ? <TableRowColumn style={styles.tableCell}>
           {submission.pointsAwarded !== undefined ? submission.pointsAwarded : null}
         </TableRowColumn> : null}
+        <TableRowColumn style={styles.tableCell}>
+          {SubmissionsTable.formatDate(submission.dateSubmitted)}
+        </TableRowColumn>
+        <TableRowColumn style={styles.tableCell}>
+          {SubmissionsTable.formatDate(submission.dateGraded)}
+        </TableRowColumn>
         <TableRowColumn style={{ width: 48, padding: 12 }}>
           {this.renderSubmissionLogsLink(submission)}
         </TableRowColumn>
@@ -158,6 +170,8 @@ export default class SubmissionsTable extends React.Component {
             {tableHeaderColumnFor('submissionStatus')}
             {tableHeaderColumnFor('grade')}
             {assessment.gamified ? tableHeaderColumnFor('experiencePoints') : null}
+            {tableHeaderColumnFor('dateSubmitted')}
+            {tableHeaderColumnFor('dateGraded')}
             <TableHeaderColumn style={{ width: 48, padding: 0 }}>
               {this.renderDownloadButton()}
             </TableHeaderColumn>
@@ -178,6 +192,8 @@ SubmissionsTable.propTypes = {
       workflowState: PropTypes.string,
       grade: PropTypes.number,
       pointsAwarded: PropTypes.number,
+      dateSubmitted: PropTypes.string,
+      dateGraded: PropTypes.string,
     })
   ),
   assessment: assessmentShape.isRequired,

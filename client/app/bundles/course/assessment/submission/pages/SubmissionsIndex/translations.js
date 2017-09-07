@@ -22,6 +22,14 @@ const translations = defineMessages({
     id: 'course.assessment.submission.submissions.experiencePoints',
     defaultMessage: 'Experience Points',
   },
+  dateSubmitted: {
+    id: 'course.assessment.submission.submissions.dateSubmitted',
+    defaultMessage: 'Date Submitted',
+  },
+  dateGraded: {
+    id: 'course.assessment.submission.submissions.dateGraded',
+    defaultMessage: 'Date Graded',
+  },
   download: {
     id: 'course.assessment.submission.submissions.download',
     defaultMessage: 'Download',
