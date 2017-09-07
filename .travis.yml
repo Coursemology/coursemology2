@@ -56,7 +56,7 @@ script:
   - 'if [ "$GROUP" = "misc" ]; then bundle exec rake factory_girl:lint; fi'
   - 'if [ "$GROUP" = "misc" ]; then bundle exec rake assets:precompile; fi'
   - 'if [ "$GROUP" = "misc" ]; then cd client && yarn; fi'
-  - 'if [ "$GROUP" = "misc" ]; then yarn lint --prefix; fi'
+  - 'if [ "$GROUP" = "misc" ]; then yarn lint; fi'
   - 'if [ "$GROUP" = "misc" ]; then yarn test; fi'
   - 'if [ "$GROUP" = "misc" ]; then cd ..; fi'
   - 'if [ "$GROUP" != "misc" ]; then export CODECOV_FLAG=backend; fi'
