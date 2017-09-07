@@ -15,4 +15,3 @@ span.pull-right
   .btn-group
     = edit_button([current_course, @forum]) if can?(:edit, @forum)
     = delete_button([current_course, @forum]) if can?(:destroy, @forum)
-
