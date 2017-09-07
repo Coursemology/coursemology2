@@ -4,7 +4,7 @@
   "description": "Coursemology Frontend",
   "engines": {
     "node": ">=5.10.0",
-    "yarn": "^0.24.4"
+    "yarn": "^1.0.0"
   },
   "scripts": {
     "test": "yarn run jest -- --coverage",
