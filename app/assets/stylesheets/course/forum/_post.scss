@@ -1,20 +1,4 @@
 @mixin course-forum-post {
-  .user {
-    float: left;
-    margin-right: 1em;
-    text-align: right;
-    width: 7em;
-
-    .image {
-      float: right;
-    }
-
-    .name {
-      clear: both;
-      display: block;
-    }
-  }
-
   .contents {
     border: 1px solid $course-discussion-post-border-color;
     border-radius: $course-discussion-post-border-radius;
@@ -23,10 +7,22 @@
     overflow: hidden;
     padding: 1.2em;
 
+    .user {
+      float: left;
+      text-align: right;
+
+      .image {
+        float: right;
+      }
+    }
+
     // Post title
     .title {
+      align-items: center;
+      border-bottom: 1px solid $grey-light;
+      display: flex;
       font-size: $font-size-base;
-      margin-top: 0;
+      margin: -16px -16px 16px;
     }
 
     // The post info, like post time etc
