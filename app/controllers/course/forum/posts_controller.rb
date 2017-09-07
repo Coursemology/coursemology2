@@ -8,8 +8,13 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
   include Course::Discussion::PostsConcern
 
   def create
-    if super
-      @topic.update_column(:latest_post_at, @post.created_at)
+    result = @post.class.transaction do
+      raise ActiveRecord::Rollback unless @post.save && create_topic_subscription && update_topic_pending_status
+      raise ActiveRecord::Rollback unless @topic.update_column(:latest_post_at, @post.created_at)
+      true
+    end
+
+    if result
       send_created_notification(@post)
       redirect_to course_forum_topic_path(current_course, @forum, @topic),
                   success: t('course.discussion.posts.create.success')
@@ -21,7 +26,7 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
   end
 
   def update
-    if super
+    if @post.update_attributes(post_params)
       redirect_to course_forum_topic_path(current_course, @forum, @topic),
                   success: t('course.discussion.posts.update.success')
     else
@@ -36,7 +41,7 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
   end
 
   def destroy
-    if super
+    if @post.destroy
       @topic.update_column(:latest_post_at, @topic.posts.last&.created_at || @topic.created_at)
       redirect_to course_forum_topic_path(current_course, @forum, @topic),
                   success: t('course.discussion.posts.destroy.success')
@@ -45,6 +50,11 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
                   danger: t('course.discussion.posts.destroy.failure',
                             error: @post.errors.full_messages.to_sentence)
     end
+  end
+
+  # Render a new post in a separate page
+  def reply
+    @reply_post = @post.children.build
   end
 
   protected

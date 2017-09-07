@@ -5,14 +5,19 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
   include Course::Discussion::PostsConcern
 
   def create
-    @annotation.class.transaction do
+    result = @annotation.class.transaction do
       @post.title = @assessment.title
-      if super && @annotation.save
-        send_created_notification(@post)
-        render_create_response
-      else
-        head :bad_request
-      end
+
+      raise ActiveRecord::Rollback unless @post.save && create_topic_subscription && update_topic_pending_status
+      raise ActiveRecord::Rollback unless @annotation.save
+      true
+    end
+
+    if result
+      send_created_notification(@post)
+      render_create_response
+    else
+      head :bad_request
     end
   end
 
