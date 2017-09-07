@@ -7,7 +7,7 @@ import Toggle from 'material-ui/Toggle';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import { updateNotificationSetting } from 'course/admin/actions/notifications';
-import adminTranslations, { defaultComponentTitles } from 'course/admin/translations.intl';
+import adminTranslations, { defaultComponentTitles } from 'course/translations.intl';
 import translations, { settingTitles, settingDescriptions } from './translations.intl';
 
 const styles = {
