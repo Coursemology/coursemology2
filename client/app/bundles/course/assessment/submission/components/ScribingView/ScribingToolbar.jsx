@@ -34,24 +34,16 @@ const propTypes = {
   setToolThickness: PropTypes.func.isRequired,
   setSelectedShape: PropTypes.func.isRequired,
   clearSavingStatus: PropTypes.func.isRequired,
+  setDrawingMode: PropTypes.func.isRequired,
+  setCanvasCursor: PropTypes.func.isRequired,
+  setCanvasZoom: PropTypes.func.isRequired,
+  deleteCanvasObject: PropTypes.func.isRequired,
+  setDisableObjectSelection: PropTypes.func.isRequired,
+  setEnableObjectSelection: PropTypes.func.isRequired,
+  setEnableTextSelection: PropTypes.func.isRequired,
 };
 
 const styles = {
-  cover: {
-    position: 'fixed',
-    top: '0px',
-    right: '0px',
-    bottom: '0px',
-    left: '0px',
-  },
-  canvas_div: {
-    alignItems: 'center',
-    margin: 'auto',
-  },
-  canvas: {
-    width: '100%',
-    border: '1px solid black',
-  },
   toolbar: {
     marginBottom: '1em',
   },
@@ -63,7 +55,7 @@ const styles = {
     boxShadow: 'none',
     marginBottom: '1em',
   },
-  custom_line: {
+  customLine: {
     display: 'inline-block',
     position: 'inherit',
     width: '25px',
@@ -112,9 +104,6 @@ class ScribingToolbar extends Component {
   // Toolbar Event handlers
 
   onChangeCompleteColor = (color, coloringTool) => {
-    if (coloringTool === scribingToolColor.DRAW) {
-      this.props.scribing.canvas.freeDrawingBrush.color = this.getRgbaHelper(color.rgb);
-    }
     this.props.setColoringToolColor(this.props.answerId, coloringTool, this.getRgbaHelper(color.rgb));
     this.setState({
       ...this.state,
@@ -134,8 +123,6 @@ class ScribingToolbar extends Component {
   )
 
   onClickColorPicker = (event, toolType) => {
-    // This prevents ghost click.
-    event.preventDefault();
     this.setState({
       ...this.state,
       colorDropdowns: {
@@ -157,8 +144,6 @@ class ScribingToolbar extends Component {
   }
 
   onTouchTapPopover = (event, popoverType) => {
-    // This prevents ghost click.
-    event.preventDefault();
     const popoverAnchor = popoverType === scribingPopoverTypes.LAYER ?
             event.currentTarget :
             event.currentTarget.parentElement.parentElement;
@@ -189,17 +174,14 @@ class ScribingToolbar extends Component {
   }
 
   onChangeSliderThickness = (event, toolType, value) => {
-    if (toolType === scribingToolThickness.DRAW) {
-      this.props.scribing.canvas.freeDrawingBrush.width = value;
-    }
     this.props.setToolThickness(this.props.answerId, toolType, value);
   }
 
   onClickTypingMode = () => {
     this.props.setToolSelected(this.props.answerId, scribingTools.TYPE);
-    this.props.scribing.canvas.isDrawingMode = false;
-    this.props.scribing.canvas.defaultCursor = 'pointer';
-    this.enableTextSelection();
+    this.props.setDrawingMode(this.props.answerId, false);
+    this.props.setCanvasCursor(this.props.answerId, 'pointer');
+    this.props.setEnableTextSelection();
   }
 
   onClickTypingIcon = () => {
@@ -214,66 +196,49 @@ class ScribingToolbar extends Component {
   onClickDrawingMode = () => {
     this.props.setToolSelected(this.props.answerId, scribingTools.DRAW);
     // isDrawingMode automatically disables selection mode in fabric.js
-    this.props.scribing.canvas.isDrawingMode = true;
+    this.props.setDrawingMode(this.props.answerId, true);
   }
 
   onClickLineMode = () => {
     this.props.setToolSelected(this.props.answerId, scribingTools.LINE);
-    this.props.scribing.canvas.isDrawingMode = false;
-    this.props.scribing.canvas.defaultCursor = 'crosshair';
-    this.disableObjectSelection();
+    this.props.setDrawingMode(this.props.answerId, false);
+    this.props.setCanvasCursor(this.props.answerId, 'crosshair');
+    this.props.setDisableObjectSelection(this.props.answerId);
   }
 
   onClickShapeMode = () => {
     this.props.setToolSelected(this.props.answerId, scribingTools.SHAPE);
-    this.props.scribing.canvas.isDrawingMode = false;
-    this.props.scribing.canvas.defaultCursor = 'crosshair';
-    this.disableObjectSelection();
+    this.props.setDrawingMode(this.props.answerId, false);
+    this.props.setCanvasCursor(this.props.answerId, 'crosshair');
+    this.props.setDisableObjectSelection(this.props.answerId);
   }
 
   onClickSelectionMode = () => {
     this.props.setToolSelected(this.props.answerId, scribingTools.SELECT);
-    this.props.scribing.canvas.isDrawingMode = false;
-    this.props.scribing.canvas.defaultCursor = 'pointer';
-    this.enableObjectSelection();
+    this.props.setDrawingMode(this.props.answerId, false);
+    this.props.setCanvasCursor(this.props.answerId, 'pointer');
+    this.props.setEnableObjectSelection(this.props.answerId);
   }
 
   onClickPanMode = () => {
     this.props.setToolSelected(this.props.answerId, scribingTools.PAN);
-    this.props.scribing.canvas.isDrawingMode = false;
-    this.props.scribing.canvas.defaultCursor = 'move';
-    this.disableObjectSelection();
+    this.props.setDrawingMode(this.props.answerId, false);
+    this.props.setCanvasCursor(this.props.answerId, 'move');
+    this.props.setDisableObjectSelection(this.props.answerId);
   }
 
   onClickZoomIn = () => {
-    const newZoom = this.props.scribing.canvas.getZoom() + 0.1;
-    this.props.scribing.canvas.zoomToPoint({
-      x: this.props.scribing.canvas.height / 2,
-      y: this.props.scribing.canvas.width / 2,
-    }, newZoom);
+    const newZoom = this.props.scribing.canvasZoom + 0.1;
+    this.props.setCanvasZoom(this.props.answerId, newZoom);
   }
 
   onClickZoomOut = () => {
-    const newZoom = Math.max(this.props.scribing.canvas.getZoom() - 0.1, 1);
-    this.props.scribing.canvas.zoomToPoint({
-      x: this.props.scribing.canvas.height / 2,
-      y: this.props.scribing.canvas.width / 2,
-    }, newZoom);
-    this.props.scribing.canvas.trigger('mouse:move', { isForced: true });
+    const newZoom = Math.max(this.props.scribing.canvasZoom - 0.1, 1);
+    this.props.setCanvasZoom(this.props.answerId, newZoom);
   }
 
   onClickDelete = () => {
-    const activeGroup = this.props.scribing.canvas.getActiveGroup();
-    const activeObject = this.props.scribing.canvas.getActiveObject();
-
-    if (activeObject) {
-      this.props.scribing.canvas.remove(activeObject);
-    } else if (activeGroup) {
-      const objectsInGroup = activeGroup.getObjects();
-      this.props.scribing.canvas.discardActiveGroup();
-      objectsInGroup.forEach(object => (this.props.scribing.canvas.remove(object)));
-    }
-    this.props.scribing.canvas.renderAll();
+    this.props.deleteCanvasObject(this.props.answerId);
   }
 
   onMouseEnter(toolType) {
@@ -297,28 +262,6 @@ class ScribingToolbar extends Component {
     `rgba(${json.r},${json.g},${json.b},${json.a})`
   );
 
-  disableObjectSelection() {
-    this.props.scribing.canvas.forEachObject(object => (
-      object.selectable = false // eslint-disable-line no-param-reassign
-    ));
-  }
-
-  // This method only enable selection for interactive texts
-  enableTextSelection() {
-    this.props.scribing.canvas.clear();
-    this.props.scribing.canvas.initializeScribblesAndBackground(false);
-    this.props.scribing.canvas.forEachObject(object => (
-      // eslint-disable-next-line no-param-reassign
-      object.selectable = (object.type === 'i-text')
-    ));
-  }
-
-  // This method clears the selection-disabled scribbles
-  // and reloads them to enable selection again
-  enableObjectSelection() {
-    this.props.scribing.canvas.clear();
-    this.props.scribing.canvas.initializeScribblesAndBackground(false);
-  }
 
   setSelectedShape = (shape) => {
     this.props.setSelectedShape(this.props.answerId, shape);
@@ -327,7 +270,7 @@ class ScribingToolbar extends Component {
   render() {
     const { intl, scribing } = this.props;
     const lineToolStyle = {
-      ...styles.custom_line,
+      ...styles.customLine,
       background: this.props.scribing.selectedTool === scribingTools.LINE ? blue500 : 'rgba(0, 0, 0, 0.4)',
     };
     const toolBarStyle = !scribing.isCanvasLoaded ? styles.disabledToolbar : styles.toolBar;
@@ -336,7 +279,7 @@ class ScribingToolbar extends Component {
       <Toolbar
         style={{
           ...toolBarStyle,
-          width: this.props.scribing.canvas && this.props.scribing.canvas.maxWidth,
+          width: this.props.scribing.isCanvasLoaded && this.props.scribing.canvasMaxWidth,
         }}
       >
         <ToolbarGroup>

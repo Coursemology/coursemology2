@@ -121,6 +121,13 @@ const props = {
   setToolThickness: jest.fn(),
   setSelectedShape: jest.fn(),
   clearSavingStatus: jest.fn(),
+  setDrawingMode: jest.fn(),
+  setCanvasCursor: jest.fn(),
+  setCanvasZoom: jest.fn(),
+  deleteCanvasObject: jest.fn(),
+  setDisableObjectSelection: jest.fn(),
+  setEnableObjectSelection: jest.fn(),
+  setEnableTextSelection: jest.fn(),
 };
 
 beforeEach(() => {

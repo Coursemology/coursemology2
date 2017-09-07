@@ -15,9 +15,14 @@ const propTypes = {
   scribing: scribingShape,
   addLayer: PropTypes.func.isRequired,
   setCanvasLoaded: PropTypes.func.isRequired,
+  setCanvasProperties: PropTypes.func.isRequired,
   setToolSelected: PropTypes.func.isRequired,
   updateScribingAnswer: PropTypes.func.isRequired,
   updateScribingAnswerInLocal: PropTypes.func.isRequired,
+  resetCanvasDelete: PropTypes.func.isRequired,
+  resetDisableObjectSelection: PropTypes.func.isRequired,
+  resetEnableObjectSelection: PropTypes.func.isRequired,
+  resetEnableTextSelection: PropTypes.func.isRequired,
 };
 
 const styles = {
@@ -69,9 +74,71 @@ export default class ScribingCanvas extends React.Component {
         this.props.scribing.answer.image_url);
   }
 
-  shouldComponentUpdate() {
+  shouldComponentUpdate(nextProps) {
+    if (this.canvas) {
+      this.canvas.isDrawingMode = nextProps.scribing.isDrawingMode;
+      this.canvas.freeDrawingBrush.color = this.props.scribing.colors[scribingToolColor.DRAW];
+      this.canvas.defaultCursor = nextProps.scribing.cursor;
+
+      this.canvas.zoomToPoint({
+        x: this.canvas.height / 2,
+        y: this.canvas.width / 2,
+      }, nextProps.scribing.canvasZoom);
+      this.canvas.trigger('mouse:move', { isForced: true });
+
+      if (nextProps.scribing.isDisableObjectSelection) {
+        this.disableObjectSelection();
+        this.props.resetDisableObjectSelection(this.props.answerId);
+      }
+      if (nextProps.scribing.isEnableObjectSelection) {
+        this.enableObjectSelection();
+        this.props.resetEnableObjectSelection(this.props.answerId);
+      }
+      if (nextProps.scribing.isEnableTextSelection) {
+        this.enableTextSelection();
+        this.props.resetEnableTextSelection(this.props.answerId);
+      }
+      if (nextProps.scribing.isDelete) {
+        const activeGroup = this.canvas.getActiveGroup();
+        const activeObject = this.canvas.getActiveObject();
+
+        if (activeObject) {
+          this.canvas.remove(activeObject);
+        } else if (activeGroup) {
+          const objectsInGroup = activeGroup.getObjects();
+          this.canvas.discardActiveGroup();
+          objectsInGroup.forEach(object => (this.canvas.remove(object)));
+        }
+        this.canvas.renderAll();
+        this.props.resetCanvasDelete(this.props.answerId);
+      }
+    }
+
     // Render canvas only at the beginning
     return !this.props.scribing.isCanvasLoaded;
+  }
+
+  disableObjectSelection() {
+    this.canvas.forEachObject(object => (
+      object.selectable = false // eslint-disable-line no-param-reassign
+    ));
+  }
+
+  // This method only enable selection for interactive texts
+  enableTextSelection() {
+    this.canvas.clear();
+    this.initializeScribblesAndBackground(false);
+    this.canvas.forEachObject(object => (
+      // eslint-disable-next-line no-param-reassign
+      object.selectable = (object.type === 'i-text')
+    ));
+  }
+
+  // This method clears the selection-disabled scribbles
+  // and reloads them to enable selection again
+  enableObjectSelection() {
+    this.canvas.clear();
+    this.initializeScribblesAndBackground(false);
   }
 
   // Canvas Event Handlers
@@ -145,7 +212,6 @@ export default class ScribingCanvas extends React.Component {
   onMouseUpCanvas = (options) => {
     this.mouseDownFlag = false;
     this.mouseCanvasDragEndPoint = this.getCanvasPoint(options.e);
-
     const getVectorDist = () => (
       (this.mouseCanvasDragStartPoint.x - this.mouseCanvasDragEndPoint.x)
       * (this.mouseCanvasDragStartPoint.x - this.mouseCanvasDragEndPoint.x)
@@ -171,7 +237,6 @@ export default class ScribingCanvas extends React.Component {
     const minDistThreshold = 25;
     const passedDistThreshold = getVectorDist() > minDistThreshold;
     const isMouseDrag = this.mouseDragFlag === true && passedDistThreshold;
-
     if (isMouseDrag) {
       if (this.props.scribing.selectedTool === scribingTools.LINE) {
         const strokeDashArray = getStrokeDashArray(scribingToolLineStyle.LINE);
@@ -384,7 +449,7 @@ export default class ScribingCanvas extends React.Component {
         needsItsOwnCache: false,
       });
 
-      this.canvas.maxWidth = maxWidth;
+      this.props.setCanvasProperties(this.props.answerId, this.width, this.height, maxWidth);
 
       const fabricImage = new fabric.Image(
         this.image,
@@ -394,8 +459,7 @@ export default class ScribingCanvas extends React.Component {
         this.canvas.setBackgroundImage(fabricImage, this.canvas.renderAll.bind(this.canvas))
       );
 
-      this.canvas.initializeScribblesAndBackground = this.initializeScribblesAndBackground;
-      this.canvas.initializeScribblesAndBackground(true);
+      this.initializeScribblesAndBackground(true);
 
       this.canvas.on('mouse:down', this.onMouseDownCanvas);
       this.canvas.on('mouse:move', this.onMouseMoveCanvas);
@@ -405,7 +469,6 @@ export default class ScribingCanvas extends React.Component {
       this.canvas.on('object:moving', this.onObjectMovingCanvas);
       this.canvas.on('object:modified', this.saveScribbles);
       this.canvas.on('object:added', this.saveScribbles);
-      this.canvas.on('path:created', this.saveScribbles);
       this.canvas.on('object:removed', this.saveScribbles);
       this.canvas.on('text:editing:exited', this.onTextChanged);
 

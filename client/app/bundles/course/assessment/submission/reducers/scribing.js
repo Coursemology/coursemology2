@@ -47,6 +47,13 @@ export default function (state = {}, action) {
               lineStyles: initializeLineStyles(),
               thickness: initializeToolThickness(),
               isCanvasLoaded: false,
+              isDrawingMode: false,
+              deleteMode: false,
+              cursor: 'pointer',
+              canvasZoom: 1,
+              canvasWidth: 100,
+              canvasHeight: 100,
+              canvasMaxWidth: 100,
               isLoading: false,
               isSaving: false,
               isSaved: false,
@@ -236,6 +243,128 @@ export default function (state = {}, action) {
         [answerId]: {
           ...state[answerId],
           selectedShape,
+        },
+      };
+    }
+    case canvasActionTypes.SET_CANVAS_PROPERTIES: {
+      const { answerId, canvasWidth, canvasHeight, canvasMaxWidth } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          canvasWidth,
+          canvasHeight,
+          canvasMaxWidth,
+        },
+      };
+    }
+    case canvasActionTypes.SET_DRAWING_MODE: {
+      const { answerId, isDrawingMode } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          isDrawingMode,
+        },
+      };
+    }
+    case canvasActionTypes.SET_CANVAS_CURSOR: {
+      const { answerId, cursor } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          cursor,
+        },
+      };
+    }
+    case canvasActionTypes.SET_CANVAS_ZOOM: {
+      const { answerId, canvasZoom } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          canvasZoom,
+        },
+      };
+    }
+    case canvasActionTypes.DELETE_CANVAS_OBJECT: {
+      const { answerId } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          isDelete: true,
+        },
+      };
+    }
+    case canvasActionTypes.RESET_CANVAS_DELETE: {
+      const { answerId } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          isDelete: false,
+        },
+      };
+    }
+    case canvasActionTypes.SET_DISABLE_OBJECT_SELECTION: {
+      const { answerId } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          isDisableObjectSelection: true,
+        },
+      };
+    }
+    case canvasActionTypes.RESET_DISABLE_OBJECT_SELECTION: {
+      const { answerId } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          isDisableObjectSelection: false,
+        },
+      };
+    }
+    case canvasActionTypes.SET_ENABLE_OBJECT_SELECTION: {
+      const { answerId } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          isEnableObjectSelection: true,
+        },
+      };
+    }
+    case canvasActionTypes.RESET_ENABLE_OBJECT_SELECTION: {
+      const { answerId } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          isEnableObjectSelection: false,
+        },
+      };
+    }
+    case canvasActionTypes.SET_ENABLE_TEXT_SELECTION: {
+      const { answerId } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          isEnableTextSelection: true,
+        },
+      };
+    }
+    case canvasActionTypes.RESET_ENABLE_TEXT_SELECTION: {
+      const { answerId } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          isEnableTextSelection: false,
         },
       };
     }

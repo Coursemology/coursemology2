@@ -143,3 +143,111 @@ export function setSelectedShape(answerId, selectedShape) {
     })
   );
 }
+
+export function setCanvasProperties(answerId, canvasWidth, canvasHeight, canvasMaxWidth) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.SET_CANVAS_PROPERTIES,
+      payload: { answerId, canvasWidth, canvasHeight, canvasMaxWidth },
+    })
+  );
+}
+
+export function setDrawingMode(answerId, isDrawingMode) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.SET_DRAWING_MODE,
+      payload: { answerId, isDrawingMode },
+    })
+  );
+}
+
+export function setCanvasCursor(answerId, cursor) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.SET_CANVAS_CURSOR,
+      payload: { answerId, cursor },
+    })
+  );
+}
+
+export function setCanvasZoom(answerId, canvasZoom) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.SET_CANVAS_ZOOM,
+      payload: { answerId, canvasZoom },
+    })
+  );
+}
+
+export function deleteCanvasObject(answerId) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.DELETE_CANVAS_OBJECT,
+      payload: { answerId },
+    })
+  );
+}
+
+export function resetCanvasDelete(answerId) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.RESET_CANVAS_DELETE,
+      payload: { answerId },
+    })
+  );
+}
+
+export function setDisableObjectSelection(answerId) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.SET_DISABLE_OBJECT_SELECTION,
+      payload: { answerId },
+    })
+  );
+}
+
+export function resetDisableObjectSelection(answerId) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.RESET_DISABLE_OBJECT_SELECTION,
+      payload: { answerId },
+    })
+  );
+}
+
+export function setEnableObjectSelection(answerId) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.SET_ENABLE_OBJECT_SELECTION,
+      payload: { answerId },
+    })
+  );
+}
+
+export function resetEnableObjectSelection(answerId) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.RESET_ENABLE_OBJECT_SELECTION,
+      payload: { answerId },
+    })
+  );
+}
+
+export function setEnableTextSelection(answerId) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.SET_ENABLE_TEXT_SELECTION,
+      payload: { answerId },
+    })
+  );
+}
+
+export function resetEnableTextSelection(answerId) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.RESET_ENABLE_TEXT_SELECTION,
+      payload: { answerId },
+    })
+  );
+}
