@@ -63,6 +63,9 @@ export default class ScribingCanvas extends React.Component {
   constructor(props) {
     super(props);
 
+    this.line = undefined;
+    this.rect = undefined;
+    this.ellipse = undefined;
     this.viewportLeft = 0;
     this.viewportTop = 0;
     this.textCreated = false;
@@ -144,7 +147,6 @@ export default class ScribingCanvas extends React.Component {
   // Canvas Event Handlers
 
   onMouseDownCanvas = (options) => {
-    this.mouseDragFlag = false;
     this.mouseCanvasDragStartPoint = this.getCanvasPoint(options.e);
 
     // To facilitate panning
@@ -152,6 +154,80 @@ export default class ScribingCanvas extends React.Component {
     this.viewportLeft = this.canvas.viewportTransform[4];
     this.viewportTop = this.canvas.viewportTransform[5];
     this.mouseStartPoint = this.getMousePoint(options.e);
+
+    const getStrokeDashArray = (toolType) => {
+      switch (this.props.scribing.lineStyles[toolType]) {
+        case 'dotted': {
+          return [1, 3];
+        }
+        case 'dashed': {
+          return [10, 5];
+        }
+        case 'solid':
+        default: {
+          return [];
+        }
+      }
+    };
+
+    if (this.mouseCanvasDragStartPoint) {
+      if (this.props.scribing.selectedTool === scribingTools.LINE) {
+        const strokeDashArray = getStrokeDashArray(scribingToolLineStyle.LINE);
+        this.line = new fabric.Line(
+          [
+            this.mouseCanvasDragStartPoint.x, this.mouseCanvasDragStartPoint.y,
+            this.mouseCanvasDragStartPoint.x, this.mouseCanvasDragStartPoint.y,
+          ],
+          {
+            stroke: `${this.props.scribing.colors[scribingToolColor.LINE]}`,
+            strokeWidth: this.props.scribing.thickness[scribingToolThickness.LINE],
+            strokeDashArray,
+            selectable: false,
+          }
+        );
+        this.canvas.add(this.line);
+        this.canvas.renderAll();
+      } else if (this.props.scribing.selectedTool === scribingTools.SHAPE) {
+        const strokeDashArray = getStrokeDashArray(scribingToolLineStyle.SHAPE_BORDER);
+        switch (this.props.scribing.selectedShape) {
+          case scribingShapes.RECT: {
+            this.rect = new fabric.Rect({
+              left: this.mouseCanvasDragStartPoint.x,
+              top: this.mouseCanvasDragStartPoint.y,
+              stroke: `${this.props.scribing.colors[scribingToolColor.SHAPE_BORDER]}`,
+              strokeWidth: this.props.scribing.thickness[scribingToolThickness.SHAPE_BORDER],
+              strokeDashArray,
+              fill: `${this.props.scribing.colors[scribingToolColor.SHAPE_FILL]}`,
+              width: 1,
+              height: 1,
+              selectable: false,
+            });
+            this.canvas.add(this.rect);
+            this.canvas.renderAll();
+            break;
+          }
+          case scribingShapes.ELLIPSE: {
+            this.ellipse = new fabric.Ellipse({
+              left: this.mouseCanvasDragStartPoint.x,
+              top: this.mouseCanvasDragStartPoint.y,
+              stroke: `${this.props.scribing.colors[scribingToolColor.SHAPE_BORDER]}`,
+              strokeWidth: this.props.scribing.thickness[scribingToolThickness.SHAPE_BORDER],
+              strokeDashArray,
+              fill: `${this.props.scribing.colors[scribingToolColor.SHAPE_FILL]}`,
+              rx: 1,
+              ry: 1,
+              selectable: false,
+            });
+            this.canvas.add(this.ellipse);
+            this.canvas.renderAll();
+            break;
+          }
+          default: {
+            break;
+          }
+        }
+      }
+    }
 
     if (this.props.scribing.selectedTool !== scribingTools.TYPE
         && this.textCreated) {
@@ -180,7 +256,7 @@ export default class ScribingCanvas extends React.Component {
   }
 
   onMouseMoveCanvas = (options) => {
-    this.mouseDragFlag = true;
+    const dragPointer = this.getCanvasPoint(options.e);
 
     // Do panning action
     const tryPan = (left, top) => {
@@ -196,104 +272,37 @@ export default class ScribingCanvas extends React.Component {
       this.canvas.renderAll();
     };
 
-    if (this.props.scribing.selectedTool === scribingTools.PAN && this.mouseDownFlag) {
-      const mouseCurrentPoint = this.getMousePoint(options.e);
-      const deltaLeft = mouseCurrentPoint.x - this.mouseStartPoint.x;
-      const deltaTop = mouseCurrentPoint.y - this.mouseStartPoint.y;
-      const newLeft = this.viewportLeft + deltaLeft;
-      const newTop = this.viewportTop + deltaTop;
-      tryPan(newLeft, newTop);
-    } else if (options.isForced) {
-      // Facilitates zooming out
-      tryPan(this.canvas.viewportTransform[4], this.canvas.viewportTransform[5]);
-    }
-  }
-
-  onMouseUpCanvas = (options) => {
-    this.mouseDownFlag = false;
-    this.mouseCanvasDragEndPoint = this.getCanvasPoint(options.e);
-    const getVectorDist = () => (
-      (this.mouseCanvasDragStartPoint.x - this.mouseCanvasDragEndPoint.x)
-      * (this.mouseCanvasDragStartPoint.x - this.mouseCanvasDragEndPoint.x)
-      + (this.mouseCanvasDragStartPoint.y - this.mouseCanvasDragEndPoint.y)
-      * (this.mouseCanvasDragStartPoint.y - this.mouseCanvasDragEndPoint.y)
-    );
-
-    const getStrokeDashArray = (toolType) => {
-      switch (this.props.scribing.lineStyles[toolType]) {
-        case 'dotted': {
-          return [1, 3];
-        }
-        case 'dashed': {
-          return [10, 5];
-        }
-        case 'solid':
-        default: {
-          return [];
-        }
-      }
-    };
-
-    const minDistThreshold = 25;
-    const passedDistThreshold = getVectorDist() > minDistThreshold;
-    const isMouseDrag = this.mouseDragFlag === true && passedDistThreshold;
-    if (isMouseDrag) {
-      if (this.props.scribing.selectedTool === scribingTools.LINE) {
-        const strokeDashArray = getStrokeDashArray(scribingToolLineStyle.LINE);
-        const line = new fabric.Line(
-          [
-            this.mouseCanvasDragStartPoint.x, this.mouseCanvasDragStartPoint.y,
-            this.mouseCanvasDragEndPoint.x, this.mouseCanvasDragEndPoint.y,
-          ],
-          {
-            stroke: `${this.props.scribing.colors[scribingToolColor.LINE]}`,
-            strokeWidth: this.props.scribing.thickness[scribingToolThickness.LINE],
-            strokeDashArray,
-            selectable: false,
-          }
-        );
-        this.canvas.add(line);
+    if (this.mouseDownFlag) {
+      if (dragPointer && this.props.scribing.selectedTool === scribingTools.LINE) {
+        this.line.set({ x2: dragPointer.x, y2: dragPointer.y });
         this.canvas.renderAll();
-      } else if (this.props.scribing.selectedTool === scribingTools.SHAPE) {
-        const strokeDashArray = getStrokeDashArray(scribingToolLineStyle.SHAPE_BORDER);
+      } else if (dragPointer && this.props.scribing.selectedTool === scribingTools.SHAPE) {
         switch (this.props.scribing.selectedShape) {
           case scribingShapes.RECT: {
             const dragProps = this.generateMouseDragProperties(
               this.mouseCanvasDragStartPoint,
-              this.mouseCanvasDragEndPoint
+              dragPointer
             );
-            const rect = new fabric.Rect({
+            this.rect.set({
               left: dragProps.left,
               top: dragProps.top,
-              stroke: `${this.props.scribing.colors[scribingToolColor.SHAPE_BORDER]}`,
-              strokeWidth: this.props.scribing.thickness[scribingToolThickness.SHAPE_BORDER],
-              strokeDashArray,
-              fill: `${this.props.scribing.colors[scribingToolColor.SHAPE_FILL]}`,
               width: dragProps.width,
               height: dragProps.height,
-              selectable: false,
             });
-            this.canvas.add(rect);
             this.canvas.renderAll();
             break;
           }
           case scribingShapes.ELLIPSE: {
             const dragProps = this.generateMouseDragProperties(
               this.mouseCanvasDragStartPoint,
-              this.mouseCanvasDragEndPoint
+              dragPointer
             );
-            const ellipse = new fabric.Ellipse({
+            this.ellipse.set({
               left: dragProps.left,
               top: dragProps.top,
-              stroke: `${this.props.scribing.colors[scribingToolColor.SHAPE_BORDER]}`,
-              strokeWidth: this.props.scribing.thickness[scribingToolThickness.SHAPE_BORDER],
-              strokeDashArray,
-              fill: `${this.props.scribing.colors[scribingToolColor.SHAPE_FILL]}`,
               rx: dragProps.width / 2,
               ry: dragProps.height / 2,
-              selectable: false,
             });
-            this.canvas.add(ellipse);
             this.canvas.renderAll();
             break;
           }
@@ -301,7 +310,25 @@ export default class ScribingCanvas extends React.Component {
             break;
           }
         }
+      } else if (this.props.scribing.selectedTool === scribingTools.PAN) {
+        const mouseCurrentPoint = this.getMousePoint(options.e);
+        const deltaLeft = mouseCurrentPoint.x - this.mouseStartPoint.x;
+        const deltaTop = mouseCurrentPoint.y - this.mouseStartPoint.y;
+        const newLeft = this.viewportLeft + deltaLeft;
+        const newTop = this.viewportTop + deltaTop;
+        tryPan(newLeft, newTop);
       }
+    } else if (options.isForced) {
+      // Facilitates zooming out
+      tryPan(this.canvas.viewportTransform[4], this.canvas.viewportTransform[5]);
+    }
+  }
+
+  onMouseUpCanvas = () => {
+    this.mouseDownFlag = false;
+    if (this.props.scribing.selectedTool === scribingTools.LINE
+      || this.props.scribing.selectedTool === scribingTools.SHAPE) {
+      this.saveScribbles();
     }
   }
 
@@ -554,6 +581,7 @@ export default class ScribingCanvas extends React.Component {
   );
 
   getCanvasPoint(event) {
+    if (!event) return undefined;
     const pointer = this.canvas.getPointer(event);
     return {
       x: pointer.x,
