@@ -128,13 +128,22 @@ export default function (state = {}, action) {
     case actions.UPDATE_SCRIBING_ANSWER_IN_LOCAL: {
       const { answerId } = action.payload;
       const scribbles = [];
-      state[answerId].answer.scribbles.forEach((scribble) => {
-        scribbles.push({
-          ...scribble,
-          content: scribble.creator_id === state[answerId].answer.user_id ?
-            action.payload.scribble : scribble.content,
+
+      // Modify existing scribbles if it exists
+      if (state[answerId].answer.scribbles.length > 0) {
+        state[answerId].answer.scribbles.forEach((scribble) => {
+          scribbles.push({
+            ...scribble,
+            content: scribble.creator_id === state[answerId].answer.user_id ?
+              action.payload.scribble : scribble.content,
+          });
         });
-      });
+      } else {
+        scribbles.push({
+          creator_id: state[answerId].answer.user_id,
+          content: action.payload.scribble,
+        });
+      }
 
       return {
         ...state,
