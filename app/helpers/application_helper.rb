@@ -78,11 +78,11 @@ module ApplicationHelper
 
   # This helper will includes all webpack assets
   def webpack_assets_tag
-    javascript_include_tag(
-      *webpack_asset_paths('manifest', extension: 'js'),
-      *webpack_asset_paths('lib', extension: 'js'),
-      *webpack_asset_paths('vendor', extension: 'js'),
-      *webpack_asset_paths('coursemology', extension: 'js')
-    )
+    capture do
+      concat javascript_pack_tag('manifest')
+      concat javascript_pack_tag('lib')
+      concat javascript_pack_tag('vendor')
+      concat javascript_pack_tag('coursemology')
+    end
   end
 end
