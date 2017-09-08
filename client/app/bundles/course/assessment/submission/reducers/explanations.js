@@ -26,6 +26,15 @@ export default function (state = {}, action) {
         return obj;
       }, { [questionId]: action.payload.explanation });
     }
+    case actions.AUTOGRADE_FAILURE: {
+      const { questionId } = action;
+      return {
+        ...state,
+        [questionId]: { correct: null,
+          explanations: [],
+        },
+      };
+    }
     default:
       return state;
   }

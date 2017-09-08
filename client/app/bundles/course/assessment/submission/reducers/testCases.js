@@ -26,6 +26,30 @@ export default function (state = {}, action) {
         return obj;
       }, { [questionId]: action.payload.testCases });
     }
+    case actions.AUTOGRADE_FAILURE: {
+      // Clear the previous test results in the test case results display.
+      const { questionId } = action;
+
+      const questionState = {};
+      // For each test case in each test type, add back the data without the output
+      // and passed values.
+      Object.keys(state[questionId]).forEach((testType) => {
+        if (testType !== 'stdout' && testType !== 'stderr') {
+          questionState[testType] = state[questionId][testType].map(testCase =>
+            ({
+              identifier: testCase.identifier,
+              expression: testCase.expression,
+              expected: testCase.expected,
+            })
+          );
+        }
+      });
+
+      return {
+        ...state,
+        [questionId]: questionState,
+      };
+    }
     default:
       return state;
   }
