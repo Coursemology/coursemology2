@@ -1,6 +1,3 @@
 [submodule "vendor/assets/stylesheets/pygments-css"]
 	path = vendor/assets/stylesheets/pygments-css
 	url = https://github.com/richleland/pygments-css.git
-[submodule "vendor/assets/javascripts/jquery-shorten"]
-	path = vendor/assets/javascripts/jquery-shorten
-	url = https://github.com/viralpatel/jquery.shorten.git
