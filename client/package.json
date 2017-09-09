@@ -7,7 +7,7 @@
     "yarn": "^1.0.0"
   },
   "scripts": {
-    "test": "yarn run jest -- --coverage",
+    "test": "yarn run jest --coverage",
     "build:test": "export NODE_ENV=test && yarn run build:translations && webpack -w",
     "build:production": "export NODE_ENV=production && yarn run build:translations && webpack -p",
     "build:development": "yarn run build:translations && webpack-dev-server",
@@ -16,7 +16,7 @@
     "lint-src": "eslint . --ext .js --ext .jsx --cache --ignore-pattern '**/__test__/**' --ignore-pattern 'coverage/**'",
     "lint-tests": "eslint . --ext .test.js --ext .test.jsx --cache -c .eslintrc.test",
     "lint": "yarn run lint-src && yarn run lint-tests",
-    "lint-fix": "yarn run lint-src -- --fix && yarn run lint-tests -- --fix"
+    "lint-fix": "yarn run lint-src --fix && yarn run lint-tests --fix"
   },
   "cacheDirectories": [
     "node_modules",
