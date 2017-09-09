@@ -37,7 +37,8 @@ export default function (state = initialState, action) {
       };
     }
     case actionTypes.ITEM_UPDATE_SUCCESS: {
-      const items = updateOrAppend(state.items, generateTypeKey(action.item));
+      const item = action.item.lesson_plan_item_type ? generateTypeKey(action.item) : action.item;
+      const items = updateOrAppend(state.items, item);
       return {
         ...state,
         items,
