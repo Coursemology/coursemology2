@@ -10,16 +10,21 @@ class Course::Assessment::SubmissionQuestion::CommentsController < Course::Asses
   delegate :discussion_topic, to: :@submission_question
 
   def create
-    @submission_question.class.transaction do
+    result = @submission_question.class.transaction do
       @post.title = @assessment.title
       # Set parent as the topologically last pre-existing post, if it exists.
       @post.parent = last_post_from(@submission_question) if @submission_question.posts.length > 1
-      if super && @submission_question.save
-        send_created_notification(@post)
-        render_create_response
-      else
-        head :bad_request
-      end
+
+      raise ActiveRecord::Rollback unless @post.save && create_topic_subscription && update_topic_pending_status
+      raise ActiveRecord::Rollback unless @submission_question.save
+      true
+    end
+
+    if result
+      send_created_notification(@post)
+      render_create_response
+    else
+      head :bad_request
     end
   end
 

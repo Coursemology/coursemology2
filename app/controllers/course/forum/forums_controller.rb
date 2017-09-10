@@ -8,7 +8,7 @@ class Course::Forum::ForumsController < Course::Forum::Controller
   end
 
   def show
-    @topics = @forum.topics.accessible_by(current_ability).order_by_date.with_topic_statistics.
+    @topics = @forum.topics.accessible_by(current_ability).order_by_latest_post.with_topic_statistics.
               page(page_param).with_read_marks_for(current_user).includes(:creator).with_latest_post
   end
 

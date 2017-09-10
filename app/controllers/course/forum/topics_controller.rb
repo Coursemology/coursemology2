@@ -2,11 +2,12 @@
 class Course::Forum::TopicsController < Course::Forum::ComponentController
   include Course::Forum::TopicControllerHidingConcern
   include Course::Forum::TopicControllerLockingConcern
+  include Course::Forum::TopicControllerResolvingConcern
   include Course::Forum::TopicControllerSubscriptionConcern
 
   before_action :load_topic, except: [:new, :create]
   load_resource :topic, class: Course::Forum::Topic.name, through: :forum, only: [:new, :create]
-  authorize_resource :topic, class: Course::Forum::Topic.name
+  authorize_resource :topic, class: Course::Forum::Topic.name, except: [:set_resolved]
   before_action :add_topic_breadcrumb
   after_action :mark_posts_read, only: [:show]
 

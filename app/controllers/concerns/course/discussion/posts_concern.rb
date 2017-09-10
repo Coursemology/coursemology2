@@ -8,29 +8,6 @@ module Course::Discussion::PostsConcern
                                        class: Course::Discussion::Post.name, parent: false
   end
 
-  def create
-    Course::Discussion::Post.transaction do
-      return true if @post.save && create_topic_subscription && update_topic_pending_status
-      raise ActiveRecord::Rollback
-    end
-  end
-
-  def edit
-  end
-
-  def update
-    @post.update_attributes(post_params)
-  end
-
-  def destroy
-    @post.destroy
-  end
-
-  # Render a new post in a separate page
-  def reply
-    @reply_post = @post.children.build
-  end
-
   protected
 
   # Update pending status of the topic:

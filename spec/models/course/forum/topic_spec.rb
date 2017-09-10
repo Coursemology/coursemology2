@@ -92,14 +92,14 @@ RSpec.describe Course::Forum::Topic, type: :model do
       end
     end
 
-    describe '.order_by_date' do
+    describe '.order_by_latest_post' do
       let!(:topics) { create_list(:forum_topic, topic_count, forum: forum) }
       let(:topic_count) { 3 }
 
       it 'sorts by updated date' do
         expect(topics).not_to be_empty
-        consecutive = topics.each_cons(2)
-        expect(consecutive.all? { |first, second| first.updated_at <= second.updated_at })
+        consecutive = forum.topics.order_by_latest_post.each_cons(2)
+        expect(consecutive.all? { |first, second| first.latest_post_at <= second.latest_post_at })
       end
     end
 

@@ -7,12 +7,17 @@ class Course::Discussion::PostsController < Course::ComponentController
   include Course::Discussion::PostsConcern
 
   def create
-    # Set parent as the topologically last pre-existing post, if it exists.
-    # @post is in @topic.posts, so we filter out @post, which has no id yet.
-    if @topic.posts.length > 1
-      @post.parent = @topic.posts.ordered_topologically.flatten.select(&:id).last
+    result = @post.transaction do
+      # Set parent as the topologically last pre-existing post, if it exists.
+      # @post is in @topic.posts, so we filter out @post, which has no id yet.
+      if @topic.posts.length > 1
+        @post.parent = @topic.posts.ordered_topologically.flatten.select(&:id).last
+      end
+      raise ActiveRecord::Rollback unless @post.save && create_topic_subscription && update_topic_pending_status
+      true
     end
-    if super
+
+    if result
       send_created_notification(@post)
     else
       head :bad_request
@@ -20,7 +25,7 @@ class Course::Discussion::PostsController < Course::ComponentController
   end
 
   def update
-    if super
+    if @post.update_attributes(post_params)
       respond_to do |format|
         format.js
         format.json { render @post }
@@ -31,7 +36,7 @@ class Course::Discussion::PostsController < Course::ComponentController
   end
 
   def destroy
-    if super
+    if @post.destroy
       respond_to do |format|
         format.js
         format.json { head :ok }

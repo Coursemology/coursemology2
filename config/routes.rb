@@ -255,6 +255,7 @@ Rails.application.routes.draw do
             delete 'subscribe', on: :member
             put 'locked' => 'topics#set_locked', on: :member
             put 'hidden' => 'topics#set_hidden', on: :member
+            put 'resolved' => 'topics#set_resolved', on: :member
           end
 
           get 'unsubscribe', on: :member

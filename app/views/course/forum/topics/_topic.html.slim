@@ -5,16 +5,19 @@
   th
     - if topic.locked?
       span => fa_icon 'lock'.freeze, title: t('.locked')
+    span => topic_type_icon(topic)
+
     = link_to(format_inline_text(topic.title),
               course_forum_topic_path(current_course, @forum, topic))
+
     div.started-by
       = t('.started_by_html', user: link_to_user(topic.creator))
-  td = topic.vote_count
-  td = topic.post_count
-  td = topic.view_count
+  td.hidden-xs = topic.vote_count
+  td.hidden-xs = topic.post_count
+  td.hidden-xs = topic.view_count
   td.latest-post
     - last_post = topic.posts.last
     - if last_post
       = link_to_user(last_post.creator)
-      | , 
-      = format_datetime(last_post.created_at, :short)
+      | ,
+      =< format_datetime(last_post.created_at, :short)
