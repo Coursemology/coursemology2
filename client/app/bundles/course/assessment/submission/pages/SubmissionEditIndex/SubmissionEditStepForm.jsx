@@ -359,7 +359,11 @@ class SubmissionEditStepForm extends Component {
 
   renderStepper() {
     const { maxStep, stepIndex } = this.state;
-    const { skippable, questionIds } = this.props;
+    const { skippable, questionIds = [] } = this.props;
+
+    if (questionIds.length <= 1) {
+      return null;
+    }
 
     return (
       <Stepper

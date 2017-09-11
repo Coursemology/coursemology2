@@ -7,6 +7,5 @@ en:
             submissions: 'Submissions'
           create:
             failure: 'Could not create submission: %{error}'
-            no_questions: 'This assessment has no questions. Check the description for your tasks.'
           edit:
             attempt: :'course.assessment.assessments.assessment.attempt'

@@ -216,6 +216,14 @@ const translations = defineMessages({
     id: 'course.assessment.submission.emptyAssessment',
     defaultMessage: 'This assessment currently has no questions.',
   },
+  submitNoQuestionExplain: {
+    id: 'course.asssessment.submission.submitNoQuestionExplain',
+    defaultMessage: 'Mark as completed?',
+  },
+  ok: {
+    id: 'course.assessment.submission.ok',
+    defaultMessage: 'OK',
+  },
 });
 
 export default translations;

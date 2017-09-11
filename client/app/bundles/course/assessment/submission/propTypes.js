@@ -86,6 +86,8 @@ export const assessmentShape = PropTypes.shape({
   tabbedView: PropTypes.bool,
   title: PropTypes.string,
   questionIds: PropTypes.arrayOf(PropTypes.number),
+  categoryId: PropTypes.number,
+  tabId: PropTypes.number,
 });
 
 export const submissionShape = PropTypes.shape({
