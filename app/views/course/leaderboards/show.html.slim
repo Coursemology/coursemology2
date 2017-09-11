@@ -2,7 +2,11 @@
 
 = render partial: 'tabs'
 
-div.col-sm-12.col-md-6
+- achievements_enabled = current_component_host[:course_achievements_component].present?
+- leaderboard_class = achievements_enabled ? ['col-sm-12', 'col-md-6'] : \
+                                             ['col-sm-12', 'col-md-8', 'col-md-offset-2']
+
+= content_tag(:div, class: leaderboard_class) do
   div.leaderboard-header
     h4 = t('.level_header')
   table.table.leaderboard-level
@@ -22,25 +26,26 @@ div.col-sm-12.col-md-6
             div
               = t('.level', level_number: course_user.level_number)
 
-div.col-sm-12.col-md-6
-  div.leaderboard-header
-    h4 = t('.achievement_count_header')
-  table.table.leaderboard-achievement
-    tbody
-      - course_users_count = @course_users.ordered_by_achievement_count.take(display_user_count)
-      - course_users_count.each.with_index(1) do |course_user, index|
-        = content_tag_for(:tr, course_user, class: ['course-user'])
-          td.rank
-            h3 = index
-          td.user-picture
-            = link_to_course_user(course_user) do
-              = display_user_image(course_user.user)
-          td.user-profile
-            div
+- if achievements_enabled
+  = content_tag(:div, class: leaderboard_class) do
+    div.leaderboard-header
+      h4 = t('.achievement_count_header')
+    table.table.leaderboard-achievement
+      tbody
+        - course_users_count = @course_users.ordered_by_achievement_count.take(display_user_count)
+        - course_users_count.each.with_index(1) do |course_user, index|
+          = content_tag_for(:tr, course_user, class: ['course-user'])
+            td.rank
+              h3 = index
+            td.user-picture
               = link_to_course_user(course_user) do
-                = format_inline_text(course_user.name)
-            div
-              - course_user.achievements.ordered_by_date_obtained.take(5).each do |achievement|
-                = content_tag_for(:span, achievement) do
-                  = link_to course_achievement_path(current_course, achievement) do
-                    = display_achievement_badge(achievement)
+                = display_user_image(course_user.user)
+            td.user-profile
+              div
+                = link_to_course_user(course_user) do
+                  = format_inline_text(course_user.name)
+              div
+                - course_user.achievements.ordered_by_date_obtained.take(5).each do |achievement|
+                  = content_tag_for(:span, achievement) do
+                    = link_to course_achievement_path(current_course, achievement) do
+                      = display_achievement_badge(achievement)
