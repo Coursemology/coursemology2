@@ -54,6 +54,9 @@ const mockSubmission = {
   }],
 };
 
+// stub import function
+jest.mock('course/assessment/submission/loaders/ScribingViewLoader', () => (() => Promise.resolve()));
+
 beforeEach(() => {
   mock.reset();
   store.dispatch({
