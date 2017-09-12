@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
@@ -11,6 +10,7 @@ import { getUrlParameter } from 'lib/helpers/url-helpers';
 import ProgressPanel from '../../components/ProgressPanel';
 import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
+import SubmissionEmptyForm from './SubmissionEmptyForm';
 import {
   fetchSubmission, autogradeSubmission, saveDraft, finalise,
   unsubmit, submitAnswer, resetAnswer, saveGrade, mark, unmark, publish,
@@ -20,7 +20,6 @@ import {
   questionFlagsShape, questionShape, reduxFormShape, submissionShape, topicShape,
 } from '../../propTypes';
 import { formNames, workflowStates } from '../../constants';
-import translations from '../../translations';
 
 class VisibleSubmissionEditIndex extends Component {
   constructor(props) {
@@ -58,7 +57,7 @@ class VisibleSubmissionEditIndex extends Component {
   handleSubmit() {
     const { dispatch, form, match: { params } } = this.props;
     const answers = Object.values(form.values);
-    dispatch(finalise(params.submissionId, answers));
+    return dispatch(finalise(params.submissionId, answers));
   }
 
   handleUnsubmit() {
@@ -140,7 +139,7 @@ class VisibleSubmissionEditIndex extends Component {
     const { newSubmission, step } = this.state;
     const {
       assessment: { autograded, delayedGradePublication, tabbedView,
-                    skippable, questionIds, passwordProtected },
+                    skippable, questionIds, passwordProtected, categoryId, tabId },
       submission: { canGrade, canUpdate, maxStep, workflowState },
       explanations,
       grading,
@@ -150,10 +149,24 @@ class VisibleSubmissionEditIndex extends Component {
       topics,
       isAutograding,
       isSaving,
+      match: { params: { courseId } },
     } = this.props;
 
     if (Object.values(questions).length === 0) {
-      return <h4><FormattedMessage {...translations.emptyAssessment} /></h4>;
+      return (<SubmissionEmptyForm
+        courseId={courseId}
+        categoryId={categoryId}
+        tabId={tabId}
+        handleSaveGrade={() => this.handleSaveGrade()}
+        handleSubmit={() => this.handleSubmit()}
+        handleUnsubmit={() => this.handleUnsubmit()}
+        canGrade={canGrade}
+        canUpdate={canUpdate}
+        attempting={workflowState === workflowStates.Attempting}
+        submitted={workflowState === workflowStates.Submitted}
+        published={workflowState === workflowStates.Published}
+        isSaving={isSaving}
+      />);
     }
 
     if (autograded) {

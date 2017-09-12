@@ -16,6 +16,8 @@ json.assessment do
     json.url url_for([@assessment.course, @assessment.folder, material])
     json.name format_inline_text(material.name)
   end
+  json.tabId @assessment.tab_id
+  json.categoryId @assessment.tab.category_id
 end
 
 answers = @submission.latest_answers

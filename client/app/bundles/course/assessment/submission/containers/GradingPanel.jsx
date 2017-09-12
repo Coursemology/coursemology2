@@ -197,6 +197,10 @@ class VisibleGradingPanel extends Component {
       return null;
     }
 
+    if (Object.values(questions).length <= 0) {
+      return null;
+    }
+
     const showGrader = canGrade && (
       workflowState === workflowStates.Graded || workflowState === workflowStates.Published);
 
