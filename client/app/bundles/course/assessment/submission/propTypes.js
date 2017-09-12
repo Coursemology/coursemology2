@@ -23,6 +23,7 @@ export const questionShape = PropTypes.shape({
   type: PropTypes.string.isRequired,
   answerId: PropTypes.number,
   topicId: PropTypes.number.isRequired,
+  autogradable: PropTypes.bool,
 });
 
 const fileShape = PropTypes.shape({
