@@ -132,6 +132,10 @@ const config = {
           options: '$',
         }],
       },
+      {
+        test: /fabric\.js$/,
+        use: ['script-loader'],
+      },
     ],
   },
 };

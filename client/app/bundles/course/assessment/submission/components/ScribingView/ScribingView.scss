@@ -1,0 +1,14 @@
+// scss-lint:disable VendorPrefix
+$color-translucent-white: rgba(255, 255, 255, 0.5);
+$color-translucent-black: rgba(0, 0, 0, 0.5);
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $color-translucent-black;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 0 1px $color-translucent-white;
+}

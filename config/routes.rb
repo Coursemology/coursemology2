@@ -198,6 +198,9 @@ Rails.application.routes.draw do
                       resources :annotations, only: [:create]
                     end
                   end
+                  namespace :scribing do
+                    resources :scribbles, only: [:create]
+                  end
                 end
               end
             end

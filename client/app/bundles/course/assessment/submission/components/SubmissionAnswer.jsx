@@ -34,7 +34,7 @@ class SubmissionAnswer extends Component {
   };
 
   getRenderer(question) {
-    const { MultipleChoice, MultipleResponse, TextResponse, FileUpload, Programming } = questionTypes;
+    const { MultipleChoice, MultipleResponse, TextResponse, FileUpload, Programming, Scribing } = questionTypes;
     switch (question.type) {
       case MultipleChoice:
         return Answers.renderMultipleChoice;
@@ -46,6 +46,8 @@ class SubmissionAnswer extends Component {
         return Answers.renderFileUpload;
       case Programming:
         return Answers.renderProgramming;
+      case Scribing:
+        return Answers.renderScribing;
       default:
         return this.renderMissingRenderer.bind(this);
     }

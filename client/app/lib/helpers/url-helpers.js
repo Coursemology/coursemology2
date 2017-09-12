@@ -53,6 +53,16 @@ function getAssessmentId() {
 }
 
 /**
+ * Get the submission id from URL.
+ *
+ * return {number}
+ */
+function getSubmissionId() {
+  const match = window.location.pathname.match(/^\/courses\/\d+\/assessments\/\d+\/submissions\/(\d+)/);
+  return match && match[1];
+}
+
+/**
  * Get the scribing id from URL.
  *
  * return {number}
@@ -63,5 +73,4 @@ function getScribingId() {
 }
 
 /* eslint-disable import/prefer-default-export */
-export { getUrlParameter, getCourseId, getSurveyId, getAssessmentId, getScribingId };
-
+export { getUrlParameter, getCourseId, getSurveyId, getAssessmentId, getSubmissionId, getScribingId };
