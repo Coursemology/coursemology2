@@ -17,6 +17,6 @@ en:
             watched: 'Watched'
             not_watched: 'Has Not Started'
           submissions:
-            student_name: 'Student Name'
+            student_name: 'Name'
             status: 'Status'
             start_at: 'Watched At'

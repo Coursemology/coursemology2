@@ -79,11 +79,11 @@ const translations = defineMessages({
   },
   student: {
     id: 'course.assessment.submission.student',
-    defaultMessage: 'Student',
+    defaultMessage: 'Name',
   },
   status: {
     id: 'course.assessment.submission.status',
-    defaultMessage: 'Status',
+    defaultMessage: 'Submission Status',
   },
   totalGrade: {
     id: 'course.assessment.submission.totalGrade',

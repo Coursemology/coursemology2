@@ -28,6 +28,10 @@ const styles = {
     whiteSpace: 'normal',
     wordBreak: 'break-word',
   },
+  tableCenterCell: {
+    ...this.tableCell,
+    textAlign: 'center',
+  },
 };
 
 export default class SubmissionsTable extends React.Component {
@@ -107,19 +111,19 @@ export default class SubmissionsTable extends React.Component {
             {submission.courseStudent.name}
           </a>
         </TableRowColumn>
-        <TableRowColumn style={styles.tableCell}>
+        <TableRowColumn style={styles.tableCenterCell}>
           {this.renderSubmissionWorkflowState(submission)}
         </TableRowColumn>
-        <TableRowColumn style={styles.tableCell}>
+        <TableRowColumn style={styles.tableCenterCell}>
           {submission.grade !== undefined ? `${submission.grade} / ${assessment.maximumGrade}` : null}
         </TableRowColumn>
-        {assessment.gamified ? <TableRowColumn style={styles.tableCell}>
+        {assessment.gamified ? <TableRowColumn style={styles.tableCenterCell}>
           {submission.pointsAwarded !== undefined ? submission.pointsAwarded : null}
         </TableRowColumn> : null}
-        <TableRowColumn style={styles.tableCell}>
+        <TableRowColumn style={styles.tableCenterCell}>
           {SubmissionsTable.formatDate(submission.dateSubmitted)}
         </TableRowColumn>
-        <TableRowColumn style={styles.tableCell}>
+        <TableRowColumn style={styles.tableCenterCell}>
           {SubmissionsTable.formatDate(submission.dateGraded)}
         </TableRowColumn>
         <TableRowColumn style={{ width: 48, padding: 12 }}>
@@ -162,16 +166,22 @@ export default class SubmissionsTable extends React.Component {
       </TableHeaderColumn>
     );
 
+    const tableHeaderCenterColumnFor = field => (
+      <TableHeaderColumn style={styles.tableCenterCell}>
+        <FormattedMessage {...submissionsTranslations[field]} />
+      </TableHeaderColumn>
+    );
+
     return (
       <Table selectable={false}>
         <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
           <TableRow>
             {tableHeaderColumnFor('studentName')}
-            {tableHeaderColumnFor('submissionStatus')}
-            {tableHeaderColumnFor('grade')}
-            {assessment.gamified ? tableHeaderColumnFor('experiencePoints') : null}
-            {tableHeaderColumnFor('dateSubmitted')}
-            {tableHeaderColumnFor('dateGraded')}
+            {tableHeaderCenterColumnFor('submissionStatus')}
+            {tableHeaderCenterColumnFor('grade')}
+            {assessment.gamified ? tableHeaderCenterColumnFor('experiencePoints') : null}
+            {tableHeaderCenterColumnFor('dateSubmitted')}
+            {tableHeaderCenterColumnFor('dateGraded')}
             <TableHeaderColumn style={{ width: 48, padding: 0 }}>
               {this.renderDownloadButton()}
             </TableHeaderColumn>

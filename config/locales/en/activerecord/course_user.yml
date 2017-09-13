@@ -5,4 +5,4 @@ en:
         name: 'Name'
       course_user:
         level_number: 'Level'
-        created_at: 'Enrolled at'
+        created_at: 'Enrolled At'

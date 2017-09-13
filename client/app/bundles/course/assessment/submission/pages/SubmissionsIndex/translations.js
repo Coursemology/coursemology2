@@ -8,7 +8,7 @@ const translations = defineMessages({
   },
   studentName: {
     id: 'course.assessment.submission.submissions.studentName',
-    defaultMessage: 'Student Name',
+    defaultMessage: 'Name',
   },
   submissionStatus: {
     id: 'course.assessment.submission.submissions.submissionStatus',
@@ -16,19 +16,19 @@ const translations = defineMessages({
   },
   grade: {
     id: 'course.assessment.submission.submissions.grade',
-    defaultMessage: 'Grade',
+    defaultMessage: 'Total Grade',
   },
   experiencePoints: {
     id: 'course.assessment.submission.submissions.experiencePoints',
-    defaultMessage: 'Experience Points',
+    defaultMessage: 'Experience Points Awarded',
   },
   dateSubmitted: {
     id: 'course.assessment.submission.submissions.dateSubmitted',
-    defaultMessage: 'Date Submitted',
+    defaultMessage: 'Submitted At',
   },
   dateGraded: {
     id: 'course.assessment.submission.submissions.dateGraded',
-    defaultMessage: 'Date Graded',
+    defaultMessage: 'Graded At',
   },
   download: {
     id: 'course.assessment.submission.submissions.download',
