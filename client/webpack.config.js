@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
-const StatsPlugin = require('stats-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 
 const env = process.env.NODE_ENV || 'development';
 const production = env === 'production';
@@ -75,14 +75,7 @@ const config = {
     }),
     // Do not require all locles in moment
     new webpack.ContextReplacementPlugin(/moment\/locale$/, /^\.\/(en-.*|zh-.*)$/),
-    // must match config.webpack.manifest_filename
-    new StatsPlugin('manifest.json', {
-      chunkModules: false,
-      source: false,
-      chunks: false,
-      modules: false,
-      assets: true,
-    }),
+    new ManifestPlugin({ fileName: 'manifest.json', publicPath: '/webpack/', writeToFileEmit: true }),
   ],
 
   module: {

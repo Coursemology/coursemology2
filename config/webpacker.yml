@@ -1,0 +1,27 @@
+# Note: You must restart bin/webpack-dev-server for changes to take effect
+
+default: &default
+  public_output_path: webpack
+
+  # Reload manifest.json on all requests so we reload latest compiled packs
+  cache_manifest: false
+  # We will do precompilation of packs manually.
+  compile: false
+
+development:
+  <<: *default
+
+  dev_server:
+    host: localhost
+    port: 8080
+    hmr: false
+    https: false
+
+test:
+  <<: *default
+
+production:
+  <<: *default
+
+  # Cache manifest.json for performance
+  cache_manifest: true
