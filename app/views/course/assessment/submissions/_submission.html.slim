@@ -4,7 +4,8 @@
   td = link_to(format_inline_text(assessment.title),
                course_assessment_path(current_course, assessment))
   td = format_datetime(submission.submitted_at) if submission.submitted_at
-  td = Course::Assessment::Submission.human_attribute_name(submission.workflow_state)
+  td.table-workflow-state
+    = Course::Assessment::Submission.human_attribute_name(submission.workflow_state)
   - if pending
     td
       - @service.group_managers_of(submission.course_user).each do |manager|
@@ -15,19 +16,19 @@
   - can_see_grades = \
       submission.published? || (submission.graded? && can?(:grade, submission.assessment))
   - if can_see_grades
-    td
+    td.table-grade
       = submission.grade.to_s + ' / ' + assessment.maximum_grade.to_s
       - if submission.graded?
         span.text-danger title=t('.graded_not_published_warning')
           =< fa_icon 'exclamation-circle'.freeze
     - if current_course.gamified?
-      td = submission.current_points_awarded
+      td.table-current-points-awarded = submission.current_points_awarded
   - else
-    td = '-- / ' + assessment.maximum_grade.to_s
+    td.table-grade = '-- / ' + assessment.maximum_grade.to_s
     - if current_course.gamified?
       td
 
-  td
+  td.table-buttons
     - button_class = ['btn', 'btn-block']
     - link_path = edit_course_assessment_submission_path(current_course, assessment, submission)
     - if current_course_user && current_course_user.staff? && submission.submitted?

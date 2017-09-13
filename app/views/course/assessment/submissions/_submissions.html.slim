@@ -1,15 +1,15 @@
-table.table.table-middle-align.table-hover
+table.table.table-middle-align.submissions-list.table-hover
   thead
     tr
       th = CourseUser.human_attribute_name(:name)
       th = Course::Assessment.human_attribute_name(:title)
       th = Course::Assessment::Submission.human_attribute_name(:submitted_at)
-      th = Course::Assessment::Submission.human_attribute_name(:status)
+      th.table-workflow-state = Course::Assessment::Submission.human_attribute_name(:status)
       - if pending
         th = Course::GroupUser.human_attribute_name(:manager)
-      th = Course::Assessment::Submission.human_attribute_name(:grade)
+      th.table-grade = Course::Assessment::Submission.human_attribute_name(:grade)
       - if current_course.gamified?
-        th = Course::ExperiencePointsRecord.human_attribute_name(:points_awarded)
+        th.table-current-points-awarded = Course::ExperiencePointsRecord.human_attribute_name(:points_awarded)
       th
       th
   tbody
