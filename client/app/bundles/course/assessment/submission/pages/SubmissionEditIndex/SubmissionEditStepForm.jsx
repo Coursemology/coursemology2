@@ -146,7 +146,11 @@ class SubmissionEditStepForm extends Component {
 
       let title = '';
       if (explanation.correct) {
-        title = intl.formatMessage(translations.correct);
+        if (question.autogradable) {
+          title = intl.formatMessage(translations.correct);
+        } else {
+          title = intl.formatMessage(translations.answerSubmitted);
+        }
       } else if (explanation.failureType === 'public_test') {
         title = intl.formatMessage(translations.publicTestCaseFailure);
       } else if (explanation.failureType === 'private_test') {

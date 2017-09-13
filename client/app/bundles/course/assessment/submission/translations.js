@@ -224,6 +224,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.ok',
     defaultMessage: 'OK',
   },
+  answerSubmitted: {
+    id: 'course.assessment.submission.answerSubmitted',
+    defaultMessage: 'Answer Submitted',
+  },
 });
 
 export const scribingTranslations = defineMessages({
