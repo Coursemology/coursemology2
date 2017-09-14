@@ -142,9 +142,10 @@ class SubmissionEditForm extends Component {
             title={title}
             titleColor={red900}
           />
+          { explanation.explanations.every(exp => exp.trim().length === 0) ? null :
           <CardText>
             {explanation.explanations.map(exp => <div dangerouslySetInnerHTML={{ __html: exp }} />)}
-          </CardText>
+          </CardText> }
         </Card>
       );
     }

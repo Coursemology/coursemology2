@@ -170,9 +170,10 @@ class SubmissionEditStepForm extends Component {
             title={title}
             titleColor={explanation.correct ? green900 : red900}
           />
+          { explanation.explanations.every(exp => exp.trim().length === 0) ? null :
           <CardText>
             {explanation.explanations.map((exp, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: exp }} />)}
-          </CardText>
+          </CardText> }
         </Card>
       );
       /* eslint-enable react/no-array-index-key */
