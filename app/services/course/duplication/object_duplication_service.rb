@@ -40,16 +40,33 @@ class Course::Duplication::ObjectDuplicationService < Course::Duplication::BaseS
   # @return [Object] The duplicated object, if `objects` is a single object.
   # @return [Array] Array of duplicated objects, if `objects` is an array.
   def duplicate_objects(objects)
-    # TODO: Inform the user when the duplication is complete.
+    # TODO: Email the user when the duplication is complete.
     Course.transaction do
       duplicated = duplicator.duplicate(objects)
-      success = duplicated.respond_to?(:save) ? duplicated.save : duplicated.all?(&:save)
-      raise ActiveRecord::Rollback unless success
+      save_success = duplicated.respond_to?(:save) ? duplicated.save : duplicated.all?(&:save)
+      after_save_success = save_success && after_save(objects, duplicated)
+      raise ActiveRecord::Rollback unless after_save_success
       duplicated
     end
   end
 
   private
+
+  # Executes callbacks meant to be invoked after duplicated objects have been saved.
+  #
+  # Models may implement `after_duplicate_save(duplicator)` if they have code to be executed after
+  # all duplicates have been saved. The method should return `true` if the execution is successful
+  # and false otherwise.
+  #
+  # @param [Object|Array] _objects The source object(s)
+  # @param [Object|Array] duplicated The duplicated object(s)
+  # @return [Boolean] true if all callbacks are executed successfully
+  def after_save(_objects, duplicates)
+    duplicates_array = duplicates.respond_to?(:to_ary) ? duplicates : [duplicates]
+    duplicates_array.all? do |object|
+      object.respond_to?(:after_duplicate_save) ? object.reload.after_duplicate_save(duplicator) : true
+    end
+  end
 
   # Initializes a new duplication object with the given options to perform the duplication.
   #

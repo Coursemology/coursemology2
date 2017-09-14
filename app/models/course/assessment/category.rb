@@ -44,6 +44,13 @@ class Course::Assessment::Category < ActiveRecord::Base
     end
   end
 
+  # @return [Boolean] true if post-duplication processing is successful.
+  def after_duplicate_save(duplicator)
+    User.with_stamper(duplicator.options[:current_user]) do
+      build_initial_tab ? save : true
+    end
+  end
+
   private
 
   def build_initial_tab

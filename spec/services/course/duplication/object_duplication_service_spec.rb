@@ -48,10 +48,11 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
         context 'when only a category is selected' do
           let(:source_objects) { category }
 
-          it 'duplicates it without any tabs' do
+          it 'creates a default tab for it' do
             expect { duplicate_objects }.to change { destination_course.assessment_categories.count }.by(1)
             expect(duplicate_objects.title).to eq(category.title)
-            expect(duplicate_objects.tabs.length).to eq(0)
+            default_title = Course::Assessment::Tab.human_attribute_name('title.default')
+            expect(duplicate_objects.tabs.first.title).to eq(default_title)
           end
         end
 
