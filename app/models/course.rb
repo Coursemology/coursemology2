@@ -42,7 +42,8 @@ class Course < ActiveRecord::Base
                                 source: :actable, source_type: Course::LessonPlan::Event.name
   # Achievements must be declared after material_folders or duplication will fail.
   has_many :achievements, dependent: :destroy
-  has_many :discussion_topics, class_name: Course::Discussion::Topic.name, inverse_of: :course
+  has_many :discussion_topics, dependent: :destroy, class_name: Course::Discussion::Topic.name,
+                               inverse_of: :course
   has_many :forums, dependent: :destroy, inverse_of: :course
   has_many :surveys, through: :lesson_plan_items, source: :actable, source_type: Course::Survey.name
   has_many :videos, through: :lesson_plan_items, source: :actable, source_type: Course::Video.name
