@@ -219,7 +219,11 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
       context 'when course has extra material folders' do
         let!(:creator) { create(:course_manager, course: course).user }
         let!(:updater) { create(:course_teaching_assistant, course: course).user }
-        let!(:folders) { create_list(:course_material_folder, 3, course: course, creator: creator) }
+        let!(:folders) do
+          create_list(:course_material_folder, 3, parent: course.root_folder,
+                                                  course: course, creator: creator)
+        end
+
         let!(:content) { create(:course_material, folder: folders[0], creator: creator) }
 
         before do
@@ -274,7 +278,11 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           expect(@new_content.attachment.creator).to eq @content.attachment.creator
         end
 
-        it 'shifts the start and end times' do
+        it 'shifts the start and end times for non-root folders' do
+          # Start at of the root folder should not be shifted
+          expect(new_course.root_folder.start_at).
+            to be_within(1.second).of new_course.root_folder.created_at
+
           # Select just the folders that were created in this context and sort them by name.
           new_standalone_folders = @new_folders.select do |folder|
             folders.map(&:name).include?(folder.name)
