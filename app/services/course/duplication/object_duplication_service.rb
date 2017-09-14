@@ -5,14 +5,16 @@ class Course::Duplication::ObjectDuplicationService < Course::Duplication::BaseS
   class << self
     # Constructor for the object duplication service.
     #
-    # @param [Array] objects The objects to duplicate.
+    # @param [Course] current_course Course to duplicate from.
+    # @param [Course] target_course Course to duplicate to.
+    # @param [Object|Array] objects The object(s) to duplicate.
     # @param [Hash] options The options to be sent to the Duplicator object.
     # @option options [User] :current_user (+User.system+) The user triggering the duplication.
-    # @option options [Course] :current_course
-    # @option options [DateTime] :target_course
-    # @return [Array] The duplicated objects
-    def duplicate_objects(objects, options = {})
-      options[:time_shift] = time_shift(options[:current_course], options[:target_course])
+    # @return [Object|Array] The duplicated object(s).
+    def duplicate_objects(current_course, target_course, objects, options = {})
+      options[:time_shift] = time_shift(current_course, target_course)
+      options[:current_course] = current_course
+      options[:target_course] = target_course
       options.reverse_merge!(DEFAULT_OBJECT_DUPLICATION_OPTIONS)
       service = new(options)
       service.duplicate_objects(objects)
@@ -34,7 +36,9 @@ class Course::Duplication::ObjectDuplicationService < Course::Duplication::BaseS
 
   # Duplicate the objects with the duplicator.
   #
-  # @return [Course] The duplicated objects
+  # @param [Object|Array] objects An object or an array of objects to duplicate.
+  # @return [Object] The duplicated object, if `objects` is a single object.
+  # @return [Array] Array of duplicated objects, if `objects` is an array.
   def duplicate_objects(objects)
     # TODO: Inform the user when the duplication is complete.
     Course.transaction do

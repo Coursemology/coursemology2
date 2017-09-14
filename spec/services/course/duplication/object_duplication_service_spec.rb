@@ -6,13 +6,13 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
   with_tenant(:instance) do
     let(:source_course) { create(:course) }
     let(:destination_course) { create(:course) }
-    let(:options) { { current_course: source_course, target_course: destination_course } }
     let(:source_objects) { [] }
     let(:excluded_objects) { [] }
 
     describe '#duplicate_objects' do
       let(:duplicate_objects) do
-        Course::Duplication::ObjectDuplicationService.duplicate_objects(source_objects, options)
+        Course::Duplication::ObjectDuplicationService.
+          duplicate_objects(source_course, destination_course, source_objects, {})
       end
 
       context 'when an item fails to duplicate' do
