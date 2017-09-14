@@ -25,7 +25,7 @@ table.table
   tbody
     - @submission.logs.ordered_by_date.each do |log|
       tr class=('danger' unless log.valid_attempt?)
-        td = format_datetime(log.created_at)
+        td = format_datetime(log.created_at, :short)
         td = log.ip_address
         td = log.user_agent
         td = log.user_session_id
