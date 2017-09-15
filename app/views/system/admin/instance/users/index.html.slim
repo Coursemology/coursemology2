@@ -1,11 +1,14 @@
 = page_header
 
+- total_users = current_tenant.instance_users.count
+- active_users = current_tenant.instance_users.active_in_past_7_days.count
+
 - if params[:search].blank?
   .panel.panel-default
     .panel-heading = t('common.summary')
     .panel-body
-      div = t('.total_users_html', count: current_tenant.users.count)
-      div = t('.active_users_html', count: current_tenant.users.active_in_past_7_days.count )
+      div = t('.total_users_html', count: params[:active] ? link_to(total_users) : total_users)
+      div = t('.active_users_html', count: params[:active] ? active_users : link_to(active_users, active: true))
 
 = render partial: 'layouts/search_form', locals: { url: admin_instance_users_path, placeholder: t('.search_placeholder') }
 

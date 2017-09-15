@@ -166,7 +166,7 @@ RSpec.describe Instance do
     describe '.active_user_count' do
       let!(:instance_users) { create_list(:instance_user, 2, instance: instance) }
       # Make one of the users active
-      before { instance_users.first.user.update_column(:current_sign_in_at, Time.zone.now) }
+      before { instance_users.sample.update_column(:last_active_at, Time.zone.now) }
       subject { Instance.where(id: instance.id).calculated(:active_user_count).first }
 
       it 'shows the correct count' do
