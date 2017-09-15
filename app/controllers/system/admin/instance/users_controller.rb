@@ -7,6 +7,7 @@ class System::Admin::Instance::UsersController < System::Admin::Instance::Contro
   def index
     @instance_users = @instance.instance_users.includes(user: [:emails, :courses]).
                       page(page_param).search_and_ordered_by_username(search_param)
+    @instance_users = @instance_users.active_in_past_7_days if params[:active]
   end
 
   def update
