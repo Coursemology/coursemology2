@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
   include ApplicationThemingConcern
   include ApplicationUserConcern
   include ApplicationUserTimeZoneConcern
+  include ApplicationInstanceUserConcern
   include ApplicationAnnouncementsConcern
   include ApplicationPaginationConcern
 
