@@ -169,11 +169,6 @@ class Course::Assessment::Submission < ActiveRecord::Base
     current_answers.map { |a| a.grade || 0 }.sum
   end
 
-  # The latest answer is the last answer of the question, ordered by created_at.
-  def latest_answers
-    answers.group_by(&:question_id).map { |pair| pair[1].last }
-  end
-
   # The answers with current_answer flag set to true.
   #
   # If there are multiple current_answers for a particular question, return the first one.

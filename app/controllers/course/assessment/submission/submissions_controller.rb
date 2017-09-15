@@ -172,7 +172,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   def check_zombie_jobs # rubocop:disable MethodLength, Metrics/AbcSize
     return unless @submission.attempting?
 
-    submitted_answers = @submission.latest_answers.select(&:submitted?)
+    submitted_answers = @submission.answers.latest_answers.select(&:submitted?)
     return if submitted_answers.empty?
 
     dead_answers = submitted_answers.select do |a|
