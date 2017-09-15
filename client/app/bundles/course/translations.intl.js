@@ -8,6 +8,10 @@ const translations = defineMessages({
 });
 
 export const defaultComponentTitles = defineMessages({
+  course_assessments_component: {
+    id: 'course.componentTitles.course_assessments_component',
+    defaultMessage: 'Assessments',
+  },
   course_announcements_component: {
     id: 'course.componentTitles.course_announcements_component',
     defaultMessage: 'Announcements',

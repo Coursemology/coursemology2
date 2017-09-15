@@ -15,8 +15,8 @@ class ConfirmationDialog extends React.Component {
     onCancel: PropTypes.func.isRequired,
     onConfirm: PropTypes.func.isRequired,
     message: PropTypes.node,
-    cancelButtonText: PropTypes.string,
-    confirmButtonText: PropTypes.string,
+    cancelButtonText: PropTypes.node,
+    confirmButtonText: PropTypes.node,
     confirmDiscard: PropTypes.bool,
     confirmDelete: PropTypes.bool,
     confirmSubmit: PropTypes.bool,
@@ -89,6 +89,7 @@ class ConfirmationDialog extends React.Component {
           modal={false}
           onRequestClose={onCancel}
           style={{ zIndex: 9999 }}
+          autoScrollBodyContent
         >
           { confirmationMessage }
         </Dialog>

@@ -1,0 +1,98 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { defineMessages, FormattedMessage } from 'react-intl';
+import Subheader from 'material-ui/Subheader';
+import { Card, CardText } from 'material-ui/Card';
+import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import { hideDuplicateItemsConfirmation, duplicateItems } from 'course/duplication/actions';
+import { courseShape } from 'course/duplication/propTypes';
+import AssessmentsListing from './AssessmentsListing';
+
+const translations = defineMessages({
+  confirmationQuestion: {
+    id: 'course.duplication.DuplicateItemsConfirmation.confirmationQuestion',
+    defaultMessage: 'Duplicate items?',
+  },
+  targetCourse: {
+    id: 'course.duplication.DuplicateItemsConfirmation.targetCourse',
+    defaultMessage: 'Target Course',
+  },
+  duplicate: {
+    id: 'course.duplication.DuplicateItemsConfirmation.duplicate',
+    defaultMessage: 'Duplicate',
+  },
+  failureMessage: {
+    id: 'course.duplication.DuplicateItemsConfirmation.failureMessage',
+    defaultMessage: 'Duplication Failed.',
+  },
+});
+
+class DuplicateItemsConfirmation extends React.Component {
+  static propTypes = {
+    open: PropTypes.bool,
+    isDuplicating: PropTypes.bool,
+    targetCourseId: PropTypes.number,
+    targetCourses: PropTypes.arrayOf(courseShape),
+    selectedItems: PropTypes.shape(),
+
+    dispatch: PropTypes.func.isRequired,
+  }
+
+  renderTargetCourseCard() {
+    const { targetCourses, targetCourseId } = this.props;
+    const targetCourse = targetCourses.find(course => course.id === targetCourseId);
+    const url = `${window.location.protocol}//${targetCourse.host}${targetCourse.path}`;
+
+    return (
+      <div>
+        <Subheader><FormattedMessage {...translations.targetCourse} /></Subheader>
+        <Card>
+          <CardText>
+            <h4>
+              <a href={url} target="_blank">
+                {targetCourse.title}
+              </a>
+            </h4>
+          </CardText>
+        </Card>
+      </div>
+    );
+  }
+
+  renderListing() {
+    return (
+      <div>
+        <p><FormattedMessage {...translations.confirmationQuestion} /></p>
+        { this.renderTargetCourseCard() }
+        <AssessmentsListing />
+      </div>
+    );
+  }
+
+  render() {
+    const { dispatch, open, targetCourseId, selectedItems, isDuplicating } = this.props;
+    if (!open) { return null; }
+    const failureMessage = <FormattedMessage {...translations.failureMessage} />;
+
+    return (
+      <ConfirmationDialog
+        open={open}
+        onCancel={() => dispatch(hideDuplicateItemsConfirmation())}
+        onConfirm={() => dispatch(duplicateItems(targetCourseId, selectedItems, failureMessage))}
+        confirmButtonText={<FormattedMessage {...translations.duplicate} />}
+        message={this.renderListing()}
+        disableCancelButton={isDuplicating}
+        disableConfirmButton={isDuplicating}
+      />
+    );
+  }
+}
+
+export default connect(({ objectDuplication }) => ({
+  open: objectDuplication.confirmationOpen,
+  targetCourses: objectDuplication.targetCourses,
+  targetCourseId: objectDuplication.targetCourseId,
+  selectedItems: objectDuplication.selectedItems,
+  isDuplicating: objectDuplication.isDuplicatingObjects,
+}))(DuplicateItemsConfirmation);
