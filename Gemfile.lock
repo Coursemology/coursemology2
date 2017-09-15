@@ -15,29 +15,6 @@ GIT
       rails (>= 3.2)
 
 GIT
-  remote: git://github.com/allenwq/devise.git
-  revision: 38cb8922fa39419b2b1bac82a5dd45f884834e1b
-  branch: 3-stable
-  specs:
-    devise (3.5.8)
-      bcrypt (~> 3.0)
-      orm_adapter (~> 0.1)
-      railties (>= 3.2.6, < 5)
-      responders
-      thread_safe (~> 0.1)
-      warden (~> 1.2.3)
-
-GIT
-  remote: git://github.com/lowjoel/simple_token_authentication.git
-  revision: 75cca3c0327e8ae9c8e2554e3d51b6f1b5db18a1
-  branch: optional-params-headers
-  specs:
-    simple_token_authentication (1.11.0)
-      actionmailer (>= 3.2.6, < 5)
-      actionpack (>= 3.2.6, < 5)
-      devise (~> 3.2)
-
-GIT
   remote: git://github.com/thedarkone/rails-dev-boost.git
   revision: a709a10b06b7d9fc4a9846bc613c60c86af9dd7c
   specs:
@@ -160,6 +137,12 @@ GEM
     coursemology-polyglot (0.2.9)
       activesupport (~> 4.2.0, >= 4.2.2)
     crass (1.0.2)
+    devise (4.3.0)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0, < 5.2)
+      responders
+      warden (~> 1.2.3)
     devise-multi_email (1.0.5)
       devise
     devise_masquerade (0.6.0)
@@ -601,7 +584,7 @@ DEPENDENCIES
   codecov
   consistency_fail
   coursemology-polyglot (>= 0.2.9)
-  devise!
+  devise
   devise-multi_email (~> 1.0.5)
   devise_masquerade
   docker-api
@@ -654,7 +637,6 @@ DEPENDENCIES
   shoulda-matchers
   simple_form (~> 3.2.1)
   simple_form-bootstrap
-  simple_token_authentication!
   simplecov
   slim-rails
   spring
@@ -673,4 +655,4 @@ DEPENDENCIES
 
 
 BUNDLED WITH
-   1.15.3
+   1.15.4

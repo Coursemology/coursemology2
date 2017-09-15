@@ -153,7 +153,6 @@ RSpec.describe User do
         it { is_expected.to be_valid }
         it { is_expected.to validate_absence_of(:email) }
         it { is_expected.to validate_absence_of(:encrypted_password) }
-        it { is_expected.to validate_absence_of(:authentication_token) }
       end
 
       describe '#time_zone' do
