@@ -3,7 +3,7 @@ table.table.table-middle-align.submissions-list.table-hover
     tr
       th = CourseUser.human_attribute_name(:name)
       th = Course::Assessment.human_attribute_name(:title)
-      th = Course::Assessment::Submission.human_attribute_name(:submitted_at)
+      th.table-submitted-at = Course::Assessment::Submission.human_attribute_name(:submitted_at)
       th.table-workflow-state = Course::Assessment::Submission.human_attribute_name(:status)
       - if pending
         th = Course::GroupUser.human_attribute_name(:manager)

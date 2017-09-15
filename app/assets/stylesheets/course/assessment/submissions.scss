@@ -1,5 +1,6 @@
 .course-assessment-submissions {
-  &.index {
+  &.index,
+  &.pending {
     .submissions-filter {
       border: 1px solid $gray-lighter;
       border-radius: 4px;
@@ -8,6 +9,7 @@
     }
 
     .submissions-list {
+      .table-submitted-at,
       .table-workflow-state,
       .table-grade,
       .table-current-points-awarded,
