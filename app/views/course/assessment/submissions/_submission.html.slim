@@ -3,7 +3,8 @@
   td = link_to_course_user(submission.course_user)
   td = link_to(format_inline_text(assessment.title),
                course_assessment_path(current_course, assessment))
-  td = format_datetime(submission.submitted_at, :short) if submission.submitted_at
+  td.table-submitted-at
+   = format_datetime(submission.submitted_at, :short) if submission.submitted_at
   td.table-workflow-state
     = Course::Assessment::Submission.human_attribute_name(submission.workflow_state)
   - if pending
