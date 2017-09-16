@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
 
   validates :email, :encrypted_password, absence: true, if: :built_in?
   schema_validations except: [:encrypted_password]
-  validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.zones_map.keys }, allow_nil: true
+  validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }, allow_nil: true
 
   has_many :emails, -> { order('primary' => :desc) }, class_name: User::Email.name,
                                                       inverse_of: :user, dependent: :destroy
