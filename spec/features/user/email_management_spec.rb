@@ -31,7 +31,7 @@ RSpec.feature 'User: Emails' do
     end
 
     scenario 'I can add new emails' do
-      invalid_email = 'test@example'
+      invalid_email = 'test@@example'
       valid_email = build(:user_email).email
       fill_in 'user_email_email', with: invalid_email
 
