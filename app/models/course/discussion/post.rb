@@ -8,7 +8,8 @@ class Course::Discussion::Post < ActiveRecord::Base
   has_many_attachments
 
   after_initialize :set_topic, if: :new_record?
-  before_destroy :reparent_children
+  before_destroy :reparent_children, unless: :destroyed_by_association
+  before_destroy :unparent_children, if: :destroyed_by_association
 
   validate :parent_topic_consistency
   validates :text, presence: true
@@ -97,5 +98,16 @@ class Course::Discussion::Post < ActiveRecord::Base
 
   def reparent_children
     children.update_all(parent_id: parent_id)
+  end
+
+  # Should be called only when destroyed by association.
+  #
+  # We unset the children's parent id so they don't trigger a foreign key exception when the
+  # parent is marked for destruction first. They will be destroyed by association later.
+  #
+  # This method assumes that :destroyed_by_association is true if and only if the entire topic
+  # the post belongs to is being destroyed.
+  def unparent_children
+    children.update_all(parent_id: nil)
   end
 end
