@@ -24,3 +24,9 @@ export const categoryShape = PropTypes.shape({
   title: PropTypes.string,
   tabs: PropTypes.arrayOf(tabShape),
 });
+
+export const surveyShape = PropTypes.shape({
+  id: PropTypes.number,
+  title: PropTypes.string,
+  published: PropTypes.bool,
+});

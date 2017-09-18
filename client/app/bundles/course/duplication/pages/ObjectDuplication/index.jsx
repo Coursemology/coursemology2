@@ -7,6 +7,7 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { fetchObjectsList } from 'course/duplication/actions';
 import TargetCourseSelector from './TargetCourseSelector';
 import AssessmentsSelector from './AssessmentsSelector';
+import SurveysSelector from './SurveysSelector';
 import DuplicateButton from './DuplicateButton';
 
 const translations = defineMessages({
@@ -27,6 +28,7 @@ class ObjectDuplication extends React.Component {
       <div>
         <TargetCourseSelector />
         <AssessmentsSelector />
+        <SurveysSelector />
         <DuplicateButton />
       </div>
     );

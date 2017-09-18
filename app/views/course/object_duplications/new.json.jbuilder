@@ -15,3 +15,7 @@ json.assessmentsComponent @categories do |category|
     end
   end
 end
+
+json.surveyComponent @surveys do |survey|
+  json.(survey, :id, :title, :published)
+end

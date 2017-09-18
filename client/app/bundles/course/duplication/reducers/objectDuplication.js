@@ -11,6 +11,7 @@ const initialState = {
   targetCourseId: null,
   targetCourses: [],
   assessmentsComponent: [],
+  surveyComponent: [],
   isLoading: false,
   isDuplicatingObjects: false,
 };
