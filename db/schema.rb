@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170915071654) do
+ActiveRecord::Schema.define(version: 20170915083041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,7 +23,6 @@ ActiveRecord::Schema.define(version: 20170915071654) do
     t.string   "time_zone",              :limit=>255
     t.text     "profile_photo"
     t.string   "encrypted_password",     :limit=>255, :default=>"", :null=>false
-    t.string   "authentication_token",   :limit=>255, :index=>{:name=>"index_users_on_authentication_token", :unique=>true}
     t.string   "reset_password_token",   :limit=>255, :index=>{:name=>"index_users_on_reset_password_token", :unique=>true}
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"

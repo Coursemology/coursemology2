@@ -33,7 +33,7 @@ RSpec.feature 'User: Profile' do
       end
 
       scenario 'I can link my account to facebook' do
-        facebook_link = find_link(nil, href: user_omniauth_authorize_path(:facebook))
+        facebook_link = find_link(nil, href: user_facebook_omniauth_authorize_path)
         expect { facebook_link.click }.to change { user.identities.count }.by(1)
         expect(page).to have_selector('div',
                                       text: I18n.t('user.omniauth_callbacks.facebook.success'))

@@ -95,8 +95,8 @@ class CourseUser < ActiveRecord::Base
   scope :active_in_past_7_days, -> { where('last_active_at > ?', 7.days.ago) }
 
   scope :from_instance, (lambda do |instance|
-    joins { course }.
-    where { course.instance_id == instance.id }
+    joining { course }.
+    where.has { course.instance_id == instance.id }
   end)
 
   # Test whether the current scope includes the current user.
