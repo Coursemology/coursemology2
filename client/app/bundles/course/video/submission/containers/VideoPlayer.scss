@@ -1,0 +1,59 @@
+$button-width: 30px;
+
+@mixin player-button($width) {
+  cursor: pointer;
+  flex-shrink: 0;
+  text-align: center;
+  width: $width;
+}
+
+.controlsContainer {
+  padding-bottom: 5px;
+}
+
+.controlsRow {
+  align-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  height: 3em;
+  justify-content: flex-start;
+}
+
+.progressBar {
+  margin-bottom: -0.5em;
+  padding: 0 1em;
+  position: relative;
+  width: 100%;
+}
+
+.playButton {
+  @include player-button($button-width);
+  order: 1;
+}
+
+.volumeButton {
+  @include player-button($button-width);
+  order: 2;
+}
+
+.volumeSlider {
+  @include player-button(2 * $button-width);
+  margin: 0 0.5em;
+  order: 3;
+}
+
+.timestamp {
+  flex-grow: 10;
+  font-size: 0.9em;
+  margin-left: 1em;
+  order: 4;
+}
+
+.playbackRate {
+  margin-right: -10px;
+  order: 6;
+  text-align: right;
+  width: 100px;
+}
