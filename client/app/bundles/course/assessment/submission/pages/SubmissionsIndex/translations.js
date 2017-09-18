@@ -34,6 +34,14 @@ const translations = defineMessages({
     id: 'course.assessment.submission.submissions.download',
     defaultMessage: 'Download',
   },
+  downloadAnswers: {
+    id: 'course.assessment.submission.submissions.downloadAnswers',
+    defaultMessage: 'Download Answers',
+  },
+  downloadStatistics: {
+    id: 'course.assessment.submission.submissions.downloadStatistics',
+    defaultMessage: 'Download Statistics',
+  },
   accessLogs: {
     id: 'course.assessment.submission.submissions.accessLogs',
     defaultMessage: 'Access Logs',

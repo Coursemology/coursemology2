@@ -6,6 +6,7 @@ const initialState = {
   isAutograding: false,
   isPublishing: false,
   isDownloading: false,
+  isStatisticsDownloading: false,
 };
 
 export default function (state = initialState, action) {
@@ -59,6 +60,13 @@ export default function (state = initialState, action) {
     case actions.DOWNLOAD_SUBMISSIONS_SUCCESS:
     case actions.DOWNLOAD_SUBMISSIONS_FAILURE:
       return { ...state, isDownloading: false };
+
+    case actions.DOWNLOAD_STATISTICS_REQUEST:
+      return { ...state, isStatisticsDownloading: true };
+    case actions.DOWNLOAD_STATISTICS_SUCCESS:
+      return { ...state, isStatisticsDownloading: false };
+    case actions.DOWNLOAD_STATISTICS_FAILURE:
+      return { ...state, isStatisticsDownloading: false };
 
     case actions.PUBLISH_SUBMISSIONS_REQUEST:
       return { ...state, isPublishing: true };

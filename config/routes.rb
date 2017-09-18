@@ -189,6 +189,7 @@ Rails.application.routes.draw do
               post :reload_answer, on: :member
               patch :submit_answer, on: :member
               get :download_all, on: :collection
+              get :download_statistics, on: :collection
               patch :publish_all, on: :collection
               resources :logs, only: [:index]
               scope module: :answer do

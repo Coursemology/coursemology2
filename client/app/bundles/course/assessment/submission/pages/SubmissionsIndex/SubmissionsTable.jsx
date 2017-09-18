@@ -5,6 +5,9 @@ import { FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
 import moment from 'lib/moment';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { red600, blue600 } from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import CircularProgress from 'material-ui/CircularProgress';
@@ -79,6 +82,11 @@ export default class SubmissionsTable extends React.Component {
     );
   }
 
+  canDownloadStatistics = () => {
+    const { submissions } = this.props;
+    return submissions.length > 0;
+  }
+
   renderSubmissionWorkflowState(submission) {
     const { courseId, assessmentId } = this.props;
 
@@ -148,27 +156,29 @@ export default class SubmissionsTable extends React.Component {
     ));
   }
 
-  renderDownloadButton() {
-    const { isDownloading, handleDownload } = this.props;
-
-    if (isDownloading) {
-      return <CircularProgress size={24} style={{ margin: 12 }} />;
-    }
-
+  renderDownloadDropdown() {
+    const { handleDownload, handleDownloadStatistics, isDownloading, isStatisticsDownloading } = this.props;
+    const downloadAnswerDisabled = isDownloading || !this.canDownload();
+    const downloadStatisticsDisabled = isStatisticsDownloading || !this.canDownloadStatistics();
     return (
-      <IconButton
-        className="download-submissions"
-        iconStyle={{ color: blue600 }}
-        onTouchTap={handleDownload}
-        disabled={isDownloading || !this.canDownload()}
-        data-tip
-        data-for="download-btn"
-      >
-        <DownloadIcon />
-        <ReactTooltip id="download-btn" effect="solid">
-          <FormattedMessage {...submissionsTranslations.download} />
-        </ReactTooltip>
-      </IconButton>
+      <div>
+        <IconMenu iconButtonElement={<IconButton id="download-dropdown-icon"><MoreVertIcon /></IconButton>}>
+          <MenuItem
+            className={downloadAnswerDisabled ? 'download-submissions-disabled' : 'download-submissions-enabled'}
+            primaryText={<FormattedMessage {...submissionsTranslations.downloadAnswers} />}
+            disabled={downloadAnswerDisabled}
+            leftIcon={isDownloading ? <CircularProgress size={30} /> : <DownloadIcon />}
+            onTouchTap={downloadAnswerDisabled ? null : handleDownload}
+          />
+          <MenuItem
+            className={downloadStatisticsDisabled ? 'download-statistics-disabled' : 'download-statistics-enabled'}
+            primaryText={<FormattedMessage {...submissionsTranslations.downloadStatistics} />}
+            disabled={downloadStatisticsDisabled}
+            leftIcon={isStatisticsDownloading ? <CircularProgress size={30} /> : <DownloadIcon />}
+            onTouchTap={downloadStatisticsDisabled ? null : handleDownloadStatistics}
+          />
+        </IconMenu>
+      </div>
     );
   }
 
@@ -198,7 +208,7 @@ export default class SubmissionsTable extends React.Component {
             {tableHeaderCenterColumnFor('dateSubmitted')}
             {tableHeaderCenterColumnFor('dateGraded')}
             <TableHeaderColumn style={{ width: 48, padding: 0 }}>
-              {this.renderDownloadButton()}
+              {this.renderDownloadDropdown()}
             </TableHeaderColumn>
           </TableRow>
         </TableHeader>
@@ -225,5 +235,7 @@ SubmissionsTable.propTypes = {
   courseId: PropTypes.string.isRequired,
   assessmentId: PropTypes.string.isRequired,
   isDownloading: PropTypes.bool.isRequired,
+  isStatisticsDownloading: PropTypes.bool.isRequired,
   handleDownload: PropTypes.func,
+  handleDownloadStatistics: PropTypes.func,
 };

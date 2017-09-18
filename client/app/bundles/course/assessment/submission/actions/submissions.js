@@ -8,6 +8,7 @@ import actionTypes from '../constants';
 
 const DOWNLOAD_JOB_POLL_INTERVAL = 2000;
 const PUBLISH_JOB_POLL_INTERVAL = 500;
+const DOWNLOAD_STATISTICS_JOB_POLL_INTERNAL = 2000;
 
 export function fetchSubmissions() {
   return (dispatch) => {
@@ -71,6 +72,31 @@ export function downloadSubmissions(type) {
       .then(response => response.data)
       .then((data) => {
         pollJob(data.redirect_url, DOWNLOAD_JOB_POLL_INTERVAL, handleSuccess, handleFailure);
+      })
+      .catch(handleFailure);
+  };
+}
+
+export function downloadStatistics(type) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.DOWNLOAD_STATISTICS_REQUEST });
+
+    const handleSuccess = (successData) => {
+      window.location.href = successData.redirect_url;
+      dispatch({ type: actionTypes.DOWNLOAD_STATISTICS_SUCCESS });
+    };
+
+    const handleFailure = (data) => {
+      const message = (data && data.response && data.response.data && data.response.data.error)
+        || translations.requestFailure;
+      dispatch({ type: actionTypes.DOWNLOAD_STATISTICS_FAILURE });
+      dispatch(setNotification(message));
+    };
+
+    return CourseAPI.assessment.submissions.downloadStatistics(type)
+      .then(response => response.data)
+      .then((data) => {
+        pollJob(data.redirect_url, DOWNLOAD_STATISTICS_JOB_POLL_INTERNAL, handleSuccess, handleFailure);
       })
       .catch(handleFailure);
   };

@@ -19,6 +19,8 @@ class Course::Assessment::Submission::SubmissionsController < \
   delegate_to_service(:load_or_create_answers)
   delegate_to_service(:load_or_create_submission_questions)
 
+  STUDENTS = { my: 'my', phantom: 'phantom' }.freeze
+
   def index
     authorize!(:manage, @assessment)
 
@@ -115,6 +117,23 @@ class Course::Assessment::Submission::SubmissionsController < \
     end
   end
 
+  def download_statistics
+    authorize!(:manage, @assessment)
+    submission_ids = @assessment.submissions.by_users(student_ids).pluck(:id)
+    if submission_ids.empty?
+      render json: { error:
+             I18n.t('course.assessment.submission.submissions.download_statistics.no_submission_statistics') },
+             status: :bad_request
+    else
+      job = Course::Assessment::Submission::StatisticsDownloadJob.
+            perform_later(current_user, submission_ids).job
+      respond_to do |format|
+        format.html { redirect_to(job_path(job)) }
+        format.json { render json: { redirect_url: job_path(job) } }
+      end
+    end
+  end
+
   private
 
   def create_params
@@ -190,5 +209,16 @@ class Course::Assessment::Submission::SubmissionsController < \
       logger.debug(message: 'Restart Answer Grading', answer_id: a.id, job_id: job.job.id,
                    old_job_id: old_job.id)
     end
+  end
+
+  def student_ids
+    case params[:students]
+    when STUDENTS[:my]
+      current_course_user.my_students
+    when STUDENTS[:phantom]
+      @assessment.course.course_users.students.phantom
+    else
+      @assessment.course.course_users.students.without_phantom_users
+    end.select(:user_id)
   end
 end

@@ -9,3 +9,17 @@ en:
             failure: 'Could not create submission: %{error}'
           edit:
             attempt: :'course.assessment.assessments.assessment.attempt'
+          download_statistics:
+            no_submission_statistics: 'No submission fulfilled your requirements for downloading'
+          statistics_download_service:
+            name: 'Name'
+            status: 'Status'
+            grade: 'Grade'
+            max_grade: 'Maximum Grade'
+            exp_points: 'Experience Points'
+            start_date_time: 'Start Date/Time'
+            submitted_date_time: 'Submitted Date/Time'
+            time_taken: 'Time Taken'
+            graded_date_time: 'Graded Date/Time'
+            grading_time: 'Grading Time'
+            csv_empty: '-'

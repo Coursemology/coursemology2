@@ -16,7 +16,7 @@ import { red100, yellow100, grey100, green100, blue100, blue500 } from 'material
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
-import { fetchSubmissions, publishSubmissions, downloadSubmissions } from '../../actions/submissions';
+import { fetchSubmissions, publishSubmissions, downloadSubmissions, downloadStatistics } from '../../actions/submissions';
 import SubmissionsTable from './SubmissionsTable';
 import { assessmentShape } from '../../propTypes';
 import { workflowStates } from '../../constants';
@@ -127,12 +127,12 @@ class VisibleSubmissionsIndex extends React.Component {
 
   renderTabs() {
     const { courseId, assessmentId } = this.props.match.params;
-    const { dispatch, submissions, assessment, isDownloading } = this.props;
+    const { dispatch, submissions, assessment, isDownloading, isStatisticsDownloading } = this.props;
     const myStudentSubmissions = submissions.filter(s => s.courseStudent.myStudent);
     const studentSubmissions = submissions.filter(s => !s.courseStudent.phantom);
     const otherSubmissions = submissions.filter(s => s.courseStudent.phantom);
 
-    const props = { courseId, assessmentId, assessment, isDownloading };
+    const props = { courseId, assessmentId, assessment, isDownloading, isStatisticsDownloading };
 
     return (
       <Tabs
@@ -149,6 +149,7 @@ class VisibleSubmissionsIndex extends React.Component {
             <SubmissionsTable
               submissions={myStudentSubmissions}
               handleDownload={() => dispatch(downloadSubmissions('my'))}
+              handleDownloadStatistics={() => dispatch(downloadStatistics('my'))}
               {...props}
             />
           </Tab>
@@ -162,6 +163,7 @@ class VisibleSubmissionsIndex extends React.Component {
           <SubmissionsTable
             submissions={studentSubmissions}
             handleDownload={() => dispatch(downloadSubmissions())}
+            handleDownloadStatistics={() => dispatch(downloadStatistics())}
             {...props}
           />
         </Tab>
@@ -174,6 +176,7 @@ class VisibleSubmissionsIndex extends React.Component {
           <SubmissionsTable
             submissions={otherSubmissions}
             handleDownload={() => dispatch(downloadSubmissions('phantom'))}
+            handleDownloadStatistics={() => dispatch(downloadStatistics('phantom'))}
             {...props}
           />
         </Tab>
@@ -236,6 +239,7 @@ VisibleSubmissionsIndex.propTypes = {
   notification: notificationShape,
   isLoading: PropTypes.bool.isRequired,
   isDownloading: PropTypes.bool.isRequired,
+  isStatisticsDownloading: PropTypes.bool.isRequired,
   isPublishing: PropTypes.bool.isRequired,
 };
 
@@ -246,6 +250,7 @@ function mapStateToProps(state) {
     submissions: state.submissions,
     isLoading: state.submissionFlags.isLoading,
     isDownloading: state.submissionFlags.isDownloading,
+    isStatisticsDownloading: state.submissionFlags.isStatisticsDownloading,
     isPublishing: state.submissionFlags.isPublishing,
   };
 }
