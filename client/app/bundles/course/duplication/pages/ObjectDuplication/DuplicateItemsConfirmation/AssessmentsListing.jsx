@@ -127,19 +127,13 @@ class AssessmentsListing extends React.Component {
     );
   }
 
-  /**
-  * Organises selected assessment component items into trees and returns a list of Cards - one for each tree
-  * with a category at its root. This should mirror what the backend does - items come under their parents
-  * only if their parents have been duplicated, otherwise, they are placed under a default parent.
-  */
-  renderCards() {
+  // Identifies connected subtrees of selected categories, tabs and assessments.
+  selectedSubtrees() {
     const { categories, selectedItems } = this.props;
     const categoriesTrees = [];
     const tabTrees = [];
     const assessmentTrees = [];
 
-    // Identify connected sub-trees and push them into categoriesTrees, tabTrees, assessmentTrees
-    // depending on the type of item at the root of the connected sub-tree.
     categories.forEach((category) => {
       const selectedTabs = [];
       category.tabs.forEach((tab) => {
@@ -161,26 +155,26 @@ class AssessmentsListing extends React.Component {
       }
     });
 
-    const hasOrphanedItems = (tabTrees.length > 0) || (assessmentTrees.length > 0);
-    return (
-      <div>
-        {
-          categoriesTrees.map(category => (
-            AssessmentsListing.renderCategoryCard(category, null, null))
-          )
-        }
-        { hasOrphanedItems && AssessmentsListing.renderCategoryCard(null, tabTrees, assessmentTrees) }
-      </div>
-    );
+    return [categoriesTrees, tabTrees, assessmentTrees];
   }
 
   render() {
+    const [categoriesTrees, tabTrees, assessmentTrees] = this.selectedSubtrees();
+    const orphanTreesCount = tabTrees.length + assessmentTrees.length;
+    const totalTreesCount = orphanTreesCount + categoriesTrees.length;
+    if (totalTreesCount < 1) { return null; }
+
     return (
       <div>
         <Subheader>
           <FormattedMessage {...defaultComponentTitles.course_assessments_component} />
         </Subheader>
-        { this.renderCards() }
+        {
+          categoriesTrees.map(category => (
+            AssessmentsListing.renderCategoryCard(category, null, null))
+          )
+        }
+        { (orphanTreesCount > 0) && AssessmentsListing.renderCategoryCard(null, tabTrees, assessmentTrees) }
       </div>
     );
   }
