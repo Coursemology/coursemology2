@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import Subheader from 'material-ui/Subheader';
 import Checkbox from 'material-ui/Checkbox';
-import Block from 'material-ui/svg-icons/content/block';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { setItemSelectedBoolean } from 'course/duplication/actions';
 import { categoryShape } from 'course/duplication/propTypes';
 import TypeBadge from 'course/duplication/components/TypeBadge';
+import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 
 const { TAB, ASSESSMENT, CATEGORY } = duplicableItemTypes;
 
@@ -37,11 +37,6 @@ const styles = {
   deselectLink: {
     marginLeft: 10,
     lineHeight: '24px',
-  },
-  unpublishedIcon: {
-    width: '1em',
-    height: '1em',
-    marginRight: 3,
   },
 };
 
@@ -107,7 +102,7 @@ class AssessmentsSelector extends React.Component {
     const label = (
       <span>
         <TypeBadge itemType={ASSESSMENT} />
-        { published || <Block style={styles.unpublishedIcon} /> }
+        { published || <UnpublishedIcon /> }
         { title }
       </span>
     );
