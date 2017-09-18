@@ -5,6 +5,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import Checkbox from 'material-ui/Checkbox';
 import Subheader from 'material-ui/Subheader';
 import { Card, CardText } from 'material-ui/Card';
+import Block from 'material-ui/svg-icons/content/block';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { categoryShape } from 'course/duplication/propTypes';
@@ -30,6 +31,15 @@ const styles = {
   indent2: {
     marginLeft: 30,
   },
+  unpublishedIcon: {
+    width: '1em',
+    height: '1em',
+    marginRight: 3,
+
+    // Allow tooltip to be triggered
+    zIndex: 3,
+    position: 'relative',
+  },
 };
 
 class AssessmentsListing extends React.Component {
@@ -43,7 +53,13 @@ class AssessmentsListing extends React.Component {
       <Checkbox
         checked
         key={assessment.id}
-        label={<span><TypeBadge itemType={ASSESSMENT} />{assessment.title}</span>}
+        label={
+          <span>
+            <TypeBadge itemType={ASSESSMENT} />
+            <Block data-tip data-for="itemUnpublished" style={styles.unpublishedIcon} />
+            {assessment.title}
+          </span>
+        }
         style={styles.indent2}
       />
     );

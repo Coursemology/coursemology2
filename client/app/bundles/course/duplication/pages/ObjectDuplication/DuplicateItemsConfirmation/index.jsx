@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import ReactTooltip from 'react-tooltip';
 import Subheader from 'material-ui/Subheader';
 import { Card, CardText } from 'material-ui/Card';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -25,6 +26,10 @@ const translations = defineMessages({
   failureMessage: {
     id: 'course.duplication.DuplicateItemsConfirmation.failureMessage',
     defaultMessage: 'Duplication Failed.',
+  },
+  itemUnpublished: {
+    id: 'course.duplication.DuplicateItemsConfirmation.itemUnpublished',
+    defaultMessage: 'Items are duplicated as unpublished when duplicating to an existing course.',
   },
 });
 
@@ -66,6 +71,10 @@ class DuplicateItemsConfirmation extends React.Component {
         <p><FormattedMessage {...translations.confirmationQuestion} /></p>
         { this.renderTargetCourseCard() }
         <AssessmentsListing />
+
+        <ReactTooltip id="itemUnpublished">
+          <FormattedMessage {...translations.itemUnpublished} />
+        </ReactTooltip>
       </div>
     );
   }

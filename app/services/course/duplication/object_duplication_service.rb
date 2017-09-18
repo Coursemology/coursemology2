@@ -32,7 +32,7 @@ class Course::Duplication::ObjectDuplicationService < Course::Duplication::BaseS
   end
 
   DEFAULT_OBJECT_DUPLICATION_OPTIONS =
-    { mode: :object, current_user: User.system }.freeze
+    { mode: :object, unpublish_all: true, current_user: User.system }.freeze
 
   # Duplicate the objects with the duplicator.
   #
