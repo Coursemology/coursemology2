@@ -173,7 +173,7 @@ class VisibleSubmissionsIndex extends React.Component {
         >
           <SubmissionsTable
             submissions={otherSubmissions}
-            handleDownload={() => dispatch(downloadSubmissions('others'))}
+            handleDownload={() => dispatch(downloadSubmissions('phantom'))}
             {...props}
           />
         </Tab>
