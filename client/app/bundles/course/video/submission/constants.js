@@ -15,6 +15,16 @@ export const videoDefaults = {
   availablePlaybackRates: [0.5, 1, 1.5, 2, 2.5],
 };
 
+export const videoActionTypes = mirrorCreator([
+  'CHANGE_PLAYER_STATE',
+  'CHANGE_PLAYER_VOLUME',
+  'CHANGE_PLAYBACK_RATE',
+  'UPDATE_PLAYER_PROGRESS',
+  'UPDATE_BUFFER_PROGRESS',
+  'UPDATE_PLAYER_DURATION',
+  'UPDATE_RESTRICTED_TIME',
+]);
+
 export const playerStates = mirrorCreator([
   'UNSTARTED',
   'ENDED',
