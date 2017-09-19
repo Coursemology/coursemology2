@@ -1,3 +1,5 @@
+import mirrorCreator from 'mirror-creator';
+
 export const youtubeOpts = {
   playerVars: {
     showinfo: false,
@@ -12,3 +14,11 @@ export const videoDefaults = {
   volume: 0.8,
   availablePlaybackRates: [0.5, 1, 1.5, 2, 2.5],
 };
+
+export const playerStates = mirrorCreator([
+  'UNSTARTED',
+  'ENDED',
+  'PLAYING',
+  'PAUSED',
+  'BUFFERING',
+]);

@@ -4,7 +4,7 @@ import Paper from 'material-ui/Paper';
 import { timeIsPastRestricted } from 'lib/helpers/videoHelpers';
 
 import styles from './VideoPlayer.scss';
-import { videoDefaults, youtubeOpts } from '../constants';
+import { playerStates, videoDefaults, youtubeOpts } from '../constants';
 
 import {
   PlayBackRateSelector,
@@ -22,28 +22,14 @@ const propTypes = {
 };
 
 class VideoPlayer extends React.Component {
-  /**
-   * Expose PlayerState constants for convenience. These constants can also be
-   * accessed through the global YT object after the YouTube IFrame API is instantiated.
-   * https://developers.google.com/youtube/iframe_api_reference#onStateChange
-   */
-  static PlayerState = {
-    UNSTARTED: -1,
-    ENDED: 0,
-    PLAYING: 1,
-    PAUSED: 2,
-    BUFFERING: 3,
-    CUED: 5,
-  };
-
   constructor(props) {
     super(props);
 
     this.player = null;
-    this.preDragState = VideoPlayer.PlayerState.PLAYING;
+    this.preDragState = playerStates.PLAYING;
 
     this.state = {
-      playerState: VideoPlayer.PlayerState.UNSTARTED,
+      playerState: playerStates.UNSTARTED,
       playerProgress: 0,
       duration: 600,
       bufferProgress: 0,
@@ -77,7 +63,7 @@ class VideoPlayer extends React.Component {
     let playerState = this.state.playerState;
     if (timeIsPastRestricted(this.props.restrictContentAfter, playedSeconds)) {
       targetTime = this.props.restrictContentAfter;
-      playerState = VideoPlayer.PlayerState.PAUSED;
+      playerState = playerStates.PAUSED;
       this.player.seekTo(targetTime);
     }
 
@@ -94,9 +80,9 @@ class VideoPlayer extends React.Component {
 
   onPlayButtonClick = () => {
     if (this.isPlayingState()) {
-      this.setState({ playerState: VideoPlayer.PlayerState.PAUSED });
+      this.setState({ playerState: playerStates.PAUSED });
     } else if (!timeIsPastRestricted(this.props.restrictContentAfter, this.state.playerProgress)) {
-      this.setState({ playerState: VideoPlayer.PlayerState.PLAYING });
+      this.setState({ playerState: playerStates.PLAYING });
     }
   };
 
@@ -118,7 +104,7 @@ class VideoPlayer extends React.Component {
     let playerState = this.preDragState;
     if (timeIsPastRestricted(this.props.restrictContentAfter, newPlayerProgress)) {
       newPlayerProgress = this.props.restrictContentAfter;
-      playerState = VideoPlayer.PlayerState.PAUSED;
+      playerState = playerStates.PAUSED;
     }
     this.player.seekTo(newPlayerProgress);
     this.setState({ playerProgress: newPlayerProgress, playerState });
@@ -141,8 +127,8 @@ class VideoPlayer extends React.Component {
    */
   isPlayingState() {
     switch (this.state.playerState) {
-      case VideoPlayer.PlayerState.PLAYING:
-      case VideoPlayer.PlayerState.BUFFERING:
+      case playerStates.PLAYING:
+      case playerStates.BUFFERING:
         return true;
       default:
         return false;
@@ -165,15 +151,15 @@ class VideoPlayer extends React.Component {
         progressFrequency={this.state.progressFrequency}
         onProgress={this.onPlayerProgress}
         onDuration={duration => this.setState({ duration })}
-        onPlay={() => this.setState({ playerState: VideoPlayer.PlayerState.PLAYING })}
-        onPause={() => this.setState({ playerState: VideoPlayer.PlayerState.PAUSED })}
+        onPlay={() => this.setState({ playerState: playerStates.PLAYING })}
+        onPause={() => this.setState({ playerState: playerStates.PAUSED })}
         onBuffer={() => {
           // It doesn't matter if video is buffering if we aren't even playing it
           if (this.isPlayingState()) {
-            this.setState({ playerState: VideoPlayer.PlayerState.BUFFERING });
+            this.setState({ playerState: playerStates.BUFFERING });
           }
         }}
-        onEnded={() => this.setState({ playerState: VideoPlayer.PlayerState.ENDED })}
+        onEnded={() => this.setState({ playerState: playerStates.ENDED })}
         config={{ youtube: youtubeOpts }}
       />
     );
