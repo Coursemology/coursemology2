@@ -169,8 +169,7 @@ gem 'http_accept_language'
 # User authentication
 gem 'devise'
 gem 'devise_masquerade'
-# TODO: To remove restriction once v2.0 stabilises.
-gem 'devise-multi_email', '~>1.0.5'
+gem 'devise-multi_email'
 
 gem 'omniauth'
 gem 'omniauth-facebook'

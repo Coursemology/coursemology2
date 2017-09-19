@@ -49,9 +49,12 @@ RSpec.describe Course::UserInvitationService, type: :service do
         { name: user.name, email: user.email, role: Course::UserInvitation.roles[new_roles[id]] }
       end
     end
+    let(:invalid_user_attributes) do
+      []
+    end
     let(:users) { existing_users + new_users }
     let(:roles) { existing_roles + new_roles }
-    let(:user_attributes) { existing_user_attributes + new_user_attributes }
+    let(:user_attributes) { existing_user_attributes + new_user_attributes + invalid_user_attributes }
     let(:user_form_attributes) do
       user_attributes.map do |hash|
         [generate(:nested_attribute_new_id), {
@@ -156,8 +159,8 @@ RSpec.describe Course::UserInvitationService, type: :service do
       end
 
       context 'when an invalid email is specified' do
-        before do
-          new_users.first.email = 'xxnot an email'
+        let(:invalid_user_attributes) do
+          [{ name: build(:user).name, email: 'xxnot an email', role: :student }]
         end
 
         it 'fails' do

@@ -62,7 +62,7 @@ GEM
       activemodel (= 4.2.9)
       activesupport (= 4.2.9)
       arel (~> 6.0)
-    activerecord-import (0.20.0)
+    activerecord-import (0.20.1)
       activerecord (>= 3.2)
     activerecord-userstamp (3.0.4)
       activerecord (~> 4.2)
@@ -149,7 +149,7 @@ GEM
       railties (>= 4.1.0, < 5.2)
       responders
       warden (~> 1.2.3)
-    devise-multi_email (1.0.5)
+    devise-multi_email (2.0.1)
       devise
     devise_masquerade (0.6.0)
       devise (>= 2.1.0)
@@ -587,7 +587,7 @@ DEPENDENCIES
   consistency_fail
   coursemology-polyglot (>= 0.2.9)
   devise
-  devise-multi_email (~> 1.0.5)
+  devise-multi_email
   devise_masquerade
   docker-api
   edge
