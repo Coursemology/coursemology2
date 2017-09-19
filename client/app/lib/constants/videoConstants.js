@@ -13,6 +13,8 @@ export const youtubeOpts = {
 export const videoDefaults = {
   volume: 0.8,
   availablePlaybackRates: [0.5, 1, 1.5, 2, 2.5],
+  placeHolderDuration: 600,
+  progressUpdateFrequencyMs: 500,
 };
 
 export const videoActionTypes = mirrorCreator([
