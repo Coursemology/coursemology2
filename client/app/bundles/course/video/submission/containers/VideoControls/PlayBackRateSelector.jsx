@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
+import { videoDefaults } from 'lib/constants/videoConstants';
 
 import styles from '../VideoPlayer.scss';
-import { videoDefaults } from '../../constants';
+import { changePlayBackRate } from '../../actions/video';
 
 const propTypes = {
   rate: PropTypes.number.isRequired,
@@ -38,4 +40,17 @@ function PlayBackRateSelector(props) {
 PlayBackRateSelector.propTypes = propTypes;
 PlayBackRateSelector.defaultProps = defaultProps;
 
-export default PlayBackRateSelector;
+function mapStateToProps(state, ownProps) {
+  return {
+    rate: state.video.playBackRate,
+    availableRates: ownProps.availableRates,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    rateChanged: newRate => dispatch(changePlayBackRate(newRate)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlayBackRateSelector);

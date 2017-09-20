@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Slider from 'material-ui/Slider';
 
 import styles from '../VideoPlayer.scss';
+import { changePlayerVolume } from '../../actions/video';
 
 const propTypes = {
   volume: PropTypes.number.isRequired,
@@ -34,4 +36,17 @@ function VolumeSlider(props) {
 VolumeSlider.propTypes = propTypes;
 VolumeSlider.defaultProps = defaultProps;
 
-export default VolumeSlider;
+function mapStateToProps(state, ownProps) {
+  return {
+    volume: state.video.playerVolume,
+    fineTuningScale: ownProps.fineTuningScale,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onVolumeChange: newVolume => dispatch(changePlayerVolume(newVolume)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(VolumeSlider);

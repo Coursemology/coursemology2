@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
-import { timeIsPastRestricted } from 'lib/helpers/videoHelpers';
+import { connect } from 'react-redux';
+import { playerStates, videoDefaults, youtubeOpts } from 'lib/constants/videoConstants';
+import { isPlayingState } from 'lib/helpers/videoHelpers';
 
 import styles from './VideoPlayer.scss';
-import { playerStates, videoDefaults, youtubeOpts } from '../constants';
-
+import { changePlayerState, updatePlayerDuration, updateProgressAndBuffer } from '../actions/video';
 import {
   PlayBackRateSelector,
   PlayButton,
@@ -17,8 +18,25 @@ import {
 
 const propTypes = {
   videoUrl: PropTypes.string.isRequired,
-  restrictContentAfter: PropTypes.number,
-  updateTimestamp: PropTypes.func,
+  playerState: PropTypes.oneOf(Object.values(playerStates)),
+  playerProgress: PropTypes.number,
+  duration: PropTypes.number,
+  playerVolume: PropTypes.number,
+  playbackRate: PropTypes.number,
+  forceSeek: PropTypes.bool,
+  onPlayerProgress: PropTypes.func,
+  onDurationReceived: PropTypes.func,
+  onPlayerStateChanged: PropTypes.func,
+};
+
+const defaultProps = {
+  playerState: playerStates.UNSTARTED,
+  playerProgress: 0,
+  duration: videoDefaults.placeHolderDuration,
+  bufferProgress: 0,
+  playerVolume: videoDefaults.volume,
+  playbackRate: 1,
+  forceSeek: false,
 };
 
 class VideoPlayer extends React.Component {
@@ -26,18 +44,6 @@ class VideoPlayer extends React.Component {
     super(props);
 
     this.player = null;
-    this.preDragState = playerStates.PLAYING;
-
-    this.state = {
-      playerState: playerStates.UNSTARTED,
-      playerProgress: 0,
-      duration: 600,
-      bufferProgress: 0,
-      playerVolume: videoDefaults.volume,
-      playbackRate: 1,
-      playsInline: true,
-      progressFrequency: 500,
-    };
   }
 
   componentWillMount() {
@@ -49,66 +55,11 @@ class VideoPlayer extends React.Component {
     });
   }
 
-  /**
-   * This is the call back passed to ReactPlayer that is called in intervals as the player plays.
-   *
-   * The update interval is specified by progressFrequency property.
-   * @param {Object} progressStats - Progress of the video as played, playedSeconds, loaded, and
-   * loadedSeconds, specifying the interval and absolute time of the progress respectively
-   */
-  onPlayerProgress = (progressStats) => {
-    const { playedSeconds, loadedSeconds } = progressStats;
-
-    let targetTime = (playedSeconds === undefined) ? 0 : playedSeconds;
-    let playerState = this.state.playerState;
-    if (timeIsPastRestricted(this.props.restrictContentAfter, playedSeconds)) {
-      targetTime = this.props.restrictContentAfter;
-      playerState = playerStates.PAUSED;
-      this.player.seekTo(targetTime);
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.forceSeek) {
+      this.player.seekTo(nextProps.playerProgress);
     }
-
-    this.setState(oldState => ({
-      playerState,
-      playerProgress: targetTime,
-      bufferProgress: ((loadedSeconds === undefined) ? oldState.bufferProgress : loadedSeconds),
-    }));
-
-    if (this.props.updateTimestamp) {
-      this.props.updateTimestamp(targetTime);
-    }
-  };
-
-  onPlayButtonClick = () => {
-    if (this.isPlayingState()) {
-      this.setState({ playerState: playerStates.PAUSED });
-    } else if (!timeIsPastRestricted(this.props.restrictContentAfter, this.state.playerProgress)) {
-      this.setState({ playerState: playerStates.PLAYING });
-    }
-  };
-
-  onVolumeButtonClick = () => {
-    const newVolume = this.state.playerVolume === 0 ? videoDefaults.volume : 0;
-    this.setState({ playerVolume: newVolume });
-  };
-
-  onVolumeSliderChange = (newVolume) => {
-    this.setState({ playerVolume: newVolume });
-  };
-
-  onPlayRateChange = (newRate) => {
-    this.setState({ playbackRate: newRate });
-  };
-
-  onVideoSliderChange = (newValue) => {
-    let newPlayerProgress = (newValue && newValue >= 0) ? newValue : 0;
-    let playerState = this.preDragState;
-    if (timeIsPastRestricted(this.props.restrictContentAfter, newPlayerProgress)) {
-      newPlayerProgress = this.props.restrictContentAfter;
-      playerState = playerStates.PAUSED;
-    }
-    this.player.seekTo(newPlayerProgress);
-    this.setState({ playerProgress: newPlayerProgress, playerState });
-  };
+  }
 
   /**
    * Sets a ref so we can control the player.
@@ -121,20 +72,6 @@ class VideoPlayer extends React.Component {
     this.player = player;
   };
 
-  /**
-   * Returns if the playerState stored is a state that indicates the player is playing.
-   * @returns {boolean} - true if player is playing
-   */
-  isPlayingState() {
-    switch (this.state.playerState) {
-      case playerStates.PLAYING:
-      case playerStates.BUFFERING:
-        return true;
-      default:
-        return false;
-    }
-  }
-
   render() {
     // do not attempt to create a player server-side, it won't work
     if (typeof document === 'undefined') return null;
@@ -144,22 +81,19 @@ class VideoPlayer extends React.Component {
       <VideoPlayer.ReactPlayer
         ref={this.setRef}
         url={this.props.videoUrl}
-        playing={this.isPlayingState()}
-        volume={this.state.playerVolume}
-        playbackRate={this.state.playbackRate}
-        playsinline={this.state.playsInline}
-        progressFrequency={this.state.progressFrequency}
-        onProgress={this.onPlayerProgress}
-        onDuration={duration => this.setState({ duration })}
-        onPlay={() => this.setState({ playerState: playerStates.PLAYING })}
-        onPause={() => this.setState({ playerState: playerStates.PAUSED })}
-        onBuffer={() => {
-          // It doesn't matter if video is buffering if we aren't even playing it
-          if (this.isPlayingState()) {
-            this.setState({ playerState: playerStates.BUFFERING });
-          }
+        playing={isPlayingState(this.props.playerState)}
+        volume={this.props.playerVolume}
+        playbackRate={this.props.playbackRate}
+        onDuration={this.props.onDurationReceived}
+        onProgress={({ playedSeconds, loadedSeconds }) => {
+          this.props.onPlayerProgress(playedSeconds, loadedSeconds);
         }}
-        onEnded={() => this.setState({ playerState: playerStates.ENDED })}
+        onPlay={() => this.props.onPlayerStateChanged(playerStates.PLAYING)}
+        onPause={() => this.props.onPlayerStateChanged(playerStates.PAUSED)}
+        onBuffer={() => this.props.onPlayerStateChanged(playerStates.BUFFERING)}
+        onEnded={() => this.props.onPlayerStateChanged(playerStates.ENDED)}
+        playsinline
+        progressFrequency={videoDefaults.progressUpdateFrequencyMs}
         config={{ youtube: youtubeOpts }}
       />
     );
@@ -167,29 +101,14 @@ class VideoPlayer extends React.Component {
     const controls = (
       <div className={styles.controlsContainer}>
         <div className={styles.progressBar}>
-          <VideoPlayerSlider
-            duration={this.state.duration}
-            playerProgress={this.state.playerProgress}
-            restrict={this.props.restrictContentAfter}
-            bufferProgress={this.state.bufferProgress}
-            onDragStart={() => {
-              this.preDragState = this.state.playerState;
-            }}
-            onDragged={this.onVideoSliderChange}
-          />
+          <VideoPlayerSlider />
         </div>
         <div className={styles.controlsRow}>
-          <PlayButton playing={this.isPlayingState()} onClick={this.onPlayButtonClick} />
-          <VolumeButton volume={this.state.playerVolume} onClick={this.onVolumeButtonClick} />
-          <VolumeSlider
-            volume={this.state.playerVolume}
-            onVolumeChange={this.onVolumeSliderChange}
-          />
-          <VideoTimestamp progress={this.state.playerProgress} duration={this.state.duration} />
-          <PlayBackRateSelector
-            rate={this.state.playbackRate}
-            rateChanged={this.onPlayRateChange}
-          />
+          <PlayButton />
+          <VolumeButton />
+          <VolumeSlider />
+          <VideoTimestamp progress={this.props.playerProgress} duration={this.props.duration} />
+          <PlayBackRateSelector />
         </div>
       </div>
     );
@@ -204,5 +123,14 @@ class VideoPlayer extends React.Component {
 }
 
 VideoPlayer.propTypes = propTypes;
+VideoPlayer.defaultProps = defaultProps;
 
-export default VideoPlayer;
+function mapDispatchToProps(dispatch) {
+  return {
+    onPlayerProgress: (progress, buffered) => dispatch(updateProgressAndBuffer(progress, buffered)),
+    onDurationReceived: duration => dispatch(updatePlayerDuration(duration)),
+    onPlayerStateChanged: newState => dispatch(changePlayerState(newState)),
+  };
+}
+
+export default connect(state => state.video, mapDispatchToProps)(VideoPlayer);
