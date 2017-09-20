@@ -6,9 +6,10 @@
  * return {string} The timestamp formatted in [hh:]mm:ss
  */
 function formatTimestamp(timestamp) {
-  const hour = Math.floor(timestamp / 3600);
-  const minute = Math.floor((timestamp % 3600) / 60);
-  const seconds = Math.round((timestamp % 3600) % 60);
+  const roundedTime = Math.round(timestamp);
+  const hour = Math.floor(roundedTime / 3600);
+  const minute = Math.floor((roundedTime % 3600) / 60);
+  const seconds = (roundedTime % 3600) % 60;
 
   return (
     `${(hour > 0 ? `${hour}:${minute < 10 ? '0' : ''}` : '') +
