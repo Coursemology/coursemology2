@@ -35,7 +35,7 @@ RSpec.describe 'Course: Videos: Viewing' do
           expect(current_path).
             to eq(edit_course_video_submission_path(course, published_video, submission))
 
-          expect(page).to have_tag('iframe', with: { 'src': published_video.url })
+          expect(page).to have_tag('div', with: { 'id': 'video-component' })
         end
 
         # Button is updated when submission exists
@@ -45,7 +45,10 @@ RSpec.describe 'Course: Videos: Viewing' do
           find('.btn.btn-info').click
         end
 
-        expect(page).to have_tag('iframe', with: { 'src': published_video.url })
+        expect(page).to have_tag('div', with: { 'id': 'video-component' })
+        data = JSON.parse(page.find('#video-component')['data'])
+
+        expect(data['video']['videoUrl']).to eq(published_video.url)
       end
     end
   end

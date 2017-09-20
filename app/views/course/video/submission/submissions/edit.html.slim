@@ -5,4 +5,4 @@
   div.well
     = format_html(@video.description)
 
-= render 'youtube', locals: { video: @video }
+div#video-component data=(render template: 'course/video/submission/submissions/edit.json.jbuilder')
