@@ -57,7 +57,7 @@
         margin-right: 4px;
       }
 
-      .table-bonus-cut-off,
+      .table-time-bonus-exp,
       .table-requirement-for {
         @extend .hidden-xs;
         @extend .hidden-sm;
@@ -70,7 +70,7 @@
       }
 
       .table-base-exp,
-      .table-time-bonus-exp {
+      .table-bonus-cut-off {
         @extend .hidden-xs;
         @extend .hidden-sm;
         @extend .text-center;
