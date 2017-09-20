@@ -60,7 +60,8 @@ export default class SubmissionsTable extends React.Component {
   }
 
   getGradeString(submission) {
-    if (submission.grade === undefined) return null;
+    if ((submission.workflowState === workflowStates.Unstarted) ||
+      (submission.workflowState !== workflowStates.Attempting)) return null;
 
     const { assessment } = this.props;
 
