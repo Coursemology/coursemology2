@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
 
 import styles from '../VideoPlayer.scss';
 
-const TippedSlider = Slider.createSliderWithTooltip(Slider);
 const unbufferedColour = '#e9e9e9';
 const bufferedColour = '#afe9ff';
 const playedColour = '#00bcd4';
@@ -40,22 +38,37 @@ const defaultProps = {
   bufferProgress: 0,
 };
 
-function VideoPlayerSlider(props) {
-  return (
-    <span className={styles.progressBar}>
-      <TippedSlider
-        max={props.duration}
-        step={1}
-        value={props.playerProgress}
-        handleStyle={[{ borderColor: playedColour }]}
-        trackStyle={{ backgroundColor: playedColour }}
-        railStyle={generateRailStyle(props.bufferProgress, props.duration)}
-        tipFormatter={formatTimestamp}
-        onChange={props.onDragged}
-        onBeforeChange={props.onDragStart}
-      />
-    </span>
-  );
+class VideoPlayerSlider extends React.Component {
+
+  componentWillMount() {
+    if (VideoPlayerSlider.TippedSlider !== undefined) return; // Already loaded
+
+    import(/* webpackChunkName: "video" */ 'rc-slider').then((rcSlider) => {
+      const Slider = rcSlider.default;
+      VideoPlayerSlider.TippedSlider = Slider.createSliderWithTooltip(Slider);
+      this.forceUpdate();
+    });
+  }
+
+  render() {
+    if (VideoPlayerSlider.TippedSlider === undefined) return null;
+
+    return (
+      <span className={styles.progressBar}>
+        <VideoPlayerSlider.TippedSlider
+          max={this.props.duration}
+          step={1}
+          value={this.props.playerProgress}
+          handleStyle={[{ borderColor: playedColour }]}
+          trackStyle={{ backgroundColor: playedColour }}
+          railStyle={generateRailStyle(this.props.bufferProgress, this.props.duration)}
+          tipFormatter={formatTimestamp}
+          onChange={this.props.onDragged}
+          onBeforeChange={this.props.onDragStart}
+        />
+      </span>
+    );
+  }
 }
 
 VideoPlayerSlider.propTypes = propTypes;

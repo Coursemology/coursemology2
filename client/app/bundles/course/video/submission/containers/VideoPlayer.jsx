@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactPlayer from 'react-player';
 import Paper from 'material-ui/Paper';
 import { timeIsPastRestricted } from 'lib/helpers/videoHelpers';
 
@@ -53,6 +52,15 @@ class VideoPlayer extends React.Component {
       playsInline: true,
       progressFrequency: 500,
     };
+  }
+
+  componentWillMount() {
+    if (VideoPlayer.ReactPlayer !== undefined) return; // Already loaded
+
+    import(/* webpackChunkName: "video" */ 'react-player').then((ReactPlayer) => {
+      VideoPlayer.ReactPlayer = ReactPlayer.default;
+      this.forceUpdate();
+    });
   }
 
   /**
@@ -144,9 +152,10 @@ class VideoPlayer extends React.Component {
   render() {
     // do not attempt to create a player server-side, it won't work
     if (typeof document === 'undefined') return null;
+    if (typeof VideoPlayer.ReactPlayer === 'undefined') return null;
 
     const videoPlayer = (
-      <ReactPlayer
+      <VideoPlayer.ReactPlayer
         ref={this.setRef}
         url={this.props.videoUrl}
         playing={this.isPlayingState()}
