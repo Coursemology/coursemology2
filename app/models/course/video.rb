@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Video < ActiveRecord::Base
+class Course::Video < ApplicationRecord
   acts_as_lesson_plan_item has_todo: true
 
   include Course::ReminderConcern

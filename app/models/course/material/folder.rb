@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Material::Folder < ActiveRecord::Base
+class Course::Material::Folder < ApplicationRecord
   acts_as_forest order: :name, dependent: :destroy
   include Course::ModelComponentHost::Component
 

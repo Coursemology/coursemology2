@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::GroupUser < ActiveRecord::Base
+class Course::GroupUser < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
 
   enum role: { normal: 0, manager: 1 }

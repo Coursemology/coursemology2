@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Answer::ProgrammingAutoGrading < ActiveRecord::Base
+class Course::Assessment::Answer::ProgrammingAutoGrading < ApplicationRecord
   acts_as :auto_grading, class_name: Course::Assessment::Answer::AutoGrading.name,
                          inverse_of: :actable
   has_one :answer, through: :auto_grading

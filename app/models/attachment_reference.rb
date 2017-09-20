@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class AttachmentReference < ActiveRecord::Base
+class AttachmentReference < ApplicationRecord
   before_save :update_expires_at
   after_save :clear_duplication_flag
 

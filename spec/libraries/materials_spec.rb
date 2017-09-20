@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Extension: Materials' do
-  class self::Assessment < ActiveRecord::Base
+  class self::Assessment < ApplicationRecord
     def self.columns
       []
     end

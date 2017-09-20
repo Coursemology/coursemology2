@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Extension: Acts as Condition', type: :model do
-  class self::DummyConditionClass < ActiveRecord::Base
+  class self::DummyConditionClass < ApplicationRecord
     def self.columns
       []
     end

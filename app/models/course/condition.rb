@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Condition < ActiveRecord::Base
+class Course::Condition < ApplicationRecord
   actable
 
   belongs_to :course, inverse_of: false

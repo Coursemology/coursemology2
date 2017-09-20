@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Survey::Question < ActiveRecord::Base
+class Course::Survey::Question < ApplicationRecord
   enum question_type: { text: 0, multiple_choice: 1, multiple_response: 2 }
 
   belongs_to :section, inverse_of: :questions

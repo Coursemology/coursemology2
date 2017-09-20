@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CourseUser < ActiveRecord::Base
+class CourseUser < ApplicationRecord
   include CourseUser::StaffConcern
   include CourseUser::LevelProgressConcern
   include CourseUser::TodoConcern

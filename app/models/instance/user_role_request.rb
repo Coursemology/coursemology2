@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Instance::UserRoleRequest < ActiveRecord::Base
+class Instance::UserRoleRequest < ApplicationRecord
   enum role: InstanceUser.roles.except(:normal)
 
   after_initialize :set_default_role, if: :new_record?

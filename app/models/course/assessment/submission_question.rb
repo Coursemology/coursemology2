@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # TODO: Refactor to Course::Assessment::Answer, and refactor Answer to Attempt
-class Course::Assessment::SubmissionQuestion < ActiveRecord::Base
+class Course::Assessment::SubmissionQuestion < ApplicationRecord
   acts_as_discussion_topic display_globally: true
 
   belongs_to :submission, class_name: Course::Assessment::Submission.name,

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::MultipleResponseOption < ActiveRecord::Base
+class Course::Assessment::Question::MultipleResponseOption < ApplicationRecord
   belongs_to :question, class_name: Course::Assessment::Question::MultipleResponse.name,
                         inverse_of: :options
 

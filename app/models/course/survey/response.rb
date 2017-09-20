@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Survey::Response < ActiveRecord::Base
+class Course::Survey::Response < ApplicationRecord
   include Course::Survey::Response::TodoConcern
 
   acts_as_experience_points_record

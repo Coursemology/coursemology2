@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # Represents a user in the application. Users are shared across all instances.
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   SYSTEM_USER_ID = 0
   DELETED_USER_ID = -1
 

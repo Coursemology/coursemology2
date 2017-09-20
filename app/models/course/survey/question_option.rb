@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Survey::QuestionOption < ActiveRecord::Base
+class Course::Survey::QuestionOption < ApplicationRecord
   has_one_attachment
 
   belongs_to :question, inverse_of: :options

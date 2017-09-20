@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Announcement < ActiveRecord::Base
+class Course::Announcement < ApplicationRecord
   acts_as_readable on: :updated_at
   has_many_attachments on: :content
 

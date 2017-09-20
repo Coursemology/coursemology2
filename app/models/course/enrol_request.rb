@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::EnrolRequest < ActiveRecord::Base
+class Course::EnrolRequest < ApplicationRecord
   validate :validate_user_not_in_course, on: :create
 
   belongs_to :course, inverse_of: :enrol_requests

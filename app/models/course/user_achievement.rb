@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::UserAchievement < ActiveRecord::Base
+class Course::UserAchievement < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
   after_create :send_notification
 

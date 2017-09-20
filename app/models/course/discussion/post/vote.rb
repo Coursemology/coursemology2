@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Discussion::Post::Vote < ActiveRecord::Base
+class Course::Discussion::Post::Vote < ApplicationRecord
   belongs_to :post, inverse_of: :votes
 
   # @!method self.upvotes

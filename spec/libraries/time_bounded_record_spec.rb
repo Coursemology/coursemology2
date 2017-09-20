@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Extension: Time Bounded Record', type: :model do
-  class self::TimeBoundedTest < ActiveRecord::Base
+  class self::TimeBoundedTest < ApplicationRecord
     self.table_name = 'time_bounded_tests'
   end
 

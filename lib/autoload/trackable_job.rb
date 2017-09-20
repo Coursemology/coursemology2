@@ -13,7 +13,7 @@
 module TrackableJob
   extend ActiveSupport::Concern
 
-  class Job < ActiveRecord::Base
+  class Job < ApplicationRecord
     enum status: [:submitted, :completed, :errored]
 
     after_save :signal_finished, unless: :submitted?

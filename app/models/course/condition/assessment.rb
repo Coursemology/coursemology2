@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Condition::Assessment < ActiveRecord::Base
+class Course::Condition::Assessment < ApplicationRecord
   include ActiveSupport::NumberHelper
 
   acts_as_condition

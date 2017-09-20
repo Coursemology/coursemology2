@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::UserInvitation < ActiveRecord::Base
+class Course::UserInvitation < ApplicationRecord
   after_initialize :generate_invitation_key, if: :new_record?
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?

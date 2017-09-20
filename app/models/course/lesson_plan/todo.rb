@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::LessonPlan::Todo < ActiveRecord::Base
+class Course::LessonPlan::Todo < ApplicationRecord
   include Workflow
 
   workflow do

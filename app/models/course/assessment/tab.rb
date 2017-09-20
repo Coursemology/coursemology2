@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Tab < ActiveRecord::Base
+class Course::Assessment::Tab < ApplicationRecord
   belongs_to :category, class_name: Course::Assessment::Category.name, inverse_of: :tabs
   has_many :assessments, class_name: Course::Assessment.name, dependent: :destroy, inverse_of: :tab
   has_many :folders, class_name: Course::Material::Folder.name, through: :assessments,

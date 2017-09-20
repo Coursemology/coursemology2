@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course < ActiveRecord::Base
+class Course < ApplicationRecord
   include Course::LessonPlanConcern
   include Course::SearchConcern
 

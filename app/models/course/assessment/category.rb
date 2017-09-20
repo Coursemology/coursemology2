@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # Represents a category of assessments. This is typically 'Mission' and 'Training'.
-class Course::Assessment::Category < ActiveRecord::Base
+class Course::Assessment::Category < ApplicationRecord
   include Course::ModelComponentHost::Component
   has_one_folder
 

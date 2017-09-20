@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::TextResponseSolution < ActiveRecord::Base
+class Course::Assessment::Question::TextResponseSolution < ApplicationRecord
   enum solution_type: [:exact_match, :keyword]
 
   before_validation :strip_whitespace

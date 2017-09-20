@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Achievement < ActiveRecord::Base
+class Course::Achievement < ApplicationRecord
   acts_as_conditional
   mount_uploader :badge, ImageUploader
 

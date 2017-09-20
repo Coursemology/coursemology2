@@ -13,18 +13,18 @@ RSpec.describe 'Extensions: has_many inverse_through', type: :model do
   temporary_table(:pens) do
   end
 
-  class self::Store < ActiveRecord::Base
+  class self::Store < ApplicationRecord
     has_many :products, inverse_of: :store
     has_many :pens, through: :products, inverse_through: :product,
                     source: :product, source_type: 'Pen'
   end
 
-  class self::Product < ActiveRecord::Base
+  class self::Product < ApplicationRecord
     belongs_to :store, inverse_of: :products
     belongs_to :product, polymorphic: true
   end
 
-  class self::Pen < ActiveRecord::Base
+  class self::Pen < ApplicationRecord
     has_one :product, inverse_of: :product, as: :product
     has_one :store, through: :product
   end

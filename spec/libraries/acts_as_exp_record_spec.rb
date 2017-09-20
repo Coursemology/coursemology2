@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Extension: Acts as Experience Points Record' do
-  class self::DummyClass < ActiveRecord::Base
+  class self::DummyClass < ApplicationRecord
     def self.columns
       []
     end
