@@ -424,9 +424,6 @@ GEM
     schema_monkey (2.1.5)
       activerecord (>= 4.2)
       modware (~> 0.1)
-    schema_plus (1.7.1)
-      activerecord (>= 3.2)
-      valuable
     schema_plus_association_inverses (0.1.0)
       schema_plus_core (>= 0.3.1)
     schema_plus_columns (0.2.0)
@@ -434,14 +431,32 @@ GEM
       its-it (~> 1.2)
       schema_plus_core
       schema_plus_indexes (~> 0.2)
+    schema_plus_compatibility (0.3.0)
+      activerecord (>= 4.2, < 5.2)
+      schema_monkey (~> 2.1)
     schema_plus_core (2.1.1)
       activerecord (~> 5.0)
       its-it (~> 1.2)
       schema_monkey (~> 2.1)
+    schema_plus_enums (0.1.6)
+      activerecord (>= 4.2, <= 5.1)
+      its-it (~> 1.2)
+      schema_plus_core
+    schema_plus_foreign_keys (0.1.7)
+      activerecord (>= 4.2, < 5.1)
+      its-it (~> 1.2)
+      schema_plus_compatibility (~> 0.2)
+      schema_plus_core
+      valuable
     schema_plus_indexes (0.3.0)
       activerecord (>= 4.2, < 5.2)
       its-it (~> 1.2)
       schema_plus_core
+    schema_plus_pg_indexes (0.3.0)
+      activerecord (~> 5.0, >= 5.0.1)
+      its-it (~> 1.2)
+      schema_plus_core (~> 2.0)
+      schema_plus_indexes (~> 0.2, >= 0.2.4)
     schema_validations (2.3.0)
       activerecord (~> 5.0)
       schema_plus_columns
@@ -595,8 +610,12 @@ DEPENDENCIES
   sanitize
   sass-rails
   schema_monkey
-  schema_plus
   schema_plus_association_inverses (>= 0.1.0)
+  schema_plus_columns
+  schema_plus_enums
+  schema_plus_foreign_keys
+  schema_plus_indexes
+  schema_plus_pg_indexes
   schema_validations
   settings_on_rails
   should_not

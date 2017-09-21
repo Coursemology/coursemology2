@@ -15,7 +15,11 @@ gem 'pg', '>= 0.18.2'
 # Table and column comments, this need to be put before schame_plus ( there are certain compatibility issues ).
 gem 'migration_comments'
 # Schema Plus for some higher level database abstractions
-gem 'schema_plus'
+gem 'schema_plus_columns'
+gem 'schema_plus_enums'
+gem 'schema_plus_foreign_keys'
+gem 'schema_plus_indexes'
+gem 'schema_plus_pg_indexes'
 gem 'schema_plus_association_inverses', '>= 0.1.0'
 gem 'schema_validations'
 gem 'schema_monkey'
