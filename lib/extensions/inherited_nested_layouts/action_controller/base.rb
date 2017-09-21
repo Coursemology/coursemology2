@@ -4,7 +4,7 @@ module Extensions::InheritedNestedLayouts::ActionController::Base
   #
   # @return [String] The layout used by the current controller.
   def current_layout
-    _layout
+    _layout(formats)
   end
 
   # Gets the parent layout of the given layout, as specified in the layout hierarchy.
@@ -28,7 +28,7 @@ module Extensions::InheritedNestedLayouts::ActionController::Base
     @layout_hierarchy ||=
       extension_module.class_hierarchy(self.class).
       select { |klass| klass < ActionController::Base }.
-      map { |klass| extension_module.class_layout(klass, self) }.
+      map { |klass| extension_module.class_layout(klass, self, formats) }.
       select { |layout| !layout.nil? }.
       uniq.
       reverse!
@@ -54,10 +54,10 @@ module Extensions::InheritedNestedLayouts::ActionController::Base
   #   ActionController::Base
   # @param [ActionController::Base] self_ The instance to query against the class hierarchy.
   # @return [String] The layout to use for instances of +klass+.
-  def self.class_layout(klass, self_)
+  def self.class_layout(klass, self_, formats)
     layout_method = klass.instance_method(:_layout)
     layout = layout_method.bind(self_)
-    layout.call
+    layout.call(formats)
   end
 
   # Overrides {ActionController::Rendering#render} to keep track of the :layout rendering option.
