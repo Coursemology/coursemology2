@@ -88,7 +88,6 @@ group :development do
   gem 'listen', '~> 1.3.1'
 
   # Gems to make development mode faster and less painful
-  gem 'rails-dev-boost', github: 'thedarkone/rails-dev-boost'
   gem 'rails-flog', require: 'flog'
   gem 'wdm', '>= 0.0.3', platforms: [:mswin, :mswin64]
 

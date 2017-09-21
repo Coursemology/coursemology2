@@ -42,13 +42,6 @@ GIT
     activerecord-userstamp (3.0.5)
       rails (>= 4.1)
 
-GIT
-  remote: git://github.com/thedarkone/rails-dev-boost.git
-  revision: a709a10b06b7d9fc4a9846bc613c60c86af9dd7c
-  specs:
-    rails-dev-boost (0.3.0)
-      railties (>= 3.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -592,7 +585,6 @@ DEPENDENCIES
   pg (>= 0.18.2)
   puma
   rails (~> 5.0.0)
-  rails-dev-boost!
   rails-flog
   rails_utils (>= 3.3.3)
   rinku
