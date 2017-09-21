@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Checkbox from 'material-ui/Checkbox';
+import { green50 } from 'material-ui/styles/colors';
 
 export default class CheckboxFormGroup extends Component {
 
@@ -26,7 +27,10 @@ export default class CheckboxFormGroup extends Component {
               return input.onChange(newValue);
             }}
             label={(
-              <div dangerouslySetInnerHTML={{ __html: option.option.trim() }} />
+              <div
+                style={option.correct && readOnly ? { backgroundColor: green50 } : null}
+                dangerouslySetInnerHTML={{ __html: option.option.trim() }}
+              />
             )}
             labelStyle={{ verticalAlign: 'middle' }}
           />
