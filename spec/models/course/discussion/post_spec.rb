@@ -162,8 +162,8 @@ RSpec.describe Course::Discussion::Post, type: :model do
 
     describe '.destroy' do
       let(:topic) { create(:course_discussion_topic) }
-      let(:parent_post) { create(:course_discussion_post, topic: topic) }
-      let(:post) { create(:course_discussion_post, parent: parent_post, topic: topic) }
+      let!(:parent_post) { create(:course_discussion_post, topic: topic) }
+      let!(:post) { create(:course_discussion_post, parent: parent_post, topic: topic) }
 
       context 'when the post has children' do
         let!(:children_posts) do
@@ -175,6 +175,15 @@ RSpec.describe Course::Discussion::Post, type: :model do
 
           expect(children_posts.all? { |child| child.reload.parent_id == parent_post.id }).
             to be_truthy
+        end
+
+        context 'when the post is destroyed by association' do
+          it 'destroys together with all children' do
+            expect(topic.reload.destroy).to be_truthy
+            all_posts_ids = topic.posts.map(&:id)
+            expect(Course::Discussion::Post.where(id: all_posts_ids).exists?).
+              to be_falsey
+          end
         end
       end
     end

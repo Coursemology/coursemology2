@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe Course::Discussion::Topic, type: :model do
   it { is_expected.to be_actable }
-  it { is_expected.to have_many(:posts).inverse_of(:topic).dependent(:delete_all) }
+  it { is_expected.to have_many(:posts).inverse_of(:topic).dependent(:destroy) }
   it { is_expected.to have_many(:subscriptions).inverse_of(:topic).dependent(:destroy) }
 
   let!(:instance) { Instance.default }
@@ -153,6 +153,63 @@ RSpec.describe Course::Discussion::Topic, type: :model do
         end
 
         it { is_expected.to contain_exactly(annotation, comment) }
+      end
+    end
+
+    describe '.destroy' do
+      it 'destroys successfully' do
+        expect(topic.destroy).to be_truthy
+      end
+
+      context 'when it has multiple posts' do
+        let!(:post) { create(:course_discussion_post, topic: topic.discussion_topic) }
+        let!(:children_posts) do
+          create_list(:course_discussion_post, 2, parent: post, topic: topic.discussion_topic)
+        end
+
+        it 'destroys successfully with posts' do
+          expect(topic.reload.destroy).to be_truthy
+          all_post_ids = [post, *children_posts].map(&:id)
+          expect(Course::Discussion::Post.where(id: all_post_ids).exists?).to be_falsey
+        end
+      end
+
+      context 'when the posts have votes' do
+        let(:upvoters) do
+          create_list(:user, 2)
+        end
+        let(:downvoters) do
+          create_list(:user, 3)
+        end
+
+        let!(:post) do
+          create(
+            :course_discussion_post,
+            topic: topic.discussion_topic,
+            upvoted_by: user
+          )
+        end
+
+        let!(:children_posts) do
+          create_list(
+            :course_discussion_post,
+            2,
+            parent: post,
+            topic: topic.discussion_topic,
+            upvoted_by: upvoters,
+            downvoted_by: downvoters
+          )
+        end
+
+        it 'destroys successfully together with votes' do
+          expect(topic.reload.destroy).to be_truthy
+          all_posts = [post, *children_posts]
+          all_post_ids = all_posts.map(&:id)
+          all_vote_ids = all_posts.map(&:votes).inject(:+).map(&:id)
+
+          expect(Course::Discussion::Post.where(id: all_post_ids).exists?).to be_falsey
+          expect(Course::Discussion::Post::Vote.where(id: all_vote_ids).exists?).to be_falsey
+        end
       end
     end
   end
