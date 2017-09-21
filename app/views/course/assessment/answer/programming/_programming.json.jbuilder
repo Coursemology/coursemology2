@@ -13,14 +13,14 @@ json.fields do
   end
 end
 
-if answer.submitted? && job = answer&.auto_grading&.job
+if last_attempt.submitted? && job = last_attempt&.auto_grading&.job
   json.autograding do
     json.path job_path(job) if job.submitted?
     json.status job.status
   end
 end
 
-if answer.submitted? && !answer.auto_grading
+if last_attempt.submitted? && !last_attempt.auto_grading
   json.autograding do
     json.status :submitted
   end

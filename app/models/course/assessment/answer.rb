@@ -56,22 +56,21 @@ class Course::Assessment::Answer < ActiveRecord::Base
   #
   # @param [String|nil] redirect_to_path The path to be redirected after auto grading job was
   #   finished.
-  # @param [Boolean] reattempt Whether to create new answer based on current answer after grading.
   # @param [Boolean] reduce_priority Whether this answer should be queued at a lower priority.
   #   Used for regrading answers when question is changed, and for submission answers.
   # @return [Course::Assessment::Answer::AutoGradingJob|nil] The autograding job instance will be
   #   returned if the answer is graded using a job, nil will be returned if answer is graded inline.
   # @raise [IllegalStateError] When the answer has not been submitted.
-  def auto_grade!(redirect_to_path: nil, reattempt: false, reduce_priority: false)
+  def auto_grade!(redirect_to_path: nil, reduce_priority: false)
     raise IllegalStateError if attempting?
 
     ensure_auto_grading!
     if grade_inline?
-      Course::Assessment::Answer::AutoGradingService.grade(self, reattempt)
+      Course::Assessment::Answer::AutoGradingService.grade(self)
       nil
     else
       auto_grading_job_class(reduce_priority).
-        perform_later(self, redirect_to_path, reattempt).tap do |job|
+        perform_later(self, redirect_to_path).tap do |job|
           auto_grading.update_column(:job_id, job.job_id)
         end
     end

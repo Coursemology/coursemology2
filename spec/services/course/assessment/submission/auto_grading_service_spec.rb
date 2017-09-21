@@ -8,32 +8,27 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
     let(:student_user) { create(:course_student, course: course).user }
     let(:assessment) { create(:assessment, :published_with_mrq_question, course: course) }
     let(:question) { assessment.questions.first.specific }
-    let(:submission) { create(:submission, assessment: assessment, creator: student_user) }
-    let(:answer) do
-      create(:course_assessment_answer_multiple_response, :submitted,
-             question: question.acting_as, submission: submission).answer
+    let(:submission) do
+      create(:submission, :attempting, assessment: assessment, creator: student_user)
     end
 
     describe '#grade' do
-      it 'evaluates all answers' do
-        answer
+      it 'evaluates the current_answers' do
+        submission.finalise!
         expect(subject.grade(submission)).to eq(true)
 
         expect(submission.answers.map(&:reload).all?(&:evaluated?)).to be(true)
         expect(submission.answers.map(&:reload).map(&:grade).all?(&:nil?)).to be(true)
       end
 
-      context 'when the submission has an answer in the attempting state' do
-        let(:answer) do
-          create(:course_assessment_answer_multiple_response,
-                 question: question.acting_as, submission: submission).answer
-        end
-
+      context 'when the submission has a current answer in the attempting state' do
         it 'submits and grades the answer' do
-          answer
+          current_answer = submission.answers.find do |ans|
+            ans.current_answer && ans.workflow_state == 'attempting'
+          end
           expect(subject.grade(submission)).to eq(true)
 
-          expect(answer.reload.evaluated?).to be_truthy
+          expect(current_answer.reload.evaluated?).to be_truthy
           expect(submission.answers.map(&:reload).all?(&:evaluated?)).to be(true)
         end
       end
@@ -43,11 +38,10 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
           create(:course_assessment_question_programming, assessment: assessment)
         end
         let!(:answer) do
-          create(:course_assessment_answer_programming, :submitted,
+          create(:course_assessment_answer_programming, :submitted, current_answer: true,
                  question: non_autograded_question.acting_as, submission: submission).answer
         end
         it 'evaluates the answer' do
-          answer
           expect(subject.grade(submission)).to eq(true)
 
           gradable_answers = submission.answers.reject { |answer| answer.question.auto_gradable? }
@@ -68,11 +62,13 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
         let(:submission) { create(:submission, assessment: assessment, creator: student_user) }
         let!(:correct_answer) do
           create(:course_assessment_answer_multiple_response, :with_all_correct_options,
+                 current_answer: true,
                  question: assessment.questions.first,
                  submission: submission)
         end
         let!(:wrong_answer) do
           create(:course_assessment_answer_multiple_response, :with_all_wrong_options,
+                 current_answer: true,
                  question: assessment.questions.last,
                  submission: submission)
         end
@@ -133,6 +129,11 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
     end
 
     context 'when a sub job fails' do
+      let(:answer) do
+        create(:course_assessment_answer_multiple_response, :submitted,
+               question: question.acting_as, submission: submission).answer
+      end
+
       before do
         def subject.aggregate_failures(jobs)
           jobs.each_with_index do |job, i|

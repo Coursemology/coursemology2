@@ -183,6 +183,7 @@ ActiveRecord::Schema.define(version: 20170915083041) do
     t.string   "actable_type",   :limit=>255, :index=>{:name=>"index_course_assessment_answers_actable", :with=>["actable_id"], :unique=>true}
     t.integer  "submission_id",  :null=>false, :index=>{:name=>"fk__course_assessment_answers_submission_id"}, :foreign_key=>{:references=>"course_assessment_submissions", :name=>"fk_course_assessment_answers_submission_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "question_id",    :null=>false, :index=>{:name=>"fk__course_assessment_answers_question_id"}, :foreign_key=>{:references=>"course_assessment_questions", :name=>"fk_course_assessment_answers_question_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.boolean  "current_answer", :default=>false, :null=>false
     t.string   "workflow_state", :limit=>255, :null=>false
     t.datetime "submitted_at"
     t.decimal  "grade",          :precision=>4, :scale=>1

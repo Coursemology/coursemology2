@@ -323,17 +323,14 @@ RSpec.describe Course::Assessment::Submission do
 
     describe '#finalise!' do
       let(:assessment_traits) { [:with_all_question_types] }
+      let(:submission1_traits) { :attempting }
       let(:submission) { submission1 }
 
-      before do
-        submission.assessment.questions.attempt(submission).each(&:save!)
-      end
-
       it 'propagates the finalise state to latest answers and sets the submitted_at time' do
-        expect(submission.latest_answers.all?(&:attempting?)).to be(true)
+        expect(submission.current_answers.all?(&:attempting?)).to be(true)
         expect(submission.submitted_at).to be_nil
         submission.finalise!
-        expect(submission.latest_answers.all?(&:submitted?)).to be(true)
+        expect(submission.current_answers.all?(&:submitted?)).to be(true)
         expect(submission.submitted_at).not_to be_nil
       end
 
@@ -353,9 +350,9 @@ RSpec.describe Course::Assessment::Submission do
         end
 
         it 'finalises the rest of the answers' do
-          expect(submission.latest_answers.all?(&:submitted?)).to be(false)
+          expect(submission.current_answers.all?(&:submitted?)).to be(false)
           submission.finalise!
-          expect(submission.latest_answers.all?(&:submitted?)).to be(true)
+          expect(submission.current_answers.all?(&:submitted?)).to be(true)
         end
       end
 
@@ -366,11 +363,11 @@ RSpec.describe Course::Assessment::Submission do
                                             question: answer.question)
         end
 
-        it 'does not finalise the non-latest answer' do
-          older_answer = submission.answers.from_question(answer.question).first
-          expect(older_answer).to be_attempting
+        it 'only finalises the current working answer' do
+          not_current_answer = submission.answers.reload.from_question(answer.question.id).second
+          expect(not_current_answer).to be_attempting
           submission.finalise!
-          expect(older_answer).to be_attempting
+          expect(not_current_answer).to be_attempting
         end
       end
     end
@@ -389,7 +386,7 @@ RSpec.describe Course::Assessment::Submission do
 
     describe '#publish!' do
       let(:assessment_traits) { [:with_all_question_types] }
-      let(:submission) { submission1 }
+      let!(:submission) { submission1 }
       let(:submission1_traits) { :submitted }
 
       it 'propagates the graded state to its answers' do
@@ -529,9 +526,9 @@ RSpec.describe Course::Assessment::Submission do
           expect(subject.submitted_at).to be_nil
         end
 
-        it 'sets all latest answers in the submission to attempting' do
+        it 'sets all current answers in the submission to attempting' do
           unsubmit_and_save_subject
-          expect(subject.latest_answers.all?(&:attempting?)).to be(true)
+          expect(subject.current_answers.all?(&:attempting?)).to be(true)
           expect(earlier_answer.reload).to be_graded
         end
       end
@@ -555,9 +552,9 @@ RSpec.describe Course::Assessment::Submission do
           expect(subject.publisher).to be_nil
         end
 
-        it 'sets all latest answers in the submission to attempting' do
+        it 'sets all current answers in the submission to attempting' do
           unsubmit_and_save_subject
-          expect(subject.latest_answers.all?(&:attempting?)).to be(true)
+          expect(subject.current_answers.all?(&:attempting?)).to be(true)
           expect(earlier_answer.reload).to be_graded
         end
       end

@@ -30,8 +30,4 @@ module Course::Assessment::Submission::SubmissionsAutogradedHelper
     return 'disabled' if step > max_step
     return 'completed' if step <= max_step
   end
-
-  def current_answer
-    @answers.last
-  end
 end

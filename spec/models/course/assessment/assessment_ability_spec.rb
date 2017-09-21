@@ -39,7 +39,7 @@ RSpec.describe Course::Assessment do
     end
 
     def get_text_response_answer_for(submission)
-      submission.latest_answers.select do |ans|
+      submission.answers.latest_answers.select do |ans|
         ans.specific.class == Course::Assessment::Answer::TextResponse
       end.first.specific
     end

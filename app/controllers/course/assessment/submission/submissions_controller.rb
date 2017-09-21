@@ -63,10 +63,10 @@ class Course::Assessment::Submission::SubmissionsController < \
     render json: { redirect_url: job_path(job.job) }
   end
 
-  # Reload answer to either its latest status or to a fresh answer, depending on parameters.
+  # Reload the current answer or reset it, depending on parameters.
+  # current_answer has the most recent copy of the answer.
   def reload_answer
     @answer = @submission.answers.find_by(id: reload_answer_params[:answer_id])
-    @current_question = @answer&.question
 
     if @answer.nil?
       head :bad_request
@@ -74,7 +74,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     elsif reload_answer_params[:reset_answer]
       @new_answer = @answer.reset_answer
     else
-      @new_answer = @submission.answers.from_question(@current_question.id).last
+      @new_answer = @answer
     end
 
     respond_to do |format|
@@ -172,7 +172,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   def check_zombie_jobs # rubocop:disable MethodLength, Metrics/AbcSize
     return unless @submission.attempting?
 
-    submitted_answers = @submission.latest_answers.select(&:submitted?)
+    submitted_answers = @submission.answers.latest_answers.select(&:submitted?)
     return if submitted_answers.empty?
 
     dead_answers = submitted_answers.select do |a|
@@ -184,8 +184,7 @@ class Course::Assessment::Submission::SubmissionsController < \
 
     dead_answers.each do |a|
       old_job = a.auto_grading.job
-      job = a.auto_grade!(redirect_to_path: old_job.redirect_to,
-                          reattempt: true, reduce_priority: true)
+      job = a.auto_grade!(redirect_to_path: old_job.redirect_to, reduce_priority: true)
 
       logger.debug(message: 'Restart Answer Grading', answer_id: a.id, job_id: job.job.id,
                    old_job_id: old_job.id)

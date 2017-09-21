@@ -9,6 +9,8 @@ FactoryGirl.define do
       submission_traits []
     end
 
+    current_answer { false }
+
     submission do
       traits = *submission_traits
       options = traits.extract_options!

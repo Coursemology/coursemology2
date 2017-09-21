@@ -21,10 +21,16 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def load_or_create_answers
     return unless @submission.attempting?
 
-    new_answers = questions_to_attempt.not_answered(@submission).attempt(@submission).
-                  map { |answer| answer.save! if answer.new_record? }.
-                  reduce(false) { |a, e| a || e }
-    @submission.answers.reload if new_answers && @submission.answers.loaded?
+    new_answers = questions_to_attempt.not_answered(@submission).attempt(@submission)
+    new_answers_created = new_answers.map do |answer|
+      # When there are no existing answers, the first one will be the current_answer.
+      if answer.new_record?
+        answer.current_answer = true
+        answer.save!
+      end
+    end
+    new_answers_created = new_answers_created.reduce(false) { |a, e| a || e }
+    @submission.answers.reload if new_answers_created && @submission.answers.loaded?
   end
 
   def load_or_create_submission_questions
@@ -151,25 +157,42 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def auto_grade(answer)
     return unless valid_for_grading?(answer)
-    job = grade_and_reattempt_answer(answer)
+    job = reattempt_and_grade_answer(answer)
     if job
       render json: { redirect_url: job_path(job.job) }
     else
-      current_question = answer&.question
-      new_answer = @submission.answers.from_question(current_question.id).last
-      render new_answer
+      # Render the current_answer.
+      render answer
     end
   end
 
-  def grade_and_reattempt_answer(answer)
-    # The transaction is to make sure that auto grading and job are present when the answer is in
-    # the submitted state.
+  # Returns all answers for the same question as `current_answer` where the
+  # autograding job has failed.
+  #
+  # @param [Course::Assessment::Answer] current_answer The Course::Assessment::Answer for a
+  #   question where current_answer is set to true.
+  # @return [Array<Course::Assessment::Answer>] An array containing answers with errored jobs.
+  def errored_answers(current_answer)
+    attempts = current_answer.submission.answers.from_question(current_answer.question_id)
+    attempts.select do |attempt|
+      attempt&.auto_grading&.job&.errored?
+    end
+  end
+
+  def reattempt_and_grade_answer(answer)
+    # The transaction is to make sure that the new attempt, auto grading and job are present when
+    # the current answer is submitted.
+    #
+    # If the latest answer has an errored job, the user may still modify current_answer before
+    # grading again. Failed autograding jobs should not count towards their answer attempt limit,
+    # so destroy the failed job answer and re-grade the current entry.
     answer.class.transaction do
-      answer.finalise! if answer.attempting?
-      # Only save if answer is graded in another server
-      answer.save! unless answer.grade_inline?
-      answer.auto_grade!(redirect_to_path: nil,
-                         reattempt: true, reduce_priority: false)
+      last_answer = answer.submission.answers.select { |ans| ans.question_id == answer.question_id }.last
+      last_answer.destroy! if last_answer&.auto_grading&.job&.errored?
+      new_answer = answer.question.attempt(answer.submission, answer)
+      new_answer.finalise!
+      new_answer.save!
+      new_answer.auto_grade!(redirect_to_path: nil, reduce_priority: false)
     end
   end
 
