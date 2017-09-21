@@ -25,7 +25,8 @@ class User::EmailsController < ApplicationController
 
   # Set an email as the primary email
   def set_primary
-    if @email.primary!
+    current_user.email = @email.email
+    if current_user.save
       redirect_to user_emails_path, success: t('.success')
     else
       redirect_to user_emails_path, error: @email.errors.full_messages.to_sentence

@@ -32,20 +32,13 @@ RSpec.describe User::EmailsController, type: :controller do
     end
 
     describe '#set_primary' do
-      let!(:email_stub) do
-        stub = create(:user_email, user: user, primary: false)
-        allow(stub).to receive(:update_attributes).and_return(false)
-        stub
-      end
-      subject { post :set_primary, id: email_stub }
+      let(:email) { create(:user_email, :unconfirmed, user: user, primary: false) }
+      subject { post :set_primary, id: email }
 
-      context 'when update fails' do
-        before do
-          controller.instance_variable_set(:@email, email_stub)
-        end
+      context 'when email is not confirmed' do
         it 'does not change the primary email' do
           subject
-          expect(email_stub.reload.primary).to be_falsey
+          expect(email.reload.primary).to be_falsey
           expect(user.reload.emails.find(&:primary?)).not_to be_nil
         end
 

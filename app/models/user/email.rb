@@ -5,22 +5,10 @@ class User::Email < ActiveRecord::Base
 
   schema_validations except: [:primary, :email]
   validates :primary, inclusion: [true, false]
-  validates :primary, uniqueness: { scope: [:user_id], conditions: -> { where(primary: true) } }
 
   belongs_to :user, inverse_of: :emails
 
   scope :confirmed, -> { where.not(confirmed_at: nil) }
-
-  # Set the email as primary. This method would cause the email record to be directly updated.
-  #
-  # @return [Boolean] True if transaction was done successfully, otherwise nil.
-  def primary!
-    User::Email.transaction do
-      raise ActiveRecord::Rollback unless user.unset_primary_email
-      raise ActiveRecord::Rollback unless update_attributes(primary: true)
-      true
-    end
-  end
 
   private
 

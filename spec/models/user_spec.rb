@@ -46,9 +46,14 @@ RSpec.describe User do
 
     describe '#emails' do
       let(:user) { create(:user, emails_count: 5) }
-      it 'only allows one primary email' do
-        user.emails.each.each { |email_record| email_record.primary = true }
-        expect { user.save! } .to raise_error(ActiveRecord::RecordInvalid)
+      it 'unsets other email as primary when a new email is assigned' do
+        email_record = user.emails.reject(&:primary).sample
+
+        user.email = email_record.email
+        user.save!
+
+        expect(email_record.reload).to be_primary
+        expect(user.emails.reload.to_a.count(&:primary)).to eq(1)
       end
     end
 
