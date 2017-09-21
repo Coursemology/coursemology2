@@ -48,7 +48,7 @@ class Course::Level < ApplicationRecord
   # @return [nil] If current level is the highest in the course.
   def next
     return @next if defined? @next
-    @next = course.levels.find_nth(level_number + 1, 0)
+    @next = course.levels.offset(level_number + 1).first
   end
 
   # Returns the experience_points_threshold of the next level. If current level is highest
