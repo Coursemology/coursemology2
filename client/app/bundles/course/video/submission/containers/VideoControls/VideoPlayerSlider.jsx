@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import 'rc-slider/assets/index.css';
+import { connect } from 'react-redux';
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
+import 'rc-slider/assets/index.css';
 
 import styles from '../VideoPlayer.scss';
+import { updatePlayerProgress } from '../../actions/video';
 
 const unbufferedColour = '#e9e9e9';
 const bufferedColour = '#afe9ff';
@@ -29,7 +31,6 @@ const propTypes = {
   duration: PropTypes.number.isRequired,
   playerProgress: PropTypes.number,
   bufferProgress: PropTypes.number,
-  onDragStart: PropTypes.func,
   onDragged: PropTypes.func,
 };
 
@@ -64,7 +65,6 @@ class VideoPlayerSlider extends React.Component {
           railStyle={generateRailStyle(this.props.bufferProgress, this.props.duration)}
           tipFormatter={formatTimestamp}
           onChange={this.props.onDragged}
-          onBeforeChange={this.props.onDragStart}
         />
       </span>
     );
@@ -74,5 +74,19 @@ class VideoPlayerSlider extends React.Component {
 VideoPlayerSlider.propTypes = propTypes;
 VideoPlayerSlider.defaultProps = defaultProps;
 
-export default VideoPlayerSlider;
+function mapStateToProps(state) {
+  return {
+    duration: state.video.duration,
+    playerProgress: state.video.playerProgress,
+    bufferProgress: state.video.bufferProgress,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onDragged: newValue => dispatch(updatePlayerProgress(newValue, true)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(VideoPlayerSlider);
 

@@ -1,3 +1,5 @@
+import { playerStates } from '../constants/videoConstants';
+
 /**
  * Formats a number into a timestamp string.
  *
@@ -6,9 +8,10 @@
  * return {string} The timestamp formatted in [hh:]mm:ss
  */
 function formatTimestamp(timestamp) {
-  const hour = Math.floor(timestamp / 3600);
-  const minute = Math.floor((timestamp % 3600) / 60);
-  const seconds = Math.round((timestamp % 3600) % 60);
+  const roundedTime = Math.round(timestamp);
+  const hour = Math.floor(roundedTime / 3600);
+  const minute = Math.floor((roundedTime % 3600) / 60);
+  const seconds = (roundedTime % 3600) % 60;
 
   return (
     `${(hour > 0 ? `${hour}:${minute < 10 ? '0' : ''}` : '') +
@@ -16,12 +19,30 @@ function formatTimestamp(timestamp) {
   );
 }
 
+/**
+ * Checks if the time given is past the restricted time.
+ *
+ * If restricted time is invalid (<0 or undefined), this function will always return false.
+ * @param restrictedTimeInSec The time denoting the maximum allowed content
+ * @param timeInSec The time to test
+ * @returns {boolean} true if timeInSec exceeds restrictedTimeInSec
+ */
 function timeIsPastRestricted(restrictedTimeInSec, timeInSec) {
-  if (!restrictedTimeInSec || restrictedTimeInSec <= 0) {
+  if (restrictedTimeInSec === undefined || restrictedTimeInSec <= 0) {
     return false;
   }
 
   return timeInSec >= restrictedTimeInSec;
 }
 
-export { formatTimestamp, timeIsPastRestricted };
+/**
+ * Returns true if the playerState provided is considered a state when the  player will continue playing the video
+ * whenever possible.
+ * @param playerState The playerState to check against playerStates
+ * @returns {boolean} If the playerState provided is a playing state
+ */
+function isPlayingState(playerState) {
+  return playerState === playerStates.PLAYING || playerState === playerStates.BUFFERING;
+}
+
+export { formatTimestamp, timeIsPastRestricted, isPlayingState };
