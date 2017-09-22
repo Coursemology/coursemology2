@@ -60,14 +60,17 @@ export default class SubmissionsTable extends React.Component {
   }
 
   getGradeString(submission) {
-    if ((submission.workflowState === workflowStates.Unstarted) ||
-      (submission.workflowState === workflowStates.Attempting)) return null;
+    if (submission.workflowState === workflowStates.Unstarted) return null;
 
     const { assessment } = this.props;
 
-    const gradeString = (submission.workflowState === workflowStates.Submitted ? '--' :
-      SubmissionsTable.formatGrade(submission.grade));
+    const gradeString =
+      ((submission.workflowState === workflowStates.Attempting) ||
+      (submission.workflowState === workflowStates.Submitted)) ? '--' :
+      SubmissionsTable.formatGrade(submission.grade);
+
     const maximumGradeString = SubmissionsTable.formatGrade(assessment.maximumGrade);
+
     return `${gradeString} / ${maximumGradeString}`;
   }
 
