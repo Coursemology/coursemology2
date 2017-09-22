@@ -486,6 +486,10 @@ export default class ScribingCanvas extends React.Component {
         this.canvas.setBackgroundImage(fabricImage, this.canvas.renderAll.bind(this.canvas))
       );
 
+      const canvasElem = document.getElementById(`canvas-container-${answerId}`);
+      const canvasContainerElem = canvasElem.getElementsByClassName('canvas-container')[0];
+      canvasContainerElem.style.margin = '0 auto';
+
       this.initializeScribblesAndBackground(true);
 
       this.canvas.on('mouse:down', this.onMouseDownCanvas);
@@ -593,7 +597,7 @@ export default class ScribingCanvas extends React.Component {
     const answerId = this.props.answerId;
     const isCanvasLoaded = this.props.scribing.isCanvasLoaded;
     return (answerId ?
-      <div style={styles.canvas_div}>
+      <div style={styles.canvas_div} id={`canvas-container-${answerId}`}>
         { !isCanvasLoaded ? <LoadingIndicator /> : null }
         <canvas style={styles.canvas} id={`canvas-${answerId}`} />
       </div> : null
