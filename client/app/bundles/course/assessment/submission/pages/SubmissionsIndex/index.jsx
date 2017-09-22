@@ -15,7 +15,7 @@ import { red100, yellow100, grey100, green100, blue100, blue500 } from 'material
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-import IntlNotificationBar, { notificationShape } from 'lib/components/IntlNotificationBar';
+import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
 import { fetchSubmissions, publishSubmissions, downloadSubmissions } from '../../actions/submissions';
 import SubmissionsTable from './SubmissionsTable';
 import { assessmentShape } from '../../propTypes';
@@ -209,7 +209,7 @@ class VisibleSubmissionsIndex extends React.Component {
         {this.renderHeader()}
         {this.renderTabs()}
         {this.renderPublishConfirmation()}
-        <IntlNotificationBar notification={notification} />
+        <NotificationBar notification={notification} />
       </div>
     );
   }

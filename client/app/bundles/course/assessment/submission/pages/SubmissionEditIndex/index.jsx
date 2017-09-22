@@ -5,7 +5,7 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import FileIcon from 'material-ui/svg-icons/editor/insert-drive-file';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-import IntlNotificationBar, { notificationShape } from 'lib/components/IntlNotificationBar';
+import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
 import { getUrlParameter } from 'lib/helpers/url-helpers';
 import ProgressPanel from '../../components/ProgressPanel';
 import SubmissionEditForm from './SubmissionEditForm';
@@ -244,7 +244,7 @@ class VisibleSubmissionEditIndex extends Component {
         {this.renderAssessment()}
         {this.renderProgress()}
         {this.renderContent()}
-        <IntlNotificationBar notification={notification} />
+        <NotificationBar notification={notification} />
       </div>
     );
   }
