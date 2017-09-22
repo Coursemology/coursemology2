@@ -1,12 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import Snackbar from 'material-ui/Snackbar';
 
 export const notificationShape = PropTypes.shape({
   message: PropTypes.oneOfType([
     PropTypes.string.isRequired,
     PropTypes.object.isRequired,
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
   ]),
+  errors: PropTypes.string,
 });
 
 /*
@@ -28,10 +33,20 @@ export default class NotificationBar extends React.Component {
   render() {
     const { notification, ...options } = this.props;
     const message = notification && notification.message;
+    const errors = notification && notification.errors;
+
+    let notificationNode = null;
+    if (message && message.id) {
+      notificationNode = <FormattedMessage {...message} values={{ errors }} />;
+    } else if (message) {
+      notificationNode = message;
+    } else {
+      notificationNode = '';
+    }
     return (
       <Snackbar
         open={!!message}
-        message={message || ''}
+        message={notificationNode}
         autoHideDuration={2000}
         {...options}
       />

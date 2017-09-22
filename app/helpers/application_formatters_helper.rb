@@ -94,15 +94,23 @@ module ApplicationFormattersHelper
   #        :date_only_long => "December 04, 2007"
   #        :date_only_short => "04 Dec"
   # @return [String] the formatted datetime string
-  def format_datetime(date, format = :long)
-    user_zone = (current_user ? current_user.time_zone : nil) ||
-                Application.config.x.default_user_time_zone
+  def format_datetime(date, format = :long, user: nil)
+    user ||= respond_to?(:current_user) ? current_user : nil
+    user_zone = user&.time_zone || Application.config.x.default_user_time_zone
     # TODO: Fix the query. This is a workaround to display the time in the correct zone, there are
     # places where datetimes are directly fetched from db and skipped AR, which result in incorrect
     # time zone.
     date = date.in_time_zone(user_zone) if date.zone != user_zone
 
     date.to_formatted_s(format)
+  end
+
+  # @return the duration in the format of "HH:MM:SS", eg 04H05M11S
+  def format_duration(total_seconds)
+    seconds = total_seconds % 60
+    minutes = (total_seconds / 60) % 60
+    hours = total_seconds / (60 * 60)
+    format('%02dH%02dM%02dS', hours, minutes, seconds)
   end
 
   # A helper for generating CSS classes, based on the time-bounded status of the item.

@@ -10,6 +10,10 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     return this.getClient().get(`${this._getUrlPrefix()}/download_all`, { params: { students } });
   }
 
+  downloadStatistics(students) {
+    return this.getClient().get(`${this._getUrlPrefix()}/download_statistics`, { params: { students } });
+  }
+
   publishAll() {
     return this.getClient().patch(`${this._getUrlPrefix()}/publish_all`);
   }
