@@ -96,9 +96,8 @@ class Instance < ActiveRecord::Base
 
   # The number of active users (in the past 7 days) in the instance.
   calculated :active_user_count, (lambda do
-    InstanceUser.unscoped.joins(:user).merge(User.active_in_past_7_days).
-      where('instance_users.instance_id = instances.id').
-      select("count('*')")
+    InstanceUser.unscoped.where('instance_users.instance_id = instances.id').
+      active_in_past_7_days.select("count('*')")
   end)
 
   def self.use_relative_model_naming?
