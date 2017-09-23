@@ -75,16 +75,6 @@ class User < ActiveRecord::Base
     id == User::SYSTEM_USER_ID || id == User::DELETED_USER_ID
   end
 
-  # Unset current primary email. This method would immediately set the attributes in the database.
-  #
-  # @return [Boolean] True if current primary emails was set as non primary or there is no
-  #   primary email, false if failed.
-  def unset_primary_email
-    return true unless default_email_record
-
-    default_email_record.update_attributes(primary: false)
-  end
-
   # Pick the default email and set it as primary email. This method would immediately set the
   # attributes in the database.
   #
