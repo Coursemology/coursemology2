@@ -27,7 +27,8 @@ class Course::Assessment::Submission::StatisticsDownloadService
 
   def generate_csv_report
     submissions = Course::Assessment::Submission.
-                  where(id: @submission_ids).includes(:course_user, :answers, :assessment)
+                  where(id: @submission_ids).
+                  includes(:course_user, :answers, :assessment, :publisher)
     statistics_file_path = File.join(@base_dir, 'statistics.csv')
     CSV.open(statistics_file_path, 'w') do |csv|
       download_statistics_header csv
@@ -48,7 +49,8 @@ class Course::Assessment::Submission::StatisticsDownloadService
             I18n.t('course.assessment.submission.submissions.statistics_download_service.submitted_date_time'),
             I18n.t('course.assessment.submission.submissions.statistics_download_service.time_taken'),
             I18n.t('course.assessment.submission.submissions.statistics_download_service.graded_date_time'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.grading_time')]
+            I18n.t('course.assessment.submission.submissions.statistics_download_service.grading_time'),
+            I18n.t('course.assessment.submission.submissions.statistics_download_service.grader')]
   end
 
   def download_statistics(csv, submission)
@@ -61,7 +63,8 @@ class Course::Assessment::Submission::StatisticsDownloadService
             csv_submitted_date_time(submission),
             csv_time_taken(submission),
             csv_graded_at(submission),
-            csv_grading_time(submission)]
+            csv_grading_time(submission),
+            csv_grader(submission)]
   end
 
   def csv_empty
@@ -111,6 +114,20 @@ class Course::Assessment::Submission::StatisticsDownloadService
   def csv_grading_time(submission)
     if submission.graded_at && submission.submitted_at
       format_duration submission.graded_at.to_time.to_i - submission.submitted_at.to_time.to_i
+    else
+      csv_empty
+    end
+  end
+  
+  def csv_grader(submission)
+    if submission.publisher
+      course_user = submission.publisher.course_users.
+                    find_by(course_id: submission.assessment.course_id)
+      if course_user
+        course_user.name
+      else
+        submission.publisher.name
+      end
     else
       csv_empty
     end
