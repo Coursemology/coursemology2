@@ -22,4 +22,5 @@ en:
             time_taken: 'Time Taken'
             graded_date_time: 'Graded Date/Time'
             grading_time: 'Grading Time'
+            grader: 'Grader'
             csv_empty: '-'
