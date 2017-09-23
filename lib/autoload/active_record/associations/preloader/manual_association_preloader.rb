@@ -4,8 +4,7 @@ module ActiveRecord::Associations::Preloader::ManualAssociationPreloader
     super(klass, owners, reflection, nil)
 
     @records_by_owner = records.each_with_object({}) do |record, h|
-      owner_id = record[association_key_name]
-      owner_id = owner_id.to_s if key_conversion_required?
+      owner_id = convert_key(record[association_key_name])
       records = (h[owner_id] ||= [])
       records << record
     end
@@ -15,7 +14,12 @@ module ActiveRecord::Associations::Preloader::ManualAssociationPreloader
     raise NotImplementedError
   end
 
-  def records_for(ids)
-    ids.flat_map { |id| @records_by_owner[id] }.tap(&:compact!)
+  def records_for(ids, &block)
+    ids.flat_map { |id| @records_by_owner[id] }.tap(&:compact!).tap do |result|
+      # In ActiveRecord 5.0.1, an ActiveRecord::Relation is expected to be returned.
+      result.define_singleton_method(:load) do
+        self
+      end
+    end
   end
 end
