@@ -20,7 +20,8 @@ RSpec.describe 'Extension: Devise: sign_in with resource', type: :controller do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:user) { self.class::TestUser.new }
-    subject { controller.sign_in(:user, user, bypass: true) }
+    # Set run_callbacks to false to skip Warden callbacks
+    subject { controller.sign_in(:user, user, run_callbacks: false) }
 
     it 'calls #before_sign_in' do
       expect(user).to receive(:before_callback)
