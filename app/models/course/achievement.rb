@@ -56,6 +56,7 @@ class Course::Achievement < ActiveRecord::Base
   def initialize_duplicate(duplicator, other)
     badge.duplicate_from(other.badge) if other.badge_url
     self.course = duplicator.options[:target_course]
+    self.published = false if duplicator.options[:unpublish_all]
     duplicate_conditions(duplicator, other)
     achievement_conditions << other.achievement_conditions.
                               select { |condition| duplicator.duplicated?(condition.conditional) }.

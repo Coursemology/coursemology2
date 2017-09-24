@@ -145,6 +145,8 @@ class Course::Assessment < ActiveRecord::Base
     @duplicating = true
   end
 
+  private
+
   # Parents the assessment under its duplicated parent tab, if it exists.
   #
   # @return [Course::Assessment::Tab] The duplicated assessment's tab
@@ -165,8 +167,6 @@ class Course::Assessment < ActiveRecord::Base
                              select { |condition| duplicator.duplicated?(condition.conditional) }.
                              map { |condition| duplicator.duplicate(condition) }
   end
-
-  private
 
   # Sets the course of the lesson plan item to be the same as the one for the assessment.
   def propagate_course

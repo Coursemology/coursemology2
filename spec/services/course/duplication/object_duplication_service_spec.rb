@@ -6,13 +6,13 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
   with_tenant(:instance) do
     let(:source_course) { create(:course) }
     let(:destination_course) { create(:course) }
-    let(:options) { { current_course: source_course, target_course: destination_course } }
     let(:source_objects) { [] }
     let(:excluded_objects) { [] }
 
     describe '#duplicate_objects' do
       let(:duplicate_objects) do
-        Course::Duplication::ObjectDuplicationService.duplicate_objects(source_objects, options)
+        Course::Duplication::ObjectDuplicationService.
+          duplicate_objects(source_course, destination_course, source_objects, {})
       end
 
       context 'when an item fails to duplicate' do
@@ -48,10 +48,11 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
         context 'when only a category is selected' do
           let(:source_objects) { category }
 
-          it 'duplicates it without any tabs' do
+          it 'creates a default tab for it' do
             expect { duplicate_objects }.to change { destination_course.assessment_categories.count }.by(1)
             expect(duplicate_objects.title).to eq(category.title)
-            expect(duplicate_objects.tabs.length).to eq(0)
+            default_title = Course::Assessment::Tab.human_attribute_name('title.default')
+            expect(duplicate_objects.tabs.first.title).to eq(default_title)
           end
         end
 

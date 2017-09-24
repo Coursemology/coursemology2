@@ -32,7 +32,7 @@ class Course::LessonPlan::Item < ActiveRecord::Base
   def copy_attributes(other, duplicator)
     self.title = other.title
     self.description = other.description
-    self.published = other.published
+    self.published = duplicator.options[:unpublish_all] ? false : other.published
     self.base_exp = other.base_exp
     self.time_bonus_exp = other.time_bonus_exp
     self.start_at = duplicator.time_shift(other.start_at)
