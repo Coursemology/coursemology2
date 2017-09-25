@@ -82,6 +82,7 @@ export default class ScribingCanvas extends React.Component {
       this.canvas.isDrawingMode = nextProps.scribing.isDrawingMode;
       this.canvas.freeDrawingBrush.color = this.props.scribing.colors[scribingToolColor.DRAW];
       this.canvas.defaultCursor = nextProps.scribing.cursor;
+      this.currentCursor = nextProps.scribing.cursor;
 
       this.canvas.zoomToPoint({
         x: this.canvas.height / 2,
@@ -122,19 +123,22 @@ export default class ScribingCanvas extends React.Component {
   }
 
   disableObjectSelection() {
-    this.canvas.forEachObject(object => (
-      object.selectable = false // eslint-disable-line no-param-reassign
-    ));
+    this.canvas.forEachObject((object) => {
+      object.selectable = false; // eslint-disable-line no-param-reassign
+      object.hoverCursor = this.currentCursor; // eslint-disable-line no-param-reassign
+    });
   }
 
   // This method only enable selection for interactive texts
   enableTextSelection() {
     this.canvas.clear();
     this.initializeScribblesAndBackground(false);
-    this.canvas.forEachObject(object => (
+    this.canvas.forEachObject((object) => {
       // eslint-disable-next-line no-param-reassign
-      object.selectable = (object.type === 'i-text')
-    ));
+      object.selectable = (object.type === 'i-text');
+      // eslint-disable-next-line no-param-reassign
+      object.hoverCursor = (object.type === 'i-text') ? 'pointer' : this.currentCursor;
+    });
   }
 
   // This method clears the selection-disabled scribbles
