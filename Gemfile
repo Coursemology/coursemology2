@@ -28,7 +28,7 @@ gem 'validates_hostname'
 # A Ruby state machine library
 gem 'workflow'
 # Add creator_id and updater_id attributes to models
-gem 'activerecord-userstamp', '>= 3.0.2'
+gem 'activerecord-userstamp', github: 'lowjoel/activerecord-userstamp'
 # Allow actions to be deferred until after a record is committed.
 gem 'after_commit_action'
 # Allow declaring the calculated attributes of a record
@@ -187,7 +187,7 @@ gem 'themes_on_rails', '>= 0.3.1', github: 'Coursemology/themes_on_rails',
                                    branch: 'cache-theme-templates'
 
 # Forms made easy for Rails
-gem 'simple_form', '~> 3.2.1'
+gem 'simple_form'
 gem 'simple_form-bootstrap'
 # Dynamic nested forms
 gem 'cocoon'
