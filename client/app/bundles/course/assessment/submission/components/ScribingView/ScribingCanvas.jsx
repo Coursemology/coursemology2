@@ -175,6 +175,14 @@ export default class ScribingCanvas extends React.Component {
     };
 
     if (this.mouseCanvasDragStartPoint) {
+      if (this.props.scribing.selectedTool === scribingTools.SELECT) {
+        this.canvas.selectionBorderColor = 'gray';
+        this.canvas.selectionDashArray = [1, 3];
+      } else {
+        this.canvas.selectionBorderColor = 'transparent';
+        this.canvas.selectionDashArray = [];
+      }
+
       if (this.props.scribing.selectedTool === scribingTools.LINE) {
         const strokeDashArray = getStrokeDashArray(scribingToolLineStyle.LINE);
         this.line = new fabric.Line(
@@ -478,6 +486,7 @@ export default class ScribingCanvas extends React.Component {
         statefullCache: false,
         noScaleCache: true,
         needsItsOwnCache: false,
+        selectionColor: 'transparent',
       });
 
       this.props.setCanvasProperties(this.props.answerId, this.width, this.height, maxWidth);
