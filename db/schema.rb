@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170915083041) do
+ActiveRecord::Schema.define(version: 20170925095335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -402,6 +402,7 @@ ActiveRecord::Schema.define(version: 20170915083041) do
     t.integer  "topic_id",   :null=>false, :index=>{:name=>"fk__course_discussion_posts_topic_id"}, :foreign_key=>{:references=>"course_discussion_topics", :name=>"fk_course_discussion_posts_topic_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.string   "title",      :limit=>255
     t.text     "text"
+    t.boolean  "answer",     :default=>false
     t.integer  "creator_id", :null=>false, :index=>{:name=>"fk__course_discussion_posts_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_discussion_posts_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "updater_id", :null=>false, :index=>{:name=>"fk__course_discussion_posts_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_discussion_posts_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at", :null=>false
