@@ -14,12 +14,13 @@ const mapProps = props => ({ ...mapError(props) });
 const propTypes = {
   field: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  errorMessage: PropTypes.string.isRequired,
   validate: PropTypes.array,
   isLoading: PropTypes.bool,
 };
 
 const FileUploadField = (props) => {
-  const { field, label, validate, isLoading } = props;
+  const { field, label, validate, isLoading, errorMessage } = props;
 
   return (
     <Field
@@ -27,7 +28,13 @@ const FileUploadField = (props) => {
       id={questionIdPrefix + field}
       disabled={isLoading}
       validate={validate}
-      component={fuProps => (<FileUploadComponent field={field} label={label} isLoading={isLoading} {...fuProps} />)}
+      component={fuProps => (<FileUploadComponent
+        field={field}
+        label={label}
+        isLoading={isLoading}
+        errorMessage={errorMessage}
+        {...fuProps}
+      />)}
     />
   );
 };

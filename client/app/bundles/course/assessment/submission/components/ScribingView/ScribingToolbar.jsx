@@ -180,8 +180,8 @@ class ScribingToolbar extends Component {
   onClickTypingMode = () => {
     this.props.setToolSelected(this.props.answerId, scribingTools.TYPE);
     this.props.setDrawingMode(this.props.answerId, false);
-    this.props.setCanvasCursor(this.props.answerId, 'pointer');
-    this.props.setEnableTextSelection();
+    this.props.setCanvasCursor(this.props.answerId, 'text');
+    this.props.setEnableTextSelection(this.props.answerId);
   }
 
   onClickTypingIcon = () => {

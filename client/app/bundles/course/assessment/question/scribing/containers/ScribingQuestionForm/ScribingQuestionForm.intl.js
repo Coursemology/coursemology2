@@ -74,4 +74,8 @@ export default defineMessages({
     id: 'course.assessment.question.scribing.scribingQuestionForm.lessThanEqualZeroValidationError',
     defaultMessage: 'Value must be greater than 0.',
   },
+  fileAttachmentRequired: {
+    id: 'course.assessment.question.scribing.scribingQuestionForm.fileAttachmentRequired',
+    defaultMessage: 'File attachment required.',
+  },
 });
