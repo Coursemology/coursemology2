@@ -32,6 +32,7 @@ const mapProps =
 const propTypes = {
   field: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  errorMessage: PropTypes.string.isRequired,
   isLoading: PropTypes.bool,
   value: PropTypes.object,
   meta: PropTypes.object,
@@ -56,10 +57,10 @@ class FileUploadComponent extends Component {
     const fileName = this.props.value && this.props.value[0] && this.props.value[0].name;
     if (fileName) {
       return (<div className="fileLabel" style={style.fileLabel} >{fileName}</div>);
-    } else if (this.props.meta && this.props.meta.touched && this.props.meta.invalid && this.props.meta.error) {
+    } else if (this.props.meta && this.props.meta.touched && !fileName) {
       return (
         <div style={style.fileLabelError}>
-          { this.props.meta && this.props.meta.touched && this.props.meta.invalid && this.props.meta.error }
+          { this.props.errorMessage }
         </div>
       );
     }

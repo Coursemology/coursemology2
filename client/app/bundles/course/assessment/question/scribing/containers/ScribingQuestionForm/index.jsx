@@ -228,6 +228,7 @@ class ScribingQuestionForm extends React.Component {
                     label={this.props.intl.formatMessage(translations.chooseFileButton)}
                     isLoading={this.props.data.isLoading}
                     validate={[required]}
+                    errorMessage={this.props.intl.formatMessage(translations.fileAttachmentRequired)}
                   />
                 </div>
               }
