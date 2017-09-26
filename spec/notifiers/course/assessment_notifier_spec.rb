@@ -10,9 +10,9 @@ RSpec.describe Course::AssessmentNotifier, type: :notifier do
     end
 
     describe '#assessment_attempted' do
-      let(:course) { create(:course) }
-      let(:assessment) { create(:assessment, course: course) }
-      let(:user) { create(:course_user, course: course).user }
+      let!(:course) { create(:course) }
+      let!(:assessment) { create(:assessment, course: course) }
+      let!(:user) { create(:course_user, course: course).user }
 
       subject { Course::AssessmentNotifier.assessment_attempted(user, assessment) }
 
@@ -23,9 +23,9 @@ RSpec.describe Course::AssessmentNotifier, type: :notifier do
 
     describe '#assessment_submitted' do
       let(:course) { create(:course) }
-      let(:course_user) { create(:course_user, course: course) }
+      let!(:course_user) { create(:course_user, course: course) }
       let(:user) { course_user.user }
-      let(:submission) { create(:submission, course: course, creator: user) }
+      let!(:submission) { create(:submission, course: course, creator: user) }
 
       subject { Course::AssessmentNotifier.assessment_submitted(user, course_user, submission) }
 
@@ -66,8 +66,8 @@ RSpec.describe Course::AssessmentNotifier, type: :notifier do
 
     describe '#assessment_opening' do
       let(:course) { create(:course) }
-      let(:assessment) { create(:course_assessment_assessment, course: course) }
-      let(:user) { create(:course_user, course: course).user }
+      let!(:assessment) { create(:course_assessment_assessment, course: course) }
+      let!(:user) { create(:course_user, course: course).user }
 
       subject { Course::AssessmentNotifier.assessment_opening(user, assessment) }
 

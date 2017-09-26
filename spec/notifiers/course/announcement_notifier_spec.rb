@@ -7,7 +7,7 @@ RSpec.describe Course::AnnouncementNotifier, type: :notifier do
   with_tenant(:instance) do
     describe '#new_announcement' do
       let(:course) { create(:course) }
-      let(:user) { create(:course_user, course: course).user }
+      let!(:user) { create(:course_user, course: course).user }
       let(:announcement) { create(:course_announcement, course: course) }
 
       before do
