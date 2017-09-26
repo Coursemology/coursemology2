@@ -198,12 +198,14 @@ class VisibleTestCaseView extends Component {
       <TableRowColumn style={styles.testCaseCell}>{field}</TableRowColumn>
     );
 
+    const outputStyle = { whiteSpace: 'pre-wrap', fontFamily: 'monospace' };
+
     return (
       <TableRow key={testCase.identifier} style={styles.testCaseRow[testCaseResult]}>
         { canGrade ? tableRowColumnFor(testCase.identifier) : null }
         {tableRowColumnFor(testCase.expression)}
-        {tableRowColumnFor(<ExpandableText text={testCase.expected || ''} /> || '')}
-        { canGrade ? tableRowColumnFor(<ExpandableText text={testCase.output || ''} /> || '') : null }
+        {tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.expected || ''} /> || '')}
+        { canGrade ? tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.output || ''} /> || '') : null }
         {tableRowColumnFor(testCaseIcon)}
       </TableRow>
     );

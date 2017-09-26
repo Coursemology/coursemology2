@@ -17,6 +17,7 @@ const propTypes = {
   text: PropTypes.string.isRequired,
   maxChars: PropTypes.number,
   intl: intlShape.isRequired,
+  style: PropTypes.object,
 };
 
 class ExpandableText extends React.Component {
@@ -40,17 +41,17 @@ class ExpandableText extends React.Component {
   }
 
   render() {
-    const { text, maxChars, intl } = this.props;
+    const { text, maxChars, intl, style } = this.props;
     const showAll = intl.formatMessage(translations.showAll);
     const showLess = intl.formatMessage(translations.showLess);
     const maxLength = maxChars && maxChars > showAll.length ? maxChars : this.defaultMaxChars;
 
     if (text.length <= maxLength) {
-      return <span>{ text }</span>;
+      return <span style={style}>{ text }</span>;
     }
 
     return (
-      <span>
+      <span style={style}>
         { this.state.expanded ?
           text :
           `${text.substr(0, maxLength - showAll.length)}\u2026`
