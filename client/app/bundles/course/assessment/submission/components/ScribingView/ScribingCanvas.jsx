@@ -259,6 +259,7 @@ export default class ScribingCanvas extends React.Component {
       });
       this.canvas.add(text);
       this.canvas.setActiveObject(text);
+      text.enterEditing();
       this.canvas.renderAll();
       this.textCreated = true;
     } else if (!this.isOverText && this.textCreated) {
