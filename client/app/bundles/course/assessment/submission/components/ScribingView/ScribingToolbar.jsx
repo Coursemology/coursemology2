@@ -396,6 +396,7 @@ class ScribingToolbar extends Component {
             open={this.state.popovers[scribingPopoverTypes.SHAPE]}
             anchorEl={this.state.popoverAnchor}
             onRequestClose={() => (this.onRequestClosePopover(scribingPopoverTypes.SHAPE))}
+            currentShape={this.props.scribing.selectedShape}
             setSelectedShape={shape => (this.setSelectedShape(shape))}
             selectedLineStyle={this.props.scribing.lineStyles[scribingToolLineStyle.SHAPE_BORDER]}
             onTouchTapLineStyleChip={this.onTouchTapLineStyleChip}

@@ -3,17 +3,19 @@ import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
+import { blue500 } from 'material-ui/styles/colors';
 
 import { scribingTranslations as translations } from '../../../translations';
 import { scribingShapes } from '../../../constants';
 
 const propTypes = {
   intl: intlShape.isRequired,
+  currentShape: PropTypes.string.isRequired,
   setSelectedShape: PropTypes.func,
 };
 
 const ShapeField = (props) => {
-  const { intl, setSelectedShape } = props;
+  const { intl, currentShape, setSelectedShape } = props;
 
   return (
     <div>
@@ -22,14 +24,22 @@ const ShapeField = (props) => {
         tooltipPosition="top-center"
         onClick={() => (setSelectedShape(scribingShapes.RECT))}
       >
-        <FontIcon className="fa fa-square-o" />
+        <FontIcon
+          color={currentShape === scribingShapes.RECT ?
+            blue500 : 'rgba(0, 0, 0, 0.4)'}
+          className="fa fa-square-o"
+        />
       </IconButton>
       <IconButton
         tooltip={intl.formatMessage(translations.ellipse)}
         tooltipPosition="top-center"
         onClick={() => (setSelectedShape(scribingShapes.ELLIPSE))}
       >
-        <FontIcon className="fa fa-circle-o" />
+        <FontIcon
+          color={currentShape === scribingShapes.ELLIPSE ?
+            blue500 : 'rgba(0, 0, 0, 0.4)'}
+          className="fa fa-circle-o"
+        />
       </IconButton>
     </div>
   );
