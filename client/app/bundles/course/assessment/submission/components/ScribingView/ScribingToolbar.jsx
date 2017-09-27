@@ -96,9 +96,6 @@ class ScribingToolbar extends Component {
       popovers: initializePopovers(),
       popoverAnchor: undefined,
     };
-    this.viewportLeft = 0;
-    this.viewportTop = 0;
-    this.textCreated = false;
   }
 
   // Toolbar Event handlers
