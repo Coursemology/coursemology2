@@ -476,11 +476,13 @@ export default class ScribingCanvas extends React.Component {
 
         // Parse JSON to Fabric.js objects
         for (let i = 0; i < objects.length; i++) {
-          const klass = fabric.util.getKlass(objects[i].type);
-          klass.fromObject(objects[i], (obj) => {
-            this.denormaliseScribble(obj);
-            fabricObjs.push(obj);
-          });
+          if (objects[i].type !== 'group') {
+            const klass = fabric.util.getKlass(objects[i].type);
+            klass.fromObject(objects[i], (obj) => {
+              this.denormaliseScribble(obj);
+              fabricObjs.push(obj);
+            });
+          }
         }
 
         // Create layer for each user's scribble
