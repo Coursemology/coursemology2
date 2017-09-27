@@ -176,8 +176,7 @@ gem 'omniauth-facebook'
 
 # Use cancancan for authorization
 gem 'cancancan'
-# Cancancan adapter. TODO: transfer to Coursemology organization
-gem 'cancancan-baby_squeel', github: 'jeremyyap/cancancan-baby_squeel'
+gem 'cancancan-squeel'
 
 # Some helpers for structuring CSS/JavaScript
 gem 'rails_utils', '>= 3.3.3'
