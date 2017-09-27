@@ -1,4 +1,5 @@
 - post_class = ['post']
+- post_class << 'bg-success' if post.answer
 - post_class.concat(unread_class(post))
 = div_for(post, class: post_class) do
   a name=dom_id(post)
@@ -53,3 +54,9 @@
           - path = vote_course_forum_topic_post_path(current_course, @forum, @topic, post, vote: 1)
           =< link_to path, method: :put, title: t('.upvote') do
             = fa_icon 'thumbs-o-up'.freeze
+
+        - topic = post.topic.specific
+        -if topic.question? && can?(:toggle_answer, topic)
+          - path = toggle_answer_course_forum_topic_post_path(current_course, @forum, @topic, post)
+          =< link_to path, method: :put, title: post.answer ? t('.unmark_as_answer') : t('.mark_as_answer') do
+            = fa_icon post.answer ? 'check-circle'.freeze : 'check'.freeze

@@ -253,6 +253,7 @@ Rails.application.routes.draw do
             resources :posts, only: [:create, :edit, :update, :destroy] do
               get 'reply', on: :member
               put 'vote', on: :member
+              put 'toggle_answer', on: :member
             end
 
             get 'subscribe', on: :member

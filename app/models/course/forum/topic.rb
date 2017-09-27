@@ -79,6 +79,16 @@ class Course::Forum::Topic < ActiveRecord::Base
     views.create(user: user)
   end
 
+  # Update the `resolve` boolean status based on correct answer counts.
+  def update_resolve_status
+    status = posts.where(answer: true).count > 0
+    if resolved != status
+      update_attribute(:resolved, status)
+    else
+      true
+    end
+  end
+
   private
 
   # Try building a slug based on the following fields in

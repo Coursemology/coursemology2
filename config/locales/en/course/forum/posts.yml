@@ -11,5 +11,9 @@ en:
           reply: 'Reply'
           downvote: 'Downvote'
           upvote: 'Upvote'
+          mark_as_answer: 'Mark as answer'
+          unmark_as_answer: 'Unmark as answer'
         vote:
           success: 'Vote was cast.'
+        toggle_answer:
+          success: 'Post was updated.'

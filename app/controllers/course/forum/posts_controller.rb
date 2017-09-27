@@ -2,6 +2,7 @@
 class Course::Forum::PostsController < Course::Forum::ComponentController
   before_action :load_topic
   authorize_resource :topic
+  skip_authorize_resource :post, only: :toggle_answer
   before_action :authorize_locked_topic, only: [:create]
   before_action :add_topic_breadcrumb
 
@@ -38,6 +39,17 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
     @post.cast_vote!(current_user, post_vote_param)
     redirect_to course_forum_topic_path(current_course, @forum, @topic),
                 success: t('.success')
+  end
+
+  # Mark/unmark the post as the correct answer
+  def toggle_answer
+    authorize!(:toggle_answer, @topic)
+    if @post.toggle_answer
+      redirect_to course_forum_topic_path(current_course, @forum, @topic), success: t('.success')
+    else
+      redirect_to course_forum_topic_path(current_course, @forum, @topic),
+                  danger: @post.errors.full_messages.to_sentence
+    end
   end
 
   def destroy
