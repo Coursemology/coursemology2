@@ -367,9 +367,36 @@ export default class ScribingCanvas extends React.Component {
 
   onMouseUpCanvas = () => {
     this.mouseDownFlag = false;
-    if (this.props.scribing.selectedTool === scribingTools.LINE
-      || this.props.scribing.selectedTool === scribingTools.SHAPE) {
-      this.saveScribbles();
+
+    switch (this.props.scribing.selectedTool) {
+      case scribingTools.LINE: {
+        if (this.line.height + this.line.width < 10) {
+          this.canvas.remove(this.line);
+          this.canvas.renderAll();
+        } else {
+          this.saveScribbles();
+        }
+        break;
+      }
+      case scribingTools.SHAPE: {
+        if (this.props.scribing.selectedShape === scribingShapes.RECT) {
+          if (this.rect.height + this.rect.width < 10) {
+            this.canvas.remove(this.rect);
+            this.canvas.renderAll();
+          } else {
+            this.saveScribbles();
+          }
+        } else if (this.props.scribing.selectedShape === scribingShapes.ELLIPSE) {
+          if (this.ellipse.height + this.ellipse.width < 10) {
+            this.canvas.remove(this.ellipse);
+            this.canvas.renderAll();
+          } else {
+            this.saveScribbles();
+          }
+        }
+        break;
+      }
+      default:
     }
   }
 
