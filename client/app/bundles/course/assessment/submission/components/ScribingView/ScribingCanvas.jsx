@@ -69,6 +69,7 @@ export default class ScribingCanvas extends React.Component {
     this.viewportLeft = 0;
     this.viewportTop = 0;
     this.textCreated = false;
+    this.copiedObjects = [];
   }
 
   componentDidMount() {
@@ -528,6 +529,9 @@ export default class ScribingCanvas extends React.Component {
       );
 
       const canvasElem = document.getElementById(`canvas-container-${answerId}`);
+      canvasElem.tabIndex = 1000;
+      canvasElem.addEventListener('keydown', this.onKeyDown, false);
+      canvasElem.style.outline = 'none';
       const canvasContainerElem = canvasElem.getElementsByClassName('canvas-container')[0];
       canvasContainerElem.style.margin = '0 auto';
 
@@ -600,6 +604,85 @@ export default class ScribingCanvas extends React.Component {
   onTextChanged = () => {
     this.saveScribbles();
     this.props.setToolSelected(this.props.answerId, scribingTools.SELECT);
+  }
+
+  onKeyDown = (event) => {
+    if (!this.canvas) return;
+
+    const activeGroup = this.canvas.getActiveGroup();
+    const activeObject = this.canvas.getActiveObject();
+
+    switch (event.keyCode) {
+      case 8: // Backspace key
+      case 46: // Delete key
+        {
+          if (activeObject) {
+            this.canvas.remove(activeObject);
+          } else if (activeGroup) {
+            const objectsInGroup = activeGroup.getObjects();
+            this.canvas.discardActiveGroup();
+            objectsInGroup.forEach(object => (this.canvas.remove(object)));
+          }
+          break;
+        }
+      case 67: // Ctrl+C
+        {
+          if (event.ctrlKey) {
+            event.preventDefault();
+
+            this.copiedObjects = [];
+            if (activeGroup) {
+              activeGroup.getObjects().forEach(obj => (
+                this.copiedObjects.push(fabric.util.object.clone(obj))
+              ));
+
+              this.copyLeft = activeGroup.getLeft();
+              this.copyTop = activeGroup.getTop();
+            } else if (activeObject) {
+              const object = fabric.util.object.clone(activeObject);
+              this.copyLeft = activeObject.getLeft();
+              this.copyTop = activeObject.getTop();
+              this.copiedObjects.push(object);
+            }
+          }
+          break;
+        }
+      case 86: // Ctrl+V
+        {
+          if (event.ctrlKey) {
+            event.preventDefault();
+
+            this.canvas.discardActiveGroup();
+            this.canvas.discardActiveObject();
+
+            const newObjects = [];
+            this.copiedObjects.forEach((obj) => {
+              const newObj = fabric.util.object.clone(obj);
+              newObjects.push(newObj);
+              newObj.setCoords();
+              this.canvas.add(newObj);
+              newObj.set('active', true);
+            });
+            const group = new fabric.Group(newObjects, { canvas: this.canvas });
+
+            // Shift copied object to the left if there's space
+            this.copyLeft = (this.copyLeft + group.getWidth() > this.canvas.getWidth()) ?
+              this.copyLeft : this.copyLeft + 10;
+            group.setLeft(this.copyLeft);
+            // Shift copied object down if there's space
+            this.copyTop = (this.copyTop + group.getHeight() > this.canvas.getHeight()) ?
+              this.copyTop : this.copyTop + 10;
+            group.setTop(this.copyTop);
+
+            group.setCoords();
+            this.canvas.setActiveGroup(group);
+            group.saveCoords();
+            this.canvas.renderAll();
+          }
+          break;
+        }
+      default:
+    }
   }
 
   // Utility Helpers
