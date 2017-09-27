@@ -23,6 +23,7 @@ const propTypes = {
   resetDisableObjectSelection: PropTypes.func.isRequired,
   resetEnableObjectSelection: PropTypes.func.isRequired,
   resetEnableTextSelection: PropTypes.func.isRequired,
+  resetChangeTool: PropTypes.func.isRequired,
 };
 
 const styles = {
@@ -116,6 +117,13 @@ export default class ScribingCanvas extends React.Component {
         }
         this.canvas.renderAll();
         this.props.resetCanvasDelete(this.props.answerId);
+      }
+      // Discard prior active object/group when using other tools
+      if (nextProps.scribing.isChangeTool) {
+        this.canvas.discardActiveObject();
+        this.canvas.discardActiveGroup();
+        this.canvas.renderAll();
+        this.props.resetChangeTool(this.props.answerId);
       }
     }
 

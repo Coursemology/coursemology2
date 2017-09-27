@@ -180,6 +180,15 @@ export function setCanvasZoom(answerId, canvasZoom) {
   );
 }
 
+export function resetChangeTool(answerId) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.RESET_CHANGE_TOOL,
+      payload: { answerId },
+    })
+  );
+}
+
 export function deleteCanvasObject(answerId) {
   return dispatch => (
     dispatch({
