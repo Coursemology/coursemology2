@@ -137,34 +137,5 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
         end
       end
     end
-
-    describe '#resolved' do
-      before do
-        controller.instance_variable_set(:@topic, topic_stub)
-        subject
-      end
-
-      context 'when set resolved fails' do
-        subject do
-          put :set_resolved, course_id: course, forum_id: forum, id: topic_stub, resolved: true
-        end
-
-        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
-        it 'sets an error flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.forum.topics.resolved.failure'))
-        end
-      end
-
-      context 'when set unresolved fails' do
-        subject do
-          put :set_resolved, course_id: course, forum_id: forum, id: topic_stub, resolved: false
-        end
-
-        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
-        it 'sets an error flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.forum.topics.unresolved.failure'))
-        end
-      end
-    end
   end
 end

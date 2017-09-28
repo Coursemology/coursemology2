@@ -2,7 +2,6 @@
 class Course::Forum::TopicsController < Course::Forum::ComponentController
   include Course::Forum::TopicControllerHidingConcern
   include Course::Forum::TopicControllerLockingConcern
-  include Course::Forum::TopicControllerResolvingConcern
   include Course::Forum::TopicControllerSubscriptionConcern
 
   before_action :load_topic, except: [:new, :create]

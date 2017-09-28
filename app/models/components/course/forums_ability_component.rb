@@ -52,7 +52,7 @@ module Course::ForumsAbilityComponent
   end
 
   def allow_student_resolve_own_topics
-    can :resolve, Course::Forum::Topic, creator_id: user.id
+    can :toggle_answer, Course::Forum::Topic, creator_id: user.id
   end
 
   def allow_staff_manage_forums
