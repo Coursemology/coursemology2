@@ -15,5 +15,5 @@ $(document).ready(() => {
     stop() {
       $('.weight input').val(index => index + 1);
     },
-  }).disableSelection();
+  });
 });
