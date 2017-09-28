@@ -11,6 +11,15 @@ RSpec.describe Course::Forum::Topic, type: :model do
   with_tenant(:instance) do
     let(:forum) { create(:forum) }
 
+    describe '.filter_unresolved_forum' do
+      let!(:topic) { create(:forum_topic, forum: forum, topic_type: :question) }
+
+      it 'returns the unresolved forum in the collection' do
+        expect(Course::Forum::Topic.filter_unresolved_forum([])).to be_empty
+        expect(Course::Forum::Topic.filter_unresolved_forum([forum.id])).to contain_exactly(forum.id)
+      end
+    end
+
     describe '#slug_candidates' do
       let!(:first_topic) { create(:forum_topic, title: 'slug', forum: forum) }
       let!(:second_topic) { create(:forum_topic, title: 'slug', forum: forum) }
