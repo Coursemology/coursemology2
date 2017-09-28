@@ -48,7 +48,8 @@ export default function (state = {}, action) {
               thickness: initializeToolThickness(),
               isCanvasLoaded: false,
               isDrawingMode: false,
-              deleteMode: false,
+              isChangeTool: false,
+              isDelete: false,
               cursor: 'pointer',
               canvasZoom: 1,
               canvasWidth: 100,
@@ -184,11 +185,13 @@ export default function (state = {}, action) {
     }
     case canvasActionTypes.SET_TOOL_SELECTED: {
       const { answerId, selectedTool } = action.payload;
+      const isChangeTool = state.selectedTool !== selectedTool;
       return {
         ...state,
         [answerId]: {
           ...state[answerId],
           selectedTool,
+          isChangeTool,
         },
       };
     }
@@ -314,6 +317,16 @@ export default function (state = {}, action) {
         [answerId]: {
           ...state[answerId],
           isDelete: false,
+        },
+      };
+    }
+    case canvasActionTypes.RESET_CHANGE_TOOL: {
+      const { answerId } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          isChangeTool: false,
         },
       };
     }

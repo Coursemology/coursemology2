@@ -23,6 +23,7 @@ const propTypes = {
   resetDisableObjectSelection: PropTypes.func.isRequired,
   resetEnableObjectSelection: PropTypes.func.isRequired,
   resetEnableTextSelection: PropTypes.func.isRequired,
+  resetChangeTool: PropTypes.func.isRequired,
 };
 
 const styles = {
@@ -69,6 +70,7 @@ export default class ScribingCanvas extends React.Component {
     this.viewportLeft = 0;
     this.viewportTop = 0;
     this.textCreated = false;
+    this.copiedObjects = [];
   }
 
   componentDidMount() {
@@ -116,6 +118,13 @@ export default class ScribingCanvas extends React.Component {
         this.canvas.renderAll();
         this.props.resetCanvasDelete(this.props.answerId);
       }
+      // Discard prior active object/group when using other tools
+      if (nextProps.scribing.isChangeTool) {
+        this.canvas.discardActiveObject();
+        this.canvas.discardActiveGroup();
+        this.canvas.renderAll();
+        this.props.resetChangeTool(this.props.answerId);
+      }
     }
 
     // Render canvas only at the beginning
@@ -159,6 +168,9 @@ export default class ScribingCanvas extends React.Component {
     this.viewportTop = this.canvas.viewportTransform[5];
     this.mouseStartPoint = this.getMousePoint(options.e);
 
+    this.isOverActiveObject = (options.target !== null
+      && options.target === this.canvas.getActiveObject());
+
     const getStrokeDashArray = (toolType) => {
       switch (this.props.scribing.lineStyles[toolType]) {
         case 'dotted': {
@@ -183,7 +195,13 @@ export default class ScribingCanvas extends React.Component {
         this.canvas.selectionDashArray = [];
       }
 
-      if (this.props.scribing.selectedTool === scribingTools.LINE) {
+      if (this.props.scribing.selectedTool === scribingTools.LINE
+          && !this.isOverActiveObject) {
+        // Make previous line unselectable if it exists
+        if (this.line && this.line.type === 'line') {
+          this.line.selectable = false;
+        }
+
         const strokeDashArray = getStrokeDashArray(scribingToolLineStyle.LINE);
         this.line = new fabric.Line(
           [
@@ -194,15 +212,22 @@ export default class ScribingCanvas extends React.Component {
             stroke: `${this.props.scribing.colors[scribingToolColor.LINE]}`,
             strokeWidth: this.props.scribing.thickness[scribingToolThickness.LINE],
             strokeDashArray,
-            selectable: false,
+            selectable: true,
           }
         );
         this.canvas.add(this.line);
+        this.canvas.setActiveObject(this.line);
         this.canvas.renderAll();
-      } else if (this.props.scribing.selectedTool === scribingTools.SHAPE) {
+      } else if (this.props.scribing.selectedTool === scribingTools.SHAPE
+                  && !this.isOverActiveObject) {
         const strokeDashArray = getStrokeDashArray(scribingToolLineStyle.SHAPE_BORDER);
         switch (this.props.scribing.selectedShape) {
           case scribingShapes.RECT: {
+            // Make previous rect unselectable if it exists
+            if (this.rect && this.rect.type === 'rect') {
+              this.rect.selectable = false;
+            }
+
             this.rect = new fabric.Rect({
               left: this.mouseCanvasDragStartPoint.x,
               top: this.mouseCanvasDragStartPoint.y,
@@ -212,13 +237,19 @@ export default class ScribingCanvas extends React.Component {
               fill: `${this.props.scribing.colors[scribingToolColor.SHAPE_FILL]}`,
               width: 1,
               height: 1,
-              selectable: false,
+              selectable: true,
             });
             this.canvas.add(this.rect);
+            this.canvas.setActiveObject(this.rect);
             this.canvas.renderAll();
             break;
           }
           case scribingShapes.ELLIPSE: {
+            // Make previous line unselectable if it exists
+            if (this.ellipse && this.ellipse.type === 'ellipse') {
+              this.ellipse.selectable = false;
+            }
+
             this.ellipse = new fabric.Ellipse({
               left: this.mouseCanvasDragStartPoint.x,
               top: this.mouseCanvasDragStartPoint.y,
@@ -228,9 +259,10 @@ export default class ScribingCanvas extends React.Component {
               fill: `${this.props.scribing.colors[scribingToolColor.SHAPE_FILL]}`,
               rx: 1,
               ry: 1,
-              selectable: false,
+              selectable: true,
             });
             this.canvas.add(this.ellipse);
+            this.canvas.setActiveObject(this.ellipse);
             this.canvas.renderAll();
             break;
           }
@@ -259,6 +291,7 @@ export default class ScribingCanvas extends React.Component {
       });
       this.canvas.add(text);
       this.canvas.setActiveObject(text);
+      text.enterEditing();
       this.canvas.renderAll();
       this.textCreated = true;
     } else if (!this.isOverText && this.textCreated) {
@@ -285,10 +318,14 @@ export default class ScribingCanvas extends React.Component {
     };
 
     if (this.mouseDownFlag) {
-      if (dragPointer && this.props.scribing.selectedTool === scribingTools.LINE) {
+      if (dragPointer
+          && this.props.scribing.selectedTool === scribingTools.LINE
+          && !this.isOverActiveObject) {
         this.line.set({ x2: dragPointer.x, y2: dragPointer.y });
         this.canvas.renderAll();
-      } else if (dragPointer && this.props.scribing.selectedTool === scribingTools.SHAPE) {
+      } else if (dragPointer
+                  && this.props.scribing.selectedTool === scribingTools.SHAPE
+                  && !this.isOverActiveObject) {
         switch (this.props.scribing.selectedShape) {
           case scribingShapes.RECT: {
             const dragProps = this.generateMouseDragProperties(
@@ -338,9 +375,36 @@ export default class ScribingCanvas extends React.Component {
 
   onMouseUpCanvas = () => {
     this.mouseDownFlag = false;
-    if (this.props.scribing.selectedTool === scribingTools.LINE
-      || this.props.scribing.selectedTool === scribingTools.SHAPE) {
-      this.saveScribbles();
+
+    switch (this.props.scribing.selectedTool) {
+      case scribingTools.LINE: {
+        if (this.line.height + this.line.width < 10) {
+          this.canvas.remove(this.line);
+          this.canvas.renderAll();
+        } else {
+          this.saveScribbles();
+        }
+        break;
+      }
+      case scribingTools.SHAPE: {
+        if (this.props.scribing.selectedShape === scribingShapes.RECT) {
+          if (this.rect.height + this.rect.width < 10) {
+            this.canvas.remove(this.rect);
+            this.canvas.renderAll();
+          } else {
+            this.saveScribbles();
+          }
+        } else if (this.props.scribing.selectedShape === scribingShapes.ELLIPSE) {
+          if (this.ellipse.height + this.ellipse.width < 10) {
+            this.canvas.remove(this.ellipse);
+            this.canvas.renderAll();
+          } else {
+            this.saveScribbles();
+          }
+        }
+        break;
+      }
+      default:
     }
   }
 
@@ -420,11 +484,13 @@ export default class ScribingCanvas extends React.Component {
 
         // Parse JSON to Fabric.js objects
         for (let i = 0; i < objects.length; i++) {
-          const klass = fabric.util.getKlass(objects[i].type);
-          klass.fromObject(objects[i], (obj) => {
-            this.denormaliseScribble(obj);
-            fabricObjs.push(obj);
-          });
+          if (objects[i].type !== 'group') {
+            const klass = fabric.util.getKlass(objects[i].type);
+            klass.fromObject(objects[i], (obj) => {
+              this.denormaliseScribble(obj);
+              fabricObjs.push(obj);
+            });
+          }
         }
 
         // Create layer for each user's scribble
@@ -500,6 +566,9 @@ export default class ScribingCanvas extends React.Component {
       );
 
       const canvasElem = document.getElementById(`canvas-container-${answerId}`);
+      canvasElem.tabIndex = 1000;
+      canvasElem.addEventListener('keydown', this.onKeyDown, false);
+      canvasElem.style.outline = 'none';
       const canvasContainerElem = canvasElem.getElementsByClassName('canvas-container')[0];
       canvasContainerElem.style.margin = '0 auto';
 
@@ -572,6 +641,85 @@ export default class ScribingCanvas extends React.Component {
   onTextChanged = () => {
     this.saveScribbles();
     this.props.setToolSelected(this.props.answerId, scribingTools.SELECT);
+  }
+
+  onKeyDown = (event) => {
+    if (!this.canvas) return;
+
+    const activeGroup = this.canvas.getActiveGroup();
+    const activeObject = this.canvas.getActiveObject();
+
+    switch (event.keyCode) {
+      case 8: // Backspace key
+      case 46: // Delete key
+        {
+          if (activeObject) {
+            this.canvas.remove(activeObject);
+          } else if (activeGroup) {
+            const objectsInGroup = activeGroup.getObjects();
+            this.canvas.discardActiveGroup();
+            objectsInGroup.forEach(object => (this.canvas.remove(object)));
+          }
+          break;
+        }
+      case 67: // Ctrl+C
+        {
+          if (event.ctrlKey) {
+            event.preventDefault();
+
+            this.copiedObjects = [];
+            if (activeGroup) {
+              activeGroup.getObjects().forEach(obj => (
+                this.copiedObjects.push(fabric.util.object.clone(obj))
+              ));
+
+              this.copyLeft = activeGroup.getLeft();
+              this.copyTop = activeGroup.getTop();
+            } else if (activeObject) {
+              const object = fabric.util.object.clone(activeObject);
+              this.copyLeft = activeObject.getLeft();
+              this.copyTop = activeObject.getTop();
+              this.copiedObjects.push(object);
+            }
+          }
+          break;
+        }
+      case 86: // Ctrl+V
+        {
+          if (event.ctrlKey) {
+            event.preventDefault();
+
+            this.canvas.discardActiveGroup();
+            this.canvas.discardActiveObject();
+
+            const newObjects = [];
+            this.copiedObjects.forEach((obj) => {
+              const newObj = fabric.util.object.clone(obj);
+              newObjects.push(newObj);
+              newObj.setCoords();
+              this.canvas.add(newObj);
+              newObj.set('active', true);
+            });
+            const group = new fabric.Group(newObjects, { canvas: this.canvas });
+
+            // Shift copied object to the left if there's space
+            this.copyLeft = (this.copyLeft + group.getWidth() > this.canvas.getWidth()) ?
+              this.copyLeft : this.copyLeft + 10;
+            group.setLeft(this.copyLeft);
+            // Shift copied object down if there's space
+            this.copyTop = (this.copyTop + group.getHeight() > this.canvas.getHeight()) ?
+              this.copyTop : this.copyTop + 10;
+            group.setTop(this.copyTop);
+
+            group.setCoords();
+            this.canvas.setActiveGroup(group);
+            group.saveCoords();
+            this.canvas.renderAll();
+          }
+          break;
+        }
+      default:
+    }
   }
 
   // Utility Helpers

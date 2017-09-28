@@ -96,9 +96,6 @@ class ScribingToolbar extends Component {
       popovers: initializePopovers(),
       popoverAnchor: undefined,
     };
-    this.viewportLeft = 0;
-    this.viewportTop = 0;
-    this.textCreated = false;
   }
 
   // Toolbar Event handlers
@@ -286,7 +283,7 @@ class ScribingToolbar extends Component {
           <ToolDropdown
             toolType={scribingTools.TYPE}
             tooltip={intl.formatMessage(translations.text)}
-            showTooltip={this.state.hovereToolTip === scribingTools.TYPE}
+            showTooltip={this.state.hoveredToolTip === scribingTools.TYPE}
             currentTool={this.props.scribing.selectedTool}
             onClickIcon={this.onClickTypingIcon}
             colorBar={this.props.scribing.colors[scribingToolColor.TYPE]}
@@ -313,7 +310,7 @@ class ScribingToolbar extends Component {
           <ToolDropdown
             toolType={scribingTools.DRAW}
             tooltip={intl.formatMessage(translations.pencil)}
-            showTooltip={this.state.hovereToolTip === scribingTools.DRAW}
+            showTooltip={this.state.hoveredToolTip === scribingTools.DRAW}
             currentTool={this.props.scribing.selectedTool}
             onClick={this.onClickDrawingMode}
             colorBar={this.props.scribing.colors[scribingToolColor.DRAW]}
@@ -340,7 +337,7 @@ class ScribingToolbar extends Component {
           <ToolDropdown
             toolType={scribingTools.LINE}
             tooltip={intl.formatMessage(translations.line)}
-            showTooltip={this.state.hovereToolTip === scribingTools.LINE}
+            showTooltip={this.state.hoveredToolTip === scribingTools.LINE}
             currentTool={this.props.scribing.selectedTool}
             onClick={this.onClickLineMode}
             colorBar={this.props.scribing.colors[scribingToolColor.LINE]}
@@ -370,7 +367,7 @@ class ScribingToolbar extends Component {
           <ToolDropdown
             toolType={scribingTools.SHAPE}
             tooltip={intl.formatMessage(translations.shape)}
-            showTooltip={this.state.hovereToolTip === scribingTools.SHAPE}
+            showTooltip={this.state.hoveredToolTip === scribingTools.SHAPE}
             currentTool={this.props.scribing.selectedTool}
             onClick={this.onClickShapeMode}
             onMouseEnter={() => this.onMouseEnter(scribingTools.SHAPE)}
@@ -396,6 +393,7 @@ class ScribingToolbar extends Component {
             open={this.state.popovers[scribingPopoverTypes.SHAPE]}
             anchorEl={this.state.popoverAnchor}
             onRequestClose={() => (this.onRequestClosePopover(scribingPopoverTypes.SHAPE))}
+            currentShape={this.props.scribing.selectedShape}
             setSelectedShape={shape => (this.setSelectedShape(shape))}
             selectedLineStyle={this.props.scribing.lineStyles[scribingToolLineStyle.SHAPE_BORDER]}
             onTouchTapLineStyleChip={this.onTouchTapLineStyleChip}
@@ -438,7 +436,7 @@ class ScribingToolbar extends Component {
             <MaterialTooltip
               horizontalPosition={'center'}
               label={intl.formatMessage(translations.select)}
-              show={this.state.hovereToolTip === scribingTools.SELECT}
+              show={this.state.hoveredToolTip === scribingTools.SELECT}
               verticalPosition={'top'}
             />
           </FontIcon>
@@ -475,7 +473,7 @@ class ScribingToolbar extends Component {
             <MaterialTooltip
               horizontalPosition={'center'}
               label={intl.formatMessage(translations.pan)}
-              show={this.state.hovereToolTip === scribingTools.PAN}
+              show={this.state.hoveredToolTip === scribingTools.PAN}
               verticalPosition={'top'}
             />
           </FontIcon>
@@ -489,7 +487,7 @@ class ScribingToolbar extends Component {
             <MaterialTooltip
               horizontalPosition={'center'}
               label={intl.formatMessage(translations.zoomIn)}
-              show={this.state.hovereToolTip === scribingTools.ZOOM_IN}
+              show={this.state.hoveredToolTip === scribingTools.ZOOM_IN}
               verticalPosition={'top'}
             />
           </FontIcon>
@@ -503,7 +501,7 @@ class ScribingToolbar extends Component {
             <MaterialTooltip
               horizontalPosition={'center'}
               label={intl.formatMessage(translations.zoomOut)}
-              show={this.state.hovereToolTip === scribingTools.ZOOM_OUT}
+              show={this.state.hoveredToolTip === scribingTools.ZOOM_OUT}
               verticalPosition={'top'}
             />
           </FontIcon>
@@ -519,7 +517,7 @@ class ScribingToolbar extends Component {
             <MaterialTooltip
               horizontalPosition={'center'}
               label={intl.formatMessage(translations.delete)}
-              show={this.state.hovereToolTip === scribingTools.DELETE}
+              show={this.state.hoveredToolTip === scribingTools.DELETE}
               verticalPosition={'top'}
             />
           </FontIcon>

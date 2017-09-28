@@ -17,6 +17,7 @@ const propTypes = {
   open: PropTypes.bool,
   anchorEl: PropTypes.object,
   onRequestClose: PropTypes.func,
+  currentShape: PropTypes.string.isRequired,
   setSelectedShape: PropTypes.func,
   selectedLineStyle: PropTypes.string,
   onTouchTapLineStyleChip: PropTypes.func,
@@ -60,14 +61,14 @@ const popoverStyles = {
 
 class ShapePopover extends Component {
   renderShapeComponent() {
-    const { setSelectedShape, intl } = this.props;
+    const { currentShape, setSelectedShape, intl } = this.props;
 
     return (
       <div>
         <div>
           <h4>{intl.formatMessage(translations.shape)} </h4>
         </div>
-        <ShapeField setSelectedShape={setSelectedShape} />
+        <ShapeField currentShape={currentShape} setSelectedShape={setSelectedShape} />
       </div>
     );
   }
