@@ -22,7 +22,7 @@ class Course::VirtualClassroomsComponent < SimpleDelegator
         key: :virtual_classrooms,
         icon: 'television',
         title: settings.title || t('course.virtual_classrooms.sidebar_title'),
-        weight: 1.5,
+        weight: 2,
         path: course_virtual_classrooms_path(current_course)
       }
     ]
