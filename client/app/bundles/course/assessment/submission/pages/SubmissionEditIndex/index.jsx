@@ -5,10 +5,12 @@ import { FormattedMessage } from 'react-intl';
 
 import { Card, CardHeader, CardText, CardActions } from 'material-ui/Card';
 import Toggle from 'material-ui/Toggle';
+import { touch } from 'redux-form';
 import FileIcon from 'material-ui/svg-icons/editor/insert-drive-file';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
+import { setNotification } from 'lib/actions';
 import { getUrlParameter } from 'lib/helpers/url-helpers';
 import ProgressPanel from '../../components/ProgressPanel';
 import SubmissionEditForm from './SubmissionEditForm';
@@ -59,10 +61,56 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(autogradeSubmission(params.submissionId));
   }
 
+  validateSubmit = () => {
+    const { dispatch, form } = this.props;
+    const answers = Object.values(form.values);
+    /**
+     * Assume there are syncErrors in the form initially.
+     * If the user did not change any field, and press submit button directly,
+     * all the fields will not be touched, hence, errors will no be shown.
+     * Therefore we need to manually touch all the fields
+     */
+    answers.forEach((answer = {}) => {
+      const answerId = answer.id;
+      Object.keys(answer).forEach((key) => {
+        dispatch(touch(formNames.SUBMISSION, `${answerId}.${key}`));
+      });
+    });
+
+    const hasError = Object.values(form.syncErrors || {})
+      .some(answerError => Object.keys(answerError).length !== 0);
+
+    if (hasError) {
+      return Promise.reject();
+    }
+    return Promise.resolve();
+  }
+
+  validateSubmitAnswer = (answerId) => {
+    const { dispatch, form } = this.props;
+    const answer = form.values[answerId] || {};
+    const answerError = form.syncErrors && form.syncErrors[answerId];
+    /**
+     * Similar reason to validateSubmit.
+     * If the user did not change any field, and press submit button directly, we need to manually
+     * touch all the fields of the answer, in order to show the syncErrors.
+     */
+    Object.keys(answer || {}).forEach((key) => {
+      dispatch(touch(formNames.SUBMISSION, `${answerId}.${key}`));
+    });
+
+    if (Object.keys(answerError || {}).length !== 0) {
+      return Promise.reject();
+    }
+    return Promise.resolve();
+  }
+
   handleSubmit() {
     const { dispatch, form, match: { params } } = this.props;
     const answers = Object.values(form.values);
-    return dispatch(finalise(params.submissionId, answers));
+    return this.validateSubmit()
+      .then(() => dispatch(finalise(params.submissionId, answers)),
+        () => setNotification(translations.submitError)(dispatch));
   }
 
   handleUnsubmit() {
@@ -92,7 +140,9 @@ class VisibleSubmissionEditIndex extends Component {
   handleSubmitAnswer(answerId) {
     const { dispatch, form, match: { params } } = this.props;
     const answer = form.values[answerId] || {};
-    dispatch(submitAnswer(params.submissionId, answer));
+    return this.validateSubmitAnswer(answerId)
+      .then(() => dispatch(submitAnswer(params.submissionId, answer)),
+        () => setNotification(translations.submitError)(dispatch));
   }
 
   handleMark() {

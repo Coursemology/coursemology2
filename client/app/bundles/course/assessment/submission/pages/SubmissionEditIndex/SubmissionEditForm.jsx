@@ -24,6 +24,7 @@ import GradingPanel from '../../containers/GradingPanel';
 import Comments from '../../containers/Comments';
 import { formNames, questionTypes } from '../../constants';
 import translations from '../../translations';
+import submissionFormValidate from './submissionFormValidate';
 
 const styles = {
   questionCardContainer: {
@@ -496,4 +497,5 @@ SubmissionEditForm.propTypes = {
 
 export default reduxForm({
   form: formNames.SUBMISSION,
+  validate: submissionFormValidate,
 })(injectIntl(SubmissionEditForm));
