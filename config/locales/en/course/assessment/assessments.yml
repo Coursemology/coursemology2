@@ -50,21 +50,6 @@ en:
         destroy:
           success: 'Assessment %{assessment} was deleted.'
           failure: 'Could not delete assessment: %{error}'
-        form:
-          autograded: 'Automatically assign grade and experience points after finalization'
-          skippable: 'Allow students to skip steps'
-          password_hint: >
-            When password protection is enabled, students are allowed to access their submission once.
-            Further attempts at editing the submission are not allowed unless the password is
-            provided by the staff.
-            In addition, only one session is allowed to access the submission at a given time.
-          password_placeholder: 'Leave blank to disable password protection'
-          delayed_grade_publication: 'Enable Delayed Grade Publication'
-          delayed_grade_publication_hint: >
-            When delayed grade publication is enabled, gradings done by course staff will not
-            be immediately shown to the student. To publish all gradings for this assessment,
-            click on the 'Publish Grades' button on the top right of the submissions listing
-            for this assessment.
         assessment_management_buttons:
           attempt: 'Attempt'
           resume: 'Resume'
