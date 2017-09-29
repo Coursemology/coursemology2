@@ -10,3 +10,4 @@ en:
           submit: 'Update Assessment Settings'
           title: 'Title'
           parent_category: 'Category'
+          enable_public_test_cases_output: 'Show output for public test cases to students'
