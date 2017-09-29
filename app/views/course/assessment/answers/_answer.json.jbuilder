@@ -1,6 +1,5 @@
 json.questionId answer.question_id
 
-last_attempt = last_attempt(answer)
 specific_answer = answer.specific
 can_grade = can?(:grade, answer.submission)
 

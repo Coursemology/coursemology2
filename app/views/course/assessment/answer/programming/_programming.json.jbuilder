@@ -63,7 +63,6 @@ end
 failed_test_cases_by_type = get_failed_test_cases_by_type(test_cases_and_results)
 
 json.explanation do
-  assessment = answer.submission.assessment
   if last_attempt
     explanations = []
 
