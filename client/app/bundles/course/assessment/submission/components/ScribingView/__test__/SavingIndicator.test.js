@@ -21,6 +21,7 @@ const mockSubmission = {
     attemptedAt: '2017-05-11T15:38:11.000+08:00',
     basePoints: 1000,
     canGrade: true,
+    showPublicTestCasesOutput: true,
     canUpdate: true,
     isCreator: false,
     late: false,

@@ -30,6 +30,8 @@ json.submission do
     json.grade submission.grade.to_f
   end
   json.maximumGrade assessment.maximum_grade.to_f
+  
+  json.showPublicTestCasesOutput current_course.enable_public_test_cases_output || current_course_user.staff?
 
   json.late assessment.end_at && submission.submitted_at &&
     submission.submitted_at > assessment.end_at

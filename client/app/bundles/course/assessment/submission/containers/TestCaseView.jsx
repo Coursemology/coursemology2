@@ -150,6 +150,7 @@ class VisibleTestCaseView extends Component {
 
   renderTestCases(testCases, title) {
     const { canGrade } = this.props;
+    const { showPublicTestCasesOutput } = this.props;
 
     if (!testCases || testCases.length === 0) {
       return null;
@@ -171,7 +172,7 @@ class VisibleTestCaseView extends Component {
                 { canGrade ? tableHeaderColumnFor('identifier') : null }
                 { tableHeaderColumnFor('expression') }
                 { tableHeaderColumnFor('expected') }
-                { canGrade ? tableHeaderColumnFor('output') : null }
+                { canGrade || showPublicTestCasesOutput ? tableHeaderColumnFor('output') : null }
                 { tableHeaderColumnFor('passed') }
               </TableRow>
             </TableHeader>
@@ -186,6 +187,7 @@ class VisibleTestCaseView extends Component {
 
   renderTestCaseRow(testCase) {
     const { canGrade } = this.props;
+    const { showPublicTestCasesOutput } = this.props;
 
     let testCaseResult = 'unattempted';
     let testCaseIcon;
@@ -205,7 +207,7 @@ class VisibleTestCaseView extends Component {
         { canGrade ? tableRowColumnFor(testCase.identifier) : null }
         {tableRowColumnFor(testCase.expression)}
         {tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.expected || ''} /> || '')}
-        { canGrade ? tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.output || ''} /> || '') : null }
+        { canGrade || showPublicTestCasesOutput ? tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.output || ''} /> || '') : null }
         {tableRowColumnFor(testCaseIcon)}
       </TableRow>
     );
@@ -248,6 +250,7 @@ class VisibleTestCaseView extends Component {
 VisibleTestCaseView.propTypes = {
   attempting: PropTypes.bool,
   canGrade: PropTypes.bool,
+  showPublicTestCasesOutput: PropTypes.bool,
   isAutograding: PropTypes.bool,
   testCases: PropTypes.shape({
     evaluation_test: PropTypes.arrayOf(testCaseShape),
@@ -263,6 +266,7 @@ function mapStateToProps(state, ownProps) {
   return {
     attempting: state.submission.workflowState === workflowStates.Attempting,
     canGrade: state.submission.canGrade,
+    showPublicTestCasesOutput: state.submission.showPublicTestCasesOutput,
     isAutograding: state.questionsFlags[questionId].isAutograding,
     testCases: state.testCases[questionId],
   };

@@ -167,6 +167,16 @@ class Course < ActiveRecord::Base
       *forums
     ]
   end
+  
+  # Course setting to enable public test cases output
+  def enable_public_test_cases_output
+    settings.enable_public_test_cases_output
+  end
+
+  def enable_public_test_cases_output=(option)
+    option = ActiveRecord::Type::Boolean.new.type_cast_from_user(option)
+    settings.enable_public_test_cases_output = option
+  end
 
   private
 
