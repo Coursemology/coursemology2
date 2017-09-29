@@ -86,6 +86,16 @@ class Course::Discussion::Post < ActiveRecord::Base
     end
   end
 
+  # Mark/unmark post as the correct answer.
+  def toggle_answer
+    self.class.transaction do
+      raise ActiveRecord::Rollback unless update_column(:answer, !answer)
+      raise ActiveRecord::Rollback unless topic.specific.update_resolve_status
+    end
+
+    true
+  end
+
   private
 
   def set_topic

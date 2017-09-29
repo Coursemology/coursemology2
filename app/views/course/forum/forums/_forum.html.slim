@@ -1,6 +1,8 @@
 = content_tag_for(:tr, forum) do
   td = badge(forum.topic_unread_count) if forum.topic_unread_count > 0
   th
+    -if @unresolved_forums_ids.include?(forum.id)
+      => fa_icon 'question-circle', title: t('.has_question'), class: 'text-warning'
     = link_to(format_inline_text(forum.name), course_forum_path(current_course, forum))
     br
     = format_html(forum.description)

@@ -178,28 +178,6 @@ RSpec.feature 'Course: Forum: Topic: Management' do
                                                                        hidden: true))
         expect(topic.reload.hidden).to eq(false)
       end
-
-      scenario 'I can set resolved state of a question topic' do
-        topic = create(:forum_topic, forum: forum, topic_type: :question)
-        visit course_forum_topic_path(course, forum, topic)
-        find_link(I18n.t('course.forum.topics.resolved.tag'),
-                  href: resolved_course_forum_topic_path(course, forum, topic,
-                                                         resolved: true)).click
-
-        expect(topic.reload.resolved).to eq(true)
-
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        find_link(I18n.t('course.forum.topics.unresolved.tag'),
-                  href: resolved_course_forum_topic_path(course, forum, topic,
-                                                         resolved: false)).click
-
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(page).to have_link(I18n.t('course.forum.topics.resolved.tag'),
-                                  href: resolved_course_forum_topic_path(course, forum, topic,
-                                                                         resolved: true))
-
-        expect(topic.reload.resolved).to eq(false)
-      end
     end
 
     context 'As a Course Student' do
@@ -325,34 +303,6 @@ RSpec.feature 'Course: Forum: Topic: Management' do
                                   href: subscribe_course_forum_topic_path(course, forum, topic,
                                                                           subscribe: true))
         expect(topic.subscriptions.where(user: user).empty?).to eq(true)
-      end
-
-      scenario 'I can set resolved state of my own question topic' do
-        topic = create(:forum_topic, forum: forum, topic_type: :question, creator: user)
-        visit course_forum_topic_path(course, forum, topic)
-        find_link(I18n.t('course.forum.topics.resolved.tag'),
-                  href: resolved_course_forum_topic_path(course, forum, topic,
-                                                         resolved: true)).click
-
-        expect(topic.reload.resolved).to eq(true)
-
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        find_link(I18n.t('course.forum.topics.unresolved.tag'),
-                  href: resolved_course_forum_topic_path(course, forum, topic,
-                                                         resolved: false)).click
-
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(page).to have_link(I18n.t('course.forum.topics.resolved.tag'),
-                                  href: resolved_course_forum_topic_path(course, forum, topic,
-                                                                         resolved: true))
-
-        expect(topic.reload.resolved).to eq(false)
-      end
-
-      scenario 'I can see resolved state of a question topic' do
-        topic = create(:forum_topic, forum: forum, topic_type: :question)
-        visit course_forum_topic_path(course, forum, topic)
-        expect(page).to have_text(I18n.t('course.forum.topics.unresolved.message'))
       end
     end
   end

@@ -33,8 +33,8 @@ RSpec.describe Course::Forum::Topic, type: :model do
       it { is_expected.not_to be_able_to(:update, hidden_topic) }
       it { is_expected.to be_able_to(:reply, shown_topic) }
       it { is_expected.not_to be_able_to(:reply, locked_topic) }
-      it { is_expected.to be_able_to(:resolve, my_question_topic) }
-      it { is_expected.not_to be_able_to(:resolve, question_topic) }
+      it { is_expected.to be_able_to(:toggle_answer, my_question_topic) }
+      it { is_expected.not_to be_able_to(:toggle_answer, question_topic) }
     end
 
     context 'when the user is a Course Staff' do

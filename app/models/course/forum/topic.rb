@@ -72,11 +72,27 @@ class Course::Forum::Topic < ActiveRecord::Base
   # Get all the topics from specified course.
   scope :from_course, ->(course) { joins(:forum).where('course_forums.course_id = ?', course.id) }
 
+  # Filter out the resolved forums from the given ids and keep the unresolved forum ids.
+  def self.filter_unresolved_forum(forum_ids)
+    # Unscope the default scope of eager loading discussion topics to improve performance.
+    unscoped.question.where(resolved: false, forum_id: forum_ids).pluck(:forum_id).to_set
+  end
+
   # Create view record for a user
   #
   # @param [User] user The user who views a topic
   def viewed_by(user)
     views.create(user: user)
+  end
+
+  # Update the `resolve` boolean status based on correct answer counts.
+  def update_resolve_status
+    status = posts.where(answer: true).count > 0
+    if resolved != status
+      update_attribute(:resolved, status)
+    else
+      true
+    end
   end
 
   private

@@ -253,6 +253,7 @@ Rails.application.routes.draw do
             resources :posts, only: [:create, :edit, :update, :destroy] do
               get 'reply', on: :member
               put 'vote', on: :member
+              put 'toggle_answer', on: :member
             end
 
             get 'subscribe', on: :member
@@ -260,7 +261,6 @@ Rails.application.routes.draw do
             delete 'subscribe', on: :member
             put 'locked' => 'topics#set_locked', on: :member
             put 'hidden' => 'topics#set_hidden', on: :member
-            put 'resolved' => 'topics#set_resolved', on: :member
           end
 
           get 'unsubscribe', on: :member

@@ -69,3 +69,5 @@ en:
           new_topic: 'New topic'
           mark_as_read: 'Mark as read'
           mark_forum_description: 'Mark all topics in current forum as read'
+        forum:
+          has_question: 'Has unresolved question(s)'

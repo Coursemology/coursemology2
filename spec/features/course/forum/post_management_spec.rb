@@ -7,7 +7,7 @@ RSpec.feature 'Course: Forum: Post: Management' do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:forum) { create(:forum, course: course) }
-    let(:topic) { create(:forum_topic, forum: forum, course: course) }
+    let(:topic) { create(:forum_topic, forum: forum, course: course, topic_type: :question) }
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
@@ -150,6 +150,25 @@ RSpec.feature 'Course: Forum: Post: Management' do
           find('a .fa-thumbs-up').find(:xpath, '..').click
         end
         expect(post.reload.vote_tally).to eq(0)
+      end
+
+      scenario 'I can mark/unmark post as answer' do
+        post = create(:course_discussion_post, topic: topic.acting_as)
+        visit course_forum_topic_path(course, forum, topic)
+
+        # Mark as answer
+        within find(content_tag_selector(post)) do
+          find('a .fa-check').find(:xpath, '..').click
+        end
+        expect(post.reload).to be_answer
+        expect(topic.reload).to be_resolved
+
+        # Unmark as answer
+        within find(content_tag_selector(post)) do
+          find('a .fa-check-circle').find(:xpath, '..').click
+        end
+        expect(post.reload).not_to be_answer
+        expect(topic.reload).not_to be_resolved
       end
 
       scenario 'I can see new posts' do
