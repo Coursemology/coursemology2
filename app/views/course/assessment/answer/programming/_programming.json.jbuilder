@@ -38,8 +38,11 @@ displayed_test_case_types = ['public_test']
 displayed_test_case_types << 'private_test' if show_private
 displayed_test_case_types << 'evaluation_test' if show_evaluation
 
+
+
 json.testCases do
   displayed_test_case_types.each do |test_case_type|
+    show_public_testcases_output = (test_case_type == "public_test") && current_course.show_public_test_cases_output
     json.set! test_case_type do
       if test_cases_and_results[test_case_type].present?
         json.array! test_cases_and_results[test_case_type] do |test_case, test_result|
@@ -47,11 +50,7 @@ json.testCases do
           json.expression test_case.expression
           json.expected test_case.expected
           if test_result
-            if test_case_type == "public_test"
-              json.output get_output(test_result) if can_grade || current_course.show_public_test_cases_output
-            else
-              json.output get_output(test_result) if can_grade
-            end
+            json.output get_output(test_result) if can_grade || show_public_testcases_output
             json.passed test_result.passed?
           end
         end
