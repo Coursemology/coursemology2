@@ -82,8 +82,8 @@ export default class ScribingCanvas extends React.Component {
   shouldComponentUpdate(nextProps) {
     if (this.canvas) {
       this.canvas.isDrawingMode = nextProps.scribing.isDrawingMode;
-      this.canvas.freeDrawingBrush.color = this.props.scribing.colors[scribingToolColor.DRAW];
-      this.canvas.freeDrawingBrush.width = this.props.scribing.thickness[scribingToolThickness.DRAW];
+      this.canvas.freeDrawingBrush.color = nextProps.scribing.colors[scribingToolColor.DRAW];
+      this.canvas.freeDrawingBrush.width = nextProps.scribing.thickness[scribingToolThickness.DRAW];
       this.canvas.defaultCursor = nextProps.scribing.cursor;
       this.currentCursor = nextProps.scribing.cursor;
 
