@@ -167,6 +167,7 @@ class Course < ActiveRecord::Base
       *forums
     ]
   end
+
   # Course setting to enable public test cases output
   def enable_public_test_cases_output
     settings.enable_public_test_cases_output
