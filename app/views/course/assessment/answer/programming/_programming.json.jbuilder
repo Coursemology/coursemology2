@@ -47,7 +47,7 @@ json.testCases do
           json.expression test_case.expression
           json.expected test_case.expected
           if test_result
-            json.output get_output(test_result) if can_grade || current_course.enable_public_test_cases_output || current_course_user.staff?
+            json.output get_output(test_result) if can_grade || current_course.enable_public_test_cases_output
             json.passed test_result.passed?
           end
         end
