@@ -168,6 +168,7 @@ class Course < ActiveRecord::Base
     ]
   end
 
+  # TODO Need to replace this with an assessment settings adapter in future
   # Course setting to enable public test cases output
   def show_public_test_cases_output
     settings(:course_assessments_component).show_public_test_cases_output
