@@ -169,13 +169,13 @@ class Course < ActiveRecord::Base
   end
 
   # Course setting to enable public test cases output
-  def enable_public_test_cases_output
-    settings.enable_public_test_cases_output
+  def show_public_test_cases_output
+    settings(:course_assessments_component).show_public_test_cases_output
   end
 
-  def enable_public_test_cases_output=(option)
+  def show_public_test_cases_output=(option)
     option = ActiveRecord::Type::Boolean.new.type_cast_from_user(option)
-    settings.enable_public_test_cases_output = option
+    settings(:course_assessments_component).show_public_test_cases_output = option
   end
 
   private
