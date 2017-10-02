@@ -52,3 +52,8 @@ en:
           tag: 'Unhide'
           success: "The topic was successfully unhidden."
           failure: "The topic could not be unhidden."
+        resolved:
+          message: 'This question topic has been resolved.'
+        unresolved:
+          message: 'This question topic is unresolved.'
+          tag: 'Mark helpful post(s) as answer(s) to resolve this question.'
