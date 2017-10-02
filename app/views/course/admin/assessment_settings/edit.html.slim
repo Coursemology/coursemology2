@@ -51,4 +51,5 @@ h2
                 = delete_button(course_admin_assessments_category_tab_path(current_course,
                                                                            category, tab))
 
+  = f.input :show_public_test_cases_output, as: :boolean, label: t('.show_public_test_cases_output')
   = f.button :submit, t('.submit')
