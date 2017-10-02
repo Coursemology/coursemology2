@@ -1,6 +1,15 @@
 = page_header format_inline_text(@topic.title) do
   = render 'controls'
 
+- if @topic.question?
+  - if @topic.resolved?
+    div.alert.alert-info
+      = t('course.forum.topics.resolved.message')
+  - else
+    div.alert.alert-warning
+      = t('course.forum.topics.unresolved.message')
+      - if can?(:resolve, @topic)
+        =< t('course.forum.topics.unresolved.tag')
 = display_topic @topic.acting_as, post_partial: 'course/forum/posts/post',
                                   post_locals: { show_buttons: false },
                                   read_marks: true,
