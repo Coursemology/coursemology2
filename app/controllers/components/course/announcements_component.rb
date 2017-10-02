@@ -37,6 +37,6 @@ class Course::AnnouncementsComponent < SimpleDelegator
   end
 
   def unread_count
-    current_course.announcements.unread_by(current_user).count
+    current_course.announcements.accessible_by(current_ability).unread_by(current_user).count
   end
 end

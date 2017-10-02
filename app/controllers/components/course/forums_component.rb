@@ -37,6 +37,6 @@ class Course::ForumsComponent < SimpleDelegator
   end
 
   def unread_count
-    Course::Forum::Topic.from_course(current_course).unread_by(current_user).count
+    Course::Forum::Topic.from_course(current_course).accessible_by(current_ability).unread_by(current_user).count
   end
 end
