@@ -38,8 +38,6 @@ displayed_test_case_types = ['public_test']
 displayed_test_case_types << 'private_test' if show_private
 displayed_test_case_types << 'evaluation_test' if show_evaluation
 
-
-
 json.testCases do
   displayed_test_case_types.each do |test_case_type|
     show_public_testcases_output = (test_case_type == "public_test") && current_course.show_public_test_cases_output
