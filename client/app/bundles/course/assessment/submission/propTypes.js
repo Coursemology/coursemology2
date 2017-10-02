@@ -95,6 +95,7 @@ export const submissionShape = PropTypes.shape({
   attempted_at: PropTypes.string,
   basePoints: PropTypes.number,
   canGrade: PropTypes.bool,
+  showPublicTestCasesOutput: PropTypes.bool,
   canUpdate: PropTypes.bool,
   dueAt: PropTypes.string,
   grade: PropTypes.number,
