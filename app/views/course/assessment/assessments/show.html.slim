@@ -72,6 +72,10 @@
                       new_course_assessment_question_text_response_path(current_course, @assessment),
                       role: 'menuitem')
           li role='presentation'
+            = link_to(t('.new_question.voice_response'),
+                      new_course_assessment_question_voice_response_path(current_course,
+                      @assessment), role: 'menuitem')
+          li role='presentation'
             = link_to(t('.new_question.file_upload'),
                       new_course_assessment_question_text_response_path(current_course, @assessment,
                                                                         { file_upload: true }),

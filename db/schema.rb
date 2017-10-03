@@ -138,8 +138,8 @@ ActiveRecord::Schema.define(version: 20170925095335) do
     t.integer  "tab_id",                    :null=>false, :index=>{:name=>"fk__course_assessments_tab_id"}, :foreign_key=>{:references=>"course_assessment_tabs", :name=>"fk_course_assessments_tab_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.boolean  "tabbed_view",               :default=>false, :null=>false
     t.boolean  "autograded",                :null=>false
-    t.boolean  "show_private",              :default=>false, :comment=>"Show private test cases  after students answer correctly"
-    t.boolean  "show_evaluation",           :default=>false, :comment=>"Show evaluation test cases after after students answer correctly"
+    t.boolean  "show_private",              :default=>false, :comment=>"Show private test cases after students answer correctly"
+    t.boolean  "show_evaluation",           :default=>false, :comment=>"Show evaluation test cases after students answer correctly"
     t.boolean  "skippable",                 :default=>false
     t.boolean  "delayed_grade_publication", :default=>false
     t.string   "password",                  :limit=>255
@@ -300,6 +300,9 @@ ActiveRecord::Schema.define(version: 20170925095335) do
     t.text "answer_text"
   end
 
+  create_table "course_assessment_answer_voice_responses", force: :cascade do |t|
+  end
+
   create_table "course_assessment_question_programming_template_files", force: :cascade do |t|
     t.integer "question_id", :null=>false, :index=>{:name=>"fk__course_assessment_quest_dbf3aed51f19fcc63a25d296a057dd1f"}, :foreign_key=>{:references=>"course_assessment_question_programming", :name=>"fk_course_assessment_questi_0788633b496294e558f55f2b41bc7c45", :on_update=>:no_action, :on_delete=>:no_action}
     t.string  "filename",    :limit=>255, :null=>false
@@ -321,6 +324,9 @@ ActiveRecord::Schema.define(version: 20170925095335) do
     t.text    "solution",      :null=>false
     t.decimal "grade",         :precision=>4, :scale=>1, :default=>0.0, :null=>false
     t.text    "explanation"
+  end
+
+  create_table "course_assessment_question_voice_responses", force: :cascade do |t|
   end
 
   create_table "course_assessment_skill_branches", force: :cascade do |t|

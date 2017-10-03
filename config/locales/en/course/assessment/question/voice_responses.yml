@@ -1,0 +1,16 @@
+en:
+  course:
+    assessment:
+      question:
+        voice_responses:
+          new:
+            voice_response_header: 'Audio Response Question'
+          create:
+            success: 'The audio response question was created.'
+          update:
+            success: 'The audio response question was updated.'
+          destroy:
+            success: 'The audio response question was deleted.'
+            failure: 'Could not delete audio response question: %{error}'
+          form:
+            voice_response_button: 'Audio Response Question'

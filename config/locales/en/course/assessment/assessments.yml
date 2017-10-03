@@ -37,6 +37,7 @@ en:
             multiple_choice: 'Multiple Choice'
             multiple_response: 'Multiple Response'
             text_response: 'Text Response'
+            voice_response: 'Audio Response'
             file_upload: 'File Upload'
             programming: 'Programming'
             scribing: 'Scribing'

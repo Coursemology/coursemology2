@@ -1,0 +1,8 @@
+- edit_path = edit_course_assessment_question_voice_response_path(current_course, @assessment,
+                                                                 voice_response)
+- delete_path = course_assessment_question_voice_response_path(current_course, @assessment,
+                                                              voice_response)
+= render partial: 'course/assessment/questions/question',
+         locals: { question: voice_response,
+                   edit_path: edit_path,
+                   delete_path: delete_path }
