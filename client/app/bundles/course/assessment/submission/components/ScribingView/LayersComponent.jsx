@@ -28,6 +28,15 @@ const popoverStyles = {
     horizontal: 'left',
     vertical: 'top',
   },
+  layersLabel: {
+    lineHeight: '22px',
+    top: '38px',
+    zIndex: 1,
+    pointerEvents: 'none',
+    userSelect: 'none',
+    color: 'rgba(0, 0, 0, 0.3)',
+    padding: '10px',
+  },
 };
 
 class LayersComponent extends Component {
@@ -60,17 +69,18 @@ class LayersComponent extends Component {
   }
 
   render() {
-    const { intl, onTouchTap, disabled } = this.props;
-    return (
-      <div>
+    const { intl, layers, onTouchTap, disabled } = this.props;
+
+    return !disabled ?
+      (<div>
+        <label style={popoverStyles.layersLabel}>{intl.formatMessage(translations.layersLabelText)}</label>
         <RaisedButton
           onTouchTap={onTouchTap}
-          label={intl.formatMessage(translations.layers)}
+          label={layers && (`${layers[0].creator_name.substring(0, 6)}...`)}
           disabled={disabled}
         />
         { this.renderLayersPopover() }
-      </div>
-    );
+      </div>) : null;
   }
 }
 
