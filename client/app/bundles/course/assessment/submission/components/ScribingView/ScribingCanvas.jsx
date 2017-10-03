@@ -566,6 +566,7 @@ export default class ScribingCanvas extends React.Component {
 
       const canvasElem = document.getElementById(`canvas-container-${answerId}`);
       canvasElem.tabIndex = 1000;
+      canvasElem.style.background = 'lightgrey';
       canvasElem.addEventListener('keydown', this.onKeyDown, false);
       canvasElem.style.outline = 'none';
       const canvasContainerElem = canvasElem.getElementsByClassName('canvas-container')[0];
