@@ -283,21 +283,19 @@ export default class ScribingCanvas extends React.Component {
     } else if (!this.isOverText
         && this.props.scribing.selectedTool === scribingTools.TYPE
         && !this.textCreated) {
-      const text = new fabric.IText('Text', {
+      const text = new fabric.IText('', {
         fontFamily: this.props.scribing.fontFamily,
         fontSize: this.props.scribing.fontSize,
         fill: this.props.scribing.colors[scribingToolColor.TYPE],
         left: this.mouseCanvasDragStartPoint.x,
         top: this.mouseCanvasDragStartPoint.y,
+        padding: 5,
       });
       this.canvas.add(text);
       this.canvas.setActiveObject(text);
       text.enterEditing();
       this.canvas.renderAll();
       this.textCreated = true;
-    } else if (!this.isOverText && this.textCreated) {
-      this.props.setToolSelected(this.props.answerId, scribingTools.SELECT);
-      this.textCreated = false;
     }
   }
 
@@ -639,7 +637,11 @@ export default class ScribingCanvas extends React.Component {
     return `{"objects": ${json}}`;
   }
 
-  onTextChanged = () => {
+  onTextChanged = (options) => {
+    if (options.target.text.trim() === '') {
+      this.canvas.remove(options.target);
+    }
+    this.textCreated = false;
     this.saveScribbles();
     this.props.setToolSelected(this.props.answerId, scribingTools.SELECT);
   }
