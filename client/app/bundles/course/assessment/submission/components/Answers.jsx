@@ -21,6 +21,7 @@ import ReadOnlyEditor from '../containers/ReadOnlyEditor';
 import UploadedFileView from '../containers/UploadedFileView';
 import ScribingView from '../containers/ScribingView';
 import { parseLanguages } from '../utils';
+import VoiceResponseAnswer from '../containers/VoiceResponseAnswer';
 
 const translations = defineMessages({
   solutions: {
@@ -209,6 +210,16 @@ export default class Answers extends Component {
         />
         <TestCaseView questionId={question.id} />
       </div>
+    );
+  }
+
+  static renderVoiceResponse(question, readOnly, answerId) {
+    return (
+      <VoiceResponseAnswer
+        question={question}
+        readOnly={readOnly}
+        answerId={answerId}
+      />
     );
   }
 

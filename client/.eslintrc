@@ -34,6 +34,9 @@
   globals: {
     window: true,
     document: true,
+    AudioContext: true,
+    navigator: true,
+    URL: ture,
     $: true,
     FormData: true,
     File: true,

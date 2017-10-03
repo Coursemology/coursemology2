@@ -2,12 +2,10 @@ import actionTypes from 'lib/constants';
 import { change } from 'redux-form';
 
 export function setNotification(message) {
-  return (dispatch) => {
-    dispatch({
-      type: actionTypes.SET_NOTIFICATION,
-      message,
-    });
-  };
+  return dispatch => dispatch({
+    type: actionTypes.SET_NOTIFICATION,
+    message,
+  });
 }
 
 export function resetDeleteConfirmation() {
