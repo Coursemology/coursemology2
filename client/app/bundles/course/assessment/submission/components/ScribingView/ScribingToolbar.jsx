@@ -213,7 +213,7 @@ class ScribingToolbar extends Component {
   onClickSelectionMode = () => {
     this.props.setToolSelected(this.props.answerId, scribingTools.SELECT);
     this.props.setDrawingMode(this.props.answerId, false);
-    this.props.setCanvasCursor(this.props.answerId, 'pointer');
+    this.props.setCanvasCursor(this.props.answerId, 'default');
     this.props.setEnableObjectSelection(this.props.answerId);
   }
 
@@ -425,7 +425,7 @@ class ScribingToolbar extends Component {
         </ToolbarGroup>
         <ToolbarGroup>
           <FontIcon
-            className="fa fa-hand-pointer-o"
+            className="fa fa-mouse-pointer"
             style={this.props.scribing.selectedTool === scribingTools.SELECT ?
               { ...styles.tool, color: blue500 } : styles.tool}
             onClick={this.onClickSelectionMode}
