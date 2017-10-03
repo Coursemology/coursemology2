@@ -109,10 +109,10 @@ class SubmissionEditStepForm extends Component {
   }
 
   handleStepClick(index) {
-    const { skippable } = this.props;
+    const { skippable, graderView } = this.props;
     const { maxStep } = this.state;
 
-    if (skippable || index <= maxStep) {
+    if (skippable || graderView || index <= maxStep) {
       this.setState({
         stepIndex: index,
       });
@@ -364,7 +364,7 @@ class SubmissionEditStepForm extends Component {
 
   renderStepper() {
     const { maxStep, stepIndex } = this.state;
-    const { skippable, questionIds = [] } = this.props;
+    const { skippable, graderView, questionIds = [] } = this.props;
 
     if (questionIds.length <= 1) {
       return null;
@@ -378,7 +378,7 @@ class SubmissionEditStepForm extends Component {
         style={{ justifyContent: 'center', flexWrap: 'wrap' }}
       >
         {questionIds.map((questionId, index) => {
-          if (skippable || index <= maxStep) {
+          if (skippable || graderView || index <= maxStep) {
             return (
               <Step key={questionId} active={index <= maxStep}>
                 <StepButton

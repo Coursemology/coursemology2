@@ -5,11 +5,7 @@ json.submission do
 
   if assessment.autograded?
     question = assessment.questions.next_unanswered(submission)
-    if question && !can_grade
-      json.maxStep assessment.questions.index(question)
-    else
-      json.maxStep assessment.questions.length - 1
-    end
+    json.maxStep assessment.questions.index(question)
   end
 
   # Show submission as submitted to students if grading is not published yet
