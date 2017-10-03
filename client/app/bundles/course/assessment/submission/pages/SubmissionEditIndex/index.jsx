@@ -86,7 +86,7 @@ class VisibleSubmissionEditIndex extends Component {
 
   handleSubmitAnswer(answerId) {
     const { dispatch, form, match: { params } } = this.props;
-    const answer = form.values[answerId];
+    const answer = form.values[answerId] || {};
     dispatch(submitAnswer(params.submissionId, answer));
   }
 
@@ -107,7 +107,6 @@ class VisibleSubmissionEditIndex extends Component {
 
   renderAssessment() {
     const { assessment } = this.props;
-
     const renderFile = (file, index) => (<div key={index}>
       <FileIcon style={{ verticalAlign: 'middle' }} />
       <a href={file.url}><span>{file.name}</span></a>

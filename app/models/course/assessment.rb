@@ -41,6 +41,9 @@ class Course::Assessment < ActiveRecord::Base
   has_many :scribing_questions,
            through: :questions, inverse_through: :question, source: :actable,
            source_type: Course::Assessment::Question::Scribing.name
+  has_many :voice_response_questions,
+           through: :questions, inverse_through: :question, source: :actable,
+           source_type: Course::Assessment::Question::VoiceResponse.name
   has_many :assessment_conditions, class_name: Course::Condition::Assessment.name,
                                    inverse_of: :assessment, dependent: :destroy
 

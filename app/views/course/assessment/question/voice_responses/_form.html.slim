@@ -1,0 +1,9 @@
+= simple_form_for [current_course, @assessment, @voice_response_question] do |f|
+  = f.error_notification
+  = render partial: 'course/assessment/questions/form', locals: { f: f }
+  - name = t('.voice_response_button')
+  - if f.object.persisted?
+    - button_text = t('helpers.buttons.update', model: name)
+  - else
+    - button_text = t('helpers.buttons.create', model: name)
+  = f.button :submit, button_text

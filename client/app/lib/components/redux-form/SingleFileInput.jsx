@@ -57,7 +57,7 @@ const translations = defineMessages({
  *   value: {
  *      url, // URL of preview of existing file if it is an image, otherwise nil.
  *     name, // Name of existing file, if any.
- *   }
+ *   },
  * }
  */
 class SingleFileInput extends React.Component {
@@ -70,6 +70,8 @@ class SingleFileInput extends React.Component {
       onChange: PropTypes.func.isRequired,
     }),
     intl: intlShape.isRequired,
+    accept: PropTypes.string,
+    children: PropTypes.node,
   };
 
   constructor(props) {
@@ -138,13 +140,15 @@ class SingleFileInput extends React.Component {
   }
 
   render() {
+    const { children, accept } = this.props;
     return (
       <Dropzone
         multiple={false}
         onDrop={this.onDrop}
         style={styles.dropzone}
+        accept={accept}
       >
-        {this.renderFile}
+        { children || this.renderFile }
       </Dropzone>
     );
   }

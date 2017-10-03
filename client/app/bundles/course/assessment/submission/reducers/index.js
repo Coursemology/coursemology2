@@ -6,6 +6,7 @@ import attachments from './attachments';
 import commentForms from './commentForms';
 import explanations from './explanations';
 import notification from './notification';
+import recorder from './recorder';
 import posts from './posts';
 import questions from './questions';
 import questionsFlags from './questionsFlags';
@@ -29,6 +30,7 @@ export default combineReducers({
   questionsFlags,
   submission,
   submissionFlags,
+  recorder,
   submissions,
   scribing,
   topics,

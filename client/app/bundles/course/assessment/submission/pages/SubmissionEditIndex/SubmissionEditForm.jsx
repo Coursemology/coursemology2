@@ -77,7 +77,7 @@ class SubmissionEditForm extends Component {
 
   renderProgrammingQuestionActions(id) {
     const { intl, attempting, canGrade, questions, questionsFlags,
-            handleSubmitAnswer, isSaving } = this.props;
+      handleSubmitAnswer, isSaving } = this.props;
     const question = questions[id];
     const { answerId, attemptsLeft, attemptLimit, autogradable } = question;
     const { jobError, isAutograding, isResetting } = questionsFlags[id] || {};
