@@ -217,8 +217,8 @@ class ScribingToolbar extends Component {
     this.props.setEnableObjectSelection(this.props.answerId);
   }
 
-  onClickPanMode = () => {
-    this.props.setToolSelected(this.props.answerId, scribingTools.PAN);
+  onClickMoveMode = () => {
+    this.props.setToolSelected(this.props.answerId, scribingTools.MOVE);
     this.props.setDrawingMode(this.props.answerId, false);
     this.props.setCanvasCursor(this.props.answerId, 'move');
     this.props.setDisableObjectSelection(this.props.answerId);
@@ -463,17 +463,17 @@ class ScribingToolbar extends Component {
         <ToolbarGroup>
           <FontIcon
             className="fa fa-arrows"
-            style={this.props.scribing.selectedTool === scribingTools.PAN ?
+            style={this.props.scribing.selectedTool === scribingTools.MOVE ?
               { color: blue500 } : {}}
-            onClick={this.onClickPanMode}
-            onMouseEnter={() => this.onMouseEnter(scribingTools.PAN)}
+            onClick={this.onClickMoveMode}
+            onMouseEnter={() => this.onMouseEnter(scribingTools.MOVE)}
             onMouseLeave={this.onMouseLeave}
             hoverColor={blue500}
           >
             <MaterialTooltip
               horizontalPosition={'center'}
-              label={intl.formatMessage(translations.pan)}
-              show={this.state.hoveredToolTip === scribingTools.PAN}
+              label={intl.formatMessage(translations.move)}
+              show={this.state.hoveredToolTip === scribingTools.MOVE}
               verticalPosition={'top'}
             />
           </FontIcon>

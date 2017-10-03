@@ -61,7 +61,7 @@ export const scribingTools = mirrorCreator([
   'LINE',
   'SHAPE',
   'SELECT',
-  'PAN',
+  'MOVE',
   'ZOOM_IN',
   'ZOOM_OUT',
   'DELETE',
