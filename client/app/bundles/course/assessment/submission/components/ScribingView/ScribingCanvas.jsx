@@ -534,9 +534,9 @@ export default class ScribingCanvas extends React.Component {
     this.image.src = imageUrl;
 
     this.image.onload = () => {
-      // Get the calculated width of canvas, 750 is min width for scribing toolbar
+      // Get the calculated width of canvas, 800 is min width for scribing toolbar
       const element = document.getElementById(`canvas-${answerId}`);
-      const maxWidth = Math.max(element.getBoundingClientRect().width, 750);
+      const maxWidth = Math.max(element.getBoundingClientRect().width, 800);
 
       this.width = Math.min(this.image.width, maxWidth);
       this.scale = Math.min(this.width / this.image.width, 1);
@@ -566,9 +566,14 @@ export default class ScribingCanvas extends React.Component {
 
       const canvasElem = document.getElementById(`canvas-container-${answerId}`);
       canvasElem.tabIndex = 1000;
-      canvasElem.style.background = 'lightgrey';
+      // Minimise reflows
+      canvasElem.setAttribute('style',
+        `background: lightgrey;
+        max-width: ${maxWidth}px;
+        margin: 0px;
+        outline: none;`
+      );
       canvasElem.addEventListener('keydown', this.onKeyDown, false);
-      canvasElem.style.outline = 'none';
       const canvasContainerElem = canvasElem.getElementsByClassName('canvas-container')[0];
       canvasContainerElem.style.margin = '0 auto';
 

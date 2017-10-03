@@ -335,9 +335,9 @@ export const scribingTranslations = defineMessages({
     id: 'course.assessment.submission.answer.scribing.select',
     defaultMessage: 'Select',
   },
-  layers: {
-    id: 'course.assessment.submission.answer.scribing.layers',
-    defaultMessage: 'Layers',
+  layersLabelText: {
+    id: 'course.assessment.submission.answer.scribing.layersLabelText',
+    defaultMessage: 'Show work from:',
   },
   move: {
     id: 'course.assessment.submission.answer.scribing.move',

@@ -424,22 +424,6 @@ class ScribingToolbar extends Component {
           />
         </ToolbarGroup>
         <ToolbarGroup>
-          <FontIcon
-            className="fa fa-mouse-pointer"
-            style={this.props.scribing.selectedTool === scribingTools.SELECT ?
-              { ...styles.tool, color: blue500 } : styles.tool}
-            onClick={this.onClickSelectionMode}
-            onMouseEnter={() => this.onMouseEnter(scribingTools.SELECT)}
-            onMouseLeave={this.onMouseLeave}
-            hoverColor={blue500}
-          >
-            <MaterialTooltip
-              horizontalPosition={'center'}
-              label={intl.formatMessage(translations.select)}
-              show={this.state.hoveredToolTip === scribingTools.SELECT}
-              verticalPosition={'top'}
-            />
-          </FontIcon>
           <LayersComponent
             onTouchTap={event => (this.onTouchTapPopover(event, scribingPopoverTypes.LAYER))}
             disabled={
@@ -461,6 +445,21 @@ class ScribingToolbar extends Component {
           />
         </ToolbarGroup>
         <ToolbarGroup>
+          <FontIcon
+            className="fa fa-mouse-pointer"
+            color={this.props.scribing.selectedTool === scribingTools.SELECT ? blue500 : undefined}
+            onClick={this.onClickSelectionMode}
+            onMouseEnter={() => this.onMouseEnter(scribingTools.SELECT)}
+            onMouseLeave={this.onMouseLeave}
+            hoverColor={blue500}
+          >
+            <MaterialTooltip
+              horizontalPosition={'center'}
+              label={intl.formatMessage(translations.select)}
+              show={this.state.hoveredToolTip === scribingTools.SELECT}
+              verticalPosition={'top'}
+            />
+          </FontIcon>
           <FontIcon
             className="fa fa-arrows"
             style={this.props.scribing.selectedTool === scribingTools.MOVE ?
