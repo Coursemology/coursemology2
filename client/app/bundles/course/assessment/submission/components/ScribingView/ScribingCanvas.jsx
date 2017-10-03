@@ -665,7 +665,7 @@ export default class ScribingCanvas extends React.Component {
         }
       case 67: // Ctrl+C
         {
-          if (event.ctrlKey) {
+          if (event.ctrlKey || event.metaKey) {
             event.preventDefault();
 
             this.copiedObjects = [];
@@ -687,7 +687,7 @@ export default class ScribingCanvas extends React.Component {
         }
       case 86: // Ctrl+V
         {
-          if (event.ctrlKey) {
+          if (event.ctrlKey || event.metaKey) {
             event.preventDefault();
 
             this.canvas.discardActiveGroup();
