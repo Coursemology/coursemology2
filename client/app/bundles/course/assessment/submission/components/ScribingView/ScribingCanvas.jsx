@@ -705,16 +705,15 @@ export default class ScribingCanvas extends React.Component {
             this.copiedObjects = [];
             if (activeGroup) {
               activeGroup.getObjects().forEach(obj => (
-                this.copiedObjects.push(fabric.util.object.clone(obj))
+                this.copiedObjects.push(obj)
               ));
 
               this.copyLeft = activeGroup.getLeft();
               this.copyTop = activeGroup.getTop();
             } else if (activeObject) {
-              const object = fabric.util.object.clone(activeObject);
               this.copyLeft = activeObject.getLeft();
               this.copyTop = activeObject.getTop();
-              this.copiedObjects.push(object);
+              this.copiedObjects.push(activeObject);
             }
           }
           break;
@@ -728,28 +727,58 @@ export default class ScribingCanvas extends React.Component {
             this.canvas.discardActiveObject();
 
             const newObjects = [];
-            this.copiedObjects.forEach((obj) => {
-              const newObj = fabric.util.object.clone(obj);
-              newObjects.push(newObj);
+            let newObj = {};
+
+            // Don't wrap single object in group,
+            // in case it's i-text and we want it to be editable at first tap
+            if (this.copiedObjects.length === 1) {
+              const obj = this.copiedObjects[0];
+              if (obj.type === 'i-text') {
+                newObj = this.cloneText(obj);
+              } else {
+                newObj = fabric.util.object.clone(obj);
+              }
+
+              // Shift copied object to the left if there's space
+              this.copyLeft = (this.copyLeft + newObj.getWidth() > this.canvas.getWidth()) ?
+                this.copyLeft : this.copyLeft + 10;
+              newObj.setLeft(this.copyLeft);
+              // Shift copied object down if there's space
+              this.copyTop = (this.copyTop + newObj.getHeight() > this.canvas.getHeight()) ?
+                this.copyTop : this.copyTop + 10;
+              newObj.setTop(this.copyTop);
+
               newObj.setCoords();
               this.canvas.add(newObj);
-              newObj.set('active', true);
-            });
-            const group = new fabric.Group(newObjects, { canvas: this.canvas });
+              this.canvas.setActiveObject(newObj);
+              this.canvas.renderAll();
+            } else {  // Cloning a group of objects
+              this.copiedObjects.forEach((obj) => {
+                if (obj.type === 'i-text') {
+                  newObj = this.cloneText(obj);
+                } else {
+                  newObj = fabric.util.object.clone(obj);
+                }
+                newObj.setCoords();
+                this.canvas.add(newObj);
+                newObjects.push(newObj);
+              });
+              const group = new fabric.Group(newObjects, { canvas: this.canvas });
 
-            // Shift copied object to the left if there's space
-            this.copyLeft = (this.copyLeft + group.getWidth() > this.canvas.getWidth()) ?
-              this.copyLeft : this.copyLeft + 10;
-            group.setLeft(this.copyLeft);
-            // Shift copied object down if there's space
-            this.copyTop = (this.copyTop + group.getHeight() > this.canvas.getHeight()) ?
-              this.copyTop : this.copyTop + 10;
-            group.setTop(this.copyTop);
+              // Shift copied object to the left if there's space
+              this.copyLeft = (this.copyLeft + group.getWidth() > this.canvas.getWidth()) ?
+                this.copyLeft : this.copyLeft + 10;
+              group.setLeft(this.copyLeft);
+              // Shift copied object down if there's space
+              this.copyTop = (this.copyTop + group.getHeight() > this.canvas.getHeight()) ?
+                this.copyTop : this.copyTop + 10;
+              group.setTop(this.copyTop);
 
-            group.setCoords();
-            this.canvas.setActiveGroup(group);
-            group.saveCoords();
-            this.canvas.renderAll();
+              group.setCoords();
+              this.canvas.setActiveGroup(group);
+              group.saveCoords();
+              this.canvas.renderAll();
+            }
           }
           break;
         }
@@ -758,10 +787,27 @@ export default class ScribingCanvas extends React.Component {
   }
 
   // Utility Helpers
-
-  getRgbaHelper = json => (
-    `rgba(${json.r},${json.g},${json.b},${json.a})`
-  );
+  cloneText = (obj) => {
+    const newObj = new fabric.IText(obj.text, {
+      left: obj.getLeft(),
+      top: obj.getTop(),
+      fontFamily: obj.fontFamily,
+      fontSize: obj.fontSize,
+      fill: obj.fill,
+      padding: 5,
+    });
+    newObj.setControlsVisibility({
+      bl: false,
+      br: false,
+      mb: false,
+      ml: false,
+      mr: false,
+      mt: false,
+      tl: false,
+      tr: false,
+    });
+    return newObj;
+  }
 
   getMousePoint = event => (
     {
