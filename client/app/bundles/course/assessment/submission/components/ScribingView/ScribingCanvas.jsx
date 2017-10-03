@@ -163,7 +163,7 @@ export default class ScribingCanvas extends React.Component {
   onMouseDownCanvas = (options) => {
     this.mouseCanvasDragStartPoint = this.getCanvasPoint(options.e);
 
-    // To facilitate panning
+    // To facilitate moving
     this.mouseDownFlag = true;
     this.viewportLeft = this.canvas.viewportTransform[4];
     this.viewportTop = this.canvas.viewportTransform[5];
@@ -304,15 +304,15 @@ export default class ScribingCanvas extends React.Component {
   onMouseMoveCanvas = (options) => {
     const dragPointer = this.getCanvasPoint(options.e);
 
-    // Do panning action
-    const tryPan = (left, top) => {
-      // limit panning
+    // Do moving action
+    const tryMove = (left, top) => {
+      // limit moving
       let finalLeft = Math.min(left, 0);
       finalLeft = Math.max(finalLeft, (this.canvas.getZoom() - 1) * this.canvas.getWidth() * -1);
       let finalTop = Math.min(top, 0);
       finalTop = Math.max(finalTop, (this.canvas.getZoom() - 1) * this.canvas.getHeight() * -1);
 
-      // apply calculated pan transforms
+      // apply calculated move transforms
       this.canvas.viewportTransform[4] = finalLeft;
       this.canvas.viewportTransform[5] = finalTop;
       this.canvas.renderAll();
@@ -360,17 +360,17 @@ export default class ScribingCanvas extends React.Component {
             break;
           }
         }
-      } else if (this.props.scribing.selectedTool === scribingTools.PAN) {
+      } else if (this.props.scribing.selectedTool === scribingTools.MOVE) {
         const mouseCurrentPoint = this.getMousePoint(options.e);
         const deltaLeft = mouseCurrentPoint.x - this.mouseStartPoint.x;
         const deltaTop = mouseCurrentPoint.y - this.mouseStartPoint.y;
         const newLeft = this.viewportLeft + deltaLeft;
         const newTop = this.viewportTop + deltaTop;
-        tryPan(newLeft, newTop);
+        tryMove(newLeft, newTop);
       }
     } else if (options.isForced) {
       // Facilitates zooming out
-      tryPan(this.canvas.viewportTransform[4], this.canvas.viewportTransform[5]);
+      tryMove(this.canvas.viewportTransform[4], this.canvas.viewportTransform[5]);
     }
   }
 

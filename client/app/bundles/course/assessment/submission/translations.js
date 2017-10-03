@@ -339,9 +339,9 @@ export const scribingTranslations = defineMessages({
     id: 'course.assessment.submission.answer.scribing.layers',
     defaultMessage: 'Layers',
   },
-  pan: {
-    id: 'course.assessment.submission.answer.scribing.pan',
-    defaultMessage: 'Pan',
+  move: {
+    id: 'course.assessment.submission.answer.scribing.move',
+    defaultMessage: 'Move',
   },
   zoomIn: {
     id: 'course.assessment.submission.answer.scribing.zoomIn',
