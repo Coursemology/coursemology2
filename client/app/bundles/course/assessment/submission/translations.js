@@ -353,7 +353,7 @@ export const scribingTranslations = defineMessages({
   },
   delete: {
     id: 'course.assessment.submission.answer.scribing.delete',
-    defaultMessage: 'Delete',
+    defaultMessage: 'Delete Object',
   },
   saving: {
     id: 'course.assessment.submission.answer.scribing.saving',
