@@ -235,6 +235,10 @@ export const scribingTranslations = defineMessages({
     id: 'course.assessment.submission.answer.scribing.colour',
     defaultMessage: 'Colour:',
   },
+  colourOpacity: {
+    id: 'course.assessment.submission.answer.scribing.colourOpacity',
+    defaultMessage: 'Colour Opacity:',
+  },
   fontFamily: {
     id: 'course.assessment.submission.answer.scribing.fontFamily',
     defaultMessage: 'Font Family:',

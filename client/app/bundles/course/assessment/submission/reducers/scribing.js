@@ -5,7 +5,7 @@ import actions, { canvasActionTypes, scribingTools, scribingShapes,
 function initializeToolColor() {
   const colors = {};
   Object.values(scribingToolColor).forEach(toolType =>
-   (colors[toolType] = '#000000')
+   (colors[toolType] = 'rgba(0,0,0,1)')
   );
   return colors;
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { SketchPicker } from 'react-color';
+import Slider from 'material-ui/Slider';
 import Popover, { PopoverAnimationVertical } from 'material-ui/Popover';
 import { scribingTranslations as translations } from '../../../translations';
 
@@ -16,6 +17,18 @@ const propTypes = {
 };
 
 const styles = {
+  fieldDiv: {
+    fontSize: '16px',
+    lineHeight: '24px',
+    width: '210px',
+    height: '72px',
+    display: 'block',
+    position: 'relative',
+    backgroundColor: 'transparent',
+    fontFamily: 'Roboto, sans-serif',
+    transition: 'height 200ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+    cursor: 'auto',
+  },
   colorPickerFieldDiv: {
     fontSize: '16px',
     lineHeight: '24px',
@@ -49,6 +62,9 @@ const styles = {
   toolDropdowns: {
     padding: '10px',
   },
+  slider: {
+    padding: '30px 0px',
+  },
 };
 
 const popoverStyles = {
@@ -70,29 +86,49 @@ const ColorPickerField = (props) => {
     onChangeCompleteColorPicker,
   } = props;
 
+  const rgbaValues = colorPickerColor.match(/^rgba\((\d+),(\d+),(\d+),(.*)\)$/);
+
   return (
-    <div style={styles.colorPickerFieldDiv}>
-      <label htmlFor="color-picker" style={styles.label}>{intl.formatMessage(translations.colour)}</label>
-      <div
-        role="button"
-        tabIndex="0"
-        style={{ background: colorPickerColor, ...styles.colorPicker }}
-        onClick={onClickColorPicker}
-      />
-      <Popover
-        style={styles.toolDropdowns}
-        open={colorPickerPopoverOpen}
-        anchorEl={colorPickerPopoverAnchorEl}
-        anchorOrigin={popoverStyles.anchorOrigin}
-        targetOrigin={popoverStyles.targetOrigin}
-        onRequestClose={onRequestCloseColorPickerPopover}
-        animation={PopoverAnimationVertical}
-      >
-        <SketchPicker
-          color={colorPickerColor}
-          onChangeComplete={onChangeCompleteColorPicker}
+    <div>
+      <div style={styles.fieldDiv}>
+        <label htmlFor="color-opacity" style={styles.label}>{intl.formatMessage(translations.colourOpacity)}</label>
+        <Slider
+          style={styles.slider}
+          min={0}
+          max={1}
+          step={0.1}
+          value={parseFloat(rgbaValues[4])}
+          onChange={(event, newValue) => (
+            onChangeCompleteColorPicker(`rgba(${rgbaValues[1]},${rgbaValues[2]},${rgbaValues[3]},${newValue})`)
+          )}
         />
-      </Popover>
+      </div>
+      <div style={styles.colorPickerFieldDiv}>
+        <label htmlFor="color-picker" style={styles.label}>{intl.formatMessage(translations.colour)}</label>
+        <div
+          role="button"
+          tabIndex="0"
+          style={{ background: colorPickerColor, ...styles.colorPicker }}
+          onClick={onClickColorPicker}
+        />
+        <Popover
+          style={styles.toolDropdowns}
+          open={colorPickerPopoverOpen}
+          anchorEl={colorPickerPopoverAnchorEl}
+          anchorOrigin={popoverStyles.anchorOrigin}
+          targetOrigin={popoverStyles.targetOrigin}
+          onRequestClose={onRequestCloseColorPickerPopover}
+          animation={PopoverAnimationVertical}
+        >
+          <SketchPicker
+            color={colorPickerColor}
+            onChange={color => (
+              onChangeCompleteColorPicker(`rgba(${color.rgb.r},${color.rgb.g},${color.rgb.b},${rgbaValues[4]})`)
+            )}
+            disableAlpha
+          />
+        </Popover>
+      </div>
     </div>
   );
 };

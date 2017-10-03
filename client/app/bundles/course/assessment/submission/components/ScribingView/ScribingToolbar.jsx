@@ -101,7 +101,7 @@ class ScribingToolbar extends Component {
   // Toolbar Event handlers
 
   onChangeCompleteColor = (color, coloringTool) => {
-    this.props.setColoringToolColor(this.props.answerId, coloringTool, this.getRgbaHelper(color.rgb));
+    this.props.setColoringToolColor(this.props.answerId, coloringTool, color);
     this.setState({
       ...this.state,
       colorDropdowns: {
@@ -253,12 +253,6 @@ class ScribingToolbar extends Component {
   }
 
   // Helpers
-
-  // Function Helpers
-  getRgbaHelper = json => (
-    `rgba(${json.r},${json.g},${json.b},${json.a})`
-  );
-
 
   setSelectedShape = (shape) => {
     this.props.setSelectedShape(this.props.answerId, shape);
