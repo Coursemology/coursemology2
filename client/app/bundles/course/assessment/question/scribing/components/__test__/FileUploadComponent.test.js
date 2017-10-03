@@ -9,6 +9,10 @@ describe('<FileUploadComponent />', () => {
     childContextTypes: { intl: intlShape },
   };
 
+  const props = {
+    errorMessage: 'error',
+  };
+
   it('renders with file name when provided', () => {
     const fileUploadComponent = shallowUntil(
       <FileUploadComponent
@@ -22,6 +26,7 @@ describe('<FileUploadComponent />', () => {
         }}
         field="attachment"
         label="Choose File"
+        {...props}
       />,
       options,
       'div'

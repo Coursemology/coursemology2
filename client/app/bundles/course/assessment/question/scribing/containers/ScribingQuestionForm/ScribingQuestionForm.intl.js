@@ -78,4 +78,10 @@ export default defineMessages({
     id: 'course.assessment.question.scribing.scribingQuestionForm.fileAttachmentRequired',
     defaultMessage: 'File attachment required.',
   },
+  scribingQuestionWarning: {
+    id: 'course.assessment.question.scribing.scribingQuestionForm.scribingQuestionWarning',
+    defaultMessage: 'NOTE: Each page of a PDF file will be created as a single Scribing question \
+    with every question taking on the same question details. \
+    You can choose to leave the optional inputs blank and return to edit the questions again after creation.',
+  },
 });
