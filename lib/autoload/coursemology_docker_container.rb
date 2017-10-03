@@ -15,6 +15,13 @@ class CoursemologyDockerContainer < Docker::Container
   # https://docs.docker.com/engine/admin/resource_constraints/
   CONTAINER_MEMORY_LIMIT = 128.megabytes
 
+  # Docker logs capture stdout, which can take up a lot of disk space on the host if student code
+  # has print statements in infinite loops.
+  # Set a maximum size for the stdout log which is retained by Docker.
+  # https://docs.docker.com/engine/admin/logging/json-file/
+  LOG_CONFIG = { 'Type' => 'json-file',
+                 'Config' => { 'max-size' => '10m', 'max-file' => '2' } }.freeze
+
   class << self
     def create(image, argv: nil)
       pull_image(image) unless Docker::Image.exist?(image)
@@ -23,7 +30,7 @@ class CoursemologyDockerContainer < Docker::Container
                                               image: image) do |payload|
         options = { 'Image' => image }
         options['Cmd'] = argv if argv.present?
-        options['HostConfig'] = { 'memory' => CONTAINER_MEMORY_LIMIT }
+        options['HostConfig'] = { 'memory' => CONTAINER_MEMORY_LIMIT, 'LogConfig' => LOG_CONFIG }
 
         payload[:container] = super(options)
       end
