@@ -82,6 +82,7 @@ export const canvasActionTypes = mirrorCreator([
   'SET_COLORING_TOOL_COLOR',
   'SET_TOOL_THICKNESS',
   'SET_SELECTED_SHAPE',
+  'SET_NO_FILL',
   'SET_CANVAS_LOADED',
   'OPEN_POPOVER',
   'CLOSE_POPOVER',

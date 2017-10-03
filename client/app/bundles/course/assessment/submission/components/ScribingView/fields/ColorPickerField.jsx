@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { SketchPicker } from 'react-color';
+import Checkbox from 'material-ui/Checkbox';
 import Popover, { PopoverAnimationVertical } from 'material-ui/Popover';
 import { scribingTranslations as translations } from '../../../translations';
 
@@ -13,6 +14,8 @@ const propTypes = {
   onRequestCloseColorPickerPopover: PropTypes.func,
   colorPickerColor: PropTypes.string,
   onChangeCompleteColorPicker: PropTypes.func,
+  noFillValue: PropTypes.bool,
+  noFillOnCheck: PropTypes.func,
 };
 
 const styles = {
@@ -66,33 +69,60 @@ const ColorPickerField = (props) => {
   const {
     intl, colorPickerColor, onClickColorPicker,
     colorPickerPopoverOpen, colorPickerPopoverAnchorEl,
-    onRequestCloseColorPickerPopover,
-    onChangeCompleteColorPicker,
+    onRequestCloseColorPickerPopover, onChangeCompleteColorPicker,
+    noFillValue, noFillOnCheck,
   } = props;
 
+  const rgbaValues = colorPickerColor.match(/^rgba\((\d+),(\d+),(\d+),(.*)\)$/);
+
   return (
-    <div style={styles.colorPickerFieldDiv}>
-      <label htmlFor="color-picker" style={styles.label}>{intl.formatMessage(translations.colour)}</label>
-      <div
-        role="button"
-        tabIndex="0"
-        style={{ background: colorPickerColor, ...styles.colorPicker }}
-        onClick={onClickColorPicker}
-      />
-      <Popover
-        style={styles.toolDropdowns}
-        open={colorPickerPopoverOpen}
-        anchorEl={colorPickerPopoverAnchorEl}
-        anchorOrigin={popoverStyles.anchorOrigin}
-        targetOrigin={popoverStyles.targetOrigin}
-        onRequestClose={onRequestCloseColorPickerPopover}
-        animation={PopoverAnimationVertical}
-      >
-        <SketchPicker
-          color={colorPickerColor}
-          onChangeComplete={onChangeCompleteColorPicker}
+    <div>
+      <div>
+        { noFillOnCheck ?
+          <Checkbox
+            label={intl.formatMessage(translations.noFill)}
+            checked={noFillValue}
+            onCheck={(event, checked) => {
+              noFillOnCheck(checked);
+              if (checked) {
+                onChangeCompleteColorPicker(`rgba(${rgbaValues[1]},${rgbaValues[2]},${rgbaValues[3]},0)`);
+              }
+            }}
+          /> : null
+        }
+      </div>
+      <div style={styles.colorPickerFieldDiv}>
+        <label htmlFor="color-picker" style={styles.label}>{intl.formatMessage(translations.colour)}</label>
+        <div
+          role="button"
+          tabIndex="0"
+          style={noFillValue ?
+          {
+            ...styles.colorPicker,
+            background: colorPickerColor,
+            cursor: 'not-allowed',
+            pointerEvents: 'inherit',
+          }
+          : { background: colorPickerColor, ...styles.colorPicker }}
+          onClick={!noFillValue && onClickColorPicker}
         />
-      </Popover>
+        <Popover
+          style={styles.toolDropdowns}
+          open={colorPickerPopoverOpen}
+          anchorEl={colorPickerPopoverAnchorEl}
+          anchorOrigin={popoverStyles.anchorOrigin}
+          targetOrigin={popoverStyles.targetOrigin}
+          onRequestClose={onRequestCloseColorPickerPopover}
+          animation={PopoverAnimationVertical}
+        >
+          <SketchPicker
+            color={colorPickerColor}
+            onChange={color => (
+              onChangeCompleteColorPicker(`rgba(${color.rgb.r},${color.rgb.g},${color.rgb.b},${color.rgb.a})`)
+            )}
+          />
+        </Popover>
+      </div>
     </div>
   );
 };

@@ -33,6 +33,7 @@ const propTypes = {
   setColoringToolColor: PropTypes.func.isRequired,
   setToolThickness: PropTypes.func.isRequired,
   setSelectedShape: PropTypes.func.isRequired,
+  setNoFill: PropTypes.func.isRequired,
   setDrawingMode: PropTypes.func.isRequired,
   setCanvasCursor: PropTypes.func.isRequired,
   setCanvasZoom: PropTypes.func.isRequired,
@@ -100,14 +101,7 @@ class ScribingToolbar extends Component {
   // Toolbar Event handlers
 
   onChangeCompleteColor = (color, coloringTool) => {
-    this.props.setColoringToolColor(this.props.answerId, coloringTool, this.getRgbaHelper(color.rgb));
-    this.setState({
-      ...this.state,
-      colorDropdowns: {
-        ...this.state.colorDropdowns,
-        [coloringTool]: false,
-      },
-    });
+    this.props.setColoringToolColor(this.props.answerId, coloringTool, color);
   }
 
   onChangeFontFamily = (event, index, value) => (
@@ -253,12 +247,6 @@ class ScribingToolbar extends Component {
 
   // Helpers
 
-  // Function Helpers
-  getRgbaHelper = json => (
-    `rgba(${json.r},${json.g},${json.b},${json.a})`
-  );
-
-
   setSelectedShape = (shape) => {
     this.props.setSelectedShape(this.props.answerId, shape);
   }
@@ -391,7 +379,10 @@ class ScribingToolbar extends Component {
             lineToolType={scribingToolThickness.SHAPE_BORDER}
             open={this.state.popovers[scribingPopoverTypes.SHAPE]}
             anchorEl={this.state.popoverAnchor}
-            onRequestClose={() => (this.onRequestClosePopover(scribingPopoverTypes.SHAPE))}
+            onRequestClose={() => {
+              this.onRequestClosePopover(scribingPopoverTypes.SHAPE);
+              this.props.setNoFill(this.props.answerId, false);
+            }}
             currentShape={this.props.scribing.selectedShape}
             setSelectedShape={shape => (this.setSelectedShape(shape))}
             selectedLineStyle={this.props.scribing.lineStyles[scribingToolLineStyle.SHAPE_BORDER]}
@@ -414,6 +405,8 @@ class ScribingToolbar extends Component {
             onClickFillColorPicker={event => (this.onClickColorPicker(event, scribingToolColor.SHAPE_FILL))}
             fillColorPickerPopoverOpen={this.state.colorDropdowns[scribingToolColor.SHAPE_FILL]}
             fillColorPickerPopoverAnchorEl={this.state.popoverColorPickerAnchor}
+            noFillValue={scribing.hasNoFill}
+            noFillOnCheck={checked => this.props.setNoFill(this.props.answerId, checked)}
             onRequestCloseFillColorPickerPopover={
               () => (this.onRequestCloseColorPicker(scribingToolColor.SHAPE_FILL))
             }

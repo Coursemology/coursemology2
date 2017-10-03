@@ -153,6 +153,15 @@ export function setDrawingMode(answerId, isDrawingMode) {
   );
 }
 
+export function setNoFill(answerId, hasNoFill) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.SET_NO_FILL,
+      payload: { answerId, hasNoFill },
+    })
+  );
+}
+
 export function setCanvasCursor(answerId, cursor) {
   return dispatch => (
     dispatch({
