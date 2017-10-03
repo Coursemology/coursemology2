@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
+import { FormattedMessage } from 'react-intl';
+
+import { Card, CardHeader, CardText, CardActions } from 'material-ui/Card';
+import Toggle from 'material-ui/Toggle';
 import FileIcon from 'material-ui/svg-icons/editor/insert-drive-file';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
@@ -14,12 +17,14 @@ import SubmissionEmptyForm from './SubmissionEmptyForm';
 import {
   fetchSubmission, autogradeSubmission, saveDraft, finalise,
   unsubmit, submitAnswer, resetAnswer, saveGrade, mark, unmark, publish,
+  enterStudentView, exitStudentView,
 } from '../../actions';
 import {
   assessmentShape, explanationShape, gradingShape, postShape,
   questionFlagsShape, questionShape, reduxFormShape, submissionShape, topicShape,
 } from '../../propTypes';
 import { formNames, workflowStates } from '../../constants';
+import translations from '../../translations';
 
 class VisibleSubmissionEditIndex extends Component {
   constructor(props) {
@@ -105,8 +110,25 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(publish(params.submissionId, Object.values(grading), exp));
   }
 
+  renderStudentViewToggle() {
+    return (
+      <Toggle
+        label={<FormattedMessage {...translations.studentView} />}
+        labelPosition="right"
+        onToggle={(_, enabled) => {
+          if (enabled) {
+            this.props.dispatch(enterStudentView());
+          } else {
+            this.props.dispatch(exitStudentView());
+          }
+        }}
+      />
+    );
+  }
+
   renderAssessment() {
-    const { assessment } = this.props;
+    const { assessment, submission } = this.props;
+
     const renderFile = (file, index) => (<div key={index}>
       <FileIcon style={{ verticalAlign: 'middle' }} />
       <a href={file.url}><span>{file.name}</span></a>
@@ -122,6 +144,9 @@ class VisibleSubmissionEditIndex extends Component {
           <h4>Files</h4>
           {assessment.files.map(renderFile)}
         </CardText>) : null}
+        <CardActions>
+          {submission.isGrader && this.renderStudentViewToggle()}
+        </CardActions>
       </Card>
     );
   }
