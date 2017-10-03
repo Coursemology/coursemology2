@@ -291,6 +291,17 @@ export default class ScribingCanvas extends React.Component {
         top: this.mouseCanvasDragStartPoint.y,
         padding: 5,
       });
+      // Don't allow scaling of text object
+      text.setControlsVisibility({
+        bl: false,
+        br: false,
+        mb: false,
+        ml: false,
+        mr: false,
+        mt: false,
+        tl: false,
+        tr: false,
+      });
       this.canvas.add(text);
       this.canvas.setActiveObject(text);
       text.enterEditing();
@@ -522,7 +533,22 @@ export default class ScribingCanvas extends React.Component {
 
       // Layer for current user's scribble
       // Enables scribble selection
-      userScribble.map(obj => (this.canvas.add(obj)));
+      userScribble.forEach((obj) => {
+        // Don't allow scaling of text object
+        if (obj.type === 'i-text') {
+          obj.setControlsVisibility({
+            bl: false,
+            br: false,
+            mb: false,
+            ml: false,
+            mr: false,
+            mt: false,
+            tl: false,
+            tr: false,
+          });
+        }
+        this.canvas.add(obj);
+      });
     }
     this.canvas.setBackground();
     this.canvas.renderAll();

@@ -42,7 +42,7 @@ export default function (state = {}, action) {
               imageWidth: 0,
               imageHeight: 0,
               fontFamily: 'Arial',
-              fontSize: 12,
+              fontSize: 23,
               colors: initializeToolColor(),
               lineStyles: initializeLineStyles(),
               thickness: initializeToolThickness(),
