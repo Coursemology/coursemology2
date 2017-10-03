@@ -33,7 +33,6 @@ const propTypes = {
   setColoringToolColor: PropTypes.func.isRequired,
   setToolThickness: PropTypes.func.isRequired,
   setSelectedShape: PropTypes.func.isRequired,
-  clearSavingStatus: PropTypes.func.isRequired,
   setDrawingMode: PropTypes.func.isRequired,
   setCanvasCursor: PropTypes.func.isRequired,
   setCanvasZoom: PropTypes.func.isRequired,
@@ -520,7 +519,6 @@ class ScribingToolbar extends Component {
             isSaving={this.props.scribing.isSaving}
             isSaved={this.props.scribing.isSaved}
             hasError={this.props.scribing.hasError}
-            clearSavingStatus={() => this.props.clearSavingStatus(this.props.answerId)}
           />
         </ToolbarGroup>
       </Toolbar>

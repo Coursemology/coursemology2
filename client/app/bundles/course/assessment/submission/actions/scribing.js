@@ -11,15 +11,6 @@ export function setCanvasLoaded(answerId, loaded, canvas) {
   );
 }
 
-export function clearSavingStatus(answerId) {
-  return dispatch => (
-    dispatch({
-      type: actions.CLEAR_SAVING_STATUS,
-      payload: { answerId },
-    })
-  );
-}
-
 export function updateScribingAnswer(answerId, answerActableId, scribblesInJSON) {
   const data = {
     content: scribblesInJSON,

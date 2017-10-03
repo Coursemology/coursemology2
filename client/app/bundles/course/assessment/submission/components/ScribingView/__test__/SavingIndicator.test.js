@@ -6,7 +6,7 @@ import ProviderWrapper from 'lib/components/ProviderWrapper';
 import CourseAPI from 'api/course';
 import store from 'course/assessment/submission/store';
 import ScribingView from 'course/assessment/submission/containers/ScribingView';
-import { updateScribingAnswer, clearSavingStatus } from '../../../actions/scribing';
+import { updateScribingAnswer } from '../../../actions/scribing';
 import actionTypes from '../../../constants';
 
 const client = CourseAPI.assessment.answer.scribing.getClient();
@@ -120,22 +120,5 @@ describe('SavingIndicator', () => {
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalled();
     expect(editPage.find('SavingIndicator').prop('hasError')).toEqual(true);
-  });
-
-  it('clears saving status', async () => {
-    const editPage = mount(
-      <ProviderWrapper store={store}>
-        <MemoryRouter
-          initialEntries={[`/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`]}
-        >
-          <ScribingView answerId={answerId} />
-        </MemoryRouter>
-      </ProviderWrapper>
-    );
-
-    store.dispatch(clearSavingStatus(answerId));
-    expect(editPage.find('SavingIndicator').prop('isSaved')).toEqual(false);
-    expect(editPage.find('SavingIndicator').prop('isSaving')).toEqual(false);
-    expect(editPage.find('SavingIndicator').prop('hasError')).toEqual(false);
   });
 });

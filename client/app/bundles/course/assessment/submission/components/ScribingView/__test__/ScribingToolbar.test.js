@@ -120,7 +120,6 @@ const props = {
   setColoringToolColor: jest.fn(),
   setToolThickness: jest.fn(),
   setSelectedShape: jest.fn(),
-  clearSavingStatus: jest.fn(),
   setDrawingMode: jest.fn(),
   setCanvasCursor: jest.fn(),
   setCanvasZoom: jest.fn(),
