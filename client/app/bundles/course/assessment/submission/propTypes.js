@@ -94,7 +94,8 @@ export const assessmentShape = PropTypes.shape({
 export const submissionShape = PropTypes.shape({
   attempted_at: PropTypes.string,
   basePoints: PropTypes.number,
-  canGrade: PropTypes.bool,
+  isGrader: PropTypes.bool, // Indicates whether the current user is a grader or not.
+  graderView: PropTypes.bool, // Grader can set graderView to false to preview as student.
   showPublicTestCasesOutput: PropTypes.bool,
   canUpdate: PropTypes.bool,
   dueAt: PropTypes.string,

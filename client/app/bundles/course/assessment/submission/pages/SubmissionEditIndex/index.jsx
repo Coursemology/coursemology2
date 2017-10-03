@@ -128,7 +128,7 @@ class VisibleSubmissionEditIndex extends Component {
 
   renderProgress() {
     const { submission } = this.props;
-    if (submission.canGrade) {
+    if (submission.graderView) {
       return <ProgressPanel submission={submission} />;
     }
     return null;
@@ -139,7 +139,7 @@ class VisibleSubmissionEditIndex extends Component {
     const {
       assessment: { autograded, delayedGradePublication, tabbedView,
                     skippable, questionIds, passwordProtected, categoryId, tabId },
-      submission: { canGrade, canUpdate, maxStep, workflowState },
+      submission: { graderView, canUpdate, maxStep, workflowState },
       explanations,
       grading,
       posts,
@@ -159,7 +159,7 @@ class VisibleSubmissionEditIndex extends Component {
         handleSaveGrade={() => this.handleSaveGrade()}
         handleSubmit={() => this.handleSubmit()}
         handleUnsubmit={() => this.handleUnsubmit()}
-        canGrade={canGrade}
+        graderView={graderView}
         canUpdate={canUpdate}
         attempting={workflowState === workflowStates.Attempting}
         submitted={workflowState === workflowStates.Submitted}
@@ -180,7 +180,7 @@ class VisibleSubmissionEditIndex extends Component {
           handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
           explanations={explanations}
           allCorrect={this.allCorrect()}
-          canGrade={canGrade}
+          graderView={graderView}
           attempting={workflowState === workflowStates.Attempting}
           submitted={workflowState === workflowStates.Submitted}
           published={workflowState === workflowStates.Published}
@@ -210,7 +210,7 @@ class VisibleSubmissionEditIndex extends Component {
         handlePublish={() => this.handlePublish()}
         explanations={explanations}
         grading={grading}
-        canGrade={canGrade}
+        graderView={graderView}
         canUpdate={canUpdate}
         attempting={workflowState === workflowStates.Attempting}
         submitted={workflowState === workflowStates.Submitted}

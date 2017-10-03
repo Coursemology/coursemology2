@@ -68,15 +68,15 @@ class SubmissionEditForm extends Component {
   }
 
   renderQuestionGrading(id) {
-    const { attempting, published, canGrade } = this.props;
-    const editable = !attempting && canGrade;
+    const { attempting, published, graderView } = this.props;
+    const editable = !attempting && graderView;
     const visible = editable || published;
 
     return visible ? <QuestionGrade id={id} editable={editable} /> : null;
   }
 
   renderProgrammingQuestionActions(id) {
-    const { intl, attempting, canGrade, questions, questionsFlags,
+    const { intl, attempting, graderView, questions, questionsFlags,
       handleSubmitAnswer, isSaving } = this.props;
     const question = questions[id];
     const { answerId, attemptsLeft, attemptLimit, autogradable } = question;
@@ -109,7 +109,7 @@ class SubmissionEditForm extends Component {
             secondary
             label={runCodeLabel}
             onTouchTap={() => handleSubmitAnswer(answerId)}
-            disabled={isAutograding || isResetting || isSaving || (!canGrade && attemptsLeft === 0)}
+            disabled={isAutograding || isResetting || isSaving || (!graderView && attemptsLeft === 0)}
           /> : null}
           {isAutograding || isResetting ? <CircularProgress size={36} style={{ position: 'absolute' }} /> : null}
         </div>
@@ -236,8 +236,8 @@ class SubmissionEditForm extends Component {
   }
 
   renderSaveGradeButton() {
-    const { intl, canGrade, attempting, handleSaveGrade, isSaving } = this.props;
-    if (canGrade && !attempting) {
+    const { intl, graderView, attempting, handleSaveGrade, isSaving } = this.props;
+    if (graderView && !attempting) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -252,9 +252,9 @@ class SubmissionEditForm extends Component {
   }
 
   renderAutogradeSubmissionButton() {
-    const { intl, canGrade, submitted, handleAutogradeSubmission,
+    const { intl, graderView, submitted, handleAutogradeSubmission,
             isAutograding, isSaving } = this.props;
-    if (canGrade && submitted) {
+    if (graderView && submitted) {
       const progressIcon = <CircularProgress size={24} />;
 
       return (
@@ -288,8 +288,8 @@ class SubmissionEditForm extends Component {
   }
 
   renderUnsubmitButton() {
-    const { intl, canGrade, submitted, published, isSaving } = this.props;
-    if (canGrade && (submitted || published)) {
+    const { intl, graderView, submitted, published, isSaving } = this.props;
+    if (graderView && (submitted || published)) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -306,8 +306,8 @@ class SubmissionEditForm extends Component {
 
   renderMarkButton() {
     const { intl, delayedGradePublication, grading,
-            canGrade, submitted, handleMark, isSaving } = this.props;
-    if (delayedGradePublication && canGrade && submitted) {
+            graderView, submitted, handleMark, isSaving } = this.props;
+    if (delayedGradePublication && graderView && submitted) {
       const anyUngraded = Object.values(grading).some(
         q => q.grade === undefined || q.grade === null);
       return (
@@ -325,8 +325,8 @@ class SubmissionEditForm extends Component {
   }
 
   renderUnmarkButton() {
-    const { intl, canGrade, graded, handleUnmark, isSaving } = this.props;
-    if (canGrade && graded) {
+    const { intl, graderView, graded, handleUnmark, isSaving } = this.props;
+    if (graderView && graded) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -342,9 +342,9 @@ class SubmissionEditForm extends Component {
   }
 
   renderPublishButton() {
-    const { intl, delayedGradePublication, canGrade, grading,
+    const { intl, delayedGradePublication, graderView, grading,
             submitted, handlePublish, isSaving } = this.props;
-    if (!delayedGradePublication && canGrade && submitted) {
+    if (!delayedGradePublication && graderView && submitted) {
       const anyUngraded = Object.values(grading).some(
         q => q.grade === undefined || q.grade === null);
 
@@ -459,7 +459,7 @@ class SubmissionEditForm extends Component {
 SubmissionEditForm.propTypes = {
   intl: intlShape.isRequired,
 
-  canGrade: PropTypes.bool.isRequired,
+  graderView: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,
   delayedGradePublication: PropTypes.bool.isRequired,
   newSubmission: PropTypes.bool.isRequired,

@@ -120,8 +120,8 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderQuestionGrading(id) {
-    const { attempting, published, canGrade } = this.props;
-    const editable = !attempting && canGrade;
+    const { attempting, published, graderView } = this.props;
+    const editable = !attempting && graderView;
     const visible = editable || published;
 
     return visible ? <QuestionGrade id={id} editable={editable} /> : null;
@@ -283,8 +283,8 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderSaveGradeButton() {
-    const { intl, canGrade, attempting, handleSaveGrade } = this.props;
-    if (canGrade && !attempting) {
+    const { intl, graderView, attempting, handleSaveGrade } = this.props;
+    if (graderView && !attempting) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -314,8 +314,8 @@ class SubmissionEditStepForm extends Component {
   }
 
   renderUnsubmitButton() {
-    const { intl, canGrade, attempting } = this.props;
-    if (canGrade && !attempting) {
+    const { intl, graderView, attempting } = this.props;
+    if (graderView && !attempting) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -472,7 +472,7 @@ class SubmissionEditStepForm extends Component {
 SubmissionEditStepForm.propTypes = {
   intl: intlShape.isRequired,
 
-  canGrade: PropTypes.bool.isRequired,
+  graderView: PropTypes.bool.isRequired,
   maxStep: PropTypes.number.isRequired,
   step: PropTypes.number,
   skippable: PropTypes.bool.isRequired,

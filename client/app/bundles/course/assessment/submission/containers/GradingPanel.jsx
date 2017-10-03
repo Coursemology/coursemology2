@@ -86,10 +86,10 @@ class VisibleGradingPanel extends Component {
   renderExperiencePoints() {
     const {
       grading: { exp, expMultiplier },
-      submission: { basePoints, canGrade },
+      submission: { basePoints, graderView },
     } = this.props;
 
-    if (!canGrade) {
+    if (!graderView) {
       return exp;
     }
 
@@ -126,13 +126,13 @@ class VisibleGradingPanel extends Component {
     const {
       submission: {
         submitter, workflowState, dueAt, attemptedAt,
-        submittedAt, grader, gradedAt, canGrade,
+        submittedAt, grader, gradedAt, graderView,
       },
       gamified,
     } = this.props;
 
     const published = workflowState === workflowStates.Published;
-    const shouldRenderGrading = published || canGrade;
+    const shouldRenderGrading = published || graderView;
 
     const tableRow = (field, value) => (
       <TableRow>
@@ -191,9 +191,9 @@ class VisibleGradingPanel extends Component {
   }
 
   renderGradeTable() {
-    const { intl, questions, submission: { canGrade, workflowState } } = this.props;
+    const { intl, questions, submission: { graderView, workflowState } } = this.props;
 
-    if (!canGrade && workflowState !== workflowStates.Published) {
+    if (!graderView && workflowState !== workflowStates.Published) {
       return null;
     }
 
@@ -201,7 +201,7 @@ class VisibleGradingPanel extends Component {
       return null;
     }
 
-    const showGrader = canGrade && (
+    const showGrader = graderView && (
       workflowState === workflowStates.Graded || workflowState === workflowStates.Published);
 
     return (
