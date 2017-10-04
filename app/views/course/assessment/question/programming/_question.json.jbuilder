@@ -10,7 +10,7 @@ json.question do
     json.(skill, :id, :title)
   end
 
-  has_submissions = @programming_question.answers.without_attempting_state.count
+  has_submissions = @programming_question.answers.without_attempting_state.count > 0
   json.autograded @programming_question.persisted? ?
     @programming_question.attachment.present? : @assessment.autograded?
   json.has_auto_gradings @programming_question.auto_gradable? && has_submissions
