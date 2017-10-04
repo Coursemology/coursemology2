@@ -69,7 +69,8 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
 
     return meta if template_files.blank?
 
-    meta[:submission] = template_files
+    # TODO: Refactor to support multiple files in non-autograded mode
+    meta[:submission] = template_files.first&.content
 
     meta.as_json
   end

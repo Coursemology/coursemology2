@@ -436,6 +436,7 @@ class OnlineEditorJavaView extends React.Component {
     return (
       <div id="java-online-editor">
         {
+          autograded &&
           <div className={styles.submitAsFileToggle}>
             <Toggle
               label={toggleLabel}
