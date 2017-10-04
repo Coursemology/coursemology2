@@ -498,6 +498,39 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           expect(all_new_comment_emails_disabled).to be(true)
         end
       end
+
+      context 'when sidebar settings have multiple assessment categories' do
+        let!(:categories) { create_list(:course_assessment_category, 2, course: course) }
+
+        before do
+          # Assign sidebar settings for original course by setting the weight to the old
+          # category ID.
+          course.assessment_categories.each do |category|
+            course.settings(:sidebar).settings("assessments_#{category.id}").weight = category.id
+          end
+          course.save!
+        end
+
+        it 'updates the sidebar setting keys with the new assessment category IDs' do
+          old_course_weights = course.assessment_categories.map(&:id)
+          new_course_weights = new_course.assessment_categories.map do |category|
+            new_course.settings(:sidebar).settings("assessments_#{category.id}").weight
+          end
+          expect(new_course_weights).to contain_exactly(*old_course_weights)
+
+          # Check that sidebar keys with the old assessment category IDs are not in the new course's
+          # sidebar settings.
+          course.assessment_categories.each do |old_category|
+            expect(new_course.settings(:sidebar, "assessments_#{old_category.id}").weight).to be_nil
+          end
+
+          # Check that the sidebar keys of the source course are not affected.
+          course.reload.assessment_categories.each do |old_category|
+            expect(course.settings(:sidebar, "assessments_#{old_category.id}").weight).
+              to eq old_category.id
+          end
+        end
+      end
     end
   end
 end

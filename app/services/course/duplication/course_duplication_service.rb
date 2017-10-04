@@ -46,6 +46,7 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
         raise ActiveRecord::Rollback unless duplicator.duplicate(item).save
       end
       raise ActiveRecord::Rollback unless update_course_settings(duplicator, new_course, current_course)
+      raise ActiveRecord::Rollback unless update_sidebar_settings(duplicator, new_course, current_course)
       new_course
     end
     notify_duplication_complete(duplicated_course) unless duplicated_course.nil?
@@ -84,6 +85,20 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
       new_category_settings[new_category.id.to_s] = old_category_settings[old_category.id.to_s]
     end
     new_course.settings.public_send("#{component_key}=", new_category_settings)
+    new_course.save
+  end
+
+  # Update sidebar settings keys with the new assessment category IDs.
+  # Remove old keys with the original course's assessment category ID numbers from the sidebar
+  # settings.
+  def update_sidebar_settings(duplicator, new_course, old_course)
+    old_course.assessment_categories.each do |old_category|
+      new_category = duplicator.duplicate(old_category)
+      weight = old_course.settings(:sidebar, "assessments_#{old_category.id}").weight
+      next unless weight
+      new_course.settings(:sidebar).settings("assessments_#{new_category.id}").weight = weight
+      new_course.settings(:sidebar).send("assessments_#{old_category.id}=", nil)
+    end
     new_course.save
   end
 end

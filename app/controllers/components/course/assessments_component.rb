@@ -20,7 +20,7 @@ class Course::AssessmentsComponent < SimpleDelegator
   def assessment_categories
     current_course.assessment_categories.select(&:persisted?).map do |category|
       {
-        key: :assessments,
+        key: "assessments_#{category.id}",
         icon: 'plane', # TODO: category.icon in db that user can select and set
         title: category.title,
         weight: 2,
