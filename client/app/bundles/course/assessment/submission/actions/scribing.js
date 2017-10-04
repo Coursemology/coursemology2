@@ -162,6 +162,24 @@ export function setCanvasCursor(answerId, cursor) {
   );
 }
 
+export function setCurrentStateIndex(answerId, currentStateIndex) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.SET_CURRENT_STATE_INDEX,
+      payload: { answerId, currentStateIndex },
+    })
+  );
+}
+
+export function setCanvasStates(answerId, canvasStates) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.SET_CANVAS_STATES,
+      payload: { answerId, canvasStates },
+    })
+  );
+}
+
 export function setCanvasZoom(answerId, canvasZoom) {
   return dispatch => (
     dispatch({
@@ -247,6 +265,42 @@ export function resetEnableTextSelection(answerId) {
   return dispatch => (
     dispatch({
       type: canvasActionTypes.RESET_ENABLE_TEXT_SELECTION,
+      payload: { answerId },
+    })
+  );
+}
+
+export function setUndo(answerId) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.SET_UNDO,
+      payload: { answerId },
+    })
+  );
+}
+
+export function resetUndo(answerId) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.RESET_UNDO,
+      payload: { answerId },
+    })
+  );
+}
+
+export function setRedo(answerId) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.SET_REDO,
+      payload: { answerId },
+    })
+  );
+}
+
+export function resetRedo(answerId) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.RESET_REDO,
       payload: { answerId },
     })
   );

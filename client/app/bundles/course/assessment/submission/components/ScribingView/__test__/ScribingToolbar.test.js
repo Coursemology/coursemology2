@@ -111,6 +111,7 @@ const props = {
     isSaved: false,
     hasError: false,
     selectedTool: scribingTools.SELECT,
+    canvasStates: [],
   },
   setLayerDisplay: jest.fn(),
   setToolSelected: jest.fn(),
@@ -127,6 +128,8 @@ const props = {
   setDisableObjectSelection: jest.fn(),
   setEnableObjectSelection: jest.fn(),
   setEnableTextSelection: jest.fn(),
+  setUndo: jest.fn(),
+  setRedo: jest.fn(),
 };
 
 // stub import function
