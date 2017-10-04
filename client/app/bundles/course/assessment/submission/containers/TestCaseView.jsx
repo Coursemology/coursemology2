@@ -214,11 +214,13 @@ class VisibleTestCaseView extends Component {
   }
 
   render() {
-    const { attempting, graderView, isAutograding, testCases } = this.props;
+    const { submissionState, showPrivate, showEvaluation, graderView, isAutograding, testCases } = this.props;
     if (!testCases) {
       return null;
     }
 
+    const attempting = (submissionState === workflowStates.Attempting);
+    const published = (submissionState === workflowStates.Published);
     return (
       <div style={styles.testCasesContainer}>
         { !attempting && isAutograding ? (
@@ -232,11 +234,11 @@ class VisibleTestCaseView extends Component {
           testCases.public_test,
           VisibleTestCaseView.renderTitle('publicTestCases', false)
         )}
-        {graderView && this.renderTestCases(
+        {(graderView || (published && showPrivate)) && this.renderTestCases(
           testCases.private_test,
           VisibleTestCaseView.renderTitle('privateTestCases', graderView)
         )}
-        {graderView && this.renderTestCases(
+        {(graderView || (published && showEvaluation)) && this.renderTestCases(
           testCases.evaluation_test,
           VisibleTestCaseView.renderTitle('evaluationTestCases', graderView)
         )}
@@ -248,9 +250,13 @@ class VisibleTestCaseView extends Component {
 }
 
 VisibleTestCaseView.propTypes = {
-  attempting: PropTypes.bool,
+  submissionState: PropTypes.string,
   graderView: PropTypes.bool,
+  // Show public test cases output to students.
   showPublicTestCasesOutput: PropTypes.bool,
+  // flags to show private or evaluation tests after submission is graded
+  showPrivate: PropTypes.bool,
+  showEvaluation: PropTypes.bool,
   isAutograding: PropTypes.bool,
   testCases: PropTypes.shape({
     evaluation_test: PropTypes.arrayOf(testCaseShape),
@@ -264,9 +270,11 @@ VisibleTestCaseView.propTypes = {
 function mapStateToProps(state, ownProps) {
   const { questionId } = ownProps;
   return {
-    attempting: state.submission.workflowState === workflowStates.Attempting,
+    submissionState: state.submission.workflowState,
     graderView: state.submission.graderView,
     showPublicTestCasesOutput: state.submission.showPublicTestCasesOutput,
+    showPrivate: state.assessment.showPrivate,
+    showEvaluation: state.assessment.showEvaluation,
     isAutograding: state.questionsFlags[questionId].isAutograding,
     testCases: state.testCases[questionId],
   };
