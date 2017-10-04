@@ -339,6 +339,14 @@ export const scribingTranslations = defineMessages({
     id: 'course.assessment.submission.answer.scribing.select',
     defaultMessage: 'Select',
   },
+  undo: {
+    id: 'course.assessment.submission.answer.scribing.undo',
+    defaultMessage: 'Undo',
+  },
+  redo: {
+    id: 'course.assessment.submission.answer.scribing.redo',
+    defaultMessage: 'Redo',
+  },
   layersLabelText: {
     id: 'course.assessment.submission.answer.scribing.layersLabelText',
     defaultMessage: 'Show work from:',
