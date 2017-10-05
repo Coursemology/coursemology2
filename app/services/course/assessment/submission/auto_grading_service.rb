@@ -14,7 +14,7 @@ class Course::Assessment::Submission::AutoGradingService
 
   MAX_TRIES = 5
 
-  # Grades into the given submission. This only grades ungraded answers.
+  # Grades into the given submission.
   #
   # @param [Course::Assessment::Submission] submission The object to store grading
   #   results in.
@@ -35,14 +35,15 @@ class Course::Assessment::Submission::AutoGradingService
   # autograding job is run for the submission.
   def grade_answers(submission)
     tries, jobs_by_qn = 0, {}
-    ungraded_answers = ungraded_answers(submission)
-    while ungraded_answers.any? && tries <= MAX_TRIES
-      new_jobs = ungraded_answers.map { |a| [a.question_id, grade_answer(a)] }.
-                 select { |e| e[1].present? }.to_h # Filter out answers which does not return a job
+    # Force re-grade all current answers (even when they've been graded before).
+    answers_to_grade = submission.current_answers
+    while answers_to_grade.any? && tries <= MAX_TRIES
+      new_jobs = answers_to_grade.map { |a| [a.question_id, grade_answer(a)] }.
+                 select { |e| e[1].present? }.to_h # Filter out answers which do not return a job
       wait_for_jobs(new_jobs.values)
 
       jobs_by_qn.merge!(new_jobs)
-      ungraded_answers = ungraded_answers(submission)
+      answers_to_grade = ungraded_answers(submission)
       tries += 1
     end
     aggregate_failures(jobs_by_qn.map { |_, job| job.job.reload })
