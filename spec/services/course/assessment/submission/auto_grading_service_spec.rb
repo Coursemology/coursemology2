@@ -15,6 +15,7 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
     describe '#grade' do
       it 'evaluates the current_answers' do
         submission.finalise!
+        submission.save!
         expect(subject.grade(submission)).to eq(true)
 
         expect(submission.answers.map(&:reload).all?(&:evaluated?)).to be(true)
