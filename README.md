@@ -114,9 +114,9 @@ You're more than welcome to use Coursemology for your own school or organization
 If you need more help, [join](http://coursemology-slack.herokuapp.com/) our Slack channel
 to reach our core developers.
 
-We are actively running Coursemology in beta and can provide free use of our infrastructure
-on a case by case basis. Please contact [Prof Ben Leong](http://www.comp.nus.edu.sg/~bleong/)
-if you would like to explore this option.
+We are actively running [Coursemology](https://coursemology.org) and can provide free use of our
+infrastructure on a case by case basis.
+Please contact [Prof Ben Leong](http://www.comp.nus.edu.sg/~bleong/) if you would like to explore this option.
 
 ## Acknowledgments
 
