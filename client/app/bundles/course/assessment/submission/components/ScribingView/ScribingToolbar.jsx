@@ -224,10 +224,10 @@ class ScribingToolbar extends Component {
     this.props.setEnableObjectSelection(this.props.answerId);
   }
 
-  onClickMoveMode = () => {
-    this.props.setToolSelected(this.props.answerId, scribingTools.MOVE);
+  onClickGrabMode = () => {
+    this.props.setToolSelected(this.props.answerId, scribingTools.GRAB);
     this.props.setDrawingMode(this.props.answerId, false);
-    this.props.setCanvasCursor(this.props.answerId, 'move');
+    this.props.setCanvasCursor(this.props.answerId, 'grab');
     this.props.setDisableObjectSelection(this.props.answerId);
   }
 
@@ -552,18 +552,18 @@ class ScribingToolbar extends Component {
         </ToolbarGroup>
         <ToolbarGroup>
           <FontIcon
-            className="fa fa-arrows"
-            style={this.props.scribing.selectedTool === scribingTools.MOVE ?
+            className="fa fa-hand-rock-o"
+            style={this.props.scribing.selectedTool === scribingTools.GRAB ?
               { color: blue500 } : {}}
-            onClick={this.onClickMoveMode}
-            onMouseEnter={() => this.onMouseEnter(scribingTools.MOVE)}
+            onClick={this.onClickGrabMode}
+            onMouseEnter={() => this.onMouseEnter(scribingTools.GRAB)}
             onMouseLeave={this.onMouseLeave}
             hoverColor={blue500}
           >
             <MaterialTooltip
               horizontalPosition={'center'}
-              label={intl.formatMessage(translations.move)}
-              show={this.state.hoveredToolTip === scribingTools.MOVE}
+              label={intl.formatMessage(translations.grab)}
+              show={this.state.hoveredToolTip === scribingTools.GRAB}
               verticalPosition={'top'}
             />
           </FontIcon>

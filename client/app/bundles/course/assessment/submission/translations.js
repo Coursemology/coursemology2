@@ -355,9 +355,9 @@ export const scribingTranslations = defineMessages({
     id: 'course.assessment.submission.answer.scribing.layersLabelText',
     defaultMessage: 'Show work from:',
   },
-  move: {
-    id: 'course.assessment.submission.answer.scribing.move',
-    defaultMessage: 'Move',
+  grab: {
+    id: 'course.assessment.submission.answer.scribing.grab',
+    defaultMessage: 'Grab',
   },
   zoomIn: {
     id: 'course.assessment.submission.answer.scribing.zoomIn',
