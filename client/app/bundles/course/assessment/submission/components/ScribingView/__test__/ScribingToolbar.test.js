@@ -124,10 +124,10 @@ const props = {
   setDrawingMode: jest.fn(),
   setCanvasCursor: jest.fn(),
   setCanvasZoom: jest.fn(),
+  setCanvasDirty: jest.fn(),
   deleteCanvasObject: jest.fn(),
   setDisableObjectSelection: jest.fn(),
   setEnableObjectSelection: jest.fn(),
-  setEnableTextSelection: jest.fn(),
   setUndo: jest.fn(),
   setRedo: jest.fn(),
 };
@@ -211,6 +211,6 @@ describe('ScribingToolbar', () => {
     const color = 'rgba(231,12,12,1)';
     store.dispatch(setColoringToolColor(answerId, coloringTool, color));
     expect(editPage.find('TypePopover').prop('colorPickerColor')).toEqual(color);
-    expect(editPage.find('ToolDropdown').first().prop('colorBar')).toEqual(color);
+    expect(editPage.find('ToolDropdown').first().prop('colorBarBackground')).toEqual(color);
   });
 });

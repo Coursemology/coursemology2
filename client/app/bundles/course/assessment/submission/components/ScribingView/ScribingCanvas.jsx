@@ -19,12 +19,15 @@ const propTypes = {
   setToolSelected: PropTypes.func.isRequired,
   setCurrentStateIndex: PropTypes.func.isRequired,
   setCanvasStates: PropTypes.func.isRequired,
+  setActiveObject: PropTypes.func.isRequired,
+  setCanvasCursor: PropTypes.func.isRequired,
   updateScribingAnswer: PropTypes.func.isRequired,
   updateScribingAnswerInLocal: PropTypes.func.isRequired,
   resetCanvasDelete: PropTypes.func.isRequired,
   resetDisableObjectSelection: PropTypes.func.isRequired,
   resetEnableObjectSelection: PropTypes.func.isRequired,
-  resetEnableTextSelection: PropTypes.func.isRequired,
+  resetCanvasDirty: PropTypes.func.isRequired,
+  resetCanvasSave: PropTypes.func.isRequired,
   resetChangeTool: PropTypes.func.isRequired,
   resetUndo: PropTypes.func.isRequired,
   resetRedo: PropTypes.func.isRequired,
@@ -97,17 +100,40 @@ export default class ScribingCanvas extends React.Component {
       }, nextProps.scribing.canvasZoom);
       this.canvas.trigger('mouse:move', { isForced: true });
 
+      // Discard prior active object/group when using other tools
+      if (nextProps.scribing.isChangeTool) {
+        if (nextProps.scribing.selectedTool !== scribingTools.TYPE
+          && nextProps.scribing.selectedTool !== scribingTools.DRAW
+          && nextProps.scribing.selectedTool !== scribingTools.LINE
+          && nextProps.scribing.selectedTool !== scribingTools.SHAPE) {
+          this.canvas.discardActiveObject();
+        }
+        this.canvas.discardActiveGroup();
+        this.canvas.renderAll();
+        this.props.resetChangeTool(this.props.answerId);
+      }
+
       if (nextProps.scribing.isDisableObjectSelection) {
         this.disableObjectSelection();
         this.props.resetDisableObjectSelection(this.props.answerId);
       }
       if (nextProps.scribing.isEnableObjectSelection) {
-        this.enableObjectSelection();
-        this.props.resetEnableObjectSelection(this.props.answerId);
+        // The canvasStates will only add the state with the text after it exits editing,
+        // hence, defer enableObjectSelection by 1 update if a text is still in editing mode.
+        if (!nextProps.scribing.activeObject
+          || (nextProps.scribing.activeObject
+              && nextProps.scribing.activeObject !== 'i-text')) {
+          this.enableObjectSelection();
+          this.props.resetEnableObjectSelection(this.props.answerId);
+        }
       }
-      if (nextProps.scribing.isEnableTextSelection) {
-        this.enableTextSelection();
-        this.props.resetEnableTextSelection(this.props.answerId);
+      if (nextProps.scribing.isCanvasDirty) {
+        this.canvas.renderAll();
+        this.props.resetCanvasDirty(this.props.answerId);
+      }
+      if (nextProps.scribing.isCanvasSave) {
+        this.saveScribbles();
+        this.props.resetCanvasSave(this.props.answerId);
       }
       if (nextProps.scribing.isUndo) {
         this.undo();
@@ -131,13 +157,6 @@ export default class ScribingCanvas extends React.Component {
         this.canvas.renderAll();
         this.props.resetCanvasDelete(this.props.answerId);
       }
-      // Discard prior active object/group when using other tools
-      if (nextProps.scribing.isChangeTool) {
-        this.canvas.discardActiveObject();
-        this.canvas.discardActiveGroup();
-        this.canvas.renderAll();
-        this.props.resetChangeTool(this.props.answerId);
-      }
     }
 
     // Render canvas only at the beginning
@@ -151,23 +170,30 @@ export default class ScribingCanvas extends React.Component {
     });
   }
 
-  // This method only enable selection for interactive texts
-  enableTextSelection() {
-    this.canvas.clear();
-    this.initializeScribblesAndBackground(false);
-    this.canvas.forEachObject((object) => {
-      // eslint-disable-next-line no-param-reassign
-      object.selectable = (object.type === 'i-text');
-      // eslint-disable-next-line no-param-reassign
-      object.hoverCursor = (object.type === 'i-text') ? 'pointer' : this.currentCursor;
-    });
-  }
-
   // This method clears the selection-disabled scribbles
   // and reloads them to enable selection again
   enableObjectSelection() {
+    const userScribbles = this.getScribblesFromCanvasState(this.props.scribing.currentStateIndex);
     this.canvas.clear();
-    this.initializeScribblesAndBackground(false);
+    this.canvas.setBackground();
+    this.props.scribing.layers.forEach(layer => this.canvas.add(layer.scribbleGroup));
+    userScribbles.forEach((scribble) => {
+      if (scribble.type === 'i-text') {
+        scribble.setControlsVisibility({
+          bl: false,
+          br: false,
+          mb: false,
+          ml: false,
+          mr: false,
+          mt: false,
+          tl: false,
+          tr: false,
+        });
+      }
+      this.canvas.add(scribble);
+    });
+    this.canvas.renderAll();
+    this.isScribblesLoaded = true;
   }
 
   // Canvas Event Handlers
@@ -493,7 +519,7 @@ export default class ScribingCanvas extends React.Component {
     return this.normaliseScribble(scribble, true);
   }
 
-  initializeScribblesAndBackground = (isFirstInit) => {
+  initializeScribblesAndBackground = () => {
     const { scribbles } = this.props.scribing.answer;
     const { layers } = this.props.scribing;
     const userId = this.props.scribing.answer.user_id;
@@ -522,7 +548,7 @@ export default class ScribingCanvas extends React.Component {
         // Create layer for each user's scribble
         // Layer for other users' scribble
         // Disables scribble selection
-        if (isFirstInit && scribble.creator_id !== userId) {
+        if (scribble.creator_id !== userId) {
           // eslint-disable-next-line no-undef
           const scribbleGroup = new fabric.Group(fabricObjs);
           scribbleGroup.selectable = false;
@@ -566,9 +592,7 @@ export default class ScribingCanvas extends React.Component {
         this.canvas.add(obj);
       });
       this.isScribblesLoaded = true;
-      if (isFirstInit) {
-        this.saveScribbles(); // Add initial state as index 0 is states history
-      }
+      this.saveScribbles(); // Add initial state as index 0 is states history
     }
     this.canvas.setBackground();
     this.canvas.renderAll();
@@ -632,6 +656,8 @@ export default class ScribingCanvas extends React.Component {
       this.canvas.on('object:moving', this.onObjectMovingCanvas);
       this.canvas.on('object:modified', this.saveScribbles);
       this.canvas.on('object:removed', this.saveScribbles);
+      this.canvas.on('object:selected', this.onObjectSelected);
+      this.canvas.on('selection:cleared', this.onSelectionCleared);
       this.canvas.on('text:editing:exited', this.onTextChanged);
 
       this.scaleCanvas();
@@ -649,26 +675,44 @@ export default class ScribingCanvas extends React.Component {
 
   // Scribble Helpers
 
+  getScribblesFromCanvasState(index) {
+    const objects = JSON.parse(this.props.scribing.canvasStates[index]).objects;
+    const scribbles = [];
+
+    // Parse JSON to Fabric.js objects
+    for (let i = 0; i < objects.length; i++) {
+      if (objects[i].type !== 'group') {
+        const klass = fabric.util.getKlass(objects[i].type);
+        klass.fromObject(objects[i], (obj) => {
+          this.denormaliseScribble(obj);
+          scribbles.push(obj);
+        });
+      }
+    }
+    return scribbles;
+  }
+
   undo = () => {
     if (this.props.scribing.currentStateIndex > 0) {
-      const objects = JSON.parse(this.props.scribing.canvasStates[this.props.scribing.currentStateIndex - 1]).objects;
-      const userScribbles = [];
-
-      // Parse JSON to Fabric.js objects
-      for (let i = 0; i < objects.length; i++) {
-        if (objects[i].type !== 'group') {
-          const klass = fabric.util.getKlass(objects[i].type);
-          klass.fromObject(objects[i], (obj) => {
-            this.denormaliseScribble(obj);
-            userScribbles.push(obj);
-          });
-        }
-      }
-
+      const userScribbles = this.getScribblesFromCanvasState(this.props.scribing.currentStateIndex - 1);
       this.canvas.clear();
       this.canvas.setBackground();
       this.props.scribing.layers.forEach(layer => this.canvas.add(layer.scribbleGroup));
-      userScribbles.forEach(scribble => this.canvas.add(scribble));
+      userScribbles.forEach((scribble) => {
+        if (scribble.type === 'i-text') {
+          scribble.setControlsVisibility({
+            bl: false,
+            br: false,
+            mb: false,
+            ml: false,
+            mr: false,
+            mt: false,
+            tl: false,
+            tr: false,
+          });
+        }
+        this.canvas.add(scribble);
+      });
       this.canvas.renderAll();
       this.isScribblesLoaded = true;
 
@@ -679,24 +723,25 @@ export default class ScribingCanvas extends React.Component {
   redo = () => {
     if (this.props.scribing.canvasStates.length - 1 > this.props.scribing.currentStateIndex
       && this.props.scribing.canvasStates.length > 1) {
-      const objects = JSON.parse(this.props.scribing.canvasStates[this.props.scribing.currentStateIndex + 1]).objects;
-      const userScribbles = [];
-
-      // Parse JSON to Fabric.js objects
-      for (let i = 0; i < objects.length; i++) {
-        if (objects[i].type !== 'group') {
-          const klass = fabric.util.getKlass(objects[i].type);
-          klass.fromObject(objects[i], (obj) => {
-            this.denormaliseScribble(obj);
-            userScribbles.push(obj);
-          });
-        }
-      }
-
+      const userScribbles = this.getScribblesFromCanvasState(this.props.scribing.currentStateIndex + 1);
       this.canvas.clear();
       this.canvas.setBackground();
       this.props.scribing.layers.forEach(layer => this.canvas.add(layer.scribbleGroup));
-      userScribbles.forEach(scribble => this.canvas.add(scribble));
+      userScribbles.forEach((scribble) => {
+        if (scribble.type === 'i-text') {
+          scribble.setControlsVisibility({
+            bl: false,
+            br: false,
+            mb: false,
+            ml: false,
+            mr: false,
+            mt: false,
+            tl: false,
+            tr: false,
+          });
+        }
+        this.canvas.add(scribble);
+      });
       this.canvas.renderAll();
       this.isScribblesLoaded = true;
 
@@ -759,8 +804,18 @@ export default class ScribingCanvas extends React.Component {
       this.canvas.remove(options.target);
     }
     this.textCreated = false;
-    this.saveScribbles();
     this.props.setToolSelected(this.props.answerId, scribingTools.SELECT);
+    this.props.setCanvasCursor(this.props.answerId, 'default');
+  }
+
+  onObjectSelected = (options) => {
+    if (options.target) {
+      this.props.setActiveObject(this.props.answerId, options.target);
+    }
+  }
+
+  onSelectionCleared = () => {
+    this.props.setActiveObject(this.props.answerId, undefined);
   }
 
   onKeyDown = (event) => {
