@@ -72,5 +72,15 @@ function getScribingId() {
   return match && match[1];
 }
 
+/**
+ * Get the video id from URL.
+ *
+ * @returns {number}
+ */
+function getVideoId() {
+  const match = window.location.pathname.match(/^\/courses\/\d+\/videos\/(\d+)/);
+  return match && match[1];
+}
+
 /* eslint-disable import/prefer-default-export */
-export { getUrlParameter, getCourseId, getSurveyId, getAssessmentId, getSubmissionId, getScribingId };
+export { getUrlParameter, getCourseId, getSurveyId, getAssessmentId, getSubmissionId, getScribingId, getVideoId };
