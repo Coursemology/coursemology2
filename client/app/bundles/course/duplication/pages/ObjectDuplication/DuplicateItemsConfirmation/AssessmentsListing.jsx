@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Checkbox from 'material-ui/Checkbox';
 import Subheader from 'material-ui/Subheader';
 import { Card, CardText } from 'material-ui/Card';
 import { defaultComponentTitles } from 'course/translations.intl';
@@ -10,6 +9,7 @@ import { duplicableItemTypes } from 'course/duplication/constants';
 import { categoryShape } from 'course/duplication/propTypes';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
+import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 
 const { TAB, ASSESSMENT, CATEGORY } = duplicableItemTypes;
 
@@ -24,15 +24,6 @@ const translations = defineMessages({
   },
 });
 
-const styles = {
-  indent1: {
-    marginLeft: 15,
-  },
-  indent2: {
-    marginLeft: 30,
-  },
-};
-
 class AssessmentsListing extends React.Component {
   static propTypes = {
     categories: PropTypes.arrayOf(categoryShape),
@@ -41,8 +32,9 @@ class AssessmentsListing extends React.Component {
 
   static renderAssessmentRow(assessment) {
     return (
-      <Checkbox
+      <IndentedCheckbox
         checked
+        indentLevel={2}
         key={assessment.id}
         label={
           <span>
@@ -51,27 +43,26 @@ class AssessmentsListing extends React.Component {
             {assessment.title}
           </span>
         }
-        style={styles.indent2}
       />
     );
   }
 
   static renderDefaultTabRow() {
     return (
-      <Checkbox
+      <IndentedCheckbox
         disabled
+        indentLevel={1}
         label={<FormattedMessage {...translations.defaultTab} />}
-        style={styles.indent1}
       />
     );
   }
 
   static renderTabRow(tab) {
     return (
-      <Checkbox
+      <IndentedCheckbox
         checked
+        indentLevel={1}
         label={<span><TypeBadge itemType={TAB} />{tab.title}</span>}
-        style={styles.indent1}
       />
     );
   }
@@ -90,7 +81,7 @@ class AssessmentsListing extends React.Component {
 
   static renderDefaultCategoryRow() {
     return (
-      <Checkbox
+      <IndentedCheckbox
         disabled
         label={<FormattedMessage {...translations.defaultCategory} />}
       />
@@ -99,7 +90,7 @@ class AssessmentsListing extends React.Component {
 
   static renderCategoryRow(category) {
     return (
-      <Checkbox
+      <IndentedCheckbox
         checked
         label={<span><TypeBadge itemType={CATEGORY} />{category.title}</span>}
       />
