@@ -17,6 +17,20 @@ export const videoDefaults = {
   progressUpdateFrequencyMs: 500,
 };
 
+export const playerStates = mirrorCreator([
+  'UNSTARTED',
+  'ENDED',
+  'PLAYING',
+  'PAUSED',
+  'BUFFERING',
+]);
+
+export const postRequestingStatuses = mirrorCreator([
+  'LOADING',
+  'LOADED',
+  'ERROR',
+]);
+
 export const videoActionTypes = mirrorCreator([
   'CHANGE_PLAYER_STATE',
   'CHANGE_PLAYER_VOLUME',
@@ -27,10 +41,21 @@ export const videoActionTypes = mirrorCreator([
   'UPDATE_RESTRICTED_TIME',
 ]);
 
-export const playerStates = mirrorCreator([
-  'UNSTARTED',
-  'ENDED',
-  'PLAYING',
-  'PAUSED',
-  'BUFFERING',
+export const discussionActionTypes = mirrorCreator([
+  'UPDATE_NEW_POST',
+  'ADD_TOPIC',
+  'UPDATE_TOPIC',
+  'REMOVE_TOPIC',
+  'ADD_POST',
+  'UPDATE_POST',
+  'REMOVE_POST',
+  'ADD_REPLY',
+  'UPDATE_REPLY',
+  'REMOVE_REPLY',
+  'CHANGE_AUTO_SCROLL',
+  'REFRESH_ALL',
+]);
+
+export const notificationActionTypes = mirrorCreator([
+  'SET_NOTIFICATION',
 ]);
