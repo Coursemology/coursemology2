@@ -33,6 +33,7 @@ const propTypes = {
   setColoringToolColor: PropTypes.func.isRequired,
   setToolThickness: PropTypes.func.isRequired,
   setSelectedShape: PropTypes.func.isRequired,
+  setNoFill: PropTypes.func.isRequired,
   setDrawingMode: PropTypes.func.isRequired,
   setCanvasCursor: PropTypes.func.isRequired,
   setCanvasZoom: PropTypes.func.isRequired,
@@ -304,7 +305,7 @@ class ScribingToolbar extends Component {
         <ToolbarGroup>
           <ToolDropdown
             activeObject={scribing.activeObject}
-            disabled={scribing.activeObject && scribing.activeObject.type !== 'i-text' || false}
+            disabled={(scribing.activeObject && scribing.activeObject.type !== 'i-text') || false}
             toolType={scribingTools.TYPE}
             tooltip={intl.formatMessage(translations.text)}
             showTooltip={this.state.hoveredToolTip === scribingTools.TYPE}
@@ -339,7 +340,7 @@ class ScribingToolbar extends Component {
           />
           <ToolDropdown
             activeObject={scribing.activeObject}
-            disabled={scribing.activeObject && scribing.activeObject.type !== 'path' || false}
+            disabled={(scribing.activeObject && scribing.activeObject.type !== 'path') || false}
             toolType={scribingTools.DRAW}
             tooltip={intl.formatMessage(translations.pencil)}
             showTooltip={this.state.hoveredToolTip === scribingTools.DRAW}
@@ -374,7 +375,7 @@ class ScribingToolbar extends Component {
           />
           <ToolDropdown
             activeObject={scribing.activeObject}
-            disabled={scribing.activeObject && scribing.activeObject.type !== 'line' || false}
+            disabled={(scribing.activeObject && scribing.activeObject.type !== 'line') || false}
             toolType={scribingTools.LINE}
             tooltip={intl.formatMessage(translations.line)}
             showTooltip={this.state.hoveredToolTip === scribingTools.LINE}
@@ -417,8 +418,8 @@ class ScribingToolbar extends Component {
           />
           <ToolDropdown
             activeObject={scribing.activeObject}
-            disabled={scribing.activeObject
-              && scribing.activeObject.type !== 'rect' && scribing.activeObject.type !== 'ellipse' || false}
+            disabled={(scribing.activeObject
+              && scribing.activeObject.type !== 'rect' && scribing.activeObject.type !== 'ellipse') || false}
             toolType={scribingTools.SHAPE}
             tooltip={intl.formatMessage(translations.shape)}
             showTooltip={this.state.hoveredToolTip === scribingTools.SHAPE}
@@ -440,7 +441,10 @@ class ScribingToolbar extends Component {
             lineToolType={scribingToolThickness.SHAPE_BORDER}
             open={this.state.popovers[scribingPopoverTypes.SHAPE]}
             anchorEl={this.state.popoverAnchor}
-            onRequestClose={() => (this.onRequestClosePopover(scribingPopoverTypes.SHAPE))}
+            onRequestClose={() => {
+              this.onRequestClosePopover(scribingPopoverTypes.SHAPE);
+              this.props.setNoFill(this.props.answerId, false);
+            }}
             currentShape={this.props.scribing.selectedShape}
             setSelectedShape={shape => (this.setSelectedShape(shape))}
             selectedLineStyle={this.props.scribing.lineStyles[scribingToolLineStyle.SHAPE_BORDER]}
@@ -463,6 +467,9 @@ class ScribingToolbar extends Component {
             onClickFillColorPicker={event => (this.onClickColorPicker(event, scribingToolColor.SHAPE_FILL))}
             fillColorPickerPopoverOpen={this.state.colorDropdowns[scribingToolColor.SHAPE_FILL]}
             fillColorPickerPopoverAnchorEl={this.state.popoverColorPickerAnchor}
+            noFillValue={scribing.hasNoFill}
+            noFillOnCheck={checked => this.props.setNoFill(this.props.answerId, checked)}
+            noFillLabel={intl.formatMessage(translations.noFill)}
             onRequestCloseFillColorPickerPopover={
               () => (this.onRequestCloseColorPicker(scribingToolColor.SHAPE_FILL))
             }

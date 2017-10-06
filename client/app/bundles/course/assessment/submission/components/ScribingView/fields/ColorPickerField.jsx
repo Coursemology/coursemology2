@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { SketchPicker } from 'react-color';
 import Slider from 'material-ui/Slider';
+import Checkbox from 'material-ui/Checkbox';
 import Popover, { PopoverAnimationVertical } from 'material-ui/Popover';
 import { scribingTranslations as translations } from '../../../translations';
 
@@ -14,6 +15,9 @@ const propTypes = {
   onRequestCloseColorPickerPopover: PropTypes.func,
   colorPickerColor: PropTypes.string,
   onChangeCompleteColorPicker: PropTypes.func,
+  noFillValue: PropTypes.bool,
+  noFillOnCheck: PropTypes.func,
+  noFillLabel: PropTypes.string,
 };
 
 const styles = {
@@ -82,18 +86,33 @@ const ColorPickerField = (props) => {
   const {
     intl, colorPickerColor, onClickColorPicker,
     colorPickerPopoverOpen, colorPickerPopoverAnchorEl,
-    onRequestCloseColorPickerPopover,
-    onChangeCompleteColorPicker,
+    onRequestCloseColorPickerPopover, onChangeCompleteColorPicker,
+    noFillValue, noFillOnCheck, noFillLabel,
   } = props;
 
   const rgbaValues = colorPickerColor.match(/^rgba\((\d+),(\d+),(\d+),(.*)\)$/);
 
   return (
     <div>
+      <div>
+        { noFillOnCheck ?
+          <Checkbox
+            label={noFillLabel}
+            checked={noFillValue}
+            onCheck={(event, checked) => {
+              noFillOnCheck(checked);
+              if (checked) {
+                onChangeCompleteColorPicker(`rgba(${rgbaValues[1]},${rgbaValues[2]},${rgbaValues[3]},0)`);
+              }
+            }}
+          /> : null
+        }
+      </div>
       <div style={styles.fieldDiv}>
         <label htmlFor="color-opacity" style={styles.label}>{intl.formatMessage(translations.colourOpacity)}</label>
         <Slider
           style={styles.slider}
+          disabled={noFillValue}
           min={0}
           max={1}
           step={0.1}
@@ -108,7 +127,14 @@ const ColorPickerField = (props) => {
         <div
           role="button"
           tabIndex="0"
-          style={{ background: colorPickerColor, ...styles.colorPicker }}
+          style={noFillValue ?
+          {
+            ...styles.colorPicker,
+            background: colorPickerColor,
+            cursor: 'not-allowed',
+            pointerEvents: 'inherit',
+          }
+          : { background: colorPickerColor, ...styles.colorPicker }}
           onClick={onClickColorPicker}
         />
         <Popover

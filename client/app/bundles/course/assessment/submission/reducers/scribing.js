@@ -46,6 +46,7 @@ export default function (state = {}, action) {
               colors: initializeToolColor(),
               lineStyles: initializeLineStyles(),
               thickness: initializeToolThickness(),
+              hasNoFill: false,
               activeObject: undefined,
               isCanvasLoaded: false,
               isCanvasDirty: false,
@@ -248,6 +249,16 @@ export default function (state = {}, action) {
         [answerId]: {
           ...state[answerId],
           selectedShape,
+        },
+      };
+    }
+    case canvasActionTypes.SET_NO_FILL: {
+      const { answerId, hasNoFill } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          hasNoFill,
         },
       };
     }

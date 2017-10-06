@@ -34,6 +34,9 @@ const propTypes = {
   onClickFillColorPicker: PropTypes.func,
   fillColorPickerPopoverOpen: PropTypes.bool,
   fillColorPickerPopoverAnchorEl: PropTypes.object,
+  noFillValue: PropTypes.bool,
+  noFillOnCheck: PropTypes.func,
+  noFillLabel: PropTypes.string,
   onRequestCloseFillColorPickerPopover: PropTypes.func,
   onChangeCompleteFillColorPicker: PropTypes.func,
   setCanvasDirty: PropTypes.func,
@@ -222,7 +225,7 @@ class ShapePopover extends Component {
     const {
       intl, activeObject, onClickFillColorPicker, fillColorPickerPopoverOpen,
       fillColorPickerPopoverAnchorEl, onRequestCloseFillColorPickerPopover,
-      setCanvasDirty,
+      setCanvasDirty, noFillValue, noFillOnCheck, noFillLabel,
     } = this.props;
 
     return (
@@ -231,6 +234,9 @@ class ShapePopover extends Component {
           <h4>{intl.formatMessage(translations.fill)}</h4>
         </div>
         <ColorPickerField
+          noFillValue={noFillValue}
+          noFillOnCheck={noFillOnCheck}
+          noFillLabel={noFillLabel}
           onClickColorPicker={onClickFillColorPicker}
           colorPickerPopoverOpen={fillColorPickerPopoverOpen}
           colorPickerPopoverAnchorEl={fillColorPickerPopoverAnchorEl}
