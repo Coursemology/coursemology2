@@ -325,6 +325,7 @@ Rails.application.routes.draw do
 
       scope module: :video do
         resources :videos do
+          resources :topics, only: [:index, :create, :show]
           scope module: :submission do
             resources :submissions, only: [:index, :create, :edit]
           end
