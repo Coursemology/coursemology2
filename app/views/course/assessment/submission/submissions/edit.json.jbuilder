@@ -5,19 +5,20 @@ json.partial! 'submission', submission: @submission, assessment: @assessment,
                             can_grade: can_grade, can_update: can_update
 
 json.assessment do
+  json.categoryId @assessment.tab.category_id
+  json.tabId @assessment.tab_id
   json.(@assessment, :title, :description, :autograded, :skippable)
   json.delayedGradePublication @assessment.delayed_grade_publication
   json.tabbedView @assessment.tabbed_view
+  json.showPrivate @assessment.show_private
+  json.showEvaluation @assessment.show_evaluation
   json.questionIds @assessment.questions.map(&:id)
   json.passwordProtected @assessment.password_protected?
-  json.description @assessment.description
   json.gamified @assessment.course.gamified?
   json.files @assessment.folder.materials do |material|
     json.url url_for([@assessment.course, @assessment.folder, material])
     json.name format_inline_text(material.name)
   end
-  json.tabId @assessment.tab_id
-  json.categoryId @assessment.tab.category_id
 end
 
 answers = @submission.current_answers

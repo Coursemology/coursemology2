@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
+import { FormattedMessage } from 'react-intl';
+
+import { Card, CardHeader, CardText, CardActions } from 'material-ui/Card';
+import Toggle from 'material-ui/Toggle';
 import FileIcon from 'material-ui/svg-icons/editor/insert-drive-file';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
@@ -14,12 +17,14 @@ import SubmissionEmptyForm from './SubmissionEmptyForm';
 import {
   fetchSubmission, autogradeSubmission, saveDraft, finalise,
   unsubmit, submitAnswer, resetAnswer, saveGrade, mark, unmark, publish,
+  enterStudentView, exitStudentView,
 } from '../../actions';
 import {
   assessmentShape, explanationShape, gradingShape, postShape,
   questionFlagsShape, questionShape, reduxFormShape, submissionShape, topicShape,
 } from '../../propTypes';
 import { formNames, workflowStates } from '../../constants';
+import translations from '../../translations';
 
 class VisibleSubmissionEditIndex extends Component {
   constructor(props) {
@@ -105,8 +110,25 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(publish(params.submissionId, Object.values(grading), exp));
   }
 
+  renderStudentViewToggle() {
+    return (
+      <Toggle
+        label={<FormattedMessage {...translations.studentView} />}
+        labelPosition="right"
+        onToggle={(_, enabled) => {
+          if (enabled) {
+            this.props.dispatch(enterStudentView());
+          } else {
+            this.props.dispatch(exitStudentView());
+          }
+        }}
+      />
+    );
+  }
+
   renderAssessment() {
-    const { assessment } = this.props;
+    const { assessment, submission } = this.props;
+
     const renderFile = (file, index) => (<div key={index}>
       <FileIcon style={{ verticalAlign: 'middle' }} />
       <a href={file.url}><span>{file.name}</span></a>
@@ -122,13 +144,16 @@ class VisibleSubmissionEditIndex extends Component {
           <h4>Files</h4>
           {assessment.files.map(renderFile)}
         </CardText>) : null}
+        <CardActions>
+          {submission.isGrader && this.renderStudentViewToggle()}
+        </CardActions>
       </Card>
     );
   }
 
   renderProgress() {
     const { submission } = this.props;
-    if (submission.canGrade) {
+    if (submission.graderView) {
       return <ProgressPanel submission={submission} />;
     }
     return null;
@@ -139,7 +164,7 @@ class VisibleSubmissionEditIndex extends Component {
     const {
       assessment: { autograded, delayedGradePublication, tabbedView,
                     skippable, questionIds, passwordProtected, categoryId, tabId },
-      submission: { canGrade, canUpdate, maxStep, workflowState },
+      submission: { graderView, canUpdate, maxStep, workflowState },
       explanations,
       grading,
       posts,
@@ -159,7 +184,7 @@ class VisibleSubmissionEditIndex extends Component {
         handleSaveGrade={() => this.handleSaveGrade()}
         handleSubmit={() => this.handleSubmit()}
         handleUnsubmit={() => this.handleUnsubmit()}
-        canGrade={canGrade}
+        graderView={graderView}
         canUpdate={canUpdate}
         attempting={workflowState === workflowStates.Attempting}
         submitted={workflowState === workflowStates.Submitted}
@@ -180,7 +205,7 @@ class VisibleSubmissionEditIndex extends Component {
           handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
           explanations={explanations}
           allCorrect={this.allCorrect()}
-          canGrade={canGrade}
+          graderView={graderView}
           attempting={workflowState === workflowStates.Attempting}
           submitted={workflowState === workflowStates.Submitted}
           published={workflowState === workflowStates.Published}
@@ -210,7 +235,7 @@ class VisibleSubmissionEditIndex extends Component {
         handlePublish={() => this.handlePublish()}
         explanations={explanations}
         grading={grading}
-        canGrade={canGrade}
+        graderView={graderView}
         canUpdate={canUpdate}
         attempting={workflowState === workflowStates.Attempting}
         submitted={workflowState === workflowStates.Submitted}

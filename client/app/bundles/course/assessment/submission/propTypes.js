@@ -79,22 +79,25 @@ export const attachmentShape = PropTypes.shape({
 });
 
 export const assessmentShape = PropTypes.shape({
+  categoryId: PropTypes.number,
+  tabId: PropTypes.number,
+  title: PropTypes.string,
+  description: PropTypes.string,
   autograded: PropTypes.bool,
   delayedGradePublication: PropTypes.bool,
-  description: PropTypes.string,
   published: PropTypes.bool,
   skippable: PropTypes.bool,
   tabbedView: PropTypes.bool,
-  title: PropTypes.string,
+  showPrivate: PropTypes.bool,
+  showEvaluation: PropTypes.bool,
   questionIds: PropTypes.arrayOf(PropTypes.number),
-  categoryId: PropTypes.number,
-  tabId: PropTypes.number,
 });
 
 export const submissionShape = PropTypes.shape({
   attempted_at: PropTypes.string,
   basePoints: PropTypes.number,
-  canGrade: PropTypes.bool,
+  isGrader: PropTypes.bool, // Indicates whether the current user is a grader or not.
+  graderView: PropTypes.bool, // Grader can set graderView to false to preview as student.
   showPublicTestCasesOutput: PropTypes.bool,
   canUpdate: PropTypes.bool,
   dueAt: PropTypes.string,

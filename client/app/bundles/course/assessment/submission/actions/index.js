@@ -346,3 +346,15 @@ export function recorderComponentMount() {
 export function recorderComponentUnmount() {
   return dispatch => dispatch({ type: actionTypes.RECORDER_COMPONENT_UNMOUNT });
 }
+
+export function enterStudentView() {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.ENTER_STUDENT_VIEW });
+  };
+}
+
+export function exitStudentView() {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.EXIT_STUDENT_VIEW });
+  };
+}

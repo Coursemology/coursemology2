@@ -149,7 +149,7 @@ class VisibleTestCaseView extends Component {
   }
 
   renderTestCases(testCases, title) {
-    const { canGrade } = this.props;
+    const { graderView } = this.props;
     const { showPublicTestCasesOutput } = this.props;
 
     if (!testCases || testCases.length === 0) {
@@ -169,10 +169,10 @@ class VisibleTestCaseView extends Component {
           <Table selectable={false} style={{}}>
             <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
               <TableRow>
-                { canGrade ? tableHeaderColumnFor('identifier') : null }
+                { graderView ? tableHeaderColumnFor('identifier') : null }
                 { tableHeaderColumnFor('expression') }
                 { tableHeaderColumnFor('expected') }
-                { canGrade || showPublicTestCasesOutput ? tableHeaderColumnFor('output') : null }
+                { graderView || showPublicTestCasesOutput ? tableHeaderColumnFor('output') : null }
                 { tableHeaderColumnFor('passed') }
               </TableRow>
             </TableHeader>
@@ -186,7 +186,7 @@ class VisibleTestCaseView extends Component {
   }
 
   renderTestCaseRow(testCase) {
-    const { canGrade } = this.props;
+    const { graderView } = this.props;
     const { showPublicTestCasesOutput } = this.props;
 
     let testCaseResult = 'unattempted';
@@ -204,21 +204,23 @@ class VisibleTestCaseView extends Component {
 
     return (
       <TableRow key={testCase.identifier} style={styles.testCaseRow[testCaseResult]}>
-        { canGrade ? tableRowColumnFor(testCase.identifier) : null }
+        { graderView ? tableRowColumnFor(testCase.identifier) : null }
         {tableRowColumnFor(testCase.expression)}
         {tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.expected || ''} /> || '')}
-        { canGrade || showPublicTestCasesOutput ? tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.output || ''} /> || '') : null }
+        { graderView || showPublicTestCasesOutput ? tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.output || ''} /> || '') : null }
         {tableRowColumnFor(testCaseIcon)}
       </TableRow>
     );
   }
 
   render() {
-    const { attempting, canGrade, isAutograding, testCases } = this.props;
+    const { submissionState, showPrivate, showEvaluation, graderView, isAutograding, testCases } = this.props;
     if (!testCases) {
       return null;
     }
 
+    const attempting = (submissionState === workflowStates.Attempting);
+    const published = (submissionState === workflowStates.Published);
     return (
       <div style={styles.testCasesContainer}>
         { !attempting && isAutograding ? (
@@ -232,25 +234,29 @@ class VisibleTestCaseView extends Component {
           testCases.public_test,
           VisibleTestCaseView.renderTitle('publicTestCases', false)
         )}
-        {this.renderTestCases(
+        {(graderView || (published && showPrivate)) && this.renderTestCases(
           testCases.private_test,
-          VisibleTestCaseView.renderTitle('privateTestCases', canGrade)
+          VisibleTestCaseView.renderTitle('privateTestCases', graderView)
         )}
-        {this.renderTestCases(
+        {(graderView || (published && showEvaluation)) && this.renderTestCases(
           testCases.evaluation_test,
-          VisibleTestCaseView.renderTitle('evaluationTestCases', canGrade)
+          VisibleTestCaseView.renderTitle('evaluationTestCases', graderView)
         )}
-        {canGrade ? VisibleTestCaseView.renderOutputStream('standardOutput', testCases.stdout) : null}
-        {canGrade ? VisibleTestCaseView.renderOutputStream('standardError', testCases.stderr) : null}
+        {graderView ? VisibleTestCaseView.renderOutputStream('standardOutput', testCases.stdout) : null}
+        {graderView ? VisibleTestCaseView.renderOutputStream('standardError', testCases.stderr) : null}
       </div>
     );
   }
 }
 
 VisibleTestCaseView.propTypes = {
-  attempting: PropTypes.bool,
-  canGrade: PropTypes.bool,
+  submissionState: PropTypes.string,
+  graderView: PropTypes.bool,
+  // Show public test cases output to students.
   showPublicTestCasesOutput: PropTypes.bool,
+  // flags to show private or evaluation tests after submission is graded
+  showPrivate: PropTypes.bool,
+  showEvaluation: PropTypes.bool,
   isAutograding: PropTypes.bool,
   testCases: PropTypes.shape({
     evaluation_test: PropTypes.arrayOf(testCaseShape),
@@ -264,9 +270,11 @@ VisibleTestCaseView.propTypes = {
 function mapStateToProps(state, ownProps) {
   const { questionId } = ownProps;
   return {
-    attempting: state.submission.workflowState === workflowStates.Attempting,
-    canGrade: state.submission.canGrade,
+    submissionState: state.submission.workflowState,
+    graderView: state.submission.graderView,
     showPublicTestCasesOutput: state.submission.showPublicTestCasesOutput,
+    showPrivate: state.assessment.showPrivate,
+    showEvaluation: state.assessment.showEvaluation,
     isAutograding: state.questionsFlags[questionId].isAutograding,
     testCases: state.testCases[questionId],
   };

@@ -67,8 +67,8 @@ class SubmissionEmptyForm extends Component {
   }
 
   renderSaveGradeButton() {
-    const { intl, canGrade, attempting, handleSaveGrade, isSaving } = this.props;
-    if (canGrade && !attempting) {
+    const { intl, graderView, attempting, handleSaveGrade, isSaving } = this.props;
+    if (graderView && !attempting) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -104,8 +104,8 @@ class SubmissionEmptyForm extends Component {
   }
 
   renderUnsubmitButton() {
-    const { intl, canGrade, submitted, published, isSaving } = this.props;
-    if (canGrade && (submitted || published)) {
+    const { intl, graderView, submitted, published, isSaving } = this.props;
+    if (graderView && (submitted || published)) {
       return (
         <RaisedButton
           style={styles.formButton}
@@ -137,9 +137,9 @@ class SubmissionEmptyForm extends Component {
   }
 
   render() {
-    const { canUpdate, attempting, canGrade, submitted, published } = this.props;
+    const { canUpdate, attempting, graderView, submitted, published } = this.props;
     const needShowSubmitButton = attempting && canUpdate;
-    const needShowUnsubmitButton = canGrade && (submitted || published);
+    const needShowUnsubmitButton = graderView && (submitted || published);
     if (!needShowSubmitButton && !needShowUnsubmitButton) {
       return null;
     }
@@ -158,7 +158,7 @@ class SubmissionEmptyForm extends Component {
 SubmissionEmptyForm.propTypes = {
   intl: intlShape.isRequired,
 
-  canGrade: PropTypes.bool.isRequired,
+  graderView: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,
 
   attempting: PropTypes.bool.isRequired,
