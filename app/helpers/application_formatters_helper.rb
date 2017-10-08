@@ -83,6 +83,7 @@ module ApplicationFormattersHelper
   # Custom datetime formats
   Time::DATE_FORMATS[:date_only_long] = '%B %d, %Y'
   Time::DATE_FORMATS[:date_only_short] = '%d %b'
+  Time::DATE_FORMATS[:i18n_default] = I18n.t('time.formats.default')
 
   # Format the given datetime
   #
