@@ -615,7 +615,6 @@ DEPENDENCIES
   lol_dba
   migration_comments
   mini_magick
-  momentjs-rails (>= 2.8.1)
   nokogiri (>= 1.8.1)
   omniauth
   omniauth-facebook
@@ -657,7 +656,6 @@ DEPENDENCIES
   webpacker
   workflow
   yard
-
 
 BUNDLED WITH
    1.15.4
