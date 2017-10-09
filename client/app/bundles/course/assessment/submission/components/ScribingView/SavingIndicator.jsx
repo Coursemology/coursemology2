@@ -5,7 +5,6 @@ import { scribingTranslations as translations } from '../../translations';
 
 const propTypes = {
   intl: intlShape.isRequired,
-  clearSavingStatus: PropTypes.func.isRequired,
   isSaving: PropTypes.bool,
   isSaved: PropTypes.bool,
   hasError: PropTypes.bool,
@@ -25,15 +24,23 @@ const style = {
 };
 
 const SavingIndicator = (props) => {
-  const { intl, clearSavingStatus, isSaving, isSaved, hasError } = props;
+  const { intl, isSaving, isSaved, hasError } = props;
+
+  function timenow() {
+    const now = new Date();
+    const h = `0${now.getHours()}`.slice(-2);
+    const m = `0${now.getMinutes()}`.slice(-2);
+    const s = `0${now.getSeconds()}`.slice(-2);
+
+    return `${h}:${m}:${s}`;
+  }
 
   let status = '';
 
   if (isSaving) {
     status = intl.formatMessage(translations.saving);
   } else if (isSaved) {
-    status = intl.formatMessage(translations.saved);
-    setTimeout(clearSavingStatus, 3000);
+    status = `${intl.formatMessage(translations.saved)} ${timenow()}`;
   } else if (hasError) {
     status = intl.formatMessage(translations.saveError);
   }

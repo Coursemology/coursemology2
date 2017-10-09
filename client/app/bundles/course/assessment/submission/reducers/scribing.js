@@ -113,19 +113,6 @@ export default function (state = {}, action) {
         },
       };
     }
-    case actions.CLEAR_SAVING_STATUS: {
-      const { answerId } = action.payload;
-      return {
-        ...state,
-        [answerId]: {
-          ...state[answerId],
-          isSaving: false,
-          isSaved: false,
-          isLoading: false,
-          hasError: false,
-        },
-      };
-    }
     case actions.UPDATE_SCRIBING_ANSWER_IN_LOCAL: {
       const { answerId } = action.payload;
       const scribbles = [];
