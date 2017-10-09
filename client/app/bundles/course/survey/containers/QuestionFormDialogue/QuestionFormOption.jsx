@@ -7,9 +7,9 @@ import Checkbox from 'material-ui/Checkbox';
 import RadioButton from 'material-ui/RadioButton';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
 import PhotoIcon from 'material-ui/svg-icons/image/photo';
-import TextField from 'lib/components/redux-form/TextField';
 import { grey700, grey600 } from 'material-ui/styles/colors';
-import Thumbnail from 'course/survey/components/Thumbnail';
+import TextField from 'lib/components/redux-form/TextField';
+import Thumbnail from 'lib/components/Thumbnail';
 
 const optionTranslations = defineMessages({
   optionPlaceholder: {

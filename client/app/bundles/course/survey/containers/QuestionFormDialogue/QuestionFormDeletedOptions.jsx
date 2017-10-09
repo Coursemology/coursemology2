@@ -5,7 +5,7 @@ import RadioButton from 'material-ui/RadioButton';
 import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
 import { grey600 } from 'material-ui/styles/colors';
-import Thumbnail from 'course/survey/components/Thumbnail';
+import Thumbnail from 'lib/components/Thumbnail';
 
 const styles = {
   option: {

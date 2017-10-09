@@ -8,10 +8,10 @@ import Toggle from 'material-ui/Toggle';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import { cyan500, grey50, grey300 } from 'material-ui/styles/colors';
+import Thumbnail from 'lib/components/Thumbnail';
 import { sorts } from 'course/survey/utils';
 import { questionTypes } from 'course/survey/constants';
 import { optionShape } from 'course/survey/propTypes';
-import Thumbnail from 'course/survey/components/Thumbnail';
 
 const styles = {
   percentageBarThreshold: 10,
