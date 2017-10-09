@@ -213,12 +213,12 @@ class ScribingToolbar extends Component {
   onClickSelectionMode = () => {
     this.props.setToolSelected(this.props.answerId, scribingTools.SELECT);
     this.props.setDrawingMode(this.props.answerId, false);
-    this.props.setCanvasCursor(this.props.answerId, 'pointer');
+    this.props.setCanvasCursor(this.props.answerId, 'default');
     this.props.setEnableObjectSelection(this.props.answerId);
   }
 
-  onClickPanMode = () => {
-    this.props.setToolSelected(this.props.answerId, scribingTools.PAN);
+  onClickMoveMode = () => {
+    this.props.setToolSelected(this.props.answerId, scribingTools.MOVE);
     this.props.setDrawingMode(this.props.answerId, false);
     this.props.setCanvasCursor(this.props.answerId, 'move');
     this.props.setDisableObjectSelection(this.props.answerId);
@@ -424,22 +424,6 @@ class ScribingToolbar extends Component {
           />
         </ToolbarGroup>
         <ToolbarGroup>
-          <FontIcon
-            className="fa fa-hand-pointer-o"
-            style={this.props.scribing.selectedTool === scribingTools.SELECT ?
-              { ...styles.tool, color: blue500 } : styles.tool}
-            onClick={this.onClickSelectionMode}
-            onMouseEnter={() => this.onMouseEnter(scribingTools.SELECT)}
-            onMouseLeave={this.onMouseLeave}
-            hoverColor={blue500}
-          >
-            <MaterialTooltip
-              horizontalPosition={'center'}
-              label={intl.formatMessage(translations.select)}
-              show={this.state.hoveredToolTip === scribingTools.SELECT}
-              verticalPosition={'top'}
-            />
-          </FontIcon>
           <LayersComponent
             onTouchTap={event => (this.onTouchTapPopover(event, scribingPopoverTypes.LAYER))}
             disabled={
@@ -462,18 +446,33 @@ class ScribingToolbar extends Component {
         </ToolbarGroup>
         <ToolbarGroup>
           <FontIcon
-            className="fa fa-arrows"
-            style={this.props.scribing.selectedTool === scribingTools.PAN ?
-              { color: blue500 } : {}}
-            onClick={this.onClickPanMode}
-            onMouseEnter={() => this.onMouseEnter(scribingTools.PAN)}
+            className="fa fa-mouse-pointer"
+            color={this.props.scribing.selectedTool === scribingTools.SELECT ? blue500 : undefined}
+            onClick={this.onClickSelectionMode}
+            onMouseEnter={() => this.onMouseEnter(scribingTools.SELECT)}
             onMouseLeave={this.onMouseLeave}
             hoverColor={blue500}
           >
             <MaterialTooltip
               horizontalPosition={'center'}
-              label={intl.formatMessage(translations.pan)}
-              show={this.state.hoveredToolTip === scribingTools.PAN}
+              label={intl.formatMessage(translations.select)}
+              show={this.state.hoveredToolTip === scribingTools.SELECT}
+              verticalPosition={'top'}
+            />
+          </FontIcon>
+          <FontIcon
+            className="fa fa-arrows"
+            style={this.props.scribing.selectedTool === scribingTools.MOVE ?
+              { color: blue500 } : {}}
+            onClick={this.onClickMoveMode}
+            onMouseEnter={() => this.onMouseEnter(scribingTools.MOVE)}
+            onMouseLeave={this.onMouseLeave}
+            hoverColor={blue500}
+          >
+            <MaterialTooltip
+              horizontalPosition={'center'}
+              label={intl.formatMessage(translations.move)}
+              show={this.state.hoveredToolTip === scribingTools.MOVE}
               verticalPosition={'top'}
             />
           </FontIcon>

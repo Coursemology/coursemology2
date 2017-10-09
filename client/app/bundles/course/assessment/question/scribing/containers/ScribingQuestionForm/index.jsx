@@ -230,6 +230,9 @@ class ScribingQuestionForm extends React.Component {
                     validate={[required]}
                     errorMessage={this.props.intl.formatMessage(translations.fileAttachmentRequired)}
                   />
+                  <div className={styles.warningText}>
+                    {this.props.intl.formatMessage(translations.scribingQuestionWarning)}
+                  </div>
                 </div>
               }
             </div>

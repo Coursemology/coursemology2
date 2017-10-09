@@ -339,13 +339,13 @@ export const scribingTranslations = defineMessages({
     id: 'course.assessment.submission.answer.scribing.select',
     defaultMessage: 'Select',
   },
-  layers: {
-    id: 'course.assessment.submission.answer.scribing.layers',
-    defaultMessage: 'Layers',
+  layersLabelText: {
+    id: 'course.assessment.submission.answer.scribing.layersLabelText',
+    defaultMessage: 'Show work from:',
   },
-  pan: {
-    id: 'course.assessment.submission.answer.scribing.pan',
-    defaultMessage: 'Pan',
+  move: {
+    id: 'course.assessment.submission.answer.scribing.move',
+    defaultMessage: 'Move',
   },
   zoomIn: {
     id: 'course.assessment.submission.answer.scribing.zoomIn',
@@ -357,7 +357,7 @@ export const scribingTranslations = defineMessages({
   },
   delete: {
     id: 'course.assessment.submission.answer.scribing.delete',
-    defaultMessage: 'Delete',
+    defaultMessage: 'Delete Object',
   },
   saving: {
     id: 'course.assessment.submission.answer.scribing.saving',

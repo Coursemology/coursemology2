@@ -163,7 +163,7 @@ export default class ScribingCanvas extends React.Component {
   onMouseDownCanvas = (options) => {
     this.mouseCanvasDragStartPoint = this.getCanvasPoint(options.e);
 
-    // To facilitate panning
+    // To facilitate moving
     this.mouseDownFlag = true;
     this.viewportLeft = this.canvas.viewportTransform[4];
     this.viewportTop = this.canvas.viewportTransform[5];
@@ -283,36 +283,45 @@ export default class ScribingCanvas extends React.Component {
     } else if (!this.isOverText
         && this.props.scribing.selectedTool === scribingTools.TYPE
         && !this.textCreated) {
-      const text = new fabric.IText('Text', {
+      const text = new fabric.IText('', {
         fontFamily: this.props.scribing.fontFamily,
         fontSize: this.props.scribing.fontSize,
         fill: this.props.scribing.colors[scribingToolColor.TYPE],
         left: this.mouseCanvasDragStartPoint.x,
         top: this.mouseCanvasDragStartPoint.y,
+        padding: 5,
+      });
+      // Don't allow scaling of text object
+      text.setControlsVisibility({
+        bl: false,
+        br: false,
+        mb: false,
+        ml: false,
+        mr: false,
+        mt: false,
+        tl: false,
+        tr: false,
       });
       this.canvas.add(text);
       this.canvas.setActiveObject(text);
       text.enterEditing();
       this.canvas.renderAll();
       this.textCreated = true;
-    } else if (!this.isOverText && this.textCreated) {
-      this.props.setToolSelected(this.props.answerId, scribingTools.SELECT);
-      this.textCreated = false;
     }
   }
 
   onMouseMoveCanvas = (options) => {
     const dragPointer = this.getCanvasPoint(options.e);
 
-    // Do panning action
-    const tryPan = (left, top) => {
-      // limit panning
+    // Do moving action
+    const tryMove = (left, top) => {
+      // limit moving
       let finalLeft = Math.min(left, 0);
       finalLeft = Math.max(finalLeft, (this.canvas.getZoom() - 1) * this.canvas.getWidth() * -1);
       let finalTop = Math.min(top, 0);
       finalTop = Math.max(finalTop, (this.canvas.getZoom() - 1) * this.canvas.getHeight() * -1);
 
-      // apply calculated pan transforms
+      // apply calculated move transforms
       this.canvas.viewportTransform[4] = finalLeft;
       this.canvas.viewportTransform[5] = finalTop;
       this.canvas.renderAll();
@@ -360,17 +369,17 @@ export default class ScribingCanvas extends React.Component {
             break;
           }
         }
-      } else if (this.props.scribing.selectedTool === scribingTools.PAN) {
+      } else if (this.props.scribing.selectedTool === scribingTools.MOVE) {
         const mouseCurrentPoint = this.getMousePoint(options.e);
         const deltaLeft = mouseCurrentPoint.x - this.mouseStartPoint.x;
         const deltaTop = mouseCurrentPoint.y - this.mouseStartPoint.y;
         const newLeft = this.viewportLeft + deltaLeft;
         const newTop = this.viewportTop + deltaTop;
-        tryPan(newLeft, newTop);
+        tryMove(newLeft, newTop);
       }
     } else if (options.isForced) {
       // Facilitates zooming out
-      tryPan(this.canvas.viewportTransform[4], this.canvas.viewportTransform[5]);
+      tryMove(this.canvas.viewportTransform[4], this.canvas.viewportTransform[5]);
     }
   }
 
@@ -524,7 +533,22 @@ export default class ScribingCanvas extends React.Component {
 
       // Layer for current user's scribble
       // Enables scribble selection
-      userScribble.map(obj => (this.canvas.add(obj)));
+      userScribble.forEach((obj) => {
+        // Don't allow scaling of text object
+        if (obj.type === 'i-text') {
+          obj.setControlsVisibility({
+            bl: false,
+            br: false,
+            mb: false,
+            ml: false,
+            mr: false,
+            mt: false,
+            tl: false,
+            tr: false,
+          });
+        }
+        this.canvas.add(obj);
+      });
     }
     this.canvas.setBackground();
     this.canvas.renderAll();
@@ -536,9 +560,9 @@ export default class ScribingCanvas extends React.Component {
     this.image.src = imageUrl;
 
     this.image.onload = () => {
-      // Get the calculated width of canvas, 750 is min width for scribing toolbar
+      // Get the calculated width of canvas, 800 is min width for scribing toolbar
       const element = document.getElementById(`canvas-${answerId}`);
-      const maxWidth = Math.max(element.getBoundingClientRect().width, 750);
+      const maxWidth = Math.max(element.getBoundingClientRect().width, 800);
 
       this.width = Math.min(this.image.width, maxWidth);
       this.scale = Math.min(this.width / this.image.width, 1);
@@ -568,8 +592,14 @@ export default class ScribingCanvas extends React.Component {
 
       const canvasElem = document.getElementById(`canvas-container-${answerId}`);
       canvasElem.tabIndex = 1000;
+      // Minimise reflows
+      canvasElem.setAttribute('style',
+        `background: lightgrey;
+        max-width: ${maxWidth}px;
+        margin: 0px;
+        outline: none;`
+      );
       canvasElem.addEventListener('keydown', this.onKeyDown, false);
-      canvasElem.style.outline = 'none';
       const canvasContainerElem = canvasElem.getElementsByClassName('canvas-container')[0];
       canvasContainerElem.style.margin = '0 auto';
 
@@ -639,7 +669,11 @@ export default class ScribingCanvas extends React.Component {
     return `{"objects": ${json}}`;
   }
 
-  onTextChanged = () => {
+  onTextChanged = (options) => {
+    if (options.target.text.trim() === '') {
+      this.canvas.remove(options.target);
+    }
+    this.textCreated = false;
     this.saveScribbles();
     this.props.setToolSelected(this.props.answerId, scribingTools.SELECT);
   }
@@ -665,57 +699,68 @@ export default class ScribingCanvas extends React.Component {
         }
       case 67: // Ctrl+C
         {
-          if (event.ctrlKey) {
+          if (event.ctrlKey || event.metaKey) {
             event.preventDefault();
 
             this.copiedObjects = [];
             if (activeGroup) {
               activeGroup.getObjects().forEach(obj => (
-                this.copiedObjects.push(fabric.util.object.clone(obj))
+                this.copiedObjects.push(obj)
               ));
 
               this.copyLeft = activeGroup.getLeft();
               this.copyTop = activeGroup.getTop();
             } else if (activeObject) {
-              const object = fabric.util.object.clone(activeObject);
               this.copyLeft = activeObject.getLeft();
               this.copyTop = activeObject.getTop();
-              this.copiedObjects.push(object);
+              this.copiedObjects.push(activeObject);
             }
           }
           break;
         }
       case 86: // Ctrl+V
         {
-          if (event.ctrlKey) {
+          if (event.ctrlKey || event.metaKey) {
             event.preventDefault();
 
             this.canvas.discardActiveGroup();
             this.canvas.discardActiveObject();
 
             const newObjects = [];
-            this.copiedObjects.forEach((obj) => {
-              const newObj = fabric.util.object.clone(obj);
-              newObjects.push(newObj);
-              newObj.setCoords();
+            let newObj = {};
+
+            // Don't wrap single object in group,
+            // in case it's i-text and we want it to be editable at first tap
+            if (this.copiedObjects.length === 1) {
+              const obj = this.copiedObjects[0];
+              if (obj.type === 'i-text') {
+                newObj = this.cloneText(obj);
+              } else {
+                newObj = fabric.util.object.clone(obj);
+              }
+
+              this.setCopiedCanvasObjectPosition(newObj);
               this.canvas.add(newObj);
-              newObj.set('active', true);
-            });
-            const group = new fabric.Group(newObjects, { canvas: this.canvas });
+              this.canvas.setActiveObject(newObj);
+              this.canvas.renderAll();
+            } else {  // Cloning a group of objects
+              this.copiedObjects.forEach((obj) => {
+                if (obj.type === 'i-text') {
+                  newObj = this.cloneText(obj);
+                } else {
+                  newObj = fabric.util.object.clone(obj);
+                }
+                newObj.setCoords();
+                this.canvas.add(newObj);
+                newObjects.push(newObj);
+              });
+              const group = new fabric.Group(newObjects, { canvas: this.canvas });
 
-            // Shift copied object to the left if there's space
-            this.copyLeft = (this.copyLeft + group.getWidth() > this.canvas.getWidth()) ?
-              this.copyLeft : this.copyLeft + 10;
-            group.setLeft(this.copyLeft);
-            // Shift copied object down if there's space
-            this.copyTop = (this.copyTop + group.getHeight() > this.canvas.getHeight()) ?
-              this.copyTop : this.copyTop + 10;
-            group.setTop(this.copyTop);
-
-            group.setCoords();
-            this.canvas.setActiveGroup(group);
-            group.saveCoords();
-            this.canvas.renderAll();
+              this.setCopiedCanvasObjectPosition(group);
+              this.canvas.setActiveGroup(group);
+              group.saveCoords();
+              this.canvas.renderAll();
+            }
           }
           break;
         }
@@ -724,10 +769,40 @@ export default class ScribingCanvas extends React.Component {
   }
 
   // Utility Helpers
+  cloneText = (obj) => {
+    const newObj = new fabric.IText(obj.text, {
+      left: obj.getLeft(),
+      top: obj.getTop(),
+      fontFamily: obj.fontFamily,
+      fontSize: obj.fontSize,
+      fill: obj.fill,
+      padding: 5,
+    });
+    newObj.setControlsVisibility({
+      bl: false,
+      br: false,
+      mb: false,
+      ml: false,
+      mr: false,
+      mt: false,
+      tl: false,
+      tr: false,
+    });
+    return newObj;
+  }
 
-  getRgbaHelper = json => (
-    `rgba(${json.r},${json.g},${json.b},${json.a})`
-  );
+  setCopiedCanvasObjectPosition(obj) {
+    // Shift copied object to the left if there's space
+    this.copyLeft = (this.copyLeft + obj.getWidth() > this.canvas.getWidth()) ?
+      this.copyLeft : this.copyLeft + 10;
+    obj.setLeft(this.copyLeft);
+    // Shift copied object down if there's space
+    this.copyTop = (this.copyTop + obj.getHeight() > this.canvas.getHeight()) ?
+      this.copyTop : this.copyTop + 10;
+    obj.setTop(this.copyTop);
+
+    obj.setCoords();
+  }
 
   getMousePoint = event => (
     {
