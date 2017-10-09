@@ -37,7 +37,7 @@ gem 'calculated_attributes', '>= 0.1.3'
 gem 'baby_squeel'
 # For multiple table inheritance
 #   TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
-gem 'active_record-acts_as', github: 'Coursemology/active_record-acts_as'
+gem 'active_record-acts_as', github: 'Coursemology/active_record-acts_as', branch: 'rails5'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Create pretty URLs and work with human-friendly strings

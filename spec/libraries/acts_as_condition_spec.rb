@@ -40,6 +40,7 @@ RSpec.describe 'Extension: Acts as Condition', type: :model do
 
         context 'when there are no changes' do
           it 'does not rebuild satisfiability graph' do
+            allow(subject).to receive(:changed?).and_return(false)
             expect(subject).to_not receive(:rebuild_satisfiability_graph)
             subject.run_callbacks(:save)
           end
