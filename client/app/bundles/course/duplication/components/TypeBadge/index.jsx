@@ -27,6 +27,10 @@ const translations = defineMessages({
     id: 'course.duplication.TypeBadge.tab',
     defaultMessage: 'Tab',
   },
+  [duplicableItemTypes.SURVEY]: {
+    id: 'course.duplication.TypeBadge.survey',
+    defaultMessage: 'Survey',
+  },
 });
 
 const TypeBadge = ({ text, itemType }) => (

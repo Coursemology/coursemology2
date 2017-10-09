@@ -9,6 +9,7 @@ import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { hideDuplicateItemsConfirmation, duplicateItems } from 'course/duplication/actions';
 import { courseShape } from 'course/duplication/propTypes';
 import AssessmentsListing from './AssessmentsListing';
+import SurveyListing from './SurveyListing';
 
 const translations = defineMessages({
   confirmationQuestion: {
@@ -71,6 +72,7 @@ class DuplicateItemsConfirmation extends React.Component {
         <p><FormattedMessage {...translations.confirmationQuestion} /></p>
         { this.renderTargetCourseCard() }
         <AssessmentsListing />
+        <SurveyListing />
 
         <ReactTooltip id="itemUnpublished">
           <FormattedMessage {...translations.itemUnpublished} />

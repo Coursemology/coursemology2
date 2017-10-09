@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import Checkbox from 'material-ui/Checkbox';
 import Subheader from 'material-ui/Subheader';
 import { Card, CardText } from 'material-ui/Card';
-import Block from 'material-ui/svg-icons/content/block';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { categoryShape } from 'course/duplication/propTypes';
 import TypeBadge from 'course/duplication/components/TypeBadge';
+import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
+import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 
 const { TAB, ASSESSMENT, CATEGORY } = duplicableItemTypes;
 
@@ -24,24 +24,6 @@ const translations = defineMessages({
   },
 });
 
-const styles = {
-  indent1: {
-    marginLeft: 15,
-  },
-  indent2: {
-    marginLeft: 30,
-  },
-  unpublishedIcon: {
-    width: '1em',
-    height: '1em',
-    marginRight: 3,
-
-    // Allow tooltip to be triggered
-    zIndex: 3,
-    position: 'relative',
-  },
-};
-
 class AssessmentsListing extends React.Component {
   static propTypes = {
     categories: PropTypes.arrayOf(categoryShape),
@@ -50,37 +32,37 @@ class AssessmentsListing extends React.Component {
 
   static renderAssessmentRow(assessment) {
     return (
-      <Checkbox
+      <IndentedCheckbox
         checked
+        indentLevel={2}
         key={assessment.id}
         label={
           <span>
             <TypeBadge itemType={ASSESSMENT} />
-            <Block data-tip data-for="itemUnpublished" style={styles.unpublishedIcon} />
+            <UnpublishedIcon tooltipId="itemUnpublished" />
             {assessment.title}
           </span>
         }
-        style={styles.indent2}
       />
     );
   }
 
   static renderDefaultTabRow() {
     return (
-      <Checkbox
+      <IndentedCheckbox
         disabled
+        indentLevel={1}
         label={<FormattedMessage {...translations.defaultTab} />}
-        style={styles.indent1}
       />
     );
   }
 
   static renderTabRow(tab) {
     return (
-      <Checkbox
+      <IndentedCheckbox
         checked
+        indentLevel={1}
         label={<span><TypeBadge itemType={TAB} />{tab.title}</span>}
-        style={styles.indent1}
       />
     );
   }
@@ -99,7 +81,7 @@ class AssessmentsListing extends React.Component {
 
   static renderDefaultCategoryRow() {
     return (
-      <Checkbox
+      <IndentedCheckbox
         disabled
         label={<FormattedMessage {...translations.defaultCategory} />}
       />
@@ -108,7 +90,7 @@ class AssessmentsListing extends React.Component {
 
   static renderCategoryRow(category) {
     return (
-      <Checkbox
+      <IndentedCheckbox
         checked
         label={<span><TypeBadge itemType={CATEGORY} />{category.title}</span>}
       />
@@ -136,19 +118,13 @@ class AssessmentsListing extends React.Component {
     );
   }
 
-  /**
-  * Organises selected assessment component items into trees and returns a list of Cards - one for each tree
-  * with a category at its root. This should mirror what the backend does - items come under their parents
-  * only if their parents have been duplicated, otherwise, they are placed under a default parent.
-  */
-  renderCards() {
+  // Identifies connected subtrees of selected categories, tabs and assessments.
+  selectedSubtrees() {
     const { categories, selectedItems } = this.props;
     const categoriesTrees = [];
     const tabTrees = [];
     const assessmentTrees = [];
 
-    // Identify connected sub-trees and push them into categoriesTrees, tabTrees, assessmentTrees
-    // depending on the type of item at the root of the connected sub-tree.
     categories.forEach((category) => {
       const selectedTabs = [];
       category.tabs.forEach((tab) => {
@@ -170,26 +146,26 @@ class AssessmentsListing extends React.Component {
       }
     });
 
-    const hasOrphanedItems = (tabTrees.length > 0) || (assessmentTrees.length > 0);
-    return (
-      <div>
-        {
-          categoriesTrees.map(category => (
-            AssessmentsListing.renderCategoryCard(category, null, null))
-          )
-        }
-        { hasOrphanedItems && AssessmentsListing.renderCategoryCard(null, tabTrees, assessmentTrees) }
-      </div>
-    );
+    return [categoriesTrees, tabTrees, assessmentTrees];
   }
 
   render() {
+    const [categoriesTrees, tabTrees, assessmentTrees] = this.selectedSubtrees();
+    const orphanTreesCount = tabTrees.length + assessmentTrees.length;
+    const totalTreesCount = orphanTreesCount + categoriesTrees.length;
+    if (totalTreesCount < 1) { return null; }
+
     return (
       <div>
         <Subheader>
           <FormattedMessage {...defaultComponentTitles.course_assessments_component} />
         </Subheader>
-        { this.renderCards() }
+        {
+          categoriesTrees.map(category => (
+            AssessmentsListing.renderCategoryCard(category, null, null))
+          )
+        }
+        { (orphanTreesCount > 0) && AssessmentsListing.renderCategoryCard(null, tabTrees, assessmentTrees) }
       </div>
     );
   }

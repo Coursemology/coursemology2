@@ -3,33 +3,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import Subheader from 'material-ui/Subheader';
-import Checkbox from 'material-ui/Checkbox';
-import Block from 'material-ui/svg-icons/content/block';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { setItemSelectedBoolean } from 'course/duplication/actions';
 import { categoryShape } from 'course/duplication/propTypes';
 import TypeBadge from 'course/duplication/components/TypeBadge';
+import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
+import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 
 const { TAB, ASSESSMENT, CATEGORY } = duplicableItemTypes;
 
 const styles = {
-  categoryCheckbox: {
-    width: 'auto',
-  },
-  tabCheckbox: {
-    marginLeft: 15,
-    width: 'auto',
-  },
-  assessmentCheckbox: {
-    marginLeft: 30,
-  },
-  checkboxLabel: {
-    width: 'auto',
-  },
-  checkboxLine: {
-    display: 'flex',
-  },
   selectLink: {
     marginLeft: 20,
     lineHeight: '24px',
@@ -37,11 +21,6 @@ const styles = {
   deselectLink: {
     marginLeft: 10,
     lineHeight: '24px',
-  },
-  unpublishedIcon: {
-    width: '1em',
-    height: '1em',
-    marginRight: 3,
   },
 };
 
@@ -107,17 +86,17 @@ class AssessmentsSelector extends React.Component {
     const label = (
       <span>
         <TypeBadge itemType={ASSESSMENT} />
-        { published || <Block style={styles.unpublishedIcon} /> }
+        { published || <UnpublishedIcon /> }
         { title }
       </span>
     );
 
     return (
-      <Checkbox
+      <IndentedCheckbox
         key={id}
         label={label}
         checked={checked}
-        style={styles.assessmentCheckbox}
+        indentLevel={2}
         onCheck={(e, value) =>
           dispatch(setItemSelectedBoolean(ASSESSMENT, id, value))
         }
@@ -132,18 +111,16 @@ class AssessmentsSelector extends React.Component {
 
     return (
       <div key={id}>
-        <div style={styles.checkboxLine}>
-          <Checkbox
-            checked={checked}
-            label={<span><TypeBadge itemType={TAB} />{ title }</span>}
-            style={styles.tabCheckbox}
-            labelStyle={styles.checkboxLabel}
-            onCheck={(e, value) =>
-              dispatch(setItemSelectedBoolean(TAB, id, value))
-            }
-          />
+        <IndentedCheckbox
+          checked={checked}
+          indentLevel={1}
+          label={<span><TypeBadge itemType={TAB} />{ title }</span>}
+          onCheck={(e, value) =>
+            dispatch(setItemSelectedBoolean(TAB, id, value))
+          }
+        >
           { AssessmentsSelector.renderBulkSelectors(this.tabSetAll, tab) }
-        </div>
+        </IndentedCheckbox>
         { assessments.map(assessment => this.renderAssessmentTree(assessment)) }
       </div>
     );
@@ -156,18 +133,15 @@ class AssessmentsSelector extends React.Component {
 
     return (
       <div key={id}>
-        <div style={styles.checkboxLine}>
-          <Checkbox
-            checked={checked}
-            label={<span><TypeBadge itemType={CATEGORY} />{ title }</span>}
-            onCheck={(e, value) =>
-              dispatch(setItemSelectedBoolean(CATEGORY, id, value))
-            }
-            style={styles.categoryCheckbox}
-            labelStyle={styles.checkboxLabel}
-          />
+        <IndentedCheckbox
+          checked={checked}
+          label={<span><TypeBadge itemType={CATEGORY} />{ title }</span>}
+          onCheck={(e, value) =>
+            dispatch(setItemSelectedBoolean(CATEGORY, id, value))
+          }
+        >
           { AssessmentsSelector.renderBulkSelectors(this.categorySetAll, category) }
-        </div>
+        </IndentedCheckbox>
         { tabs.map(tab => this.renderTabTree(tab)) }
       </div>
     );
