@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 class Course::ObjectDuplicationsController < Course::ComponentController
   before_action :authorize_duplication
+  helper Course::Achievement::AchievementsHelper
 
   def new
     load_target_courses_data
     load_assessments_component_data
     load_survey_component_data
+    load_achievements_component_data
   end
 
   def create
@@ -37,6 +39,10 @@ class Course::ObjectDuplicationsController < Course::ComponentController
     @surveys = current_course.surveys
   end
 
+  def load_achievements_component_data
+    @achievements = current_course.achievements
+  end
+
   def create_duplication_params
     @create_duplication_params ||= begin
       items_params = course_item_finders.keys.map { |key| { key => [] } }
@@ -59,7 +65,8 @@ class Course::ObjectDuplicationsController < Course::ComponentController
       'CATEGORY' => ->(ids) { current_course.assessment_categories.find(ids) },
       'TAB' => ->(ids) { current_course.assessment_tabs.find(ids) },
       'ASSESSMENT' => ->(ids) { current_course.assessments.find(ids) },
-      'SURVEY' => ->(ids) { current_course.surveys.find(ids) }
+      'SURVEY' => ->(ids) { current_course.surveys.find(ids) },
+      'ACHIEVEMENT' => ->(ids) { current_course.achievements.find(ids) }
     }
   end
 

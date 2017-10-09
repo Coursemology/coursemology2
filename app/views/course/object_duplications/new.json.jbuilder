@@ -19,3 +19,8 @@ end
 json.surveyComponent @surveys do |survey|
   json.(survey, :id, :title, :published)
 end
+
+json.achievementsComponent @achievements do |achievement|
+  json.(achievement, :id, :title, :published)
+  json.url achievement_badge_path(achievement)
+end

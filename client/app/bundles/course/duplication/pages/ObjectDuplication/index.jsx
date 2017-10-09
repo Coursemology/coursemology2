@@ -23,14 +23,16 @@ import { defaultComponentTitles } from 'course/translations.intl';
 import TargetCourseSelector from './TargetCourseSelector';
 import AssessmentsSelector from './AssessmentsSelector';
 import SurveysSelector from './SurveysSelector';
+import AchievementsSelector from './AchievementsSelector';
 import DuplicateButton from './DuplicateButton';
 
-const { TAB, ASSESSMENT, CATEGORY, SURVEY } = duplicableItemTypes;
+const { TAB, ASSESSMENT, CATEGORY, SURVEY, ACHIEVEMENT } = duplicableItemTypes;
 
 const panels = mirrorCreator([
   'TARGET_COURSE',
   'ASSESSMENTS',
   'SURVEYS',
+  'ACHIEVEMENTS',
 ]);
 
 const translations = defineMessages({
@@ -161,6 +163,13 @@ class ObjectDuplication extends React.Component {
               () => this.setState({ panel: panels.SURVEYS })
             )
           }
+          {
+            ObjectDuplication.renderSidebarItem(
+              defaultComponentTitles.course_achievements_component,
+              counts[ACHIEVEMENT],
+              () => this.setState({ panel: panels.ACHIEVEMENTS })
+            )
+          }
 
           <ListItem disabled style={styles.duplicateButton}>
             <DuplicateButton />
@@ -175,6 +184,7 @@ class ObjectDuplication extends React.Component {
       [panels.TARGET_COURSE]: TargetCourseSelector,
       [panels.ASSESSMENTS]: AssessmentsSelector,
       [panels.SURVEYS]: SurveysSelector,
+      [panels.ACHIEVEMENTS]: AchievementsSelector,
     }[this.state.panel];
 
     return (

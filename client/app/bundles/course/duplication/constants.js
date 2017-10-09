@@ -5,6 +5,7 @@ export const duplicableItemTypes = mirrorCreator([
   'TAB',
   'CATEGORY',
   'SURVEY',
+  'ACHIEVEMENT',
 ]);
 
 const actionTypes = mirrorCreator([
