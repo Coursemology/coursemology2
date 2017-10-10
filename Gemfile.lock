@@ -1,10 +1,11 @@
 GIT
   remote: git://github.com/Coursemology/active_record-acts_as.git
-  revision: 098b5405c6d74275ba8035fa9e88b0f7cf6c422d
+  revision: 712cf95c93fe1f4209893a25df6fc1862e9a6276
+  branch: rails5
   specs:
-    active_record-acts_as (2.0.1)
-      activerecord (>= 4.2)
-      activesupport (>= 4.2)
+    active_record-acts_as (2.5.0.1)
+      activerecord (>= 4.2, <= 5.1)
+      activesupport (>= 4.2, <= 5.1)
 
 GIT
   remote: git://github.com/Coursemology/themes_on_rails.git
@@ -657,7 +658,6 @@ DEPENDENCIES
   webpacker
   workflow
   yard
-
 
 BUNDLED WITH
    1.15.4
