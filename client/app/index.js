@@ -11,7 +11,6 @@
   in the path that matches the controller path if you want it to be required automatically.
  */
 
-
 function loadCurrentModule() {
   const { modulePath } = require('./lib/helpers/server-context');
   try {

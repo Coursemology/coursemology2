@@ -11,7 +11,7 @@ const devServerPort = 8080;
 
 const config = {
   entry: {
-    coursemology: ['babel-polyfill', './app/index'],
+    coursemology: ['babel-polyfill', './app/index', './app/lib/moment-timezone'],
     lib: [
       'babel-polyfill',
       'axios',
@@ -130,6 +130,13 @@ const config = {
         }, {
           loader: 'expose-loader',
           options: '$',
+        }],
+      },
+      {
+        test: require.resolve('./app/lib/moment-timezone'),
+        use: [{
+          loader: 'expose-loader',
+          options: 'moment',
         }],
       },
       {

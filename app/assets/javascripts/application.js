@@ -15,7 +15,6 @@
 //= require i18n/translations
 //= require js-routes
 //= require bootstrap-sprockets
-//= require moment
 //= require bootstrap-datetimepicker
 //= require bootstrap-select
 //= require twitter/typeahead
