@@ -3,11 +3,15 @@ class UsersController < ApplicationController
   load_resource :user
 
   def show
-    course_users =
-      @user.course_users.with_course_statistics.from_instance(current_tenant).includes(:course)
-    @current_course_users = course_users.merge(Course.current)
-    @completed_course_users = course_users.merge(Course.completed)
-    @instances = other_instances
+    if @user.built_in?
+      render file: 'public/404', layout: false, status: :not_found
+    else
+      course_users =
+        @user.course_users.with_course_statistics.from_instance(current_tenant).includes(:course)
+      @current_course_users = course_users.merge(Course.current)
+      @completed_course_users = course_users.merge(Course.completed)
+      @instances = other_instances
+    end
   end
 
   private
