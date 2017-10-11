@@ -51,6 +51,17 @@ class Course::Assessment::ProgrammingEvaluationService
       @stdout = stdout
       @stderr = stderr
     end
+
+    # Override to_h to provide a more detailed message in TrackableJob::Job#error
+    def to_h
+      {
+        class: self.class.name,
+        message: to_s,
+        backtrace: backtrace,
+        stdout: @stdout,
+        stderr: @stderr
+      }
+    end
   end
 
   # Represents a Time Limit Exceeded error while evaluating the package.

@@ -113,8 +113,8 @@ RSpec.describe TrackableJob do
     context 'when the error defines #as_json' do
       let(:error_to_throw) { self.class::MyError }
       class self::MyError < StandardError
-        def as_json
-          super.reverse_merge(test: nil)
+        def to_h
+          { test: 'message' }
         end
       end
 
