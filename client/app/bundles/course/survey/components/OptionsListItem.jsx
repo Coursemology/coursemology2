@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardText } from 'material-ui/Card';
-import Thumbnail from './Thumbnail';
+import Thumbnail from 'lib/components/Thumbnail';
 
 const styles = {
   option: {

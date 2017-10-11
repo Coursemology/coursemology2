@@ -44,6 +44,7 @@ node_modules
 
 # Ignore generated js bundles
 /app/assets/webpack/*
+/public/webpack/manifest.json
 
 # Ignore eslint cache
 /client/.eslintcache

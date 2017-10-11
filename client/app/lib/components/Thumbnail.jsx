@@ -50,7 +50,7 @@ class Thumbnail extends React.PureComponent {
 
   render() {
     // eslint-disable-next-line no-unused-vars
-    const { src, alt, file, onTouchTap, style, containerStyle, ...props } = this.props;
+    const { src, alt, file, onTouchTap, style, containerStyle, rootStyle, ...props } = this.props;
     const source = src || this.state.src;
     const altText = alt || this.state.alt || src;
 
@@ -84,7 +84,7 @@ class Thumbnail extends React.PureComponent {
     ];
 
     return (
-      <div>
+      <div style={rootStyle}>
         <div style={containerStyle}>
           <img
             src={source}
@@ -120,6 +120,7 @@ Thumbnail.propTypes = {
   file: PropTypes.instanceOf(File),
   onTouchTap: PropTypes.func,
   style: PropTypes.shape(),
+  rootStyle: PropTypes.shape(),
   containerStyle: PropTypes.shape(),
 };
 

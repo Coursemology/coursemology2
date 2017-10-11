@@ -30,3 +30,10 @@ export const surveyShape = PropTypes.shape({
   title: PropTypes.string,
   published: PropTypes.bool,
 });
+
+export const achievementShape = PropTypes.shape({
+  id: PropTypes.number,
+  title: PropTypes.string,
+  published: PropTypes.bool,
+  url: PropTypes.string,
+});
