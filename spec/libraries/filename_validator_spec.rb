@@ -7,6 +7,8 @@ RSpec.describe FilenameValidator do
       []
     end
 
+    def self.load_schema!; end
+
     attr_accessor :name
 
     validates_with FilenameValidator

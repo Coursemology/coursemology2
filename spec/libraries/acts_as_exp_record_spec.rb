@@ -7,6 +7,8 @@ RSpec.describe 'Extension: Acts as Experience Points Record' do
       []
     end
 
+    def self.load_schema!; end
+
     acts_as_experience_points_record
   end
 

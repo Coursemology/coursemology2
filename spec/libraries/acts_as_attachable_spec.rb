@@ -7,6 +7,8 @@ RSpec.describe 'Extension: Acts as Attachable' do
       []
     end
 
+    def self.load_schema!; end
+
     has_many_attachments
   end
 
@@ -14,6 +16,8 @@ RSpec.describe 'Extension: Acts as Attachable' do
     def self.columns
       []
     end
+
+    def self.load_schema!; end
 
     has_one_attachment
 
