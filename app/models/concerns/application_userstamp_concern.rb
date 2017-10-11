@@ -1,5 +1,7 @@
 # frozen_string_literal: true
-module Extensions::AssociationInverseSuppression::ActiveRecord::Base
+module ApplicationUserstampConcern
+  extend ActiveSupport::Concern
+
   module ClassMethods
     # Bring forward the userstamp association definitions
     # TODO: Remove after lowjoel/activerecord-userstamp#27 is closed
@@ -14,15 +16,6 @@ module Extensions::AssociationInverseSuppression::ActiveRecord::Base
     def add_userstamp_associations(options)
       options.reverse_merge!(inverse_of: false)
       super(options)
-    end
-
-    # Subclasses +acts_as+ to automatically inject the +inverse_of+ option.
-    def acts_as(*args)
-      options = args.extract_options!
-      options.reverse_merge!(inverse_of: :actable)
-
-      args.push(options)
-      super(*args)
     end
   end
 end
