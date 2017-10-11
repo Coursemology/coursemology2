@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
+import { red500 } from 'material-ui/styles/colors';
 import { injectIntl, intlShape, defineMessages, FormattedMessage } from 'react-intl';
 import FlatButton from 'material-ui/FlatButton';
 import MicIcon from 'material-ui/svg-icons/av/mic';
@@ -45,6 +46,9 @@ const styles = {
   singleFileInputChildren: {
     display: 'table-cell',
     verticalAlign: 'middle',
+  },
+  errorStyle: {
+    color: red500,
   },
 };
 
@@ -173,12 +177,17 @@ class VoiceResponseAnswer extends Component {
     );
   }
 
-  renderFile = ({ readOnly, recording, recordingComponentId, ...field }) => (
-    <div>
-      {this.renderAudioInput(readOnly, recording, recordingComponentId, field)}
-      {this.renderAudio(field)}
-    </div>
-    )
+  renderFile = ({ readOnly, recording, recordingComponentId, ...field }) => {
+    const error = field && field.meta && field.meta.error;
+    const touched = field && field.meta && field.meta.touched;
+    return (
+      <div>
+        {this.renderAudioInput(readOnly, recording, recordingComponentId, field)}
+        {this.renderAudio(field)}
+        { touched && error ? <div style={styles.errorStyle}><FormattedMessage {...error} /></div> : null }
+      </div>
+    );
+  }
 
   render() {
     const { question, recording, recordingComponentId, readOnly, answerId } = this.props;

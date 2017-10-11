@@ -159,6 +159,10 @@ const translations = defineMessages({
     defaultMessage: 'This will reset the submission time and permit the student to change \
                     his submission. NOTE THAT YOU CANNOT UNDO THIS!! Are you sure you want to proceed?',
   },
+  submitError: {
+    id: 'course.assessment.submission.submitError',
+    defaultMessage: 'Failure to submit answer. Please check the errors for your answers',
+  },
   resetConfirmation: {
     id: 'course.assessment.submission.resetConfirmation',
     defaultMessage: 'Are you sure you want to reset your answer? This action is irreversible \

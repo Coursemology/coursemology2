@@ -22,6 +22,7 @@ import GradingPanel from '../../containers/GradingPanel';
 import Comments from '../../containers/Comments';
 import { formNames, questionTypes } from '../../constants';
 import translations from '../../translations';
+import submissionFormValidate from './submissionFormValidate';
 
 const styles = {
   questionContainer: {
@@ -499,4 +500,6 @@ SubmissionEditStepForm.propTypes = {
 
 export default reduxForm({
   form: formNames.SUBMISSION,
+  validate: submissionFormValidate,
+  destroyOnUnmount: false, // preserve form data after navigating to different step
 })(injectIntl(SubmissionEditStepForm));
