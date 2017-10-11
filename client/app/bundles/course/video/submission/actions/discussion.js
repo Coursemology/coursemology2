@@ -1,6 +1,6 @@
 import CourseAPI from 'api/course';
 import { discussionActionTypes, postRequestingStatuses } from 'lib/constants/videoConstants';
-import { setNotification } from './notification';
+import setNotification from './notification';
 
 /**
  * Creates an action to update the new post being created with the main comment box.

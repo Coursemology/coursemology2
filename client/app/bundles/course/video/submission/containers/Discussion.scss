@@ -1,0 +1,73 @@
+$pic-width: 30px;
+$pic-margin: 10px;
+$indent: $pic-width + $pic-margin;
+$comment-background: #ffffff;
+
+.rootContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.newCommentEditor {
+  background-color: $comment-background;
+  padding: 1em;
+  width: 100%;
+}
+
+.topicsContainer {
+  flex: 1;
+  padding: 1em 1em 0;
+}
+
+.replyContainer {
+  margin-bottom: 1em;
+}
+
+.contentContainer {
+  display: inline-block;
+  margin-bottom: 1em;
+  max-width: 800px;
+  width: calc(100% - 100px);
+}
+
+.userPic {
+  img {
+    border-radius: 50%;
+    height: $pic-width;
+    margin-right: $pic-margin;
+    object-fit: cover;
+    object-position: center;
+    vertical-align: top;
+    width: $pic-width;
+  }
+}
+
+.replyIndent {
+  margin-left: $indent;
+}
+
+.topicTimestamp {
+  margin-bottom: 1em;
+}
+
+.userName {
+  margin-right: 0.5em;
+}
+
+.postTimestamp {
+  display: inline-block;
+  font-size: 0.8em;
+}
+
+.editorButtons {
+  float: right;
+
+  > div {
+    margin-left: 5px;
+  }
+}
+
+.editorExtraElement {
+  float: left;
+}
