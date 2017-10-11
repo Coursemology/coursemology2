@@ -41,7 +41,7 @@ class Course::Survey::Response < ApplicationRecord
   private
 
   def options_invalid(attributes)
-    if attributes[:question_option_ids]
+    if attributes[:id] && attributes[:question_option_ids]
       !valid_option_ids?(attributes[:id], attributes[:question_option_ids])
     else
       false
@@ -50,13 +50,14 @@ class Course::Survey::Response < ApplicationRecord
 
   # Checks if the given question option ids belong to the answer's question.
   #
-  # @param [Integer] answer_id ID of the answer
-  # @param [Array<Integer>] ids ID of the selected options
+  # @param [Integer|String] answer_id ID of the answer
+  # @param [Array<Integer|String>] ids ID of the selected options
   # @return [Boolean] true if options are valid
   def valid_option_ids?(answer_id, ids)
-    question_id = question_ids_hash[answer_id]
+    integer_type = ActiveModel::Type::Integer.new
+    question_id = question_ids_hash[integer_type.cast(answer_id)]
     valid_option_ids = valid_option_ids_hash[question_id]
-    ids.to_set.subset?(valid_option_ids)
+    ids.map { |i| integer_type.cast(i) }.to_set.subset?(valid_option_ids)
   end
 
   def question_ids_hash
