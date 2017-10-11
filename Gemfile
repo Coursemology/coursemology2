@@ -220,3 +220,4 @@ gem 'activerecord-import', '>= 0.2.0'
 # gem 'capistrano-rails', group: :development
 
 gem 'record_tag_helper'
+gem 'rails-controller-testing'
