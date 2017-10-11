@@ -163,7 +163,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
         end
 
         it 'reorders questions' do
-          expect(immutable_assessment.questions.pluck(:id)).to eq(reversed_order)
+          expect(immutable_assessment.questions.order(:weight).pluck(:id)).to eq(reversed_order)
         end
       end
 
