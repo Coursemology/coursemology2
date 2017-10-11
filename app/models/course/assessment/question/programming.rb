@@ -63,12 +63,10 @@ class Course::Assessment::Question::Programming < ApplicationRecord
 
   # This specifies the attachment which was imported.
   #
-  # This is used by the +Course::Assessment::Question::ProgrammingImportService+ to indicate
-  # the actual attachment which was imported. This does not run the evaluator again when the
-  # record is saved.
+  # Using this to assign the attachment when you do not want to run the evaluation callbacks when the record is saved.
   def imported_attachment=(attachment)
     self.attachment = attachment
-    clear_attribute_changes(:attachment)
+    clear_attachment_change
   end
 
   # Copies the template files from this question to the specified answer.
@@ -101,7 +99,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
     self.import_job_id = nil
     self.template_files = duplicator.duplicate(other.template_files)
     self.test_cases = duplicator.duplicate(other.test_cases)
-    self.attachment = duplicator.duplicate(other.attachment)
+    self.imported_attachment = duplicator.duplicate(other.attachment)
 
     set_duplication_flag
   end
@@ -142,7 +140,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   # the import job.
   def process_new_package
     new_attachment = attachment
-    restore_attribute!(:attachment)
+    restore_attachment_change
 
     execute_after_commit do
       new_attachment.save!
