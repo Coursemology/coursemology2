@@ -23,6 +23,7 @@ class Course < ApplicationRecord
   # The order needs to be preserved, this makes sure that the root_folder will be saved first
   has_many :material_folders, class_name: Course::Material::Folder.name, inverse_of: :course,
                               dependent: :destroy
+  has_many :materials, through: :material_folders
   has_many :assessment_categories, class_name: Course::Assessment::Category.name,
                                    dependent: :destroy, inverse_of: :course
   has_many :assessment_tabs, source: :tabs, through: :assessment_categories
@@ -153,6 +154,7 @@ class Course < ApplicationRecord
   def duplication_manifest
     [
       *material_folders.concrete,
+      *materials.in_concrete_folder,
       *levels,
       *assessment_categories,
       *assessment_tabs,

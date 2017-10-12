@@ -10,6 +10,8 @@ class Course::Material < ApplicationRecord
   validate :validate_name_is_unique_among_folders
   validates_with FilenameValidator
 
+  scope :in_concrete_folder, -> { joins(:folder).merge(Folder.concrete) }
+
   def touch_folder
     folder.touch if !duplicating? && changed?
   end
@@ -28,7 +30,11 @@ class Course::Material < ApplicationRecord
 
   def initialize_duplicate(duplicator, other)
     self.attachment = duplicator.duplicate(other.attachment)
-    self.folder = duplicator.duplicate(other.folder)
+    self.folder = if duplicator.duplicated?(other.folder)
+                    duplicator.duplicate(other.folder)
+                  else
+                    duplicator.options[:target_course].root_folder
+                  end
     self.updated_at = other.updated_at
     self.created_at = other.created_at
     set_duplication_flag

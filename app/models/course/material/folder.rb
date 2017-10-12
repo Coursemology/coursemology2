@@ -32,18 +32,13 @@ class Course::Material::Folder < ApplicationRecord
   end)
 
   scope :with_content_statistics, ->() { all.calculated(:material_count, :children_count) }
+  scope :concrete, ->() { where(owner_id: nil) }
 
   # Filter out the empty linked folders (i.e. Folder with an owner).
   def self.without_empty_linked_folder
     select do |folder|
       folder.concrete? || folder.children_count != 0 || folder.material_count != 0
     end
-  end
-
-  # Filter out folders with owners. Keeps folders created directly.
-  # Needed for duplication.
-  def self.concrete
-    select(&:concrete?)
   end
 
   def self.after_course_initialize(course)
@@ -81,12 +76,12 @@ class Course::Material::Folder < ApplicationRecord
     self.end_at = duplicator.time_shift(other.end_at) if other.end_at
     self.updated_at = other.updated_at
     self.created_at = other.created_at
-    self.materials = duplicator.duplicate(other.materials).compact
     self.owner = duplicator.duplicate(other.owner)
     self.course = duplicator.options[:target_course]
     initialize_duplicate_parent(duplicator, other)
     initialize_duplicate_children(duplicator, other)
     set_duplication_flag
+    initialize_duplicate_materials(duplicator, other)
   end
 
   def initialize_duplicate_parent(duplicator, other)
@@ -104,6 +99,16 @@ class Course::Material::Folder < ApplicationRecord
     children << other.children.
                 select { |folder| duplicator.duplicated?(folder) }.
                 map { |folder| duplicator.duplicate(folder) }
+  end
+
+  def initialize_duplicate_materials(duplicator, other)
+    self.materials = if other.concrete?
+                       other.materials.
+                         select { |material| duplicator.duplicated?(material) }.
+                         map { |material| duplicator.duplicate(material) }
+                     else
+                       duplicator.duplicate(other.materials).compact
+                     end
   end
 
   private

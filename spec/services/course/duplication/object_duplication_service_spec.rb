@@ -331,7 +331,7 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
         end
       end
 
-      context 'when a material folder are present' do
+      context 'when materials and folders are present' do
         let(:grandparent_folder) { create(:course_material_folder, course: source_course) }
         let(:parent_folder) do
           create(:course_material_folder, course: source_course, parent: grandparent_folder)
@@ -339,41 +339,89 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
         let(:folder) do
           create(:course_material_folder, course: source_course, parent: parent_folder)
         end
-        let!(:content) { create(:course_material, folder: folder) }
+        let!(:material) { create(:course_material, folder: folder) }
 
-        context 'when folders are duplicated but not their parents' do
-          let(:source_objects) { [grandparent_folder, folder] }
+        context 'when a folder is duplicated' do
+          context 'when its containing folder is also duplicated' do
+            context 'when folder is duplicated before its parent' do
+              let(:source_objects) { [folder, parent_folder, grandparent_folder] }
 
-          it 'sets the root folders as their parents' do
-            expect { duplicate_objects }.to change { destination_course.material_folders.count }.by(2)
-            duplicate_grandparent_folder, duplicate_folder = duplicate_objects
-            expect(duplicate_folder.materials.first.name).to eq(content.name)
-            expect(duplicate_grandparent_folder.parent.id).to be(destination_course.root_folder.id)
-            expect(duplicate_folder.parent.id).to be(destination_course.root_folder.id)
+              it 'associates them' do
+                expect { duplicate_objects }.to change { destination_course.material_folders.count }.by(3)
+                duplicate_folder, duplicate_parent_folder, duplicate_grandparent_folder = duplicate_objects
+                expect(duplicate_grandparent_folder.parent.id).to be(destination_course.root_folder.id)
+                expect(duplicate_parent_folder.parent).to be(duplicate_grandparent_folder)
+                expect(duplicate_folder.parent).to be(duplicate_parent_folder)
+              end
+            end
+
+            context 'when folder is duplicated after its parent' do
+              let(:source_objects) { [grandparent_folder, parent_folder, folder] }
+
+              it 'associates them' do
+                expect { duplicate_objects }.to change { destination_course.material_folders.count }.by(3)
+                duplicate_grandparent_folder, duplicate_parent_folder, duplicate_folder = duplicate_objects
+                expect(duplicate_grandparent_folder.parent.id).to be(destination_course.root_folder.id)
+                expect(duplicate_parent_folder.parent).to be(duplicate_grandparent_folder)
+                expect(duplicate_folder.parent).to be(duplicate_parent_folder)
+              end
+            end
+          end
+
+          context 'when its containing folder is not duplicated' do
+            let(:source_objects) { [grandparent_folder, folder] }
+
+            it 'duplicates it to destination course root folder' do
+              expect { duplicate_objects }.to change { destination_course.material_folders.count }.by(2)
+              duplicate_grandparent_folder, duplicate_folder = duplicate_objects
+              expect(duplicate_folder.materials.length).to eq(0)
+              expect(duplicate_grandparent_folder.parent.id).to be(destination_course.root_folder.id)
+              expect(duplicate_folder.parent.id).to be(destination_course.root_folder.id)
+            end
+          end
+
+          context 'when it does not have a containing folder' do
+            let(:source_objects) { source_course.root_folder }
+
+            it 'duplicates it to destination course root folder' do
+              expect { duplicate_objects }.to change { destination_course.material_folders.count }.by(1)
+              expect(duplicate_objects.parent.id).to be(destination_course.root_folder.id)
+            end
           end
         end
 
-        context 'when children are duplicated before their parents' do
-          let(:source_objects) { [folder, parent_folder, grandparent_folder] }
+        context 'when a material is duplicated' do
+          context 'when its containing folder is also duplicated' do
+            context 'when material is duplicated before its folder' do
+              let(:source_objects) { [material, folder] }
 
-          it 'associates them' do
-            expect { duplicate_objects }.to change { destination_course.material_folders.count }.by(3)
-            duplicate_folder, duplicate_parent_folder, duplicate_grandparent_folder = duplicate_objects
-            expect(duplicate_grandparent_folder.parent.id).to be(destination_course.root_folder.id)
-            expect(duplicate_parent_folder.parent).to be(duplicate_grandparent_folder)
-            expect(duplicate_folder.parent).to be(duplicate_parent_folder)
+              it 'associates them' do
+                expect { duplicate_objects }.to change { destination_course.materials.count }.by(1)
+                duplicate_material, duplicate_folder = duplicate_objects
+                expect(duplicate_folder.materials.first.name).to eq(material.name)
+                expect(duplicate_material.folder_id).to eq(duplicate_folder.id)
+              end
+            end
+
+            context 'when material is duplicated after its folder' do
+              let(:source_objects) { [folder, material] }
+
+              it 'associates them' do
+                expect { duplicate_objects }.to change { destination_course.materials.count }.by(1)
+                duplicate_folder, duplicate_material = duplicate_objects
+                expect(duplicate_folder.reload.materials.first.name).to eq(material.name)
+                expect(duplicate_material.folder_id).to eq(duplicate_folder.id)
+              end
+            end
           end
-        end
 
-        context 'when children are duplicated after their parents' do
-          let(:source_objects) { [grandparent_folder, parent_folder, folder] }
+          context 'when its containing folder is not duplicated' do
+            let(:source_objects) { material }
 
-          it 'associates them' do
-            expect { duplicate_objects }.to change { destination_course.material_folders.count }.by(3)
-            duplicate_grandparent_folder, duplicate_parent_folder, duplicate_folder = duplicate_objects
-            expect(duplicate_grandparent_folder.parent.id).to be(destination_course.root_folder.id)
-            expect(duplicate_parent_folder.parent).to be(duplicate_grandparent_folder)
-            expect(duplicate_folder.parent).to be(duplicate_parent_folder)
+            it 'duplicates it to target course root folder' do
+              expect { duplicate_objects }.to change { destination_course.root_folder.materials.count }.by(1)
+              expect(duplicate_objects.folder_id).to be(destination_course.root_folder.id)
+            end
           end
         end
       end
