@@ -73,7 +73,7 @@ class Course::Assessment::Question::ProgrammingImportService
   def save!(template_files, evaluation_result)
     @question.imported_attachment = @attachment
     @question.template_files = build_template_file_records(template_files)
-    @question.test_cases = build_test_case_records(evaluation_result.test_report)
+    @question.test_cases = build_combined_test_case_records(evaluation_result.test_reports)
 
     @question.save!
   end
@@ -89,7 +89,23 @@ class Course::Assessment::Question::ProgrammingImportService
     end
   end
 
-  # Builds the test case records from the test report.
+  # Goes through each test report file and combines all the test cases contained in them.
+  #
+  # @param [Hash<String, String>] test_reports The test reports from evaluating the package.
+  #   Hash key is the report type, followed by the contents of the report.
+  #   e.g. { 'public': <XML from public tests>, 'private': <XML from private tests> }
+  # @return [Array<Course::Assessment::Question::ProgrammingTestCase>]
+  def build_combined_test_case_records(test_reports)
+    test_cases = []
+
+    test_reports.values.each do |test_report|
+      test_cases += build_test_case_records(test_report)
+    end
+
+    test_cases
+  end
+
+  # Builds the test case records from a single test report.
   #
   # @param [String] test_report The test case report from evaluating the package.
   # @return [Array<Course::Assessment::Question::ProgrammingTestCase>]
