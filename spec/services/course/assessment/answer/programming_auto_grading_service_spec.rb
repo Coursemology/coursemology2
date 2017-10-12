@@ -39,7 +39,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
           allow(Course::Assessment::ProgrammingEvaluationService).to \
             receive(:execute).and_wrap_original do |original, *args|
               result = original.call(*args)
-              result.test_report = File.read(question_test_report_path)
+              result.test_reports = { public: File.read(question_test_report_path) }
               result
             end
         end
@@ -144,7 +144,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
           allow(Course::Assessment::ProgrammingEvaluationService).to \
             receive(:execute).and_wrap_original do |original, *args|
               result = original.call(*args)
-              result.test_report = nil
+              result.test_reports = {}
               result.stdout = "Makefile:6: recipe for target 'test' failed"
               result.stderr = "ImportError: No module named 'simulation'"
               result.exit_code = 2

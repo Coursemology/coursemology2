@@ -121,20 +121,20 @@ RSpec.describe CoursemologyDockerContainer do
 
     it 'returns the test report' do
       copy_report(report_contents)
-      test_report = subject.send(:extract_test_report)
+      test_report = subject.send(:extract_test_report, CoursemologyDockerContainer::REPORT_PATH)
       expect(test_report).to eq(report_contents)
       expect(test_report.encoding).to eq Encoding::UTF_8
     end
 
     it 'does not crash when report is nil' do
       copy_report(nil)
-      test_report = subject.send(:extract_test_report)
+      test_report = subject.send(:extract_test_report, CoursemologyDockerContainer::REPORT_PATH)
       expect(test_report).to be_nil
     end
 
     context 'when running the tests fails' do
       it 'returns nil' do
-        expect(subject.send(:extract_test_report)).to be_nil
+        expect(subject.send(:extract_test_report, CoursemologyDockerContainer::REPORT_PATH)).to be_nil
       end
     end
   end

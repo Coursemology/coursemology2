@@ -5,13 +5,13 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
   describe Course::Assessment::ProgrammingEvaluationService::Result do
     self::TIME_LIMIT_EXCEEDED_EXIT_CODE = 137
     let(:exit_code) { 0 }
-    let(:test_report) { '' }
+    let(:test_reports) { { report: '' } }
     subject do
-      Course::Assessment::ProgrammingEvaluationService::Result.new('', '', test_report, exit_code)
+      Course::Assessment::ProgrammingEvaluationService::Result.new('', '', test_reports, exit_code)
     end
 
     describe '#error' do
-      context 'when the test report is not nil' do
+      context 'when the test reports have values' do
         context 'when the exit code is 0' do
           it { is_expected.not_to be_error }
         end
@@ -22,8 +22,8 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
         end
       end
 
-      context 'when the test_report is nil' do
-        let(:test_report) { nil }
+      context 'when the test_reports are an empty hash' do
+        let(:test_reports) { {} }
         context 'when the exit code is 0' do
           it { is_expected.not_to be_error }
         end
@@ -56,7 +56,7 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
 
       context 'when the time limit is exceeded' do
         let(:exit_code) { self.class::TIME_LIMIT_EXCEEDED_EXIT_CODE }
-        let(:test_report) { nil }
+        let(:test_reports) { {} }
         it 'returns TimeLimitExceededError' do
           expect(subject).to be_time_limit_exceeded
           expect(subject.exception).to \
@@ -66,7 +66,7 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
 
       context 'when there are all other errors' do
         let(:exit_code) { 2 }
-        let(:test_report) { nil }
+        let(:test_reports) { {} }
         it 'returns Error' do
           expect(subject).to be_error
           expect(subject.exception).to be_a(Course::Assessment::ProgrammingEvaluationService::Error)

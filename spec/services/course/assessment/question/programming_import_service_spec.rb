@@ -45,7 +45,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportService do
 
       context 'when the evaluation fails' do
         it 'raises an Course::Assessment::ProgrammingEvaluationService::Error' do
-          mock_result = Course::Assessment::ProgrammingEvaluationService::Result.new('', '', nil, 1)
+          mock_result = Course::Assessment::ProgrammingEvaluationService::Result.new('', '', {}, 1)
           expect(subject).to receive(:evaluate_package).and_return(mock_result)
 
           expect { subject.send(:import) }.to \
@@ -57,7 +57,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportService do
     describe '#save' do
       it 'does not trigger another attachment import' do
         expect(question).to receive(:imported_attachment=).with(attachment)
-        mock_result = Course::Assessment::ProgrammingEvaluationService::Result.new('', '', nil, 1)
+        mock_result = Course::Assessment::ProgrammingEvaluationService::Result.new('', '', {}, 1)
         subject.send(:save!, {}, mock_result)
       end
     end

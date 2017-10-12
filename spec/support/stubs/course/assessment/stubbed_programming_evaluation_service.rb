@@ -5,13 +5,15 @@ module Course::Assessment::StubbedProgrammingEvaluationService
   def evaluate_in_container
     attributes = { stdout: '',
                    stderr: '',
-                   test_report: File.read(Rails.root.join('spec/fixtures/course/' \
-                                                          'programming_multiple_test_suite_report.xml')),
+                   test_reports: { report: File.read(
+                     Rails.root.join('spec/fixtures/course/' \
+                                     'programming_multiple_test_suite_report.xml')
+                   ) },
                    exit_code: 0 }
     # For timeout testing
     sleep(0.2)
 
-    [attributes[:stdout], attributes[:stderr], attributes[:test_report], attributes[:exit_code]]
+    [attributes[:stdout], attributes[:stderr], attributes[:test_reports], attributes[:exit_code]]
   end
 end
 
