@@ -10,19 +10,18 @@ module ActiveJob::TestGroupHelpers
     example.call
   ensure
     wait_for_jobs if adapter == :background_thread ||
-                     adapter == ActiveJob::QueueAdapters::BackgroundThreadAdapter
+                     adapter.is_a?(ActiveJob::QueueAdapters::BackgroundThreadAdapter)
     ActiveJob::Base.queue_adapter = old_adapter
   end
 
   def self.ensure_jobs_completion(example)
     example.call
   ensure
-    wait_for_jobs if ActiveJob::Base.queue_adapter ==
-                     ActiveJob::QueueAdapters::BackgroundThreadAdapter
+    wait_for_jobs if ActiveJob::Base.queue_adapter.is_a?(ActiveJob::QueueAdapters::BackgroundThreadAdapter)
   end
 
   def self.wait_for_jobs
-    ActiveJob::QueueAdapters::BackgroundThreadAdapter.wait_for_jobs
+    ActiveJob::Base.queue_adapter.wait_for_jobs
   end
 
   def with_active_job_queue_adapter(adapter, &proc)
@@ -57,21 +56,21 @@ module TrackableJob::SpecHelpers
       job = TrackableJob::Job.find(job_guid)
       job.wait(while_callback: -> { job.reload.submitted? })
       visit current_path
-    elsif ActiveJob::Base.queue_adapter == ActiveJob::QueueAdapters::BackgroundThreadAdapter
-      ActiveJob::QueueAdapters::BackgroundThreadAdapter.wait_for_jobs
+    elsif ActiveJob::Base.queue_adapter.is_a?(ActiveJob::QueueAdapters::BackgroundThreadAdapter)
+      ActiveJob::Base.queue_adapter.wait_for_jobs
     end
   end
 
   def perform_enqueued_jobs
-    if ActiveJob::Base.queue_adapter == ActiveJob::QueueAdapters::BackgroundThreadAdapter
-      ActiveJob::QueueAdapters::BackgroundThreadAdapter.perform_enqueued_jobs
-    end
+    return unless ActiveJob::Base.queue_adapter.is_a?(ActiveJob::QueueAdapters::BackgroundThreadAdapter)
+
+    ActiveJob::Base.queue_adapter.perform_enqueued_jobs
   end
 
   def clear_enqueued_jobs
-    if ActiveJob::Base.queue_adapter == ActiveJob::QueueAdapters::BackgroundThreadAdapter
-      ActiveJob::QueueAdapters::BackgroundThreadAdapter.clear_enqueued_jobs
-    end
+    return unless ActiveJob::Base.queue_adapter.is_a?(ActiveJob::QueueAdapters::BackgroundThreadAdapter)
+
+    ActiveJob::Base.queue_adapter.clear_enqueued_jobs
   end
 end
 
