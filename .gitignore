@@ -43,8 +43,7 @@ npm-debug.log*
 node_modules
 
 # Ignore generated js bundles
-/app/assets/webpack/*
-/public/webpack/manifest.json
+/public/webpack/*
 
 # Ignore eslint cache
 /client/.eslintcache
