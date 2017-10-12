@@ -29,7 +29,7 @@ class AssessmentsSelector extends React.Component {
     dispatch: PropTypes.func.isRequired,
   }
 
-  tabSetAll = (tab, value) => {
+  tabSetAll = tab => (value) => {
     const { dispatch } = this.props;
     dispatch(setItemSelectedBoolean(TAB, tab.id, value));
     tab.assessments.forEach((assessment) => {
