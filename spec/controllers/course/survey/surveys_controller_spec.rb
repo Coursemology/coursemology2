@@ -331,7 +331,7 @@ RSpec.describe Course::Survey::SurveysController do
 
       subject do
         post :reorder_questions,
-             format: :json, course_id: course.id, id: survey.id, ordering: ordering
+             as: :json, params: { course_id: course.id, id: survey.id, ordering: ordering }
       end
       before { subject }
 
