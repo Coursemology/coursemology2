@@ -36,6 +36,10 @@ export const defaultComponentTitles = defineMessages({
     id: 'course.componentTitles.course_videos_component',
     defaultMessage: 'Videos',
   },
+  course_materials_component: {
+    id: 'course.componentTitles.course_materials_component',
+    defaultMessage: 'Materials',
+  },
 });
 
 export default translations;

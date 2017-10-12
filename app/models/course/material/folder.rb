@@ -33,6 +33,7 @@ class Course::Material::Folder < ApplicationRecord
 
   scope :with_content_statistics, ->() { all.calculated(:material_count, :children_count) }
   scope :concrete, ->() { where(owner_id: nil) }
+  scope :root, ->() { where(parent_id: nil) }
 
   # Filter out the empty linked folders (i.e. Folder with an owner).
   def self.without_empty_linked_folder

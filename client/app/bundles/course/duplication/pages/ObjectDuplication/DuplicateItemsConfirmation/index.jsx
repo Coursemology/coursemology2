@@ -11,6 +11,7 @@ import { courseShape } from 'course/duplication/propTypes';
 import AssessmentsListing from './AssessmentsListing';
 import SurveyListing from './SurveyListing';
 import AchievementsListing from './AchievementsListing';
+import MaterialsListing from './MaterialsListing';
 
 const translations = defineMessages({
   confirmationQuestion: {
@@ -75,6 +76,7 @@ class DuplicateItemsConfirmation extends React.Component {
         <AssessmentsListing />
         <SurveyListing />
         <AchievementsListing />
+        <MaterialsListing />
 
         <ReactTooltip id="itemUnpublished">
           <FormattedMessage {...translations.itemUnpublished} />

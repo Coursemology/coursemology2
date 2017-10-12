@@ -4,10 +4,16 @@ class Course::ObjectDuplicationsController < Course::ComponentController
   helper Course::Achievement::AchievementsHelper
 
   def new
-    load_target_courses_data
-    load_assessments_component_data
-    load_survey_component_data
-    load_achievements_component_data
+    respond_to do |format|
+      format.html
+      format.json do
+        load_target_courses_data
+        load_assessments_component_data
+        load_survey_component_data
+        load_achievements_component_data
+        load_materials_component_data
+      end
+    end
   end
 
   def create
@@ -26,8 +32,12 @@ class Course::ObjectDuplicationsController < Course::ComponentController
   private
 
   def load_target_courses_data
-    @target_courses = ActsAsTenant.without_tenant do
-      Course.accessible_by(current_ability, :duplicate_to).includes(:instance)
+    ActsAsTenant.without_tenant do
+      @target_courses = Course.accessible_by(current_ability, :duplicate_to).includes(:instance)
+      @root_folder_map = Course::Material::Folder.root.includes(:materials, :children).
+                         where(course_id: @target_courses.map(&:id)).map do |folder|
+                           [folder.course_id, folder]
+                         end.to_h
     end
   end
 
@@ -41,6 +51,10 @@ class Course::ObjectDuplicationsController < Course::ComponentController
 
   def load_achievements_component_data
     @achievements = current_course.achievements
+  end
+
+  def load_materials_component_data
+    @folders = current_course.material_folders.includes(:materials).concrete
   end
 
   def create_duplication_params
@@ -66,7 +80,9 @@ class Course::ObjectDuplicationsController < Course::ComponentController
       'TAB' => ->(ids) { current_course.assessment_tabs.find(ids) },
       'ASSESSMENT' => ->(ids) { current_course.assessments.find(ids) },
       'SURVEY' => ->(ids) { current_course.surveys.find(ids) },
-      'ACHIEVEMENT' => ->(ids) { current_course.achievements.find(ids) }
+      'ACHIEVEMENT' => ->(ids) { current_course.achievements.find(ids) },
+      'FOLDER' => ->(ids) { current_course.material_folders.concrete.find(ids) },
+      'MATERIAL' => ->(ids) { current_course.materials.in_concrete_folder.find(ids) }
     }
   end
 

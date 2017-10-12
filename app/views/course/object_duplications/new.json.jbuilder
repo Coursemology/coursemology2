@@ -4,6 +4,11 @@ json.targetCourses @target_courses do |course|
   json.(course, :id, :title)
   json.path course_path(course)
   json.host course.instance.host
+  json.rootFolder do
+    root_folder = @root_folder_map[course.id]
+    json.subfolders root_folder.children.map(&:name)
+    json.materials root_folder.materials.map(&:name)
+  end
 end
 
 json.assessmentsComponent @categories do |category|
@@ -23,4 +28,11 @@ end
 json.achievementsComponent @achievements do |achievement|
   json.(achievement, :id, :title, :published)
   json.url achievement_badge_path(achievement)
+end
+
+json.materialsComponent @folders do |folder|
+  json.(folder, :id, :name, :parent_id)
+  json.materials folder.materials do |material|
+    json.(material, :id, :name)
+  end
 end

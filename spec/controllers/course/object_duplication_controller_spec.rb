@@ -51,10 +51,21 @@ RSpec.describe Course::ObjectDuplicationsController do
         end
       end
 
-      context 'when invalid parameters are provided' do
+      context 'when invalid assessment id is provided' do
         let(:items_params) { { 'ASSESSMENT' => [unenrolled_course_assessment.id] } }
 
-        it 'duplicates selected items' do
+        it 'does not duplicate selected item' do
+          expect do
+            subject
+            wait_for_job
+          end.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+
+      context 'when virtual folder id is provided but not its owner' do
+        let(:items_params) { { 'FOLDER' => [assessment.folder.id] } }
+
+        it 'does not duplicate selected item' do
           expect do
             subject
             wait_for_job
