@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Submission < ActiveRecord::Base
+class Course::Assessment::Submission < ApplicationRecord
   include Workflow
   include Course::Assessment::Submission::WorkflowEventConcern
   include Course::Assessment::Submission::TodoConcern

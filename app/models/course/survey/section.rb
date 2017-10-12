@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Survey::Section < ActiveRecord::Base
+class Course::Survey::Section < ApplicationRecord
   belongs_to :survey, inverse_of: :sections
   has_many :questions, inverse_of: :section, dependent: :destroy
 

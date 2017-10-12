@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::ExperiencePointsRecord < ActiveRecord::Base
+class Course::ExperiencePointsRecord < ApplicationRecord
   actable
 
   before_save :send_notification, if: :reached_new_level?

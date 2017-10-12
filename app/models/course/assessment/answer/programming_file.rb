@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Answer::ProgrammingFile < ActiveRecord::Base
+class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
   schema_validations except: [:content]
 
   before_validation :normalize_filename

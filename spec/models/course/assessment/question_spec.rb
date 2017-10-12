@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Question do
-  class self::TestPolymorphicQuestion < ActiveRecord::Base
+  class self::TestPolymorphicQuestion < ApplicationRecord
     acts_as :question, class_name: Course::Assessment::Question.name
 
     def self.table_name

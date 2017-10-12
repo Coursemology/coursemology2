@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Discussion::Post < ActiveRecord::Base
+class Course::Discussion::Post < ApplicationRecord
   extend Course::Discussion::Post::OrderingConcern
   include Course::ForumParticipationConcern
 

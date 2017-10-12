@@ -381,7 +381,7 @@ RSpec.describe Duplicator, type: :model do
   end
 
   context 'when ActiveRecord objects' do
-    class SimpleActiveRecord < ActiveRecord::Base
+    class SimpleActiveRecord < ApplicationRecord
       def initialize_duplicate(_duplicator, _other)
       end
     end
@@ -390,7 +390,7 @@ RSpec.describe Duplicator, type: :model do
       t.integer :data
     end
 
-    class ComplexActiveRecord < ActiveRecord::Base
+    class ComplexActiveRecord < ApplicationRecord
       has_and_belongs_to_many :children, class_name: 'ComplexActiveRecord',
                                          foreign_key: 'parent_id',
                                          join_table: :children_parents,

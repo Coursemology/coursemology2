@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Condition::Level < ActiveRecord::Base
+class Course::Condition::Level < ApplicationRecord
   acts_as_condition
 
   # Trigger for evaluating the satisfiability of conditionals for a course user

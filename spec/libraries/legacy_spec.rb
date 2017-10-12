@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe 'Extension: Legacy', type: :model do
   describe 'maximum string column length' do
-    class self::ExtensionLegacyStringColumnLength < ActiveRecord::Base
+    class self::ExtensionLegacyStringColumnLength < ApplicationRecord
     end
 
     temporary_table(:extension_legacy_string_column_lengths) do |t|

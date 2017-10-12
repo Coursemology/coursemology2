@@ -2,7 +2,7 @@
 # Represents an assessment in Coursemology, as well as the enclosing module for associated models.
 #
 # An assessment is a collection of questions that can be asked.
-class Course::Assessment < ActiveRecord::Base
+class Course::Assessment < ApplicationRecord
   acts_as_lesson_plan_item has_todo: true
   acts_as_conditional
   has_one_folder

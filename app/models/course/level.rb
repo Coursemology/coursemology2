@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Level < ActiveRecord::Base
+class Course::Level < ApplicationRecord
   include Course::ModelComponentHost::Component
   validates :experience_points_threshold, numericality: { greater_than_or_equal_to: 0 }
 

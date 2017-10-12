@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::Programming < ActiveRecord::Base
+class Course::Assessment::Question::Programming < ApplicationRecord
   enum package_type: { zip_upload: 0, online_editor: 1 }
 
   # The table name for this model is singular.

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Instance < ActiveRecord::Base
+class Instance < ApplicationRecord
   DEFAULT_INSTANCE_ID = 0
 
   has_settings_on :settings

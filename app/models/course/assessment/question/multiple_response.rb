@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::MultipleResponse < ActiveRecord::Base
+class Course::Assessment::Question::MultipleResponse < ApplicationRecord
   acts_as :question, class_name: Course::Assessment::Question.name
 
   enum grading_scheme: [:all_correct, :any_correct]

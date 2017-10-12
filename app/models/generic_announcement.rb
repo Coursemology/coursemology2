@@ -2,7 +2,7 @@
 # Represents a generic announcement, which may be either a system-level or instance-level one.
 #
 # This is the abstract single-table inheritance table used for both announcement types.
-class GenericAnnouncement < ActiveRecord::Base
+class GenericAnnouncement < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
   acts_as_readable on: :updated_at
   after_create :mark_as_read_by_creator

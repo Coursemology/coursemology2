@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::LessonPlan::Item < ActiveRecord::Base
+class Course::LessonPlan::Item < ApplicationRecord
   include Course::LessonPlan::ItemTodoConcern
 
   actable

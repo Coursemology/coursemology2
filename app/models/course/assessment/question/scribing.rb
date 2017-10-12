@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::Scribing < ActiveRecord::Base
+class Course::Assessment::Question::Scribing < ApplicationRecord
   acts_as :question, class_name: Course::Assessment::Question.name
   has_one_attachment
 

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Answer::ProgrammingFileAnnotation < ActiveRecord::Base
+class Course::Assessment::Answer::ProgrammingFileAnnotation < ApplicationRecord
   acts_as_discussion_topic display_globally: true
 
   belongs_to :file, class_name: Course::Assessment::Answer::ProgrammingFile.name,

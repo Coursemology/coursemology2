@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Answer::Scribing < ActiveRecord::Base
+class Course::Assessment::Answer::Scribing < ApplicationRecord
   acts_as :answer, class_name: Course::Assessment::Answer.name
   has_many :scribbles, class_name: Course::Assessment::Answer::ScribingScribble.name,
                        dependent: :destroy, foreign_key: :answer_id, inverse_of: :answer

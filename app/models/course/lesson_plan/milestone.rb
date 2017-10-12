@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::LessonPlan::Milestone < ActiveRecord::Base
+class Course::LessonPlan::Milestone < ApplicationRecord
   belongs_to :course, inverse_of: :lesson_plan_milestones
 
   def initialize_duplicate(duplicator, _other)

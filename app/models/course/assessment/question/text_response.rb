@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::TextResponse < ActiveRecord::Base
+class Course::Assessment::Question::TextResponse < ApplicationRecord
   acts_as :question, class_name: Course::Assessment::Question.name
 
   validate :validate_grade

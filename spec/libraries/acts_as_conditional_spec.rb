@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Extension: Acts as Conditional', type: :model do
-  class self::DummyConditionalClass < ActiveRecord::Base
+  class self::DummyConditionalClass < ApplicationRecord
     def self.columns
       []
     end
@@ -10,7 +10,7 @@ RSpec.describe 'Extension: Acts as Conditional', type: :model do
     acts_as_conditional
   end
 
-  class self::DummyConditionClass < ActiveRecord::Base
+  class self::DummyConditionClass < ApplicationRecord
     def self.columns
       []
     end

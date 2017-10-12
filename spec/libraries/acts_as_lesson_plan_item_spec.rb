@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Extension: Acts as Lesson Plan Item' do
-  class self::DummyClass < ActiveRecord::Base
+  class self::DummyClass < ApplicationRecord
     def self.columns
       []
     end
@@ -10,7 +10,7 @@ RSpec.describe 'Extension: Acts as Lesson Plan Item' do
     acts_as_lesson_plan_item
   end
 
-  class self::DummyTodoClass < ActiveRecord::Base
+  class self::DummyTodoClass < ApplicationRecord
     def self.columns
       []
     end

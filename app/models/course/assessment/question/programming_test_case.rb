@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::ProgrammingTestCase < ActiveRecord::Base
+class Course::Assessment::Question::ProgrammingTestCase < ApplicationRecord
   enum test_case_type: { private_test: 0, public_test: 1, evaluation_test: 2 }
 
   belongs_to :question, class_name: Course::Assessment::Question::Programming.name,

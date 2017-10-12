@@ -2,7 +2,7 @@
 # The user level notification. This is meant to be called by the Notifications Framework
 #
 # @api notifications
-class UserNotification < ActiveRecord::Base
+class UserNotification < ApplicationRecord
   acts_as_readable on: :created_at
 
   enum notification_type: { popup: 0, email: 1 }

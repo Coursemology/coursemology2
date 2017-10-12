@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # Represents an email address belonging to a user.
-class User::Email < ActiveRecord::Base
+class User::Email < ApplicationRecord
   after_destroy :set_new_user_primary_email, if: :primary?
 
   schema_validations except: [:primary, :email]

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Submission::Log < ActiveRecord::Base
+class Course::Assessment::Submission::Log < ApplicationRecord
   belongs_to :submission, class_name: Course::Assessment::Submission.name,
                           inverse_of: :logs
 

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Attachment < ActiveRecord::Base
+class Attachment < ApplicationRecord
   TEMPORARY_FILE_PREFIX = 'attachment'.freeze
 
   mount_uploader :file_upload, FileUploader

@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Extension: Acts as Attachable' do
-  class self::SampleModelMultiple < ActiveRecord::Base
+  class self::SampleModelMultiple < ApplicationRecord
     def self.columns
       []
     end
@@ -10,7 +10,7 @@ RSpec.describe 'Extension: Acts as Attachable' do
     has_many_attachments
   end
 
-  class self::SampleModelSingular < ActiveRecord::Base
+  class self::SampleModelSingular < ApplicationRecord
     def self.columns
       []
     end

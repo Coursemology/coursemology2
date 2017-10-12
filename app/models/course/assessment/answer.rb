@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Answer < ActiveRecord::Base
+class Course::Assessment::Answer < ApplicationRecord
   include Workflow
   actable inverse_of: :answer
 

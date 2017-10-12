@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Video::Submission < ActiveRecord::Base
+class Course::Video::Submission < ApplicationRecord
   include Course::Video::Submission::TodoConcern
 
   acts_as_experience_points_record

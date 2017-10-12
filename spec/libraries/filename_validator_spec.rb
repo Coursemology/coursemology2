@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe FilenameValidator do
-  class self::FileModel < ActiveRecord::Base
+  class self::FileModel < ApplicationRecord
     def self.columns
       []
     end

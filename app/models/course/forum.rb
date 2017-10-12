@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Forum < ActiveRecord::Base
+class Course::Forum < ApplicationRecord
   extend FriendlyId
   friendly_id :slug_candidates, use: :scoped, scope: :course
 
