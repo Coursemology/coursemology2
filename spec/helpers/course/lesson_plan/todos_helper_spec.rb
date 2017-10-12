@@ -6,7 +6,7 @@ RSpec.describe Course::LessonPlan::TodosHelper do
   with_tenant(:instance) do
     describe '#todo_status_class' do
       let(:todo) do
-        item = create(:course_lesson_plan_item, start_at: end_at - 1.day, end_at: end_at)
+        item = create(:course_lesson_plan_event, start_at: end_at - 1.day, end_at: end_at).acting_as
         create(:course_lesson_plan_todo, item: item)
       end
       subject { helper.todo_status_class(todo) }

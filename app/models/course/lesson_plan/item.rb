@@ -2,7 +2,7 @@
 class Course::LessonPlan::Item < ApplicationRecord
   include Course::LessonPlan::ItemTodoConcern
 
-  actable
+  actable required: true
   has_many_attachments
 
   after_initialize :set_default_values, if: :new_record?

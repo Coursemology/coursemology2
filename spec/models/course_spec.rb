@@ -94,7 +94,7 @@ RSpec.describe Course, type: :model do
       end
       let!(:lesson_plan_items) do
         [3.days.ago, 2.days.ago, 1.day.from_now, 3.days.from_now].map do |start_at|
-          create(:course_lesson_plan_item, course: course, start_at: start_at)
+          create(:course_lesson_plan_event, course: course, start_at: start_at).acting_as
         end
       end
       subject { course.grouped_lesson_plan_items_with_milestones }
