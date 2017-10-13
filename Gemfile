@@ -63,7 +63,7 @@ gem 'js-routes'
 gem 'jquery-rails'
 # Our Coursemology will be themed using Bootstrap
 gem 'bootstrap-sass'
-gem 'bootstrap-sass-extras', '>= 0.0.7'
+gem 'bootstrap-sass-extras', '>= 0.0.7', github: 'doabit/bootstrap-sass-extras'
 gem 'autoprefixer-rails'
 # Use font-awesome for icons
 gem 'font-awesome-rails'
