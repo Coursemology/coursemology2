@@ -71,7 +71,7 @@ mockAnchor.getBoundingClientRect.mockReturnValue({
 function initializeToolColor() {
   const colors = {};
   Object.values(scribingToolColor).forEach(toolType =>
-   (colors[toolType] = '#000000')
+   (colors[toolType] = 'rgba(0,0,0,1)')
   );
   return colors;
 }
@@ -120,9 +120,12 @@ const props = {
   setColoringToolColor: jest.fn(),
   setToolThickness: jest.fn(),
   setSelectedShape: jest.fn(),
+  setNoFill: jest.fn(),
   setDrawingMode: jest.fn(),
   setCanvasCursor: jest.fn(),
   setCanvasZoom: jest.fn(),
+  setCanvasDirty: jest.fn(),
+  setCanvasSave: jest.fn(),
   deleteCanvasObject: jest.fn(),
   setDisableObjectSelection: jest.fn(),
   setEnableObjectSelection: jest.fn(),

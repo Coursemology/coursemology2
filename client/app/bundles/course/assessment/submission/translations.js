@@ -339,6 +339,10 @@ export const scribingTranslations = defineMessages({
     id: 'course.assessment.submission.answer.scribing.fill',
     defaultMessage: 'Fill',
   },
+  noFill: {
+    id: 'course.assessment.submission.answer.scribing.noFill',
+    defaultMessage: 'No Fill',
+  },
   select: {
     id: 'course.assessment.submission.answer.scribing.select',
     defaultMessage: 'Select',

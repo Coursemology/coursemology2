@@ -5,7 +5,7 @@ import actions, { canvasActionTypes, scribingTools, scribingShapes,
 function initializeToolColor() {
   const colors = {};
   Object.values(scribingToolColor).forEach(toolType =>
-   (colors[toolType] = '#000000')
+   (colors[toolType] = 'rgba(0,0,0,1)')
   );
   return colors;
 }
@@ -46,6 +46,7 @@ export default function (state = {}, action) {
               colors: initializeToolColor(),
               lineStyles: initializeLineStyles(),
               thickness: initializeToolThickness(),
+              hasNoFill: false,
               isCanvasLoaded: false,
               isDrawingMode: false,
               isChangeTool: false,
@@ -242,6 +243,16 @@ export default function (state = {}, action) {
         [answerId]: {
           ...state[answerId],
           selectedShape,
+        },
+      };
+    }
+    case canvasActionTypes.SET_NO_FILL: {
+      const { answerId, hasNoFill } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          hasNoFill,
         },
       };
     }
