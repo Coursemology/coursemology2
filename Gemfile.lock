@@ -139,8 +139,8 @@ GEM
       url
     concurrent-ruby (1.0.5)
     consistency_fail (0.3.5)
-    coursemology-polyglot (0.2.9)
-      activesupport (~> 4.2.0, >= 4.2.2)
+    coursemology-polyglot (0.2.9.1)
+      activesupport (>= 4.2, <= 5.1)
     crass (1.0.2)
     devise (4.3.0)
       bcrypt (~> 3.0)
@@ -169,7 +169,7 @@ GEM
       htmlentities (~> 4.3.3)
       launchy (~> 2.1)
       mail (~> 2.6)
-    erubi (1.6.1)
+    erubi (1.7.0)
     erubis (2.7.0)
     excon (0.59.0)
     execjs (2.7.0)
@@ -312,7 +312,7 @@ GEM
     pg (0.21.0)
     polyamorous (1.1.0)
       activerecord (>= 3.0)
-    progress (3.3.1)
+    progress (3.4.0)
     public_suffix (3.0.0)
     puma (3.10.0)
     rack (1.6.8)
@@ -657,6 +657,7 @@ DEPENDENCIES
   webpacker
   workflow
   yard
+
 
 BUNDLED WITH
    1.15.4
