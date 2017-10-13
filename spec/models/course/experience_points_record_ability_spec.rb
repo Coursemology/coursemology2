@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe Course::ExperiencePointsRecord do
   let!(:instance) { Instance.default }
   with_tenant(:instance) do
-    subject { Ability.new(user) }
+    subject { Ability.new(user, course, course_user) }
     let(:course) { create(:course) }
     let(:course_student) { create(:course_student, course: course) }
     let(:points_record) do
@@ -12,6 +12,7 @@ RSpec.describe Course::ExperiencePointsRecord do
     end
 
     context 'when the user is a Course Student' do
+      let(:course_user) { course_student }
       let(:user) { course_student.user }
       let(:classmate) { create(:course_student, course: course) }
       let(:classmate_points_record) do
@@ -42,7 +43,8 @@ RSpec.describe Course::ExperiencePointsRecord do
     end
 
     context 'when the user is a Course Staff' do
-      let(:user) { create(:course_manager, course: course).user }
+      let(:course_user) { create(:course_manager, course: course) }
+      let(:user) { course_user.user }
       let(:foreign_points_record) { create(:course_experience_points_record) }
 
       context 'when record belongs to a student from the same course' do
