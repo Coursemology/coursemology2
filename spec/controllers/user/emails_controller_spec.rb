@@ -9,7 +9,7 @@ RSpec.describe User::EmailsController, type: :controller do
     before { sign_in(user) }
 
     describe '#destroy' do
-      subject { delete :destroy, id: user.send(:default_email_record) }
+      subject { delete :destroy, params: { id: user.send(:default_email_record) } }
 
       context 'when the user only has one email address' do
         it 'cannot be deleted' do
@@ -33,7 +33,7 @@ RSpec.describe User::EmailsController, type: :controller do
 
     describe '#set_primary' do
       let(:email) { create(:user_email, :unconfirmed, user: user, primary: false) }
-      subject { post :set_primary, id: email }
+      subject { post :set_primary, params: { id: email } }
 
       context 'when email is not confirmed' do
         it 'does not change the primary email' do
@@ -48,7 +48,7 @@ RSpec.describe User::EmailsController, type: :controller do
 
     describe '#send_confirmation' do
       let!(:email) { create(:user_email, email_traits, user: user, primary: false) }
-      subject { post :send_confirmation, id: email }
+      subject { post :send_confirmation, params: { id: email } }
 
       context 'when the email is already confirmed' do
         let(:email_traits) { :confirmed }

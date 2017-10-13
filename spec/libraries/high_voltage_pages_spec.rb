@@ -9,7 +9,7 @@ RSpec.describe 'Extension: High Voltage Page Action Class', type: :controller do
   end
 
   it 'gets the correct action class' do
-    get :show, id: 'home'
+    get :show, params: { id: 'home' }
     expect(controller.view_context.page_action_class).to eq('home')
   end
 end

@@ -16,7 +16,7 @@ RSpec.describe System::Admin::InstancesController do
         stub
       end
 
-      subject { delete :destroy, id: instance_to_delete }
+      subject { delete :destroy, params: { id: instance_to_delete } }
 
       it { is_expected.to redirect_to(admin_instances_path) }
 

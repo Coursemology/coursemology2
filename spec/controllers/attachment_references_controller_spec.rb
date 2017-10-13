@@ -10,7 +10,7 @@ RSpec.describe AttachmentReferencesController, type: :controller do
 
     describe '#show' do
       let(:attachment_reference) { create(:attachment_reference) }
-      subject { get :show, id: attachment_reference }
+      subject { get :show, params: { id: attachment_reference } }
 
       it { is_expected.to redirect_to(attachment_reference.attachment.url) }
     end

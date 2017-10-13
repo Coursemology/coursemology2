@@ -33,14 +33,14 @@ RSpec.describe Course::Survey::ResponsesController do
       let(:user) { create(:administrator) }
 
       context 'when html page is requested' do
-        subject { get :index, course_id: course.id, survey_id: survey.id }
+        subject { get :index, params: { course_id: course.id, survey_id: survey.id } }
 
         it { is_expected.to render_template('index') }
       end
 
       context 'when json data is requested' do
         render_views
-        subject { get :index, format: :json, course_id: course.id, survey_id: survey.id }
+        subject { get :index, params: { format: :json, course_id: course.id, survey_id: survey.id } }
         before do
           survey_response
           subject
@@ -63,7 +63,7 @@ RSpec.describe Course::Survey::ResponsesController do
 
     describe '#create' do
       let(:create_response_request) do
-        post :create, format: :json, course_id: course.id, survey_id: survey.id
+        post :create, as: :json, params: { course_id: course.id, survey_id: survey.id }
       end
 
       context 'when user is a student' do
@@ -104,8 +104,8 @@ RSpec.describe Course::Survey::ResponsesController do
 
     describe '#show' do
       subject do
-        get :show, format: :json,
-                   course_id: course.id, survey_id: survey.id, id: survey_response.id
+        get :show, as: :json,
+                   params: { course_id: course.id, survey_id: survey.id, id: survey_response.id }
       end
 
       context 'when a new question is created after response was last edited' do
@@ -144,8 +144,8 @@ RSpec.describe Course::Survey::ResponsesController do
 
     describe '#edit' do
       subject do
-        get :edit, format: :json,
-                   course_id: course.id, survey_id: survey.id, id: survey_response.id
+        get :edit, as: :json,
+                   params: { course_id: course.id, survey_id: survey.id, id: survey_response.id }
       end
 
       context 'when a new question is created after response was last edited' do
@@ -264,8 +264,10 @@ RSpec.describe Course::Survey::ResponsesController do
         { answer_attributes: { id: response_answer.id, text_response: new_response_text } }
       end
       subject do
-        post :unsubmit, format: :json, response: response_params,
-                        course_id: course.id, survey_id: survey.id, id: survey_response.id
+        post :unsubmit, as: :json, params: {
+          response: response_params,
+          course_id: course.id, survey_id: survey.id, id: survey_response.id
+        }
       end
 
       it 'unsubmits the survey response' do

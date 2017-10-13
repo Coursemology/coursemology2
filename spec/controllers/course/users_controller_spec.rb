@@ -15,7 +15,7 @@ RSpec.describe Course::UsersController, type: :controller do
 
     describe '#students' do
       before { sign_in(user) }
-      subject { get :students, course_id: course }
+      subject { get :students, params: { course_id: course } }
 
       context 'when a course manager visits the page' do
         let!(:course_lecturer) { create(:course_manager, course: course, user: user) }
@@ -35,7 +35,7 @@ RSpec.describe Course::UsersController, type: :controller do
 
     describe '#staff' do
       before { sign_in(user) }
-      subject { get :staff, course_id: course }
+      subject { get :staff, params: { course_id: course } }
 
       context 'when a course manager visits the page' do
         let!(:course_lecturer) { create(:course_manager, course: course, user: user) }
@@ -106,7 +106,7 @@ RSpec.describe Course::UsersController, type: :controller do
 
     describe '#destroy' do
       before { sign_in(user) }
-      subject { delete :destroy, course_id: course, id: course_user_to_delete }
+      subject { delete :destroy, params: { course_id: course, id: course_user_to_delete } }
 
       let!(:course_user_to_delete) { create(:course_user, course: course) }
 

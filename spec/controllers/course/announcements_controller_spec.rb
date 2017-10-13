@@ -21,7 +21,7 @@ RSpec.describe Course::AnnouncementsController, type: :controller do
           allow(controller).
             to receive_message_chain('current_component_host.[]').and_return(nil)
         end
-        subject { get :index, course_id: course }
+        subject { get :index, params: { course_id: course } }
         it 'raises an component not found error' do
           expect { subject }.to raise_error(ComponentNotFoundError)
         end
@@ -29,7 +29,7 @@ RSpec.describe Course::AnnouncementsController, type: :controller do
     end
 
     describe '#destroy' do
-      subject { delete :destroy, course_id: course, id: announcement_stub }
+      subject { delete :destroy, params: { course_id: course, id: announcement_stub } }
 
       context 'upon destroy failure' do
         before do

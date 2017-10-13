@@ -17,7 +17,7 @@ RSpec.describe Course::Assessment::SkillsController do
     before { sign_in(user) }
 
     describe '#create' do
-      subject { post :create, course_id: course }
+      subject { post :create, params: { course_id: course } }
 
       context 'when create fails' do
         before do
@@ -31,7 +31,7 @@ RSpec.describe Course::Assessment::SkillsController do
 
     describe '#update' do
       subject do
-        post :update, course_id: course, id: immutable_skill, skill: { title: '' }
+        post :update, params: { course_id: course, id: immutable_skill, skill: { title: '' } }
       end
 
       context 'when update fails' do
@@ -46,7 +46,7 @@ RSpec.describe Course::Assessment::SkillsController do
 
     describe '#destroy' do
       subject do
-        delete :destroy, course_id: course, id: immutable_skill
+        delete :destroy, params: { course_id: course, id: immutable_skill }
       end
 
       context 'when destroy fails' do

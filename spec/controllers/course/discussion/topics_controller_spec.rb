@@ -19,7 +19,7 @@ RSpec.describe Course::Discussion::TopicsController do
     let(:topics) { controller.instance_variable_get(:@topics) }
 
     describe '#index' do
-      subject { get :index, course_id: course }
+      subject { get :index, params: { course_id: course } }
 
       context 'when a course staff visits the page' do
         before { sign_in(staff) }
@@ -55,7 +55,7 @@ RSpec.describe Course::Discussion::TopicsController do
     end
 
     describe '#pending' do
-      subject { get :pending, course_id: course }
+      subject { get :pending, params: { course_id: course } }
 
       context 'when a course staff visits the page' do
         before { sign_in(staff) }
@@ -76,7 +76,7 @@ RSpec.describe Course::Discussion::TopicsController do
     end
 
     describe '#my_students' do
-      subject { get :my_students, course_id: course }
+      subject { get :my_students, params: { course_id: course } }
 
       context 'when a course staff visits the page' do
         before { sign_in(staff) }
@@ -113,7 +113,7 @@ RSpec.describe Course::Discussion::TopicsController do
     end
 
     describe '#my_students_pending' do
-      subject { get :my_students_pending, course_id: course }
+      subject { get :my_students_pending, params: { course_id: course } }
 
       context 'when a course staff visits the page' do
         before { sign_in(staff) }

@@ -26,8 +26,10 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
         question_multiple_response_attributes =
           attributes_for(:course_assessment_question_multiple_response).
           slice(:description, :maximum_grade)
-        post :create, course_id: course, assessment_id: assessment,
-                      question_multiple_response: question_multiple_response_attributes
+        post :create, params: {
+          course_id: course, assessment_id: assessment,
+          question_multiple_response: question_multiple_response_attributes
+        }
       end
 
       context 'when saving fails' do
@@ -89,7 +91,7 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
 
     describe '#destroy' do
       let(:multiple_response) { immutable_multiple_response_question }
-      subject { post :destroy, course_id: course, assessment_id: assessment, id: multiple_response }
+      subject { post :destroy, params: { course_id: course, assessment_id: assessment, id: multiple_response } }
 
       it { is_expected.to redirect_to(course_assessment_path(course, assessment)) }
       it 'sets the correct flash message' do

@@ -12,11 +12,13 @@ RSpec.describe Course::Assessment::SubmissionQuestion::CommentsController do
 
     describe '#create' do
       subject do
-        post :create, format: :js, course_id: course, assessment_id: assessment,
-                      submission_question_id: submission_question,
-                      discussion_post: {
-                        text: comment
-                      }
+        post :create, as: :js, params: {
+          course_id: course, assessment_id: assessment,
+          submission_question_id: submission_question,
+          discussion_post: {
+            text: comment
+          }
+        }
       end
 
       before do

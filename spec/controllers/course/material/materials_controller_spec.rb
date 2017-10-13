@@ -18,7 +18,7 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
 
     describe '#show' do
       let(:material) { create(:material, folder: folder) }
-      subject { get :show, course_id: course, folder_id: folder, id: material }
+      subject { get :show, params: { course_id: course, folder_id: folder, id: material } }
 
       it { is_expected.to redirect_to(material.attachment.url) }
     end
@@ -41,7 +41,7 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
     end
 
     describe '#destroy' do
-      subject { delete :destroy, course_id: course, folder_id: folder, id: material_stub }
+      subject { delete :destroy, params: { course_id: course, folder_id: folder, id: material_stub } }
 
       context 'when material cannot be destroyed' do
         before do

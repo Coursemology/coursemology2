@@ -23,7 +23,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
 
       describe '#index' do
         it 'gets access denied' do
-          expect { get :index, course_id: course }.to raise_error(CanCan::AccessDenied)
+          expect { get :index, params: { course_id: course } }.to raise_error(CanCan::AccessDenied)
         end
       end
     end
@@ -35,7 +35,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
       let!(:second_topic_post) { create(:course_discussion_post, topic: topic.acting_as) }
 
       it 'preloads the latest post for each topics of the forum' do
-        get :show, course_id: course, id: forum
+        get :show, params: { course_id: course, id: forum }
         expect(controller.instance_variable_get(:@topics).first.posts.first).
           to eq(second_topic_post)
       end
@@ -77,7 +77,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
     end
 
     describe '#destroy' do
-      subject { delete :destroy, course_id: course, id: forum_stub }
+      subject { delete :destroy, params: { course_id: course, id: forum_stub } }
 
       context 'when destroy fails' do
         before do
@@ -90,7 +90,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
     end
 
     describe '#subscribe' do
-      subject { post :subscribe, course_id: course, id: forum_stub, format: 'js' }
+      subject { post :subscribe, params: { course_id: course, id: forum_stub, format: 'js' } }
 
       context 'when subscribe fails' do
         before do
@@ -105,7 +105,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
     end
 
     describe '#unsubscribe' do
-      subject { delete :unsubscribe, course_id: course, id: forum_stub, format: 'js' }
+      subject { delete :unsubscribe, params: { course_id: course, id: forum_stub, format: 'js' } }
 
       context 'when there is no subscription for the forum' do
         before do

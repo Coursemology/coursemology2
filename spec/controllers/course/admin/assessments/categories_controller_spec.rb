@@ -16,7 +16,7 @@ RSpec.describe Course::Admin::Assessments::CategoriesController, type: :controll
     before { sign_in(user) }
 
     describe '#create' do
-      subject { post :create, course_id: course }
+      subject { post :create, params: { course_id: course } }
       context 'upon create failure' do
         before do
           controller.instance_variable_set(:@category, category_stub)
@@ -27,7 +27,7 @@ RSpec.describe Course::Admin::Assessments::CategoriesController, type: :controll
     end
 
     describe '#destroy' do
-      subject { delete :destroy, course_id: course, id: category_stub }
+      subject { delete :destroy, params: { course_id: course, id: category_stub } }
       context 'upon destroy failure' do
         before do
           controller.instance_variable_set(:@category, category_stub)

@@ -18,7 +18,7 @@ RSpec.describe Course::Video::Submission::SubmissionsController do
 
     describe '#create' do
       subject do
-        post :create, course_id: course, video_id: video
+        post :create, params: { course_id: course, video_id: video }
       end
 
       context 'when create fails' do

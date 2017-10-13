@@ -8,7 +8,7 @@ RSpec.describe Course::Admin::AdminController do
     before { sign_in(user) }
 
     describe '#index' do
-      subject { get :index, course_id: course }
+      subject { get :index, params: { course_id: course } }
 
       context 'when the user is a Course Manager' do
         let(:user) { create(:course_manager, course: course).user }
@@ -59,7 +59,7 @@ RSpec.describe Course::Admin::AdminController do
     end
 
     describe '#destroy' do
-      subject { delete :destroy, course_id: course }
+      subject { delete :destroy, params: { course_id: course } }
       before { controller.instance_variable_set(:@course, course) }
 
       context 'when the user is a Course Manager' do

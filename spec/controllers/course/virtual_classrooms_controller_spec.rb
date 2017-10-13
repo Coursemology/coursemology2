@@ -23,7 +23,7 @@ RSpec.describe Course::VirtualClassroomsController, type: :controller do
             allow(controller).
               to receive_message_chain('current_component_host.[]').and_return(nil)
           end
-          subject { get :index, course_id: course }
+          subject { get :index, params: { course_id: course } }
           it 'raises an component not found error' do
             expect { subject }.to raise_error(ComponentNotFoundError)
           end
@@ -31,7 +31,7 @@ RSpec.describe Course::VirtualClassroomsController, type: :controller do
       end
 
       describe '#recorded_video_link' do
-        subject { get :recorded_video_link, course_id: course, record_id: 123, format: :json }
+        subject { get :recorded_video_link, params: { course_id: course, record_id: 123 }, as: :json }
 
         context 'student should not be able to access' do
           before do
@@ -47,7 +47,7 @@ RSpec.describe Course::VirtualClassroomsController, type: :controller do
       let(:user) { create(:course_manager, course: course).user }
 
       describe '#recorded_video_link' do
-        subject { get :recorded_video_link, course_id: course, record_id: 123, format: :json }
+        subject { get :recorded_video_link, params: { course_id: course, record_id: 123, format: :json } }
 
         context 'admin should be able to access' do
           before do
@@ -60,7 +60,7 @@ RSpec.describe Course::VirtualClassroomsController, type: :controller do
       end
 
       describe '#destroy' do
-        subject { delete :destroy, course_id: course, id: virtual_classroom_stub }
+        subject { delete :destroy, params: { course_id: course, id: virtual_classroom_stub } }
 
         context 'upon destroy failure' do
           before do

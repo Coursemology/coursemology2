@@ -18,7 +18,7 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
     before { sign_in(user) }
 
     describe '#destroy' do
-      subject { delete :destroy, course_id: course, id: folder_stub }
+      subject { delete :destroy, params: { course_id: course, id: folder_stub } }
 
       context 'when folder cannot be destroyed' do
         before do
@@ -56,7 +56,7 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
     describe '#download' do
       let(:folder) { create(:folder, course: course, parent: course.root_folder) }
       let!(:material) { create(:course_material, folder: folder) }
-      subject { get :download, course_id: course, id: folder }
+      subject { get :download, params: { course_id: course, id: folder } }
 
       it 'downloads all the files in current folder' do
         subject

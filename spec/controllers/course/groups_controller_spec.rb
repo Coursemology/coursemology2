@@ -84,7 +84,7 @@ RSpec.describe Course::GroupsController, type: :controller do
         allow(stub).to receive(:destroy).and_return(false)
         stub
       end
-      subject { delete :destroy, course_id: course, id: group_stub }
+      subject { delete :destroy, params: { course_id: course, id: group_stub } }
 
       context 'when the group cannot be destroyed' do
         before do

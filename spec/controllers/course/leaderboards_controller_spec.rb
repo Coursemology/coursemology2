@@ -11,7 +11,7 @@ RSpec.describe Course::LeaderboardsController, type: :controller do
     before { sign_in(user) }
 
     describe '#show' do
-      subject { get :show, course_id: course }
+      subject { get :show, params: { course_id: course } }
 
       context 'when the leaderboard component is disabled' do
         before do
@@ -24,7 +24,7 @@ RSpec.describe Course::LeaderboardsController, type: :controller do
     end
 
     describe '#groups' do
-      subject { get :groups, course_id: course }
+      subject { get :groups, params: { course_id: course } }
 
       context' when the group leaderboard is disabled' do
         it 'raises a standard error' do

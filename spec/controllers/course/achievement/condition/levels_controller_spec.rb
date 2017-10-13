@@ -23,10 +23,11 @@ RSpec.describe Course::Achievement::Condition::LevelsController, type: :controll
       end
 
       subject do
-        delete :destroy,
-               course_id: course,
-               achievement_id: achievement,
-               id: level_condition
+        delete :destroy, params: {
+          course_id: course,
+          achievement_id: achievement,
+          id: level_condition
+        }
       end
 
       context 'when destroy fails' do
@@ -56,9 +57,7 @@ RSpec.describe Course::Achievement::Condition::LevelsController, type: :controll
       end
 
       subject do
-        post :create,
-             course_id: course,
-             achievement_id: achievement
+        post :create, params: { course_id: course, achievement_id: achievement }
       end
 
       context 'when create fails' do

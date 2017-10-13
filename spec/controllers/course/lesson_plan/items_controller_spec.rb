@@ -12,7 +12,7 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
     before { sign_in(user) }
 
     describe '#index' do
-      subject { get :index, course_id: course.id }
+      subject { get :index, params: { course_id: course.id } }
 
       context 'when survey component is disabled' do
         let(:user) { admin }
@@ -35,7 +35,7 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
           create(:course_lesson_plan_event, published: true, course: course)
         end
 
-        subject { get :index, format: :json, course_id: course.id }
+        subject { get :index, params: { format: :json, course_id: course.id } }
 
         context 'when user is staff' do
           let(:user) { admin }

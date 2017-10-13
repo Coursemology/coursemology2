@@ -21,7 +21,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
     before { sign_in(user) }
 
     describe '#show' do
-      subject { get :show, course_id: course, forum_id: forum, id: topic }
+      subject { get :show, params: { course_id: course, forum_id: forum, id: topic } }
 
       it 'marks the topic as read' do
         subject
@@ -35,7 +35,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
     end
 
     describe '#destroy' do
-      subject { delete :destroy, course_id: course, forum_id: forum, id: topic_stub }
+      subject { delete :destroy, params: { course_id: course, forum_id: forum, id: topic_stub } }
 
       context 'when destroy fails' do
         before do
@@ -59,7 +59,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
 
       context 'when subscribe fails' do
         subject do
-          post :subscribe, course_id: course, forum_id: forum, id: topic_stub, subscribe: 'true'
+          post :subscribe, params: { course_id: course, forum_id: forum, id: topic_stub, subscribe: 'true' }
         end
 
         it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
@@ -70,7 +70,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
 
       context 'when unsubscribe fails' do
         subject do
-          post :subscribe, course_id: course, forum_id: forum, id: topic_stub, subscribe: 'false'
+          post :subscribe, params: { course_id: course, forum_id: forum, id: topic_stub, subscribe: 'false' }
         end
 
         it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }

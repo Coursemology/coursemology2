@@ -17,7 +17,7 @@ RSpec.describe Course::LevelsController, type: :controller do
     before { sign_in(user) }
 
     describe '#destroy' do
-      subject { delete :destroy, course_id: course, id: level_stub }
+      subject { delete :destroy, params: { course_id: course, id: level_stub } }
 
       context 'when destroy fails' do
         before do
@@ -33,7 +33,7 @@ RSpec.describe Course::LevelsController, type: :controller do
     end
 
     describe '#save' do
-      subject { post :create, course_id: course, level: level_stub }
+      subject { post :create, params: { course_id: course, level: level_stub } }
 
       context 'when saving fails' do
         before do

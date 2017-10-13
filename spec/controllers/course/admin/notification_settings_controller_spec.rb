@@ -10,7 +10,7 @@ RSpec.describe Course::Admin::NotificationSettingsController, type: :controller 
     before { sign_in(user) }
 
     describe '#edit' do
-      subject { get :edit, course_id: course }
+      subject { get :edit, params: { course_id: course } }
       it { is_expected.to render_template(:edit) }
     end
 

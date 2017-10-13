@@ -31,8 +31,10 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
     describe '#create' do
       subject do
         request.accept = 'application/json'
-        post :create, course_id: course, assessment_id: assessment,
-                      question_programming: question_programming_attributes
+        post :create, params: {
+          course_id: course, assessment_id: assessment,
+          question_programming: question_programming_attributes
+        }
       end
 
       context 'when saving fails' do
@@ -127,7 +129,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
     describe '#destroy' do
       let(:programming_question) { immutable_programming_question }
       subject do
-        post :destroy, course_id: course, assessment_id: assessment, id: programming_question
+        post :destroy, params: { course_id: course, assessment_id: assessment, id: programming_question }
       end
 
       context 'when the question cannot be destroyed' do

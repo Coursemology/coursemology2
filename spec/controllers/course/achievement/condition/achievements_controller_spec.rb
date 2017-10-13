@@ -23,10 +23,7 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
       end
 
       subject do
-        delete :destroy,
-               course_id: course,
-               achievement_id: achievement,
-               id: achievement_condition
+        delete :destroy, params: { course_id: course, achievement_id: achievement, id: achievement_condition }
       end
 
       context 'when destroy fails' do
@@ -57,9 +54,7 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
       end
 
       subject do
-        post :create,
-             course_id: course,
-             achievement_id: achievement
+        post :create, params: { course_id: course, achievement_id: achievement }
       end
 
       context 'when create fails' do
@@ -88,11 +83,12 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
       end
 
       subject do
-        patch :update,
-              course_id: course,
-              achievement_id: achievement,
-              id: achievement_condition,
-              condition_achievement: { achievement_id: achievement.id }
+        patch :update, params: {
+          course_id: course,
+          achievement_id: achievement,
+          id: achievement_condition,
+          condition_achievement: { achievement_id: achievement.id }
+        }
       end
 
       context 'when update fails' do
