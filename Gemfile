@@ -12,8 +12,7 @@ gem 'rails', '~> 5.0.0'
 
 # Use PostgreSQL for the backend
 gem 'pg', '>= 0.18.2'
-# Table and column comments, this need to be put before schame_plus ( there are certain compatibility issues ).
-gem 'migration_comments'
+
 # Schema Plus for some higher level database abstractions
 gem 'schema_plus_columns'
 gem 'schema_plus_enums'
