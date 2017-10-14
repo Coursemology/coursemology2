@@ -176,7 +176,7 @@ gem 'omniauth-facebook'
 
 # Use cancancan for authorization
 gem 'cancancan'
-gem 'cancancan-squeel'
+gem 'cancancan-baby_squeel', github: 'jeremyyap/cancancan-baby_squeel'
 
 # Some helpers for structuring CSS/JavaScript
 gem 'rails_utils', '>= 3.3.3'

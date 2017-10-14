@@ -16,6 +16,15 @@ GIT
       rails (>= 3.2)
 
 GIT
+  remote: git://github.com/jeremyyap/cancancan-baby_squeel.git
+  revision: e8d6c23ba93e34405652f1d85c077feca9b48b41
+  specs:
+    cancancan-baby_squeel (0.1.6)
+      activerecord (>= 4.1)
+      baby_squeel (~> 1.1.5)
+      cancancan (>= 1.10)
+
+GIT
   remote: git://github.com/lowjoel/activerecord-userstamp.git
   revision: e3c808edf57b1d388ac7082a72d0a9910fde8fab
   specs:
@@ -84,8 +93,9 @@ GEM
     autoprefixer-rails (7.1.5)
       execjs
     awesome_print (1.8.0)
-    baby_squeel (0.3.1)
-      activerecord (>= 4.0.0)
+    baby_squeel (1.1.5)
+      activerecord (>= 4.2.0)
+      polyamorous (~> 1.3)
     bcrypt (3.1.11)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
@@ -103,11 +113,7 @@ GEM
     byebug (9.1.0)
     calculated_attributes (0.2.0)
       activerecord (>= 3.2.20)
-    cancancan (1.17.0)
-    cancancan-squeel (0.1.4)
-      activerecord (>= 4.1)
-      cancancan (~> 1.10)
-      squeel (~> 1.2)
+    cancancan (2.0.0)
     capybara (2.15.4)
       addressable
       mini_mime (>= 0.1.3)
@@ -310,7 +316,7 @@ GEM
     parser (2.4.0.0)
       ast (~> 2.2)
     pg (0.21.0)
-    polyamorous (1.1.0)
+    polyamorous (1.3.1)
       activerecord (>= 3.0)
     progress (3.4.0)
     public_suffix (3.0.0)
@@ -515,10 +521,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    squeel (1.2.3)
-      activerecord (>= 3.0)
-      activesupport (>= 3.0)
-      polyamorous (~> 1.1.0)
     summernote-rails (0.8.3.0)
       railties (>= 3.1)
     temple (0.8.0)
@@ -579,7 +581,7 @@ DEPENDENCIES
   byebug
   calculated_attributes (>= 0.1.3)
   cancancan
-  cancancan-squeel
+  cancancan-baby_squeel!
   capybara
   capybara-screenshot
   capybara-selenium

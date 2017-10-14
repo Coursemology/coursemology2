@@ -3,6 +3,7 @@ class Ability
   include CanCan::Ability
   attr_reader :user
   attr_reader :course
+  attr_reader :course_user
 
   # Load all components which declare abilities.
   AbilityHost.components.each { |component| prepend(component) }
@@ -11,10 +12,13 @@ class Ability
   #
   # @param [User|nil] user The current user. This can be nil if the no user is logged in.
   # @param [Course|nil] course The current course. This can be nil if not inside a course.
-  def initialize(user, course = nil)
+  # @param [CourseUser|nil] course_user The current course_user. This can be nil if not inside a course
+  # or user is not part of the course
+  def initialize(user, course = nil, course_user = nil)
     @user = user
     @course = course
-    can :manage, :all if user && user.administrator?
+    @course_user = course_user
+    can :manage, :all if user&.administrator?
 
     define_permissions
   end
