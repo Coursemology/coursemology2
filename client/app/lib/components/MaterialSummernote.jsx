@@ -17,6 +17,7 @@ const propTypes = {
   inputId: PropTypes.string,
   required: PropTypes.bool,
   value: PropTypes.string,
+  airMode: PropTypes.bool,
 };
 
 const contextTypes = {
@@ -111,7 +112,7 @@ class MaterialSummernote extends React.Component {
           backgroundColor,
           fontFamily: baseTheme.fontFamily,
           cursor: this.props.disabled ? 'not-allowed' : 'auto',
-          paddingTop: '2.5em',
+          paddingTop: this.props.label ? '2.5em' : 0,
         }}
       >
         <TextFieldLabel
@@ -137,8 +138,11 @@ class MaterialSummernote extends React.Component {
         />
         <div className="material-summernote">
           <ReactSummernote
-            ref={(ref) => { this.reactSummernote = ref; }}
+            ref={(ref) => {
+              this.reactSummernote = ref;
+            }}
             options={{
+              airMode: this.props.airMode,
               dialogsInBody: false,
               disabled: this.props.disabled,
               fontNames: [
@@ -158,11 +162,26 @@ class MaterialSummernote extends React.Component {
                 ['insert', ['link', 'picture', 'video']],
                 ['view', ['fullscreen', 'codeview', 'help']],
               ],
+              popover: {
+                air: [
+                  ['style', ['style']],
+                  ['font', ['bold', 'underline', 'clear']],
+                  ['script', ['superscript', 'subscript']],
+                  ['color', ['color']],
+                  ['para', ['ul', 'ol', 'paragraph']],
+                  ['table', ['table']],
+                  ['insert', ['link', 'picture']],
+                ],
+              },
             }}
             value={this.props.value}
             onChange={this.props.onChange}
-            onFocus={() => { this.setState({ isFocused: true }); }}
-            onBlur={() => { this.setState({ isFocused: false }); }}
+            onFocus={() => {
+              this.setState({ isFocused: true });
+            }}
+            onBlur={() => {
+              this.setState({ isFocused: false });
+            }}
             onImageUpload={this.onImageUpload}
           />
         </div>

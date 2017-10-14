@@ -18,7 +18,11 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
     end
   end
 
-  def edit; end
+  def edit
+    @topics = @video.topics.includes(posts: :children).order(:timestamp)
+    @topics = @topics.reject { |topic| topic.posts.empty? }
+    @posts = @topics.map(&:posts).inject(Course::Discussion::Post.none, :+)
+  end
 
   private
 

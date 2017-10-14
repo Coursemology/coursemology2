@@ -1,0 +1,121 @@
+import { Map as makeImmutableMap } from 'immutable';
+import { discussionActionTypes, postRequestingStatuses } from 'lib/constants/videoConstants';
+import { combineReducers } from 'redux';
+
+export const initialState = {
+  newTopicPost: {
+    content: '',
+    status: postRequestingStatuses.LOADED,
+  },
+  topics: makeImmutableMap(),
+  posts: makeImmutableMap(),
+  pendingReplyPosts: makeImmutableMap(),
+  autoScroll: false,
+};
+
+const postDefaults = {
+  editedContent: null,
+  status: postRequestingStatuses.LOADED,
+  editMode: false,
+};
+
+const topicDefaults = {
+  status: postRequestingStatuses.LOADED,
+};
+
+const replyDefaults = {
+  editorVisible: true,
+  content: '',
+  status: postRequestingStatuses.LOADED,
+};
+
+/**
+ * Organises the discussion entitles (posts and topics) into ImmutableJS map for efficient and explicit larger size
+ * entity stores.
+ *
+ * This function also merges in the default state parameters for the entities.
+ * @param discussion The discussion props parsed from JSON directly
+ * @returns {*} A copy of the discussion props but with the topics and posts changed (other discussion module states
+ * are not added in this function
+ */
+export function organiseDiscussionEntities(discussion) {
+  // A new video likely has nothing at all
+  if (discussion === undefined) {
+    return {};
+  }
+  const immutableEntitiesStore = {
+    topics: makeImmutableMap(discussion.topics).map(topic => Object.assign({}, topicDefaults, topic)),
+    posts: makeImmutableMap(discussion.posts).map(post => Object.assign({}, postDefaults, post)),
+  };
+
+  return Object.assign({}, discussion, immutableEntitiesStore);
+}
+
+function newTopicPost(state = initialState.newTopicPost, action) {
+  switch (action.type) {
+    case discussionActionTypes.UPDATE_NEW_POST:
+      return Object.assign({}, state, action.postProps);
+    default:
+      return state;
+  }
+}
+
+function topics(state = makeImmutableMap(), action) {
+  switch (action.type) {
+    case discussionActionTypes.ADD_TOPIC:
+      return state.set(action.topicId, Object.assign({}, topicDefaults, action.topicProps));
+    case discussionActionTypes.UPDATE_TOPIC:
+      return state.set(action.topicId, Object.assign({}, state.get(action.topicId), action.topicProps));
+    case discussionActionTypes.REMOVE_TOPIC:
+      return state.delete(action.topicId);
+    case discussionActionTypes.REFRESH_ALL:
+      return makeImmutableMap(action.topics).map(topic => Object.assign({}, topicDefaults, topic));
+    default:
+      return state;
+  }
+}
+
+function posts(state = makeImmutableMap(), action) {
+  switch (action.type) {
+    case discussionActionTypes.ADD_POST:
+      return state.set(action.postId, Object.assign({}, postDefaults, action.postProps));
+    case discussionActionTypes.UPDATE_POST:
+      return state.set(action.postId, Object.assign({}, state.get(action.postId), action.postProps));
+    case discussionActionTypes.REMOVE_POST:
+      return state.delete(action.postId);
+    case discussionActionTypes.REFRESH_ALL:
+      return makeImmutableMap(action.posts).map(post => Object.assign({}, postDefaults, post));
+    default:
+      return state;
+  }
+}
+
+function pendingReplyPosts(state = makeImmutableMap, action) {
+  switch (action.type) {
+    case discussionActionTypes.ADD_REPLY:
+      return state.set(action.parentId, Object.assign({}, replyDefaults));
+    case discussionActionTypes.UPDATE_REPLY:
+      return state.set(action.parentId, Object.assign({}, state.get(action.parentId), action.replyProps));
+    case discussionActionTypes.REMOVE_REPLY:
+      return state.delete(action.parentId);
+    default:
+      return state;
+  }
+}
+
+function autoScroll(state = false, action) {
+  switch (action.type) {
+    case discussionActionTypes.CHANGE_AUTO_SCROLL:
+      return action.autoScroll;
+    default:
+      return state;
+  }
+}
+
+export default combineReducers({
+  newTopicPost,
+  topics,
+  posts,
+  pendingReplyPosts,
+  autoScroll,
+});

@@ -7,6 +7,8 @@ class Course::Video < ApplicationRecord
 
   has_many :submissions, class_name: Course::Video::Submission.name,
                          inverse_of: :video, dependent: :destroy
+  has_many :topics, class_name: Course::Video::Topic.name,
+                    dependent: :destroy, foreign_key: :video_id, inverse_of: :video
 
   # TODO: Refactor this together with assessments.
   # @!method self.ordered_by_date_and_title

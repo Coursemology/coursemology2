@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171004053203) do
+ActiveRecord::Schema.define(version: 20171005033946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -733,6 +733,11 @@ ActiveRecord::Schema.define(version: 20171004053203) do
     t.datetime "updated_at", :null=>false
   end
   add_index "course_video_submissions", ["video_id", "creator_id"], :name=>"index_course_video_submissions_on_video_id_and_creator_id", :unique=>true
+
+  create_table "course_video_topics", force: :cascade do |t|
+    t.integer "video_id",  :null=>false, :index=>{:name=>"fk__course_video_topics_video_id"}, :foreign_key=>{:references=>"course_videos", :name=>"fk_course_video_topics_video_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer "timestamp", :null=>false
+  end
 
   create_table "course_virtual_classrooms", force: :cascade do |t|
     t.integer  "course_id",                 :null=>false, :index=>{:name=>"fk__course_virtual_classrooms_course_id"}, :foreign_key=>{:references=>"courses", :name=>"fk_course_virtual_classrooms_course_id", :on_update=>:no_action, :on_delete=>:no_action}

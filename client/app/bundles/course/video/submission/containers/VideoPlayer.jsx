@@ -16,6 +16,14 @@ import {
   VolumeSlider,
 } from './VideoControls';
 
+const reactPlayerStyle = {
+  position: 'absolute',
+  top: '0',
+  left: '0',
+  height: '100%',
+  width: '100%',
+};
+
 const propTypes = {
   videoUrl: PropTypes.string.isRequired,
   playerState: PropTypes.oneOf(Object.values(playerStates)),
@@ -78,24 +86,29 @@ class VideoPlayer extends React.Component {
     if (typeof VideoPlayer.ReactPlayer === 'undefined') return null;
 
     const videoPlayer = (
-      <VideoPlayer.ReactPlayer
-        ref={this.setRef}
-        url={this.props.videoUrl}
-        playing={isPlayingState(this.props.playerState)}
-        volume={this.props.playerVolume}
-        playbackRate={this.props.playbackRate}
-        onDuration={this.props.onDurationReceived}
-        onProgress={({ playedSeconds, loadedSeconds }) => {
-          this.props.onPlayerProgress(playedSeconds, loadedSeconds);
-        }}
-        onPlay={() => this.props.onPlayerStateChanged(playerStates.PLAYING)}
-        onPause={() => this.props.onPlayerStateChanged(playerStates.PAUSED)}
-        onBuffer={() => this.props.onPlayerStateChanged(playerStates.BUFFERING)}
-        onEnded={() => this.props.onPlayerStateChanged(playerStates.ENDED)}
-        playsinline
-        progressFrequency={videoDefaults.progressUpdateFrequencyMs}
-        config={{ youtube: youtubeOpts }}
-      />
+      <div className={styles.playerContainer}>
+        <VideoPlayer.ReactPlayer
+          ref={this.setRef}
+          url={this.props.videoUrl}
+          playing={isPlayingState(this.props.playerState)}
+          volume={this.props.playerVolume}
+          playbackRate={this.props.playbackRate}
+          onDuration={this.props.onDurationReceived}
+          onProgress={({ playedSeconds, loadedSeconds }) => {
+            this.props.onPlayerProgress(playedSeconds, loadedSeconds);
+          }}
+          onPlay={() => this.props.onPlayerStateChanged(playerStates.PLAYING)}
+          onPause={() => this.props.onPlayerStateChanged(playerStates.PAUSED)}
+          onBuffer={() => this.props.onPlayerStateChanged(playerStates.BUFFERING)}
+          onEnded={() => this.props.onPlayerStateChanged(playerStates.ENDED)}
+          playsinline
+          progressFrequency={videoDefaults.progressUpdateFrequencyMs}
+          style={reactPlayerStyle}
+          width="100%"
+          height="100%"
+          config={{ youtube: youtubeOpts }}
+        />
+      </div>
     );
 
     const controls = (
@@ -114,7 +127,7 @@ class VideoPlayer extends React.Component {
     );
 
     return (
-      <Paper zDepth={2} style={{ width: '640px' }}>
+      <Paper zDepth={2} className={styles.videoPaperContainer}>
         {videoPlayer}
         {controls}
       </Paper>

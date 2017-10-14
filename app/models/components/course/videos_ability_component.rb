@@ -18,6 +18,8 @@ module Course::VideosAbilityComponent
     allow_student_attempt_video
     allow_student_create_video_submission
     allow_student_update_own_video_submission
+    allow_student_show_video_topics
+    allow_student_create_video_topics
   end
 
   def define_staff_video_permissions
@@ -65,5 +67,13 @@ module Course::VideosAbilityComponent
 
   def allow_staff_read_and_update_video_submission
     can [:read, :update], Course::Video::Submission, video: video_all_course_staff_hash
+  end
+
+  def allow_student_show_video_topics
+    can :read, Course::Video::Topic, video: video_all_course_users_hash
+  end
+
+  def allow_student_create_video_topics
+    can :create, Course::Video::Topic, video: video_all_course_users_hash
   end
 end

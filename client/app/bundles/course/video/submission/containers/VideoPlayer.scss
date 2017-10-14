@@ -7,6 +7,17 @@ $button-width: 30px;
   width: $width;
 }
 
+.videoPaperContainer {
+  width: 100%;
+}
+
+.playerContainer {
+  height: 0;
+  padding-bottom: 56.25%;
+  position: relative;
+  width: 100%;
+}
+
 .controlsContainer {
   padding-bottom: 5px;
 }
@@ -17,8 +28,8 @@ $button-width: 30px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  height: 3em;
   justify-content: flex-start;
+  height: 3em;
 }
 
 .progressBar {
