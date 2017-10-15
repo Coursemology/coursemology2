@@ -59,7 +59,7 @@ export default class SubmissionsTable extends React.Component {
   }
 
   static formatGrade(grade) {
-    return grade ? grade.toFixed(1) : null;
+    return (grade !== null) ? grade.toFixed(1) : null;
   }
 
   getGradeString(submission) {
