@@ -10,14 +10,11 @@ class Course::Assessment < ApplicationRecord
   # Concern must be included below acts_as_lesson_plan_item to override #can_user_start?
   include Course::Assessment::TodoConcern
   include Course::ReminderConcern
+  include DuplicationStateTrackingConcern
 
   after_initialize :set_defaults, if: :new_record?
   before_validation :propagate_course, if: :new_record?
   before_validation :assign_folder_attributes
-
-  # Other models use after_save, but some assessments are saved multiple times, causing
-  # the flag to be cleared too early.
-  after_commit :clear_duplication_flag
 
   belongs_to :tab, inverse_of: :assessments
 
@@ -145,7 +142,7 @@ class Course::Assessment < ApplicationRecord
     folder.parent = target_tab.category.folder
     self.questions = duplicator.duplicate(other.questions.map(&:actable)).compact.map(&:acting_as)
     initialize_duplicate_conditions(duplicator, other)
-    @duplicating = true
+    set_duplication_flag
   end
 
   private
@@ -178,7 +175,7 @@ class Course::Assessment < ApplicationRecord
 
   def assign_folder_attributes
     # Folder attributes are handled during duplication by folder duplication code
-    return if @duplicating
+    return if duplicating?
     folder.assign_attributes(name: title, course: course, parent: tab.category.folder,
                              start_at: start_at)
   end
@@ -186,10 +183,6 @@ class Course::Assessment < ApplicationRecord
   def set_defaults
     self.published = false
     self.autograded ||= false
-  end
-
-  def clear_duplication_flag
-    @duplicating = nil
   end
 
   def tab_in_same_course

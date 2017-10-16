@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Condition::Achievement < ApplicationRecord
   acts_as_condition
+  include DuplicationStateTrackingConcern
 
   # Trigger for evaluating the satisfiability of conditionals for a course user
   Course::UserAchievement.after_save do |achievement|
@@ -12,7 +13,6 @@ class Course::Condition::Achievement < ApplicationRecord
   end
 
   validate :validate_achievement_condition, if: :achievement_id_changed?
-  after_save :clear_duplication_flag
 
   belongs_to :achievement, class_name: Course::Achievement.name, inverse_of: :achievement_conditions
 
@@ -55,7 +55,7 @@ class Course::Condition::Achievement < ApplicationRecord
       self.course = duplicator.options[:target_course]
     end
 
-    @duplicating = true
+    set_duplication_flag
   end
 
   private
@@ -88,7 +88,7 @@ class Course::Condition::Achievement < ApplicationRecord
 
   def validate_achievement_condition
     validate_references_self
-    validate_unique_dependency unless @duplicating
+    validate_unique_dependency unless duplicating?
     validate_acyclic_dependency
   end
 
@@ -105,9 +105,5 @@ class Course::Condition::Achievement < ApplicationRecord
   def validate_acyclic_dependency
     return unless cyclic?
     errors.add(:achievement, :cyclic_dependency)
-  end
-
-  def clear_duplication_flag
-    @duplicating = nil
   end
 end

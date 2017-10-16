@@ -14,12 +14,12 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   # Docker container memory limits will keep the evaluation in check.
   MEMORY_LIMIT = nil
 
+  include DuplicationStateTrackingConcern
   acts_as :question, class_name: Course::Assessment::Question.name
 
   before_save :process_package, unless: :skip_process_package?
   before_validation :assign_template_attributes
   before_validation :assign_test_case_attributes
-  after_save :clear_duplication_flag
 
   validates :memory_limit, numericality: { greater_than: 0 }, allow_nil: true
   validates :time_limit, numericality: { greater_than: 0, less_than_or_equal_to: CPU_TIMEOUT },
@@ -103,7 +103,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
     self.test_cases = duplicator.duplicate(other.test_cases)
     self.attachment = duplicator.duplicate(other.attachment)
 
-    @duplicating = true
+    set_duplication_flag
   end
 
   # This specifies the template files generated from the online editor.
@@ -171,11 +171,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
     end
   end
 
-  def clear_duplication_flag
-    @duplicating = nil
-  end
-
   def skip_process_package?
-    !!@duplicating
+    duplicating?
   end
 end

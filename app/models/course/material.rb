@@ -1,16 +1,17 @@
 # frozen_string_literal: true
 class Course::Material < ApplicationRecord
   has_one_attachment
+  include DuplicationStateTrackingConcern
+
   belongs_to :folder, inverse_of: :materials, class_name: Course::Material::Folder.name
 
   before_save :touch_folder
-  after_save :clear_duplication_flag
 
   validate :validate_name_is_unique_among_folders
   validates_with FilenameValidator
 
   def touch_folder
-    folder.touch if !@duplicating && changed?
+    folder.touch if !duplicating? && changed?
   end
 
   # Returns the path of the material
@@ -22,7 +23,7 @@ class Course::Material < ApplicationRecord
 
   # Return false to prevent the userstamp gem from changing the updater during duplication
   def record_userstamp
-    !@duplicating
+    !duplicating?
   end
 
   def initialize_duplicate(duplicator, other)
@@ -30,7 +31,7 @@ class Course::Material < ApplicationRecord
     self.folder = duplicator.duplicate(other.folder)
     self.updated_at = other.updated_at
     self.created_at = other.created_at
-    @duplicating = true
+    set_duplication_flag
   end
 
   private
@@ -42,9 +43,5 @@ class Course::Material < ApplicationRecord
 
     conflicts = folder.children.where.has { |parent| name =~ parent.name }
     errors.add(:name, :taken) unless conflicts.empty?
-  end
-
-  def clear_duplication_flag
-    @duplicating = nil
   end
 end
