@@ -7,8 +7,18 @@ class CoursemologyDockerContainer < Docker::Container
   # The path to where the package will be extracted.
   PACKAGE_PATH = File.join(HOME_PATH, 'package')
 
-  # The path to where the test report will be at.
+  # With the old Makefile, the path to where the test report will be at.
   REPORT_PATH = File.join(PACKAGE_PATH, 'report.xml')
+
+  # With new Makefile targets, paths to the test group report files.
+  PUBLIC_REPORT_PATH = File.join(PACKAGE_PATH, 'report-public.xml')
+  PRIVATE_REPORT_PATH = File.join(PACKAGE_PATH, 'report-private.xml')
+  EVALUATION_REPORT_PATH = File.join(PACKAGE_PATH, 'report-evaluation.xml')
+
+  REPORT_PATHS = { 'report': REPORT_PATH,
+                   'public': PUBLIC_REPORT_PATH,
+                   'private': PRIVATE_REPORT_PATH,
+                   'evaluation': EVALUATION_REPORT_PATH }.freeze
 
   # Maximum amount of memory the docker container can use.
   # Enforced by Docker.
@@ -100,12 +110,12 @@ class CoursemologyDockerContainer < Docker::Container
 
   # Gets the output that Coursemology is interested in.
   #
-  # @return [Array<(String, String, String, Integer)>] The stdout, stderr, test report and exit
-  #   code.
+  # @return [Array<(String, String, Hash, Integer)>] The stdout, stderr, hash of test reports
+  #   and exit code.
   def evaluation_result
     _, stdout, stderr = container_streams
 
-    [stdout, stderr, extract_test_report, exit_code]
+    [stdout, stderr, extract_test_reports, exit_code]
   end
 
   private
@@ -157,8 +167,20 @@ class CoursemologyDockerContainer < Docker::Container
     parse_docker_stream(log_stream)
   end
 
-  def extract_test_report
-    stream = extract_test_report_archive
+  # Extract all the xml files from the container.
+  def extract_test_reports
+    test_reports_hash = {}
+
+    REPORT_PATHS.each do |type, path|
+      test_report = extract_test_report(path)
+      test_reports_hash[type] = test_report
+    end
+
+    test_reports_hash
+  end
+
+  def extract_test_report(report_path)
+    stream = extract_test_report_archive(report_path)
 
     tar_file = Gem::Package::TarReader.new(stream)
     tar_file.each do |file|
@@ -171,11 +193,12 @@ class CoursemologyDockerContainer < Docker::Container
 
   # Extracts the test report from the container.
   #
+  # @param [String] report_path The path to the report file.
   # @return [StringIO] The stream containing the archive, the pointer is reset to the start of the
   #   stream.
-  def extract_test_report_archive
+  def extract_test_report_archive(report_path)
     stream = StringIO.new
-    archive_out(REPORT_PATH) do |bytes|
+    archive_out(report_path) do |bytes|
       stream.write(bytes)
     end
 

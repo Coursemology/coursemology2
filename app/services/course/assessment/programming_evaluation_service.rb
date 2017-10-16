@@ -10,14 +10,14 @@ class Course::Assessment::ProgrammingEvaluationService
   MEMORY_LIMIT_RATIO = 1.megabyte / 1.kilobyte
 
   # Represents a result of evaluating a package.
-  Result = Struct.new(:stdout, :stderr, :test_report, :exit_code, :evaluation_id) do
+  Result = Struct.new(:stdout, :stderr, :test_reports, :exit_code, :evaluation_id) do
     # Checks if the evaluation errored.
     #
     # This does not count failing test cases as an error, although the exit code is nonzero.
     #
     # @return [Boolean]
     def error?
-      test_report.nil? && exit_code != 0
+      test_reports.values.all?(&:nil?) && exit_code != 0
     end
 
     # Checks if the evaluation exceeded its time limit.
@@ -99,8 +99,8 @@ class Course::Assessment::ProgrammingEvaluationService
   # @return [Result]
   # @raise [Timeout::Error] When the evaluation timeout has elapsed.
   def execute
-    stdout, stderr, test_report, exit_code = Timeout.timeout(@timeout) { evaluate_in_container }
-    Result.new(stdout, stderr, test_report, exit_code)
+    stdout, stderr, test_reports, exit_code = Timeout.timeout(@timeout) { evaluate_in_container }
+    Result.new(stdout, stderr, test_reports, exit_code)
   end
 
   def create_container(image)

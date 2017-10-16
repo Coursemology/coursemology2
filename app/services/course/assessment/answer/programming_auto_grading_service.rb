@@ -62,7 +62,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   def build_result(question, evaluation_result, ignore_evaluation:)
     auto_grading = Course::Assessment::Answer::ProgrammingAutoGrading.new(actable: nil)
     set_auto_grading_results(auto_grading, evaluation_result)
-    build_test_case_records(question, auto_grading, evaluation_result.test_report)
+    build_test_case_records(question, auto_grading, evaluation_result.test_reports)
     test_results = auto_grading.test_results
     test_cases = question.test_cases
 
@@ -90,13 +90,17 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   # @param [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading The programming auto
   #   grading result to store the test results in.
   # @param [String] test_report The test case report from evaluating the package.
-  # @return [Array<Course::Assessment::Question::ProgrammingTestCase>]
-  def build_test_case_records(question, auto_grading, test_report)
-    if test_report.present?
-      build_test_case_records_from_report(question, auto_grading, test_report)
-    else
-      build_failed_test_case_records(question, auto_grading)
+  # @return [Array<Course::Assessment::Question::ProgrammingTestCase>] Only the test cases not in
+  #   any reports.
+  def build_test_case_records(question, auto_grading, test_reports)
+    test_reports.values.each do |test_report|
+      if test_report.present?
+        build_test_case_records_from_report(question, auto_grading, test_report)
+      end
     end
+
+    # Build failed test case records for test cases which were not found in any reports.
+    build_failed_test_case_records(question, auto_grading)
   end
 
   # Builds test case records from test report.
@@ -119,8 +123,8 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
     end
   end
 
-  # Builds test case records when there is no test report.
-  # Treats all test cases as failed.
+  # Builds test case records for remaining test cases when there is no test report.
+  # Treats all remaining test cases without a test result yet as failed.
   #
   # @param [Course::Assessment::Question::Programming] question The programming question being
   #   graded.
@@ -131,7 +135,8 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
     messages = {
       'error': I18n.t('course.assessment.answer.programming_auto_grading.grade.evaluation_failed')
     }
-    question.test_cases.map do |test_case|
+    remaining_test_cases = question.test_cases - auto_grading.test_results.map(&:test_case)
+    remaining_test_cases.map do |test_case|
       auto_grading.test_results.build(
         auto_grading: auto_grading, test_case: test_case,
         passed: false,
