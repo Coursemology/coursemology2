@@ -32,6 +32,10 @@ export const defaultComponentTitles = defineMessages({
     id: 'course.componentTitles.course_forums_component',
     defaultMessage: 'Forums',
   },
+  course_videos_component: {
+    id: 'course.componentTitles.course_videos_component',
+    defaultMessage: 'Videos',
+  },
 });
 
 export default translations;
