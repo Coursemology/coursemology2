@@ -1,4 +1,4 @@
-= page_header t('.header', title: format_inline_text(@video.title))
+= page_header t('.header', title: @video.title)
 
 - unless @video.description.blank?
   h3 = t('.description')
