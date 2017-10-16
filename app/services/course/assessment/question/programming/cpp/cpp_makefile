@@ -8,8 +8,14 @@ prepare: answer.cc
 
 compile: answer.bin
 
-test:
-	./answer.bin
+public:
+	./answer.bin --gtest_filter='*public*'
+
+private:
+	./answer.bin --gtest_filter='*private*'
+
+evaluation:
+	./answer.bin --gtest_filter='*evaluation*'
 
 answer.bin: answer.cc ${GTEST_HEADERS} ${GTEST_DIR}/libgtest.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) answer.cc ${GTEST_DIR}/libgtest.a -o $@
