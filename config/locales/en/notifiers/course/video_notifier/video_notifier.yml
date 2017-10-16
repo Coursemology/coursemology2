@@ -6,13 +6,11 @@ en:
           course_notifications:
             email:
               subject: '%{course} New Video Available'
-# TODO: To re-enable when paths are fixed.
-#              message: >
-#                New Video Available : %{video}
+              message: >
+                New Video Available : %{video}
         closing:
           user_notifications:
             email:
               subject: '%{course} Reminder for %{video}'
-# TODO: To re-enable when paths are fixed.
-#              message: >
-#                Please be reminded that %{video} is due on %{time}
+              message: >
+                Please be reminded that %{video} is due on %{time}
