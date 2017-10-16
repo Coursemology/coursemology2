@@ -161,6 +161,17 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
   end
 
   def zip_test_files(test_type, zip) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    # Print test class preamble
+    test_class_name = "#{test_type}_tests_grader".camelize
+    class_definition = <<~PYTHON
+      class #{test_class_name}(unittest.TestCase):
+          def setUp(self):
+              # clears the dictionary containing metadata for each test
+              self.meta = { 'expression': '', 'expected': '', 'hint': '' }
+    PYTHON
+
+    zip.print class_definition
+
     tests = @test_params[:test_cases]
     tests[test_type]&.each&.with_index(1) do |test, index|
       # String types should be displayed with quotes, other types will be converted to string
@@ -180,6 +191,7 @@ class Course::Assessment::Question::Programming::Python::PythonPackageService < 
 
       zip.print test_fn
     end
+    zip.print "\n"
   end
 
   def get_data_files_meta(data_files_to_keep, new_data_files)
