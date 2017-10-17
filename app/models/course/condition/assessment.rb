@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Condition::Assessment < ApplicationRecord
   include ActiveSupport::NumberHelper
-
+  include DuplicationStateTrackingConcern
   acts_as_condition
 
   # Trigger for evaluating the satisfiability of conditionals for a course user
@@ -10,7 +10,6 @@ class Course::Condition::Assessment < ApplicationRecord
   end
 
   validate :validate_assessment_condition, if: :assessment_id_changed?
-  after_save :clear_duplication_flag
 
   belongs_to :assessment, class_name: Course::Assessment.name, inverse_of: :assessment_conditions
 
@@ -70,7 +69,7 @@ class Course::Condition::Assessment < ApplicationRecord
       self.course = duplicator.options[:target_course]
     end
 
-    @duplicating = true
+    set_duplication_flag
   end
 
   private
@@ -89,7 +88,7 @@ class Course::Condition::Assessment < ApplicationRecord
 
   def validate_assessment_condition
     validate_references_self
-    validate_unique_dependency unless @duplicating
+    validate_unique_dependency unless duplicating?
     validate_acyclic_dependency
   end
 
@@ -127,9 +126,5 @@ class Course::Condition::Assessment < ApplicationRecord
         ) ids
       ON ids.assessment_id = course_assessments.id
     SQL
-  end
-
-  def clear_duplication_flag
-    @duplicating = nil
   end
 end

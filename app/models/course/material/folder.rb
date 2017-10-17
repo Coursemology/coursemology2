@@ -2,12 +2,11 @@
 class Course::Material::Folder < ApplicationRecord
   acts_as_forest order: :name, dependent: :destroy
   include Course::ModelComponentHost::Component
+  include DuplicationStateTrackingConcern
 
   after_initialize :set_defaults, if: :new_record?
   before_validation :normalize_filename, if: :owner
   before_validation :assign_valid_name
-
-  after_save :clear_duplication_flag
 
   has_many :materials, inverse_of: :folder, dependent: :destroy, foreign_key: :folder_id,
                        class_name: Course::Material.name, autosave: true
@@ -87,7 +86,7 @@ class Course::Material::Folder < ApplicationRecord
     self.course = duplicator.options[:target_course]
     initialize_duplicate_parent(duplicator, other)
     initialize_duplicate_children(duplicator, other)
-    @duplicating = true
+    set_duplication_flag
   end
 
   def initialize_duplicate_parent(duplicator, other)
@@ -156,12 +155,8 @@ class Course::Material::Folder < ApplicationRecord
     self.name = Pathname.normalize_filename(name)
   end
 
-  def clear_duplication_flag
-    @duplicating = nil
-  end
-
   # Return false to prevent the userstamp gem from changing the updater during duplication
   def record_userstamp
-    !@duplicating
+    !duplicating?
   end
 end

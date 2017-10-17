@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 class AttachmentReference < ApplicationRecord
+  include DuplicationStateTrackingConcern
+
   before_save :update_expires_at
-  after_save :clear_duplication_flag
 
   belongs_to :attachable, polymorphic: true, inverse_of: nil
   belongs_to :attachment, inverse_of: :attachment_references
@@ -19,14 +20,14 @@ class AttachmentReference < ApplicationRecord
 
   # Return false to prevent the userstamp gem from changing the updater during duplication
   def record_userstamp
-    !@duplicating
+    !duplicating?
   end
 
   def initialize_duplicate(duplicator, other)
     self.attachable = duplicator.duplicate(other.attachable)
     self.updated_at = other.updated_at
     self.created_at = other.created_at
-    @duplicating = true
+    set_duplication_flag
   end
 
   private
@@ -51,9 +52,5 @@ class AttachmentReference < ApplicationRecord
                       else
                         1.day.from_now
                       end
-  end
-
-  def clear_duplication_flag
-    @duplicating = nil
   end
 end
