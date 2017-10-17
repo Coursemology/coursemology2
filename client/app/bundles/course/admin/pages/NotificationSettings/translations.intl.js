@@ -82,6 +82,14 @@ export const settingDescriptions = defineMessages({
     id: 'course.admin.NotificationSettings.settingDescriptions.topic_created',
     defaultMessage: 'Notify users who are subscribed to a forum when a topic is created for that forum.',
   },
+  video_opening: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.video_opening',
+    defaultMessage: 'Notify students when a new video is available.',
+  },
+  video_closing: {
+    id: 'course.admin.NotificationSettings.settingDescriptions.video_closing',
+    defaultMessage: 'Notify students when a video submission is about to be due.',
+  },
 });
 
 export const settingTitles = defineMessages({
@@ -132,6 +140,14 @@ export const settingTitles = defineMessages({
   topic_created: {
     id: 'course.admin.NotificationSettings.settingTitles.topic_created',
     defaultMessage: 'Topic Created',
+  },
+  video_opening: {
+    id: 'course.admin.NotificationSettings.settingTitles.video_opening',
+    defaultMessage: 'Video Opening',
+  },
+  video_closing: {
+    id: 'course.admin.NotificationSettings.settingTitles.video_closing',
+    defaultMessage: 'Video Closing',
   },
 });
 

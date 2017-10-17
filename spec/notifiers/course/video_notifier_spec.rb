@@ -37,6 +37,23 @@ RSpec.describe Course::VideoNotifier, type: :notifier do
         subject
         expect(activity).not_to be_nil
       end
+
+      context 'when email notification for video opening is disabled' do
+        before do
+          context = OpenStruct.new(key: Course::VideosComponent.key, current_course: course)
+          Course::Settings::VideosComponent.new(context).
+            update_email_setting('key' => 'video_opening', 'enabled' => false)
+          course.save!
+        end
+
+        it 'does not send a course notification' do
+          expect { subject }.to change(course.notifications, :count).by(0)
+        end
+
+        it 'does not send an email notification' do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
+      end
     end
 
     describe '#video_closing' do
@@ -65,6 +82,23 @@ RSpec.describe Course::VideoNotifier, type: :notifier do
       it 'creates an activity' do
         subject
         expect(activity).not_to be_nil
+      end
+
+      context 'when email notification for video closing is disabled' do
+        before do
+          context = OpenStruct.new(key: Course::VideosComponent.key, current_course: course)
+          Course::Settings::VideosComponent.new(context).
+            update_email_setting('key' => 'video_closing', 'enabled' => false)
+          course.save!
+        end
+
+        it 'does not send a user notification' do
+          expect { subject }.to change(UserNotification, :count).by(0)
+        end
+
+        it 'does not send an email notification' do
+          expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(0)
+        end
       end
     end
   end
