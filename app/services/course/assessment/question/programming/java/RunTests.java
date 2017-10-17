@@ -21,6 +21,7 @@ public class RunTests {
 		XmlTest test = new XmlTest(suite);
 		test.setName("tests");
 		test.setXmlClasses(classes);
+		test.addIncludedGroup(args[0]);
 
 		List<XmlSuite> suites = new ArrayList<XmlSuite>();
 		suites.add(suite);

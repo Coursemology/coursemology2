@@ -43,19 +43,45 @@
 		</java>
 	</target>
 
+	<taskdef name="testpublic" classname="org.testng.TestNGAntTask" classpathref="classpath"></taskdef>
+
+	<target name="testpublic" depends="test-compile">
+		<java classname="RunTests">
+			<arg value="public" />
+			<classpath refid="classpath"></classpath>
+		</java>
+	</target>
+
+	<taskdef name="testprivate" classname="org.testng.TestNGAntTask" classpathref="classpath"></taskdef>
+
+	<target name="testprivate" depends="test-compile">
+		<java classname="RunTests">
+			<arg value="private" />
+			<classpath refid="classpath"></classpath>
+		</java>
+	</target>
+
+	<taskdef name="testevaluation" classname="org.testng.TestNGAntTask" classpathref="classpath"></taskdef>
+
+	<target name="testevaluation" depends="test-compile">
+		<java classname="RunTests">
+			<arg value="evaluation" />
+			<classpath refid="classpath"></classpath>
+		</java>
+	</target>
 
 	<!-- To compile the solution files -->
 	<target name="sol-compile" depends="aux-compile">
 		<mkdir dir="${build}"/>
 		<javac srcdir="${soln}" destdir="${build}" includeantruntime="false">
-		    <classpath refid="classpath"></classpath>
+			<classpath refid="classpath"></classpath>
 		</javac>
 	</target>
 
 	<target name="testsol-compile" depends="sol-compile">
 		<mkdir dir="${build}"/>
 		<javac srcdir="${test}" destdir="${build}" includeantruntime="false">
-		    <classpath refid="classpath"></classpath>
+			<classpath refid="classpath"></classpath>
 		</javac>
 	</target>
 

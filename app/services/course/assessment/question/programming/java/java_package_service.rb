@@ -241,7 +241,7 @@ class Course::Assessment::Question::Programming::Java::JavaPackageService < \
       hint = test[:hint].blank? ? String(nil) : "result.setAttribute(\"hint\", #{test[:hint].inspect});"
 
       test_fn = <<-Java
-        @Test
+        @Test(groups = { "#{test_type}" })
         public void test_#{test_type}_#{format('%02i', index)}() {
           ITestResult result = Reporter.getCurrentTestResult();
           result.setAttribute("expression", #{test[:expression].inspect});
