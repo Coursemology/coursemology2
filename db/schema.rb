@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171005033946) do
+ActiveRecord::Schema.define(version: 20171014154130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -242,6 +242,18 @@ ActiveRecord::Schema.define(version: 20171005033946) do
     t.integer "exit_code"
   end
 
+  create_table "course_assessment_answer_programming_files", force: :cascade do |t|
+    t.integer "answer_id", :null=>false, :index=>{:name=>"fk__course_assessment_answer_programming_files_answer_id"}, :foreign_key=>{:references=>"course_assessment_answer_programming", :name=>"fk_course_assessment_answer_programming_files_answer_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.string  "filename",  :limit=>255, :null=>false
+    t.text    "content",   :default=>"", :null=>false
+  end
+  add_index "course_assessment_answer_programming_files", ["answer_id", "filename"], :name=>"index_course_assessment_answer_programming_files_filename", :unique=>true, :case_sensitive=>false
+
+  create_table "course_assessment_answer_programming_file_annotations", force: :cascade do |t|
+    t.integer "file_id", :null=>false, :index=>{:name=>"fk__course_assessment_answe_09c4b638af92d0f8252d7cdef59bd6f3"}, :foreign_key=>{:references=>"course_assessment_answer_programming_files", :name=>"fk_course_assessment_answer_ed21459e7a2a5034dcf43a14812cb17d", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer "line",    :null=>false
+  end
+
   create_table "polyglot_languages", force: :cascade do |t|
     t.string  "type",      :limit=>255, :null=>false, :comment=>"The class of language, as perceived by the application."
     t.string  "name",      :limit=>255, :null=>false, :index=>{:name=>"index_polyglot_languages_on_name", :unique=>true, :case_sensitive=>false}
@@ -266,23 +278,11 @@ ActiveRecord::Schema.define(version: 20171005033946) do
     t.text    "hint"
   end
 
-  create_table "course_assessment_answer_programming_auto_grading_test_results", force: :cascade do |t|
-    t.integer "auto_grading_id", :null=>false, :index=>{:name=>"fk__course_assessment_answe_57b22f114b54911fd4e1519680ebfd49"}, :foreign_key=>{:references=>"course_assessment_answer_programming_auto_gradings", :name=>"fk_course_assessment_answer_e3d785447112439bb306849be8690102", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer "test_case_id",    :index=>{:name=>"fk__course_assessment_answe_29a2568d5e2fb3a47c0561815786f9ab"}, :foreign_key=>{:references=>"course_assessment_question_programming_test_cases", :name=>"fk_course_assessment_answer_bbb492885b1e3dca4433b8af8cb95906", :on_update=>:no_action, :on_delete=>:no_action}
+  create_table "course_assessment_answer_programming_test_results", force: :cascade do |t|
+    t.integer "auto_grading_id", :null=>false, :index=>{:name=>"fk__course_assessment_answe_3d4bf9a99ed787551e4454c7106971fc"}, :foreign_key=>{:references=>"course_assessment_answer_programming_auto_gradings", :name=>"fk_course_assessment_answer_e3d785447112439bb306849be8690102", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer "test_case_id",    :index=>{:name=>"fk__course_assessment_answe_ca0d5ba368869806d2a9cb8717feed4f"}, :foreign_key=>{:references=>"course_assessment_question_programming_test_cases", :name=>"fk_course_assessment_answer_bbb492885b1e3dca4433b8af8cb95906", :on_update=>:no_action, :on_delete=>:no_action}
     t.boolean "passed",          :null=>false
     t.jsonb   "messages",        :default=>{}, :null=>false
-  end
-
-  create_table "course_assessment_answer_programming_files", force: :cascade do |t|
-    t.integer "answer_id", :null=>false, :index=>{:name=>"fk__course_assessment_answer_programming_files_answer_id"}, :foreign_key=>{:references=>"course_assessment_answer_programming", :name=>"fk_course_assessment_answer_programming_files_answer_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.string  "filename",  :limit=>255, :null=>false
-    t.text    "content",   :default=>"", :null=>false
-  end
-  add_index "course_assessment_answer_programming_files", ["answer_id", "filename"], :name=>"index_course_assessment_answer_programming_files_filename", :unique=>true, :case_sensitive=>false
-
-  create_table "course_assessment_answer_programming_file_annotations", force: :cascade do |t|
-    t.integer "file_id", :null=>false, :index=>{:name=>"fk__course_assessment_answe_09c4b638af92d0f8252d7cdef59bd6f3"}, :foreign_key=>{:references=>"course_assessment_answer_programming_files", :name=>"fk_course_assessment_answer_ed21459e7a2a5034dcf43a14812cb17d", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer "line",    :null=>false
   end
 
   create_table "course_assessment_answer_scribings", force: :cascade do |t|
