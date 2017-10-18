@@ -11,9 +11,11 @@ import SurveyAPI from './Survey';
 import VideoAPI from './Video';
 import AdminAPI from './Admin';
 import ScribingQuestionAPI from './Assessment/question/scribing';
+import AnnouncementsAPI from './Announcements';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
+  announcements: new AnnouncementsAPI(),
   assessment: AssessmentAPI,
   comments: new CommentsAPI(),
   virtualClassrooms: new VirtualClassroomsAPI(),
