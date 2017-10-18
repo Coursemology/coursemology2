@@ -1,5 +1,1 @@
-= page_header announcements_title do
-  = new_button([current_course, :announcement]) if can?(:create, Course::Announcement.new(course: current_course))
-
-= render partial: @announcements, spacer_template: 'announcements/announcement_spacer'
-= paginate @announcements
+#course-announcement-component

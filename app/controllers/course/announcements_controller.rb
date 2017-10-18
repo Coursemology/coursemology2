@@ -5,8 +5,13 @@ class Course::AnnouncementsController < Course::ComponentController
   after_action :mark_announcements_as_read, only: :index
 
   def index #:nodoc:
-    @announcements = @announcements.includes(:creator).sorted_by_sticky.sorted_by_date
-    @announcements = @announcements.page(page_param).with_read_marks_for(current_user)
+    respond_to do |format|
+      format.html {}
+      format.json do
+        @announcements = @announcements.includes(:creator).sorted_by_sticky.sorted_by_date
+        @announcements = @announcements.page(page_param).with_read_marks_for(current_user)
+      end
+    end
   end
 
   def show #:nodoc:
@@ -17,10 +22,9 @@ class Course::AnnouncementsController < Course::ComponentController
 
   def create #:nodoc:
     if @announcement.save
-      redirect_to course_announcements_path(current_course),
-                  success: t('.success', title: @announcement.title)
+      render 'announcement.json.jbuilder'
     else
-      render 'new'
+      render json: { errors: @announcement.errors }, status: :bad_request
     end
   end
 
@@ -29,20 +33,17 @@ class Course::AnnouncementsController < Course::ComponentController
 
   def update #:nodoc:
     if @announcement.update_attributes(announcement_params)
-      redirect_to course_announcements_path(current_course),
-                  success: t('.success', title: @announcement.title)
+      render 'announcement.json.jbuilder'
     else
-      render 'edit'
+      render json: { errors: @announcement.errors }, status: :bad_request
     end
   end
 
   def destroy #:nodoc:
     if @announcement.destroy
-      redirect_to course_announcements_path(current_course),
-                  success: t('.success', title: @announcement.title)
+      head :ok
     else
-      redirect_to course_announcements_path(current_course),
-                  danger: t('.failure', error: @announcement.errors.full_messages.to_sentence)
+      render json: { errors: @announcement.errors }, status: :bad_request
     end
   end
 
