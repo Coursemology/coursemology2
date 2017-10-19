@@ -132,11 +132,20 @@ export default class Answers extends Component {
       component={props => (<div dangerouslySetInnerHTML={{ __html: props.input.value }} />)}
     />);
 
-    const editableAnswer = (<Field
+    const richtextAnswer = (<Field
       name={`${answerId}[answer_text]`}
       component={RichTextField}
       multiLine
     />);
+
+    const plaintextAnswer = (<Field
+      name={`${answerId}[answer_text]`}
+      component="textarea"
+      style={{ width: '100%' }}
+      rows={5}
+    />);
+
+    const editableAnswer = question.solutions ? plaintextAnswer : richtextAnswer;
 
     return (
       <div>
