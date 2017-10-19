@@ -113,7 +113,7 @@ export default class Answers extends Component {
             {question.solutions.map((solution, index) => (
               <TableRow key={index}>
                 <TableRowColumn>{solution.solutionType}</TableRowColumn>
-                <TableRowColumn>{solution.solution}</TableRowColumn>
+                <TableRowColumn style={{ whiteSpace: 'pre-wrap' }}>{solution.solution}</TableRowColumn>
                 <TableRowColumn>{solution.grade}</TableRowColumn>
               </TableRow>
             ))}

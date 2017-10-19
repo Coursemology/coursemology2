@@ -90,7 +90,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
             # This works only if +click_link+ is executed before each option.
             fill_in_rails_summernote '.question_text_response_solutions_explanation:last',
                                      solution[:explanation]
-            find('input.text-response-solution').set solution[:solution]
+            find('textarea.text-response-solution').set solution[:solution]
 
             solution_type = find('select.text-response-solution-type', visible: :all)
             # Twitter Bootstrap hides <select> element and creates a div.
