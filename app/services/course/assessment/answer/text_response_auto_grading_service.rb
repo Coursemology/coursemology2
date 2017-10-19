@@ -17,7 +17,7 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   #   assigned to the grading.
   def evaluate_answer(answer)
     question = answer.question.actable
-    answer_text = answer.sanitized_answer_text
+    answer_text = answer.normalized_answer_text
     exact_matches, keywords = question.solutions.partition(&:exact_match?)
 
     solutions = find_exact_match(answer_text, exact_matches)
@@ -41,7 +41,7 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   #   the answer.
   def find_exact_match(answer_text, solutions)
     # comparison is case insensitive
-    solutions.find { |s| s.solution.casecmp(answer_text) == 0 }
+    solutions.find { |s| s.solution.encode(universal_newline: true).casecmp(answer_text) == 0 }
   end
 
   # Returns the keywords found in the given answer text.
