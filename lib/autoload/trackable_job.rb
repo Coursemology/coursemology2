@@ -106,7 +106,7 @@ module TrackableJob
   # The retry is needed because the transaction to create the trackable job might not have finished.
   def find_job(job_id)
     tries ||= 5
-    @job = Job.find(job_id)
+    @job = Job.uncached { Job.find(job_id) }
   rescue ActiveRecord::RecordNotFound => e
     tries -= 1
     raise e if tries < 1
