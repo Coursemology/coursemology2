@@ -62,6 +62,8 @@ export const scribingTools = mirrorCreator([
   'SHAPE',
   'SELECT',
   'MOVE',
+  'UNDO',
+  'REDO',
   'ZOOM_IN',
   'ZOOM_OUT',
   'DELETE',
@@ -91,6 +93,8 @@ export const canvasActionTypes = mirrorCreator([
   'SET_CANVAS_PROPERTIES',
   'SET_DRAWING_MODE',
   'SET_CANVAS_CURSOR',
+  'SET_CURRENT_STATE_INDEX',
+  'SET_CANVAS_STATES',
   'SET_CANVAS_ZOOM',
   'RESET_CHANGE_TOOL',
   'DELETE_CANVAS_OBJECT',
@@ -101,6 +105,10 @@ export const canvasActionTypes = mirrorCreator([
   'RESET_ENABLE_OBJECT_SELECTION',
   'SET_ENABLE_TEXT_SELECTION',
   'RESET_ENABLE_TEXT_SELECTION',
+  'SET_UNDO',
+  'RESET_UNDO',
+  'SET_REDO',
+  'RESET_REDO',
 ]);
 
 const actionTypes = mirrorCreator([

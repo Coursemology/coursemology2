@@ -355,6 +355,14 @@ export const scribingTranslations = defineMessages({
     id: 'course.assessment.submission.answer.scribing.move',
     defaultMessage: 'Move',
   },
+  undo: {
+    id: 'course.assessment.submission.answer.scribing.undo',
+    defaultMessage: 'Undo',
+  },
+  redo: {
+    id: 'course.assessment.submission.answer.scribing.redo',
+    defaultMessage: 'Redo',
+  },
   zoomIn: {
     id: 'course.assessment.submission.answer.scribing.zoomIn',
     defaultMessage: 'Zoom In',

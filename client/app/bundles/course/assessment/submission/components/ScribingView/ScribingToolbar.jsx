@@ -41,6 +41,8 @@ const propTypes = {
   setDisableObjectSelection: PropTypes.func.isRequired,
   setEnableObjectSelection: PropTypes.func.isRequired,
   setEnableTextSelection: PropTypes.func.isRequired,
+  setUndo: PropTypes.func.isRequired,
+  setRedo: PropTypes.func.isRequired,
 };
 
 const styles = {
@@ -67,6 +69,11 @@ const styles = {
     position: 'relative',
     display: 'inline-block',
     paddingRight: '24px',
+  },
+  disabled: {
+    cursor: 'not-allowed',
+    pointerEvents: 'none',
+    color: '#c0c0c0',
   },
 };
 
@@ -229,6 +236,14 @@ class ScribingToolbar extends Component {
 
   onClickDelete = () => {
     this.props.deleteCanvasObject(this.props.answerId);
+  }
+
+  onClickUndo = () => {
+    this.props.setUndo(this.props.answerId);
+  }
+
+  onClickRedo = () => {
+    this.props.setRedo(this.props.answerId);
   }
 
   onMouseEnter(toolType) {
@@ -452,6 +467,40 @@ class ScribingToolbar extends Component {
               verticalPosition={'top'}
             />
           </FontIcon>
+          <FontIcon
+            className="fa fa-undo"
+            onClick={this.onClickUndo}
+            onMouseEnter={() => this.onMouseEnter(scribingTools.UNDO)}
+            onMouseLeave={this.onMouseLeave}
+            style={this.props.scribing.currentStateIndex < 1 ? styles.disabled : undefined}
+            hoverColor={blue500}
+          >
+            <MaterialTooltip
+              horizontalPosition={'center'}
+              label={intl.formatMessage(translations.undo)}
+              show={this.state.hoveredToolTip === scribingTools.UNDO}
+              verticalPosition={'top'}
+            />
+          </FontIcon>
+          <FontIcon
+            className="fa fa-repeat"
+            onClick={this.onClickRedo}
+            onMouseEnter={() => this.onMouseEnter(scribingTools.REDO)}
+            onMouseLeave={this.onMouseLeave}
+            style={this.props.scribing.currentStateIndex >= this.props.scribing.canvasStates.length - 1 ?
+              styles.disabled : undefined
+            }
+            hoverColor={blue500}
+          >
+            <MaterialTooltip
+              horizontalPosition={'center'}
+              label={intl.formatMessage(translations.redo)}
+              show={this.state.hoveredToolTip === scribingTools.REDO}
+              verticalPosition={'top'}
+            />
+          </FontIcon>
+        </ToolbarGroup>
+        <ToolbarGroup>
           <FontIcon
             className="fa fa-arrows"
             style={this.props.scribing.selectedTool === scribingTools.MOVE ?

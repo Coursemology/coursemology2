@@ -51,7 +51,11 @@ export default function (state = {}, action) {
               isDrawingMode: false,
               isChangeTool: false,
               isDelete: false,
+              isUndo: false,
+              isRedo: false,
               cursor: 'pointer',
+              currentStateIndex: -1,
+              canvasStates: [],
               canvasZoom: 1,
               canvasWidth: 100,
               canvasHeight: 100,
@@ -288,6 +292,26 @@ export default function (state = {}, action) {
         },
       };
     }
+    case canvasActionTypes.SET_CURRENT_STATE_INDEX: {
+      const { answerId, currentStateIndex } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          currentStateIndex,
+        },
+      };
+    }
+    case canvasActionTypes.SET_CANVAS_STATES: {
+      const { answerId, canvasStates } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          canvasStates,
+        },
+      };
+    }
     case canvasActionTypes.SET_CANVAS_ZOOM: {
       const { answerId, canvasZoom } = action.payload;
       return {
@@ -388,6 +412,47 @@ export default function (state = {}, action) {
         },
       };
     }
+    case canvasActionTypes.SET_UNDO: {
+      const { answerId } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          isUndo: true,
+        },
+      };
+    }
+    case canvasActionTypes.RESET_UNDO: {
+      const { answerId } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          isUndo: false,
+        },
+      };
+    }
+    case canvasActionTypes.SET_REDO: {
+      const { answerId } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          isRedo: true,
+        },
+      };
+    }
+    case canvasActionTypes.RESET_REDO: {
+      const { answerId } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          isRedo: false,
+        },
+      };
+    }
+
     default: {
       return state;
     }
