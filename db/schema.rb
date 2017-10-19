@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -52,7 +51,7 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.datetime "updated_at",  :null=>false
   end
 
-  create_table "attachment_references", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+  create_table "attachment_references", id: :uuid, default: %q{uuid_generate_v4()}, force: :cascade do |t|
     t.integer  "attachable_id"
     t.string   "attachable_type", :limit=>255, :index=>{:name=>"fk__attachment_references_attachable_id", :with=>["attachable_id"]}
     t.integer  "attachment_id",   :null=>false, :index=>{:name=>"fk__attachment_references_attachment_id"}, :foreign_key=>{:references=>"attachments", :name=>"fk_attachment_references_attachment_id", :on_update=>:no_action, :on_delete=>:no_action}
@@ -175,8 +174,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.integer  "publisher_id",   :index=>{:name=>"fk__course_assessment_submissions_publisher_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessment_submissions_publisher_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "published_at"
     t.datetime "submitted_at"
+
+    t.index ["assessment_id", "creator_id"], :name=>"unique_assessment_id_and_creator_id", :unique=>true
   end
-  add_index "course_assessment_submissions", ["assessment_id", "creator_id"], :name=>"unique_assessment_id_and_creator_id", :unique=>true
 
   create_table "course_assessment_answers", force: :cascade do |t|
     t.integer  "actable_id"
@@ -230,8 +230,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
   create_table "course_assessment_answer_multiple_response_options", force: :cascade do |t|
     t.integer "answer_id", :null=>false, :index=>{:name=>"fk__course_assessment_multiple_response_option_answer"}, :foreign_key=>{:references=>"course_assessment_answer_multiple_responses", :name=>"fk_course_assessment_answer_multiple_response_options_answer_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer "option_id", :null=>false, :index=>{:name=>"fk__course_assessment_multiple_response_option_question_option"}, :foreign_key=>{:references=>"course_assessment_question_multiple_response_options", :name=>"fk_course_assessment_answer_multiple_response_options_option_id", :on_update=>:no_action, :on_delete=>:no_action}
+
+    t.index ["answer_id", "option_id"], :name=>"index_multiple_response_answer_on_answer_id_and_option_id", :unique=>true
   end
-  add_index "course_assessment_answer_multiple_response_options", ["answer_id", "option_id"], :name=>"index_multiple_response_answer_on_answer_id_and_option_id", :unique=>true
 
   create_table "course_assessment_answer_programming", force: :cascade do |t|
   end
@@ -246,8 +247,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.integer "answer_id", :null=>false, :index=>{:name=>"fk__course_assessment_answer_programming_files_answer_id"}, :foreign_key=>{:references=>"course_assessment_answer_programming", :name=>"fk_course_assessment_answer_programming_files_answer_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.string  "filename",  :limit=>255, :null=>false
     t.text    "content",   :default=>"", :null=>false
+
+    t.index ["answer_id", "filename"], :name=>"index_course_assessment_answer_programming_files_filename", :unique=>true, :case_sensitive=>false
   end
-  add_index "course_assessment_answer_programming_files", ["answer_id", "filename"], :name=>"index_course_assessment_answer_programming_files_filename", :unique=>true, :case_sensitive=>false
 
   create_table "course_assessment_answer_programming_file_annotations", force: :cascade do |t|
     t.integer "file_id", :null=>false, :index=>{:name=>"fk__course_assessment_answe_09c4b638af92d0f8252d7cdef59bd6f3"}, :foreign_key=>{:references=>"course_assessment_answer_programming_files", :name=>"fk_course_assessment_answer_ed21459e7a2a5034dcf43a14812cb17d", :on_update=>:no_action, :on_delete=>:no_action}
@@ -307,8 +309,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.integer "question_id", :null=>false, :index=>{:name=>"fk__course_assessment_quest_dbf3aed51f19fcc63a25d296a057dd1f"}, :foreign_key=>{:references=>"course_assessment_question_programming", :name=>"fk_course_assessment_questi_0788633b496294e558f55f2b41bc7c45", :on_update=>:no_action, :on_delete=>:no_action}
     t.string  "filename",    :limit=>255, :null=>false
     t.text    "content",     :null=>false
+
+    t.index ["question_id", "filename"], :name=>"index_course_assessment_question_programming_template_filenames", :unique=>true, :case_sensitive=>false
   end
-  add_index "course_assessment_question_programming_template_files", ["question_id", "filename"], :name=>"index_course_assessment_question_programming_template_filenames", :unique=>true, :case_sensitive=>false
 
   create_table "course_assessment_question_scribings", force: :cascade do |t|
   end
@@ -322,7 +325,7 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.integer "question_id",   :null=>false, :index=>{:name=>"fk__course_assessment_text_response_solution_question"}, :foreign_key=>{:references=>"course_assessment_question_text_responses", :name=>"fk_course_assessment_questi_2fbeabfad04f21c2d05c8b2d9100d1c4", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer "solution_type", :default=>0, :null=>false
     t.text    "solution",      :null=>false
-    t.decimal "grade",         :precision=>4, :scale=>1, :default=>0.0, :null=>false
+    t.decimal "grade",         :precision=>4, :scale=>1, :default=>"0.0", :null=>false
     t.text    "explanation"
   end
 
@@ -366,8 +369,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.integer  "question_id",   :null=>false, :index=>{:name=>"fk__course_assessment_submission_questions_question_id"}, :foreign_key=>{:references=>"course_assessment_questions", :name=>"fk_course_assessment_submission_questions_question_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at",    :null=>false
     t.datetime "updated_at",    :null=>false
+
+    t.index ["submission_id", "question_id"], :name=>"idx_course_assessment_submission_questions_on_sub_and_qn", :unique=>true
   end
-  add_index "course_assessment_submission_questions", ["submission_id", "question_id"], :name=>"idx_course_assessment_submission_questions_on_sub_and_qn", :unique=>true
 
   create_table "course_condition_achievements", force: :cascade do |t|
     t.integer "achievement_id", :null=>false, :index=>{:name=>"fk__course_condition_achievements_achievement_id"}, :foreign_key=>{:references=>"course_achievements", :name=>"fk_course_condition_achievements_achievement_id", :on_update=>:no_action, :on_delete=>:no_action}
@@ -422,22 +426,25 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.integer  "updater_id", :null=>false, :index=>{:name=>"fk__course_discussion_post_votes_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_discussion_post_votes_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at", :null=>false
     t.datetime "updated_at", :null=>false
+
+    t.index ["post_id", "creator_id"], :name=>"index_course_discussion_post_votes_on_post_id_and_creator_id", :unique=>true
   end
-  add_index "course_discussion_post_votes", ["post_id", "creator_id"], :name=>"index_course_discussion_post_votes_on_post_id_and_creator_id", :unique=>true
 
   create_table "course_discussion_topic_subscriptions", force: :cascade do |t|
     t.integer "topic_id", :null=>false, :index=>{:name=>"fk__course_discussion_topic_subscriptions_topic_id"}, :foreign_key=>{:references=>"course_discussion_topics", :name=>"fk_course_discussion_topic_subscriptions_topic_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer "user_id",  :null=>false, :index=>{:name=>"fk__course_discussion_topic_subscriptions_user_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_discussion_topic_subscriptions_user_id", :on_update=>:no_action, :on_delete=>:no_action}
+
+    t.index ["topic_id", "user_id"], :name=>"index_topic_subscriptions_on_topic_id_and_user_id", :unique=>true
   end
-  add_index "course_discussion_topic_subscriptions", ["topic_id", "user_id"], :name=>"index_topic_subscriptions_on_topic_id_and_user_id", :unique=>true
 
   create_table "course_enrol_requests", force: :cascade do |t|
     t.integer  "course_id",  :null=>false, :index=>{:name=>"fk__course_enrol_requests_course_id"}, :foreign_key=>{:references=>"courses", :name=>"fk_course_enrol_requests_course_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "user_id",    :null=>false, :index=>{:name=>"fk__course_enrol_requests_user_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_enrol_requests_user_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at"
     t.datetime "updated_at"
+
+    t.index ["course_id", "user_id"], :name=>"index_course_enrol_requests_on_course_id_and_user_id", :unique=>true
   end
-  add_index "course_enrol_requests", ["course_id", "user_id"], :name=>"index_course_enrol_requests_on_course_id_and_user_id", :unique=>true
 
   create_table "course_users", force: :cascade do |t|
     t.integer  "course_id",      :null=>false, :index=>{:name=>"fk__course_users_course_id"}, :foreign_key=>{:references=>"courses", :name=>"fk_course_users_course_id", :on_update=>:no_action, :on_delete=>:no_action}
@@ -450,8 +457,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.datetime "updated_at",     :null=>false
     t.integer  "creator_id",     :null=>false, :index=>{:name=>"fk__course_users_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_users_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "updater_id",     :null=>false, :index=>{:name=>"fk__course_users_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_users_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
+
+    t.index ["course_id", "user_id"], :name=>"index_course_users_on_course_id_and_user_id", :unique=>true
   end
-  add_index "course_users", ["course_id", "user_id"], :name=>"index_course_users_on_course_id_and_user_id", :unique=>true
 
   create_table "course_experience_points_records", force: :cascade do |t|
     t.integer  "actable_id"
@@ -477,14 +485,16 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.integer  "updater_id",  :null=>false, :index=>{:name=>"fk__course_forums_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_forums_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at",  :null=>false
     t.datetime "updated_at",  :null=>false
+
+    t.index ["course_id", "slug"], :name=>"index_course_forums_on_course_id_and_slug", :unique=>true
   end
-  add_index "course_forums", ["course_id", "slug"], :name=>"index_course_forums_on_course_id_and_slug", :unique=>true
 
   create_table "course_forum_subscriptions", force: :cascade do |t|
     t.integer "forum_id", :null=>false, :index=>{:name=>"fk__course_forum_subscriptions_forum_id"}, :foreign_key=>{:references=>"course_forums", :name=>"fk_course_forum_subscriptions_forum_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer "user_id",  :null=>false, :index=>{:name=>"fk__course_forum_subscriptions_user_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_forum_subscriptions_user_id", :on_update=>:no_action, :on_delete=>:no_action}
+
+    t.index ["forum_id", "user_id"], :name=>"index_course_forum_subscriptions_on_forum_id_and_user_id", :unique=>true
   end
-  add_index "course_forum_subscriptions", ["forum_id", "user_id"], :name=>"index_course_forum_subscriptions_on_forum_id_and_user_id", :unique=>true
 
   create_table "course_forum_topics", force: :cascade do |t|
     t.integer  "forum_id",       :null=>false, :index=>{:name=>"fk__course_forum_topics_forum_id"}, :foreign_key=>{:references=>"course_forums", :name=>"fk_course_forum_topics_forum_id", :on_update=>:no_action, :on_delete=>:no_action}
@@ -499,8 +509,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.datetime "updated_at",     :null=>false
     t.boolean  "resolved",       :default=>false, :null=>false
     t.datetime "latest_post_at", :null=>false
+
+    t.index ["forum_id", "slug"], :name=>"index_course_forum_topics_on_forum_id_and_slug", :unique=>true
   end
-  add_index "course_forum_topics", ["forum_id", "slug"], :name=>"index_course_forum_topics_on_forum_id_and_slug", :unique=>true
 
   create_table "course_forum_topic_views", force: :cascade do |t|
     t.integer  "topic_id",   :null=>false, :index=>{:name=>"fk__course_forum_topic_views_topic_id"}, :foreign_key=>{:references=>"course_forum_topics", :name=>"fk_course_forum_topic_views_topic_id", :on_update=>:no_action, :on_delete=>:no_action}
@@ -517,8 +528,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.integer  "updater_id",  :null=>false, :index=>{:name=>"fk__course_groups_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_groups_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at",  :null=>false
     t.datetime "updated_at",  :null=>false
+
+    t.index ["course_id", "name"], :name=>"index_course_groups_on_course_id_and_name", :unique=>true
   end
-  add_index "course_groups", ["course_id", "name"], :name=>"index_course_groups_on_course_id_and_name", :unique=>true
 
   create_table "course_group_users", force: :cascade do |t|
     t.integer  "group_id",       :null=>false, :index=>{:name=>"fk__course_group_users_course_group_id"}, :foreign_key=>{:references=>"course_groups", :name=>"fk_course_group_users_course_group_id", :on_update=>:no_action, :on_delete=>:no_action}
@@ -528,8 +540,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.integer  "updater_id",     :null=>false, :index=>{:name=>"fk__course_group_users_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_group_users_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at",     :null=>false
     t.datetime "updated_at",     :null=>false
+
+    t.index ["course_user_id", "group_id"], :name=>"index_course_group_users_on_course_user_id_and_course_group_id", :unique=>true
   end
-  add_index "course_group_users", ["course_user_id", "group_id"], :name=>"index_course_group_users_on_course_user_id_and_course_group_id", :unique=>true
 
   create_table "course_lesson_plan_events", force: :cascade do |t|
     t.string "location",   :limit=>255
@@ -550,8 +563,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.integer  "updater_id",         :null=>false, :index=>{:name=>"fk__course_material_folders_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_material_folders_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at",         :null=>false
     t.datetime "updated_at",         :null=>false
+
+    t.index ["parent_id", "name"], :name=>"index_course_material_folders_on_parent_id_and_name", :unique=>true, :case_sensitive=>false
   end
-  add_index "course_material_folders", ["parent_id", "name"], :name=>"index_course_material_folders_on_parent_id_and_name", :unique=>true, :case_sensitive=>false
 
   create_table "course_materials", force: :cascade do |t|
     t.integer  "folder_id",   :null=>false, :index=>{:name=>"fk__course_materials_folder_id"}, :foreign_key=>{:references=>"course_material_folders", :name=>"fk_course_materials_folder_id", :on_update=>:no_action, :on_delete=>:no_action}
@@ -561,8 +575,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.integer  "updater_id",  :null=>false, :index=>{:name=>"fk__course_materials_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_materials_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at",  :null=>false
     t.datetime "updated_at",  :null=>false
+
+    t.index ["folder_id", "name"], :name=>"index_course_materials_on_folder_id_and_name", :unique=>true, :case_sensitive=>false
   end
-  add_index "course_materials", ["folder_id", "name"], :name=>"index_course_materials_on_folder_id_and_name", :unique=>true, :case_sensitive=>false
 
   create_table "course_lesson_plan_event_materials", force: :cascade do |t|
     t.integer "lesson_plan_event_id", :null=>false, :index=>{:name=>"fk__course_lesson_plan_event_materials_lesson_plan_event_id"}, :foreign_key=>{:references=>"course_lesson_plan_events", :name=>"fk_course_lesson_plan_event_materials_lesson_plan_event_id", :on_update=>:no_action, :on_delete=>:no_action}
@@ -609,16 +624,18 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.integer  "updater_id",     :null=>false, :index=>{:name=>"fk__course_lesson_plan_todos_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_lesson_plan_todos_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at"
     t.datetime "updated_at"
+
+    t.index ["item_id", "user_id"], :name=>"index_course_lesson_plan_todos_on_item_id_and_user_id", :unique=>true
   end
-  add_index "course_lesson_plan_todos", ["item_id", "user_id"], :name=>"index_course_lesson_plan_todos_on_item_id_and_user_id", :unique=>true
 
   create_table "course_levels", force: :cascade do |t|
     t.integer  "course_id",                   :null=>false, :index=>{:name=>"fk__course_levels_course_id"}, :foreign_key=>{:references=>"courses", :name=>"fk_course_levels_course_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.integer  "experience_points_threshold", :null=>false
     t.datetime "created_at",                  :null=>false
     t.datetime "updated_at",                  :null=>false
+
+    t.index ["course_id", "experience_points_threshold"], :name=>"index_experience_points_threshold_on_course_id", :unique=>true
   end
-  add_index "course_levels", ["course_id", "experience_points_threshold"], :name=>"index_experience_points_threshold_on_course_id", :unique=>true
 
   create_table "course_notifications", force: :cascade do |t|
     t.integer  "activity_id",       :null=>false, :index=>{:name=>"index_course_notifications_on_activity_id"}, :foreign_key=>{:references=>"activities", :name=>"fk_course_notifications_activity_id", :on_update=>:no_action, :on_delete=>:no_action}
@@ -668,8 +685,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.integer  "updater_id",   :null=>false, :index=>{:name=>"fk__course_survey_responses_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_survey_responses_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at",   :null=>false
     t.datetime "updated_at",   :null=>false
+
+    t.index ["survey_id", "creator_id"], :name=>"index_course_survey_responses_on_survey_id_and_creator_id", :unique=>true
   end
-  add_index "course_survey_responses", ["survey_id", "creator_id"], :name=>"index_course_survey_responses_on_survey_id_and_creator_id", :unique=>true
 
   create_table "course_survey_answers", force: :cascade do |t|
     t.integer  "question_id",   :null=>false, :index=>{:name=>"fk__course_survey_answers_question_id"}, :foreign_key=>{:references=>"course_survey_questions", :name=>"fk_course_survey_answers_question_id", :on_update=>:no_action, :on_delete=>:no_action}
@@ -698,8 +716,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.datetime "obtained_at",    :null=>false
     t.datetime "created_at",     :null=>false
     t.datetime "updated_at",     :null=>false
+
+    t.index ["course_user_id", "achievement_id"], :name=>"index_user_achievements_on_course_user_id_and_achievement_id", :unique=>true
   end
-  add_index "course_user_achievements", ["course_user_id", "achievement_id"], :name=>"index_user_achievements_on_course_user_id_and_achievement_id", :unique=>true
 
   create_table "course_user_invitations", force: :cascade do |t|
     t.integer  "course_id",      :null=>false, :index=>{:name=>"fk__course_user_invitations_course_id"}, :foreign_key=>{:references=>"courses", :name=>"fk_course_user_invitations_course_id", :on_update=>:no_action, :on_delete=>:no_action}
@@ -714,8 +733,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.integer  "updater_id",     :null=>false, :index=>{:name=>"fk__course_user_invitations_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_user_invitations_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at",     :null=>false
     t.datetime "updated_at",     :null=>false
+
+    t.index ["course_id", "email"], :name=>"index_course_user_invitations_on_course_id_and_email", :unique=>true
   end
-  add_index "course_user_invitations", ["course_id", "email"], :name=>"index_course_user_invitations_on_course_id_and_email", :unique=>true
 
   create_table "course_videos", force: :cascade do |t|
     t.string   "url",        :limit=>255, :null=>false
@@ -731,8 +751,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.integer  "updater_id", :null=>false, :index=>{:name=>"fk__course_video_submissions_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_video_submissions_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at", :null=>false
     t.datetime "updated_at", :null=>false
+
+    t.index ["video_id", "creator_id"], :name=>"index_course_video_submissions_on_video_id_and_creator_id", :unique=>true
   end
-  add_index "course_video_submissions", ["video_id", "creator_id"], :name=>"index_course_video_submissions_on_video_id_and_creator_id", :unique=>true
 
   create_table "course_video_topics", force: :cascade do |t|
     t.integer "video_id",  :null=>false, :index=>{:name=>"fk__course_video_topics_video_id"}, :foreign_key=>{:references=>"course_videos", :name=>"fk_course_video_topics_video_id", :on_update=>:no_action, :on_delete=>:no_action}
@@ -786,8 +807,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.datetime "last_active_at"
     t.datetime "created_at",     :null=>false
     t.datetime "updated_at",     :null=>false
+
+    t.index ["instance_id", "user_id"], :name=>"index_instance_users_on_instance_id_and_user_id", :unique=>true
   end
-  add_index "instance_users", ["instance_id", "user_id"], :name=>"index_instance_users_on_instance_id_and_user_id", :unique=>true
 
   create_table "read_marks", force: :cascade do |t|
     t.integer  "readable_id"
@@ -795,8 +817,9 @@ ActiveRecord::Schema.define(version: 20171014154130) do
     t.integer  "reader_id",     :null=>false, :index=>{:name=>"fk__read_marks_user_id"}, :foreign_key=>{:references=>"users", :name=>"fk_read_marks_user_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "timestamp"
     t.string   "reader_type",   :limit=>255
+
+    t.index ["reader_id", "reader_type", "readable_type", "readable_id"], :name=>"read_marks_reader_readable_index", :unique=>true
   end
-  add_index "read_marks", ["reader_id", "reader_type", "readable_type", "readable_id"], :name=>"read_marks_reader_readable_index", :unique=>true
 
   create_table "user_emails", force: :cascade do |t|
     t.boolean  "primary",              :default=>false, :null=>false
