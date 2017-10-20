@@ -165,7 +165,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
       end
 
       context 'when a valid ordering is given' do
-        let(:reversed_order) { immutable_assessment.questions.map(&:id).reverse }
+        let(:reversed_order) { immutable_assessment.question_assessments.map(&:id).reverse }
 
         before do
           post :reorder,
@@ -174,7 +174,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
         end
 
         it 'reorders questions' do
-          expect(immutable_assessment.questions.order(:weight).pluck(:id)).to eq(reversed_order)
+          expect(immutable_assessment.question_assessments.order(:weight).pluck(:id)).to eq(reversed_order)
         end
       end
 
