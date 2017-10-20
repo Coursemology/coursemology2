@@ -10,6 +10,18 @@ RSpec.describe Course::Announcement, type: :model do
     let!(:user) { create(:user) }
     let(:course) { create(:course) }
 
+    describe 'validations' do
+      subject { build(:course_announcement) }
+      context 'when start date is after end date' do
+        before { subject.start_at = subject.end_at + 3.days }
+        it 'is invalid' do
+          expect(subject).to be_invalid
+          expect(subject.errors[:start_at]).to include(I18n.t('activerecord.errors.models.' \
+            'course/announcement.attributes.start_at.cannot_be_after_end_at'))
+        end
+      end
+    end
+
     describe 'create an announcement' do
       context 'when announcement is created' do
         subject { Course::Announcement.new }

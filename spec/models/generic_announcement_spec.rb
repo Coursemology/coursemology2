@@ -10,6 +10,18 @@ RSpec.describe GenericAnnouncement, type: :model do
     let!(:active_system_announcements) { create_list(:system_announcement, 1) }
     let!(:active_instance_announcements) { create_list(:instance_announcement, 1) }
 
+    describe 'validations' do
+      subject { build(:generic_announcement) }
+      context 'when start date is after end date' do
+        before { subject.start_at = subject.end_at + 3.days }
+        it 'is invalid' do
+          expect(subject).to be_invalid
+          expect(subject.errors[:start_at]).to include(I18n.t('activerecord.errors.models.' \
+            'generic_announcement.attributes.start_at.cannot_be_after_end_at'))
+        end
+      end
+    end
+
     describe '.currently_active' do
       let!(:now) { Time.zone.now }
       let!(:inactive_announcements) do
