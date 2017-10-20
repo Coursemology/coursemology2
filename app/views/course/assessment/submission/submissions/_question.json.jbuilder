@@ -3,7 +3,6 @@
 
 json.id question.id
 json.description question.description
-json.displayTitle question.display_title
 json.maximumGrade question.maximum_grade.to_f
 
 json.type case question.actable_type

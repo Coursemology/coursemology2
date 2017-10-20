@@ -7,6 +7,18 @@ class Course::QuestionAssessment < ApplicationRecord
 
   default_scope { order(weight: :asc) }
 
+  # Prefixes a question number in front of the title
+  #
+  # @return [string]
+  def display_title
+    question_number = I18n.t('activerecord.course/assessment/question.question_number',
+                             index: assessment.question_assessments.index(self) + 1)
+
+    return question_number if question.title.blank?
+    I18n.t('activerecord.course/assessment/question.question_with_title',
+           question_number: question_number, title: question.title)
+  end
+
   private
 
   def set_defaults

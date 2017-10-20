@@ -1,6 +1,6 @@
 json.question do
   json.(@programming_question, :id, :title, :description, :staff_only_comments, :maximum_grade,
-                               :weight, :language_id, :memory_limit, :time_limit)
+                               :language_id, :memory_limit, :time_limit)
   json.languages Coursemology::Polyglot::Language.all.order(:name) do |lang|
     json.(lang, :id, :name)
     json.editor_mode lang.ace_mode

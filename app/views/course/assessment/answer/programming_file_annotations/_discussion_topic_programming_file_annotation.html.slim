@@ -4,10 +4,11 @@
 - question = answer.question
 - submission = answer.submission
 - assessment = question.assessment
+- question_assessment = assessment.question_assessments.find_by!(question: question)
 
 = div_for(topic, 'data-topic-id' => topic.id) do
   h3
-    - comment_title = "#{assessment.title}: #{question.display_title}"
+    - comment_title = "#{assessment.title}: #{question_assessment.display_title}"
     = link_to comment_title, edit_course_assessment_submission_path(current_course, assessment, submission, step: assessment.questions.index(question) +1)
   - if can?(:manage, topic)
     = link_to_toggle_pending(topic)

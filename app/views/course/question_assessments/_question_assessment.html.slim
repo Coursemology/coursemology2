@@ -1,0 +1,20 @@
+- assessment = question_assessment.assessment
+- question = question_assessment.question
+
+- edit_path = url_for([:edit, current_course, @assessment, question.specific])
+- delete_path = url_for([current_course, @assessment, question.specific])
+
+.question-card data-question-dom-id=dom_id(question_assessment)
+  .panel.panel-default.card
+    .panel-body
+      = div_for(question, class: ['clearfix']) do
+        div.pull-right
+          - if !question.auto_gradable? && assessment.autograded?
+            => fa_icon 'exclamation-triangle'.freeze,
+                    title: t('.non_auto_gradable'),
+                    class: 'text-warning'
+          div.btn-group
+            = edit_button(edit_path)
+            = delete_button(delete_path)
+        h4 = format_inline_text(question_assessment.display_title)
+        = format_html(question.description)

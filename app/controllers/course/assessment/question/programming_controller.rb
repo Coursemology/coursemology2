@@ -25,6 +25,7 @@ class Course::Assessment::Question::ProgrammingController < \
   end
 
   def edit
+    @question_assessment = load_question_assessment_for(@programming_question)
     @template = 'course/assessment/question/programming/edit.json.jbuilder'
     @meta = programming_package_service.extract_meta if @programming_question.edit_online?
   end

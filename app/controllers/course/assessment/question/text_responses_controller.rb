@@ -22,6 +22,7 @@ class Course::Assessment::Question::TextResponsesController < \
   end
 
   def edit
+    @question_assessment = load_question_assessment_for(@text_response_question)
   end
 
   def update

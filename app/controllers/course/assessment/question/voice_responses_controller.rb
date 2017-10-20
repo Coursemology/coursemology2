@@ -27,6 +27,7 @@ class Course::Assessment::Question::VoiceResponsesController < \
   end
 
   def edit
+    @question_assessment = load_question_assessment_for(@voice_response_question)
   end
 
   def destroy

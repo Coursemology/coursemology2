@@ -39,6 +39,8 @@ class Course::Assessment::Question::ScribingController < \
   end
 
   def edit
+    @question_assessment = load_question_assessment_for(@scribing_question)
+
     respond_to do |format|
       format.html { render 'edit' }
       format.json { render_scribing_question_json }

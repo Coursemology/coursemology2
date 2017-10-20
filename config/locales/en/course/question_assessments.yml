@@ -1,0 +1,5 @@
+en:
+  course:
+    question_assessments:
+      question_assessment:
+        non_auto_gradable: 'This question is not auto-gradable'

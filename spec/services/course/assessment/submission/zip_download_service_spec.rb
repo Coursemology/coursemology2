@@ -123,7 +123,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
 
           expect(subject).to be_present
 
-          assessment_title = Pathname.normalize_filename(assessment.questions.first.display_title)
+          assessment_title = Pathname.normalize_filename(assessment.question_assessments.first.display_title)
 
           file_names = Zip::File.open(subject) { |f| f.map(&:name) }
           expect(file_names).to contain_exactly(
@@ -144,7 +144,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
           expect(subject).to be_present
 
           student2_name = "#{student2.name} (0)"
-          assessment_title = Pathname.normalize_filename(assessment.questions.first.display_title)
+          assessment_title = Pathname.normalize_filename(assessment.question_assessments.first.display_title)
 
           file_names = Zip::File.open(subject) { |f| f.map(&:name) }
           expect(file_names).to contain_exactly(

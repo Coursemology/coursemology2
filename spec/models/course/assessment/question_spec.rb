@@ -37,28 +37,6 @@ RSpec.describe Course::Assessment::Question do
       end
     end
 
-    describe '#display_title' do
-      context 'when title is nil' do
-        let!(:question) { create(:course_assessment_question, title: nil) }
-        subject { question }
-
-        it 'returns Question N' do
-          expect(subject.display_title).
-            to eq I18n.t('activerecord.course/assessment/question.question_number')
-        end
-      end
-
-      context 'when there is a title' do
-        let!(:question) { create(:course_assessment_question) }
-        subject { question }
-
-        it 'returns question_with_title translation' do
-          expect(subject.display_title).
-            to eq I18n.t('activerecord.course/assessment/question.question_with_title')
-        end
-      end
-    end
-
     describe '#auto_gradable?' do
       it 'defaults to false' do
         expect(subject.auto_gradable?).to eq(false)
@@ -139,16 +117,6 @@ RSpec.describe Course::Assessment::Question do
           expect(assessment.questions.not_correctly_answered(submission)).
             to contain_exactly(*(assessment.questions - [question]))
         end
-      end
-    end
-
-    describe '.default_scope' do
-      let(:assessment) { create(:assessment) }
-      let!(:questions) { create_list(:course_assessment_question, 2, assessment: assessment) }
-      it 'orders by ascending weight' do
-        weights = assessment.questions.pluck(:weight)
-        expect(weights.length).to be > 1
-        expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
       end
     end
   end

@@ -44,7 +44,9 @@ class Course::Assessment::Submission::ZipDownloadService
     answers = submission.answers.includes(:question).latest_answers.
               select { |answer| @questions[answer.question_id]&.downloadable? }
     answers.each do |answer|
-      answer_dir = create_folder(submission_dir, @questions[answer.question_id].display_title)
+      question_assessment = submission.assessment.question_assessments.
+                            find_by!(question: @questions[answer.question_id])
+      answer_dir = create_folder(submission_dir, question_assessment.display_title)
       answer.specific.download(answer_dir)
     end
   end

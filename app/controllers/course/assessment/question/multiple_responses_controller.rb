@@ -20,6 +20,7 @@ class Course::Assessment::Question::MultipleResponsesController < \
   end
 
   def edit
+    @question_assessment = load_question_assessment_for(@multiple_response_question)
   end
 
   def update
