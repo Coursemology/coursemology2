@@ -35,4 +35,4 @@ en:
         attempted:
           course_notifications:
             feed:
-              attempted_video_html: '%{user} attempted %{video}'
+              attempted_video_html: '%{user} watched %{video}'
