@@ -32,5 +32,27 @@ RSpec.describe Course::Material, type: :model do
         expect(subject).to be_invalid
       end
     end
+
+    describe '#next_valid_name' do
+      let(:common_name) { 'Common Name' }
+      let(:parent_folder) { create(:folder) }
+      let(:material) { build(:material, folder: parent_folder, name: common_name) }
+
+      let(:other_material) { build(:material, folder: parent_folder, name: common_name.downcase) }
+      let(:sibling_folder) { build(:folder, parent: parent_folder, name: common_name + ' (0)') }
+
+      it 'returns a unique name' do
+        # When there are no name conflicts
+        expect(material.send(:next_valid_name)).to eq(common_name)
+
+        # When there is a name conflict with another material
+        other_material.save
+        expect(material.send(:next_valid_name)).to eq(common_name + ' (0)')
+
+        # When there is another name conflict with a sibling folder
+        sibling_folder.save
+        expect(material.send(:next_valid_name)).to eq(common_name + ' (1)')
+      end
+    end
   end
 end

@@ -424,6 +424,30 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
             end
           end
         end
+
+        context 'when there are items with conflicting filenames' do
+          let(:source_objects) { [material, parent_folder] }
+          let(:conflicting_folder) do
+            create(:course_material_folder, course: destination_course,
+                                            parent: destination_course.root_folder, name: parent_folder.name)
+          end
+          let(:conflicting_material) do
+            create(:course_material, folder: destination_course.root_folder, name: material.name)
+          end
+
+          before do
+            conflicting_folder
+            conflicting_material
+          end
+
+          it 'gives the duplicated items unique names' do
+            expect { duplicate_objects }.to change { destination_course.material_folders.count }.by(1)
+
+            duplicate_material, duplicate_folder = duplicate_objects
+            expect(duplicate_material.name).not_to eq(material.name)
+            expect(duplicate_folder.name).not_to eq(parent_folder.name)
+          end
+        end
       end
 
       context 'when a survey is selected' do

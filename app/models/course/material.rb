@@ -28,6 +28,13 @@ class Course::Material < ApplicationRecord
     !duplicating?
   end
 
+  # Finds a unique name for the current material among its siblings.
+  #
+  # @return [String] A unique name.
+  def next_valid_name
+    folder.next_uniq_child_name(self)
+  end
+
   def initialize_duplicate(duplicator, other)
     self.attachment = duplicator.duplicate(other.attachment)
     self.folder = if duplicator.duplicated?(other.folder)
@@ -40,10 +47,15 @@ class Course::Material < ApplicationRecord
     set_duplication_flag
   end
 
+  def before_duplicate_save(_duplicator)
+    self.name = next_valid_name
+  end
+
   private
 
   # TODO: Not threadsafe, consider making all folders as materials
   # Make sure that material won't have the same name with other child folders in the folder
+  # Schema validations already ensure that it won't have the same name as other materials
   def validate_name_is_unique_among_folders
     return if folder.nil?
 

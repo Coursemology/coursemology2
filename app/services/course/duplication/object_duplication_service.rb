@@ -43,6 +43,7 @@ class Course::Duplication::ObjectDuplicationService < Course::Duplication::BaseS
     # TODO: Email the user when the duplication is complete.
     Course.transaction do
       duplicated = duplicator.duplicate(objects)
+      before_save(objects, duplicated)
       save_success = duplicated.respond_to?(:save) ? duplicated.save : duplicated.all?(&:save)
       after_save_success = save_success && after_save(objects, duplicated)
       raise ActiveRecord::Rollback unless after_save_success
@@ -51,6 +52,22 @@ class Course::Duplication::ObjectDuplicationService < Course::Duplication::BaseS
   end
 
   private
+
+  # Executes callbacks meant to be invoked after all items have been duplicated, but before they have
+  # been saved. This is useful for actions that make invalid items valid so they can be saved successfully,
+  # that can only be executed after all items have been re-parented.
+  #
+  # Models may implement `before_duplicate_save(duplicator)` if they have code to be executed during this
+  # window.
+  #
+  # @param [Object|Array] _objects The source object(s)
+  # @param [Object|Array] duplicated The duplicated object(s)
+  def before_save(_objects, duplicates)
+    duplicates_array = duplicates.respond_to?(:to_ary) ? duplicates : [duplicates]
+    duplicates_array.each do |duplicate|
+      duplicate.before_duplicate_save(duplicator) if duplicate.respond_to?(:before_duplicate_save)
+    end
+  end
 
   # Executes callbacks meant to be invoked after duplicated objects have been saved.
   #
