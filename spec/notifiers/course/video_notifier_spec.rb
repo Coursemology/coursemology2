@@ -7,8 +7,8 @@ RSpec.describe Course::VideoNotifier, type: :notifier do
   with_tenant(:instance) do
     describe '#video_attempted' do
       let(:course) { create(:course) }
-      let(:video) { create(:video, course: course) }
-      let(:user) { create(:course_user, course: course).user }
+      let!(:video) { create(:video, course: course) }
+      let!(:user) { create(:course_user, course: course).user }
 
       subject { Course::VideoNotifier.video_attempted(user, video) }
 
@@ -19,8 +19,8 @@ RSpec.describe Course::VideoNotifier, type: :notifier do
 
     describe '#video_opening' do
       let(:course) { create(:course) }
-      let(:video) { create(:course_video, course: course) }
-      let(:user) { create(:course_user, course: course).user }
+      let!(:video) { create(:course_video, course: course) }
+      let!(:user) { create(:course_user, course: course).user }
       let(:activity) { Activity.find_by(object: video, event: :opening, actor: user) }
 
       subject { Course::VideoNotifier.video_opening(user, video) }
@@ -61,7 +61,7 @@ RSpec.describe Course::VideoNotifier, type: :notifier do
       let(:activity) { Activity.find_by(object: video, event: :closing, actor: user) }
 
       let(:course) { create(:course) }
-      let(:video) { create(:course_video, course: course, end_at: now) }
+      let!(:video) { create(:course_video, course: course, end_at: now) }
       let(:user) { create(:course_manager, course: course).user }
       let!(:submitted_student) { create(:course_student, course: course) }
       let!(:unsubmitted_student) { create(:course_student, course: course) }

@@ -44,12 +44,12 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   # Reorder questions for an assessment
   def reorder
-    unless valid_ordering?(question_order_params)
+    unless valid_ordering?(question_order_ids)
       raise ArgumentError, 'Invalid ordering for assessment questions'
     end
 
     Course::Assessment::Question.transaction do
-      question_order_params.each_with_index do |id, index|
+      question_order_ids.each_with_index do |id, index|
         questions_hash[id].update_attribute(:weight, index)
       end
     end
@@ -65,8 +65,11 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   private
 
-  def question_order_params
-    params.require(:question_order)
+  def question_order_ids
+    @order_from_user ||= begin
+      integer_type = ActiveModel::Type::Integer.new
+      params.require(:question_order).map { |id| integer_type.cast(id) }
+    end
   end
 
   def assessment_params
@@ -137,7 +140,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   # @return [Hash{Integer => Course::Assessment::Question}]
   def questions_hash
     @questions_hash ||= @assessment.questions.map do |question|
-      [question.id.to_s, question]
+      [question.id, question]
     end.to_h
   end
 

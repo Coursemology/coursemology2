@@ -81,9 +81,10 @@ module TrackableJob
 
   def rescue_tracked(exception)
     @job.status = :errored
-    @job.error = exception.as_json.reverse_merge(class: exception.class.name,
-                                                 message: exception.to_s,
-                                                 backtrace: exception.backtrace)
+    error = { class: exception.class.name, message: exception.to_s, backtrace: exception.backtrace }
+    error.merge!(exception.try(:to_h) || {})
+
+    @job.error = error
     @job.save!
   end
 
@@ -105,7 +106,7 @@ module TrackableJob
   # The retry is needed because the transaction to create the trackable job might not have finished.
   def find_job(job_id)
     tries ||= 5
-    @job = Job.find(job_id)
+    @job = Job.uncached { Job.find(job_id) }
   rescue ActiveRecord::RecordNotFound => e
     tries -= 1
     raise e if tries < 1

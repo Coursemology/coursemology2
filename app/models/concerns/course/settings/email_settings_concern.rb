@@ -85,7 +85,7 @@ module Course::Settings::EmailSettingsConcern
   def update_email_setting(attributes)
     setting_key = attributes['key'].to_sym
     raise ArgumentError, 'Invalid email key' unless valid_email_setting_key?(setting_key)
-    settings.settings(:emails, setting_key).enabled = attributes['enabled']
+    settings.settings(:emails, setting_key).enabled = ActiveRecord::Type::Boolean.new.cast(attributes['enabled'])
     true
   end
 end

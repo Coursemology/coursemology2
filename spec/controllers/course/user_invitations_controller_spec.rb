@@ -32,7 +32,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
         { invitations_attributes: invitations }
       end
 
-      subject { post :create, course_id: course, course: invite_params }
+      subject { post :create, params: { course_id: course, course: invite_params } }
 
       context 'when a course manager visits the page' do
         let!(:course_lecturer) { create(:course_manager, course: course, user: user) }
@@ -65,7 +65,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
         end
 
         context 'when no users are manually specified for invitations' do
-          subject { post :create, course_id: course }
+          subject { post :create, params: { course_id: course } }
           it { is_expected.to redirect_to(course_user_invitations_path(course)) }
         end
       end
@@ -105,7 +105,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
         sign_in(user)
       end
       let!(:invitation) { create(:course_user_invitation, course: course) }
-      subject { post :resend_invitations, course_id: course, user_invitation_id: invitation.id }
+      subject { post :resend_invitations, params: { course_id: course, user_invitation_id: invitation.id } }
 
       it 'loads the invitation' do
         subject
@@ -127,7 +127,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
         sign_in(user)
       end
       let!(:pending_invitations) { create_list(:course_user_invitation, 3, course: course) }
-      subject { post :resend_invitations, course_id: course }
+      subject { post :resend_invitations, params: { course_id: course } }
 
       it 'loads the all unconfirmed invitations' do
         subject
@@ -139,7 +139,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
     describe '#toggle_registration' do
       before { sign_in(user) }
       subject do
-        post :toggle_registration, course_id: course, course: { registration_key: param }
+        post :toggle_registration, params: { course_id: course, course: { registration_key: param } }
       end
 
       context 'when the course_lecturer visits the page' do

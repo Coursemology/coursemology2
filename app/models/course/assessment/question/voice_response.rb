@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::VoiceResponse < ActiveRecord::Base
+class Course::Assessment::Question::VoiceResponse < ApplicationRecord
   acts_as :question, class_name: Course::Assessment::Question.name
 
   def attempt(submission, last_attempt = nil)

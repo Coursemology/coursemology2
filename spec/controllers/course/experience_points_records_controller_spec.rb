@@ -41,7 +41,7 @@ RSpec.describe Course::ExperiencePointsRecordsController, type: :controller do
 
     describe '#destroy' do
       subject do
-        delete :destroy, course_id: course, user_id: course_student, id: points_record_stub
+        delete :destroy, params: { course_id: course, user_id: course_student, id: points_record_stub }
       end
 
       context 'when destroy fails' do

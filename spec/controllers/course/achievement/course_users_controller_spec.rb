@@ -12,7 +12,7 @@ RSpec.describe Course::Achievement::CourseUsersController, type: :controller do
     before { sign_in(user) }
 
     describe '#index' do
-      subject { get :index, course_id: course, achievement_id: achievement }
+      subject { get :index, params: { course_id: course, achievement_id: achievement } }
 
       context 'when the achievement is automatically awarded' do
         before do

@@ -35,7 +35,7 @@ RSpec.describe Course::Survey::SurveysController do
 
       context 'when html page is requested' do
         let(:user) { student.user }
-        subject { get :index, course_id: course.id }
+        subject { get :index, params: { course_id: course.id } }
 
         it { is_expected.to render_template('index') }
 
@@ -53,7 +53,7 @@ RSpec.describe Course::Survey::SurveysController do
 
       context 'when json data is requested' do
         render_views
-        subject { get :index, format: :json, course_id: course.id }
+        subject { get :index, as: :json, params: { course_id: course.id } }
         before { subject }
 
         context 'when user is staff' do
@@ -78,8 +78,9 @@ RSpec.describe Course::Survey::SurveysController do
       let(:user) { admin }
 
       subject do
-        post :create, format: :json, course_id: course.id, id: survey.id,
-                      survey: attributes_for(:survey)
+        post :create, as: :json, params: {
+          course_id: course.id, id: survey.id, survey: attributes_for(:survey)
+        }
       end
 
       it 'creates a survey' do
@@ -101,7 +102,7 @@ RSpec.describe Course::Survey::SurveysController do
 
       context 'when html page is requested' do
         let(:user) { student.user }
-        subject { get :show, course_id: course.id, id: survey.id }
+        subject { get :show, params: { course_id: course.id, id: survey.id } }
 
         it { is_expected.to render_template('index') }
       end
@@ -113,7 +114,7 @@ RSpec.describe Course::Survey::SurveysController do
           create(:response, survey: survey, creator: manager.user, course_user: manager)
         end
 
-        subject { get :show, format: :json, course_id: course.id, id: survey.id }
+        subject { get :show, as: :json, params: { course_id: course.id, id: survey.id } }
         before do
           manager_response
           subject
@@ -198,7 +199,7 @@ RSpec.describe Course::Survey::SurveysController do
 
     describe '#destroy' do
       let(:user) { admin }
-      subject { delete :destroy, format: :json, course_id: course.id, id: survey.id }
+      subject { delete :destroy, as: :json, params: { course_id: course.id, id: survey.id } }
 
       context 'when destroy succeeds' do
         it 'removes the deleted survey' do
@@ -221,7 +222,7 @@ RSpec.describe Course::Survey::SurveysController do
       let(:user) { admin }
 
       context 'when html page is requested' do
-        subject { get :results, course_id: course.id, id: survey.id }
+        subject { get :results, params: { course_id: course.id, id: survey.id } }
 
         it { is_expected.to render_template('index') }
       end
@@ -230,7 +231,7 @@ RSpec.describe Course::Survey::SurveysController do
         render_views
         let(:response_traits) { :submitted }
 
-        subject { get :results, format: :json, course_id: course.id, id: survey.id }
+        subject { get :results, as: :json, params: { course_id: course.id, id: survey.id } }
         before do
           student_response.build_missing_answers
           student_response.save!
@@ -275,7 +276,7 @@ RSpec.describe Course::Survey::SurveysController do
       let(:user) { admin }
       let(:survey_traits) { :currently_active }
 
-      subject { post :remind, format: :json, course_id: course.id, id: survey.id }
+      subject { post :remind, as: :json, params: { course_id: course.id, id: survey.id } }
 
       it 'sends reminder to students' do
         allow(Course::Survey::ReminderService).to receive(:send_closing_reminder)
@@ -290,7 +291,7 @@ RSpec.describe Course::Survey::SurveysController do
 
       subject do
         post :reorder_sections,
-             format: :json, course_id: course.id, id: survey.id, ordering: ordering
+             as: :json, params: { course_id: course.id, id: survey.id, ordering: ordering }
       end
 
       before { subject }
@@ -331,7 +332,7 @@ RSpec.describe Course::Survey::SurveysController do
 
       subject do
         post :reorder_questions,
-             format: :json, course_id: course.id, id: survey.id, ordering: ordering
+             as: :json, params: { course_id: course.id, id: survey.id, ordering: ordering }
       end
       before { subject }
 

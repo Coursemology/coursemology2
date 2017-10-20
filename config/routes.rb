@@ -145,8 +145,8 @@ Rails.application.routes.draw do
         get 'leaderboard' => 'leaderboard_settings#edit'
         patch 'leaderboard' => 'leaderboard_settings#update'
 
-        get 'topics' => 'discussion/topic_settings#edit', path: 'comments'
-        patch 'topics' => 'discussion/topic_settings#update', path: 'comments'
+        get 'comments' => 'discussion/topic_settings#edit', as: 'topics'
+        patch 'comments' => 'discussion/topic_settings#update'
 
         get'videos' => 'video_settings#edit'
         patch 'videos' => 'video_settings#update'
@@ -297,9 +297,9 @@ Rails.application.routes.draw do
 
       namespace :material, path: 'materials' do
         resources :folders, except: [:index, :new, :create] do
-          get 'new_subfolder', on: :member, path: 'new/subfolder'
-          post 'create_subfolder', on: :member, path: 'create/subfolder'
-          get 'new_materials', on: :member, path: 'new/files'
+          get 'new/subfolder', on: :member, as: 'new_subfolder', action: 'new_subfolder'
+          post 'create/subfolder', on: :member, as: 'create_subfolder', action: 'create_subfolder'
+          get 'new/files', on: :member, as: 'new_materials', action: 'new_materials'
           put 'upload_materials', on: :member
           get 'download', on: :member
           resources :materials, path: 'files'

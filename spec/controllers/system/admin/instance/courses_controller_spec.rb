@@ -36,7 +36,7 @@ RSpec.describe System::Admin::Instance::CoursesController, type: :controller do
         stub
       end
 
-      subject { delete :destroy, id: course_to_delete }
+      subject { delete :destroy, params: { id: course_to_delete } }
 
       context 'when the user is an administrator' do
         before { sign_in(instance_admin) }

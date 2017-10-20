@@ -15,7 +15,7 @@ RSpec.describe System::Admin::AnnouncementsController, type: :controller do
     before { sign_in(user) }
 
     describe '#destroy' do
-      subject { delete :destroy, id: system_announcement_stub }
+      subject { delete :destroy, params: { id: system_announcement_stub } }
 
       context 'upon destroy failure' do
         before do

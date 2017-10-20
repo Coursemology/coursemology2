@@ -8,14 +8,17 @@ gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 gem 'bundler', '>= 1.10.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.9'
+gem 'rails', '~> 5.0.0'
 
 # Use PostgreSQL for the backend
 gem 'pg', '>= 0.18.2'
-# Table and column comments, this need to be put before schame_plus ( there are certain compatibility issues ).
-gem 'migration_comments'
+
 # Schema Plus for some higher level database abstractions
-gem 'schema_plus'
+gem 'schema_plus_columns'
+gem 'schema_plus_enums'
+gem 'schema_plus_foreign_keys'
+gem 'schema_plus_indexes'
+gem 'schema_plus_pg_indexes'
 gem 'schema_plus_association_inverses', '>= 0.1.0'
 gem 'schema_validations'
 gem 'schema_monkey'
@@ -59,7 +62,7 @@ gem 'js-routes'
 gem 'jquery-rails'
 # Our Coursemology will be themed using Bootstrap
 gem 'bootstrap-sass'
-gem 'bootstrap-sass-extras', '>= 0.0.7'
+gem 'bootstrap-sass-extras', '>= 0.0.7', github: 'doabit/bootstrap-sass-extras'
 gem 'autoprefixer-rails'
 # Use font-awesome for icons
 gem 'font-awesome-rails'
@@ -88,7 +91,6 @@ group :development do
   gem 'listen', '~> 1.3.1'
 
   # Gems to make development mode faster and less painful
-  gem 'rails-dev-boost', github: 'thedarkone/rails-dev-boost'
   gem 'rails-flog', require: 'flog'
   gem 'wdm', '>= 0.0.3', platforms: [:mswin, :mswin64]
 
@@ -187,7 +189,7 @@ gem 'themes_on_rails', '>= 0.3.1', github: 'Coursemology/themes_on_rails',
 
 # Forms made easy for Rails
 gem 'simple_form'
-gem 'simple_form-bootstrap'
+gem 'simple_form-bootstrap', github: 'jeremyyap/simple_form-bootstrap'
 # Dynamic nested forms
 gem 'cocoon'
 gem 'bootstrap3-datetimepicker-rails'
@@ -208,10 +210,13 @@ gem 'rubyzip', require: 'zip'
 gem 'nokogiri', '>= 1.8.1'
 
 # Polyglot support
-gem 'coursemology-polyglot', '>= 0.2.9'
+gem 'coursemology-polyglot'
 
 # To assist with bulk inserts into database
 gem 'activerecord-import', '>= 0.2.0'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+
+gem 'record_tag_helper'
+gem 'rails-controller-testing'

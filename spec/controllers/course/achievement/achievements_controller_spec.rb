@@ -14,7 +14,7 @@ RSpec.describe Course::Achievement::AchievementsController, type: :controller do
       before do
         allow(controller).to receive_message_chain('current_component_host.[]').and_return(nil)
       end
-      subject { get :index, course_id: course }
+      subject { get :index, params: { course_id: course } }
       it 'raises an component not found error' do
         expect { subject }.to raise_error(ComponentNotFoundError)
       end
@@ -49,7 +49,7 @@ RSpec.describe Course::Achievement::AchievementsController, type: :controller do
         allow(stub).to receive(:destroy).and_return(false)
         stub
       end
-      subject { delete :destroy, course_id: course, id: achievement_stub }
+      subject { delete :destroy, params: { course_id: course, id: achievement_stub } }
 
       context 'upon destroy failure' do
         before do
@@ -72,8 +72,7 @@ RSpec.describe Course::Achievement::AchievementsController, type: :controller do
         let(:reversed_order) { course.achievements.map(&:id).reverse }
 
         before do
-          post :reorder, format: :js, course_id: course,
-                         achievement_order: reversed_order.map(&:to_s)
+          post :reorder, format: :js, params: { course_id: course, achievement_order: reversed_order.map(&:to_s) }
         end
 
         it 'reorders achievements' do
@@ -83,8 +82,7 @@ RSpec.describe Course::Achievement::AchievementsController, type: :controller do
 
       context 'when an invalid ordering is given' do
         subject do
-          post :reorder, format: :js, course_id: course,
-                         achievement_order: [achievements.first.id.to_s]
+          post :reorder, format: :js, params: { course_id: course, achievement_order: [achievements.first.id.to_s] }
         end
 
         it 'raises ArgumentError' do

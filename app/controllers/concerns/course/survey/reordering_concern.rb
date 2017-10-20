@@ -3,8 +3,8 @@ module Course::Survey::ReorderingConcern
   extend ActiveSupport::Concern
 
   def reorder_sections
-    if valid_section_ordering?(reorder_params)
-      update_sections_ordering(reorder_params)
+    if valid_section_ordering?(ordered_section_ids)
+      update_sections_ordering(ordered_section_ids)
       render_survey_with_questions_json
     else
       head :bad_request
@@ -21,6 +21,13 @@ module Course::Survey::ReorderingConcern
   end
 
   private
+
+  def ordered_section_ids
+    @section_ids ||= begin
+                       integer_type = ActiveModel::Type::Integer.new
+                       reorder_params.map { |id| integer_type.cast(id) }
+                     end
+  end
 
   def reorder_params
     params.require(:ordering)

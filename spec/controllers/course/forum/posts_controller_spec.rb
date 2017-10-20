@@ -19,7 +19,7 @@ RSpec.describe Course::Forum::PostsController, type: :controller do
 
     describe '#destroy' do
       subject do
-        delete :destroy, course_id: course, forum_id: forum, topic_id: topic, id: post_stub
+        delete :destroy, params: { course_id: course, forum_id: forum, topic_id: topic, id: post_stub }
       end
 
       context 'when destroy fails' do

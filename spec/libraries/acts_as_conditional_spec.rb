@@ -7,6 +7,8 @@ RSpec.describe 'Extension: Acts as Conditional', type: :model do
       []
     end
 
+    def self.load_schema!; end
+
     acts_as_conditional
   end
 
@@ -14,6 +16,8 @@ RSpec.describe 'Extension: Acts as Conditional', type: :model do
     def self.columns
       []
     end
+
+    def self.load_schema!; end
 
     acts_as_condition
   end

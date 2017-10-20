@@ -7,6 +7,8 @@ RSpec.describe 'Extension: Acts as Lesson Plan Item' do
       []
     end
 
+    def self.load_schema!; end
+
     acts_as_lesson_plan_item
   end
 
@@ -14,6 +16,8 @@ RSpec.describe 'Extension: Acts as Lesson Plan Item' do
     def self.columns
       []
     end
+
+    def self.load_schema!; end
 
     acts_as_lesson_plan_item has_todo: true
   end

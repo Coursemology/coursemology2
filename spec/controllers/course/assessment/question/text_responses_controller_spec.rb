@@ -26,8 +26,10 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
         question_text_response_attributes =
           attributes_for(:course_assessment_question_text_response).
           slice(:description, :maximum_grade)
-        post :create, course_id: course, assessment_id: assessment,
-                      question_text_response: question_text_response_attributes
+        post :create, params: {
+          course_id: course, assessment_id: assessment,
+          question_text_response: question_text_response_attributes
+        }
       end
 
       context 'when saving fails' do
@@ -55,7 +57,7 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
 
     describe '#destroy' do
       let(:text_response) { immutable_text_response_question }
-      subject { post :destroy, course_id: course, assessment_id: assessment, id: text_response }
+      subject { post :destroy, params: { course_id: course, assessment_id: assessment, id: text_response } }
 
       it { is_expected.to redirect_to(course_assessment_path(course, assessment)) }
       it 'sets the correct flash message' do

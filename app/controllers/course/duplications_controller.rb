@@ -31,6 +31,6 @@ class Course::DuplicationsController < Course::ComponentController
   #
   # @return [Hash] Hash of options to be sent to the duplication job
   def duplication_job_options
-    create_duplication_params.merge(current_user: current_user)
+    create_duplication_params.merge(current_user: current_user).to_h
   end
 end

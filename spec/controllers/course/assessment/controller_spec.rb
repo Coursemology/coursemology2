@@ -22,7 +22,7 @@ RSpec.describe Course::Assessment::Controller do
         create_list(:course_assessment_tab, tabs - 1,
                     category: course.assessment_categories.first)
         @controller.instance_variable_set(:@assessment, assessment)
-        get :index, course_id: course.id
+        get :index, params: { course_id: course.id }
       end
 
       context 'when the category has one tab' do

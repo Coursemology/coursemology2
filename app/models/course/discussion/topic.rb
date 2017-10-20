@@ -54,7 +54,7 @@ class Course::Discussion::Topic < ApplicationRecord
   #
   # @param [User] user The user who needs to subscribe to this topic
   def ensure_subscribed_by(user)
-    ActiveRecord::Base.transaction(requires_new: true) do
+    ApplicationRecord.transaction(requires_new: true) do
       subscribed_by?(user) || subscriptions.create!(user: user)
     end
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e

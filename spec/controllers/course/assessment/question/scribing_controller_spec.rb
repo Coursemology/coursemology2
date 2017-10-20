@@ -32,8 +32,10 @@ RSpec.describe Course::Assessment::Question::ScribingController do
     describe '#create' do
       subject do
         request.accept = 'application/json'
-        post :create, course_id: course, assessment_id: assessment,
-                      question_scribing: question_scribing_attributes
+        post :create, params: {
+          course_id: course, assessment_id: assessment,
+          question_scribing: question_scribing_attributes
+        }
       end
 
       context 'when saving fails' do
@@ -135,7 +137,7 @@ RSpec.describe Course::Assessment::Question::ScribingController do
     end
 
     describe '#destroy' do
-      subject { post :destroy, course_id: course, assessment_id: assessment, id: scribing_question }
+      subject { post :destroy, params: { course_id: course, assessment_id: assessment, id: scribing_question } }
 
       context 'when question is destroyed' do
         let!(:scribing_question) do

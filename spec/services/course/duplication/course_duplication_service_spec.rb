@@ -112,12 +112,12 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           end
 
           # Check attributes of duplicated milestones
-          new_milestones.each_index do |i|
-            expect(new_course.lesson_plan_milestones[i].title).
+          new_milestones.each_with_index do |new, i|
+            expect(new.title).
               to eq old_milestones[i].title
-            expect(new_course.lesson_plan_milestones[i].description).
+            expect(new.description).
               to eq old_milestones[i].description
-            expect(new_course.lesson_plan_milestones[i].start_at).
+            expect(new.start_at).
               to be_within(1.second).of old_milestones[i].start_at + time_shift
           end
         end

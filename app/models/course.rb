@@ -175,7 +175,7 @@ class Course < ApplicationRecord
   end
 
   def show_public_test_cases_output=(option)
-    option = ActiveRecord::Type::Boolean.new.type_cast_from_user(option)
+    option = ActiveRecord::Type::Boolean.new.cast(option)
     settings(:course_assessments_component).show_public_test_cases_output = option
   end
 

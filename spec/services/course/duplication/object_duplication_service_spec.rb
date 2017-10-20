@@ -90,7 +90,7 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
             duplicate_assessment, duplicate_tab, duplicate_category = duplicate_objects
             expect(duplicate_category.tabs.length).to eq(1)
             expect(duplicate_tab.title).to eq(tab.title)
-            expect(duplicate_assessment.folder.parent.owner).to be(duplicate_category)
+            expect(duplicate_assessment.folder.parent.owner).to eq(duplicate_category)
           end
         end
 
@@ -101,7 +101,7 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
             duplicate_assessment, duplicate_category, duplicate_tab = duplicate_objects
             expect(duplicate_category.reload.tabs.length).to eq(1)
             expect(duplicate_tab.title).to eq(tab.title)
-            expect(duplicate_assessment.folder.parent.owner).to be(duplicate_category)
+            expect(duplicate_assessment.folder.parent.owner).to eq(duplicate_category)
           end
         end
 

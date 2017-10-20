@@ -142,13 +142,12 @@ module Extensions::Attachable::ActiveRecord::Base
     extend ActiveSupport::Concern
 
     included do
+      after_commit :clear_attachment_change
       validates :attachment_references, length: { maximum: 1 }
 
       has_many :attachment_references, as: :attachable, class_name: "::#{AttachmentReference.name}",
                                        inverse_of: :attachable, dependent: :destroy, autosave: true
     end
-
-    ATTACHMENT_ATTRIBUTE = 'attachment'.freeze
 
     def attachment_reference
       attachment_references.take
@@ -160,32 +159,55 @@ module Extensions::Attachable::ActiveRecord::Base
     def attachment_reference=(attachment_reference)
       return self.attachment_reference if self.attachment_reference == attachment_reference
 
-      attribute_will_change!(ATTACHMENT_ATTRIBUTE)
+      mark_attachment_as_changed(self.attachment_reference)
       attachment_references.clear
       attachment_references << attachment_reference if attachment_reference
     end
     alias_method :attachment=, :attachment_reference=
 
     def build_attachment_reference(attributes = {})
-      attribute_will_change!(ATTACHMENT_ATTRIBUTE)
+      mark_attachment_as_changed(attachment_reference)
       attachment_references.clear
       attachment_references.build(attributes)
     end
     alias_method :build_attachment, :build_attachment_reference
-
-    def attachment_reference_changed?
-      changed.include?(ATTACHMENT_ATTRIBUTE)
-    end
-    alias_method :attachment_changed?, :attachment_reference_changed?
 
     def file=(file)
       if file
         build_attachment_reference(file: file)
       else
         return nil if attachment_reference.nil?
-        attribute_will_change!(ATTACHMENT_ATTRIBUTE)
+        mark_attachment_as_changed(attachment_reference)
         attachment_references.clear
       end
     end
+
+    # Tracks the the attachment_reference changes and support clear/revert the changes.
+    # `attachment_reference` is a virtual attribute, and changes tracking to such attributes are not well supported in
+    # rails 5: https://github.com/rails/rails/issues/25787
+    def attachment_reference_changed?
+      !!@attachment_changed
+    end
+    alias_method :attachment_changed?, :attachment_reference_changed?
+
+    def mark_attachment_reference_as_changed(old)
+      @attachment_changed = true
+      @original_attachment = old
+    end
+    alias_method :mark_attachment_as_changed, :mark_attachment_reference_as_changed
+
+    def clear_attachment_reference_change
+      @attachment_changed = false
+      @original_attachment = nil
+    end
+    alias_method :clear_attachment_change, :clear_attachment_reference_change
+
+    # Restore the attachmenet_reference to its previous value.
+    def restore_attachment_reference_change
+      return unless attachment_reference_changed?
+      self.attachment_reference = @original_attachment
+      clear_attachment_change
+    end
+    alias_method :restore_attachment_change, :restore_attachment_reference_change
   end
 end

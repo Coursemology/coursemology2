@@ -7,6 +7,8 @@ RSpec.describe 'Extension: Acts as Condition', type: :model do
       []
     end
 
+    def self.load_schema!; end
+
     acts_as_condition
   end
 

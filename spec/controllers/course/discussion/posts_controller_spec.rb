@@ -21,8 +21,10 @@ RSpec.describe Course::Discussion::PostsController do
       let(:post_text) { 'updated post text' }
 
       subject do
-        post :update, format: :js, course_id: course, topic_id: topic,
-                      id: immutable_post, discussion_post: { text: post_text }
+        post :update, as: :js, params: {
+          course_id: course, topic_id: topic,
+          id: immutable_post, discussion_post: { text: post_text }
+        }
       end
 
       context 'when updating fails' do

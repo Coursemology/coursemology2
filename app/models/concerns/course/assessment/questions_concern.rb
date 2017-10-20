@@ -50,7 +50,7 @@ module Course::Assessment::QuestionsConcern
                   index(next_unanswered(submission) || last)
                 end
 
-    fetch([current_index, max_index].min)
+    to_a.fetch([current_index, max_index].min)
   end
 
   # Return the next unanswered question.

@@ -7,6 +7,8 @@ RSpec.describe 'Extension: Materials' do
       []
     end
 
+    def self.load_schema!; end
+
     has_one_folder
   end
 

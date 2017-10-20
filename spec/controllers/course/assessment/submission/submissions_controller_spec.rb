@@ -21,7 +21,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
     describe '#index' do
       subject do
-        get :index, course_id: course, assessment_id: assessment
+        get :index, params: { course_id: course, assessment_id: assessment }
       end
 
       context 'when a student visits the page' do
@@ -34,7 +34,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
     describe '#create' do
       subject do
-        post :create, course_id: course, assessment_id: assessment
+        post :create, params: { course_id: course, assessment_id: assessment }
       end
 
       context 'when create fails' do
@@ -53,8 +53,10 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
     describe '#update' do
       subject do
-        post :update, course_id: course, assessment_id: assessment, id: immutable_submission,
-                      submission: { title: '' }
+        post :update, params: {
+          course_id: course, assessment_id: assessment, id: immutable_submission,
+          submission: { title: '' }
+        }
       end
 
       context 'when update fails' do
@@ -69,7 +71,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
     describe '#extract_instance_variables' do
       subject do
-        get :edit, course_id: course, assessment_id: assessment, id: immutable_submission
+        get :edit, params: { course_id: course, assessment_id: assessment, id: immutable_submission }
       end
 
       it 'extracts instance variables from services' do
@@ -84,8 +86,10 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
       context 'when answer_id does not exist' do
         subject do
-          post :reload_answer, course_id: course, assessment_id: assessment.id,
-                               id: submission.id, answer_id: -1, format: :json
+          post :reload_answer, params: {
+            course_id: course, assessment_id: assessment.id,
+            id: submission.id, answer_id: -1, format: :json
+          }
         end
 
         it { is_expected.to have_http_status(:bad_request) }
@@ -96,8 +100,10 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         render_views
         let(:answer) { submission.answers.first }
         subject do
-          post :reload_answer, course_id: course, assessment_id: assessment.id,
-                               id: submission.id, answer_id: answer.id, format: :json
+          post :reload_answer, params: {
+            course_id: course, assessment_id: assessment.id,
+            id: submission.id, answer_id: answer.id, format: :json
+          }
         end
 
         it 'returns the answer' do

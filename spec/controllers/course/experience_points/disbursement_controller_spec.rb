@@ -17,7 +17,7 @@ RSpec.describe Course::ExperiencePoints::DisbursementController, type: :controll
 
     before { sign_in(user) }
     describe '#create' do
-      subject { post :create, course_id: course }
+      subject { post :create, params: { course_id: course } }
 
       context 'when create fails' do
         before do

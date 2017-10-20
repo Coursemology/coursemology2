@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Video::Topic < ActiveRecord::Base
+class Course::Video::Topic < ApplicationRecord
   acts_as_discussion_topic
 
   belongs_to :video, inverse_of: :topics

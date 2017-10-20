@@ -21,15 +21,17 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
     describe '#create' do
       let(:post_text) { 'test post text' }
       subject do
-        post :create, format: :js, course_id: course, assessment_id: assessment,
-                      submission_id: submission, answer_id: answer, file_id: file,
-                      id: immutable_annotation, line: 1,
-                      annotation: {
-                        answer_id: answer.id
-                      },
-                      discussion_post: {
-                        text: post_text
-                      }
+        post :create, as: :js, params: {
+          course_id: course, assessment_id: assessment,
+          submission_id: submission, answer_id: answer, file_id: file,
+          id: immutable_annotation, line: 1,
+          annotation: {
+            answer_id: answer.id
+          },
+          discussion_post: {
+            text: post_text
+          }
+        }
       end
 
       context 'when saving fails' do

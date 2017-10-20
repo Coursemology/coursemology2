@@ -19,7 +19,7 @@ class Course::Assessment::SessionLogService
     request_headers['USER_SESSION_ID'] = current_authentication_token
     request_headers['SUBMISSION_SESSION_ID'] = @submission.session_id
 
-    @submission.logs.create(request: request_headers.to_json)
+    @submission.logs.create(request: request_headers)
   end
 
   private

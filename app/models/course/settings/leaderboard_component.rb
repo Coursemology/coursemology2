@@ -46,7 +46,7 @@ class Course::Settings::LeaderboardComponent < Course::Settings::Component
   #   By default, simple_form provides '0' and '1' for boolean fields.
   #   This method will handle this conversion to Boolean.
   def enable_group_leaderboard=(option)
-    option = ActiveRecord::Type::Boolean.new.type_cast_from_user(option)
+    option = ActiveRecord::Type::Boolean.new.cast(option)
     group_leaderboard_settings.enabled = option
   end
 

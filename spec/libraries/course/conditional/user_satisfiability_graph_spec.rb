@@ -40,6 +40,8 @@ RSpec.describe Course::Conditional::UserSatisfiabilityGraph do
       []
     end
 
+    def self.load_schema!; end
+
     def self.build(conditions, id)
       dummy = new
       dummy.conditions = conditions

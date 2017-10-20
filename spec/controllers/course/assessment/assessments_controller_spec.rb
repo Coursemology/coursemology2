@@ -112,7 +112,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
     end
 
     describe '#destroy' do
-      subject { delete :destroy, course_id: course, id: immutable_assessment }
+      subject { delete :destroy, params: { course_id: course, id: immutable_assessment } }
 
       context 'when destroy fails' do
         before { controller.instance_variable_set(:@assessment, immutable_assessment) }
@@ -130,7 +130,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
       before do
         create_list(:course_assessment_tab, tabs - 1,
                     category: course.assessment_categories.first)
-        get :index, course_id: course.id
+        get :index, params: { course_id: course.id }
       end
 
       context 'when the category has one tab' do
@@ -158,19 +158,21 @@ RSpec.describe Course::Assessment::AssessmentsController do
         let(:reversed_order) { immutable_assessment.questions.map(&:id).reverse }
 
         before do
-          post :reorder, format: :js, course_id: course, id: immutable_assessment,
-                         question_order: reversed_order.map(&:to_s)
+          post :reorder,
+               as: :js,
+               params: { course_id: course, id: immutable_assessment, question_order: reversed_order.map(&:to_s) }
         end
 
         it 'reorders questions' do
-          expect(immutable_assessment.questions.pluck(:id)).to eq(reversed_order)
+          expect(immutable_assessment.questions.order(:weight).pluck(:id)).to eq(reversed_order)
         end
       end
 
       context 'when an invalid ordering is given' do
         subject do
-          post :reorder, format: :js, course_id: course, id: immutable_assessment,
-                         question_order: [questions.first.id]
+          post :reorder,
+               as: :js,
+               params: { course_id: course, id: immutable_assessment, question_order: [questions.first.id] }
         end
 
         it 'raises ArgumentError' do

@@ -16,6 +16,13 @@ GIT
       rails (>= 3.2)
 
 GIT
+  remote: git://github.com/doabit/bootstrap-sass-extras.git
+  revision: 6aa549b91a66055a5f5e37400dbe44f4d17f09c3
+  specs:
+    bootstrap-sass-extras (0.0.7)
+      rails (>= 3.1.0)
+
+GIT
   remote: git://github.com/jeremyyap/cancancan-baby_squeel.git
   revision: e8d6c23ba93e34405652f1d85c077feca9b48b41
   specs:
@@ -25,57 +32,64 @@ GIT
       cancancan (>= 1.10)
 
 GIT
+  remote: git://github.com/jeremyyap/simple_form-bootstrap.git
+  revision: aaf660c965a8a13fe223d34a96afca9f2acef196
+  specs:
+    simple_form-bootstrap (1.4.1)
+      actionpack (>= 4.1, < 6)
+      activemodel (>= 4.1, < 6)
+      bootstrap-sass (~> 3)
+      railties (>= 4.1, < 6)
+      simple_form (>= 3.1.0)
+
+GIT
   remote: git://github.com/lowjoel/activerecord-userstamp.git
   revision: 752f1e30ed8a2f0b09408bcdfa2c2dad1e5523c4
   specs:
     activerecord-userstamp (3.0.5)
       rails (>= 4.1)
 
-GIT
-  remote: git://github.com/thedarkone/rails-dev-boost.git
-  revision: a709a10b06b7d9fc4a9846bc613c60c86af9dd7c
-  specs:
-    rails-dev-boost (0.3.0)
-      railties (>= 3.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
-    actionmailer (4.2.10)
-      actionpack (= 4.2.10)
-      actionview (= 4.2.10)
-      activejob (= 4.2.10)
+    actioncable (5.0.6)
+      actionpack (= 5.0.6)
+      nio4r (>= 1.2, < 3.0)
+      websocket-driver (~> 0.6.1)
+    actionmailer (5.0.6)
+      actionpack (= 5.0.6)
+      actionview (= 5.0.6)
+      activejob (= 5.0.6)
       mail (~> 2.5, >= 2.5.4)
-      rails-dom-testing (~> 1.0, >= 1.0.5)
-    actionpack (4.2.10)
-      actionview (= 4.2.10)
-      activesupport (= 4.2.10)
-      rack (~> 1.6)
-      rack-test (~> 0.6.2)
-      rails-dom-testing (~> 1.0, >= 1.0.5)
+      rails-dom-testing (~> 2.0)
+    actionpack (5.0.6)
+      actionview (= 5.0.6)
+      activesupport (= 5.0.6)
+      rack (~> 2.0)
+      rack-test (~> 0.6.3)
+      rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    actionview (4.2.10)
-      activesupport (= 4.2.10)
+    actionview (5.0.6)
+      activesupport (= 5.0.6)
       builder (~> 3.1)
       erubis (~> 2.7.0)
-      rails-dom-testing (~> 1.0, >= 1.0.5)
+      rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    activejob (4.2.10)
-      activesupport (= 4.2.10)
-      globalid (>= 0.3.0)
-    activemodel (4.2.10)
-      activesupport (= 4.2.10)
-      builder (~> 3.1)
-    activerecord (4.2.10)
-      activemodel (= 4.2.10)
-      activesupport (= 4.2.10)
-      arel (~> 6.0)
+    activejob (5.0.6)
+      activesupport (= 5.0.6)
+      globalid (>= 0.3.6)
+    activemodel (5.0.6)
+      activesupport (= 5.0.6)
+    activerecord (5.0.6)
+      activemodel (= 5.0.6)
+      activesupport (= 5.0.6)
+      arel (~> 7.0)
     activerecord-import (0.20.2)
       activerecord (>= 3.2)
-    activesupport (4.2.10)
+    activesupport (5.0.6)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (~> 0.7)
       minitest (~> 5.1)
-      thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     acts_as_tenant (0.4.1)
       rails (>= 3.1)
@@ -88,7 +102,7 @@ GEM
     anbt-sql-formatter (0.0.5)
     archive-zip (0.7.0)
       io-like (~> 0.3.0)
-    arel (6.0.4)
+    arel (7.1.4)
     ast (2.3.0)
     autoprefixer-rails (7.1.5)
       execjs
@@ -100,8 +114,6 @@ GEM
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
-    bootstrap-sass-extras (0.0.7)
-      rails (>= 3.1.0)
     bootstrap-select-rails (1.12.1)
     bootstrap3-datetimepicker-rails (4.17.47)
       momentjs-rails (>= 2.8.1)
@@ -276,8 +288,7 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.6)
       mime-types (>= 1.16, < 4)
-    migration_comments (0.4.1)
-      activerecord (>= 4.2.0)
+    method_source (0.9.0)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
@@ -292,6 +303,7 @@ GEM
     multi_json (1.12.2)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
+    nio4r (2.1.0)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
     nokogumbo (1.4.13)
@@ -322,28 +334,30 @@ GEM
     progress (3.4.0)
     public_suffix (3.0.0)
     puma (3.10.0)
-    rack (1.6.8)
+    rack (2.0.3)
     rack-proxy (0.6.2)
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
-    rails (4.2.10)
-      actionmailer (= 4.2.10)
-      actionpack (= 4.2.10)
-      actionview (= 4.2.10)
-      activejob (= 4.2.10)
-      activemodel (= 4.2.10)
-      activerecord (= 4.2.10)
-      activesupport (= 4.2.10)
-      bundler (>= 1.3.0, < 2.0)
-      railties (= 4.2.10)
-      sprockets-rails
-    rails-deprecated_sanitizer (1.0.3)
-      activesupport (>= 4.2.0.alpha)
-    rails-dom-testing (1.0.8)
-      activesupport (>= 4.2.0.beta, < 5.0)
-      nokogiri (~> 1.6)
-      rails-deprecated_sanitizer (>= 1.0.1)
+    rails (5.0.6)
+      actioncable (= 5.0.6)
+      actionmailer (= 5.0.6)
+      actionpack (= 5.0.6)
+      actionview (= 5.0.6)
+      activejob (= 5.0.6)
+      activemodel (= 5.0.6)
+      activerecord (= 5.0.6)
+      activesupport (= 5.0.6)
+      bundler (>= 1.3.0)
+      railties (= 5.0.6)
+      sprockets-rails (>= 2.0.0)
+    rails-controller-testing (1.0.2)
+      actionpack (~> 5.x, >= 5.0.1)
+      actionview (~> 5.x, >= 5.0.1)
+      activesupport (~> 5.x)
+    rails-dom-testing (2.0.3)
+      activesupport (>= 4.2.0)
+      nokogiri (>= 1.6)
     rails-flog (1.4.0)
       anbt-sql-formatter
       awesome_print
@@ -352,9 +366,10 @@ GEM
       loofah (~> 2.0)
     rails_utils (4.0.0)
       rails (>= 3.2)
-    railties (4.2.10)
-      actionpack (= 4.2.10)
-      activesupport (= 4.2.10)
+    railties (5.0.6)
+      actionpack (= 5.0.6)
+      activesupport (= 5.0.6)
+      method_source
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rainbow (2.2.2)
@@ -365,6 +380,8 @@ GEM
       ffi (>= 0.5.0, < 2)
     rb-kqueue (0.2.5)
       ffi (>= 0.5.0)
+    record_tag_helper (1.0.0)
+      actionview (~> 5.x)
     request_store (1.3.2)
     responders (2.4.0)
       actionpack (>= 4.2.0, < 5.3)
@@ -413,27 +430,9 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
-    schema_auto_foreign_keys (0.1.3)
-      its-it (~> 1.2)
-      schema_plus_foreign_keys (~> 0.1)
-      schema_plus_indexes (~> 0.2)
     schema_monkey (2.1.5)
       activerecord (>= 4.2)
       modware (~> 0.1)
-    schema_plus (2.0.1)
-      activerecord (~> 4.2)
-      schema_auto_foreign_keys (~> 0.1)
-      schema_monkey (~> 2.1)
-      schema_plus_columns (~> 0.1)
-      schema_plus_core (~> 1.0)
-      schema_plus_db_default (~> 0.1)
-      schema_plus_default_expr (~> 0.1)
-      schema_plus_enums (~> 0.1)
-      schema_plus_foreign_keys (~> 0.1)
-      schema_plus_indexes (~> 0.1, >= 0.1.3)
-      schema_plus_pg_indexes (~> 0.1, >= 0.1.3)
-      schema_plus_tables (~> 0.1)
-      schema_plus_views (~> 0.1)
     schema_plus_association_inverses (0.1.0)
       schema_plus_core (>= 0.3.1)
     schema_plus_columns (0.2.0)
@@ -444,17 +443,10 @@ GEM
     schema_plus_compatibility (0.3.0)
       activerecord (>= 4.2, < 5.2)
       schema_monkey (~> 2.1)
-    schema_plus_core (1.0.2)
-      activerecord (~> 4.2)
+    schema_plus_core (2.1.1)
+      activerecord (~> 5.0)
       its-it (~> 1.2)
       schema_monkey (~> 2.1)
-    schema_plus_db_default (0.1.1)
-      activerecord (~> 4.2)
-      schema_plus_core (~> 1.0)
-    schema_plus_default_expr (0.1.4)
-      activerecord (>= 4.2, < 6.0)
-      its-it (~> 1.2)
-      schema_plus_core (>= 1.0, < 3.0)
     schema_plus_enums (0.1.6)
       activerecord (>= 4.2, <= 5.1)
       its-it (~> 1.2)
@@ -469,19 +461,13 @@ GEM
       activerecord (>= 4.2, < 5.2)
       its-it (~> 1.2)
       schema_plus_core
-    schema_plus_pg_indexes (0.1.12)
-      activerecord (~> 4.2)
+    schema_plus_pg_indexes (0.3.0)
+      activerecord (~> 5.0, >= 5.0.1)
       its-it (~> 1.2)
-      schema_plus_core (~> 1.0)
-      schema_plus_indexes (~> 0.1, >= 0.1.3)
-    schema_plus_tables (0.1.1)
-      activerecord (~> 4.2)
-      schema_plus_core (~> 1.0)
-    schema_plus_views (0.3.1)
-      activerecord (~> 4.2)
-      schema_plus_core (~> 1.0)
-    schema_validations (2.2.1)
-      activerecord (>= 4.2.1, < 5.1)
+      schema_plus_core (~> 2.0)
+      schema_plus_indexes (~> 0.2, >= 0.2.4)
+    schema_validations (2.3.0)
+      activerecord (~> 5.0)
       schema_plus_columns
       valuable
     selenium-webdriver (3.6.0)
@@ -495,12 +481,6 @@ GEM
     simple_form (3.5.0)
       actionpack (> 4, < 5.2)
       activemodel (> 4, < 5.2)
-    simple_form-bootstrap (1.4.0)
-      actionpack (~> 4.0)
-      activemodel (~> 4.0)
-      bootstrap-sass (~> 3)
-      railties (~> 4.0)
-      simple_form (>= 3.1.0)
     simplecov (0.13.0)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -556,6 +536,9 @@ GEM
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
       railties (>= 4.2)
+    websocket-driver (0.6.5)
+      websocket-extensions (>= 0.1.0)
+    websocket-extensions (0.1.2)
     workflow (1.2.0)
     xpath (2.1.0)
       nokogiri (~> 1.3)
@@ -573,7 +556,7 @@ DEPENDENCIES
   autoprefixer-rails
   baby_squeel
   bootstrap-sass
-  bootstrap-sass-extras (>= 0.0.7)
+  bootstrap-sass-extras (>= 0.0.7)!
   bootstrap-select-rails
   bootstrap3-datetimepicker-rails
   bootstrap_tokenfield_rails
@@ -592,7 +575,7 @@ DEPENDENCIES
   codeclimate-test-reporter
   codecov
   consistency_fail
-  coursemology-polyglot (>= 0.2.9)
+  coursemology-polyglot
   devise
   devise-multi_email
   devise_masquerade
@@ -617,7 +600,6 @@ DEPENDENCIES
   kaminari
   listen (~> 1.3.1)
   lol_dba
-  migration_comments
   mini_magick
   nokogiri (>= 1.8.1)
   omniauth
@@ -625,10 +607,11 @@ DEPENDENCIES
   parallel_tests
   pg (>= 0.18.2)
   puma
-  rails (~> 4.2.9)
-  rails-dev-boost!
+  rails (~> 5.0.0)
+  rails-controller-testing
   rails-flog
   rails_utils (>= 3.3.3)
+  record_tag_helper
   rinku
   rspec-html-matchers
   rspec-rails
@@ -637,14 +620,18 @@ DEPENDENCIES
   sanitize
   sass-rails
   schema_monkey
-  schema_plus
   schema_plus_association_inverses (>= 0.1.0)
+  schema_plus_columns
+  schema_plus_enums
+  schema_plus_foreign_keys
+  schema_plus_indexes
+  schema_plus_pg_indexes
   schema_validations
   settings_on_rails
   should_not
   shoulda-matchers
   simple_form
-  simple_form-bootstrap
+  simple_form-bootstrap!
   simplecov
   slim-rails
   spring
@@ -660,7 +647,6 @@ DEPENDENCIES
   webpacker
   workflow
   yard
-
 
 BUNDLED WITH
    1.15.4

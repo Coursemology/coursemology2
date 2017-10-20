@@ -7,6 +7,8 @@ RSpec.describe 'Extension: Acts as Attachable' do
       []
     end
 
+    def self.load_schema!; end
+
     has_many_attachments
   end
 
@@ -14,6 +16,8 @@ RSpec.describe 'Extension: Acts as Attachable' do
     def self.columns
       []
     end
+
+    def self.load_schema!; end
 
     has_one_attachment
 
@@ -95,7 +99,7 @@ RSpec.describe 'Extension: Acts as Attachable' do
         before { attachable.attachment = attachment }
 
         it 'stores the old attribute' do
-          expect(attachable.changes[:attachment].first).to be_nil
+          expect(attachable.instance_variable_get(:@original_attachment)).to be_nil
         end
       end
     end
@@ -129,7 +133,7 @@ RSpec.describe 'Extension: Acts as Attachable' do
         end
 
         it 'stores the old attribute' do
-          expect(attachable.changes[:attachment].first).to be_nil
+          expect(attachable.instance_variable_get(:@original_attachment)).to be_nil
         end
       end
 
@@ -137,7 +141,7 @@ RSpec.describe 'Extension: Acts as Attachable' do
         context 'when a file existed' do
           before do
             attachable.file = file
-            attachable.clear_attribute_changes
+            attachable.clear_attachment_change
             attachable.file = nil
           end
 
@@ -150,7 +154,7 @@ RSpec.describe 'Extension: Acts as Attachable' do
           end
 
           it 'stores the old attribute' do
-            expect(attachable.changes[:attachment].first).to be_a(AttachmentReference)
+            expect(attachable.instance_variable_get(:@original_attachment)).to be_a(AttachmentReference)
           end
         end
 

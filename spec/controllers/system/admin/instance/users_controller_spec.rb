@@ -59,7 +59,7 @@ RSpec.describe System::Admin::Instance::UsersController, type: :controller do
         stub
       end
 
-      subject { delete :destroy, id: instance_user }
+      subject { delete :destroy, params: { id: instance_user } }
 
       context 'when the user is an instance administrator' do
         before { sign_in(instance_admin) }

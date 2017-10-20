@@ -22,7 +22,7 @@ RSpec.describe Course::ObjectDuplicationsController do
     describe '#new' do
       render_views
 
-      subject { get :new, format: :json, course_id: course.id }
+      subject { get :new, format: :json, params: { course_id: course.id } }
       before { subject }
 
       it "includes user's courses from other instances in targetCourses" do
@@ -33,8 +33,10 @@ RSpec.describe Course::ObjectDuplicationsController do
 
     describe '#create' do
       subject do
-        post :create, format: :json, course_id: course.id, object_duplication: {
-          target_course_id: other_instance_course.id, items: items_params
+        post :create, as: :json, params: {
+          course_id: course.id, object_duplication: {
+            target_course_id: other_instance_course.id, items: items_params
+          }
         }
       end
 

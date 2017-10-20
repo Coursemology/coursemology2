@@ -19,8 +19,9 @@ RSpec.describe Course::LessonPlan::EventsController, type: :controller do
 
     describe '#create' do
       subject do
-        post :create, format: :json, course_id: course,
-                      lesson_plan_event: attributes_for(:course_lesson_plan_event)
+        post :create, as: :json, params: {
+          course_id: course, lesson_plan_event: attributes_for(:course_lesson_plan_event)
+        }
       end
 
       context 'when saving succeeds' do
@@ -58,7 +59,7 @@ RSpec.describe Course::LessonPlan::EventsController, type: :controller do
     end
 
     describe '#destroy' do
-      subject { delete :destroy, course_id: course, id: event_immutable_stub }
+      subject { delete :destroy, params: { course_id: course, id: event_immutable_stub } }
 
       context 'when destroy succeeds' do
         it { is_expected.to have_http_status(:ok) }

@@ -18,7 +18,7 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
     before { sign_in(user) }
 
     describe '#destroy' do
-      subject { delete :destroy, course_id: course, id: folder_stub }
+      subject { delete :destroy, params: { course_id: course, id: folder_stub } }
 
       context 'when folder cannot be destroyed' do
         before do
@@ -35,9 +35,10 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
     end
 
     describe '#upload_materials' do
+      let(:file) { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'files', 'text.txt')) }
       subject do
         patch :upload_materials, course_id: course, id: folder_stub,
-                                 material_folder: { files_attributes: [] }
+                                 material_folder: { files_attributes: [file] }
       end
 
       context 'when files cannot be uploaded' do
@@ -55,7 +56,7 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
     describe '#download' do
       let(:folder) { create(:folder, course: course, parent: course.root_folder) }
       let!(:material) { create(:course_material, folder: folder) }
-      subject { get :download, course_id: course, id: folder }
+      subject { get :download, params: { course_id: course, id: folder } }
 
       it 'downloads all the files in current folder' do
         subject
