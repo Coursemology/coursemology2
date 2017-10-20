@@ -3,8 +3,6 @@ class Course::Assessment::Question < ApplicationRecord
   actable
   has_many_attachments
 
-  before_validation :set_defaults, if: :new_record?
-
   has_many :question_assessments, class_name: Course::QuestionAssessment.name, inverse_of: :question,
                                   dependent: :destroy
   has_many :answers, class_name: Course::Assessment::Answer.name, dependent: :destroy,
@@ -12,8 +10,6 @@ class Course::Assessment::Question < ApplicationRecord
   has_and_belongs_to_many :skills
   has_many :submission_questions, class_name: Course::Assessment::SubmissionQuestion.name,
                                   dependent: :destroy, inverse_of: :question
-
-  default_scope { order(weight: :asc) }
 
   delegate :to_partial_path, to: :actable
 
@@ -101,15 +97,5 @@ class Course::Assessment::Question < ApplicationRecord
     skills << other.skills.
               select { |skill| duplicator.duplicated?(skill) }.
               map { |skill| duplicator.duplicate(skill) }
-  end
-
-  private
-
-  def set_defaults
-    return if weight.present? || !assessment || assessment.new_record?
-
-    # Make sure new questions appear at the end of the list.
-    max_weight = assessment.questions.pluck(:weight).max
-    self.weight ||= max_weight ? max_weight + 1 : 0
   end
 end
