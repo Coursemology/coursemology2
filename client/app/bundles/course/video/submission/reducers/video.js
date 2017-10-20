@@ -9,7 +9,7 @@ export const initialState = {
   duration: videoDefaults.placeHolderDuration,
   bufferProgress: 0,
   playerVolume: videoDefaults.volume,
-  playBackRate: 1,
+  playbackRate: 1,
   restrictContentAfter: null,
   forceSeek: false,
 };
@@ -92,7 +92,7 @@ export default function (state = initialState, action) {
     case videoActionTypes.CHANGE_PLAYER_VOLUME:
       return transformState({ playerVolume: action.playerVolume });
     case videoActionTypes.CHANGE_PLAYBACK_RATE:
-      return transformState({ playBackRate: action.playBackRate });
+      return transformState({ playbackRate: action.playbackRate });
     case videoActionTypes.UPDATE_PLAYER_PROGRESS:
       return transformState(computeTimeAdjustChange(state, action.playerProgress, action.forceSeek));
     case videoActionTypes.UPDATE_BUFFER_PROGRESS:

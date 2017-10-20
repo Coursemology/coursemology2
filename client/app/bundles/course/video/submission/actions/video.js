@@ -36,13 +36,13 @@ export function changePlayerVolume(playerVolume) {
  * The playback rate should be one of videoDefaults.availablePlaybackRates, or any
  * playback rate supported by the intended player.
  *
- * @param playBackRate The new playback rate
- * @returns {{type: videoActionTypes, playBackRate: number}} A change playback rate Redux action
+ * @param playbackRate The new playback rate
+ * @returns {{type: videoActionTypes, playbackRate: number}} A change playback rate Redux action
  */
-export function changePlayBackRate(playBackRate) {
+export function changePlaybackRate(playbackRate) {
   return {
     type: videoActionTypes.CHANGE_PLAYBACK_RATE,
-    playBackRate,
+    playbackRate,
   };
 }
 
