@@ -23,7 +23,9 @@ class Course::Assessment < ApplicationRecord
   # questions cannot be deleted.
   has_many :submissions, inverse_of: :assessment, dependent: :destroy
 
-  has_many :questions, inverse_of: :assessment, dependent: :destroy do
+  has_many :question_assessments, class_name: Course::QuestionAssessment.name,
+                                  inverse_of: :assessment, dependent: :destroy
+  has_many :questions, through: :question_assessments do
     include Course::Assessment::QuestionsConcern
   end
   has_many :multiple_response_questions,

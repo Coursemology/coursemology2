@@ -5,7 +5,8 @@ class Course::Assessment::Question < ApplicationRecord
 
   before_validation :set_defaults, if: :new_record?
 
-  belongs_to :assessment, inverse_of: :questions
+  has_many :question_assessments, class_name: Course::QuestionAssessment.name, inverse_of: :question,
+                                  dependent: :destroy
   has_many :answers, class_name: Course::Assessment::Answer.name, dependent: :destroy,
                      inverse_of: :question
   has_and_belongs_to_many :skills

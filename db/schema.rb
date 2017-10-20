@@ -113,6 +113,19 @@ ActiveRecord::Schema.define(version: 20171026141412) do
     t.datetime "updated_at", :null=>false
   end
 
+  create_table "course_assessment_questions", force: :cascade do |t|
+    t.integer  "actable_id"
+    t.string   "actable_type",        :limit=>255, :index=>{:name=>"index_course_assessment_questions_actable", :with=>["actable_id"], :unique=>true}
+    t.string   "title",               :limit=>255
+    t.text     "description"
+    t.text     "staff_only_comments"
+    t.decimal  "maximum_grade",       :precision=>4, :scale=>1, :null=>false
+    t.integer  "creator_id",          :null=>false, :index=>{:name=>"fk__course_assessment_questions_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessment_questions_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer  "updater_id",          :null=>false, :index=>{:name=>"fk__course_assessment_questions_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessment_questions_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.datetime "created_at",          :null=>false
+    t.datetime "updated_at",          :null=>false
+  end
+
   create_table "course_assessment_categories", force: :cascade do |t|
     t.integer  "course_id",  :null=>false, :index=>{:name=>"fk__course_assessment_categories_course_id"}, :foreign_key=>{:references=>"courses", :name=>"fk_course_assessment_categories_course_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.string   "title",      :limit=>255, :null=>false
@@ -146,21 +159,6 @@ ActiveRecord::Schema.define(version: 20171026141412) do
     t.integer  "updater_id",                :null=>false, :index=>{:name=>"fk__course_assessments_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessments_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
     t.datetime "created_at",                :null=>false
     t.datetime "updated_at",                :null=>false
-  end
-
-  create_table "course_assessment_questions", force: :cascade do |t|
-    t.integer  "actable_id"
-    t.string   "actable_type",        :limit=>255, :index=>{:name=>"index_course_assessment_questions_actable", :with=>["actable_id"], :unique=>true}
-    t.integer  "assessment_id",       :null=>false, :index=>{:name=>"fk__course_assessment_questions_assessment_id"}, :foreign_key=>{:references=>"course_assessments", :name=>"fk_course_assessment_questions_assessment_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.string   "title",               :limit=>255
-    t.text     "description"
-    t.text     "staff_only_comments"
-    t.decimal  "maximum_grade",       :precision=>4, :scale=>1, :null=>false
-    t.integer  "weight",              :null=>false
-    t.integer  "creator_id",          :null=>false, :index=>{:name=>"fk__course_assessment_questions_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessment_questions_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer  "updater_id",          :null=>false, :index=>{:name=>"fk__course_assessment_questions_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_assessment_questions_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.datetime "created_at",          :null=>false
-    t.datetime "updated_at",          :null=>false
   end
 
   create_table "course_assessment_submissions", force: :cascade do |t|
@@ -643,6 +641,14 @@ ActiveRecord::Schema.define(version: 20171026141412) do
     t.integer  "notification_type", :default=>0, :null=>false
     t.datetime "created_at",        :null=>false
     t.datetime "updated_at",        :null=>false
+  end
+
+  create_table "course_question_assessments", force: :cascade do |t|
+    t.integer "question_id",   :null=>false, :index=>{:name=>"index_course_question_assessments_on_question_id"}, :foreign_key=>{:references=>"course_assessment_questions", :name=>"fk_course_question_assessments_question_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer "assessment_id", :null=>false, :index=>{:name=>"index_course_question_assessments_on_assessment_id"}, :foreign_key=>{:references=>"course_assessments", :name=>"fk_course_question_assessments_assessment_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer "weight",        :null=>false
+
+    t.index ["question_id", "assessment_id"], :name=>"index_question_assessments_on_question_id_and_assessment_id", :unique=>true
   end
 
   create_table "course_surveys", force: :cascade do |t|
