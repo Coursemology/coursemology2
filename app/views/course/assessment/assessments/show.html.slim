@@ -17,18 +17,20 @@
       tr.type
         th = t('.type')
         td = @assessment.autograded? ? t('.autograded') : t('.manually_graded')
-      tr.base_exp
-        th = t('.base_exp')
-        td = @assessment.base_exp
-      tr.bonus_exp
-        th = t('.bonus_exp')
-        td = @assessment.time_bonus_exp
+      - if current_course.gamified?
+        tr.base_exp
+          th = t('.base_exp')
+          td = @assessment.base_exp
+        tr.bonus_exp
+          th = t('.bonus_exp')
+          td = @assessment.time_bonus_exp
       tr.start_at
         th = t('.start_at')
         td = format_datetime(@assessment.start_at)
-      tr.bonus_cut_off
-        th = t('.bonus_cut_off')
-        td = format_datetime(@assessment.bonus_end_at) if @assessment.bonus_end_at.present?
+      - if current_course.gamified?
+        tr.bonus_cut_off
+          th = t('.bonus_cut_off')
+          td = format_datetime(@assessment.bonus_end_at) if @assessment.bonus_end_at.present?
       tr.end_at
         th = t('.end_at')
         td = format_datetime(@assessment.end_at) if @assessment.end_at.present?
