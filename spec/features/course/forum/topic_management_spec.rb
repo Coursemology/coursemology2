@@ -39,8 +39,8 @@ RSpec.feature 'Course: Forum: Topic: Management' do
         fill_in 'title', with: topic.title
         fill_in 'text', with: 'test'
 
-        within '#topic_topic_type' do
-          find("option[value='announcement']").select_option
+        within '.topic_topic_type' do
+          find("input[value='announcement']").click
         end
         click_button 'submit'
 
@@ -55,8 +55,8 @@ RSpec.feature 'Course: Forum: Topic: Management' do
         fill_in 'title', with: topic.title
         fill_in 'text', with: 'awesome text'
 
-        within '#topic_topic_type' do
-          find("option[value='sticky']").select_option
+        within '.topic_topic_type' do
+          find("input[value='sticky']").click
         end
         click_button 'submit'
 
@@ -220,8 +220,8 @@ RSpec.feature 'Course: Forum: Topic: Management' do
         fill_in 'title', with: topic.title
         fill_in 'text', with: 'test'
 
-        within '#topic_topic_type' do
-          find("option[value='normal']").select_option
+        within '.topic_topic_type' do
+          find("input[value='normal']").click
         end
         click_button 'submit'
 
@@ -236,8 +236,8 @@ RSpec.feature 'Course: Forum: Topic: Management' do
         fill_in 'title', with: topic.title
         fill_in 'text', with: 'awesome text'
 
-        within '#topic_topic_type' do
-          find("option[value='question']").select_option
+        within '.topic_topic_type' do
+          find("input[value='question']").click
         end
         click_button 'submit'
 

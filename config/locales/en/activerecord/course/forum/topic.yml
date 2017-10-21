@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    attributes:
+      course/forum/topic/topic_type:
+        normal: 'Normal'
+        announcement: 'Announcement'
+        question: 'Question'
+        sticky: 'Sticky'
