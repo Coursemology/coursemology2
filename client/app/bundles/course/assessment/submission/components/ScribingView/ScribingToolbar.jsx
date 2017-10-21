@@ -273,6 +273,13 @@ class ScribingToolbar extends Component {
       background: this.props.scribing.selectedTool === scribingTools.LINE ? blue500 : 'rgba(0, 0, 0, 0.4)',
     };
     const toolBarStyle = !scribing.isCanvasLoaded ? styles.disabledToolbar : styles.toolBar;
+    let shapeIcon = this.props.scribing.selectedShape === scribingShapes.RECT ?
+      'fa fa-square-o' : 'fa fa-circle-o';
+    if (scribing.activeObject && scribing.activeObject.type === 'rect') {
+      shapeIcon = 'fa fa-square-o';
+    } else if (scribing.activeObject && scribing.activeObject.type === 'ellipse') {
+      shapeIcon = 'fa fa-circle-o';
+    }
 
     return (
       <Toolbar
@@ -288,7 +295,7 @@ class ScribingToolbar extends Component {
             showTooltip={this.state.hoveredToolTip === scribingTools.TYPE}
             currentTool={this.props.scribing.selectedTool}
             onClickIcon={this.onClickTypingIcon}
-            colorBar={this.props.scribing.colors[scribingToolColor.TYPE]}
+            colorBarBackground={this.props.scribing.colors[scribingToolColor.TYPE]}
             onClickChevron={this.onClickTypingChevron}
             iconClassname="fa fa-font"
             onMouseEnter={() => this.onMouseEnter(scribingTools.TYPE)}
@@ -315,7 +322,7 @@ class ScribingToolbar extends Component {
             showTooltip={this.state.hoveredToolTip === scribingTools.DRAW}
             currentTool={this.props.scribing.selectedTool}
             onClick={this.onClickDrawingMode}
-            colorBar={this.props.scribing.colors[scribingToolColor.DRAW]}
+            colorBarBackground={this.props.scribing.colors[scribingToolColor.DRAW]}
             onClickChevron={event => (this.onClickPopover(event, scribingPopoverTypes.DRAW))}
             iconClassname="fa fa-pencil"
             onMouseEnter={() => this.onMouseEnter(scribingTools.DRAW)}
@@ -342,9 +349,14 @@ class ScribingToolbar extends Component {
             showTooltip={this.state.hoveredToolTip === scribingTools.LINE}
             currentTool={this.props.scribing.selectedTool}
             onClick={this.onClickLineMode}
-            colorBar={this.props.scribing.colors[scribingToolColor.LINE]}
+            colorBarBackground={this.props.scribing.colors[scribingToolColor.LINE]}
             onClickChevron={event => (this.onClickPopover(event, scribingPopoverTypes.LINE))}
-            iconComponent={() => (<div style={lineToolStyle} />)}
+            iconComponent={() => (
+              <div
+                style={scribing.activeObject && scribing.activeObject.type !== 'line' ?
+                { ...lineToolStyle, background: '#c0c0c0' } : lineToolStyle}
+              />
+            )}
             onMouseEnter={() => this.onMouseEnter(scribingTools.LINE)}
             onMouseLeave={this.onMouseLeave}
           />
@@ -372,23 +384,12 @@ class ScribingToolbar extends Component {
             showTooltip={this.state.hoveredToolTip === scribingTools.SHAPE}
             currentTool={this.props.scribing.selectedTool}
             onClick={this.onClickShapeMode}
+            colorBarBorder={this.props.scribing.colors[scribingToolColor.SHAPE_BORDER]}
+            colorBarBackground={this.props.scribing.colors[scribingToolColor.SHAPE_FILL]}
             onMouseEnter={() => this.onMouseEnter(scribingTools.SHAPE)}
             onMouseLeave={this.onMouseLeave}
-            colorBarComponent={() => (
-              <div
-                style={{
-                  width: '23px',
-                  height: '8px',
-                  border: `${this.props.scribing.colors[scribingToolColor.SHAPE_BORDER]} 2px solid`,
-                  background: this.props.scribing.colors[scribingToolColor.SHAPE_FILL],
-                }}
-              />
-            )}
             onClickChevron={event => (this.onClickPopover(event, scribingPopoverTypes.SHAPE))}
-            iconClassname={
-              this.props.scribing.selectedShape === scribingShapes.RECT ?
-              'fa fa-square-o' : 'fa fa-circle-o'
-            }
+            iconClassname={shapeIcon}
           />
           <ShapePopover
             lineToolType={scribingToolThickness.SHAPE_BORDER}

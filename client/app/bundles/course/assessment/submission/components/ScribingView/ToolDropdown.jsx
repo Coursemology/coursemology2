@@ -12,9 +12,9 @@ const propTypes = {
   onClick: PropTypes.func,
   onClickIcon: PropTypes.func,
   onClickChevron: PropTypes.func,
-  colorBar: PropTypes.string,
+  colorBarBorder: PropTypes.string,
+  colorBarBackground: PropTypes.string,
   iconClassname: PropTypes.string,
-  colorBarComponent: PropTypes.func,
   iconComponent: PropTypes.func,
   onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
@@ -59,11 +59,21 @@ export default class ToolDropdown extends Component {
   }
 
   renderColorBar() {
-    const { colorBar, colorBarComponent } = this.props;
+    const { colorBarBorder, colorBarBackground } = this.props;
 
-    return colorBarComponent ?
-      colorBarComponent() :
-      <div style={{ ...style.colorBar, background: colorBar }} />;
+    const backgroundColor = colorBarBackground;
+    const borderColor = colorBarBorder;
+
+    return (
+      <div
+        style={{
+          width: '23px',
+          height: '8px',
+          backgroundColor,
+          border: borderColor ? `${borderColor} 2px solid` : undefined,
+        }}
+      />
+    );
   }
 
   render() {
