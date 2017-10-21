@@ -189,6 +189,15 @@ export function setCanvasStates(answerId, canvasStates) {
   );
 }
 
+export function setActiveObject(answerId, activeObject) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.SET_ACTIVE_OBJECT,
+      payload: { answerId, activeObject },
+    })
+  );
+}
+
 export function setCanvasZoom(answerId, canvasZoom) {
   return dispatch => (
     dispatch({

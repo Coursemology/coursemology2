@@ -95,6 +95,7 @@ export const canvasActionTypes = mirrorCreator([
   'SET_CANVAS_CURSOR',
   'SET_CURRENT_STATE_INDEX',
   'SET_CANVAS_STATES',
+  'SET_ACTIVE_OBJECT',
   'SET_CANVAS_ZOOM',
   'RESET_CHANGE_TOOL',
   'DELETE_CANVAS_OBJECT',

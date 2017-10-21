@@ -19,6 +19,7 @@ const propTypes = {
   setToolSelected: PropTypes.func.isRequired,
   setCurrentStateIndex: PropTypes.func.isRequired,
   setCanvasStates: PropTypes.func.isRequired,
+  setActiveObject: PropTypes.func.isRequired,
   updateScribingAnswer: PropTypes.func.isRequired,
   updateScribingAnswerInLocal: PropTypes.func.isRequired,
   resetCanvasDelete: PropTypes.func.isRequired,
@@ -97,13 +98,32 @@ export default class ScribingCanvas extends React.Component {
       }, nextProps.scribing.canvasZoom);
       this.canvas.trigger('mouse:move', { isForced: true });
 
+      // Discard prior active object/group when using other tools
+      if (nextProps.scribing.isChangeTool) {
+        if (nextProps.scribing.selectedTool !== scribingTools.TYPE
+          && nextProps.scribing.selectedTool !== scribingTools.DRAW
+          && nextProps.scribing.selectedTool !== scribingTools.LINE
+          && nextProps.scribing.selectedTool !== scribingTools.SHAPE) {
+          this.canvas.discardActiveObject();
+        }
+        this.canvas.discardActiveGroup();
+        this.canvas.renderAll();
+        this.props.resetChangeTool(this.props.answerId);
+      }
+
       if (nextProps.scribing.isDisableObjectSelection) {
         this.disableObjectSelection();
         this.props.resetDisableObjectSelection(this.props.answerId);
       }
       if (nextProps.scribing.isEnableObjectSelection) {
-        this.enableObjectSelection();
-        this.props.resetEnableObjectSelection(this.props.answerId);
+        // The canvasStates will only add the state with the text after it exits editing,
+        // hence, defer enableObjectSelection by 1 update if a text is still in editing mode.
+        if (!nextProps.scribing.activeObject
+          || (nextProps.scribing.activeObject
+              && nextProps.scribing.activeObject !== 'i-text')) {
+          this.enableObjectSelection();
+          this.props.resetEnableObjectSelection(this.props.answerId);
+        }
       }
       if (nextProps.scribing.isEnableTextSelection) {
         this.enableTextSelection();
@@ -130,13 +150,6 @@ export default class ScribingCanvas extends React.Component {
         }
         this.canvas.renderAll();
         this.props.resetCanvasDelete(this.props.answerId);
-      }
-      // Discard prior active object/group when using other tools
-      if (nextProps.scribing.isChangeTool) {
-        this.canvas.discardActiveObject();
-        this.canvas.discardActiveGroup();
-        this.canvas.renderAll();
-        this.props.resetChangeTool(this.props.answerId);
       }
     }
 
@@ -637,6 +650,8 @@ export default class ScribingCanvas extends React.Component {
       this.canvas.on('object:moving', this.onObjectMovingCanvas);
       this.canvas.on('object:modified', this.saveScribbles);
       this.canvas.on('object:removed', this.saveScribbles);
+      this.canvas.on('object:selected', this.onObjectSelected);
+      this.canvas.on('selection:cleared', this.onSelectionCleared);
       this.canvas.on('text:editing:exited', this.onTextChanged);
 
       this.scaleCanvas();
@@ -757,6 +772,16 @@ export default class ScribingCanvas extends React.Component {
     this.textCreated = false;
     this.saveScribbles();
     this.props.setToolSelected(this.props.answerId, scribingTools.SELECT);
+  }
+
+  onObjectSelected = (options) => {
+    if (options.target) {
+      this.props.setActiveObject(this.props.answerId, options.target);
+    }
+  }
+
+  onSelectionCleared = () => {
+    this.props.setActiveObject(this.props.answerId, undefined);
   }
 
   onKeyDown = (event) => {

@@ -47,6 +47,7 @@ export default function (state = {}, action) {
               lineStyles: initializeLineStyles(),
               thickness: initializeToolThickness(),
               hasNoFill: false,
+              activeObject: undefined,
               isCanvasLoaded: false,
               isDrawingMode: false,
               isChangeTool: false,
@@ -309,6 +310,16 @@ export default function (state = {}, action) {
         [answerId]: {
           ...state[answerId],
           canvasStates,
+        },
+      };
+    }
+    case canvasActionTypes.SET_ACTIVE_OBJECT: {
+      const { answerId, activeObject } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          activeObject,
         },
       };
     }
