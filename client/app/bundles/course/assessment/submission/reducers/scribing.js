@@ -49,6 +49,7 @@ export default function (state = {}, action) {
               hasNoFill: false,
               activeObject: undefined,
               isCanvasLoaded: false,
+              isCanvasDirty: false,
               isDrawingMode: false,
               isChangeTool: false,
               isDelete: false,
@@ -403,23 +404,43 @@ export default function (state = {}, action) {
         },
       };
     }
-    case canvasActionTypes.SET_ENABLE_TEXT_SELECTION: {
+    case canvasActionTypes.SET_CANVAS_DIRTY: {
       const { answerId } = action.payload;
       return {
         ...state,
         [answerId]: {
           ...state[answerId],
-          isEnableTextSelection: true,
+          isCanvasDirty: true,
         },
       };
     }
-    case canvasActionTypes.RESET_ENABLE_TEXT_SELECTION: {
+    case canvasActionTypes.RESET_CANVAS_DIRTY: {
       const { answerId } = action.payload;
       return {
         ...state,
         [answerId]: {
           ...state[answerId],
-          isEnableTextSelection: false,
+          isCanvasDirty: false,
+        },
+      };
+    }
+    case canvasActionTypes.SET_CANVAS_SAVE: {
+      const { answerId } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          isCanvasSave: true,
+        },
+      };
+    }
+    case canvasActionTypes.RESET_CANVAS_SAVE: {
+      const { answerId } = action.payload;
+      return {
+        ...state,
+        [answerId]: {
+          ...state[answerId],
+          isCanvasSave: false,
         },
       };
     }

@@ -5,7 +5,8 @@ import MaterialTooltip from 'material-ui/internal/Tooltip';
 import { blue500 } from 'material-ui/styles/colors';
 
 const propTypes = {
-  disabled: PropTypes.bool.isRequired,
+  activeObject: PropTypes.object,
+  disabled: PropTypes.bool,
   toolType: PropTypes.string.isRequired,
   tooltip: PropTypes.string,
   showTooltip: PropTypes.bool,
@@ -51,14 +52,8 @@ const style = {
 export default class ToolDropdown extends Component {
   renderIcon() {
     const { disabled, iconClassname, currentTool, toolType, iconComponent } = this.props;
-    let iconStyle;
-    if (disabled) {
-      iconStyle = style.disabled;
-    } else if (currentTool === toolType) {
-      iconStyle = { color: blue500 };
-    } else {
-      iconStyle = { color: 'rgba(0, 0, 0, 0.4)' };
-    }
+    const iconStyle = disabled ? style.disabled :
+      { color: currentTool === toolType ? blue500 : 'rgba(0, 0, 0, 0.4)' };
 
     return iconComponent ?
       iconComponent() :
@@ -69,29 +64,43 @@ export default class ToolDropdown extends Component {
   }
 
   renderColorBar() {
-    const { disabled, colorBarBorder, colorBarBackground } = this.props;
+    const { activeObject, disabled, colorBarBorder, colorBarBackground } = this.props;
 
-    const backgroundColor = colorBarBackground;
-    const borderColor = colorBarBorder;
+    let backgroundColor = colorBarBackground;
+    let borderColor = colorBarBorder;
 
+    if (activeObject) {
+      switch (activeObject.type) {
+        case 'path':
+        case 'line':
+          backgroundColor = activeObject.stroke;
+          break;
+        case 'i-text':
+          backgroundColor = activeObject.fill;
+          break;
+        case 'rect':
+        case 'ellipse':
+          backgroundColor = activeObject.fill;
+          borderColor = activeObject.stroke;
+          break;
+        default:
+      }
+    }
 
-    return disabled ?
-      <div
-        style={{
-          width: '23px',
-          height: '8px',
-          background: '#c0c0c0',
-        }}
-      />
-      :
-      <div
-        style={{
-          width: '23px',
-          height: '8px',
-          backgroundColor,
-          border: borderColor ? `${borderColor} 2px solid` : undefined,
-        }}
-      />;
+    const colorBarStyle = disabled ?
+    {
+      width: '23px',
+      height: '8px',
+      background: '#c0c0c0',
+    } :
+    {
+      width: '23px',
+      height: '8px',
+      backgroundColor,
+      border: borderColor ? `${borderColor} 2px solid` : undefined,
+    };
+
+    return <div style={colorBarStyle} />;
   }
 
   render() {

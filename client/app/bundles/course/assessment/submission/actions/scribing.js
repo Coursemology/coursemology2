@@ -270,19 +270,37 @@ export function resetEnableObjectSelection(answerId) {
   );
 }
 
-export function setEnableTextSelection(answerId) {
+export function setCanvasDirty(answerId) {
   return dispatch => (
     dispatch({
-      type: canvasActionTypes.SET_ENABLE_TEXT_SELECTION,
+      type: canvasActionTypes.SET_CANVAS_DIRTY,
       payload: { answerId },
     })
   );
 }
 
-export function resetEnableTextSelection(answerId) {
+export function resetCanvasDirty(answerId) {
   return dispatch => (
     dispatch({
-      type: canvasActionTypes.RESET_ENABLE_TEXT_SELECTION,
+      type: canvasActionTypes.RESET_CANVAS_DIRTY,
+      payload: { answerId },
+    })
+  );
+}
+
+export function setCanvasSave(answerId) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.SET_CANVAS_SAVE,
+      payload: { answerId },
+    })
+  );
+}
+
+export function resetCanvasSave(answerId) {
+  return dispatch => (
+    dispatch({
+      type: canvasActionTypes.RESET_CANVAS_SAVE,
       payload: { answerId },
     })
   );

@@ -17,6 +17,7 @@ const propTypes = {
   open: PropTypes.bool,
   anchorEl: PropTypes.object,
   onRequestClose: PropTypes.func,
+  displayShapeField: PropTypes.bool.isRequired,
   currentShape: PropTypes.string.isRequired,
   setSelectedShape: PropTypes.func,
   selectedLineStyle: PropTypes.string,
@@ -71,6 +72,7 @@ class ShapePopover extends Component {
           <h4>{intl.formatMessage(translations.shape)} </h4>
         </div>
         <ShapeField currentShape={currentShape} setSelectedShape={setSelectedShape} />
+        <Divider />
       </div>
     );
   }
@@ -138,7 +140,7 @@ class ShapePopover extends Component {
   }
 
   render() {
-    const { open, anchorEl, onRequestClose } = this.props;
+    const { open, displayShapeField, anchorEl, onRequestClose } = this.props;
 
     return (
       <Popover
@@ -151,8 +153,7 @@ class ShapePopover extends Component {
         animation={PopoverAnimationVertical}
       >
         <Menu style={styles.menu}>
-          { this.renderShapeComponent() }
-          <Divider />
+          { displayShapeField ? this.renderShapeComponent() : undefined }
           { this.renderBorderComponent() }
           <Divider />
           { this.renderFillComponent() }
