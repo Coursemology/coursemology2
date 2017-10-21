@@ -290,6 +290,7 @@ class ScribingToolbar extends Component {
       >
         <ToolbarGroup>
           <ToolDropdown
+            disabled={(scribing.activeObject && scribing.activeObject.type !== 'i-text') || false}
             toolType={scribingTools.TYPE}
             tooltip={intl.formatMessage(translations.text)}
             showTooltip={this.state.hoveredToolTip === scribingTools.TYPE}
@@ -317,6 +318,7 @@ class ScribingToolbar extends Component {
             onChangeCompleteColorPicker={color => (this.onChangeCompleteColor(color, scribingToolColor.TYPE))}
           />
           <ToolDropdown
+            disabled={(scribing.activeObject && scribing.activeObject.type !== 'path') || false}
             toolType={scribingTools.DRAW}
             tooltip={intl.formatMessage(translations.pencil)}
             showTooltip={this.state.hoveredToolTip === scribingTools.DRAW}
@@ -344,6 +346,7 @@ class ScribingToolbar extends Component {
             onChangeCompleteColorPicker={color => (this.onChangeCompleteColor(color, scribingToolColor.DRAW))}
           />
           <ToolDropdown
+            disabled={(scribing.activeObject && scribing.activeObject.type !== 'line') || false}
             toolType={scribingTools.LINE}
             tooltip={intl.formatMessage(translations.line)}
             showTooltip={this.state.hoveredToolTip === scribingTools.LINE}
@@ -379,6 +382,8 @@ class ScribingToolbar extends Component {
             onChangeCompleteColorPicker={color => (this.onChangeCompleteColor(color, scribingToolColor.LINE))}
           />
           <ToolDropdown
+            disabled={(scribing.activeObject
+              && scribing.activeObject.type !== 'rect' && scribing.activeObject.type !== 'ellipse') || false}
             toolType={scribingTools.SHAPE}
             tooltip={intl.formatMessage(translations.shape)}
             showTooltip={this.state.hoveredToolTip === scribingTools.SHAPE}

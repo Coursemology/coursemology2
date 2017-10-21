@@ -5,6 +5,7 @@ import MaterialTooltip from 'material-ui/internal/Tooltip';
 import { blue500 } from 'material-ui/styles/colors';
 
 const propTypes = {
+  disabled: PropTypes.bool.isRequired,
   toolType: PropTypes.string.isRequired,
   tooltip: PropTypes.string,
   showTooltip: PropTypes.bool,
@@ -40,31 +41,49 @@ const style = {
     fontSize: '12px',
     padding: '10px 0px 10px 0px',
   },
+  disabled: {
+    cursor: 'not-allowed',
+    pointerEvents: 'none',
+    color: '#c0c0c0',
+  },
 };
 
 export default class ToolDropdown extends Component {
   renderIcon() {
-    const { iconClassname, currentTool, toolType, iconComponent } = this.props;
+    const { disabled, iconClassname, currentTool, toolType, iconComponent } = this.props;
+    let iconStyle;
+    if (disabled) {
+      iconStyle = style.disabled;
+    } else if (currentTool === toolType) {
+      iconStyle = { color: blue500 };
+    } else {
+      iconStyle = { color: 'rgba(0, 0, 0, 0.4)' };
+    }
 
     return iconComponent ?
       iconComponent() :
       <FontIcon
         className={iconClassname}
-        style={
-          currentTool === toolType ?
-            { color: blue500 } :
-            { color: 'rgba(0, 0, 0, 0.4)' }
-        }
+        style={iconStyle}
       />;
   }
 
   renderColorBar() {
-    const { colorBarBorder, colorBarBackground } = this.props;
+    const { disabled, colorBarBorder, colorBarBackground } = this.props;
 
     const backgroundColor = colorBarBackground;
     const borderColor = colorBarBorder;
 
-    return (
+
+    return disabled ?
+      <div
+        style={{
+          width: '23px',
+          height: '8px',
+          background: '#c0c0c0',
+        }}
+      />
+      :
       <div
         style={{
           width: '23px',
@@ -72,13 +91,12 @@ export default class ToolDropdown extends Component {
           backgroundColor,
           border: borderColor ? `${borderColor} 2px solid` : undefined,
         }}
-      />
-    );
+      />;
   }
 
   render() {
     const {
-      onClick, onClickIcon, onClickChevron,
+      disabled, onClick, onClickIcon, onClickChevron,
       tooltip, showTooltip, onMouseEnter, onMouseLeave,
     } = this.props;
 
@@ -86,8 +104,8 @@ export default class ToolDropdown extends Component {
       <div
         role="button"
         tabIndex="0"
-        style={style.tool}
-        onClick={onClick}
+        style={disabled ? { ...style.tool, ...style.disabled } : style.tool}
+        onClick={event => (disabled ? () => {} : onClick && onClick(event))}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
@@ -104,8 +122,8 @@ export default class ToolDropdown extends Component {
         <div style={style.innerTool}>
           <FontIcon
             className="fa fa-chevron-down"
-            style={style.chevron}
-            onClick={onClickChevron}
+            style={disabled ? { ...style.chevron, ...style.disabled } : style.chevron}
+            onClick={!disabled && onClickChevron}
           />
         </div>
       </div>
