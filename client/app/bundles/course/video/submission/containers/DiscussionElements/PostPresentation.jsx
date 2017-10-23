@@ -25,15 +25,13 @@ const defaultProps = {
 
 function PostPresentation(props) {
   let childrenElements = null;
-  if (props.isRoot) {
-    const childrenNodes = props.childrenIds.map(childId => <PostContainer key={childId} postId={childId} />);
-    if (childrenNodes.length > 0) {
-      childrenElements = (
-        <div className={styles.replyIndent}>
-          {childrenNodes}
-        </div>
-      );
-    }
+  const childrenNodes = props.childrenIds.map(childId => <PostContainer key={childId} postId={childId} />);
+  if (childrenNodes.length > 0) {
+    childrenElements = (
+      <div className={props.isRoot && styles.replyIndent}>
+        {childrenNodes}
+      </div>
+    );
   }
 
   return (
