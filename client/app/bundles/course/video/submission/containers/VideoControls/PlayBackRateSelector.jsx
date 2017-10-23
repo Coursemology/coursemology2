@@ -6,7 +6,7 @@ import MenuItem from 'material-ui/MenuItem';
 import { videoDefaults } from 'lib/constants/videoConstants';
 
 import styles from '../VideoPlayer.scss';
-import { changePlayBackRate } from '../../actions/video';
+import { changePlaybackRate } from '../../actions/video';
 
 const propTypes = {
   rate: PropTypes.number.isRequired,
@@ -42,14 +42,14 @@ PlayBackRateSelector.defaultProps = defaultProps;
 
 function mapStateToProps(state, ownProps) {
   return {
-    rate: state.video.playBackRate,
+    rate: state.video.playbackRate,
     availableRates: ownProps.availableRates,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    rateChanged: newRate => dispatch(changePlayBackRate(newRate)),
+    rateChanged: newRate => dispatch(changePlaybackRate(newRate)),
   };
 }
 
