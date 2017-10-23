@@ -21,10 +21,12 @@ RSpec.describe Course::Assessment::AssessmentsController do
       context 'when a category is given' do
         before do
           post :index,
-               course_id: course,
-               id: immutable_assessment,
-               assessment: { title: '' },
-               category: category
+               params: {
+                 course_id: course,
+                 id: immutable_assessment,
+                 assessment: { title: '' },
+                 category: category
+               }
         end
         it { expect(controller.instance_variable_get(:@category)).to eq(category) }
       end
@@ -32,11 +34,13 @@ RSpec.describe Course::Assessment::AssessmentsController do
       context 'when a tab is given' do
         before do
           post :index,
-               course_id: course,
-               id: immutable_assessment,
-               assessment: { title: '' },
-               category: category,
-               tab: tab
+               params: {
+                 course_id: course,
+                 id: immutable_assessment,
+                 assessment: { title: '' },
+                 category: category,
+                 tab: tab
+               }
         end
         it { expect(controller.instance_variable_get(:@tab)).to eq(tab) }
       end
@@ -50,7 +54,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
 
       context 'when update fails' do
         it 'renders JSON errors' do
-          patch :update, course_id: course, id: assessment, assessment: { title: '' }
+          patch :update, params: { course_id: course, id: assessment, assessment: { title: '' } }
 
           body = JSON.parse(response.body)
           expect(body['errors']).to be_present
@@ -60,8 +64,10 @@ RSpec.describe Course::Assessment::AssessmentsController do
       it 'updates the start_at and end_at' do
         student
 
-        patch :update, course_id: course, id: assessment,
-                       assessment: { start_at: Time.zone.now, end_at: Time.zone.now + 1.hour }
+        patch :update, params: {
+          course_id: course, id: assessment,
+          assessment: { start_at: Time.zone.now, end_at: Time.zone.now + 1.hour }
+        }
 
         perform_enqueued_jobs
         wait_for_job
@@ -81,8 +87,10 @@ RSpec.describe Course::Assessment::AssessmentsController do
       context 'when the assessment is autograded' do
         let(:assessment) { create(:assessment, :autograded, course: course) }
         it 'does not update attributes tabbed_view and password' do
-          patch :update, course_id: course, id: assessment,
-                         assessment: { skippable: true, tabbed_view: true, password: 'password' }
+          patch :update, params: {
+            course_id: course, id: assessment,
+            assessment: { skippable: true, tabbed_view: true, password: 'password' }
+          }
 
           expect(assessment).not_to be_skippable
           assessment.reload
@@ -96,8 +104,10 @@ RSpec.describe Course::Assessment::AssessmentsController do
       context 'when the assessment is not autograded' do
         let(:assessment) { create(:assessment, course: course) }
         it 'does not update attribute skippable' do
-          patch :update, course_id: course, id: assessment,
-                         assessment: { skippable: true, tabbed_view: true, password: 'password' }
+          patch :update, params: {
+            course_id: course, id: assessment,
+            assessment: { skippable: true, tabbed_view: true, password: 'password' }
+          }
 
           expect(assessment).not_to be_skippable
           expect(assessment.tabbed_view).not_to be_truthy

@@ -121,8 +121,11 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       describe '#submit_answer' do
         subject do
           put :submit_answer,
-              course_id: course, assessment_id: assessment, id: submission, answer_id: current_answer.id,
-              answer: { id: current_answer.id }, format: :json
+              as: :json,
+              params: {
+                course_id: course, assessment_id: assessment, id: submission, answer_id: current_answer.id,
+                answer: { id: current_answer.id }
+              }
         end
 
         context 'when update fails' do

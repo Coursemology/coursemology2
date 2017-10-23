@@ -22,8 +22,10 @@ RSpec.describe Course::Achievement::AchievementsController, type: :controller do
 
     describe '#update' do
       subject do
-        patch :update, course_id: course, id: achievement_stub,
-                       achievement: { course_user_ids: [course_user.id] }
+        patch :update, params: {
+          course_id: course, id: achievement_stub,
+          achievement: { course_user_ids: [course_user.id] }
+        }
       end
 
       context 'when the achievement is automatically awarded' do

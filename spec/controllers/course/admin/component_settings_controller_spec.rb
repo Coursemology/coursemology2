@@ -28,7 +28,7 @@ RSpec.describe Course::Admin::ComponentSettingsController, type: :controller do
       end
 
       subject do
-        patch :update, settings_components: components_params, course_id: course
+        patch :update, params: { settings_components: components_params, course_id: course }
       end
 
       it 'enables the specified component and disables all other components' do

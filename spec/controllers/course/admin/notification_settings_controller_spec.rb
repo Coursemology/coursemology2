@@ -15,7 +15,7 @@ RSpec.describe Course::Admin::NotificationSettingsController, type: :controller 
     end
 
     describe '#update' do
-      subject { patch :update, course_id: course, notification_settings: payload }
+      subject { patch :update, params: { course_id: course, notification_settings: payload } }
 
       context 'when valid parameters are received' do
         render_views

@@ -56,8 +56,7 @@ RSpec.describe Course::UsersController, type: :controller do
     describe '#update' do
       before { sign_in(user) }
       subject do
-        put :update, format: :js, course_id: course, id: course_user,
-                     course_user: updated_course_user
+        put :update, as: :js, params: { course_id: course, id: course_user, course_user: updated_course_user }
       end
       let!(:course_user_to_update) { create(:course_user) }
       let(:updated_course_user) { { role: :teaching_assistant } }

@@ -114,8 +114,10 @@ RSpec.describe Course::Assessment::Question::ScribingController do
     describe '#update' do
       subject do
         request.accept = 'application/json'
-        patch :update, course_id: course, assessment_id: assessment, id: scribing_question,
-                       question_scribing: question_scribing_update_attributes
+        patch :update, params: {
+          course_id: course, assessment_id: assessment, id: scribing_question,
+          question_scribing: question_scribing_update_attributes
+        }
       end
 
       context 'when the question cannot be saved' do

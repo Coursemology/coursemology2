@@ -79,8 +79,10 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
     describe '#update' do
       subject do
         request.accept = 'application/json'
-        patch :update, course_id: course, assessment_id: assessment, id: programming_question,
-                       question_programming: question_programming_attributes
+        patch :update, params: {
+          course_id: course, assessment_id: assessment, id: programming_question,
+          question_programming: question_programming_attributes
+        }
       end
 
       context 'when the question cannot be saved' do

@@ -40,8 +40,10 @@ RSpec.describe Course::LessonPlan::EventsController, type: :controller do
 
     describe '#update' do
       subject do
-        patch :update, format: :json, course_id: course, id: event_immutable_stub,
-                       lesson_plan_event: attributes_for(:course_lesson_plan_event)
+        patch :update, as: :json, params: {
+          course_id: course, id: event_immutable_stub,
+          lesson_plan_event: attributes_for(:course_lesson_plan_event)
+        }
       end
 
       context 'when update succeeds' do

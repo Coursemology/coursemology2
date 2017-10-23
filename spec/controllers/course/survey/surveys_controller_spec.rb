@@ -157,8 +157,10 @@ RSpec.describe Course::Survey::SurveysController do
       let(:user) { admin }
 
       subject do
-        patch :update, format: :json, course_id: course.id, id: survey.id,
-                       survey: survey_params
+        patch :update, as: :json, params: {
+          course_id: course.id, id: survey.id,
+          survey: survey_params
+        }
       end
 
       context 'when survey is anonymous' do

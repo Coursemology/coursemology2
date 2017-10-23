@@ -19,7 +19,7 @@ RSpec.describe System::Admin::Instance::ComponentsController, type: :controller 
         all_component_ids.sample(1 + rand(all_component_ids.count))
       end
       let(:components_params) { { enabled_component_ids: ids_to_enable } }
-      subject { patch :update, settings_components: components_params }
+      subject { patch :update, params: { settings_components: components_params } }
 
       context 'enable/disable components' do
         let(:settings) do

@@ -20,7 +20,7 @@ RSpec.describe Course::Admin::AssessmentSettingsController, type: :controller do
         allow(controller).to receive(:category_params).and_return(nil)
       end
       context 'upon update failure' do
-        subject { patch :update, course_id: course }
+        subject { patch :update, params: { course_id: course } }
         it { is_expected.to render_template(:edit) }
       end
     end

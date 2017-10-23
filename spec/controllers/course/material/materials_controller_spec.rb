@@ -27,8 +27,8 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
       let(:file) { fixture_file_upload('files/picture.jpg', 'image/jpeg') }
       let(:attributes) { attributes_for(:material, file: file) }
       subject do
-        patch :update, course_id: course, folder_id: folder,
-                       id: material_stub, material: attributes
+        patch :update,
+              params: { course_id: course, folder_id: folder, id: material_stub, material: attributes }
       end
 
       context 'when a different file is given' do

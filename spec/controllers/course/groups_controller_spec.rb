@@ -19,7 +19,7 @@ RSpec.describe Course::GroupsController, type: :controller do
         let(:group_attributes) do
           attributes_for(:course_group, group_users_attributes: group_users_attributes)
         end
-        subject { patch :update, course_id: course, id: group, group: group_attributes }
+        subject { patch :update, params: { course_id: course, id: group, group: group_attributes } }
 
         context 'when the user and the group are in the same course' do
           let!(:course_user_to_add) { create(:course_user, course: course) }
@@ -68,7 +68,7 @@ RSpec.describe Course::GroupsController, type: :controller do
           group_users_attributes = { id_not_taken => attributes_for(:course_group_user) }
           attributes_for(:course_group, group_users_attributes: group_users_attributes)
         end
-        subject { patch :update, course_id: course, id: group, group: group_attributes }
+        subject { patch :update, params: { course_id: course, id: group, group: group_attributes } }
 
         it 'does not add the user to the group' do
           expect { subject }.to change { group.course_users.count }.by(0)

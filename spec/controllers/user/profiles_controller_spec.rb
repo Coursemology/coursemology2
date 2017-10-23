@@ -23,7 +23,7 @@ RSpec.describe User::ProfilesController, type: :controller do
 
     describe '#update' do
       let(:new_name) { 'New Name' }
-      subject { patch :update, user: { name: new_name } }
+      subject { patch :update, params: { user: { name: new_name } } }
 
       context 'when user is signed in' do
         before { sign_in(user) }
