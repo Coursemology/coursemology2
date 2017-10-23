@@ -5,7 +5,6 @@ import styles from '../Discussion.scss';
 import PostContainer from './PostContainer';
 import EditPostContainer from './EditPostContainer';
 import PostMenu from './PostMenu';
-import Reply from './Reply';
 
 const propTypes = {
   postId: PropTypes.string.isRequired,
@@ -52,7 +51,6 @@ function PostPresentation(props) {
         )}
       </div>
       {childrenElements}
-      {props.isRoot && <Reply parentId={props.postId} />}
     </div>
   );
 }
