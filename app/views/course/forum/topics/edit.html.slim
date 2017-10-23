@@ -8,6 +8,8 @@
   - keys = Course::Forum::Topic.topic_types.keys
   - keys -= ['announcement'] unless can?(:set_announcement, @topic)
   - keys -= ['sticky'] unless can?(:set_sticky, @topic)
-  = f.input :topic_type, as: :select, collection: keys
+  = f.input :topic_type,
+            as: :radio_buttons,
+            collection: keys.map { |type| [Course::Forum::Topic.human_attribute_name("topic_type.#{type}"), type] }
 
   = f.button :submit
