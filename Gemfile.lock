@@ -33,9 +33,9 @@ GIT
 
 GIT
   remote: git://github.com/jeremyyap/simple_form-bootstrap.git
-  revision: aaf660c965a8a13fe223d34a96afca9f2acef196
+  revision: 28ca2c5ef02a8b4ec4cead92d7bdbe71140b3de3
   specs:
-    simple_form-bootstrap (1.4.1)
+    simple_form-bootstrap (1.5.0)
       actionpack (>= 4.1, < 6)
       activemodel (>= 4.1, < 6)
       bootstrap-sass (~> 3)
@@ -104,7 +104,7 @@ GEM
       io-like (~> 0.3.0)
     arel (7.1.4)
     ast (2.3.0)
-    autoprefixer-rails (7.1.5)
+    autoprefixer-rails (7.1.6)
       execjs
     awesome_print (1.8.0)
     baby_squeel (1.1.5)
@@ -260,18 +260,18 @@ GEM
       sprockets-rails
     json (2.1.0)
     jwt (1.5.6)
-    kaminari (1.1.0)
+    kaminari (1.1.1)
       activesupport (>= 4.1.0)
-      kaminari-actionview (= 1.1.0)
-      kaminari-activerecord (= 1.1.0)
-      kaminari-core (= 1.1.0)
-    kaminari-actionview (1.1.0)
+      kaminari-actionview (= 1.1.1)
+      kaminari-activerecord (= 1.1.1)
+      kaminari-core (= 1.1.1)
+    kaminari-actionview (1.1.1)
       actionview
-      kaminari-core (= 1.1.0)
-    kaminari-activerecord (1.1.0)
+      kaminari-core (= 1.1.1)
+    kaminari-activerecord (1.1.1)
       activerecord
-      kaminari-core (= 1.1.0)
-    kaminari-core (1.1.0)
+      kaminari-core (= 1.1.1)
+    kaminari-core (1.1.1)
     key_struct (0.4.2)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -403,7 +403,7 @@ GEM
     rspec-mocks (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
-    rspec-rails (3.7.0)
+    rspec-rails (3.7.1)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       railties (>= 3.0)
@@ -647,6 +647,7 @@ DEPENDENCIES
   webpacker
   workflow
   yard
+
 
 BUNDLED WITH
    1.15.4
