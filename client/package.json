@@ -93,6 +93,7 @@
     "react-dropzone": "^3.13.2",
     "react-intl": "^2.3.0",
     "react-overlays": "^0.7.0",
+    "react-paginate": "^5.0.0",
     "react-player": "^0.24.2",
     "react-redux": "^5.0.5",
     "react-router": "^4.1.1",
