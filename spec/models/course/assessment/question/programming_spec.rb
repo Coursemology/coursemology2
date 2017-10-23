@@ -121,10 +121,15 @@ RSpec.describe Course::Assessment::Question::Programming do
     end
 
     describe '#attempt' do
-      subject { create(:course_assessment_question_programming, template_file_count: 1) }
+      subject { question }
+      let(:question) do
+        question = create(:course_assessment_question_programming, template_file_count: 1)
+        create(:course_question_assessment, question: question.acting_as, assessment: assessment)
+        question
+      end
+      let(:assessment) { create(:assessment) }
       let(:course) { assessment.course }
       let(:student_user) { create(:course_student, course: course).user }
-      let(:assessment) { subject.assessment }
       let(:submission) { create(:submission, assessment: assessment, creator: student_user) }
 
       it 'returns an Answer' do

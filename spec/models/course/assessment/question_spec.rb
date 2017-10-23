@@ -11,7 +11,7 @@ RSpec.describe Course::Assessment::Question do
   end
 
   it { is_expected.to be_actable }
-  it { is_expected.to belong_to(:assessment) }
+  it { is_expected.to have_many(:question_assessments).dependent(:destroy) }
   it { is_expected.to have_many(:answers).dependent(:destroy) }
   it { is_expected.to have_and_belong_to_many(:skills) }
 
@@ -94,8 +94,9 @@ RSpec.describe Course::Assessment::Question do
       let(:course) { assessment.course }
       let(:student_user) { create(:course_student, course: course).user }
       let(:assessment) do
-        assessment = build(:assessment)
-        create_list(:course_assessment_question_multiple_response, 3, assessment: assessment)
+        assessment = create(:assessment)
+        questions = create_list(:course_assessment_question_multiple_response, 3)
+        assessment.questions << questions.map(&:acting_as)
         assessment
       end
       let(:submission) { create(:submission, assessment: assessment, creator: student_user) }

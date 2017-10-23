@@ -45,7 +45,7 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
         it 'evaluates the answer' do
           expect(subject.grade(submission)).to eq(true)
 
-          gradable_answers = submission.answers.reject { |answer| answer.question.auto_gradable? }
+          gradable_answers = submission.current_answers.reject { |answer| answer.question.auto_gradable? }
           expect(gradable_answers).not_to be_empty
           expect(gradable_answers.map(&:reload).all?(&:evaluated?)).to be(true)
         end

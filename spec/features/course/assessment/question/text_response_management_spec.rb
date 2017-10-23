@@ -32,7 +32,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
         click_button I18n.t('helpers.buttons.create')
 
         question_created = assessment.questions.first.specific
-        expect(page).to have_content_tag_for(question_created)
+        expect(page).to have_selector('div', text: I18n.t('course.assessment.question.text_responses.create.success'))
         expect(question_created.skills).to contain_exactly(skill)
         expect(question_created.allow_attachment).to be_truthy
       end
@@ -52,7 +52,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
         click_button I18n.t('helpers.buttons.create')
 
         question_created = assessment.questions.first.specific
-        expect(page).to have_content_tag_for(question_created)
+        expect(page).to have_selector('div', text: I18n.t('course.assessment.question.text_responses.create.success'))
         expect(question_created.hide_text).to be_truthy
         expect(question_created.allow_attachment).to be_truthy
       end

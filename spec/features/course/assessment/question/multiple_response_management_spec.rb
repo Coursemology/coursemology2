@@ -44,7 +44,8 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
         click_button I18n.t('helpers.buttons.create')
 
         question_created = assessment.questions.first.specific
-        expect(page).to have_content_tag_for(question_created)
+        expect(page).
+          to have_selector('div', text: I18n.t('course.assessment.question.multiple_responses.create.success'))
         expect(question_created).not_to be_multiple_choice
         expect(question_created.skills).to contain_exactly(skill)
         expect(question_created.options).to be_present
@@ -99,7 +100,8 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management' do
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
         question_created = assessment.questions.first.specific
-        expect(page).to have_content_tag_for(question_created)
+        expect(page).
+          to have_selector('div', text: I18n.t('course.assessment.question.multiple_responses.create.success'))
         expect(question_created).to be_multiple_choice
         expect(question_created.options).to be_present
       end

@@ -48,7 +48,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
           subject { super().grade(answer) }
           let(:answer_contents) { 'test code ' + SecureRandom.hex }
           let(:answer_traits) { [{ file_contents: [answer_contents] }] }
-          before { allow(answer.question.assessment).to receive(:autograded?).and_return(true) }
+          before { allow(answer.submission.assessment).to receive(:autograded?).and_return(true) }
 
           it 'creates a new package with the correct file contents' do
             expect(Course::Assessment::ProgrammingEvaluationService).to \
@@ -153,7 +153,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
         end
 
         describe '#grade' do
-          before { allow(answer.question.assessment).to receive(:autograded?).and_return(true) }
+          before { allow(answer.submission.assessment).to receive(:autograded?).and_return(true) }
 
           subject { super().grade(answer) }
 
