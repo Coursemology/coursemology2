@@ -32,10 +32,6 @@ class Course::Video::TopicsController < Course::Video::Controller
     params.permit(:timestamp, :video_id)
   end
 
-  def timestamp_param
-    topic_params[:timestamp]
-  end
-
   def parent_id_param
     params.try(:[], :discussion_post).try(:[], :parent_id)
   end
@@ -49,13 +45,8 @@ class Course::Video::TopicsController < Course::Video::Controller
   end
 
   def load_existing_topic
-    return unless timestamp_param || parent_id_param
-
-    topic = if timestamp_param
-              @video.topics.find_by(timestamp: timestamp_param.to_i)
-            elsif parent_id_param
-              Course::Discussion::Post.find(parent_id_param).topic.specific
-            end
+    return unless parent_id_param
+    topic = Course::Discussion::Post.find(parent_id_param).topic.specific
     @topic = topic unless topic.nil?
   end
 end

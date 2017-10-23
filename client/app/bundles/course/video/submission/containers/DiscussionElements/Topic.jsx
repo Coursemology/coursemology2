@@ -35,14 +35,6 @@ function Topic(props) {
         {props.postIds.map(id => <PostContainer key={id.toString()} postId={id} isRoot />)}
       </div>
       <Divider style={{ marginBottom: '1em' }} />
-      <div className={styles.topicTimestamp}>
-        <span className="glyphicon glyphicon-chevron-up" />
-        &nbsp;
-        <b>Time: {formatTimestamp(props.timestamp)}</b>
-        &nbsp;
-        <span className="glyphicon glyphicon-chevron-up" />
-      </div>
-      <Divider style={{ marginBottom: '1em' }} />
     </div>
   );
 }
