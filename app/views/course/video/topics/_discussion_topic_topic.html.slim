@@ -1,0 +1,18 @@
+- video_topic = discussion_topic_topic
+- topic = video_topic.acting_as
+- video = video_topic.video
+- creator = video_topic.creator
+- submission = video.submissions.by_user(creator).first
+
+= div_for(topic, 'data-topic-id' => topic.id) do
+  h3
+    - timestamp = Time.at(video_topic.timestamp).utc.strftime("%H:%M:%S")
+    = link_to t('.comment_title', title: video.title, timestamp: timestamp),
+              edit_course_video_submission_path(current_course, video, submission)
+  - if can?(:manage, topic)
+    = link_to_toggle_pending(topic)
+  h4
+    = t('.by_html', user: link_to_user(creator))
+
+  = display_topic video_topic.acting_as, post_partial: 'course/discussion/post',
+    footer: 'course/discussion/posts/form'
