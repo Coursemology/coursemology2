@@ -5,8 +5,8 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:text_response) { nil }
-    let(:user) { create(:user) }
-    let(:course) { create(:course, creator: user) }
+    let(:user) { create(:course_manager, course: course).user }
+    let(:course) { create(:course) }
     let(:assessment) { create(:assessment, course: course) }
     let(:immutable_text_response_question) do
       create(:course_assessment_question_text_response, assessment: assessment).tap do |question|
@@ -17,8 +17,18 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
 
     before do
       sign_in(user)
-      return unless text_response
-      controller.instance_variable_set(:@text_response_question, text_response)
+    end
+
+    describe '#new' do
+      subject do
+        get :new, params: { course_id: course, assessment_id: assessment }
+      end
+
+      it 'intialises the question' do
+        subject
+
+        expect(controller.instance_variable_get(:@text_response_question)).to be_present
+      end
     end
 
     describe '#create' do
@@ -32,7 +42,17 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
         }
       end
 
+      it 'intialises the question' do
+        subject
+
+        expect(controller.instance_variable_get(:@text_response_question)).to be_present
+      end
+
       context 'when saving fails' do
+        before do
+          controller.instance_variable_set(:@text_response_question, text_response)
+        end
+
         let(:text_response) { immutable_text_response_question }
         it do
           is_expected.to render_template('new')
@@ -52,8 +72,12 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
         }
       end
 
-      it do
-        is_expected.to render_template('edit')
+      context 'when update fails' do
+        before do
+          controller.instance_variable_set(:@text_response_question, text_response)
+        end
+
+        it { is_expected.to render_template('edit') }
       end
     end
 
@@ -62,9 +86,10 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
       subject { post :destroy, params: { course_id: course, assessment_id: assessment, id: text_response } }
 
       it { is_expected.to redirect_to(course_assessment_path(course, assessment)) }
+
       it 'sets the correct flash message' do
         subject
-        expect(flash[:danger]).not_to be_empty
+        expect(flash[:success]).not_to be_empty
       end
     end
   end

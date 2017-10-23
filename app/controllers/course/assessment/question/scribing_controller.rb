@@ -1,9 +1,10 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::ScribingController < \
-  Course::Assessment::QuestionsController
+class Course::Assessment::Question::ScribingController < Course::Assessment::QuestionsController
+  build_and_authorize_new_question :scribing_question,
+                                   class: Course::Assessment::Question::Scribing, only: [:new, :create]
   load_and_authorize_resource :scribing_question,
                               class: Course::Assessment::Question::Scribing,
-                              through: :assessment, parent: false
+                              through: :assessment, parent: false, except: [:new, :create]
 
   def new
     respond_to do |format|

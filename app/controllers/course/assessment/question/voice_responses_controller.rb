@@ -1,9 +1,10 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::VoiceResponsesController < \
-  Course::Assessment::QuestionsController
+class Course::Assessment::Question::VoiceResponsesController < Course::Assessment::QuestionsController
+  build_and_authorize_new_question :voice_response_question,
+                                   class: Course::Assessment::Question::VoiceResponse, only: [:new, :create]
   load_and_authorize_resource :voice_response_question,
                               class: Course::Assessment::Question::VoiceResponse,
-                              through: :assessment, parent: false
+                              through: :assessment, parent: false, except: [:new, :create]
 
   def create
     if @voice_response_question.save

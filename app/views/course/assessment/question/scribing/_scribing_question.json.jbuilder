@@ -1,6 +1,5 @@
 json.question do
-  json.(@scribing_question, :id, :title, :description, :staff_only_comments, :maximum_grade,
-    :weight)
+  json.(@scribing_question, :id, :title, :description, :staff_only_comments, :maximum_grade)
 
   if @scribing_question.attachment_reference
     json.attachment_reference do

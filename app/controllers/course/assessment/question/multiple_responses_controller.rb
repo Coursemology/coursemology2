@@ -1,9 +1,10 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::MultipleResponsesController < \
-  Course::Assessment::QuestionsController
+class Course::Assessment::Question::MultipleResponsesController < Course::Assessment::QuestionsController
+  build_and_authorize_new_question :multiple_response_question,
+                                   class: Course::Assessment::Question::MultipleResponse, only: [:new, :create]
   load_and_authorize_resource :multiple_response_question,
                               class: Course::Assessment::Question::MultipleResponse,
-                              through: :assessment, parent: false
+                              through: :assessment, parent: false, except: [:new, :create]
 
   def new
     @multiple_response_question.grading_scheme = :any_correct if params[:multiple_choice] == 'true'
