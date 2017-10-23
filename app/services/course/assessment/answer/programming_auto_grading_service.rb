@@ -45,8 +45,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   # @return [Course::Assessment::ProgrammingEvaluationService::Result]
   def evaluate_package(question, package)
     Course::Assessment::ProgrammingEvaluationService.
-      execute(question.assessment.course, question.language, question.memory_limit,
-              question.time_limit, package.path)
+      execute(question.language, question.memory_limit, question.time_limit, package.path)
   end
 
   # Builds the result of the auto grading from the evaluation result.

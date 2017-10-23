@@ -3,7 +3,7 @@
 - answer = file_annotation.file.answer
 - question = answer.question
 - submission = answer.submission
-- assessment = question.assessment
+- assessment = submission.assessment
 - question_assessment = assessment.question_assessments.find_by!(question: question)
 
 = div_for(topic, 'data-topic-id' => topic.id) do

@@ -2,7 +2,7 @@
 - topic = submission_question.acting_as
 - question = submission_question.question
 - submission = submission_question.submission
-- assessment = question.assessment
+- assessment = submission.assessment
 - question_assessment = assessment.question_assessments.find_by!(question: question)
 
 = div_for(topic, 'data-topic-id' => topic.id) do
