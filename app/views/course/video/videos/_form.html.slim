@@ -3,7 +3,9 @@
   = f.input :title
   = f.input :description, as: :text
   = f.input :url, placeholder: t('.url_placeholder')
-  = f.input :start_at, as: :bootstrap_date_time
+  = f.input :start_at,
+            as: :bootstrap_date_time,
+            input_html: { value: f.object.start_at || Date.today }
   = f.input :published, as: :boolean
 
   = f.button :submit
