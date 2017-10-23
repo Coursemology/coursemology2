@@ -46,8 +46,10 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
         question_multiple_response_attributes =
           attributes_for(:course_assessment_question_multiple_response).
           slice(:description, :maximum_grade)
-        patch :update, course_id: course, assessment_id: assessment, id: multiple_response,
-                       question_multiple_response: question_multiple_response_attributes
+        patch :update, params: {
+          course_id: course, assessment_id: assessment, id: multiple_response,
+          question_multiple_response: question_multiple_response_attributes
+        }
       end
 
       it do
@@ -77,8 +79,10 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
                     }
                 }
             }
-          patch :update, course_id: course, assessment_id: assessment, id: multiple_response,
-                         question_multiple_response: question_multiple_response_attributes
+          patch :update, params: {
+            course_id: course, assessment_id: assessment, id: multiple_response,
+            question_multiple_response: question_multiple_response_attributes
+          }
         end
 
         it 'updates a valid weight' do

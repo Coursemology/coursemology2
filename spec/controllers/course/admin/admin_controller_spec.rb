@@ -31,7 +31,7 @@ RSpec.describe Course::Admin::AdminController do
 
     describe '#update' do
       let(:title) { 'New Title' }
-      subject { patch :update, course_id: course, course: { title: title } }
+      subject { patch :update, params: { course_id: course, course: { title: title } } }
 
       context 'when the user is a Course Manager' do
         let(:user) { create(:course_manager, course: course).user }

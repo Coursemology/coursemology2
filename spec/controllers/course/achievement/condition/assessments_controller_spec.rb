@@ -86,11 +86,12 @@ RSpec.describe Course::Achievement::Condition::AssessmentsController, type: :con
       end
 
       subject do
-        patch :update,
-              course_id: course,
-              achievement_id: achievement,
-              id: assessment_condition,
-              condition_assessment: { minimum_grade_percentage: minimum_grade_percentage }
+        patch :update, params: {
+          course_id: course,
+          achievement_id: achievement,
+          id: assessment_condition,
+          condition_assessment: { minimum_grade_percentage: minimum_grade_percentage }
+        }
       end
 
       context 'when update fails' do

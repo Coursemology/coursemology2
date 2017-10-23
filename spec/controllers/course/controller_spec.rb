@@ -20,7 +20,7 @@ RSpec.describe Course::Controller, type: :controller do
 
     describe '#current_course' do
       it 'returns the current course' do
-        get(:show, id: course.id)
+        get :show, params: { id: course.id }
         expect(controller.current_course).to eq(course)
       end
     end
@@ -28,7 +28,7 @@ RSpec.describe Course::Controller, type: :controller do
     describe '#current_course_user' do
       context 'when there is no user logged in' do
         let(:user) { nil }
-        subject { get(:show, id: course.id) }
+        subject { get :show, params: { id: course.id } }
         it 'raises an error' do
           expect { subject }.to raise_error(CanCan::AccessDenied)
         end
@@ -37,7 +37,7 @@ RSpec.describe Course::Controller, type: :controller do
       context 'when the user is logged in' do
         context 'when the user is not registered in the course' do
           it 'returns nil' do
-            get(:show, id: course.id)
+            get :show, params: { id: course.id }
             expect(controller.current_course_user).to be_nil
           end
         end
@@ -45,7 +45,7 @@ RSpec.describe Course::Controller, type: :controller do
         context 'when the user is registered in the course' do
           let!(:course_user) { create(:course_user, course: course, user: user) }
           it 'returns the correct user' do
-            get(:show, id: course.id)
+            get :show, params: { id: course.id }
             expect(controller.current_course_user.user).to eq(user)
             expect(controller.current_course_user.course).to eq(controller.current_course)
           end

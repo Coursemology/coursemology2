@@ -22,9 +22,11 @@ RSpec.describe Course::ExperiencePointsRecordsController, type: :controller do
 
     describe '#update' do
       subject do
-        patch :update, format: :js, course_id: course,
-                       user_id: course_student, id: points_record_stub,
-                       experience_points_record: { reason: 'reason' }
+        patch :update, format: :js, params: {
+          course_id: course,
+          user_id: course_student, id: points_record_stub,
+          experience_points_record: { reason: 'reason' }
+        }
       end
 
       context 'when update fails' do

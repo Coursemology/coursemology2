@@ -22,7 +22,7 @@ RSpec.describe Course::Admin::SidebarSettingsController, type: :controller do
         sidebar_item_attributes = { id => { id: sample_item[:key], weight: weight } }
         { sidebar_items_attributes: sidebar_item_attributes }
       end
-      subject { patch :update, settings_sidebar: sidebar_item_attributes, course_id: course }
+      subject { patch :update, params: { settings_sidebar: sidebar_item_attributes, course_id: course } }
 
       context 'when the weight is greater than 0' do
         it 'updates the weight' do

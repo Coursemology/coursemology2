@@ -87,11 +87,12 @@ RSpec.describe Course::Achievement::Condition::LevelsController, type: :controll
       end
 
       subject do
-        patch :update,
-              course_id: course,
-              achievement_id: achievement,
-              id: level_condition,
-              condition_level: { minimum_level: min_level }
+        patch :update, params: {
+          course_id: course,
+          achievement_id: achievement,
+          id: level_condition,
+          condition_level: { minimum_level: min_level }
+        }
       end
 
       context 'when update fails' do

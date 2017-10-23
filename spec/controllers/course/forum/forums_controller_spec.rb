@@ -44,8 +44,10 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
     describe '#create' do
       subject do
         post :create,
-             course_id: course,
-             forum: { name: 'test', description: '' }
+             params: {
+               course_id: course,
+               forum: { name: 'test', description: '' }
+             }
       end
 
       context 'when saving fails' do
@@ -60,10 +62,11 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
 
     describe '#update' do
       subject do
-        patch :update,
-              course_id: course,
-              id: forum_stub,
-              forum: { name: 'new name', descripiton: 'new description' }
+        patch :update, params: {
+          course_id: course,
+          id: forum_stub,
+          forum: { name: 'new name', descripiton: 'new description' }
+        }
       end
 
       context 'when update fails' do

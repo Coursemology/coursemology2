@@ -28,7 +28,7 @@ RSpec.describe System::Admin::Instance::UsersController, type: :controller do
       let!(:instance_user) { create(:instance_user) }
 
       subject do
-        patch :update, format: :js, id: instance_user, instance_user: { role: :administrator }
+        patch :update, as: :js, params: { id: instance_user, instance_user: { role: :administrator } }
       end
 
       context 'when the user is an instance administrator' do

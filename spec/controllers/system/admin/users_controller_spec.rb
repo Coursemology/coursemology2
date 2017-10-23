@@ -34,7 +34,7 @@ RSpec.describe System::Admin::UsersController, type: :controller do
     describe '#update' do
       let!(:user_to_update) { create(:user) }
 
-      subject { patch :update, format: :js, id: user_to_update, user: { role: :administrator } }
+      subject { patch :update, as: :js, params: { id: user_to_update, user: { role: :administrator } } }
 
       context 'when the user is a system administrator' do
         before { sign_in(admin) }

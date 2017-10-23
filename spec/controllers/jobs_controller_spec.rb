@@ -19,7 +19,7 @@ RSpec.describe JobsController do
       it { is_expected.to redirect_to(redirect_path) }
     end
 
-    before { get 'show', id: job.id, format: format }
+    before { get 'show', params: { id: job.id, format: format } }
 
     context 'when the job is in progress' do
       it { is_expected.to respond_with(:accepted) }

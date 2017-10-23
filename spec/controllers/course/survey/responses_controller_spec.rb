@@ -177,8 +177,10 @@ RSpec.describe Course::Survey::ResponsesController do
       let(:user) { student.user }
 
       subject do
-        patch :update, format: :json, response: response_params,
-                       course_id: course.id, survey_id: survey.id, id: survey_response.id
+        patch :update, as: :json, params: {
+          response: response_params,
+          course_id: course.id, survey_id: survey.id, id: survey_response.id
+        }
       end
 
       context 'when student submits an answer for a multiple response question' do

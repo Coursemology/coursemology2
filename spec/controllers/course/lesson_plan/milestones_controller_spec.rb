@@ -41,8 +41,10 @@ RSpec.describe Course::LessonPlan::MilestonesController, type: :controller do
 
     describe '#update' do
       subject do
-        patch :update, format: :json, course_id: course, id: milestone_immutable_stub,
-                       lesson_plan_milestone: attributes_for(:course_lesson_plan_milestone)
+        patch :update, as: :json, params: {
+          course_id: course, id: milestone_immutable_stub,
+          lesson_plan_milestone: attributes_for(:course_lesson_plan_milestone)
+        }
       end
 
       context 'when update succeeds' do
