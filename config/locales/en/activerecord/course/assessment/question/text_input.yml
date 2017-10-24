@@ -1,0 +1,14 @@
+en:
+  activerecord:
+    attributes:
+      models:
+        course/assessment/question/text_input:
+          text_input: 'text input question'
+          file_upload: 'file upload question'
+          comprehension: 'comprehension question'
+    errors:
+      models:
+        course/assessment/question/text_input:
+          attributes:
+            maximum_grade:
+              invalid_grade: 'must be no less than the grade of any solution'

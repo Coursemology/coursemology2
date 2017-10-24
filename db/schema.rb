@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171023060000) do
+ActiveRecord::Schema.define(version: 20171023065500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -318,6 +318,31 @@ ActiveRecord::Schema.define(version: 20171023060000) do
   end
 
   create_table "course_assessment_question_scribings", force: :cascade do |t|
+  end
+
+  create_table "course_assessment_question_text_inputs", force: :cascade do |t|
+    t.boolean "allow_attachment", :default=>false
+    t.boolean "hide_text",        :default=>false
+    t.boolean "is_comprehension", :default=>false
+  end
+
+  create_table "course_assessment_question_text_input_groups", force: :cascade do |t|
+    t.integer "question_id",         :null=>false, :index=>{:name=>"fk__course_assessment_text_input_group_question"}, :foreign_key=>{:references=>"course_assessment_question_text_inputs", :name=>"fk_course_assessment_question_text_input_groups_question_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.decimal "maximum_group_grade", :precision=>4, :scale=>1, :default=>"0.0", :null=>false
+  end
+
+  create_table "course_assessment_question_text_input_points", force: :cascade do |t|
+    t.integer "group_id",            :null=>false, :index=>{:name=>"fk__course_assessment_text_input_point_group"}, :foreign_key=>{:references=>"course_assessment_question_text_input_groups", :name=>"fk_course_assessment_question_text_input_points_group_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.decimal "maximum_point_grade", :precision=>4, :scale=>1, :default=>"0.0", :null=>false
+  end
+
+  create_table "course_assessment_question_text_input_solutions", force: :cascade do |t|
+    t.integer "point_id",       :null=>false, :index=>{:name=>"fk__course_assessment_text_input_solution_point"}, :foreign_key=>{:references=>"course_assessment_question_text_input_points", :name=>"fk_course_assessment_question_text_input_solutions_point_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer "solution_type",  :default=>0, :null=>false
+    t.text    "solution",       :default=>[], :null=>false, :array=>true
+    t.text    "solution_lemma", :default=>[], :null=>false, :array=>true
+    t.decimal "grade",          :precision=>4, :scale=>1, :default=>"0.0", :null=>false
+    t.text    "explanation"
   end
 
   create_table "course_assessment_question_text_responses", force: :cascade do |t|
