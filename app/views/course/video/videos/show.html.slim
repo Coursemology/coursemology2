@@ -1,7 +1,10 @@
 - add_breadcrumb @video.title
 = page_header @video.title do
-  - if can?(:manage, @video)
-    div.pull-right
+  div.pull-right
+    - if can?(:attempt, @video)
+      = render partial: 'course/video/videos/video_attempt_button',
+        locals: { video: @video }
+    - if can?(:manage, @video)
       = render partial: 'video_management_buttons', locals: { video: @video }
 
 = div_for(@video) do

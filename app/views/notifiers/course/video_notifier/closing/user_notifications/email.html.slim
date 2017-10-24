@@ -5,7 +5,6 @@
 
 - message.subject = t('.subject', course: course.title, video: video.title)
 
-/ TODO: Re-enable when routes are updated
-/= simple_format(t('.message', time: time,
-/                video: link_to(video.title,
-/                               course_video_url(course, video, host: host))))
+= simple_format(t('.message', time: time,
+                video: link_to(video.title,
+                               course_video_url(video.course, video))))

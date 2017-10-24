@@ -4,8 +4,7 @@
 = div_for(notification) do
   // TODO: Display user image here.
   - user_link = link_to_user(activity.actor)
-  // TODO: Enable video_link when routes are fixed
-  // - video_link = link_to video.title, course_video_path(notification.course, video)
-  - video_link = video.title
+  - video_link = link_to(video.title,
+                         course_video_path(notification.course, video))
   => t('.attempted_video_html', user: user_link, video: video_link)
   i.clearfix.timestamp = format_datetime(activity.created_at)
