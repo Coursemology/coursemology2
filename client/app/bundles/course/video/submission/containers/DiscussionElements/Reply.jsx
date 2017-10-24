@@ -8,7 +8,7 @@ import NewReplyContainer from './NewReplyContainer';
 import { addReply } from '../../actions/discussion';
 
 const propTypes = {
-  parentId: PropTypes.string.isRequired,
+  topicId: PropTypes.string.isRequired,
   editorVisible: PropTypes.bool,
   onTriggerReply: PropTypes.func,
 };
@@ -20,7 +20,7 @@ const defaultProps = {
 function Reply(props) {
   return props.editorVisible ? (
     <div className={styles.replyContainer}>
-      <NewReplyContainer parentId={props.parentId} />
+      <NewReplyContainer topicId={props.topicId} />
     </div>
   ) : (
     <div className={styles.replyContainer}>
@@ -37,20 +37,20 @@ Reply.propTypes = propTypes;
 Reply.defaultProps = defaultProps;
 
 const containerPropTypes = {
-  parentId: PropTypes.string.isRequired,
+  topicId: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
-  const pendingReply = state.discussion.pendingReplyPosts.get(ownProps.parentId);
+  const pendingReply = state.discussion.pendingReplyPosts.get(ownProps.topicId);
   return {
-    parentId: ownProps.parentId,
+    topicId: ownProps.topicId,
     editorVisible: (pendingReply !== undefined) && pendingReply.editorVisible,
   };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    onTriggerReply: () => dispatch(addReply(ownProps.parentId)),
+    onTriggerReply: () => dispatch(addReply(ownProps.topicId)),
   };
 }
 

@@ -93,11 +93,11 @@ function posts(state = makeImmutableMap(), action) {
 function pendingReplyPosts(state = makeImmutableMap, action) {
   switch (action.type) {
     case discussionActionTypes.ADD_REPLY:
-      return state.set(action.parentId, Object.assign({}, replyDefaults));
+      return state.set(action.topicId, Object.assign({}, replyDefaults));
     case discussionActionTypes.UPDATE_REPLY:
-      return state.set(action.parentId, Object.assign({}, state.get(action.parentId), action.replyProps));
+      return state.set(action.topicId, Object.assign({}, state.get(action.topicId), action.replyProps));
     case discussionActionTypes.REMOVE_REPLY:
-      return state.delete(action.parentId);
+      return state.delete(action.topicId);
     default:
       return state;
   }

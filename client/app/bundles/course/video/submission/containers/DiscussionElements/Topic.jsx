@@ -6,8 +6,10 @@ import { formatTimestamp } from 'lib/helpers/videoHelpers';
 
 import styles from '../Discussion.scss';
 import PostContainer from './PostContainer';
+import Reply from './Reply';
 
 const propTypes = {
+  topicId: PropTypes.string.isRequired,
   timestamp: PropTypes.number.isRequired,
   postIds: PropTypes.arrayOf(PropTypes.string),
 };
@@ -34,14 +36,7 @@ function Topic(props) {
       <div>
         {props.postIds.map(id => <PostContainer key={id.toString()} postId={id} isRoot />)}
       </div>
-      <Divider style={{ marginBottom: '1em' }} />
-      <div className={styles.topicTimestamp}>
-        <span className="glyphicon glyphicon-chevron-up" />
-        &nbsp;
-        <b>Time: {formatTimestamp(props.timestamp)}</b>
-        &nbsp;
-        <span className="glyphicon glyphicon-chevron-up" />
-      </div>
+      <Reply topicId={props.topicId} />
       <Divider style={{ marginBottom: '1em' }} />
     </div>
   );
@@ -59,6 +54,7 @@ function mapStateToProps(state, ownProps) {
   const postsStore = state.discussion.posts;
   const postIds = topic.topLevelPostIds.filter(postId => postsStore.has(postId));
   return {
+    topicId: ownProps.topicId,
     timestamp: topic.timestamp,
     postIds,
   };

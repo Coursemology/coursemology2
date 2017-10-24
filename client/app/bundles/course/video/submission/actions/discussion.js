@@ -121,16 +121,16 @@ function removeTopic(topicId) {
 }
 
 /**
- * Creates and action to add a reply to a post.
+ * Creates and action to add a reply to a topic.
  *
  * The reply will be created with default reply properties.
- * @param parentId The id of the post the reply is for
- * @returns {{type: discussionActionTypes, parentId: string}} The add reply action
+ * @param topicId The id of the topic the reply is for
+ * @returns {{type: discussionActionTypes, topicId: string}} The add reply action
  */
-export function addReply(parentId) {
+export function addReply(topicId) {
   return {
     type: discussionActionTypes.ADD_REPLY,
-    parentId,
+    topicId,
   };
 }
 
@@ -139,27 +139,27 @@ export function addReply(parentId) {
  *
  * The properties provided will be merged into the original reply state. Properties that are not specified will not
  * be touched.
- * @param parentId The post id of the post the reply is for
+ * @param topicId The id of the topic the reply is for
  * @param replyProps The properties of the reply
- * @returns {{type: discussionActionTypes, parentId: string, replyProps: Object}} The update reply action
+ * @returns {{type: discussionActionTypes, topicId: string, replyProps: Object}} The update reply action
  */
-export function updateReply(parentId, replyProps) {
+export function updateReply(topicId, replyProps) {
   return {
     type: discussionActionTypes.UPDATE_REPLY,
-    parentId,
+    topicId,
     replyProps,
   };
 }
 
 /**
  * Creates an action to remove a reply.
- * @param parentId The post id the reply is for, used as a key
- * @returns {{type: discussionActionTypes, parentId: string}} The remove reply action
+ * @param topicId The topic id the reply is for, used as a key
+ * @returns {{type: discussionActionTypes, topicId: string}} The remove reply action
  */
-function removeReply(parentId) {
+function removeReply(topicId) {
   return {
     type: discussionActionTypes.REMOVE_REPLY,
-    parentId,
+    topicId,
   };
 }
 
@@ -253,15 +253,15 @@ export function refreshDiscussion() {
  * The new reply is then added to the application state with addReply(..).
  *
  * Sets the notification and status for the new post object created accordingly too.
- * @param parentId The parent post id for which the reply is for
+ * @param topicId The topic id for which the reply is for
  * @returns {function(*, *)} The thunk that submits the request
  */
-export function submitNewReplyToServer(parentId) {
+export function submitNewReplyToServer(topicId) {
   return (dispatch, getState) => {
-    dispatch(updateReply(parentId, { status: postRequestingStatuses.LOADING }));
+    dispatch(updateReply(topicId, { status: postRequestingStatuses.LOADING }));
 
     const state = getState();
-    const text = state.discussion.pendingReplyPosts.get(parentId).content;
+    const text = state.discussion.pendingReplyPosts.get(topicId).content;
 
     if (text === '') {
       dispatch(setNotification('Comment cannot be blank!'));
@@ -269,17 +269,13 @@ export function submitNewReplyToServer(parentId) {
     }
 
     CourseAPI.video.topics
-      .create({ discussion_post: { parent_id: parentId, text } })
-      .then(({ data }) => {
-        const { topicId, topic, postId, post, parentPostId, parentPost } = data;
-
-        dispatch(addPost(postId, post));
-        dispatch(updatePost(parentPostId, parentPost));
-        dispatch(updateTopic(topicId, topic)); // Topic may be new, we just overwrite anyway
-        dispatch(removeReply(parentId));
+      .create({ discussion_post: { topic_id: topicId, text } })
+      .then(() => {
+        dispatch(refreshTopic(topicId));
+        dispatch(removeReply(topicId));
       })
       .catch(() => {
-        dispatch(updateReply(parentId, { status: postRequestingStatuses.ERROR }));
+        dispatch(updateReply(topicId, { status: postRequestingStatuses.ERROR }));
         dispatch(setNotification('Error replying, please try again later.'));
       });
   };

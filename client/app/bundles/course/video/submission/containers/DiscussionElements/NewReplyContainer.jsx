@@ -15,11 +15,11 @@ const translations = defineMessages({
 });
 
 const propTypes = {
-  parentId: PropTypes.string.isRequired,
+  topicId: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
-  const pendingReplyPost = state.discussion.pendingReplyPosts.get(ownProps.parentId);
+  const pendingReplyPost = state.discussion.pendingReplyPosts.get(ownProps.topicId);
 
   return {
     content: pendingReplyPost.content,
@@ -30,9 +30,9 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    onSubmit: () => dispatch(submitNewReplyToServer(ownProps.parentId)),
-    onCancel: () => dispatch(updateReply(ownProps.parentId, { editorVisible: false })),
-    onContentUpdate: content => dispatch(updateReply(ownProps.parentId, { content })),
+    onSubmit: () => dispatch(submitNewReplyToServer(ownProps.topicId)),
+    onCancel: () => dispatch(updateReply(ownProps.topicId, { editorVisible: false })),
+    onContentUpdate: content => dispatch(updateReply(ownProps.topicId, { content })),
   };
 }
 
