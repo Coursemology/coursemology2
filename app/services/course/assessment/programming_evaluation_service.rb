@@ -85,9 +85,8 @@ class Course::Assessment::ProgrammingEvaluationService
     # @return [Result] The result of evaluating the template.
     #
     # @raise [Timeout::Error] When the operation times out.
-    def execute(language, memory_limit, time_limit, # rubocop:disable Metrics/ParameterLists
-                package, timeout = nil)
-      new(course, language, memory_limit, time_limit, package, timeout).send(:execute)
+    def execute(language, memory_limit, time_limit, package, timeout = nil)
+      new(language, memory_limit, time_limit, package, timeout).send(:execute)
     end
   end
 

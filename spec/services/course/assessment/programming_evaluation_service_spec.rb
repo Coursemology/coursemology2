@@ -81,8 +81,7 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
     let(:course) { create(:course) }
 
     it 'returns the result of evaluating' do
-      result = subject.execute(course,
-                               Coursemology::Polyglot::Language::Python::Python2Point7.instance, 64,
+      result = subject.execute(Coursemology::Polyglot::Language::Python::Python2Point7.instance, 64,
                                5.seconds, File.join(Rails.root, 'spec', 'fixtures', 'course',
                                                     'programming_question_template.zip'))
       expect(result).to be_a(Course::Assessment::ProgrammingEvaluationService::Result)
@@ -92,10 +91,9 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
       it 'raises a Timeout::Error' do
         expect do
           # Pass in a non-zero timeout as Ruby's Timeout treats 0 as infinite.
-          subject.execute(course, Coursemology::Polyglot::Language::Python::Python2Point7.instance,
+          subject.execute(Coursemology::Polyglot::Language::Python::Python2Point7.instance,
                           64, 5.seconds, File.join(Rails.root, 'spec', 'fixtures', 'course',
-                                                   'programming_question_template.zip'),
-                          0.1.seconds)
+                                                   'programming_question_template.zip'), 0.1.seconds)
         end.to raise_error(Timeout::Error)
       end
     end
@@ -104,10 +102,9 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
       let(:memory_limit) { nil }
       let(:time_limit) { nil }
       let(:service_instance) do
-        subject.new(course, Coursemology::Polyglot::Language::Python::Python2Point7.instance,
+        subject.new(Coursemology::Polyglot::Language::Python::Python2Point7.instance,
                     memory_limit, time_limit, Rails.root.join('spec', 'fixtures', 'course',
-                                                              'programming_question_template.zip'),
-                    nil)
+                                                              'programming_question_template.zip'), nil)
       end
       let(:image) { 'python:2.7' }
       let(:container) { service_instance.send(:create_container, image) }

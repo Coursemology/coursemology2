@@ -53,7 +53,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
           it 'creates a new package with the correct file contents' do
             expect(Course::Assessment::ProgrammingEvaluationService).to \
               receive(:execute).and_wrap_original do |method, *args|
-              package = Course::Assessment::ProgrammingPackage.new(args[4])
+              package = Course::Assessment::ProgrammingPackage.new(args[3])
               expect(package.submission_files.values).to contain_exactly(answer_contents)
               method.call(*args)
             end

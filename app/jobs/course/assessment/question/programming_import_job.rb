@@ -25,8 +25,5 @@ class Course::Assessment::Question::ProgrammingImportJob < ApplicationJob
     Course::Assessment::Question::ProgrammingImportService.import(question, attachment)
     # Re-run the tests since the test results are deleted with the old package.
     Course::Assessment::Question::AnswersEvaluationJob.perform_later(question)
-  ensure
-    redirect_to edit_course_assessment_question_programming_path(question.assessment.course,
-                                                                 question.assessment, question)
   end
 end

@@ -75,7 +75,6 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
 
   def render_success_json(message, redirect_to_edit)
     @response = { message: message, redirect_to_edit: redirect_to_edit }
-    @import_job_url = job_path(@programming_question.import_job) if @programming_question.import_job
 
     render 'edit'
   end
