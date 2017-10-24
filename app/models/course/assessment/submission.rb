@@ -59,6 +59,9 @@ class Course::Assessment::Submission < ApplicationRecord
   has_many :scribing_answers,
            through: :answers, inverse_through: :answer, source: :actable,
            source_type: Course::Assessment::Answer::Scribing.name
+  has_many :text_input_answers,
+           through: :answers, inverse_through: :answer, source: :actable,
+           source_type: Course::Assessment::Answer::TextInput.name
 
   # @!attribute [r] graders
   #   The graders associated with this submission.

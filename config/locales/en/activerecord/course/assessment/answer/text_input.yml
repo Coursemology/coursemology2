@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/assessment/answer/text_input:
+          attributes:
+            attachments:
+              unique: 'File names must be unique'
