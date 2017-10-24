@@ -55,9 +55,12 @@ class Course::Assessment < ApplicationRecord
   #   maximum grade.
   #   @return [Integer]
   calculated :maximum_grade, (lambda do
-    Course::Assessment::Question.unscope(:order).
-      select('coalesce(sum(course_assessment_questions.maximum_grade), 0)').
-      where('course_assessment_questions.assessment_id = course_assessments.id')
+    Course::Assessment::Question.
+      select('coalesce(sum(caq.maximum_grade), 0)').
+      from(
+        "course_assessment_questions caq INNER JOIN course_question_assessments cqa ON \
+        cqa.assessment_id = course_assessments.id AND cqa.question_id = caq.id"
+      )
   end)
 
   # @!method self.ordered_by_date_and_title
