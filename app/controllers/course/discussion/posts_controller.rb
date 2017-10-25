@@ -19,6 +19,10 @@ class Course::Discussion::PostsController < Course::ComponentController
 
     if result
       send_created_notification(@post)
+      respond_to do |format|
+        format.js
+        format.json { render @post }
+      end
     else
       head :bad_request
     end
