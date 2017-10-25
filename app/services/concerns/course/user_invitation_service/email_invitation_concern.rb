@@ -200,7 +200,7 @@ module Course::UserInvitationService::EmailInvitationConcern
   def parse_file_role(role)
     return Course::UserInvitation.roles[:student] if role.blank?
 
-    symbol = role.parameterize('_').to_sym
+    symbol = role.parameterize(separator: '_').to_sym
     Course::UserInvitation.roles[symbol] || Course::UserInvitation.roles[:student]
   end
 
