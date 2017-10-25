@@ -145,7 +145,7 @@ class Course::Assessment < ApplicationRecord
     target_tab = initialize_duplicate_tab(duplicator, other)
     self.folder = duplicator.duplicate(other.folder)
     folder.parent = target_tab.category.folder
-    self.questions = duplicator.duplicate(other.questions.map(&:actable)).compact.map(&:acting_as)
+    self.question_assessments = duplicator.duplicate(other.question_assessments)
     initialize_duplicate_conditions(duplicator, other)
     set_duplication_flag
   end

@@ -19,6 +19,11 @@ class Course::QuestionAssessment < ApplicationRecord
            question_number: question_number, title: question.title)
   end
 
+  def initialize_duplicate(duplicator, other)
+    self.weight = other.weight
+    self.question = duplicator.duplicate(other.question.actable).acting_as
+  end
+
   private
 
   def set_defaults

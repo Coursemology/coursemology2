@@ -77,7 +77,6 @@ class Course::Assessment::Question < ApplicationRecord
     self.description = other.description
     self.staff_only_comments = other.staff_only_comments
     self.maximum_grade = other.maximum_grade
-    self.weight = other.weight
   end
 
   # Associates duplicated skills with the current question
