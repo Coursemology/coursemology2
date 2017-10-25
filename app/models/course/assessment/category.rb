@@ -67,9 +67,8 @@ class Course::Assessment::Category < ApplicationRecord
   end
 
   def validate_before_destroy
-    return true if course.destroying?
-    safe = other_categories_remaining?
-    errors.add(:base, :deletion) unless safe
-    safe
+    return true if course.destroying? || other_categories_remaining?
+    errors.add(:base, :deletion)
+    throw(:abort)
   end
 end

@@ -35,10 +35,9 @@ class Course::Assessment::Tab < ApplicationRecord
   private
 
   def validate_before_destroy
-    return true if category.destroying?
-    safe = other_tabs_remaining?
-    errors.add(:base, :deletion) unless safe
-    safe
+    return true if category.destroying? || other_tabs_remaining?
+    errors.add(:base, :deletion)
+    throw(:abort)
   end
 
   # Reassign the assessment folders to new category if the category changed.
@@ -48,7 +47,7 @@ class Course::Assessment::Tab < ApplicationRecord
 
     folders.each do |folder|
       folder.parent = new_parent_folder
-      return false unless folder.save
+      throw(:abort) unless folder.save
     end
   end
 end
