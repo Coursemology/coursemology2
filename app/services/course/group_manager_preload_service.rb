@@ -13,7 +13,7 @@ class Course::GroupManagerPreloadService
   # Returns all managers of the groups that the given CourseUser are a part of.
   # Assumes that GroupUsers and their Groups have been loaded for the given CourseUser.
   #
-  # @param [CourseUser] course_user The given CoruseUser
+  # @param [CourseUser] course_user The given CourseUser
   # @return [Array<CourseUser>]
   def group_managers_of(course_user)
     course_user.groups.map do |group|
