@@ -20,6 +20,19 @@ export default class CommentsAPI extends BaseCourseAPI {
    */
 
   /**
+   * Creates a comment (discussion post)
+   *
+   * @param {string} topicId
+   * @param {object} params
+   *    - params in the format of { :discussion_post }
+   * @return {Promise}
+   * success response: post
+   */
+  create(topicId, params) {
+    return this.getClient().post(`${this._getUrlPrefix()}/${topicId}/posts/`, params);
+  }
+
+  /**
    * Updates a comment (discussion post)
    *
    * @param {string} topicId

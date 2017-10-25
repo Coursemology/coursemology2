@@ -268,8 +268,8 @@ export function submitNewReplyToServer(topicId) {
       return;
     }
 
-    CourseAPI.video.topics
-      .create({ discussion_post: { topic_id: topicId, text } })
+    CourseAPI.comments
+      .create(topicId, { discussion_post: { text } })
       .then(() => {
         dispatch(refreshTopic(topicId));
         dispatch(removeReply(topicId));
