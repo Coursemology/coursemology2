@@ -15,11 +15,19 @@ FactoryGirl.define do
     answer_text '<p>xxx</p>'
 
     trait :exact_match do
-      answer_text '<p>exact match</p>'
+      answer_text 'exact match'
     end
 
     trait :keyword do
       answer_text '<p>my answer contains keyword match</p>'
+    end
+
+    trait :multiline_windows do
+      answer_text "hello world\r\nsecond line"
+    end
+
+    trait :multiline_linux do
+      answer_text "hello world\nsecond line"
     end
 
     trait :no_match do
