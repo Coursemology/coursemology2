@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe Course::Controller, type: :controller do
   controller(Course::Controller) do
     def show
-      render text: ''
+      render body: ''
     end
 
     def publicly_accessible?

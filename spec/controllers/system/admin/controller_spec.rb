@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe System::Admin::Controller, type: :controller do
   controller do
     def index
-      render text: 'Success'
+      render body: 'Success'
     end
   end
 
