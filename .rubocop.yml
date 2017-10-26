@@ -33,11 +33,6 @@ Rails/HasAndBelongsToMany:
 Rails/SkipsModelValidations:
   Enabled: false
 
-# TODO: Cop only applies to Rails 5, to remove once upgraded.
-#       References bbatsov/rubocop#3629
-Rails/HttpPositionalArguments:
-  Enabled: false
-
 Rails/ApplicationRecord:
   Enabled: false
 

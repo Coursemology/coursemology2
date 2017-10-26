@@ -146,7 +146,7 @@ RSpec.describe Course::UsersController, type: :controller do
 
     describe '#upgrade_to_staff' do
       before { sign_in(user) }
-      subject { put :upgrade_to_staff, course_id: course, course_user: staff_to_be_params }
+      subject { put :upgrade_to_staff, params: { course_id: course, course_user: staff_to_be_params } }
       let!(:course_user) { create(:course_manager, course: course, user: user) }
       let(:staff_to_be) { create(:course_student, course: course) }
       let(:staff_to_be_params) { { id: staff_to_be.id, role: :teaching_assistant } }
