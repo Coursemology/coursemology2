@@ -31,7 +31,7 @@ class Course::Condition::Achievement < ApplicationRecord
     # Unpublished achievements are considered not satisfied.
     return false unless achievement.published?
 
-    course_user.achievements.exists?(achievement)
+    course_user.achievements.exists?(achievement.id)
   end
 
   # Class that the condition depends on.

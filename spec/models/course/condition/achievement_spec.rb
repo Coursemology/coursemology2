@@ -125,8 +125,8 @@ RSpec.describe Course::Condition::Achievement, type: :model do
       let(:achievement2) { create(:achievement) }
       let(:course_user) do
         achievements = instance_double(ActiveRecord::Associations::CollectionProxy)
-        allow(achievements).to receive(:exists?).with(achievement1).and_return(true)
-        allow(achievements).to receive(:exists?).with(achievement2).and_return(false)
+        allow(achievements).to receive(:exists?).with(achievement1.id).and_return(true)
+        allow(achievements).to receive(:exists?).with(achievement2.id).and_return(false)
         course_user = instance_double(CourseUser)
         allow(course_user).to receive(:achievements).and_return(achievements)
         course_user

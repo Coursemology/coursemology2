@@ -9,7 +9,7 @@ RSpec.feature 'System: Administration: Courses' do
     let!(:courses) do
       courses = create_list(:course, 2)
       other_instance = create(:instance)
-      courses.last.update_column(:instance_id, other_instance)
+      courses.last.update_column(:instance_id, other_instance.id)
       Course.unscoped.ordered_by_title.page(last_page)
     end
     let(:active_course) do
