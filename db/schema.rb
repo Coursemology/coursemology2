@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171014154130) do
+ActiveRecord::Schema.define(version: 20171026141412) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -756,8 +756,10 @@ ActiveRecord::Schema.define(version: 20171014154130) do
   end
 
   create_table "course_video_topics", force: :cascade do |t|
-    t.integer "video_id",  :null=>false, :index=>{:name=>"fk__course_video_topics_video_id"}, :foreign_key=>{:references=>"course_videos", :name=>"fk_course_video_topics_video_id", :on_update=>:no_action, :on_delete=>:no_action}
-    t.integer "timestamp", :null=>false
+    t.integer "video_id",   :null=>false, :index=>{:name=>"fk__course_video_topics_video_id"}, :foreign_key=>{:references=>"course_videos", :name=>"fk_course_video_topics_video_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer "timestamp",  :null=>false
+    t.integer "creator_id", :null=>false, :index=>{:name=>"index_course_video_topics_on_creator_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_video_topics_creator_id", :on_update=>:no_action, :on_delete=>:no_action}
+    t.integer "updater_id", :null=>false, :index=>{:name=>"index_course_video_topics_on_updater_id"}, :foreign_key=>{:references=>"users", :name=>"fk_course_video_topics_updater_id", :on_update=>:no_action, :on_delete=>:no_action}
   end
 
   create_table "course_virtual_classrooms", force: :cascade do |t|
