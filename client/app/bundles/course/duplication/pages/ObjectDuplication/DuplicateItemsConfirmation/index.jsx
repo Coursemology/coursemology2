@@ -109,5 +109,5 @@ export default connect(({ objectDuplication }) => ({
   targetCourses: objectDuplication.targetCourses,
   targetCourseId: objectDuplication.targetCourseId,
   selectedItems: objectDuplication.selectedItems,
-  isDuplicating: objectDuplication.isDuplicatingObjects,
+  isDuplicating: objectDuplication.isDuplicating,
 }))(DuplicateItemsConfirmation);

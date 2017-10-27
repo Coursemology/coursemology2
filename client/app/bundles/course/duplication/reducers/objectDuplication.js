@@ -18,7 +18,7 @@ const initialState = {
   materialsComponent: [],
 
   isLoading: false,
-  isDuplicatingObjects: false,
+  isDuplicating: false,
 };
 
 export default function (state = initialState, action) {
@@ -63,11 +63,11 @@ export default function (state = initialState, action) {
     }
 
     case actionTypes.DUPLICATE_ITEMS_REQUEST: {
-      return { ...state, isDuplicatingObjects: true };
+      return { ...state, isDuplicating: true };
     }
     case actionTypes.DUPLICATE_ITEMS_FAILURE:
     case actionTypes.DUPLICATE_ITEMS_SUCCESS: {
-      return { ...state, isDuplicatingObjects: false };
+      return { ...state, isDuplicating: false };
     }
 
     default:
