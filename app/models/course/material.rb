@@ -40,6 +40,13 @@ class Course::Material < ApplicationRecord
     self.folder = if duplicator.duplicated?(other.folder)
                     duplicator.duplicate(other.folder)
                   else
+                    # If parent has not been duplicated yet, put the current duplicate under the root folder
+                    # temorarily. The material will be re-parented only afterwards when the parent folder is being
+                    # duplicated. This will be done when `#initialize_duplicate_children` is called on the
+                    # duplicated parent folder.
+                    #
+                    # If the material's folder is not selected for duplication, the current duplicated material will
+                    # remain a child of the root folder.
                     duplicator.options[:target_course].root_folder
                   end
     self.updated_at = other.updated_at

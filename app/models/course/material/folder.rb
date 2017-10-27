@@ -114,11 +114,24 @@ class Course::Material::Folder < ApplicationRecord
                   elsif duplicator.duplicated?(other.parent)
                     duplicator.duplicate(other.parent)
                   else
+                    # If parent has not been duplicated yet, put the current duplicate under the root folder
+                    # temporarily. The folder will be re-parented only afterwards when the parent is being
+                    # duplicated. This will be done when `#initialize_duplicate_children` is called on the
+                    # duplicated parent folder.
+                    #
+                    # If the folder's parent is not selected for duplication, the current duplicated folder
+                    # will remain a child of the root folder.
                     duplicator.options[:target_course].root_folder
                   end
   end
 
   def initialize_duplicate_children(duplicator, other)
+    # Add only subfolders that have already been duplicated as its children.
+    # If a subfolder has been selected for duplication, but has not yet been duplicated,
+    # then the subfolder's duplicate will be added as a child of the current folder later on when
+    # the child is being duplicated and `initialize_duplicate_parent` is being called on the duplicated
+    # child folder. `duplicator.duplicate(folder)` will merely retrieve the subfolder's duplicate,
+    # rather than trigger the duplication of the subfolder.
     children << other.children.
                 select { |folder| duplicator.duplicated?(folder) }.
                 map { |folder| duplicator.duplicate(folder) }
@@ -126,10 +139,14 @@ class Course::Material::Folder < ApplicationRecord
 
   def initialize_duplicate_materials(duplicator, other)
     self.materials = if other.concrete?
+                       # Create associations only for materials which have been duplicated. For child materials
+                       # that are duplicated later, the duplicated material will parent itself under the
+                       # current folder. (see `Course::Material#initialize_duplicate`)
                        other.materials.
                          select { |material| duplicator.duplicated?(material) }.
                          map { |material| duplicator.duplicate(material) }
                      else
+                       # If folder is virtual, all it's materials are duplicated by default.
                        duplicator.duplicate(other.materials).compact
                      end
   end
