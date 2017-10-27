@@ -65,6 +65,7 @@ const styles = {
   },
   mainPanel: {
     paddingLeft: 40,
+    paddingRight: 40,
     width: '100%',
   },
   countAvatar: {
@@ -116,8 +117,34 @@ class ObjectDuplication extends React.Component {
     this.props.dispatch(fetchObjectsList());
   }
 
-  renderSidebar() {
-    const { selectedItems, targetCourseId } = this.props;
+  renderCourseSelector() {
+    const { targetCourseId } = this.props;
+
+    return (
+      <div>
+        <Subheader>
+          <FormattedMessage {...translations.selectTargetCourse} />
+        </Subheader>
+        <ListItem
+          leftAvatar={
+            <Avatar
+              style={styles.countAvatar}
+              size={30}
+              backgroundColor={targetCourseId ? cyan500 : red500}
+            >
+              { targetCourseId ? <Done color={grey50} /> : <Clear color={grey50} /> }
+            </Avatar>
+          }
+          onTouchTap={() => this.setState({ panel: panels.TARGET_COURSE })}
+        >
+          <FormattedMessage {...translations.targetCourse} />
+        </ListItem>
+      </div>
+    );
+  }
+
+  renderItemsSelector() {
+    const { selectedItems } = this.props;
 
     const counts = {};
     Object.keys(selectedItems).forEach((key) => {
@@ -128,61 +155,51 @@ class ObjectDuplication extends React.Component {
     const assessmentsComponentCount = counts[TAB] + counts[ASSESSMENT] + counts[CATEGORY];
 
     return (
+      <div>
+        <Subheader>
+          <FormattedMessage {...translations.duplicableItemsHeader} />
+        </Subheader>
+        {
+          ObjectDuplication.renderSidebarItem(
+            defaultComponentTitles.course_assessments_component,
+            assessmentsComponentCount,
+            () => this.setState({ panel: panels.ASSESSMENTS })
+          )
+        }
+        {
+          ObjectDuplication.renderSidebarItem(
+            defaultComponentTitles.course_survey_component,
+            counts[SURVEY],
+            () => this.setState({ panel: panels.SURVEYS })
+          )
+        }
+        {
+          ObjectDuplication.renderSidebarItem(
+            defaultComponentTitles.course_achievements_component,
+            counts[ACHIEVEMENT],
+            () => this.setState({ panel: panels.ACHIEVEMENTS })
+          )
+        }
+        {
+          ObjectDuplication.renderSidebarItem(
+            defaultComponentTitles.course_materials_component,
+            counts[FOLDER] + counts[MATERIAL],
+            () => this.setState({ panel: panels.MATERIALS })
+          )
+        }
+        <ListItem disabled style={styles.duplicateButton}>
+          <DuplicateButton />
+        </ListItem>
+      </div>
+    );
+  }
+
+  renderSidebar() {
+    return (
       <Paper>
         <List style={styles.sidebar}>
-          <Subheader>
-            <FormattedMessage {...translations.selectTargetCourse} />
-          </Subheader>
-          <ListItem
-            leftAvatar={
-              <Avatar
-                style={styles.countAvatar}
-                size={30}
-                backgroundColor={targetCourseId ? cyan500 : red500}
-              >
-                { targetCourseId ? <Done color={grey50} /> : <Clear color={grey50} /> }
-              </Avatar>
-            }
-            onClick={() => this.setState({ panel: panels.TARGET_COURSE })}
-          >
-            <FormattedMessage {...translations.targetCourse} />
-          </ListItem>
-
-          <Subheader>
-            <FormattedMessage {...translations.duplicableItemsHeader} />
-          </Subheader>
-          {
-            ObjectDuplication.renderSidebarItem(
-              defaultComponentTitles.course_assessments_component,
-              assessmentsComponentCount,
-              () => this.setState({ panel: panels.ASSESSMENTS })
-            )
-          }
-          {
-            ObjectDuplication.renderSidebarItem(
-              defaultComponentTitles.course_survey_component,
-              counts[SURVEY],
-              () => this.setState({ panel: panels.SURVEYS })
-            )
-          }
-          {
-            ObjectDuplication.renderSidebarItem(
-              defaultComponentTitles.course_achievements_component,
-              counts[ACHIEVEMENT],
-              () => this.setState({ panel: panels.ACHIEVEMENTS })
-            )
-          }
-          {
-            ObjectDuplication.renderSidebarItem(
-              defaultComponentTitles.course_materials_component,
-              counts[FOLDER] + counts[MATERIAL],
-              () => this.setState({ panel: panels.MATERIALS })
-            )
-          }
-
-          <ListItem disabled style={styles.duplicateButton}>
-            <DuplicateButton />
-          </ListItem>
+          { this.renderCourseSelector() }
+          { this.renderItemsSelector() }
         </List>
       </Paper>
     );
