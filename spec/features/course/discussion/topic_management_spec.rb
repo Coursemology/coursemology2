@@ -12,6 +12,9 @@ RSpec.feature 'Course: Topics: Management' do
     let(:code_annotation) do
       create(:course_assessment_answer_programming_file_annotation, :with_post, course: course)
     end
+    let(:video_comment) do
+      create(:course_video_topic, :with_post, :with_submission, course: course, timestamp: 3723)
+    end
 
     before { login_as(user, scope: :user) }
 
@@ -21,17 +24,24 @@ RSpec.feature 'Course: Topics: Management' do
       scenario 'I can see all the comments' do
         comment
         code_annotation
+        video_comment
         visit course_topics_path(course)
 
         expect(page).to have_selector('.nav.nav-tabs')
         expect(page).to have_selector('div', text: comment.question.assessment.title)
         expect(page).
           to have_selector('div', text: code_annotation.file.answer.question.assessment.title)
+        expect(page).
+          to have_link(I18n.t(
+                                'course.video.topics.discussion_topic_topic.comment_title',
+                                title: video_comment.video.title,
+                                timestamp: Time.at(video_comment.timestamp).utc.strftime('%H:%M:%S')))
       end
 
       scenario 'I can reply to a comment topic', js: true do
-        # Randomly create a topic, either code_annotation or comment.
-        topic = [true, false].sample ? code_annotation : comment
+        # Randomly create a topic, either code_annotation, comment, or video_comment.
+        choices = [proc { code_annotation }, proc { comment }, proc { video_comment }]
+        topic = choices.sample[]
         visit course_topics_path(course)
 
         comment = 'GOOD WORK!'
@@ -50,7 +60,8 @@ RSpec.feature 'Course: Topics: Management' do
       end
 
       scenario 'I can mark a topic as pending', js: true do
-        topic = ([true, false].sample ? code_annotation : comment).acting_as
+        choices = [proc { code_annotation }, proc { comment }, proc { video_comment }]
+        topic = choices.sample[].acting_as
         visit course_topics_path(course)
 
         click_link I18n.t('course.discussion.topics.mark_as_pending')
@@ -79,10 +90,18 @@ RSpec.feature 'Course: Topics: Management' do
         create(:course_discussion_post, topic: student_comment.acting_as, creator: user,
                                         text: '<p>Content with html tags</p>')
       end
+      let(:student_video_comment) do
+        create(:course_video_topic, :with_post, :with_submission, course: course, creator: user)
+      end
+      let(:student_video_reply) do
+        create(:course_discussion_post, topic: student_video_comment.acting_as, creator: user,
+                                        text: '<p>Content with html tags</p>')
+      end
+
 
       scenario 'I can see all my comments' do
-        other_comments = [comment, code_annotation].map(&:acting_as)
-        my_comments = [student_comment, student_annotation].map(&:acting_as)
+        other_comments = [comment, code_annotation, video_comment].map(&:acting_as)
+        my_comments = [student_comment, student_annotation, student_video_comment].map(&:acting_as)
         visit course_topics_path(course)
 
         expect(page).not_to have_selector('.nav.nav-tabs')
@@ -98,8 +117,11 @@ RSpec.feature 'Course: Topics: Management' do
       end
 
       scenario 'I can reply to and delete a comment topic', js: true do
-        # Randomly create a topic, either code_annotation or comment.
-        topic = [true, false].sample ? student_comment : student_annotation
+        # Randomly create a topic, either code_annotation, comment, or video_comment.
+        choices = [proc { student_code_annotation },
+                   proc { student_comment },
+                   proc { student_video_comment }]
+        topic = choices.sample[]
         visit course_topics_path(course)
 
         comment = 'THANKS !'
@@ -136,7 +158,8 @@ RSpec.feature 'Course: Topics: Management' do
       end
 
       scenario 'I can edit my comment post', js: true do
-        my_comment_post = student_reply
+        choices = [proc { student_reply }, proc { student_video_reply }]
+        my_comment_post = choices.sample[]
         visit course_topics_path(course)
 
         # Test post editing
@@ -165,10 +188,16 @@ RSpec.feature 'Course: Topics: Management' do
 
       scenario 'I can visit the comments page' do
         comment
+        video_comment
         visit course_topics_path(course)
 
         expect(page).to have_selector('.nav.nav-tabs')
         expect(page).to have_selector('div', text: comment.question.assessment.title)
+        expect(page).
+          to have_link(I18n.t(
+                                'course.video.topics.discussion_topic_topic.comment_title',
+                                title: video_comment.video.title,
+                                timestamp: Time.at(video_comment.timestamp).utc.strftime('%H:%M:%S')))
       end
     end
   end
