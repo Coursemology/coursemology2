@@ -166,7 +166,8 @@ export default class ScribingCanvas extends React.Component {
   // This method clears the selection-disabled scribbles
   // and reloads them to enable selection again
   enableObjectSelection() {
-    const userScribbles = this.getScribblesFromCanvasState(this.props.scribing.currentStateIndex);
+    const canvasState = this.props.scribing.canvasStates[this.props.scribing.currentStateIndex];
+    const userScribbles = this.getFabricObjectsFromJson(canvasState);
     this.canvas.clear();
     this.canvas.setBackground();
     this.props.scribing.layers.forEach(layer => this.canvas.add(layer.scribbleGroup));
@@ -524,23 +525,10 @@ export default class ScribingCanvas extends React.Component {
 
     if (scribbles) {
       scribbles.forEach((scribble) => {
-        const objects = JSON.parse(scribble.content).objects;
-        const fabricObjs = [];
-
-        // Parse JSON to Fabric.js objects
-        for (let i = 0; i < objects.length; i++) {
-          if (objects[i].type !== 'group') {
-            const klass = fabric.util.getKlass(objects[i].type);
-            klass.fromObject(objects[i], (obj) => {
-              this.denormaliseScribble(obj);
-              fabricObjs.push(obj);
-            });
-          }
-        }
+        const fabricObjs = this.getFabricObjectsFromJson(scribble.content);
 
         // Create layer for each user's scribble
-        // Layer for other users' scribble
-        // Disables scribble selection
+        // Scribbles in layers have selection disabled
         if (scribble.creator_id !== userId) {
           // eslint-disable-next-line no-undef
           const scribbleGroup = new fabric.Group(fabricObjs);
@@ -665,7 +653,6 @@ export default class ScribingCanvas extends React.Component {
   }
 
   // Scribble Helpers
-
   undo = () => {
     if (this.props.scribing.currentStateIndex > 0) {
       this.setCurrentCanvasState(this.props.scribing.currentStateIndex - 1);
@@ -679,8 +666,12 @@ export default class ScribingCanvas extends React.Component {
     }
   }
 
-  setCurrentCanvasState = (stateIndex) => {
-    const objects = JSON.parse(this.props.scribing.canvasStates[stateIndex]).objects;
+  /*
+   * @param {string} json: JSON string with 'objects' key containing array of scribbles
+   * @return {array} array of Fabric objects
+   */
+  getFabricObjectsFromJson = (json) => {
+    const objects = JSON.parse(json).objects;
     const userScribbles = [];
 
     // Parse JSON to Fabric.js objects
@@ -693,6 +684,11 @@ export default class ScribingCanvas extends React.Component {
         });
       }
     }
+    return userScribbles;
+  }
+
+  setCurrentCanvasState = (stateIndex) => {
+    const userScribbles = this.getFabricObjectsFromJson(this.props.scribing.canvasStates[stateIndex]);
 
     this.canvas.clear();
     this.canvas.setBackground();
