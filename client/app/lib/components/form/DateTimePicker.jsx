@@ -63,6 +63,7 @@ const propTypes = {
   ]),
   value: PropTypes.oneOfType([
     PropTypes.instanceOf(Date),
+    PropTypes.instanceOf(moment),
     PropTypes.string, // Date format from JSON string ( e.g. 2017-01-01T12:00:00+08:00 )
   ]),
   errorText: PropTypes.string,
