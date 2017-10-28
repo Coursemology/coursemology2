@@ -32,7 +32,6 @@ const config = {
       'react-router',
       'react-scroll',
       'react-summernote',
-      'react-tap-event-plugin',
       'redux',
       'redux-form',
       'redux-immutable',
