@@ -43,7 +43,7 @@ class MoveUpButton extends React.Component {
     return (
       <FlatButton
         label={<FormattedMessage {...translations.moveSectionUp} />}
-        onTouchTap={this.moveSectionUp}
+        onClick={this.moveSectionUp}
         disabled={this.props.disabled}
       />
     );

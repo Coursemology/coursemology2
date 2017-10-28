@@ -13,12 +13,12 @@ describe('<RemindButton />', () => {
     const store = storeCreator({ surveys: {} });
     const remindButton = mount(<RemindButton />, buildContextOptions(store));
     const remindButtonNode = ReactDOM.findDOMNode(remindButton.find('button').node);
-    ReactTestUtils.Simulate.touchTap(remindButtonNode);
+    ReactTestUtils.Simulate.click(remindButtonNode);
     const cancelButton = remindButton.find('ConfirmationDialog').first().node.cancelButton;
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(cancelButton));
-    ReactTestUtils.Simulate.touchTap(remindButtonNode);
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(cancelButton));
+    ReactTestUtils.Simulate.click(remindButtonNode);
     const confirmButton = remindButton.find('ConfirmationDialog').first().node.confirmButton;
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(confirmButton));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmButton));
     expect(spyRemind).toHaveBeenCalled();
   });
 });

@@ -18,7 +18,7 @@ describe('<NewMilestoneButton />', () => {
 
     // Click 'new milestone' button
     const newMilestoneButtonNode = ReactDOM.findDOMNode(newMilestoneButton.find('button').node);
-    ReactTestUtils.Simulate.touchTap(newMilestoneButtonNode);
+    ReactTestUtils.Simulate.click(newMilestoneButtonNode);
     expect(milestoneFormDialog.find('MilestoneFormDialog').first().props().visible).toBe(true);
 
     // Fill milestone form
@@ -37,7 +37,7 @@ describe('<NewMilestoneButton />', () => {
 
     // Submit milestone form
     const submitButton = milestoneFormDialog.find('FormDialogue').first().node.submitButton;
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(submitButton));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
     expect(spyCreate).toHaveBeenCalledWith({ lesson_plan_milestone: milestoneData });
   });
 

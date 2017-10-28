@@ -34,15 +34,15 @@ describe('<AdminMenu />', () => {
     );
 
     const iconButton = adminMenu.find('button').first();
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(iconButton.node));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(iconButton.node));
 
     const menuCardNode = adminMenu.find('RenderToLayer').first().node.layerElement;
     const deleteButton = new ReactWrapper(menuCardNode, true).find('EnhancedButton').at(1);
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(deleteButton.node));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(deleteButton.node));
 
     const confirmDeleteButton =
       deleteConfirmation.find('ConfirmationDialog').first().node.confirmButton;
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(confirmDeleteButton));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmDeleteButton));
 
     expect(spy).toHaveBeenCalledWith(eventId);
   });
@@ -75,11 +75,11 @@ describe('<AdminMenu />', () => {
     );
 
     const iconButton = adminMenu.find('button').first();
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(iconButton.node));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(iconButton.node));
 
     const menuCardNode = adminMenu.find('RenderToLayer').first().node.layerElement;
     const updateButton = new ReactWrapper(menuCardNode, true).find('EnhancedButton').first();
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(updateButton.node));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(updateButton.node));
 
     const dialogInline = eventFormDialog.find('RenderToLayer').first().node.layerElement;
     const eventForm = new ReactWrapper(dialogInline, true).find('form');
@@ -88,7 +88,7 @@ describe('<AdminMenu />', () => {
     descriptionInput.simulate('change', { target: { value: description } });
 
     const submitButton = eventFormDialog.find('FormDialogue').first().node.submitButton;
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(submitButton));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
 
     const expectedPayload = {
       lesson_plan_event: {

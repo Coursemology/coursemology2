@@ -60,7 +60,7 @@ class NewSectionButton extends React.Component {
         primary
         style={styles.button}
         label={<FormattedMessage {...translations.newSection} />}
-        onTouchTap={this.showNewSectionForm}
+        onClick={this.showNewSectionForm}
         disabled={this.props.disabled}
       />
     );

@@ -68,7 +68,7 @@ class QuestionFormOptions extends React.Component {
           <FlatButton
             primary
             label={intl.formatMessage(optionsTranslations.addOption)}
-            onTouchTap={() => fields.push({})}
+            onClick={() => fields.push({})}
             {...{ disabled }}
           />
           <FlatButton

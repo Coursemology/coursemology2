@@ -135,7 +135,7 @@ class SurveysTable extends React.Component {
                         <RaisedButton
                           style={styles.button}
                           label={<FormattedMessage {...translations.results} />}
-                          onTouchTap={() => history.push(
+                          onClick={() => history.push(
                             `/courses/${courseId}/surveys/${survey.id}/results`
                           )}
                         /> :
@@ -146,7 +146,7 @@ class SurveysTable extends React.Component {
                         <RaisedButton
                           style={styles.button}
                           label={<FormattedMessage {...translations.responses} />}
-                          onTouchTap={() => history.push(
+                          onClick={() => history.push(
                             `/courses/${courseId}/surveys/${survey.id}/responses`
                           )}
                         /> :

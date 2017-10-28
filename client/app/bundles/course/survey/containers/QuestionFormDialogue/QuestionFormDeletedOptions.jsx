@@ -75,7 +75,7 @@ class QuestionFormDeletedOptions extends React.Component {
                   <div style={styles.imageSpacer} />
               }
               <span style={styles.optionBody}>{option.option}</span>
-              <IconButton onTouchTap={handleRestore} {...{ disabled }}>
+              <IconButton onClick={handleRestore} {...{ disabled }}>
                 <CloseIcon color={grey600} />
               </IconButton>
             </div>

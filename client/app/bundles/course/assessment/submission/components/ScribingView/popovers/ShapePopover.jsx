@@ -20,7 +20,7 @@ const propTypes = {
   currentShape: PropTypes.string.isRequired,
   setSelectedShape: PropTypes.func,
   selectedLineStyle: PropTypes.string,
-  onTouchTapLineStyleChip: PropTypes.func,
+  onClickLineStyleChip: PropTypes.func,
   toolThicknessValue: PropTypes.number,
   onChangeSliderThickness: PropTypes.func,
   borderColorPickerColor: PropTypes.string,
@@ -77,7 +77,7 @@ class ShapePopover extends Component {
 
   renderBorderComponent() {
     const {
-      intl, lineToolType, selectedLineStyle, onTouchTapLineStyleChip,
+      intl, lineToolType, selectedLineStyle, onClickLineStyleChip,
       toolThicknessValue, onChangeSliderThickness, onClickBorderColorPicker,
       borderColorPickerPopoverOpen, borderColorPickerPopoverAnchorEl,
       onRequestCloseBorderColorPickerPopover, borderColorPickerColor,
@@ -92,7 +92,7 @@ class ShapePopover extends Component {
         <LineStyleField
           lineToolType={lineToolType}
           selectedLineStyle={selectedLineStyle}
-          onTouchTapLineStyleChip={onTouchTapLineStyleChip}
+          onClickLineStyleChip={onClickLineStyleChip}
         />
         <LineThicknessField
           toolThicknessValue={toolThicknessValue}

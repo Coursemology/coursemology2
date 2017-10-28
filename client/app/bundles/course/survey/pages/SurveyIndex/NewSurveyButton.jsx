@@ -60,7 +60,7 @@ class NewSurveyButton extends React.Component {
 
   render() {
     const { canCreate } = this.props;
-    return canCreate ? <AddButton onTouchTap={this.showNewSurveyForm} /> : <div />;
+    return canCreate ? <AddButton onClick={this.showNewSurveyForm} /> : <div />;
   }
 }
 

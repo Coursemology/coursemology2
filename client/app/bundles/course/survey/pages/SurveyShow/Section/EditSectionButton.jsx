@@ -55,7 +55,7 @@ class EditSectionButton extends React.Component {
     return (
       <FlatButton
         label={<FormattedMessage {...translations.editSection} />}
-        onTouchTap={this.showEditSectionForm}
+        onClick={this.showEditSectionForm}
         disabled={this.props.disabled}
       />
     );

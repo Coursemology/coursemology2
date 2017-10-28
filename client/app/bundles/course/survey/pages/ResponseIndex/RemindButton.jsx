@@ -52,7 +52,7 @@ class RemindButton extends React.Component {
       <div>
         <RaisedButton
           label={<FormattedMessage {...translations.remind} />}
-          onTouchTap={() => this.setState({ open: true })}
+          onClick={() => this.setState({ open: true })}
         />
         <ConfirmationDialog
           open={this.state.open}

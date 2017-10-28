@@ -18,7 +18,7 @@ describe('<NewSurveyButton />', () => {
 
     // Click 'new survey' button
     const newSurveyButtonNode = ReactDOM.findDOMNode(newSurveyButton.find('button').node);
-    ReactTestUtils.Simulate.touchTap(newSurveyButtonNode);
+    ReactTestUtils.Simulate.click(newSurveyButtonNode);
     expect(surveyFormDialogue.find('SurveyFormDialogue').first().props().visible).toBe(true);
 
     // Fill survey form
@@ -42,7 +42,7 @@ describe('<NewSurveyButton />', () => {
 
     // Submit survey form
     const submitButton = surveyFormDialogue.find('FormDialogue').first().node.submitButton;
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(submitButton));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
     expect(spyCreate).toHaveBeenCalledWith({ survey });
   });
 });

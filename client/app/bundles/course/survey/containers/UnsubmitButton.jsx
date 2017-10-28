@@ -68,7 +68,7 @@ class UnsubmitButton extends React.Component {
       <div>
         <RaisedButton
           primary
-          onTouchTap={() => this.setState({ open: true })}
+          onClick={() => this.setState({ open: true })}
           style={styles.formButton}
           buttonStyle={styles.unsubmitButton}
           label={<FormattedMessage {...translations.unsubmit} />}

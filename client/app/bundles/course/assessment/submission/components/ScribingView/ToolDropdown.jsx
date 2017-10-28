@@ -11,7 +11,7 @@ const propTypes = {
   currentTool: PropTypes.string.isRequired,
   onClick: PropTypes.func,
   onClickIcon: PropTypes.func,
-  onTouchTapChevron: PropTypes.func,
+  onClickChevron: PropTypes.func,
   colorBar: PropTypes.string,
   iconClassname: PropTypes.string,
   colorBarComponent: PropTypes.func,
@@ -68,7 +68,7 @@ export default class ToolDropdown extends Component {
 
   render() {
     const {
-      onClick, onClickIcon, onTouchTapChevron,
+      onClick, onClickIcon, onClickChevron,
       tooltip, showTooltip, onMouseEnter, onMouseLeave,
     } = this.props;
 
@@ -95,7 +95,7 @@ export default class ToolDropdown extends Component {
           <FontIcon
             className="fa fa-chevron-down"
             style={style.chevron}
-            onTouchTap={onTouchTapChevron}
+            onClick={onClickChevron}
           />
         </div>
       </div>

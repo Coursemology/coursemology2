@@ -9,7 +9,7 @@ const propTypes = {
   intl: intlShape.isRequired,
   lineToolType: PropTypes.string,
   selectedLineStyle: PropTypes.string,
-  onTouchTapLineStyleChip: PropTypes.func,
+  onClickLineStyleChip: PropTypes.func,
 };
 
 const styles = {
@@ -52,7 +52,7 @@ class LineStyleField extends Component {
   renderLineStyleChips() {
     const {
       intl, lineToolType, selectedLineStyle,
-      onTouchTapLineStyleChip,
+      onClickLineStyleChip,
     } = this.props;
     const lineStyles = [
       {
@@ -75,7 +75,7 @@ class LineStyleField extends Component {
         labelColor={selectedLineStyle === style.value ? grey50 : undefined}
         key={lineToolType + style.value}
         style={styles.chip}
-        onTouchTap={event => onTouchTapLineStyleChip(event, lineToolType, style.value)}
+        onClick={event => onClickLineStyleChip(event, lineToolType, style.value)}
       >
         {style.key}
       </Chip>

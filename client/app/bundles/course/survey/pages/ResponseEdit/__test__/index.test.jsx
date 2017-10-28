@@ -81,7 +81,7 @@ describe('<ResponseEdit />', () => {
     const newAnswer = 'New Answer';
     textResponse.simulate('change', { target: { value: newAnswer } });
     const submitButton = responseForm.find('RaisedButton').at(1).find('button').first();
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(submitButton.node));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton.node));
 
     const expectedPayload = {
       response: {

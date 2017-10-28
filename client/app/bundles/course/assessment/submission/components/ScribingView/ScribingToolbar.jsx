@@ -140,7 +140,7 @@ class ScribingToolbar extends Component {
     });
   }
 
-  onTouchTapPopover = (event, popoverType) => {
+  onClickPopover = (event, popoverType) => {
     const popoverAnchor = popoverType === scribingPopoverTypes.LAYER ?
             event.currentTarget :
             event.currentTarget.parentElement.parentElement;
@@ -164,7 +164,7 @@ class ScribingToolbar extends Component {
     });
   }
 
-  onTouchTapLineStyleChip = (event, toolType, style) => {
+  onClickLineStyleChip = (event, toolType, style) => {
     // This prevents ghost click.
     event.preventDefault();
     this.props.setLineStyleChip(this.props.answerId, toolType, style);
@@ -187,7 +187,7 @@ class ScribingToolbar extends Component {
 
   onClickTypingChevron = (event) => {
     this.onClickTypingMode();
-    this.onTouchTapPopover(event, scribingPopoverTypes.TYPE);
+    this.onClickPopover(event, scribingPopoverTypes.TYPE);
   }
 
   onClickDrawingMode = () => {
@@ -289,7 +289,7 @@ class ScribingToolbar extends Component {
             currentTool={this.props.scribing.selectedTool}
             onClickIcon={this.onClickTypingIcon}
             colorBar={this.props.scribing.colors[scribingToolColor.TYPE]}
-            onTouchTapChevron={this.onClickTypingChevron}
+            onClickChevron={this.onClickTypingChevron}
             iconClassname="fa fa-font"
             onMouseEnter={() => this.onMouseEnter(scribingTools.TYPE)}
             onMouseLeave={this.onMouseLeave}
@@ -316,7 +316,7 @@ class ScribingToolbar extends Component {
             currentTool={this.props.scribing.selectedTool}
             onClick={this.onClickDrawingMode}
             colorBar={this.props.scribing.colors[scribingToolColor.DRAW]}
-            onTouchTapChevron={event => (this.onTouchTapPopover(event, scribingPopoverTypes.DRAW))}
+            onClickChevron={event => (this.onClickPopover(event, scribingPopoverTypes.DRAW))}
             iconClassname="fa fa-pencil"
             onMouseEnter={() => this.onMouseEnter(scribingTools.DRAW)}
             onMouseLeave={this.onMouseLeave}
@@ -343,7 +343,7 @@ class ScribingToolbar extends Component {
             currentTool={this.props.scribing.selectedTool}
             onClick={this.onClickLineMode}
             colorBar={this.props.scribing.colors[scribingToolColor.LINE]}
-            onTouchTapChevron={event => (this.onTouchTapPopover(event, scribingPopoverTypes.LINE))}
+            onClickChevron={event => (this.onClickPopover(event, scribingPopoverTypes.LINE))}
             iconComponent={() => (<div style={lineToolStyle} />)}
             onMouseEnter={() => this.onMouseEnter(scribingTools.LINE)}
             onMouseLeave={this.onMouseLeave}
@@ -354,7 +354,7 @@ class ScribingToolbar extends Component {
             anchorEl={this.state.popoverAnchor}
             onRequestClose={() => (this.onRequestClosePopover(scribingPopoverTypes.LINE))}
             selectedLineStyle={this.props.scribing.lineStyles[scribingToolLineStyle.LINE]}
-            onTouchTapLineStyleChip={this.onTouchTapLineStyleChip}
+            onClickLineStyleChip={this.onClickLineStyleChip}
             toolThicknessValue={this.props.scribing.thickness[scribingToolThickness.LINE]}
             onChangeSliderThickness={(event, newValue) =>
               (this.onChangeSliderThickness(event, scribingToolThickness.LINE, newValue))
@@ -384,7 +384,7 @@ class ScribingToolbar extends Component {
                 }}
               />
             )}
-            onTouchTapChevron={event => (this.onTouchTapPopover(event, scribingPopoverTypes.SHAPE))}
+            onClickChevron={event => (this.onClickPopover(event, scribingPopoverTypes.SHAPE))}
             iconClassname={
               this.props.scribing.selectedShape === scribingShapes.RECT ?
               'fa fa-square-o' : 'fa fa-circle-o'
@@ -401,7 +401,7 @@ class ScribingToolbar extends Component {
             currentShape={this.props.scribing.selectedShape}
             setSelectedShape={shape => (this.setSelectedShape(shape))}
             selectedLineStyle={this.props.scribing.lineStyles[scribingToolLineStyle.SHAPE_BORDER]}
-            onTouchTapLineStyleChip={this.onTouchTapLineStyleChip}
+            onClickLineStyleChip={this.onClickLineStyleChip}
             toolThicknessValue={this.props.scribing.thickness[scribingToolThickness.SHAPE_BORDER]}
             onChangeSliderThickness={(event, newValue) =>
               (this.onChangeSliderThickness(event, scribingToolThickness.SHAPE_BORDER, newValue))
@@ -432,7 +432,7 @@ class ScribingToolbar extends Component {
         </ToolbarGroup>
         <ToolbarGroup>
           <LayersComponent
-            onTouchTap={event => (this.onTouchTapPopover(event, scribingPopoverTypes.LAYER))}
+            onClick={event => (this.onClickPopover(event, scribingPopoverTypes.LAYER))}
             disabled={
               this.props.scribing.layers
               && this.props.scribing.layers.length === 0}
@@ -440,7 +440,7 @@ class ScribingToolbar extends Component {
             anchorEl={this.state.popoverAnchor}
             onRequestClose={() => (this.onRequestClosePopover(scribingPopoverTypes.LAYER))}
             layers={this.props.scribing.layers}
-            onTouchTapLayer={(layer) => {
+            onClickLayer={(layer) => {
               this.props.scribing.layers.forEach((l) => {
                 if (l.creator_id === layer.creator_id) {
                   const newDisplay = !l.isDisplayed;

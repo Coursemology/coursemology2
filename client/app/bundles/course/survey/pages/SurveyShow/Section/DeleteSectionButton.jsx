@@ -48,7 +48,7 @@ class DeleteSectionButton extends React.PureComponent {
     return (
       <FlatButton
         label={<FormattedMessage {...translations.deleteSection} />}
-        onTouchTap={this.deleteSectionHandler}
+        onClick={this.deleteSectionHandler}
         disabled={this.props.disabled}
       />
     );

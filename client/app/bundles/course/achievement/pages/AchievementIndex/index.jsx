@@ -70,13 +70,13 @@ class PopupDialog extends React.Component {
         label={<FormattedMessage {...formTranslations.cancel} />}
         primary
         disabled={this.props.disabled}
-        onTouchTap={this.handleClose}
+        onClick={this.handleClose}
       />,
       <FlatButton
         label={<FormattedMessage {...formTranslations.submit} />}
         className="btn-submit"
         primary
-        onTouchTap={() => dispatch(submit(formNames.ACHIEVEMENT))}
+        onClick={() => dispatch(submit(formNames.ACHIEVEMENT))}
         disabled={this.props.disabled}
       />,
     ];
@@ -91,7 +91,7 @@ class PopupDialog extends React.Component {
         <RaisedButton
           label={intl.formatMessage(translations.new)}
           primary
-          onTouchTap={this.handleOpen}
+          onClick={this.handleOpen}
           style={styles.newButton}
         />
         <Dialog

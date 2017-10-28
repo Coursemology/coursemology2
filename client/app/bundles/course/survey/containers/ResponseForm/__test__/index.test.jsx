@@ -109,7 +109,7 @@ describe('<ResponseForm />', () => {
     lastMRQOptionCheckbox.props().onCheck(null, true);
 
     const submitButton = responseForm.find('button').last();
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(submitButton.node));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton.node));
 
     const textResponseAnswerError = textResponseAnswer.find('div').last().text();
     expect(textResponseAnswerError).toEqual('Required');
@@ -123,7 +123,7 @@ describe('<ResponseForm />', () => {
     expect(multipleResponseAnswerError).toEqual('Please select at most 2 option(s).');
 
     const saveButton = responseForm.find('button').first();
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(saveButton.node));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(saveButton.node));
     const saveExpectedPayload = {
       response: {
         answers_attributes: [{
@@ -151,7 +151,7 @@ describe('<ResponseForm />', () => {
     firstMCQOptionRadio.props().onCheck(null, firstMCQOptionRadio.props().value);
     lastMRQOptionCheckbox.props().onCheck(null, false);
 
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(submitButton.node));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton.node));
     const submitExpectedPayload = {
       response: {
         answers_attributes: [{

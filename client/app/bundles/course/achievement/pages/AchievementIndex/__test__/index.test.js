@@ -19,7 +19,7 @@ describe('<AchievementIndex />', () => {
     );
 
     const newBtn = ReactDOM.findDOMNode(indexPage.find('button').node);
-    ReactTestUtils.Simulate.touchTap(newBtn);
+    ReactTestUtils.Simulate.click(newBtn);
     expect(indexPage.find('Dialog').first().props().open).toBe(true);
   });
 });

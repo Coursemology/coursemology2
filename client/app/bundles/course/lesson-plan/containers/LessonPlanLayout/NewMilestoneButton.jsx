@@ -61,7 +61,7 @@ class NewMilestoneButton extends React.Component {
       <RaisedButton
         primary
         label={<FormattedMessage {...translations.newMilestone} />}
-        onTouchTap={this.showForm}
+        onClick={this.showForm}
         style={styles.button}
       />
     );

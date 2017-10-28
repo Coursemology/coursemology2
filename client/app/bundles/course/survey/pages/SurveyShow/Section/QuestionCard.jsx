@@ -139,7 +139,7 @@ class QuestionCard extends React.Component {
         style={styles.adminMenu}
       >
         {adminFunctions.map(({ label, handler }) =>
-          <MenuItem key={label} primaryText={label} onTouchTap={handler} />
+          <MenuItem key={label} primaryText={label} onClick={handler} />
         )}
       </IconMenu>
     );

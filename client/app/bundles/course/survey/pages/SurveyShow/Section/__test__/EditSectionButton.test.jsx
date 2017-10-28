@@ -24,7 +24,7 @@ describe('<EditSectionButton />', () => {
     const sectionFormDialogue = mount(<SectionFormDialogue />, contextOptions);
     const editSectionButton = mount(<EditSectionButton section={section} />, contextOptions);
     const editSectionButtonNode = ReactDOM.findDOMNode(editSectionButton.find('button').node);
-    ReactTestUtils.Simulate.touchTap(editSectionButtonNode);
+    ReactTestUtils.Simulate.click(editSectionButtonNode);
 
     const newDescription = 'Added later';
     const dialogInline = sectionFormDialogue.find('RenderToLayer').first().node.layerElement;
@@ -33,7 +33,7 @@ describe('<EditSectionButton />', () => {
     descriptionInput.simulate('change', { target: { value: newDescription } });
 
     const submitButton = sectionFormDialogue.find('FormDialogue').first().node.submitButton;
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(submitButton));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
 
     const expectedPayload = { section: { title: section.title, description: newDescription } };
     expect(spyUpdate).toHaveBeenCalledWith(section.id, expectedPayload);

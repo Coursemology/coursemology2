@@ -20,7 +20,7 @@ const styles = {
 const ExitEditModeButton = ({ match: { params: { courseId } } }) => (
   <RaisedButton
     label={<FormattedMessage {...translations.exitEditMode} />}
-    onTouchTap={() => history.push(`/courses/${courseId}/lesson_plan/`)}
+    onClick={() => history.push(`/courses/${courseId}/lesson_plan/`)}
     style={styles.button}
   />
   );

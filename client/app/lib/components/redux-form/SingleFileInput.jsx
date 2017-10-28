@@ -97,7 +97,7 @@ class SingleFileInput extends React.Component {
     return (
       <IconButton
         tooltip={intl.formatMessage(translations.removeFile)}
-        onTouchTap={this.onCancel}
+        onClick={this.onCancel}
       >
         <CloseIcon />
       </IconButton>

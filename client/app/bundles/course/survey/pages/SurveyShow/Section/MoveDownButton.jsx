@@ -43,7 +43,7 @@ class MoveDownButton extends React.Component {
     return (
       <FlatButton
         label={<FormattedMessage {...translations.moveSectionDown} />}
-        onTouchTap={this.moveSectionDown}
+        onClick={this.moveSectionDown}
         disabled={this.props.disabled}
       />
     );

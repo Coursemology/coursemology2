@@ -17,7 +17,7 @@ describe('<NewQuestionButton />', () => {
 
     // Click 'new question' button
     const newQuestionButtonNode = ReactDOM.findDOMNode(newQuestionButton.find('button').node);
-    ReactTestUtils.Simulate.touchTap(newQuestionButtonNode);
+    ReactTestUtils.Simulate.click(newQuestionButtonNode);
     expect(questionFormDialogue.find('QuestionFormDialogue').first().props().visible).toBe(true);
 
     // Fill section form with title
@@ -32,7 +32,7 @@ describe('<NewQuestionButton />', () => {
 
     // Submit question form
     const submitButton = questionFormDialogue.find('FormDialogue').first().node.submitButton;
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(submitButton));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
 
     expect(spyCreate).toHaveBeenCalled();
     const formData = spyCreate.mock.calls[0][0];

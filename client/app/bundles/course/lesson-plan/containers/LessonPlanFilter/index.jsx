@@ -54,7 +54,7 @@ class LessonPlanFilter extends React.Component {
     return (
       <div>
         <RaisedButton
-          onTouchTap={this.handleTouchTap}
+          onClick={this.handleTouchTap}
           label={<FormattedMessage {...translations.filter} />}
           labelPosition="before"
           icon={<KeyboardArrowUp />}
@@ -75,7 +75,7 @@ class LessonPlanFilter extends React.Component {
                     key={itemType}
                     primaryText={itemType}
                     rightIcon={isVisible ? <Done /> : <span />}
-                    onTouchTap={() => dispatch(setItemTypeVisibility(itemType, !isVisible))}
+                    onClick={() => dispatch(setItemTypeVisibility(itemType, !isVisible))}
                   />
                 );
               })

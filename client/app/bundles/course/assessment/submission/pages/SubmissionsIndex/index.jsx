@@ -118,7 +118,7 @@ class VisibleSubmissionsIndex extends React.Component {
             label={<FormattedMessage {...submissionsTranslations.publishGrades} />}
             labelPosition="before"
             icon={isPublishing ? <CircularProgress size={24} /> : null}
-            onTouchTap={() => this.setState({ publishConfirmation: true })}
+            onClick={() => this.setState({ publishConfirmation: true })}
           />
         </CardActions>
       </Card>

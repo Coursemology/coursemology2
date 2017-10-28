@@ -30,7 +30,7 @@ describe('<MoveUpButton />', () => {
     const moveSectionButton =
       mount(<MoveUpButton sectionIndex={sectionIndex} />, buildContextOptions(store));
     const moveSectionButtonNode = ReactDOM.findDOMNode(moveSectionButton.find('button').node);
-    ReactTestUtils.Simulate.touchTap(moveSectionButtonNode);
+    ReactTestUtils.Simulate.click(moveSectionButtonNode);
 
     expect(spyMove).toHaveBeenCalledWith({ ordering: [3, 1, 5, 4, 9] });
   });

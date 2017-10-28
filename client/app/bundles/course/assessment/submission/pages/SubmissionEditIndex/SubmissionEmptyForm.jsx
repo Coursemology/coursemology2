@@ -74,7 +74,7 @@ class SubmissionEmptyForm extends Component {
           style={styles.formButton}
           primary
           label={intl.formatMessage(translations.saveGrade)}
-          onTouchTap={handleSaveGrade}
+          onClick={handleSaveGrade}
           disabled={isSaving}
         />
       );
@@ -94,7 +94,7 @@ class SubmissionEmptyForm extends Component {
             style={styles.formButton}
             secondary
             label={intl.formatMessage(translations.ok)}
-            onTouchTap={this.submitAndRedirect}
+            onClick={this.submitAndRedirect}
             disabled={isSaving}
           />
         </div>
@@ -112,7 +112,7 @@ class SubmissionEmptyForm extends Component {
           backgroundColor={red900}
           secondary
           label={intl.formatMessage(translations.unsubmit)}
-          onTouchTap={() => this.setState({ unsubmitConfirmation: true })}
+          onClick={() => this.setState({ unsubmitConfirmation: true })}
           disabled={isSaving}
         />
       );

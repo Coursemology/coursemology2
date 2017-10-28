@@ -67,7 +67,7 @@ class QuestionFormOption extends React.Component {
     return (
       <div style={styles.imageUploaderDiv}>
         <label htmlFor={fieldId}>
-          <IconButton {...{ disabled }} onTouchTap={() => this.fileInput.click()}>
+          <IconButton {...{ disabled }} onClick={() => this.fileInput.click()}>
             <PhotoIcon color={grey700} />
           </IconButton>
         </label>
@@ -161,7 +161,7 @@ class QuestionFormOption extends React.Component {
           component={this.renderImageField}
           {...{ index, disabled }}
         />
-        <IconButton onTouchTap={handleRemove} {...{ disabled }}>
+        <IconButton onClick={handleRemove} {...{ disabled }}>
           <CloseIcon color={grey600} />
         </IconButton>
       </div>

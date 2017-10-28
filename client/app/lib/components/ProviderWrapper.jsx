@@ -4,13 +4,9 @@ import { Provider } from 'react-redux';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { i18nLocale } from 'lib/helpers/server-context';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import injectTapEventPlugin from 'lib/injectTapEventPlugin';
-
 import zh from 'react-intl/locale-data/zh';
 
 import translations from '../../../build/locales/locales.json';
-
-injectTapEventPlugin();
 
 const propTypes = {
   store: PropTypes.shape({

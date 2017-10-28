@@ -10,13 +10,13 @@ import { scribingTranslations as translations } from '../../translations';
 
 const propTypes = {
   intl: intlShape.isRequired,
-  onTouchTap: PropTypes.func,
+  onClick: PropTypes.func,
   disabled: PropTypes.bool,
   open: PropTypes.bool,
   anchorEl: PropTypes.object,
   onRequestClose: PropTypes.func,
   layers: PropTypes.array,
-  onTouchTapLayer: PropTypes.func,
+  onClickLayer: PropTypes.func,
 };
 
 const popoverStyles = {
@@ -43,7 +43,7 @@ class LayersComponent extends Component {
   renderLayersPopover() {
     const {
       layers, open, anchorEl,
-      onRequestClose, onTouchTapLayer,
+      onRequestClose, onClickLayer,
     } = this.props;
 
     return layers && layers.length !== 0 ? (
@@ -59,7 +59,7 @@ class LayersComponent extends Component {
             <MenuItem
               key={layer.creator_id}
               primaryText={layer.creator_name}
-              onTouchTap={() => (onTouchTapLayer(layer))}
+              onClick={() => (onClickLayer(layer))}
               rightIcon={layer.isDisplayed ? <Done /> : null}
             />))
           }
@@ -69,13 +69,13 @@ class LayersComponent extends Component {
   }
 
   render() {
-    const { intl, layers, onTouchTap, disabled } = this.props;
+    const { intl, layers, onClick, disabled } = this.props;
 
     return !disabled ?
       (<div>
         <label style={popoverStyles.layersLabel}>{intl.formatMessage(translations.layersLabelText)}</label>
         <RaisedButton
-          onTouchTap={onTouchTap}
+          onClick={onClick}
           label={layers && (`${layers[0].creator_name.substring(0, 6)}...`)}
           disabled={disabled}
         />

@@ -97,7 +97,7 @@ class LessonPlanNav extends React.Component {
       <div>
         { this.renderScrollSpies() }
         <RaisedButton
-          onTouchTap={this.handleTouchTap}
+          onClick={this.handleTouchTap}
           label={this.state.text}
           labelPosition="before"
           icon={<KeyboardArrowUp />}
@@ -118,7 +118,7 @@ class LessonPlanNav extends React.Component {
                   <MenuItem
                     key={group.id}
                     primaryText={group.milestone.title}
-                    onTouchTap={() => {
+                    onClick={() => {
                       scroller.scrollTo(group.id, { offset: -50 });
                       this.setState({ open: false });
                     }}

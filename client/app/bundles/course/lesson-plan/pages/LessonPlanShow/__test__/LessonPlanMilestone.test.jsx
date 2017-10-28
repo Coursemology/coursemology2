@@ -51,15 +51,15 @@ describe('<LessonPlanMilestone />', () => {
     );
 
     const iconButton = lessonPlanMilestone.find('button').first();
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(iconButton.node));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(iconButton.node));
 
     const menuCardNode = lessonPlanMilestone.find('RenderToLayer').first().node.layerElement;
     const deleteButton = new ReactWrapper(menuCardNode, true).find('EnhancedButton').at(1);
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(deleteButton.node));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(deleteButton.node));
 
     const confirmDeleteButton =
       deleteConfirmation.find('ConfirmationDialog').first().node.confirmButton;
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(confirmDeleteButton));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmDeleteButton));
 
     expect(spyDelete).toHaveBeenCalledWith(milestoneId);
   });
@@ -82,11 +82,11 @@ describe('<LessonPlanMilestone />', () => {
     );
 
     const iconButton = lessonPlanMilestone.find('button').first();
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(iconButton.node));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(iconButton.node));
 
     const menuCardNode = lessonPlanMilestone.find('RenderToLayer').first().node.layerElement;
     const updateButton = new ReactWrapper(menuCardNode, true).find('EnhancedButton').first();
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(updateButton.node));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(updateButton.node));
 
     const dialogInline = milestoneFormDialog.find('RenderToLayer').first().node.layerElement;
     const milestoneForm = new ReactWrapper(dialogInline, true).find('form');
@@ -95,7 +95,7 @@ describe('<LessonPlanMilestone />', () => {
     descriptionInput.simulate('change', { target: { value: description } });
 
     const submitButton = milestoneFormDialog.find('FormDialogue').first().node.submitButton;
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(submitButton));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
 
     const expectedPayload = {
       lesson_plan_milestone: {
