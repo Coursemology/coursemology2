@@ -459,7 +459,7 @@ export default class ScribingCanvas extends React.Component {
     }
   }
 
-  onMouseOut = () => (this.isOverText = false)
+  onMouseOut = () => { this.isOverText = false; }
 
   // Limit moving of objects to within the canvas
   onObjectMovingCanvas = (options) => {

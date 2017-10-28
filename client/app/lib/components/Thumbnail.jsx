@@ -86,13 +86,14 @@ class Thumbnail extends React.PureComponent {
     return (
       <div style={rootStyle}>
         <div style={containerStyle}>
-          <img
-            src={source}
-            alt={altText}
-            onClick={onThumbnailTouchTap}
-            style={thumbnailStyle}
-            {...props}
-          />
+          <a onClick={onThumbnailTouchTap}>
+            <img
+              src={source}
+              alt={altText}
+              style={thumbnailStyle}
+              {...props}
+            />
+          </a>
         </div>
         <Dialog
           actions={actions}

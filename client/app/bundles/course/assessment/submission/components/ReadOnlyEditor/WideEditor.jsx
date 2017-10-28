@@ -111,7 +111,6 @@ export default class WideEditor extends Component {
 
   renderEditor() {
     /* eslint-disable react/no-array-index-key */
-    /* eslint-disable react/no-danger */
     const { content } = this.props;
     return (
       <div style={styles.editorContainer}>
@@ -143,7 +142,6 @@ export default class WideEditor extends Component {
         </table>
       </div>
     );
-    /* eslint-enable react/no-danger */
     /* eslint-enable react/no-array-index-key */
   }
 

@@ -79,17 +79,17 @@ const styles = {
 
 function initializeColorDropdowns() {
   const colorDropdowns = {};
-  Object.values(scribingToolColor).forEach(toolType =>
-   (colorDropdowns[toolType] = false)
-  );
+  Object.values(scribingToolColor).forEach((toolType) => {
+    colorDropdowns[toolType] = false;
+  });
   return colorDropdowns;
 }
 
 function initializePopovers() {
   const popovers = {};
-  Object.values(scribingPopoverTypes).forEach(popoverType =>
-   (popovers[popoverType] = false)
-  );
+  Object.values(scribingPopoverTypes).forEach((popoverType) => {
+    popovers[popoverType] = false;
+  });
   return popovers;
 }
 

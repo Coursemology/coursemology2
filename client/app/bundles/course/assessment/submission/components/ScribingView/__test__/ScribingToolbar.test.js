@@ -70,25 +70,25 @@ mockAnchor.getBoundingClientRect.mockReturnValue({
 
 function initializeToolColor() {
   const colors = {};
-  Object.values(scribingToolColor).forEach(toolType =>
-   (colors[toolType] = 'rgba(0,0,0,1)')
-  );
+  Object.values(scribingToolColor).forEach((toolType) => {
+    colors[toolType] = 'rgba(0,0,0,1)';
+  });
   return colors;
 }
 
 function initializeToolThickness() {
   const thickness = {};
-  Object.values(scribingToolThickness).forEach(toolType =>
-   (thickness[toolType] = 1)
-  );
+  Object.values(scribingToolThickness).forEach((toolType) => {
+    thickness[toolType] = 1;
+  });
   return thickness;
 }
 
 function initializeLineStyles() {
   const lineStyles = {};
-  Object.values(scribingToolLineStyle).forEach(toolType =>
-   (lineStyles[toolType] = 'solid')
-  );
+  Object.values(scribingToolLineStyle).forEach((toolType) => {
+    lineStyles[toolType] = 'solid';
+  });
   return lineStyles;
 }
 

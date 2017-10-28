@@ -7,7 +7,7 @@ import { questionNamePrefix, questionIdPrefix } from '../constants';
 const propTypes = {
   placeholder: PropTypes.string,
   field: PropTypes.string.isRequired,
-  validate: PropTypes.array,
+  validate: PropTypes.arrayOf(PropTypes.func),
   label: PropTypes.string.isRequired,
   required: PropTypes.bool,
   type: PropTypes.string,

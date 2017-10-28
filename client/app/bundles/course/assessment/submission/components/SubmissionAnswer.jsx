@@ -1,5 +1,3 @@
-/* eslint-disable react/no-danger */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape, defineMessages } from 'react-intl';
@@ -34,7 +32,11 @@ class SubmissionAnswer extends Component {
   };
 
   getRenderer(question) {
-    const { MultipleChoice, MultipleResponse, TextResponse, FileUpload, Programming, VoiceResponse, Scribing } = questionTypes;
+    const {
+      MultipleChoice, MultipleResponse, TextResponse, FileUpload,
+      Programming, VoiceResponse, Scribing,
+    } = questionTypes;
+
     switch (question.type) {
       case MultipleChoice:
         return Answers.renderMultipleChoice;

@@ -146,7 +146,7 @@ export const scribingAnswerShape = PropTypes.shape({
 
 export const scribingShape = PropTypes.shape({
   answer: scribingAnswerShape,
-  layers: PropTypes.array,
+  layers: PropTypes.arrayOf(scribbleShape),
   selectedTool: PropTypes.string,
   selectedShape: PropTypes.string,
   imageWidth: PropTypes.number,

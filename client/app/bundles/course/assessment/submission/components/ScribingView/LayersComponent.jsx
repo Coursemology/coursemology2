@@ -7,6 +7,7 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Done from 'material-ui/svg-icons/action/done';
 import { scribingTranslations as translations } from '../../translations';
+import { scribbleShape } from '../../propTypes';
 
 const propTypes = {
   intl: intlShape.isRequired,
@@ -15,7 +16,7 @@ const propTypes = {
   open: PropTypes.bool,
   anchorEl: PropTypes.object,
   onRequestClose: PropTypes.func,
-  layers: PropTypes.array,
+  layers: PropTypes.arrayOf(scribbleShape),
   onClickLayer: PropTypes.func,
 };
 

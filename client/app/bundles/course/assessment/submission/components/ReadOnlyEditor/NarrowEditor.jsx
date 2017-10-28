@@ -77,7 +77,7 @@ export default class NarrowEditor extends Component {
         show={expanded[lineNumber - 1]}
         onHide={() => collapseLine(lineNumber)}
         placement={placement}
-        target={() => findDOMNode(this[`comment-${lineNumber}`])}
+        target={() => findDOMNode(this[`comment-${lineNumber}`])} // eslint-disable-line react/no-find-dom-node
       >
         <OverlayTooltip
           placement={placement}
@@ -113,7 +113,6 @@ export default class NarrowEditor extends Component {
 
   render() {
     /* eslint-disable react/no-array-index-key */
-    /* eslint-disable react/no-danger */
     const { content } = this.props;
     return (
       <table className="codehilite" style={styles.editor}>
@@ -143,7 +142,6 @@ export default class NarrowEditor extends Component {
         </tbody>
       </table>
     );
-    /* eslint-enable react/no-danger */
     /* eslint-enable react/no-array-index-key */
   }
 }

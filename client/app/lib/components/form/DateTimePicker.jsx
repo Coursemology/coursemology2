@@ -178,7 +178,7 @@ class DateTimePicker extends React.Component {
         <DatePicker
           {...{ name, disabled }}
           textFieldStyle={{ display: 'none' }}
-          ref={input => (this.datePicker = input)}
+          ref={(input) => { this.datePicker = input; }}
           onChange={this.updateDate}
           value={value || undefined}
         />
@@ -201,7 +201,7 @@ class DateTimePicker extends React.Component {
         <TimePicker
           {...{ name, disabled }}
           textFieldStyle={{ display: 'none' }}
-          ref={input => (this.timePicker = input)}
+          ref={(input) => { this.timePicker = input; }}
           onChange={this.updateTime}
           value={value || undefined}
         />

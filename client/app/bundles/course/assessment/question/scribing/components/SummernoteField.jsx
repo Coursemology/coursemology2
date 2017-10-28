@@ -7,7 +7,7 @@ import { questionNamePrefix, questionIdPrefix } from '../constants';
 const propTypes = {
   label: PropTypes.string.isRequired,
   field: PropTypes.string.isRequired,
-  validate: PropTypes.array,
+  validate: PropTypes.arrayOf(PropTypes.func),
 };
 
 const SummernoteField = (props) => {

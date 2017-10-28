@@ -1,13 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import NotificationBar from 'lib/components/NotificationBar';
+import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
 import VideoPlayer from './VideoPlayer';
 import Discussion from './Discussion';
 import styles from './Submission.scss';
 
 const propTypes = {
-  notification: PropTypes.object,
+  notification: notificationShape,
 };
 
 function Submission(props) {

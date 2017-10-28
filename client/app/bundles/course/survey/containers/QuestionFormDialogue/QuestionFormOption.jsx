@@ -80,7 +80,7 @@ class QuestionFormOption extends React.Component {
             input.onChange(image);
             input.onBlur(image);
           }}
-          ref={field => (this.fileInput = field)}
+          ref={(field) => { this.fileInput = field; }}
           {...{ disabled }}
         />
       </div>
