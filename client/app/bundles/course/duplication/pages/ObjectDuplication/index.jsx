@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import mirrorCreator from 'mirror-creator';
+import { isValid } from 'redux-form';
 
 import Paper from 'material-ui/Paper';
 import Avatar from 'material-ui/Avatar';
@@ -16,7 +17,7 @@ import Done from 'material-ui/svg-icons/action/done';
 import TitleBar from 'lib/components/TitleBar';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 
-import { duplicableItemTypes } from 'course/duplication/constants';
+import { duplicableItemTypes, formNames } from 'course/duplication/constants';
 import { fetchObjectsList } from 'course/duplication/actions';
 import { defaultComponentTitles } from 'course/translations.intl';
 
@@ -26,6 +27,7 @@ import SurveysSelector from './SurveysSelector';
 import AchievementsSelector from './AchievementsSelector';
 import MaterialsSelector from './MaterialsSelector';
 import DuplicateButton from './DuplicateButton';
+import DuplicateAllButton from './DuplicateAllButton';
 
 const { TAB, ASSESSMENT, CATEGORY, SURVEY, ACHIEVEMENT, FOLDER, MATERIAL } = duplicableItemTypes;
 
@@ -81,7 +83,9 @@ class ObjectDuplication extends React.Component {
   static propTypes = {
     isLoading: PropTypes.bool.isRequired,
     selectedItems: PropTypes.shape(),
-    targetCourseId: PropTypes.number,
+    isExistingCourseSelected: PropTypes.bool.isRequired,
+    newCourseFormValid: PropTypes.bool.isRequired,
+    duplicationMode: PropTypes.string.isRequired,
 
     dispatch: PropTypes.func.isRequired,
   }
@@ -118,7 +122,9 @@ class ObjectDuplication extends React.Component {
   }
 
   renderCourseSelector() {
-    const { targetCourseId } = this.props;
+    const { isExistingCourseSelected, newCourseFormValid, duplicationMode } = this.props;
+    const isCourseSelected =
+      duplicationMode === 'course' ? newCourseFormValid : isExistingCourseSelected;
 
     return (
       <div>
@@ -130,9 +136,9 @@ class ObjectDuplication extends React.Component {
             <Avatar
               style={styles.countAvatar}
               size={30}
-              backgroundColor={targetCourseId ? cyan500 : red500}
+              backgroundColor={isCourseSelected ? cyan500 : red500}
             >
-              { targetCourseId ? <Done color={grey50} /> : <Clear color={grey50} /> }
+              { isCourseSelected ? <Done color={grey50} /> : <Clear color={grey50} /> }
             </Avatar>
           }
           onTouchTap={() => this.setState({ panel: panels.TARGET_COURSE })}
@@ -195,11 +201,19 @@ class ObjectDuplication extends React.Component {
   }
 
   renderSidebar() {
+    const { duplicationMode } = this.props;
+
     return (
       <Paper>
         <List style={styles.sidebar}>
           { this.renderCourseSelector() }
-          { this.renderItemsSelector() }
+          {
+            duplicationMode === 'course' ?
+              <ListItem disabled style={styles.duplicateButton}>
+                <DuplicateAllButton />
+              </ListItem> :
+            this.renderItemsSelector()
+          }
         </List>
       </Paper>
     );
@@ -240,8 +254,10 @@ class ObjectDuplication extends React.Component {
   }
 }
 
-export default connect(({ objectDuplication }) => ({
+export default connect(({ objectDuplication, ...state }) => ({
   isLoading: objectDuplication.isLoading,
   selectedItems: objectDuplication.selectedItems,
-  targetCourseId: objectDuplication.targetCourseId,
+  isExistingCourseSelected: !!objectDuplication.targetCourseId,
+  duplicationMode: objectDuplication.duplicationMode,
+  newCourseFormValid: isValid(formNames.NEW_COURSE)(state),
 }))(ObjectDuplication);

@@ -7,6 +7,11 @@ export const courseShape = PropTypes.shape({
   title: PropTypes.string,
 });
 
+export const currentCourseShape = PropTypes.shape({
+  title: PropTypes.string,
+  start_at: PropTypes.string,
+});
+
 export const assessmentShape = PropTypes.shape({
   id: PropTypes.number,
   title: PropTypes.string,

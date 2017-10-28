@@ -1,5 +1,9 @@
 json.currentHost current_tenant.host
 
+json.currentCourse do
+  json.(current_course, :title, :start_at)
+end
+
 json.targetCourses @target_courses do |course|
   json.(course, :id, :title)
   json.path course_path(course)

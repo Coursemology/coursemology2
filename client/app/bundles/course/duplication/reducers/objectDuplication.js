@@ -11,6 +11,13 @@ const initialState = {
   },
   targetCourseId: null,
   targetCourses: [],
+  duplicationMode: 'object',
+
+  currentHost: '',
+  currentCourse: {
+    title: '',
+    start_at: null,
+  },
 
   assessmentsComponent: [],
   surveyComponent: [],
@@ -54,6 +61,9 @@ export default function (state = initialState, action) {
       selectedItems[action.itemType][action.id] = action.value;
       return { ...state, selectedItems };
     }
+    case actionTypes.SET_DUPLICATION_MODE: {
+      return { ...state, duplicationMode: action.duplicationMode };
+    }
 
     case actionTypes.SHOW_DUPLICATE_ITEMS_CONFIRMATION: {
       return { ...state, confirmationOpen: true };
@@ -62,9 +72,12 @@ export default function (state = initialState, action) {
       return { ...state, confirmationOpen: false };
     }
 
+    case actionTypes.DUPLICATE_COURSE_REQUEST:
     case actionTypes.DUPLICATE_ITEMS_REQUEST: {
       return { ...state, isDuplicating: true };
     }
+    case actionTypes.DUPLICATE_COURSE_SUCCESS:
+    case actionTypes.DUPLICATE_COURSE_FAILURE:
     case actionTypes.DUPLICATE_ITEMS_FAILURE:
     case actionTypes.DUPLICATE_ITEMS_SUCCESS: {
       return { ...state, isDuplicating: false };
