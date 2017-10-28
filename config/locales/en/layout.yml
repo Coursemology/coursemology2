@@ -33,7 +33,7 @@ en:
     course_users:
       title: 'Manage Users'
     duplication:
-      title: 'Duplicate Course'
+      title: 'Duplicate Data'
     attachment_uploader:
       uploaded_files: 'Uploaded Files:'
       uploaded_file: 'Uploaded File:'

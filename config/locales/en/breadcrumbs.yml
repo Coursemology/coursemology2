@@ -9,7 +9,7 @@ en:
         index: :'course.levels.index.header'
         new: :'course.levels.new.header'
       duplications:
-        show: :'course.duplications.show.header'
+        show: :'layouts.duplication.title'
       admin:
         controller:
           admin: :'layouts.course.administration'

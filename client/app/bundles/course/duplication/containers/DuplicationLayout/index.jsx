@@ -8,7 +8,7 @@ const DuplicationLayout = () => (
     <NotificationPopup />
 
     <Switch>
-      <Route exact path="/courses/:courseId/object_duplication/new" component={Duplication} />
+      <Route exact path="/courses/:courseId/duplication" component={Duplication} />
     </Switch>
   </div>
  );
