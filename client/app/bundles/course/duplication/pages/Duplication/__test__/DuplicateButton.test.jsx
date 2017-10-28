@@ -9,7 +9,7 @@ import DuplicateButton from '../DuplicateButton';
 
 const data = {
   duplication: {
-    objectDuplication: {
+    duplication: {
       targetCourseId: 9,
       targetCourses: [{
         id: 9,

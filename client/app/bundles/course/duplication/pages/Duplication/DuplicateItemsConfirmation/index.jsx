@@ -104,10 +104,10 @@ class DuplicateItemsConfirmation extends React.Component {
   }
 }
 
-export default connect(({ objectDuplication }) => ({
-  open: objectDuplication.confirmationOpen,
-  targetCourses: objectDuplication.targetCourses,
-  targetCourseId: objectDuplication.targetCourseId,
-  selectedItems: objectDuplication.selectedItems,
-  isDuplicating: objectDuplication.isDuplicating,
+export default connect(({ duplication }) => ({
+  open: duplication.confirmationOpen,
+  targetCourses: duplication.targetCourses,
+  targetCourseId: duplication.targetCourseId,
+  selectedItems: duplication.selectedItems,
+  isDuplicating: duplication.isDuplicating,
 }))(DuplicateItemsConfirmation);

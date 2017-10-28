@@ -40,20 +40,20 @@ const panels = mirrorCreator([
 ]);
 
 const translations = defineMessages({
-  duplicateItems: {
-    id: 'course.duplication.ObjectDuplication.duplicateItems',
-    defaultMessage: 'Duplicate Items',
+  duplicateData: {
+    id: 'course.duplication.Duplication.duplicateData',
+    defaultMessage: 'Duplicate Data',
   },
   selectTargetCourse: {
-    id: 'course.duplication.ObjectDuplication.selectTargetCourse',
+    id: 'course.duplication.Duplication.selectTargetCourse',
     defaultMessage: 'Select Target Course',
   },
   targetCourse: {
-    id: 'course.duplication.ObjectDuplication.targetCourse',
+    id: 'course.duplication.Duplication.targetCourse',
     defaultMessage: 'Target Course',
   },
   duplicableItemsHeader: {
-    id: 'course.duplication.ObjectDuplication.duplicableItemsHeader',
+    id: 'course.duplication.Duplication.duplicableItemsHeader',
     defaultMessage: 'Select Items to Duplicate',
   },
 });
@@ -79,7 +79,7 @@ const styles = {
   },
 };
 
-class ObjectDuplication extends React.Component {
+class Duplication extends React.Component {
   static propTypes = {
     isLoading: PropTypes.bool.isRequired,
     selectedItems: PropTypes.shape(),
@@ -141,7 +141,7 @@ class ObjectDuplication extends React.Component {
               { isCourseSelected ? <Done color={grey50} /> : <Clear color={grey50} /> }
             </Avatar>
           }
-          onTouchTap={() => this.setState({ panel: panels.TARGET_COURSE })}
+          onClick={() => this.setState({ panel: panels.TARGET_COURSE })}
         >
           <FormattedMessage {...translations.targetCourse} />
         </ListItem>
@@ -166,28 +166,28 @@ class ObjectDuplication extends React.Component {
           <FormattedMessage {...translations.duplicableItemsHeader} />
         </Subheader>
         {
-          ObjectDuplication.renderSidebarItem(
+          Duplication.renderSidebarItem(
             defaultComponentTitles.course_assessments_component,
             assessmentsComponentCount,
             () => this.setState({ panel: panels.ASSESSMENTS })
           )
         }
         {
-          ObjectDuplication.renderSidebarItem(
+          Duplication.renderSidebarItem(
             defaultComponentTitles.course_survey_component,
             counts[SURVEY],
             () => this.setState({ panel: panels.SURVEYS })
           )
         }
         {
-          ObjectDuplication.renderSidebarItem(
+          Duplication.renderSidebarItem(
             defaultComponentTitles.course_achievements_component,
             counts[ACHIEVEMENT],
             () => this.setState({ panel: panels.ACHIEVEMENTS })
           )
         }
         {
-          ObjectDuplication.renderSidebarItem(
+          Duplication.renderSidebarItem(
             defaultComponentTitles.course_materials_component,
             counts[FOLDER] + counts[MATERIAL],
             () => this.setState({ panel: panels.MATERIALS })
@@ -247,17 +247,17 @@ class ObjectDuplication extends React.Component {
   render() {
     return (
       <div>
-        <TitleBar title={<FormattedMessage {...translations.duplicateItems} />} />
+        <TitleBar title={<FormattedMessage {...translations.duplicateData} />} />
         { this.props.isLoading ? <LoadingIndicator /> : this.renderBody() }
       </div>
     );
   }
 }
 
-export default connect(({ objectDuplication, ...state }) => ({
-  isLoading: objectDuplication.isLoading,
-  selectedItems: objectDuplication.selectedItems,
-  isExistingCourseSelected: !!objectDuplication.targetCourseId,
-  duplicationMode: objectDuplication.duplicationMode,
+export default connect(({ duplication, ...state }) => ({
+  isLoading: duplication.isLoading,
+  selectedItems: duplication.selectedItems,
+  isExistingCourseSelected: !!duplication.targetCourseId,
+  duplicationMode: duplication.duplicationMode,
   newCourseFormValid: isValid(formNames.NEW_COURSE)(state),
-}))(ObjectDuplication);
+}))(Duplication);

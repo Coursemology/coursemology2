@@ -98,7 +98,7 @@ class MaterialsSelector extends React.Component {
   }
 }
 
-export default connect(({ objectDuplication }) => ({
-  folders: objectDuplication.materialsComponent,
-  selectedItems: objectDuplication.selectedItems,
+export default connect(({ duplication }) => ({
+  folders: duplication.materialsComponent,
+  selectedItems: duplication.selectedItems,
 }))(MaterialsSelector);

@@ -77,7 +77,7 @@ class TargetCourseSelector extends React.Component {
       new_start_at: PropTypes.oneOfType([
         PropTypes.instanceOf(Date),
         PropTypes.instanceOf(moment),
-      ])
+      ]),
     }),
 
     dispatch: PropTypes.func.isRequired,
@@ -121,7 +121,7 @@ class TargetCourseSelector extends React.Component {
   }
 
   renderNewCourseTab = () => {
-    const { intl,  dispatch, currentCourse, isDuplicating, formValues } = this.props;
+    const { intl, dispatch, currentCourse, isDuplicating, formValues } = this.props;
 
     const failureMessage = intl.formatMessage(translations.failure);
     const currentCourseStartAt = moment(currentCourse.start_at);
@@ -132,7 +132,7 @@ class TargetCourseSelector extends React.Component {
     const initialValues = {
       new_title: intl.formatMessage(translations.defaultTitle, newTitleValues),
       new_start_at: moment().add(1, 'day').startOf('day'),
-    }
+    };
 
     return (
       <Tab
@@ -143,7 +143,7 @@ class TargetCourseSelector extends React.Component {
           <CardText>
             <FormattedMessage {...translations.newCoursePrompt} />
             <NewCourseForm
-              onSubmit={(values) => dispatch(duplicateCourse(values, failureMessage))}
+              onSubmit={values => dispatch(duplicateCourse(values, failureMessage))}
               disabled={isDuplicating}
               initialValues={initialValues}
             />
@@ -180,12 +180,12 @@ class TargetCourseSelector extends React.Component {
   }
 }
 
-export default connect(({ objectDuplication, ...state }) => ({
-  courses: objectDuplication.targetCourses,
-  currentHost: objectDuplication.currentHost,
-  targetCourseId: objectDuplication.targetCourseId,
-  duplicationMode: objectDuplication.duplicationMode,
-  currentCourse: objectDuplication.currentCourse,
-  isDuplicating: objectDuplication.isDuplicating,
+export default connect(({ duplication, ...state }) => ({
+  courses: duplication.targetCourses,
+  currentHost: duplication.currentHost,
+  targetCourseId: duplication.targetCourseId,
+  duplicationMode: duplication.duplicationMode,
+  currentCourse: duplication.currentCourse,
+  isDuplicating: duplication.isDuplicating,
   formValues: getFormValues(formNames.NEW_COURSE)(state),
 }))(injectIntl(TargetCourseSelector));

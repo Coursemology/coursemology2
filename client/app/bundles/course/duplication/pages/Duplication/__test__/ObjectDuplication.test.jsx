@@ -42,7 +42,7 @@ describe('<ObjectDuplication />', () => {
     await sleep(1);
     expect(spy).toHaveBeenCalled();
 
-    const sortedData = store.getState().objectDuplication;
+    const sortedData = store.getState().duplication;
     const courseTitles = sortedData.targetCourses.map(course => course.title);
     const rootFolder = sortedData.materialsComponent[0];
     expect(courseTitles).toEqual(['Course A', 'Course B', 'Course C']);

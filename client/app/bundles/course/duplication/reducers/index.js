@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import notificationPopup from 'lib/reducers/notificationPopup';
-import objectDuplication from './objectDuplication';
+import duplication from './duplication';
 
 export default combineReducers({
   notificationPopup,
-  objectDuplication,
+  duplication,
   form: formReducer,
 });

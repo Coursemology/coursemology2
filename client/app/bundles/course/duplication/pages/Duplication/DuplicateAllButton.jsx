@@ -20,7 +20,7 @@ const translations = defineMessages({
   },
   confirmationMessage: {
     id: 'course.duplication.DuplicateAllButton.confirmationMessage',
-    defaultMessage: 'Proceed with Duplication?',
+    defaultMessage: 'Proceed with course duplication?',
   },
 });
 
@@ -71,8 +71,8 @@ class DuplicateAllButton extends React.Component {
   }
 }
 
-export default connect(({ objectDuplication, ...state }) => ({
-  duplicationMode: objectDuplication.duplicationMode,
-  isDuplicating: objectDuplication.isDuplicating,
+export default connect(({ duplication, ...state }) => ({
+  duplicationMode: duplication.duplicationMode,
+  isDuplicating: duplication.isDuplicating,
   newCourseFormValid: isValid(formNames.NEW_COURSE)(state),
 }))(DuplicateAllButton);

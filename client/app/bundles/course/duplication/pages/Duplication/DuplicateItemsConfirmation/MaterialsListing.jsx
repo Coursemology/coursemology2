@@ -110,9 +110,9 @@ class MaterialsListing extends React.Component {
   }
 }
 
-export default connect(({ objectDuplication }) => ({
-  folders: objectDuplication.materialsComponent,
-  selectedItems: objectDuplication.selectedItems,
-  targetRootFolder: objectDuplication.targetCourses
-    .find(course => course.id === objectDuplication.targetCourseId).rootFolder,
+export default connect(({ duplication }) => ({
+  folders: duplication.materialsComponent,
+  selectedItems: duplication.selectedItems,
+  targetRootFolder: duplication.targetCourses
+    .find(course => course.id === duplication.targetCourseId).rootFolder,
 }))(MaterialsListing);
