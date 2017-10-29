@@ -14,7 +14,7 @@ import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 class SurveyListing extends React.Component {
   static propTypes = {
     surveys: PropTypes.arrayOf(surveyShape),
-    selectedItems: PropTypes.shape(),
+    selectedItems: PropTypes.shape({}),
   }
 
   static renderRow(survey) {

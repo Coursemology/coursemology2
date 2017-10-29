@@ -27,7 +27,7 @@ const translations = defineMessages({
 class AssessmentsListing extends React.Component {
   static propTypes = {
     categories: PropTypes.arrayOf(categoryShape),
-    selectedItems: PropTypes.shape(),
+    selectedItems: PropTypes.shape({}),
   }
 
   static renderAssessmentRow(assessment) {

@@ -42,7 +42,7 @@ class DuplicateItemsConfirmation extends React.Component {
     isDuplicating: PropTypes.bool,
     targetCourseId: PropTypes.number,
     targetCourses: PropTypes.arrayOf(courseShape),
-    selectedItems: PropTypes.shape(),
+    selectedItems: PropTypes.shape({}),
 
     dispatch: PropTypes.func.isRequired,
   }

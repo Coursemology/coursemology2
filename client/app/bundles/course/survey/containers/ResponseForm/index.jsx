@@ -69,7 +69,7 @@ class ResponseForm extends React.Component {
     response: responseShape.isRequired,
     onSubmit: PropTypes.func.isRequired,
     pristine: PropTypes.bool.isRequired,
-    formValues: PropTypes.shape(),
+    formValues: PropTypes.shape({}),
 
     handleSubmit: PropTypes.func.isRequired,
   };

@@ -10,8 +10,8 @@ describe('<AchievementEdit />', () => {
   const id = 1;
   const intitialValues = {
     id,
-    title: 'Achievmeent',
-    description: 'Awesome achievmeent',
+    title: 'Achievement',
+    description: 'Awesome achievement',
     published: false,
     badge: {
       name: 'Foo',
@@ -44,6 +44,9 @@ describe('<AchievementEdit />', () => {
     // Check that API call is made.
     const formData = new FormData();
     formData.append('achievement[title]', newTitle);
+    formData.append('achievement[description]', 'Awesome achievement');
+    formData.append('achievement[published]', false);
+    formData.append('achievement[badge]', undefined);
     expect(spy).toHaveBeenCalledWith(id, formData);
   });
 });

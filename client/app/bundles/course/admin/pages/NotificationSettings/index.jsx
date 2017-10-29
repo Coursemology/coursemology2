@@ -24,7 +24,7 @@ class NotificationSettings extends React.Component {
       component_title: PropTypes.string,
       key: PropTypes.string,
       enabled: PropTypes.bool,
-      options: PropTypes.shape(),
+      options: PropTypes.shape({}),
     })),
     dispatch: PropTypes.func.isRequired,
   };

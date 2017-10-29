@@ -128,7 +128,7 @@ const EventForm = ({ handleSubmit, onSubmit, disabled, formValues, shiftEndDate,
 EventForm.propTypes = {
   eventTypes: PropTypes.arrayOf(PropTypes.string),
   eventLocations: PropTypes.arrayOf(PropTypes.string),
-  formValues: PropTypes.shape(),
+  formValues: PropTypes.shape({}),
   shiftEndDate: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,

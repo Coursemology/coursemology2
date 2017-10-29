@@ -19,7 +19,7 @@ const translations = defineMessages({
 
 class LessonPlanFilter extends React.Component {
   static propTypes = {
-    visibility: PropTypes.shape().isRequired,
+    visibility: PropTypes.shape({}).isRequired,
     dispatch: PropTypes.func.isRequired,
   }
 

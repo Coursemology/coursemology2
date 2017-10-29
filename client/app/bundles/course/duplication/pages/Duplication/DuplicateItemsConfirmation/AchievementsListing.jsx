@@ -22,7 +22,7 @@ const styles = {
 class AchievementsListing extends React.Component {
   static propTypes = {
     achievements: PropTypes.arrayOf(achievementShape),
-    selectedItems: PropTypes.shape(),
+    selectedItems: PropTypes.shape({}),
   }
 
   static renderRow(achievement) {

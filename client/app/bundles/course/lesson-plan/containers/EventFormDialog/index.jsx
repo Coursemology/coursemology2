@@ -73,7 +73,7 @@ EventFormDialog.propTypes = {
     location: PropTypes.string,
     lesson_plan_item_type: PropTypes.arrayOf(PropTypes.string),
   })),
-  formValues: PropTypes.shape(),
+  formValues: PropTypes.shape({}),
   onSubmit: PropTypes.func.isRequired,
   pristine: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
