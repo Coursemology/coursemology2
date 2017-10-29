@@ -101,7 +101,6 @@ function validation(data, pathOfKeysToData, intl) {
 }
 
 class ProgrammingQuestionForm extends React.Component {
-
   static getInputName(field) {
     return `question_programming[${field}]`;
   }

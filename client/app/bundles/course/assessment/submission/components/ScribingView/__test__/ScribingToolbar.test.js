@@ -11,7 +11,7 @@ import ScribingView from 'course/assessment/submission/containers/ScribingView';
 import ScribingToolbar from 'course/assessment/submission/components/ScribingView/ScribingToolbar';
 import { setColoringToolColor } from '../../../actions/scribing';
 import actionTypes, { scribingTools, scribingToolColor, scribingToolThickness,
-      scribingToolLineStyle, scribingPopoverTypes } from '../../../constants';
+  scribingToolLineStyle, scribingPopoverTypes } from '../../../constants';
 
 const client = CourseAPI.assessment.answer.scribing.getClient();
 const mock = new MockAdapter(client);

@@ -53,7 +53,7 @@ class MaterialUploader extends React.Component {
         });
         const failureMessage =
           <FormattedMessage {...{ ...translations.deleteFail, values: { name } }} />;
-        this.setState({ materials, notification: { message: failureMessage }, name });
+        this.setState({ materials, notification: { message: failureMessage } });
       });
   }
 
@@ -75,11 +75,11 @@ class MaterialUploader extends React.Component {
       .then((response) => {
         this.updateMaterials(materials, response);
       })
-       .catch((error) => {
-         this.removeUploads(materials, error.response);
-          // Set the value to null so that the files can be selected again.
-         fileInput.value = null;
-       });
+      .catch((error) => {
+        this.removeUploads(materials, error.response);
+        // Set the value to null so that the files can be selected again.
+        fileInput.value = null;
+      });
   }
 
   // Remove materials from uploading list and add new materials from server reponse to existing

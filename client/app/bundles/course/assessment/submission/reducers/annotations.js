@@ -21,7 +21,7 @@ export default function (state = {}, action) {
               topics: arrayToObjectById(annotation.topics),
             },
           })
-        , {}),
+          , {}),
       };
     }
     case actions.CREATE_ANNOTATION_SUCCESS: {

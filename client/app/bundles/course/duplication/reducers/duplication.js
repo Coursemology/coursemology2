@@ -5,7 +5,7 @@ const initialState = {
   confirmationOpen: false,
   selectedItems: {
     ...Object.keys(duplicableItemTypes).reduce((hash, type) => {
-      hash[type] = {};  // eslint-disable-line no-param-reassign
+      hash[type] = {}; // eslint-disable-line no-param-reassign
       return hash;
     }, {}),
   },

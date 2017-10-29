@@ -45,7 +45,6 @@ const contextTypes = {
 };
 
 class OnlineEditorJavaView extends React.Component {
-
   static getTestInputName(type, field) {
     return `question_programming[test_cases][${type}][][${field}]`;
   }
@@ -184,7 +183,7 @@ class OnlineEditorJavaView extends React.Component {
           intl: this.props.intl,
         }}
       />
-      ));
+    ));
 
     const editors = [...testCases.get(type).entries()].map(([index, test]) => {
       const showCodeEditor = test.get('show_code_editor') || false;
@@ -301,7 +300,7 @@ class OnlineEditorJavaView extends React.Component {
     >
       {testCaseError}
     </div>
-      );
+    );
 
     return (
       <div>

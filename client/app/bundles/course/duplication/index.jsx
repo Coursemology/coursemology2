@@ -18,6 +18,6 @@ $(document).ready(() => {
           <DuplicationLayout />
         </Router>
       </ProviderWrapper>
-    , mountNode);
+      , mountNode);
   }
 });

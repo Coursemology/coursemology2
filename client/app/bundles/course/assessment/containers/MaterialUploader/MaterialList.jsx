@@ -60,25 +60,25 @@ const MaterialList = (props) => {
     />);
 
   const materialNodes = materials.map(material =>
-     (
-       <Material
-         key={material.id}
-         id={material.id}
-         name={material.name}
-         updatedAt={material.updated_at}
-         deleting={material.deleting}
-         onMaterialDelete={onMaterialDelete}
-       />
+    (
+      <Material
+        key={material.id}
+        id={material.id}
+        name={material.name}
+        updatedAt={material.updated_at}
+        deleting={material.deleting}
+        onMaterialDelete={onMaterialDelete}
+      />
     )
   );
 
   const uploadingMaterialNodes = uploadingMaterials.map(material =>
-     (
-       <Material
-         key={material.name}
-         name={material.name}
-         uploading
-       />
+    (
+      <Material
+        key={material.name}
+        name={material.name}
+        uploading
+      />
     )
   );
 

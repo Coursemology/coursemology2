@@ -40,7 +40,6 @@ const contextTypes = {
 };
 
 class OnlineEditorPythonView extends React.Component {
-
   testCaseCreateHandler(type) {
     return (e) => {
       e.preventDefault();
@@ -175,7 +174,7 @@ class OnlineEditorPythonView extends React.Component {
           intl: this.props.intl,
         }}
       />
-      ));
+    ));
 
     return (
       <Card initiallyExpanded>
@@ -250,7 +249,7 @@ class OnlineEditorPythonView extends React.Component {
     >
       {testCaseError}
     </div>
-      );
+    );
 
     return (
       <div>

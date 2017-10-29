@@ -18,6 +18,6 @@ $(document).ready(() => {
           <SurveysLayout />
         </Router>
       </ProviderWrapper>
-    , mountNode);
+      , mountNode);
   }
 });

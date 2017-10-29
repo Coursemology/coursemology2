@@ -40,7 +40,6 @@ const defaultProps = {
 };
 
 class VideoPlayerSlider extends React.Component {
-
   componentWillMount() {
     if (VideoPlayerSlider.TippedSlider !== undefined) return; // Already loaded
 

@@ -1,7 +1,6 @@
 import BaseAPI from './Base';
 
 class AttachmentsAPI extends BaseAPI {
-
   delete(attachmentId) {
     return this.getClient().delete(`${AttachmentsAPI._getUrlPrefix()}/${attachmentId}`);
   }

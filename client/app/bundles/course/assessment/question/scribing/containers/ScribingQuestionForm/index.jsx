@@ -76,8 +76,8 @@ class ScribingQuestionForm extends React.Component {
     const { isSubmitting } = this.props.data;
     const { formatMessage } = this.props.intl;
     return (isSubmitting) ?
-           formatMessage(translations.submittingMessage) :
-           formatMessage(translations.submitButton);
+      formatMessage(translations.submittingMessage) :
+      formatMessage(translations.submitButton);
   }
 
   renderErrorMessage() {
@@ -85,8 +85,7 @@ class ScribingQuestionForm extends React.Component {
     return errors && errors.length > 0 ?
       <div className="alert alert-danger">
         {errors.map(errorMessage => (<div key={errorMessage}>{errorMessage}</div>))}
-      </div> : null
-    ;
+      </div> : null;
   }
 
   renderExistingAttachmentLabel() {
@@ -137,7 +136,7 @@ class ScribingQuestionForm extends React.Component {
 
   render() {
     const { handleSubmit, submitting,
-            intl, scribingId } = this.props;
+      intl, scribingId } = this.props;
     const question = this.props.data.question;
     const onSubmit = scribingId ? this.handleUpdateQuestion : this.handleCreateQuestion;
 
@@ -150,11 +149,11 @@ class ScribingQuestionForm extends React.Component {
     );
     const lessThan1000 = value => (
       value && value >= 1000 ?
-      intl.formatMessage(translations.valueMoreThanEqual1000Error) : undefined
+        intl.formatMessage(translations.valueMoreThanEqual1000Error) : undefined
     );
     const nonNegative = value => (
       value && value < 0 ?
-      intl.formatMessage(translations.positiveNumberValidationError) : undefined
+        intl.formatMessage(translations.positiveNumberValidationError) : undefined
     );
 
     return (

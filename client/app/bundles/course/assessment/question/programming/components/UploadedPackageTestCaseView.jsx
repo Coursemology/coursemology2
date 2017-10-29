@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
 import { Card, CardHeader } from 'material-ui/Card';
 import { Table, TableBody, TableHeader, TableHeaderColumn,
-         TableRow, TableRowColumn } from 'material-ui/Table';
+  TableRow, TableRowColumn } from 'material-ui/Table';
 import ExpandableText from 'lib/components/ExpandableText';
 
 import styles from './UploadedPackageTestCaseView.scss';
@@ -57,7 +57,6 @@ const translations = defineMessages({
 });
 
 class UploadedPackageTestCaseView extends React.Component {
-
   renderTable(tests) {
     if (tests.size > 0) {
       const rows = tests.map(test => (

@@ -14,7 +14,7 @@ export default function (state = {}, action) {
         ...state,
         ...action.payload.answers.reduce((obj, answer) =>
           ({ ...obj, [answer.questionId]: answer.testCases })
-        , {}),
+          , {}),
       };
     case actions.AUTOGRADE_SUCCESS:
     case actions.RESET_SUCCESS: {

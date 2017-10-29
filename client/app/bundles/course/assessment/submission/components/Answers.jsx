@@ -6,7 +6,7 @@ import { Field, FieldArray } from 'redux-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { RadioButton } from 'material-ui/RadioButton';
 import { Table, TableBody, TableHeader, TableHeaderColumn,
-         TableRow, TableRowColumn } from 'material-ui/Table';
+  TableRow, TableRowColumn } from 'material-ui/Table';
 import { green50 } from 'material-ui/styles/colors';
 
 // eslint-disable-next-line import/extensions, import/no-extraneous-dependencies, import/no-unresolved

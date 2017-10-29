@@ -41,7 +41,6 @@ const contextTypes = {
 };
 
 class OnlineEditorCppView extends React.Component {
-
   testCaseCreateHandler(type) {
     return (e) => {
       e.preventDefault();
@@ -176,7 +175,7 @@ class OnlineEditorCppView extends React.Component {
           intl: this.props.intl,
         }}
       />
-      ));
+    ));
 
     return (
       <Card initiallyExpanded>
@@ -251,7 +250,7 @@ class OnlineEditorCppView extends React.Component {
     >
       {testCaseError}
     </div>
-      );
+    );
 
     return (
       <div>

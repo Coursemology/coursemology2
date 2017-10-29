@@ -1,7 +1,6 @@
 import BaseAssessmentAPI from './Base';
 
 export default class SubmissionsAPI extends BaseAssessmentAPI {
-
   index() {
     return this.getClient().get(this._getUrlPrefix());
   }

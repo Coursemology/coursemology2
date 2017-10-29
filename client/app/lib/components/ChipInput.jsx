@@ -90,7 +90,7 @@ const getStyles = (props, context, state) => {
 
 /* eslint-disable react/prop-types */
 const defaultChipRenderer =
-  ({ value, text, isFocused, isDisabled, handleClick, handleRequestDelete }, key) => (
+  ({ text, isFocused, isDisabled, handleClick, handleRequestDelete }, key) => (
     <Chip
       key={key}
       style={{
@@ -163,8 +163,6 @@ class ChipInput extends React.Component {
     this.state = {
       isFocused: false,
       errorText: undefined,
-      isClean: true,
-      chips: [],
       focusedChip: null,
       inputValue: '',
     };

@@ -37,8 +37,6 @@ const styles = {
 };
 
 class VisibleUploadedFileView extends Component {
-
-
   static buildAttachmentUrl(attachment) {
     return `/attachments/${attachment.id}`;
   }

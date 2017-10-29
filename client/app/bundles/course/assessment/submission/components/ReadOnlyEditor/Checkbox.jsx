@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 export default class Checkbox extends Component {
   static propTypes = {
-    style: PropTypes.object,        // eslint-disable-line react/forbid-prop-types
+    style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     checked: PropTypes.bool.isRequired,
     disabled: PropTypes.bool.isRequired,
     indeterminate: PropTypes.bool,
@@ -24,8 +24,8 @@ export default class Checkbox extends Component {
         style={style}
         ref={(input) => {
           if (input) {
-            input.checked = checked;              // eslint-disable-line no-param-reassign
-            input.indeterminate = indeterminate;  // eslint-disable-line no-param-reassign
+            input.checked = checked; // eslint-disable-line no-param-reassign
+            input.indeterminate = indeterminate; // eslint-disable-line no-param-reassign
           }
         }}
         onChange={onChange}

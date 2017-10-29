@@ -34,7 +34,7 @@ class VisibleSubmissionEditIndex extends Component {
 
     const newSubmission = !!getUrlParameter('new_submission') && getUrlParameter('new_submission') === 'true';
     const stepString = getUrlParameter('step');
-    const step = isNaN(stepString) || stepString === '' ? null : parseInt(stepString, 10) - 1;
+    const step = Number.isNaN(stepString) || stepString === '' ? null : parseInt(stepString, 10) - 1;
 
     this.state = { newSubmission, step };
   }
@@ -126,7 +126,7 @@ class VisibleSubmissionEditIndex extends Component {
 
   handleSaveGrade() {
     const { dispatch, match: { params }, grading, exp,
-            submission: { workflowState } } = this.props;
+      submission: { workflowState } } = this.props;
     const published = workflowState === workflowStates.Published;
     dispatch(saveGrade(params.submissionId, Object.values(grading), exp, published));
   }
@@ -213,7 +213,7 @@ class VisibleSubmissionEditIndex extends Component {
     const { newSubmission, step } = this.state;
     const {
       assessment: { autograded, delayedGradePublication, tabbedView,
-                    skippable, questionIds, passwordProtected, categoryId, tabId },
+        skippable, questionIds, passwordProtected, categoryId, tabId },
       submission: { graderView, canUpdate, maxStep, workflowState },
       explanations,
       grading,

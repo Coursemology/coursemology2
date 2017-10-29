@@ -15,7 +15,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { explanationShape, questionShape, questionFlagsShape,
-        questionGradeShape, topicShape } from '../../propTypes';
+  questionGradeShape, topicShape } from '../../propTypes';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import QuestionGrade from '../../containers/QuestionGrade';
 import GradingPanel from '../../containers/GradingPanel';
@@ -252,7 +252,7 @@ class SubmissionEditForm extends Component {
 
   renderAutogradeSubmissionButton() {
     const { intl, graderView, submitted, handleAutogradeSubmission,
-            isAutograding, isSaving } = this.props;
+      isAutograding, isSaving } = this.props;
     if (graderView && submitted) {
       const progressIcon = <CircularProgress size={24} />;
 
@@ -305,7 +305,7 @@ class SubmissionEditForm extends Component {
 
   renderMarkButton() {
     const { intl, delayedGradePublication, grading,
-            graderView, submitted, handleMark, isSaving } = this.props;
+      graderView, submitted, handleMark, isSaving } = this.props;
     if (delayedGradePublication && graderView && submitted) {
       const anyUngraded = Object.values(grading).some(
         q => q.grade === undefined || q.grade === null);
@@ -342,7 +342,7 @@ class SubmissionEditForm extends Component {
 
   renderPublishButton() {
     const { intl, delayedGradePublication, graderView, grading,
-            submitted, handlePublish, isSaving } = this.props;
+      submitted, handlePublish, isSaving } = this.props;
     if (!delayedGradePublication && graderView && submitted) {
       const anyUngraded = Object.values(grading).some(
         q => q.grade === undefined || q.grade === null);

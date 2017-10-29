@@ -55,7 +55,7 @@ const sortResultsQuestionElements = (question) => {
  */
 export const sortResultsSectionElements = anonymous => section => (
   anonymous ? sortAttributeArray(section, 'questions') :
-  sortAttributeArray(section, 'questions', sortResultsQuestionElements)
+    sortAttributeArray(section, 'questions', sortResultsQuestionElements)
 );
 
 export const sortSurveysByDate = surveys => surveys.sort((a, b) => {

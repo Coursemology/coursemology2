@@ -118,7 +118,7 @@ export function autogradeSubmission(id) {
           () => dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_FAILURE })
         );
       })
-    .catch(() => dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_FAILURE }));
+      .catch(() => dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_FAILURE }));
   };
 }
 

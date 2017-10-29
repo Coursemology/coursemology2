@@ -55,7 +55,6 @@ const styles = {
 };
 
 export default class WideEditor extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -132,7 +131,8 @@ export default class WideEditor extends Component {
                         <code
                           dangerouslySetInnerHTML={{ __html: line }}
                           style={{ whiteSpace: 'inherit' }}
-                        /></pre>
+                        />
+                      </pre>
                     </div>
                   ))}
                 </div>

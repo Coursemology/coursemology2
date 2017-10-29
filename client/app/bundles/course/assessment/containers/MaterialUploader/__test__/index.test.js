@@ -76,7 +76,7 @@ describe('<MaterialUploader />', () => {
     materailUploder.find('input[type="file"]').simulate('change', {
       target: {
         files: [
-           { name: 'Uploading file' },
+          { name: 'Uploading file' },
         ],
       },
     });

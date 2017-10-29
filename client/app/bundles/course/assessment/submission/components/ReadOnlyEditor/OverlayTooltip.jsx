@@ -42,7 +42,7 @@ const placementStyles = {
 
 export default class OverlayTooltip extends Component {
   static propTypes = {
-    style: PropTypes.object,            // eslint-disable-line react/forbid-prop-types
+    style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     placement: PropTypes.oneOf(['left', 'right', 'bottom']).isRequired,
     arrowOffsetLeft: PropTypes.string,
     arrowOffsetTop: PropTypes.string,

@@ -37,11 +37,11 @@ function buildFormData($form) {
  * @param {HTMLElement} form The submitted form
  */
 
- /**
-  * @callback formSubmitFailureCallback
-  * @param {data} data The server response
-  * @param {HTMLElement} form The submitted form
-  */
+/**
+ * @callback formSubmitFailureCallback
+ * @param {data} data The server response
+ * @param {HTMLElement} form The submitted form
+ */
 
 /**
  * Submits a form and disable form input.

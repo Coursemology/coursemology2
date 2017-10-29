@@ -29,7 +29,6 @@ const styles = {
 };
 
 export default class WideComments extends Component {
-
   renderComments(lineNumber, annotation) {
     const {
       activeComment, answerId, fileId, expanded,

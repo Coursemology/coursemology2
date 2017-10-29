@@ -95,7 +95,6 @@ const translations = defineMessages({
 });
 
 class VisibleTestCaseView extends Component {
-
   static renderStaffOnlyTestCasesWarning() {
     return (
       <span style={{ display: 'inline-block', marginLeft: 5 }}>

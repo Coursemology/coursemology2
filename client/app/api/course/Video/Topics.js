@@ -3,7 +3,6 @@ import { getVideoId } from 'lib/helpers/url-helpers';
 import BaseCourseAPI from '../Base';
 
 export default class TopicsAPI extends BaseCourseAPI {
-
   /**
    * topic = {
    *    timestamp: int

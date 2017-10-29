@@ -5,7 +5,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
 import { white, red100, red200, red900, green200, green500, green900,
-         lightBlue400, blue800 } from 'material-ui/styles/colors';
+  lightBlue400, blue800 } from 'material-ui/styles/colors';
 import { Stepper, Step, StepButton, StepLabel } from 'material-ui/Stepper';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -45,7 +45,6 @@ const styles = {
 };
 
 class SubmissionEditStepForm extends Component {
-
   static isLastQuestion(questionIds, stepIndex) {
     return stepIndex + 1 === questionIds.length;
   }
@@ -63,19 +62,6 @@ class SubmissionEditStepForm extends Component {
       unsubmitConfirmation: false,
       resetConfirmation: false,
     };
-  }
-
-  componentDidMount() {
-    this.updateScreenWidth();
-    window.addEventListener('resize', () => this.updateScreenWidth());
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', () => this.updateScreenWidth());
-  }
-
-  updateScreenWidth() {
-    this.setState({ width: window.innerWidth });
   }
 
   shouldRenderContinueButton() {

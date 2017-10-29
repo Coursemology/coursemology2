@@ -53,7 +53,6 @@ const styles = {
 };
 
 class VoiceResponseAnswer extends Component {
-
   static propTypes = {
     answerId: PropTypes.number.isRequired,
     readOnly: PropTypes.bool.isRequired,

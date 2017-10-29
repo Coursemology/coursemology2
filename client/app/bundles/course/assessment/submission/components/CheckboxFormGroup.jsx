@@ -4,7 +4,6 @@ import Checkbox from 'material-ui/Checkbox';
 import { green50 } from 'material-ui/styles/colors';
 
 export default class CheckboxFormGroup extends Component {
-
   render() {
     const { readOnly, options, input } = this.props;
     return (

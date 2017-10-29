@@ -4,21 +4,21 @@ let recorder;
 let recording = false;
 
 const initRecorder = () => Promise.resolve()
-    .then(() => {
-      window.AudioContext = window.AudioContext || window.webkitAudioContext;
-      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
-      window.URL = window.URL || window.webkitURL;
-      const audioContext = new AudioContext();
+  .then(() => {
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+    window.URL = window.URL || window.webkitURL;
+    const audioContext = new AudioContext();
 
-      const startUserMedia = (stream) => {
-        const mediaStreamSource = audioContext.createMediaStreamSource(stream);
-        recorder = new Recorder(mediaStreamSource);
-        return recorder;
-      };
+    const startUserMedia = (stream) => {
+      const mediaStreamSource = audioContext.createMediaStreamSource(stream);
+      recorder = new Recorder(mediaStreamSource);
+      return recorder;
+    };
 
-      return navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(startUserMedia);
-    });
+    return navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(startUserMedia);
+  });
 
 const startRecord = () => {
   if (recording) {

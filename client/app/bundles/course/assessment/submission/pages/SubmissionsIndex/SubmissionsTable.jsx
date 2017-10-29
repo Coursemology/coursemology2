@@ -38,7 +38,6 @@ const styles = {
 };
 
 export default class SubmissionsTable extends React.Component {
-
   static formatDate(date) {
     return date ? moment(date).format('DD MMM HH:mm') : null;
   }
@@ -70,7 +69,7 @@ export default class SubmissionsTable extends React.Component {
     const gradeString =
       ((submission.workflowState === workflowStates.Attempting) ||
       (submission.workflowState === workflowStates.Submitted)) ? '--' :
-      SubmissionsTable.formatGrade(submission.grade);
+        SubmissionsTable.formatGrade(submission.grade);
 
     const maximumGradeString = SubmissionsTable.formatGrade(assessment.maximumGrade);
 

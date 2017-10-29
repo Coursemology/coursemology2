@@ -51,7 +51,7 @@ class VisibleGradingPanel extends Component {
     const { updateMultiplier } = this.props;
     const parsedValue = parseFloat(value);
 
-    if (isNaN(parsedValue) || parsedValue < 0) {
+    if (Number.isNaN(parsedValue) || parsedValue < 0) {
       updateMultiplier(0);
     } else if (parsedValue > 1) {
       updateMultiplier(1);

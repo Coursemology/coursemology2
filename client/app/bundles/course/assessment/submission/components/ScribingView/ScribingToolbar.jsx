@@ -19,7 +19,7 @@ import ShapePopover from './popovers/ShapePopover';
 import { scribingShape } from '../../propTypes';
 import { scribingTranslations as translations } from '../../translations';
 import { scribingTools, scribingShapes, scribingToolColor, scribingToolThickness,
-         scribingToolLineStyle, scribingPopoverTypes } from '../../constants';
+  scribingToolLineStyle, scribingPopoverTypes } from '../../constants';
 
 const propTypes = {
   intl: intlShape.isRequired,
@@ -143,8 +143,8 @@ class ScribingToolbar extends Component {
 
   onClickPopover = (event, popoverType) => {
     const popoverAnchor = popoverType === scribingPopoverTypes.LAYER ?
-            event.currentTarget :
-            event.currentTarget.parentElement.parentElement;
+      event.currentTarget :
+      event.currentTarget.parentElement.parentElement;
     this.setState({
       ...this.state,
       popoverAnchor,
