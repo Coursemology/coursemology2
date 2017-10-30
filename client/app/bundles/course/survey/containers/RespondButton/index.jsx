@@ -42,28 +42,28 @@ const RespondButton = ({
   const goToResponseCreate = () => dispatch(createResponse(surveyId));
 
   let labelTranslation = translations.notOpen;
-  let onTouchTap = () => {};
+  let onClick = () => {};
   let disabled = false;
   let primary = false;
 
   if (isStarted && (canModify || canSubmit)) {
     labelTranslation = submittedAt ? translations.view : translations.continue;
-    onTouchTap = goToResponseEdit;
+    onClick = goToResponseEdit;
     primary = !submittedAt;
   } else if (!isStarted && (canRespond || canModify || canSubmit)) {
     labelTranslation = translations.start;
-    onTouchTap = goToResponseCreate;
+    onClick = goToResponseCreate;
     primary = true;
   } else if (submittedAt) {
     // From this case on, both canModify and canSubmit both false
     labelTranslation = translations.view;
-    onTouchTap = canModify ? goToResponseEdit : goToResponseShow;
+    onClick = canModify ? goToResponseEdit : goToResponseShow;
   } else if (startAt && moment(startAt).isAfter()) {
     disabled = true;
   } else if (endAt && moment(endAt).isBefore()) {
     labelTranslation = translations.expired;
     if (isStarted) {
-      onTouchTap = goToResponseShow;
+      onClick = goToResponseShow;
     } else {
       disabled = true;
     }
@@ -72,7 +72,7 @@ const RespondButton = ({
   return (
     <RaisedButton
       label={<FormattedMessage {...labelTranslation} />}
-      {...{ onTouchTap, disabled, primary }}
+      {...{ onClick, disabled, primary }}
     />
   );
 };

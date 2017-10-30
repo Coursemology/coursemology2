@@ -62,7 +62,7 @@ const testExpandLongQuestion = (question) => {
   );
   expect(resultsQuestion.find('Table')).toHaveLength(0);
   const expandButton = resultsQuestion.find('RaisedButton').first().find('button');
-  ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(expandButton.node));
+  ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(expandButton.node));
   expect(resultsQuestion.find('Table')).toHaveLength(1);
 };
 

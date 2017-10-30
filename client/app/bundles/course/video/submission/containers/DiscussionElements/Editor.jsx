@@ -39,7 +39,7 @@ const propTypes = {
   showCancel: PropTypes.bool,
   cancelButtonText: PropTypes.node,
   submitButtonText: PropTypes.node,
-  children: React.PropTypes.element,
+  children: PropTypes.element,
   onSubmit: PropTypes.func,
   onCancel: PropTypes.func,
   onContentUpdate: PropTypes.func,

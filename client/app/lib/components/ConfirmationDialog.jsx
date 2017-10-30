@@ -66,19 +66,19 @@ class ConfirmationDialog extends React.Component {
         keyboardFocused
         className="cancel-btn"
         disabled={disableCancelButton}
-        onTouchTap={onCancel}
+        onClick={onCancel}
         style={buttonStyle}
         label={cancelButtonText || intl.formatMessage(formTranslations.cancel)}
-        ref={button => (this.cancelButton = button)}
+        ref={(button) => { this.cancelButton = button; }}
       />,
       <FlatButton
         primary
         className="confirm-btn"
         disabled={disableConfirmButton}
-        onTouchTap={onConfirm}
+        onClick={onConfirm}
         style={buttonStyle}
         label={confirmationButtonText}
-        ref={button => (this.confirmButton = button)}
+        ref={(button) => { this.confirmButton = button; }}
       />,
     ];
 

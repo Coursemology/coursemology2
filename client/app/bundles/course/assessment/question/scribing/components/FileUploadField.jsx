@@ -15,7 +15,7 @@ const propTypes = {
   field: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   errorMessage: PropTypes.string.isRequired,
-  validate: PropTypes.array,
+  validate: PropTypes.arrayOf(PropTypes.func),
   isLoading: PropTypes.bool,
 };
 

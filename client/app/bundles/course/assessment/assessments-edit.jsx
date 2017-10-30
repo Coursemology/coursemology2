@@ -11,10 +11,10 @@ $(document).ready(() => {
     const dataAttr = mountNode.getAttribute('data');
     const data = JSON.parse(dataAttr);
     const store = storeCreator({});
-    const tab_attr = data.tab_attributes;
-    const current_tab = {
+    const tabAttr = data.tab_attributes;
+    const currentTab = {
       tab_id: data.attributes.tab_id,
-      title: categoryAndTabTitle(tab_attr.category_title, tab_attr.tab_title, tab_attr.only_tab),
+      title: categoryAndTabTitle(tabAttr.category_title, tabAttr.tab_title, tabAttr.only_tab),
     };
 
     const Page = () => (
@@ -26,7 +26,7 @@ $(document).ready(() => {
           conditionAttributes={data.condition_attributes}
           initialValues={{
             ...data.attributes,
-            tabs: [current_tab],
+            tabs: [currentTab],
             password_protected: !!data.attributes.password,
           }}
         />

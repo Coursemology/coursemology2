@@ -12,11 +12,11 @@ const styles = {
 };
 
 const propTypes = {
-  onTouchTap: PropTypes.func,
+  onClick: PropTypes.func,
 };
 
-const AddButton = ({ onTouchTap }) => (
-  <FloatingActionButton style={styles.floatingButton} {...{ onTouchTap }}>
+const AddButton = ({ onClick }) => (
+  <FloatingActionButton style={styles.floatingButton} {...{ onClick }}>
     <ContentAdd />
   </FloatingActionButton>
 );

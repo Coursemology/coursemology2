@@ -83,7 +83,7 @@ class ObjectDuplication extends React.Component {
     dispatch: PropTypes.func.isRequired,
   }
 
-  static renderSidebarItem(translation, count, onTouchTap) {
+  static renderSidebarItem(translation, count, onClick) {
     return (
       <ListItem
         leftAvatar={
@@ -95,7 +95,7 @@ class ObjectDuplication extends React.Component {
             { count }
           </Avatar>
         }
-        onTouchTap={onTouchTap}
+        onClick={onClick}
       >
         <FormattedMessage {...translation} />
       </ListItem>
@@ -141,7 +141,7 @@ class ObjectDuplication extends React.Component {
                 { targetCourseId ? <Done color={grey50} /> : <Clear color={grey50} /> }
               </Avatar>
             }
-            onTouchTap={() => this.setState({ panel: panels.TARGET_COURSE })}
+            onClick={() => this.setState({ panel: panels.TARGET_COURSE })}
           >
             <FormattedMessage {...translations.targetCourse} />
           </ListItem>

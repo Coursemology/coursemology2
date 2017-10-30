@@ -158,7 +158,7 @@ class SurveyDetails extends React.Component {
               <RaisedButton
                 style={styles.button}
                 label={<FormattedMessage {...surveyTranslations.results} />}
-                onTouchTap={() => history.push(
+                onClick={() => history.push(
                 `/courses/${courseId}/surveys/${survey.id}/results`
               )}
               /> : null
@@ -168,7 +168,7 @@ class SurveyDetails extends React.Component {
               <RaisedButton
                 style={styles.button}
                 label={<FormattedMessage {...surveyTranslations.responses} />}
-                onTouchTap={() => history.push(
+                onClick={() => history.push(
                 `/courses/${courseId}/surveys/${survey.id}/responses`
               )}
               /> : null

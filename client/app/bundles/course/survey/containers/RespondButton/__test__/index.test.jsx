@@ -33,7 +33,7 @@ describe('<RespondButton />', () => {
     );
 
     const respondButtonNode = respondButton.find('button').first().node;
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(respondButtonNode));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(respondButtonNode));
 
     await sleep(1);
     expect(spyCreate).toHaveBeenCalledWith(surveyId);

@@ -24,7 +24,7 @@ const MAX_TEST_CASES = 99;
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
   testData: PropTypes.instanceOf(Immutable.Map).isRequired,
-  actions: React.PropTypes.shape({
+  actions: PropTypes.shape({
     toggleSubmitAsFile: PropTypes.func.isRequired,
     updateCodeBlock: PropTypes.func.isRequired,
     createTestCase: PropTypes.func.isRequired,
@@ -41,7 +41,7 @@ const propTypes = {
 };
 
 const contextTypes = {
-  muiTheme: React.PropTypes.object.isRequired,
+  muiTheme: PropTypes.object.isRequired,
 };
 
 class OnlineEditorJavaView extends React.Component {

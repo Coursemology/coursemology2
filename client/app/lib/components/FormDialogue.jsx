@@ -54,7 +54,7 @@ class FormDialogue extends React.Component {
       <FlatButton
         label={intl.formatMessage(formTranslations.cancel)}
         primary
-        onTouchTap={this.handleFormClose}
+        onClick={this.handleFormClose}
         {...{ disabled }}
       />,
       <FlatButton
@@ -62,7 +62,7 @@ class FormDialogue extends React.Component {
         label={intl.formatMessage(formTranslations.submit)}
         primary
         keyboardFocused
-        onTouchTap={submitForm}
+        onClick={submitForm}
         {...{ disabled }}
       />,
     ];

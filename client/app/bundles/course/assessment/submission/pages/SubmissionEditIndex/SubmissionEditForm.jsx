@@ -1,5 +1,3 @@
-/* eslint-disable react/no-danger */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
@@ -101,7 +99,7 @@ class SubmissionEditForm extends Component {
             style={styles.formButton}
             backgroundColor={white}
             label={intl.formatMessage(translations.reset)}
-            onTouchTap={() => this.setState({ resetConfirmation: true, resetAnswerId: answerId })}
+            onClick={() => this.setState({ resetConfirmation: true, resetAnswerId: answerId })}
             disabled={isAutograding || isResetting || isSaving}
           />
           {autogradable ? <RaisedButton
@@ -109,7 +107,7 @@ class SubmissionEditForm extends Component {
             backgroundColor={red900}
             secondary
             label={runCodeLabel}
-            onTouchTap={() => handleSubmitAnswer(answerId)}
+            onClick={() => handleSubmitAnswer(answerId)}
             disabled={isAutograding || isResetting || isSaving || (!graderView && attemptsLeft === 0)}
           /> : null}
           {isAutograding || isResetting ? <CircularProgress size={36} style={{ position: 'absolute' }} /> : null}
@@ -228,7 +226,7 @@ class SubmissionEditForm extends Component {
           style={styles.formButton}
           primary
           label={intl.formatMessage(translations.saveDraft)}
-          onTouchTap={handleSaveDraft}
+          onClick={handleSaveDraft}
           disabled={pristine || isSaving}
         />
       );
@@ -244,7 +242,7 @@ class SubmissionEditForm extends Component {
           style={styles.formButton}
           primary
           label={intl.formatMessage(translations.saveGrade)}
-          onTouchTap={handleSaveGrade}
+          onClick={handleSaveGrade}
           disabled={isSaving}
         />
       );
@@ -264,7 +262,7 @@ class SubmissionEditForm extends Component {
           primary
           label={intl.formatMessage(translations.autograde)}
           icon={isAutograding ? progressIcon : null}
-          onTouchTap={handleAutogradeSubmission}
+          onClick={handleAutogradeSubmission}
           disabled={isSaving || isAutograding}
         />
       );
@@ -280,7 +278,7 @@ class SubmissionEditForm extends Component {
           style={styles.formButton}
           secondary
           label={intl.formatMessage(translations.finalise)}
-          onTouchTap={() => this.setState({ submitConfirmation: true })}
+          onClick={() => this.setState({ submitConfirmation: true })}
           disabled={isSaving}
         />
       );
@@ -297,7 +295,7 @@ class SubmissionEditForm extends Component {
           backgroundColor={red900}
           secondary
           label={intl.formatMessage(translations.unsubmit)}
-          onTouchTap={() => this.setState({ unsubmitConfirmation: true })}
+          onClick={() => this.setState({ unsubmitConfirmation: true })}
           disabled={isSaving}
         />
       );
@@ -317,7 +315,7 @@ class SubmissionEditForm extends Component {
           backgroundColor={yellow900}
           labelColor={white}
           label={intl.formatMessage(translations.mark)}
-          onTouchTap={handleMark}
+          onClick={handleMark}
           disabled={isSaving || anyUngraded}
         />
       );
@@ -334,7 +332,7 @@ class SubmissionEditForm extends Component {
           backgroundColor={yellow900}
           labelColor={white}
           label={intl.formatMessage(translations.unmark)}
-          onTouchTap={handleUnmark}
+          onClick={handleUnmark}
           disabled={isSaving}
         />
       );
@@ -355,7 +353,7 @@ class SubmissionEditForm extends Component {
           backgroundColor={red900}
           secondary
           label={intl.formatMessage(translations.publish)}
-          onTouchTap={handlePublish}
+          onClick={handlePublish}
           disabled={isSaving || anyUngraded}
         />
       );
@@ -421,7 +419,7 @@ class SubmissionEditForm extends Component {
           <FlatButton
             primary
             label="OK"
-            onTouchTap={() => this.setState({ examNotice: false })}
+            onClick={() => this.setState({ examNotice: false })}
           />
         }
         modal

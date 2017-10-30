@@ -22,7 +22,7 @@ const MAX_TEST_CASES = 99;
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
   dataFiles: PropTypes.instanceOf(Immutable.Map).isRequired,
-  actions: React.PropTypes.shape({
+  actions: PropTypes.shape({
     updateCodeBlock: PropTypes.func.isRequired,
     createTestCase: PropTypes.func.isRequired,
     updateTestCase: PropTypes.func.isRequired,
@@ -37,7 +37,7 @@ const propTypes = {
 };
 
 const contextTypes = {
-  muiTheme: React.PropTypes.object.isRequired,
+  muiTheme: PropTypes.object.isRequired,
 };
 
 class OnlineEditorCppView extends React.Component {

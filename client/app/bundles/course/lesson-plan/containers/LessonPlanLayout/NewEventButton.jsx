@@ -55,7 +55,7 @@ class NewEventButton extends React.Component {
       <RaisedButton
         primary
         label={<FormattedMessage {...translations.newEvent} />}
-        onTouchTap={this.showForm}
+        onClick={this.showForm}
       />
     );
   }

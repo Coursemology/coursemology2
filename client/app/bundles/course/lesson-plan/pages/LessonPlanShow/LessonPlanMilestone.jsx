@@ -108,11 +108,11 @@ class LessonPlanMilestone extends React.PureComponent {
       >
         <MenuItem
           primaryText={intl.formatMessage(translations.editMilestone)}
-          onTouchTap={this.showEditMilestoneDialog}
+          onClick={this.showEditMilestoneDialog}
         />
         <MenuItem
           primaryText={intl.formatMessage(translations.deleteMilestone)}
-          onTouchTap={this.deleteMilestoneHandler}
+          onClick={this.deleteMilestoneHandler}
         />
       </IconMenu>
     );

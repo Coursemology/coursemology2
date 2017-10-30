@@ -44,7 +44,7 @@ export default class CommentField extends Component {
         <RaisedButton
           primary
           label={<FormattedMessage {...translations.comment} />}
-          onTouchTap={() => createComment(value)}
+          onClick={() => createComment(value)}
           disabled={value === ''}
         />
       </div>

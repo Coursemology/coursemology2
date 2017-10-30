@@ -73,7 +73,7 @@ class NewQuestionButton extends React.Component {
       <FlatButton
         primary
         label={<FormattedMessage {...translations.addQuestion} />}
-        onTouchTap={this.showNewQuestionForm}
+        onClick={this.showNewQuestionForm}
         disabled={this.props.disabled}
       />
     );

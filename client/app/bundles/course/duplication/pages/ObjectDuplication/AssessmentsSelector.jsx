@@ -51,13 +51,13 @@ class AssessmentsSelector extends React.Component {
     return (
       <div>
         <a
-          onTouchTap={() => bulkSelectorMethod(item, true)}
+          onClick={() => bulkSelectorMethod(item, true)}
           style={styles.selectLink}
         >
           <FormattedMessage {...translations.selectAll} />
         </a>
         <a
-          onTouchTap={() => bulkSelectorMethod(item, false)}
+          onClick={() => bulkSelectorMethod(item, false)}
           style={styles.deselectLink}
         >
           <FormattedMessage {...translations.deselectAll} />

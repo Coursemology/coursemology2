@@ -162,7 +162,7 @@ class VoiceResponseAnswer extends Component {
             disabled={recording}
             icon={<MicIcon />}
             label={intl.formatMessage(translations.startRecording)}
-            onTouchTap={this.onStartRecord}
+            onClick={this.onStartRecord}
           />
           <FlatButton
             primary
@@ -170,7 +170,7 @@ class VoiceResponseAnswer extends Component {
             icon={<StopIcon />}
             label={intl.formatMessage(translations.stopRecording)}
             disabled={!recording || recordingComponentId !== this.currentRecordingComponentId()}
-            onTouchTap={this.onStopRecord(field)}
+            onClick={this.onStopRecord(field)}
           />
         </div>
       </div>

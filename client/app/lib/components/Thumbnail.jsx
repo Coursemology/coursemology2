@@ -50,7 +50,7 @@ class Thumbnail extends React.PureComponent {
 
   render() {
     // eslint-disable-next-line no-unused-vars
-    const { src, alt, file, onTouchTap, style, containerStyle, rootStyle, ...props } = this.props;
+    const { src, alt, file, onClick, style, containerStyle, rootStyle, ...props } = this.props;
     const source = src || this.state.src;
     const altText = alt || this.state.alt || src;
 
@@ -68,9 +68,9 @@ class Thumbnail extends React.PureComponent {
       objectFit: 'contain',
     };
 
-    const onThumbnailTouchTap = onTouchTap && typeof (onTouchTap) === 'function' ?
+    const onThumbnailTouchTap = onClick && typeof (onClick) === 'function' ?
       (event) => {
-        onTouchTap(event);
+        onClick(event);
         this.setState({ open: true });
       } :
       () => this.setState({ open: true });
@@ -79,20 +79,21 @@ class Thumbnail extends React.PureComponent {
       <FlatButton
         label={<FormattedMessage {...formTranslations.close} />}
         primary
-        onTouchTap={() => this.setState({ open: false })}
+        onClick={() => this.setState({ open: false })}
       />,
     ];
 
     return (
       <div style={rootStyle}>
         <div style={containerStyle}>
-          <img
-            src={source}
-            alt={altText}
-            onTouchTap={onThumbnailTouchTap}
-            style={thumbnailStyle}
-            {...props}
-          />
+          <a onClick={onThumbnailTouchTap}>
+            <img
+              src={source}
+              alt={altText}
+              style={thumbnailStyle}
+              {...props}
+            />
+          </a>
         </div>
         <Dialog
           actions={actions}
@@ -118,7 +119,7 @@ Thumbnail.propTypes = {
   src: PropTypes.string,
   alt: PropTypes.string,
   file: PropTypes.instanceOf(File),
-  onTouchTap: PropTypes.func,
+  onClick: PropTypes.func,
   style: PropTypes.shape(),
   rootStyle: PropTypes.shape(),
   containerStyle: PropTypes.shape(),

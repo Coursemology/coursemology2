@@ -159,7 +159,7 @@ class DateTimePicker extends React.Component {
     return (
       <div style={Object.assign({}, styles.dateTimePicker, style)}>
         <IconButton
-          onTouchTap={() => !disabled && this.datePicker.openDialog()}
+          onClick={() => !disabled && this.datePicker.openDialog()}
           style={styles.pickerIconButton}
         >
           <DateRange style={styles.pickerIcon} />
@@ -178,12 +178,12 @@ class DateTimePicker extends React.Component {
         <DatePicker
           {...{ name, disabled }}
           textFieldStyle={{ display: 'none' }}
-          ref={input => (this.datePicker = input)}
+          ref={(input) => { this.datePicker = input; }}
           onChange={this.updateDate}
           value={value || undefined}
         />
         <IconButton
-          onTouchTap={() => !disabled && this.timePicker.openDialog()}
+          onClick={() => !disabled && this.timePicker.openDialog()}
           style={styles.pickerIconButton}
         >
           <Schedule style={styles.pickerIcon} />
@@ -201,7 +201,7 @@ class DateTimePicker extends React.Component {
         <TimePicker
           {...{ name, disabled }}
           textFieldStyle={{ display: 'none' }}
-          ref={input => (this.timePicker = input)}
+          ref={(input) => { this.timePicker = input; }}
           onChange={this.updateTime}
           value={value || undefined}
         />

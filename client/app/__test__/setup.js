@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types';
 import { IntlProvider, intlShape } from 'react-intl';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import injectTapEventPlugin from 'lib/injectTapEventPlugin';
-
-injectTapEventPlugin();
 
 require('babel-polyfill');
 // Our jquery is from CDN and loaded at runtime, so this is required in test.

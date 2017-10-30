@@ -16,7 +16,8 @@ import { red100, yellow100, grey100, green100, blue100, blue500 } from 'material
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import NotificationBar, { notificationShape } from 'lib/components/NotificationBar';
-import { fetchSubmissions, publishSubmissions, downloadSubmissions, downloadStatistics } from '../../actions/submissions';
+import { fetchSubmissions, publishSubmissions,
+  downloadSubmissions, downloadStatistics } from '../../actions/submissions';
 import SubmissionsTable from './SubmissionsTable';
 import { assessmentShape } from '../../propTypes';
 import { workflowStates } from '../../constants';
@@ -118,7 +119,7 @@ class VisibleSubmissionsIndex extends React.Component {
             label={<FormattedMessage {...submissionsTranslations.publishGrades} />}
             labelPosition="before"
             icon={isPublishing ? <CircularProgress size={24} /> : null}
-            onTouchTap={() => this.setState({ publishConfirmation: true })}
+            onClick={() => this.setState({ publishConfirmation: true })}
           />
         </CardActions>
       </Card>

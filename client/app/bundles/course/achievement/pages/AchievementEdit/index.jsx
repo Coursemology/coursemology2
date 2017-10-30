@@ -71,7 +71,7 @@ class EditPage extends React.Component {
             primary
             className="btn-submit"
             disabled={this.props.disabled}
-            onTouchTap={() => dispatch(submit(formNames.ACHIEVEMENT))}
+            onClick={() => dispatch(submit(formNames.ACHIEVEMENT))}
           />
         </div>
         <NotificationBar notification={this.props.notification} />

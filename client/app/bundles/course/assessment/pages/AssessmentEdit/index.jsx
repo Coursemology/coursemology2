@@ -75,7 +75,7 @@ class EditPage extends React.Component {
             label={<FormattedMessage {...translations.updateAssessment} />}
             primary
             disabled={this.props.disabled}
-            onTouchTap={() => dispatch(submit(formNames.ASSESSMENT))}
+            onClick={() => dispatch(submit(formNames.ASSESSMENT))}
           />
         </div>
         <NotificationBar notification={this.props.notification} />

@@ -20,7 +20,7 @@ const styles = {
 const EnterEditModeButton = ({ match: { params: { courseId } } }) => (
   <RaisedButton
     label={<FormattedMessage {...translations.enterEditMode} />}
-    onTouchTap={() => history.push(`/courses/${courseId}/lesson_plan/edit/`)}
+    onClick={() => history.push(`/courses/${courseId}/lesson_plan/edit/`)}
     style={styles.button}
   />
   );

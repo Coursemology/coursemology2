@@ -16,7 +16,7 @@ const propTypes = {
   anchorEl: PropTypes.object,
   onRequestClose: PropTypes.func,
   selectedLineStyle: PropTypes.string,
-  onTouchTapLineStyleChip: PropTypes.func,
+  onClickLineStyleChip: PropTypes.func,
   toolThicknessValue: PropTypes.number,
   onChangeSliderThickness: PropTypes.func,
   colorPickerColor: PropTypes.string,
@@ -52,7 +52,7 @@ const popoverStyles = {
 const LinePopover = (props) => {
   const {
     intl, lineToolType, open, anchorEl, onRequestClose,
-    selectedLineStyle, onTouchTapLineStyleChip,
+    selectedLineStyle, onClickLineStyleChip,
     toolThicknessValue, onChangeSliderThickness,
     colorPickerColor, onClickColorPicker, colorPickerPopoverOpen,
     colorPickerPopoverAnchorEl, onRequestCloseColorPickerPopover,
@@ -76,7 +76,7 @@ const LinePopover = (props) => {
         <LineStyleField
           lineToolType={lineToolType}
           selectedLineStyle={selectedLineStyle}
-          onTouchTapLineStyleChip={onTouchTapLineStyleChip}
+          onClickLineStyleChip={onClickLineStyleChip}
         />
         <LineThicknessField
           toolThicknessValue={toolThicknessValue}

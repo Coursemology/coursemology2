@@ -171,14 +171,14 @@ export default class SubmissionsTable extends React.Component {
             primaryText={<FormattedMessage {...submissionsTranslations.downloadAnswers} />}
             disabled={downloadAnswerDisabled}
             leftIcon={isDownloading ? <CircularProgress size={30} /> : <DownloadIcon />}
-            onTouchTap={downloadAnswerDisabled ? null : handleDownload}
+            onClick={downloadAnswerDisabled ? null : handleDownload}
           />
           <MenuItem
             className={downloadStatisticsDisabled ? 'download-statistics-disabled' : 'download-statistics-enabled'}
             primaryText={<FormattedMessage {...submissionsTranslations.downloadStatistics} />}
             disabled={downloadStatisticsDisabled}
             leftIcon={isStatisticsDownloading ? <CircularProgress size={30} /> : <DownloadIcon />}
-            onTouchTap={downloadStatisticsDisabled ? null : handleDownloadStatistics}
+            onClick={downloadStatisticsDisabled ? null : handleDownloadStatistics}
           />
         </IconMenu>
       </div>

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-danger */
 import 'brace/mode/python';
 import 'brace/theme/github';
 

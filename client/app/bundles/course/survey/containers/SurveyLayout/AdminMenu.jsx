@@ -119,14 +119,14 @@ class AdminMenu extends React.Component {
           survey.canUpdate ?
             <MenuItem
               primaryText={intl.formatMessage(translations.editSurvey)}
-              onTouchTap={this.showEditSurveyForm}
+              onClick={this.showEditSurveyForm}
             /> : null
         }
         {
           survey.canDelete ?
             <MenuItem
               primaryText={intl.formatMessage(translations.deleteSurvey)}
-              onTouchTap={this.deleteSurveyHandler}
+              onClick={this.deleteSurveyHandler}
             /> : null
         }
       </IconMenu>

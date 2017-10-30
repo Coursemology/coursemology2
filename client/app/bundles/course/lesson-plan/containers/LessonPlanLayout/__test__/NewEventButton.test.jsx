@@ -18,7 +18,7 @@ describe('<NewEventButton />', () => {
 
     // Click 'new event' button
     const newEventButtonNode = ReactDOM.findDOMNode(newEventButton.find('button').node);
-    ReactTestUtils.Simulate.touchTap(newEventButtonNode);
+    ReactTestUtils.Simulate.click(newEventButtonNode);
     expect(eventFormDialog.find('EventFormDialog').first().props().visible).toBe(true);
 
     // Fill event form
@@ -41,7 +41,7 @@ describe('<NewEventButton />', () => {
 
     // Submit event form
     const submitButton = eventFormDialog.find('FormDialogue').first().node.submitButton;
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(submitButton));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
     expect(spyCreate).toHaveBeenCalledWith({ lesson_plan_event: eventData });
   });
 

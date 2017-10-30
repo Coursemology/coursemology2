@@ -1,5 +1,3 @@
-/* eslint-disable react/no-danger */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
@@ -212,7 +210,7 @@ class SubmissionEditStepForm extends Component {
           style={styles.formButton}
           backgroundColor={white}
           label={intl.formatMessage(translations.reset)}
-          onTouchTap={() => this.setState({ resetConfirmation: true, resetAnswerId: answerId })}
+          onClick={() => this.setState({ resetConfirmation: true, resetAnswerId: answerId })}
           disabled={isAutograding || isResetting || isSaving}
         />
       );
@@ -232,7 +230,7 @@ class SubmissionEditStepForm extends Component {
         style={styles.formButton}
         secondary
         label={intl.formatMessage(translations.submit)}
-        onTouchTap={() => handleSubmitAnswer(answerId)}
+        onClick={() => handleSubmitAnswer(answerId)}
         disabled={isAutograding || isResetting || isSaving}
       />
     );
@@ -247,7 +245,7 @@ class SubmissionEditStepForm extends Component {
           backgroundColor={green500}
           labelColor={white}
           label={intl.formatMessage(translations.continue)}
-          onTouchTap={() => this.handleNext()}
+          onClick={() => this.handleNext()}
           disabled={this.shouldDisableContinueButton()}
         />
       );
@@ -275,7 +273,7 @@ class SubmissionEditStepForm extends Component {
           style={styles.formButton}
           primary
           label={intl.formatMessage(translations.saveDraft)}
-          onTouchTap={handleSaveDraft}
+          onClick={handleSaveDraft}
           disabled={pristine || isSaving}
         />
       );
@@ -291,7 +289,7 @@ class SubmissionEditStepForm extends Component {
           style={styles.formButton}
           primary
           label={intl.formatMessage(translations.saveGrade)}
-          onTouchTap={handleSaveGrade}
+          onClick={handleSaveGrade}
         />
       );
     }
@@ -306,7 +304,7 @@ class SubmissionEditStepForm extends Component {
           style={styles.formButton}
           secondary
           label={intl.formatMessage(translations.finalise)}
-          onTouchTap={() => this.setState({ submitConfirmation: true })}
+          onClick={() => this.setState({ submitConfirmation: true })}
           disabled={isSaving}
         />
       );
@@ -323,7 +321,7 @@ class SubmissionEditStepForm extends Component {
           backgroundColor={red900}
           secondary
           label={intl.formatMessage(translations.unsubmit)}
-          onTouchTap={() => this.setState({ unsubmitConfirmation: true })}
+          onClick={() => this.setState({ unsubmitConfirmation: true })}
         />
       );
     }

@@ -207,7 +207,8 @@ class VisibleTestCaseView extends Component {
         { graderView ? tableRowColumnFor(testCase.identifier) : null }
         {tableRowColumnFor(testCase.expression)}
         {tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.expected || ''} /> || '')}
-        { graderView || showPublicTestCasesOutput ? tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.output || ''} /> || '') : null }
+        { graderView || showPublicTestCasesOutput ?
+          tableRowColumnFor(<ExpandableText style={outputStyle} text={testCase.output || ''} /> || '') : null }
         {tableRowColumnFor(testCaseIcon)}
       </TableRow>
     );

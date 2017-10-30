@@ -22,11 +22,11 @@ describe('<DeleteSectionButton />', () => {
       mount(<DeleteSectionButton sectionId={sectionId} />, contextOptions);
 
     const deleteSectionButtonNode = ReactDOM.findDOMNode(deleteSectionButton.find('button').node);
-    ReactTestUtils.Simulate.touchTap(deleteSectionButtonNode);
+    ReactTestUtils.Simulate.click(deleteSectionButtonNode);
 
     const confirmDeleteButton =
       deleteConfirmation.find('ConfirmationDialog').first().node.confirmButton;
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(confirmDeleteButton));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmDeleteButton));
 
     expect(spyDelete).toHaveBeenCalledWith(sectionId);
   });

@@ -110,7 +110,7 @@ class ResponseForm extends React.Component {
         type="submit"
         primary
         label={<FormattedMessage {...formTranslations.save} />}
-        onTouchTap={() => onSubmit({ ...formValues, submit: false })}
+        onClick={() => onSubmit({ ...formValues, submit: false })}
         disabled={isSubmitting || pristine}
       />
     );
@@ -133,7 +133,7 @@ class ResponseForm extends React.Component {
         type="submit"
         primary
         label={<FormattedMessage {...submitButtonTranslation} />}
-        onTouchTap={handleSubmit(data => onSubmit({ ...data, submit: true }))}
+        onClick={handleSubmit(data => onSubmit({ ...data, submit: true }))}
         disabled={isSubmitting || !!response.submitted_at}
       />
     );

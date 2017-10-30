@@ -115,11 +115,11 @@ class AdminMenu extends React.PureComponent {
       >
         <MenuItem
           primaryText={intl.formatMessage(translations.editEvent)}
-          onTouchTap={this.showEditEventDialog}
+          onClick={this.showEditEventDialog}
         />
         <MenuItem
           primaryText={intl.formatMessage(translations.deleteEvent)}
-          onTouchTap={this.deleteEventHandler}
+          onClick={this.deleteEventHandler}
         />
       </IconMenu>
     );

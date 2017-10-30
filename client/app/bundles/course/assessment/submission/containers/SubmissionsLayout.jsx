@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
 
 import SubmissionEditIndex from '../pages/SubmissionEditIndex';
@@ -18,7 +17,3 @@ export default class SubmissionsLayout extends Component {
     );
   }
 }
-
-SubmissionsLayout.propTypes = {
-  children: PropTypes.node,
-};

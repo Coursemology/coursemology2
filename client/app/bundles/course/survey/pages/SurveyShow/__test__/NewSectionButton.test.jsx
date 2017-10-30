@@ -16,7 +16,7 @@ describe('<NewSectionButton />', () => {
 
     // Click 'new section' button
     const newSectionButtonNode = ReactDOM.findDOMNode(newSectionButton.find('button').node);
-    ReactTestUtils.Simulate.touchTap(newSectionButtonNode);
+    ReactTestUtils.Simulate.click(newSectionButtonNode);
     expect(sectionFormDialogue.find('SectionFormDialogue').first().props().visible).toBe(true);
 
     // Fill section form with title
@@ -28,7 +28,7 @@ describe('<NewSectionButton />', () => {
 
     // Submit section form
     const submitButton = sectionFormDialogue.find('FormDialogue').first().node.submitButton;
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(submitButton));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
     expect(spyCreate).toHaveBeenCalledWith({ section });
   });
 });

@@ -19,7 +19,7 @@ import { formNames } from '../../constants';
 import { dataShape, questionShape } from '../../propTypes';
 
 const propTypes = {
-  actions: React.PropTypes.shape({
+  actions: PropTypes.shape({
     fetchSkills: PropTypes.func.isRequired,
     fetchScribingQuestion: PropTypes.func.isRequired,
     createScribingQuestion: PropTypes.func.isRequired,
@@ -261,4 +261,3 @@ export default reduxForm({
   form: formNames.QUESTION_SCRIBING,
   enableReinitialize: true,
 })(injectIntl(ScribingQuestionForm));
-

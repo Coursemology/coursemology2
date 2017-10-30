@@ -61,7 +61,7 @@ describe('<DuplicateButton />', () => {
 
     const confirmButton = duplicateButton.find('ConfirmationDialog').first().node.confirmButton;
     const confirmButtonNode = new ReactWrapper(confirmButton, true).find('button').first().node;
-    ReactTestUtils.Simulate.touchTap(ReactDOM.findDOMNode(confirmButtonNode));
+    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmButtonNode));
 
     const expectedPayload = {
       object_duplication: {

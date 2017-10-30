@@ -83,6 +83,6 @@ export function groupItemsUnderMilestones(items, milestones) {
 export function initializeVisibility(items) {
   const itemTypes = new Set(items.map(item => item.itemTypeKey));
   const visibility = {};
-  itemTypes.forEach(itemType => (visibility[itemType] = true));
+  itemTypes.forEach((itemType) => { visibility[itemType] = true; });
   return visibility;
 }
