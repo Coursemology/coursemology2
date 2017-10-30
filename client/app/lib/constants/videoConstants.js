@@ -53,6 +53,7 @@ export const discussionActionTypes = mirrorCreator([
   'UPDATE_REPLY',
   'REMOVE_REPLY',
   'CHANGE_AUTO_SCROLL',
+  'UNSET_SCROLL_TOPIC',
   'REFRESH_ALL',
 ]);
 
