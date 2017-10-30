@@ -69,17 +69,18 @@ Discussion.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   // TODO: Use reselect
+  const autoScroll = state.discussion.scrolling.autoScroll;
   const currentTime = state.video.playerProgress;
 
   const sortedKeys = state.discussion.topics
     .filter(topic => topic.topLevelPostIds.length > 0)
-    .filter(topic => !state.discussion.autoScroll || topic.timestamp <= currentTime)
+    .filter(topic => !autoScroll || topic.timestamp <= currentTime)
     .sort((topic1, topic2) => topic1.timestamp - topic2.timestamp)
     .keySeq()
     .toArray();
   return {
     topicIds: sortedKeys,
-    autoScroll: state.discussion.autoScroll,
+    autoScroll,
   };
 }
 

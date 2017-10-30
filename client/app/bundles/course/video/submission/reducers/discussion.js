@@ -10,7 +10,10 @@ export const initialState = {
   topics: makeImmutableMap(),
   posts: makeImmutableMap(),
   pendingReplyPosts: makeImmutableMap(),
-  autoScroll: false,
+  scrolling: {
+    scrollTopicId: null,
+    autoScroll: false,
+  },
 };
 
 const postDefaults = {
@@ -60,7 +63,7 @@ function newTopicPost(state = initialState.newTopicPost, action) {
   }
 }
 
-function topics(state = makeImmutableMap(), action) {
+function topics(state = initialState.topics, action) {
   switch (action.type) {
     case discussionActionTypes.ADD_TOPIC:
       return state.set(action.topicId, Object.assign({}, topicDefaults, action.topicProps));
@@ -75,7 +78,7 @@ function topics(state = makeImmutableMap(), action) {
   }
 }
 
-function posts(state = makeImmutableMap(), action) {
+function posts(state = initialState.posts, action) {
   switch (action.type) {
     case discussionActionTypes.ADD_POST:
       return state.set(action.postId, Object.assign({}, postDefaults, action.postProps));
@@ -90,7 +93,7 @@ function posts(state = makeImmutableMap(), action) {
   }
 }
 
-function pendingReplyPosts(state = makeImmutableMap, action) {
+function pendingReplyPosts(state = initialState.pendingReplyPosts, action) {
   switch (action.type) {
     case discussionActionTypes.ADD_REPLY:
       return state.set(action.topicId, Object.assign({}, replyDefaults));
@@ -103,10 +106,18 @@ function pendingReplyPosts(state = makeImmutableMap, action) {
   }
 }
 
-function autoScroll(state = false, action) {
+function scrolling(state = initialState.scrolling, action) {
   switch (action.type) {
     case discussionActionTypes.CHANGE_AUTO_SCROLL:
-      return action.autoScroll;
+      // We reset topic scrolling on auto scroll toggle
+      return Object.assign({}, state, {
+        autoScroll: action.autoScroll,
+        scrollTopicId: null,
+      });
+    case discussionActionTypes.ADD_TOPIC:
+      return Object.assign({}, state, { scrollTopicId: action.topicId });
+    case discussionActionTypes.UNSET_SCROLL_TOPIC:
+      return Object.assign({}, state, { scrollTopicId: null });
     default:
       return state;
   }
@@ -117,5 +128,5 @@ export default combineReducers({
   topics,
   posts,
   pendingReplyPosts,
-  autoScroll,
+  scrolling,
 });
