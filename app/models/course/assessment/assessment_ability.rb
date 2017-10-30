@@ -80,16 +80,21 @@ module Course::Assessment::AssessmentAbility
 
   def allow_staff_manage_assessments
     can :manage, Course::Assessment, assessment_course_staff_hash
-    can :manage, Course::Assessment::Question::MultipleResponse,
-        question: { assessment: assessment_course_staff_hash }
-    can :manage, Course::Assessment::Question::TextResponse,
-        question: { assessment: assessment_course_staff_hash }
-    can :manage, Course::Assessment::Question::Programming,
-        question: { assessment: assessment_course_staff_hash }
-    can :manage, Course::Assessment::Question::Scribing,
-        question: { assessment: assessment_course_staff_hash }
-    can :manage, Course::Assessment::Question::VoiceResponse,
-        question: { assessment: assessment_course_staff_hash }
+    allow_manage_questions if course_user&.staff?
+  end
+
+  def allow_manage_questions
+    [
+      Course::Assessment::Question::MultipleResponse,
+      Course::Assessment::Question::TextResponse,
+      Course::Assessment::Question::Programming,
+      Course::Assessment::Question::Scribing,
+      Course::Assessment::Question::VoiceResponse
+    ].each do |question_class|
+      can :create, question_class
+      can :manage, question_class,
+          question: { question_assessments: { assessment: { tab: { category: { course: course } } } } }
+    end
   end
 
   # Only managers are allowed to publish assessment submission grades

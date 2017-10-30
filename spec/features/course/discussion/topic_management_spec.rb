@@ -28,9 +28,9 @@ RSpec.feature 'Course: Topics: Management' do
         visit course_topics_path(course)
 
         expect(page).to have_selector('.nav.nav-tabs')
-        expect(page).to have_selector('div', text: comment.question.assessment.title)
+        expect(page).to have_selector('div', text: comment.submission.assessment.title)
         expect(page).
-          to have_selector('div', text: code_annotation.file.answer.question.assessment.title)
+          to have_selector('div', text: code_annotation.file.answer.submission.assessment.title)
         expect(page).
           to have_link(I18n.t(
                                 'course.video.topics.discussion_topic_topic.comment_title',
@@ -118,7 +118,7 @@ RSpec.feature 'Course: Topics: Management' do
 
       scenario 'I can reply to and delete a comment topic', js: true do
         # Randomly create a topic, either code_annotation, comment, or video_comment.
-        choices = [proc { student_code_annotation },
+        choices = [proc { student_annotation },
                    proc { student_comment },
                    proc { student_video_comment }]
         topic = choices.sample[]
@@ -192,7 +192,7 @@ RSpec.feature 'Course: Topics: Management' do
         visit course_topics_path(course)
 
         expect(page).to have_selector('.nav.nav-tabs')
-        expect(page).to have_selector('div', text: comment.question.assessment.title)
+        expect(page).to have_selector('div', text: comment.submission.assessment.title)
         expect(page).
           to have_link(I18n.t(
                                 'course.video.topics.discussion_topic_topic.comment_title',

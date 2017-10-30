@@ -21,6 +21,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(current_path).to eq(
           new_course_assessment_question_programming_path(course, assessment)
         )
+        visit new_course_assessment_question_programming_path(course, assessment)
         expect(page).to have_xpath('//form[@id=\'programmming-question-form\']')
         question_attributes = attributes_for(:course_assessment_question_programming)
         fill_in 'question_programming[title]', with: question_attributes[:title]
@@ -44,7 +45,6 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(current_path).to eq(course_assessment_path(course, assessment))
 
         question_created = assessment.questions.first.specific.reload
-        expect(page).to have_content_tag_for(question_created)
         expect(question_created.description).
           to include(question_attributes[:description])
         expect(question_created.staff_only_comments).

@@ -19,7 +19,7 @@ RSpec.describe Course::Assessment::Answer do
       describe '#question' do
         it 'validates that the assessment is consistent' do
           subject.question = build_stubbed(:course_assessment_question)
-          expect(subject.question.assessment).not_to eq(subject.submission.assessment)
+          expect(subject.question.question_assessments.map(&:assessment)).not_to include(subject.submission.assessment)
           expect(subject.valid?).to be(false)
           expect(subject.errors[:question]).to include(
             I18n.t('activerecord.errors.models.course/assessment/answer.attributes.question'\

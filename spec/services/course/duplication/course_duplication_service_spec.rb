@@ -164,20 +164,22 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           expect(new_assessment.questions.size).to eq assessment.questions.size
 
           new_questions = new_assessment.questions
+          new_question_assessments = new_assessment.question_assessments
           questions = assessment.questions
 
           # Check that the attributes are duplicated
-          attributes = [:title, :description, :actable_type, :staff_only_comments, :maximum_grade,
-                        :weight]
+          attributes = [:title, :description, :actable_type, :staff_only_comments, :maximum_grade]
           attributes.each do |attribute|
             new_attribs = new_questions.map(&attribute)
             attribs = questions.map(&attribute)
             expect(new_attribs).to match_array attribs
           end
 
+          expect(assessment.question_assessments.map(&:weight)).to match_array new_question_assessments.map(&:weight)
+
           # Check that duplicated questions belong to the duplicated course
-          new_questions.each do |question|
-            expect(question.assessment.course).to eq new_course
+          new_question_assessments.each do |question_assessment|
+            expect(question_assessment.assessment.course).to eq new_course
           end
         end
 
@@ -425,8 +427,7 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           questions = survey.questions
 
           # Check that the attributes are duplicated
-          attributes = [:question_type, :description, :weight, :required, :grid_view,
-                        :max_options, :min_options]
+          attributes = [:question_type, :description, :required, :grid_view, :max_options, :min_options]
           attributes.each do |attribute|
             new_attribs = new_questions.map(&attribute)
             attribs = questions.map(&attribute)

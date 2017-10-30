@@ -5,10 +5,11 @@ RSpec.describe Course::Assessment::Question::AnswersEvaluationService do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     # Used MCQ question here because we are not able to run programming auto grading in tests
-    let(:question) { create(:course_assessment_question_multiple_response) }
-    let(:student) { create(:course_student, course: question.assessment.course).user }
+    let(:assessment) { create(:assessment) }
+    let(:question) { create(:course_assessment_question_multiple_response, assessment: assessment) }
+    let(:student) { create(:course_student, course: assessment.course).user }
     let!(:submission) do
-      create(:submission, :submitted, assessment: question.assessment, creator: student)
+      create(:submission, :submitted, assessment: assessment, creator: student)
     end
     let!(:answers) { submission.answers }
     subject { Course::Assessment::Question::AnswersEvaluationService.new(question) }

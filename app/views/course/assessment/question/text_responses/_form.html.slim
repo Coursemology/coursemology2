@@ -21,7 +21,7 @@
       tbody
         = f.simple_fields_for :solutions do |solutions_form|
           = render 'solution_fields', f: solutions_form
-  - if f.object.assessment.autograded?
+  - if @assessment.autograded?
     p
       - if f.object.file_upload_question?
         b = t('.file_upload_autograde')

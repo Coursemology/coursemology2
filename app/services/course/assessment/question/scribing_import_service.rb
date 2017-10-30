@@ -73,24 +73,21 @@ class Course::Assessment::Question::ScribingImportService
   def build_scribing_questions(files)
     next_weight = max_weight ? max_weight + 1 : 0
     files.map.with_index(next_weight) do |file, weight|
-      build_scribing_question(weight).tap do |question|
-        question.build_attachment(attachment: Attachment.find_or_create_by(file: file),
-                                  name: file.original_filename)
+      build_scribing_question.tap do |question|
+        question.build_attachment(attachment: Attachment.find_or_create_by(file: file), name: file.original_filename)
+        question.question_assessments.build(assessment_id: @assessment_id, weight: weight)
       end
     end
   end
 
   # Builds a new scribing question given the +@question+ instance varible.
   #
-  # @param [Fixnum] weight Weight to be assigned to the scribing question
   # @return [Course::Assessment::Question::Scribing] New scribing that is not persisted.
-  def build_scribing_question(weight)
+  def build_scribing_question
     Course::Assessment::Question::Scribing.new(
       title: @params[:title],
       description: @params[:description],
-      maximum_grade: @params[:maximum_grade],
-      assessment_id: @assessment_id,
-      weight: weight
+      maximum_grade: @params[:maximum_grade]
     )
   end
 

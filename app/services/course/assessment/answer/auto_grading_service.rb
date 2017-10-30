@@ -35,7 +35,7 @@ class Course::Assessment::Answer::AutoGradingService
       answer.correct = true
       answer.evaluate!
 
-      if answer.question.assessment.autograded?
+      if answer.submission.assessment.autograded?
         answer.publish!
         answer.grade = answer.question.maximum_grade
         answer.grader = User.system
@@ -54,7 +54,7 @@ class Course::Assessment::Answer::AutoGradingService
     grade = evaluate(answer)
     answer.evaluate!
 
-    if answer.question.assessment.autograded?
+    if answer.submission.assessment.autograded?
       answer.publish!
       answer.grade = grade
       answer.grader = User.system

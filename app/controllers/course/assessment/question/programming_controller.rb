@@ -1,9 +1,11 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::ProgrammingController < \
-  Course::Assessment::QuestionsController
+class Course::Assessment::Question::ProgrammingController < Course::Assessment::QuestionsController
+  build_and_authorize_new_question :programming_question,
+                                   class: Course::Assessment::Question::Programming, only: [:new, :create]
   load_and_authorize_resource :programming_question,
                               class: Course::Assessment::Question::Programming,
-                              through: :assessment, parent: false
+                              through: :assessment, parent: false, except: [:new, :create]
+  before_action :load_question_assessment, only: [:edit, :update]
 
   def new
     @template = 'course/assessment/question/programming/new.json.jbuilder'
@@ -17,6 +19,7 @@ class Course::Assessment::Question::ProgrammingController < \
 
     respond_to do |format|
       if @programming_question.save
+        load_question_assessment
         format.json { render_success_json t('.success'), true }
       else
         format.json { render_failure_json t('.failure') }
@@ -72,7 +75,6 @@ class Course::Assessment::Question::ProgrammingController < \
 
   def render_success_json(message, redirect_to_edit)
     @response = { message: message, redirect_to_edit: redirect_to_edit }
-    @import_job_url = job_path(@programming_question.import_job) if @programming_question.import_job
 
     render 'edit'
   end
@@ -93,5 +95,9 @@ class Course::Assessment::Question::ProgrammingController < \
     @service ||= Course::Assessment::Question::Programming::ProgrammingPackageService.new(
       @programming_question, params
     )
+  end
+
+  def load_question_assessment
+    @question_assessment = load_question_assessment_for(@programming_question)
   end
 end

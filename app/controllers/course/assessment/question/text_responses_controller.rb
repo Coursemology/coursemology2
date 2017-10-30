@@ -1,9 +1,10 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::TextResponsesController < \
-  Course::Assessment::QuestionsController
+class Course::Assessment::Question::TextResponsesController < Course::Assessment::QuestionsController
+  build_and_authorize_new_question :text_response_question,
+                                   class: Course::Assessment::Question::TextResponse, only: [:new, :create]
   load_and_authorize_resource :text_response_question,
                               class: Course::Assessment::Question::TextResponse,
-                              through: :assessment, parent: false
+                              through: :assessment, parent: false, except: [:new, :create]
 
   def new
     if params[:file_upload] == 'true'
@@ -22,6 +23,7 @@ class Course::Assessment::Question::TextResponsesController < \
   end
 
   def edit
+    @question_assessment = load_question_assessment_for(@text_response_question)
   end
 
   def update

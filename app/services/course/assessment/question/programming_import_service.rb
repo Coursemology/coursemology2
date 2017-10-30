@@ -61,8 +61,7 @@ class Course::Assessment::Question::ProgrammingImportService
   # @return [Course::Assessment::ProgrammingEvaluationService::Result]
   def evaluate_package(package)
     Course::Assessment::ProgrammingEvaluationService.
-      execute(@question.assessment.course, @question.language, @question.memory_limit,
-              @question.time_limit, package.path)
+      execute(@question.language, @question.memory_limit, @question.time_limit, package.path)
   end
 
   # Saves the templates and tests to the question.

@@ -20,7 +20,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
     end
 
     describe '#grade' do
-      before { allow(answer.question.assessment).to receive(:autograded?).and_return(true) }
+      before { allow(answer.submission.assessment).to receive(:autograded?).and_return(true) }
 
       context 'when an exact match is present' do
         let(:answer_traits) { :exact_match }

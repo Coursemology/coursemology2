@@ -48,9 +48,9 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
       raise ArgumentError, 'Invalid ordering for assessment questions'
     end
 
-    Course::Assessment::Question.transaction do
+    Course::QuestionAssessment.transaction do
       question_order_ids.each_with_index do |id, index|
-        questions_hash[id].update_attribute(:weight, index)
+        question_assessments_hash[id].update_attribute(:weight, index)
       end
     end
   end
@@ -137,10 +137,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   # Maps question ids to their respective questions
   #
-  # @return [Hash{Integer => Course::Assessment::Question}]
-  def questions_hash
-    @questions_hash ||= @assessment.questions.map do |question|
-      [question.id, question]
+  # @return [Hash{Integer => Course::QuestionAssessment}]
+  def question_assessments_hash
+    @question_assessments_hash ||= @assessment.question_assessments.map do |qa|
+      [qa.id, qa]
     end.to_h
   end
 
@@ -149,6 +149,6 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   # @param [Array<Integer>] proposed_ordering
   # @return [Boolean]
   def valid_ordering?(proposed_ordering)
-    questions_hash.keys.sort == proposed_ordering.sort
+    question_assessments_hash.keys.sort == proposed_ordering.sort
   end
 end

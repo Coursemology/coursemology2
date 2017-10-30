@@ -71,8 +71,6 @@ class Course::Assessment::ProgrammingEvaluationService
   class << self
     # Executes the provided package.
     #
-    # @param [Course] course The course which this evaluation belongs to. This is necessary to
-    #   determine which workers get access to execute the package.
     # @param [Coursemology::Polyglot::Language] language The language runtime to use to run this
     #   package.
     # @param [Integer] memory_limit The memory limit for the evaluation, in MiB.
@@ -87,17 +85,15 @@ class Course::Assessment::ProgrammingEvaluationService
     # @return [Result] The result of evaluating the template.
     #
     # @raise [Timeout::Error] When the operation times out.
-    def execute(course, language, memory_limit, time_limit, # rubocop:disable Metrics/ParameterLists
-                package, timeout = nil)
-      new(course, language, memory_limit, time_limit, package, timeout).send(:execute)
+    def execute(language, memory_limit, time_limit, package, timeout = nil)
+      new(language, memory_limit, time_limit, package, timeout).send(:execute)
     end
   end
 
   private
 
-  def initialize(course, language, memory_limit, # rubocop:disable Metrics/ParameterLists
+  def initialize(language, memory_limit, # rubocop:disable Metrics/ParameterLists
                  time_limit, package, timeout)
-    @course = course
     @language = language
     @memory_limit = memory_limit || MEMORY_LIMIT
     @time_limit = time_limit || CPU_TIMEOUT

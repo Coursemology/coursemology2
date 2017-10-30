@@ -14,7 +14,7 @@ FactoryGirl.define do
     submission do
       traits = *submission_traits
       options = traits.extract_options!
-      options[:assessment] = question.assessment
+      options[:assessment] = question.question_assessments.first&.assessment
       options[:creator] = creator
       options[:course] = course
       build(:course_assessment_submission, *traits, options)

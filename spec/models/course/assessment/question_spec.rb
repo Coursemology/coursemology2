@@ -11,7 +11,7 @@ RSpec.describe Course::Assessment::Question do
   end
 
   it { is_expected.to be_actable }
-  it { is_expected.to belong_to(:assessment) }
+  it { is_expected.to have_many(:question_assessments).dependent(:destroy) }
   it { is_expected.to have_many(:answers).dependent(:destroy) }
   it { is_expected.to have_and_belong_to_many(:skills) }
 
@@ -33,28 +33,6 @@ RSpec.describe Course::Assessment::Question do
         context 'when question is not autograded' do
           before { allow(question).to receive(:auto_gradable?).and_return(false) }
           it { is_expected.to be_valid }
-        end
-      end
-    end
-
-    describe '#display_title' do
-      context 'when title is nil' do
-        let!(:question) { create(:course_assessment_question, title: nil) }
-        subject { question }
-
-        it 'returns Question N' do
-          expect(subject.display_title).
-            to eq I18n.t('activerecord.course/assessment/question.question_number')
-        end
-      end
-
-      context 'when there is a title' do
-        let!(:question) { create(:course_assessment_question) }
-        subject { question }
-
-        it 'returns question_with_title translation' do
-          expect(subject.display_title).
-            to eq I18n.t('activerecord.course/assessment/question.question_with_title')
         end
       end
     end
@@ -116,8 +94,9 @@ RSpec.describe Course::Assessment::Question do
       let(:course) { assessment.course }
       let(:student_user) { create(:course_student, course: course).user }
       let(:assessment) do
-        assessment = build(:assessment)
-        create_list(:course_assessment_question_multiple_response, 3, assessment: assessment)
+        assessment = create(:assessment)
+        questions = create_list(:course_assessment_question_multiple_response, 3)
+        assessment.questions << questions.map(&:acting_as)
         assessment
       end
       let(:submission) { create(:submission, assessment: assessment, creator: student_user) }
@@ -139,16 +118,6 @@ RSpec.describe Course::Assessment::Question do
           expect(assessment.questions.not_correctly_answered(submission)).
             to contain_exactly(*(assessment.questions - [question]))
         end
-      end
-    end
-
-    describe '.default_scope' do
-      let(:assessment) { create(:assessment) }
-      let!(:questions) { create_list(:course_assessment_question, 2, assessment: assessment) }
-      it 'orders by ascending weight' do
-        weights = assessment.questions.pluck(:weight)
-        expect(weights.length).to be > 1
-        expect(weights.each_cons(2).all? { |a, b| a <= b }).to be_truthy
       end
     end
   end

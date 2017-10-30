@@ -116,7 +116,9 @@ class Course::Assessment::Answer < ApplicationRecord
   private
 
   def validate_consistent_assessment
-    errors.add(:question, :consistent_assessment) if question.assessment != submission.assessment
+    return if question.question_assessments.map(&:assessment_id).include?(submission.assessment_id)
+
+    errors.add(:question, :consistent_assessment)
   end
 
   def validate_assessment_state

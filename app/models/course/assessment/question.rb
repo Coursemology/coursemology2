@@ -3,16 +3,13 @@ class Course::Assessment::Question < ApplicationRecord
   actable
   has_many_attachments
 
-  before_validation :set_defaults, if: :new_record?
-
-  belongs_to :assessment, inverse_of: :questions
+  has_many :question_assessments, class_name: Course::QuestionAssessment.name, inverse_of: :question,
+                                  dependent: :destroy
   has_many :answers, class_name: Course::Assessment::Answer.name, dependent: :destroy,
                      inverse_of: :question
   has_and_belongs_to_many :skills
   has_many :submission_questions, class_name: Course::Assessment::SubmissionQuestion.name,
                                   dependent: :destroy, inverse_of: :question
-
-  default_scope { order(weight: :asc) }
 
   delegate :to_partial_path, to: :actable
 
@@ -61,18 +58,6 @@ class Course::Assessment::Question < ApplicationRecord
     assessment.questions.last == self
   end
 
-  # Prefixes a question number in front of the title
-  #
-  # @return [string]
-  def display_title
-    question_number = I18n.t('activerecord.course/assessment/question.question_number',
-                             index: assessment.questions.index(self) + 1)
-
-    return question_number if title.blank?
-    I18n.t('activerecord.course/assessment/question.question_with_title',
-           question_number: question_number, title: title)
-  end
-
   # Whether the answer has downloadable content.
   #
   # @return [Boolean]
@@ -92,7 +77,6 @@ class Course::Assessment::Question < ApplicationRecord
     self.description = other.description
     self.staff_only_comments = other.staff_only_comments
     self.maximum_grade = other.maximum_grade
-    self.weight = other.weight
   end
 
   # Associates duplicated skills with the current question
@@ -100,15 +84,5 @@ class Course::Assessment::Question < ApplicationRecord
     skills << other.skills.
               select { |skill| duplicator.duplicated?(skill) }.
               map { |skill| duplicator.duplicate(skill) }
-  end
-
-  private
-
-  def set_defaults
-    return if weight.present? || !assessment || assessment.new_record?
-
-    # Make sure new questions appear at the end of the list.
-    max_weight = assessment.questions.pluck(:weight).max
-    self.weight ||= max_weight ? max_weight + 1 : 0
   end
 end

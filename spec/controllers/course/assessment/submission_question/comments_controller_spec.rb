@@ -6,7 +6,7 @@ RSpec.describe Course::Assessment::SubmissionQuestion::CommentsController do
   with_tenant(:instance) do
     let!(:submission_question) { create(:submission_question) }
     let!(:user) { submission_question.submission.creator }
-    let(:assessment) { submission_question.question.assessment }
+    let(:assessment) { submission_question.submission.assessment }
     let(:course) { assessment.course }
     before { sign_in(user) }
 

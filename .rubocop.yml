@@ -9,6 +9,7 @@ AllCops:
    - 'bin/*'
    - 'db/seeds.rb'
    - 'db/schema.rb'
+   - 'db/migrate/*'
    - 'vendor/bundle/**/*'
   TargetRubyVersion: 2.3
 
