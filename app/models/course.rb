@@ -73,7 +73,7 @@ class Course < ApplicationRecord
   end)
 
   scope :active_in_past_7_days, (lambda do
-    joins(:course_users).merge(CourseUser.active_in_past_7_days).merge(CourseUser.student).uniq
+    joins(:course_users).merge(CourseUser.active_in_past_7_days).merge(CourseUser.student).distinct
   end)
 
   delegate :staff, to: :course_users

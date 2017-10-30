@@ -88,7 +88,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
 
       context 'when set locked fails' do
         subject do
-          put :set_locked, course_id: course, forum_id: forum, id: topic_stub, locked: true
+          put :set_locked, params: { course_id: course, forum_id: forum, id: topic_stub, locked: true }
         end
 
         it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
@@ -99,7 +99,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
 
       context 'when set unlocked fails' do
         subject do
-          put :set_locked, course_id: course, forum_id: forum, id: topic_stub, locked: false
+          put :set_locked, params: { course_id: course, forum_id: forum, id: topic_stub, locked: false }
         end
 
         it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
@@ -117,7 +117,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
 
       context 'when set hidden fails' do
         subject do
-          put :set_hidden, course_id: course, forum_id: forum, id: topic_stub, hidden: true
+          put :set_hidden, params: { course_id: course, forum_id: forum, id: topic_stub, hidden: true }
         end
 
         it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
@@ -128,7 +128,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
 
       context 'when set unhidden fails' do
         subject do
-          put :set_hidden, course_id: course, forum_id: forum, id: topic_stub, hidden: false
+          put :set_hidden, params: { course_id: course, forum_id: forum, id: topic_stub, hidden: false }
         end
 
         it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }

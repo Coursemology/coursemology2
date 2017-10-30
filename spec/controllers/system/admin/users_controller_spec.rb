@@ -70,7 +70,7 @@ RSpec.describe System::Admin::UsersController, type: :controller do
         stub
       end
 
-      subject { delete :destroy, id: user_to_delete }
+      subject { delete :destroy, params: { id: user_to_delete } }
 
       context 'when the user is a system administrator' do
         before { sign_in(admin) }
