@@ -5,8 +5,14 @@ class Course::AnnouncementsController < Course::ComponentController
   after_action :mark_announcements_as_read, only: :index
 
   def index #:nodoc:
-    @announcements = @announcements.includes(:creator).sorted_by_sticky.sorted_by_date
-    @announcements = @announcements.page(page_param).with_read_marks_for(current_user)
+    respond_to do |format|
+      format.html {}
+      format.json do
+        @total_page_count = @announcements.page(page_param).per(announcement_pagination).total_pages
+        @announcements = @announcements.includes(:creator).sorted_by_sticky.sorted_by_date
+        @announcements = @announcements.page(page_param).per(announcement_pagination).with_read_marks_for(current_user)
+      end
+    end
   end
 
   def show #:nodoc:
@@ -38,11 +44,9 @@ class Course::AnnouncementsController < Course::ComponentController
 
   def destroy #:nodoc:
     if @announcement.destroy
-      redirect_to course_announcements_path(current_course),
-                  success: t('.success', title: @announcement.title)
+      head :ok
     else
-      redirect_to course_announcements_path(current_course),
-                  danger: t('.failure', error: @announcement.errors.full_messages.to_sentence)
+      render json: { errors: @announcement.errors }, status: :bad_request
     end
   end
 
@@ -60,6 +64,10 @@ class Course::AnnouncementsController < Course::ComponentController
   # @return [nil] If announcement component is disabled.
   def component
     current_component_host[:course_announcements_component]
+  end
+
+  def announcement_pagination
+    @settings.pagination
   end
 
   def mark_announcements_as_read
