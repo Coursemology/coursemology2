@@ -268,8 +268,8 @@ export function submitNewReplyToServer(topicId) {
       return;
     }
 
-    CourseAPI.video.topics
-      .create({ discussion_post: { topic_id: topicId, text } })
+    CourseAPI.comments
+      .create(topicId, { discussion_post: { text } })
       .then(() => {
         dispatch(refreshTopic(topicId));
         dispatch(removeReply(topicId));
@@ -341,7 +341,7 @@ export function updatePostOnServer(postId) {
     }
 
     dispatch(updatePost(postId, { status: postRequestingStatuses.LOADING }));
-    CourseAPI.posts
+    CourseAPI.comments
       .update(discussionTopicId, postId, { discussion_post: { text } })
       .then(({ data }) => {
         dispatch(updatePost(postId, {
@@ -376,7 +376,7 @@ export function deletePostFromServer(postId) {
     const topicId = post.topicId;
 
     dispatch(updatePost(postId, { status: postRequestingStatuses.LOADING }));
-    CourseAPI.posts
+    CourseAPI.comments
       .delete(discussionTopicId, postId)
       .then(() => {
         dispatch(refreshTopic(topicId));
