@@ -24,7 +24,7 @@ function Topic(props) {
   }
 
   return (
-    <div>
+    <div id={`discussion-topic-${props.topicId}`}>
       <div className={styles.topicTimestamp}>
         <span className="glyphicon glyphicon-chevron-down" />
         &nbsp;
