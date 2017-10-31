@@ -171,7 +171,7 @@ class AssessmentsListing extends React.Component {
   }
 }
 
-export default connect(({ objectDuplication }) => ({
-  categories: objectDuplication.assessmentsComponent,
-  selectedItems: objectDuplication.selectedItems,
+export default connect(({ duplication }) => ({
+  categories: duplication.assessmentsComponent,
+  selectedItems: duplication.selectedItems,
 }))(AssessmentsListing);

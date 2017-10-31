@@ -57,7 +57,7 @@ class SurveyListing extends React.Component {
   }
 }
 
-export default connect(({ objectDuplication }) => ({
-  surveys: objectDuplication.surveyComponent,
-  selectedItems: objectDuplication.selectedItems,
+export default connect(({ duplication }) => ({
+  surveys: duplication.surveyComponent,
+  selectedItems: duplication.selectedItems,
 }))(SurveyListing);

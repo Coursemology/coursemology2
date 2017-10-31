@@ -28,9 +28,22 @@ export default class DuplicationAPI extends BaseCourseAPI {
   * success response: { redirect_url: string }
   * error response: {}
   */
-
   duplicateItems(params) {
     return this.getClient().post(this._getUrlPrefix(), params);
+  }
+
+  /**
+  * Duplicates course.
+  *
+  * @param {object} params in the form {
+  *   duplication: { new_title: string, new_start_at: Date }
+  * }
+  * @return {Promise}
+  * success response: { redirect_url: string }
+  * error response: {}
+  */
+  duplicateCourse(params) {
+    return this.getClient().post(`/courses/${this.getCourseId()}/duplication`, params);
   }
 
   _getUrlPrefix() {

@@ -62,9 +62,9 @@ class DuplicateButton extends React.Component {
   }
 }
 
-export default connect(({ objectDuplication }) => ({
-  isCourseSelected: !!objectDuplication.targetCourseId,
-  isItemSelected: Object.values(objectDuplication.selectedItems).some(hash => (
+export default connect(({ duplication }) => ({
+  isCourseSelected: !!duplication.targetCourseId,
+  isItemSelected: Object.values(duplication.selectedItems).some(hash => (
     Object.values(hash).some(value => value)
   )),
 }))(DuplicateButton);

@@ -39,6 +39,10 @@ export function setTargetCourseId(targetCourseId) {
   return { type: actionTypes.SET_TARGET_COURSE_ID, targetCourseId };
 }
 
+export function setDuplicationMode(duplicationMode) {
+  return { type: actionTypes.SET_DUPLICATION_MODE, duplicationMode };
+}
+
 /**
 * Prepares the payload containing ids and types of items selected for duplication.
 *
@@ -77,6 +81,23 @@ export function duplicateItems(targetCourseId, selectedItems, failureMessage) {
       .catch(() => {
         dispatch({ type: actionTypes.DUPLICATE_ITEMS_FAILURE });
         dispatch(hideDuplicateItemsConfirmation());
+        setNotification(failureMessage)(dispatch);
+      });
+  };
+}
+
+export function duplicateCourse(fields, failureMessage) {
+  const payload = { duplication: fields };
+
+  return (dispatch) => {
+    dispatch({ type: actionTypes.DUPLICATE_COURSE_REQUEST });
+    return CourseAPI.duplication.duplicateCourse(payload)
+      .then((response) => {
+        window.location = response.data.redirect_url;
+        dispatch({ type: actionTypes.DUPLICATE_COURSE_SUCCESS });
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.DUPLICATE_COURSE_FAILURE });
         setNotification(failureMessage)(dispatch);
       });
   };

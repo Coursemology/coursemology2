@@ -5,7 +5,6 @@ class Course::ObjectDuplicationsController < Course::ComponentController
 
   def new
     respond_to do |format|
-      format.html
       format.json do
         load_target_courses_data
         load_assessments_component_data

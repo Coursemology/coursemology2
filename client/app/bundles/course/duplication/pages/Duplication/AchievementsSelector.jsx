@@ -86,7 +86,7 @@ class AchievementsSelector extends React.Component {
   }
 }
 
-export default connect(({ objectDuplication }) => ({
-  achievements: objectDuplication.achievementsComponent,
-  selectedItems: objectDuplication.selectedItems,
+export default connect(({ duplication }) => ({
+  achievements: duplication.achievementsComponent,
+  selectedItems: duplication.selectedItems,
 }))(AchievementsSelector);
