@@ -35,6 +35,14 @@ const translations = defineMessages({
     id: 'course.duplication.TypeBadge.achievement',
     defaultMessage: 'Achievement',
   },
+  [duplicableItemTypes.FOLDER]: {
+    id: 'course.duplication.TypeBadge.folder',
+    defaultMessage: 'Folder',
+  },
+  [duplicableItemTypes.MATERIAL]: {
+    id: 'course.duplication.TypeBadge.material',
+    defaultMessage: 'Material',
+  },
 });
 
 const TypeBadge = ({ text, itemType }) => (

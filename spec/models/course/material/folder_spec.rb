@@ -56,16 +56,15 @@ RSpec.describe Course::Material::Folder, type: :model do
       let(:other_child_folder) { build(:folder, parent: parent_folder, name: common_name.downcase) }
       let(:material) { build(:material, folder: parent_folder, name: common_name + ' (0)') }
 
-      subject { folder.next_valid_name }
-      it 'finds the proper name' do
-        # When there is no name conflicts
+      it 'returns a unique name' do
+        # When there are no name conflicts
         expect(folder.send(:next_valid_name)).to eq(common_name)
 
-        # When is is a name conflict
+        # When there is a name conflict with another folder
         other_child_folder.save
         expect(folder.send(:next_valid_name)).to eq(common_name + ' (0)')
 
-        # When there is another name conflict with lower case
+        # When there is another name conflict with a material
         material.save
         expect(folder.send(:next_valid_name)).to eq(common_name + ' (1)')
       end

@@ -37,3 +37,15 @@ export const achievementShape = PropTypes.shape({
   published: PropTypes.bool,
   url: PropTypes.string,
 });
+
+export const materialShape = PropTypes.shape({
+  id: PropTypes.number,
+  name: PropTypes.string,
+});
+
+export const folderShape = PropTypes.shape({
+  id: PropTypes.number,
+  parent_id: PropTypes.number,
+  name: PropTypes.string,
+  materials: PropTypes.arrayOf(materialShape),
+});

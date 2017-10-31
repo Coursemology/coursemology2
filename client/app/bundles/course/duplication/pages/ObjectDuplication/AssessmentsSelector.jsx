@@ -10,29 +10,11 @@ import { categoryShape } from 'course/duplication/propTypes';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
+import BulkSelectors from 'course/duplication/components/BulkSelectors';
 
 const { TAB, ASSESSMENT, CATEGORY } = duplicableItemTypes;
 
-const styles = {
-  selectLink: {
-    marginLeft: 20,
-    lineHeight: '24px',
-  },
-  deselectLink: {
-    marginLeft: 10,
-    lineHeight: '24px',
-  },
-};
-
 const translations = defineMessages({
-  selectAll: {
-    id: 'course.duplication.AssessmentsSelector.selectAll',
-    defaultMessage: 'Select All',
-  },
-  deselectAll: {
-    id: 'course.duplication.AssessmentsSelector.deselectAll',
-    defaultMessage: 'Deselect All',
-  },
   noItems: {
     id: 'course.duplication.AssessmentsSelector.noItems',
     defaultMessage: 'There are no assessment items to duplicate.',
@@ -47,25 +29,6 @@ class AssessmentsSelector extends React.Component {
     dispatch: PropTypes.func.isRequired,
   }
 
-  static renderBulkSelectors(bulkSelectorMethod, item) {
-    return (
-      <div>
-        <a
-          onClick={() => bulkSelectorMethod(item, true)}
-          style={styles.selectLink}
-        >
-          <FormattedMessage {...translations.selectAll} />
-        </a>
-        <a
-          onClick={() => bulkSelectorMethod(item, false)}
-          style={styles.deselectLink}
-        >
-          <FormattedMessage {...translations.deselectAll} />
-        </a>
-      </div>
-    );
-  }
-
   tabSetAll = (tab, value) => {
     const { dispatch } = this.props;
     dispatch(setItemSelectedBoolean(TAB, tab.id, value));
@@ -74,9 +37,9 @@ class AssessmentsSelector extends React.Component {
     });
   }
 
-  categorySetAll = (category, value) => {
+  categorySetAll = category => (value) => {
     this.props.dispatch(setItemSelectedBoolean(CATEGORY, category.id, value));
-    category.tabs.forEach(tab => this.tabSetAll(tab, value));
+    category.tabs.forEach(tab => this.tabSetAll(tab)(value));
   }
 
   renderAssessmentTree(assessment) {
@@ -119,7 +82,7 @@ class AssessmentsSelector extends React.Component {
             dispatch(setItemSelectedBoolean(TAB, id, value))
           }
         >
-          { AssessmentsSelector.renderBulkSelectors(this.tabSetAll, tab) }
+          <BulkSelectors callback={this.tabSetAll(tab)} />
         </IndentedCheckbox>
         { assessments.map(assessment => this.renderAssessmentTree(assessment)) }
       </div>
@@ -140,7 +103,7 @@ class AssessmentsSelector extends React.Component {
             dispatch(setItemSelectedBoolean(CATEGORY, id, value))
           }
         >
-          { AssessmentsSelector.renderBulkSelectors(this.categorySetAll, category) }
+          <BulkSelectors callback={this.categorySetAll(category)} />
         </IndentedCheckbox>
         { tabs.map(tab => this.renderTabTree(tab)) }
       </div>

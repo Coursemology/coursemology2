@@ -22,6 +22,7 @@ const data = {
         [duplicableItemTypes.CATEGORY]: { 6: false },
         [duplicableItemTypes.ASSESSMENT]: { 7: true },
       },
+      materialsComponent: [],
       assessmentsComponent: [
         {
           id: 6,

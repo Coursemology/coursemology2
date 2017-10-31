@@ -32,18 +32,14 @@ class Course::Material::Folder < ApplicationRecord
   end)
 
   scope :with_content_statistics, ->() { all.calculated(:material_count, :children_count) }
+  scope :concrete, ->() { where(owner_id: nil) }
+  scope :root, ->() { where(parent_id: nil) }
 
   # Filter out the empty linked folders (i.e. Folder with an owner).
   def self.without_empty_linked_folder
     select do |folder|
       folder.concrete? || folder.children_count != 0 || folder.material_count != 0
     end
-  end
-
-  # Filter out folders with owners. Keeps folders created directly.
-  # Needed for duplication.
-  def self.concrete
-    select(&:concrete?)
   end
 
   def self.after_course_initialize(course)
@@ -75,18 +71,40 @@ class Course::Material::Folder < ApplicationRecord
     owner_id.nil?
   end
 
+  # Finds a unique name for `item` among the folder's existing contents by appending a serial number
+  # to it, if necessary. E.g. "logo.png" will be named "logo.png (1)" if the files named "logo.png"
+  # and "logo.png (0)" exist in the folder.
+  #
+  # @param [#name] item Folder or Material to find unique name for.
+  # @return [String] A unique name.
+  def next_uniq_child_name(item)
+    taken_names = contents_names(item).map(&:downcase)
+    name_generator = FileName.new(item.name, path: :relative, add: :always,
+                                             format: '(%d)', delimiter: ' ')
+    new_name = item.name
+    new_name = name_generator.create while taken_names.include?(new_name.downcase)
+    new_name
+  end
+
+  # Finds a unique name for the current folder among its siblings.
+  #
+  # @return [String] A unique name.
+  def next_valid_name
+    parent.next_uniq_child_name(self)
+  end
+
   def initialize_duplicate(duplicator, other)
     # Do not shift the time of root folder
     self.start_at = other.parent_id.nil? ? Time.zone.now : duplicator.time_shift(other.start_at)
     self.end_at = duplicator.time_shift(other.end_at) if other.end_at
     self.updated_at = other.updated_at
     self.created_at = other.created_at
-    self.materials = duplicator.duplicate(other.materials).compact
     self.owner = duplicator.duplicate(other.owner)
     self.course = duplicator.options[:target_course]
     initialize_duplicate_parent(duplicator, other)
     initialize_duplicate_children(duplicator, other)
     set_duplication_flag
+    initialize_duplicate_materials(duplicator, other)
   end
 
   def initialize_duplicate_parent(duplicator, other)
@@ -96,14 +114,45 @@ class Course::Material::Folder < ApplicationRecord
                   elsif duplicator.duplicated?(other.parent)
                     duplicator.duplicate(other.parent)
                   else
+                    # If parent has not been duplicated yet, put the current duplicate under the root folder
+                    # temporarily. The folder will be re-parented only afterwards when the parent is being
+                    # duplicated. This will be done when `#initialize_duplicate_children` is called on the
+                    # duplicated parent folder.
+                    #
+                    # If the folder's parent is not selected for duplication, the current duplicated folder
+                    # will remain a child of the root folder.
                     duplicator.options[:target_course].root_folder
                   end
   end
 
   def initialize_duplicate_children(duplicator, other)
+    # Add only subfolders that have already been duplicated as its children.
+    # If a subfolder has been selected for duplication, but has not yet been duplicated,
+    # then the subfolder's duplicate will be added as a child of the current folder later on when
+    # the child is being duplicated and `initialize_duplicate_parent` is being called on the duplicated
+    # child folder. `duplicator.duplicate(folder)` will merely retrieve the subfolder's duplicate,
+    # rather than trigger the duplication of the subfolder.
     children << other.children.
                 select { |folder| duplicator.duplicated?(folder) }.
                 map { |folder| duplicator.duplicate(folder) }
+  end
+
+  def initialize_duplicate_materials(duplicator, other)
+    self.materials = if other.concrete?
+                       # Create associations only for materials which have been duplicated. For child materials
+                       # that are duplicated later, the duplicated material will parent itself under the
+                       # current folder. (see `Course::Material#initialize_duplicate`)
+                       other.materials.
+                         select { |material| duplicator.duplicated?(material) }.
+                         map { |material| duplicator.duplicate(material) }
+                     else
+                       # If folder is virtual, all it's materials are duplicated by default.
+                       duplicator.duplicate(other.materials).compact
+                     end
+  end
+
+  def before_duplicate_save(_duplicator)
+    self.name = next_valid_name
   end
 
   private
@@ -114,6 +163,7 @@ class Course::Material::Folder < ApplicationRecord
 
   # TODO: Not threadsafe, consider making all folders as materials
   # Make sure that folder won't have the same name with other materials in the parent folder
+  # Schema validations already ensure that it won't have the same name as other folders
   def validate_name_is_unique_among_materials
     return if parent.nil?
 
@@ -121,26 +171,17 @@ class Course::Material::Folder < ApplicationRecord
     errors.add(:name, :taken) unless conflicts.empty?
   end
 
-  def sibling_names
-    parent.children.where.not(id: self).pluck(:name) + parent.materials.pluck(:name)
-  end
-
-  # Find the next valid name whose format is based on the the name given.
-  # If the base_name has been taken, the next name will be generate in the format of: base_name(0),
-  # base_name(1), etc.
-  # @param [String] base_name The name which we want to name the folder.
-  # @return [String] The next valid name that haven't been taken.
-  def next_valid_name(base_name = name)
-    return base_name unless parent && base_name
-
-    names_taken = sibling_names.map(&:downcase)
-    name_generator = FileName.new(base_name, path: :relative, add: :always,
-                                             format: '(%d)', delimiter: ' ')
-
-    new_name = base_name
-    new_name = name_generator.create while names_taken.include?(new_name.downcase)
-
-    new_name
+  # Fetches the names of the contents of the current folder, except for an excluded_item, if one is
+  # provided.
+  #
+  # @param [Object] excluded_item Item whose name to exclude from the list
+  # @return [Array<String>] List of names of contents of folder
+  def contents_names(excluded_item = nil)
+    excluded_material = excluded_item.class == Course::Material ? excluded_item : nil
+    excluded_folder = excluded_item.class == Course::Material::Folder ? excluded_item : nil
+    materials_names = materials.where.not(id: excluded_material).pluck(:name)
+    subfolders_names = children.where.not(id: excluded_folder).pluck(:name)
+    materials_names + subfolders_names
   end
 
   def assign_valid_name

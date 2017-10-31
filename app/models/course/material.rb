@@ -10,6 +10,8 @@ class Course::Material < ApplicationRecord
   validate :validate_name_is_unique_among_folders
   validates_with FilenameValidator
 
+  scope :in_concrete_folder, -> { joins(:folder).merge(Folder.concrete) }
+
   def touch_folder
     folder.touch if !duplicating? && changed?
   end
@@ -26,18 +28,41 @@ class Course::Material < ApplicationRecord
     !duplicating?
   end
 
+  # Finds a unique name for the current material among its siblings.
+  #
+  # @return [String] A unique name.
+  def next_valid_name
+    folder.next_uniq_child_name(self)
+  end
+
   def initialize_duplicate(duplicator, other)
     self.attachment = duplicator.duplicate(other.attachment)
-    self.folder = duplicator.duplicate(other.folder)
+    self.folder = if duplicator.duplicated?(other.folder)
+                    duplicator.duplicate(other.folder)
+                  else
+                    # If parent has not been duplicated yet, put the current duplicate under the root folder
+                    # temorarily. The material will be re-parented only afterwards when the parent folder is being
+                    # duplicated. This will be done when `#initialize_duplicate_children` is called on the
+                    # duplicated parent folder.
+                    #
+                    # If the material's folder is not selected for duplication, the current duplicated material will
+                    # remain a child of the root folder.
+                    duplicator.options[:target_course].root_folder
+                  end
     self.updated_at = other.updated_at
     self.created_at = other.created_at
     set_duplication_flag
+  end
+
+  def before_duplicate_save(_duplicator)
+    self.name = next_valid_name
   end
 
   private
 
   # TODO: Not threadsafe, consider making all folders as materials
   # Make sure that material won't have the same name with other child folders in the folder
+  # Schema validations already ensure that it won't have the same name as other materials
   def validate_name_is_unique_among_folders
     return if folder.nil?
 

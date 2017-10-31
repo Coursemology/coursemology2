@@ -16,8 +16,23 @@ class Duplicator
     @mode = options[:mode]
   end
 
-  # Deep copy the arguments to this function. Objects must provide an +initialize_duplicate+
-  # method which duplicates its children.
+  # Deep copies the given item(s) and initializes the duplicates by calling `initialize_duplicate`
+  # on the duplicates.
+  #
+  # `initialize_duplicate` may further trigger duplication of the source item's
+  # children. If a collection is given, some of the items to be duplicated might be associated.
+  # `initialize_duplicate` may be used to associate the duplicates of associated items.
+  #
+  # Since the duplicator does not have any knowledge of what these items are, expect for the fact that
+  # they respond to `initialize_duplicate`, the duplicator does not impose an order on which items are
+  # duplicated first. To simplify the process of associating duplicated objects, we give the responsibility
+  # of forming the association to the object that is duplicated later.
+  #
+  # E.g. Suppose that `Group` has many `Student`s and the instance `student_a` belongs to the instance 'group_a'.
+  # If `group_a` is duplicated first, then calling `duplicate_student_a.initialize_duplicate` should add
+  # `duplicate_student_a` to `duplicate_group_a`'s list of students. If `student_a` is duplicated first, then
+  # vice versa. Thus, the code to form the association can be found in both `Student#initialize_duplicate` and
+  # `Group#initialize_duplicate`.
   #
   # @overload duplicate(array_of_stuff)
   #   @param [Enumerable<#initialize_duplicate>] array_of_stuff Enumerable of objects
@@ -64,8 +79,7 @@ class Duplicator
     item_or_collection.respond_to?(:to_ary) ? item_or_collection.map(&block) : yield(item_or_collection)
   end
 
-  # Deep copy +source_object+ and its children. +source_object+ must provide a
-  # +initialize_duplicate+ method which duplicates its children.
+  # See `#duplicate`.
   #
   # @param [#initialize_duplicate] source_object The object to be duplicated.
   # @return duplicated_object A reference to the duplicated object.

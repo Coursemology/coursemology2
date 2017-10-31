@@ -1,4 +1,5 @@
 import actionTypes, { duplicableItemTypes } from 'course/duplication/constants';
+import { nestFolders } from 'course/duplication/utils';
 
 const initialState = {
   confirmationOpen: false,
@@ -10,8 +11,12 @@ const initialState = {
   },
   targetCourseId: null,
   targetCourses: [],
+
   assessmentsComponent: [],
   surveyComponent: [],
+  achievementsComponent: [],
+  materialsComponent: [],
+
   isLoading: false,
   isDuplicatingObjects: false,
 };
@@ -24,14 +29,17 @@ export default function (state = initialState, action) {
       return { ...state, isLoading: true };
     }
     case actionTypes.LOAD_OBJECTS_LIST_SUCCESS: {
-      const sortedTargetCourses = action.duplicationData.targetCourses.sort(
+      const { targetCourses, materialsComponent, ...data } = action.duplicationData;
+      const sortedTargetCourses = targetCourses.sort(
         (a, b) => a.title.localeCompare(b.title)
       );
+      const nestedFolders = nestFolders(materialsComponent);
       return {
         ...state,
-        ...action.duplicationData,
+        ...data,
         isLoading: false,
         targetCourses: sortedTargetCourses,
+        materialsComponent: nestedFolders,
       };
     }
     case actionTypes.LOAD_OBJECTS_LIST_FAILURE: {
