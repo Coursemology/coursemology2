@@ -24,7 +24,7 @@ function Topic(props) {
   }
 
   return (
-    <div id={`discussion-topic-${props.topicId}`}>
+    <div id={`discussion-topic-${props.topicId}`} className={styles.topicComponent}>
       <div className={styles.topicTimestamp}>
         <span className="glyphicon glyphicon-chevron-down" />
         &nbsp;
@@ -37,7 +37,7 @@ function Topic(props) {
         {props.postIds.map(id => <PostContainer key={id.toString()} postId={id} isRoot />)}
       </div>
       <Reply topicId={props.topicId} />
-      <Divider style={{ marginBottom: '1em' }} />
+      <Divider />
     </div>
   );
 }

@@ -17,8 +17,12 @@ $comment-background: #ffffff;
 
 .topicsContainer {
   flex: 1;
-  padding: 1em 1em 0;
   overflow: scroll;
+  padding: 0 1em;
+}
+
+.topicComponent {
+  padding-top: 1em;
 }
 
 .replyContainer {

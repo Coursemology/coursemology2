@@ -9,7 +9,7 @@ import NewPostContainer from './DiscussionElements/NewPostContainer';
 import Topic from './DiscussionElements/Topic';
 import Controls from './DiscussionElements/Controls';
 import { unsetScrollTopic } from '../actions/discussion';
-import { orderedTopicIdsSelector } from '../selectors/discussion';
+import { inverseCreatedAtOrderedTopicsSelector, orderedTopicIdsSelector } from '../selectors/discussion';
 
 const propTypes = {
   topicIds: PropTypes.arrayOf(PropTypes.string),
@@ -28,11 +28,17 @@ class Discussion extends React.Component {
     this.topicPane = null;
   }
 
-  componentDidUpdate() {
-    if (this.props.scrollTopicId !== null) {
-      const topicElem = document.getElementById(`discussion-topic-${this.props.scrollTopicId}`);
-      this.topicPane.scrollTop = topicElem.offsetTop;
+  componentDidUpdate(prevProps) {
+    if (this.props.scrollTopicId === null || this.props.scrollTopicId === prevProps.scrollTopicId) {
+      return;
     }
+
+    const topicElem = document.getElementById(`discussion-topic-${this.props.scrollTopicId}`);
+    if (topicElem.offsetParent !== this.topicPane) {
+      this.topicPane.scrollTop = topicElem.offsetTop - this.topicPane.offsetTop;
+    } else {
+      this.topicPane.scrollTop = topicElem.offsetTop;
+    } // Setting scrollTop will trigger the onScroll callback, which typically unsets scrollTopicId thereafter
   }
 
   setRef = (topicPaneElement) => {
@@ -63,11 +69,44 @@ class Discussion extends React.Component {
 Discussion.propTypes = propTypes;
 Discussion.defaultProps = defaultProps;
 
+/**
+ * Returns the topic id to scroll to.
+ *
+ * This topic id is determined by:
+ * 1) If a scrollTopicId is set in the state, it is returned
+ * 2) If not, and if autoscrolling is on, return the id of the first created topic (by createdAt time) in the group of
+ * topics with the largest timestamp smaller than the player progress (first topic for current player progress)
+ * 3) If neither of those are present, return null
+ *
+ * @param state The full application state
+ * @return {null|string} The topic id to scroll to
+ */
+function getScrollTopicId(state) {
+  const scrollTopicId = state.discussion.scrolling.scrollTopicId;
+  if (scrollTopicId !== null) {
+    return scrollTopicId;
+  }
+
+  const autoScroll = state.discussion.scrolling.autoScroll;
+  if (!autoScroll) {
+    return null;
+  }
+
+  const currentPlayerProgress = state.video.playerProgress;
+  const autoScrollTopic = inverseCreatedAtOrderedTopicsSelector(state)
+    .findLastEntry(topic => topic.timestamp < currentPlayerProgress);
+
+  if (autoScrollTopic === undefined) {
+    return null;
+  }
+  return autoScrollTopic[0];
+}
+
 function mapStateToProps(state) {
-  const scrolling = state.discussion.scrolling;
   return {
     topicIds: orderedTopicIdsSelector(state),
-    scrollTopicId: scrolling.topicId,
+    scrollTopicId: getScrollTopicId(state),
+    scrollTopicIdSet: state.discussion.scrolling.scrollTopicId !== null,
   };
 }
 
@@ -78,11 +117,11 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mergeProps(stateProps, dispatchProps) {
-  if (stateProps.scrollTopicId === null) {
-    return Object.assign({}, stateProps, dispatchProps, { onScroll: null });
+  if (stateProps.scrollTopicIdSet) {
+    return Object.assign({}, stateProps, dispatchProps);
   }
 
-  return Object.assign({}, stateProps, dispatchProps);
+  return Object.assign({}, stateProps, dispatchProps, { onScroll: null });
 }
 
 export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Discussion);
