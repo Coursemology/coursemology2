@@ -28,8 +28,23 @@ class Discussion extends React.Component {
     this.topicPane = null;
   }
 
+  componentDidMount() {
+    this.scrollToTopic();
+  }
+
   componentDidUpdate(prevProps) {
-    if (this.props.scrollTopicId === null || this.props.scrollTopicId === prevProps.scrollTopicId) {
+    if (this.props.scrollTopicId === prevProps.scrollTopicId) {
+      return;
+    }
+    this.scrollToTopic();
+  }
+
+  setRef = (topicPaneElement) => {
+    this.topicPane = topicPaneElement;
+  };
+
+  scrollToTopic() {
+    if (this.props.scrollTopicId === null) {
       return;
     }
 
@@ -40,10 +55,6 @@ class Discussion extends React.Component {
       this.topicPane.scrollTop = topicElem.offsetTop;
     } // Setting scrollTop will trigger the onScroll callback, which typically unsets scrollTopicId thereafter
   }
-
-  setRef = (topicPaneElement) => {
-    this.topicPane = topicPaneElement;
-  };
 
   render() {
     return (

@@ -8,7 +8,10 @@
   h3
     - timestamp = Time.at(video_topic.timestamp).utc.strftime("%H:%M:%S")
     = link_to t('.comment_title', title: video.title, timestamp: timestamp),
-              edit_course_video_submission_path(current_course, video, submission)
+              edit_course_video_submission_path(current_course,
+                                                video,
+                                                submission,
+                                                params: { scroll_to_topic: video_topic})
   - if can?(:manage, topic)
     = link_to_toggle_pending(topic)
   h4

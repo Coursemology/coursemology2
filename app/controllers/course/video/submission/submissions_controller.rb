@@ -22,12 +22,17 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
     @topics = @video.topics.includes(posts: :children).order(:timestamp)
     @topics = @topics.reject { |topic| topic.posts.empty? }
     @posts = @topics.map(&:posts).inject(Course::Discussion::Post.none, :+)
+    @scroll_topic_id = scroll_topic_params
   end
 
   private
 
   def create_params
     { course_user: current_course_user }
+  end
+
+  def scroll_topic_params
+    params[:scroll_to_topic]
   end
 
   def authorize_video!
