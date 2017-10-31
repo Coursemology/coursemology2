@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   base_time = Time.zone.now.to_i
   sequence :email do |n|
     "user_#{n}@domain_#{base_time}_name.com"

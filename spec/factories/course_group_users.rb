@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :course_group_user, class: Course::GroupUser.name do
     transient do
       course { build(:course) }

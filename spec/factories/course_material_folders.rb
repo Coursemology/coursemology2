@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :course_material_folder, class: Course::Material::Folder.name, aliases: [:folder] do
     course
     sequence(:name) { |n| "Folder #{n}" }

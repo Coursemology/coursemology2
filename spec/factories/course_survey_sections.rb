@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:course_survey_section_title) { |n| "Survey Section #{n}" }
   factory :course_survey_section, class: Course::Survey::Section.name, aliases: [:section] do
     transient do

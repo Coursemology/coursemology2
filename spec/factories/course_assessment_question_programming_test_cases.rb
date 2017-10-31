@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   base_time = Time.zone.now.to_i
   factory :course_assessment_question_programming_test_case,
           class: Course::Assessment::Question::ProgrammingTestCase do

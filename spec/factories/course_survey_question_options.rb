@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:course_survey_question_option_text) { |n| "Option #{n}" }
   factory :course_survey_question_option, class: Course::Survey::QuestionOption.name do
     transient do

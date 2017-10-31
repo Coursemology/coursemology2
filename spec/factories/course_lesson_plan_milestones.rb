@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :course_lesson_plan_milestone, class: Course::LessonPlan::Milestone.name do
     course
     sequence(:title) { |n| "Example Milestone #{n}" }

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   sequence :uid do |n|
     Time.zone.now.to_i.to_s + n.to_s
   end

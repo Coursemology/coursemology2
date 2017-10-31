@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :course_assessment_question_multiple_response_option,
           class: Course::Assessment::Question::MultipleResponseOption do
     question { build(:course_assessment_question_multiple_response) }

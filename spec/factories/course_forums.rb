@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :forum, class: Course::Forum.name do
     course
     sequence(:name) { |n| "forum #{n}" }

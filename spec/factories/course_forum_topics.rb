@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :forum_topic, class: Course::Forum::Topic.name do
     transient do
       course { build(:course) }

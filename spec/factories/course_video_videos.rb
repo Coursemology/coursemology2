@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:course_video_title) { |n| "Video #{n}" }
   sequence(:course_video_description) { |n| "Video Description #{n}" }
   factory :course_video, class: Course::Video.name, aliases: [:video],

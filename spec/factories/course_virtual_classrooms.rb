@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :course_virtual_classroom, class: 'Course::VirtualClassroom' do
     course
     sequence(:title) { |n| "VirtualClassroom #{n}" }

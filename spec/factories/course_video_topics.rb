@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :course_video_topic, class: Course::Video::Topic.name,
                                parent: :course_discussion_topic,
                                aliases: [:video_topic] do
