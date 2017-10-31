@@ -262,6 +262,7 @@ export function submitNewReplyToServer(topicId) {
 
     const state = getState();
     const text = state.discussion.pendingReplyPosts.get(topicId).content;
+    const discussionTopicId = state.discussion.topics.get(topicId).discussionTopicId;
 
     if (text === '') {
       dispatch(setNotification('Comment cannot be blank!'));
@@ -269,7 +270,7 @@ export function submitNewReplyToServer(topicId) {
     }
 
     CourseAPI.comments
-      .create(topicId, { discussion_post: { text } })
+      .create(discussionTopicId, { discussion_post: { text } })
       .then(() => {
         dispatch(refreshTopic(topicId));
         dispatch(removeReply(topicId));
