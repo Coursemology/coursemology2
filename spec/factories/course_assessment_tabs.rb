@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:course_assessment_tab_weight) { |n| n }
   factory :course_assessment_tab, class: Course::Assessment::Tab do
     transient do

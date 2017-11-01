@@ -7,7 +7,7 @@ module DeviseControllerMacros
   def requires_login(as: nil)
     before do
       @request.env['devise.mapping'] = Devise.mappings[:user]
-      sign_in FactoryGirl.create(as) if as
+      sign_in FactoryBot.create(as) if as
     end
   end
 end

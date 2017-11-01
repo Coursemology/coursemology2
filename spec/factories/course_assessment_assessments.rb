@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:course_assessment_assessment_name) { |n| "Assessment #{n}" }
   sequence(:course_assessment_assessment_description) { |n| "Awesome description #{n}" }
   factory :course_assessment_assessment, class: Course::Assessment, aliases: [:assessment],

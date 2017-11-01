@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:course_survey_answer_text) { |n| "Response to survey question #{n}" }
   factory :course_survey_answer, class: Course::Survey::Answer.name do
     response

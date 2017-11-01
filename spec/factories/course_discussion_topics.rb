@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :course_discussion_topic, class: Course::Discussion::Topic.name do
     course
     pending_staff_reply false

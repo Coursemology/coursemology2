@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :course_video_submission, class: Course::Video::Submission.name,
                                     aliases: [:video_submission],
                                     parent: :course_experience_points_record do

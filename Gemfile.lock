@@ -192,10 +192,10 @@ GEM
     excon (0.59.0)
     execjs (2.7.0)
     exifr (1.3.2)
-    factory_girl (4.9.0)
+    factory_bot (4.8.2)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.9.0)
-      factory_girl (~> 4.9.0)
+    factory_bot_rails (4.8.2)
+      factory_bot (~> 4.8.2)
       railties (>= 3.0.0)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
@@ -583,7 +583,7 @@ DEPENDENCIES
   edge
   ejs
   email_spec
-  factory_girl_rails
+  factory_bot_rails
   filename
   font-awesome-rails
   friendly_id
@@ -647,7 +647,6 @@ DEPENDENCIES
   webpacker
   workflow
   yard
-
 
 BUNDLED WITH
    1.15.4

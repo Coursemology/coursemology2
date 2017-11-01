@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :course_lesson_plan_event, class: Course::LessonPlan::Event.name,
                                      parent: :course_lesson_plan_item do
     sequence(:title) { |n| "Example Course Event #{n}" }

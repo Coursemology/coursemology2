@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :course_discussion_post, class: Course::Discussion::Post.name do
     transient do
       upvoted_by []

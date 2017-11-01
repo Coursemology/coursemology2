@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :course_assessment_question_programming_template_file,
           class: Course::Assessment::Question::ProgrammingTemplateFile do
     question { build(:course_assessment_question_programming) }

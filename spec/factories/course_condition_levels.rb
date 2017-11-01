@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :course_condition_level,
           class: Course::Condition::Level.name, aliases: [:level_condition] do
     course

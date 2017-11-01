@@ -125,8 +125,8 @@ group :development, :test do
   # Use RSpec for Behaviour testing
   gem 'rspec-rails'
 
-  # Factory Girl for factories
-  gem 'factory_girl_rails'
+  # Factory Bot for factories
+  gem 'factory_bot_rails'
 
   # Checks that all translations are used and defined
   gem 'i18n-tasks', require: false

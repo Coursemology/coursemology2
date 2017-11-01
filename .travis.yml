@@ -53,7 +53,7 @@ script:
   - 'if [ "$GROUP" = "misc" ]; then bundle exec consistency_fail; fi'
   - 'if [ "$GROUP" = "misc" ]; then bundle exec i18n-tasks unused; fi'
   - 'if [ "$GROUP" = "misc" ]; then bundle exec i18n-tasks missing; fi'
-  - 'if [ "$GROUP" = "misc" ]; then bundle exec rake factory_girl:lint; fi'
+  - 'if [ "$GROUP" = "misc" ]; then bundle exec rake factory_bot:lint; fi'
   - 'if [ "$GROUP" = "misc" ]; then bundle exec rake assets:precompile; fi'
   - 'if [ "$GROUP" = "misc" ]; then cd client && yarn; fi'
   - 'if [ "$GROUP" = "misc" ]; then yarn lint; fi'

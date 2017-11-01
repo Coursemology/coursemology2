@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :course_assessment_question_text_response,
           class: Course::Assessment::Question::TextResponse,
           parent: :course_assessment_question do

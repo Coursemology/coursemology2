@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :course_discussion_post_vote, class: Course::Discussion::Post::Vote.name do
     association :post, factory: :course_discussion_post
     vote_flag true

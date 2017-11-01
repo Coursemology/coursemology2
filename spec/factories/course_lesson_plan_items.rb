@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-FactoryGirl.define do
+FactoryBot.define do
   factory :course_lesson_plan_item, class: Course::LessonPlan::Item.name do
     course
     base_exp          { rand(1..10) * 100 }
