@@ -77,6 +77,9 @@ function removePost(postId) {
  * Defaults for a topic properties will be applied if they are not set.
  *
  * If a topic with the id already exists, it will be totally replaced by this new topic. Attributes will not be merged.
+ *
+ * This action will also set the topicId under for the scrolling state, signalling to the components that they
+ * should scroll to the element for this new topic after it's rendered.
  * @param topicId The id of the new topic
  * @param topicProps The properties of the new topic
  * @returns {{type: discussionActionTypes, topicId: string, topicProps: Object}} The create topic action
@@ -174,6 +177,18 @@ export function changeAutoScroll(autoScroll) {
   return {
     type: discussionActionTypes.CHANGE_AUTO_SCROLL,
     autoScroll,
+  };
+}
+
+/**
+ * Creates an action to unset the topic id in the scrolling state.
+ *
+ * Doing so will signal to the components that they should no longer snap to the topic's element on update.
+ * @return {{type: discussionActionTypes}}
+ */
+export function unsetScrollTopic() {
+  return {
+    type: discussionActionTypes.UNSET_SCROLL_TOPIC,
   };
 }
 

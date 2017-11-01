@@ -8,15 +8,18 @@ import styles from './Discussion.scss';
 import NewPostContainer from './DiscussionElements/NewPostContainer';
 import Topic from './DiscussionElements/Topic';
 import Controls from './DiscussionElements/Controls';
+import { unsetScrollTopic } from '../actions/discussion';
+import { inverseCreatedAtOrderedTopicsSelector, orderedTopicIdsSelector } from '../selectors/discussion';
 
 const propTypes = {
   topicIds: PropTypes.arrayOf(PropTypes.string),
-  autoScroll: PropTypes.bool,
+  scrollTopicId: PropTypes.string,
+  onScroll: PropTypes.func,
 };
 
 const defaultProps = {
   topicIds: [],
-  autoScroll: false,
+  scrollTopicId: null,
 };
 
 class Discussion extends React.Component {
@@ -25,39 +28,49 @@ class Discussion extends React.Component {
     this.topicPane = null;
   }
 
-  componentWillUpdate(nextProps) {
-    if (this.props.autoScroll && !nextProps.autoScroll) {
-      this.savedAutoScrollPos = this.topicPane.scrollTop;
-    }
+  componentDidMount() {
+    this.scrollToTopic();
   }
 
   componentDidUpdate(prevProps) {
-    if (!this.props.autoScroll && prevProps.autoScroll) {
-      this.topicPane.scrollTop = this.savedAutoScrollPos;
-    } else if (this.props.autoScroll) {
-      this.topicPane.scrollTop = this.topicPane.scrollHeight;
+    if (this.props.scrollTopicId === prevProps.scrollTopicId) {
+      return;
     }
+    this.scrollToTopic();
   }
 
   setRef = (topicPaneElement) => {
     this.topicPane = topicPaneElement;
   };
 
+  scrollToTopic() {
+    if (this.props.scrollTopicId === null) {
+      return;
+    }
+
+    const topicElem = document.getElementById(`discussion-topic-${this.props.scrollTopicId}`);
+    if (topicElem.offsetParent !== this.topicPane) {
+      this.topicPane.scrollTop = topicElem.offsetTop - this.topicPane.offsetTop;
+    } else {
+      this.topicPane.scrollTop = topicElem.offsetTop;
+    } // Setting scrollTop will trigger the onScroll callback, which typically unsets scrollTopicId thereafter
+  }
+
   render() {
     return (
       <Paper zDepth={2} className={styles.rootContainer}>
-        <div
-          ref={this.setRef}
-          className={styles.topicsContainer}
-          style={{ overflowY: this.props.autoScroll ? 'hidden' : 'scroll' }}
-        >
-          {this.props.topicIds.map(id => <Topic key={id.toString()} topicId={id} />)}
-        </div>
-        <Divider />
         <div className={styles.newCommentEditor}>
           <NewPostContainer>
             <Controls />
           </NewPostContainer>
+        </div>
+        <Divider />
+        <div
+          ref={this.setRef}
+          className={styles.topicsContainer}
+          onScroll={this.props.onScroll}
+        >
+          {this.props.topicIds.map(id => <Topic key={id.toString()} topicId={id} />)}
         </div>
       </Paper>
     );
@@ -67,20 +80,59 @@ class Discussion extends React.Component {
 Discussion.propTypes = propTypes;
 Discussion.defaultProps = defaultProps;
 
-function mapStateToProps(state) {
-  // TODO: Use reselect
-  const currentTime = state.video.playerProgress;
+/**
+ * Returns the topic id to scroll to.
+ *
+ * This topic id is determined by:
+ * 1) If a scrollTopicId is set in the state, it is returned
+ * 2) If not, and if autoscrolling is on, return the id of the first created topic (by createdAt time) in the group of
+ * topics with the largest timestamp smaller than the player progress (first topic for current player progress)
+ * 3) If neither of those are present, return null
+ *
+ * @param state The full application state
+ * @return {null|string} The topic id to scroll to
+ */
+function getScrollTopicId(state) {
+  const scrollTopicId = state.discussion.scrolling.scrollTopicId;
+  if (scrollTopicId !== null) {
+    return scrollTopicId;
+  }
 
-  const sortedKeys = state.discussion.topics
-    .filter(topic => topic.topLevelPostIds.length > 0)
-    .filter(topic => !state.discussion.autoScroll || topic.timestamp <= currentTime)
-    .sort((topic1, topic2) => topic1.timestamp - topic2.timestamp)
-    .keySeq()
-    .toArray();
+  const autoScroll = state.discussion.scrolling.autoScroll;
+  if (!autoScroll) {
+    return null;
+  }
+
+  const currentPlayerProgress = state.video.playerProgress;
+  const autoScrollTopic = inverseCreatedAtOrderedTopicsSelector(state)
+    .findLastEntry(topic => topic.timestamp < currentPlayerProgress);
+
+  if (autoScrollTopic === undefined) {
+    return null;
+  }
+  return autoScrollTopic[0];
+}
+
+function mapStateToProps(state) {
   return {
-    topicIds: sortedKeys,
-    autoScroll: state.discussion.autoScroll,
+    topicIds: orderedTopicIdsSelector(state),
+    scrollTopicId: getScrollTopicId(state),
+    scrollTopicIdSet: state.discussion.scrolling.scrollTopicId !== null,
   };
 }
 
-export default connect(mapStateToProps)(Discussion);
+function mapDispatchToProps(dispatch) {
+  return {
+    onScroll: () => dispatch(unsetScrollTopic()),
+  };
+}
+
+function mergeProps(stateProps, dispatchProps) {
+  if (stateProps.scrollTopicIdSet) {
+    return Object.assign({}, stateProps, dispatchProps);
+  }
+
+  return Object.assign({}, stateProps, dispatchProps, { onScroll: null });
+}
+
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Discussion);

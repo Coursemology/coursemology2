@@ -39,7 +39,7 @@ Controls.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
-    autoScroll: state.discussion.autoScroll,
+    autoScroll: state.discussion.scrolling.autoScroll,
   };
 }
 
