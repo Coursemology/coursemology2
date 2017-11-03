@@ -85,7 +85,6 @@ namespace :coursemology do
           template_files: [template_file], test_cases: test_cases, assessment: assessment,
           file: File.new(Rails.root.join('lib/tasks/coursemology/programming_question.zip'))
         )
-        assessment.questions << question.acting_as
         assessment.published = true
         assessment.save!
       end
