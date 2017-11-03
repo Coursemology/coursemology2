@@ -17,6 +17,7 @@ module Course::DuplicationAbilityComponent
   # Include in the list of target courses only courses which superusers can duplicate to.
   # Without this, the list will consist of all courses in the instance.
   def disallow_superusers_duplicate_via_frontend
+    cannot :duplicate, Course
     cannot :duplicate_to, Course
   end
 
