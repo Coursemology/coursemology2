@@ -33,10 +33,6 @@ const style = {
     display: 'inline-block',
     outline: 'none',
   },
-  colorBar: {
-    width: '23px',
-    height: '8px',
-  },
   chevron: {
     color: 'rgba(0, 0, 0, 0.4)',
     fontSize: '12px',
