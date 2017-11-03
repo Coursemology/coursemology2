@@ -319,7 +319,6 @@ class ScribingToolbar extends Component {
       lineToolType: scribingToolThickness.LINE,
       open: this.state.popovers[scribingPopoverTypes.LINE],
       anchorEl: this.state.popoverAnchor,
-      onRequestClose: () => (this.onRequestClosePopover(scribingPopoverTypes.LINE)),
       colorPickerPopoverOpen: this.state.colorDropdowns[scribingToolColor.LINE],
       colorPickerPopoverAnchorEl: this.state.popoverColorPickerAnchor,
       onRequestCloseColorPickerPopover: () => (this.onRequestCloseColorPicker(scribingToolColor.LINE)),
@@ -329,10 +328,6 @@ class ScribingToolbar extends Component {
       lineToolType: scribingToolThickness.SHAPE_BORDER,
       open: this.state.popovers[scribingPopoverTypes.SHAPE],
       anchorEl: this.state.popoverAnchor,
-      onRequestClose: () => {
-        this.onRequestClosePopover(scribingPopoverTypes.SHAPE);
-        this.props.setNoFill(this.props.answerId, false);
-      },
       currentShape: this.props.scribing.selectedShape,
       setSelectedShape: shape => (this.setSelectedShape(shape)),
       onClickBorderColorPicker: event => (this.onClickColorPicker(event, scribingToolColor.SHAPE_BORDER)),
@@ -479,6 +474,11 @@ class ScribingToolbar extends Component {
           {scribing.activeObject && scribing.activeObject.type === 'line' ?
             <LinePopover
               {...linePopoverProps}
+              onRequestClose={() => {
+                this.props.setCanvasSave(this.props.answerId);
+                this.setToSelectTool();
+                this.onRequestClosePopover(scribingPopoverTypes.LINE);
+              }}
               selectedLineStyle={this.getActiveObjectSelectedLineStyle()}
               onClickLineStyleChip={(_, __, style) => {
                 let strokeDashArray = [];
@@ -506,6 +506,7 @@ class ScribingToolbar extends Component {
             :
             <LinePopover
               {...linePopoverProps}
+              onRequestClose={() => (this.onRequestClosePopover(scribingPopoverTypes.LINE))}
               selectedLineStyle={this.props.scribing.lineStyles[scribingToolLineStyle.LINE]}
               onClickLineStyleChip={this.onClickLineStyleChip}
               toolThicknessValue={this.props.scribing.thickness[scribingToolThickness.LINE]}
@@ -538,6 +539,12 @@ class ScribingToolbar extends Component {
               && (scribing.activeObject.type === 'rect' || scribing.activeObject.type === 'ellipse') ?
                 <ShapePopover
                   {...shapePopoverProps}
+                  onRequestClose={() => {
+                    this.props.setCanvasSave(this.props.answerId);
+                    this.setToSelectTool();
+                    this.onRequestClosePopover(scribingPopoverTypes.SHAPE);
+                    this.props.setNoFill(this.props.answerId, false);
+                  }}
                   displayShapeField={false}
                   selectedLineStyle={this.getActiveObjectSelectedLineStyle()}
                   onClickLineStyleChip={(_, __, style) => {
@@ -571,6 +578,10 @@ class ScribingToolbar extends Component {
                 :
                 <ShapePopover
                   {...shapePopoverProps}
+                  onRequestClose={() => {
+                    this.onRequestClosePopover(scribingPopoverTypes.SHAPE);
+                    this.props.setNoFill(this.props.answerId, false);
+                  }}
                   displayShapeField
                   selectedLineStyle={this.props.scribing.lineStyles[scribingToolLineStyle.SHAPE_BORDER]}
                   onClickLineStyleChip={this.onClickLineStyleChip}
