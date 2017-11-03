@@ -74,10 +74,6 @@ export default defineMessages({
     id: 'course.assessment.question.scribing.scribingQuestionForm.lessThanEqualZeroValidationError',
     defaultMessage: 'Value must be greater than 0.',
   },
-  fileAttachmentRequired: {
-    id: 'course.assessment.question.scribing.scribingQuestionForm.fileAttachmentRequired',
-    defaultMessage: 'File attachment required.',
-  },
   scribingQuestionWarning: {
     id: 'course.assessment.question.scribing.scribingQuestionForm.scribingQuestionWarning',
     defaultMessage: 'NOTE: Each page of a PDF file will be created as a single Scribing question \

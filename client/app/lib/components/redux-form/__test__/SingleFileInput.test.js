@@ -1,17 +1,12 @@
 import React from 'react';
-import InsertDriveFileIcon from 'material-ui/svg-icons/editor/insert-drive-file';
-import shallowUntil from 'utils/shallowUntil';
+import PropTypes from 'prop-types';
+import { mount } from 'enzyme';
 import SingleFileInput from '../SingleFileInput';
 
 
 describe('<SingleFileInput />', () => {
-  const options = {
-    context: { intl },
-    childContextTypes: { intl: intlShape },
-  };
-
-  it('renders with url and name when provided', () => {
-    const singleFileInput = shallowUntil(
+  it('renders with url and name when provided in badge/avatar style', () => {
+    const singleFileInput = mount(
       <SingleFileInput
         input={{
           value: {
@@ -21,9 +16,15 @@ describe('<SingleFileInput />', () => {
           onChange: jest.fn(),
         }}
       />,
-      options,
-      'div'
+      {
+        context: { intl, muiTheme }, // eslint-disable-line no-undef
+        childContextTypes: {
+          intl: intlShape,
+          muiTheme: PropTypes.object,
+        },
+      }
     );
+
     const avatar = singleFileInput.find('Avatar').first();
 
     expect(singleFileInput.find('.file-name').text().includes('bar')).toBeTruthy();
@@ -31,20 +32,100 @@ describe('<SingleFileInput />', () => {
     expect(avatar.prop('icon')).toBeUndefined();
   });
 
-  it('renders a placeholder when no url is provided', () => {
-    const singleFileInput = shallowUntil(
+  it('renders a placeholder when no url is provided in badge/avatar style', () => {
+    const singleFileInput = mount(
       <SingleFileInput
         input={{
           value: {},
           onChange: jest.fn(),
         }}
       />,
-      options,
-      'div'
+      {
+        context: { intl, muiTheme }, // eslint-disable-line no-undef
+        childContextTypes: {
+          intl: intlShape,
+          muiTheme: PropTypes.object,
+        },
+      }
     );
 
     const avatar = singleFileInput.find('Avatar').first();
-    expect(avatar.prop('icon')).toEqual(<InsertDriveFileIcon />);
-    expect(avatar.prop('src')).toBeUndefined();
+    // SvgIcon is the element of the placeholder 'InsertDriveFileIcon'
+    expect(avatar.find('SvgIcon').length).toBe(1);
+    // No img element is rendered
+    expect(avatar.find('img').length).toBe(0);
+  });
+
+  it('renders with url and name when provided in "isNotBadge" style', () => {
+    const singleFileInput = mount(
+      <SingleFileInput
+        isNotBadge
+        input={{
+          value: {
+            url: 'foo',
+            name: 'bar',
+          },
+          onChange: jest.fn(),
+        }}
+      />,
+      {
+        context: { intl, muiTheme }, // eslint-disable-line no-undef
+        childContextTypes: {
+          intl: intlShape,
+          muiTheme: PropTypes.object,
+        },
+      }
+    );
+    const imageSrc = singleFileInput.find('img').first();
+
+    expect(singleFileInput.find('.file-name').text().includes('bar')).toBeTruthy();
+    expect(imageSrc.prop('src')).toEqual('foo');
+  });
+
+  it('renders a placeholder when no url is provided in "isNotBadge" style', () => {
+    const singleFileInput = mount(
+      <SingleFileInput
+        isNotBadge
+        input={{
+          value: {},
+          onChange: jest.fn(),
+        }}
+      />,
+      {
+        context: { intl, muiTheme }, // eslint-disable-line no-undef
+        childContextTypes: {
+          intl: intlShape,
+          muiTheme: PropTypes.object,
+        },
+      }
+    );
+
+    // SvgIcon is the element of the placeholder 'InsertDriveFileIcon'
+    expect(singleFileInput.find('SvgIcon').length).toBe(1);
+    // No img element is rendered
+    expect(singleFileInput.find('img').length).toBe(0);
+  });
+
+  it('renders required error message', () => {
+    const singleFileInput = mount(
+      <SingleFileInput
+        isNotBadge
+        required
+        meta={{ touched: true }}
+        input={{
+          value: {},
+          onChange: jest.fn(),
+        }}
+      />,
+      {
+        context: { intl, muiTheme }, // eslint-disable-line no-undef
+        childContextTypes: {
+          intl: intlShape,
+          muiTheme: PropTypes.object,
+        },
+      }
+    );
+
+    expect(singleFileInput.find('.error-message').length).toBe(1);
   });
 });

@@ -5,7 +5,7 @@ import { Field } from 'redux-form';
 import createComponent from 'lib/components/redux-form/createComponent';
 import mapError from 'lib/components/redux-form/mapError';
 
-import FileUploadComponent from './FileUploadComponent';
+import SingleFileInput from 'lib/components/redux-form/SingleFileInput';
 import { questionNamePrefix, questionIdPrefix } from '../constants';
 
 
@@ -14,27 +14,23 @@ const mapProps = props => ({ ...mapError(props) });
 const propTypes = {
   field: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  errorMessage: PropTypes.string.isRequired,
-  validate: PropTypes.arrayOf(PropTypes.func),
   isLoading: PropTypes.bool,
+  required: PropTypes.bool,
 };
 
 const FileUploadField = (props) => {
-  const { field, label, validate, isLoading, errorMessage } = props;
+  const { field, label, isLoading, required } = props;
 
   return (
     <Field
       name={questionNamePrefix + field}
       id={questionIdPrefix + field}
+      component={SingleFileInput}
+      isNotBadge
+      label={label}
       disabled={isLoading}
-      validate={validate}
-      component={fuProps => (<FileUploadComponent
-        field={field}
-        label={label}
-        isLoading={isLoading}
-        errorMessage={errorMessage}
-        {...fuProps}
-      />)}
+      accept="image/gif, image/png, image/jpeg, image/pjpeg, application/pdf"
+      required={required}
     />
   );
 };

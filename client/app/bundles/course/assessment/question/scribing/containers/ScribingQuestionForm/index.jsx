@@ -102,12 +102,17 @@ class ScribingQuestionForm extends React.Component {
       </div> : null;
   }
 
-  renderExistingAttachmentLabel() {
+  renderExistingAttachment() {
     return (
       <div className={styles.row}>
         <label htmlFor="question_scribing_attachment">
-          File uploaded: {this.props.data.question.attachment_reference.name}
+          File uploaded:
         </label>
+        <img
+          className={styles.uploadedImage}
+          src={this.props.data.question.attachment_reference.image_url}
+          alt={this.props.data.question.attachment_reference.name}
+        />
       </div> : []
     );
   }
@@ -220,14 +225,13 @@ class ScribingQuestionForm extends React.Component {
               {
                 this.props.data.question.attachment_reference
                   && this.props.data.question.attachment_reference.name ?
-                this.renderExistingAttachmentLabel() :
+                this.renderExistingAttachment() :
                 <div className={styles.row} >
                   <FileUploadField
                     field="attachment"
                     label={this.props.intl.formatMessage(translations.chooseFileButton)}
                     isLoading={this.props.data.isLoading}
-                    validate={[validations.required]}
-                    errorMessage={this.props.intl.formatMessage(translations.fileAttachmentRequired)}
+                    required
                   />
                   <div className={styles.warningText}>
                     {this.props.intl.formatMessage(translations.scribingQuestionWarning)}

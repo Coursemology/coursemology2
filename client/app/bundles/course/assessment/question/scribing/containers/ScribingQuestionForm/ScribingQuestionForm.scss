@@ -83,3 +83,11 @@ $black: #000000;
     font-size: inherit;
   }
 }
+
+.uploadedImage {
+  display: block;
+  height: auto;
+  max-height: 300px;
+  max-width: 300px;
+  width: auto;
+}
