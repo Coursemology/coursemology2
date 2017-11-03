@@ -34,6 +34,32 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
         end
       end
 
+      context 'when the solution contains Windows newlines' do
+        let(:question_traits) { :multiline_windows }
+        let(:answer_traits) { :multiline_linux }
+
+        it 'treats different answer and question newlines as equivalent' do
+          subject.grade(answer)
+          expect(answer).to be_correct
+          expect(answer.grade).to eq(question.solutions.exact_match.first.grade)
+          expect(grading.result['messages']).to \
+            contain_exactly(question.solutions.exact_match.first.explanation)
+        end
+      end
+
+      context 'when the solution contains Linux newlines' do
+        let(:question_traits) { :multiline_linux }
+        let(:answer_traits) { :multiline_windows }
+
+        it 'treats different answer and question newlines as equivalent' do
+          subject.grade(answer)
+          expect(answer).to be_correct
+          expect(answer.grade).to eq(question.solutions.exact_match.first.grade)
+          expect(grading.result['messages']).to \
+            contain_exactly(question.solutions.exact_match.first.explanation)
+        end
+      end
+
       context 'when one keyword is present' do
         let(:answer_traits) { :keyword }
 

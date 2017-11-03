@@ -112,7 +112,7 @@ export default class Answers extends Component {
             {question.solutions.map((solution, index) => (
               <TableRow key={index}>
                 <TableRowColumn>{solution.solutionType}</TableRowColumn>
-                <TableRowColumn>{solution.solution}</TableRowColumn>
+                <TableRowColumn style={{ whiteSpace: 'pre-wrap' }}>{solution.solution}</TableRowColumn>
                 <TableRowColumn>{solution.grade}</TableRowColumn>
               </TableRow>
             ))}
@@ -131,11 +131,20 @@ export default class Answers extends Component {
       component={props => (<div dangerouslySetInnerHTML={{ __html: props.input.value }} />)}
     />);
 
-    const editableAnswer = (<Field
+    const richtextAnswer = (<Field
       name={`${answerId}[answer_text]`}
       component={RichTextField}
       multiLine
     />);
+
+    const plaintextAnswer = (<Field
+      name={`${answerId}[answer_text]`}
+      component="textarea"
+      style={{ width: '100%' }}
+      rows={5}
+    />);
+
+    const editableAnswer = question.solutions ? plaintextAnswer : richtextAnswer;
 
     return (
       <div>

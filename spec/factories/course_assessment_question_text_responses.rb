@@ -33,5 +33,21 @@ FactoryBot.define do
       allow_attachment true
       hide_text true
     end
+
+    trait :multiline_windows do
+      solutions do
+        [
+          build(:course_assessment_question_text_response_solution, :multiline_windows, question: nil)
+        ]
+      end
+    end
+
+    trait :multiline_linux do
+      solutions do
+        [
+          build(:course_assessment_question_text_response_solution, :multiline_linux, question: nil)
+        ]
+      end
+    end
   end
 end

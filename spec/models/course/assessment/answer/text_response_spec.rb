@@ -31,5 +31,29 @@ RSpec.describe Course::Assessment::Answer::TextResponse, type: :model do
         expect(subject).to be_a(Course::Assessment::Answer)
       end
     end
+
+    describe '#normalized_answer_text' do
+      subject { answer.normalized_answer_text }
+
+      context 'with Windows newlines' do
+        let(:answer) do
+          create(:course_assessment_answer_text_response, :multiline_windows)
+        end
+
+        it 'normalizes newlines' do
+          expect(subject). to eq("hello world\nsecond line")
+        end
+      end
+
+      context 'with Linux newlines' do
+        let(:answer) do
+          create(:course_assessment_answer_text_response, :multiline_linux)
+        end
+
+        it 'normalizes newlines' do
+          expect(subject). to eq("hello world\nsecond line")
+        end
+      end
+    end
   end
 end

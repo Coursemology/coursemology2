@@ -15,6 +15,11 @@ en:
             failure: 'Could not delete %{name}: %{error}'
           form:
             allow_upload_file: 'Allow file upload in the answer'
+            multiline_explanation_html: >
+              Adding solutions allows the question to be autograded. Students can only input plaintext.
+              <br/>
+              If exact_match is selected, solutions with multiple lines must match student answers exactly for the
+              answer to be graded as correct.
             solution_type: 'Type'
             solution: 'Solution'
             grade: 'Grade'

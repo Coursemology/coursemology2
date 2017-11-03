@@ -18,5 +18,17 @@ FactoryBot.define do
       solution 'Exact Match'
       grade 2
     end
+
+    trait :multiline_windows do
+      solution_type :exact_match
+      solution "hello world\r\nsecond line"
+      grade 2
+    end
+
+    trait :multiline_linux do
+      solution_type :exact_match
+      solution "hello world\nsecond line"
+      grade 2
+    end
   end
 end

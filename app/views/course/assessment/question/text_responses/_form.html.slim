@@ -7,6 +7,7 @@
     = f.hidden_field :allow_attachment
   - else
     = f.input :allow_attachment, label: t('.allow_upload_file')
+    b = t('.multiline_explanation_html')
     table.table.table-striped.table-hover
       thead
         tr

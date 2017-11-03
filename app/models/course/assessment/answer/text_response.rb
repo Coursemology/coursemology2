@@ -14,8 +14,9 @@ class Course::Assessment::Answer::TextResponse < ApplicationRecord
     acting_as
   end
 
-  def sanitized_answer_text
-    Sanitize.fragment(answer_text).strip
+  # Normalize the newlines to \n.
+  def normalized_answer_text
+    answer_text.strip.encode(universal_newline: true)
   end
 
   def download(dir)
@@ -26,7 +27,7 @@ class Course::Assessment::Answer::TextResponse < ApplicationRecord
   def download_answer(dir)
     answer_path = File.join(dir, 'answer.txt')
     File.open(answer_path, 'w') do |file|
-      file.write(sanitized_answer_text)
+      file.write(normalized_answer_text)
     end
   end
 
