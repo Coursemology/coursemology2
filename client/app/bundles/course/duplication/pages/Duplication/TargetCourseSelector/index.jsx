@@ -125,13 +125,19 @@ class TargetCourseSelector extends React.Component {
 
     const failureMessage = intl.formatMessage(translations.failure);
     const currentCourseStartAt = moment(currentCourse.start_at);
+    const tomorrow = moment().add(1, 'day');
+    const defaultNewCourseStartAt = moment(currentCourseStartAt).set({
+      year: tomorrow.year(),
+      month: tomorrow.month(),
+      date: tomorrow.date(),
+    });
     const newCourseStartAt = moment(formValues && formValues.new_start_at);
 
     const timeNow = moment().format(shortDateTime);
     const newTitleValues = { title: currentCourse.title, timestamp: timeNow };
     const initialValues = {
       new_title: intl.formatMessage(translations.defaultTitle, newTitleValues),
-      new_start_at: moment().add(1, 'day').startOf('day'),
+      new_start_at: defaultNewCourseStartAt,
     };
 
     return (
