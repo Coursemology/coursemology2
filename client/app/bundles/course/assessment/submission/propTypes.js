@@ -156,6 +156,7 @@ export const scribingShape = PropTypes.shape({
   colors: PropTypes.object,
   lineStyles: PropTypes.object,
   thickness: PropTypes.object,
+  activeObject: PropTypes.object,
   cursor: PropTypes.string,
   currentStateIndex: PropTypes.number,
   canvasStates: PropTypes.array,
