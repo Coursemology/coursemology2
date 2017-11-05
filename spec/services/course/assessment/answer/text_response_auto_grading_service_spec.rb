@@ -73,7 +73,7 @@ RSpec.describe Course::Assessment::Answer::TextResponseAutoGradingService do
       end
 
       context 'when multiple keywords are present' do
-        let(:question_traits) { :multiple }
+        let(:question_traits) { :multiple_solutions }
 
         it 'matches all keywords' do
           answer.actable.answer_text = 'keywordA keywordB'

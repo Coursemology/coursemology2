@@ -41,7 +41,7 @@ RSpec.describe Course::Assessment::Answer::TextResponse, type: :model do
         end
 
         it 'normalizes newlines' do
-          expect(subject). to eq("hello world\nsecond line")
+          expect(subject).to eq("hello world\nsecond line")
         end
       end
 
@@ -51,7 +51,7 @@ RSpec.describe Course::Assessment::Answer::TextResponse, type: :model do
         end
 
         it 'normalizes newlines' do
-          expect(subject). to eq("hello world\nsecond line")
+          expect(subject).to eq("hello world\nsecond line")
         end
       end
     end
