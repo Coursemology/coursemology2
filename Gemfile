@@ -8,15 +8,13 @@ gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 gem 'bundler', '>= 1.10.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.0'
+gem 'rails', '~> 5.1.0'
 
 # Use PostgreSQL for the backend
 gem 'pg', '>= 0.18.2'
 
 # Schema Plus for some higher level database abstractions
 gem 'schema_plus_columns'
-gem 'schema_plus_enums'
-gem 'schema_plus_foreign_keys'
 gem 'schema_plus_indexes'
 gem 'schema_plus_pg_indexes'
 gem 'schema_plus_association_inverses', '>= 0.1.0'
@@ -40,7 +38,7 @@ gem 'calculated_attributes', '>= 0.1.3'
 gem 'baby_squeel'
 # For multiple table inheritance
 #   TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
-gem 'active_record-acts_as', github: 'Coursemology/active_record-acts_as', branch: 'rails5'
+gem 'active_record-acts_as', github: 'jeremyyap/active_record-acts_as', branch: 'coursemology'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Create pretty URLs and work with human-friendly strings
@@ -210,7 +208,7 @@ gem 'rubyzip', require: 'zip'
 gem 'nokogiri', '>= 1.8.1'
 
 # Polyglot support
-gem 'coursemology-polyglot'
+gem 'coursemology-polyglot', github: 'jeremyyap/polyglot'
 
 # To assist with bulk inserts into database
 gem 'activerecord-import', '>= 0.2.0'
