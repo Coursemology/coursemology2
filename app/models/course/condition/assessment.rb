@@ -122,7 +122,7 @@ class Course::Condition::Assessment < ApplicationRecord
           FROM course_condition_assessments cca INNER JOIN course_conditions cc
           ON cc.actable_type = 'Course::Condition::Assessment' AND cc.actable_id = cca.id
           WHERE cc.conditional_id = #{conditional.id}
-            AND cc.conditional_type = #{ActiveRecord::Base.sanitize(conditional.class.name)}
+            AND cc.conditional_type = #{ActiveRecord::Base.connection.quote(conditional.class.name)}
         ) ids
       ON ids.assessment_id = course_assessments.id
     SQL

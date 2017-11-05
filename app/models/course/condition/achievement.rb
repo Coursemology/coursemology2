@@ -80,7 +80,7 @@ class Course::Condition::Achievement < ApplicationRecord
           FROM course_condition_achievements cca INNER JOIN course_conditions cc
             ON cc.actable_type = 'Course::Condition::Achievement' AND cc.actable_id = cca.id
             WHERE cc.conditional_id = #{conditional.id}
-              AND cc.conditional_type = #{ActiveRecord::Base.sanitize(conditional.class.name)}
+              AND cc.conditional_type = #{ActiveRecord::Base.connection.quote(conditional.class.name)}
         ) ids
       ON ids.achievement_id = course_achievements.id
     SQL
