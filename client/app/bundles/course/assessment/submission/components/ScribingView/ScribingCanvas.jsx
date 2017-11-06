@@ -612,6 +612,7 @@ export default class ScribingCanvas extends React.Component {
         noScaleCache: true,
         needsItsOwnCache: false,
         selectionColor: 'transparent',
+        backgroundColor: 'white',
       });
 
       this.props.setCanvasProperties(this.props.answerId, this.width, this.height, maxWidth);
