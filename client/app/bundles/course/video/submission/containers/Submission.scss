@@ -20,6 +20,7 @@
 .discussion {
   flex-grow: 1;
   height: calc(95vh - 70px);
+  max-width: calc(35% - 1em);
   order: 2;
   padding-left: 5px;
   position: sticky;
