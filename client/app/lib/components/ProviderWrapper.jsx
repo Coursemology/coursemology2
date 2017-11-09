@@ -27,18 +27,20 @@ const ProviderWrapper = ({ store, children }) => {
     messages = translations[localeWithoutRegionCode] || translations[i18nLocale];
   }
 
-  let providers =
-    (<IntlProvider locale={i18nLocale} messages={messages}>
+  let providers = (
+    <IntlProvider locale={i18nLocale} messages={messages}>
       <MuiThemeProvider>
         { children }
       </MuiThemeProvider>
-    </IntlProvider>);
+    </IntlProvider>
+  );
 
   if (store) {
-    providers =
-      (<Provider store={store}>
+    providers = (
+      <Provider store={store}>
         {providers}
-      </Provider>);
+      </Provider>
+    );
   }
 
   return providers;

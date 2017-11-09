@@ -179,10 +179,12 @@ class VisibleSubmissionEditIndex extends Component {
   renderAssessment() {
     const { assessment, submission } = this.props;
 
-    const renderFile = (file, index) => (<div key={index}>
-      <FileIcon style={{ verticalAlign: 'middle' }} />
-      <a href={file.url}><span>{file.name}</span></a>
-    </div>);
+    const renderFile = (file, index) => (
+      <div key={index}>
+        <FileIcon style={{ verticalAlign: 'middle' }} />
+        <a href={file.url}><span>{file.name}</span></a>
+      </div>
+    );
 
     return (
       <Card style={{ marginBottom: 20 }}>
@@ -190,10 +192,12 @@ class VisibleSubmissionEditIndex extends Component {
         {assessment.description ? <CardText
           dangerouslySetInnerHTML={{ __html: assessment.description }}
         /> : null}
-        {assessment.files.length > 0 ? (<CardText>
-          <h4>Files</h4>
-          {assessment.files.map(renderFile)}
-        </CardText>) : null}
+        {assessment.files.length > 0 ? (
+          <CardText>
+            <h4>Files</h4>
+            {assessment.files.map(renderFile)}
+          </CardText>
+        ) : null}
         <CardActions>
           {submission.isGrader && this.renderStudentViewToggle()}
         </CardActions>

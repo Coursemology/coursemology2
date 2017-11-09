@@ -329,12 +329,14 @@ class SubmissionEditStepForm extends Component {
         {this.renderExplanationPanel(question)}
         {this.renderQuestionGrading(id)}
         {this.renderGradingPanel()}
-        {attempting ? <div>
-          {this.renderResetButton()}
-          {this.renderSubmitButton()}
-          {this.renderContinueButton()}
-          {this.renderAnswerLoadingIndicator()}
-        </div> : null}
+        {attempting ?
+          <div>
+            {this.renderResetButton()}
+            {this.renderSubmitButton()}
+            {this.renderContinueButton()}
+            {this.renderAnswerLoadingIndicator()}
+          </div>
+        : null}
         <div>
           {this.renderSaveGradeButton()}
           {this.renderSaveDraftButton()}

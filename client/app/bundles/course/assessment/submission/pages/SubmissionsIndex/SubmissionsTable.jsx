@@ -143,9 +143,11 @@ export default class SubmissionsTable extends React.Component {
         <TableRowColumn style={styles.tableCenterCell}>
           {this.getGradeString(submission)}
         </TableRowColumn>
-        {assessment.gamified ? <TableRowColumn style={styles.tableCenterCell}>
-          {submission.pointsAwarded !== undefined ? submission.pointsAwarded : null}
-        </TableRowColumn> : null}
+        {assessment.gamified ?
+          <TableRowColumn style={styles.tableCenterCell}>
+            {submission.pointsAwarded !== undefined ? submission.pointsAwarded : null}
+          </TableRowColumn>
+        : null}
         <TableRowColumn style={styles.tableCenterCell}>
           {SubmissionsTable.formatDate(submission.dateSubmitted)}
         </TableRowColumn>

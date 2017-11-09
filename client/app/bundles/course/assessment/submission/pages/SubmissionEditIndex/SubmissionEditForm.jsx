@@ -92,9 +92,11 @@ class SubmissionEditForm extends Component {
 
       return (
         <div>
-          {jobError ? <Paper style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}>
-            {intl.formatMessage(translations.autogradeFailure)}
-          </Paper> : null}
+          {jobError ?
+            <Paper style={{ padding: 10, backgroundColor: red100, marginBottom: 20 }}>
+              {intl.formatMessage(translations.autogradeFailure)}
+            </Paper>
+          : null}
           <RaisedButton
             style={styles.formButton}
             backgroundColor={white}
