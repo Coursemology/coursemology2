@@ -6,7 +6,6 @@
   },
   rules: {
     // temporary disable some rules
-    prefer-destructuring: "off",
     react/jsx-curly-brace-presence: "off",
     react/no-typos: "off",
     jsx-a11y/mouse-events-have-key-events: "off",
@@ -42,6 +41,7 @@
     // Use `_` to indicate that the method is private
     no-underscore-dangle: "off",
     object-curly-newline: ["error", { consistent: true }],
+    prefer-destructuring: "off",
   },
   globals: {
     window: true,

@@ -176,11 +176,11 @@ class ChipInput extends React.Component {
   }
 
   componentDidMount() {
-    const handleKeyDown = this.autoComplete.handleKeyDown;
+    const { handleKeyDown, handleEscKeyDown, props: { dataSource } } = this.autoComplete;
+
     this.autoComplete.handleKeyDown = (event) => {
       if (this.props.newChipKeyCodes.indexOf(event.keyCode) >= 0) {
         if (this.autoComplete.requestsList.length > 0) {
-          const dataSource = this.autoComplete.props.dataSource;
           const child = this.autoComplete.requestsList[0].value;
           const index = parseInt(child.key, 10);
           const chosenRequest = dataSource[index];
@@ -194,8 +194,6 @@ class ChipInput extends React.Component {
     };
 
     this.autoComplete.handleItemTouchTap = (event, child) => {
-      const dataSource = this.autoComplete.props.dataSource;
-
       const index = parseInt(child.key, 10);
       const chosenRequest = dataSource[index];
       this.handleAddChip(chosenRequest);
@@ -205,7 +203,6 @@ class ChipInput extends React.Component {
       setTimeout(() => this.focus(), 100);
     };
 
-    const handleEscKeyDown = this.autoComplete.handleEscKeyDown;
     this.autoComplete.handleEscKeyDown = () => {
       handleEscKeyDown();
       this.focus();
